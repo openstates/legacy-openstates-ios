@@ -22,10 +22,7 @@
     UITabBarController *tabBarController;
 	
 	UIAlertView *hackingAlert;
-	UIAlertView *ratingsAlert;
-	
-//	NSMutableArray *leakyControllerStack;
-	
+		
 	NSMutableArray		*savedLocation;	// an array of selections for each drill level
 	// i.e.
 	// [0, 1, 3] =	select the top level / main tab 0,
@@ -52,10 +49,8 @@
 @property (nonatomic, retain) UITabBarController *tabBarController;
 @property (nonatomic, retain) UIWindow			*portraitWindow;
 @property (nonatomic, retain) UIAlertView		*hackingAlert;
-@property (nonatomic, retain) UIAlertView		*ratingsAlert;
 
 @property (nonatomic, retain) NSMutableArray	*savedLocation;
-//@property (nonatomic, retain) NSMutableArray	*leakyControllerStack;
 
 @property (nonatomic, retain) AboutViewController *aboutView;
 @property (nonatomic, retain) VoteInfoViewController *voteInfoView;

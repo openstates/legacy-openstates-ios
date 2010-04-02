@@ -6,7 +6,6 @@
 //  Copyright 2009 Gregory S. Combs. All rights reserved.
 //
 
-
 #import "TexLegeAppDelegate.h"
 #import "UtilityMethods.h"
 
@@ -17,11 +16,11 @@
 #import "MapImagesDataSource.h"
 #import "GeneralTableViewController.h"
 #import "Reachability.h"
+#import "Appirater.h"
 
 @interface TexLegeAppDelegate(mymethods)
 // these are private methods that outside classes need not use
 - (void)setupDialogBoxes;
-- (void)onFirstRun;
 - (void)showHackingAlert;
 
 - (NSString *)hostName;
@@ -38,8 +37,7 @@ NSInteger kNoSelection = -1;
 //- (void) setupDialogBoxes;
 
 @synthesize tabBarController, savedLocation;
-//@synthesize leakyControllerStack;
-@synthesize portraitWindow, hackingAlert, ratingsAlert;
+@synthesize portraitWindow, hackingAlert;
 @synthesize aboutView, voteInfoView, activeDialogController;
 @synthesize remoteHostStatus, internetConnectionStatus, localWiFiConnectionStatus;
 
@@ -51,8 +49,6 @@ NSInteger kNoSelection = -1;
 		tabBarController = nil;
 		activeDialogController = nil;
 		hackingAlert = nil;
-		ratingsAlert = nil;
-//		leakyControllerStack = [[[NSMutableArray alloc] init] retain];
 				
 		[self setupDialogBoxes];
 	}
@@ -145,8 +141,8 @@ NSInteger kNoSelection = -1;
 	}
 }
 
-
-
+// Should we use this newer one instead?
+// - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 - (void)applicationDidFinishLaunching:(UIApplication *)application {		
 	/*
      You can use the Reachability class to check the reachability of a remote host
@@ -213,10 +209,9 @@ NSInteger kNoSelection = -1;
 	[[NSUserDefaults standardUserDefaults] registerDefaults:savedLocationDict];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
-	[self onFirstRun];
-	
+	[Appirater appLaunched];
+		
 }
-
 
 - (void)applicationWillTerminate:(UIApplication *)application {
 
@@ -302,78 +297,8 @@ NSInteger kNoSelection = -1;
 		if (![UtilityMethods openURLWithTrepidation:goURL]) 
 				exit(0); // just quit if we can't open this url
 	}
-	else if (alertView == ratingsAlert) {
-		switch (buttonIndex) {
-			case 1:
-				goURL = [NSURL URLWithString:m_iTunesURL];
-				[UtilityMethods openURLWithTrepidation:goURL];
-				break;
-			case 0:
-			default:
-				break;
-		}	
-	}
 	[ alertView release ];
 } 
-
-- (void)onFirstRun {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-#if 1	
-	if (! [defaults objectForKey:@"firstRun"]) {
-		[defaults setObject:[NSDate date] forKey:@"firstRun"];
-	}
-	
-	NSInteger daysSinceInstall = [[NSDate date] timeIntervalSinceDate:[defaults objectForKey:@"firstRun"]] / 86400;
-//	if ([defaults boolForKey:@"askedForRating"] == NO)
-	if (daysSinceInstall > 10 && [defaults boolForKey:@"askedForRating"] == NO)
-	{
-		ratingsAlert = [[UIAlertView alloc] initWithTitle:@"Like This App?" 
-										message:@"Please rate it in the App Store!" 
-										delegate:self cancelButtonTitle:@"No Thanks" 
-										otherButtonTitles:@"Rate It!", nil];
-		[ratingsAlert show];
-		[defaults setBool:YES forKey:@"askedForRating"];
-	}
-	
-	[[NSUserDefaults standardUserDefaults] synchronize];	
-#endif
-	
-}
-
-#if 0
-
-- (IBAction)buyFullVersion
-{
-	NSString *referralLink = @"http://click.linksynergy.com/yadayadayada";
-	self.iTunesURL = [NSURL URLWithString:referralLink];
-	NSURLRequest *referralRequest = [NSURLRequest
-									 requestWithURL:self.iTunesURL
-									 ];
-	NSURLConnection *referralConnection = [[NSURLConnection alloc]
-										   initWithRequest:referralRequest
-										   delegate:self
-										   startImmediately:YES
-										   ];
-	[referralConnection release];
-}
-
-// Save the most recent URL in case multiple redirects occur
-- (NSURLRequest *)connection:(NSURLConnection *)connection
-			 willSendRequest:(NSURLRequest *)request
-			redirectResponse:(NSURLResponse *)response
-{
-	self.iTunesURL = [response URL];
-	return request;
-}
-
-
-// No more redirects; use the last URL saved
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-	[[UIApplication sharedApplication] openURL:self.iTunesURL];
-}
-
-#endif
 
 
 - (void)setupDialogBoxes {    

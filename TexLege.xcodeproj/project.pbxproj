@@ -272,8 +272,10 @@
 		37BB2135100510D900EE39D5 /* Lucio.Eddie.Jr.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BB2132100510D900EE39D5 /* Lucio.Eddie.Jr.png */; };
 		37BB2136100510D900EE39D5 /* Jackson.Mike.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BB2133100510D900EE39D5 /* Jackson.Mike.png */; };
 		37BB2137100510D900EE39D5 /* Patrick.Dan.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BB2134100510D900EE39D5 /* Patrick.Dan.png */; };
+		37CB78FE107515C400BBF77A /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CB78FD107515C400BBF77A /* Appirater.m */; };
 		37D6E82810175F0800D4D7C2 /* UtilityMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6E82710175F0800D4D7C2 /* UtilityMethods.m */; };
 		37D6E8C51017772B00D4D7C2 /* Map.SamHoustonLoc.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37D6E8C41017772B00D4D7C2 /* Map.SamHoustonLoc.pdf */; };
+		37ECDA781065358800E43497 /* Release Notes.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 37ECDA771065358800E43497 /* Release Notes.rtf */; };
 		37F510AA0FF1ADEF0020A13B /* Icon_80.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F510A90FF1ADEF0020A13B /* Icon_80.png */; };
 /* End PBXBuildFile section */
 
@@ -287,17 +289,17 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2883B6A00D944613003F08B5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		32CA4F630368D1EE00C91783 /* TexLege_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TexLege_Prefix.pch; path = "MySources/Version Controlled/TexLege/TexLege/TexLege_Prefix.pch"; sourceTree = DEVELOPER_DIR; };
+		32CA4F630368D1EE00C91783 /* TexLege_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TexLege_Prefix.pch; path = ../../TexLege_Prefix.pch; sourceTree = BUILT_PRODUCTS_DIR; };
 		3709AB23101A046D00C1061B /* EditingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditingTableViewCell.h; sourceTree = "<group>"; };
 		3709AB24101A046D00C1061B /* EditingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditingTableViewCell.m; sourceTree = "<group>"; };
 		3709AB25101A046D00C1061B /* LinksDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinksDetailViewController.h; sourceTree = "<group>"; };
 		3709AB26101A046D00C1061B /* LinksDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinksDetailViewController.m; sourceTree = "<group>"; };
 		3709AB30101A092500C1061B /* EditingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = EditingTableViewCell.xib; path = Resources/EditingTableViewCell.xib; sourceTree = "<group>"; };
-		3709AEAC101FBE7900C1061B /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = "MySources/Version Controlled/TexLege/TexLege/Classes/Universal Classes/Reachability.h"; sourceTree = DEVELOPER_DIR; };
-		3709AEAD101FBE7900C1061B /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = "MySources/Version Controlled/TexLege/TexLege/Classes/Universal Classes/Reachability.m"; sourceTree = DEVELOPER_DIR; };
+		3709AEAC101FBE7900C1061B /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		3709AEAD101FBE7900C1061B /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		3709AF0C101FBF5100C1061B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		37155726100859E700FA57DB /* CommitteeObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommitteeObj.h; path = "MySources/Version Controlled/TexLege/TexLege/Classes/Core Data Classes/CommitteeObj.h"; sourceTree = DEVELOPER_DIR; };
-		37155727100859E700FA57DB /* CommitteeObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommitteeObj.m; path = "MySources/Version Controlled/TexLege/TexLege/Classes/Core Data Classes/CommitteeObj.m"; sourceTree = DEVELOPER_DIR; };
+		37155726100859E700FA57DB /* CommitteeObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeObj.h; sourceTree = "<group>"; };
+		37155727100859E700FA57DB /* CommitteeObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteeObj.m; sourceTree = "<group>"; };
 		3729EC2810077F83000AD804 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		3729ED8410079CCA000AD804 /* TexLege.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = TexLege.xcdatamodel; sourceTree = "<group>"; };
 		373AB3B70FD3389F0065740E /* DirectoryDetailInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryDetailInfo.h; sourceTree = "<group>"; };
@@ -362,13 +364,13 @@
 		376B5BDC0FC1DC640094D80B /* Map.CapitolComplex.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.CapitolComplex.pdf; path = Resources/Maps/Map.CapitolComplex.pdf; sourceTree = "<group>"; };
 		376B5BE10FC1DC640094D80B /* Map.MonumentGuide.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.MonumentGuide.pdf; path = Resources/Maps/Map.MonumentGuide.pdf; sourceTree = "<group>"; };
 		376F0FB90FCBD4140011F813 /* Legislators.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Legislators.plist; sourceTree = "<group>"; };
-		377E8CF0100C39F300686B23 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = "MySources/Version Controlled/TexLege/TexLege/Classes/Universal Classes/Constants.h"; sourceTree = DEVELOPER_DIR; };
-		378A1CD61007FF4600BEC4ED /* CommitteePositionObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommitteePositionObj.h; path = "MySources/Version Controlled/TexLege/TexLege/Classes/Core Data Classes/CommitteePositionObj.h"; sourceTree = DEVELOPER_DIR; };
-		378A1CD71007FF4600BEC4ED /* CommitteePositionObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommitteePositionObj.m; path = "MySources/Version Controlled/TexLege/TexLege/Classes/Core Data Classes/CommitteePositionObj.m"; sourceTree = DEVELOPER_DIR; };
-		378A1CD81007FF4600BEC4ED /* LegislatorObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorObj.h; path = "MySources/Version Controlled/TexLege/TexLege/Classes/Core Data Classes/LegislatorObj.h"; sourceTree = DEVELOPER_DIR; };
-		378A1CD91007FF4600BEC4ED /* LegislatorObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegislatorObj.m; path = "MySources/Version Controlled/TexLege/TexLege/Classes/Core Data Classes/LegislatorObj.m"; sourceTree = DEVELOPER_DIR; };
-		378A1CDA1007FF4600BEC4ED /* LinkObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LinkObj.h; path = "MySources/Version Controlled/TexLege/TexLege/Classes/Core Data Classes/LinkObj.h"; sourceTree = DEVELOPER_DIR; };
-		378A1CDB1007FF4600BEC4ED /* LinkObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LinkObj.m; path = "MySources/Version Controlled/TexLege/TexLege/Classes/Core Data Classes/LinkObj.m"; sourceTree = DEVELOPER_DIR; };
+		377E8CF0100C39F300686B23 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		378A1CD61007FF4600BEC4ED /* CommitteePositionObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteePositionObj.h; sourceTree = "<group>"; };
+		378A1CD71007FF4600BEC4ED /* CommitteePositionObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteePositionObj.m; sourceTree = "<group>"; };
+		378A1CD81007FF4600BEC4ED /* LegislatorObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorObj.h; sourceTree = "<group>"; };
+		378A1CD91007FF4600BEC4ED /* LegislatorObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorObj.m; sourceTree = "<group>"; };
+		378A1CDA1007FF4600BEC4ED /* LinkObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinkObj.h; sourceTree = "<group>"; };
+		378A1CDB1007FF4600BEC4ED /* LinkObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinkObj.m; sourceTree = "<group>"; };
 		378A1D611008061A00BEC4ED /* TexLege.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = TexLege.sqlite; sourceTree = "<group>"; };
 		378AFA85100BCC190040706A /* DirectoryDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryDetailView.m; sourceTree = "<group>"; };
 		378AFC7C100BDD640040706A /* CommitteeDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeDetailView.h; sourceTree = "<group>"; };
@@ -582,10 +584,13 @@
 		37BB2132100510D900EE39D5 /* Lucio.Eddie.Jr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Lucio.Eddie.Jr.png; sourceTree = "<group>"; };
 		37BB2133100510D900EE39D5 /* Jackson.Mike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Jackson.Mike.png; sourceTree = "<group>"; };
 		37BB2134100510D900EE39D5 /* Patrick.Dan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Patrick.Dan.png; sourceTree = "<group>"; };
-		37C512FD0FF6EC28001ABAA1 /* Committees.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Committees.plist; path = "MySources/Version Controlled/TexLege/TexLege/Data/Committees.plist"; sourceTree = DEVELOPER_DIR; };
-		37D6E82610175F0800D4D7C2 /* UtilityMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UtilityMethods.h; path = "MySources/Version Controlled/TexLege/TexLege/Classes/Universal Classes/UtilityMethods.h"; sourceTree = DEVELOPER_DIR; };
-		37D6E82710175F0800D4D7C2 /* UtilityMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UtilityMethods.m; path = "MySources/Version Controlled/TexLege/TexLege/Classes/Universal Classes/UtilityMethods.m"; sourceTree = DEVELOPER_DIR; };
+		37C512FD0FF6EC28001ABAA1 /* Committees.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Committees.plist; sourceTree = "<group>"; };
+		37CB78FC107515C400BBF77A /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
+		37CB78FD107515C400BBF77A /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
+		37D6E82610175F0800D4D7C2 /* UtilityMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilityMethods.h; sourceTree = "<group>"; };
+		37D6E82710175F0800D4D7C2 /* UtilityMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UtilityMethods.m; sourceTree = "<group>"; };
 		37D6E8C41017772B00D4D7C2 /* Map.SamHoustonLoc.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.SamHoustonLoc.pdf; path = Resources/Maps/Map.SamHoustonLoc.pdf; sourceTree = "<group>"; };
+		37ECDA771065358800E43497 /* Release Notes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "Release Notes.rtf"; sourceTree = "<group>"; };
 		37F510A90FF1ADEF0020A13B /* Icon_80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon_80.png; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -634,6 +639,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				37ECDA771065358800E43497 /* Release Notes.rtf */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -816,6 +822,8 @@
 				376487BF10274F1E001E482D /* MiniBrowserController.m */,
 				3709AEAC101FBE7900C1061B /* Reachability.h */,
 				3709AEAD101FBE7900C1061B /* Reachability.m */,
+				37CB78FC107515C400BBF77A /* Appirater.h */,
+				37CB78FD107515C400BBF77A /* Appirater.m */,
 			);
 			path = "Universal Classes";
 			sourceTree = "<group>";
@@ -1378,6 +1386,7 @@
 				3764887110275511001E482D /* fwdButton.png in Resources */,
 				3764887210275511001E482D /* backButton.png in Resources */,
 				3764898310275DE3001E482D /* slider_star.png in Resources */,
+				37ECDA781065358800E43497 /* Release Notes.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1413,6 +1422,7 @@
 				3709AB28101A046D00C1061B /* LinksDetailViewController.m in Sources */,
 				3709AEAE101FBE7900C1061B /* Reachability.m in Sources */,
 				376487C210274F1E001E482D /* MiniBrowserController.m in Sources */,
+				37CB78FE107515C400BBF77A /* Appirater.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1472,7 +1482,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Gregory Combs";
-				CURRENT_PROJECT_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 1.0.1;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1480,6 +1490,8 @@
 				PRODUCT_NAME = TexLege;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D2DC2A9C-3DF4-4261-A1BB-524E378BF574";
 				SDKROOT = iphoneos3.0;
+				VERSIONING_SYSTEM = "";
+				VERSION_INFO_BUILDER = greg;
 			};
 			name = "iTunes Distribution";
 		};
@@ -1504,7 +1516,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_ENTITLEMENTS = Data/Entitlements.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Gregory Combs";
-				CURRENT_PROJECT_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 1.0.1;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1512,6 +1524,8 @@
 				PRODUCT_NAME = TexLege;
 				PROVISIONING_PROFILE = "8BEF1928-5A69-4C9C-B3AB-BE6A716F71D9";
 				SDKROOT = iphoneos3.0;
+				VERSIONING_SYSTEM = "";
+				VERSION_INFO_BUILDER = greg;
 			};
 			name = "AdHoc Distribution";
 		};
@@ -1542,7 +1556,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Gregory Combs (MJMLU3U99Y)";
-				CURRENT_PROJECT_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 1.0.1;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1555,6 +1569,8 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
 				SDKROOT = iphonesimulator3.0;
+				VERSIONING_SYSTEM = "";
+				VERSION_INFO_BUILDER = greg;
 			};
 			name = Debug;
 		};
@@ -1564,7 +1580,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Gregory Combs (MJMLU3U99Y)";
-				CURRENT_PROJECT_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 1.0.1;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1572,6 +1588,8 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
 				SDKROOT = iphonesimulator3.0;
+				VERSIONING_SYSTEM = "";
+				VERSION_INFO_BUILDER = greg;
 			};
 			name = Release;
 		};
