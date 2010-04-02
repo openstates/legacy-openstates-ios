@@ -1,0 +1,18 @@
+/*
+
+File: TexLege_Prefix.pch
+Abstract: This file is included for support purposes and isn't necessary for
+understanding this sample.
+
+Version: 1.0
+
+*/
+
+//
+// Prefix header for all source files of the 'TheElements' target in the 'TheElements' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import <UIKit/UIKit.h>
+#endif
