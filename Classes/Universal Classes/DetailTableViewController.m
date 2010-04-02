@@ -1,52 +1,98 @@
-/*
+//
+//  DetailTableViewController.m
+//  TexLege
+//
+//  Created by Gregory S. Combs on 5/31/09.
+//  Copyright 2009 Gregory S. Combs. All rights reserved.
+//
 
-File: DetailTableViewController.m
-Abstract: Controller that manages the full tile view of the atomic information,
-creating the reflection, and the flipping of the tile.
-
-*/
-
- 
 #import "DetailTableViewController.h"
-#import "AtomicElementView.h"
-#import "AtomicElementFlippedView.h"
-#import "AtomicElement.h"
+#import "CommitteeObj.h"
+#import "UtilityMethods.h"
+#import "MiniBrowserController.h"
+
+@interface DetailTableViewController(mymethods)
+
+// these are private methods that outside classes need not use
+- (void)loadWebViewFromMapPDF;
+- (void)loadWebViewFromURL:(NSURL *)url;
+- (void)loadLegislatorView;
+- (void)loadCommitteeView;
+@end
 
 @implementation DetailTableViewController
 
-@synthesize element;
-@synthesize atomicElementFlippedView;
-@synthesize atomicElementView;
 @synthesize containerView;
-@synthesize reflectionView;
-@synthesize flipIndicatorButton;
-@synthesize frontViewIsVisible;
 
 //@synthesize mapImageView;
-@synthesize mapFileName;
-@synthesize webPDFView;
-
-
-#define reflectionFraction 0.35
-#define reflectionOpacity 0.5
+@synthesize mapFileName, webPDFView;
+@synthesize webViewURL;
+@synthesize legislator, legislatorView;
+@synthesize committee, committeeView;
 
 
 - (id)init {
 	if (self = [super init]) {
-		element = nil;
-		atomicElementView = nil;
-		atomicElementFlippedView = nil;
-		self.frontViewIsVisible=YES;
-		self.hidesBottomBarWhenPushed = YES;
-
+		self.hidesBottomBarWhenPushed = NO;
+		
 		mapFileName = nil;
 //		mapImageView = nil;
-		
 		webPDFView = nil;
+		webViewURL = nil;
+
+		legislatorView = nil;
+		legislator = nil;
+		committeeView = nil;
+		committee = nil;
 	}
 	return self;
 }
 
+- (void)dealloc {
+	[legislatorView release];
+	[legislator release];
+
+	[committeeView release];
+	[committee release];
+
+	[webPDFView release];
+	[mapFileName release];
+	//	[mapImageView release];
+	[webViewURL release];
+
+	[containerView release];
+
+	[super dealloc];
+}
+
+- (void)didReceiveMemoryWarning {
+	[[self navigationController] popToRootViewControllerAnimated:YES];
+	[legislatorView release];
+	legislatorView = nil;
+	[legislator release];
+	legislator = nil;
+
+	[committeeView release];
+	committeeView = nil;
+	[committee release];
+	committee = nil;
+	
+	[webPDFView release];
+	webPDFView = nil;
+	[mapFileName release];
+	mapFileName = nil;
+	[webViewURL release];
+	webViewURL = nil;
+	[containerView release];
+	containerView = nil;
+	
+    [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
+    // Release anything that's not essential, such as cached data
+}
+
+
+#pragma mark -
+#pragma mark Load Detail Views
 
 - (void)loadView {	
 	// create and store a container view
@@ -55,191 +101,166 @@ creating the reflection, and the flipping of the tile.
 	self.containerView = localContainerView;
 	[localContainerView release];
 	
-	containerView.backgroundColor = [UIColor blackColor];
-	
-if (element != nil) {
+	self.navigationController.toolbarHidden = YES;	
 
-	CGSize preferredAtomicElementViewSize = [AtomicElementView preferredViewSize];
 	
-	CGRect viewRect = CGRectMake((containerView.bounds.size.width-preferredAtomicElementViewSize.width)/2,
-								 (containerView.bounds.size.height-preferredAtomicElementViewSize.height)/2-40,
-								 preferredAtomicElementViewSize.width,preferredAtomicElementViewSize.height);
+	if (legislator != nil) {
+		containerView.backgroundColor = [UIColor whiteColor];
+		[self loadLegislatorView];
+	}
+	if (committee != nil) {
+		containerView.backgroundColor = [UIColor whiteColor];
+		[self loadCommitteeView];
+	}
+	else if (mapFileName != nil) {
+		containerView.backgroundColor = [UIColor whiteColor];
+		[self loadWebViewFromMapPDF];
+	}
+	else if (webViewURL != nil) {
+		containerView.backgroundColor = [UIColor whiteColor];
+		[self loadWebViewFromURL:webViewURL];
+	}	
 	
-	// create the atomic element view
-	AtomicElementView *localAtomicElementView = [[AtomicElementView alloc] initWithFrame:viewRect];
-	self.atomicElementView = localAtomicElementView;
-	[localAtomicElementView release];
+}
+
+
+- (void)loadWebViewFromMapPDF {
 	
-	// add the atomic element view to the containerView
-	atomicElementView.element = element;	
-	[containerView addSubview:atomicElementView];
-	atomicElementView.viewController = self;
+	NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
+	NSString *pdfPath = [ NSString stringWithFormat:
+						 @"%@/%@.app/%@",NSHomeDirectory(),appName, mapFileName ];
+	
+	NSURL *url = [ NSURL fileURLWithPath:pdfPath ];
+	[ self loadWebViewFromURL:url ];
+	
+	
+	/*	Right now we're using a simple WebView, but we may go back to custom drawing/scrolling...	
+	 // create the map image view
+	 MapImageView *localMapImageView = [[MapImageView alloc] initWithFrame:containerView.bounds];
+	 self.mapImageView = localMapImageView;
+	 [localMapImageView release];
+	 
+	 mapImageView.imageFile = mapFileName;	
+	 [containerView addSubview:mapImageView];
+	 mapImageView.viewController = self;
+	 self.view = containerView;
+	 */
+}	
+
+
+- (void)loadWebViewFromURL:(NSURL *)url {
+	UIWebView *localWebView = [[UIWebView alloc] initWithFrame:containerView.bounds];
+	self.webPDFView = localWebView;
+	self.webPDFView.backgroundColor=[UIColor blackColor];
+	
+	self.webPDFView.scalesPageToFit = YES;
+	self.webPDFView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
+	
+	self.webPDFView.dataDetectorTypes = UIDataDetectorTypeAll;
+	
+	[localWebView release];
+	
+	NSURLRequest *request = [ NSURLRequest requestWithURL:url ];
+	[ webPDFView loadRequest:request ];
+	
+	[containerView addSubview:webPDFView];
 	self.view = containerView;
 	
-	// create the atomic element flipped view
-	AtomicElementFlippedView *localAtomicElementFlippedView = [[AtomicElementFlippedView alloc] initWithFrame:viewRect];
-	self.atomicElementFlippedView = localAtomicElementFlippedView;
-	[localAtomicElementFlippedView release];
-	
-	atomicElementFlippedView.element = element;	
-	atomicElementFlippedView.viewController = self;
+}	
 
-	// create the reflection view
-	CGRect reflectionRect=viewRect;
 
-	// the reflection is a fraction of the size of the view being reflected
-	reflectionRect.size.height=reflectionRect.size.height*reflectionFraction;
-	// and is offset to be at the bottom of the view being reflected
-	reflectionRect=CGRectOffset(reflectionRect,0,viewRect.size.height);
+- (void)loadLegislatorView {
 	
-	UIImageView *localReflectionImageView = [[UIImageView alloc] initWithFrame:reflectionRect];
-	self.reflectionView = localReflectionImageView;
-	[localReflectionImageView release];
+	self.legislatorView = [[DirectoryDetailView alloc] initWithFrameAndLegislator:containerView.bounds 
+																	   Legislator:self.legislator];
 	
-	// determine the size of the reflection to create
-	NSUInteger reflectionHeight=atomicElementView.bounds.size.height*reflectionFraction;
+	// eventually it'll just be the name, once we add custom notes button...
+	self.navigationItem.title = [NSString stringWithFormat:@"%@ %@",
+											[self.legislator legProperName], [self.legislator districtPartyString]];
+	self.legislatorView.delegate = self;
+	self.legislatorView.detailController = self;
 	
-	// create the reflection image, assign it to the UIImageView and add the image view to the containerView
-	reflectionView.image=[self.atomicElementView reflectedImageRepresentationWithHeight:reflectionHeight];
-	reflectionView.alpha=reflectionOpacity;
+	[containerView addSubview:self.legislatorView];
+	self.view = containerView;
 	
-	[containerView addSubview:reflectionView];
+}	
+
+- (void)loadCommitteeView {
 	
+	self.committeeView = [[CommitteeDetailView alloc] initWithFrameAndCommittee:containerView.bounds 
+																	   Committee:self.committee];
 	
-	UIButton *localFlipIndicator=[[UIButton alloc] initWithFrame:CGRectMake(0,0,30,30)];
-	self.flipIndicatorButton=localFlipIndicator;
-	[localFlipIndicator release];
+	// eventually it'll just be the name, once we add custom notes button...
+	self.navigationItem.title = [self.committee description];
+	self.committeeView.delegate = self;
+	self.committeeView.detailController = self;
 	
-	// front view is always visible at first
-	[flipIndicatorButton setBackgroundImage:[UIImage imageNamed:@"flipper_list_blue.png"] forState:UIControlStateNormal];
+	[containerView addSubview:self.committeeView];
+	self.view = containerView;
 	
-	UIBarButtonItem *flipButtonBarItem;
-	flipButtonBarItem=[[UIBarButtonItem alloc] initWithCustomView:flipIndicatorButton];
-	
-	[self.navigationItem setRightBarButtonItem:flipButtonBarItem animated:YES];
-	[flipButtonBarItem release];
-	
-	[flipIndicatorButton addTarget:self action:@selector(flipCurrentView) forControlEvents:(UIControlEventTouchDown   )];
-	 
+}	
+
+
+// the user selected a row in the table.
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath {
+
+	if (self.legislatorView != nil) {
+		[self.legislatorView didSelectRowAtIndexPath:newIndexPath];		
 	}
-	else {
-		UIWebView *localWebView = [[UIWebView alloc] initWithFrame:containerView.bounds];
-		self.webPDFView = localWebView;
-		self.webPDFView.backgroundColor=[UIColor blackColor];
-		
-		self.webPDFView.scalesPageToFit = YES;
-		self.webPDFView.detectsPhoneNumbers = NO;
-		self.webPDFView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
-		
-		[localWebView release];
-		/*
-		 CFURLRef pdfURL = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFSTR("Map.Floors234.pdf"), NULL, NULL);
-		 pdf = CGPDFDocumentCreateWithURL((CFURLRef)pdfURL);
-		 CFRelease(pdfURL);
-		 */
-		NSString *appBundle = [NSString stringWithFormat:@"%@/TexLege.app/", NSHomeDirectory()];
-		NSString *pdfPath = [ NSString stringWithFormat:@"%@%@",appBundle,mapFileName ];
-		NSURL *url = [ NSURL fileURLWithPath:pdfPath ];
-		
-		NSURLRequest *request = [ NSURLRequest requestWithURL:url ];
-		[ webPDFView loadRequest:request ];
-
-		[containerView addSubview:webPDFView];
-		self.view = containerView;
-				
-		/*		
-		// create the map image view
-		MapImageView *localMapImageView = [[MapImageView alloc] initWithFrame:containerView.bounds];
-		self.mapImageView = localMapImageView;
-		[localMapImageView release];
-		
-		mapImageView.imageFile = mapFileName;	
-		[containerView addSubview:mapImageView];
-		mapImageView.viewController = self;
-		self.view = containerView;
-		*/
+	if (self.committeeView != nil) {
+		[self.committeeView didSelectRowAtIndexPath:newIndexPath];		
 	}
 	
 }
 
-- (void)flipCurrentView {
-	NSUInteger reflectionHeight;
-	UIImage *reflectedImage;
-	
-	// disable user interaction during the flip
-	containerView.userInteractionEnabled = NO;
-	flipIndicatorButton.userInteractionEnabled = NO;
-	
-	// setup the animation group
-	[UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.75];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(transitionDidStop:finished:context:)];
-	
-	// swap the views and transition
-    if (frontViewIsVisible==YES) {
-        [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:containerView cache:YES];
-        [atomicElementView removeFromSuperview];
-        [containerView addSubview:atomicElementFlippedView];
-		
-		
-		// update the reflection image for the new view
-		reflectionHeight=atomicElementFlippedView.bounds.size.height*reflectionFraction;
-		reflectedImage = [atomicElementFlippedView reflectedImageRepresentationWithHeight:reflectionHeight];
-		reflectionView.image=reflectedImage;
-    } else {
-        [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:containerView cache:YES];
-        [atomicElementFlippedView removeFromSuperview];
-        [containerView addSubview:atomicElementView];
-		// update the reflection image for the new view
-		reflectionHeight=atomicElementView.bounds.size.height*reflectionFraction;
-		reflectedImage = [atomicElementView reflectedImageRepresentationWithHeight:reflectionHeight];
-		reflectionView.image=reflectedImage;
-    }
-	[UIView commitAnimations];
-	
-	
-	[UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.75];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(transitionDidStop:finished:context:)];
-
-	if (frontViewIsVisible==YES)
-	{
-		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:flipIndicatorButton cache:YES];
-		[flipIndicatorButton setBackgroundImage:element.flipperImageForAtomicElementNavigationItem forState:UIControlStateNormal];
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (self.legislatorView != nil) {
+		return [self.legislatorView heightForRowAtIndexPath:indexPath];		
 	}
-	else
-	{
-		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:flipIndicatorButton cache:YES];
-		[flipIndicatorButton setBackgroundImage:[UIImage imageNamed:@"flipper_list_blue.png"] forState:UIControlStateNormal];
+	return 44.0f;
+}
+
+- (void) pushMapViewWithURL:(NSURL *)url {
+	DetailTableViewController *detailController = [[DetailTableViewController alloc] init];
+	
+	detailController.webViewURL = url;
+	
+	// push the detail view controller onto the navigation stack to display it
+	[[self navigationController] pushViewController:detailController animated:YES];
+	
+	[detailController release];
+	
+}
+
+- (void) pushInternalBrowserWithURL:(NSURL *)url {
+	if ([UtilityMethods canReachHostWithURL:url]) { // do we have a good URL/connection?
+#if 0
+		DrillDownWebController * controller = [[DrillDownWebController alloc] initWithWebRoot: url 
+																					 andTitle:@"Loading..." andSplashImage:nil andViewController:self];
+		[[self navigationController] pushViewController:controller animated: YES];
 		
+		[controller release];	
+#endif
+		MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
+		[mbc display:self];
 	}
-	[UIView commitAnimations];
-	frontViewIsVisible=!frontViewIsVisible;
 }
 
+- (void) showWebViewWithURL:(NSURL *)url {
+	if ([url isFileURL]) {	// we don't implicitely "push" this one, since we might be a maps table.
+		[self loadWebViewFromURL:url];
+	}
+	else  {
+		[self pushInternalBrowserWithURL:url];
+	}
+}	
 
-- (void)transitionDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-	// re-enable user interaction when the flip is completed.
-	containerView.userInteractionEnabled = YES;
-	flipIndicatorButton.userInteractionEnabled = YES;
 
+#pragma mark -
+#pragma mark Orientation
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation { // Override to allow rotation. Default returns YES only for UIDeviceOrientationPortrait
+	return YES;
 }
-
-
-
-- (void)dealloc {
-	[webPDFView release];
-	[mapFileName release];
-//	[mapImageView release];
-
-	[atomicElementView release];
-	[reflectionView release];
-	[atomicElementFlippedView release];
-	[element release];
-	[super dealloc];
-}
-
 
 @end

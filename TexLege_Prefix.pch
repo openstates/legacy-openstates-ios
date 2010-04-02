@@ -1,15 +1,13 @@
-/*
-
-File: TexLege_Prefix.pch
-Abstract: This file is included for support purposes and isn't necessary for
-understanding this sample.
-
-Version: 1.0
-
-*/
+//
+//  TexLege_Prefix.pch
+//  TexLege
+//
+//  Created by Gregory Combs on 7/22/09.
+//  Copyright 2009 Gregory S. Combs. All rights reserved.
+//
 
 //
-// Prefix header for all source files of the 'TheElements' target in the 'TheElements' project
+// Prefix header for all source files of the 'TexLege' target in the 'TexLege' project
 //
 
 #ifdef __OBJC__

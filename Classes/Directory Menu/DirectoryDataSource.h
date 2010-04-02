@@ -1,23 +1,39 @@
-/*
+//
+//  DirectoryDataSource.m
+//  TexLege
+//
+//  Created by Gregory S. Combs on 5/31/09.
+//  Copyright 2009 Gregory S. Combs. All rights reserved.
+//
 
-File: DirectoryDataSource.h
-Abstract: Provides the table view data for the legislators sorted by name.
 
-Version: 1.0
-
-*/
-
-#import <UIKit/UIKit.h>
+#import "Constants.h"
 #import "TableDataSourceProtocol.h"
-#import "Legislator.h"
+#import "LegislatorObj.h"
 
-@interface DirectoryDataSource : NSObject <UITableViewDataSource,TableDataSource>  {
+@interface DirectoryDataSource : NSObject <UITableViewDataSource,TableDataSource, NSFetchedResultsControllerDelegate>  {
+	BOOL hideTableIndex;
+	NSInteger filterChamber;
+	NSMutableString *filterString;
+	
+	NSFetchedResultsController *fetchedResultsController;
+	NSManagedObjectContext *managedObjectContext;	
 }
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
-// means of asking for the legislator at the specific
-// index path, regardless of the sorting or display technique for the specific
-// datasource
-- (Legislator *)legislatorDataForIndexPath:(NSIndexPath *)indexPath;
+@property (nonatomic) NSInteger filterChamber;		// 0 means don't filter
+@property (nonatomic,retain) NSMutableString *filterString;	// @"" means don't filter
+@property (nonatomic, readonly) BOOL hasFilter;
 
- 
+- (LegislatorObj *)legislatorDataForIndexPath:(NSIndexPath *)indexPath;
+- (void) setFilterByString:(NSString *)filter;
+- (void) removeFilter;
+
+#if NEEDS_TO_INITIALIZE_DATABASE
+- (void)initializeDatabase;	
+#endif
+
+
+
 @end

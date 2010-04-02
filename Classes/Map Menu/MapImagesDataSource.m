@@ -1,43 +1,48 @@
-/*
-
-File: MapImagesDataSource.m
-Abstract: Provides the table view data for the capitol maps.
-
-Version: 1.0
-
-*/
+//
+//  MapImagesDataSource.m
+//  TexLege
+//
+//  Created by Gregory Combs on 7/22/09.
+//  Copyright 2009 Gregory S. Combs. All rights reserved.
+//
 
 #import "MapImagesDataSource.h"
 #import "TexLegeAppDelegate.h"
-#import "AtomicElement.h"
-
 
 @implementation MapImagesDataSource
 
+@synthesize managedObjectContext;
+//@synthesize fetchedResultsController;
+
 @synthesize InteriorMaps;
 @synthesize ExteriorMaps;
+@synthesize ChamberMaps;
 
 // TableDataSourceProtocol methods
 
-// return the data used by the navigation controller and tab bar item
-- (NSString *)navigationBarName {
-	return @"Capitol Maps";
-}
+- (NSString *)navigationBarName
+{ return @"Capitol Maps"; }
 
-- (NSString *)name {
-	return @"Maps";
-}
-
+- (NSString *)name
+{ return @"Maps"; }
  
-- (UIImage *)tabBarImage {
-	return [UIImage imageNamed:@"71-compass.png"];
-}
-
+- (UIImage *)tabBarImage 
+{ return [UIImage imageNamed:@"71-compass.png"]; }
 
 - (BOOL)showDisclosureIcon
-{
-	return YES;
-}
+{ return YES; }
+
+- (BOOL)usesCoreData
+{ return NO; }
+
+- (BOOL)usesToolbar
+{ return NO; }
+
+- (BOOL)usesSearchbar
+{ return NO; }
+
+- (BOOL)canEdit
+{ return NO; }
 
 
 // displayed in a plain style tableview
@@ -57,10 +62,13 @@ Version: 1.0
 /* Build a list of files */
 - (void)reload {
 	InteriorMaps = [[NSArray arrayWithObjects:
-					 [NSArray arrayWithObjects:@"Floors 4, 3, & 2", @"Map.Floors234.pdf",nil],
-					 [NSArray arrayWithObjects:@"Floors 1 and Ground", @"Map.Floors1andGround.pdf",nil],
-					 [NSArray arrayWithObjects:@"Extension 1st Floor (E1)", @"Map.ExtensionF1.pdf",nil],
-					 [NSArray arrayWithObjects:@"Extension 2nd Floor (E2)", @"Map.ExtensionF2.pdf",nil],
+					 [NSArray arrayWithObjects:@"Fourth Floor", @"Map.Floor4.pdf",nil],
+					 [NSArray arrayWithObjects:@"Third Floor", @"Map.Floor3.pdf",nil],
+					 [NSArray arrayWithObjects:@"Second Floor", @"Map.Floor2.pdf",nil],
+					 [NSArray arrayWithObjects:@"First Floor", @"Map.Floor1.pdf",nil],
+					 [NSArray arrayWithObjects:@"Ground Floor", @"Map.FloorG.pdf",nil],
+					 [NSArray arrayWithObjects:@"Extension 1st Floor (E1)", @"Map.FloorE1.pdf",nil],
+					 [NSArray arrayWithObjects:@"Extension 2nd Floor (E2)", @"Map.FloorE2.pdf",nil],
 					 nil]
 					 retain];
 
@@ -68,6 +76,12 @@ Version: 1.0
 					 [NSArray arrayWithObjects:@"Capitol Complex", @"Map.CapitolComplex.pdf",nil],
 					 [NSArray arrayWithObjects:@"Wheelchair Access", @"Map.WheelchairAccess.pdf",nil],
 					 [NSArray arrayWithObjects:@"Monument Guide", @"Map.MonumentGuide.pdf",nil],
+					 nil]
+					retain];
+	
+	ChamberMaps = [[NSArray arrayWithObjects:
+					 [NSArray arrayWithObjects:@"House Chamber", @"Map.HouseChamber.pdf",nil],
+					 [NSArray arrayWithObjects:@"Senate Chamber", @"Map.SenateChamber.pdf",nil],
 					 nil]
 					retain];
 	
@@ -82,15 +96,13 @@ Version: 1.0
 	
 	else if (indexPath.section == 1) // Get the file name for our exterior map
 		CellIdentifier = [[[ExteriorMaps objectAtIndex:indexPath.row] objectAtIndex:1] autorelease];
-	
+
+	else if (indexPath.section == 2) // Get the file name for our exterior map
+		CellIdentifier = [[[ChamberMaps objectAtIndex:indexPath.row] objectAtIndex:1] autorelease];
+
 	return CellIdentifier;
 }
 
-// return the atomic element at the index in the sorted by symbol array
-- (AtomicElement *)cellDataForIndexPath:(NSIndexPath *)indexPath {
-	// Don't care, we're not using Atomic crap.
-	return nil;
-}
 
 #pragma mark -
 #pragma mark UITableViewDataSource methods
@@ -104,7 +116,10 @@ Version: 1.0
 	
 	else if (indexPath.section == 1) // Get the proper name for our exterior map
 		CellIdentifier = [[ExteriorMaps objectAtIndex:indexPath.row] objectAtIndex:0];
-	
+
+	else if (indexPath.section == 2) // Get the proper name for our exterior map
+		CellIdentifier = [[ChamberMaps objectAtIndex:indexPath.row] objectAtIndex:0];
+
 	    
 	/* Look up cell in the table queue */
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -118,15 +133,16 @@ Version: 1.0
 	if ([self showDisclosureIcon])
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	
-	cell.text = CellIdentifier;
-	cell.textAlignment = UITextAlignmentLeft;
+	cell.textLabel.text = CellIdentifier;
+	cell.textLabel.textAlignment = UITextAlignmentLeft;
+	cell.textLabel.font = [UIFont boldSystemFontOfSize:15];
 	
 	return cell;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	// Just Interior & Exterior Map sections
-	return 2;
+	// Three sections
+	return 3;
 }
 
 
@@ -138,23 +154,30 @@ Version: 1.0
 		rows = [InteriorMaps count];
 	else if (section == 1)
 		rows = [ExteriorMaps count];
+	else if (section == 2)
+		rows = [ChamberMaps count];
 	return rows;
 }
 
 
 
  - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {	
-	if (section == 1)
-		return @"Exterior Maps";
-	else
+	if (section == 0)
 		return @"Interior Maps";
+	else if (section == 1)
+		return @"Exterior Maps";
+	else // if (section == 3)
+		return @"Chamber Floor Desk Maps";
 }
 
 
 - (void)dealloc {
 	[ InteriorMaps release ];
 	[ ExteriorMaps release ];
+	[ ChamberMaps release ];
 
+	//[fetchedResultsController release];
+	[managedObjectContext release];
 	[super dealloc];
 }
 @end

@@ -1,17 +1,16 @@
-/*
+//
+//  TableDataSourceProtocol.h
+//  TexLege
+//
+//  Created by Gregory Combs on 7/22/09.
+//  Copyright 2009 Gregory S. Combs. All rights reserved.
+//
 
-File: TableDataSourceProtocol.h
-Abstract: Protocol that defines information each Element tableview datasource
-must provide.
+#import "Constants.h"
+#import "LegislatorObj.h"
+#import "CommitteeObj.h"
 
-Version: 1.7
-
-*/
-
-#import <UIKit/UIKit.h>
-#import "AtomicElement.h"
-
-@protocol TableDataSource <NSObject>
+@protocol TableDataSource <NSObject, NSFetchedResultsControllerDelegate>
  
 @required
 
@@ -23,16 +22,20 @@ Version: 1.7
 
 // this property determines the style of table view displayed
 @property (readonly) UITableViewStyle tableViewStyle;
+@property (readonly) BOOL usesCoreData;
+@property (readonly) BOOL usesToolbar;
+@property (readonly) BOOL usesSearchbar;
+@property (readonly) BOOL canEdit;
 
+- (BOOL)showDisclosureIcon;
+
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
 @optional
 
-// provides a standardized means of asking for the element at the specific
-// index path, regardless of the sorting or display technique for the specific
-// datasource
-- (AtomicElement *)cellDataForIndexPath:(NSIndexPath *)indexPath;
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 
-- (BOOL)showDisclosureIcon;
+- (void)initializeDatabase;
 
 // this optional protocol allows us to send the datasource this message, since it has the 
 // required information
@@ -40,6 +43,19 @@ Version: 1.7
 
 // return an image file name, used with maps.
 - (NSString *)cellImageDataForIndexPath:(NSIndexPath *)indexPath;
+
+- (LegislatorObj *)legislatorDataForIndexPath:(NSIndexPath *)indexPath;
+
+- (CommitteeObj *)committeeDataForIndexPath:(NSIndexPath *)indexPath;
+
+// implement these for editing...
+
+- (void)setEditing:(BOOL)isEditing animated:(BOOL)animated;
+- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath;
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath;
+
+// set this on when you don't want to see the index, ala keyboard active
+@property (nonatomic) BOOL hideTableIndex;
 
 
 @end

@@ -1,87 +1,154 @@
-/*
+//
+//  BillsDataSource.m
+//  TexLege
+//
+//  Created by Gregory S. Combs on 5/31/09.
+//  Copyright 2009 Gregory S. Combs. All rights reserved.
+//
 
-File: LegislationDataSource.m
-Abstract: Provides the table view data for the elements sorted by atomic number.
-
-Version: 1.7
-
-*/
-
-#import "LegislationDataSource.h"
+#import "BillsDataSource.h"
 #import "TexLegeAppDelegate.h"
-#import "PeriodicElements.h"
-#import "AtomicElement.h"
-#import "AtomicElementTableViewCell.h"
 
 
-@implementation LegislationDataSource
+@implementation BillsDataSource
 
-// TableDataSourceProtocol methods
+@synthesize fetchedResultsController, managedObjectContext;
 
-
+#pragma mark -
+#pragma mark TableDataSourceProtocol methods
 // return the data used by the navigation controller and tab bar item
-- (NSString *)navigationBarName {
-	return @"Legislation Information";
-}
 
-- (NSString *)name {
-	return @"Legislation";
-}
+- (NSString *)navigationBarName 
+{ return @"Bills and Legislation"; }
 
- 
-- (UIImage *)tabBarImage {
-	return [UIImage imageNamed:@"06-magnifying-glass.png"];
-}
+- (NSString *)name
+{ return @"Bills"; }
 
+- (UIImage *)tabBarImage
+{ return [UIImage imageNamed:@"06-magnifying-glass.png"]; }
 
 - (BOOL)showDisclosureIcon
-{
-	return YES;
-}
+{ return YES; }
+
+- (BOOL)usesCoreData
+{ return NO; }
+
+- (BOOL)usesToolbar
+{ return NO; }
+
+- (BOOL)usesSearchbar
+{ return YES; }
+
+- (BOOL)canEdit
+{ return NO; }
 
 
-// atomic number is displayed in a plain style tableview
-- (UITableViewStyle)tableViewStyle  {
+// atomic state is displayed in a grouped style tableview
+- (UITableViewStyle)tableViewStyle {
 	return UITableViewStylePlain;
+} 
+
+// setup the data collection
+- init {
+	if (self = [super init]) {		
+	}
+	return self;
 }
 
-
-// return the atomic element at the index in the sorted by numbers array
-- (AtomicElement *)cellDataForIndexPath:(NSIndexPath *)indexPath {
-	return [[[PeriodicElements sharedPeriodicElements] elementsSortedByNumber] objectAtIndex:indexPath.row];
+- (void)dealloc {	
+	[fetchedResultsController release];
+	[managedObjectContext release];
+    [super dealloc];
 }
 
+#if 0
+- (void) setupDataArray {
+	NSString *DataPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Links.plist"];		
+	NSDictionary *tempDict = [[NSDictionary alloc] initWithContentsOfFile:DataPath];
+	NSArray *tempArray = [[NSArray alloc] initWithArray:[tempDict objectForKey:@"Links"]];
+	self.linksData = tempArray;
+	[tempArray release];
+	[tempDict release];		
+}
+#endif
 
 // UITableViewDataSource methods
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	AtomicElementTableViewCell *cell = (AtomicElementTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"AtomicElementTableViewCell"];
-	if (cell == nil) {
-		cell = [[[AtomicElementTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"AtomicElementTableViewCell"] autorelease];
+#if 0
+	NSString *CellIdentifier = [NSString stringWithFormat:@"Links Section %d", indexPath.section];
+	NSInteger properRow = indexPath.section > 0 ? indexPath.row + 2 : indexPath.row;
+	
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+		if (indexPath.section == 0) {
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+			cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+		}	
+		else {
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		}
 	}
     
-	// configure cell contents
-	// all the rows should show the disclosure indicator
-	if ([self showDisclosureIcon])
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    // Set up the cell...
+	NSDictionary *dictionary = [self.linksData objectAtIndex:properRow];
+	if (indexPath.section == 0) {
+		cell.textLabel.text = [dictionary objectForKey:@"label"];
+		//cell.imageView.image = [UIImage imageNamed:@"Icon.png"];
+	}
+	else {
+		cell.detailTextLabel.text = [dictionary objectForKey:@"url"];
+		cell.textLabel.text = [dictionary objectForKey:@"label"];
+	}
 	
-	// set the element for this cell as specified by the datasource. The cellDataForIndexPath: is declared
-	// as part of the TableDataSource Protocol and will return the appropriate element for the index row
-	cell.element = [self cellDataForIndexPath:indexPath];
-	
-	return cell;
+    return cell;
+#else
+	return nil;
+#endif
 }
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView  {
-	// this table has only one section
-	return 1;
+	// this table has multiple sections. One for each physical state
+	// [solid, liquid, gas, artificial]
+	// return the number of items in the states array
+#if 0
+	return 2;
+#else
+	return 0;
+#endif
 }
 
+
 - (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section {
-	// get the shared elements object
-	// ask for, and return, the number of elements in the array of elements sorted by number
-	return [[[PeriodicElements sharedPeriodicElements] elementsSortedByNumber] count];
+#if 0
+	// this is one of the first methods called when the view is loading, so initialize here.
+	// if numberOfSections is dynamic, we should move this up...
+	if (self.linksData == nil) {
+		[self setupDataArray];
+	}
+
+	if (section == 0) 
+		return kNumInfoViewItems; // Two About View Items
+	else
+		return [self.linksData count] - kNumInfoViewItems;
+#else
+	return 0;
+#endif
+}
+
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+#if 0
+	if (section == 0) 
+		return @"This Application"; // Two About View Items
+	else
+		return @"Web Resources";
+#else
+	return nil;
+#endif
 }
 
 @end

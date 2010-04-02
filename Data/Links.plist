@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Links</key>
+	<array>
+		<dict>
+			<key>section</key>
+			<integer>0</integer>
+			<key>order</key>
+			<integer>-2</integer>
+			<key>label</key>
+			<string>About TexLege</string>
+			<key>url</key>
+			<string>aboutView</string>
+		</dict>
+		<dict>
+			<key>section</key>
+			<integer>0</integer>
+			<key>order</key>
+			<integer>-1</integer>
+			<key>label</key>
+			<string>About The Roll Call Index</string>
+			<key>url</key>
+			<string>voteInfoView</string>
+		</dict>
+		<dict>
+			<key>section</key>
+			<integer>1</integer>
+			<key>order</key>
+			<integer>0</integer>
+			<key>label</key>
+			<string>TexLege for iPhone</string>
+			<key>url</key>
+			<string>http://www.texlege.com</string>
+		</dict>
+		<dict>
+			<key>section</key>
+			<integer>1</integer>
+			<key>order</key>
+			<integer>1</integer>
+			<key>label</key>
+			<string>Texas Legislature Online</string>
+			<key>url</key>
+			<string>http://www.legis.state.tx.us/</string>
+		</dict>
+		<dict>
+			<key>section</key>
+			<integer>1</integer>
+			<key>order</key>
+			<integer>2</integer>
+			<key>label</key>
+			<string>Who Represents Me?</string>
+			<key>url</key>
+			<string>http://www.fyi.legis.state.tx.us/</string>
+		</dict>
+		<dict>
+			<key>section</key>
+			<integer>1</integer>
+			<key>order</key>
+			<integer>3</integer>
+			<key>label</key>
+			<string>Legislative Reference Library</string>
+			<key>url</key>
+			<string>http://www.lrl.state.tx.us/</string>
+		</dict>
+		<dict>
+			<key>section</key>
+			<integer>1</integer>
+			<key>order</key>
+			<integer>4</integer>
+			<key>label</key>
+			<string>Texas Legislative Council</string>
+			<key>url</key>
+			<string>http://www.tlc.state.tx.us/</string>
+		</dict>
+		<dict>
+			<key>section</key>
+			<integer>1</integer>
+			<key>order</key>
+			<integer>5</integer>
+			<key>label</key>
+			<string>House Resource Organization</string>
+			<key>url</key>
+			<string>http://www.house.state.tx.us/analyses/hro/welcome.htm</string>
+		</dict>
+		<dict>
+			<key>section</key>
+			<integer>1</integer>
+			<key>order</key>
+			<integer>6</integer>
+			<key>label</key>
+			<string>Senate Research Center</string>
+			<key>url</key>
+			<string>http://www.senate.state.tx.us/SRC/Pub.htm</string>
+		</dict>
+		<dict>
+			<key>section</key>
+			<integer>1</integer>
+			<key>order</key>
+			<integer>7</integer>
+			<key>label</key>
+			<string>Project Vote Smart</string>
+			<key>url</key>
+			<string>http://www.votesmart.org/mystate_summary.php?state_id=TX</string>
+		</dict>
+		<dict>
+			<key>section</key>
+			<integer>1</integer>
+			<key>order</key>
+			<integer>8</integer>
+			<key>label</key>
+			<string>Follow The Money</string>
+			<key>url</key>
+			<string>http://www.followthemoney.org/database/state_overview.phtml?s=TX&amp;y=2008</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -1,55 +1,55 @@
-/*
-
-File: DetailTableViewController.h
-Abstract: Controller that manages the full tile view of the atomic information,
-creating the reflection, and the flipping of the tile.
-
-
-*/
+//
+//  DetailTableViewController.h
+//  TexLege
+//
+//  Created by Gregory S. Combs on 5/31/09.
+//  Copyright 2009 Gregory S. Combs. All rights reserved.
+//
 
  
-#import <UIKit/UIKit.h>
+#import "Constants.h"
+
+#import "DirectoryDetailView.h"
+#import "CommitteeDetailView.h"
+#include "VoteInfoViewController.h"
 
 //#import "MapImageView.h"
 
-@class AtomicElement;
-@class AtomicElementView;
-@class AtomicElementFlippedView;
+@class LegislatorObj;
+@class CommitteeObj;
 
 
-@interface DetailTableViewController : UIViewController {
-	AtomicElement *element;
-	
-	AtomicElementView *atomicElementView;
-	AtomicElementFlippedView *atomicElementFlippedView;
-	
-	UIImageView *reflectionView;
+@interface DetailTableViewController : UITableViewController <UITableViewDelegate>{
+
 	UIView *containerView;	
-	UIButton *flipIndicatorButton;	
-	BOOL frontViewIsVisible;
 	
+	NSURL *webViewURL;
 	NSString *mapFileName;
 //	MapImageView *mapImageView;
-	
 	UIWebView *webPDFView;
 
+	LegislatorObj *legislator;
+	CommitteeObj *committee;
+
+	DirectoryDetailView *legislatorView;
+	CommitteeDetailView *committeeView;
 }
 
-@property (assign) BOOL frontViewIsVisible;
-@property (nonatomic,retain) AtomicElement *element;
 @property (nonatomic,retain) UIView *containerView;
-@property (nonatomic,retain) AtomicElementView *atomicElementView;
-@property (nonatomic,retain) UIImageView *reflectionView;
-@property (nonatomic,retain) AtomicElementFlippedView *atomicElementFlippedView;
-@property (nonatomic,retain) UIButton *flipIndicatorButton;
 
 //@property (nonatomic,retain) MapImageView *mapImageView;
 @property (nonatomic,retain) NSString *mapFileName;
 @property (nonatomic,retain) UIWebView *webPDFView;
+@property (nonatomic,retain) NSURL *webViewURL;
 
+@property (nonatomic,retain) LegislatorObj *legislator;
+@property (nonatomic,retain) DirectoryDetailView *legislatorView;
 
-- (void)flipCurrentView;
-- (void)transitionDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context;
+@property (nonatomic,retain) CommitteeObj *committee;
+@property (nonatomic,retain) CommitteeDetailView *committeeView;
 
-
+- (void) showWebViewWithURL:(NSURL *)url;
+- (void) pushMapViewWithURL:(NSURL *)url;
+- (void) pushInternalBrowserWithURL:(NSURL *)url;
+	
 @end

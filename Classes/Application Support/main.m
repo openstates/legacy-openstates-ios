@@ -1,12 +1,10 @@
-/*
-
-File: main.m
-Abstract: This file is included for support purposes and isn't necessary for
-understanding this sample.
-
-Version: 1.0
-
-*/
+//
+//  main.m
+//  TexLege
+//
+//  Created by Gregory Combs on 7/22/09.
+//  Copyright 2009 Gregory S. Combs. All rights reserved.
+//
 
 #import <UIKit/UIKit.h>
 

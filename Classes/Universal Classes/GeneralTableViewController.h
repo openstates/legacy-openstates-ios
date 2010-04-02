@@ -1,28 +1,58 @@
-/*
+//
+//  GeneralTableViewController.h
+//  TexLege
+//
+//  Created by Gregory Combs on 7/10/09.
+//  Copyright 2009 Gregory S. Combs. All rights reserved.
+//
 
-File: GeneralTableViewController.h
-Abstract: Coordinates the tableviews and element data sources. It also responds
- to changes of selection in the table view and provides the cells.
+#import "Constants.h"
 
-Version: 1.7
-
-*/
-
-#import <UIKit/UIKit.h>
 #import "TableDataSourceProtocol.h"
 
-@class AtomicElement;
+#define _searchcontroller_ 0
 
- 
-@interface GeneralTableViewController : UIViewController <UITableViewDelegate> {
+
+@interface GeneralTableViewController : UIViewController < UITableViewDelegate, UISearchBarDelegate 
+#if _searchcontroller_
+			,UISearchDisplayDelegate
+#endif
+> {
+
 	UITableView *theTableView;
-	id<TableDataSource,UITableViewDataSource> dataSource;
+	id<TableDataSource,UITableViewDataSource, NSFetchedResultsControllerDelegate> dataSource;
+	
+	UISearchBar		*searchBar;
+    NSString	*savedSearchTerm;
+    BOOL		searchWasActive;
+	CGFloat		atLaunchScrollTo;
+	
+#if _searchcontroller_
+	UISearchDisplayController *searchController;
+    NSInteger	savedScopeButtonIndex;
+#endif	
 }
+
+//@property (nonatomic, retain) NSMutableArray savedLocation;
 
 @property (nonatomic,retain) UITableView *theTableView;
 @property (nonatomic,retain) id<TableDataSource,UITableViewDataSource> dataSource;
 
-- (id)initWithDataSource:(id<TableDataSource,UITableViewDataSource>)theDataSource;
+@property (nonatomic, retain) UISearchBar *searchBar;
+@property (nonatomic, copy) NSString *savedSearchTerm;
+@property (nonatomic) BOOL searchWasActive;
+@property (nonatomic, assign) CGFloat atLaunchScrollTo;
+
+#if _searchcontroller_
+@property (nonatomic, retain) UISearchDisplayController *searchController; 
+@property (nonatomic) NSInteger savedScopeButtonIndex;
+#endif
+
+- (void)toolbarAction:(id)sender;
+- (void)toolBarSetup;
+
+- (id)initWithDataSource:(id<TableDataSource,UITableViewDataSource, NSFetchedResultsControllerDelegate>)theDataSource;
+- (void)filterContentForSearchText:(NSString*)searchText scope:(NSInteger)scope;
 
 
 @end

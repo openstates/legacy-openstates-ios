@@ -1,18 +1,21 @@
-/*
+//
+//  BillsDataSource.h
+//  TexLege
+//
+//  Created by Gregory S. Combs on 5/31/09.
+//  Copyright 2009 Gregory S. Combs. All rights reserved.
+//
 
-File: LegislationDataSource.h
-Abstract: Provides the table view data for the elements sorted by atomic number.
-
-Version: 1.7
-
-*/
-
-#import <UIKit/UIKit.h>
+#import "Constants.h"
 #import "TableDataSourceProtocol.h"
 
- 
-@interface LegislationDataSource : NSObject <UITableViewDataSource,TableDataSource>  {
+@interface BillsDataSource : NSObject <UITableViewDataSource,TableDataSource, NSFetchedResultsControllerDelegate>  {
+	NSFetchedResultsController *fetchedResultsController;
+	NSManagedObjectContext *managedObjectContext;	
 }
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+
 
 
 @end
