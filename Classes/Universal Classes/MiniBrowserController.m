@@ -213,7 +213,7 @@ static MiniBrowserController *s_browser = NULL;
 	
 	[super viewWillDisappear:animated];
 	
-	[[UIApplication sharedApplication] setStatusBarHidden:NO animated:YES];
+	[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:YES];
 }
 
 
@@ -387,7 +387,7 @@ static MiniBrowserController *s_browser = NULL;
 	{
 		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:topView cache:NO];
 		[self.view removeFromSuperview];
-		[[UIApplication sharedApplication] setStatusBarHidden:NO animated:YES];
+		[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:YES];
 	}
 	else
 	{
@@ -399,7 +399,7 @@ static MiniBrowserController *s_browser = NULL;
 		else // assume portrait
 			[self.view setFrame:CGRectMake(0.0f,0.0f,320.0f,480.0f)];
 		
-		[[UIApplication sharedApplication] setStatusBarHidden:YES animated:YES];
+		[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:YES];
 	}
 	
 	[UIView commitAnimations];
@@ -486,4 +486,13 @@ static MiniBrowserController *s_browser = NULL;
 }
 
 
+@synthesize m_loadingInterrupted;
+@synthesize m_urlRequestToLoad;
+@synthesize m_activity;
+@synthesize m_loadingLabel;
+@synthesize m_normalItemList;
+@synthesize m_loadingItemList;
+@synthesize m_shouldDisplayOnViewLoad;
+@synthesize m_parentCtrl;
+@synthesize m_authCallback;
 @end

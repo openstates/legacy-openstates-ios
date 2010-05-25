@@ -56,4 +56,13 @@
 - (void)setAuthCallback:(SEL)callback;
 - (void)authCompleteCallback;
 
+@property BOOL m_loadingInterrupted;
+@property (retain) NSURLRequest *m_urlRequestToLoad;
+@property (retain) UIActivityIndicatorView *m_activity;
+@property (retain) UILabel                 *m_loadingLabel;
+@property (retain) NSArray *m_normalItemList;
+@property (retain) NSArray *m_loadingItemList;
+@property BOOL m_shouldDisplayOnViewLoad;
+@property (assign,setter=display:) id m_parentCtrl;
+@property (setter=setAuthCallback:) SEL m_authCallback;
 @end

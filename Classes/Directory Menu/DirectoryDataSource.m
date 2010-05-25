@@ -222,7 +222,7 @@
 // probably unnecessary, but we might as well validate the new info with our expectations...
 - (void) setFilterByString:(NSString *)filter {
 	if (![self.filterString isEqualToString:filter]) {
-		self.filterString = (filter==nil) ? @"" : filter;
+		self.filterString = [NSMutableString stringWithString:(filter==nil) ? @"" : filter];
 	}
 	// we also get called on toolbar chamber switches, with or without a search string, so update anyway...
 	[self updateFilterPredicate];	
@@ -373,5 +373,4 @@
 
 	return fetchedResultsController;
 }    
-
 @end

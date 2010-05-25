@@ -123,4 +123,8 @@
 }
 
 
+@synthesize versionLabel;
+@synthesize infoView;
+@synthesize projectWebsiteButton;
+@synthesize dismissButton;
 @end

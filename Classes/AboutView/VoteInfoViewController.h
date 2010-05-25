@@ -36,6 +36,9 @@
 - (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle otherTitle:(NSString *)otherTitle;
 
 
+@property (retain) UIView *infoView;
+@property (retain) UISegmentedControl *projectWebsiteButton;
+@property (retain) UIBarButtonItem *dismissButton;
 @end
 
 

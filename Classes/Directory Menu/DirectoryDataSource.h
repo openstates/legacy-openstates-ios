@@ -34,6 +34,4 @@
 - (void)initializeDatabase;	
 #endif
 
-
-
 @end
