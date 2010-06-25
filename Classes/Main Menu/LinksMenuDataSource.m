@@ -603,9 +603,11 @@ enum HeaderSectionRows {
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {    
 	@try {
+		
 		switch (type) {
 			case NSFetchedResultsChangeInsert:
-				[theTableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+				if (newIndexPath)
+					[theTableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
 				[self validateLinkOrders];
 				break;
 			case NSFetchedResultsChangeUpdate:
@@ -621,7 +623,8 @@ enum HeaderSectionRows {
 				break;
 				
 			case NSFetchedResultsChangeDelete:
-				[theTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+				if (indexPath)
+					[theTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 				//[self performSelector:@selector(validateLinkOrders) withObject:nil afterDelay:0.02];
 				[self validateLinkOrders];
 				break;
