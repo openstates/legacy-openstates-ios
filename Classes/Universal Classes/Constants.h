@@ -23,7 +23,7 @@
 
 
 #define m_iTunesAppID 326478866
-//#define m_iTunesURL @"http://itunes.com/app/TexLege"
+//#define m_iTunesURL @"http://itunes.com/us/app/TexLege"
 #define m_iTunesURL @"http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=326478866&mt=8"
 
 
