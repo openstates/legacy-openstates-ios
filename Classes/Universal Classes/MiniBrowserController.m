@@ -30,7 +30,7 @@ enum
 @synthesize m_backButton, m_reloadButton, m_fwdButton;
 @synthesize m_shouldUseParentsView;
 
-static MiniBrowserController *s_browser = NULL;
+static MiniBrowserController *s_browser = nil;
 
 
 + (MiniBrowserController *)sharedBrowser
@@ -41,7 +41,7 @@ static MiniBrowserController *s_browser = NULL;
 
 + (MiniBrowserController *)sharedBrowserWithURL:(NSURL *)urlOrNil
 {
-	if ( NULL == s_browser )
+	if ( s_browser == nil )
 	{
 		s_browser = [[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil];
 		//s_browser.m_webView.detectsPhoneNumbers = YES;
@@ -95,9 +95,9 @@ static MiniBrowserController *s_browser = NULL;
 
 - (void)dealloc 
 {
-	[m_urlRequestToLoad release];
-	[m_normalItemList release];
-	[m_loadingItemList release];
+	if (m_urlRequestToLoad) [m_urlRequestToLoad release];
+	if (m_normalItemList) [m_normalItemList release];
+	if (m_loadingItemList) [m_loadingItemList release];
 	[super dealloc];
 }
 
@@ -122,8 +122,8 @@ static MiniBrowserController *s_browser = NULL;
 	[m_activity release];
 	[m_activity stopAnimating];
 	
-	m_loadingLabel = [[UILabel alloc] init];
-	[m_loadingLabel setFrame:lblFrame];
+	m_loadingLabel = [[UILabel alloc] initWithFrame:lblFrame];
+	//[m_loadingLabel setFrame:lblFrame];
 	//m_loadingLabel.backgroundColor = [UIColor colorWithRed:0.55f green:0.55f blue:0.55f alpha:0.40f];
 	m_loadingLabel.backgroundColor = [UIColor clearColor];
 	m_loadingLabel.highlightedTextColor = [UIColor darkGrayColor];
@@ -143,9 +143,7 @@ static MiniBrowserController *s_browser = NULL;
 	// (this enables a stop button)
 	{
 		NSMutableArray *tmpArray = [[NSMutableArray alloc] initWithCapacity:[m_normalItemList count]];
-		NSEnumerator *e = [m_toolBar.items objectEnumerator];
-		id bbi;
-		while ( bbi = [e nextObject] )
+		for (id bbi in m_toolBar.items )
 		{
 			UIBarButtonItem *button = (UIBarButtonItem *)bbi;
 			if ( eTAG_RELOAD == [button tag] )
@@ -184,7 +182,7 @@ static MiniBrowserController *s_browser = NULL;
 {
 	[super viewDidAppear:animated];
 	
-	if ( nil != m_urlRequestToLoad )
+	if ( m_urlRequestToLoad != nil )
 	{
 		[self LoadRequest:m_urlRequestToLoad];
 		[m_urlRequestToLoad release]; m_urlRequestToLoad = nil;
@@ -229,7 +227,7 @@ static MiniBrowserController *s_browser = NULL;
 {
 	m_parentCtrl = parentController;
 	m_authCallback = nil;
-	if ( nil != m_webView )
+	if ( m_webView != nil )
 	{
 		//[m_parentCtrl presentModalViewController:self animated:NO];
 		[self animate];
@@ -277,7 +275,7 @@ static MiniBrowserController *s_browser = NULL;
 
 - (void)loadURL:(NSURL *)url
 {
-	if ( nil == url ) return;
+	if ( url == nil ) return;
 	
 	m_loadingInterrupted = NO;
 	
@@ -360,13 +358,12 @@ static MiniBrowserController *s_browser = NULL;
 - (void)animate
 {
 	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
-
 	
-	UIView *topView;
+	UIView *topView = nil;
 	if ( m_shouldUseParentsView )
 	{
 		topView = [m_parentCtrl view];
-		if ( nil == topView )
+		if ( topView == nil )
 		{
 			topView = appDelegate.tabBarController.view;
 		}
@@ -375,6 +372,10 @@ static MiniBrowserController *s_browser = NULL;
 	{
 		topView = appDelegate.tabBarController.view;
 	}
+	
+	if (topView) [topView retain];
+	
+	NSLog(@"%@", [topView description]);
 	
 	m_shouldUseParentsView = NO;
 	
@@ -391,18 +392,17 @@ static MiniBrowserController *s_browser = NULL;
 	}
 	else
 	{
-		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:topView cache:NO];
+		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:topView cache:NO];		
+		[self.view setFrame:topView.frame];
 		[topView addSubview:self.view];
-		
-		if ([UtilityMethods isLandscapeOrientation])
-			[self.view setFrame:CGRectMake(0.0f,0.0f,480.0f,320.0f)];
-		else // assume portrait
-			[self.view setFrame:CGRectMake(0.0f,0.0f,320.0f,480.0f)];
 		
 		[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:YES];
 	}
 	
 	[UIView commitAnimations];
+	
+	if (topView) [topView release];
+
 }
 
 - (void)animationFinished:(NSString *)animationID finished:(BOOL)finished context:(void *)context
