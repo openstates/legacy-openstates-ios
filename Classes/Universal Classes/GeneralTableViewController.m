@@ -210,7 +210,7 @@
 				NSURL *url = [UtilityMethods safeWebUrlFromString:action];
 				
 				if ([UtilityMethods canReachHostWithURL:url]) { // got a network connection
-					if (destination.intValue == URLAction_internalBrowser) {
+					if (destination.integerValue == URLAction_internalBrowser) {
 						MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
 						[mbc display:self];
 #if 0
@@ -342,6 +342,12 @@
 	if ([dataSource usesCoreData])
 	{		
 		NSError *error;
+
+#if _searchcontroller_
+		// You've got to delete the cache, or disable caching before you modify the predicate...
+		[NSFetchedResultsController deleteCacheWithName:[[dataSource fetchedResultsController] cacheName]];
+#endif
+		
 		if (![[dataSource fetchedResultsController] performFetch:&error]) {
 			// Handle the error...
 		}		
