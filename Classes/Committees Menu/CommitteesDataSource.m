@@ -109,7 +109,7 @@
 	cell.detailTextLabel.text = tempEntry.committeeName;
 	cell.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
 
-	if (tempEntry.committeeType.intValue == HOUSE)
+	if (tempEntry.committeeType.integerValue == HOUSE)
 		cell.textLabel.text = [NSString stringWithString: @"House"];
 	else //if (tempEntry.committeeType == SENATE)
 		cell.textLabel.text = [NSString stringWithString: @"Senate"];
@@ -199,13 +199,15 @@
 		if (self.filterChamber > 0) {		// do some chamber filtering
 			if (predString.length > 0)	// we already have some predicate action, insert "AND"
 				[predString appendString:@" AND "];
-			[predString appendFormat:@"(committeeType == %@)", [NSNumber numberWithInt:self.filterChamber]];
+			[predString appendFormat:@"(committeeType == %@)", [NSNumber numberWithInteger:self.filterChamber]];
 		}
 		
 	NSPredicate *predicate = (predString.length > 0) ? [NSPredicate predicateWithFormat:predString] : nil;
 
+	// You've got to delete the cache, or disable caching before you modify the predicate...
+	[NSFetchedResultsController deleteCacheWithName:[fetchedResultsController cacheName]];
 	[fetchedResultsController.fetchRequest setPredicate:predicate];
-
+	
 	NSError *error = nil;
 	if (![[self fetchedResultsController] performFetch:&error]) {
         // Handle error
