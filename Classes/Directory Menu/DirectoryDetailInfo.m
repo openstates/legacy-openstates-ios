@@ -19,7 +19,7 @@
 		
 		self.entryName = [aDictionary valueForKey:@"entryName"];
 		self.entryValue = [aDictionary valueForKey:@"entryValue"];
-		self.entryType = [[aDictionary valueForKey:@"entryType"] intValue];		
+		self.entryType = [[aDictionary valueForKey:@"entryType"] integerValue];		
 		self.isClickable = [[aDictionary valueForKey:@"isClickable"] boolValue];
 	}
 	return self;
@@ -63,7 +63,7 @@
 				tempURL = [UtilityMethods pdfMapUrlFromOfficeString:entryValue];			
 				break;
 			case DirectoryTypeChamberMap:
-				tempURL = [UtilityMethods pdfMapUrlFromChamber:legislator.legtype.intValue];
+				tempURL = [UtilityMethods pdfMapUrlFromChamber:legislator.legtype.integerValue];
 				break;
 			default:
 				tempURL = nil;
