@@ -74,7 +74,7 @@
 	UIImageView *photoView = [[UIImageView alloc] initWithFrame:CGRectMake(20.0f, 18.0f, 64.0f, 85.0f)];
 	photoView.autoresizingMask = UIViewAutoresizingNone;
 	
-	photoView.image = [self.legislator legislatorImage];
+	photoView.image = [UtilityMethods poorMansImageNamed:self.legislator.photo_name];
 	
 	[aHeader addSubview:photoView];	
 	
