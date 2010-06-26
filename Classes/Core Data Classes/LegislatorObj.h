@@ -79,7 +79,7 @@
 
 - (UIImage *) legislatorImage;
 - (UIImage *) smallLegislatorImage;
-- (UIImage *) scaleImage:(UIImage *) image maxWidth:(float) maxWidth maxHeight:(float) maxHeight;
+//- (UIImage *) scaleImage:(UIImage *) image maxWidth:(float) maxWidth maxHeight:(float) maxHeight;
 
 - (NSMutableArray *) committees;
 @end

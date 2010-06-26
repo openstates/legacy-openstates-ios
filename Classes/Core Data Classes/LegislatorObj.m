@@ -9,6 +9,7 @@
 #import "LegislatorObj.h"
 
 #import "CommitteePositionObj.h"
+#import "UIImage+Resize.h"
 
 @implementation LegislatorObj 
 
@@ -77,72 +78,27 @@
 	return initial;
 }
 
-- (UIImage *)scaleImage:(UIImage *) image maxWidth:(float) maxWidth maxHeight:(float) maxHeight
-{
-	CGImageRef imgRef = image.CGImage;
-	
-	CGFloat width = CGImageGetWidth(imgRef);
-	CGFloat height = CGImageGetHeight(imgRef);
-	
-	if (width <= maxWidth && height <= maxHeight)
-	{
-		return image;
-	}
-	
-	CGAffineTransform transform = CGAffineTransformIdentity;
-	CGRect bounds = CGRectMake(0, 0, width, height);
-	if (width > maxWidth || height > maxHeight)
-	{
-		CGFloat ratio = width/height;
-		if (ratio > 1)
-		{
-			bounds.size.width = maxWidth;
-			bounds.size.height = bounds.size.width / ratio;
-		}
-		else
-		{
-			bounds.size.height = maxHeight;
-			bounds.size.width = bounds.size.height * ratio;
-		}
-	}
-	
-	CGFloat scaleRatio = bounds.size.width / width;
-	
-	UIGraphicsBeginImageContext(bounds.size);
-	
-	CGContextRef context = UIGraphicsGetCurrentContext();
-	
-	CGContextScaleCTM(context, scaleRatio, -scaleRatio);
-	CGContextTranslateCTM(context, 0, -height);
-	
-	CGContextConcatCTM(context, transform);
-	
-	CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, width, height), imgRef);
-	UIImage *imageCopy = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();
-	
-	return imageCopy;
-}
-
-
 - (UIImage *)smallLegislatorImage {
-	UIImage * image;
-	image = [self scaleImage:[UIImage imageNamed:[self photo_name]] maxWidth:43.0f maxHeight:43.0f];
+	UIImage *image = [[UIImage imageNamed:self.photo_name] 
+//					  resizedImage:CGSizeMake(51.0f, 68.0f) interpolationQuality:kCGInterpolationMedium];
+					 resizedImage:CGSizeMake(48.0f, 64.0f) interpolationQuality:kCGInterpolationMedium];
+
 	return image;
 }
 
 - (UIImage *)legislatorImage {
-	UIImage * image;
-	image = [UIImage imageNamed:[self photo_name]];
+	UIImage *image = [[UIImage imageNamed:self.photo_name] 
+					  resizedImage:CGSizeMake(64.0f, 85.0f) interpolationQuality:kCGInterpolationMedium];
+	
 	return image;
 }
 
 
 - (NSString *)partyShortName {
 	NSString *shortName;
-	if ([[self party_id] integerValue] == DEMOCRAT) // Democrat
+	if ([self.party_id integerValue] == DEMOCRAT) // Democrat
 		shortName = @"D";
-	else if ([[self party_id] integerValue] == REPUBLICAN) // Republican
+	else if ([self.party_id integerValue] == REPUBLICAN) // Republican
 		shortName = @"R";
 	else // don't know the party?
 		shortName = @"I";
@@ -151,9 +107,9 @@
 
 - (NSString *)legTypeShortName {
 	NSString *shortName;
-	if ([[self legtype] integerValue] == HOUSE) // Representative
+	if ([self.legtype integerValue] == HOUSE) // Representative
 		shortName = @"Rep.";
-	else if ([[self legtype] integerValue] == SENATE) // Senator
+	else if ([self.legtype integerValue] == SENATE) // Senator
 		shortName = @"Sen.";
 	else // don't know the party?
 		shortName = @"";
@@ -162,38 +118,38 @@
 
 - (NSString *)legProperName {
 	NSMutableString *name = [NSMutableString stringWithCapacity:128];
-	if ([[self firstname] length] > 0)
-		[name appendString:[self firstname]];
-	else if ([[self middlename] length] > 0)
-		[name appendString:[self firstname]];
+	if ([self.firstname length] > 0)
+		[name appendString:self.firstname];
+	else if ([self.middlename length] > 0)
+		[name appendString:self.firstname];
 	
-	[name appendFormat:@" %@", [self lastname]];
+	[name appendFormat:@" %@", self.lastname];
 	
-	if ([[self suffix] length] > 0)
-		[name appendFormat:@", %@", [self suffix]];
+	if ([self.suffix length] > 0)
+		[name appendFormat:@", %@", self.suffix];
 
 	return name;
 }
 
 - (NSString *)districtPartyString {
 	NSString *string;
-	string = [NSString stringWithFormat: @"(%@-%d)", [self partyShortName], [[self district] integerValue]];
+	string = [NSString stringWithFormat: @"(%@-%d)", self.partyShortName, [self.district integerValue]];
 	return string;
 }
 
 - (NSString *)fullName {
 	NSMutableString *name = [NSMutableString stringWithCapacity:128];
 
-	if ([[self firstname] length] > 0)
-		[name appendString:[self firstname]];
-	if ([[self middlename] length] > 0)
-		[name appendFormat:@" %@", [self middlename]];
-	if ([[self nickname] length] > 0)
-		[name appendFormat:@" \"%@\"", [self nickname]];
-	if ([[self lastname] length] > 0)
-		[name appendFormat:@" %@", [self lastname]];
-	if ([[self suffix] length] > 0)
-		[name appendFormat:@", %@", [self suffix]];
+	if ([self.firstname length] > 0)
+		[name appendString:self.firstname];
+	if ([self.middlename length] > 0)
+		[name appendFormat:@" %@", self.middlename];
+	if ([self.nickname length] > 0)
+		[name appendFormat:@" \"%@\"", self.nickname];
+	if ([self.lastname length] > 0)
+		[name appendFormat:@" %@", self.lastname];
+	if ([self.suffix length] > 0)
+		[name appendFormat:@", %@", self.suffix];
 
 	return name;
 }
@@ -201,14 +157,14 @@
 - (NSString *)fullNameLastFirst {
 	NSMutableString *name = [NSMutableString stringWithCapacity:128];
 	
-	if ([[self lastname] length] > 0)
-		[name appendFormat:@"%@, ", [self lastname]];
-	if ([[self firstname] length] > 0)
-		[name appendString:[self firstname]];
-	if ([[self middlename] length] > 0)
-		[name appendFormat:@" %@", [self middlename]];
-	if ([[self suffix] length] > 0)
-		[name appendFormat:@" %@", [self suffix]];
+	if ([self.lastname length] > 0)
+		[name appendFormat:@"%@, ", self.lastname];
+	if ([self.firstname length] > 0)
+		[name appendString:self.firstname];
+	if ([self.middlename length] > 0)
+		[name appendFormat:@" %@", self.middlename];
+	if ([self.suffix length] > 0)
+		[name appendFormat:@" %@", self.suffix];
 	
 	return name;
 }
@@ -223,19 +179,19 @@
 - (NSString *)labelSubText {
 	NSString *string;
 	string = [NSString stringWithFormat: @"%@ - District %d", 
-			[self legtype_name], [[self district] integerValue]];
+			self.legtype_name, [self.district integerValue]];
 	return string;
 }
 
 - (NSString *)website {
 	NSString *url = nil;
 
-	if ([[self legtype] integerValue] == HOUSE)
+	if ([self.legtype integerValue] == HOUSE)
 		url = [NSString stringWithFormat:@"http://www.house.state.tx.us/members/dist%d/welcome.htm",
-			   [[self district] integerValue]];
-	else if ([[self legtype] integerValue] == SENATE)
+			   [self.district integerValue]];
+	else if ([self.legtype integerValue] == SENATE)
 		url = [NSString stringWithFormat:@"http://www.senate.state.tx.us/75r/Senate/members/dist%d/dist%d.htm",
-			   [[self district] integerValue], [[self district] integerValue]];
+			   [self.district integerValue], [self.district integerValue]];
 
 	return url;
 }
@@ -253,13 +209,13 @@
 - (NSInteger)numberOfDistrictOffices {
 	NSInteger offices = 0;
 	
-	if ([[self dist4_street] length] > 0)		// 4th office is good
+	if ([self.dist4_street length] > 0)		// 4th office is good
 		offices = 4;
-	else if ([[self dist3_street] length] > 0)	// 3rd office is good
+	else if ([self.dist3_street length] > 0)	// 3rd office is good
 		offices = 3;
-	else if ([[self dist2_street] length] > 0)	// 2nd office is good
+	else if ([self.dist2_street length] > 0)	// 2nd office is good
 		offices = 2;
-	else if ([[self dist1_street] length] > 0)	// 1st office is good
+	else if ([self.dist1_street length] > 0)	// 1st office is good
 		offices = 1;
 	
 	return offices;
@@ -268,7 +224,7 @@
 - (NSMutableArray *)committees
 {
 	NSMutableArray *memberArray = [[[NSMutableArray alloc] init] autorelease];
-	for (CommitteePositionObj *position in [self committeePositions]) {
+	for (CommitteePositionObj *position in self.committeePositions) {
 		[memberArray addObject:position];
 	}
 	[memberArray sortUsingSelector:@selector(comparePositionAndCommittee:)];
