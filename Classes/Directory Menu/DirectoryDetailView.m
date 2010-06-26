@@ -102,7 +102,7 @@
 	currentY = currentY + height + marginY;
 	
 	theLabel = [[UILabel alloc] initWithFrame:CGRectMake(96.0f+insetX, currentY, length-insetX, height)];
-	theLabel.text = [NSString stringWithFormat:@"District %d",  self.legislator.district.intValue];
+	theLabel.text = [NSString stringWithFormat:@"District %d",  self.legislator.district.integerValue];
 	theLabel.font = [UIFont boldSystemFontOfSize:14];
 	theLabel.textColor = [UIColor darkGrayColor];
 	//theLabel.textAlignment = UITextAlignmentRight;
@@ -123,18 +123,18 @@
 	[aHeader addSubview:theLabel];
 	[theLabel release];
 	
-	if (self.legislator.tenure.intValue > -1) {
+	if (self.legislator.tenure.integerValue > -1) {
 		currentY = currentY + height + marginY;
 
 		theLabel = [[UILabel alloc] initWithFrame:CGRectMake(96.0f+insetX, currentY, length-insetX, height)];
-		if (self.legislator.tenure.intValue == 1) {
-			theLabel.text = [NSString stringWithFormat:@"%d Year",  self.legislator.tenure.intValue];
+		if (self.legislator.tenure.integerValue == 1) {
+			theLabel.text = [NSString stringWithFormat:@"%d Year",  self.legislator.tenure.integerValue];
 		}
-		else if (self.legislator.tenure.intValue == 0) {
+		else if (self.legislator.tenure.integerValue == 0) {
 			theLabel.text = [NSString stringWithString:@"Freshman Legislator"];
 		}
 		else {
-			theLabel.text = [NSString stringWithFormat:@"%d Years",  self.legislator.tenure.intValue];
+			theLabel.text = [NSString stringWithFormat:@"%d Years",  self.legislator.tenure.integerValue];
 		}
 		theLabel.font = [UIFont boldSystemFontOfSize:14];
 		theLabel.textColor = [UIColor darkGrayColor];
@@ -209,33 +209,33 @@
 	[sectionArray addObject:[[[NSMutableArray alloc] init] retain]];
 
 	objects = [NSArray arrayWithObjects:	@"Name", [self.legislator fullName], 
-			boolNO, [NSNumber numberWithInt:DirectoryTypeNone], nil];
+			boolNO, [NSNumber numberWithInteger:DirectoryTypeNone], nil];
 	[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 	
 	objects = [NSArray arrayWithObjects:	@"Website", self.legislator.website, 
-			boolYES, [NSNumber numberWithInt:DirectoryTypeWeb], nil];
+			boolYES, [NSNumber numberWithInteger:DirectoryTypeWeb], nil];
 	[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 	
 	objects = [NSArray arrayWithObjects:	@"Bio", self.legislator.bio_url, 
-			   boolYES, [NSNumber numberWithInt:DirectoryTypeWeb], nil];
+			   boolYES, [NSNumber numberWithInteger:DirectoryTypeWeb], nil];
 	[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 
 	objects = [NSArray arrayWithObjects:	@"Email", self.legislator.email, 
-			   boolYES, [NSNumber numberWithInt:DirectoryTypeMail], nil];
+			   boolYES, [NSNumber numberWithInteger:DirectoryTypeMail], nil];
 	[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 	
 	if (self.legislator.twitter.length > 0) {
 		objects = [NSArray arrayWithObjects:	@"Twitter", [NSString stringWithFormat:@"@%@", self.legislator.twitter], 
-				   boolYES, [NSNumber numberWithInt:DirectoryTypeTwitter], nil];
+				   boolYES, [NSNumber numberWithInteger:DirectoryTypeTwitter], nil];
 		[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 	}
 	if (self.legislator.partisan_index.floatValue != 0.0f) {
 		objects = [NSArray arrayWithObjects:	@"Index",  self.legislator.partisan_index.stringValue,
-				   boolNO, [NSNumber numberWithInt:DirectoryTypeIndex], nil];
+				   boolNO, [NSNumber numberWithInteger:DirectoryTypeIndex], nil];
 		[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 		
 		objects = [NSArray arrayWithObjects:	@"",  @"About the Roll Call Index", 
-				  boolYES, [NSNumber numberWithInt:DirectoryTypeIndexAbout], nil];
+				  boolYES, [NSNumber numberWithInteger:DirectoryTypeIndexAbout], nil];
 		[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 	}
 	if (self.legislator.notes.length > 0) {
@@ -245,7 +245,7 @@
 		tempString = kStaticNotes;
 
 	objects = [NSArray arrayWithObjects:	@"Notes",  tempString, 
-			   boolYES, [NSNumber numberWithInt:DirectoryTypeNotes], nil];
+			   boolYES, [NSNumber numberWithInteger:DirectoryTypeNotes], nil];
 	[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 	
 	
@@ -256,7 +256,7 @@
 		
 	for (CommitteePositionObj *position in [self.legislator committees]) {
 		objects = [NSArray arrayWithObjects:[position positionString],  [position.committee committeeName], 
-				   boolYES, [NSNumber numberWithInt:DirectoryTypeCommittee], nil];
+				   boolYES, [NSNumber numberWithInteger:DirectoryTypeCommittee], nil];
 		[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 	}
 	
@@ -268,34 +268,34 @@
 
 	if (legislator.staff.length > 0) {
 		objects = [NSArray arrayWithObjects:	@"Staff", self.legislator.staff, 
-				   boolNO, [NSNumber numberWithInt:DirectoryTypeNone], nil];
+				   boolNO, [NSNumber numberWithInteger:DirectoryTypeNone], nil];
 		[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 	}
 	if (self.legislator.cap_office.length > 0) {
 		objects = [NSArray arrayWithObjects:	@"Office",  self.legislator.cap_office, 
-				   boolYES, [NSNumber numberWithInt:DirectoryTypeOfficeMap], nil];
+				   boolYES, [NSNumber numberWithInteger:DirectoryTypeOfficeMap], nil];
 		[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 	} 
 	if (legislator.chamber_desk.length > 0) {
 		objects = [NSArray arrayWithObjects:	@"Desk #",  self.legislator.chamber_desk, 
-				   boolYES, [NSNumber numberWithInt:DirectoryTypeChamberMap], nil];
+				   boolYES, [NSNumber numberWithInteger:DirectoryTypeChamberMap], nil];
 		[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 	}
 	if (legislator.cap_phone.length > 0) {
 		objects = [NSArray arrayWithObjects:	@"Phone",  self.legislator.cap_phone, 
-				   boolIsPhone, [NSNumber numberWithInt:DirectoryTypePhone], nil];
+				   boolIsPhone, [NSNumber numberWithInteger:DirectoryTypePhone], nil];
 		[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 	} 
 	if (legislator.cap_fax.length > 0) {
 		objects = [NSArray arrayWithObjects:	@"Fax",  self.legislator.cap_fax, 
-				   boolNO, [NSNumber numberWithInt:DirectoryTypeNone], nil];
+				   boolNO, [NSNumber numberWithInteger:DirectoryTypeNone], nil];
 		[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 	}
 	if (legislator.cap_phone2.length > 0) {
 		tempString = (self.legislator.cap_phone2_name.length > 0) ? self.legislator.cap_phone2_name : @"Phone #2";
 		
 		objects = [NSArray arrayWithObjects:	tempString,  self.legislator.cap_phone2, 
-				   boolIsPhone, [NSNumber numberWithInt:DirectoryTypePhone], nil];
+				   boolIsPhone, [NSNumber numberWithInteger:DirectoryTypePhone], nil];
 		[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 	} 
 	
@@ -309,12 +309,12 @@
 		
 		if (legislator.dist1_phone.length > 0) {
 			objects = [NSArray arrayWithObjects:	@"Phone",  self.legislator.dist1_phone, 
-					   boolIsPhone, [NSNumber numberWithInt:DirectoryTypePhone], nil];
+					   boolIsPhone, [NSNumber numberWithInteger:DirectoryTypePhone], nil];
 			[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 		} 
 		if (legislator.dist1_fax.length > 0) {
 			objects = [NSArray arrayWithObjects:	@"Fax",  self.legislator.dist1_fax, 
-					   boolNO, [NSNumber numberWithInt:DirectoryTypeNone], nil];
+					   boolNO, [NSNumber numberWithInteger:DirectoryTypeNone], nil];
 			[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 		}
 		if (legislator.dist1_street.length > 0) {
@@ -323,7 +323,7 @@
 								   tempString, self.legislator.dist1_city, self.legislator.dist1_zip];
 
 			objects = [NSArray arrayWithObjects:	@"Address", tempString, 
-					   boolYES, [NSNumber numberWithInt:DirectoryTypeMap], nil];
+					   boolYES, [NSNumber numberWithInteger:DirectoryTypeMap], nil];
 			[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 		} 
 	}
@@ -337,12 +337,12 @@
 
 		if (legislator.dist2_phone.length > 0) {
 			objects = [NSArray arrayWithObjects:	@"Phone",  self.legislator.dist2_phone, 
-					   boolIsPhone, [NSNumber numberWithInt:DirectoryTypePhone], nil];
+					   boolIsPhone, [NSNumber numberWithInteger:DirectoryTypePhone], nil];
 			[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 		} 
 		if (legislator.dist2_fax.length > 0) {
 			objects = [NSArray arrayWithObjects:	@"Fax",  self.legislator.dist2_fax, 
-					   boolNO, [NSNumber numberWithInt:DirectoryTypeNone], nil];
+					   boolNO, [NSNumber numberWithInteger:DirectoryTypeNone], nil];
 			[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 		}
 		if (legislator.dist2_street.length > 0) {
@@ -351,7 +351,7 @@
 						  tempString, self.legislator.dist2_city, self.legislator.dist2_zip];
 			
 			objects = [NSArray arrayWithObjects:	@"Address", tempString, 
-					   boolYES, [NSNumber numberWithInt:DirectoryTypeMap], nil];
+					   boolYES, [NSNumber numberWithInteger:DirectoryTypeMap], nil];
 			[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 		} 
 	}
@@ -365,12 +365,12 @@
 		
 		if (legislator.dist3_phone1.length > 0) {
 			objects = [NSArray arrayWithObjects:	@"Phone",  self.legislator.dist3_phone1, 
-					   boolIsPhone, [NSNumber numberWithInt:DirectoryTypePhone], nil];
+					   boolIsPhone, [NSNumber numberWithInteger:DirectoryTypePhone], nil];
 			[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 		} 
 		if (legislator.dist3_fax.length > 0) {
 			objects = [NSArray arrayWithObjects:	@"Fax",  self.legislator.dist3_fax, 
-					   boolNO, [NSNumber numberWithInt:DirectoryTypeNone], nil];
+					   boolNO, [NSNumber numberWithInteger:DirectoryTypeNone], nil];
 			[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 		}
 		if (legislator.dist3_street.length > 0) {
@@ -379,7 +379,7 @@
 						  tempString, self.legislator.dist3_city, self.legislator.dist3_zip];
 			
 			objects = [NSArray arrayWithObjects:	@"Address", tempString, 
-					   boolYES, [NSNumber numberWithInt:DirectoryTypeMap], nil];
+					   boolYES, [NSNumber numberWithInteger:DirectoryTypeMap], nil];
 			[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 		} 
 	}
@@ -393,12 +393,12 @@
 		
 		if (legislator.dist4_phone1.length > 0) {
 			objects = [NSArray arrayWithObjects:	@"Phone",  self.legislator.dist4_phone1, 
-					   boolIsPhone, [NSNumber numberWithInt:DirectoryTypePhone], nil];
+					   boolIsPhone, [NSNumber numberWithInteger:DirectoryTypePhone], nil];
 			[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 		} 
 		if (legislator.dist4_fax.length > 0) {
 			objects = [NSArray arrayWithObjects:	@"Fax",  self.legislator.dist4_fax, 
-					   boolNO, [NSNumber numberWithInt:DirectoryTypeNone], nil];
+					   boolNO, [NSNumber numberWithInteger:DirectoryTypeNone], nil];
 			[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 		}
 		if (legislator.dist4_street.length > 0) {
@@ -407,7 +407,7 @@
 						  tempString, self.legislator.dist4_city, self.legislator.dist4_zip];
 			
 			objects = [NSArray arrayWithObjects:	@"Address", tempString, 
-					   boolYES, [NSNumber numberWithInt:DirectoryTypeMap], nil];
+					   boolYES, [NSNumber numberWithInteger:DirectoryTypeMap], nil];
 			[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
 		} 
 	}
