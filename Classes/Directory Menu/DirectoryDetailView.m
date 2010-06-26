@@ -74,10 +74,8 @@
 	UIImageView *photoView = [[UIImageView alloc] initWithFrame:CGRectMake(20.0f, 18.0f, 64.0f, 85.0f)];
 	photoView.autoresizingMask = UIViewAutoresizingNone;
 	
-	if (self.legislator.photo_name != nil)
-		photoView.image = [UIImage imageNamed:self.legislator.photo_name];
-	else 
-		photoView.image = [UIImage imageNamed:@"unknown.png"];	
+	photoView.image = [self.legislator legislatorImage];
+	
 	[aHeader addSubview:photoView];	
 	
 	CGFloat marginY = 3.0f;
