@@ -116,8 +116,8 @@
 			id <NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:1];
 			count = [sectionInfo numberOfObjects];
 		}
-		link.order = [NSNumber numberWithInt:count];	// put it in our last row.
-		link.section = [NSNumber numberWithInt:1];
+		link.order = [NSNumber numberWithInteger:count];	// put it in our last row.
+		link.section = [NSNumber numberWithInteger:1];
 		link.timeStamp = [NSDate date];
 	}
 	

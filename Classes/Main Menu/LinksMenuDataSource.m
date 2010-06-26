@@ -180,17 +180,17 @@ enum HeaderSectionRows {
 	#define kReferenceDate 269721914.791581
 	NSDate *referenceDate = [NSDate dateWithTimeIntervalSinceReferenceDate:kReferenceDate];
 	if ([link.timeStamp compare:referenceDate] == NSOrderedDescending) // it's a newer/added link
-		destination = [NSNumber numberWithInt:URLAction_externalBrowser];
+		destination = [NSNumber numberWithInteger:URLAction_externalBrowser];
 	else 
 #endif
-		destination = [NSNumber numberWithInt:URLAction_internalBrowser];
+		destination = [NSNumber numberWithInteger:URLAction_internalBrowser];
 	
 	return [NSArray arrayWithObjects:destination, link.url, nil];	
 }
 
 
 - (BOOL)validateLinkOrders {		
-	NSUInteger index = 0;
+	NSInteger index = 0;
 	@try {		
 		NSArray * fetchedObjects = [self.fetchedResultsController fetchedObjects];
 		
@@ -199,11 +199,11 @@ enum HeaderSectionRows {
 		
 		LinkObj * link = nil;		
 		for (link in fetchedObjects) {
-			if (link.section.intValue == kBodySection) {
-				if (link.order.intValue != index) {
+			if (link.section.integerValue == kBodySection) {
+				if (link.order.integerValue != index) {
 					debug_NSLog(@"Info: Order out of sync, order=%@ expected=%d", link.order, index);
 
-					link.order = [NSNumber numberWithInt:index];
+					link.order = [NSNumber numberWithInteger:index];
 				}
 				index++;
 			}
@@ -520,11 +520,11 @@ enum HeaderSectionRows {
 		//debug_NSLog(@"Before: %@", link);
 		
 		if (i == fromIndexPath.row) // it's our initial cell, just set it to our final destination
-			link.order = [NSNumber numberWithInt:toIndexPath.row];
+			link.order = [NSNumber numberWithInteger:toIndexPath.row];
 		else if (fromIndexPath.row < toIndexPath.row)
-			link.order = [NSNumber numberWithInt:i-1]; 	// it moved forward, shift back
+			link.order = [NSNumber numberWithInteger:i-1]; 	// it moved forward, shift back
 		else // if (fromIndexPath.row > toIndexPath.row)
-			link.order = [NSNumber numberWithInt:i+1]; 	// it moved backward, shift forward
+			link.order = [NSNumber numberWithInteger:i+1]; 	// it moved backward, shift forward
 				
 		//debug_NSLog(@"After: %@", link);
 	}
@@ -559,11 +559,11 @@ enum HeaderSectionRows {
 			//debug_NSLog(@"Before: %@", link);
 			
 			if (i == fromRow)	// it's our initial cell, just set it to our final destination
-				link.order = [NSNumber numberWithInt:(toRow-NUM_HEADER_SECTION_ROWS)];
+				link.order = [NSNumber numberWithInteger:(toRow-NUM_HEADER_SECTION_ROWS)];
 			else if (fromRow < toRow)
-				link.order = [NSNumber numberWithInt:(i-1-NUM_HEADER_SECTION_ROWS)];		// it moved forward, shift back
+				link.order = [NSNumber numberWithInteger:(i-1-NUM_HEADER_SECTION_ROWS)];		// it moved forward, shift back
 			else // if (fromIndexPath.row > toIndexPath.row)
-				link.order = [NSNumber numberWithInt:(i+1-NUM_HEADER_SECTION_ROWS)];		// it moved backward, shift forward
+				link.order = [NSNumber numberWithInteger:(i+1-NUM_HEADER_SECTION_ROWS)];		// it moved backward, shift forward
 			//debug_NSLog(@"After: %@", link);
 		}
 	}

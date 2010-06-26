@@ -246,7 +246,7 @@ enum InfoSectionRows {
 			break;
 		case kInfoSection:
 		default:
-			if (self.committee.parentId.intValue == -1) 
+			if (self.committee.parentId.integerValue == -1) 
 				sectionName = [NSString stringWithFormat:@"%@ Committee Info",[self.committee typeString]];
 			else
 				sectionName = [NSString stringWithFormat:@"%@ Subcommittee Info",[self.committee typeString]];			
