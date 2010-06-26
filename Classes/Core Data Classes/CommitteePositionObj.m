@@ -18,9 +18,9 @@
 @dynamic legislatorID;
 
 - (NSString*)positionString {
-	if ([[self position] intValue] == POS_CHAIR) 
+	if ([[self position] integerValue] == POS_CHAIR) 
 		return @"Chair";
-	else if ([[self position] intValue] == POS_VICE) 
+	else if ([[self position] integerValue] == POS_VICE) 
 		return @"Vice Chair";
 	else
 		return @"Member";
@@ -28,8 +28,8 @@
 
 - (NSComparisonResult)comparePositionAndCommittee:(CommitteePositionObj *)p
 {
-	NSInteger selfOrder = [[self position] intValue];
-	NSInteger comparedToOrder = [[p position] intValue];
+	NSInteger selfOrder = [[self position] integerValue];
+	NSInteger comparedToOrder = [[p position] integerValue];
 	NSComparisonResult result = NSOrderedSame;
 	
 	if (selfOrder < comparedToOrder) // reversed order, lower position id is higher

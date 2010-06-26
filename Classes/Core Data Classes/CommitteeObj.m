@@ -33,7 +33,7 @@
 }
 
 - (NSString*)typeString {
-	NSString * tempString = ([[self committeeType] intValue] == HOUSE) ? @"House" : @"Senate";
+	NSString * tempString = ([[self committeeType] integerValue] == HOUSE) ? @"House" : @"Senate";
 	return tempString;
 }
 
@@ -45,7 +45,7 @@
 - (LegislatorObj *)chair
 {
 	for (CommitteePositionObj *position in [self committeePositions]) {
-		if ([[position position] intValue] == POS_CHAIR)
+		if ([[position position] integerValue] == POS_CHAIR)
 			return position.legislator;
 	}
 	 return nil;
@@ -54,7 +54,7 @@
 - (LegislatorObj *)vicechair
 {
 	for (CommitteePositionObj *position in [self committeePositions]) {
-		if ([[position position] intValue] == POS_VICE)
+		if ([[position position] integerValue] == POS_VICE)
 			return position.legislator;
 	}
 	return nil;
@@ -64,7 +64,7 @@
 {
 	NSMutableArray *memberArray = [[[NSMutableArray alloc] init] autorelease];
 	for (CommitteePositionObj *position in [self committeePositions]) {
-		if ([[position position] intValue] == POS_MEMBER)
+		if ([[position position] integerValue] == POS_MEMBER)
 			[memberArray addObject:position.legislator];
 	}
 	

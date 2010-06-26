@@ -140,9 +140,9 @@
 
 - (NSString *)partyShortName {
 	NSString *shortName;
-	if ([[self party_id] intValue] == DEMOCRAT) // Democrat
+	if ([[self party_id] integerValue] == DEMOCRAT) // Democrat
 		shortName = @"D";
-	else if ([[self party_id] intValue] == REPUBLICAN) // Republican
+	else if ([[self party_id] integerValue] == REPUBLICAN) // Republican
 		shortName = @"R";
 	else // don't know the party?
 		shortName = @"I";
@@ -151,9 +151,9 @@
 
 - (NSString *)legTypeShortName {
 	NSString *shortName;
-	if ([[self legtype] intValue] == HOUSE) // Representative
+	if ([[self legtype] integerValue] == HOUSE) // Representative
 		shortName = @"Rep.";
-	else if ([[self legtype] intValue] == SENATE) // Senator
+	else if ([[self legtype] integerValue] == SENATE) // Senator
 		shortName = @"Sen.";
 	else // don't know the party?
 		shortName = @"";
@@ -177,7 +177,7 @@
 
 - (NSString *)districtPartyString {
 	NSString *string;
-	string = [NSString stringWithFormat: @"(%@-%d)", [self partyShortName], [[self district] intValue]];
+	string = [NSString stringWithFormat: @"(%@-%d)", [self partyShortName], [[self district] integerValue]];
 	return string;
 }
 
@@ -223,19 +223,19 @@
 - (NSString *)labelSubText {
 	NSString *string;
 	string = [NSString stringWithFormat: @"%@ - District %d", 
-			[self legtype_name], [[self district] intValue]];
+			[self legtype_name], [[self district] integerValue]];
 	return string;
 }
 
 - (NSString *)website {
 	NSString *url = nil;
 
-	if ([[self legtype] intValue] == HOUSE)
+	if ([[self legtype] integerValue] == HOUSE)
 		url = [NSString stringWithFormat:@"http://www.house.state.tx.us/members/dist%d/welcome.htm",
-			   [[self district] intValue]];
-	else if ([[self legtype] intValue] == SENATE)
+			   [[self district] integerValue]];
+	else if ([[self legtype] integerValue] == SENATE)
 		url = [NSString stringWithFormat:@"http://www.senate.state.tx.us/75r/Senate/members/dist%d/dist%d.htm",
-			   [[self district] intValue], [[self district] intValue]];
+			   [[self district] integerValue], [[self district] integerValue]];
 
 	return url;
 }
