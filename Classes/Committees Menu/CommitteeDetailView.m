@@ -90,7 +90,7 @@ enum InfoSectionRows {
 		cell.detailTextLabel.font = [UIFont boldSystemFontOfSize:12];
 		cell.detailTextLabel.textColor = [UIColor lightGrayColor];
 		
-		cell.imageView.image = [legislator smallLegislatorImage];
+		cell.imageView.image = [UtilityMethods poorMansImageNamed:legislator.photo_name];
 
 		// all the rows should show the disclosure indicator
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
