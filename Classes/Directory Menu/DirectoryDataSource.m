@@ -196,9 +196,9 @@
 
 - (void) updateFilterPredicate {
 	NSMutableString * predString = [NSMutableString stringWithString:@""];
-		
+
 	if (self.filterChamber > 0)	// do some chamber filtering
-		[predString appendFormat:@"(legtype == %@)", [NSNumber numberWithInt:self.filterChamber]];
+		[predString appendFormat:@"(legtype = %@)", [NSNumber numberWithInteger:self.filterChamber]];
 	if (self.filterString.length > 0) {		// do some string filtering
 		if (predString.length > 0)	// we already have some predicate action, insert "AND"
 			[predString appendString:@" AND "];
@@ -206,9 +206,11 @@
 		[predString appendFormat:@" OR (middlename CONTAINS[cd] '%@') OR (nickname CONTAINS[cd] '%@')", self.filterString, self.filterString];
 		[predString appendFormat:@" OR (district CONTAINS[cd] '%@'))", self.filterString];
 	}
-	
+
 	NSPredicate *predicate = (predString.length > 0) ? [NSPredicate predicateWithFormat:predString] : nil;
 	
+	// You've got to delete the cache, or disable caching before you modify the predicate...
+	[NSFetchedResultsController deleteCacheWithName:[fetchedResultsController cacheName]];
 	[fetchedResultsController.fetchRequest setPredicate:predicate];
 	
 	NSError *error = nil;
