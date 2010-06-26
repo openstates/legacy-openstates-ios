@@ -343,10 +343,8 @@
 	{		
 		NSError *error;
 
-#if _searchcontroller_
 		// You've got to delete the cache, or disable caching before you modify the predicate...
 		[NSFetchedResultsController deleteCacheWithName:[[dataSource fetchedResultsController] cacheName]];
-#endif
 		
 		if (![[dataSource fetchedResultsController] performFetch:&error]) {
 			// Handle the error...
