@@ -16,6 +16,8 @@
 	NSInteger filterChamber;
 	NSMutableString *filterString;
 	
+	//NSMutableDictionary *imageCache;
+	
 	NSFetchedResultsController *fetchedResultsController;
 	NSManagedObjectContext *managedObjectContext;	
 }
@@ -25,6 +27,7 @@
 @property (nonatomic) NSInteger filterChamber;		// 0 means don't filter
 @property (nonatomic,retain) NSMutableString *filterString;	// @"" means don't filter
 @property (nonatomic, readonly) BOOL hasFilter;
+//@property (nonatomic, retain) NSMutableDictionary *imageCache;
 
 - (LegislatorObj *)legislatorDataForIndexPath:(NSIndexPath *)indexPath;
 - (void) setFilterByString:(NSString *)filter;

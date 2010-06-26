@@ -78,22 +78,6 @@
 	return initial;
 }
 
-- (UIImage *)smallLegislatorImage {
-	UIImage *image = [[UIImage imageNamed:self.photo_name] 
-//					  resizedImage:CGSizeMake(51.0f, 68.0f) interpolationQuality:kCGInterpolationMedium];
-					 resizedImage:CGSizeMake(48.0f, 64.0f) interpolationQuality:kCGInterpolationMedium];
-
-	return image;
-}
-
-- (UIImage *)legislatorImage {
-	UIImage *image = [[UIImage imageNamed:self.photo_name] 
-					  resizedImage:CGSizeMake(64.0f, 85.0f) interpolationQuality:kCGInterpolationMedium];
-	
-	return image;
-}
-
-
 - (NSString *)partyShortName {
 	NSString *shortName;
 	if ([self.party_id integerValue] == DEMOCRAT) // Democrat

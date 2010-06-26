@@ -12,18 +12,23 @@
 
 #import "DetailTableViewController.h"
 
+#import "UtilityMethods.h"
+//#import "UIImage+Resize.h"
+
 @implementation DirectoryDataSource
 
 @synthesize fetchedResultsController, managedObjectContext;
 
 @synthesize hideTableIndex;
 @synthesize filterChamber, filterString;
+//@synthesize imageCache;
 
 // setup the data collection
 - init {
 	if (self = [super init]) {
 		self.filterChamber = 0;
 		self.filterString = [[[NSMutableString alloc] initWithString:@""] retain];
+		//self.imageCache = [NSMutableDictionary dictionary];
 	}
 	return self;
 }
@@ -34,10 +39,37 @@
 	if (filterString)
 		[filterString release];
 	
+	//if (self.imageCache)
+	//	self.imageCache = nil;
+	
 	[fetchedResultsController release];
 	[managedObjectContext release];
     [super dealloc];
 }
+
+- (void)didReceiveMemoryWarning {
+	//[self.imageCache removeAllObjects];
+}
+
+/*
+ - (UIImage*)cachedImage:(NSString*)fileName
+{
+
+#ifdef roleYourOwnCache
+	UIImage *image = [self.imageCache objectForKey:fileName];
+	
+	if (image == nil)
+	{
+		image = [UtilityMethods poorMansImageNamed:fileName];
+		[self.imageCache setObject:image forKey:fileName];
+	}
+	return image;
+#else
+	return [UtilityMethods poorMansImageNamed:fileName];
+#endif
+	
+}
+ */
 
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
@@ -116,8 +148,9 @@
 	cell.detailTextLabel.font = [UIFont boldSystemFontOfSize:12];
 	cell.detailTextLabel.textColor = [UIColor lightGrayColor];
 	
-	cell.imageView.image = [tempEntry smallLegislatorImage];
-
+	cell.imageView.image = [UtilityMethods poorMansImageNamed:tempEntry.photo_name];
+	//cell.imageView.image = [self cachedImage:tempEntry.photo_name];
+	
 	// all the rows should show the disclosure indicator
 	if ([self showDisclosureIcon])
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

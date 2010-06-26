@@ -111,6 +111,9 @@
 }
 
 - (void)didReceiveMemoryWarning {
+	if ([self.dataSource respondsToSelector:@selector(didReceiveMemoryWarning)])
+		[self.dataSource performSelector:@selector(didReceiveMemoryWarning)];
+	
 	[self resetStoredSelection];
 #if kUseLeakyControllers
 	[UtilityMethods flushLeakyControllers];
