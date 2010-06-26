@@ -105,9 +105,13 @@
 	}
 	
 	// configure cell contents
+	
+	cell.indentationLevel = -4;
 	cell.selectionStyle = UITableViewCellSelectionStyleBlue;
 	cell.detailTextLabel.text = tempEntry.committeeName;
 	cell.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
+	cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+	cell.detailTextLabel.minimumFontSize = 12.0f;
 
 	if (tempEntry.committeeType.integerValue == HOUSE)
 		cell.textLabel.text = [NSString stringWithString: @"House"];
