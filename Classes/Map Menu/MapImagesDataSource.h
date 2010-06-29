@@ -9,7 +9,7 @@
 #import "Constants.h"
 #import "TableDataSourceProtocol.h"
 
-@interface MapImagesDataSource : NSObject <UITableViewDataSource,TableDataSource, NSFetchedResultsControllerDelegate> {
+@interface MapImagesDataSource : NSObject <TableDataSource> {
 	NSArray *InteriorMaps;
 	NSArray *ExteriorMaps;
 	NSArray *ChamberMaps;

@@ -9,7 +9,7 @@
 #import "Constants.h"
 #import "TableDataSourceProtocol.h"
 
-@interface LinksMenuDataSource : NSObject <UITableViewDataSource,TableDataSource, NSFetchedResultsControllerDelegate>  {
+@interface LinksMenuDataSource : NSObject <TableDataSource>  {
 	NSFetchedResultsController *fetchedResultsController;
 	NSManagedObjectContext *managedObjectContext;
 #if NEEDS_TO_INITIALIZE_DATABASE

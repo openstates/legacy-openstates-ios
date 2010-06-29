@@ -11,7 +11,7 @@
 #import "TableDataSourceProtocol.h"
 #import "LegislatorObj.h"
 
-@interface DirectoryDataSource : NSObject <UITableViewDataSource,TableDataSource, NSFetchedResultsControllerDelegate>  {
+@interface DirectoryDataSource : NSObject <TableDataSource>  {
 	BOOL hideTableIndex;
 	NSInteger filterChamber;
 	NSMutableString *filterString;

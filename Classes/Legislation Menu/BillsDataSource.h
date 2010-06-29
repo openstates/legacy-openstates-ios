@@ -9,7 +9,7 @@
 #import "Constants.h"
 #import "TableDataSourceProtocol.h"
 
-@interface BillsDataSource : NSObject <UITableViewDataSource,TableDataSource, NSFetchedResultsControllerDelegate>  {
+@interface BillsDataSource : NSObject <TableDataSource>  {
 	NSFetchedResultsController *fetchedResultsController;
 	NSManagedObjectContext *managedObjectContext;	
 }

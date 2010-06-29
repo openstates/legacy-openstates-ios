@@ -10,7 +10,7 @@
 #import "LegislatorObj.h"
 #import "CommitteeObj.h"
 
-@protocol TableDataSource <NSObject, NSFetchedResultsControllerDelegate>
+@protocol TableDataSource <UITableViewDataSource, NSFetchedResultsControllerDelegate>
  
 @required
 
