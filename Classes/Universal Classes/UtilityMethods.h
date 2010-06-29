@@ -32,13 +32,7 @@
 + (void) alertNotAPhone;
 + (void) noInternetAlert;
 
-#define kUseLeakyControllers 0
-#if kUseLeakyControllers
-// used to limit the total number of internal browsers, for memory management
-//#define kMaxLeakyControllers 2	
-+ (void) registerLeakyController:(id) controller;
-+ (void) unregisterLeakyController:(id) controller;
-+ (void) flushLeakyControllers;
-#endif
++ (BOOL) isIPadDevice;
+//+ (BOOL) isSplitViewClassAvailable;
 
 @end

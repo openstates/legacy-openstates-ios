@@ -154,7 +154,7 @@
 + (void)noInternetAlert {
 	UIAlertView *noInternetAlert = [[[ UIAlertView alloc ] 
 								  initWithTitle:@"Internet Unavailable" 
-								  message:@"This feature requires an Internet connection.  If your iPhone/iTouch is in Airplane Mode, you must disable it before utilizing this feature." 
+								  message:@"This feature requires an Internet connection.  Perhaps your iOS device is in Airplane mode or there is no WiFi service in this area." 
 								  delegate:nil // we're static, so don't do "self"
 								  cancelButtonTitle: @"Cancel" 
 								  otherButtonTitles:nil, nil] autorelease];
@@ -240,49 +240,15 @@
 	return checked;
 }
 
-#pragma mark -
-#pragma mark Memory Management
-
-#if kUseLeakyControllers
-+ (void) unregisterLeakyController:(id) controller  {
-	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
-	if ((appDelegate != nil) && (controller != nil)) {
-		if ([appDelegate.leakyControllerStack containsObject:controller])
-			[appDelegate.leakyControllerStack removeObject:controller];
-	}
-
++ (BOOL) isIPadDevice {
+	return (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
 }
-
-+ (void) flushLeakyControllers {
-	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
-	if (appDelegate == nil) {
-		return;
-	}
-	
-	for (id controller in appDelegate.leakyControllerStack) {
-		[controller didReceiveMemoryWarning];
-		[UtilityMethods unregisterLeakyController:controller];
-	}	
+/*
+ // This particular method is bulls&@t, given that splitviews are in the iOS4 SDK and available to any iPhones during linking ... just not available at runtime.
++ (BOOL) isSplitViewClassAvailable {
+ 
+	Class splitVCClass = NSClassFromString(@"UISplitViewController");
+	return splitVCClass != nil;	
 }
-
-+ (void) registerLeakyController:(id) controller {
-	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
-	if (appDelegate == nil) {
-		return;
-	}
-	
-	NSUInteger count = [appDelegate.leakyControllerStack count];
-	
-	// maximum of 2 leaky controllers
-	if (count >= kMaxLeakyControllers) {
-		// find the oldest leaky controller and "pop" it off the stack by telling it we're out of memory
-		id firstController = [appDelegate.leakyControllerStack objectAtIndex:0];
-		[firstController didReceiveMemoryWarning];
-		[UtilityMethods unregisterLeakyController:firstController];
-	}
-	
-	[appDelegate.leakyControllerStack addObject:controller];
-	
-}
-#endif
+ */
 @end
