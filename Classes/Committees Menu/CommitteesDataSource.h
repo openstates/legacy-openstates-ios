@@ -9,7 +9,7 @@
 #import "Constants.h"
 #import "TableDataSourceProtocol.h"
 
-@interface CommitteesDataSource : NSObject <UITableViewDataSource,TableDataSource, NSFetchedResultsControllerDelegate> {
+@interface CommitteesDataSource : NSObject <TableDataSource> {
 	BOOL hideTableIndex;
 	NSInteger filterChamber;
 	NSMutableString *filterString;
