@@ -491,7 +491,7 @@
 				UIImage *emptyImage = [[UIImage alloc] init]; // should we autorelease??????
 				[self.sliderControl setMinimumTrackImage:emptyImage forState:UIControlStateNormal];
 				[self.sliderControl setMaximumTrackImage:emptyImage forState:UIControlStateNormal];
-				[self.sliderControl setThumbImage:[UIImage imageNamed:@"slider_star.png"] forState:UIControlStateNormal];
+				[self.sliderControl setThumbImage:[UIImage imageNamed:@"slider_star_big.png"] forState:UIControlStateNormal];
 				
 			}
 			[self.sliderView setFrame:sliderViewFrame];			
