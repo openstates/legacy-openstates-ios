@@ -46,11 +46,11 @@ NSString *const kAppiraterDeclinedToRate			= @"kAppiraterDeclinedToRate";
 
 NSString *templateReviewURL = @"http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=APP_ID&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software";
 
-@interface Appirater (hidden)
+@interface Appirater (Private)
 - (BOOL)connectedToNetwork;
 @end
 
-@implementation Appirater (hidden)
+@implementation Appirater (Private)
 
 - (BOOL)connectedToNetwork {
     // Create zero addy
