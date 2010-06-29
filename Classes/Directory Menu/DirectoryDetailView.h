@@ -17,15 +17,18 @@
 @interface DirectoryDetailView : UITableView <UITableViewDataSource>{
 	LegislatorObj		*legislator;
 	NSMutableArray	*sectionArray;
-	UISlider		*customSlider;
+	IBOutlet UIView  *sliderView;
+	IBOutlet UISlider  *sliderControl;
 	DetailTableViewController *detailController;
+
 }
 
 @property (nonatomic, retain) DetailTableViewController *detailController;
 @property (nonatomic, retain) LegislatorObj *legislator;
 @property (nonatomic, retain) NSMutableArray *sectionArray;
 @property (readonly) NSString *name;
-@property (readonly) UISlider *customSlider;
+@property (nonatomic, retain) UIView *sliderView;
+@property (nonatomic, retain) UISlider *sliderControl;
 
 
 - (id) initWithFrameAndLegislator:(CGRect)frame Legislator:(LegislatorObj *)aLegislator;

@@ -14,19 +14,17 @@
 #import "CommitteeObj.h"
 #import "CommitteePositionObj.h"
 #import "NotesViewController.h"
-
 @implementation DirectoryDetailView
 
 @synthesize legislator;
 @synthesize sectionArray;
 @synthesize detailController;
-
-
+@synthesize sliderView, sliderControl;
 
 - (id)initWithFrameAndLegislator:(CGRect)frame Legislator:(LegislatorObj *)aLegislator {
 	// allow superclass to initialize its state first
     if (self = [super initWithFrame:frame style:UITableViewStyleGrouped]) {
-		
+				
 		// Initialization code here.
 		if (aLegislator == nil) { // This should never happen....
 			debug_NSLog(@"DirectoryDetailView: Failed to find an instantiated legislator.");
@@ -48,16 +46,7 @@
 }
 
 - (void)dealloc {
-	
-	
 	[sectionArray release];
-	//legislator = nil;
-	//[self.legislator release]; // we didn't allocate it...
-	
-	if (customSlider != nil)
-		[customSlider release];
-
-	
     [super dealloc];
 }
 
@@ -152,19 +141,6 @@
 // Override to allow rotation. Default returns YES only for UIDeviceOrientationPortrait
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation { 
 	return YES;
-}
-
-- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-	/*	
-	 // adjust individual subviews as necessary
-	 BOOL wasSideways = (UIInterfaceOrientationLandscapeLeft == fromInterfaceOrientation || 
-	 UIInterfaceOrientationLandscapeRight == fromInterfaceOrientation);
-	 CGRect searchBarRect = self.searchBar.bounds;
-	 searchBarRect.size.height = wasSideways ? 44 : 32;
-	 self.searchBar.bounds = searchBarRect;
-	 
-	 */
 }
 
 /* Some stuff that we might have to repeat... */
@@ -427,6 +403,25 @@
 }
 
 #pragma mark -
+#pragma mark Custom Slider
+
+/* This determines the appropriate size for the custom slider view, given its superview */
+- (CGRect) preshrinkSliderViewFromView:(UIView *)aView {
+	CGFloat sliderHeight = 24.0f;
+	CGFloat sliderInset = 18.0f;
+	
+	CGRect rect = aView.bounds;
+	CGFloat sliderWidth = aView.bounds.size.width - (sliderInset * 2);
+	
+	rect.origin.y = aView.center.y - (sliderHeight / 2);
+	rect.size.height = sliderHeight;
+	rect.origin.x = sliderInset; //aView.center.x - (sliderWidth / 2);
+	rect.size.width = sliderWidth;
+	
+	return rect;
+}
+
+#pragma mark -
 #pragma mark UITableViewDataSource methods
 
 
@@ -489,18 +484,20 @@
 			cell.textLabel.numberOfLines = 2;
 			cell.textLabel.highlightedTextColor = [UIColor blackColor];
 			//cell.textLabel.text = cellInfo.entryName;
-			UISlider *control = [self customSlider];
-			[control setValue:cellInfo.entryValue.floatValue animated:YES];
+
+			CGRect sliderViewFrame = [self preshrinkSliderViewFromView:cell.contentView];
+			if (self.sliderView == nil) {
+				[[NSBundle mainBundle] loadNibNamed:@"StaticGradientSliderView" owner:self options:NULL];
+				UIImage *emptyImage = [[UIImage alloc] init]; // should we autorelease??????
+				[self.sliderControl setMinimumTrackImage:emptyImage forState:UIControlStateNormal];
+				[self.sliderControl setMaximumTrackImage:emptyImage forState:UIControlStateNormal];
+				[self.sliderControl setThumbImage:[UIImage imageNamed:@"slider_star.png"] forState:UIControlStateNormal];
+				
+			}
+			[self.sliderView setFrame:sliderViewFrame];			
+			[self.sliderControl setValue:cellInfo.entryValue.floatValue animated:YES];
+			[cell.contentView addSubview:self.sliderView];
 			cell.userInteractionEnabled = NO;
-			
-			CGRect gradientRect = control.frame;
-			gradientRect.size.height = 14;
-			gradientRect.origin.y = gradientRect.origin.y + 6;
-			UIImageView * gradientView = [[UIImageView alloc] initWithFrame:gradientRect];
-			gradientView.image = [UIImage imageNamed:@"TexasGradient.png"];
-			gradientView.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
-			[cell.contentView addSubview:gradientView];
-			[cell.contentView addSubview:control];
 			break;
 
 		case DirectoryTypeMap:
@@ -646,7 +643,7 @@
 	CGFloat height = 44.0f;
 	NSInteger row = [indexPath row];
 	NSInteger section = [indexPath section];
-
+	
 	//DirectoryDetailInfo *cellInfo = [[DirectoryDetailInfo alloc] init];
 	//[self infoForRow:cellInfo atIndexPath:indexPath];
 	
@@ -660,43 +657,5 @@
 	}
 	return height;
 }
-
-
-#pragma mark -
-#pragma mark Custom Controls
-
-- (UISlider *)customSlider
-{
-	
-
-    if (customSlider == nil) 
-    {
-        CGRect frame = CGRectMake(18, 9.0, 270.0, 11.0f);
-        customSlider = [[UISlider alloc] initWithFrame:frame];
-        //[customSlider addTarget:self action:@selector(sliderAction:) forControlEvents:UIControlEventValueChanged];
-        // in case the parent view draws with a custom color or gradient, use a transparent color
-        customSlider.backgroundColor = [UIColor clearColor];	
-		UIImage *stetchLeftTrack = [[UIImage alloc] init];
-		UIImage *stetchRightTrack = [[UIImage alloc] init];
-       // UIImage *stetchLeftTrack = [[UIImage imageNamed:@"left_slider.png"]
-		//							stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0];
-        //UIImage *stetchRightTrack = [[UIImage imageNamed:@"right_slider.png"]
-		//							 stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0];
-        [customSlider setThumbImage: [UIImage imageNamed:@"slider_star.png"] forState:UIControlStateNormal];
-//        [customSlider setThumbImage: [UIImage imageNamed:@"fancy_star.png"] forState:UIControlStateNormal];
-        [customSlider setMinimumTrackImage:stetchLeftTrack forState:UIControlStateNormal];
-        [customSlider setMaximumTrackImage:stetchRightTrack forState:UIControlStateNormal];
-        customSlider.minimumValue = -1.25;
-        customSlider.maximumValue = 1.25;
-        customSlider.continuous = YES;
-        customSlider.value = 0.001f;
-		
-		customSlider.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
-
-		//customSlider.tag = kViewTag;	// tag this view for later so we can remove it from recycled table cells
-    }
-    return customSlider;
-}
-
 
 @end
