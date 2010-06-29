@@ -10,7 +10,6 @@
 #import "Constants.h"
 
 #import "DirectoryDetailView.h"
-#import "CommitteeDetailView.h"
 #include "VoteInfoViewController.h"
 
 //#import "MapImageView.h"
@@ -29,10 +28,8 @@
 	UIWebView *webPDFView;
 
 	LegislatorObj *legislator;
-	CommitteeObj *committee;
 
 	DirectoryDetailView *legislatorView;
-	CommitteeDetailView *committeeView;
 }
 
 @property (nonatomic,retain) UIView *containerView;
@@ -44,9 +41,6 @@
 
 @property (nonatomic,retain) LegislatorObj *legislator;
 @property (nonatomic,retain) DirectoryDetailView *legislatorView;
-
-@property (nonatomic,retain) CommitteeObj *committee;
-@property (nonatomic,retain) CommitteeDetailView *committeeView;
 
 - (void) showWebViewWithURL:(NSURL *)url;
 - (void) pushMapViewWithURL:(NSURL *)url;
