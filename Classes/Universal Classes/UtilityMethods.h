@@ -14,6 +14,8 @@
 
 + (BOOL) isThisCrantacular;
 
++ (NSString *) titleFromURL:(NSURL *)url;
+
 + (NSURL *) safeWebUrlFromString:(NSString *)urlString;
 + (NSURL *) pdfMapUrlFromOfficeString:(NSString *)office;
 + (NSURL *) pdfMapUrlFromChamber:(NSInteger)chamber;

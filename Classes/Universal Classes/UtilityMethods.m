@@ -15,9 +15,35 @@
 	return (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation));
 }
 
++ (NSString *) titleFromURL:(NSURL *)url {
+	NSLog(@"%@", [url absoluteString]);
+	NSArray *urlComponents = [[url absoluteString] componentsSeparatedByString:@"/"];
+	NSString * title = nil;
+	
+	if ( [urlComponents count] > 0 )
+	{
+		NSString *str = [urlComponents objectAtIndex:([urlComponents count]-1)];
+		NSRange dot = [str rangeOfString:@"."];
+		if ( dot.length > 0 )
+		{
+			title = [str substringToIndex:dot.location];
+		}
+		else
+		{
+			title = str;
+		}
+	}
+	else
+	{
+		title = @"...";
+	}
+	
+	return title;
+}
+
 + (NSURL *) safeWebUrlFromString:(NSString *)urlString {
-	NSString * tempString = [[NSString alloc] initWithString:urlString];
-	return [NSURL URLWithString:[tempString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	//NSString * tempString = [[NSString alloc] initWithString:urlString];
+	return [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 }
 
 + (NSURL *) pdfMapUrlFromOfficeString:(NSString *)office {
