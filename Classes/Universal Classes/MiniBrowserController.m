@@ -7,7 +7,7 @@
 #import "MiniBrowserController.h"
 #import "UtilityMethods.h"
 
-@interface MiniBrowserController (private)
+@interface MiniBrowserController (Private)
 	- (void)animate;
 	- (void)animationFinished:(NSString *)animationID finished:(BOOL)finished context:(void *)context;
 	- (void)enableBackButton:(BOOL)enable;
