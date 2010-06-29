@@ -27,8 +27,8 @@
 @property (nonatomic, retain) LegislatorObj *legislator;
 @property (nonatomic, retain) NSMutableArray *sectionArray;
 @property (readonly) NSString *name;
-@property (nonatomic, retain) UIView *sliderView;
-@property (nonatomic, retain) UISlider *sliderControl;
+@property (nonatomic, retain) IBOutlet UIView *sliderView;
+@property (nonatomic, retain) IBOutlet UISlider *sliderControl;
 
 
 - (id) initWithFrameAndLegislator:(CGRect)frame Legislator:(LegislatorObj *)aLegislator;

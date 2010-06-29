@@ -11,6 +11,8 @@
 #import "DirectoryDetailView.h"
 #import "TexLegeAppDelegate.h"
 #import "DetailTableViewController.h"
+#import "CommitteeDetailViewController.h"
+
 #import "CommitteeObj.h"
 #import "CommitteePositionObj.h"
 #import "NotesViewController.h"
@@ -228,7 +230,7 @@
 	sectionIndex++;
 	[sectionArray addObject:[[[NSMutableArray alloc] init] retain]];
 		
-	for (CommitteePositionObj *position in [self.legislator committees]) {
+	for (CommitteePositionObj *position in [self.legislator sortedCommitteePositions]) {
 		objects = [NSArray arrayWithObjects:[position positionString],  [position.committee committeeName], 
 				   boolYES, [NSNumber numberWithInteger:DirectoryTypeCommittee], nil];
 		[self createEntryInSection:sectionIndex WithKeys:keys andObjects:objects];
@@ -598,18 +600,12 @@
 				}
 				
 			}
-			else if (cellInfo.entryType == DirectoryTypeCommittee) {								
-				DetailTableViewController *subDetailController = [[DetailTableViewController alloc] init];
-				
-				CommitteePositionObj *tempComm = [[self.legislator committees] objectAtIndex:row];
-				subDetailController.committee = tempComm.committee;
-				
+			else if (cellInfo.entryType == DirectoryTypeCommittee) {
+				CommitteeDetailViewController *subDetailController = [[CommitteeDetailViewController alloc] init];
+				subDetailController.committee = [[[self.legislator sortedCommitteePositions] objectAtIndex:row] committee];
 				// push the detail view controller onto the navigation stack to display it
 				[[self.detailController navigationController] pushViewController:subDetailController animated:YES];
-				
-				//	[self.navigationController setNavigationBarHidden:NO];
 				[subDetailController release];
-				
 			}
 			else if (cellInfo.entryType == DirectoryTypeOfficeMap || cellInfo.entryType == DirectoryTypeChamberMap) {
 				[self.detailController pushMapViewWithURL:[cellInfo generateURL:self.legislator]];
