@@ -205,15 +205,10 @@
 	return offices;
 }
 
-- (NSMutableArray *)committees
+- (NSArray *)sortedCommitteePositions
 {
-	NSMutableArray *memberArray = [[[NSMutableArray alloc] init] autorelease];
-	for (CommitteePositionObj *position in self.committeePositions) {
-		[memberArray addObject:position];
-	}
-	[memberArray sortUsingSelector:@selector(comparePositionAndCommittee:)];
-
-	return memberArray;
+	return [[self.committeePositions allObjects] 
+							sortedArrayUsingSelector:@selector(comparePositionAndCommittee:)];
 }
 
 

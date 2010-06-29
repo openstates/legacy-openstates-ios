@@ -19,6 +19,7 @@
 @property (nonatomic, retain) LegislatorObj * legislator;
 @property (nonatomic, retain) NSNumber * legislatorID;
 @property (nonatomic, retain) CommitteeObj * committee;
+
 - (NSString *) positionString;
 - (NSComparisonResult)comparePositionAndCommittee:(CommitteePositionObj *)p;
 

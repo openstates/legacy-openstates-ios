@@ -31,7 +31,7 @@
 - (NSString *) description;
 - (LegislatorObj *) chair;
 - (LegislatorObj *) vicechair;
-- (NSMutableArray *) members;
+- (NSArray *) sortedMembers;
 
 
 @end

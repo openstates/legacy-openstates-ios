@@ -74,10 +74,9 @@
 - (NSString *)website;
 - (NSString *)shortNameForButtons;
 - (NSString *)labelSubText;
-
 - (NSInteger) numberOfDistrictOffices;
 
-- (NSMutableArray *) committees;
+- (NSArray *) sortedCommitteePositions;
 @end
 
 

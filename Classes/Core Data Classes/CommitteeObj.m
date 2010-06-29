@@ -60,14 +60,16 @@
 	return nil;
 }
 
-- (NSMutableArray *)members
+- (NSArray *)sortedMembers
 {
+	//return [[self.committeePositions allObjects] 
+	//		sortedArrayUsingSelector:@selector(compareMembersByName:)];
+
 	NSMutableArray *memberArray = [[[NSMutableArray alloc] init] autorelease];
 	for (CommitteePositionObj *position in [self committeePositions]) {
 		if ([[position position] integerValue] == POS_MEMBER)
 			[memberArray addObject:position.legislator];
 	}
-	
 	[memberArray sortUsingSelector:@selector(compareMembersByName:)];
 
 	return memberArray;
