@@ -62,7 +62,7 @@
 					<object class="IBUISlider" id="826232757">
 						<reference key="NSNextResponder" ref="832563178"/>
 						<int key="NSvFlags">290</int>
-						<string key="NSFrame">{{-2, 1}, {304, 23}}</string>
+						<string key="NSFrame">{{-2, 0}, {304, 23}}</string>
 						<reference key="NSSuperview" ref="832563178"/>
 						<reference key="IBUIBackgroundColor" ref="680358745"/>
 						<bool key="IBUIOpaque">NO</bool>
