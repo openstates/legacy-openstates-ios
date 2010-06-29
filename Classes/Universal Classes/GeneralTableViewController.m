@@ -115,9 +115,7 @@
 		[self.dataSource performSelector:@selector(didReceiveMemoryWarning)];
 	
 	[self resetStoredSelection];
-#if kUseLeakyControllers
-	[UtilityMethods flushLeakyControllers];
-#endif
+
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
     // Release anything that's not essential, such as cached data
 }
