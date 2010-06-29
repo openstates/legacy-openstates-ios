@@ -17,11 +17,13 @@
 #import "GeneralTableViewController.h"
 #import "Reachability.h"
 #import "Appirater.h"
+#import "CPTestApp_iPadViewController.h"
 
-@interface TexLegeAppDelegate(mymethods)
+@interface TexLegeAppDelegate(Private)
 // these are private methods that outside classes need not use
 - (void)setupDialogBoxes;
 - (void)showHackingAlert;
+- (void)iPhoneUserInterfaceInit;
 
 - (NSString *)hostName;
 
@@ -37,15 +39,17 @@ NSInteger kNoSelection = -1;
 //- (void) setupDialogBoxes;
 
 @synthesize tabBarController, savedLocation;
-@synthesize portraitWindow, hackingAlert;
+@synthesize mainWindow, hackingAlert;
 @synthesize aboutView, voteInfoView, activeDialogController;
 @synthesize remoteHostStatus, internetConnectionStatus, localWiFiConnectionStatus;
 
 
+@synthesize splitViewController, rootViewController, detailViewController;
+
 - init {
 	if (self = [super init]) {
 		// initialize  to nil
-		portraitWindow = nil;
+		mainWindow = nil;
 		tabBarController = nil;
 		activeDialogController = nil;
 		hackingAlert = nil;
@@ -55,6 +59,12 @@ NSInteger kNoSelection = -1;
 	return self;
 }
 
+#pragma mark -
+#pragma mark Data Sources
+
+
+#pragma mark -
+#pragma mark iPhone Interface
 
 - (UINavigationController *)createNavigationControllerWrappingViewControllerForDataSourceOfClass:(Class)datasourceClass {
 	// this is entirely a convenience method to reduce the repetition of the code
@@ -62,7 +72,7 @@ NSInteger kNoSelection = -1;
 	// it returns a retained instance of the UINavigationController class. This is unusual, but 
 	// it is necessary to limit the autorelease use as much as possible.
 	
-	id<TableDataSource,UITableViewDataSource> dataSource = [[datasourceClass alloc] init];
+	id<TableDataSource> dataSource = [[datasourceClass alloc] init];
 
 	// Core Data // is it necessary to do this here first?
 	dataSource.managedObjectContext = self.managedObjectContext;
@@ -87,7 +97,7 @@ NSInteger kNoSelection = -1;
 }
 
 
-- (void)setupPortraitUserInterface {
+- (void)iPhoneUserInterfaceInit {
 	UINavigationController *localNavigationController;
 	
 	tabBarController = [[UITabBarController alloc] init];	
@@ -116,10 +126,15 @@ NSInteger kNoSelection = -1;
 	[localViewControllersArray addObject:localNavigationController];
 	[localNavigationController release];
 		
+	localNavigationController = [[CPTestApp_iPadViewController alloc] initWithNibName:@"CPTestApp_iPadViewController" bundle:nil];
+	localNavigationController.tabBarItem.image = [UIImage imageNamed:@"fancy_star.png"];
+	localNavigationController.tabBarItem.title = @"Vote Index";
+	[localViewControllersArray addObject:localNavigationController];
+
 	tabBarController.viewControllers = localViewControllersArray;
 	[localViewControllersArray release];
 
-	[portraitWindow addSubview:tabBarController.view];
+	[self.mainWindow addSubview:tabBarController.view];
 
 }
 
@@ -161,21 +176,20 @@ NSInteger kNoSelection = -1;
     // method "reachabilityChanged" will be called. 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:@"kNetworkReachabilityChangedNotification" object:nil];
 	
-    // Set up the portraitWindow and content view
-	UIWindow *localPortraitWindow;
-	localPortraitWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.portraitWindow = localPortraitWindow;
-	// the localPortraitWindow data is now retained by the application delegate so we can release the local variable
-	[localPortraitWindow release];
+    // Set up the mainWindow and content view
+	UIWindow *localMainWindow;
+	localMainWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.mainWindow = localMainWindow;
+	// the localMainWindow data is now retained by the application delegate so we can release the local variable
+	[localMainWindow release];
 	
-    [portraitWindow setBackgroundColor:[UIColor blackColor]];
+    [self.mainWindow setBackgroundColor:[UIColor blackColor]];
 	
 	if (![UtilityMethods isThisCrantacular]) {
 		// This app be hacked!
 		
 		[self showHackingAlert];
 	}
-	
 	// load the stored preference of the user's last location from a previous launch
 	NSMutableArray *tempMutableCopy = [[[NSUserDefaults standardUserDefaults] objectForKey:kRestoreLocationKey] mutableCopy];
 	self.savedLocation = tempMutableCopy;
@@ -189,19 +203,33 @@ NSInteger kNoSelection = -1;
 						  [NSNumber numberWithInteger:kNoSelection],	// .. section selection for underlying table
 						  nil] retain];
 	}
-			
-	// configure the portrait user interface
-	[self setupPortraitUserInterface];
-	
-	[self setTabOrderIfSaved];
-	
-	NSInteger selection = [[savedLocation objectAtIndex:0] integerValue];	// read the saved selection at level 1
-	if ((selection != kNoSelection) && (selection != tabBarController.selectedIndex)) {
-		tabBarController.selectedIndex = selection;
+
+	if ([UtilityMethods isIPadDevice]) {
+		//NSLog(@"This is an iPad!!!");
+
+		if (splitViewController == nil) {
+			[[NSBundle mainBundle] loadNibNamed:@"SplitViewController" owner:self options:NULL];
+		}
+		//GREG
+		[self.mainWindow addSubview:splitViewController.view];
+
+		//[self iPhoneUserInterfaceInit];
 	}
-	
+	else {
+		//NSLog(@"This is NOT an iPad!!!");
+
+		// configure the portrait user interface
+		[self iPhoneUserInterfaceInit];
+		
+		[self setTabOrderIfSaved];
+		
+		NSInteger selection = [[savedLocation objectAtIndex:0] integerValue];	// read the saved selection at level 1
+		if ((selection != kNoSelection) && (selection != tabBarController.selectedIndex)) {
+			tabBarController.selectedIndex = selection;
+		}
+	}
 	// make the window visible
-	[portraitWindow makeKeyAndVisible];
+	[self.mainWindow makeKeyAndVisible];
 	
 	// register our preference selection data to be archived
 	NSDictionary *savedLocationDict = [NSDictionary dictionaryWithObject:savedLocation forKey:kRestoreLocationKey];
@@ -215,8 +243,8 @@ NSInteger kNoSelection = -1;
 - (void)applicationWillTerminate:(UIApplication *)application {
 
 	/* maybe someday figure out how to update the Default.png 
-	UIGraphicsBeginImageContext(self.portraitWindow.bounds.size);
-	[self.portraitWindow.layer renderInContext:UIGraphicsGetCurrentContext()];
+	UIGraphicsBeginImageContext(self.mainWindow.bounds.size);
+	[self.mainWindow.layer renderInContext:UIGraphicsGetCurrentContext()];
 	UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
 	
@@ -505,18 +533,18 @@ NSInteger kNoSelection = -1;
 #pragma mark Memory management
 
 - (void)dealloc {
-    [managedObjectContext release];
-    [managedObjectModel release];
-    [persistentStoreCoordinator release];
-    
-	[tabBarController release];
-	[portraitWindow release];    
 	[savedLocation release];
-	
-	//[leakyControllerStack release];
-	
 	[aboutView release];
 	[voteInfoView release];
+	
+	[tabBarController release];
+
+	[splitViewController release];
+	[mainWindow release];    
+
+	[managedObjectContext release];
+    [managedObjectModel release];
+    [persistentStoreCoordinator release];
 	
     [super dealloc];
 }

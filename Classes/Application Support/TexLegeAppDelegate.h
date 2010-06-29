@@ -11,18 +11,19 @@
 #import "AboutViewController.h"
 #import "Reachability.h"
 
+@class LegislatorDetailViewController, MasterTableViewController;
 
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate, 
-		AboutViewControllerDelegate, VoteInfoViewControllerDelegate> {
-    NSManagedObjectModel *managedObjectModel;
-    NSManagedObjectContext *managedObjectContext;	    
-    NSPersistentStoreCoordinator *persistentStoreCoordinator;
+		AboutViewControllerDelegate, VoteInfoViewControllerDelegate> 
+{
+	NSManagedObjectModel *managedObjectModel;
+	NSManagedObjectContext *managedObjectContext;	    
+	NSPersistentStoreCoordinator *persistentStoreCoordinator;
 	
-    UIWindow *portraitWindow;
-    UITabBarController *tabBarController;
-	
+	UIWindow *mainWindow;
+	UITabBarController *tabBarController;
 	UIAlertView *hackingAlert;
-		
+	
 	NSMutableArray		*savedLocation;	// an array of selections for each drill level
 	// i.e.
 	// [0, 1, 3] =	select the top level / main tab 0,
@@ -37,17 +38,25 @@
 	UIViewController *activeDialogController;
 	
 	NetworkStatus remoteHostStatus;
-    NetworkStatus internetConnectionStatus;
-    NetworkStatus localWiFiConnectionStatus;	
+	NetworkStatus internetConnectionStatus;
+	NetworkStatus localWiFiConnectionStatus;	
+	
+	IBOutlet MasterTableViewController *rootViewController;
+    IBOutlet LegislatorDetailViewController *detailViewController;
+	IBOutlet UISplitViewController *splitViewController;
 	
 }
+@property (nonatomic, retain) UIWindow			*mainWindow;
+
+@property (nonatomic, retain) IBOutlet UISplitViewController *splitViewController;
+@property (nonatomic, retain) IBOutlet MasterTableViewController *rootViewController;
+@property (nonatomic, retain) IBOutlet LegislatorDetailViewController *detailViewController;
 
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (nonatomic, retain) UITabBarController *tabBarController;
-@property (nonatomic, retain) UIWindow			*portraitWindow;
 @property (nonatomic, retain) UIAlertView		*hackingAlert;
 
 @property (nonatomic, retain) NSMutableArray	*savedLocation;
