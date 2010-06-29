@@ -28,12 +28,25 @@
 	<false/>
 	<key>UILaunchImageFile~ipad</key>
 	<string>Default-iPad.png</string>
+	<key>UIInterfaceOrientation</key>
+	<string>UIInterfaceOrientationPortrait</string>
+	<key>UIInterfaceOrientation~ipad</key>
+	<string>UIInterfaceOrientationLandscapeRight</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>CFBundleIconFiles</key>
+	<array>
+		<string>Icon.png</string>
+		<string>Icon~ipad.png</string>
+		<string>Icon@2x~iphone.png</string>
+		<string>Icon-Settings@2x~iphone.png</string>
+		<string>Icon-Small-50.png</string>
+		<string>Icon-Small.png</string>
 	</array>
 	<key>projectWebsite</key>
 	<string>http://www.texlege.com</string>
