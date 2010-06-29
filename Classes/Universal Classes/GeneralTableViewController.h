@@ -20,7 +20,7 @@
 > {
 
 	UITableView *theTableView;
-	id<TableDataSource,UITableViewDataSource, NSFetchedResultsControllerDelegate> dataSource;
+	id<TableDataSource> dataSource;
 	
 	UISearchBar		*searchBar;
     NSString	*savedSearchTerm;
@@ -36,7 +36,7 @@
 //@property (nonatomic, retain) NSMutableArray savedLocation;
 
 @property (nonatomic,retain) UITableView *theTableView;
-@property (nonatomic,retain) id<TableDataSource,UITableViewDataSource> dataSource;
+@property (nonatomic,retain) id<TableDataSource> dataSource;
 
 @property (nonatomic, retain) UISearchBar *searchBar;
 @property (nonatomic, copy) NSString *savedSearchTerm;
@@ -51,8 +51,7 @@
 - (void)toolbarAction:(id)sender;
 - (void)toolBarSetup;
 
-- (id)initWithDataSource:(id<TableDataSource,UITableViewDataSource, NSFetchedResultsControllerDelegate>)theDataSource;
+- (id)initWithDataSource:(id<TableDataSource>)theDataSource;
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSInteger)scope;
-
 
 @end

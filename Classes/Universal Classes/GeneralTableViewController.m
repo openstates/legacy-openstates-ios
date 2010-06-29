@@ -10,6 +10,8 @@
 
 #import "GeneralTableViewController.h"
 
+#import "CommitteeDetailViewController.h"
+
 #import "DetailTableViewController.h"
 #import "TexLegeAppDelegate.h"
 #import "TableDataSourceProtocol.h"
@@ -19,7 +21,7 @@
 #import "LinksDetailViewController.h"
 #import "MiniBrowserController.h"
 
-@interface GeneralTableViewController(mymethods)
+@interface GeneralTableViewController(Private)
 // these are private methods that outside classes need not use
 
 #if NEEDS_TO_INITIALIZE_DATABASE
@@ -69,7 +71,7 @@
 // it expects an object that conforms to both the UITableViewDataSource protocol
 // which provides data to the tableview, and the ElementDataSource protocol which
 // provides information about the elements data that is displayed,
-- (id)initWithDataSource:(id<TableDataSource,UITableViewDataSource, NSFetchedResultsControllerDelegate>)theDataSource {
+- (id)initWithDataSource:(id<TableDataSource>)theDataSource {
 	if ([self init]) {
 		theTableView = nil;
 		
@@ -192,9 +194,8 @@
 				[linksDetail release];
 			}
 		}
-		else
+		else // we're not editing web links
 		{
-			
 			NSArray * actionArray = [tempDataSource getActionForRowAtIndexPath:newIndexPath];
 			
 			NSString * action = [NSString stringWithString:[actionArray objectAtIndex:1]];
@@ -214,15 +215,6 @@
 					if (destination.integerValue == URLAction_internalBrowser) {
 						MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
 						[mbc display:self];
-#if 0
-						//UIImage * img = [UIImage imageNamed: @"loading.png"];
-						DrillDownWebController * controller = 
-						[[DrillDownWebController alloc] initWithWebRoot: url andTitle:@"Loading..." 
-														 andSplashImage:nil andViewController:self];
-						[[self navigationController] pushViewController:controller animated:animated];
-						
-						[controller release];
-#endif
 					}
 					else { // (destination == URLAction_externalBrowser)
 						[UtilityMethods openURLWithTrepidation:url];
@@ -231,6 +223,14 @@
 			}
 		}
 		
+	}
+	else if (dataSource.name == @"Committees") {
+		// WHY DOES THIS WORK WITHOUT LOADING THE NIB???
+		// CommitteeDetailViewController *detailViewController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
+		CommitteeDetailViewController *detailController = [[CommitteeDetailViewController alloc] init];
+		detailController.committee = [dataSource committeeDataForIndexPath:newIndexPath];
+		[self.navigationController pushViewController:detailController animated:YES];
+		[detailController release];
 	}
 	else {
 		// create an DetailTableViewController. This controller will display the full size tile for the element
@@ -242,9 +242,6 @@
 		}
 		else if (dataSource.name == @"Directory") {
 			detailController.legislator = [dataSource legislatorDataForIndexPath:newIndexPath];
-		}
-		else if (dataSource.name == @"Committees") {
-			detailController.committee = [dataSource committeeDataForIndexPath:newIndexPath];
 		}
 		
 		// push the detail view controller onto the navigation stack to display it
