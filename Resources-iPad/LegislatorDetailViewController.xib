@@ -10,9 +10,7 @@
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">117</string>
 		</object>
-		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="1"/>
-		</array>
+		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs"/>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 		</array>
@@ -27,7 +25,7 @@
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 			</object>
 			<object class="IBUIView" id="191373211">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIToolbar" id="911009299">
@@ -257,7 +255,11 @@
 												<bool key="IBUIUserInteractionEnabled">NO</bool>
 												<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 												<string key="IBUIText">Legislator Roll Call Index</string>
-												<reference key="IBUIFont" ref="401055135"/>
+												<object class="NSFont" key="IBUIFont">
+													<string key="NSName">Helvetica</string>
+													<double key="NSSize">20</double>
+													<int key="NSfFlags">16</int>
+												</object>
 												<object class="NSColor" key="IBUITextColor">
 													<int key="NSColorSpace">2</int>
 													<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
@@ -297,14 +299,10 @@
 												<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 											</object>
 										</array>
-										<string key="NSFrame">{{303, 61}, {400, 128}}</string>
+										<string key="NSFrame">{{303, 67}, {400, 128}}</string>
 										<reference key="NSSuperview" ref="587766930"/>
-										<object class="NSColor" key="IBUIBackgroundColor">
-											<int key="NSColorSpace">3</int>
-											<bytes key="NSWhite">MQA</bytes>
-										</object>
+										<reference key="IBUIBackgroundColor" ref="703314677"/>
 										<bool key="IBUIOpaque">NO</bool>
-										<float key="IBUIAlpha">0.14788731932640076</float>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 									</object>
 									<object class="IBUIView" id="762151347">
@@ -4734,7 +4732,6 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 					</object>
 				</array>
 				<string key="NSFrameSize">{703, 748}</string>
-				<reference key="NSSuperview"/>
 				<reference key="IBUIBackgroundColor" ref="87506465"/>
 				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
 					<int key="IBUIStatusBarStyle">2</int>
@@ -4795,6 +4792,70 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 						<reference key="destination" ref="729910629"/>
 					</object>
 					<int key="connectionID">57</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_districtLab</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="872364951"/>
+					</object>
+					<int key="connectionID">58</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_partyLab</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="956787638"/>
+					</object>
+					<int key="connectionID">59</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_photoView</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="629699499"/>
+					</object>
+					<int key="connectionID">60</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_tenureLab</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="46984486"/>
+					</object>
+					<int key="connectionID">61</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_nameLab</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="1324418"/>
+					</object>
+					<int key="connectionID">62</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">indivPHolder</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="240673914"/>
+					</object>
+					<int key="connectionID">63</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">partyPHolder</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="325225472"/>
+					</object>
+					<int key="connectionID">64</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">allPHolder</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="325225472"/>
+					</object>
+					<int key="connectionID">65</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -4957,7 +5018,7 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
 				<string key="-1.CustomClassName">LegislatorDetailViewController</string>
 				<string key="-2.CustomClassName">UIResponder</string>
-				<string key="1.IBEditorWindowLastContentRect">{{479, 31}, {703, 768}}</string>
+				<string key="1.IBEditorWindowLastContentRect">{{608, 101}, {703, 768}}</string>
 				<string key="1.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="13.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="23.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -4983,7 +5044,7 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">57</int>
+			<int key="maxID">65</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4992,14 +5053,20 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 					<string key="superclassName">UITableViewController</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="allPHolder">UIView</string>
-						<string key="allSlider">UISlider</string>
+						<string key="allSlider">StaticGradientSliderView</string>
 						<string key="allView">UIView</string>
 						<string key="indivPHolder">UIView</string>
-						<string key="indivSlider">UISlider</string>
+						<string key="indivSlider">StaticGradientSliderView</string>
 						<string key="indivView">UIView</string>
 						<string key="legInfoTable">UITableView</string>
+						<string key="leg_districtLab">UILabel</string>
+						<string key="leg_nameLab">UILabel</string>
+						<string key="leg_partyLab">UILabel</string>
+						<string key="leg_photoView">UIImageView</string>
+						<string key="leg_tenureLab">UILabel</string>
+						<string key="leg_titleLab">UILabel</string>
 						<string key="partyPHolder">UIView</string>
-						<string key="partySlider">UISlider</string>
+						<string key="partySlider">StaticGradientSliderView</string>
 						<string key="partyView">UIView</string>
 						<string key="toolbar">UIToolbar</string>
 					</dictionary>
@@ -5010,7 +5077,7 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 						</object>
 						<object class="IBToOneOutletInfo" key="allSlider">
 							<string key="name">allSlider</string>
-							<string key="candidateClassName">UISlider</string>
+							<string key="candidateClassName">StaticGradientSliderView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="allView">
 							<string key="name">allView</string>
@@ -5022,7 +5089,7 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 						</object>
 						<object class="IBToOneOutletInfo" key="indivSlider">
 							<string key="name">indivSlider</string>
-							<string key="candidateClassName">UISlider</string>
+							<string key="candidateClassName">StaticGradientSliderView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="indivView">
 							<string key="name">indivView</string>
@@ -5032,13 +5099,37 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 							<string key="name">legInfoTable</string>
 							<string key="candidateClassName">UITableView</string>
 						</object>
+						<object class="IBToOneOutletInfo" key="leg_districtLab">
+							<string key="name">leg_districtLab</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="leg_nameLab">
+							<string key="name">leg_nameLab</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="leg_partyLab">
+							<string key="name">leg_partyLab</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="leg_photoView">
+							<string key="name">leg_photoView</string>
+							<string key="candidateClassName">UIImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="leg_tenureLab">
+							<string key="name">leg_tenureLab</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="leg_titleLab">
+							<string key="name">leg_titleLab</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="partyPHolder">
 							<string key="name">partyPHolder</string>
 							<string key="candidateClassName">UIView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="partySlider">
 							<string key="name">partySlider</string>
-							<string key="candidateClassName">UISlider</string>
+							<string key="candidateClassName">StaticGradientSliderView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="partyView">
 							<string key="name">partyView</string>
@@ -5051,7 +5142,26 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/View Controllers/LegislatorDetailViewController.h</string>
+						<string key="minorKey">Classes/iPad View Controllers/LegislatorDetailViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">StaticGradientSliderView</string>
+					<string key="superclassName">UIView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">sliderControl</string>
+						<string key="NS.object.0">UISlider</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">sliderControl</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">sliderControl</string>
+							<string key="candidateClassName">UISlider</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Classes/iPad View Controllers/StaticGradientSliderView.h</string>
 					</object>
 				</object>
 			</array>
