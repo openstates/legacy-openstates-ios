@@ -51,7 +51,9 @@
 - (void)toolbarAction:(id)sender;
 - (void)toolBarSetup;
 
-- (id)initWithDataSource:(id<TableDataSource>)theDataSource;
+//- (id)initWithDataSource:(id<TableDataSource>)theDataSource;
+- (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context;
+
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSInteger)scope;
 
 @end

@@ -21,15 +21,6 @@
 #import "LinksDetailViewController.h"
 #import "MiniBrowserController.h"
 
-@interface GeneralTableViewController(Private)
-// these are private methods that outside classes need not use
-
-#if NEEDS_TO_INITIALIZE_DATABASE
-- (void)initializeDatabase;
-#endif
-
-@end
-
 @implementation GeneralTableViewController
 
 
@@ -71,42 +62,29 @@
 // it expects an object that conforms to both the UITableViewDataSource protocol
 // which provides data to the tableview, and the ElementDataSource protocol which
 // provides information about the elements data that is displayed,
-- (id)initWithDataSource:(id<TableDataSource>)theDataSource {
+/*
+ - (id)initWithDataSource:(id<TableDataSource>)theDataSource {
 	if ([self init]) {
-		theTableView = nil;
-		
-		// retain the data source
-		self.dataSource = theDataSource;
-		// set the title, and tab bar images from the dataSource
-		// object. These are part of the TableDataSource Protocol
-		self.title = [dataSource name];
-		self.tabBarItem.image = [dataSource tabBarImage];
-
-		// set the long name shown in the navigation bar
-		self.navigationItem.title=[dataSource navigationBarName];
-		// create a custom navigation bar button and set it to always say "back"
-		UIBarButtonItem *temporaryBarButtonItem=[[UIBarButtonItem alloc] init];
-		temporaryBarButtonItem.title=@"Back";
-		self.navigationItem.backBarButtonItem = temporaryBarButtonItem;
-		[temporaryBarButtonItem release];
-				
+		[self configureWithDataSource:theDataSource];
 	}
 	return self;
 }
-
+*/
+- (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context {
+	theTableView = nil;
+	self.dataSource = [[sourceClass alloc] initWithManagedObjectContext:context];
+	self.title = [dataSource name];	
+	// set the long name shown in the navigation bar
+	//self.navigationItem.title=[dataSource navigationBarName];
+}
 
 - (void)dealloc {
-	theTableView.delegate = nil;
-	theTableView.dataSource = nil;
-	[theTableView release];
-	[dataSource release];
-
-	[searchBar release];
-	searchBar = nil;
-		
+	self.theTableView = nil;
+	self.dataSource = nil; 
+	self.searchBar = nil;
+			
 #if _searchcontroller_
-	[searchController release];
-	searchController = nil;
+	self.searchController = nil;
 #endif
 	
 	[super dealloc];
@@ -350,10 +328,6 @@
 		if (![[dataSource fetchedResultsController] performFetch:&error]) {
 			// Handle the error...
 		}		
-
-#if NEEDS_TO_INITIALIZE_DATABASE
-		[self initializeDatabase];
-#endif
 	}
 	
 	if ([dataSource canEdit]) { // later change this to "usesEditing" or something
@@ -576,16 +550,6 @@
 
 #pragma mark -
 #pragma mark Editing Table
-
-
-#if NEEDS_TO_INITIALIZE_DATABASE
-- (void)initializeDatabase {
-	[dataSource initializeDatabase];
-    [self.theTableView reloadData];
-}
-#endif
-
-
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCellEditingStyle style = UITableViewCellEditingStyleNone;
