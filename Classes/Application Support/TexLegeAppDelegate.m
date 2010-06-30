@@ -43,14 +43,19 @@ NSInteger kNoSelection = -1;
 @synthesize aboutView, voteInfoView, activeDialogController;
 @synthesize remoteHostStatus, internetConnectionStatus, localWiFiConnectionStatus;
 
+@synthesize managedObjectContext;
 
-@synthesize splitViewController, rootViewController, detailViewController;
+@synthesize directoryTableTabbedVC, committeeTableTabbedVC, mapsTableTabbedVC, linksTableTabbedVC, corePlotTabbedVC;
+//@synthesize billsTableTabbedVC;
+
+
+@synthesize splitViewController, masterTableViewController, detailViewController;
 
 - init {
 	if (self = [super init]) {
 		// initialize  to nil
 		mainWindow = nil;
-		tabBarController = nil;
+		//tabBarController = nil;
 		activeDialogController = nil;
 		hackingAlert = nil;
 				
@@ -59,90 +64,36 @@ NSInteger kNoSelection = -1;
 	return self;
 }
 
-#pragma mark -
-#pragma mark Data Sources
-
-
-#pragma mark -
-#pragma mark iPhone Interface
-
-- (UINavigationController *)createNavigationControllerWrappingViewControllerForDataSourceOfClass:(Class)datasourceClass {
-	// this is entirely a convenience method to reduce the repetition of the code
-	// in the setupPortaitUserInterface
-	// it returns a retained instance of the UINavigationController class. This is unusual, but 
-	// it is necessary to limit the autorelease use as much as possible.
+- (void)dealloc {
+	[savedLocation release];
+	[aboutView release];
+	[voteInfoView release];
 	
-	id<TableDataSource> dataSource = [[datasourceClass alloc] init];
+	self.tabBarController = nil;
+	self.splitViewController = nil;
+	self.masterTableViewController = nil;
+	
+	[mainWindow release];    
+	
+	self.directoryTableTabbedVC = self.committeeTableTabbedVC = self.mapsTableTabbedVC = self.linksTableTabbedVC = self.corePlotTabbedVC = nil;
+	//self.billsTableTabbedVC = nil;
 
-	// Core Data // is it necessary to do this here first?
-	dataSource.managedObjectContext = self.managedObjectContext;
-	
-	// create the GeneralTableViewController and set the datasource
-	GeneralTableViewController *theViewController;	
-	theViewController = [[GeneralTableViewController alloc] initWithDataSource:dataSource];
-	
-	// create the navigation controller with the view controller
-	UINavigationController *theNavigationController;
-	theNavigationController = [[UINavigationController alloc] initWithRootViewController:theViewController];
-	
-	theNavigationController.navigationBar.barStyle = UIBarStyleBlack;	
-
-	// before we return we can release the dataSource (it is now managed by the GeneralTableViewController instance
-	[dataSource release];
+	self.managedObjectContext = nil;
+    [managedObjectModel release];
+    [persistentStoreCoordinator release];
 		
-	// and we can release the viewController because it is managed by the navigation controller
-	[theViewController release];
-	
-	return theNavigationController;
+    [super dealloc];
 }
 
 
-- (void)iPhoneUserInterfaceInit {
-	UINavigationController *localNavigationController;
-	
-	tabBarController = [[UITabBarController alloc] init];	
-	
-	NSMutableArray *localViewControllersArray = [[NSMutableArray alloc] initWithCapacity:kNumMaxTabs];
-	
-	// ********** setup the various view controllers for the different data representations
-	
-	localNavigationController = [self createNavigationControllerWrappingViewControllerForDataSourceOfClass:[DirectoryDataSource class]];
-	[localViewControllersArray addObject:localNavigationController];
-	[localNavigationController release];
-	
-	//localNavigationController = [self createNavigationControllerWrappingViewControllerForDataSourceOfClass:[BillsDataSource class]];
-	//[localViewControllersArray addObject:localNavigationController];
-	//[localNavigationController release];
-	
-	localNavigationController = [self createNavigationControllerWrappingViewControllerForDataSourceOfClass:[CommitteesDataSource class]];
-	[localViewControllersArray addObject:localNavigationController];
-	[localNavigationController release];
-	
-	localNavigationController = [self createNavigationControllerWrappingViewControllerForDataSourceOfClass:[MapImagesDataSource class]];
-	[localViewControllersArray addObject:localNavigationController];
-	[localNavigationController release];
-		
-	localNavigationController = [self createNavigationControllerWrappingViewControllerForDataSourceOfClass:[LinksMenuDataSource class]];
-	[localViewControllersArray addObject:localNavigationController];
-	[localNavigationController release];
-		
-	localNavigationController = [[CPTestApp_iPadViewController alloc] initWithNibName:@"CPTestApp_iPadViewController" bundle:nil];
-	localNavigationController.tabBarItem.image = [UIImage imageNamed:@"fancy_star.png"];
-	localNavigationController.tabBarItem.title = @"Vote Index";
-	[localViewControllersArray addObject:localNavigationController];
-
-	tabBarController.viewControllers = localViewControllersArray;
-	[localViewControllersArray release];
-
-	[self.mainWindow addSubview:tabBarController.view];
-
-}
+#pragma mark -
+#pragma mark Data Sources and Main View Controllers
 
 // Not sure if this works ... we need more tabs to test.
 - (void)setTabOrderIfSaved {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSArray *savedOrder = [defaults arrayForKey:@"savedTabOrder"];
-	NSMutableArray *orderedTabs = [NSMutableArray arrayWithCapacity:kNumMaxTabs];
+	NSMutableArray *orderedTabs = [[NSMutableArray alloc] init];
 	if ([savedOrder count] > 0 ) {
 		for (id loopItem in savedOrder){
 			for (UIViewController *aController in tabBarController.viewControllers) {
@@ -152,6 +103,36 @@ NSInteger kNoSelection = -1;
 			}
 		}
 		tabBarController.viewControllers = orderedTabs;
+	}
+	if (orderedTabs) [orderedTabs release], orderedTabs = nil;
+}
+
+// ********** setup the various view controllers for the different data representations
+- (void) constructDataSourcesAndInitMainViewControllers
+{
+	if ([UtilityMethods isIPadDevice]) { // we're on an iPad, use the splitViewController
+		if (splitViewController == nil) 
+			[[NSBundle mainBundle] loadNibNamed:@"SplitViewController" owner:self options:NULL];
+		[self.masterTableViewController configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext]; 
+		[self.mainWindow addSubview:splitViewController.view];
+	}
+	else {  // We're on an iPhone/iTouch using the tabBarController
+		if (self.tabBarController == nil)
+			//tabBarController = [[UITabBarController alloc] initWithNibName:@"iPhoneTabBarController" bundle:nil];
+			[[NSBundle mainBundle] loadNibNamed:@"iPhoneTabBarController" owner:self options:nil];
+		[self.directoryTableTabbedVC configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
+		[self.committeeTableTabbedVC configureWithDataSourceClass:[CommitteesDataSource class] andManagedObjectContext:self.managedObjectContext];
+		[self.mapsTableTabbedVC configureWithDataSourceClass:[MapImagesDataSource class] andManagedObjectContext:self.managedObjectContext];
+		[self.linksTableTabbedVC configureWithDataSourceClass:[LinksMenuDataSource class] andManagedObjectContext:self.managedObjectContext];
+		
+		[self.mainWindow addSubview:tabBarController.view];
+		
+		[self setTabOrderIfSaved];
+		
+		NSInteger selection = [[savedLocation objectAtIndex:0] integerValue];	// read the saved selection at level 1
+		if ((selection != kNoSelection) && (selection != tabBarController.selectedIndex)) {
+			tabBarController.selectedIndex = selection;
+		}
 	}
 }
 
@@ -187,9 +168,9 @@ NSInteger kNoSelection = -1;
 	
 	if (![UtilityMethods isThisCrantacular]) {
 		// This app be hacked!
-		
 		[self showHackingAlert];
 	}
+	
 	// load the stored preference of the user's last location from a previous launch
 	NSMutableArray *tempMutableCopy = [[[NSUserDefaults standardUserDefaults] objectForKey:kRestoreLocationKey] mutableCopy];
 	self.savedLocation = tempMutableCopy;
@@ -204,30 +185,8 @@ NSInteger kNoSelection = -1;
 						  nil] retain];
 	}
 
-	if ([UtilityMethods isIPadDevice]) {
-		//NSLog(@"This is an iPad!!!");
-
-		if (splitViewController == nil) {
-			[[NSBundle mainBundle] loadNibNamed:@"SplitViewController" owner:self options:NULL];
-		}
-		//GREG
-		[self.mainWindow addSubview:splitViewController.view];
-
-		//[self iPhoneUserInterfaceInit];
-	}
-	else {
-		//NSLog(@"This is NOT an iPad!!!");
-
-		// configure the portrait user interface
-		[self iPhoneUserInterfaceInit];
-		
-		[self setTabOrderIfSaved];
-		
-		NSInteger selection = [[savedLocation objectAtIndex:0] integerValue];	// read the saved selection at level 1
-		if ((selection != kNoSelection) && (selection != tabBarController.selectedIndex)) {
-			tabBarController.selectedIndex = selection;
-		}
-	}
+	[self constructDataSourcesAndInitMainViewControllers];
+			
 	// make the window visible
 	[self.mainWindow makeKeyAndVisible];
 	
@@ -529,25 +488,6 @@ NSInteger kNoSelection = -1;
     return persistentStoreCoordinator;
 }
 
-#pragma mark -
-#pragma mark Memory management
-
-- (void)dealloc {
-	[savedLocation release];
-	[aboutView release];
-	[voteInfoView release];
-	
-	[tabBarController release];
-
-	[splitViewController release];
-	[mainWindow release];    
-
-	[managedObjectContext release];
-    [managedObjectModel release];
-    [persistentStoreCoordinator release];
-	
-    [super dealloc];
-}
 
 @end
 
