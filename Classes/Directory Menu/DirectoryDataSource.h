@@ -11,16 +11,20 @@
 #import "TableDataSourceProtocol.h"
 #import "LegislatorObj.h"
 
+@class LegislatorMasterTableViewCell;
+
 @interface DirectoryDataSource : NSObject <TableDataSource>  {
 	BOOL hideTableIndex;
 	NSInteger filterChamber;
 	NSMutableString *filterString;
 	
-	//NSMutableDictionary *imageCache;
+	IBOutlet LegislatorMasterTableViewCell *leg_cell;
 	
 	NSFetchedResultsController *fetchedResultsController;
 	NSManagedObjectContext *managedObjectContext;	
 }
+@property (nonatomic, retain) IBOutlet LegislatorMasterTableViewCell *leg_cell;
+
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 

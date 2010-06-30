@@ -9,11 +9,10 @@
 #import "DirectoryDataSource.h"
 #import "TexLegeAppDelegate.h"
 #import "LegislatorObj.h"
-
+#import "LegislatorMasterTableViewCell.h"
 #import "DetailTableViewController.h"
 
 #import "UtilityMethods.h"
-//#import "UIImage+Resize.h"
 
 @implementation DirectoryDataSource
 
@@ -21,7 +20,8 @@
 
 @synthesize hideTableIndex;
 @synthesize filterChamber, filterString;
-//@synthesize imageCache;
+@synthesize leg_cell;
+
 
 // setup the data collection
 - init {
@@ -38,38 +38,17 @@
 		[self removeFilter];
 	if (filterString)
 		[filterString release];
-	
-	//if (self.imageCache)
-	//	self.imageCache = nil;
-	
+		
 	[fetchedResultsController release];
 	[managedObjectContext release];
+	
+	self.leg_cell = nil;
     [super dealloc];
 }
 
 - (void)didReceiveMemoryWarning {
-	//[self.imageCache removeAllObjects];
 }
 
-/*
- - (UIImage*)cachedImage:(NSString*)fileName
-{
-
-#ifdef roleYourOwnCache
-	UIImage *image = [self.imageCache objectForKey:fileName];
-	
-	if (image == nil)
-	{
-		image = [UtilityMethods poorMansImageNamed:fileName];
-		[self.imageCache setObject:image forKey:fileName];
-	}
-	return image;
-#else
-	return [UtilityMethods poorMansImageNamed:fileName];
-#endif
-	
-}
- */
 
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
@@ -124,6 +103,43 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+#if NEEDS_TO_INITIALIZE_DATABASE
+	[self initializeDatabase];
+#endif
+	static NSString *leg_cell_ID = @"LegislatorDirectory";
+
+	LegislatorMasterTableViewCell *cell = (LegislatorMasterTableViewCell *)[tableView 
+																			dequeueReusableCellWithIdentifier:leg_cell_ID];
+    if (cell == nil) {
+		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"LegislatorMasterTableViewCell" owner:self options:nil];
+		for (id suspect in objects) {
+			if ([suspect isKindOfClass:[LegislatorMasterTableViewCell class]]) {
+				self.leg_cell = suspect;
+			}
+		}
+		cell = self.leg_cell;
+		
+		//self.leg_cell = nil;
+    }
+	
+	LegislatorObj *dataObj = [self legislatorDataForIndexPath:indexPath];
+	if (dataObj == nil) {
+		debug_NSLog(@"Busted in DirectoryDataSource.m: cellForRowAtIndexPath -> Couldn't get legislator data for row.");
+		return nil;
+	}
+	
+	if (cell) {
+		[cell setupWithLegislator:dataObj];
+	}
+
+		
+	// all the rows should show the disclosure indicator
+	//if ([self showDisclosureIcon])
+	//	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+	
+	return cell;
+	
+	/*
 	static NSString *MyIdentifier = @"LegislatorDirectory";
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
 	if (cell == nil) {
@@ -155,7 +171,9 @@
 	if ([self showDisclosureIcon])
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	
-	return cell;
+	return cell;*/
+	
+	
 }
 
 #pragma mark -
