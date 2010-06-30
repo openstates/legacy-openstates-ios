@@ -14,14 +14,16 @@
 	NSArray *ExteriorMaps;
 	NSArray *ChamberMaps;
 	//NSFetchedResultsController *fetchedResultsController;
-	NSManagedObjectContext *managedObjectContext;	
+	IBOutlet NSManagedObjectContext *managedObjectContext;	
 }
 //@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 
 @property (readonly,nonatomic,retain) NSArray *InteriorMaps;
 @property (readonly,nonatomic,retain) NSArray *ExteriorMaps;
 @property (readonly,nonatomic,retain) NSArray *ChamberMaps;
+
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
 - (void) reload;
 

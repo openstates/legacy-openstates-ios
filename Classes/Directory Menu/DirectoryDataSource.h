@@ -21,17 +21,19 @@
 	IBOutlet LegislatorMasterTableViewCell *leg_cell;
 	
 	NSFetchedResultsController *fetchedResultsController;
-	NSManagedObjectContext *managedObjectContext;	
+	IBOutlet NSManagedObjectContext *managedObjectContext;	
+	UISearchDisplayController *searchDisplayController;
 }
 @property (nonatomic, retain) IBOutlet LegislatorMasterTableViewCell *leg_cell;
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 
 @property (nonatomic) NSInteger filterChamber;		// 0 means don't filter
 @property (nonatomic,retain) NSMutableString *filterString;	// @"" means don't filter
 @property (nonatomic, readonly) BOOL hasFilter;
-//@property (nonatomic, retain) NSMutableDictionary *imageCache;
+
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
 - (LegislatorObj *)legislatorDataForIndexPath:(NSIndexPath *)indexPath;
 - (void) setFilterByString:(NSString *)filter;

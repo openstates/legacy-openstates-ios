@@ -55,9 +55,15 @@
 	return self;
 }
 
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
+	if ([self init])
+		if (newContext) self.managedObjectContext = newContext;
+	return self;
+}
+
 - (void)dealloc {	
-	[fetchedResultsController release];
-	[managedObjectContext release];
+	self.fetchedResultsController = nil;
+	self.managedObjectContext = nil;
     [super dealloc];
 }
 

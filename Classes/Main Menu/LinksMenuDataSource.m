@@ -75,17 +75,20 @@ enum HeaderSectionRows {
 	return self;
 }
 
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
+	if ([self init])
+		if (newContext) self.managedObjectContext = newContext;
+	return self;
+}
+
 - (void)dealloc {	
 #if NEEDS_TO_INITIALIZE_DATABASE
 	[linksData release];
 #endif
-	
-	if (fetchedResultsController != nil)
-		[fetchedResultsController release];
-	
-	// we didn't allocate these, do we really need to release them?
-	//[managedObjectContext release];
-	//[theTableView release];
+	self.fetchedResultsController = nil;
+	self.managedObjectContext = nil;
+	self.theTableView = nil;
+
     [super dealloc];
 }
 
@@ -431,7 +434,7 @@ enum HeaderSectionRows {
 		}
 		else if (editingStyle == UITableViewCellEditingStyleInsert) {
 			// we need this for when they click the "+" icon; just select the row
-			[theTableView.delegate tableView:tableView didSelectRowAtIndexPath:indexPath];
+			[tableView.delegate tableView:tableView didSelectRowAtIndexPath:indexPath];
 		}
 	}
 }

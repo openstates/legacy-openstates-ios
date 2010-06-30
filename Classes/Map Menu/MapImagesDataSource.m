@@ -59,6 +59,13 @@
 	return self;
 }
 
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
+	if ([self init])
+		if (newContext) self.managedObjectContext = newContext;
+	return self;
+}
+
+
 /* Build a list of files */
 - (void)reload {
 	InteriorMaps = [[NSArray arrayWithObjects:
@@ -159,8 +166,6 @@
 	return rows;
 }
 
-
-
  - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {	
 	if (section == 0)
 		return @"Interior Maps";
@@ -172,12 +177,12 @@
 
 
 - (void)dealloc {
-	[ InteriorMaps release ];
-	[ ExteriorMaps release ];
-	[ ChamberMaps release ];
+	[ InteriorMaps release ], InteriorMaps = nil;
+	[ ExteriorMaps release ], ExteriorMaps = nil;
+	[ ChamberMaps release ], ChamberMaps = nil;
 
 	//[fetchedResultsController release];
-	[managedObjectContext release];
+	self.managedObjectContext = nil;
 	[super dealloc];
 }
 @end

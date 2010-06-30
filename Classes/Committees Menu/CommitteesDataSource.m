@@ -23,19 +23,22 @@
 - init {
 	if (self = [super init]) {
 		self.filterChamber = 0;
-		self.filterString = [[[NSMutableString alloc] initWithString:@""] retain];
+		self.filterString = [NSMutableString stringWithString:@""];
 	}
 	return self;
 }
 
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
+	if ([self init])
+		if (newContext) self.managedObjectContext = newContext;
+	return self;
+}
+
 - (void)dealloc {
-	if ([self hasFilter])
-		[self removeFilter];
-	if (self.filterString)
-		[self.filterString release];
-	
-	[fetchedResultsController release];
-	[managedObjectContext release];
+	self.fetchedResultsController = nil;
+	self.managedObjectContext = nil;	
+	self.filterString = nil;
+
     [super dealloc];
 }
 
@@ -222,8 +225,9 @@
 
 // probably unnecessary, but we might as well validate the new info with our expectations...
 - (void) setFilterByString:(NSString *)filter {
+	if (!filter) filter = @"";
 	if (![self.filterString isEqualToString:filter]) {
-		self.filterString = [NSMutableString stringWithString:(filter==nil) ? @"" : filter];
+		self.filterString = [NSMutableString stringWithString:filter];
 	}
 	// we also get called on toolbar chamber switches, with or without a search string, so update anyway...
 	[self updateFilterPredicate];	

@@ -28,10 +28,16 @@
 @property (readonly) BOOL canEdit;
 
 - (BOOL)showDisclosureIcon;
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
-@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 
 @optional
+
+- (void) setFilterByString:(NSString *)filter;
+- (void) removeFilter;
+@property (nonatomic) NSInteger filterChamber;		// 0 means don't filter
+@property (nonatomic, retain) UISearchDisplayController *searchDisplayController;
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 

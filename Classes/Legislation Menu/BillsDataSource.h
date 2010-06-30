@@ -11,11 +11,12 @@
 
 @interface BillsDataSource : NSObject <TableDataSource>  {
 	NSFetchedResultsController *fetchedResultsController;
-	NSManagedObjectContext *managedObjectContext;	
+	IBOutlet NSManagedObjectContext *managedObjectContext;	
 }
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
 
 @end

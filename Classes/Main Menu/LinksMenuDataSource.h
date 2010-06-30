@@ -11,7 +11,7 @@
 
 @interface LinksMenuDataSource : NSObject <TableDataSource>  {
 	NSFetchedResultsController *fetchedResultsController;
-	NSManagedObjectContext *managedObjectContext;
+	IBOutlet NSManagedObjectContext *managedObjectContext;
 #if NEEDS_TO_INITIALIZE_DATABASE
 	NSArray *linksData;
 #endif
@@ -24,13 +24,15 @@
 @property (nonatomic, retain) UITableView *theTableView;
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 
 #if NEEDS_TO_INITIALIZE_DATABASE
 @property (nonatomic,retain) NSArray * linksData;
 - (void) setupDataArray;
 - (void) initializeDatabase;
 #endif
+
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
 - (NSArray *) getActionForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL) isAddLinkPlaceholderAtIndexPath:(NSIndexPath *)indexPath;

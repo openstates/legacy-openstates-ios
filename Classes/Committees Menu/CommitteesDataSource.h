@@ -15,14 +15,16 @@
 	NSMutableString *filterString;
 
 	NSFetchedResultsController *fetchedResultsController;
-	NSManagedObjectContext *managedObjectContext;	
+	IBOutlet NSManagedObjectContext *managedObjectContext;	
 }
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 
 @property (nonatomic) NSInteger filterChamber;		// 0 means don't filter
 @property (nonatomic,retain) NSMutableString *filterString;	// @"" means don't filter
 @property (nonatomic, readonly) BOOL hasFilter;
+
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
 - (CommitteeObj *)committeeDataForIndexPath:(NSIndexPath *)indexPath;
 - (void) setFilterByString:(NSString *)filter;

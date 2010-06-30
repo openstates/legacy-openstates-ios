@@ -19,7 +19,7 @@
 @synthesize fetchedResultsController, managedObjectContext;
 
 @synthesize hideTableIndex;
-@synthesize filterChamber, filterString;
+@synthesize filterChamber, filterString, searchDisplayController;
 @synthesize leg_cell;
 
 
@@ -27,22 +27,23 @@
 - init {
 	if (self = [super init]) {
 		self.filterChamber = 0;
-		self.filterString = [[[NSMutableString alloc] initWithString:@""] retain];
-		//self.imageCache = [NSMutableDictionary dictionary];
+		self.filterString = [NSMutableString stringWithString:@""];
 	}
 	return self;
 }
 
-- (void)dealloc {
-	if ([self hasFilter])
-		[self removeFilter];
-	if (filterString)
-		[filterString release];
-		
-	[fetchedResultsController release];
-	[managedObjectContext release];
-	
-	self.leg_cell = nil;
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
+	if ([self init])
+		if (newContext) self.managedObjectContext = newContext;
+	return self;
+}
+
+- (void)dealloc {	
+	self.fetchedResultsController = nil;
+	self.searchDisplayController = nil;
+	self.managedObjectContext = nil;	
+	self.filterString = nil;
+	self.leg_cell = nil;	
     [super dealloc];
 }
 
@@ -88,13 +89,9 @@
 };
 
 
-
 // return the legislator at the index in the sorted by symbol array
 - (LegislatorObj *)legislatorDataForIndexPath:(NSIndexPath *)indexPath {
-	
-	// DO A TRANSLATION HERE UNTIL WE GET A COMPLETE COMMITTEOBJ MODEL (WITH RELATIONSHIPS)
-	LegislatorObj *tempEntry = [fetchedResultsController objectAtIndexPath:indexPath];
-	//return [[[LegislatorsListing sharedLegislators] legislatorDictionary] objectForKey:tempEntry.legislatorID];
+	LegislatorObj *tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	return tempEntry;	
 }
 
@@ -106,73 +103,67 @@
 #if NEEDS_TO_INITIALIZE_DATABASE
 	[self initializeDatabase];
 #endif
-	static NSString *leg_cell_ID = @"LegislatorDirectory";
-
-	LegislatorMasterTableViewCell *cell = (LegislatorMasterTableViewCell *)[tableView 
-																			dequeueReusableCellWithIdentifier:leg_cell_ID];
-    if (cell == nil) {
-		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"LegislatorMasterTableViewCell" owner:self options:nil];
-		for (id suspect in objects) {
-			if ([suspect isKindOfClass:[LegislatorMasterTableViewCell class]]) {
-				self.leg_cell = suspect;
-			}
-		}
-		cell = self.leg_cell;
-		
-		//self.leg_cell = nil;
-    }
 	
 	LegislatorObj *dataObj = [self legislatorDataForIndexPath:indexPath];
-	if (dataObj == nil) {
-		debug_NSLog(@"Busted in DirectoryDataSource.m: cellForRowAtIndexPath -> Couldn't get legislator data for row.");
-		return nil;
-	}
-	
-	if (cell) {
-		[cell setupWithLegislator:dataObj];
-	}
 
+#if 0	// let's try out the bigger cells for both iPad and iPhone ... but leave this here in case we want to revert.
+    if (![UtilityMethods isIPadDevice]) // if we're on an iphone
+    {
+		static NSString *leg_searchcell_ID = @"LegislatorDirectorySkinny";
 		
-	// all the rows should show the disclosure indicator
-	//if ([self showDisclosureIcon])
-	//	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-	
-	return cell;
-	
-	/*
-	static NSString *MyIdentifier = @"LegislatorDirectory";
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
-	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:MyIdentifier] autorelease];
-	}
-#if NEEDS_TO_INITIALIZE_DATABASE
-	[self initializeDatabase];
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:leg_searchcell_ID];
+		if (cell == nil) {
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:leg_searchcell_ID] autorelease];
+		}
+		
+		// configure cell contents
+		cell.textLabel.text = [NSString stringWithFormat: @"%@ - (%@)", 
+							   [dataObj legProperName], [dataObj partyShortName]];
+		cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
+		cell.detailTextLabel.text = [dataObj labelSubText];
+		cell.detailTextLabel.font = [UIFont boldSystemFontOfSize:12];
+		cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+		
+		cell.imageView.image = [UtilityMethods poorMansImageNamed:dataObj.photo_name];
+		
+		// all the rows should show the disclosure indicator
+		if ([self showDisclosureIcon])
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		
+		return cell;
+    }
+	else
 #endif
-    
-	LegislatorObj *tempEntry = [self legislatorDataForIndexPath:indexPath];
-	
-	if (tempEntry == nil) {
-		debug_NSLog(@"Busted in DirectoryDataSource.m: cellForRowAtIndexPath -> Couldn't get legislator data for row.");
-		return nil;
+	{
+		static NSString *leg_cell_ID = @"LegislatorDirectory";
+		
+		LegislatorMasterTableViewCell *cell = (LegislatorMasterTableViewCell *)[tableView 
+																				dequeueReusableCellWithIdentifier:leg_cell_ID];
+		if (cell == nil) {
+			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"LegislatorMasterTableViewCell" owner:self options:nil];
+			for (id suspect in objects) {
+				if ([suspect isKindOfClass:[LegislatorMasterTableViewCell class]])
+					self.leg_cell = suspect;
+			}
+			cell = self.leg_cell;
+			//self.leg_cell = nil;
+		}
+		
+		LegislatorObj *dataObj = [self legislatorDataForIndexPath:indexPath];
+		if (dataObj == nil) {
+			debug_NSLog(@"Busted in DirectoryDataSource.m: cellForRowAtIndexPath -> Couldn't get legislator data for row.");
+			return nil;
+		}
+		
+		if (cell) {
+			[cell setupWithLegislator:dataObj];
+		}
+		
+		if (tableView == self.searchDisplayController.searchResultsTableView) 
+			cell.accessoryType = UITableViewCellAccessoryNone;
+		
+		return cell;
 	}
-	
-	// configure cell contents
-	cell.textLabel.text = [NSString stringWithFormat: @"%@ - (%@)", 
-						   [tempEntry legProperName], [tempEntry partyShortName]];
-	cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
-	cell.detailTextLabel.text = [tempEntry labelSubText];
-	cell.detailTextLabel.font = [UIFont boldSystemFontOfSize:12];
-	cell.detailTextLabel.textColor = [UIColor lightGrayColor];
-	
-	cell.imageView.image = [UtilityMethods poorMansImageNamed:tempEntry.photo_name];
-	//cell.imageView.image = [self cachedImage:tempEntry.photo_name];
-	
-	// all the rows should show the disclosure indicator
-	if ([self showDisclosureIcon])
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-	
-	return cell;*/
-	
 	
 }
 
@@ -181,7 +172,7 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {	
-	NSInteger count = [[fetchedResultsController sections] count];		
+	NSInteger count = [[self.fetchedResultsController sections] count];		
 	if (count > 1 /*&! self.hasFilter*/)  {
 		return count; 
 	}
@@ -190,7 +181,7 @@
 
 // This is for the little index along the right side of the table ... use nil if you don't want it.
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-	return  hideTableIndex ? nil : [fetchedResultsController sectionIndexTitles] ;
+	return  hideTableIndex ? nil : [self.fetchedResultsController sectionIndexTitles] ;
 	//return  nil ;
 }
 
@@ -200,9 +191,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section {
 	// eventually (soon) we'll need to create a new fetchedResultsController to filter for chamber selection
-	NSInteger count = [[fetchedResultsController sections] count];		
+	NSInteger count = [[self.fetchedResultsController sections] count];		
 	if (count > 1) {
-		id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:section];
+		id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
 		count = [sectionInfo numberOfObjects];
 	}
 	return count;
@@ -213,9 +204,9 @@
 	// [A,B,C,D,E,F,G,H,I,K,L,M,N,O,P,R,S,T,U,V,X,Y,Z]
 	// return the letter that represents the requested section
 	
-	NSInteger count = [[fetchedResultsController sections] count];		
+	NSInteger count = [[self.fetchedResultsController sections] count];		
 	if (count > 1 /*&! self.hasFilter*/)  {
-		id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:section];
+		id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
 		return [sectionInfo indexTitle]; // or [sectionInfo name];
 	}
 	return @"";
@@ -261,11 +252,11 @@
 	NSPredicate *predicate = (predString.length > 0) ? [NSPredicate predicateWithFormat:predString] : nil;
 	
 	// You've got to delete the cache, or disable caching before you modify the predicate...
-	[NSFetchedResultsController deleteCacheWithName:[fetchedResultsController cacheName]];
-	[fetchedResultsController.fetchRequest setPredicate:predicate];
+	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
+	[self.fetchedResultsController.fetchRequest setPredicate:predicate];
 	
 	NSError *error = nil;
-	if (![[self fetchedResultsController] performFetch:&error]) {
+	if (![self.fetchedResultsController performFetch:&error]) {
         // Handle error
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);  // Fail
@@ -274,8 +265,10 @@
 
 // probably unnecessary, but we might as well validate the new info with our expectations...
 - (void) setFilterByString:(NSString *)filter {
+	if (!filter) filter = @"";
+	
 	if (![self.filterString isEqualToString:filter]) {
-		self.filterString = [NSMutableString stringWithString:(filter==nil) ? @"" : filter];
+		self.filterString = [NSMutableString stringWithString:filter];
 	}
 	// we also get called on toolbar chamber switches, with or without a search string, so update anyway...
 	[self updateFilterPredicate];	
@@ -298,8 +291,8 @@
 	if (count == 0) { // try initializing it...
 		
 		// Create a new instance of the entity managed by the fetched results controller.
-		NSManagedObjectContext *context = [fetchedResultsController managedObjectContext];
-		NSEntityDescription *entity = [[fetchedResultsController fetchRequest] entity];
+		NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
+		NSEntityDescription *entity = [[self.fetchedResultsController fetchRequest] entity];
 		
 		// read the legislator data from the plist
 		NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"Legislators" ofType:@"plist"];
@@ -392,7 +385,8 @@
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	
 	// Get our table-specific Core Data.
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"LegislatorObj" inManagedObjectContext:managedObjectContext];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"LegislatorObj" 
+											  inManagedObjectContext:self.managedObjectContext];
 	[fetchRequest setEntity:entity];
 	
 	// Sort by committeeName.
@@ -413,7 +407,7 @@
 	
 	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] 
 															 initWithFetchRequest:fetchRequest 
-															 managedObjectContext:managedObjectContext 
+															 managedObjectContext:self.managedObjectContext 
 															 sectionNameKeyPath:sectionString cacheName:@"Root"];
 	
     aFetchedResultsController.delegate = self;
