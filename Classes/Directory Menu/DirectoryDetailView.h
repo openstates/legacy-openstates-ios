@@ -13,12 +13,12 @@
 #include "DirectoryDetailInfo.h"
 
 @class DetailTableViewController;
+@class StaticGradientSliderView;
 
 @interface DirectoryDetailView : UITableView <UITableViewDataSource>{
 	LegislatorObj		*legislator;
 	NSMutableArray	*sectionArray;
-	IBOutlet UIView  *sliderView;
-	IBOutlet UISlider  *sliderControl;
+	IBOutlet StaticGradientSliderView  *sliderView;
 	DetailTableViewController *detailController;
 
 }
@@ -27,8 +27,7 @@
 @property (nonatomic, retain) LegislatorObj *legislator;
 @property (nonatomic, retain) NSMutableArray *sectionArray;
 @property (readonly) NSString *name;
-@property (nonatomic, retain) IBOutlet UIView *sliderView;
-@property (nonatomic, retain) IBOutlet UISlider *sliderControl;
+@property (nonatomic, retain) IBOutlet StaticGradientSliderView *sliderView;
 
 
 - (id) initWithFrameAndLegislator:(CGRect)frame Legislator:(LegislatorObj *)aLegislator;

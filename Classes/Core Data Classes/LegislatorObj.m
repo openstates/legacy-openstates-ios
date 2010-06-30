@@ -205,6 +205,24 @@
 	return offices;
 }
 
+- (NSString *)tenureString {
+	NSString *stringVal = nil;
+	NSInteger years = self.tenure.integerValue;
+	
+	switch (years) {
+		case 0:
+			stringVal = @"Freshman";
+			break;
+		case 1:
+			stringVal = [NSString stringWithFormat:@"%d Year",  years];
+			break;
+		default:
+			stringVal = [NSString stringWithFormat:@"%d Years",  years];
+			break;
+	}
+	return stringVal;
+}
+
 - (NSArray *)sortedCommitteePositions
 {
 	return [[self.committeePositions allObjects] 

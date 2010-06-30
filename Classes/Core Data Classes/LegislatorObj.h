@@ -75,7 +75,7 @@
 - (NSString *)shortNameForButtons;
 - (NSString *)labelSubText;
 - (NSInteger) numberOfDistrictOffices;
-
+- (NSString *)tenureString;
 - (NSArray *) sortedCommitteePositions;
 @end
 

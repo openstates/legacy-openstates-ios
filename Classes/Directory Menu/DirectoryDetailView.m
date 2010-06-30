@@ -12,6 +12,7 @@
 #import "TexLegeAppDelegate.h"
 #import "DetailTableViewController.h"
 #import "CommitteeDetailViewController.h"
+#import "StaticGradientSliderView.h"
 
 #import "CommitteeObj.h"
 #import "CommitteePositionObj.h"
@@ -21,7 +22,7 @@
 @synthesize legislator;
 @synthesize sectionArray;
 @synthesize detailController;
-@synthesize sliderView, sliderControl;
+@synthesize sliderView;
 
 - (id)initWithFrameAndLegislator:(CGRect)frame Legislator:(LegislatorObj *)aLegislator {
 	// allow superclass to initialize its state first
@@ -116,15 +117,8 @@
 		currentY = currentY + height + marginY;
 
 		theLabel = [[UILabel alloc] initWithFrame:CGRectMake(96.0f+insetX, currentY, length-insetX, height)];
-		if (self.legislator.tenure.integerValue == 1) {
-			theLabel.text = [NSString stringWithFormat:@"%d Year",  self.legislator.tenure.integerValue];
-		}
-		else if (self.legislator.tenure.integerValue == 0) {
-			theLabel.text = [NSString stringWithString:@"Freshman Legislator"];
-		}
-		else {
-			theLabel.text = [NSString stringWithFormat:@"%d Years",  self.legislator.tenure.integerValue];
-		}
+
+		theLabel.text = [self.legislator tenureString];
 		theLabel.font = [UIFont boldSystemFontOfSize:14];
 		theLabel.textColor = [UIColor darkGrayColor];
 		//theLabel.textAlignment = UITextAlignmentRight;
@@ -489,16 +483,19 @@
 
 			CGRect sliderViewFrame = [self preshrinkSliderViewFromView:cell.contentView];
 			if (self.sliderView == nil) {
-				[[NSBundle mainBundle] loadNibNamed:@"StaticGradientSliderView" owner:self options:NULL];
-				UIImage *emptyImage = [[UIImage alloc] init]; // should we autorelease??????
-				[self.sliderControl setMinimumTrackImage:emptyImage forState:UIControlStateNormal];
-				[self.sliderControl setMaximumTrackImage:emptyImage forState:UIControlStateNormal];
-				[self.sliderControl setThumbImage:[UIImage imageNamed:@"slider_star_big.png"] forState:UIControlStateNormal];
-				
+				NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StaticGradientSliderView" owner:self options:NULL];
+				for (id suspect in objects) {
+					if ([suspect isKindOfClass:[StaticGradientSliderView class]]) {
+						self.sliderView = suspect;
+					}
+				}
 			}
-			[self.sliderView setFrame:sliderViewFrame];			
-			[self.sliderControl setValue:cellInfo.entryValue.floatValue animated:YES];
-			[cell.contentView addSubview:self.sliderView];
+			if (self.sliderView) {
+				[self.sliderView setFrame:sliderViewFrame];
+				self.sliderView.sliderValue = cellInfo.entryValue.floatValue;
+				[cell.contentView addSubview:self.sliderView];
+			}
+			
 			cell.userInteractionEnabled = NO;
 			break;
 

@@ -50,24 +50,25 @@
 							<object class="IBUIImageView" id="938596182">
 								<reference key="NSNextResponder" ref="806442696"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{11, 6}, {60, 60}}</string>
+								<string key="NSFrameSize">{64, 73}</string>
 								<reference key="NSSuperview" ref="806442696"/>
 								<bool key="IBUIOpaque">NO</bool>
+								<bool key="IBUIClipsSubviews">YES</bool>
 								<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
-								<int key="IBUIContentMode">4</int>
+								<int key="IBUIContentMode">1</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
 							<object class="IBUILabel" id="650079503">
 								<reference key="NSNextResponder" ref="806442696"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{81, 8}, {84, 15}}</string>
+								<string key="NSFrame">{{69, 8}, {82, 15}}</string>
 								<reference key="NSSuperview" ref="806442696"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Title</string>
+								<string key="IBUIText">Representative</string>
 								<object class="NSFont" key="IBUIFont" id="167171552">
 									<string key="NSName">Helvetica-Bold</string>
 									<double key="NSSize">11</double>
@@ -87,7 +88,7 @@
 							<object class="IBUILabel" id="195963236">
 								<reference key="NSNextResponder" ref="806442696"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{199, 5}, {50, 21}}</string>
+								<string key="NSFrame">{{159, 5}, {50, 21}}</string>
 								<reference key="NSSuperview" ref="806442696"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -102,18 +103,17 @@
 								<reference key="IBUIHighlightedColor" ref="538412073"/>
 								<int key="IBUIBaselineAdjustment">1</int>
 								<float key="IBUIMinimumFontSize">10</float>
-								<int key="IBUITextAlignment">2</int>
 							</object>
 							<object class="IBUILabel" id="900401356">
 								<reference key="NSNextResponder" ref="806442696"/>
-								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{219, 45}, {76, 15}}</string>
+								<int key="NSvFlags">293</int>
+								<string key="NSFrame">{{240, 51}, {60, 15}}</string>
 								<reference key="NSSuperview" ref="806442696"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">%d Sessions</string>
+								<string key="IBUIText">%d Years</string>
 								<object class="NSFont" key="IBUIFont">
 									<string key="NSName">Helvetica</string>
 									<double key="NSSize">11</double>
@@ -130,7 +130,7 @@
 							<object class="IBUILabel" id="1058917816">
 								<reference key="NSNextResponder" ref="806442696"/>
 								<int key="NSvFlags">290</int>
-								<string key="NSFrame">{{81, 23}, {168, 21}}</string>
+								<string key="NSFrame">{{69, 23}, {211, 21}}</string>
 								<reference key="NSSuperview" ref="806442696"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -152,16 +152,11 @@
 							</object>
 							<object class="IBUIView" id="1000715457">
 								<reference key="NSNextResponder" ref="806442696"/>
-								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{81, 46}, {134, 14}}</string>
+								<int key="NSvFlags">-2147483356</int>
+								<string key="NSFrame">{{69, 46}, {168, 24}}</string>
 								<reference key="NSSuperview" ref="806442696"/>
-								<object class="NSColor" key="IBUIBackgroundColor">
-									<int key="NSColorSpace">3</int>
-									<bytes key="NSWhite">MQA</bytes>
-									<object class="NSColorSpace" key="NSCustomColorSpace">
-										<int key="NSID">2</int>
-									</object>
-								</object>
+								<reference key="IBUIBackgroundColor" ref="538412073"/>
+								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
 						</object>
@@ -199,6 +194,54 @@
 		<object class="IBObjectContainer" key="IBDocument.Objects">
 			<object class="NSMutableArray" key="connectionRecords">
 				<bool key="EncodedWithXMLCoder">YES</bool>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_nameLab</string>
+						<reference key="source" ref="76075731"/>
+						<reference key="destination" ref="1058917816"/>
+					</object>
+					<int key="connectionID">28</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_partyDistLab</string>
+						<reference key="source" ref="76075731"/>
+						<reference key="destination" ref="195963236"/>
+					</object>
+					<int key="connectionID">29</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_photoView</string>
+						<reference key="source" ref="76075731"/>
+						<reference key="destination" ref="938596182"/>
+					</object>
+					<int key="connectionID">30</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_sliderViewPlaceHolder</string>
+						<reference key="source" ref="76075731"/>
+						<reference key="destination" ref="1000715457"/>
+					</object>
+					<int key="connectionID">31</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_tenureLab</string>
+						<reference key="source" ref="76075731"/>
+						<reference key="destination" ref="900401356"/>
+					</object>
+					<int key="connectionID">32</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_titleLab</string>
+						<reference key="source" ref="76075731"/>
+						<reference key="destination" ref="650079503"/>
+					</object>
+					<int key="connectionID">33</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -228,9 +271,9 @@
 							<reference ref="938596182"/>
 							<reference ref="650079503"/>
 							<reference ref="1058917816"/>
-							<reference ref="900401356"/>
 							<reference ref="1000715457"/>
 							<reference ref="195963236"/>
+							<reference ref="900401356"/>
 						</object>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Legislator Master Table View Cell</string>
@@ -286,7 +329,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>UIResponder</string>
 					<string>LegislatorMasterTableViewCell</string>
-					<string>{{493, 772}, {320, 73}}</string>
+					<string>{{1086, 767}, {320, 73}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -312,7 +355,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">27</int>
+			<int key="maxID">33</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -320,9 +363,95 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">LegislatorMasterTableViewCell</string>
 					<string key="superclassName">UITableViewCell</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>leg_nameLab</string>
+							<string>leg_partyDistLab</string>
+							<string>leg_photoView</string>
+							<string>leg_sliderView</string>
+							<string>leg_sliderViewPlaceHolder</string>
+							<string>leg_tenureLab</string>
+							<string>leg_titleLab</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>UILabel</string>
+							<string>UILabel</string>
+							<string>UIImageView</string>
+							<string>StaticGradientSliderView</string>
+							<string>UIView</string>
+							<string>UILabel</string>
+							<string>UILabel</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>leg_nameLab</string>
+							<string>leg_partyDistLab</string>
+							<string>leg_photoView</string>
+							<string>leg_sliderView</string>
+							<string>leg_sliderViewPlaceHolder</string>
+							<string>leg_tenureLab</string>
+							<string>leg_titleLab</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">leg_nameLab</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">leg_partyDistLab</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">leg_photoView</string>
+								<string key="candidateClassName">UIImageView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">leg_sliderView</string>
+								<string key="candidateClassName">StaticGradientSliderView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">leg_sliderViewPlaceHolder</string>
+								<string key="candidateClassName">UIView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">leg_tenureLab</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">leg_titleLab</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
+						</object>
+					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/View Controllers/LegislatorMasterTableViewCell.h</string>
+						<string key="minorKey">Classes/iPad View Controllers/LegislatorMasterTableViewCell.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">StaticGradientSliderView</string>
+					<string key="superclassName">UIView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">sliderControl</string>
+						<string key="NS.object.0">UISlider</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">sliderControl</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">sliderControl</string>
+							<string key="candidateClassName">UISlider</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Classes/iPad View Controllers/StaticGradientSliderView.h</string>
 					</object>
 				</object>
 			</object>
@@ -462,6 +591,14 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">UIControl</string>
+					<string key="superclassName">UIView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">UIKit.framework/Headers/UIControl.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">UIImageView</string>
 					<string key="superclassName">UIView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -481,6 +618,14 @@
 					<string key="className">UIResponder</string>
 					<string key="superclassName">NSObject</string>
 					<reference key="sourceIdentifier" ref="861221793"/>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">UISlider</string>
+					<string key="superclassName">UIControl</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">UIKit.framework/Headers/UISlider.h</string>
+					</object>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">UITableViewCell</string>
