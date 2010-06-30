@@ -11,8 +11,8 @@
 
 @implementation MasterTableViewController
 @synthesize legDetailViewController;
-
-@synthesize testContent;
+@synthesize dataSource;
+@synthesize searchBar, m_searchDisplayController, chamberControl;
 
 #pragma mark -
 #pragma mark Initialization
@@ -26,120 +26,88 @@
 }
 */
 
+- (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context {
+	self.dataSource = [[sourceClass alloc] initWithManagedObjectContext:context];
+	self.title = [dataSource name];	
+	// set the long name shown in the navigation bar
+	//self.navigationItem.title=[dataSource navigationBarName];
+	
+
+	// FETCH CORE DATA
+	if ([dataSource usesCoreData])
+	{		
+		NSError *error;
+		// You've got to delete the cache, or disable caching before you modify the predicate...
+		[NSFetchedResultsController deleteCacheWithName:[[dataSource fetchedResultsController] cacheName]];
+		
+		if (![[dataSource fetchedResultsController] performFetch:&error]) {
+			// Handle the error...
+		}				
+	}
+	
+	self.tableView.dataSource = self.dataSource;
+	self.dataSource.searchDisplayController = self.m_searchDisplayController;
+	self.m_searchDisplayController.searchResultsDataSource = self.dataSource;
+}
 
 #pragma mark -
 #pragma mark View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title=@"Legislators";
+	self.tableView.rowHeight = 73.0f;
+		
+    //self.title=@"Legislators";
     self.clearsSelectionOnViewWillAppear = NO;
     self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 	
-	self.testContent = [NSMutableArray arrayWithCapacity:50];
-	NSInteger i=0;
-	for (i=0; i<15; i++) {
-		[self.testContent addObject:[NSString stringWithFormat:@"Dude %d", i]];
+	if (self.m_searchDisplayController == nil) {
+		self.m_searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
 	}
+	self.m_searchDisplayController.delegate = self;
+	self.m_searchDisplayController.searchResultsDelegate = self;
+		
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
 
-/*
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+	
+	//if (self.legDetailViewController.legislator == nil)
+	if ([self.tableView indexPathForSelectedRow] == nil)  {
+		NSUInteger ints[2] = {0,0};
+		NSIndexPath* indexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
+		[self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
+		self.legDetailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
+	}
 }
-*/
+
 /*
 - (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+	[super viewDidAppear:animated];
+
+	// this is a hack so that the index does not show up on top of the search bar
+	//if ([dataSource usesSearchbar]) {
+	//	[self.searchDisplayController setActive:YES];
+	//	[self.searchDisplayController setActive:NO];
+	//}
 }
+ 
 */
 /*
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 }
 */
-/*
+
 - (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
+    [super viewDidDisappear:animated];	
+	
 }
-*/
-
-
-
-#pragma mark -
-#pragma mark Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
-    return 1;
-}
-
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // Return the number of rows in the section.
-    return [self.testContent count];
-}
-
-
-// Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-    // Configure the cell...
-	cell.textLabel.text = [self.testContent objectAtIndex:indexPath.row];
-
-    return cell;
-}
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 
 #pragma mark -
@@ -147,7 +115,8 @@
 
 //START:code.split.delegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.legDetailViewController.tempLegislator = [self.testContent objectAtIndex:indexPath.row];
+	//[aTableView deselectRowAtIndexPath:indexPath animated:YES];
+	self.legDetailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
 }
 //END:code.split.delegate
 
@@ -166,6 +135,14 @@
 - (void)viewDidUnload {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
+	self.chamberControl = nil;
+	self.legDetailViewController = nil;
+	self.dataSource = nil;
+	
+	self.searchDisplayController.searchResultsDataSource = nil;  // default is nil. delegate can provide
+	self.searchDisplayController.searchResultsDelegate = nil;    // default is nil. delegate can provide
+	self.searchDisplayController.delegate = nil;
+	self.m_searchDisplayController = nil;
 }
 
 
@@ -176,14 +153,59 @@
 #pragma mark -
 #pragma mark Filtering and Searching
 
-- (IBAction) filterChamber:(id)sender {
-	if (sender == chamberControl) {
-		NSLog(@"Chamber Changed: %@", 
-			  [chamberControl titleForSegmentAtIndex:chamberControl.selectedSegmentIndex]);
+- (void)filterContentForSearchText:(NSString*)searchText scope:(NSInteger)scope
+{
+	/*
+	 Update the filtered array based on the search text and scope.
+	 */
+	if ([self.dataSource respondsToSelector:@selector(setFilterChamber:)])
+		[self.dataSource setFilterChamber:scope];
+	
+	// start filtering names...
+	if (searchText.length > 0) {
+		if ([self.dataSource respondsToSelector:@selector(setFilterByString:)])
+			[self.dataSource setFilterByString:searchText];
+	}	
+	else {
+		if ([self.dataSource respondsToSelector:@selector(removeFilter)])
+			[self.dataSource removeFilter];
 	}
 	
 }
 
+- (IBAction) filterChamber:(id)sender {
+	if (sender == chamberControl) {
+		[self filterContentForSearchText:self.searchBar.text scope:chamberControl.selectedSegmentIndex];
+		[self.tableView reloadData];
+	}
+}
 
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    [self filterContentForSearchText:searchString scope:chamberControl.selectedSegmentIndex];
+    
+	// Return YES to cause the search result table view to be reloaded.
+    return YES;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
+	self.searchDisplayController.searchBar.text = @"";
+	[self.dataSource removeFilter];
+
+	[self.searchDisplayController setActive:NO animated:YES];
+}
+
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
+	[self.dataSource setHideTableIndex:YES];	
+	// for some reason, these get zeroed out after we restart searching.
+	self.m_searchDisplayController.searchResultsTableView.rowHeight = self.tableView.rowHeight;
+	self.m_searchDisplayController.searchResultsTableView.backgroundColor = self.tableView.backgroundColor;
+	self.m_searchDisplayController.searchResultsTableView.sectionIndexMinimumDisplayRowCount = self.tableView.sectionIndexMinimumDisplayRowCount;
+	
+}
+
+- (void)searchDisplayControllerEillEndSearch:(UISearchDisplayController *)controller {
+	[self.dataSource setHideTableIndex:NO];	
+}
 @end
 

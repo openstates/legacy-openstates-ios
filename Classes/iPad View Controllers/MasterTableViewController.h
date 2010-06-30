@@ -7,19 +7,28 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TableDataSourceProtocol.h"
 
 @class LegislatorDetailViewController;
 
-@interface MasterTableViewController : UITableViewController {
+@interface MasterTableViewController : UITableViewController <UISearchDisplayDelegate> {
 	IBOutlet UISegmentedControl *chamberControl;
 	IBOutlet LegislatorDetailViewController *legDetailViewController;
+	IBOutlet id<TableDataSource> dataSource;
+	IBOutlet UISearchBar *searchBar;
 	
-	NSMutableArray *testContent;
+	UISearchDisplayController *m_searchDisplayController;
 }
 
 
 - (IBAction) filterChamber:(id)sender;
-
+@property (nonatomic, retain) IBOutlet id<TableDataSource> dataSource;
 @property (nonatomic, retain) IBOutlet LegislatorDetailViewController *legDetailViewController;
-@property (nonatomic, retain) IBOutlet NSMutableArray *testContent;
+@property (nonatomic, retain) IBOutlet UISearchBar *searchBar;
+@property (nonatomic, retain) IBOutlet UISegmentedControl *chamberControl;
+
+@property (nonatomic, retain) UISearchDisplayController *m_searchDisplayController;
+
+- (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context;
+
 @end

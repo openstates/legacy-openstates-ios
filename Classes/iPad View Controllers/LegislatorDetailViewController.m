@@ -7,12 +7,17 @@
 //
 
 #import "LegislatorDetailViewController.h"
-
+#import "LegislatorObj.h"
+#import "StaticGradientSliderView.h"
+#import "UtilityMethods.h"
 
 @implementation LegislatorDetailViewController
 
 @synthesize tempLegislator;
 @synthesize legislator;
+
+@synthesize leg_photoView, leg_titleLab, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab;
+@synthesize indivSlider, partySlider, allSlider;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -28,6 +33,42 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+- (void)setupHeader {
+	self.leg_nameLab.text = [NSString stringWithFormat:@"%@ %@",  [self.legislator legTypeShortName], 
+					 [self.legislator legProperName]];
+
+	self.leg_photoView.image = [UtilityMethods poorMansImageNamed:self.legislator.photo_name];
+	self.leg_titleLab.text = self.legislator.legtype_name;
+	self.leg_partyLab.text = [self.legislator party_name];
+	self.leg_districtLab.text = [NSString stringWithFormat:@"District %@", self.legislator.district];
+	self.leg_tenureLab.text = [self.legislator tenureString];
+	
+	if (self.indivSlider == nil) {
+		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StaticGradientSliderView" owner:self options:NULL];
+		for (id suspect in objects) {
+			if ([suspect isKindOfClass:[StaticGradientSliderView class]]) {
+				self.indivSlider = suspect;
+			}
+		}
+		CGRect sliderViewFrame = indivPHolder.bounds;
+		[self.indivSlider setFrame:sliderViewFrame];
+		[self.indivSlider.sliderControl setThumbImage:[UIImage imageNamed:@"slider_star_big.png"] forState:UIControlStateNormal];
+		[indivPHolder addSubview:self.indivSlider];
+	}
+	if (self.indivSlider) {
+		self.indivSlider.sliderValue = self.legislator.partisan_index.floatValue;
+	}	
+}
+
+- (void)setLegislator:(LegislatorObj *)newLegislator {
+	if (newLegislator) {
+		if (legislator) [legislator release], legislator = nil;
+		legislator = [newLegislator retain];
+	}
+	[self setupHeader];
+	[self.tableView reloadData];
+	[self.view setNeedsDisplay];
+}
 
 /*
 - (void)viewWillAppear:(BOOL)animated {
@@ -74,7 +115,8 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    	
+	
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -84,7 +126,7 @@
     
 	
     // Configure the cell...
-    cell.textLabel.text = self.tempLegislator;
+    cell.textLabel.text = [self.legislator legProperName];
 	
     return cell;
 }
