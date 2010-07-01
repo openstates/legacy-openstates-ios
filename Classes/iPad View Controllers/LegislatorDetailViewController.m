@@ -11,13 +11,20 @@
 #import "StaticGradientSliderView.h"
 #import "UtilityMethods.h"
 
+@interface LegislatorDetailViewController (Private)
+@property (nonatomic, retain) UIPopoverController *popoverController;
+@end
+
+
 @implementation LegislatorDetailViewController
 
-@synthesize tempLegislator;
-@synthesize legislator;
+@synthesize popoverController;//, m_popButton;
 
+@synthesize legislator;
 @synthesize leg_photoView, leg_titleLab, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab;
 @synthesize indivSlider, partySlider, allSlider;
+@synthesize indivPHolder, partyPHolder, allPHolder;
+@synthesize indivView, partyView, allView;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -30,12 +37,17 @@
      self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+	//self.navigationItem.rightBarButtonItem = self.editButtonItem;
+	
+	//self.m_popButton.action = @selector(showMasterInPopover:);
+
+
 }
 
 - (void)setupHeader {
 	self.leg_nameLab.text = [NSString stringWithFormat:@"%@ %@",  [self.legislator legTypeShortName], 
 					 [self.legislator legProperName]];
+	self.navigationItem.title = self.leg_nameLab.text;
 
 	self.leg_photoView.image = [UtilityMethods poorMansImageNamed:self.legislator.photo_name];
 	self.leg_titleLab.text = self.legislator.legtype_name;
@@ -66,6 +78,11 @@
 		legislator = [newLegislator retain];
 	}
 	[self setupHeader];
+	
+	if (popoverController != nil) {
+        [popoverController dismissPopoverAnimated:YES];
+    }        
+	
 	[self.tableView reloadData];
 	[self.view setNeedsDisplay];
 }
@@ -91,7 +108,47 @@
 }
 */
 
+/*
+- (IBAction)showMasterInPopover:(id)sender {
+	[self.splitViewController showMasterInPopover:sender];
+}
+*/
 
+#pragma mark -
+#pragma mark Split view support
+
+- (void)splitViewController: (UISplitViewController*)svc 
+	 willHideViewController:(UIViewController *)aViewController 
+		  withBarButtonItem:(UIBarButtonItem*)barButtonItem 
+	   forPopoverController: (UIPopoverController*)pc {
+    
+	barButtonItem.title = @"Legislators";	
+	[self.navigationItem setRightBarButtonItem:[barButtonItem retain] animated:YES];
+	//[self.navigationController setNavigationBarHidden:NO animated:YES];
+	
+    self.popoverController = pc;
+}
+
+
+// Called when the view is shown again in the split view, invalidating the button and popover controller.
+- (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController 
+  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
+	
+	self.navigationItem.rightBarButtonItem = nil;
+	//[self.navigationController setNavigationBarHidden:YES animated:NO];
+	
+	
+
+	self.popoverController = nil;
+}
+
+- (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
+   willPresentViewController: (UIViewController *)aViewController
+{
+    if (pc != nil) {
+        [pc dismissPopoverAnimated:YES];
+    }
+}
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Override to allow orientations other than the default portrait orientation.
     return YES;
@@ -200,6 +257,18 @@
 - (void)viewDidUnload {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
+	self.popoverController = nil;
+	//self.toolbar = nil;
+	
+	self.indivSlider = self.partySlider = self.allSlider = nil;
+	self.indivPHolder = self.partyPHolder = self.allPHolder = nil;
+	self.indivView = self.partyView = self.allView = nil;
+	
+	self.legislator = nil;
+	
+	self.leg_photoView = nil;
+	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = nil;
+
 }
 
 

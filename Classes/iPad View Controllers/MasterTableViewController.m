@@ -204,7 +204,7 @@
 	
 }
 
-- (void)searchDisplayControllerEillEndSearch:(UISearchDisplayController *)controller {
+- (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
 	[self.dataSource setHideTableIndex:NO];	
 }
 @end
