@@ -91,7 +91,16 @@
 
 // return the legislator at the index in the sorted by symbol array
 - (LegislatorObj *)legislatorDataForIndexPath:(NSIndexPath *)indexPath {
-	LegislatorObj *tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
+	LegislatorObj *tempEntry = nil;
+	@try {
+		tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
+	}
+	@catch (NSException * e) {
+		// Perhaps we're returning from a search and we've got a wacked out indexPath.  Let's reset the search and see what happens.
+		NSLog(@"DirectoryDataSource.m -- legislatorDataForIndexPath:  indexPath must be out of bounds.  %@", [indexPath description]); 
+		[self removeFilter];
+		tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
+	}
 	return tempEntry;	
 }
 
@@ -105,7 +114,11 @@
 #endif
 	
 	LegislatorObj *dataObj = [self legislatorDataForIndexPath:indexPath];
-
+	if (dataObj == nil) {
+		debug_NSLog(@"Busted in DirectoryDataSource.m: cellForRowAtIndexPath -> Couldn't get legislator data for row.");
+		return nil;
+	}
+	
 #if 0	// let's try out the bigger cells for both iPad and iPhone ... but leave this here in case we want to revert.
     if (![UtilityMethods isIPadDevice]) // if we're on an iphone
     {
@@ -148,13 +161,7 @@
 			cell = self.leg_cell;
 			//self.leg_cell = nil;
 		}
-		
-		LegislatorObj *dataObj = [self legislatorDataForIndexPath:indexPath];
-		if (dataObj == nil) {
-			debug_NSLog(@"Busted in DirectoryDataSource.m: cellForRowAtIndexPath -> Couldn't get legislator data for row.");
-			return nil;
-		}
-		
+				
 		if (cell) {
 			[cell setupWithLegislator:dataObj];
 		}
