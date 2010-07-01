@@ -55,7 +55,7 @@
 					<array class="NSMutableArray" key="IBUIViewControllers">
 						<object class="IBUITableViewController" id="148454557">
 							<object class="IBUITableView" key="IBUIView" id="548002529">
-								<reference key="NSNextResponder"/>
+								<nil key="NSNextResponder"/>
 								<int key="NSvFlags">274</int>
 								<array class="NSMutableArray" key="NSSubviews">
 									<object class="IBUISearchBar" id="631651505">
@@ -63,7 +63,6 @@
 										<int key="NSvFlags">290</int>
 										<string key="NSFrameSize">{320, 44}</string>
 										<reference key="NSSuperview" ref="548002529"/>
-										<reference key="NSWindow"/>
 										<int key="IBUIContentMode">3</int>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<string key="IBPrompt"/>
@@ -76,8 +75,6 @@
 									</object>
 								</array>
 								<string key="NSFrame">{{-160, 0}, {320, 704}}</string>
-								<reference key="NSSuperview"/>
-								<reference key="NSWindow"/>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">6</int>
 									<string key="NSCatalogName">System</string>
@@ -101,19 +98,10 @@
 							</object>
 							<reference key="IBUIToolbarItems" ref="0"/>
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="334199257">
-								<reference key="IBUINavigationBar"/>
-								<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="862645672">
-									<string key="IBUITitle">Menu</string>
-									<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-									<int key="IBUIStyle">1</int>
-									<reference key="IBUINavigationItem" ref="334199257"/>
-								</object>
 								<object class="IBUISegmentedControl" key="IBUITitleView" id="204909584">
-									<reference key="NSNextResponder"/>
+									<nil key="NSNextResponder"/>
 									<int key="NSvFlags">292</int>
 									<string key="NSFrame">{{75, 7}, {170, 30}}</string>
-									<reference key="NSSuperview"/>
-									<reference key="NSWindow"/>
 									<bool key="IBUIOpaque">NO</bool>
 									<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 									<int key="IBSegmentControlStyle">2</int>
@@ -160,15 +148,50 @@
 						</object>
 					</array>
 				</object>
-				<object class="IBUIViewController" key="IBUIDetailViewController" id="108040592">
-					<reference key="IBUIToolbarItems" ref="0"/>
+				<object class="IBUINavigationController" key="IBUIDetailViewController" id="841671705">
 					<reference key="IBUIParentViewController" ref="603363263"/>
-					<string key="IBUINibName">LegislatorDetailViewController</string>
+					<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
+						<int key="IBUIStatusBarStyle">2</int>
+					</object>
 					<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
 						<int key="interfaceOrientation">1</int>
 					</object>
 					<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 					<bool key="IBUIHorizontal">NO</bool>
+					<object class="IBUINavigationBar" key="IBUINavigationBar" id="919792043">
+						<nil key="NSNextResponder"/>
+						<int key="NSvFlags">256</int>
+						<string key="NSFrameSize">{0, 0}</string>
+						<bool key="IBUIClipsSubviews">YES</bool>
+						<bool key="IBUIMultipleTouchEnabled">YES</bool>
+						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+					</object>
+					<object class="IBUIToolbar" key="IBUIToolbar" id="1064420527">
+						<nil key="NSNextResponder"/>
+						<int key="NSvFlags">256</int>
+						<string key="NSFrame">{{0, 980}, {768, 44}}</string>
+						<bool key="IBUIOpaque">NO</bool>
+						<bool key="IBUIClipsSubviews">YES</bool>
+						<int key="IBUIContentMode">4</int>
+						<bool key="IBUIMultipleTouchEnabled">YES</bool>
+						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+					</object>
+					<array key="IBUIViewControllers">
+						<object class="IBUIViewController" id="1034356905">
+							<array key="IBUIToolbarItems"/>
+							<object class="IBUINavigationItem" key="IBUINavigationItem" id="77276599">
+								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+							</object>
+							<reference key="IBUIParentViewController" ref="841671705"/>
+							<string key="IBUINibName">LegislatorDetailViewController</string>
+							<object class="IBUISimulatedToolbarMetrics" key="IBUISimulatedBottomBarMetrics"/>
+							<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
+								<int key="interfaceOrientation">1</int>
+							</object>
+							<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+							<bool key="IBUIHorizontal">NO</bool>
+						</object>
+					</array>
 				</object>
 			</object>
 		</array>
@@ -192,22 +215,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">detailViewController</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="108040592"/>
-					</object>
-					<int key="connectionID">62</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">legDetailViewController</string>
-						<reference key="source" ref="148454557"/>
-						<reference key="destination" ref="108040592"/>
-					</object>
-					<int key="connectionID">63</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">chamberControl</string>
 						<reference key="source" ref="148454557"/>
 						<reference key="destination" ref="204909584"/>
@@ -222,14 +229,6 @@
 						<int key="IBEventType">13</int>
 					</object>
 					<int key="connectionID">65</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">delegate</string>
-						<reference key="source" ref="603363263"/>
-						<reference key="destination" ref="108040592"/>
-					</object>
-					<int key="connectionID">66</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -255,6 +254,22 @@
 					</object>
 					<int key="connectionID">80</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">legDetailViewController</string>
+						<reference key="source" ref="148454557"/>
+						<reference key="destination" ref="1034356905"/>
+					</object>
+					<int key="connectionID">100</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="603363263"/>
+						<reference key="destination" ref="1034356905"/>
+					</object>
+					<int key="connectionID">103</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -279,62 +294,34 @@
 						<int key="objectID">3</int>
 						<reference key="object" ref="603363263"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="108040592"/>
 							<reference ref="682048502"/>
+							<reference ref="841671705"/>
 						</array>
 						<reference key="parent" ref="0"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">5</int>
-						<reference key="object" ref="108040592"/>
-						<array class="NSMutableArray" key="children"/>
-						<reference key="parent" ref="603363263"/>
-						<string key="objectName">Legislator Detail View Controller</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">4</int>
 						<reference key="object" ref="682048502"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="148454557"/>
 							<reference ref="991132551"/>
+							<reference ref="148454557"/>
 						</array>
 						<reference key="parent" ref="603363263"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">6</int>
-						<reference key="object" ref="148454557"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="334199257"/>
-							<reference ref="548002529"/>
-						</array>
-						<reference key="parent" ref="682048502"/>
-						<string key="objectName">Master Table View Controller</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">8</int>
-						<reference key="object" ref="334199257"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="204909584"/>
-							<reference ref="862645672"/>
-						</array>
-						<reference key="parent" ref="148454557"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">13</int>
-						<reference key="object" ref="204909584"/>
-						<reference key="parent" ref="334199257"/>
-						<string key="objectName">Chamber Selection Control</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">9</int>
-						<reference key="object" ref="862645672"/>
-						<reference key="parent" ref="334199257"/>
-						<string key="objectName">Menu Button Item</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">7</int>
 						<reference key="object" ref="991132551"/>
 						<reference key="parent" ref="682048502"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">6</int>
+						<reference key="object" ref="148454557"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="548002529"/>
+							<reference ref="334199257"/>
+						</array>
+						<reference key="parent" ref="682048502"/>
+						<string key="objectName">Master Table View Controller</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">10</int>
@@ -350,6 +337,55 @@
 						<reference key="object" ref="631651505"/>
 						<reference key="parent" ref="548002529"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">8</int>
+						<reference key="object" ref="334199257"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="204909584"/>
+						</array>
+						<reference key="parent" ref="148454557"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">13</int>
+						<reference key="object" ref="204909584"/>
+						<reference key="parent" ref="334199257"/>
+						<string key="objectName">Chamber Selection Control</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">88</int>
+						<reference key="object" ref="841671705"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="919792043"/>
+							<reference ref="1034356905"/>
+							<reference ref="1064420527"/>
+						</array>
+						<reference key="parent" ref="603363263"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">92</int>
+						<reference key="object" ref="1034356905"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="77276599"/>
+						</array>
+						<reference key="parent" ref="841671705"/>
+						<string key="objectName">Legislator Detail View Controller</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">90</int>
+						<reference key="object" ref="919792043"/>
+						<reference key="parent" ref="841671705"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">93</int>
+						<reference key="object" ref="77276599"/>
+						<array class="NSMutableArray" key="children"/>
+						<reference key="parent" ref="1034356905"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">110</int>
+						<reference key="object" ref="1064420527"/>
+						<reference key="parent" ref="841671705"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -357,23 +393,25 @@
 				<string key="-2.CustomClassName">UIResponder</string>
 				<string key="10.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="13.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="3.IBEditorWindowLastContentRect">{{316, 179}, {1024, 768}}</string>
+				<string key="3.IBEditorWindowLastContentRect">{{123, -536}, {1024, 768}}</string>
 				<string key="3.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="4.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="5.CustomClassName">LegislatorDetailViewController</string>
-				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="6.CustomClassName">MasterTableViewController</string>
 				<string key="6.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="69.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="7.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="8.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="9.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="88.IBEditorWindowLastContentRect">{{312, 4}, {783, 1002}}</string>
+				<string key="88.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="90.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="92.CustomClassName">LegislatorDetailViewController</string>
+				<string key="92.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">80</int>
+			<int key="maxID">112</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -444,7 +482,6 @@
 						<string key="indivPHolder">UIView</string>
 						<string key="indivSlider">StaticGradientSliderView</string>
 						<string key="indivView">UIView</string>
-						<string key="legInfoTable">UITableView</string>
 						<string key="leg_districtLab">UILabel</string>
 						<string key="leg_nameLab">UILabel</string>
 						<string key="leg_partyLab">UILabel</string>
@@ -454,7 +491,6 @@
 						<string key="partyPHolder">UIView</string>
 						<string key="partySlider">StaticGradientSliderView</string>
 						<string key="partyView">UIView</string>
-						<string key="toolbar">UIToolbar</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="allPHolder">
@@ -480,10 +516,6 @@
 						<object class="IBToOneOutletInfo" key="indivView">
 							<string key="name">indivView</string>
 							<string key="candidateClassName">UIView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="legInfoTable">
-							<string key="name">legInfoTable</string>
-							<string key="candidateClassName">UITableView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="leg_districtLab">
 							<string key="name">leg_districtLab</string>
@@ -520,10 +552,6 @@
 						<object class="IBToOneOutletInfo" key="partyView">
 							<string key="name">partyView</string>
 							<string key="candidateClassName">UIView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="toolbar">
-							<string key="name">toolbar</string>
-							<string key="candidateClassName">UIToolbar</string>
 						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
