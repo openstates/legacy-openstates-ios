@@ -29,6 +29,7 @@
 		3729EC2910077F83000AD804 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3729EC2810077F83000AD804 /* CoreData.framework */; };
 		3729ED8510079CCA000AD804 /* TexLege.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 3729ED8410079CCA000AD804 /* TexLege.xcdatamodel */; };
 		372E4F0111D9691B001B4AF5 /* StaticGradientSliderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 372E4F0011D9691B001B4AF5 /* StaticGradientSliderView.xib */; };
+		3732A0F811DB203F009E8957 /* iPhoneTabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3732A0F711DB203F009E8957 /* iPhoneTabBarController.xib */; };
 		373AB3B90FD3389F0065740E /* DirectoryDetailInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 373AB3B80FD3389F0065740E /* DirectoryDetailInfo.m */; };
 		37617AB31006B8140052D12C /* info_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 376B59980FC1AE060094D80B /* info_30.png */; };
 		37617AD91006BB810052D12C /* BillsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37617AD71006BB810052D12C /* BillsDataSource.m */; };
@@ -47,6 +48,7 @@
 		37674B341002C492003FD09F /* Map.FloorE2.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B2D1002C492003FD09F /* Map.FloorE2.pdf */; };
 		37674B5D100391C8003FD09F /* Map.SenateChamber.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B5B100391C8003FD09F /* Map.SenateChamber.pdf */; };
 		37674B5E100391C8003FD09F /* Map.HouseChamber.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B5C100391C8003FD09F /* Map.HouseChamber.pdf */; };
+		376777F511DAB9C50075A74E /* StaticGradientSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 376777F411DAB9C50075A74E /* StaticGradientSliderView.m */; };
 		376B599E0FC1AE060094D80B /* Directory.png in Resources */ = {isa = PBXBuildFile; fileRef = 376B59450FC1AE060094D80B /* Directory.png */; };
 		376B599F0FC1AE060094D80B /* 01-refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 376B59470FC1AE060094D80B /* 01-refresh.png */; };
 		376B59A40FC1AE060094D80B /* 06-magnifying-glass.png in Resources */ = {isa = PBXBuildFile; fileRef = 376B594C0FC1AE060094D80B /* 06-magnifying-glass.png */; };
@@ -88,7 +90,6 @@
 		378A1CDE1007FF4600BEC4ED /* LegislatorObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A1CD91007FF4600BEC4ED /* LegislatorObj.m */; };
 		378A1CDF1007FF4600BEC4ED /* LinkObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A1CDB1007FF4600BEC4ED /* LinkObj.m */; };
 		378AFA86100BCC190040706A /* DirectoryDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 378AFA85100BCC190040706A /* DirectoryDetailView.m */; };
-		378AFC80100BDD640040706A /* CommitteeDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 378AFC7D100BDD640040706A /* CommitteeDetailView.m */; };
 		378AFC81100BDD640040706A /* CommitteesDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 378AFC7F100BDD640040706A /* CommitteesDataSource.m */; };
 		378AFC84100BDD940040706A /* DirectoryDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 378AFC82100BDD940040706A /* DirectoryDataSource.m */; };
 		3792247A10115FB5004E0DCA /* TexasGradient.png in Resources */ = {isa = PBXBuildFile; fileRef = 3792247710115FB5004E0DCA /* TexasGradient.png */; };
@@ -342,12 +343,13 @@
 		3718F46411D7CECB002E8EAD /* 16-line-chart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "16-line-chart.png"; sourceTree = "<group>"; };
 		3718F46511D7CECB002E8EAD /* 17-bar-chart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "17-bar-chart.png"; sourceTree = "<group>"; };
 		3721EB9B11D6FD6B00CA33DA /* CorePlot-CocoaTouch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "CorePlot-CocoaTouch.xcodeproj"; path = "/Users/greg/Downloads/core-plot/framework/CorePlot-CocoaTouch.xcodeproj"; sourceTree = "<absolute>"; };
-		3721EC6611D70C8600CA33DA /* CPTestApp_iPadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPTestApp_iPadViewController.h; sourceTree = "<group>"; };
-		3721EC6711D70C8600CA33DA /* CPTestApp_iPadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPTestApp_iPadViewController.m; sourceTree = "<group>"; };
-		3721EC6811D70C8600CA33DA /* CPTestApp_iPadViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CPTestApp_iPadViewController.xib; sourceTree = "<group>"; };
+		3721EC6611D70C8600CA33DA /* CPTestApp_iPadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPTestApp_iPadViewController.h; path = CorePlot/CPTestApp_iPadViewController.h; sourceTree = "<group>"; };
+		3721EC6711D70C8600CA33DA /* CPTestApp_iPadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CPTestApp_iPadViewController.m; path = CorePlot/CPTestApp_iPadViewController.m; sourceTree = "<group>"; };
+		3721EC6811D70C8600CA33DA /* CPTestApp_iPadViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CPTestApp_iPadViewController.xib; path = "Resources-iPad/CPTestApp_iPadViewController.xib"; sourceTree = "<group>"; };
 		3729EC2810077F83000AD804 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		3729ED8410079CCA000AD804 /* TexLege.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = TexLege.xcdatamodel; sourceTree = "<group>"; };
 		372E4F0011D9691B001B4AF5 /* StaticGradientSliderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = StaticGradientSliderView.xib; path = Resources/StaticGradientSliderView.xib; sourceTree = "<group>"; };
+		3732A0F711DB203F009E8957 /* iPhoneTabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = iPhoneTabBarController.xib; path = Resources/iPhoneTabBarController.xib; sourceTree = "<group>"; };
 		373AB3B70FD3389F0065740E /* DirectoryDetailInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryDetailInfo.h; sourceTree = "<group>"; };
 		373AB3B80FD3389F0065740E /* DirectoryDetailInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryDetailInfo.m; sourceTree = "<group>"; };
 		3741417310054AAA0025D3AE /* leave_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leave_arrow.png; sourceTree = "<group>"; };
@@ -371,6 +373,8 @@
 		37674B2D1002C492003FD09F /* Map.FloorE2.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.FloorE2.pdf; path = Resources/Maps/Map.FloorE2.pdf; sourceTree = "<group>"; };
 		37674B5B100391C8003FD09F /* Map.SenateChamber.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.SenateChamber.pdf; path = Resources/Maps/Map.SenateChamber.pdf; sourceTree = "<group>"; };
 		37674B5C100391C8003FD09F /* Map.HouseChamber.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.HouseChamber.pdf; path = Resources/Maps/Map.HouseChamber.pdf; sourceTree = "<group>"; };
+		376777F311DAB9C50075A74E /* StaticGradientSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StaticGradientSliderView.h; path = "iPad View Controllers/StaticGradientSliderView.h"; sourceTree = "<group>"; };
+		376777F411DAB9C50075A74E /* StaticGradientSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StaticGradientSliderView.m; path = "iPad View Controllers/StaticGradientSliderView.m"; sourceTree = "<group>"; };
 		376B59450FC1AE060094D80B /* Directory.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Directory.png; sourceTree = "<group>"; };
 		376B59470FC1AE060094D80B /* 01-refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "01-refresh.png"; sourceTree = "<group>"; };
 		376B594C0FC1AE060094D80B /* 06-magnifying-glass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "06-magnifying-glass.png"; sourceTree = "<group>"; };
@@ -415,12 +419,12 @@
 		376F291311D7319700699DFD /* LegislatorMasterTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = LegislatorMasterTableViewCell.xib; path = "Resources-iPad/LegislatorMasterTableViewCell.xib"; sourceTree = "<group>"; };
 		3775F9BF11D860BA00D69AC5 /* Default-iPad-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-iPad-Landscape.png"; path = "../../Resources-iPad/Default-iPad-Landscape.png"; sourceTree = "<group>"; };
 		3775F9C011D860BA00D69AC5 /* Default-iPad-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-iPad-Portrait.png"; path = "../../Resources-iPad/Default-iPad-Portrait.png"; sourceTree = "<group>"; };
-		3775FA3A11D86E1700D69AC5 /* LegislatorDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorDetailViewController.h; path = "View Controllers/LegislatorDetailViewController.h"; sourceTree = "<group>"; };
-		3775FA3B11D86E1700D69AC5 /* LegislatorDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegislatorDetailViewController.m; path = "View Controllers/LegislatorDetailViewController.m"; sourceTree = "<group>"; };
-		3775FA4A11D8701B00D69AC5 /* MasterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MasterTableViewController.h; path = "View Controllers/MasterTableViewController.h"; sourceTree = "<group>"; };
-		3775FA4B11D8701B00D69AC5 /* MasterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MasterTableViewController.m; path = "View Controllers/MasterTableViewController.m"; sourceTree = "<group>"; };
-		3775FA4F11D870D200D69AC5 /* LegislatorMasterTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorMasterTableViewCell.h; path = "View Controllers/LegislatorMasterTableViewCell.h"; sourceTree = "<group>"; };
-		3775FA5011D870D200D69AC5 /* LegislatorMasterTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegislatorMasterTableViewCell.m; path = "View Controllers/LegislatorMasterTableViewCell.m"; sourceTree = "<group>"; };
+		3775FA3A11D86E1700D69AC5 /* LegislatorDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorDetailViewController.h; path = "iPad View Controllers/LegislatorDetailViewController.h"; sourceTree = "<group>"; };
+		3775FA3B11D86E1700D69AC5 /* LegislatorDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegislatorDetailViewController.m; path = "iPad View Controllers/LegislatorDetailViewController.m"; sourceTree = "<group>"; };
+		3775FA4A11D8701B00D69AC5 /* MasterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MasterTableViewController.h; path = "iPad View Controllers/MasterTableViewController.h"; sourceTree = "<group>"; };
+		3775FA4B11D8701B00D69AC5 /* MasterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MasterTableViewController.m; path = "iPad View Controllers/MasterTableViewController.m"; sourceTree = "<group>"; };
+		3775FA4F11D870D200D69AC5 /* LegislatorMasterTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorMasterTableViewCell.h; path = "iPad View Controllers/LegislatorMasterTableViewCell.h"; sourceTree = "<group>"; };
+		3775FA5011D870D200D69AC5 /* LegislatorMasterTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegislatorMasterTableViewCell.m; path = "iPad View Controllers/LegislatorMasterTableViewCell.m"; sourceTree = "<group>"; };
 		377E8CF0100C39F300686B23 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		378A1CD61007FF4600BEC4ED /* CommitteePositionObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteePositionObj.h; sourceTree = "<group>"; };
 		378A1CD71007FF4600BEC4ED /* CommitteePositionObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteePositionObj.m; sourceTree = "<group>"; };
@@ -430,8 +434,6 @@
 		378A1CDB1007FF4600BEC4ED /* LinkObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinkObj.m; sourceTree = "<group>"; };
 		378A1D611008061A00BEC4ED /* TexLege.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = TexLege.sqlite; sourceTree = "<group>"; };
 		378AFA85100BCC190040706A /* DirectoryDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryDetailView.m; sourceTree = "<group>"; };
-		378AFC7C100BDD640040706A /* CommitteeDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeDetailView.h; sourceTree = "<group>"; };
-		378AFC7D100BDD640040706A /* CommitteeDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteeDetailView.m; sourceTree = "<group>"; };
 		378AFC7E100BDD640040706A /* CommitteesDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommitteesDataSource.h; path = "Committees Menu/CommitteesDataSource.h"; sourceTree = "<group>"; };
 		378AFC7F100BDD640040706A /* CommitteesDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommitteesDataSource.m; path = "Committees Menu/CommitteesDataSource.m"; sourceTree = "<group>"; };
 		378AFC82100BDD940040706A /* DirectoryDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DirectoryDataSource.m; path = "Directory Menu/DirectoryDataSource.m"; sourceTree = "<group>"; };
@@ -459,9 +461,9 @@
 		37A0E5E10FD30E17009B65F7 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		37A0E5E20FD30E17009B65F7 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		37AD572C11DA4C5C00D68934 /* TexLege.xcclassmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcclassmodel; name = TexLege.xcclassmodel; path = Resources/TexLege.xcclassmodel; sourceTree = "<group>"; };
-		37AD57B811DA651300D68934 /* CommitteeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeDetailViewController.h; sourceTree = "<group>"; };
-		37AD57B911DA651500D68934 /* CommitteeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteeDetailViewController.m; sourceTree = "<group>"; };
-		37AD57BA11DA651700D68934 /* CommitteeDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CommitteeDetailViewController.xib; path = Classes/CommitteeDetailViewController.xib; sourceTree = "<group>"; };
+		37AD57B811DA651300D68934 /* CommitteeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommitteeDetailViewController.h; path = "Committees Menu/CommitteeDetailViewController.h"; sourceTree = "<group>"; };
+		37AD57B911DA651500D68934 /* CommitteeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommitteeDetailViewController.m; path = "Committees Menu/CommitteeDetailViewController.m"; sourceTree = "<group>"; };
+		37AD57BA11DA651700D68934 /* CommitteeDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CommitteeDetailViewController.xib; path = Resources/CommitteeDetailViewController.xib; sourceTree = "<group>"; };
 		37ADADE30FD25F4200282EA0 /* allen.alma.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = allen.alma.png; sourceTree = "<group>"; };
 		37ADADE40FD25F4200282EA0 /* alonzo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alonzo.png; sourceTree = "<group>"; };
 		37ADADE50FD25F4200282EA0 /* alvarado.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alvarado.png; sourceTree = "<group>"; };
@@ -697,7 +699,6 @@
 				37AD57B511DA644900D68934 /* Views and Table Cells */,
 				378A1C851007FA9700BEC4ED /* Core Data Classes */,
 				37A0E4510FD2DEAA009B65F7 /* Member Directory Menu */,
-				378AFC7B100BDD640040706A /* Committees Menu */,
 				37A0E4430FD2DEAA009B65F7 /* Links Info Menu */,
 			);
 			path = Classes;
@@ -729,6 +730,7 @@
 			children = (
 				8D1107310486CEB800E47090 /* Info.plist */,
 				37AD572C11DA4C5C00D68934 /* TexLege.xcclassmodel */,
+				3732A0F711DB203F009E8957 /* iPhoneTabBarController.xib */,
 				372E4F0011D9691B001B4AF5 /* StaticGradientSliderView.xib */,
 				37AD57BA11DA651700D68934 /* CommitteeDetailViewController.xib */,
 				3709AB30101A092500C1061B /* EditingTableViewCell.xib */,
@@ -764,7 +766,6 @@
 				3721EB9B11D6FD6B00CA33DA /* CorePlot-CocoaTouch.xcodeproj */,
 				3721EC6611D70C8600CA33DA /* CPTestApp_iPadViewController.h */,
 				3721EC6711D70C8600CA33DA /* CPTestApp_iPadViewController.m */,
-				3721EC6811D70C8600CA33DA /* CPTestApp_iPadViewController.xib */,
 			);
 			name = CorePlot;
 			sourceTree = "<group>";
@@ -780,6 +781,7 @@
 		374036D91186AE2F0047E70A /* Resources-iPad */ = {
 			isa = PBXGroup;
 			children = (
+				3721EC6811D70C8600CA33DA /* CPTestApp_iPadViewController.xib */,
 				37BF251111D64B5400B71688 /* LegislatorDetailViewController.xib */,
 				37BF24ED11D63FB500B71688 /* SplitViewController.xib */,
 				376F291311D7319700699DFD /* LegislatorMasterTableViewCell.xib */,
@@ -899,15 +901,6 @@
 			path = "Core Data Classes";
 			sourceTree = "<group>";
 		};
-		378AFC7B100BDD640040706A /* Committees Menu */ = {
-			isa = PBXGroup;
-			children = (
-				378AFC7C100BDD640040706A /* CommitteeDetailView.h */,
-				378AFC7D100BDD640040706A /* CommitteeDetailView.m */,
-			);
-			path = "Committees Menu";
-			sourceTree = "<group>";
-		};
 		37A0E4430FD2DEAA009B65F7 /* Links Info Menu */ = {
 			isa = PBXGroup;
 			children = (
@@ -1025,6 +1018,8 @@
 				3709AB24101A046D00C1061B /* EditingTableViewCell.m */,
 				3775FA4F11D870D200D69AC5 /* LegislatorMasterTableViewCell.h */,
 				3775FA5011D870D200D69AC5 /* LegislatorMasterTableViewCell.m */,
+				376777F311DAB9C50075A74E /* StaticGradientSliderView.h */,
+				376777F411DAB9C50075A74E /* StaticGradientSliderView.m */,
 			);
 			name = "Views and Table Cells";
 			sourceTree = "<group>";
@@ -1586,6 +1581,7 @@
 				37C63E6711D9CC9200352CF3 /* Directory@2x.png in Resources */,
 				37AD572D11DA4C5C00D68934 /* TexLege.xcclassmodel in Resources */,
 				37AD57BC11DA651700D68934 /* CommitteeDetailViewController.xib in Resources */,
+				3732A0F811DB203F009E8957 /* iPhoneTabBarController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1612,7 +1608,6 @@
 				378A1CDF1007FF4600BEC4ED /* LinkObj.m in Sources */,
 				37155728100859E700FA57DB /* CommitteeObj.m in Sources */,
 				378AFA86100BCC190040706A /* DirectoryDetailView.m in Sources */,
-				378AFC80100BDD640040706A /* CommitteeDetailView.m in Sources */,
 				378AFC81100BDD640040706A /* CommitteesDataSource.m in Sources */,
 				378AFC84100BDD940040706A /* DirectoryDataSource.m in Sources */,
 				379C1EEA1012DF28007844B5 /* NotesViewController.m in Sources */,
@@ -1628,6 +1623,7 @@
 				3775FA4C11D8701B00D69AC5 /* MasterTableViewController.m in Sources */,
 				3775FA5111D870D200D69AC5 /* LegislatorMasterTableViewCell.m in Sources */,
 				37AD57BB11DA651700D68934 /* CommitteeDetailViewController.m in Sources */,
+				376777F511DAB9C50075A74E /* StaticGradientSliderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
