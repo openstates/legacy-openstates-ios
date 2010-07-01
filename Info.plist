@@ -25,10 +25,10 @@
 	<key>CFBundleVersion</key>
 	<string>${CURRENT_PROJECT_VERSION}</string>
 	<key>LSRequiresIPhoneOS</key>
-	<false/>
+	<true/>
 	<key>UILaunchImageFile~ipad</key>
 	<string>Default-iPad.png</string>
-	<key>UIInterfaceOrientation</key>
+	<key>UIInterfaceOrientation~iphone</key>
 	<string>UIInterfaceOrientationPortrait</string>
 	<key>UIInterfaceOrientation~ipad</key>
 	<string>UIInterfaceOrientationLandscapeLeft</string>
