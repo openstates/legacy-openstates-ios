@@ -29,6 +29,7 @@
 		3729EC2910077F83000AD804 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3729EC2810077F83000AD804 /* CoreData.framework */; };
 		3729ED8510079CCA000AD804 /* TexLege.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 3729ED8410079CCA000AD804 /* TexLege.xcdatamodel */; };
 		372E4F0111D9691B001B4AF5 /* StaticGradientSliderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 372E4F0011D9691B001B4AF5 /* StaticGradientSliderView.xib */; };
+		3730B43311DD4B4D00BA10D0 /* Icon_512.png in Resources */ = {isa = PBXBuildFile; fileRef = 3730B43211DD4B4D00BA10D0 /* Icon_512.png */; };
 		3732A0F811DB203F009E8957 /* iPhoneTabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3732A0F711DB203F009E8957 /* iPhoneTabBarController.xib */; };
 		373AB3B90FD3389F0065740E /* DirectoryDetailInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 373AB3B80FD3389F0065740E /* DirectoryDetailInfo.m */; };
 		37617AB31006B8140052D12C /* info_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 376B59980FC1AE060094D80B /* info_30.png */; };
@@ -349,6 +350,7 @@
 		3729EC2810077F83000AD804 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		3729ED8410079CCA000AD804 /* TexLege.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = TexLege.xcdatamodel; sourceTree = "<group>"; };
 		372E4F0011D9691B001B4AF5 /* StaticGradientSliderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = StaticGradientSliderView.xib; path = Resources/StaticGradientSliderView.xib; sourceTree = "<group>"; };
+		3730B43211DD4B4D00BA10D0 /* Icon_512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon_512.png; path = "../Icons/Application Icon/Icon_512.png"; sourceTree = SOURCE_ROOT; };
 		3732A0F711DB203F009E8957 /* iPhoneTabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = iPhoneTabBarController.xib; path = Resources/iPhoneTabBarController.xib; sourceTree = "<group>"; };
 		373AB3B70FD3389F0065740E /* DirectoryDetailInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryDetailInfo.h; sourceTree = "<group>"; };
 		373AB3B80FD3389F0065740E /* DirectoryDetailInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryDetailInfo.m; sourceTree = "<group>"; };
@@ -1233,6 +1235,7 @@
 		37D714640FFD0818008E59E7 /* Default and Icon */ = {
 			isa = PBXGroup;
 			children = (
+				3730B43211DD4B4D00BA10D0 /* Icon_512.png */,
 				1D30AB170D05D02000671497 /* Icon.png */,
 				37C63DC411D9B52200352CF3 /* Icon~ipad.png */,
 				37C63DC311D9B52200352CF3 /* Icon@2x~iphone.png */,
@@ -1582,6 +1585,7 @@
 				37AD572D11DA4C5C00D68934 /* TexLege.xcclassmodel in Resources */,
 				37AD57BC11DA651700D68934 /* CommitteeDetailViewController.xib in Resources */,
 				3732A0F811DB203F009E8957 /* iPhoneTabBarController.xib in Resources */,
+				3730B43311DD4B4D00BA10D0 /* Icon_512.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

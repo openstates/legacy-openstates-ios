@@ -62,7 +62,7 @@
 					<object class="IBUISlider" id="826232757">
 						<reference key="NSNextResponder" ref="832563178"/>
 						<int key="NSvFlags">290</int>
-						<string key="NSFrame">{{-2, 0}, {304, 23}}</string>
+						<string key="NSFrameSize">{300, 23}</string>
 						<reference key="NSSuperview" ref="832563178"/>
 						<reference key="IBUIBackgroundColor" ref="680358745"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -158,7 +158,7 @@
 					<string>UIResponder</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>StaticGradientSliderView</string>
-					<string>{{361, 514}, {300, 24}}</string>
+					<string>{{345, 798}, {300, 24}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				</object>
 			</object>
