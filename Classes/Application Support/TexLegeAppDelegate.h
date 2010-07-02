@@ -55,8 +55,12 @@
 		
 	IBOutlet CPTestApp_iPadViewController *corePlotTabbedVC;
 	
+@private
+	NSMutableArray *functionalViewControllers;	
 }
 @property (nonatomic, retain) UIWindow			*mainWindow;
+
+@property (nonatomic, retain) NSMutableArray *functionalViewControllers;
 
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 @property (nonatomic, retain) IBOutlet GeneralTableViewController *directoryTableTabbedVC, *committeeTableTabbedVC, *mapsTableTabbedVC, *linksTableTabbedVC;

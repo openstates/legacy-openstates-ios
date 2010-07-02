@@ -21,6 +21,9 @@
 #define NEEDS_TO_INITIALIZE_DATABASE 0
 #define NEEDS_TO_CENSOR_USER_LINKS 0
 
+#define kDeviceSensitiveRowHeight 0
+
+
 
 #define m_iTunesAppID 326478866
 //#define m_iTunesURL @"http://itunes.com/us/app/TexLege"

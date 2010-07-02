@@ -46,6 +46,8 @@
 	}
 	
 	self.tableView.dataSource = self.dataSource;
+	self.tableView.rowHeight = self.dataSource.rowHeight;
+
 	self.dataSource.searchDisplayController = self.m_searchDisplayController;
 	self.m_searchDisplayController.searchResultsDataSource = self.dataSource;
 }
@@ -55,7 +57,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	self.tableView.rowHeight = 73.0f;
 		
     //self.title=@"Legislators";
     self.clearsSelectionOnViewWillAppear = NO;

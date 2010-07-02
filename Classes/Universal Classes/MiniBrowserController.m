@@ -68,8 +68,8 @@ static MiniBrowserController *s_browser = nil;
 		m_shouldStopLoadingOnHide = YES;
 		m_loadingInterrupted = NO;
 		m_urlRequestToLoad = nil;
-		m_activity = nil;
-		m_loadingLabel = nil;
+		//m_activity = nil;
+		//m_loadingLabel = nil;
 		m_parentCtrl = nil;
 		m_shouldUseParentsView = NO;
 		m_shouldDisplayOnViewLoad = NO;
@@ -107,34 +107,8 @@ static MiniBrowserController *s_browser = nil;
 {
 	[super viewDidLoad];
 	
-	CGRect actFrame = CGRectMake( CGRectGetWidth(self.m_webView.frame)/2.0f - 16.0f,
-								  CGRectGetHeight(self.m_webView.frame)/2.0f - 16.0f,
-								  32.0f, 32.0f
-								 );
-	CGRect lblFrame = CGRectMake( CGRectGetMaxX(actFrame) + 6.0f,
-								  CGRectGetMinY(actFrame) - 4.0f,
-								  120.0f, 40.0f
-	                            );
-	m_activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-	[m_activity setFrame:actFrame];
-	m_activity.hidesWhenStopped = YES;
-	[self.m_webView addSubview:m_activity];
-	[m_activity release];
-	[m_activity stopAnimating];
-	
-	m_loadingLabel = [[UILabel alloc] initWithFrame:lblFrame];
-	//[m_loadingLabel setFrame:lblFrame];
-	//m_loadingLabel.backgroundColor = [UIColor colorWithRed:0.55f green:0.55f blue:0.55f alpha:0.40f];
-	m_loadingLabel.backgroundColor = [UIColor clearColor];
-	m_loadingLabel.highlightedTextColor = [UIColor darkGrayColor];
-	m_loadingLabel.textColor = [UIColor blackColor];
-	m_loadingLabel.font = [UIFont boldSystemFontOfSize:14.0f];
-	m_loadingLabel.textAlignment = UITextAlignmentLeft;
-	m_loadingLabel.adjustsFontSizeToFitWidth = YES;
-	m_loadingLabel.text = @"Loading...";
-	[self.m_webView addSubview:m_loadingLabel];
-	[m_loadingLabel release];
-	[m_loadingLabel setHidden:YES];
+	//[m_activity stopAnimating];
+	//[m_loadingLabel setHidden:YES];
 	
 	// get the current list of buttons
 	m_normalItemList = [[NSArray alloc] initWithArray:m_toolBar.items];
@@ -358,6 +332,9 @@ static MiniBrowserController *s_browser = nil;
 - (void)animate
 {
 	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+	//NSLog(@"Parent view %@", [m_parentCtrl view]);
+	//NSLog(@"my tabbar %@", [m_parentCtrl tabBarController].view);
+	//NSLog(@"Parent 1st nav view %@", [[[m_parentCtrl navigationController].viewControllers objectAtIndex:0] view]);
 	
 	UIView *topView = nil;
 	if ( m_shouldUseParentsView )
@@ -365,12 +342,21 @@ static MiniBrowserController *s_browser = nil;
 		topView = [m_parentCtrl view];
 		if ( topView == nil )
 		{
-			topView = appDelegate.tabBarController.view;
+			if (appDelegate.splitViewController)
+				topView = [[appDelegate.splitViewController.viewControllers objectAtIndex:1] view];
+			else 
+				topView = appDelegate.tabBarController.view;
 		}
 	}
 	else
 	{
-		topView = appDelegate.tabBarController.view;
+		if (appDelegate.splitViewController)
+			topView = [[appDelegate.splitViewController.viewControllers objectAtIndex:1] view];
+		else 
+			topView = appDelegate.tabBarController.view;
+		
+
+		//topView = appDelegate.tabBarController.view;
 	}
 	
 	if (topView) [topView retain];
@@ -392,8 +378,9 @@ static MiniBrowserController *s_browser = nil;
 	}
 	else
 	{
-		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:topView cache:NO];		
-		[self.view setFrame:topView.frame];
+		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:topView cache:NO];
+		
+		[self.view setFrame:[topView bounds]];
 		[topView addSubview:self.view];
 		
 		[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:YES];

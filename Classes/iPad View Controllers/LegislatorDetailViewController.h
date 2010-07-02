@@ -10,7 +10,9 @@
 
 @class LegislatorObj;
 @class StaticGradientSliderView;
-@interface LegislatorDetailViewController : UITableViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate>
+@class DirectoryDetailInfo;
+
+@interface LegislatorDetailViewController : UITableViewController <UITableViewDelegate, UIPopoverControllerDelegate, UISplitViewControllerDelegate>
 {	
     UIPopoverController *popoverController;
 	//IBOutlet UIBarButtonItem *m_popButton;
@@ -23,6 +25,9 @@
 	
 	IBOutlet UIImageView *leg_photoView;
 	IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab;
+	
+	NSMutableArray	*sectionArray;
+
 }
 
 @property (nonatomic,retain) IBOutlet UIImageView *leg_photoView;
@@ -34,6 +39,18 @@
 @property (nonatomic,retain) LegislatorObj *legislator;
 @property (nonatomic, retain) UIPopoverController *popoverController;
 //@property (nonatomic, retain) IBOutlet UIBarButtonItem *m_popButton;
+
+@property (nonatomic, retain) NSMutableArray *sectionArray;
+
+
+//- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
+//- (void) didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath;
+//- (void) setupHeader:(UIView *)aHeader;
+
+//- (void) loadView;
+- (void) createSectionList;
+- (void) createEntryInSection:(NSInteger)sectionIndex WithKeys:(NSArray *)keys andObjects:(NSArray *)objects;
+- (void) standardTextCell:(UITableViewCell *)cell withInfo:(DirectoryDetailInfo *)cellInfo;
 
 //- (IBAction)showMasterInPopover:(id)sender;
 @end

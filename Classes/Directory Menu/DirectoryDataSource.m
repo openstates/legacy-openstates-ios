@@ -105,6 +105,22 @@
 }
 
 
+- (CGFloat) rowHeight {
+	CGFloat height;
+
+#if kDeviceSensitiveRowHeight == 1
+	//if (0 /*something about checking to see if a passed in tableView == searchResultsTable*/)
+	//else 
+		if (![UtilityMethods isIPadDevice])	// We're on an iPhone/iTouch
+			height = 44.0f;
+		else
+			// an iPad and not a searchResultsTable
+#endif
+			height = 73.0f;
+	
+	return height;
+}
+
 // UITableViewDataSource methods
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -119,7 +135,8 @@
 		return nil;
 	}
 	
-#if 0	// let's try out the bigger cells for both iPad and iPhone ... but leave this here in case we want to revert.
+#if kDeviceSensitiveRowHeight == 1
+	// let's try out the bigger cells for both iPad and iPhone ... but leave this here in case we want to revert.
     if (![UtilityMethods isIPadDevice]) // if we're on an iphone
     {
 		static NSString *leg_searchcell_ID = @"LegislatorDirectorySkinny";

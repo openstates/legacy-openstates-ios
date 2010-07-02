@@ -71,6 +71,22 @@
 - (BOOL)canEdit
 { return NO; }
 
+- (CGFloat) rowHeight {
+	CGFloat height;
+#if kDeviceSensitiveRowHeight == 1
+	//if (0 /*something about checking to see if a passed in tableView == searchResultsTable*/)
+	//else 
+	if (![UtilityMethods isIPadDevice])	// We're on an iPhone/iTouch
+		height = 44.0f;
+	else
+		// an iPad and not a searchResultsTable
+#endif
+		height = 44.0f;
+	
+	return height;
+}
+
+
 // atomic number is displayed in a plain style tableview
 - (UITableViewStyle)tableViewStyle {
 	return UITableViewStylePlain;

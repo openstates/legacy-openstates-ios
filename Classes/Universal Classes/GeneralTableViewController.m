@@ -124,7 +124,7 @@
 	tableView.sectionIndexMinimumDisplayRowCount=15;
 	
 	if (dataSource.name == @"Directory")
-		tableView.rowHeight = 73.0f;
+		tableView.rowHeight = dataSource.rowHeight;
 
 	// set the tableview as the controller view
     self.theTableView = tableView;

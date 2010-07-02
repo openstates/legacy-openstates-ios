@@ -266,9 +266,34 @@
 	return checked;
 }
 
-+ (BOOL) isIPadDevice {
-	return (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
+/*+ (BOOL)isIPadDevice;
+ {
+ return (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
+ }*/
+
++ (BOOL)isIPadDevice;
+{
+	static BOOL hasCheckediPadStatus = NO;
+	static BOOL isRunningOniPad = NO;
+	
+	if (!hasCheckediPadStatus)
+	{
+		if ([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)])
+		{
+			if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+			{
+				isRunningOniPad = YES;
+				hasCheckediPadStatus = YES;
+				return isRunningOniPad;
+			}
+		}
+		
+		hasCheckediPadStatus = YES;
+	}
+	
+	return isRunningOniPad;
 }
+
 /*
  // This particular method is bulls&@t, given that splitviews are in the iOS4 SDK and available to any iPhones during linking ... just not available at runtime.
 + (BOOL) isSplitViewClassAvailable {

@@ -20,8 +20,8 @@
 	BOOL m_loadingInterrupted;
 	NSURLRequest *m_urlRequestToLoad;
 	
-	UIActivityIndicatorView *m_activity;
-	UILabel                 *m_loadingLabel;
+	IBOutlet UIActivityIndicatorView *m_activity;
+	IBOutlet UILabel                 *m_loadingLabel;
 	
 	NSArray *m_normalItemList;
 	NSArray *m_loadingItemList;
@@ -58,8 +58,8 @@
 
 @property BOOL m_loadingInterrupted;
 @property (retain) NSURLRequest *m_urlRequestToLoad;
-@property (retain) UIActivityIndicatorView *m_activity;
-@property (retain) UILabel                 *m_loadingLabel;
+@property (retain) IBOutlet UIActivityIndicatorView *m_activity;
+@property (retain) IBOutlet UILabel					*m_loadingLabel;
 @property (retain) NSArray *m_normalItemList;
 @property (retain) NSArray *m_loadingItemList;
 @property BOOL m_shouldDisplayOnViewLoad;

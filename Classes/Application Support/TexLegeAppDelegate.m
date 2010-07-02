@@ -19,17 +19,25 @@
 #import "Appirater.h"
 #import "CPTestApp_iPadViewController.h"
 
-@interface TexLegeAppDelegate(Private)
+@interface TexLegeAppDelegate (Private)
+
 // these are private methods that outside classes need not use
+@property (nonatomic, retain) NSMutableArray *functionalViewControllers;
+
 - (void)setupDialogBoxes;
 - (void)showHackingAlert;
 - (void)iPhoneUserInterfaceInit;
 
 - (NSString *)hostName;
+- (NSInteger) indexForFunctionalViewController:(id)viewController;
+- (NSInteger) addFunctionalViewController:(id)viewController;
 
 @end
 
-NSString *kRestoreLocationKey = @"RestoreLocation";	// preference key to obtain our restore location
+// preference key to obtain our restore location
+NSString *kRestoreLocationKey = @"RestoreLocation";			// old, simplistic key/array used on original iphone-only app.
+//NSString *kRestoreLocationKey = @"HybridRestoreLocation";
+
 NSUInteger kNumMaxTabs = 11;
 NSInteger kNoSelection = -1;
 
@@ -38,7 +46,10 @@ NSInteger kNoSelection = -1;
 
 //- (void) setupDialogBoxes;
 
-@synthesize tabBarController, savedLocation;
+@synthesize tabBarController;
+@synthesize savedLocation;
+@synthesize functionalViewControllers;
+
 @synthesize mainWindow, hackingAlert;
 @synthesize aboutView, voteInfoView, activeDialogController;
 @synthesize remoteHostStatus, internetConnectionStatus, localWiFiConnectionStatus;
@@ -58,14 +69,18 @@ NSInteger kNoSelection = -1;
 		//tabBarController = nil;
 		activeDialogController = nil;
 		hackingAlert = nil;
-				
+		savedLocation = nil;
+		self.functionalViewControllers = [NSMutableArray array];
+		
 		[self setupDialogBoxes];
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[savedLocation release];
+	self.savedLocation = nil;
+	self.functionalViewControllers = nil;
+	
 	[aboutView release];
 	[voteInfoView release];
 	
@@ -91,21 +106,54 @@ NSInteger kNoSelection = -1;
 
 // Not sure if this works ... we need more tabs to test.
 - (void)setTabOrderIfSaved {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSArray *savedOrder = [defaults arrayForKey:@"savedTabOrder"];
-	NSMutableArray *orderedTabs = [[NSMutableArray alloc] init];
-	if ([savedOrder count] > 0 ) {
-		for (id loopItem in savedOrder){
-			for (UIViewController *aController in tabBarController.viewControllers) {
-				if ([aController.tabBarItem.title isEqualToString:loopItem]) {
-					[orderedTabs addObject:aController];
+	if ([UtilityMethods isIPadDevice] == NO && self.tabBarController) {
+
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		NSArray *savedOrder = [defaults arrayForKey:@"savedTabOrder"];		/// saves the order of the titles
+		NSMutableArray *orderedControllers = [[NSMutableArray alloc] init];
+		
+		if ([savedOrder count] > 0 ) {
+			
+			for (id loopItem in savedOrder){
+				for (UIViewController *aController in tabBarController.viewControllers) {
+					if ([aController.tabBarItem.title isEqualToString:loopItem]) {
+						[orderedControllers addObject:aController];
+					}
 				}
 			}
+			tabBarController.viewControllers = orderedControllers;
+			self.functionalViewControllers = orderedControllers;  // replace our existing order
 		}
-		tabBarController.viewControllers = orderedTabs;
+		if (orderedControllers) [orderedControllers release], orderedControllers = nil;
 	}
-	if (orderedTabs) [orderedTabs release], orderedTabs = nil;
 }
+
+- (NSInteger) indexForFunctionalViewController:(id)viewController {
+	NSInteger index = 0;
+	if (self.functionalViewControllers && viewController) {
+		index = [self.functionalViewControllers indexOfObject:viewController];
+		if (index == NSNotFound)
+			index = 0;
+	}
+	return index;
+}
+
+- (NSInteger) addFunctionalViewController:(id)viewController {
+	NSInteger index = 0;
+	
+	if (viewController && self.functionalViewControllers) {
+		NSInteger existingIndex = NSNotFound;
+		if ((existingIndex = [self.functionalViewControllers indexOfObject:viewController]) != NSNotFound) 
+			// we already have it in our array
+			index = existingIndex;
+		else {
+			index = [self.functionalViewControllers count];
+			[self.functionalViewControllers addObject:viewController];
+		}
+	}
+	return index;
+}
+
 
 // ********** setup the various view controllers for the different data representations
 - (void) constructDataSourcesAndInitMainViewControllers
@@ -113,13 +161,47 @@ NSInteger kNoSelection = -1;
 	if ([UtilityMethods isIPadDevice]) { // we're on an iPad, use the splitViewController
 		if (splitViewController == nil) 
 			[[NSBundle mainBundle] loadNibNamed:@"SplitViewController" owner:self options:NULL];
+		
+		[self addFunctionalViewController:self.masterTableViewController];
+		//[self addFunctionalViewController:self.directoryTableTabbedVC];
+		//[self addFunctionalViewController:self.committeeTableTabbedVC];
+		//[self addFunctionalViewController:self.corePlotTabbedVC];
+		//[self addFunctionalViewController:self.mapsTableTabbedVC];
+		//[self addFunctionalViewController:self.linksTableTabbedVC];
+		
 		[self.masterTableViewController configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext]; 
 		[self.mainWindow addSubview:splitViewController.view];
+		
+#if 0 // this is a work in progress to restore and rearrange the proper viewControllers as necessary.
+		NSInteger selection = [[savedLocation objectAtIndex:0] integerValue];	// read the saved selection at level 1
+		if (selection != kNoSelection && selection > 0) { // it's not the first one, so change things up...
+			if (UIViewController *savedMasterVC = [self.functionalViewControllers objectAtIndex:selection]) {
+				
+				
+				// work in progress ... fix from here down???
+				UINavigationController *masterNavController = [self.splitViewController.viewControllers objectAtIndex:0];
+				UINavigationController *detailNavController = [self.splitViewController.viewControllers objectAtIndex:1];
+
+				//id<TableDataSource> masterDataSource = nil;
+				//UIViewController *savedMasterVC = masterNavControl.topViewController;
+				//UIViewController *savedDetailVC = detailNavControl.topViewController;
+				//if ([suspectVC respondsToSelector:@selector(dataSource)])
+				//	masterDataSource = [suspectVC performSelector:@selector(dataSource)];
+								
+				// I'm certain this part here is particularly suspect ... I mean, is this the proper way to reinitialize a controller???
+				[masterNavController initWithRootViewController:newSavedMasterController];
+				[detailNavController initWithRootViewController:newSavedDetailController];
+				self.splitViewController.delegate = newSavedDetailController;
+			}
+		}				 
+#endif
+		
 	}
 	else {  // We're on an iPhone/iTouch using the tabBarController
 		if (self.tabBarController == nil)
 			//tabBarController = [[UITabBarController alloc] initWithNibName:@"iPhoneTabBarController" bundle:nil];
 			[[NSBundle mainBundle] loadNibNamed:@"iPhoneTabBarController" owner:self options:nil];
+
 		[self.directoryTableTabbedVC configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
 		[self.committeeTableTabbedVC configureWithDataSourceClass:[CommitteesDataSource class] andManagedObjectContext:self.managedObjectContext];
 		[self.mapsTableTabbedVC configureWithDataSourceClass:[MapImagesDataSource class] andManagedObjectContext:self.managedObjectContext];
@@ -128,12 +210,13 @@ NSInteger kNoSelection = -1;
 		[self.mainWindow addSubview:tabBarController.view];
 		
 		[self setTabOrderIfSaved];
-		
+
 		NSInteger selection = [[savedLocation objectAtIndex:0] integerValue];	// read the saved selection at level 1
 		if ((selection != kNoSelection) && (selection != tabBarController.selectedIndex)) {
 			tabBarController.selectedIndex = selection;
 		}
 	}
+
 }
 
 // Should we use this newer one instead?
@@ -199,6 +282,7 @@ NSInteger kNoSelection = -1;
 		
 }
 
+
 - (void)applicationWillTerminate:(UIApplication *)application {
 
 	/* maybe someday figure out how to update the Default.png 
@@ -214,28 +298,52 @@ NSInteger kNoSelection = -1;
 	 -(void) _updateDefaultImage;
 	 -(void) createApplicationDefaultPNG;
 */	
-	
-	NSInteger tabSelection = tabBarController.selectedIndex;
+
+	NSInteger masterIndexSelection = 0;
+#if 0  /// this is a work in progress ... trouble is that the splitViewController has intermediate UINavigationControllers!!!
+	if (self.splitViewController && [self.splitViewController.viewControllers count]) {
+		UIViewController *splitMasterVC = [self.splitViewController.viewControllers objectAtIndex:0]; // this is the master (left)
+		UIViewController *splitDetailVC = [self.splitViewController.viewControllers objectAtIndex:1]; // this is the detail (right)
+
+		if (splitMasterVC) {
+			masterIndexSelection = [self indexForFunctionalViewController:splitMasterVC];
+		}
+	}
+	else 
+#endif
+	if (self.tabBarController)
+	{
+		//if (self.tabBarController.selectedViewController != self.tabBarController.moreNavigationController)
+		//	masterIndexSelection = self.tabBarController.selectedIndex;  // they had selected "More...", lets not go back there implicitly.
+
+		masterIndexSelection = [self indexForFunctionalViewController:self.tabBarController.selectedViewController];
+	}
+
+
 	NSInteger tabSavedSelection = [[savedLocation objectAtIndex:0] integerValue];
 
-	if (tabSelection != tabSavedSelection) { // we're out of sync with the selection, clear the unknown
-		[savedLocation replaceObjectAtIndex:0 withObject:[NSNumber numberWithInteger:tabSelection]];
+	if (masterIndexSelection != tabSavedSelection) { // we're out of sync with the selection, clear the unknown
+		[savedLocation replaceObjectAtIndex:0 withObject:[NSNumber numberWithInteger:masterIndexSelection]];
 		[savedLocation replaceObjectAtIndex:1 withObject:[NSNumber numberWithInteger:kNoSelection]];
 		[savedLocation replaceObjectAtIndex:2 withObject:[NSNumber numberWithInteger:kNoSelection]];
 	}
 	
-	// Smarten this up later for Core Data tab saving
-	NSMutableArray *savedOrder = [NSMutableArray arrayWithCapacity:kNumMaxTabs];
-	NSArray *tabOrderToSave = tabBarController.viewControllers;
-	
-	for (UIViewController *aViewController in tabOrderToSave) {
-		[savedOrder addObject:aViewController.tabBarItem.title];
+	if (self.tabBarController) {
+		// Smarten this up later for Core Data tab saving
+		NSMutableArray *savedOrder = [NSMutableArray arrayWithCapacity:kNumMaxTabs];
+		NSArray *tabOrderToSave = tabBarController.viewControllers;
+		
+		for (UIViewController *aViewController in tabOrderToSave) {
+			[savedOrder addObject:aViewController.tabBarItem.title];
+		}
+		
+		[[NSUserDefaults standardUserDefaults] setObject:savedOrder forKey:@"savedTabOrder"];
 	}
 	
-	[[NSUserDefaults standardUserDefaults] setObject:savedOrder forKey:@"savedTabOrder"];
-
 	// save the drill-down hierarchy of selections to preferences
 	[[NSUserDefaults standardUserDefaults] setObject:savedLocation forKey:kRestoreLocationKey];
+	
+	[[NSUserDefaults standardUserDefaults] synchronize];
 
 	// Core Data Saving
 	NSError *error;

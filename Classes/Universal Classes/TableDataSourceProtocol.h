@@ -26,6 +26,7 @@
 @property (readonly) BOOL usesToolbar;
 @property (readonly) BOOL usesSearchbar;
 @property (readonly) BOOL canEdit;
+@property(nonatomic, readonly) CGFloat rowHeight;
 
 - (BOOL)showDisclosureIcon;
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
