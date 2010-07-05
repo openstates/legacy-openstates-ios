@@ -29,54 +29,75 @@
 - (void) pushInternalBrowserWithURL:(NSURL *)url;
 - (void) showWebViewWithURL:(NSURL *)url;
 	
+- (void) setupHeader;
 @end
 
 
 @implementation LegislatorDetailViewController
 
-@synthesize popoverController;//, m_popButton;
+@synthesize popoverController;
+@synthesize scatterPlotView, dataForPlot; //, dataForChart;
+
 
 @synthesize legislator;
 @synthesize leg_photoView, leg_titleLab, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab;
 @synthesize indivSlider, partySlider, allSlider;
 @synthesize indivPHolder, partyPHolder, allPHolder;
-@synthesize indivView, partyView, allView;
+@synthesize startupSplashView, headerView;
 
 @synthesize sectionArray;
 
 #pragma mark -
 #pragma mark View lifecycle
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-	//self.tableView.delegate = self;
-	//self.tableView.dataSource = self;
+	if (self.legislator)
+		[self setupHeader];
+
+	[self constructScatterPlot];
 	
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 	//self.navigationItem.rightBarButtonItem = self.editButtonItem;
-	
-	//self.m_popButton.action = @selector(showMasterInPopover:);
-
 
 }
 
+- (void)setupHeaderView {
+	if (self.headerView == nil && self.scatterPlotView) {
+		UIView * headerSuper = self.scatterPlotView.superview;
+		
+		// Load one of our header views (iPad or iPhone selected automatically by the file's name extension
+		if (self.headerView == nil) {
+			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"LegislatorDetailHeaderView" owner:self options:NULL];
+			self.headerView = [objects objectAtIndex:0];
+		}
+		if ([UtilityMethods isIPadDevice] == NO) {
+			CGFloat headerHeight = self.scatterPlotView.bounds.size.height+self.headerView.bounds.size.height;
+			[headerSuper setBounds:CGRectMake(0.0f, 0.0f, 0.0f, headerHeight)];
+	
+		}			
+		[headerSuper insertSubview:self.headerView aboveSubview:self.scatterPlotView];
+	}
+}
+	
 - (void)setupHeader {
-	self.leg_nameLab.text = [NSString stringWithFormat:@"%@ %@",  [self.legislator legTypeShortName], 
-					 [self.legislator legProperName]];
-	self.navigationItem.title = self.leg_nameLab.text;
+	[self setupHeaderView];
+	
+	NSString *legName = [NSString stringWithFormat:@"%@ %@",  [self.legislator legTypeShortName], [self.legislator legProperName]];
+	self.leg_nameLab.text = legName;
+	self.navigationItem.title = legName;
 
 	self.leg_photoView.image = [UtilityMethods poorMansImageNamed:self.legislator.photo_name];
 	self.leg_titleLab.text = self.legislator.legtype_name;
 	self.leg_partyLab.text = [self.legislator party_name];
 	self.leg_districtLab.text = [NSString stringWithFormat:@"District %@", self.legislator.district];
 	self.leg_tenureLab.text = [self.legislator tenureString];
-	
-	if (self.indivSlider == nil) {
+
+	if ([UtilityMethods isIPadDevice] && self.indivSlider == nil) {
 		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StaticGradientSliderView" owner:self options:NULL];
 		for (id suspect in objects) {
 			if ([suspect isKindOfClass:[StaticGradientSliderView class]]) {
@@ -87,14 +108,16 @@
 		[self.indivSlider setFrame:sliderViewFrame];
 		[self.indivSlider.sliderControl setThumbImage:[UIImage imageNamed:@"slider_star_big.png"] forState:UIControlStateNormal];
 		[indivPHolder addSubview:self.indivSlider];
+		if (self.indivSlider) {
+			self.indivSlider.sliderValue = self.legislator.partisan_index.floatValue;
+		}	
 	}
-	if (self.indivSlider) {
-		self.indivSlider.sliderValue = self.legislator.partisan_index.floatValue;
-	}	
 }
 
 - (void)setLegislator:(LegislatorObj *)newLegislator {
-	[self.indivView removeFromSuperview];
+	if (self.startupSplashView) {
+		[self.startupSplashView removeFromSuperview];
+	}
 
 	if (newLegislator) {
 		if (legislator) [legislator release], legislator = nil;
@@ -102,17 +125,15 @@
 	}
 	[self setupHeader];
 	
-	if (popoverController != nil) {
-        [popoverController dismissPopoverAnimated:YES];
+	if (self.popoverController != nil) {
+        [self.popoverController dismissPopoverAnimated:YES];
+		//self.popoverController = nil; // i think this breaks, unless you're in a showHide type of situation.
     }        
 	
 	[self createSectionList];
 	
 	[self.tableView reloadData];
 	[self.view setNeedsDisplay];
-	
-	NSLog(@"Delegate: %@", self.tableView.delegate);
-	//NSLog(@"Delegate: %@", self.tableView.delegate);
 	
 }
 
@@ -122,7 +143,9 @@
 	
 	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
 	if (self.legislator == nil && ![UtilityMethods isLandscapeOrientation])  {
-		[self.view addSubview:self.indivView];
+		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StartupSplashView-Portrait" owner:self options:NULL];
+		self.startupSplashView = [objects objectAtIndex:0];
+		[self.view addSubview:self.startupSplashView];
 		//[self.view setNeedsDisplay];
 		
 #if 0
@@ -146,7 +169,7 @@
 #endif
 	}
 	else {
-		[self.indivView removeFromSuperview];
+		[self.startupSplashView removeFromSuperview];
 	}
 
 }
@@ -204,6 +227,7 @@
 {
     if (pc != nil) {
         [pc dismissPopoverAnimated:YES];
+		// do I need to set pc to nil?  I need to confirm, but I think it breaks things.
     }
 }
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -211,7 +235,25 @@
     return YES;
 }
 
-
+/*
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+	if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
+	{
+		// Move the plots into place for portrait
+		//scatterPlotView.frame = CGRectMake(20.0f, 55.0f, 728.0f, 556.0f);
+		//barChartView.frame = CGRectMake(20.0f, 644.0f, 340.0f, 340.0f);
+		//pieChartView.frame = CGRectMake(408.0f, 644.0f, 340.0f, 340.0f);
+	}
+	else
+	{
+		// Move the plots into place for landscape
+		//scatterPlotView.frame = CGRectMake(20.0f, 51.0f, 628.0f, 677.0f);
+		//barChartView.frame = CGRectMake(684.0f, 51.0f, 320.0f, 320.0f);
+		//pieChartView.frame = CGRectMake(684.0f, 408.0f, 320.0f, 320.0f);
+	}
+}
+*/
 
 #pragma mark -
 #pragma mark Memory management
@@ -231,17 +273,17 @@
 	
 	self.indivSlider = self.partySlider = self.allSlider = nil;
 	self.indivPHolder = self.partyPHolder = self.allPHolder = nil;
-	self.indivView = self.partyView = self.allView = nil;
-	
 	self.legislator = nil;
-	
 	self.leg_photoView = nil;
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = nil;
+	self.headerView = self.startupSplashView = nil;
 
 }
 
 
 - (void)dealloc {
+	self.dataForPlot = nil;
+	//self.dataForChart = nil;
     [super dealloc];
 }
 
@@ -775,6 +817,292 @@
 	else
 		[self pushInternalBrowserWithURL:url];
 }	
+
+
+#pragma mark -
+#pragma mark Plot construction methods
+
+- (void)constructScatterPlot
+{
+	// Create graph from theme
+    graph = [[CPXYGraph alloc] initWithFrame:CGRectZero];
+	CPTheme *theme = [CPTheme themeNamed:kCPStocksTheme];
+	//CPTheme *theme = [CPTheme themeNamed:kCPSlateTheme];
+    [graph applyTheme:theme];
+    scatterPlotView.hostedLayer = graph;
+	
+    graph.paddingLeft = 10.0;
+	graph.paddingTop = 10.0;
+	graph.paddingRight = 10.0;
+	graph.paddingBottom = 10.0;
+    
+    // Setup plot space
+    CPXYPlotSpace *plotSpace = (CPXYPlotSpace *)graph.defaultPlotSpace;
+    plotSpace.allowsUserInteraction = YES;
+    plotSpace.xRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(1.0) length:CPDecimalFromFloat(2.0)];
+    plotSpace.yRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(1.0) length:CPDecimalFromFloat(3.0)];
+	
+    // Axes
+	CPXYAxisSet *axisSet = (CPXYAxisSet *)graph.axisSet;
+    CPXYAxis *x = axisSet.xAxis;
+    x.majorIntervalLength = CPDecimalFromString(@"0.5");
+    x.orthogonalCoordinateDecimal = CPDecimalFromString(@"2");
+    x.minorTicksPerInterval = 2;
+ 	NSArray *exclusionRanges = [NSArray arrayWithObjects:
+								[CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(1.99) length:CPDecimalFromFloat(0.02)], 
+								[CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.99) length:CPDecimalFromFloat(0.02)],
+								[CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(2.99) length:CPDecimalFromFloat(0.02)],
+								nil];
+	x.labelExclusionRanges = exclusionRanges;
+	
+    CPXYAxis *y = axisSet.yAxis;
+    y.majorIntervalLength = CPDecimalFromString(@"0.5");
+    y.minorTicksPerInterval = 5;
+    y.orthogonalCoordinateDecimal = CPDecimalFromString(@"2");
+	exclusionRanges = [NSArray arrayWithObjects:
+					   [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(1.99) length:CPDecimalFromFloat(0.02)], 
+					   [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.99) length:CPDecimalFromFloat(0.02)],
+					   [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(3.99) length:CPDecimalFromFloat(0.02)],
+					   nil];
+	y.labelExclusionRanges = exclusionRanges;
+	
+	// Create a blue plot area
+	CPScatterPlot *boundLinePlot = [[[CPScatterPlot alloc] init] autorelease];
+    boundLinePlot.identifier = @"Blue Plot";
+	boundLinePlot.dataLineStyle.miterLimit = 1.0f;
+	boundLinePlot.dataLineStyle.lineWidth = 3.0f;
+	boundLinePlot.dataLineStyle.lineColor = [CPColor blueColor];
+    boundLinePlot.dataSource = self;
+	[graph addPlot:boundLinePlot];
+	
+	// Do a blue gradient
+	CPColor *areaColor1 = [CPColor colorWithComponentRed:0.3 green:0.3 blue:1.0 alpha:0.8];
+    CPGradient *areaGradient1 = [CPGradient gradientWithBeginningColor:areaColor1 endingColor:[CPColor clearColor]];
+    areaGradient1.angle = -90.0f;
+    CPFill *areaGradientFill = [CPFill fillWithGradient:areaGradient1];
+    boundLinePlot.areaFill = areaGradientFill;
+    boundLinePlot.areaBaseValue = [[NSDecimalNumber zero] decimalValue];    
+	
+	// Add plot symbols
+	CPLineStyle *symbolLineStyle = [CPLineStyle lineStyle];
+	symbolLineStyle.lineColor = [CPColor blackColor];
+	CPPlotSymbol *plotSymbol = [CPPlotSymbol ellipsePlotSymbol];
+	plotSymbol.fill = [CPFill fillWithColor:[CPColor blueColor]];
+	plotSymbol.lineStyle = symbolLineStyle;
+    plotSymbol.size = CGSizeMake(10.0, 10.0);
+    boundLinePlot.plotSymbol = plotSymbol;
+	
+    // Create a green plot area
+	CPScatterPlot *dataSourceLinePlot = [[[CPScatterPlot alloc] init] autorelease];
+    dataSourceLinePlot.identifier = @"Green Plot";
+	dataSourceLinePlot.dataLineStyle.lineWidth = 3.f;
+    dataSourceLinePlot.dataLineStyle.lineColor = [CPColor greenColor];
+	dataSourceLinePlot.dataLineStyle.dashPattern = [NSArray arrayWithObjects:[NSNumber numberWithFloat:5.0f], [NSNumber numberWithFloat:5.0f], nil];
+    dataSourceLinePlot.dataSource = self;
+	
+	// Put an area gradient under the plot above
+    CPColor *areaColor = [CPColor colorWithComponentRed:0.3 green:1.0 blue:0.3 alpha:0.8];
+    CPGradient *areaGradient = [CPGradient gradientWithBeginningColor:areaColor endingColor:[CPColor clearColor]];
+    areaGradient.angle = -90.0f;
+    areaGradientFill = [CPFill fillWithGradient:areaGradient];
+    dataSourceLinePlot.areaFill = areaGradientFill;
+    dataSourceLinePlot.areaBaseValue = CPDecimalFromString(@"1.75");
+	
+	// Animate in the new plot, as an example
+	dataSourceLinePlot.opacity = 0.0f;
+    [graph addPlot:dataSourceLinePlot];
+	
+	CABasicAnimation *fadeInAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+	fadeInAnimation.duration = 1.0f;
+	fadeInAnimation.removedOnCompletion = NO;
+	fadeInAnimation.fillMode = kCAFillModeForwards;
+	fadeInAnimation.toValue = [NSNumber numberWithFloat:1.0];
+	[dataSourceLinePlot addAnimation:fadeInAnimation forKey:@"animateOpacity"];
+	
+    // Add some initial data
+	NSMutableArray *contentArray = [NSMutableArray arrayWithCapacity:100];
+	NSUInteger i;
+	for ( i = 0; i < 60; i++ ) {
+		id x = [NSNumber numberWithFloat:1+i*0.05];
+		id y = [NSNumber numberWithFloat:1.2*rand()/(float)RAND_MAX + 1.2];
+		[contentArray addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:x, @"x", y, @"y", nil]];
+	}
+	self.dataForPlot = contentArray;
+	
+}
+
+/*
+- (void)constructBarChart
+{
+    // Create barChart from theme
+    barChart = [[CPXYGraph alloc] initWithFrame:CGRectZero];
+	CPTheme *theme = [CPTheme themeNamed:kCPDarkGradientTheme];
+    [barChart applyTheme:theme];
+    barChartView.hostedLayer = barChart;
+    barChart.plotAreaFrame.masksToBorder = NO;
+	
+    barChart.paddingLeft = 70.0;
+	barChart.paddingTop = 20.0;
+	barChart.paddingRight = 20.0;
+	barChart.paddingBottom = 80.0;
+	
+	// Add plot space for horizontal bar charts
+    CPXYPlotSpace *plotSpace = (CPXYPlotSpace *)barChart.defaultPlotSpace;
+    plotSpace.yRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.0f) length:CPDecimalFromFloat(300.0f)];
+    plotSpace.xRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.0f) length:CPDecimalFromFloat(16.0f)];
+    
+	
+	CPXYAxisSet *axisSet = (CPXYAxisSet *)barChart.axisSet;
+    CPXYAxis *x = axisSet.xAxis;
+    x.axisLineStyle = nil;
+    x.majorTickLineStyle = nil;
+    x.minorTickLineStyle = nil;
+    x.majorIntervalLength = CPDecimalFromString(@"5");
+    x.orthogonalCoordinateDecimal = CPDecimalFromString(@"0");
+	x.title = @"X Axis";
+    x.titleLocation = CPDecimalFromFloat(7.5f);
+	x.titleOffset = 55.0f;
+	
+	// Define some custom labels for the data elements
+	x.labelRotation = M_PI/4;
+	x.labelingPolicy = CPAxisLabelingPolicyNone;
+	NSArray *customTickLocations = [NSArray arrayWithObjects:[NSDecimalNumber numberWithInt:1], [NSDecimalNumber numberWithInt:5], [NSDecimalNumber numberWithInt:10], [NSDecimalNumber numberWithInt:15], nil];
+	NSArray *xAxisLabels = [NSArray arrayWithObjects:@"Label A", @"Label B", @"Label C", @"Label D", @"Label E", nil];
+	NSUInteger labelLocation = 0;
+	NSMutableArray *customLabels = [NSMutableArray arrayWithCapacity:[xAxisLabels count]];
+	for (NSNumber *tickLocation in customTickLocations) {
+		CPAxisLabel *newLabel = [[CPAxisLabel alloc] initWithText: [xAxisLabels objectAtIndex:labelLocation++] textStyle:x.labelTextStyle];
+		newLabel.tickLocation = [tickLocation decimalValue];
+		newLabel.offset = x.labelOffset + x.majorTickLength;
+		newLabel.rotation = M_PI/4;
+		[customLabels addObject:newLabel];
+		[newLabel release];
+	}
+	
+	x.axisLabels =  [NSSet setWithArray:customLabels];
+	
+	CPXYAxis *y = axisSet.yAxis;
+    y.axisLineStyle = nil;
+    y.majorTickLineStyle = nil;
+    y.minorTickLineStyle = nil;
+    y.majorIntervalLength = CPDecimalFromString(@"50");
+    y.orthogonalCoordinateDecimal = CPDecimalFromString(@"0");
+	y.title = @"Y Axis";
+	y.titleOffset = 45.0f;
+    y.titleLocation = CPDecimalFromFloat(150.0f);
+	
+    // First bar plot
+    CPBarPlot *barPlot = [CPBarPlot tubularBarPlotWithColor:[CPColor darkGrayColor] horizontalBars:NO];
+    barPlot.baseValue = CPDecimalFromString(@"0");
+    barPlot.dataSource = self;
+    barPlot.barOffset = -0.25f;
+    barPlot.identifier = @"Bar Plot 1";
+    [barChart addPlot:barPlot toPlotSpace:plotSpace];
+    
+    // Second bar plot
+    barPlot = [CPBarPlot tubularBarPlotWithColor:[CPColor blueColor] horizontalBars:NO];
+    barPlot.dataSource = self;
+    barPlot.baseValue = CPDecimalFromString(@"0");
+    barPlot.barOffset = 0.25f;
+    barPlot.cornerRadius = 2.0f;
+    barPlot.identifier = @"Bar Plot 2";
+    [barChart addPlot:barPlot toPlotSpace:plotSpace];
+}
+
+- (void)constructPieChart
+{
+	// Create pieChart from theme
+    pieChart = [[CPXYGraph alloc] initWithFrame:CGRectZero];
+	CPTheme *theme = [CPTheme themeNamed:kCPDarkGradientTheme];
+    [pieChart applyTheme:theme];
+    pieChartView.hostedLayer = pieChart;
+    pieChart.plotAreaFrame.masksToBorder = NO;
+	
+    pieChart.paddingLeft = 20.0;
+	pieChart.paddingTop = 20.0;
+	pieChart.paddingRight = 20.0;
+	pieChart.paddingBottom = 20.0;
+	
+	pieChart.axisSet = nil;
+	
+    // Add pie chart
+    CPPieChart *piePlot = [[CPPieChart alloc] init];
+    piePlot.dataSource = self;
+    piePlot.pieRadius = 130.0;
+    piePlot.identifier = @"Pie Chart 1";
+	piePlot.startAngle = M_PI_4;
+	piePlot.sliceDirection = CPPieDirectionCounterClockwise;
+    [pieChart addPlot:piePlot];
+    [piePlot release];
+	
+	// Add some initial data
+	NSMutableArray *contentArray = [NSMutableArray arrayWithObjects:[NSNumber numberWithDouble:20.0], [NSNumber numberWithDouble:30.0], [NSNumber numberWithDouble:60.0], nil];
+	self.dataForChart = contentArray;	
+}
+*/
+
+#pragma mark -
+#pragma mark Plot Data Source Methods
+
+-(NSUInteger)numberOfRecordsForPlot:(CPPlot *)plot 
+{
+/*
+	if ([plot isKindOfClass:[CPPieChart class]])
+		return [self.dataForChart count];
+	else if ([plot isKindOfClass:[CPBarPlot class]])
+		return 16;
+	else
+*/
+		return [dataForPlot count];
+}
+
+-(NSNumber *)numberForPlot:(CPPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index 
+{
+    NSDecimalNumber *num = nil;
+/*
+	if ( [plot isKindOfClass:[CPPieChart class]] ) {
+		if ( index >= [self.dataForChart count] ) return nil;
+		
+		if ( fieldEnum == CPPieChartFieldSliceWidth ) {
+			return [self.dataForChart objectAtIndex:index];
+		}
+		else {
+			return [NSNumber numberWithInt:index];
+		}
+	}
+    else if ( [plot isKindOfClass:[CPBarPlot class]] ) {
+		switch ( fieldEnum ) {
+			case CPBarPlotFieldBarLocation:
+				num = (NSDecimalNumber *)[NSDecimalNumber numberWithUnsignedInteger:index];
+				break;
+			case CPBarPlotFieldBarLength:
+				num = (NSDecimalNumber *)[NSDecimalNumber numberWithUnsignedInteger:(index+1)*(index+1)];
+				if ( [plot.identifier isEqual:@"Bar Plot 2"] ) 
+					num = [num decimalNumberBySubtracting:[NSDecimalNumber decimalNumberWithString:@"10"]];
+				break;
+		}
+    }
+	else
+*/
+	{
+		//NSLog(@"Plot: %@, fieldEnum: %d, recordIndex: %d", plot, fieldEnum, index);
+		num = [[dataForPlot objectAtIndex:index] valueForKey:(fieldEnum == CPScatterPlotFieldX ? @"x" : @"y")];
+		// Green plot gets shifted above the blue
+		if ([(NSString *)plot.identifier isEqualToString:@"Green Plot"])
+		{
+			if ( fieldEnum == CPScatterPlotFieldY ) 
+				num = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:[num doubleValue] + 1.0];
+		}
+	}
+	
+    return num;
+}
+
+-(CPFill *) barFillForBarPlot:(CPBarPlot *)barPlot recordIndex:(NSNumber *)index; 
+{
+	return nil;
+}
+
 
 @end
 
