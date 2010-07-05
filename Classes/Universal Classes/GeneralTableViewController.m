@@ -11,6 +11,7 @@
 #import "GeneralTableViewController.h"
 
 #import "CommitteeDetailViewController.h"
+#import "LegislatorDetailViewController.h"
 
 #import "DetailTableViewController.h"
 #import "TexLegeAppDelegate.h"
@@ -206,13 +207,23 @@
 		
 	}
 	else if (dataSource.name == @"Committees") {
-		// WHY DOES THIS WORK WITHOUT LOADING THE NIB???
-		// CommitteeDetailViewController *detailViewController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
-		CommitteeDetailViewController *detailController = [[CommitteeDetailViewController alloc] init];
+		// WHY DOES THIS WORK WITHOUT LOADING THE NIB???  It actually doesn't load the nib, it just whips up a tableview for us.
+		CommitteeDetailViewController *detailController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
+//		CommitteeDetailViewController *detailController = [[CommitteeDetailViewController alloc] init];
 		detailController.committee = [dataSource committeeDataForIndexPath:newIndexPath];
 		[self.navigationController pushViewController:detailController animated:YES];
 		[detailController release];
 	}
+	else if (dataSource.name == @"Directory") {
+		
+		LegislatorDetailViewController *detailController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
+//		LegislatorDetailViewController *detailController = [[LegislatorDetailViewController alloc] init];
+		detailController.legislator = [dataSource legislatorDataForIndexPath:newIndexPath];
+		[self.navigationController pushViewController:detailController animated:YES];
+		[detailController release];
+
+	}
+
 	else {
 		// create an DetailTableViewController. This controller will display the full size tile for the element
 		DetailTableViewController *detailController = [[DetailTableViewController alloc] init];
@@ -474,9 +485,9 @@
 	[self.searchBar setShowsCancelButton:YES animated:YES];
 	
 	if (searchText.length > 0)
-		[(DirectoryDataSource *)self.dataSource setFilterByString:searchText];  // start filtering names...
+		[self.dataSource setFilterByString:searchText];  // start filtering names...
 	else
-		[(DirectoryDataSource *)self.dataSource removeFilter];
+		[self.dataSource removeFilter];
 	
 	[self.theTableView reloadData];
 
@@ -506,7 +517,7 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
 	self.searchBar.text = @"";
-	[(DirectoryDataSource *)self.dataSource removeFilter];
+	[self.dataSource removeFilter];
 
 #if _searchcontroller_ == 0
 	[self.dataSource setHideTableIndex:NO];
