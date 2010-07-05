@@ -16,36 +16,31 @@
 	
 	IBOutlet UILabel *versionLabel;
 	IBOutlet UIView *infoView;
-	//IBOutlet UIButton *projectWebsiteButton;
 	IBOutlet UISegmentedControl *projectWebsiteButton;
-
 	IBOutlet UIBarButtonItem *dismissButton;
-
-	NSDictionary *infoPlistDict;
 	NSURL *projectWebsiteURL;
 
 }
 
 @property (nonatomic, assign) id <AboutViewControllerDelegate> delegate;
-@property (nonatomic, retain) NSDictionary *infoPlistDict;
 @property (nonatomic, retain) NSURL *projectWebsiteURL;
+@property (nonatomic, retain) UILabel *versionLabel;
+@property (nonatomic, retain) UIView *infoView;
+@property (nonatomic, retain) UISegmentedControl *projectWebsiteButton;
+@property (nonatomic, retain) UIBarButtonItem *dismissButton;
 
 
 - (IBAction)done:(id)sender;
 - (IBAction)weblink_click:(id)sender;
-
 - (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle;
 - (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle otherTitle:(NSString *)otherTitle;
-
-
-@property (retain) UILabel *versionLabel;
-@property (retain) UIView *infoView;
-@property (retain) UISegmentedControl *projectWebsiteButton;
-@property (retain) UIBarButtonItem *dismissButton;
 @end
 
 
 @protocol AboutViewControllerDelegate
-- (void)aboutViewControllerDidFinish:(AboutViewController *)controller;
+- (void)modalViewControllerDidFinish:(UIViewController *)controller;
+@optional
+- (IBAction)showOrHideAboutMenuPopover:(id)sender;
+- (void)showAboutDialog:(UIViewController *)controller;
 @end
 

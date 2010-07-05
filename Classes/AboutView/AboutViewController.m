@@ -14,44 +14,41 @@
 
 @implementation AboutViewController
 
-@synthesize delegate, infoPlistDict, projectWebsiteURL;
+@synthesize delegate, projectWebsiteURL;
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-	if(self) {
-		
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+		self.title = @"About TexLege";
 		// NSBundle Info.plist
-		self.infoPlistDict = [[NSBundle mainBundle] infoDictionary];		// !! could use the supplied NSBundle or the mainBundle on nil
+		NSDictionary *infoPlistDict = [[NSBundle mainBundle] infoDictionary];
 		self.projectWebsiteURL = [NSURL URLWithString:[infoPlistDict objectForKey:@"projectWebsite"]];
+		NSString *versionString = [[NSString alloc] initWithFormat:@"Version %@", [infoPlistDict objectForKey:@"CFBundleVersion"]];
+		self.versionLabel.text = versionString;	
+		[versionString release], versionString = nil;
 	}
-	return self;	
+	return self;
 }
 
 - (void)viewDidLoad {
-	self.view = infoView;		// do we need this?
-//    [super viewDidLoad];
-    //self.view.backgroundColor = [UIColor viewFlipsideBackgroundColor];      
-
-	//projectWebsiteButton.autoresizingMask = UIViewAutoresizingNone;
-
-	// version
-	NSString *version = [NSString stringWithFormat:@"Version %@", [infoPlistDict objectForKey:@"CFBundleVersion"]];
-	[versionLabel setText:version];
-	
+	[super viewDidLoad];
 }
-
-
-- (IBAction)done {
-	[self.delegate aboutViewControllerDidFinish:self];	
-}
-
 
  // Override to allow orientations other than the default portrait orientation.
  - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	 return YES; // UIInterfaceOrientationPortrait;
  }
 
+// To avoid any weird drawing issues, lets just close up any popover business if we have to rotate
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	NSLog(@"Fixin' to rotate");
+	if ([UtilityMethods isIPadDevice]) {
+		[self done:self];
+	}	
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+	NSLog(@"Rotated");
+}
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
@@ -62,7 +59,7 @@
 
 - (void) done:(id)sender
 {
-	[self.parentViewController dismissModalViewControllerAnimated:YES];
+	[self.delegate modalViewControllerDidFinish:self];	
 }
 
 - (void)viewDidUnload {
@@ -94,30 +91,25 @@
 
 - (IBAction) weblink_click:(id) sender
 {
-	NSURL * url = [NSURL URLWithString:@"http://www.texlege.com/"];
-	[UtilityMethods openURLWithTrepidation:url];
-#if 0
-	if ([UtilityMethods canReachHostWithURL:url]) {
-		UIViewController *tempController = self.parentViewController;
-		[self done:button];
-		MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
-		[mbc display:tempController];
+	if ([UtilityMethods isIPadDevice]) {
+		if ([UtilityMethods canReachHostWithURL:self.projectWebsiteURL]) {
+			UIViewController *tempController = self.parentViewController;
+			[self done:sender];	
+			MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:self.projectWebsiteURL];
+			[mbc display:tempController];
+		}
 	}
-#endif
+	else
+		[UtilityMethods openURLWithTrepidation:self.projectWebsiteURL];
 }
 
 
 - (void)dealloc {
-	self.infoPlistDict = nil;
 	self.projectWebsiteURL = nil;
-
-	// IBOutlets
-	[infoView release];
-	
-	[versionLabel release];
-	
-	[projectWebsiteButton release];
-	[dismissButton release];
+	self.infoView = nil;
+	self.versionLabel = nil;
+	self.projectWebsiteButton = nil;
+	self.dismissButton = nil;
 
 	[super dealloc];
 }

@@ -10,44 +10,41 @@
 
 #import "VoteInfoViewController.h"
 #import "UtilityMethods.h"
+#import "MiniBrowserController.h"
 
 @implementation VoteInfoViewController
 
-@synthesize delegate, infoPlistDict, projectWebsiteURL;
+@synthesize delegate, projectWebsiteURL;
+@synthesize infoView;
+@synthesize projectWebsiteButton;
+@synthesize dismissButton;
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-	if(self) {
-		
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+		self.title = @"Vote Index Information";
 		// NSBundle Info.plist
-		self.infoPlistDict = [[NSBundle mainBundle] infoDictionary];		// !! could use the supplied NSBundle or the mainBundle on nil
+		NSDictionary *infoPlistDict = [[NSBundle mainBundle] infoDictionary];
 		self.projectWebsiteURL = [NSURL URLWithString:[infoPlistDict objectForKey:@"projectWebsite"]];
 	}
-	return self;	
+	return self;
 }
 
 - (void)viewDidLoad {
-	self.view = infoView;		// do we need this?
-//    [super viewDidLoad];
-    //self.view.backgroundColor = [UIColor viewFlipsideBackgroundColor];      
-
-	//projectWebsiteButton.autoresizingMask = UIViewAutoresizingNone;
-
-	
-}
-
-
-- (IBAction)done {
-	[self.delegate VoteInfoViewControllerDidFinish:self];	
+	[super viewDidLoad];	
 }
 
 
  // Override to allow orientations other than the default portrait orientation.
  - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
- return YES;
+	 return YES;
  }
 
+// To avoid any weird drawing issues, lets just close up any popover business if we have to rotate
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	if ([UtilityMethods isIPadDevice]) {
+		[self done:self];
+	}	
+}
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
@@ -58,7 +55,7 @@
 
 - (void) done:(id)sender
 {
-	[self.parentViewController dismissModalViewControllerAnimated:YES];
+	[self.delegate modalViewControllerDidFinish:self];
 }
 
 - (void)viewDidUnload {
@@ -90,34 +87,27 @@
 
 - (IBAction) weblink_click:(id) sender
 {
-	NSURL * url = [NSURL URLWithString:@"http://www.texlege.com/"];
-	[UtilityMethods openURLWithTrepidation:url];
-#if 0
-	if ([UtilityMethods canReachHostWithURL:url]) {
-		UIViewController *tempController = self.parentViewController;
-		[self done:button];
-		MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
-		[mbc display:tempController];
+	if ([UtilityMethods isIPadDevice]) {
+		if ([UtilityMethods canReachHostWithURL:self.projectWebsiteURL]) {
+			UIViewController *tempController = self.parentViewController;
+			[self done:sender];	
+			MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:self.projectWebsiteURL];
+			[mbc display:tempController];
+		}
 	}
-#endif
+	else
+		[UtilityMethods openURLWithTrepidation:self.projectWebsiteURL];
 }
 
 
 - (void)dealloc {
-	self.infoPlistDict = nil;
 	self.projectWebsiteURL = nil;
-
-	// IBOutlets
-	[infoView release];
-		
-	[projectWebsiteButton release];
-	[dismissButton release];
-
+	self.infoView = nil;
+	self.projectWebsiteButton = nil;
+	self.dismissButton = nil;
+	
 	[super dealloc];
 }
 
 
-@synthesize infoView;
-@synthesize projectWebsiteButton;
-@synthesize dismissButton;
 @end
