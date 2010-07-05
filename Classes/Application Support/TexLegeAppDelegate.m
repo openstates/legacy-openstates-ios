@@ -18,6 +18,7 @@
 #import "Reachability.h"
 #import "Appirater.h"
 #import "CPTestApp_iPadViewController.h"
+#import "MenuPopoverViewController.h"
 
 @interface TexLegeAppDelegate (Private)
 
@@ -49,6 +50,7 @@ NSInteger kNoSelection = -1;
 @synthesize tabBarController;
 @synthesize savedLocation;
 @synthesize functionalViewControllers;
+@synthesize menuPopoverVC;
 
 @synthesize mainWindow, hackingAlert;
 @synthesize aboutView, voteInfoView, activeDialogController;
@@ -70,6 +72,8 @@ NSInteger kNoSelection = -1;
 		activeDialogController = nil;
 		hackingAlert = nil;
 		savedLocation = nil;
+		menuPopoverPC = nil;
+
 		self.functionalViewControllers = [NSMutableArray array];
 		
 		[self setupDialogBoxes];
@@ -80,10 +84,9 @@ NSInteger kNoSelection = -1;
 - (void)dealloc {
 	self.savedLocation = nil;
 	self.functionalViewControllers = nil;
-	
-	[aboutView release];
-	[voteInfoView release];
-	
+	self.menuPopoverVC = nil;
+	self.aboutView = nil;
+	self.voteInfoView = nil;
 	self.tabBarController = nil;
 	self.splitViewController = nil;
 	self.masterTableViewController = nil;
@@ -164,12 +167,17 @@ NSInteger kNoSelection = -1;
 		
 		[self addFunctionalViewController:self.masterTableViewController];
 		//[self addFunctionalViewController:self.directoryTableTabbedVC];
-		//[self addFunctionalViewController:self.committeeTableTabbedVC];
-		//[self addFunctionalViewController:self.corePlotTabbedVC];
-		//[self addFunctionalViewController:self.mapsTableTabbedVC];
-		//[self addFunctionalViewController:self.linksTableTabbedVC];
+		[self addFunctionalViewController:self.committeeTableTabbedVC];
+		[self addFunctionalViewController:self.corePlotTabbedVC];
+		[self addFunctionalViewController:self.mapsTableTabbedVC];
+		[self addFunctionalViewController:self.linksTableTabbedVC];
 		
 		[self.masterTableViewController configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext]; 
+		//[self.directoryTableTabbedVC configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
+		[self.committeeTableTabbedVC configureWithDataSourceClass:[CommitteesDataSource class] andManagedObjectContext:self.managedObjectContext];
+		[self.mapsTableTabbedVC configureWithDataSourceClass:[MapImagesDataSource class] andManagedObjectContext:self.managedObjectContext];
+		[self.linksTableTabbedVC configureWithDataSourceClass:[LinksMenuDataSource class] andManagedObjectContext:self.managedObjectContext];
+
 		[self.mainWindow addSubview:splitViewController.view];
 		
 #if 0 // this is a work in progress to restore and rearrange the proper viewControllers as necessary.
@@ -247,7 +255,7 @@ NSInteger kNoSelection = -1;
 	// the localMainWindow data is now retained by the application delegate so we can release the local variable
 	[localMainWindow release];
 	
-    [self.mainWindow setBackgroundColor:[UIColor blackColor]];
+    [self.mainWindow setBackgroundColor:[UIColor whiteColor]];
 	
 	if (![UtilityMethods isThisCrantacular]) {
 		// This app be hacked!
@@ -399,37 +407,73 @@ NSInteger kNoSelection = -1;
 	
 	aboutView = [[[AboutViewController alloc] initWithNibName:@"AboutView" bundle:nil] retain];	
 	aboutView.delegate = self;
-	aboutView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-//	aboutView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//	aboutView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+	aboutView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//	aboutView.modalPresentationStyle = UIModalPresentationFormSheet;
+	aboutView.modalPresentationStyle = UIModalPresentationCurrentContext;
 	
 	voteInfoView = [[[VoteInfoViewController alloc] initWithNibName:@"VoteInfoView" bundle:nil] retain];	
 	voteInfoView.delegate = self;
-	voteInfoView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-//	voteInfoView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//	voteInfoView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+	voteInfoView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//	voteInfoView.modalPresentationStyle = UIModalPresentationFormSheet;
+	voteInfoView.modalPresentationStyle = UIModalPresentationCurrentContext;
 	
 }
 
 - (void)showAboutDialog:(UIViewController *)controller {
 	activeDialogController = controller;
-	if ((controller != nil) && (aboutView != nil))
-		[controller presentModalViewController:aboutView animated:YES];
+	if ((controller != nil) && (self.aboutView != nil))
+		[controller presentModalViewController:self.aboutView animated:YES];
 }
 
 - (void)showVoteInfoDialog:(UIViewController *)controller {
 	activeDialogController = controller;
-	if ((controller != nil) && (voteInfoView != nil))
-		[controller presentModalViewController:voteInfoView animated:YES];
+	if ((controller != nil) && (self.voteInfoView != nil))
+		[controller presentModalViewController:self.voteInfoView animated:YES];
 }
 
-- (void)VoteInfoViewControllerDidFinish:(VoteInfoViewController *)controller {
-	if (activeDialogController != nil)
+- (void)modalViewControllerDidFinish:(UIViewController *)controller {
+	if (menuPopoverPC && menuPopoverPC.contentViewController == self.aboutView) {
+		[self showOrHideAboutMenuPopover:controller];
+	}
+	else if (activeDialogController != nil)
 		[activeDialogController dismissModalViewControllerAnimated:YES];
 }
 
-- (void)aboutViewControllerDidFinish:(AboutViewController *)controller {
-	if (activeDialogController != nil)
-		[activeDialogController dismissModalViewControllerAnimated:YES];
+//END:code.gestures.color
+//START:code.popover.menu
+-(IBAction)showOrHideAboutMenuPopover:(id)sender {
+    if (menuPopoverPC) {
+        [menuPopoverPC dismissPopoverAnimated:YES];
+        menuPopoverPC = nil;
+    } else {
+		menuPopoverPC = [[UIPopoverController alloc] 
+						 initWithContentViewController:self.aboutView];
+		menuPopoverPC.popoverContentSize = self.aboutView.view.frame.size;
+		[menuPopoverPC presentPopoverFromBarButtonItem:sender 
+							  permittedArrowDirections:UIPopoverArrowDirectionAny 
+											  animated:YES];
+    }
 }
+//END:code.popover.menu
+
+//END:code.gestures.color
+//START:code.popover.menu
+-(IBAction)showOrHideMenuPopover:(id)sender {
+    if (menuPopoverPC) {
+        [menuPopoverPC dismissPopoverAnimated:YES];
+        menuPopoverPC = nil;
+    } else {
+		menuPopoverPC = [[UIPopoverController alloc] 
+						 initWithContentViewController:self.menuPopoverVC];
+		menuPopoverPC.popoverContentSize = self.menuPopoverVC.view.frame.size;
+		[menuPopoverPC presentPopoverFromBarButtonItem:sender 
+							  permittedArrowDirections:UIPopoverArrowDirectionAny 
+											  animated:YES];
+    }
+}
+//END:code.popover.menu
 
 #pragma mark - 
 #pragma mark Reachability

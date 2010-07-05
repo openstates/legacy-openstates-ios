@@ -10,10 +10,12 @@
 #import "VoteInfoViewController.h"
 #import "AboutViewController.h"
 #import "Reachability.h"
+#import "MenuPopoverViewController.h"
 
 @class LegislatorDetailViewController, MasterTableViewController;
 @class GeneralTableViewController;
 @class CPTestApp_iPadViewController;
+@class MenuPopoverViewController;
 
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate, 
 		AboutViewControllerDelegate, VoteInfoViewControllerDelegate> 
@@ -36,6 +38,8 @@
 	AboutViewController *aboutView;
 	VoteInfoViewController *voteInfoView;
 	UIViewController *activeDialogController;
+	IBOutlet MenuPopoverViewController *menuPopoverVC;
+	UIPopoverController *menuPopoverPC;
 	
 	NetworkStatus remoteHostStatus;
 	NetworkStatus internetConnectionStatus;
@@ -61,6 +65,7 @@
 @property (nonatomic, retain) UIWindow			*mainWindow;
 
 @property (nonatomic, retain) NSMutableArray *functionalViewControllers;
+@property (nonatomic, retain) MenuPopoverViewController *menuPopoverVC;
 
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 @property (nonatomic, retain) IBOutlet GeneralTableViewController *directoryTableTabbedVC, *committeeTableTabbedVC, *mapsTableTabbedVC, *linksTableTabbedVC;
@@ -89,9 +94,9 @@
 
 - (void)setTabOrderIfSaved;
 - (IBAction)saveAction:sender;
+- (IBAction)showOrHideMenuPopover:(id)sender;
+- (IBAction)showOrHideAboutMenuPopover:(id)sender;
 
-- (void)showAboutDialog:(UIViewController *)controller;
-- (void)showVoteInfoDialog:(UIViewController *)controller;
 - (void)updateStatus;
 
 @end
