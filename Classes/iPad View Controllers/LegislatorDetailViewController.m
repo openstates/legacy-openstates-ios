@@ -604,7 +604,7 @@
 		 return nil;
 	}
 		 
-	BOOL clickable = clickable = cellInfo.isClickable;
+	BOOL clickable = cellInfo.isClickable;
 	//NSString *CellIdentifier = [NSString stringWithFormat:@"Section: %d Row: %d",indexPath.section,indexPath.row];
 	NSString *CellIdentifier = [NSString stringWithFormat:@"Type: %d",cellInfo.entryType];
 	//NSString *CellIdentifier = @"DirectoryDetailCell";
