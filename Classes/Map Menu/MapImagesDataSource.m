@@ -111,17 +111,17 @@
 }
 
 // return an image file name
-- (NSString *)cellImageDataForIndexPath:(NSIndexPath *)indexPath {
+- (NSString *)mapFileForIndexPath:(NSIndexPath *)indexPath {
 	NSString *CellIdentifier = nil;
 	
 	if (indexPath.section == 0) // Get the file name for our interior map
-		CellIdentifier = [[[InteriorMaps objectAtIndex:indexPath.row] objectAtIndex:1] autorelease];
+		CellIdentifier = [[InteriorMaps objectAtIndex:indexPath.row] objectAtIndex:1];
 	
 	else if (indexPath.section == 1) // Get the file name for our exterior map
-		CellIdentifier = [[[ExteriorMaps objectAtIndex:indexPath.row] objectAtIndex:1] autorelease];
+		CellIdentifier = [[ExteriorMaps objectAtIndex:indexPath.row] objectAtIndex:1];
 
 	else if (indexPath.section == 2) // Get the file name for our exterior map
-		CellIdentifier = [[[ChamberMaps objectAtIndex:indexPath.row] objectAtIndex:1] autorelease];
+		CellIdentifier = [[ChamberMaps objectAtIndex:indexPath.row] objectAtIndex:1];
 
 	return CellIdentifier;
 }

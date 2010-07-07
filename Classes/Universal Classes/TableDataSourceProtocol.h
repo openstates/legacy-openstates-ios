@@ -49,7 +49,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
 
 // return an image file name, used with maps.
-- (NSString *)cellImageDataForIndexPath:(NSIndexPath *)indexPath;
+- (NSString *)mapFileForIndexPath:(NSIndexPath *)indexPath;
 
 - (LegislatorObj *)legislatorDataForIndexPath:(NSIndexPath *)indexPath;
 
