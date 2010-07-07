@@ -13,9 +13,12 @@
 
 @interface MasterTableViewController : UITableViewController <UISearchDisplayDelegate> {
 	IBOutlet UISegmentedControl *chamberControl;
-	IBOutlet LegislatorDetailViewController *legDetailViewController;
+	IBOutlet LegislatorDetailViewController *detailViewController;
 	IBOutlet id<TableDataSource> dataSource;
 	IBOutlet UISearchBar *searchBar;
+	
+	IBOutlet UIBarButtonItem *menuButton;
+	IBOutlet UIBarButtonItem *aboutButton;
 	
 	UISearchDisplayController *m_searchDisplayController;
 }
@@ -23,11 +26,13 @@
 
 - (IBAction) filterChamber:(id)sender;
 @property (nonatomic, retain) IBOutlet id<TableDataSource> dataSource;
-@property (nonatomic, retain) IBOutlet LegislatorDetailViewController *legDetailViewController;
+@property (nonatomic, retain) IBOutlet LegislatorDetailViewController *detailViewController;
 @property (nonatomic, retain) IBOutlet UISearchBar *searchBar;
 @property (nonatomic, retain) IBOutlet UISegmentedControl *chamberControl;
-
 @property (nonatomic, retain) UISearchDisplayController *m_searchDisplayController;
+
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *menuButton;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *aboutButton;
 
 - (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context;
 

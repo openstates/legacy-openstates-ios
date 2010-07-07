@@ -116,21 +116,6 @@
     return YES;
 }
 
-// To avoid any weird drawing issues, lets just close up any popover business if we have to rotate
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	NSLog(@"Fixin' to rotate");
-	if (self.itemPopoverController) {
-		[self modalViewControllerDidFinish:self.itemPopoverController.contentViewController];
-	}
-	[appDelegate showOrHideMenuPopover:nil];
-	
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-	NSLog(@"Rotated");
-}
-
-
 
 #pragma mark -
 #pragma mark Table view data source
@@ -203,11 +188,15 @@
 
 - (void) showOrHideItemPopover:(UIViewController *) itemViewController fromRect:(CGRect)clickedRow {
 	if (self.itemPopoverController) {
+		itemViewController.modalInPopover = NO;
 		[self modalViewControllerDidFinish:itemViewController];
 	}
 	else {
+		itemViewController.modalInPopover = YES;
+
 		self.itemPopoverController = [[UIPopoverController alloc] initWithContentViewController:itemViewController];
 		self.itemPopoverController.popoverContentSize = itemViewController.view.frame.size;
+		self.itemPopoverController.delegate = self;
 		[self.itemPopoverController presentPopoverFromRect:clickedRow inView:self.view 
 							  permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 	}
@@ -217,30 +206,33 @@
 - (void)modalViewControllerDidFinish:(UIViewController *)controller {
 	if (self.itemPopoverController) {
         [self.itemPopoverController dismissPopoverAnimated:YES];
-		//self.itemPopoverController = nil;		// I think this actually breaks shit.
+		self.itemPopoverController = nil;
 	}
 }
 		
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+	// the user (not us) has dismissed the popover, let's cleanup.
+	self.itemPopoverController = nil;
+}
+
+
 #pragma mark -
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	//NSInteger row = indexPath.row;
 	NSInteger section = indexPath.section;
-		
+
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	//[appDelegate showOrHideMenuPopover:nil];
+
 	if (section == 1) {
 		CGRect clickedRow = [tableView rectForRowAtIndexPath:indexPath];
 
-		if (self.itemPopoverController) {	// we're already showing the popover, so turn it off
-			[tableView deselectRowAtIndexPath:indexPath animated:YES];
-			[self modalViewControllerDidFinish:[self objectForRowAtIndexPath:indexPath]];
-		}
-		else {
-			[self showOrHideItemPopover:[self objectForRowAtIndexPath:indexPath] fromRect:clickedRow];
-		}
+		[self showOrHideItemPopover:[self objectForRowAtIndexPath:indexPath] fromRect:clickedRow];
 	}
 	else {
-		[tableView deselectRowAtIndexPath:indexPath animated:YES];
+
 		[appDelegate showOrHideMenuPopover:nil];
 	}
     // Navigation logic may go here. Create and push another view controller.

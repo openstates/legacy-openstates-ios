@@ -12,7 +12,8 @@
 @class VoteInfoViewController;
 @class TexLegeAppDelegate;
 
-@interface MenuPopoverViewController : UITableViewController <AboutViewControllerDelegate, VoteInfoViewControllerDelegate> {
+@interface MenuPopoverViewController : UITableViewController <AboutViewControllerDelegate, VoteInfoViewControllerDelegate,
+												UIPopoverControllerDelegate> {
 	UIPopoverController *itemPopoverController;
 
 @private

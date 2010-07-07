@@ -16,7 +16,7 @@
 @interface LegislatorDetailViewController : UITableViewController <UITableViewDelegate, UIPopoverControllerDelegate, 
 												UISplitViewControllerDelegate, CPPlotDataSource, CPPieChartDataSource>
 {	
-	LegislatorObj *legislator;
+	IBOutlet LegislatorObj *legislator;
     UIPopoverController *popoverController;
 
 	IBOutlet UIView *startupSplashView;
@@ -44,16 +44,13 @@
 @property (nonatomic,retain) IBOutlet UIView *headerView;
 @property (nonatomic,retain) IBOutlet CPLayerHostingView *scatterPlotView;
 @property (nonatomic,retain) IBOutlet UIImageView *leg_photoView;
-@property (nonatomic,retain) IBOutlet UILabel *leg_titleLab, *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab;
+@property (nonatomic,retain) IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab;
 @property (nonatomic,retain) IBOutlet StaticGradientSliderView *indivSlider, *partySlider, *allSlider;
 @property (nonatomic,retain) IBOutlet UIView *indivPHolder, *partyPHolder, *allPHolder;
 
-@property (nonatomic,retain) LegislatorObj *legislator;
+@property (nonatomic, retain) IBOutlet LegislatorObj *legislator;
 @property (nonatomic, retain) UIPopoverController *popoverController;
 
 @property (nonatomic, retain) NSMutableArray *sectionArray;
 
-- (void) createSectionList;
-- (void) createEntryInSection:(NSInteger)sectionIndex WithKeys:(NSArray *)keys andObjects:(NSArray *)objects;
-- (void) standardTextCell:(UITableViewCell *)cell withInfo:(DirectoryDetailInfo *)cellInfo;
 @end

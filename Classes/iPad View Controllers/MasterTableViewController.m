@@ -8,11 +8,13 @@
 
 #import "MasterTableViewController.h"
 #import "LegislatorDetailViewController.h"
+#import "UtilityMethods.h"
 
 @implementation MasterTableViewController
-@synthesize legDetailViewController;
+@synthesize detailViewController;
 @synthesize dataSource;
 @synthesize searchBar, m_searchDisplayController, chamberControl;
+@synthesize menuButton, aboutButton;
 
 #pragma mark -
 #pragma mark Initialization
@@ -58,6 +60,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 		
+	if (!self.menuButton)
+		self.menuButton = self.navigationItem.leftBarButtonItem;
+	
+	if (!self.aboutButton)
+		self.aboutButton = self.navigationItem.rightBarButtonItem;
+	
     //self.title=@"Legislators";
     self.clearsSelectionOnViewWillAppear = NO;
     self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
@@ -77,13 +85,31 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+		
+	if ([UtilityMethods isLandscapeOrientation] == NO) {		
+		self.navigationItem.leftBarButtonItem = nil;
+		self.navigationItem.rightBarButtonItem = nil;
+	}
+	else {
+		if (self.menuButton)
+			self.navigationItem.leftBarButtonItem = self.menuButton;
+		//self.menuButton = nil;
+		if (self.aboutButton)
+			self.navigationItem.rightBarButtonItem = self.aboutButton;
+		//self.aboutButton = nil;
+		
+	}
+
 	
-	//if (self.legDetailViewController.legislator == nil)
+	// if we are in in portrait then we're in a popover, hide buttons as needed ....
+	
+	
+	//if (self.detailViewController.legislator == nil)
 	if ([self.tableView indexPathForSelectedRow] == nil)  {
 		NSUInteger ints[2] = {0,0};
 		NSIndexPath* indexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
 		[self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
-		self.legDetailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
+		self.detailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
 	}
 }
 
@@ -117,7 +143,7 @@
 //START:code.split.delegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	//[aTableView deselectRowAtIndexPath:indexPath animated:YES];
-	self.legDetailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
+	self.detailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
 }
 //END:code.split.delegate
 
@@ -137,8 +163,9 @@
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
 	self.chamberControl = nil;
-	self.legDetailViewController = nil;
+	self.detailViewController = nil;
 	self.dataSource = nil;
+	self.aboutButton = self.menuButton = nil;
 	
 	self.searchDisplayController.searchResultsDataSource = nil;  // default is nil. delegate can provide
 	self.searchDisplayController.searchResultsDelegate = nil;    // default is nil. delegate can provide
