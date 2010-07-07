@@ -359,45 +359,47 @@ static MiniBrowserController *s_browser = nil;
 		//topView = appDelegate.tabBarController.view;
 	}
 	
-	if (topView) [topView retain];
-	
-	//NSLog(@"%@", [topView description]);
-	
-	m_shouldUseParentsView = NO;
-	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:0.5f];
-	[UIView setAnimationDelegate:self];
-	[UIView setAnimationDidStopSelector:@selector(animationFinished:finished:context:)];
-	UIViewAnimationTransition flipTrans;
-	
-	if ( [self.view superview] ) // This happens when they click done: and we need to go back to the main view
-	{
-		//if ([UtilityMethods isLandscapeOrientation])
-		//	flipTrans = UIViewAnimationTransitionCurlUp;
-		//else
+	if (topView) {
+		[topView retain];
+		
+		//NSLog(@"%@", [topView description]);
+		
+		m_shouldUseParentsView = NO;
+		
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:0.5f];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(animationFinished:finished:context:)];
+		UIViewAnimationTransition flipTrans;
+		
+		if ( [self.view superview] ) // This happens when they click done: and we need to go back to the main view
+		{
+			//if ([UtilityMethods isLandscapeOrientation])
+			//	flipTrans = UIViewAnimationTransitionCurlUp;
+			//else
 			flipTrans = UIViewAnimationTransitionFlipFromLeft;
-
-		[UIView setAnimationTransition:flipTrans forView:topView cache:NO];
-		[self.view removeFromSuperview];
-	}
-	else	// This happens when we first open the web view
-	{
-		//if ([UtilityMethods isLandscapeOrientation])
-		//	flipTrans = UIViewAnimationTransitionCurlDown;
-		//else
+			
+			[UIView setAnimationTransition:flipTrans forView:topView cache:NO];
+			[self.view removeFromSuperview];
+		}
+		else	// This happens when we first open the web view
+		{
+			//if ([UtilityMethods isLandscapeOrientation])
+			//	flipTrans = UIViewAnimationTransitionCurlDown;
+			//else
 			flipTrans = UIViewAnimationTransitionFlipFromRight;
+			
+			[UIView setAnimationTransition:flipTrans forView:topView cache:NO];
+			
+			[self.view setFrame:[topView bounds]];
+			[topView addSubview:self.view];
+		}
 		
-		[UIView setAnimationTransition:flipTrans forView:topView cache:NO];
+		[UIView commitAnimations];
 		
-		[self.view setFrame:[topView bounds]];
-		[topView addSubview:self.view];
+		[topView release];
 	}
 	
-	[UIView commitAnimations];
-	
-	if (topView) [topView release];
-
 }
 
 - (void)animationFinished:(NSString *)animationID finished:(BOOL)finished context:(void *)context

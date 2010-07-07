@@ -254,7 +254,7 @@
 			[tempController release];
 		}
 				
-		[self.detailViewController setMapString:[dataSource cellImageDataForIndexPath:newIndexPath]];
+		[self.detailViewController setMapString:[dataSource mapFileForIndexPath:newIndexPath]];
 		
 		if (isSplitViewDetail == NO) {
 			// push the detail view controller onto the navigation stack to display it
