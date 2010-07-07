@@ -101,6 +101,4 @@ extern NSString *const kAppiraterDeclinedToRate;
 
 }
 
-+ (void)appLaunched;
-
 @end
