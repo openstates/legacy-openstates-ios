@@ -10,7 +10,8 @@
 #import "CommitteeObj.h"
 #import "LegislatorObj.h"
 #import "UtilityMethods.h"
-#import "DetailTableViewController.h"
+#import "MapsDetailViewController.h"
+#import "LegislatorDetailViewController.h"
 #import "MiniBrowserController.h"
 
 @implementation CommitteeDetailViewController
@@ -34,6 +35,30 @@ enum InfoSectionRows {
     NUM_INFO_SECTION_ROWS
 };
 
+- (void)setCommittee:(CommitteeObj *)newObj {
+	//if (self.startupSplashView) {
+	//	[self.startupSplashView removeFromSuperview];
+	//}
+	
+	if (committee) [committee release], committee = nil;
+	if (newObj) {
+		committee = [newObj retain];
+		self.navigationItem.title = self.committee.committeeName;
+		/*
+		 if (self.popoverController != nil) {
+		 [self.popoverController dismissPopoverAnimated:YES];
+		 //self.popoverController = nil; // i think this breaks, unless you're in a showHide type of situation.
+		 }        
+		 
+		 [self createSectionList];
+		 */
+		[self.tableView reloadData];
+		[self.view setNeedsDisplay];
+	}
+
+}
+
+
 #pragma mark -
 #pragma mark View lifecycle
 
@@ -49,9 +74,6 @@ enum InfoSectionRows {
 - (void)viewWillAppear:(BOOL)animated 
 {
     [super viewWillAppear:animated];
-	if (self.committee)
-		self.navigationItem.title = self.committee.committeeName;
-
 }
 
 /*
@@ -254,8 +276,8 @@ enum InfoSectionRows {
 }
 
 - (void) pushMapViewWithURL:(NSURL *)url {
-	DetailTableViewController *detailController = [[DetailTableViewController alloc] init];
-	detailController.webViewURL = url;
+	MapsDetailViewController *detailController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
+	detailController.mapURL = url;
 	detailController.navigationItem.title = @"Maps";
 	// push the detail view controller onto the navigation stack to display it
 	[[self navigationController] pushViewController:detailController animated:YES];
@@ -301,7 +323,7 @@ enum InfoSectionRows {
 		
 	}
 	else {
-		DetailTableViewController *subDetailController = [[DetailTableViewController alloc] init];
+		LegislatorDetailViewController *subDetailController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
 		
 		switch (section) {
 			case kChairSection:
