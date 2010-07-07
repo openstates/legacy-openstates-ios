@@ -20,6 +20,12 @@
 #import "CPTestApp_iPadViewController.h"
 #import "MenuPopoverViewController.h"
 
+
+#import "LegislatorDetailViewController.h"
+#import "MapsDetailViewController.h"
+#import "CommitteeDetailViewController.h"
+
+
 @interface TexLegeAppDelegate (Private)
 
 // these are private methods that outside classes need not use
@@ -50,9 +56,9 @@ NSInteger kNoSelection = -1;
 @synthesize tabBarController;
 @synthesize savedLocation;
 @synthesize functionalViewControllers;
-@synthesize menuPopoverVC;
+@synthesize menuPopoverVC, menuPopoverPC;
 
-@synthesize mainWindow, hackingAlert;
+@synthesize mainWindow, hackingAlert, appirater;
 @synthesize aboutView, voteInfoView, activeDialogController;
 @synthesize remoteHostStatus, internetConnectionStatus, localWiFiConnectionStatus;
 
@@ -61,8 +67,9 @@ NSInteger kNoSelection = -1;
 @synthesize directoryTableTabbedVC, committeeTableTabbedVC, mapsTableTabbedVC, linksTableTabbedVC, corePlotTabbedVC;
 //@synthesize billsTableTabbedVC;
 
-
-@synthesize splitViewController, masterTableViewController, detailViewController;
+@synthesize masterNavigationController, detailNavigationController;
+@synthesize currentMasterViewController, currentDetailViewController;
+@synthesize splitViewController, legMasterTableViewController;
 
 - init {
 	if (self = [super init]) {
@@ -72,7 +79,6 @@ NSInteger kNoSelection = -1;
 		activeDialogController = nil;
 		hackingAlert = nil;
 		savedLocation = nil;
-		menuPopoverPC = nil;
 
 		self.functionalViewControllers = [NSMutableArray array];
 		
@@ -85,12 +91,13 @@ NSInteger kNoSelection = -1;
 	self.savedLocation = nil;
 	self.functionalViewControllers = nil;
 	self.menuPopoverVC = nil;
+	self.menuPopoverPC = nil;
 	self.aboutView = nil;
 	self.voteInfoView = nil;
 	self.tabBarController = nil;
 	self.splitViewController = nil;
-	self.masterTableViewController = nil;
-	
+	self.legMasterTableViewController = nil;
+	self.appirater = nil;
 	[mainWindow release];    
 	
 	self.directoryTableTabbedVC = self.committeeTableTabbedVC = self.mapsTableTabbedVC = self.linksTableTabbedVC = self.corePlotTabbedVC = nil;
@@ -157,6 +164,61 @@ NSInteger kNoSelection = -1;
 	return index;
 }
 
+- (void) changeActiveFeaturedControllerTo:(NSString *)controllerString {
+	if (controllerString) {
+		// set the first component of our state saving business
+		
+		// GREG .... I mean it, set it ... this is a TODO!!!!!!!!!!!!!!!!!!!!!!!!
+		
+		if (self.currentDetailViewController)
+			self.currentDetailViewController = nil;
+
+		if ([controllerString isEqualToString:@"MasterTableViewController"]) {
+			self.currentMasterViewController = self.legMasterTableViewController;
+			self.currentDetailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
+			[self.currentMasterViewController setValue:self.currentDetailViewController forKey:@"detailViewController"];
+			self.splitViewController.delegate = self.currentDetailViewController;
+		}
+		else if ([controllerString isEqualToString:@"CommitteeTableViewController"]) {
+			self.currentMasterViewController = self.committeeTableTabbedVC;
+			self.currentDetailViewController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
+			[self.currentMasterViewController setValue:self.currentDetailViewController forKey:@"detailViewController"];
+			self.splitViewController.delegate = self.currentDetailViewController;
+		}
+		else if ([controllerString isEqualToString:@"MapsTableViewController"]) {
+			self.currentMasterViewController = self.mapsTableTabbedVC;
+			self.currentDetailViewController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
+			[self.currentMasterViewController setValue:self.currentDetailViewController forKey:@"detailViewController"];
+			self.splitViewController.delegate = self.currentDetailViewController;
+		}
+		
+		
+		// Set up the view controller for the master.
+		NSArray *viewControllers = [[NSArray alloc] initWithObjects:self.currentMasterViewController, nil];
+		self.masterNavigationController.viewControllers = viewControllers;
+		[viewControllers release], viewControllers = nil;
+		
+		// now do the detail ...
+		if (self.currentDetailViewController) {
+			viewControllers = [[NSArray alloc] initWithObjects:self.currentDetailViewController, nil];
+			self.detailNavigationController.viewControllers = viewControllers;
+			[viewControllers release], viewControllers = nil;
+
+		}
+		
+		// Dismiss the popover if it's present.
+		if (self.menuPopoverPC != nil) {
+			[self.menuPopoverPC dismissPopoverAnimated:YES];
+		}
+		
+		//	// Configure the new view controller's popover button (after the view has been displayed and its toolbar/navigation bar has been created).
+		//	if (rootPopoverButtonItem != nil) {
+		//		[detailViewController showRootPopoverButtonItem:self.rootPopoverButtonItem];
+		//	}
+		
+	}
+	
+}
 
 // ********** setup the various view controllers for the different data representations
 - (void) constructDataSourcesAndInitMainViewControllers
@@ -165,14 +227,21 @@ NSInteger kNoSelection = -1;
 		if (splitViewController == nil) 
 			[[NSBundle mainBundle] loadNibNamed:@"SplitViewController" owner:self options:NULL];
 		
-		[self addFunctionalViewController:self.masterTableViewController];
+		if (self.legMasterTableViewController == nil)
+			[[NSBundle mainBundle] loadNibNamed:@"MasterTableViewController" owner:self options:NULL];
+			
+		[self changeActiveFeaturedControllerTo:@"MasterTableViewController"];
+		//[self changeActiveFeaturedControllerTo:@"CommitteeTableViewController"];
+		//[self changeActiveFeaturedControllerTo:@"MapsTableViewController"];
+		
+		[self addFunctionalViewController:self.legMasterTableViewController];
 		//[self addFunctionalViewController:self.directoryTableTabbedVC];
 		[self addFunctionalViewController:self.committeeTableTabbedVC];
 		[self addFunctionalViewController:self.corePlotTabbedVC];
 		[self addFunctionalViewController:self.mapsTableTabbedVC];
 		[self addFunctionalViewController:self.linksTableTabbedVC];
 		
-		[self.masterTableViewController configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext]; 
+		[self.legMasterTableViewController configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext]; 
 		//[self.directoryTableTabbedVC configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
 		[self.committeeTableTabbedVC configureWithDataSourceClass:[CommitteesDataSource class] andManagedObjectContext:self.managedObjectContext];
 		[self.mapsTableTabbedVC configureWithDataSourceClass:[MapImagesDataSource class] andManagedObjectContext:self.managedObjectContext];
@@ -285,9 +354,10 @@ NSInteger kNoSelection = -1;
 	NSDictionary *savedLocationDict = [NSDictionary dictionaryWithObject:savedLocation forKey:kRestoreLocationKey];
 	[[NSUserDefaults standardUserDefaults] registerDefaults:savedLocationDict];
 	[[NSUserDefaults standardUserDefaults] synchronize];
-	
-	[Appirater appLaunched];
-		
+
+	// [Appirater appLaunched];  This is replaced with the following, to avoid leakiness
+	self.appirater = [[Appirater alloc] init];
+	[NSThread detachNewThreadSelector:@selector(_appLaunched) toTarget:self.appirater withObject:nil];
 }
 
 
@@ -409,15 +479,15 @@ NSInteger kNoSelection = -1;
 	aboutView.delegate = self;
 //	aboutView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
 	aboutView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-//	aboutView.modalPresentationStyle = UIModalPresentationFormSheet;
-	aboutView.modalPresentationStyle = UIModalPresentationCurrentContext;
+	aboutView.modalPresentationStyle = UIModalPresentationFormSheet;
+//	aboutView.modalPresentationStyle = UIModalPresentationCurrentContext;
 	
 	voteInfoView = [[[VoteInfoViewController alloc] initWithNibName:@"VoteInfoView" bundle:nil] retain];	
 	voteInfoView.delegate = self;
 //	voteInfoView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
 	voteInfoView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-//	voteInfoView.modalPresentationStyle = UIModalPresentationFormSheet;
-	voteInfoView.modalPresentationStyle = UIModalPresentationCurrentContext;
+	voteInfoView.modalPresentationStyle = UIModalPresentationFormSheet;
+//	voteInfoView.modalPresentationStyle = UIModalPresentationCurrentContext;
 	
 }
 
@@ -434,7 +504,7 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)modalViewControllerDidFinish:(UIViewController *)controller {
-	if (menuPopoverPC && menuPopoverPC.contentViewController == self.aboutView) {
+	if (self.menuPopoverPC && self.menuPopoverPC.contentViewController == self.aboutView) {
 		[self showOrHideAboutMenuPopover:controller];
 	}
 	else if (activeDialogController != nil)
@@ -444,16 +514,15 @@ NSInteger kNoSelection = -1;
 //END:code.gestures.color
 //START:code.popover.menu
 -(IBAction)showOrHideAboutMenuPopover:(id)sender {
-    if (menuPopoverPC) {
-        [menuPopoverPC dismissPopoverAnimated:YES];
-        menuPopoverPC = nil;
+    if (self.menuPopoverPC) {
+        [self.menuPopoverPC dismissPopoverAnimated:YES];
+        self.menuPopoverPC = nil;
     } else {
-		menuPopoverPC = [[UIPopoverController alloc] 
-						 initWithContentViewController:self.aboutView];
-		menuPopoverPC.popoverContentSize = self.aboutView.view.frame.size;
-		[menuPopoverPC presentPopoverFromBarButtonItem:sender 
-							  permittedArrowDirections:UIPopoverArrowDirectionAny 
-											  animated:YES];
+		self.menuPopoverPC = [[UIPopoverController alloc] initWithContentViewController:self.aboutView];
+		self.menuPopoverPC.popoverContentSize = self.aboutView.view.frame.size;
+		self.menuPopoverPC.delegate = self;
+		[self.menuPopoverPC presentPopoverFromBarButtonItem:sender 
+							  permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
 }
 //END:code.popover.menu
@@ -461,19 +530,55 @@ NSInteger kNoSelection = -1;
 //END:code.gestures.color
 //START:code.popover.menu
 -(IBAction)showOrHideMenuPopover:(id)sender {
-    if (menuPopoverPC) {
-        [menuPopoverPC dismissPopoverAnimated:YES];
-        menuPopoverPC = nil;
+    if (self.menuPopoverPC) {
+        [self.menuPopoverPC dismissPopoverAnimated:YES];
+        self.menuPopoverPC = nil;
     } else {
-		menuPopoverPC = [[UIPopoverController alloc] 
-						 initWithContentViewController:self.menuPopoverVC];
-		menuPopoverPC.popoverContentSize = self.menuPopoverVC.view.frame.size;
-		[menuPopoverPC presentPopoverFromBarButtonItem:sender 
-							  permittedArrowDirections:UIPopoverArrowDirectionAny 
-											  animated:YES];
+		self.menuPopoverPC = [[UIPopoverController alloc] initWithContentViewController:self.menuPopoverVC];
+		self.menuPopoverPC.popoverContentSize = self.menuPopoverVC.view.frame.size;
+		self.menuPopoverPC.delegate = self;
+		[self.menuPopoverPC presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
 }
 //END:code.popover.menu
+
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+	// the user (not us) has dismissed the popover, let's cleanup.
+	self.menuPopoverPC = nil;
+}
+
+/*
+ 
+ // add this to init: or something
+ [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+ (void)deviceOrientationDidChange:(void*)object { UIDeviceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+ 
+ if (UIInterfaceOrientationIsLandscape(orientation)) {
+ // do something
+ } else {
+ // do something else
+ }
+ }
+ // add this to done: or something
+ [[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+ 
+ */
+
+
+- (void)application:(UIApplication *)application willChangeStatusBarOrientation:(UIInterfaceOrientation)newStatusBarOrientation duration:(NSTimeInterval)duration {
+	// a cheat, so that we can dismiss all our popovers, if they're open.
+	
+	if (self.menuPopoverPC) {
+		// if we're actually showing the menu, and not the about box, close out any active menu dialogs too
+		if (self.menuPopoverVC && self.menuPopoverVC == self.menuPopoverPC.contentViewController)
+			[self.menuPopoverVC modalViewControllerDidFinish:nil];
+		
+        [self.menuPopoverPC dismissPopoverAnimated:YES];
+        self.menuPopoverPC = nil;
+	}
+		
+}
 
 #pragma mark - 
 #pragma mark Reachability

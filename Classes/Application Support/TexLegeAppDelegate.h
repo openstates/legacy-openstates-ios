@@ -16,9 +16,10 @@
 @class GeneralTableViewController;
 @class CPTestApp_iPadViewController;
 @class MenuPopoverViewController;
+@class Appirater;
 
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate, 
-		AboutViewControllerDelegate, VoteInfoViewControllerDelegate> 
+		AboutViewControllerDelegate, VoteInfoViewControllerDelegate, UIPopoverControllerDelegate> 
 {
 	// savedLocation: an array of selections for each drill level
 	// i.e.
@@ -41,11 +42,10 @@
 	IBOutlet MenuPopoverViewController *menuPopoverVC;
 	UIPopoverController *menuPopoverPC;
 	
-	NetworkStatus remoteHostStatus;
-	NetworkStatus internetConnectionStatus;
-	NetworkStatus localWiFiConnectionStatus;	
+	NetworkStatus remoteHostStatus, internetConnectionStatus, localWiFiConnectionStatus;	
 
 	UIWindow *mainWindow;
+	Appirater *appirater;
 	
 	// For iPhone Interface
 	IBOutlet UITabBarController *tabBarController;
@@ -54,8 +54,10 @@
 	
 	// For iPad Interface
 	IBOutlet UISplitViewController *splitViewController;
-	IBOutlet MasterTableViewController *masterTableViewController;
-    IBOutlet LegislatorDetailViewController *detailViewController;
+	IBOutlet UINavigationController *masterNavigationController, *detailNavigationController;
+	IBOutlet id currentMasterViewController, currentDetailViewController;
+	
+	IBOutlet MasterTableViewController *legMasterTableViewController;
 		
 	IBOutlet CPTestApp_iPadViewController *corePlotTabbedVC;
 	
@@ -63,9 +65,11 @@
 	NSMutableArray *functionalViewControllers;	
 }
 @property (nonatomic, retain) UIWindow			*mainWindow;
+@property (nonatomic, retain) Appirater			*appirater;
 
 @property (nonatomic, retain) NSMutableArray *functionalViewControllers;
 @property (nonatomic, retain) MenuPopoverViewController *menuPopoverVC;
+@property (nonatomic, retain) UIPopoverController *menuPopoverPC;
 
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 @property (nonatomic, retain) IBOutlet GeneralTableViewController *directoryTableTabbedVC, *committeeTableTabbedVC, *mapsTableTabbedVC, *linksTableTabbedVC;
@@ -74,8 +78,10 @@
 @property (nonatomic, retain) IBOutlet CPTestApp_iPadViewController *corePlotTabbedVC;
 
 @property (nonatomic, retain) IBOutlet UISplitViewController *splitViewController;
-@property (nonatomic, retain) IBOutlet MasterTableViewController *masterTableViewController;
-@property (nonatomic, retain) IBOutlet LegislatorDetailViewController *detailViewController;
+@property (nonatomic, retain) IBOutlet UINavigationController *masterNavigationController, *detailNavigationController;
+@property (nonatomic, retain) IBOutlet id currentMasterViewController, currentDetailViewController;
+
+@property (nonatomic, retain) IBOutlet MasterTableViewController *legMasterTableViewController;
 
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
