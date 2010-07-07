@@ -9,6 +9,24 @@
 #import "MasterTableViewController.h"
 #import "LegislatorDetailViewController.h"
 #import "UtilityMethods.h"
+#import "LegislatorMasterTableViewCell.h"
+#import "TexLegeAppDelegate.h"
+
+/*
+ Predefined colors to alternate the background color of each cell row by row
+ (see tableView:cellForRowAtIndexPath: and tableView:willDisplayCell:forRowAtIndexPath:).
+ */
+#define DARK_BACKGROUND  [UIColor colorWithRed:151.0/255.0 green:152.0/255.0 blue:155.0/255.0 alpha:1.0]
+#define LIGHT_BACKGROUND [UIColor colorWithRed:172.0/255.0 green:173.0/255.0 blue:175.0/255.0 alpha:1.0]
+
+@interface MasterTableViewController (Private)
+
+- (void)setStoredSelectionWithRow:(NSInteger)row section:(NSInteger)section;
+- (void)resetStoredSelection;
+- (void)validateStoredSelection;
+
+@end
+
 
 @implementation MasterTableViewController
 @synthesize detailViewController;
@@ -47,6 +65,8 @@
 		}				
 	}
 	
+	// GREG do we need this one?  does it break things?
+	self.tableView.delegate = self;
 	self.tableView.dataSource = self.dataSource;
 	self.tableView.rowHeight = self.dataSource.rowHeight;
 
@@ -75,7 +95,10 @@
 	}
 	self.m_searchDisplayController.delegate = self;
 	self.m_searchDisplayController.searchResultsDelegate = self;
-		
+	
+	self.tableView.backgroundColor = DARK_BACKGROUND;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -86,6 +109,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 		
+	[self validateStoredSelection];
+	
 	if ([UtilityMethods isLandscapeOrientation] == NO) {		
 		self.navigationItem.leftBarButtonItem = nil;
 		self.navigationItem.rightBarButtonItem = nil;
@@ -104,6 +129,33 @@
 	// if we are in in portrait then we're in a popover, hide buttons as needed ....
 	
 	
+	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+	
+	if (appDelegate.savedLocation != nil) {
+		// save off this level's selection to our AppDelegate
+		[self validateStoredSelection];
+		NSInteger rowSelection = [[appDelegate.savedLocation objectAtIndex:1] integerValue];
+		NSInteger sectionSelection = [[appDelegate.savedLocation objectAtIndex:2] integerValue];
+		
+		//debug_NSLog(@"Restoring Selection: Row: %d    Section: %d", rowSelection, sectionSelection);
+		
+		if (rowSelection != -1) {
+			
+			NSIndexPath *selectionPath = [NSIndexPath indexPathForRow:rowSelection inSection:sectionSelection];
+						
+			// I'm not sure if this is how you do the "selector" business, so I've commented it out
+			//if ([self.tableView.delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)
+			//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
+
+			[self.tableView selectRowAtIndexPath:selectionPath animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+			[self.tableView.delegate tableView:self.tableView didSelectRowAtIndexPath:selectionPath];
+
+			//if ([self.tableView.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)
+			//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
+			
+		}
+	}
+	
 	//if (self.detailViewController.legislator == nil)
 	if ([self.tableView indexPathForSelectedRow] == nil)  {
 		NSUInteger ints[2] = {0,0};
@@ -113,7 +165,7 @@
 	}
 }
 
-/*
+
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 
@@ -122,9 +174,10 @@
 	//	[self.searchDisplayController setActive:YES];
 	//	[self.searchDisplayController setActive:NO];
 	//}
+	[self resetStoredSelection];
 }
  
-*/
+
 /*
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -142,20 +195,31 @@
 
 //START:code.split.delegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	// save off this item's selection to our AppDelegate
+	[self setStoredSelectionWithRow:indexPath.row section:indexPath.section];
+	
 	//[aTableView deselectRowAtIndexPath:indexPath animated:YES];
 	self.detailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
 }
 //END:code.split.delegate
 
-
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+	// let's override some of the datasource's settings ... specifically, the background color.
+	cell.backgroundColor = ((LegislatorMasterTableViewCell *)cell).useDarkBackground ? DARK_BACKGROUND : LIGHT_BACKGROUND;
+	
+}
 
 #pragma mark -
 #pragma mark Memory management
 
 - (void)didReceiveMemoryWarning {
+    
+	[self resetStoredSelection];
+
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
+	
+
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
@@ -177,6 +241,38 @@
 - (void)dealloc {
     [super dealloc];
 }
+
+#pragma mark -
+#pragma mark Save Location
+
+- (void)setStoredSelectionWithRow:(NSInteger)row section:(NSInteger)section {
+	// we have moved to level 1, remove it's stored row/section selection
+	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+	if (appDelegate.savedLocation != nil) {
+		NSInteger functionIndex = [appDelegate indexForFunctionalViewController:self];
+		[appDelegate.savedLocation replaceObjectAtIndex:0 withObject:[NSNumber numberWithInteger:functionIndex]]; //tab
+		[appDelegate.savedLocation replaceObjectAtIndex:1 withObject:[NSNumber numberWithInteger:row]];
+		[appDelegate.savedLocation replaceObjectAtIndex:2 withObject:[NSNumber numberWithInteger:section]];
+	}
+	
+}
+
+- (void)resetStoredSelection {
+	// we have moved to level 1, remove it's stored row/section selection
+	[self setStoredSelectionWithRow:-1 section:-1]; 	
+}
+
+- (void)validateStoredSelection {
+	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+	NSInteger functionIndex = [appDelegate indexForFunctionalViewController:self];
+	NSInteger tabSavedSelection = [[appDelegate.savedLocation objectAtIndex:0] integerValue];
+	
+	if (functionIndex != tabSavedSelection) { // we're out of sync with the selection, clear the unknown
+		[self resetStoredSelection];
+	}
+}	
+
+
 
 #pragma mark -
 #pragma mark Filtering and Searching

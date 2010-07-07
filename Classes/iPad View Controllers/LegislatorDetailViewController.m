@@ -145,10 +145,41 @@
 	
 	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
 	if (self.legislator == nil && ![UtilityMethods isLandscapeOrientation])  {
-		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StartupSplashView-Portrait" owner:self options:NULL];
-		self.startupSplashView = [objects objectAtIndex:0];
-		[self.view addSubview:self.startupSplashView];
-		//[self.view setNeedsDisplay];
+		
+		TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+		
+		if (appDelegate.savedLocation != nil) {
+			// save off this level's selection to our AppDelegate
+			
+			//[self validateStoredSelection];
+			NSInteger rowSelection = [[appDelegate.savedLocation objectAtIndex:1] integerValue];
+			NSInteger sectionSelection = [[appDelegate.savedLocation objectAtIndex:2] integerValue];
+			
+			//debug_NSLog(@"Restoring Selection: Row: %d    Section: %d", rowSelection, sectionSelection);
+			
+			if (rowSelection != -1) {
+				MasterTableViewController *masterVC = [appDelegate.functionalViewControllers objectAtIndex:0];
+				UITableView *masterTableView = [masterVC valueForKey:@"tableView"];
+				NSIndexPath *selectionPath = [NSIndexPath indexPathForRow:rowSelection inSection:sectionSelection];
+				
+				// I'm not sure if this is how you do the "selector" business, so I've commented it out
+				//if ([self.tableView.delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)
+				//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
+				
+				[masterTableView selectRowAtIndexPath:selectionPath animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+				[masterTableView.delegate tableView:masterTableView didSelectRowAtIndexPath:selectionPath];
+				
+				//if ([self.tableView.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)
+				//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
+				
+			}
+		}
+		else {
+			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StartupSplashView-Portrait" owner:self options:NULL];
+			self.startupSplashView = [objects objectAtIndex:0];
+			[self.view addSubview:self.startupSplashView];
+			//[self.view setNeedsDisplay];
+		}
 		
 #if 0
 		// We could alternatively use this opportunity to open a proper informational introduction
