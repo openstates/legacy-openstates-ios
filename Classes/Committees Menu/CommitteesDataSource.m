@@ -7,9 +7,6 @@
 //
 
 #import "CommitteesDataSource.h"
-#import "TexLegeAppDelegate.h"
-
-#import "DetailTableViewController.h"
 
 @implementation CommitteesDataSource
 

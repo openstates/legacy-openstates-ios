@@ -7,10 +7,8 @@
 //
 
 #import "DirectoryDataSource.h"
-#import "TexLegeAppDelegate.h"
 #import "LegislatorObj.h"
 #import "LegislatorMasterTableViewCell.h"
-#import "DetailTableViewController.h"
 
 #import "UtilityMethods.h"
 
