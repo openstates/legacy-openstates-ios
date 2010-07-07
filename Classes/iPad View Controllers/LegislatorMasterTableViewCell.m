@@ -20,7 +20,7 @@
 @implementation LegislatorMasterTableViewCell
 
 @synthesize leg_photoView, leg_titleLab, leg_partyDistLab, leg_tenureLab, leg_nameLab, leg_sliderViewPlaceHolder, leg_sliderView;
-@synthesize legislator;
+@synthesize legislator, useDarkBackground;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
@@ -29,15 +29,42 @@
     return self;
 }
 
-
+/*
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
 
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
 }
+*/
 
-
+- (void)setUseDarkBackground:(BOOL)flag
+{
+    if (flag != useDarkBackground || !self.backgroundView)
+    {
+        useDarkBackground = flag;
+		
+        NSString *backgroundImagePath = [[NSBundle mainBundle] pathForResource:useDarkBackground ? @"DarkBackground" : @"LightBackground" ofType:@"png"];
+        UIImage *backgroundImage = [[UIImage imageWithContentsOfFile:backgroundImagePath] stretchableImageWithLeftCapWidth:0.0 topCapHeight:1.0];
+        self.backgroundView = [[[UIImageView alloc] initWithImage:backgroundImage] autorelease];
+        self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.backgroundView.frame = self.bounds;
+    }
+}
+/*
+- (void)setBackgroundColor:(UIColor *)backgroundColor
+{
+    [super setBackgroundColor:backgroundColor];
+	
+	self.leg_photoView.backgroundColor = backgroundColor;
+	self.leg_titleLab.backgroundColor = backgroundColor;
+	self.leg_partyDistLab.backgroundColor = backgroundColor;
+	self.leg_tenureLab.backgroundColor = backgroundColor;
+	self.leg_nameLab.backgroundColor = backgroundColor;
+	self.leg_sliderViewPlaceHolder.backgroundColor = backgroundColor;
+	self.leg_sliderView.backgroundColor = backgroundColor;	
+}
+*/
 - (void)dealloc {
     [super dealloc];
 }

@@ -12,6 +12,7 @@
 @class StaticGradientSliderView;
 
 @interface LegislatorMasterTableViewCell : UITableViewCell {
+    BOOL useDarkBackground;
 	IBOutlet UIImageView *leg_photoView;
 	IBOutlet UILabel *leg_titleLab;
 	IBOutlet UILabel *leg_partyDistLab;
@@ -21,6 +22,8 @@
 	IBOutlet StaticGradientSliderView *leg_sliderView;
 	LegislatorObj	 *legislator;
 }
+
+@property BOOL useDarkBackground;
 
 @property (nonatomic,retain) IBOutlet UIImageView *leg_photoView;
 @property (nonatomic,retain) IBOutlet UILabel *leg_titleLab;
