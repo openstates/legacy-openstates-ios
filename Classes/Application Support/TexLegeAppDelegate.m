@@ -36,7 +36,6 @@
 - (void)iPhoneUserInterfaceInit;
 
 - (NSString *)hostName;
-- (NSInteger) indexForFunctionalViewController:(id)viewController;
 - (NSInteger) addFunctionalViewController:(id)viewController;
 
 @end
@@ -249,29 +248,14 @@ NSInteger kNoSelection = -1;
 
 		[self.mainWindow addSubview:splitViewController.view];
 		
-#if 0 // this is a work in progress to restore and rearrange the proper viewControllers as necessary.
 		NSInteger selection = [[savedLocation objectAtIndex:0] integerValue];	// read the saved selection at level 1
 		if (selection != kNoSelection && selection > 0) { // it's not the first one, so change things up...
-			if (UIViewController *savedMasterVC = [self.functionalViewControllers objectAtIndex:selection]) {
+			NSString * vcString = [[self.functionalViewControllers objectAtIndex:selection] name];
+			if (vcString) {
 				
-				
-				// work in progress ... fix from here down???
-				UINavigationController *masterNavController = [self.splitViewController.viewControllers objectAtIndex:0];
-				UINavigationController *detailNavController = [self.splitViewController.viewControllers objectAtIndex:1];
-
-				//id<TableDataSource> masterDataSource = nil;
-				//UIViewController *savedMasterVC = masterNavControl.topViewController;
-				//UIViewController *savedDetailVC = detailNavControl.topViewController;
-				//if ([suspectVC respondsToSelector:@selector(dataSource)])
-				//	masterDataSource = [suspectVC performSelector:@selector(dataSource)];
-								
-				// I'm certain this part here is particularly suspect ... I mean, is this the proper way to reinitialize a controller???
-				[masterNavController initWithRootViewController:newSavedMasterController];
-				[detailNavController initWithRootViewController:newSavedDetailController];
-				self.splitViewController.delegate = newSavedDetailController;
+				[self changeActiveFeaturedControllerTo:vcString];				
 			}
 		}				 
-#endif
 		
 	}
 	else {  // We're on an iPhone/iTouch using the tabBarController

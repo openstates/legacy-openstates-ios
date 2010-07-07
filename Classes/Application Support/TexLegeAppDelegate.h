@@ -104,5 +104,6 @@
 - (IBAction)showOrHideAboutMenuPopover:(id)sender;
 
 - (void)updateStatus;
+- (NSInteger) indexForFunctionalViewController:(id)viewController;
 
 @end
