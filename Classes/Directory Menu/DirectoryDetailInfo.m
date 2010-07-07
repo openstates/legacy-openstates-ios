@@ -44,7 +44,7 @@
 }
 
 - (NSURL *)generateURL:(LegislatorObj *)legislator {
-	NSURL * tempURL;
+	NSURL * tempURL = nil;
 
 	if (![entryValue isEqualToString:@""]) { // Make sure we have something to give...
 		switch (entryType) {
