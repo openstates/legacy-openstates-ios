@@ -180,6 +180,9 @@
 		if (cell) {
 			[cell setupWithLegislator:dataObj];
 		}
+		// Display dark and light background in alternate rows -- see tableView:willDisplayCell:forRowAtIndexPath:.
+		cell.useDarkBackground = (indexPath.row % 2 == 0);
+
 		
 		if (tableView == self.searchDisplayController.searchResultsTableView) 
 			cell.accessoryType = UITableViewCellAccessoryNone;

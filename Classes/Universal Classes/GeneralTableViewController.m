@@ -12,6 +12,7 @@
 
 #import "CommitteeDetailViewController.h"
 #import "LegislatorDetailViewController.h"
+#import "LegislatorMasterTableViewCell.h"
 
 #import "MapsDetailViewController.h"
 #import "TexLegeAppDelegate.h"
@@ -21,6 +22,14 @@
 #import "LinksMenuDataSource.h"
 #import "LinksDetailViewController.h"
 #import "MiniBrowserController.h"
+
+/*
+ Predefined colors to alternate the background color of each cell row by row
+ (see tableView:cellForRowAtIndexPath: and tableView:willDisplayCell:forRowAtIndexPath:).
+ */
+#define DARK_BACKGROUND  [UIColor colorWithRed:151.0/255.0 green:152.0/255.0 blue:155.0/255.0 alpha:1.0]
+#define LIGHT_BACKGROUND [UIColor colorWithRed:172.0/255.0 green:173.0/255.0 blue:175.0/255.0 alpha:1.0]
+
 
 @implementation GeneralTableViewController
 
@@ -267,6 +276,16 @@
 	[self tableView:tableView didSelectRowAtIndexPath:newIndexPath withAnimation:YES];
 	
 }
+
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+
+	if (self.dataSource.name == @"Directory") {
+		// let's override some of the datasource's settings ... specifically, the background color.
+		cell.backgroundColor = ((LegislatorMasterTableViewCell *)cell).useDarkBackground ? DARK_BACKGROUND : LIGHT_BACKGROUND;
+	}
+}
+
 
 
 -(void)viewWillAppear:(BOOL)animated
