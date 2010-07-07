@@ -16,6 +16,7 @@
 
 @synthesize delegate, projectWebsiteURL;
 
+
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
 		self.title = @"About TexLege";
@@ -37,18 +38,6 @@
  - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	 return YES; // UIInterfaceOrientationPortrait;
  }
-
-// To avoid any weird drawing issues, lets just close up any popover business if we have to rotate
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	NSLog(@"Fixin' to rotate");
-	if ([UtilityMethods isIPadDevice]) {
-		[self done:self];
-	}	
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-	NSLog(@"Rotated");
-}
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
