@@ -12,7 +12,6 @@
 
 #define _searchcontroller_ 0
 
-
 @interface GeneralTableViewController : UIViewController < UITableViewDelegate, UISearchBarDelegate 
 #if _searchcontroller_
 			,UISearchDisplayDelegate
@@ -21,6 +20,7 @@
 
 	UITableView *theTableView;
 	id<TableDataSource> dataSource;
+	id detailViewController;
 	
 	UISearchBar		*searchBar;
     NSString	*savedSearchTerm;
@@ -37,6 +37,7 @@
 
 @property (nonatomic,retain) UITableView *theTableView;
 @property (nonatomic,retain) id<TableDataSource> dataSource;
+@property (nonatomic,retain) id detailViewController;
 
 @property (nonatomic, retain) UISearchBar *searchBar;
 @property (nonatomic, copy) NSString *savedSearchTerm;

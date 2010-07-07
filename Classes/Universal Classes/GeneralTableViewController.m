@@ -13,7 +13,7 @@
 #import "CommitteeDetailViewController.h"
 #import "LegislatorDetailViewController.h"
 
-#import "DetailTableViewController.h"
+#import "MapsDetailViewController.h"
 #import "TexLegeAppDelegate.h"
 #import "TableDataSourceProtocol.h"
 #import "DirectoryDataSource.h"
@@ -25,7 +25,7 @@
 @implementation GeneralTableViewController
 
 
-@synthesize theTableView, dataSource;
+@synthesize theTableView, dataSource, detailViewController;
 
 @synthesize searchBar, savedSearchTerm, searchWasActive, atLaunchScrollTo;
 #if _searchcontroller_
@@ -149,7 +149,8 @@
 
 // the user selected a row in the table.
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
-	
+	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]) && (self.detailViewController != nil);
+
 	// deselect the new row using animation
     [tableView deselectRowAtIndexPath:newIndexPath animated:animated];	
 	
@@ -207,40 +208,50 @@
 		
 	}
 	else if (dataSource.name == @"Committees") {
-		// WHY DOES THIS WORK WITHOUT LOADING THE NIB???  It actually doesn't load the nib, it just whips up a tableview for us.
-		CommitteeDetailViewController *detailController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
-//		CommitteeDetailViewController *detailController = [[CommitteeDetailViewController alloc] init];
-		detailController.committee = [dataSource committeeDataForIndexPath:newIndexPath];
-		[self.navigationController pushViewController:detailController animated:YES];
-		[detailController release];
+		if (self.detailViewController == nil)
+			self.detailViewController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
+		
+		[self.detailViewController setValue:[dataSource committeeDataForIndexPath:newIndexPath] forKey:@"committee"];
+		
+		if (isSplitViewDetail == NO) {
+			// push the detail view controller onto the navigation stack to display it
+			[self.navigationController pushViewController:self.detailViewController animated:YES];
+			self.detailViewController = nil;
+		}		
 	}
 	else if (dataSource.name == @"Directory") {
-		
-		LegislatorDetailViewController *detailController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
-//		LegislatorDetailViewController *detailController = [[LegislatorDetailViewController alloc] init];
-		detailController.legislator = [dataSource legislatorDataForIndexPath:newIndexPath];
-		[self.navigationController pushViewController:detailController animated:YES];
-		[detailController release];
+		if (self.detailViewController == nil)
+			self.detailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
 
+		((LegislatorDetailViewController *)self.detailViewController).legislator = [dataSource legislatorDataForIndexPath:newIndexPath];
+		//[self.detailViewController setValue:[dataSource legislatorDataForIndexPath:newIndexPath] forKey:@"legislator"];
+
+		
+		if (isSplitViewDetail == NO) {
+			// push the detail view controller onto the navigation stack to display it
+			[self.navigationController pushViewController:self.detailViewController animated:YES];
+			self.detailViewController = nil;
+		}
 	}
 
 	else {
-		// create an DetailTableViewController. This controller will display the full size tile for the element
-		DetailTableViewController *detailController = [[DetailTableViewController alloc] init];
-		
-		if (dataSource.name == @"Maps")
-		{
-			detailController.mapFileName = [dataSource cellImageDataForIndexPath:newIndexPath];
+		if (dataSource.name != @"Maps")
+			NSLog(@"GeneralTableViewController, unexpected datasource: %@", dataSource.name);
+
+		// create an MapsDetailViewController. This controller will display the full size tile for the element
+		if (self.detailViewController == nil) {
+			MapsDetailViewController *tempController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
+			self.detailViewController = tempController;
+			[tempController release];
 		}
-		else if (dataSource.name == @"Directory") {
-			detailController.legislator = [dataSource legislatorDataForIndexPath:newIndexPath];
+				
+		[self.detailViewController setMapString:[dataSource cellImageDataForIndexPath:newIndexPath]];
+		
+		if (isSplitViewDetail == NO) {
+			// push the detail view controller onto the navigation stack to display it
+			[[self navigationController] pushViewController:self.detailViewController animated:animated];
+			self.detailViewController = nil;
 		}
-		
-		// push the detail view controller onto the navigation stack to display it
-		[[self navigationController] pushViewController:detailController animated:animated];
-		
-		//	[self.navigationController setNavigationBarHidden:NO];
-		[detailController release];
 	}
 }
 
