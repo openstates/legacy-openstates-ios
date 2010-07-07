@@ -175,31 +175,15 @@
 			}
 		}
 		else {
+			// We could alternatively use this opportunity to open a proper informational introduction
+			// for instance, drop in a new view taking the full screen that gives a full menu and helpful info
+
 			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StartupSplashView-Portrait" owner:self options:NULL];
 			self.startupSplashView = [objects objectAtIndex:0];
 			[self.view addSubview:self.startupSplashView];
 			//[self.view setNeedsDisplay];
 		}
-		
-#if 0
-		// We could alternatively use this opportunity to open a proper informational introduction
-		// for instance, drop in a new view taking the full screen that discusses stuff (and points them to rotate the device)
-		
-		// or we could figure out how to force this to start in a landscape view...
-		
-		id<TableDataSource> masterDataSource = nil;
-		UINavigationController *masterNavControl = [self.splitViewController.viewControllers objectAtIndex:0];
-		UIViewController *suspectVC = masterNavControl.topViewController;
-		if ([suspectVC respondsToSelector:@selector(dataSource)])
-			masterDataSource = [suspectVC performSelector:@selector(dataSource)];
-		
-		if (masterDataSource) {
-			NSUInteger ints[2] = {0,0};	// just pick the first legislator in our datasource
-			NSIndexPath* indexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
-			//[self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
-			self.legislator = [masterDataSource legislatorDataForIndexPath:indexPath];
-		}
-#endif
+				
 	}
 	else {
 		[self.startupSplashView removeFromSuperview];
