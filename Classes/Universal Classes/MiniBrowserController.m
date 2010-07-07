@@ -65,6 +65,7 @@ static MiniBrowserController *s_browser = nil;
 {
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) 
 	{
+		self.modalPresentationStyle = UIModalPresentationFullScreen;
 		m_shouldStopLoadingOnHide = YES;
 		m_loadingInterrupted = NO;
 		m_urlRequestToLoad = nil;
@@ -86,7 +87,7 @@ static MiniBrowserController *s_browser = nil;
 - (void)didReceiveMemoryWarning 
 {
 	[self stopLoading]; // should we do more, like just close up shop?
-	//[m_parentCtrl dismissModalViewControllerAnimated:YES];
+	[m_parentCtrl dismissModalViewControllerAnimated:YES];
 
 	[super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
 	// Release anything that's not essential, such as cached data
@@ -184,8 +185,6 @@ static MiniBrowserController *s_browser = nil;
 	}
 	
 	[super viewWillDisappear:animated];
-	
-	[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:YES];
 }
 
 
@@ -203,8 +202,9 @@ static MiniBrowserController *s_browser = nil;
 	m_authCallback = nil;
 	if ( m_webView != nil )
 	{
-		//[m_parentCtrl presentModalViewController:self animated:NO];
-		[self animate];
+		//GREG!!!!
+		[m_parentCtrl presentModalViewController:self animated:YES];
+		//[self animate];
 	}
 	else
 	{
@@ -217,8 +217,8 @@ static MiniBrowserController *s_browser = nil;
 - (IBAction)closeButtonPressed:(id)button
 {
 	// dismiss the view
-	//[m_parentCtrl dismissModalViewControllerAnimated:YES];
-	[self animate];
+	[m_parentCtrl dismissModalViewControllerAnimated:YES];
+	//[self animate];
 }
 
 
@@ -343,7 +343,7 @@ static MiniBrowserController *s_browser = nil;
 		if ( topView == nil )
 		{
 			if (appDelegate.splitViewController)
-				topView = [[appDelegate.splitViewController.viewControllers objectAtIndex:1] view];
+				topView = appDelegate.splitViewController.view;//.viewControllers objectAtIndex:1] view];
 			else 
 				topView = appDelegate.tabBarController.view;
 		}
@@ -351,7 +351,7 @@ static MiniBrowserController *s_browser = nil;
 	else
 	{
 		if (appDelegate.splitViewController)
-			topView = [[appDelegate.splitViewController.viewControllers objectAtIndex:1] view];
+			topView = appDelegate.splitViewController.view;//.viewControllers objectAtIndex:1] view];
 		else 
 			topView = appDelegate.tabBarController.view;
 		
@@ -361,7 +361,7 @@ static MiniBrowserController *s_browser = nil;
 	
 	if (topView) [topView retain];
 	
-	NSLog(@"%@", [topView description]);
+	//NSLog(@"%@", [topView description]);
 	
 	m_shouldUseParentsView = NO;
 	
@@ -369,21 +369,29 @@ static MiniBrowserController *s_browser = nil;
 	[UIView setAnimationDuration:0.5f];
 	[UIView setAnimationDelegate:self];
 	[UIView setAnimationDidStopSelector:@selector(animationFinished:finished:context:)];
+	UIViewAnimationTransition flipTrans;
 	
-	if ( [self.view superview] )
+	if ( [self.view superview] ) // This happens when they click done: and we need to go back to the main view
 	{
-		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:topView cache:NO];
+		//if ([UtilityMethods isLandscapeOrientation])
+		//	flipTrans = UIViewAnimationTransitionCurlUp;
+		//else
+			flipTrans = UIViewAnimationTransitionFlipFromLeft;
+
+		[UIView setAnimationTransition:flipTrans forView:topView cache:NO];
 		[self.view removeFromSuperview];
-		[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:YES];
 	}
-	else
+	else	// This happens when we first open the web view
 	{
-		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:topView cache:NO];
+		//if ([UtilityMethods isLandscapeOrientation])
+		//	flipTrans = UIViewAnimationTransitionCurlDown;
+		//else
+			flipTrans = UIViewAnimationTransitionFlipFromRight;
+		
+		[UIView setAnimationTransition:flipTrans forView:topView cache:NO];
 		
 		[self.view setFrame:[topView bounds]];
 		[topView addSubview:self.view];
-		
-		[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:YES];
 	}
 	
 	[UIView commitAnimations];
