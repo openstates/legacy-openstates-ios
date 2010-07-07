@@ -46,6 +46,7 @@ enum {
 - (NSURL *)generateURL:(LegislatorObj *)legislator;
 
 - (id)initWithDictionary:(NSDictionary *)aDictionary;
+- (id)initWithName:(NSString *)newName value:(NSString *)newValue isClickable:(BOOL)newClickable type:(NSInteger)newType;
 
 
 @end
