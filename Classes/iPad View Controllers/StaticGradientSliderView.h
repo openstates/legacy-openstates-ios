@@ -10,9 +10,14 @@
 
 
 @interface StaticGradientSliderView : UIView {
-	UISlider *sliderControl;
+	IBOutlet UIImageView *gradientImage;
+	IBOutlet UISlider *sliderControl;
 }
 
+@property (nonatomic, retain) IBOutlet UIImageView *gradientImage;
 @property (nonatomic, retain) IBOutlet UISlider *sliderControl;
 @property (nonatomic) CGFloat sliderValue;
+
+- (void)setSliderValue:(float)newVal animated:(BOOL)isAnimated;
+
 @end

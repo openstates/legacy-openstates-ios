@@ -15,7 +15,7 @@
 @end
 
 @implementation StaticGradientSliderView
-@synthesize sliderControl;
+@synthesize sliderControl, gradientImage;
 
 - (void)prepareUI {
 	UIImage *emptyImage = [[UIImage alloc] init]; // should we autorelease??????
@@ -40,10 +40,11 @@
 }
 
 - (void)dealloc {
+	self.sliderControl = self.gradientImage = nil;
     [super dealloc];
 }
 
-- (float)sliderValue {
+- (float)sliderValue {	
 	return self.sliderControl.value;
 }
 
@@ -51,5 +52,11 @@
 	//self.sliderControl.value = newVal; 
 	[self.sliderControl setValue:newVal animated:YES];
 }
+
+- (void)setSliderValue:(float)newVal animated:(BOOL)isAnimated {
+	//self.sliderControl.value = newVal; 
+	[self.sliderControl setValue:newVal animated:isAnimated];
+}
+
 
 @end

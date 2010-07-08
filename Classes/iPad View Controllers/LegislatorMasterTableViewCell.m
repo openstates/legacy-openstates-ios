@@ -66,6 +66,10 @@
 }
 */
 - (void)dealloc {
+	self.leg_photoView = self.leg_titleLab = self.leg_partyDistLab = self.leg_tenureLab = self.leg_nameLab = nil;
+	self.leg_sliderViewPlaceHolder = self.leg_sliderView = nil;
+	self.legislator = nil;
+	
     [super dealloc];
 }
 
@@ -94,7 +98,8 @@
 		[self.leg_sliderView setFrame:sliderViewFrame];
 		[self.leg_sliderView.sliderControl setThumbImage:[UIImage imageNamed:@"slider_star.png"] forState:UIControlStateNormal];
 
-		self.leg_sliderView.sliderControl.value = self.legislator.partisan_index.floatValue;
+		//self.leg_sliderView.sliderValue = self.legislator.partisan_index.floatValue;
+		[self.leg_sliderView setSliderValue:self.legislator.partisan_index.floatValue animated:NO];
 		[self.contentView addSubview:self.leg_sliderView];
 	}
 	
