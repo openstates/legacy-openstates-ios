@@ -25,7 +25,9 @@
 	UISearchBar		*searchBar;
     NSString	*savedSearchTerm;
     BOOL		searchWasActive;
-	CGFloat		atLaunchScrollTo;
+	
+	IBOutlet UIBarButtonItem *menuButton;
+	IBOutlet UIBarButtonItem *aboutButton;
 	
 #if _searchcontroller_
 	UISearchDisplayController *searchController;
@@ -34,6 +36,9 @@
 }
 
 //@property (nonatomic, retain) NSMutableArray savedLocation;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *menuButton;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *aboutButton;
+
 
 @property (nonatomic,retain) UITableView *theTableView;
 @property (nonatomic,retain) id<TableDataSource> dataSource;
@@ -42,7 +47,6 @@
 @property (nonatomic, retain) UISearchBar *searchBar;
 @property (nonatomic, copy) NSString *savedSearchTerm;
 @property (nonatomic) BOOL searchWasActive;
-@property (nonatomic, assign) CGFloat atLaunchScrollTo;
 
 #if _searchcontroller_
 @property (nonatomic, retain) UISearchDisplayController *searchController; 
@@ -57,4 +61,6 @@
 
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSInteger)scope;
 
+@property (nonatomic,readonly) NSString *functionalViewControllerName;
+@property (nonatomic,readonly) NSString *detailViewControllerName;
 @end

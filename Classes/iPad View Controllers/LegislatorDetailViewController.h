@@ -18,6 +18,7 @@
 {	
 	IBOutlet LegislatorObj *legislator;
     UIPopoverController *popoverController;
+	UISegmentedControl *commonMenuControl;
 
 	IBOutlet UIView *startupSplashView;
 	IBOutlet UIView *headerView;
@@ -50,6 +51,7 @@
 
 @property (nonatomic, retain) IBOutlet LegislatorObj *legislator;
 @property (nonatomic, retain) UIPopoverController *popoverController;
+@property (nonatomic, retain) UISegmentedControl *commonMenuControl;
 
 @property (nonatomic, retain) NSMutableArray *sectionArray;
 

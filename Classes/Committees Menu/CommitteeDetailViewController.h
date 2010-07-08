@@ -10,11 +10,12 @@
 
 @class CommitteeObj;
 
-@interface CommitteeDetailViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate> {
+@interface CommitteeDetailViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UIPopoverControllerDelegate> {
 	CommitteeObj		*committee;
+	UISegmentedControl	*commonMenuControl;
 }
 
 @property (nonatomic, retain) CommitteeObj *committee;
-
+@property (nonatomic, retain) UISegmentedControl *commonMenuControl;
 
 @end

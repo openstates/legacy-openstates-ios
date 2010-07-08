@@ -11,8 +11,6 @@
 
 @interface MenuPopoverViewController (Private)
 
-@property (nonatomic, readonly) NSArray *functionalViewControllers;
-
 - (void) showOrHideItemPopover:(UIViewController *) itemViewController fromRect:(CGRect)clickedRow;
 
 @end
@@ -20,17 +18,6 @@
 @implementation MenuPopoverViewController
 
 @synthesize itemPopoverController, voteInfoViewController, aboutViewController, appDelegate;
-
-- (NSArray *) functionalViewControllers {
-	NSArray * viewControllers = nil;
-	
-	if ([self.appDelegate respondsToSelector:@selector(functionalViewControllers)])
-		viewControllers = [self.appDelegate performSelector:@selector(functionalViewControllers)];
-	else 
-		viewControllers = [NSArray array];
-	
-	return viewControllers;
-}
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -131,7 +118,7 @@
 	if (section == 1)
 		return 2;
 	else
-		return [self.functionalViewControllers count];	
+		return [self.appDelegate.functionalViewControllers count];	
 }
 
 - (id)objectForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -146,7 +133,7 @@
 			object = self.voteInfoViewController;
 	}
 	else
-		object = [self.functionalViewControllers objectAtIndex:row];
+		object = [self.appDelegate.functionalViewControllers objectAtIndex:row];
 	
 	return object;
 }
@@ -226,14 +213,18 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	//[appDelegate showOrHideMenuPopover:nil];
 
+	id viewController = [self objectForRowAtIndexPath:indexPath];
 	if (section == 1) {
 		CGRect clickedRow = [tableView rectForRowAtIndexPath:indexPath];
 
-		[self showOrHideItemPopover:[self objectForRowAtIndexPath:indexPath] fromRect:clickedRow];
+		[self showOrHideItemPopover:viewController fromRect:clickedRow];
 	}
-	else {
-
+	else {		
 		[appDelegate showOrHideMenuPopover:nil];
+		
+		NSInteger vcIndex = [appDelegate indexForFunctionalViewController:viewController];
+		[appDelegate changeActiveFeaturedControllerTo:vcIndex];
+
 	}
     // Navigation logic may go here. Create and push another view controller.
 	/*

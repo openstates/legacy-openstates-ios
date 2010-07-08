@@ -13,10 +13,12 @@
 #import "MapsDetailViewController.h"
 #import "LegislatorDetailViewController.h"
 #import "MiniBrowserController.h"
+#import "LegislatorMasterTableViewCell.h"
+#import "TexLegeAppDelegate.h"
 
 @implementation CommitteeDetailViewController
 
-@synthesize committee;
+@synthesize committee, commonMenuControl;
 
 enum Sections {
     //kHeaderSection = 0,
@@ -58,6 +60,26 @@ enum InfoSectionRows {
 
 }
 
+- (void)showPopoverMenus:(BOOL)show {
+	if (self.splitViewController && show) {
+		TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+		if (self.commonMenuControl == nil) {
+			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CommonMenuSegmentControl" owner:appDelegate options:nil];
+			for (id suspect in objects) {
+				if ([suspect isKindOfClass:[UISegmentedControl class]]) {
+					self.commonMenuControl = (UISegmentedControl *)suspect;
+					break;
+				}
+			}
+		}
+
+		self.navigationItem.titleView = self.commonMenuControl;
+	}
+	else {
+		self.navigationItem.titleView = nil;
+	}
+}
+
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -74,6 +96,8 @@ enum InfoSectionRows {
 - (void)viewWillAppear:(BOOL)animated 
 {
     [super viewWillAppear:animated];
+	
+	[self showPopoverMenus:([UtilityMethods isLandscapeOrientation] == NO)];
 }
 
 /*
@@ -91,6 +115,10 @@ enum InfoSectionRows {
     [super viewDidDisappear:animated];
 }
 */
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
+}
 
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -143,7 +171,7 @@ enum InfoSectionRows {
 	NSInteger InfoSectionEnd = ([UtilityMethods canMakePhoneCalls]) ? kInfoSectionClerk : kInfoSectionPhone;
 	
 	if (section > kInfoSection)
-		CellIdentifier = @"LegislatorDirectory";
+		CellIdentifier = @"CommitteeLegislators";
 	else if (row > InfoSectionEnd)
 		CellIdentifier = @"CommitteeInfo";
 	else // the non-clickable / no disclosure items
@@ -154,7 +182,18 @@ enum InfoSectionRows {
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:CellIdentifier] autorelease];
+		if (CellIdentifier == @"CommitteeLegislators") {
+			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"LegislatorMasterTableViewCell" owner:self options:nil];
+			for (id suspect in objects) {
+				if ([suspect isKindOfClass:[LegislatorMasterTableViewCell class]]) {
+					cell = (UITableViewCell *)suspect;
+					break;
+				}
+			}
+		}
+		else {
+			cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:CellIdentifier] autorelease];			
+		}
 	}    
 	
 	LegislatorObj *legislator = nil;
@@ -220,6 +259,8 @@ enum InfoSectionRows {
 	}
 	
 	if (legislator) {
+		[(LegislatorMasterTableViewCell *)cell setupWithLegislator:legislator];
+		/*
 		// configure cell contents for a legislator
 		cell.textLabel.text = [NSString stringWithFormat: @"%@ - (%@)", 
 							   [legislator legProperName], [legislator partyShortName]];
@@ -233,6 +274,7 @@ enum InfoSectionRows {
 		// all the rows should show the disclosure indicator
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		cell.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		 */
 	}	
 	
 	
@@ -273,6 +315,14 @@ enum InfoSectionRows {
 			break;
 	}
 	return sectionName;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (indexPath.section > kInfoSection)
+		return 73.0f;
+
+	return self.tableView.rowHeight;
+
 }
 
 - (void) pushMapViewWithURL:(NSURL *)url {
@@ -362,6 +412,7 @@ enum InfoSectionRows {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
 	self.committee = nil;
+	self.commonMenuControl = nil;
 }
 
 

@@ -10,6 +10,7 @@
 #import "CommitteeObj.h"
 #import "UtilityMethods.h"
 #import "MiniBrowserController.h"
+#import "TexLegeAppDelegate.h"
 
 @interface MapsDetailViewController(Private)
 
@@ -20,7 +21,7 @@
 
 @implementation MapsDetailViewController
 
-@synthesize mapURL, webView;
+@synthesize mapURL, webView, commonMenuControl;;
 
 
 - (id)init {
@@ -33,6 +34,7 @@
 - (void)dealloc {
 	self.webView = nil;
 	self.mapURL = nil;
+	self.commonMenuControl = nil;
 	[super dealloc];
 }
 
@@ -72,6 +74,27 @@
 	
 }
 
+- (void)showPopoverMenus:(BOOL)show {
+	if (self.splitViewController && show) {
+		TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+		if (self.commonMenuControl == nil) {
+			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CommonMenuSegmentControl" owner:appDelegate options:nil];
+			for (id suspect in objects) {
+				if ([suspect isKindOfClass:[UISegmentedControl class]]) {
+					self.commonMenuControl = (UISegmentedControl *)suspect;
+					break;
+				}
+			}
+		}
+		
+		self.navigationItem.titleView = self.commonMenuControl;
+	}
+	else {
+		self.navigationItem.titleView = nil;
+	}
+}
+
+
 #pragma mark -
 #pragma mark Load Detail Views
 
@@ -82,6 +105,10 @@
 
 	//self.navigationController.toolbarHidden = YES;	
 
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[self showPopoverMenus:([UtilityMethods isLandscapeOrientation] == NO)];
 }
 
 - (void)setMapString:(NSString *)newString {
@@ -98,6 +125,11 @@
 
 #pragma mark -
 #pragma mark Orientation
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
+}
+
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation { // Override to allow rotation. Default returns YES only for UIDeviceOrientationPortrait
 	return YES;

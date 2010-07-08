@@ -35,18 +35,61 @@
 
 
 @synthesize theTableView, dataSource, detailViewController;
+@synthesize menuButton, aboutButton;
 
-@synthesize searchBar, savedSearchTerm, searchWasActive, atLaunchScrollTo;
+@synthesize searchBar, savedSearchTerm, searchWasActive;
 #if _searchcontroller_
 @synthesize searchController, savedScopeButtonIndex;
 #endif
+
+	
+- (NSString *)functionalViewControllerName 
+{ 
+	NSString *retString = @"";
+	
+	if (self.dataSource.name == @"Directory") {
+		retString = @"MasterTableViewController";
+	}
+	else if (self.dataSource.name == @"Committees") {
+		retString = @"CommitteeTableViewController";
+	}
+	else if (self.dataSource.name == @"Maps") {
+		retString = @"MapsTableViewController";
+	}
+	else // (self.dataSource.name == @"Resources")
+		retString = @"LinksTableViewController";
+	
+	return retString;
+}
+	
+- (NSString *)detailViewControllerName 
+{ 
+	NSString *retString = @"";
+	
+	if (self.dataSource.name == @"Directory") {
+		retString = @"LegislatorDetailViewController";
+	}
+	else if (self.dataSource.name == @"Committees") {
+		retString = @"CommitteeDetailViewController";
+	}
+	else if (self.dataSource.name == @"Maps") {
+		retString = @"MapsDetailViewController";
+	}
+	else // (self.dataSource.name == @"Resources")
+		retString = @"MiniBrowserView";
+
+	return retString;
+}
+
 
 
 - (void)setStoredSelectionWithRow:(NSInteger)row section:(NSInteger)section {
 	// we have moved to level 1, remove it's stored row/section selection
 	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
 	if (appDelegate.savedLocation != nil) {
-		[appDelegate.savedLocation replaceObjectAtIndex:0 withObject:[NSNumber numberWithInteger:appDelegate.tabBarController.selectedIndex]]; //tab
+		NSInteger functionIndex = [appDelegate indexForFunctionalViewController:self];
+		//[appDelegate.savedLocation replaceObjectAtIndex:0 withObject:[NSNumber numberWithInteger:appDelegate.tabBarController.selectedIndex]]; //tab
+		[appDelegate.savedLocation replaceObjectAtIndex:0 withObject:[NSNumber numberWithInteger:functionIndex]]; //tab
 		[appDelegate.savedLocation replaceObjectAtIndex:1 withObject:[NSNumber numberWithInteger:row]];
 		[appDelegate.savedLocation replaceObjectAtIndex:2 withObject:[NSNumber numberWithInteger:section]];
 	}
@@ -60,13 +103,16 @@
 
 - (void)validateStoredSelection {
 	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSInteger tabSelection = appDelegate.tabBarController.selectedIndex;
+	NSInteger functionIndex = [appDelegate indexForFunctionalViewController:self];
+	//	NSInteger tabSelection = appDelegate.tabBarController.selectedIndex;
+
 	NSInteger tabSavedSelection = [[appDelegate.savedLocation objectAtIndex:0] integerValue];
 	
-	if (tabSelection != tabSavedSelection) { // we're out of sync with the selection, clear the unknown
+	if (functionIndex != tabSavedSelection) { // we're out of sync with the selection, clear the unknown
 		[self resetStoredSelection];
 	}
 }	
+
 
 // this is the custom initialization method for the GeneralTableViewController
 // it expects an object that conforms to both the UITableViewDataSource protocol
@@ -92,6 +138,7 @@
 	self.theTableView = nil;
 	self.dataSource = nil; 
 	self.searchBar = nil;
+	self.aboutButton = self.menuButton = nil;
 			
 #if _searchcontroller_
 	self.searchController = nil;
@@ -275,6 +322,24 @@
 	
 	[self tableView:tableView didSelectRowAtIndexPath:newIndexPath withAnimation:YES];
 	
+	// if we have a stack of view controllers and someone selected a new cell from our master list, 
+	//	lets go all the way back to accomodate their selection, and scroll to the top.
+	if (self.splitViewController) {
+		UITableView *detailTable = nil;
+		UINavigationController *detailNav = nil;
+		if ([self.detailViewController respondsToSelector:@selector(tableView)])
+			detailTable = [self.detailViewController performSelector:@selector(tableView)];
+		if ([self.detailViewController respondsToSelector:@selector(navigationController)])
+			detailNav = [self.detailViewController performSelector:@selector(navigationController)];
+		
+		if (detailTable && detailNav) {
+			if ([detailNav.viewControllers count] > 1) { 
+				CGRect guessTop = CGRectMake(0, 0, 10.0f, 10.0f);
+				[detailNav popToRootViewControllerAnimated:YES];
+				[detailTable scrollRectToVisible:guessTop animated:YES];
+			}
+		}
+	}
 }
 
 
@@ -286,7 +351,26 @@
 	}
 }
 
-
+- (void)showPopoverMenus:(BOOL)show {
+	if (self.splitViewController && show) {
+		TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+		if (self.aboutButton == nil) {
+			self.aboutButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_20.png"] 
+																style:UIBarButtonItemStylePlain target:appDelegate 
+															   action:@selector(showOrHideAboutMenuPopover:)];
+		}
+		if (self.menuButton == nil) {
+			self.menuButton = [[UIBarButtonItem alloc] initWithTitle:@"Menu" style:UIBarButtonItemStylePlain target:appDelegate 
+															  action:@selector(showOrHideMenuPopover:)];
+		}
+		[self.navigationItem setRightBarButtonItem:self.aboutButton animated:YES];
+		[self.navigationItem setLeftBarButtonItem:self.menuButton animated:YES];
+	}
+	else {
+		[self.navigationItem setRightBarButtonItem:nil animated:YES];
+		[self.navigationItem setLeftBarButtonItem:nil animated:YES];
+	}
+}
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -295,6 +379,8 @@
 
 	if ([dataSource usesToolbar])
 		self.navigationController.toolbarHidden = NO;
+	
+	[self showPopoverMenus:[UtilityMethods isLandscapeOrientation]];
 	
 	if ([dataSource usesSearchbar]) {
 		
@@ -334,14 +420,6 @@
 #endif
 		
 		self.navigationController.navigationBar.clipsToBounds = TRUE;
-
-		// remembers scroll position across page changes
-		if(atLaunchScrollTo > 0.0) {
-			CGRect rct = [self.theTableView bounds];
-			rct.origin.y = atLaunchScrollTo;
-			[theTableView setBounds:rct];
-			atLaunchScrollTo = 0.0;
-		}
 
 	}
 	
@@ -578,9 +656,6 @@
 
 
 #endif
-
-
-
 
 #pragma mark -
 #pragma mark Orientation

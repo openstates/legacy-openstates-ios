@@ -40,7 +40,7 @@
 @synthesize legislator, sectionArray;
 @synthesize startupSplashView, headerView;
 
-@synthesize popoverController;
+@synthesize popoverController, commonMenuControl;
 @synthesize scatterPlotView, dataForPlot; //, dataForChart;
 
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab;
@@ -97,12 +97,12 @@
 	self.leg_districtLab.text = [NSString stringWithFormat:@"District %@", self.legislator.district];
 	self.leg_tenureLab.text = [self.legislator tenureString];
 
-	if ([UtilityMethods isIPadDevice] && self.indivSlider == nil) {
-		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StaticGradientSliderView" owner:self options:NULL];
-		for (id suspect in objects) {
-			if ([suspect isKindOfClass:[StaticGradientSliderView class]]) {
-				self.indivSlider = suspect;
-			}
+	if ([UtilityMethods isIPadDevice]) {
+		if (self.indivSlider == nil) {
+			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StaticGradientSliderView" owner:self options:NULL];
+			for (id suspect in objects)
+				if ([suspect isKindOfClass:[StaticGradientSliderView class]])
+					self.indivSlider = suspect;
 		}
 		CGRect sliderViewFrame = indivPHolder.bounds;
 		[self.indivSlider setFrame:sliderViewFrame];
@@ -135,13 +135,55 @@
 		[self.view setNeedsDisplay];
 	}
 }
+#pragma mark -
+#pragma mark Managing the popover
+
+- (void)showMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
+    // Add the popover button to the left navigation item.
+    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
+}
+
+- (void)invalidateMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
+    // Remove the popover button.
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+}
+
+- (void)showMainMenuPopoverButtonItems:(NSArray *)barButtonItems {
+    // Add the popover button to the left navigation item.
+    [self setToolbarItems:barButtonItems animated:YES];
+}
+
+- (void)invalidateMainMenuPopoverButtonItems:(NSArray *)barButtonItems {
+    // Remove the popover button.
+    [self setToolbarItems:nil animated:YES];
+}
+
+
+- (void)showPopoverMenus:(BOOL)show {
+	if (self.splitViewController && show) {
+		TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+		if (self.commonMenuControl == nil) {
+			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CommonMenuSegmentControl" owner:appDelegate options:nil];
+			for (id suspect in objects) {
+				if ([suspect isKindOfClass:[UISegmentedControl class]]) {
+					self.commonMenuControl = (UISegmentedControl *)suspect;
+					break;
+				}
+			}
+		}
+		
+		self.navigationItem.titleView = self.commonMenuControl;
+	}
+	else {
+		self.navigationItem.titleView = nil;
+	}
+}
 
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-	if (self.legislator)
-		[self setupHeader];
+	BOOL showSplash = ([UtilityMethods isLandscapeOrientation] == NO && [UtilityMethods isIPadDevice]);
 	
 	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
 	if (self.legislator == nil && ![UtilityMethods isLandscapeOrientation])  {
@@ -165,7 +207,7 @@
 				// I'm not sure if this is how you do the "selector" business, so I've commented it out
 				//if ([self.tableView.delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)
 				//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
-				
+				showSplash = NO;
 				[masterTableView selectRowAtIndexPath:selectionPath animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 				[masterTableView.delegate tableView:masterTableView didSelectRowAtIndexPath:selectionPath];
 				
@@ -173,21 +215,29 @@
 				//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
 				
 			}
+			
 		}
-		else {
-			// We could alternatively use this opportunity to open a proper informational introduction
-			// for instance, drop in a new view taking the full screen that gives a full menu and helpful info
+	}
+	
+	if (self.legislator) {
+		showSplash = NO;
+		[self setupHeader];
+	}
 
-			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StartupSplashView-Portrait" owner:self options:NULL];
-			self.startupSplashView = [objects objectAtIndex:0];
-			[self.view addSubview:self.startupSplashView];
-			//[self.view setNeedsDisplay];
-		}
-				
+	if (showSplash) {
+		// We could alternatively use this opportunity to open a proper informational introduction
+		// for instance, drop in a new view taking the full screen that gives a full menu and helpful info
+		
+		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StartupSplashView-Portrait" owner:self options:NULL];
+		self.startupSplashView = [objects objectAtIndex:0];
+		[self.view addSubview:self.startupSplashView];
+		//[self.view setNeedsDisplay];
 	}
 	else {
 		[self.startupSplashView removeFromSuperview];
 	}
+	
+	[self showPopoverMenus:([UtilityMethods isLandscapeOrientation] == NO)];
 
 }
 
@@ -226,7 +276,7 @@
 - (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController 
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
 	
-	self.navigationItem.rightBarButtonItem = nil;
+	[self.navigationItem setRightBarButtonItem:nil animated:YES];
 	//[self.navigationController setNavigationBarHidden:YES animated:NO];
 
 	self.popoverController = nil;
@@ -240,6 +290,11 @@
 		// do I need to set pc to nil?  I need to confirm, but I think it breaks things.
     }
 }
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Override to allow orientations other than the default portrait orientation.
     return YES;
@@ -277,24 +332,22 @@
 
 - (void)viewDidUnload {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
 	self.popoverController = nil;
 	self.sectionArray = nil;
 	//self.toolbar = nil;
-	
+	self.commonMenuControl = nil;
 	self.indivSlider = self.partySlider = self.allSlider = nil;
 	self.indivPHolder = self.partyPHolder = self.allPHolder = nil;
 	self.legislator = nil;
-	self.leg_photoView = nil;
-	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = nil;
+	self.leg_photoView = self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = nil;
 	self.headerView = self.startupSplashView = nil;
-
+	self.scatterPlotView = nil;
+	self.dataForPlot = nil;
+	//self.dataForChart = nil;
 }
 
 
 - (void)dealloc {
-	self.dataForPlot = nil;
-	//self.dataForChart = nil;
     [super dealloc];
 }
 

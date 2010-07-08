@@ -46,6 +46,17 @@
 }
 */
 
+- (NSString *)functionalViewControllerName 
+{ 
+	return @"MasterTableViewController";
+}
+
+- (NSString *)detailViewControllerName 
+{ 
+	return @"LegislatorDetailViewController";
+}
+
+
 - (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context {
 	self.dataSource = [[sourceClass alloc] initWithManagedObjectContext:context];
 	self.title = [dataSource name];	
@@ -73,6 +84,7 @@
 	self.dataSource.searchDisplayController = self.m_searchDisplayController;
 	self.m_searchDisplayController.searchResultsDataSource = self.dataSource;
 }
+
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -163,6 +175,9 @@
 		[self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
 		self.detailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
 	}
+	
+	if ([UtilityMethods isIPadDevice])
+		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
 }
 
 
@@ -200,6 +215,16 @@
 	
 	//[aTableView deselectRowAtIndexPath:indexPath animated:YES];
 	self.detailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
+	
+	if (self.splitViewController) {
+		// if we have a stack of view controllers and someone selected a new cell from our master list, 
+		//	lets go all the way back to accomodate their selection, and scroll to the top.
+		if ([self.detailViewController.navigationController.viewControllers count] > 1) { 
+			[self.detailViewController.navigationController popToRootViewControllerAnimated:YES];
+			[self.detailViewController.tableView scrollRectToVisible:self.detailViewController.headerView.bounds animated:YES];
+		}
+	}
+	
 }
 //END:code.split.delegate
 
@@ -235,6 +260,7 @@
 	self.searchDisplayController.searchResultsDelegate = nil;    // default is nil. delegate can provide
 	self.searchDisplayController.delegate = nil;
 	self.m_searchDisplayController = nil;
+	self.searchBar = nil;
 }
 
 
