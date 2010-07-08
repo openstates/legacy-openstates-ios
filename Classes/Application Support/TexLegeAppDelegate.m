@@ -18,6 +18,8 @@
 #import "Reachability.h"
 #import "Appirater.h"
 #import "CPTestApp_iPadViewController.h"
+#import "MiniBrowserController.h"
+
 #import "MenuPopoverViewController.h"
 
 
@@ -34,6 +36,8 @@
 - (void)setupDialogBoxes;
 - (void)showHackingAlert;
 - (void)iPhoneUserInterfaceInit;
+
+- (void)setupFeatures;
 
 - (NSString *)hostName;
 - (NSInteger) addFunctionalViewController:(id)viewController;
@@ -87,25 +91,30 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)dealloc {
-	self.savedLocation = nil;
+
+	self.currentDetailViewController = self.currentMasterViewController = nil;
+	self.masterNavigationController = self.detailNavigationController = nil;
 	self.functionalViewControllers = nil;
-	self.menuPopoverVC = nil;
-	self.menuPopoverPC = nil;
-	self.aboutView = nil;
-	self.voteInfoView = nil;
-	self.tabBarController = nil;
-	self.splitViewController = nil;
+	self.savedLocation = nil;
+
+	self.hackingAlert = self.activeDialogController = nil;
+	self.menuPopoverVC = self.menuPopoverPC = nil;
+	self.aboutView = self.voteInfoView = nil;
+	self.tabBarController = self.splitViewController = nil;
 	self.legMasterTableViewController = nil;
 	self.appirater = nil;
-	[mainWindow release];    
+	self.mainWindow = nil;    
 	
 	self.directoryTableTabbedVC = self.committeeTableTabbedVC = self.mapsTableTabbedVC = self.linksTableTabbedVC = self.corePlotTabbedVC = nil;
 	//self.billsTableTabbedVC = nil;
 
 	self.managedObjectContext = nil;
-    [managedObjectModel release];
-    [persistentStoreCoordinator release];
 		
+	if (managedObjectModel)
+		[managedObjectModel release], managedObjectModel = nil;
+	if (persistentStoreCoordinator)
+		[persistentStoreCoordinator release], persistentStoreCoordinator = nil;
+	
     [super dealloc];
 }
 
@@ -137,6 +146,13 @@ NSInteger kNoSelection = -1;
 	}
 }
 
+- (id) functionalViewControllerAtIndex:(NSInteger)index {
+	if (!self.functionalViewControllers)
+		return nil;
+	
+	return [self.functionalViewControllers objectAtIndex:index];
+}
+
 - (NSInteger) indexForFunctionalViewController:(id)viewController {
 	NSInteger index = 0;
 	if (self.functionalViewControllers && viewController) {
@@ -163,34 +179,43 @@ NSInteger kNoSelection = -1;
 	return index;
 }
 
-- (void) changeActiveFeaturedControllerTo:(NSString *)controllerString {
-	if (controllerString) {
-		// set the first component of our state saving business
-		
-		// GREG .... I mean it, set it ... this is a TODO!!!!!!!!!!!!!!!!!!!!!!!!
-		
-		if (self.currentDetailViewController)
-			self.currentDetailViewController = nil;
 
-		if ([controllerString isEqualToString:@"MasterTableViewController"]) {
-			self.currentMasterViewController = self.legMasterTableViewController;
+- (void) changeActiveFeaturedControllerTo:(NSInteger)controllerIndex {
+	// set the first component of our state saving business
+	
+	// GREG .... I mean it, set it ... this is a TODO!!!!!!!!!!!!!!!!!!!!!!!!
+	
+	if (self.currentDetailViewController)
+		self.currentDetailViewController = nil;
+	
+	self.currentMasterViewController = [self functionalViewControllerAtIndex:controllerIndex];
+	
+	switch (controllerIndex) {
+		case 0:
 			self.currentDetailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
-			[self.currentMasterViewController setValue:self.currentDetailViewController forKey:@"detailViewController"];
-			self.splitViewController.delegate = self.currentDetailViewController;
-		}
-		else if ([controllerString isEqualToString:@"CommitteeTableViewController"]) {
-			self.currentMasterViewController = self.committeeTableTabbedVC;
+			break;
+		case 1:
 			self.currentDetailViewController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
-			[self.currentMasterViewController setValue:self.currentDetailViewController forKey:@"detailViewController"];
-			self.splitViewController.delegate = self.currentDetailViewController;
-		}
-		else if ([controllerString isEqualToString:@"MapsTableViewController"]) {
-			self.currentMasterViewController = self.mapsTableTabbedVC;
+			break;
+		case 2:
+			self.currentDetailViewController = [[CPTestApp_iPadViewController alloc] initWithNibName:@"CPTestApp_iPadViewController" bundle:nil];
+			break;
+		case 3:
 			self.currentDetailViewController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
-			[self.currentMasterViewController setValue:self.currentDetailViewController forKey:@"detailViewController"];
-			self.splitViewController.delegate = self.currentDetailViewController;
-		}
-		
+			break;
+		case 4:
+			self.currentDetailViewController = [[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil];
+			break;			
+		default:
+			self.currentDetailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
+			NSLog(@"Unknown controller index in changeActiveFeaturedControllerTo: %d", controllerIndex);
+			break;
+	}
+	
+	[self.currentMasterViewController setValue:self.currentDetailViewController forKey:@"detailViewController"];
+	
+	if ([UtilityMethods isIPadDevice] && self.splitViewController) {
+		self.splitViewController.delegate = self.currentDetailViewController;	
 		
 		// Set up the view controller for the master.
 		NSArray *viewControllers = [[NSArray alloc] initWithObjects:self.currentMasterViewController, nil];
@@ -202,83 +227,70 @@ NSInteger kNoSelection = -1;
 			viewControllers = [[NSArray alloc] initWithObjects:self.currentDetailViewController, nil];
 			self.detailNavigationController.viewControllers = viewControllers;
 			[viewControllers release], viewControllers = nil;
+			
+		}
+	}		
+	else // it's an iPhone with a tabBar
+		self.tabBarController.selectedIndex = controllerIndex;
 
-		}
-		
-		// Dismiss the popover if it's present.
-		if (self.menuPopoverPC != nil) {
-			[self.menuPopoverPC dismissPopoverAnimated:YES];
-		}
-		
-		//	// Configure the new view controller's popover button (after the view has been displayed and its toolbar/navigation bar has been created).
-		//	if (rootPopoverButtonItem != nil) {
-		//		[detailViewController showRootPopoverButtonItem:self.rootPopoverButtonItem];
-		//	}
-		
+	// Dismiss the popover if it's present.
+	if (self.menuPopoverPC != nil) {
+		[self.menuPopoverPC dismissPopoverAnimated:YES];
 	}
+	
+	//	// Configure the new view controller's popover button (after the view has been displayed and its toolbar/navigation bar has been created).
+	//	if (rootPopoverButtonItem != nil) {
+	//		[detailViewController showRootPopoverButtonItem:self.rootPopoverButtonItem];
+	//	}
+}
+
+- (void) setupFeatures {
+	BOOL isIpad = [UtilityMethods isIPadDevice];
+	
+	if (isIpad) {
+		if (splitViewController == nil) 
+			[[NSBundle mainBundle] loadNibNamed:@"SplitViewController" owner:self options:NULL];
+		if (self.legMasterTableViewController == nil)
+			[[NSBundle mainBundle] loadNibNamed:@"MasterTableViewController" owner:self options:NULL];
+	}
+	else
+		if (self.tabBarController == nil)
+			[[NSBundle mainBundle] loadNibNamed:@"iPhoneTabBarController" owner:self options:nil];
+	
+	
+	if (isIpad) [self.functionalViewControllers addObject:self.legMasterTableViewController];	// 0
+	else		[self.functionalViewControllers addObject:self.directoryTableTabbedVC];			// 0
+	
+	[self.functionalViewControllers addObject:self.committeeTableTabbedVC];				// 1
+	[self.functionalViewControllers addObject:self.corePlotTabbedVC];					// 2
+	[self.functionalViewControllers addObject:self.mapsTableTabbedVC];					// 3
+	[self.functionalViewControllers addObject:self.linksTableTabbedVC];					// 4
+	
+	if (isIpad)	[self.legMasterTableViewController configureWithDataSourceClass:
+				 [DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext]; 
+	else		[self.directoryTableTabbedVC configureWithDataSourceClass:
+				 [DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
+	[self.committeeTableTabbedVC configureWithDataSourceClass:[CommitteesDataSource class] andManagedObjectContext:self.managedObjectContext];
+	[self.mapsTableTabbedVC configureWithDataSourceClass:[MapImagesDataSource class] andManagedObjectContext:self.managedObjectContext];
+	[self.linksTableTabbedVC configureWithDataSourceClass:[LinksMenuDataSource class] andManagedObjectContext:self.managedObjectContext];
+	
+	if (self.splitViewController)
+		[self.mainWindow addSubview:self.splitViewController.view];
+	
+	// presumably we've got a tab bar controller
+	else { 
+		[self.mainWindow addSubview:self.tabBarController.view];
+		[self setTabOrderIfSaved];
+	}
+	
+	NSInteger selection = [[savedLocation objectAtIndex:0] integerValue];	// read the saved selection at level 1
+	if (selection > 0 && selection < kNumMaxTabs)				// do we have a valid selection?
+		[self changeActiveFeaturedControllerTo:selection];				
+	else
+		[self changeActiveFeaturedControllerTo:0];				// just default to the first one, if we get troublesome data
 	
 }
 
-// ********** setup the various view controllers for the different data representations
-- (void) constructDataSourcesAndInitMainViewControllers
-{
-	if ([UtilityMethods isIPadDevice]) { // we're on an iPad, use the splitViewController
-		if (splitViewController == nil) 
-			[[NSBundle mainBundle] loadNibNamed:@"SplitViewController" owner:self options:NULL];
-		
-		if (self.legMasterTableViewController == nil)
-			[[NSBundle mainBundle] loadNibNamed:@"MasterTableViewController" owner:self options:NULL];
-			
-		[self changeActiveFeaturedControllerTo:@"MasterTableViewController"];
-		//[self changeActiveFeaturedControllerTo:@"CommitteeTableViewController"];
-		//[self changeActiveFeaturedControllerTo:@"MapsTableViewController"];
-		
-		[self addFunctionalViewController:self.legMasterTableViewController];
-		//[self addFunctionalViewController:self.directoryTableTabbedVC];
-		[self addFunctionalViewController:self.committeeTableTabbedVC];
-		[self addFunctionalViewController:self.corePlotTabbedVC];
-		[self addFunctionalViewController:self.mapsTableTabbedVC];
-		[self addFunctionalViewController:self.linksTableTabbedVC];
-		
-		[self.legMasterTableViewController configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext]; 
-		//[self.directoryTableTabbedVC configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
-		[self.committeeTableTabbedVC configureWithDataSourceClass:[CommitteesDataSource class] andManagedObjectContext:self.managedObjectContext];
-		[self.mapsTableTabbedVC configureWithDataSourceClass:[MapImagesDataSource class] andManagedObjectContext:self.managedObjectContext];
-		[self.linksTableTabbedVC configureWithDataSourceClass:[LinksMenuDataSource class] andManagedObjectContext:self.managedObjectContext];
-
-		[self.mainWindow addSubview:splitViewController.view];
-		
-		NSInteger selection = [[savedLocation objectAtIndex:0] integerValue];	// read the saved selection at level 1
-		if (selection != kNoSelection && selection > 0) { // it's not the first one, so change things up...
-			NSString * vcString = [[self.functionalViewControllers objectAtIndex:selection] name];
-			if (vcString) {
-				
-				[self changeActiveFeaturedControllerTo:vcString];				
-			}
-		}				 
-		
-	}
-	else {  // We're on an iPhone/iTouch using the tabBarController
-		if (self.tabBarController == nil)
-			//tabBarController = [[UITabBarController alloc] initWithNibName:@"iPhoneTabBarController" bundle:nil];
-			[[NSBundle mainBundle] loadNibNamed:@"iPhoneTabBarController" owner:self options:nil];
-
-		[self.directoryTableTabbedVC configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
-		[self.committeeTableTabbedVC configureWithDataSourceClass:[CommitteesDataSource class] andManagedObjectContext:self.managedObjectContext];
-		[self.mapsTableTabbedVC configureWithDataSourceClass:[MapImagesDataSource class] andManagedObjectContext:self.managedObjectContext];
-		[self.linksTableTabbedVC configureWithDataSourceClass:[LinksMenuDataSource class] andManagedObjectContext:self.managedObjectContext];
-		
-		[self.mainWindow addSubview:tabBarController.view];
-		
-		[self setTabOrderIfSaved];
-
-		NSInteger selection = [[savedLocation objectAtIndex:0] integerValue];	// read the saved selection at level 1
-		if ((selection != kNoSelection) && (selection != tabBarController.selectedIndex)) {
-			tabBarController.selectedIndex = selection;
-		}
-	}
-
-}
 
 // Should we use this newer one instead?
 // - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -329,7 +341,7 @@ NSInteger kNoSelection = -1;
 						  nil] retain];
 	}
 
-	[self constructDataSourcesAndInitMainViewControllers];
+	[self setupFeatures];
 			
 	// make the window visible
 	[self.mainWindow makeKeyAndVisible];
@@ -495,6 +507,50 @@ NSInteger kNoSelection = -1;
 		[activeDialogController dismissModalViewControllerAnimated:YES];
 }
 
+
+-(IBAction)touchCommonMenuControl:(id)sender {
+	NSInteger selectedSegment = -1;
+	UISegmentedControl *tempCtl = nil;
+	if ([sender isKindOfClass:[UISegmentedControl class]]) {
+		tempCtl = (UISegmentedControl *)sender;
+		selectedSegment = tempCtl.selectedSegmentIndex;
+	}
+	
+	UIViewController *viewController = nil;
+	
+	switch (selectedSegment) {
+		case 0:
+			viewController = self.menuPopoverVC;
+			break;
+		case 1:
+			viewController = self.aboutView;
+			break;
+		default:
+			break;
+	}
+	
+	if (self.menuPopoverPC) {
+        [self.menuPopoverPC dismissPopoverAnimated:YES];
+        self.menuPopoverPC = nil;
+    } else if (viewController) {
+		self.menuPopoverPC = [[UIPopoverController alloc] initWithContentViewController:viewController];
+		self.menuPopoverPC.popoverContentSize = viewController.view.frame.size;
+		self.menuPopoverPC.delegate = self;
+		if (tempCtl) { // it's a segmented controller
+			CGRect ctlRect = tempCtl.frame;
+			CGFloat ctlHalfWidth = tempCtl.frame.size.width / [tempCtl numberOfSegments];	// two for right now
+			ctlRect.size.width = ctlHalfWidth;
+			ctlRect.origin.x += (selectedSegment * ctlHalfWidth); // to center it over the selected segment
+			UIView *detailView = [self.detailNavigationController valueForKey:@"view"];
+			[self.menuPopoverPC presentPopoverFromRect:ctlRect inView:detailView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+		}
+		else
+			[self.menuPopoverPC presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    }
+	
+}
+
+
 //END:code.gestures.color
 //START:code.popover.menu
 -(IBAction)showOrHideAboutMenuPopover:(id)sender {
@@ -505,8 +561,16 @@ NSInteger kNoSelection = -1;
 		self.menuPopoverPC = [[UIPopoverController alloc] initWithContentViewController:self.aboutView];
 		self.menuPopoverPC.popoverContentSize = self.aboutView.view.frame.size;
 		self.menuPopoverPC.delegate = self;
-		[self.menuPopoverPC presentPopoverFromBarButtonItem:sender 
-							  permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+		if ([sender isKindOfClass:[UISegmentedControl class]]) {
+			UISegmentedControl *tempCtl = (UISegmentedControl *)sender;
+			CGRect ctlRect = tempCtl.frame;
+			ctlRect.size.width = [tempCtl widthForSegmentAtIndex:[tempCtl selectedSegmentIndex]];
+			ctlRect.origin.x = ctlRect.origin.x + (ctlRect.size.width / 2);
+			UIView *detailView = [self.currentDetailViewController valueForKey:@"view"];
+			[self.menuPopoverPC presentPopoverFromRect:ctlRect inView:detailView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+		}
+		else
+			[self.menuPopoverPC presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
 }
 //END:code.popover.menu
@@ -521,7 +585,14 @@ NSInteger kNoSelection = -1;
 		self.menuPopoverPC = [[UIPopoverController alloc] initWithContentViewController:self.menuPopoverVC];
 		self.menuPopoverPC.popoverContentSize = self.menuPopoverVC.view.frame.size;
 		self.menuPopoverPC.delegate = self;
-		[self.menuPopoverPC presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+		if ([sender isKindOfClass:[UISegmentedControl class]]) {
+			UISegmentedControl *tempCtl = (UISegmentedControl *)sender;
+			CGRect ctlRect = tempCtl.frame;
+			ctlRect.size.width = [tempCtl widthForSegmentAtIndex:[tempCtl selectedSegmentIndex]];
+			[self.menuPopoverPC presentPopoverFromRect:ctlRect inView:tempCtl permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+		}
+		else
+			[self.menuPopoverPC presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
 }
 //END:code.popover.menu
@@ -530,6 +601,9 @@ NSInteger kNoSelection = -1;
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
 	// the user (not us) has dismissed the popover, let's cleanup.
 	self.menuPopoverPC = nil;
+	//if (tempCtl)
+	//	[tempCtl setSelectedSegmentIndex:-1];
+
 }
 
 /*

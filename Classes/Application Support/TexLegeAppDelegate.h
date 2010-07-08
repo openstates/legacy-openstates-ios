@@ -102,8 +102,11 @@
 - (IBAction)saveAction:sender;
 - (IBAction)showOrHideMenuPopover:(id)sender;
 - (IBAction)showOrHideAboutMenuPopover:(id)sender;
+- (IBAction)touchCommonMenuControl:(id)sender;
 
 - (void)updateStatus;
 - (NSInteger) indexForFunctionalViewController:(id)viewController;
+- (void) changeActiveFeaturedControllerTo:(NSInteger)controllerIndex;
+
 
 @end
