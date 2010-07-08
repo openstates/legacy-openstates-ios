@@ -14,6 +14,7 @@
 @interface VoteInfoViewController : UIViewController <UIAlertViewDelegate> {
 	id <VoteInfoViewControllerDelegate> delegate;
 	
+	IBOutlet UITextView *textView;
 	IBOutlet UIView *infoView;
 	IBOutlet UISegmentedControl *projectWebsiteButton;
 	IBOutlet UIBarButtonItem *dismissButton;
@@ -26,6 +27,7 @@
 @property (nonatomic, retain) UIView *infoView;
 @property (nonatomic, retain) UISegmentedControl *projectWebsiteButton;
 @property (nonatomic, retain) UIBarButtonItem *dismissButton;
+@property (nonatomic, retain) UITextView *textView;
 
 - (IBAction)done:(id)sender;
 - (IBAction)weblink_click:(id)sender;

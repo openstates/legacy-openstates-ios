@@ -14,6 +14,7 @@
 @interface AboutViewController : UIViewController <UIAlertViewDelegate> {
 	id <AboutViewControllerDelegate> delegate;
 	
+	IBOutlet UITextView *textView;
 	IBOutlet UILabel *versionLabel;
 	IBOutlet UIView *infoView;
 	IBOutlet UISegmentedControl *projectWebsiteButton;
@@ -28,6 +29,7 @@
 @property (nonatomic, retain) UIView *infoView;
 @property (nonatomic, retain) UISegmentedControl *projectWebsiteButton;
 @property (nonatomic, retain) UIBarButtonItem *dismissButton;
+@property (nonatomic, retain) UITextView *textView;
 
 
 - (IBAction)done:(id)sender;

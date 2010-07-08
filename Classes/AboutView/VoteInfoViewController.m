@@ -15,7 +15,7 @@
 @implementation VoteInfoViewController
 
 @synthesize delegate, projectWebsiteURL;
-@synthesize infoView;
+@synthesize infoView, textView;
 @synthesize projectWebsiteButton;
 @synthesize dismissButton;
 
@@ -28,6 +28,11 @@
 	}
 	return self;
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+	[self.textView flashScrollIndicators];
+}
+
 
 - (void)viewDidLoad {
 	[super viewDidLoad];	
@@ -105,7 +110,7 @@
 	self.infoView = nil;
 	self.projectWebsiteButton = nil;
 	self.dismissButton = nil;
-	
+	self.textView = nil;
 	[super dealloc];
 }
 

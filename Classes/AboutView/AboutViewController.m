@@ -23,15 +23,20 @@
 		// NSBundle Info.plist
 		NSDictionary *infoPlistDict = [[NSBundle mainBundle] infoDictionary];
 		self.projectWebsiteURL = [NSURL URLWithString:[infoPlistDict objectForKey:@"projectWebsite"]];
-		NSString *versionString = [[NSString alloc] initWithFormat:@"Version %@", [infoPlistDict objectForKey:@"CFBundleVersion"]];
-		self.versionLabel.text = versionString;	
-		[versionString release], versionString = nil;
 	}
 	return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+	[self.textView flashScrollIndicators];
+}
+
+
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	NSDictionary *infoPlistDict = [[NSBundle mainBundle] infoDictionary];
+	self.versionLabel.text = [NSString stringWithFormat:@"Version %@", [infoPlistDict objectForKey:@"CFBundleVersion"]];	
+
 }
 
  // Override to allow orientations other than the default portrait orientation.
@@ -99,11 +104,11 @@
 	self.versionLabel = nil;
 	self.projectWebsiteButton = nil;
 	self.dismissButton = nil;
-
+	self.textView = nil;
 	[super dealloc];
 }
 
-
+@synthesize textView;
 @synthesize versionLabel;
 @synthesize infoView;
 @synthesize projectWebsiteButton;

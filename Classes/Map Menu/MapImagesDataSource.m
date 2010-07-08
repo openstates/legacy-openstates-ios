@@ -193,9 +193,8 @@
 
 
 - (void)dealloc {
-	[ InteriorMaps release ], InteriorMaps = nil;
-	[ ExteriorMaps release ], ExteriorMaps = nil;
-	[ ChamberMaps release ], ChamberMaps = nil;
+	self.InteriorMaps = self.ExteriorMaps = self.ChamberMaps = nil;
+	
 
 	//[fetchedResultsController release];
 	self.managedObjectContext = nil;

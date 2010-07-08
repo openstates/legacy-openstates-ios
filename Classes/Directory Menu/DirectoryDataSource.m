@@ -42,6 +42,7 @@
 	self.managedObjectContext = nil;	
 	self.filterString = nil;
 	self.leg_cell = nil;	
+	
     [super dealloc];
 }
 
@@ -164,6 +165,7 @@
 #endif
 	{
 		static NSString *leg_cell_ID = @"LegislatorDirectory";
+		//NSString *leg_cell_ID = [NSString stringWithFormat:@"LegislatorDirectory-%d", rand()] ;
 		
 		LegislatorMasterTableViewCell *cell = (LegislatorMasterTableViewCell *)[tableView 
 																				dequeueReusableCellWithIdentifier:leg_cell_ID];
@@ -174,7 +176,7 @@
 					self.leg_cell = suspect;
 			}
 			cell = self.leg_cell;
-			//self.leg_cell = nil;
+			self.leg_cell = nil;
 		}
 				
 		if (cell) {

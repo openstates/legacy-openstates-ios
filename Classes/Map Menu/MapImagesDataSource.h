@@ -19,9 +19,9 @@
 //@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 
-@property (readonly,nonatomic,retain) NSArray *InteriorMaps;
-@property (readonly,nonatomic,retain) NSArray *ExteriorMaps;
-@property (readonly,nonatomic,retain) NSArray *ChamberMaps;
+@property (nonatomic,retain) NSArray *InteriorMaps;
+@property (nonatomic,retain) NSArray *ExteriorMaps;
+@property (nonatomic,retain) NSArray *ChamberMaps;
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
