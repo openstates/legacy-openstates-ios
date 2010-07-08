@@ -37,8 +37,7 @@
 
 
 - (void)dealloc {
-	[entryName release];
-	[entryValue release];
+	self.entryName = self.entryValue = nil;
 	
     [super dealloc];
 }
