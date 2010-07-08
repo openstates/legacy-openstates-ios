@@ -17,6 +17,7 @@
 	NSMutableArray *dataForChart, *dataForPlot;
 }
 
+@property (nonatomic,retain) id detailViewController;
 @property(readwrite, retain, nonatomic) NSMutableArray *dataForChart, *dataForPlot;
 
 // Plot construction methods

@@ -9,7 +9,7 @@
 
 @implementation CPTestApp_iPadViewController
 
-@synthesize dataForChart, dataForPlot;
+@synthesize dataForChart, dataForPlot, detailViewController;
 
 #pragma mark -
 #pragma mark Initialization and teardown
@@ -18,9 +18,18 @@
 {
     [super viewDidLoad];
 	
+	self.title = @"Vote Index";
 	[self constructScatterPlot];
 	[self constructBarChart];
 	[self constructPieChart];
+}
+
+- (id) dataSource {
+	return self;
+}
+
+- (UIImage *)tabBarImage {
+	return [UIImage imageNamed:@"16-line-chart.png"];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
