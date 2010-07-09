@@ -74,6 +74,10 @@ NSInteger kNoSelection = -1;
 @synthesize currentMasterViewController, currentDetailViewController;
 @synthesize splitViewController, legMasterTableViewController;
 
++ (TexLegeAppDelegate *)appDelegate {
+	return (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
 - init {
 	if (self = [super init]) {
 		// initialize  to nil
@@ -122,6 +126,7 @@ NSInteger kNoSelection = -1;
 #pragma mark -
 #pragma mark Data Sources and Main View Controllers
 
+/*
 // Not sure if this works ... we need more tabs to test.
 - (void)setTabOrderIfSaved {
 	if ([UtilityMethods isIPadDevice] == NO && self.tabBarController) {
@@ -145,13 +150,7 @@ NSInteger kNoSelection = -1;
 		if (orderedControllers) [orderedControllers release], orderedControllers = nil;
 	}
 }
-
-- (id) functionalViewControllerAtIndex:(NSInteger)index {
-	if (!self.functionalViewControllers)
-		return nil;
-	
-	return [self.functionalViewControllers objectAtIndex:index];
-}
+*/
 
 - (NSInteger) indexForFunctionalViewController:(id)viewController {
 	NSInteger index = 0;
@@ -163,23 +162,6 @@ NSInteger kNoSelection = -1;
 	return index;
 }
 
-- (NSInteger) addFunctionalViewController:(id)viewController {
-	NSInteger index = 0;
-	
-	if (viewController && self.functionalViewControllers) {
-		NSInteger existingIndex = NSNotFound;
-		if ((existingIndex = [self.functionalViewControllers indexOfObject:viewController]) != NSNotFound) 
-			// we already have it in our array
-			index = existingIndex;
-		else {
-			index = [self.functionalViewControllers count];
-			[self.functionalViewControllers addObject:viewController];
-		}
-	}
-	return index;
-}
-
-
 - (void) changeActiveFeaturedControllerTo:(NSInteger)controllerIndex {
 	// set the first component of our state saving business
 	
@@ -188,7 +170,7 @@ NSInteger kNoSelection = -1;
 	if (self.currentDetailViewController)
 		self.currentDetailViewController = nil;
 	
-	self.currentMasterViewController = [self functionalViewControllerAtIndex:controllerIndex];
+	self.currentMasterViewController = [self.functionalViewControllers objectAtIndex:controllerIndex];
 	
 	switch (controllerIndex) {
 		case 0:
@@ -215,7 +197,7 @@ NSInteger kNoSelection = -1;
 	[self.currentMasterViewController setValue:self.currentDetailViewController forKey:@"detailViewController"];
 	
 	if ([UtilityMethods isIPadDevice] && self.splitViewController) {
-		self.splitViewController.delegate = self.currentDetailViewController;	
+		//self.splitViewController.delegate = self.currentDetailViewController;	
 		
 		// Set up the view controller for the master.
 		NSArray *viewControllers = [[NSArray alloc] initWithObjects:self.currentMasterViewController, nil];
@@ -228,7 +210,10 @@ NSInteger kNoSelection = -1;
 			self.detailNavigationController.viewControllers = viewControllers;
 			[viewControllers release], viewControllers = nil;
 			
+			self.splitViewController.delegate = self.currentDetailViewController;	
+
 		}
+
 	}		
 	else // it's an iPhone with a tabBar
 		self.tabBarController.selectedIndex = controllerIndex;
@@ -267,20 +252,18 @@ NSInteger kNoSelection = -1;
 	[self.functionalViewControllers addObject:self.linksTableTabbedVC];					// 4
 	
 	if (isIpad)	[self.legMasterTableViewController configureWithDataSourceClass:
-				 [DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext]; 
+						[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext]; 
 	else		[self.directoryTableTabbedVC configureWithDataSourceClass:
-				 [DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
+						[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.committeeTableTabbedVC configureWithDataSourceClass:[CommitteesDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.mapsTableTabbedVC configureWithDataSourceClass:[MapImagesDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.linksTableTabbedVC configureWithDataSourceClass:[LinksMenuDataSource class] andManagedObjectContext:self.managedObjectContext];
 	
 	if (self.splitViewController)
 		[self.mainWindow addSubview:self.splitViewController.view];
-	
-	// presumably we've got a tab bar controller
 	else { 
 		[self.mainWindow addSubview:self.tabBarController.view];
-		[self setTabOrderIfSaved];
+		//[self setTabOrderIfSaved];
 	}
 	
 	NSInteger selection = [[savedLocation objectAtIndex:0] integerValue];	// read the saved selection at level 1
@@ -500,11 +483,10 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)modalViewControllerDidFinish:(UIViewController *)controller {
-	if (self.menuPopoverPC && self.menuPopoverPC.contentViewController == self.aboutView) {
-		[self showOrHideAboutMenuPopover:controller];
-	}
-	else if (activeDialogController != nil)
+	if (activeDialogController != nil)
 		[activeDialogController dismissModalViewControllerAnimated:YES];
+	if (self.menuPopoverPC && self.menuPopoverPC.contentViewController == self.aboutView)
+		[self showOrHideAboutMenuPopover:controller];
 }
 
 
@@ -695,16 +677,10 @@ NSInteger kNoSelection = -1;
 }
 
 - (NSString *)hostName
-{
-    // Don't include a scheme. 'http://' will break the reachability checking.
-    // Change this value to test the reachability of a different host.
-    return @"www.apple.com";
-}
+{	return @"www.apple.com";	}
 
 - (NSString *)hostNameLabel
-{
-    return [NSString stringWithFormat:@"Remote Host: %@", [self hostName]];
-}
+{	return [NSString stringWithFormat:@"Remote Host: %@", [self hostName]];	}
 
 #pragma mark -
 #pragma mark Saving
