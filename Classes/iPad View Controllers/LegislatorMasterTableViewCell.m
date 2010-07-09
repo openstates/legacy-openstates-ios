@@ -75,7 +75,7 @@
 	if (self.leg_sliderView == nil)
 		self.leg_sliderView = [StaticGradientSliderView newSliderViewWithOwner:self];
 	if (self.leg_sliderView) {
-		[self.leg_sliderView addToPlaceholder:self.leg_sliderViewPlaceHolder];
+		[self.leg_sliderView addToPlaceholder:self.leg_sliderViewPlaceHolder withLegislator:self.legislator];
 		self.leg_sliderView.usesSmallStar = YES;
 		//self.leg_sliderView.sliderValue = self.legislator.partisan_index.floatValue;
 		[self.leg_sliderView setSliderValue:self.legislator.partisan_index.floatValue animated:NO];

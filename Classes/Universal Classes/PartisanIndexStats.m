@@ -11,7 +11,7 @@
 
 @interface PartisanIndexStats (Private)
 
-- (NSNumber *) averagePartisanIndexForChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
+- (NSArray *) aggregatePartisanIndexForChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
 - (NSArray *) allMembersByChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
 
 
@@ -63,59 +63,96 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 		NSInteger chamber, party;
 		for (chamber = HOUSE; chamber <= SENATE; chamber++) {
 			for (party = kUnknownParty; party <= REPUBLICAN; party++) {
-				NSNumber *avgIndex = [self averagePartisanIndexForChamber:chamber andPartyID:party];
+				NSArray *aggregatesArray = [self aggregatePartisanIndexForChamber:chamber andPartyID:party];
+				NSNumber *avgIndex = [aggregatesArray objectAtIndex:0];
 				if (avgIndex)
-					[tempAggregates setObject:avgIndex forKey:[NSString stringWithFormat:@"C%d+P%d", chamber, party]];
+					[tempAggregates setObject:avgIndex forKey:[NSString stringWithFormat:@"AvgC%d+P%d", chamber, party]];
+				
+				NSNumber *maxIndex = [aggregatesArray objectAtIndex:1];
+				if (maxIndex)
+					[tempAggregates setObject:maxIndex forKey:[NSString stringWithFormat:@"MaxC%d+P%d", chamber, party]];
+				
+				NSNumber *minIndex = [aggregatesArray objectAtIndex:2];
+				if (minIndex)
+					[tempAggregates setObject:minIndex forKey:[NSString stringWithFormat:@"MinC%d+P%d", chamber, party]];
+				
 			}
 		}
-		NSLog(@"Index Aggregates: %@", [tempAggregates description]);			
+		//NSLog(@"Index Aggregates: %@", [tempAggregates description]);			
 		m_partisanIndexAggregates = [[NSDictionary dictionaryWithDictionary:tempAggregates] retain];
 	}
 
 	return m_partisanIndexAggregates;
 }
 
+- (NSNumber *) minPartisanIndexUsingLegislator:(LegislatorObj *)legislator {
+	return [self.partisanIndexAggregates objectForKey:
+			[NSString stringWithFormat:@"MinC%d+P0", [legislator.legtype integerValue]]];
+};
+
+- (NSNumber *) maxPartisanIndexUsingLegislator:(LegislatorObj *)legislator {
+	return [self.partisanIndexAggregates objectForKey:
+			[NSString stringWithFormat:@"MaxC%d+P0", [legislator.legtype integerValue]]];
+};
+
 - (NSNumber *) overallPartisanIndexUsingLegislator:(LegislatorObj *)legislator {
 	return [self.partisanIndexAggregates objectForKey:
-			[NSString stringWithFormat:@"C%d+P0", [legislator.legtype integerValue]]];
+			[NSString stringWithFormat:@"AvgC%d+P0", [legislator.legtype integerValue]]];
 };
 
 
 - (NSNumber *) partyPartisanIndexUsingLegislator:(LegislatorObj *)legislator {
 	return [self.partisanIndexAggregates objectForKey:
-			[NSString stringWithFormat:@"C%d+P%d", [legislator.legtype integerValue], [legislator.party_id integerValue]]];
+			[NSString stringWithFormat:@"AvgC%d+P%d", [legislator.legtype integerValue], [legislator.party_id integerValue]]];
 };
 
 
 #pragma mark -
 #pragma mark Partisan Indexing
 
-- (NSNumber *) averagePartisanIndexForChamber:(NSInteger)chamber andPartyID:(NSInteger)party {
+- (NSArray *) aggregatePartisanIndexForChamber:(NSInteger)chamber andPartyID:(NSInteger)party {
 	
 	if (chamber == BOTH_CHAMBERS) {
 		NSLog(@"allMembersByChamber: ... cannot be BOTH chambers");
 		return nil;
 	}
 	
-	NSExpression *ex = [NSExpression expressionForFunction:@"average:" arguments:
-						[NSArray arrayWithObject:[NSExpression expressionForKeyPath:@"partisan_index"]]];
 	NSString *predicateString = nil;
 	if (party > kUnknownParty)
 		predicateString = [NSString stringWithFormat:@"legtype == %d AND party_id == %d", chamber, party];
 	else
-		predicateString = [NSString stringWithFormat:@"legtype == %d", chamber];
-	
+		predicateString = [NSString stringWithFormat:@"legtype == %d", chamber];	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateString]; 
+	/*_____________________*/
 	
-	NSExpressionDescription *ed = [[NSExpressionDescription alloc] init];
-	[ed setName:@"averagePartisanIndex"];
-	[ed setExpression:ex];
-	[ed setExpressionResultType:NSFloatAttributeType];
+	NSExpression *ex = [NSExpression expressionForFunction:@"average:" arguments:
+						[NSArray arrayWithObject:[NSExpression expressionForKeyPath:@"partisan_index"]]];
+	NSExpressionDescription *edAvg = [[NSExpressionDescription alloc] init];
+	[edAvg setName:@"averagePartisanIndex"];
+	[edAvg setExpression:ex];
+	[edAvg setExpressionResultType:NSFloatAttributeType];
 	
+	ex = [NSExpression expressionForFunction:@"max:" arguments:
+						[NSArray arrayWithObject:[NSExpression expressionForKeyPath:@"partisan_index"]]];
+	NSExpressionDescription *edMax = [[NSExpressionDescription alloc] init];
+	[edMax setName:@"maxPartisanIndex"];
+	[edMax setExpression:ex];
+	[edMax setExpressionResultType:NSFloatAttributeType];
+	
+	ex = [NSExpression expressionForFunction:@"min:" arguments:
+		  [NSArray arrayWithObject:[NSExpression expressionForKeyPath:@"partisan_index"]]];
+	NSExpressionDescription *edMin = [[NSExpressionDescription alloc] init];
+	[edMin setName:@"minPartisanIndex"];
+	[edMin setExpression:ex];
+	[edMin setExpressionResultType:NSFloatAttributeType];
+	
+	/*_____________________*/
+
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	[request setPredicate:predicate];
-	[request setPropertiesToFetch:[NSArray arrayWithObject:ed]];
+	[request setPropertiesToFetch:[NSArray arrayWithObjects:edAvg, edMax, edMin, nil]];
 	[request setResultType:NSDictionaryResultType];
+	[edAvg release], [edMax release], [edMin release];
 	
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"LegislatorObj" 
 											  inManagedObjectContext:self.managedObjectContext];
@@ -129,8 +166,10 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	else {
 		if ([objects count] > 0) {
 			NSNumber *avgPartisanIndex = [[objects objectAtIndex:0] valueForKey:@"averagePartisanIndex"];
+			NSNumber *maxPartisanIndex = [[objects objectAtIndex:0] valueForKey:@"maxPartisanIndex"];
+			NSNumber *minPartisanIndex = [[objects objectAtIndex:0] valueForKey:@"minPartisanIndex"];
 			//return [avgPartisanIndex floatValue];
-			return avgPartisanIndex;
+			return [NSArray arrayWithObjects:avgPartisanIndex, maxPartisanIndex, minPartisanIndex, nil];
 		}
 	}
 	
@@ -150,7 +189,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 									 andPartyID:kUnknownParty];
 	
 	if (legislators) {
-		NSInteger rank = [legislators indexOfObject:legislator];
+		NSInteger rank = [legislators indexOfObject:legislator] + 1;
 		NSInteger count = [legislators count];
 		return [NSString stringWithFormat:@"%d out of %d", rank, count];	
 	}

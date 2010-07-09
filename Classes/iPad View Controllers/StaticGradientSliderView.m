@@ -7,6 +7,8 @@
 //
 
 #import "StaticGradientSliderView.h"
+#import "LegislatorObj.h"
+#import "PartisanIndexStats.h"
 
 @interface StaticGradientSliderView (Private)
 
@@ -51,20 +53,23 @@
 
 - (void)setSliderValue:(float)newVal {
 	//self.sliderControl.value = newVal; 
-	[self.sliderControl setValue:newVal animated:YES];
+	[self setSliderValue:newVal animated:YES];
 }
 
 - (void)setSliderValue:(float)newVal animated:(BOOL)isAnimated {
 	//self.sliderControl.value = newVal; 
 	[self.sliderControl setValue:newVal animated:isAnimated];
+	[self.sliderControl setNeedsDisplay];
+
 }
 
-- (void)addToPlaceholder:(UIView *)placeholder {
+- (void)addToPlaceholder:(UIView *)placeholder withLegislator:(LegislatorObj *)legislator {
 	if (placeholder) {
 		CGRect placeholderRect = placeholder.bounds;
 		[placeholder addSubview:self];
 		self.frame = placeholderRect;
 	}
+	[self setLegislator:legislator];
 }
 
 + (StaticGradientSliderView *) newSliderViewWithOwner:(id)owner {
@@ -75,5 +80,17 @@
 		}
 	return nil;
 }
+
+- (void) setLegislator:(LegislatorObj *)legislator {
+	if (legislator) {
+		PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
+		
+		CGFloat minSlider = [[indexStats minPartisanIndexUsingLegislator:legislator] floatValue];
+		CGFloat maxSlider = [[indexStats maxPartisanIndexUsingLegislator:legislator] floatValue];
+		[self.sliderControl setMinimumValue:minSlider];
+		[self.sliderControl setMaximumValue:maxSlider];
+	}
+}
+
 
 @end

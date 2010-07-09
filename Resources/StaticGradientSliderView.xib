@@ -12,6 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="6"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -44,9 +45,8 @@
 					<object class="IBUIImageView" id="265624113">
 						<reference key="NSNextResponder" ref="832563178"/>
 						<int key="NSvFlags">290</int>
-						<string key="NSFrame">{{0, 6}, {300, 14}}</string>
+						<string key="NSFrame">{{12, 6}, {276, 14}}</string>
 						<reference key="NSSuperview" ref="832563178"/>
-						<reference key="NSWindow"/>
 						<object class="NSColor" key="IBUIBackgroundColor" id="680358745">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MCAwAA</bytes>
@@ -64,7 +64,6 @@
 						<int key="NSvFlags">290</int>
 						<string key="NSFrameSize">{300, 23}</string>
 						<reference key="NSSuperview" ref="832563178"/>
-						<reference key="NSWindow"/>
 						<reference key="IBUIBackgroundColor" ref="680358745"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUIContentMode">2</int>
@@ -75,13 +74,13 @@
 						</object>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
+						<float key="IBUIValue">1.25</float>
 						<float key="IBUIMinValue">-1.25</float>
 						<float key="IBUIMaxValue">1.25</float>
 					</object>
 				</object>
 				<string key="NSFrameSize">{300, 24}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="IBUIBackgroundColor" ref="680358745"/>
 				<bool key="IBUIOpaque">NO</bool>
 				<int key="IBUIContentMode">4</int>
@@ -168,7 +167,7 @@
 					<string>UIResponder</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>StaticGradientSliderView</string>
-					<string>{{345, 798}, {300, 24}}</string>
+					<string>{{382, 382}, {300, 24}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				</object>
 			</object>

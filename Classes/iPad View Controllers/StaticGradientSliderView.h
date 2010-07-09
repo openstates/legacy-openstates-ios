@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-
+@class LegislatorObj;
 @interface StaticGradientSliderView : UIView {
 	IBOutlet UIImageView *gradientImage;
 	IBOutlet UISlider *sliderControl;
+	
 @private
 	BOOL	m_usesSmallStar;
 }
@@ -21,7 +22,9 @@
 @property (nonatomic) CGFloat sliderValue;
 @property (readwrite) BOOL usesSmallStar;		// defaults to big star, not small star
 
-- (void)setSliderValue:(float)newVal animated:(BOOL)isAnimated;
-- (void)addToPlaceholder:(UIView *)placeholder;
 + (StaticGradientSliderView *) newSliderViewWithOwner:(id)owner;
+- (void)setSliderValue:(float)newVal animated:(BOOL)isAnimated;
+- (void)addToPlaceholder:(UIView *)placeholder withLegislator:(LegislatorObj *)legislator;
+- (void)setLegislator:(LegislatorObj *)legislator;
+
 @end

@@ -27,7 +27,9 @@
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
-
+- (NSNumber *) minPartisanIndexUsingLegislator:(LegislatorObj *)legislator;
+- (NSNumber *) maxPartisanIndexUsingLegislator:(LegislatorObj *)legislator;
+	
 - (NSString *) partisanRankForLegislator:(LegislatorObj *)legislator onlyParty:(BOOL)inParty;
 - (NSNumber *) partyPartisanIndexUsingLegislator:(LegislatorObj *)legislator;
 - (NSNumber *) overallPartisanIndexUsingLegislator:(LegislatorObj *)legislator;

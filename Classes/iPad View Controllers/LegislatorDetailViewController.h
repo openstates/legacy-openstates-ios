@@ -24,7 +24,7 @@
 	IBOutlet UIView *headerView;
 	IBOutlet UIImageView *leg_photoView;
 	IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab;
-	IBOutlet UILabel *leg_indexTitleLab, *leg_rankLab;
+	IBOutlet UILabel *leg_indexTitleLab, *leg_rankLab, *leg_chamberPartyLab, *leg_chamberLab;
 	IBOutlet CPLayerHostingView *scatterPlotView;//, *barChartView, *pieChartView;
 	IBOutlet UIView *indivPHolder, *partyPHolder, *allPHolder;
 	IBOutlet StaticGradientSliderView *indivSlider, *partySlider, *allSlider;
@@ -46,7 +46,7 @@
 @property (nonatomic,retain) IBOutlet UIView *headerView;
 @property (nonatomic,retain) IBOutlet CPLayerHostingView *scatterPlotView;
 @property (nonatomic,retain) IBOutlet UIImageView *leg_photoView;
-@property (nonatomic,retain) IBOutlet UILabel *leg_indexTitleLab, *leg_rankLab;
+@property (nonatomic,retain) IBOutlet UILabel *leg_indexTitleLab, *leg_rankLab, *leg_chamberPartyLab, *leg_chamberLab;
 @property (nonatomic,retain) IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab;
 @property (nonatomic,retain) IBOutlet StaticGradientSliderView *indivSlider, *partySlider, *allSlider;
 @property (nonatomic,retain) IBOutlet UIView *indivPHolder, *partyPHolder, *allPHolder;

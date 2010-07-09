@@ -45,7 +45,7 @@
 @synthesize popoverController, commonMenuControl;
 @synthesize scatterPlotView, dataForPlot; //, dataForChart;
 
-@synthesize leg_indexTitleLab, leg_rankLab;
+@synthesize leg_indexTitleLab, leg_rankLab, leg_chamberPartyLab, leg_chamberLab;
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab;
 @synthesize indivSlider, partySlider, allSlider;
 @synthesize indivPHolder, partyPHolder, allPHolder;
@@ -65,6 +65,30 @@
 
 }
 
+- (NSString *)chamberAbbrev {
+	NSString *chamberName = nil;
+	if ([self.legislator.legtype integerValue] == HOUSE) // Representative
+		chamberName = @"House";
+	else if ([self.legislator.legtype integerValue] == SENATE) // Senator
+		chamberName = @"Senate";
+	else // don't know the party?
+		chamberName = @"";
+
+	return chamberName;
+}
+
+- (NSString *)chamberPartyAbbrev {
+	NSString *partyName = nil;
+	if ([self.legislator.party_id integerValue] == DEMOCRAT) // Democrat
+		partyName = @"Dem.";
+	else if ([self.legislator.party_id integerValue] == REPUBLICAN) // Republican
+		partyName = @"Rep.";
+	else // don't know the party?
+		partyName = @"Ind.";
+	
+	return [NSString stringWithFormat:@"%@ %@ Avg.", [self chamberAbbrev], partyName];
+}
+
 - (void)setupHeaderView {
 	if (self.headerView == nil && self.scatterPlotView) {
 		UIView * headerSuper = self.scatterPlotView.superview;
@@ -79,40 +103,21 @@
 		headerRect.size.width = headerSuper.bounds.size.width;
 
 		if ([UtilityMethods isIPadDevice] == NO) {
-			CGFloat superHeight = self.scatterPlotView.bounds.size.height+self.headerView.bounds.size.height;
-			[headerSuper setBounds:CGRectMake(0.0f, 0.0f, headerSuper.bounds.size.width, superHeight)];
+			//CGFloat oldSuperHeight = headerSuper.bounds.size.height;
+			CGFloat newSuperHeight = self.scatterPlotView.bounds.size.height+self.headerView.bounds.size.height;
+			//CGFloat difference = oldSuperHeight - newSuperHeight;
+			[headerSuper setFrame:CGRectMake(0.0f, 0.0f, headerSuper.bounds.size.width, newSuperHeight)];
+			
 		}
 		[headerSuper insertSubview:self.headerView aboveSubview:self.scatterPlotView];
 		[self.headerView setFrame:headerRect];
+		//[self.headerView layoutIfNeeded];
 		
 		NSLog(@"HeaderSuperView: %@", headerSuper);
 		NSLog(@"HeaderView: %@", self.headerView);
-		NSLog(@"ScatterPlotView: %@", self.scatterPlotView);
+		NSLog(@"TableHeader: %@", self.tableView.tableHeaderView);
+		NSLog(@"TableView: %@", self.tableView);
 	}
-#if 0
-	// buggy UI crap pissing me off
-	if ([UtilityMethods isIPadDevice]) {
-		UIView * headerSuper = self.leg_rankLab.superview;
-		
-		NSData *labelArchive = [NSKeyedArchiver archivedDataWithRootObject:self.leg_rankLab];
-		[self.leg_rankLab removeFromSuperview];
-		self.leg_rankLab = nil;
-		
-		self.leg_rankLab = [NSKeyedUnarchiver unarchiveObjectWithData:labelArchive];
-		[headerSuper addSubview:self.leg_rankLab];
-		
-		/*
-		 CGRect labelRect = self.leg_rankLab.frame;
-		 NSString *labelString = self.leg_rankLab.text;
-		 [self.leg_rankLab removeFromSuperview];
-		 self.leg_rankLab = nil;
-		 
-		 self.leg_rankLab = [[UILabel alloc] initWithFrame:labelRect];
-		 self.leg_rankLab.text = labelString;
-		 [headerSuper addSubview:self.leg_rankLab];
-		 */
-	}
-#endif
 	
 }
 	
@@ -139,6 +144,9 @@
 		self.leg_rankLab.text = [NSString stringWithFormat:@"Rank: %@",
 								 [indexStats partisanRankForLegislator:self.legislator onlyParty:YES]];
 		
+		self.leg_chamberPartyLab.text = [self chamberPartyAbbrev];
+		self.leg_chamberLab.text = [[self chamberAbbrev] stringByAppendingString:@" Avg."];
+		
 		if (!self.indivSlider)
 			self.indivSlider = [StaticGradientSliderView newSliderViewWithOwner:self];
 		if (!self.partySlider)
@@ -147,15 +155,15 @@
 			self.allSlider = [StaticGradientSliderView newSliderViewWithOwner:self];
 
 		if (self.indivSlider) {
-			[self.indivSlider addToPlaceholder:indivPHolder];
+			[self.indivSlider addToPlaceholder:indivPHolder withLegislator:self.legislator];
 			self.indivSlider.sliderValue = self.legislator.partisan_index.floatValue;
 		}	
 		if (self.partySlider) {
-			[self.partySlider addToPlaceholder:partyPHolder];
+			[self.partySlider addToPlaceholder:partyPHolder withLegislator:self.legislator];
 			self.partySlider.sliderValue = [[indexStats partyPartisanIndexUsingLegislator:self.legislator] floatValue];
 		}	
 		if (self.allSlider) {
-			[self.allSlider addToPlaceholder:allPHolder];
+			[self.allSlider addToPlaceholder:allPHolder withLegislator:self.legislator];
 			self.allSlider.sliderValue = [[indexStats overallPartisanIndexUsingLegislator:self.legislator] floatValue];
 
 		}	

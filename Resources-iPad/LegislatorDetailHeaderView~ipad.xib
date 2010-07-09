@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="16"/>
+			<integer value="83"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -45,7 +45,7 @@
 					<object class="IBUILabel" id="85541933">
 						<reference key="NSNextResponder" ref="703605998"/>
 						<int key="NSvFlags">311</int>
-						<string key="NSFrame">{{155, 147}, {215, 30}}</string>
+						<string key="NSFrame">{{142, 147}, {196, 30}}</string>
 						<reference key="NSSuperview" ref="703605998"/>
 						<object class="NSColor" key="IBUIBackgroundColor" id="1009232079">
 							<int key="NSColorSpace">3</int>
@@ -77,7 +77,7 @@
 					<object class="IBUILabel" id="476326344">
 						<reference key="NSNextResponder" ref="703605998"/>
 						<int key="NSvFlags">307</int>
-						<string key="NSFrame">{{155, 20}, {611, 43}}</string>
+						<string key="NSFrame">{{141, 20}, {559, 43}}</string>
 						<reference key="NSSuperview" ref="703605998"/>
 						<reference key="IBUIBackgroundColor" ref="1009232079"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -100,7 +100,7 @@
 					<object class="IBUILabel" id="1037254471">
 						<reference key="NSNextResponder" ref="703605998"/>
 						<int key="NSvFlags">311</int>
-						<string key="NSFrame">{{155, 109}, {215, 30}}</string>
+						<string key="NSFrame">{{142, 109}, {196, 30}}</string>
 						<reference key="NSSuperview" ref="703605998"/>
 						<reference key="IBUIBackgroundColor" ref="1009232079"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -119,7 +119,7 @@
 					<object class="IBUILabel" id="356189904">
 						<reference key="NSNextResponder" ref="703605998"/>
 						<int key="NSvFlags">311</int>
-						<string key="NSFrame">{{155, 71}, {215, 30}}</string>
+						<string key="NSFrame">{{142, 71}, {196, 30}}</string>
 						<reference key="NSSuperview" ref="703605998"/>
 						<reference key="IBUIBackgroundColor" ref="1009232079"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -138,7 +138,7 @@
 					<object class="IBUIImageView" id="831474949">
 						<reference key="NSNextResponder" ref="703605998"/>
 						<int key="NSvFlags">310</int>
-						<string key="NSFrame">{{20, 24}, {124, 158}}</string>
+						<string key="NSFrame">{{9, 14}, {125, 175}}</string>
 						<reference key="NSSuperview" ref="703605998"/>
 						<reference key="IBUIBackgroundColor" ref="1009232079"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -161,7 +161,7 @@
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">Legislator Roll Call Index</string>
+								<string key="IBUIText">Legislator Roll Call Index (__)</string>
 								<object class="NSFont" key="IBUIFont">
 									<string key="NSName">Helvetica</string>
 									<double key="NSSize">20</double>
@@ -181,17 +181,17 @@
 							<object class="IBUILabel" id="60135240">
 								<reference key="NSNextResponder" ref="66596999"/>
 								<int key="NSvFlags">259</int>
-								<string key="NSFrame">{{264, 40}, {124, 30}}</string>
+								<string key="NSFrame">{{256, 40}, {133, 30}}</string>
 								<reference key="NSSuperview" ref="66596999"/>
 								<reference key="IBUIBackgroundColor" ref="1009232079"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">Rank: #</string>
-								<object class="NSFont" key="IBUIFont" id="793873691">
+								<string key="IBUIText">Rank: __</string>
+								<object class="NSFont" key="IBUIFont" id="11856757">
 									<string key="NSName">Helvetica</string>
-									<double key="NSSize">18</double>
+									<double key="NSSize">16</double>
 									<int key="NSfFlags">16</int>
 								</object>
 								<object class="NSColor" key="IBUITextColor">
@@ -207,7 +207,7 @@
 							<object class="IBUILabel" id="663722019">
 								<reference key="NSNextResponder" ref="66596999"/>
 								<int key="NSvFlags">259</int>
-								<string key="NSFrame">{{264, 70}, {124, 30}}</string>
+								<string key="NSFrame">{{256, 70}, {133, 30}}</string>
 								<reference key="NSSuperview" ref="66596999"/>
 								<reference key="IBUIBackgroundColor" ref="1009232079"/>
 								<bool key="IBUIOpaque">NO</bool>
@@ -215,7 +215,7 @@
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<string key="IBUIText">Party Avg.</string>
-								<reference key="IBUIFont" ref="793873691"/>
+								<reference key="IBUIFont" ref="11856757"/>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">2</int>
 									<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
@@ -229,7 +229,7 @@
 							<object class="IBUILabel" id="468254568">
 								<reference key="NSNextResponder" ref="66596999"/>
 								<int key="NSvFlags">259</int>
-								<string key="NSFrame">{{263, 100}, {127, 30}}</string>
+								<string key="NSFrame">{{255, 100}, {134, 30}}</string>
 								<reference key="NSSuperview" ref="66596999"/>
 								<reference key="IBUIBackgroundColor" ref="1009232079"/>
 								<bool key="IBUIOpaque">NO</bool>
@@ -237,7 +237,7 @@
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<string key="IBUIText">Overall Avg.</string>
-								<reference key="IBUIFont" ref="793873691"/>
+								<reference key="IBUIFont" ref="11856757"/>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">2</int>
 									<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
@@ -251,7 +251,7 @@
 							<object class="IBUIView" id="926842535">
 								<reference key="NSNextResponder" ref="66596999"/>
 								<int key="NSvFlags">294</int>
-								<string key="NSFrame">{{0, 44}, {256, 24}}</string>
+								<string key="NSFrame">{{0, 44}, {247, 24}}</string>
 								<reference key="NSSuperview" ref="66596999"/>
 								<reference key="IBUIBackgroundColor" ref="1009232079"/>
 								<bool key="IBUIOpaque">NO</bool>
@@ -260,7 +260,7 @@
 							<object class="IBUIView" id="842495798">
 								<reference key="NSNextResponder" ref="66596999"/>
 								<int key="NSvFlags">294</int>
-								<string key="NSFrame">{{0, 74}, {256, 24}}</string>
+								<string key="NSFrame">{{0, 74}, {247, 24}}</string>
 								<reference key="NSSuperview" ref="66596999"/>
 								<reference key="IBUIBackgroundColor" ref="1009232079"/>
 								<bool key="IBUIOpaque">NO</bool>
@@ -269,21 +269,21 @@
 							<object class="IBUIView" id="636302262">
 								<reference key="NSNextResponder" ref="66596999"/>
 								<int key="NSvFlags">294</int>
-								<string key="NSFrame">{{0, 104}, {256, 24}}</string>
+								<string key="NSFrame">{{0, 104}, {247, 24}}</string>
 								<reference key="NSSuperview" ref="66596999"/>
 								<reference key="IBUIBackgroundColor" ref="1009232079"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
 						</object>
-						<string key="NSFrame">{{378, 73}, {390, 130}}</string>
+						<string key="NSFrame">{{313, 73}, {390, 130}}</string>
 						<reference key="NSSuperview" ref="703605998"/>
 						<reference key="IBUIBackgroundColor" ref="1009232079"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 					</object>
 				</object>
-				<string key="NSFrameSize">{768, 203}</string>
+				<string key="NSFrameSize">{703, 203}</string>
 				<reference key="NSSuperview"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">10</int>
@@ -4756,6 +4756,38 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 					</object>
 					<int key="connectionID">99</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_rankLab</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="60135240"/>
+					</object>
+					<int key="connectionID">101</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_indexTitleLab</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="844308732"/>
+					</object>
+					<int key="connectionID">102</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_chamberPartyLab</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="663722019"/>
+					</object>
+					<int key="connectionID">103</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">leg_chamberLab</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="468254568"/>
+					</object>
+					<int key="connectionID">104</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -4786,8 +4818,8 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 							<reference ref="476326344"/>
 							<reference ref="1037254471"/>
 							<reference ref="356189904"/>
-							<reference ref="831474949"/>
 							<reference ref="66596999"/>
+							<reference ref="831474949"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -4897,7 +4929,7 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>LegislatorDetailViewController</string>
 					<string>UIResponder</string>
-					<string>{{399, 221}, {768, 203}}</string>
+					<string>{{360, 610}, {703, 203}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -4929,7 +4961,7 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">99</int>
+			<int key="maxID">104</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4946,10 +4978,14 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 							<string>headerView</string>
 							<string>indivPHolder</string>
 							<string>indivSlider</string>
+							<string>leg_chamberLab</string>
+							<string>leg_chamberPartyLab</string>
 							<string>leg_districtLab</string>
+							<string>leg_indexTitleLab</string>
 							<string>leg_nameLab</string>
 							<string>leg_partyLab</string>
 							<string>leg_photoView</string>
+							<string>leg_rankLab</string>
 							<string>leg_tenureLab</string>
 							<string>legislator</string>
 							<string>partyPHolder</string>
@@ -4967,7 +5003,11 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 							<string>UILabel</string>
 							<string>UILabel</string>
 							<string>UILabel</string>
+							<string>UILabel</string>
+							<string>UILabel</string>
+							<string>UILabel</string>
 							<string>UIImageView</string>
+							<string>UILabel</string>
 							<string>UILabel</string>
 							<string>LegislatorObj</string>
 							<string>UIView</string>
@@ -4985,10 +5025,14 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 							<string>headerView</string>
 							<string>indivPHolder</string>
 							<string>indivSlider</string>
+							<string>leg_chamberLab</string>
+							<string>leg_chamberPartyLab</string>
 							<string>leg_districtLab</string>
+							<string>leg_indexTitleLab</string>
 							<string>leg_nameLab</string>
 							<string>leg_partyLab</string>
 							<string>leg_photoView</string>
+							<string>leg_rankLab</string>
 							<string>leg_tenureLab</string>
 							<string>legislator</string>
 							<string>partyPHolder</string>
@@ -5019,7 +5063,19 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 								<string key="candidateClassName">StaticGradientSliderView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
+								<string key="name">leg_chamberLab</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">leg_chamberPartyLab</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
+							<object class="IBToOneOutletInfo">
 								<string key="name">leg_districtLab</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">leg_indexTitleLab</string>
 								<string key="candidateClassName">UILabel</string>
 							</object>
 							<object class="IBToOneOutletInfo">
@@ -5033,6 +5089,10 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 							<object class="IBToOneOutletInfo">
 								<string key="name">leg_photoView</string>
 								<string key="candidateClassName">UIImageView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">leg_rankLab</string>
+								<string key="candidateClassName">UILabel</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">leg_tenureLab</string>
