@@ -27,8 +27,10 @@ enum
 @implementation MiniBrowserController
 
 @synthesize m_toolBar, m_webView, m_shouldStopLoadingOnHide;
-@synthesize m_backButton, m_reloadButton, m_fwdButton;
+@synthesize m_backButton, m_reloadButton, m_fwdButton, m_doneButton;
 @synthesize m_shouldUseParentsView;
+@synthesize m_currentURL;
+@synthesize sealColor;
 
 static MiniBrowserController *s_browser = nil;
 
@@ -65,6 +67,10 @@ static MiniBrowserController *s_browser = nil;
 {
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) 
 	{
+
+		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
+		self.sealColor = [UIColor colorWithPatternImage:sealImage];		
+		
 		self.modalPresentationStyle = UIModalPresentationFullScreen;
 		m_shouldStopLoadingOnHide = YES;
 		m_loadingInterrupted = NO;
@@ -74,7 +80,7 @@ static MiniBrowserController *s_browser = nil;
 		m_parentCtrl = nil;
 		m_shouldUseParentsView = NO;
 		m_shouldDisplayOnViewLoad = NO;
-		m_normalItemList = nil;
+		self.m_normalItemList = nil;
 		m_loadingItemList = nil;
 		m_authCallback = nil;
 		[self enableBackButton:NO];
@@ -96,23 +102,21 @@ static MiniBrowserController *s_browser = nil;
 
 - (void)dealloc 
 {
+	self.sealColor = nil;
+	self.m_currentURL = nil;
+	self.m_doneButton = nil;
+	self.m_normalItemList = nil;
 	if (m_urlRequestToLoad) [m_urlRequestToLoad release];
-	if (m_normalItemList) [m_normalItemList release];
 	if (m_loadingItemList) [m_loadingItemList release];
 	[super dealloc];
 }
 
-
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad 
-{
-	[super viewDidLoad];
-	
-	//[m_activity stopAnimating];
-	//[m_loadingLabel setHidden:YES];
-	
+- (void)normalizeToolbarButtons {
 	// get the current list of buttons
-	m_normalItemList = [[NSArray alloc] initWithArray:m_toolBar.items];
+	if (self.m_normalItemList)
+		self.m_normalItemList = nil;
+	
+	self.m_normalItemList = [[NSArray alloc] initWithArray:m_toolBar.items];
 	
 	// generate a list of buttons to display while loading
 	// (this enables a stop button)
@@ -124,8 +128,8 @@ static MiniBrowserController *s_browser = nil;
 			if ( eTAG_RELOAD == [button tag] )
 			{
 				UIBarButtonItem *stopButton = [[UIBarButtonItem alloc] 
-													initWithBarButtonSystemItem:UIBarButtonSystemItemStop 
-													target:self action:@selector(refreshButtonPressed:)];
+											   initWithBarButtonSystemItem:UIBarButtonSystemItemStop 
+											   target:self action:@selector(refreshButtonPressed:)];
 				[stopButton setTag:eTAG_STOP];
 				[tmpArray addObject:stopButton];
 				[stopButton release];
@@ -135,8 +139,36 @@ static MiniBrowserController *s_browser = nil;
 				[tmpArray addObject:bbi];
 			}
 		}
-		m_loadingItemList = (NSArray *)tmpArray;
+		if (self.m_loadingItemList)
+			self.m_loadingItemList = nil;
+		
+		self.m_loadingItemList = (NSArray *)tmpArray;
 	}
+	
+}
+
+- (void)removeDoneButton {
+	NSMutableArray * buttons = [[NSMutableArray alloc] initWithArray:self.m_toolBar.items];
+	[buttons removeObject:self.m_doneButton];
+	[self.m_toolBar setItems:buttons animated:NO];		
+	[buttons release], buttons = nil;
+}
+
+
+// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+- (void)viewDidLoad 
+{
+	[super viewDidLoad];
+
+	[self.m_webView setBackgroundColor:[UIColor clearColor]];
+	[self.m_webView setOpaque:NO];
+	
+	self.view.backgroundColor = self.sealColor;
+
+	//[m_activity stopAnimating];
+	//[m_loadingLabel setHidden:YES];
+	
+	[self normalizeToolbarButtons];
 	
 	if ( m_shouldDisplayOnViewLoad )
 	{
@@ -150,6 +182,13 @@ static MiniBrowserController *s_browser = nil;
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+	
+	if (self.splitViewController)
+	{
+		[self removeDoneButton];
+		[self normalizeToolbarButtons];
+	}
+	
 }
 
 
@@ -246,10 +285,19 @@ static MiniBrowserController *s_browser = nil;
 	}
 }
 
+- (IBAction)openInSafari:(id)button {
+	if (self.m_currentURL) {
+		[UtilityMethods openURLWithTrepidation:self.m_currentURL];
+	}
+}
+
+
 
 - (void)loadURL:(NSURL *)url
 {
 	if ( url == nil ) return;
+	
+	self.m_currentURL = url;
 	
 	m_loadingInterrupted = NO;
 	
@@ -331,7 +379,7 @@ static MiniBrowserController *s_browser = nil;
 
 - (void)animate
 {
-	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 	//NSLog(@"Parent view %@", [m_parentCtrl view]);
 	//NSLog(@"my tabbar %@", [m_parentCtrl tabBarController].view);
 	//NSLog(@"Parent 1st nav view %@", [[[m_parentCtrl navigationController].viewControllers objectAtIndex:0] view]);

@@ -13,6 +13,7 @@
 	IBOutlet UIBarButtonItem *m_backButton;
 	IBOutlet UIBarButtonItem *m_reloadButton;
 	IBOutlet UIBarButtonItem *m_fwdButton;
+	IBOutlet UIBarButtonItem *m_doneButton;
 	
 	BOOL m_shouldStopLoadingOnHide;
 	BOOL m_shouldUseParentsView;
@@ -23,12 +24,15 @@
 	IBOutlet UIActivityIndicatorView *m_activity;
 	IBOutlet UILabel                 *m_loadingLabel;
 	
+	NSURL *m_currentURL;
+	
 	NSArray *m_normalItemList;
 	NSArray *m_loadingItemList;
 	
 	BOOL m_shouldDisplayOnViewLoad;
 	id m_parentCtrl;
 	SEL m_authCallback;
+	IBOutlet UIColor *sealColor;
 }
 
 @property (nonatomic,retain) IBOutlet UIToolbar *m_toolBar;
@@ -38,6 +42,9 @@
 @property (nonatomic,retain) IBOutlet UIBarButtonItem *m_backButton;
 @property (nonatomic,retain) IBOutlet UIBarButtonItem *m_reloadButton;
 @property (nonatomic,retain) IBOutlet UIBarButtonItem *m_fwdButton;
+@property (nonatomic,retain) IBOutlet UIBarButtonItem *m_doneButton;
+@property (nonatomic,retain) NSURL *m_currentURL;
+@property (nonatomic,retain) IBOutlet UIColor *sealColor;
 
 + (MiniBrowserController *)sharedBrowser;
 + (MiniBrowserController *)sharedBrowserWithURL:(NSURL *)urlOrNil;
@@ -48,6 +55,7 @@
 - (IBAction)backButtonPressed:(id)button;
 - (IBAction)fwdButtonPressed:(id)button;
 - (IBAction)refreshButtonPressed:(id)button;
+- (IBAction)openInSafari:(id)button;
 
 - (void)loadURL:(NSURL *)url;
 - (void)LoadRequest:(NSURLRequest *)urlRequest;
