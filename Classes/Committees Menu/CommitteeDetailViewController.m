@@ -62,9 +62,8 @@ enum InfoSectionRows {
 
 - (void)showPopoverMenus:(BOOL)show {
 	if (self.splitViewController && show) {
-		TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
 		if (self.commonMenuControl == nil) {
-			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CommonMenuSegmentControl" owner:appDelegate options:nil];
+			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CommonMenuSegmentControl" owner:[TexLegeAppDelegate appDelegate] options:nil];
 			for (id suspect in objects) {
 				if ([suspect isKindOfClass:[UISegmentedControl class]]) {
 					self.commonMenuControl = (UISegmentedControl *)suspect;

@@ -60,7 +60,4 @@
 - (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context;
 
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSInteger)scope;
-
-@property (nonatomic,readonly) NSString *functionalViewControllerName;
-@property (nonatomic,readonly) NSString *detailViewControllerName;
 @end

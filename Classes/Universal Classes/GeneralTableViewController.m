@@ -42,50 +42,10 @@
 @synthesize searchController, savedScopeButtonIndex;
 #endif
 
-	
-- (NSString *)functionalViewControllerName 
-{ 
-	NSString *retString = @"";
-	
-	if (self.dataSource.name == @"Directory") {
-		retString = @"MasterTableViewController";
-	}
-	else if (self.dataSource.name == @"Committees") {
-		retString = @"CommitteeTableViewController";
-	}
-	else if (self.dataSource.name == @"Maps") {
-		retString = @"MapsTableViewController";
-	}
-	else // (self.dataSource.name == @"Resources")
-		retString = @"LinksTableViewController";
-	
-	return retString;
-}
-	
-- (NSString *)detailViewControllerName 
-{ 
-	NSString *retString = @"";
-	
-	if (self.dataSource.name == @"Directory") {
-		retString = @"LegislatorDetailViewController";
-	}
-	else if (self.dataSource.name == @"Committees") {
-		retString = @"CommitteeDetailViewController";
-	}
-	else if (self.dataSource.name == @"Maps") {
-		retString = @"MapsDetailViewController";
-	}
-	else // (self.dataSource.name == @"Resources")
-		retString = @"MiniBrowserView";
-
-	return retString;
-}
-
-
 
 - (void)setStoredSelectionWithRow:(NSInteger)row section:(NSInteger)section {
 	// we have moved to level 1, remove it's stored row/section selection
-	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 	if (appDelegate.savedLocation != nil) {
 		NSInteger functionIndex = [appDelegate indexForFunctionalViewController:self];
 		//[appDelegate.savedLocation replaceObjectAtIndex:0 withObject:[NSNumber numberWithInteger:appDelegate.tabBarController.selectedIndex]]; //tab
@@ -102,7 +62,7 @@
 }
 
 - (void)validateStoredSelection {
-	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 	NSInteger functionIndex = [appDelegate indexForFunctionalViewController:self];
 	//	NSInteger tabSelection = appDelegate.tabBarController.selectedIndex;
 
@@ -205,13 +165,21 @@
 
 // the user selected a row in the table.
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
-	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]) && (self.detailViewController != nil);
+	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]) && (self.splitViewController != nil);
 
+	UIViewController *openInController = (isSplitViewDetail) ? self.detailViewController : self;
+	
 	// deselect the new row using animation
     [tableView deselectRowAtIndexPath:newIndexPath animated:animated];	
 	
-	self.navigationController.toolbarHidden = YES;	
+	if (!openInController) {
+		NSLog(@"Error opening detail controller from GeneralTableViewController:didSelect ...");
+		return;
+	}
 	
+	if (isSplitViewDetail == NO)
+		self.navigationController.toolbarHidden = YES;
+		
 	if (dataSource.name == @"Resources"){ // has it's own special controller...
 		LinksMenuDataSource * tempDataSource = (LinksMenuDataSource *)dataSource;
 		BOOL addLinkRow = [tempDataSource isAddLinkPlaceholderAtIndexPath:newIndexPath];
@@ -229,7 +197,9 @@
 				if (!addLinkRow) { // we're editing an existing link
 					linksDetail.link = [[linksDetail fetchedResultsController] objectAtIndexPath:newIndexPath];
 				}
-				[[self navigationController] pushViewController:linksDetail animated:animated];
+				
+				[[openInController navigationController] pushViewController:linksDetail animated:animated];
+
 				[linksDetail release];
 			}
 		}
@@ -239,21 +209,31 @@
 			
 			NSString * action = [NSString stringWithString:[actionArray objectAtIndex:1]];
 			NSNumber * destination = [actionArray objectAtIndex:0];
-			TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+			TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 			
 			if ([action isEqualToString:@"aboutView"]) {
-				if (appDelegate != nil) [appDelegate showAboutDialog:self];
+				if (appDelegate != nil) [appDelegate showAboutDialog:openInController];
 			}
 			else if ([action isEqualToString:@"voteInfoView"]) {
-				if (appDelegate != nil) [appDelegate showVoteInfoDialog:self];
+				if (appDelegate != nil) [appDelegate showVoteInfoDialog:openInController];
 			}
 			else {
 				NSURL *url = [UtilityMethods safeWebUrlFromString:action];
 				
 				if ([UtilityMethods canReachHostWithURL:url]) { // got a network connection
 					if (destination.integerValue == URLAction_internalBrowser) {
-						MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
-						[mbc display:self];
+						MiniBrowserController *mbc = nil;
+						
+						// we might already have a browser loaded and ready to go
+						if (self.detailViewController && [self.detailViewController isKindOfClass:[MiniBrowserController class]]) {
+							mbc = (MiniBrowserController *) self.detailViewController;
+							[mbc loadURL:url];
+						}
+						else
+							mbc = [MiniBrowserController sharedBrowserWithURL:url];
+
+						if (isSplitViewDetail == NO)
+							[mbc display:openInController];
 					}
 					else { // (destination == URLAction_externalBrowser)
 						[UtilityMethods openURLWithTrepidation:url];
@@ -276,16 +256,18 @@
 		}		
 	}
 	else if (dataSource.name == @"Directory") {
-		if (self.detailViewController == nil)
+		if (self.detailViewController == nil)	// just assume it's a typical legislator detail (could be corePlot though)
 			self.detailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
 
-		((LegislatorDetailViewController *)self.detailViewController).legislator = [dataSource legislatorDataForIndexPath:newIndexPath];
+		if ([self.detailViewController respondsToSelector:@selector(setLegislator:)])
+			[self.detailViewController performSelector:@selector(setLegislator:) withObject:[dataSource legislatorDataForIndexPath:newIndexPath]];
+		
+		//((LegislatorDetailViewController *)self.detailViewController).legislator = [dataSource legislatorDataForIndexPath:newIndexPath];
 		//[self.detailViewController setValue:[dataSource legislatorDataForIndexPath:newIndexPath] forKey:@"legislator"];
-
 		
 		if (isSplitViewDetail == NO) {
 			// push the detail view controller onto the navigation stack to display it
-			[self.navigationController pushViewController:self.detailViewController animated:YES];
+			[openInController.navigationController pushViewController:self.detailViewController animated:YES];
 			self.detailViewController = nil;
 		}
 	}
@@ -296,9 +278,7 @@
 
 		// create an MapsDetailViewController. This controller will display the full size tile for the element
 		if (self.detailViewController == nil) {
-			MapsDetailViewController *tempController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
-			self.detailViewController = tempController;
-			[tempController release];
+			self.detailViewController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
 		}
 				
 		[self.detailViewController setMapString:[dataSource mapFileForIndexPath:newIndexPath]];
@@ -353,7 +333,7 @@
 
 - (void)showPopoverMenus:(BOOL)show {
 	if (self.splitViewController && show) {
-		TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 		if (self.aboutButton == nil) {
 			self.aboutButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_20.png"] 
 																style:UIBarButtonItemStylePlain target:appDelegate 
@@ -377,7 +357,7 @@
 	
 	[self validateStoredSelection];
 
-	if ([dataSource usesToolbar])
+	if (/*[UtilityMethods isIPadDevice] == NO &&*/ [dataSource usesToolbar])
 		self.navigationController.toolbarHidden = NO;
 	
 	[self showPopoverMenus:[UtilityMethods isLandscapeOrientation]];
@@ -429,7 +409,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated
 {
-	if ([dataSource usesSearchbar]) {
+	if ([UtilityMethods isIPadDevice] == NO && [dataSource usesSearchbar]) {
 		self.navigationItem.titleView = nil;
 	}
 }
@@ -472,7 +452,7 @@
 		}
 	}	
 	
-	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 
 	if (appDelegate.savedLocation != nil) {
 		// save off this level's selection to our AppDelegate
@@ -486,6 +466,7 @@
 			
 			NSIndexPath *selectionPath = [NSIndexPath indexPathForRow:rowSelection inSection:sectionSelection];
 			
+			[self.theTableView selectRowAtIndexPath:selectionPath animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 			[self tableView:self.theTableView didSelectRowAtIndexPath:selectionPath withAnimation:NO];
 			
 		}
@@ -503,7 +484,8 @@
 	}
 #endif
 	
-	[self resetStoredSelection];
+	if (self.splitViewController == nil)
+		[self resetStoredSelection];
 	
 }
 
