@@ -26,8 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	self.appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
-
+	self.appDelegate = [TexLegeAppDelegate appDelegate];
 
 	self.itemPopoverController = nil;
 	
