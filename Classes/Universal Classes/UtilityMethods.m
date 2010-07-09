@@ -193,10 +193,7 @@
 + (BOOL) isNetworkReachable {
 	BOOL reachable = YES;
 	
-	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
-	if (appDelegate != nil) {
-		reachable = (appDelegate.internetConnectionStatus != NotReachable);
-	}
+	reachable = ([TexLegeAppDelegate appDelegate].internetConnectionStatus != NotReachable);
 	
 	return reachable;
 }
