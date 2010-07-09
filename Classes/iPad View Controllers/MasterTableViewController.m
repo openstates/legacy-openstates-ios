@@ -46,17 +46,6 @@
 }
 */
 
-- (NSString *)functionalViewControllerName 
-{ 
-	return @"MasterTableViewController";
-}
-
-- (NSString *)detailViewControllerName 
-{ 
-	return @"LegislatorDetailViewController";
-}
-
-
 - (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context {
 	self.dataSource = [[sourceClass alloc] initWithManagedObjectContext:context];
 	self.title = [dataSource name];	
@@ -73,7 +62,7 @@
 		
 		if (![[dataSource fetchedResultsController] performFetch:&error]) {
 			// Handle the error...
-		}				
+		}
 	}
 	
 	// GREG do we need this one?  does it break things?
@@ -138,10 +127,10 @@
 	}
 
 	
-	// if we are in in portrait then we're in a popover, hide buttons as needed ....
+	// if we are in in portrait orientation then we are appearing in a popover, hide buttons as needed ....
 	
 	
-	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 	
 	if (appDelegate.savedLocation != nil) {
 		// save off this level's selection to our AppDelegate
@@ -189,7 +178,8 @@
 	//	[self.searchDisplayController setActive:YES];
 	//	[self.searchDisplayController setActive:NO];
 	//}
-	[self resetStoredSelection];
+	
+	//[self resetStoredSelection];
 }
  
 
@@ -273,7 +263,7 @@
 
 - (void)setStoredSelectionWithRow:(NSInteger)row section:(NSInteger)section {
 	// we have moved to level 1, remove it's stored row/section selection
-	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 	if (appDelegate.savedLocation != nil) {
 		NSInteger functionIndex = [appDelegate indexForFunctionalViewController:self];
 		[appDelegate.savedLocation replaceObjectAtIndex:0 withObject:[NSNumber numberWithInteger:functionIndex]]; //tab
@@ -289,7 +279,7 @@
 }
 
 - (void)validateStoredSelection {
-	TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 	NSInteger functionIndex = [appDelegate indexForFunctionalViewController:self];
 	NSInteger tabSavedSelection = [[appDelegate.savedLocation objectAtIndex:0] integerValue];
 	
@@ -314,11 +304,11 @@
 	// start filtering names...
 	if (searchText.length > 0) {
 		if ([self.dataSource respondsToSelector:@selector(setFilterByString:)])
-			[self.dataSource setFilterByString:searchText];
+			[self.dataSource performSelector:@selector(setFilterByString:) withObject:searchText];
 	}	
 	else {
 		if ([self.dataSource respondsToSelector:@selector(removeFilter)])
-			[self.dataSource removeFilter];
+			[self.dataSource performSelector:@selector(removeFilter)];
 	}
 	
 }
