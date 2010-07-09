@@ -98,7 +98,7 @@
 @property NetworkStatus internetConnectionStatus;
 @property NetworkStatus localWiFiConnectionStatus;
 
-- (void)setTabOrderIfSaved;
+//- (void)setTabOrderIfSaved;
 - (IBAction)saveAction:sender;
 - (IBAction)showOrHideMenuPopover:(id)sender;
 - (IBAction)showOrHideAboutMenuPopover:(id)sender;
@@ -108,5 +108,5 @@
 - (NSInteger) indexForFunctionalViewController:(id)viewController;
 - (void) changeActiveFeaturedControllerTo:(NSInteger)controllerIndex;
 
-
++ (TexLegeAppDelegate *)appDelegate;
 @end
