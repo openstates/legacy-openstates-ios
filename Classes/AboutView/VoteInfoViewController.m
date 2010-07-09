@@ -11,6 +11,7 @@
 #import "VoteInfoViewController.h"
 #import "UtilityMethods.h"
 #import "MiniBrowserController.h"
+#import "TexLegeAppDelegate.h"
 
 @implementation VoteInfoViewController
 
@@ -94,7 +95,8 @@
 {
 	if ([UtilityMethods isIPadDevice]) {
 		if ([UtilityMethods canReachHostWithURL:self.projectWebsiteURL]) {
-			UIViewController *tempController = self.parentViewController;
+			TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+			UIViewController *tempController = (self.splitViewController) ? appDelegate.currentDetailViewController: appDelegate.currentMasterViewController;				
 			[self done:sender];	
 			MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:self.projectWebsiteURL];
 			[mbc display:tempController];
