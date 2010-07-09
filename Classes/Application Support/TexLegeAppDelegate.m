@@ -8,6 +8,7 @@
 
 #import "TexLegeAppDelegate.h"
 #import "UtilityMethods.h"
+#import "PartisanIndexStats.h"
 
 #import "LinksMenuDataSource.h"
 #import "DirectoryDataSource.h"
@@ -230,6 +231,8 @@ NSInteger kNoSelection = -1;
 }
 
 - (void) setupFeatures {
+	[[PartisanIndexStats sharedPartisanIndexStats] setManagedObjectContext:self.managedObjectContext];
+	
 	BOOL isIpad = [UtilityMethods isIPadDevice];
 	
 	if (isIpad) {
