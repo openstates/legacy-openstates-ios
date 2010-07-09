@@ -51,20 +51,7 @@
         self.backgroundView.frame = self.bounds;
     }
 }
-/*
-- (void)setBackgroundColor:(UIColor *)backgroundColor
-{
-    [super setBackgroundColor:backgroundColor];
-	
-	self.leg_photoView.backgroundColor = backgroundColor;
-	self.leg_titleLab.backgroundColor = backgroundColor;
-	self.leg_partyDistLab.backgroundColor = backgroundColor;
-	self.leg_tenureLab.backgroundColor = backgroundColor;
-	self.leg_nameLab.backgroundColor = backgroundColor;
-	self.leg_sliderViewPlaceHolder.backgroundColor = backgroundColor;
-	self.leg_sliderView.backgroundColor = backgroundColor;	
-}
-*/
+
 - (void)dealloc {
 	self.leg_photoView = self.leg_titleLab = self.leg_partyDistLab = self.leg_tenureLab = self.leg_nameLab = nil;
 	self.leg_sliderViewPlaceHolder = self.leg_sliderView = nil;
@@ -85,22 +72,13 @@
 	self.leg_partyDistLab.text = [self.legislator districtPartyString];
 	self.leg_tenureLab.text = [self.legislator tenureString];
 	
-	if (self.leg_sliderView == nil) {
-		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StaticGradientSliderView" owner:self options:NULL];
-		for (id suspect in objects) {
-			if ([suspect isKindOfClass:[StaticGradientSliderView class]]) {
-				self.leg_sliderView = suspect;
-			}
-		}
-	}
+	if (self.leg_sliderView == nil)
+		self.leg_sliderView = [StaticGradientSliderView newSliderViewWithOwner:self];
 	if (self.leg_sliderView) {
-		CGRect sliderViewFrame = self.leg_sliderViewPlaceHolder.frame;
-		[self.leg_sliderView setFrame:sliderViewFrame];
-		[self.leg_sliderView.sliderControl setThumbImage:[UIImage imageNamed:@"slider_star.png"] forState:UIControlStateNormal];
-
+		[self.leg_sliderView addToPlaceholder:self.leg_sliderViewPlaceHolder];
+		self.leg_sliderView.usesSmallStar = YES;
 		//self.leg_sliderView.sliderValue = self.legislator.partisan_index.floatValue;
 		[self.leg_sliderView setSliderValue:self.legislator.partisan_index.floatValue animated:NO];
-		[self.contentView addSubview:self.leg_sliderView];
 	}
 	
 }
