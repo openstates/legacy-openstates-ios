@@ -23,6 +23,8 @@
 #import "MiniBrowserController.h"
 #import "MapsDetailViewController.h"
 
+#import "PartisanIndexStats.h"
+
 @interface LegislatorDetailViewController (Private)
 @property (nonatomic, retain) UIPopoverController *popoverController;
 
@@ -43,6 +45,7 @@
 @synthesize popoverController, commonMenuControl;
 @synthesize scatterPlotView, dataForPlot; //, dataForChart;
 
+@synthesize leg_indexTitleLab, leg_rankLab;
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab;
 @synthesize indivSlider, partySlider, allSlider;
 @synthesize indivPHolder, partyPHolder, allPHolder;
@@ -53,8 +56,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-	[self constructScatterPlot];
 	
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
@@ -70,19 +71,49 @@
 		
 		NSString * headerViewXib = [UtilityMethods isIPadDevice] ? @"LegislatorDetailHeaderView~ipad" : @"LegislatorDetailHeaderView~iphone";
 		
-		
 		// Load one of our header views (iPad or iPhone selected automatically by the file's name extension
-		if (self.headerView == nil) {
-			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:headerViewXib owner:self options:NULL];
-			self.headerView = [objects objectAtIndex:0];
-		}
+		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:headerViewXib owner:self options:NULL];
+		self.headerView = [objects objectAtIndex:0];
+
+		CGRect headerRect = self.headerView.bounds;
+		headerRect.size.width = headerSuper.bounds.size.width;
+
 		if ([UtilityMethods isIPadDevice] == NO) {
-			CGFloat headerHeight = self.scatterPlotView.bounds.size.height+self.headerView.bounds.size.height;
-			[headerSuper setBounds:CGRectMake(0.0f, 0.0f, headerSuper.bounds.size.width, headerHeight)];
-	
-		}			
+			CGFloat superHeight = self.scatterPlotView.bounds.size.height+self.headerView.bounds.size.height;
+			[headerSuper setBounds:CGRectMake(0.0f, 0.0f, headerSuper.bounds.size.width, superHeight)];
+		}
 		[headerSuper insertSubview:self.headerView aboveSubview:self.scatterPlotView];
+		[self.headerView setFrame:headerRect];
+		
+		NSLog(@"HeaderSuperView: %@", headerSuper);
+		NSLog(@"HeaderView: %@", self.headerView);
+		NSLog(@"ScatterPlotView: %@", self.scatterPlotView);
 	}
+#if 0
+	// buggy UI crap pissing me off
+	if ([UtilityMethods isIPadDevice]) {
+		UIView * headerSuper = self.leg_rankLab.superview;
+		
+		NSData *labelArchive = [NSKeyedArchiver archivedDataWithRootObject:self.leg_rankLab];
+		[self.leg_rankLab removeFromSuperview];
+		self.leg_rankLab = nil;
+		
+		self.leg_rankLab = [NSKeyedUnarchiver unarchiveObjectWithData:labelArchive];
+		[headerSuper addSubview:self.leg_rankLab];
+		
+		/*
+		 CGRect labelRect = self.leg_rankLab.frame;
+		 NSString *labelString = self.leg_rankLab.text;
+		 [self.leg_rankLab removeFromSuperview];
+		 self.leg_rankLab = nil;
+		 
+		 self.leg_rankLab = [[UILabel alloc] initWithFrame:labelRect];
+		 self.leg_rankLab.text = labelString;
+		 [headerSuper addSubview:self.leg_rankLab];
+		 */
+	}
+#endif
+	
 }
 	
 - (void)setupHeader {
@@ -96,21 +127,39 @@
 	self.leg_partyLab.text = [self.legislator party_name];
 	self.leg_districtLab.text = [NSString stringWithFormat:@"District %@", self.legislator.district];
 	self.leg_tenureLab.text = [self.legislator tenureString];
+	
+	[self constructScatterPlot];
 
 	if ([UtilityMethods isIPadDevice]) {
-		if (self.indivSlider == nil) {
-			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StaticGradientSliderView" owner:self options:NULL];
-			for (id suspect in objects)
-				if ([suspect isKindOfClass:[StaticGradientSliderView class]])
-					self.indivSlider = suspect;
-		}
-		CGRect sliderViewFrame = indivPHolder.bounds;
-		[self.indivSlider setFrame:sliderViewFrame];
-		[self.indivSlider.sliderControl setThumbImage:[UIImage imageNamed:@"slider_star_big.png"] forState:UIControlStateNormal];
-		[indivPHolder addSubview:self.indivSlider];
+		PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
+
+		self.leg_indexTitleLab.text = [NSString stringWithFormat:@"Legislator Roll Call Index (%@)",
+									   [indexStats currentSessionYear]];
+
+		self.leg_rankLab.text = [NSString stringWithFormat:@"Rank: %@",
+								 [indexStats partisanRankForLegislator:self.legislator onlyParty:YES]];
+		
+		if (!self.indivSlider)
+			self.indivSlider = [StaticGradientSliderView newSliderViewWithOwner:self];
+		if (!self.partySlider)
+			self.partySlider = [StaticGradientSliderView newSliderViewWithOwner:self];
+		if (!self.allSlider)
+			self.allSlider = [StaticGradientSliderView newSliderViewWithOwner:self];
+
 		if (self.indivSlider) {
+			[self.indivSlider addToPlaceholder:indivPHolder];
 			self.indivSlider.sliderValue = self.legislator.partisan_index.floatValue;
 		}	
+		if (self.partySlider) {
+			[self.partySlider addToPlaceholder:partyPHolder];
+			self.partySlider.sliderValue = [[indexStats partyPartisanIndexUsingLegislator:self.legislator] floatValue];
+		}	
+		if (self.allSlider) {
+			[self.allSlider addToPlaceholder:allPHolder];
+			self.allSlider.sliderValue = [[indexStats overallPartisanIndexUsingLegislator:self.legislator] floatValue];
+
+		}	
+		//[self.headerView setNeedsDisplay];
 	}
 }
 
@@ -161,7 +210,7 @@
 
 - (void)showPopoverMenus:(BOOL)show {
 	if (self.splitViewController && show) {
-		TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 		if (self.commonMenuControl == nil) {
 			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CommonMenuSegmentControl" owner:appDelegate options:nil];
 			for (id suspect in objects) {
@@ -188,7 +237,7 @@
 	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
 	if (self.legislator == nil && ![UtilityMethods isLandscapeOrientation])  {
 		
-		TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 		
 		if (appDelegate.savedLocation != nil) {
 			// save off this level's selection to our AppDelegate
@@ -264,8 +313,9 @@
 	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
 	   forPopoverController: (UIPopoverController*)pc {
 	
-	barButtonItem.title = @"Legislators";	
-	[self.navigationItem setRightBarButtonItem:[barButtonItem retain] animated:YES];
+	barButtonItem.title = @"Legislators";
+	[self showMasterListPopoverButtonItem:barButtonItem];
+	//[self.navigationItem setRightBarButtonItem:[barButtonItem retain] animated:YES];
 	//[self.navigationController setNavigationBarHidden:NO animated:YES];
 	
     self.popoverController = pc;
@@ -273,10 +323,12 @@
 
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
-- (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController 
+- (void)splitViewController: (UISplitViewController*)svc 
+	 willShowViewController:(UIViewController *)aViewController 
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
 	
-	[self.navigationItem setRightBarButtonItem:nil animated:YES];
+	[self invalidateMasterListPopoverButtonItem:barButtonItem];
+	//[self.navigationItem setRightBarButtonItem:nil animated:YES];
 	//[self.navigationController setNavigationBarHidden:YES animated:NO];
 
 	self.popoverController = nil;
@@ -817,7 +869,7 @@
 	
 	if (cellInfo.isClickable) {
 		if (cellInfo.entryType == DirectoryTypeIndexAbout) {
-			TexLegeAppDelegate *appDelegate = (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
+			TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 			if (appDelegate != nil) [appDelegate showVoteInfoDialog:self];
 		}
 		else if (cellInfo.entryType == DirectoryTypeNotes) { // We need to edit the notes thing...
