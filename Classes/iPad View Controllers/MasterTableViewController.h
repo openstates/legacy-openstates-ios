@@ -34,9 +34,6 @@
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *menuButton;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *aboutButton;
 
-@property (nonatomic,readonly) NSString *functionalViewControllerName;
-@property (nonatomic,readonly) NSString *detailViewControllerName;
-
 - (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end
