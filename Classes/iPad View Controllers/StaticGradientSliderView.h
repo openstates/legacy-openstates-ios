@@ -12,12 +12,16 @@
 @interface StaticGradientSliderView : UIView {
 	IBOutlet UIImageView *gradientImage;
 	IBOutlet UISlider *sliderControl;
+@private
+	BOOL	m_usesSmallStar;
 }
 
 @property (nonatomic, retain) IBOutlet UIImageView *gradientImage;
 @property (nonatomic, retain) IBOutlet UISlider *sliderControl;
 @property (nonatomic) CGFloat sliderValue;
+@property (readwrite) BOOL usesSmallStar;		// defaults to big star, not small star
 
 - (void)setSliderValue:(float)newVal animated:(BOOL)isAnimated;
-
+- (void)addToPlaceholder:(UIView *)placeholder;
++ (StaticGradientSliderView *) newSliderViewWithOwner:(id)owner;
 @end
