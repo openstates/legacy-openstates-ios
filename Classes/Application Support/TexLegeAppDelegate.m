@@ -259,6 +259,7 @@ NSInteger kNoSelection = -1;
 	else		[self.directoryTableTabbedVC configureWithDataSourceClass:
 						[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.committeeTableTabbedVC configureWithDataSourceClass:[CommitteesDataSource class] andManagedObjectContext:self.managedObjectContext];
+	[self.corePlotTabbedVC configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.mapsTableTabbedVC configureWithDataSourceClass:[MapImagesDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.linksTableTabbedVC configureWithDataSourceClass:[LinksMenuDataSource class] andManagedObjectContext:self.managedObjectContext];
 	

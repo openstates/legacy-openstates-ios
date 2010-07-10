@@ -58,8 +58,8 @@
 	IBOutlet id currentMasterViewController, currentDetailViewController;
 	
 	IBOutlet MasterTableViewController *legMasterTableViewController;
-		
-	IBOutlet CPTestApp_iPadViewController *corePlotTabbedVC;
+	IBOutlet GeneralTableViewController	*corePlotTabbedVC;
+	//IBOutlet CPTestApp_iPadViewController *corePlotTabbedVC;
 	
 @private
 	NSMutableArray *functionalViewControllers;	
@@ -75,7 +75,8 @@
 @property (nonatomic, retain) IBOutlet GeneralTableViewController *directoryTableTabbedVC, *committeeTableTabbedVC, *mapsTableTabbedVC, *linksTableTabbedVC;
 //@property (nonatomic, retain) IBOutlet GeneralTableViewController *billsTableTabbedVC;
 
-@property (nonatomic, retain) IBOutlet CPTestApp_iPadViewController *corePlotTabbedVC;
+@property (nonatomic, retain) IBOutlet GeneralTableViewController *corePlotTabbedVC;
+//@property (nonatomic, retain) IBOutlet CPTestApp_iPadViewController *corePlotTabbedVC;
 
 @property (nonatomic, retain) IBOutlet UISplitViewController *splitViewController;
 @property (nonatomic, retain) IBOutlet UINavigationController *masterNavigationController, *detailNavigationController;
