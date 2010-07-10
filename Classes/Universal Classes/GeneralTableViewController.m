@@ -170,7 +170,8 @@
 	UIViewController *openInController = (isSplitViewDetail) ? self.detailViewController : self;
 	
 	// deselect the new row using animation
-    [tableView deselectRowAtIndexPath:newIndexPath animated:animated];	
+	if ([UtilityMethods isIPadDevice] == NO)
+		[tableView deselectRowAtIndexPath:newIndexPath animated:animated];	
 	
 	if (!openInController) {
 		NSLog(@"Error opening detail controller from GeneralTableViewController:didSelect ...");
@@ -362,6 +363,16 @@
 	
 	[self showPopoverMenus:[UtilityMethods isLandscapeOrientation]];
 	
+	if ([UtilityMethods isIPadDevice]) {
+		if ([self.theTableView indexPathForSelectedRow] == nil)  {
+			NSUInteger ints[2] = {0,0};
+			NSIndexPath* indexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
+			[self.theTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
+			[self tableView:self.theTableView didSelectRowAtIndexPath:indexPath];
+			//self.detailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
+		}
+	}	
+	
 	if ([dataSource usesSearchbar]) {
 		
 		if (self.searchBar == nil) {
@@ -400,7 +411,7 @@
 #endif
 		
 		self.navigationController.navigationBar.clipsToBounds = TRUE;
-
+		
 	}
 	
 	// force the tableview to load
@@ -416,6 +427,8 @@
 
 -(void)viewDidLoad {
 	
+	//self.clearsSelectionOnViewWillAppear = NO;
+
 	// FETCH CORE DATA
 	if ([dataSource usesCoreData])
 	{		
@@ -463,7 +476,6 @@
 		//debug_NSLog(@"Restoring Selection: Row: %d    Section: %d", rowSelection, sectionSelection);
 		
 		if (rowSelection != -1) {
-			
 			NSIndexPath *selectionPath = [NSIndexPath indexPathForRow:rowSelection inSection:sectionSelection];
 			
 			[self.theTableView selectRowAtIndexPath:selectionPath animated:NO scrollPosition:UITableViewScrollPositionMiddle];

@@ -15,7 +15,6 @@
 @implementation LinksDetailViewController
 
 @synthesize link, editingTableViewCell, fetchedResultsController;
-@synthesize commonMenuControl;
 
 #pragma mark -
 #pragma mark View controller
@@ -44,26 +43,7 @@
     return self;
 }
 
-
-- (void)showPopoverMenus:(BOOL)show {
-	if (self.splitViewController && show) {
-		if (self.commonMenuControl == nil) {
-			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CommonMenuSegmentControl" owner:[TexLegeAppDelegate appDelegate] options:nil];
-			for (id suspect in objects) {
-				if ([suspect isKindOfClass:[UISegmentedControl class]]) {
-					self.commonMenuControl = (UISegmentedControl *)suspect;
-					break;
-				}
-			}
-		}
-		
-		self.navigationItem.titleView = self.commonMenuControl;
-	}
-	else {
-		self.navigationItem.titleView = nil;
-	}
-}
-
+/*
 - (void)viewWillAppear:(BOOL)animated {
 	[self showPopoverMenus:([UtilityMethods isLandscapeOrientation] == NO)];
 }
@@ -71,6 +51,7 @@
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
 }
+*/
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
@@ -186,7 +167,6 @@
 
 - (void)dealloc {
     [link release];
-	self.commonMenuControl = nil;
     [super dealloc];
 }
 

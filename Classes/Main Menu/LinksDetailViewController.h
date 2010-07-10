@@ -12,7 +12,6 @@
 @class LinkObj, EditingTableViewCell;
 
 @interface LinksDetailViewController : UITableViewController {
-	IBOutlet UISegmentedControl *commonMenuControl;
     @private
 	LinkObj *link;
 	NSFetchedResultsController * fetchedResultsController;
@@ -23,7 +22,6 @@
 @property (nonatomic, retain) LinkObj *link;
 @property (nonatomic, retain) NSFetchedResultsController * fetchedResultsController;
 @property (nonatomic, assign) IBOutlet EditingTableViewCell *editingTableViewCell;
-@property (nonatomic, retain) IBOutlet UISegmentedControl *commonMenuControl;
 
 - (id)initWithStyle:(UITableViewStyle)style resultsController:(NSFetchedResultsController *)controller;
 

@@ -24,9 +24,9 @@
 #import "MapsDetailViewController.h"
 
 #import "PartisanIndexStats.h"
+//#import "UIImage+ResolutionIndependent.h"
 
 @interface LegislatorDetailViewController (Private)
-@property (nonatomic, retain) UIPopoverController *popoverController;
 
 - (void) pushMapViewWithURL:(NSURL *)url;
 - (void) showWebViewWithURL:(NSURL *)url;
@@ -42,14 +42,13 @@
 @synthesize legislator, sectionArray;
 @synthesize startupSplashView, headerView;
 
-@synthesize popoverController, commonMenuControl;
+@synthesize popoverController;
 @synthesize scatterPlotView, dataForPlot; //, dataForChart;
 
 @synthesize leg_indexTitleLab, leg_rankLab, leg_chamberPartyLab, leg_chamberLab;
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab;
 @synthesize indivSlider, partySlider, allSlider;
 @synthesize indivPHolder, partyPHolder, allPHolder;
-
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -58,8 +57,10 @@
     [super viewDidLoad];
 	
     // Uncomment the following line to preserve selection between presentations.
-     self.clearsSelectionOnViewWillAppear = NO;
- 
+	self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+	self.clearsSelectionOnViewWillAppear = NO;
+	//self.hidesBottomBarWhenPushed = YES;
+	
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 	//self.navigationItem.rightBarButtonItem = self.editButtonItem;
 
@@ -92,33 +93,27 @@
 - (void)setupHeaderView {
 	if (self.headerView == nil && self.scatterPlotView) {
 		UIView * headerSuper = self.scatterPlotView.superview;
-		
 		NSString * headerViewXib = [UtilityMethods isIPadDevice] ? @"LegislatorDetailHeaderView~ipad" : @"LegislatorDetailHeaderView~iphone";
 		
 		// Load one of our header views (iPad or iPhone selected automatically by the file's name extension
 		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:headerViewXib owner:self options:NULL];
 		self.headerView = [objects objectAtIndex:0];
-
 		CGRect headerRect = self.headerView.bounds;
 		headerRect.size.width = headerSuper.bounds.size.width;
-
-		if ([UtilityMethods isIPadDevice] == NO) {
-			//CGFloat oldSuperHeight = headerSuper.bounds.size.height;
-			CGFloat newSuperHeight = self.scatterPlotView.bounds.size.height+self.headerView.bounds.size.height;
-			//CGFloat difference = oldSuperHeight - newSuperHeight;
-			[headerSuper setFrame:CGRectMake(0.0f, 0.0f, headerSuper.bounds.size.width, newSuperHeight)];
-			
-		}
+		
+		CGFloat newSuperHeight = self.scatterPlotView.bounds.size.height+self.headerView.bounds.size.height;
+		[headerSuper setFrame:CGRectMake(0.0f, 0.0f, headerSuper.bounds.size.width, newSuperHeight)];
 		[headerSuper insertSubview:self.headerView aboveSubview:self.scatterPlotView];
 		[self.headerView setFrame:headerRect];
-		//[self.headerView layoutIfNeeded];
 		
-		NSLog(@"HeaderSuperView: %@", headerSuper);
-		NSLog(@"HeaderView: %@", self.headerView);
-		NSLog(@"TableHeader: %@", self.tableView.tableHeaderView);
-		NSLog(@"TableView: %@", self.tableView);
+		//UIImage *sealImage = [UIImage imageWithContentsOfResolutionIndependentFile:@"seal.png"];
+		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
+		UIColor *sealColor = [UIColor colorWithPatternImage:sealImage];	
+		self.headerView.backgroundColor = sealColor;
+		//self.view.backgroundColor = sealColor;
+		//self.tableView.backgroundColor = [UIColor clearColor];
+		
 	}
-	
 }
 	
 - (void)setupHeader {
@@ -167,7 +162,6 @@
 			self.allSlider.sliderValue = [[indexStats overallPartisanIndexUsingLegislator:self.legislator] floatValue];
 
 		}	
-		//[self.headerView setNeedsDisplay];
 	}
 }
 
@@ -181,10 +175,8 @@
 		
 		[self setupHeader];
 		
-		if (self.popoverController != nil) {
-			[self.popoverController dismissPopoverAnimated:YES];
-			//self.popoverController = nil; // i think this breaks, unless you're in a showHide type of situation.
-		}        
+		if (popoverController != nil)
+			[popoverController dismissPopoverAnimated:YES];
 		
 		[self createSectionList];
 		
@@ -197,6 +189,7 @@
 
 - (void)showMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
     // Add the popover button to the left navigation item.
+	barButtonItem.title = @"Legislators";
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
 }
 
@@ -217,25 +210,28 @@
 
 
 - (void)showPopoverMenus:(BOOL)show {
-	if (self.splitViewController && show) {
-		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-		if (self.commonMenuControl == nil) {
-			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CommonMenuSegmentControl" owner:appDelegate options:nil];
-			for (id suspect in objects) {
-				if ([suspect isKindOfClass:[UISegmentedControl class]]) {
-					self.commonMenuControl = (UISegmentedControl *)suspect;
-					break;
+#if 0
+	if ([UtilityMethods isIPadDevice]) {
+		if (self.splitViewController && show) {
+			TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+			if (self.commonMenuControl == nil) {
+				NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CommonMenuSegmentControl" owner:appDelegate options:nil];
+				for (id suspect in objects) {
+					if ([suspect isKindOfClass:[UISegmentedControl class]]) {
+						self.commonMenuControl = (UISegmentedControl *)suspect;
+						break;
+					}
 				}
 			}
+			
+			self.navigationItem.titleView = self.commonMenuControl;
 		}
-		
-		self.navigationItem.titleView = self.commonMenuControl;
+		else {
+			self.navigationItem.titleView = nil;
+		}
 	}
-	else {
-		self.navigationItem.titleView = nil;
-	}
+#endif
 }
-
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -321,14 +317,10 @@
 	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
 	   forPopoverController: (UIPopoverController*)pc {
 	
-	barButtonItem.title = @"Legislators";
 	[self showMasterListPopoverButtonItem:barButtonItem];
-	//[self.navigationItem setRightBarButtonItem:[barButtonItem retain] animated:YES];
-	//[self.navigationController setNavigationBarHidden:NO animated:YES];
 	
     self.popoverController = pc;
 }
-
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
 - (void)splitViewController: (UISplitViewController*)svc 
@@ -336,9 +328,6 @@
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
 	
 	[self invalidateMasterListPopoverButtonItem:barButtonItem];
-	//[self.navigationItem setRightBarButtonItem:nil animated:YES];
-	//[self.navigationController setNavigationBarHidden:YES animated:NO];
-
 	self.popoverController = nil;
 }
 
@@ -350,6 +339,9 @@
 		// do I need to set pc to nil?  I need to confirm, but I think it breaks things.
     }
 }
+
+#pragma mark -
+#pragma mark orientations
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
@@ -394,8 +386,6 @@
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
 	self.popoverController = nil;
 	self.sectionArray = nil;
-	//self.toolbar = nil;
-	self.commonMenuControl = nil;
 	self.indivSlider = self.partySlider = self.allSlider = nil;
 	self.indivPHolder = self.partyPHolder = self.allPHolder = nil;
 	self.legislator = nil;

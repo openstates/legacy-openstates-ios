@@ -81,15 +81,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 		
-	if (!self.menuButton)
-		self.menuButton = self.navigationItem.leftBarButtonItem;
-	
-	if (!self.aboutButton)
-		self.aboutButton = self.navigationItem.rightBarButtonItem;
-	
+	if ([UtilityMethods isIPadDevice]) {
+		if (!self.menuButton)
+			self.menuButton = self.navigationItem.leftBarButtonItem;
+		if (!self.aboutButton)
+			self.aboutButton = self.navigationItem.rightBarButtonItem;
+
+	    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
+}		
     //self.title=@"Legislators";
     self.clearsSelectionOnViewWillAppear = NO;
-    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 	
 	if (self.m_searchDisplayController == nil) {
 		self.m_searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
@@ -112,24 +113,21 @@
 		
 	[self validateStoredSelection];
 	
-	if ([UtilityMethods isLandscapeOrientation] == NO) {		
-		self.navigationItem.leftBarButtonItem = nil;
-		self.navigationItem.rightBarButtonItem = nil;
+	if ([UtilityMethods isIPadDevice]) {
+		if ([UtilityMethods isLandscapeOrientation] == NO) {		
+			self.navigationItem.leftBarButtonItem = nil;
+			self.navigationItem.rightBarButtonItem = nil;
+		}
+		else {
+			if (self.menuButton)
+				self.navigationItem.leftBarButtonItem = self.menuButton;
+			//self.menuButton = nil;
+			if (self.aboutButton)
+				self.navigationItem.rightBarButtonItem = self.aboutButton;
+			//self.aboutButton = nil;
+			
+		}
 	}
-	else {
-		if (self.menuButton)
-			self.navigationItem.leftBarButtonItem = self.menuButton;
-		//self.menuButton = nil;
-		if (self.aboutButton)
-			self.navigationItem.rightBarButtonItem = self.aboutButton;
-		//self.aboutButton = nil;
-		
-	}
-
-	
-	// if we are in in portrait orientation then we are appearing in a popover, hide buttons as needed ....
-	
-	
 	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 	
 	if (appDelegate.savedLocation != nil) {
@@ -141,7 +139,6 @@
 		//debug_NSLog(@"Restoring Selection: Row: %d    Section: %d", rowSelection, sectionSelection);
 		
 		if (rowSelection != -1) {
-			
 			NSIndexPath *selectionPath = [NSIndexPath indexPathForRow:rowSelection inSection:sectionSelection];
 						
 			// I'm not sure if this is how you do the "selector" business, so I've commented it out
@@ -157,14 +154,14 @@
 		}
 	}
 	
-	//if (self.detailViewController.legislator == nil)
-	if ([self.tableView indexPathForSelectedRow] == nil)  {
-		NSUInteger ints[2] = {0,0};
-		NSIndexPath* indexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
-		[self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
-		self.detailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
-	}
-	
+	if ([UtilityMethods isIPadDevice]) {
+		if ([self.tableView indexPathForSelectedRow] == nil)  {
+			NSUInteger ints[2] = {0,0};
+			NSIndexPath* indexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
+			[self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
+			self.detailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
+		}
+	}	
 	if ([UtilityMethods isIPadDevice])
 		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
 }
@@ -179,7 +176,8 @@
 	//	[self.searchDisplayController setActive:NO];
 	//}
 	
-	//[self resetStoredSelection];
+	if ([UtilityMethods isIPadDevice] == NO)
+		[self resetStoredSelection];
 }
  
 
@@ -214,6 +212,15 @@
 			[self.detailViewController.tableView scrollRectToVisible:self.detailViewController.headerView.bounds animated:YES];
 		}
 	}
+	else {
+		/* this isn't working yet */
+		if (self.detailViewController == nil)	// just assume it's a typical legislator detail (could be corePlot though)
+			self.detailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
+		[self.navigationController pushViewController:self.detailViewController animated:YES];
+		self.detailViewController = nil;
+
+	}
+
 	
 }
 //END:code.split.delegate

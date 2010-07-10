@@ -10,6 +10,8 @@
 @implementation CPTestApp_iPadViewController
 
 @synthesize dataForChart, dataForPlot, detailViewController;
+@synthesize popoverController;
+@synthesize legislator;
 
 #pragma mark -
 #pragma mark Initialization and teardown
@@ -37,6 +39,18 @@
     return YES;
 }
 
+- (void)setLegislator:(LegislatorObj *)newLegislator {
+	if (legislator) [legislator release], legislator = nil;
+	if (newLegislator) {
+		legislator = [newLegislator retain];
+				
+		if (popoverController != nil)
+			[popoverController dismissPopoverAnimated:YES];
+		
+		[self.view setNeedsDisplay];
+	}
+}
+/*
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
 	if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
@@ -54,6 +68,50 @@
 		pieChartView.frame = CGRectMake(684.0f, 408.0f, 320.0f, 320.0f);
 	}
 }
+*/
+#pragma mark -
+#pragma mark Popover Support
+
+- (void)showMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
+    // Add the popover button to the left navigation item.
+	barButtonItem.title = @"Legislators";
+    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
+}
+
+- (void)invalidateMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
+    // Remove the popover button.
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+}
+
+
+#pragma mark -
+#pragma mark Split view support
+
+- (void)splitViewController: (UISplitViewController*)svc 
+	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
+	   forPopoverController: (UIPopoverController*)pc {
+	
+	[self showMasterListPopoverButtonItem:barButtonItem];
+    self.popoverController = pc;
+}
+
+// Called when the view is shown again in the split view, invalidating the button and popover controller.
+- (void)splitViewController: (UISplitViewController*)svc 
+	 willShowViewController:(UIViewController *)aViewController 
+  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
+	
+	[self invalidateMasterListPopoverButtonItem:barButtonItem];
+	self.popoverController = nil;
+}
+
+- (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
+   willPresentViewController: (UIViewController *)aViewController
+{
+    if (pc != nil) {
+        [pc dismissPopoverAnimated:YES];
+		// do I need to set pc to nil?  I need to confirm, but I think it breaks things.
+    }
+}
 
 
 - (void)didReceiveMemoryWarning {
@@ -65,12 +123,14 @@
 
 - (void)viewDidUnload {
 	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
+	self.legislator = nil;
 }
 
 
 - (void)dealloc 
 {
+	self.popoverController = nil;
+
 	[dataForChart release];
 	[dataForPlot release];
 	

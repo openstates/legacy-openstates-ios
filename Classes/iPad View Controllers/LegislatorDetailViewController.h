@@ -18,7 +18,6 @@
 {	
 	IBOutlet LegislatorObj *legislator;
     UIPopoverController *popoverController;
-	UISegmentedControl *commonMenuControl;
 
 	IBOutlet UIView *startupSplashView;
 	IBOutlet UIView *headerView;
@@ -36,6 +35,7 @@
 }
 
 @property(nonatomic, retain) NSMutableArray *dataForPlot; //, *dataForChart
+@property (nonatomic, retain) UIPopoverController *popoverController;
 
 // Plot construction methods
 - (void)constructScatterPlot;
@@ -52,8 +52,6 @@
 @property (nonatomic,retain) IBOutlet UIView *indivPHolder, *partyPHolder, *allPHolder;
 
 @property (nonatomic, retain) IBOutlet LegislatorObj *legislator;
-@property (nonatomic, retain) UIPopoverController *popoverController;
-@property (nonatomic, retain) UISegmentedControl *commonMenuControl;
 
 @property (nonatomic, retain) NSMutableArray *sectionArray;
 

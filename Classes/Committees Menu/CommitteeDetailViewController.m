@@ -18,7 +18,8 @@
 
 @implementation CommitteeDetailViewController
 
-@synthesize committee, commonMenuControl;
+@synthesize committee;
+@synthesize popoverController;
 
 enum Sections {
     //kHeaderSection = 0,
@@ -46,61 +47,71 @@ enum InfoSectionRows {
 	if (newObj) {
 		committee = [newObj retain];
 		self.navigationItem.title = self.committee.committeeName;
-		/*
-		 if (self.popoverController != nil) {
-		 [self.popoverController dismissPopoverAnimated:YES];
-		 //self.popoverController = nil; // i think this breaks, unless you're in a showHide type of situation.
-		 }        
+
+		if (popoverController != nil)
+			[popoverController dismissPopoverAnimated:YES];
 		 
-		 [self createSectionList];
-		 */
 		[self.tableView reloadData];
 		[self.view setNeedsDisplay];
 	}
 
 }
 
-- (void)showPopoverMenus:(BOOL)show {
-	if (self.splitViewController && show) {
-		if (self.commonMenuControl == nil) {
-			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CommonMenuSegmentControl" owner:[TexLegeAppDelegate appDelegate] options:nil];
-			for (id suspect in objects) {
-				if ([suspect isKindOfClass:[UISegmentedControl class]]) {
-					self.commonMenuControl = (UISegmentedControl *)suspect;
-					break;
-				}
-			}
-		}
-
-		self.navigationItem.titleView = self.commonMenuControl;
-	}
-	else {
-		self.navigationItem.titleView = nil;
-	}
-}
-
 
 #pragma mark -
 #pragma mark View lifecycle
 
-/*
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+	self.clearsSelectionOnViewWillAppear = NO;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
-*/
+
 
 - (void)viewWillAppear:(BOOL)animated 
 {
     [super viewWillAppear:animated];
 	
-	[self showPopoverMenus:([UtilityMethods isLandscapeOrientation] == NO)];
+	if ([UtilityMethods isIPadDevice] == NO)
+		return;
+	
+	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
+	if (self.committee == nil && ![UtilityMethods isLandscapeOrientation])  {
+		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+		if (appDelegate.savedLocation != nil) {
+			// save off this level's selection to our AppDelegate
+			
+			//[self validateStoredSelection];
+			NSInteger rowSelection = [[appDelegate.savedLocation objectAtIndex:1] integerValue];
+			NSInteger sectionSelection = [[appDelegate.savedLocation objectAtIndex:2] integerValue];
+			
+			//debug_NSLog(@"Restoring Selection: Row: %d    Section: %d", rowSelection, sectionSelection);
+			
+			if (rowSelection != -1) {
+				GeneralTableViewController *masterVC = [appDelegate.functionalViewControllers objectAtIndex:1];
+				UITableView *masterTableView = [masterVC valueForKey:@"tableView"];
+				NSIndexPath *selectionPath = [NSIndexPath indexPathForRow:rowSelection inSection:sectionSelection];
+				
+				// I'm not sure if this is how you do the "selector" business, so I've commented it out
+				//if ([self.tableView.delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)
+				//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
+				//showSplash = NO;
+				[masterTableView selectRowAtIndexPath:selectionPath animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+				[masterTableView.delegate tableView:masterTableView didSelectRowAtIndexPath:selectionPath];
+				
+				//if ([self.tableView.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)
+				//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
+				
+			}
+		}
+	}
+	
 }
 
 /*
-- (void)viewDidAppear:(BOOL)animated {
+ - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 }
 */
@@ -114,16 +125,60 @@ enum InfoSectionRows {
     [super viewDidDisappear:animated];
 }
 */
-
+/*
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
 }
+*/
 
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
 
+#pragma mark -
+#pragma mark Popover Support
+
+- (void)showMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
+    // Add the popover button to the left navigation item.
+	barButtonItem.title = @"Committees";
+    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
+}
+
+- (void)invalidateMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
+    // Remove the popover button.
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+}
+
+
+#pragma mark -
+#pragma mark Split view support
+
+- (void)splitViewController: (UISplitViewController*)svc 
+	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
+	   forPopoverController: (UIPopoverController*)pc {
+	
+	[self showMasterListPopoverButtonItem:barButtonItem];
+    self.popoverController = pc;
+}
+
+// Called when the view is shown again in the split view, invalidating the button and popover controller.
+- (void)splitViewController: (UISplitViewController*)svc 
+	 willShowViewController:(UIViewController *)aViewController 
+  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
+	
+	[self invalidateMasterListPopoverButtonItem:barButtonItem];
+	self.popoverController = nil;
+}
+
+- (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
+   willPresentViewController: (UIViewController *)aViewController
+{
+    if (pc != nil) {
+        [pc dismissPopoverAnimated:YES];
+		// do I need to set pc to nil?  I need to confirm, but I think it breaks things.
+    }
+}
 
 #pragma mark -
 #pragma mark Table view data source
@@ -411,7 +466,8 @@ enum InfoSectionRows {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
 	self.committee = nil;
-	self.commonMenuControl = nil;
+	self.popoverController = nil;
+
 }
 
 
