@@ -57,7 +57,11 @@
 }
 
 - (void)setSliderValue:(float)newVal animated:(BOOL)isAnimated {
-	//self.sliderControl.value = newVal; 
+	if (newVal == 0.0) {
+		NSString *imageString = (self.usesSmallStar) ? @"Slider_Question.png" : @"Slider_Question_big.png";
+		[self.sliderControl setThumbImage:[UIImage imageNamed:imageString] forState:UIControlStateNormal];
+		[self setAlpha:0.5];
+	}
 	[self.sliderControl setValue:newVal animated:isAnimated];
 	[self.sliderControl setNeedsDisplay];
 
