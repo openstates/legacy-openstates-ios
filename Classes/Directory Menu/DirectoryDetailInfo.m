@@ -61,18 +61,13 @@
 				break;
 			case DirectoryTypeTwitter: {
 				NSMutableString *twitString = [NSMutableString stringWithString:entryValue];
-				[twitString deleteCharactersInRange:NSMakeRange(0, 1)]; // delete the initial "@" character.
+				if ([twitString hasPrefix:@"@"])
+					[twitString deleteCharactersInRange:NSMakeRange(0, 1)]; // delete the initial "@" character.
 				tempURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://m.twitter.com/%@",twitString]];
 			}
 				break;
 			case DirectoryTypeMap:
 				tempURL = [UtilityMethods googleMapUrlFromStreetAddress:entryValue];
-				break;
-			case DirectoryTypeOfficeMap:
-				tempURL = [UtilityMethods pdfMapUrlFromOfficeString:entryValue];			
-				break;
-			case DirectoryTypeChamberMap:
-				tempURL = [UtilityMethods pdfMapUrlFromChamber:legislator.legtype.integerValue];
 				break;
 			default:
 				tempURL = nil;
