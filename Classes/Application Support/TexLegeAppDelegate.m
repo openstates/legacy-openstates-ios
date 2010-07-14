@@ -14,7 +14,7 @@
 #import "DirectoryDataSource.h"
 #import "BillsDataSource.h"
 #import "CommitteesDataSource.h"
-#import "MapImagesDataSource.h"
+#import "CapitolMapsDataSource.h"
 #import "GeneralTableViewController.h"
 #import "Reachability.h"
 #import "Appirater.h"
@@ -27,7 +27,6 @@
 #import "LegislatorDetailViewController.h"
 #import "MapsDetailViewController.h"
 #import "CommitteeDetailViewController.h"
-
 
 @interface TexLegeAppDelegate (Private)
 
@@ -260,7 +259,7 @@ NSInteger kNoSelection = -1;
 						[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.committeeTableTabbedVC configureWithDataSourceClass:[CommitteesDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.corePlotTabbedVC configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
-	[self.mapsTableTabbedVC configureWithDataSourceClass:[MapImagesDataSource class] andManagedObjectContext:self.managedObjectContext];
+	[self.mapsTableTabbedVC configureWithDataSourceClass:[CapitolMapsDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.linksTableTabbedVC configureWithDataSourceClass:[LinksMenuDataSource class] andManagedObjectContext:self.managedObjectContext];
 	
 	if (self.splitViewController)
