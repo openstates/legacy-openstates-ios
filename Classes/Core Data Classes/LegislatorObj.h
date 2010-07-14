@@ -63,6 +63,8 @@
 @property (nonatomic, retain) NSString * lastnameInitial;
 @property (nonatomic, retain) NSString * searchName;
 @property (nonatomic, retain) NSSet* committeePositions;
+@property (nonatomic, readonly) NSString * districtMap;
+
 
 - (NSComparisonResult)compareMembersByName:(LegislatorObj *)p;
 - (NSString *)partyShortName;

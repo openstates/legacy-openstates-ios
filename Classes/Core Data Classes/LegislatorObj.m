@@ -229,5 +229,18 @@
 							sortedArrayUsingSelector:@selector(comparePositionAndCommittee:)];
 }
 
+- (NSString *)districtMap
+{
+	NSString *url = nil;
+	
+	if ([self.legtype integerValue] == HOUSE)
+		url = [NSString stringWithFormat:@"http://www.house.state.tx.us/members/pdf/districts/%d.pdf",
+			   [self.district integerValue]];
+	else if ([self.legtype integerValue] == SENATE)
+		url = [NSString stringWithFormat:@"http://www.senate.state.tx.us/Icons/Dist_Maps/Dist%d_Map.pdf",
+			   [self.district integerValue], [self.district integerValue]];
+	
+	return url;	
+}
 
 @end
