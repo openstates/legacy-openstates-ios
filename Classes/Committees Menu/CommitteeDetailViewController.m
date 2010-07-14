@@ -379,10 +379,10 @@ enum InfoSectionRows {
 
 }
 
-- (void) pushMapViewWithURL:(NSURL *)url {
+- (void) pushMapViewWithMap:(CapitolMap *)capMap {
 	MapsDetailViewController *detailController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
-	detailController.mapURL = url;
-	detailController.navigationItem.title = @"Maps";
+	detailController.map = capMap;
+	//detailController.navigationItem.title = @"Maps";
 	// push the detail view controller onto the navigation stack to display it
 	[[self navigationController] pushViewController:detailController animated:YES];
 	[detailController release];
@@ -416,7 +416,7 @@ enum InfoSectionRows {
 			}
 				break;
 			case kInfoSectionOffice: // open the office map
-				[self pushMapViewWithURL:[UtilityMethods pdfMapUrlFromOfficeString:self.committee.office]];
+				[self pushMapViewWithMap:[UtilityMethods capitolMapFromOfficeString:self.committee.office]];
 				break;
 			case kInfoSectionWeb:	 // open the web page
 				[self pushInternalBrowserWithURL:[UtilityMethods safeWebUrlFromString:self.committee.url]];

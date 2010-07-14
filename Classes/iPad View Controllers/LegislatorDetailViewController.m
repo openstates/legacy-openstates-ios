@@ -28,7 +28,7 @@
 
 @interface LegislatorDetailViewController (Private)
 
-- (void) pushMapViewWithURL:(NSURL *)url;
+- (void) pushMapViewWithMap:(CapitolMap *)capMap;
 - (void) showWebViewWithURL:(NSURL *)url;
 - (void) setupHeaderView;
 - (void) setupHeader;
@@ -43,7 +43,7 @@
 @synthesize startupSplashView, headerView;
 
 @synthesize popoverController;
-@synthesize scatterPlotView, dataForPlot; //, dataForChart;
+@synthesize scatterPlotView, graph, dataForPlot; //, dataForChart;
 
 @synthesize leg_indexTitleLab, leg_rankLab, leg_chamberPartyLab, leg_chamberLab;
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab;
@@ -91,28 +91,22 @@
 }
 
 - (void)setupHeaderView {
-	if (self.headerView == nil && self.scatterPlotView) {
-		UIView * headerSuper = self.scatterPlotView.superview;
+	if (1) { //(self.headerView == nil) {
 		NSString * headerViewXib = [UtilityMethods isIPadDevice] ? @"LegislatorDetailHeaderView~ipad" : @"LegislatorDetailHeaderView~iphone";
-		
 		// Load one of our header views (iPad or iPhone selected automatically by the file's name extension
 		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:headerViewXib owner:self options:NULL];
 		self.headerView = [objects objectAtIndex:0];
+
 		CGRect headerRect = self.headerView.bounds;
-		headerRect.size.width = headerSuper.bounds.size.width;
-		
-		CGFloat newSuperHeight = self.scatterPlotView.bounds.size.height+self.headerView.bounds.size.height;
-		[headerSuper setFrame:CGRectMake(0.0f, 0.0f, headerSuper.bounds.size.width, newSuperHeight)];
-		[headerSuper insertSubview:self.headerView aboveSubview:self.scatterPlotView];
-		[self.headerView setFrame:headerRect];
-		
+		headerRect.size.width = self.tableView.bounds.size.width;
+
 		//UIImage *sealImage = [UIImage imageWithContentsOfResolutionIndependentFile:@"seal.png"];
 		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
 		UIColor *sealColor = [UIColor colorWithPatternImage:sealImage];	
 		self.headerView.backgroundColor = sealColor;
-		//self.view.backgroundColor = sealColor;
-		//self.tableView.backgroundColor = [UIColor clearColor];
-		
+		self.scatterPlotView.backgroundColor = sealColor;
+
+		[self.tableView setTableHeaderView:self.headerView];
 	}
 }
 	
@@ -136,6 +130,8 @@
 		self.leg_indexTitleLab.text = [NSString stringWithFormat:@"Legislator Roll Call Index (%@)",
 									   [indexStats currentSessionYear]];
 
+		if ([self.legislator.partisan_index floatValue] == 0.0f)
+			self.leg_rankLab.enabled = NO;
 		self.leg_rankLab.text = [NSString stringWithFormat:@"Rank: %@",
 								 [indexStats partisanRankForLegislator:self.legislator onlyParty:YES]];
 		
@@ -352,10 +348,10 @@
     return YES;
 }
 
-/*
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
+	//[self.tableView.tableHeaderView setNeedsDisplay];
+/*	if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
 	{
 		// Move the plots into place for portrait
 		//scatterPlotView.frame = CGRectMake(20.0f, 55.0f, 728.0f, 556.0f);
@@ -369,8 +365,9 @@
 		//barChartView.frame = CGRectMake(684.0f, 51.0f, 320.0f, 320.0f);
 		//pieChartView.frame = CGRectMake(684.0f, 408.0f, 320.0f, 320.0f);
 	}
-}
 */
+}
+
 
 #pragma mark -
 #pragma mark Memory management
@@ -393,6 +390,7 @@
 	self.headerView = self.startupSplashView = nil;
 	self.scatterPlotView = nil;
 	self.dataForPlot = nil;
+	self.graph = nil;
 	//self.dataForChart = nil;
 }
 
@@ -444,6 +442,13 @@
 	[cellInfo release], cellInfo = nil;
 	
 	
+	cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"District Map" value:self.legislator.districtMap 
+											 isClickable:YES type:DirectoryTypeWeb];
+	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
+	[cellInfo release], cellInfo = nil;
+	
+	
+	
 	cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Bio" value:self.legislator.bio_url 
 											 isClickable:YES type:DirectoryTypeWeb];
 	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
@@ -457,7 +462,7 @@
 	
 	
 	if (self.legislator.twitter.length > 0) {
-		tempString = [[NSString alloc] initWithFormat:@"@%@", self.legislator.twitter];
+		tempString = ([self.legislator.twitter hasPrefix:@"@"]) ? self.legislator.twitter : [[NSString alloc] initWithFormat:@"@%@", self.legislator.twitter];
 		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Twitter" value: tempString
 															   isClickable:YES type:DirectoryTypeTwitter];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
@@ -757,17 +762,11 @@
 				//cell.textLabel.text = cellInfo.entryName;
 				
 				CGRect sliderViewFrame = [self preshrinkSliderViewFromView:cell.contentView];
-				if (self.indivSlider == nil) {
-					NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StaticGradientSliderView" owner:self options:NULL];
-					for (id suspect in objects) {
-						if ([suspect isKindOfClass:[StaticGradientSliderView class]]) {
-							self.indivSlider = suspect;
-						}
-					}
-				}
+				if (self.indivSlider == nil)
+					self.indivSlider = [StaticGradientSliderView newSliderViewWithOwner:self];
 				if (self.indivSlider) {
 					[self.indivSlider setFrame:sliderViewFrame];
-					self.indivSlider.sliderValue = cellInfo.entryValue.floatValue;
+					[self.indivSlider setSliderValue:cellInfo.entryValue.floatValue animated:NO];
 					[cell.contentView addSubview:self.indivSlider];
 				}
 				cell.userInteractionEnabled = NO;
@@ -787,6 +786,8 @@
 					cell.detailTextLabel.text = @"Official Website";
 				else if ([cellInfo.entryName isEqualToString:@"Bio"])
 					cell.detailTextLabel.text = @"VoteSmart Bio";
+				else if ([cellInfo.entryName isEqualToString:@"District Map"])
+					cell.detailTextLabel.text = @"District Map";
 				cell.textLabel.text = @"Web";
 			}
 			break;
@@ -889,8 +890,13 @@
 			[self.navigationController pushViewController:subDetailController animated:YES];
 			[subDetailController release];
 		}
-		else if (cellInfo.entryType == DirectoryTypeOfficeMap || cellInfo.entryType == DirectoryTypeChamberMap) {
-			[self pushMapViewWithURL:[cellInfo generateURL:self.legislator]];
+		else if (cellInfo.entryType == DirectoryTypeOfficeMap) {
+			CapitolMap *capMap = [UtilityMethods capitolMapFromOfficeString:cellInfo.entryValue];			
+			[self pushMapViewWithMap:capMap];
+		}
+		else if (cellInfo.entryType == DirectoryTypeChamberMap) {
+			CapitolMap *capMap = [UtilityMethods capitolMapFromChamber:self.legislator.legtype.integerValue];			
+			[self pushMapViewWithMap:capMap];
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&
 				 cellInfo.entryType < kDirectoryTypeIsExternalHandler) {	// handle the URL ourselves in a webView
@@ -941,24 +947,20 @@
 	return height;
 }
 
-
-- (void) pushMapViewWithURL:(NSURL *)url {
+- (void) pushMapViewWithMap:(CapitolMap *)capMap {
 	MapsDetailViewController *detailController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
-	detailController.mapURL = url;
-	detailController.navigationItem.title = @"Maps";
+	detailController.map = capMap;
+	//detailController.navigationItem.title = @"Maps";
 	// push the detail view controller onto the navigation stack to display it
 	[[self navigationController] pushViewController:detailController animated:YES];
 	[detailController release];
 }
 
 - (void) showWebViewWithURL:(NSURL *)url {
-	if ([url isFileURL])	// it's a maps table, use our own webview.
-		[self pushMapViewWithURL:url];
-	else
-		if ([UtilityMethods canReachHostWithURL:url]) { // do we have a good URL/connection?
-			MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
-			[mbc display:self];
-		}
+	if ([UtilityMethods canReachHostWithURL:url]) { // do we have a good URL/connection?
+		MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
+		[mbc display:self];
+	}
 }	
 
 
@@ -967,12 +969,20 @@
 
 - (void)constructScatterPlot
 {
+	if (self.graph)
+		self.graph = nil;
+	
 	// Create graph from theme
-    graph = [[CPXYGraph alloc] initWithFrame:CGRectZero];
+	self.graph = [[CPXYGraph alloc] initWithFrame:CGRectZero];
 	CPTheme *theme = [CPTheme themeNamed:kCPStocksTheme];
 	//CPTheme *theme = [CPTheme themeNamed:kCPSlateTheme];
     [graph applyTheme:theme];
     scatterPlotView.hostedLayer = graph;
+		
+	//graph.plotAreaFrame.masksToBorder = NO;
+	//graph.plotAreaFrame.borderColor = [[UIColor blackColor] CGColor];
+	graph.plotAreaFrame.borderLineStyle.lineColor = [CPColor blackColor];
+	graph.plotAreaFrame.cornerRadius = 14.0;
 	
     graph.paddingLeft = 10.0;
 	graph.paddingTop = 10.0;
@@ -1053,6 +1063,7 @@
 	
 	// Animate in the new plot, as an example
 	dataSourceLinePlot.opacity = 0.0f;
+	
     [graph addPlot:dataSourceLinePlot];
 	
 	CABasicAnimation *fadeInAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];

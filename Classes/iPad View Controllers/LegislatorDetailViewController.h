@@ -42,6 +42,8 @@
 //- (void)constructBarChart;
 //- (void)constructPieChart;
 
+@property (nonatomic,retain) IBOutlet CPXYGraph *graph;
+
 @property (nonatomic,retain) IBOutlet UIView *startupSplashView;
 @property (nonatomic,retain) IBOutlet UIView *headerView;
 @property (nonatomic,retain) IBOutlet CPLayerHostingView *scatterPlotView;
