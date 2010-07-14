@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Constants.h"
 
+@class CapitolMap;
 @interface UtilityMethods : NSObject {
 }
 
@@ -17,8 +18,8 @@
 + (NSString *) titleFromURL:(NSURL *)url;
 
 + (NSURL *) safeWebUrlFromString:(NSString *)urlString;
-+ (NSURL *) pdfMapUrlFromOfficeString:(NSString *)office;
-+ (NSURL *) pdfMapUrlFromChamber:(NSInteger)chamber;
++ (CapitolMap *) capitolMapFromOfficeString:(NSString *)office;
++ (CapitolMap *) capitolMapFromChamber:(NSInteger)chamber;
 + (NSURL *) googleMapUrlFromStreetAddress:(NSString *)address;
 + (NSString *)applicationDocumentsDirectory;
 

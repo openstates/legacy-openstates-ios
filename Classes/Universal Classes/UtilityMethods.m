@@ -8,6 +8,7 @@
 
 #import "UtilityMethods.h"
 #import "TexLegeAppDelegate.h"
+#import "CapitolMap.h"
 
 @implementation UtilityMethods
 
@@ -46,8 +47,12 @@
 	return [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 }
 
-+ (NSURL *) pdfMapUrlFromOfficeString:(NSString *)office {
++ (CapitolMap *) capitolMapFromOfficeString:(NSString *)office {
 	NSString *fileString = nil;
+	NSString *thePath = [[NSBundle mainBundle] pathForResource:@"CapitolMaps" ofType:@"plist"];
+	NSArray *mapSectionsPlist = [NSArray arrayWithContentsOfFile:thePath];	
+	NSArray *searchArray = [mapSectionsPlist objectAtIndex:0];
+	
 	if ([office hasPrefix:@"4"])
 		fileString = [NSString stringWithFormat:@"Map.Floor4.pdf"];
 	else if ([office hasPrefix:@"3"])
@@ -62,28 +67,37 @@
 		fileString = [NSString stringWithFormat:@"Map.FloorE1.pdf"];
 	else if ([office hasPrefix:@"E2."])
 		fileString = [NSString stringWithFormat:@"Map.FloorE2.pdf"];
-	else if ([office hasPrefix:@"SHB"])
+	else if ([office hasPrefix:@"SHB"]) {
 		fileString = [NSString stringWithFormat:@"Map.SamHoustonLoc.pdf"];
-	
-	NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
-	NSString *pdfPath = [ NSString stringWithFormat:
-						 @"%@/%@.app/%@",NSHomeDirectory(),appName, fileString ];
-	
-	return [ NSURL fileURLWithPath:pdfPath ];
+		searchArray = [mapSectionsPlist objectAtIndex:1];
+	}
+		
+	for (NSDictionary * mapEntry in searchArray)
+	{
+		if ([fileString isEqualToString:[mapEntry valueForKey:@"file"]])
+			return [[[CapitolMap alloc] initWithDictionary:mapEntry] autorelease];
+	}
+
+	return nil;
 }
 
-+ (NSURL *) pdfMapUrlFromChamber:(NSInteger)chamber {
++ (CapitolMap *) capitolMapFromChamber:(NSInteger)chamber {
 	NSString *fileString = nil;
+	NSString *thePath = [[NSBundle mainBundle] pathForResource:@"CapitolMaps" ofType:@"plist"];
+	NSArray *mapSectionsPlist = [NSArray arrayWithContentsOfFile:thePath];	
+	NSArray *searchArray = [mapSectionsPlist objectAtIndex:2];
+
 	if (chamber == HOUSE)
 		fileString = [NSString stringWithFormat:@"Map.HouseChamber.pdf"];
 	else // (chamber == SENATE)
 		fileString = [NSString stringWithFormat:@"Map.SenateChamber.pdf"];
 	
-	NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
-	NSString *pdfPath = [ NSString stringWithFormat:
-						 @"%@/%@.app/%@",NSHomeDirectory(),appName, fileString ];
-	
-	return [NSURL fileURLWithPath:pdfPath ];
+	for (NSDictionary * mapEntry in searchArray)
+	{
+		if ([fileString isEqualToString:[mapEntry valueForKey:@"file"]])
+			return [[[CapitolMap alloc] initWithDictionary:mapEntry] autorelease];
+	}
+	return nil;
 }
 
 + (NSURL *) googleMapUrlFromStreetAddress:(NSString *)address {

@@ -12,31 +12,16 @@
 #import "MiniBrowserController.h"
 #import "TexLegeAppDelegate.h"
 
-@interface MapsDetailViewController(Private)
-
-// these are private methods that outside classes need not use
-- (void)loadWebViewFromMapPDF;
-- (void)loadWebViewFromURL:(NSURL *)url;
-@end
-
 @implementation MapsDetailViewController
 
-@synthesize mapURL, webView;
+@synthesize map, webView;
 @synthesize popoverController;
 
 
-- (id)init {
-	if (self = [super init]) {
-
-	}
-	return self;
-}
-
 - (void)dealloc {
 	self.webView = nil;
-	self.mapURL = nil;
+	self.map = nil;
 	self.popoverController = nil;
-
 	[super dealloc];
 }
 
@@ -44,22 +29,23 @@
 	[[self navigationController] popToRootViewControllerAnimated:YES];
 
 	self.webView = nil;
-	self.mapURL = nil;
+	self.map = nil;
 	
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
     // Release anything that's not essential, such as cached data
 }
 
-- (void)setMapURL:(NSURL *)newObj {
+- (void)setMap:(CapitolMap *)newObj {
 	
-	if (mapURL) [mapURL release], mapURL = nil;
+	if (map) [map release], map = nil;
 	if (newObj) {
-		mapURL = [newObj retain];
+		map = [newObj retain];
 
 		if (popoverController != nil)
 			[popoverController dismissPopoverAnimated:YES];
-
-		[self.webView loadRequest:[NSURLRequest requestWithURL:mapURL]];
+		
+		self.navigationItem.title = map.name;
+		[self.webView loadRequest:[NSURLRequest requestWithURL:map.url]];
 		[self.view setNeedsDisplay];
 	}
 }
@@ -76,10 +62,13 @@
 	[self.webView setBackgroundColor:[UIColor clearColor]];
 	[self.webView setOpaque:NO];
 	self.view.backgroundColor = sealColor;
-
-	self.navigationItem.title = @"Maps";
 	
-	[self.webView loadRequest:[NSURLRequest requestWithURL:mapURL]];
+	if (self.map) {
+		self.navigationItem.title = map.name;
+		[self.webView loadRequest:[NSURLRequest requestWithURL:map.url]];
+	}
+	else
+		self.navigationItem.title = @"Maps";
 
 	//self.navigationController.toolbarHidden = YES;	
 }
@@ -88,15 +77,6 @@
 	[self showPopoverMenus:([UtilityMethods isLandscapeOrientation] == NO)];
 }
 */
-- (void)setMapString:(NSString *)newString {
-	
-	NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
-	NSString *pdfPath = [ NSString stringWithFormat:
-						 @"%@/%@.app/%@",NSHomeDirectory(),appName, newString ];
-	self.navigationItem.title = [newString substringToIndex:[newString length]-4];
-
-	self.mapURL = [NSURL fileURLWithPath:pdfPath];
-}	
 
 #pragma mark -
 #pragma mark Popover Support

@@ -8,18 +8,15 @@
 
  
 #import "Constants.h"
+#import "CapitolMap.h"
 
 @interface MapsDetailViewController : UIViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate> {
-	NSURL *mapURL;
-	IBOutlet UIWebView *webView;
-	
+	CapitolMap *map;
+	IBOutlet UIWebView *webView;	
 	UIPopoverController *popoverController;
-
 }
-@property (nonatomic, retain) UIPopoverController *popoverController;
-@property (nonatomic,retain) NSURL *mapURL;
+@property (nonatomic,retain) UIPopoverController *popoverController;
+@property (nonatomic,retain) CapitolMap *map;
 @property (nonatomic,retain) IBOutlet UIWebView *webView;
-	
-- (void)setMapString:(NSString *)newString;
 
 @end
