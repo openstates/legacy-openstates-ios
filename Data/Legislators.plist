@@ -22,7 +22,7 @@
 		<key>dist1_phone</key>
 		<string>210-372-0759</string>
 		<key>dist1_street</key>
-		<string>9107 Marbach Road, Suite 111</string>
+		<string>9107 Marbach Road, #111</string>
 		<key>dist1_zip</key>
 		<string>78245</string>
 		<key>dist2_city</key>
@@ -32,7 +32,7 @@
 		<key>dist2_phone</key>
 		<string>210-372-0759</string>
 		<key>dist2_street</key>
-		<string>12274 Bandera Road Suite 216</string>
+		<string>12274 Bandera Road #216</string>
 		<key>dist2_zip</key>
 		<string>78023</string>
 		<key>dist3_city</key>
@@ -114,7 +114,7 @@
 		<key>dist1_phone</key>
 		<string>361-882-2277</string>
 		<key>dist1_street</key>
-		<string>606 North Carancahua, Suite 103A</string>
+		<string>606 North Carancahua, #103A</string>
 		<key>dist1_zip</key>
 		<string>78476</string>
 		<key>dist2_city</key>
@@ -276,7 +276,7 @@
 		<key>tenure</key>
 		<integer>4</integer>
 		<key>twitter</key>
-		<string>A_Hernandez</string>
+		<string>@A_Hernandez</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -368,7 +368,7 @@
 		<key>tenure</key>
 		<integer>6</integer>
 		<key>twitter</key>
-		<string>TXRepERodriguez</string>
+		<string>@TXRepERodriguez</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -390,7 +390,7 @@
 		<key>dist1_phone</key>
 		<string>713-776-0505</string>
 		<key>dist1_street</key>
-		<string>10101 Fondren Road, Suite 500</string>
+		<string>10101 Fondren Road, #500</string>
 		<key>dist1_zip</key>
 		<string>77096</string>
 		<key>dist2_city</key>
@@ -574,7 +574,7 @@
 		<key>dist1_phone</key>
 		<string>214-942-7104</string>
 		<key>dist1_street</key>
-		<string>400 South Zang Boulevard, Suite 801</string>
+		<string>400 South Zang Boulevard, #801</string>
 		<key>dist1_zip</key>
 		<string>75208</string>
 		<key>dist2_city</key>
@@ -736,7 +736,7 @@
 		<key>tenure</key>
 		<integer>2</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@ValindaBolton47</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -850,7 +850,7 @@
 		<key>dist1_phone</key>
 		<string>210-684-6896</string>
 		<key>dist1_street</key>
-		<string>6502 Bandera, Suite 106</string>
+		<string>6502 Bandera, #106</string>
 		<key>dist1_zip</key>
 		<string>78238</string>
 		<key>dist2_city</key>
@@ -942,7 +942,7 @@
 		<key>dist1_phone</key>
 		<string>210-923-0908</string>
 		<key>dist1_street</key>
-		<string>660 Southwest Military Drive, Suite L</string>
+		<string>660 Southwest Military Drive, #L</string>
 		<key>dist1_zip</key>
 		<string>78221</string>
 		<key>dist2_city</key>
@@ -1034,7 +1034,7 @@
 		<key>dist1_phone</key>
 		<string>214-941-3895</string>
 		<key>dist1_street</key>
-		<string>5787 South Hampton Road, Suite 447</string>
+		<string>5787 South Hampton Road, #447</string>
 		<key>dist1_zip</key>
 		<string>75232</string>
 		<key>dist2_city</key>
@@ -1126,7 +1126,7 @@
 		<key>dist1_phone</key>
 		<string>214-941-4619</string>
 		<key>dist1_street</key>
-		<string>2908 East 11th Street, Suite B</string>
+		<string>2908 East 11th Street, #B</string>
 		<key>dist1_zip</key>
 		<string>75203</string>
 		<key>dist2_city</key>
@@ -1218,7 +1218,7 @@
 		<key>dist1_phone</key>
 		<string>817-339-1430</string>
 		<key>dist1_street</key>
-		<string>1120 South Freeway, Suite 121</string>
+		<string>1120 South Freeway, #121</string>
 		<key>dist1_zip</key>
 		<string>76104</string>
 		<key>dist2_city</key>
@@ -1288,7 +1288,7 @@
 		<key>tenure</key>
 		<integer>4</integer>
 		<key>twitter</key>
-		<string>MarcVeasey</string>
+		<string>@MarcVeasey</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -1380,7 +1380,7 @@
 		<key>tenure</key>
 		<integer>18</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@ElliottNaishtat</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -1402,7 +1402,7 @@
 		<key>dist1_phone</key>
 		<string>713-520-5355</string>
 		<key>dist1_street</key>
-		<string>5445 Alameda, Suite 501</string>
+		<string>5445 Alameda, #501</string>
 		<key>dist1_zip</key>
 		<string>77004</string>
 		<key>dist2_city</key>
@@ -1472,7 +1472,7 @@
 		<key>tenure</key>
 		<integer>17</integer>
 		<key>twitter</key>
-		<string>GFColeman</string>
+		<string>@GFColeman</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -1564,7 +1564,7 @@
 		<key>tenure</key>
 		<integer>8</integer>
 		<key>twitter</key>
-		<string>TMF116</string>
+		<string>@TMF116</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -1678,7 +1678,7 @@
 		<key>dist1_phone</key>
 		<string>361-991-0047</string>
 		<key>dist1_street</key>
-		<string>5959 South Staples, Suite 222</string>
+		<string>5959 South Staples, #222</string>
 		<key>dist1_zip</key>
 		<string>78413</string>
 		<key>dist2_city</key>
@@ -1748,7 +1748,7 @@
 		<key>tenure</key>
 		<integer>2</integer>
 		<key>twitter</key>
-		<string>solomonortizjr</string>
+		<string>@solomonortizjr</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -1770,7 +1770,7 @@
 		<key>dist1_phone</key>
 		<string>214-943-6081</string>
 		<key>dist1_street</key>
-		<string>1111 West Mockingbird Lane, Suite 1330</string>
+		<string>1111 West Mockingbird Lane, #1330</string>
 		<key>dist1_zip</key>
 		<string>75247</string>
 		<key>dist2_city</key>
@@ -1840,11 +1840,11 @@
 		<key>tenure</key>
 		<integer>4</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@RafaelAnchia</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
-		<string>http://votesmart.org/bio.php?can_id=10065</string>
+		<string>http://votesmart.org/bio.php?can_id=116968</string>
 		<key>cap_fax</key>
 		<string></string>
 		<key>cap_office</key>
@@ -1858,13 +1858,13 @@
 		<key>dist1_city</key>
 		<string>Dallas</string>
 		<key>dist1_fax</key>
-		<string>214-828-2330</string>
+		<string></string>
 		<key>dist1_phone</key>
-		<string>214-824-1996</string>
+		<string>214-565-5680</string>
 		<key>dist1_street</key>
-		<string>4032 Swiss Avenue</string>
+		<string>1409 South Lamar #005</string>
 		<key>dist1_zip</key>
-		<string>75204</string>
+		<string>75215</string>
 		<key>dist2_city</key>
 		<string></string>
 		<key>dist2_fax</key>
@@ -1898,15 +1898,15 @@
 		<key>district</key>
 		<integer>100</integer>
 		<key>email</key>
-		<string>terri.hodge@house.state.tx.us</string>
+		<string>eric.johnson@house.state.tx.us</string>
 		<key>firstname</key>
-		<string>Terri</string>
+		<string>Eric</string>
 		<key>chamber_desk</key>
 		<string>90</string>
 		<key>lastname</key>
-		<string>Hodge</string>
+		<string>Johnson</string>
 		<key>legislatorID</key>
-		<integer>10065</integer>
+		<integer>116968</integer>
 		<key>legtype</key>
 		<integer>1</integer>
 		<key>legtype_name</key>
@@ -1918,21 +1918,21 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>-0.828187736</real>
+		<real>0.0</real>
 		<key>party_id</key>
 		<integer>1</integer>
 		<key>party_name</key>
 		<string>Democrat</string>
 		<key>photo_name</key>
-		<string>hodge.png</string>
+		<string>johnson.eric.png</string>
 		<key>staff</key>
-		<string>Clint Magee</string>
+		<string>Juan Ayala</string>
 		<key>suffix</key>
 		<string></string>
 		<key>tenure</key>
-		<integer>12</integer>
+		<integer>0</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@JohnsonForTexas</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -2046,7 +2046,7 @@
 		<key>dist1_phone</key>
 		<string>956-686-5501</string>
 		<key>dist1_street</key>
-		<string>4900 North 10th Street, Suite C-2</string>
+		<string>4900 North 10th Street, #C-2</string>
 		<key>dist1_zip</key>
 		<string>78504</string>
 		<key>dist2_city</key>
@@ -2138,7 +2138,7 @@
 		<key>dist1_phone</key>
 		<string>713-692-9192</string>
 		<key>dist1_street</key>
-		<string>8799 North Loop East, Suite 305</string>
+		<string>8799 North Loop East, #305</string>
 		<key>dist1_zip</key>
 		<string>77029</string>
 		<key>dist2_city</key>
@@ -2230,7 +2230,7 @@
 		<key>dist1_phone</key>
 		<string>713-627-0134</string>
 		<key>dist1_street</key>
-		<string>1535 West Loop South, Suite 320</string>
+		<string>1535 West Loop South, #320</string>
 		<key>dist1_zip</key>
 		<string>77027</string>
 		<key>dist2_city</key>
@@ -2300,7 +2300,7 @@
 		<key>tenure</key>
 		<integer>2</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@ellencohen134</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -2378,7 +2378,7 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>-0.872739977</real>
+		<real>-0.8727399769999999</real>
 		<key>party_id</key>
 		<integer>1</integer>
 		<key>party_name</key>
@@ -2484,7 +2484,7 @@
 		<key>tenure</key>
 		<integer>4</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@amtz059</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -2506,7 +2506,7 @@
 		<key>dist1_phone</key>
 		<string>214-370-8305</string>
 		<key>dist1_street</key>
-		<string>6301 Gaston Avenue, Suite 330</string>
+		<string>6301 Gaston Avenue, #330</string>
 		<key>dist1_zip</key>
 		<string>75214</string>
 		<key>dist2_city</key>
@@ -2576,7 +2576,7 @@
 		<key>tenure</key>
 		<integer>2</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@allenvaught</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -2598,7 +2598,7 @@
 		<key>dist1_phone</key>
 		<string>817-385-4786</string>
 		<key>dist1_street</key>
-		<string>1201 North Watson Road, Suite 207</string>
+		<string>1201 North Watson Road, #207</string>
 		<key>dist1_zip</key>
 		<string>76006</string>
 		<key>dist2_city</key>
@@ -2654,7 +2654,7 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>-0.849741688</real>
+		<real>-0.8497416880000001</real>
 		<key>party_id</key>
 		<integer>1</integer>
 		<key>party_name</key>
@@ -2690,7 +2690,7 @@
 		<key>dist1_phone</key>
 		<string>361-354-5373</string>
 		<key>dist1_street</key>
-		<string>111 South St. Mary&apos;s, Suite 202</string>
+		<string>111 South St. Mary&apos;s, #202</string>
 		<key>dist1_zip</key>
 		<string>78102</string>
 		<key>dist2_city</key>
@@ -2782,7 +2782,7 @@
 		<key>dist1_phone</key>
 		<string>832-252-7336</string>
 		<key>dist1_street</key>
-		<string>7011 Harwin, Suite 230</string>
+		<string>7011 Harwin, #230</string>
 		<key>dist1_zip</key>
 		<string>77036</string>
 		<key>dist2_city</key>
@@ -2874,7 +2874,7 @@
 		<key>dist1_phone</key>
 		<string>254-753-8546</string>
 		<key>dist1_street</key>
-		<string>713 Elm Street, Suite 101</string>
+		<string>713 Elm Street, #101</string>
 		<key>dist1_zip</key>
 		<string>76704</string>
 		<key>dist2_city</key>
@@ -2966,7 +2966,7 @@
 		<key>dist1_phone</key>
 		<string>281-988-0212</string>
 		<key>dist1_street</key>
-		<string>7474 South Kirkwood, Suite 202</string>
+		<string>7474 South Kirkwood, #202</string>
 		<key>dist1_zip</key>
 		<string>77072</string>
 		<key>dist2_city</key>
@@ -3058,7 +3058,7 @@
 		<key>dist1_phone</key>
 		<string>713-683-6363</string>
 		<key>dist1_street</key>
-		<string>6915 Antoine Street, Suite E</string>
+		<string>6915 Antoine Street, #E</string>
 		<key>dist1_zip</key>
 		<string>77091</string>
 		<key>dist2_city</key>
@@ -3150,7 +3150,7 @@
 		<key>dist1_phone</key>
 		<string>210-734-8937</string>
 		<key>dist1_street</key>
-		<string>1114 South St. Marys, Suite 110</string>
+		<string>1114 South St. Marys, #110</string>
 		<key>dist1_zip</key>
 		<string>78210</string>
 		<key>dist2_city</key>
@@ -3220,7 +3220,7 @@
 		<key>tenure</key>
 		<integer>9</integer>
 		<key>twitter</key>
-		<string>MikeVillarreal</string>
+		<string>@MikeVillarreal</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -3426,7 +3426,7 @@
 		<key>dist1_phone</key>
 		<string>915-778-9960</string>
 		<key>dist1_street</key>
-		<string>6070 Gateway East, Suite 300</string>
+		<string>6070 Gateway East, #300</string>
 		<key>dist1_zip</key>
 		<string>79905</string>
 		<key>dist2_city</key>
@@ -3496,7 +3496,7 @@
 		<key>tenure</key>
 		<integer>12</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@ElPasoNorma</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -3518,7 +3518,7 @@
 		<key>dist1_phone</key>
 		<string>210-225-2107</string>
 		<key>dist1_street</key>
-		<string>403 South WW White Road, Suite 210</string>
+		<string>403 South WW White Road, #210</string>
 		<key>dist1_zip</key>
 		<string>78219</string>
 		<key>dist2_city</key>
@@ -3574,7 +3574,7 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>-0.762081544</real>
+		<real>-0.7620815440000001</real>
 		<key>party_id</key>
 		<integer>1</integer>
 		<key>party_name</key>
@@ -3610,7 +3610,7 @@
 		<key>dist1_phone</key>
 		<string>210-673-3579</string>
 		<key>dist1_street</key>
-		<string>7121 United States Highway 90 West, Suite 240</string>
+		<string>7121 United States Highway 90 West, #240</string>
 		<key>dist1_zip</key>
 		<string>78227</string>
 		<key>dist2_city</key>
@@ -3772,7 +3772,7 @@
 		<key>tenure</key>
 		<integer>18</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@petegallego</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -3978,7 +3978,7 @@
 		<key>dist1_phone</key>
 		<string>409-724-0788</string>
 		<key>dist1_street</key>
-		<string>One Plaza Square, Suite 203</string>
+		<string>One Plaza Square, #203</string>
 		<key>dist1_zip</key>
 		<string>77642</string>
 		<key>dist2_city</key>
@@ -4048,7 +4048,7 @@
 		<key>tenure</key>
 		<integer>10</integer>
 		<key>twitter</key>
-		<string>jddeshotel</string>
+		<string>@jddeshotel</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -4070,7 +4070,7 @@
 		<key>dist1_phone</key>
 		<string>956-361-2795</string>
 		<key>dist1_street</key>
-		<string>2402 West Bus Highway 77, Suite I</string>
+		<string>2402 West Bus Highway 77, #I</string>
 		<key>dist1_zip</key>
 		<string>78586</string>
 		<key>dist2_city</key>
@@ -4126,7 +4126,7 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>-0.70764115</real>
+		<real>-0.7076411500000001</real>
 		<key>party_id</key>
 		<integer>1</integer>
 		<key>party_name</key>
@@ -4232,7 +4232,7 @@
 		<key>tenure</key>
 		<integer>6</integer>
 		<key>twitter</key>
-		<string>AaronPena</string>
+		<string>@AaronPena</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -4346,7 +4346,7 @@
 		<key>dist1_phone</key>
 		<string>956-542-1828</string>
 		<key>dist1_street</key>
-		<string>855 West Price Road, Suite 22</string>
+		<string>855 West Price Road, #22</string>
 		<key>dist1_zip</key>
 		<string>78520</string>
 		<key>dist2_city</key>
@@ -4438,7 +4438,7 @@
 		<key>dist1_phone</key>
 		<string>915-859-3111</string>
 		<key>dist1_street</key>
-		<string>120 North Horizon, Suite 112A</string>
+		<string>120 North Horizon, #112A</string>
 		<key>dist1_zip</key>
 		<string>79927</string>
 		<key>dist2_city</key>
@@ -4622,7 +4622,7 @@
 		<key>dist1_phone</key>
 		<string>956-716-4838</string>
 		<key>dist1_street</key>
-		<string>100 North F.M. 3167, Suite 212</string>
+		<string>100 North F.M. 3167, #212</string>
 		<key>dist1_zip</key>
 		<string>78582</string>
 		<key>dist2_city</key>
@@ -4692,7 +4692,7 @@
 		<key>tenure</key>
 		<integer>6</integer>
 		<key>twitter</key>
-		<string>RyanGuillen</string>
+		<string>@RyanGuillen</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -4990,7 +4990,7 @@
 		<key>dist1_phone</key>
 		<string>936-634-9786</string>
 		<key>dist1_street</key>
-		<string>203 South First, Suite A</string>
+		<string>203 South First, #A</string>
 		<key>dist1_zip</key>
 		<string>75904</string>
 		<key>dist2_city</key>
@@ -5184,7 +5184,7 @@
 		<key>dist2_phone</key>
 		<string>903-657-1407</string>
 		<key>dist2_street</key>
-		<string>204 North Main, Suite A</string>
+		<string>204 North Main, #A</string>
 		<key>dist2_zip</key>
 		<string>75652</string>
 		<key>dist3_city</key>
@@ -5266,7 +5266,7 @@
 		<key>dist1_phone</key>
 		<string>512-805-2233</string>
 		<key>dist1_street</key>
-		<string>302 West Hopkins, Suite 3</string>
+		<string>302 West Hopkins, #3</string>
 		<key>dist1_zip</key>
 		<string>78666</string>
 		<key>dist2_city</key>
@@ -5336,7 +5336,7 @@
 		<key>tenure</key>
 		<integer>6</integer>
 		<key>twitter</key>
-		<string>RepPatrickRose</string>
+		<string>@RepPatrickRose</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -5358,7 +5358,7 @@
 		<key>dist1_phone</key>
 		<string>640-322-4122</string>
 		<key>dist1_street</key>
-		<string>900 8th Street, Suite 115</string>
+		<string>900 8th Street, #115</string>
 		<key>dist1_zip</key>
 		<string>76301</string>
 		<key>dist2_city</key>
@@ -5634,7 +5634,7 @@
 		<key>dist1_phone</key>
 		<string>972-264-4231</string>
 		<key>dist1_street</key>
-		<string>2426 South Carrier Parkway, Suite 106</string>
+		<string>2426 South Carrier Parkway, #106</string>
 		<key>dist1_zip</key>
 		<string>75052</string>
 		<key>dist2_city</key>
@@ -5980,7 +5980,7 @@
 		<key>tenure</key>
 		<integer>12</integer>
 		<key>twitter</key>
-		<string>tommymerritt</string>
+		<string>@tommymerritt</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -6076,7 +6076,7 @@
 	</dict>
 	<dict>
 		<key>bio_url</key>
-		<string>http://votesmart.org/bio.php?can_id=5551</string>
+		<string>http://votesmart.org/bio.php?can_id=59392</string>
 		<key>cap_fax</key>
 		<string></string>
 		<key>cap_office</key>
@@ -6092,11 +6092,11 @@
 		<key>dist1_fax</key>
 		<string></string>
 		<key>dist1_phone</key>
-		<string>972-881-0890</string>
+		<string></string>
 		<key>dist1_street</key>
-		<string>2301 West Plano Parkway, Suite 108</string>
+		<string></string>
 		<key>dist1_zip</key>
-		<string>75075</string>
+		<string></string>
 		<key>dist2_city</key>
 		<string></string>
 		<key>dist2_fax</key>
@@ -6130,41 +6130,41 @@
 		<key>district</key>
 		<integer>66</integer>
 		<key>email</key>
-		<string>brian.mccall@house.state.tx.us</string>
+		<string>van.taylor@house.state.tx.us</string>
 		<key>firstname</key>
-		<string>Brian</string>
+		<string>Nicholas</string>
 		<key>chamber_desk</key>
 		<string>51</string>
 		<key>lastname</key>
-		<string>McCall</string>
+		<string>Taylor</string>
 		<key>legislatorID</key>
-		<integer>5551</integer>
+		<integer>59392</integer>
 		<key>legtype</key>
 		<integer>1</integer>
 		<key>legtype_name</key>
 		<string>Representative</string>
 		<key>middlename</key>
-		<string></string>
+		<string>Van</string>
 		<key>nickname</key>
-		<string></string>
+		<string>Van</string>
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>0.22757327</real>
+		<real>0.0</real>
 		<key>party_id</key>
 		<integer>2</integer>
 		<key>party_name</key>
 		<string>Republican</string>
 		<key>photo_name</key>
-		<string>mccall.png</string>
+		<string>taylor.van.png</string>
 		<key>staff</key>
-		<string>Sean Cunningham</string>
+		<string>Brittany Eck</string>
 		<key>suffix</key>
 		<string></string>
 		<key>tenure</key>
-		<integer>17</integer>
+		<integer>0</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@RepVanTaylor</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -6278,7 +6278,7 @@
 		<key>dist1_phone</key>
 		<string>817-283-3131</string>
 		<key>dist1_street</key>
-		<string>1608 Airport Freeway, Suite 100</string>
+		<string>1608 Airport Freeway, #100</string>
 		<key>dist1_zip</key>
 		<string>76022</string>
 		<key>dist2_city</key>
@@ -6370,7 +6370,7 @@
 		<key>dist1_phone</key>
 		<string>912-463-0686</string>
 		<key>dist1_street</key>
-		<string>7373 Broadway, Suite 202A</string>
+		<string>7373 Broadway, #202A</string>
 		<key>dist1_zip</key>
 		<string>78209</string>
 		<key>dist2_city</key>
@@ -6440,7 +6440,7 @@
 		<key>tenure</key>
 		<integer>4</integer>
 		<key>twitter</key>
-		<string>SpeakerStraus</string>
+		<string>@SpeakerStraus</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -6716,7 +6716,7 @@
 		<key>tenure</key>
 		<integer>6</integer>
 		<key>twitter</key>
-		<string>RepHughes</string>
+		<string>@RepHughes</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -6738,7 +6738,7 @@
 		<key>dist1_phone</key>
 		<string>972-938-9392</string>
 		<key>dist1_street</key>
-		<string>310 W. Jefferson, Suite 1</string>
+		<string>310 W. Jefferson, #1</string>
 		<key>dist1_zip</key>
 		<string>75165</string>
 		<key>dist2_city</key>
@@ -6830,7 +6830,7 @@
 		<key>dist1_phone</key>
 		<string>972-394-3904</string>
 		<key>dist1_street</key>
-		<string>1029 Rosemeade Parkway, Suite 108</string>
+		<string>1029 Rosemeade Parkway, #108</string>
 		<key>dist1_zip</key>
 		<string>75007</string>
 		<key>dist2_city</key>
@@ -7014,7 +7014,7 @@
 		<key>dist1_phone</key>
 		<string>979-822-9797</string>
 		<key>dist1_street</key>
-		<string>1920 West Villa Maria Road, Suite 303</string>
+		<string>1920 West Villa Maria Road, #303</string>
 		<key>dist1_zip</key>
 		<string>77207</string>
 		<key>dist2_city</key>
@@ -7106,7 +7106,7 @@
 		<key>dist1_phone</key>
 		<string>281-395-2238</string>
 		<key>dist1_street</key>
-		<string>410 West Grand Parkway, Suite 390</string>
+		<string>410 West Grand Parkway, #390</string>
 		<key>dist1_zip</key>
 		<string>74751</string>
 		<key>dist2_city</key>
@@ -7198,7 +7198,7 @@
 		<key>dist1_phone</key>
 		<string>936-291-8230</string>
 		<key>dist1_street</key>
-		<string>1301 Sam Houston, Suite 200</string>
+		<string>1301 Sam Houston, #200</string>
 		<key>dist1_zip</key>
 		<string>77340</string>
 		<key>dist2_city</key>
@@ -7268,7 +7268,7 @@
 		<key>tenure</key>
 		<integer>8</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@loisfortexas</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -7290,7 +7290,7 @@
 		<key>dist1_phone</key>
 		<string>830-257-2333</string>
 		<key>dist1_street</key>
-		<string>125 Lehmann Drive, Suite 201</string>
+		<string>125 Lehmann Drive, #201</string>
 		<key>dist1_zip</key>
 		<string>78028</string>
 		<key>dist2_city</key>
@@ -7360,7 +7360,7 @@
 		<key>tenure</key>
 		<integer>20</integer>
 		<key>twitter</key>
-		<string>RepHilderbran</string>
+		<string>@RepHilderbran</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -7382,7 +7382,7 @@
 		<key>dist1_phone</key>
 		<string>817-488-4098</string>
 		<key>dist1_street</key>
-		<string>1256 Main Street, Suite 248</string>
+		<string>1256 Main Street, #248</string>
 		<key>dist1_zip</key>
 		<string>76092</string>
 		<key>dist2_city</key>
@@ -7452,7 +7452,7 @@
 		<key>tenure</key>
 		<integer>10</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@RepVickiTruitt</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -7622,7 +7622,7 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>0.531599973</real>
+		<real>0.5315999729999999</real>
 		<key>party_id</key>
 		<integer>2</integer>
 		<key>party_name</key>
@@ -7842,7 +7842,7 @@
 		<key>dist1_phone</key>
 		<string>214-745-5768</string>
 		<key>dist1_street</key>
-		<string>2100 McKinney Avenue, Suite 1501A</string>
+		<string>2100 McKinney Avenue, #1501A</string>
 		<key>dist1_zip</key>
 		<string>75201</string>
 		<key>dist2_city</key>
@@ -7912,7 +7912,7 @@
 		<key>tenure</key>
 		<integer>6</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@texansfordan</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -8210,7 +8210,7 @@
 		<key>dist1_phone</key>
 		<string>281-333-1350</string>
 		<key>dist1_street</key>
-		<string>1350 NASA Parkway, Suite 212</string>
+		<string>1350 NASA Parkway, #212</string>
 		<key>dist1_zip</key>
 		<string>77058</string>
 		<key>dist2_city</key>
@@ -8372,7 +8372,7 @@
 		<key>tenure</key>
 		<integer>2</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@RepCreighton</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -8394,7 +8394,7 @@
 		<key>dist1_phone</key>
 		<string>817-295-5158</string>
 		<key>dist1_street</key>
-		<string>201 West Ellison, Suite 201</string>
+		<string>201 West Ellison, #201</string>
 		<key>dist1_zip</key>
 		<string>76028</string>
 		<key>dist2_city</key>
@@ -8450,7 +8450,7 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>0.558375758</real>
+		<real>0.5583757580000001</real>
 		<key>party_id</key>
 		<integer>2</integer>
 		<key>party_name</key>
@@ -8556,7 +8556,7 @@
 		<key>tenure</key>
 		<integer>6</integer>
 		<key>twitter</key>
-		<string>dangattis</string>
+		<string>@dangattis</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -8578,7 +8578,7 @@
 		<key>dist1_phone</key>
 		<string>832-912-8380</string>
 		<key>dist1_street</key>
-		<string>9601 Jones Road, Suite 215</string>
+		<string>9601 Jones Road, #215</string>
 		<key>dist1_zip</key>
 		<string>77065</string>
 		<key>dist2_city</key>
@@ -8648,7 +8648,7 @@
 		<key>tenure</key>
 		<integer>14</integer>
 		<key>twitter</key>
-		<string>gwelkins</string>
+		<string>@gwelkins</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -8670,7 +8670,7 @@
 		<key>dist1_phone</key>
 		<string>361-572-0196</string>
 		<key>dist1_street</key>
-		<string>1501 East Mockingbird, Suite 101</string>
+		<string>1501 East Mockingbird, #101</string>
 		<key>dist1_zip</key>
 		<string>77903</string>
 		<key>dist2_city</key>
@@ -8762,7 +8762,7 @@
 		<key>dist1_phone</key>
 		<string>325-658-7313</string>
 		<key>dist1_street</key>
-		<string>36 West Beauregard, Suite 517</string>
+		<string>36 West Beauregard, #517</string>
 		<key>dist1_zip</key>
 		<string>76903</string>
 		<key>dist2_city</key>
@@ -8854,7 +8854,7 @@
 		<key>dist1_phone</key>
 		<string>832-556-2002</string>
 		<key>dist1_street</key>
-		<string>909 Decker Drive, Suite 104</string>
+		<string>909 Decker Drive, #104</string>
 		<key>dist1_zip</key>
 		<string>77520</string>
 		<key>dist2_city</key>
@@ -9016,7 +9016,7 @@
 		<key>tenure</key>
 		<integer>2</integer>
 		<key>twitter</key>
-		<string>RepHancock</string>
+		<string>@RepHancock</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -9094,7 +9094,7 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>0.601651828</real>
+		<real>0.6016518280000001</real>
 		<key>party_id</key>
 		<integer>2</integer>
 		<key>party_name</key>
@@ -9130,7 +9130,7 @@
 		<key>dist1_phone</key>
 		<string>713-460-2800</string>
 		<key>dist1_street</key>
-		<string>2600 Gessner, Suite 212</string>
+		<string>2600 Gessner, #212</string>
 		<key>dist1_zip</key>
 		<string>77080</string>
 		<key>dist2_city</key>
@@ -9222,7 +9222,7 @@
 		<key>dist1_phone</key>
 		<string>817-548-9091</string>
 		<key>dist1_street</key>
-		<string>318 West Main Street, Suite 102</string>
+		<string>318 West Main Street, #102</string>
 		<key>dist1_zip</key>
 		<string>76013</string>
 		<key>dist2_city</key>
@@ -9314,7 +9314,7 @@
 		<key>dist1_phone</key>
 		<string>254-754-3892</string>
 		<key>dist1_street</key>
-		<string>900 Austin Avenue, Suite 804</string>
+		<string>900 Austin Avenue, #804</string>
 		<key>dist1_zip</key>
 		<string>76701</string>
 		<key>dist2_city</key>
@@ -9498,7 +9498,7 @@
 		<key>dist1_phone</key>
 		<string>713-629-6313</string>
 		<key>dist1_street</key>
-		<string>2400 Augusta Drive, Suite 266</string>
+		<string>2400 Augusta Drive, #266</string>
 		<key>dist1_zip</key>
 		<string>77057</string>
 		<key>dist2_city</key>
@@ -9682,7 +9682,7 @@
 		<key>dist1_phone</key>
 		<string>281-537-5252</string>
 		<key>dist1_street</key>
-		<string>3848 F.M. 1960 West, Suite 106</string>
+		<string>3848 F.M. 1960 West, #106</string>
 		<key>dist1_zip</key>
 		<string>77068</string>
 		<key>dist2_city</key>
@@ -9752,7 +9752,7 @@
 		<key>tenure</key>
 		<integer>7</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@debbieriddle</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -9958,7 +9958,7 @@
 		<key>dist1_phone</key>
 		<string>903-675-9500</string>
 		<key>dist1_street</key>
-		<string>108 South Pinkerton Street, Suite 105</string>
+		<string>108 South Pinkerton Street, #105</string>
 		<key>dist1_zip</key>
 		<string>75751</string>
 		<key>dist2_city</key>
@@ -10050,7 +10050,7 @@
 		<key>dist1_phone</key>
 		<string>281-578-8484</string>
 		<key>dist1_street</key>
-		<string>1550 Foxlake Drive, Suite 120</string>
+		<string>1550 Foxlake Drive, #120</string>
 		<key>dist1_zip</key>
 		<string>77084</string>
 		<key>dist2_city</key>
@@ -10142,7 +10142,7 @@
 		<key>dist1_phone</key>
 		<string>214-891-1776</string>
 		<key>dist1_street</key>
-		<string>10210 North Central Expressway, Suite 230</string>
+		<string>10210 North Central Expressway, #230</string>
 		<key>dist1_zip</key>
 		<string>75231</string>
 		<key>dist2_city</key>
@@ -10396,7 +10396,7 @@
 		<key>tenure</key>
 		<integer>2</integer>
 		<key>twitter</key>
-		<string>tparker63</string>
+		<string>@tparker63</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -10488,7 +10488,7 @@
 		<key>tenure</key>
 		<integer>10</integer>
 		<key>twitter</key>
-		<string>waynechristian</string>
+		<string>@waynechristian</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -10602,7 +10602,7 @@
 		<key>dist1_phone</key>
 		<string>281-338-0924</string>
 		<key>dist1_street</key>
-		<string>174 Calder Road, Suite 116</string>
+		<string>174 Calder Road, #116</string>
 		<key>dist1_zip</key>
 		<string>77573</string>
 		<key>dist2_city</key>
@@ -10948,7 +10948,7 @@
 		<key>tenure</key>
 		<integer>6</integer>
 		<key>twitter</key>
-		<string>RepKenPaxton</string>
+		<string>@RepKenPaxton</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -11132,7 +11132,7 @@
 		<key>tenure</key>
 		<integer>10</integer>
 		<key>twitter</key>
-		<string>LeoBerman</string>
+		<string>@LeoBerman</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -11224,7 +11224,7 @@
 		<key>tenure</key>
 		<integer>6</integer>
 		<key>twitter</key>
-		<string>Dan_Flynn</string>
+		<string>@Dan_Flynn</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -11246,7 +11246,7 @@
 		<key>dist1_phone</key>
 		<string>210-349-0320</string>
 		<key>dist1_street</key>
-		<string>2040 Babcock Road, Suite 402</string>
+		<string>2040 Babcock Road, #402</string>
 		<key>dist1_zip</key>
 		<string>78229</string>
 		<key>dist2_city</key>
@@ -11614,7 +11614,7 @@
 		<key>dist1_phone</key>
 		<string>972-401-8825</string>
 		<key>dist1_street</key>
-		<string>125 East John Carpenter Freeway, Suite 250a</string>
+		<string>125 East John Carpenter Freeway, #250a</string>
 		<key>dist1_zip</key>
 		<string>75062</string>
 		<key>dist2_city</key>
@@ -11684,7 +11684,7 @@
 		<key>tenure</key>
 		<integer>6</integer>
 		<key>twitter</key>
-		<string>lhbcampaign</string>
+		<string>@lhbcampaign</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -11706,7 +11706,7 @@
 		<key>dist1_phone</key>
 		<string>713-649-6563</string>
 		<key>dist1_street</key>
-		<string>8145 Park Place, Suite 100</string>
+		<string>8145 Park Place, #100</string>
 		<key>dist1_zip</key>
 		<string>77017</string>
 		<key>dist2_city</key>
@@ -11890,7 +11890,7 @@
 		<key>dist1_phone</key>
 		<string>432-682-3000</string>
 		<key>dist1_street</key>
-		<string>500 West Texas, Suite 880</string>
+		<string>500 West Texas, #880</string>
 		<key>dist1_zip</key>
 		<string>79701</string>
 		<key>dist2_city</key>
@@ -12052,7 +12052,7 @@
 		<key>tenure</key>
 		<integer>28</integer>
 		<key>twitter</key>
-		<string>Rep_Al_Edwards</string>
+		<string>@Rep_Al_Edwards</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -12144,7 +12144,7 @@
 		<key>tenure</key>
 		<integer>0</integer>
 		<key>twitter</key>
-		<string>AllenFletcher</string>
+		<string>@AllenFletcher</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -12166,7 +12166,7 @@
 		<key>dist1_phone</key>
 		<string>210-532-2758</string>
 		<key>dist1_street</key>
-		<string>3319 Sidney Brooks, Building 510, Suite 2</string>
+		<string>3319 Sidney Brooks, Building 510, #2</string>
 		<key>dist1_zip</key>
 		<string>78235</string>
 		<key>dist2_city</key>
@@ -12512,7 +12512,7 @@
 		<key>tenure</key>
 		<integer>0</integer>
 		<key>twitter</key>
-		<string>RepKleinschmidt</string>
+		<string>@RepKleinschmidt</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -12604,7 +12604,7 @@
 		<key>tenure</key>
 		<integer>0</integer>
 		<key>twitter</key>
-		<string>KenLegler</string>
+		<string>@KenLegler</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -12788,7 +12788,7 @@
 		<key>tenure</key>
 		<integer>0</integer>
 		<key>twitter</key>
-		<string>RepMaldonado</string>
+		<string>@RepMaldonado</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -12810,7 +12810,7 @@
 		<key>dist1_phone</key>
 		<string>915-544-0789</string>
 		<key>dist1_street</key>
-		<string>1444 Montana, Suite A</string>
+		<string>1444 Montana, #A</string>
 		<key>dist1_zip</key>
 		<string>79901</string>
 		<key>dist2_city</key>
@@ -12880,7 +12880,7 @@
 		<key>tenure</key>
 		<integer>0</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@MarisaMarquez</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -12902,7 +12902,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0464</string>
 		<key>dist1_street</key>
-		<string>210 West Davis Street, Suite 101</string>
+		<string>210 West Davis Street, #101</string>
 		<key>dist1_zip</key>
 		<string>75149</string>
 		<key>dist2_city</key>
@@ -12972,7 +12972,7 @@
 		<key>tenure</key>
 		<integer>0</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@RobertMiklos</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -13270,7 +13270,7 @@
 		<key>dist1_phone</key>
 		<string>254-774-9888</string>
 		<key>dist1_street</key>
-		<string>3000 South 31st Street, Suite 505</string>
+		<string>3000 South 31st Street, #505</string>
 		<key>dist1_zip</key>
 		<string>76502</string>
 		<key>dist2_city</key>
@@ -13546,7 +13546,7 @@
 		<key>dist1_phone</key>
 		<string>817-478-5096</string>
 		<key>dist1_street</key>
-		<string>5840 West I-20, Suite 110</string>
+		<string>5840 West I-20, #110</string>
 		<key>dist1_zip</key>
 		<string>76017</string>
 		<key>dist2_city</key>
@@ -13616,7 +13616,7 @@
 		<key>tenure</key>
 		<integer>0</integer>
 		<key>twitter</key>
-		<string>RepChrisTurner</string>
+		<string>@RepChrisTurner</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -13800,7 +13800,7 @@
 		<key>tenure</key>
 		<integer>0</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@TexasStateRep29</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -13822,7 +13822,7 @@
 		<key>dist1_phone</key>
 		<string>254-772-6225</string>
 		<key>dist1_street</key>
-		<string>400 Austin Avenue, Suite 303</string>
+		<string>400 Austin Avenue, #303</string>
 		<key>dist1_zip</key>
 		<string>76701</string>
 		<key>dist2_city</key>
@@ -13832,7 +13832,7 @@
 		<key>dist2_phone</key>
 		<string>817-573-9622</string>
 		<key>dist2_street</key>
-		<string>1100 East Highway 377, Suite 103</string>
+		<string>1100 East Highway 377, #103</string>
 		<key>dist2_zip</key>
 		<string>76048</string>
 		<key>dist3_city</key>
@@ -13914,7 +13914,7 @@
 		<key>dist1_phone</key>
 		<string>214-378-5751</string>
 		<key>dist1_street</key>
-		<string>8080 North Central Expressway, Suite 1440, LB 44</string>
+		<string>8080 North Central Expressway, #1440-LB44</string>
 		<key>dist1_zip</key>
 		<string>75206</string>
 		<key>dist2_city</key>
@@ -13984,7 +13984,7 @@
 		<key>tenure</key>
 		<integer>14</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@JohnCarona</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -14108,7 +14108,7 @@
 		<key>dist2_phone</key>
 		<string>972-279-1800</string>
 		<key>dist2_street</key>
-		<string>18061 LBJ Freeway, Suite 400</string>
+		<string>18061 LBJ Freeway, #400</string>
 		<key>dist2_zip</key>
 		<string>75150</string>
 		<key>dist3_city</key>
@@ -14200,7 +14200,7 @@
 		<key>dist2_phone</key>
 		<string>806-762-1122</string>
 		<key>dist2_street</key>
-		<string>1500 Broadway, Suite 902</string>
+		<string>1500 Broadway, #902</string>
 		<key>dist2_zip</key>
 		<string>79401</string>
 		<key>dist3_city</key>
@@ -14260,7 +14260,7 @@
 		<key>tenure</key>
 		<integer>13</integer>
 		<key>twitter</key>
-		<string>senatorduncan</string>
+		<string>@senatorduncan</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -14282,7 +14282,7 @@
 		<key>dist1_phone</key>
 		<string>281-261-2360</string>
 		<key>dist1_street</key>
-		<string>2440 Texas Parkway, Suite 110</string>
+		<string>2440 Texas Parkway, #110</string>
 		<key>dist1_zip</key>
 		<string>77489</string>
 		<key>dist2_city</key>
@@ -14292,7 +14292,7 @@
 		<key>dist2_phone</key>
 		<string>281-564-2228</string>
 		<key>dist2_street</key>
-		<string>11110 Bellaire Boulevard, Suite 211</string>
+		<string>11110 Bellaire Boulevard, #211</string>
 		<key>dist2_zip</key>
 		<string>77072</string>
 		<key>dist3_city</key>
@@ -14302,7 +14302,7 @@
 		<key>dist3_phone1</key>
 		<string>713-236-0306</string>
 		<key>dist3_street</key>
-		<string>440 Louisiana, Suite 575</string>
+		<string>440 Louisiana, #575</string>
 		<key>dist3_zip</key>
 		<string>77002</string>
 		<key>dist4_city</key>
@@ -14352,7 +14352,7 @@
 		<key>tenure</key>
 		<integer>19</integer>
 		<key>twitter</key>
-		<string>SenatorEllis</string>
+		<string>@SenatorEllis</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -14374,7 +14374,7 @@
 		<key>dist1_phone</key>
 		<string>903-223-7931</string>
 		<key>dist1_street</key>
-		<string>5411 Plaza Drive, Suite D</string>
+		<string>5411 Plaza Drive, #D</string>
 		<key>dist1_zip</key>
 		<string>75503</string>
 		<key>dist2_city</key>
@@ -14384,7 +14384,7 @@
 		<key>dist2_phone</key>
 		<string>903-596-9122</string>
 		<key>dist2_street</key>
-		<string>3304 South Broadway, Suite 103</string>
+		<string>3304 South Broadway, #103</string>
 		<key>dist2_zip</key>
 		<string>75701</string>
 		<key>dist3_city</key>
@@ -14394,7 +14394,7 @@
 		<key>dist3_phone1</key>
 		<string>903-753-8137</string>
 		<key>dist3_street</key>
-		<string>101 East Methvin, Suite 301</string>
+		<string>101 East Methvin, #301</string>
 		<key>dist3_zip</key>
 		<string>75601</string>
 		<key>dist4_city</key>
@@ -14466,7 +14466,7 @@
 		<key>dist1_phone</key>
 		<string>903-868-2347</string>
 		<key>dist1_street</key>
-		<string>1117 Gallagher Drive, Suite 340</string>
+		<string>1117 Gallagher Drive, #340</string>
 		<key>dist1_zip</key>
 		<string>75090</string>
 		<key>dist2_city</key>
@@ -14476,7 +14476,7 @@
 		<key>dist2_phone</key>
 		<string>940-689-0191</string>
 		<key>dist2_street</key>
-		<string>2716 Commerce Street, Suite 101</string>
+		<string>2716 Commerce Street, #101</string>
 		<key>dist2_zip</key>
 		<string>76301</string>
 		<key>dist3_city</key>
@@ -14486,7 +14486,7 @@
 		<key>dist3_phone1</key>
 		<string>940-898-0331</string>
 		<key>dist3_street</key>
-		<string>4401 North Interstate-Highway 35, Suite 202</string>
+		<string>4401 North Interstate-Highway 35, #202</string>
 		<key>dist3_zip</key>
 		<string>76207</string>
 		<key>dist4_city</key>
@@ -14558,7 +14558,7 @@
 		<key>dist1_phone</key>
 		<string>254-939-3562</string>
 		<key>dist1_street</key>
-		<string>1920 North Main, Suite 101</string>
+		<string>1920 North Main, #101</string>
 		<key>dist1_zip</key>
 		<string>76513</string>
 		<key>dist2_city</key>
@@ -14568,7 +14568,7 @@
 		<key>dist2_phone</key>
 		<string>325-676-7404</string>
 		<key>dist2_street</key>
-		<string>500 Chestnut, Suite 810</string>
+		<string>500 Chestnut, #810</string>
 		<key>dist2_zip</key>
 		<string>79602</string>
 		<key>dist3_city</key>
@@ -14578,7 +14578,7 @@
 		<key>dist3_phone1</key>
 		<string>830-693-9900</string>
 		<key>dist3_street</key>
-		<string>101 Highway 281 North, Suite 203</string>
+		<string>101 Highway 281 North, #203</string>
 		<key>dist3_zip</key>
 		<string>78654</string>
 		<key>dist4_city</key>
@@ -14670,7 +14670,7 @@
 		<key>dist3_phone1</key>
 		<string>713-923-7575</string>
 		<key>dist3_street</key>
-		<string>5425 Polk Street Suite 1101</string>
+		<string>5425 Polk Street #1101</string>
 		<key>dist3_zip</key>
 		<string>77023</string>
 		<key>dist4_city</key>
@@ -14742,7 +14742,7 @@
 		<key>dist1_phone</key>
 		<string>817-461-9109</string>
 		<key>dist1_street</key>
-		<string>2001 East Lamar Boulevard, Suite 150</string>
+		<string>2001 East Lamar Boulevard, #150</string>
 		<key>dist1_zip</key>
 		<string>76006</string>
 		<key>dist2_city</key>
@@ -14752,7 +14752,7 @@
 		<key>dist2_phone</key>
 		<string>972-436-1001</string>
 		<key>dist2_street</key>
-		<string>522 South Edmonds Lane, Suite 200</string>
+		<string>522 South Edmonds Lane, #200</string>
 		<key>dist2_zip</key>
 		<string>75067</string>
 		<key>dist3_city</key>
@@ -14798,7 +14798,7 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>1.1020</real>
+		<real>1.102</real>
 		<key>party_id</key>
 		<integer>2</integer>
 		<key>party_name</key>
@@ -14926,7 +14926,7 @@
 		<key>dist1_phone</key>
 		<string>361-225-1200</string>
 		<key>dist1_street</key>
-		<string>2820 S.P.I.D., Suite 291</string>
+		<string>2820 S.P.I.D., #291</string>
 		<key>dist1_zip</key>
 		<string>78415</string>
 		<key>dist2_city</key>
@@ -14936,7 +14936,7 @@
 		<key>dist2_phone</key>
 		<string>956-972-1841</string>
 		<key>dist2_street</key>
-		<string>612 Nolana, Suite 410 B</string>
+		<string>612 Nolana, #410-B</string>
 		<key>dist2_zip</key>
 		<string>78504</string>
 		<key>dist3_city</key>
@@ -15088,7 +15088,7 @@
 		<key>tenure</key>
 		<integer>1</integer>
 		<key>twitter</key>
-		<string>JoanHuffman</string>
+		<string>@JoanHuffman</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -15294,7 +15294,7 @@
 		<key>dist1_phone</key>
 		<string>817-424-3446</string>
 		<key>dist1_street</key>
-		<string>1235 South Main Street, Suite 280</string>
+		<string>1235 South Main Street, #280</string>
 		<key>dist1_zip</key>
 		<string>76051</string>
 		<key>dist2_city</key>
@@ -15350,7 +15350,7 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>0.9360</real>
+		<real>0.9360000000000001</real>
 		<key>party_id</key>
 		<integer>2</integer>
 		<key>party_name</key>
@@ -15364,7 +15364,7 @@
 		<key>tenure</key>
 		<integer>16</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@TeamJaneNelson</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -15396,7 +15396,7 @@
 		<key>dist2_phone</key>
 		<string>936-564-4252</string>
 		<key>dist2_street</key>
-		<string>202 East Pillar Street, Suite 208</string>
+		<string>202 East Pillar Street, #208</string>
 		<key>dist2_zip</key>
 		<string>75961</string>
 		<key>dist3_city</key>
@@ -15406,7 +15406,7 @@
 		<key>dist3_phone1</key>
 		<string>936-699-4988</string>
 		<key>dist3_street</key>
-		<string>4100 South Medford Drive, Suite B-2</string>
+		<string>4100 South Medford Drive, #B-2</string>
 		<key>dist3_zip</key>
 		<string>75901</string>
 		<key>dist4_city</key>
@@ -15416,7 +15416,7 @@
 		<key>dist4_phone1</key>
 		<string>936-756-5168</string>
 		<key>dist4_street</key>
-		<string>2040 North Loop 336 West, Suite 107, Box 7</string>
+		<string>2040 North Loop 336 West, #107-Box-7</string>
 		<key>dist4_zip</key>
 		<string>77304</string>
 		<key>district</key>
@@ -15478,7 +15478,7 @@
 		<key>dist1_phone</key>
 		<string>512-828-5224</string>
 		<key>dist1_street</key>
-		<string>309 West Main Street, Suite 115</string>
+		<string>309 West Main Street, #115</string>
 		<key>dist1_zip</key>
 		<string>78664</string>
 		<key>dist2_city</key>
@@ -15488,7 +15488,7 @@
 		<key>dist2_phone</key>
 		<string>979-776-0521</string>
 		<key>dist2_street</key>
-		<string>3740 Copperfield Drive, Suite 103</string>
+		<string>3740 Copperfield Drive, #103</string>
 		<key>dist2_zip</key>
 		<string>77802</string>
 		<key>dist3_city</key>
@@ -15570,7 +15570,7 @@
 		<key>dist1_phone</key>
 		<string>713-464-0282</string>
 		<key>dist1_street</key>
-		<string>11451 Katy Freeway, Suite 209</string>
+		<string>11451 Katy Freeway, #209</string>
 		<key>dist1_zip</key>
 		<string>77079</string>
 		<key>dist2_city</key>
@@ -15626,7 +15626,7 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>1.1020</real>
+		<real>1.102</real>
 		<key>party_id</key>
 		<integer>2</integer>
 		<key>party_name</key>
@@ -15640,7 +15640,7 @@
 		<key>tenure</key>
 		<integer>2</integer>
 		<key>twitter</key>
-		<string>DanPatrick</string>
+		<string>@DanPatrick</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -15662,7 +15662,7 @@
 		<key>dist1_phone</key>
 		<string>432-268-9909</string>
 		<key>dist1_street</key>
-		<string>401 Austin, Suite 101</string>
+		<string>401 Austin, #101</string>
 		<key>dist1_zip</key>
 		<string>79720</string>
 		<key>dist2_city</key>
@@ -15682,7 +15682,7 @@
 		<key>dist3_phone1</key>
 		<string>806-374-8994</string>
 		<key>dist3_street</key>
-		<string>410 South Taylor, Suite 1600</string>
+		<string>410 South Taylor, #1600</string>
 		<key>dist3_zip</key>
 		<string>79101</string>
 		<key>dist4_city</key>
@@ -15732,7 +15732,7 @@
 		<key>tenure</key>
 		<integer>5</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@kseliger</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -15754,7 +15754,7 @@
 		<key>dist1_phone</key>
 		<string>972-403-3404</string>
 		<key>dist1_street</key>
-		<string>5000 Legacy Drive, Suite 494</string>
+		<string>5000 Legacy Drive, #494</string>
 		<key>dist1_zip</key>
 		<string>75024</string>
 		<key>dist2_city</key>
@@ -15824,7 +15824,7 @@
 		<key>tenure</key>
 		<integer>16</integer>
 		<key>twitter</key>
-		<string>FlorenceShapiro</string>
+		<string>@FlorenceShapiro</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -15846,7 +15846,7 @@
 		<key>dist1_phone</key>
 		<string>915-544-1990</string>
 		<key>dist1_street</key>
-		<string>800 Wyoming, Suite A</string>
+		<string>800 Wyoming, #A</string>
 		<key>dist1_zip</key>
 		<string>79902</string>
 		<key>dist2_city</key>
@@ -15856,7 +15856,7 @@
 		<key>dist2_phone</key>
 		<string>915-857-4800</string>
 		<key>dist2_street</key>
-		<string>1801 Zaragosa, Suite C</string>
+		<string>1801 Zaragosa, #C</string>
 		<key>dist2_zip</key>
 		<string>79936</string>
 		<key>dist3_city</key>
@@ -15938,7 +15938,7 @@
 		<key>dist1_phone</key>
 		<string>210-932-2568</string>
 		<key>dist1_street</key>
-		<string>2530 Southwest Military Drive, Suite 103</string>
+		<string>2530 Southwest Military Drive, #103</string>
 		<key>dist1_zip</key>
 		<string>78224</string>
 		<key>dist2_city</key>
@@ -15948,7 +15948,7 @@
 		<key>dist2_phone</key>
 		<string>432-447-0270</string>
 		<key>dist2_street</key>
-		<string>100 East 4th, Suite 100</string>
+		<string>100 East 4th, #100</string>
 		<key>dist2_zip</key>
 		<string>79772</string>
 		<key>dist3_city</key>
@@ -15958,7 +15958,7 @@
 		<key>dist3_phone1</key>
 		<string>830-758-0294</string>
 		<key>dist3_street</key>
-		<string>501 Main Street, Suite 114</string>
+		<string>501 Main Street, #114</string>
 		<key>dist3_zip</key>
 		<string>78852</string>
 		<key>dist4_city</key>
@@ -16030,7 +16030,7 @@
 		<key>dist1_phone</key>
 		<string>210-733-6604</string>
 		<key>dist1_street</key>
-		<string>700 North Saint Mary&apos;s Street, Suite 1725</string>
+		<string>700 North Saint Mary&apos;s Street, #1725</string>
 		<key>dist1_zip</key>
 		<string>78205</string>
 		<key>dist2_city</key>
@@ -16086,7 +16086,7 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>-0.9650</real>
+		<real>-0.965</real>
 		<key>party_id</key>
 		<integer>1</integer>
 		<key>party_name</key>
@@ -16100,7 +16100,7 @@
 		<key>tenure</key>
 		<integer>10</integer>
 		<key>twitter</key>
-		<string>leticiavdp</string>
+		<string>@leticiavdp</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -16306,7 +16306,7 @@
 		<key>dist1_phone</key>
 		<string>214-467-0123</string>
 		<key>dist1_street</key>
-		<string>5787 South Hampton Road, Suite 385</string>
+		<string>5787 South Hampton Road, #385</string>
 		<key>dist1_zip</key>
 		<string>75232</string>
 		<key>dist2_city</key>
@@ -16316,7 +16316,7 @@
 		<key>dist2_phone</key>
 		<string>214-741-0123</string>
 		<key>dist2_street</key>
-		<string>2612 Main Street, Suite 100</string>
+		<string>2612 Main Street, #100</string>
 		<key>dist2_zip</key>
 		<string>75226</string>
 		<key>dist3_city</key>
@@ -16376,7 +16376,7 @@
 		<key>tenure</key>
 		<integer>16</integer>
 		<key>twitter</key>
-		<string></string>
+		<string>@SenRoyceWest</string>
 	</dict>
 	<dict>
 		<key>bio_url</key>
@@ -16490,7 +16490,7 @@
 		<key>dist1_phone</key>
 		<string>281-364-9426</string>
 		<key>dist1_street</key>
-		<string>2441 High Timbers, Suite 400</string>
+		<string>2441 High Timbers, #400</string>
 		<key>dist1_zip</key>
 		<string>77380</string>
 		<key>dist2_city</key>
@@ -16500,7 +16500,7 @@
 		<key>dist2_phone</key>
 		<string>409-896-2350</string>
 		<key>dist2_street</key>
-		<string>2825 Interstate Highway-10 East, Suite 100</string>
+		<string>2825 Interstate Highway-10 East, #100</string>
 		<key>dist2_zip</key>
 		<string>77702</string>
 		<key>dist3_city</key>
@@ -16546,7 +16546,7 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>1.0660</real>
+		<real>1.066</real>
 		<key>party_id</key>
 		<integer>2</integer>
 		<key>party_name</key>
@@ -16582,7 +16582,7 @@
 		<key>dist1_phone</key>
 		<string>210-657-0095</string>
 		<key>dist1_street</key>
-		<string>12702 Toepperwein Road, Suite 214</string>
+		<string>12702 Toepperwein Road, #214</string>
 		<key>dist1_zip</key>
 		<string>78233</string>
 		<key>dist2_city</key>
