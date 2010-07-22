@@ -2,7 +2,6 @@
 //  UIImage+ResolutionIndependent.m
 //  TexLege
 //
-//  Created by Gregory Combs on 7/9/10.
 //	http://atastypixel.com/blog/uiimage-resolution-independence-and-the-iphone-4s-retina-display/
 //
 
