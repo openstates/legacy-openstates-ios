@@ -39,3 +39,11 @@
 //+ (BOOL) isSplitViewClassAvailable;
 
 @end
+
+
+@interface NSArray (Find)
+- (NSArray *)findAllWhereKeyPath:(NSString *)keyPath equals:(id)value;
+- (id)findWhereKeyPath:(NSString *)keyPath equals:(id)value;
+
+@end
+

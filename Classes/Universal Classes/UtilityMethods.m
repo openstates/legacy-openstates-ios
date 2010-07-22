@@ -10,11 +10,92 @@
 #import "TexLegeAppDelegate.h"
 #import "CapitolMap.h"
 
+#pragma mark -
+#pragma mark NSArray Categories
+
+@implementation NSArray (Find)
+
+// Implementation example
+//NSArray *friendsWithDadsNamedBob = [friends findAllWhereKeyPath:@"father.name" equals:@"Bob"]
+
+- (NSArray *)findAllWhereKeyPath:(NSString *)keyPath equals:(id)value {
+	NSMutableArray *matches = [NSMutableArray array];
+    for (id object in self) {
+		id objectValue = [object valueForKeyPath:keyPath];
+		if ([objectValue isEqual:value] || objectValue == value) [matches addObject:object];
+    }
+	
+    return matches;
+}
+
+- (id)findWhereKeyPath:(NSString *)keyPath equals:(id)value {
+	id match = nil;
+    for (id object in self) {
+		id objectValue = [object valueForKeyPath:keyPath];
+		if ([objectValue isEqual:value] || objectValue == value) {
+			match = object;
+			return match;
+		}
+    }
+    return match;
+}
+
+@end
+
+#pragma mark -
+
 @implementation UtilityMethods
+
+#pragma mark -
+#pragma mark Device Checks and Screen Methods
 
 + (BOOL) isLandscapeOrientation {
 	return (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation));
 }
+
++ (BOOL)isIPadDevice;
+{
+	static BOOL hasCheckediPadStatus = NO;
+	static BOOL isRunningOniPad = NO;
+	
+	if (!hasCheckediPadStatus)
+	{
+		if ([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)])
+		{
+			if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+			{
+				isRunningOniPad = YES;
+				hasCheckediPadStatus = YES;
+				return isRunningOniPad;
+			}
+		}
+		hasCheckediPadStatus = YES;
+	}
+	return isRunningOniPad;
+}
+
+#pragma mark -
+#pragma mark File Handling
+
+/**
+ Returns the path to the application's documents directory.
+ */
++ (NSString *)applicationDocumentsDirectory {
+	
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    return basePath;
+}
+
+// This is less buggy, but slower (since there's no cache) than UIImage imageNamed
++ (UIImage *)poorMansImageNamed:(NSString *)fileName {
+	//NSString *imageFile = [NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], fileName];
+	//return [UIImage imageWithContentsOfFile:imageFile];
+	return [UIImage imageNamed:fileName];
+}
+
+#pragma mark -
+#pragma mark URL Handling
 
 + (NSString *) titleFromURL:(NSURL *)url {
 	NSLog(@"%@", [url absoluteString]);
@@ -26,18 +107,12 @@
 		NSString *str = [urlComponents objectAtIndex:([urlComponents count]-1)];
 		NSRange dot = [str rangeOfString:@"."];
 		if ( dot.length > 0 )
-		{
 			title = [str substringToIndex:dot.location];
-		}
 		else
-		{
 			title = str;
-		}
 	}
 	else
-	{
 		title = @"...";
-	}
 	
 	return title;
 }
@@ -45,6 +120,54 @@
 + (NSURL *) safeWebUrlFromString:(NSString *)urlString {
 	//NSString * tempString = [[NSString alloc] initWithString:urlString];
 	return [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+}
+
+// Determine if we have network access, if not then throw up an alert.
++ (BOOL) openURLWithTrepidation:(NSURL *)url {
+	BOOL canOpenURL = NO;
+	
+	if (![UtilityMethods isNetworkReachable]) {
+		[UtilityMethods noInternetAlert];
+	}
+	else if ([[UIApplication sharedApplication] canOpenURL:url]) {
+		[[UIApplication sharedApplication] openURL:url];
+		canOpenURL = YES;
+	}
+	else {
+		debug_NSLog(@"Can't open this URL: %@", url.description);			
+	}
+	return canOpenURL;
+}
+
+// just open the url, don't bother checking for network access
++ (BOOL) openURLWithoutTrepidation:(NSURL *)url {
+	BOOL canOpenURL = NO;
+	
+	if ([[UIApplication sharedApplication] canOpenURL:url]) {
+		[[UIApplication sharedApplication] openURL:url];
+		canOpenURL = YES;
+	}
+	else {
+		debug_NSLog(@"Can't open this URL: %@", url.description);			
+	}
+	return canOpenURL;
+}
+
+
+#pragma mark -
+#pragma mark Maps and Map Files
+
++ (NSURL *) googleMapUrlFromStreetAddress:(NSString *)address {
+	// if you want driving directions, daddr is the destination, saddr is the origin
+	// @"http://maps.google.com/maps?daddr=San+Francisco,+CA&saddr=cupertino"
+	// [NSString stringWithFormat: @"http://maps.google.com/maps?q=%f,%f", loc.latitude, loc.longitude];
+	
+	NSString *temp1 =  [NSString stringWithFormat:@"http://maps.google.com/maps?q=%@",address];
+	// We'll likely have carriage returns
+	NSString *temp2 = [temp1 stringByReplacingOccurrencesOfString:@"\n" withString:@", "];
+	
+	
+	return [UtilityMethods safeWebUrlFromString:temp2];
 }
 
 + (CapitolMap *) capitolMapFromOfficeString:(NSString *)office {
@@ -100,66 +223,8 @@
 	return nil;
 }
 
-+ (NSURL *) googleMapUrlFromStreetAddress:(NSString *)address {
-	// if you want driving directions, daddr is the destination, saddr is the origin
-	// @"http://maps.google.com/maps?daddr=San+Francisco,+CA&saddr=cupertino"
-	// [NSString stringWithFormat: @"http://maps.google.com/maps?q=%f,%f", loc.latitude, loc.longitude];
-	
-	NSString *temp1 =  [NSString stringWithFormat:@"http://maps.google.com/maps?q=%@",address];
-	// We'll likely have carriage returns
-	NSString *temp2 = [temp1 stringByReplacingOccurrencesOfString:@"\n" withString:@", "];
-
-	
-	return [UtilityMethods safeWebUrlFromString:temp2];
-}
-
-// Determine if we have network access, if not then throw up an alert.
-+ (BOOL) openURLWithTrepidation:(NSURL *)url {
-	BOOL canOpenURL = NO;
-	
-	if (![UtilityMethods isNetworkReachable]) {
-		[UtilityMethods noInternetAlert];
-	}
-	else if ([[UIApplication sharedApplication] canOpenURL:url]) {
-		[[UIApplication sharedApplication] openURL:url];
-		canOpenURL = YES;
-	}
-	else {
-		debug_NSLog(@"Can't open this URL: %@", url.description);			
-	}
-	return canOpenURL;
-}
-
-// just open the url, don't bother checking for network access
-+ (BOOL) openURLWithoutTrepidation:(NSURL *)url {
-	BOOL canOpenURL = NO;
-	
-	if ([[UIApplication sharedApplication] canOpenURL:url]) {
-		[[UIApplication sharedApplication] openURL:url];
-		canOpenURL = YES;
-	}
-	else {
-		debug_NSLog(@"Can't open this URL: %@", url.description);			
-	}
-	return canOpenURL;
-}
-
-/**
- Returns the path to the application's documents directory.
- */
-+ (NSString *)applicationDocumentsDirectory {
-	
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-    return basePath;
-}
-
-// This is less buggy, but slower (since there's no cache) than UIImage imageNamed
-+ (UIImage *)poorMansImageNamed:(NSString *)fileName {
-	//NSString *imageFile = [NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], fileName];
-	//return [UIImage imageWithContentsOfFile:imageFile];
-	return [UIImage imageNamed:fileName];
-}
+#pragma mark -
+#pragma mark Device Hardware Alerts and Reachability
 
 + (BOOL)canMakePhoneCalls
 {
@@ -188,7 +253,6 @@
 								  otherButtonTitles:nil, nil] autorelease];
 	
 	[ noPhoneAlert show ];		
-	
 }
 
 + (void)noInternetAlert {
@@ -198,9 +262,7 @@
 								  delegate:nil // we're static, so don't do "self"
 								  cancelButtonTitle: @"Cancel" 
 								  otherButtonTitles:nil, nil] autorelease];
-	
 	[ noInternetAlert show ];		
-	
 }
 
 
@@ -277,40 +339,4 @@
 	return checked;
 }
 
-/*+ (BOOL)isIPadDevice;
- {
- return (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
- }*/
-
-+ (BOOL)isIPadDevice;
-{
-	static BOOL hasCheckediPadStatus = NO;
-	static BOOL isRunningOniPad = NO;
-	
-	if (!hasCheckediPadStatus)
-	{
-		if ([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)])
-		{
-			if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
-			{
-				isRunningOniPad = YES;
-				hasCheckediPadStatus = YES;
-				return isRunningOniPad;
-			}
-		}
-		
-		hasCheckediPadStatus = YES;
-	}
-	
-	return isRunningOniPad;
-}
-
-/*
- // This particular method is bulls&@t, given that splitviews are in the iOS4 SDK and available to any iPhones during linking ... just not available at runtime.
-+ (BOOL) isSplitViewClassAvailable {
- 
-	Class splitVCClass = NSClassFromString(@"UISplitViewController");
-	return splitVCClass != nil;	
-}
- */
 @end
