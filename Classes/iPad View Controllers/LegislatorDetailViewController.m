@@ -766,6 +766,7 @@
 					self.indivSlider = [StaticGradientSliderView newSliderViewWithOwner:self];
 				if (self.indivSlider) {
 					[self.indivSlider setFrame:sliderViewFrame];
+					[self.indivSlider setLegislator:self.legislator];
 					[self.indivSlider setSliderValue:cellInfo.entryValue.floatValue animated:NO];
 					[cell.contentView addSubview:self.indivSlider];
 				}
