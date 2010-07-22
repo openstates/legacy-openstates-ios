@@ -762,12 +762,10 @@ NSInteger kNoSelection = -1;
 			[fileManager copyItemAtPath:defaultStorePath toPath:storePath error:NULL];
 		}
 	}
+	NSLog(@"%@", storePath);
 #endif
 	
 	NSURL *storeUrl = [NSURL fileURLWithPath:storePath];
-	// GREG
-	NSLog(@"%@", storePath);
-	
 
 	NSError *error;
 	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], 
