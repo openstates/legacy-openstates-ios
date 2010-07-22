@@ -77,8 +77,8 @@
 	}
 	[self.sliderControl setValue:newVal animated:isAnimated];
 	//[self.sliderControl setNeedsDisplay];	// GREG, do we need this???
-	NSLog(@"Min: %f   Max: %f", self.sliderControl.minimumValue, self.sliderControl.maximumValue);
-	NSLog(@"Value: %f", newVal);
+	//NSLog(@"Min: %f   Max: %f", self.sliderControl.minimumValue, self.sliderControl.maximumValue);
+	//NSLog(@"Value: %f", newVal);
 
 }
 
