@@ -74,7 +74,6 @@
 						</object>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
-						<float key="IBUIValue">1.25</float>
 						<float key="IBUIMinValue">-1.25</float>
 						<float key="IBUIMaxValue">1.25</float>
 					</object>
