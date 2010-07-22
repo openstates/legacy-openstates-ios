@@ -13,6 +13,7 @@
 @interface StaticGradientSliderView (Private)
 
 - (void)prepareUI;
+- (void) setBackgroundOffset;
 
 @end
 
@@ -31,6 +32,18 @@
 	NSString *starString = (isSmall) ? @"slider_star.png" : @"slider_star_big.png";
 	[self.sliderControl setThumbImage:[UIImage imageNamed:starString] forState:UIControlStateNormal];
 	m_usesSmallStar = isSmall;
+	
+	[self setBackgroundOffset];
+}
+
+- (void) setBackgroundOffset {	
+	CGFloat thumbWidth = self.sliderControl.currentThumbImage.size.width;
+	CGRect sliderRect = self.sliderControl.bounds;
+	CGRect backgroundRect = self.gradientImage.bounds;
+	backgroundRect.origin.x = sliderRect.origin.x + (thumbWidth/2);
+	backgroundRect.size.width = sliderRect.size.width - thumbWidth;
+	
+	[self.gradientImage setBounds:backgroundRect];
 }
 
 - (BOOL) usesSmallStar {
@@ -63,7 +76,9 @@
 		[self setAlpha:0.5];
 	}
 	[self.sliderControl setValue:newVal animated:isAnimated];
-	[self.sliderControl setNeedsDisplay];
+	//[self.sliderControl setNeedsDisplay];	// GREG, do we need this???
+	NSLog(@"Min: %f   Max: %f", self.sliderControl.minimumValue, self.sliderControl.maximumValue);
+	NSLog(@"Value: %f", newVal);
 
 }
 
@@ -93,8 +108,7 @@
 		CGFloat maxSlider = [[indexStats maxPartisanIndexUsingLegislator:legislator] floatValue];
 		[self.sliderControl setMinimumValue:minSlider];
 		[self.sliderControl setMaximumValue:maxSlider];
-	}
-}
+	}}
 
 
 @end
