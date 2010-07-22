@@ -63,6 +63,7 @@
 @dynamic searchName;
 
 @dynamic committeePositions;
+@dynamic wnomScores;
 
 - (NSComparisonResult)compareMembersByName:(LegislatorObj *)p
 {	

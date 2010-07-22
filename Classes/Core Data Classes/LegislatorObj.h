@@ -9,7 +9,7 @@
 #import <CoreData/CoreData.h>
 #import "Constants.h"
 
-@class CommitteePositionObj;
+@class CommitteePositionObj, WnomObj;
 
 @interface LegislatorObj :  NSManagedObject  
 {
@@ -63,8 +63,8 @@
 @property (nonatomic, retain) NSString * lastnameInitial;
 @property (nonatomic, retain) NSString * searchName;
 @property (nonatomic, retain) NSSet* committeePositions;
+@property (nonatomic, retain) NSSet* wnomScores;
 @property (nonatomic, readonly) NSString * districtMap;
-
 
 - (NSComparisonResult)compareMembersByName:(LegislatorObj *)p;
 - (NSString *)partyShortName;
@@ -88,5 +88,9 @@
 - (void)addCommitteePositions:(NSSet *)value;
 - (void)removeCommitteePositions:(NSSet *)value;
 
+- (void)addWnomScoresObject:(WnomObj *)value;
+- (void)removeWnomScoresObject:(WnomObj *)value;
+- (void)addWnomScores:(NSSet *)value;
+- (void)removeWnomScores:(NSSet *)value;
 @end
 
