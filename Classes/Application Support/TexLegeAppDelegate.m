@@ -291,7 +291,7 @@ NSInteger kNoSelection = -1;
     // The Reachability class is capable of notifying your application when the network
     // status changes. By default, those notifications are not enabled.
     // Uncomment the following line to enable them:
-    //[[Reachability sharedReachability] setNetworkStatusNotificationsEnabled:YES];
+    [[Reachability sharedReachability] setNetworkStatusNotificationsEnabled:YES];
         
     [self updateStatus];
 	
@@ -303,7 +303,6 @@ NSInteger kNoSelection = -1;
 	UIWindow *localMainWindow;
 	localMainWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.mainWindow = localMainWindow;
-	// the localMainWindow data is now retained by the application delegate so we can release the local variable
 	[localMainWindow release];
 	
     [self.mainWindow setBackgroundColor:[UIColor whiteColor]];
@@ -360,25 +359,17 @@ NSInteger kNoSelection = -1;
 */	
 
 	NSInteger masterIndexSelection = 0;
-#if 0  /// this is a work in progress ... trouble is that the splitViewController has intermediate UINavigationControllers!!!
-	if (self.splitViewController && [self.splitViewController.viewControllers count]) {
-		UIViewController *splitMasterVC = [self.splitViewController.viewControllers objectAtIndex:0]; // this is the master (left)
-		UIViewController *splitDetailVC = [self.splitViewController.viewControllers objectAtIndex:1]; // this is the detail (right)
-
-		if (splitMasterVC) {
-			masterIndexSelection = [self indexForFunctionalViewController:splitMasterVC];
-		}
+	if (self.splitViewController) {
+		masterIndexSelection = [self indexForFunctionalViewController:self.masterNavigationController];
 	}
 	else 
-#endif
-	if (self.tabBarController)
+		if (self.tabBarController)
 	{
 		//if (self.tabBarController.selectedViewController != self.tabBarController.moreNavigationController)
 		//	masterIndexSelection = self.tabBarController.selectedIndex;  // they had selected "More...", lets not go back there implicitly.
 
 		masterIndexSelection = [self indexForFunctionalViewController:self.tabBarController.selectedViewController];
 	}
-
 
 	NSInteger tabSavedSelection = [[savedLocation objectAtIndex:0] integerValue];
 
@@ -724,7 +715,6 @@ NSInteger kNoSelection = -1;
     return managedObjectContext;
 }
 
-
 /**
  Returns the managed object model for the application.
  If the model doesn't already exist, it is created by merging all of the models found in the application bundle.
@@ -734,7 +724,11 @@ NSInteger kNoSelection = -1;
     if (managedObjectModel != nil) {
         return managedObjectModel;
     }
-    managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];    
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"TexLege" ofType:@"momd"];
+	NSURL *momURL = [NSURL fileURLWithPath:path];
+	managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:momURL];
+
+    //managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];    
     return managedObjectModel;
 }
 
@@ -745,11 +739,15 @@ NSInteger kNoSelection = -1;
  */
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
 	
+	static NSString *DATABASE_NAME = @"TexLege.v2";
+	static NSString *DATABASE_FILE = @"TexLege.v2.sqlite";
+	
+	
     if (persistentStoreCoordinator != nil) {
         return persistentStoreCoordinator;
     }
 	
-	NSString *storePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent: @"TexLege.sqlite"];
+	NSString *storePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent: DATABASE_FILE];
 
 #if NEEDS_TO_INITIALIZE_DATABASE == 0 // don't use this if we're setting up & initializing from property lists...
 	/*
@@ -759,7 +757,7 @@ NSInteger kNoSelection = -1;
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	// If the expected store doesn't exist, copy the default store.
 	if (![fileManager fileExistsAtPath:storePath]) {
-		NSString *defaultStorePath = [[NSBundle mainBundle] pathForResource:@"TexLege" ofType:@"sqlite"];
+		NSString *defaultStorePath = [[NSBundle mainBundle] pathForResource:DATABASE_NAME ofType:@"sqlite"];
 		if (defaultStorePath) {
 			[fileManager copyItemAtPath:defaultStorePath toPath:storePath error:NULL];
 		}
@@ -767,6 +765,9 @@ NSInteger kNoSelection = -1;
 #endif
 	
 	NSURL *storeUrl = [NSURL fileURLWithPath:storePath];
+	// GREG
+	NSLog(@"%@", storePath);
+	
 
 	NSError *error;
 	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], 
