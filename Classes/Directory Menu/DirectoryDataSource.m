@@ -8,14 +8,24 @@
 
 #import "DirectoryDataSource.h"
 #import "LegislatorObj.h"
+#import "WnomObj.h"
 #import "LegislatorMasterTableViewCell.h"
-
 #import "UtilityMethods.h"
+
+@interface DirectoryDataSource (Private)
+
+#if NEEDS_TO_INITIALIZE_DATABASE
+- (void) populatePartisanIndexDatabase;
+#endif
+
+- (void) save;
+
+@end
+
 
 @implementation DirectoryDataSource
 
 @synthesize fetchedResultsController, managedObjectContext;
-
 @synthesize hideTableIndex;
 @synthesize filterChamber, filterString, searchDisplayController;
 @synthesize leg_cell;
@@ -26,13 +36,19 @@
 	if (self = [super init]) {
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
+#if NEEDS_TO_INITIALIZE_DATABASE
+		needsInitDB = YES;
+#endif
 	}
 	return self;
 }
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
 	if ([self init])
-		if (newContext) self.managedObjectContext = newContext;
+		if (newContext)
+		{
+			self.managedObjectContext = newContext;			
+		}
 	return self;
 }
 
@@ -125,7 +141,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 #if NEEDS_TO_INITIALIZE_DATABASE
-	[self initializeDatabase];
+	if (needsInitDB) {
+		[self initializeDatabase];
+		[self populatePartisanIndexDatabase];
+		needsInitDB = NO;
+	}
 #endif
 	
 	LegislatorObj *dataObj = [self legislatorDataForIndexPath:indexPath];
@@ -164,9 +184,7 @@
 	else
 #endif
 	{
-		static NSString *leg_cell_ID = @"LegislatorDirectory";
-		//NSString *leg_cell_ID = [NSString stringWithFormat:@"LegislatorDirectory-%d", rand()] ;
-		
+		static NSString *leg_cell_ID = @"LegislatorDirectory";		
 		LegislatorMasterTableViewCell *cell = (LegislatorMasterTableViewCell *)[tableView 
 																				dequeueReusableCellWithIdentifier:leg_cell_ID];
 		if (cell == nil) {
@@ -297,6 +315,7 @@
 	if (![self.filterString isEqualToString:filter]) {
 		self.filterString = [NSMutableString stringWithString:filter];
 	}
+
 	// we also get called on toolbar chamber switches, with or without a search string, so update anyway...
 	[self updateFilterPredicate];	
 }
@@ -310,6 +329,19 @@
 
 #pragma mark -
 #pragma mark Core Data Methods
+
+- (void)save{
+	@try {
+		NSError *error;
+		if (![self.managedObjectContext save:&error]) {
+			NSLog(@"DirectoryDataSource:save - unresolved error %@, %@", error, [error userInfo]);
+		}		
+	}
+	@catch (NSException * e) {
+		debug_NSLog(@"Failure in DirectoryDataSource:save, name=%@ reason=%@", e.name, e.reason);
+	}
+}
+
 
 #if NEEDS_TO_INITIALIZE_DATABASE
 
@@ -387,16 +419,95 @@
 			[newManagedObject setValue:[aDictionary valueForKey:@"dist4_phone1"] forKey:@"dist4_phone1"];
 			[newManagedObject setValue:[aDictionary valueForKey:@"dist4_fax"] forKey:@"dist4_fax"];
 			
-			// Save the context.
-			NSError *error;
-			if (![context save:&error]) {
-				// Handle the error...
-			}
+			[self save];
 		}
 		// release the raw data
 		[rawPlistArray release];
 	}
 }
+
+- (void) populatePartisanIndexDatabase
+{
+	// Create the fetch request for the entity.
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	
+	// Get our table-specific Core Data.
+	NSEntityDescription *legEntity = [NSEntityDescription entityForName:@"LegislatorObj" 
+											  inManagedObjectContext:self.managedObjectContext];
+	[fetchRequest setEntity:legEntity];
+	
+	// Sort by lastname.
+	NSSortDescriptor *lastnnameSortOrder = [[NSSortDescriptor alloc] initWithKey:@"lastname"
+																	 ascending:YES] ;
+	[fetchRequest setSortDescriptors:[NSArray arrayWithObjects:lastnnameSortOrder, nil]];
+	
+	[fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"legislatorID",@"partisan_index", nil]];
+	
+	NSError *error = nil;
+	NSArray *legArray = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+	
+	[fetchRequest release];
+	[lastnnameSortOrder release];
+	
+	
+	if (error) {
+		NSLog(@"DirectoryDataSource:save - unresolved error %@, %@", error, [error userInfo]);
+		return;
+	}
+	
+	// read the legislator data from the plist
+	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"Wnom" ofType:@"plist"];
+	NSArray *rawPlistArray = [[NSArray alloc] initWithContentsOfFile:thePath];
+	
+	NSEntityDescription *wnomEntity = [NSEntityDescription entityForName:@"WnomObj" 
+											  inManagedObjectContext:self.managedObjectContext];
+
+	NSNumber		*currentLegID = nil;
+	NSMutableSet	*wnomSet = [[NSMutableSet alloc] initWithCapacity:30];	// arbitrary limit, change at will.
+	
+	// iterate over the values in the raw  dictionary
+	for (NSDictionary * aDictionary in rawPlistArray)
+	{
+		NSNumber *wnomLegID = [aDictionary valueForKey:@"legislatorID"];
+		NSNumber *session = [aDictionary valueForKey:@"session"];
+		NSNumber *wnomAdj = [aDictionary valueForKey:@"wnom_adj"];
+		NSNumber *wnomStderr = [aDictionary valueForKey:@"wnom_stderr"];
+		NSNumber *adjMean = [aDictionary valueForKey:@"adj_mean"];
+
+		// we've got a new legislator
+		if (![wnomLegID isEqual:currentLegID]) {
+			if ([wnomSet count])
+			{
+				// lets find the appropriate legislator object and add this wnom set to it.
+				for (LegislatorObj *leg in legArray) {
+					if ([leg.legislatorID isEqual:currentLegID]) {
+						[leg addWnomScores:wnomSet];
+						//NSLog(@"Adding %d scores to %@", [wnomSet count], leg.legislatorID);
+						NSNumber *tempMean = [[wnomSet anyObject] valueForKey:@"adjMean"];
+						if (![tempMean isEqual:leg.partisan_index])
+							leg.partisan_index = tempMean;
+					}
+				}
+				[wnomSet removeAllObjects];
+			}
+			currentLegID = wnomLegID;
+		}
+		WnomObj *newWnomObj = (WnomObj *)[NSEntityDescription insertNewObjectForEntityForName:
+										  [wnomEntity name] inManagedObjectContext:self.managedObjectContext];
+		newWnomObj.session = session;
+		newWnomObj.wnomAdj = wnomAdj;
+		newWnomObj.wnomStderr = wnomStderr;
+		newWnomObj.adjMean = adjMean;
+		[wnomSet addObject:newWnomObj];
+				
+	}
+	[self save];
+	[rawPlistArray release];
+	[wnomSet release];
+	
+	
+}
+
 #endif
 
 /*
