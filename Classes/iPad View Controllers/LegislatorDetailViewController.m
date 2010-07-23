@@ -10,6 +10,7 @@
 #import "LegislatorObj.h"
 #import "CommitteeObj.h"
 #import "CommitteePositionObj.h"
+#import "WnomObj.h"
 
 #import "StaticGradientSliderView.h"
 #import "UtilityMethods.h"
@@ -122,7 +123,8 @@
 	self.leg_districtLab.text = [NSString stringWithFormat:@"District %@", self.legislator.district];
 	self.leg_tenureLab.text = [self.legislator tenureString];
 	
-	[self constructScatterPlot];
+	//[self constructScatterPlot];
+	[self newPlot];
 
 	if ([UtilityMethods isIPadDevice]) {
 		PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
@@ -968,6 +970,73 @@
 #pragma mark -
 #pragma mark Plot construction methods
 
+- (void)newPlot {
+    // If you make sure your dates are calculated at noon, you shouldn't have to 
+    // worry about daylight savings. If you use midnight, you will have to adjust
+    // for daylight savings time.
+    NSDate *refDate = [NSDate dateWithNaturalLanguageString:@"12:00 Jan 10, 1997"];
+    NSTimeInterval oneDay = 24 * 60 * 60 * 365 * 2;
+	
+    // Create graph from theme
+    graph = [(CPXYGraph *)[CPXYGraph alloc] initWithFrame:CGRectZero];
+	CPTheme *theme = [CPTheme themeNamed:kCPStocksTheme];
+	[graph applyTheme:theme];
+	scatterPlotView.hostedLayer = graph;
+    
+    // Setup scatter plot space
+    CPXYPlotSpace *plotSpace = (CPXYPlotSpace *)graph.defaultPlotSpace;
+    NSTimeInterval xLow = 0.0f;
+    plotSpace.xRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(xLow) length:CPDecimalFromFloat(oneDay*8.0f)];
+    plotSpace.yRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(-1.25) length:CPDecimalFromFloat(2.5)];
+    
+    // Axes
+	CPXYAxisSet *axisSet = (CPXYAxisSet *)graph.axisSet;
+    CPXYAxis *x = axisSet.xAxis;
+    x.majorIntervalLength = CPDecimalFromFloat(oneDay);
+    x.orthogonalCoordinateDecimal = CPDecimalFromString(@"0");
+    x.minorTicksPerInterval = 0;
+    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    dateFormatter.dateStyle = kCFDateFormatterShortStyle;
+	[dateFormatter setDateFormat:@"‘YY"];
+
+    CPTimeFormatter *timeFormatter = [[[CPTimeFormatter alloc] initWithDateFormatter:dateFormatter] autorelease];
+    timeFormatter.referenceDate = refDate;
+    x.labelFormatter = timeFormatter;
+	
+    CPXYAxis *y = axisSet.yAxis;
+    y.majorIntervalLength = CPDecimalFromString(@"0.5");
+    y.minorTicksPerInterval = 5;
+    y.orthogonalCoordinateDecimal = CPDecimalFromFloat(oneDay);
+	
+    // Create a plot that uses the data source method
+	CPScatterPlot *dataSourceLinePlot = [[[CPScatterPlot alloc] init] autorelease];
+    dataSourceLinePlot.identifier = @"Date Plot";
+	dataSourceLinePlot.dataLineStyle.lineWidth = 3.f;
+    dataSourceLinePlot.dataLineStyle.lineColor = [CPColor greenColor];
+    dataSourceLinePlot.dataSource = self;
+    [graph addPlot:dataSourceLinePlot];
+	
+    // Add some data
+	NSMutableArray *newData = [NSMutableArray array];
+	NSInteger countOfScores = [self.legislator.wnomScores count];
+	
+	NSMutableArray *sortedScores = [NSMutableArray arrayWithArray:[self.legislator.wnomScores allObjects]];
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"wnomAdj" ascending:YES];
+	[sortedScores sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+	[sortDescriptor release];
+	
+	NSUInteger i;
+	for ( i = 0; i < countOfScores ; i++) {
+		//NSLog(@"%@ %@", [self.legislator legProperName], [[[self.legislator.wnomScores allObjects] objectAtIndex:i] wnomAdj]);
+		NSTimeInterval x = oneDay*i; //[[[sortedScores objectAtIndex:i] session] integerValue] - 75 * oneDay;  //oneDay*i;
+		id y = [[sortedScores objectAtIndex:i] wnomAdj]; //[NSDecimalNumber numberWithFloat:1.2*rand()/(float)RAND_MAX + 1.2];
+		[newData addObject:
+		 [NSDictionary dictionaryWithObjectsAndKeys:	[NSDecimalNumber numberWithFloat:x], [NSNumber numberWithInt:CPScatterPlotFieldX], 
+														y, [NSNumber numberWithInt:CPScatterPlotFieldY], nil]];
+	}
+	self.dataForPlot = newData;
+	
+}
 - (void)constructScatterPlot
 {
 	if (self.graph)
@@ -993,24 +1062,24 @@
     // Setup plot space
     CPXYPlotSpace *plotSpace = (CPXYPlotSpace *)graph.defaultPlotSpace;
     plotSpace.allowsUserInteraction = YES;
-    plotSpace.xRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(1.0) length:CPDecimalFromFloat(2.0)];
-    plotSpace.yRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(1.0) length:CPDecimalFromFloat(3.0)];
+    plotSpace.xRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(73.0) length:CPDecimalFromFloat(10.0)];
+    plotSpace.yRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.0) length:CPDecimalFromFloat(2.0)];
 	
     // Axes
 	CPXYAxisSet *axisSet = (CPXYAxisSet *)graph.axisSet;
     CPXYAxis *x = axisSet.xAxis;
-    x.majorIntervalLength = CPDecimalFromString(@"0.5");
+    x.majorIntervalLength = CPDecimalFromString(@"2.0");
     x.orthogonalCoordinateDecimal = CPDecimalFromString(@"2");
     x.minorTicksPerInterval = 2;
  	NSArray *exclusionRanges = [NSArray arrayWithObjects:
 								[CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(1.99) length:CPDecimalFromFloat(0.02)], 
 								[CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.99) length:CPDecimalFromFloat(0.02)],
-								[CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(2.99) length:CPDecimalFromFloat(0.02)],
+								[CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(3.99) length:CPDecimalFromFloat(0.02)],
 								nil];
 	x.labelExclusionRanges = exclusionRanges;
 	
     CPXYAxis *y = axisSet.yAxis;
-    y.majorIntervalLength = CPDecimalFromString(@"0.5");
+    y.majorIntervalLength = CPDecimalFromString(@"0.25");
     y.minorTicksPerInterval = 5;
     y.orthogonalCoordinateDecimal = CPDecimalFromString(@"2");
 	exclusionRanges = [NSArray arrayWithObjects:
@@ -1018,7 +1087,7 @@
 					   [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.99) length:CPDecimalFromFloat(0.02)],
 					   [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(3.99) length:CPDecimalFromFloat(0.02)],
 					   nil];
-	y.labelExclusionRanges = exclusionRanges;
+	//y.labelExclusionRanges = exclusionRanges;
 	
 	// Create a blue plot area
 	CPScatterPlot *boundLinePlot = [[[CPScatterPlot alloc] init] autorelease];
@@ -1074,6 +1143,13 @@
 	fadeInAnimation.toValue = [NSNumber numberWithFloat:1.0];
 	[dataSourceLinePlot addAnimation:fadeInAnimation forKey:@"animateOpacity"];
 	
+	self.dataForPlot = [NSMutableArray arrayWithArray:[self.legislator.wnomScores allObjects]];
+
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"wnomAdj" ascending:YES];
+	[self.dataForPlot sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+	
+	[sortDescriptor release];
+	/*
     // Add some initial data
 	NSMutableArray *contentArray = [NSMutableArray arrayWithCapacity:100];
 	NSUInteger i;
@@ -1083,7 +1159,7 @@
 		[contentArray addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:x, @"x", y, @"y", nil]];
 	}
 	self.dataForPlot = contentArray;
-	
+	*/
 }
 
 /*
@@ -1208,48 +1284,34 @@
 		return 16;
 	else
 */
-		return [dataForPlot count];
+	return [dataForPlot count];
 }
 
 -(NSNumber *)numberForPlot:(CPPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index 
 {
-    NSDecimalNumber *num = nil;
+	NSDecimalNumber *num = [[self.dataForPlot objectAtIndex:index] objectForKey:[NSNumber numberWithInt:fieldEnum]];
 /*
-	if ( [plot isKindOfClass:[CPPieChart class]] ) {
-		if ( index >= [self.dataForChart count] ) return nil;
-		
-		if ( fieldEnum == CPPieChartFieldSliceWidth ) {
-			return [self.dataForChart objectAtIndex:index];
-		}
-		else {
-			return [NSNumber numberWithInt:index];
-		}
-	}
-    else if ( [plot isKindOfClass:[CPBarPlot class]] ) {
-		switch ( fieldEnum ) {
-			case CPBarPlotFieldBarLocation:
-				num = (NSDecimalNumber *)[NSDecimalNumber numberWithUnsignedInteger:index];
-				break;
-			case CPBarPlotFieldBarLength:
-				num = (NSDecimalNumber *)[NSDecimalNumber numberWithUnsignedInteger:(index+1)*(index+1)];
-				if ( [plot.identifier isEqual:@"Bar Plot 2"] ) 
-					num = [num decimalNumberBySubtracting:[NSDecimalNumber decimalNumberWithString:@"10"]];
-				break;
-		}
-    }
-	else
-*/
 	{
 		//NSLog(@"Plot: %@, fieldEnum: %d, recordIndex: %d", plot, fieldEnum, index);
 		num = [[dataForPlot objectAtIndex:index] valueForKey:(fieldEnum == CPScatterPlotFieldX ? @"x" : @"y")];
+		/*
+		WnomObj *wnom = [dataForPlot objectAtIndex:index];
+		if (fieldEnum == CPScatterPlotFieldX) {
+			num = wnom.session;
+		}
+		else {
+			num = wnom.wnomAdj;
+		}
+		*
 		// Green plot gets shifted above the blue
 		if ([(NSString *)plot.identifier isEqualToString:@"Green Plot"])
 		{
 			if ( fieldEnum == CPScatterPlotFieldY ) 
-				num = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:[num doubleValue] + 1.0];
+				//num = wnom.adjMean;
+				num = [NSNumber numberWithDouble:[num doubleValue] + 1.0];
 		}
 	}
-	
+	*/
     return num;
 }
 
