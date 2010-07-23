@@ -1918,7 +1918,7 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>0.0</real>
+		<real>0</real>
 		<key>party_id</key>
 		<integer>1</integer>
 		<key>party_name</key>
@@ -6132,7 +6132,7 @@
 		<key>email</key>
 		<string>van.taylor@house.state.tx.us</string>
 		<key>firstname</key>
-		<string>Nicholas</string>
+		<string>Van</string>
 		<key>chamber_desk</key>
 		<string>51</string>
 		<key>lastname</key>
@@ -6144,13 +6144,13 @@
 		<key>legtype_name</key>
 		<string>Representative</string>
 		<key>middlename</key>
-		<string>Van</string>
+		<string>Nicholas</string>
 		<key>nickname</key>
-		<string>Van</string>
+		<string></string>
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>0.0</real>
+		<real>0</real>
 		<key>party_id</key>
 		<integer>2</integer>
 		<key>party_name</key>
