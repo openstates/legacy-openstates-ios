@@ -34,7 +34,7 @@
 - (void) setupHeaderView;
 - (void) setupHeader;
 - (void) createSectionList;
-
+- (void) plotHistory;
 @end
 
 
@@ -45,6 +45,7 @@
 
 @synthesize popoverController;
 @synthesize scatterPlotView, graph, dataForPlot; //, dataForChart;
+@synthesize texasRed, texasBlue, texasOrange;
 
 @synthesize leg_indexTitleLab, leg_rankLab, leg_chamberPartyLab, leg_chamberLab;
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab;
@@ -64,7 +65,11 @@
 	
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 	//self.navigationItem.rightBarButtonItem = self.editButtonItem;
-
+	
+	self.texasRed = [CPColor colorWithComponentRed:198.0/255 green:0.0 blue:47.0/255 alpha:1.0f];
+//	self.texasBlue = [CPColor colorWithComponentRed:50.0/255 green:79.0/255 blue:133.0/255 alpha:1.0f];
+	self.texasBlue = [CPColor colorWithComponentRed:90.0/255 green:141.0/255 blue:222.0/255 alpha:1.0f];
+	self.texasOrange = [CPColor colorWithComponentRed:204.0/255 green:85.0/255 blue:0.0 alpha:1.0f];
 }
 
 - (NSString *)chamberAbbrev {
@@ -124,7 +129,7 @@
 	self.leg_tenureLab.text = [self.legislator tenureString];
 	
 	//[self constructScatterPlot];
-	[self newPlot];
+	[self plotHistory];
 
 	if ([UtilityMethods isIPadDevice]) {
 		PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
@@ -352,22 +357,6 @@
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	//[self.tableView.tableHeaderView setNeedsDisplay];
-/*	if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
-	{
-		// Move the plots into place for portrait
-		//scatterPlotView.frame = CGRectMake(20.0f, 55.0f, 728.0f, 556.0f);
-		//barChartView.frame = CGRectMake(20.0f, 644.0f, 340.0f, 340.0f);
-		//pieChartView.frame = CGRectMake(408.0f, 644.0f, 340.0f, 340.0f);
-	}
-	else
-	{
-		// Move the plots into place for landscape
-		//scatterPlotView.frame = CGRectMake(20.0f, 51.0f, 628.0f, 677.0f);
-		//barChartView.frame = CGRectMake(684.0f, 51.0f, 320.0f, 320.0f);
-		//pieChartView.frame = CGRectMake(684.0f, 408.0f, 320.0f, 320.0f);
-	}
-*/
 }
 
 
@@ -393,11 +382,24 @@
 	self.scatterPlotView = nil;
 	self.dataForPlot = nil;
 	self.graph = nil;
-	//self.dataForChart = nil;
+	self.texasRed = self.texasBlue = self.texasOrange = nil;
+
 }
 
 
 - (void)dealloc {
+	self.popoverController = nil;
+	self.sectionArray = nil;
+	self.indivSlider = self.partySlider = self.allSlider = nil;
+	self.indivPHolder = self.partyPHolder = self.allPHolder = nil;
+	self.legislator = nil;
+	self.leg_photoView = self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = nil;
+	self.headerView = self.startupSplashView = nil;
+	self.scatterPlotView = nil;
+	self.dataForPlot = nil;
+	self.graph = nil;
+	self.texasRed = self.texasBlue = self.texasOrange = nil;
+	
     [super dealloc];
 }
 
@@ -970,30 +972,48 @@
 #pragma mark -
 #pragma mark Plot construction methods
 
-- (void)newPlot {
-    // If you make sure your dates are calculated at noon, you shouldn't have to 
-    // worry about daylight savings. If you use midnight, you will have to adjust
-    // for daylight savings time.
-    NSDate *refDate = [NSDate dateWithNaturalLanguageString:@"12:00 Jan 10, 1997"];
-    NSTimeInterval oneDay = 24 * 60 * 60 * 365 * 2;
+- (void)plotHistory {
 	
+	NSInteger countOfScores = [self.legislator.wnomScores count];
+
+	if (!countOfScores) {
+		graph.hidden = YES;
+		return;
+	}
+	
+	NSMutableArray *sortedScores = [[NSMutableArray alloc] initWithArray:[self.legislator.wnomScores allObjects]];
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"session" ascending:YES];
+	[sortedScores sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+	[sortDescriptor release];
+	
+	NSInteger year = 1847 + ([[[sortedScores objectAtIndex:0] session] integerValue] * 2);
+	NSString *refStr = [NSString stringWithFormat:@"%d-02-02", year];
+	NSDateFormatter *inputFormatter = [[NSDateFormatter alloc] init];
+	[inputFormatter setDateFormat:@"yyyy-MM-dd"];
+	NSDate *refDate = [inputFormatter dateFromString:refStr];
+	[inputFormatter release];
+	
+    NSTimeInterval oneSession = 24 * 60 * 60 * 365 * 2;
+		
     // Create graph from theme
-    graph = [(CPXYGraph *)[CPXYGraph alloc] initWithFrame:CGRectZero];
+    self.graph = [(CPXYGraph *)[CPXYGraph alloc] initWithFrame:CGRectZero];
 	CPTheme *theme = [CPTheme themeNamed:kCPStocksTheme];
-	[graph applyTheme:theme];
-	scatterPlotView.hostedLayer = graph;
+	[self.graph applyTheme:theme];
+	scatterPlotView.hostedLayer = self.graph;
     
     // Setup scatter plot space
-    CPXYPlotSpace *plotSpace = (CPXYPlotSpace *)graph.defaultPlotSpace;
+    CPXYPlotSpace *plotSpace = (CPXYPlotSpace *)self.graph.defaultPlotSpace;
+	plotSpace.allowsUserInteraction = YES;
+
     NSTimeInterval xLow = 0.0f;
-    plotSpace.xRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(xLow) length:CPDecimalFromFloat(oneDay*8.0f)];
+    plotSpace.xRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(xLow-(oneSession/2)) length:CPDecimalFromInteger(oneSession*countOfScores)];
     plotSpace.yRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(-1.25) length:CPDecimalFromFloat(2.5)];
     
     // Axes
-	CPXYAxisSet *axisSet = (CPXYAxisSet *)graph.axisSet;
+	CPXYAxisSet *axisSet = (CPXYAxisSet *)self.graph.axisSet;
     CPXYAxis *x = axisSet.xAxis;
-    x.majorIntervalLength = CPDecimalFromFloat(oneDay);
-    x.orthogonalCoordinateDecimal = CPDecimalFromString(@"0");
+    x.majorIntervalLength = CPDecimalFromFloat(oneSession);
+    x.orthogonalCoordinateDecimal = CPDecimalFromString(@"0.0");
     x.minorTicksPerInterval = 0;
     NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
     dateFormatter.dateStyle = kCFDateFormatterShortStyle;
@@ -1002,316 +1022,97 @@
     CPTimeFormatter *timeFormatter = [[[CPTimeFormatter alloc] initWithDateFormatter:dateFormatter] autorelease];
     timeFormatter.referenceDate = refDate;
     x.labelFormatter = timeFormatter;
-	
-    CPXYAxis *y = axisSet.yAxis;
-    y.majorIntervalLength = CPDecimalFromString(@"0.5");
-    y.minorTicksPerInterval = 5;
-    y.orthogonalCoordinateDecimal = CPDecimalFromFloat(oneDay);
-	
-    // Create a plot that uses the data source method
-	CPScatterPlot *dataSourceLinePlot = [[[CPScatterPlot alloc] init] autorelease];
-    dataSourceLinePlot.identifier = @"Date Plot";
-	dataSourceLinePlot.dataLineStyle.lineWidth = 3.f;
-    dataSourceLinePlot.dataLineStyle.lineColor = [CPColor greenColor];
-    dataSourceLinePlot.dataSource = self;
-    [graph addPlot:dataSourceLinePlot];
-	
-    // Add some data
-	NSMutableArray *newData = [NSMutableArray array];
-	NSInteger countOfScores = [self.legislator.wnomScores count];
-	
-	NSMutableArray *sortedScores = [NSMutableArray arrayWithArray:[self.legislator.wnomScores allObjects]];
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"wnomAdj" ascending:YES];
-	[sortedScores sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-	[sortDescriptor release];
-	
-	NSUInteger i;
-	for ( i = 0; i < countOfScores ; i++) {
-		//NSLog(@"%@ %@", [self.legislator legProperName], [[[self.legislator.wnomScores allObjects] objectAtIndex:i] wnomAdj]);
-		NSTimeInterval x = oneDay*i; //[[[sortedScores objectAtIndex:i] session] integerValue] - 75 * oneDay;  //oneDay*i;
-		id y = [[sortedScores objectAtIndex:i] wnomAdj]; //[NSDecimalNumber numberWithFloat:1.2*rand()/(float)RAND_MAX + 1.2];
-		[newData addObject:
-		 [NSDictionary dictionaryWithObjectsAndKeys:	[NSDecimalNumber numberWithFloat:x], [NSNumber numberWithInt:CPScatterPlotFieldX], 
-														y, [NSNumber numberWithInt:CPScatterPlotFieldY], nil]];
-	}
-	self.dataForPlot = newData;
-	
-}
-- (void)constructScatterPlot
-{
-	if (self.graph)
-		self.graph = nil;
-	
-	// Create graph from theme
-	self.graph = [[CPXYGraph alloc] initWithFrame:CGRectZero];
-	CPTheme *theme = [CPTheme themeNamed:kCPStocksTheme];
-	//CPTheme *theme = [CPTheme themeNamed:kCPSlateTheme];
-    [graph applyTheme:theme];
-    scatterPlotView.hostedLayer = graph;
-		
-	//graph.plotAreaFrame.masksToBorder = NO;
-	//graph.plotAreaFrame.borderColor = [[UIColor blackColor] CGColor];
-	graph.plotAreaFrame.borderLineStyle.lineColor = [CPColor blackColor];
-	graph.plotAreaFrame.cornerRadius = 14.0;
-	
-    graph.paddingLeft = 10.0;
-	graph.paddingTop = 10.0;
-	graph.paddingRight = 10.0;
-	graph.paddingBottom = 10.0;
-    
-    // Setup plot space
-    CPXYPlotSpace *plotSpace = (CPXYPlotSpace *)graph.defaultPlotSpace;
-    plotSpace.allowsUserInteraction = YES;
-    plotSpace.xRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(73.0) length:CPDecimalFromFloat(10.0)];
-    plotSpace.yRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.0) length:CPDecimalFromFloat(2.0)];
-	
-    // Axes
-	CPXYAxisSet *axisSet = (CPXYAxisSet *)graph.axisSet;
-    CPXYAxis *x = axisSet.xAxis;
-    x.majorIntervalLength = CPDecimalFromString(@"2.0");
-    x.orthogonalCoordinateDecimal = CPDecimalFromString(@"2");
-    x.minorTicksPerInterval = 2;
- 	NSArray *exclusionRanges = [NSArray arrayWithObjects:
-								[CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(1.99) length:CPDecimalFromFloat(0.02)], 
-								[CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.99) length:CPDecimalFromFloat(0.02)],
-								[CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(3.99) length:CPDecimalFromFloat(0.02)],
+	NSArray *exclusionRanges = [NSArray arrayWithObjects:
+								[CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(-10 * oneSession) length:CPDecimalFromFloat(9*oneSession)],
+								[CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(oneSession*countOfScores) length:CPDecimalFromFloat(9*oneSession)],
 								nil];
 	x.labelExclusionRanges = exclusionRanges;
 	
     CPXYAxis *y = axisSet.yAxis;
-    y.majorIntervalLength = CPDecimalFromString(@"0.25");
-    y.minorTicksPerInterval = 5;
-    y.orthogonalCoordinateDecimal = CPDecimalFromString(@"2");
+    y.majorIntervalLength = CPDecimalFromString(@"0.5");
+    y.minorTicksPerInterval = 1;
+
+    y.orthogonalCoordinateDecimal = CPDecimalFromFloat(oneSession/2);
 	exclusionRanges = [NSArray arrayWithObjects:
-					   [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(1.99) length:CPDecimalFromFloat(0.02)], 
-					   [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.99) length:CPDecimalFromFloat(0.02)],
-					   [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(3.99) length:CPDecimalFromFloat(0.02)],
+					   [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(-10.0) length:CPDecimalFromFloat(8.5f)], 
+					   [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.0) length:CPDecimalFromFloat(0.02)], 
+					   [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(1.5) length:CPDecimalFromFloat(8.5f)], 
 					   nil];
-	//y.labelExclusionRanges = exclusionRanges;
+	y.labelExclusionRanges = exclusionRanges;
 	
+	CPColor *partyColor = [legislator.party_id integerValue] == DEMOCRAT ? self.texasBlue : self.texasRed;
 	// Create a blue plot area
 	CPScatterPlot *boundLinePlot = [[[CPScatterPlot alloc] init] autorelease];
-    boundLinePlot.identifier = @"Blue Plot";
-	boundLinePlot.dataLineStyle.miterLimit = 1.0f;
-	boundLinePlot.dataLineStyle.lineWidth = 3.0f;
-	boundLinePlot.dataLineStyle.lineColor = [CPColor blueColor];
+    boundLinePlot.identifier = @"Party Plot";
+	//boundLinePlot.dataLineStyle.miterLimit = 1.0f;
+	boundLinePlot.dataLineStyle.lineWidth = 2.5f;
+	boundLinePlot.dataLineStyle.lineColor = partyColor;
+	//boundLinePlot.dataLineStyle.dashPattern = [NSArray arrayWithObjects:[NSNumber numberWithFloat:4.0f], [NSNumber numberWithFloat:4.0f], [NSNumber numberWithFloat:4.0f], nil];
+	boundLinePlot.dataLineStyle.lineCap = kCGLineCapRound;
     boundLinePlot.dataSource = self;
-	[graph addPlot:boundLinePlot];
-	
-	// Do a blue gradient
-	CPColor *areaColor1 = [CPColor colorWithComponentRed:0.3 green:0.3 blue:1.0 alpha:0.8];
-    CPGradient *areaGradient1 = [CPGradient gradientWithBeginningColor:areaColor1 endingColor:[CPColor clearColor]];
-    areaGradient1.angle = -90.0f;
-    CPFill *areaGradientFill = [CPFill fillWithGradient:areaGradient1];
-    boundLinePlot.areaFill = areaGradientFill;
-    boundLinePlot.areaBaseValue = [[NSDecimalNumber zero] decimalValue];    
-	
+	[self.graph addPlot:boundLinePlot];
+
 	// Add plot symbols
 	CPLineStyle *symbolLineStyle = [CPLineStyle lineStyle];
-	symbolLineStyle.lineColor = [CPColor blackColor];
+	symbolLineStyle.lineColor = partyColor; //[CPColor blackColor];
 	CPPlotSymbol *plotSymbol = [CPPlotSymbol ellipsePlotSymbol];
-	plotSymbol.fill = [CPFill fillWithColor:[CPColor blueColor]];
+	plotSymbol.fill = [CPFill fillWithColor:partyColor];
 	plotSymbol.lineStyle = symbolLineStyle;
-    plotSymbol.size = CGSizeMake(10.0, 10.0);
+    plotSymbol.size = CGSizeMake(5.0, 5.0);
     boundLinePlot.plotSymbol = plotSymbol;
 	
-    // Create a green plot area
+    // Create a plot that uses the data source method
 	CPScatterPlot *dataSourceLinePlot = [[[CPScatterPlot alloc] init] autorelease];
-    dataSourceLinePlot.identifier = @"Green Plot";
-	dataSourceLinePlot.dataLineStyle.lineWidth = 3.f;
-    dataSourceLinePlot.dataLineStyle.lineColor = [CPColor greenColor];
-	dataSourceLinePlot.dataLineStyle.dashPattern = [NSArray arrayWithObjects:[NSNumber numberWithFloat:5.0f], [NSNumber numberWithFloat:5.0f], nil];
+    dataSourceLinePlot.identifier = @"Legislator Plot";
+	dataSourceLinePlot.dataLineStyle.lineWidth = 3.0f;
+    dataSourceLinePlot.dataLineStyle.lineColor = self.texasOrange;
     dataSourceLinePlot.dataSource = self;
+	[self.graph addPlot:dataSourceLinePlot];
 	
-	// Put an area gradient under the plot above
-    CPColor *areaColor = [CPColor colorWithComponentRed:0.3 green:1.0 blue:0.3 alpha:0.8];
-    CPGradient *areaGradient = [CPGradient gradientWithBeginningColor:areaColor endingColor:[CPColor clearColor]];
-    areaGradient.angle = -90.0f;
-    areaGradientFill = [CPFill fillWithGradient:areaGradient];
-    dataSourceLinePlot.areaFill = areaGradientFill;
-    dataSourceLinePlot.areaBaseValue = CPDecimalFromString(@"1.75");
-	
-	// Animate in the new plot, as an example
-	dataSourceLinePlot.opacity = 0.0f;
-	
-    [graph addPlot:dataSourceLinePlot];
-	
-	CABasicAnimation *fadeInAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-	fadeInAnimation.duration = 1.0f;
-	fadeInAnimation.removedOnCompletion = NO;
-	fadeInAnimation.fillMode = kCAFillModeForwards;
-	fadeInAnimation.toValue = [NSNumber numberWithFloat:1.0];
-	[dataSourceLinePlot addAnimation:fadeInAnimation forKey:@"animateOpacity"];
-	
-	self.dataForPlot = [NSMutableArray arrayWithArray:[self.legislator.wnomScores allObjects]];
-
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"wnomAdj" ascending:YES];
-	[self.dataForPlot sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-	
-	[sortDescriptor release];
-	/*
-    // Add some initial data
-	NSMutableArray *contentArray = [NSMutableArray arrayWithCapacity:100];
+	// Add plot symbols
+	//CPLineStyle *symbolLineStyle = [CPLineStyle lineStyle];
+	symbolLineStyle.lineColor = [CPColor blackColor];
+	plotSymbol = [CPPlotSymbol starPlotSymbol];
+	plotSymbol.fill = [CPFill fillWithColor:self.texasOrange];
+	plotSymbol.lineStyle = symbolLineStyle;
+    plotSymbol.size = CGSizeMake(14.0, 14.0);
+    dataSourceLinePlot.plotSymbol = plotSymbol;
+		
+    // Add some data
+	NSInteger party = [legislator.party_id integerValue];
+	NSInteger chamber = [legislator.legtype integerValue];
+	NSDictionary *partyDict = [[PartisanIndexStats sharedPartisanIndexStats] historyForParty:party Chamber:chamber];
 	NSUInteger i;
-	for ( i = 0; i < 60; i++ ) {
-		id x = [NSNumber numberWithFloat:1+i*0.05];
-		id y = [NSNumber numberWithFloat:1.2*rand()/(float)RAND_MAX + 1.2];
-		[contentArray addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:x, @"x", y, @"y", nil]];
+	for ( i = 0; i < countOfScores ; i++) {
+		NSTimeInterval x = oneSession*i; 
+		id y = [[sortedScores objectAtIndex:i] wnomAdj];
+		id partyY = [partyDict objectForKey:[[sortedScores objectAtIndex:i] session]];
+		[self.dataForPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:	
+							[NSDecimalNumber numberWithFloat:x], [NSNumber numberWithInt:CPScatterPlotFieldX], 
+							y, [NSNumber numberWithInt:CPScatterPlotFieldY], 
+							partyY, @"PartyY", nil]];
 	}
-	self.dataForPlot = contentArray;
-	*/
+	[sortedScores release];
 }
-
-/*
-- (void)constructBarChart
-{
-    // Create barChart from theme
-    barChart = [[CPXYGraph alloc] initWithFrame:CGRectZero];
-	CPTheme *theme = [CPTheme themeNamed:kCPDarkGradientTheme];
-    [barChart applyTheme:theme];
-    barChartView.hostedLayer = barChart;
-    barChart.plotAreaFrame.masksToBorder = NO;
-	
-    barChart.paddingLeft = 70.0;
-	barChart.paddingTop = 20.0;
-	barChart.paddingRight = 20.0;
-	barChart.paddingBottom = 80.0;
-	
-	// Add plot space for horizontal bar charts
-    CPXYPlotSpace *plotSpace = (CPXYPlotSpace *)barChart.defaultPlotSpace;
-    plotSpace.yRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.0f) length:CPDecimalFromFloat(300.0f)];
-    plotSpace.xRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.0f) length:CPDecimalFromFloat(16.0f)];
-    
-	
-	CPXYAxisSet *axisSet = (CPXYAxisSet *)barChart.axisSet;
-    CPXYAxis *x = axisSet.xAxis;
-    x.axisLineStyle = nil;
-    x.majorTickLineStyle = nil;
-    x.minorTickLineStyle = nil;
-    x.majorIntervalLength = CPDecimalFromString(@"5");
-    x.orthogonalCoordinateDecimal = CPDecimalFromString(@"0");
-	x.title = @"X Axis";
-    x.titleLocation = CPDecimalFromFloat(7.5f);
-	x.titleOffset = 55.0f;
-	
-	// Define some custom labels for the data elements
-	x.labelRotation = M_PI/4;
-	x.labelingPolicy = CPAxisLabelingPolicyNone;
-	NSArray *customTickLocations = [NSArray arrayWithObjects:[NSDecimalNumber numberWithInt:1], [NSDecimalNumber numberWithInt:5], [NSDecimalNumber numberWithInt:10], [NSDecimalNumber numberWithInt:15], nil];
-	NSArray *xAxisLabels = [NSArray arrayWithObjects:@"Label A", @"Label B", @"Label C", @"Label D", @"Label E", nil];
-	NSUInteger labelLocation = 0;
-	NSMutableArray *customLabels = [NSMutableArray arrayWithCapacity:[xAxisLabels count]];
-	for (NSNumber *tickLocation in customTickLocations) {
-		CPAxisLabel *newLabel = [[CPAxisLabel alloc] initWithText: [xAxisLabels objectAtIndex:labelLocation++] textStyle:x.labelTextStyle];
-		newLabel.tickLocation = [tickLocation decimalValue];
-		newLabel.offset = x.labelOffset + x.majorTickLength;
-		newLabel.rotation = M_PI/4;
-		[customLabels addObject:newLabel];
-		[newLabel release];
-	}
-	
-	x.axisLabels =  [NSSet setWithArray:customLabels];
-	
-	CPXYAxis *y = axisSet.yAxis;
-    y.axisLineStyle = nil;
-    y.majorTickLineStyle = nil;
-    y.minorTickLineStyle = nil;
-    y.majorIntervalLength = CPDecimalFromString(@"50");
-    y.orthogonalCoordinateDecimal = CPDecimalFromString(@"0");
-	y.title = @"Y Axis";
-	y.titleOffset = 45.0f;
-    y.titleLocation = CPDecimalFromFloat(150.0f);
-	
-    // First bar plot
-    CPBarPlot *barPlot = [CPBarPlot tubularBarPlotWithColor:[CPColor darkGrayColor] horizontalBars:NO];
-    barPlot.baseValue = CPDecimalFromString(@"0");
-    barPlot.dataSource = self;
-    barPlot.barOffset = -0.25f;
-    barPlot.identifier = @"Bar Plot 1";
-    [barChart addPlot:barPlot toPlotSpace:plotSpace];
-    
-    // Second bar plot
-    barPlot = [CPBarPlot tubularBarPlotWithColor:[CPColor blueColor] horizontalBars:NO];
-    barPlot.dataSource = self;
-    barPlot.baseValue = CPDecimalFromString(@"0");
-    barPlot.barOffset = 0.25f;
-    barPlot.cornerRadius = 2.0f;
-    barPlot.identifier = @"Bar Plot 2";
-    [barChart addPlot:barPlot toPlotSpace:plotSpace];
-}
-
-- (void)constructPieChart
-{
-	// Create pieChart from theme
-    pieChart = [[CPXYGraph alloc] initWithFrame:CGRectZero];
-	CPTheme *theme = [CPTheme themeNamed:kCPDarkGradientTheme];
-    [pieChart applyTheme:theme];
-    pieChartView.hostedLayer = pieChart;
-    pieChart.plotAreaFrame.masksToBorder = NO;
-	
-    pieChart.paddingLeft = 20.0;
-	pieChart.paddingTop = 20.0;
-	pieChart.paddingRight = 20.0;
-	pieChart.paddingBottom = 20.0;
-	
-	pieChart.axisSet = nil;
-	
-    // Add pie chart
-    CPPieChart *piePlot = [[CPPieChart alloc] init];
-    piePlot.dataSource = self;
-    piePlot.pieRadius = 130.0;
-    piePlot.identifier = @"Pie Chart 1";
-	piePlot.startAngle = M_PI_4;
-	piePlot.sliceDirection = CPPieDirectionCounterClockwise;
-    [pieChart addPlot:piePlot];
-    [piePlot release];
-	
-	// Add some initial data
-	NSMutableArray *contentArray = [NSMutableArray arrayWithObjects:[NSNumber numberWithDouble:20.0], [NSNumber numberWithDouble:30.0], [NSNumber numberWithDouble:60.0], nil];
-	self.dataForChart = contentArray;	
-}
-*/
-
 #pragma mark -
 #pragma mark Plot Data Source Methods
 
 -(NSUInteger)numberOfRecordsForPlot:(CPPlot *)plot 
 {
-/*
-	if ([plot isKindOfClass:[CPPieChart class]])
-		return [self.dataForChart count];
-	else if ([plot isKindOfClass:[CPBarPlot class]])
-		return 16;
-	else
-*/
-	return [dataForPlot count];
+	return [self.dataForPlot count];
 }
 
 -(NSNumber *)numberForPlot:(CPPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index 
 {
-	NSDecimalNumber *num = [[self.dataForPlot objectAtIndex:index] objectForKey:[NSNumber numberWithInt:fieldEnum]];
-/*
-	{
-		//NSLog(@"Plot: %@, fieldEnum: %d, recordIndex: %d", plot, fieldEnum, index);
-		num = [[dataForPlot objectAtIndex:index] valueForKey:(fieldEnum == CPScatterPlotFieldX ? @"x" : @"y")];
-		/*
-		WnomObj *wnom = [dataForPlot objectAtIndex:index];
-		if (fieldEnum == CPScatterPlotFieldX) {
-			num = wnom.session;
-		}
-		else {
-			num = wnom.wnomAdj;
-		}
-		*
-		// Green plot gets shifted above the blue
-		if ([(NSString *)plot.identifier isEqualToString:@"Green Plot"])
-		{
-			if ( fieldEnum == CPScatterPlotFieldY ) 
-				//num = wnom.adjMean;
-				num = [NSNumber numberWithDouble:[num doubleValue] + 1.0];
-		}
+	NSDecimalNumber *num = nil;
+	
+	if ([(NSString *)plot.identifier isEqualToString:@"Party Plot"] && fieldEnum ==CPScatterPlotFieldY) {
+		num = [[self.dataForPlot objectAtIndex:index] objectForKey:@"PartyY"];
+		return num;
 	}
-	*/
+	
+	num = [[self.dataForPlot objectAtIndex:index] objectForKey:[NSNumber numberWithInt:fieldEnum]];
+
     return num;
 }
 

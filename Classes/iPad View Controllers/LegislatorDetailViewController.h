@@ -12,6 +12,7 @@
 @class LegislatorObj;
 @class StaticGradientSliderView;
 @class DirectoryDetailInfo;
+@class CPColor;
 
 @interface LegislatorDetailViewController : UITableViewController <UITableViewDelegate, UIPopoverControllerDelegate, 
 												UISplitViewControllerDelegate, CPPlotDataSource, CPPieChartDataSource>
@@ -32,18 +33,15 @@
 	CPXYGraph *graph;//, *barChart, *pieChart;
 	NSMutableArray	*sectionArray;
 	NSMutableArray *dataForPlot; //, *dataForChart;
+	
+	CPColor *texasRed, *texasBlue, *texasOrange;
 }
 
 @property(nonatomic, retain) NSMutableArray *dataForPlot; //, *dataForChart
 @property (nonatomic, retain) UIPopoverController *popoverController;
 
-// Plot construction methods
-- (void)constructScatterPlot;
-//- (void)constructBarChart;
-//- (void)constructPieChart;
-
-@property (nonatomic,retain) IBOutlet CPXYGraph *graph;
-
+@property (nonatomic,retain) CPXYGraph *graph;
+@property (nonatomic,retain) CPColor *texasRed, *texasBlue, *texasOrange;
 @property (nonatomic,retain) IBOutlet UIView *startupSplashView;
 @property (nonatomic,retain) IBOutlet UIView *headerView;
 @property (nonatomic,retain) IBOutlet CPLayerHostingView *scatterPlotView;
