@@ -234,4 +234,51 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	
 }
 
+- (NSDictionary *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber {
+	NSDictionary *historyDict = nil;
+		
+	if (party == REPUBLICAN && chamber == HOUSE)
+		historyDict = [NSDictionary dictionaryWithObjectsAndKeys:
+					   [NSNumber numberWithFloat:0.54409], [NSNumber numberWithInteger:72],
+					   [NSNumber numberWithFloat:0.559875531], [NSNumber numberWithInteger:73],
+					   [NSNumber numberWithFloat:0.552640372], [NSNumber numberWithInteger:74],
+					   [NSNumber numberWithFloat:0.621388023], [NSNumber numberWithInteger:75],
+					   [NSNumber numberWithFloat:0.629700791], [NSNumber numberWithInteger:76],
+					   [NSNumber numberWithFloat:0.621778609], [NSNumber numberWithInteger:77],
+					   [NSNumber numberWithFloat:0.621042716], [NSNumber numberWithInteger:78],
+					   [NSNumber numberWithFloat:0.617089494], [NSNumber numberWithInteger:79],
+					   [NSNumber numberWithFloat:0.636998902], [NSNumber numberWithInteger:80],
+					   [NSNumber numberWithFloat:0.734943024], [NSNumber numberWithInteger:81],nil];
+	else if (party == DEMOCRAT && chamber == HOUSE)
+		historyDict = [NSDictionary dictionaryWithObjectsAndKeys:
+					   [NSNumber numberWithFloat:-0.42222], [NSNumber numberWithInteger:72],
+					   [NSNumber numberWithFloat:-0.449964135], [NSNumber numberWithInteger:73],
+					   [NSNumber numberWithFloat:-0.445684078], [NSNumber numberWithInteger:74],
+					   [NSNumber numberWithFloat:-0.536115388], [NSNumber numberWithInteger:75],
+					   [NSNumber numberWithFloat:-0.581599285], [NSNumber numberWithInteger:76],
+					   [NSNumber numberWithFloat:-0.585928296], [NSNumber numberWithInteger:77],
+					   [NSNumber numberWithFloat:-0.644611479], [NSNumber numberWithInteger:78],
+					   [NSNumber numberWithFloat:-0.695038928], [NSNumber numberWithInteger:79],
+					   [NSNumber numberWithFloat:-0.689908867], [NSNumber numberWithInteger:80],
+					   [NSNumber numberWithFloat:-0.816011438], [NSNumber numberWithInteger:81],nil];
+	else if (party == REPUBLICAN && chamber == SENATE)
+		historyDict = [NSDictionary dictionaryWithObjectsAndKeys:
+					   [NSNumber numberWithFloat:0.4383], [NSNumber numberWithInteger:76],
+					   [NSNumber numberWithFloat:0.607931], [NSNumber numberWithInteger:77],
+					   [NSNumber numberWithFloat:0.799931], [NSNumber numberWithInteger:78],
+					   [NSNumber numberWithFloat:0.722995], [NSNumber numberWithInteger:79],
+					   [NSNumber numberWithFloat:0.386157], [NSNumber numberWithInteger:80],
+					   [NSNumber numberWithFloat:0.599742], [NSNumber numberWithInteger:81],nil];
+	else if (party == DEMOCRAT && chamber == SENATE)
+		historyDict = [NSDictionary dictionaryWithObjectsAndKeys:
+					   [NSNumber numberWithFloat:-0.4161], [NSNumber numberWithInteger:76],
+					   [NSNumber numberWithFloat:-0.5796], [NSNumber numberWithInteger:77],
+					   [NSNumber numberWithFloat:-0.833222], [NSNumber numberWithInteger:78],
+					   [NSNumber numberWithFloat:-0.656078], [NSNumber numberWithInteger:79],
+					   [NSNumber numberWithFloat:-0.688802], [NSNumber numberWithInteger:80],
+					   [NSNumber numberWithFloat:-0.69183], [NSNumber numberWithInteger:81],nil];
+	
+	return historyDict;
+}
+
 @end

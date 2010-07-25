@@ -14,6 +14,7 @@
 @interface PartisanIndexStats : NSObject {
 	IBOutlet NSManagedObjectContext *managedObjectContext;
 	//CGFloat	avgRepubHouseIndex, avgDemocHouseIndex, avgRepubSenateIndex, avgDemocSenateIndex;
+	
 @private
 	NSDictionary *m_partisanIndexAggregates;	
 
@@ -34,4 +35,5 @@
 - (NSNumber *) partyPartisanIndexUsingLegislator:(LegislatorObj *)legislator;
 - (NSNumber *) overallPartisanIndexUsingLegislator:(LegislatorObj *)legislator;
 
+- (NSDictionary *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber;
 @end
