@@ -56,7 +56,8 @@
 }
 
 - (void)dealloc {
-	self.sliderControl = self.gradientImage = nil;
+	self.sliderControl = nil;
+	self.gradientImage = nil;
     [super dealloc];
 }
 
