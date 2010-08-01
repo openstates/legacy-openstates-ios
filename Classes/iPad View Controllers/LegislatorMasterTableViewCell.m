@@ -20,14 +20,13 @@
 @implementation LegislatorMasterTableViewCell
 
 @synthesize leg_photoView, leg_titleLab, leg_partyDistLab, leg_tenureLab, leg_nameLab, leg_sliderViewPlaceHolder, leg_sliderView;
-@synthesize legislator, useDarkBackground;
+@synthesize legislator, backgroundLight, backgroundDark;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
-        // Initialization code
-    }
-    return self;
+- (void)awakeFromNib {
+	self.backgroundDark = [UIColor colorWithRed:0.592f green:0.596f blue:0.608f alpha:1.0];
+	self.backgroundLight = [UIColor colorWithRed:0.675f green:0.678f blue:0.686f alpha:1.0];
 }
+
 
 /*
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -37,6 +36,13 @@
     // Configure the view for the selected state
 }
 */
+
+// DARK middle:  151, 152, 155
+// LIGHT middle: 172, 173, 175
+
+- (BOOL)useDarkBackground {
+	return useDarkBackground;
+}
 
 - (void)setUseDarkBackground:(BOOL)flag
 {
@@ -49,14 +55,24 @@
         self.backgroundView = [[[UIImageView alloc] initWithImage:backgroundImage] autorelease];
         self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.backgroundView.frame = self.bounds;
-    }
+		
+		UIColor *labelBGColor = (useDarkBackground) ? self.backgroundDark : self.backgroundLight;
+		self.leg_photoView.backgroundColor = labelBGColor;
+		self.leg_titleLab.backgroundColor = labelBGColor;
+		self.leg_partyDistLab.backgroundColor = labelBGColor;
+		self.leg_tenureLab.backgroundColor = labelBGColor;
+		self.leg_nameLab.backgroundColor = labelBGColor;
+		self.leg_sliderViewPlaceHolder.backgroundColor = labelBGColor;
+		self.leg_sliderView.backgroundColor = labelBGColor;
+    }	
 }
 
 - (void)dealloc {
-	self.leg_photoView = self.leg_titleLab = self.leg_partyDistLab = self.leg_tenureLab = self.leg_nameLab = nil;
+	self.leg_photoView = nil;
+	self.leg_titleLab = self.leg_partyDistLab = self.leg_tenureLab = self.leg_nameLab = nil;
 	self.leg_sliderViewPlaceHolder = self.leg_sliderView = nil;
 	self.legislator = nil;
-	
+	self.backgroundDark = self.backgroundLight = nil;
     [super dealloc];
 }
 
