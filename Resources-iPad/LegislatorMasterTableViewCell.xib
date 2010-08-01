@@ -52,7 +52,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrameSize">{64, 73}</string>
 								<reference key="NSSuperview" ref="806442696"/>
-								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 								<int key="IBUIContentMode">1</int>
@@ -64,7 +63,10 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{69, 8}, {82, 15}}</string>
 								<reference key="NSSuperview" ref="806442696"/>
-								<bool key="IBUIOpaque">NO</bool>
+								<object class="NSColor" key="IBUIBackgroundColor" id="538412073">
+									<int key="NSColorSpace">3</int>
+									<bytes key="NSWhite">MQA</bytes>
+								</object>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -78,10 +80,7 @@
 									<int key="NSColorSpace">2</int>
 									<bytes key="NSRGB">MC4yMjc0NTEgMC4yMjc0NTEgMC4yMjc0NTEAA</bytes>
 								</object>
-								<object class="NSColor" key="IBUIHighlightedColor" id="538412073">
-									<int key="NSColorSpace">3</int>
-									<bytes key="NSWhite">MQA</bytes>
-								</object>
+								<reference key="IBUIHighlightedColor" ref="538412073"/>
 								<int key="IBUIBaselineAdjustment">1</int>
 								<float key="IBUIMinimumFontSize">10</float>
 							</object>
@@ -90,7 +89,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{159, 5}, {50, 21}}</string>
 								<reference key="NSSuperview" ref="806442696"/>
-								<bool key="IBUIOpaque">NO</bool>
+								<reference key="IBUIBackgroundColor" ref="538412073"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -109,7 +108,7 @@
 								<int key="NSvFlags">293</int>
 								<string key="NSFrame">{{240, 51}, {60, 15}}</string>
 								<reference key="NSSuperview" ref="806442696"/>
-								<bool key="IBUIOpaque">NO</bool>
+								<reference key="IBUIBackgroundColor" ref="538412073"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -132,7 +131,7 @@
 								<int key="NSvFlags">290</int>
 								<string key="NSFrame">{{69, 23}, {211, 21}}</string>
 								<reference key="NSSuperview" ref="806442696"/>
-								<bool key="IBUIOpaque">NO</bool>
+								<reference key="IBUIBackgroundColor" ref="538412073"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -155,17 +154,16 @@
 								<int key="NSvFlags">290</int>
 								<string key="NSFrame">{{69, 46}, {168, 24}}</string>
 								<reference key="NSSuperview" ref="806442696"/>
-								<object class="NSColor" key="IBUIBackgroundColor" id="644142536">
-									<int key="NSColorSpace">3</int>
-									<bytes key="NSWhite">MCAwAA</bytes>
-								</object>
-								<bool key="IBUIOpaque">NO</bool>
+								<reference key="IBUIBackgroundColor" ref="538412073"/>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
 						</object>
 						<string key="NSFrameSize">{300, 73}</string>
 						<reference key="NSSuperview" ref="76075731"/>
-						<reference key="IBUIBackgroundColor" ref="644142536"/>
+						<object class="NSColor" key="IBUIBackgroundColor">
+							<int key="NSColorSpace">3</int>
+							<bytes key="NSWhite">MCAwAA</bytes>
+						</object>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<int key="IBUIContentMode">4</int>
@@ -179,7 +177,6 @@
 					<int key="NSColorSpace">1</int>
 					<bytes key="NSRGB">MSAxIDEAA</bytes>
 				</object>
-				<bool key="IBUIOpaque">NO</bool>
 				<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<int key="IBUIAccessoryType">1</int>
