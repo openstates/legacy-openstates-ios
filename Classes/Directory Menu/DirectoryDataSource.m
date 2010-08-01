@@ -342,7 +342,6 @@
 	}
 }
 
-
 #if NEEDS_TO_INITIALIZE_DATABASE
 
 - (void)initializeDatabase {
@@ -425,6 +424,7 @@
 		[rawPlistArray release];
 	}
 }
+#endif
 
 - (void) populatePartisanIndexDatabase
 {
@@ -478,16 +478,23 @@
 		if (![wnomLegID isEqual:currentLegID]) {
 			if ([wnomSet count])
 			{
+				BOOL found = NO;
+				
 				// lets find the appropriate legislator object and add this wnom set to it.
 				for (LegislatorObj *leg in legArray) {
 					if ([leg.legislatorID isEqual:currentLegID]) {
 						[leg addWnomScores:wnomSet];
-						//NSLog(@"Adding %d scores to %@", [wnomSet count], leg.legislatorID);
+						NSLog(@"Adding %d scores to %@ - %@", [wnomSet count], leg.legislatorID, [leg legProperName]);
 						NSNumber *tempMean = [[wnomSet anyObject] valueForKey:@"adjMean"];
+						found = YES;
 						if (![tempMean isEqual:leg.partisan_index])
 							leg.partisan_index = tempMean;
 					}
 				}
+				if (!found) {
+					NSLog(@"Not Found in core data: %@", currentLegID);
+				}
+					
 				[wnomSet removeAllObjects];
 			}
 			currentLegID = wnomLegID;
@@ -502,13 +509,14 @@
 				
 	}
 	[self save];
+	NSLog(@"---------------------------------------------------------Saved Partisan Index DB");
 	[rawPlistArray release];
 	[wnomSet release];
 	
 	
 }
 
-#endif
+//#endif
 
 /*
  Set up the fetched results controller.
