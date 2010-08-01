@@ -235,6 +235,10 @@ static MiniBrowserController *s_browser = nil;
 }
 
 
+-(id)m_parentCtrl {
+	return m_parentCtrl;
+}
+
 - (void)display:(id)parentController
 {
 	m_parentCtrl = parentController;
@@ -348,6 +352,9 @@ static MiniBrowserController *s_browser = nil;
 	}
 }
 
+- (SEL)m_authCallback {
+	return m_authCallback;
+}
 
 - (void)setAuthCallback:(SEL)callback
 {
