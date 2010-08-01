@@ -11,7 +11,7 @@
 @protocol VoteInfoViewControllerDelegate;
 
 
-@interface VoteInfoViewController : UIViewController <UIAlertViewDelegate> {
+@interface VoteInfoViewController : UIViewController {
 	id <VoteInfoViewControllerDelegate> delegate;
 	
 	IBOutlet UITextView *textView;
@@ -31,8 +31,8 @@
 
 - (IBAction)done:(id)sender;
 - (IBAction)weblink_click:(id)sender;
-- (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle;
-- (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle otherTitle:(NSString *)otherTitle;
+//- (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle;
+//- (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle otherTitle:(NSString *)otherTitle;
 @end
 
 

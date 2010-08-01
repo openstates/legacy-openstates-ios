@@ -63,10 +63,11 @@
 }
 
 #pragma mark Alert View + Delegate
-// alert with one button
+/* alert with one button
 - (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle
 {
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancelTitle otherButtonTitles:nil];
+
 	[alert show];
 	[alert release];
 }
@@ -82,6 +83,7 @@
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger) buttonIndex
 {
 }
+ */
 #pragma mark -
 
 - (IBAction) weblink_click:(id) sender

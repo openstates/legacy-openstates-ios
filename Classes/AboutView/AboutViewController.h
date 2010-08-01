@@ -11,7 +11,7 @@
 @protocol AboutViewControllerDelegate;
 
 
-@interface AboutViewController : UIViewController <UIAlertViewDelegate> {
+@interface AboutViewController : UIViewController {
 	id <AboutViewControllerDelegate> delegate;
 	
 	IBOutlet UITextView *textView;
@@ -34,9 +34,9 @@
 
 - (IBAction)done:(id)sender;
 - (IBAction)weblink_click:(id)sender;
-- (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle;
+/*- (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle;
 - (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle otherTitle:(NSString *)otherTitle;
-@end
+*/@end
 
 
 @protocol AboutViewControllerDelegate
