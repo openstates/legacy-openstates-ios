@@ -159,6 +159,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	[request setEntity:entity];
 	NSError *error;
 	NSArray *objects = [self.managedObjectContext executeFetchRequest:request error:&error];
+	[request release];
 	if (objects == nil) {
 		// Handle the error.
 		NSLog(@"Error");
