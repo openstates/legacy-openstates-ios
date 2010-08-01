@@ -41,7 +41,7 @@
 @implementation LegislatorDetailViewController
 
 @synthesize legislator, sectionArray;
-@synthesize startupSplashView, headerView;
+@synthesize startupSplashView, headerView, miniBackgroundView;
 
 @synthesize popoverController;
 @synthesize scatterPlotView, graph, dataForPlot; //, dataForChart;
@@ -62,6 +62,8 @@
 	self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 	self.clearsSelectionOnViewWillAppear = NO;
 	//self.hidesBottomBarWhenPushed = YES;
+	
+	self.dataForPlot = [NSMutableArray array];
 	
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 	//self.navigationItem.rightBarButtonItem = self.editButtonItem;
@@ -109,8 +111,11 @@
 		//UIImage *sealImage = [UIImage imageWithContentsOfResolutionIndependentFile:@"seal.png"];
 		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
 		UIColor *sealColor = [UIColor colorWithPatternImage:sealImage];	
-		self.headerView.backgroundColor = sealColor;
-		self.scatterPlotView.backgroundColor = sealColor;
+		self.miniBackgroundView.backgroundColor = sealColor;
+		//self.headerView.backgroundColor = sealColor;
+		//self.scatterPlotView.backgroundColor = sealColor;
+		//self.scatterPlotView.backgroundColor = self.tableView.backgroundColor;
+		//self.scatterPlotView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 
 		[self.tableView setTableHeaderView:self.headerView];
 	}
@@ -377,7 +382,8 @@
 	self.indivSlider = self.partySlider = self.allSlider = nil;
 	self.indivPHolder = self.partyPHolder = self.allPHolder = nil;
 	self.legislator = nil;
-	self.leg_photoView = self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = nil;
+	self.leg_photoView = nil;
+	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = nil;
 	self.headerView = self.startupSplashView = nil;
 	self.scatterPlotView = nil;
 	self.dataForPlot = nil;
@@ -393,13 +399,14 @@
 	self.indivSlider = self.partySlider = self.allSlider = nil;
 	self.indivPHolder = self.partyPHolder = self.allPHolder = nil;
 	self.legislator = nil;
-	self.leg_photoView = self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = nil;
+	self.leg_photoView = nil;
+	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = nil;
 	self.headerView = self.startupSplashView = nil;
 	self.scatterPlotView = nil;
 	self.dataForPlot = nil;
 	self.graph = nil;
 	self.texasRed = self.texasBlue = self.texasOrange = nil;
-	
+	self.miniBackgroundView = nil;
     [super dealloc];
 }
 
@@ -981,6 +988,9 @@
 		return;
 	}
 	
+	if (self.dataForPlot && [self.dataForPlot count])
+		[self.dataForPlot removeAllObjects];
+	
 	NSMutableArray *sortedScores = [[NSMutableArray alloc] initWithArray:[self.legislator.wnomScores allObjects]];
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"session" ascending:YES];
 	[sortedScores sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -1040,30 +1050,49 @@
 					   nil];
 	y.labelExclusionRanges = exclusionRanges;
 	
-	CPColor *partyColor = [legislator.party_id integerValue] == DEMOCRAT ? self.texasBlue : self.texasRed;
 	// Create a blue plot area
-	CPScatterPlot *boundLinePlot = [[[CPScatterPlot alloc] init] autorelease];
-    boundLinePlot.identifier = @"Party Plot";
-	//boundLinePlot.dataLineStyle.miterLimit = 1.0f;
-	boundLinePlot.dataLineStyle.lineWidth = 2.5f;
-	boundLinePlot.dataLineStyle.lineColor = partyColor;
-	//boundLinePlot.dataLineStyle.dashPattern = [NSArray arrayWithObjects:[NSNumber numberWithFloat:4.0f], [NSNumber numberWithFloat:4.0f], [NSNumber numberWithFloat:4.0f], nil];
-	boundLinePlot.dataLineStyle.lineCap = kCGLineCapRound;
-    boundLinePlot.dataSource = self;
-	[self.graph addPlot:boundLinePlot];
+	CPScatterPlot *democratPlot = [[[CPScatterPlot alloc] init] autorelease];
+    democratPlot.identifier = @"Democrat Plot";
+	democratPlot.dataLineStyle.miterLimit = 5.0f;
+	democratPlot.dataLineStyle.lineWidth = 2.5f;
+	democratPlot.dataLineStyle.lineColor = self.texasBlue;
+	democratPlot.dataLineStyle.lineCap = kCGLineCapRound;
+    democratPlot.dataSource = self;
+	[self.graph addPlot:democratPlot];
 
 	// Add plot symbols
 	CPLineStyle *symbolLineStyle = [CPLineStyle lineStyle];
-	symbolLineStyle.lineColor = partyColor; //[CPColor blackColor];
+	symbolLineStyle.lineColor = self.texasBlue;
 	CPPlotSymbol *plotSymbol = [CPPlotSymbol ellipsePlotSymbol];
-	plotSymbol.fill = [CPFill fillWithColor:partyColor];
+	plotSymbol.fill = [CPFill fillWithColor:self.texasBlue];
 	plotSymbol.lineStyle = symbolLineStyle;
     plotSymbol.size = CGSizeMake(5.0, 5.0);
-    boundLinePlot.plotSymbol = plotSymbol;
+    democratPlot.plotSymbol = plotSymbol;
+	
+	// Create a blue plot area
+	CPScatterPlot *republicanPlot = [[[CPScatterPlot alloc] init] autorelease];
+    republicanPlot.identifier = @"Republican Plot";
+	republicanPlot.dataLineStyle.miterLimit = 5.0f;
+	republicanPlot.dataLineStyle.lineWidth = 2.5f;
+	republicanPlot.dataLineStyle.lineColor = self.texasRed;
+	republicanPlot.dataLineStyle.lineCap = kCGLineCapRound;
+    republicanPlot.dataSource = self;
+	[self.graph addPlot:republicanPlot];
+	
+	// Add plot symbols
+	//CPLineStyle *symbolLineStyle = [CPLineStyle lineStyle];
+	symbolLineStyle.lineColor = self.texasRed;
+	//CPPlotSymbol *plotSymbol = [CPPlotSymbol ellipsePlotSymbol];
+	plotSymbol.fill = [CPFill fillWithColor:self.texasRed];
+	plotSymbol.lineStyle = symbolLineStyle;
+    plotSymbol.size = CGSizeMake(5.0, 5.0);
+    republicanPlot.plotSymbol = plotSymbol;
+	
 	
     // Create a plot that uses the data source method
 	CPScatterPlot *dataSourceLinePlot = [[[CPScatterPlot alloc] init] autorelease];
     dataSourceLinePlot.identifier = @"Legislator Plot";
+	dataSourceLinePlot.dataLineStyle.miterLimit = 5.0f;
 	dataSourceLinePlot.dataLineStyle.lineWidth = 3.0f;
     dataSourceLinePlot.dataLineStyle.lineColor = self.texasOrange;
     dataSourceLinePlot.dataSource = self;
@@ -1079,18 +1108,21 @@
     dataSourceLinePlot.plotSymbol = plotSymbol;
 		
     // Add some data
-	NSInteger party = [legislator.party_id integerValue];
 	NSInteger chamber = [legislator.legtype integerValue];
-	NSDictionary *partyDict = [[PartisanIndexStats sharedPartisanIndexStats] historyForParty:party Chamber:chamber];
+	NSDictionary *democDict = [[PartisanIndexStats sharedPartisanIndexStats] historyForParty:DEMOCRAT Chamber:chamber];
+	NSDictionary *repubDict = [[PartisanIndexStats sharedPartisanIndexStats] historyForParty:REPUBLICAN Chamber:chamber];
 	NSUInteger i;
 	for ( i = 0; i < countOfScores ; i++) {
 		NSTimeInterval x = oneSession*i; 
 		id y = [[sortedScores objectAtIndex:i] wnomAdj];
-		id partyY = [partyDict objectForKey:[[sortedScores objectAtIndex:i] session]];
+		id democY = [democDict objectForKey:[[sortedScores objectAtIndex:i] session]];
+		id repubY = [repubDict objectForKey:[[sortedScores objectAtIndex:i] session]];
+		
 		[self.dataForPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:	
 							[NSDecimalNumber numberWithFloat:x], [NSNumber numberWithInt:CPScatterPlotFieldX], 
 							y, [NSNumber numberWithInt:CPScatterPlotFieldY], 
-							partyY, @"PartyY", nil]];
+							repubY, @"RepubY", 
+							democY, @"DemocY", nil]];
 	}
 	[sortedScores release];
 }
@@ -1106,8 +1138,12 @@
 {
 	NSDecimalNumber *num = nil;
 	
-	if ([(NSString *)plot.identifier isEqualToString:@"Party Plot"] && fieldEnum ==CPScatterPlotFieldY) {
-		num = [[self.dataForPlot objectAtIndex:index] objectForKey:@"PartyY"];
+	if ([(NSString *)plot.identifier isEqualToString:@"Democrat Plot"] && fieldEnum ==CPScatterPlotFieldY) {
+		num = [[self.dataForPlot objectAtIndex:index] objectForKey:@"DemocY"];
+		return num;
+	}
+	if ([(NSString *)plot.identifier isEqualToString:@"Republican Plot"] && fieldEnum ==CPScatterPlotFieldY) {
+		num = [[self.dataForPlot objectAtIndex:index] objectForKey:@"RepubY"];
 		return num;
 	}
 	

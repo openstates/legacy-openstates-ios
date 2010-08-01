@@ -22,6 +22,7 @@
 
 	IBOutlet UIView *startupSplashView;
 	IBOutlet UIView *headerView;
+	IBOutlet UIView *miniBackgroundView;
 	IBOutlet UIImageView *leg_photoView;
 	IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab;
 	IBOutlet UILabel *leg_indexTitleLab, *leg_rankLab, *leg_chamberPartyLab, *leg_chamberLab;
@@ -43,6 +44,7 @@
 @property (nonatomic,retain) CPXYGraph *graph;
 @property (nonatomic,retain) CPColor *texasRed, *texasBlue, *texasOrange;
 @property (nonatomic,retain) IBOutlet UIView *startupSplashView;
+@property (nonatomic,retain) IBOutlet UIView *miniBackgroundView;
 @property (nonatomic,retain) IBOutlet UIView *headerView;
 @property (nonatomic,retain) IBOutlet CPLayerHostingView *scatterPlotView;
 @property (nonatomic,retain) IBOutlet UIImageView *leg_photoView;
