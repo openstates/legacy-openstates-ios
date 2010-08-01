@@ -44,8 +44,7 @@ enum HeaderSectionRows {
 { return @"Resources and Info"; }
 
 - (UIImage *)tabBarImage {
-	//return [UIImage imageNamed:@"33-cabinet.png"];
-	return [UIImage imageNamed:@"info_30.png"];
+	return [UIImage imageNamed:@"113-navigation.png"];
 }
 
 - (BOOL)showDisclosureIcon

@@ -108,7 +108,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {		
-	static NSString *CellIdentifier = @"CapitolMapCell";
+	static NSString *CellIdentifier = @"Cell";
 	
 	/* Look up cell in the table queue */
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
