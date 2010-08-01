@@ -50,6 +50,7 @@
 - (CapitolMap *)capitolMapForIndexPath:(NSIndexPath *)indexPath;
 - (LegislatorObj *)legislatorDataForIndexPath:(NSIndexPath *)indexPath;
 - (CommitteeObj *)committeeDataForIndexPath:(NSIndexPath *)indexPath;
+- (NSArray *)feedEntriesForIndexPath:(NSIndexPath *)indexPath;
 
 // implement these for editing...
 - (void)setEditing:(BOOL)isEditing animated:(BOOL)animated;
