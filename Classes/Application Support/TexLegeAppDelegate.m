@@ -18,7 +18,7 @@
 #import "GeneralTableViewController.h"
 #import "Reachability.h"
 #import "Appirater.h"
-#import "CPTestApp_iPadViewController.h"
+
 #import "MiniBrowserController.h"
 
 #import "MenuPopoverViewController.h"
@@ -27,6 +27,9 @@
 #import "LegislatorDetailViewController.h"
 #import "MapsDetailViewController.h"
 #import "CommitteeDetailViewController.h"
+
+#import "CalendarDataSource.h"
+#import "CalendarComboViewController.h"
 
 @interface TexLegeAppDelegate (Private)
 
@@ -67,8 +70,7 @@ NSInteger kNoSelection = -1;
 
 @synthesize managedObjectContext;
 
-@synthesize directoryTableTabbedVC, committeeTableTabbedVC, mapsTableTabbedVC, linksTableTabbedVC, corePlotTabbedVC;
-//@synthesize billsTableTabbedVC;
+@synthesize directoryTableTabbedVC, committeeTableTabbedVC, mapsTableTabbedVC, linksTableTabbedVC, calendarsTableTabbedVC;
 
 @synthesize masterNavigationController, detailNavigationController;
 @synthesize currentMasterViewController, currentDetailViewController;
@@ -101,15 +103,19 @@ NSInteger kNoSelection = -1;
 	self.functionalViewControllers = nil;
 	self.savedLocation = nil;
 
-	self.hackingAlert = self.activeDialogController = nil;
-	self.menuPopoverVC = self.menuPopoverPC = nil;
-	self.aboutView = self.voteInfoView = nil;
-	self.tabBarController = self.splitViewController = nil;
+	self.hackingAlert = nil;
+	self.activeDialogController = nil;
+	self.menuPopoverVC = nil;
+	self.menuPopoverPC = nil;
+	self.aboutView = nil;
+	self.voteInfoView = nil;
+	self.tabBarController = nil;
+	self.splitViewController = nil;
 	self.legMasterTableViewController = nil;
 	self.appirater = nil;
 	self.mainWindow = nil;    
 	
-	self.directoryTableTabbedVC = self.committeeTableTabbedVC = self.mapsTableTabbedVC = self.linksTableTabbedVC = self.corePlotTabbedVC = nil;
+	self.directoryTableTabbedVC = self.committeeTableTabbedVC = self.mapsTableTabbedVC = self.linksTableTabbedVC = self.calendarsTableTabbedVC = nil;
 	//self.billsTableTabbedVC = nil;
 
 	self.managedObjectContext = nil;
@@ -180,7 +186,11 @@ NSInteger kNoSelection = -1;
 			self.currentDetailViewController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
 			break;
 		case 2:
-			self.currentDetailViewController = [[CPTestApp_iPadViewController alloc] initWithNibName:@"CPTestApp_iPadViewController" bundle:nil];
+			if (self.splitViewController)
+				self.currentDetailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController" bundle:nil];
+			else
+				self.currentDetailViewController = [[TKCalendarMonthTableViewController alloc] init];
+			//	self.currentDetailViewController = [[CalendarSimpleViewController alloc] initWithNibName:@"CalendarSimpleViewController" bundle:nil];				
 			break;
 		case 3:
 			self.currentDetailViewController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
@@ -249,7 +259,7 @@ NSInteger kNoSelection = -1;
 	else		[self.functionalViewControllers addObject:self.directoryTableTabbedVC];			// 0
 	
 	[self.functionalViewControllers addObject:self.committeeTableTabbedVC];				// 1
-	[self.functionalViewControllers addObject:self.corePlotTabbedVC];					// 2
+	[self.functionalViewControllers addObject:self.calendarsTableTabbedVC];				// 2
 	[self.functionalViewControllers addObject:self.mapsTableTabbedVC];					// 3
 	[self.functionalViewControllers addObject:self.linksTableTabbedVC];					// 4
 	
@@ -258,7 +268,7 @@ NSInteger kNoSelection = -1;
 	else		[self.directoryTableTabbedVC configureWithDataSourceClass:
 						[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.committeeTableTabbedVC configureWithDataSourceClass:[CommitteesDataSource class] andManagedObjectContext:self.managedObjectContext];
-	[self.corePlotTabbedVC configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
+	[self.calendarsTableTabbedVC configureWithDataSourceClass:[CalendarDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.mapsTableTabbedVC configureWithDataSourceClass:[CapitolMapsDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.linksTableTabbedVC configureWithDataSourceClass:[LinksMenuDataSource class] andManagedObjectContext:self.managedObjectContext];
 	
@@ -510,7 +520,8 @@ NSInteger kNoSelection = -1;
         self.menuPopoverPC = nil;
     } else if (viewController) {
 		self.menuPopoverPC = [[UIPopoverController alloc] initWithContentViewController:viewController];
-		self.menuPopoverPC.popoverContentSize = viewController.view.frame.size;
+		//self.menuPopoverPC.popoverContentSize = viewController.view.frame.size;
+		self.menuPopoverPC.popoverContentSize = CGSizeMake(viewController.view.frame.size.width, 300.0f);
 		self.menuPopoverPC.delegate = self;
 		if (tempCtl) { // it's a segmented controller
 			CGRect ctlRect = tempCtl.frame;

@@ -14,7 +14,6 @@
 
 @class LegislatorDetailViewController, MasterTableViewController;
 @class GeneralTableViewController;
-@class CPTestApp_iPadViewController;
 @class MenuPopoverViewController;
 @class Appirater;
 
@@ -49,8 +48,7 @@
 	
 	// For iPhone Interface
 	IBOutlet UITabBarController *tabBarController;
-	IBOutlet GeneralTableViewController *directoryTableTabbedVC, *committeeTableTabbedVC, *mapsTableTabbedVC, *linksTableTabbedVC;
-	//IBOutlet GeneralTableViewController *billsTableTabbedVC;
+	IBOutlet GeneralTableViewController *directoryTableTabbedVC, *committeeTableTabbedVC, *mapsTableTabbedVC, *linksTableTabbedVC, *calendarsTableTabbedVC;
 	
 	// For iPad Interface
 	IBOutlet UISplitViewController *splitViewController;
@@ -58,8 +56,6 @@
 	IBOutlet id currentMasterViewController, currentDetailViewController;
 	
 	IBOutlet MasterTableViewController *legMasterTableViewController;
-	IBOutlet GeneralTableViewController	*corePlotTabbedVC;
-	//IBOutlet CPTestApp_iPadViewController *corePlotTabbedVC;
 	
 @private
 	NSMutableArray *functionalViewControllers;	
@@ -72,11 +68,7 @@
 @property (nonatomic, retain) UIPopoverController *menuPopoverPC;
 
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
-@property (nonatomic, retain) IBOutlet GeneralTableViewController *directoryTableTabbedVC, *committeeTableTabbedVC, *mapsTableTabbedVC, *linksTableTabbedVC;
-//@property (nonatomic, retain) IBOutlet GeneralTableViewController *billsTableTabbedVC;
-
-@property (nonatomic, retain) IBOutlet GeneralTableViewController *corePlotTabbedVC;
-//@property (nonatomic, retain) IBOutlet CPTestApp_iPadViewController *corePlotTabbedVC;
+@property (nonatomic, retain) IBOutlet GeneralTableViewController *directoryTableTabbedVC, *committeeTableTabbedVC, *mapsTableTabbedVC, *linksTableTabbedVC, *calendarsTableTabbedVC;
 
 @property (nonatomic, retain) IBOutlet UISplitViewController *splitViewController;
 @property (nonatomic, retain) IBOutlet UINavigationController *masterNavigationController, *detailNavigationController;

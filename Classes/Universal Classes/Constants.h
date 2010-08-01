@@ -34,7 +34,8 @@
 enum kChambers {
     BOTH_CHAMBERS = 0,
     HOUSE,
-    SENATE
+    SENATE,
+	JOINT	
 };
 
 // Political Party
