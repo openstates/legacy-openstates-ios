@@ -27,7 +27,6 @@
     BOOL		searchWasActive;
 	
 	IBOutlet UIBarButtonItem *menuButton;
-	IBOutlet UIBarButtonItem *aboutButton;
 	
 #if _searchcontroller_
 	UISearchDisplayController *searchController;
@@ -37,7 +36,6 @@
 
 //@property (nonatomic, retain) NSMutableArray savedLocation;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *menuButton;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *aboutButton;
 
 
 @property (nonatomic,retain) UITableView *theTableView;

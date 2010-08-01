@@ -19,6 +19,10 @@
 #import "TableDataSourceProtocol.h"
 #import "DirectoryDataSource.h"
 #import "CommitteesDataSource.h"
+
+#import "CalendarDataSource.h"
+#import "CalendarComboViewController.h"
+
 #import "LinksMenuDataSource.h"
 #import "LinksDetailViewController.h"
 #import "MiniBrowserController.h"
@@ -35,7 +39,7 @@
 
 
 @synthesize theTableView, dataSource, detailViewController;
-@synthesize menuButton, aboutButton;
+@synthesize menuButton;
 
 @synthesize searchBar, savedSearchTerm, searchWasActive;
 #if _searchcontroller_
@@ -74,18 +78,6 @@
 }	
 
 
-// this is the custom initialization method for the GeneralTableViewController
-// it expects an object that conforms to both the UITableViewDataSource protocol
-// which provides data to the tableview, and the ElementDataSource protocol which
-// provides information about the elements data that is displayed,
-/*
- - (id)initWithDataSource:(id<TableDataSource>)theDataSource {
-	if ([self init]) {
-		[self configureWithDataSource:theDataSource];
-	}
-	return self;
-}
-*/
 - (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context {
 	theTableView = nil;
 	self.dataSource = [[sourceClass alloc] initWithManagedObjectContext:context];
@@ -98,7 +90,7 @@
 	self.theTableView = nil;
 	self.dataSource = nil; 
 	self.searchBar = nil;
-	self.aboutButton = self.menuButton = nil;
+	self.menuButton = nil;
 			
 #if _searchcontroller_
 	self.searchController = nil;
@@ -272,7 +264,22 @@
 			self.detailViewController = nil;
 		}
 	}
-
+	else if (dataSource.name == @"Meetings") {
+		if (self.detailViewController == nil) {
+			if ([UtilityMethods isIPadDevice])
+				self.detailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController" bundle:nil];
+			else
+				self.detailViewController = [[TKCalendarMonthTableViewController alloc] init];
+		}
+		if ([self.detailViewController respondsToSelector:@selector(setFeedEntries:)])
+			[self.detailViewController setValue:[dataSource feedEntriesForIndexPath:newIndexPath] forKey:@"feedEntries"];
+		
+		if (isSplitViewDetail == NO) {
+			// push the detail view controller onto the navigation stack to display it
+			[self.navigationController pushViewController:self.detailViewController animated:YES];
+			self.detailViewController = nil;
+		}		
+	}	
 	else {
 		if (dataSource.name != @"Maps")
 			NSLog(@"GeneralTableViewController, unexpected datasource: %@", dataSource.name);
@@ -335,20 +342,13 @@
 - (void)showPopoverMenus:(BOOL)show {
 	if (self.splitViewController && show) {
 		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-		if (self.aboutButton == nil) {
-			self.aboutButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_20.png"] 
-																style:UIBarButtonItemStylePlain target:appDelegate 
-															   action:@selector(showOrHideAboutMenuPopover:)];
-		}
 		if (self.menuButton == nil) {
 			self.menuButton = [[UIBarButtonItem alloc] initWithTitle:@"Menu" style:UIBarButtonItemStylePlain target:appDelegate 
 															  action:@selector(showOrHideMenuPopover:)];
 		}
-		[self.navigationItem setRightBarButtonItem:self.aboutButton animated:YES];
 		[self.navigationItem setLeftBarButtonItem:self.menuButton animated:YES];
 	}
 	else {
-		[self.navigationItem setRightBarButtonItem:nil animated:YES];
 		[self.navigationItem setLeftBarButtonItem:nil animated:YES];
 	}
 }
@@ -364,7 +364,7 @@
 	[self showPopoverMenus:[UtilityMethods isLandscapeOrientation]];
 	
 	if ([UtilityMethods isIPadDevice]) {
-		if ([self.theTableView indexPathForSelectedRow] == nil)  {
+		if ([self.theTableView indexPathForSelectedRow] == nil && ![dataSource.name isEqualToString:@"Resources"])  {
 			NSUInteger ints[2] = {0,0};
 			NSIndexPath* indexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
 			[self.theTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
