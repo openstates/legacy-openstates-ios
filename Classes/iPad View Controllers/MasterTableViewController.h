@@ -18,13 +18,13 @@
 	IBOutlet UISearchBar *searchBar;
 	
 	IBOutlet UIBarButtonItem *menuButton;
-	IBOutlet UIBarButtonItem *aboutButton;
-	
+	id selectObjectOnAppear;
 	UISearchDisplayController *m_searchDisplayController;
 }
 
 
 - (IBAction) filterChamber:(id)sender;
+@property (nonatomic,retain) id selectObjectOnAppear;
 @property (nonatomic, retain) IBOutlet id<TableDataSource> dataSource;
 @property (nonatomic, retain) IBOutlet LegislatorDetailViewController *detailViewController;
 @property (nonatomic, retain) IBOutlet UISearchBar *searchBar;
@@ -32,7 +32,8 @@
 @property (nonatomic, retain) UISearchDisplayController *m_searchDisplayController;
 
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *menuButton;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *aboutButton;
+
+@property (nonatomic,readonly) NSString *viewControllerKey;
 
 - (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context;
 

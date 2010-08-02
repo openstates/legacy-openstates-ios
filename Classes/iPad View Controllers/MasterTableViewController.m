@@ -20,31 +20,22 @@
 #define LIGHT_BACKGROUND [UIColor colorWithRed:172.0/255.0 green:173.0/255.0 blue:175.0/255.0 alpha:1.0]
 
 @interface MasterTableViewController (Private)
-
-- (void)setStoredSelectionWithRow:(NSInteger)row section:(NSInteger)section;
-- (void)resetStoredSelection;
-- (void)validateStoredSelection;
-
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
 @end
 
 
 @implementation MasterTableViewController
 @synthesize detailViewController;
-@synthesize dataSource;
+@synthesize dataSource, selectObjectOnAppear;
 @synthesize searchBar, m_searchDisplayController, chamberControl;
-@synthesize menuButton, aboutButton;
+@synthesize menuButton;
 
 #pragma mark -
 #pragma mark Initialization
 
-/*
-- (id)initWithStyle:(UITableViewStyle)style {
-    // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-    if ((self = [super initWithStyle:style])) {
-    }
-    return self;
+- (NSString *) viewControllerKey {
+	return @"MasterTableViewController";
 }
-*/
 
 - (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context {
 	self.dataSource = [[sourceClass alloc] initWithManagedObjectContext:context];
@@ -72,6 +63,13 @@
 
 	self.dataSource.searchDisplayController = self.m_searchDisplayController;
 	self.m_searchDisplayController.searchResultsDataSource = self.dataSource;
+	
+	if ([dataSource usesCoreData]) {
+		NSManagedObjectID *objectID = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:self.viewControllerKey];
+		if (objectID)
+			self.selectObjectOnAppear = [self.dataSource.managedObjectContext objectWithID:objectID];
+	}
+	
 }
 
 
@@ -84,11 +82,9 @@
 	if ([UtilityMethods isIPadDevice]) {
 		if (!self.menuButton)
 			self.menuButton = self.navigationItem.leftBarButtonItem;
-		if (!self.aboutButton)
-			self.aboutButton = self.navigationItem.rightBarButtonItem;
-
 	    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
-}		
+	}
+	
     //self.title=@"Legislators";
     self.clearsSelectionOnViewWillAppear = NO;
 	
@@ -100,7 +96,6 @@
 	
 	self.tableView.backgroundColor = DARK_BACKGROUND;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -110,65 +105,58 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-		
-	[self validateStoredSelection];
 	
-	if ([UtilityMethods isIPadDevice]) {
-		if ([UtilityMethods isLandscapeOrientation] == NO) {		
-			self.navigationItem.leftBarButtonItem = nil;
-			self.navigationItem.rightBarButtonItem = nil;
-		}
-		else {
-			if (self.menuButton)
-				self.navigationItem.leftBarButtonItem = self.menuButton;
-			//self.menuButton = nil;
-			if (self.aboutButton)
-				self.navigationItem.rightBarButtonItem = self.aboutButton;
-			//self.aboutButton = nil;
-			
-		}
+	if (![UtilityMethods isIPadDevice])
+		return;
+	
+	
+	//// ALL OF THE FOLLOWING MUST NOT RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER
+	
+	// We don't want menus and such in our popover menu or search results table
+	if ([UtilityMethods isLandscapeOrientation] == NO) {	
+		self.navigationItem.leftBarButtonItem = nil;
+		self.navigationItem.rightBarButtonItem = nil;
 	}
-	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-	
-	if (appDelegate.savedLocation != nil) {
-		// save off this level's selection to our AppDelegate
-		[self validateStoredSelection];
-		NSInteger rowSelection = [[appDelegate.savedLocation objectAtIndex:1] integerValue];
-		NSInteger sectionSelection = [[appDelegate.savedLocation objectAtIndex:2] integerValue];
-		
-		//debug_NSLog(@"Restoring Selection: Row: %d    Section: %d", rowSelection, sectionSelection);
-		
-		if (rowSelection != -1) {
-			NSIndexPath *selectionPath = [NSIndexPath indexPathForRow:rowSelection inSection:sectionSelection];
-						
-			// I'm not sure if this is how you do the "selector" business, so I've commented it out
-			//if ([self.tableView.delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)
-			//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
-
-			[self.tableView selectRowAtIndexPath:selectionPath animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-			[self.tableView.delegate tableView:self.tableView didSelectRowAtIndexPath:selectionPath];
-
-			//if ([self.tableView.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)
-			//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
-			
-		}
+	else {
+		if (self.menuButton)
+			self.navigationItem.leftBarButtonItem = self.menuButton;
+		//self.menuButton = nil;
 	}
 	
-	if ([UtilityMethods isIPadDevice]) {
-		if ([self.tableView indexPathForSelectedRow] == nil)  {
-			NSUInteger ints[2] = {0,0};
-			NSIndexPath* indexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
-			[self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
-			self.detailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
+	if (self.selectObjectOnAppear == nil) {
+		LegislatorObj* legislator = self.detailViewController ? self.detailViewController.legislator : nil;
+		if (!legislator) {
+			NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
+			if (currentIndexPath) {
+				NSLog(@"currentIndexPath, does this ever happen?   - %@", self);
+			}
+			
+			if (!currentIndexPath) {			
+				NSUInteger ints[2] = {0,0};	// just pick the first one then
+				currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
+			}
+			legislator = [self.dataSource legislatorDataForIndexPath:currentIndexPath];				
 		}
+		self.selectObjectOnAppear = legislator;
 	}	
-	if ([UtilityMethods isIPadDevice])
-		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
+	[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
+
+	// END: IPAD ONLY
 }
 
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
+
+	if (self.selectObjectOnAppear)  {		// if we have prepared a particular selection, do it
+		if ([self.selectObjectOnAppear isKindOfClass:[LegislatorObj class]])
+		{
+			NSIndexPath *selectedPath = [self.dataSource.fetchedResultsController indexPathForObject:self.selectObjectOnAppear];
+			[self.tableView selectRowAtIndexPath:selectedPath animated:animated scrollPosition:UITableViewScrollPositionTop];
+			[self tableView:self.tableView didSelectRowAtIndexPath:selectedPath];
+		}
+		self.selectObjectOnAppear = nil;
+	}	
 
 	// this is a hack so that the index does not show up on top of the search bar
 	//if ([dataSource usesSearchbar]) {
@@ -176,20 +164,10 @@
 	//	[self.searchDisplayController setActive:NO];
 	//}
 	
-	if ([UtilityMethods isIPadDevice] == NO)
-		[self resetStoredSelection];
-}
- 
-
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-*/
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];	
-	
+	// We're on an iphone, without a splitview or popovers, so if we get here, let's stop
+	if ([UtilityMethods isIPadDevice] == NO) {
+		[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
+	}
 }
 
 
@@ -198,13 +176,21 @@
 
 //START:code.split.delegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	// save off this item's selection to our AppDelegate
-	[self setStoredSelectionWithRow:indexPath.row section:indexPath.section];
-	
 	//[aTableView deselectRowAtIndexPath:indexPath animated:YES];
-	self.detailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
 	
+	LegislatorObj *legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
+	// save off this item's selection to our AppDelegate
+	[[TexLegeAppDelegate appDelegate] setSavedTableSelection:[legislator objectID] forKey:self.viewControllerKey];
+
 	if (self.splitViewController) {
+		//self.selectIndexPathOnAppear = indexPath;
+		self.detailViewController.legislator = legislator;
+		
+		if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
+			//self.searchDisplayController.searchBar.text = @"";	// should we do this?
+			[self searchBarCancelButtonClicked:nil];
+		}
+		
 		// if we have a stack of view controllers and someone selected a new cell from our master list, 
 		//	lets go all the way back to accomodate their selection, and scroll to the top.
 		if ([self.detailViewController.navigationController.viewControllers count] > 1) { 
@@ -214,8 +200,10 @@
 	}
 	else {
 		/* this isn't working yet */
-		if (self.detailViewController == nil)	// just assume it's a typical legislator detail (could be corePlot though)
+		if (self.detailViewController == nil)
 			self.detailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
+
+		self.detailViewController.legislator = legislator;
 		[self.navigationController pushViewController:self.detailViewController animated:YES];
 		self.detailViewController = nil;
 
@@ -236,7 +224,7 @@
 
 - (void)didReceiveMemoryWarning {
     
-	[self resetStoredSelection];
+	[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
 
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
@@ -251,50 +239,20 @@
 	self.chamberControl = nil;
 	self.detailViewController = nil;
 	self.dataSource = nil;
-	self.aboutButton = self.menuButton = nil;
+	self.menuButton = nil;
 	
 	self.searchDisplayController.searchResultsDataSource = nil;  // default is nil. delegate can provide
 	self.searchDisplayController.searchResultsDelegate = nil;    // default is nil. delegate can provide
 	self.searchDisplayController.delegate = nil;
 	self.m_searchDisplayController = nil;
 	self.searchBar = nil;
+	self.selectObjectOnAppear = nil;
 }
 
 
 - (void)dealloc {
     [super dealloc];
 }
-
-#pragma mark -
-#pragma mark Save Location
-
-- (void)setStoredSelectionWithRow:(NSInteger)row section:(NSInteger)section {
-	// we have moved to level 1, remove it's stored row/section selection
-	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-	if (appDelegate.savedLocation != nil) {
-		NSInteger functionIndex = [appDelegate indexForFunctionalViewController:self];
-		[appDelegate.savedLocation replaceObjectAtIndex:0 withObject:[NSNumber numberWithInteger:functionIndex]]; //tab
-		[appDelegate.savedLocation replaceObjectAtIndex:1 withObject:[NSNumber numberWithInteger:row]];
-		[appDelegate.savedLocation replaceObjectAtIndex:2 withObject:[NSNumber numberWithInteger:section]];
-	}
-	
-}
-
-- (void)resetStoredSelection {
-	// we have moved to level 1, remove it's stored row/section selection
-	[self setStoredSelectionWithRow:-1 section:-1]; 	
-}
-
-- (void)validateStoredSelection {
-	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-	NSInteger functionIndex = [appDelegate indexForFunctionalViewController:self];
-	NSInteger tabSavedSelection = [[appDelegate.savedLocation objectAtIndex:0] integerValue];
-	
-	if (functionIndex != tabSavedSelection) { // we're out of sync with the selection, clear the unknown
-		[self resetStoredSelection];
-	}
-}	
-
 
 
 #pragma mark -
