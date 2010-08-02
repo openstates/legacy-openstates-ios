@@ -71,11 +71,16 @@
 }
 
 - (void)setSliderValue:(float)newVal animated:(BOOL)isAnimated {
-	if (newVal == 0.0) {
+	if (newVal == 0.0f) {
 		NSString *imageString = (self.usesSmallStar) ? @"Slider_Question.png" : @"Slider_Question_big.png";
 		[self.sliderControl setThumbImage:[UIImage imageNamed:imageString] forState:UIControlStateNormal];
-		[self setAlpha:0.5];
+		[self setAlpha:0.5f];
 	}
+	else {
+		[self setUsesSmallStar:m_usesSmallStar];
+		[self setAlpha:1.0f];
+	}
+
 	[self.sliderControl setValue:newVal animated:isAnimated];
 	//[self.sliderControl setNeedsDisplay];	// GREG, do we need this???
 	//NSLog(@"Min: %f   Max: %f", self.sliderControl.minimumValue, self.sliderControl.maximumValue);
