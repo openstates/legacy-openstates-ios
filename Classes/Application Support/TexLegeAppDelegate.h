@@ -29,6 +29,7 @@
 	// [1, -1, -1] =	select tab 1,
 	//					don't select a detail view
 	NSMutableArray		*savedLocation;
+	NSMutableDictionary	*savedTableSelection;
 	
 	NSManagedObjectModel *managedObjectModel;
 	IBOutlet NSManagedObjectContext *managedObjectContext;	    
@@ -80,7 +81,9 @@
 @property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-@property (nonatomic, retain) NSMutableArray	*savedLocation;
+@property (nonatomic, retain) NSMutableArray		*savedLocation;
+@property (nonatomic, retain) NSMutableDictionary	*savedTableSelection;
+@property (nonatomic,readonly) NSString				*currentMasterViewControllerKey;
 
 @property (nonatomic, retain) UIAlertView		*hackingAlert;
 @property (nonatomic, retain) AboutViewController *aboutView;
@@ -99,7 +102,13 @@
 
 - (void)updateStatus;
 - (NSInteger) indexForFunctionalViewController:(id)viewController;
+- (NSInteger) indexForFunctionalViewControllerKey:(NSString *)vcKey;
+
 - (void) changeActiveFeaturedControllerTo:(NSInteger)controllerIndex;
+
+
+- (id) savedTableSelectionForKey:(NSString *)vcKey;
+- (void)setSavedTableSelection:(id)object forKey:(NSString *)vcKey;
 
 + (TexLegeAppDelegate *)appDelegate;
 @end

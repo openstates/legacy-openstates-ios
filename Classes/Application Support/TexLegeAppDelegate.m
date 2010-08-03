@@ -45,11 +45,14 @@
 - (NSString *)hostName;
 - (NSInteger) addFunctionalViewController:(id)viewController;
 
+- (void)restoreArchivableSavedTableSelection;
+- (NSData *)archivableSavedTableSelection;
+	
 @end
 
 // preference key to obtain our restore location
 NSString *kRestoreLocationKey = @"RestoreLocation";			// old, simplistic key/array used on original iphone-only app.
-//NSString *kRestoreLocationKey = @"HybridRestoreLocation";
+NSString *kRestoreSelectionKey = @"RestoreSelection";
 
 NSUInteger kNumMaxTabs = 11;
 NSInteger kNoSelection = -1;
@@ -60,7 +63,7 @@ NSInteger kNoSelection = -1;
 //- (void) setupDialogBoxes;
 
 @synthesize tabBarController;
-@synthesize savedLocation;
+@synthesize savedLocation, savedTableSelection;
 @synthesize functionalViewControllers;
 @synthesize menuPopoverVC, menuPopoverPC;
 
@@ -88,7 +91,9 @@ NSInteger kNoSelection = -1;
 		activeDialogController = nil;
 		hackingAlert = nil;
 		savedLocation = nil;
-
+		
+		self.savedTableSelection = [NSMutableDictionary dictionaryWithCapacity:2];
+		
 		self.functionalViewControllers = [NSMutableArray array];
 		
 		[self setupDialogBoxes];
@@ -102,6 +107,7 @@ NSInteger kNoSelection = -1;
 	self.masterNavigationController = self.detailNavigationController = nil;
 	self.functionalViewControllers = nil;
 	self.savedLocation = nil;
+	self.savedTableSelection = nil;
 
 	self.hackingAlert = nil;
 	self.activeDialogController = nil;
@@ -168,13 +174,32 @@ NSInteger kNoSelection = -1;
 	return index;
 }
 
+- (NSInteger) indexForFunctionalViewControllerKey:(NSString *)vcKey {
+	if (self.functionalViewControllers && vcKey) {
+		NSInteger tempIndex = 0;
+		for (id vc in self.functionalViewControllers) {
+			if ([vc isKindOfClass:[UIViewController class]] && [vc respondsToSelector:@selector(viewControllerKey)]) {
+				NSString *tempVCKey = [vc performSelector:@selector(viewControllerKey)];
+				if (tempVCKey && [tempVCKey isEqualToString:vcKey])
+					return tempIndex;
+			}
+			tempIndex ++;
+		}
+	}
+	return 0;
+}
+
+
 - (void) changeActiveFeaturedControllerTo:(NSInteger)controllerIndex {
 	// set the first component of our state saving business
 	
 	// GREG .... I mean it, set it ... this is a TODO!!!!!!!!!!!!!!!!!!!!!!!!
 	
-	if (self.currentDetailViewController)
-		self.currentDetailViewController = nil;
+	if (self.currentMasterViewController &&					// they're trying to select what they've already got
+		[self indexForFunctionalViewController:self.currentMasterViewController] == controllerIndex)
+		return;
+	
+	self.currentDetailViewController = nil;
 	
 	self.currentMasterViewController = [self.functionalViewControllers objectAtIndex:controllerIndex];
 	
@@ -279,11 +304,17 @@ NSInteger kNoSelection = -1;
 		//[self setTabOrderIfSaved];
 	}
 	
-	NSInteger selection = [[savedLocation objectAtIndex:0] integerValue];	// read the saved selection at level 1
-	if (selection > 0 && selection < kNumMaxTabs)				// do we have a valid selection?
-		[self changeActiveFeaturedControllerTo:selection];				
-	else
-		[self changeActiveFeaturedControllerTo:0];				// just default to the first one, if we get troublesome data
+	NSInteger selection = -1;
+	NSString * tempVCKey = [self.savedTableSelection objectForKey:@"viewController"];
+	if (tempVCKey) { // we have a saved view controller
+		selection = [self indexForFunctionalViewControllerKey:tempVCKey];
+	}
+	if (selection < 0) {
+		selection = [[savedLocation objectAtIndex:0] integerValue];	// read the saved selection at level 1
+		if (selection < 0 || selection >= kNumMaxTabs) 
+			selection = 0;
+	}
+	[self changeActiveFeaturedControllerTo:selection];				
 	
 }
 
@@ -335,15 +366,19 @@ NSInteger kNoSelection = -1;
 						  [NSNumber numberWithInteger:kNoSelection],	// .. section selection for underlying table
 						  nil] retain];
 	}
-
+	
+	[self restoreArchivableSavedTableSelection];
 	[self setupFeatures];
 			
 	// make the window visible
 	[self.mainWindow makeKeyAndVisible];
 	
 	// register our preference selection data to be archived
-	NSDictionary *savedLocationDict = [NSDictionary dictionaryWithObject:savedLocation forKey:kRestoreLocationKey];
-	[[NSUserDefaults standardUserDefaults] registerDefaults:savedLocationDict];
+	NSDictionary *savedPrefsDict = [NSDictionary dictionaryWithObjectsAndKeys:
+									savedLocation,kRestoreLocationKey,
+									[self archivableSavedTableSelection],kRestoreSelectionKey,nil];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:savedPrefsDict];
+
 	[[NSUserDefaults standardUserDefaults] synchronize];
 
 	// [Appirater appLaunched];  This is replaced with the following, to avoid leakiness
@@ -367,7 +402,7 @@ NSInteger kNoSelection = -1;
 	 -(void) _updateDefaultImage;
 	 -(void) createApplicationDefaultPNG;
 */	
-
+/*
 	NSInteger masterIndexSelection = 0;
 	if (self.splitViewController) {
 		masterIndexSelection = [self indexForFunctionalViewController:self.masterNavigationController];
@@ -388,7 +423,7 @@ NSInteger kNoSelection = -1;
 		[savedLocation replaceObjectAtIndex:1 withObject:[NSNumber numberWithInteger:kNoSelection]];
 		[savedLocation replaceObjectAtIndex:2 withObject:[NSNumber numberWithInteger:kNoSelection]];
 	}
-	
+*/	
 	if (self.tabBarController) {
 		// Smarten this up later for Core Data tab saving
 		NSMutableArray *savedOrder = [NSMutableArray arrayWithCapacity:kNumMaxTabs];
@@ -397,12 +432,12 @@ NSInteger kNoSelection = -1;
 		for (UIViewController *aViewController in tabOrderToSave) {
 			[savedOrder addObject:aViewController.tabBarItem.title];
 		}
-		
 		[[NSUserDefaults standardUserDefaults] setObject:savedOrder forKey:@"savedTabOrder"];
 	}
-	
+
 	// save the drill-down hierarchy of selections to preferences
 	[[NSUserDefaults standardUserDefaults] setObject:savedLocation forKey:kRestoreLocationKey];
+	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
 	
 	[[NSUserDefaults standardUserDefaults] synchronize];
 
@@ -689,6 +724,62 @@ NSInteger kNoSelection = -1;
 
 #pragma mark -
 #pragma mark Saving
+
+- (id) savedTableSelectionForKey:(NSString *)vcKey {
+	id object = nil;
+	id savedVC = [self.savedTableSelection objectForKey:@"viewController"];
+	if (vcKey && savedVC && [vcKey isEqualToString:savedVC])
+		object = [self.savedTableSelection objectForKey:@"object"];
+	
+	return object;
+}
+
+- (void)setSavedTableSelection:(id)object forKey:(NSString *)vcKey {
+	if (!vcKey) {
+		[self.savedTableSelection removeAllObjects];
+		return;
+	}
+	[self.savedTableSelection setObject:vcKey forKey:@"viewController"];
+	if (object)
+		[self.savedTableSelection setObject:object forKey:@"object"];
+	else
+		[self.savedTableSelection removeObjectForKey:@"object"];
+}
+
+- (void)restoreArchivableSavedTableSelection {
+	NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:kRestoreSelectionKey];
+	if (data) {
+		NSMutableDictionary *tempDict = [[NSKeyedUnarchiver unarchiveObjectWithData:data] mutableCopy];	
+		if (tempDict) {
+			id object = [tempDict objectForKey:@"object"];
+			if (object && [object isKindOfClass:[NSURL class]] && [[object scheme] isEqualToString:@"x-coredata"])	{		// try to get a managed object ID				
+				NSManagedObjectID *tempID = [self.persistentStoreCoordinator managedObjectIDForURIRepresentation:object];
+				if (tempID)
+					[tempDict setObject:tempID forKey:@"object"]; 
+			}
+			
+			self.savedTableSelection = tempDict;
+			[tempDict release];
+		}	
+	}
+}
+
+- (NSData *)archivableSavedTableSelection {
+	NSMutableDictionary *tempDict = [self.savedTableSelection mutableCopy];
+	id object = [tempDict objectForKey:@"object"];
+	if (object && [object isKindOfClass:[NSManagedObjectID class]])
+		[tempDict setObject:[object URIRepresentation] forKey:@"object"]; 
+
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:tempDict];
+	[tempDict release];
+	return data;
+}
+
+- (NSString *)currentMasterViewControllerKey {
+	if ([self.currentMasterViewController respondsToSelector:@selector(viewControllerKey)])
+		return [self.currentMasterViewController performSelector:@selector(viewControllerKey)];
+	return @"";
+}
 
 /**
  Performs the save action for the application, which is to send the save:
