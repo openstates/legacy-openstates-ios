@@ -24,21 +24,21 @@
 	IBOutlet UIView *headerView;
 	IBOutlet UIView *miniBackgroundView;
 	IBOutlet UIImageView *leg_photoView;
-	IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab;
+	IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab, *freshmanPlotLab;
 	IBOutlet UILabel *leg_indexTitleLab, *leg_rankLab, *leg_chamberPartyLab, *leg_chamberLab;
-	IBOutlet CPLayerHostingView *scatterPlotView;//, *barChartView, *pieChartView;
+	IBOutlet CPLayerHostingView *scatterPlotView;
 	IBOutlet UIView *indivPHolder, *partyPHolder, *allPHolder;
 	IBOutlet StaticGradientSliderView *indivSlider, *partySlider, *allSlider;
 			
 @private
-	CPXYGraph *graph;//, *barChart, *pieChart;
+	CPXYGraph *graph;
 	NSMutableArray	*sectionArray;
-	NSMutableArray *dataForPlot; //, *dataForChart;
+	NSMutableArray *dataForPlot;
 	
 	CPColor *texasRed, *texasBlue, *texasOrange;
 }
 
-@property(nonatomic, retain) NSMutableArray *dataForPlot; //, *dataForChart
+@property(nonatomic, retain) NSMutableArray *dataForPlot;
 @property (nonatomic, retain) UIPopoverController *popoverController;
 
 @property (nonatomic,retain) CPXYGraph *graph;
@@ -49,7 +49,7 @@
 @property (nonatomic,retain) IBOutlet CPLayerHostingView *scatterPlotView;
 @property (nonatomic,retain) IBOutlet UIImageView *leg_photoView;
 @property (nonatomic,retain) IBOutlet UILabel *leg_indexTitleLab, *leg_rankLab, *leg_chamberPartyLab, *leg_chamberLab;
-@property (nonatomic,retain) IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab;
+@property (nonatomic,retain) IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab, *freshmanPlotLab;
 @property (nonatomic,retain) IBOutlet StaticGradientSliderView *indivSlider, *partySlider, *allSlider;
 @property (nonatomic,retain) IBOutlet UIView *indivPHolder, *partyPHolder, *allPHolder;
 

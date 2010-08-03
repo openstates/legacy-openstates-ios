@@ -6,6 +6,7 @@
 //  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
+#import "TableDataSourceProtocol.h"
 #import "LegislatorDetailViewController.h"
 #import "LegislatorObj.h"
 #import "CommitteeObj.h"
@@ -44,11 +45,11 @@
 @synthesize startupSplashView, headerView, miniBackgroundView;
 
 @synthesize popoverController;
-@synthesize scatterPlotView, graph, dataForPlot; //, dataForChart;
+@synthesize scatterPlotView, graph, dataForPlot;
 @synthesize texasRed, texasBlue, texasOrange;
 
 @synthesize leg_indexTitleLab, leg_rankLab, leg_chamberPartyLab, leg_chamberLab;
-@synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab;
+@synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab, freshmanPlotLab;
 @synthesize indivSlider, partySlider, allSlider;
 @synthesize indivPHolder, partyPHolder, allPHolder;
 
@@ -57,16 +58,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	
-    // Uncomment the following line to preserve selection between presentations.
 	self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 	self.clearsSelectionOnViewWillAppear = NO;
 	//self.hidesBottomBarWhenPushed = YES;
 	
 	self.dataForPlot = [NSMutableArray array];
-	
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-	//self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	
 	self.texasRed = [CPColor colorWithComponentRed:198.0/255 green:0.0 blue:47.0/255 alpha:1.0f];
 //	self.texasBlue = [CPColor colorWithComponentRed:50.0/255 green:79.0/255 blue:133.0/255 alpha:1.0f];
@@ -133,7 +129,6 @@
 	self.leg_districtLab.text = [NSString stringWithFormat:@"District %@", self.legislator.district];
 	self.leg_tenureLab.text = [self.legislator tenureString];
 	
-	//[self constructScatterPlot];
 	[self plotHistory];
 
 	if ([UtilityMethods isIPadDevice]) {
@@ -168,7 +163,6 @@
 		if (self.allSlider) {
 			[self.allSlider addToPlaceholder:allPHolder withLegislator:self.legislator];
 			self.allSlider.sliderValue = [[indexStats overallPartisanIndexUsingLegislator:self.legislator] floatValue];
-
 		}	
 	}
 }
@@ -183,6 +177,7 @@
 		
 		[self setupHeader];
 		
+		// TODO: is this where we see disappearing popover menu buttons?
 		if (popoverController != nil)
 			[popoverController dismissPopoverAnimated:YES];
 		
@@ -195,6 +190,12 @@
 #pragma mark -
 #pragma mark Managing the popover
 
+- (IBAction)displayMasterListPopover:(id)sender {
+	[self.popoverController presentPopoverFromBarButtonItem:sender 
+								   permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+}
+
+
 - (void)showMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
     // Add the popover button to the left navigation item.
 	barButtonItem.title = @"Legislators";
@@ -206,77 +207,67 @@
     [self.navigationItem setRightBarButtonItem:nil animated:YES];
 }
 
-- (void)showMainMenuPopoverButtonItems:(NSArray *)barButtonItems {
+- (void)showMainMenuPopoverButtonItem {
     // Add the popover button to the left navigation item.
-    [self setToolbarItems:barButtonItems animated:YES];
+	id masterVC = [[TexLegeAppDelegate appDelegate] currentMasterViewController];
+	UIBarButtonItem *mainMenuButton = nil;
+	if ([masterVC respondsToSelector:@selector(menuButton)])
+		mainMenuButton = [masterVC performSelector:@selector(menuButton)];
+		
+	if (mainMenuButton)
+		[self.navigationItem setLeftBarButtonItem:mainMenuButton animated:YES];
 }
 
-- (void)invalidateMainMenuPopoverButtonItems:(NSArray *)barButtonItems {
+- (void)invalidateMainMenuPopoverButtonItem {
     // Remove the popover button.
-    [self setToolbarItems:nil animated:YES];
+	[self.navigationItem setLeftBarButtonItem:nil animated:YES];
 }
 
 
 - (void)showPopoverMenus:(BOOL)show {
-#if 0
 	if ([UtilityMethods isIPadDevice]) {
 		if (self.splitViewController && show) {
-			TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-			if (self.commonMenuControl == nil) {
-				NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CommonMenuSegmentControl" owner:appDelegate options:nil];
-				for (id suspect in objects) {
-					if ([suspect isKindOfClass:[UISegmentedControl class]]) {
-						self.commonMenuControl = (UISegmentedControl *)suspect;
-						break;
-					}
-				}
-			}
+			[self showMainMenuPopoverButtonItem];
 			
-			self.navigationItem.titleView = self.commonMenuControl;
+			if (!self.popoverController) {
+				UIBarButtonItem *masterListItem = [[UIBarButtonItem alloc] 
+												   initWithTitle:@"Legislators" style:UIBarButtonItemStyleBordered 
+												   target:self action:@selector(displayMasterListPopover:)];
+				[self showMasterListPopoverButtonItem:masterListItem];
+				[masterListItem release];    
+				
+				UIPopoverController *popover = [[UIPopoverController alloc] 
+												initWithContentViewController:[[TexLegeAppDelegate appDelegate] currentMasterViewController]];
+				self.popoverController = popover;
+				self.popoverController.delegate = self;
+				
+				// Ensure the popover is not dismissed if the user taps in the search bar.
+				//self.popoverController.passthroughViews = [NSArray arrayWithObject:searchBar];
+				
+				[popover release];
+			}
 		}
-		else {
-			self.navigationItem.titleView = nil;
-		}
+		else
+			[self invalidateMainMenuPopoverButtonItem];
 	}
-#endif
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
 	BOOL showSplash = ([UtilityMethods isLandscapeOrientation] == NO && [UtilityMethods isIPadDevice]);
 	
 	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
-	if (self.legislator == nil && ![UtilityMethods isLandscapeOrientation])  {
-		
-		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-		
-		if (appDelegate.savedLocation != nil) {
-			// save off this level's selection to our AppDelegate
-			
-			//[self validateStoredSelection];
-			NSInteger rowSelection = [[appDelegate.savedLocation objectAtIndex:1] integerValue];
-			NSInteger sectionSelection = [[appDelegate.savedLocation objectAtIndex:2] integerValue];
-			
-			//debug_NSLog(@"Restoring Selection: Row: %d    Section: %d", rowSelection, sectionSelection);
-			
-			if (rowSelection != -1) {
-				MasterTableViewController *masterVC = [appDelegate.functionalViewControllers objectAtIndex:0];
-				UITableView *masterTableView = [masterVC valueForKey:@"tableView"];
-				NSIndexPath *selectionPath = [NSIndexPath indexPathForRow:rowSelection inSection:sectionSelection];
-				
-				// I'm not sure if this is how you do the "selector" business, so I've commented it out
-				//if ([self.tableView.delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)
-				//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
-				showSplash = NO;
-				[masterTableView selectRowAtIndexPath:selectionPath animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-				[masterTableView.delegate tableView:masterTableView didSelectRowAtIndexPath:selectionPath];
-				
-				//if ([self.tableView.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)
-				//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
-				
-			}
-			
+	if (!self.legislator && ![UtilityMethods isLandscapeOrientation])  {
+		id masterVC = [[TexLegeAppDelegate appDelegate] currentMasterViewController];
+					   
+		if ([masterVC respondsToSelector:@selector(selectObjectOnAppear)])
+			self.legislator = [[[TexLegeAppDelegate appDelegate] currentMasterViewController] performSelector:@selector(selectObjectOnAppear)];
+
+		if (!self.legislator) {
+			NSString *vcKey = [[TexLegeAppDelegate appDelegate] currentMasterViewControllerKey];
+			NSManagedObjectID *objectID = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:vcKey];
+			if (objectID)
+				self.legislator = (LegislatorObj *)[[[masterVC valueForKey:@"dataSource"] managedObjectContext] objectWithID:objectID];
 		}
 	}
 	
@@ -286,13 +277,12 @@
 	}
 
 	if (showSplash) {
-		// We could alternatively use this opportunity to open a proper informational introduction
+		// TODO: We could alternatively use this opportunity to open a proper informational introduction
 		// for instance, drop in a new view taking the full screen that gives a full menu and helpful info
 		
 		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StartupSplashView-Portrait" owner:self options:NULL];
 		self.startupSplashView = [objects objectAtIndex:0];
 		[self.view addSubview:self.startupSplashView];
-		//[self.view setNeedsDisplay];
 	}
 	else {
 		[self.startupSplashView removeFromSuperview];
@@ -302,22 +292,6 @@
 
 }
 
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
-
 #pragma mark -
 #pragma mark Split view support
 
@@ -326,6 +300,7 @@
 	   forPopoverController: (UIPopoverController*)pc {
 	
 	[self showMasterListPopoverButtonItem:barButtonItem];
+	[self showMainMenuPopoverButtonItem];
 	
     self.popoverController = pc;
 }
@@ -336,6 +311,8 @@
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
 	
 	[self invalidateMasterListPopoverButtonItem:barButtonItem];
+	[self invalidateMainMenuPopoverButtonItem];
+
 	self.popoverController = nil;
 }
 
@@ -360,11 +337,6 @@
     return YES;
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-}
-
-
 #pragma mark -
 #pragma mark Memory management
 
@@ -383,7 +355,7 @@
 	self.indivPHolder = self.partyPHolder = self.allPHolder = nil;
 	self.legislator = nil;
 	self.leg_photoView = nil;
-	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = nil;
+	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
 	self.headerView = self.startupSplashView = nil;
 	self.scatterPlotView = nil;
 	self.dataForPlot = nil;
@@ -400,7 +372,7 @@
 	self.indivPHolder = self.partyPHolder = self.allPHolder = nil;
 	self.legislator = nil;
 	self.leg_photoView = nil;
-	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = nil;
+	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
 	self.headerView = self.startupSplashView = nil;
 	self.scatterPlotView = nil;
 	self.dataForPlot = nil;
@@ -422,21 +394,15 @@
 	DirectoryDetailInfo *cellInfo = nil;
 	
 	// create an array of sections, with arrays of DirectoryDetailInfo entries as contents
-	if (self.sectionArray) {
-		// is this necessary???
-		for (NSMutableArray *entryArray in self.sectionArray)
-			[entryArray removeAllObjects];
-		self.sectionArray = nil;	// this calls removeAllObjects and release automatically
-	}
+	self.sectionArray = nil;	// this calls removeAllObjects and release automatically
 	self.sectionArray = [NSMutableArray arrayWithCapacity:numberOfSections];
 
 	NSInteger i;
 	for (i=0; i < numberOfSections; i++) {
-		NSMutableArray *entryArray = [[NSMutableArray alloc] initWithCapacity:20]; // just an arbitrary maximum
+		NSMutableArray *entryArray = [[NSMutableArray alloc] initWithCapacity:30]; // just an arbitrary maximum
 		[self.sectionArray addObject:entryArray];
 		[entryArray release], entryArray = nil;
 	}
-	
 	
 	/*	Section 0: Personal Information */		
 	NSInteger sectionIndex = 0;	
@@ -980,11 +946,11 @@
 #pragma mark Plot construction methods
 
 - (void)plotHistory {
-	
 	NSInteger countOfScores = [self.legislator.wnomScores count];
 
 	if (!countOfScores) {
 		graph.hidden = YES;
+		self.freshmanPlotLab.hidden = NO;
 		return;
 	}
 	
