@@ -13,7 +13,7 @@
 @synthesize fetchedResultsController, managedObjectContext;
 
 @synthesize hideTableIndex;
-@synthesize filterChamber, filterString;
+@synthesize filterChamber, filterString, searchDisplayController;
 
 
 // setup the data collection
@@ -33,6 +33,7 @@
 
 - (void)dealloc {
 	self.fetchedResultsController = nil;
+	self.searchDisplayController = nil;
 	self.managedObjectContext = nil;	
 	self.filterString = nil;
 
@@ -92,12 +93,17 @@
 
 // return the committee at the index in the sorted by symbol array
 - (CommitteeObj *)committeeDataForIndexPath:(NSIndexPath *)indexPath {
-	
-	// DO A TRANSLATION HERE UNTIL WE GET A COMPLETE COMMITTEOBJ MODEL (WITH RELATIONSHIPS)
-	CommitteeObj *tempEntry = [fetchedResultsController objectAtIndexPath:indexPath];
-	//return [[[CommitteesListing sharedCommittees] committeesDictionary] objectForKey:tempEntry.committeeId];
+	CommitteeObj *tempEntry = nil;
+	@try {
+		tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
+	}
+	@catch (NSException * e) {
+		// Perhaps we're returning from a search and we've got a wacked out indexPath.  Let's reset the search and see what happens.
+		NSLog(@"CommitteeDataSource.m -- committeeDataForIndexPath:  indexPath must be out of bounds.  %@", [indexPath description]); 
+		[self removeFilter];
+		tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
+	}
 	return tempEntry;
-
 }
 
 // UITableViewDataSource methods
@@ -122,7 +128,7 @@
 	
 	// configure cell contents
 	
-	cell.indentationLevel = -4;
+	//cell.indentationLevel = -4;
 	cell.selectionStyle = UITableViewCellSelectionStyleBlue;
 	cell.detailTextLabel.text = tempEntry.committeeName;
 	cell.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
@@ -137,7 +143,20 @@
 	// all the rows should show the disclosure indicator
 	if ([self showDisclosureIcon])
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		
+				
+	if (tableView == self.searchDisplayController.searchResultsTableView) 
+		cell.accessoryType = UITableViewCellAccessoryNone;
+
+	
+	//UIColor *dark = [UIColor colorWithRed:0.592f green:0.596f blue:0.608f alpha:1.0];
+	//UIColor *light = [UIColor colorWithRed:0.675f green:0.678f blue:0.686f alpha:1.0];
+#define DARK_BACKGROUND  [UIColor colorWithRed:218.0/255.0 green:223.0/255.0 blue:226.0/255.0 alpha:1.0]
+#define LIGHT_BACKGROUND [UIColor colorWithRed:250.0/255.0 green:251.0/255.0 blue:251.0/255.0 alpha:1.0]
+
+	cell.backgroundColor = (indexPath.row % 2 == 0) ? DARK_BACKGROUND : LIGHT_BACKGROUND;
+	cell.detailTextLabel.textColor = 	[UIColor colorWithRed:67.f/255.f green:86.f/255.f blue:98.f/255.f alpha:1.f];
+	cell.textLabel.textColor =			[UIColor colorWithRed:151.f/255.f green:161.f/255.f blue:166.f/255.f alpha:1.f];
+	
 	return cell;
 }
 
