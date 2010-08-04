@@ -190,11 +190,7 @@ NSInteger kNoSelection = -1;
 }
 
 
-- (void) changeActiveFeaturedControllerTo:(NSInteger)controllerIndex {
-	// set the first component of our state saving business
-	
-	// GREG .... I mean it, set it ... this is a TODO!!!!!!!!!!!!!!!!!!!!!!!!
-	
+- (void) changeActiveFeaturedControllerTo:(NSInteger)controllerIndex {	
 	if (self.currentMasterViewController &&					// they're trying to select what they've already got
 		[self indexForFunctionalViewController:self.currentMasterViewController] == controllerIndex)
 		return;
@@ -203,37 +199,32 @@ NSInteger kNoSelection = -1;
 	
 	self.currentMasterViewController = [self.functionalViewControllers objectAtIndex:controllerIndex];
 	
-	switch (controllerIndex) {
-		case 0:
-			self.currentDetailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
-			break;
-		case 1:
-			self.currentDetailViewController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
-			break;
-		case 2:
-			if (self.splitViewController)
+	if ([UtilityMethods isIPadDevice] && self.splitViewController) {		
+
+		switch (controllerIndex) {
+			case 0:
+				self.currentDetailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
+				break;
+			case 1:
+				self.currentDetailViewController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
+				break;
+			case 2:
 				self.currentDetailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController" bundle:nil];
-			else
-				self.currentDetailViewController = [[TKCalendarMonthTableViewController alloc] init];
-			//	self.currentDetailViewController = [[CalendarSimpleViewController alloc] initWithNibName:@"CalendarSimpleViewController" bundle:nil];				
-			break;
-		case 3:
-			self.currentDetailViewController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
-			break;
-		case 4:
-			self.currentDetailViewController = [[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil];
-			break;			
-		default:
-			self.currentDetailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
-			NSLog(@"Unknown controller index in changeActiveFeaturedControllerTo: %d", controllerIndex);
-			break;
-	}
-	
-	[self.currentMasterViewController setValue:self.currentDetailViewController forKey:@"detailViewController"];
-	
-	if ([UtilityMethods isIPadDevice] && self.splitViewController) {
-		//self.splitViewController.delegate = self.currentDetailViewController;	
+				break;
+			case 3:
+				self.currentDetailViewController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
+				break;
+			case 4:
+				self.currentDetailViewController = [[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil];
+				break;			
+			default:
+				self.currentDetailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
+				NSLog(@"Unknown controller index in changeActiveFeaturedControllerTo: %d", controllerIndex);
+				break;
+		}
 		
+		[self.currentMasterViewController setValue:self.currentDetailViewController forKey:@"detailViewController"];
+	
 		// Set up the view controller for the master.
 		NSArray *viewControllers = [[NSArray alloc] initWithObjects:self.currentMasterViewController, nil];
 		self.masterNavigationController.viewControllers = viewControllers;
@@ -244,24 +235,16 @@ NSInteger kNoSelection = -1;
 			viewControllers = [[NSArray alloc] initWithObjects:self.currentDetailViewController, nil];
 			self.detailNavigationController.viewControllers = viewControllers;
 			[viewControllers release], viewControllers = nil;
-			
 			self.splitViewController.delegate = self.currentDetailViewController;	
-
 		}
-
 	}		
-	else // it's an iPhone with a tabBar
+	else // it's an iPhone with a tabBar, we do the allocation of detail views
 		self.tabBarController.selectedIndex = controllerIndex;
 
 	// Dismiss the popover if it's present.
 	if (self.menuPopoverPC != nil) {
 		[self.menuPopoverPC dismissPopoverAnimated:YES];
 	}
-	
-	//	// Configure the new view controller's popover button (after the view has been displayed and its toolbar/navigation bar has been created).
-	//	if (rootPopoverButtonItem != nil) {
-	//		[detailViewController showRootPopoverButtonItem:self.rootPopoverButtonItem];
-	//	}
 }
 
 - (void) setupFeatures {
