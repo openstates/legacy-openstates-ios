@@ -12,7 +12,6 @@
 
 #import "LinksMenuDataSource.h"
 #import "DirectoryDataSource.h"
-#import "BillsDataSource.h"
 #import "CommitteesDataSource.h"
 #import "CapitolMapsDataSource.h"
 #import "GeneralTableViewController.h"
@@ -121,8 +120,8 @@ NSInteger kNoSelection = -1;
 	self.appirater = nil;
 	self.mainWindow = nil;    
 	
-	self.directoryTableTabbedVC = self.committeeTableTabbedVC = self.mapsTableTabbedVC = self.linksTableTabbedVC = self.calendarsTableTabbedVC = nil;
-	//self.billsTableTabbedVC = nil;
+	self.directoryTableTabbedVC = self.mapsTableTabbedVC = self.linksTableTabbedVC = self.calendarsTableTabbedVC = nil;
+	self.committeeTableTabbedVC = nil;
 
 	self.managedObjectContext = nil;
 		

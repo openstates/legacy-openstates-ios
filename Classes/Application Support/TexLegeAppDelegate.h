@@ -13,6 +13,7 @@
 #import "MenuPopoverViewController.h"
 
 @class LegislatorDetailViewController, MasterTableViewController;
+@class CommitteeMasterViewController;
 @class GeneralTableViewController;
 @class MenuPopoverViewController;
 @class Appirater;
@@ -49,14 +50,15 @@
 	
 	// For iPhone Interface
 	IBOutlet UITabBarController *tabBarController;
-	IBOutlet GeneralTableViewController *directoryTableTabbedVC, *committeeTableTabbedVC, *mapsTableTabbedVC, *linksTableTabbedVC, *calendarsTableTabbedVC;
+	IBOutlet GeneralTableViewController *directoryTableTabbedVC, *mapsTableTabbedVC, *linksTableTabbedVC, *calendarsTableTabbedVC;
+	IBOutlet MasterTableViewController *legMasterTableViewController;
+	IBOutlet CommitteeMasterViewController *committeeTableTabbedVC;
 	
 	// For iPad Interface
 	IBOutlet UISplitViewController *splitViewController;
 	IBOutlet UINavigationController *masterNavigationController, *detailNavigationController;
 	IBOutlet id currentMasterViewController, currentDetailViewController;
 	
-	IBOutlet MasterTableViewController *legMasterTableViewController;
 	
 @private
 	NSMutableArray *functionalViewControllers;	
@@ -69,12 +71,13 @@
 @property (nonatomic, retain) UIPopoverController *menuPopoverPC;
 
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
-@property (nonatomic, retain) IBOutlet GeneralTableViewController *directoryTableTabbedVC, *committeeTableTabbedVC, *mapsTableTabbedVC, *linksTableTabbedVC, *calendarsTableTabbedVC;
+@property (nonatomic, retain) IBOutlet GeneralTableViewController *directoryTableTabbedVC, *mapsTableTabbedVC, *linksTableTabbedVC, *calendarsTableTabbedVC;
 
 @property (nonatomic, retain) IBOutlet UISplitViewController *splitViewController;
 @property (nonatomic, retain) IBOutlet UINavigationController *masterNavigationController, *detailNavigationController;
 @property (nonatomic, retain) IBOutlet id currentMasterViewController, currentDetailViewController;
 
+@property (nonatomic, retain) IBOutlet CommitteeMasterViewController *committeeTableTabbedVC;
 @property (nonatomic, retain) IBOutlet MasterTableViewController *legMasterTableViewController;
 
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
