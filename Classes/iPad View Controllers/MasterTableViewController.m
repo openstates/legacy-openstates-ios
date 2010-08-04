@@ -8,16 +8,14 @@
 
 #import "MasterTableViewController.h"
 #import "LegislatorDetailViewController.h"
-#import "UtilityMethods.h"
 #import "LegislatorMasterTableViewCell.h"
+#import "UtilityMethods.h"
 #import "TexLegeAppDelegate.h"
 
 /*
  Predefined colors to alternate the background color of each cell row by row
  (see tableView:cellForRowAtIndexPath: and tableView:willDisplayCell:forRowAtIndexPath:).
  */
-#define DARK_BACKGROUND  [UIColor colorWithRed:151.0/255.0 green:152.0/255.0 blue:155.0/255.0 alpha:1.0]
-#define LIGHT_BACKGROUND [UIColor colorWithRed:172.0/255.0 green:173.0/255.0 blue:175.0/255.0 alpha:1.0]
 
 @interface MasterTableViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
@@ -56,7 +54,6 @@
 		}
 	}
 	
-	// GREG do we need this one?  does it break things?
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self.dataSource;
 	self.tableView.rowHeight = self.dataSource.rowHeight;
@@ -94,8 +91,9 @@
 	self.m_searchDisplayController.delegate = self;
 	self.m_searchDisplayController.searchResultsDelegate = self;
 	
-	self.tableView.backgroundColor = DARK_BACKGROUND;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+	//self.tableView.backgroundColor = DARK_BACKGROUND;
+	self.tableView.separatorColor = [UIColor colorWithRed:0.741f green:0.769f blue:0.792f alpha:1.0];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -127,10 +125,6 @@
 		LegislatorObj* legislator = self.detailViewController ? self.detailViewController.legislator : nil;
 		if (!legislator) {
 			NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
-			if (currentIndexPath) {
-				NSLog(@"currentIndexPath, does this ever happen?   - %@", self);
-			}
-			
 			if (!currentIndexPath) {			
 				NSUInteger ints[2] = {0,0};	// just pick the first one then
 				currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
@@ -194,8 +188,8 @@
 		// if we have a stack of view controllers and someone selected a new cell from our master list, 
 		//	lets go all the way back to accomodate their selection, and scroll to the top.
 		if ([self.detailViewController.navigationController.viewControllers count] > 1) { 
-			[self.detailViewController.navigationController popToRootViewControllerAnimated:YES];
-			[self.detailViewController.tableView scrollRectToVisible:self.detailViewController.headerView.bounds animated:YES];
+			CGRect topish = CGRectMake(0, 0, 10, 10);
+			[self.detailViewController.tableView scrollRectToVisible:topish animated:YES];
 		}
 	}
 	else {
@@ -213,10 +207,14 @@
 }
 //END:code.split.delegate
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+	BOOL useDark = (indexPath.row % 2 == 0);
+	UIColor *darkColor = ((LegislatorMasterTableViewCell *)cell).backgroundDark;
+	UIColor *lightColor = ((LegislatorMasterTableViewCell *)cell).backgroundDark;
+
 	// let's override some of the datasource's settings ... specifically, the background color.
-	cell.backgroundColor = ((LegislatorMasterTableViewCell *)cell).useDarkBackground ? DARK_BACKGROUND : LIGHT_BACKGROUND;
-	
+	cell.backgroundColor = useDark ? darkColor : lightColor;
+	[((LegislatorMasterTableViewCell *)cell) setUseDarkBackground:useDark];
 }
 
 #pragma mark -
@@ -229,7 +227,6 @@
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
 	
-
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 

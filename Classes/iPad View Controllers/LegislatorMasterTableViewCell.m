@@ -23,8 +23,13 @@
 @synthesize legislator, backgroundLight, backgroundDark;
 
 - (void)awakeFromNib {
-	self.backgroundDark = [UIColor colorWithRed:0.592f green:0.596f blue:0.608f alpha:1.0];
-	self.backgroundLight = [UIColor colorWithRed:0.675f green:0.678f blue:0.686f alpha:1.0];
+	//self.backgroundDark = [UIColor colorWithRed:0.592f green:0.596f blue:0.608f alpha:1.0];
+	//self.backgroundLight = [UIColor colorWithRed:0.675f green:0.678f blue:0.686f alpha:1.0];
+	self.backgroundDark = [UIColor colorWithRed:0.855f green:0.914f blue:0.886f alpha:1.0];
+	self.backgroundLight = [UIColor colorWithRed:0.981f green:0.984f blue:0.984f alpha:1.0];;
+	//UIColor *detailColor = [UIColor colorWithRed:0.293f green:0.337f blue:0.384f alpha:1.0];
+	//UIColor *typeColor = [UIColor colorWithRed:0.592f green:0.631f blue:0.651f alpha:1.0];
+
 }
 
 
@@ -46,17 +51,20 @@
 
 - (void)setUseDarkBackground:(BOOL)flag
 {
-    if (flag != useDarkBackground || !self.backgroundView)
+    //if (flag != useDarkBackground || !self.backgroundView)
     {
         useDarkBackground = flag;
 		
-        NSString *backgroundImagePath = [[NSBundle mainBundle] pathForResource:useDarkBackground ? @"DarkBackground" : @"LightBackground" ofType:@"png"];
-        UIImage *backgroundImage = [[UIImage imageWithContentsOfFile:backgroundImagePath] stretchableImageWithLeftCapWidth:0.0 topCapHeight:1.0];
-        self.backgroundView = [[[UIImageView alloc] initWithImage:backgroundImage] autorelease];
-        self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        self.backgroundView.frame = self.bounds;
+        //NSString *backgroundImagePath = [[NSBundle mainBundle] pathForResource:useDarkBackground ? @"DarkBackground" : @"LightBackground" ofType:@"png"];
+        //UIImage *backgroundImage = [[UIImage imageWithContentsOfFile:backgroundImagePath] stretchableImageWithLeftCapWidth:0.0 topCapHeight:1.0];
+        //self.backgroundView = [[[UIImageView alloc] initWithImage:backgroundImage] autorelease];
+        //self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        //self.backgroundView.frame = self.bounds;
 		
 		UIColor *labelBGColor = (useDarkBackground) ? self.backgroundDark : self.backgroundLight;
+		self.backgroundColor = labelBGColor;
+		self.backgroundView.backgroundColor = labelBGColor;
+		
 		self.leg_photoView.backgroundColor = labelBGColor;
 		self.leg_titleLab.backgroundColor = labelBGColor;
 		self.leg_partyDistLab.backgroundColor = labelBGColor;
