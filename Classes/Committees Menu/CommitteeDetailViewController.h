@@ -15,7 +15,6 @@
 {
 	CommitteeObj		*committee;
 	UIPopoverController *popoverController;
-
 }
 @property (nonatomic, retain) UIPopoverController *popoverController;
 @property (nonatomic, retain) CommitteeObj *committee;

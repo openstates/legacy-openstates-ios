@@ -6,6 +6,7 @@
 //  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
+#import "TableDataSourceProtocol.h"
 #import "CommitteeDetailViewController.h"
 #import "CommitteeObj.h"
 #import "LegislatorObj.h"
@@ -77,33 +78,37 @@ enum InfoSectionRows {
 	if ([UtilityMethods isIPadDevice] == NO)
 		return;
 	
-	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
+	
+		// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
 	if (self.committee == nil && ![UtilityMethods isLandscapeOrientation])  {
+		
 		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 		if (appDelegate.savedLocation != nil) {
-			// save off this level's selection to our AppDelegate
+				// save off this level's selection to our AppDelegate
 			
-			//[self validateStoredSelection];
+				//[self validateStoredSelection];
+			NSInteger vcSelection = [[appDelegate.savedLocation objectAtIndex:0] integerValue];
 			NSInteger rowSelection = [[appDelegate.savedLocation objectAtIndex:1] integerValue];
 			NSInteger sectionSelection = [[appDelegate.savedLocation objectAtIndex:2] integerValue];
 			
-			//debug_NSLog(@"Restoring Selection: Row: %d    Section: %d", rowSelection, sectionSelection);
-			
 			if (rowSelection != -1) {
-				GeneralTableViewController *masterVC = [appDelegate.functionalViewControllers objectAtIndex:1];
+				UITableViewController *masterVC = [appDelegate.functionalViewControllers objectAtIndex:vcSelection];
 				UITableView *masterTableView = [masterVC valueForKey:@"tableView"];
 				NSIndexPath *selectionPath = [NSIndexPath indexPathForRow:rowSelection inSection:sectionSelection];
 				
-				// I'm not sure if this is how you do the "selector" business, so I've commented it out
-				//if ([self.tableView.delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)
-				//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
-				//showSplash = NO;
-				[masterTableView selectRowAtIndexPath:selectionPath animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-				[masterTableView.delegate tableView:masterTableView didSelectRowAtIndexPath:selectionPath];
+					// I'm not sure if this is how you do the "selector" business, so I've commented it out
+					//if ([self.tableView.delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)
+					//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
 				
-				//if ([self.tableView.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)
-				//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
-				
+				id<TableDataSource> masterSource = [masterVC valueForKey:@"dataSource"];
+				if (rowSelection < [masterSource tableView:masterTableView  numberOfRowsInSection:sectionSelection]) {
+					if ([[masterTableView visibleCells] count])
+						[masterTableView selectRowAtIndexPath:selectionPath animated:NO scrollPosition:UITableViewScrollPositionTop];
+					[masterTableView.delegate tableView:masterTableView didSelectRowAtIndexPath:selectionPath];
+										
+						//if ([self.tableView.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)
+						//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
+				}
 			}
 		}
 	}

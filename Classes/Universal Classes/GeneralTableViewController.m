@@ -31,8 +31,6 @@
  Predefined colors to alternate the background color of each cell row by row
  (see tableView:cellForRowAtIndexPath: and tableView:willDisplayCell:forRowAtIndexPath:).
  */
-#define DARK_BACKGROUND  [UIColor colorWithRed:151.0/255.0 green:152.0/255.0 blue:155.0/255.0 alpha:1.0]
-#define LIGHT_BACKGROUND [UIColor colorWithRed:172.0/255.0 green:173.0/255.0 blue:175.0/255.0 alpha:1.0]
 
 
 @implementation GeneralTableViewController
@@ -508,7 +506,7 @@
 	}
 }
 
-
+/*
 - (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 	if (self.dataSource.name == @"Directory") {
@@ -516,7 +514,7 @@
 		cell.backgroundColor = ((LegislatorMasterTableViewCell *)cell).useDarkBackground ? DARK_BACKGROUND : LIGHT_BACKGROUND;
 	}
 }
-
+*/
 #pragma mark -
 #pragma mark ToolBar Methods
 
