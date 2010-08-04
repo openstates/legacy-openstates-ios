@@ -792,7 +792,7 @@
 		<string key="IBDocument.LastKnownRelativeProjectPath">../TexLege.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="71-compass.png">{26, 26}</string>
+			<string key="71-compass.png">{24, 24}</string>
 			<string key="backButton.png">{32, 32}</string>
 			<string key="fwdButton.png">{32, 32}</string>
 		</dictionary>
