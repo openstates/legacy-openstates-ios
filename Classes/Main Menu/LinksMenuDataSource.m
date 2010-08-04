@@ -187,23 +187,9 @@ enum HeaderSectionRows {
 }
 
 
-- (NSArray *) getActionForRowAtIndexPath:(NSIndexPath *)indexPath {
-
+- (NSString *) getLinkForRowAtIndexPath:(NSIndexPath *)indexPath {
 	LinkObj *link = [fetchedResultsController objectAtIndexPath:indexPath];
-	NSNumber * destination = nil;
-	
-	// If allowing the user to enter URLs for the internal browser creates an issue for App ratings in iTunes
-	// (i.e. possible adult content), then we just force user entered links (determined by mod date) over to Safari
-#if NEEDS_TO_CENSOR_USER_LINKS
-	#define kReferenceDate 269721914.791581
-	NSDate *referenceDate = [NSDate dateWithTimeIntervalSinceReferenceDate:kReferenceDate];
-	if ([link.timeStamp compare:referenceDate] == NSOrderedDescending) // it's a newer/added link
-		destination = [NSNumber numberWithInteger:URLAction_externalBrowser];
-	else 
-#endif
-		destination = [NSNumber numberWithInteger:URLAction_internalBrowser];
-	
-	return [NSArray arrayWithObjects:destination, link.url, nil];	
+	return link.url;	
 }
 
 
@@ -388,20 +374,6 @@ enum HeaderSectionRows {
 						withRowAnimation:UITableViewRowAnimationNone];
 						//withRowAnimation:UITableViewRowAnimationFade];  // does a weird flashing thing.
 }
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSIndexPath *rowToSelect = indexPath;
-    NSInteger section = indexPath.section;
-    
-    // If editing, don't allow header to be selected
-    if (tableView.isEditing && section == kHeaderSection) {
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        rowToSelect = nil;    
-    }
-	
-	return rowToSelect;
-}
-
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section == kHeaderSection)

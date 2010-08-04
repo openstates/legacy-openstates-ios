@@ -34,10 +34,8 @@
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
-- (NSArray *) getActionForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (NSString *) getLinkForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL) isAddLinkPlaceholderAtIndexPath:(NSIndexPath *)indexPath;
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath;
-
 
 @end
  
