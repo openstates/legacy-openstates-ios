@@ -13,6 +13,7 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="30"/>
+			<integer value="45"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -47,7 +48,6 @@
 						<int key="NSvFlags">290</int>
 						<string key="NSFrame">{{0, 313}, {703, 197}}</string>
 						<reference key="NSSuperview" ref="447670393"/>
-						<reference key="NSNextKeyView" ref="404293941"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -62,7 +62,6 @@
 						<int key="NSvFlags">289</int>
 						<string key="NSFrame">{{361, 0}, {198, 265}}</string>
 						<reference key="NSSuperview" ref="447670393"/>
-						<reference key="NSNextKeyView" ref="1009024189"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -77,7 +76,6 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{144, 0}, {198, 265}}</string>
 						<reference key="NSSuperview" ref="447670393"/>
-						<reference key="NSNextKeyView" ref="840324790"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -107,7 +105,6 @@
 						<int key="NSvFlags">289</int>
 						<string key="NSFrame">{{383, 0}, {320, 265}}</string>
 						<reference key="NSSuperview" ref="447670393"/>
-						<reference key="NSNextKeyView" ref="365838757"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">2</int>
 							<bytes key="NSRGB">MC44NDcwNTg4OTIzIDAuODUwOTgwNDYwNiAwLjg3NDUwOTg3MQA</bytes>
@@ -128,7 +125,6 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrameSize">{320, 265}</string>
 						<reference key="NSSuperview" ref="447670393"/>
-						<reference key="NSNextKeyView" ref="52163915"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">2</int>
 							<bytes key="NSRGB">MC44NTA5ODA0NjA2IDAuODU0OTAyMDI5IDAuODc4NDMxNDM5NAA</bytes>
@@ -139,7 +135,6 @@
 				</object>
 				<string key="NSFrameSize">{703, 748}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSNextKeyView" ref="761162493"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">6</int>
 					<string key="NSCatalogName">System</string>
@@ -168,14 +163,19 @@
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 			</object>
 			<object class="IBUISearchBar" id="511655040">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">290</int>
 				<string key="NSFrameSize">{311, 44}</string>
+				<reference key="NSSuperview"/>
 				<int key="IBUIContentMode">3</int>
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 				<string key="IBText"/>
 				<string key="IBPrompt"/>
 				<string key="IBPlaceholder">Search upcoming meetings</string>
+				<object class="NSColor" key="IBTintColor">
+					<int key="NSColorSpace">1</int>
+					<bytes key="NSRGB">MC4zMDU4ODIzNTI5IDAuMzYwNzg0MzEzNyAwLjM4ODIzNTI5NDEAA</bytes>
+				</object>
 				<object class="IBUITextInputTraits" key="IBTextInputTraits">
 					<int key="IBUIAutocorrectionType">2</int>
 					<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -415,6 +415,7 @@
 					<string>30.IBEditorWindowLastContentRect</string>
 					<string>30.IBPluginDependency</string>
 					<string>38.IBPluginDependency</string>
+					<string>45.IBEditorWindowLastContentRect</string>
 					<string>5.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
@@ -426,6 +427,7 @@
 					<string>{{591, 204}, {703, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>{{0, 951}, {311, 44}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				</object>
 			</object>
@@ -457,12 +459,16 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>landShadow</string>
 							<string>leftShadow</string>
+							<string>portShadow</string>
 							<string>rightShadow</string>
 							<string>webView</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>UIImageView</string>
+							<string>UIImageView</string>
 							<string>UIImageView</string>
 							<string>UIImageView</string>
 							<string>UIWebView</string>
@@ -472,14 +478,24 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>landShadow</string>
 							<string>leftShadow</string>
+							<string>portShadow</string>
 							<string>rightShadow</string>
 							<string>webView</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
+								<string key="name">landShadow</string>
+								<string key="candidateClassName">UIImageView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
 								<string key="name">leftShadow</string>
+								<string key="candidateClassName">UIImageView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">portShadow</string>
 								<string key="candidateClassName">UIImageView</string>
 							</object>
 							<object class="IBToOneOutletInfo">

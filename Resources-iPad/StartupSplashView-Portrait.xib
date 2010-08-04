@@ -33,7 +33,7 @@
 					<object class="IBUIImageView" id="42015212">
 						<reference key="NSNextResponder" ref="119919913"/>
 						<int key="NSvFlags">274</int>
-						<string key="NSFrameSize">{768, 960}</string>
+						<string key="NSFrameSize">{768, 1024}</string>
 						<reference key="NSSuperview" ref="119919913"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<float key="IBUIAlpha">0.077464789152145386</float>
@@ -47,7 +47,7 @@
 					<object class="IBUILabel" id="414987512">
 						<reference key="NSNextResponder" ref="119919913"/>
 						<int key="NSvFlags">303</int>
-						<string key="NSFrame">{{97, 687}, {573, 189}}</string>
+						<string key="NSFrame">{{97, 744}, {573, 189}}</string>
 						<reference key="NSSuperview" ref="119919913"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -79,7 +79,7 @@ Ym92ZS4</string>
 					<object class="IBUIImageView" id="716709015">
 						<reference key="NSNextResponder" ref="119919913"/>
 						<int key="NSvFlags">319</int>
-						<string key="NSFrame">{{128, 157}, {512, 489}}</string>
+						<string key="NSFrame">{{128, 167}, {512, 521}}</string>
 						<reference key="NSSuperview" ref="119919913"/>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -89,20 +89,13 @@ Ym92ZS4</string>
 						</object>
 					</object>
 				</array>
-				<string key="NSFrameSize">{768, 960}</string>
+				<string key="NSFrameSize">{768, 1024}</string>
 				<reference key="NSSuperview"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">6</int>
 					<string key="NSCatalogName">System</string>
 					<string key="NSColorName">selectedKnobColor</string>
 					<reference key="NSColor" ref="302157474"/>
-				</object>
-				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
-					<int key="IBUIStatusBarStyle">2</int>
-				</object>
-				<object class="IBUISimulatedNavigationBarMetrics" key="IBUISimulatedTopBarMetrics">
-					<int key="IBUIBarStyle">1</int>
-					<bool key="IBUIPrompted">NO</bool>
 				</object>
 				<object class="IBUISimulatedSizeMetrics" key="IBUISimulatedDestinationMetrics">
 					<string key="IBUIDestinationClass">IBUISplitViewController</string>
