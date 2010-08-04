@@ -7,47 +7,86 @@
 //
 #import "Constants.h"
 #import "CalendarComboViewController.h"
-//#import "CFeedEntry.h"
 #import "UtilityMethods.h"
+#include "MiniBrowserController.h"
+
+@interface CalendarComboViewController (Private) 
+
+- (void)selectSoonestEvent;
+- (void)changeLayoutForOrientation:(UIInterfaceOrientation)interfaceOrientation;
+- (void)deviceOrientationDidChange:(void*)object;
+	
+@end
 
 @implementation CalendarComboViewController
-@synthesize popoverController, feedEntries, currentEvents;
-
-/*
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        // Custom initialization
-    }
-    return self;
-}
-*/
-
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
-}
-*/
+@synthesize popoverController, feedEntries, currentEvents, webView, searchResults;
+@synthesize leftShadow, rightShadow, portShadow, landShadow;
 
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
-	UIColor *sealColor = [UIColor colorWithPatternImage:sealImage];		
-	self.view.backgroundColor = sealColor;
-	
-	self.navigationItem.title = @"Upcoming Committee Meetings";
+	if ([UtilityMethods isIPadDevice]) {
+		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
+		UIColor *sealColor = [UIColor colorWithPatternImage:sealImage];		
+		self.view.backgroundColor = sealColor;
+	}		
+		//self.navigationItem.title = @"Upcoming Committee Meetings";
+	self.navigationItem.titleView = self.searchDisplayController.searchBar;
 	
 	self.currentEvents = [NSMutableArray array];
+	self.searchResults = [NSMutableArray array];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
 
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	[self changeLayoutForOrientation:[UIDevice currentDevice].orientation];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	if (![self.currentEvents count] && [self.feedEntries count])	// we don't have anything selected yet
+		[self selectSoonestEvent];
+}
+
+- (void)changeLayoutForOrientation:(UIInterfaceOrientation)interfaceOrientation {
+	if (![UtilityMethods isIPadDevice]) {
+		
+		CGRect monthPortrait = CGRectMake(0, 0, 320, 265);
+		CGRect tablePortrait = CGRectMake(0, 265, 320, 151);
+		CGRect tableLandscape = CGRectMake(320.f, 0.f, 160.f, 268.f);
+		//CGRect shadowLandscape = CGRectMake(143.f, 0.f, 198.f, 268.f);
+		
+		self.monthView.bounds = monthPortrait;
+		
+		if (UIDeviceOrientationIsLandscape(interfaceOrientation)) {
+			self.tableView.frame = tableLandscape;
+			self.landShadow.hidden = NO;
+			self.portShadow.hidden = YES;
+		}
+		else {
+			self.tableView.frame = tablePortrait;
+			self.landShadow.hidden = YES;
+			self.portShadow.hidden = NO;
+		}	
+		[self.tableView setNeedsDisplay];	
+	}
+}
+
+// add this to init: or something
+- (void)deviceOrientationDidChange:(void*)object { 
+	UIDeviceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	[self changeLayoutForOrientation:orientation];	
+}
+
+
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Overriden to allow any orientation.
-    return YES;
+	return YES;
 }
 
 
@@ -56,7 +95,6 @@
 
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
     // Release any cached data, images, etc that aren't in use.
 }
 
@@ -64,7 +102,10 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+	self.leftShadow = self.rightShadow = self.portShadow = self.landShadow = nil;
+	
+	// add this to done: or something
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIDeviceOrientationDidChangeNotification" object:nil];
 }
 
 
@@ -72,6 +113,9 @@
 	self.popoverController = nil;
 	self.feedEntries = nil;
 	self.currentEvents = nil;
+	self.webView = nil;
+	self.leftShadow = self.rightShadow = self.portShadow = self.landShadow = nil;
+	self.searchResults = nil;
     [super dealloc];
 }
 
@@ -120,6 +164,8 @@
     }
 }
 
+#pragma -
+#pragma ComboVC Utilities
 /*
  Sorts an array of CalendarItems objects by date.  
  */
@@ -148,14 +194,33 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		
 		if (popoverController != nil)
 			[popoverController dismissPopoverAnimated:YES];
-				
-		[self.view setNeedsDisplay];
+						
+		[self.searchResults removeAllObjects];
+		[self.tableView reloadData];
+		[self.monthView reload];
+		[self selectSoonestEvent];
 	}
 }
 
+- (void)selectSoonestEvent {	
+	for (NSDictionary *entryDict in self.feedEntries) {
+		NSDate *entryDate = [entryDict objectForKey:@"date"];
+		if ([entryDate compare:[NSDate date]] != NSOrderedAscending) {  // don't select a date before today
+			[self.monthView selectDate:[entryDict objectForKey:@"date"]];
+			[self calendarMonthView:self.monthView didSelectDate:[entryDict objectForKey:@"date"]];
+			return;
+		}	
+	}
+}
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.currentEvents count];
+#pragma -
+#pragma UITableViewDelegate
+
+- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section {
+	if (tv == self.searchDisplayController.searchResultsTableView) 
+		return [self.searchResults count];
+    else
+		return [self.currentEvents count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -167,43 +232,77 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
     }
 	
-	NSDictionary *entry = [self.currentEvents objectAtIndex:indexPath.row];
+	NSDictionary *entry = nil;
+	
+	if (tv == self.searchDisplayController.searchResultsTableView)
+		entry = [self.searchResults objectAtIndex:indexPath.row];		
+	else
+		entry = [self.currentEvents objectAtIndex:indexPath.row];
 	
 	NSString *chamberString = nil;
 	switch ([[entry objectForKey:@"chamber"] integerValue]) {
-		case HOUSE:
-			chamberString = @"(H)";
+		case JOINT:
+			chamberString = @"(J)";
 			break;
 		case SENATE:
-			chamberString = @"(Sen)";
+			chamberString = @"(S)";
 			break;
-		case JOINT:
-			chamberString = @"(Joint)";
-			break;
-		default:
-			chamberString = @"";
+		default:	//case HOUSE:
+			chamberString = @"(H)";
 			break;
 	}
-	cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", chamberString, [entry objectForKey:@"committee"]];;
-	cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
-	//cell.textLabel.textColor = [UIColor lightGrayColor];
-	
-	
+	NSString *committeeString = [[NSString alloc] initWithFormat:@"%@ %@", chamberString, [entry objectForKey:@"committee"]];
+	NSString *cellText = nil;
+	if (tv == self.searchDisplayController.searchResultsTableView) {  // give a more different format in searches
+		cellText = [[NSString alloc] initWithFormat:@"%@ %@ - %@", [entry objectForKey:@"dateString"], 
+							[entry objectForKey:@"timeString"], committeeString];
+		cell.textLabel.font = [UIFont boldSystemFontOfSize:10];
+	}
+	else {
+		cellText = [[NSString alloc] initWithFormat:@"%@: %@", committeeString, [entry objectForKey:@"timeString"]];
+		if ([UtilityMethods isIPadDevice])
+			cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
+		else
+			cell.textLabel.font = [UIFont systemFontOfSize:10];
+
+	}
+	cell.textLabel.text = cellText;
+	[committeeString release];
     return cell;
 	
 }
 
-- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-	NSDictionary *eventDict = [self.currentEvents objectAtIndex:indexPath.row];
-	
-	NSURL *url = [NSURL URLWithString:[eventDict objectForKey:@"url"]];
-	if (url)
-		[UtilityMethods openURLWithTrepidation:url];
-
+	NSDictionary *eventDict = nil;
+	if (tv == self.searchDisplayController.searchResultsTableView) {
+		eventDict = [self.searchResults objectAtIndex:indexPath.row];
+		[self.searchDisplayController setActive:NO animated:YES];
+		[self.monthView selectDate:[eventDict objectForKey:@"date"]];
+		[self calendarMonthView:self.monthView didSelectDate:[eventDict objectForKey:@"date"]];
+	}
+	else {
+		eventDict = [self.currentEvents objectAtIndex:indexPath.row];
+		NSURL *url = [NSURL URLWithString:[eventDict objectForKey:@"url"]];
+		
+		if ([UtilityMethods canReachHostWithURL:url]) { // do we have a good URL/connection?
+			if ([UtilityMethods isIPadDevice]) {	
+				NSURLRequest *urlReq = [NSURLRequest requestWithURL:url];
+				if (urlReq)
+					[self.webView loadRequest:urlReq];	
+			}
+			else {
+				MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
+				[mbc display:self];
+			}		
+		}
+	}
 }
 
-- (void) calendarMonthView:(TKCalendarMonthView*)monthView didSelectDate:(NSDate*)d{
+#pragma -
+#pragma TKCalendarMonthViewDelegate
+
+- (void) calendarMonthView:(TKCalendarMonthView*)monthView didSelectDate:(NSDate*)d{	
 	[self.currentEvents removeAllObjects];
 	for (NSDictionary *entry in self.feedEntries) {
 		//NSLog(@"%@ compared to %@", d, [entry objectForKey:@"date"]);
@@ -211,8 +310,12 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 			[self.currentEvents addObject:entry];
 	}
 	[self.tableView reloadData];
-	self.calendarDayTimelineView.currentDay = d;
-	[self.calendarDayTimelineView reloadDay];
+	
+	if ([self.currentEvents count] && [UtilityMethods isIPadDevice]) {
+		NSIndexPath *selectionPath = [NSIndexPath indexPathForRow:0 inSection:0];
+		[self.tableView selectRowAtIndexPath:selectionPath animated:NO scrollPosition:UITableViewScrollPositionTop];
+		[self tableView:self.tableView didSelectRowAtIndexPath:selectionPath];
+	}
 }	
 
 - (NSArray*) calendarMonthView:(TKCalendarMonthView*)monthView marksFromDate:(NSDate*)startDate toDate:(NSDate*)endDate{
@@ -242,46 +345,62 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 }
 
 
-#pragma mark -
-#pragma mark ODCalendarDayTimelineViewDelegate
-
-#pragma mark -
-#pragma mark Calendar Day Timeline View delegate
-
-- (NSArray *)calendarDayTimelineView:(ODCalendarDayTimelineView*)calendarDayTimeline eventsForDate:(NSDate *)eventDate
-{
-	NSMutableArray *odEvents = [NSMutableArray arrayWithCapacity:[self.currentEvents count]];
-	
-	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-	[dateFormatter setLenient:YES];
-	[dateFormatter setDateFormat:@"M/d/yyyy h:mm a"];
-	
-	for (NSDictionary *eventDict in self.currentEvents) {
+- (void) updateTableOffset{
+	if ([UtilityMethods isIPadDevice]) {
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationDuration:0.4];
 		
-		NSString *eventDateString = [NSString stringWithFormat:@"%@ %@", [eventDict objectForKey:@"dateString"], [eventDict objectForKey:@"timeString"]];
-		NSDate *eventDate = [dateFormatter dateFromString:eventDateString];
-
+		float y =  monthView.frame.size.height;
+		CGRect newSize = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, y);
+		self.tableView.frame = newSize;
 		
-		ODCalendarDayEventView *eventView = [ODCalendarDayEventView eventViewWithFrame:CGRectZero
-																					 id:nil 
-																				  //startDate:[eventDict objectForKey:@"time"]
-																					//endDate:[[eventDict objectForKey:@"time"] addTimeInterval:60 * 60 * 24]
-																			 startDate:eventDate 
-																			   endDate:[eventDate addTimeInterval:60 * 60 * 1]
-																			  //startDate:[[NSDate date]addTimeInterval:60 * 60 * 2] 
-																			  //endDate:[[NSDate date]addTimeInterval:60 * 60 * 24]
-																				  title:[eventDict objectForKey:@"committee"]
-																			   location:[NSString stringWithFormat:@"Location: %@ - (Approx. length)",[eventDict objectForKey:@"location"]]];
-		[odEvents addObject:eventView];
+		newSize = CGRectMake(self.leftShadow.frame.origin.x, self.leftShadow.frame.origin.y, self.leftShadow.frame.size.width, y);
+		self.leftShadow.frame = newSize;
+		
+		newSize = CGRectMake(self.rightShadow.frame.origin.x, self.rightShadow.frame.origin.y, self.rightShadow.frame.size.width, y);
+		self.rightShadow.frame = newSize;
+		
+		[UIView commitAnimations];
 	}
-	[dateFormatter release];
-	
-	return odEvents;
+	else {
+		if (![UtilityMethods isLandscapeOrientation])
+			[super updateTableOffset];
+	}
+	return;				// normally this would move the tableView down as the monthView changes size
 }
 
-- (void)calendarDayTimelineView:(ODCalendarDayTimelineView*)calendarDayTimeline eventViewWasSelected:(ODCalendarDayEventView *)eventView
-{
-	NSLog(@"CalendarDayTimelineView: EventViewWasSelected");
+#pragma mark -
+#pragma mark Search Results Delegate
+- (void) searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
+	[self.monthView setAlpha:0.4f];
+}
+
+- (void) searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller {
+		//[self.monthView selectDate:self.savedDateFromSearch];
+	[self.monthView setAlpha:1.0f];
+	
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
+	BOOL shouldReload = YES;
+	
+	[self.searchResults removeAllObjects];
+	
+	if (searchString) {
+		for (NSDictionary *entry in self.feedEntries) {
+			NSRange committeeRange = [[entry objectForKey:@"committee"] 
+									  rangeOfString:searchString options:(NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch)];
+			
+			NSRange locationRange = [[entry objectForKey:@"location"] 
+									  rangeOfString:searchString options:(NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch)];
+
+			if (committeeRange.location != NSNotFound || locationRange.location != NSNotFound)
+				[self.searchResults addObject:entry];
+		}
+			
+	}
+	
+	return shouldReload;
 }
 
 

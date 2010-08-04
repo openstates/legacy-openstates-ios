@@ -8,15 +8,22 @@
 
 #import <TapkuLibrary/TapkuLibrary.h>
 
-@interface CalendarComboViewController : TKCalendarComboViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate> {
+@interface CalendarComboViewController : TKCalendarMonthTableViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate> {
+	IBOutlet UIWebView	*webView;
+	IBOutlet UIImageView *leftShadow, *rightShadow;
+	IBOutlet UIImageView *portShadow, *landShadow;
 	UIPopoverController *popoverController;
-	NSArray *feedEntries;
-	
-	NSMutableArray *currentEvents;
+	NSArray				*feedEntries;
+	NSMutableArray	*currentEvents;
+	NSMutableArray	*searchResults;
 
 }
+@property (nonatomic, retain) UIImageView *leftShadow, *rightShadow;
+@property (nonatomic, retain) UIImageView *portShadow, *landShadow;
+@property (nonatomic, retain) UIWebView *webView;
 @property (nonatomic, retain) UIPopoverController *popoverController;
 @property (nonatomic, retain) NSArray *feedEntries;
 @property (nonatomic, retain) NSMutableArray *currentEvents;
+@property (nonatomic, retain) NSMutableArray *searchResults;
 
 @end

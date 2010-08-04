@@ -20,7 +20,7 @@
 
 
 - (NSString *)navigationBarName
-{ return @"Committee Meetings"; }
+{ return @"Upcoming Meetings"; }
 
 - (NSString *)name
 { return @"Meetings"; }
@@ -58,8 +58,8 @@
 	if (self !=nil) {
 		/* Build a list of files */		
 		self.calendarList = [NSArray arrayWithObjects:
-							 @"All Committee Meetings", @"House Committee Meetings", 
-							 @"Senate Committee Meetings", @"Joint Committee Meetings", nil];		
+							 @"All Upcoming Meetings", @"Upcoming House Meetings", 
+							 @"Upcoming Senate Meetings", @"Upcoming Joint Meetings", nil];		
 	}
 	return self;
 }
@@ -182,7 +182,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {		
-	static NSString *CellIdentifier = @"Cell";
+	static NSString *CellIdentifier = @"CalendarCell";
 	NSInteger row = indexPath.row;
 	
 	/* Look up cell in the table queue */
@@ -199,7 +199,9 @@
 	
 	cell.textLabel.text = [self.calendarList objectAtIndex:row];
 	cell.textLabel.textAlignment = UITextAlignmentLeft;
+	
 	cell.textLabel.font = [UIFont boldSystemFontOfSize:15];
+		
 	
 	return cell;
 }

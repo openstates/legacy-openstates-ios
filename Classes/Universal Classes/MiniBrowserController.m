@@ -160,10 +160,17 @@ static MiniBrowserController *s_browser = nil;
 {
 	[super viewDidLoad];
 
-	[self.m_webView setBackgroundColor:[UIColor clearColor]];
-	[self.m_webView setOpaque:NO];
+	if ([UtilityMethods isIPadDevice]) {
+		[self.m_webView setBackgroundColor:[UIColor clearColor]];
+		[self.m_webView setOpaque:NO];
+		self.view.backgroundColor = self.sealColor;
+	}
+	else {
+		[self.m_webView setBackgroundColor:[UIColor whiteColor]];
+		[self.m_webView setOpaque:YES];
+		self.view.backgroundColor = [UIColor whiteColor];
+	}
 	
-	self.view.backgroundColor = self.sealColor;
 
 	//[m_activity stopAnimating];
 	//[m_loadingLabel setHidden:YES];

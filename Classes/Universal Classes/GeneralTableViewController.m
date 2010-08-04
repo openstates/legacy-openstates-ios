@@ -38,13 +38,27 @@
 @implementation GeneralTableViewController
 
 
-@synthesize theTableView, dataSource, detailViewController;
-@synthesize menuButton;
+@synthesize /*theTableView,*/ dataSource, detailViewController;
+@synthesize menuButton, selectIndexPathOnAppear;
 
 @synthesize searchBar, savedSearchTerm, searchWasActive;
 #if _searchcontroller_
 @synthesize searchController, savedScopeButtonIndex;
 #endif
+
+- (void)showPopoverMenus:(BOOL)show {
+	if (self.splitViewController && show) {
+		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+		if (self.menuButton == nil) {
+			self.menuButton = [[UIBarButtonItem alloc] initWithTitle:@"Menu" style:UIBarButtonItemStylePlain target:appDelegate 
+															  action:@selector(showOrHideMenuPopover:)];
+		}
+		[self.navigationItem setLeftBarButtonItem:self.menuButton animated:YES];
+	}
+	else {
+		[self.navigationItem setLeftBarButtonItem:nil animated:YES];
+	}
+}
 
 
 - (void)setStoredSelectionWithRow:(NSInteger)row section:(NSInteger)section {
@@ -79,7 +93,7 @@
 
 
 - (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context {
-	theTableView = nil;
+		//self.tableView = nil;
 	self.dataSource = [[sourceClass alloc] initWithManagedObjectContext:context];
 	self.title = [dataSource name];	
 	// set the long name shown in the navigation bar
@@ -87,11 +101,11 @@
 }
 
 - (void)dealloc {
-	self.theTableView = nil;
+	self.tableView = nil;
 	self.dataSource = nil; 
 	self.searchBar = nil;
 	self.menuButton = nil;
-			
+	self.selectIndexPathOnAppear = nil;
 #if _searchcontroller_
 	self.searchController = nil;
 #endif
@@ -115,55 +129,211 @@
 	// create a new table using the full application frame
 	// we'll ask the datasource which type of table to use (plain or grouped)
 	CGRect tempFrame = [[UIScreen mainScreen] applicationFrame];
-	UITableView *tableView = [[UITableView alloc] initWithFrame:tempFrame 
+	self.tableView = [[UITableView alloc] initWithFrame:tempFrame 
 														  style:[dataSource tableViewStyle]];
 	
 	// set the autoresizing mask so that the table will always fill the view
-	tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
-	tableView.autoresizesSubviews = YES;
+	self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
+	self.tableView.autoresizesSubviews = YES;
 	
 	// set the cell separator to a single straight line.
-	tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-	tableView.separatorColor = [UIColor lightGrayColor];
+	self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+	self.tableView.separatorColor = [UIColor lightGrayColor];
 	
 	// set the tableview delegate to this object and the datasource to the datasource which has already been set
-	tableView.delegate = self;
-	tableView.dataSource = dataSource;
+	self.tableView.delegate = self;
+	self.tableView.dataSource = dataSource;
 	
-	tableView.sectionIndexMinimumDisplayRowCount=15;
+	self.tableView.sectionIndexMinimumDisplayRowCount=15;
 	
 	if (dataSource.name == @"Directory")
-		tableView.rowHeight = dataSource.rowHeight;
+		self.tableView.rowHeight = dataSource.rowHeight;
 
 	// set the tableview as the controller view
-    self.theTableView = tableView;
-	self.view = tableView;
-	[tableView release];	
+	self.view = self.tableView;
 }
 
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)newIndexPath {
+-(void)viewDidLoad {
+	[super viewDidLoad];
+		//self.clearsSelectionOnViewWillAppear = NO;
+	
+		// FETCH CORE DATA
+	if ([dataSource usesCoreData])
+	{		
+		NSError *error;
+		
+			// You've got to delete the cache, or disable caching before you modify the predicate...
+		[NSFetchedResultsController deleteCacheWithName:[[dataSource fetchedResultsController] cacheName]];
+		
+		if (![[dataSource fetchedResultsController] performFetch:&error]) {
+				// Handle the error...
+		}		
+	}
+	
+	if ([dataSource canEdit]) { // later change this to "usesEditing" or something
+	    self.navigationItem.rightBarButtonItem = self.editButtonItem;		
+		self.tableView.allowsSelectionDuringEditing = YES;
+	}
+	
+	if ([dataSource usesToolbar]) {
+		[self toolBarSetup];
+	}
+	
+	if ([dataSource usesSearchbar])
+	{		
+			// Restore search settings if they were saved in didReceiveMemoryWarning.
+		if (self.savedSearchTerm)
+		{
+#if _searchcontroller_
+			[self.searchController setActive:self.searchWasActive];
+			[self.searchBar setSelectedScopeButtonIndex:self.savedScopeButtonIndex];
+#endif
+			[self.searchBar setText:savedSearchTerm];
+			self.savedSearchTerm = nil;
+		}
+	}	
+	
+	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+	if (appDelegate.savedLocation != nil && [[appDelegate.savedLocation objectAtIndex:0] integerValue] == [appDelegate indexForFunctionalViewController:self]) {
+			// save off this level's selection to our AppDelegate
+			//[self validateStoredSelection];
+		NSInteger rowSelection = [[appDelegate.savedLocation objectAtIndex:1] integerValue];
+		NSInteger sectionSelection = [[appDelegate.savedLocation objectAtIndex:2] integerValue];
+		
+		if (rowSelection != -1)
+			self.selectIndexPathOnAppear = [NSIndexPath indexPathForRow:rowSelection inSection:sectionSelection];
+	}
+    
+}
+
+
+- (void)viewWillAppear:(BOOL)animated
+{	
+	[super viewWillAppear:animated];
+	
+	[self validateStoredSelection];
+	
+	self.navigationController.toolbarHidden = ![dataSource usesToolbar];
+	
+	if ([dataSource usesSearchbar]) {
+		
+		if (self.searchBar == nil) {
+			self.searchBar = [[[UISearchBar alloc] initWithFrame:CGRectZero] retain];
+			self.searchBar.placeholder = @"Search";	
+			self.searchBar.autocorrectionType = UITextAutocorrectionTypeNo; // Don't get in the way of user typing.
+			self.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone; // Don't capitalize each word.
+			self.searchBar.delegate = self; // Become delegate to detect changes in scope.
+			self.searchBar.contentMode = UIViewContentModeTopLeft;
+			self.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:@"All", @"House", @"Senate", nil];
+				//self.searchBar.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
+			self.searchBar.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+				//self.searchBar.tintColor = [[UIColor alloc] initWithRed:0.75 green:0.80 blue:0.80 alpha:1.0];
+			self.searchBar.barStyle = UIBarStyleBlack;
+			self.searchBar.showsScopeBar = NO;
+			[self.searchBar sizeToFit];
+			
+		}
+		CGRect searchBounds = self.searchBar.bounds;
+		searchBounds.size.width = self.view.bounds.size.width;
+		self.searchBar.bounds = searchBounds;
+		
+		
+#if _searchcontroller_
+		if (self.searchController == nil) {
+			self.searchController = [[[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self] retain];
+			[self.searchController setSearchResultsDataSource:dataSource];
+			[self.searchController setSearchResultsDelegate:self];
+			[self.searchController setDelegate:self];
+		}
+		[self.view addSubview:self.searchController.searchBar];
+		[self.dataSource setHideTableIndex:YES];
+		
+#else
+		self.navigationItem.titleView = self.searchBar;
+#endif
+		//self.navigationController.navigationBar.clipsToBounds = TRUE;
+	}
+	
+	if ([UtilityMethods isIPadDevice] && self.selectIndexPathOnAppear == nil) {
+		NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
+		if (currentIndexPath == nil && ![dataSource.name isEqualToString:@"Resources"])  {
+			NSUInteger ints[2] = {0,0};
+			currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
+		}
+		self.selectIndexPathOnAppear = currentIndexPath;
+	}	
+		// force the tableview to load
+	[self.tableView reloadData];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	
+	[self showPopoverMenus:[UtilityMethods isLandscapeOrientation]];
+	
+	if (self.selectIndexPathOnAppear)  {		// if we have prepared a particular selection, do it
+		if (self.selectIndexPathOnAppear.row < [dataSource tableView:self.tableView numberOfRowsInSection:self.selectIndexPathOnAppear.section])
+		{
+			[self.tableView selectRowAtIndexPath:self.selectIndexPathOnAppear animated:animated scrollPosition:UITableViewScrollPositionTop];
+			[self tableView:self.tableView didSelectRowAtIndexPath:self.selectIndexPathOnAppear];		
+		}
+
+	}	
+	
+#if _searchcontroller_
+		// this is a hack so that the index does not show up on top of the search bar
+	if ([dataSource usesSearchbar]) {
+		[self.searchDisplayController setActive:YES];
+		[self.searchDisplayController setActive:NO];
+		[super viewDidAppear:animated];
+	}
+#endif
+	
+	if (self.splitViewController == nil)
+		[self resetStoredSelection];
+	
+}
+
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	if ([UtilityMethods isIPadDevice] == NO && [dataSource usesSearchbar]) {
+		self.navigationItem.titleView = nil;
+	}
+}
+
+#pragma -
+#pragma UITableViewDelegate
+
+- (void)tableView:(UITableView *)aTableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)newIndexPath {
 	if (dataSource.name == @"Resources") { // just select the row, nothing special.
-		[self tableView:tableView didSelectRowAtIndexPath:newIndexPath];
+		[aTableView.delegate tableView:aTableView didSelectRowAtIndexPath:newIndexPath];
 	}
 }
 
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (dataSource.name == @"Resources"){ // has it's own special controller...
-		 return [(LinksMenuDataSource *) dataSource tableView:tableView willSelectRowAtIndexPath:indexPath];
+
+- (NSIndexPath *)tableView:(UITableView *)aTableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	NSIndexPath *rowToSelect = indexPath;
+	if (dataSource.name == @"Resources" && aTableView.isEditing && indexPath.section == 0)
+	{ 
+		[aTableView deselectRowAtIndexPath:indexPath animated:YES];
+		rowToSelect = nil;    
 	}
-	else 
-		return indexPath;
-}	
+		
+	return rowToSelect;
+}
+
 
 // the user selected a row in the table.
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
 	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]) && (self.splitViewController != nil);
 
 	UIViewController *openInController = (isSplitViewDetail) ? self.detailViewController : self;
 	
 	// deselect the new row using animation
 	if ([UtilityMethods isIPadDevice] == NO)
-		[tableView deselectRowAtIndexPath:newIndexPath animated:animated];	
+		[aTableView deselectRowAtIndexPath:newIndexPath animated:animated];	
 	
 	if (!openInController) {
 		NSLog(@"Error opening detail controller from GeneralTableViewController:didSelect ...");
@@ -177,7 +347,7 @@
 		LinksMenuDataSource * tempDataSource = (LinksMenuDataSource *)dataSource;
 		BOOL addLinkRow = [tempDataSource isAddLinkPlaceholderAtIndexPath:newIndexPath];
 		
-		if (addLinkRow || theTableView.isEditing) {
+		if (addLinkRow || aTableView.isEditing) {
 			// we're editing links, or adding new ones.
 			
 			LinksDetailViewController *linksDetail = 
@@ -196,12 +366,10 @@
 				[linksDetail release];
 			}
 		}
-		else // we're not editing web links
+		else // we're not editing or adding web links, someone wants to really go somewhere
 		{
-			NSArray * actionArray = [tempDataSource getActionForRowAtIndexPath:newIndexPath];
+			NSString * action = [tempDataSource getLinkForRowAtIndexPath:newIndexPath];
 			
-			NSString * action = [NSString stringWithString:[actionArray objectAtIndex:1]];
-			NSNumber * destination = [actionArray objectAtIndex:0];
 			TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 			
 			if ([action isEqualToString:@"aboutView"]) {
@@ -214,23 +382,18 @@
 				NSURL *url = [UtilityMethods safeWebUrlFromString:action];
 				
 				if ([UtilityMethods canReachHostWithURL:url]) { // got a network connection
-					if (destination.integerValue == URLAction_internalBrowser) {
-						MiniBrowserController *mbc = nil;
+					MiniBrowserController *mbc = nil;
 						
-						// we might already have a browser loaded and ready to go
-						if (self.detailViewController && [self.detailViewController isKindOfClass:[MiniBrowserController class]]) {
-							mbc = (MiniBrowserController *) self.detailViewController;
-							[mbc loadURL:url];
-						}
-						else
-							mbc = [MiniBrowserController sharedBrowserWithURL:url];
+					// we might already have a browser loaded and ready to go
+					if (self.detailViewController && [self.detailViewController isKindOfClass:[MiniBrowserController class]]) {
+						mbc = (MiniBrowserController *) self.detailViewController;
+						[mbc loadURL:url];
+					}
+					else
+						mbc = [MiniBrowserController sharedBrowserWithURL:url];
 
-						if (isSplitViewDetail == NO)
-							[mbc display:openInController];
-					}
-					else { // (destination == URLAction_externalBrowser)
-						[UtilityMethods openURLWithTrepidation:url];
-					}
+					if (isSplitViewDetail == NO)
+						[mbc display:openInController];
 				}
 			}
 		}
@@ -240,45 +403,55 @@
 		if (self.detailViewController == nil)
 			self.detailViewController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
 		
-		[self.detailViewController setValue:[dataSource committeeDataForIndexPath:newIndexPath] forKey:@"committee"];
-		
-		if (isSplitViewDetail == NO) {
-			// push the detail view controller onto the navigation stack to display it
-			[self.navigationController pushViewController:self.detailViewController animated:YES];
-			self.detailViewController = nil;
-		}		
+		CommitteeObj *committee = [dataSource committeeDataForIndexPath:newIndexPath];
+		if (committee) {			
+			[self.detailViewController setValue:committee forKey:@"committee"];
+			if (isSplitViewDetail == NO) {
+					// push the detail view controller onto the navigation stack to display it
+				[openInController.navigationController pushViewController:self.detailViewController animated:YES];
+				self.detailViewController = nil;
+			}		
+		}
+
 	}
 	else if (dataSource.name == @"Directory") {
 		if (self.detailViewController == nil)	// just assume it's a typical legislator detail (could be corePlot though)
 			self.detailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
 
-		if ([self.detailViewController respondsToSelector:@selector(setLegislator:)])
-			[self.detailViewController performSelector:@selector(setLegislator:) withObject:[dataSource legislatorDataForIndexPath:newIndexPath]];
-		
-		//((LegislatorDetailViewController *)self.detailViewController).legislator = [dataSource legislatorDataForIndexPath:newIndexPath];
-		//[self.detailViewController setValue:[dataSource legislatorDataForIndexPath:newIndexPath] forKey:@"legislator"];
-		
-		if (isSplitViewDetail == NO) {
-			// push the detail view controller onto the navigation stack to display it
-			[openInController.navigationController pushViewController:self.detailViewController animated:YES];
-			self.detailViewController = nil;
+		LegislatorObj *legislator = [dataSource legislatorDataForIndexPath:newIndexPath];
+		if (legislator) {
+			if ([self.detailViewController respondsToSelector:@selector(setLegislator:)])
+				[self.detailViewController performSelector:@selector(setLegislator:) withObject:legislator];
+			if (isSplitViewDetail == NO) {
+					// push the detail view controller onto the navigation stack to display it
+				[openInController.navigationController pushViewController:self.detailViewController animated:YES];
+				self.detailViewController = nil;
+			}			
 		}
 	}
-	else if (dataSource.name == @"Meetings") {
-		if (self.detailViewController == nil) {
-			if ([UtilityMethods isIPadDevice])
-				self.detailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController" bundle:nil];
-			else
-				self.detailViewController = [[TKCalendarMonthTableViewController alloc] init];
+	else if (dataSource.name == @"Meetings") {	
+		if (!self.detailViewController) {
+			self.detailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController" bundle:nil];
 		}
-		if ([self.detailViewController respondsToSelector:@selector(setFeedEntries:)])
-			[self.detailViewController setValue:[dataSource feedEntriesForIndexPath:newIndexPath] forKey:@"feedEntries"];
 		
-		if (isSplitViewDetail == NO) {
-			// push the detail view controller onto the navigation stack to display it
-			[self.navigationController pushViewController:self.detailViewController animated:YES];
-			self.detailViewController = nil;
-		}		
+		NSArray *feedEntries = [dataSource feedEntriesForIndexPath:newIndexPath];
+		if (feedEntries) {			
+			if ([self.detailViewController respondsToSelector:@selector(setFeedEntries:)])
+				[self.detailViewController setValue:feedEntries forKey:@"feedEntries"];
+			NSArray *placeholderArray = [[NSArray alloc] initWithObjects:@"All upcoming meetings", @"House upcoming meetings",@"Senate upcoming meetings",@"Joint upcoming meetings", nil ];
+			
+			if (isSplitViewDetail == NO) {
+					// push the detail view controller onto the navigation stack to display it
+				((UIViewController *)self.detailViewController).hidesBottomBarWhenPushed = YES;
+				
+				[openInController.navigationController pushViewController:self.detailViewController animated:YES];
+				[self.detailViewController searchDisplayController].searchBar.placeholder = [placeholderArray objectAtIndex:newIndexPath.row];
+				self.detailViewController = nil;
+			}		
+			else
+				[self.detailViewController searchDisplayController].searchBar.placeholder = [placeholderArray objectAtIndex:newIndexPath.row];
+			[placeholderArray release];
+		}
 	}	
 	else {
 		if (dataSource.name != @"Maps")
@@ -289,18 +462,20 @@
 			self.detailViewController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
 		}
 				
-		[self.detailViewController setMap:[dataSource capitolMapForIndexPath:newIndexPath]];
-		
-		if (isSplitViewDetail == NO) {
-			// push the detail view controller onto the navigation stack to display it
-			[[self navigationController] pushViewController:self.detailViewController animated:animated];
-			self.detailViewController = nil;
+		CapitolMap *capitolMap = [dataSource capitolMapForIndexPath:newIndexPath];
+		if (capitolMap) {
+			[self.detailViewController setMap:capitolMap];
+			if (isSplitViewDetail == NO) {
+					// push the detail view controller onto the navigation stack to display it				
+				[openInController.navigationController pushViewController:self.detailViewController animated:YES];
+				self.detailViewController = nil;
+			}
 		}
 	}
 }
 
 // the *user* selected a row in the table, so turn on animations and save their selection.
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath {
 	
 	// they clicked a web link ... don't restore it or it might go to Safari on startup!
 	if (dataSource.name == @"Resources") 
@@ -308,7 +483,7 @@
 	else // save off this item's selection to our AppDelegate
 		[self setStoredSelectionWithRow:newIndexPath.row section:newIndexPath.section];
 	
-	[self tableView:tableView didSelectRowAtIndexPath:newIndexPath withAnimation:YES];
+	[self tableView:aTableView didSelectRowAtIndexPath:newIndexPath withAnimation:YES];
 	
 	// if we have a stack of view controllers and someone selected a new cell from our master list, 
 	//	lets go all the way back to accomodate their selection, and scroll to the top.
@@ -327,180 +502,20 @@
 				[detailTable scrollRectToVisible:guessTop animated:YES];
 			}
 		}
+		
+		if (detailTable && dataSource.name == @"Meetings")
+			[detailTable reloadData];		// don't we already do this in our own combo detail controller?
 	}
 }
 
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 	if (self.dataSource.name == @"Directory") {
 		// let's override some of the datasource's settings ... specifically, the background color.
 		cell.backgroundColor = ((LegislatorMasterTableViewCell *)cell).useDarkBackground ? DARK_BACKGROUND : LIGHT_BACKGROUND;
 	}
 }
-
-- (void)showPopoverMenus:(BOOL)show {
-	if (self.splitViewController && show) {
-		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-		if (self.menuButton == nil) {
-			self.menuButton = [[UIBarButtonItem alloc] initWithTitle:@"Menu" style:UIBarButtonItemStylePlain target:appDelegate 
-															  action:@selector(showOrHideMenuPopover:)];
-		}
-		[self.navigationItem setLeftBarButtonItem:self.menuButton animated:YES];
-	}
-	else {
-		[self.navigationItem setLeftBarButtonItem:nil animated:YES];
-	}
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-	
-	[self validateStoredSelection];
-
-	if (/*[UtilityMethods isIPadDevice] == NO &&*/ [dataSource usesToolbar])
-		self.navigationController.toolbarHidden = NO;
-	
-	[self showPopoverMenus:[UtilityMethods isLandscapeOrientation]];
-	
-	if ([UtilityMethods isIPadDevice]) {
-		if ([self.theTableView indexPathForSelectedRow] == nil && ![dataSource.name isEqualToString:@"Resources"])  {
-			NSUInteger ints[2] = {0,0};
-			NSIndexPath* indexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
-			[self.theTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
-			[self tableView:self.theTableView didSelectRowAtIndexPath:indexPath];
-			//self.detailViewController.legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
-		}
-	}	
-	
-	if ([dataSource usesSearchbar]) {
-		
-		if (self.searchBar == nil) {
-			self.searchBar = [[[UISearchBar alloc] initWithFrame:CGRectZero] retain];
-			self.searchBar.placeholder = @"Search";	
-			self.searchBar.autocorrectionType = UITextAutocorrectionTypeNo; // Don't get in the way of user typing.
-			self.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone; // Don't capitalize each word.
-			self.searchBar.delegate = self; // Become delegate to detect changes in scope.
-			self.searchBar.contentMode = UIViewContentModeTopLeft;
-			self.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:@"All", @"House", @"Senate", nil];
-			//self.searchBar.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
-			self.searchBar.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
-			//self.searchBar.tintColor = [[UIColor alloc] initWithRed:0.75 green:0.80 blue:0.80 alpha:1.0];
-			self.searchBar.barStyle = UIBarStyleBlack;
-			self.searchBar.showsScopeBar = NO;
-			[self.searchBar sizeToFit];
-
-		}
-		CGRect searchBounds = self.searchBar.bounds;
-		searchBounds.size.width = self.view.bounds.size.width;
-		self.searchBar.bounds = searchBounds;
-		
-		
-#if _searchcontroller_
-		if (self.searchController == nil) {
-			self.searchController = [[[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self] retain];
-			[self.searchController setSearchResultsDataSource:dataSource];
-			[self.searchController setSearchResultsDelegate:self];
-			[self.searchController setDelegate:self];
-		}
-		[self.view addSubview:self.searchController.searchBar];
-		[self.dataSource setHideTableIndex:YES];
-
-#else
-		self.navigationItem.titleView = self.searchBar;
-#endif
-		
-		self.navigationController.navigationBar.clipsToBounds = TRUE;
-		
-	}
-	
-	// force the tableview to load
-	[theTableView reloadData];
-}
-
--(void)viewWillDisappear:(BOOL)animated
-{
-	if ([UtilityMethods isIPadDevice] == NO && [dataSource usesSearchbar]) {
-		self.navigationItem.titleView = nil;
-	}
-}
-
--(void)viewDidLoad {
-	
-	//self.clearsSelectionOnViewWillAppear = NO;
-
-	// FETCH CORE DATA
-	if ([dataSource usesCoreData])
-	{		
-		NSError *error;
-
-		// You've got to delete the cache, or disable caching before you modify the predicate...
-		[NSFetchedResultsController deleteCacheWithName:[[dataSource fetchedResultsController] cacheName]];
-		
-		if (![[dataSource fetchedResultsController] performFetch:&error]) {
-			// Handle the error...
-		}		
-	}
-	
-	if ([dataSource canEdit]) { // later change this to "usesEditing" or something
-	    self.navigationItem.rightBarButtonItem = self.editButtonItem;		
-		self.theTableView.allowsSelectionDuringEditing = YES;
-	}
-
-	if ([dataSource usesToolbar]) {
-		[self toolBarSetup];
-	}
-	
-	if ([dataSource usesSearchbar])
-	{		
-		// Restore search settings if they were saved in didReceiveMemoryWarning.
-		if (self.savedSearchTerm)
-		{
-#if _searchcontroller_
-			[self.searchController setActive:self.searchWasActive];
-			[self.searchBar setSelectedScopeButtonIndex:self.savedScopeButtonIndex];
-#endif
-			[self.searchBar setText:savedSearchTerm];
-			self.savedSearchTerm = nil;
-		}
-	}	
-	
-	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-
-	if (appDelegate.savedLocation != nil) {
-		// save off this level's selection to our AppDelegate
-		[self validateStoredSelection];
-		NSInteger rowSelection = [[appDelegate.savedLocation objectAtIndex:1] integerValue];
-		NSInteger sectionSelection = [[appDelegate.savedLocation objectAtIndex:2] integerValue];
-		
-		//debug_NSLog(@"Restoring Selection: Row: %d    Section: %d", rowSelection, sectionSelection);
-		
-		if (rowSelection != -1) {
-			NSIndexPath *selectionPath = [NSIndexPath indexPathForRow:rowSelection inSection:sectionSelection];
-			
-			[self.theTableView selectRowAtIndexPath:selectionPath animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-			[self tableView:self.theTableView didSelectRowAtIndexPath:selectionPath withAnimation:NO];
-			
-		}
-	}
-    
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-#if _searchcontroller_
-	// this is a hack so that the index does not show up on top of the search bar
-	if ([dataSource usesSearchbar]) {
-		[self.searchDisplayController setActive:YES];
-		[self.searchDisplayController setActive:NO];
-		[super viewDidAppear:animated];
-	}
-#endif
-	
-	if (self.splitViewController == nil)
-		[self resetStoredSelection];
-	
-}
-
 
 #pragma mark -
 #pragma mark ToolBar Methods
@@ -555,9 +570,13 @@
 	if ( [dataSource usesToolbar] )
 	{
 		[self filterContentForSearchText:self.searchBar.text scope:[sender selectedSegmentIndex]];
-		[self.theTableView reloadData];
+		[self.tableView reloadData];
 	}
 }
+
+
+#pragma mark -
+#pragma mark SearchBar Methods
 
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSInteger)scope
 {
@@ -578,9 +597,6 @@
 }
 
 
-#pragma mark -
-#pragma mark SearchBar Methods
-
 #if _searchcontroller_ == 0
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
@@ -591,7 +607,7 @@
 	else
 		[self.dataSource removeFilter];
 	
-	[self.theTableView reloadData];
+	[self.tableView reloadData];
 
 }
 
@@ -607,7 +623,7 @@
 		[self.dataSource setHideTableIndex:NO];
 		[self.searchBar setShowsCancelButton:NO animated:YES];
 	}
-	[self.theTableView reloadData];
+	[self.tableView reloadData];
 }
 
 
@@ -654,18 +670,18 @@
 #pragma mark -
 #pragma mark Orientation
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation { // Override to allow rotation. Default returns YES only for UIDeviceOrientationPortrait
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation { 	
 	return YES;
 }
 
 #pragma mark -
 #pragma mark Editing Table
 
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCellEditingStyle style = UITableViewCellEditingStyleNone;
 
-	if ([dataSource usesCoreData] && [dataSource canEdit]) {
-		style = [dataSource tableView:tableView editingStyleForRowAtIndexPath:indexPath];
+	if ([self.dataSource usesCoreData] && [self.dataSource canEdit]) {
+		style = [self.dataSource tableView:aTableView editingStyleForRowAtIndexPath:indexPath];
     }
     return style;
 }
@@ -678,7 +694,7 @@
 		[super setEditing:editing animated:animated];
 		[self.navigationItem setHidesBackButton:editing animated:YES];
 
-		[theTableView setEditing:editing animated:YES];
+		[self.tableView setEditing:editing animated:YES];
 
 		//[theTableView beginUpdates];
 		[dataSource setEditing:editing animated:animated];
@@ -688,10 +704,10 @@
 }
 
 
-- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {
+- (NSIndexPath *)tableView:(UITableView *)aTableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {
 	NSIndexPath * tempPath = nil;
     if ([dataSource usesCoreData] && [dataSource canEdit]) {
-		tempPath = [dataSource tableView:tableView targetIndexPathForMoveFromRowAtIndexPath:sourceIndexPath toProposedIndexPath:proposedDestinationIndexPath];
+		tempPath = [dataSource tableView:aTableView targetIndexPathForMoveFromRowAtIndexPath:sourceIndexPath toProposedIndexPath:proposedDestinationIndexPath];
 	}
 	return tempPath;
 }

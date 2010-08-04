@@ -12,19 +12,20 @@
 
 #define _searchcontroller_ 0
 
-@interface GeneralTableViewController : UIViewController < UITableViewDelegate, UISearchBarDelegate 
+@interface GeneralTableViewController : UITableViewController < UITableViewDelegate, UISearchBarDelegate 
 #if _searchcontroller_
 			,UISearchDisplayDelegate
 #endif
 > {
 
-	UITableView *theTableView;
+		//UITableView *theTableView;
 	id<TableDataSource> dataSource;
 	id detailViewController;
 	
 	UISearchBar		*searchBar;
     NSString	*savedSearchTerm;
     BOOL		searchWasActive;
+	NSIndexPath *selectIndexPathOnAppear;
 	
 	IBOutlet UIBarButtonItem *menuButton;
 	
@@ -37,8 +38,8 @@
 //@property (nonatomic, retain) NSMutableArray savedLocation;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *menuButton;
 
-
-@property (nonatomic,retain) UITableView *theTableView;
+@property (nonatomic,retain) NSIndexPath *selectIndexPathOnAppear;
+	//@property (nonatomic,retain) UITableView *theTableView;
 @property (nonatomic,retain) id<TableDataSource> dataSource;
 @property (nonatomic,retain) id detailViewController;
 
