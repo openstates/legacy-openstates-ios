@@ -18,6 +18,33 @@
 @synthesize popoverController;
 
 
+#pragma mark -
+#pragma mark Intialization and Memory Management
+
+- (void)viewDidLoad {
+	self.hidesBottomBarWhenPushed = YES;
+	
+	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
+	UIColor *sealColor = [UIColor colorWithPatternImage:sealImage];		
+	[self.webView setBackgroundColor:[UIColor clearColor]];
+	[self.webView setOpaque:NO];
+	self.view.backgroundColor = sealColor;
+	
+	if (self.map) {
+		self.navigationItem.title = map.name;
+		[self.webView loadRequest:[NSURLRequest requestWithURL:map.url]];
+	}
+	else
+		self.navigationItem.title = @"Maps";
+	
+	//self.navigationController.toolbarHidden = YES;	
+}
+/*
+ - (void)viewWillAppear:(BOOL)animated {
+ [self showPopoverMenus:([UtilityMethods isLandscapeOrientation] == NO)];
+ }
+ */
+
 - (void)dealloc {
 	self.webView = nil;
 	self.map = nil;
@@ -50,33 +77,6 @@
 	}
 }
 
-
-#pragma mark -
-#pragma mark Load Detail Views
-
-- (void)viewDidLoad {
-	//[self.webView reload];
-	//self.hidesBottomBarWhenPushed = NO;
-	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
-	UIColor *sealColor = [UIColor colorWithPatternImage:sealImage];		
-	[self.webView setBackgroundColor:[UIColor clearColor]];
-	[self.webView setOpaque:NO];
-	self.view.backgroundColor = sealColor;
-	
-	if (self.map) {
-		self.navigationItem.title = map.name;
-		[self.webView loadRequest:[NSURLRequest requestWithURL:map.url]];
-	}
-	else
-		self.navigationItem.title = @"Maps";
-
-	//self.navigationController.toolbarHidden = YES;	
-}
-/*
-- (void)viewWillAppear:(BOOL)animated {
-	[self showPopoverMenus:([UtilityMethods isLandscapeOrientation] == NO)];
-}
-*/
 
 #pragma mark -
 #pragma mark Popover Support
