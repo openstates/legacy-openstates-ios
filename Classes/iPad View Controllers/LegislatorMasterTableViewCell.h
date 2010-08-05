@@ -24,6 +24,9 @@
 	
 	UIColor *backgroundLight;
 	UIColor *backgroundDark;
+	UIColor *detailColor;
+	UIColor *typeColor;
+
 }
 
 @property BOOL useDarkBackground;
@@ -35,8 +38,11 @@
 @property (nonatomic,retain) IBOutlet UILabel *leg_nameLab;
 @property (nonatomic,retain) IBOutlet UIView	*leg_sliderViewPlaceHolder;
 @property (nonatomic,retain) IBOutlet StaticGradientSliderView *leg_sliderView;
+
 @property (nonatomic,retain) UIColor *backgroundLight;
 @property (nonatomic,retain) UIColor *backgroundDark;
+@property (nonatomic,retain) UIColor *detailColor;
+@property (nonatomic,retain) UIColor *typeColor;
 
 @property (nonatomic,retain) LegislatorObj *legislator;
 

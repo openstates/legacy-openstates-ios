@@ -11,6 +11,7 @@
 
 #import "LegislatorObj.h"
 #import "UtilityMethods.h"
+#import "TexLegeTheme.h"
 
 @interface LegislatorMasterTableViewCell (Private)
 
@@ -20,16 +21,27 @@
 @implementation LegislatorMasterTableViewCell
 
 @synthesize leg_photoView, leg_titleLab, leg_partyDistLab, leg_tenureLab, leg_nameLab, leg_sliderViewPlaceHolder, leg_sliderView;
-@synthesize legislator, backgroundLight, backgroundDark;
+@synthesize legislator, backgroundLight, backgroundDark, detailColor, typeColor;
 
 - (void)awakeFromNib {
-	//self.backgroundDark = [UIColor colorWithRed:0.592f green:0.596f blue:0.608f alpha:1.0];
-	//self.backgroundLight = [UIColor colorWithRed:0.675f green:0.678f blue:0.686f alpha:1.0];
-	self.backgroundDark = [UIColor colorWithRed:0.855f green:0.914f blue:0.886f alpha:1.0];
-	self.backgroundLight = [UIColor colorWithRed:0.981f green:0.984f blue:0.984f alpha:1.0];;
-	//UIColor *detailColor = [UIColor colorWithRed:0.293f green:0.337f blue:0.384f alpha:1.0];
-	//UIColor *typeColor = [UIColor colorWithRed:0.592f green:0.631f blue:0.651f alpha:1.0];
-
+	self.backgroundDark = [TexLegeTheme backgroundDark];
+	self.backgroundLight = [TexLegeTheme backgroundLight];
+	self.detailColor = [TexLegeTheme textDark];
+	self.typeColor = [TexLegeTheme accent];
+	//self.accessoryView = [TexLegeTheme disclosureLabel:NO];
+	self.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]] autorelease];
+	self.selectionStyle = UITableViewCellSelectionStyleBlue;	
+	
+	self.leg_titleLab.highlightedTextColor = self.leg_partyDistLab.highlightedTextColor = self.leg_tenureLab.highlightedTextColor = self.leg_nameLab.highlightedTextColor = [TexLegeTheme backgroundLight];
+	
+	self.leg_titleLab.textColor = self.leg_partyDistLab.textColor = self.typeColor;
+	self.leg_tenureLab.textColor = [TexLegeTheme textLight];
+	self.leg_nameLab.textColor = self.detailColor;
+	self.leg_nameLab.font = [TexLegeTheme boldFifteen];
+	
+	self.leg_titleLab.font = self.leg_partyDistLab.font = [TexLegeTheme boldTwelve];
+	self.leg_tenureLab.font = [TexLegeTheme boldTwelve];
+	
 }
 
 
@@ -42,37 +54,28 @@
 }
 */
 
-// DARK middle:  151, 152, 155
-// LIGHT middle: 172, 173, 175
-
 - (BOOL)useDarkBackground {
 	return useDarkBackground;
 }
 
 - (void)setUseDarkBackground:(BOOL)flag
 {
-    //if (flag != useDarkBackground || !self.backgroundView)
-    {
-        useDarkBackground = flag;
+	if (self.selected || self.highlighted)
+		return;
+
+	useDarkBackground = flag;
 		
-        //NSString *backgroundImagePath = [[NSBundle mainBundle] pathForResource:useDarkBackground ? @"DarkBackground" : @"LightBackground" ofType:@"png"];
-        //UIImage *backgroundImage = [[UIImage imageWithContentsOfFile:backgroundImagePath] stretchableImageWithLeftCapWidth:0.0 topCapHeight:1.0];
-        //self.backgroundView = [[[UIImageView alloc] initWithImage:backgroundImage] autorelease];
-        //self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        //self.backgroundView.frame = self.bounds;
-		
-		UIColor *labelBGColor = (useDarkBackground) ? self.backgroundDark : self.backgroundLight;
-		self.backgroundColor = labelBGColor;
-		self.backgroundView.backgroundColor = labelBGColor;
-		
-		self.leg_photoView.backgroundColor = labelBGColor;
-		self.leg_titleLab.backgroundColor = labelBGColor;
-		self.leg_partyDistLab.backgroundColor = labelBGColor;
-		self.leg_tenureLab.backgroundColor = labelBGColor;
-		self.leg_nameLab.backgroundColor = labelBGColor;
-		self.leg_sliderViewPlaceHolder.backgroundColor = labelBGColor;
-		self.leg_sliderView.backgroundColor = labelBGColor;
-    }	
+	UIColor *labelBGColor = (useDarkBackground) ? self.backgroundDark : self.backgroundLight;
+	self.backgroundColor = labelBGColor;
+	self.backgroundView.backgroundColor = labelBGColor;
+	self.leg_photoView.backgroundColor = labelBGColor;
+	self.leg_titleLab.backgroundColor = labelBGColor;
+	self.leg_partyDistLab.backgroundColor = labelBGColor;
+	self.leg_tenureLab.backgroundColor = labelBGColor;
+	self.leg_nameLab.backgroundColor = labelBGColor;
+	self.leg_sliderViewPlaceHolder.backgroundColor = labelBGColor;
+	self.leg_sliderView.backgroundColor = labelBGColor;
+
 }
 
 - (void)dealloc {
@@ -80,7 +83,7 @@
 	self.leg_titleLab = self.leg_partyDistLab = self.leg_tenureLab = self.leg_nameLab = nil;
 	self.leg_sliderViewPlaceHolder = self.leg_sliderView = nil;
 	self.legislator = nil;
-	self.backgroundDark = self.backgroundLight = nil;
+	self.backgroundDark = self.backgroundLight = self.typeColor = self.detailColor = nil;
     [super dealloc];
 }
 
@@ -101,7 +104,6 @@
 	if (self.leg_sliderView) {
 		[self.leg_sliderView addToPlaceholder:self.leg_sliderViewPlaceHolder withLegislator:self.legislator];
 		self.leg_sliderView.usesSmallStar = YES;
-		//self.leg_sliderView.sliderValue = self.legislator.partisan_index.floatValue;
 		[self.leg_sliderView setSliderValue:self.legislator.partisan_index.floatValue animated:NO];
 	}
 	
