@@ -50,7 +50,7 @@
 	
 	// For iPhone Interface
 	IBOutlet UITabBarController *tabBarController;
-	IBOutlet GeneralTableViewController *directoryTableTabbedVC, *mapsTableTabbedVC, *linksTableTabbedVC, *calendarsTableTabbedVC;
+	IBOutlet GeneralTableViewController *mapsTableTabbedVC, *linksTableTabbedVC, *calendarsTableTabbedVC;
 	IBOutlet MasterTableViewController *legMasterTableViewController;
 	IBOutlet CommitteeMasterViewController *committeeTableTabbedVC;
 	
@@ -71,7 +71,7 @@
 @property (nonatomic, retain) UIPopoverController *menuPopoverPC;
 
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
-@property (nonatomic, retain) IBOutlet GeneralTableViewController *directoryTableTabbedVC, *mapsTableTabbedVC, *linksTableTabbedVC, *calendarsTableTabbedVC;
+@property (nonatomic, retain) IBOutlet GeneralTableViewController *mapsTableTabbedVC, *linksTableTabbedVC, *calendarsTableTabbedVC;
 
 @property (nonatomic, retain) IBOutlet UISplitViewController *splitViewController;
 @property (nonatomic, retain) IBOutlet UINavigationController *masterNavigationController, *detailNavigationController;
@@ -101,14 +101,11 @@
 - (IBAction)saveAction:sender;
 - (IBAction)showOrHideMenuPopover:(id)sender;
 - (IBAction)showOrHideAboutMenuPopover:(id)sender;
-- (IBAction)touchCommonMenuControl:(id)sender;
 
 - (void)updateStatus;
 - (NSInteger) indexForFunctionalViewController:(id)viewController;
 - (NSInteger) indexForFunctionalViewControllerKey:(NSString *)vcKey;
-
 - (void) changeActiveFeaturedControllerTo:(NSInteger)controllerIndex;
-
 
 - (id) savedTableSelectionForKey:(NSString *)vcKey;
 - (void)setSavedTableSelection:(id)object forKey:(NSString *)vcKey;

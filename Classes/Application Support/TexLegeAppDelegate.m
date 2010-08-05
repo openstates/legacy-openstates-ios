@@ -72,11 +72,11 @@ NSInteger kNoSelection = -1;
 
 @synthesize managedObjectContext;
 
-@synthesize directoryTableTabbedVC, committeeTableTabbedVC, mapsTableTabbedVC, linksTableTabbedVC, calendarsTableTabbedVC;
+@synthesize legMasterTableViewController, committeeTableTabbedVC, mapsTableTabbedVC, linksTableTabbedVC, calendarsTableTabbedVC;
 
 @synthesize masterNavigationController, detailNavigationController;
 @synthesize currentMasterViewController, currentDetailViewController;
-@synthesize splitViewController, legMasterTableViewController;
+@synthesize splitViewController;
 
 + (TexLegeAppDelegate *)appDelegate {
 	return (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -116,11 +116,11 @@ NSInteger kNoSelection = -1;
 	self.voteInfoView = nil;
 	self.tabBarController = nil;
 	self.splitViewController = nil;
-	self.legMasterTableViewController = nil;
 	self.appirater = nil;
 	self.mainWindow = nil;    
 	
-	self.directoryTableTabbedVC = self.mapsTableTabbedVC = self.linksTableTabbedVC = self.calendarsTableTabbedVC = nil;
+	self.mapsTableTabbedVC = self.linksTableTabbedVC = self.calendarsTableTabbedVC = nil;
+	self.legMasterTableViewController = nil;
 	self.committeeTableTabbedVC = nil;
 
 	self.managedObjectContext = nil;
@@ -251,29 +251,19 @@ NSInteger kNoSelection = -1;
 	
 	BOOL isIpad = [UtilityMethods isIPadDevice];
 	
-	if (isIpad) {
-		if (splitViewController == nil) 
+	if (isIpad && self.splitViewController == nil) 
 			[[NSBundle mainBundle] loadNibNamed:@"SplitViewController" owner:self options:NULL];
-		if (self.legMasterTableViewController == nil)
-			[[NSBundle mainBundle] loadNibNamed:@"MasterTableViewController" owner:self options:NULL];
-	}
-	else
-		if (self.tabBarController == nil)
+	else if (!isIpad && self.tabBarController == nil)
 			[[NSBundle mainBundle] loadNibNamed:@"iPhoneTabBarController" owner:self options:nil];
 	
 	
-	if (isIpad) [self.functionalViewControllers addObject:self.legMasterTableViewController];	// 0
-	else		[self.functionalViewControllers addObject:self.directoryTableTabbedVC];			// 0
-	
+	[self.functionalViewControllers addObject:self.legMasterTableViewController];		// 0
 	[self.functionalViewControllers addObject:self.committeeTableTabbedVC];				// 1
 	[self.functionalViewControllers addObject:self.calendarsTableTabbedVC];				// 2
 	[self.functionalViewControllers addObject:self.mapsTableTabbedVC];					// 3
 	[self.functionalViewControllers addObject:self.linksTableTabbedVC];					// 4
 	
-	if (isIpad)	[self.legMasterTableViewController configureWithDataSourceClass:
-						[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext]; 
-	else		[self.directoryTableTabbedVC configureWithDataSourceClass:
-						[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext];
+	[self.legMasterTableViewController configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext]; 
 	[self.committeeTableTabbedVC configureWithDataSourceClass:[CommitteesDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.calendarsTableTabbedVC configureWithDataSourceClass:[CalendarDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.mapsTableTabbedVC configureWithDataSourceClass:[CapitolMapsDataSource class] andManagedObjectContext:self.managedObjectContext];
@@ -303,7 +293,8 @@ NSInteger kNoSelection = -1;
 
 // Should we use this newer one instead?
 // - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-- (void)applicationDidFinishLaunching:(UIApplication *)application {		
+- (void)applicationDidFinishLaunching:(UIApplication *)application {	
+		
 	/*
      You can use the Reachability class to check the reachability of a remote host
      by specifying either the host's DNS name (www.apple.com) or by IP address.
@@ -477,17 +468,13 @@ NSInteger kNoSelection = -1;
 	
 	aboutView = [[[AboutViewController alloc] initWithNibName:@"AboutView" bundle:nil] retain];	
 	aboutView.delegate = self;
-//	aboutView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
 	aboutView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 	aboutView.modalPresentationStyle = UIModalPresentationFormSheet;
-//	aboutView.modalPresentationStyle = UIModalPresentationCurrentContext;
 	
 	voteInfoView = [[[VoteInfoViewController alloc] initWithNibName:@"VoteInfoView" bundle:nil] retain];	
 	voteInfoView.delegate = self;
-//	voteInfoView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
 	voteInfoView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 	voteInfoView.modalPresentationStyle = UIModalPresentationFormSheet;
-//	voteInfoView.modalPresentationStyle = UIModalPresentationCurrentContext;
 	
 }
 
@@ -511,50 +498,6 @@ NSInteger kNoSelection = -1;
 }
 
 
--(IBAction)touchCommonMenuControl:(id)sender {
-	NSInteger selectedSegment = -1;
-	UISegmentedControl *tempCtl = nil;
-	if ([sender isKindOfClass:[UISegmentedControl class]]) {
-		tempCtl = (UISegmentedControl *)sender;
-		selectedSegment = tempCtl.selectedSegmentIndex;
-	}
-	
-	UIViewController *viewController = nil;
-	
-	switch (selectedSegment) {
-		case 0:
-			viewController = self.menuPopoverVC;
-			break;
-		case 1:
-			viewController = self.aboutView;
-			break;
-		default:
-			break;
-	}
-	
-	if (self.menuPopoverPC) {
-        [self.menuPopoverPC dismissPopoverAnimated:YES];
-        self.menuPopoverPC = nil;
-    } else if (viewController) {
-		self.menuPopoverPC = [[UIPopoverController alloc] initWithContentViewController:viewController];
-		//self.menuPopoverPC.popoverContentSize = viewController.view.frame.size;
-		self.menuPopoverPC.popoverContentSize = CGSizeMake(viewController.view.frame.size.width, 300.0f);
-		self.menuPopoverPC.delegate = self;
-		if (tempCtl) { // it's a segmented controller
-			CGRect ctlRect = tempCtl.frame;
-			CGFloat ctlHalfWidth = tempCtl.frame.size.width / [tempCtl numberOfSegments];	// two for right now
-			ctlRect.size.width = ctlHalfWidth;
-			ctlRect.origin.x += (selectedSegment * ctlHalfWidth); // to center it over the selected segment
-			UIView *detailView = [self.detailNavigationController valueForKey:@"view"];
-			[self.menuPopoverPC presentPopoverFromRect:ctlRect inView:detailView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-		}
-		else
-			[self.menuPopoverPC presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-    }
-	
-}
-
-
 //END:code.gestures.color
 //START:code.popover.menu
 -(IBAction)showOrHideAboutMenuPopover:(id)sender {
@@ -565,16 +508,7 @@ NSInteger kNoSelection = -1;
 		self.menuPopoverPC = [[UIPopoverController alloc] initWithContentViewController:self.aboutView];
 		self.menuPopoverPC.popoverContentSize = self.aboutView.view.frame.size;
 		self.menuPopoverPC.delegate = self;
-		if ([sender isKindOfClass:[UISegmentedControl class]]) {
-			UISegmentedControl *tempCtl = (UISegmentedControl *)sender;
-			CGRect ctlRect = tempCtl.frame;
-			ctlRect.size.width = [tempCtl widthForSegmentAtIndex:[tempCtl selectedSegmentIndex]];
-			ctlRect.origin.x = ctlRect.origin.x + (ctlRect.size.width / 2);
-			UIView *detailView = [self.currentDetailViewController valueForKey:@"view"];
-			[self.menuPopoverPC presentPopoverFromRect:ctlRect inView:detailView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-		}
-		else
-			[self.menuPopoverPC presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+		[self.menuPopoverPC presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
 }
 //END:code.popover.menu
@@ -589,14 +523,7 @@ NSInteger kNoSelection = -1;
 		self.menuPopoverPC = [[UIPopoverController alloc] initWithContentViewController:self.menuPopoverVC];
 		self.menuPopoverPC.popoverContentSize = self.menuPopoverVC.view.frame.size;
 		self.menuPopoverPC.delegate = self;
-		if ([sender isKindOfClass:[UISegmentedControl class]]) {
-			UISegmentedControl *tempCtl = (UISegmentedControl *)sender;
-			CGRect ctlRect = tempCtl.frame;
-			ctlRect.size.width = [tempCtl widthForSegmentAtIndex:[tempCtl selectedSegmentIndex]];
-			[self.menuPopoverPC presentPopoverFromRect:ctlRect inView:tempCtl permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-		}
-		else
-			[self.menuPopoverPC presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+		[self.menuPopoverPC presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
 }
 //END:code.popover.menu
@@ -605,9 +532,6 @@ NSInteger kNoSelection = -1;
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
 	// the user (not us) has dismissed the popover, let's cleanup.
 	self.menuPopoverPC = nil;
-	//if (tempCtl)
-	//	[tempCtl setSelectedSegmentIndex:-1];
-
 }
 
 /*
