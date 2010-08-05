@@ -71,7 +71,7 @@
 // return the data used by the navigation controller and tab bar item
 
 - (NSString *)name 
-{ return @"Directory"; }
+{ return @"Legislators"; }
 
 - (NSString *)navigationBarName 
 { return @"Legislator Directory"; }

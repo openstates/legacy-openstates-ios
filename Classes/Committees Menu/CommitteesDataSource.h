@@ -17,8 +17,8 @@
 	NSFetchedResultsController *fetchedResultsController;
 	IBOutlet NSManagedObjectContext *managedObjectContext;	
 	UISearchDisplayController *searchDisplayController;
-
 }
+
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 

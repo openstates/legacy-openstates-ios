@@ -7,6 +7,7 @@
 //
 
 #import "CommitteesDataSource.h"
+#import "TexLegeTheme.h"
 
 @implementation CommitteesDataSource
 
@@ -14,7 +15,6 @@
 
 @synthesize hideTableIndex;
 @synthesize filterChamber, filterString, searchDisplayController;
-
 
 // setup the data collection
 - init {
@@ -26,8 +26,10 @@
 }
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
-	if ([self init])
+	if ([self init]) {
 		if (newContext) self.managedObjectContext = newContext;
+		
+	}
 	return self;
 }
 
@@ -36,7 +38,7 @@
 	self.searchDisplayController = nil;
 	self.managedObjectContext = nil;	
 	self.filterString = nil;
-
+	
     [super dealloc];
 }
 
@@ -69,19 +71,8 @@
 - (BOOL)canEdit
 { return NO; }
 
-- (CGFloat) rowHeight {
-	CGFloat height;
-#if kDeviceSensitiveRowHeight == 1
-	//if (0 /*something about checking to see if a passed in tableView == searchResultsTable*/)
-	//else 
-	if (![UtilityMethods isIPadDevice])	// We're on an iPhone/iTouch
-		height = 44.0f;
-	else
-		// an iPad and not a searchResultsTable
-#endif
-		height = 44.0f;
-	
-	return height;
+- (CGFloat) rowHeight {	
+	return 44.0f;
 }
 
 
@@ -110,9 +101,26 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	BOOL useDark = (indexPath.row % 2 == 0);
+
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Committees"];
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Committees"] autorelease];
+
+		cell.detailTextLabel.font = [TexLegeTheme boldFifteen];
+		cell.textLabel.font =		[TexLegeTheme boldTwelve];
+		cell.detailTextLabel.textColor = 	[TexLegeTheme textDark];
+		cell.textLabel.textColor =	[TexLegeTheme accent];
+		cell.indentationLevel =		-4;
+		
+		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+		cell.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
+		cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+		cell.detailTextLabel.minimumFontSize = 12.0f;
+		//cell.accessoryView = [TexLegeTheme disclosureLabel:YES];
+		cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]] autorelease];
+
+
 	}
     
 #if NEEDS_TO_INITIALIZE_DATABASE
@@ -126,37 +134,17 @@
 		return nil;
 	}
 	
-	// configure cell contents
+	// let's override some of the datasource's settings ... specifically, the background color.
+	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	
-	//cell.indentationLevel = -4;
-	cell.selectionStyle = UITableViewCellSelectionStyleBlue;
 	cell.detailTextLabel.text = tempEntry.committeeName;
-	cell.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
-	cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
-	cell.detailTextLabel.minimumFontSize = 12.0f;
+	cell.textLabel.text = (tempEntry.committeeType.integerValue == HOUSE) ? @"House" : @"Senate";
 
-	if (tempEntry.committeeType.integerValue == HOUSE)
-		cell.textLabel.text = [NSString stringWithString: @"House"];
-	else //if (tempEntry.committeeType == SENATE)
-		cell.textLabel.text = [NSString stringWithString: @"Senate"];
-	
-	// all the rows should show the disclosure indicator
-	if ([self showDisclosureIcon])
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-				
-	if (tableView == self.searchDisplayController.searchResultsTableView) 
+	if (tableView == self.searchDisplayController.searchResultsTableView) {
 		cell.accessoryType = UITableViewCellAccessoryNone;
+	}
 
-	
-	//UIColor *dark = [UIColor colorWithRed:0.592f green:0.596f blue:0.608f alpha:1.0];
-	//UIColor *light = [UIColor colorWithRed:0.675f green:0.678f blue:0.686f alpha:1.0];
-#define DARK_BACKGROUND  [UIColor colorWithRed:218.0/255.0 green:223.0/255.0 blue:226.0/255.0 alpha:1.0]
-#define LIGHT_BACKGROUND [UIColor colorWithRed:250.0/255.0 green:251.0/255.0 blue:251.0/255.0 alpha:1.0]
 
-	cell.backgroundColor = (indexPath.row % 2 == 0) ? DARK_BACKGROUND : LIGHT_BACKGROUND;
-	cell.detailTextLabel.textColor = 	[UIColor colorWithRed:67.f/255.f green:86.f/255.f blue:98.f/255.f alpha:1.f];
-	cell.textLabel.textColor =			[UIColor colorWithRed:151.f/255.f green:161.f/255.f blue:166.f/255.f alpha:1.f];
-	
 	return cell;
 }
 
@@ -175,7 +163,7 @@
 
 // This is for the little index along the right side of the table ... use nil if you don't want it.
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-	//return  hideTableIndex ? nil : [fetchedResultsController sectionIndexTitles] ;
+	return  hideTableIndex ? nil : [fetchedResultsController sectionIndexTitles] ;
 	return  nil ;
 }
 
