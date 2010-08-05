@@ -92,8 +92,9 @@
 				</object>
 				<array class="NSMutableArray" key="IBUIViewControllers">
 					<object class="IBUINavigationController" id="505626866">
+						<string key="IBUITitle">Legislators</string>
 						<object class="IBUITabBarItem" key="IBUITabBarItem" id="850528328">
-							<string key="IBUITitle">Directory</string>
+							<string key="IBUITitle">Legislators</string>
 							<object class="NSCustomResource" key="IBUIImage">
 								<string key="NSClassName">NSImage</string>
 								<string key="NSResourceName">Directory.png</string>
@@ -137,6 +138,7 @@
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								</object>
 								<reference key="IBUIParentViewController" ref="505626866"/>
+								<string key="IBUINibName">MasterTableViewController</string>
 								<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
 									<int key="interfaceOrientation">1</int>
 								</object>
@@ -328,14 +330,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">directoryTableTabbedVC</string>
-						<reference key="source" ref="841351856"/>
-						<reference key="destination" ref="946652663"/>
-					</object>
-					<int key="connectionID">65</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">linksTableTabbedVC</string>
 						<reference key="source" ref="841351856"/>
 						<reference key="destination" ref="440134525"/>
@@ -365,6 +359,14 @@
 						<reference key="destination" ref="220680231"/>
 					</object>
 					<int key="connectionID">87</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">legMasterTableViewController</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="946652663"/>
+					</object>
+					<int key="connectionID">88</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -426,7 +428,6 @@
 							<reference ref="631679792"/>
 						</array>
 						<reference key="parent" ref="505626866"/>
-						<string key="objectName">General Table View Controller - Legislator Directory</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">25</int>
@@ -618,7 +619,7 @@
 				<string key="10.IBEditorWindowLastContentRect">{{571, 381}, {320, 480}}</string>
 				<string key="10.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="11.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="23.CustomClassName">GeneralTableViewController</string>
+				<string key="23.CustomClassName">MasterTableViewController</string>
 				<string key="28.CustomClassName">CommitteeMasterViewController</string>
 				<string key="36.CustomClassName">GeneralTableViewController</string>
 				<string key="43.CustomClassName">GeneralTableViewController</string>
@@ -630,7 +631,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">87</int>
+			<int key="maxID">88</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -717,7 +718,6 @@
 						<string key="dataSource">id</string>
 						<string key="detailViewController">CommitteeDetailViewController</string>
 						<string key="menuButton">UIBarButtonItem</string>
-						<string key="searchBar">UISearchBar</string>
 						<string key="selectObjectOnAppear">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
@@ -736,10 +736,6 @@
 						<object class="IBToOneOutletInfo" key="menuButton">
 							<string key="name">menuButton</string>
 							<string key="candidateClassName">UIBarButtonItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="searchBar">
-							<string key="name">searchBar</string>
-							<string key="candidateClassName">UISearchBar</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="selectObjectOnAppear">
 							<string key="name">selectObjectOnAppear</string>
@@ -933,7 +929,6 @@
 						<string key="dataSource">id</string>
 						<string key="detailViewController">LegislatorDetailViewController</string>
 						<string key="menuButton">UIBarButtonItem</string>
-						<string key="searchBar">UISearchBar</string>
 						<string key="selectObjectOnAppear">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
@@ -952,10 +947,6 @@
 						<object class="IBToOneOutletInfo" key="menuButton">
 							<string key="name">menuButton</string>
 							<string key="candidateClassName">UIBarButtonItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="searchBar">
-							<string key="name">searchBar</string>
-							<string key="candidateClassName">UISearchBar</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="selectObjectOnAppear">
 							<string key="name">selectObjectOnAppear</string>
