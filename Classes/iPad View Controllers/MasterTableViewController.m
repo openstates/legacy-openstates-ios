@@ -11,11 +11,7 @@
 #import "LegislatorMasterTableViewCell.h"
 #import "UtilityMethods.h"
 #import "TexLegeAppDelegate.h"
-
-/*
- Predefined colors to alternate the background color of each cell row by row
- (see tableView:cellForRowAtIndexPath: and tableView:willDisplayCell:forRowAtIndexPath:).
- */
+#import "TexLegeTheme.h"
 
 @interface MasterTableViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
@@ -25,8 +21,7 @@
 @implementation MasterTableViewController
 @synthesize detailViewController;
 @synthesize dataSource, selectObjectOnAppear;
-@synthesize searchBar, m_searchDisplayController, chamberControl;
-@synthesize menuButton;
+@synthesize chamberControl, menuButton;
 
 #pragma mark -
 #pragma mark Initialization
@@ -58,15 +53,14 @@
 	self.tableView.dataSource = self.dataSource;
 	self.tableView.rowHeight = self.dataSource.rowHeight;
 
-	self.dataSource.searchDisplayController = self.m_searchDisplayController;
-	self.m_searchDisplayController.searchResultsDataSource = self.dataSource;
+	self.dataSource.searchDisplayController = self.searchDisplayController;
+	self.searchDisplayController.searchResultsDataSource = self.dataSource;
 	
 	if ([dataSource usesCoreData]) {
 		NSManagedObjectID *objectID = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:self.viewControllerKey];
 		if (objectID)
 			self.selectObjectOnAppear = [self.dataSource.managedObjectContext objectWithID:objectID];
 	}
-	
 }
 
 
@@ -77,23 +71,27 @@
     [super viewDidLoad];
 		
 	if ([UtilityMethods isIPadDevice]) {
-		if (!self.menuButton)
-			self.menuButton = self.navigationItem.leftBarButtonItem;
+		self.navigationItem.leftBarButtonItem = self.menuButton;
 	    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
+		self.menuButton.target = [TexLegeAppDelegate appDelegate];
+		self.menuButton.action = @selector(showOrHideMenuPopover:);
 	}
 	
     //self.title=@"Legislators";
     self.clearsSelectionOnViewWillAppear = NO;
 	
-	if (self.m_searchDisplayController == nil) {
-		self.m_searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
-	}
-	self.m_searchDisplayController.delegate = self;
-	self.m_searchDisplayController.searchResultsDelegate = self;
+	self.searchDisplayController.delegate = self;
+	self.searchDisplayController.searchResultsDelegate = self;
+	self.dataSource.searchDisplayController = self.searchDisplayController;
+	self.searchDisplayController.searchResultsDataSource = self.dataSource;
 	
-	//self.tableView.backgroundColor = DARK_BACKGROUND;
-	self.tableView.separatorColor = [UIColor colorWithRed:0.741f green:0.769f blue:0.792f alpha:1.0];
+	self.tableView.separatorColor = [TexLegeTheme separator];
+	self.tableView.backgroundColor = [TexLegeTheme tableBackground];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+	self.chamberControl.tintColor = [TexLegeTheme segmentCtl];
+	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
+	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
+	self.navigationItem.titleView = self.chamberControl;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -152,12 +150,6 @@
 		self.selectObjectOnAppear = nil;
 	}	
 
-	// this is a hack so that the index does not show up on top of the search bar
-	//if ([dataSource usesSearchbar]) {
-	//	[self.searchDisplayController setActive:YES];
-	//	[self.searchDisplayController setActive:NO];
-	//}
-	
 	// We're on an iphone, without a splitview or popovers, so if we get here, let's stop
 	if ([UtilityMethods isIPadDevice] == NO) {
 		[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
@@ -177,11 +169,9 @@
 	[[TexLegeAppDelegate appDelegate] setSavedTableSelection:[legislator objectID] forKey:self.viewControllerKey];
 
 	if (self.splitViewController) {
-		//self.selectIndexPathOnAppear = indexPath;
 		self.detailViewController.legislator = legislator;
 		
 		if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
-			//self.searchDisplayController.searchBar.text = @"";	// should we do this?
 			[self searchBarCancelButtonClicked:nil];
 		}
 		
@@ -193,7 +183,6 @@
 		}
 	}
 	else {
-		/* this isn't working yet */
 		if (self.detailViewController == nil)
 			self.detailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
 
@@ -209,11 +198,6 @@
 
 - (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 	BOOL useDark = (indexPath.row % 2 == 0);
-	UIColor *darkColor = ((LegislatorMasterTableViewCell *)cell).backgroundDark;
-	UIColor *lightColor = ((LegislatorMasterTableViewCell *)cell).backgroundDark;
-
-	// let's override some of the datasource's settings ... specifically, the background color.
-	cell.backgroundColor = useDark ? darkColor : lightColor;
 	[((LegislatorMasterTableViewCell *)cell) setUseDarkBackground:useDark];
 }
 
@@ -221,33 +205,26 @@
 #pragma mark Memory management
 
 - (void)didReceiveMemoryWarning {
-    
 	[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
 
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-	
-    // Relinquish ownership any cached data, images, etc that aren't in use.
+	[self searchBarCancelButtonClicked:self.searchDisplayController.searchBar];
+	self.detailViewController = nil;
+    [super didReceiveMemoryWarning];	
 }
 
 - (void)viewDidUnload {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
-	self.chamberControl = nil;
 	self.detailViewController = nil;
-	self.dataSource = nil;
-	self.menuButton = nil;
-	
-	self.searchDisplayController.searchResultsDataSource = nil;  // default is nil. delegate can provide
-	self.searchDisplayController.searchResultsDelegate = nil;    // default is nil. delegate can provide
-	self.searchDisplayController.delegate = nil;
-	self.m_searchDisplayController = nil;
-	self.searchBar = nil;
+	self.menuButton = nil;	
 	self.selectObjectOnAppear = nil;
 }
 
 
 - (void)dealloc {
+	self.chamberControl = nil;
+	self.dataSource = nil;
+	
     [super dealloc];
 }
 
@@ -277,7 +254,8 @@
 
 - (IBAction) filterChamber:(id)sender {
 	if (sender == chamberControl) {
-		[self filterContentForSearchText:self.searchBar.text scope:chamberControl.selectedSegmentIndex];
+		[self filterContentForSearchText:self.searchDisplayController.searchBar.text 
+								   scope:self.chamberControl.selectedSegmentIndex];
 		[self.tableView reloadData];
 	}
 }
@@ -300,9 +278,9 @@
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
 	[self.dataSource setHideTableIndex:YES];	
 	// for some reason, these get zeroed out after we restart searching.
-	self.m_searchDisplayController.searchResultsTableView.rowHeight = self.tableView.rowHeight;
-	self.m_searchDisplayController.searchResultsTableView.backgroundColor = self.tableView.backgroundColor;
-	self.m_searchDisplayController.searchResultsTableView.sectionIndexMinimumDisplayRowCount = self.tableView.sectionIndexMinimumDisplayRowCount;
+	self.searchDisplayController.searchResultsTableView.rowHeight = self.tableView.rowHeight;
+	self.searchDisplayController.searchResultsTableView.backgroundColor = self.tableView.backgroundColor;
+	self.searchDisplayController.searchResultsTableView.sectionIndexMinimumDisplayRowCount = self.tableView.sectionIndexMinimumDisplayRowCount;
 	
 }
 
