@@ -11,5 +11,6 @@
 - (id)initWithContentsOfResolutionIndependentFile:(NSString *)path;
 + (UIImage*)imageWithContentsOfResolutionIndependentFile:(NSString *)path;
 + (UIImage*)highResImageWithPath:(NSString *)path;
++ (NSString *)resolutionIndependentFilePath:(NSString *)path;
 
 @end

@@ -11,6 +11,20 @@
 
 @implementation UIImage (ResolutionIndependent)
 
++ (NSString *)resolutionIndependentFilePath:(NSString *)path {
+    if ( [UIScreen instancesRespondToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0 ) {
+        NSString *path2x = [[path stringByDeletingLastPathComponent] 
+                            stringByAppendingPathComponent:[NSString stringWithFormat:@"%@@2x.%@", 
+                                                            [[path lastPathComponent] stringByDeletingPathExtension], 
+                                                            [path pathExtension]]];
+		
+        if ( [[NSFileManager defaultManager] fileExistsAtPath:path2x] ) {
+            return path2x;
+        }
+    }
+	return path;
+}
+
 - (id)initWithContentsOfResolutionIndependentFile:(NSString *)path {
     if ( [UIScreen instancesRespondToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0 ) {
         NSString *path2x = [[path stringByDeletingLastPathComponent] 
