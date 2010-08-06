@@ -10,15 +10,9 @@
 
 #import "GeneralTableViewController.h"
 
-#import "CommitteeDetailViewController.h"
-#import "LegislatorDetailViewController.h"
-#import "LegislatorMasterTableViewCell.h"
-
 #import "MapsDetailViewController.h"
 #import "TexLegeAppDelegate.h"
 #import "TableDataSourceProtocol.h"
-#import "DirectoryDataSource.h"
-#import "CommitteesDataSource.h"
 
 #import "CalendarDataSource.h"
 #import "CalendarComboViewController.h"
@@ -27,22 +21,11 @@
 #import "LinksDetailViewController.h"
 #import "MiniBrowserController.h"
 
-/*
- Predefined colors to alternate the background color of each cell row by row
- (see tableView:cellForRowAtIndexPath: and tableView:willDisplayCell:forRowAtIndexPath:).
- */
-
-
 @implementation GeneralTableViewController
 
 
-@synthesize /*theTableView,*/ dataSource, detailViewController;
+@synthesize dataSource, detailViewController;
 @synthesize menuButton, selectIndexPathOnAppear;
-
-@synthesize searchBar, savedSearchTerm, searchWasActive;
-#if _searchcontroller_
-@synthesize searchController, savedScopeButtonIndex;
-#endif
 
 - (void)showPopoverMenus:(BOOL)show {
 	if (self.splitViewController && show) {
@@ -101,12 +84,8 @@
 - (void)dealloc {
 	self.tableView = nil;
 	self.dataSource = nil; 
-	self.searchBar = nil;
 	self.menuButton = nil;
 	self.selectIndexPathOnAppear = nil;
-#if _searchcontroller_
-	self.searchController = nil;
-#endif
 	
 	[super dealloc];
 }
@@ -144,9 +123,6 @@
 	
 	self.tableView.sectionIndexMinimumDisplayRowCount=15;
 	
-	if (dataSource.name == @"Directory")
-		self.tableView.rowHeight = dataSource.rowHeight;
-
 	// set the tableview as the controller view
 	self.view = self.tableView;
 }
@@ -172,25 +148,7 @@
 	    self.navigationItem.rightBarButtonItem = self.editButtonItem;		
 		self.tableView.allowsSelectionDuringEditing = YES;
 	}
-	
-	if ([dataSource usesToolbar]) {
-		[self toolBarSetup];
-	}
-	
-	if ([dataSource usesSearchbar])
-	{		
-			// Restore search settings if they were saved in didReceiveMemoryWarning.
-		if (self.savedSearchTerm)
-		{
-#if _searchcontroller_
-			[self.searchController setActive:self.searchWasActive];
-			[self.searchBar setSelectedScopeButtonIndex:self.savedScopeButtonIndex];
-#endif
-			[self.searchBar setText:savedSearchTerm];
-			self.savedSearchTerm = nil;
-		}
-	}	
-	
+		
 	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 	if (appDelegate.savedLocation != nil && [[appDelegate.savedLocation objectAtIndex:0] integerValue] == [appDelegate indexForFunctionalViewController:self]) {
 			// save off this level's selection to our AppDelegate
@@ -210,47 +168,6 @@
 	[super viewWillAppear:animated];
 	
 	[self validateStoredSelection];
-	
-	self.navigationController.toolbarHidden = ![dataSource usesToolbar];
-	
-	if ([dataSource usesSearchbar]) {
-		
-		if (self.searchBar == nil) {
-			self.searchBar = [[[UISearchBar alloc] initWithFrame:CGRectZero] retain];
-			self.searchBar.placeholder = @"Search";	
-			self.searchBar.autocorrectionType = UITextAutocorrectionTypeNo; // Don't get in the way of user typing.
-			self.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone; // Don't capitalize each word.
-			self.searchBar.delegate = self; // Become delegate to detect changes in scope.
-			self.searchBar.contentMode = UIViewContentModeTopLeft;
-			self.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:@"All", @"House", @"Senate", nil];
-				//self.searchBar.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
-			self.searchBar.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
-				//self.searchBar.tintColor = [[UIColor alloc] initWithRed:0.75 green:0.80 blue:0.80 alpha:1.0];
-			self.searchBar.barStyle = UIBarStyleBlack;
-			self.searchBar.showsScopeBar = NO;
-			[self.searchBar sizeToFit];
-			
-		}
-		CGRect searchBounds = self.searchBar.bounds;
-		searchBounds.size.width = self.view.bounds.size.width;
-		self.searchBar.bounds = searchBounds;
-		
-		
-#if _searchcontroller_
-		if (self.searchController == nil) {
-			self.searchController = [[[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self] retain];
-			[self.searchController setSearchResultsDataSource:dataSource];
-			[self.searchController setSearchResultsDelegate:self];
-			[self.searchController setDelegate:self];
-		}
-		[self.view addSubview:self.searchController.searchBar];
-		[self.dataSource setHideTableIndex:YES];
-		
-#else
-		self.navigationItem.titleView = self.searchBar;
-#endif
-		//self.navigationController.navigationBar.clipsToBounds = TRUE;
-	}
 	
 	if ([UtilityMethods isIPadDevice] && self.selectIndexPathOnAppear == nil) {
 		NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
@@ -278,28 +195,11 @@
 
 	}	
 	
-#if _searchcontroller_
-		// this is a hack so that the index does not show up on top of the search bar
-	if ([dataSource usesSearchbar]) {
-		[self.searchDisplayController setActive:YES];
-		[self.searchDisplayController setActive:NO];
-		[super viewDidAppear:animated];
-	}
-#endif
-	
 	if (self.splitViewController == nil)
 		[self resetStoredSelection];
 	
 }
 
-
--(void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-	if ([UtilityMethods isIPadDevice] == NO && [dataSource usesSearchbar]) {
-		self.navigationItem.titleView = nil;
-	}
-}
 
 #pragma -
 #pragma UITableViewDelegate
@@ -397,36 +297,6 @@
 		}
 		
 	}
-	else if (dataSource.name == @"Committees") {
-		if (self.detailViewController == nil)
-			self.detailViewController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
-		
-		CommitteeObj *committee = [dataSource committeeDataForIndexPath:newIndexPath];
-		if (committee) {			
-			[self.detailViewController setValue:committee forKey:@"committee"];
-			if (isSplitViewDetail == NO) {
-					// push the detail view controller onto the navigation stack to display it
-				[openInController.navigationController pushViewController:self.detailViewController animated:YES];
-				self.detailViewController = nil;
-			}		
-		}
-
-	}
-	else if (dataSource.name == @"Directory") {
-		if (self.detailViewController == nil)	// just assume it's a typical legislator detail (could be corePlot though)
-			self.detailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
-
-		LegislatorObj *legislator = [dataSource legislatorDataForIndexPath:newIndexPath];
-		if (legislator) {
-			if ([self.detailViewController respondsToSelector:@selector(setLegislator:)])
-				[self.detailViewController performSelector:@selector(setLegislator:) withObject:legislator];
-			if (isSplitViewDetail == NO) {
-					// push the detail view controller onto the navigation stack to display it
-				[openInController.navigationController pushViewController:self.detailViewController animated:YES];
-				self.detailViewController = nil;
-			}			
-		}
-	}
 	else if (dataSource.name == @"Meetings") {	
 		if (!self.detailViewController) {
 			self.detailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController" bundle:nil];
@@ -506,164 +376,6 @@
 	}
 }
 
-/*
-- (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-
-	if (self.dataSource.name == @"Directory") {
-		// let's override some of the datasource's settings ... specifically, the background color.
-		cell.backgroundColor = ((LegislatorMasterTableViewCell *)cell).useDarkBackground ? DARK_BACKGROUND : LIGHT_BACKGROUND;
-	}
-}
-*/
-#pragma mark -
-#pragma mark ToolBar Methods
-
-- (void) toolBarSetup {
-	
-	if ( [dataSource usesToolbar])
-	{
-		UIBarButtonItem *flexLeft = [[UIBarButtonItem alloc] 
-									 initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace 
-									 target:nil action:nil];
-		UIBarButtonItem *flexRight = [[UIBarButtonItem alloc] 
-									  initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace 
-									  target:nil action:nil];
-		UISegmentedControl *segControl = [[UISegmentedControl alloc] initWithItems:
-										  [NSArray arrayWithObjects:@"All", @"House", @"Senate", nil]];
-		[segControl addTarget:self action:@selector(toolbarAction:) forControlEvents:UIControlEventValueChanged];
-		segControl.selectedSegmentIndex = 0;	
-		
-		segControl.segmentedControlStyle = UISegmentedControlStyleBar;
-		segControl.backgroundColor = [UIColor clearColor];
-		segControl.tintColor = [UIColor darkGrayColor];
-		//segControl.contentMode = UIViewContentModeScaleToFill; //****
-		//segControl.autoresizesSubviews = YES;
-		//segControl.autoresizingMask =  (UIViewAutoresizingFlexibleWidth);
-		//[segControl sizeToFit];	
-		//	CGRect segControlFrame = CGRectMake(5.0f,0.0f, 
-		//			self.navigationController.toolbar.bounds.size.width - (5.0f * 2.0), 40.0f);
-		CGRect segControlFrame = segControl.bounds;
-		segControlFrame.size.width = 280.0f;
-		segControl.bounds = segControlFrame;
-		
-		UIBarButtonItem *plainButton = [[UIBarButtonItem alloc]
-										initWithCustomView:segControl];
-		
-		NSArray *items = [NSArray arrayWithObjects: flexLeft, plainButton, flexRight, nil];
-		
-		self.toolbarItems = items;
-		self.navigationController.toolbarHidden = NO;
-		self.navigationController.toolbar.barStyle = UIBarStyleBlackTranslucent;
-		
-		[flexLeft release];
-		[flexRight release];
-		[segControl release];
-		[plainButton release]; 
-	}
-}
-
-
-- (void)toolbarAction:(id)sender
-{
-	if ( [dataSource usesToolbar] )
-	{
-		[self filterContentForSearchText:self.searchBar.text scope:[sender selectedSegmentIndex]];
-		[self.tableView reloadData];
-	}
-}
-
-
-#pragma mark -
-#pragma mark SearchBar Methods
-
-- (void)filterContentForSearchText:(NSString*)searchText scope:(NSInteger)scope
-{
-	/*
-	 Update the filtered array based on the search text and scope.
-	 */
-	
-	[(DirectoryDataSource *)self.dataSource setFilterChamber:scope];
-	
-	// start filtering names...
-	if (searchText.length > 0) {
-		[(DirectoryDataSource *)self.dataSource setFilterByString:searchText];
-	}
-	else {
-		[(DirectoryDataSource *)self.dataSource removeFilter];
-	}
-	
-}
-
-
-#if _searchcontroller_ == 0
-
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-	[self.searchBar setShowsCancelButton:YES animated:YES];
-	
-	if (searchText.length > 0)
-		[self.dataSource setFilterByString:searchText];  // start filtering names...
-	else
-		[self.dataSource removeFilter];
-	
-	[self.tableView reloadData];
-
-}
-
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {                     // called when text starts editing
-	[self.dataSource setHideTableIndex:YES];
-	[self.searchBar setShowsCancelButton:YES animated:YES];	
-	//[self.theTableView reloadData];
-	
-}
-
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar { // called when text ends editing
-	if([self.searchBar.text isEqualToString:@""]) {
-		[self.dataSource setHideTableIndex:NO];
-		[self.searchBar setShowsCancelButton:NO animated:YES];
-	}
-	[self.tableView reloadData];
-}
-
-
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {                     // called when keyboard search button pressed
-	//[self.searchBar setShowsCancelButton:NO animated:YES];
-	[self.searchBar resignFirstResponder];
-}
-#endif
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
-	self.searchBar.text = @"";
-	[self.dataSource removeFilter];
-
-#if _searchcontroller_ == 0
-	[self.dataSource setHideTableIndex:NO];
-#endif
-	
-	[self.searchBar setShowsCancelButton:NO animated:YES];
-	[self.searchBar setNeedsDisplay];
-	[self.searchBar resignFirstResponder];
-}
-
-
-#if _searchcontroller_
-
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
-{
-    [self filterContentForSearchText:searchString scope:[self.searchDisplayController.searchBar selectedScopeButtonIndex]];
-    
-	// Return YES to cause the search result table view to be reloaded.
-    return YES;
-}
-
-
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
-{
-    [self filterContentForSearchText:[self.searchDisplayController.searchBar text] scope:searchOption];
-    return YES;  // Return YES to cause the search result table view to be reloaded.
-}
-
-
-#endif
 
 #pragma mark -
 #pragma mark Orientation
