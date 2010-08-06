@@ -51,7 +51,7 @@
 	
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self.dataSource;
-	self.tableView.rowHeight = self.dataSource.rowHeight;
+	//self.tableView.rowHeight = 73.0f;
 
 	self.dataSource.searchDisplayController = self.searchDisplayController;
 	self.searchDisplayController.searchResultsDataSource = self.dataSource;
