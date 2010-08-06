@@ -230,6 +230,9 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
     UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
+		cell.textLabel.numberOfLines = 2;
+		cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+		cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
     }
 	
 	NSDictionary *entry = nil;
@@ -253,17 +256,12 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	}
 	NSString *committeeString = [[NSString alloc] initWithFormat:@"%@ %@", chamberString, [entry objectForKey:@"committee"]];
 	NSString *cellText = nil;
-	if (tv == self.searchDisplayController.searchResultsTableView) {  // give a more different format in searches
-		cellText = [[NSString alloc] initWithFormat:@"%@ %@ - %@", [entry objectForKey:@"dateString"], 
-							[entry objectForKey:@"timeString"], committeeString];
-		cell.textLabel.font = [UIFont boldSystemFontOfSize:10];
+	if (tv == self.searchDisplayController.searchResultsTableView) {  // give a different format in searches
+		cellText = [[NSString alloc] initWithFormat:@"%@ - %@\n%@", [entry objectForKey:@"dateString"], [entry objectForKey:@"timeString"], 
+					committeeString];
 	}
 	else {
-		cellText = [[NSString alloc] initWithFormat:@"%@: %@", committeeString, [entry objectForKey:@"timeString"]];
-		if ([UtilityMethods isIPadDevice])
-			cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
-		else
-			cell.textLabel.font = [UIFont systemFontOfSize:10];
+		cellText = [[NSString alloc] initWithFormat:@"%@\nTime:%@ - Location: %@", committeeString, [entry objectForKey:@"timeString"], [entry objectForKey:@"location"]];
 
 	}
 	cell.textLabel.text = cellText;
