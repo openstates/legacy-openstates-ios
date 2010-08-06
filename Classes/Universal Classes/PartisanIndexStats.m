@@ -25,7 +25,7 @@
 SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 
 // setup the data collection
-- init {
+- (id)init {
 	if (self = [super init]) {
 
 	}
