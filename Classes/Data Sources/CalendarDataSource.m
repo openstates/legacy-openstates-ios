@@ -16,7 +16,7 @@
 
 @implementation CalendarDataSource
 @synthesize managedObjectContext;
-@synthesize calendarList;
+@synthesize calendarList, senateURL, houseURL, jointURL, feedStore;
 
 
 - (NSString *)navigationBarName
@@ -26,7 +26,7 @@
 { return @"Meetings"; }
 
 - (UIImage *)tabBarImage 
-{ return [UIImage imageNamed:@"83-calendar.png"]; }
+{ return [UIImage imageNamed:@"83-calendar"]; }
 
 - (BOOL)showDisclosureIcon
 { return YES; }
@@ -34,18 +34,8 @@
 - (BOOL)usesCoreData
 { return NO; }
 
-- (BOOL)usesToolbar
-{ return NO; }
-
-- (BOOL)usesSearchbar
-{ return NO; }
-
 - (BOOL)canEdit
 { return NO; }
-
-- (CGFloat) rowHeight {	
-	return 44.0f;
-}
 
 
 // displayed in a plain style tableview
@@ -59,14 +49,45 @@
 		/* Build a list of files */		
 		self.calendarList = [NSArray arrayWithObjects:
 							 @"All Upcoming Meetings", @"Upcoming House Meetings", 
-							 @"Upcoming Senate Meetings", @"Upcoming Joint Meetings", nil];		
+							 @"Upcoming Senate Meetings", @"Upcoming Joint Meetings", nil];	
+		
+		static NSString *senateURLString = @"http://www.capitol.state.tx.us/MyTLO/RSS/RSS.aspx?Type=upcomingmeetingssenate";
+		static NSString *houseURLString = @"http://www.capitol.state.tx.us/MyTLO/RSS/RSS.aspx?Type=upcomingmeetingshouse";
+		static NSString *jointURLString = @"http://www.capitol.state.tx.us/MyTLO/RSS/RSS.aspx?Type=upcomingmeetingsjoint";
+		
+		self.senateURL = [NSURL URLWithString:senateURLString];
+		self.houseURL = [NSURL URLWithString:houseURLString];
+		self.jointURL = [NSURL URLWithString:jointURLString];
+		
+
 	}
 	return self;
 }
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
-	if ([self init])
-		if (newContext) self.managedObjectContext = newContext;
+	if ([self init]) {
+		if (newContext)
+			self.managedObjectContext = newContext;
+		
+		NSArray *feedURLs = [[NSArray alloc] initWithObjects:self.senateURL, self.houseURL, self.jointURL, nil];
+		NSError *theError = NULL;
+
+		@try {
+			NSLog(@"Beginning feed subscriptions - %@", [NSDate date]);
+			
+			self.feedStore = [CFeedStore instance];
+			for (NSURL *url in feedURLs) {
+				[feedStore.feedFetcher subscribeToURL:url error:&theError];
+			}			
+			NSLog(@"Ended feed subscriptions -- %@", [NSDate date]);
+		}
+		@catch (NSException * e) {
+			NSLog(@"Error when initializing calendar feed subscriptions:\n  %@\n   %@", [theError description], [e description]);
+		}
+		
+		[feedURLs release];
+
+	}
 	return self;
 }
 
@@ -79,31 +100,26 @@
 		[UtilityMethods noInternetAlert];
 		return nil;
 	}
-	
-	const NSURL *senateURL = [NSURL URLWithString:@"http://www.capitol.state.tx.us/MyTLO/RSS/RSS.aspx?Type=upcomingmeetingssenate"];
-	const NSURL *houseURL = [NSURL URLWithString:@"http://www.capitol.state.tx.us/MyTLO/RSS/RSS.aspx?Type=upcomingmeetingshouse"];
-	const NSURL *jointURL = [NSURL URLWithString:@"http://www.capitol.state.tx.us/MyTLO/RSS/RSS.aspx?Type=upcomingmeetingsjoint"];
 	NSMutableArray *entryArray = [NSMutableArray array];
 	NSNumber *chamberType = [NSNumber numberWithInteger:indexPath.row];		// save this for later
 	
 	switch (indexPath.row) {
 		case JOINT:
-			feedURLs = [[NSArray alloc] initWithObjects:jointURL,nil];
+			feedURLs = [[NSArray alloc] initWithObjects:self.jointURL,nil];
 			break;
 		case HOUSE:
-			feedURLs = [[NSArray alloc] initWithObjects:houseURL,nil];
+			feedURLs = [[NSArray alloc] initWithObjects:self.houseURL,nil];
 			break;
 		case SENATE:
-			feedURLs = [[NSArray alloc] initWithObjects:senateURL,nil];
+			feedURLs = [[NSArray alloc] initWithObjects:self.senateURL,nil];
 			break;
 		default:	// "BOTH" ... but really this means all (0)
-			feedURLs = [[NSArray alloc] initWithObjects:houseURL,senateURL,jointURL,nil];
+			feedURLs = [[NSArray alloc] initWithObjects:self.houseURL,self.senateURL,self.jointURL,nil];
 			break;
 	}
 	
 	if ([UtilityMethods canReachHostWithURL:[feedURLs objectAtIndex:0]]) {		// I think just doing it once is enough?
 		NSError *theError = NULL;
-		CFeedStore * feedStore = [CFeedStore instance];
 		
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setLenient:YES];
@@ -112,10 +128,13 @@
 		[timeFormatter setLenient:YES];
 		[timeFormatter setDateFormat:@"h:mm a"];
 		
+		if (!self.feedStore)
+			self.feedStore = [CFeedStore instance];
+
 		NSInteger index = 1;
 		for (NSURL *url in feedURLs) {
-			[feedStore.feedFetcher subscribeToURL:url error:&theError];
-			CFeed * theFeed = [feedStore feedForURL:url fetch:YES];
+			[self.feedStore.feedFetcher subscribeToURL:url error:&theError];
+			CFeed * theFeed = [self.feedStore feedForURL:url fetch:YES];
 			
 			for (CFeedEntry *entry in theFeed.entries) {
 				if (indexPath.row == BOTH_CHAMBERS) /// this is when we've got mutliple feeds, must be "all", educate it
@@ -191,6 +210,8 @@
 	/* Not found in queue, create a new cell object */
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewStylePlain reuseIdentifier:CellIdentifier] autorelease];
+		cell.textLabel.textAlignment = UITextAlignmentLeft;
+		cell.textLabel.font = [UIFont boldSystemFontOfSize:15];
     }
     
 	// configure cell contents
@@ -198,11 +219,7 @@
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	
 	cell.textLabel.text = [self.calendarList objectAtIndex:row];
-	cell.textLabel.textAlignment = UITextAlignmentLeft;
-	
-	cell.textLabel.font = [UIFont boldSystemFontOfSize:15];
 		
-	
 	return cell;
 }
 
@@ -213,7 +230,9 @@
 }
 
 - (void)dealloc {
-	
+	self.senateURL = self.houseURL = self.jointURL = nil;
+	self.feedStore = nil;
+
 	self.calendarList = nil;
 	self.managedObjectContext = nil;
 	[super dealloc];
