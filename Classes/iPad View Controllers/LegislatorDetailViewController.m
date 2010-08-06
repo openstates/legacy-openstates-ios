@@ -26,7 +26,7 @@
 #import "MapsDetailViewController.h"
 
 #import "PartisanIndexStats.h"
-//#import "UIImage+ResolutionIndependent.h"
+#import "UIImage+ResolutionIndependent.h"
 
 @interface LegislatorDetailViewController (Private)
 
@@ -58,6 +58,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	NSString * headerViewXib = [UtilityMethods isIPadDevice] ? @"LegislatorDetailHeaderView~ipad" : @"LegislatorDetailHeaderView~iphone";
+	// Load one of our header views (iPad or iPhone selected automatically by the file's name extension
+	NSArray *objects = [[NSBundle mainBundle] loadNibNamed:headerViewXib owner:self options:NULL];
+	self.headerView = [objects objectAtIndex:0];
+	
+	CGRect headerRect = self.headerView.bounds;
+	headerRect.size.width = self.tableView.bounds.size.width;
+	
+	//UIImage *sealImage = [UIImage imageWithContentsOfResolutionIndependentFile:@"seal.png"];
+	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
+	UIColor *sealColor = [UIColor colorWithPatternImage:sealImage];	
+	self.miniBackgroundView.backgroundColor = sealColor;
+	//self.headerView.backgroundColor = sealColor;
+	//self.scatterPlotView.backgroundColor = sealColor;
+	//self.scatterPlotView.backgroundColor = self.tableView.backgroundColor;
+	//self.scatterPlotView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+	
 	self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 	self.clearsSelectionOnViewWillAppear = NO;
 	//self.hidesBottomBarWhenPushed = YES;
@@ -65,9 +82,30 @@
 	self.dataForPlot = [NSMutableArray array];
 	
 	self.texasRed = [CPColor colorWithComponentRed:198.0/255 green:0.0 blue:47.0/255 alpha:1.0f];
-//	self.texasBlue = [CPColor colorWithComponentRed:50.0/255 green:79.0/255 blue:133.0/255 alpha:1.0f];
+	//	self.texasBlue = [CPColor colorWithComponentRed:50.0/255 green:79.0/255 blue:133.0/255 alpha:1.0f];
 	self.texasBlue = [CPColor colorWithComponentRed:90.0/255 green:141.0/255 blue:222.0/255 alpha:1.0f];
 	self.texasOrange = [CPColor colorWithComponentRed:204.0/255 green:85.0/255 blue:0.0 alpha:1.0f];
+	
+	[self.tableView setTableHeaderView:self.headerView];
+	
+	if ([UtilityMethods isIPadDevice]) {
+		self.indivSlider = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
+		self.partySlider = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
+		self.allSlider = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
+		
+		if (self.indivSlider) {
+			[self.indivSlider addToPlaceholder:self.indivPHolder];
+			self.indivSlider.usesSmallStar = NO;
+		}
+		if (self.partySlider) {
+			[self.partySlider addToPlaceholder:self.partyPHolder];
+			self.partySlider.usesSmallStar = NO;
+		}
+		if (self.allSlider) {
+			[self.allSlider addToPlaceholder:self.allPHolder];
+			self.allSlider.usesSmallStar = NO;
+		}
+	}	
 }
 
 - (NSString *)chamberAbbrev {
@@ -94,37 +132,13 @@
 	return [NSString stringWithFormat:@"%@ %@ Avg.", [self chamberAbbrev], partyName];
 }
 
-- (void)setupHeaderView {
-	if (1) { //(self.headerView == nil) {
-		NSString * headerViewXib = [UtilityMethods isIPadDevice] ? @"LegislatorDetailHeaderView~ipad" : @"LegislatorDetailHeaderView~iphone";
-		// Load one of our header views (iPad or iPhone selected automatically by the file's name extension
-		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:headerViewXib owner:self options:NULL];
-		self.headerView = [objects objectAtIndex:0];
-
-		CGRect headerRect = self.headerView.bounds;
-		headerRect.size.width = self.tableView.bounds.size.width;
-
-		//UIImage *sealImage = [UIImage imageWithContentsOfResolutionIndependentFile:@"seal.png"];
-		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
-		UIColor *sealColor = [UIColor colorWithPatternImage:sealImage];	
-		self.miniBackgroundView.backgroundColor = sealColor;
-		//self.headerView.backgroundColor = sealColor;
-		//self.scatterPlotView.backgroundColor = sealColor;
-		//self.scatterPlotView.backgroundColor = self.tableView.backgroundColor;
-		//self.scatterPlotView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-
-		[self.tableView setTableHeaderView:self.headerView];
-	}
-}
 	
-- (void)setupHeader {
-	[self setupHeaderView];
-	
+- (void)setupHeader {	
 	NSString *legName = [NSString stringWithFormat:@"%@ %@",  [self.legislator legTypeShortName], [self.legislator legProperName]];
 	self.leg_nameLab.text = legName;
 	self.navigationItem.title = legName;
 
-	self.leg_photoView.image = [UtilityMethods poorMansImageNamed:self.legislator.photo_name];
+	self.leg_photoView.image = [UIImage highResImageWithPath:self.legislator.photo_name];
 	self.leg_partyLab.text = [self.legislator party_name];
 	self.leg_districtLab.text = [NSString stringWithFormat:@"District %@", self.legislator.district];
 	self.leg_tenureLab.text = [self.legislator tenureString];
@@ -145,23 +159,16 @@
 		self.leg_chamberPartyLab.text = [self chamberPartyAbbrev];
 		self.leg_chamberLab.text = [[self chamberAbbrev] stringByAppendingString:@" Avg."];
 		
-		if (!self.indivSlider)
-			self.indivSlider = [StaticGradientSliderView newSliderViewWithOwner:self];
-		if (!self.partySlider)
-			self.partySlider = [StaticGradientSliderView newSliderViewWithOwner:self];
-		if (!self.allSlider)
-			self.allSlider = [StaticGradientSliderView newSliderViewWithOwner:self];
-
 		if (self.indivSlider) {
-			[self.indivSlider addToPlaceholder:indivPHolder withLegislator:self.legislator];
+			[self.indivSlider setLegislator:self.legislator];
 			self.indivSlider.sliderValue = self.legislator.partisan_index.floatValue;
 		}	
 		if (self.partySlider) {
-			[self.partySlider addToPlaceholder:partyPHolder withLegislator:self.legislator];
+			[self.partySlider setLegislator:self.legislator];
 			self.partySlider.sliderValue = [[indexStats partyPartisanIndexUsingLegislator:self.legislator] floatValue];
 		}	
 		if (self.allSlider) {
-			[self.allSlider addToPlaceholder:allPHolder withLegislator:self.legislator];
+			[self.allSlider setLegislator:self.legislator];
 			self.allSlider.sliderValue = [[indexStats overallPartisanIndexUsingLegislator:self.legislator] floatValue];
 		}	
 	}
@@ -349,18 +356,12 @@
 
 - (void)viewDidUnload {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-	self.popoverController = nil;
-	self.sectionArray = nil;
-	self.indivSlider = self.partySlider = self.allSlider = nil;
-	self.indivPHolder = self.partyPHolder = self.allPHolder = nil;
 	self.legislator = nil;
+	self.startupSplashView = nil;	
+	self.sectionArray = nil;
 	self.leg_photoView = nil;
-	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
-	self.headerView = self.startupSplashView = nil;
-	self.scatterPlotView = nil;
 	self.dataForPlot = nil;
 	self.graph = nil;
-	self.texasRed = self.texasBlue = self.texasOrange = nil;
 
 }
 
@@ -739,8 +740,9 @@
 				//cell.textLabel.text = cellInfo.entryName;
 				
 				CGRect sliderViewFrame = [self preshrinkSliderViewFromView:cell.contentView];
-				if (self.indivSlider == nil)
-					self.indivSlider = [StaticGradientSliderView newSliderViewWithOwner:self];
+				if (self.indivSlider == nil) {
+					self.indivSlider = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
+				}
 				if (self.indivSlider) {
 					[self.indivSlider setFrame:sliderViewFrame];
 					[self.indivSlider setLegislator:self.legislator];
