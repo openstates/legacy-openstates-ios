@@ -87,13 +87,6 @@
     return basePath;
 }
 
-// This is less buggy, but slower (since there's no cache) than UIImage imageNamed
-+ (UIImage *)poorMansImageNamed:(NSString *)fileName {
-	//NSString *imageFile = [NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], fileName];
-	//return [UIImage imageWithContentsOfFile:imageFile];
-	return [UIImage imageNamed:fileName];
-}
-
 #pragma mark -
 #pragma mark URL Handling
 

@@ -25,8 +25,6 @@
 
 + (BOOL) isLandscapeOrientation;
 
-+ (UIImage *)poorMansImageNamed:(NSString *)fileName;
-
 + (BOOL) openURLWithTrepidation:(NSURL *)url;
 + (BOOL) openURLWithoutTrepidation:(NSURL *)url;
 + (BOOL) canMakePhoneCalls;
