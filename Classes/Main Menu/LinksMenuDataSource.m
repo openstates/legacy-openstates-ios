@@ -44,7 +44,7 @@ enum HeaderSectionRows {
 { return @"Resources and Info"; }
 
 - (UIImage *)tabBarImage {
-	return [UIImage imageNamed:@"113-navigation.png"];
+	return [UIImage imageNamed:@"113-navigation"];
 }
 
 - (BOOL)showDisclosureIcon
@@ -53,30 +53,8 @@ enum HeaderSectionRows {
 - (BOOL)usesCoreData
 { return YES; }
 
-- (BOOL)usesToolbar
-{ return NO; }
-
-- (BOOL)usesSearchbar
-{ return NO; }
-
 - (BOOL)canEdit
 { return YES; }
-
-- (CGFloat) rowHeight {
-	CGFloat height;
-	
-#if kDeviceSensitiveRowHeight == 1
-	//if (0 /*something about checking to see if a passed in tableView == searchResultsTable*/)
-	//else 
-	if (![UtilityMethods isIPadDevice])	// We're on an iPhone/iTouch
-		height = 44.0f;
-	else
-		// an iPad and not a searchResultsTable
-#endif
-		height = 44.0f;
-	
-	return height;
-}
 
 - (UITableViewStyle)tableViewStyle {
 	return UITableViewStylePlain;

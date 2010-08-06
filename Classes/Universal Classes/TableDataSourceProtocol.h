@@ -26,10 +26,7 @@
 // this property determines the style of table view displayed
 @property (readonly) UITableViewStyle tableViewStyle;
 @property (readonly) BOOL usesCoreData;
-@property (readonly) BOOL usesToolbar;
-@property (readonly) BOOL usesSearchbar;
 @property (readonly) BOOL canEdit;
-@property(nonatomic, readonly) CGFloat rowHeight;
 
 - (BOOL)showDisclosureIcon;
 

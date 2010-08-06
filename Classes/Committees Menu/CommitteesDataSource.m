@@ -54,7 +54,7 @@
 { return @"Committees"; }
 
 - (UIImage *)tabBarImage
-{ return [UIImage imageNamed:@"60-signpost.png"]; }
+{ return [UIImage imageNamed:@"60-signpost"]; }
 
 - (BOOL)showDisclosureIcon
 { return YES; }
@@ -62,18 +62,8 @@
 - (BOOL)usesCoreData
 { return YES; }
 
-- (BOOL)usesToolbar
-{ return YES; }
-
-- (BOOL)usesSearchbar
-{ return NO; }
-
 - (BOOL)canEdit
 { return NO; }
-
-- (CGFloat) rowHeight {	
-	return 44.0f;
-}
 
 
 // atomic number is displayed in a plain style tableview

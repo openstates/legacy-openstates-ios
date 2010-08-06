@@ -28,7 +28,7 @@
 { return @"Maps"; }
  
 - (UIImage *)tabBarImage 
-{ return [UIImage imageNamed:@"71-compass.png"]; }
+{ return [UIImage imageNamed:@"71-compass"]; }
 
 - (BOOL)showDisclosureIcon
 { return YES; }
@@ -36,18 +36,8 @@
 - (BOOL)usesCoreData
 { return NO; }
 
-- (BOOL)usesToolbar
-{ return NO; }
-
-- (BOOL)usesSearchbar
-{ return NO; }
-
 - (BOOL)canEdit
 { return NO; }
-
-- (CGFloat) rowHeight {	
-	return 44.0f;
-}
 
 
 // displayed in a plain style tableview
@@ -60,7 +50,6 @@
 	if (self !=nil) {
 		/* Build a list of files */		
 		self.sectionList = [[NSMutableArray alloc] init];
-
 		[self createSectionList];
 	}
 	return self;

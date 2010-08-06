@@ -77,18 +77,12 @@
 { return @"Legislator Directory"; }
 
 - (UIImage *)tabBarImage 
-{ return [UIImage imageNamed:@"Directory.png"]; }
+{ return [UIImage imageNamed:@"123-id-card"]; }
 
 - (BOOL)showDisclosureIcon
 { return NO; }
 
 - (BOOL)usesCoreData
-{ return YES; }
-
-- (BOOL)usesToolbar
-{ return YES; }
-
-- (BOOL)usesSearchbar
 { return YES; }
 
 - (BOOL)canEdit
@@ -204,8 +198,9 @@
 		cell.useDarkBackground = (indexPath.row % 2 == 0);
 
 		
-		if (tableView == self.searchDisplayController.searchResultsTableView) 
-			cell.accessoryType = UITableViewCellAccessoryNone;
+		//if (tableView == self.searchDisplayController.searchResultsTableView) 
+			//cell.accessoryType.hidden = UITableViewCellAccessoryNone;
+		cell.accessoryView.hidden = (tableView == self.searchDisplayController.searchResultsTableView);
 		
 		return cell;
 	}
