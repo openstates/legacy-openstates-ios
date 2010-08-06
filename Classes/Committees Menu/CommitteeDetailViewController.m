@@ -380,7 +380,7 @@ enum InfoSectionRows {
 	if (indexPath.section > kInfoSection)
 		return 73.0f;
 
-	return self.tableView.rowHeight;
+	return 44.0f;
 
 }
 
