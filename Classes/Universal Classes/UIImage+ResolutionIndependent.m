@@ -30,4 +30,11 @@
     return [[[UIImage alloc] initWithContentsOfResolutionIndependentFile:path] autorelease];
 }
 
++ (UIImage*)highResImageWithPath:(NSString *)path {
+	return  [UIImage imageNamed:[[path stringByDeletingLastPathComponent] 
+							  stringByAppendingPathComponent:[NSString stringWithFormat:@"%@@2x.%@", 
+															  [[path lastPathComponent] stringByDeletingPathExtension], 
+															  [path pathExtension]]]];
+}
+
 @end

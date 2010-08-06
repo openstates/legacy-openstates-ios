@@ -10,4 +10,6 @@
 @interface UIImage (ResolutionIndependent)
 - (id)initWithContentsOfResolutionIndependentFile:(NSString *)path;
 + (UIImage*)imageWithContentsOfResolutionIndependentFile:(NSString *)path;
++ (UIImage*)highResImageWithPath:(NSString *)path;
+
 @end
