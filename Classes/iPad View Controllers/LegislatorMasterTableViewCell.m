@@ -12,7 +12,6 @@
 #import "LegislatorObj.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
-#import "UIImage+ResolutionIndependent.h"
 #import "ImageCache.h"
 @interface LegislatorMasterTableViewCell (Private)
 
