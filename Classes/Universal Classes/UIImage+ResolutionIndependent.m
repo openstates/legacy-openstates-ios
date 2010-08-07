@@ -11,8 +11,16 @@
 
 @implementation UIImage (ResolutionIndependent)
 
++ (NSString*)highResImagePathWithPath:(NSString *)path {
+	return  [[path stringByDeletingLastPathComponent] 
+			 stringByAppendingPathComponent:[NSString stringWithFormat:@"%@@2x.%@", 
+											 [[path lastPathComponent] stringByDeletingPathExtension], 
+											 [path pathExtension]]];
+}	
+
 + (NSString *)resolutionIndependentFilePath:(NSString *)path {
-    if ( [UIScreen instancesRespondToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0 ) {
+	// perhaps we already have @2x in the path, so just send it on through.
+    if ( ![path hasSuffix:@"@2x.png"] && [UIScreen instancesRespondToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0 ) {
         NSString *path2x = [[path stringByDeletingLastPathComponent] 
                             stringByAppendingPathComponent:[NSString stringWithFormat:@"%@@2x.%@", 
                                                             [[path lastPathComponent] stringByDeletingPathExtension], 
@@ -42,13 +50,6 @@
 
 + (UIImage*)imageWithContentsOfResolutionIndependentFile:(NSString *)path {
     return [[[UIImage alloc] initWithContentsOfResolutionIndependentFile:path] autorelease];
-}
-
-+ (UIImage*)highResImageWithPath:(NSString *)path {
-	return  [UIImage imageNamed:[[path stringByDeletingLastPathComponent] 
-							  stringByAppendingPathComponent:[NSString stringWithFormat:@"%@@2x.%@", 
-															  [[path lastPathComponent] stringByDeletingPathExtension], 
-															  [path pathExtension]]]];
 }
 
 @end
