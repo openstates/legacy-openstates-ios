@@ -9,10 +9,11 @@
 #import "StaticGradientSliderView.h"
 #import "LegislatorObj.h"
 #import "PartisanIndexStats.h"
+#import "UtilityMethods.h"
+#import "ImageCache.h"
 
 @interface StaticGradientSliderView (Private)
 
-- (void)prepareUI;
 - (void) setBackgroundOffset;
 
 @end
@@ -20,20 +21,94 @@
 @implementation StaticGradientSliderView
 @synthesize sliderControl, gradientImage;
 
-- (void)prepareUI {
-	UIImage *emptyImage = [[UIImage allocWithZone:[self zone]] init]; // should we autorelease??????
-	[self.sliderControl setMinimumTrackImage:emptyImage forState:UIControlStateNormal];
-	[self.sliderControl setMaximumTrackImage:emptyImage forState:UIControlStateNormal];
-	[self setUsesSmallStar:NO];
-	[emptyImage release], emptyImage = nil;	
+- (id)initWithFrame:(CGRect)aRect {
+	if (self = [super initWithFrame:aRect]) 
+	{
+		if (aRect.size.height == 0.f)
+			aRect.size.height = 24.0f;
+		if (aRect.size.width == 0.f)
+			aRect.size.width = 300.0f;
+		
+		self.frame = aRect;
+		
+		self.contentMode = UIViewContentModeCenter;
+		self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+		self.autoresizesSubviews = self.clearsContextBeforeDrawing = YES;
+		self.userInteractionEnabled = self.clipsToBounds = self.multipleTouchEnabled = NO;
+		self.opaque = NO;
+		self.backgroundColor = [UIColor clearColor];
+
+		if (self.gradientImage) {
+			self.gradientImage = nil;
+		}
+		
+		//self.gradientImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TexasGradient"]];
+		self.gradientImage = [[[UIImageView alloc] initWithFrame:CGRectMake(12.0, 6.0, 276.0, 14.0)] autorelease];
+		[[ImageCache sharedImageCache] loadImageView:self.gradientImage fromPath:@"TexasGradient.png"];
+
+		//self.gradientImage.frame = CGRectMake(12.0, 6.0, 276.0, 14.0);
+		self.gradientImage.autoresizesSubviews = self.gradientImage.clearsContextBeforeDrawing = YES;
+		self.gradientImage.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
+		self.gradientImage.clearsContextBeforeDrawing = YES;
+		self.gradientImage.contentMode = UIViewContentModeScaleToFill;
+		self.gradientImage.clipsToBounds = self.gradientImage.multipleTouchEnabled = self.gradientImage.userInteractionEnabled = NO;
+		self.gradientImage.opaque = NO;
+		self.gradientImage.backgroundColor = [UIColor clearColor];
+		self.gradientImage.highlighted = NO;
+
+		if (self.sliderControl)
+			self.sliderControl = nil;
+		
+		self.sliderControl = [[[UISlider alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 23.0)] autorelease];
+		self.sliderControl.autoresizesSubviews = YES;
+		self.sliderControl.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
+		
+		self.sliderControl.clipsToBounds = self.sliderControl.multipleTouchEnabled = self.sliderControl.userInteractionEnabled = NO;
+		self.sliderControl.clearsContextBeforeDrawing = YES;
+		self.sliderControl.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+		self.sliderControl.contentMode = UIViewContentModeScaleAspectFill;
+		self.sliderControl.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+		self.sliderControl.continuous = YES;
+		self.sliderControl.opaque = NO;
+		self.sliderControl.backgroundColor = [UIColor clearColor];
+		self.sliderControl.maximumValue = 1.250;
+		self.sliderControl.minimumValue = -1.250;
+		self.sliderControl.value = 0.005;
+		self.sliderControl.highlighted = YES;
+		self.sliderControl.selected = YES;
+		//self.sliderControl.enabled = NO;
+		
+		//self.usesSmallStar = (![UtilityMethods isIPadDevice]);
+		m_usesSmallStar = NO;
+		self.usesSmallStar = YES;	// This forces it to initialize the first time
+		
+		UIImage *emptyImage = [[UIImage allocWithZone:[self zone]] init]; // should we autorelease??????
+		[self.sliderControl setMinimumTrackImage:emptyImage forState:UIControlStateNormal & UIControlStateHighlighted & UIControlStateSelected & UIControlStateDisabled];
+		[self.sliderControl setMaximumTrackImage:emptyImage forState:UIControlStateNormal & UIControlStateHighlighted & UIControlStateSelected & UIControlStateDisabled];
+		[emptyImage release], emptyImage = nil;	
+		
+		
+		[self addSubview:self.gradientImage];
+		[self addSubview:self.sliderControl];
+		
+	}
+	return self;
+}
+
+- (void)setBackgroundColor:(UIColor *)color {
+	[super setBackgroundColor:color];
+	self.gradientImage.backgroundColor = color;
+	self.opaque = self.gradientImage.opaque = (![color isEqual:[UIColor clearColor]]);
 }
 
 - (void) setUsesSmallStar:(BOOL)isSmall {
-	NSString *starString = (isSmall) ? @"slider_star.png" : @"slider_star_big.png";
-	[self.sliderControl setThumbImage:[UIImage imageNamed:starString] forState:UIControlStateNormal];
-	m_usesSmallStar = isSmall;
-	
-	[self setBackgroundOffset];
+	if (isSmall != m_usesSmallStar) {
+		NSString *starString = (isSmall) ? @"slider_star.png" : @"slider_star_big.png";
+		[self.sliderControl setThumbImage:[UIImage imageNamed:starString] forState:UIControlStateNormal & UIControlStateHighlighted & UIControlStateSelected & UIControlStateDisabled];
+		m_usesSmallStar = isSmall;
+		
+		[self setBackgroundOffset];
+	}
 }
 
 - (void) setBackgroundOffset {	
@@ -50,12 +125,10 @@
 	return m_usesSmallStar;
 }
 
-- (void)awakeFromNib {
-	m_usesSmallStar = NO;
-	[self prepareUI];
-}
-
 - (void)dealloc {
+	if (self.gradientImage.image)
+		self.gradientImage.image = nil;
+
 	self.sliderControl = nil;
 	self.gradientImage = nil;
     [super dealloc];
@@ -66,14 +139,13 @@
 }
 
 - (void)setSliderValue:(float)newVal {
-	//self.sliderControl.value = newVal; 
 	[self setSliderValue:newVal animated:YES];
 }
 
 - (void)setSliderValue:(float)newVal animated:(BOOL)isAnimated {
 	if (newVal == 0.0f) {
 		NSString *imageString = (self.usesSmallStar) ? @"Slider_Question.png" : @"Slider_Question_big.png";
-		[self.sliderControl setThumbImage:[UIImage imageNamed:imageString] forState:UIControlStateNormal];
+		[self.sliderControl setThumbImage:[UIImage imageNamed:imageString] forState:UIControlStateNormal & UIControlStateHighlighted & UIControlStateSelected & UIControlStateDisabled];
 		[self setAlpha:0.5f];
 	}
 	else {
@@ -88,22 +160,12 @@
 
 }
 
-- (void)addToPlaceholder:(UIView *)placeholder withLegislator:(LegislatorObj *)legislator {
+- (void)addToPlaceholder:(UIView *)placeholder {
 	if (placeholder) {
 		CGRect placeholderRect = placeholder.bounds;
 		[placeholder addSubview:self];
 		self.frame = placeholderRect;
 	}
-	[self setLegislator:legislator];
-}
-
-+ (StaticGradientSliderView *) newSliderViewWithOwner:(id)owner {
-	NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StaticGradientSliderView" owner:owner options:NULL];
-	for (id suspect in objects)
-		if ([suspect isKindOfClass:[StaticGradientSliderView class]]) {
-			return suspect;
-		}
-	return nil;
 }
 
 - (void) setLegislator:(LegislatorObj *)legislator {
@@ -114,7 +176,8 @@
 		CGFloat maxSlider = [[indexStats maxPartisanIndexUsingLegislator:legislator] floatValue];
 		[self.sliderControl setMinimumValue:minSlider];
 		[self.sliderControl setMaximumValue:maxSlider];
-	}}
+	}
+}
 
 
 @end

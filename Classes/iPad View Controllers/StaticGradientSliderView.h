@@ -22,9 +22,8 @@
 @property (nonatomic) CGFloat sliderValue;
 @property (readwrite) BOOL usesSmallStar;		// defaults to big star, not small star
 
-+ (StaticGradientSliderView *) newSliderViewWithOwner:(id)owner;
 - (void)setSliderValue:(float)newVal animated:(BOOL)isAnimated;
-- (void)addToPlaceholder:(UIView *)placeholder withLegislator:(LegislatorObj *)legislator;
+- (void)addToPlaceholder:(UIView *)placeholder;
 - (void)setLegislator:(LegislatorObj *)legislator;
 
 @end
