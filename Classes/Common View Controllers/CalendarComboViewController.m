@@ -93,6 +93,10 @@
 - (void)didReceiveMemoryWarning {
 	[[self navigationController] popToRootViewControllerAnimated:YES];
 
+	self.leftShadow = self.rightShadow = self.portShadow = self.landShadow = nil;
+	[self.currentEvents removeAllObjects];
+	[self.searchResults removeAllObjects];
+	
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
@@ -266,6 +270,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	}
 	cell.textLabel.text = cellText;
 	[committeeString release];
+	[cellText release];
     return cell;
 	
 }
