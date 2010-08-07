@@ -11,7 +11,7 @@
 			<string key="NS.object.0">117</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="10"/>
+			<integer value="21"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -38,13 +38,13 @@
 				</object>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<bool key="IBUIHorizontal">NO</bool>
-				<object class="IBUINavigationController" key="IBUISelectedViewController" id="431203068">
-					<object class="IBUITabBarItem" key="IBUITabBarItem" id="964946555">
-						<int key="IBUITag">3</int>
-						<string key="IBUITitle">Resources</string>
+				<object class="IBUINavigationController" key="IBUISelectedViewController" id="505626866">
+					<string key="IBUITitle">Legislators</string>
+					<object class="IBUITabBarItem" key="IBUITabBarItem" id="850528328">
+						<string key="IBUITitle">Legislators</string>
 						<object class="NSCustomResource" key="IBUIImage">
 							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">113-navigation.png</string>
+							<string key="NSResourceName">123-id-card.png</string>
 						</object>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<reference key="IBUITabBar"/>
@@ -56,10 +56,14 @@
 					</object>
 					<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					<bool key="IBUIHorizontal">NO</bool>
-					<object class="IBUINavigationBar" key="IBUINavigationBar" id="232223445">
+					<object class="IBUINavigationBar" key="IBUINavigationBar" id="184298566">
 						<nil key="NSNextResponder"/>
 						<int key="NSvFlags">256</int>
 						<string key="NSFrameSize">{320, 44}</string>
+						<object class="NSColor" key="IBUIBackgroundColor" id="188610103">
+							<int key="NSColorSpace">3</int>
+							<bytes key="NSWhite">MQA</bytes>
+						</object>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -69,19 +73,20 @@
 						</object>
 					</object>
 					<array class="NSMutableArray" key="IBUIViewControllers">
-						<object class="IBUIViewController" id="440134525">
+						<object class="IBUIViewController" id="946652663">
 							<reference key="IBUIToolbarItems" ref="0"/>
-							<object class="IBUINavigationItem" key="IBUINavigationItem" id="1039822793">
+							<object class="IBUINavigationItem" key="IBUINavigationItem" id="631679792">
 								<reference key="IBUINavigationBar"/>
-								<string key="IBUITitle">Resources and Info</string>
-								<object class="IBUIBarButtonItem" key="IBUIBackBarButtonItem" id="116344567">
+								<string key="IBUITitle">Legislator Directory</string>
+								<object class="IBUIBarButtonItem" key="IBUIBackBarButtonItem" id="265864822">
 									<string key="IBUITitle">Back</string>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 									<int key="IBUIStyle">1</int>
 								</object>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
-							<reference key="IBUIParentViewController" ref="431203068"/>
+							<reference key="IBUIParentViewController" ref="505626866"/>
+							<string key="IBUINibName">MasterTableViewController</string>
 							<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
 								<int key="interfaceOrientation">1</int>
 							</object>
@@ -91,62 +96,7 @@
 					</array>
 				</object>
 				<array class="NSMutableArray" key="IBUIViewControllers">
-					<object class="IBUINavigationController" id="505626866">
-						<string key="IBUITitle">Legislators</string>
-						<object class="IBUITabBarItem" key="IBUITabBarItem" id="850528328">
-							<string key="IBUITitle">Legislators</string>
-							<object class="NSCustomResource" key="IBUIImage">
-								<string key="NSClassName">NSImage</string>
-								<string key="NSResourceName">Directory.png</string>
-							</object>
-							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-							<reference key="IBUITabBar"/>
-						</object>
-						<reference key="IBUIToolbarItems" ref="0"/>
-						<reference key="IBUIParentViewController" ref="131916064"/>
-						<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-							<int key="interfaceOrientation">1</int>
-						</object>
-						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<bool key="IBUIHorizontal">NO</bool>
-						<object class="IBUINavigationBar" key="IBUINavigationBar" id="184298566">
-							<nil key="NSNextResponder"/>
-							<int key="NSvFlags">256</int>
-							<string key="NSFrameSize">{320, 44}</string>
-							<object class="NSColor" key="IBUIBackgroundColor" id="188610103">
-								<int key="NSColorSpace">3</int>
-								<bytes key="NSWhite">MQA</bytes>
-							</object>
-							<bool key="IBUIClipsSubviews">YES</bool>
-							<bool key="IBUIMultipleTouchEnabled">YES</bool>
-							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-							<object class="NSColor" key="IBUITintColor">
-								<int key="NSColorSpace">1</int>
-								<bytes key="NSRGB">MC4zMDU4ODIzNTI5IDAuMzYwNzg0MzEzNyAwLjM4ODIzNTI5NDEAA</bytes>
-							</object>
-						</object>
-						<array class="NSMutableArray" key="IBUIViewControllers">
-							<object class="IBUIViewController" id="946652663">
-								<reference key="IBUIToolbarItems" ref="0"/>
-								<object class="IBUINavigationItem" key="IBUINavigationItem" id="631679792">
-									<string key="IBUITitle">Legislator Directory</string>
-									<object class="IBUIBarButtonItem" key="IBUIBackBarButtonItem" id="265864822">
-										<string key="IBUITitle">Back</string>
-										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-										<int key="IBUIStyle">1</int>
-									</object>
-									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								</object>
-								<reference key="IBUIParentViewController" ref="505626866"/>
-								<string key="IBUINibName">MasterTableViewController</string>
-								<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-									<int key="interfaceOrientation">1</int>
-								</object>
-								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<bool key="IBUIHorizontal">NO</bool>
-							</object>
-						</array>
-					</object>
+					<reference ref="505626866"/>
 					<object class="IBUINavigationController" id="565023066">
 						<object class="IBUITabBarItem" key="IBUITabBarItem" id="291974220">
 							<int key="IBUITag">1</int>
@@ -306,7 +256,57 @@
 							</object>
 						</array>
 					</object>
-					<reference ref="431203068"/>
+					<object class="IBUINavigationController" id="431203068">
+						<object class="IBUITabBarItem" key="IBUITabBarItem" id="964946555">
+							<int key="IBUITag">3</int>
+							<string key="IBUITitle">Resources</string>
+							<object class="NSCustomResource" key="IBUIImage">
+								<string key="NSClassName">NSImage</string>
+								<string key="NSResourceName">113-navigation.png</string>
+							</object>
+							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+							<reference key="IBUITabBar"/>
+						</object>
+						<reference key="IBUIToolbarItems" ref="0"/>
+						<reference key="IBUIParentViewController" ref="131916064"/>
+						<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
+							<int key="interfaceOrientation">1</int>
+						</object>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<bool key="IBUIHorizontal">NO</bool>
+						<object class="IBUINavigationBar" key="IBUINavigationBar" id="232223445">
+							<nil key="NSNextResponder"/>
+							<int key="NSvFlags">256</int>
+							<string key="NSFrameSize">{320, 44}</string>
+							<bool key="IBUIClipsSubviews">YES</bool>
+							<bool key="IBUIMultipleTouchEnabled">YES</bool>
+							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+							<object class="NSColor" key="IBUITintColor">
+								<int key="NSColorSpace">1</int>
+								<bytes key="NSRGB">MC4zMDU4ODIzNTI5IDAuMzYwNzg0MzEzNyAwLjM4ODIzNTI5NDEAA</bytes>
+							</object>
+						</object>
+						<array class="NSMutableArray" key="IBUIViewControllers">
+							<object class="IBUIViewController" id="440134525">
+								<reference key="IBUIToolbarItems" ref="0"/>
+								<object class="IBUINavigationItem" key="IBUINavigationItem" id="1039822793">
+									<string key="IBUITitle">Resources and Info</string>
+									<object class="IBUIBarButtonItem" key="IBUIBackBarButtonItem" id="116344567">
+										<string key="IBUITitle">Back</string>
+										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+										<int key="IBUIStyle">1</int>
+									</object>
+									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								</object>
+								<reference key="IBUIParentViewController" ref="431203068"/>
+								<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
+									<int key="interfaceOrientation">1</int>
+								</object>
+								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<bool key="IBUIHorizontal">NO</bool>
+							</object>
+						</array>
+					</object>
 				</array>
 				<object class="IBUITabBar" key="IBUITabBar" id="671102759">
 					<nil key="NSNextResponder"/>
@@ -750,17 +750,6 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">GeneralTableViewController</string>
 					<string key="superclassName">UITableViewController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">toolbarAction:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">toolbarAction:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">toolbarAction:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="dataSource">id</string>
 						<string key="detailViewController">id</string>
@@ -1021,7 +1010,6 @@
 						<string key="saveAction:">id</string>
 						<string key="showOrHideAboutMenuPopover:">id</string>
 						<string key="showOrHideMenuPopover:">id</string>
-						<string key="touchCommonMenuControl:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="saveAction:">
@@ -1036,10 +1024,6 @@
 							<string key="name">showOrHideMenuPopover:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="touchCommonMenuControl:">
-							<string key="name">touchCommonMenuControl:</string>
-							<string key="candidateClassName">id</string>
-						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="calendarsTableTabbedVC">GeneralTableViewController</string>
@@ -1047,7 +1031,6 @@
 						<string key="currentDetailViewController">id</string>
 						<string key="currentMasterViewController">id</string>
 						<string key="detailNavigationController">UINavigationController</string>
-						<string key="directoryTableTabbedVC">GeneralTableViewController</string>
 						<string key="legMasterTableViewController">MasterTableViewController</string>
 						<string key="linksTableTabbedVC">GeneralTableViewController</string>
 						<string key="managedObjectContext">NSManagedObjectContext</string>
@@ -1077,10 +1060,6 @@
 						<object class="IBToOneOutletInfo" key="detailNavigationController">
 							<string key="name">detailNavigationController</string>
 							<string key="candidateClassName">UINavigationController</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="directoryTableTabbedVC">
-							<string key="name">directoryTableTabbedVC</string>
-							<string key="candidateClassName">GeneralTableViewController</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="legMasterTableViewController">
 							<string key="name">legMasterTableViewController</string>
@@ -1504,9 +1483,9 @@
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="103-map.png">{26, 21}</string>
 			<string key="113-navigation.png">{28, 28}</string>
+			<string key="123-id-card.png">{24, 17}</string>
 			<string key="60-signpost.png">{22, 28}</string>
 			<string key="83-calendar.png">{23, 25}</string>
-			<string key="Directory.png">{30, 30}</string>
 		</dictionary>
 		<string key="IBCocoaTouchPluginVersion">117</string>
 	</data>
