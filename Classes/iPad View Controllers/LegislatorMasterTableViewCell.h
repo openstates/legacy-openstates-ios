@@ -13,9 +13,9 @@
 
 @interface LegislatorMasterTableViewCell : UITableViewCell {
     BOOL useDarkBackground;
+	IBOutlet UIImageView *disclosureView;
 	IBOutlet UIImageView *leg_photoView;
 	IBOutlet UILabel *leg_titleLab;
-	IBOutlet UILabel *leg_partyDistLab;
 	IBOutlet UILabel *leg_tenureLab;
 	IBOutlet UILabel *leg_nameLab;
 	IBOutlet UIView	 *leg_sliderViewPlaceHolder;
@@ -31,9 +31,9 @@
 
 @property BOOL useDarkBackground;
 
+@property (nonatomic,retain) IBOutlet UIImageView *disclosureView;
 @property (nonatomic,retain) IBOutlet UIImageView *leg_photoView;
 @property (nonatomic,retain) IBOutlet UILabel *leg_titleLab;
-@property (nonatomic,retain) IBOutlet UILabel *leg_partyDistLab;
 @property (nonatomic,retain) IBOutlet UILabel *leg_tenureLab;
 @property (nonatomic,retain) IBOutlet UILabel *leg_nameLab;
 @property (nonatomic,retain) IBOutlet UIView	*leg_sliderViewPlaceHolder;
