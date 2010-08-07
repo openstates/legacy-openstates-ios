@@ -76,9 +76,8 @@
 				</object>
 				<bool key="IBUIClipsSubviews">YES</bool>
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-				<bool key="IBUIAlwaysBounceVertical">YES</bool>
 				<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
-				<int key="IBUIIndicatorStyle">1</int>
+				<bool key="IBUIBouncesZoom">NO</bool>
 				<int key="IBUISeparatorStyle">1</int>
 				<int key="IBUISectionIndexMinimumDisplayRowCount">15</int>
 				<bool key="IBUIShowsSelectionImmediatelyOnTouchBegin">YES</bool>
@@ -541,7 +540,6 @@
 							<string>dataSource</string>
 							<string>detailViewController</string>
 							<string>menuButton</string>
-							<string>searchBar</string>
 							<string>selectObjectOnAppear</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -550,7 +548,6 @@
 							<string>id</string>
 							<string>LegislatorDetailViewController</string>
 							<string>UIBarButtonItem</string>
-							<string>UISearchBar</string>
 							<string>id</string>
 						</object>
 					</object>
@@ -562,7 +559,6 @@
 							<string>dataSource</string>
 							<string>detailViewController</string>
 							<string>menuButton</string>
-							<string>searchBar</string>
 							<string>selectObjectOnAppear</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -582,10 +578,6 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">menuButton</string>
 								<string key="candidateClassName">UIBarButtonItem</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">searchBar</string>
-								<string key="candidateClassName">UISearchBar</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">selectObjectOnAppear</string>
