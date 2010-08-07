@@ -86,6 +86,9 @@ enum HeaderSectionRows {
 }
 
 #if NEEDS_TO_INITIALIZE_DATABASE
+#warning initializeDatabase IS TURNED ON!!!
+#warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
+
 - (void) setupDataArray {
 //#error **** MAKE SURE YOU RE-ENABLE LINK FOR "Links.plist"
 	NSString *DataPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Links.plist"];		

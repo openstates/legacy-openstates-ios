@@ -11,6 +11,7 @@
 #import "WnomObj.h"
 #import "LegislatorMasterTableViewCell.h"
 #import "UtilityMethods.h"
+#import "ImageCache.h"
 
 @interface DirectoryDataSource (Private)
 
@@ -55,16 +56,12 @@
 - (void)dealloc {	
 	self.fetchedResultsController = nil;
 	self.searchDisplayController = nil;
-	self.managedObjectContext = nil;	
+	self.managedObjectContext = nil;	// I THINK THIS IS CORRECT, SINCE WE'VE SYNTHESIZED IT AS RETAIN...
 	self.filterString = nil;
 	self.leg_cell = nil;	
 	
     [super dealloc];
 }
-
-- (void)didReceiveMemoryWarning {
-}
-
 
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
@@ -167,7 +164,8 @@
 		cell.detailTextLabel.font = [UIFont boldSystemFontOfSize:12];
 		cell.detailTextLabel.textColor = [UIColor lightGrayColor];
 		
-		cell.imageView.image = [UtilityMethods poorMansImageNamed:dataObj.photo_name];
+		[[ImageCache sharedImageCache] loadImageView:cell.imageView fromPath:dataObj.photo_name]
+		//cell.imageView.image = [UIImage imageNamed:dataObj.photo_name];
 		
 		// all the rows should show the disclosure indicator
 		if ([self showDisclosureIcon])
@@ -338,7 +336,8 @@
 }
 
 #if NEEDS_TO_INITIALIZE_DATABASE
-
+#warning initializeDatabase IS TURNED ON!!!
+#warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
 - (void)initializeDatabase {
 	NSInteger count = [[self.fetchedResultsController sections] count];
 	if (count == 0) { // try initializing it...

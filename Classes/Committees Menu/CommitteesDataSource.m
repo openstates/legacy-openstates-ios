@@ -35,8 +35,8 @@
 
 - (void)dealloc {
 	self.fetchedResultsController = nil;
-	self.searchDisplayController = nil;
-	self.managedObjectContext = nil;	
+	//self.searchDisplayController = nil;
+	//self.managedObjectContext = nil;	
 	self.filterString = nil;
 	
     [super dealloc];
@@ -95,13 +95,12 @@
 
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Committees"];
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Committees"] autorelease];
+		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Committees"] autorelease];
 
 		cell.detailTextLabel.font = [TexLegeTheme boldFifteen];
 		cell.textLabel.font =		[TexLegeTheme boldTwelve];
 		cell.detailTextLabel.textColor = 	[TexLegeTheme textDark];
 		cell.textLabel.textColor =	[TexLegeTheme accent];
-		cell.indentationLevel =		-4;
 		
 		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
 		cell.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
@@ -130,9 +129,12 @@
 	cell.detailTextLabel.text = tempEntry.committeeName;
 	cell.textLabel.text = (tempEntry.committeeType.integerValue == HOUSE) ? @"House" : @"Senate";
 
-	if (tableView == self.searchDisplayController.searchResultsTableView) {
+	/*
+	 if (tableView == self.searchDisplayController.searchResultsTableView) {
 		cell.accessoryType = UITableViewCellAccessoryNone;
 	}
+	 */
+	cell.accessoryView.hidden = (tableView == self.searchDisplayController.searchResultsTableView);
 
 
 	return cell;
@@ -255,6 +257,8 @@
 #pragma mark Core Data Methods
 
 #if NEEDS_TO_INITIALIZE_DATABASE
+#warning initializeDatabase IS TURNED ON!!!
+#warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
 
 - (void)initializeDatabase {
 	NSInteger count = [[self.fetchedResultsController sections] count];

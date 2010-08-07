@@ -141,8 +141,6 @@
 
 - (void)dealloc {
 	self.sectionList = nil;
-	
-	//[fetchedResultsController release];
 	self.managedObjectContext = nil;
 	[super dealloc];
 }
