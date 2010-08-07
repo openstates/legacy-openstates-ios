@@ -45,10 +45,14 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 }
 
 - (void)dealloc {	
-	self.managedObjectContext = nil;
+	self.managedObjectContext = nil;	// I THINK THIS IS CORRECT, SINCE WE'VE SYNTHESIZED IT AS RETAIN...
 	if (m_partisanIndexAggregates) [m_partisanIndexAggregates release], m_partisanIndexAggregates = nil;
 	
     [super dealloc];
+}
+
+- (void)didReceiveMemoryWarning {
+	[m_partisanIndexAggregates release], m_partisanIndexAggregates = nil;
 }
 
 - (NSNumber *) currentSessionYear {
