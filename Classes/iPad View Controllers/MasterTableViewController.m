@@ -207,7 +207,7 @@
 - (void)didReceiveMemoryWarning {
 	[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
 
-	[self searchBarCancelButtonClicked:self.searchDisplayController.searchBar];
+	//[self searchBarCancelButtonClicked:self.searchDisplayController.searchBar];
 	self.detailViewController = nil;
     [super didReceiveMemoryWarning];	
 }
@@ -224,7 +224,9 @@
 - (void)dealloc {
 	self.chamberControl = nil;
 	self.dataSource = nil;
-	
+	self.selectObjectOnAppear = nil;
+	self.detailViewController = nil;
+	self.menuButton = nil;
     [super dealloc];
 }
 
