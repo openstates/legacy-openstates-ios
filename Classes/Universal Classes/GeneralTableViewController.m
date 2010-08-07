@@ -94,6 +94,8 @@
 	if ([self.dataSource respondsToSelector:@selector(didReceiveMemoryWarning)])
 		[self.dataSource performSelector:@selector(didReceiveMemoryWarning)];
 	
+	self.detailViewController = nil;
+	self.selectIndexPathOnAppear = nil;
 	[self resetStoredSelection];
 
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
