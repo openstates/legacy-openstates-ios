@@ -166,54 +166,64 @@
 + (CapitolMap *) capitolMapFromOfficeString:(NSString *)office {
 	NSString *fileString = nil;
 	NSString *thePath = [[NSBundle mainBundle] pathForResource:@"CapitolMaps" ofType:@"plist"];
-	NSArray *mapSectionsPlist = [NSArray arrayWithContentsOfFile:thePath];	
+	NSArray *mapSectionsPlist = [[NSArray alloc] initWithContentsOfFile:thePath];	
 	NSArray *searchArray = [mapSectionsPlist objectAtIndex:0];
+	CapitolMap *foundMap = nil;
 	
 	if ([office hasPrefix:@"4"])
-		fileString = [NSString stringWithFormat:@"Map.Floor4.pdf"];
+		fileString = @"Map.Floor4.pdf";
 	else if ([office hasPrefix:@"3"])
-		fileString = [NSString stringWithFormat:@"Map.Floor3.pdf"];
+		fileString = @"Map.Floor3.pdf";
 	else if ([office hasPrefix:@"2"])
-		fileString = [NSString stringWithFormat:@"Map.Floor2.pdf"];
+		fileString = @"Map.Floor2.pdf";
 	else if ([office hasPrefix:@"1"])
-		fileString = [NSString stringWithFormat:@"Map.Floor1.pdf"];
+		fileString = @"Map.Floor1.pdf";
 	else if ([office hasPrefix:@"G"])
-		fileString = [NSString stringWithFormat:@"Map.FloorG.pdf"];
+		fileString = @"Map.FloorG.pdf";
 	else if ([office hasPrefix:@"E1."])
-		fileString = [NSString stringWithFormat:@"Map.FloorE1.pdf"];
+		fileString = @"Map.FloorE1.pdf";
 	else if ([office hasPrefix:@"E2."])
-		fileString = [NSString stringWithFormat:@"Map.FloorE2.pdf"];
+		fileString = @"Map.FloorE2.pdf";
 	else if ([office hasPrefix:@"SHB"]) {
-		fileString = [NSString stringWithFormat:@"Map.SamHoustonLoc.pdf"];
+		fileString = @"Map.SamHoustonLoc.pdf";
 		searchArray = [mapSectionsPlist objectAtIndex:1];
 	}
 		
 	for (NSDictionary * mapEntry in searchArray)
 	{
-		if ([fileString isEqualToString:[mapEntry valueForKey:@"file"]])
-			return [[[CapitolMap alloc] initWithDictionary:mapEntry] autorelease];
+		if ([fileString isEqualToString:[mapEntry valueForKey:@"file"]]) {
+			foundMap = [[[CapitolMap alloc] initWithDictionary:mapEntry] autorelease];
+			continue;
+		}
 	}
 
-	return nil;
+	[mapSectionsPlist release];
+
+	return foundMap;
 }
 
 + (CapitolMap *) capitolMapFromChamber:(NSInteger)chamber {
 	NSString *fileString = nil;
 	NSString *thePath = [[NSBundle mainBundle] pathForResource:@"CapitolMaps" ofType:@"plist"];
-	NSArray *mapSectionsPlist = [NSArray arrayWithContentsOfFile:thePath];	
+	NSArray *mapSectionsPlist = [[NSArray alloc] initWithContentsOfFile:thePath];	
 	NSArray *searchArray = [mapSectionsPlist objectAtIndex:2];
+	CapitolMap *foundMap = nil;
 
 	if (chamber == HOUSE)
-		fileString = [NSString stringWithFormat:@"Map.HouseChamber.pdf"];
+		fileString = @"Map.HouseChamber.pdf";
 	else // (chamber == SENATE)
-		fileString = [NSString stringWithFormat:@"Map.SenateChamber.pdf"];
+		fileString = @"Map.SenateChamber.pdf";
 	
 	for (NSDictionary * mapEntry in searchArray)
 	{
-		if ([fileString isEqualToString:[mapEntry valueForKey:@"file"]])
-			return [[[CapitolMap alloc] initWithDictionary:mapEntry] autorelease];
+		if ([fileString isEqualToString:[mapEntry valueForKey:@"file"]]) {
+			foundMap = [[[CapitolMap alloc] initWithDictionary:mapEntry] autorelease];
+			continue;
+		}
 	}
-	return nil;
+	[mapSectionsPlist release];
+	
+	return foundMap;
 }
 
 #pragma mark -
