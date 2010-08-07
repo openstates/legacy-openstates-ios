@@ -462,8 +462,10 @@ enum InfoSectionRows {
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
+	[[self navigationController] popToRootViewControllerAnimated:YES];
+
+	self.committee = nil;
     [super didReceiveMemoryWarning];
-    
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 

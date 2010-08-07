@@ -164,9 +164,14 @@
 #pragma mark -
 #pragma mark Memory management
 
+- (void)didReceiveMemoryWarning {
+	[[self navigationController] popToRootViewControllerAnimated:YES];
+	self.link = nil;
+	[super didReceiveMemoryWarning];
+}
 
 - (void)dealloc {
-    [link release];
+	self.link = nil;
     [super dealloc];
 }
 

@@ -12,10 +12,10 @@
 @class LegislatorObj;
 @class StaticGradientSliderView;
 @class DirectoryDetailInfo;
-@class CPColor;
+@class CPLTColor;
 
 @interface LegislatorDetailViewController : UITableViewController <UITableViewDelegate, UIPopoverControllerDelegate, 
-												UISplitViewControllerDelegate, CPPlotDataSource, CPPieChartDataSource>
+												UISplitViewControllerDelegate, CPLTPlotDataSource, CPLTPieChartDataSource>
 {	
 	IBOutlet LegislatorObj *legislator;
     UIPopoverController *popoverController;
@@ -26,27 +26,27 @@
 	IBOutlet UIImageView *leg_photoView;
 	IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab, *freshmanPlotLab;
 	IBOutlet UILabel *leg_indexTitleLab, *leg_rankLab, *leg_chamberPartyLab, *leg_chamberLab;
-	IBOutlet CPLayerHostingView *scatterPlotView;
+	IBOutlet CPLTLayerHostingView *scatterPlotView;
 	IBOutlet UIView *indivPHolder, *partyPHolder, *allPHolder;
 	IBOutlet StaticGradientSliderView *indivSlider, *partySlider, *allSlider;
 			
 @private
-	CPXYGraph *graph;
+	CPLTXYGraph *graph;
 	NSMutableArray	*sectionArray;
 	NSMutableArray *dataForPlot;
 	
-	CPColor *texasRed, *texasBlue, *texasOrange;
+	CPLTColor *texasRed, *texasBlue, *texasOrange;
 }
 
 @property(nonatomic, retain) NSMutableArray *dataForPlot;
 @property (nonatomic, retain) UIPopoverController *popoverController;
 
-@property (nonatomic,retain) CPXYGraph *graph;
-@property (nonatomic,retain) CPColor *texasRed, *texasBlue, *texasOrange;
+@property (nonatomic,retain) CPLTXYGraph *graph;
+@property (nonatomic,retain) CPLTColor *texasRed, *texasBlue, *texasOrange;
 @property (nonatomic,retain) IBOutlet UIView *startupSplashView;
 @property (nonatomic,retain) IBOutlet UIView *miniBackgroundView;
 @property (nonatomic,retain) IBOutlet UIView *headerView;
-@property (nonatomic,retain) IBOutlet CPLayerHostingView *scatterPlotView;
+@property (nonatomic,retain) IBOutlet CPLTLayerHostingView *scatterPlotView;
 @property (nonatomic,retain) IBOutlet UIImageView *leg_photoView;
 @property (nonatomic,retain) IBOutlet UILabel *leg_indexTitleLab, *leg_rankLab, *leg_chamberPartyLab, *leg_chamberLab;
 @property (nonatomic,retain) IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab, *freshmanPlotLab;

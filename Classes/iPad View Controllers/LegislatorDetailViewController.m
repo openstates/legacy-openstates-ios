@@ -27,6 +27,7 @@
 
 #import "PartisanIndexStats.h"
 #import "UIImage+ResolutionIndependent.h"
+#import "ImageCache.h"
 
 @interface LegislatorDetailViewController (Private)
 
@@ -58,10 +59,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	NSString * headerViewXib = [UtilityMethods isIPadDevice] ? @"LegislatorDetailHeaderView~ipad" : @"LegislatorDetailHeaderView~iphone";
-	// Load one of our header views (iPad or iPhone selected automatically by the file's name extension
-	NSArray *objects = [[NSBundle mainBundle] loadNibNamed:headerViewXib owner:self options:NULL];
-	self.headerView = [objects objectAtIndex:0];
+	
+	if (self.headerView == nil) {
+		NSString * headerViewXib = [UtilityMethods isIPadDevice] ? @"LegislatorDetailHeaderView~ipad" : @"LegislatorDetailHeaderView~iphone";
+		// Load one of our header views (iPad or iPhone selected automatically by the file's name extension
+		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:headerViewXib owner:self options:NULL];
+		self.headerView = [objects objectAtIndex:0];
+	}
 	
 	CGRect headerRect = self.headerView.bounds;
 	headerRect.size.width = self.tableView.bounds.size.width;
@@ -81,17 +85,17 @@
 	
 	self.dataForPlot = [NSMutableArray array];
 	
-	self.texasRed = [CPColor colorWithComponentRed:198.0/255 green:0.0 blue:47.0/255 alpha:1.0f];
-	//	self.texasBlue = [CPColor colorWithComponentRed:50.0/255 green:79.0/255 blue:133.0/255 alpha:1.0f];
-	self.texasBlue = [CPColor colorWithComponentRed:90.0/255 green:141.0/255 blue:222.0/255 alpha:1.0f];
-	self.texasOrange = [CPColor colorWithComponentRed:204.0/255 green:85.0/255 blue:0.0 alpha:1.0f];
+	self.texasRed = [CPLTColor colorWithComponentRed:198.0/255 green:0.0 blue:47.0/255 alpha:1.0f];
+	//	self.texasBlue = [CPLTColor colorWithComponentRed:50.0/255 green:79.0/255 blue:133.0/255 alpha:1.0f];
+	self.texasBlue = [CPLTColor colorWithComponentRed:90.0/255 green:141.0/255 blue:222.0/255 alpha:1.0f];
+	self.texasOrange = [CPLTColor colorWithComponentRed:204.0/255 green:85.0/255 blue:0.0 alpha:1.0f];
 	
 	[self.tableView setTableHeaderView:self.headerView];
 	
 	if ([UtilityMethods isIPadDevice]) {
-		self.indivSlider = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
-		self.partySlider = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
-		self.allSlider = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
+		self.indivSlider = [[[StaticGradientSliderView alloc] initWithFrame:CGRectZero] autorelease];
+		self.partySlider = [[[StaticGradientSliderView alloc] initWithFrame:CGRectZero] autorelease];
+		self.allSlider = [[[StaticGradientSliderView alloc] initWithFrame:CGRectZero] autorelease];
 		
 		if (self.indivSlider) {
 			[self.indivSlider addToPlaceholder:self.indivPHolder];
@@ -138,7 +142,8 @@
 	self.leg_nameLab.text = legName;
 	self.navigationItem.title = legName;
 
-	self.leg_photoView.image = [UIImage highResImageWithPath:self.legislator.photo_name];
+	[[ImageCache sharedImageCache] loadImageView:self.leg_photoView fromPath:[UIImage highResImagePathWithPath:self.legislator.photo_name]];
+	//self.leg_photoView.image = [UIImage imageNamed:[UIImage highResImagePathWithPath:self.legislator.photo_name]];
 	self.leg_partyLab.text = [self.legislator party_name];
 	self.leg_districtLab.text = [NSString stringWithFormat:@"District %@", self.legislator.district];
 	self.leg_tenureLab.text = [self.legislator tenureString];
@@ -287,12 +292,15 @@
 		// TODO: We could alternatively use this opportunity to open a proper informational introduction
 		// for instance, drop in a new view taking the full screen that gives a full menu and helpful info
 		
-		NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StartupSplashView-Portrait" owner:self options:NULL];
-		self.startupSplashView = [objects objectAtIndex:0];
+		if (self.startupSplashView == nil) {
+			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StartupSplashView-Portrait" owner:self options:NULL];
+			self.startupSplashView = [objects objectAtIndex:0];
+		}
 		[self.view addSubview:self.startupSplashView];
 	}
 	else {
 		[self.startupSplashView removeFromSuperview];
+		self.startupSplashView = nil;
 	}
 	
 	[self showPopoverMenus:([UtilityMethods isLandscapeOrientation] == NO)];
@@ -349,6 +357,15 @@
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
+	[[self navigationController] popToRootViewControllerAnimated:YES];
+
+	self.legislator = nil;
+	self.leg_photoView = nil;
+	self.graph = nil;
+	self.dataForPlot = nil;
+	self.sectionArray = nil;
+	self.startupSplashView = nil;
+	
     [super didReceiveMemoryWarning];
     
     // Relinquish ownership any cached data, images, etc that aren't in use.
@@ -974,52 +991,54 @@
     NSTimeInterval oneSession = 24 * 60 * 60 * 365 * 2;
 		
     // Create graph from theme
-    self.graph = [(CPXYGraph *)[CPXYGraph alloc] initWithFrame:CGRectZero];
-	CPTheme *theme = [CPTheme themeNamed:kCPStocksTheme];
+	if (self.graph)
+		self.graph = nil;
+    self.graph = [(CPLTXYGraph *)[CPLTXYGraph alloc] initWithFrame:CGRectZero];
+	CPLTTheme *theme = [CPLTTheme themeNamed:kCPStocksTheme];
 	[self.graph applyTheme:theme];
 	scatterPlotView.hostedLayer = self.graph;
     
     // Setup scatter plot space
-    CPXYPlotSpace *plotSpace = (CPXYPlotSpace *)self.graph.defaultPlotSpace;
+    CPLTXYPlotSpace *plotSpace = (CPLTXYPlotSpace *)self.graph.defaultPlotSpace;
 	plotSpace.allowsUserInteraction = YES;
 
     NSTimeInterval xLow = 0.0f;
-    plotSpace.xRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(xLow-(oneSession/2)) length:CPDecimalFromInteger(oneSession*countOfScores)];
-    plotSpace.yRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(-1.25) length:CPDecimalFromFloat(2.5)];
+    plotSpace.xRange = [CPLTPlotRange plotRangeWithLocation:CPLTDecimalFromFloat(xLow-(oneSession/2)) length:CPLTDecimalFromInteger(oneSession*countOfScores)];
+    plotSpace.yRange = [CPLTPlotRange plotRangeWithLocation:CPLTDecimalFromFloat(-1.25) length:CPLTDecimalFromFloat(2.5)];
     
     // Axes
-	CPXYAxisSet *axisSet = (CPXYAxisSet *)self.graph.axisSet;
-    CPXYAxis *x = axisSet.xAxis;
-    x.majorIntervalLength = CPDecimalFromFloat(oneSession);
-    x.orthogonalCoordinateDecimal = CPDecimalFromString(@"0.0");
+	CPLTXYAxisSet *axisSet = (CPLTXYAxisSet *)self.graph.axisSet;
+    CPLTXYAxis *x = axisSet.xAxis;
+    x.majorIntervalLength = CPLTDecimalFromFloat(oneSession);
+    x.orthogonalCoordinateDecimal = CPLTDecimalFromString(@"0.0");
     x.minorTicksPerInterval = 0;
     NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
     dateFormatter.dateStyle = kCFDateFormatterShortStyle;
 	[dateFormatter setDateFormat:@"‘YY"];
 
-    CPTimeFormatter *timeFormatter = [[[CPTimeFormatter alloc] initWithDateFormatter:dateFormatter] autorelease];
+    CPLTTimeFormatter *timeFormatter = [[[CPLTTimeFormatter alloc] initWithDateFormatter:dateFormatter] autorelease];
     timeFormatter.referenceDate = refDate;
     x.labelFormatter = timeFormatter;
 	NSArray *exclusionRanges = [NSArray arrayWithObjects:
-								[CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(-10 * oneSession) length:CPDecimalFromFloat(9*oneSession)],
-								[CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(oneSession*countOfScores) length:CPDecimalFromFloat(9*oneSession)],
+								[CPLTPlotRange plotRangeWithLocation:CPLTDecimalFromFloat(-10 * oneSession) length:CPLTDecimalFromFloat(9*oneSession)],
+								[CPLTPlotRange plotRangeWithLocation:CPLTDecimalFromFloat(oneSession*countOfScores) length:CPLTDecimalFromFloat(9*oneSession)],
 								nil];
 	x.labelExclusionRanges = exclusionRanges;
 	
-    CPXYAxis *y = axisSet.yAxis;
-    y.majorIntervalLength = CPDecimalFromString(@"0.5");
+    CPLTXYAxis *y = axisSet.yAxis;
+    y.majorIntervalLength = CPLTDecimalFromString(@"0.5");
     y.minorTicksPerInterval = 1;
 
-    y.orthogonalCoordinateDecimal = CPDecimalFromFloat(oneSession/2);
+    y.orthogonalCoordinateDecimal = CPLTDecimalFromFloat(oneSession/2);
 	exclusionRanges = [NSArray arrayWithObjects:
-					   [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(-10.0) length:CPDecimalFromFloat(8.5f)], 
-					   [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.0) length:CPDecimalFromFloat(0.02)], 
-					   [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(1.5) length:CPDecimalFromFloat(8.5f)], 
+					   [CPLTPlotRange plotRangeWithLocation:CPLTDecimalFromFloat(-10.0) length:CPLTDecimalFromFloat(8.5f)], 
+					   [CPLTPlotRange plotRangeWithLocation:CPLTDecimalFromFloat(0.0) length:CPLTDecimalFromFloat(0.02)], 
+					   [CPLTPlotRange plotRangeWithLocation:CPLTDecimalFromFloat(1.5) length:CPLTDecimalFromFloat(8.5f)], 
 					   nil];
 	y.labelExclusionRanges = exclusionRanges;
 	
 	// Create a blue plot area
-	CPScatterPlot *democratPlot = [[[CPScatterPlot alloc] init] autorelease];
+	CPLTScatterPlot *democratPlot = [[[CPLTScatterPlot alloc] init] autorelease];
     democratPlot.identifier = @"Democrat Plot";
 	democratPlot.dataLineStyle.miterLimit = 5.0f;
 	democratPlot.dataLineStyle.lineWidth = 2.5f;
@@ -1029,16 +1048,16 @@
 	[self.graph addPlot:democratPlot];
 
 	// Add plot symbols
-	CPLineStyle *symbolLineStyle = [CPLineStyle lineStyle];
+	CPLTLineStyle *symbolLineStyle = [CPLTLineStyle lineStyle];
 	symbolLineStyle.lineColor = self.texasBlue;
-	CPPlotSymbol *plotSymbol = [CPPlotSymbol ellipsePlotSymbol];
-	plotSymbol.fill = [CPFill fillWithColor:self.texasBlue];
+	CPLTPlotSymbol *plotSymbol = [CPLTPlotSymbol ellipsePlotSymbol];
+	plotSymbol.fill = [CPLTFill fillWithColor:self.texasBlue];
 	plotSymbol.lineStyle = symbolLineStyle;
     plotSymbol.size = CGSizeMake(5.0, 5.0);
     democratPlot.plotSymbol = plotSymbol;
 	
 	// Create a blue plot area
-	CPScatterPlot *republicanPlot = [[[CPScatterPlot alloc] init] autorelease];
+	CPLTScatterPlot *republicanPlot = [[[CPLTScatterPlot alloc] init] autorelease];
     republicanPlot.identifier = @"Republican Plot";
 	republicanPlot.dataLineStyle.miterLimit = 5.0f;
 	republicanPlot.dataLineStyle.lineWidth = 2.5f;
@@ -1048,17 +1067,17 @@
 	[self.graph addPlot:republicanPlot];
 	
 	// Add plot symbols
-	//CPLineStyle *symbolLineStyle = [CPLineStyle lineStyle];
+	//CPLTLineStyle *symbolLineStyle = [CPLTLineStyle lineStyle];
 	symbolLineStyle.lineColor = self.texasRed;
-	//CPPlotSymbol *plotSymbol = [CPPlotSymbol ellipsePlotSymbol];
-	plotSymbol.fill = [CPFill fillWithColor:self.texasRed];
+	//CPLTPlotSymbol *plotSymbol = [CPLTPlotSymbol ellipsePlotSymbol];
+	plotSymbol.fill = [CPLTFill fillWithColor:self.texasRed];
 	plotSymbol.lineStyle = symbolLineStyle;
     plotSymbol.size = CGSizeMake(5.0, 5.0);
     republicanPlot.plotSymbol = plotSymbol;
 	
 	
     // Create a plot that uses the data source method
-	CPScatterPlot *dataSourceLinePlot = [[[CPScatterPlot alloc] init] autorelease];
+	CPLTScatterPlot *dataSourceLinePlot = [[[CPLTScatterPlot alloc] init] autorelease];
     dataSourceLinePlot.identifier = @"Legislator Plot";
 	dataSourceLinePlot.dataLineStyle.miterLimit = 5.0f;
 	dataSourceLinePlot.dataLineStyle.lineWidth = 3.0f;
@@ -1067,10 +1086,10 @@
 	[self.graph addPlot:dataSourceLinePlot];
 	
 	// Add plot symbols
-	//CPLineStyle *symbolLineStyle = [CPLineStyle lineStyle];
-	symbolLineStyle.lineColor = [CPColor blackColor];
-	plotSymbol = [CPPlotSymbol starPlotSymbol];
-	plotSymbol.fill = [CPFill fillWithColor:self.texasOrange];
+	//CPLTLineStyle *symbolLineStyle = [CPLTLineStyle lineStyle];
+	symbolLineStyle.lineColor = [CPLTColor blackColor];
+	plotSymbol = [CPLTPlotSymbol starPlotSymbol];
+	plotSymbol.fill = [CPLTFill fillWithColor:self.texasOrange];
 	plotSymbol.lineStyle = symbolLineStyle;
     plotSymbol.size = CGSizeMake(14.0, 14.0);
     dataSourceLinePlot.plotSymbol = plotSymbol;
@@ -1087,8 +1106,8 @@
 		id repubY = [repubDict objectForKey:[[sortedScores objectAtIndex:i] session]];
 		
 		[self.dataForPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:	
-							[NSDecimalNumber numberWithFloat:x], [NSNumber numberWithInt:CPScatterPlotFieldX], 
-							y, [NSNumber numberWithInt:CPScatterPlotFieldY], 
+							[NSDecimalNumber numberWithFloat:x], [NSNumber numberWithInt:CPLTScatterPlotFieldX], 
+							y, [NSNumber numberWithInt:CPLTScatterPlotFieldY], 
 							repubY, @"RepubY", 
 							democY, @"DemocY", nil]];
 	}
@@ -1097,20 +1116,20 @@
 #pragma mark -
 #pragma mark Plot Data Source Methods
 
--(NSUInteger)numberOfRecordsForPlot:(CPPlot *)plot 
+-(NSUInteger)numberOfRecordsForPlot:(CPLTPlot *)plot 
 {
 	return [self.dataForPlot count];
 }
 
--(NSNumber *)numberForPlot:(CPPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index 
+-(NSNumber *)numberForPlot:(CPLTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index 
 {
 	NSDecimalNumber *num = nil;
 	
-	if ([(NSString *)plot.identifier isEqualToString:@"Democrat Plot"] && fieldEnum ==CPScatterPlotFieldY) {
+	if ([(NSString *)plot.identifier isEqualToString:@"Democrat Plot"] && fieldEnum ==CPLTScatterPlotFieldY) {
 		num = [[self.dataForPlot objectAtIndex:index] objectForKey:@"DemocY"];
 		return num;
 	}
-	if ([(NSString *)plot.identifier isEqualToString:@"Republican Plot"] && fieldEnum ==CPScatterPlotFieldY) {
+	if ([(NSString *)plot.identifier isEqualToString:@"Republican Plot"] && fieldEnum ==CPLTScatterPlotFieldY) {
 		num = [[self.dataForPlot objectAtIndex:index] objectForKey:@"RepubY"];
 		return num;
 	}
@@ -1120,7 +1139,7 @@
     return num;
 }
 
--(CPFill *) barFillForBarPlot:(CPBarPlot *)barPlot recordIndex:(NSNumber *)index; 
+-(CPLTFill *) barFillForBarPlot:(CPLTBarPlot *)barPlot recordIndex:(NSNumber *)index; 
 {
 	return nil;
 }
