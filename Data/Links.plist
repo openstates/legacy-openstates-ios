@@ -10,7 +10,7 @@
 			<key>order</key>
 			<integer>-2</integer>
 			<key>label</key>
-			<string>About TexLege</string>
+			<string>TexLege Information</string>
 			<key>url</key>
 			<string>aboutView</string>
 		</dict>
@@ -20,9 +20,9 @@
 			<key>order</key>
 			<integer>-1</integer>
 			<key>label</key>
-			<string>About The Roll Call Index</string>
+			<string>Contact TexLege Support</string>
 			<key>url</key>
-			<string>voteInfoView</string>
+			<string>contactMail</string>
 		</dict>
 		<dict>
 			<key>section</key>
@@ -30,7 +30,7 @@
 			<key>order</key>
 			<integer>0</integer>
 			<key>label</key>
-			<string>TexLege for iPhone</string>
+			<string>TexLege Website</string>
 			<key>url</key>
 			<string>http://www.texlege.com</string>
 		</dict>
