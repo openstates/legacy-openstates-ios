@@ -6,6 +6,7 @@
 #import "TexLegeAppDelegate.h"
 #import "MiniBrowserController.h"
 #import "UtilityMethods.h"
+#import "TexLegeTheme.h"
 
 @interface MiniBrowserController (Private)
 	- (void)animate;
@@ -166,9 +167,9 @@ static MiniBrowserController *s_browser = nil;
 		self.view.backgroundColor = self.sealColor;
 	}
 	else {
-		[self.m_webView setBackgroundColor:[UIColor whiteColor]];
+		[self.m_webView setBackgroundColor:[TexLegeTheme backgroundLight]];
 		[self.m_webView setOpaque:YES];
-		self.view.backgroundColor = [UIColor whiteColor];
+		self.view.backgroundColor = [TexLegeTheme backgroundLight];
 	}
 	
 
@@ -394,9 +395,9 @@ static MiniBrowserController *s_browser = nil;
 - (void)animate
 {
 	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-	//NSLog(@"Parent view %@", [m_parentCtrl view]);
-	//NSLog(@"my tabbar %@", [m_parentCtrl tabBarController].view);
-	//NSLog(@"Parent 1st nav view %@", [[[m_parentCtrl navigationController].viewControllers objectAtIndex:0] view]);
+	//debug_NSLog(@"Parent view %@", [m_parentCtrl view]);
+	//debug_NSLog(@"my tabbar %@", [m_parentCtrl tabBarController].view);
+	//debug_NSLog(@"Parent 1st nav view %@", [[[m_parentCtrl navigationController].viewControllers objectAtIndex:0] view]);
 	
 	UIView *topView = nil;
 	if ( m_shouldUseParentsView )
@@ -424,7 +425,7 @@ static MiniBrowserController *s_browser = nil;
 	if (topView) {
 		[topView retain];
 		
-		//NSLog(@"%@", [topView description]);
+		//debug_NSLog(@"%@", [topView description]);
 		
 		m_shouldUseParentsView = NO;
 		

@@ -8,6 +8,7 @@
 
 #import "CapitolMapsDataSource.h"
 #import "TexLegeAppDelegate.h"
+#import "TexLegeTheme.h"
 
 @interface CapitolMapsDataSource(Private)
 
@@ -28,7 +29,7 @@
 { return @"Maps"; }
  
 - (UIImage *)tabBarImage 
-{ return [UIImage imageNamed:@"71-compass"]; }
+{ return [UIImage imageNamed:@"71-compass.png"]; }
 
 - (BOOL)showDisclosureIcon
 { return YES; }
@@ -91,7 +92,6 @@
 	return capMap;
 }
 
-
 #pragma mark -
 #pragma mark UITableViewDataSource methods
 
@@ -105,16 +105,27 @@
 	/* Not found in queue, create a new cell object */
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewStylePlain reuseIdentifier:CellIdentifier] autorelease];
+		cell.textLabel.textColor =	[TexLegeTheme textDark];
+		cell.textLabel.textAlignment = UITextAlignmentLeft;
+		cell.textLabel.font = [UIFont boldSystemFontOfSize:15];
+
+		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+		cell.textLabel.adjustsFontSizeToFitWidth = YES;
+		cell.textLabel.minimumFontSize = 12.0f;
+		//cell.accessoryView = [TexLegeTheme disclosureLabel:YES];
+		cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]] autorelease];
+		
     }
-    
+	BOOL useDark = (indexPath.row % 2 == 0);
+
+	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
+			
 	// configure cell contents
-	if ([self showDisclosureIcon])
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+	//if ([self showDisclosureIcon])
+		//cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	
 	cell.textLabel.text = [[self capitolMapForIndexPath:indexPath] name];
-	cell.textLabel.textAlignment = UITextAlignmentLeft;
-	cell.textLabel.font = [UIFont boldSystemFontOfSize:15];
-	
+				 
 	return cell;
 }
 
@@ -122,7 +133,6 @@
 	// Three sections
 	return [self.sectionList count];
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section 
 {		

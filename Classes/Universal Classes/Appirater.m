@@ -68,7 +68,7 @@ NSString *templateReviewURL = @"http://itunes.apple.com/WebObjects/MZStore.woa/w
 	
     if (!didRetrieveFlags)
     {
-        NSLog(@"Error. Could not recover network reachability flags");
+        debug_NSLog(@"Error. Could not recover network reachability flags");
         return NO;
     }
 	
@@ -111,7 +111,7 @@ NSString *templateReviewURL = @"http://itunes.apple.com/WebObjects/MZStore.woa/w
 	}
 	
 	if (APPIRATER_DEBUG)
-		NSLog(@"APPIRATER Tracking version: %@", trackingVersion);
+		debug_NSLog(@"APPIRATER Tracking version: %@", trackingVersion);
 	
 	if ([trackingVersion isEqualToString:version])
 	{
@@ -131,7 +131,7 @@ NSString *templateReviewURL = @"http://itunes.apple.com/WebObjects/MZStore.woa/w
 		launchCount++;
 		[userDefaults setInteger:launchCount forKey:kAppiraterLaunchCount];
 		if (APPIRATER_DEBUG)
-			NSLog(@"APPIRATER Launch count: %d", launchCount);
+			debug_NSLog(@"APPIRATER Launch count: %d", launchCount);
 		
 		// have they previously declined to rate this version of the app?
 		BOOL declinedToRate = [userDefaults boolForKey:kAppiraterDeclinedToRate];

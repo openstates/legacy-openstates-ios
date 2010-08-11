@@ -15,7 +15,6 @@ enum {
 	DirectoryTypeNone = 0,
 	DirectoryTypeNotes,
 	DirectoryTypeIndex,
-	DirectoryTypeIndexAbout,
 	DirectoryTypeCommittee,
 	// URL types go below here
 	kDirectoryTypeIsURLHandler,

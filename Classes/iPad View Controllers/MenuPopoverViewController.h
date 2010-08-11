@@ -7,24 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TexLegeAppDelegate.h"
-@class AboutViewController;
-@class VoteInfoViewController;
+#import <MessageUI/MessageUI.h>
+#import "AboutViewController.h"
+
 @class TexLegeAppDelegate;
 
-@interface MenuPopoverViewController : UITableViewController <AboutViewControllerDelegate, VoteInfoViewControllerDelegate,
+@interface MenuPopoverViewController : UITableViewController <AboutViewControllerDelegate,
 												UIPopoverControllerDelegate> {
-	UIPopoverController *itemPopoverController;
-
-@private
-	IBOutlet TexLegeAppDelegate *appDelegate;
-	IBOutlet AboutViewController *aboutViewController;
-	IBOutlet VoteInfoViewController *voteInfoViewController;
 	
 }
 
 @property (nonatomic, retain) UIPopoverController *itemPopoverController;
 @property (nonatomic, retain) IBOutlet AboutViewController *aboutViewController;
-@property (nonatomic, retain) IBOutlet VoteInfoViewController *voteInfoViewController;
 @property (nonatomic, retain) IBOutlet TexLegeAppDelegate *appDelegate;
 @end

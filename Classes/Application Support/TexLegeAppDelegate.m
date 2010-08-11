@@ -20,9 +20,6 @@
 
 #import "MiniBrowserController.h"
 
-#import "MenuPopoverViewController.h"
-
-
 #import "LegislatorDetailViewController.h"
 #import "MapsDetailViewController.h"
 #import "CommitteeDetailViewController.h"
@@ -30,13 +27,13 @@
 #import "CalendarDataSource.h"
 #import "CalendarComboViewController.h"
 
+#import "CommonPopoversController.h"
 @interface TexLegeAppDelegate (Private)
 
 // these are private methods that outside classes need not use
 @property (nonatomic, retain) NSMutableArray *functionalViewControllers;
 
 - (void)setupDialogBoxes;
-- (void)showHackingAlert;
 - (void)iPhoneUserInterfaceInit;
 
 - (void)setupFeatures;
@@ -64,10 +61,10 @@ NSInteger kNoSelection = -1;
 @synthesize tabBarController;
 @synthesize savedLocation, savedTableSelection;
 @synthesize functionalViewControllers;
-@synthesize menuPopoverVC, menuPopoverPC;
+@synthesize menuPopoverPC;
 
-@synthesize mainWindow, hackingAlert, appirater;
-@synthesize aboutView, voteInfoView, activeDialogController;
+@synthesize mainWindow, appirater;
+@synthesize aboutView, activeDialogController;
 @synthesize remoteHostStatus, internetConnectionStatus, localWiFiConnectionStatus;
 
 @synthesize managedObjectContext;
@@ -86,9 +83,7 @@ NSInteger kNoSelection = -1;
 	if (self = [super init]) {
 		// initialize  to nil
 		mainWindow = nil;
-		//tabBarController = nil;
 		activeDialogController = nil;
-		hackingAlert = nil;
 		savedLocation = nil;
 		
 		self.savedTableSelection = [NSMutableDictionary dictionaryWithCapacity:2];
@@ -108,12 +103,9 @@ NSInteger kNoSelection = -1;
 	self.savedLocation = nil;
 	self.savedTableSelection = nil;
 
-	self.hackingAlert = nil;
 	self.activeDialogController = nil;
-	self.menuPopoverVC = nil;
 	self.menuPopoverPC = nil;
 	self.aboutView = nil;
-	self.voteInfoView = nil;
 	self.tabBarController = nil;
 	self.splitViewController = nil;
 	self.appirater = nil;
@@ -188,6 +180,20 @@ NSInteger kNoSelection = -1;
 	return 0;
 }
 
+- (UIViewController *)topViewController {
+	UIViewController *vc = nil;
+	if ([UtilityMethods isIPadDevice]) {
+		//vc = self.currentDetailViewController;
+		vc = [self.currentDetailViewController navigationController].topViewController;
+	}
+	else {
+		if ([self.tabBarController.selectedViewController respondsToSelector:@selector(topViewController)]) {
+			vc = [self.tabBarController.selectedViewController performSelector:@selector(topViewController)];
+		}
+	}
+
+	return vc;
+}
 
 - (void) changeActiveFeaturedControllerTo:(NSInteger)controllerIndex {	
 	if (self.currentMasterViewController &&					// they're trying to select what they've already got
@@ -208,7 +214,7 @@ NSInteger kNoSelection = -1;
 				self.currentDetailViewController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
 				break;
 			case 2:
-				self.currentDetailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController" bundle:nil];
+				self.currentDetailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController~ipad" bundle:nil];
 				break;
 			case 3:
 				self.currentDetailViewController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
@@ -218,7 +224,7 @@ NSInteger kNoSelection = -1;
 				break;			
 			default:
 				self.currentDetailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
-				NSLog(@"Unknown controller index in changeActiveFeaturedControllerTo: %d", controllerIndex);
+				debug_NSLog(@"Unknown controller index in changeActiveFeaturedControllerTo: %d", controllerIndex);
 				break;
 		}
 		
@@ -244,6 +250,8 @@ NSInteger kNoSelection = -1;
 	if (self.menuPopoverPC != nil) {
 		[self.menuPopoverPC dismissPopoverAnimated:YES];
 	}
+	
+	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];
 }
 
 - (void) setupFeatures {
@@ -268,7 +276,7 @@ NSInteger kNoSelection = -1;
 	[self.calendarsTableTabbedVC configureWithDataSourceClass:[CalendarDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.mapsTableTabbedVC configureWithDataSourceClass:[CapitolMapsDataSource class] andManagedObjectContext:self.managedObjectContext];
 	[self.linksTableTabbedVC configureWithDataSourceClass:[LinksMenuDataSource class] andManagedObjectContext:self.managedObjectContext];
-	
+		
 	if (self.splitViewController)
 		[self.mainWindow addSubview:self.splitViewController.view];
 	else { 
@@ -291,26 +299,17 @@ NSInteger kNoSelection = -1;
 }
 
 
-// Should we use this newer one instead?
-// - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-- (void)applicationDidFinishLaunching:(UIApplication *)application {	
+ - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{	
 		
-	/*
-     You can use the Reachability class to check the reachability of a remote host
-     by specifying either the host's DNS name (www.apple.com) or by IP address.
-     */
     [[Reachability sharedReachability] setHostName:[self hostName]];
-	//[[Reachability sharedReachability] setAddress:@"0.0.0.0"];
     
     // The Reachability class is capable of notifying your application when the network
     // status changes. By default, those notifications are not enabled.
-    // Uncomment the following line to enable them:
     [[Reachability sharedReachability] setNetworkStatusNotificationsEnabled:YES];
         
     [self updateStatus];
 	
-	// Observe the kNetworkReachabilityChangedNotification. When that notification is posted, the
-    // method "reachabilityChanged" will be called. 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:@"kNetworkReachabilityChangedNotification" object:nil];
 	
     // Set up the mainWindow and content view
@@ -320,11 +319,6 @@ NSInteger kNoSelection = -1;
 	[localMainWindow release];
 	
     [self.mainWindow setBackgroundColor:[UIColor whiteColor]];
-	
-	if (![UtilityMethods isThisCrantacular]) {
-		// This app be hacked!
-		[self showHackingAlert];
-	}
 	
 	// load the stored preference of the user's last location from a previous launch
 	NSMutableArray *tempMutableCopy = [[[NSUserDefaults standardUserDefaults] objectForKey:kRestoreLocationKey] mutableCopy];
@@ -357,6 +351,19 @@ NSInteger kNoSelection = -1;
 	// [Appirater appLaunched];  This is replaced with the following, to avoid leakiness
 	self.appirater = [[Appirater alloc] init];
 	[NSThread detachNewThreadSelector:@selector(_appLaunched) toTarget:self.appirater withObject:nil];
+	
+	return YES;
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+	// save the drill-down hierarchy of selections to preferences
+	[[NSUserDefaults standardUserDefaults] setObject:savedLocation forKey:kRestoreLocationKey];
+	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
+	
+	[[NSUserDefaults standardUserDefaults] synchronize];
+	
+	// Core Data Saving
+	[self saveAction:nil];
 }
 
 
@@ -415,92 +422,49 @@ NSInteger kNoSelection = -1;
 	[[NSUserDefaults standardUserDefaults] synchronize];
 
 	// Core Data Saving
-	NSError *error;
-    if (managedObjectContext != nil) {
-        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-			// Handle error.
-			NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-			//exit(-1);  // Fail
-        } 
-    }
-	
+	[self saveAction:nil];
 }
 
 
 #pragma mark -
 #pragma mark Alerts and Dialog Boxes
 
-- (void)showHackingAlert {
-	hackingAlert = [ [ UIAlertView alloc ] 
-					initWithTitle:@"Suspected Hacking" 
-					message:@"It appears this application may have been stolen.  If so, please purchase it at iTunes.  If this message is in error, please contact me. (at TexLege.com)" 
-					delegate:self
-					cancelButtonTitle: nil 
-					otherButtonTitles: @"Go to TexLege.com", @"Buy in AppStore", nil];
-	
-	hackingAlert.delegate = self;
-	[ hackingAlert show ];		
-}
-
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex 
-{
-	NSURL *goURL = nil;
-	
-	if (alertView == hackingAlert) {
-		switch (buttonIndex) {
-			case 1:
-				goURL = [NSURL URLWithString:m_iTunesURL];
-				break;
-			case 0:
-			default:
-				goURL = [NSURL URLWithString:@"http://www.texlege.com/"];
-				break;
-		}
-		if (![UtilityMethods openURLWithTrepidation:goURL]) 
-				exit(0); // just quit if we can't open this url
-	}
-	[ alertView release ];
-} 
-
 
 - (void)setupDialogBoxes {    
-	
-	aboutView = [[[AboutViewController alloc] initWithNibName:@"AboutView" bundle:nil] retain];	
-	aboutView.delegate = self;
-	aboutView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-	aboutView.modalPresentationStyle = UIModalPresentationFormSheet;
-	
-	voteInfoView = [[[VoteInfoViewController alloc] initWithNibName:@"VoteInfoView" bundle:nil] retain];	
-	voteInfoView.delegate = self;
-	voteInfoView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-	voteInfoView.modalPresentationStyle = UIModalPresentationFormSheet;
-	
+	if ([UtilityMethods isIPadDevice])
+		self.aboutView = [[AboutViewController alloc] initWithNibName:@"TexLegeInfo~ipad" bundle:nil];	
+	else
+		self.aboutView = [[AboutViewController alloc] initWithNibName:@"TexLegeInfo~iphone" bundle:nil];	
+
+	self.aboutView.delegate = self;
+	self.aboutView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+	self.aboutView.modalPresentationStyle = UIModalPresentationFormSheet;
+		
 }
 
 - (void)showAboutDialog:(UIViewController *)controller {
-	activeDialogController = controller;
+	self.activeDialogController = controller;
 	if ((controller != nil) && (self.aboutView != nil))
 		[controller presentModalViewController:self.aboutView animated:YES];
 }
 
-- (void)showVoteInfoDialog:(UIViewController *)controller {
-	activeDialogController = controller;
-	if ((controller != nil) && (self.voteInfoView != nil))
-		[controller presentModalViewController:self.voteInfoView animated:YES];
-}
-
 - (void)modalViewControllerDidFinish:(UIViewController *)controller {
-	if (activeDialogController != nil)
-		[activeDialogController dismissModalViewControllerAnimated:YES];
+	if (self.activeDialogController != nil)
+		[self.activeDialogController dismissModalViewControllerAnimated:YES];
 	if (self.menuPopoverPC && self.menuPopoverPC.contentViewController == self.aboutView)
 		[self showOrHideAboutMenuPopover:controller];
 }
+
+#pragma mark -
+#pragma mark Popover Menus
 
 
 //END:code.gestures.color
 //START:code.popover.menu
 -(IBAction)showOrHideAboutMenuPopover:(id)sender {
+	if (![UtilityMethods isIPadDevice])
+		return;
+
     if (self.menuPopoverPC) {
         [self.menuPopoverPC dismissPopoverAnimated:YES];
         self.menuPopoverPC = nil;
@@ -513,20 +477,6 @@ NSInteger kNoSelection = -1;
 }
 //END:code.popover.menu
 
-//END:code.gestures.color
-//START:code.popover.menu
--(IBAction)showOrHideMenuPopover:(id)sender {
-    if (self.menuPopoverPC) {
-        [self.menuPopoverPC dismissPopoverAnimated:YES];
-        self.menuPopoverPC = nil;
-    } else {
-		self.menuPopoverPC = [[UIPopoverController alloc] initWithContentViewController:self.menuPopoverVC];
-		self.menuPopoverPC.popoverContentSize = self.menuPopoverVC.view.frame.size;
-		self.menuPopoverPC.delegate = self;
-		[self.menuPopoverPC presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-    }
-}
-//END:code.popover.menu
 
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
@@ -554,16 +504,6 @@ NSInteger kNoSelection = -1;
 
 - (void)application:(UIApplication *)application willChangeStatusBarOrientation:(UIInterfaceOrientation)newStatusBarOrientation duration:(NSTimeInterval)duration {
 	// a cheat, so that we can dismiss all our popovers, if they're open.
-	
-	if (self.menuPopoverPC) {
-		// if we're actually showing the menu, and not the about box, close out any active menu dialogs too
-		if (self.menuPopoverVC && self.menuPopoverVC == self.menuPopoverPC.contentViewController)
-			[self.menuPopoverVC modalViewControllerDidFinish:nil];
-		
-        [self.menuPopoverPC dismissPopoverAnimated:YES];
-        self.menuPopoverPC = nil;
-	}
-		
 }
 
 #pragma mark - 
@@ -578,30 +518,7 @@ NSInteger kNoSelection = -1;
  
  Connection to Local Network.
  Not available | Available via WiFi
- 
- if (self.remoteHostStatus == NotReachable) {
-	cell.text = @"Cannot Connect To Remote Host.";
- } else if (self.remoteHostStatus == ReachableViaCarrierDataNetwork) {
-	cell.text = @"Reachable Via Carrier Data Network.";
- } else if (self.remoteHostStatus == ReachableViaWiFiNetwork) {
-	cell.text = @"Reachable Via WiFi Network.";
- }
- 
- if (self.internetConnectionStatus == NotReachable) {
-	cell.text = @"Access Not Available.";
- } else if (self.internetConnectionStatus == ReachableViaCarrierDataNetwork) {
-	cell.text = @"Available Via Carrier Data Network.";
- } else if (self.internetConnectionStatus == ReachableViaWiFiNetwork) {
-	cell.text = @"Available Via WiFi Network.";
- }
- 
- if (self.localWiFiConnectionStatus == NotReachable) {
-	cell.text = @"Access Not Available.";
- } else if (self.localWiFiConnectionStatus == ReachableViaWiFiNetwork) {
-	cell.text = @"Available Via WiFi Network.";
- }
- */
-
+*/
 
 - (void)reachabilityChanged:(NSNotification *)note
 {
@@ -694,10 +611,12 @@ NSInteger kNoSelection = -1;
 - (IBAction)saveAction:(id)sender {
 	
     NSError *error;
-    if (![[self managedObjectContext] save:&error]) {
-		// Handle error
-		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-		//exit(-1);  // Fail
+    if (managedObjectContext != nil) {
+        if ([[self managedObjectContext] hasChanges] && ![[self managedObjectContext] save:&error]) {
+			// Handle error.
+			debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+			//exit(-1);  // Fail
+        } 
     }
 }
 
@@ -770,7 +689,7 @@ NSInteger kNoSelection = -1;
 			[fileManager copyItemAtPath:defaultStorePath toPath:storePath error:NULL];
 		}
 	}
-	NSLog(@"%@", storePath);
+	debug_NSLog(@"%@", storePath);
 #endif
 	
 	NSURL *storeUrl = [NSURL fileURLWithPath:storePath];
@@ -783,7 +702,7 @@ NSInteger kNoSelection = -1;
     persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel: [self managedObjectModel]];
     if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error]) {
         // Handle the error.
-		NSLog(@"error: %@", [error localizedFailureReason]);
+		debug_NSLog(@"error: %@", [error localizedFailureReason]);
     }    
 		
     return persistentStoreCoordinator;

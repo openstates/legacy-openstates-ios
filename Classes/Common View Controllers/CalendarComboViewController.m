@@ -9,6 +9,8 @@
 #import "CalendarComboViewController.h"
 #import "UtilityMethods.h"
 #include "MiniBrowserController.h"
+#import "TexLegeAppDelegate.h"
+#import "CommonPopoversController.h"
 
 @interface CalendarComboViewController (Private) 
 
@@ -19,7 +21,7 @@
 @end
 
 @implementation CalendarComboViewController
-@synthesize popoverController, feedEntries, currentEvents, webView, searchResults;
+@synthesize feedEntries, currentEvents, webView, searchResults;
 @synthesize leftShadow, rightShadow, portShadow, landShadow;
 
 
@@ -33,7 +35,9 @@
 		self.view.backgroundColor = sealColor;
 	}		
 		//self.navigationItem.title = @"Upcoming Committee Meetings";
+	self.searchDisplayController.searchBar.tintColor = self.navigationController.navigationBar.tintColor;
 	self.navigationItem.titleView = self.searchDisplayController.searchBar;
+
 	
 	self.currentEvents = [NSMutableArray array];
 	self.searchResults = [NSMutableArray array];
@@ -45,6 +49,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	[self changeLayoutForOrientation:[UIDevice currentDevice].orientation];
+	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -84,7 +89,6 @@
 }
 
 
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	return YES;
 }
@@ -114,7 +118,6 @@
 
 
 - (void)dealloc {
-	self.popoverController = nil;
 	self.feedEntries = nil;
 	self.currentEvents = nil;
 	self.webView = nil;
@@ -124,30 +127,19 @@
 }
 
 #pragma mark -
-#pragma mark Popover Support
-
-- (void)showMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
-    // Add the popover button to the left navigation item.
-	barButtonItem.title = @"Meetings";
-    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
-}
-
-- (void)invalidateMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
-    // Remove the popover button.
-    [self.navigationItem setRightBarButtonItem:nil animated:YES];
-}
-
-
-#pragma mark -
 #pragma mark Split view support
+
+- (NSString *)popoverButtonTitle {
+	return @"Meetings";
+}
 
 - (void)splitViewController: (UISplitViewController*)svc 
 	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
 	   forPopoverController: (UIPopoverController*)pc {
 	
-	[self showMasterListPopoverButtonItem:barButtonItem];
+	//[self showMasterListPopoverButtonItem:barButtonItem];
 	
-    self.popoverController = pc;
+   // self.popoverController = pc;
 }
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
@@ -155,17 +147,18 @@
 	 willShowViewController:(UIViewController *)aViewController 
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
 	
-	[self invalidateMasterListPopoverButtonItem:barButtonItem];
-	self.popoverController = nil;
+	//[self invalidateMasterListPopoverButtonItem:barButtonItem];
+	//self.popoverController = nil;
 }
 
 - (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
    willPresentViewController: (UIViewController *)aViewController
 {
-    if (pc != nil) {
-        [pc dismissPopoverAnimated:YES];
+ /*   if (pc != nil) {
+        [[TexLegeAppDelegate appDelegate] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
 		// do I need to set pc to nil?  I need to confirm, but I think it breaks things.
     }
+*/
 }
 
 #pragma -
@@ -196,9 +189,10 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	if (newObj) {
 		feedEntries = [[newObj sortedArrayUsingFunction:sortByDate context:nil] retain];
 		
-		if (popoverController != nil)
-			[popoverController dismissPopoverAnimated:YES];
-						
+		if ([UtilityMethods isIPadDevice]) {		// might have come here via a popover
+			[[CommonPopoversController sharedCommonPopoversController] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
+		}
+		
 		[self.searchResults removeAllObjects];
 		[self.tableView reloadData];
 		[self.monthView reload];
@@ -308,7 +302,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 - (void) calendarMonthView:(TKCalendarMonthView*)monthView didSelectDate:(NSDate*)d{	
 	[self.currentEvents removeAllObjects];
 	for (NSDictionary *entry in self.feedEntries) {
-		//NSLog(@"%@ compared to %@", d, [entry objectForKey:@"date"]);
+		//debug_NSLog(@"%@ compared to %@", d, [entry objectForKey:@"date"]);
 		if ([[entry objectForKey:@"date"] isEqualToDate:d])
 			[self.currentEvents addObject:entry];
 	}

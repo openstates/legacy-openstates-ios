@@ -34,7 +34,7 @@
 	//self.accessoryView = [TexLegeTheme disclosureLabel:NO];
 	
 	/* if (( [UIScreen instancesRespondToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0 ) || [UtilityMethods isIPadDevice])
-		self.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]] autorelease];
+		self.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
 	else
 		self.accessoryView = [TexLegeTheme disclosureLabel:NO];
 	 */
@@ -54,8 +54,10 @@
 	
 	self.leg_titleLab.font = self.leg_tenureLab.font = [TexLegeTheme boldTwelve];
 	
-	self.leg_sliderView = [[[StaticGradientSliderView alloc] initWithFrame:CGRectZero] autorelease];
+	self.leg_sliderView = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
 	[self.leg_sliderView addToPlaceholder:self.leg_sliderViewPlaceHolder];
+	
+	self.useDarkBackground = YES;
 		
 }
 
@@ -99,9 +101,9 @@
 	self.legislator = newLegislator;
 	
 	[[ImageCache sharedImageCache] loadImageView:self.leg_photoView fromPath:self.legislator.photo_name];
+	//self.leg_photoView.image = [UIImage imageNamed:self.legislator.photo_name];	
 	self.accessoryView = self.disclosureView;
 
-	self.leg_photoView.image = [UIImage imageNamed:self.legislator.photo_name];	
 	self.leg_titleLab.text = [self.legislator.legtype_name stringByAppendingFormat:@" - %@", [self.legislator districtPartyString]];
 	self.leg_nameLab.text = [self.legislator legProperName];
 	self.leg_tenureLab.text = [self.legislator tenureString];

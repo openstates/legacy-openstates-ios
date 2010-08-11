@@ -8,16 +8,22 @@
 
 #import "MenuPopoverViewController.h"
 #import "TableDataSourceProtocol.h"
+#import "TexLegeTheme.h"
+#import "CommonPopoversController.h"
+#import "TexLegeAppDelegate.h"
+#import "UtilityMethods.h"
+#import "TexLegeEmailComposer.h"
+
+#define kMAILERKEY @"MAILERKEY"
 
 @interface MenuPopoverViewController (Private)
 
 - (void) showOrHideItemPopover:(UIViewController *) itemViewController fromRect:(CGRect)clickedRow;
-
 @end
 
 @implementation MenuPopoverViewController
 
-@synthesize itemPopoverController, voteInfoViewController, aboutViewController, appDelegate;
+@synthesize itemPopoverController, aboutViewController, appDelegate;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -30,32 +36,32 @@
 
 	self.itemPopoverController = nil;
 	
-	self.aboutViewController = [[AboutViewController alloc] initWithNibName:@"AboutView" bundle:nil];
+	self.aboutViewController = [[AboutViewController alloc] initWithNibName:@"TexLegeInfo~ipad" bundle:nil];
 	self.aboutViewController.delegate = self;
-
-	self.voteInfoViewController = [[VoteInfoViewController alloc] initWithNibName:@"VoteInfoView" bundle:nil];
-	self.voteInfoViewController.delegate = self;
 	
 	self.contentSizeForViewInPopover = CGSizeMake(300.0, 450.0);
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
+	self.tableView.separatorColor = [TexLegeTheme separator];
+	self.tableView.backgroundColor = [TexLegeTheme tableBackground];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+	
+	self.clearsSelectionOnViewWillAppear = NO;
 }
 
+- (IBAction)selectFirstRow:(id)sender {
+	if (![self.tableView indexPathForSelectedRow]) {
+		NSInteger index = [appDelegate indexForFunctionalViewController:[appDelegate currentMasterViewController]];
+		NSIndexPath *selectionPath = [NSIndexPath indexPathForRow:index inSection:0];				
+		[self.tableView selectRowAtIndexPath:selectionPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+	}		
+}
 
-/*
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+	[self performSelector:@selector(selectFirstRow:) withObject:self afterDelay:0];
 }
-*/
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
+
 /*
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -79,14 +85,13 @@
 
 - (void)viewDidUnload {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-	self.appDelegate = nil;
 	self.itemPopoverController = nil;
-	self.aboutViewController = nil;
-	self.voteInfoViewController = nil;
 }
 
 
 - (void)dealloc {
+	self.appDelegate = nil;
+	self.aboutViewController = nil;
     [super dealloc];
 	
 	//self.itemPopoverController = nil;
@@ -99,7 +104,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Override to allow orientations other than the default portrait orientation.
-    return YES;
+	return YES;
 }
 
 
@@ -120,6 +125,13 @@
 		return [self.appDelegate.functionalViewControllers count];	
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (![cell isSelected]) {
+	BOOL useDark = (indexPath.row % 2 == 0);
+	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
+	}
+}
+
 - (id)objectForRowAtIndexPath:(NSIndexPath *)indexPath {
 	id object = nil;
 	NSInteger row = indexPath.row;
@@ -129,7 +141,7 @@
 		if (row == 0)
 			object = self.aboutViewController;
 		else 
-			object = self.voteInfoViewController;
+			object = kMAILERKEY;
 	}
 	else
 		object = [self.appDelegate.functionalViewControllers objectAtIndex:row];
@@ -145,20 +157,47 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
+		
+		cell.textLabel.font =		[TexLegeTheme boldFifteen];
+		cell.textLabel.textColor = 	[TexLegeTheme textDark];
+		//cell.textLabel.textColor =	[TexLegeTheme accent];
+		
+		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+		cell.textLabel.lineBreakMode = UILineBreakModeTailTruncation;
+		cell.textLabel.adjustsFontSizeToFitWidth = YES;
+		cell.textLabel.minimumFontSize = 12.0f;
+		//cell.accessoryView = [TexLegeTheme disclosureLabel:YES];
+//		cell.textLabel.textColor =	[TexLegeTheme accent];
+		
+		//cell.accessoryView = [TexLegeTheme disclosureLabel:YES];
+		//cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure.png"]] autorelease];
+		
+		
+	}
+	
     // Configure the cell...
 	
 	id object = [self objectForRowAtIndexPath:indexPath];
 	
-    cell.textLabel.textColor = [UIColor whiteColor];
 	if ([object respondsToSelector:@selector(title)])
 		cell.textLabel.text = [object performSelector:@selector(title)];
+	if ([object isKindOfClass:[NSString class]] && object == kMAILERKEY)
+		cell.textLabel.text = @"Contact Me: TexLege Support";
 	
 	if ([object respondsToSelector:@selector(dataSource)]) {
 		id<TableDataSource> selectedSource = [object performSelector:@selector(dataSource)];
 		if ([selectedSource respondsToSelector:@selector(tabBarImage)])
 			cell.imageView.image = [selectedSource performSelector:@selector(tabBarImage)];
+	}
+	
+	if (indexPath.section == 1) {
+		NSString *imagePath = nil;
+		if (indexPath.row == 0)
+			imagePath = @"28-star.png";
+		else
+			imagePath = @"110-bug.png";
+		
+		cell.imageView.image = [UIImage imageNamed:imagePath];
 	}
 	
     return cell;
@@ -209,32 +248,36 @@
 	//NSInteger row = indexPath.row;
 	NSInteger section = indexPath.section;
 
-	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	//[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	//[appDelegate showOrHideMenuPopover:nil];
 
 	id viewController = [self objectForRowAtIndexPath:indexPath];
 	if (section == 1) {
-		CGRect clickedRow = [tableView rectForRowAtIndexPath:indexPath];
+		///CGRect clickedRow = [tableView rectForRowAtIndexPath:indexPath];
 
-		[self showOrHideItemPopover:viewController fromRect:clickedRow];
+		//[self showOrHideItemPopover:viewController fromRect:clickedRow];
+		if (indexPath.row == 0) {
+			if (![[[TexLegeAppDelegate appDelegate] topViewController] isEqual:viewController])
+				[[[[TexLegeAppDelegate appDelegate] topViewController] navigationController] pushViewController:viewController animated:YES];
+			[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+		}
+		else {
+			// This is the mailer.
+			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
+																			 subject:@"TexLege Support Question/Concern" 
+																				body:@""];			
+		}
+		[tableView deselectRowAtIndexPath:indexPath animated:YES];
+
 	}
 	else {		
-		[appDelegate showOrHideMenuPopover:nil];
+		//[appDelegate showOrHideMenuPopover:nil];
 		
 		NSInteger vcIndex = [appDelegate indexForFunctionalViewController:viewController];
 		[appDelegate changeActiveFeaturedControllerTo:vcIndex];
 
 	}
-    // Navigation logic may go here. Create and push another view controller.
-	/*
-	 <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-	 [self.navigationController pushViewController:detailViewController animated:YES];
-	 [detailViewController release];
-	 */
 }
-
 
 @end
 

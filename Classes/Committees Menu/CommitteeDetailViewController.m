@@ -16,11 +16,11 @@
 #import "MiniBrowserController.h"
 #import "LegislatorMasterTableViewCell.h"
 #import "TexLegeAppDelegate.h"
+#import "CommonPopoversController.h"
 
 @implementation CommitteeDetailViewController
 
 @synthesize committee;
-@synthesize popoverController;
 
 enum Sections {
     //kHeaderSection = 0,
@@ -49,9 +49,10 @@ enum InfoSectionRows {
 		committee = [newObj retain];
 		self.navigationItem.title = self.committee.committeeName;
 
-		if (popoverController != nil)
-			[popoverController dismissPopoverAnimated:YES];
-		 
+		if ([UtilityMethods isIPadDevice]) {
+			[[CommonPopoversController sharedCommonPopoversController] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
+		}
+				
 		[self.tableView reloadData];
 		[self.view setNeedsDisplay];
 	}
@@ -77,7 +78,6 @@ enum InfoSectionRows {
 	
 	if ([UtilityMethods isIPadDevice] == NO)
 		return;
-	
 	
 		// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
 	if (self.committee == nil && ![UtilityMethods isLandscapeOrientation])  {
@@ -112,7 +112,7 @@ enum InfoSectionRows {
 			}
 		}
 	}
-	
+	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 }
 
 /*
@@ -136,6 +136,11 @@ enum InfoSectionRows {
 }
 */
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+	//[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
+	//[[TexLegeAppDelegate appDelegate] resetPopoverMenus];
+}
+
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
@@ -144,17 +149,9 @@ enum InfoSectionRows {
 #pragma mark -
 #pragma mark Popover Support
 
-- (void)showMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
-    // Add the popover button to the left navigation item.
-	barButtonItem.title = @"Committees";
-    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
+- (NSString *)popoverButtonTitle {
+	return @"Committees";	
 }
-
-- (void)invalidateMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
-    // Remove the popover button.
-    [self.navigationItem setRightBarButtonItem:nil animated:YES];
-}
-
 
 #pragma mark -
 #pragma mark Split view support
@@ -163,8 +160,8 @@ enum InfoSectionRows {
 	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
 	   forPopoverController: (UIPopoverController*)pc {
 	
-	[self showMasterListPopoverButtonItem:barButtonItem];
-    self.popoverController = pc;
+//	[self showMasterListPopoverButtonItem:barButtonItem];
+ //   self.popoverController = pc;
 }
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
@@ -172,17 +169,18 @@ enum InfoSectionRows {
 	 willShowViewController:(UIViewController *)aViewController 
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
 	
-	[self invalidateMasterListPopoverButtonItem:barButtonItem];
-	self.popoverController = nil;
+//	[self invalidateMasterListPopoverButtonItem:barButtonItem];
+//	self.popoverController = nil;
 }
 
 - (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
    willPresentViewController: (UIViewController *)aViewController
 {
-    if (pc != nil) {
-        [pc dismissPopoverAnimated:YES];
+/*    if (pc != nil) {
+        [[TexLegeAppDelegate appDelegate] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
 		// do I need to set pc to nil?  I need to confirm, but I think it breaks things.
     }
+*/
 }
 
 #pragma mark -
@@ -336,8 +334,6 @@ enum InfoSectionRows {
 		 */
 	}	
 	
-	
-	
 	return cell;
 }
 
@@ -473,7 +469,6 @@ enum InfoSectionRows {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
 	self.committee = nil;
-	self.popoverController = nil;
 
 }
 

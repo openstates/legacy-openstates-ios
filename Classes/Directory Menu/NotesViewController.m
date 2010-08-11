@@ -59,7 +59,7 @@
 		NSError *error = nil;
 		if (![context save:&error]) {
 			// Handle error
-			NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+			debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 			exit(-1);  // Fail
 		}
 	}		

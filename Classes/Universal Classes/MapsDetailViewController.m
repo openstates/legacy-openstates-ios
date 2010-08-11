@@ -10,12 +10,12 @@
 #import "CommitteeObj.h"
 #import "UtilityMethods.h"
 #import "MiniBrowserController.h"
-#import "TexLegeAppDelegate.h"
+//#import "TexLegeAppDelegate.h"
+#import "CommonPopoversController.h"
 
 @implementation MapsDetailViewController
 
 @synthesize map, webView;
-@synthesize popoverController;
 
 
 #pragma mark -
@@ -39,16 +39,16 @@
 	
 	//self.navigationController.toolbarHidden = YES;	
 }
-/*
+
+
  - (void)viewWillAppear:(BOOL)animated {
- [self showPopoverMenus:([UtilityMethods isLandscapeOrientation] == NO)];
- }
- */
+	 [[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+}
+ 
 
 - (void)dealloc {
 	self.webView = nil;
 	self.map = nil;
-	self.popoverController = nil;
 	[super dealloc];
 }
 
@@ -68,9 +68,10 @@
 	if (newObj) {
 		map = [newObj retain];
 
-		if (popoverController != nil)
-			[popoverController dismissPopoverAnimated:YES];
-		
+		if ([UtilityMethods isIPadDevice]) {
+			[[CommonPopoversController sharedCommonPopoversController] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
+		}
+				
 		self.navigationItem.title = map.name;
 		[self.webView loadRequest:[NSURLRequest requestWithURL:map.url]];
 		[self.view setNeedsDisplay];
@@ -81,15 +82,8 @@
 #pragma mark -
 #pragma mark Popover Support
 
-- (void)showMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
-    // Add the popover button to the left navigation item.
-	barButtonItem.title = @"Maps";
-    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
-}
-
-- (void)invalidateMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
-    // Remove the popover button.
-    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+- (NSString*)popoverButtonTitle {
+	return  @"Maps";
 }
 
 
@@ -100,9 +94,9 @@
 	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
 	   forPopoverController: (UIPopoverController*)pc {
 	
-	[self showMasterListPopoverButtonItem:barButtonItem];
+	//[self showMasterListPopoverButtonItem:barButtonItem];
 	
-    self.popoverController = pc;
+    //self.popoverController = pc;
 }
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
@@ -110,30 +104,35 @@
 	 willShowViewController:(UIViewController *)aViewController 
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
 	
-	[self invalidateMasterListPopoverButtonItem:barButtonItem];
-	self.popoverController = nil;
+	//[self invalidateMasterListPopoverButtonItem:barButtonItem];
+	//self.popoverController = nil;
 }
 
 - (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
    willPresentViewController: (UIViewController *)aViewController
 {
-    if (pc != nil) {
-        [pc dismissPopoverAnimated:YES];
-		// do I need to set pc to nil?  I need to confirm, but I think it breaks things.
+/*    if (pc != nil) {
+        [[TexLegeAppDelegate appDelegate] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
     }
+*/
 }
 
 
 #pragma mark -
 #pragma mark Orientation
-/*
+
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
 }
-*/
+
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation { // Override to allow rotation. Default returns YES only for UIDeviceOrientationPortrait
 	return YES;
 }
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+//	[[TexLegeAppDelegate appDelegate] resetPopoverMenus];
+	[self.webView reload];
+}
+
 
 @end

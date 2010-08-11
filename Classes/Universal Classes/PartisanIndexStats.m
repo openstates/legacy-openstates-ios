@@ -82,7 +82,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 				
 			}
 		}
-		//NSLog(@"Index Aggregates: %@", [tempAggregates description]);			
+		//debug_NSLog(@"Index Aggregates: %@", [tempAggregates description]);			
 		m_partisanIndexAggregates = [[NSDictionary dictionaryWithDictionary:tempAggregates] retain];
 	}
 
@@ -117,7 +117,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 - (NSArray *) aggregatePartisanIndexForChamber:(NSInteger)chamber andPartyID:(NSInteger)party {
 	
 	if (chamber == BOTH_CHAMBERS) {
-		NSLog(@"allMembersByChamber: ... cannot be BOTH chambers");
+		debug_NSLog(@"allMembersByChamber: ... cannot be BOTH chambers");
 		return nil;
 	}
 	
@@ -166,7 +166,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	[request release];
 	if (objects == nil) {
 		// Handle the error.
-		NSLog(@"Error");
+		debug_NSLog(@"Error");
 	}
 	else {
 		if ([objects count] > 0) {
@@ -207,7 +207,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 - (NSArray *) allMembersByChamber:(NSInteger)chamber andPartyID:(NSInteger)party
 {
 	if (chamber == BOTH_CHAMBERS) {
-		NSLog(@"allMembersByChamber: ... cannot be BOTH chambers");
+		debug_NSLog(@"allMembersByChamber: ... cannot be BOTH chambers");
 		return nil;
 	}
 	
@@ -233,7 +233,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
 	[fetchRequest release];
 	//if (error)
-	//	NSLog(@"allMembersByChamber:andParty: error in executeFetchRequest: %@, %@", error, [error userInfo]);
+	//	debug_NSLog(@"allMembersByChamber:andParty: error in executeFetchRequest: %@, %@", error, [error userInfo]);
 	
 	return fetchedObjects;
 	

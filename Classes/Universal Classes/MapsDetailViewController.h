@@ -10,13 +10,10 @@
 #import "Constants.h"
 #import "CapitolMap.h"
 
-@interface MapsDetailViewController : UIViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate> {
-	CapitolMap *map;
-	IBOutlet UIWebView *webView;	
-	UIPopoverController *popoverController;
+@interface MapsDetailViewController : UIViewController <UISplitViewControllerDelegate> {
 }
-@property (nonatomic,retain) UIPopoverController *popoverController;
 @property (nonatomic,retain) CapitolMap *map;
 @property (nonatomic,retain) IBOutlet UIWebView *webView;
 
+- (NSString *)popoverButtonTitle;
 @end

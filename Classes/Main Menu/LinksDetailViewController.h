@@ -9,20 +9,16 @@
 #import <CoreData/CoreData.h>
 #import "Constants.h"
 
-@class LinkObj, EditingTableViewCell;
+@class LinkObj, EditingTableViewCell, LinksMenuDataSource;
 
 @interface LinksDetailViewController : UITableViewController {
-    @private
-	LinkObj *link;
-	NSFetchedResultsController * fetchedResultsController;
-	
-	EditingTableViewCell *editingTableViewCell;
 }
 
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) LinksMenuDataSource *mainDataSource;
 @property (nonatomic, retain) LinkObj *link;
-@property (nonatomic, retain) NSFetchedResultsController * fetchedResultsController;
 @property (nonatomic, assign) IBOutlet EditingTableViewCell *editingTableViewCell;
 
-- (id)initWithStyle:(UITableViewStyle)style resultsController:(NSFetchedResultsController *)controller;
+- (id)initWithStyle:(UITableViewStyle)style context:(NSManagedObjectContext *)context dataSource:(LinksMenuDataSource *)dataSource;
 
 @end

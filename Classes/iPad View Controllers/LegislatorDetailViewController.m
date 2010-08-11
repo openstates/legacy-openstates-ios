@@ -28,6 +28,8 @@
 #import "PartisanIndexStats.h"
 #import "UIImage+ResolutionIndependent.h"
 #import "ImageCache.h"
+#import "CommonPopoversController.h"
+#import "TexLegeEmailComposer.h"
 
 @interface LegislatorDetailViewController (Private)
 
@@ -45,7 +47,6 @@
 @synthesize legislator, sectionArray;
 @synthesize startupSplashView, headerView, miniBackgroundView;
 
-@synthesize popoverController;
 @synthesize scatterPlotView, graph, dataForPlot;
 @synthesize texasRed, texasBlue, texasOrange;
 
@@ -93,9 +94,9 @@
 	[self.tableView setTableHeaderView:self.headerView];
 	
 	if ([UtilityMethods isIPadDevice]) {
-		self.indivSlider = [[[StaticGradientSliderView alloc] initWithFrame:CGRectZero] autorelease];
-		self.partySlider = [[[StaticGradientSliderView alloc] initWithFrame:CGRectZero] autorelease];
-		self.allSlider = [[[StaticGradientSliderView alloc] initWithFrame:CGRectZero] autorelease];
+		self.indivSlider = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
+		self.partySlider = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
+		self.allSlider = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
 		
 		if (self.indivSlider) {
 			[self.indivSlider addToPlaceholder:self.indivPHolder];
@@ -189,9 +190,9 @@
 		
 		[self setupHeader];
 		
-		// TODO: is this where we see disappearing popover menu buttons?
-		if (popoverController != nil)
-			[popoverController dismissPopoverAnimated:YES];
+		if ([UtilityMethods isIPadDevice]) {
+			[[CommonPopoversController sharedCommonPopoversController] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
+		}
 		
 		[self createSectionList];
 		
@@ -202,67 +203,11 @@
 #pragma mark -
 #pragma mark Managing the popover
 
-- (IBAction)displayMasterListPopover:(id)sender {
-	[self.popoverController presentPopoverFromBarButtonItem:sender 
-								   permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+
+- (NSString *)popoverButtonTitle {
+	return @"Legislators";	
 }
 
-
-- (void)showMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
-    // Add the popover button to the left navigation item.
-	barButtonItem.title = @"Legislators";
-    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
-}
-
-- (void)invalidateMasterListPopoverButtonItem:(UIBarButtonItem *)barButtonItem {
-    // Remove the popover button.
-    [self.navigationItem setRightBarButtonItem:nil animated:YES];
-}
-
-- (void)showMainMenuPopoverButtonItem {
-    // Add the popover button to the left navigation item.
-	id masterVC = [[TexLegeAppDelegate appDelegate] currentMasterViewController];
-	UIBarButtonItem *mainMenuButton = nil;
-	if ([masterVC respondsToSelector:@selector(menuButton)])
-		mainMenuButton = [masterVC performSelector:@selector(menuButton)];
-		
-	if (mainMenuButton)
-		[self.navigationItem setLeftBarButtonItem:mainMenuButton animated:YES];
-}
-
-- (void)invalidateMainMenuPopoverButtonItem {
-    // Remove the popover button.
-	[self.navigationItem setLeftBarButtonItem:nil animated:YES];
-}
-
-
-- (void)showPopoverMenus:(BOOL)show {
-	if ([UtilityMethods isIPadDevice]) {
-		if (self.splitViewController && show) {
-			[self showMainMenuPopoverButtonItem];
-			
-			if (!self.popoverController) {
-				UIBarButtonItem *masterListItem = [[UIBarButtonItem alloc] 
-												   initWithTitle:@"Legislators" style:UIBarButtonItemStyleBordered 
-												   target:self action:@selector(displayMasterListPopover:)];
-				[self showMasterListPopoverButtonItem:masterListItem];
-				[masterListItem release];    
-				
-				UIPopoverController *popover = [[UIPopoverController alloc] 
-												initWithContentViewController:[[TexLegeAppDelegate appDelegate] currentMasterViewController]];
-				self.popoverController = popover;
-				self.popoverController.delegate = self;
-				
-				// Ensure the popover is not dismissed if the user taps in the search bar.
-				//self.popoverController.passthroughViews = [NSArray arrayWithObject:searchBar];
-				
-				[popover release];
-			}
-		}
-		else
-			[self invalidateMainMenuPopoverButtonItem];
-	}
-}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -288,6 +233,8 @@
 		[self setupHeader];
 	}
 
+	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+
 	if (showSplash) {
 		// TODO: We could alternatively use this opportunity to open a proper informational introduction
 		// for instance, drop in a new view taking the full screen that gives a full menu and helpful info
@@ -297,14 +244,12 @@
 			self.startupSplashView = [objects objectAtIndex:0];
 		}
 		[self.view addSubview:self.startupSplashView];
+		//[[CommonPopoversController sharedCommonPopoversController] displayMainMenuPopover:self.navigationItem.leftBarButtonItem];
 	}
 	else {
 		[self.startupSplashView removeFromSuperview];
 		self.startupSplashView = nil;
 	}
-	
-	[self showPopoverMenus:([UtilityMethods isLandscapeOrientation] == NO)];
-
 }
 
 #pragma mark -
@@ -314,10 +259,10 @@
 	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
 	   forPopoverController: (UIPopoverController*)pc {
 	
-	[self showMasterListPopoverButtonItem:barButtonItem];
-	[self showMainMenuPopoverButtonItem];
+	//[self showMasterListPopoverButtonItem:barButtonItem];
+	//[self showMainMenuPopoverButtonItem];
 	
-    self.popoverController = pc;
+    //self.popoverController = pc;
 }
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
@@ -325,26 +270,34 @@
 	 willShowViewController:(UIViewController *)aViewController 
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
 	
-	[self invalidateMasterListPopoverButtonItem:barButtonItem];
-	[self invalidateMainMenuPopoverButtonItem];
+	//[self invalidateMasterListPopoverButtonItem:barButtonItem];
+	//[self invalidateMainMenuPopoverButtonItem];
 
-	self.popoverController = nil;
+	//self.popoverController = nil;
 }
 
 - (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
    willPresentViewController: (UIViewController *)aViewController
 {
-    if (pc != nil) {
-        [pc dismissPopoverAnimated:YES];
+/*    if (pc != nil) {
+		[[TexLegeAppDelegate appDelegate] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
+        //[pc dismissPopoverAnimated:YES];
 		// do I need to set pc to nil?  I need to confirm, but I think it breaks things.
     }
+*/
 }
 
 #pragma mark -
 #pragma mark orientations
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
+	//[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
+	//[[TexLegeAppDelegate appDelegate] resetPopoverMenus];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+	//[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
+	//[[TexLegeAppDelegate appDelegate] resetPopoverMenus];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -384,7 +337,6 @@
 
 
 - (void)dealloc {
-	self.popoverController = nil;
 	self.sectionArray = nil;
 	self.indivSlider = self.partySlider = self.allSlider = nil;
 	self.indivPHolder = self.partyPHolder = self.allPHolder = nil;
@@ -471,13 +423,7 @@
 												 isClickable:NO type:DirectoryTypeIndex];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;
-
-		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"" value:@"About the Roll Call Index" 
-												 isClickable:YES type:DirectoryTypeIndexAbout];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;
 	}
-	
 	
 	if (self.legislator.notes.length > 0)
 		tempString = self.legislator.notes;
@@ -703,7 +649,7 @@
 		cellInfo = [entryArray objectAtIndex:row];
 	
 	if (cellInfo == nil) {
-		NSLog(@"LegislatorDetailViewController:cellForRow: error finding table entry for section:%d row:%d", section, row);
+		debug_NSLog(@"LegislatorDetailViewController:cellForRow: error finding table entry for section:%d row:%d", section, row);
 		 return nil;
 	}
 		 
@@ -737,16 +683,6 @@
 				cell.detailTextLabel.textColor = [UIColor grayColor];
 			cell.detailTextLabel.text = cellInfo.entryValue;
 			cell.textLabel.text = cellInfo.entryName;
-			break;
-			
-		case DirectoryTypeIndexAbout:  // About the Partisanship Index...
-			if (![UtilityMethods isIPadDevice]) {
-				cell.detailTextLabel.textColor = [UIColor colorWithRed:56.0/256.0 green:84/256.0 blue:135/256.0 alpha:1.0];
-				cell.detailTextLabel.font = [UIFont boldSystemFontOfSize:14];
-				cell.detailTextLabel.textAlignment = UITextAlignmentCenter;
-				cell.detailTextLabel.text = cellInfo.entryValue;
-				cell.textLabel.text = cellInfo.entryName;
-			}
 			break;
 			
 		case DirectoryTypeIndex:		// partisan index custom slider
@@ -859,16 +795,12 @@
 		cellInfo = [entryArray objectAtIndex:row];
 	
 	if (cellInfo == nil) {
-		NSLog(@"LegislatorDetailViewController:didSelectRow: error finding table entry for section:%d row:%d", section, row);
+		debug_NSLog(@"LegislatorDetailViewController:didSelectRow: error finding table entry for section:%d row:%d", section, row);
 		return;
 	}
 	
 	if (cellInfo.isClickable) {
-		if (cellInfo.entryType == DirectoryTypeIndexAbout) {
-			TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-			if (appDelegate != nil) [appDelegate showVoteInfoDialog:self];
-		}
-		else if (cellInfo.entryType == DirectoryTypeNotes) { // We need to edit the notes thing...
+		if (cellInfo.entryType == DirectoryTypeNotes) { // We need to edit the notes thing...
 			NotesViewController *nextViewController = [[NotesViewController alloc] initWithNibName:@"NotesView" bundle:nil];
 			
 			// If we got a new view controller, push it .
@@ -894,6 +826,10 @@
 		else if (cellInfo.entryType == DirectoryTypeChamberMap) {
 			CapitolMap *capMap = [UtilityMethods capitolMapFromChamber:self.legislator.legtype.integerValue];			
 			[self pushMapViewWithMap:capMap];
+		}
+		else if (cellInfo.entryType == DirectoryTypeMail) {
+			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:cellInfo.entryValue 
+																			 subject:@"" body:@""];			
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&
 				 cellInfo.entryType < kDirectoryTypeIsExternalHandler) {	// handle the URL ourselves in a webView
@@ -931,7 +867,7 @@
 		cellInfo = [entryArray objectAtIndex:row];
 	
 	if (cellInfo == nil) {
-		NSLog(@"LegislatorDetailViewController:heightForRow: error finding table entry for section:%d row:%d", section, row);
+		debug_NSLog(@"LegislatorDetailViewController:heightForRow: error finding table entry for section:%d row:%d", section, row);
 		return height;
 	}
 	

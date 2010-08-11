@@ -10,18 +10,8 @@
 #import "TableDataSourceProtocol.h"
 
 @interface LinksMenuDataSource : NSObject <TableDataSource>  {
-	NSFetchedResultsController *fetchedResultsController;
-	IBOutlet NSManagedObjectContext *managedObjectContext;
-#if NEEDS_TO_INITIALIZE_DATABASE
-	NSArray *linksData;
-#endif
-	
-	UITableView *theTableView;
-	BOOL	moving;
+		
 }
-@property (nonatomic) BOOL moving;
-
-@property (nonatomic, retain) UITableView *theTableView;
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
@@ -34,8 +24,7 @@
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
-- (NSString *) getLinkForRowAtIndexPath:(NSIndexPath *)indexPath;
-- (BOOL) isAddLinkPlaceholderAtIndexPath:(NSIndexPath *)indexPath;
+- (id) dataObjectForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
  

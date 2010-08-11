@@ -43,7 +43,7 @@
 		}
 		
 		//self.gradientImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TexasGradient"]];
-		self.gradientImage = [[[UIImageView alloc] initWithFrame:CGRectMake(12.0, 6.0, 276.0, 14.0)] autorelease];
+		self.gradientImage = [[UIImageView alloc] initWithFrame:CGRectMake(12.0, 6.0, 276.0, 14.0)];
 		[[ImageCache sharedImageCache] loadImageView:self.gradientImage fromPath:@"TexasGradient.png"];
 
 		//self.gradientImage.frame = CGRectMake(12.0, 6.0, 276.0, 14.0);
@@ -59,7 +59,7 @@
 		if (self.sliderControl)
 			self.sliderControl = nil;
 		
-		self.sliderControl = [[[UISlider alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 23.0)] autorelease];
+		self.sliderControl = [[UISlider alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 23.0)];
 		self.sliderControl.autoresizesSubviews = YES;
 		self.sliderControl.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
 		
@@ -155,8 +155,8 @@
 
 	[self.sliderControl setValue:newVal animated:isAnimated];
 	//[self.sliderControl setNeedsDisplay];	// GREG, do we need this???
-	//NSLog(@"Min: %f   Max: %f", self.sliderControl.minimumValue, self.sliderControl.maximumValue);
-	//NSLog(@"Value: %f", newVal);
+	//debug_NSLog(@"Min: %f   Max: %f", self.sliderControl.minimumValue, self.sliderControl.maximumValue);
+	//debug_NSLog(@"Value: %f", newVal);
 
 }
 

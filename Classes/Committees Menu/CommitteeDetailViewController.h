@@ -10,13 +10,10 @@
 
 @class CommitteeObj;
 
-@interface CommitteeDetailViewController : UITableViewController <UITableViewDataSource, 
-				UITableViewDelegate, UIPopoverControllerDelegate, UISplitViewControllerDelegate> 
+@interface CommitteeDetailViewController : UITableViewController <UISplitViewControllerDelegate> 
 {
-	CommitteeObj		*committee;
-	UIPopoverController *popoverController;
 }
-@property (nonatomic, retain) UIPopoverController *popoverController;
 @property (nonatomic, retain) CommitteeObj *committee;
 
+- (NSString *)popoverButtonTitle;
 @end

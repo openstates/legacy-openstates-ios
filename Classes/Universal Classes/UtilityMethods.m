@@ -91,7 +91,7 @@
 #pragma mark URL Handling
 
 + (NSString *) titleFromURL:(NSURL *)url {
-	NSLog(@"%@", [url absoluteString]);
+	debug_NSLog(@"%@", [url absoluteString]);
 	NSArray *urlComponents = [[url absoluteString] componentsSeparatedByString:@"/"];
 	NSString * title = nil;
 	
@@ -310,12 +310,12 @@
 	return reachableHost;
 }
 
-
-// Look for app hacking/cracking/smacking
-+ (BOOL) isThisCrantacular {
-	char symCipher[] = { 'v', 'S', '#', 'd', 'X', '2', 'x', '+', 'h', '8', '&', 'L', 'i', '9', 't', '[', 'e', 'q', '>', '0', 'D', 'A', 'Y', '-', 'O', '%', '=', 'R', 'f', 'r', 'a', '|', 'K', '7', 'F', '}', '\\', 's', 'U', '*', 'G', 'E', 'g', 'j', 'H', '(', 'T', '4', '?', '$', '!', 'N', '_', '/', '`', ']', 'b', ',', 'Q', 'z', 'n', '.', '\'', '6', 'B', 'W', '"', ')', '5', 'c', 'y', 'J', '{', 'w', '3', ';', '^', 'u', 'Z', 'p', 'l', ':', 'V', 'k', 'P', 'M', '@', 'm', '1', 'C', 'I', '<', 'o' };
-	char csignid[] = "!{yu5:G)5uk{k1";
-	int i = 0;
+// Thisisalongstringsowatchoutkid
+// http://www.iwillapps.com/tuts/symcipher.php?sub_str=Thisisalongstringsowatchoutkid
++ (NSString*)cipher32Byte {
+	char symCipher[] = { ';', 'R', ',', 'S', 'y', '&', 'W', '^', '#', 'x', '\\', '"', 'G', 'i', '7', 'q', '{', 'v', '8', 'o', '_', 'E', 'z', '3', '5', 'c', 'g', 'l', 'm', 'D', 'K', 'F', '(', ':', 'n', 'Z', '-', 'a', 'U', '*', 'X', 'I', 'j', 'Y', 'O', 'A', '=', 'f', '.', '`', '\'', ']', 'M', '%', 'u', '/', '|', 't', 'L', '4', '@', 'd', '+', 'k', 'p', 'e', '?', '0', ')', '1', 'P', '6', '[', 'h', 'r', 'H', 'B', 's', '9', 'C', '2', 'w', 'T', '}', 'V', '$', 'N', 'b', 'J', '!', '<', '>', 'Q' }; 
+	char csignid[] = "]6[T[TpH9sPT}w[sPT9Np}?69V}r[0";
+	NSInteger i = 0;
 	for(i=0;i<strlen(csignid);i++)
 	{
 		int j = 0;
@@ -328,18 +328,8 @@
 			}
 		}
 	}
-	NSString* signIdentity = [[NSString alloc] initWithCString:csignid encoding:NSUTF8StringEncoding];
-	//NSLog(signIdentity);
-	
-	BOOL checked = NO; // First assume "This app be hacked!"
-	if([[[NSBundle mainBundle] infoDictionary] objectForKey:signIdentity] == nil || 
-	   [[[NSBundle mainBundle] infoDictionary] objectForKey:signIdentity] != nil)
-	{
-		checked = YES;
-	}
-	
-	[signIdentity release];
-	return checked;
+	return [NSString stringWithCString:csignid encoding:NSUTF8StringEncoding];
 }
+
 
 @end

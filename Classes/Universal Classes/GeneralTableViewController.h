@@ -11,16 +11,7 @@
 #import "TableDataSourceProtocol.h"
 
 @interface GeneralTableViewController : UITableViewController < UITableViewDelegate> {
-	id<TableDataSource> dataSource;
-	id detailViewController;
-	
-	NSIndexPath *selectIndexPathOnAppear;
-	
-	IBOutlet UIBarButtonItem *menuButton;
-	
 }
-
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *menuButton;
 
 @property (nonatomic,retain) NSIndexPath *selectIndexPathOnAppear;
 @property (nonatomic,retain) id<TableDataSource> dataSource;

@@ -12,6 +12,9 @@
 #import "LegislatorMasterTableViewCell.h"
 #import "UtilityMethods.h"
 #import "ImageCache.h"
+#import "LegislatorMasterCellView.h"
+#import "LegislatorMasterCell.h"
+//#import "NSData+Encryption.h"
 
 @interface DirectoryDataSource (Private)
 
@@ -48,7 +51,7 @@
 	if ([self init])
 		if (newContext)
 		{
-			self.managedObjectContext = newContext;			
+			self.managedObjectContext = newContext;
 		}
 	return self;
 }
@@ -74,7 +77,7 @@
 { return @"Legislator Directory"; }
 
 - (UIImage *)tabBarImage 
-{ return [UIImage imageNamed:@"123-id-card"]; }
+{ return [UIImage imageNamed:@"123-id-card.png"]; }
 
 - (BOOL)showDisclosureIcon
 { return NO; }
@@ -103,7 +106,7 @@
 	}
 	@catch (NSException * e) {
 		// Perhaps we're returning from a search and we've got a wacked out indexPath.  Let's reset the search and see what happens.
-		NSLog(@"DirectoryDataSource.m -- legislatorDataForIndexPath:  indexPath must be out of bounds.  %@", [indexPath description]); 
+		debug_NSLog(@"DirectoryDataSource.m -- legislatorDataForIndexPath:  indexPath must be out of bounds.  %@", [indexPath description]); 
 		[self removeFilter];
 		tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	}
@@ -175,6 +178,34 @@
     }
 	else
 #endif
+		
+#if 0	// IF YOU WANT QUARTZ DRAWN CELLS ... 
+	{
+			
+		static NSString *leg_cell_ID = @"LegislatorQuartz";		
+			
+		LegislatorMasterCell *cell = (LegislatorMasterCell *)[tableView dequeueReusableCellWithIdentifier:leg_cell_ID];
+		
+		if (cell == nil) {
+			cell = [[[LegislatorMasterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:leg_cell_ID] autorelease];
+			cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
+		}
+		
+		cell.legislator = dataObj;
+		cell.cellView.useDarkBackground = (indexPath.row % 2 == 0);
+		
+		// Display dark and light background in alternate rows -- see tableView:willDisplayCell:forRowAtIndexPath:.
+		//cell.useDarkBackground = (indexPath.row % 2 == 0);
+		
+		
+		//if (tableView == self.searchDisplayController.searchResultsTableView) 
+		//cell.accessoryType.hidden = UITableViewCellAccessoryNone;
+		//cell.accessoryView.hidden = (tableView == self.searchDisplayController.searchResultsTableView);
+		
+		return cell;
+	}
+	
+#else
 	{
 		static NSString *leg_cell_ID = @"LegislatorDirectory";		
 		LegislatorMasterTableViewCell *cell = (LegislatorMasterTableViewCell *)[tableView 
@@ -202,6 +233,7 @@
 		
 		return cell;
 	}
+#endif
 	
 }
 
@@ -296,7 +328,7 @@
 	NSError *error = nil;
 	if (![self.fetchedResultsController performFetch:&error]) {
         // Handle error
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);  // Fail
     }           
 }
@@ -327,7 +359,7 @@
 	@try {
 		NSError *error;
 		if (![self.managedObjectContext save:&error]) {
-			NSLog(@"DirectoryDataSource:save - unresolved error %@, %@", error, [error userInfo]);
+			debug_NSLog(@"DirectoryDataSource:save - unresolved error %@, %@", error, [error userInfo]);
 		}		
 	}
 	@catch (NSException * e) {
@@ -420,6 +452,69 @@
 }
 #endif
 
+
+/*
+- (void) encryptWnomData {
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"WnomObj"
+											  inManagedObjectContext:self.managedObjectContext];
+	[fetchRequest setEntity:entity];
+	
+	NSError *error;
+	NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+	if (fetchedObjects == nil) {
+		debug_NSLog(@"There's no WnomObj objects to delete ???");
+	}
+	[fetchRequest release];
+	
+	//for (WnomObj *object in fetchedObjects)
+	WnomObj *object = [fetchedObjects objectAtIndex:124];
+	{
+		//object.wnomAdj
+		//object.wnomStderr
+		//object.adjMean
+		
+		debug_NSLog(@"starting number: %@", [object.wnomAdj description]);
+		
+		NSData *wnomData = [NSKeyedArchiver archivedDataWithRootObject:object.wnomAdj];
+		debug_NSLog(@"raw archival: %@", [wnomData description]);
+		
+		NSData *encryptedData = [wnomData AES256EncryptWithKey:[UtilityMethods cipher32Byte]];
+		debug_NSLog(@"encrypted: %@", [encryptedData description]);
+		
+		NSData *decryptedData = [encryptedData AES256DecryptWithKey:[UtilityMethods cipher32Byte]];
+		debug_NSLog(@"decypted: %@", [decryptedData description]);
+		
+		NSNumber *decryptedNum = [NSKeyedUnarchiver unarchiveObjectWithData:decryptedData];
+		
+		debug_NSLog(@"ending number: %@", [decryptedNum description]);
+
+	}
+	
+}
+*/
+
+- (void) clearPartisanshipIndexDatabase {
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"WnomObj"
+											  inManagedObjectContext:self.managedObjectContext];
+	[fetchRequest setEntity:entity];
+	
+	NSError *error;
+	NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+	if (fetchedObjects == nil) {
+		debug_NSLog(@"There's no WnomObj objects to delete ???");
+	}
+	[fetchRequest release];
+
+	for (NSManagedObject *object in fetchedObjects) {
+		[self.managedObjectContext deleteObject:object];
+	}
+	[self save];
+}
+
+
 - (void) populatePartisanIndexDatabase
 {
 	// Create the fetch request for the entity.
@@ -445,7 +540,7 @@
 	
 	
 	if (error) {
-		NSLog(@"DirectoryDataSource:save - unresolved error %@, %@", error, [error userInfo]);
+		debug_NSLog(@"DirectoryDataSource:save - unresolved error %@, %@", error, [error userInfo]);
 		return;
 	}
 	
@@ -478,7 +573,7 @@
 				for (LegislatorObj *leg in legArray) {
 					if ([leg.legislatorID isEqual:currentLegID]) {
 						[leg addWnomScores:wnomSet];
-						NSLog(@"Adding %d scores to %@ - %@", [wnomSet count], leg.legislatorID, [leg legProperName]);
+						debug_NSLog(@"Adding %d scores to %@ - %@", [wnomSet count], leg.legislatorID, [leg legProperName]);
 						NSNumber *tempMean = [[wnomSet anyObject] valueForKey:@"adjMean"];
 						found = YES;
 						if (![tempMean isEqual:leg.partisan_index])
@@ -486,7 +581,7 @@
 					}
 				}
 				if (!found) {
-					NSLog(@"Not Found in core data: %@", currentLegID);
+					debug_NSLog(@"Not Found in core data: %@", currentLegID);
 				}
 					
 				[wnomSet removeAllObjects];
@@ -503,7 +598,7 @@
 				
 	}
 	[self save];
-	NSLog(@"---------------------------------------------------------Saved Partisan Index DB");
+	debug_NSLog(@"---------------------------------------------------------Saved Partisan Index DB");
 	[rawPlistArray release];
 	[wnomSet release];
 	

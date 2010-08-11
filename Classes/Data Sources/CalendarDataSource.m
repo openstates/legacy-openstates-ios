@@ -13,6 +13,7 @@
 #import "CFeed.h"
 #import "UtilityMethods.h"
 #import "RegexKitLite.h"
+#import "TexLegeTheme.h"
 
 @implementation CalendarDataSource
 @synthesize managedObjectContext;
@@ -26,7 +27,7 @@
 { return @"Meetings"; }
 
 - (UIImage *)tabBarImage 
-{ return [UIImage imageNamed:@"83-calendar"]; }
+{ return [UIImage imageNamed:@"83-calendar.png"]; }
 
 - (BOOL)showDisclosureIcon
 { return YES; }
@@ -73,16 +74,16 @@
 		NSError *theError = NULL;
 
 		@try {
-			NSLog(@"Beginning feed subscriptions - %@", [NSDate date]);
+			debug_NSLog(@"Beginning feed subscriptions - %@", [NSDate date]);
 			
 			self.feedStore = [CFeedStore instance];
 			for (NSURL *url in feedURLs) {
 				[feedStore.feedFetcher subscribeToURL:url error:&theError];
 			}			
-			NSLog(@"Ended feed subscriptions -- %@", [NSDate date]);
+			debug_NSLog(@"Ended feed subscriptions -- %@", [NSDate date]);
 		}
 		@catch (NSException * e) {
-			NSLog(@"Error when initializing calendar feed subscriptions:\n  %@\n   %@", [theError description], [e description]);
+			debug_NSLog(@"Error when initializing calendar feed subscriptions:\n  %@\n   %@", [theError description], [e description]);
 		}
 		
 		[feedURLs release];
@@ -201,7 +202,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {		
-	static NSString *CellIdentifier = @"CalendarCell";
+	static NSString *CellIdentifier = @"Cell";
 	NSInteger row = indexPath.row;
 	
 	/* Look up cell in the table queue */
@@ -210,13 +211,23 @@
 	/* Not found in queue, create a new cell object */
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewStylePlain reuseIdentifier:CellIdentifier] autorelease];
+		cell.textLabel.textColor =	[TexLegeTheme textDark];
 		cell.textLabel.textAlignment = UITextAlignmentLeft;
 		cell.textLabel.font = [UIFont boldSystemFontOfSize:15];
+		
+		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+		cell.textLabel.adjustsFontSizeToFitWidth = YES;
+		cell.textLabel.minimumFontSize = 12.0f;
+		//cell.accessoryView = [TexLegeTheme disclosureLabel:YES];
+		cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]] autorelease];
     }
-    
 	// configure cell contents
-	if ([self showDisclosureIcon])
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
+	BOOL useDark = (indexPath.row % 2 == 0);
+	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
+	
+	//if ([self showDisclosureIcon])
+	//	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	
 	cell.textLabel.text = [self.calendarList objectAtIndex:row];
 		

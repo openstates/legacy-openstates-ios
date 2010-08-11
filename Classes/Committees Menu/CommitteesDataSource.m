@@ -36,7 +36,7 @@
 - (void)dealloc {
 	self.fetchedResultsController = nil;
 	//self.searchDisplayController = nil;
-	//self.managedObjectContext = nil;	
+	self.managedObjectContext = nil;	
 	self.filterString = nil;
 	
     [super dealloc];
@@ -54,7 +54,7 @@
 { return @"Committees"; }
 
 - (UIImage *)tabBarImage
-{ return [UIImage imageNamed:@"60-signpost"]; }
+{ return [UIImage imageNamed:@"60-signpost.png"]; }
 
 - (BOOL)showDisclosureIcon
 { return YES; }
@@ -80,7 +80,7 @@
 	}
 	@catch (NSException * e) {
 		// Perhaps we're returning from a search and we've got a wacked out indexPath.  Let's reset the search and see what happens.
-		NSLog(@"CommitteeDataSource.m -- committeeDataForIndexPath:  indexPath must be out of bounds.  %@", [indexPath description]); 
+		debug_NSLog(@"CommitteeDataSource.m -- committeeDataForIndexPath:  indexPath must be out of bounds.  %@", [indexPath description]); 
 		[self removeFilter];
 		tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	}
@@ -230,7 +230,7 @@
 	NSError *error = nil;
 	if (![[self fetchedResultsController] performFetch:&error]) {
         // Handle error
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         exit(-1);  // Fail
     }           
 }
@@ -272,6 +272,8 @@
 		NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"Committees" ofType:@"plist"];
 		NSArray *rawPlistArray = [[NSArray alloc] initWithContentsOfFile:thePath];
 		
+		NSFetchRequest *lege_request = [[NSFetchRequest alloc] init];
+
 		// iterate over the values in the raw  dictionary
 		for (NSDictionary * eachCommittee in rawPlistArray)
 		{
@@ -302,7 +304,6 @@
 				//[memberObject setValue:nextId forKey:@"sessionID"];
 
 				// NOW LETS GET THE PROPER LEGISLATOR OBJECT TO LINK THE RELATIONSHIP
-				NSFetchRequest *lege_request = [[[NSFetchRequest alloc] init] autorelease];
 				NSEntityDescription *lege_entity = [NSEntityDescription entityForName:@"LegislatorObj" 
 															   inManagedObjectContext:managedObjectContext];
 				[lege_request setEntity:lege_entity];
@@ -320,13 +321,15 @@
 				}
 				[committeeObject addCommitteePositionsObject:positionObject]; //<label id="code.SVC.addSessionObject"/>
 			}
-			
+
 			// Save the context.
 			NSError *error;
 			if (![context save:&error]) {
 				// Handle the error...
 			}
 		}
+		[lege_request release];
+
 		// release the raw data
 		[rawPlistArray release];
 	}

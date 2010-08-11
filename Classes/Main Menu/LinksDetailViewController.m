@@ -11,10 +11,11 @@
 #import "EditingTableViewCell.h"
 #import "TexLegeAppDelegate.h"
 #import "UtilityMethods.h"
- 
+#import "LinksMenuDataSource.h"
+
 @implementation LinksDetailViewController
 
-@synthesize link, editingTableViewCell, fetchedResultsController;
+@synthesize link, editingTableViewCell, mainDataSource, managedObjectContext;
 
 #pragma mark -
 #pragma mark View controller
@@ -36,9 +37,10 @@
     return self;
 }
 
-- (id)initWithStyle:(UITableViewStyle)style resultsController:(NSFetchedResultsController *)controller {
+- (id)initWithStyle:(UITableViewStyle)style context:(NSManagedObjectContext *)context dataSource:(LinksMenuDataSource *)dataSource {
     if (self = [self initWithStyle:style]) {
-		self.fetchedResultsController = controller;
+		self.managedObjectContext = context;
+		self.mainDataSource = dataSource;
     }
     return self;
 }
@@ -110,21 +112,13 @@
 #pragma mark Save and cancel
 
 - (void)save:(id)sender {
-	
-	NSManagedObjectContext *context = [fetchedResultsController managedObjectContext];
-	
 	/*
 	 If there isn't an existing link object, create and configure one.
 	 */
     if (!link) {
-        link = [NSEntityDescription insertNewObjectForEntityForName:@"LinkObj" inManagedObjectContext:context];
+        link = [NSEntityDescription insertNewObjectForEntityForName:@"LinkObj" inManagedObjectContext:self.managedObjectContext];
+		NSInteger count = [self.mainDataSource.bodyLinksArray count];
 
-		NSArray *sections = [fetchedResultsController sections];
-		NSUInteger count = 0;
-		if ([sections count]) {
-			id <NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:1];
-			count = [sectionInfo numberOfObjects];
-		}
 		link.order = [NSNumber numberWithInteger:count];	// put it in our last row.
 		link.section = [NSNumber numberWithInteger:1];
 		link.timeStamp = [NSDate date];
@@ -146,11 +140,12 @@
 	 Save the managed object context.
 	 */
 	NSError *error = nil;
-	if (![context save:&error]) {
+	if (![self.managedObjectContext save:&error]) {
 		// Handle error
-		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+		debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		exit(-1);  // Fail
 	}
+	[self.mainDataSource populateLinksArrays];
 	
     [self.navigationController popViewControllerAnimated:YES];
 }

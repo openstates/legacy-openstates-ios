@@ -18,29 +18,15 @@
 #import "CalendarComboViewController.h"
 
 #import "LinksMenuDataSource.h"
-#import "LinksDetailViewController.h"
 #import "MiniBrowserController.h"
+#import "TexLegeTheme.h"
+#import "TexLegeEmailComposer.h"
 
 @implementation GeneralTableViewController
 
 
 @synthesize dataSource, detailViewController;
-@synthesize menuButton, selectIndexPathOnAppear;
-
-- (void)showPopoverMenus:(BOOL)show {
-	if (self.splitViewController && show) {
-		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-		if (self.menuButton == nil) {
-			self.menuButton = [[UIBarButtonItem alloc] initWithTitle:@"Menu" style:UIBarButtonItemStylePlain target:appDelegate 
-															  action:@selector(showOrHideMenuPopover:)];
-		}
-		[self.navigationItem setLeftBarButtonItem:self.menuButton animated:YES];
-	}
-	else {
-		[self.navigationItem setLeftBarButtonItem:nil animated:YES];
-	}
-}
-
+@synthesize selectIndexPathOnAppear;
 
 - (void)setStoredSelectionWithRow:(NSInteger)row section:(NSInteger)section {
 	// we have moved to level 1, remove it's stored row/section selection
@@ -84,7 +70,6 @@
 - (void)dealloc {
 	self.tableView = nil;
 	self.dataSource = nil; 
-	self.menuButton = nil;
 	self.selectIndexPathOnAppear = nil;
 	
 	[super dealloc];
@@ -146,11 +131,6 @@
 		}		
 	}
 	
-	if ([dataSource canEdit]) { // later change this to "usesEditing" or something
-	    self.navigationItem.rightBarButtonItem = self.editButtonItem;		
-		self.tableView.allowsSelectionDuringEditing = YES;
-	}
-		
 	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 	if (appDelegate.savedLocation != nil && [[appDelegate.savedLocation objectAtIndex:0] integerValue] == [appDelegate indexForFunctionalViewController:self]) {
 			// save off this level's selection to our AppDelegate
@@ -186,8 +166,6 @@
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
-	[self showPopoverMenus:[UtilityMethods isLandscapeOrientation]];
-	
 	if (self.selectIndexPathOnAppear)  {		// if we have prepared a particular selection, do it
 		if (self.selectIndexPathOnAppear.row < [dataSource tableView:self.tableView numberOfRowsInSection:self.selectIndexPathOnAppear.section])
 		{
@@ -206,24 +184,17 @@
 #pragma -
 #pragma UITableViewDelegate
 
+- (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+	BOOL useDark = (indexPath.row % 2 == 0);
+	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
+}
+
+
 - (void)tableView:(UITableView *)aTableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)newIndexPath {
 	if (dataSource.name == @"Resources") { // just select the row, nothing special.
 		[aTableView.delegate tableView:aTableView didSelectRowAtIndexPath:newIndexPath];
 	}
 }
-
-
-- (NSIndexPath *)tableView:(UITableView *)aTableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSIndexPath *rowToSelect = indexPath;
-	if (dataSource.name == @"Resources" && aTableView.isEditing && indexPath.section == 0)
-	{ 
-		[aTableView deselectRowAtIndexPath:indexPath animated:YES];
-		rowToSelect = nil;    
-	}
-		
-	return rowToSelect;
-}
-
 
 // the user selected a row in the table.
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
@@ -236,7 +207,7 @@
 		[aTableView deselectRowAtIndexPath:newIndexPath animated:animated];	
 	
 	if (!openInController) {
-		NSLog(@"Error opening detail controller from GeneralTableViewController:didSelect ...");
+		debug_NSLog(@"Error opening detail controller from GeneralTableViewController:didSelect ...");
 		return;
 	}
 	
@@ -245,63 +216,45 @@
 		
 	if (dataSource.name == @"Resources"){ // has it's own special controller...
 		LinksMenuDataSource * tempDataSource = (LinksMenuDataSource *)dataSource;
-		BOOL addLinkRow = [tempDataSource isAddLinkPlaceholderAtIndexPath:newIndexPath];
+
+		NSString * action = [[tempDataSource dataObjectForRowAtIndexPath:newIndexPath] valueForKey:@"url"];
 		
-		if (addLinkRow || aTableView.isEditing) {
-			// we're editing links, or adding new ones.
-			
-			LinksDetailViewController *linksDetail = 
-			[[LinksDetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			
-			// If we got a new view controller, push it .
-			if (linksDetail) {
-				linksDetail.fetchedResultsController = [dataSource fetchedResultsController];
-				
-				if (!addLinkRow) { // we're editing an existing link
-					linksDetail.link = [[linksDetail fetchedResultsController] objectAtIndexPath:newIndexPath];
-				}
-				
-				[[openInController navigationController] pushViewController:linksDetail animated:animated];
-
-				[linksDetail release];
-			}
+		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+		
+		if ([action isEqualToString:@"aboutView"]) {
+			if (appDelegate != nil) [appDelegate showAboutDialog:openInController];
 		}
-		else // we're not editing or adding web links, someone wants to really go somewhere
-		{
-			NSString * action = [tempDataSource getLinkForRowAtIndexPath:newIndexPath];
+		else if ([action isEqualToString:@"contactMail"]) {
+			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
+																			 subject:@"TexLege Support Question / Concern" 
+																				body:@""];
+		}				
+		else {
+			NSURL *url = [UtilityMethods safeWebUrlFromString:action];
 			
-			TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-			
-			if ([action isEqualToString:@"aboutView"]) {
-				if (appDelegate != nil) [appDelegate showAboutDialog:openInController];
-			}
-			else if ([action isEqualToString:@"voteInfoView"]) {
-				if (appDelegate != nil) [appDelegate showVoteInfoDialog:openInController];
-			}
-			else {
-				NSURL *url = [UtilityMethods safeWebUrlFromString:action];
+			if ([UtilityMethods canReachHostWithURL:url]) { // got a network connection
+				MiniBrowserController *mbc = nil;
 				
-				if ([UtilityMethods canReachHostWithURL:url]) { // got a network connection
-					MiniBrowserController *mbc = nil;
-						
-					// we might already have a browser loaded and ready to go
-					if (self.detailViewController && [self.detailViewController isKindOfClass:[MiniBrowserController class]]) {
-						mbc = (MiniBrowserController *) self.detailViewController;
-						[mbc loadURL:url];
-					}
-					else
-						mbc = [MiniBrowserController sharedBrowserWithURL:url];
-
-					if (isSplitViewDetail == NO)
-						[mbc display:openInController];
+				// we might already have a browser loaded and ready to go
+				if (self.detailViewController && [self.detailViewController isKindOfClass:[MiniBrowserController class]]) {
+					mbc = (MiniBrowserController *) self.detailViewController;
+					[mbc loadURL:url];
 				}
+				else
+					mbc = [MiniBrowserController sharedBrowserWithURL:url];
+				
+				if (isSplitViewDetail == NO)
+					[mbc display:openInController];
 			}
 		}
 		
 	}
 	else if (dataSource.name == @"Meetings") {	
 		if (!self.detailViewController) {
-			self.detailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController" bundle:nil];
+			if ([UtilityMethods isIPadDevice])
+				self.detailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController~ipad" bundle:nil];
+			else
+				self.detailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController~iphone" bundle:nil];
 		}
 		
 		NSArray *feedEntries = [dataSource feedEntriesForIndexPath:newIndexPath];
@@ -325,7 +278,7 @@
 	}	
 	else {
 		if (dataSource.name != @"Maps")
-			NSLog(@"GeneralTableViewController, unexpected datasource: %@", dataSource.name);
+			debug_NSLog(@"GeneralTableViewController, unexpected datasource: %@", dataSource.name);
 
 		// create an MapsDetailViewController. This controller will display the full size tile for the element
 		if (self.detailViewController == nil) {
@@ -386,42 +339,5 @@
 	return YES;
 }
 
-#pragma mark -
-#pragma mark Editing Table
-
-- (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-	UITableViewCellEditingStyle style = UITableViewCellEditingStyleNone;
-
-	if ([self.dataSource usesCoreData] && [self.dataSource canEdit]) {
-		style = [self.dataSource tableView:aTableView editingStyleForRowAtIndexPath:indexPath];
-    }
-    return style;
-}
-
-
-
-- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
-	
-    if ([dataSource usesCoreData] && [dataSource canEdit]) {
-		[super setEditing:editing animated:animated];
-		[self.navigationItem setHidesBackButton:editing animated:YES];
-
-		[self.tableView setEditing:editing animated:YES];
-
-		//[theTableView beginUpdates];
-		[dataSource setEditing:editing animated:animated];
-		//[theTableView endUpdates];
-
-	}
-}
-
-
-- (NSIndexPath *)tableView:(UITableView *)aTableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {
-	NSIndexPath * tempPath = nil;
-    if ([dataSource usesCoreData] && [dataSource canEdit]) {
-		tempPath = [dataSource tableView:aTableView targetIndexPathForMoveFromRowAtIndexPath:sourceIndexPath toProposedIndexPath:proposedDestinationIndexPath];
-	}
-	return tempPath;
-}
 
 @end

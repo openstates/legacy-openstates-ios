@@ -13,7 +13,7 @@
 @interface UtilityMethods : NSObject {
 }
 
-+ (BOOL) isThisCrantacular;
++ (NSString*)cipher32Byte;
 
 + (NSString *) titleFromURL:(NSURL *)url;
 
