@@ -122,11 +122,6 @@
 					<bytes key="NSRGB">MC41OTIxNTY4NjI3IDAuNjMxMzcyNTQ5IDAuNjUwOTgwMzkyMgA</bytes>
 				</object>
 			</object>
-			<object class="IBUIBarButtonItem" id="4769675">
-				<string key="IBUITitle">Menu</string>
-				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-				<int key="IBUIStyle">1</int>
-			</object>
 		</array>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
 			<array class="NSMutableArray" key="connectionRecords">
@@ -196,14 +191,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">menuButton</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="4769675"/>
-					</object>
-					<int key="connectionID">27</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">chamberControl</string>
 						<reference key="source" ref="372490531"/>
 						<reference key="destination" ref="264026904"/>
@@ -263,18 +250,12 @@
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Chamber Selection Control</string>
 					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">24</int>
-						<reference key="object" ref="4769675"/>
-						<reference key="parent" ref="0"/>
-					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
 				<string key="-1.CustomClassName">CommitteeMasterViewController</string>
 				<string key="-2.CustomClassName">UIResponder</string>
 				<string key="12.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="24.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="25.IBEditorWindowLastContentRect">{{329, 965}, {163, 30}}</string>
 				<string key="25.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="8.IBEditorWindowLastContentRect">{{571, 228}, {320, 768}}</string>

@@ -10,9 +10,7 @@
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">117</string>
 		</object>
-		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="21"/>
-		</array>
+		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs"/>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 		</array>
@@ -47,7 +45,6 @@
 							<string key="NSResourceName">123-id-card.png</string>
 						</object>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<reference key="IBUITabBar"/>
 					</object>
 					<array key="IBUIToolbarItems" id="0"/>
 					<reference key="IBUIParentViewController" ref="131916064"/>
@@ -76,7 +73,6 @@
 						<object class="IBUIViewController" id="946652663">
 							<reference key="IBUIToolbarItems" ref="0"/>
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="631679792">
-								<reference key="IBUINavigationBar"/>
 								<string key="IBUITitle">Legislator Directory</string>
 								<object class="IBUIBarButtonItem" key="IBUIBackBarButtonItem" id="265864822">
 									<string key="IBUITitle">Back</string>
@@ -106,7 +102,6 @@
 								<string key="NSResourceName">60-signpost.png</string>
 							</object>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-							<reference key="IBUITabBar"/>
 						</object>
 						<reference key="IBUIToolbarItems" ref="0"/>
 						<reference key="IBUIParentViewController" ref="131916064"/>
@@ -159,7 +154,6 @@
 								<string key="NSResourceName">83-calendar.png</string>
 							</object>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-							<reference key="IBUITabBar"/>
 						</object>
 						<reference key="IBUIToolbarItems" ref="0"/>
 						<reference key="IBUIParentViewController" ref="131916064"/>
@@ -213,7 +207,6 @@
 								<string key="NSResourceName">103-map.png</string>
 							</object>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-							<reference key="IBUITabBar"/>
 						</object>
 						<reference key="IBUIToolbarItems" ref="0"/>
 						<reference key="IBUIParentViewController" ref="131916064"/>
@@ -265,7 +258,6 @@
 								<string key="NSResourceName">113-navigation.png</string>
 							</object>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-							<reference key="IBUITabBar"/>
 						</object>
 						<reference key="IBUIToolbarItems" ref="0"/>
 						<reference key="IBUIParentViewController" ref="131916064"/>
@@ -616,7 +608,7 @@
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
 				<string key="-1.CustomClassName">TexLegeAppDelegate</string>
 				<string key="-2.CustomClassName">UIResponder</string>
-				<string key="10.IBEditorWindowLastContentRect">{{571, 381}, {320, 480}}</string>
+				<string key="10.IBEditorWindowLastContentRect">{{824, 396}, {320, 480}}</string>
 				<string key="10.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="11.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="23.CustomClassName">MasterTableViewController</string>
@@ -635,62 +627,6 @@
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
-				<object class="IBPartialClassDescription">
-					<string key="className">AboutViewController</string>
-					<string key="superclassName">UIViewController</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="done:">id</string>
-						<string key="weblink_click:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="done:">
-							<string key="name">done:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="weblink_click:">
-							<string key="name">weblink_click:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="delegate">id</string>
-						<string key="dismissButton">UIBarButtonItem</string>
-						<string key="infoView">UIView</string>
-						<string key="projectWebsiteButton">UISegmentedControl</string>
-						<string key="textView">UITextView</string>
-						<string key="versionLabel">UILabel</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="delegate">
-							<string key="name">delegate</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="dismissButton">
-							<string key="name">dismissButton</string>
-							<string key="candidateClassName">UIBarButtonItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="infoView">
-							<string key="name">infoView</string>
-							<string key="candidateClassName">UIView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="projectWebsiteButton">
-							<string key="name">projectWebsiteButton</string>
-							<string key="candidateClassName">UISegmentedControl</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="textView">
-							<string key="name">textView</string>
-							<string key="candidateClassName">UITextView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="versionLabel">
-							<string key="name">versionLabel</string>
-							<string key="candidateClassName">UILabel</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/AboutView/AboutViewController.h</string>
-					</object>
-				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">CommitteeDetailViewController</string>
 					<string key="superclassName">UITableViewController</string>
@@ -717,8 +653,6 @@
 						<string key="chamberControl">UISegmentedControl</string>
 						<string key="dataSource">id</string>
 						<string key="detailViewController">CommitteeDetailViewController</string>
-						<string key="menuButton">UIBarButtonItem</string>
-						<string key="selectObjectOnAppear">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="chamberControl">
@@ -733,14 +667,6 @@
 							<string key="name">detailViewController</string>
 							<string key="candidateClassName">CommitteeDetailViewController</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="menuButton">
-							<string key="name">menuButton</string>
-							<string key="candidateClassName">UIBarButtonItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="selectObjectOnAppear">
-							<string key="name">selectObjectOnAppear</string>
-							<string key="candidateClassName">id</string>
-						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
@@ -750,25 +676,6 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">GeneralTableViewController</string>
 					<string key="superclassName">UITableViewController</string>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="dataSource">id</string>
-						<string key="detailViewController">id</string>
-						<string key="menuButton">UIBarButtonItem</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="dataSource">
-							<string key="name">dataSource</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="detailViewController">
-							<string key="name">detailViewController</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="menuButton">
-							<string key="name">menuButton</string>
-							<string key="candidateClassName">UIBarButtonItem</string>
-						</object>
-					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Classes/Universal Classes/GeneralTableViewController.h</string>
@@ -797,7 +704,7 @@
 						<string key="miniBackgroundView">UIView</string>
 						<string key="partyPHolder">UIView</string>
 						<string key="partySlider">StaticGradientSliderView</string>
-						<string key="scatterPlotView">CPLayerHostingView</string>
+						<string key="scatterPlotView">CPLTLayerHostingView</string>
 						<string key="startupSplashView">UIView</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
@@ -879,7 +786,7 @@
 						</object>
 						<object class="IBToOneOutletInfo" key="scatterPlotView">
 							<string key="name">scatterPlotView</string>
-							<string key="candidateClassName">CPLayerHostingView</string>
+							<string key="candidateClassName">CPLTLayerHostingView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="startupSplashView">
 							<string key="name">startupSplashView</string>
@@ -917,8 +824,6 @@
 						<string key="chamberControl">UISegmentedControl</string>
 						<string key="dataSource">id</string>
 						<string key="detailViewController">LegislatorDetailViewController</string>
-						<string key="menuButton">UIBarButtonItem</string>
-						<string key="selectObjectOnAppear">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="chamberControl">
@@ -933,45 +838,10 @@
 							<string key="name">detailViewController</string>
 							<string key="candidateClassName">LegislatorDetailViewController</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="menuButton">
-							<string key="name">menuButton</string>
-							<string key="candidateClassName">UIBarButtonItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="selectObjectOnAppear">
-							<string key="name">selectObjectOnAppear</string>
-							<string key="candidateClassName">id</string>
-						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Classes/iPad View Controllers/MasterTableViewController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">MenuPopoverViewController</string>
-					<string key="superclassName">UITableViewController</string>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="aboutViewController">AboutViewController</string>
-						<string key="appDelegate">TexLegeAppDelegate</string>
-						<string key="voteInfoViewController">VoteInfoViewController</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="aboutViewController">
-							<string key="name">aboutViewController</string>
-							<string key="candidateClassName">AboutViewController</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="appDelegate">
-							<string key="name">appDelegate</string>
-							<string key="candidateClassName">TexLegeAppDelegate</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="voteInfoViewController">
-							<string key="name">voteInfoViewController</string>
-							<string key="candidateClassName">VoteInfoViewController</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/iPad View Controllers/MenuPopoverViewController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1009,7 +879,6 @@
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="saveAction:">id</string>
 						<string key="showOrHideAboutMenuPopover:">id</string>
-						<string key="showOrHideMenuPopover:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="saveAction:">
@@ -1018,10 +887,6 @@
 						</object>
 						<object class="IBActionInfo" key="showOrHideAboutMenuPopover:">
 							<string key="name">showOrHideAboutMenuPopover:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="showOrHideMenuPopover:">
-							<string key="name">showOrHideMenuPopover:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>
@@ -1036,7 +901,6 @@
 						<string key="managedObjectContext">NSManagedObjectContext</string>
 						<string key="mapsTableTabbedVC">GeneralTableViewController</string>
 						<string key="masterNavigationController">UINavigationController</string>
-						<string key="menuPopoverVC">MenuPopoverViewController</string>
 						<string key="splitViewController">UISplitViewController</string>
 						<string key="tabBarController">UITabBarController</string>
 					</dictionary>
@@ -1081,10 +945,6 @@
 							<string key="name">masterNavigationController</string>
 							<string key="candidateClassName">UINavigationController</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="menuPopoverVC">
-							<string key="name">menuPopoverVC</string>
-							<string key="candidateClassName">MenuPopoverViewController</string>
-						</object>
 						<object class="IBToOneOutletInfo" key="splitViewController">
 							<string key="name">splitViewController</string>
 							<string key="candidateClassName">UISplitViewController</string>
@@ -1100,54 +960,10 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">VoteInfoViewController</string>
-					<string key="superclassName">UIViewController</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="done:">id</string>
-						<string key="weblink_click:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="done:">
-							<string key="name">done:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="weblink_click:">
-							<string key="name">weblink_click:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="delegate">id</string>
-						<string key="dismissButton">UIBarButtonItem</string>
-						<string key="infoView">UIView</string>
-						<string key="projectWebsiteButton">UISegmentedControl</string>
-						<string key="textView">UITextView</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="delegate">
-							<string key="name">delegate</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="dismissButton">
-							<string key="name">dismissButton</string>
-							<string key="candidateClassName">UIBarButtonItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="infoView">
-							<string key="name">infoView</string>
-							<string key="candidateClassName">UIView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="projectWebsiteButton">
-							<string key="name">projectWebsiteButton</string>
-							<string key="candidateClassName">UISegmentedControl</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="textView">
-							<string key="name">textView</string>
-							<string key="candidateClassName">UITextView</string>
-						</object>
-					</dictionary>
+					<string key="className">UIImageView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/AboutView/VoteInfoViewController.h</string>
+						<string key="minorKey">../../Frameworks/UIImageView+Cached/ImageCache.h</string>
 					</object>
 				</object>
 			</array>
@@ -1340,14 +1156,6 @@
 					<reference key="sourceIdentifier" ref="180762353"/>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">UIScrollView</string>
-					<string key="superclassName">UIView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBFrameworkSource</string>
-						<string key="minorKey">UIKit.framework/Headers/UIScrollView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
 					<string key="className">UISearchBar</string>
 					<string key="superclassName">UIView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -1417,14 +1225,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">UIKit.framework/Headers/UITableViewController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">UITextView</string>
-					<string key="superclassName">UIScrollView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBFrameworkSource</string>
-						<string key="minorKey">UIKit.framework/Headers/UITextView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
