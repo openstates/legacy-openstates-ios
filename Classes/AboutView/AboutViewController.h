@@ -12,32 +12,20 @@
 
 
 @interface AboutViewController : UIViewController {
-	id <AboutViewControllerDelegate> delegate;
 	
-	IBOutlet UITextView *textView;
-	IBOutlet UILabel *versionLabel;
-	IBOutlet UIView *infoView;
-	IBOutlet UISegmentedControl *projectWebsiteButton;
-	IBOutlet UIBarButtonItem *dismissButton;
-	NSURL *projectWebsiteURL;
-
 }
 
-@property (nonatomic, assign) id <AboutViewControllerDelegate> delegate;
+@property (nonatomic, assign) IBOutlet id <AboutViewControllerDelegate> delegate;
 @property (nonatomic, retain) NSURL *projectWebsiteURL;
-@property (nonatomic, retain) UILabel *versionLabel;
-@property (nonatomic, retain) UIView *infoView;
-@property (nonatomic, retain) UISegmentedControl *projectWebsiteButton;
-@property (nonatomic, retain) UIBarButtonItem *dismissButton;
-@property (nonatomic, retain) UITextView *textView;
+@property (nonatomic, retain) IBOutlet UILabel *versionLabel;
+@property (nonatomic, retain) IBOutlet UIButton *projectWebsiteButton;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *dismissButton;
+@property (nonatomic, retain) IBOutlet UITextView *infoTextView;
 
 
 - (IBAction)done:(id)sender;
 - (IBAction)weblink_click:(id)sender;
-/*- (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle;
-- (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle otherTitle:(NSString *)otherTitle;
-*/@end
-
+@end
 
 @protocol AboutViewControllerDelegate
 - (void)modalViewControllerDidFinish:(UIViewController *)controller;

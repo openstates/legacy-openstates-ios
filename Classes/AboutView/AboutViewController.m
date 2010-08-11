@@ -20,23 +20,28 @@
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-		self.title = @"About TexLege";
+		self.title = @"TextLege Info";
 		// NSBundle Info.plist
 		NSDictionary *infoPlistDict = [[NSBundle mainBundle] infoDictionary];
 		self.projectWebsiteURL = [NSURL URLWithString:[infoPlistDict objectForKey:@"projectWebsite"]];
+		
 	}
 	return self;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	[self.textView flashScrollIndicators];
+	[self.infoTextView flashScrollIndicators];
 }
 
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	NSDictionary *infoPlistDict = [[NSBundle mainBundle] infoDictionary];
-	self.versionLabel.text = [NSString stringWithFormat:@"Version %@", [infoPlistDict objectForKey:@"CFBundleVersion"]];	
+	self.versionLabel.text = [NSString stringWithFormat:@"Version %@", [infoPlistDict objectForKey:@"CFBundleVersion"]];
+	
+	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"TexLegeStrings" ofType:@"plist"];
+	NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
+	self.infoTextView.text = [[textDict objectForKey:@"AboutText"] stringByAppendingFormat:@"\n%@", [textDict objectForKey:@"PartisanIndexText"]];
 
 }
 
@@ -54,7 +59,8 @@
 
 - (void) done:(id)sender
 {
-	[self.delegate modalViewControllerDidFinish:self];	
+	if (self.delegate && ![UtilityMethods isIPadDevice])
+		[self.delegate modalViewControllerDidFinish:self];	
 }
 
 - (void)viewDidUnload {
@@ -63,58 +69,28 @@
 }
 
 #pragma mark Alert View + Delegate
-/* alert with one button
-- (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle
-{
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancelTitle otherButtonTitles:nil];
-
-	[alert show];
-	[alert release];
-}
-
-// alert with 2 buttons
-- (void) alertViewWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle otherTitle:(NSString *)otherTitle
-{
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancelTitle otherButtonTitles:otherTitle, nil];
-	[alert show];
-	[alert release];
-}
-
-- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger) buttonIndex
-{
-}
- */
 #pragma mark -
 
 - (IBAction) weblink_click:(id) sender
 {
-	if ([UtilityMethods isIPadDevice]) {
-		if ([UtilityMethods canReachHostWithURL:self.projectWebsiteURL]) {
-			TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-			UIViewController *tempController = (self.splitViewController) ? appDelegate.currentDetailViewController: appDelegate.currentMasterViewController;				
-			[self done:sender];	
-			MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:self.projectWebsiteURL];
-			[mbc display:tempController];
-		}
+	if ([UtilityMethods canReachHostWithURL:self.projectWebsiteURL]) {
+		MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:self.projectWebsiteURL];
+		[mbc display:self];
 	}
-	else
-		[UtilityMethods openURLWithTrepidation:self.projectWebsiteURL];
 }
 
 
 - (void)dealloc {
 	self.projectWebsiteURL = nil;
-	self.infoView = nil;
 	self.versionLabel = nil;
 	self.projectWebsiteButton = nil;
 	self.dismissButton = nil;
-	self.textView = nil;
+	self.infoTextView = nil;
 	[super dealloc];
 }
 
-@synthesize textView;
+@synthesize infoTextView;
 @synthesize versionLabel;
-@synthesize infoView;
 @synthesize projectWebsiteButton;
 @synthesize dismissButton;
 @end
