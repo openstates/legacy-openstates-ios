@@ -20,4 +20,5 @@
 @property (nonatomic, retain) UIPopoverController *itemPopoverController;
 @property (nonatomic, retain) IBOutlet AboutViewController *aboutViewController;
 @property (nonatomic, retain) IBOutlet TexLegeAppDelegate *appDelegate;
+
 @end

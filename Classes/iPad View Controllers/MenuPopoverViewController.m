@@ -49,30 +49,6 @@
 	self.clearsSelectionOnViewWillAppear = NO;
 }
 
-- (IBAction)selectFirstRow:(id)sender {
-	if (![self.tableView indexPathForSelectedRow]) {
-		NSInteger index = [appDelegate indexForFunctionalViewController:[appDelegate currentMasterViewController]];
-		NSIndexPath *selectionPath = [NSIndexPath indexPathForRow:index inSection:0];				
-		[self.tableView selectRowAtIndexPath:selectionPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-	}		
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-	[self performSelector:@selector(selectFirstRow:) withObject:self afterDelay:0];
-}
-
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
-
 #pragma mark -
 #pragma mark Memory management
 
@@ -127,8 +103,8 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (![cell isSelected]) {
-	BOOL useDark = (indexPath.row % 2 == 0);
-	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
+		BOOL useDark = (indexPath.row % 2 == 0);
+		cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	}
 }
 
@@ -152,7 +128,7 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"MainMenuCell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
@@ -257,9 +233,9 @@
 
 		//[self showOrHideItemPopover:viewController fromRect:clickedRow];
 		if (indexPath.row == 0) {
-			if (![[[TexLegeAppDelegate appDelegate] topViewController] isEqual:viewController])
-				[[[[TexLegeAppDelegate appDelegate] topViewController] navigationController] pushViewController:viewController animated:YES];
-			[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+			if (![[appDelegate topViewController] isEqual:viewController])
+				[[[appDelegate topViewController] navigationController] pushViewController:viewController animated:YES];
+			//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 		}
 		else {
 			// This is the mailer.
@@ -275,7 +251,10 @@
 		
 		NSInteger vcIndex = [appDelegate indexForFunctionalViewController:viewController];
 		[appDelegate changeActiveFeaturedControllerTo:vcIndex];
-
+		
+		if (![UtilityMethods isLandscapeOrientation])
+			[[CommonPopoversController sharedCommonPopoversController] performSelector:@selector(displayMasterListPopover:) withObject:self afterDelay:0];
+				
 	}
 }
 
