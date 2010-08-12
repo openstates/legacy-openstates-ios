@@ -23,5 +23,6 @@
 
 - (IBAction) filterChamber:(id)sender;
 - (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context;
+- (IBAction)selectDefaultObject:(id)sender;
 
 @end

@@ -21,42 +21,22 @@
 #import "MiniBrowserController.h"
 #import "TexLegeTheme.h"
 #import "TexLegeEmailComposer.h"
+#import "CommonPopoversController.h"
 
 @implementation GeneralTableViewController
 
 
-@synthesize dataSource, detailViewController;
-@synthesize selectIndexPathOnAppear;
+@synthesize dataSource, detailViewController, aboutControl, miniBrowser;
+@synthesize selectObjectOnAppear;
 
-- (void)setStoredSelectionWithRow:(NSInteger)row section:(NSInteger)section {
-	// we have moved to level 1, remove it's stored row/section selection
-	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-	if (appDelegate.savedLocation != nil) {
-		NSInteger functionIndex = [appDelegate indexForFunctionalViewController:self];
-		//[appDelegate.savedLocation replaceObjectAtIndex:0 withObject:[NSNumber numberWithInteger:appDelegate.tabBarController.selectedIndex]]; //tab
-		[appDelegate.savedLocation replaceObjectAtIndex:0 withObject:[NSNumber numberWithInteger:functionIndex]]; //tab
-		[appDelegate.savedLocation replaceObjectAtIndex:1 withObject:[NSNumber numberWithInteger:row]];
-		[appDelegate.savedLocation replaceObjectAtIndex:2 withObject:[NSNumber numberWithInteger:section]];
-	}
-	
+- (NSString *) viewControllerKey {
+	if ([dataSource.name isEqualToString:@"Resources"])
+		return @"LinksMasterViewController";
+	else if ([dataSource.name isEqualToString:@"Maps"])
+		return @"MapsMasterViewController";
+	else //([dataSource.name isEqualToString:@"Meetings"])
+		return @"CalendarsMasterViewController";
 }
-
-- (void)resetStoredSelection {
-	// we have moved to level 1, remove it's stored row/section selection
-	[self setStoredSelectionWithRow:-1 section:-1]; 	
-}
-
-- (void)validateStoredSelection {
-	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-	NSInteger functionIndex = [appDelegate indexForFunctionalViewController:self];
-	//	NSInteger tabSelection = appDelegate.tabBarController.selectedIndex;
-
-	NSInteger tabSavedSelection = [[appDelegate.savedLocation objectAtIndex:0] integerValue];
-	
-	if (functionIndex != tabSavedSelection) { // we're out of sync with the selection, clear the unknown
-		[self resetStoredSelection];
-	}
-}	
 
 
 - (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context {
@@ -65,13 +45,28 @@
 	self.title = [dataSource name];	
 	// set the long name shown in the navigation bar
 	//self.navigationItem.title=[dataSource navigationBarName];
+	
+	if ([dataSource usesCoreData]) {
+		NSManagedObjectID *objectID = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:self.viewControllerKey];
+		if (objectID)
+			self.selectObjectOnAppear = [self.dataSource.managedObjectContext objectWithID:objectID];
+		
+		if (self.selectObjectOnAppear && [self.selectObjectOnAppear isKindOfClass:[LinkObj class]]) {
+			self.selectObjectOnAppear = nil; // let's not go hitting up websites on startup (Resources) 
+		}
+	}
+	else if ([dataSource.name isEqualToString:@"Meetings"])
+		self.selectObjectOnAppear = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:self.viewControllerKey];
+		
+	
 }
 
 - (void)dealloc {
+	self.miniBrowser = nil;
 	self.tableView = nil;
 	self.dataSource = nil; 
-	self.selectIndexPathOnAppear = nil;
-	
+	self.selectObjectOnAppear = nil;
+	self.aboutControl = nil;
 	[super dealloc];
 }
 
@@ -80,9 +75,9 @@
 		[self.dataSource performSelector:@selector(didReceiveMemoryWarning)];
 	
 	self.detailViewController = nil;
-	self.selectIndexPathOnAppear = nil;
-	[self resetStoredSelection];
-
+	self.selectObjectOnAppear = nil;
+	self.aboutControl = nil;
+	
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
     // Release anything that's not essential, such as cached data
 }
@@ -116,13 +111,23 @@
 
 -(void)viewDidLoad {
 	[super viewDidLoad];
-		//self.clearsSelectionOnViewWillAppear = NO;
+	
+	if ([UtilityMethods isIPadDevice])
+		self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
+
+	self.clearsSelectionOnViewWillAppear = NO;
+
+	self.tableView.separatorColor = [TexLegeTheme separator];
+	self.tableView.backgroundColor = [TexLegeTheme tableBackground];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
+	//self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
+	//self.navigationItem.titleView = self.chamberControl;
 	
 		// FETCH CORE DATA
 	if ([dataSource usesCoreData])
 	{		
 		NSError *error;
-		
 			// You've got to delete the cache, or disable caching before you modify the predicate...
 		[NSFetchedResultsController deleteCacheWithName:[[dataSource fetchedResultsController] cacheName]];
 		
@@ -130,18 +135,12 @@
 				// Handle the error...
 		}		
 	}
-	
-	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-	if (appDelegate.savedLocation != nil && [[appDelegate.savedLocation objectAtIndex:0] integerValue] == [appDelegate indexForFunctionalViewController:self]) {
-			// save off this level's selection to our AppDelegate
-			//[self validateStoredSelection];
-		NSInteger rowSelection = [[appDelegate.savedLocation objectAtIndex:1] integerValue];
-		NSInteger sectionSelection = [[appDelegate.savedLocation objectAtIndex:2] integerValue];
-		
-		if (rowSelection != -1)
-			self.selectIndexPathOnAppear = [NSIndexPath indexPathForRow:rowSelection inSection:sectionSelection];
-	}
-    
+}
+
+- (IBAction)selectDefaultObject:(id)sender {
+	NSIndexPath *selectFirst = [NSIndexPath indexPathForRow:0 inSection:0];
+	[self.tableView selectRowAtIndexPath:selectFirst animated:NO scrollPosition:UITableViewScrollPositionNone];
+	[self tableView:self.tableView didSelectRowAtIndexPath:selectFirst];
 }
 
 
@@ -149,35 +148,54 @@
 {	
 	[super viewWillAppear:animated];
 	
-	[self validateStoredSelection];
+	//// ALL OF THE FOLLOWING MUST *NOT* RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER
 	
-	if ([UtilityMethods isIPadDevice] && self.selectIndexPathOnAppear == nil) {
-		NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
-		if (currentIndexPath == nil && ![dataSource.name isEqualToString:@"Resources"])  {
-			NSUInteger ints[2] = {0,0};
-			currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
+	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
+		id detailObject = nil;
+		if ([dataSource.name isEqualToString:@"Maps"])
+			detailObject = self.detailViewController ? [self.detailViewController valueForKey:@"map"] : nil;
+		else if ([dataSource.name isEqualToString:@"Meetings"])
+			detailObject = [NSNumber numberWithInteger:0];
+				  
+		if (!detailObject) {
+			NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
+			if (!currentIndexPath) {			
+				NSUInteger ints[2] = {0,0};	// just pick the first one then
+				currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
+			}
+			detailObject = [self.dataSource dataObjectForIndexPath:currentIndexPath];			
 		}
-		self.selectIndexPathOnAppear = currentIndexPath;
+		self.selectObjectOnAppear = detailObject;
 	}	
-		// force the tableview to load
-	[self.tableView reloadData];
+	if ([UtilityMethods isIPadDevice])
+		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
+	
+	// END: IPAD ONLY
 }
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
-	if (self.selectIndexPathOnAppear)  {		// if we have prepared a particular selection, do it
-		if (self.selectIndexPathOnAppear.row < [dataSource tableView:self.tableView numberOfRowsInSection:self.selectIndexPathOnAppear.section])
-		{
-			[self.tableView selectRowAtIndexPath:self.selectIndexPathOnAppear animated:animated scrollPosition:UITableViewScrollPositionTop];
-			[self tableView:self.tableView didSelectRowAtIndexPath:self.selectIndexPathOnAppear];		
+	if (self.selectObjectOnAppear)  {	
+		NSIndexPath *selectedPath = nil;
+		
+		if ([self.selectObjectOnAppear isKindOfClass:[NSManagedObject class]] && self.dataSource.fetchedResultsController)
+			selectedPath = [self.dataSource.fetchedResultsController indexPathForObject:self.selectObjectOnAppear];
+		else if ([dataSource.name isEqualToString:@"Meetings"] && [self.selectObjectOnAppear isKindOfClass:[NSNumber class]])
+			selectedPath = [NSIndexPath indexPathForRow:[self.selectObjectOnAppear integerValue] inSection:0];
+		
+		if (selectedPath) {
+			[self.tableView selectRowAtIndexPath:selectedPath animated:animated scrollPosition:UITableViewScrollPositionNone];
+			[self tableView:self.tableView didSelectRowAtIndexPath:selectedPath];
 		}
+		self.selectObjectOnAppear = nil;
 
 	}	
 	
-	if (self.splitViewController == nil)
-		[self resetStoredSelection];
-	
+	// We're on an iphone, without a splitview or popovers, so if we get here, let's stop
+	if ([UtilityMethods isIPadDevice] == NO) {
+		[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
+	}
 }
 
 
@@ -198,14 +216,14 @@
 
 // the user selected a row in the table.
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
-	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]) && (self.splitViewController != nil);
+	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 
+	if (![UtilityMethods isIPadDevice])
+		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
+
+	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]) && (self.splitViewController != nil);
 	UIViewController *openInController = (isSplitViewDetail) ? self.detailViewController : self;
-	
-	// deselect the new row using animation
-	if ([UtilityMethods isIPadDevice] == NO)
-		[aTableView deselectRowAtIndexPath:newIndexPath animated:animated];	
-	
+		
 	if (!openInController) {
 		debug_NSLog(@"Error opening detail controller from GeneralTableViewController:didSelect ...");
 		return;
@@ -213,26 +231,58 @@
 	
 	if (isSplitViewDetail == NO)
 		self.navigationController.toolbarHidden = YES;
+	
+	id dataObject = [dataSource dataObjectForIndexPath:newIndexPath];
+	// save off this item's selection to our AppDelegate
+	if ([dataSource.name isEqualToString:@"Resources"])
+		[appDelegate setSavedTableSelection:nil forKey:self.viewControllerKey];
+	else if ([dataObject isKindOfClass:[NSManagedObject class]])
+		[appDelegate setSavedTableSelection:[dataObject objectID] forKey:self.viewControllerKey];
+	else if ([dataSource.name isEqualToString:@"Meetings"])
+		[appDelegate setSavedTableSelection:[NSNumber numberWithInteger:newIndexPath.row] forKey:self.viewControllerKey];
+
 		
 	if (dataSource.name == @"Resources"){ // has it's own special controller...
-		LinksMenuDataSource * tempDataSource = (LinksMenuDataSource *)dataSource;
-
-		NSString * action = [[tempDataSource dataObjectForRowAtIndexPath:newIndexPath] valueForKey:@"url"];
+		if ([appDelegate.currentDetailViewController isKindOfClass:[MiniBrowserController class]])
+			self.miniBrowser = appDelegate.currentDetailViewController;
 		
-		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+		NSString * action = [dataObject valueForKey:@"url"];
 		
 		if ([action isEqualToString:@"aboutView"]) {
-			if (appDelegate != nil) [appDelegate showAboutDialog:openInController];
+			if (![UtilityMethods isIPadDevice])
+				[appDelegate showAboutDialog:openInController];
+			else {
+				if (!self.aboutControl) {
+					self.aboutControl = [[AboutViewController alloc] initWithNibName:@"TexLegeInfo~ipad" bundle:nil];
+					//self.aboutControl.delegate = self;
+				}
+				[[appDelegate detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.aboutControl] animated:YES];
+				appDelegate.currentDetailViewController = self.aboutControl;
+				//appDelegate.splitViewController.delegate = self.aboutControl;
+			}
 		}
 		else if ([action isEqualToString:@"contactMail"]) {
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
 																			 subject:@"TexLege Support Question / Concern" 
 																				body:@""];
-		}				
+		}
 		else {
+			if (self.aboutControl)
+				self.aboutControl = nil;
+			
+			[[appDelegate detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.miniBrowser] animated:YES];
+			appDelegate.currentDetailViewController = self.miniBrowser;
+			
 			NSURL *url = [UtilityMethods safeWebUrlFromString:action];
 			
 			if ([UtilityMethods canReachHostWithURL:url]) { // got a network connection
+				if ([UtilityMethods isIPadDevice]) {
+					self.aboutControl = nil;
+					[[appDelegate detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.miniBrowser] animated:YES];
+					appDelegate.currentDetailViewController = self.miniBrowser;
+					//appDelegate.splitViewController.delegate = self.miniBrowser;					
+				}
+				
 				MiniBrowserController *mbc = nil;
 				
 				// we might already have a browser loaded and ready to go
@@ -247,6 +297,7 @@
 					[mbc display:openInController];
 			}
 		}
+		[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 		
 	}
 	else if (dataSource.name == @"Meetings") {	
@@ -257,7 +308,10 @@
 				self.detailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController~iphone" bundle:nil];
 		}
 		
-		NSArray *feedEntries = [dataSource feedEntriesForIndexPath:newIndexPath];
+		NSArray *feedEntries = nil;
+		if ([dataObject isKindOfClass:[NSArray class]])
+			feedEntries = dataObject;
+		
 		if (feedEntries) {			
 			if ([self.detailViewController respondsToSelector:@selector(setFeedEntries:)])
 				[self.detailViewController setValue:feedEntries forKey:@"feedEntries"];
@@ -285,7 +339,7 @@
 			self.detailViewController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
 		}
 				
-		CapitolMap *capitolMap = [dataSource capitolMapForIndexPath:newIndexPath];
+		CapitolMap *capitolMap = dataObject;
 		if (capitolMap) {
 			[self.detailViewController setMap:capitolMap];
 			if (isSplitViewDetail == NO) {
@@ -300,12 +354,7 @@
 // the *user* selected a row in the table, so turn on animations and save their selection.
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath {
 	
-	// they clicked a web link ... don't restore it or it might go to Safari on startup!
-	if (dataSource.name == @"Resources") 
-		[self resetStoredSelection];
-	else // save off this item's selection to our AppDelegate
-		[self setStoredSelectionWithRow:newIndexPath.row section:newIndexPath.section];
-	
+
 	[self tableView:aTableView didSelectRowAtIndexPath:newIndexPath withAnimation:YES];
 	
 	// if we have a stack of view controllers and someone selected a new cell from our master list, 

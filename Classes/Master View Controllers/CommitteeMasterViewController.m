@@ -90,6 +90,11 @@
     return YES;
 }
 
+- (IBAction)selectDefaultObject:(id)sender {
+	NSIndexPath *selectFirst = [NSIndexPath indexPathForRow:0 inSection:0];
+	[self.tableView selectRowAtIndexPath:selectFirst animated:NO scrollPosition:UITableViewScrollPositionNone];
+	[self tableView:self.tableView didSelectRowAtIndexPath:selectFirst];
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -104,7 +109,7 @@
 				NSUInteger ints[2] = {0,0};	// just pick the first one then
 				currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
 			}
-			committee = [self.dataSource committeeDataForIndexPath:currentIndexPath];				
+			committee = [self.dataSource dataObjectForIndexPath:currentIndexPath];				
 		}
 		self.selectObjectOnAppear = committee;
 	}	
@@ -143,7 +148,7 @@
 	if (![UtilityMethods isIPadDevice])
 		[aTableView deselectRowAtIndexPath:indexPath animated:YES];
 	
-	CommitteeObj *committee = [self.dataSource committeeDataForIndexPath:indexPath];
+	CommitteeObj *committee = [self.dataSource dataObjectForIndexPath:indexPath];
 	// save off this item's selection to our AppDelegate
 	[[TexLegeAppDelegate appDelegate] setSavedTableSelection:[committee objectID] forKey:self.viewControllerKey];
 	

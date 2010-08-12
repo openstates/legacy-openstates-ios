@@ -9,13 +9,18 @@
 #import "Constants.h"
 
 #import "TableDataSourceProtocol.h"
+#import "AboutViewController.h"
 
-@interface GeneralTableViewController : UITableViewController < UITableViewDelegate> {
+@class MiniBrowserController;
+@interface GeneralTableViewController : UITableViewController <UITableViewDelegate> {
 }
 
-@property (nonatomic,retain) NSIndexPath *selectIndexPathOnAppear;
 @property (nonatomic,retain) id<TableDataSource> dataSource;
 @property (nonatomic,retain) id detailViewController;
+@property (nonatomic,readonly) NSString			*viewControllerKey;
+@property (nonatomic,retain) id					selectObjectOnAppear;
+@property (nonatomic,retain) AboutViewController *aboutControl;
+@property (nonatomic,retain) MiniBrowserController *miniBrowser;
 
 - (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context;
 @end

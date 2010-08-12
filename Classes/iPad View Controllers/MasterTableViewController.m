@@ -95,6 +95,12 @@
 	[self.tableView setNeedsDisplay];
 }
 
+- (IBAction)selectDefaultObject:(id)sender {
+	NSIndexPath *selectFirst = [NSIndexPath indexPathForRow:0 inSection:0];
+	[self.tableView selectRowAtIndexPath:selectFirst animated:NO scrollPosition:UITableViewScrollPositionNone];
+	[self tableView:self.tableView didSelectRowAtIndexPath:selectFirst];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 	
@@ -107,7 +113,7 @@
 				NSUInteger ints[2] = {0,0};	// just pick the first one then
 				currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
 			}
-			legislator = [self.dataSource legislatorDataForIndexPath:currentIndexPath];				
+			legislator = [self.dataSource dataObjectForIndexPath:currentIndexPath];				
 		}
 		self.selectObjectOnAppear = legislator;
 	}	
@@ -146,7 +152,7 @@
 	if (![UtilityMethods isIPadDevice])
 		[aTableView deselectRowAtIndexPath:indexPath animated:YES];
 	
-	LegislatorObj *legislator = [self.dataSource legislatorDataForIndexPath:indexPath];
+	LegislatorObj *legislator = [self.dataSource dataObjectForIndexPath:indexPath];
 	// save off this item's selection to our AppDelegate
 	[[TexLegeAppDelegate appDelegate] setSavedTableSelection:[legislator objectID] forKey:self.viewControllerKey];
 
