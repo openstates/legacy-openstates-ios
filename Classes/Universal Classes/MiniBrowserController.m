@@ -7,6 +7,7 @@
 #import "MiniBrowserController.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
+#import "CommonPopoversController.h"
 
 @interface MiniBrowserController (Private)
 	- (void)animate;
@@ -112,6 +113,14 @@ static MiniBrowserController *s_browser = nil;
 	[super dealloc];
 }
 
+#pragma mark -
+#pragma mark Popovers and Split Views
+
+- (NSString *)popoverButtonTitle {
+	return @"Resources";
+}
+
+
 - (void)normalizeToolbarButtons {
 	// get the current list of buttons
 	if (self.m_normalItemList)
@@ -195,6 +204,10 @@ static MiniBrowserController *s_browser = nil;
 	{
 		[self removeDoneButton];
 		[self normalizeToolbarButtons];
+		
+		if ([self isEqual:[[TexLegeAppDelegate appDelegate] currentDetailViewController]])
+			[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+
 	}
 	
 }

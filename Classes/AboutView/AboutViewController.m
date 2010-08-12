@@ -12,6 +12,7 @@
 #import "UtilityMethods.h"
 #import "MiniBrowserController.h"
 #import "TexLegeAppDelegate.h"
+#import "CommonPopoversController.h"
 
 @implementation AboutViewController
 
@@ -31,6 +32,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[self.infoTextView flashScrollIndicators];
+	if ([self isEqual:[[TexLegeAppDelegate appDelegate] currentDetailViewController]])
+		[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 }
 
 
@@ -67,6 +70,15 @@
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
 }
+
+#pragma mark -
+#pragma mark Popovers and Split Views
+
+- (NSString *)popoverButtonTitle {
+	return @"Resources";
+}
+
+
 
 #pragma mark Alert View + Delegate
 #pragma mark -

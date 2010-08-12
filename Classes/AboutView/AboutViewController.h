@@ -22,9 +22,11 @@
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *dismissButton;
 @property (nonatomic, retain) IBOutlet UITextView *infoTextView;
 
+- (NSString *)popoverButtonTitle;
 
 - (IBAction)done:(id)sender;
 - (IBAction)weblink_click:(id)sender;
+
 @end
 
 @protocol AboutViewControllerDelegate

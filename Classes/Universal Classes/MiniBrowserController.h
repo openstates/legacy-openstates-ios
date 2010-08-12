@@ -50,6 +50,7 @@
 + (MiniBrowserController *)sharedBrowserWithURL:(NSURL *)urlOrNil;
 
 - (void)display:(id)parentController;
+- (NSString *)popoverButtonTitle;
 
 - (IBAction)closeButtonPressed:(id)button;
 - (IBAction)backButtonPressed:(id)button;
