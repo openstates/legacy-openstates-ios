@@ -59,7 +59,6 @@ enum InfoSectionRows {
 
 }
 
-
 #pragma mark -
 #pragma mark View lifecycle
 
@@ -75,43 +74,30 @@ enum InfoSectionRows {
 - (void)viewWillAppear:(BOOL)animated 
 {
     [super viewWillAppear:animated];
-	
+	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+
 	if ([UtilityMethods isIPadDevice] == NO)
 		return;
 	
 		// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
 	if (self.committee == nil && ![UtilityMethods isLandscapeOrientation])  {
 		
-		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-		if (appDelegate.savedLocation != nil) {
-				// save off this level's selection to our AppDelegate
+		id masterVC = [appDelegate currentMasterViewController];
+		
+		if ([masterVC respondsToSelector:@selector(selectObjectOnAppear)])
+			self.committee = [masterVC performSelector:@selector(selectObjectOnAppear)];
+		
+		if (!self.committee) {
+			NSString *vcKey = [appDelegate currentMasterViewControllerKey];
+			NSManagedObjectID *objectID = [appDelegate savedTableSelectionForKey:vcKey];
+			if (objectID)
+				self.committee = (CommitteeObj *)[[[masterVC valueForKey:@"dataSource"] managedObjectContext] objectWithID:objectID];
 			
-				//[self validateStoredSelection];
-			NSInteger vcSelection = [[appDelegate.savedLocation objectAtIndex:0] integerValue];
-			NSInteger rowSelection = [[appDelegate.savedLocation objectAtIndex:1] integerValue];
-			NSInteger sectionSelection = [[appDelegate.savedLocation objectAtIndex:2] integerValue];
-			
-			if (rowSelection != -1) {
-				UITableViewController *masterVC = [appDelegate.functionalViewControllers objectAtIndex:vcSelection];
-				UITableView *masterTableView = [masterVC valueForKey:@"tableView"];
-				NSIndexPath *selectionPath = [NSIndexPath indexPathForRow:rowSelection inSection:sectionSelection];
-				
-					// I'm not sure if this is how you do the "selector" business, so I've commented it out
-					//if ([self.tableView.delegate respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)
-					//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
-				
-				id<TableDataSource> masterSource = [masterVC valueForKey:@"dataSource"];
-				if (rowSelection < [masterSource tableView:masterTableView  numberOfRowsInSection:sectionSelection]) {
-					if ([[masterTableView visibleCells] count])
-						[masterTableView selectRowAtIndexPath:selectionPath animated:NO scrollPosition:UITableViewScrollPositionTop];
-					[masterTableView.delegate tableView:masterTableView didSelectRowAtIndexPath:selectionPath];
-										
-						//if ([self.tableView.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)
-						//	[self.tableView.delegate tableView:self.tableView willSelectRowAtIndexPath:selectionPath];
-				}
-			}
+//			if (!self.committee && [masterVC respondsToSelector:@selector(selectDefaultObject:)])
+//				[masterVC performSelector:@selector(selectDefaultObject:)];				
 		}
 	}
+	
 	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 }
 

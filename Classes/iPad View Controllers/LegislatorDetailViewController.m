@@ -212,19 +212,23 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 	BOOL showSplash = ([UtilityMethods isLandscapeOrientation] == NO && [UtilityMethods isIPadDevice]);
-	
+	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+
 	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
 	if (!self.legislator && ![UtilityMethods isLandscapeOrientation])  {
-		id masterVC = [[TexLegeAppDelegate appDelegate] currentMasterViewController];
+		id masterVC = [appDelegate currentMasterViewController];
 					   
 		if ([masterVC respondsToSelector:@selector(selectObjectOnAppear)])
-			self.legislator = [[[TexLegeAppDelegate appDelegate] currentMasterViewController] performSelector:@selector(selectObjectOnAppear)];
+			self.legislator = [masterVC performSelector:@selector(selectObjectOnAppear)];
 
 		if (!self.legislator) {
-			NSString *vcKey = [[TexLegeAppDelegate appDelegate] currentMasterViewControllerKey];
-			NSManagedObjectID *objectID = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:vcKey];
+			NSString *vcKey = [appDelegate currentMasterViewControllerKey];
+			NSManagedObjectID *objectID = [appDelegate savedTableSelectionForKey:vcKey];
 			if (objectID)
 				self.legislator = (LegislatorObj *)[[[masterVC valueForKey:@"dataSource"] managedObjectContext] objectWithID:objectID];
+			
+			//if (!self.legislator && [masterVC respondsToSelector:@selector(selectDefaultObject:)])
+			//		[masterVC performSelector:@selector(selectDefaultObject:)];
 		}
 	}
 	
