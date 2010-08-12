@@ -87,6 +87,10 @@
 	return tempEntry;
 }
 
+- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
+	return [self committeeDataForIndexPath:indexPath];
+}
+
 // UITableViewDataSource methods
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

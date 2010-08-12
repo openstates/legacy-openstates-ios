@@ -10,6 +10,7 @@
 #import "LegislatorObj.h"
 #import "CommitteeObj.h"
 #import "CapitolMap.h"
+#import "LinkObj.h"
 
 @protocol TableDataSource <UITableViewDataSource, NSFetchedResultsControllerDelegate>
  
@@ -44,10 +45,7 @@
 // required information
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
 
-- (CapitolMap *)capitolMapForIndexPath:(NSIndexPath *)indexPath;
-- (LegislatorObj *)legislatorDataForIndexPath:(NSIndexPath *)indexPath;
-- (CommitteeObj *)committeeDataForIndexPath:(NSIndexPath *)indexPath;
-- (NSArray *)feedEntriesForIndexPath:(NSIndexPath *)indexPath;
+- (id)dataObjectForIndexPath:(NSIndexPath*)indexPath;
 
 // implement these for editing...
 - (void)setEditing:(BOOL)isEditing animated:(BOOL)animated;

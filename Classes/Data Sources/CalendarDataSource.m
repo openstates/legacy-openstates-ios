@@ -196,6 +196,10 @@
 	return entryArray;
 }
 
+- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
+	return [self feedEntriesForIndexPath:indexPath];
+}
+
 
 #pragma mark -
 #pragma mark UITableViewDataSource methods

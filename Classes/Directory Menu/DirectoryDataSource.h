@@ -39,7 +39,6 @@
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
-- (LegislatorObj *)legislatorDataForIndexPath:(NSIndexPath *)indexPath;
 - (void) setFilterByString:(NSString *)filter;
 - (void) removeFilter;
 

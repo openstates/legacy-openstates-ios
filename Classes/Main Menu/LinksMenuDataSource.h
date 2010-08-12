@@ -24,7 +24,5 @@
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
-- (id) dataObjectForRowAtIndexPath:(NSIndexPath *)indexPath;
-
 @end
  

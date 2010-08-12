@@ -158,14 +158,14 @@ enum HeaderSectionRows {
 		return @"Web Resources";		
 }
 
-- (id) dataObjectForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
 	LinkObj * link = [fetchedResultsController objectAtIndexPath:indexPath];	
 	return link;	
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-	LinkObj *link = [self dataObjectForRowAtIndexPath:indexPath];
+	LinkObj *link = [self dataObjectForIndexPath:indexPath];
 	cell.textLabel.text = link.label;
 	
 	if (indexPath.section == kBodySection)
@@ -225,7 +225,7 @@ enum HeaderSectionRows {
 	}
 }
 
-
+	
 #pragma mark -
 #pragma mark Fetched results controller
 - (NSFetchedResultsController *)fetchedResultsController
@@ -240,6 +240,22 @@ enum HeaderSectionRows {
 	NSSortDescriptor *sortOrder = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
 	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortSection, sortOrder, nil];  
 	[fetchRequest setSortDescriptors:sortDescriptors];
+	
+	NSError *error;
+	NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+	if (fetchedObjects == nil) {
+		debug_NSLog(@"There's no links objects ???");
+	}
+	for (LinkObj *object in fetchedObjects) {
+		if ([object.section integerValue] == kHeaderSection) {
+			debug_NSLog(@"%@", object.url);
+			if ([object.url isEqualToString:@"voteInfoView"]) {	// we've changed out this old thingy
+				object.url = @"contactMail";
+				object.label = @"Contact TexLege Support";
+			}
+		}
+	}	
+	[self saveAction:nil];
 	
 	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
 																								managedObjectContext:managedObjectContext

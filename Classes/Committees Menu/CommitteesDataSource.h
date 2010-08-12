@@ -28,7 +28,6 @@
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
-- (CommitteeObj *)committeeDataForIndexPath:(NSIndexPath *)indexPath;
 - (void) setFilterByString:(NSString *)filter;
 - (void) removeFilter;
 

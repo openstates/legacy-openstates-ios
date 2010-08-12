@@ -92,6 +92,10 @@
 	return capMap;
 }
 
+- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
+	return [self capitolMapForIndexPath:indexPath];	
+}
+
 #pragma mark -
 #pragma mark UITableViewDataSource methods
 

@@ -113,6 +113,9 @@
 	return tempEntry;	
 }
 
+- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
+	return [self legislatorDataForIndexPath:indexPath];
+}
 
 - (CGFloat) rowHeight {
 	CGFloat height;

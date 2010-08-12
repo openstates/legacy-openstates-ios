@@ -24,5 +24,4 @@
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
-
 @end
