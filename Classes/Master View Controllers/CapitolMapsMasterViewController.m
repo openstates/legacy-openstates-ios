@@ -24,6 +24,11 @@
 	return @"CapitolMapsMasterViewController";
 }
 
+- (void)loadView {	
+	[super runLoadView];	
+}
+
+
 
 - (void)viewWillAppear:(BOOL)animated
 {	

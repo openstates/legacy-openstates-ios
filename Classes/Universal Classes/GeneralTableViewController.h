@@ -18,4 +18,6 @@
 @property (nonatomic,retain) id					selectObjectOnAppear;
 
 - (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context;
+- (void)runLoadView;
+
 @end

@@ -33,6 +33,18 @@
 	// set the long name shown in the navigation bar
 	//self.navigationItem.title=[dataSource navigationBarName];
 	
+	// FETCH CORE DATA
+	if ([self.dataSource usesCoreData])
+	{		
+		NSError *error;
+		// You've got to delete the cache, or disable caching before you modify the predicate...
+		[NSFetchedResultsController deleteCacheWithName:[[self.dataSource fetchedResultsController] cacheName]];
+		
+		if (![[self.dataSource fetchedResultsController] performFetch:&error]) {
+			// Handle the error...
+		}		
+	}
+	
 	if ([self.dataSource usesCoreData]) {
 		NSManagedObjectID *objectID = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:self.viewControllerKey];
 		if (objectID)
@@ -60,19 +72,22 @@
 	if ([self.dataSource respondsToSelector:@selector(didReceiveMemoryWarning)])
 		[self.dataSource performSelector:@selector(didReceiveMemoryWarning)];
 	
+	[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
+
 	//self.detailViewController = nil;
 	self.selectObjectOnAppear = nil;
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
     // Release anything that's not essential, such as cached data
 }
 
-
-- (void)loadView {	
+- (void)runLoadView {	
+	[super loadView];
+	
 	// create a new table using the full application frame
 	// we'll ask the datasource which type of table to use (plain or grouped)
 	CGRect tempFrame = [[UIScreen mainScreen] applicationFrame];
 	self.tableView = [[UITableView alloc] initWithFrame:tempFrame 
-														  style:[self.dataSource tableViewStyle]];
+												  style:[self.dataSource tableViewStyle]];
 	
 	// set the autoresizing mask so that the table will always fill the view
 	self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
@@ -103,17 +118,6 @@
 	//self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
 	//self.navigationItem.titleView = self.chamberControl;
 	
-		// FETCH CORE DATA
-	if ([self.dataSource usesCoreData])
-	{		
-		NSError *error;
-			// You've got to delete the cache, or disable caching before you modify the predicate...
-		[NSFetchedResultsController deleteCacheWithName:[[self.dataSource fetchedResultsController] cacheName]];
-		
-		if (![[self.dataSource fetchedResultsController] performFetch:&error]) {
-				// Handle the error...
-		}		
-	}
 	if ([UtilityMethods isIPadDevice]) {
 		NSUInteger sectionCount = [self.tableView numberOfSections];
 		CGFloat tableHeight = 0;
@@ -131,8 +135,6 @@
 	[self.tableView selectRowAtIndexPath:selectFirst animated:NO scrollPosition:UITableViewScrollPositionNone];
 	[self tableView:self.tableView didSelectRowAtIndexPath:selectFirst];
 }
-
-
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];

@@ -7,19 +7,14 @@
 
 #import <UIKit/UIKit.h>
 #import "TableDataSourceProtocol.h"
+#import "GeneralTableViewController.h"
 
 @class CommitteeDetailViewController;
 
-@interface CommitteeMasterViewController : UITableViewController <UISearchDisplayDelegate> {
+@interface CommitteeMasterViewController : GeneralTableViewController <UISearchDisplayDelegate> {
 }
 
-@property (nonatomic,retain)			id					selectObjectOnAppear;
-@property (nonatomic, retain) IBOutlet	id<TableDataSource> dataSource;
-@property (nonatomic, retain) IBOutlet CommitteeDetailViewController *detailViewController;
 @property (nonatomic, retain) IBOutlet	UISegmentedControl	*chamberControl;
-@property (nonatomic,readonly)			NSString			*viewControllerKey;
 
 - (IBAction) filterChamber:(id)sender;
-- (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context;
-- (IBAction)selectDefaultObject:(id)sender;
 @end

@@ -53,6 +53,11 @@
     // Release anything that's not essential, such as cached data
 }
 
+- (void)loadView {	
+	[super runLoadView];	
+}
+
+
 - (void)viewWillAppear:(BOOL)animated
 {	
 	[super viewWillAppear:animated];
