@@ -85,15 +85,29 @@
 }
 
 
-// Returns an array of the appropriate map ... [0] is the name [1] is just the file name (not path)
-- (CapitolMap *)capitolMapForIndexPath:(NSIndexPath *)indexPath {	
+// return the map at the index in the array
+- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
 	NSArray *thisSection = [self.sectionList objectAtIndex:indexPath.section];
-	CapitolMap *capMap = [thisSection objectAtIndex:indexPath.row];
-	return capMap;
+	if (thisSection)
+		return [thisSection objectAtIndex:indexPath.row];
+	
+	return nil;
 }
 
-- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
-	return [self capitolMapForIndexPath:indexPath];	
+- (NSIndexPath *)indexPathForDataObject:(id)dataObject {
+	NSInteger section = 0;
+	NSInteger row = 0;
+	
+	if (dataObject && [dataObject isKindOfClass:[CapitolMap class]]) {
+		section = [[dataObject valueForKey:@"type"] integerValue];
+		NSArray *thisSection = [self.sectionList objectAtIndex:section];
+		if (thisSection) {
+			row = [thisSection indexOfObject:dataObject];
+			if (row == NSNotFound)
+				row = 0;
+		}
+	}
+	return [NSIndexPath indexPathForRow:row inSection:section];
 }
 
 #pragma mark -
@@ -128,7 +142,7 @@
 	//if ([self showDisclosureIcon])
 		//cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	
-	cell.textLabel.text = [[self capitolMapForIndexPath:indexPath] name];
+	cell.textLabel.text = [[self dataObjectForIndexPath:indexPath] name];
 				 
 	return cell;
 }

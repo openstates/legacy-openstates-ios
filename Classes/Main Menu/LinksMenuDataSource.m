@@ -163,6 +163,10 @@ enum HeaderSectionRows {
 	return link;	
 }
 
+- (NSIndexPath *)indexPathForDataObject:(id)dataObject {
+	return [self.fetchedResultsController indexPathForObject:dataObject];
+}
+
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
 	LinkObj *link = [self dataObjectForIndexPath:indexPath];
