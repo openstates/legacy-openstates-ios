@@ -10,15 +10,9 @@
 
 @class CFeedStore;
 @interface CalendarDataSource : NSObject <TableDataSource> {
-
-	IBOutlet NSManagedObjectContext *managedObjectContext;
-	NSArray *calendarList;
-	
-	NSURL *senateURL, *houseURL, *jointURL;
-	CFeedStore *feedStore;
 }
 @property (nonatomic,retain) IBOutlet NSManagedObjectContext *managedObjectContext;
-@property (nonatomic,retain) NSArray *calendarList;
+@property (nonatomic,retain) NSMutableArray *calendarList;
 @property (nonatomic,retain) NSURL *senateURL, *houseURL, *jointURL;
 @property (nonatomic,retain) CFeedStore *feedStore;
 
