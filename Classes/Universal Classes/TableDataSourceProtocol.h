@@ -11,6 +11,7 @@
 #import "CommitteeObj.h"
 #import "CapitolMap.h"
 #import "LinkObj.h"
+#import "ChamberCalendarObj.h"
 
 @protocol TableDataSource <UITableViewDataSource, NSFetchedResultsControllerDelegate>
  
@@ -46,6 +47,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
 
 - (id)dataObjectForIndexPath:(NSIndexPath*)indexPath;
+- (NSIndexPath *)indexPathForDataObject:(id)dataObject;
 
 // implement these for editing...
 - (void)setEditing:(BOOL)isEditing animated:(BOOL)animated;
