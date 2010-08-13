@@ -8,6 +8,7 @@
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "CommonPopoversController.h"
+#import "LinkObj.h"
 
 @interface MiniBrowserController (Private)
 	- (void)animate;
@@ -28,11 +29,14 @@ enum
 
 @implementation MiniBrowserController
 
+@synthesize m_urlRequestToLoad, m_loadingItemList, link, m_activity, m_loadingLabel;
+
 @synthesize m_toolBar, m_webView, m_shouldStopLoadingOnHide;
 @synthesize m_backButton, m_reloadButton, m_fwdButton, m_doneButton;
 @synthesize m_shouldUseParentsView;
 @synthesize m_currentURL;
 @synthesize sealColor;
+@synthesize m_loadingInterrupted, m_normalItemList, m_shouldDisplayOnViewLoad, m_parentCtrl, m_authCallback;
 
 static MiniBrowserController *s_browser = nil;
 
@@ -95,7 +99,8 @@ static MiniBrowserController *s_browser = nil;
 - (void)didReceiveMemoryWarning 
 {
 	[self stopLoading]; // should we do more, like just close up shop?
-	[m_parentCtrl dismissModalViewControllerAnimated:YES];
+	//if (m_parentCtrl && [m_parentCtrl modalViewController])
+		[m_parentCtrl dismissModalViewControllerAnimated:YES];
 
 	[super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
 	// Release anything that's not essential, such as cached data
@@ -205,8 +210,8 @@ static MiniBrowserController *s_browser = nil;
 		[self removeDoneButton];
 		[self normalizeToolbarButtons];
 		
-		if ([self isEqual:[[TexLegeAppDelegate appDelegate] currentDetailViewController]])
-			[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+//		if ([self isEqual:[[TexLegeAppDelegate appDelegate] currentDetailViewController]])
+		[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 
 	}
 	
@@ -271,7 +276,7 @@ static MiniBrowserController *s_browser = nil;
 		//[self animate];
 	}
 	else
-	{
+	{	// when would this ever happen????
 		m_shouldDisplayOnViewLoad = YES;
 		[self.view setNeedsDisplay];
 	}
@@ -281,7 +286,8 @@ static MiniBrowserController *s_browser = nil;
 - (IBAction)closeButtonPressed:(id)button
 {
 	// dismiss the view
-	[m_parentCtrl dismissModalViewControllerAnimated:YES];
+	//if (m_parentCtrl && [m_parentCtrl modalViewController])
+		[m_parentCtrl dismissModalViewControllerAnimated:YES];
 	//[self animate];
 }
 
@@ -316,7 +322,22 @@ static MiniBrowserController *s_browser = nil;
 	}
 }
 
-
+- (void)setLink:(LinkObj *)newLink {
+	if (link && newLink && [link isEqual:newLink])
+		return;
+	
+	if (link) [link release], link = nil;
+	if (newLink) link = [newLink retain];
+	
+	if (link) {
+		self.title = link.label;
+		
+		NSURL *aURL = [UtilityMethods safeWebUrlFromString:link.url];
+		if (aURL && [UtilityMethods canReachHostWithURL:aURL alert:NO]) // got a network connection
+			[self loadURL:aURL];
+	}
+	
+}
 
 - (void)loadURL:(NSURL *)url
 {
@@ -529,23 +550,27 @@ static MiniBrowserController *s_browser = nil;
 	[self enableFwdButton:m_webView.canGoForward];
 	
 	// set the navigation bar title based on URL
-	NSArray *urlComponents = [[[webView.request URL] absoluteString] componentsSeparatedByString:@"/"];
-	if ( [urlComponents count] > 0 )
-	{
-		NSString *str = [urlComponents objectAtIndex:([urlComponents count]-1)];
-		NSRange dot = [str rangeOfString:@"."];
-		if ( dot.length > 0 )
+	if (link)
+		self.title = link.label;
+	else {
+		NSArray *urlComponents = [[[webView.request URL] absoluteString] componentsSeparatedByString:@"/"];
+		if ( [urlComponents count] > 0 )
 		{
-			self.title = [str substringToIndex:dot.location];
+			NSString *str = [urlComponents objectAtIndex:([urlComponents count]-1)];
+			NSRange dot = [str rangeOfString:@"."];
+			if ( dot.length > 0 )
+			{
+				self.title = [str substringToIndex:dot.location];
+			}
+			else
+			{
+				self.title = str;
+			}
 		}
 		else
 		{
-			self.title = str;
-		}
-	}
-	else
-	{
-		self.title = @"...";
+			self.title = @"...";
+		}		
 	}
 }
 
@@ -558,14 +583,4 @@ static MiniBrowserController *s_browser = nil;
 	self.title = @"loading...";
 }
 
-
-@synthesize m_loadingInterrupted;
-@synthesize m_urlRequestToLoad;
-@synthesize m_activity;
-@synthesize m_loadingLabel;
-@synthesize m_normalItemList;
-@synthesize m_loadingItemList;
-@synthesize m_shouldDisplayOnViewLoad;
-@synthesize m_parentCtrl;
-@synthesize m_authCallback;
 @end
