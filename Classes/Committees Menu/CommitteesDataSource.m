@@ -73,7 +73,7 @@
 
 
 // return the committee at the index in the sorted by symbol array
-- (CommitteeObj *)committeeDataForIndexPath:(NSIndexPath *)indexPath {
+- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
 	CommitteeObj *tempEntry = nil;
 	@try {
 		tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -87,8 +87,8 @@
 	return tempEntry;
 }
 
-- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
-	return [self committeeDataForIndexPath:indexPath];
+- (NSIndexPath *)indexPathForDataObject:(id)dataObject {
+	return [self.fetchedResultsController indexPathForObject:dataObject];
 }
 
 // UITableViewDataSource methods
@@ -120,7 +120,7 @@
 	[self initializeDatabase];
 #endif
 
-	CommitteeObj *tempEntry = [fetchedResultsController objectAtIndexPath:indexPath];
+	CommitteeObj *tempEntry = [self dataObjectForIndexPath:indexPath];
 	
 	if (tempEntry == nil) {
 		debug_NSLog(@"Busted in CommitteeDataSource.m: cellForRowAtIndexPath -> Couldn't get committee data for row.");
