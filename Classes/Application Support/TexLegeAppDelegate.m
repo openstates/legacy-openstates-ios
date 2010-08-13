@@ -10,21 +10,23 @@
 #import "UtilityMethods.h"
 #import "PartisanIndexStats.h"
 
-#import "LinksMenuDataSource.h"
 #import "DirectoryDataSource.h"
-#import "CommitteesDataSource.h"
-#import "CapitolMapsDataSource.h"
-#import "GeneralTableViewController.h"
 #import "Reachability.h"
 #import "Appirater.h"
 
+#import "LinksMenuDataSource.h"
 #import "MiniBrowserController.h"
 
 #import "LegislatorDetailViewController.h"
+
 #import "MapsDetailViewController.h"
+#import "CapitolMapsDataSource.h"
+
+#import "CommitteesDataSource.h"
 #import "CommitteeDetailViewController.h"
 
 #import "CalendarDataSource.h"
+#import "CalendarMasterViewController.h"
 #import "CalendarComboViewController.h"
 
 #import "CommonPopoversController.h"
@@ -111,7 +113,9 @@ NSInteger kNoSelection = -1;
 	self.appirater = nil;
 	self.mainWindow = nil;    
 	
-	self.mapsTableTabbedVC = self.linksTableTabbedVC = self.calendarsTableTabbedVC = nil;
+	self.mapsTableTabbedVC = nil;
+	self.linksTableTabbedVC = nil; 
+	self.calendarsTableTabbedVC = nil;
 	self.legMasterTableViewController = nil;
 	self.committeeTableTabbedVC = nil;
 
@@ -247,9 +251,9 @@ NSInteger kNoSelection = -1;
 		self.tabBarController.selectedIndex = controllerIndex;
 
 	// Dismiss the popover if it's present.
-	if (self.menuPopoverPC != nil) {
-		[self.menuPopoverPC dismissPopoverAnimated:YES];
-	}
+	//if (self.menuPopoverPC != nil) {
+	//	[self.menuPopoverPC dismissPopoverAnimated:YES];
+	//}
 	
 	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];
 }

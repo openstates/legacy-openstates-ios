@@ -12,7 +12,9 @@
 
 @class MasterTableViewController;
 @class CommitteeMasterViewController;
-@class GeneralTableViewController;
+@class LinksMasterViewController;
+@class CapitolMapsMasterViewController;
+@class CalendarMasterViewController;
 @class MenuPopoverViewController;
 @class Appirater;
 
@@ -52,9 +54,11 @@
 // For Functional View Controllers
 @property (nonatomic, readonly) UIViewController *topViewController;
 @property (nonatomic, retain) NSMutableArray *functionalViewControllers;
-@property (nonatomic, retain) IBOutlet GeneralTableViewController *mapsTableTabbedVC, *linksTableTabbedVC, *calendarsTableTabbedVC;
+@property (nonatomic, retain) IBOutlet LinksMasterViewController *linksTableTabbedVC;
+@property (nonatomic, retain) IBOutlet CapitolMapsMasterViewController *mapsTableTabbedVC;
 @property (nonatomic, retain) IBOutlet CommitteeMasterViewController *committeeTableTabbedVC;
 @property (nonatomic, retain) IBOutlet MasterTableViewController *legMasterTableViewController;
+@property (nonatomic, retain) IBOutlet CalendarMasterViewController *calendarsTableTabbedVC;
 
 // For iPhone Interface
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
