@@ -8,18 +8,15 @@
 
 #import <TapkuLibrary/TapkuLibrary.h>
 
+@class ChamberCalendarObj;
+
 @interface CalendarComboViewController : TKCalendarMonthTableViewController <UISplitViewControllerDelegate> {
-	IBOutlet UIWebView	*webView;
-	IBOutlet UIImageView *leftShadow, *rightShadow;
-	IBOutlet UIImageView *portShadow, *landShadow;
-	NSArray				*feedEntries;
-	NSMutableArray	*currentEvents;
-	NSMutableArray	*searchResults;
 
 }
-@property (nonatomic, retain) UIImageView *leftShadow, *rightShadow;
-@property (nonatomic, retain) UIImageView *portShadow, *landShadow;
-@property (nonatomic, retain) UIWebView *webView;
+@property (nonatomic, retain) IBOutlet UIImageView *leftShadow, *rightShadow;
+@property (nonatomic, retain) IBOutlet UIImageView *portShadow, *landShadow;
+@property (nonatomic, retain) IBOutlet UIWebView *webView;
+@property (nonatomic, retain) ChamberCalendarObj *chamberCalendar;
 @property (nonatomic, retain) NSArray *feedEntries;
 @property (nonatomic, retain) NSMutableArray *currentEvents;
 @property (nonatomic, retain) NSMutableArray *searchResults;
