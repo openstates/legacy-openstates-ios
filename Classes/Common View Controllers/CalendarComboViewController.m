@@ -11,6 +11,8 @@
 #include "MiniBrowserController.h"
 #import "TexLegeAppDelegate.h"
 #import "CommonPopoversController.h"
+#import "ChamberCalendarObj.h"
+
 
 @interface CalendarComboViewController (Private) 
 
@@ -21,7 +23,8 @@
 @end
 
 @implementation CalendarComboViewController
-@synthesize feedEntries, currentEvents, webView, searchResults;
+@synthesize chamberCalendar, feedEntries;
+@synthesize currentEvents, webView, searchResults;
 @synthesize leftShadow, rightShadow, portShadow, landShadow;
 
 
@@ -49,12 +52,15 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	[self changeLayoutForOrientation:[UIDevice currentDevice].orientation];
-	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+	if (self.chamberCalendar)
+		self.searchDisplayController.searchBar.placeholder = self.chamberCalendar.title;
+	
+	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-	[super viewDidAppear:animated];
-	if (![self.currentEvents count] && [self.feedEntries count])	// we don't have anything selected yet
+	[super viewDidAppear:animated];	
+	if (![self.currentEvents count] && self.feedEntries && [self.feedEntries count])	// we don't have anything selected yet
 		[self selectSoonestEvent];
 }
 
@@ -118,6 +124,7 @@
 
 
 - (void)dealloc {
+	self.chamberCalendar = nil;
 	self.feedEntries = nil;
 	self.currentEvents = nil;
 	self.webView = nil;
@@ -183,11 +190,13 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
     return comparison;
 }
 
-- (void)setFeedEntries:(NSArray *)newObj {
+- (void)setChamberCalendar:(ChamberCalendarObj *)newObj {
 	
-	if (feedEntries) [feedEntries release], feedEntries = nil;
+	if (chamberCalendar) [chamberCalendar release], chamberCalendar = nil;
 	if (newObj) {
-		feedEntries = [[newObj sortedArrayUsingFunction:sortByDate context:nil] retain];
+		chamberCalendar = [newObj retain];
+		
+		self.feedEntries = [[self.chamberCalendar feedEntries] sortedArrayUsingFunction:sortByDate context:nil];
 		
 		if ([UtilityMethods isIPadDevice]) {		// might have come here via a popover
 			[[CommonPopoversController sharedCommonPopoversController] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
