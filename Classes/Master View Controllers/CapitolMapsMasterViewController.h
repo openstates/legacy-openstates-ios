@@ -7,15 +7,9 @@
 //
 
 #import "Constants.h"
-
+#import "GeneralTableViewController.h"
 #import "TableDataSourceProtocol.h"
-@interface CapitolMapsMasterViewController : UITableViewController <UITableViewDelegate> {
+@interface CapitolMapsMasterViewController : GeneralTableViewController {
 }
 
-@property (nonatomic,retain) id<TableDataSource> dataSource;
-@property (nonatomic,retain) id detailViewController;
-@property (nonatomic,readonly) NSString			*viewControllerKey;
-@property (nonatomic,retain) id					selectObjectOnAppear;
-
-- (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context;
 @end
