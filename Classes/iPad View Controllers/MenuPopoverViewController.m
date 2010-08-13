@@ -252,8 +252,8 @@
 		NSInteger vcIndex = [appDelegate indexForFunctionalViewController:viewController];
 		[appDelegate changeActiveFeaturedControllerTo:vcIndex];
 		
-		if (![UtilityMethods isLandscapeOrientation])
-			[[CommonPopoversController sharedCommonPopoversController] performSelector:@selector(displayMasterListPopover:) withObject:self afterDelay:0];
+//		if (![UtilityMethods isLandscapeOrientation])
+//			[[CommonPopoversController sharedCommonPopoversController] performSelector:@selector(displayMasterListPopover:) withObject:self afterDelay:0];
 				
 	}
 }
