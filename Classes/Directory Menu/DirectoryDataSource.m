@@ -99,7 +99,7 @@
 
 
 // return the legislator at the index in the sorted by symbol array
-- (LegislatorObj *)legislatorDataForIndexPath:(NSIndexPath *)indexPath {
+- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
 	LegislatorObj *tempEntry = nil;
 	@try {
 		tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -113,8 +113,8 @@
 	return tempEntry;	
 }
 
-- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
-	return [self legislatorDataForIndexPath:indexPath];
+- (NSIndexPath *)indexPathForDataObject:(id)dataObject {
+	return [self.fetchedResultsController indexPathForObject:dataObject];
 }
 
 - (CGFloat) rowHeight {
@@ -145,7 +145,7 @@
 	}
 #endif
 	
-	LegislatorObj *dataObj = [self legislatorDataForIndexPath:indexPath];
+	LegislatorObj *dataObj = [self dataObjectForIndexPath:indexPath];
 	if (dataObj == nil) {
 		debug_NSLog(@"Busted in DirectoryDataSource.m: cellForRowAtIndexPath -> Couldn't get legislator data for row.");
 		return nil;
