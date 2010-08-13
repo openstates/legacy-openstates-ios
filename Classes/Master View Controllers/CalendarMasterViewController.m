@@ -26,6 +26,10 @@
 	return @"CalendarsMasterViewController";
 }
 
+- (void)loadView {
+	[super runLoadView];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {	
 	[super viewWillAppear:animated];
