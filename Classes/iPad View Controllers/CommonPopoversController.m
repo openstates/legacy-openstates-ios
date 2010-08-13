@@ -121,8 +121,10 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 	
 	[self dismissMainMenuPopover:sender];		//  they want to show this popover, lets close up the other one if it's open.
 		
-	self.masterListPopoverPC = [[UIPopoverController alloc] initWithContentViewController:self.currentMasterViewController]; // (Autorelease??)
-	self.masterListPopoverPC.delegate = (id<UIPopoverControllerDelegate>)self; //self.currentDetailViewController;		
+	if (!self.masterListPopoverPC) {
+		self.masterListPopoverPC = [[UIPopoverController alloc] initWithContentViewController:self.currentMasterViewController]; // (Autorelease??)
+		self.masterListPopoverPC.delegate = (id<UIPopoverControllerDelegate>)self; //self.currentDetailViewController;	
+	}
 	UIBarButtonItem *menuButton = self.currentDetailViewController.navigationItem.rightBarButtonItem;
 
 	if (!menuButton || !self.masterListPopoverPC) {
@@ -134,12 +136,13 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 	self.isOpening = NO;
 	
 	// now that the menu is displayed, let's reset the action so it's ready to go away again on demand
+	[menuButton setTarget:self];
 	[menuButton setAction:@selector(dismissMasterListPopover:)];
 }
 
 
 - (IBAction)dismissMasterListPopover:(id)sender {
-	if (!self.currentDetailViewController || ![UtilityMethods isIPadDevice] || self.isOpening)
+	if (!self.masterListPopoverPC || !self.currentDetailViewController || ![UtilityMethods isIPadDevice] || self.isOpening)
 		return;
 		
 	if (self.masterListPopoverPC)	{
@@ -149,8 +152,10 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 	}
 	
 	UIBarButtonItem *menuButton = self.currentDetailViewController.navigationItem.rightBarButtonItem;
-	if (menuButton)
+	if (menuButton) {
+		[menuButton setTarget:self];
 		[menuButton setAction:@selector(displayMasterListPopover:)];
+	}
 }
 
 #pragma mark MainMenuPopover
@@ -189,7 +194,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 
 
 - (IBAction)dismissMainMenuPopover:(id)sender {
-	if (![UtilityMethods isIPadDevice] || self.isOpening)
+	if (!self.mainMenuPopoverPC || ![UtilityMethods isIPadDevice] || self.isOpening)
 		return;
 
 	if (self.mainMenuPopoverPC)	{
