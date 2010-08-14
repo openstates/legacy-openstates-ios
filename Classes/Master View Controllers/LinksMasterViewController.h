@@ -17,7 +17,7 @@
 @interface LinksMasterViewController : GeneralTableViewController {
 }
 
-@property (nonatomic,retain) AboutViewController *aboutControl;
-@property (nonatomic,retain) MiniBrowserController *miniBrowser;
+@property (nonatomic,retain) IBOutlet AboutViewController *aboutControl;
+@property (nonatomic,retain) IBOutlet MiniBrowserController *miniBrowser;
 
 @end
