@@ -35,24 +35,19 @@
 @synthesize leg_cell;
 
 
-// setup the data collection
-- init {
+
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
 	if (self = [super init]) {
+		if (newContext)
+			self.managedObjectContext = newContext;
+	
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
 #if NEEDS_TO_INITIALIZE_DATABASE
 		needsInitDB = YES;
 #endif
+		
 	}
-	return self;
-}
-
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
-	if ([self init])
-		if (newContext)
-		{
-			self.managedObjectContext = newContext;
-		}
 	return self;
 }
 
@@ -332,7 +327,6 @@
 	if (![self.fetchedResultsController performFetch:&error]) {
         // Handle error
         debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);  // Fail
     }           
 }
 

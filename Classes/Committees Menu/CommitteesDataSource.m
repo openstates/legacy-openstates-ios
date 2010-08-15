@@ -16,19 +16,12 @@
 @synthesize hideTableIndex;
 @synthesize filterChamber, filterString, searchDisplayController;
 
-// setup the data collection
-- init {
-	if (self = [super init]) {
-		self.filterChamber = 0;
-		self.filterString = [NSMutableString stringWithString:@""];
-	}
-	return self;
-}
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
-	if ([self init]) {
+	if (self = [super init]) {
 		if (newContext) self.managedObjectContext = newContext;
-		
+		self.filterChamber = 0;
+		self.filterString = [NSMutableString stringWithString:@""];
 	}
 	return self;
 }
@@ -235,7 +228,6 @@
 	if (![[self fetchedResultsController] performFetch:&error]) {
         // Handle error
         debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        exit(-1);  // Fail
     }           
 }
 

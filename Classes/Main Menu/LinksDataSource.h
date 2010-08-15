@@ -9,7 +9,7 @@
 #import "Constants.h"
 #import "TableDataSourceProtocol.h"
 
-@interface LinksMenuDataSource : NSObject <TableDataSource>  {
+@interface LinksDataSource : NSObject <TableDataSource>  {
 		
 }
 

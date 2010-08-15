@@ -63,15 +63,8 @@ enum HeaderSectionRows {
 	return UITableViewStylePlain;
 } 
 
-// setup the data collection
-- init {
-	if (self = [super init]) {
-	}
-	return self;
-}
-
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
-	if ([self init]) {
+	if (self = [super init]) {
 		if (newContext) self.managedObjectContext = newContext;
 	
 		//[self populateLinksArrays];

@@ -51,23 +51,15 @@
 	return UITableViewStylePlain;
 }
 
-- (id)init {
-	self = [super init];
-	if (self !=nil) {
-		/* Build a list of files */		
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
+	if (self = [super init]) {
+		if (newContext)
+			self.managedObjectContext = newContext;
 		
 		self.feedStore = [CFeedStore instance];
 		[self loadChamberCalendars];
 		[self subscribeToAllFeeds];
-
-	}
-	return self;
-}
-
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
-	if ([self init]) {
-		if (newContext)
-			self.managedObjectContext = newContext;
+		
 	}
 	return self;
 }
