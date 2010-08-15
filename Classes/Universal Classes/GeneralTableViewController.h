@@ -17,7 +17,8 @@
 @property (nonatomic,readonly) NSString			*viewControllerKey;
 @property (nonatomic,retain) id					selectObjectOnAppear;
 
-- (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context;
+- (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context;
 - (void)runLoadView;
+- (Class)dataSourceClass;
 
 @end

@@ -6,6 +6,7 @@
 //  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
+#import "LegislatorsDataSource.h"
 #import "LegislatorMasterViewController.h"
 #import "LegislatorDetailViewController.h"
 #import "LegislatorMasterTableViewCell.h"
@@ -28,8 +29,13 @@
 	return @"LegislatorMasterViewController";
 }
 
-- (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context {
-	[super configureWithDataSourceClass:sourceClass andManagedObjectContext:context];
+- (Class)dataSourceClass {
+	return [LegislatorsDataSource class];
+}
+
+
+- (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
+	[super configureWithManagedObjectContext:context];
 	
 	self.tableView.rowHeight = 73.0f;
 	self.tableView.delegate = self;

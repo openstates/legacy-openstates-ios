@@ -5,6 +5,7 @@
 //  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
+#import "CommitteesDataSource.h"
 #import "CommitteeMasterViewController.h"
 #import "CommitteeDetailViewController.h"
 #import "CommitteeObj.h"
@@ -27,10 +28,15 @@
 	return @"CommitteeMasterViewController";
 }
 
+- (Class)dataSourceClass {
+	return [CommitteesDataSource class];
+}
+
+
 #pragma mark -
 #pragma mark View lifecycle
-- (void) configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context {
-	[super configureWithDataSourceClass:sourceClass andManagedObjectContext:context];
+- (void) configureWithManagedObjectContext:(NSManagedObjectContext *)context {
+	[super configureWithManagedObjectContext:context];
 	
 	self.tableView.rowHeight = 44.0f;
 	self.tableView.delegate = self;

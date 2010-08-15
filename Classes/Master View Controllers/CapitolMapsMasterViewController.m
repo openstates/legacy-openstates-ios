@@ -10,6 +10,8 @@
 
 #import "UtilityMethods.h"
 
+#import "CapitolMapsDataSource.h"
+
 #import "MapsDetailViewController.h"
 #import "TexLegeAppDelegate.h"
 #import "TableDataSourceProtocol.h"
@@ -28,6 +30,9 @@
 	[super runLoadView];	
 }
 
+- (Class)dataSourceClass {
+	return [CapitolMapsDataSource class];
+}
 
 
 - (void)viewWillAppear:(BOOL)animated

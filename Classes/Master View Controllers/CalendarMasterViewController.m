@@ -30,6 +30,10 @@
 	[super runLoadView];
 }
 
+- (Class)dataSourceClass {
+	return [CalendarDataSource class];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {	
 	[super viewWillAppear:animated];
@@ -64,12 +68,7 @@
 	
 	if (![UtilityMethods isIPadDevice])
 		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
-	
-	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]) && (self.splitViewController != nil);
-	
-	if (!isSplitViewDetail)
-		self.navigationController.toolbarHidden = YES;
-	
+		
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	// save off this item's selection to our AppDelegate
 
@@ -90,7 +89,7 @@
 	if ([self.detailViewController respondsToSelector:@selector(setChamberCalendar:)])
 		[self.detailViewController setValue:calendar forKey:@"chamberCalendar"];
 	
-	if (isSplitViewDetail == NO) {
+	if (![UtilityMethods isIPadDevice]) {
 		// push the detail view controller onto the navigation stack to display it
 		((UIViewController *)self.detailViewController).hidesBottomBarWhenPushed = YES;
 		
@@ -106,7 +105,7 @@
 	
 	// if we have a stack of view controllers and someone selected a new cell from our master list, 
 	//	lets go all the way back to accomodate their selection, and scroll to the top.
-	if (self.splitViewController) {
+	if ([UtilityMethods isIPadDevice]) {
 		if ([self.detailViewController respondsToSelector:@selector(tableView)]) {
 			UITableView *detailTable = [self.detailViewController performSelector:@selector(tableView)];
 			[detailTable reloadData];		// don't we already do this in our own combo detail controller?

@@ -11,7 +11,7 @@
 
 #import "TexLegeAppDelegate.h"
 #import "TableDataSourceProtocol.h"
-#import "LinksMenuDataSource.h"
+#import "LinksDataSource.h"
 #import "LinksDetailViewController.h"
 
 #import "MiniBrowserController.h"
@@ -29,13 +29,25 @@
 	return @"LinksMasterViewController";
 }
 
+- (Class)dataSourceClass {
+	return [LinksDataSource class];
+}
 
-- (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context {
-	[super configureWithDataSourceClass:sourceClass andManagedObjectContext:context];
-			
-	if (self.selectObjectOnAppear && [self.selectObjectOnAppear isKindOfClass:[LinkObj class]]) {
-		self.selectObjectOnAppear = nil; // let's not go hitting up websites on startup (Resources) 
+- (id)init {
+	if (self = [super init]) {
+		debug_NSLog(@"AppDelegate Managed Context %@", [[[TexLegeAppDelegate appDelegate] managedObjectContext] description]);
+	
 	}
+	return self;
+}
+
+
+- (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
+	[super configureWithManagedObjectContext:context];
+			
+//	if (self.selectObjectOnAppear && [self.selectObjectOnAppear isKindOfClass:[LinkObj class]]) {
+		self.selectObjectOnAppear = nil; // let's not go hitting up websites on startup (Resources) 
+//	}
 	
 }
 
@@ -57,8 +69,7 @@
 	[super runLoadView];	
 }
 
-
-- (void)viewWillAppear:(BOOL)animated
+/*- (void)viewWillAppear:(BOOL)animated
 {	
 	[super viewWillAppear:animated];
 	
@@ -83,7 +94,7 @@
 		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
 	
 	// END: IPAD ONLY
-}
+}*/
 
 #pragma -
 #pragma UITableViewDelegate
@@ -99,18 +110,19 @@
 	if (![UtilityMethods isIPadDevice])
 		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
 	
-	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]) && (self.splitViewController != nil);
+	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]);
 	
 	if (!isSplitViewDetail)
 		self.navigationController.toolbarHidden = YES;
 	
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
-	// save off this item's selection to our AppDelegate
+/*
+ // save off this item's selection to our AppDelegate
 	if ([dataObject isKindOfClass:[NSManagedObject class]])
 		[appDelegate setSavedTableSelection:[dataObject objectID] forKey:self.viewControllerKey];
 	else
 		[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
-	
+*/	
 	NSString * action = [dataObject valueForKey:@"url"];
 	
 	if ([UtilityMethods isIPadDevice]) {
@@ -118,8 +130,9 @@
 			[self.detailViewController release];
 			self.detailViewController = [[LinksDetailViewController alloc] init];
 		}
-		appDelegate.currentDetailViewController = self.detailViewController;
-		[[appDelegate detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.detailViewController] animated:NO];
+		if ([action isEqualToString:@"contactMail"])
+			[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
+		
 		[self.detailViewController setValue:dataObject forKey:@"link"];
 		
 	}
@@ -145,8 +158,7 @@
 			appDelegate.currentDetailViewController = self.aboutControl;
 			
 			if (isSplitViewDetail) {
-				[[appDelegate detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.aboutControl] animated:YES];
-				//appDelegate.splitViewController.delegate = self.aboutControl;
+				[[self.detailViewController navigationController] setViewControllers:[NSArray arrayWithObject:self.aboutControl] animated:YES];
 			}
 		}
 		else if ([action isEqualToString:@"contactMail"]) {
@@ -167,7 +179,7 @@
 						self.miniBrowser = [MiniBrowserController sharedBrowserWithURL:url];
 						appDelegate.currentDetailViewController = self.miniBrowser;
 						if ([UtilityMethods isIPadDevice]) {
-							[[appDelegate detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.miniBrowser] animated:YES];
+							[[self.detailViewController navigationController] setViewControllers:[NSArray arrayWithObject:self.miniBrowser] animated:YES];
 						}
 					}
 				}

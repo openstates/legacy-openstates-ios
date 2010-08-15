@@ -26,9 +26,13 @@
 	return @"GENERALTABLEVIEWCONTROLLER_TEMPLATE";
 }
 
-- (void)configureWithDataSourceClass:(Class)sourceClass andManagedObjectContext:(NSManagedObjectContext *)context {
+- (Class)dataSourceClass {
+	return [NSObject class];
+}
+
+- (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
 		//self.tableView = nil;
-	self.dataSource = [[sourceClass alloc] initWithManagedObjectContext:context];
+	self.dataSource = [[[self dataSourceClass] alloc] initWithManagedObjectContext:context];
 	self.title = [self.dataSource name];	
 	// set the long name shown in the navigation bar
 	//self.navigationItem.title=[dataSource navigationBarName];
