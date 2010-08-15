@@ -36,8 +36,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 		self.masterListPopoverPC = nil;
 		self.mainMenuPopoverPC = nil;
 		
-		if ([UtilityMethods isIPadDevice])
-			self.mainMenuPopoverVC = [[MenuPopoverViewController alloc] initWithNibName:@"MenuPopoverViewController" bundle:nil];
+		//if ([UtilityMethods isIPadDevice])
+		//	self.mainMenuPopoverVC = [[MenuPopoverViewController alloc] initWithNibName:@"MenuPopoverViewController" bundle:nil];
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) 
 													 name:@"UIDeviceOrientationDidChangeNotification" object:nil];
@@ -77,7 +77,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 	if (![UtilityMethods isIPadDevice])
 		return;
 	
-	[self dismissMainMenuPopover:sender];
+//	[self dismissMainMenuPopover:sender];
 	[self dismissMasterListPopover:sender];
 	
 	BOOL masterSplitVisible = ([UtilityMethods isLandscapeOrientation]);
@@ -87,15 +87,15 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 		return;
 	}
 		
-	UIBarButtonItem *mainMenuButton = [[UIBarButtonItem alloc]
+/*	UIBarButtonItem *mainMenuButton = [[UIBarButtonItem alloc]
 									   initWithTitle:@"Menu" style:UIBarButtonItemStyleBordered 
 									   target:self action:@selector(displayMainMenuPopover:)];
 	
 	[commander.navigationItem setLeftBarButtonItem:mainMenuButton animated:YES];
 	[mainMenuButton release], mainMenuButton = nil;
-	
+*/	
 	if (masterSplitVisible) {	// Don't show any menu buttons on the detail side of the split if we're in landscape
-		[[self.currentDetailViewController navigationItem] setLeftBarButtonItem:nil animated:YES];
+//		[[self.currentDetailViewController navigationItem] setLeftBarButtonItem:nil animated:YES];
 		[[self.currentDetailViewController navigationItem] setRightBarButtonItem:nil animated:YES];
 		return;			// don't go any further if we don't need to show the other one.
 	}
@@ -161,7 +161,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 #pragma mark MainMenuPopover
 
 - (IBAction)displayMainMenuPopover:(id)sender {	
-	if (!self.currentMasterViewController || ![UtilityMethods isIPadDevice])
+/*
+ if (!self.currentMasterViewController || ![UtilityMethods isIPadDevice])
 		return;
 	
 	[self dismissMasterListPopover:sender];		//  they want to show this popover, lets close up the other one if it's open.
@@ -190,11 +191,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 	
 	// now that the menu is displayed, let's reset the action so it's ready to go away again on demand
 	[menuButton setAction:@selector(dismissMainMenuPopover:)];
+*/
 }
 
 
 - (IBAction)dismissMainMenuPopover:(id)sender {
-	if (!self.mainMenuPopoverPC || ![UtilityMethods isIPadDevice] || self.isOpening)
+/*	if (!self.mainMenuPopoverPC || ![UtilityMethods isIPadDevice] || self.isOpening)
 		return;
 
 	if (self.mainMenuPopoverPC)	{
@@ -213,7 +215,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 	UIBarButtonItem *menuButton = commander.navigationItem.leftBarButtonItem;
 	if (menuButton)
 		[menuButton setAction:@selector(displayMainMenuPopover:)];
-}
+*/}
 
 
 #pragma mark -
@@ -227,10 +229,10 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 	// the user (not us) has dismissed the popover, let's cleanup.
 	if ([popoverController isEqual:self.masterListPopoverPC])
 		[self dismissMasterListPopover:nil];
-	else if ([popoverController isEqual:self.mainMenuPopoverPC])
-		[self dismissMainMenuPopover:nil];
-	else
-		debug_NSLog(@"Unexpected condition, we received a unknown popover controller dismissal notification.");
+	//else if ([popoverController isEqual:self.mainMenuPopoverPC])
+	//	[self dismissMainMenuPopover:nil];
+	//else
+	//	debug_NSLog(@"Unexpected condition, we received a unknown popover controller dismissal notification.");
 }
 
 
