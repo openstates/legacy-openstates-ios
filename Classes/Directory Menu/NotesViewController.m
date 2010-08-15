@@ -8,17 +8,24 @@
 
 #import "NotesViewController.h"
 #import "LegislatorObj.h"
-
+#import "UtilityMethods.h"
+#import "TexLegeTheme.h"
 @implementation NotesViewController
 
 @synthesize legislator, notesText, nameLabel;
-@synthesize backView;
+@synthesize backView, navBar, navTitle;
 
 
 - (void)viewDidLoad {
-    UINavigationItem *navigationItem = self.navigationItem;
-    navigationItem.title = @"Notes";
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+	if ([UtilityMethods isIPadDevice]) {
+		self.navBar.tintColor = [TexLegeTheme accent];
+		self.navTitle.rightBarButtonItem = self.editButtonItem;
+		self.contentSizeForViewInPopover = CGSizeMake(320.f, 320.f);
+	}
+	else {
+		self.navigationItem.title = @"Notes";
+		self.navigationItem.rightBarButtonItem = self.editButtonItem;
+	}
 }
 
 
@@ -52,7 +59,6 @@
 	if (!editing) {
 		if (![notesText.text isEqualToString:kStaticNotes]) {
 			legislator.notes = notesText.text;
-			[backView reloadData];
 		}
 		
 		NSManagedObjectContext *context = legislator.managedObjectContext;
@@ -60,8 +66,9 @@
 		if (![context save:&error]) {
 			// Handle error
 			debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-			exit(-1);  // Fail
 		}
+		[backView reloadData];
+
 	}		
 }
 
@@ -70,6 +77,8 @@
     [legislator release];
     [notesText release];
     [nameLabel release];
+	self.navTitle = nil;
+	self.navBar = nil;
     [super dealloc];
 }
 
