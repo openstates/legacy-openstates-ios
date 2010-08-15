@@ -28,6 +28,7 @@
 #pragma mark -
 #pragma mark View lifecycle
 
+#warning DEPRECATED
 
 - (void)viewDidLoad {
     [super viewDidLoad];
