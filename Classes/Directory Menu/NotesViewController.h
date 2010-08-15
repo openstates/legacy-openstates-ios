@@ -18,7 +18,6 @@
 @property (nonatomic, retain) LegislatorObj *legislator;
 @property (nonatomic, retain) IBOutlet UITextView *notesText;
 @property (nonatomic, retain) IBOutlet UILabel *nameLabel;
-@property (nonatomic, retain) IBOutlet UINavigationBar *navBar;
 @property (nonatomic, retain) IBOutlet UINavigationItem *navTitle;
 
 @property (nonatomic, assign) UITableView *backView;
