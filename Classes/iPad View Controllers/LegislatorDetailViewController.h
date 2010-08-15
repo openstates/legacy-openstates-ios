@@ -14,7 +14,8 @@
 @class DirectoryDetailInfo;
 @class CPLTColor;
 
-@interface LegislatorDetailViewController : UITableViewController <UISplitViewControllerDelegate, CPLTPlotDataSource, CPLTPieChartDataSource>
+@interface LegislatorDetailViewController : UITableViewController <UISplitViewControllerDelegate, CPLTPlotDataSource, CPLTPieChartDataSource,
+																		UIPopoverControllerDelegate>
 {	
 }
 
@@ -34,6 +35,7 @@
 @property (nonatomic,retain) IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab, *freshmanPlotLab;
 @property (nonatomic,retain) IBOutlet StaticGradientSliderView *indivSlider, *partySlider, *allSlider;
 @property (nonatomic,retain) IBOutlet UIView *indivPHolder, *partyPHolder, *allPHolder;
+@property (nonatomic,retain) UIPopoverController *notesPopover;
 
 @property (nonatomic, retain) IBOutlet LegislatorObj *legislator;
 

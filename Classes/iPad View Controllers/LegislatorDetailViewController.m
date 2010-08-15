@@ -54,6 +54,7 @@
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab, freshmanPlotLab;
 @synthesize indivSlider, partySlider, allSlider;
 @synthesize indivPHolder, partyPHolder, allPHolder;
+@synthesize notesPopover;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -208,6 +209,13 @@
 	return @"Legislators";	
 }
 
+// Called on the delegate when the user has taken action to dismiss the popover. This is not called when -dismissPopoverAnimated: is called directly.
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+	[self.tableView reloadData];
+	debug_NSLog(@"%@", self.tableView);
+	self.notesPopover = nil;
+}
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -237,7 +245,7 @@
 		[self setupHeader];
 	}
 
-	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 
 	if (showSplash) {
 		// TODO: We could alternatively use this opportunity to open a proper informational introduction
@@ -316,11 +324,9 @@
     // Releases the view if it doesn't have a superview.
 	[[self navigationController] popToRootViewControllerAnimated:YES];
 
-	self.legislator = nil;
 	self.leg_photoView = nil;
 	self.graph = nil;
 	self.dataForPlot = nil;
-	self.sectionArray = nil;
 	self.startupSplashView = nil;
 	
     [super didReceiveMemoryWarning];
@@ -336,11 +342,13 @@
 	self.leg_photoView = nil;
 	self.dataForPlot = nil;
 	self.graph = nil;
+	self.notesPopover = nil;
 
 }
 
 
 - (void)dealloc {
+	self.notesPopover = nil;
 	self.sectionArray = nil;
 	self.indivSlider = self.partySlider = self.allSlider = nil;
 	self.indivPHolder = self.partyPHolder = self.allPHolder = nil;
@@ -639,7 +647,7 @@
 #pragma mark UITableViewDataSource methods
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {		
 	//DirectoryDetailInfo * cellInfo = [[DirectoryDetailInfo alloc] init];
 	//[self infoForRow:cellInfo atIndexPath:indexPath];
@@ -663,7 +671,7 @@
 	//NSString *CellIdentifier = @"DirectoryDetailCell";
 	
 	/* Look up cell in the table queue */
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	
 	UITableViewCellStyle currentStyle = UITableViewCellStyleValue2;
 	UITableViewCellSelectionStyle selectionStyle = clickable ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
@@ -757,17 +765,17 @@
 	
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
 	return [sectionArray count];
 	
 }
 
 
-- (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section {		
+- (NSInteger)tableView:(UITableView *)aTableView  numberOfRowsInSection:(NSInteger)section {		
 	return [[sectionArray objectAtIndex:section] count];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {	
+- (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {	
 	if (section == 0)
 		return @"Legislator Information";
 	else if (section == 1)
@@ -784,14 +792,13 @@
 		return @"District Office #4";
 }
 
-
 // the user selected a row in the table.
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath {
 	int row = [newIndexPath row];
 	int section = [newIndexPath section];
 	
 	// deselect the new row using animation
-	[tableView deselectRowAtIndexPath:newIndexPath animated:YES];	
+	[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];	
 	
 	DirectoryDetailInfo *cellInfo = nil;
 	NSMutableArray *entryArray = [self.sectionArray objectAtIndex:section];
@@ -805,13 +812,27 @@
 	
 	if (cellInfo.isClickable) {
 		if (cellInfo.entryType == DirectoryTypeNotes) { // We need to edit the notes thing...
-			NotesViewController *nextViewController = [[NotesViewController alloc] initWithNibName:@"NotesView" bundle:nil];
+			NotesViewController *nextViewController = nil;
+			if ([UtilityMethods isIPadDevice])
+				nextViewController = [[NotesViewController alloc] initWithNibName:@"NotesView~ipad" bundle:nil];
+			else
+				nextViewController = [[NotesViewController alloc] initWithNibName:@"NotesView" bundle:nil];
 			
 			// If we got a new view controller, push it .
 			if (nextViewController) {
 				nextViewController.legislator = self.legislator;
-				nextViewController.backView = tableView;
-				[self.navigationController pushViewController:nextViewController animated:YES];
+				nextViewController.backView = aTableView;
+				
+				if ([UtilityMethods isIPadDevice]) {
+					//nextViewController.toolbar.hidden = NO;
+					self.notesPopover = [[UIPopoverController alloc] initWithContentViewController:nextViewController];
+					self.notesPopover.delegate = self;
+					CGRect cellRect = [aTableView rectForRowAtIndexPath:newIndexPath];
+					[self.notesPopover presentPopoverFromRect:cellRect inView:aTableView permittedArrowDirections:(UIPopoverArrowDirectionLeft & UIPopoverArrowDirectionRight & UIPopoverArrowDirectionDown ) animated:YES];
+				}
+				else
+					[self.navigationController pushViewController:nextViewController animated:YES];
+				
 				[nextViewController release];
 			}
 			
@@ -860,7 +881,7 @@
 	}
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = 44.0f;
 	NSInteger row = [indexPath row];
 	NSInteger section = [indexPath section];
