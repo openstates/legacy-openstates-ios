@@ -42,7 +42,7 @@
 
 
  - (void)viewWillAppear:(BOOL)animated {
-	 [[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+	 //[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 }
  
 

@@ -13,7 +13,7 @@
 #import "CommonPopoversController.h"
 #import "TexLegeTheme.h"
 #import "TexLegeAppDelegate.h"
-
+#import "TableDataSourceProtocol.h"
 @implementation LinksDetailViewController
 @synthesize link, miniBrowser, aboutControl;
 
@@ -68,7 +68,14 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+	
+	if ([UtilityMethods isIPadDevice] && ![UtilityMethods isLandscapeOrientation] && !self.link) {
+		UIBarButtonItem *button = self.navigationItem.rightBarButtonItem;
 		
+		if (button)
+			debug_NSLog(@"no selection yet ... %@", button);
+	}
+	
 }
 
 
@@ -87,8 +94,8 @@
 			if (!self.aboutControl)
 				self.aboutControl = [[AboutViewController alloc] initWithNibName:@"TexLegeInfo~ipad" bundle:nil];
 			//[self.navigationController pushViewController:self.aboutControl animated:NO];
-			[self.navigationController setViewControllers:[NSArray arrayWithObject:self.aboutControl] animated:NO];
-			[[TexLegeAppDelegate appDelegate] setCurrentDetailViewController:self.aboutControl];
+			[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.aboutControl] animated:NO];
+//			[[TexLegeAppDelegate appDelegate] setCurrentDetailViewController:self.aboutControl];
 
 			//[[TexLegeAppDelegate appDelegate] showAboutDialog:self];
 		}
@@ -106,8 +113,11 @@
 					self.miniBrowser = [[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil];
 				self.miniBrowser.link = link;
 				
-				[self.navigationController setViewControllers:[NSArray arrayWithObject:self.miniBrowser] animated:NO];
-				[[TexLegeAppDelegate appDelegate] setCurrentDetailViewController:self.miniBrowser];
+				[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.miniBrowser] animated:NO];
+				debug_NSLog(@"mini browser %@", [self.miniBrowser description]);
+				debug_NSLog(@"vc's %@", [self.navigationController viewControllers]);
+				
+				//[[TexLegeAppDelegate appDelegate] setCurrentDetailViewController:self.miniBrowser];
 			}
 			
 		}

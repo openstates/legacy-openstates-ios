@@ -98,7 +98,7 @@ enum InfoSectionRows {
 		}
 	}
 	
-	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 }
 
 /*
@@ -446,7 +446,6 @@ enum InfoSectionRows {
     // Releases the view if it doesn't have a superview.
 	[[self navigationController] popToRootViewControllerAnimated:YES];
 
-	self.committee = nil;
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
