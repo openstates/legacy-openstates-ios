@@ -185,7 +185,6 @@ static MiniBrowserController *s_browser = nil;
 		[self.m_webView setOpaque:YES];
 		self.view.backgroundColor = [TexLegeTheme backgroundLight];
 	}
-	
 
 	//[m_activity stopAnimating];
 	//[m_loadingLabel setHidden:YES];
@@ -205,12 +204,12 @@ static MiniBrowserController *s_browser = nil;
 {
 	[super viewWillAppear:animated];
 	
-	if (self.splitViewController)
+	if ([UtilityMethods isIPadDevice])
 	{
-		[self removeDoneButton];
+		if (self.splitViewController)
+			[self removeDoneButton];
 		[self normalizeToolbarButtons];
 		
-//		if ([self isEqual:[[TexLegeAppDelegate appDelegate] currentDetailViewController]])
 		[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 
 	}
@@ -439,21 +438,20 @@ static MiniBrowserController *s_browser = nil;
 		topView = [m_parentCtrl view];
 		if ( topView == nil )
 		{
-			if (appDelegate.splitViewController)
-				topView = appDelegate.splitViewController.view;//.viewControllers objectAtIndex:1] view];
-			else 
+			if ([UtilityMethods isIPadDevice])
+				topView = appDelegate.detailNavigationController.view;
+			else
 				topView = appDelegate.tabBarController.view;
+				
 		}
 	}
 	else
 	{
-		if (appDelegate.splitViewController)
-			topView = appDelegate.splitViewController.view;//.viewControllers objectAtIndex:1] view];
-		else 
+		if ([UtilityMethods isIPadDevice])
+			topView = appDelegate.detailNavigationController.view;
+		else
 			topView = appDelegate.tabBarController.view;
 		
-
-		//topView = appDelegate.tabBarController.view;
 	}
 	
 	if (topView) {
