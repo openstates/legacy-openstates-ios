@@ -32,8 +32,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[self.infoTextView flashScrollIndicators];
-	if ([self isEqual:[[TexLegeAppDelegate appDelegate] currentDetailViewController]])
-		[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 }
 
 
