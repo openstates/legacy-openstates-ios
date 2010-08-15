@@ -10,7 +10,7 @@
 #import "AboutViewController.h"
 #import "Reachability.h"
 
-@class MasterTableViewController;
+@class LegislatorMasterViewController;
 @class CommitteeMasterViewController;
 @class LinksMasterViewController;
 @class CapitolMapsMasterViewController;
@@ -28,16 +28,6 @@
 @property (nonatomic, retain) UIWindow			*mainWindow;
 @property (nonatomic, retain) Appirater			*appirater;
 
-// For Persistent View Selection
-// savedLocation: an array of selections for each drill level
-// i.e.
-// [0, 1, 3] =	select the top level / main tab 0,
-//				in the tableView, select detail with row 1
-//				......... and select detail with section 3
-// i.e.
-// [1, -1, -1] =	select tab 1,
-//					don't select a detail view
-@property (nonatomic, retain) NSMutableArray		*savedLocation;
 @property (nonatomic, retain) NSMutableDictionary	*savedTableSelection;
 @property (nonatomic,readonly) NSString				*currentMasterViewControllerKey;
 
@@ -54,19 +44,20 @@
 // For Functional View Controllers
 @property (nonatomic, readonly) UIViewController *topViewController;
 @property (nonatomic, retain) NSMutableArray *functionalViewControllers;
-@property (nonatomic, retain) IBOutlet LinksMasterViewController *linksTableTabbedVC;
-@property (nonatomic, retain) IBOutlet CapitolMapsMasterViewController *mapsTableTabbedVC;
-@property (nonatomic, retain) IBOutlet CommitteeMasterViewController *committeeTableTabbedVC;
-@property (nonatomic, retain) IBOutlet MasterTableViewController *legMasterTableViewController;
-@property (nonatomic, retain) IBOutlet CalendarMasterViewController *calendarsTableTabbedVC;
+@property (nonatomic, retain) IBOutlet LinksMasterViewController *linksMasterVC;
+@property (nonatomic, retain) IBOutlet CapitolMapsMasterViewController *capitolMapsMasterVC;
+@property (nonatomic, retain) IBOutlet CommitteeMasterViewController *committeeMasterVC;
+@property (nonatomic, retain) IBOutlet LegislatorMasterViewController *legislatorMasterVC;
+@property (nonatomic, retain) IBOutlet CalendarMasterViewController *calendarMasterVC;
 
 // For iPhone Interface
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 
 // For iPad Interface
-@property (nonatomic, retain) IBOutlet UISplitViewController *splitViewController;
-@property (nonatomic, retain) IBOutlet UINavigationController *masterNavigationController, *detailNavigationController;
-@property (nonatomic, retain) IBOutlet id currentMasterViewController, currentDetailViewController;
+@property (nonatomic, readonly)  UISplitViewController *splitViewController;
+@property (nonatomic, retain)  id currentMasterViewController, currentDetailViewController;
+@property (nonatomic, readonly) UINavigationController * detailNavigationController;
+@property (nonatomic, readonly) UINavigationController * masterNavigationController;
 
 @property NetworkStatus remoteHostStatus;
 @property NetworkStatus internetConnectionStatus;

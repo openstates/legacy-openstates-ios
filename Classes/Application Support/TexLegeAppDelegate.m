@@ -10,26 +10,14 @@
 #import "UtilityMethods.h"
 #import "PartisanIndexStats.h"
 
-#import "DirectoryDataSource.h"
 #import "Reachability.h"
 #import "Appirater.h"
 
-#import "LinksMenuDataSource.h"
 #import "MiniBrowserController.h"
-
-#import "LegislatorDetailViewController.h"
-
-#import "MapsDetailViewController.h"
-#import "CapitolMapsDataSource.h"
-
-#import "CommitteesDataSource.h"
-#import "CommitteeDetailViewController.h"
-
-#import "CalendarDataSource.h"
-#import "CalendarMasterViewController.h"
-#import "CalendarComboViewController.h"
-
 #import "CommonPopoversController.h"
+#import "GeneralTableViewController.h"
+#import "TableDataSourceProtocol.h"
+
 @interface TexLegeAppDelegate (Private)
 
 // these are private methods that outside classes need not use
@@ -49,7 +37,6 @@
 @end
 
 // preference key to obtain our restore location
-NSString *kRestoreLocationKey = @"RestoreLocation";			// old, simplistic key/array used on original iphone-only app.
 NSString *kRestoreSelectionKey = @"RestoreSelection";
 
 NSUInteger kNumMaxTabs = 11;
@@ -61,7 +48,8 @@ NSInteger kNoSelection = -1;
 //- (void) setupDialogBoxes;
 
 @synthesize tabBarController;
-@synthesize savedLocation, savedTableSelection;
+
+@synthesize savedTableSelection;
 @synthesize functionalViewControllers;
 @synthesize menuPopoverPC;
 
@@ -71,11 +59,9 @@ NSInteger kNoSelection = -1;
 
 @synthesize managedObjectContext;
 
-@synthesize legMasterTableViewController, committeeTableTabbedVC, mapsTableTabbedVC, linksTableTabbedVC, calendarsTableTabbedVC;
+@synthesize legislatorMasterVC, committeeMasterVC, capitolMapsMasterVC, linksMasterVC, calendarMasterVC;
 
-@synthesize masterNavigationController, detailNavigationController;
 @synthesize currentMasterViewController, currentDetailViewController;
-@synthesize splitViewController;
 
 + (TexLegeAppDelegate *)appDelegate {
 	return (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -86,7 +72,6 @@ NSInteger kNoSelection = -1;
 		// initialize  to nil
 		mainWindow = nil;
 		activeDialogController = nil;
-		savedLocation = nil;
 		
 		self.savedTableSelection = [NSMutableDictionary dictionaryWithCapacity:2];
 		
@@ -100,24 +85,21 @@ NSInteger kNoSelection = -1;
 - (void)dealloc {
 
 	self.currentDetailViewController = self.currentMasterViewController = nil;
-	self.masterNavigationController = self.detailNavigationController = nil;
 	self.functionalViewControllers = nil;
-	self.savedLocation = nil;
 	self.savedTableSelection = nil;
 
 	self.activeDialogController = nil;
 	self.menuPopoverPC = nil;
 	self.aboutView = nil;
 	self.tabBarController = nil;
-	self.splitViewController = nil;
 	self.appirater = nil;
 	self.mainWindow = nil;    
 	
-	self.mapsTableTabbedVC = nil;
-	self.linksTableTabbedVC = nil; 
-	self.calendarsTableTabbedVC = nil;
-	self.legMasterTableViewController = nil;
-	self.committeeTableTabbedVC = nil;
+	self.capitolMapsMasterVC = nil;
+	self.linksMasterVC = nil; 
+	self.calendarMasterVC = nil;
+	self.legislatorMasterVC = nil;
+	self.committeeMasterVC = nil;
 
 	self.managedObjectContext = nil;
 		
@@ -133,31 +115,6 @@ NSInteger kNoSelection = -1;
 #pragma mark -
 #pragma mark Data Sources and Main View Controllers
 
-/*
-// Not sure if this works ... we need more tabs to test.
-- (void)setTabOrderIfSaved {
-	if ([UtilityMethods isIPadDevice] == NO && self.tabBarController) {
-
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		NSArray *savedOrder = [defaults arrayForKey:@"savedTabOrder"];		/// saves the order of the titles
-		NSMutableArray *orderedControllers = [[NSMutableArray alloc] init];
-		
-		if ([savedOrder count] > 0 ) {
-			
-			for (id loopItem in savedOrder){
-				for (UIViewController *aController in tabBarController.viewControllers) {
-					if ([aController.tabBarItem.title isEqualToString:loopItem]) {
-						[orderedControllers addObject:aController];
-					}
-				}
-			}
-			tabBarController.viewControllers = orderedControllers;
-			self.functionalViewControllers = orderedControllers;  // replace our existing order
-		}
-		if (orderedControllers) [orderedControllers release], orderedControllers = nil;
-	}
-}
-*/
 
 - (NSInteger) indexForFunctionalViewController:(id)viewController {
 	NSInteger index = 0;
@@ -167,6 +124,25 @@ NSInteger kNoSelection = -1;
 			index = 0;
 	}
 	return index;
+	
+	#if 0
+	if (!viewController)
+		return 0;
+	
+	NSInteger index = 0;
+	
+	for (id splitVC in self.tabBarController.viewControllers) {
+		UINavigationController *masterNav = [[splitVC viewControllers] objectAtIndex:0];
+		if (masterNav && [[masterNav viewControllers] count]) {
+			UIViewController *vc = [[masterNav viewControllers] objectAtIndex:0];
+			if (vc && [vc isEqual:viewController])
+				return index;
+		}
+		index++;
+	}
+	return 0;
+
+	#endif
 }
 
 - (NSInteger) indexForFunctionalViewControllerKey:(NSString *)vcKey {
@@ -182,13 +158,83 @@ NSInteger kNoSelection = -1;
 		}
 	}
 	return 0;
+	
+	#if 0
+	if (!vcKey)
+		return 0;
+	
+	NSInteger index = 0;
+	
+	for (id splitVC in self.tabBarController.viewControllers) {
+		UINavigationController *masterNav = [[splitVC viewControllers] objectAtIndex:0];
+		if (masterNav && [[masterNav viewControllers] count]) {
+			UIViewController *vc = [[masterNav viewControllers] objectAtIndex:0];
+			if (vc && [vc respondsToSelector:@selector(viewControllerKey)]) {
+				NSString *tempVCKey = [vc performSelector:@selector(viewControllerKey)];
+				if (tempVCKey && [tempVCKey isEqualToString:vcKey])
+					return index;
+			}
+		}
+		index++;
+	}
+	return 0;	
+
+	
+	#endif
 }
+
+////// IPAD ONLY
+- (UISplitViewController *) splitViewController {
+	if ([UtilityMethods isIPadDevice]) {
+		return (UISplitViewController *)self.tabBarController.selectedViewController;
+	}
+	return nil;
+}
+
+
+////// IPAD ONLY
+- (UINavigationController *) detailNavigationController {
+	if ([UtilityMethods isIPadDevice]) {
+		UISplitViewController *split = (UISplitViewController *)self.tabBarController.selectedViewController;
+		if (split && [[split viewControllers] count])
+			return [[split viewControllers] objectAtIndex:1];
+	}
+	return nil;
+}
+
+////// IPAD ONLY
+- (UINavigationController *) masterNavigationController {
+	if ([UtilityMethods isIPadDevice]) {
+		UISplitViewController *split = (UISplitViewController *)self.tabBarController.selectedViewController;
+		if (split && [[split viewControllers] count])
+			return [[split viewControllers] objectAtIndex:0];
+	}
+	return nil;
+}
+
+///// IPAD ONLY
+- (UIViewController *) currentDetailViewController {	
+	if ([UtilityMethods isIPadDevice]) {
+		return [[[self detailNavigationController] viewControllers] objectAtIndex:0];
+	}
+	else
+		return currentDetailViewController;
+}
+
+////// IPAD ONLY
+- (UIViewController *) currentMasterViewController {
+	if ([UtilityMethods isIPadDevice]) {
+		return [[[self masterNavigationController] viewControllers] objectAtIndex:0];
+	}
+	else
+		return currentMasterViewController;
+}
+
 
 - (UIViewController *)topViewController {
 	UIViewController *vc = nil;
 	if ([UtilityMethods isIPadDevice]) {
-		//vc = self.currentDetailViewController;
-		vc = [self.currentDetailViewController navigationController].topViewController;
+		return [[self detailNavigationController] topViewController];
 	}
 	else {
 		if ([self.tabBarController.selectedViewController respondsToSelector:@selector(topViewController)]) {
@@ -200,104 +246,76 @@ NSInteger kNoSelection = -1;
 }
 
 - (void) changeActiveFeaturedControllerTo:(NSInteger)controllerIndex {	
-	if (self.currentMasterViewController &&					// they're trying to select what they've already got
-		[self indexForFunctionalViewController:self.currentMasterViewController] == controllerIndex)
-		return;
+	if (![UtilityMethods isIPadDevice]) {
+		if (self.currentMasterViewController &&					// they're trying to select what they've already got
+			[self indexForFunctionalViewController:self.currentMasterViewController] == controllerIndex)
+			return;
 	
-	self.currentDetailViewController = nil;
+		self.currentDetailViewController = nil;
+		self.currentMasterViewController = [self.functionalViewControllers objectAtIndex:controllerIndex];
+	}
 	
-	self.currentMasterViewController = [self.functionalViewControllers objectAtIndex:controllerIndex];
-	
-	if ([UtilityMethods isIPadDevice] && self.splitViewController) {		
+	self.tabBarController.selectedIndex = controllerIndex;
+	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];	
 
-		switch (controllerIndex) {
-			case 0:
-				self.currentDetailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
-				break;
-			case 1:
-				self.currentDetailViewController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
-				break;
-			case 2:
-				self.currentDetailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController~ipad" bundle:nil];
-				break;
-			case 3:
-				self.currentDetailViewController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
-				break;
-			case 4:
-				self.currentDetailViewController = [[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil];
-				break;			
-			default:
-				self.currentDetailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
-				debug_NSLog(@"Unknown controller index in changeActiveFeaturedControllerTo: %d", controllerIndex);
-				break;
-		}
-		
-		[self.currentMasterViewController setValue:self.currentDetailViewController forKey:@"detailViewController"];
-	
-		// Set up the view controller for the master.
-		NSArray *viewControllers = [[NSArray alloc] initWithObjects:self.currentMasterViewController, nil];
-		self.masterNavigationController.viewControllers = viewControllers;
-		[viewControllers release], viewControllers = nil;
-		
-		// now do the detail ...
-		if (self.currentDetailViewController) {
-			viewControllers = [[NSArray alloc] initWithObjects:self.currentDetailViewController, nil];
-			self.detailNavigationController.viewControllers = viewControllers;
-			[viewControllers release], viewControllers = nil;
-			self.splitViewController.delegate = self.currentDetailViewController;	
-		}
-	}		
-	else // it's an iPhone with a tabBar, we do the allocation of detail views
-		self.tabBarController.selectedIndex = controllerIndex;
 
+}
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
 	// Dismiss the popover if it's present.
 	//if (self.menuPopoverPC != nil) {
 	//	[self.menuPopoverPC dismissPopoverAnimated:YES];
 	//}
-	
-	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];
+	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];	
 }
 
 - (void) setupFeatures {
 	[[PartisanIndexStats sharedPartisanIndexStats] setManagedObjectContext:self.managedObjectContext];
 	
-	BOOL isIpad = [UtilityMethods isIPadDevice];
-	
-	if (isIpad && self.splitViewController == nil) 
-			[[NSBundle mainBundle] loadNibNamed:@"SplitViewController" owner:self options:NULL];
-	else if (!isIpad && self.tabBarController == nil)
+	if ([UtilityMethods isIPadDevice] ) 
+			[[NSBundle mainBundle] loadNibNamed:@"iPadTabBarController" owner:self options:nil];
+//			[[NSBundle mainBundle] loadNibNamed:@"SplitViewController" owner:self options:NULL];
+	else
 			[[NSBundle mainBundle] loadNibNamed:@"iPhoneTabBarController" owner:self options:nil];
 	
 	
-	[self.functionalViewControllers addObject:self.legMasterTableViewController];		// 0
-	[self.functionalViewControllers addObject:self.committeeTableTabbedVC];				// 1
-	[self.functionalViewControllers addObject:self.calendarsTableTabbedVC];				// 2
-	[self.functionalViewControllers addObject:self.mapsTableTabbedVC];					// 3
-	[self.functionalViewControllers addObject:self.linksTableTabbedVC];					// 4
+	[self.functionalViewControllers addObject:self.legislatorMasterVC];		// 0
+	[self.functionalViewControllers addObject:self.committeeMasterVC];				// 1
+	[self.functionalViewControllers addObject:self.calendarMasterVC];				// 2
+	[self.functionalViewControllers addObject:self.capitolMapsMasterVC];					// 3
+	[self.functionalViewControllers addObject:self.linksMasterVC];					// 4
 	
-	[self.legMasterTableViewController configureWithDataSourceClass:[DirectoryDataSource class] andManagedObjectContext:self.managedObjectContext]; 
-	[self.committeeTableTabbedVC configureWithDataSourceClass:[CommitteesDataSource class] andManagedObjectContext:self.managedObjectContext];
-	[self.calendarsTableTabbedVC configureWithDataSourceClass:[CalendarDataSource class] andManagedObjectContext:self.managedObjectContext];
-	[self.mapsTableTabbedVC configureWithDataSourceClass:[CapitolMapsDataSource class] andManagedObjectContext:self.managedObjectContext];
-	[self.linksTableTabbedVC configureWithDataSourceClass:[LinksMenuDataSource class] andManagedObjectContext:self.managedObjectContext];
+	[self.legislatorMasterVC configureWithManagedObjectContext:self.managedObjectContext]; 
+	[self.committeeMasterVC configureWithManagedObjectContext:self.managedObjectContext];
+	[self.calendarMasterVC configureWithManagedObjectContext:self.managedObjectContext];
+	[self.capitolMapsMasterVC configureWithManagedObjectContext:self.managedObjectContext];
+	[self.linksMasterVC configureWithManagedObjectContext:self.managedObjectContext];
 		
-	if (self.splitViewController)
-		[self.mainWindow addSubview:self.splitViewController.view];
-	else { 
-		[self.mainWindow addSubview:self.tabBarController.view];
-		//[self setTabOrderIfSaved];
+	NSMutableArray *splitViewControllers = [NSMutableArray arrayWithCapacity:[self.functionalViewControllers count]];
+	if ([UtilityMethods isIPadDevice]) {
+		NSInteger index = 0;
+		for (GeneralTableViewController * controller in self.functionalViewControllers) {
+			UISplitViewController * split = [controller splitViewController];
+			if (split) {
+				split.title = [[controller dataSource] name];
+				split.tabBarItem = [[UITabBarItem alloc] initWithTitle:
+									[[controller dataSource] name] image:[[controller dataSource] tabBarImage] tag:index];
+				[splitViewControllers addObject:split];
+			}
+			index++;
+		}
+		[self.tabBarController setViewControllers:splitViewControllers];
 	}
+	
+	[self.mainWindow addSubview:self.tabBarController.view];
 	
 	NSInteger selection = -1;
 	NSString * tempVCKey = [self.savedTableSelection objectForKey:@"viewController"];
 	if (tempVCKey) { // we have a saved view controller
 		selection = [self indexForFunctionalViewControllerKey:tempVCKey];
 	}
-	if (selection < 0) {
-		selection = [[savedLocation objectAtIndex:0] integerValue];	// read the saved selection at level 1
-		if (selection < 0 || selection >= kNumMaxTabs) 
-			selection = 0;
-	}
+	if (selection < 0 || selection >= kNumMaxTabs) 
+		selection = 0;
 	[self changeActiveFeaturedControllerTo:selection];				
 	
 }
@@ -324,20 +342,6 @@ NSInteger kNoSelection = -1;
 	
     [self.mainWindow setBackgroundColor:[UIColor whiteColor]];
 	
-	// load the stored preference of the user's last location from a previous launch
-	NSMutableArray *tempMutableCopy = [[[NSUserDefaults standardUserDefaults] objectForKey:kRestoreLocationKey] mutableCopy];
-	self.savedLocation = tempMutableCopy;
-	[tempMutableCopy release];
-	if (savedLocation == nil)
-	{
-		// user has not launched this app nor navigated to a particular level yet, start at level 1, with no selection
-		savedLocation = [[NSMutableArray arrayWithObjects:
-						  [NSNumber numberWithInteger:kNoSelection],	// tab selection at 1st level (-1 = no selection)
-						  [NSNumber numberWithInteger:kNoSelection],	// .. row selection for underlying table
-						  [NSNumber numberWithInteger:kNoSelection],	// .. section selection for underlying table
-						  nil] retain];
-	}
-	
 	[self restoreArchivableSavedTableSelection];
 	[self setupFeatures];
 			
@@ -345,8 +349,7 @@ NSInteger kNoSelection = -1;
 	[self.mainWindow makeKeyAndVisible];
 	
 	// register our preference selection data to be archived
-	NSDictionary *savedPrefsDict = [NSDictionary dictionaryWithObjectsAndKeys:
-									savedLocation,kRestoreLocationKey,
+	NSDictionary *savedPrefsDict = [NSDictionary dictionaryWithObjectsAndKeys: 
 									[self archivableSavedTableSelection],kRestoreSelectionKey,nil];
 	[[NSUserDefaults standardUserDefaults] registerDefaults:savedPrefsDict];
 
@@ -361,7 +364,6 @@ NSInteger kNoSelection = -1;
 
 - (void)applicationWillResignActive:(UIApplication *)application {
 	// save the drill-down hierarchy of selections to preferences
-	[[NSUserDefaults standardUserDefaults] setObject:savedLocation forKey:kRestoreLocationKey];
 	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
 	
 	[[NSUserDefaults standardUserDefaults] synchronize];
@@ -400,13 +402,6 @@ NSInteger kNoSelection = -1;
 		masterIndexSelection = [self indexForFunctionalViewController:self.tabBarController.selectedViewController];
 	}
 
-	NSInteger tabSavedSelection = [[savedLocation objectAtIndex:0] integerValue];
-
-	if (masterIndexSelection != tabSavedSelection) { // we're out of sync with the selection, clear the unknown
-		[savedLocation replaceObjectAtIndex:0 withObject:[NSNumber numberWithInteger:masterIndexSelection]];
-		[savedLocation replaceObjectAtIndex:1 withObject:[NSNumber numberWithInteger:kNoSelection]];
-		[savedLocation replaceObjectAtIndex:2 withObject:[NSNumber numberWithInteger:kNoSelection]];
-	}
 */	
 	if (self.tabBarController) {
 		// Smarten this up later for Core Data tab saving
@@ -420,7 +415,6 @@ NSInteger kNoSelection = -1;
 	}
 
 	// save the drill-down hierarchy of selections to preferences
-	[[NSUserDefaults standardUserDefaults] setObject:savedLocation forKey:kRestoreLocationKey];
 	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
 	
 	[[NSUserDefaults standardUserDefaults] synchronize];
@@ -619,7 +613,6 @@ NSInteger kNoSelection = -1;
         if ([[self managedObjectContext] hasChanges] && ![[self managedObjectContext] save:&error]) {
 			// Handle error.
 			debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-			//exit(-1);  // Fail
         } 
     }
 }
