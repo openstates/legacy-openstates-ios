@@ -17,6 +17,7 @@
 #import "CommonPopoversController.h"
 #import "GeneralTableViewController.h"
 #import "TableDataSourceProtocol.h"
+#import "UIApplication+ScreenMirroring.h"
 
 @interface TexLegeAppDelegate (Private)
 
@@ -24,12 +25,10 @@
 @property (nonatomic, retain) NSMutableArray *functionalViewControllers;
 
 - (void)setupDialogBoxes;
-- (void)iPhoneUserInterfaceInit;
 
 - (void)setupFeatures;
 
 - (NSString *)hostName;
-- (NSInteger) addFunctionalViewController:(id)viewController;
 
 - (void)restoreArchivableSavedTableSelection;
 - (NSData *)archivableSavedTableSelection;
@@ -51,7 +50,6 @@ NSInteger kNoSelection = -1;
 
 @synthesize savedTableSelection;
 @synthesize functionalViewControllers;
-@synthesize menuPopoverPC;
 
 @synthesize mainWindow, appirater;
 @synthesize aboutView, activeDialogController;
@@ -89,7 +87,6 @@ NSInteger kNoSelection = -1;
 	self.savedTableSelection = nil;
 
 	self.activeDialogController = nil;
-	self.menuPopoverPC = nil;
 	self.aboutView = nil;
 	self.tabBarController = nil;
 	self.appirater = nil;
@@ -358,8 +355,12 @@ NSInteger kNoSelection = -1;
 	// [Appirater appLaunched];  This is replaced with the following, to avoid leakiness
 	self.appirater = [[Appirater alloc] init];
 	[NSThread detachNewThreadSelector:@selector(_appLaunched) toTarget:self.appirater withObject:nil];
-	
+		
 	return YES;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+	[[UIApplication sharedApplication] setupScreenMirroring];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -367,6 +368,8 @@ NSInteger kNoSelection = -1;
 	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
 	
 	[[NSUserDefaults standardUserDefaults] synchronize];
+	
+	[[UIApplication sharedApplication] disableScreenMirroring];
 	
 	// Core Data Saving
 	[self saveAction:nil];
@@ -403,6 +406,7 @@ NSInteger kNoSelection = -1;
 	}
 
 */	
+	
 	if (self.tabBarController) {
 		// Smarten this up later for Core Data tab saving
 		NSMutableArray *savedOrder = [NSMutableArray arrayWithCapacity:kNumMaxTabs];
@@ -429,57 +433,24 @@ NSInteger kNoSelection = -1;
 
 
 - (void)setupDialogBoxes {    
-	if ([UtilityMethods isIPadDevice])
-		self.aboutView = [[AboutViewController alloc] initWithNibName:@"TexLegeInfo~ipad" bundle:nil];	
-	else
-		self.aboutView = [[AboutViewController alloc] initWithNibName:@"TexLegeInfo~iphone" bundle:nil];	
-
-	self.aboutView.delegate = self;
-	self.aboutView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-	self.aboutView.modalPresentationStyle = UIModalPresentationFormSheet;
-		
+	if (![UtilityMethods isIPadDevice]) {
+		self.aboutView.delegate = self;
+		self.aboutView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+		self.aboutView.modalPresentationStyle = UIModalPresentationFormSheet;
+	}
 }
 
 - (void)showAboutDialog:(UIViewController *)controller {
-	self.activeDialogController = controller;
-	if ((controller != nil) && (self.aboutView != nil))
-		[controller presentModalViewController:self.aboutView animated:YES];
+	if (![UtilityMethods isIPadDevice]) {
+		self.activeDialogController = controller;
+		if ((controller != nil) && (self.aboutView != nil))
+			[controller presentModalViewController:self.aboutView animated:YES];
+	}
 }
 
 - (void)modalViewControllerDidFinish:(UIViewController *)controller {
-	if (self.activeDialogController != nil)
+	if (![UtilityMethods isIPadDevice] && self.activeDialogController)
 		[self.activeDialogController dismissModalViewControllerAnimated:YES];
-	if (self.menuPopoverPC && self.menuPopoverPC.contentViewController == self.aboutView)
-		[self showOrHideAboutMenuPopover:controller];
-}
-
-#pragma mark -
-#pragma mark Popover Menus
-
-
-//END:code.gestures.color
-//START:code.popover.menu
--(IBAction)showOrHideAboutMenuPopover:(id)sender {
-	if (![UtilityMethods isIPadDevice])
-		return;
-
-    if (self.menuPopoverPC) {
-        [self.menuPopoverPC dismissPopoverAnimated:YES];
-        self.menuPopoverPC = nil;
-    } else {
-		self.menuPopoverPC = [[UIPopoverController alloc] initWithContentViewController:self.aboutView];
-		self.menuPopoverPC.popoverContentSize = self.aboutView.view.frame.size;
-		self.menuPopoverPC.delegate = self;
-		[self.menuPopoverPC presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-    }
-}
-//END:code.popover.menu
-
-
-
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-	// the user (not us) has dismissed the popover, let's cleanup.
-	self.menuPopoverPC = nil;
 }
 
 /*
@@ -500,9 +471,10 @@ NSInteger kNoSelection = -1;
  */
 
 
-- (void)application:(UIApplication *)application willChangeStatusBarOrientation:(UIInterfaceOrientation)newStatusBarOrientation duration:(NSTimeInterval)duration {
+/*
+ - (void)application:(UIApplication *)application willChangeStatusBarOrientation:(UIInterfaceOrientation)newStatusBarOrientation duration:(NSTimeInterval)duration {
 	// a cheat, so that we can dismiss all our popovers, if they're open.
-}
+}*/
 
 #pragma mark - 
 #pragma mark Reachability

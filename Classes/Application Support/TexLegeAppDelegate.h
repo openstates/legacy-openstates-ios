@@ -15,11 +15,10 @@
 @class LinksMasterViewController;
 @class CapitolMapsMasterViewController;
 @class CalendarMasterViewController;
-@class MenuPopoverViewController;
 @class Appirater;
 
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate, 
-		AboutViewControllerDelegate, UIPopoverControllerDelegate> 
+		AboutViewControllerDelegate> 
 {
 	NSManagedObjectModel *managedObjectModel;
 	NSPersistentStoreCoordinator *persistentStoreCoordinator;
@@ -39,7 +38,6 @@
 // For Alerts and Modal Dialogs
 @property (nonatomic, retain) AboutViewController *aboutView;
 @property (nonatomic, retain) UIViewController *activeDialogController;
-@property (nonatomic, retain) UIPopoverController *menuPopoverPC;
 
 // For Functional View Controllers
 @property (nonatomic, readonly) UIViewController *topViewController;
@@ -65,7 +63,6 @@
 
 //- (void)setTabOrderIfSaved;
 - (IBAction)saveAction:sender;
-- (IBAction)showOrHideAboutMenuPopover:(id)sender;
 
 - (void)updateStatus;
 - (NSInteger) indexForFunctionalViewController:(id)viewController;
