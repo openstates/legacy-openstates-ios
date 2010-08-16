@@ -23,7 +23,7 @@
 #import "CommitteeDetailViewController.h"
 
 #import "MiniBrowserController.h"
-#import "MapsDetailViewController.h"
+#import "CapitolMapsDetailViewController.h"
 
 #import "PartisanIndexStats.h"
 #import "UIImage+ResolutionIndependent.h"
@@ -31,6 +31,7 @@
 #import "CommonPopoversController.h"
 #import "TexLegeEmailComposer.h"
 
+#import "ColoredBarButtonItem.h"
 @interface LegislatorDetailViewController (Private)
 
 - (void) pushMapViewWithMap:(CapitolMap *)capMap;
@@ -256,6 +257,7 @@
 			self.startupSplashView = [objects objectAtIndex:0];
 		}
 		[self.view addSubview:self.startupSplashView];
+		
 		//[[CommonPopoversController sharedCommonPopoversController] displayMainMenuPopover:self.navigationItem.leftBarButtonItem];
 	}
 	else {
@@ -906,7 +908,7 @@
 }
 
 - (void) pushMapViewWithMap:(CapitolMap *)capMap {
-	MapsDetailViewController *detailController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
+	CapitolMapsDetailViewController *detailController = [[CapitolMapsDetailViewController alloc] initWithNibName:@"CapitolMapsDetailViewController" bundle:nil];
 	detailController.map = capMap;
 	//detailController.navigationItem.title = @"Maps";
 	// push the detail view controller onto the navigation stack to display it

@@ -62,15 +62,10 @@
 	self.navigationItem.titleView = self.chamberControl;
 }
 
-/*
- - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-	[self.tableView setNeedsDisplay];
-}
-*/
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-	
+		
 	//// ALL OF THE FOLLOWING MUST NOT RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER	
 	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
 		id detailObject = self.detailViewController ? [self.detailViewController valueForKey:@"legislator"] : nil;
