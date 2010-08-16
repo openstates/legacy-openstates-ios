@@ -1,4 +1,4 @@
-    //
+//
 //  CapitolMapsMasterViewController.m
 //  TexLege
 //
@@ -12,7 +12,7 @@
 
 #import "CapitolMapsDataSource.h"
 
-#import "MapsDetailViewController.h"
+#import "CapitolMapsDetailViewController.h"
 #import "TexLegeAppDelegate.h"
 #import "TableDataSourceProtocol.h"
 
@@ -79,9 +79,9 @@
 	// save off this item's selection to our AppDelegate
 	[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
 	
-	// create an MapsDetailViewController. This controller will display the full size tile for the element
+	// create a CapitolMapsDetailViewController. This controller will display the full size tile for the element
 	if (self.detailViewController == nil) {
-		self.detailViewController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
+		self.detailViewController = [[CapitolMapsDetailViewController alloc] initWithNibName:@"CapitolMapsDetailViewController" bundle:nil];
 	}
 	
 	CapitolMap *capitolMap = dataObject;
