@@ -13,6 +13,8 @@
 @interface UtilityMethods : NSObject {
 }
 
++ (BOOL) locationServicesEnabled;
+
 + (NSString*)cipher32Byte;
 
 + (NSString *) titleFromURL:(NSURL *)url;

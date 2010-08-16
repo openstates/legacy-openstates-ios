@@ -9,6 +9,7 @@
 #import "UtilityMethods.h"
 #import "TexLegeAppDelegate.h"
 #import "CapitolMap.h"
+#import <MapKit/MapKit.h>
 
 #pragma mark -
 #pragma mark NSArray Categories
@@ -49,6 +50,7 @@
 #pragma mark -
 #pragma mark Device Checks and Screen Methods
 
+
 + (BOOL) isLandscapeOrientation {
 	return (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation));
 }
@@ -73,6 +75,23 @@
 	}
 	return isRunningOniPad;
 }
+
+#pragma mark -
+#pragma mark MapKit
+
++ (BOOL) locationServicesEnabled {
+	BOOL locationEnabled = NO;
+	if ([[CLLocationManager class] respondsToSelector:@selector(locationServicesEnabled)])
+		locationEnabled = [CLLocationManager locationServicesEnabled];
+	else {
+		CLLocationManager *locMan = [[CLLocationManager alloc] init];
+		if (locMan)
+			locationEnabled = [locMan locationServicesEnabled];
+		[locMan release];
+	}
+	return locationEnabled;
+}
+
 
 #pragma mark -
 #pragma mark File Handling
