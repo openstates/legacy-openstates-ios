@@ -1,19 +1,19 @@
 //
-//  MapsDetailViewController.m
+//  CapitolMapsDetailViewController.m
 //  TexLege
 //
 //  Created by Gregory S. Combs on 5/31/09.
 //  Copyright 2009 Gregory S. Combs. All rights reserved.
 //
 
-#import "MapsDetailViewController.h"
+#import "CapitolMapsDetailViewController.h"
 #import "CommitteeObj.h"
 #import "UtilityMethods.h"
 #import "MiniBrowserController.h"
 //#import "TexLegeAppDelegate.h"
 #import "CommonPopoversController.h"
 
-@implementation MapsDetailViewController
+@implementation CapitolMapsDetailViewController
 
 @synthesize map, webView;
 

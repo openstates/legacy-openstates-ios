@@ -1,5 +1,5 @@
 //
-//  MapsDetailViewController.h
+//  CapitolMapsDetailViewController.h
 //  TexLege
 //
 //  Created by Gregory S. Combs on 5/31/09.
@@ -10,7 +10,7 @@
 #import "Constants.h"
 #import "CapitolMap.h"
 
-@interface MapsDetailViewController : UIViewController <UISplitViewControllerDelegate> {
+@interface CapitolMapsDetailViewController : UIViewController <UISplitViewControllerDelegate> {
 }
 @property (nonatomic,retain) CapitolMap *map;
 @property (nonatomic,retain) IBOutlet UIWebView *webView;
