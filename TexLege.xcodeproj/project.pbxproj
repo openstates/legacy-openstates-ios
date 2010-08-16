@@ -84,7 +84,6 @@
 		3766ED9F121056520073C705 /* CommonPopoversController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3766ED9E121056520073C705 /* CommonPopoversController.m */; };
 		3766EFC112109F110073C705 /* TexLegeStrings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3766EFC012109F110073C705 /* TexLegeStrings.plist */; };
 		3766EFC71210A1030073C705 /* TexLegeInfo~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3766EFC61210A1030073C705 /* TexLegeInfo~ipad.xib */; };
-		3767140211E8319900D004C8 /* UIDevice-Hardware.h in Sources */ = {isa = PBXBuildFile; fileRef = 3767140111E8319900D004C8 /* UIDevice-Hardware.h */; };
 		3767142211E833BA00D004C8 /* UIImage+ResolutionIndependent.m in Sources */ = {isa = PBXBuildFile; fileRef = 3767142111E833BA00D004C8 /* UIImage+ResolutionIndependent.m */; };
 		37674B2E1002C492003FD09F /* Map.Floor4.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B271002C492003FD09F /* Map.Floor4.pdf */; };
 		37674B2F1002C492003FD09F /* Map.Floor2.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B281002C492003FD09F /* Map.Floor2.pdf */; };
@@ -121,6 +120,9 @@
 		378A1CDF1007FF4600BEC4ED /* LinkObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A1CDB1007FF4600BEC4ED /* LinkObj.m */; };
 		378AFC81100BDD640040706A /* CommitteesDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 378AFC7F100BDD640040706A /* CommitteesDataSource.m */; };
 		378AFC84100BDD940040706A /* LegislatorsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 378AFC82100BDD940040706A /* LegislatorsDataSource.m */; };
+		378B57AA1219913400F7ED0B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 378B57A91219913400F7ED0B /* MapViewController.m */; };
+		378B57BE121994C400F7ED0B /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3767140011E8319900D004C8 /* UIDevice-Hardware.m */; };
+		378B58FB1219BB9C00F7ED0B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 378B58FA1219BB9C00F7ED0B /* CoreLocation.framework */; };
 		3792247A10115FB5004E0DCA /* TexasGradient.png in Resources */ = {isa = PBXBuildFile; fileRef = 3792247710115FB5004E0DCA /* TexasGradient.png */; };
 		379C1EEA1012DF28007844B5 /* NotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 379C1EE81012DF28007844B5 /* NotesViewController.m */; };
 		379C1F031012E0CD007844B5 /* NotesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 379C1F021012E0CD007844B5 /* NotesView.xib */; };
@@ -519,7 +521,7 @@
 		37C63E6711D9CC9200352CF3 /* Directory@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37C63E6611D9CC9200352CF3 /* Directory@2x.png */; };
 		37C9B67E11EDB28E001F0010 /* TexLege.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 37C9B67D11EDB28E001F0010 /* TexLege.xcdatamodeld */; };
 		37CB78FE107515C400BBF77A /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CB78FD107515C400BBF77A /* Appirater.m */; };
-		37CDD9CD12150651004EC1B7 /* GMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37CDD9CC12150651004EC1B7 /* GMapViewController.xib */; };
+		37CDD9CD12150651004EC1B7 /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37CDD9CC12150651004EC1B7 /* MapViewController.xib */; };
 		37D1C4D212026FE300507757 /* Month Calendar Shadow Down.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C4CE12026FE300507757 /* Month Calendar Shadow Down.png */; };
 		37D1C4D312026FE300507757 /* Month Calendar Shadow Right.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C4CF12026FE300507757 /* Month Calendar Shadow Right.png */; };
 		37D1C4D412026FE300507757 /* Month Calendar Shadow Vertical.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C4D012026FE300507757 /* Month Calendar Shadow Vertical.png */; };
@@ -718,9 +720,9 @@
 		376366FA11FFB4AF0052A2A9 /* TouchRSS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TouchRSS.xcdatamodel; sourceTree = "<group>"; };
 		376472C011D5AAFB00E6E27F /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Resize.h"; path = "Classes/Utility Classes/UIImage+Resize.h"; sourceTree = SOURCE_ROOT; };
 		376472C111D5AAFB00E6E27F /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Resize.m"; path = "Classes/Utility Classes/UIImage+Resize.m"; sourceTree = SOURCE_ROOT; };
-		376487BF10274F1E001E482D /* MiniBrowserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MiniBrowserController.m; path = "Classes/Detail View Controllers/MiniBrowserController.m"; sourceTree = SOURCE_ROOT; };
+		376487BF10274F1E001E482D /* MiniBrowserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MiniBrowserController.m; sourceTree = "<group>"; };
 		376487C010274F1E001E482D /* MiniBrowserView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MiniBrowserView.xib; path = Resources/MiniBrowserView.xib; sourceTree = "<group>"; };
-		376487C110274F1E001E482D /* MiniBrowserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MiniBrowserController.h; path = "Classes/Detail View Controllers/MiniBrowserController.h"; sourceTree = SOURCE_ROOT; };
+		376487C110274F1E001E482D /* MiniBrowserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MiniBrowserController.h; sourceTree = "<group>"; };
 		3764886F10275511001E482D /* fwdButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fwdButton.png; sourceTree = "<group>"; };
 		3764887010275511001E482D /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backButton.png; sourceTree = "<group>"; };
 		3764898210275DE3001E482D /* slider_star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slider_star.png; sourceTree = "<group>"; };
@@ -731,8 +733,7 @@
 		3766ED9E121056520073C705 /* CommonPopoversController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommonPopoversController.m; path = "Classes/iPad View Controllers/CommonPopoversController.m"; sourceTree = SOURCE_ROOT; };
 		3766EFC012109F110073C705 /* TexLegeStrings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = TexLegeStrings.plist; path = Resources/TexLegeStrings.plist; sourceTree = "<group>"; };
 		3766EFC61210A1030073C705 /* TexLegeInfo~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "TexLegeInfo~ipad.xib"; path = "Resources-iPad/TexLegeInfo~ipad.xib"; sourceTree = "<group>"; };
-		3767140011E8319900D004C8 /* UIDevice-Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice-Hardware.m"; path = "Classes/Utility Classes/UIDevice-Hardware.m"; sourceTree = SOURCE_ROOT; };
-		3767140111E8319900D004C8 /* UIDevice-Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice-Hardware.h"; path = "Classes/Utility Classes/UIDevice-Hardware.h"; sourceTree = SOURCE_ROOT; };
+		3767140011E8319900D004C8 /* UIDevice-Hardware.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; name = "UIDevice-Hardware.m"; path = "Classes/Utility Classes/UIDevice-Hardware.m"; sourceTree = SOURCE_ROOT; };
 		3767142011E833BA00D004C8 /* UIImage+ResolutionIndependent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+ResolutionIndependent.h"; path = "Classes/Utility Classes/UIImage+ResolutionIndependent.h"; sourceTree = SOURCE_ROOT; };
 		3767142111E833BA00D004C8 /* UIImage+ResolutionIndependent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ResolutionIndependent.m"; path = "Classes/Utility Classes/UIImage+ResolutionIndependent.m"; sourceTree = SOURCE_ROOT; };
 		37674B271002C492003FD09F /* Map.Floor4.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.Floor4.pdf; path = Resources/Maps/Map.Floor4.pdf; sourceTree = "<group>"; };
@@ -794,13 +795,17 @@
 		378AFC7F100BDD640040706A /* CommitteesDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommitteesDataSource.m; path = "Classes/Data Sources/CommitteesDataSource.m"; sourceTree = SOURCE_ROOT; };
 		378AFC82100BDD940040706A /* LegislatorsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegislatorsDataSource.m; path = "Classes/Data Sources/LegislatorsDataSource.m"; sourceTree = SOURCE_ROOT; };
 		378AFC83100BDD940040706A /* LegislatorsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorsDataSource.h; path = "Classes/Data Sources/LegislatorsDataSource.h"; sourceTree = SOURCE_ROOT; };
+		378B57A81219913400F7ED0B /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		378B57A91219913400F7ED0B /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		378B57BF121994DF00F7ED0B /* UIDevice-Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice-Hardware.h"; path = "Classes/Utility Classes/UIDevice-Hardware.h"; sourceTree = SOURCE_ROOT; };
+		378B58FA1219BB9C00F7ED0B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3792247710115FB5004E0DCA /* TexasGradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TexasGradient.png; sourceTree = "<group>"; };
 		3792247810115FB5004E0DCA /* fancy_star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fancy_star.png; sourceTree = "<group>"; };
 		379C1EE81012DF28007844B5 /* NotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotesViewController.m; path = "Classes/Detail View Controllers/NotesViewController.m"; sourceTree = SOURCE_ROOT; };
 		379C1EE91012DF28007844B5 /* NotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotesViewController.h; path = "Classes/Detail View Controllers/NotesViewController.h"; sourceTree = SOURCE_ROOT; };
 		379C1F021012E0CD007844B5 /* NotesView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = NotesView.xib; path = Resources/NotesView.xib; sourceTree = "<group>"; };
-		37A0C6011211DB810067F7AF /* TexLegeEmailComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TexLegeEmailComposer.h; path = "Classes/Utility Classes/TexLegeEmailComposer.h"; sourceTree = SOURCE_ROOT; };
-		37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TexLegeEmailComposer.m; path = "Classes/Utility Classes/TexLegeEmailComposer.m"; sourceTree = SOURCE_ROOT; };
+		37A0C6011211DB810067F7AF /* TexLegeEmailComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeEmailComposer.h; sourceTree = "<group>"; };
+		37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeEmailComposer.m; sourceTree = "<group>"; };
 		37A0E4440FD2DEAA009B65F7 /* LinksDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LinksDataSource.h; path = "Classes/Data Sources/LinksDataSource.h"; sourceTree = SOURCE_ROOT; };
 		37A0E4450FD2DEAA009B65F7 /* LinksDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LinksDataSource.m; path = "Classes/Data Sources/LinksDataSource.m"; sourceTree = SOURCE_ROOT; };
 		37A0E4470FD2DEAA009B65F7 /* CapitolMapsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CapitolMapsDetailViewController.h; path = "Classes/Detail View Controllers/CapitolMapsDetailViewController.h"; sourceTree = SOURCE_ROOT; };
@@ -811,8 +816,8 @@
 		37A0E44D0FD2DEAA009B65F7 /* CapitolMapsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CapitolMapsDataSource.h; path = "Classes/Data Sources/CapitolMapsDataSource.h"; sourceTree = SOURCE_ROOT; };
 		37A0E44E0FD2DEAA009B65F7 /* CapitolMapsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CapitolMapsDataSource.m; path = "Classes/Data Sources/CapitolMapsDataSource.m"; sourceTree = SOURCE_ROOT; };
 		37A0E5E00FD30E17009B65F7 /* TexLegeInfo~iphone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "TexLegeInfo~iphone.xib"; path = "Resources/TexLegeInfo~iphone.xib"; sourceTree = "<group>"; };
-		37A0E5E10FD30E17009B65F7 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutViewController.h; path = "Classes/Detail View Controllers/AboutViewController.h"; sourceTree = SOURCE_ROOT; };
-		37A0E5E20FD30E17009B65F7 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutViewController.m; path = "Classes/Detail View Controllers/AboutViewController.m"; sourceTree = SOURCE_ROOT; };
+		37A0E5E10FD30E17009B65F7 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
+		37A0E5E20FD30E17009B65F7 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		37A705B611DFD9EA00E72909 /* MenuPopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuPopoverViewController.h; path = "Classes/iPad View Controllers/MenuPopoverViewController.h"; sourceTree = SOURCE_ROOT; };
 		37A705B711DFD9EA00E72909 /* MenuPopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuPopoverViewController.m; path = "Classes/iPad View Controllers/MenuPopoverViewController.m"; sourceTree = SOURCE_ROOT; };
 		37A705B811DFD9EA00E72909 /* MenuPopoverViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MenuPopoverViewController.xib; path = "Resources-iPad/MenuPopoverViewController.xib"; sourceTree = "<group>"; };
@@ -1207,9 +1212,9 @@
 		37C63E5111D9C3AF00352CF3 /* slider_star_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider_star_big@2x.png"; sourceTree = "<group>"; };
 		37C63E5F11D9C48C00352CF3 /* TexasGradient@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TexasGradient@2x.png"; sourceTree = "<group>"; };
 		37C63E6611D9CC9200352CF3 /* Directory@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Directory@2x.png"; sourceTree = "<group>"; };
-		37CB78FC107515C400BBF77A /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Appirater.h; path = "Classes/Utility Classes/Appirater.h"; sourceTree = SOURCE_ROOT; };
-		37CB78FD107515C400BBF77A /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Appirater.m; path = "Classes/Utility Classes/Appirater.m"; sourceTree = SOURCE_ROOT; };
-		37CDD9CC12150651004EC1B7 /* GMapViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GMapViewController.xib; path = Resources/GMapViewController.xib; sourceTree = "<group>"; };
+		37CB78FC107515C400BBF77A /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
+		37CB78FD107515C400BBF77A /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
+		37CDD9CC12150651004EC1B7 /* MapViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MapViewController.xib; path = Resources/MapViewController.xib; sourceTree = "<group>"; };
 		37D1C4CE12026FE300507757 /* Month Calendar Shadow Down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Month Calendar Shadow Down.png"; path = "../../Frameworks/TapkuLibrary/universaldemo/Shared/Images/Month Calendar Shadow Down.png"; sourceTree = SOURCE_ROOT; };
 		37D1C4CF12026FE300507757 /* Month Calendar Shadow Right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Month Calendar Shadow Right.png"; path = "../../Frameworks/TapkuLibrary/universaldemo/Shared/Images/Month Calendar Shadow Right.png"; sourceTree = SOURCE_ROOT; };
 		37D1C4D012026FE300507757 /* Month Calendar Shadow Vertical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Month Calendar Shadow Vertical.png"; path = "../../Frameworks/TapkuLibrary/universaldemo/Shared/Images/Month Calendar Shadow Vertical.png"; sourceTree = SOURCE_ROOT; };
@@ -1424,6 +1429,7 @@
 				37D1C7C412030DAE00507757 /* libTapkuLibrary.a in Frameworks */,
 				3744268B120CA9F3007CBD96 /* libCorePlot-CocoaTouch.a in Frameworks */,
 				37413B1712114D09003CA7E8 /* MessageUI.framework in Frameworks */,
+				378B58FB1219BB9C00F7ED0B /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1484,7 +1490,7 @@
 				3709AB30101A092500C1061B /* EditingTableViewCell.xib */,
 				376487C010274F1E001E482D /* MiniBrowserView.xib */,
 				379C1F021012E0CD007844B5 /* NotesView.xib */,
-				37CDD9CC12150651004EC1B7 /* GMapViewController.xib */,
+				37CDD9CC12150651004EC1B7 /* MapViewController.xib */,
 				37A0E4870FD2DFB1009B65F7 /* Data */,
 				37D714640FFD0818008E59E7 /* Default and Icon */,
 				37ADADE10FD25F4200282EA0 /* Legislator Photos */,
@@ -1507,6 +1513,7 @@
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				370298CD11F97C7A00D65FCB /* MapKit.framework */,
 				37413B1612114D09003CA7E8 /* MessageUI.framework */,
+				378B58FA1219BB9C00F7ED0B /* CoreLocation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1629,6 +1636,10 @@
 		3766EE1212108E610073C705 /* Detail View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				37A0E5E10FD30E17009B65F7 /* AboutViewController.h */,
+				37A0E5E20FD30E17009B65F7 /* AboutViewController.m */,
+				376487C110274F1E001E482D /* MiniBrowserController.h */,
+				376487BF10274F1E001E482D /* MiniBrowserController.m */,
 				379C1EE91012DF28007844B5 /* NotesViewController.h */,
 				379C1EE81012DF28007844B5 /* NotesViewController.m */,
 				3775FA3A11D86E1700D69AC5 /* LegislatorDetailViewController.h */,
@@ -1643,6 +1654,8 @@
 				37AD57B911DA651500D68934 /* CommitteeDetailViewController.m */,
 				37FBA4B71214B04300D86257 /* LinksDetailViewController.h */,
 				37FBA4B81214B04300D86257 /* LinksDetailViewController.m */,
+				378B57A81219913400F7ED0B /* MapViewController.h */,
+				378B57A91219913400F7ED0B /* MapViewController.m */,
 			);
 			path = "Detail View Controllers";
 			sourceTree = "<group>";
@@ -1771,6 +1784,8 @@
 		37A0E4460FD2DEAA009B65F7 /* Utility Classes */ = {
 			isa = PBXGroup;
 			children = (
+				37A0C6011211DB810067F7AF /* TexLegeEmailComposer.h */,
+				37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */,
 				37BACDFA1218D834000C8E5D /* UIApplication+ScreenMirroring.h */,
 				37BACDF91218D834000C8E5D /* UIApplication+ScreenMirroring.m */,
 				3747C29411E7B8F400A6D8C6 /* SynthesizeSingleton.h */,
@@ -1778,8 +1793,8 @@
 				37D6E82710175F0800D4D7C2 /* UtilityMethods.m */,
 				3709AEAC101FBE7900C1061B /* Reachability.h */,
 				3709AEAD101FBE7900C1061B /* Reachability.m */,
+				378B57BF121994DF00F7ED0B /* UIDevice-Hardware.h */,
 				3767140011E8319900D004C8 /* UIDevice-Hardware.m */,
-				3767140111E8319900D004C8 /* UIDevice-Hardware.h */,
 				376472C011D5AAFB00E6E27F /* UIImage+Resize.h */,
 				376472C111D5AAFB00E6E27F /* UIImage+Resize.m */,
 				3767142011E833BA00D004C8 /* UIImage+ResolutionIndependent.h */,
@@ -1788,6 +1803,8 @@
 				3735DDAE120899980000AF5A /* UISearchDisplayController+NoHideNav.m */,
 				37782582121217B7001BD23D /* NSData+Encryption.h */,
 				37782583121217B7001BD23D /* NSData+Encryption.m */,
+				37CB78FC107515C400BBF77A /* Appirater.h */,
+				37CB78FD107515C400BBF77A /* Appirater.m */,
 			);
 			path = "Utility Classes";
 			sourceTree = "<group>";
@@ -1807,28 +1824,11 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
-		37A0E5DD0FD30E17009B65F7 /* Alerts and Flip Panels */ = {
-			isa = PBXGroup;
-			children = (
-				37A0C6011211DB810067F7AF /* TexLegeEmailComposer.h */,
-				37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */,
-				37CB78FC107515C400BBF77A /* Appirater.h */,
-				37CB78FD107515C400BBF77A /* Appirater.m */,
-				37A0E5E10FD30E17009B65F7 /* AboutViewController.h */,
-				37A0E5E20FD30E17009B65F7 /* AboutViewController.m */,
-				376487C110274F1E001E482D /* MiniBrowserController.h */,
-				376487BF10274F1E001E482D /* MiniBrowserController.m */,
-			);
-			name = "Alerts and Flip Panels";
-			path = AboutView;
-			sourceTree = "<group>";
-		};
 		37AD577911DA573D00D68934 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				3735DFF8120916A00000AF5A /* Master View Controllers */,
 				3766EE1212108E610073C705 /* Detail View Controllers */,
-				37A0E5DD0FD30E17009B65F7 /* Alerts and Flip Panels */,
 				3775FA3511D86D6500D69AC5 /* iPad View Controllers */,
 			);
 			name = "View Controllers";
@@ -3099,7 +3099,7 @@
 				37782772121303C1001BD23D /* Default@2x~iphone.png in Resources */,
 				3778292C12133709001BD23D /* uparrow.png in Resources */,
 				37FBA4BB1214B04300D86257 /* LinksDetailViewController.xib in Resources */,
-				37CDD9CD12150651004EC1B7 /* GMapViewController.xib in Resources */,
+				37CDD9CD12150651004EC1B7 /* MapViewController.xib in Resources */,
 				374C36B21215E26E006B6ADA /* iPadTabBarController.xib in Resources */,
 				3764E8CB1217B83F008DF726 /* NotesView~ipad.xib in Resources */,
 			);
@@ -3139,7 +3139,6 @@
 				37AD57BB11DA651700D68934 /* CommitteeDetailViewController.m in Sources */,
 				376777F511DAB9C50075A74E /* StaticGradientSliderView.m in Sources */,
 				3747C25D11E7B15300A6D8C6 /* PartisanIndexStats.m in Sources */,
-				3767140211E8319900D004C8 /* UIDevice-Hardware.h in Sources */,
 				3767142211E833BA00D004C8 /* UIImage+ResolutionIndependent.m in Sources */,
 				372D5CC011E9983A005A21E2 /* CapitolMap.m in Sources */,
 				3737803B11F8082500E36500 /* WnomObj.m in Sources */,
@@ -3194,6 +3193,8 @@
 				3764E8501217A6B1008DF726 /* ColoredBarButtonView.m in Sources */,
 				37DC99171217D05000AD53BD /* ColoredBarButtonItem.m in Sources */,
 				37BACDFB1218D834000C8E5D /* UIApplication+ScreenMirroring.m in Sources */,
+				378B57AA1219913400F7ED0B /* MapViewController.m in Sources */,
+				378B57BE121994C400F7ED0B /* UIDevice-Hardware.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
