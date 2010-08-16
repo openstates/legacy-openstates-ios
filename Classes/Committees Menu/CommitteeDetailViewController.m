@@ -11,7 +11,7 @@
 #import "CommitteeObj.h"
 #import "LegislatorObj.h"
 #import "UtilityMethods.h"
-#import "MapsDetailViewController.h"
+#import "CapitolMapsDetailViewController.h"
 #import "LegislatorDetailViewController.h"
 #import "MiniBrowserController.h"
 #import "LegislatorMasterTableViewCell.h"
@@ -367,7 +367,7 @@ enum InfoSectionRows {
 }
 
 - (void) pushMapViewWithMap:(CapitolMap *)capMap {
-	MapsDetailViewController *detailController = [[MapsDetailViewController alloc] initWithNibName:@"MapsDetailViewController" bundle:nil];
+	CapitolMapsDetailViewController *detailController = [[CapitolMapsDetailViewController alloc] initWithNibName:@"CapitolMapsDetailViewController" bundle:nil];
 	detailController.map = capMap;
 	//detailController.navigationItem.title = @"Maps";
 	// push the detail view controller onto the navigation stack to display it
