@@ -140,26 +140,8 @@
 		if ([action isEqualToString:@"aboutView"]) {
 			self.miniBrowser = nil;
 			
-			if (!isSplitViewDetail) {
-				[appDelegate showAboutDialog:self];
-				return;
-			}
-			else if (!self.aboutControl) {
-				if (self.detailViewController && [self.detailViewController isKindOfClass:[AboutViewController class]])
-					self.aboutControl = (AboutViewController *) self.detailViewController;
-				else
-					self.aboutControl = [[AboutViewController alloc] initWithNibName:@"TexLegeInfo~ipad" bundle:nil];
-			}
-			
-			if (!self.aboutControl) {
-				debug_NSLog(@"Failure while attempting to allocate memory for AboutViewController");
-				return;
-			}
-			appDelegate.currentDetailViewController = self.aboutControl;
-			
-			if (isSplitViewDetail) {
-				[[self.detailViewController navigationController] setViewControllers:[NSArray arrayWithObject:self.aboutControl] animated:YES];
-			}
+			[appDelegate showAboutDialog:self];
+
 		}
 		else if ([action isEqualToString:@"contactMail"]) {
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
@@ -178,9 +160,6 @@
 					else {
 						self.miniBrowser = [MiniBrowserController sharedBrowserWithURL:url];
 						appDelegate.currentDetailViewController = self.miniBrowser;
-						if ([UtilityMethods isIPadDevice]) {
-							[[self.detailViewController navigationController] setViewControllers:[NSArray arrayWithObject:self.miniBrowser] animated:YES];
-						}
 					}
 				}
 				if (!self.miniBrowser) {
@@ -189,13 +168,10 @@
 				}
 				
 				[self.miniBrowser loadURL:url];
-				
-				if (![UtilityMethods isIPadDevice])
-					[self.miniBrowser display:self];
+				[self.miniBrowser display:self];
 			}
 		}
 	}
-	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 }
 
 

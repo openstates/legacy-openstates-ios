@@ -10,13 +10,13 @@
 
 #import "TableDataSourceProtocol.h"
 #import "GeneralTableViewController.h"
-#import "AboutViewController.h"
+#import "TexLegeInfoController.h"
 
 @class MiniBrowserController;
 @interface LinksMasterViewController : GeneralTableViewController {
 }
 
-@property (nonatomic,retain) IBOutlet AboutViewController *aboutControl;
+@property (nonatomic,retain) IBOutlet TexLegeInfoController *aboutControl;
 @property (nonatomic,retain) IBOutlet MiniBrowserController *miniBrowser;
 
 @end
