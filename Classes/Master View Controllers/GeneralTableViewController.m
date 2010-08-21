@@ -50,8 +50,8 @@
 	}
 	
 	if ([self.dataSource usesCoreData]) {
-		NSManagedObjectID *objectID = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:self.viewControllerKey];
-		if (objectID)
+		id objectID = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:self.viewControllerKey];
+		if (objectID && [objectID isKindOfClass:[NSManagedObjectID class]])
 			self.selectObjectOnAppear = [self.dataSource.managedObjectContext objectWithID:objectID];		
 	}
 	else { // Let's just do this for maps, and meetings, ... we'll handle them like integer row selections
