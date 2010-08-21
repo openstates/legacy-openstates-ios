@@ -438,7 +438,8 @@ NSInteger kNoSelection = -1;
 
 
 - (void)setupDialogBoxes {    
-	if (![UtilityMethods isIPadDevice]) {
+	if (![UtilityMethods isIPadDevice] && !self.aboutView) {
+		self.aboutView = [[TexLegeInfoController alloc] initWithNibName:@"TexLegeInfoController~iphone" bundle:nil];	
 		self.aboutView.delegate = self;
 		self.aboutView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 		self.aboutView.modalPresentationStyle = UIModalPresentationFormSheet;

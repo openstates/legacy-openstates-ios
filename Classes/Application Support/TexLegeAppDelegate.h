@@ -6,7 +6,7 @@
 //  Copyright 2009 Gregory S. Combs. All rights reserved.
 //
 
-#import "AboutViewController.h"
+#import "TexLegeInfoController.h"
 #import "Reachability.h"
 
 @class LegislatorMasterViewController;
@@ -17,7 +17,7 @@
 @class Appirater;
 
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate, 
-		AboutViewControllerDelegate> 
+		TexLegeInfoControllerDelegate> 
 {
 	NSManagedObjectModel *managedObjectModel;
 	NSPersistentStoreCoordinator *persistentStoreCoordinator;
@@ -35,7 +35,7 @@
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 // For Alerts and Modal Dialogs
-@property (nonatomic, retain) AboutViewController *aboutView;
+@property (nonatomic, retain) TexLegeInfoController *aboutView;
 @property (nonatomic, retain) UIViewController *activeDialogController;
 
 // For Functional View Controllers
