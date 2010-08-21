@@ -92,7 +92,7 @@
 		if ([self.link.url isEqualToString:@"aboutView"]) {
 			self.miniBrowser = nil;
 			if (!self.aboutControl)
-				self.aboutControl = [[AboutViewController alloc] initWithNibName:@"TexLegeInfo~ipad" bundle:nil];
+				self.aboutControl = [[TexLegeInfoController alloc] initWithNibName:@"TexLegeInfoController~ipad" bundle:nil];
 			//[self.navigationController pushViewController:self.aboutControl animated:NO];
 			[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.aboutControl] animated:NO];
 //			[[TexLegeAppDelegate appDelegate] setCurrentDetailViewController:self.aboutControl];

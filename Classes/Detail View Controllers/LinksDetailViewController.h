@@ -8,14 +8,14 @@
 
 #import "LinkObj.h"
 
-@class MiniBrowserController, AboutViewController;
+@class MiniBrowserController, TexLegeInfoController;
 @interface LinksDetailViewController : UIViewController <UISplitViewControllerDelegate> {
 	
 }
 
 @property (nonatomic,retain) LinkObj *link;
 @property (nonatomic,retain) IBOutlet MiniBrowserController *miniBrowser;
-@property (nonatomic,retain) IBOutlet AboutViewController *aboutControl;
+@property (nonatomic,retain) IBOutlet TexLegeInfoController *aboutControl;
 
 - (NSString *)popoverButtonTitle;
 @end
