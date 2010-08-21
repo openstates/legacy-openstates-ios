@@ -51,6 +51,16 @@
 	[super dealloc];
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+	NSURL *tempURL = [NSURL URLWithString:@"http://maps.google.com"];
+	//if (![UtilityMethods isNetworkReachable])
+	//		[UtilityMethods noInternetAlert];
+		
+	if (![UtilityMethods canReachHostWithURL:tempURL])// do we have a good URL/connection?
+		return;
+	
+}
+
 - (void) viewDidDisappear:(BOOL)animated {
 	self.mapView.showsUserLocation = NO;
 	[super viewDidDisappear:animated];
