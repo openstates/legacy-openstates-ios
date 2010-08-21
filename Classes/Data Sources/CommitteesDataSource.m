@@ -22,6 +22,11 @@
 		if (newContext) self.managedObjectContext = newContext;
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
+		
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
+		[self initializeDatabase];
+#endif
+		
 	}
 	return self;
 }
@@ -109,10 +114,6 @@
 
 	}
     
-#if NEEDS_TO_INITIALIZE_DATABASE
-	[self initializeDatabase];
-#endif
-
 	CommitteeObj *tempEntry = [self dataObjectForIndexPath:indexPath];
 	
 	if (tempEntry == nil) {
@@ -252,7 +253,7 @@
 #pragma mark -
 #pragma mark Core Data Methods
 
-#if NEEDS_TO_INITIALIZE_DATABASE
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
 #warning initializeDatabase IS TURNED ON!!!
 #warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
 

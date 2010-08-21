@@ -18,7 +18,8 @@
 
 @interface LegislatorsDataSource (Private)
 
-#if NEEDS_TO_INITIALIZE_DATABASE
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
+- (void)initializeDatabase;	
 - (void) populatePartisanIndexDatabase;
 #endif
 
@@ -43,8 +44,10 @@
 	
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
-#if NEEDS_TO_INITIALIZE_DATABASE
-		needsInitDB = YES;
+
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
+		[self initializeDatabase];
+		[self populatePartisanIndexDatabase];
 #endif
 		
 	}
@@ -132,14 +135,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#if NEEDS_TO_INITIALIZE_DATABASE
-	if (needsInitDB) {
-		[self initializeDatabase];
-		[self populatePartisanIndexDatabase];
-		needsInitDB = NO;
-	}
-#endif
-	
 	LegislatorObj *dataObj = [self dataObjectForIndexPath:indexPath];
 	if (dataObj == nil) {
 		debug_NSLog(@"Busted in DirectoryDataSource.m: cellForRowAtIndexPath -> Couldn't get legislator data for row.");
@@ -364,7 +359,7 @@
 	}
 }
 
-#if NEEDS_TO_INITIALIZE_DATABASE
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
 #warning initializeDatabase IS TURNED ON!!!
 #warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
 - (void)initializeDatabase {

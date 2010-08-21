@@ -30,7 +30,7 @@
 - (void) setFilterByString:(NSString *)filter;
 - (void) removeFilter;
 
-#if NEEDS_TO_INITIALIZE_DATABASE
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
 - (void)initializeDatabase;	
 #endif
 

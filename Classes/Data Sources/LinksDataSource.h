@@ -15,7 +15,7 @@
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 
-#if NEEDS_TO_INITIALIZE_DATABASE
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
 @property (nonatomic,retain) NSArray * linksData;
 - (void) setupDataArray;
 - (void) initializeDatabase;

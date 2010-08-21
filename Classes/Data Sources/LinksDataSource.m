@@ -32,7 +32,7 @@ enum HeaderSectionRows {
 @synthesize fetchedResultsController, managedObjectContext;
 
 
-#if NEEDS_TO_INITIALIZE_DATABASE
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
 @synthesize linksData;
 #endif
 
@@ -67,6 +67,10 @@ enum HeaderSectionRows {
 	if (self = [super init]) {
 		if (newContext) self.managedObjectContext = newContext;
 	
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
+		[self initializeDatabase];
+#endif
+
 		//[self populateLinksArrays];
 		NSError *error = nil;
 		if (![[self fetchedResultsController] performFetch:&error])
@@ -78,7 +82,7 @@ enum HeaderSectionRows {
 }
 
 - (void)dealloc {	
-#if NEEDS_TO_INITIALIZE_DATABASE
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
 	[linksData release];
 #endif
 	self.fetchedResultsController = nil;
@@ -87,7 +91,7 @@ enum HeaderSectionRows {
     [super dealloc];
 }
 
-#if NEEDS_TO_INITIALIZE_DATABASE
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
 #warning initializeDatabase IS TURNED ON!!!
 #warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
 

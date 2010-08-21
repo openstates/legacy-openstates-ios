@@ -15,7 +15,6 @@
 #endif
 
 #define NEEDS_TO_INITIALIZE_DATABASE 0
-#define NEEDS_TO_CENSOR_USER_LINKS 0
 
 #define kDeviceSensitiveRowHeight 0
 

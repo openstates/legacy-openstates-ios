@@ -22,10 +22,6 @@
 	NSFetchedResultsController *fetchedResultsController;
 	IBOutlet NSManagedObjectContext *managedObjectContext;	
 	UISearchDisplayController *searchDisplayController;
-#if NEEDS_TO_INITIALIZE_DATABASE
-@private
-	BOOL needsInitDB;
-#endif
 }
 @property (nonatomic, retain) IBOutlet LegislatorMasterTableViewCell *leg_cell;
 
@@ -40,9 +36,5 @@
 
 - (void) setFilterByString:(NSString *)filter;
 - (void) removeFilter;
-
-#if NEEDS_TO_INITIALIZE_DATABASE
-- (void)initializeDatabase;	
-#endif
 
 @end
