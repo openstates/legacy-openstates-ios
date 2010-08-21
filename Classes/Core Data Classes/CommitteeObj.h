@@ -7,7 +7,6 @@
 //
 
 #import <CoreData/CoreData.h>
-#import "Constants.h"
 
 @class CommitteePositionObj, LegislatorObj;
 

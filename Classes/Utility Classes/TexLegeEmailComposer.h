@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <MessageUI/MessageUI.h>
 #import "SynthesizeSingleton.h"
-#import "Constants.h"
 
 @interface TexLegeEmailComposer : NSObject <MFMailComposeViewControllerDelegate,UIAlertViewDelegate>
 {

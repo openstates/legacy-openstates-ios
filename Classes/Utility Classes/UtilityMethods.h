@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Constants.h"
 
 @class CapitolMap;
 @interface UtilityMethods : NSObject {
@@ -47,4 +46,6 @@
 - (id)findWhereKeyPath:(NSString *)keyPath equals:(id)value;
 
 @end
+
+
 

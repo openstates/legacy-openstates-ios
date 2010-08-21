@@ -40,6 +40,8 @@ NSString *MAPS_API_KEY = @"ABQIAAAATejoI1-rG9VOa4T5f3ppWRRYQtG-vnXKOEpkBE1rl0xG1
 	CXMLDocument *doc = [[CXMLDocument alloc] 
 						 initWithContentsOfURL:url 
 						 options:CXMLDocumentTidyXML error:&error];
+	
+	 
 	CXMLElement *element = [doc rootElement];
 	[doc release];
 	

@@ -22,6 +22,7 @@
 
 #import "CommitteeDetailViewController.h"
 
+#import "MapViewController.h"
 #import "MiniBrowserController.h"
 #import "CapitolMapsDetailViewController.h"
 
@@ -858,6 +859,19 @@
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:cellInfo.entryValue 
 																			 subject:@"" body:@""];			
 		}
+		// Switch to the appropriate application for this url...
+		else if (cellInfo.entryType == DirectoryTypeMap) {
+			MapViewController *mapVC = [[MapViewController alloc] initWithNibName:@"MapViewController" bundle:nil];
+			if (!mapVC) {
+				debug_NSLog(@"Tried to map services, but couldn't allocate memory for the view.");
+				return;
+			}
+			NSString *address = [cellInfo.entryValue stringByReplacingOccurrencesOfString:@"\n" withString:@", "];
+			[mapVC setAddressString:address withLegislator:self.legislator];
+			[self.navigationController pushViewController:mapVC animated:YES];
+			[mapVC release];
+			
+		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&
 				 cellInfo.entryType < kDirectoryTypeIsExternalHandler) {	// handle the URL ourselves in a webView
 			[self showWebViewWithURL:[cellInfo generateURL:self.legislator]];
@@ -874,11 +888,7 @@
 				return;
 			}
 			
-			// Switch to the appropriate application for this url...
-			if (cellInfo.entryType == DirectoryTypeMap)
-				[UtilityMethods openURLWithTrepidation:myURL];
-			else
-				[UtilityMethods openURLWithoutTrepidation:myURL];
+			[UtilityMethods openURLWithoutTrepidation:myURL];
 		}
 	}
 }
@@ -916,11 +926,13 @@
 	[detailController release];
 }
 
-- (void) showWebViewWithURL:(NSURL *)url {
+- (void) showWebViewWithURL:(NSURL *)url { 
+
 	if ([UtilityMethods canReachHostWithURL:url]) { // do we have a good URL/connection?
 		MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
 		[mbc display:self];
 	}
+
 }	
 
 

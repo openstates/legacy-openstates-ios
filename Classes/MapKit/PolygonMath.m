@@ -9,7 +9,6 @@
 #import "PolygonMath.h"
 
 
-
 @implementation PolygonMath
 
 //The following C function returns INSIDE or OUTSIDE indicating the status of a point P with respect to a polygon with N points.
@@ -21,8 +20,10 @@
 
 - (BOOL) insidePolygon:(MapPoint *)polygon count:(NSInteger)N point:(MapPoint) p;
 {
-	int counter = 0;
-	int i;
+	debug_NSLog(@"Starting insidePolygon: %@", [NSDate date]);
+	
+	NSInteger counter = 0;
+	NSInteger i = 0;
 	double xinters;
 	MapPoint p1,p2;
 	
@@ -43,6 +44,8 @@
 		p1 = p2;
 	}
 	
+	debug_NSLog(@"Ending insidePolygon: %@", [NSDate date]);
+
 	if (counter % 2 == 0)
 		return(OUTSIDE);
 	else
@@ -50,9 +53,11 @@
 }
 
 //The following code is by Randolph Franklin, it returns 1 for interior points and 0 for exterior points.
-- (BOOL) pnpoly:(float *)xp yp:(float *)yp count:(NSInteger)npol x:(float)x y:(float)y;
+- (BOOL) pnpoly:(double *)xp yp:(double *)yp count:(NSInteger)npol x:(double)x y:(double)y;
 {
-	int i = 0, j = 0;
+	debug_NSLog(@"Starting pnpoly: %@", [NSDate date]);
+
+	NSInteger i = 0, j = 0;
 	BOOL foundInside = NO;
 	for (i = 0, j = npol-1; i < npol; j = i++) {
         if ((((yp[i] <= y) && (y < yp[j])) ||
@@ -60,6 +65,9 @@
             (x < (xp[j] - xp[i]) * (y - yp[i]) / (yp[j] - yp[i]) + xp[i]))
 			foundInside = !foundInside;
 	}
+	
+	debug_NSLog(@"Ending pnpoly: %@", [NSDate date]);
+
 	return foundInside;
 }
 @end

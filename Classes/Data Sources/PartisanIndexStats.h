@@ -7,7 +7,6 @@
 //
 
 #import "SynthesizeSingleton.h"
-#import "Constants.h"
 
 @class LegislatorObj;
 

@@ -36,12 +36,11 @@
 
 - (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
 	[super configureWithManagedObjectContext:context];
-	
+
 	self.tableView.rowHeight = 73.0f;
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self.dataSource;	
 }
-
 
 #pragma mark -
 #pragma mark View lifecycle

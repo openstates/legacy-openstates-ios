@@ -7,7 +7,6 @@
 //
 
 #import <CoreData/CoreData.h>
-#import "Constants.h"
 
 
 @interface LinkObj :  NSManagedObject  

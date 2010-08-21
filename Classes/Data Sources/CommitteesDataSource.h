@@ -6,7 +6,6 @@
 //  Copyright 2009 Gregory S. Combs. All rights reserved.
 //
 
-#import "Constants.h"
 #import "TableDataSourceProtocol.h"
 
 @interface CommitteesDataSource : NSObject <TableDataSource> {

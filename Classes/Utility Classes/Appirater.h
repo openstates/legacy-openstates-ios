@@ -35,7 +35,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "Constants.h"
 
 extern NSString *const kAppiraterLaunchDate;
 extern NSString *const kAppiraterLaunchCount;

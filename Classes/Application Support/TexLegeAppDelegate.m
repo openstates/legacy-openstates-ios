@@ -269,12 +269,17 @@ NSInteger kNoSelection = -1;
 - (void) setupFeatures {
 	[[PartisanIndexStats sharedPartisanIndexStats] setManagedObjectContext:self.managedObjectContext];
 	
-	if ([UtilityMethods isIPadDevice] ) 
-			[[NSBundle mainBundle] loadNibNamed:@"iPadTabBarController" owner:self options:nil];
+	NSArray *nibObjects = nil;
+	if ([UtilityMethods isIPadDevice]) 
+			nibObjects = [[NSBundle mainBundle] loadNibNamed:@"iPadTabBarController" owner:self options:nil];
 //			[[NSBundle mainBundle] loadNibNamed:@"SplitViewController" owner:self options:NULL];
 	else
-			[[NSBundle mainBundle] loadNibNamed:@"iPhoneTabBarController" owner:self options:nil];
+			nibObjects = [[NSBundle mainBundle] loadNibNamed:@"iPhoneTabBarController" owner:self options:nil];
 	
+	if (!nibObjects || [nibObjects count] == 0) {
+		debug_NSLog(@"Error loading user interface NIB components! Can't find the nib file and can't continue this charade.");
+		exit(0);
+	}
 	
 	[self.functionalViewControllers addObject:self.legislatorMasterVC];		// 0
 	[self.functionalViewControllers addObject:self.committeeMasterVC];				// 1

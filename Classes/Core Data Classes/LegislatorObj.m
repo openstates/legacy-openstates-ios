@@ -7,9 +7,7 @@
 //
 
 #import "LegislatorObj.h"
-
 #import "CommitteePositionObj.h"
-#import "UIImage+Resize.h"
 
 @implementation LegislatorObj 
 

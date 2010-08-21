@@ -7,10 +7,6 @@
  *
  */
 
-#import <UIKit/UIKit.h>
-
-#import <CoreData/CoreData.h>
-
 //#define DEBUG 0
 #ifdef DEBUG //== 1
 #define debug_NSLog(format, ...) NSLog(format, ## __VA_ARGS__)

@@ -6,7 +6,6 @@
 //  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
-#import "Constants.h"
 #import "LinkObj.h"
 
 @class MiniBrowserController, AboutViewController;
