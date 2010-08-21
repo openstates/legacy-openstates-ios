@@ -16,6 +16,7 @@
 #import "MiniBrowserController.h"
 #import "LegislatorMasterTableViewCell.h"
 #import "TexLegeAppDelegate.h"
+#import "TexLegeTheme.h"
 #import "CommonPopoversController.h"
 
 @implementation CommitteeDetailViewController
@@ -202,11 +203,12 @@ enum InfoSectionRows {
 	return rows;
 }
 
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSInteger row = [indexPath row];
 	NSInteger section = [indexPath section];
-	
+
 	// We use the Leigislator Directory Cell identifier on purpose, since it's the same style as here..
 	
 	NSString *CellIdentifier;
@@ -237,6 +239,11 @@ enum InfoSectionRows {
 		else {
 			cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:CellIdentifier] autorelease];			
 		}
+		if ([cell respondsToSelector:@selector(setUseDarkBackground:)])
+			[((LegislatorMasterTableViewCell *)cell) setUseDarkBackground:NO];
+		else
+			cell.backgroundColor = [TexLegeTheme backgroundLight];
+		
 	}    
 	
 	LegislatorObj *legislator = nil;
@@ -303,6 +310,9 @@ enum InfoSectionRows {
 	
 	if (legislator) {
 		[(LegislatorMasterTableViewCell *)cell setupWithLegislator:legislator];
+		// let's override some of the datasource's settings ... specifically, the background color.
+		
+		
 		/*
 		// configure cell contents for a legislator
 		cell.textLabel.text = [NSString stringWithFormat: @"%@ - (%@)", 
