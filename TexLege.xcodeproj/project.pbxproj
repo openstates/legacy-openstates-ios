@@ -547,11 +547,16 @@
 		37D6E82810175F0800D4D7C2 /* UtilityMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6E82710175F0800D4D7C2 /* UtilityMethods.m */; };
 		37D6E8C51017772B00D4D7C2 /* Map.SamHoustonLoc.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37D6E8C41017772B00D4D7C2 /* Map.SamHoustonLoc.pdf */; };
 		37DC99171217D05000AD53BD /* ColoredBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 37DC99161217D05000AD53BD /* ColoredBarButtonItem.m */; };
+		37EAE4B1121A57D100BF4277 /* BSAddressComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE47A121A57D100BF4277 /* BSAddressComponent.m */; };
+		37EAE4B2121A57D100BF4277 /* BSForwardGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE47C121A57D100BF4277 /* BSForwardGeocoder.m */; };
+		37EAE4B4121A57D100BF4277 /* BSGoogleV3KmlParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE480121A57D100BF4277 /* BSGoogleV3KmlParser.m */; };
+		37EAE4B5121A57D100BF4277 /* BSKmlResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE482121A57D100BF4277 /* BSKmlResult.m */; };
+		37EAE540121A6B4200BF4277 /* 72-pin.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C86E120344D000507757 /* 72-pin.png */; };
+		37EAE54F121A6D9A00BF4277 /* DistrictOfficeAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE54E121A6D9A00BF4277 /* DistrictOfficeAnnotation.m */; };
 		37EC28FD120DFFB600174836 /* UACellBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EC28FC120DFFB600174836 /* UACellBackgroundView.m */; };
 		37ECDA781065358800E43497 /* Release Notes.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 37ECDA771065358800E43497 /* Release Notes.rtf */; };
 		37EFDD7E11F80F4300268D53 /* TexLege.v2.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 37EFDD7D11F80F4300268D53 /* TexLege.v2.sqlite */; };
 		37F510AA0FF1ADEF0020A13B /* Icon_80.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F510A90FF1ADEF0020A13B /* Icon_80.png */; };
-		37F800B511FFABAA00970122 /* AddressGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F800B411FFABAA00970122 /* AddressGeocoder.m */; };
 		37F952401211409300206241 /* 110-bug@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F9523F1211409300206241 /* 110-bug@2x.png */; };
 		37FBA4BA1214B04300D86257 /* LinksDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FBA4B81214B04300D86257 /* LinksDetailViewController.m */; };
 		37FBA4BB1214B04300D86257 /* LinksDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37FBA4B91214B04300D86257 /* LinksDetailViewController.xib */; };
@@ -1362,14 +1367,22 @@
 		37D6E8C41017772B00D4D7C2 /* Map.SamHoustonLoc.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.SamHoustonLoc.pdf; path = Resources/Maps/Map.SamHoustonLoc.pdf; sourceTree = "<group>"; };
 		37DC99151217D05000AD53BD /* ColoredBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColoredBarButtonItem.h; path = "Classes/Custom Cells and Views/ColoredBarButtonItem.h"; sourceTree = SOURCE_ROOT; };
 		37DC99161217D05000AD53BD /* ColoredBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColoredBarButtonItem.m; path = "Classes/Custom Cells and Views/ColoredBarButtonItem.m"; sourceTree = SOURCE_ROOT; };
+		37EAE479121A57D100BF4277 /* BSAddressComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BSAddressComponent.h; path = Classes/BSAddressComponent.h; sourceTree = "<group>"; };
+		37EAE47A121A57D100BF4277 /* BSAddressComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BSAddressComponent.m; path = Classes/BSAddressComponent.m; sourceTree = "<group>"; };
+		37EAE47B121A57D100BF4277 /* BSForwardGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BSForwardGeocoder.h; path = Classes/BSForwardGeocoder.h; sourceTree = "<group>"; };
+		37EAE47C121A57D100BF4277 /* BSForwardGeocoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BSForwardGeocoder.m; path = Classes/BSForwardGeocoder.m; sourceTree = "<group>"; };
+		37EAE47F121A57D100BF4277 /* BSGoogleV3KmlParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BSGoogleV3KmlParser.h; path = Classes/BSGoogleV3KmlParser.h; sourceTree = "<group>"; };
+		37EAE480121A57D100BF4277 /* BSGoogleV3KmlParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BSGoogleV3KmlParser.m; path = Classes/BSGoogleV3KmlParser.m; sourceTree = "<group>"; };
+		37EAE481121A57D100BF4277 /* BSKmlResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BSKmlResult.h; path = Classes/BSKmlResult.h; sourceTree = "<group>"; };
+		37EAE482121A57D100BF4277 /* BSKmlResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BSKmlResult.m; path = Classes/BSKmlResult.m; sourceTree = "<group>"; };
+		37EAE54D121A6D9A00BF4277 /* DistrictOfficeAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DistrictOfficeAnnotation.h; path = Classes/MapKit/DistrictOfficeAnnotation.h; sourceTree = SOURCE_ROOT; };
+		37EAE54E121A6D9A00BF4277 /* DistrictOfficeAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DistrictOfficeAnnotation.m; path = Classes/MapKit/DistrictOfficeAnnotation.m; sourceTree = SOURCE_ROOT; };
 		37EC28FB120DFFB600174836 /* UACellBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UACellBackgroundView.h; path = "Classes/Custom Cells and Views/UACellBackgroundView.h"; sourceTree = SOURCE_ROOT; };
 		37EC28FC120DFFB600174836 /* UACellBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UACellBackgroundView.m; path = "Classes/Custom Cells and Views/UACellBackgroundView.m"; sourceTree = SOURCE_ROOT; };
 		37ECDA771065358800E43497 /* Release Notes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "Release Notes.rtf"; sourceTree = "<group>"; };
 		37EFDD7D11F80F4300268D53 /* TexLege.v2.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = TexLege.v2.sqlite; path = Data/TexLege.v2.sqlite; sourceTree = SOURCE_ROOT; };
 		37EFDE5F11F8A18200268D53 /* Wnom.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Wnom.plist; sourceTree = "<group>"; };
 		37F510A90FF1ADEF0020A13B /* Icon_80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon_80.png; sourceTree = "<group>"; };
-		37F800B311FFABAA00970122 /* AddressGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddressGeocoder.h; path = Classes/MapKit/AddressGeocoder.h; sourceTree = SOURCE_ROOT; };
-		37F800B411FFABAA00970122 /* AddressGeocoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddressGeocoder.m; path = Classes/MapKit/AddressGeocoder.m; sourceTree = SOURCE_ROOT; };
 		37F9523F1211409300206241 /* 110-bug@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "110-bug@2x.png"; sourceTree = "<group>"; };
 		37FBA4B71214B04300D86257 /* LinksDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LinksDetailViewController.h; path = "Classes/Detail View Controllers/LinksDetailViewController.h"; sourceTree = SOURCE_ROOT; };
 		37FBA4B81214B04300D86257 /* LinksDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LinksDetailViewController.m; path = "Classes/Detail View Controllers/LinksDetailViewController.m"; sourceTree = SOURCE_ROOT; };
@@ -1521,6 +1534,7 @@
 		3721EA4F11D6E6EA00CA33DA /* Custom Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				37EAE44F121A57D100BF4277 /* Forward-Geocoding */,
 				374422BF120C724F007CBD96 /* Concurrent Images */,
 				37BB40211204E46E0062547E /* RegexKitLite */,
 				376366DD11FFB45D0052A2A9 /* TouchCode */,
@@ -1534,8 +1548,8 @@
 			children = (
 				370F7AA711FEAF730004AC50 /* PolygonMath.h */,
 				370F7AA811FEAF730004AC50 /* PolygonMath.m */,
-				37F800B311FFABAA00970122 /* AddressGeocoder.h */,
-				37F800B411FFABAA00970122 /* AddressGeocoder.m */,
+				37EAE54D121A6D9A00BF4277 /* DistrictOfficeAnnotation.h */,
+				37EAE54E121A6D9A00BF4277 /* DistrictOfficeAnnotation.m */,
 			);
 			path = MapKit;
 			sourceTree = "<group>";
@@ -1545,16 +1559,16 @@
 			children = (
 				37A0E4490FD2DEAA009B65F7 /* GeneralTableViewController.h */,
 				37A0E44A0FD2DEAA009B65F7 /* GeneralTableViewController.m */,
-				374C37031215EB2D006B6ADA /* LinksMasterViewController.h */,
-				374C37041215EB2D006B6ADA /* LinksMasterViewController.m */,
-				374C36E41215E8DA006B6ADA /* CapitolMapsMasterViewController.h */,
-				374C36E51215E8DA006B6ADA /* CapitolMapsMasterViewController.m */,
-				3735DFFB120917490000AF5A /* CommitteeMasterViewController.h */,
-				3735DFFC120917490000AF5A /* CommitteeMasterViewController.m */,
 				3702412512198C11002D169E /* LegislatorMasterViewController.h */,
 				3775FA4B11D8701B00D69AC5 /* LegislatorMasterViewController.m */,
+				3735DFFB120917490000AF5A /* CommitteeMasterViewController.h */,
+				3735DFFC120917490000AF5A /* CommitteeMasterViewController.m */,
 				374C36B81215E55F006B6ADA /* CalendarMasterViewController.h */,
 				374C36B91215E55F006B6ADA /* CalendarMasterViewController.m */,
+				374C36E41215E8DA006B6ADA /* CapitolMapsMasterViewController.h */,
+				374C36E51215E8DA006B6ADA /* CapitolMapsMasterViewController.m */,
+				374C37031215EB2D006B6ADA /* LinksMasterViewController.h */,
+				374C37041215EB2D006B6ADA /* LinksMasterViewController.m */,
 			);
 			path = "Master View Controllers";
 			sourceTree = "<group>";
@@ -2465,6 +2479,22 @@
 			path = "Resources/Default and Icon";
 			sourceTree = "<group>";
 		};
+		37EAE44F121A57D100BF4277 /* Forward-Geocoding */ = {
+			isa = PBXGroup;
+			children = (
+				37EAE479121A57D100BF4277 /* BSAddressComponent.h */,
+				37EAE47A121A57D100BF4277 /* BSAddressComponent.m */,
+				37EAE47B121A57D100BF4277 /* BSForwardGeocoder.h */,
+				37EAE47C121A57D100BF4277 /* BSForwardGeocoder.m */,
+				37EAE47F121A57D100BF4277 /* BSGoogleV3KmlParser.h */,
+				37EAE480121A57D100BF4277 /* BSGoogleV3KmlParser.m */,
+				37EAE481121A57D100BF4277 /* BSKmlResult.h */,
+				37EAE482121A57D100BF4277 /* BSKmlResult.m */,
+			);
+			name = "Forward-Geocoding";
+			path = "../../Frameworks/Forward-Geocoding";
+			sourceTree = SOURCE_ROOT;
+		};
 		37FC118F11FFB4FA00C025C9 /* TouchRSS */ = {
 			isa = PBXGroup;
 			children = (
@@ -3102,6 +3132,7 @@
 				37CDD9CD12150651004EC1B7 /* MapViewController.xib in Resources */,
 				374C36B21215E26E006B6ADA /* iPadTabBarController.xib in Resources */,
 				3764E8CB1217B83F008DF726 /* NotesView~ipad.xib in Resources */,
+				37EAE540121A6B4200BF4277 /* 72-pin.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3144,7 +3175,6 @@
 				3737803B11F8082500E36500 /* WnomObj.m in Sources */,
 				370F7AA911FEAF730004AC50 /* PolygonMath.m in Sources */,
 				377ACE4811FFA30E002C7E49 /* CalendarDataSource.m in Sources */,
-				37F800B511FFABAA00970122 /* AddressGeocoder.m in Sources */,
 				376366E611FFB4A70052A2A9 /* CFeedFetcher.m in Sources */,
 				376366E711FFB4A70052A2A9 /* CFeedStore.m in Sources */,
 				376366E811FFB4A70052A2A9 /* CObjectTranscoder.m in Sources */,
@@ -3195,6 +3225,11 @@
 				37BACDFB1218D834000C8E5D /* UIApplication+ScreenMirroring.m in Sources */,
 				378B57AA1219913400F7ED0B /* MapViewController.m in Sources */,
 				378B57BE121994C400F7ED0B /* UIDevice-Hardware.m in Sources */,
+				37EAE4B1121A57D100BF4277 /* BSAddressComponent.m in Sources */,
+				37EAE4B2121A57D100BF4277 /* BSForwardGeocoder.m in Sources */,
+				37EAE4B4121A57D100BF4277 /* BSGoogleV3KmlParser.m in Sources */,
+				37EAE4B5121A57D100BF4277 /* BSKmlResult.m in Sources */,
+				37EAE54F121A6D9A00BF4277 /* DistrictOfficeAnnotation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
