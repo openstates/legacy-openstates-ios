@@ -44,12 +44,12 @@
 }
 
 - (UIImage *)image {
-	if (!self.legislator)
-		return [UIImage imageNamed:@"slider_star.png"];
-	else if ([self.legislator.party_id integerValue] == DEMOCRAT)
+	if (self.legislator && [self.legislator.party_id integerValue] == DEMOCRAT)
 		return [UIImage imageNamed:@"bluestar.png"];
-	else //if ([self.legislator.party_id integerValue] == REPUBLICAN)
+	else if (self.legislator && [self.legislator.party_id integerValue] == REPUBLICAN)
 		return [UIImage imageNamed:@"redstar.png"];
+	else
+		return [UIImage imageNamed:@"silverstar.png"];
 }
 
 // optional
