@@ -9,9 +9,8 @@
 #import <MapKit/MapKit.h>
 #import "BSForwardGeocoder.h"
 #import "BSKmlResult.h"
-#import "DistrictOfficeAnnotation.h"
 
-@class LegislatorObj;
+@class DistrictOfficeObj;
 @interface MapViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate,
 		MKReverseGeocoderDelegate, BSForwardGeocoderDelegate> {
 }
@@ -25,12 +24,11 @@
 @property (nonatomic,retain) MKReverseGeocoder *reverseGeocoder;
 @property (nonatomic,retain) BSForwardGeocoder *forwardGeocoder;
 @property (nonatomic,copy) NSString *addressString;
-@property (nonatomic,retain) LegislatorObj *legislator;
 @property (nonatomic,readonly) MKCoordinateRegion texasRegion;
 
 - (IBAction)changeMapType:(id)sender;
 - (IBAction)locateUser:(id)sender;
 - (IBAction)reverseGeocodeCurrentLocation;
-- (void)setAddressString:(NSString *)string withLegislator:(LegislatorObj *)newLegislator;
+- (void)setAddressString:(NSString *)string;
 
 @end

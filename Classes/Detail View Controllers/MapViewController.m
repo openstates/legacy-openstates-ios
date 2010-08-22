@@ -8,13 +8,13 @@
 #import "MapViewController.h"
 #import "TexLegeTheme.h"
 #import "UtilityMethods.h"
-#import "LegislatorObj.h"
 #import "LegislatorDetailViewController.h"
 #import "DistrictOfficeObj.h"
+#import "CustomAnnotation.h"
 
 @implementation MapViewController
 @synthesize bookmarksButton, mapTypeControl, mapView, userLocationButton, reverseGeocoder;
-@synthesize toolbar, searchBar, forwardGeocoder, addressString, legislator, texasRegion;
+@synthesize toolbar, searchBar, forwardGeocoder, addressString, texasRegion;
 
 #pragma mark -
 #pragma mark Initialization and Memory Management
@@ -48,7 +48,6 @@
 	self.forwardGeocoder = nil;
 	self.searchBar = nil;
 	self.addressString = nil;
-	self.legislator = nil;
 	[super dealloc];
 }
 
@@ -93,14 +92,6 @@
 		// Forward geocode!
 		[forwardGeocoder findLocation:string];
 		
-	}
-}
-
-- (void)setAddressString:(NSString *)string withLegislator:(LegislatorObj *)newLegislator {
-	if (string && newLegislator) {
-		self.legislator = newLegislator;
-
-		self.addressString = string;
 	}
 }
 
@@ -151,19 +142,15 @@
 	
 	if(forwardGeocoder.status == G_GEO_SUCCESS)
 	{
-		int searchResults = [forwardGeocoder.results count];
+		NSInteger searchResults = [forwardGeocoder.results count];
 		
 		// Add placemarks for each result
-		for(int i = 0; i < searchResults; i++)
+		for(NSInteger i = 0; i < searchResults; i++)
 		{
 			BSKmlResult *place = [forwardGeocoder.results objectAtIndex:i];
 			
 			// Add a placemark on the map
-			DistrictOfficeAnnotation *placemark = [[[DistrictOfficeAnnotation alloc] initWithBSKmlResult:place] autorelease];
-			if (self.legislator) {
-				placemark.legislator = self.legislator;
-				self.legislator = nil;
-			}
+			CustomAnnotation *placemark = [[[CustomAnnotation alloc] initWithBSKmlResult:place] autorelease];
 			[mapView addAnnotation:placemark];	
 		}
 		
@@ -278,11 +265,24 @@
 	
 	MKAnnotationView *lastView = [views lastObject];
 	id<MKAnnotation> lastAnnotation = lastView.annotation;
+	MKCoordinateRegion region;
 	
 	if (lastAnnotation) {
 		if ([lastAnnotation isKindOfClass:[DistrictOfficeObj class]]) {
 			DistrictOfficeObj *obj = lastAnnotation;
-			[self.mapView setRegion:obj.region animated:TRUE];
+			region = [obj region];
+			[self.mapView setRegion:region animated:TRUE];
+		}
+		else if ([lastAnnotation isKindOfClass:[CustomAnnotation class]]) {
+			CustomAnnotation *obj = lastAnnotation;
+			region = [obj region];
+			[self.mapView setRegion:region animated:TRUE];
+		}
+		else {
+			MKCoordinateSpan span = {2.f,2.f};
+			
+			MKCoordinateRegion region = MKCoordinateRegionMake(lastAnnotation.coordinate, span);
+			[self.mapView setRegion:region animated:TRUE];
 		}
 
 		[self.mapView selectAnnotation:lastAnnotation animated:YES];
@@ -330,14 +330,18 @@
 #pragma mark -
 #pragma mark MKMapViewDelegate
 
-- (void)showDetails:(id)sender
+- (void)showLegislatorDetails:(LegislatorObj *)legislator
 {
     // the detail view does not want a toolbar so hide it
     //[self.navigationController setToolbarHidden:YES animated:NO];
     
    //[self.navigationController pushViewController:self.detailViewController animated:YES];
+	
+	if (!legislator)
+		return;
+
 	LegislatorDetailViewController *legVC = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
-	legVC.legislator = self.legislator;
+	legVC.legislator = legislator;
 	[self.navigationController pushViewController:legVC animated:YES];
 	[legVC release];
 }
@@ -356,6 +360,18 @@
 	
 	if (lastAnnotation)
 		[mapView selectAnnotation:lastAnnotation animated:YES];
+}
+
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
+	id <MKAnnotation> annotation = view.annotation;
+	
+	if ([annotation isKindOfClass:[DistrictOfficeObj class]]) // for Golden Gate Bridge
+    {
+		DistrictOfficeObj *districtOffice = (DistrictOfficeObj *)annotation;
+		
+		if (districtOffice && districtOffice.legislator)
+			[self showLegislatorDetails:districtOffice.legislator];
+	}		
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation
@@ -383,72 +399,45 @@
             customPinView.animatesDrop = YES;
             customPinView.canShowCallout = YES;
             
-            // add a detail disclosure button to the callout which will open a new view controller page
-            //
-            // note: you can assign a specific call out accessory view, or as MKMapViewDelegate you can implement:
-            //  - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control;
-            //
             UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-            [rightButton addTarget:self
-                            action:@selector(showDetails:)
-                  forControlEvents:UIControlEventTouchUpInside];
+            //[rightButton addTarget:self action:@selector(showLegislatorDetails:) forControlEvents:UIControlEventTouchUpInside];
+			
             customPinView.rightCalloutAccessoryView = rightButton;
 			
-			UIImageView *photoView = [[UIImageView alloc] initWithImage:[districtOffice image]];
-			/*CGRect bounds = customPinView.bounds;
-			bounds.size.height = photoView.bounds.size.height;
-			
-			customPinView.bounds = bounds;*/
-            customPinView.leftCalloutAccessoryView = photoView;
-            [photoView release];
+			UIImageView *iconView = [[UIImageView alloc] initWithImage:[districtOffice image]];
+            customPinView.leftCalloutAccessoryView = iconView;
+            [iconView release];
 			
             return customPinView;
         }
         else
         {
             pinView.annotation = annotation;
-        }
+        }		
+		
+		[pinView addObserver:self forKeyPath:@"selected" options:NSKeyValueObservingOptionNew context:@"GMAP_ANNOTATION_SELECTED"];
+		
         return pinView;
     }
-/*  
-	if ([annotation isKindOfClass:[CustomPlacemark class]])   // for City of San Francisco
+  
+	if ([annotation isKindOfClass:[CustomAnnotation class]])  
     {
-        static NSString* legislatorAnnotationIdentifier = @"legislatorAnnotationIdentifier";
+		CustomAnnotation *customAnotation = (CustomAnnotation *)annotation;
+
+        static NSString* customAnnotationIdentifier = @"customAnnotationIdentifier";
         MKPinAnnotationView* pinView =
-		(MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:legislatorAnnotationIdentifier];
+		(MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:customAnnotationIdentifier];
         if (!pinView)
         {
-            MKAnnotationView *annotationView = [[[MKAnnotationView alloc] initWithAnnotation:annotation
-                                                                             reuseIdentifier:legislatorAnnotationIdentifier] autorelease];
+            MKPinAnnotationView *annotationView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation
+                                                                             reuseIdentifier:customAnnotationIdentifier] autorelease];
             annotationView.canShowCallout = YES;
-			
-            UIImage *flagImage = [UIImage imageNamed:@"72-pin.png"];
-            
-            CGRect resizeRect;
-            
-            resizeRect.size = flagImage.size;
-            CGSize maxSize = CGRectInset(self.view.bounds,
-                                         [MapViewController annotationPadding],
-                                         [MapViewController annotationPadding]).size;
-            maxSize.height -= self.navigationController.navigationBar.frame.size.height + [MapViewController calloutHeight];
-            if (resizeRect.size.width > maxSize.width)
-                resizeRect.size = CGSizeMake(maxSize.width, resizeRect.size.height / resizeRect.size.width * maxSize.width);
-            if (resizeRect.size.height > maxSize.height)
-                resizeRect.size = CGSizeMake(resizeRect.size.width / resizeRect.size.height * maxSize.height, maxSize.height);
-            
-            resizeRect.origin = (CGPoint){0.0f, 0.0f};
-            UIGraphicsBeginImageContext(resizeRect.size);
-            [flagImage drawInRect:resizeRect];
-            UIImage *resizedImage = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            
-            annotationView.image = resizedImage;
-			
+            annotationView.pinColor = [[customAnotation pinColorIndex] integerValue];
             annotationView.opaque = NO;
 			
-            UIImageView *sfIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"anchia.png"]];
-            annotationView.leftCalloutAccessoryView = sfIconView;
-            [sfIconView release];
+			UIImageView *iconView = [[UIImageView alloc] initWithImage:[customAnotation image]];
+            annotationView.leftCalloutAccessoryView = iconView;
+            [iconView release];
             
             return annotationView;
         }
@@ -458,10 +447,10 @@
         }
         return pinView;
     }
- */  
+   
     return nil;
 }
-/*
+
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
 					  ofObject:(id)object
@@ -470,22 +459,36 @@
 	
 	NSString *action = (NSString*)context;
 	
-	
+	debug_NSLog(@"something");
 	if([action isEqualToString:@"GMAP_ANNOTATION_SELECTED"]) 
-	{
-		if([((MKAnnotationView*) object).annotation isKindOfClass:[CustomPlacemark class]])
-		{
-			CustomPlacemark *place = ((MKAnnotationView*) object).annotation;
+	{				
+		if ([object respondsToSelector:@selector(annotation)]) {
+			id<MKAnnotation> annotation = [object performSelector:@selector(annotation)];
+			if (!annotation)
+				return;
 			
-			// Zoom into the location		
-			[mapView setRegion:place.coordinateRegion animated:TRUE];
-			debug_NSLog(@"annotation selected %f, %f", ((MKAnnotationView*) object).annotation.coordinate.latitude, ((MKAnnotationView*) object).annotation.coordinate.longitude);
+			MKCoordinateRegion region;
+			if ([annotation isKindOfClass:[DistrictOfficeObj class]]) {
+				DistrictOfficeObj *obj = annotation;
+				region = [obj region];
+			}
+			else if ([annotation isKindOfClass:[CustomAnnotation class]]) {
+				CustomAnnotation *obj = annotation;
+				region = [obj region];
+			}
+			else {
+				MKCoordinateSpan span = {2.f,2.f};
+				region = MKCoordinateRegionMake(annotation.coordinate, span);
+			}
+			[self.mapView setRegion:region animated:TRUE];
+
+			debug_NSLog(@"annotation selected %f, %f", annotation.coordinate.latitude, annotation.coordinate.longitude);
 		}
 	}
 }
 
 
-*/
+
 
 #pragma mark -
 #pragma mark Map Movement
