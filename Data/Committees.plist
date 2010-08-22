@@ -3416,7 +3416,7 @@
 	</dict>
 	<dict>
 		<key>committeeId</key>
-		<integer>11394</integer>
+		<integer>15354</integer>
 		<key>committeeName</key>
 		<string>Administration</string>
 		<key>committeeType</key>
@@ -3551,7 +3551,7 @@
 		<array>
 			<dict>
 				<key>memberId</key>
-				<integer>9952</integer>
+				<integer>5475</integer>
 				<key>memberPos</key>
 				<integer>2</integer>
 			</dict>
@@ -3560,12 +3560,6 @@
 				<integer>5442</integer>
 				<key>memberPos</key>
 				<integer>1</integer>
-			</dict>
-			<dict>
-				<key>memberId</key>
-				<integer>5470</integer>
-				<key>memberPos</key>
-				<integer>0</integer>
 			</dict>
 			<dict>
 				<key>memberId</key>
@@ -3628,7 +3622,7 @@
 		<array>
 			<dict>
 				<key>memberId</key>
-				<integer>5470</integer>
+				<integer>127373</integer>
 				<key>memberPos</key>
 				<integer>0</integer>
 			</dict>
@@ -3843,7 +3837,7 @@
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>49550</integer>
+				<integer>110896</integer>
 				<key>memberPos</key>
 				<integer>1</integer>
 			</dict>
@@ -3902,7 +3896,7 @@
 		<array>
 			<dict>
 				<key>memberId</key>
-				<integer>5442</integer>
+				<integer>5533</integer>
 				<key>memberPos</key>
 				<integer>2</integer>
 			</dict>
@@ -3914,7 +3908,7 @@
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>49358</integer>
+				<integer>127373</integer>
 				<key>memberPos</key>
 				<integer>0</integer>
 			</dict>
@@ -3964,12 +3958,6 @@
 				<integer>57986</integer>
 				<key>memberPos</key>
 				<integer>1</integer>
-			</dict>
-			<dict>
-				<key>memberId</key>
-				<integer>5470</integer>
-				<key>memberPos</key>
-				<integer>0</integer>
 			</dict>
 			<dict>
 				<key>memberId</key>
@@ -4044,12 +4032,6 @@
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>5470</integer>
-				<key>memberPos</key>
-				<integer>0</integer>
-			</dict>
-			<dict>
-				<key>memberId</key>
 				<integer>49358</integer>
 				<key>memberPos</key>
 				<integer>0</integer>
@@ -4067,10 +4049,10 @@
 				<integer>0</integer>
 			</dict>
 			<dict>
-				<key>memberId</key>
-				<integer>5442</integer>
 				<key>memberPos</key>
 				<integer>0</integer>
+				<key>memberId</key>
+				<integer>49388</integer>
 			</dict>
 			<dict>
 				<key>memberId</key>
@@ -4157,7 +4139,7 @@
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>110896</integer>
+				<integer>127373</integer>
 				<key>memberPos</key>
 				<integer>0</integer>
 			</dict>
@@ -4287,19 +4269,31 @@
 		<array>
 			<dict>
 				<key>memberId</key>
+				<integer>57991</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
+				<integer>5463</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
 				<integer>5465</integer>
 				<key>memberPos</key>
 				<integer>2</integer>
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>57986</integer>
+				<integer>110896</integer>
 				<key>memberPos</key>
 				<integer>1</integer>
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>5470</integer>
+				<integer>127373</integer>
 				<key>memberPos</key>
 				<integer>0</integer>
 			</dict>
@@ -4311,7 +4305,7 @@
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>5463</integer>
+				<integer>5442</integer>
 				<key>memberPos</key>
 				<integer>0</integer>
 			</dict>
@@ -4399,25 +4393,25 @@
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>49550</integer>
+				<integer>108093</integer>
 				<key>memberPos</key>
 				<integer>1</integer>
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>108093</integer>
-				<key>memberPos</key>
-				<integer>0</integer>
-			</dict>
-			<dict>
-				<key>memberId</key>
-				<integer>49388</integer>
-				<key>memberPos</key>
-				<integer>0</integer>
-			</dict>
-			<dict>
-				<key>memberId</key>
 				<integer>9952</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
+				<integer>49550</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
+				<integer>9968</integer>
 				<key>memberPos</key>
 				<integer>0</integer>
 			</dict>
@@ -4458,7 +4452,7 @@
 		<array>
 			<dict>
 				<key>memberId</key>
-				<integer>5462</integer>
+				<integer>5442</integer>
 				<key>memberPos</key>
 				<integer>2</integer>
 			</dict>
@@ -4482,19 +4476,19 @@
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>5442</integer>
-				<key>memberPos</key>
-				<integer>0</integer>
-			</dict>
-			<dict>
-				<key>memberId</key>
 				<integer>10049</integer>
 				<key>memberPos</key>
 				<integer>0</integer>
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>57991</integer>
+				<integer>110896</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
+				<integer>15218</integer>
 				<key>memberPos</key>
 				<integer>0</integer>
 			</dict>
@@ -4523,7 +4517,7 @@
 		<array>
 			<dict>
 				<key>memberId</key>
-				<integer>5470</integer>
+				<integer>9952</integer>
 				<key>memberPos</key>
 				<integer>2</integer>
 			</dict>
@@ -4553,13 +4547,13 @@
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>9952</integer>
+				<integer>49274</integer>
 				<key>memberPos</key>
 				<integer>0</integer>
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>49274</integer>
+				<integer>59338</integer>
 				<key>memberPos</key>
 				<integer>0</integer>
 			</dict>
@@ -4612,19 +4606,19 @@
 		<array>
 			<dict>
 				<key>memberId</key>
-				<integer>5533</integer>
+				<integer>49358</integer>
 				<key>memberPos</key>
 				<integer>2</integer>
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>15354</integer>
+				<integer>49274</integer>
 				<key>memberPos</key>
 				<integer>1</integer>
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>49274</integer>
+				<integer>9952</integer>
 				<key>memberPos</key>
 				<integer>0</integer>
 			</dict>
@@ -4737,47 +4731,6 @@
 	</dict>
 	<dict>
 		<key>committeeId</key>
-		<integer>12298</integer>
-		<key>committeeName</key>
-		<string>Subcommittee on Base Realignment and Closure</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>clerk</key>
-		<string>David Edmonson</string>
-		<key>clerk_email</key>
-		<string>David.Edmonson_sc@senate.state.tx.us</string>
-		<key>office</key>
-		<string>SHB 460</string>
-		<key>phone</key>
-		<string>512-463-4779</string>
-		<key>members</key>
-		<array>
-			<dict>
-				<key>memberId</key>
-				<integer>9968</integer>
-				<key>memberPos</key>
-				<integer>2</integer>
-			</dict>
-			<dict>
-				<key>memberId</key>
-				<integer>49388</integer>
-				<key>memberPos</key>
-				<integer>0</integer>
-			</dict>
-			<dict>
-				<key>memberId</key>
-				<integer>110896</integer>
-				<key>memberPos</key>
-				<integer>0</integer>
-			</dict>
-		</array>
-		<key>parentId</key>
-		<integer>11410</integer>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C655</string>
-	</dict>
-	<dict>
-		<key>committeeId</key>
 		<integer>12297</integer>
 		<key>committeeName</key>
 		<string>Subcommittee on Flooding and Evacuations</string>
@@ -4836,7 +4789,7 @@
 		<array>
 			<dict>
 				<key>memberId</key>
-				<integer>5475</integer>
+				<integer>9962</integer>
 				<key>memberPos</key>
 				<integer>2</integer>
 			</dict>
@@ -4913,15 +4866,27 @@
 		<array>
 			<dict>
 				<key>memberId</key>
+				<integer>9968</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
 				<integer>8021</integer>
 				<key>memberPos</key>
 				<integer>2</integer>
 			</dict>
 			<dict>
 				<key>memberId</key>
-				<integer>9968</integer>
+				<integer>5462</integer>
 				<key>memberPos</key>
 				<integer>1</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
+				<integer>127373</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
 			</dict>
 			<dict>
 				<key>memberId</key>
@@ -4935,17 +4900,100 @@
 				<key>memberPos</key>
 				<integer>0</integer>
 			</dict>
+		</array>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C650</string>
+	</dict>
+	<dict>
+		<key>members</key>
+		<array>
+			<dict>
+				<key>memberId</key>
+				<integer>5465</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
+				<integer>9962</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
+				<integer>5463</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
+				<integer>57986</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
+			</dict>
 			<dict>
 				<key>memberId</key>
 				<integer>110896</integer>
 				<key>memberPos</key>
 				<integer>0</integer>
 			</dict>
+			<dict>
+				<key>memberId</key>
+				<integer>10049</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
+				<integer>49388</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
+				<integer>15354</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
+				<integer>5475</integer>
+				<key>memberPos</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
+				<integer>5440</integer>
+				<key>memberPos</key>
+				<integer>1</integer>
+			</dict>
+			<dict>
+				<key>memberId</key>
+				<integer>49550</integer>
+				<key>memberPos</key>
+				<integer>2</integer>
+			</dict>
 		</array>
+		<key>url</key>
+		<string>http://www.legis.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C625</string>
 		<key>parentId</key>
 		<integer>-1</integer>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C650</string>
+		<key>phone</key>
+		<string>512-463-8802</string>
+		<key>office</key>
+		<string>SHB 460</string>
+		<key>clerk_email</key>
+		<string>Stephanie.Hoover_sc@senate.state.tx.us</string>
+		<key>clerk</key>
+		<string>Stephanie Hoover</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>committeeName</key>
+		<string>Redistricting</string>
+		<key>committeeId</key>
+		<integer>29999</integer>
 	</dict>
 </array>
 </plist>

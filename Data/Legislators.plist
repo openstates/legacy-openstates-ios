@@ -298,7 +298,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0674</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -666,7 +666,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0652</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -1310,7 +1310,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0668</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -1862,7 +1862,7 @@
 		<key>dist1_phone</key>
 		<string>214-565-5680</string>
 		<key>dist1_street</key>
-		<string>1409 South Lamar #005</string>
+		<string>1409 S Lamar St, #5</string>
 		<key>dist1_zip</key>
 		<string>75215</string>
 		<key>dist2_city</key>
@@ -1954,7 +1954,7 @@
 		<key>dist1_phone</key>
 		<string>512-481-0506</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -2230,7 +2230,7 @@
 		<key>dist1_phone</key>
 		<string>713-627-0134</string>
 		<key>dist1_street</key>
-		<string>1535 West Loop South, #320</string>
+		<string>1535 West Loop S, #320</string>
 		<key>dist1_zip</key>
 		<string>77027</string>
 		<key>dist2_city</key>
@@ -2322,7 +2322,7 @@
 		<key>dist1_phone</key>
 		<string>713-633-3390</string>
 		<key>dist1_street</key>
-		<string>10527 Homestead Road</string>
+		<string>10527 Homestead Rd</string>
 		<key>dist1_zip</key>
 		<string>77016</string>
 		<key>dist2_city</key>
@@ -2414,7 +2414,7 @@
 		<key>dist1_phone</key>
 		<string>956-447-9473</string>
 		<key>dist1_street</key>
-		<string>800 West Railroad Street, Room H-111</string>
+		<string>800 W Railroad St, #H111</string>
 		<key>dist1_zip</key>
 		<string>78596</string>
 		<key>dist2_city</key>
@@ -2700,7 +2700,7 @@
 		<key>dist2_phone</key>
 		<string>361-661-1145</string>
 		<key>dist2_street</key>
-		<string>700 East Third Street</string>
+		<string>700 E 3rd St</string>
 		<key>dist2_zip</key>
 		<string>78332</string>
 		<key>dist3_city</key>
@@ -2782,7 +2782,7 @@
 		<key>dist1_phone</key>
 		<string>832-252-7336</string>
 		<key>dist1_street</key>
-		<string>7011 Harwin, #230</string>
+		<string>7011 Harwin Dr, #230</string>
 		<key>dist1_zip</key>
 		<string>77036</string>
 		<key>dist2_city</key>
@@ -3334,7 +3334,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0631</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -3610,7 +3610,7 @@
 		<key>dist1_phone</key>
 		<string>210-673-3579</string>
 		<key>dist1_street</key>
-		<string>7121 United States Highway 90 West, #240</string>
+		<string>7121 W US Highway 90, #240</string>
 		<key>dist1_zip</key>
 		<string>78227</string>
 		<key>dist2_city</key>
@@ -3794,7 +3794,7 @@
 		<key>dist1_phone</key>
 		<string>956-584-8999</string>
 		<key>dist1_street</key>
-		<string>141 East Tom Landry</string>
+		<string>141 E Tom Landry St</string>
 		<key>dist1_zip</key>
 		<string>78572</string>
 		<key>dist2_city</key>
@@ -3886,7 +3886,7 @@
 		<key>dist1_phone</key>
 		<string>956-753-7722</string>
 		<key>dist1_street</key>
-		<string>1110 Houston Street, Third Floor</string>
+		<string>1110 Houston Street</string>
 		<key>dist1_zip</key>
 		<string>78040</string>
 		<key>dist2_city</key>
@@ -3978,7 +3978,7 @@
 		<key>dist1_phone</key>
 		<string>409-724-0788</string>
 		<key>dist1_street</key>
-		<string>One Plaza Square, #203</string>
+		<string>1 Plaza Square, #203</string>
 		<key>dist1_zip</key>
 		<string>77642</string>
 		<key>dist2_city</key>
@@ -4070,7 +4070,7 @@
 		<key>dist1_phone</key>
 		<string>956-361-2795</string>
 		<key>dist1_street</key>
-		<string>2402 West Bus Highway 77, #I</string>
+		<string>2402 U.S. 77 Business, #I</string>
 		<key>dist1_zip</key>
 		<string>78586</string>
 		<key>dist2_city</key>
@@ -4254,7 +4254,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0821</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -4438,7 +4438,7 @@
 		<key>dist1_phone</key>
 		<string>915-859-3111</string>
 		<key>dist1_street</key>
-		<string>120 North Horizon, #112A</string>
+		<string>120 Horizon Blvd, #112A</string>
 		<key>dist1_zip</key>
 		<string>79927</string>
 		<key>dist2_city</key>
@@ -4632,7 +4632,7 @@
 		<key>dist2_phone</key>
 		<string>361-279-7344</string>
 		<key>dist2_street</key>
-		<string>400 East Gravis, Box 332</string>
+		<string>400 East Gravis Ave, #332</string>
 		<key>dist2_zip</key>
 		<string>78384</string>
 		<key>dist3_city</key>
@@ -5634,7 +5634,7 @@
 		<key>dist1_phone</key>
 		<string>972-264-4231</string>
 		<key>dist1_street</key>
-		<string>2426 South Carrier Parkway, #106</string>
+		<string>2426 S Carrier Pkwy, #106</string>
 		<key>dist1_zip</key>
 		<string>75052</string>
 		<key>dist2_city</key>
@@ -5726,7 +5726,7 @@
 		<key>dist1_phone</key>
 		<string>806-763-4468</string>
 		<key>dist1_street</key>
-		<string>5609-A Villa Drive</string>
+		<string>5609 Villa Drive</string>
 		<key>dist1_zip</key>
 		<string>79412</string>
 		<key>dist2_city</key>
@@ -5818,7 +5818,7 @@
 		<key>dist1_phone</key>
 		<string>817-738-8333</string>
 		<key>dist1_street</key>
-		<string>1011 Roberts Cutoff</string>
+		<string>1011 Roberts Cut Off Rd</string>
 		<key>dist1_zip</key>
 		<string>76114</string>
 		<key>dist2_city</key>
@@ -5910,7 +5910,7 @@
 		<key>dist1_phone</key>
 		<string>903-238-9100</string>
 		<key>dist1_street</key>
-		<string>201 Estes Drive</string>
+		<string>201 Estes Dr</string>
 		<key>dist1_zip</key>
 		<string>75602</string>
 		<key>dist2_city</key>
@@ -6092,11 +6092,11 @@
 		<key>dist1_fax</key>
 		<string></string>
 		<key>dist1_phone</key>
-		<string></string>
+		<string>972-490-5400</string>
 		<key>dist1_street</key>
-		<string></string>
+		<string>Post Office Box 1767</string>
 		<key>dist1_zip</key>
-		<string></string>
+		<string>75026</string>
 		<key>dist2_city</key>
 		<string></string>
 		<key>dist2_fax</key>
@@ -6370,7 +6370,7 @@
 		<key>dist1_phone</key>
 		<string>912-463-0686</string>
 		<key>dist1_street</key>
-		<string>7373 Broadway, #202A</string>
+		<string>7373 Broadway St, #202A</string>
 		<key>dist1_zip</key>
 		<string>78209</string>
 		<key>dist2_city</key>
@@ -6462,7 +6462,7 @@
 		<key>dist1_phone</key>
 		<string>940-553-3825</string>
 		<key>dist1_street</key>
-		<string>1930 Fannin Street</string>
+		<string>1930 Fannin St</string>
 		<key>dist1_zip</key>
 		<string>76384</string>
 		<key>dist2_city</key>
@@ -6656,7 +6656,7 @@
 		<key>dist2_phone</key>
 		<string>903-569-8880</string>
 		<key>dist2_street</key>
-		<string>701 North Pacific Avenue, Post Office Box 450</string>
+		<string>701 North Pacific Avenue, #450</string>
 		<key>dist2_zip</key>
 		<string>75773</string>
 		<key>dist3_city</key>
@@ -7290,7 +7290,7 @@
 		<key>dist1_phone</key>
 		<string>830-257-2333</string>
 		<key>dist1_street</key>
-		<string>125 Lehmann Drive, #201</string>
+		<string>125 N Lehmann Dr, #201</string>
 		<key>dist1_zip</key>
 		<string>78028</string>
 		<key>dist2_city</key>
@@ -7566,7 +7566,7 @@
 		<key>dist1_phone</key>
 		<string>806-374-8787</string>
 		<key>dist1_street</key>
-		<string>600 South Tyler, Lobby Box 12013</string>
+		<string>600 South Tyler, #12013</string>
 		<key>dist1_zip</key>
 		<string>79101</string>
 		<key>dist2_city</key>
@@ -8302,7 +8302,7 @@
 		<key>dist1_phone</key>
 		<string>936-539-0028</string>
 		<key>dist1_street</key>
-		<string>326 1/2 Main Street</string>
+		<string>326 North Main Street</string>
 		<key>dist1_zip</key>
 		<string>77301</string>
 		<key>dist2_city</key>
@@ -8486,7 +8486,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0309</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -10234,7 +10234,7 @@
 		<key>dist1_phone</key>
 		<string>806-763-2366</string>
 		<key>dist1_street</key>
-		<string>1001 Main Street, #608</string>
+		<string>1001 Main St, #608</string>
 		<key>dist1_zip</key>
 		<string>79401</string>
 		<key>dist2_city</key>
@@ -11706,7 +11706,7 @@
 		<key>dist1_phone</key>
 		<string>713-649-6563</string>
 		<key>dist1_street</key>
-		<string>8145 Park Place, #100</string>
+		<string>8145 Park Place Blvd, #100</string>
 		<key>dist1_zip</key>
 		<string>77017</string>
 		<key>dist2_city</key>
@@ -11798,7 +11798,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0486</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -11890,7 +11890,7 @@
 		<key>dist1_phone</key>
 		<string>432-682-3000</string>
 		<key>dist1_street</key>
-		<string>500 West Texas, #880</string>
+		<string>500 W Texas Ave, #880</string>
 		<key>dist1_zip</key>
 		<string>79701</string>
 		<key>dist2_city</key>
@@ -11982,7 +11982,7 @@
 		<key>dist1_phone</key>
 		<string>713-741-8800</string>
 		<key>dist1_street</key>
-		<string>4913 Griggs Groad</string>
+		<string>4913 Griggs Road</string>
 		<key>dist1_zip</key>
 		<string>77021</string>
 		<key>dist2_city</key>
@@ -12074,7 +12074,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0661</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -12160,13 +12160,13 @@
 		<key>cap_phone2_name</key>
 		<string></string>
 		<key>dist1_city</key>
-		<string>San Antonio</string>
+		<string>Brooks City Base</string>
 		<key>dist1_fax</key>
 		<string></string>
 		<key>dist1_phone</key>
 		<string>210-532-2758</string>
 		<key>dist1_street</key>
-		<string>3319 Sidney Brooks, Building 510, #2</string>
+		<string>3319 Sidney Brooks, #510-2</string>
 		<key>dist1_zip</key>
 		<string>78235</string>
 		<key>dist2_city</key>
@@ -12258,7 +12258,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0672</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -12442,7 +12442,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0682</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -12534,7 +12534,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0460</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -13454,7 +13454,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0514</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -13546,7 +13546,7 @@
 		<key>dist1_phone</key>
 		<string>817-478-5096</string>
 		<key>dist1_street</key>
-		<string>5840 West I-20, #110</string>
+		<string>5840 Interstate 20 W, #110</string>
 		<key>dist1_zip</key>
 		<string>76017</string>
 		<key>dist2_city</key>
@@ -13638,7 +13638,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0924</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -13730,7 +13730,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0707</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Ave</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -13804,7 +13804,7 @@
 	</dict>
 	<dict>
 		<key>bio_url</key>
-		<string>http://votesmart.org/bio.php?can_id=5470</string>
+		<string>http://votesmart.org/bio.php?can_id=127373</string>
 		<key>cap_fax</key>
 		<string></string>
 		<key>cap_office</key>
@@ -13818,23 +13818,23 @@
 		<key>dist1_city</key>
 		<string>Waco</string>
 		<key>dist1_fax</key>
-		<string></string>
+		<string>254-776-2843</string>
 		<key>dist1_phone</key>
 		<string>254-772-6225</string>
 		<key>dist1_street</key>
-		<string>400 Austin Avenue, #303</string>
+		<string>900 Austin Avenue, #403</string>
 		<key>dist1_zip</key>
 		<string>76701</string>
 		<key>dist2_city</key>
-		<string>Granbury</string>
+		<string></string>
 		<key>dist2_fax</key>
-		<string>817-579-7172</string>
+		<string></string>
 		<key>dist2_phone</key>
-		<string>817-573-9622</string>
+		<string></string>
 		<key>dist2_street</key>
-		<string>1100 East Highway 377, #103</string>
+		<string></string>
 		<key>dist2_zip</key>
-		<string>76048</string>
+		<string></string>
 		<key>dist3_city</key>
 		<string></string>
 		<key>dist3_fax</key>
@@ -13858,15 +13858,15 @@
 		<key>district</key>
 		<integer>22</integer>
 		<key>email</key>
-		<string>kip.averitt@senate.state.tx.us</string>
+		<string>brian.birdwell@senate.state.tx.us</string>
 		<key>firstname</key>
-		<string>Kip</string>
+		<string>Brian</string>
 		<key>chamber_desk</key>
 		<string>4L</string>
 		<key>lastname</key>
-		<string>Averitt</string>
+		<string>Birdwell</string>
 		<key>legislatorID</key>
-		<integer>5470</integer>
+		<integer>127373</integer>
 		<key>legtype</key>
 		<integer>2</integer>
 		<key>legtype_name</key>
@@ -13878,19 +13878,19 @@
 		<key>notes</key>
 		<string></string>
 		<key>partisan_index</key>
-		<real>0.0567</real>
+		<real>0</real>
 		<key>party_id</key>
 		<integer>2</integer>
 		<key>party_name</key>
 		<string>Republican</string>
 		<key>photo_name</key>
-		<string>Averitt.png</string>
+		<string>birdwell.png</string>
 		<key>staff</key>
-		<string>Heather Harward</string>
+		<string>Casey Kelley</string>
 		<key>suffix</key>
 		<string></string>
 		<key>tenure</key>
-		<integer>7</integer>
+		<integer>0</integer>
 		<key>twitter</key>
 		<string></string>
 	</dict>
@@ -13914,7 +13914,7 @@
 		<key>dist1_phone</key>
 		<string>214-378-5751</string>
 		<key>dist1_street</key>
-		<string>8080 North Central Expressway, #1440-LB44</string>
+		<string>8080 North Central Expressway, #1440</string>
 		<key>dist1_zip</key>
 		<string>75206</string>
 		<key>dist2_city</key>
@@ -14006,7 +14006,7 @@
 		<key>dist1_phone</key>
 		<string>512-462-0110</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Avenue</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -14926,7 +14926,7 @@
 		<key>dist1_phone</key>
 		<string>361-225-1200</string>
 		<key>dist1_street</key>
-		<string>2820 S.P.I.D., #291</string>
+		<string>2820 South Padre Island Drive, #291</string>
 		<key>dist1_zip</key>
 		<string>78415</string>
 		<key>dist2_city</key>
@@ -15018,7 +15018,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0117</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Avenue</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -15406,7 +15406,7 @@
 		<key>dist3_phone1</key>
 		<string>936-699-4988</string>
 		<key>dist3_street</key>
-		<string>4100 South Medford Drive, #B-2</string>
+		<string>4100 South Medford Drive, #B2</string>
 		<key>dist3_zip</key>
 		<string>75901</string>
 		<key>dist4_city</key>
@@ -15416,7 +15416,7 @@
 		<key>dist4_phone1</key>
 		<string>936-756-5168</string>
 		<key>dist4_street</key>
-		<string>2040 North Loop 336 West, #107-Box-7</string>
+		<string>2040 North Loop 336 West, #107</string>
 		<key>dist4_zip</key>
 		<string>77304</string>
 		<key>district</key>
@@ -16122,7 +16122,7 @@
 		<key>dist1_phone</key>
 		<string>512-463-0114</string>
 		<key>dist1_street</key>
-		<string>1100 Congress Avenue</string>
+		<string>1100 N Congress Ave</string>
 		<key>dist1_zip</key>
 		<string>78701</string>
 		<key>dist2_city</key>
@@ -16214,7 +16214,7 @@
 		<key>dist1_phone</key>
 		<string>210-826-7800</string>
 		<key>dist1_street</key>
-		<string>925 North Frost Center</string>
+		<string>1250 NE Loop 410, #925 North Frost Center</string>
 		<key>dist1_zip</key>
 		<string>78209</string>
 		<key>dist2_city</key>
@@ -16500,7 +16500,7 @@
 		<key>dist2_phone</key>
 		<string>409-896-2350</string>
 		<key>dist2_street</key>
-		<string>2825 Interstate Highway-10 East, #100</string>
+		<string>2825 Interstate 10 E, #100</string>
 		<key>dist2_zip</key>
 		<string>77702</string>
 		<key>dist3_city</key>
