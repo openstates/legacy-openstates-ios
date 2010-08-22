@@ -19,5 +19,6 @@
 - (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context;
 - (void)runLoadView;
 - (Class)dataSourceClass;
-
+- (IBAction)selectDefaultObject:(id)sender;
+- (id)firstDataObject;
 @end

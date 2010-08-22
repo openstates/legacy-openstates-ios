@@ -8,6 +8,8 @@
 
 #import "TableDataSourceProtocol.h"
 #import "CommitteeDetailViewController.h"
+#import "CommitteeMasterViewController.h"
+
 #import "CommitteeObj.h"
 #import "LegislatorObj.h"
 #import "UtilityMethods.h"
@@ -83,20 +85,8 @@ enum InfoSectionRows {
 		// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
 	if (self.committee == nil && ![UtilityMethods isLandscapeOrientation])  {
 		
-		id masterVC = [appDelegate currentMasterViewController];
-		
-		if ([masterVC respondsToSelector:@selector(selectObjectOnAppear)])
-			self.committee = [masterVC performSelector:@selector(selectObjectOnAppear)];
-		
-		if (!self.committee) {
-			NSString *vcKey = [appDelegate currentMasterViewControllerKey];
-			NSManagedObjectID *objectID = [appDelegate savedTableSelectionForKey:vcKey];
-			if (objectID)
-				self.committee = (CommitteeObj *)[[[masterVC valueForKey:@"dataSource"] managedObjectContext] objectWithID:objectID];
-			
-//			if (!self.committee && [masterVC respondsToSelector:@selector(selectDefaultObject:)])
-//				[masterVC performSelector:@selector(selectDefaultObject:)];				
-		}
+		self.committee = [[appDelegate committeeMasterVC] selectObjectOnAppear];		
+
 	}
 	
 	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];

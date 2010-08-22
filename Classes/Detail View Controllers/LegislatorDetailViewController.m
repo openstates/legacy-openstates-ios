@@ -8,6 +8,7 @@
 
 #import "TableDataSourceProtocol.h"
 #import "LegislatorDetailViewController.h"
+#import "LegislatorMasterViewController.h"
 #import "LegislatorObj.h"
 #import "DistrictOfficeObj.h"
 #import "CommitteeObj.h"
@@ -223,25 +224,13 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 	BOOL showSplash = ([UtilityMethods isLandscapeOrientation] == NO && [UtilityMethods isIPadDevice]);
-	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 
-	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
-	if (!self.legislator && ![UtilityMethods isLandscapeOrientation])  {
-		id masterVC = [appDelegate currentMasterViewController];
-					   
-		if ([masterVC respondsToSelector:@selector(selectObjectOnAppear)])
-			self.legislator = [masterVC performSelector:@selector(selectObjectOnAppear)];
-
-		if (!self.legislator) {
-			NSString *vcKey = [appDelegate currentMasterViewControllerKey];
-			NSManagedObjectID *objectID = [appDelegate savedTableSelectionForKey:vcKey];
-			if (objectID)
-				self.legislator = (LegislatorObj *)[[[masterVC valueForKey:@"dataSource"] managedObjectContext] objectWithID:objectID];
-			
-			//if (!self.legislator && [masterVC respondsToSelector:@selector(selectDefaultObject:)])
-			//		[masterVC performSelector:@selector(selectDefaultObject:)];
-		}
+	if ([UtilityMethods isIPadDevice] && !self.legislator && ![UtilityMethods isLandscapeOrientation])  {
+		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+				
+		self.legislator = [[appDelegate legislatorMasterVC] selectObjectOnAppear];		
 	}
+	
 	
 	if (self.legislator) {
 		showSplash = NO;
@@ -414,7 +403,7 @@
 	[cellInfo release], cellInfo = nil;
 	
 	
-	if (self.legislator.twitter.length > 0) {
+	if (self.legislator && self.legislator.twitter && [self.legislator.twitter length]) {
 		tempString = ([self.legislator.twitter hasPrefix:@"@"]) ? self.legislator.twitter : [[NSString alloc] initWithFormat:@"@%@", self.legislator.twitter];
 		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Twitter" value: tempString
 															   isClickable:YES type:DirectoryTypeTwitter];
@@ -424,7 +413,7 @@
 	}
 	
 	
-	if ([UtilityMethods isIPadDevice] == NO && self.legislator.partisan_index.floatValue != 0.0f) {
+	if ([UtilityMethods isIPadDevice] == NO && [self.legislator.partisan_index floatValue] != 0.0f) {
 		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Index" value:[self.legislator.partisan_index description] 
 												 isClickable:NO type:DirectoryTypeIndex];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
@@ -455,37 +444,37 @@
 	sectionIndex++;
 	/*	Section 1: Capitol Office */		
 	
-	if (legislator.staff.length > 0) {
+	if (self.legislator && self.legislator.staff && [self.legislator.staff length]) {
 		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Staff" value:self.legislator.staff 
 												 isClickable:NO type:DirectoryTypeNone];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;		
 	}
-	if (self.legislator.cap_office.length > 0) {
+	if (self.legislator && self.legislator.cap_office && [self.legislator.cap_office length]) {
 		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Office" value:self.legislator.cap_office 
 												 isClickable:YES type:DirectoryTypeOfficeMap];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;		
 	} 
-	if (legislator.chamber_desk.length > 0) {
+	if (self.legislator && self.legislator.chamber_desk && [self.legislator.chamber_desk length]) {
 		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Desk #" value:self.legislator.chamber_desk 
 												 isClickable:YES type:DirectoryTypeChamberMap];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;		
 	}
-	if (legislator.cap_phone.length > 0) {
+	if (self.legislator && self.legislator.cap_phone && [self.legislator.cap_phone length]) {
 		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Phone" value:self.legislator.cap_phone 
 												 isClickable:isPhone type:DirectoryTypePhone];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;		
 	} 
-	if (legislator.cap_fax.length > 0) {
+	if (self.legislator && self.legislator.cap_fax && [self.legislator.cap_fax length]) {
 		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Fax" value:self.legislator.cap_fax 
 												 isClickable:NO type:DirectoryTypeNone];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;		
 	}
-	if (legislator.cap_phone2.length > 0) {
+	if (self.legislator && self.legislator.cap_phone2 && [self.legislator.cap_phone2 length]) {
 		tempString = (self.legislator.cap_phone2_name.length > 0) ? self.legislator.cap_phone2_name : @"Phone #2";
 		cellInfo = [[DirectoryDetailInfo alloc] initWithName:tempString value:self.legislator.cap_phone2 
 												 isClickable:isPhone type:DirectoryTypePhone];
@@ -497,19 +486,19 @@
 	
 	for (DistrictOfficeObj *office in self.legislator.districtOffices) {
 		sectionIndex++;
-		if ([office.phone length]) {
+		if (office.phone && [office.phone length]) {
 			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Phone" value:office.phone 
 													 isClickable:isPhone type:DirectoryTypePhone];
 			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 			[cellInfo release], cellInfo = nil;		
 		}			
-		if ([office.fax length]) {
+		if (office.fax && [office.fax length]) {
 			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Fax" value:office.fax 
 													 isClickable:NO type:DirectoryTypeNone];
 			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 			[cellInfo release], cellInfo = nil;		
 		}			
-		if ([office.address length]) {
+		if (office.address && [office.address length]) {
 			
 			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Address" value:office 
 													 isClickable:YES type:DirectoryTypeMap];

@@ -73,8 +73,8 @@
 }
 
 - (void)didReceiveMemoryWarning {
-	if ([self.dataSource respondsToSelector:@selector(didReceiveMemoryWarning)])
-		[self.dataSource performSelector:@selector(didReceiveMemoryWarning)];
+	//if ([self.dataSource respondsToSelector:@selector(didReceiveMemoryWarning)])
+	//	[self.dataSource performSelector:@selector(didReceiveMemoryWarning)];
 	
 	[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
 
@@ -140,6 +140,12 @@
 	[self tableView:self.tableView didSelectRowAtIndexPath:selectFirst];
 }
 
+- (id)firstDataObject {
+	NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+	id detailObject = [self.dataSource dataObjectForIndexPath:currentIndexPath];			
+	return detailObject;
+}
+
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
@@ -155,7 +161,7 @@
 		}
 		self.selectObjectOnAppear = nil;
 
-	}	
+	}
 	
 	// We're on an iphone, without a splitview or popovers, so if we get here, let's stop
 	if ([UtilityMethods isIPadDevice] == NO) {
@@ -185,7 +191,7 @@
 	
 	// if we have a stack of view controllers and someone selected a new cell from our master list, 
 	//	lets go all the way back to accomodate their selection, and scroll to the top.
-	if (self.splitViewController) {
+	if ([UtilityMethods isIPadDevice]) {
 		UITableView *detailTable = nil;
 		UINavigationController *detailNav = nil;
 		if ([self.detailViewController respondsToSelector:@selector(tableView)])

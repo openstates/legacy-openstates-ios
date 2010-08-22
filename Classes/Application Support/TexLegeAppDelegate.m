@@ -349,6 +349,7 @@ NSInteger kNoSelection = -1;
 			
 	// make the window visible
 	[self.mainWindow makeKeyAndVisible];
+
 	
 	// register our preference selection data to be archived
 	NSDictionary *savedPrefsDict = [NSDictionary dictionaryWithObjectsAndKeys: 

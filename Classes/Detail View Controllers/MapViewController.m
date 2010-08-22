@@ -257,9 +257,11 @@
 
 				[self.mapView setRegion:region animated:TRUE];
 				//[self.mapView regionThatFits:region];
+				//debug_NSLog(@"[Found user location] %f %f %f %f", location.latitude, location.longitude, span.latitudeDelta, span.longitudeDelta);
+
 			}
 			
-			continue;
+			return;
 		}
 	}
 	

@@ -6,6 +6,7 @@
 //  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 #import "CalendarComboViewController.h"
+#import "CalendarMasterViewController.h"
 #import "UtilityMethods.h"
 #include "MiniBrowserController.h"
 #import "TexLegeAppDelegate.h"
@@ -50,12 +51,19 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+	if ([UtilityMethods isIPadDevice] && !self.chamberCalendar && ![UtilityMethods isLandscapeOrientation])  {
+		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+		
+		self.chamberCalendar = [[appDelegate calendarMasterVC] selectObjectOnAppear];		
+	}
+	
 	[self changeLayoutForOrientation:[UIDevice currentDevice].orientation];
 	if (self.chamberCalendar)
 		self.searchDisplayController.searchBar.placeholder = self.chamberCalendar.title;
 	
 	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 }
+
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];	

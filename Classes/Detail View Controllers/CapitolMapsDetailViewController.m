@@ -7,10 +7,11 @@
 //
 
 #import "CapitolMapsDetailViewController.h"
+#import "CapitolMapsMasterViewController.h"
 #import "CommitteeObj.h"
 #import "UtilityMethods.h"
 #import "MiniBrowserController.h"
-//#import "TexLegeAppDelegate.h"
+#import "TexLegeAppDelegate.h"
 #import "CommonPopoversController.h"
 
 @implementation CapitolMapsDetailViewController
@@ -41,10 +42,26 @@
 }
 
 
- - (void)viewWillAppear:(BOOL)animated {
-	 //[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+- (void)viewWillAppear:(BOOL)animated {
+	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+	
+	if ([UtilityMethods isIPadDevice] && !self.map && ![UtilityMethods isLandscapeOrientation])  {
+		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+		
+		self.map = [[appDelegate capitolMapsMasterVC] selectObjectOnAppear];		
+
+	}
+	/*
+	 if ([UtilityMethods isIPadDevice] && ![UtilityMethods isLandscapeOrientation] && !self.link) {
+	 UIBarButtonItem *button = self.navigationItem.rightBarButtonItem;
+	 
+	 if (button)
+	 debug_NSLog(@"no selection yet ... %@", button);
+	 }
+	 */
+	
 }
- 
+
 
 - (void)dealloc {
 	self.webView = nil;

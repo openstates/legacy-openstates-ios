@@ -7,6 +7,7 @@
 //
 
 #import "LinksDetailViewController.h"
+#import "LinksMasterViewController.h"
 #import "UtilityMethods.h"
 #import "MiniBrowserController.h"
 #import "TexLegeEmailComposer.h"
@@ -67,14 +68,22 @@
 
 
 - (void)viewWillAppear:(BOOL)animated {
-	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 	
+	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
+	if ([UtilityMethods isIPadDevice] && !self.link && ![UtilityMethods isLandscapeOrientation])  {
+		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+		
+		self.link = [[appDelegate linksMasterVC] selectObjectOnAppear];		
+	}
+	/*
 	if ([UtilityMethods isIPadDevice] && ![UtilityMethods isLandscapeOrientation] && !self.link) {
 		UIBarButtonItem *button = self.navigationItem.rightBarButtonItem;
 		
 		if (button)
 			debug_NSLog(@"no selection yet ... %@", button);
 	}
+	 */
 	
 }
 
@@ -93,8 +102,11 @@
 			self.miniBrowser = nil;
 			if (!self.aboutControl)
 				self.aboutControl = [[TexLegeInfoController alloc] initWithNibName:@"TexLegeInfoController~ipad" bundle:nil];
+			if (!self.aboutControl)
+				debug_NSLog(@"About View Controller didn't load!");
 			//[self.navigationController pushViewController:self.aboutControl animated:NO];
-			[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.aboutControl] animated:NO];
+
+			[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.aboutControl] animated:YES];
 //			[[TexLegeAppDelegate appDelegate] setCurrentDetailViewController:self.aboutControl];
 
 			//[[TexLegeAppDelegate appDelegate] showAboutDialog:self];

@@ -27,13 +27,18 @@
 }
 
 - (void)loadView {	
-	[super runLoadView];	
+	[super runLoadView];
+}
+
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
+		self.selectObjectOnAppear = [self firstDataObject];
 }
 
 - (Class)dataSourceClass {
 	return [CapitolMapsDataSource class];
 }
-
 
 - (void)viewWillAppear:(BOOL)animated
 {	

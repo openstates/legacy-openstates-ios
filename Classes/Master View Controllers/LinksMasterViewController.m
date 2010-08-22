@@ -69,6 +69,13 @@
 	[super runLoadView];	
 }
 
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
+		self.selectObjectOnAppear = [self firstDataObject];
+}
+
+
 /*- (void)viewWillAppear:(BOOL)animated
 {	
 	[super viewWillAppear:animated];

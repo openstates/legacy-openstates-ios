@@ -58,6 +58,10 @@
 	self.chamberControl.tintColor = [TexLegeTheme segmentCtl];
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
 	self.navigationItem.titleView = self.chamberControl;
+	
+	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
+		self.selectObjectOnAppear = [self firstDataObject];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {

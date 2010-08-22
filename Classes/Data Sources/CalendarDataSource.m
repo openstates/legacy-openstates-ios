@@ -76,55 +76,47 @@
 	self.calendarList = [NSMutableArray arrayWithCapacity:4];
 	
 	
-	NSMutableArray *feedURLS = [[NSMutableArray alloc] initWithObjects:self.houseURL,self.senateURL,self.jointURL,nil];
-	NSMutableDictionary *calendarDict = [[NSMutableDictionary alloc] initWithCapacity:3];
+	NSMutableDictionary *calendarDict = [[NSMutableDictionary alloc] initWithCapacity:10];
 	ChamberCalendarObj *calendar = nil;
 	
 	[calendarDict setObject:@"All Upcoming Meetings" forKey:@"title"];
-	[calendarDict setObject:feedURLS forKey:@"feedURLS"];
+	[calendarDict setObject:[NSArray arrayWithObjects:self.houseURL, self.senateURL, self.jointURL, nil] forKey:@"feedURLS"];
 	[calendarDict setObject:[NSNumber numberWithInteger:BOTH_CHAMBERS] forKey:@"chamber"];
 	[calendarDict setObject:self.feedStore forKey:@"feedStore"];
 	calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
 	[self.calendarList addObject:calendar];
 	[calendar release];
 	[calendarDict removeAllObjects];
-	[feedURLS removeAllObjects];
 	
 	
-	[feedURLS addObject:self.houseURL];
 	[calendarDict setObject:@"Upcoming House Meetings" forKey:@"title"];
-	[calendarDict setObject:feedURLS forKey:@"feedURLS"];
+	[calendarDict setObject:[NSArray arrayWithObject:self.houseURL]  forKey:@"feedURLS"];
 	[calendarDict setObject:[NSNumber numberWithInteger:HOUSE] forKey:@"chamber"];
 	[calendarDict setObject:self.feedStore forKey:@"feedStore"];
 	calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
 	[self.calendarList addObject:calendar];
 	[calendar release];
 	[calendarDict removeAllObjects];
-	[feedURLS removeAllObjects];
 	
 	
-	[feedURLS addObject:self.senateURL];
 	[calendarDict setObject:@"Upcoming Senate Meetings" forKey:@"title"];
-	[calendarDict setObject:feedURLS forKey:@"feedURLS"];
+	[calendarDict setObject:[NSArray arrayWithObject:self.senateURL] forKey:@"feedURLS"];
 	[calendarDict setObject:[NSNumber numberWithInteger:SENATE] forKey:@"chamber"];
 	[calendarDict setObject:self.feedStore forKey:@"feedStore"];
 	calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
 	[self.calendarList addObject:calendar];
 	[calendar release];
 	[calendarDict removeAllObjects];
-	[feedURLS removeAllObjects];
 	
 	   
-	[feedURLS addObject:self.jointURL];
 	[calendarDict setObject:@"Upcoming Joint Meetings" forKey:@"title"];
-	[calendarDict setObject:feedURLS forKey:@"feedURLS"];
+	[calendarDict setObject:[NSArray arrayWithObject:self.jointURL] forKey:@"feedURLS"];
 	[calendarDict setObject:[NSNumber numberWithInteger:JOINT] forKey:@"chamber"];
 	[calendarDict setObject:self.feedStore forKey:@"feedStore"];
 	calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
 	[self.calendarList addObject:calendar];
 	[calendar release];
 	[calendarDict release];
-	[feedURLS release];
 	
 }
 
