@@ -100,10 +100,11 @@
 						<object class="IBUITableViewController" id="650880088">
 							<string key="IBUITitle">Legislators</string>
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="924175648">
+								<reference key="IBUINavigationBar"/>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
 							<reference key="IBUIParentViewController" ref="629314799"/>
-							<string key="IBUINibName">MasterTableViewController</string>
+							<string key="IBUINibName">LegislatorMasterViewController</string>
 							<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
 								<int key="IBUIStatusBarStyle">2</int>
 							</object>
@@ -144,6 +145,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="IBUITableViewController" id="566113220">
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="185254033">
+								<reference key="IBUINavigationBar"/>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
 							<reference key="IBUIParentViewController" ref="230062801"/>
@@ -201,6 +203,7 @@
 						<object class="IBUITableViewController" id="744523692">
 							<string key="IBUITitle">Committees</string>
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="497317870">
+								<reference key="IBUINavigationBar"/>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
 							<reference key="IBUIParentViewController" ref="483288192"/>
@@ -242,6 +245,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="IBUITableViewController" id="1067643098">
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="210515723">
+								<reference key="IBUINavigationBar"/>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
 							<reference key="IBUIParentViewController" ref="795113160"/>
@@ -300,6 +304,7 @@
 							<bool key="IBUIAutoresizesArchivedViewToFullSize">NO</bool>
 							<string key="IBUITitle">Upcoming Meetings</string>
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="898351145">
+								<reference key="IBUINavigationBar"/>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
 							<reference key="IBUIParentViewController" ref="98047001"/>
@@ -340,6 +345,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="IBUIViewController" id="596106840">
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="38611259">
+								<reference key="IBUINavigationBar"/>
 								<string key="IBUITitle">Item</string>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
@@ -398,6 +404,7 @@
 							<bool key="IBUIAutoresizesArchivedViewToFullSize">NO</bool>
 							<string key="IBUITitle">Capitol Maps</string>
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="537396742">
+								<reference key="IBUINavigationBar"/>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
 							<reference key="IBUIParentViewController" ref="619576865"/>
@@ -438,11 +445,12 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="IBUIViewController" id="442036212">
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="477562532">
+								<reference key="IBUINavigationBar"/>
 								<string key="IBUITitle">Item</string>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
 							<reference key="IBUIParentViewController" ref="320180549"/>
-							<string key="IBUINibName">MapsDetailViewController</string>
+							<string key="IBUINibName">CapitolMapsDetailViewController</string>
 							<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
 								<int key="IBUIStatusBarStyle">2</int>
 							</object>
@@ -496,6 +504,7 @@
 							<bool key="IBUIAutoresizesArchivedViewToFullSize">NO</bool>
 							<string key="IBUITitle">Resources</string>
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="586090699">
+								<reference key="IBUINavigationBar"/>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
 							<reference key="IBUIParentViewController" ref="497531394"/>
@@ -536,6 +545,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="IBUIViewController" id="463174589">
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="485194011">
+								<reference key="IBUINavigationBar"/>
 								<string key="IBUITitle">Item</string>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
@@ -1283,7 +1293,7 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/Common View Controllers/CalendarComboViewController.h</string>
+						<string key="minorKey">Classes/Detail View Controllers/CalendarComboViewController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1309,6 +1319,14 @@
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Classes/Detail View Controllers/CapitolMapsDetailViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">CapitolMapsDetailViewController</string>
+					<string key="superclassName">UIViewController</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
 					</object>
@@ -1326,7 +1344,7 @@
 					<string key="superclassName">UITableViewController</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/Committees Menu/CommitteeDetailViewController.h</string>
+						<string key="minorKey">Classes/Detail View Controllers/CommitteeDetailViewController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1396,7 +1414,7 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/Universal Classes/GeneralTableViewController.h</string>
+						<string key="minorKey">Classes/Master View Controllers/GeneralTableViewController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1569,7 +1587,7 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/iPad View Controllers/LegislatorDetailViewController.h</string>
+						<string key="minorKey">Classes/Detail View Controllers/LegislatorDetailViewController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1599,7 +1617,7 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/iPad View Controllers/LegislatorMasterViewController.h</string>
+						<string key="minorKey">Classes/Master View Controllers/LegislatorMasterViewController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1822,7 +1840,7 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/Universal Classes/MiniBrowserController.h</string>
+						<string key="minorKey">Classes/Detail View Controllers/MiniBrowserController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1869,42 +1887,21 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/iPad View Controllers/StaticGradientSliderView.h</string>
+						<string key="minorKey">Classes/Custom Cells and Views/StaticGradientSliderView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">TexLegeAppDelegate</string>
 					<string key="superclassName">NSObject</string>
 					<object class="NSMutableDictionary" key="actions">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>saveAction:</string>
-							<string>showOrHideAboutMenuPopover:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-						</object>
+						<string key="NS.key.0">saveAction:</string>
+						<string key="NS.object.0">id</string>
 					</object>
 					<object class="NSMutableDictionary" key="actionInfosByName">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>saveAction:</string>
-							<string>showOrHideAboutMenuPopover:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBActionInfo">
-								<string key="name">saveAction:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">showOrHideAboutMenuPopover:</string>
-								<string key="candidateClassName">id</string>
-							</object>
+						<string key="NS.key.0">saveAction:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">saveAction:</string>
+							<string key="candidateClassName">id</string>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
@@ -1914,12 +1911,9 @@
 							<string>calendarMasterVC</string>
 							<string>capitolMapsMasterVC</string>
 							<string>committeeMasterVC</string>
-							<string>currentDetailViewController</string>
-							<string>currentMasterViewController</string>
 							<string>legislatorMasterVC</string>
 							<string>linksMasterVC</string>
 							<string>managedObjectContext</string>
-							<string>splitViewController</string>
 							<string>tabBarController</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -1927,12 +1921,9 @@
 							<string>CalendarMasterViewController</string>
 							<string>CapitolMapsMasterViewController</string>
 							<string>CommitteeMasterViewController</string>
-							<string>id</string>
-							<string>id</string>
 							<string>LegislatorMasterViewController</string>
 							<string>LinksMasterViewController</string>
 							<string>NSManagedObjectContext</string>
-							<string>UISplitViewController</string>
 							<string>UITabBarController</string>
 						</object>
 					</object>
@@ -1943,12 +1934,9 @@
 							<string>calendarMasterVC</string>
 							<string>capitolMapsMasterVC</string>
 							<string>committeeMasterVC</string>
-							<string>currentDetailViewController</string>
-							<string>currentMasterViewController</string>
 							<string>legislatorMasterVC</string>
 							<string>linksMasterVC</string>
 							<string>managedObjectContext</string>
-							<string>splitViewController</string>
 							<string>tabBarController</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -1966,14 +1954,6 @@
 								<string key="candidateClassName">CommitteeMasterViewController</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">currentDetailViewController</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">currentMasterViewController</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBToOneOutletInfo">
 								<string key="name">legislatorMasterVC</string>
 								<string key="candidateClassName">LegislatorMasterViewController</string>
 							</object>
@@ -1984,10 +1964,6 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">managedObjectContext</string>
 								<string key="candidateClassName">NSManagedObjectContext</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">splitViewController</string>
-								<string key="candidateClassName">UISplitViewController</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">tabBarController</string>
@@ -2088,6 +2064,14 @@
 							</object>
 						</object>
 					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Classes/Detail View Controllers/TexLegeInfoController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">TexLegeInfoController</string>
+					<string key="superclassName">UIViewController</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
