@@ -10,6 +10,7 @@
 #import "UtilityMethods.h"
 #import "LegislatorObj.h"
 #import "LegislatorDetailViewController.h"
+#import "DistrictOfficeObj.h"
 
 @implementation MapViewController
 @synthesize bookmarksButton, mapTypeControl, mapView, userLocationButton, reverseGeocoder;
@@ -77,7 +78,6 @@
 	const MKCoordinateRegion txreg = MKCoordinateRegionMake(texasCenter, texasSpan);
 	return txreg;
 }
-
 
 - (void)setAddressString:(NSString *)string {
 	if (string && ![string isEqualToString:addressString]) {
@@ -275,6 +275,19 @@
 			continue;
 		}
 	}
+	
+	MKAnnotationView *lastView = [views lastObject];
+	id<MKAnnotation> lastAnnotation = lastView.annotation;
+	
+	if (lastAnnotation) {
+		if ([lastAnnotation isKindOfClass:[DistrictOfficeObj class]]) {
+			DistrictOfficeObj *obj = lastAnnotation;
+			[self.mapView setRegion:obj.region animated:TRUE];
+		}
+
+		[self.mapView selectAnnotation:lastAnnotation animated:YES];
+	}
+	
 }
 
 
@@ -353,9 +366,9 @@
     
     // handle our custom annotations
     //
-    if ([annotation isKindOfClass:[DistrictOfficeAnnotation class]]) // for Golden Gate Bridge
+    if ([annotation isKindOfClass:[DistrictOfficeObj class]]) // for Golden Gate Bridge
     {
-		DistrictOfficeAnnotation *districtOffice = (DistrictOfficeAnnotation *)annotation;
+		DistrictOfficeObj *districtOffice = (DistrictOfficeObj *)annotation;
 		
         // try to dequeue an existing pin view first
         static NSString* districtOfficeAnnotationID = @"districtOfficeAnnotationID";

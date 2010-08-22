@@ -9,6 +9,7 @@
 #import "TableDataSourceProtocol.h"
 #import "LegislatorDetailViewController.h"
 #import "LegislatorObj.h"
+#import "DistrictOfficeObj.h"
 #import "CommitteeObj.h"
 #import "CommitteePositionObj.h"
 #import "WnomObj.h"
@@ -305,16 +306,6 @@
 #pragma mark -
 #pragma mark orientations
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	//[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
-	//[[TexLegeAppDelegate appDelegate] resetPopoverMenus];
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-	//[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
-	//[[TexLegeAppDelegate appDelegate] resetPopoverMenus];
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Override to allow orientations other than the default portrait orientation.
     return YES;
@@ -404,7 +395,7 @@
 	[cellInfo release], cellInfo = nil;
 	
 	
-	cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"District Map" value:self.legislator.districtMap 
+	cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"District Map" value:self.legislator.districtMapURL 
 											 isClickable:YES type:DirectoryTypeWeb];
 	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 	[cellInfo release], cellInfo = nil;
@@ -504,127 +495,31 @@
 	
 	/* after that section's done... */
 	
-	if ([legislator numberOfDistrictOffices] >= 1) {
+	for (DistrictOfficeObj *office in self.legislator.districtOffices) {
 		sectionIndex++;
-		/*	Section 2: District 1 */		
-		
-		if (legislator.dist1_phone.length > 0) {
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Phone" value:self.legislator.dist1_phone 
+		if ([office.phone length]) {
+			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Phone" value:office.phone 
 													 isClickable:isPhone type:DirectoryTypePhone];
 			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 			[cellInfo release], cellInfo = nil;		
-		} 
-		if (legislator.dist1_fax.length > 0) {
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Fax" value:self.legislator.dist1_fax 
+		}			
+		if ([office.fax length]) {
+			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Fax" value:office.fax 
 													 isClickable:NO type:DirectoryTypeNone];
 			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;
-		}
-		if (legislator.dist1_street.length > 0) {
-			tempString = [[NSString alloc] initWithFormat:@"%@\n%@, TX\n%@", 
-						  [self.legislator.dist1_street stringByReplacingOccurrencesOfString:@", " withString:@"\n"], 
-						  self.legislator.dist1_city, self.legislator.dist1_zip];
+			[cellInfo release], cellInfo = nil;		
+		}			
+		if ([office.address length]) {
 			
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Address" value:tempString 
+			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Address" value:office 
 													 isClickable:YES type:DirectoryTypeMap];
 			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 			[cellInfo release], cellInfo = nil;
 			[tempString release], tempString = nil;
 		} 
-	}
-	
-	/* after that section's done... */
-	
-	if ([legislator numberOfDistrictOffices] >= 2) {
-		sectionIndex++;
-		/*	Section 3: District 2 */		
 		
-		if (legislator.dist2_phone.length > 0) {
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Phone" value:self.legislator.dist2_phone 
-													 isClickable:isPhone type:DirectoryTypePhone];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;
-		} 
-		if (legislator.dist2_fax.length > 0) {
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Fax" value:self.legislator.dist2_fax 
-													 isClickable:NO type:DirectoryTypeNone];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;
-		}
-		if (legislator.dist2_street.length > 0) {
-			tempString = [[NSString alloc] initWithFormat:@"%@\n%@, TX\n%@", 
-						  [self.legislator.dist2_street stringByReplacingOccurrencesOfString:@", " withString:@"\n"], 
-						  self.legislator.dist2_city, self.legislator.dist2_zip];
-			
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Address" value:tempString 
-													 isClickable:YES type:DirectoryTypeMap];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;
-			[tempString release], tempString = nil;
-		} 
 	}
 	
-	/* after that section's done... */
-	
-	if ([legislator numberOfDistrictOffices] >= 3) {
-		sectionIndex++;
-		/*	Section 4: District 3 */		
-		
-		if (legislator.dist3_phone1.length > 0) {
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Phone" value:self.legislator.dist3_phone1 
-													 isClickable:isPhone type:DirectoryTypePhone];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;			
-		} 
-		if (legislator.dist3_fax.length > 0) {
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Fax" value:self.legislator.dist3_fax 
-													 isClickable:NO type:DirectoryTypeNone];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;
-		}
-		if (legislator.dist3_street.length > 0) {
-			tempString = [[NSString alloc] initWithFormat:@"%@\n%@, TX\n%@", 
-						  [self.legislator.dist3_street stringByReplacingOccurrencesOfString:@", " withString:@"\n"], 
-						  self.legislator.dist3_city, self.legislator.dist3_zip];
-			
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Address" value:tempString 
-													 isClickable:YES type:DirectoryTypeMap];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;
-			[tempString release], tempString = nil;
-		} 
-	}
-	
-	/* after that section's done... */
-	
-	if ([legislator numberOfDistrictOffices] >= 4) {
-		sectionIndex++;
-		/*	Section 5: District 4 */		
-		
-		if (legislator.dist4_phone1.length > 0) {
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Phone" value:self.legislator.dist4_phone1 
-													 isClickable:isPhone type:DirectoryTypePhone];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;						
-		} 
-		if (legislator.dist4_fax.length > 0) {
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Fax" value:self.legislator.dist4_fax 
-													 isClickable:NO type:DirectoryTypeNone];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;
-		}
-		if (legislator.dist4_street.length > 0) {
-			tempString = [[NSString alloc] initWithFormat:@"%@\n%@, TX\n%@", 
-						  [self.legislator.dist4_street stringByReplacingOccurrencesOfString:@", " withString:@"\n"], 
-						  self.legislator.dist4_city, self.legislator.dist4_zip];
-			
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Address" value:tempString 
-													 isClickable:YES type:DirectoryTypeMap];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;
-			[tempString release], tempString = nil;
-		} 
-	}
 }	
 
 #pragma mark -
@@ -714,7 +609,13 @@
 				if (self.indivSlider) {
 					[self.indivSlider setFrame:sliderViewFrame];
 					[self.indivSlider setLegislator:self.legislator];
-					[self.indivSlider setSliderValue:cellInfo.entryValue.floatValue animated:NO];
+					CGFloat indexValue = 0.0f;
+					NSString *tempStr = nil;
+					if ([cellInfo.entryValue isKindOfClass:[NSString class]])
+						tempStr = cellInfo.entryValue;
+					if (tempStr)
+						indexValue = [tempStr floatValue];
+					[self.indivSlider setSliderValue:indexValue animated:NO];
 					[cell.contentView addSubview:self.indivSlider];
 				}
 				cell.userInteractionEnabled = NO;
@@ -724,12 +625,18 @@
 		case DirectoryTypeMap:
 			cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
 			cell.detailTextLabel.numberOfLines = 4;
-			cell.detailTextLabel.text = cellInfo.entryValue;
+			DistrictOfficeObj *office = nil;
+			if ([cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]])
+				office = cellInfo.entryValue;
+			if (office)
+				cell.detailTextLabel.text = [office cellAddress];
 			cell.textLabel.text = cellInfo.entryName;
 			break;
-			
+
 		case DirectoryTypeWeb:
-			if (cellInfo.entryValue.length > 0) {
+			if ([cellInfo.entryValue isKindOfClass:[NSString class]]) {
+				NSString *tempStr = cellInfo.entryValue;
+			if (tempStr && tempStr.length > 0) {
 				if ([cellInfo.entryName isEqualToString:@"Website"])
 					cell.detailTextLabel.text = @"Official Website";
 				else if ([cellInfo.entryName isEqualToString:@"Bio"])
@@ -737,6 +644,7 @@
 				else if ([cellInfo.entryName isEqualToString:@"District Map"])
 					cell.detailTextLabel.text = @"District Map";
 				cell.textLabel.text = @"Web";
+			}
 			}
 			break;
 			
@@ -861,13 +769,17 @@
 		}
 		// Switch to the appropriate application for this url...
 		else if (cellInfo.entryType == DirectoryTypeMap) {
+			if (![cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]])
+				return;
+			
 			MapViewController *mapVC = [[MapViewController alloc] initWithNibName:@"MapViewController" bundle:nil];
 			if (!mapVC) {
 				debug_NSLog(@"Tried to map services, but couldn't allocate memory for the view.");
 				return;
 			}
-			NSString *address = [cellInfo.entryValue stringByReplacingOccurrencesOfString:@"\n" withString:@", "];
-			[mapVC setAddressString:address withLegislator:self.legislator];
+			DistrictOfficeObj *districtOffice = cellInfo.entryValue;
+			
+			[mapVC.mapView addAnnotation:districtOffice];
 			[self.navigationController pushViewController:mapVC animated:YES];
 			[mapVC release];
 			
@@ -908,11 +820,14 @@
 		return height;
 	}
 	
-	if (cellInfo.entryValue.length <= 0) {
-		height = 0.0f;
-	}
-	else if ([cellInfo.entryName rangeOfString:@"Address"].length > 0) { // We found "Address" in the string.
+	if ([cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]] ||
+		[cellInfo.entryName rangeOfString:@"Address"].length )
 		height = 98.0f;
+	else if ([cellInfo.entryValue isKindOfClass:[NSString string]]) {
+		NSString *tempStr = cellInfo.entryValue;
+		if (!tempStr || [tempStr length] <= 0) {
+			height = 0.0f;
+		}
 	}
 	return height;
 }

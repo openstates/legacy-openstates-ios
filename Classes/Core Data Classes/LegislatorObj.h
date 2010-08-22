@@ -8,7 +8,7 @@
 
 #import <CoreData/CoreData.h>
 
-@class CommitteePositionObj, WnomObj;
+@class CommitteePositionObj, WnomObj, DistrictOfficeObj, DistrictMapObj;
 
 @interface LegislatorObj :  NSManagedObject  
 {
@@ -61,9 +61,11 @@
 @property (nonatomic, retain) NSString * staff;
 @property (nonatomic, retain) NSString * lastnameInitial;
 @property (nonatomic, retain) NSString * searchName;
+@property (nonatomic, retain) DistrictMapObj *districtMap;
 @property (nonatomic, retain) NSSet* committeePositions;
 @property (nonatomic, retain) NSSet* wnomScores;
-@property (nonatomic, readonly) NSString * districtMap;
+@property (nonatomic, retain) NSSet* districtOffices;
+@property (nonatomic, readonly) NSString * districtMapURL;
 
 - (NSComparisonResult)compareMembersByName:(LegislatorObj *)p;
 - (NSString *)partyShortName;
@@ -86,6 +88,11 @@
 - (void)removeCommitteePositionsObject:(CommitteePositionObj *)value;
 - (void)addCommitteePositions:(NSSet *)value;
 - (void)removeCommitteePositions:(NSSet *)value;
+
+- (void)addDistrictOfficesObject:(DistrictOfficeObj *)value;
+- (void)removeDistrictOfficesObject:(DistrictOfficeObj *)value;
+- (void)addDistrictOffices:(NSSet *)value;
+- (void)removeDistrictOffices:(NSSet *)value;
 
 - (void)addWnomScoresObject:(WnomObj *)value;
 - (void)removeWnomScoresObject:(WnomObj *)value;

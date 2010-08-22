@@ -40,7 +40,9 @@
 {
     if (self = [super init])
     {
-		NSManagedObjectID *legislatorID = [coder decodeObjectForKey:@"legObjectID"];
+		NSURL *uriRepresentation = [coder decodeObjectForKey:@"legObjectID"];
+		NSManagedObjectID *legislatorID = [[TexLegeAppDelegate appDelegate].persistentStoreCoordinator 
+										   managedObjectIDForURIRepresentation:uriRepresentation];
 		NSManagedObjectContext *mContext = [[TexLegeAppDelegate appDelegate] managedObjectContext];
 		if (mContext && legislatorID) {
 			NSManagedObject *object = [mContext objectWithID:legislatorID];
@@ -56,9 +58,8 @@
 	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder;
-{
-	[coder encodeObject:[self.legislator objectID]	forKey:@"legObjectID"];
+- (void)encodeWithCoder:(NSCoder *)coder {
+	[coder encodeObject:[[self.legislator objectID] URIRepresentation]	forKey:@"legObjectID"];
     [coder encodeObject:self.pinColorIndex	forKey:@"pinColorIndex"];
 	[coder encodeObject:self.regionDict		forKey:@"regionDict"];
 	[coder encodeObject:self.addressDict	forKey:@"addressDict"];
@@ -98,9 +99,11 @@
 
 - (UIImage *)image {
 	if (!self.legislator)
-		return nil;
-
-	return [UIImage imageNamed:self.legislator.photo_name];
+		return [UIImage imageNamed:@"slider_star.png"];
+	else if ([self.legislator.party_id integerValue] == DEMOCRAT)
+		return [UIImage imageNamed:@"bluestar.png"];
+	else //if ([self.legislator.party_id integerValue] == REPUBLICAN)
+		return [UIImage imageNamed:@"redstar.png"];
 }
 
 // optional

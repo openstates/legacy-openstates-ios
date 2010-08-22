@@ -13,7 +13,7 @@
 @implementation DirectoryDetailInfo
 @synthesize entryName, entryValue, isClickable, entryType;
 
-- (id)initWithName:(NSString *)newName value:(NSString *)newValue isClickable:(BOOL)newClickable type:(NSInteger)newType {
+- (id)initWithName:(NSString *)newName value:(id)newValue isClickable:(BOOL)newClickable type:(NSInteger)newType {
 	if ([self init]) {
 		
 		self.entryName = newName;

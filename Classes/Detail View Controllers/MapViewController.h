@@ -33,5 +33,4 @@
 - (IBAction)reverseGeocodeCurrentLocation;
 - (void)setAddressString:(NSString *)string withLegislator:(LegislatorObj *)newLegislator;
 
-
 @end

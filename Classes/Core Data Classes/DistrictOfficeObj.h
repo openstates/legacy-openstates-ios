@@ -7,11 +7,12 @@
 //
 
 #import <CoreData/CoreData.h>
+#import <MapKit/MapKit.h>
 
 @class DistrictMapObj;
 @class LegislatorObj;
 
-@interface DistrictOfficeObj :  NSManagedObject  
+@interface DistrictOfficeObj :  NSManagedObject  <MKAnnotation>
 {
 }
 
@@ -33,6 +34,16 @@
 @property (nonatomic, retain) LegislatorObj * legislator;
 @property (nonatomic, retain) DistrictMapObj * districtMap;
 
+// MKAnnotation protocol
+@property (nonatomic, readonly) CLLocationCoordinate2D	coordinate;
+@property (nonatomic, readonly) MKCoordinateRegion		region;
+@property (nonatomic, readonly) MKCoordinateSpan		span;
+
+- (NSString *)title;
+- (NSString *)subtitle;
+- (UIImage *)image;
+
+- (NSString *)cellAddress;
 @end
 
 

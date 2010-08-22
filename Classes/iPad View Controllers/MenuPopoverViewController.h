@@ -8,17 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
-#import "AboutViewController.h"
+#import "TexLegeInfoController.h"
 
 @class TexLegeAppDelegate;
 
-@interface MenuPopoverViewController : UITableViewController <AboutViewControllerDelegate,
+@interface MenuPopoverViewController : UITableViewController <TexLegeInfoControllerDelegate,
 												UIPopoverControllerDelegate> {
 	
 }
 
 @property (nonatomic, retain) UIPopoverController *itemPopoverController;
-@property (nonatomic, retain) IBOutlet AboutViewController *aboutViewController;
+@property (nonatomic, retain) IBOutlet TexLegeInfoController *aboutViewController;
 @property (nonatomic, retain) IBOutlet TexLegeAppDelegate *appDelegate;
 
 @end

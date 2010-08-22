@@ -37,7 +37,7 @@
 
 	self.itemPopoverController = nil;
 	
-	self.aboutViewController = [[AboutViewController alloc] initWithNibName:@"TexLegeInfo~ipad" bundle:nil];
+	self.aboutViewController = [[AboutViewController alloc] initWithNibName:@"TexLegeInfoController~ipad" bundle:nil];
 	self.aboutViewController.delegate = self;
 	
 	self.contentSizeForViewInPopover = CGSizeMake(300.0, 450.0);

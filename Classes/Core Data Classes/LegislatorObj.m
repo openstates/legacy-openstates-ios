@@ -59,9 +59,11 @@
 
 @dynamic lastnameInitial;
 @dynamic searchName;
+@dynamic districtMap;
 
 @dynamic committeePositions;
 @dynamic wnomScores;
+@dynamic districtOffices;
 
 - (NSComparisonResult)compareMembersByName:(LegislatorObj *)p
 {	
@@ -190,7 +192,8 @@
 }
 
 - (NSInteger)numberOfDistrictOffices {
-	NSInteger offices = 0;
+/*
+ NSInteger offices = 0;
 	
 	if ([self.dist4_street length] > 0)		// 4th office is good
 		offices = 4;
@@ -202,6 +205,8 @@
 		offices = 1;
 	
 	return offices;
+*/
+	return [self.districtOffices count];
 }
 
 - (NSString *)tenureString {
@@ -228,7 +233,7 @@
 							sortedArrayUsingSelector:@selector(comparePositionAndCommittee:)];
 }
 
-- (NSString *)districtMap
+- (NSString *)districtMapURL
 {
 	NSString *url = nil;
 	

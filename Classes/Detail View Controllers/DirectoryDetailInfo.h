@@ -31,20 +31,16 @@ enum {
 
 @interface DirectoryDetailInfo : NSObject {
 	
-	NSString *entryName;
-	NSString *entryValue;
-	BOOL isClickable;
-	NSInteger entryType;
 }
 @property (nonatomic, retain)NSString *entryName;
-@property (nonatomic, retain)NSString *entryValue;
+@property (nonatomic, retain)id entryValue;
 @property (nonatomic)BOOL isClickable;
 @property (nonatomic)NSInteger entryType;
 
 - (NSURL *)generateURL:(LegislatorObj *)legislator;
 
 - (id)initWithDictionary:(NSDictionary *)aDictionary;
-- (id)initWithName:(NSString *)newName value:(NSString *)newValue isClickable:(BOOL)newClickable type:(NSInteger)newType;
+- (id)initWithName:(NSString *)newName value:(id)newValue isClickable:(BOOL)newClickable type:(NSInteger)newType;
 
 
 @end
