@@ -556,12 +556,14 @@
 		37E208B51220F0FD00103D76 /* TexLege 2.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 3737802211F800AF00E36500 /* TexLege 2.xcdatamodel */; };
 		37E208BA1220F11400103D76 /* TexLege.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 3729ED8410079CCA000AD804 /* TexLege.xcdatamodel */; };
 		37E208DA1221095500103D76 /* TexLege.v2.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 37EFDD7D11F80F4300268D53 /* TexLege.v2.sqlite */; };
+		37E9848A12217C8600950298 /* silverstar.png in Resources */ = {isa = PBXBuildFile; fileRef = 37E9848812217C8600950298 /* silverstar.png */; };
+		37E9848B12217C8600950298 /* silverstar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37E9848912217C8600950298 /* silverstar@2x.png */; };
 		37EAE4B1121A57D100BF4277 /* BSAddressComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE47A121A57D100BF4277 /* BSAddressComponent.m */; };
 		37EAE4B2121A57D100BF4277 /* BSForwardGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE47C121A57D100BF4277 /* BSForwardGeocoder.m */; };
 		37EAE4B4121A57D100BF4277 /* BSGoogleV3KmlParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE480121A57D100BF4277 /* BSGoogleV3KmlParser.m */; };
 		37EAE4B5121A57D100BF4277 /* BSKmlResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE482121A57D100BF4277 /* BSKmlResult.m */; };
 		37EAE540121A6B4200BF4277 /* 72-pin.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C86E120344D000507757 /* 72-pin.png */; };
-		37EAE54F121A6D9A00BF4277 /* DistrictOfficeAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE54E121A6D9A00BF4277 /* DistrictOfficeAnnotation.m */; };
+		37EAE54F121A6D9A00BF4277 /* CustomAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE54E121A6D9A00BF4277 /* CustomAnnotation.m */; };
 		37EC28FD120DFFB600174836 /* UACellBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EC28FC120DFFB600174836 /* UACellBackgroundView.m */; };
 		37ECDA781065358800E43497 /* Release Notes.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 37ECDA771065358800E43497 /* Release Notes.rtf */; };
 		37F510AA0FF1ADEF0020A13B /* Icon_80.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F510A90FF1ADEF0020A13B /* Icon_80.png */; };
@@ -1381,6 +1383,8 @@
 		37E207C61220779B00103D76 /* redstar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "redstar@2x.png"; path = "Resources/UI Graphics/redstar@2x.png"; sourceTree = SOURCE_ROOT; };
 		37E208AA1220F07300103D76 /* birdwell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = birdwell.png; path = "Resources/Legislator Photos/senate/birdwell.png"; sourceTree = SOURCE_ROOT; };
 		37E208AB1220F07300103D76 /* birdwell@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "birdwell@2x.png"; path = "Resources/Legislator Photos/senate/birdwell@2x.png"; sourceTree = SOURCE_ROOT; };
+		37E9848812217C8600950298 /* silverstar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = silverstar.png; path = "Resources/UI Graphics/silverstar.png"; sourceTree = SOURCE_ROOT; };
+		37E9848912217C8600950298 /* silverstar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "silverstar@2x.png"; path = "Resources/UI Graphics/silverstar@2x.png"; sourceTree = SOURCE_ROOT; };
 		37EAE479121A57D100BF4277 /* BSAddressComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BSAddressComponent.h; path = Classes/BSAddressComponent.h; sourceTree = "<group>"; };
 		37EAE47A121A57D100BF4277 /* BSAddressComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BSAddressComponent.m; path = Classes/BSAddressComponent.m; sourceTree = "<group>"; };
 		37EAE47B121A57D100BF4277 /* BSForwardGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BSForwardGeocoder.h; path = Classes/BSForwardGeocoder.h; sourceTree = "<group>"; };
@@ -1389,8 +1393,8 @@
 		37EAE480121A57D100BF4277 /* BSGoogleV3KmlParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BSGoogleV3KmlParser.m; path = Classes/BSGoogleV3KmlParser.m; sourceTree = "<group>"; };
 		37EAE481121A57D100BF4277 /* BSKmlResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BSKmlResult.h; path = Classes/BSKmlResult.h; sourceTree = "<group>"; };
 		37EAE482121A57D100BF4277 /* BSKmlResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BSKmlResult.m; path = Classes/BSKmlResult.m; sourceTree = "<group>"; };
-		37EAE54D121A6D9A00BF4277 /* DistrictOfficeAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DistrictOfficeAnnotation.h; path = Classes/MapKit/DistrictOfficeAnnotation.h; sourceTree = SOURCE_ROOT; };
-		37EAE54E121A6D9A00BF4277 /* DistrictOfficeAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DistrictOfficeAnnotation.m; path = Classes/MapKit/DistrictOfficeAnnotation.m; sourceTree = SOURCE_ROOT; };
+		37EAE54D121A6D9A00BF4277 /* CustomAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomAnnotation.h; sourceTree = "<group>"; };
+		37EAE54E121A6D9A00BF4277 /* CustomAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomAnnotation.m; sourceTree = "<group>"; };
 		37EC28FB120DFFB600174836 /* UACellBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UACellBackgroundView.h; path = "Classes/Custom Cells and Views/UACellBackgroundView.h"; sourceTree = SOURCE_ROOT; };
 		37EC28FC120DFFB600174836 /* UACellBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UACellBackgroundView.m; path = "Classes/Custom Cells and Views/UACellBackgroundView.m"; sourceTree = SOURCE_ROOT; };
 		37ECDA771065358800E43497 /* Release Notes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "Release Notes.rtf"; sourceTree = "<group>"; };
@@ -1562,8 +1566,8 @@
 			children = (
 				370F7AA711FEAF730004AC50 /* PolygonMath.h */,
 				370F7AA811FEAF730004AC50 /* PolygonMath.m */,
-				37EAE54D121A6D9A00BF4277 /* DistrictOfficeAnnotation.h */,
-				37EAE54E121A6D9A00BF4277 /* DistrictOfficeAnnotation.m */,
+				37EAE54D121A6D9A00BF4277 /* CustomAnnotation.h */,
+				37EAE54E121A6D9A00BF4277 /* CustomAnnotation.m */,
 			);
 			path = MapKit;
 			sourceTree = "<group>";
@@ -1697,6 +1701,8 @@
 				37E207C41220779B00103D76 /* bluestar@2x.png */,
 				37E207C51220779B00103D76 /* redstar.png */,
 				37E207C61220779B00103D76 /* redstar@2x.png */,
+				37E9848812217C8600950298 /* silverstar.png */,
+				37E9848912217C8600950298 /* silverstar@2x.png */,
 				37D1C4CF12026FE300507757 /* Month Calendar Shadow Right.png */,
 				37D1C4D012026FE300507757 /* Month Calendar Shadow Vertical.png */,
 				37D1C4D112026FE300507757 /* Month Calendar Shadow.png */,
@@ -3157,6 +3163,8 @@
 				37E208AC1220F07300103D76 /* birdwell.png in Resources */,
 				37E208AD1220F07300103D76 /* birdwell@2x.png in Resources */,
 				37E208DA1221095500103D76 /* TexLege.v2.sqlite in Resources */,
+				37E9848A12217C8600950298 /* silverstar.png in Resources */,
+				37E9848B12217C8600950298 /* silverstar@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3253,7 +3261,7 @@
 				37EAE4B2121A57D100BF4277 /* BSForwardGeocoder.m in Sources */,
 				37EAE4B4121A57D100BF4277 /* BSGoogleV3KmlParser.m in Sources */,
 				37EAE4B5121A57D100BF4277 /* BSKmlResult.m in Sources */,
-				37EAE54F121A6D9A00BF4277 /* DistrictOfficeAnnotation.m in Sources */,
+				37EAE54F121A6D9A00BF4277 /* CustomAnnotation.m in Sources */,
 				37E2068412204D5000103D76 /* DistrictOfficeObj.m in Sources */,
 				37E2068512204D5000103D76 /* DistrictMapObj.m in Sources */,
 				37E208B51220F0FD00103D76 /* TexLege 2.xcdatamodel in Sources */,
