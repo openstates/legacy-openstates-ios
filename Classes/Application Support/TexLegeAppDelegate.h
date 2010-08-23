@@ -27,7 +27,6 @@
 @property (nonatomic, retain) Appirater			*appirater;
 
 @property (nonatomic, retain) NSMutableDictionary	*savedTableSelection;
-@property (nonatomic,readonly) NSString				*currentMasterViewControllerKey;
 
 // For Core Data
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
@@ -40,7 +39,6 @@
 
 // For Functional View Controllers
 @property (nonatomic, readonly) UIViewController *topViewController;
-@property (nonatomic, retain) NSMutableArray *functionalViewControllers;
 @property (nonatomic, retain) IBOutlet LinksMasterViewController *linksMasterVC;
 @property (nonatomic, retain) IBOutlet CapitolMapsMasterViewController *capitolMapsMasterVC;
 @property (nonatomic, retain) IBOutlet CommitteeMasterViewController *committeeMasterVC;
@@ -52,9 +50,8 @@
 
 // For iPad Interface
 @property (nonatomic, readonly)  UISplitViewController *splitViewController;
-@property (nonatomic, retain)  id currentMasterViewController, currentDetailViewController;
-@property (nonatomic, readonly) UINavigationController * detailNavigationController;
-@property (nonatomic, readonly) UINavigationController * masterNavigationController;
+@property (nonatomic, readonly)  UIViewController *currentMasterViewController, *currentDetailViewController;
+@property (nonatomic, readonly) UINavigationController * masterNavigationController, *detailNavigationController;
 
 @property NetworkStatus remoteHostStatus;
 @property NetworkStatus internetConnectionStatus;
@@ -64,10 +61,6 @@
 - (IBAction)saveAction:sender;
 
 - (void)updateStatus;
-- (NSInteger) indexForFunctionalViewController:(id)viewController;
-- (NSInteger) indexForFunctionalViewControllerKey:(NSString *)vcKey;
-- (void) changeActiveFeaturedControllerTo:(NSInteger)controllerIndex;
-
 
 - (id) savedTableSelectionForKey:(NSString *)vcKey;
 - (void)setSavedTableSelection:(id)object forKey:(NSString *)vcKey;

@@ -21,11 +21,6 @@
 
 @interface TexLegeAppDelegate (Private)
 
-// these are private methods that outside classes need not use
-@property (nonatomic, retain) NSMutableArray *functionalViewControllers;
-
-- (void)setupDialogBoxes;
-
 - (void)setupFeatures;
 
 - (NSString *)hostName;
@@ -44,12 +39,9 @@ NSInteger kNoSelection = -1;
 
 @implementation TexLegeAppDelegate
 
-//- (void) setupDialogBoxes;
-
 @synthesize tabBarController;
 
 @synthesize savedTableSelection;
-@synthesize functionalViewControllers;
 
 @synthesize mainWindow, appirater;
 @synthesize aboutView, activeDialogController;
@@ -59,8 +51,6 @@ NSInteger kNoSelection = -1;
 
 @synthesize legislatorMasterVC, committeeMasterVC, capitolMapsMasterVC, linksMasterVC, calendarMasterVC;
 
-@synthesize currentMasterViewController, currentDetailViewController;
-
 + (TexLegeAppDelegate *)appDelegate {
 	return (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
 }
@@ -69,21 +59,14 @@ NSInteger kNoSelection = -1;
 	if (self = [super init]) {
 		// initialize  to nil
 		mainWindow = nil;
-		activeDialogController = nil;
 		
 		self.savedTableSelection = [NSMutableDictionary dictionaryWithCapacity:2];
-		
-		self.functionalViewControllers = [NSMutableArray array];
-		
-		[self setupDialogBoxes];
 	}
 	return self;
 }
 
 - (void)dealloc {
 
-	self.currentDetailViewController = self.currentMasterViewController = nil;
-	self.functionalViewControllers = nil;
 	self.savedTableSelection = nil;
 
 	self.activeDialogController = nil;
@@ -108,11 +91,17 @@ NSInteger kNoSelection = -1;
     [super dealloc];
 }
 
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
+	self.aboutView = nil;
+	
+}
+
 
 #pragma mark -
 #pragma mark Data Sources and Main View Controllers
 
-
+#if 0
+/*
 - (NSInteger) indexForFunctionalViewController:(id)viewController {
 	NSInteger index = 0;
 	if (self.functionalViewControllers && viewController) {
@@ -120,26 +109,7 @@ NSInteger kNoSelection = -1;
 		if (index == NSNotFound)
 			index = 0;
 	}
-	return index;
-	
-	#if 0
-	if (!viewController)
-		return 0;
-	
-	NSInteger index = 0;
-	
-	for (id splitVC in self.tabBarController.viewControllers) {
-		UINavigationController *masterNav = [[splitVC viewControllers] objectAtIndex:0];
-		if (masterNav && [[masterNav viewControllers] count]) {
-			UIViewController *vc = [[masterNav viewControllers] objectAtIndex:0];
-			if (vc && [vc isEqual:viewController])
-				return index;
-		}
-		index++;
-	}
-	return 0;
-
-	#endif
+	return index;	
 }
 
 - (NSInteger) indexForFunctionalViewControllerKey:(NSString *)vcKey {
@@ -155,110 +125,99 @@ NSInteger kNoSelection = -1;
 		}
 	}
 	return 0;
-	
-	#if 0
-	if (!vcKey)
-		return 0;
-	
-	NSInteger index = 0;
-	
-	for (id splitVC in self.tabBarController.viewControllers) {
-		UINavigationController *masterNav = [[splitVC viewControllers] objectAtIndex:0];
-		if (masterNav && [[masterNav viewControllers] count]) {
-			UIViewController *vc = [[masterNav viewControllers] objectAtIndex:0];
-			if (vc && [vc respondsToSelector:@selector(viewControllerKey)]) {
-				NSString *tempVCKey = [vc performSelector:@selector(viewControllerKey)];
-				if (tempVCKey && [tempVCKey isEqualToString:vcKey])
-					return index;
-			}
-		}
-		index++;
-	}
-	return 0;	
-
-	
-	#endif
 }
+ */
+#endif
 
 ////// IPAD ONLY
 - (UISplitViewController *) splitViewController {
 	if ([UtilityMethods isIPadDevice]) {
+		if (![self.tabBarController.selectedViewController isKindOfClass:[UISplitViewController class]]) {
+			debug_NSLog(@"Unexpected navigation controller class in tab bar controller hierarchy, check nib.");
+			return nil;
+		}
+				
 		return (UISplitViewController *)self.tabBarController.selectedViewController;
 	}
 	return nil;
 }
 
 
-////// IPAD ONLY
-- (UINavigationController *) detailNavigationController {
-	if ([UtilityMethods isIPadDevice]) {
-		UISplitViewController *split = (UISplitViewController *)self.tabBarController.selectedViewController;
-		if (split && [[split viewControllers] count])
-			return [[split viewControllers] objectAtIndex:1];
-	}
-	return nil;
-}
-
-////// IPAD ONLY
 - (UINavigationController *) masterNavigationController {
 	if ([UtilityMethods isIPadDevice]) {
-		UISplitViewController *split = (UISplitViewController *)self.tabBarController.selectedViewController;
-		if (split && [[split viewControllers] count])
-			return [[split viewControllers] objectAtIndex:0];
+		UISplitViewController *split = [self splitViewController];
+		if (split && split.viewControllers && [split.viewControllers count])
+			return [split.viewControllers objectAtIndex:0];
+	}
+	else {
+		if (![self.tabBarController.selectedViewController isKindOfClass:[UINavigationController class]]) {
+			debug_NSLog(@"Unexpected view/navigation controller class in tab bar controller hierarchy, check nib.");
+		}
+		
+		UINavigationController *nav = (UINavigationController *)self.tabBarController.selectedViewController;
+		return nav;
 	}
 	return nil;
 }
 
-///// IPAD ONLY
-- (UIViewController *) currentDetailViewController {	
+- (UINavigationController *) detailNavigationController {
 	if ([UtilityMethods isIPadDevice]) {
-		return [[[self detailNavigationController] viewControllers] objectAtIndex:0];
+		UISplitViewController *split = [self splitViewController];
+		if (split && split.viewControllers && [split.viewControllers count])
+			return [split.viewControllers objectAtIndex:1];
 	}
 	else
-		return currentDetailViewController;
+		return [self masterNavigationController];
+	
+	return nil;
 }
 
-////// IPAD ONLY
-- (UIViewController *) currentMasterViewController {
-	if ([UtilityMethods isIPadDevice]) {
-		return [[[self masterNavigationController] viewControllers] objectAtIndex:0];
+- (UIViewController *) currentDetailViewController {	
+	UINavigationController *nav = [self detailNavigationController];
+	NSInteger numVCs = 0;
+	if (nav && nav.viewControllers) {
+		numVCs = [nav.viewControllers count];
+		if ([UtilityMethods isIPadDevice])
+			return numVCs ? [nav.viewControllers objectAtIndex:0] : nil;
+		else if (numVCs >= 2)	// we're on an iPhone
+			return [nav.viewControllers objectAtIndex:1];		// this will give us the second vc in the chain, typicaly a detail vc
 	}
-	else
-		return currentMasterViewController;
+
+	return nil;
+}
+
+- (UIViewController *) currentMasterViewController {
+	UINavigationController *nav = [self masterNavigationController];
+	if (nav && nav.viewControllers && [nav.viewControllers count])
+		return [nav.viewControllers objectAtIndex:0];
+	return nil;
 }
 
 
 - (UIViewController *)topViewController {
-	UIViewController *vc = nil;
-	if ([UtilityMethods isIPadDevice]) {
-		return [[self detailNavigationController] topViewController];
-	}
-	else {
-		if ([self.tabBarController.selectedViewController respondsToSelector:@selector(topViewController)]) {
-			vc = [self.tabBarController.selectedViewController performSelector:@selector(topViewController)];
-		}
-	}
-
-	return vc;
+	UINavigationController *nav = [self detailNavigationController];
+	if (nav)
+		return [nav topViewController];
+	else
+		return nil;
 }
 
-- (void) changeActiveFeaturedControllerTo:(NSInteger)controllerIndex {	
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
 	if (![UtilityMethods isIPadDevice]) {
-		if (self.currentMasterViewController &&					// they're trying to select what they've already got
-			[self indexForFunctionalViewController:self.currentMasterViewController] == controllerIndex)
-			return;
-	
-		self.currentDetailViewController = nil;
-		self.currentMasterViewController = [self.functionalViewControllers objectAtIndex:controllerIndex];
+		if (![viewController isEqual:self.tabBarController.selectedViewController]) {
+			debug_NSLog(@"About to switch tabs, popping to root view controller.");
+			UINavigationController *nav = [self detailNavigationController];
+			if (nav)
+				[nav popToRootViewControllerAnimated:NO];
+		}
 	}
 	
-	self.tabBarController.selectedIndex = controllerIndex;
-	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];	
-
-
+	return YES;
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+	
+	
 	// Dismiss the popover if it's present.
 	//if (self.menuPopoverPC != nil) {
 	//	[self.menuPopoverPC dismissPopoverAnimated:YES];
@@ -271,42 +230,37 @@ NSInteger kNoSelection = -1;
 	
 	NSArray *nibObjects = nil;
 	if ([UtilityMethods isIPadDevice]) 
-			nibObjects = [[NSBundle mainBundle] loadNibNamed:@"iPadTabBarController" owner:self options:nil];
-//			[[NSBundle mainBundle] loadNibNamed:@"SplitViewController" owner:self options:NULL];
+		nibObjects = [[NSBundle mainBundle] loadNibNamed:@"iPadTabBarController" owner:self options:nil];
 	else
-			nibObjects = [[NSBundle mainBundle] loadNibNamed:@"iPhoneTabBarController" owner:self options:nil];
+		nibObjects = [[NSBundle mainBundle] loadNibNamed:@"iPhoneTabBarController" owner:self options:nil];
 	
 	if (!nibObjects || [nibObjects count] == 0) {
 		debug_NSLog(@"Error loading user interface NIB components! Can't find the nib file and can't continue this charade.");
 		exit(0);
 	}
 	
-	[self.functionalViewControllers addObject:self.legislatorMasterVC];		// 0
-	[self.functionalViewControllers addObject:self.committeeMasterVC];				// 1
-	[self.functionalViewControllers addObject:self.calendarMasterVC];				// 2
-	[self.functionalViewControllers addObject:self.capitolMapsMasterVC];					// 3
-	[self.functionalViewControllers addObject:self.linksMasterVC];					// 4
+	NSArray *VCs = [[NSArray alloc] initWithObjects:self.legislatorMasterVC, self.committeeMasterVC,
+					self.calendarMasterVC, self.capitolMapsMasterVC, self.linksMasterVC, nil];
 	
-	[self.legislatorMasterVC configureWithManagedObjectContext:self.managedObjectContext]; 
-	[self.committeeMasterVC configureWithManagedObjectContext:self.managedObjectContext];
-	[self.calendarMasterVC configureWithManagedObjectContext:self.managedObjectContext];
-	[self.capitolMapsMasterVC configureWithManagedObjectContext:self.managedObjectContext];
-	[self.linksMasterVC configureWithManagedObjectContext:self.managedObjectContext];
+	for (GeneralTableViewController *masterVC in VCs) {
+		[masterVC configureWithManagedObjectContext:self.managedObjectContext];
+	}
 		
-	NSMutableArray *splitViewControllers = [NSMutableArray arrayWithCapacity:[self.functionalViewControllers count]];
 	if ([UtilityMethods isIPadDevice]) {
+		NSMutableArray *splitViewControllers = [[NSMutableArray alloc] initWithCapacity:[VCs count]];
 		NSInteger index = 0;
-		for (GeneralTableViewController * controller in self.functionalViewControllers) {
+		for (GeneralTableViewController * controller in VCs) {
 			UISplitViewController * split = [controller splitViewController];
 			if (split) {
 				split.title = [[controller dataSource] name];
-				split.tabBarItem = [[UITabBarItem alloc] initWithTitle:
-									[[controller dataSource] name] image:[[controller dataSource] tabBarImage] tag:index];
+				split.tabBarItem = [[[UITabBarItem alloc] initWithTitle:
+									[[controller dataSource] name] image:[[controller dataSource] tabBarImage] tag:index] autorelease];
 				[splitViewControllers addObject:split];
 			}
 			index++;
 		}
 		[self.tabBarController setViewControllers:splitViewControllers];
+		[splitViewControllers release];
 	}
 	
 	[self.mainWindow addSubview:self.tabBarController.view];
@@ -314,12 +268,21 @@ NSInteger kNoSelection = -1;
 	NSInteger selection = -1;
 	NSString * tempVCKey = [self.savedTableSelection objectForKey:@"viewController"];
 	if (tempVCKey) { // we have a saved view controller
-		selection = [self indexForFunctionalViewControllerKey:tempVCKey];
+		NSInteger index = 0;
+		for (GeneralTableViewController * masterVC in VCs) {
+			if ([tempVCKey isEqualToString:[masterVC viewControllerKey]]){
+				selection = index;
+				continue;
+			}
+			index++;
+		}
 	}
-	if (selection < 0 || selection >= kNumMaxTabs) 
+	if (selection < 0) 
 		selection = 0;
-	[self changeActiveFeaturedControllerTo:selection];				
 	
+	[self.tabBarController setSelectedIndex:selection];
+	
+	[VCs release];
 }
 
 
@@ -438,26 +401,33 @@ NSInteger kNoSelection = -1;
 #pragma mark Alerts and Dialog Boxes
 
 
-- (void)setupDialogBoxes {    
-	if (![UtilityMethods isIPadDevice] && !self.aboutView) {
-		self.aboutView = [[TexLegeInfoController alloc] initWithNibName:@"TexLegeInfoController~iphone" bundle:nil];	
-		self.aboutView.delegate = self;
-		self.aboutView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-		self.aboutView.modalPresentationStyle = UIModalPresentationFormSheet;
-	}
-}
-
 - (void)showAboutDialog:(UIViewController *)controller {
 	if (![UtilityMethods isIPadDevice]) {
+		if (!controller)
+			return;
+		
 		self.activeDialogController = controller;
-		if ((controller != nil) && (self.aboutView != nil))
+		
+		if (!self.aboutView) {
+			self.aboutView = [[TexLegeInfoController alloc] initWithNibName:@"TexLegeInfoController~iphone" bundle:nil];	
+			self.aboutView.delegate = self;
+			self.aboutView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+			self.aboutView.modalPresentationStyle = UIModalPresentationFormSheet;
+		}
+		
+		if (self.aboutView)
 			[controller presentModalViewController:self.aboutView animated:YES];
 	}
 }
 
 - (void)modalViewControllerDidFinish:(UIViewController *)controller {
-	if (![UtilityMethods isIPadDevice] && self.activeDialogController)
+	if (![UtilityMethods isIPadDevice] && self.activeDialogController) {
+		BOOL isAbout = [self.activeDialogController.modalViewController isEqual:self.aboutView];
+		
 		[self.activeDialogController dismissModalViewControllerAnimated:YES];
+		if (isAbout)
+			self.aboutView = nil;
+	}
 }
 
 /*
@@ -573,12 +543,6 @@ NSInteger kNoSelection = -1;
 	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:tempDict];
 	[tempDict release];
 	return data;
-}
-
-- (NSString *)currentMasterViewControllerKey {
-	if ([self.currentMasterViewController respondsToSelector:@selector(viewControllerKey)])
-		return [self.currentMasterViewController performSelector:@selector(viewControllerKey)];
-	return @"";
 }
 
 /**
