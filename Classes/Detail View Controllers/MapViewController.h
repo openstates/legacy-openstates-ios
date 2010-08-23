@@ -11,10 +11,11 @@
 #import "BSKmlResult.h"
 
 @class DistrictOfficeObj;
-@interface MapViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate,
-		MKReverseGeocoderDelegate, BSForwardGeocoderDelegate> {
+@interface MapViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate, UIPopoverControllerDelegate,
+		MKReverseGeocoderDelegate, BSForwardGeocoderDelegate, UISplitViewControllerDelegate> {
 }
 
+@property (nonatomic,retain) IBOutlet UIPopoverController *popoverController;
 @property (nonatomic,retain) IBOutlet MKMapView *mapView;
 @property (nonatomic,retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic,retain) IBOutlet UISegmentedControl *mapTypeControl;
@@ -25,10 +26,14 @@
 @property (nonatomic,retain) BSForwardGeocoder *forwardGeocoder;
 @property (nonatomic,copy) NSString *addressString;
 @property (nonatomic,readonly) MKCoordinateRegion texasRegion;
+@property (nonatomic) BOOL shouldAnimate;
 
+- (IBAction) showAllDistrictOffices:(id)sender;
 - (IBAction)changeMapType:(id)sender;
 - (IBAction)locateUser:(id)sender;
 - (IBAction)reverseGeocodeCurrentLocation;
 - (void)setAddressString:(NSString *)string;
+
+//- (NSString *)popoverButtonTitle;
 
 @end

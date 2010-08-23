@@ -12,29 +12,33 @@
 #import "DistrictOfficeObj.h"
 #import "CustomAnnotation.h"
 
+#import "TexLegeAppDelegate.h"
+#import "DistrictOfficeMasterViewController.h"
+#import "DistrictOfficeDataSource.h"
+#import "DistrictOfficeAnnotationView.h"
+
+@interface MapViewController (Private)
+- (void)animateToState:(id<MKAnnotation>)annotation;
+- (void)animateToAnnotation:(id<MKAnnotation>)annotation;
+@end
+
+
 @implementation MapViewController
 @synthesize bookmarksButton, mapTypeControl, mapView, userLocationButton, reverseGeocoder;
 @synthesize toolbar, searchBar, forwardGeocoder, addressString, texasRegion;
+@synthesize popoverController, shouldAnimate;
 
 #pragma mark -
 #pragma mark Initialization and Memory Management
 
+- (NSString *)nibName {
+	return @"MapViewController";
+}
+
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-		[self.view setBackgroundColor:[TexLegeTheme backgroundLight]];
-		self.mapView.showsUserLocation = NO;
-
-		// Set up the map's region to frame the state of Texas.
-		// Zoom = 6
-		self.mapView.region = self.texasRegion;
-		
-		self.toolbar.tintColor = [TexLegeTheme navbar];
-		if ([UtilityMethods isIPadDevice])
-			self.navigationItem.titleView = self.toolbar; 
-		else
-			self.navigationItem.titleView = self.searchBar;
-			//self.navigationItem.titleView = self.mapTypeControl;
-
+	
+		self.shouldAnimate = YES;
 	}
 	return self;
 }
@@ -49,6 +53,31 @@
 	self.searchBar = nil;
 	self.addressString = nil;
 	[super dealloc];
+}
+
+- (void) viewDidLoad {
+	[super viewDidLoad];
+	
+	[self.view setBackgroundColor:[TexLegeTheme backgroundLight]];
+	self.mapView.showsUserLocation = NO;
+	
+	// Set up the map's region to frame the state of Texas.
+	// Zoom = 6
+	self.mapView.region = self.texasRegion;
+	
+	self.toolbar.tintColor = [TexLegeTheme navbar];
+	if ([UtilityMethods isIPadDevice]) {
+		self.navigationItem.titleView = self.toolbar; 
+		
+		self.bookmarksButton.enabled = ![UtilityMethods isLandscapeOrientation];
+		self.bookmarksButton.target = self;
+		self.bookmarksButton.action = @selector(displayDistrictOfficesPopover:);
+		
+		
+	}
+	else
+		self.navigationItem.titleView = self.searchBar;
+	//self.navigationItem.titleView = self.mapTypeControl;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -69,7 +98,85 @@
 }
 
 #pragma mark -
+#pragma mark Popover Support
+
+/*- (NSString*)popoverButtonTitle {
+	return  @"District Offices";
+}
+*/
+
+- (IBAction)displayDistrictOfficesPopover:(id)sender {
+	if ( ![UtilityMethods isIPadDevice])
+		return;
+	
+	if (!self.popoverController) {
+		self.popoverController = [[UIPopoverController alloc] initWithContentViewController:[[TexLegeAppDelegate appDelegate] districtOfficeMasterVC]]; // (Autorelease??)
+		self.popoverController.delegate = (id<UIPopoverControllerDelegate>)self; //self.currentDetailViewController;	
+	}
+	
+	if (!self.bookmarksButton || !self.popoverController) {
+		debug_NSLog(@"Bookmarks Button Item or District Offices Popover Controller is unallocated ... cannot display master list popover.");
+		return;		// should never happen?
+	}
+	//self.isOpening = YES;
+	[self.popoverController presentPopoverFromBarButtonItem:self.bookmarksButton permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+	//self.isOpening = NO;
+	
+	// now that the menu is displayed, let's reset the action so it's ready to go away again on demand
+	[self.bookmarksButton setTarget:self];
+	[self.bookmarksButton setAction:@selector(dismissDistrictOfficesPopover:)];
+}
+
+- (IBAction)dismissDistrictOfficesPopover:(id)sender {
+	if (!self.popoverController || ![UtilityMethods isIPadDevice] /*|| self.isOpening*/)
+		return;
+	
+	if (self.popoverController)	{
+		if ([self.popoverController isPopoverVisible])
+			[self.popoverController dismissPopoverAnimated:YES];
+		self.popoverController = nil;
+	}
+	
+	if (self.bookmarksButton) {
+		[self.bookmarksButton setTarget:self];
+		[self.bookmarksButton setAction:@selector(displayDistrictOfficesPopover:)];
+	}
+}
+
+#pragma mark -
+#pragma mark Split view support
+
+- (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController 
+		  withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
+	
+	//[self showMasterListPopoverButtonItem:barButtonItem];
+	//[self.bookmarksButton setHidden:NO];
+	[self.bookmarksButton setEnabled:YES];
+	self.popoverController = pc;
+}
+
+// Called when the view is shown again in the split view, invalidating the button and popover controller.
+- (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController 
+  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
+	
+	//[self.bookmarksButton setHidden:YES];
+	[self.bookmarksButton setEnabled:NO];
+
+	[self dismissDistrictOfficesPopover:barButtonItem];		
+}
+
+/*
+// we're about to show the popover, with the master list inside
+- (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
+   willPresentViewController: (UIViewController *)aViewController
+{
+	 
+}
+*/
+
+#pragma mark -
 #pragma mark Properties
+
 
 - (MKCoordinateRegion) texasRegion {
 	// Set up the map's region to frame the state of Texas.
@@ -110,6 +217,48 @@
 	if ([UtilityMethods locationServicesEnabled]) 
 		self.mapView.showsUserLocation = YES;
 }
+
+- (IBAction) showAllDistrictOffices:(id)sender {
+	// create a LegislatorDetailViewController. This controller will display the full size tile for the element
+	
+	DistrictOfficeMasterViewController *masterList = [[TexLegeAppDelegate appDelegate] districtOfficeMasterVC];	
+	NSFetchedResultsController *frc = [(DistrictOfficeDataSource *) masterList.dataSource fetchedResultsController];
+	if (!frc)
+		return;
+	
+	NSArray *array = [frc fetchedObjects];
+	
+	NSMutableArray *officeAnnotations = [[NSMutableArray alloc] init];
+	for (id<MKAnnotation> annotation in [self.mapView annotations]) {
+		if ([annotation isKindOfClass:[DistrictOfficeObj class]])
+			[officeAnnotations addObject:annotation];
+	}
+	[self.mapView removeAnnotations:officeAnnotations];
+	[officeAnnotations release];
+	
+	[self performSelector:@selector(animateToState:) withObject:nil afterDelay:0.3f];
+	self.shouldAnimate = NO;
+	[self.mapView addAnnotations:array];	
+}
+
+
+
+- (void)showLegislatorDetails:(LegislatorObj *)legislator
+{
+    // the detail view does not want a toolbar so hide it
+    //[self.navigationController setToolbarHidden:YES animated:NO];
+    
+	//[self.navigationController pushViewController:self.detailViewController animated:YES];
+	
+	if (!legislator)
+		return;
+	
+	LegislatorDetailViewController *legVC = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
+	legVC.legislator = legislator;
+	[self.navigationController pushViewController:legVC animated:YES];
+	[legVC release];
+}
+
 
 #pragma mark -
 #pragma mark Geocoding and Reverse Geocoding
@@ -163,12 +312,14 @@
 			// Zoom into the location		
 			//[mapView setRegion:place.coordinateRegion animated:TRUE];
 			
-			if (lastAnnotation) { // we've already got one annotation set, let's zoom in/out
-				[self performSelector:@selector(animateToState:) withObject:lastAnnotation afterDelay:0.3];
-				[self performSelector:@selector(animateToAnnotation:) withObject:place afterDelay:1.7];        
+			if (self.shouldAnimate) {
+				if (lastAnnotation) { // we've already got one annotation set, let's zoom in/out
+					[self performSelector:@selector(animateToState:) withObject:lastAnnotation afterDelay:0.3];
+					[self performSelector:@selector(animateToAnnotation:) withObject:place afterDelay:1.7];        
+				}
+				else
+					[self performSelector:@selector(animateToAnnotation:) withObject:place afterDelay:0.3];
 			}
-			else
-				[self performSelector:@selector(animateToAnnotation:) withObject:place afterDelay:0.3];
 			
 		}
 		
@@ -239,11 +390,13 @@
 }
 
 #pragma mark -
-#pragma mark Map View Delegate
+#pragma mark MapViewDelegate
 
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views
 {
+	[self dismissDistrictOfficesPopover:nil];
+
 	for (MKAnnotationView *aView in views) {
 		if ([aView.annotation class] == [MKUserLocation class])
 			//[aView isKindOfClass:NSClassFromString(@"MKUserLocationView")])
@@ -271,7 +424,8 @@
 	id<MKAnnotation> lastAnnotation = lastView.annotation;
 	MKCoordinateRegion region;
 	
-	if (lastAnnotation) {
+	if (lastAnnotation && self.shouldAnimate) {
+		
 		if ([lastAnnotation isKindOfClass:[DistrictOfficeObj class]]) {
 			DistrictOfficeObj *obj = lastAnnotation;
 			region = [obj region];
@@ -289,9 +443,11 @@
 			[self.mapView setRegion:region animated:TRUE];
 		}
 
+		
 		[self.mapView selectAnnotation:lastAnnotation animated:YES];
 	}
 	
+	self.shouldAnimate = YES;
 }
 
 
@@ -331,24 +487,6 @@
 	return nil;
 }
 */
-#pragma mark -
-#pragma mark MKMapViewDelegate
-
-- (void)showLegislatorDetails:(LegislatorObj *)legislator
-{
-    // the detail view does not want a toolbar so hide it
-    //[self.navigationController setToolbarHidden:YES animated:NO];
-    
-   //[self.navigationController pushViewController:self.detailViewController animated:YES];
-	
-	if (!legislator)
-		return;
-
-	LegislatorDetailViewController *legVC = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
-	legVC.legislator = legislator;
-	[self.navigationController pushViewController:legVC animated:YES];
-	[legVC release];
-}
 
 + (CGFloat)annotationPadding;
 {
@@ -392,12 +530,11 @@
 		
         // try to dequeue an existing pin view first
         static NSString* districtOfficeAnnotationID = @"districtOfficeAnnotationID";
-        MKPinAnnotationView* pinView = (MKPinAnnotationView *)
-		[mapView dequeueReusableAnnotationViewWithIdentifier:districtOfficeAnnotationID];
+        DistrictOfficeAnnotationView* pinView = (DistrictOfficeAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:districtOfficeAnnotationID];
         if (!pinView)
         {
             // if an existing pin view was not available, create one
-            MKPinAnnotationView* customPinView = [[[MKPinAnnotationView alloc]
+            DistrictOfficeAnnotationView* customPinView = [[[DistrictOfficeAnnotationView alloc]
 												   initWithAnnotation:annotation reuseIdentifier:districtOfficeAnnotationID] autorelease];
             customPinView.pinColor = [[districtOffice pinColorIndex] integerValue];
             customPinView.animatesDrop = YES;
@@ -412,6 +549,9 @@
             customPinView.leftCalloutAccessoryView = iconView;
             [iconView release];
 			
+			[customPinView setSelectionObserver:self];
+			//[customPinView addObserver:self forKeyPath:@"selected" options:NSKeyValueObservingOptionNew context:@"GMAP_ANNOTATION_SELECTED"];
+
             return customPinView;
         }
         else
@@ -419,7 +559,6 @@
             pinView.annotation = annotation;
         }		
 		
-		[pinView addObserver:self forKeyPath:@"selected" options:NSKeyValueObservingOptionNew context:@"GMAP_ANNOTATION_SELECTED"];
 		
         return pinView;
     }
@@ -454,7 +593,15 @@
    
     return nil;
 }
+/*
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+	
+}
 
+- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
+	
+}
+*/
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
 					  ofObject:(id)object
@@ -463,7 +610,7 @@
 	
 	NSString *action = (NSString*)context;
 	
-	debug_NSLog(@"something");
+	//debug_NSLog(@"something");
 	if([action isEqualToString:@"GMAP_ANNOTATION_SELECTED"]) 
 	{				
 		if ([object respondsToSelector:@selector(annotation)]) {
