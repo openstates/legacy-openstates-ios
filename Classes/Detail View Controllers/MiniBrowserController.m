@@ -206,7 +206,7 @@ static MiniBrowserController *s_browser = nil;
 	
 	if ([UtilityMethods isIPadDevice])
 	{
-		if (self.splitViewController)
+		if ([UtilityMethods isIPadDevice])
 			[self removeDoneButton];
 		[self normalizeToolbarButtons];
 		
