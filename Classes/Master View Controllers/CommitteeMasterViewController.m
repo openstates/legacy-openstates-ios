@@ -28,6 +28,10 @@
 	return @"CommitteeMasterViewController";
 }
 
+- (NSString *)nibName {
+	return [self viewControllerKey];
+}
+
 - (Class)dataSourceClass {
 	return [CommitteesDataSource class];
 }
@@ -35,17 +39,18 @@
 
 #pragma mark -
 #pragma mark View lifecycle
-- (void) configureWithManagedObjectContext:(NSManagedObjectContext *)context {
-	[super configureWithManagedObjectContext:context];
+/*
+ - (void) configureWithManagedObjectContext:(NSManagedObjectContext *)context {
+	[super configureWithManagedObjectContext:context];	
+}
+*/
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
 	
 	self.tableView.rowHeight = 44.0f;
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self.dataSource;
-		
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
 	
 	if ([UtilityMethods isIPadDevice])
 		self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);

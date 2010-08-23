@@ -29,18 +29,20 @@
 	return @"LegislatorMasterViewController";
 }
 
+- (NSString *)nibName {
+	return [self viewControllerKey];
+}
+
+
 - (Class)dataSourceClass {
 	return [LegislatorsDataSource class];
 }
 
-
+/*
 - (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
-	[super configureWithManagedObjectContext:context];
-
-	self.tableView.rowHeight = 73.0f;
-	self.tableView.delegate = self;
-	self.tableView.dataSource = self.dataSource;	
+	[super configureWithManagedObjectContext:context];	
 }
+*/
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -48,6 +50,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 		
+	self.tableView.rowHeight = 73.0f;
+	self.tableView.delegate = self;
+	self.tableView.dataSource = self.dataSource;	
+	
 	if ([UtilityMethods isIPadDevice])
 	    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 	
