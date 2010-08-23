@@ -139,18 +139,6 @@
 	}
 }
 
-// Returns an array of the appropriate feed entries (CFeedEntry)...
-- (NSArray *)feedEntriesForIndexPath:(NSIndexPath *)indexPath {	
-	if (!indexPath || !self.calendarList)
-		return nil;
-	
-	ChamberCalendarObj *calendar = [self.calendarList objectAtIndex:indexPath.row];
-	if (calendar)
-		return [calendar feedEntries];
-	
-	return nil;
-}
-
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
 	return [self.calendarList objectAtIndex:indexPath.row];
 }
