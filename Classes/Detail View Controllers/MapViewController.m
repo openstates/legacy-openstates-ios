@@ -52,6 +52,8 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
 	NSURL *tempURL = [NSURL URLWithString:@"http://maps.google.com"];
 	//if (![UtilityMethods isNetworkReachable])
 	//		[UtilityMethods noInternetAlert];

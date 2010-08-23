@@ -23,6 +23,7 @@
 #pragma mark Intialization and Memory Management
 
 - (void)viewDidLoad {
+	[super viewDidLoad];
 	self.hidesBottomBarWhenPushed = YES;
 	
 	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
@@ -43,6 +44,7 @@
 
 
 - (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
 	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 	
 	if ([UtilityMethods isIPadDevice] && !self.map && ![UtilityMethods isLandscapeOrientation])  {

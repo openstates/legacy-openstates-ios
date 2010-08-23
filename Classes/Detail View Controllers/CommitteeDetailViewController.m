@@ -446,6 +446,7 @@ enum InfoSectionRows {
     // Releases the view if it doesn't have a superview.
 	[[self navigationController] popToRootViewControllerAnimated:YES];
 
+	self.committee = nil;
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
@@ -454,11 +455,13 @@ enum InfoSectionRows {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
 	self.committee = nil;
+	[super viewDidUnload];
 
 }
 
 
 - (void)dealloc {
+	self.committee = nil;
     [super dealloc];
 }
 

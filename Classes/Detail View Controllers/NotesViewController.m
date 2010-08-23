@@ -17,6 +17,7 @@
 
 
 - (void)viewDidLoad {
+	[super viewDidLoad];
 	if ([UtilityMethods isIPadDevice]) {
 		self.navBar.tintColor = [TexLegeTheme accent];
 		self.navTitle.rightBarButtonItem = self.editButtonItem;
@@ -29,7 +30,8 @@
 }
 
 
-- (void)viewWillAppear:(BOOL)animated {    
+- (void)viewWillAppear:(BOOL)animated {   
+	[super viewWillAppear:animated];
     // Update the views appropriately
     nameLabel.text = [legislator shortNameForButtons];    
 	if (legislator.notes.length == 0) {

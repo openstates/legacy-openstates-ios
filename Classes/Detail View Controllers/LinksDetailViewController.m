@@ -37,7 +37,7 @@
 
 
 - (void)viewDidLoad {	
-	
+	[super viewDidLoad];
 /*	if (self.link) {
 		self.navigationItem.title = link.label;
 		//[self.webView loadRequest:[NSURLRequest requestWithURL:map.url]];
@@ -59,15 +59,16 @@
 
 
 - (void)dealloc {
-    [super dealloc];
 	self.miniBrowser = nil;
 	self.link = nil;
 	self.aboutControl = nil;
+    [super dealloc];
 }
 
 
 
 - (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
 	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 	
 	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
@@ -107,7 +108,6 @@
 			//[self.navigationController pushViewController:self.aboutControl animated:NO];
 
 			[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.aboutControl] animated:YES];
-//			[[TexLegeAppDelegate appDelegate] setCurrentDetailViewController:self.aboutControl];
 
 			//[[TexLegeAppDelegate appDelegate] showAboutDialog:self];
 		}
@@ -128,8 +128,6 @@
 				[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.miniBrowser] animated:NO];
 				debug_NSLog(@"mini browser %@", [self.miniBrowser description]);
 				debug_NSLog(@"vc's %@", [self.navigationController viewControllers]);
-				
-				//[[TexLegeAppDelegate appDelegate] setCurrentDetailViewController:self.miniBrowser];
 			}
 			
 		}

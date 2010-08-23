@@ -326,7 +326,7 @@
 	self.dataForPlot = nil;
 	self.graph = nil;
 	self.notesPopover = nil;
-
+	[super viewDidUnload];
 }
 
 

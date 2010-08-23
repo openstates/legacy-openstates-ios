@@ -68,6 +68,9 @@
 - (void)viewDidUnload {
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
+	self.versionLabel.text = @"";
+
+	[super viewDidUnload];
 }
 
 #pragma mark -
@@ -92,6 +95,7 @@
 
 
 - (void)dealloc {
+	
 	self.projectWebsiteURL = nil;
 	self.versionLabel = nil;
 	self.projectWebsiteButton = nil;
