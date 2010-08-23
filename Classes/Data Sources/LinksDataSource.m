@@ -242,6 +242,7 @@ enum HeaderSectionRows {
 	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortSection, sortOrder, nil];  
 	[fetchRequest setSortDescriptors:sortDescriptors];
 	
+	/* This was so we could edit core data contents on the fly ... keep it for an example
 	NSError *error;
 	NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
 	if (fetchedObjects == nil) {
@@ -249,20 +250,21 @@ enum HeaderSectionRows {
 	}
 	for (LinkObj *object in fetchedObjects) {
 		if ([object.section integerValue] == kHeaderSection) {
-			debug_NSLog(@"%@", object.url);
 			if ([object.url isEqualToString:@"voteInfoView"]) {	// we've changed out this old thingy
+				debug_NSLog(@"%@", object.url);
 				object.url = @"contactMail";
 				object.label = @"Contact TexLege Support";
+				continue;
 			}
 		}
 	}	
 	[self saveAction:nil];
-	
+	*/
 	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
 																								managedObjectContext:managedObjectContext
 																								  sectionNameKeyPath:@"section" cacheName:@"LinksCache"];
 	aFetchedResultsController.delegate = self;
-	[self setFetchedResultsController:aFetchedResultsController];
+	self.fetchedResultsController = aFetchedResultsController;
 	
 	[aFetchedResultsController release];
 	[fetchRequest release];
