@@ -9,16 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "SynthesizeSingleton.h"
 
-@class MenuPopoverViewController;
-
 @interface CommonPopoversController : NSObject <UIPopoverControllerDelegate> {
 }
 
 + (CommonPopoversController *)sharedCommonPopoversController;
 
 @property (nonatomic,retain) UIPopoverController *masterListPopoverPC;
-@property (nonatomic,retain) UIPopoverController *mainMenuPopoverPC;
-@property (nonatomic,retain) IBOutlet MenuPopoverViewController *mainMenuPopoverVC;
 @property (nonatomic,readonly) IBOutlet UIViewController *currentMasterViewController;
 @property (nonatomic,readonly) IBOutlet UIViewController *currentDetailViewController;
 @property (nonatomic) BOOL isOpening;
@@ -29,7 +25,4 @@
 - (IBAction)displayMasterListPopover:(id)sender;
 - (IBAction)dismissMasterListPopover:(id)sender;
 
-- (IBAction)displayMainMenuPopover:(id)sender;
-- (IBAction)dismissMainMenuPopover:(id)sender;
-	
 @end
