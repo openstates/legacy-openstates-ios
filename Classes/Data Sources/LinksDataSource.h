@@ -17,8 +17,6 @@
 
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
 @property (nonatomic,retain) NSArray * linksData;
-- (void) setupDataArray;
-- (void) initializeDatabase;
 #endif
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;

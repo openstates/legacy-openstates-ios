@@ -13,6 +13,12 @@
 
 @interface LinksDataSource (Private)
 - (IBAction)saveAction:(id)sender;
+
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
+- (void) setupDataArray;
+- (void) initializeDatabase;
+#endif
+
 @end
 
 @implementation LinksDataSource
