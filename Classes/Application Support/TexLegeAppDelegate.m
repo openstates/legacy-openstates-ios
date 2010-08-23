@@ -614,9 +614,11 @@ NSInteger kNoSelection = -1;
         return persistentStoreCoordinator;
     }
 	
+	// If we ever want to allow editing or changing the database, we must use a copy of the database!
+#ifdef IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB
 	NSString *storePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent: DATABASE_FILE];
-
-#if NEEDS_TO_INITIALIZE_DATABASE == 0 // don't use this if we're setting up & initializing from property lists...
+	
+	#if NEEDS_TO_INITIALIZE_DATABASE == 0 // don't use this if we're setting up & initializing from property lists...
 	/*
 	 Set up the store.
 	 Provide a pre-populated default store.
@@ -629,9 +631,11 @@ NSInteger kNoSelection = -1;
 			[fileManager copyItemAtPath:defaultStorePath toPath:storePath error:NULL];
 		}
 	}
-	debug_NSLog(@"%@", storePath);
+	#endif
+#else
+	NSString *storePath = [[NSBundle mainBundle] pathForResource:DATABASE_NAME ofType:@"sqlite"];
 #endif
-	
+	debug_NSLog(@"%@", storePath);
 	NSURL *storeUrl = [NSURL fileURLWithPath:storePath];
 
 	NSError *error;
