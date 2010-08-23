@@ -11,6 +11,8 @@
 @interface GeneralTableViewController : UITableViewController <UITableViewDelegate> {
 }
 
+@property (nonatomic,retain) IBOutlet NSManagedObjectContext *managedObjectContext;
+
 @property (nonatomic,retain) IBOutlet id<TableDataSource> dataSource;
 @property (nonatomic,retain) IBOutlet id detailViewController;
 @property (nonatomic,readonly) NSString			*viewControllerKey;

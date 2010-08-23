@@ -20,7 +20,7 @@
 
 
 @synthesize dataSource, detailViewController;
-@synthesize selectObjectOnAppear;
+@synthesize selectObjectOnAppear, managedObjectContext;
 
 - (NSString *) viewControllerKey {
 	return @"GENERALTABLEVIEWCONTROLLER_TEMPLATE";
@@ -31,8 +31,10 @@
 }
 
 - (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
+	self.managedObjectContext = context;
+	
 		//self.tableView = nil;
-	self.dataSource = [[[self dataSourceClass] alloc] initWithManagedObjectContext:context];
+	self.dataSource = [[[self dataSourceClass] alloc] initWithManagedObjectContext:self.managedObjectContext];
 	self.title = [self.dataSource name];	
 	// set the long name shown in the navigation bar
 	//self.navigationItem.title=[dataSource navigationBarName];
@@ -69,6 +71,7 @@
 	self.tableView = nil;
 	self.dataSource = nil; 
 	self.selectObjectOnAppear = nil;
+	self.managedObjectContext = nil;
 	[super dealloc];
 }
 
@@ -78,10 +81,13 @@
 	
 	[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
 
-	//self.detailViewController = nil;
+	if (![UtilityMethods isIPadDevice]) {
+		debug_NSLog(@"about to release a view controller %@", self.detailViewController);
+		self.detailViewController = nil;
+	}
+	
 	self.selectObjectOnAppear = nil;
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
-    // Release anything that's not essential, such as cached data
 }
 
 - (void)runLoadView {	
@@ -164,7 +170,7 @@
 	}
 	
 	// We're on an iphone, without a splitview or popovers, so if we get here, let's stop
-	if ([UtilityMethods isIPadDevice] == NO) {
+	if (![UtilityMethods isIPadDevice]) {
 		[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
 	}
 }
@@ -181,6 +187,7 @@
 
 // the user selected a row in the table.
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
+	return ; // just a placeholder for children
 }
 
 // the *user* selected a row in the table, so turn on animations and save their selection.
