@@ -13,15 +13,6 @@
 @class LegislatorMasterTableViewCell;
 
 @interface LegislatorsDataSource : NSObject <TableDataSource>  {
-	BOOL hideTableIndex;
-	NSInteger filterChamber;
-	NSMutableString *filterString;
-	
-	IBOutlet LegislatorMasterTableViewCell *leg_cell;
-	
-	NSFetchedResultsController *fetchedResultsController;
-	IBOutlet NSManagedObjectContext *managedObjectContext;	
-	UISearchDisplayController *searchDisplayController;
 }
 @property (nonatomic, retain) IBOutlet LegislatorMasterTableViewCell *leg_cell;
 

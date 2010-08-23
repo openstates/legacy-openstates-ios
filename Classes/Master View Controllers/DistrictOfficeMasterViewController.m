@@ -1,32 +1,46 @@
 //
-//  MasterTableViewController.m
+//  DistrictOfficeMasterViewController.m
 //  TexLege
 //
-//  Created by Gregory Combs on 6/28/10.
+//  Created by Gregory Combs on 8/23/10.
 //  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
-#import "LegislatorsDataSource.h"
-#import "LegislatorMasterViewController.h"
-#import "LegislatorDetailViewController.h"
-#import "LegislatorMasterTableViewCell.h"
+#import "DistrictOfficeMasterViewController.h"
+#import "DistrictOfficeDataSource.h"
+#import "DistrictOfficeObj.h"
+#import "MapViewController.h"
 #import "UtilityMethods.h"
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 
-@interface LegislatorMasterViewController (Private)
+
+@interface DistrictOfficeMasterViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
 @end
 
 
-@implementation LegislatorMasterViewController
-@synthesize chamberControl;
+
+@implementation DistrictOfficeMasterViewController
+@synthesize chamberControl, sortControl, filterControls;
+
+
+#pragma mark -
+#pragma mark Memory management
+
+- (void)didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    
+    // Relinquish ownership any cached data, images, etc that aren't in use.
+}
+
 
 #pragma mark -
 #pragma mark Initialization
 
 - (NSString *) viewControllerKey {
-	return @"LegislatorMasterViewController";
+	return @"DistrictOfficeMasterViewController";
 }
 
 - (NSString *)nibName {
@@ -35,22 +49,22 @@
 
 
 - (Class)dataSourceClass {
-	return [LegislatorsDataSource class];
+	return [DistrictOfficeDataSource class];
 }
 
 /*
-- (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
-	[super configureWithManagedObjectContext:context];	
-}
-*/
+ - (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
+ [super configureWithManagedObjectContext:context];	
+ }
+ */
 
 #pragma mark -
 #pragma mark View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-		
-	self.tableView.rowHeight = 73.0f;
+	
+	self.tableView.rowHeight = 44.0f;
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self.dataSource;	
 	
@@ -63,34 +77,52 @@
 	self.searchDisplayController.searchResultsDataSource = self.dataSource;
 	
 	self.chamberControl.tintColor = [TexLegeTheme accent];
+	self.sortControl.tintColor = [TexLegeTheme accent];
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
-	self.navigationItem.titleView = self.chamberControl;
-
-	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
+	self.navigationItem.titleView = self.filterControls;
+	
+	self.selectObjectOnAppear = nil;
+/*
+ if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
 		self.selectObjectOnAppear = [self firstDataObject];
+*/
 }
 
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-		
+	/*
 	//// ALL OF THE FOLLOWING MUST NOT RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER	
 	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
-		id detailObject = self.detailViewController ? [self.detailViewController valueForKey:@"legislator"] : nil;
-		if (!detailObject) {
-			NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
-			if (!currentIndexPath) {			
-				NSUInteger ints[2] = {0,0};	// just pick the first one then
-				currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
+		id detailObject = nil;
+
+		if (self.detailViewController && [self.detailViewController isKindOfClass:[MapViewController class]]) {
+			MapViewController *mapVC = (MapViewController *)self.detailViewController;
+			if (mapVC && [mapVC.mapView.annotations count]) {
+				for (id<MKAnnotation>annotation in mapVC.mapView.annotations) {
+					if ([annotation isKindOfClass:[DistrictOfficeObj class]]) {
+						detailObject = annotation;
+						continue;
+					}
+				}
 			}
-			detailObject = [self.dataSource dataObjectForIndexPath:currentIndexPath];				
+			if (!detailObject) {
+				NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
+				if (!currentIndexPath) {			
+					NSUInteger ints[2] = {0,0};	// just pick the first one then
+					currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
+				}
+				detailObject = [self.dataSource dataObjectForIndexPath:currentIndexPath];				
+			}
+			self.selectObjectOnAppear = detailObject;
+			
 		}
+			
 		self.selectObjectOnAppear = detailObject;
 	}	
-	if ([UtilityMethods isIPadDevice])
-		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
 	
 	// END: IPAD ONLY
+	 */
 }
 
 
@@ -101,30 +133,53 @@
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
 	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 	
-	if (![UtilityMethods isIPadDevice])
+	//if (![UtilityMethods isIPadDevice])
 		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
-	
-	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]) && (self.splitViewController != nil);
+		
 	
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
-	if ([dataObject isKindOfClass:[NSManagedObject class]])
+/*	if ([dataObject isKindOfClass:[NSManagedObject class]])
 		[appDelegate setSavedTableSelection:[dataObject objectID] forKey:self.viewControllerKey];
 	else
 		[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
+*/
+	[appDelegate setSavedTableSelection:nil forKey:self.viewControllerKey];
 	
 	// create a LegislatorDetailViewController. This controller will display the full size tile for the element
 	if (self.detailViewController == nil) {
-		self.detailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
+		self.detailViewController = [[MapViewController alloc] initWithNibName:@"MapViewController" bundle:nil];
 	}
 	
-	LegislatorObj *legislator = dataObject;
-	if (legislator) {
-		[self.detailViewController setLegislator:legislator];
+	DistrictOfficeObj *office = dataObject;
+	if (office) {
+		MapViewController *mapVC = (MapViewController *)self.detailViewController;
+		[mapVC view];	// this is retarded ... we have to fool it into loading the view???
+		MKMapView *mapView = mapVC.mapView;
+		if (mapVC && mapView) {
+			NSMutableArray *officeAnnotations = [[NSMutableArray alloc] init];
+			for (id<MKAnnotation> annotation in [mapView annotations]) {
+				if ([annotation isKindOfClass:[DistrictOfficeObj class]])
+					[officeAnnotations addObject:annotation];
+			}
+			
+			mapVC.shouldAnimate = NO;
+			[mapView removeAnnotations:officeAnnotations];
+			[mapView addAnnotation:office];
+			
+			if ([officeAnnotations lastObject]) { // we've already got one annotation set, let's zoom in/out
+				[self.detailViewController performSelector:@selector(animateToState:) withObject:[officeAnnotations lastObject] afterDelay:0.3];
+				[self.detailViewController performSelector:@selector(animateToAnnotation:) withObject:office afterDelay:2.0];        
+			}
+			else
+				[self.detailViewController performSelector:@selector(animateToAnnotation:) withObject:office afterDelay:0.3];
+			
+			[officeAnnotations release];
+		}
 		if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
 			[self searchBarCancelButtonClicked:nil];
 		}
 		
-		if (!isSplitViewDetail) {
+		if (![UtilityMethods isIPadDevice]) {
 			// push the detail view controller onto the navigation stack to display it				
 			[self.navigationController pushViewController:self.detailViewController animated:YES];
 			self.detailViewController = nil;
@@ -135,21 +190,14 @@
 }
 //END:code.split.delegate
 
-	
-- (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-	BOOL useDark = (indexPath.row % 2 == 0);
-	if ([cell respondsToSelector:@selector(setUseDarkBackground:)])
-		[((LegislatorMasterTableViewCell *)cell) setUseDarkBackground:useDark];
-	else
-		cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
-
-}
 
 #pragma mark -
 #pragma mark Memory management
 
 - (void)dealloc {
 	self.chamberControl = nil;
+	self.sortControl = nil;
+	self.filterControls = nil;
     [super dealloc];
 }
 
@@ -185,6 +233,17 @@
 	}
 }
 
+- (IBAction) sortType:(id)sender {
+	if (sender == self.sortControl) {
+		BOOL byDistrict = (self.sortControl.selectedSegmentIndex == 1);
+		
+		[(DistrictOfficeDataSource *) self.dataSource setByDistrict:byDistrict];
+		[(DistrictOfficeDataSource *) self.dataSource sortByType:sender];
+				
+		[self.tableView reloadData];
+	}
+}
+
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
     [self filterContentForSearchText:searchString scope:self.chamberControl.selectedSegmentIndex];
@@ -196,7 +255,7 @@
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
 	self.searchDisplayController.searchBar.text = @"";
 	[self.dataSource removeFilter];
-
+	
 	[self.searchDisplayController setActive:NO animated:YES];
 }
 
@@ -212,5 +271,8 @@
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
 	[self.dataSource setHideTableIndex:NO];	
 }
+
+
+
 @end
 

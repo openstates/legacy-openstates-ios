@@ -154,7 +154,7 @@
 // This is for the little index along the right side of the table ... use nil if you don't want it.
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
 	return  hideTableIndex ? nil : [fetchedResultsController sectionIndexTitles] ;
-	return  nil ;
+	//return  nil ;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {

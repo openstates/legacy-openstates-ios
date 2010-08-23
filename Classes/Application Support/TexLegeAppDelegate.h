@@ -14,6 +14,7 @@
 @class LinksMasterViewController;
 @class CapitolMapsMasterViewController;
 @class CalendarMasterViewController;
+@class DistrictOfficeMasterViewController;
 @class Appirater;
 
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate, 
@@ -44,6 +45,7 @@
 @property (nonatomic, retain) IBOutlet CommitteeMasterViewController *committeeMasterVC;
 @property (nonatomic, retain) IBOutlet LegislatorMasterViewController *legislatorMasterVC;
 @property (nonatomic, retain) IBOutlet CalendarMasterViewController *calendarMasterVC;
+@property (nonatomic, retain) IBOutlet DistrictOfficeMasterViewController *districtOfficeMasterVC;
 
 // For iPhone Interface
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;

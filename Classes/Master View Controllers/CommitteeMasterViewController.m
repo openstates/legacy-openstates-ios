@@ -60,7 +60,7 @@
 	self.dataSource.searchDisplayController = self.searchDisplayController;
 	self.searchDisplayController.searchResultsDataSource = self.dataSource;
 	
-	self.chamberControl.tintColor = [TexLegeTheme segmentCtl];
+	self.chamberControl.tintColor = [TexLegeTheme accent];
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
 	self.navigationItem.titleView = self.chamberControl;
 	

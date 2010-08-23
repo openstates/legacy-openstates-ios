@@ -49,7 +49,7 @@ NSInteger kNoSelection = -1;
 
 @synthesize managedObjectContext;
 
-@synthesize legislatorMasterVC, committeeMasterVC, capitolMapsMasterVC, linksMasterVC, calendarMasterVC;
+@synthesize legislatorMasterVC, committeeMasterVC, capitolMapsMasterVC, linksMasterVC, calendarMasterVC, districtOfficeMasterVC;
 
 + (TexLegeAppDelegate *)appDelegate {
 	return (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -80,6 +80,7 @@ NSInteger kNoSelection = -1;
 	self.calendarMasterVC = nil;
 	self.legislatorMasterVC = nil;
 	self.committeeMasterVC = nil;
+	self.districtOfficeMasterVC = nil;
 
 	self.managedObjectContext = nil;
 		
@@ -100,34 +101,6 @@ NSInteger kNoSelection = -1;
 #pragma mark -
 #pragma mark Data Sources and Main View Controllers
 
-#if 0
-/*
-- (NSInteger) indexForFunctionalViewController:(id)viewController {
-	NSInteger index = 0;
-	if (self.functionalViewControllers && viewController) {
-		index = [self.functionalViewControllers indexOfObject:viewController];
-		if (index == NSNotFound)
-			index = 0;
-	}
-	return index;	
-}
-
-- (NSInteger) indexForFunctionalViewControllerKey:(NSString *)vcKey {
-	if (self.functionalViewControllers && vcKey) {
-		NSInteger tempIndex = 0;
-		for (id vc in self.functionalViewControllers) {
-			if ([vc isKindOfClass:[UIViewController class]] && [vc respondsToSelector:@selector(viewControllerKey)]) {
-				NSString *tempVCKey = [vc performSelector:@selector(viewControllerKey)];
-				if (tempVCKey && [tempVCKey isEqualToString:vcKey])
-					return tempIndex;
-			}
-			tempIndex ++;
-		}
-	}
-	return 0;
-}
- */
-#endif
 
 ////// IPAD ONLY
 - (UISplitViewController *) splitViewController {
@@ -239,7 +212,7 @@ NSInteger kNoSelection = -1;
 		exit(0);
 	}
 	
-	NSArray *VCs = [[NSArray alloc] initWithObjects:self.legislatorMasterVC, self.committeeMasterVC,
+	NSArray *VCs = [[NSArray alloc] initWithObjects:self.legislatorMasterVC, self.committeeMasterVC, self.districtOfficeMasterVC,
 					self.calendarMasterVC, self.capitolMapsMasterVC, self.linksMasterVC, nil];
 	
 	for (GeneralTableViewController *masterVC in VCs) {
@@ -253,8 +226,8 @@ NSInteger kNoSelection = -1;
 			UISplitViewController * split = [controller splitViewController];
 			if (split) {
 				split.title = [[controller dataSource] name];
-				split.tabBarItem = [[[UITabBarItem alloc] initWithTitle:
-									[[controller dataSource] name] image:[[controller dataSource] tabBarImage] tag:index] autorelease];
+				split.tabBarItem = [[UITabBarItem alloc] initWithTitle:
+									[[controller dataSource] name] image:[[controller dataSource] tabBarImage] tag:index];
 				[splitViewControllers addObject:split];
 			}
 			index++;
@@ -281,7 +254,8 @@ NSInteger kNoSelection = -1;
 		selection = 0;
 	
 	[self.tabBarController setSelectedIndex:selection];
-	
+	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];	
+
 	[VCs release];
 }
 
@@ -607,7 +581,7 @@ NSInteger kNoSelection = -1;
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
 	
 	static NSString *DATABASE_NAME = @"TexLege.v2";
-	static NSString *DATABASE_FILE = @"TexLege.v2.sqlite";
+	//static NSString *DATABASE_FILE = @"TexLege.v2.sqlite";
 	
 	
     if (persistentStoreCoordinator != nil) {

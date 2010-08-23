@@ -9,13 +9,6 @@
 #import "TableDataSourceProtocol.h"
 
 @interface CommitteesDataSource : NSObject <TableDataSource> {
-	BOOL hideTableIndex;
-	NSInteger filterChamber;
-	NSMutableString *filterString;
-
-	NSFetchedResultsController *fetchedResultsController;
-	IBOutlet NSManagedObjectContext *managedObjectContext;	
-	UISearchDisplayController *searchDisplayController;
 }
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
