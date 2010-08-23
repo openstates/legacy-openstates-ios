@@ -12,7 +12,6 @@
 #import "UtilityMethods.h"
 
 @interface LinksDataSource (Private)
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 - (IBAction)saveAction:(id)sender;
 @end
 
@@ -38,7 +37,6 @@ enum HeaderSectionRows {
 
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
-// return the data used by the navigation controller and tab bar item
 
 - (NSString *)name
 { return @"Resources"; }
@@ -71,7 +69,6 @@ enum HeaderSectionRows {
 		[self initializeDatabase];
 #endif
 
-		//[self populateLinksArrays];
 		NSError *error = nil;
 		if (![[self fetchedResultsController] performFetch:&error])
 		{
@@ -96,7 +93,6 @@ enum HeaderSectionRows {
 #warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
 
 - (void) setupDataArray {
-//#error **** MAKE SURE YOU RE-ENABLE LINK FOR "Links.plist"
 	NSString *DataPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Links.plist"];		
 	NSDictionary *tempDict = [[NSDictionary alloc] initWithContentsOfFile:DataPath];
 	NSArray *tempArray = [[NSArray alloc] initWithArray:[tempDict objectForKey:@"Links"]];
@@ -122,12 +118,6 @@ enum HeaderSectionRows {
 												 [entity name] inManagedObjectContext:self.managedObjectContext];
 			
 			[newManagedObject setValuesForKeysWithDictionary:dictionary];
-/*			[newManagedObject setValue:[dictionary objectForKey:@"label"] forKey:@"label"];
-			[newManagedObject setValue:[dictionary objectForKey:@"url"] forKey:@"url"];
-			[newManagedObject setValue:[dictionary objectForKey:@"order"] forKey:@"order"];
-			[newManagedObject setValue:[dictionary objectForKey:@"section"] forKey:@"section"];
-			[newManagedObject setValue:[NSDate date] forKey:@"timeStamp"];
-*/			
 		}
 		[self saveAction:nil];			
 	}
@@ -164,16 +154,6 @@ enum HeaderSectionRows {
 	return [self.fetchedResultsController indexPathForObject:dataObject];
 }
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
-	LinkObj *link = [self dataObjectForIndexPath:indexPath];
-	cell.textLabel.text = link.label;
-	
-	if (indexPath.section == kBodySection)
-		cell.detailTextLabel.text = link.url;
-	
-	//[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -199,12 +179,15 @@ enum HeaderSectionRows {
 
 		cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:@"Cell"] autorelease];
 		cell.accessoryType = disclosure;
-
-
 	}
 	
-	[self configureCell:cell atIndexPath:indexPath];
-	
+	LinkObj *link = [self dataObjectForIndexPath:indexPath];
+	if (link) {
+		cell.textLabel.text = link.label;
+		
+		if (indexPath.section == kBodySection)
+			cell.detailTextLabel.text = link.url;
+	}
 	return cell;
 }
 
