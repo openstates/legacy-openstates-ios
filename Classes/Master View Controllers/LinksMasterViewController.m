@@ -166,7 +166,6 @@
 						self.miniBrowser = (MiniBrowserController *) self.detailViewController;
 					else {
 						self.miniBrowser = [MiniBrowserController sharedBrowserWithURL:url];
-						appDelegate.currentDetailViewController = self.miniBrowser;
 					}
 				}
 				if (!self.miniBrowser) {
