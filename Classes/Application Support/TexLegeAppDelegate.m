@@ -11,13 +11,15 @@
 #import "PartisanIndexStats.h"
 
 #import "Reachability.h"
-#import "Appirater.h"
 
 #import "MiniBrowserController.h"
 #import "CommonPopoversController.h"
 #import "GeneralTableViewController.h"
 #import "TableDataSourceProtocol.h"
 #import "UIApplication+ScreenMirroring.h"
+#import "AnalyticsOptInAlertController.h"
+
+#import "LocalyticsSession.h"
 
 @interface TexLegeAppDelegate (Private)
 
@@ -30,8 +32,10 @@
 	
 @end
 
-// preference key to obtain our restore location
-NSString *kRestoreSelectionKey = @"RestoreSelection";
+// user default dictionary keys
+NSString * const kRestoreSelectionKey = @"RestoreSelection";
+NSString * const kAnalyticsOptInKey = @"HasOptedInToAnalytics";
+NSString * const kShowedSplashScreenKey = @"HasShownSplashScreen";
 
 NSUInteger kNumMaxTabs = 11;
 NSInteger kNoSelection = -1;
@@ -43,8 +47,8 @@ NSInteger kNoSelection = -1;
 
 @synthesize savedTableSelection;
 
-@synthesize mainWindow, appirater;
-@synthesize aboutView, activeDialogController;
+@synthesize mainWindow;
+@synthesize aboutView, activeDialogController, analyticsOptInController;
 @synthesize remoteHostStatus, internetConnectionStatus, localWiFiConnectionStatus;
 
 @synthesize managedObjectContext;
@@ -68,11 +72,10 @@ NSInteger kNoSelection = -1;
 - (void)dealloc {
 
 	self.savedTableSelection = nil;
-
+	self.analyticsOptInController = nil;
 	self.activeDialogController = nil;
 	self.aboutView = nil;
 	self.tabBarController = nil;
-	self.appirater = nil;
 	self.mainWindow = nil;    
 	
 	self.capitolMapsMasterVC = nil;
@@ -94,7 +97,7 @@ NSInteger kNoSelection = -1;
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
 	self.aboutView = nil;
-	
+	self.analyticsOptInController = nil;
 }
 
 
@@ -170,7 +173,7 @@ NSInteger kNoSelection = -1;
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
 	if (![UtilityMethods isIPadDevice]) {
 		if (![viewController isEqual:self.tabBarController.selectedViewController]) {
-			debug_NSLog(@"About to switch tabs, popping to root view controller.");
+			//debug_NSLog(@"About to switch tabs, popping to root view controller.");
 			UINavigationController *nav = [self detailNavigationController];
 			if (nav)
 				[nav popToRootViewControllerAnimated:YES];
@@ -180,14 +183,24 @@ NSInteger kNoSelection = -1;
 	return YES;
 }
 
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+- (void)tabBarController:(UITabBarController *)theTabBarController didSelectViewController:(UIViewController *)viewController {
+	UIViewController *master = [self currentMasterViewController];
 	
+	NSString *vcKey = nil;
+	if (master && [master respondsToSelector:@selector(viewControllerKey)])
+		vcKey = [master performSelector:@selector(viewControllerKey)];
+	if (!vcKey) {
+		vcKey = [NSString stringWithFormat:@"INDEX=%d", theTabBarController.selectedIndex];
+	}
 	
+	NSString *tabchangetag = [NSString stringWithFormat:@"Selected New Tab: %@", vcKey];
+	[[LocalyticsSession sharedLocalyticsSession] tagEvent:tabchangetag];
+
 	// Dismiss the popover if it's present.
 	//if (self.menuPopoverPC != nil) {
 	//	[self.menuPopoverPC dismissPopoverAnimated:YES];
 	//}
-	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];	
+	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];	
 }
 
 - (void) setupFeatures {
@@ -282,32 +295,55 @@ NSInteger kNoSelection = -1;
 	
 	// register our preference selection data to be archived
 	NSDictionary *savedPrefsDict = [NSDictionary dictionaryWithObjectsAndKeys: 
-									[self archivableSavedTableSelection],kRestoreSelectionKey,nil];
+									[self archivableSavedTableSelection],kRestoreSelectionKey,
+									[NSNumber numberWithInteger:-1], kAnalyticsOptInKey,
+									[NSNumber numberWithBool:NO], kShowedSplashScreenKey,
+									nil];
+	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:savedPrefsDict];
-
 	[[NSUserDefaults standardUserDefaults] synchronize];
-
-	// [Appirater appLaunched];  This is replaced with the following, to avoid leakiness
-	self.appirater = [[Appirater alloc] init];
-	[NSThread detachNewThreadSelector:@selector(_appLaunched) toTarget:self.appirater withObject:nil];
+	
+	self.analyticsOptInController = [[AnalyticsOptInAlertController alloc] init];
+	if (self.analyticsOptInController && [self.analyticsOptInController shouldPresentAnalyticsOptInAlert])
+		[self.analyticsOptInController presentAnalyticsOptInAlert];
 		
+	[[LocalyticsSession sharedLocalyticsSession] startSession:@"111c245bdf4ad08686ac12b-eae4b72e-9439-11df-5b0c-009ee7c87684"];
 	return YES;
 }
+
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 	[[UIApplication sharedApplication] setupScreenMirroring];
 }
 
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+ 	[[LocalyticsSession sharedLocalyticsSession] resume];
+ 	[[LocalyticsSession sharedLocalyticsSession] upload];
+}
+
+
 - (void)applicationWillResignActive:(UIApplication *)application {
 	// save the drill-down hierarchy of selections to preferences
 	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
-	
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
 	[[UIApplication sharedApplication] disableScreenMirroring];
 	
 	// Core Data Saving
 	[self saveAction:nil];
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+	// save the drill-down hierarchy of selections to preferences
+	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+
+	// Core Data Saving
+	[self saveAction:nil];
+
+	[[LocalyticsSession sharedLocalyticsSession] close];
+	[[LocalyticsSession sharedLocalyticsSession] upload];
 }
 
 
@@ -360,6 +396,10 @@ NSInteger kNoSelection = -1;
 
 	// Core Data Saving
 	[self saveAction:nil];
+	
+	[[LocalyticsSession sharedLocalyticsSession] close];
+	[[LocalyticsSession sharedLocalyticsSession] upload];
+
 }
 
 

@@ -15,7 +15,7 @@
 @class CapitolMapsMasterViewController;
 @class CalendarMasterViewController;
 @class DistrictOfficeMasterViewController;
-@class Appirater;
+@class AnalyticsOptInAlertController;
 
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate, 
 		TexLegeInfoControllerDelegate> 
@@ -25,7 +25,6 @@
 }
 
 @property (nonatomic, retain) UIWindow			*mainWindow;
-@property (nonatomic, retain) Appirater			*appirater;
 
 @property (nonatomic, retain) NSMutableDictionary	*savedTableSelection;
 
@@ -37,6 +36,7 @@
 // For Alerts and Modal Dialogs
 @property (nonatomic, retain) TexLegeInfoController *aboutView;
 @property (nonatomic, retain) UIViewController *activeDialogController;
+@property (nonatomic, retain) AnalyticsOptInAlertController *analyticsOptInController;
 
 // For Functional View Controllers
 @property (nonatomic, retain) IBOutlet LinksMasterViewController *linksMasterVC;

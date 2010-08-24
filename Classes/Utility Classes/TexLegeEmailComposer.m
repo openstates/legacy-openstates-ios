@@ -10,6 +10,7 @@
 #import "TexLegeAppDelegate.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
+#import "LocalyticsSession.h"
 
 @interface TexLegeEmailComposer (Private)
 - (void)presentMailFailureAlertViewWithTitle:(NSString*)failTitle message:(NSString *)failMessage;
@@ -48,6 +49,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
 	
 	if (!body)
 		body = @"";
+	
+	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"EMAILING_TEXLEGE_SUPPORT"];
+
 	
 	if ([MFMailComposeViewController canSendMail]) {
 		self.mailComposerVC = [[[MFMailComposeViewController alloc] init] autorelease];

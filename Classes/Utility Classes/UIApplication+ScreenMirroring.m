@@ -29,6 +29,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <CoreGraphics/CoreGraphics.h>
+#import "LocalyticsSession.h"
 
 NSString * const UIApplicationDidSetupScreenMirroringNotification = @"UIApplicationDidSetupScreenMirroringNotification";
 NSString * const UIApplicationDidDisableScreenMirroringNotification = @"UIApplicationDidDisableScreenMirroringNotification";
@@ -121,6 +122,7 @@ static UIImageView *mirroredImageView = nil;
 - (void) screenDidConnect:(NSNotification *)aNotification
 {
 	NSLog(@"A new screen got connected: %@", [aNotification object]);
+	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"MIRRORING_TO_VGA_SCREEN"];
 	[self setupMirroringForScreen:[aNotification object]];
 }
 
