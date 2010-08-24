@@ -10,7 +10,9 @@
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">117</string>
 		</object>
-		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs"/>
+		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
+			<integer value="40"/>
+		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 		</array>
@@ -25,7 +27,7 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUIView" id="249263867">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">282</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUINavigationBar" id="871675769">
@@ -87,7 +89,7 @@
 					<object class="IBUILabel" id="752613966">
 						<reference key="NSNextResponder" ref="249263867"/>
 						<int key="NSvFlags">289</int>
-						<string key="NSFrame">{{133, 50}, {175, 25}}</string>
+						<string key="NSFrame">{{108, 50}, {200, 25}}</string>
 						<reference key="NSSuperview" ref="249263867"/>
 						<reference key="IBUIBackgroundColor" ref="696436409"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -114,7 +116,7 @@
 					<object class="IBUILabel" id="702050097">
 						<reference key="NSNextResponder" ref="249263867"/>
 						<int key="NSvFlags">289</int>
-						<string key="NSFrame">{{114, 100}, {194, 22}}</string>
+						<string key="NSFrame">{{108, 100}, {200, 22}}</string>
 						<reference key="NSSuperview" ref="249263867"/>
 						<reference key="IBUIBackgroundColor" ref="696436409"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -141,7 +143,7 @@
 					<object class="IBUILabel" id="506164640">
 						<reference key="NSNextResponder" ref="249263867"/>
 						<int key="NSvFlags">289</int>
-						<string key="NSFrame">{{133, 76}, {175, 20}}</string>
+						<string key="NSFrame">{{108, 76}, {200, 20}}</string>
 						<reference key="NSSuperview" ref="249263867"/>
 						<reference key="IBUIBackgroundColor" ref="696436409"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -181,8 +183,8 @@
 					</object>
 					<object class="IBUIButton" id="444958961">
 						<reference key="NSNextResponder" ref="249263867"/>
-						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{133, 122}, {177, 37}}</string>
+						<int key="NSvFlags">289</int>
+						<string key="NSFrame">{{108, 122}, {202, 37}}</string>
 						<reference key="NSSuperview" ref="249263867"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">1</int>
@@ -223,6 +225,7 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{320, 460}</string>
+				<reference key="NSSuperview"/>
 				<reference key="IBUIBackgroundColor" ref="696436409"/>
 				<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics"/>
@@ -379,7 +382,7 @@
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
 				<string key="-1.CustomClassName">TexLegeInfoController</string>
 				<string key="-2.CustomClassName">UIResponder</string>
-				<string key="40.IBEditorWindowLastContentRect">{{400, 355}, {320, 480}}</string>
+				<string key="40.IBEditorWindowLastContentRect">{{793, 355}, {320, 480}}</string>
 				<string key="40.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="42.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="43.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -444,6 +447,14 @@
 							<string key="candidateClassName">UILabel</string>
 						</object>
 					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Classes/Detail View Controllers/TexLegeInfoController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">TexLegeInfoController</string>
+					<string key="superclassName">UIViewController</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
