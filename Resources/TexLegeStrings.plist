@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AnalyticsOptInText</key>
+	<string>With your permission, TexLege can unobtrusively collect and submit anonymous usage data (such as time of app launch and features used) to the developer.  This is solely intended to improve future app development and the user experience.  It will NEVER be used for advertising or marketing purposes.  No geographic or otherwise personally identifying information is submitted to the server. Please consider permitting this service.  This is the only time you will see this message.  Please contact me if you have any concerns.  Thank you! &lt;support@texlege.com&gt;</string>
 	<key>PartisanIndexText</key>
 	<string>     I calculated the Roll Call Index scores using all the roll call votes taken in the state legislature since 1991 for the House and 1999 for the Senate.  However, in order allow legislator score comparison from one session to another, I apply a statistical transformation on the data.  In a sense, a legislator&apos;s current voting record score is influenced by their scores from previous sessions (but not the other way around).  Since the Speaker rarely votes, I calculate his scores for the current session using his voting record from the prior sessions where he is a regular member.  For the historical charts, I simulate the Speaker&apos;s score from the scores of the members on the Speaker&apos;s Team. 
 
