@@ -14,12 +14,13 @@
 {
 
 }
+@property (nonatomic, retain) IBOutlet UIViewController *currentCommander;
 @property (nonatomic, retain) IBOutlet MFMailComposeViewController *mailComposerVC;
 @property (nonatomic, retain) IBOutlet UIAlertView *currentAlert;
 @property (nonatomic) BOOL isComposingMail;
 
 + (TexLegeEmailComposer *)sharedTexLegeEmailComposer;
-- (void)presentMailComposerTo:(NSString*)recipient subject:(NSString*)subject body:(NSString*)body;
+- (void)presentMailComposerTo:(NSString*)recipient subject:(NSString*)subject body:(NSString*)body commander:(UIViewController *)commander;
 
 
 @end

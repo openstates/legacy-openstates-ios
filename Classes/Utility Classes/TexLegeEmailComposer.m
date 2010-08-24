@@ -18,7 +18,7 @@
 @implementation TexLegeEmailComposer
 
 SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
-@synthesize mailComposerVC, isComposingMail, currentAlert;
+@synthesize mailComposerVC, isComposingMail, currentAlert, currentCommander;
 
 
 - (id) init
@@ -28,6 +28,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
 		self.isComposingMail = NO;
 		self.mailComposerVC = nil;
 		self.currentAlert = nil;
+		self.currentCommander = nil;
     }
     return self;
 }
@@ -35,25 +36,29 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
 - (void)dealloc {
 	self.mailComposerVC = nil;
 	self.currentAlert = nil;
+	self.currentCommander = nil;
     [super dealloc];
 }
 
-- (void)presentMailComposerTo:(NSString*)recipient subject:(NSString*)subject body:(NSString*)body {
+- (void)presentMailComposerTo:(NSString*)recipient subject:(NSString*)subject body:(NSString*)body commander:(UIViewController *)commander{
+	if (!commander)
+		return;
+	
+	self.currentCommander = commander;
+	
 	if (!body)
 		body = @"";
 	
 	if ([MFMailComposeViewController canSendMail]) {
-		self.mailComposerVC = [[MFMailComposeViewController alloc] init];
+		self.mailComposerVC = [[[MFMailComposeViewController alloc] init] autorelease];
 		self.mailComposerVC.mailComposeDelegate = self;
 		[self.mailComposerVC setSubject:subject];
 		[self.mailComposerVC setToRecipients:[NSArray arrayWithObject:recipient]];
 		[self.mailComposerVC setMessageBody:body isHTML:NO];
 		[[self.mailComposerVC navigationBar] setTintColor:[TexLegeTheme navbar]];
 		self.isComposingMail = YES;
-		
-		UIViewController *commander = [[TexLegeAppDelegate appDelegate] topViewController];
-		
-		[commander presentModalViewController:self.mailComposerVC animated:YES];
+				
+		[self.currentCommander presentModalViewController:self.mailComposerVC animated:YES];
 
 	}
 	else {   // Mail functions are unavailable
@@ -80,8 +85,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
 	}
 	
 	self.isComposingMail = NO;
-	[[[TexLegeAppDelegate appDelegate] topViewController] dismissModalViewControllerAnimated:YES];
+	[self.currentCommander dismissModalViewControllerAnimated:YES];
 	self.mailComposerVC = nil;
+	self.currentCommander = nil;
 }
 
 #pragma mark -
