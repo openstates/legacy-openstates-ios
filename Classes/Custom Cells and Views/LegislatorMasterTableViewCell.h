@@ -12,21 +12,7 @@
 @class StaticGradientSliderView;
 
 @interface LegislatorMasterTableViewCell : UITableViewCell {
-    BOOL useDarkBackground;
-	IBOutlet UIImageView *disclosureView;
-	IBOutlet UIImageView *leg_photoView;
-	IBOutlet UILabel *leg_titleLab;
-	IBOutlet UILabel *leg_tenureLab;
-	IBOutlet UILabel *leg_nameLab;
-	IBOutlet UIView	 *leg_sliderViewPlaceHolder;
-	IBOutlet StaticGradientSliderView *leg_sliderView;
-	LegislatorObj	 *legislator;
-	
-	UIColor *backgroundLight;
-	UIColor *backgroundDark;
-	UIColor *detailColor;
-	UIColor *typeColor;
-
+	BOOL useDarkBackground;
 }
 
 @property BOOL useDarkBackground;
