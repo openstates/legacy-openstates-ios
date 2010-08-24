@@ -167,21 +167,13 @@ NSInteger kNoSelection = -1;
 }
 
 
-- (UIViewController *)topViewController {
-	UINavigationController *nav = [self detailNavigationController];
-	if (nav)
-		return [nav topViewController];
-	else
-		return nil;
-}
-
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
 	if (![UtilityMethods isIPadDevice]) {
 		if (![viewController isEqual:self.tabBarController.selectedViewController]) {
 			debug_NSLog(@"About to switch tabs, popping to root view controller.");
 			UINavigationController *nav = [self detailNavigationController];
 			if (nav)
-				[nav popToRootViewControllerAnimated:NO];
+				[nav popToRootViewControllerAnimated:YES];
 		}
 	}
 	

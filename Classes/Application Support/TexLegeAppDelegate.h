@@ -39,7 +39,6 @@
 @property (nonatomic, retain) UIViewController *activeDialogController;
 
 // For Functional View Controllers
-@property (nonatomic, readonly) UIViewController *topViewController;
 @property (nonatomic, retain) IBOutlet LinksMasterViewController *linksMasterVC;
 @property (nonatomic, retain) IBOutlet CapitolMapsMasterViewController *capitolMapsMasterVC;
 @property (nonatomic, retain) IBOutlet CommitteeMasterViewController *committeeMasterVC;
