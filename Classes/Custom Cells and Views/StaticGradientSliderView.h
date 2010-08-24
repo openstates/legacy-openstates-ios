@@ -10,8 +10,6 @@
 
 @class LegislatorObj;
 @interface StaticGradientSliderView : UIView {
-	IBOutlet UIImageView *gradientImage;
-	IBOutlet UISlider *sliderControl;
 	
 @private
 	BOOL	m_usesSmallStar;

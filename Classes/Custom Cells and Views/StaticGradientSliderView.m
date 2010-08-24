@@ -126,7 +126,7 @@
 }
 
 - (void)dealloc {
-	if (self.gradientImage.image)
+	if (self.gradientImage)
 		self.gradientImage.image = nil;
 
 	self.sliderControl = nil;
