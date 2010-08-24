@@ -16,9 +16,11 @@
 
 #define NEEDS_TO_INITIALIZE_DATABASE 0
 
-#define kDeviceSensitiveRowHeight 0
+#define kDeviceSensitiveRowHeight 1
 
-
+extern NSString * const kRestoreSelectionKey;
+extern NSString * const kAnalyticsOptInKey;
+extern NSString * const kShowedSplashScreenKey;
 
 #define m_iTunesAppID 326478866
 //#define m_iTunesURL @"http://itunes.com/us/app/TexLege"
