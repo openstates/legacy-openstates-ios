@@ -16,23 +16,23 @@
 
 @implementation TexLegeInfoController
 
-@synthesize delegate, projectWebsiteURL;
+@synthesize delegate;
+@synthesize infoTextView;
+@synthesize versionLabel;
+@synthesize dismissButton;
+
 
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
 		self.title = @"TextLege Info";
-		// NSBundle Info.plist
-		NSDictionary *infoPlistDict = [[NSBundle mainBundle] infoDictionary];
-		self.projectWebsiteURL = [NSURL URLWithString:[infoPlistDict objectForKey:@"projectWebsite"]];
-		
 	}
 	return self;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[self.infoTextView flashScrollIndicators];
-	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 }
 
 
@@ -47,10 +47,12 @@
 
 }
 
- // Override to allow orientations other than the default portrait orientation.
- - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	 return YES; // UIInterfaceOrientationPortrait;
- }
+- (void)viewDidUnload {
+	self.versionLabel = nil;
+	self.infoTextView = nil;
+	[super viewDidUnload];
+}
+
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
@@ -59,19 +61,17 @@
 	// Release any cached data, images, etc that aren't in use.
 }
 
+ // Override to allow orientations other than the default portrait orientation.
+ - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+	 return YES; // UIInterfaceOrientationPortrait;
+ }
+
 - (void) done:(id)sender
 {
 	if (self.delegate && ![UtilityMethods isIPadDevice])
 		[self.delegate modalViewControllerDidFinish:self];	
 }
 
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-	self.versionLabel.text = @"";
-
-	[super viewDidUnload];
-}
 
 #pragma mark -
 #pragma mark Popovers and Split Views
@@ -79,20 +79,6 @@
 - (NSString *)popoverButtonTitle {
 	return @"Resources";
 }
-
-
-
-#pragma mark Alert View + Delegate
-#pragma mark -
-
-- (IBAction) weblink_click:(id) sender
-{
-	if ([UtilityMethods canReachHostWithURL:self.projectWebsiteURL]) {
-		MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:self.projectWebsiteURL];
-		[mbc display:self];
-	}
-}
-
 
 - (void)dealloc {
 	
@@ -103,9 +89,4 @@
 	self.infoTextView = nil;
 	[super dealloc];
 }
-
-@synthesize infoTextView;
-@synthesize versionLabel;
-@synthesize projectWebsiteButton;
-@synthesize dismissButton;
 @end

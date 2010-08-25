@@ -15,16 +15,13 @@
 }
 
 @property (nonatomic, assign) IBOutlet id <TexLegeInfoControllerDelegate> delegate;
-@property (nonatomic, retain) NSURL *projectWebsiteURL;
 @property (nonatomic, retain) IBOutlet UILabel *versionLabel;
-@property (nonatomic, retain) IBOutlet UIButton *projectWebsiteButton;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *dismissButton;
 @property (nonatomic, retain) IBOutlet UITextView *infoTextView;
 
 - (NSString *)popoverButtonTitle;
 
 - (IBAction)done:(id)sender;
-- (IBAction)weblink_click:(id)sender;
 
 @end
 
