@@ -21,6 +21,8 @@
 
 #import "LocalyticsSession.h"
 
+#import "DistrictMapDataSource.h"
+
 @interface TexLegeAppDelegate (Private)
 
 - (void)setupFeatures;
@@ -44,8 +46,8 @@ NSInteger kNoSelection = -1;
 @implementation TexLegeAppDelegate
 
 @synthesize tabBarController;
-
-@synthesize savedTableSelection;
+@synthesize districtMapDataSource;
+@synthesize savedTableSelection, appIsQuitting;
 
 @synthesize mainWindow;
 @synthesize aboutView, activeDialogController, analyticsOptInController;
@@ -64,13 +66,14 @@ NSInteger kNoSelection = -1;
 		// initialize  to nil
 		mainWindow = nil;
 		
+		self.appIsQuitting = NO;
 		self.savedTableSelection = [NSMutableDictionary dictionaryWithCapacity:2];
 	}
 	return self;
 }
 
 - (void)dealloc {
-
+	self.districtMapDataSource = nil;
 	self.savedTableSelection = nil;
 	self.analyticsOptInController = nil;
 	self.activeDialogController = nil;
@@ -184,16 +187,7 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)tabBarController:(UITabBarController *)theTabBarController didSelectViewController:(UIViewController *)viewController {
-	UIViewController *master = [self currentMasterViewController];
-	
-	NSString *vcKey = nil;
-	if (master && [master respondsToSelector:@selector(viewControllerKey)])
-		vcKey = [master performSelector:@selector(viewControllerKey)];
-	if (!vcKey) {
-		vcKey = [NSString stringWithFormat:@"INDEX=%d", theTabBarController.selectedIndex];
-	}
-	
-	NSString *tabchangetag = [NSString stringWithFormat:@"Selected New Tab: %@", vcKey];
+	NSString *tabchangetag = [NSString stringWithFormat:@"SELECTTAB_%@", viewController.tabBarItem.title];
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:tabchangetag];
 
 	// Dismiss the popover if it's present.
@@ -201,6 +195,22 @@ NSInteger kNoSelection = -1;
 	//	[self.menuPopoverPC dismissPopoverAnimated:YES];
 	//}
 	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];	
+}
+
+- (void)setTabOrderIfSaved {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSArray *savedOrder = [defaults arrayForKey:@"savedTabOrder"];
+	NSMutableArray *orderedTabs = [NSMutableArray arrayWithCapacity:[self.tabBarController.viewControllers count]];
+	if ([savedOrder count] > 0 ) {
+		for (NSInteger i = 0; i < [savedOrder count]; i++){
+			for (UIViewController *aController in self.tabBarController.viewControllers) {
+				if ([aController.tabBarItem.title isEqualToString:[savedOrder objectAtIndex:i]]) {
+					[orderedTabs addObject:aController];
+				}
+			}
+		}
+		tabBarController.viewControllers = orderedTabs;
+	}
 }
 
 - (void) setupFeatures {
@@ -220,10 +230,20 @@ NSInteger kNoSelection = -1;
 	NSArray *VCs = [[NSArray alloc] initWithObjects:self.legislatorMasterVC, self.committeeMasterVC, self.districtOfficeMasterVC,
 					self.calendarMasterVC, self.capitolMapsMasterVC, self.linksMasterVC, nil];
 	
+	NSString * tempVCKey = [self.savedTableSelection objectForKey:@"viewController"];
+	NSInteger savedTabSelectionIndex = -1;
+	NSInteger loopIndex = 0;
 	for (GeneralTableViewController *masterVC in VCs) {
 		[masterVC configureWithManagedObjectContext:self.managedObjectContext];
-	}
 		
+		// If we have a preferred VC and we've found it in our array, save it
+		if (savedTabSelectionIndex < 0 && tempVCKey && [tempVCKey isEqualToString:[masterVC viewControllerKey]]) // we have a saved view controller in mind
+			savedTabSelectionIndex = loopIndex;
+		loopIndex++;
+	}
+	if (savedTabSelectionIndex < 0 || savedTabSelectionIndex > [VCs count])
+		savedTabSelectionIndex = 0;
+	
 	if ([UtilityMethods isIPadDevice]) {
 		NSMutableArray *splitViewControllers = [[NSMutableArray alloc] initWithCapacity:[VCs count]];
 		NSInteger index = 0;
@@ -240,28 +260,23 @@ NSInteger kNoSelection = -1;
 		[self.tabBarController setViewControllers:splitViewControllers];
 		[splitViewControllers release];
 	}
+	[VCs release];
+	
+	id savedTabController = [self.tabBarController.viewControllers objectAtIndex:savedTabSelectionIndex];
+	if (!savedTabController) {
+		debug_NSLog (@"Couldn't find a view/navigation controller at index: %d", savedTabSelectionIndex);
+		savedTabController = [self.tabBarController.viewControllers objectAtIndex:0];
+	}
+	
+	[self setTabOrderIfSaved];
+	
+	[self.tabBarController setSelectedViewController:savedTabController];
 	
 	[self.mainWindow addSubview:self.tabBarController.view];
-	
-	NSInteger selection = -1;
-	NSString * tempVCKey = [self.savedTableSelection objectForKey:@"viewController"];
-	if (tempVCKey) { // we have a saved view controller
-		NSInteger index = 0;
-		for (GeneralTableViewController * masterVC in VCs) {
-			if ([tempVCKey isEqualToString:[masterVC viewControllerKey]]){
-				selection = index;
-				continue;
-			}
-			index++;
-		}
-	}
-	if (selection < 0) 
-		selection = 0;
-	
-	[self.tabBarController setSelectedIndex:selection];
+		
+	self.districtMapDataSource = [[DistrictMapDataSource alloc] initWithManagedObjectContext:self.managedObjectContext];
+	//[self.tabBarController setSelectedIndex:selection];
 	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];	
-
-	[VCs release];
 }
 
 
@@ -308,98 +323,66 @@ NSInteger kNoSelection = -1;
 		[self.analyticsOptInController presentAnalyticsOptInAlert];
 		
 	[[LocalyticsSession sharedLocalyticsSession] startSession:@"111c245bdf4ad08686ac12b-eae4b72e-9439-11df-5b0c-009ee7c87684"];
+	
+	if ([UtilityMethods supportsMKPolyline])
+		debug_NSLog(@"MKPolyline IS available on this device.");
+	else
+		debug_NSLog(@"MKPolyline is NOT available on this device.");
+	
 	return YES;
 }
 
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-	[[UIApplication sharedApplication] setupScreenMirroring];
-}
 
-
-- (void)applicationWillEnterForeground:(UIApplication *)application {
- 	[[LocalyticsSession sharedLocalyticsSession] resume];
- 	[[LocalyticsSession sharedLocalyticsSession] upload];
-}
-
-
-- (void)applicationWillResignActive:(UIApplication *)application {
-	// save the drill-down hierarchy of selections to preferences
-	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
-	[[NSUserDefaults standardUserDefaults] synchronize];
-	
-	[[UIApplication sharedApplication] disableScreenMirroring];
-	
-	// Core Data Saving
-	[self saveAction:nil];
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-	// save the drill-down hierarchy of selections to preferences
-	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
-	[[NSUserDefaults standardUserDefaults] synchronize];
-
-	// Core Data Saving
-	[self saveAction:nil];
-
-	[[LocalyticsSession sharedLocalyticsSession] close];
-	[[LocalyticsSession sharedLocalyticsSession] upload];
-}
-
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-
-	/* maybe someday figure out how to update the Default.png 
-	UIGraphicsBeginImageContext(self.mainWindow.bounds.size);
-	[self.mainWindow.layer renderInContext:UIGraphicsGetCurrentContext()];
-	UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();
-	
-	UIImageWriteToSavedPhotosAlbum(viewImage, nil, nil, nil);
-	 
-	 // some undocumented (CANT USE) methods in UIApplication:
-	 -(void) _writeApplicationSnapshot;
-	 -(void) _updateDefaultImage;
-	 -(void) createApplicationDefaultPNG;
-*/	
-/*
-	NSInteger masterIndexSelection = 0;
-	if (self.splitViewController) {
-		masterIndexSelection = [self indexForFunctionalViewController:self.masterNavigationController];
-	}
-	else 
-		if (self.tabBarController)
-	{
-		//if (self.tabBarController.selectedViewController != self.tabBarController.moreNavigationController)
-		//	masterIndexSelection = self.tabBarController.selectedIndex;  // they had selected "More...", lets not go back there implicitly.
-
-		masterIndexSelection = [self indexForFunctionalViewController:self.tabBarController.selectedViewController];
-	}
-
-*/	
+- (void)prepareToQuit {
+	if (self.appIsQuitting)
+		return;
+	self.appIsQuitting = YES;
 	
 	if (self.tabBarController) {
 		// Smarten this up later for Core Data tab saving
-		NSMutableArray *savedOrder = [NSMutableArray arrayWithCapacity:kNumMaxTabs];
-		NSArray *tabOrderToSave = tabBarController.viewControllers;
+		NSMutableArray *savedOrder = [NSMutableArray arrayWithCapacity:[self.tabBarController.viewControllers count]];
+		NSArray *tabOrderToSave = self.tabBarController.viewControllers;
 		
 		for (UIViewController *aViewController in tabOrderToSave) {
 			[savedOrder addObject:aViewController.tabBarItem.title];
 		}
 		[[NSUserDefaults standardUserDefaults] setObject:savedOrder forKey:@"savedTabOrder"];
 	}
-
+	
 	// save the drill-down hierarchy of selections to preferences
 	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
 	
 	[[NSUserDefaults standardUserDefaults] synchronize];
-
-	// Core Data Saving
-	[self saveAction:nil];
 	
-	[[LocalyticsSession sharedLocalyticsSession] close];
-	[[LocalyticsSession sharedLocalyticsSession] upload];
+	// Core Data Saving
+	[self saveAction:nil];	
+}
 
+
+
+- (void)applicationDidBecomeActive:(UIApplication *)application		{[[UIApplication sharedApplication] setupScreenMirroring];}
+
+- (void)applicationWillResignActive:(UIApplication *)application	{[[UIApplication sharedApplication] disableScreenMirroring];}
+
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+	self.appIsQuitting = NO;
+	
+ 	[[LocalyticsSession sharedLocalyticsSession] resume];
+ 	[[LocalyticsSession sharedLocalyticsSession] upload];
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+	[self prepareToQuit];
+	[[LocalyticsSession sharedLocalyticsSession] close];
+	[[LocalyticsSession sharedLocalyticsSession] upload];	
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {	
+	[self prepareToQuit];
+	[[LocalyticsSession sharedLocalyticsSession] close];
+	[[LocalyticsSession sharedLocalyticsSession] upload];	
 }
 
 

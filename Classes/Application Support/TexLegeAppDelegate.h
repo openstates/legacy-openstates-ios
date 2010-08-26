@@ -16,6 +16,7 @@
 @class CalendarMasterViewController;
 @class DistrictOfficeMasterViewController;
 @class AnalyticsOptInAlertController;
+@class DistrictMapDataSource;
 
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate, 
 		TexLegeInfoControllerDelegate> 
@@ -23,6 +24,8 @@
 	NSManagedObjectModel *managedObjectModel;
 	NSPersistentStoreCoordinator *persistentStoreCoordinator;
 }
+
+@property (nonatomic) BOOL appIsQuitting;
 
 @property (nonatomic, retain) UIWindow			*mainWindow;
 
@@ -67,4 +70,6 @@
 - (void)setSavedTableSelection:(id)object forKey:(NSString *)vcKey;
 
 + (TexLegeAppDelegate *)appDelegate;
+
+@property (nonatomic,retain) DistrictMapDataSource *districtMapDataSource;
 @end

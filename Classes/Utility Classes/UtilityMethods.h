@@ -12,19 +12,18 @@
 @interface UtilityMethods : NSObject {
 }
 
++ (BOOL) supportsMKPolyline;
 + (BOOL) locationServicesEnabled;
 
-+ (NSString*)cipher32Byte;
++ (BOOL) isLandscapeOrientation;
++ (BOOL) isIPadDevice;
 
 + (NSString *) titleFromURL:(NSURL *)url;
-
 + (NSURL *) safeWebUrlFromString:(NSString *)urlString;
 + (CapitolMap *) capitolMapFromOfficeString:(NSString *)office;
 + (CapitolMap *) capitolMapFromChamber:(NSInteger)chamber;
 + (NSURL *) googleMapUrlFromStreetAddress:(NSString *)address;
 + (NSString *)applicationDocumentsDirectory;
-
-+ (BOOL) isLandscapeOrientation;
 
 + (BOOL) openURLWithTrepidation:(NSURL *)url;
 + (BOOL) openURLWithoutTrepidation:(NSURL *)url;
@@ -35,8 +34,7 @@
 + (void) alertNotAPhone;
 + (void) noInternetAlert;
 
-+ (BOOL) isIPadDevice;
-//+ (BOOL) isSplitViewClassAvailable;
++ (NSString*)cipher32Byte;
 
 @end
 

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MapKit/MapKit.h>
 
 typedef struct {
 	double x,y;
@@ -15,7 +16,8 @@ typedef struct {
 @interface PolygonMath : NSObject {
 	
 }
-- (BOOL) insidePolygon:(MapPoint *)polygon count:(NSInteger)N point:(MapPoint) p;
++ (BOOL) insidePolygon:(CLLocationCoordinate2D *)polygon count:(NSInteger)N point:(CLLocationCoordinate2D) p;
++ (BOOL) pnpoly:(double *)xp yp:(double *)yp count:(NSInteger)npol x:(double)x y:(double)y;
 
 
 

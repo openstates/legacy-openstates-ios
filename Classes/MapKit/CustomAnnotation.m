@@ -30,7 +30,6 @@
 		
 		self.pinColorIndex = [NSNumber numberWithInteger:MKPinAnnotationColorGreen]; 
 		self.imageName = @"silverstar.png";
-		self.title = @"Searched Location";
 	}
 	
 	return self;
@@ -82,6 +81,13 @@
 		return [UIImage imageNamed:self.imageName];
 }
 
+- (NSString *)title {
+	if (title)
+		return title;
+	else
+		return @"Searched Location";
+}
+
 // optional
 - (NSString *)subtitle
 {
@@ -95,11 +101,14 @@
 	if (!formattedString && !componentString)
 		return nil;
 
-	NSInteger formattedLength = [formattedString length];
-	NSRange range = [formattedString rangeOfString:@","];
-	if (range.length > 0 && range.location != NSNotFound && range.location < formattedLength)
-		formattedString = [formattedString substringToIndex:range.location];
-	
+	/*
+	 NSInteger formattedLength = [formattedString length];
+	NSRange strRange = NSMakeRange(NSNotFound, 0);
+	if (formattedString && formattedLength)
+		strRange = [formattedString rangeOfString:@","];
+	if (strRange.length > 0 && strRange.location < formattedLength)
+		formattedString = [formattedString substringToIndex:strRange.location];
+	*/
 	if (formattedString && [formattedString length])
 		return formattedString;
 	else {

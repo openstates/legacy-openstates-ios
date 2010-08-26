@@ -18,24 +18,24 @@
 #define INSIDE YES
 #define OUTSIDE NO
 
-- (BOOL) insidePolygon:(MapPoint *)polygon count:(NSInteger)N point:(MapPoint) p;
++ (BOOL) insidePolygon:(CLLocationCoordinate2D *)polygon count:(NSInteger)N point:(CLLocationCoordinate2D) p
 {
 	debug_NSLog(@"Starting insidePolygon: %@", [NSDate date]);
 	
 	NSInteger counter = 0;
 	NSInteger i = 0;
 	double xinters;
-	MapPoint p1,p2;
+	CLLocationCoordinate2D p1,p2;
 	
 	p1 = polygon[0];
 	for (i=1;i<=N;i++) {
 		p2 = polygon[i % N];
-		if (p.y > MIN(p1.y,p2.y)) {
-			if (p.y <= MAX(p1.y,p2.y)) {
-				if (p.x <= MAX(p1.x,p2.x)) {
-					if (p1.y != p2.y) {
-						xinters = (p.y-p1.y)*(p2.x-p1.x)/(p2.y-p1.y)+p1.x;
-						if (p1.x == p2.x || p.x <= xinters)
+		if (p.longitude > MIN(p1.longitude,p2.longitude)) {
+			if (p.longitude <= MAX(p1.longitude,p2.longitude)) {
+				if (p.latitude <= MAX(p1.latitude,p2.latitude)) {
+					if (p1.longitude != p2.longitude) {
+						xinters = (p.longitude-p1.longitude)*(p2.latitude-p1.latitude)/(p2.longitude-p1.longitude)+p1.latitude;
+						if (p1.latitude == p2.latitude || p.latitude <= xinters)
 							counter++;
 					}
 				}
@@ -53,7 +53,7 @@
 }
 
 //The following code is by Randolph Franklin, it returns 1 for interior points and 0 for exterior points.
-- (BOOL) pnpoly:(double *)xp yp:(double *)yp count:(NSInteger)npol x:(double)x y:(double)y;
++ (BOOL) pnpoly:(double *)xp yp:(double *)yp count:(NSInteger)npol x:(double)x y:(double)y
 {
 	debug_NSLog(@"Starting pnpoly: %@", [NSDate date]);
 
