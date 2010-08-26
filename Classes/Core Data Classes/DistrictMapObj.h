@@ -7,6 +7,7 @@
 //
 
 #import <CoreData/CoreData.h>
+#import <MapKit/MapKit.h>
 
 @class DistrictOfficeObj;
 @class LegislatorObj;
@@ -30,7 +31,21 @@
 @property (nonatomic, retain) NSNumber * minLon;
 @property (nonatomic, retain) NSNumber * centerLat;
 @property (nonatomic, retain) LegislatorObj * legislator;
-@property (nonatomic, retain) DistrictOfficeObj * districtOffice;
+//@property (nonatomic, retain) DistrictOfficeObj * districtOffice;
+// USE legislator.districtOffices array instead! ... We get plural!
+
+
+@property (nonatomic, readonly) CLLocationCoordinate2D	coordinate;
+@property (nonatomic, readonly) MKCoordinateRegion		region;
+@property (nonatomic, readonly) MKCoordinateSpan		span;
+
+- (NSString *)title;
+- (NSString *)subtitle;
+- (UIImage *)image;
+- (MKPolyline *)polyline;
+- (MKPolygon *)polygon;
+
+- (BOOL) districtContainsCoordinate:(CLLocationCoordinate2D)aCoordinate;
 
 @end
 
