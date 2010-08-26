@@ -16,7 +16,9 @@
 @property (nonatomic, retain) IBOutlet UIAlertView *currentAlert;
 @property (nonatomic, retain) NSString *optInText;
 
-- (void)presentAnalyticsOptInAlert;
+- (BOOL) presentAnalyticsOptInAlertIfNecessary;
+- (void) presentAnalyticsOptInAlert;
 - (BOOL) shouldPresentAnalyticsOptInAlert;
+- (void) updateOptInFromSettings;
 
 @end

@@ -23,15 +23,32 @@
 	return self;
 }
 
+- (void)updateOptInFromSettings {
+	if ([self shouldPresentAnalyticsOptInAlert])	// we don't have a valid setting yet, wait till they get asked first
+		return;
+	
+	NSNumber *optInUserSetting = [[NSUserDefaults standardUserDefaults] objectForKey:kAnalyticsSettingsSwitch];
+	if (!optInUserSetting)	// we didn't find a switch setting in the bundle??? shouldn't happen...
+		optInUserSetting = [NSNumber numberWithBool:YES];
+	BOOL didOptIn = [optInUserSetting boolValue];
+	[[LocalyticsSession sharedLocalyticsSession] setOptIn:didOptIn];	
+}
+
+
 - (BOOL) shouldPresentAnalyticsOptInAlert {
-	NSNumber *optInResponse = [[NSUserDefaults standardUserDefaults] objectForKey:kAnalyticsOptInKey];
-	if (!optInResponse || [optInResponse integerValue] == -1)
+	BOOL hasAsked = [[NSUserDefaults standardUserDefaults] boolForKey:kAnalyticsAskedForOptInKey];
+	if (!hasAsked)
 		return YES;
-	NSInteger optIn = [optInResponse integerValue];
-	[[LocalyticsSession sharedLocalyticsSession] setOptIn:(optIn == 1)];
 	return NO;
 }
 
+- (BOOL) presentAnalyticsOptInAlertIfNecessary {
+	if ([self shouldPresentAnalyticsOptInAlert]) {
+		[self presentAnalyticsOptInAlert];
+		return YES;
+	}
+	return NO;
+}
 
 - (void)presentAnalyticsOptInAlert {
 
@@ -55,20 +72,20 @@
 		self.currentAlert = nil;
 		self.optInText = nil;
 		
-		NSInteger optIn = buttonIndex;
-		if (optIn != 1 && optIn != 0) {
+		NSInteger didOptIn = buttonIndex;
+		if (didOptIn != 1 && didOptIn != 0) {
 			debug_NSLog(@"Received an unknown button selection for analytics opt-in alert: %d", buttonIndex);
-			if (optIn > 1)
-				optIn = 1;
-			else if (optIn < -1)
-				optIn = -1;
+			if (didOptIn > 1)
+				didOptIn = 1;
+			else if (didOptIn < -1)
+				didOptIn = -1;
 			
 		}
 		
-		[[LocalyticsSession sharedLocalyticsSession] setOptIn:optIn];
+		[[LocalyticsSession sharedLocalyticsSession] setOptIn:didOptIn];
 
-		NSNumber *optInNum = [NSNumber numberWithInteger:optIn];
-		[[NSUserDefaults standardUserDefaults] setObject:optInNum forKey:kAnalyticsOptInKey];
+		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:kAnalyticsAskedForOptInKey];
+		[[NSUserDefaults standardUserDefaults] setBool:(didOptIn == 1) forKey:kAnalyticsSettingsSwitch];
 		[[NSUserDefaults standardUserDefaults] synchronize];
 	}
 }

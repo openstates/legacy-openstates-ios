@@ -36,7 +36,8 @@
 
 // user default dictionary keys
 NSString * const kRestoreSelectionKey = @"RestoreSelection";
-NSString * const kAnalyticsOptInKey = @"HasOptedInToAnalytics";
+NSString * const kAnalyticsAskedForOptInKey = @"HasAskedForOptIn";
+NSString * const kAnalyticsSettingsSwitch = @"PermitUseOfAnalytics";
 NSString * const kShowedSplashScreenKey = @"HasShownSplashScreen";
 
 NSUInteger kNumMaxTabs = 11;
@@ -307,28 +308,30 @@ NSInteger kNoSelection = -1;
 	// make the window visible
 	[self.mainWindow makeKeyAndVisible];
 
+	NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+
 	
 	// register our preference selection data to be archived
 	NSDictionary *savedPrefsDict = [NSDictionary dictionaryWithObjectsAndKeys: 
 									[self archivableSavedTableSelection],kRestoreSelectionKey,
-									[NSNumber numberWithInteger:-1], kAnalyticsOptInKey,
+									[NSNumber numberWithBool:NO], kAnalyticsAskedForOptInKey,
+									[NSNumber numberWithBool:YES], kAnalyticsSettingsSwitch,
 									[NSNumber numberWithBool:NO], kShowedSplashScreenKey,
+									version, @"CFBundleVersion",
 									nil];
 	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:savedPrefsDict];
+	
+	[[NSUserDefaults standardUserDefaults] setObject:version forKey:@"CFBundleVersion"];
+	
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
 	self.analyticsOptInController = [[AnalyticsOptInAlertController alloc] init];
-	if (self.analyticsOptInController && [self.analyticsOptInController shouldPresentAnalyticsOptInAlert])
-		[self.analyticsOptInController presentAnalyticsOptInAlert];
+	if (self.analyticsOptInController && ![self.analyticsOptInController presentAnalyticsOptInAlertIfNecessary])
+		[self.analyticsOptInController updateOptInFromSettings];
 		
 	[[LocalyticsSession sharedLocalyticsSession] startSession:@"111c245bdf4ad08686ac12b-eae4b72e-9439-11df-5b0c-009ee7c87684"];
-	
-	if ([UtilityMethods supportsMKPolyline])
-		debug_NSLog(@"MKPolyline IS available on this device.");
-	else
-		debug_NSLog(@"MKPolyline is NOT available on this device.");
-	
+		
 	return YES;
 }
 
@@ -368,6 +371,9 @@ NSInteger kNoSelection = -1;
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
 	self.appIsQuitting = NO;
+	
+	if (self.analyticsOptInController && ![self.analyticsOptInController shouldPresentAnalyticsOptInAlert])
+		[self.analyticsOptInController updateOptInFromSettings];
 	
  	[[LocalyticsSession sharedLocalyticsSession] resume];
  	[[LocalyticsSession sharedLocalyticsSession] upload];

@@ -19,7 +19,8 @@
 #define kDeviceSensitiveRowHeight 1
 
 extern NSString * const kRestoreSelectionKey;
-extern NSString * const kAnalyticsOptInKey;
+extern NSString * const kAnalyticsAskedForOptInKey;
+extern NSString * const kAnalyticsSettingsSwitch;
 extern NSString * const kShowedSplashScreenKey;
 
 #define m_iTunesAppID 326478866
