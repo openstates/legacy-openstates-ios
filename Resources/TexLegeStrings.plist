@@ -3,23 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>AnalyticsOptInText</key>
-	<string>With your permission, TexLege can unobtrusively collect and submit anonymous usage data (such as time of app launch and features used) to the developer.  This is solely intended to improve future app development and the user experience.  It will NEVER be used for advertising or marketing purposes.  No geographic or otherwise personally identifying information is submitted to the server. Please consider permitting this service.  This is the only time you will see this message.  Please contact me if you have any concerns.  Thank you! &lt;support@texlege.com&gt;</string>
+	<string>TexLege can unobtrusively submit anonymous usage data (like launch time and features used) to the developer.  This is solely intended to improve app development, and will NEVER be used for advertising or marketing.  It submits no geographic or identifying information. Please consider enabling this service.  You may change this later in the Settings app.</string>
 	<key>PartisanIndexText</key>
-	<string>     I calculated the Roll Call Index scores using all the roll call votes taken in the state legislature since 1991 for the House and 1999 for the Senate.  However, in order allow legislator score comparison from one session to another, I apply a statistical transformation on the data.  In a sense, a legislator&apos;s current voting record score is influenced by their scores from previous sessions (but not the other way around).  Since the Speaker rarely votes, I calculate his scores for the current session using his voting record from the prior sessions where he is a regular member.  For the historical charts, I simulate the Speaker&apos;s score from the scores of the members on the Speaker&apos;s Team. 
+	<string>	Thank you for using TexLege, it&apos;s is the only application of it&apos;s kind that includes a roll call vote dimensional index for legislators (along with historical data going back a decade or more). This index is a measure of partisanship within the legislative voting record.
 
-Caveats:
+     I calculate the Roll Call Index scores using the many thousands of votes taken in the legislature since 1991 for the House and 1999 for the Senate.  To get historical comparisons, I apply a statistical transformation on the data such that a legislator&apos;s current voting record score is influenced by their scores from previous sessions (but not the other way around!).  As the Speaker rarely votes, I calculate his scores for the current session using his voting record from the prior sessions where he is a regular member.  For the purposes of the historical graph plots, I simulate the Speaker&apos;s score from the scores of the members on the Speaker&apos;s Team. 
 
-Don&apos;t interpret these scores as a measure of ideology.  That&apos;s bad science.  Many interest groups make this mistake.  Rather, these scores are a measure of partisanship within the voting record.  Ideology and partisanship in voting are two very different things.
+	Don&apos;t compare the scores between a House and a Senator member (yet), the scales are not the same.  I&apos;m actively working on a transformation that will normalize the indexes for the two chambers, but it&apos;s not included here.
 
-You shouldn&apos;t compare scores between House members and Senators (yet), the scales are not the same.  I&apos;m working on a transformation that will normalize the two chambers, but it&apos;s not included here. However, you can compare scores between members of the same chamber, or from one legislative session to another.
+For much more detailed information on the roll call analysis, please contact me or see my doctoral dissertation titled “The Power of the Texas Speaker: Maintaining Influence and Governing over a Divided House”, available from http://disill.umi.com/dxweb or through your local university’s library.
 
-Too much information (for stats nerds):
-
-The Roll Call Index originates from my dissertation titled “The Power of the Texas Speaker: Maintaining Influence and Governing over a Divided House”, available from http://disill.umi.com/dxweb or through your university’s library. I use Dr. Keith Pool’s W-NOMINATE software to generate scores for a single session. I then apply Dr. Gerald Wright’s modified Groseclose-Levitt-Snyder transformation to regress individual legislator scores from one session to the previous session, and so on.
-
-Gregory S. Combs, PhD, utdallas.edu</string>
+Gregory S. Combs, PhD
+www.texlege.com</string>
 	<key>AboutText</key>
-	<string>     Thank you for your support.  Please visit the website for more information or for questions and assistance.  Among a litany of other features, TexLege has pre-installed zoomable maps of the entire complex, along with a full directory of legislators and their office information, so you won&apos;t need internet service to find your way around.
-     TexLege is the only application of it&apos;s kind that includes a roll call vote dimensional index for legislators (along with historical data going back a decade or more).  You can find more detailed information on the Roll Call Index at TexLege.com or just contact me, I&apos;m happy to discuss it at length.</string>
+	<string></string>
 </dict>
 </plist>
