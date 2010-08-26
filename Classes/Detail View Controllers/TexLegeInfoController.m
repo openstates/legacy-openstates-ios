@@ -82,9 +82,7 @@
 
 - (void)dealloc {
 	
-	self.projectWebsiteURL = nil;
 	self.versionLabel = nil;
-	self.projectWebsiteButton = nil;
 	self.dismissButton = nil;
 	self.infoTextView = nil;
 	[super dealloc];
