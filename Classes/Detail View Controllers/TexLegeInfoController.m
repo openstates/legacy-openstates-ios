@@ -43,7 +43,8 @@
 	
 	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"TexLegeStrings" ofType:@"plist"];
 	NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
-	self.infoTextView.text = [[textDict objectForKey:@"AboutText"] stringByAppendingFormat:@"\n%@", [textDict objectForKey:@"PartisanIndexText"]];
+	//self.infoTextView.text = [[textDict objectForKey:@"AboutText"] stringByAppendingFormat:@"\n%@", [textDict objectForKey:@"PartisanIndexText"]];
+	self.infoTextView.text = [textDict objectForKey:@"PartisanIndexText"];
 
 }
 
