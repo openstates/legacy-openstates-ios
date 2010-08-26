@@ -13,6 +13,7 @@
 #import "UtilityMethods.h"
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
+#import "DistrictMapObj.h"
 
 
 @interface DistrictOfficeMasterViewController (Private)
@@ -88,9 +89,18 @@
 */
 }
 
+- (void)viewDidUnload {
+	self.chamberControl = nil;
+	self.sortControl = nil;
+	self.filterControls = nil;
+	[super viewDidUnload];
+}
+
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
 	/*
 	//// ALL OF THE FOLLOWING MUST NOT RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER	
 	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
@@ -153,7 +163,6 @@
 	DistrictOfficeObj *office = dataObject;
 	if (office) {
 		MapViewController *mapVC = (MapViewController *)self.detailViewController;
-		[mapVC view];	// this is retarded ... we have to fool it into loading the view???
 		MKMapView *mapView = mapVC.mapView;
 		if (mapVC && mapView) {
 			NSMutableArray *officeAnnotations = [[NSMutableArray alloc] init];
@@ -164,7 +173,11 @@
 			
 			mapVC.shouldAnimate = NO;
 			[mapView removeAnnotations:officeAnnotations];
+			[mapView removeOverlays:mapView.overlays];
+
+			[mapView addOverlay:[office.legislator.districtMap polygon]];
 			[mapView addAnnotation:office];
+			
 			
 			if ([officeAnnotations lastObject]) { // we've already got one annotation set, let's zoom in/out
 				[self.detailViewController performSelector:@selector(animateToState:) withObject:[officeAnnotations lastObject] afterDelay:0.3];
