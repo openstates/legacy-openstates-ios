@@ -11,7 +11,6 @@
 #import "CFeedFetcher.h"
 #import "CFeedEntry.h"
 #import "CFeed.h"
-#import "RegexKitLite.h"
 
 @implementation ChamberCalendarObj
 
@@ -92,23 +91,55 @@
 			if (searchString) {
 				
 				// Catches:			"Time: 8:00 AM  (Canceled), Location: North Texas Tollway Authority Headquarters, Plano"
-				//   also:			"Time: 9:00 AM, Location: Senate Chamber"
-				static NSString *regexString = @"Time:\\s+([0-9]+:[0-9]+\\s+[AP]M)(\\s+\\(Cance[l]+ed\\))?,\\s+Location:\\s+(.+)$";
+				//   also:			"Time: 9:00 AM, Location: Senate Chamber"				
+
 				
-				if([searchString isMatchedByRegex:regexString]) {
-					NSString *timeString = [searchString stringByMatching:regexString capture:1L];
-					if (timeString) {
-						[entryDict setObject:[timeFormatter dateFromString:timeString] forKey:@"time"];
-						[entryDict setObject:timeString forKey:@"timeString"];
-					}
+				//static NSRange kRangeNotFound = {NSNotFound, 0};
+				
+				// Set whether it's cancelled/canceled(!)
+				NSRange cancelRange = [searchString rangeOfString:@" (Canceled),"];
+				if (cancelRange.length > 0)
+					cancelRange = [searchString rangeOfString:@" (Cancelled),"];
+				[entryDict setObject:[NSNumber numberWithBool:(cancelRange.length > 0)] forKey:@"cancelled"];
+				
+
+				// Time
+				NSRange timeRange = [searchString rangeOfString:@"Time: "];
+				NSRange placeRange = [searchString rangeOfString:@" Location: "];
+				if ( timeRange.length <= 0 )
+					debug_NSLog(@"Unexpected content in schedule parsing ... expected 'Time:[...]', got: %@", searchString);
+				else {
+					NSInteger start = timeRange.location + timeRange.length;
+					NSInteger end = 0;
+					if (cancelRange.location != NSNotFound && cancelRange.location > 0)
+						end = cancelRange.location-1;
+					else if (placeRange.location != NSNotFound && placeRange.location > 0)
+						end = placeRange.location-1;
 					
-					NSString *cancelledStr   = [searchString stringByMatching:regexString capture:2L];
-					[entryDict setObject:[NSNumber numberWithBool:(cancelledStr != nil)] forKey:@"cancelled"];
-					
-					NSString *location   = [searchString stringByMatching:regexString capture:3L];
-					if (location)
-						[entryDict setObject:location forKey:@"location"];
+					if (start < end) {
+						timeRange = NSMakeRange(start, end-start);
+						NSString *timeString = [searchString substringWithRange:timeRange];
+						if (timeString) {
+							[entryDict setObject:[timeFormatter dateFromString:timeString] forKey:@"time"];
+							[entryDict setObject:timeString forKey:@"timeString"];
+						}
+					}						
 				}
+
+				// Location
+				if ( placeRange.length <= 0 )
+					debug_NSLog(@"Unexpected content in schedule parsing ... expected 'Location:[...]', got: %@", searchString);
+				else {
+					NSInteger start = placeRange.location + placeRange.length;
+					NSInteger end = [searchString length];
+					if (start < end) {
+						placeRange = NSMakeRange(start, end-start);
+						NSString *placeString = [searchString substringWithRange:placeRange];
+						if (placeString)
+							[entryDict setObject:placeString forKey:@"location"];
+					}					
+				}
+				
 			}
 			
 			[entryArray addObject:entryDict];
