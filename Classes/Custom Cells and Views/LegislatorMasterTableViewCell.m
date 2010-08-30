@@ -39,9 +39,10 @@
 		self.accessoryView = [TexLegeTheme disclosureLabel:NO];
 	 */
 	
-	self.disclosureView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30.f, 30.f)];
-	[[ImageCache sharedImageCache] loadImageView:self.disclosureView fromPath:@"disclosure.png"];
-
+	UIImageView *theImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30.f, 30.f)];
+	theImageView.image = [UIImage imageNamed:@"disclosure.png"];
+	self.disclosureView = theImageView;
+	[theImageView release];
 	
 	self.selectionStyle = UITableViewCellSelectionStyleBlue;	
 	
@@ -54,7 +55,10 @@
 	
 	self.leg_titleLab.font = self.leg_tenureLab.font = [TexLegeTheme boldTwelve];
 	
-	self.leg_sliderView = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
+	StaticGradientSliderView *sliderV = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
+	self.leg_sliderView = sliderV;
+	[sliderV release];
+	
 	[self.leg_sliderView addToPlaceholder:self.leg_sliderViewPlaceHolder];
 	
 	self.useDarkBackground = YES;
@@ -103,7 +107,7 @@
 	[[ImageCache sharedImageCache] loadImageView:self.leg_photoView fromPath:self.legislator.photo_name];
 	//self.leg_photoView.image = [UIImage imageNamed:self.legislator.photo_name];	
 	self.accessoryView = self.disclosureView;
-
+	
 	self.leg_titleLab.text = [self.legislator.legtype_name stringByAppendingFormat:@" - %@", [self.legislator districtPartyString]];
 	self.leg_nameLab.text = [self.legislator legProperName];
 	self.leg_tenureLab.text = [self.legislator tenureString];

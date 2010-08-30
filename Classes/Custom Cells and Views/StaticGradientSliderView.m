@@ -43,8 +43,8 @@
 		}
 		
 		//self.gradientImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TexasGradient"]];
-		self.gradientImage = [[UIImageView alloc] initWithFrame:CGRectMake(12.0, 6.0, 276.0, 14.0)];
-		[[ImageCache sharedImageCache] loadImageView:self.gradientImage fromPath:@"TexasGradient.png"];
+		self.gradientImage = [[[UIImageView alloc] initWithFrame:CGRectMake(12.0, 6.0, 276.0, 14.0)] autorelease];
+		self.gradientImage.image = [UIImage imageNamed:@"TexasGradient.png"];
 
 		//self.gradientImage.frame = CGRectMake(12.0, 6.0, 276.0, 14.0);
 		self.gradientImage.autoresizesSubviews = self.gradientImage.clearsContextBeforeDrawing = YES;
@@ -59,7 +59,7 @@
 		if (self.sliderControl)
 			self.sliderControl = nil;
 		
-		self.sliderControl = [[UISlider alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 23.0)];
+		self.sliderControl = [[[UISlider alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 23.0)] autorelease];
 		self.sliderControl.autoresizesSubviews = YES;
 		self.sliderControl.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
 		
@@ -104,7 +104,8 @@
 - (void) setUsesSmallStar:(BOOL)isSmall {
 	if (isSmall != m_usesSmallStar) {
 		NSString *starString = (isSmall) ? @"slider_star.png" : @"slider_star_big.png";
-		[self.sliderControl setThumbImage:[UIImage imageNamed:starString] forState:UIControlStateNormal & UIControlStateHighlighted & UIControlStateSelected & UIControlStateDisabled];
+		UIImage *starImage = [UIImage imageNamed:starString];
+		[self.sliderControl setThumbImage:starImage forState:UIControlStateNormal & UIControlStateHighlighted & UIControlStateSelected & UIControlStateDisabled];
 		m_usesSmallStar = isSmall;
 		
 		[self setBackgroundOffset];
@@ -145,7 +146,8 @@
 - (void)setSliderValue:(float)newVal animated:(BOOL)isAnimated {
 	if (newVal == 0.0f) {
 		NSString *imageString = (self.usesSmallStar) ? @"Slider_Question.png" : @"Slider_Question_big.png";
-		[self.sliderControl setThumbImage:[UIImage imageNamed:imageString] forState:UIControlStateNormal & UIControlStateHighlighted & UIControlStateSelected & UIControlStateDisabled];
+		UIImage *questionImage = [UIImage imageNamed:imageString];
+		[self.sliderControl setThumbImage:questionImage forState:UIControlStateNormal & UIControlStateHighlighted & UIControlStateSelected & UIControlStateDisabled];
 		[self setAlpha:0.5f];
 	}
 	else {

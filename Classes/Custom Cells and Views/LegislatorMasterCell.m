@@ -55,7 +55,7 @@
 
 - (void)dealloc {
 	self.legislator = nil;
-	self.cellView = nil;
+	[cellView release], cellView = nil;
 	
     [super dealloc];
 }
