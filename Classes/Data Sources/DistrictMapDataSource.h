@@ -7,6 +7,7 @@
 //
 
 #import "TableDataSourceProtocol.h"
+#import <MapKit/MapKit.h>
 
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
 @class DistrictMapImporter;
@@ -17,6 +18,8 @@
 	NSInteger mapCount;
 #endif
 }
+
+- (NSArray *) districtsContainingCoordinate:(CLLocationCoordinate2D)aCoordinate;
 
 @property (nonatomic, retain)			NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) IBOutlet	NSManagedObjectContext *managedObjectContext;

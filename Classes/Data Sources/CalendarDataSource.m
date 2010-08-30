@@ -12,7 +12,6 @@
 #import "CFeedEntry.h"
 #import "CFeed.h"
 #import "UtilityMethods.h"
-#import "RegexKitLite.h"
 #import "TexLegeTheme.h"
 #import "ChamberCalendarObj.h"
 

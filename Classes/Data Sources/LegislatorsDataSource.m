@@ -13,10 +13,11 @@
 #import "UtilityMethods.h"
 #import "ImageCache.h"
 #import "LegislatorMasterCellView.h"
+#import "TexLegeTheme.h"
 #import "LegislatorMasterCell.h"
 #import "DistrictOfficeObj.h"
 #import "BSForwardGeocoder.h"
-
+#import "UIDevice-Hardware.h"
 //#import "NSData+Encryption.h"
 
 @interface LegislatorsDataSource (Private)
@@ -86,7 +87,7 @@
 { return [UIImage imageNamed:@"123-id-card.png"]; }
 
 - (BOOL)showDisclosureIcon
-{ return NO; }
+{ return YES; }
 
 - (BOOL)usesCoreData
 { return YES; }
@@ -123,22 +124,6 @@
 	return [self.fetchedResultsController indexPathForObject:dataObject];
 }
 
-- (CGFloat) rowHeight {
-	CGFloat height;
-
-#if kDeviceSensitiveRowHeight == 1
-	//if (0 /*something about checking to see if a passed in tableView == searchResultsTable*/)
-	//else 
-		if (![UtilityMethods isIPadDevice])	// We're on an iPhone/iTouch
-			height = 44.0f;
-		else
-			// an iPad and not a searchResultsTable
-#endif
-			height = 73.0f;
-	
-	return height;
-}
-
 // UITableViewDataSource methods
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -150,31 +135,36 @@
 	}
 	
 #if kDeviceSensitiveRowHeight == 1
-	// let's try out the bigger cells for both iPad and iPhone ... but leave this here in case we want to revert.
-    if (![UtilityMethods isIPadDevice]) // if we're on an iphone
+	NSUInteger platformType = [[UIDevice currentDevice] platformType];
+	if (platformType != UIDeviceiPhoneSimulatoriPad && platformType <= UIDevice3GiPhone)
     {
 		static NSString *leg_searchcell_ID = @"LegislatorDirectorySkinny";
 		
+		
 		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:leg_searchcell_ID];
 		if (cell == nil) {
+			
 			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:leg_searchcell_ID] autorelease];
+			
+			cell.detailTextLabel.font =		[TexLegeTheme boldFifteen];
+			cell.textLabel.font =			[TexLegeTheme boldTwelve];
+			cell.detailTextLabel.textColor = [TexLegeTheme textDark];
+			cell.textLabel.textColor =		[TexLegeTheme accent];
+			
+			cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+			cell.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
+			cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+			cell.detailTextLabel.minimumFontSize = 12.0f;
+			//cell.accessoryView = [TexLegeTheme disclosureLabel:YES];
+			cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]] autorelease];
 		}
 		
 		// configure cell contents
-		cell.textLabel.text = [NSString stringWithFormat: @"%@ - (%@)", 
-							   [dataObj legProperName], [dataObj partyShortName]];
-		cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
-		cell.detailTextLabel.text = [dataObj labelSubText];
-		cell.detailTextLabel.font = [UIFont boldSystemFontOfSize:12];
-		cell.detailTextLabel.textColor = [UIColor lightGrayColor];
-		
-		[[ImageCache sharedImageCache] loadImageView:cell.imageView fromPath:dataObj.photo_name]
-		//cell.imageView.image = [UIImage imageNamed:dataObj.photo_name];
-		
-		// all the rows should show the disclosure indicator
-		if ([self showDisclosureIcon])
-			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		
+		cell.textLabel.text = [dataObj.legtype_name stringByAppendingFormat:@" - %@", [dataObj districtPartyString]];
+		cell.detailTextLabel.text = [dataObj legProperName];
+		cell.imageView.image = [UIImage imageNamed:dataObj.photo_name];
+		cell.accessoryView.hidden = (![self showDisclosureIcon] || tableView == self.searchDisplayController.searchResultsTableView);
+
 		return cell;
     }
 	else
@@ -194,19 +184,12 @@
 		
 		cell.legislator = dataObj;
 		cell.cellView.useDarkBackground = (indexPath.row % 2 == 0);
-		
-		// Display dark and light background in alternate rows -- see tableView:willDisplayCell:forRowAtIndexPath:.
-		//cell.useDarkBackground = (indexPath.row % 2 == 0);
-		
-		
-		//if (tableView == self.searchDisplayController.searchResultsTableView) 
-		//cell.accessoryType.hidden = UITableViewCellAccessoryNone;
-		//cell.accessoryView.hidden = (tableView == self.searchDisplayController.searchResultsTableView);
+		cell.accessoryView.hidden = (![self showDisclosureIcon] || tableView == self.searchDisplayController.searchResultsTableView);
 		
 		return cell;
 	}
 	
-#else
+#endif
 	{
 		static NSString *leg_cell_ID = @"LegislatorDirectory";		
 		LegislatorMasterTableViewCell *cell = (LegislatorMasterTableViewCell *)[tableView 
@@ -221,20 +204,12 @@
 			self.leg_cell = nil;
 		}
 				
-		if (cell) {
-			[cell setupWithLegislator:dataObj];
-		}
-		// Display dark and light background in alternate rows -- see tableView:willDisplayCell:forRowAtIndexPath:.
+		[cell setupWithLegislator:dataObj];
 		cell.useDarkBackground = (indexPath.row % 2 == 0);
-
-		
-		//if (tableView == self.searchDisplayController.searchResultsTableView) 
-			//cell.accessoryType.hidden = UITableViewCellAccessoryNone;
-		cell.accessoryView.hidden = (tableView == self.searchDisplayController.searchResultsTableView);
+		cell.accessoryView.hidden = (![self showDisclosureIcon] || tableView == self.searchDisplayController.searchResultsTableView);
 		
 		return cell;
 	}
-#endif
 	
 }
 
@@ -491,8 +466,6 @@
 		NSDictionary *addressDict = firstResult.addressDict;
 		
 		
-		//NSRange pobox = [searchQuery rangeOfString:@"Post Office"];
-		//BOOL hasPOBox = (pobox.length > 0 && pobox.location != NSNotFound && pobox.location < [searchQuery length]);
 		BOOL missingAddress = (addressDict && [[addressDict valueForKey:@"address"] length] == 0);
 		
 		if (missingAddress) {

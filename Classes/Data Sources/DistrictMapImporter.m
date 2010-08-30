@@ -192,7 +192,7 @@
     self.currentDistrictMapObject = nil;
     self.currentParsedCharacterData = nil;
     [parser release];        
-    [pool release];
+    [pool drain];
 }
 
 // Handle errors in the download or the parser by showing an alert to the user. This is a very

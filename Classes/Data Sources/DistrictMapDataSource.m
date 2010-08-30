@@ -6,9 +6,9 @@
 //  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
-#import "DistrictMapDataSource.h"
 #import "TexLegeTheme.h"
 #import "DistrictMapObj.h"
+#import "DistrictMapDataSource.h"
 
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
 #import "DistrictMap.h"
@@ -92,7 +92,8 @@
 	return UITableViewStylePlain;
 }
 
-
+#pragma mark -
+#pragma mark Data Object Methods
 // return the committee at the index in the sorted by symbol array
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
 	DistrictMapObj *tempEntry = nil;
@@ -112,7 +113,47 @@
 	return [self.fetchedResultsController indexPathForObject:dataObject];
 }
 
-// UITableViewDataSource methods
+- (NSArray *) districtsContainingCoordinate:(CLLocationCoordinate2D)aCoordinate {
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSManagedObjectContext *context = self.managedObjectContext;
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictMapObj" inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];
+	
+	[fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"legislator", @"district", @"chamber", 
+										@"minLat", @"maxLat", @"minLon", @"maxLon", nil]];
+	
+	NSSortDescriptor *sort1 = [[NSSortDescriptor alloc] initWithKey:@"district" ascending:YES] ;
+	NSSortDescriptor *sort2 = [[NSSortDescriptor alloc] initWithKey:@"chamber" ascending:NO] ;
+	[fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sort1, sort2, nil]];
+	[sort1 release];
+	[sort2 release];
+	
+	NSError *error = nil;
+	NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+	[fetchRequest release];
+	if (error) {
+		debug_NSLog(@"Problem fetching district maps.");
+		return nil;
+	}
+	
+	NSMutableArray *districts = [[[NSMutableArray alloc] initWithCapacity:181] autorelease];
+	for (DistrictMapObj *map in fetchedObjects) {
+		if ([map districtContainsCoordinate:aCoordinate])
+			[districts addObject:map];
+	}
+	
+	//[self.mapView removeOverlays:[self.mapView overlays]];
+	
+	//[self performSelector:@selector(animateToState) withObject:nil afterDelay:0.3f];
+	//self.shouldAnimate = NO;
+	//[self.mapView addOverlays:array];	
+	
+	return districts;
+}
+
+#pragma mark -
+#pragma UITableViewDataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -410,7 +451,7 @@
 	
 	if (mapCount ==31) {
 		self.importer = nil;
-		self.importer = [[DistrictMapImporter alloc] initWithChamber:HOUSE dataSource:self];
+		self.importer = [[[DistrictMapImporter alloc] initWithChamber:HOUSE dataSource:self] autorelease];
 	}
 	
 	if (mapCount == 181) {
@@ -462,8 +503,11 @@
 	self.fetchedResultsController = aFetchedResultsController;
 	
 	[aFetchedResultsController release];
+	
 	[fetchRequest release];
 	
+	NSError *error = nil;
+	[self.fetchedResultsController performFetch:&error];
 	return fetchedResultsController;
 }    
 

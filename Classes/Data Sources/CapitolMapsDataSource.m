@@ -50,7 +50,7 @@
 	if (self = [super init]) {
 		if (newContext) self.managedObjectContext = newContext;
 		
-		self.sectionList = [[NSMutableArray alloc] init];
+		self.sectionList = [[[NSMutableArray alloc] init] autorelease];
 		[self createSectionList];
 	}
 	return self;
@@ -64,15 +64,16 @@
 	
 	for (NSArray * section in mapSectionsPlist)
 	{
-		NSMutableArray *tempSection = [NSMutableArray array];
+		NSMutableArray *tempSection = [[NSMutableArray alloc] initWithCapacity:[section count]];
 
 		for (NSDictionary * mapEntry in section)
 		{
-			CapitolMap *newMap = [[[CapitolMap alloc] initWithDictionary:mapEntry] autorelease];
+			CapitolMap *newMap = [[CapitolMap alloc] initWithDictionary:mapEntry];
 			[tempSection addObject:newMap];
-			//[newMap release];
+			[newMap release];
 		}
 		[self.sectionList addObject:tempSection];
+		[tempSection release];
 	}
 	
 	[mapSectionsPlist release];
