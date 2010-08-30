@@ -157,7 +157,7 @@
 	
 	// create a LegislatorDetailViewController. This controller will display the full size tile for the element
 	if (self.detailViewController == nil) {
-		self.detailViewController = [[MapViewController alloc] initWithNibName:@"MapViewController" bundle:nil];
+		self.detailViewController = [MapViewController sharedMapViewController];
 	}
 	
 	DistrictOfficeObj *office = dataObject;
@@ -165,28 +165,12 @@
 		MapViewController *mapVC = (MapViewController *)self.detailViewController;
 		MKMapView *mapView = mapVC.mapView;
 		if (mapVC && mapView) {
-			NSMutableArray *officeAnnotations = [[NSMutableArray alloc] init];
-			for (id<MKAnnotation> annotation in [mapView annotations]) {
-				if ([annotation isKindOfClass:[DistrictOfficeObj class]])
-					[officeAnnotations addObject:annotation];
-			}
 			
-			mapVC.shouldAnimate = NO;
-			[mapView removeAnnotations:officeAnnotations];
-			[mapView removeOverlays:mapView.overlays];
+			[mapVC clearAnnotationsAndOverlays];
 
 			[mapView addOverlay:[office.legislator.districtMap polygon]];
 			[mapView addAnnotation:office];
-			
-			
-			if ([officeAnnotations lastObject]) { // we've already got one annotation set, let's zoom in/out
-				[self.detailViewController performSelector:@selector(animateToState:) withObject:[officeAnnotations lastObject] afterDelay:0.3];
-				[self.detailViewController performSelector:@selector(animateToAnnotation:) withObject:office afterDelay:2.0];        
-			}
-			else
-				[self.detailViewController performSelector:@selector(animateToAnnotation:) withObject:office afterDelay:0.3];
-			
-			[officeAnnotations release];
+			[mapVC moveMapToAnnotation:office];			
 		}
 		if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
 			[self searchBarCancelButtonClicked:nil];

@@ -69,6 +69,11 @@
 
 }
 
+- (void)viewDidUnload {
+	self.chamberControl = nil;
+	[super viewDidUnload];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 	//// ALL OF THE FOLLOWING MUST *NOT* RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER
@@ -112,7 +117,7 @@
 		
 	// create a CommitteeDetailViewController. This controller will display the full size tile for the element
 	if (self.detailViewController == nil) {
-		self.detailViewController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
+		self.detailViewController = [[[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil] autorelease];
 	}
 	
 	CommitteeObj *committee = dataObject;

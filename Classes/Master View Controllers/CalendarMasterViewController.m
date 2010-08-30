@@ -82,9 +82,9 @@
 	
 	if (!self.detailViewController) {
 		if ([UtilityMethods isIPadDevice])
-			self.detailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController~ipad" bundle:nil];
+			self.detailViewController = [[[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController~ipad" bundle:nil] autorelease];
 		else
-			self.detailViewController = [[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController~iphone" bundle:nil];
+			self.detailViewController = [[[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController~iphone" bundle:nil] autorelease];
 	}
 	
 	if (!dataObject || ![dataObject isKindOfClass:[ChamberCalendarObj class]])

@@ -86,7 +86,7 @@
 	
 	// create a CapitolMapsDetailViewController. This controller will display the full size tile for the element
 	if (self.detailViewController == nil) {
-		self.detailViewController = [[CapitolMapsDetailViewController alloc] initWithNibName:@"CapitolMapsDetailViewController" bundle:nil];
+		self.detailViewController = [[[CapitolMapsDetailViewController alloc] initWithNibName:@"CapitolMapsDetailViewController" bundle:nil] autorelease];
 	}
 	
 	CapitolMap *capitolMap = dataObject;

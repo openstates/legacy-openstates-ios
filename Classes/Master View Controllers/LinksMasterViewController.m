@@ -75,6 +75,13 @@
 		self.selectObjectOnAppear = [self firstDataObject];
 }
 
+- (void)viewDidUnload {
+	self.aboutControl = nil;
+	self.miniBrowser = nil;
+	[super viewDidUnload];
+}
+
+
 
 /*- (void)viewWillAppear:(BOOL)animated
 {	
@@ -135,7 +142,7 @@
 	if ([UtilityMethods isIPadDevice]) {
 		if (!self.detailViewController || ![self.detailViewController isKindOfClass:[LinksDetailViewController class]]) {
 			[self.detailViewController release];
-			self.detailViewController = [[LinksDetailViewController alloc] init];
+			self.detailViewController = [[[LinksDetailViewController alloc] init] autorelease];
 		}
 		if ([action isEqualToString:@"contactMail"])
 			[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
@@ -153,7 +160,7 @@
 		else if ([action isEqualToString:@"contactMail"]) {
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
 																			 subject:@"TexLege Support Question / Concern" 
-																				body:@""];
+																				body:@"" commander:self];
 		}
 		else {			
 			NSURL *url = [UtilityMethods safeWebUrlFromString:action];

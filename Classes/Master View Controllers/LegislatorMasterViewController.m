@@ -13,6 +13,7 @@
 #import "UtilityMethods.h"
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
+#import "UIDevice-Hardware.h"
 
 @interface LegislatorMasterViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
@@ -50,7 +51,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 		
-	self.tableView.rowHeight = 73.0f;
+#if kDeviceSensitiveRowHeight == 1
+	NSUInteger platformType = [[UIDevice currentDevice] platformType];
+	if (platformType != UIDeviceiPhoneSimulatoriPad && platformType <= UIDevice3GiPhone)
+		self.tableView.rowHeight = 54.0f;
+	else
+		// an iPad and not a searchResultsTable
+#endif
+		self.tableView.rowHeight = 73.0f;
+	
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self.dataSource;	
 	
@@ -70,6 +79,10 @@
 		self.selectObjectOnAppear = [self firstDataObject];
 }
 
+- (void)viewDidUnload {
+	self.chamberControl = nil;
+	[super viewDidUnload];
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -104,7 +117,7 @@
 	if (![UtilityMethods isIPadDevice])
 		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
 	
-	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]) && (self.splitViewController != nil);
+	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]);
 	
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	if ([dataObject isKindOfClass:[NSManagedObject class]])
@@ -114,7 +127,7 @@
 	
 	// create a LegislatorDetailViewController. This controller will display the full size tile for the element
 	if (self.detailViewController == nil) {
-		self.detailViewController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
+		self.detailViewController = [[[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil] autorelease];
 	}
 	
 	LegislatorObj *legislator = dataObject;

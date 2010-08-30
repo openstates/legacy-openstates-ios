@@ -34,7 +34,7 @@
 	self.managedObjectContext = context;
 	
 		//self.tableView = nil;
-	self.dataSource = [[[self dataSourceClass] alloc] initWithManagedObjectContext:self.managedObjectContext];
+	self.dataSource = [[[[self dataSourceClass] alloc] initWithManagedObjectContext:self.managedObjectContext] autorelease];
 	self.title = [self.dataSource name];	
 	// set the long name shown in the navigation bar
 	//self.navigationItem.title=[dataSource navigationBarName];
@@ -81,10 +81,10 @@
 	
 	[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
 
-	if (![UtilityMethods isIPadDevice]) {
+	//if (![UtilityMethods isIPadDevice]) {
 		debug_NSLog(@"about to release a view controller %@", self.detailViewController);
 		self.detailViewController = nil;
-	}
+	//}
 	
 	self.selectObjectOnAppear = nil;
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
@@ -96,8 +96,7 @@
 	// create a new table using the full application frame
 	// we'll ask the datasource which type of table to use (plain or grouped)
 	CGRect tempFrame = [[UIScreen mainScreen] applicationFrame];
-	self.tableView = [[UITableView alloc] initWithFrame:tempFrame 
-												  style:[self.dataSource tableViewStyle]];
+	self.tableView = [[[UITableView alloc] initWithFrame:tempFrame style:[self.dataSource tableViewStyle]] autorelease];
 	
 	// set the autoresizing mask so that the table will always fill the view
 	self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
@@ -138,6 +137,14 @@
 		self.contentSizeForViewInPopover = CGSizeMake(320.0, tableHeight);
 		//self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 	}
+}
+
+- (void)viewDidUnload {
+	self.tableView.dataSource = nil;
+	//self.tableView.delegate = nil;
+	self.selectObjectOnAppear = nil;
+	self.tableView = nil;
+	[super viewDidUnload];
 }
 
 - (IBAction)selectDefaultObject:(id)sender {
