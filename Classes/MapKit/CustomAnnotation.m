@@ -30,6 +30,7 @@
 		
 		self.pinColorIndex = [NSNumber numberWithInteger:MKPinAnnotationColorGreen]; 
 		self.imageName = @"silverstar.png";
+
 	}
 	
 	return self;
@@ -58,7 +59,7 @@
 	[coder encodeObject:self.regionDict		forKey:@"regionDict"];
 	[coder encodeObject:self.addressDict	forKey:@"addressDict"];
 	
-}
+}	
 
 - (void)dealloc {	
 	self.title = nil;
