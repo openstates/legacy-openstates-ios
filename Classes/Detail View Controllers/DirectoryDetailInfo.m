@@ -11,33 +11,24 @@
 #include "UtilityMethods.h"
 
 @implementation DirectoryDetailInfo
-@synthesize entryName, entryValue, isClickable, entryType;
-
-- (id)initWithName:(NSString *)newName value:(id)newValue isClickable:(BOOL)newClickable type:(NSInteger)newType {
-	if ([self init]) {
-		
-		self.entryName = newName;
-		self.entryValue = newValue;
-		self.entryType = newType;		
-		self.isClickable = newClickable;
-	}
-	return self;
-}
+@synthesize /*entryName, */entryValue, isClickable, entryType, title, subtitle;
 
 - (id)initWithDictionary:(NSDictionary *)aDictionary {
 	if ([self init]) {
 		
-		self.entryName = [aDictionary valueForKey:@"entryName"];
+		//self.entryName = [aDictionary valueForKey:@"entryName"];
 		self.entryValue = [aDictionary valueForKey:@"entryValue"];
 		self.entryType = [[aDictionary valueForKey:@"entryType"] integerValue];		
 		self.isClickable = [[aDictionary valueForKey:@"isClickable"] boolValue];
+		self.title = [aDictionary valueForKey:@"title"];
+		self.subtitle = [aDictionary valueForKey:@"subtitle"];
 	}
 	return self;
 }
 
 
 - (void)dealloc {
-	self.entryName = self.entryValue = nil;
+	self.entryValue = self.subtitle = self.title = nil;
 	
     [super dealloc];
 }
