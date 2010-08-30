@@ -215,6 +215,7 @@ NSInteger kNoSelection = -1;
 }
 
 - (void) setupFeatures {
+	
 	[[PartisanIndexStats sharedPartisanIndexStats] setManagedObjectContext:self.managedObjectContext];
 	
 	NSArray *nibObjects = nil;
@@ -252,8 +253,8 @@ NSInteger kNoSelection = -1;
 			UISplitViewController * split = [controller splitViewController];
 			if (split) {
 				split.title = [[controller dataSource] name];
-				split.tabBarItem = [[UITabBarItem alloc] initWithTitle:
-									[[controller dataSource] name] image:[[controller dataSource] tabBarImage] tag:index];
+				split.tabBarItem = [[[UITabBarItem alloc] initWithTitle:
+									[[controller dataSource] name] image:[[controller dataSource] tabBarImage] tag:index] autorelease];
 				[splitViewControllers addObject:split];
 			}
 			index++;
@@ -275,7 +276,7 @@ NSInteger kNoSelection = -1;
 	
 	[self.mainWindow addSubview:self.tabBarController.view];
 		
-	self.districtMapDataSource = [[DistrictMapDataSource alloc] initWithManagedObjectContext:self.managedObjectContext];
+	self.districtMapDataSource = [[[DistrictMapDataSource alloc] initWithManagedObjectContext:self.managedObjectContext] autorelease];
 	//[self.tabBarController setSelectedIndex:selection];
 	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];	
 }
@@ -326,7 +327,7 @@ NSInteger kNoSelection = -1;
 	
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
-	self.analyticsOptInController = [[AnalyticsOptInAlertController alloc] init];
+	self.analyticsOptInController = [[[AnalyticsOptInAlertController alloc] init] autorelease];
 	if (self.analyticsOptInController && ![self.analyticsOptInController presentAnalyticsOptInAlertIfNecessary])
 		[self.analyticsOptInController updateOptInFromSettings];
 		
@@ -404,7 +405,7 @@ NSInteger kNoSelection = -1;
 		self.activeDialogController = controller;
 		
 		if (!self.aboutView) {
-			self.aboutView = [[TexLegeInfoController alloc] initWithNibName:@"TexLegeInfoController~iphone" bundle:nil];	
+			self.aboutView = [[[TexLegeInfoController alloc] initWithNibName:@"TexLegeInfoController~iphone" bundle:nil] autorelease];	
 			self.aboutView.delegate = self;
 			self.aboutView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 			self.aboutView.modalPresentationStyle = UIModalPresentationFormSheet;
