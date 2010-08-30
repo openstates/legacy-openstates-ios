@@ -53,7 +53,7 @@ enum InfoSectionRows {
 		self.navigationItem.title = self.committee.committeeName;
 
 		if ([UtilityMethods isIPadDevice]) {
-			[[CommonPopoversController sharedCommonPopoversController] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
+			[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];
 		}
 				
 		[self.tableView reloadData];
@@ -107,6 +107,36 @@ enum InfoSectionRows {
     [super viewDidDisappear:animated];
 }
 */
+
+#pragma mark -
+#pragma mark Memory management
+
+- (void)didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
+	[[self navigationController] popToRootViewControllerAnimated:YES];
+	
+	self.committee = nil;
+    [super didReceiveMemoryWarning];
+    // Relinquish ownership any cached data, images, etc that aren't in use.
+}
+
+- (void)viewDidUnload {
+    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
+    // For example: self.myOutlet = nil;
+	self.committee = nil;
+	self.tableView = nil;
+	[super viewDidUnload];
+	
+}
+
+
+- (void)dealloc {
+	self.committee = nil;
+	self.tableView = nil;
+
+    [super dealloc];
+}
+
 /*
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
@@ -439,31 +469,6 @@ enum InfoSectionRows {
 }
 
 
-#pragma mark -
-#pragma mark Memory management
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-	[[self navigationController] popToRootViewControllerAnimated:YES];
-
-	self.committee = nil;
-    [super didReceiveMemoryWarning];
-    // Relinquish ownership any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload {
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
-	self.committee = nil;
-	[super viewDidUnload];
-
-}
-
-
-- (void)dealloc {
-	self.committee = nil;
-    [super dealloc];
-}
 
 
 @end

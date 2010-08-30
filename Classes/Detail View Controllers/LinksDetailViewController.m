@@ -54,6 +54,7 @@
     // Release any retained subviews of the main view.
 	self.miniBrowser = nil;
 	self.aboutControl = nil;
+	self.link = nil;
 
 }
 
@@ -95,14 +96,10 @@
 	if (newObj) {
 		link = [newObj retain];
 		
-		if ([UtilityMethods isIPadDevice]) {
-			[[CommonPopoversController sharedCommonPopoversController] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
-		}
-		
 		if ([self.link.url isEqualToString:@"aboutView"]) {
 			self.miniBrowser = nil;
 			if (!self.aboutControl)
-				self.aboutControl = [[TexLegeInfoController alloc] initWithNibName:@"TexLegeInfoController~ipad" bundle:nil];
+				self.aboutControl = [[[TexLegeInfoController alloc] initWithNibName:@"TexLegeInfoController~ipad" bundle:nil] autorelease];
 			if (!self.aboutControl)
 				debug_NSLog(@"About View Controller didn't load!");
 			//[self.navigationController pushViewController:self.aboutControl animated:NO];
@@ -112,8 +109,9 @@
 			//[[TexLegeAppDelegate appDelegate] showAboutDialog:self];
 		}
 		else if ([self.link.url isEqualToString:@"contactMail"])
-			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:
-			 @"support@texlege.com" subject:@"TexLege Support Question" body:@""];
+			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
+																			 subject:@"TexLege Support Question" 
+																				body:@"" commander:self];
 		
 		else {
 			self.aboutControl = nil;
@@ -122,7 +120,7 @@
 			if (aURL && [UtilityMethods canReachHostWithURL:aURL alert:NO]) // got a network connection
 			{
 				if (!self.miniBrowser)
-					self.miniBrowser = [[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil];
+					self.miniBrowser = [[[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil] autorelease];
 				self.miniBrowser.link = link;
 				
 				[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.miniBrowser] animated:NO];
@@ -131,6 +129,11 @@
 			}
 			
 		}
+		
+		if ([UtilityMethods isIPadDevice]) {
+			[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];
+		}
+				
 	}
 }	
 

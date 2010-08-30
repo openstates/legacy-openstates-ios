@@ -11,29 +11,38 @@
 #import "LegislatorDetailViewController.h"
 #import "DistrictOfficeObj.h"
 #import "DistrictMapObj.h"
+#import "DistrictMapDataSource.h"
 
 #import "CustomAnnotation.h"
 
 #import "TexLegeAppDelegate.h"
 #import "DistrictOfficeMasterViewController.h"
 #import "DistrictOfficeDataSource.h"
-#import "DistrictOfficeAnnotationView.h"
+#import "SelectablePinAnnotationView.h"
 
 #import "LocalyticsSession.h"
 #import "UIColor-Expanded.h"
 
 @interface MapViewController (Private)
-- (void)animateToState:(id<MKAnnotation>)annotation;
-- (void)animateToAnnotation:(id<MKAnnotation>)annotation;
-- (void)dismissDistrictOfficesPopover:(id)sender;
+- (void) animateToState;
+- (void) animateToAnnotation:(id<MKAnnotation>)annotation;
+- (void) clearAnnotationsAndOverlays;
+- (void) resetMapViewWithAnimation:(BOOL)animated;
+- (void) dismissDistrictOfficesPopover:(id)sender;
+- (BOOL) region:(MKCoordinateRegion)region1 isEqualTo:(MKCoordinateRegion)region2;
+
 @end
 
-NSInteger colorIndex;;
+NSInteger colorIndex;
+static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
+
 
 @implementation MapViewController
 @synthesize bookmarksButton, mapTypeControl, mapView, userLocationButton, reverseGeocoder;
-@synthesize toolbar, searchBar, forwardGeocoder, addressString, texasRegion;
+@synthesize toolbar, searchBar, searchBarButton, districtOfficesButton, mapControlsButton, forwardGeocoder, texasRegion;
 @synthesize popoverController, shouldAnimate;
+
+SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 
 #pragma mark -
 #pragma mark Initialization and Memory Management
@@ -55,44 +64,35 @@ NSInteger colorIndex;;
 - (void) dealloc {
 	self.bookmarksButton = nil;
 	self.mapTypeControl = nil;
+	self.searchBarButton = nil;
 	self.mapView = nil;
+	self.mapControlsButton = nil;
 	self.userLocationButton = nil;
 	self.reverseGeocoder = nil;
 	self.forwardGeocoder = nil;
+	self.districtOfficesButton = nil;
 	self.searchBar = nil;
-	self.addressString = nil;
 	[super dealloc];
 }
 
 - (void) didReceiveMemoryWarning {
 	[self dismissDistrictOfficesPopover:nil];
 	
-	self.mapView.region = self.texasRegion;
-	[self.mapView removeAnnotations:[self.mapView annotations]];
-
 	self.forwardGeocoder = nil;
 	self.reverseGeocoder = nil;
-/*
-	if ([self.view superview])	{// we're in a view heirarchy, so don't wipe everything.
-		
-		id<MKAnnotation> lastAnnotation = [[self.mapView annotations] lastObject];
-		
-		id<MKAnnotation> currentAnnotation = [[self.mapView annotations] objectAtIndex:0];
-		while ([[self.mapView annotations] count] > 1) {
-			
-			if (![currentAnnotation isEqual:lastAnnotation])
-				[self.mapView removeAnnotation:currentAnnotation];
-			
-			currentAnnotation = [[self.mapView annotations] objectAtIndex:0];		
-		}
-	}
-*/
+
+	[self clearAnnotationsAndOverlays];
+	[self resetMapViewWithAnimation:YES];
+
 	[super didReceiveMemoryWarning];
 }
 
 - (void) viewDidLoad {
 	[super viewDidLoad];
 	
+	self.shouldAnimate = YES;
+	colorIndex = 0;
+
 	[self.view setBackgroundColor:[TexLegeTheme backgroundLight]];
 	self.mapView.showsUserLocation = NO;
 	
@@ -107,10 +107,19 @@ NSInteger colorIndex;;
 		self.bookmarksButton.enabled = ![UtilityMethods isLandscapeOrientation];
 		self.bookmarksButton.target = self;
 		self.bookmarksButton.action = @selector(displayDistrictOfficesPopover:);
+		[self.toolbar setItems:[NSArray arrayWithObjects:self.mapTypeControl, self.userLocationButton, self.districtOfficesButton, 
+								self.bookmarksButton, self.searchBarButton, nil] animated:YES];
+
 	}
-	else
-		self.navigationItem.titleView = self.searchBar;
+	else {
+		[self.toolbar setItems:[NSArray arrayWithObjects:self.searchBarButton, self.mapControlsButton, nil] animated:YES];
+		self.navigationItem.titleView = self.toolbar;
+	}
 	//self.navigationItem.titleView = self.mapTypeControl;
+	
+	if (![UtilityMethods supportsMKPolyline])
+		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"__NO_MKPOLYLINE!__"];
+
 }
 
 - (void) viewDidUnload {
@@ -118,12 +127,13 @@ NSInteger colorIndex;;
 
 	self.bookmarksButton = nil;
 	self.mapTypeControl = nil;
+	self.mapControlsButton = nil;
 	self.mapView = nil;
+	self.searchBarButton = nil;
 	self.userLocationButton = nil;
 	self.reverseGeocoder = nil;
 	self.forwardGeocoder = nil;
 	self.searchBar = nil;
-	self.addressString = nil;	
 }
 
 - (void) testingMkPolyline {
@@ -172,8 +182,6 @@ NSInteger colorIndex;;
 - (void) viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	//self.bookmarksButton.enabled = ([UtilityMethods isIPadDevice] && ![UtilityMethods isLandscapeOrientation]);
-
-	//[self testingMkPolyline];
 	
 	NSURL *tempURL = [NSURL URLWithString:@"http://maps.google.com"];		
 	if (![UtilityMethods canReachHostWithURL:tempURL])// do we have a good URL/connection?
@@ -186,6 +194,49 @@ NSInteger colorIndex;;
 	[super viewDidDisappear:animated];
 }
 
+#pragma mark -
+#pragma mark Animation and Zoom
+
+- (void) clearAnnotationsAndOverlays {
+	self.mapView.showsUserLocation = NO;
+	[self.mapView removeOverlays:self.mapView.annotations];
+	[self.mapView removeAnnotations:self.mapView.annotations];
+}
+
+
+- (void) resetMapViewWithAnimation:(BOOL)animated {
+	[self clearAnnotationsAndOverlays];
+	if (animated)
+		[self animateToState];
+	else
+		[self.mapView setRegion:self.texasRegion animated:NO];
+	
+}
+
+- (void)animateToState
+{    
+    [self.mapView setRegion:self.texasRegion animated:YES];
+}
+
+- (void)animateToAnnotation:(id<MKAnnotation>)annotation
+{
+	if (!annotation)
+		return;
+	
+    MKCoordinateRegion region = MKCoordinateRegionMake(annotation.coordinate, kStandardZoomSpan);
+    [self.mapView setRegion:region animated:YES];
+	
+	[self.mapView selectAnnotation:annotation animated:YES];
+}
+
+- (void)moveMapToAnnotation:(id<MKAnnotation>)annotation {
+	if (![self region:self.mapView.region isEqualTo:self.texasRegion]) { // we've already another region, let's zoom out
+		[self performSelector:@selector(animateToState) withObject:nil afterDelay:0.3];
+		[self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:1.7];        
+	}
+	else
+		[self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:0.3];	
+}
 
 #pragma mark -
 #pragma mark Popover Support
@@ -200,8 +251,10 @@ NSInteger colorIndex;;
 		return;
 	
 	if (!self.popoverController) {
-		self.popoverController = [[UIPopoverController alloc] initWithContentViewController:[[TexLegeAppDelegate appDelegate] districtOfficeMasterVC]]; // (Autorelease??)
-		self.popoverController.delegate = (id<UIPopoverControllerDelegate>)self; //self.currentDetailViewController;	
+		UIPopoverController *pc = [[UIPopoverController alloc] initWithContentViewController:[[TexLegeAppDelegate appDelegate] districtOfficeMasterVC]];
+		pc.delegate = (id<UIPopoverControllerDelegate>)self; //self.currentDetailViewController;	
+		self.popoverController = pc;
+		[pc release];
 	}
 	
 	if (!self.bookmarksButton || !self.popoverController) {
@@ -275,26 +328,57 @@ NSInteger colorIndex;;
 	return txreg;
 }
 
-- (void)setAddressString:(NSString *)string {
-	if (string && ![string isEqualToString:addressString]) {
-		[addressString release];
-		addressString = [string copy];
-				
-		//[self.mapView removeAnnotations:self.mapView.annotations];  // remove any annotations that exist
-		
-		debug_NSLog(@"Searching for: %@", addressString);
-		if(!self.forwardGeocoder)
-			self.forwardGeocoder = [[BSForwardGeocoder alloc] initWithDelegate:self];
-		
-		// Forward geocode!
-		[self.forwardGeocoder findLocation:string];
-		
-	}
+- (BOOL) region:(MKCoordinateRegion)region1 isEqualTo:(MKCoordinateRegion)region2 {
+	MKMapPoint coord1 = MKMapPointForCoordinate(region1.center);
+	MKMapPoint coord2 = MKMapPointForCoordinate(region2.center);
+	BOOL coordsEqual = MKMapPointEqualToPoint(coord1, coord2);
+	
+	BOOL spanEqual = region1.span.latitudeDelta == region2.span.latitudeDelta; // let's just only do one, okay?
+	return (coordsEqual && spanEqual);
 }
-
 
 #pragma mark -
 #pragma mark Control Element Actions
+
+- (IBAction) mapControlSheet:(id)sender {
+	UIActionSheet *popupQuery = [[UIActionSheet alloc]
+								 initWithTitle:nil
+								 delegate:self
+								 cancelButtonTitle:@"Cancel"
+								 destructiveButtonTitle:nil
+								 otherButtonTitles:@"My Location's Districts",
+								 @"All District Offices",@"Map: Normal", @"Map: Satellite", @"Map: Hybrid", nil];
+	
+	popupQuery.actionSheetStyle = UIActionSheetStyleAutomatic;
+	//[popupQuery showFromBarButtonItem:sender animated:YES];
+	[popupQuery showFromTabBar:self.tabBarController.tabBar];
+	[popupQuery release];
+}
+
+//- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex 
+{
+	switch (buttonIndex) {
+		case 0:
+			[self locateUser:actionSheet];
+			break;
+		case 1:
+			[self showAllDistrictOffices:actionSheet];
+			break;
+		case 2:
+			self.mapView.mapType = MKMapTypeStandard;
+			break;
+		case 3:
+			self.mapView.mapType = MKMapTypeSatellite;
+			break;
+		case 4:
+			self.mapView.mapType = MKMapTypeHybrid;
+			break;
+		case 5:
+		default:
+			break;			
+	}
+}
 
 - (IBAction)changeMapType:(id)sender {
 	NSInteger index = self.mapTypeControl.selectedSegmentIndex;
@@ -302,6 +386,8 @@ NSInteger colorIndex;;
 }
 
 - (IBAction)locateUser:(id)sender {
+	[self clearAnnotationsAndOverlays];
+
 	if ([UtilityMethods locationServicesEnabled]) 
 		self.mapView.showsUserLocation = YES;
 }
@@ -309,55 +395,29 @@ NSInteger colorIndex;;
 - (IBAction) showAllDistrictMaps:(id)sender {
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"SHOWING_ALL_DISTRICT_MAPS"];
 	
-	// create a LegislatorDetailViewController. This controller will display the full size tile for the element
-	
 	NSFetchedResultsController *frc = [[[TexLegeAppDelegate appDelegate] districtMapDataSource] fetchedResultsController];
 	if (!frc)
 		return;
 	
-	NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:181];
-	for (DistrictMapObj *map in [frc fetchedObjects]) {
-		//[array addObject:[map polyline]];
-		[array addObject:[map polygon]];
-	}
-		
-	[self.mapView removeOverlays:[self.mapView overlays]];
+	[self resetMapViewWithAnimation:YES];
+
+	[self.mapView addOverlays:[frc fetchedObjects]];	
 	
-	[self performSelector:@selector(animateToState:) withObject:nil afterDelay:0.3f];
-	self.shouldAnimate = NO;
-	[self.mapView addOverlays:array];	
-	self.shouldAnimate = YES;
-	
-	[array release];
 }
 
 - (IBAction) showAllDistrictOffices:(id)sender {
 	
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"SHOWING_ALL_DISTRICT_OFFICES"];
-	
-	// create a LegislatorDetailViewController. This controller will display the full size tile for the element
-	
+		
 	DistrictOfficeMasterViewController *masterList = [[TexLegeAppDelegate appDelegate] districtOfficeMasterVC];	
 	NSFetchedResultsController *frc = [(DistrictOfficeDataSource *) masterList.dataSource fetchedResultsController];
 	if (!frc)
 		return;
-	
-	NSArray *array = [frc fetchedObjects];
-	
-	NSMutableArray *officeAnnotations = [[NSMutableArray alloc] init];
-	for (id<MKAnnotation> annotation in [self.mapView annotations]) {
-		if ([annotation isKindOfClass:[DistrictOfficeObj class]])
-			[officeAnnotations addObject:annotation];
-	}
-	[self.mapView removeAnnotations:officeAnnotations];
-	[officeAnnotations release];
-	
-	[self performSelector:@selector(animateToState:) withObject:nil afterDelay:0.3f];
-	self.shouldAnimate = NO;
-	[self.mapView addAnnotations:array];	
-	self.shouldAnimate = YES;
+		
+	[self resetMapViewWithAnimation:YES];
 
-	[self showAllDistrictMaps:sender];
+	//[self performSelector:@selector(animateToState) withObject:nil afterDelay:0.3f];
+	[self.mapView addAnnotations:[frc fetchedObjects]];	
 }
 
 
@@ -377,54 +437,16 @@ NSInteger colorIndex;;
 }
 
 
-- (NSArray *) districtsContainingCoordinate:(CLLocationCoordinate2D)aCoordinate {
-		
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	NSManagedObjectContext *context = [[TexLegeAppDelegate appDelegate] managedObjectContext];
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictMapObj" inManagedObjectContext:context];
-	[fetchRequest setEntity:entity];
-	
-	[fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"legislator", @"district", @"chamber", 
-										@"minLat", @"maxLat", @"minLon", @"maxLon", nil]];
-	
-		NSSortDescriptor *sort1 = [[NSSortDescriptor alloc] initWithKey:@"district" ascending:YES] ;
-		NSSortDescriptor *sort2 = [[NSSortDescriptor alloc] initWithKey:@"chamber" ascending:NO] ;
-		[fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sort1, sort2, nil]];
-		[sort1 release];
-		[sort2 release];
-	
-	NSError *error = nil;
-	NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
-	[fetchRequest release];
-	if (error) {
-		debug_NSLog(@"Problem fetching district maps.");
-		return nil;
-	}
-	
-	NSMutableArray *districts = [[[NSMutableArray alloc] initWithCapacity:181] autorelease];
-	for (DistrictMapObj *map in fetchedObjects) {
-		if ([map districtContainsCoordinate:aCoordinate])
-			[districts addObject:map];
-	}
-	
-	//[self.mapView removeOverlays:[self.mapView overlays]];
-	
-	//[self performSelector:@selector(animateToState:) withObject:nil afterDelay:0.3f];
-	//self.shouldAnimate = NO;
-	//[self.mapView addOverlays:array];	
-	
-	return districts;
-}
-
-
 #pragma mark -
 #pragma mark Geocoding and Reverse Geocoding
 
 - (IBAction)reverseGeocodeCurrentLocation
 {
 	if (!self.reverseGeocoder) {
-		self.reverseGeocoder = [[MKReverseGeocoder alloc] initWithCoordinate:self.mapView.userLocation.location.coordinate];
-		self.reverseGeocoder.delegate = self;
+		MKReverseGeocoder *rgc = [[MKReverseGeocoder alloc] initWithCoordinate:self.mapView.userLocation.location.coordinate];
+		rgc.delegate = self;
+		self.reverseGeocoder = rgc;
+		[rgc release];
 		[self.reverseGeocoder start];
 	}
 }
@@ -433,13 +455,6 @@ NSInteger colorIndex;;
 {
 	
 	debug_NSLog(@"User's Location: %@", placemark.addressDictionary);
-	NSArray *districts = [self districtsContainingCoordinate:placemark.coordinate];
-	for (DistrictMapObj *district in districts) {
-		//[self.mapView  performSelector:@selector(addOverlay:) withObject:[district polyline] afterDelay:0.3f];
-		[self.mapView  performSelector:@selector(addOverlay:) withObject:[district polygon] afterDelay:0.3f];
-		for (DistrictOfficeObj *office in district.legislator.districtOffices)
-			[self.mapView  performSelector:@selector(addAnnotation:) withObject:office afterDelay:0.3f];
-	}
 	
 	[self.reverseGeocoder cancel];
 	self.reverseGeocoder = nil;
@@ -450,17 +465,18 @@ NSInteger colorIndex;;
     debug_NSLog(@"MKReverseGeocoder has failed: %@", error);
 }
 
-
 -(void)forwardGeocoderFoundLocation
 {
-	
-	id<MKAnnotation> lastAnnotation = [[self.mapView annotations] lastObject];	
-	
+
 	if(self.forwardGeocoder.status == G_GEO_SUCCESS)
 	{
+		[self clearAnnotationsAndOverlays];		
+		
 		NSInteger searchResults = [self.forwardGeocoder.results count];
 		
 		// Add placemarks for each result
+		id<MKAnnotation> lastAnnotation = nil;
+		
 		for(NSInteger i = 0; i < searchResults; i++)
 		{
 			BSKmlResult *place = [self.forwardGeocoder.results objectAtIndex:i];
@@ -469,36 +485,15 @@ NSInteger colorIndex;;
 			CustomAnnotation *placemark = [[[CustomAnnotation alloc] initWithBSKmlResult:place] autorelease];
 			
 			//self.shouldAnimate = NO;
-			NSArray *districts = [self districtsContainingCoordinate:placemark.coordinate];
-			for (DistrictMapObj *district in districts) {
-				//[self.mapView addOverlay:[district polyline]];
-				[self.mapView addOverlay:[district polygon]];
-				for (DistrictOfficeObj *office in district.legislator.districtOffices) {
-					[self.mapView addAnnotation:office];
-				}
-			}
+			[self performSelector:@selector(addDistrictPlacesForAnnotation:) withObject:placemark];
+
 			//self.shouldAnimate = YES;
 			[self.mapView addAnnotation:placemark];	
-
+			
+			lastAnnotation = placemark;
 		}
 		
-		if([self.forwardGeocoder.results count] >= 1)
-		{
-			BSKmlResult *place = [self.forwardGeocoder.results objectAtIndex:0];
-			
-			// Zoom into the location		
-			//[mapView setRegion:place.coordinateRegion animated:TRUE];
-			
-			if (self.shouldAnimate) {
-				if (lastAnnotation) { // we've already got one annotation set, let's zoom in/out
-					[self performSelector:@selector(animateToState:) withObject:lastAnnotation afterDelay:0.3];
-					[self performSelector:@selector(animateToAnnotation:) withObject:place afterDelay:1.7];        
-				}
-				else
-					[self performSelector:@selector(animateToAnnotation:) withObject:place afterDelay:0.3];
-			}
-			
-		}
+		[self moveMapToAnnotation:lastAnnotation];
 		
 		// Dismiss the keyboard
 		[self.searchBar resignFirstResponder];
@@ -507,24 +502,12 @@ NSInteger colorIndex;;
 		NSString *message = @"";
 		
 		switch (forwardGeocoder.status) {
-			case G_GEO_BAD_KEY:
-				message = @"The API key is invalid.";
-				break;
-				
 			case G_GEO_UNKNOWN_ADDRESS:
 				message = [NSString stringWithFormat:@"Could not find %@", forwardGeocoder.searchQuery];
 				break;
-				
-			case G_GEO_TOO_MANY_QUERIES:
-				message = @"Too many queries has been made for this API key.";
-				break;
-				
 			case G_GEO_SERVER_ERROR:
-				message = @"Server error, please try again.";
-				break;
-				
-				
 			default:
+				message = @"Map server error, please try again.";
 				break;
 		}
 		
@@ -540,17 +523,15 @@ NSInteger colorIndex;;
 
 - (void) searchBarSearchButtonClicked:(UISearchBar *)theSearchBar {
 	
-	//[self.mapView removeAnnotations:self.mapView.annotations];  // remove any annotations that exist
-	
-	
+
 	debug_NSLog(@"Searching for: %@", theSearchBar.text);
-	if(forwardGeocoder == nil)
+	if(self.forwardGeocoder == nil)
 	{
-		forwardGeocoder = [[BSForwardGeocoder alloc] initWithDelegate:self];
+		self.forwardGeocoder = [[[BSForwardGeocoder alloc] initWithDelegate:self] autorelease];
 	}
 	
 	// Forward geocode!
-	[forwardGeocoder findLocation:theSearchBar.text];
+	[self.forwardGeocoder findLocation:theSearchBar.text];
 	
 }
 
@@ -569,6 +550,20 @@ NSInteger colorIndex;;
 #pragma mark -
 #pragma mark MapViewDelegate
 
+- (IBAction) addDistrictPlacesForAnnotation:(id<MKAnnotation>)place {
+	if (!place)
+		return;
+	
+	DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
+	NSArray *districts = [dataSource districtsContainingCoordinate:place.coordinate];
+	for (DistrictMapObj *district in districts) {
+		[self.mapView addOverlay:[district polygon]];
+		for (DistrictOfficeObj *office in district.legislator.districtOffices)
+			[self.mapView addAnnotation:office];
+	}
+	
+}
+
 
 - (void)mapView:(MKMapView *)theMapView didAddAnnotationViews:(NSArray *)views
 {
@@ -579,24 +574,17 @@ NSInteger colorIndex;;
 			//[aView isKindOfClass:NSClassFromString(@"MKUserLocationView")])
 		{
 			// we have received our current location, so start reverse geocoding the address
-			[self reverseGeocodeCurrentLocation];
+			//[self reverseGeocodeCurrentLocation];
 			
-			if (!theMapView.userLocationVisible){
-				MKCoordinateSpan span = MKCoordinateSpanMake(2.f, 2.f);
-				
-				CLLocationCoordinate2D location=self.mapView.userLocation.coordinate;
-				MKCoordinateRegion region = MKCoordinateRegionMake(location, span);
-				[theMapView setRegion:region animated:TRUE];
-
-				//[self.mapView regionThatFits:region];
-				//debug_NSLog(@"[Found user location] %f %f %f %f", location.latitude, location.longitude, span.latitudeDelta, span.longitudeDelta);
-			}
-			self.shouldAnimate = YES;
-
+			[self performSelector:@selector(addDistrictPlacesForAnnotation:) withObject:self.mapView.userLocation afterDelay:.0f];
+			
+			if (!theMapView.userLocationVisible)
+				[self performSelector:@selector(animateToAnnotation:) withObject:aView.annotation afterDelay:.5f];
+			
 			return;
 		}
 	}
-	
+	/*
 	MKAnnotationView *lastView = [views lastObject];
 	id<MKAnnotation> lastAnnotation = lastView.annotation;
 	MKCoordinateRegion region;
@@ -606,36 +594,23 @@ NSInteger colorIndex;;
 		if ([lastAnnotation isKindOfClass:[DistrictOfficeObj class]]) {
 			DistrictOfficeObj *obj = lastAnnotation;
 			region = [obj region];
-			[theMapView setRegion:region animated:TRUE];
+			[theMapView setRegion:region animated:YES];
 		}
 		else if ([lastAnnotation isKindOfClass:[CustomAnnotation class]]) {
 			CustomAnnotation *obj = lastAnnotation;
 			region = [obj region];
-			[theMapView setRegion:region animated:TRUE];
+			[theMapView setRegion:region animated:YES];
 		}
 		else {
-			MKCoordinateSpan span = {2.f,2.f};
-			
-			MKCoordinateRegion region = MKCoordinateRegionMake(lastAnnotation.coordinate, span);
-			[theMapView setRegion:region animated:TRUE];
+			MKCoordinateRegion region = MKCoordinateRegionMake(lastAnnotation.coordinate, kStandardZoomSpan);
+			[theMapView setRegion:region animated:YES];
 		}
 
 		
-		[theMapView selectAnnotation:lastAnnotation animated:YES];
-	}
-	
-	self.shouldAnimate = YES;
+		//[theMapView selectAnnotation:lastAnnotation animated:YES];
+	}*/
 }
 
-
-+ (CGFloat)annotationPadding;
-{
-    return 10.0f;
-}
-+ (CGFloat)calloutHeight;
-{
-    return 80.0f;
-}
 
 /*
 - (void) mapViewDidFinishLoadingMap:(MKMapView *)theMapView {
@@ -666,17 +641,17 @@ NSInteger colorIndex;;
     
     // handle our custom annotations
     //
-    if ([annotation isKindOfClass:[DistrictOfficeObj class]]) // for Golden Gate Bridge
+    if ([annotation isKindOfClass:[DistrictOfficeObj class]]) 
     {
 		DistrictOfficeObj *districtOffice = (DistrictOfficeObj *)annotation;
 		
         // try to dequeue an existing pin view first
         static NSString* districtOfficeAnnotationID = @"districtOfficeAnnotationID";
-        DistrictOfficeAnnotationView* pinView = (DistrictOfficeAnnotationView *)[theMapView dequeueReusableAnnotationViewWithIdentifier:districtOfficeAnnotationID];
+        SelectablePinAnnotationView* pinView = (SelectablePinAnnotationView *)[theMapView dequeueReusableAnnotationViewWithIdentifier:districtOfficeAnnotationID];
         if (!pinView)
         {
             // if an existing pin view was not available, create one
-            DistrictOfficeAnnotationView* customPinView = [[[DistrictOfficeAnnotationView alloc]
+            SelectablePinAnnotationView* customPinView = [[[SelectablePinAnnotationView alloc]
 												   initWithAnnotation:annotation reuseIdentifier:districtOfficeAnnotationID] autorelease];
             customPinView.pinColor = [[districtOffice pinColorIndex] integerValue];
             customPinView.animatesDrop = YES;
@@ -707,21 +682,23 @@ NSInteger colorIndex;;
 		CustomAnnotation *customAnotation = (CustomAnnotation *)annotation;
 
         static NSString* customAnnotationIdentifier = @"customAnnotationIdentifier";
-        MKPinAnnotationView* pinView =
-		(MKPinAnnotationView *)[theMapView dequeueReusableAnnotationViewWithIdentifier:customAnnotationIdentifier];
+        SelectablePinAnnotationView* pinView = (SelectablePinAnnotationView *)[theMapView dequeueReusableAnnotationViewWithIdentifier:customAnnotationIdentifier];
         if (!pinView)
         {
-            MKPinAnnotationView *annotationView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation
+            SelectablePinAnnotationView *customPinView = [[[SelectablePinAnnotationView alloc] initWithAnnotation:annotation
                                                                              reuseIdentifier:customAnnotationIdentifier] autorelease];
-            annotationView.canShowCallout = YES;
-            annotationView.pinColor = [[customAnotation pinColorIndex] integerValue];
-            annotationView.opaque = NO;
+            customPinView.pinColor = [[customAnotation pinColorIndex] integerValue];
+			customPinView.animatesDrop = YES;
+            customPinView.canShowCallout = YES;
+            customPinView.opaque = NO;
 			
 			UIImageView *iconView = [[UIImageView alloc] initWithImage:[customAnotation image]];
-            annotationView.leftCalloutAccessoryView = iconView;
+            customPinView.leftCalloutAccessoryView = iconView;
             [iconView release];
             
-            return annotationView;
+			[customPinView setSelectionObserver:self];
+
+            return customPinView;
         }
         else
         {
@@ -799,50 +776,17 @@ NSInteger colorIndex;;
 			
 			MKCoordinateRegion region;
 			if ([annotation isKindOfClass:[DistrictOfficeObj class]]) {
-				DistrictOfficeObj *obj = annotation;
-				region = [obj region];
-			}
-			else if ([annotation isKindOfClass:[CustomAnnotation class]]) {
-				CustomAnnotation *obj = annotation;
-				region = [obj region];
+				region = [(DistrictOfficeObj *)annotation region];
 			}
 			else {
-				MKCoordinateSpan span = {2.f,2.f};
-				region = MKCoordinateRegionMake(annotation.coordinate, span);
+				region = MKCoordinateRegionMake(annotation.coordinate, kStandardZoomSpan);
 			}
-			region.span.latitudeDelta = .05f;
-			region.span.longitudeDelta = .05f;
+			region.span = MKCoordinateSpanMake(0.05f, 0.05f);
 			[self.mapView setRegion:region animated:TRUE];
 
 			//debug_NSLog(@"annotation selected %f, %f", annotation.coordinate.latitude, annotation.coordinate.longitude);
 		}
 	}
-}
-
-
-
-
-#pragma mark -
-#pragma mark Map Movement
-
-
-- (void)animateToState:(id<MKAnnotation>)annotation
-{    
-    [self.mapView setRegion:self.texasRegion animated:YES];
-}
-
-- (void)animateToAnnotation:(id<MKAnnotation>)annotation
-{
-    MKCoordinateRegion region;
-    region.center = annotation.coordinate;
-    MKCoordinateSpan span = {0.4, 0.4};
-		
-    region.span = span;
-    [self.mapView setRegion:region animated:YES];
-	
-	if (annotation)		// GREG, does this even work here?
-		[mapView selectAnnotation:annotation animated:YES];
-	
 }
 
 

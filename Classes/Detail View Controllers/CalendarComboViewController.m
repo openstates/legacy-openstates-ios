@@ -121,12 +121,19 @@
 
 
 - (void)viewDidUnload {
-    [super viewDidUnload];
     // Release any retained subviews of the main view.
 	self.leftShadow = self.rightShadow = self.portShadow = self.landShadow = nil;
+	self.chamberCalendar = nil;
+	self.tableView = nil;
+	self.webView = nil;
+	self.feedEntries = nil;
+	self.currentEvents = nil;
+	self.searchResults = nil;
 	
 	// add this to done: or something
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+
+    [super viewDidUnload];
 }
 
 
@@ -137,6 +144,8 @@
 	self.webView = nil;
 	self.leftShadow = self.rightShadow = self.portShadow = self.landShadow = nil;
 	self.searchResults = nil;
+	self.tableView = nil;
+
     [super dealloc];
 }
 
@@ -206,7 +215,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		self.feedEntries = [[self.chamberCalendar feedEntries] sortedArrayUsingFunction:sortByDate context:nil];
 		
 		if ([UtilityMethods isIPadDevice]) {		// might have come here via a popover
-			[[CommonPopoversController sharedCommonPopoversController] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
+			[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];
 		}
 		
 		[self.searchResults removeAllObjects];

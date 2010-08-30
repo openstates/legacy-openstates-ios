@@ -33,8 +33,8 @@
 	self.view.backgroundColor = sealColor;
 	
 	if (self.map) {
-		self.navigationItem.title = map.name;
-		[self.webView loadRequest:[NSURLRequest requestWithURL:map.url]];
+		self.navigationItem.title = self.map.name;
+		[self.webView loadRequest:[NSURLRequest requestWithURL:self.map.url]];
 	}
 	else
 		self.navigationItem.title = @"Maps";
@@ -42,6 +42,12 @@
 	//self.navigationController.toolbarHidden = YES;	
 }
 
+- (void)viewDidUnload {
+	self.webView = nil;
+	self.map = nil;
+	
+	[super viewDidUnload];
+}
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
@@ -88,7 +94,7 @@
 		map = [newObj retain];
 
 		if ([UtilityMethods isIPadDevice]) {
-			[[CommonPopoversController sharedCommonPopoversController] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
+			[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];
 		}
 				
 		self.navigationItem.title = map.name;
