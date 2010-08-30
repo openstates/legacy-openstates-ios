@@ -52,10 +52,10 @@
 
 - (void)presentAnalyticsOptInAlert {
 
-	self.currentAlert = [[UIAlertView alloc] 
+	self.currentAlert = [[[UIAlertView alloc] 
 						 initWithTitle:@"Permission To Use Analytics"
 						 message:self.optInText
-						 delegate:self cancelButtonTitle:@"Deny" otherButtonTitles:@"Permit", nil];
+						 delegate:self cancelButtonTitle:@"Deny" otherButtonTitles:@"Permit", nil] autorelease];
 	[self.currentAlert show];
 	
 }

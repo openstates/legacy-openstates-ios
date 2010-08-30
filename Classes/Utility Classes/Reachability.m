@@ -203,7 +203,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
     // Post a notification to notify the client that the network reachability changed.
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kNetworkReachabilityChangedNotification" object:nil];
     
-    [pool release];
+    [pool drain];
 }
 
 // Perform a reachability query for the address 0.0.0.0. If that address is reachable without

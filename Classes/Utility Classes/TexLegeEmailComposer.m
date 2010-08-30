@@ -54,7 +54,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
 
 	
 	if ([MFMailComposeViewController canSendMail]) {
-		self.mailComposerVC = [[[MFMailComposeViewController alloc] init] autorelease];
+		MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+		self.mailComposerVC = mc;
+		[mc release];
 		self.mailComposerVC.mailComposeDelegate = self;
 		[self.mailComposerVC setSubject:subject];
 		[self.mailComposerVC setToRecipients:[NSArray arrayWithObject:recipient]];
@@ -98,10 +100,10 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
 #pragma mark Alert View
 
 - (void)presentMailFailureAlertViewWithTitle:(NSString*)failTitle message:(NSString *)failMessage {
-	self.currentAlert = [[UIAlertView alloc] 
+	self.currentAlert = [[[UIAlertView alloc] 
 						 initWithTitle:failTitle
 						 message:failMessage 
-						 delegate:self cancelButtonTitle:@"Dang It" otherButtonTitles:nil];
+						 delegate:self cancelButtonTitle:@"Dang It" otherButtonTitles:nil] autorelease];
 	[self.currentAlert show];
 	
 }
