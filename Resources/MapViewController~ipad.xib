@@ -80,7 +80,7 @@
 					<object class="IBUISegmentedControl" id="750709019">
 						<reference key="NSNextResponder" ref="275054592"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{85, 7}, {160, 30}}</string>
+						<string key="NSFrame">{{68, 7}, {160, 30}}</string>
 						<reference key="NSSuperview" ref="275054592"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -125,7 +125,7 @@
 					<object class="IBUISearchBar" id="107545398">
 						<reference key="NSNextResponder" ref="275054592"/>
 						<int key="NSvFlags">258</int>
-						<string key="NSFrame">{{343, 0}, {245, 44}}</string>
+						<string key="NSFrame">{{348, 0}, {245, 44}}</string>
 						<reference key="NSSuperview" ref="275054592"/>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<string key="IBText"/>
@@ -181,16 +181,19 @@
 							<string key="NSResourceName">multipins.png</string>
 						</object>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<int key="IBUIStyle">1</int>
 						<reference key="IBUIToolbar" ref="275054592"/>
 					</object>
 					<object class="IBUIBarButtonItem" id="134083498">
 						<bool key="IBUIEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<int key="IBUIStyle">1</int>
 						<reference key="IBUIToolbar" ref="275054592"/>
 						<int key="IBUISystemItemIdentifier">11</int>
 					</object>
 					<object class="IBUIBarButtonItem" id="530868576">
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<int key="IBUIStyle">1</int>
 						<reference key="IBUICustomView" ref="107545398"/>
 						<reference key="IBUIToolbar" ref="275054592"/>
 					</object>
@@ -461,7 +464,7 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{259, 479}, {600, 44}}</string>
+					<string>{{258, 478}, {600, 44}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
