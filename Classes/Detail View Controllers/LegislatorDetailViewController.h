@@ -13,17 +13,15 @@
 @class StaticGradientSliderView;
 @class DirectoryDetailInfo;
 @class CPLTColor;
+@class LegislatorDetailDataSource;
 
 @interface LegislatorDetailViewController : UITableViewController <UISplitViewControllerDelegate, CPLTPlotDataSource, CPLTPieChartDataSource,
 																		UIPopoverControllerDelegate>
 {	
 }
 
-@property (nonatomic, retain) NSMutableArray *sectionArray;
-
 // For Core Plot
 @property (nonatomic,retain) NSMutableArray *dataForPlot;
-@property (nonatomic,retain) CPLTXYGraph *graph;
 @property (nonatomic,retain) CPLTColor *texasRed, *texasBlue, *texasOrange;
 @property (nonatomic,retain) IBOutlet CPLTLayerHostingView *scatterPlotView;
 
@@ -38,6 +36,7 @@
 @property (nonatomic,retain) UIPopoverController *notesPopover;
 
 @property (nonatomic, retain) IBOutlet LegislatorObj *legislator;
+@property (nonatomic, retain) LegislatorDetailDataSource *dataSource;
 
 - (NSString *)popoverButtonTitle;
 

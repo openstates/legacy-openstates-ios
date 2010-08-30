@@ -8,6 +8,8 @@
 
 #import "TableDataSourceProtocol.h"
 #import "LegislatorDetailViewController.h"
+#import "LegislatorDetailDataSource.h"
+
 #import "LegislatorMasterViewController.h"
 #import "LegislatorObj.h"
 #import "DistrictOfficeObj.h"
@@ -41,17 +43,16 @@
 - (void) showWebViewWithURL:(NSURL *)url;
 - (void) setupHeaderView;
 - (void) setupHeader;
-- (void) createSectionList;
 - (void) plotHistory;
 @end
 
 
 @implementation LegislatorDetailViewController
 
-@synthesize legislator, sectionArray;
+@synthesize legislator, dataSource;
 @synthesize startupSplashView, headerView, miniBackgroundView;
 
-@synthesize scatterPlotView, graph, dataForPlot;
+@synthesize scatterPlotView, dataForPlot;
 @synthesize texasRed, texasBlue, texasOrange;
 
 @synthesize leg_indexTitleLab, leg_rankLab, leg_chamberPartyLab, leg_chamberLab;
@@ -99,9 +100,17 @@
 	[self.tableView setTableHeaderView:self.headerView];
 	
 	if ([UtilityMethods isIPadDevice]) {
-		self.indivSlider = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
-		self.partySlider = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
-		self.allSlider = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
+		StaticGradientSliderView *sliderV = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
+		self.indivSlider = sliderV;
+		[sliderV release];
+		
+		sliderV = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
+		self.partySlider = sliderV;
+		[sliderV release];
+		
+		sliderV = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
+		self.allSlider = sliderV;
+		[sliderV release];
 		
 		if (self.indivSlider) {
 			[self.indivSlider addToPlaceholder:self.indivPHolder];
@@ -117,6 +126,76 @@
 		}
 	}	
 }
+
+#pragma mark -
+#pragma mark Memory management
+
+- (void)didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
+	[[self navigationController] popToRootViewControllerAnimated:YES];
+	
+	self.leg_photoView = nil;
+	self.dataForPlot = nil;
+	//self.scatterPlotView = nil;
+	self.startupSplashView = nil;
+	
+    [super didReceiveMemoryWarning];
+    
+    // Relinquish ownership any cached data, images, etc that aren't in use.
+}
+
+- (void)viewDidUnload {
+    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
+	self.texasRed = nil;
+	self.texasBlue = nil;
+	self.texasOrange = nil;
+	self.indivSlider = nil;
+	self.partySlider = nil;
+	self.allSlider = nil;
+	self.indivPHolder = nil;
+	self.partyPHolder = nil;
+	self.allPHolder = nil;
+	self.legislator = nil;
+	self.dataSource = nil;
+	self.headerView = nil;
+	self.startupSplashView = nil;	
+	self.leg_photoView = nil;
+	self.dataForPlot = nil;
+	self.notesPopover = nil;
+	self.tableView = nil;
+	self.scatterPlotView = nil;
+	self.miniBackgroundView = nil;
+	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
+	//self.scatterPlotView = nil;
+	[super viewDidUnload];
+}
+
+
+- (void)dealloc {
+	self.texasRed = nil;
+	self.texasBlue = nil;
+	self.texasOrange = nil;
+	self.indivSlider = nil;
+	self.partySlider = nil;
+	self.allSlider = nil;
+	self.indivPHolder = nil;
+	self.partyPHolder = nil;
+	self.allPHolder = nil;
+	self.dataSource = nil;
+	self.legislator = nil;
+	self.headerView = nil;
+	self.startupSplashView = nil;	
+	self.leg_photoView = nil;
+	self.dataForPlot = nil;
+	self.notesPopover = nil;
+	self.tableView = nil;
+	self.scatterPlotView = nil;
+	self.miniBackgroundView = nil;
+	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
+
+	[super dealloc];
+}
+
 
 - (NSString *)chamberAbbrev {
 	NSString *chamberName = nil;
@@ -148,8 +227,8 @@
 	self.leg_nameLab.text = legName;
 	self.navigationItem.title = legName;
 
-	[[ImageCache sharedImageCache] loadImageView:self.leg_photoView fromPath:[UIImage highResImagePathWithPath:self.legislator.photo_name]];
-	//self.leg_photoView.image = [UIImage imageNamed:[UIImage highResImagePathWithPath:self.legislator.photo_name]];
+	//[[ImageCache sharedImageCache] loadImageView:self.leg_photoView fromPath:[UIImage highResImagePathWithPath:self.legislator.photo_name]];
+	self.leg_photoView.image = [UIImage imageNamed:[UIImage highResImagePathWithPath:self.legislator.photo_name]];
 	self.leg_partyLab.text = [self.legislator party_name];
 	self.leg_districtLab.text = [NSString stringWithFormat:@"District %@", self.legislator.district];
 	self.leg_tenureLab.text = [self.legislator tenureString];
@@ -193,14 +272,17 @@
 	if (newLegislator) {
 		legislator = [newLegislator retain];
 		
+		LegislatorDetailDataSource *ds = [[LegislatorDetailDataSource alloc] initWithLegislator:legislator];
+		self.dataSource = ds;
+		self.tableView.dataSource = self.dataSource;
+		[ds release];
+		
 		[self setupHeader];
 		
 		if ([UtilityMethods isIPadDevice]) {
-			[[CommonPopoversController sharedCommonPopoversController] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
+			[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];
 		}
-		
-		[self createSectionList];
-		
+				
 		[self.tableView reloadData];
 		[self.view setNeedsDisplay];
 	}
@@ -300,417 +382,18 @@
     return YES;
 }
 
-#pragma mark -
-#pragma mark Memory management
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-	[[self navigationController] popToRootViewControllerAnimated:YES];
-
-	self.leg_photoView = nil;
-	self.graph = nil;
-	self.dataForPlot = nil;
-	self.startupSplashView = nil;
-	
-    [super didReceiveMemoryWarning];
-    
-    // Relinquish ownership any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload {
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-	self.legislator = nil;
-	self.startupSplashView = nil;	
-	self.sectionArray = nil;
-	self.leg_photoView = nil;
-	self.dataForPlot = nil;
-	self.graph = nil;
-	self.notesPopover = nil;
-	[super viewDidUnload];
-}
-
-
-- (void)dealloc {
-	self.notesPopover = nil;
-	self.sectionArray = nil;
-	self.indivSlider = self.partySlider = self.allSlider = nil;
-	self.indivPHolder = self.partyPHolder = self.allPHolder = nil;
-	self.legislator = nil;
-	self.leg_photoView = nil;
-	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
-	self.headerView = self.startupSplashView = nil;
-	self.scatterPlotView = nil;
-	self.dataForPlot = nil;
-	self.graph = nil;
-	self.texasRed = self.texasBlue = self.texasOrange = nil;
-	self.miniBackgroundView = nil;
-    [super dealloc];
-}
-
-
-
-#pragma mark -
-#pragma mark Table view data source
-
-- (void) createSectionList {
-	NSInteger numberOfSections = 3 + [self.legislator numberOfDistrictOffices];	
-	NSString *tempString = nil;
-	BOOL isPhone = [UtilityMethods canMakePhoneCalls];
-	DirectoryDetailInfo *cellInfo = nil;
-	
-	// create an array of sections, with arrays of DirectoryDetailInfo entries as contents
-	self.sectionArray = nil;	// this calls removeAllObjects and release automatically
-	self.sectionArray = [NSMutableArray arrayWithCapacity:numberOfSections];
-
-	NSInteger i;
-	for (i=0; i < numberOfSections; i++) {
-		NSMutableArray *entryArray = [[NSMutableArray alloc] initWithCapacity:30]; // just an arbitrary maximum
-		[self.sectionArray addObject:entryArray];
-		[entryArray release], entryArray = nil;
-	}
-	
-	/*	Section 0: Personal Information */		
-	NSInteger sectionIndex = 0;	
-	
-	cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Name" value:[self.legislator fullName] 
-											isClickable:NO type:DirectoryTypeNone];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
-	
-	cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Website" value:self.legislator.website 
-											 isClickable:YES type:DirectoryTypeWeb];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
-	
-	cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"District Map" value:self.legislator.districtMapURL 
-											 isClickable:YES type:DirectoryTypeWeb];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
-	
-	
-	cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Bio" value:self.legislator.bio_url 
-											 isClickable:YES type:DirectoryTypeWeb];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
-	
-	cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Email" value:self.legislator.email 
-											 isClickable:YES type:DirectoryTypeMail];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
-	
-	if (self.legislator && self.legislator.twitter && [self.legislator.twitter length]) {
-		tempString = ([self.legislator.twitter hasPrefix:@"@"]) ? self.legislator.twitter : [[NSString alloc] initWithFormat:@"@%@", self.legislator.twitter];
-		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Twitter" value: tempString
-															   isClickable:YES type:DirectoryTypeTwitter];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;
-		[tempString release], tempString = nil;
-	}
-	
-	
-	if ([UtilityMethods isIPadDevice] == NO && [self.legislator.partisan_index floatValue] != 0.0f) {
-		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Index" value:[self.legislator.partisan_index description] 
-												 isClickable:NO type:DirectoryTypeIndex];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;
-	}
-	
-	if (self.legislator.notes.length > 0)
-		tempString = self.legislator.notes;
-	else
-		tempString = kStaticNotes;
-	
-	cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Notes" value: tempString
-											 isClickable:YES type:DirectoryTypeNotes];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
-	
-	/* after that section's done... DO COMMITTEES */
-	sectionIndex++;
-	for (CommitteePositionObj *position in [self.legislator sortedCommitteePositions]) {
-		cellInfo = [[DirectoryDetailInfo alloc] initWithName:[position positionString] value:[position.committee committeeName] 
-												 isClickable:YES type:DirectoryTypeCommittee];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;
-	}
-	
-	/* Now we handle all the office locations ... */
-	sectionIndex++;
-	/*	Section 1: Capitol Office */		
-	
-	if (self.legislator && self.legislator.staff && [self.legislator.staff length]) {
-		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Staff" value:self.legislator.staff 
-												 isClickable:NO type:DirectoryTypeNone];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;		
-	}
-	if (self.legislator && self.legislator.cap_office && [self.legislator.cap_office length]) {
-		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Office" value:self.legislator.cap_office 
-												 isClickable:YES type:DirectoryTypeOfficeMap];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;		
-	} 
-	if (self.legislator && self.legislator.chamber_desk && [self.legislator.chamber_desk length]) {
-		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Desk #" value:self.legislator.chamber_desk 
-												 isClickable:YES type:DirectoryTypeChamberMap];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;		
-	}
-	if (self.legislator && self.legislator.cap_phone && [self.legislator.cap_phone length]) {
-		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Phone" value:self.legislator.cap_phone 
-												 isClickable:isPhone type:DirectoryTypePhone];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;		
-	} 
-	if (self.legislator && self.legislator.cap_fax && [self.legislator.cap_fax length]) {
-		cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Fax" value:self.legislator.cap_fax 
-												 isClickable:NO type:DirectoryTypeNone];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;		
-	}
-	if (self.legislator && self.legislator.cap_phone2 && [self.legislator.cap_phone2 length]) {
-		tempString = (self.legislator.cap_phone2_name.length > 0) ? self.legislator.cap_phone2_name : @"Phone #2";
-		cellInfo = [[DirectoryDetailInfo alloc] initWithName:tempString value:self.legislator.cap_phone2 
-												 isClickable:isPhone type:DirectoryTypePhone];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;		
-	} 
-	
-	/* after that section's done... */
-	
-	for (DistrictOfficeObj *office in self.legislator.districtOffices) {
-		sectionIndex++;
-		if (office.phone && [office.phone length]) {
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Phone" value:office.phone 
-													 isClickable:isPhone type:DirectoryTypePhone];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;		
-		}			
-		if (office.fax && [office.fax length]) {
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Fax" value:office.fax 
-													 isClickable:NO type:DirectoryTypeNone];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;		
-		}			
-		if (office.address && [office.address length]) {
-			
-			cellInfo = [[DirectoryDetailInfo alloc] initWithName:@"Address" value:office 
-													 isClickable:YES type:DirectoryTypeMap];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;
-			[tempString release], tempString = nil;
-		} 
-		
-	}
-	
-}	
-
-#pragma mark -
-#pragma mark Custom Slider
-
-/* This determines the appropriate size for the custom slider view, given its superview */
-- (CGRect) preshrinkSliderViewFromView:(UIView *)aView {
-	CGFloat sliderHeight = 24.0f;
-	CGFloat sliderInset = 18.0f;
-	
-	CGRect rect = aView.bounds;
-	CGFloat sliderWidth = aView.bounds.size.width - (sliderInset * 2);
-	
-	rect.origin.y = aView.center.y - (sliderHeight / 2);
-	rect.size.height = sliderHeight;
-	rect.origin.x = sliderInset; //aView.center.x - (sliderWidth / 2);
-	rect.size.width = sliderWidth;
-	
-	return rect;
-}
-
-#pragma mark -
-#pragma mark UITableViewDataSource methods
-
-
-- (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{		
-	//DirectoryDetailInfo * cellInfo = [[DirectoryDetailInfo alloc] init];
-	//[self infoForRow:cellInfo atIndexPath:indexPath];
-	
-	NSInteger row = [indexPath row];
-	NSInteger section = [indexPath section];
-	
-	DirectoryDetailInfo *cellInfo = nil;
-	NSMutableArray *entryArray = [self.sectionArray objectAtIndex:section];
-	if (entryArray)
-		cellInfo = [entryArray objectAtIndex:row];
-	
-	if (cellInfo == nil) {
-		debug_NSLog(@"LegislatorDetailViewController:cellForRow: error finding table entry for section:%d row:%d", section, row);
-		 return nil;
-	}
-		 
-	BOOL clickable = cellInfo.isClickable;
-	//NSString *CellIdentifier = [NSString stringWithFormat:@"Section: %d Row: %d",indexPath.section,indexPath.row];
-	NSString *CellIdentifier = [NSString stringWithFormat:@"Type: %d",cellInfo.entryType];
-	//NSString *CellIdentifier = @"DirectoryDetailCell";
-	
-	/* Look up cell in the table queue */
-    UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	
-	UITableViewCellStyle currentStyle = UITableViewCellStyleValue2;
-	UITableViewCellSelectionStyle selectionStyle = clickable ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
-	
-	/* Not found in queue, create a new cell object */
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:currentStyle reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-	cell.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	
-	cell.selectionStyle = selectionStyle;
-	if (clickable)
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;	
-	
-	switch(cellInfo.entryType) {
-		case DirectoryTypeNotes:		// Since our notes data can change, we must tend to the cached info ...
-			if (self.legislator.notes.length > 0)
-				cell.detailTextLabel.textColor = [UIColor blackColor];
-			else
-				cell.detailTextLabel.textColor = [UIColor grayColor];
-			cell.detailTextLabel.text = cellInfo.entryValue;
-			cell.textLabel.text = cellInfo.entryName;
-			break;
-			
-		case DirectoryTypeIndex:		// partisan index custom slider
-			if (![UtilityMethods isIPadDevice]) {
-				cell.textLabel.opaque = NO;
-				cell.textLabel.numberOfLines = 2;
-				cell.textLabel.highlightedTextColor = [UIColor blackColor];
-				//cell.textLabel.text = cellInfo.entryName;
-				
-				CGRect sliderViewFrame = [self preshrinkSliderViewFromView:cell.contentView];
-				if (self.indivSlider == nil) {
-					self.indivSlider = [[StaticGradientSliderView alloc] initWithFrame:CGRectZero];
-				}
-				if (self.indivSlider) {
-					[self.indivSlider setFrame:sliderViewFrame];
-					[self.indivSlider setLegislator:self.legislator];
-					CGFloat indexValue = 0.0f;
-					NSString *tempStr = nil;
-					if ([cellInfo.entryValue isKindOfClass:[NSString class]])
-						tempStr = cellInfo.entryValue;
-					if (tempStr)
-						indexValue = [tempStr floatValue];
-					[self.indivSlider setSliderValue:indexValue animated:NO];
-					[cell.contentView addSubview:self.indivSlider];
-				}
-				cell.userInteractionEnabled = NO;
-			}
-			break;
-			
-		case DirectoryTypeMap:
-			cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
-			cell.detailTextLabel.numberOfLines = 4;
-			DistrictOfficeObj *office = nil;
-			if ([cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]])
-				office = cellInfo.entryValue;
-			if (office)
-				cell.detailTextLabel.text = [office cellAddress];
-			cell.textLabel.text = cellInfo.entryName;
-			break;
-
-		case DirectoryTypeWeb:
-			if ([cellInfo.entryValue isKindOfClass:[NSString class]]) {
-				NSString *tempStr = cellInfo.entryValue;
-			if (tempStr && tempStr.length > 0) {
-				if ([cellInfo.entryName isEqualToString:@"Website"])
-					cell.detailTextLabel.text = @"Official Website";
-				else if ([cellInfo.entryName isEqualToString:@"Bio"])
-					cell.detailTextLabel.text = @"VoteSmart Bio";
-				else if ([cellInfo.entryName isEqualToString:@"District Map"])
-					cell.detailTextLabel.text = @"District Map";
-				cell.textLabel.text = @"Web";
-			}
-			}
-			break;
-			
-		case DirectoryTypeCommittee:
-		case DirectoryTypeOfficeMap:
-		case DirectoryTypeChamberMap:
-		case DirectoryTypeTwitter:
-		case DirectoryTypeMail:
-		case DirectoryTypePhone:
-		case DirectoryTypeSMS:
-		case DirectoryTypeNone:
-			cell.detailTextLabel.text = cellInfo.entryValue;
-			cell.textLabel.text = cellInfo.entryName;
-			break;
-			
-		default:
-			cell.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-			cell.hidden = YES;
-			cell.frame  = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, 0.01f, 0.01f);
-			cell.tag = 999; //EMPTY
-			[cell sizeToFit];
-			break;
-	}
-	
-	[cell sizeToFit];
-	[cell setNeedsDisplay];
-	
-	return cell;
-	
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
-	return [sectionArray count];
-	
-}
-
-
-- (NSInteger)tableView:(UITableView *)aTableView  numberOfRowsInSection:(NSInteger)section {		
-	return [[sectionArray objectAtIndex:section] count];
-}
-
-- (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {	
-	if (section == 0)
-		return @"Legislator Information";
-	else if (section == 1)
-		return @"Committee Assignments";
-	else if (section == 2)
-		return @"Capitol Office";
-	else if (section == 3)
-		return @"District Office #1";
-	else if (section == 4)
-		return @"District Office #2";
-	else if (section == 5)
-		return @"District Office #3";
-	else //if (section == 6)
-		return @"District Office #4";
-}
 
 // the user selected a row in the table.
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath {
-	int row = [newIndexPath row];
-	int section = [newIndexPath section];
 	
 	// deselect the new row using animation
 	[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];	
 	
-	DirectoryDetailInfo *cellInfo = nil;
-	NSMutableArray *entryArray = [self.sectionArray objectAtIndex:section];
-	if (entryArray)
-		cellInfo = [entryArray objectAtIndex:row];
-	
-	if (cellInfo == nil) {
-		debug_NSLog(@"LegislatorDetailViewController:didSelectRow: error finding table entry for section:%d row:%d", section, row);
+	DirectoryDetailInfo *cellInfo = [self.dataSource dataObjectForIndexPath:newIndexPath];
+
+	if (!cellInfo.isClickable)
 		return;
-	}
 	
-	if (cellInfo.isClickable) {
 		if (cellInfo.entryType == DirectoryTypeNotes) { // We need to edit the notes thing...
 			NotesViewController *nextViewController = nil;
 			if ([UtilityMethods isIPadDevice])
@@ -725,7 +408,7 @@
 				
 				if ([UtilityMethods isIPadDevice]) {
 					//nextViewController.toolbar.hidden = NO;
-					self.notesPopover = [[UIPopoverController alloc] initWithContentViewController:nextViewController];
+					self.notesPopover = [[[UIPopoverController alloc] initWithContentViewController:nextViewController] autorelease];
 					self.notesPopover.delegate = self;
 					CGRect cellRect = [aTableView rectForRowAtIndexPath:newIndexPath];
 					[self.notesPopover presentPopoverFromRect:cellRect inView:aTableView permittedArrowDirections:(UIPopoverArrowDirectionLeft & UIPopoverArrowDirectionRight & UIPopoverArrowDirectionDown ) animated:YES];
@@ -739,38 +422,32 @@
 		}
 		else if (cellInfo.entryType == DirectoryTypeCommittee) {
 			CommitteeDetailViewController *subDetailController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
-			subDetailController.committee = [[[self.legislator sortedCommitteePositions] objectAtIndex:row] committee];
-			// push the detail view controller onto the navigation stack to display it
+			subDetailController.committee = cellInfo.entryValue;
 			[self.navigationController pushViewController:subDetailController animated:YES];
 			[subDetailController release];
 		}
-		else if (cellInfo.entryType == DirectoryTypeOfficeMap) {
-			CapitolMap *capMap = [UtilityMethods capitolMapFromOfficeString:cellInfo.entryValue];			
-			[self pushMapViewWithMap:capMap];
-		}
-		else if (cellInfo.entryType == DirectoryTypeChamberMap) {
-			CapitolMap *capMap = [UtilityMethods capitolMapFromChamber:self.legislator.legtype.integerValue];			
+		else if (cellInfo.entryType == DirectoryTypeOfficeMap || cellInfo.entryType == DirectoryTypeChamberMap) {
+			CapitolMap *capMap = cellInfo.entryValue;			
 			[self pushMapViewWithMap:capMap];
 		}
 		else if (cellInfo.entryType == DirectoryTypeMail) {
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:cellInfo.entryValue 
-																			 subject:@"" body:@""];			
+																			 subject:@"" body:@"" commander:self];			
 		}
 		// Switch to the appropriate application for this url...
 		else if (cellInfo.entryType == DirectoryTypeMap) {
 			if (![cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]])
 				return;
 			
-			MapViewController *mapVC = [[MapViewController alloc] initWithNibName:@"MapViewController" bundle:nil];
-			if (!mapVC) {
-				debug_NSLog(@"Tried to map services, but couldn't allocate memory for the view.");
-				return;
-			}
+			MapViewController *mapVC = [MapViewController sharedMapViewController];
 			DistrictOfficeObj *districtOffice = cellInfo.entryValue;
 			
+			[mapVC resetMapViewWithAnimation:NO];
 			[mapVC.mapView addAnnotation:districtOffice];
+			[mapVC moveMapToAnnotation:districtOffice];
+			//[mapVC.mapView addOverlay:[self.legislator.districtMap polygon]];
 			[self.navigationController pushViewController:mapVC animated:YES];
-			[mapVC release];
+			//[mapVC release];
 			
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&
@@ -791,7 +468,6 @@
 			
 			[UtilityMethods openURLWithoutTrepidation:myURL];
 		}
-	}
 }
 
 - (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -799,18 +475,15 @@
 	NSInteger row = [indexPath row];
 	NSInteger section = [indexPath section];
 	
-	DirectoryDetailInfo *cellInfo = nil;
-	NSMutableArray *entryArray = [self.sectionArray objectAtIndex:section];
-	if (entryArray)
-		cellInfo = [entryArray objectAtIndex:row];
+	DirectoryDetailInfo *cellInfo = [self.dataSource dataObjectForIndexPath:indexPath];
 	
 	if (cellInfo == nil) {
 		debug_NSLog(@"LegislatorDetailViewController:heightForRow: error finding table entry for section:%d row:%d", section, row);
 		return height;
 	}
 	
-	if ([cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]] ||
-		[cellInfo.entryName rangeOfString:@"Address"].length )
+	if (cellInfo.entryType == DirectoryTypeMap ||
+		[cellInfo.subtitle rangeOfString:@"Address"].length )
 		height = 98.0f;
 	else if ([cellInfo.entryValue isKindOfClass:[NSString string]]) {
 		NSString *tempStr = cellInfo.entryValue;
@@ -846,21 +519,26 @@
 - (void)plotHistory {
 	NSInteger countOfScores = [self.legislator.wnomScores count];
 
-	if (!countOfScores) {
-		graph.hidden = YES;
-		self.freshmanPlotLab.hidden = NO;
+	self.freshmanPlotLab.hidden = (countOfScores > 0);
+	if (countOfScores == 0)
 		return;
-	}
 	
 	if (self.dataForPlot && [self.dataForPlot count])
 		[self.dataForPlot removeAllObjects];
 	
-	NSMutableArray *sortedScores = [[NSMutableArray alloc] initWithArray:[self.legislator.wnomScores allObjects]];
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"session" ascending:YES];
-	[sortedScores sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+	NSArray *descriptors = [[NSArray alloc] initWithObjects:sortDescriptor,nil];
+	NSArray *sortedScores = [[self.legislator.wnomScores allObjects] sortedArrayUsingDescriptors:descriptors];
 	[sortDescriptor release];
+	[descriptors release];
 	
-	NSInteger year = 1847 + ([[[sortedScores objectAtIndex:0] session] integerValue] * 2);
+	
+	WnomObj *firstScore = [sortedScores objectAtIndex:0];
+	NSInteger year = 2010;
+	if (firstScore && firstScore.session) {
+		year = 1847 + [firstScore.session integerValue] * 2;
+	}
+		
 	NSString *refStr = [NSString stringWithFormat:@"%d-02-02", year];
 	NSDateFormatter *inputFormatter = [[NSDateFormatter alloc] init];
 	[inputFormatter setDateFormat:@"yyyy-MM-dd"];
@@ -870,15 +548,13 @@
     NSTimeInterval oneSession = 24 * 60 * 60 * 365 * 2;
 		
     // Create graph from theme
-	if (self.graph)
-		self.graph = nil;
-    self.graph = [(CPLTXYGraph *)[CPLTXYGraph alloc] initWithFrame:CGRectZero];
+    CPLTXYGraph * graph = [[CPLTXYGraph alloc] initWithFrame:CGRectZero];
 	CPLTTheme *theme = [CPLTTheme themeNamed:kCPStocksTheme];
-	[self.graph applyTheme:theme];
-	scatterPlotView.hostedLayer = self.graph;
+	[graph applyTheme:theme];
+	
     
     // Setup scatter plot space
-    CPLTXYPlotSpace *plotSpace = (CPLTXYPlotSpace *)self.graph.defaultPlotSpace;
+    CPLTXYPlotSpace *plotSpace = (CPLTXYPlotSpace *)graph.defaultPlotSpace;
 	plotSpace.allowsUserInteraction = YES;
 
     NSTimeInterval xLow = 0.0f;
@@ -886,45 +562,49 @@
     plotSpace.yRange = [CPLTPlotRange plotRangeWithLocation:CPLTDecimalFromFloat(-1.25) length:CPLTDecimalFromFloat(2.5)];
     
     // Axes
-	CPLTXYAxisSet *axisSet = (CPLTXYAxisSet *)self.graph.axisSet;
+	CPLTXYAxisSet *axisSet = (CPLTXYAxisSet *)graph.axisSet;
     CPLTXYAxis *x = axisSet.xAxis;
     x.majorIntervalLength = CPLTDecimalFromFloat(oneSession);
     x.orthogonalCoordinateDecimal = CPLTDecimalFromString(@"0.0");
     x.minorTicksPerInterval = 0;
-    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateStyle = kCFDateFormatterShortStyle;
 	[dateFormatter setDateFormat:@"‘YY"];
 
-    CPLTTimeFormatter *timeFormatter = [[[CPLTTimeFormatter alloc] initWithDateFormatter:dateFormatter] autorelease];
+    CPLTTimeFormatter *timeFormatter = [[CPLTTimeFormatter alloc] initWithDateFormatter:dateFormatter];
+	[dateFormatter release];
+	
     timeFormatter.referenceDate = refDate;
     x.labelFormatter = timeFormatter;
-	NSArray *exclusionRanges = [NSArray arrayWithObjects:
+	[timeFormatter release];
+	NSArray *exclusionRanges = [[NSArray alloc] initWithObjects:
 								[CPLTPlotRange plotRangeWithLocation:CPLTDecimalFromFloat(-10 * oneSession) length:CPLTDecimalFromFloat(9*oneSession)],
 								[CPLTPlotRange plotRangeWithLocation:CPLTDecimalFromFloat(oneSession*countOfScores) length:CPLTDecimalFromFloat(9*oneSession)],
 								nil];
 	x.labelExclusionRanges = exclusionRanges;
+	[exclusionRanges release];
 	
     CPLTXYAxis *y = axisSet.yAxis;
     y.majorIntervalLength = CPLTDecimalFromString(@"0.5");
     y.minorTicksPerInterval = 1;
 
     y.orthogonalCoordinateDecimal = CPLTDecimalFromFloat(oneSession/2);
-	exclusionRanges = [NSArray arrayWithObjects:
+	exclusionRanges = [[NSArray alloc] initWithObjects:
 					   [CPLTPlotRange plotRangeWithLocation:CPLTDecimalFromFloat(-10.0) length:CPLTDecimalFromFloat(8.5f)], 
 					   [CPLTPlotRange plotRangeWithLocation:CPLTDecimalFromFloat(0.0) length:CPLTDecimalFromFloat(0.02)], 
 					   [CPLTPlotRange plotRangeWithLocation:CPLTDecimalFromFloat(1.5) length:CPLTDecimalFromFloat(8.5f)], 
 					   nil];
 	y.labelExclusionRanges = exclusionRanges;
+	[exclusionRanges release];
 	
 	// Create a blue plot area
-	CPLTScatterPlot *democratPlot = [[[CPLTScatterPlot alloc] init] autorelease];
+	CPLTScatterPlot *democratPlot = [[CPLTScatterPlot alloc] init];
     democratPlot.identifier = @"Democrat Plot";
 	democratPlot.dataLineStyle.miterLimit = 5.0f;
 	democratPlot.dataLineStyle.lineWidth = 2.5f;
 	democratPlot.dataLineStyle.lineColor = self.texasBlue;
 	democratPlot.dataLineStyle.lineCap = kCGLineCapRound;
     democratPlot.dataSource = self;
-	[self.graph addPlot:democratPlot];
 
 	// Add plot symbols
 	CPLTLineStyle *symbolLineStyle = [CPLTLineStyle lineStyle];
@@ -934,16 +614,17 @@
 	plotSymbol.lineStyle = symbolLineStyle;
     plotSymbol.size = CGSizeMake(5.0, 5.0);
     democratPlot.plotSymbol = plotSymbol;
-	
+	[graph addPlot:democratPlot];
+	[democratPlot release];
+
 	// Create a blue plot area
-	CPLTScatterPlot *republicanPlot = [[[CPLTScatterPlot alloc] init] autorelease];
+	CPLTScatterPlot *republicanPlot = [[CPLTScatterPlot alloc] init];
     republicanPlot.identifier = @"Republican Plot";
 	republicanPlot.dataLineStyle.miterLimit = 5.0f;
 	republicanPlot.dataLineStyle.lineWidth = 2.5f;
 	republicanPlot.dataLineStyle.lineColor = self.texasRed;
 	republicanPlot.dataLineStyle.lineCap = kCGLineCapRound;
     republicanPlot.dataSource = self;
-	[self.graph addPlot:republicanPlot];
 	
 	// Add plot symbols
 	//CPLTLineStyle *symbolLineStyle = [CPLTLineStyle lineStyle];
@@ -953,16 +634,17 @@
 	plotSymbol.lineStyle = symbolLineStyle;
     plotSymbol.size = CGSizeMake(5.0, 5.0);
     republicanPlot.plotSymbol = plotSymbol;
-	
+	[graph addPlot:republicanPlot];
+	[republicanPlot release];
+
 	
     // Create a plot that uses the data source method
-	CPLTScatterPlot *dataSourceLinePlot = [[[CPLTScatterPlot alloc] init] autorelease];
+	CPLTScatterPlot *dataSourceLinePlot = [[CPLTScatterPlot alloc] init];
     dataSourceLinePlot.identifier = @"Legislator Plot";
 	dataSourceLinePlot.dataLineStyle.miterLimit = 5.0f;
 	dataSourceLinePlot.dataLineStyle.lineWidth = 3.0f;
     dataSourceLinePlot.dataLineStyle.lineColor = self.texasOrange;
     dataSourceLinePlot.dataSource = self;
-	[self.graph addPlot:dataSourceLinePlot];
 	
 	// Add plot symbols
 	//CPLTLineStyle *symbolLineStyle = [CPLTLineStyle lineStyle];
@@ -972,7 +654,9 @@
 	plotSymbol.lineStyle = symbolLineStyle;
     plotSymbol.size = CGSizeMake(14.0, 14.0);
     dataSourceLinePlot.plotSymbol = plotSymbol;
-		
+	[graph addPlot:dataSourceLinePlot];
+	[dataSourceLinePlot release];
+
     // Add some data
 	NSInteger chamber = [legislator.legtype integerValue];
 	NSDictionary *democDict = [[PartisanIndexStats sharedPartisanIndexStats] historyForParty:DEMOCRAT Chamber:chamber];
@@ -990,7 +674,10 @@
 							repubY, @"RepubY", 
 							democY, @"DemocY", nil]];
 	}
-	[sortedScores release];
+	self.scatterPlotView.hostedLayer = graph;
+	[graph release];
+
+	//[sortedScores release];
 }
 #pragma mark -
 #pragma mark Plot Data Source Methods
@@ -1017,12 +704,6 @@
 
     return num;
 }
-
--(CPLTFill *) barFillForBarPlot:(CPLTBarPlot *)barPlot recordIndex:(NSNumber *)index; 
-{
-	return nil;
-}
-
 
 @end
 
