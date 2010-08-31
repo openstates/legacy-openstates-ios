@@ -44,6 +44,9 @@
 - (UIImage *)image;
 
 - (NSString *)cellAddress;
+
+- (id) initWithDictionary: (NSDictionary *)dictionary;
+- (NSDictionary *)exportDictionary;
 @end
 
 
