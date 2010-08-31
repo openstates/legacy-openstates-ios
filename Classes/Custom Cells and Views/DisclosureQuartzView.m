@@ -11,14 +11,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "TexLegeTheme.h"
 
-#define small 1
-#if small == 1
 const CGFloat kDisclosureQuartzViewWidth = 32.0f;
 const CGFloat kDisclosureQuartzViewHeight = 32.0f;
-#else
-const CGFloat kDisclosureQuartzViewWidth = 64.0f;
-const CGFloat kDisclosureQuartzViewHeight = 64.0f;
-#endif
 
 @implementation DisclosureQuartzView
 
@@ -93,11 +87,10 @@ const CGFloat kDisclosureQuartzViewHeight = 64.0f;
 	
 	// Setup for Inner Shadow Effect
 	bytesPerRow = 4 * roundf(bounds.size.width);
-	//NSMutableData *shadowBuffer = [NSMutableData dataWithCapacity:(bytesPerRow * roundf(bounds.size.height) * roundf(bounds.size.width))];
+
 	bitmapData = calloc(bytesPerRow * round(bounds.size.height), 8);
 	context = CGBitmapContextCreate(bitmapData, round(bounds.size.width), round(bounds.size.height), 8, bytesPerRow, space, kCGImageAlphaPremultipliedLast);
 
-	//context = CGBitmapContextCreate([shadowBuffer mutableBytes], roundf(bounds.size.width), roundf(bounds.size.height), 8, bytesPerRow, space, kCGImageAlphaPremultipliedLast);
 	UIGraphicsPushContext(context);
 	CGContextScaleCTM(context, (bounds.size.width / imageBounds.size.width), (bounds.size.height / imageBounds.size.height));
 	
@@ -113,11 +106,9 @@ const CGFloat kDisclosureQuartzViewHeight = 64.0f;
 	stroke /= resolution;
 	alignStroke = fmodf(0.5f * stroke * resolution, 1.0f);
 	path = CGPathCreateMutable();
-#if small == 1
+	
 	drawRect = CGRectMake(1.0f, 1.0f, 30.0f, 30.0f);
-#else
-	drawRect = CGRectMake(1.5f, 2.5f, 60.0f, 60.0f);
-#endif
+
 	drawRect.origin.x = (roundf(resolution * drawRect.origin.x + alignStroke) - alignStroke) / resolution;
 	drawRect.origin.y = (roundf(resolution * drawRect.origin.y + alignStroke) - alignStroke) / resolution;
 	drawRect.size.width = roundf(resolution * drawRect.size.width) / resolution;
@@ -138,22 +129,16 @@ const CGFloat kDisclosureQuartzViewHeight = 64.0f;
 	
 	CGContextSaveGState(context);
 	transform = CGAffineTransformMakeTranslation(CGRectGetMidX(drawRect), CGRectGetMidY(drawRect));
-#if small == 1
+
 	transform = CGAffineTransformScale(transform, 0.882f, 0.882f);
 	drawRect.size.width /= 0.882f;
 	drawRect.size.height /= 0.882f;
-#else
-	transform = CGAffineTransformScale(transform, 1.765f, 1.765f);
-	drawRect.size.width /= 1.765f;
-	drawRect.size.height /= 1.765f;
-#endif
+
 	transform = CGAffineTransformTranslate(transform, -CGRectGetMidX(drawRect), -CGRectGetMidY(drawRect));
 	CGContextConcatCTM(context, transform);
-#if small == 1
+
 	drawRect = CGRectMake(5.0f, 3.0f, 30.0f, 30.0f);
-#else
-	drawRect = CGRectMake(9.5f, 6.5f, 60.0f, 60.0f);
-#endif
+
 	drawRect.origin.x = roundf(resolution * drawRect.origin.x) / resolution;
 	drawRect.origin.y = roundf(resolution * drawRect.origin.y) / resolution;
 	drawRect.size.width = roundf(resolution * drawRect.size.width) / resolution;

@@ -24,10 +24,12 @@
 		//UIImage *tempImage = [UIImage imageNamed:@"anchia.png"];
 		//self.imageView.image = tempImage;
 		
-		DisclosureQuartzView *disclosureQV = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 32.f, 32.f)];
-		self.accessoryView = disclosureQV;
-		[disclosureQV release];
-					
+		DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 25.f, 25.f)];
+		//UIImageView *iv = [[UIImageView alloc] initWithImage:[qv imageFromUIView]];
+		self.accessoryView = qv;
+		[qv release];
+		//[iv release];
+		
 		CGFloat endX = self.contentView.bounds.size.width - 45.f;
 		CGRect tzvFrame = CGRectMake(45.f, 0.0, endX, self.contentView.bounds.size.height);
 		cellView = [[LegislatorMasterCellView alloc] initWithFrame:tzvFrame];

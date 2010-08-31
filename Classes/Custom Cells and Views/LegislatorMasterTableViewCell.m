@@ -41,11 +41,11 @@
 	[theImageView release];
 	*/
 	
-	DisclosureQuartzView *disclosureQV = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0, 0, 32.f, 32.f)];
-	UIImageView *tempIV = [[UIImageView alloc] initWithImage:[disclosureQV imageFromUIView]];
-	self.disclosureView = tempIV;
-	[disclosureQV release];
-	[tempIV release];
+	DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 25.f, 25.f)];
+	//UIImageView *iv = [[UIImageView alloc] initWithImage:[qv imageFromUIView]];
+	self.disclosureView = qv;
+	[qv release];
+	//[tempIV release];
 	
 	self.selectionStyle = UITableViewCellSelectionStyleBlue;	
 	

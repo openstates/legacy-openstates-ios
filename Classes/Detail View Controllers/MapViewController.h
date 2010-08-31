@@ -31,7 +31,6 @@
 @property (nonatomic,retain) MKReverseGeocoder *reverseGeocoder;
 @property (nonatomic,retain) BSForwardGeocoder *forwardGeocoder;
 @property (nonatomic,readonly) MKCoordinateRegion texasRegion;
-@property (nonatomic) BOOL shouldAnimate;
 
 - (IBAction) mapControlSheet:(id)sender;
 - (IBAction) showAllDistrictMaps:(id)sender;

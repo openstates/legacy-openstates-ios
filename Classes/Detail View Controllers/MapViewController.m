@@ -43,7 +43,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 @synthesize mapView, userLocationButton, reverseGeocoder;
 @synthesize toolbar, searchBar, searchBarButton, districtOfficesButton;
 @synthesize mapControlsButton, forwardGeocoder, texasRegion;
-@synthesize popoverController, shouldAnimate;
+@synthesize popoverController;
 
 SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 
@@ -61,7 +61,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
 	
 		[self view]; // why do we have to cheat it like this? shouldn't the view load automatically from the nib?
-		self.shouldAnimate = YES;
 		colorIndex = 0;
 		if (![UtilityMethods isIPadDevice])
 			self.hidesBottomBarWhenPushed = YES;
@@ -99,7 +98,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 - (void) viewDidLoad {
 	[super viewDidLoad];
 	
-	self.shouldAnimate = YES;
 	colorIndex = 0;
 
 	[self.view setBackgroundColor:[TexLegeTheme backgroundLight]];
@@ -237,7 +235,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 
 - (void) clearAnnotationsAndOverlays {
 	self.mapView.showsUserLocation = NO;
-	[self.mapView removeOverlays:self.mapView.annotations];
+	[self.mapView removeOverlays:self.mapView.overlays];
 	[self.mapView removeAnnotations:self.mapView.annotations];
 }
 
@@ -273,7 +271,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 		[self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:1.7];        
 	}
 	else
-		[self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:0.3];	
+		[self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:0.5];	
 }
 
 #pragma mark -
@@ -524,10 +522,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 			// Add a placemark on the map
 			CustomAnnotation *placemark = [[[CustomAnnotation alloc] initWithBSKmlResult:place] autorelease];
 			
-			//self.shouldAnimate = NO;
 			[self performSelector:@selector(addDistrictPlacesForAnnotation:) withObject:placemark];
 
-			//self.shouldAnimate = YES;
 			[self.mapView addAnnotation:placemark];	
 			
 			lastAnnotation = placemark;
@@ -629,7 +625,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 	id<MKAnnotation> lastAnnotation = lastView.annotation;
 	MKCoordinateRegion region;
 	
-	if (lastAnnotation && self.shouldAnimate) {
+	if (lastAnnotation) {
 		
 		if ([lastAnnotation isKindOfClass:[DistrictOfficeObj class]]) {
 			DistrictOfficeObj *obj = lastAnnotation;
@@ -812,6 +808,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 		if ([object respondsToSelector:@selector(annotation)]) {
 			id<MKAnnotation> annotation = [object performSelector:@selector(annotation)];
 			if (!annotation)
+				return;
+			
+			if (![self.mapView.selectedAnnotations containsObject:annotation])
 				return;
 			
 			MKCoordinateRegion region;
