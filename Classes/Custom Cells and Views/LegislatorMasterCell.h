@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "LegislatorMasterCellView.h"
 @class LegislatorObj;
-@class MyView;
+
 @interface LegislatorMasterCell : UITableViewCell {
 	
 }
-@property (nonatomic,retain) IBOutlet MyView *cellView;
+@property (nonatomic,retain) IBOutlet LegislatorMasterCellView *cellView;
 @property (nonatomic,retain) IBOutlet LegislatorObj *legislator;
 @end

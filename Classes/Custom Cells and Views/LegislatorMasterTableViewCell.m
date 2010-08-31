@@ -13,6 +13,8 @@
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "ImageCache.h"
+#import "DisclosureQuartzView.h"
+
 @interface LegislatorMasterTableViewCell (Private)
 
 @end
@@ -32,17 +34,18 @@
 	self.detailColor = [TexLegeTheme textDark];
 	self.typeColor = [TexLegeTheme accent];
 	//self.accessoryView = [TexLegeTheme disclosureLabel:NO];
-	
-	/* if (( [UIScreen instancesRespondToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0 ) || [UtilityMethods isIPadDevice])
-		self.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
-	else
-		self.accessoryView = [TexLegeTheme disclosureLabel:NO];
-	 */
-	
-	UIImageView *theImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30.f, 30.f)];
+		
+	/*UIImageView *theImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30.f, 30.f)];
 	theImageView.image = [UIImage imageNamed:@"disclosure.png"];
 	self.disclosureView = theImageView;
 	[theImageView release];
+	*/
+	
+	DisclosureQuartzView *disclosureQV = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0, 0, 32.f, 32.f)];
+	UIImageView *tempIV = [[UIImageView alloc] initWithImage:[disclosureQV imageFromUIView]];
+	self.disclosureView = tempIV;
+	[disclosureQV release];
+	[tempIV release];
 	
 	self.selectionStyle = UITableViewCellSelectionStyleBlue;	
 	

@@ -8,6 +8,8 @@
 
 #import "LegislatorMasterCell.h"
 #import "LegislatorMasterCellView.h"
+#import "LegislatorObj.h"
+#import "DisclosureQuartzView.h"
 
 @implementation LegislatorMasterCell
 @synthesize legislator, cellView;
@@ -18,25 +20,34 @@
 	if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
 		
 		// Create a time zone view and add it as a subview of self's contentView.
-		CGRect tzvFrame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, self.contentView.bounds.size.height);
-		cellView = [[MyView alloc] initWithFrame:tzvFrame];
+
+		//UIImage *tempImage = [UIImage imageNamed:@"anchia.png"];
+		//self.imageView.image = tempImage;
+		
+		DisclosureQuartzView *disclosureQV = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 32.f, 32.f)];
+		self.accessoryView = disclosureQV;
+		[disclosureQV release];
+					
+		CGFloat endX = self.contentView.bounds.size.width - 45.f;
+		CGRect tzvFrame = CGRectMake(45.f, 0.0, endX, self.contentView.bounds.size.height);
+		cellView = [[LegislatorMasterCellView alloc] initWithFrame:tzvFrame];
 		cellView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		[self/*.contentView*/ addSubview:cellView];
+		[self.contentView addSubview:cellView];
 	}
 	return self;
 }
 
 
  - (void)setHighlighted:(BOOL)val animated:(BOOL)animated {               // animate between regular and highlighted state
-	//[super setHighlighted:val animated:animated];
+	[super setHighlighted:val animated:animated];
 
 	self.cellView.highlighted = val;
 }
 
 - (void)setSelected:(BOOL)val animated:(BOOL)animated {               // animate between regular and highlighted state
-	//[super setHighlighted:val animated:animated];
+	[super setHighlighted:val animated:animated];
 	
-	//self.cellView.highlighted = val;
+	self.cellView.highlighted = val;
 }
 
 
@@ -44,6 +55,8 @@
 	if ([legislator isEqual:value])
 		return;
 	legislator = [value retain];
+	self.imageView.image = [UIImage imageNamed:legislator.photo_name];
+		
 	self.cellView.legislator = value;
 }
 
