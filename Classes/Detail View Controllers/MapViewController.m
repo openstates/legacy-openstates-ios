@@ -30,6 +30,7 @@
 - (void) resetMapViewWithAnimation:(BOOL)animated;
 - (void) dismissDistrictOfficesPopover:(id)sender;
 - (BOOL) region:(MKCoordinateRegion)region1 isEqualTo:(MKCoordinateRegion)region2;
+- (IBAction) showHidePopoverButton:(id)sender;
 
 @end
 
@@ -38,8 +39,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 
 @implementation MapViewController
-@synthesize bookmarksButton, mapTypeControl, mapView, userLocationButton, reverseGeocoder;
-@synthesize toolbar, searchBar, searchBarButton, districtOfficesButton, mapControlsButton, forwardGeocoder, texasRegion;
+@synthesize bookmarksButton, mapTypeControl, mapTypeControlButton;
+@synthesize mapView, userLocationButton, reverseGeocoder;
+@synthesize toolbar, searchBar, searchBarButton, districtOfficesButton;
+@synthesize mapControlsButton, forwardGeocoder, texasRegion;
 @synthesize popoverController, shouldAnimate;
 
 SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
@@ -48,7 +51,10 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 #pragma mark Initialization and Memory Management
 
 - (NSString *)nibName {
-	return @"MapViewController";
+	if ([UtilityMethods isIPadDevice])
+		return @"MapViewController~ipad";
+	else
+		return @"MapViewController~iphone";
 }
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -57,6 +63,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 		[self view]; // why do we have to cheat it like this? shouldn't the view load automatically from the nib?
 		self.shouldAnimate = YES;
 		colorIndex = 0;
+		if (![UtilityMethods isIPadDevice])
+			self.hidesBottomBarWhenPushed = YES;
 	}
 	return self;
 }
@@ -65,6 +73,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 	self.bookmarksButton = nil;
 	self.mapTypeControl = nil;
 	self.searchBarButton = nil;
+	self.mapTypeControlButton = nil;
 	self.mapView = nil;
 	self.mapControlsButton = nil;
 	self.userLocationButton = nil;
@@ -100,22 +109,21 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 	// Zoom = 6
 	self.mapView.region = self.texasRegion;
 	
+	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 	self.toolbar.tintColor = [TexLegeTheme navbar];
+	self.searchBar.tintColor = [TexLegeTheme navbar];
 	if ([UtilityMethods isIPadDevice]) {
-		self.navigationItem.titleView = self.toolbar; 
-		
+
 		self.bookmarksButton.enabled = ![UtilityMethods isLandscapeOrientation];
 		self.bookmarksButton.target = self;
 		self.bookmarksButton.action = @selector(displayDistrictOfficesPopover:);
-		[self.toolbar setItems:[NSArray arrayWithObjects:self.mapTypeControl, self.userLocationButton, self.districtOfficesButton, 
-								self.bookmarksButton, self.searchBarButton, nil] animated:YES];
+		
+		self.navigationItem.titleView = self.toolbar; 
 
 	}
 	else {
-		[self.toolbar setItems:[NSArray arrayWithObjects:self.searchBarButton, self.mapControlsButton, nil] animated:YES];
-		self.navigationItem.titleView = self.toolbar;
+		self.navigationItem.titleView = self.searchBar;
 	}
-	//self.navigationItem.titleView = self.mapTypeControl;
 	
 	if (![UtilityMethods supportsMKPolyline])
 		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"__NO_MKPOLYLINE!__"];
@@ -128,6 +136,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 	self.bookmarksButton = nil;
 	self.mapTypeControl = nil;
 	self.mapControlsButton = nil;
+	self.mapTypeControlButton = nil;
 	self.mapView = nil;
 	self.searchBarButton = nil;
 	self.userLocationButton = nil;
@@ -179,9 +188,38 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 	[[self mapView]setRegion:MKCoordinateRegionMake(center, span) animated:YES];
 }
 
+- (IBAction) showHidePopoverButton:(id)sender {
+	if (![UtilityMethods isIPadDevice])
+		return;
+	
+	BOOL changed = NO;
+	NSMutableArray *buttons = [[NSMutableArray alloc] initWithArray:self.toolbar.items];
+	
+	if ([UtilityMethods isLandscapeOrientation]) {
+		if ([buttons containsObject:self.bookmarksButton]) {
+			[buttons removeObject:self.bookmarksButton];
+			changed = YES;
+		}
+	}
+	else { 
+		if (![buttons containsObject:self.bookmarksButton]) {
+			[buttons insertObject:self.bookmarksButton atIndex:[buttons count]-1];
+			changed = YES;
+		}
+	}
+	if (changed)
+		[self.toolbar setItems:buttons animated:YES];
+
+	debug_NSLog(@"%@", self.toolbar.items);
+
+	[buttons release];
+}
+
 - (void) viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	//self.bookmarksButton.enabled = ([UtilityMethods isIPadDevice] && ![UtilityMethods isLandscapeOrientation]);
+	
+	[self showHidePopoverButton:nil];
+	
 	
 	NSURL *tempURL = [NSURL URLWithString:@"http://maps.google.com"];		
 	if (![UtilityMethods canReachHostWithURL:tempURL])// do we have a good URL/connection?
@@ -292,8 +330,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 - (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController 
 		  withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
 	
-	barButtonItem.enabled = YES;
-	self.bookmarksButton.enabled = YES;
+	//barButtonItem.enabled = YES;
+	//self.bookmarksButton.enabled = YES;
+	[self performSelector:@selector(showHidePopoverButton:) withObject:nil afterDelay:0.1f];
 	self.popoverController = pc;
 }
 
@@ -301,8 +340,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 - (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController 
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
 	
-	barButtonItem.enabled = NO;
-	self.bookmarksButton.enabled = NO;
+	//barButtonItem.enabled = NO;
+	//self.bookmarksButton.enabled = NO;
+	[self performSelector:@selector(showHidePopoverButton:) withObject:nil afterDelay:0.1f];
 	[self dismissDistrictOfficesPopover:barButtonItem];		
 }
 

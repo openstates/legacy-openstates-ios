@@ -134,7 +134,7 @@
 		return nil;
 	}
 	
-#if kDeviceSensitiveRowHeight == 1
+#if kDeviceSensitiveRowHeight == 0
 	NSUInteger platformType = [[UIDevice currentDevice] platformType];
 	if (platformType != UIDeviceiPhoneSimulatoriPad && platformType <= UIDevice3GiPhone)
     {
@@ -170,7 +170,7 @@
 	else
 #endif
 		
-#if 0	// IF YOU WANT QUARTZ DRAWN CELLS ... 
+#if 1	// IF YOU WANT QUARTZ DRAWN CELLS ... 
 	{
 			
 		static NSString *leg_cell_ID = @"LegislatorQuartz";		
@@ -179,7 +179,9 @@
 		
 		if (cell == nil) {
 			cell = [[[LegislatorMasterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:leg_cell_ID] autorelease];
+			//cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
 			cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
+
 		}
 		
 		cell.legislator = dataObj;
@@ -189,7 +191,7 @@
 		return cell;
 	}
 	
-#endif
+#else
 	{
 		static NSString *leg_cell_ID = @"LegislatorDirectory";		
 		LegislatorMasterTableViewCell *cell = (LegislatorMasterTableViewCell *)[tableView 
@@ -210,7 +212,7 @@
 		
 		return cell;
 	}
-	
+#endif
 }
 
 #pragma mark -

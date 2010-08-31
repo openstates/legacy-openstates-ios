@@ -106,6 +106,17 @@
 	// END: IPAD ONLY
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+	//[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
+	//[[TexLegeAppDelegate appDelegate] resetPopoverMenus];
+	
+	NSArray *visibleCells = self.tableView.visibleCells;
+	for (id cell in visibleCells) {
+		if ([cell respondsToSelector:@selector(redisplay)])
+			[cell performSelector:@selector(redisplay)];
+	}
+	
+}
 
 #pragma mark -
 #pragma mark Table view delegate

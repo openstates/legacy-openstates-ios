@@ -20,6 +20,7 @@
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 #import "CommonPopoversController.h"
+#import "LegislatorMasterCell.h"
 
 @implementation CommitteeDetailViewController
 
@@ -146,6 +147,13 @@ enum InfoSectionRows {
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	//[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
 	//[[TexLegeAppDelegate appDelegate] resetPopoverMenus];
+
+	NSArray *visibleCells = self.tableView.visibleCells;
+		for (id cell in visibleCells) {
+			if ([cell respondsToSelector:@selector(redisplay)])
+				[cell performSelector:@selector(redisplay)];
+		}
+	
 }
 
 // Override to allow orientations other than the default portrait orientation.
@@ -236,18 +244,18 @@ enum InfoSectionRows {
 	NSInteger InfoSectionEnd = ([UtilityMethods canMakePhoneCalls]) ? kInfoSectionClerk : kInfoSectionPhone;
 	
 	if (section > kInfoSection)
-		CellIdentifier = @"CommitteeLegislators";
+		CellIdentifier = @"LegislatorQuartz";
 	else if (row > InfoSectionEnd)
 		CellIdentifier = @"CommitteeInfo";
 	else // the non-clickable / no disclosure items
 		CellIdentifier = @"Committee-NoDisclosure";
 	
 	UITableViewCellStyle style = section > kInfoSection ? UITableViewCellStyleSubtitle : UITableViewCellStyleValue2;
-	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	
 	if (cell == nil) {
-		if (CellIdentifier == @"CommitteeLegislators") {
+		
+		/*if (CellIdentifier == @"CommitteeLegislators") {
 			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"LegislatorMasterTableViewCell" owner:self options:nil];
 			for (id suspect in objects) {
 				if ([suspect isKindOfClass:[LegislatorMasterTableViewCell class]]) {
@@ -255,6 +263,15 @@ enum InfoSectionRows {
 					break;
 				}
 			}
+		}*/
+		if (CellIdentifier == @"LegislatorQuartz") {
+			LegislatorMasterCell *newcell = [[[LegislatorMasterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+			//cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
+			newcell.frame = CGRectMake(0.0, 0.0, 250.0, 73.0);		
+			newcell.cellView.useDarkBackground = NO;
+			newcell.accessoryView.hidden = NO;
+			cell = newcell;
+
 		}
 		else {
 			cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:CellIdentifier] autorelease];			
@@ -329,25 +346,10 @@ enum InfoSectionRows {
 	}
 	
 	if (legislator) {
-		[(LegislatorMasterTableViewCell *)cell setupWithLegislator:legislator];
-		// let's override some of the datasource's settings ... specifically, the background color.
+		if ([cell respondsToSelector:@selector(setLegislator:)])
+			[cell performSelector:@selector(setLegislator:) withObject:legislator];
 		
-		
-		/*
-		// configure cell contents for a legislator
-		cell.textLabel.text = [NSString stringWithFormat: @"%@ - (%@)", 
-							   [legislator legProperName], [legislator partyShortName]];
-		cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
-		cell.detailTextLabel.text = [legislator labelSubText];
-		cell.detailTextLabel.font = [UIFont boldSystemFontOfSize:12];
-		cell.detailTextLabel.textColor = [UIColor lightGrayColor];
-		
-		cell.imageView.image = [UtilityMethods poorMansImageNamed:legislator.photo_name];
-		
-		// all the rows should show the disclosure indicator
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		 */
+		//[(LegislatorMasterTableViewCell *)cell setupWithLegislator:legislator];
 	}	
 	
 	return cell;
