@@ -307,6 +307,7 @@ static NSString * const kGeoRSSPointElementName = @"coordinates";
         // The georss:point element contains the latitude and longitude of the districtMap epicenter.
         // 18.6477 -66.7452
         //
+#warning this only works on iOS4
 		NSError *error=NULL;
 		static NSString *matchPattern = @"(-?[0-9.]+),(-?[0-9.]+)";
 		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:matchPattern options:NSRegularExpressionCaseInsensitive error:&error];
