@@ -10,6 +10,7 @@
 #import "TexLegeAppDelegate.h"
 #import "LinkObj.h"
 #import "UtilityMethods.h"
+#import "DisclosureQuartzView.h"
 
 @interface LinksDataSource (Private)
 - (IBAction)saveAction:(id)sender;
@@ -184,7 +185,17 @@ enum HeaderSectionRows {
 		}
 
 		cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:@"Cell"] autorelease];
-		cell.accessoryType = disclosure;
+		if (section == kHeaderSection)
+			cell.accessoryType = disclosure;
+		else {
+			DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 25.f, 25.f)];
+			//UIImageView *iv = [[UIImageView alloc] initWithImage:[qv imageFromUIView]];
+			cell.accessoryView = qv;
+			[qv release];
+			//[iv release];			
+		}
+
+		
 	}
 	
 	LinkObj *link = [self dataObjectForIndexPath:indexPath];

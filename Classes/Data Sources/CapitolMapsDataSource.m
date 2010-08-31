@@ -9,6 +9,7 @@
 #import "CapitolMapsDataSource.h"
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
+#import "DisclosureQuartzView.h"
 
 @interface CapitolMapsDataSource(Private)
 
@@ -126,7 +127,13 @@
 		cell.textLabel.adjustsFontSizeToFitWidth = YES;
 		cell.textLabel.minimumFontSize = 12.0f;
 		//cell.accessoryView = [TexLegeTheme disclosureLabel:YES];
-		cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]] autorelease];
+		//cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]] autorelease];
+		DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 25.f, 25.f)];
+		//UIImageView *iv = [[UIImageView alloc] initWithImage:[qv imageFromUIView]];
+		cell.accessoryView = qv;
+		[qv release];
+		//[iv release];
+		
 		
     }
 	BOOL useDark = (indexPath.row % 2 == 0);
