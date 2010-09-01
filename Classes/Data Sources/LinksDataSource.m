@@ -185,8 +185,10 @@ enum HeaderSectionRows {
 		}
 
 		cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:@"Cell"] autorelease];
-		if (section == kHeaderSection)
+		if (section == kHeaderSection) {
+			if (indexPath.row == kHeaderSectionContactRow || ![UtilityMethods isIPadDevice])
 			cell.accessoryType = disclosure;
+		}
 		else {
 			DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 25.f, 25.f)];
 			//UIImageView *iv = [[UIImageView alloc] initWithImage:[qv imageFromUIView]];

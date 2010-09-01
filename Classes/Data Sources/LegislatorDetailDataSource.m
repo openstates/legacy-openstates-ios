@@ -112,11 +112,11 @@
 	
 	
 	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 @"Web", @"subtitle",
-				 self.legislator.districtMapURL, @"entryValue",
+				 @"Map", @"subtitle",
+				 self.legislator.districtMap, @"entryValue",
 				 @"District Map", @"title",
 				 [NSNumber numberWithBool:YES], @"isClickable",
-				 [NSNumber numberWithInteger:DirectoryTypeWeb], @"entryType",
+				 [NSNumber numberWithInteger:DirectoryTypeMap], @"entryType",
 				 nil];
 	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
 	[entryDict release];
@@ -153,7 +153,7 @@
 	
 	
 	if (self.legislator && self.legislator.twitter && [self.legislator.twitter length]) {
-		tempString = ([self.legislator.twitter hasPrefix:@"@"]) ? self.legislator.twitter : [[NSString alloc] initWithFormat:@"@%@", self.legislator.twitter];
+		tempString = ([self.legislator.twitter hasPrefix:@"@"]) ? self.legislator.twitter : [[[NSString alloc] initWithFormat:@"@%@", self.legislator.twitter] autorelease];
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 					 @"Twitter", @"subtitle",
 					 tempString, @"entryValue",

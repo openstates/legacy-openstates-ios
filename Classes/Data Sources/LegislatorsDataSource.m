@@ -9,7 +9,6 @@
 #import "LegislatorsDataSource.h"
 #import "LegislatorObj.h"
 #import "WnomObj.h"
-#import "LegislatorMasterTableViewCell.h"
 #import "UtilityMethods.h"
 #import "ImageCache.h"
 #import "LegislatorMasterCellView.h"
@@ -40,7 +39,6 @@
 @synthesize fetchedResultsController, managedObjectContext;
 @synthesize hideTableIndex;
 @synthesize filterChamber, filterString, searchDisplayController;
-@synthesize leg_cell;
 
 
 
@@ -68,7 +66,6 @@
 	self.searchDisplayController = nil;
 	self.managedObjectContext = nil;	// I THINK THIS IS CORRECT, SINCE WE'VE SYNTHESIZED IT AS RETAIN...
 	self.filterString = nil;
-	self.leg_cell = nil;	
 	
     [super dealloc];
 }
@@ -134,45 +131,7 @@
 		return nil;
 	}
 	
-#if kDeviceSensitiveRowHeight == 0
-	NSUInteger platformType = [[UIDevice currentDevice] platformType];
-	if (platformType != UIDeviceiPhoneSimulatoriPad && platformType <= UIDevice3GiPhone)
-    {
-		static NSString *leg_searchcell_ID = @"LegislatorDirectorySkinny";
-		
-		
-		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:leg_searchcell_ID];
-		if (cell == nil) {
-			
-			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:leg_searchcell_ID] autorelease];
-			
-			cell.detailTextLabel.font =		[TexLegeTheme boldFifteen];
-			cell.textLabel.font =			[TexLegeTheme boldTwelve];
-			cell.detailTextLabel.textColor = [TexLegeTheme textDark];
-			cell.textLabel.textColor =		[TexLegeTheme accent];
-			
-			cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-			cell.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
-			cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
-			cell.detailTextLabel.minimumFontSize = 12.0f;
-			//cell.accessoryView = [TexLegeTheme disclosureLabel:YES];
-			cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]] autorelease];
-		}
-		
-		// configure cell contents
-		cell.textLabel.text = [dataObj.legtype_name stringByAppendingFormat:@" - %@", [dataObj districtPartyString]];
-		cell.detailTextLabel.text = [dataObj legProperName];
-		cell.imageView.image = [UIImage imageNamed:dataObj.photo_name];
-		cell.accessoryView.hidden = (![self showDisclosureIcon] || tableView == self.searchDisplayController.searchResultsTableView);
 
-		return cell;
-    }
-	else
-#endif
-		
-#if 1	// IF YOU WANT QUARTZ DRAWN CELLS ... 
-	{
-			
 		static NSString *leg_cell_ID = @"LegislatorQuartz";		
 			
 		LegislatorMasterCell *cell = (LegislatorMasterCell *)[tableView dequeueReusableCellWithIdentifier:leg_cell_ID];
@@ -188,31 +147,7 @@
 		cell.cellView.useDarkBackground = (indexPath.row % 2 == 0);
 		cell.accessoryView.hidden = (![self showDisclosureIcon] || tableView == self.searchDisplayController.searchResultsTableView);
 		
-		return cell;
-	}
-	
-#else
-	{
-		static NSString *leg_cell_ID = @"LegislatorDirectory";		
-		LegislatorMasterTableViewCell *cell = (LegislatorMasterTableViewCell *)[tableView 
-																				dequeueReusableCellWithIdentifier:leg_cell_ID];
-		if (cell == nil) {
-			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"LegislatorMasterTableViewCell" owner:self options:nil];
-			for (id suspect in objects) {
-				if ([suspect isKindOfClass:[LegislatorMasterTableViewCell class]])
-					self.leg_cell = suspect;
-			}
-			cell = self.leg_cell;
-			self.leg_cell = nil;
-		}
-				
-		[cell setupWithLegislator:dataObj];
-		cell.useDarkBackground = (indexPath.row % 2 == 0);
-		cell.accessoryView.hidden = (![self showDisclosureIcon] || tableView == self.searchDisplayController.searchResultsTableView);
-		
-		return cell;
-	}
-#endif
+		return cell;	
 }
 
 #pragma mark -

@@ -9,6 +9,7 @@
 #import "CommitteesDataSource.h"
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
+#import "TexLegeCoreDataUtils.h"
 
 @implementation CommitteesDataSource
 
@@ -307,21 +308,10 @@
 				//[memberObject setValue:nextId forKey:@"sessionID"];
 
 				// NOW LETS GET THE PROPER LEGISLATOR OBJECT TO LINK THE RELATIONSHIP
-				NSEntityDescription *lege_entity = [NSEntityDescription entityForName:@"LegislatorObj" 
-															   inManagedObjectContext:managedObjectContext];
-				[lege_request setEntity:lege_entity];
+				LegislatorObj *legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:[eachMember valueForKey:@"memberId"] withContext:context];
+				if (legislator)
+					positionObject.legislator = legislator;;
 				
-				NSPredicate *lege_predicate = [NSPredicate predicateWithFormat:@"self.legislatorID == %@", [eachMember valueForKey:@"memberId"]];
-				[lege_request setPredicate:lege_predicate];
-				
-				NSError *error = nil;
-				NSArray *lege_array = [managedObjectContext executeFetchRequest:lege_request error:&error];
-				if (lege_array != nil) {
-					if ([lege_array count] > 0) { // may be 0 if the object has been deleted
-						LegislatorObj * legislatorObject = [lege_array objectAtIndex:0]; // just get the first (only!!) one.
-						[positionObject setValue:legislatorObject forKey:@"legislator"];
-					}
-				}
 				[committeeObject addCommitteePositionsObject:positionObject]; //<label id="code.SVC.addSessionObject"/>
 			}
 

@@ -118,6 +118,10 @@
 	return [self.fetchedResultsController indexPathForObject:dataObject];
 }
 
+
+#pragma mark -
+#pragma DistrictMapSearchOperationDelegate
+
 - (void) searchDistrictMapsForCoordinate:(CLLocationCoordinate2D)aCoordinate withDelegate:(id)mapSearchDelegate {
 	if (self.districtSearchDelegate)
 		self.districtSearchDelegate = nil;
@@ -131,9 +135,6 @@
 	[self.genericOperationQueue addOperation:op];
 	[op release];
 }
-
-#pragma mark -
-#pragma DistrictMapSearchOperationDelegate
 
 - (void)DistrictMapSearchOperationDidFinishSuccessfully:(DistrictMapSearchOperation *)op {	
 	debug_NSLog(@"Found some search results in %d districts", [op.foundDistricts count]);
@@ -424,13 +425,9 @@
     //[self didChangeValueForKey:@"districtMapList"];
 	
 	NSManagedObjectContext *context = self.managedObjectContext;
-	NSEntityDescription *entity = [[self.fetchedResultsController fetchRequest] entity];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictMapObj" 
+											  inManagedObjectContext:context];
 	
-	NSFetchRequest *lege_request = [[NSFetchRequest alloc] init];
-	// NOW LETS GET THE PROPER LEGISLATOR OBJECT TO LINK THE RELATIONSHIP
-	NSEntityDescription *lege_entity = [NSEntityDescription entityForName:@"LegislatorObj" 
-												   inManagedObjectContext:context];
-	[lege_request setEntity:lege_entity];
 	
 	// iterate over the values in the raw  dictionary
 	for (DistrictMap * map in districtMaps)

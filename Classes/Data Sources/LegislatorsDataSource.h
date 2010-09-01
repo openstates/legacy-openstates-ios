@@ -10,11 +10,9 @@
 #import "TableDataSourceProtocol.h"
 #import "LegislatorObj.h"
 
-@class LegislatorMasterTableViewCell;
 
 @interface LegislatorsDataSource : NSObject <TableDataSource>  {
 }
-@property (nonatomic, retain) IBOutlet LegislatorMasterTableViewCell *leg_cell;
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
