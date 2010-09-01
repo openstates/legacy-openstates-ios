@@ -266,10 +266,8 @@ enum InfoSectionRows {
 		else {
 			cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:CellIdentifier] autorelease];			
 		}
-		if ([cell respondsToSelector:@selector(setUseDarkBackground:)])
-			[((LegislatorMasterCell *)cell) setUseDarkBackground:NO];
-		else
-			cell.backgroundColor = [TexLegeTheme backgroundLight];
+
+		cell.backgroundColor = [TexLegeTheme backgroundLight];
 		
 	}    
 	
