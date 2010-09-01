@@ -10,6 +10,7 @@
 #import "DistrictMapObj.h"
 #import "DistrictMapDataSource.h"
 #import "DisclosureQuartzView.h"
+#import "TexLegeCoreDataUtils.h"
 
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
 #import "DistrictMap.h"
@@ -29,6 +30,7 @@
 @synthesize fetchedResultsController, managedObjectContext;
 @synthesize hideTableIndex, byDistrict;
 @synthesize filterChamber, filterString, searchDisplayController;
+@synthesize genericOperationQueue, districtSearchDelegate;
 
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
 @synthesize importer;
@@ -39,7 +41,6 @@
 		if (newContext) self.managedObjectContext = newContext;
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
-		
 		
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
 		[self initializeDatabase];
@@ -60,7 +61,10 @@
 	self.fetchedResultsController = nil;
 	self.managedObjectContext = nil;	
 	self.filterString = nil;
-	
+	if (self.genericOperationQueue)
+		[self.genericOperationQueue cancelAllOperations];
+	self.genericOperationQueue = nil;
+	self.districtSearchDelegate = nil;
     [super dealloc];
 }
 
@@ -114,6 +118,40 @@
 	return [self.fetchedResultsController indexPathForObject:dataObject];
 }
 
+- (void) searchDistrictMapsForCoordinate:(CLLocationCoordinate2D)aCoordinate withDelegate:(id)mapSearchDelegate {
+	if (self.districtSearchDelegate)
+		self.districtSearchDelegate = nil;
+	self.districtSearchDelegate = mapSearchDelegate;
+	
+	NSArray *objectsArray = [TexLegeCoreDataUtils allObjectIDsInEntityNamed:@"DistrictMapObj" context:self.managedObjectContext];
+	debug_NSLog(@"Starting search for coordinate");
+	DistrictMapSearchOperation *op = [[DistrictMapSearchOperation alloc] initWithDelegate:self objects:objectsArray coordinate:aCoordinate];
+	if (!self.genericOperationQueue)
+		self.genericOperationQueue = [[NSOperationQueue alloc] init];
+	[self.genericOperationQueue addOperation:op];
+	[op release];
+}
+
+#pragma mark -
+#pragma DistrictMapSearchOperationDelegate
+
+- (void)DistrictMapSearchOperationDidFinishSuccessfully:(DistrictMapSearchOperation *)op {	
+	debug_NSLog(@"Found some search results in %d districts", [op.foundDistricts count]);
+	
+	if (self.districtSearchDelegate && [self.districtSearchDelegate respondsToSelector:@selector(foundDistrictMapsWithObjectIDs:)])
+		[self.districtSearchDelegate performSelector:@selector(foundDistrictMapsWithObjectIDs:) withObject:op.foundDistricts];
+	
+}
+
+- (void)DistrictMapSearchOperationDidFail:(DistrictMapSearchOperation *)op 
+							 errorMessage:(NSString *)errorMessage 
+								   option:(DistrictMapSearchOperationFailOption)failOption {
+	
+	debug_NSLog(@"The search for the coordinate failed: %@", errorMessage);
+
+}
+
+/*
 - (NSArray *) districtsContainingCoordinate:(CLLocationCoordinate2D)aCoordinate {
 	
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -152,7 +190,7 @@
 	
 	return districts;
 }
-
+*/
 #pragma mark -
 #pragma UITableViewDataSource
 
@@ -426,21 +464,11 @@
 		newObject.numberOfCoords = map.numberOfCoords;
 		newObject.coordinatesData = [map.coordinatesData copy];
 		
-
-		NSPredicate *lege_predicate = [NSPredicate predicateWithFormat:@"self.district == %@ AND self.legtype == %@", map.district, map.chamber];
-		[lege_request setPredicate:lege_predicate];
-		
-		NSError *error = nil;
-		NSArray *lege_array = [context executeFetchRequest:lege_request error:&error];
-		if (lege_array != nil) {
-			if ([lege_array count] > 0) { // may be 0 if the object has been deleted
-				LegislatorObj * legislatorObject = [lege_array objectAtIndex:0]; // just get the first (only!!) one.
-				newObject.legislator = legislatorObject;
-			}
-		}
-		else {
+		LegislatorObj *legislatorObject = [TexLegeCoreDataUtils legislatorForDistrict:map.district andChamber:map.chamber withContext:context];
+		if (legislatorObject)
+			newObject.legislator = legislatorObject;
+		else
 			debug_NSLog(@"No Legislator Found for chamber=%@ district=%@", map.chamber, map.district); 
-		}
 
 		
 		mapCount++;

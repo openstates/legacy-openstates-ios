@@ -7,19 +7,23 @@
 //
 
 #import "TableDataSourceProtocol.h"
+#import "DistrictMapSearchOperation.h"
 #import <MapKit/MapKit.h>
 
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
 @class DistrictMapImporter;
 #endif
 
-@interface DistrictMapDataSource : NSObject <TableDataSource> {
+@interface DistrictMapDataSource : NSObject <TableDataSource, DistrictMapSearchOperationDelegate> {
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
 	NSInteger mapCount;
 #endif
 }
 
-- (NSArray *) districtsContainingCoordinate:(CLLocationCoordinate2D)aCoordinate;
+//- (NSArray *) districtsContainingCoordinate:(CLLocationCoordinate2D)aCoordinate;
+- (void) searchDistrictMapsForCoordinate:(CLLocationCoordinate2D)aCoordinate withDelegate:(id)delegate;
+@property (nonatomic, retain) NSOperationQueue *genericOperationQueue;
+@property (nonatomic, retain) id districtSearchDelegate;
 
 @property (nonatomic, retain)			NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) IBOutlet	NSManagedObjectContext *managedObjectContext;
@@ -28,7 +32,6 @@
 @property (nonatomic,retain)	NSMutableString *filterString;	// @"" means don't filter
 @property (nonatomic, readonly) BOOL hasFilter;
 @property (nonatomic)			BOOL byDistrict;
-
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 - (void) setFilterByString:(NSString *)filter;
