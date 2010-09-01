@@ -14,6 +14,18 @@
 
 @implementation TexLegeCoreDataUtils
 
++ (void)saveWithContext:(NSManagedObjectContext *)context{
+	@try {
+		NSError *error;
+		if (![context save:&error]) {
+			debug_NSLog(@"DirectoryDataSource:save - unresolved error %@, %@", error, [error userInfo]);
+		}		
+	}
+	@catch (NSException * e) {
+		debug_NSLog(@"Failure in DirectoryDataSource:save, name=%@ reason=%@", e.name, e.reason);
+	}
+}
+
 + (LegislatorObj*)legislatorForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber withContext:(NSManagedObjectContext*)context
 {
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.district == %@ AND self.legtype == %@", district, chamber];
@@ -84,17 +96,90 @@
 }
 
 + (NSArray*)allObjectIDsInEntityNamed:(NSString*)entityName context:(NSManagedObjectContext*)context {
-	NSArray *objects = [TexLegeCoreDataUtils allObjectsInEntityNamed:entityName context:context];
-	if (!objects || ![objects count])
+	if (!context || !entityName)
 		return nil;
-	NSMutableArray *objectIDs = [NSMutableArray arrayWithCapacity:[objects count]];
-	for (NSManagedObject *object in objects) {
-		[objectIDs addObject:[object objectID]];
+	
+	NSFetchRequest *request = [[NSFetchRequest alloc] init];
+	
+	NSEntityDescription *entity = [NSEntityDescription entityForName:entityName 
+											  inManagedObjectContext:context];
+	[request setEntity:entity];
+	[request setResultType:NSManagedObjectIDResultType];	// only return object IDs
+	
+	//NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.district == %@ AND self.legtype == %@", district, chamber];
+	//[request setPredicate:predicate];
+	
+	NSError *error = nil;
+	NSArray *objArray = [context executeFetchRequest:request error:&error];
+	if (!objArray || error) {
+		debug_NSLog(@"Error while obtaining objects for entity=%@ error=%@", entityName, error); 
 	}
 	
-	return objectIDs;
+	[request release];
+	return objArray;
+}
+
+/*
+- (NSArray *) allDistrictMapsFetchingBoundingBoxes {
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSManagedObjectContext *context = self.managedObjectContext;
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictMapObj" inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];
+	
+	[fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"minLat", @"maxLat", @"minLon", @"maxLon", nil]];
+	
+	NSError *error = nil;
+	NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+	[fetchRequest release];
+	if (error) {
+		debug_NSLog(@"Problem fetching district maps.");
+		return nil;
+	}
+	
+	NSMutableArray *districts = [[[NSMutableArray alloc] initWithCapacity:181] autorelease];
+	for (DistrictMapObj *map in fetchedObjects) {
+		if ([map districtContainsCoordinate:aCoordinate])
+			[districts addObject:map];
+	}
+	
+	//[self.mapView removeOverlays:[self.mapView overlays]];
+	
+	//[self performSelector:@selector(animateToState) withObject:nil afterDelay:0.3f];
+	//self.shouldAnimate = NO;
+	//[self.mapView addOverlays:array];	
+	
+	return districts;
 	
 }
+*/
+
++ (void) deleteAllObjectsInEntityNamed:(NSString*)entityName context:(NSManagedObjectContext*)context {
+	debug_NSLog(@"I HOPE YOU REALLY WANT TO DO THIS ... DELETING ALL OBJECTS IN %@", entityName);
+	debug_NSLog(@"----------------------------------------------------------------------");
+	
+	if (!context || !entityName)
+		return;
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:entityName
+											  inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];
+	
+	NSError *error;
+	NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+	if (fetchedObjects == nil) {
+		debug_NSLog(@"There's no objects to delete ???");
+	}
+	[fetchRequest release];
+	
+	for (NSManagedObject *object in fetchedObjects) {
+		[context deleteObject:object];
+	}
+	[TexLegeCoreDataUtils saveWithContext:context];
+}
+
+
 
 @end
 
