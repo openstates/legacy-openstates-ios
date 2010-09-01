@@ -536,7 +536,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 			// Add a placemark on the map
 			CustomAnnotation *placemark = [[[CustomAnnotation alloc] initWithBSKmlResult:place] autorelease];
 			
-			[self performSelector:@selector(addDistrictPlacesForAnnotation:) withObject:placemark];
+			DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
+			[dataSource searchDistrictMapsForCoordinate:placemark.coordinate withDelegate:self];
 
 			[self.mapView addAnnotation:placemark];	
 			
@@ -600,18 +601,18 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 #pragma mark -
 #pragma mark MapViewDelegate
 
-- (IBAction) addDistrictPlacesForAnnotation:(id<MKAnnotation>)place {
-	if (!place)
+- (IBAction) foundDistrictMapsWithObjectIDs:(NSArray *)objectIDs {
+	if (!objectIDs)
 		return;
-	
-	DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
-	NSArray *districts = [dataSource districtsContainingCoordinate:place.coordinate];
-	for (DistrictMapObj *district in districts) {
-		[self.mapView addOverlay:[district polygon]];
-		for (DistrictOfficeObj *office in district.legislator.districtOffices)
-			[self.mapView addAnnotation:office];
-	}
-	
+
+	for (NSManagedObjectID *objectID in objectIDs) {
+		DistrictMapObj *district = (DistrictMapObj *)[[[TexLegeAppDelegate appDelegate] managedObjectContext] objectWithID:objectID];
+		if (district) {
+			[self.mapView addOverlay:[district polygon]];
+			for (DistrictOfficeObj *office in district.legislator.districtOffices)
+				[self.mapView addAnnotation:office];
+		}
+	}	
 }
 
 
@@ -626,7 +627,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 			// we have received our current location, so start reverse geocoding the address
 			//[self reverseGeocodeCurrentLocation];
 			
-			[self performSelector:@selector(addDistrictPlacesForAnnotation:) withObject:self.mapView.userLocation afterDelay:.0f];
+			DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
+			[dataSource searchDistrictMapsForCoordinate:self.mapView.userLocation.coordinate withDelegate:self];
 			
 			if (!theMapView.userLocationVisible)
 				[self performSelector:@selector(animateToAnnotation:) withObject:aView.annotation afterDelay:.5f];

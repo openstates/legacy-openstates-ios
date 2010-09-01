@@ -42,6 +42,7 @@
 - (void) clearAnnotationsAndOverlaysExceptRecent;
 - (void) resetMapViewWithAnimation:(BOOL)animated;
 - (void)moveMapToAnnotation:(id<MKAnnotation>)annotation;
+- (IBAction) foundDistrictMapsWithObjectIDs:(NSArray *)objectIDs;
 
 	
 //- (NSString *)popoverButtonTitle;
