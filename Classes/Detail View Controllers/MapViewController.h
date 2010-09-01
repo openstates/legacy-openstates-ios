@@ -39,6 +39,7 @@
 - (IBAction) locateUser:(id)sender;
 - (IBAction) reverseGeocodeCurrentLocation;
 - (void) clearAnnotationsAndOverlays;
+- (void) clearAnnotationsAndOverlaysExceptRecent;
 - (void) resetMapViewWithAnimation:(BOOL)animated;
 - (void)moveMapToAnnotation:(id<MKAnnotation>)annotation;
 

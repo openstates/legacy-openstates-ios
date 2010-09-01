@@ -13,6 +13,8 @@
 #import "LegislatorMasterViewController.h"
 #import "LegislatorObj.h"
 #import "DistrictOfficeObj.h"
+#import "DistrictMapObj.h"
+
 #import "CommitteeObj.h"
 #import "CommitteePositionObj.h"
 #import "WnomObj.h"
@@ -302,9 +304,37 @@
 	self.notesPopover = nil;
 }
 
-
+/*- (IBAction) showHidePopoverButton:(id)sender {
+	if (![UtilityMethods isIPadDevice])
+		return;
+	
+	BOOL changed = NO;
+	NSMutableArray *buttons = [[NSMutableArray alloc] initWithArray:self.toolbar.items];
+	
+	if ([UtilityMethods isLandscapeOrientation]) {
+		if ([buttons containsObject:self.bookmarksButton]) {
+			[buttons removeObject:self.bookmarksButton];
+			changed = YES;
+		}
+	}
+	else { 
+		if (![buttons containsObject:self.bookmarksButton]) {
+			[buttons insertObject:self.bookmarksButton atIndex:[buttons count]-1];
+			changed = YES;
+		}
+	}
+	if (changed)
+		[self.toolbar setItems:buttons animated:YES];
+	
+	debug_NSLog(@"%@", self.toolbar.items);
+	
+	[buttons release];
+}
+*/	
+	
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+	
 	BOOL showSplash = ([UtilityMethods isLandscapeOrientation] == NO && [UtilityMethods isIPadDevice]);
 
 	if ([UtilityMethods isIPadDevice] && !self.legislator && ![UtilityMethods isLandscapeOrientation])  {
@@ -319,7 +349,7 @@
 		[self setupHeader];
 	}
 
-	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
+//	[self showHidePopoverButton:nil];
 
 	if (showSplash) {
 		// TODO: We could alternatively use this opportunity to open a proper informational introduction
@@ -436,19 +466,27 @@
 		}
 		// Switch to the appropriate application for this url...
 		else if (cellInfo.entryType == DirectoryTypeMap) {
-			if (![cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]])
-				return;
-			
-			MapViewController *mapVC = [MapViewController sharedMapViewController];
-			DistrictOfficeObj *districtOffice = cellInfo.entryValue;
-			
-			[mapVC resetMapViewWithAnimation:NO];
-			[mapVC.mapView addAnnotation:districtOffice];
-			[mapVC moveMapToAnnotation:districtOffice];
-			//[mapVC.mapView addOverlay:[self.legislator.districtMap polygon]];
-			[self.navigationController pushViewController:mapVC animated:YES];
-			//[mapVC release];
-			
+			if ([cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]] || [cellInfo.entryValue isKindOfClass:[DistrictMapObj class]])
+			{			
+				MapViewController *mapVC = [MapViewController sharedMapViewController];
+				
+				DistrictOfficeObj *districtOffice = nil;
+				if ([cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]])
+					districtOffice = cellInfo.entryValue;
+				
+				[mapVC resetMapViewWithAnimation:NO];
+				[mapVC.mapView addOverlay:[self.legislator.districtMap polygon]];
+
+				if (districtOffice) {
+					[mapVC.mapView addAnnotation:districtOffice];
+					[mapVC moveMapToAnnotation:districtOffice];
+				}
+				else {
+					[mapVC.mapView setRegion:self.legislator.districtMap.region animated:YES]; 
+				}
+				[self.navigationController pushViewController:mapVC animated:YES];
+				//[mapVC release];
+			}
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&
 				 cellInfo.entryType < kDirectoryTypeIsExternalHandler) {	// handle the URL ourselves in a webView
@@ -482,8 +520,7 @@
 		return height;
 	}
 	
-	if (cellInfo.entryType == DirectoryTypeMap ||
-		[cellInfo.subtitle rangeOfString:@"Address"].length )
+	if ([cellInfo.subtitle rangeOfString:@"Address"].length )
 		height = 98.0f;
 	else if ([cellInfo.entryValue isKindOfClass:[NSString string]]) {
 		NSString *tempStr = cellInfo.entryValue;

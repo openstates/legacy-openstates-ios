@@ -89,8 +89,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 	self.forwardGeocoder = nil;
 	self.reverseGeocoder = nil;
 
-	[self clearAnnotationsAndOverlays];
-	[self resetMapViewWithAnimation:YES];
+	[self clearAnnotationsAndOverlaysExceptRecent];
+	//[self resetMapViewWithAnimation:YES];
 
 	[super didReceiveMemoryWarning];
 }
@@ -238,6 +238,20 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 	[self.mapView removeOverlays:self.mapView.overlays];
 	[self.mapView removeAnnotations:self.mapView.annotations];
 }
+
+- (void) clearAnnotationsAndOverlaysExceptRecent {
+	self.mapView.showsUserLocation = NO;
+	
+	NSMutableArray *toRemove = [[NSMutableArray alloc] initWithArray:self.mapView.overlays];
+	[toRemove removeLastObject];
+	[self.mapView removeOverlays:toRemove];
+	[toRemove removeAllObjects];
+	[toRemove setArray:self.mapView.annotations];
+	[toRemove removeLastObject];
+	[self.mapView removeAnnotations:toRemove];
+	[toRemove release];
+}
+
 
 
 - (void) resetMapViewWithAnimation:(BOOL)animated {
