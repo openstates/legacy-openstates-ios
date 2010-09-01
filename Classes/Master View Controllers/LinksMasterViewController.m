@@ -20,7 +20,7 @@
 @implementation LinksMasterViewController
 
 
-@synthesize dataSource, detailViewController, aboutControl, miniBrowser;
+@synthesize dataSource, detailViewController;
 @synthesize selectObjectOnAppear;
 
 - (NSString *) viewControllerKey {
@@ -50,14 +50,10 @@
 }
 
 - (void)dealloc {
-	self.aboutControl = nil;
-	self.miniBrowser = nil;
 	[super dealloc];
 }
 
 - (void)didReceiveMemoryWarning {
-	self.aboutControl = nil;
-	self.miniBrowser = nil;
 	
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
     // Release anything that's not essential, such as cached data
@@ -74,8 +70,6 @@
 }
 
 - (void)viewDidUnload {
-	self.aboutControl = nil;
-	self.miniBrowser = nil;
 	[super viewDidUnload];
 }
 

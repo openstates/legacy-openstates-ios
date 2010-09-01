@@ -82,7 +82,7 @@ static MiniBrowserController *s_browser = nil;
 		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
 		self.sealColor = [UIColor colorWithPatternImage:sealImage];		
 		
-		self.modalPresentationStyle = UIModalPresentationFullScreen;
+		self.modalPresentationStyle = UIModalPresentationCurrentContext; //UIModalPresentationFullScreen;
 		m_shouldStopLoadingOnHide = YES;
 		m_loadingInterrupted = NO;
 		m_urlRequestToLoad = nil;
