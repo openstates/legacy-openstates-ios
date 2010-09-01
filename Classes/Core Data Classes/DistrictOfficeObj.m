@@ -76,31 +76,30 @@
 {
     if (self = [super init])
     {
-		if (!dictionary)
-			return;
-		
-        self.district = [dictionary objectForKey:@"district"];
-        self.chamber = [dictionary objectForKey:@"chamber"];
-		self.pinColorIndex = [dictionary objectForKey:@"pinColorIndex"];
-		self.longitude = [dictionary objectForKey:@"longitude"];
-		self.latitude = [dictionary objectForKey:@"latitude"];
-		self.spanLon = [dictionary objectForKey:@"spanLon"];
-		self.spanLat = [dictionary objectForKey:@"spanLat"];
-		self.stateCode = [dictionary objectForKey:@"stateCode"];
-		self.formattedAddress = [dictionary objectForKey:@"formattedAddress"];
-		self.address = [dictionary objectForKey:@"address"];
-		self.city = [dictionary objectForKey:@"city"];
-		self.county = [dictionary objectForKey:@"county"];
-		self.phone = [dictionary objectForKey:@"phone"];
-		self.fax = [dictionary objectForKey:@"fax"];
-		self.zipCode = [dictionary objectForKey:@"zipCode"];
-		
-		NSNumber *legislatorID = [dictionary objectForKey:@"legislatorID"];
-		if (legislatorID)
-			self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
-		else
-			self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
-		// ignore district map for now
+		if (dictionary) {
+			self.district = [dictionary objectForKey:@"district"];
+			self.chamber = [dictionary objectForKey:@"chamber"];
+			self.pinColorIndex = [dictionary objectForKey:@"pinColorIndex"];
+			self.longitude = [dictionary objectForKey:@"longitude"];
+			self.latitude = [dictionary objectForKey:@"latitude"];
+			self.spanLon = [dictionary objectForKey:@"spanLon"];
+			self.spanLat = [dictionary objectForKey:@"spanLat"];
+			self.stateCode = [dictionary objectForKey:@"stateCode"];
+			self.formattedAddress = [dictionary objectForKey:@"formattedAddress"];
+			self.address = [dictionary objectForKey:@"address"];
+			self.city = [dictionary objectForKey:@"city"];
+			self.county = [dictionary objectForKey:@"county"];
+			self.phone = [dictionary objectForKey:@"phone"];
+			self.fax = [dictionary objectForKey:@"fax"];
+			self.zipCode = [dictionary objectForKey:@"zipCode"];
+			
+			NSNumber *legislatorID = [dictionary objectForKey:@"legislatorID"];
+			if (legislatorID)
+				self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
+			else
+				self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
+			// ignore district map for now
+		}
     }
 	return self;
 }
