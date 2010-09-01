@@ -20,8 +20,12 @@
 #import "AnalyticsOptInAlertController.h"
 
 #import "LocalyticsSession.h"
-
 #import "DistrictMapDataSource.h"
+
+#define EXPORTING_DATA 0
+#if EXPORTING_DATA == 1
+#import "TexLegeDataExporter.h"
+#endif
 
 @interface TexLegeAppDelegate (Private)
 
@@ -51,7 +55,7 @@ NSInteger kNoSelection = -1;
 @synthesize savedTableSelection, appIsQuitting;
 
 @synthesize mainWindow;
-@synthesize aboutView, activeDialogController, analyticsOptInController;
+@synthesize analyticsOptInController;
 @synthesize remoteHostStatus, internetConnectionStatus, localWiFiConnectionStatus;
 
 @synthesize managedObjectContext;
@@ -77,8 +81,6 @@ NSInteger kNoSelection = -1;
 	self.districtMapDataSource = nil;
 	self.savedTableSelection = nil;
 	self.analyticsOptInController = nil;
-	self.activeDialogController = nil;
-	self.aboutView = nil;
 	self.tabBarController = nil;
 	self.mainWindow = nil;    
 	
@@ -100,7 +102,6 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
-	self.aboutView = nil;
 	self.analyticsOptInController = nil;
 }
 
@@ -333,6 +334,12 @@ NSInteger kNoSelection = -1;
 		
 	[[LocalyticsSession sharedLocalyticsSession] startSession:@"111c245bdf4ad08686ac12b-eae4b72e-9439-11df-5b0c-009ee7c87684"];
 		
+	
+#if EXPORTING_DATA == 1
+	TexLegeDataExporter *exporter = [[TexLegeDataExporter alloc] initWithManagedObjectContext:self.managedObjectContext];
+	[exporter exportDistrictOffices];
+	[exporter release];
+#endif
 	return YES;
 }
 
@@ -392,62 +399,6 @@ NSInteger kNoSelection = -1;
 	[[LocalyticsSession sharedLocalyticsSession] upload];	
 }
 
-
-#pragma mark -
-#pragma mark Alerts and Dialog Boxes
-
-
-- (void)showAboutDialog:(UIViewController *)controller {
-	if (![UtilityMethods isIPadDevice]) {
-		if (!controller)
-			return;
-		
-		self.activeDialogController = controller;
-		
-		if (!self.aboutView) {
-			self.aboutView = [[[TexLegeInfoController alloc] initWithNibName:@"TexLegeInfoController~iphone" bundle:nil] autorelease];	
-			self.aboutView.delegate = self;
-			self.aboutView.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-			self.aboutView.modalPresentationStyle = UIModalPresentationFormSheet;
-		}
-		
-		if (self.aboutView)
-			[controller presentModalViewController:self.aboutView animated:YES];
-	}
-}
-
-- (void)modalViewControllerDidFinish:(UIViewController *)controller {
-	if (![UtilityMethods isIPadDevice] && self.activeDialogController) {
-		BOOL isAbout = [self.activeDialogController.modalViewController isEqual:self.aboutView];
-		
-		[self.activeDialogController dismissModalViewControllerAnimated:YES];
-		if (isAbout)
-			self.aboutView = nil;
-	}
-}
-
-/*
- 
- // add this to init: or something
- [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
- (void)deviceOrientationDidChange:(void*)object { UIDeviceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
- 
- if (UIInterfaceOrientationIsLandscape(orientation)) {
- // do something
- } else {
- // do something else
- }
- }
- // add this to done: or something
- [[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIDeviceOrientationDidChangeNotification" object:nil];
- 
- */
-
-
-/*
- - (void)application:(UIApplication *)application willChangeStatusBarOrientation:(UIInterfaceOrientation)newStatusBarOrientation duration:(NSTimeInterval)duration {
-	// a cheat, so that we can dismiss all our popovers, if they're open.
-}*/
 
 #pragma mark - 
 #pragma mark Reachability

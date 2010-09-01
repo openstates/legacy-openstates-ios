@@ -18,8 +18,7 @@
 @class AnalyticsOptInAlertController;
 @class DistrictMapDataSource;
 
-@interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate, 
-		TexLegeInfoControllerDelegate> 
+@interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate> 
 {
 	NSManagedObjectModel *managedObjectModel;
 	NSPersistentStoreCoordinator *persistentStoreCoordinator;
@@ -37,8 +36,6 @@
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 // For Alerts and Modal Dialogs
-@property (nonatomic, retain) TexLegeInfoController *aboutView;
-@property (nonatomic, retain) UIViewController *activeDialogController;
 @property (nonatomic, retain) AnalyticsOptInAlertController *analyticsOptInController;
 
 // For Functional View Controllers
