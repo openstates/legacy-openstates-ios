@@ -208,7 +208,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 	if (changed)
 		[self.toolbar setItems:buttons animated:YES];
 
-	debug_NSLog(@"%@", self.toolbar.items);
+	//debug_NSLog(@"%@", self.toolbar.items);
 
 	[buttons release];
 }
@@ -243,12 +243,16 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 	self.mapView.showsUserLocation = NO;
 	
 	NSMutableArray *toRemove = [[NSMutableArray alloc] initWithArray:self.mapView.overlays];
-	[toRemove removeLastObject];
-	[self.mapView removeOverlays:toRemove];
-	[toRemove removeAllObjects];
+	if (toRemove && [toRemove count]) {
+		[toRemove removeLastObject];
+		[self.mapView removeOverlays:toRemove];
+		[toRemove removeAllObjects];
+	}
 	[toRemove setArray:self.mapView.annotations];
-	[toRemove removeLastObject];
-	[self.mapView removeAnnotations:toRemove];
+	if (toRemove && [toRemove count]) {
+		[toRemove removeLastObject];
+		[self.mapView removeAnnotations:toRemove];
+	}
 	[toRemove release];
 }
 

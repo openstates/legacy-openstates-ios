@@ -35,7 +35,7 @@
 #import "PartisanIndexStats.h"
 #import "UIImage+ResolutionIndependent.h"
 #import "ImageCache.h"
-#import "CommonPopoversController.h"
+
 #import "TexLegeEmailComposer.h"
 
 #import "ColoredBarButtonItem.h"
@@ -61,7 +61,7 @@
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab, freshmanPlotLab;
 @synthesize indivSlider, partySlider, allSlider;
 @synthesize indivPHolder, partyPHolder, allPHolder;
-@synthesize notesPopover;
+@synthesize notesPopover, masterPopover;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -90,7 +90,6 @@
 	
 	self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 	self.clearsSelectionOnViewWillAppear = NO;
-	//self.hidesBottomBarWhenPushed = YES;
 	
 	self.dataForPlot = [NSMutableArray array];
 	
@@ -163,12 +162,15 @@
 	self.startupSplashView = nil;	
 	self.leg_photoView = nil;
 	self.dataForPlot = nil;
-	self.notesPopover = nil;
 	self.tableView = nil;
 	self.scatterPlotView = nil;
 	self.miniBackgroundView = nil;
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
 	//self.scatterPlotView = nil;
+	
+	self.notesPopover = nil;
+	self.masterPopover = nil;
+
 	[super viewDidUnload];
 }
 
@@ -189,11 +191,13 @@
 	self.startupSplashView = nil;	
 	self.leg_photoView = nil;
 	self.dataForPlot = nil;
-	self.notesPopover = nil;
 	self.tableView = nil;
 	self.scatterPlotView = nil;
 	self.miniBackgroundView = nil;
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
+
+	self.notesPopover = nil;
+	self.masterPopover = nil;
 
 	[super dealloc];
 }
@@ -281,10 +285,10 @@
 		
 		[self setupHeader];
 		
-		if ([UtilityMethods isIPadDevice]) {
-			[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];
-		}
-				
+		if (masterPopover != nil) {
+			[masterPopover dismissPopoverAnimated:YES];
+		}		
+		
 		[self.tableView reloadData];
 		[self.view setNeedsDisplay];
 	}
@@ -292,45 +296,19 @@
 #pragma mark -
 #pragma mark Managing the popover
 
-
+/*
 - (NSString *)popoverButtonTitle {
 	return @"Legislators";	
 }
+*/
 
 // Called on the delegate when the user has taken action to dismiss the popover. This is not called when -dismissPopoverAnimated: is called directly.
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
 	[self.tableView reloadData];
 	debug_NSLog(@"%@", self.tableView);
-	self.notesPopover = nil;
+	if (self.notesPopover && [self.notesPopover isEqual:popoverController])
+		self.notesPopover = nil;
 }
-
-/*- (IBAction) showHidePopoverButton:(id)sender {
-	if (![UtilityMethods isIPadDevice])
-		return;
-	
-	BOOL changed = NO;
-	NSMutableArray *buttons = [[NSMutableArray alloc] initWithArray:self.toolbar.items];
-	
-	if ([UtilityMethods isLandscapeOrientation]) {
-		if ([buttons containsObject:self.bookmarksButton]) {
-			[buttons removeObject:self.bookmarksButton];
-			changed = YES;
-		}
-	}
-	else { 
-		if (![buttons containsObject:self.bookmarksButton]) {
-			[buttons insertObject:self.bookmarksButton atIndex:[buttons count]-1];
-			changed = YES;
-		}
-	}
-	if (changed)
-		[self.toolbar setItems:buttons animated:YES];
-	
-	debug_NSLog(@"%@", self.toolbar.items);
-	
-	[buttons release];
-}
-*/	
 	
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -349,8 +327,6 @@
 		[self setupHeader];
 	}
 
-//	[self showHidePopoverButton:nil];
-
 	if (showSplash) {
 		// TODO: We could alternatively use this opportunity to open a proper informational introduction
 		// for instance, drop in a new view taking the full screen that gives a full menu and helpful info
@@ -360,8 +336,6 @@
 			self.startupSplashView = [objects objectAtIndex:0];
 		}
 		[self.view addSubview:self.startupSplashView];
-		
-		//[[CommonPopoversController sharedCommonPopoversController] displayMainMenuPopover:self.navigationItem.leftBarButtonItem];
 	}
 	else {
 		[self.startupSplashView removeFromSuperview];
@@ -376,26 +350,27 @@
 	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
 	   forPopoverController: (UIPopoverController*)pc {
 	
-	//[self showMasterListPopoverButtonItem:barButtonItem];
-	//[self showMainMenuPopoverButtonItem];
-	
-    //self.popoverController = pc;
+	barButtonItem.title = @"Legislators";
+	[self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
+	self.masterPopover = pc;
 }
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
 - (void)splitViewController: (UISplitViewController*)svc 
 	 willShowViewController:(UIViewController *)aViewController 
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-	
-	//[self invalidateMasterListPopoverButtonItem:barButtonItem];
-	//[self invalidateMainMenuPopoverButtonItem];
-
-	//self.popoverController = nil;
+		
+	[self.navigationItem setRightBarButtonItem:nil animated:YES];
+	self.masterPopover = nil;
 }
 
 - (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
    willPresentViewController: (UIViewController *)aViewController
 {
+	if (self.notesPopover) {
+		[self.notesPopover dismissPopoverAnimated:YES];
+		self.notesPopover = nil;
+	}
 /*    if (pc != nil) {
 		[[TexLegeAppDelegate appDelegate] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
         //[pc dismissPopoverAnimated:YES];
@@ -534,7 +509,7 @@
 - (void) pushMapViewWithMap:(CapitolMap *)capMap {
 	CapitolMapsDetailViewController *detailController = [[CapitolMapsDetailViewController alloc] initWithNibName:@"CapitolMapsDetailViewController" bundle:nil];
 	detailController.map = capMap;
-	//detailController.navigationItem.title = @"Maps";
+
 	// push the detail view controller onto the navigation stack to display it
 	[[self navigationController] pushViewController:detailController animated:YES];
 	[detailController release];

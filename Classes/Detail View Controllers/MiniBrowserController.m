@@ -7,8 +7,9 @@
 #import "MiniBrowserController.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
-#import "CommonPopoversController.h"
+#import "TexLegeEmailComposer.h"
 #import "LinkObj.h"
+#import "LinksMasterViewController.h"
 
 @interface MiniBrowserController (Private)
 	- (void)animate;
@@ -37,6 +38,7 @@ enum
 @synthesize m_currentURL;
 @synthesize sealColor;
 @synthesize m_loadingInterrupted, m_normalItemList, m_shouldDisplayOnViewLoad, m_parentCtrl, m_authCallback;
+@synthesize masterPopover, m_shouldHideDoneButton;
 
 static MiniBrowserController *s_browser = nil;
 
@@ -67,6 +69,9 @@ static MiniBrowserController *s_browser = nil;
 	return s_browser;
 }
 
+- (NSString *)nibName {
+	return @"MiniBrowserView";
+}
 
 // The designated initializer. Override to perform setup that is required before the view is loaded.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
@@ -86,6 +91,7 @@ static MiniBrowserController *s_browser = nil;
 		m_parentCtrl = nil;
 		m_shouldUseParentsView = NO;
 		m_shouldDisplayOnViewLoad = NO;
+		m_shouldHideDoneButton = NO;
 		self.m_normalItemList = nil;
 		m_loadingItemList = nil;
 		m_authCallback = nil;
@@ -99,7 +105,7 @@ static MiniBrowserController *s_browser = nil;
 - (void)didReceiveMemoryWarning 
 {
 	[self stopLoading]; // should we do more, like just close up shop?
-	//if (m_parentCtrl && [m_parentCtrl modalViewController])
+	if (m_parentCtrl)// && [m_parentCtrl modalViewController])
 		[m_parentCtrl dismissModalViewControllerAnimated:YES];
 
 	[super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
@@ -115,23 +121,52 @@ static MiniBrowserController *s_browser = nil;
 	self.m_normalItemList = nil;
 	if (m_urlRequestToLoad) [m_urlRequestToLoad release];
 	if (m_loadingItemList) [m_loadingItemList release];
+	self.masterPopover = nil;
 	[super dealloc];
 }
 
 #pragma mark -
 #pragma mark Popovers and Split Views
-
+/*
 - (NSString *)popoverButtonTitle {
 	return @"Resources";
 }
+*/
 
+- (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
+    
+    barButtonItem.title = @"Resources";
+    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
+    self.masterPopover = pc;
+}
+
+
+// Called when the view is shown again in the split view, invalidating the button and popover controller.
+- (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
+    
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+    self.masterPopover = nil;
+}
+
+- (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
+   willPresentViewController: (UIViewController *)aViewController
+{
+}	
+
+#pragma mark -
+#pragma mark UIToolBar buttons
 
 - (void)normalizeToolbarButtons {
 	// get the current list of buttons
 	if (self.m_normalItemList)
 		self.m_normalItemList = nil;
 	
-	self.m_normalItemList = [[NSArray alloc] initWithArray:m_toolBar.items];
+	NSMutableArray *alteredButtonList = [[NSMutableArray alloc] initWithArray:m_toolBar.items];
+	if (m_shouldHideDoneButton && [alteredButtonList containsObject:self.m_doneButton])
+		[alteredButtonList removeObject:self.m_doneButton];
+
+	self.m_normalItemList = [NSArray arrayWithArray:alteredButtonList];
+	[alteredButtonList release];	
 	
 	// generate a list of buttons to display while loading
 	// (this enables a stop button)
@@ -191,28 +226,44 @@ static MiniBrowserController *s_browser = nil;
 	
 	[self normalizeToolbarButtons];
 	
-	if ( m_shouldDisplayOnViewLoad )
+	if ( self.m_shouldDisplayOnViewLoad )
 	{
-		m_shouldDisplayOnViewLoad = NO;
+		self.m_shouldDisplayOnViewLoad = NO;
 		[m_parentCtrl presentModalViewController:self animated:YES];
 	}
 }
 
+- (void)viewDidUnload {
+	self.m_webView = nil;
+	self.m_toolBar = nil;
+	self.m_loadingLabel = nil;
+	self.link = nil;
+	self.m_backButton = nil;
+	self.m_reloadButton = nil;
+	self.m_fwdButton = nil;
+	self.m_doneButton = nil;
+	self.m_loadingItemList = nil;
+	self.m_normalItemList = nil;
+	self.masterPopover = nil;
+	[super viewDidUnload];
+}
 
 
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
 	
-	if ([UtilityMethods isIPadDevice])
+	if (m_shouldHideDoneButton)
 	{
-		if ([UtilityMethods isIPadDevice])
-			[self removeDoneButton];
+		[self removeDoneButton];
 		[self normalizeToolbarButtons];
-		
-		[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
-
 	}
+	
+	if ([UtilityMethods isIPadDevice] && !self.link && ![UtilityMethods isLandscapeOrientation])  {
+		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+		
+		self.link = [[appDelegate linksMasterVC] selectObjectOnAppear];		
+	}	
 	
 }
 
@@ -221,34 +272,37 @@ static MiniBrowserController *s_browser = nil;
 {
 	[super viewDidAppear:animated];
 	
-	if ( m_urlRequestToLoad != nil )
+	if ( self.m_urlRequestToLoad != nil )
 	{
 		[self LoadRequest:m_urlRequestToLoad];
-		[m_urlRequestToLoad release]; m_urlRequestToLoad = nil;
+		[m_urlRequestToLoad release];
+		self.m_urlRequestToLoad = nil;
 	}
-	else if ( m_loadingInterrupted )
+	else if ( self.m_loadingInterrupted )
 	{
-		[m_webView reload];
+		[self.m_webView reload];
 	}
-	m_loadingInterrupted = NO;
+	self.m_loadingInterrupted = NO;
 	
-	[self enableBackButton:m_webView.canGoBack];
-	[self enableFwdButton:m_webView.canGoForward];
+	[self enableBackButton:self.m_webView.canGoBack];
+	[self enableFwdButton:self.m_webView.canGoForward];
 }
 
 
 - (void)viewWillDisappear:(BOOL)animated 
 {
-	if ( m_shouldStopLoadingOnHide )
+	if ( self.m_shouldStopLoadingOnHide )
 	{
-		if ( m_webView.loading )
+		if ( self.m_webView.loading )
 		{
-			m_loadingInterrupted = YES;
+			self.m_loadingInterrupted = YES;
 		}
 		[self stopLoading];
 	}
 	
 	[super viewWillDisappear:animated];
+//	if (self.masterPopover)
+//		[self.masterPopover dismissPopoverAnimated:YES];
 }
 
 
@@ -268,7 +322,7 @@ static MiniBrowserController *s_browser = nil;
 {
 	m_parentCtrl = parentController;
 	m_authCallback = nil;
-	if ( m_webView != nil )
+	if ( self.m_webView != nil )
 	{
 		//GREG!!!!
 		[m_parentCtrl presentModalViewController:self animated:YES];
@@ -285,33 +339,35 @@ static MiniBrowserController *s_browser = nil;
 - (IBAction)closeButtonPressed:(id)button
 {
 	// dismiss the view
-	//if (m_parentCtrl && [m_parentCtrl modalViewController])
+	if (m_parentCtrl /*&& [m_parentCtrl modalViewController]*/)
 		[m_parentCtrl dismissModalViewControllerAnimated:YES];
+	else
+		[self.parentViewController dismissModalViewControllerAnimated:YES];
 	//[self animate];
 }
 
 
 - (IBAction)backButtonPressed:(id)button
 {
-	if ( m_webView.canGoBack ) [m_webView goBack];
+	if ( self.m_webView.canGoBack ) [self.m_webView goBack];
 }
 
 
 - (IBAction)fwdButtonPressed:(id)button
 {
-	if ( m_webView.canGoForward ) [m_webView goForward];
+	if ( self.m_webView.canGoForward ) [self.m_webView goForward];
 }
 
 
 - (IBAction)refreshButtonPressed:(id)button
 {
-	if ( m_webView.loading )
+	if ( self.m_webView.loading )
 	{
 		[self stopLoading];
 	}
 	else 
 	{
-		[m_webView reload];
+		[self.m_webView reload];
 	}
 }
 
@@ -322,74 +378,82 @@ static MiniBrowserController *s_browser = nil;
 }
 
 - (void)setLink:(LinkObj *)newLink {
-	if (link && newLink && [link isEqual:newLink])
-		return;
+	if (self.masterPopover)
+		[self.masterPopover dismissPopoverAnimated:YES];
 	
 	if (link) [link release], link = nil;
 	if (newLink) link = [newLink retain];
 	
 	if (link) {
-		self.title = link.label;
+		if ([self.link.url isEqualToString:@"contactMail"])
+			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
+																			 subject:@"TexLege Support Question" 
+																				body:@"" commander:[[TexLegeAppDelegate appDelegate] detailNavigationController]];
+		else {
+			self.title = link.label;
+			
+			NSURL *aURL = [UtilityMethods safeWebUrlFromString:link.url];
+			if (aURL && [UtilityMethods canReachHostWithURL:aURL alert:NO]) // got a network connection
+				[self loadURL:aURL];			
+		}
 		
-		NSURL *aURL = [UtilityMethods safeWebUrlFromString:link.url];
-		if (aURL && [UtilityMethods canReachHostWithURL:aURL alert:NO]) // got a network connection
-			[self loadURL:aURL];
 	}
 	
 }
 
 - (void)loadURL:(NSURL *)url
 {
-	if ( url == nil ) return;
+	if (!url)
+		return;
 	
 	self.m_currentURL = url;
 	
-	m_loadingInterrupted = NO;
+	self.m_loadingInterrupted = NO;
 	
 	// cancel any transaction currently taking place
-	if ( m_webView.loading ) [m_webView stopLoading];
+	if ( self.m_webView.loading ) [m_webView stopLoading];
 	
 	if ( [self.view isHidden] )
 	{
-		[m_urlRequestToLoad release];
-		m_urlRequestToLoad = [[NSURLRequest alloc] initWithURL:url];
+		self.m_urlRequestToLoad = nil;
+		self.m_urlRequestToLoad = [[[NSURLRequest alloc] initWithURL:url] autorelease];
 	}
 	else
 	{
-		[m_webView loadRequest:[NSURLRequest requestWithURL:url]];
+		[self.m_webView loadRequest:[NSURLRequest requestWithURL:url]];
 	}
 }
 
 
 - (void)LoadRequest:(NSURLRequest *)urlRequest
 {
-	m_loadingInterrupted = NO;
+	self.m_loadingInterrupted = NO;
 	
 	// cancel any transaction currently taking place
-	if ( m_webView.loading ) [m_webView stopLoading];
+	if ( self.m_webView.loading ) [self.m_webView stopLoading];
 	
 	if ( [self.view isHidden] )
 	{
 		// do it this goofy way just in case (url == m_urlRequestToLoad)
 		[urlRequest retain];
-		[m_urlRequestToLoad release];
-		m_urlRequestToLoad = [[NSURLRequest alloc] initWithURL:[urlRequest URL]];
+		self.m_urlRequestToLoad = nil;
+		self.m_urlRequestToLoad = [[[NSURLRequest alloc] initWithURL:[urlRequest URL]]autorelease];
 		[urlRequest release];
 	}
 	else
 	{
-		[m_webView loadRequest:urlRequest];
+		[self.m_webView loadRequest:urlRequest];
 	}
 }
 
 
 - (void)stopLoading
 {
-	if ( m_webView.loading )
+	if ( self.m_webView.loading )
 	{
-		[m_webView stopLoading];
-		[m_activity stopAnimating];
-		[m_loadingLabel setHidden:YES];
+		[self.m_webView stopLoading];
+		[self.m_activity stopAnimating];
+		[self.m_loadingLabel setHidden:YES];
 	}
 }
 
@@ -413,7 +477,7 @@ static MiniBrowserController *s_browser = nil;
 	}
 	
 	// do the auth-callback if requested
-	if ( nil != m_authCallback )
+	if (m_authCallback )
 	{
 		if ( [m_parentCtrl respondsToSelector:m_authCallback] )
 		{
@@ -433,7 +497,7 @@ static MiniBrowserController *s_browser = nil;
 	//debug_NSLog(@"Parent 1st nav view %@", [[[m_parentCtrl navigationController].viewControllers objectAtIndex:0] view]);
 	
 	UIView *topView = nil;
-	if ( m_shouldUseParentsView )
+	if ( self.m_shouldUseParentsView )
 	{
 		topView = [m_parentCtrl view];
 		if ( topView == nil )
@@ -459,7 +523,7 @@ static MiniBrowserController *s_browser = nil;
 		
 		//debug_NSLog(@"%@", [topView description]);
 		
-		m_shouldUseParentsView = NO;
+		self.m_shouldUseParentsView = NO;
 		
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.5f];
@@ -504,13 +568,13 @@ static MiniBrowserController *s_browser = nil;
 
 - (void)enableBackButton:(BOOL)enable
 {
-	[m_backButton setEnabled:enable];
+	[self.m_backButton setEnabled:enable];
 }
 
 
 - (void)enableFwdButton:(BOOL)enable
 {
-	[m_fwdButton setEnabled:enable];
+	[self.m_fwdButton setEnabled:enable];
 }
 
 
@@ -520,17 +584,17 @@ static MiniBrowserController *s_browser = nil;
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
 	// notify of an error?
-	[m_toolBar setItems:m_normalItemList animated:NO];
+	[self.m_toolBar setItems:m_normalItemList animated:NO];
 }
 
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-	[m_toolBar setItems:m_loadingItemList animated:NO];
+	[self.m_toolBar setItems:self.m_loadingItemList animated:NO];
 	
-	[m_activity startAnimating];
-	[m_loadingLabel setHidden:NO];
-	[m_webView setAlpha:0.75f];
+	[self.m_activity startAnimating];
+	[self.m_loadingLabel setHidden:NO];
+	[self.m_webView setAlpha:0.75f];
 	
 	// always start loading - we're not real restrictive here...
 	return YES;
@@ -539,44 +603,46 @@ static MiniBrowserController *s_browser = nil;
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-	[m_toolBar setItems:m_normalItemList animated:NO];
-	[m_activity stopAnimating];
-	[m_loadingLabel setHidden:YES];
-	[m_webView setAlpha:1.0f];
+	[self.m_toolBar setItems:self.m_normalItemList animated:NO];
+	[self.m_activity stopAnimating];
+	[self.m_loadingLabel setHidden:YES];
+	[self.m_webView setAlpha:1.0f];
 	
-	[self enableBackButton:m_webView.canGoBack];
-	[self enableFwdButton:m_webView.canGoForward];
+	[self enableBackButton:self.m_webView.canGoBack];
+	[self enableFwdButton:self.m_webView.canGoForward];
 	
 	// set the navigation bar title based on URL
-	if (link)
-		self.title = link.label;
-	else {
-		NSArray *urlComponents = [[[webView.request URL] absoluteString] componentsSeparatedByString:@"/"];
-		if ( [urlComponents count] > 0 )
-		{
-			NSString *str = [urlComponents objectAtIndex:([urlComponents count]-1)];
-			NSRange dot = [str rangeOfString:@"."];
-			if ( dot.length > 0 )
-			{
-				self.title = [str substringToIndex:dot.location];
-			}
-			else
-			{
-				self.title = str;
-			}
-		}
-		else
-		{
-			self.title = @"...";
-		}		
-	}
+	if (self.link)
+		self.title = self.link.label;
+	else
+		self.title = [self.m_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+	
+	static NSString* js = @""
+    "function bkModifyBaseTargets()"
+	"{"
+		"var allBases = window.document.getElementsByTagName('base');"
+		"if (allBases)"
+		"{"
+			"for (var i = 0; i < allBases.length; i++)"
+			"{"
+				"base = allBases[i];"
+				"target = base.getAttribute('target');"
+				"if (target)"
+				"{"
+					"base.setAttribute('target', '_self');"
+				"}"
+			"}"
+		"}"
+    "}";
+	[self.m_webView stringByEvaluatingJavaScriptFromString: js];
+    [self.m_webView stringByEvaluatingJavaScriptFromString: @"bkModifyBaseTargets()"];
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
-	[m_activity startAnimating];
-	[m_loadingLabel setHidden:NO];
-	[m_webView setAlpha:0.75f];
+	[self.m_activity startAnimating];
+	[self.m_loadingLabel setHidden:NO];
+	[self.m_webView setAlpha:0.75f];
 	
 	self.title = @"loading...";
 }

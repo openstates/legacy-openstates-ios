@@ -6,7 +6,7 @@
 #import <UIKit/UIKit.h>
 
 @class LinkObj;
-@interface MiniBrowserController : UIViewController <UIWebViewDelegate>
+@interface MiniBrowserController : UIViewController <UIWebViewDelegate, UISplitViewControllerDelegate>
 {
 }
 
@@ -31,12 +31,14 @@
 @property (nonatomic,retain) NSURL *m_currentURL;
 @property (nonatomic,retain) UIColor *sealColor;
 @property (nonatomic,retain) LinkObj *link;
+@property (nonatomic) BOOL m_shouldHideDoneButton;
 
 + (MiniBrowserController *)sharedBrowser;
 + (MiniBrowserController *)sharedBrowserWithURL:(NSURL *)urlOrNil;
 
 - (void)display:(id)parentController;
-- (NSString *)popoverButtonTitle;
+//- (NSString *)popoverButtonTitle;
+@property (nonatomic, retain) UIPopoverController *masterPopover;
 
 - (IBAction)closeButtonPressed:(id)button;
 - (IBAction)backButtonPressed:(id)button;
@@ -47,6 +49,7 @@
 - (void)loadURL:(NSURL *)url;
 - (void)LoadRequest:(NSURLRequest *)urlRequest;
 - (void)stopLoading;
+- (void)removeDoneButton;
 
 - (void)setAuthCallback:(SEL)callback;
 - (void)authCompleteCallback;

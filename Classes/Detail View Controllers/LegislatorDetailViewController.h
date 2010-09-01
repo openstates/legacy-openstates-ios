@@ -33,11 +33,12 @@
 @property (nonatomic,retain) IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab, *freshmanPlotLab;
 @property (nonatomic,retain) IBOutlet StaticGradientSliderView *indivSlider, *partySlider, *allSlider;
 @property (nonatomic,retain) IBOutlet UIView *indivPHolder, *partyPHolder, *allPHolder;
-@property (nonatomic,retain) UIPopoverController *notesPopover;
 
+@property (nonatomic,retain) UIPopoverController *notesPopover;
+@property (nonatomic,retain) UIPopoverController *masterPopover;
 @property (nonatomic, retain) IBOutlet LegislatorObj *legislator;
 @property (nonatomic, retain) LegislatorDetailDataSource *dataSource;
 
-- (NSString *)popoverButtonTitle;
+//- (NSString *)popoverButtonTitle;
 
 @end
