@@ -305,6 +305,9 @@
 	UIAlertView * alert = nil;	
 	BOOL reachableHost = NO;
 	
+	if ([url isFileURL])
+		return YES;
+		
 	if (![UtilityMethods isNetworkReachable]) {
 		if (doAlert)
 			[UtilityMethods noInternetAlert];
