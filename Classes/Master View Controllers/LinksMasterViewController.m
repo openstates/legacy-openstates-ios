@@ -12,12 +12,10 @@
 #import "TexLegeAppDelegate.h"
 #import "TableDataSourceProtocol.h"
 #import "LinksDataSource.h"
-#import "LinksDetailViewController.h"
 
 #import "MiniBrowserController.h"
 #import "TexLegeTheme.h"
 #import "TexLegeEmailComposer.h"
-#import "CommonPopoversController.h"
 
 @implementation LinksMasterViewController
 
@@ -121,71 +119,57 @@
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
 	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 	
-	if (![UtilityMethods isIPadDevice])
-		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
+	[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
 	
-	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]);
+	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]) && (self.splitViewController != nil);
 	
 	if (!isSplitViewDetail)
 		self.navigationController.toolbarHidden = YES;
 	
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
-/*
- // save off this item's selection to our AppDelegate
-	if ([dataObject isKindOfClass:[NSManagedObject class]])
-		[appDelegate setSavedTableSelection:[dataObject objectID] forKey:self.viewControllerKey];
-	else
-		[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
-*/	
-	NSString * action = [dataObject valueForKey:@"url"];
 	
-	if ([UtilityMethods isIPadDevice]) {
-		if (!self.detailViewController || ![self.detailViewController isKindOfClass:[LinksDetailViewController class]]) {
-			[self.detailViewController release];
-			self.detailViewController = [[[LinksDetailViewController alloc] init] autorelease];
-		}
-		if ([action isEqualToString:@"contactMail"])
-			[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
+	LinkObj *link = dataObject;
+	
+	if (link) {
 		
-		[self.detailViewController setValue:dataObject forKey:@"link"];
-		
-	}
-	else {
-		if ([action isEqualToString:@"aboutView"]) {
-			self.miniBrowser = nil;
-			
-			[appDelegate showAboutDialog:self];
-
+		// create a CapitolMapsDetailViewController. This controller will display the full size tile for the element
+		if (self.detailViewController == nil) {
+			self.detailViewController = [[[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil] autorelease];
 		}
-		else if ([action isEqualToString:@"contactMail"]) {
+		
+		MiniBrowserController *detailVC = self.detailViewController;
+		if ([link.url isEqualToString:@"contactMail"]) {
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
 																			 subject:@"TexLege Support Question / Concern" 
 																				body:@"" commander:self];
+			return;
 		}
-		else {			
-			NSURL *url = [UtilityMethods safeWebUrlFromString:action];
+
+		
+		if ([link.url isEqualToString:@"aboutView"]) {
+			NSString *path = nil;
+			if ([UtilityMethods isIPadDevice])
+				path = [[NSBundle mainBundle] pathForResource:@"TexLegeInfo~ipad" ofType:@"htm"];
+			else
+				path = [[NSBundle mainBundle] pathForResource:@"TexLegeInfo~iphone" ofType:@"htm"];
 			
-			if ([UtilityMethods canReachHostWithURL:url]) { // got a network connection
-				self.aboutControl = nil;
-				
-				if (!self.miniBrowser) {
-					if (self.detailViewController && [self.detailViewController isKindOfClass:[MiniBrowserController class]])
-						self.miniBrowser = (MiniBrowserController *) self.detailViewController;
-					else {
-						self.miniBrowser = [MiniBrowserController sharedBrowserWithURL:url];
-					}
-				}
-				if (!self.miniBrowser) {
-					debug_NSLog(@"Failure while attempting to allocate memory for MiniBrowserController");
-					return;
-				}
-				
-				[self.miniBrowser loadURL:url];
-				[self.miniBrowser display:self];
-			}
+			link.url = [NSString stringWithFormat:@"file://%@", path];
+			
+		}
+		[detailVC view];
+		detailVC.m_shouldHideDoneButton = YES;
+		[detailVC removeDoneButton];
+		
+		// save off this item's selection to our AppDelegate
+		[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
+
+		[detailVC setLink:link];
+		if (isSplitViewDetail == NO) {
+			// push the detail view controller onto the navigation stack to display it				
+			[self.navigationController pushViewController:self.detailViewController animated:YES];
+			self.detailViewController = nil;
 		}
 	}
 }
-
 
 @end
