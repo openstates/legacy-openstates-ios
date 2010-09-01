@@ -10,7 +10,7 @@
 #import "DistrictOfficeObj.h"
 #import "LegislatorObj.h"
 #import "PolygonMath.h"
-
+#import "TexLegeCoreDataUtils.h"
 @implementation DistrictMapObj 
 
 @dynamic centerLat;
@@ -31,6 +31,99 @@
 //@dynamic districtOffice;
 // USE legislator.districtOffices array instead! ... We get plural!
 
+- (id) initWithCoder: (NSCoder *)coder
+{
+    if (self = [super init])
+    {
+        self.district = [coder decodeObjectForKey:@"district"];
+        self.chamber = [coder decodeObjectForKey:@"chamber"];
+		self.lineColor = [coder decodeObjectForKey:@"lineColor"];
+		self.lineWidth = [coder decodeObjectForKey:@"lineWidth"];
+		self.centerLon = [coder decodeObjectForKey:@"centerLon"];
+		self.centerLat = [coder decodeObjectForKey:@"centerLat"];
+		self.spanLon = [coder decodeObjectForKey:@"spanLon"];
+		self.spanLat = [coder decodeObjectForKey:@"spanLat"];
+		self.maxLon = [coder decodeObjectForKey:@"maxLon"];
+		self.maxLat = [coder decodeObjectForKey:@"maxLat"];
+		self.minLon = [coder decodeObjectForKey:@"minLon"];
+		self.minLat = [coder decodeObjectForKey:@"minLat"];
+		self.numberOfCoords = [coder decodeObjectForKey:@"numberOfCoords"];
+		self.coordinatesData = [[coder decodeObjectForKey:@"coordinatesData"] copy];
+		
+		NSNumber *legislatorID = [coder decodeObjectForKey:@"legislatorID"];
+		if (legislatorID)
+			self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
+		else
+			self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
+		// ignore district office for now
+		
+    }
+	return self;
+}
+
+
+- (void)encodeWithCoder:(NSCoder *)coder;
+{
+	NSDictionary *tempDict = [self exportDictionary];
+	for (NSString *key in [tempDict allKeys]) {
+		id object = [tempDict objectForKey:key];
+		[coder encodeObject:object];	
+	}
+}
+
+- (id) initWithDictionary: (NSDictionary *)dictionary
+{
+    if (self = [super init])
+    {
+				
+		if (dictionary) {
+			self.district = [dictionary objectForKey:@"district"];
+			self.chamber = [dictionary objectForKey:@"chamber"];
+			self.lineColor = [dictionary objectForKey:@"lineColor"];
+			self.lineWidth = [dictionary objectForKey:@"lineWidth"];
+			self.centerLon = [dictionary objectForKey:@"centerLon"];
+			self.centerLat = [dictionary objectForKey:@"centerLat"];
+			self.spanLon = [dictionary objectForKey:@"spanLon"];
+			self.spanLat = [dictionary objectForKey:@"spanLat"];
+			self.maxLon = [dictionary objectForKey:@"maxLon"];
+			self.maxLat = [dictionary objectForKey:@"maxLat"];
+			self.minLon = [dictionary objectForKey:@"minLon"];
+			self.minLat = [dictionary objectForKey:@"minLat"];
+			self.numberOfCoords = [dictionary objectForKey:@"numberOfCoords"];
+			self.coordinatesData = [[dictionary objectForKey:@"coordinatesData"] copy];
+
+			NSNumber *legislatorID = [dictionary objectForKey:@"legislatorID"];
+			if (legislatorID)
+				self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
+			else
+				self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
+			// ignore district office for now
+		}
+    }
+	return self;
+}
+
+
+- (NSDictionary *)exportDictionary {
+	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  self.district, @"district",
+							  self.chamber, @"chamber",
+							  self.lineColor, @"lineColor",
+							  self.lineWidth, @"lineWidth",
+							  self.centerLon, @"centerLon",
+							  self.centerLat, @"centerLat",
+							  self.spanLon, @"spanLon",
+							  self.spanLat, @"spanLat",
+							  self.maxLon, @"maxLon",
+							  self.maxLat, @"maxLat",
+							  self.minLon, @"minLon",
+							  self.minLat, @"minLat",
+							  self.numberOfCoords, @"numberOfCoords",
+							  self.legislator.legislatorID, @"legislatorID",
+							  self.coordinatesData, @"coordinatesData",
+							  nil];
+	return tempDict;
+}
 
 
 - (NSString *) chamberName {
@@ -56,7 +149,6 @@
 		return [UIImage imageNamed:@"silverstar.png"];
 }
 
-// optional
 - (NSString *)subtitle
 {
 	return [self.legislator legProperName];
@@ -81,9 +173,6 @@
 
 - (MKPolyline *)polyline {
 	
-	//self.coordinatesData = [NSData dataWithBytes:(const void *)self.coordinatesCArray 
-	//									  length:numberOfPairs*sizeof(CLLocationCoordinate2D)];
-
 	MKPolyline *polyLine=[MKPolyline polylineWithCoordinates:(CLLocationCoordinate2D *)[self.coordinatesData bytes] 
 													   count:[self.numberOfCoords integerValue]];
 	polyLine.title = self.title;
@@ -92,9 +181,6 @@
 }
 
 - (MKPolygon *)polygon {
-	
-	//self.coordinatesData = [NSData dataWithBytes:(const void *)self.coordinatesCArray 
-	//									  length:numberOfPairs*sizeof(CLLocationCoordinate2D)];
 	
 	MKPolygon *polyGon=[MKPolygon polygonWithCoordinates:(CLLocationCoordinate2D *)[self.coordinatesData bytes] 
 													   count:[self.numberOfCoords integerValue]];

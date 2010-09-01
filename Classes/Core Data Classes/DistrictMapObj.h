@@ -12,7 +12,7 @@
 @class DistrictOfficeObj;
 @class LegislatorObj;
 
-@interface DistrictMapObj :  NSManagedObject  
+@interface DistrictMapObj :  NSManagedObject  <NSCoding>
 {
 }
 
@@ -47,6 +47,11 @@
 
 - (BOOL) districtContainsCoordinate:(CLLocationCoordinate2D)aCoordinate;
 
+- (id) initWithCoder: (NSCoder *)coder;
+- (void)encodeWithCoder:(NSCoder *)coder;
+- (id) initWithDictionary: (NSDictionary *)dictionary;
+- (NSDictionary *)exportDictionary;
+	
 @end
 
 

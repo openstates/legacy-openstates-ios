@@ -13,7 +13,20 @@
 
 }
 
++ (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName context:(NSManagedObjectContext*)context;
 + (LegislatorObj*)legislatorForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber withContext:(NSManagedObjectContext*)context;
 + (LegislatorObj*)legislatorWithLegislatorID:(NSNumber*)legID withContext:(NSManagedObjectContext*)context;
++ (NSArray*)allObjectIDsInEntityNamed:(NSString*)entityName context:(NSManagedObjectContext*)context;
++ (NSArray*)allObjectsInEntityNamed:(NSString*)entityName context:(NSManagedObjectContext*)context;
 
+@end
+
+@interface NSManagedObjectContext (EZFetch)
+
+
+// Convenience method to fetch the array of objects for a given Entity
+// name in the context, optionally limiting by a predicate or by a predicate
+// made from a format NSString and variable arguments.
+//
+- (NSSet *)fetchObjectsForEntityName:(NSString *)newEntityName withPredicate:(id)stringOrPredicate, ...;
 @end
