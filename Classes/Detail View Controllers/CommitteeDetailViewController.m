@@ -16,7 +16,6 @@
 #import "CapitolMapsDetailViewController.h"
 #import "LegislatorDetailViewController.h"
 #import "MiniBrowserController.h"
-#import "LegislatorMasterTableViewCell.h"
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 #import "CommonPopoversController.h"
@@ -255,19 +254,10 @@ enum InfoSectionRows {
 	
 	if (cell == nil) {
 		
-		/*if (CellIdentifier == @"CommitteeLegislators") {
-			NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"LegislatorMasterTableViewCell" owner:self options:nil];
-			for (id suspect in objects) {
-				if ([suspect isKindOfClass:[LegislatorMasterTableViewCell class]]) {
-					cell = (UITableViewCell *)suspect;
-					break;
-				}
-			}
-		}*/
 		if (CellIdentifier == @"LegislatorQuartz") {
 			LegislatorMasterCell *newcell = [[[LegislatorMasterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 			//cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
-			newcell.frame = CGRectMake(0.0, 0.0, 250.0, 73.0);		
+			newcell.frame = CGRectMake(0.0, 0.0, 234.0, 73.0);		
 			newcell.cellView.useDarkBackground = NO;
 			newcell.accessoryView.hidden = NO;
 			cell = newcell;
@@ -277,7 +267,7 @@ enum InfoSectionRows {
 			cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:CellIdentifier] autorelease];			
 		}
 		if ([cell respondsToSelector:@selector(setUseDarkBackground:)])
-			[((LegislatorMasterTableViewCell *)cell) setUseDarkBackground:NO];
+			[((LegislatorMasterCell *)cell) setUseDarkBackground:NO];
 		else
 			cell.backgroundColor = [TexLegeTheme backgroundLight];
 		
@@ -349,7 +339,6 @@ enum InfoSectionRows {
 		if ([cell respondsToSelector:@selector(setLegislator:)])
 			[cell performSelector:@selector(setLegislator:) withObject:legislator];
 		
-		//[(LegislatorMasterTableViewCell *)cell setupWithLegislator:legislator];
 	}	
 	
 	return cell;
