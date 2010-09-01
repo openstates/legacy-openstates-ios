@@ -6,7 +6,6 @@
 //  Copyright 2009 Gregory S. Combs. All rights reserved.
 //
 
-#import "TexLegeInfoController.h"
 #import "Reachability.h"
 
 @class LegislatorMasterViewController;
