@@ -9,11 +9,11 @@
 #import "LegislatorsDataSource.h"
 #import "LegislatorMasterViewController.h"
 #import "LegislatorDetailViewController.h"
-#import "LegislatorMasterTableViewCell.h"
 #import "UtilityMethods.h"
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 #import "UIDevice-Hardware.h"
+#import "LegislatorMasterCell.h"
 
 @interface LegislatorMasterViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
@@ -51,7 +51,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 		
-#if kDeviceSensitiveRowHeight == 1
+#if kDeviceSensitiveRowHeight == 0
 	NSUInteger platformType = [[UIDevice currentDevice] platformType];
 	if (platformType != UIDeviceiPhoneSimulatoriPad && platformType <= UIDevice3GiPhone)
 		self.tableView.rowHeight = 54.0f;
@@ -162,10 +162,8 @@
 	
 - (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 	BOOL useDark = (indexPath.row % 2 == 0);
-	if ([cell respondsToSelector:@selector(setUseDarkBackground:)])
-		[((LegislatorMasterTableViewCell *)cell) setUseDarkBackground:useDark];
-	else
-		cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
+
+	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 
 }
 
