@@ -376,7 +376,6 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 	CGContextRestoreGState(context);
 	
 	CGContextRestoreGState(context);
-	NSLog(@"Unregistered Copy of Opacity");
 	CGColorSpaceRelease(space);
 }
 

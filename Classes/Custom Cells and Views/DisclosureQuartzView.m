@@ -211,7 +211,6 @@ const CGFloat kDisclosureQuartzViewHeight = 32.0f;
 	CGImageRelease(contextImage);
 	
 	CGContextRestoreGState(context);
-	NSLog(@"Unregistered Copy of Opacity");
 	CGColorSpaceRelease(space);
 	//[shadowBuffer release];
 }

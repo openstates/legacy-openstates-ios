@@ -350,7 +350,6 @@ else if (!self.green && self.selected)
 	CGContextRestoreGState(context);
 	
 	CGContextRestoreGState(context);
-	NSLog(@"Unregistered Copy of Opacity");
 	CGColorSpaceRelease(space);
 }
 

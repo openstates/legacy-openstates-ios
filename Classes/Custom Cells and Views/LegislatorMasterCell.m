@@ -30,8 +30,8 @@
 		[qv release];
 		//[iv release];
 		
-		CGFloat endX = self.contentView.bounds.size.width - 45.f;
-		CGRect tzvFrame = CGRectMake(45.f, 0.0, endX, self.contentView.bounds.size.height);
+		CGFloat endX = self.contentView.bounds.size.width - 53.f;
+		CGRect tzvFrame = CGRectMake(53.f, 0.0, endX, self.contentView.bounds.size.height);
 		cellView = [[LegislatorMasterCellView alloc] initWithFrame:tzvFrame];
 		cellView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		[self.contentView addSubview:cellView];
