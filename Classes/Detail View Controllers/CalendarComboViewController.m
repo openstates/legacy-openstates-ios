@@ -10,7 +10,6 @@
 #import "UtilityMethods.h"
 #include "MiniBrowserController.h"
 #import "TexLegeAppDelegate.h"
-#import "CommonPopoversController.h"
 #import "ChamberCalendarObj.h"
 
 
@@ -26,7 +25,7 @@
 @synthesize chamberCalendar, feedEntries;
 @synthesize currentEvents, webView, searchResults;
 @synthesize leftShadow, rightShadow, portShadow, landShadow;
-
+@synthesize masterPopover;
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
@@ -60,8 +59,6 @@
 	[self changeLayoutForOrientation:[UIDevice currentDevice].orientation];
 	if (self.chamberCalendar)
 		self.searchDisplayController.searchBar.placeholder = self.chamberCalendar.title;
-	
-	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 }
 
 
@@ -129,7 +126,7 @@
 	self.feedEntries = nil;
 	self.currentEvents = nil;
 	self.searchResults = nil;
-	
+	self.masterPopover = nil;
 	// add this to done: or something
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIDeviceOrientationDidChangeNotification" object:nil];
 
@@ -145,44 +142,33 @@
 	self.leftShadow = self.rightShadow = self.portShadow = self.landShadow = nil;
 	self.searchResults = nil;
 	self.tableView = nil;
-
+	self.masterPopover = nil;
     [super dealloc];
 }
 
 #pragma mark -
-#pragma mark Split view support
+#pragma mark Popover Support
 
-- (NSString *)popoverButtonTitle {
-	return @"Meetings";
+
+- (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
+    
+    barButtonItem.title = @"Meetings";
+    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
+    self.masterPopover = pc;
 }
 
-- (void)splitViewController: (UISplitViewController*)svc 
-	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
-	   forPopoverController: (UIPopoverController*)pc {
-	
-	//[self showMasterListPopoverButtonItem:barButtonItem];
-	
-   // self.popoverController = pc;
-}
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
-- (void)splitViewController: (UISplitViewController*)svc 
-	 willShowViewController:(UIViewController *)aViewController 
-  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-	
-	//[self invalidateMasterListPopoverButtonItem:barButtonItem];
-	//self.popoverController = nil;
+- (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
+    
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+    self.masterPopover = nil;
 }
 
 - (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
    willPresentViewController: (UIViewController *)aViewController
 {
- /*   if (pc != nil) {
-        [[TexLegeAppDelegate appDelegate] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
-		// do I need to set pc to nil?  I need to confirm, but I think it breaks things.
-    }
-*/
-}
+}	
 
 #pragma -
 #pragma ComboVC Utilities
@@ -210,13 +196,12 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	
 	if (chamberCalendar) [chamberCalendar release], chamberCalendar = nil;
 	if (newObj) {
+		if (masterPopover)
+			[masterPopover dismissPopoverAnimated:YES];
+
 		chamberCalendar = [newObj retain];
 		
 		self.feedEntries = [[self.chamberCalendar feedEntries] sortedArrayUsingFunction:sortByDate context:nil];
-		
-		if ([UtilityMethods isIPadDevice]) {		// might have come here via a popover
-			[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];
-		}
 		
 		[self.searchResults removeAllObjects];
 		[self.tableView reloadData];

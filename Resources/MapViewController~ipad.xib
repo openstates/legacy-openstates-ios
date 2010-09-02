@@ -80,7 +80,7 @@
 					<object class="IBUISegmentedControl" id="750709019">
 						<reference key="NSNextResponder" ref="275054592"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{68, 7}, {160, 30}}</string>
+						<string key="NSFrame">{{151, 7}, {160, 30}}</string>
 						<reference key="NSSuperview" ref="275054592"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -159,6 +159,15 @@
 						<int key="IBUIStyle">1</int>
 						<reference key="IBUIToolbar" ref="275054592"/>
 					</object>
+					<object class="IBUIBarButtonItem" id="654648440">
+						<object class="NSCustomResource" key="IBUIImage">
+							<string key="NSClassName">NSImage</string>
+							<string key="NSResourceName">multipins.png</string>
+						</object>
+						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<int key="IBUIStyle">1</int>
+						<reference key="IBUIToolbar" ref="275054592"/>
+					</object>
 					<object class="IBUIBarButtonItem" id="27968564">
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<reference key="IBUIToolbar" ref="275054592"/>
@@ -175,24 +184,9 @@
 						<reference key="IBUIToolbar" ref="275054592"/>
 						<int key="IBUISystemItemIdentifier">5</int>
 					</object>
-					<object class="IBUIBarButtonItem" id="654648440">
-						<object class="NSCustomResource" key="IBUIImage">
-							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">multipins.png</string>
-						</object>
-						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<int key="IBUIStyle">1</int>
-						<reference key="IBUIToolbar" ref="275054592"/>
-					</object>
-					<object class="IBUIBarButtonItem" id="134083498">
-						<bool key="IBUIEnabled">NO</bool>
-						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<int key="IBUIStyle">1</int>
-						<reference key="IBUIToolbar" ref="275054592"/>
-						<int key="IBUISystemItemIdentifier">11</int>
-					</object>
 					<object class="IBUIBarButtonItem" id="530868576">
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<float key="IBUIWidth">245</float>
 						<int key="IBUIStyle">1</int>
 						<reference key="IBUICustomView" ref="107545398"/>
 						<reference key="IBUIToolbar" ref="275054592"/>
@@ -230,14 +224,6 @@
 						<reference key="destination" ref="217027828"/>
 					</object>
 					<int key="connectionID">42</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">bookmarksButton</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="134083498"/>
-					</object>
-					<int key="connectionID">43</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -368,13 +354,12 @@
 						<reference key="object" ref="275054592"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="134083498"/>
 							<reference ref="324810363"/>
 							<reference ref="530868576"/>
 							<reference ref="1031406591"/>
 							<reference ref="217027828"/>
-							<reference ref="654648440"/>
 							<reference ref="27968564"/>
+							<reference ref="654648440"/>
 						</object>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">iPad Toolbar</string>
@@ -392,11 +377,6 @@
 						<int key="objectID">28</int>
 						<reference key="object" ref="107545398"/>
 						<reference key="parent" ref="530868576"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">32</int>
-						<reference key="object" ref="134083498"/>
-						<reference key="parent" ref="275054592"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">14</int>
@@ -446,7 +426,6 @@
 					<string>20.IBPluginDependency</string>
 					<string>28.IBPluginDependency</string>
 					<string>31.IBPluginDependency</string>
-					<string>32.IBPluginDependency</string>
 					<string>56.IBEditorWindowLastContentRect</string>
 					<string>56.IBPluginDependency</string>
 					<string>61.IBPluginDependency</string>
@@ -458,7 +437,6 @@
 					<string>MapViewController</string>
 					<string>UIResponder</string>
 					<string>{{535, 22}, {703, 768}}</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -500,6 +478,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>changeMapType:</string>
+							<string>foundDistrictMapsWithObjectIDs:</string>
 							<string>locateUser:</string>
 							<string>mapControlSheet:</string>
 							<string>reverseGeocodeCurrentLocation</string>
@@ -509,6 +488,7 @@
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>id</string>
+							<string>NSArray</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -521,6 +501,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>changeMapType:</string>
+							<string>foundDistrictMapsWithObjectIDs:</string>
 							<string>locateUser:</string>
 							<string>mapControlSheet:</string>
 							<string>reverseGeocodeCurrentLocation</string>
@@ -532,6 +513,10 @@
 							<object class="IBActionInfo">
 								<string key="name">changeMapType:</string>
 								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">foundDistrictMapsWithObjectIDs:</string>
+								<string key="candidateClassName">NSArray</string>
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">locateUser:</string>
@@ -559,13 +544,12 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>bookmarksButton</string>
 							<string>districtOfficesButton</string>
 							<string>mapControlsButton</string>
 							<string>mapTypeControl</string>
 							<string>mapTypeControlButton</string>
 							<string>mapView</string>
-							<string>popoverController</string>
+							<string>masterPopover</string>
 							<string>searchBar</string>
 							<string>searchBarButton</string>
 							<string>toolbar</string>
@@ -573,7 +557,6 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>UIBarButtonItem</string>
 							<string>UIBarButtonItem</string>
 							<string>UIBarButtonItem</string>
 							<string>UISegmentedControl</string>
@@ -590,13 +573,12 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>bookmarksButton</string>
 							<string>districtOfficesButton</string>
 							<string>mapControlsButton</string>
 							<string>mapTypeControl</string>
 							<string>mapTypeControlButton</string>
 							<string>mapView</string>
-							<string>popoverController</string>
+							<string>masterPopover</string>
 							<string>searchBar</string>
 							<string>searchBarButton</string>
 							<string>toolbar</string>
@@ -604,10 +586,6 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBToOneOutletInfo">
-								<string key="name">bookmarksButton</string>
-								<string key="candidateClassName">UIBarButtonItem</string>
-							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">districtOfficesButton</string>
 								<string key="candidateClassName">UIBarButtonItem</string>
@@ -629,7 +607,7 @@
 								<string key="candidateClassName">MKMapView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">popoverController</string>
+								<string key="name">masterPopover</string>
 								<string key="candidateClassName">UIPopoverController</string>
 							</object>
 							<object class="IBToOneOutletInfo">
@@ -664,6 +642,13 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">NSArray</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Classes/Utility Classes/UtilityMethods.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
@@ -682,6 +667,49 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">NSArray</string>
+					<string key="superclassName">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">Foundation.framework/Headers/NSArray.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSArray</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier" id="63108006">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">Foundation.framework/Headers/NSKeyValueCoding.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSArray</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier" id="908033490">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">Foundation.framework/Headers/NSKeyValueObserving.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSArray</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">Foundation.framework/Headers/NSPathUtilities.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSArray</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">Foundation.framework/Headers/NSPredicate.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSArray</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">Foundation.framework/Headers/NSSortDescriptor.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
@@ -697,17 +725,11 @@
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBFrameworkSource</string>
-						<string key="minorKey">Foundation.framework/Headers/NSKeyValueCoding.h</string>
-					</object>
+					<reference key="sourceIdentifier" ref="63108006"/>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBFrameworkSource</string>
-						<string key="minorKey">Foundation.framework/Headers/NSKeyValueObserving.h</string>
-					</object>
+					<reference key="sourceIdentifier" ref="908033490"/>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>

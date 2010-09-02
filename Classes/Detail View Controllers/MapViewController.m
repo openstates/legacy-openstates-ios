@@ -39,11 +39,11 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 
 @implementation MapViewController
-@synthesize bookmarksButton, mapTypeControl, mapTypeControlButton;
+@synthesize mapTypeControl, mapTypeControlButton;
 @synthesize mapView, userLocationButton, reverseGeocoder;
 @synthesize toolbar, searchBar, searchBarButton, districtOfficesButton;
 @synthesize mapControlsButton, forwardGeocoder, texasRegion;
-@synthesize popoverController;
+@synthesize masterPopover;
 
 SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 
@@ -69,7 +69,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 }
 
 - (void) dealloc {
-	self.bookmarksButton = nil;
 	self.mapTypeControl = nil;
 	self.searchBarButton = nil;
 	self.mapTypeControlButton = nil;
@@ -80,6 +79,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 	self.forwardGeocoder = nil;
 	self.districtOfficesButton = nil;
 	self.searchBar = nil;
+	self.masterPopover = nil;
 	[super dealloc];
 }
 
@@ -111,13 +111,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 	self.toolbar.tintColor = [TexLegeTheme navbar];
 	self.searchBar.tintColor = [TexLegeTheme navbar];
 	if ([UtilityMethods isIPadDevice]) {
-
-		self.bookmarksButton.enabled = ![UtilityMethods isLandscapeOrientation];
-		self.bookmarksButton.target = self;
-		self.bookmarksButton.action = @selector(displayDistrictOfficesPopover:);
-		
 		self.navigationItem.titleView = self.toolbar; 
-
 	}
 	else {
 		self.navigationItem.titleView = self.searchBar;
@@ -131,7 +125,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 - (void) viewDidUnload {
 	[self.mapView removeAnnotations:[self.mapView annotations]];
 
-	self.bookmarksButton = nil;
 	self.mapTypeControl = nil;
 	self.mapControlsButton = nil;
 	self.mapTypeControlButton = nil;
@@ -141,83 +134,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 	self.reverseGeocoder = nil;
 	self.forwardGeocoder = nil;
 	self.searchBar = nil;
-}
-
-- (void) testingMkPolyline {
-	if (![UtilityMethods supportsMKPolyline])
-		return;
-	
-	CLLocationCoordinate2D coords0[5]={
-		{37.33544, -122.036677},
-		{37.338511, -122.036677},
-		{37.338511, -122.032128},
-		{37.33544, -122.032128},
-		{37.33544, -122.036677}
-	};
-	MKPolygon *polygon=[MKPolygon polygonWithCoordinates:coords0 count:5];
-	
-	CLLocationCoordinate2D coords[5]={
-		{37.33444, -122.036777},
-		{37.337511, -122.036777},
-		{37.337511, -122.032228},
-		{37.33444, -122.032228},
-		{37.33444, -122.036777}
-	};
-	MKPolyline *polyLine=[MKPolyline polylineWithCoordinates:coords count:5];
-	
-	CLLocationCoordinate2D coords2[5]={
-		{37.33434, -122.036767},
-		{37.337411, -122.036767},
-		{37.337411, -122.032218},
-		{37.33434, -122.032218},
-		{37.33434, -122.036767}
-	};
-	MKPolyline *polyLine2=[MKPolyline polylineWithCoordinates:coords2 count:5];
-	
-	NSArray *arrayOfPolylines = [NSArray arrayWithObjects:polygon, polyLine, polyLine2, nil];
-	//MultiPolyline *multipoly = [[MultiPolyline alloc] initWithPolylines:arrayOfPolylines];
-	
-	CLLocationCoordinate2D center = {37.336086,-122.03454};
-	[[self mapView] setCenterCoordinate:center];
-	[[self mapView] addOverlays:arrayOfPolylines];
-	//[[self mapView] addOverlay:multipoly];
-	
-	MKCoordinateSpan span = MKCoordinateSpanMake(0.005, 0.005);
-	[[self mapView]setRegion:MKCoordinateRegionMake(center, span) animated:YES];
-}
-
-- (IBAction) showHidePopoverButton:(id)sender {
-	if (![UtilityMethods isIPadDevice])
-		return;
-	
-	BOOL changed = NO;
-	NSMutableArray *buttons = [[NSMutableArray alloc] initWithArray:self.toolbar.items];
-	
-	if ([UtilityMethods isLandscapeOrientation]) {
-		if ([buttons containsObject:self.bookmarksButton]) {
-			[buttons removeObject:self.bookmarksButton];
-			changed = YES;
-		}
-	}
-	else { 
-		if (![buttons containsObject:self.bookmarksButton]) {
-			[buttons insertObject:self.bookmarksButton atIndex:[buttons count]-1];
-			changed = YES;
-		}
-	}
-	if (changed)
-		[self.toolbar setItems:buttons animated:YES];
-
-	//debug_NSLog(@"%@", self.toolbar.items);
-
-	[buttons release];
+	self.masterPopover = nil;
+	[super viewDidUnload];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	
-	[self showHidePopoverButton:nil];
-	
 	
 	NSURL *tempURL = [NSURL URLWithString:@"http://maps.google.com"];		
 	if (![UtilityMethods canReachHostWithURL:tempURL])// do we have a good URL/connection?
@@ -284,6 +206,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 }
 
 - (void)moveMapToAnnotation:(id<MKAnnotation>)annotation {
+	if (masterPopover)
+		[masterPopover dismissPopoverAnimated:YES];
+	
 	if (![self region:self.mapView.region isEqualTo:self.texasRegion]) { // we've already another region, let's zoom out
 		[self performSelector:@selector(animateToState) withObject:nil afterDelay:0.3];
 		[self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:1.7];        
@@ -292,84 +217,31 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 		[self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:0.5];	
 }
 
+
 #pragma mark -
 #pragma mark Popover Support
 
-/*- (NSString*)popoverButtonTitle {
-	return  @"District Offices";
-}
-*/
 
-- (IBAction)displayDistrictOfficesPopover:(id)sender {
-	if ( ![UtilityMethods isIPadDevice])
-		return;
-	
-	if (!self.popoverController) {
-		UIPopoverController *pc = [[UIPopoverController alloc] initWithContentViewController:[[TexLegeAppDelegate appDelegate] districtOfficeMasterVC]];
-		pc.delegate = (id<UIPopoverControllerDelegate>)self; //self.currentDetailViewController;	
-		self.popoverController = pc;
-		[pc release];
-	}
-	
-	if (!self.bookmarksButton || !self.popoverController) {
-		debug_NSLog(@"Bookmarks Button Item or District Offices Popover Controller is unallocated ... cannot display master list popover.");
-		return;		// should never happen?
-	}
-	//self.isOpening = YES;
-	[self.popoverController presentPopoverFromBarButtonItem:self.bookmarksButton permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-	//self.isOpening = NO;
-	
-	// now that the menu is displayed, let's reset the action so it's ready to go away again on demand
-	[self.bookmarksButton setTarget:self];
-	[self.bookmarksButton setAction:@selector(dismissDistrictOfficesPopover:)];
+- (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
+    
+    barButtonItem.title = @"Districts";
+    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
+    self.masterPopover = pc;
 }
 
-- (IBAction)dismissDistrictOfficesPopover:(id)sender {
-	if (!self.popoverController || ![UtilityMethods isIPadDevice] /*|| self.isOpening*/)
-		return;
-	
-	if (self.popoverController)	{
-		if ([self.popoverController isPopoverVisible])
-			[self.popoverController dismissPopoverAnimated:YES];
-		self.popoverController = nil;
-	}
-	
-	if (self.bookmarksButton) {
-		[self.bookmarksButton setTarget:self];
-		[self.bookmarksButton setAction:@selector(displayDistrictOfficesPopover:)];
-	}
-}
-
-#pragma mark -
-#pragma mark Split view support
-
-- (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController 
-		  withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
-	
-	//barButtonItem.enabled = YES;
-	//self.bookmarksButton.enabled = YES;
-	[self performSelector:@selector(showHidePopoverButton:) withObject:nil afterDelay:0.1f];
-	self.popoverController = pc;
-}
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
-- (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController 
-  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-	
-	//barButtonItem.enabled = NO;
-	//self.bookmarksButton.enabled = NO;
-	[self performSelector:@selector(showHidePopoverButton:) withObject:nil afterDelay:0.1f];
-	[self dismissDistrictOfficesPopover:barButtonItem];		
+- (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
+    
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+    self.masterPopover = nil;
 }
 
-/*
-// we're about to show the popover, with the master list inside
 - (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
    willPresentViewController: (UIViewController *)aViewController
 {
-	 
-}
-*/
+}	
+
 
 #pragma mark -
 #pragma mark Properties

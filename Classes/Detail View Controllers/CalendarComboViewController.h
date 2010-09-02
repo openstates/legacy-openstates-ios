@@ -20,6 +20,5 @@
 @property (nonatomic, retain) NSArray *feedEntries;
 @property (nonatomic, retain) NSMutableArray *currentEvents;
 @property (nonatomic, retain) NSMutableArray *searchResults;
-
-- (NSString *)popoverButtonTitle;
+@property (nonatomic, retain) UIPopoverController *masterPopover;
 @end

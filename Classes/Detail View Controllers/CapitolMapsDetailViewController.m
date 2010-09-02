@@ -12,11 +12,10 @@
 #import "UtilityMethods.h"
 #import "MiniBrowserController.h"
 #import "TexLegeAppDelegate.h"
-#import "CommonPopoversController.h"
 
 @implementation CapitolMapsDetailViewController
 
-@synthesize map, webView;
+@synthesize map, webView, masterPopover;
 
 
 #pragma mark -
@@ -45,35 +44,26 @@
 - (void)viewDidUnload {
 	self.webView = nil;
 	self.map = nil;
-	
+	self.masterPopover = nil;
 	[super viewDidUnload];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 	
 	if ([UtilityMethods isIPadDevice] && !self.map && ![UtilityMethods isLandscapeOrientation])  {
 		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 		
 		self.map = [[appDelegate capitolMapsMasterVC] selectObjectOnAppear];		
 
-	}
-	/*
-	 if ([UtilityMethods isIPadDevice] && ![UtilityMethods isLandscapeOrientation] && !self.link) {
-	 UIBarButtonItem *button = self.navigationItem.rightBarButtonItem;
-	 
-	 if (button)
-	 debug_NSLog(@"no selection yet ... %@", button);
-	 }
-	 */
-	
+	}	
 }
 
 
 - (void)dealloc {
 	self.webView = nil;
 	self.map = nil;
+	self.masterPopover = nil;
 	[super dealloc];
 }
 
@@ -91,12 +81,11 @@
 	
 	if (map) [map release], map = nil;
 	if (newObj) {
+		if (masterPopover)
+			[masterPopover dismissPopoverAnimated:YES];
+		
 		map = [newObj retain];
 
-		if ([UtilityMethods isIPadDevice]) {
-			[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];
-		}
-				
 		self.navigationItem.title = map.name;
 		[self.webView loadRequest:[NSURLRequest requestWithURL:map.url]];
 		[self.view setNeedsDisplay];
@@ -107,55 +96,35 @@
 #pragma mark -
 #pragma mark Popover Support
 
-- (NSString*)popoverButtonTitle {
-	return  @"Maps";
+
+- (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
+    
+    barButtonItem.title = @"Capitol Maps";
+    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
+    self.masterPopover = pc;
 }
 
-
-#pragma mark -
-#pragma mark Split view support
-
-- (void)splitViewController: (UISplitViewController*)svc 
-	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
-	   forPopoverController: (UIPopoverController*)pc {
-	
-	//[self showMasterListPopoverButtonItem:barButtonItem];
-	
-    //self.popoverController = pc;
-}
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
-- (void)splitViewController: (UISplitViewController*)svc 
-	 willShowViewController:(UIViewController *)aViewController 
-  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-	
-	//[self invalidateMasterListPopoverButtonItem:barButtonItem];
-	//self.popoverController = nil;
+- (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
+    
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+    self.masterPopover = nil;
 }
 
 - (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
    willPresentViewController: (UIViewController *)aViewController
 {
-/*    if (pc != nil) {
-        [[TexLegeAppDelegate appDelegate] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
-    }
-*/
-}
-
+}	
 
 #pragma mark -
 #pragma mark Orientation
-
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-}
-
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation { // Override to allow rotation. Default returns YES only for UIDeviceOrientationPortrait
 	return YES;
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-//	[[TexLegeAppDelegate appDelegate] resetPopoverMenus];
 	[self.webView reload];
 }
 

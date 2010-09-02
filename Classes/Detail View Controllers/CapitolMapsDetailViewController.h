@@ -13,6 +13,5 @@
 }
 @property (nonatomic,retain) CapitolMap *map;
 @property (nonatomic,retain) IBOutlet UIWebView *webView;
-
-- (NSString *)popoverButtonTitle;
+@property (nonatomic,retain) UIPopoverController *masterPopover;
 @end
