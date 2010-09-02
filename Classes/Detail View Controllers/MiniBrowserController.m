@@ -55,11 +55,13 @@ static MiniBrowserController *s_browser = nil;
 	{
 		s_browser = [[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil];
 		//s_browser.m_webView.detectsPhoneNumbers = YES;
+		s_browser.m_shouldHideDoneButton = NO;
+
 		s_browser.m_webView.scalesPageToFit = YES;
 		[s_browser.view setNeedsDisplay];
 	}
 	s_browser.m_shouldHideDoneButton = NO;
-	
+
 	if ( nil != urlOrNil )
 	{
 		[s_browser loadURL:urlOrNil];
@@ -72,6 +74,31 @@ static MiniBrowserController *s_browser = nil;
 
 - (NSString *)nibName {
 	return @"MiniBrowserView";
+}
+
+- (id) initWithNibName:(NSString *)nib bundle:(NSBundle *)bundle {
+	if (self = [super initWithNibName:nib bundle:bundle]) {
+		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
+		self.sealColor = [UIColor colorWithPatternImage:sealImage];		
+		
+		self.modalPresentationStyle = UIModalPresentationCurrentContext; //UIModalPresentationFullScreen;
+		m_shouldStopLoadingOnHide = YES;
+		m_loadingInterrupted = NO;
+		m_urlRequestToLoad = nil;
+		//m_activity = nil;
+		//m_loadingLabel = nil;
+		m_parentCtrl = nil;
+		m_shouldUseParentsView = NO;
+		m_shouldDisplayOnViewLoad = NO;
+		m_shouldHideDoneButton = YES;
+		self.m_normalItemList = nil;
+		m_loadingItemList = nil;
+		m_authCallback = nil;
+		[self enableBackButton:NO];
+		[self enableFwdButton:NO];
+		
+	}
+	return self;
 }
 
 - (void)awakeFromNib {
