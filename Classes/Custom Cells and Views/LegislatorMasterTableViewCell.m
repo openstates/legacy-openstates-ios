@@ -27,7 +27,6 @@
 @synthesize disclosureView;
 
 - (void)awakeFromNib {
-	[ImageCache sharedImageCache];
 	
 	self.backgroundDark = [TexLegeTheme backgroundDark];
 	self.backgroundLight = [TexLegeTheme backgroundLight];
@@ -93,7 +92,8 @@
 }
 
 - (void)dealloc {
-	self.leg_photoView = self.disclosureView = nil;
+	self.leg_photoView = nil;
+	self.disclosureView = nil;
 	self.leg_titleLab = self.leg_tenureLab = self.leg_nameLab = nil;
 	self.leg_sliderViewPlaceHolder = self.leg_sliderView = nil;
 	self.legislator = nil;

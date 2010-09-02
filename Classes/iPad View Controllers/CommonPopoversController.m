@@ -18,8 +18,6 @@
 SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 
 @synthesize masterListPopoverPC;
-@synthesize currentMasterViewController;
-@synthesize currentDetailViewController;
 @synthesize isOpening;
 
 #pragma mark -
@@ -32,7 +30,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 		
 		self.masterListPopoverPC = nil;
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) 
+		if ([UtilityMethods isIPadDevice])
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) 
 													 name:@"UIDeviceOrientationDidChangeNotification" object:nil];
     }
     return self;
@@ -42,7 +41,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 /* dealloc */
 - (void) dealloc
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+	if ([UtilityMethods isIPadDevice])
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIDeviceOrientationDidChangeNotification" object:nil];
 
     self.masterListPopoverPC = nil;
 	
@@ -50,46 +50,35 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 }
 
 #pragma mark -
-#pragma mark Accessors
-
-/* currentMasterViewController */
-- (UIViewController *) currentMasterViewController { return [[TexLegeAppDelegate appDelegate] currentMasterViewController]; }
-
-/* currentDetailViewController */
-- (UIViewController *) currentDetailViewController { return [[TexLegeAppDelegate appDelegate] currentDetailViewController]; }
-
-
-#pragma mark -
 #pragma mark Popover Menu Management
 
 // before this we should listen for rotations and invalidate menu items in the appropriate controllers
 // This would happen on rotations or on new menu selections with a VC change
 - (IBAction)resetPopoverMenus:(id)sender {
-	if (![UtilityMethods isIPadDevice])
+	if (![UtilityMethods isIPadDevice] || self.isOpening)
 		return;
+	
+	BOOL animated = YES;
+	if (!sender)
+		animated = NO;
+	
 	
 	[self dismissMasterListPopover:sender];
 	
-	BOOL masterSplitVisible = ([UtilityMethods isLandscapeOrientation]);
-	UIViewController *commander = masterSplitVisible ? self.currentMasterViewController : self.currentDetailViewController; 
-	if (!commander) {
-		debug_NSLog(@"CurrentMasterViewController or CurrentDetailViewController is empty. Popovers not possible.");
-		return;
-	}
-		
-	if (masterSplitVisible) {	// Don't show any menu buttons on the detail side of the split if we're in landscape
-		[[self.currentDetailViewController navigationItem] setRightBarButtonItem:nil animated:YES];
+	UIViewController *detail = [[TexLegeAppDelegate appDelegate] currentDetailViewController];
+	if ([UtilityMethods isLandscapeOrientation]) {	// Don't show any menu buttons on the detail side of the split if we're in landscape
+		[[detail navigationItem] setRightBarButtonItem:nil animated:animated];
 		return;			// don't go any further if we don't need to show the other one.
 	}
 	
 	NSString *buttonTitle = nil;
-	if ([self.currentDetailViewController respondsToSelector:@selector(popoverButtonTitle)])
-		buttonTitle = [self.currentDetailViewController performSelector:@selector(popoverButtonTitle)];
+	if ([detail respondsToSelector:@selector(popoverButtonTitle)])
+		buttonTitle = [detail performSelector:@selector(popoverButtonTitle)];
 	if (buttonTitle) {
 		UIBarButtonItem *masterListButton = [[UIBarButtonItem alloc] 
 											 initWithTitle:buttonTitle style:UIBarButtonItemStyleBordered 
 											 target:self action:@selector(displayMasterListPopover:)];
-		[self.currentDetailViewController.navigationItem setRightBarButtonItem:masterListButton animated:YES];
+		[detail.navigationItem setRightBarButtonItem:masterListButton animated:animated];
 		[masterListButton release], masterListButton = nil;
 	}
 			
@@ -98,21 +87,31 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 #pragma mark MasterListPopover
 
 - (IBAction)displayMasterListPopover:(id)sender {	
-	if (!self.currentDetailViewController || ![UtilityMethods isIPadDevice])
+	UIViewController *master = [[TexLegeAppDelegate appDelegate] currentMasterViewController];
+	UIViewController *detail = [[TexLegeAppDelegate appDelegate] currentDetailViewController];
+
+	if (!detail || ![UtilityMethods isIPadDevice])
 		return;
 			
+	BOOL animated = YES;
+	if (!sender)
+		animated = NO;
+		
 	if (!self.masterListPopoverPC) {
-		self.masterListPopoverPC = [[UIPopoverController alloc] initWithContentViewController:self.currentMasterViewController]; // (Autorelease??)
+		self.masterListPopoverPC = [[[UIPopoverController alloc] initWithContentViewController:master] autorelease];
 		self.masterListPopoverPC.delegate = (id<UIPopoverControllerDelegate>)self; //self.currentDetailViewController;	
 	}
-	UIBarButtonItem *menuButton = self.currentDetailViewController.navigationItem.rightBarButtonItem;
-
+	UIBarButtonItem *menuButton = detail.navigationItem.rightBarButtonItem;		
+	if (!menuButton && [sender isKindOfClass:[UIBarButtonItem class]])
+		menuButton = sender;
+		
 	if (!menuButton || !self.masterListPopoverPC) {
 		debug_NSLog(@"Menu Button Item or Master List Popover Controller is unallocated ... cannot display master list popover.");
+		debug_NSLog(@"Button Item :%@    Popover Controller: %@    sender: %@", menuButton, self.masterListPopoverPC, sender);
 		return;		// should never happen?
 	}
 	self.isOpening = YES;
-	[self.masterListPopoverPC presentPopoverFromBarButtonItem:menuButton permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+	[self.masterListPopoverPC presentPopoverFromBarButtonItem:menuButton permittedArrowDirections:UIPopoverArrowDirectionAny animated:animated];
 	self.isOpening = NO;
 	
 	// now that the menu is displayed, let's reset the action so it's ready to go away again on demand
@@ -122,16 +121,22 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 
 
 - (IBAction)dismissMasterListPopover:(id)sender {
-	if (!self.masterListPopoverPC || !self.currentDetailViewController || ![UtilityMethods isIPadDevice] || self.isOpening)
+	UIViewController *detail = [[TexLegeAppDelegate appDelegate] currentDetailViewController];
+		
+	if (!self.masterListPopoverPC || !detail || ![UtilityMethods isIPadDevice] || self.isOpening)
 		return;
+	
+	BOOL animated = YES;
+	if (!sender)
+		animated = NO;
 		
 	if (self.masterListPopoverPC)	{
 		if ([self.masterListPopoverPC isPopoverVisible])
-			[self.masterListPopoverPC dismissPopoverAnimated:YES];
+			[self.masterListPopoverPC dismissPopoverAnimated:animated];
 		self.masterListPopoverPC = nil;
 	}
 	
-	UIBarButtonItem *menuButton = self.currentDetailViewController.navigationItem.rightBarButtonItem;
+	UIBarButtonItem *menuButton = detail.navigationItem.rightBarButtonItem;
 	if (menuButton) {
 		[menuButton setTarget:self];
 		[menuButton setAction:@selector(displayMasterListPopover:)];
@@ -150,9 +155,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
 	// the user (not us) has dismissed the popover, let's cleanup.
 	if ([popoverController isEqual:self.masterListPopoverPC])
-		[self dismissMasterListPopover:nil];
-	//else
-	//	debug_NSLog(@"Unexpected condition, we received a unknown popover controller dismissal notification.");
+		[self dismissMasterListPopover:popoverController];
 }
 
 
@@ -160,17 +163,24 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CommonPopoversController);
 #pragma mark Orientation Changes
 
 - (void)deviceOrientationDidChange:(void*)object { 
-	//UIDeviceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-	/*if (UIInterfaceOrientationIsLandscape(orientation)) {
-		// do something
+	if (![UtilityMethods isIPadDevice])
+		return;
+
+/*	UIDeviceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	if (UIInterfaceOrientationIsLandscape(orientation)) {
+		UIViewController *detail = [[TexLegeAppDelegate appDelegate] currentDetailViewController];
+		
+		if ([UtilityMethods isLandscapeOrientation]) {	// Don't show any menu buttons on the detail side of the split if we're in landscape
+			[[detail navigationItem] setRightBarButtonItem:nil animated:YES];
+			return;			// don't go any further if we don't need to show the other one.
+		}
 	} else {
 		// do something else
-	}*/
+	}
 	
-	/*
-	if (self.masterListPopoverPC)
-		[self dismissMasterListPopover:nil];
-	*/
+	
+	[self dismissMasterListPopover:nil];
+*/	
 	[self resetPopoverMenus:nil];
 }
 

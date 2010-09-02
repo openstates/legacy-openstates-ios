@@ -15,8 +15,6 @@
 + (CommonPopoversController *)sharedCommonPopoversController;
 
 @property (nonatomic,retain) UIPopoverController *masterListPopoverPC;
-@property (nonatomic,readonly) IBOutlet UIViewController *currentMasterViewController;
-@property (nonatomic,readonly) IBOutlet UIViewController *currentDetailViewController;
 @property (nonatomic) BOOL isOpening;
 
 

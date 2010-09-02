@@ -17,7 +17,7 @@
 
 @property BOOL useDarkBackground;
 
-@property (nonatomic,retain) IBOutlet UIImageView *disclosureView;
+@property (nonatomic,retain) IBOutlet UIView *disclosureView;
 @property (nonatomic,retain) IBOutlet UIImageView *leg_photoView;
 @property (nonatomic,retain) IBOutlet UILabel *leg_titleLab;
 @property (nonatomic,retain) IBOutlet UILabel *leg_tenureLab;
