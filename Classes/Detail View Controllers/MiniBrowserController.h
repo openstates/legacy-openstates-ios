@@ -37,7 +37,7 @@
 + (MiniBrowserController *)sharedBrowserWithURL:(NSURL *)urlOrNil;
 
 - (void)display:(id)parentController;
-//- (NSString *)popoverButtonTitle;
+
 @property (nonatomic, retain) UIPopoverController *masterPopover;
 
 - (IBAction)closeButtonPressed:(id)button;

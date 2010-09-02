@@ -18,12 +18,11 @@
 #import "MiniBrowserController.h"
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
-#import "CommonPopoversController.h"
 #import "LegislatorMasterCell.h"
 
 @implementation CommitteeDetailViewController
 
-@synthesize committee;
+@synthesize committee, masterPopover;
 
 enum Sections {
     //kHeaderSection = 0,
@@ -42,19 +41,18 @@ enum InfoSectionRows {
     NUM_INFO_SECTION_ROWS
 };
 
+CGFloat quartzRowHeight = 73.f;
+
 - (void)setCommittee:(CommitteeObj *)newObj {
-	//if (self.startupSplashView) {
-	//	[self.startupSplashView removeFromSuperview];
-	//}
 	
 	if (committee) [committee release], committee = nil;
 	if (newObj) {
+		if (self.masterPopover)
+			[self.masterPopover dismissPopoverAnimated:YES];
+
 		committee = [newObj retain];
 		self.navigationItem.title = self.committee.committeeName;
 
-		if ([UtilityMethods isIPadDevice]) {
-			[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];
-		}
 				
 		[self.tableView reloadData];
 		[self.view setNeedsDisplay];
@@ -71,6 +69,9 @@ enum InfoSectionRows {
 	self.clearsSelectionOnViewWillAppear = NO;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+	
+	if ([UtilityMethods isIPadDevice])
+		quartzRowHeight = quartzRowHeight*1.5;
 }
 
 
@@ -88,8 +89,6 @@ enum InfoSectionRows {
 		self.committee = [[appDelegate committeeMasterVC] selectObjectOnAppear];		
 
 	}
-	
-	//[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];
 }
 
 /*
@@ -124,6 +123,7 @@ enum InfoSectionRows {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
 	self.committee = nil;
+	self.masterPopover = nil;
 	self.tableView = nil;
 	[super viewDidUnload];
 	
@@ -133,7 +133,7 @@ enum InfoSectionRows {
 - (void)dealloc {
 	self.committee = nil;
 	self.tableView = nil;
-
+	self.masterPopover = nil;
     [super dealloc];
 }
 
@@ -163,39 +163,25 @@ enum InfoSectionRows {
 #pragma mark -
 #pragma mark Popover Support
 
-- (NSString *)popoverButtonTitle {
-	return @"Committees";	
+- (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
+    
+    barButtonItem.title = @"Committees";
+    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
+    self.masterPopover = pc;
 }
 
-#pragma mark -
-#pragma mark Split view support
-
-- (void)splitViewController: (UISplitViewController*)svc 
-	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
-	   forPopoverController: (UIPopoverController*)pc {
-	
-//	[self showMasterListPopoverButtonItem:barButtonItem];
- //   self.popoverController = pc;
-}
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
-- (void)splitViewController: (UISplitViewController*)svc 
-	 willShowViewController:(UIViewController *)aViewController 
-  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-	
-//	[self invalidateMasterListPopoverButtonItem:barButtonItem];
-//	self.popoverController = nil;
+- (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
+    
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+    self.masterPopover = nil;
 }
 
 - (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
    willPresentViewController: (UIViewController *)aViewController
 {
-/*    if (pc != nil) {
-        [[TexLegeAppDelegate appDelegate] dismissMasterListPopover:self.navigationItem.rightBarButtonItem];
-		// do I need to set pc to nil?  I need to confirm, but I think it breaks things.
-    }
-*/
-}
+}	
 
 #pragma mark -
 #pragma mark Table view data source
@@ -230,7 +216,6 @@ enum InfoSectionRows {
 	return rows;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSInteger row = [indexPath row];
@@ -257,7 +242,7 @@ enum InfoSectionRows {
 		if (CellIdentifier == @"LegislatorQuartz") {
 			LegislatorMasterCell *newcell = [[[LegislatorMasterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 			//cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
-			newcell.frame = CGRectMake(0.0, 0.0, 234.0, 73.0);		
+			newcell.frame = CGRectMake(0.0, 0.0, 234.0, quartzRowHeight);		
 			newcell.cellView.useDarkBackground = NO;
 			newcell.accessoryView.hidden = NO;
 			cell = newcell;
@@ -379,10 +364,9 @@ enum InfoSectionRows {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section > kInfoSection)
-		return 73.0f;
-
+		return quartzRowHeight;
+	
 	return 44.0f;
-
 }
 
 - (void) pushMapViewWithMap:(CapitolMap *)capMap {

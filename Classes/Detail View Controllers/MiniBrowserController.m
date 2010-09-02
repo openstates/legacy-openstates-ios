@@ -58,6 +58,7 @@ static MiniBrowserController *s_browser = nil;
 		s_browser.m_webView.scalesPageToFit = YES;
 		[s_browser.view setNeedsDisplay];
 	}
+	s_browser.m_shouldHideDoneButton = NO;
 	
 	if ( nil != urlOrNil )
 	{
@@ -73,34 +74,30 @@ static MiniBrowserController *s_browser = nil;
 	return @"MiniBrowserView";
 }
 
-// The designated initializer. Override to perform setup that is required before the view is loaded.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
-{
-	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) 
-	{
-
-		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
-		self.sealColor = [UIColor colorWithPatternImage:sealImage];		
-		
-		self.modalPresentationStyle = UIModalPresentationCurrentContext; //UIModalPresentationFullScreen;
-		m_shouldStopLoadingOnHide = YES;
-		m_loadingInterrupted = NO;
-		m_urlRequestToLoad = nil;
-		//m_activity = nil;
-		//m_loadingLabel = nil;
-		m_parentCtrl = nil;
-		m_shouldUseParentsView = NO;
-		m_shouldDisplayOnViewLoad = NO;
-		m_shouldHideDoneButton = NO;
-		self.m_normalItemList = nil;
-		m_loadingItemList = nil;
-		m_authCallback = nil;
-		[self enableBackButton:NO];
-		[self enableFwdButton:NO];
-	}
-	return self;
+- (void)awakeFromNib {
+	
+	[super awakeFromNib];
+	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
+	self.sealColor = [UIColor colorWithPatternImage:sealImage];		
+	
+	self.modalPresentationStyle = UIModalPresentationCurrentContext; //UIModalPresentationFullScreen;
+	m_shouldStopLoadingOnHide = YES;
+	m_loadingInterrupted = NO;
+	m_urlRequestToLoad = nil;
+	//m_activity = nil;
+	//m_loadingLabel = nil;
+	m_parentCtrl = nil;
+	m_shouldUseParentsView = NO;
+	m_shouldDisplayOnViewLoad = NO;
+	m_shouldHideDoneButton = YES;
+	self.m_normalItemList = nil;
+	m_loadingItemList = nil;
+	m_authCallback = nil;
+	[self enableBackButton:NO];
+	[self enableFwdButton:NO];
+	
+	
 }
-
 
 - (void)didReceiveMemoryWarning 
 {
@@ -162,8 +159,14 @@ static MiniBrowserController *s_browser = nil;
 		self.m_normalItemList = nil;
 	
 	NSMutableArray *alteredButtonList = [[NSMutableArray alloc] initWithArray:m_toolBar.items];
-	if (m_shouldHideDoneButton && [alteredButtonList containsObject:self.m_doneButton])
-		[alteredButtonList removeObject:self.m_doneButton];
+	if (m_shouldHideDoneButton) {
+		for (UIBarButtonItem *button in m_toolBar.items) {
+			if (button.tag == eTAG_CLOSE) {
+				[alteredButtonList removeObject:button];
+				continue;
+			}
+		}
+	}
 
 	self.m_normalItemList = [NSArray arrayWithArray:alteredButtonList];
 	[alteredButtonList release];	
@@ -220,6 +223,7 @@ static MiniBrowserController *s_browser = nil;
 		[self.m_webView setOpaque:YES];
 		self.view.backgroundColor = [TexLegeTheme backgroundLight];
 	}
+	self.m_toolBar.tintColor = [TexLegeTheme navbar];
 
 	//[m_activity stopAnimating];
 	//[m_loadingLabel setHidden:YES];
@@ -261,8 +265,15 @@ static MiniBrowserController *s_browser = nil;
 	
 	if ([UtilityMethods isIPadDevice] && !self.link && ![UtilityMethods isLandscapeOrientation])  {
 		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+		LinksMasterViewController *masterVC = [appDelegate linksMasterVC];
+		if (!masterVC)
+			return;
 		
-		self.link = [[appDelegate linksMasterVC] selectObjectOnAppear];		
+		if (!masterVC.selectObjectOnAppear)
+			masterVC.selectObjectOnAppear = [masterVC firstDataObject];
+
+		self.link = masterVC.selectObjectOnAppear;	
+		
 	}	
 	
 }

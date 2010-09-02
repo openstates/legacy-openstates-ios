@@ -11,9 +11,8 @@
 @class CommitteeObj;
 
 @interface CommitteeDetailViewController : UITableViewController <UISplitViewControllerDelegate> 
-{
-}
-@property (nonatomic, retain) CommitteeObj *committee;
 
-- (NSString *)popoverButtonTitle;
+@property (nonatomic, retain) CommitteeObj *committee;
+@property (nonatomic, retain) UIPopoverController *masterPopover;
+
 @end

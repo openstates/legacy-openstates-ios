@@ -39,6 +39,4 @@
 @property (nonatomic, retain) IBOutlet LegislatorObj *legislator;
 @property (nonatomic, retain) LegislatorDetailDataSource *dataSource;
 
-//- (NSString *)popoverButtonTitle;
-
 @end
