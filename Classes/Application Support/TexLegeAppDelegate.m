@@ -13,7 +13,6 @@
 #import "Reachability.h"
 
 #import "MiniBrowserController.h"
-#import "CommonPopoversController.h"
 #import "GeneralTableViewController.h"
 #import "TableDataSourceProtocol.h"
 #import "UIApplication+ScreenMirroring.h"
@@ -191,12 +190,10 @@ NSInteger kNoSelection = -1;
 - (void)tabBarController:(UITabBarController *)theTabBarController didSelectViewController:(UIViewController *)viewController {
 	NSString *tabchangetag = [NSString stringWithFormat:@"SELECTTAB_%@", viewController.tabBarItem.title];
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:tabchangetag];
+	
+	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
+	[[NSUserDefaults standardUserDefaults] synchronize];
 
-	// Dismiss the popover if it's present.
-	//if (self.menuPopoverPC != nil) {
-	//	[self.menuPopoverPC dismissPopoverAnimated:YES];
-	//}
-	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:self];	
 }
 
 - (void)setTabOrderIfSaved {
@@ -279,7 +276,6 @@ NSInteger kNoSelection = -1;
 		
 	self.districtMapDataSource = [[[DistrictMapDataSource alloc] initWithManagedObjectContext:self.managedObjectContext] autorelease];
 	//[self.tabBarController setSelectedIndex:selection];
-	[[CommonPopoversController sharedCommonPopoversController] resetPopoverMenus:nil];	
 }
 
 
@@ -325,7 +321,6 @@ NSInteger kNoSelection = -1;
 	[[NSUserDefaults standardUserDefaults] registerDefaults:savedPrefsDict];
 	
 	[[NSUserDefaults standardUserDefaults] setObject:version forKey:@"CFBundleVersion"];
-	
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
 	self.analyticsOptInController = [[[AnalyticsOptInAlertController alloc] init] autorelease];
