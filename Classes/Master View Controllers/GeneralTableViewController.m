@@ -14,7 +14,6 @@
 #import "TableDataSourceProtocol.h"
 
 #import "TexLegeTheme.h"
-#import "CommonPopoversController.h"
 
 @implementation GeneralTableViewController
 
