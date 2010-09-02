@@ -154,6 +154,18 @@ enum HeaderSectionRows {
 
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
 	LinkObj * link = [fetchedResultsController objectAtIndexPath:indexPath];	
+	
+	if ([link.url isEqualToString:@"aboutView"]) {
+		NSString *path = nil;
+		if ([UtilityMethods isIPadDevice])
+			path = [[NSBundle mainBundle] pathForResource:@"TexLegeInfo~ipad" ofType:@"htm"];
+		else
+			path = [[NSBundle mainBundle] pathForResource:@"TexLegeInfo~iphone" ofType:@"htm"];
+		
+		link.url = [NSString stringWithFormat:@"file://%@", path];
+		
+	}
+	
 	return link;	
 }
 
@@ -186,7 +198,6 @@ enum HeaderSectionRows {
 
 		cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:@"Cell"] autorelease];
 		if (section == kHeaderSection) {
-			if (indexPath.row == kHeaderSectionContactRow || ![UtilityMethods isIPadDevice])
 			cell.accessoryType = disclosure;
 		}
 		else {
