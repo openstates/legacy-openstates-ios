@@ -130,8 +130,9 @@
 		if (self.detailViewController == nil) {
 			self.detailViewController = [[[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil] autorelease];
 		}
-		
+
 		MiniBrowserController *detailVC = self.detailViewController;
+		
 		if ([link.url isEqualToString:@"contactMail"]) {
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
 																			 subject:@"TexLege Support Question / Concern" 
@@ -140,18 +141,7 @@
 		}
 
 		
-		if ([link.url isEqualToString:@"aboutView"]) {
-			NSString *path = nil;
-			if ([UtilityMethods isIPadDevice])
-				path = [[NSBundle mainBundle] pathForResource:@"TexLegeInfo~ipad" ofType:@"htm"];
-			else
-				path = [[NSBundle mainBundle] pathForResource:@"TexLegeInfo~iphone" ofType:@"htm"];
-			
-			link.url = [NSString stringWithFormat:@"file://%@", path];
-			
-		}
 		[detailVC view];
-		detailVC.m_shouldHideDoneButton = YES;
 		[detailVC removeDoneButton];
 		
 		// save off this item's selection to our AppDelegate
