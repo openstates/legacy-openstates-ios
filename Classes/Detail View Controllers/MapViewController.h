@@ -15,7 +15,7 @@
 @interface MapViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate, UIPopoverControllerDelegate,
 		MKReverseGeocoderDelegate, BSForwardGeocoderDelegate, UISplitViewControllerDelegate, UIActionSheetDelegate> {
 }
-+ (MapViewController *)sharedMapViewController;
+//+ (MapViewController *)sharedMapViewController;
 
 @property (nonatomic,retain) IBOutlet UIPopoverController *masterPopover;
 @property (nonatomic,retain) IBOutlet MKMapView *mapView;
@@ -32,7 +32,7 @@
 @property (nonatomic,readonly) MKCoordinateRegion texasRegion;
 
 - (IBAction) mapControlSheet:(id)sender;
-- (IBAction) showAllDistrictMaps:(id)sender;
+- (IBAction) showAllDistricts:(id)sender;
 - (IBAction) showAllDistrictOffices:(id)sender;
 - (IBAction) changeMapType:(id)sender;
 - (IBAction) locateUser:(id)sender;
@@ -40,7 +40,7 @@
 - (void) clearAnnotationsAndOverlays;
 - (void) clearAnnotationsAndOverlaysExceptRecent;
 - (void) resetMapViewWithAnimation:(BOOL)animated;
-- (void)moveMapToAnnotation:(id<MKAnnotation>)annotation;
+- (void) moveMapToAnnotation:(id<MKAnnotation>)annotation;
 - (IBAction) foundDistrictMapsWithObjectIDs:(NSArray *)objectIDs;
 
 	
