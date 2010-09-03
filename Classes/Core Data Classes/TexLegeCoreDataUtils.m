@@ -119,6 +119,27 @@
 	return objArray;
 }
 
+
++ (NSArray *) allDistrictMapsLightWithContext:(NSManagedObjectContext*)context {
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictMapObj" inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];
+	
+	[fetchRequest setPropertiesToFetch:[DistrictMapObj lightPropertiesToFetch]];
+	
+	NSError *error = nil;
+	NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+	[fetchRequest release];
+	if (error) {
+		debug_NSLog(@"Problem fetching district maps.");
+		return nil;
+	}
+		
+	return fetchedObjects;
+}
+
+
 /*
 - (NSArray *) allDistrictMapsFetchingBoundingBoxes {
 	
