@@ -12,7 +12,7 @@
 @class DistrictMapObj;
 @class LegislatorObj;
 
-@interface DistrictOfficeObj :  NSManagedObject  <MKAnnotation>
+@interface DistrictOfficeObj :  NSManagedObject  <NSCoding, MKAnnotation>
 {
 }
 

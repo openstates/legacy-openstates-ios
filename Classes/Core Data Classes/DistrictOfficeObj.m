@@ -134,8 +134,9 @@
 {
 	if (!self.legislator)
 		return @"District Office";
-	
-    return [self.legislator legProperName];
+
+	NSString *tempString = [NSString stringWithFormat:@"%@ %@ (%@)", [self.legislator legTypeShortName], [self.legislator legProperName], [self.legislator partyShortName]];
+    return tempString;
 }
 
 - (UIImage *)image {
