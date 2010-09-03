@@ -14,7 +14,7 @@
 @class DirectoryDetailInfo;
 @class CPLTColor;
 @class LegislatorDetailDataSource;
-
+@class MapViewController;
 @interface LegislatorDetailViewController : UITableViewController <UISplitViewControllerDelegate, CPLTPlotDataSource, CPLTPieChartDataSource,
 																		UIPopoverControllerDelegate>
 {	
@@ -38,5 +38,6 @@
 @property (nonatomic,retain) UIPopoverController *masterPopover;
 @property (nonatomic, retain) IBOutlet LegislatorObj *legislator;
 @property (nonatomic, retain) LegislatorDetailDataSource *dataSource;
+@property (nonatomic, retain) IBOutlet MapViewController *mapViewController;
 
 @end

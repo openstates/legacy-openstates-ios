@@ -27,6 +27,7 @@
 #import "TexLegeAppDelegate.h"
 
 #import "CommitteeDetailViewController.h"
+#import "DistrictOfficeMasterViewController.h"
 
 #import "MapViewController.h"
 #import "MiniBrowserController.h"
@@ -62,6 +63,7 @@
 @synthesize indivSlider, partySlider, allSlider;
 @synthesize indivPHolder, partyPHolder, allPHolder;
 @synthesize notesPopover, masterPopover;
+@synthesize mapViewController;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -139,6 +141,7 @@
 	self.dataForPlot = nil;
 	//self.scatterPlotView = nil;
 	self.startupSplashView = nil;
+	self.mapViewController = nil;
 	
     [super didReceiveMemoryWarning];
     
@@ -167,7 +170,7 @@
 	self.miniBackgroundView = nil;
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
 	//self.scatterPlotView = nil;
-	
+	self.mapViewController = nil;
 	self.notesPopover = nil;
 	self.masterPopover = nil;
 
@@ -195,7 +198,7 @@
 	self.scatterPlotView = nil;
 	self.miniBackgroundView = nil;
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
-
+	self.mapViewController = nil;
 	self.notesPopover = nil;
 	self.masterPopover = nil;
 
@@ -442,25 +445,35 @@
 		// Switch to the appropriate application for this url...
 		else if (cellInfo.entryType == DirectoryTypeMap) {
 			if ([cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]] || [cellInfo.entryValue isKindOfClass:[DistrictMapObj class]])
-			{			
-				MapViewController *mapVC = [MapViewController sharedMapViewController];
+			{		
+				if (!self.mapViewController)
+					self.mapViewController = [[[MapViewController alloc] init] autorelease];
+				[self.mapViewController view];
 				
 				DistrictOfficeObj *districtOffice = nil;
 				if ([cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]])
 					districtOffice = cellInfo.entryValue;
 				
-				[mapVC resetMapViewWithAnimation:NO];
-				[mapVC.mapView addOverlay:[self.legislator.districtMap polygon]];
+				[self.mapViewController resetMapViewWithAnimation:NO];
 
+				[self.mapViewController.mapView addOverlay:[self.legislator.districtMap polygon]];
 				if (districtOffice) {
-					[mapVC.mapView addAnnotation:districtOffice];
-					[mapVC moveMapToAnnotation:districtOffice];
+					[self.mapViewController.mapView addAnnotation:districtOffice];
+					[self.mapViewController moveMapToAnnotation:districtOffice];
 				}
 				else {
-					[mapVC.mapView setRegion:self.legislator.districtMap.region animated:YES]; 
+					[self.mapViewController.mapView addAnnotation:self.legislator.districtMap];
+					//[mapVC.mapView setRegion:self.legislator.districtMap.region animated:YES]; 
+					[self.mapViewController moveMapToAnnotation:self.legislator.districtMap];
+
 				}
-				[self.navigationController pushViewController:mapVC animated:YES];
-				//[mapVC release];
+				if ([self.navigationController.viewControllers containsObject:self.mapViewController])
+					[self.navigationController popToViewController:self.mapViewController animated:YES];
+				else
+					[self.navigationController pushViewController:self.mapViewController animated:YES];
+
+				//if (![UtilityMethods isIPadDevice]) 
+				//	self.mapViewController = nil;
 			}
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&

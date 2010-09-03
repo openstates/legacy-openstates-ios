@@ -129,7 +129,7 @@ static MiniBrowserController *s_browser = nil;
 - (void)didReceiveMemoryWarning 
 {
 	[self stopLoading]; // should we do more, like just close up shop?
-	if (m_parentCtrl)// && [m_parentCtrl modalViewController])
+	if (m_parentCtrl && [m_parentCtrl modalViewController])
 		[m_parentCtrl dismissModalViewControllerAnimated:YES];
 
 	[super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
