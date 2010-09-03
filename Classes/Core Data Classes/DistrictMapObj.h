@@ -12,7 +12,7 @@
 @class DistrictOfficeObj;
 @class LegislatorObj;
 
-@interface DistrictMapObj :  NSManagedObject  <NSCoding>
+@interface DistrictMapObj :  NSManagedObject  <NSCoding, MKAnnotation>
 {
 }
 
@@ -52,6 +52,8 @@
 - (id) initWithDictionary: (NSDictionary *)dictionary;
 - (NSDictionary *)exportDictionary;
 	
++ (NSArray *)lightPropertiesToFetch;
+
 @end
 
 

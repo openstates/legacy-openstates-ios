@@ -125,6 +125,25 @@
 	return tempDict;
 }
 
++ (NSArray *)lightPropertiesToFetch {
+	NSArray *props = [NSArray arrayWithObjects:
+	@"district",
+	@"chamber",
+	@"lineColor",
+	@"lineWidth",
+	@"centerLon",
+	@"centerLat",
+	@"spanLon",
+	@"spanLat",
+	@"maxLon",
+	@"maxLat",
+	@"minLon",
+	@"minLat",
+	@"numberOfCoords",
+	@"legislator.legislatorID",
+	nil];
+	return props;
+}
 
 - (NSString *) chamberName {
 	
@@ -151,7 +170,8 @@
 
 - (NSString *)subtitle
 {
-	return [self.legislator legProperName];
+	NSString *tempString = [NSString stringWithFormat:@"%@ %@ (%@)", [self.legislator legTypeShortName], [self.legislator legProperName], [self.legislator partyShortName]];
+	return tempString;
 }
 
 - (CLLocationCoordinate2D) center {
