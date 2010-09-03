@@ -155,14 +155,16 @@
 */
 	[appDelegate setSavedTableSelection:nil forKey:self.viewControllerKey];
 	
-	// create a LegislatorDetailViewController. This controller will display the full size tile for the element
-	if (self.detailViewController == nil) {
-		self.detailViewController = [MapViewController sharedMapViewController];
+	if (!self.detailViewController) {
+		MapViewController *tempVC = [[MapViewController alloc] init];
+		self.detailViewController = tempVC;
+		[tempVC release];
 	}
-	
+
 	DistrictOfficeObj *office = dataObject;
 	if (office) {
 		MapViewController *mapVC = (MapViewController *)self.detailViewController;
+		[mapVC view];
 		MKMapView *mapView = mapVC.mapView;
 		if (mapVC && mapView) {
 			
