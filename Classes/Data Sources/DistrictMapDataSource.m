@@ -11,10 +11,12 @@
 #import "DistrictMapDataSource.h"
 #import "DisclosureQuartzView.h"
 #import "TexLegeCoreDataUtils.h"
-
+#import "DistrictOfficeObj.h"
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
+#import "DistrictOfficeDataSource.h"
 #import "DistrictMap.h"
 #import "DistrictMapImporter.h"
+#import "TexLegeMapPins.h"
 #endif
 
 @interface DistrictMapDataSource (Private)
@@ -42,10 +44,15 @@
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
 		
+		
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
-		[self initializeDatabase];
+		
+		DistrictOfficeDataSource *tempDistOff = [[DistrictOfficeDataSource alloc] initWithManagedObjectContext:newContext];
+#warning hacky plce to put this....
+		
+		//[self initializeDatabase];
 		mapCount = 0;
-		//self.importer = [[DistrictMapImporter alloc] initWithChamber:SENATE dataSource:self];
+		self.importer = [[DistrictMapImporter alloc] initWithChamber:SENATE dataSource:self];
 		
 		self.byDistrict = NO;
 #endif
@@ -130,6 +137,9 @@
 	NSArray *objectsArray = [TexLegeCoreDataUtils allObjectIDsInEntityNamed:@"DistrictMapObj" context:self.managedObjectContext];
 	debug_NSLog(@"Starting search for coordinate");
 	DistrictMapSearchOperation *op = [[DistrictMapSearchOperation alloc] initWithDelegate:self objects:objectsArray coordinate:aCoordinate];
+	if (!op)
+		return;
+	
 	if (!self.genericOperationQueue)
 		self.genericOperationQueue = [[NSOperationQueue alloc] init];
 	[self.genericOperationQueue addOperation:op];
@@ -368,48 +378,45 @@
         // Handle error
         debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }           
-	
-	
 }
+
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
 #warning initializeDatabase IS TURNED ON!!!
 #warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
 
+
 - (void)checkDistrictMaps {
-			
-		
-		NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-		
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictMapObj" 
-												  inManagedObjectContext:self.managedObjectContext];
-		[fetchRequest setEntity:entity];
-		
-		//[fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"legislator", @"district", @"chamber", nil]];
-		
-		if (self.byDistrict) {
-			NSSortDescriptor *sort1 = [[NSSortDescriptor alloc] initWithKey:@"district" ascending:YES] ;
-			NSSortDescriptor *sort2 = [[NSSortDescriptor alloc] initWithKey:@"chamber" ascending:NO] ;
-			[fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sort1, sort2, nil]];
-			[sort1 release];
-			[sort2 release];
-		}
-		else {
-			NSSortDescriptor *sort1 = [[NSSortDescriptor alloc] initWithKey:@"legislator.lastname" ascending:YES] ;
-			NSSortDescriptor *sort2 = [[NSSortDescriptor alloc] initWithKey:@"legislator.firstname" ascending:YES] ;
-			[fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sort1, sort2, nil]];
-			[sort1 release];
-			[sort2 release];
-			
-		}
-	NSError *error;
-	NSArray *results = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-		
-	[fetchRequest release];
 	
-	for (DistrictMapObj* map in results) {
-		debug_NSLog(@"map for district %@: %d", map.district, [map.coordinatesData length]);
-		MKPolyline *poly = [map polyline];
+	for (DistrictMapObj *map in [TexLegeCoreDataUtils allDistrictMapsLightWithContext:self.managedObjectContext]) {
+		if (!map.legislator) {
+			debug_NSLog(@"district without a legislator!");
+			assert(map.legislator);
+			return;
+		}
 		
+		if (![map districtContainsCoordinate:map.coordinate]) {
+			//debug_NSLog(@"District %@ center is outside the district, finding appropriate district office...", map.district);
+			
+			BOOL foundOne = NO;
+			for (DistrictOfficeObj *office in map.legislator.districtOffices) {
+				if ([map districtContainsCoordinate:office.coordinate]) {
+					//debug_NSLog(@"Found one at %@", office.address);
+					map.centerLat = office.latitude;
+					map.centerLon = office.longitude;
+					foundOne = YES;
+					continue;
+				}
+			}
+			if (!foundOne)
+				debug_NSLog(@"District had no suitable offices inside the boundaries, district=%@ chamber=%@ legislator=%@", 
+							map.district, map.chamber, map.legislator.lastname);
+		}
+		
+	}	 
+ 	// Save the context.
+	NSError *error;
+	if (![self.managedObjectContext save:&error]) {
+		// Handle the error...
 	}
 	
 }
@@ -462,10 +469,14 @@
 		newObject.coordinatesData = [map.coordinatesData copy];
 		
 		LegislatorObj *legislatorObject = [TexLegeCoreDataUtils legislatorForDistrict:map.district andChamber:map.chamber withContext:context];
-		if (legislatorObject)
+		if (legislatorObject) {
 			newObject.legislator = legislatorObject;
-		else
+			newObject.pinColorIndex = ([legislatorObject.party_id integerValue] == REPUBLICAN) ? [NSNumber numberWithInteger:TexLegePinAnnotationColorRed] : [NSNumber numberWithInteger:TexLegePinAnnotationColorBlue];
+		}
+		else {
+			newObject.pinColorIndex = [NSNumber numberWithInteger:TexLegePinAnnotationColorGreen];
 			debug_NSLog(@"No Legislator Found for chamber=%@ district=%@", map.chamber, map.district); 
+		}
 
 		
 		mapCount++;
@@ -476,9 +487,6 @@
 	if (![context save:&error]) {
 		// Handle the error...
 	}
-	
-	[lege_request release];
-	
 	
 	if (mapCount ==31) {
 		self.importer = nil;
