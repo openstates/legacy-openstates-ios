@@ -14,8 +14,6 @@
 #import "LegislatorMasterCellView.h"
 #import "TexLegeTheme.h"
 #import "LegislatorMasterCell.h"
-#import "DistrictOfficeObj.h"
-#import "BSForwardGeocoder.h"
 #import "UIDevice-Hardware.h"
 //#import "NSData+Encryption.h"
 
@@ -24,13 +22,8 @@
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
 - (void)initializeDatabase;	
 - (void) populatePartisanIndexDatabase;
-- (void) populateDistrictOffices;
-- (void) checkDistrictOffices;
-#endif
-
-
 - (void) save;
-
+#endif
 @end
 
 
@@ -53,8 +46,6 @@
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
 		[self initializeDatabase];
 		[self populatePartisanIndexDatabase];
-		[self populateDistrictOffices];
-		[self checkDistrictOffices];
 #endif
 		
 	}
@@ -267,21 +258,24 @@
 #pragma mark -
 #pragma mark Core Data Methods
 
-- (void)save{
-	@try {
-		NSError *error;
-		if (![self.managedObjectContext save:&error]) {
-			debug_NSLog(@"DirectoryDataSource:save - unresolved error %@, %@", error, [error userInfo]);
-		}		
-	}
-	@catch (NSException * e) {
-		debug_NSLog(@"Failure in DirectoryDataSource:save, name=%@ reason=%@", e.name, e.reason);
-	}
-}
-
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
 #warning initializeDatabase IS TURNED ON!!!
 #warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
+- (void)save{
+	@try {
+		[self.managedObjectContext setUndoManager:nil];
+
+		NSError *error;
+		if (![self.managedObjectContext save:&error]) {
+			debug_NSLog(@"LegislatorsDataSource:save - unresolved error %@, %@", error, [error userInfo]);
+		}		
+	}
+	@catch (NSException * e) {
+		debug_NSLog(@"Failure in LegislatorsDataSource:save, name=%@ reason=%@", e.name, e.reason);
+	}
+}
+
+
 - (void)initializeDatabase {
 	NSInteger count = [[self.fetchedResultsController sections] count];
 	if (count == 0) { // try initializing it...
@@ -331,305 +325,12 @@
 			[newManagedObject setValue:[aDictionary valueForKey:@"cap_fax"] forKey:@"cap_fax"];
 			[newManagedObject setValue:[aDictionary valueForKey:@"cap_phone2_name"] forKey:@"cap_phone2_name"];
 			[newManagedObject setValue:[aDictionary valueForKey:@"cap_phone2"] forKey:@"cap_phone2"];
-			
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist1_street"] forKey:@"dist1_street"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist1_city"] forKey:@"dist1_city"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist1_zip"] forKey:@"dist1_zip"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist1_phone"] forKey:@"dist1_phone"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist1_fax"] forKey:@"dist1_fax"];
-			
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist2_street"] forKey:@"dist2_street"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist2_city"] forKey:@"dist2_city"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist2_zip"] forKey:@"dist2_zip"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist2_phone"] forKey:@"dist2_phone"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist2_fax"] forKey:@"dist2_fax"];
-			
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist3_street"] forKey:@"dist3_street"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist3_city"] forKey:@"dist3_city"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist3_zip"] forKey:@"dist3_zip"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist3_phone1"] forKey:@"dist3_phone1"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist3_fax"] forKey:@"dist3_fax"];
-			
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist4_street"] forKey:@"dist4_street"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist4_city"] forKey:@"dist4_city"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist4_zip"] forKey:@"dist4_zip"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist4_phone1"] forKey:@"dist4_phone1"];
-			[newManagedObject setValue:[aDictionary valueForKey:@"dist4_fax"] forKey:@"dist4_fax"];
-			
+						
 			[self save];
 		}
 		// release the raw data
 		[rawPlistArray release];
 	}
-}
-
-- (NSError *) geocodeDistrictOffice:(DistrictOfficeObj *)office {
-	NSError *parseError = nil;
-	NSString *searchQuery = [NSString stringWithFormat:@"%@, %@, TX, %@", office.address, office.city, office.zipCode];
-
-	// Create the url to Googles geocoding API, we want the response to be in XML
-	NSString* mapsUrl = [[NSString alloc] initWithFormat:@"http://maps.google.com/maps/api/geocode/xml?address=%@&sensor=false&region=us", 
-						 searchQuery];
-	
-	// Create the url object for our request. It's important to escape the 
-	// search string to support spaces and international characters
-	NSURL *url = [[NSURL alloc] initWithString:[mapsUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-	
-	// Run the KML parser
-	BSGoogleV3KmlParser *parser = [[BSGoogleV3KmlParser alloc] init];
-	
-	[parser parseXMLFileAtURL:url parseError:&parseError ignoreAddressComponents:NO];
-	
-	[url release];
-	[mapsUrl release];
-		
-	// If the query was successfull we store the array with results
-	if(parser.statusCode == G_GEO_SUCCESS)
-	{
-		BSKmlResult *firstResult = nil;
-		
-		for (BSKmlResult *result in parser.results) {
-			if (result.addressDict && ([[result.addressDict valueForKey:@"address"] length]|| [result.formattedAddress length])) {
-				//debug_NSLog(@"%@ ..... %@", [result.addressDict valueForKey:@"address"], result.formattedAddress);
-				firstResult = result;
-				continue;
-			}
-		}
-		if (!firstResult) {
-			firstResult = [parser.results objectAtIndex:0];
-			debug_NSLog(@"Troublesome address for %@", [office.legislator legProperName]);
-		}
-		
-		NSDictionary *addressDict = firstResult.addressDict;
-		
-		
-		BOOL missingAddress = (addressDict && [[addressDict valueForKey:@"address"] length] == 0);
-		
-		if (missingAddress) {
-			debug_NSLog(@"[Forward Geocoder] Has a missing address: MISSINGADDR=%d, %@", missingAddress, searchQuery);
-			//[addressDict setValue:@"Post Office Box" forKey:@"formattedAddress"];
-			[addressDict setValue:office.address forKey:@"formattedAddress"];
-		}
-		
-		office.formattedAddress = [addressDict valueForKey:@"formattedAddress"];
-		office.county = [firstResult county];
-		office.latitude = [NSNumber numberWithDouble:[firstResult latitude]];
-		office.longitude = [NSNumber numberWithDouble:[firstResult longitude]];
-		office.spanLat = [NSNumber numberWithDouble:firstResult.coordinateSpan.latitudeDelta];
-		office.spanLon = [NSNumber numberWithDouble:firstResult.coordinateSpan.longitudeDelta];
-	}
-	
-	//debug_NSLog(@"Found placemarks: %d", [parser.results count]);
-
-	if ([parser.results count] == 0)
-		debug_NSLog(@"Nothing found for %@", searchQuery);
-		
-		
-	[parser release];	
-	
-	
-	if(parseError != nil)
-	{
-		debug_NSLog(@"Geocode parse error: %@", [parseError localizedDescription]);
-	}
-	
-	
-	return parseError;
-	
-}
-
-- (void) checkDistrictOffices {
-	// Create the fetch request for the entity.
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	
-	// Get our table-specific Core Data.
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictOfficeObj" 
-												 inManagedObjectContext:self.managedObjectContext];
-	[fetchRequest setEntity:entity];
-	
-	//[fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"legislatorID", nil]];
-	
-	NSError *error = nil;
-	NSArray *objArray = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-	
-	[fetchRequest release];
-	
-	
-	if (error) {
-		debug_NSLog(@"DirectoryDataSource:fetch - unresolved error %@, %@", error, [error userInfo]);
-		return;
-	}
-	
-	for (DistrictOfficeObj *obj in objArray) {
-		if ([obj.latitude doubleValue] < 20.0f) { // we don't have a valid location
-			[self geocodeDistrictOffice:obj];
-			if ([obj.latitude doubleValue] < 20.0f) // we don't have a valid location
-				debug_NSLog(@"Found invalid location: %@", [obj address]);
-			else
-				debug_NSLog(@"Fixed one: %@", [obj address]);
-		}
-	}
-	[self save];
-	
-}
-
-
-- (void) populateDistrictOffices {
-	// Create the fetch request for the entity.
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	
-	// Get our table-specific Core Data.
-	NSEntityDescription *legEntity = [NSEntityDescription entityForName:@"LegislatorObj" 
-												 inManagedObjectContext:self.managedObjectContext];
-	[fetchRequest setEntity:legEntity];
-		
-	[fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"legislatorID", nil]];
-	
-	NSError *error = nil;
-	NSArray *legArray = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-	
-	[fetchRequest release];
-	
-	
-	if (error) {
-		debug_NSLog(@"DirectoryDataSource:save - unresolved error %@, %@", error, [error userInfo]);
-		return;
-	}
-	
-	// read the legislator data from the plist
-	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"Legislators" ofType:@"plist"];
-	NSArray *rawPlistArray = [[NSArray alloc] initWithContentsOfFile:thePath];
-	
-	NSEntityDescription *distOfficeEntity = [NSEntityDescription entityForName:@"DistrictOfficeObj" 
-												  inManagedObjectContext:self.managedObjectContext];
-	
-	NSMutableSet	*theset = [[NSMutableSet alloc] initWithCapacity:5];	// arbitrary limit, change at will.
-	
-	// iterate over the values in the raw  dictionary
-	for (NSDictionary * aDictionary in rawPlistArray)
-	{
-		NSNumber *legID = [aDictionary valueForKey:@"legislatorID"];
-		NSNumber *chamber = [aDictionary valueForKey:@"legtype"];
-		NSNumber *district = [aDictionary valueForKey:@"district"];
-		
-		LegislatorObj *foundLeg = nil;
-		
-		// lets find the appropriate legislator object and add this wnom set to it.
-		for (LegislatorObj *leg in legArray) {
-			if ([leg.legislatorID isEqual:legID]) {
-				foundLeg = leg;
-				continue;
-			}
-		}
-		if (!foundLeg) {
-			debug_NSLog(@"Not Found in core data: %@", legID);
-			continue;
-		}
-
-		
-		NSString *street = [aDictionary valueForKey:@"dist1_street"];
-		NSString *city = [aDictionary valueForKey:@"dist1_city"];
-		NSString *zip = [aDictionary valueForKey:@"dist1_zip"];
-		NSString *phone = [aDictionary valueForKey:@"dist1_phone"];
-		NSString *fax = [aDictionary valueForKey:@"dist1_fax"];
-		
-		if (street && [street length]) {
-			DistrictOfficeObj *newObj = (DistrictOfficeObj *)[NSEntityDescription insertNewObjectForEntityForName:
-																	[distOfficeEntity name] inManagedObjectContext:self.managedObjectContext];
-			
-			newObj.chamber = chamber;
-			newObj.district = district;
-			newObj.phone = phone;
-			newObj.fax = fax;
-			newObj.address = street;
-			newObj.city = city;
-			newObj.stateCode = @"TX";
-			newObj.zipCode = zip;
-			newObj.legislator = foundLeg;
-			newObj.pinColorIndex = [NSNumber numberWithInteger:MKPinAnnotationColorRed];
-
-			[self geocodeDistrictOffice:newObj];
-		}
-		
-		street = [aDictionary valueForKey:@"dist2_street"];
-		city = [aDictionary valueForKey:@"dist2_city"];
-		zip = [aDictionary valueForKey:@"dist2_zip"];
-		phone = [aDictionary valueForKey:@"dist2_phone"];
-		fax = [aDictionary valueForKey:@"dist2_fax"];
-		
-		if (street && [street length]) {
-			DistrictOfficeObj *newObj = (DistrictOfficeObj *)[NSEntityDescription insertNewObjectForEntityForName:
-															  [distOfficeEntity name] inManagedObjectContext:self.managedObjectContext];
-			
-			newObj.chamber = chamber;
-			newObj.district = district;
-			newObj.phone = phone;
-			newObj.fax = fax;
-			newObj.address = street;
-			newObj.city = city;
-			newObj.stateCode = @"TX";
-			newObj.zipCode = zip;
-			newObj.legislator = foundLeg;
-			newObj.pinColorIndex = [NSNumber numberWithInteger:MKPinAnnotationColorRed];
-
-			[self geocodeDistrictOffice:newObj];
-		}
-		
-		street = [aDictionary valueForKey:@"dist3_street"];
-		city = [aDictionary valueForKey:@"dist3_city"];
-		zip = [aDictionary valueForKey:@"dist3_zip"];
-		phone = [aDictionary valueForKey:@"dist3_phone1"];
-		fax = [aDictionary valueForKey:@"dist3_fax"];
-		
-		if (street && [street length]) {
-			DistrictOfficeObj *newObj = (DistrictOfficeObj *)[NSEntityDescription insertNewObjectForEntityForName:
-															  [distOfficeEntity name] inManagedObjectContext:self.managedObjectContext];
-			
-			newObj.chamber = chamber;
-			newObj.district = district;
-			newObj.phone = phone;
-			newObj.fax = fax;
-			newObj.address = street;
-			newObj.city = city;
-			newObj.stateCode = @"TX";
-			newObj.zipCode = zip;
-			newObj.legislator = foundLeg;
-			newObj.pinColorIndex = [NSNumber numberWithInteger:MKPinAnnotationColorRed];
-
-			[self geocodeDistrictOffice:newObj];
-		}
-		
-		
-		street = [aDictionary valueForKey:@"dist4_street"];
-		city = [aDictionary valueForKey:@"dist4_city"];
-		zip = [aDictionary valueForKey:@"dist4_zip"];
-		phone = [aDictionary valueForKey:@"dist4_phone1"];
-		fax = [aDictionary valueForKey:@"dist4_fax"];
-		
-		if (street && [street length]) {
-			DistrictOfficeObj *newObj = (DistrictOfficeObj *)[NSEntityDescription insertNewObjectForEntityForName:
-															  [distOfficeEntity name] inManagedObjectContext:self.managedObjectContext];
-			
-			newObj.chamber = chamber;
-			newObj.district = district;
-			newObj.phone = phone;
-			newObj.fax = fax;
-			newObj.address = street;
-			newObj.city = city;
-			newObj.stateCode = @"TX";
-			newObj.zipCode = zip;
-			newObj.legislator = foundLeg;
-			newObj.pinColorIndex = [NSNumber numberWithInteger:MKPinAnnotationColorRed];
-
-			[self geocodeDistrictOffice:newObj];
-		}
-				
-	}
-	[self save];
-	debug_NSLog(@"---------------------------------------------------------Saved District Office Entities");
-	[rawPlistArray release];
-	[theset release];
-	
 }
 
 
