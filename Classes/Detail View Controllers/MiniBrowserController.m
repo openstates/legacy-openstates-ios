@@ -428,11 +428,16 @@ static MiniBrowserController *s_browser = nil;
 																			 subject:@"TexLege Support Question" 
 																				body:@"" commander:[[TexLegeAppDelegate appDelegate] detailNavigationController]];
 		else {
-			self.title = link.label;
-			
 			NSURL *aURL = [UtilityMethods safeWebUrlFromString:link.url];
-			if (aURL && [UtilityMethods canReachHostWithURL:aURL alert:NO]) // got a network connection
-				[self loadURL:aURL];			
+			if (aURL && [UtilityMethods canReachHostWithURL:aURL alert:YES]) { // got a network connection
+				[self loadURL:aURL];
+			}
+			else
+				return;
+			
+			self.title = link.label;
+			self.m_toolBar.hidden = ([link.label isEqualToString:@"TexLege Information"]);
+
 		}
 		
 	}
