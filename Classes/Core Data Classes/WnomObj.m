@@ -19,7 +19,7 @@
 @dynamic adjMean;
 
 - (NSNumber *) year {
-	return [NSNumber numberWithInteger:1849+(2*[self.session integerValue])];
+	return [NSNumber numberWithInteger:1847+(2*[self.session integerValue])];
 }
 
 
