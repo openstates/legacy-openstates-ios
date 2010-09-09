@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name = "viewport" content = "VIEWPORT_SETTING">
+		<title>LEGISLATOR Roll Call Analysis</title>
+		<script type="text/javascript">document.documentElement.style.webkitTapHighlightColor = "rgba(0,0,0,0)";</script>
+		<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="highcharts.js"></script>
+		<script type="text/javascript">
+			var chart;
+			$(document).ready(function() {
+				chart = new Highcharts.Chart({
+					chart: {
+						renderTo: 'container',
+						defaultSeriesType: 'line',
+						margin: [50,50,50,60],	// [top, right, bottom, left]
+						borderRadius: 9,
+						borderWidth: 1,
+						shadow: true,
+						borderColor: 'AAAAAA',		// lightGray
+						backgroundColor: 'FAFBFB'	//backgroundLight
+					},
+					title: {
+						text: 'Historical Voting Comparison',
+						color: '435662',
+						y: 25 
+					},
+					plotOptions: {
+						series: {
+							animation: false,
+
+							events: {
+								legendItemClick: function(event) {
+									return false;
+								}
+							}
+						}
+					},
+					credits: {enabled: false},
+					xAxis: {
+						type: 'datetime',
+						tickPixelInterval: 55,
+						tickmarkPlacement: 'between',
+
+						labels: {
+							formatter: function() {
+								return Highcharts.dateFormat('%Y', this.value);
+							}
+						}
+					},
+					yAxis: {
+						title: {
+							text: 'Partisanship',
+							color: '8D977D'
+						},
+						plotLines: [{
+							value: 0,
+							width: 2,
+							color: '#808080'
+						}]
+					},
+					tooltip: {
+                        formatter: function() {
+                                return '<b>'+ this.series.name +'</b><br/>'+
+									Highcharts.dateFormat('%Y', this.x) +': '+ Highcharts.numberFormat(this.y, 3, '.');
+                        }
+                    },
+					legend: {
+						layout: 'horizontal',
+						align: 'center',
+						verticalAlign: 'bottom',
+						x: 0,
+						y: -10,
+						borderWidth: 0
+					},
+					series: [
+					{
+						name: 'Dem',
+						color: '324F85',
+						data: DATA_DEMOC,
+						pointStart: Date.UTC(DATA_TIME, 1, 1),
+						pointInterval: 2 * 365 * 24 * 3600 * 1000
+					}, 
+					{
+						name: 'Repub',
+						color: 'C6002F',
+						data: DATA_REPUB,
+						pointStart: Date.UTC(DATA_TIME, 1, 1),
+						pointInterval: 2 * 365 * 24 * 3600 * 1000
+					}, 
+					{
+						name: 'LEGISLATOR',
+						color: '99BE5A',				//'7E9143'
+						data: DATA_MEMBER,
+						lineWidth: 2,
+						pointStart: Date.UTC(DATA_TIME, 1, 1),
+						pointInterval: 2 * 365 * 24 * 3600 * 1000
+					}]
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="container" style="CONTENT_STYLE"></div>
+	</body>
+</html>
