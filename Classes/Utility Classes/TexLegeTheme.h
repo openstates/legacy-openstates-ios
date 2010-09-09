@@ -33,5 +33,7 @@
 + (UIColor *)segmentCtl;
 + (UIColor *)texasBlue;
 + (UIColor *)texasRed;
++ (UIColor *)texasGreen;
++ (UIColor *)texasOrange;
 
 @end
