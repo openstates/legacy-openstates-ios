@@ -50,7 +50,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1114 S St Mary's St, San Antonio, TX 78210, USA</string>
+		<string>1114 S St Mary's St, San Antonio, TX 78210</string>
 		<key>latitude</key>
 		<real>29.412479400634766</real>
 		<key>legislatorID</key>
@@ -152,7 +152,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1 Fluor Daniel Dr, Sugar Land, TX 77478, USA</string>
+		<string>1 Fluor Daniel Dr, Sugar Land, TX 77478</string>
 		<key>latitude</key>
 		<real>29.605247497558594</real>
 		<key>legislatorID</key>
@@ -186,7 +186,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>E John Carpenter Fwy, Irving, TX 75062, USA</string>
+		<string>E John Carpenter Fwy, Irving, TX 75062</string>
 		<key>latitude</key>
 		<real>32.834362030029297</real>
 		<key>legislatorID</key>
@@ -220,7 +220,7 @@
 		<key>fax</key>
 		<string>325-676-8060</string>
 		<key>formattedAddress</key>
-		<string>810 Chestnut St, Abilene, TX 79602, USA</string>
+		<string>810 Chestnut St, Abilene, TX 79602</string>
 		<key>latitude</key>
 		<real>32.440364837646484</real>
 		<key>legislatorID</key>
@@ -254,7 +254,7 @@
 		<key>fax</key>
 		<string>903-223-7963</string>
 		<key>formattedAddress</key>
-		<string>5411 Plaza Dr, Texarkana, TX 75503, USA</string>
+		<string>5411 Plaza Dr, Texarkana, TX 75503</string>
 		<key>latitude</key>
 		<real>33.470226287841797</real>
 		<key>legislatorID</key>
@@ -288,7 +288,7 @@
 		<key>fax</key>
 		<string>817-295-5319</string>
 		<key>formattedAddress</key>
-		<string>201 W Ellison St, Burleson, TX 76028, USA</string>
+		<string>201 W Ellison St, Burleson, TX 76028</string>
 		<key>latitude</key>
 		<real>32.541683197021484</real>
 		<key>legislatorID</key>
@@ -310,27 +310,27 @@
 	</dict>
 	<dict>
 		<key>address</key>
-		<string>1100 N Congress Ave</string>
+		<string>2421 W 7th St #350</string>
 		<key>chamber</key>
 		<integer>2</integer>
 		<key>city</key>
-		<string>Austin</string>
+		<string>Fort Worth</string>
 		<key>county</key>
-		<string>Travis</string>
+		<string>Tarrant</string>
 		<key>district</key>
 		<integer>10</integer>
 		<key>fax</key>
-		<string></string>
+		<string>817-332-1230</string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>2421 W 7th St #350, Fort Worth, TX 76107</string>
 		<key>latitude</key>
-		<real>30.272745132446289</real>
+		<real>32.7510167</real>
 		<key>legislatorID</key>
 		<integer>108093</integer>
 		<key>longitude</key>
-		<real>-97.741134643554688</real>
+		<real>-97.3512189</real>
 		<key>phone</key>
-		<string>512-462-0110</string>
+		<string>817-332-3338</string>
 		<key>pinColorIndex</key>
 		<integer>0</integer>
 		<key>spanLat</key>
@@ -340,7 +340,7 @@
 		<key>stateCode</key>
 		<string>TX</string>
 		<key>zipCode</key>
-		<string>78701</string>
+		<string>76107</string>
 	</dict>
 	<dict>
 		<key>address</key>
@@ -390,7 +390,7 @@
 		<key>fax</key>
 		<string>940-898-0926</string>
 		<key>formattedAddress</key>
-		<string>S Interstate Highway 35 E, Denton, TX 76210, USA</string>
+		<string>S Interstate Highway 35 E, Denton, TX 76210</string>
 		<key>latitude</key>
 		<real>33.186435699462891</real>
 		<key>legislatorID</key>
@@ -424,7 +424,7 @@
 		<key>fax</key>
 		<string>254-968-6903</string>
 		<key>formattedAddress</key>
-		<string>U.S. 377, Stephenville, TX 76401, USA</string>
+		<string>U.S. 377, Stephenville, TX 76401</string>
 		<key>latitude</key>
 		<real>32.238117218017578</real>
 		<key>legislatorID</key>
@@ -446,27 +446,27 @@
 	</dict>
 	<dict>
 		<key>address</key>
-		<string>1100 N Congress Ave</string>
+		<string>11200 East Executive Dr. #130</string>
 		<key>chamber</key>
 		<integer>1</integer>
 		<key>city</key>
-		<string>Austin</string>
+		<string>Richardson</string>
 		<key>county</key>
-		<string>Travis</string>
+		<string>Dallas</string>
 		<key>district</key>
 		<integer>112</integer>
 		<key>fax</key>
-		<string></string>
+		<string>972-470-0789</string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>1200 East Executive Dr. #130, Richardson, TX 75081</string>
 		<key>latitude</key>
-		<real>30.272745132446289</real>
+		<real>32.9623221</real>
 		<key>legislatorID</key>
 		<integer>102062</integer>
 		<key>longitude</key>
-		<real>-97.741134643554688</real>
+		<real>-96.7104318</real>
 		<key>phone</key>
-		<string>512-463-0486</string>
+		<string>972-234-8980</string>
 		<key>pinColorIndex</key>
 		<integer>0</integer>
 		<key>spanLat</key>
@@ -476,7 +476,7 @@
 		<key>stateCode</key>
 		<string>TX</string>
 		<key>zipCode</key>
-		<string>78701</string>
+		<string>75081</string>
 	</dict>
 	<dict>
 		<key>address</key>
@@ -492,7 +492,7 @@
 		<key>fax</key>
 		<string>903-753-8568</string>
 		<key>formattedAddress</key>
-		<string>101 E Methvin St, Longview, TX 75601, USA</string>
+		<string>101 E Methvin St, Longview, TX 75601</string>
 		<key>latitude</key>
 		<real>32.496208190917969</real>
 		<key>legislatorID</key>
@@ -526,7 +526,7 @@
 		<key>fax</key>
 		<string>806-749-2828</string>
 		<key>formattedAddress</key>
-		<string>1500 Broadway, Lubbock, TX 79401, USA</string>
+		<string>1500 Broadway, Lubbock, TX 79401</string>
 		<key>latitude</key>
 		<real>33.584217071533203</real>
 		<key>legislatorID</key>
@@ -560,7 +560,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>600 S Tyler St, Amarillo, TX 79101, USA</string>
+		<string>600 S Tyler St, Amarillo, TX 79101</string>
 		<key>latitude</key>
 		<real>35.207302093505859</real>
 		<key>legislatorID</key>
@@ -594,7 +594,7 @@
 		<key>fax</key>
 		<string>214-941-6859</string>
 		<key>formattedAddress</key>
-		<string>5787 S Hampton Rd, Dallas, TX 75232, USA</string>
+		<string>5787 S Hampton Rd, Dallas, TX 75232</string>
 		<key>latitude</key>
 		<real>32.676460266113281</real>
 		<key>legislatorID</key>
@@ -628,7 +628,7 @@
 		<key>fax</key>
 		<string>903-589-0203</string>
 		<key>formattedAddress</key>
-		<string>329 Neches St, Jacksonville, TX 75766, USA</string>
+		<string>329 Neches St, Jacksonville, TX 75766</string>
 		<key>latitude</key>
 		<real>31.962457656860352</real>
 		<key>legislatorID</key>
@@ -684,27 +684,27 @@
 	</dict>
 	<dict>
 		<key>address</key>
-		<string>1100 N Congress Ave</string>
+		<string>11129 Circle Way, #101</string>
 		<key>chamber</key>
 		<integer>2</integer>
 		<key>city</key>
-		<string>Austin</string>
+		<string>Lake Jackson</string>
 		<key>county</key>
-		<string>Travis</string>
+		<string>Brazoria</string>
 		<key>district</key>
 		<integer>17</integer>
 		<key>fax</key>
-		<string>512-463-0639</string>
+		<string>979-480-9122</string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>11129 Circle Way, #101, Lake Jackson, TX 77566</string>
 		<key>latitude</key>
-		<real>30.272745132446289</real>
+		<real>29.0408504</real>
 		<key>legislatorID</key>
 		<integer>110896</integer>
 		<key>longitude</key>
-		<real>-97.741134643554688</real>
+		<real>-95.4518594</real>
 		<key>phone</key>
-		<string>512-463-0117</string>
+		<string>979-480-0994</string>
 		<key>pinColorIndex</key>
 		<integer>0</integer>
 		<key>spanLat</key>
@@ -714,7 +714,7 @@
 		<key>stateCode</key>
 		<string>TX</string>
 		<key>zipCode</key>
-		<string>78701</string>
+		<string>77566</string>
 	</dict>
 	<dict>
 		<key>address</key>
@@ -730,7 +730,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>9601 Jones Rd, Houston, TX 77065, USA</string>
+		<string>9601 Jones Rd, Houston, TX 77065</string>
 		<key>latitude</key>
 		<real>29.913097381591797</real>
 		<key>legislatorID</key>
@@ -764,7 +764,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1001 Main St, Lubbock, TX 79401, USA</string>
+		<string>1001 Main St, Lubbock, TX 79401</string>
 		<key>latitude</key>
 		<real>33.585231781005859</real>
 		<key>legislatorID</key>
@@ -798,7 +798,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1120 Metrocrest Dr, Carrollton, TX 75006, USA</string>
+		<string>1120 Metrocrest Dr, Carrollton, TX 75006</string>
 		<key>latitude</key>
 		<real>32.955207824707031</real>
 		<key>legislatorID</key>
@@ -888,27 +888,27 @@
 	</dict>
 	<dict>
 		<key>address</key>
-		<string>1100 N Congress Ave</string>
+		<string>150 West Parker Road</string>
 		<key>chamber</key>
 		<integer>1</integer>
 		<key>city</key>
-		<string>Austin</string>
+		<string>Houston</string>
 		<key>county</key>
-		<string>Travis</string>
+		<string>Harris</string>
 		<key>district</key>
 		<integer>140</integer>
 		<key>fax</key>
-		<string></string>
+		<string>713-694-8613</string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>150 West Parker Road, Houston, TX 77076</string>
 		<key>latitude</key>
-		<real>30.272745132446289</real>
+		<real>29.860048</real>
 		<key>legislatorID</key>
 		<integer>102289</integer>
 		<key>longitude</key>
-		<real>-97.741134643554688</real>
+		<real>-95.399813</real>
 		<key>phone</key>
-		<string>512-463-0924</string>
+		<string>713-694-8620</string>
 		<key>pinColorIndex</key>
 		<integer>0</integer>
 		<key>spanLat</key>
@@ -918,7 +918,7 @@
 		<key>stateCode</key>
 		<string>TX</string>
 		<key>zipCode</key>
-		<string>78701</string>
+		<string>77076</string>
 	</dict>
 	<dict>
 		<key>address</key>
@@ -934,7 +934,7 @@
 		<key>fax</key>
 		<string>830-624-8330</string>
 		<key>formattedAddress</key>
-		<string>387 W Mill St, New Braunfels, TX 78130, USA</string>
+		<string>387 W Mill St, New Braunfels, TX 78130</string>
 		<key>latitude</key>
 		<real>29.700920104980469</real>
 		<key>legislatorID</key>
@@ -968,7 +968,7 @@
 		<key>fax</key>
 		<string>361-279-2129</string>
 		<key>formattedAddress</key>
-		<string>400 E Gravis Ave, San Diego, TX 78384, USA</string>
+		<string>400 E Gravis Ave, San Diego, TX 78384</string>
 		<key>latitude</key>
 		<real>27.763313293457031</real>
 		<key>legislatorID</key>
@@ -1002,7 +1002,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1510 N Hampton Rd, DeSoto, TX 75115, USA</string>
+		<string>1510 N Hampton Rd, DeSoto, TX 75115</string>
 		<key>latitude</key>
 		<real>32.619251251220703</real>
 		<key>legislatorID</key>
@@ -1036,7 +1036,7 @@
 		<key>fax</key>
 		<string>325-655-2541</string>
 		<key>formattedAddress</key>
-		<string>36 W Beauregard Ave, San Angelo, TX 76903, USA</string>
+		<string>36 W Beauregard Ave, San Angelo, TX 76903</string>
 		<key>latitude</key>
 		<real>31.462326049804688</real>
 		<key>legislatorID</key>
@@ -1070,7 +1070,7 @@
 		<key>fax</key>
 		<string>806-763-1201</string>
 		<key>formattedAddress</key>
-		<string>5609 Villa Dr, Lubbock, TX 79412, USA</string>
+		<string>5609 Villa Dr, Lubbock, TX 79412</string>
 		<key>latitude</key>
 		<real>33.543319702148438</real>
 		<key>legislatorID</key>
@@ -1104,7 +1104,7 @@
 		<key>fax</key>
 		<string>210-673-3816</string>
 		<key>formattedAddress</key>
-		<string>7121 W US Highway 90, San Antonio, TX 78227, USA</string>
+		<string>7121 W US Highway 90, San Antonio, TX 78227</string>
 		<key>latitude</key>
 		<real>29.404441833496094</real>
 		<key>legislatorID</key>
@@ -1172,7 +1172,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>Sidney Brooks, San Antonio, TX 78235, USA</string>
+		<string>Sidney Brooks, San Antonio, TX 78235</string>
 		<key>latitude</key>
 		<real>29.34593391418457</real>
 		<key>legislatorID</key>
@@ -1206,7 +1206,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>320 S Polk St, Amarillo, TX 79101, USA</string>
+		<string>320 S Polk St, Amarillo, TX 79101</string>
 		<key>latitude</key>
 		<real>35.210052490234375</real>
 		<key>legislatorID</key>
@@ -1240,7 +1240,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>410 Grand Pkwy, Katy, TX 77494, USA</string>
+		<string>410 Grand Pkwy, Katy, TX 77494</string>
 		<key>latitude</key>
 		<real>29.768848419189453</real>
 		<key>legislatorID</key>
@@ -1274,7 +1274,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1350 Nasa Pkwy, Houston, TX 77058, USA</string>
+		<string>1350 Nasa Pkwy, Houston, TX 77058</string>
 		<key>latitude</key>
 		<real>29.54728889465332</real>
 		<key>legislatorID</key>
@@ -1308,7 +1308,7 @@
 		<key>fax</key>
 		<string>281-578-1674</string>
 		<key>formattedAddress</key>
-		<string>1550 Foxlake Dr, Houston, TX 77084, USA</string>
+		<string>1550 Foxlake Dr, Houston, TX 77084</string>
 		<key>latitude</key>
 		<real>29.79034423828125</real>
 		<key>legislatorID</key>
@@ -1342,7 +1342,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>310 W Jefferson St, Waxahachie, TX 75165, USA</string>
+		<string>310 W Jefferson St, Waxahachie, TX 75165</string>
 		<key>latitude</key>
 		<real>32.385562896728516</real>
 		<key>legislatorID</key>
@@ -1376,7 +1376,7 @@
 		<key>fax</key>
 		<string>713-236-0604</string>
 		<key>formattedAddress</key>
-		<string>440 Louisiana St, Houston, TX 77002, USA</string>
+		<string>440 Louisiana St, Houston, TX 77002</string>
 		<key>latitude</key>
 		<real>29.762937545776367</real>
 		<key>legislatorID</key>
@@ -1410,7 +1410,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>204 N Main St, Henderson, TX 75652, USA</string>
+		<string>204 N Main St, Henderson, TX 75652</string>
 		<key>latitude</key>
 		<real>32.154796600341797</real>
 		<key>legislatorID</key>
@@ -1444,7 +1444,7 @@
 		<key>fax</key>
 		<string>713-742-5016</string>
 		<key>formattedAddress</key>
-		<string>5206 Irvington Blvd, Houston, TX 77009, USA</string>
+		<string>5206 Irvington Blvd, Houston, TX 77009</string>
 		<key>latitude</key>
 		<real>29.807407379150391</real>
 		<key>legislatorID</key>
@@ -1478,7 +1478,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>2908 E 11th St, Dallas, TX 75203, USA</string>
+		<string>2908 E 11th St, Dallas, TX 75203</string>
 		<key>latitude</key>
 		<real>32.746028900146484</real>
 		<key>legislatorID</key>
@@ -1546,7 +1546,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>2400 Augusta Dr, Houston, TX 77057, USA</string>
+		<string>2400 Augusta Dr, Houston, TX 77057</string>
 		<key>latitude</key>
 		<real>29.741508483886719</real>
 		<key>legislatorID</key>
@@ -1580,7 +1580,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1920 W Villa Maria Rd, Bryan, TX 77807, USA</string>
+		<string>1920 W Villa Maria Rd, Bryan, TX 77807</string>
 		<key>latitude</key>
 		<real>30.628610610961914</real>
 		<key>legislatorID</key>
@@ -1614,7 +1614,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1110 Kingwood Dr, Houston, TX 77339, USA</string>
+		<string>1110 Kingwood Dr, Houston, TX 77339</string>
 		<key>latitude</key>
 		<real>30.048837661743164</real>
 		<key>legislatorID</key>
@@ -1648,7 +1648,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>318 W Main St, Arlington, TX 76010, USA</string>
+		<string>318 W Main St, Arlington, TX 76010</string>
 		<key>latitude</key>
 		<real>32.736442565917969</real>
 		<key>legislatorID</key>
@@ -1682,7 +1682,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1233 Mercury Dr, Houston, TX 77029, USA</string>
+		<string>1233 Mercury Dr, Houston, TX 77029</string>
 		<key>latitude</key>
 		<real>29.768354415893555</real>
 		<key>legislatorID</key>
@@ -1716,7 +1716,7 @@
 		<key>fax</key>
 		<string>254-776-2843</string>
 		<key>formattedAddress</key>
-		<string>900 Austin Ave, Waco, TX 76701, USA</string>
+		<string>900 Austin Ave, Waco, TX 76701</string>
 		<key>latitude</key>
 		<real>31.553251266479492</real>
 		<key>legislatorID</key>
@@ -1750,7 +1750,7 @@
 		<key>fax</key>
 		<string>817-469-9652</string>
 		<key>formattedAddress</key>
-		<string>2001 E Lamar Blvd, Arlington, TX 76006, USA</string>
+		<string>2001 E Lamar Blvd, Arlington, TX 76006</string>
 		<key>latitude</key>
 		<real>32.763294219970703</real>
 		<key>legislatorID</key>
@@ -1818,7 +1818,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>7474 S Kirkwood Rd, Houston, TX 77072, USA</string>
+		<string>7474 S Kirkwood Rd, Houston, TX 77072</string>
 		<key>latitude</key>
 		<real>29.697343826293945</real>
 		<key>legislatorID</key>
@@ -1852,7 +1852,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>523 E Donegan St, Seguin, TX 78155, USA</string>
+		<string>523 E Donegan St, Seguin, TX 78155</string>
 		<key>latitude</key>
 		<real>29.567930221557617</real>
 		<key>legislatorID</key>
@@ -1886,7 +1886,7 @@
 		<key>fax</key>
 		<string>903-450-9796</string>
 		<key>formattedAddress</key>
-		<string>2500 Stonewall St, Greenville, TX 75401, USA</string>
+		<string>2500 Stonewall St, Greenville, TX 75401</string>
 		<key>latitude</key>
 		<real>33.139427185058594</real>
 		<key>legislatorID</key>
@@ -1920,7 +1920,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>3000 S 31st St, Temple, TX 76502, USA</string>
+		<string>3000 S 31st St, Temple, TX 76502</string>
 		<key>latitude</key>
 		<real>31.071662902832031</real>
 		<key>legislatorID</key>
@@ -1954,7 +1954,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1535 West Loop S, Houston, TX 77027, USA</string>
+		<string>1535 West Loop S, Houston, TX 77027</string>
 		<key>latitude</key>
 		<real>29.75413703918457</real>
 		<key>legislatorID</key>
@@ -1988,7 +1988,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>900 8th St, Wichita Falls, TX 76301, USA</string>
+		<string>900 8th St, Wichita Falls, TX 76301</string>
 		<key>latitude</key>
 		<real>33.911289215087891</real>
 		<key>legislatorID</key>
@@ -2022,7 +2022,7 @@
 		<key>fax</key>
 		<string>940-937-6994</string>
 		<key>formattedAddress</key>
-		<string>119 Ave B NW, Childress, TX 79201, USA</string>
+		<string>119 Ave B NW, Childress, TX 79201</string>
 		<key>latitude</key>
 		<real>34.422679901123047</real>
 		<key>legislatorID</key>
@@ -2056,7 +2056,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1444 Montana Ave, El Paso, TX 79902, USA</string>
+		<string>1444 Montana Ave, El Paso, TX 79902</string>
 		<key>latitude</key>
 		<real>31.771949768066406</real>
 		<key>legislatorID</key>
@@ -2090,7 +2090,7 @@
 		<key>fax</key>
 		<string>972-548-8469</string>
 		<key>formattedAddress</key>
-		<string>201 W Virginia St, McKinney, TX 75069, USA</string>
+		<string>201 W Virginia St, McKinney, TX 75069</string>
 		<key>latitude</key>
 		<real>33.197948455810547</real>
 		<key>legislatorID</key>
@@ -2124,7 +2124,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>Lbj Fwy, Mesquite, TX 75149, USA</string>
+		<string>Lbj Fwy, Mesquite, TX 75149</string>
 		<key>latitude</key>
 		<real>32.762245178222656</real>
 		<key>legislatorID</key>
@@ -2158,7 +2158,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>125 N Lehmann Dr, Kerrville, TX 78028, USA</string>
+		<string>125 N Lehmann Dr, Kerrville, TX 78028</string>
 		<key>latitude</key>
 		<real>30.039525985717773</real>
 		<key>legislatorID</key>
@@ -2192,7 +2192,7 @@
 		<key>fax</key>
 		<string>361-664-7245</string>
 		<key>formattedAddress</key>
-		<string>700 E 3rd St, Alice, TX 78332, USA</string>
+		<string>700 E 3rd St, Alice, TX 78332</string>
 		<key>latitude</key>
 		<real>27.753107070922852</real>
 		<key>legislatorID</key>
@@ -2226,7 +2226,7 @@
 		<key>fax</key>
 		<string>254-754-1604</string>
 		<key>formattedAddress</key>
-		<string>900 Austin Ave, Waco, TX 76701, USA</string>
+		<string>900 Austin Ave, Waco, TX 76701</string>
 		<key>latitude</key>
 		<real>31.553251266479492</real>
 		<key>legislatorID</key>
@@ -2260,7 +2260,7 @@
 		<key>fax</key>
 		<string>432-447-0275</string>
 		<key>formattedAddress</key>
-		<string>100 E 4th St, Pecos, TX 79772, USA</string>
+		<string>100 E 4th St, Pecos, TX 79772</string>
 		<key>latitude</key>
 		<real>31.424594879150391</real>
 		<key>legislatorID</key>
@@ -2294,7 +2294,7 @@
 		<key>fax</key>
 		<string>830-693-9603</string>
 		<key>formattedAddress</key>
-		<string>Hwy 281 Blanco, Marble Falls, TX 78654, USA</string>
+		<string>Hwy 281 Blanco, Marble Falls, TX 78654</string>
 		<key>latitude</key>
 		<real>30.483282089233398</real>
 		<key>legislatorID</key>
@@ -2328,7 +2328,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>8080 N Central Expy, Dallas, TX 75206, USA</string>
+		<string>8080 N Central Expy, Dallas, TX 75206</string>
 		<key>latitude</key>
 		<real>32.860485076904297</real>
 		<key>legislatorID</key>
@@ -2396,7 +2396,7 @@
 		<key>fax</key>
 		<string>806-374-4607</string>
 		<key>formattedAddress</key>
-		<string>410 S Taylor St, Amarillo, TX 79101, USA</string>
+		<string>410 S Taylor St, Amarillo, TX 79101</string>
 		<key>latitude</key>
 		<real>35.209003448486328</real>
 		<key>legislatorID</key>
@@ -2430,7 +2430,7 @@
 		<key>fax</key>
 		<string>972-403-3405</string>
 		<key>formattedAddress</key>
-		<string>5000 Legacy Dr, Plano, TX 75024, USA</string>
+		<string>5000 Legacy Dr, Plano, TX 75024</string>
 		<key>latitude</key>
 		<real>33.069488525390625</real>
 		<key>legislatorID</key>
@@ -2464,7 +2464,7 @@
 		<key>fax</key>
 		<string>972-436-9829</string>
 		<key>formattedAddress</key>
-		<string>522 S Edmonds Ln, Lewisville, TX 75067, USA</string>
+		<string>522 S Edmonds Ln, Lewisville, TX 75067</string>
 		<key>latitude</key>
 		<real>33.043769836425781</real>
 		<key>legislatorID</key>
@@ -2498,7 +2498,7 @@
 		<key>fax</key>
 		<string>361-354-5143</string>
 		<key>formattedAddress</key>
-		<string>111 S St Marys St, Beeville, TX 78102, USA</string>
+		<string>111 S St Marys St, Beeville, TX 78102</string>
 		<key>latitude</key>
 		<real>28.401901245117188</real>
 		<key>legislatorID</key>
@@ -2532,7 +2532,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1790 N Lee Trevino Dr, El Paso, TX 79935, USA</string>
+		<string>1790 N Lee Trevino Dr, El Paso, TX 79935</string>
 		<key>latitude</key>
 		<real>31.7647705078125</real>
 		<key>legislatorID</key>
@@ -2566,7 +2566,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>204 Houston St, Center, TX 75935, USA</string>
+		<string>204 Houston St, Center, TX 75935</string>
 		<key>latitude</key>
 		<real>31.792863845825195</real>
 		<key>legislatorID</key>
@@ -2600,7 +2600,7 @@
 		<key>fax</key>
 		<string>817-478-5092</string>
 		<key>formattedAddress</key>
-		<string>5840 Interstate 20 Frontage Rd, Arlington, TX 76017, USA</string>
+		<string>5840 Interstate 20 Frontage Rd, Arlington, TX 76017</string>
 		<key>latitude</key>
 		<real>32.673446655273438</real>
 		<key>legislatorID</key>
@@ -2634,7 +2634,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>2402 U.S. 77 Business, San Benito, TX 78586, USA</string>
+		<string>2402 U.S. 77 Business, San Benito, TX 78586</string>
 		<key>latitude</key>
 		<real>26.119369506835938</real>
 		<key>legislatorID</key>
@@ -2668,7 +2668,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>4900 N 10th St, McAllen, TX 78504, USA</string>
+		<string>4900 N 10th St, McAllen, TX 78504</string>
 		<key>latitude</key>
 		<real>26.248140335083008</real>
 		<key>legislatorID</key>
@@ -2702,7 +2702,7 @@
 		<key>fax</key>
 		<string>956-548-0440</string>
 		<key>formattedAddress</key>
-		<string>7 N Park Dr, Brownsville, TX 78520, USA</string>
+		<string>7 N Park Dr, Brownsville, TX 78520</string>
 		<key>latitude</key>
 		<real>25.913494110107422</real>
 		<key>legislatorID</key>
@@ -2736,7 +2736,7 @@
 		<key>fax</key>
 		<string>832-252-8015</string>
 		<key>formattedAddress</key>
-		<string>7011 Harwin Dr, Houston, TX 77036, USA</string>
+		<string>7011 Harwin Dr, Houston, TX 77036</string>
 		<key>latitude</key>
 		<real>29.717668533325195</real>
 		<key>legislatorID</key>
@@ -2770,7 +2770,7 @@
 		<key>fax</key>
 		<string>903-596-9189</string>
 		<key>formattedAddress</key>
-		<string>3304 S Broadway Ave, Tyler, TX 75701, USA</string>
+		<string>3304 S Broadway Ave, Tyler, TX 75701</string>
 		<key>latitude</key>
 		<real>32.313182830810547</real>
 		<key>legislatorID</key>
@@ -2804,7 +2804,7 @@
 		<key>fax</key>
 		<string>210-372-1405</string>
 		<key>formattedAddress</key>
-		<string>9107 Marbach Rd, San Antonio, TX 78245, USA</string>
+		<string>9107 Marbach Rd, San Antonio, TX 78245</string>
 		<key>latitude</key>
 		<real>29.418399810791016</real>
 		<key>legislatorID</key>
@@ -2838,7 +2838,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>5445 Alameda Point Ln, Houston, TX 77041, USA</string>
+		<string>5445 Alameda Point Ln, Houston, TX 77041</string>
 		<key>latitude</key>
 		<real>29.861194610595703</real>
 		<key>legislatorID</key>
@@ -2872,7 +2872,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1235 S Main St, Grapevine, TX 76051, USA</string>
+		<string>1235 S Main St, Grapevine, TX 76051</string>
 		<key>latitude</key>
 		<real>32.927833557128906</real>
 		<key>legislatorID</key>
@@ -2906,7 +2906,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1110 Houston St, Laredo, TX 78040, USA</string>
+		<string>1110 Houston St, Laredo, TX 78040</string>
 		<key>latitude</key>
 		<real>27.507102966308594</real>
 		<key>legislatorID</key>
@@ -2940,7 +2940,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1501 E Mockingbird Ln, Victoria, TX 77904, USA</string>
+		<string>1501 E Mockingbird Ln, Victoria, TX 77904</string>
 		<key>latitude</key>
 		<real>28.835994720458984</real>
 		<key>legislatorID</key>
@@ -2974,7 +2974,7 @@
 		<key>fax</key>
 		<string>936-637-6694</string>
 		<key>formattedAddress</key>
-		<string>203 S 1st St, Lufkin, TX 75901, USA</string>
+		<string>203 S 1st St, Lufkin, TX 75901</string>
 		<key>latitude</key>
 		<real>31.337459564208984</real>
 		<key>legislatorID</key>
@@ -3008,7 +3008,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>660 SW Military Dr, San Antonio, TX 78221, USA</string>
+		<string>660 SW Military Dr, San Antonio, TX 78221</string>
 		<key>latitude</key>
 		<real>29.356111526489258</real>
 		<key>legislatorID</key>
@@ -3030,27 +3030,27 @@
 	</dict>
 	<dict>
 		<key>address</key>
-		<string>1100 N Congress Ave</string>
+		<string>1109 Fairmont Parkway</string>
 		<key>chamber</key>
 		<integer>1</integer>
 		<key>city</key>
-		<string>Austin</string>
+		<string>Pasadena</string>
 		<key>county</key>
-		<string>Travis</string>
+		<string>Harris</string>
 		<key>district</key>
 		<integer>144</integer>
 		<key>fax</key>
-		<string></string>
+		<string>713-944-1084</string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>1109 Fairmont Parkway, Pasadena, TX 77504</string>
 		<key>latitude</key>
-		<real>30.272745132446289</real>
+		<real>29.6516156</real>
 		<key>legislatorID</key>
 		<integer>102074</integer>
 		<key>longitude</key>
-		<real>-97.741134643554688</real>
+		<real>-95.1951703</real>
 		<key>phone</key>
-		<string>512-463-0460</string>
+		<string>281-487-8818</string>
 		<key>pinColorIndex</key>
 		<integer>0</integer>
 		<key>spanLat</key>
@@ -3060,7 +3060,7 @@
 		<key>stateCode</key>
 		<string>TX</string>
 		<key>zipCode</key>
-		<string>78701</string>
+		<string>77504</string>
 	</dict>
 	<dict>
 		<key>address</key>
@@ -3110,7 +3110,7 @@
 		<key>fax</key>
 		<string>512-463-8022</string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>1100 N Congress Ave, Austin, TX 78701</string>
 		<key>latitude</key>
 		<real>30.272745132446289</real>
 		<key>legislatorID</key>
@@ -3178,7 +3178,7 @@
 		<key>fax</key>
 		<string>210-932-2572</string>
 		<key>formattedAddress</key>
-		<string>2530 SW Military Dr, San Antonio, TX 78224, USA</string>
+		<string>2530 SW Military Dr, San Antonio, TX 78224</string>
 		<key>latitude</key>
 		<real>29.356184005737305</real>
 		<key>legislatorID</key>
@@ -3212,7 +3212,7 @@
 		<key>fax</key>
 		<string>713-678-7080</string>
 		<key>formattedAddress</key>
-		<string>2205 Clinton Dr, Galena Park, TX 77547, USA</string>
+		<string>2205 Clinton Dr, Galena Park, TX 77547</string>
 		<key>latitude</key>
 		<real>29.732841491699219</real>
 		<key>legislatorID</key>
@@ -3246,7 +3246,7 @@
 		<key>fax</key>
 		<string>936-291-9432</string>
 		<key>formattedAddress</key>
-		<string>1301 Sam Houston Ave, Huntsville, TX 77340, USA</string>
+		<string>1301 Sam Houston Ave, Huntsville, TX 77340</string>
 		<key>latitude</key>
 		<real>30.721660614013672</real>
 		<key>legislatorID</key>
@@ -3314,7 +3314,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>1100 N Congress Ave, Austin, TX 78701</string>
 		<key>latitude</key>
 		<real>30.272745132446289</real>
 		<key>legislatorID</key>
@@ -3348,7 +3348,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>2600 Gessner Dr, Houston, TX 77080, USA</string>
+		<string>2600 Gessner Dr, Houston, TX 77080</string>
 		<key>latitude</key>
 		<real>29.819509506225586</real>
 		<key>legislatorID</key>
@@ -3416,7 +3416,7 @@
 		<key>fax</key>
 		<string>432-684-4864</string>
 		<key>formattedAddress</key>
-		<string>500 W Texas Ave, Midland, TX 79701, USA</string>
+		<string>500 W Texas Ave, Midland, TX 79701</string>
 		<key>latitude</key>
 		<real>31.998958587646484</real>
 		<key>legislatorID</key>
@@ -3450,7 +3450,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>10210 N Central Expy, Dallas, TX 75231, USA</string>
+		<string>10210 N Central Expy, Dallas, TX 75231</string>
 		<key>latitude</key>
 		<real>32.885292053222656</real>
 		<key>legislatorID</key>
@@ -3484,7 +3484,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>1100 N Congress Ave, Austin, TX 78701</string>
 		<key>latitude</key>
 		<real>30.272745132446289</real>
 		<key>legislatorID</key>
@@ -3518,7 +3518,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>4100 S Medford Dr, Lufkin, TX 75901, USA</string>
+		<string>4100 S Medford Dr, Lufkin, TX 75901</string>
 		<key>latitude</key>
 		<real>31.314014434814453</real>
 		<key>legislatorID</key>
@@ -3586,7 +3586,7 @@
 		<key>fax</key>
 		<string>214-942-8104</string>
 		<key>formattedAddress</key>
-		<string>400 Zang Blvd S, Dallas, TX 75208, USA</string>
+		<string>400 Zang Blvd S, Dallas, TX 75208</string>
 		<key>latitude</key>
 		<real>32.741844177246094</real>
 		<key>legislatorID</key>
@@ -3620,7 +3620,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>909 Decker Dr, Baytown, TX 77520, USA</string>
+		<string>909 Decker Dr, Baytown, TX 77520</string>
 		<key>latitude</key>
 		<real>29.736166000366211</real>
 		<key>legislatorID</key>
@@ -3654,7 +3654,7 @@
 		<key>fax</key>
 		<string>713-948-0004</string>
 		<key>formattedAddress</key>
-		<string>1109 W Fairmont Pkwy, Pasadena, TX 77504, USA</string>
+		<string>1109 W Fairmont Pkwy, Pasadena, TX 77504</string>
 		<key>latitude</key>
 		<real>29.651615142822266</real>
 		<key>legislatorID</key>
@@ -3688,7 +3688,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1201 N Watson Rd, Arlington, TX 76006, USA</string>
+		<string>1201 N Watson Rd, Arlington, TX 76006</string>
 		<key>latitude</key>
 		<real>32.768375396728516</real>
 		<key>legislatorID</key>
@@ -3710,27 +3710,27 @@
 	</dict>
 	<dict>
 		<key>address</key>
-		<string>1100 N Congress Ave</string>
+		<string>15217 South Padre Island Dr., #205</string>
 		<key>chamber</key>
 		<integer>1</integer>
 		<key>city</key>
-		<string>Austin</string>
+		<string>Corpus Christi</string>
 		<key>county</key>
-		<string>Travis</string>
+		<string>Nueces</string>
 		<key>district</key>
 		<integer>32</integer>
 		<key>fax</key>
-		<string></string>
+		<string>361-949-4634</string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>15217 South Padre Island Dr., #205, Corpus Christi, TX 78418</string>
 		<key>latitude</key>
-		<real>30.272745132446289</real>
+		<real>27.603003</real>
 		<key>legislatorID</key>
 		<integer>5532</integer>
 		<key>longitude</key>
-		<real>-97.741134643554688</real>
+		<real>-97.222909</real>
 		<key>phone</key>
-		<string>512-463-0672</string>
+		<string>361-949-4603</string>
 		<key>pinColorIndex</key>
 		<integer>0</integer>
 		<key>spanLat</key>
@@ -3740,7 +3740,7 @@
 		<key>stateCode</key>
 		<string>TX</string>
 		<key>zipCode</key>
-		<string>78701</string>
+		<string>78418</string>
 	</dict>
 	<dict>
 		<key>address</key>
@@ -3756,7 +3756,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1409 S Lamar St, Dallas, TX 75215, USA</string>
+		<string>1409 S Lamar St, Dallas, TX 75215</string>
 		<key>latitude</key>
 		<real>32.767066955566406</real>
 		<key>legislatorID</key>
@@ -3790,7 +3790,7 @@
 		<key>fax</key>
 		<string>713-649-6454</string>
 		<key>formattedAddress</key>
-		<string>8145 Park Pl Blvd, Houston, TX 77017, USA</string>
+		<string>8145 Park Pl Blvd, Houston, TX 77017</string>
 		<key>latitude</key>
 		<real>29.687168121337891</real>
 		<key>legislatorID</key>
@@ -3824,7 +3824,7 @@
 		<key>fax</key>
 		<string>972-394-5638</string>
 		<key>formattedAddress</key>
-		<string>1029 W Rosemeade Pkwy, Carrollton, TX 75007, USA</string>
+		<string>1029 W Rosemeade Pkwy, Carrollton, TX 75007</string>
 		<key>latitude</key>
 		<real>33.009925842285156</real>
 		<key>legislatorID</key>
@@ -3858,7 +3858,7 @@
 		<key>fax</key>
 		<string>214-570-4998</string>
 		<key>formattedAddress</key>
-		<string>Lbj Fwy, Dallas, TX 75217, USA</string>
+		<string>Lbj Fwy, Dallas, TX 75217</string>
 		<key>latitude</key>
 		<real>32.680526733398438</real>
 		<key>legislatorID</key>
@@ -3892,7 +3892,7 @@
 		<key>fax</key>
 		<string>210-733-6605</string>
 		<key>formattedAddress</key>
-		<string>700 N St Mary's St, San Antonio, TX 78205, USA</string>
+		<string>700 N St Mary's St, San Antonio, TX 78205</string>
 		<key>latitude</key>
 		<real>29.430374145507812</real>
 		<key>legislatorID</key>
@@ -3926,7 +3926,7 @@
 		<key>fax</key>
 		<string>713-692-6791</string>
 		<key>formattedAddress</key>
-		<string>North Loop E, Houston, TX 77029, USA</string>
+		<string>North Loop E, Houston, TX 77029</string>
 		<key>latitude</key>
 		<real>29.801347732543945</real>
 		<key>legislatorID</key>
@@ -4028,7 +4028,7 @@
 		<key>fax</key>
 		<string>512-481-7864</string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>1100 N Congress Ave, Austin, TX 78701</string>
 		<key>latitude</key>
 		<real>30.272745132446289</real>
 		<key>legislatorID</key>
@@ -4062,7 +4062,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1111 W Mockingbird Ln, Dallas, TX 75247, USA</string>
+		<string>1111 W Mockingbird Ln, Dallas, TX 75247</string>
 		<key>latitude</key>
 		<real>32.818607330322266</real>
 		<key>legislatorID</key>
@@ -4096,7 +4096,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>302 W Hopkins St, San Marcos, TX 78666, USA</string>
+		<string>302 W Hopkins St, San Marcos, TX 78666</string>
 		<key>latitude</key>
 		<real>29.882961273193359</real>
 		<key>legislatorID</key>
@@ -4130,7 +4130,7 @@
 		<key>fax</key>
 		<string>254-939-7611</string>
 		<key>formattedAddress</key>
-		<string>1920 N Main St, Belton, TX 76513, USA</string>
+		<string>1920 N Main St, Belton, TX 76513</string>
 		<key>latitude</key>
 		<real>31.074922561645508</real>
 		<key>legislatorID</key>
@@ -4164,7 +4164,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>7101 Burns St, Richland Hills, TX 76118, USA</string>
+		<string>7101 Burns St, Richland Hills, TX 76118</string>
 		<key>latitude</key>
 		<real>32.796184539794922</real>
 		<key>legislatorID</key>
@@ -4198,7 +4198,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>Forest Park Blvd, Fort Worth, TX 76110, USA</string>
+		<string>Forest Park Blvd, Fort Worth, TX 76110</string>
 		<key>latitude</key>
 		<real>32.717586517333984</real>
 		<key>legislatorID</key>
@@ -4220,27 +4220,27 @@
 	</dict>
 	<dict>
 		<key>address</key>
-		<string>1100 N Congress Ave</string>
+		<string>21901 State Highway 249, #350</string>
 		<key>chamber</key>
 		<integer>1</integer>
 		<key>city</key>
-		<string>Austin</string>
+		<string>Houston</string>
 		<key>county</key>
-		<string>Travis</string>
+		<string>Harris</string>
 		<key>district</key>
 		<integer>130</integer>
 		<key>fax</key>
-		<string>512-463-4130</string>
+		<string>281-374-0863</string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>21901 State Highway 249, #350, Houston, TX 77070</string>
 		<key>latitude</key>
-		<real>30.272745132446289</real>
+		<real>29.9992931</real>
 		<key>legislatorID</key>
 		<integer>102070</integer>
 		<key>longitude</key>
-		<real>-97.741134643554688</real>
+		<real>-95.5814819</real>
 		<key>phone</key>
-		<string>512-463-0661</string>
+		<string>281-374-0894</string>
 		<key>pinColorIndex</key>
 		<integer>0</integer>
 		<key>spanLat</key>
@@ -4250,7 +4250,7 @@
 		<key>stateCode</key>
 		<string>TX</string>
 		<key>zipCode</key>
-		<string>78701</string>
+		<string>77070</string>
 	</dict>
 	<dict>
 		<key>address</key>
@@ -4266,7 +4266,7 @@
 		<key>fax</key>
 		<string>713-864-5287</string>
 		<key>formattedAddress</key>
-		<string>803 Yale St, Houston, TX 77007, USA</string>
+		<string>803 Yale St, Houston, TX 77007</string>
 		<key>latitude</key>
 		<real>29.785364151000977</real>
 		<key>legislatorID</key>
@@ -4300,7 +4300,7 @@
 		<key>fax</key>
 		<string>713-747-7846</string>
 		<key>formattedAddress</key>
-		<string>4913 Griggs Rd, Houston, TX 77021, USA</string>
+		<string>4913 Griggs Rd, Houston, TX 77021</string>
 		<key>latitude</key>
 		<real>29.699831008911133</real>
 		<key>legislatorID</key>
@@ -4334,7 +4334,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>141 E Tom Landry St, Mission, TX 78572, USA</string>
+		<string>141 E Tom Landry St, Mission, TX 78572</string>
 		<key>latitude</key>
 		<real>26.215875625610352</real>
 		<key>legislatorID</key>
@@ -4402,7 +4402,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>1100 N Congress Ave, Austin, TX 78701</string>
 		<key>latitude</key>
 		<real>30.272745132446289</real>
 		<key>legislatorID</key>
@@ -4436,7 +4436,7 @@
 		<key>fax</key>
 		<string>512-463-5949</string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>1100 N Congress Ave, Austin, TX 78701</string>
 		<key>latitude</key>
 		<real>30.272745132446289</real>
 		<key>legislatorID</key>
@@ -4470,7 +4470,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>326 N Main St, Conroe, TX 77301, USA</string>
+		<string>326 N Main St, Conroe, TX 77301</string>
 		<key>latitude</key>
 		<real>30.31181526184082</real>
 		<key>legislatorID</key>
@@ -4504,7 +4504,7 @@
 		<key>fax</key>
 		<string>915-544-1998</string>
 		<key>formattedAddress</key>
-		<string>800 Wyoming Ave, El Paso, TX 79902, USA</string>
+		<string>800 Wyoming Ave, El Paso, TX 79902</string>
 		<key>latitude</key>
 		<real>31.76557731628418</real>
 		<key>legislatorID</key>
@@ -4538,7 +4538,7 @@
 		<key>fax</key>
 		<string>830-758-0402</string>
 		<key>formattedAddress</key>
-		<string>501 Main St, Eagle Pass, TX 78852, USA</string>
+		<string>501 Main St, Eagle Pass, TX 78852</string>
 		<key>latitude</key>
 		<real>28.708488464355469</real>
 		<key>legislatorID</key>
@@ -4572,7 +4572,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>120 Horizon Blvd, El Paso, TX 79927, USA</string>
+		<string>120 Horizon Blvd, El Paso, TX 79927</string>
 		<key>latitude</key>
 		<real>31.649845123291016</real>
 		<key>legislatorID</key>
@@ -4606,7 +4606,7 @@
 		<key>fax</key>
 		<string>210-684-6945</string>
 		<key>formattedAddress</key>
-		<string>6502 Bandera Pass Dr, Leon Valley, TX 78238, USA</string>
+		<string>6502 Bandera Pass Dr, Leon Valley, TX 78238</string>
 		<key>latitude</key>
 		<real>29.503740310668945</real>
 		<key>legislatorID</key>
@@ -4628,27 +4628,27 @@
 	</dict>
 	<dict>
 		<key>address</key>
-		<string>1100 N Congress Ave</string>
+		<string>10613 Bellaire Blvd., #A-126</string>
 		<key>chamber</key>
 		<integer>1</integer>
 		<key>city</key>
-		<string>Austin</string>
+		<string>Houston</string>
 		<key>county</key>
-		<string>Travis</string>
+		<string>Harris</string>
 		<key>district</key>
 		<integer>133</integer>
 		<key>fax</key>
-		<string></string>
+		<string>281-498-4075</string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>10613 Bellaire Blvd., #A-126, Houston, Texas 77072</string>
 		<key>latitude</key>
-		<real>30.272745132446289</real>
+		<real>29.702548</real>
 		<key>legislatorID</key>
 		<integer>59408</integer>
 		<key>longitude</key>
-		<real>-97.741134643554688</real>
+		<real>-95.568731</real>
 		<key>phone</key>
-		<string>512-463-0514</string>
+		<string>281-498-4558</string>
 		<key>pinColorIndex</key>
 		<integer>0</integer>
 		<key>spanLat</key>
@@ -4658,7 +4658,7 @@
 		<key>stateCode</key>
 		<string>TX</string>
 		<key>zipCode</key>
-		<string>78701</string>
+		<string>77072</string>
 	</dict>
 	<dict>
 		<key>address</key>
@@ -4674,7 +4674,7 @@
 		<key>fax</key>
 		<string>214-467-0050</string>
 		<key>formattedAddress</key>
-		<string>5787 S Hampton Rd, Dallas, TX 75232, USA</string>
+		<string>5787 S Hampton Rd, Dallas, TX 75232</string>
 		<key>latitude</key>
 		<real>32.676460266113281</real>
 		<key>legislatorID</key>
@@ -4708,7 +4708,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>5959 S Staples St, Corpus Christi, TX 78413, USA</string>
+		<string>5959 S Staples St, Corpus Christi, TX 78413</string>
 		<key>latitude</key>
 		<real>27.693155288696289</real>
 		<key>legislatorID</key>
@@ -4742,7 +4742,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>3800 E 42nd St, Odessa, TX 79762, USA</string>
+		<string>3800 E 42nd St, Odessa, TX 79762</string>
 		<key>latitude</key>
 		<real>31.888816833496094</real>
 		<key>legislatorID</key>
@@ -4776,7 +4776,7 @@
 		<key>fax</key>
 		<string>713-923-7676</string>
 		<key>formattedAddress</key>
-		<string>5425 Polk St, Houston, TX 77023, USA</string>
+		<string>5425 Polk St, Houston, TX 77023</string>
 		<key>latitude</key>
 		<real>29.736398696899414</real>
 		<key>legislatorID</key>
@@ -4810,7 +4810,7 @@
 		<key>fax</key>
 		<string>979-849-3169</string>
 		<key>formattedAddress</key>
-		<string>122 E Myrtle St, Angleton, TX 77515, USA</string>
+		<string>122 E Myrtle St, Angleton, TX 77515</string>
 		<key>latitude</key>
 		<real>29.16529655456543</real>
 		<key>legislatorID</key>
@@ -4832,27 +4832,27 @@
 	</dict>
 	<dict>
 		<key>address</key>
-		<string>1100 N Congress Ave</string>
+		<string>3596 County Road 405</string>
 		<key>chamber</key>
 		<integer>1</integer>
 		<key>city</key>
-		<string>Austin</string>
+		<string>Lexington</string>
 		<key>county</key>
-		<string>Travis</string>
+		<string>Lee</string>
 		<key>district</key>
 		<integer>17</integer>
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>3596 County Road 405, Lexington, TX 78947</string>
 		<key>latitude</key>
-		<real>30.272745132446289</real>
+		<real>30.4160659</real>
 		<key>legislatorID</key>
 		<integer>56621</integer>
 		<key>longitude</key>
-		<real>-97.741134643554688</real>
+		<real>-96.9324094</real>
 		<key>phone</key>
-		<string>512-463-0682</string>
+		<string>979-542-9602</string>
 		<key>pinColorIndex</key>
 		<integer>0</integer>
 		<key>spanLat</key>
@@ -4862,7 +4862,7 @@
 		<key>stateCode</key>
 		<string>TX</string>
 		<key>zipCode</key>
-		<string>78701</string>
+		<string>78947</string>
 	</dict>
 	<dict>
 		<key>address</key>
@@ -4878,7 +4878,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1930 Fannin St, Vernon, TX 76384, USA</string>
+		<string>1930 Fannin St, Vernon, TX 76384</string>
 		<key>latitude</key>
 		<real>34.151493072509766</real>
 		<key>legislatorID</key>
@@ -4946,7 +4946,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1067 W Magnolia Ave, Fort Worth, TX 76104, USA</string>
+		<string>1067 W Magnolia Ave, Fort Worth, TX 76104</string>
 		<key>latitude</key>
 		<real>32.730613708496094</real>
 		<key>legislatorID</key>
@@ -4980,7 +4980,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>421 N Crockett St, Sherman, TX 75090, USA</string>
+		<string>421 N Crockett St, Sherman, TX 75090</string>
 		<key>latitude</key>
 		<real>33.640110015869141</real>
 		<key>legislatorID</key>
@@ -5014,7 +5014,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>36 W Beauregard Ave, San Angelo, TX 76903, USA</string>
+		<string>36 W Beauregard Ave, San Angelo, TX 76903</string>
 		<key>latitude</key>
 		<real>31.462326049804688</real>
 		<key>legislatorID</key>
@@ -5048,7 +5048,7 @@
 		<key>fax</key>
 		<string>512-828-5229</string>
 		<key>formattedAddress</key>
-		<string>309 W Main St, Round Rock, TX 78664, USA</string>
+		<string>309 W Main St, Round Rock, TX 78664</string>
 		<key>latitude</key>
 		<real>30.507741928100586</real>
 		<key>legislatorID</key>
@@ -5082,7 +5082,7 @@
 		<key>fax</key>
 		<string>281-554-9240</string>
 		<key>formattedAddress</key>
-		<string>174 Calder Dr, League City, TX 77573, USA</string>
+		<string>174 Calder Dr, League City, TX 77573</string>
 		<key>latitude</key>
 		<real>29.503679275512695</real>
 		<key>legislatorID</key>
@@ -5150,7 +5150,7 @@
 		<key>fax</key>
 		<string>940-689-0194</string>
 		<key>formattedAddress</key>
-		<string>2716 Commerce St, Wichita Falls, TX 76301, USA</string>
+		<string>2716 Commerce St, Wichita Falls, TX 76301</string>
 		<key>latitude</key>
 		<real>33.890178680419922</real>
 		<key>legislatorID</key>
@@ -5184,7 +5184,7 @@
 		<key>fax</key>
 		<string>361-592-6371</string>
 		<key>formattedAddress</key>
-		<string>635 E King Ave, Kingsville, TX 78363, USA</string>
+		<string>635 E King Ave, Kingsville, TX 78363</string>
 		<key>latitude</key>
 		<real>27.515373229980469</real>
 		<key>legislatorID</key>
@@ -5252,7 +5252,7 @@
 		<key>fax</key>
 		<string>817-738-8362</string>
 		<key>formattedAddress</key>
-		<string>1011 Roberts Cut Off Rd, River Oaks, TX 76114, USA</string>
+		<string>1011 Roberts Cut Off Rd, River Oaks, TX 76114</string>
 		<key>latitude</key>
 		<real>32.775821685791016</real>
 		<key>legislatorID</key>
@@ -5286,7 +5286,7 @@
 		<key>fax</key>
 		<string>972-522-5918</string>
 		<key>formattedAddress</key>
-		<string>2426 S Carrier Pkwy, Grand Prairie, TX 75051, USA</string>
+		<string>2426 S Carrier Pkwy, Grand Prairie, TX 75051</string>
 		<key>latitude</key>
 		<real>32.71038818359375</real>
 		<key>legislatorID</key>
@@ -5320,7 +5320,7 @@
 		<key>fax</key>
 		<string>210-372-1405</string>
 		<key>formattedAddress</key>
-		<string>12274 Bandera Rd, Helotes, TX 78023, USA</string>
+		<string>12274 Bandera Rd, Helotes, TX 78023</string>
 		<key>latitude</key>
 		<real>29.557092666625977</real>
 		<key>legislatorID</key>
@@ -5354,7 +5354,7 @@
 		<key>fax</key>
 		<string>956-542-1618</string>
 		<key>formattedAddress</key>
-		<string>855 W Price Rd, Brownsville, TX 78520, USA</string>
+		<string>855 W Price Rd, Brownsville, TX 78520</string>
 		<key>latitude</key>
 		<real>25.937820434570312</real>
 		<key>legislatorID</key>
@@ -5388,7 +5388,7 @@
 		<key>fax</key>
 		<string>210-349-0381</string>
 		<key>formattedAddress</key>
-		<string>2040 Babcock Rd, San Antonio, TX 78229, USA</string>
+		<string>2040 Babcock Rd, San Antonio, TX 78229</string>
 		<key>latitude</key>
 		<real>29.501251220703125</real>
 		<key>legislatorID</key>
@@ -5422,7 +5422,7 @@
 		<key>fax</key>
 		<string>956-664-0602</string>
 		<key>formattedAddress</key>
-		<string>612 Nolana St, McAllen, TX 78504, USA</string>
+		<string>612 Nolana St, McAllen, TX 78504</string>
 		<key>latitude</key>
 		<real>26.238798141479492</real>
 		<key>legislatorID</key>
@@ -5456,7 +5456,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>201 S Glenbrook Dr, Garland, TX 75040, USA</string>
+		<string>201 S Glenbrook Dr, Garland, TX 75040</string>
 		<key>latitude</key>
 		<real>32.911594390869141</real>
 		<key>legislatorID</key>
@@ -5490,7 +5490,7 @@
 		<key>fax</key>
 		<string>214-749-7830</string>
 		<key>formattedAddress</key>
-		<string>2612 Main St, Dallas, TX 75226, USA</string>
+		<string>2612 Main St, Dallas, TX 75226</string>
 		<key>latitude</key>
 		<real>32.783218383789062</real>
 		<key>legislatorID</key>
@@ -5524,7 +5524,7 @@
 		<key>fax</key>
 		<string>903-586-0823</string>
 		<key>formattedAddress</key>
-		<string>214 S Main St, Jacksonville, TX 75766, USA</string>
+		<string>214 S Main St, Jacksonville, TX 75766</string>
 		<key>latitude</key>
 		<real>31.96331787109375</real>
 		<key>legislatorID</key>
@@ -5558,7 +5558,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>2916 Illinois Ave, Killeen, TX 76543, USA</string>
+		<string>2916 Illinois Ave, Killeen, TX 76543</string>
 		<key>latitude</key>
 		<real>31.091270446777344</real>
 		<key>legislatorID</key>
@@ -5592,7 +5592,7 @@
 		<key>fax</key>
 		<string>956-722-8586</string>
 		<key>formattedAddress</key>
-		<string>1407 Washington St, Laredo, TX 78040, USA</string>
+		<string>1407 Washington St, Laredo, TX 78040</string>
 		<key>latitude</key>
 		<real>27.508632659912109</real>
 		<key>legislatorID</key>
@@ -5626,7 +5626,7 @@
 		<key>fax</key>
 		<string>915-857-4854</string>
 		<key>formattedAddress</key>
-		<string>N Zaragosa Rd, El Paso, TX 79936, USA</string>
+		<string>N Zaragosa Rd, El Paso, TX 79936</string>
 		<key>latitude</key>
 		<real>31.762701034545898</real>
 		<key>legislatorID</key>
@@ -5660,7 +5660,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>9702 Emmett F Lowry Expy, Texas City, TX 77591, USA</string>
+		<string>9702 Emmett F Lowry Expy, Texas City, TX 77591</string>
 		<key>latitude</key>
 		<real>29.401573181152344</real>
 		<key>legislatorID</key>
@@ -5728,7 +5728,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>10101 Fondren Rd, Houston, TX 77096, USA</string>
+		<string>10101 Fondren Rd, Houston, TX 77096</string>
 		<key>latitude</key>
 		<real>29.67011833190918</real>
 		<key>legislatorID</key>
@@ -5762,7 +5762,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1960 West St, Houston, TX 77026, USA</string>
+		<string>1960 West St, Houston, TX 77026</string>
 		<key>latitude</key>
 		<real>29.779458999633789</real>
 		<key>legislatorID</key>
@@ -5796,7 +5796,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>210 W Davis St, Mesquite, TX 75149, USA</string>
+		<string>210 W Davis St, Mesquite, TX 75149</string>
 		<key>latitude</key>
 		<real>32.765830993652344</real>
 		<key>legislatorID</key>
@@ -5830,7 +5830,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>2110 Fort Worth Hwy, Weatherford, TX 76086, USA</string>
+		<string>2110 Fort Worth Hwy, Weatherford, TX 76086</string>
 		<key>latitude</key>
 		<real>32.750988006591797</real>
 		<key>legislatorID</key>
@@ -5864,7 +5864,7 @@
 		<key>fax</key>
 		<string>281-564-0999</string>
 		<key>formattedAddress</key>
-		<string>11110 Bellaire Blvd, Houston, TX 77072, USA</string>
+		<string>11110 Bellaire Blvd, Houston, TX 77072</string>
 		<key>latitude</key>
 		<real>29.704885482788086</real>
 		<key>legislatorID</key>
@@ -5898,7 +5898,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>603 N Goliad St, Rockwall, TX 75087, USA</string>
+		<string>603 N Goliad St, Rockwall, TX 75087</string>
 		<key>latitude</key>
 		<real>32.934738159179688</real>
 		<key>legislatorID</key>
@@ -5932,7 +5932,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>108 S Pinkerton St, Athens, TX 75751, USA</string>
+		<string>108 S Pinkerton St, Athens, TX 75751</string>
 		<key>latitude</key>
 		<real>32.204238891601562</real>
 		<key>legislatorID</key>
@@ -5966,7 +5966,7 @@
 		<key>fax</key>
 		<string>903-569-8889</string>
 		<key>formattedAddress</key>
-		<string>701 N Pacific St, Mineola, TX 75773, USA</string>
+		<string>701 N Pacific St, Mineola, TX 75773</string>
 		<key>latitude</key>
 		<real>32.668910980224609</real>
 		<key>legislatorID</key>
@@ -6034,7 +6034,7 @@
 		<key>fax</key>
 		<string>903-868-9666</string>
 		<key>formattedAddress</key>
-		<string>1117 Gallagher Dr, Sherman, TX 75090, USA</string>
+		<string>1117 Gallagher Dr, Sherman, TX 75090</string>
 		<key>latitude</key>
 		<real>33.673305511474609</real>
 		<key>legislatorID</key>
@@ -6068,7 +6068,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>F-M 3167, Rio Grande City, TX 78582, USA</string>
+		<string>F-M 3167, Rio Grande City, TX 78582</string>
 		<key>latitude</key>
 		<real>26.55473518371582</real>
 		<key>legislatorID</key>
@@ -6102,7 +6102,7 @@
 		<key>fax</key>
 		<string>409-724-0750</string>
 		<key>formattedAddress</key>
-		<string>1 Plaza Square, Port Arthur, TX 77642, USA</string>
+		<string>1 Plaza Square, Port Arthur, TX 77642</string>
 		<key>latitude</key>
 		<real>29.914228439331055</real>
 		<key>legislatorID</key>
@@ -6136,7 +6136,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>606 N Carancahua St, Corpus Christi, TX 78476, USA</string>
+		<string>606 N Carancahua St, Corpus Christi, TX 78476</string>
 		<key>latitude</key>
 		<real>27.795711517333984</real>
 		<key>legislatorID</key>
@@ -6170,7 +6170,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1608 Airport Fwy, Bedford, TX 76022, USA</string>
+		<string>1608 Airport Fwy, Bedford, TX 76022</string>
 		<key>latitude</key>
 		<real>32.835964202880859</real>
 		<key>legislatorID</key>
@@ -6226,27 +6226,27 @@
 	</dict>
 	<dict>
 		<key>address</key>
-		<string>1100 N Congress Ave</string>
+		<string>2225 County Road 90, #107</string>
 		<key>chamber</key>
 		<integer>1</integer>
 		<key>city</key>
-		<string>Austin</string>
+		<string>Pearland</string>
 		<key>county</key>
-		<string>Travis</string>
+		<string>Brazoria</string>
 		<key>district</key>
 		<integer>29</integer>
 		<key>fax</key>
-		<string></string>
+		<string>281-485-1106</string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>2225 County Road 90, #107, Pearland, TX 77584</string>
 		<key>latitude</key>
-		<real>30.272745132446289</real>
+		<real>29.555948</real>
 		<key>legislatorID</key>
 		<integer>102026</integer>
 		<key>longitude</key>
-		<real>-97.741134643554688</real>
+		<real>-95.366847</real>
 		<key>phone</key>
-		<string>512-463-0707</string>
+		<string>281-485-0616</string>
 		<key>pinColorIndex</key>
 		<integer>0</integer>
 		<key>spanLat</key>
@@ -6256,7 +6256,7 @@
 		<key>stateCode</key>
 		<string>TX</string>
 		<key>zipCode</key>
-		<string>78701</string>
+		<string>77584</string>
 	</dict>
 	<dict>
 		<key>address</key>
@@ -6306,7 +6306,7 @@
 		<key>fax</key>
 		<string>361-225-0119</string>
 		<key>formattedAddress</key>
-		<string>2820 S Padre Island Dr, Corpus Christi, TX 78415, USA</string>
+		<string>2820 S Padre Island Dr, Corpus Christi, TX 78415</string>
 		<key>latitude</key>
 		<real>27.732597351074219</real>
 		<key>legislatorID</key>
@@ -6340,7 +6340,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>403 S Ww White Rd, San Antonio, TX 78219, USA</string>
+		<string>403 S Ww White Rd, San Antonio, TX 78219</string>
 		<key>latitude</key>
 		<real>29.424758911132812</real>
 		<key>legislatorID</key>
@@ -6374,7 +6374,7 @@
 		<key>fax</key>
 		<string>936-564-4276</string>
 		<key>formattedAddress</key>
-		<string>202 E Pillar St, Nacogdoches, TX 75961, USA</string>
+		<string>202 E Pillar St, Nacogdoches, TX 75961</string>
 		<key>latitude</key>
 		<real>31.602725982666016</real>
 		<key>legislatorID</key>
@@ -6408,7 +6408,7 @@
 		<key>fax</key>
 		<string>281-364-9473</string>
 		<key>formattedAddress</key>
-		<string>2441 High Timbers Dr, The Woodlands, TX 77380, USA</string>
+		<string>2441 High Timbers Dr, The Woodlands, TX 77380</string>
 		<key>latitude</key>
 		<real>30.161590576171875</real>
 		<key>legislatorID</key>
@@ -6442,7 +6442,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1120 South Fwy, Fort Worth, TX 76104, USA</string>
+		<string>1120 South Fwy, Fort Worth, TX 76104</string>
 		<key>latitude</key>
 		<real>32.731597900390625</real>
 		<key>legislatorID</key>
@@ -6476,7 +6476,7 @@
 		<key>fax</key>
 		<string>956-447-0583</string>
 		<key>formattedAddress</key>
-		<string>500 S Kansas Ave, Weslaco, TX 78596, USA</string>
+		<string>500 S Kansas Ave, Weslaco, TX 78596</string>
 		<key>latitude</key>
 		<real>26.157205581665039</real>
 		<key>legislatorID</key>
@@ -6510,7 +6510,7 @@
 		<key>fax</key>
 		<string>903-238-9102</string>
 		<key>formattedAddress</key>
-		<string>201 Estes Dr, Longview, TX 75602, USA</string>
+		<string>201 Estes Dr, Longview, TX 75602</string>
 		<key>latitude</key>
 		<real>32.438346862792969</real>
 		<key>legislatorID</key>
@@ -6544,7 +6544,7 @@
 		<key>fax</key>
 		<string>830-757-0317</string>
 		<key>formattedAddress</key>
-		<string>1995 Williams St, Eagle Pass, TX 78852, USA</string>
+		<string>1995 Williams St, Eagle Pass, TX 78852</string>
 		<key>latitude</key>
 		<real>28.704496383666992</real>
 		<key>legislatorID</key>
@@ -6578,7 +6578,7 @@
 		<key>fax</key>
 		<string>936-756-5170</string>
 		<key>formattedAddress</key>
-		<string>2040 Rte 336 Loop, Conroe, TX 77304, USA</string>
+		<string>2040 Rte 336 Loop, Conroe, TX 77304</string>
 		<key>latitude</key>
 		<real>30.331184387207031</real>
 		<key>legislatorID</key>
@@ -6612,7 +6612,7 @@
 		<key>fax</key>
 		<string>713-461-0108</string>
 		<key>formattedAddress</key>
-		<string>11451 Katy Fwy, Houston, TX 77079, USA</string>
+		<string>11451 Katy Fwy, Houston, TX 77079</string>
 		<key>latitude</key>
 		<real>29.783523559570312</real>
 		<key>legislatorID</key>
@@ -6646,7 +6646,7 @@
 		<key>fax</key>
 		<string>409-896-2454</string>
 		<key>formattedAddress</key>
-		<string>2825 Interstate 10 E, Beaumont, TX 77702, USA</string>
+		<string>2825 Interstate 10 E, Beaumont, TX 77702</string>
 		<key>latitude</key>
 		<real>30.095033645629883</real>
 		<key>legislatorID</key>
@@ -6680,7 +6680,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>2100 McKinney Ave, Dallas, TX 75201, USA</string>
+		<string>2100 McKinney Ave, Dallas, TX 75201</string>
 		<key>latitude</key>
 		<real>32.791652679443359</real>
 		<key>legislatorID</key>
@@ -6714,7 +6714,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>6605 Cypresswood Dr, Spring, TX 77379, USA</string>
+		<string>6605 Cypresswood Dr, Spring, TX 77379</string>
 		<key>latitude</key>
 		<real>30.014270782470703</real>
 		<key>legislatorID</key>
@@ -6748,7 +6748,7 @@
 		<key>fax</key>
 		<string>817-488-4099</string>
 		<key>formattedAddress</key>
-		<string>1256 Main St, Southlake, TX 76092, USA</string>
+		<string>1256 Main St, Southlake, TX 76092</string>
 		<key>latitude</key>
 		<real>32.942977905273438</real>
 		<key>legislatorID</key>
@@ -6782,7 +6782,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1849 Lamar Ave, Paris, TX 75460, USA</string>
+		<string>1849 Lamar Ave, Paris, TX 75460</string>
 		<key>latitude</key>
 		<real>33.661270141601562</real>
 		<key>legislatorID</key>
@@ -6816,7 +6816,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>1910 Fredericksburg Rd, San Antonio, TX 78201, USA</string>
+		<string>1910 Fredericksburg Rd, San Antonio, TX 78201</string>
 		<key>latitude</key>
 		<real>29.463489532470703</real>
 		<key>legislatorID</key>
@@ -6850,7 +6850,7 @@
 		<key>fax</key>
 		<string>254-756-3197</string>
 		<key>formattedAddress</key>
-		<string>713 Elm St, Waco, TX 76704, USA</string>
+		<string>713 Elm St, Waco, TX 76704</string>
 		<key>latitude</key>
 		<real>31.567331314086914</real>
 		<key>legislatorID</key>
@@ -6884,7 +6884,7 @@
 		<key>fax</key>
 		<string>281-261-4726</string>
 		<key>formattedAddress</key>
-		<string>2440 Texas Pkwy, Missouri City, TX 77489, USA</string>
+		<string>2440 Texas Pkwy, Missouri City, TX 77489</string>
 		<key>latitude</key>
 		<real>29.591894149780273</real>
 		<key>legislatorID</key>
@@ -6918,7 +6918,7 @@
 		<key>fax</key>
 		<string>979-776-8951</string>
 		<key>formattedAddress</key>
-		<string>3740 Copperfield Dr, Bryan, TX 77802, USA</string>
+		<string>3740 Copperfield Dr, Bryan, TX 77802</string>
 		<key>latitude</key>
 		<real>30.652124404907227</real>
 		<key>legislatorID</key>
@@ -6952,7 +6952,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>7373 Broadway St, San Antonio, TX 78209, USA</string>
+		<string>7373 Broadway St, San Antonio, TX 78209</string>
 		<key>latitude</key>
 		<real>29.495456695556641</real>
 		<key>legislatorID</key>
@@ -6986,7 +6986,7 @@
 		<key>fax</key>
 		<string>512-463-5896</string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>1100 N Congress Ave, Austin, TX 78701</string>
 		<key>latitude</key>
 		<real>30.272745132446289</real>
 		<key>legislatorID</key>
@@ -7020,7 +7020,7 @@
 		<key>fax</key>
 		<string>903-569-8889</string>
 		<key>formattedAddress</key>
-		<string>102 W Houston St, Marshall, TX 75670, USA</string>
+		<string>102 W Houston St, Marshall, TX 75670</string>
 		<key>latitude</key>
 		<real>32.544635772705078</real>
 		<key>legislatorID</key>
@@ -7054,7 +7054,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>800 W Railroad St, Weslaco, TX 78596, USA</string>
+		<string>800 W Railroad St, Weslaco, TX 78596</string>
 		<key>latitude</key>
 		<real>26.160881042480469</real>
 		<key>legislatorID</key>
@@ -7088,7 +7088,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>12702 Toepperwein Rd, San Antonio, TX 78233, USA</string>
+		<string>12702 Toepperwein Rd, San Antonio, TX 78233</string>
 		<key>latitude</key>
 		<real>29.554527282714844</real>
 		<key>legislatorID</key>
@@ -7122,7 +7122,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>6301 Gaston Ave, Dallas, TX 75214, USA</string>
+		<string>6301 Gaston Ave, Dallas, TX 75214</string>
 		<key>latitude</key>
 		<real>32.813091278076172</real>
 		<key>legislatorID</key>
@@ -7156,7 +7156,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>6915 Antoine Dr, Houston, TX 77091, USA</string>
+		<string>6915 Antoine Dr, Houston, TX 77091</string>
 		<key>latitude</key>
 		<real>29.86216926574707</real>
 		<key>legislatorID</key>
@@ -7190,7 +7190,7 @@
 		<key>fax</key>
 		<string>432-268-9899</string>
 		<key>formattedAddress</key>
-		<string>401 Austin St, Big Spring, TX 79720, USA</string>
+		<string>401 Austin St, Big Spring, TX 79720</string>
 		<key>latitude</key>
 		<real>32.253734588623047</real>
 		<key>legislatorID</key>
@@ -7212,27 +7212,27 @@
 	</dict>
 	<dict>
 		<key>address</key>
-		<string>1100 N Congress Ave</string>
+		<string>710 Main St., #200</string>
 		<key>chamber</key>
 		<integer>1</integer>
 		<key>city</key>
-		<string>Austin</string>
+		<string>Georgetown</string>
 		<key>county</key>
-		<string>Travis</string>
+		<string>Williamson</string>
 		<key>district</key>
 		<integer>20</integer>
 		<key>fax</key>
-		<string></string>
+		<string>512-499-8354</string>
 		<key>formattedAddress</key>
-		<string>1100 N Congress Ave, Austin, TX 78701, USA</string>
+		<string>710 Main St., #200, Georgetown, TX 78626</string>
 		<key>latitude</key>
-		<real>30.272745132446289</real>
+		<real>30.637377</real>
 		<key>legislatorID</key>
 		<integer>49636</integer>
 		<key>longitude</key>
-		<real>-97.741134643554688</real>
+		<real>-97.6770666</real>
 		<key>phone</key>
-		<string>512-463-0309</string>
+		<string>512-863-5697</string>
 		<key>pinColorIndex</key>
 		<integer>0</integer>
 		<key>spanLat</key>
@@ -7242,7 +7242,7 @@
 		<key>stateCode</key>
 		<string>TX</string>
 		<key>zipCode</key>
-		<string>78701</string>
+		<string>78626</string>
 	</dict>
 	<dict>
 		<key>address</key>
@@ -7258,7 +7258,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>6070 Gateway Blvd E, El Paso, TX 79905, USA</string>
+		<string>6070 Gateway Blvd E, El Paso, TX 79905</string>
 		<key>latitude</key>
 		<real>31.780172348022461</real>
 		<key>legislatorID</key>
@@ -7292,7 +7292,7 @@
 		<key>fax</key>
 		<string></string>
 		<key>formattedAddress</key>
-		<string>10527 Homestead Rd, Houston, TX 77016, USA</string>
+		<string>10527 Homestead Rd, Houston, TX 77016</string>
 		<key>latitude</key>
 		<real>29.865499496459961</real>
 		<key>legislatorID</key>
