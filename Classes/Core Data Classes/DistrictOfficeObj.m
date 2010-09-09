@@ -11,6 +11,7 @@
 #import "DistrictMapObj.h"
 #import "LegislatorObj.h"
 #import "TexLegeCoreDataUtils.h"
+#import "TexLegeMapPins.h"
 
 @implementation DistrictOfficeObj 
 
@@ -65,47 +66,43 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder;
 {
-	NSDictionary *tempDict = [self exportDictionary];
+	NSDictionary *tempDict = [self exportToDictionary];
 	for (NSString *key in [tempDict allKeys]) {
 		id object = [tempDict objectForKey:key];
 		[coder encodeObject:object];	
 	}
 }
 
-- (id) initWithDictionary: (NSDictionary *)dictionary
+- (void) importFromDictionary: (NSDictionary *)dictionary
 {
-    if (self = [super init])
-    {
-		if (dictionary) {
-			self.district = [dictionary objectForKey:@"district"];
-			self.chamber = [dictionary objectForKey:@"chamber"];
-			self.pinColorIndex = [dictionary objectForKey:@"pinColorIndex"];
-			self.longitude = [dictionary objectForKey:@"longitude"];
-			self.latitude = [dictionary objectForKey:@"latitude"];
-			self.spanLon = [dictionary objectForKey:@"spanLon"];
-			self.spanLat = [dictionary objectForKey:@"spanLat"];
-			self.stateCode = [dictionary objectForKey:@"stateCode"];
-			self.formattedAddress = [dictionary objectForKey:@"formattedAddress"];
-			self.address = [dictionary objectForKey:@"address"];
-			self.city = [dictionary objectForKey:@"city"];
-			self.county = [dictionary objectForKey:@"county"];
-			self.phone = [dictionary objectForKey:@"phone"];
-			self.fax = [dictionary objectForKey:@"fax"];
-			self.zipCode = [dictionary objectForKey:@"zipCode"];
-			
-			NSNumber *legislatorID = [dictionary objectForKey:@"legislatorID"];
-			if (legislatorID)
-				self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
-			else
-				self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
-			// ignore district map for now
-		}
-    }
-	return self;
+	if (dictionary) {
+		self.district = [dictionary objectForKey:@"district"];
+		self.chamber = [dictionary objectForKey:@"chamber"];
+		self.pinColorIndex = [dictionary objectForKey:@"pinColorIndex"];
+		self.longitude = [dictionary objectForKey:@"longitude"];
+		self.latitude = [dictionary objectForKey:@"latitude"];
+		self.spanLon = [dictionary objectForKey:@"spanLon"];
+		self.spanLat = [dictionary objectForKey:@"spanLat"];
+		self.stateCode = [dictionary objectForKey:@"stateCode"];
+		self.formattedAddress = [dictionary objectForKey:@"formattedAddress"];
+		self.address = [dictionary objectForKey:@"address"];
+		self.city = [dictionary objectForKey:@"city"];
+		self.county = [dictionary objectForKey:@"county"];
+		self.phone = [dictionary objectForKey:@"phone"];
+		self.fax = [dictionary objectForKey:@"fax"];
+		self.zipCode = [dictionary objectForKey:@"zipCode"];
+		
+		NSNumber *legislatorID = [dictionary objectForKey:@"legislatorID"];
+		if (legislatorID)
+			self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
+		else
+			self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
+		// ignore district map for now
+	}
 }
 
 
-- (NSDictionary *)exportDictionary {
+- (NSDictionary *)exportToDictionary {
 	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  self.district, @"district",
 							  self.chamber, @"chamber",
@@ -125,6 +122,19 @@
 							  self.legislator.legislatorID, @"legislatorID",
 							  nil];
 	return tempDict;
+}
+
+// we're overriding what's stored in core data ... is this a good idea?
+- (NSNumber *) pinColorIndex {
+	/*	if (self.legislator) {
+	 if ([self.legislator.party_id integerValue] == REPUBLICAN)
+	 return [NSNumber numberWithInteger:TexLegePinAnnotationColorRed];
+	 else if ([self.legislator.party_id integerValue] == DEMOCRAT)
+	 return [NSNumber numberWithInteger:TexLegePinAnnotationColorBlue];
+	 }
+	 return [NSNumber numberWithInteger:TexLegePinAnnotationColorGreen];
+	 */
+	return [NSNumber numberWithInteger:TexLegePinAnnotationColorGreen];
 }
 
 #pragma mark -

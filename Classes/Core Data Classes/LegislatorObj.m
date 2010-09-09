@@ -11,48 +11,28 @@
 
 @implementation LegislatorObj 
 
-@dynamic dist3_city;
 @dynamic suffix;
 @dynamic legtype;
 @dynamic email;
-@dynamic dist3_fax;
-@dynamic dist2_phone;
 @dynamic bio_url;
-@dynamic dist4_zip;
 @dynamic cap_phone2;
-@dynamic dist4_phone1;
 @dynamic tenure;
-@dynamic dist2_city;
-@dynamic dist2_fax;
 @dynamic cap_phone;
 @dynamic cap_phone2_name;
-@dynamic dist4_street;
 @dynamic lastname;
-@dynamic dist1_fax;
 @dynamic legislatorID;
 @dynamic middlename;
 @dynamic notes;
-@dynamic dist3_street;
-@dynamic dist2_zip;
 @dynamic district;
-@dynamic dist3_zip;
 @dynamic cap_fax;
-@dynamic dist3_phone1;
 @dynamic party_id;
 @dynamic chamber_desk;
-@dynamic dist4_city;
 @dynamic twitter;
-@dynamic dist1_zip;
 @dynamic party_name;
-@dynamic dist4_fax;
 @dynamic partisan_index;
-@dynamic dist1_phone;
-@dynamic dist2_street;
-@dynamic dist1_street;
 @dynamic photo_name;
 @dynamic nickname;
 @dynamic legtype_name;
-@dynamic dist1_city;
 @dynamic cap_office;
 @dynamic firstname;
 @dynamic staff;
@@ -191,20 +171,6 @@
 }
 
 - (NSInteger)numberOfDistrictOffices {
-/*
- NSInteger offices = 0;
-	
-	if ([self.dist4_street length] > 0)		// 4th office is good
-		offices = 4;
-	else if ([self.dist3_street length] > 0)	// 3rd office is good
-		offices = 3;
-	else if ([self.dist2_street length] > 0)	// 2nd office is good
-		offices = 2;
-	else if ([self.dist1_street length] > 0)	// 1st office is good
-		offices = 1;
-	
-	return offices;
-*/
 	return [self.districtOffices count];
 }
 
@@ -244,6 +210,16 @@
 			   [self.district integerValue], [self.district integerValue]];
 	
 	return url;	
+}
+
+- (NSString *)chamberName {
+	NSString *chamberString = nil;
+	if ([self.legtype integerValue] == SENATE) // Democrat
+		chamberString = @"Senate";
+	else //if ([self.legislator.legtype integerValue] == HOUSE) // Republican
+		chamberString = @"House";
+	
+	return  chamberString;
 }
 
 @end

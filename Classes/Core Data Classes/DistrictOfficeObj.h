@@ -45,8 +45,8 @@
 
 - (NSString *)cellAddress;
 
-- (id) initWithDictionary: (NSDictionary *)dictionary;
-- (NSDictionary *)exportDictionary;
+- (void) importFromDictionary: (NSDictionary *)dictionary;
+- (NSDictionary *)exportToDictionary;
 @end
 
 

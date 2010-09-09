@@ -11,6 +11,8 @@
 #import "LegislatorObj.h"
 #import "PolygonMath.h"
 #import "TexLegeCoreDataUtils.h"
+#import "TexLegeMapPins.h"
+
 @implementation DistrictMapObj 
 
 @dynamic centerLat;
@@ -28,8 +30,7 @@
 @dynamic district;
 @dynamic lineColor;
 @dynamic legislator;
-//@dynamic districtOffice;
-// USE legislator.districtOffices array instead! ... We get plural!
+@dynamic pinColorIndex;
 
 - (id) initWithCoder: (NSCoder *)coder
 {
@@ -37,6 +38,7 @@
     {
         self.district = [coder decodeObjectForKey:@"district"];
         self.chamber = [coder decodeObjectForKey:@"chamber"];
+		self.pinColorIndex = [coder decodeObjectForKey:@"pinColorIndex"];
 		self.lineColor = [coder decodeObjectForKey:@"lineColor"];
 		self.lineWidth = [coder decodeObjectForKey:@"lineWidth"];
 		self.centerLon = [coder decodeObjectForKey:@"centerLon"];
@@ -64,50 +66,47 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder;
 {
-	NSDictionary *tempDict = [self exportDictionary];
+	NSDictionary *tempDict = [self exportToDictionary];
 	for (NSString *key in [tempDict allKeys]) {
 		id object = [tempDict objectForKey:key];
 		[coder encodeObject:object];	
 	}
 }
 
-- (id) initWithDictionary: (NSDictionary *)dictionary
-{
-    if (self = [super init])
-    {
-				
-		if (dictionary) {
-			self.district = [dictionary objectForKey:@"district"];
-			self.chamber = [dictionary objectForKey:@"chamber"];
-			self.lineColor = [dictionary objectForKey:@"lineColor"];
-			self.lineWidth = [dictionary objectForKey:@"lineWidth"];
-			self.centerLon = [dictionary objectForKey:@"centerLon"];
-			self.centerLat = [dictionary objectForKey:@"centerLat"];
-			self.spanLon = [dictionary objectForKey:@"spanLon"];
-			self.spanLat = [dictionary objectForKey:@"spanLat"];
-			self.maxLon = [dictionary objectForKey:@"maxLon"];
-			self.maxLat = [dictionary objectForKey:@"maxLat"];
-			self.minLon = [dictionary objectForKey:@"minLon"];
-			self.minLat = [dictionary objectForKey:@"minLat"];
-			self.numberOfCoords = [dictionary objectForKey:@"numberOfCoords"];
-			self.coordinatesData = [[dictionary objectForKey:@"coordinatesData"] copy];
+- (void) importFromDictionary: (NSDictionary *)dictionary
+{				
+	if (dictionary) {
+		self.district = [dictionary objectForKey:@"district"];
+		self.chamber = [dictionary objectForKey:@"chamber"];
+		self.pinColorIndex = [dictionary objectForKey:@"pinColorIndex"];
+		self.lineColor = [dictionary objectForKey:@"lineColor"];
+		self.lineWidth = [dictionary objectForKey:@"lineWidth"];
+		self.centerLon = [dictionary objectForKey:@"centerLon"];
+		self.centerLat = [dictionary objectForKey:@"centerLat"];
+		self.spanLon = [dictionary objectForKey:@"spanLon"];
+		self.spanLat = [dictionary objectForKey:@"spanLat"];
+		self.maxLon = [dictionary objectForKey:@"maxLon"];
+		self.maxLat = [dictionary objectForKey:@"maxLat"];
+		self.minLon = [dictionary objectForKey:@"minLon"];
+		self.minLat = [dictionary objectForKey:@"minLat"];
+		self.numberOfCoords = [dictionary objectForKey:@"numberOfCoords"];
+		self.coordinatesData = [[dictionary objectForKey:@"coordinatesData"] copy];
 
-			NSNumber *legislatorID = [dictionary objectForKey:@"legislatorID"];
-			if (legislatorID)
-				self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
-			else
-				self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
-			// ignore district office for now
-		}
-    }
-	return self;
+		NSNumber *legislatorID = [dictionary objectForKey:@"legislatorID"];
+		if (legislatorID)
+			self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
+		else
+			self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
+		// ignore district office for now
+	}
 }
 
 
-- (NSDictionary *)exportDictionary {
+- (NSDictionary *)exportToDictionary {
 	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  self.district, @"district",
 							  self.chamber, @"chamber",
+							  self.pinColorIndex, @"pinColorIndex",
 							  self.lineColor, @"lineColor",
 							  self.lineWidth, @"lineWidth",
 							  self.centerLon, @"centerLon",
@@ -129,6 +128,7 @@
 	NSArray *props = [NSArray arrayWithObjects:
 	@"district",
 	@"chamber",
+	@"pinColorIndex",
 	@"lineColor",
 	@"lineWidth",
 	@"centerLon",
@@ -152,7 +152,6 @@
 	else
 		return @"Senate";
 }
-
 
 - (NSString *)title
 {

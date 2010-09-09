@@ -31,9 +31,7 @@
 @property (nonatomic, retain) NSNumber * minLon;
 @property (nonatomic, retain) NSNumber * centerLat;
 @property (nonatomic, retain) LegislatorObj * legislator;
-//@property (nonatomic, retain) DistrictOfficeObj * districtOffice;
-// USE legislator.districtOffices array instead! ... We get plural!
-
+@property (nonatomic, retain) NSNumber		*pinColorIndex;
 
 @property (nonatomic, readonly) CLLocationCoordinate2D	coordinate;
 @property (nonatomic, readonly) MKCoordinateRegion		region;
@@ -49,8 +47,8 @@
 
 - (id) initWithCoder: (NSCoder *)coder;
 - (void)encodeWithCoder:(NSCoder *)coder;
-- (id) initWithDictionary: (NSDictionary *)dictionary;
-- (NSDictionary *)exportDictionary;
+- (void) importFromDictionary: (NSDictionary *)dictionary;
+- (NSDictionary *)exportToDictionary;
 	
 + (NSArray *)lightPropertiesToFetch;
 
