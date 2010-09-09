@@ -15,7 +15,8 @@
 @interface LinksDataSource (Private)
 - (IBAction)saveAction:(id)sender;
 
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+
+#if NEEDS_TO_INITIALIZE_DATABASE == 1 || JUST_INITIALIZE_LINKS == 1
 - (void) setupDataArray;
 - (void) initializeDatabase;
 #endif
@@ -38,7 +39,7 @@ enum HeaderSectionRows {
 @synthesize fetchedResultsController, managedObjectContext;
 
 
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if NEEDS_TO_INITIALIZE_DATABASE == 1 || JUST_INITIALIZE_LINKS == 1
 @synthesize linksData;
 #endif
 
@@ -72,7 +73,8 @@ enum HeaderSectionRows {
 	if (self = [super init]) {
 		if (newContext) self.managedObjectContext = newContext;
 	
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if NEEDS_TO_INITIALIZE_DATABASE == 1 || JUST_INITIALIZE_LINKS == 1
+#error now that we have lots of view controllers in the tabs, this won't get called unless we're on an ipad
 		[self initializeDatabase];
 #endif
 
@@ -81,12 +83,15 @@ enum HeaderSectionRows {
 		{
 			debug_NSLog(@"LinksMenuDataSource-init: Unresolved error %@, %@", error, [error userInfo]);
 		}		
+		else if ([self.fetchedResultsController.fetchedObjects count] == 0)
+			debug_NSLog(@"No link resources in a database...");
+			
 	}
 	return self;
 }
 
 - (void)dealloc {	
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if NEEDS_TO_INITIALIZE_DATABASE == 1 || JUST_INITIALIZE_LINKS == 1
 	[linksData release];
 #endif
 	self.fetchedResultsController = nil;
@@ -95,7 +100,7 @@ enum HeaderSectionRows {
     [super dealloc];
 }
 
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if NEEDS_TO_INITIALIZE_DATABASE == 1 || JUST_INITIALIZE_LINKS == 1
 #warning initializeDatabase IS TURNED ON!!!
 #warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
 

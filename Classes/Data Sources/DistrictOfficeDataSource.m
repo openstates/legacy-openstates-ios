@@ -61,10 +61,10 @@
 { return @"District Offices"; }
 
 - (NSString *)name
-{ return @"Districts"; }
+{ return @"Districts Offices"; }
 
 - (UIImage *)tabBarImage
-{ return [UIImage imageNamed:@"73-radar.png"]; }
+{ return [UIImage imageNamed:@"Building.png"]; }
 
 - (BOOL)showDisclosureIcon
 { return YES; }
