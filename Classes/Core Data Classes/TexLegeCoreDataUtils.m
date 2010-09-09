@@ -18,11 +18,11 @@
 	@try {
 		NSError *error;
 		if (![context save:&error]) {
-			debug_NSLog(@"DirectoryDataSource:save - unresolved error %@, %@", error, [error userInfo]);
+			debug_NSLog(@"Failure in TexLegeCoreDataUtils:save - unresolved error %@, %@", error, [error userInfo]);
 		}		
 	}
 	@catch (NSException * e) {
-		debug_NSLog(@"Failure in DirectoryDataSource:save, name=%@ reason=%@", e.name, e.reason);
+		debug_NSLog(@"Failure in TexLegeCoreDataUtils:save, name=%@ reason=%@", e.name, e.reason);
 	}
 }
 
