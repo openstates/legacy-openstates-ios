@@ -22,6 +22,7 @@
 @property (nonatomic, readonly) NSDictionary *partisanIndexAggregates;
 @property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, readonly) NSNumber *currentSessionYear;
+@property (nonatomic, retain) NSString *chartTemplate;
 
 + (PartisanIndexStats *)sharedPartisanIndexStats;
 
@@ -35,4 +36,8 @@
 - (NSNumber *) overallPartisanIndexUsingLegislator:(LegislatorObj *)legislator;
 
 - (NSDictionary *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber;
+
+- (NSString *)partisanChartForLegislator:(LegislatorObj*)legislator width:(NSString *)width;
+
+
 @end

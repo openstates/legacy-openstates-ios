@@ -8,26 +8,28 @@
 
 #import "PartisanIndexStats.h"
 #import "LegislatorObj.h"
+#import "WnomObj.h"
+#import "UtilityMethods.h"
+#import "UIColor-Expanded.h"
+#import "TexLegeTheme.h"
 
 @interface PartisanIndexStats (Private)
 
 - (NSArray *) aggregatePartisanIndexForChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
 - (NSArray *) allMembersByChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
 
-
-
 @end
 
 @implementation PartisanIndexStats
 
-@synthesize managedObjectContext;
+@synthesize managedObjectContext, chartTemplate;
 
 SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 
 // setup the data collection
 - (id)init {
 	if (self = [super init]) {
-
+		
 	}
 	return self;
 }
@@ -39,7 +41,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 		
 		// initialize these
 		[self partisanIndexAggregates];
-	
+		
 	}
 	return self;
 }
@@ -48,11 +50,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	self.managedObjectContext = nil;	// I THINK THIS IS CORRECT, SINCE WE'VE SYNTHESIZED IT AS RETAIN...
 	if (m_partisanIndexAggregates) [m_partisanIndexAggregates release], m_partisanIndexAggregates = nil;
 	
+	self.chartTemplate = nil;
+	
     [super dealloc];
-}
-
-- (void)didReceiveMemoryWarning {
-	[m_partisanIndexAggregates release], m_partisanIndexAggregates = nil;
 }
 
 - (NSNumber *) currentSessionYear {
@@ -85,7 +85,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 		//debug_NSLog(@"Index Aggregates: %@", [tempAggregates description]);			
 		m_partisanIndexAggregates = [[NSDictionary dictionaryWithDictionary:tempAggregates] retain];
 	}
-
+	
 	return m_partisanIndexAggregates;
 }
 
@@ -137,7 +137,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	[edAvg setExpressionResultType:NSFloatAttributeType];
 	
 	ex = [NSExpression expressionForFunction:@"max:" arguments:
-						[NSArray arrayWithObject:[NSExpression expressionForKeyPath:@"partisan_index"]]];
+		  [NSArray arrayWithObject:[NSExpression expressionForKeyPath:@"partisan_index"]]];
 	NSExpressionDescription *edMax = [[NSExpressionDescription alloc] init];
 	[edMax setName:@"maxPartisanIndex"];
 	[edMax setExpression:ex];
@@ -151,7 +151,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	[edMin setExpressionResultType:NSFloatAttributeType];
 	
 	/*_____________________*/
-
+	
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	[request setPredicate:predicate];
 	[request setPropertiesToFetch:[NSArray arrayWithObjects:edAvg, edMax, edMin, nil]];
@@ -241,7 +241,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 
 - (NSDictionary *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber {
 	NSDictionary *historyDict = nil;
-		
+	
 	if (party == REPUBLICAN && chamber == HOUSE)
 		historyDict = [NSDictionary dictionaryWithObjectsAndKeys:
 					   [NSNumber numberWithFloat:0.54409], [NSNumber numberWithInteger:72],
@@ -284,6 +284,160 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 					   [NSNumber numberWithFloat:-0.69183], [NSNumber numberWithInteger:81],nil];
 	
 	return historyDict;
+}
+
+#pragma mark -
+#pragma mark Chart Generation
+
+- (NSString *)chartTemplate {
+	if (!chartTemplate) {
+		/*
+		 NSString *thePath = [[NSBundle mainBundle] pathForResource:@"TexLegeStrings" ofType:@"plist"];
+		 NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
+		 if ([UtilityMethods isIPadDevice])
+		 chartTemplate = [[textDict objectForKey:@"ChartTemplate"] retain];
+		 else
+		 chartTemplate = [[textDict objectForKey:@"ChartTemplateSmall"] retain];
+		 */
+		NSString *file = nil;
+		if ([UtilityMethods isIPadDevice])
+			file = @"ChartsTemplate~ipad";
+		else
+			file = @"ChartsTemplate~iphone";
+		
+		NSString *thePath = [[NSBundle mainBundle] pathForResource:file ofType:@"htm"];
+		NSError *error;
+		chartTemplate = [[NSString stringWithContentsOfFile:thePath encoding:NSUTF8StringEncoding error:&error] retain];
+	}
+	return chartTemplate;
+}
+
+- (NSDictionary *)chartDataForLegislator:(LegislatorObj*)legislator {	
+	if (!legislator)
+		return nil;
+	
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"session" ascending:YES];
+	NSArray *descriptors = [[NSArray alloc] initWithObjects:sortDescriptor,nil];
+	NSArray *sortedScores = [[legislator.wnomScores allObjects] sortedArrayUsingDescriptors:descriptors];
+	[sortDescriptor release];
+	[descriptors release];
+	NSInteger countOfScores = [legislator.wnomScores count];
+	
+	
+	NSInteger chamber = [legislator.legtype integerValue];
+	NSDictionary *democDict = [self historyForParty:DEMOCRAT Chamber:chamber];
+	NSDictionary *repubDict = [self historyForParty:REPUBLICAN Chamber:chamber];
+	
+	NSMutableString *repubData = [[NSMutableString alloc] initWithString:@"["];
+	NSMutableString *democData = [[NSMutableString alloc] initWithString:@"["];
+	NSMutableString *memberData = [[NSMutableString alloc] initWithString:@"["];
+	//NSMutableString *timeData = [[NSMutableString alloc] initWithString:@"["];
+	
+	NSString *firstYear = nil;
+	
+	NSUInteger i;
+	for ( i = 0; i < countOfScores ; i++) {
+		//BOOL showLabel = ((i % 2 == 0) || countOfScores < 3);
+		
+		WnomObj *wnomObj = [sortedScores objectAtIndex:i];
+		
+		id democY = [democDict objectForKey:[wnomObj session]];
+		id repubY = [repubDict objectForKey:[wnomObj session]];
+		
+		[repubData appendString:[repubY stringValue]];
+		[democData appendString:[democY stringValue]];
+		
+		//[timeData appendString:[[wnomObj year] stringValue]];
+		if (i==0)
+			firstYear = [[wnomObj year] stringValue];
+		
+		CGFloat legVal = [[wnomObj wnomAdj] floatValue];
+		if (legVal != 0.0f)
+			[memberData appendString:[[wnomObj wnomAdj] stringValue]];
+		else
+			[memberData appendString:@"null"];
+		
+		if (i<(countOfScores-1)) {
+			[repubData appendString:@", "];
+			[democData appendString:@", "];
+			[memberData appendString:@", "];
+			//[timeData appendString:@", "];
+		}
+		
+	}
+	[repubData appendString:@"]"];
+	[democData appendString:@"]"];
+	[memberData appendString:@"]"];
+	//[timeData appendString:@"]"];
+	
+	NSString *timeData = @"";
+	if (firstYear) {
+		timeData =  firstYear;
+	}
+	
+	NSDictionary *dataDict = [NSDictionary dictionaryWithObjectsAndKeys:	
+							  repubData, @"repub", 
+							  democData, @"democ", 
+							  memberData, @"member", 
+							  timeData, @"time", nil];
+	
+	[repubData release], [democData release], [memberData release];
+	//	, [timeData release];
+	
+	return dataDict;
+	
+}
+
+
+- (NSString *)partisanChartForLegislator:(LegislatorObj*)legislator width:(NSString*)width {
+	if (!legislator)
+		return nil;
+	
+	NSUInteger matches = 0;
+	NSMutableString *content = [self.chartTemplate mutableCopy];
+	
+	NSString *legName = [legislator lastname];
+	
+	matches += [content replaceOccurrencesOfString:@"LEGISLATOR" withString:legName
+										   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
+	
+	matches += [content replaceOccurrencesOfString:@"CHAMBER" withString:[legislator chamberName] 
+										   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
+	
+	NSDictionary *chartData = [self chartDataForLegislator:legislator];
+	if (chartData) {
+		
+		matches += [content replaceOccurrencesOfString:@"DATA_DEMOC" withString:[chartData objectForKey:@"democ"] 
+											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
+		matches += [content replaceOccurrencesOfString:@"DATA_REPUB" withString:[chartData objectForKey:@"repub"] 
+											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
+		matches += [content replaceOccurrencesOfString:@"DATA_MEMBER" withString:[chartData objectForKey:@"member"] 
+											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
+		matches += [content replaceOccurrencesOfString:@"DATA_TIME" withString:[chartData objectForKey:@"time"] 
+											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
+		
+		NSString *style = @"";
+		NSString *viewport = @"";
+		if ([UtilityMethods isIPadDevice]) {
+			//style = @"width: 500px; height: 180px; margin: 0 auto  background-color: transparent";
+			style = [NSString stringWithFormat:@"width: %@; height: 180px; auto", width];
+			debug_NSLog(@"%@", style);
+			
+		}
+		else {
+			//style = @"width: 320px; height: 192px; margin: 0 auto";
+			//style = @"width: 100%; height: 192px;";
+			//style = @"height: 180px; auto";
+			style = [NSString stringWithFormat:@"width: %@; height: 180px; auto", width];
+			viewport = @"width = device-width";
+			
+			//viewport = @"initial-scale = 1";
+		}
+		matches += [content replaceOccurrencesOfString:@"VIEWPORT_SETTING" withString:viewport options:NSLiteralSearch range:NSMakeRange(0, [content length])];
+		matches += [content replaceOccurrencesOfString:@"CONTENT_STYLE" withString:style options:NSLiteralSearch range:NSMakeRange(0, [content length])];
+	}
+	//debug_NSLog(@"Partisan chart template, found/replaced %d matches", matches);
+	return [content autorelease];
 }
 
 @end

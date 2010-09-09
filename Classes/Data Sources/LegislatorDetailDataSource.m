@@ -17,7 +17,6 @@
 #import "CommitteePositionObj.h"
 #import "WnomObj.h"
 
-#import "StaticGradientSliderView.h"
 #import "UtilityMethods.h"
 #import "DirectoryDetailInfo.h"
 #import "TexLegeAppDelegate.h"
