@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
+
+#define kCustomAnnotationDidChangeNotificationKey @"CustomAnnotationDidChangeNotification"
 @class BSKmlResult;
 @interface CustomAnnotation : NSObject <MKAnnotation, NSCoding> {
 }
@@ -24,8 +26,10 @@
 @property (nonatomic, readonly) MKCoordinateRegion		region;
 @property (nonatomic, readonly) MKCoordinateSpan		span;
 
-
 -(id)initWithBSKmlResult:(BSKmlResult*)kmlResult;
 
 - (UIImage *)image;
+
+- (void)setAddressDictWithPlacemark:(MKPlacemark *)placemark;
+
 @end

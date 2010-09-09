@@ -10,6 +10,13 @@
 #import "CustomAnnotation.h"
 #import	"BSKmlResult.h"
 #import "TexLegeAppDelegate.h"
+#import <AddressBookUI/ABAddressFormatting.h>
+
+@interface CustomAnnotation (Private)
+
+- (void)reloadTitle;
+
+@end
 
 @implementation CustomAnnotation
 
@@ -28,9 +35,10 @@
 		
 		self.addressDict = kmlResult.addressDict;
 		
-		self.pinColorIndex = [NSNumber numberWithInteger:MKPinAnnotationColorGreen]; 
+		self.pinColorIndex = [NSNumber numberWithInteger:MKPinAnnotationColorPurple]; 
 		self.imageName = @"silverstar.png";
-
+		
+		[self reloadTitle];
 	}
 	
 	return self;
@@ -47,6 +55,8 @@
         self.regionDict = [coder decodeObjectForKey:@"regionDict"];
         self.addressDict = [coder decodeObjectForKey:@"addressDict"];
 		
+		if (!self.title || ![self.title length])
+			[self reloadTitle];
     }
 	return self;
 }
@@ -62,14 +72,28 @@
 }	
 
 - (void)dealloc {	
-	self.title = nil;
-	self.subtitle = nil;
 	self.imageName = nil;
 	self.pinColorIndex = nil;
 	self.regionDict = nil;
 	self.addressDict = nil;
-	
+
 	[super dealloc];
+}
+
+- (void)reloadTitle {
+	if (self.addressDict) {
+		NSString *formattedString = [self.addressDict objectForKey:@"formattedAddress"];
+		NSString *componentString = [self.addressDict objectForKey:@"address"];
+	
+		if (componentString && [componentString length])
+			self.title = componentString;
+		else if (formattedString && [formattedString length])
+			self.title = formattedString;
+		
+		return;
+	}
+	self.title = [NSString	stringWithFormat:@"%f %f", self.coordinate.latitude, self.coordinate.longitude];
+		
 }
 
 #pragma mark -
@@ -82,55 +106,95 @@
 		return [UIImage imageNamed:self.imageName];
 }
 
-- (NSString *)title {
-	if (title)
-		return title;
-	else
-		return @"Searched Location";
-}
-
-// optional
-- (NSString *)subtitle
-{
+- (NSString *)subtitle {
 	if (subtitle)
 		return subtitle;
-	
-	//debug_NSLog(@"addressDict: %@", self.addressDict);
-	NSString *formattedString = [self.addressDict objectForKey:@"formattedAddress"];
-	NSString *componentString = [self.addressDict objectForKey:@"address"];
-	
-	if (!formattedString && !componentString)
-		return nil;
-
-	/*
-	 NSInteger formattedLength = [formattedString length];
-	NSRange strRange = NSMakeRange(NSNotFound, 0);
-	if (formattedString && formattedLength)
-		strRange = [formattedString rangeOfString:@","];
-	if (strRange.length > 0 && strRange.location < formattedLength)
-		formattedString = [formattedString substringToIndex:strRange.location];
-	*/
-	if (formattedString && [formattedString length])
-		return formattedString;
-	else {
-		//debug_NSLog(@"formatted address not found, using component address: %@", componentString);
-		return componentString;
-	}
+	else
+		return @"Tap & hold to move pin";
 }
 
 - (CLLocationCoordinate2D) coordinate {
-	CLLocationCoordinate2D tempCoord = {[[self.regionDict valueForKey:@"latitude"] doubleValue],
-										[[self.regionDict valueForKey:@"longitude"] doubleValue]};
+	CLLocationCoordinate2D tempCoord;
+	if (self.regionDict) {
+		tempCoord = CLLocationCoordinate2DMake([[self.regionDict objectForKey:@"latitude"] doubleValue], 
+											   [[self.regionDict objectForKey:@"longitude"] doubleValue]);
+	}
 	return tempCoord;
 }
 
+- (void) setCoordinate:(CLLocationCoordinate2D)newCoordinate {
+	
+	NSMutableDictionary *tempDict = [[NSMutableDictionary alloc] init];
+	
+	[tempDict setObject:[NSNumber numberWithDouble:newCoordinate.latitude] forKey:@"latitude"];
+	[tempDict setObject:[NSNumber numberWithDouble:newCoordinate.longitude] forKey:@"longitude"];
+	if (self.regionDict) {
+		NSNumber *tempNum = [self.regionDict objectForKey:@"spanLat"];
+		if (tempNum)
+			[tempDict setObject:tempNum forKey:@"spanLat"];
+		tempNum = [self.regionDict objectForKey:@"spanLon"];
+		if (tempNum)
+			[tempDict setObject:tempNum forKey:@"spanLon"];
+	}
+	
+	self.regionDict = tempDict;
+	[tempDict release];
+		
+	//self.title = @"Updating Address...";
+	self.title = [NSString	stringWithFormat:@"%f %f", newCoordinate.latitude, newCoordinate.longitude];
+}
+
+
 - (MKCoordinateSpan) span {
-	return MKCoordinateSpanMake([[self.regionDict valueForKey:@"spanLat"] doubleValue],
-								[[self.regionDict valueForKey:@"spanLon"] doubleValue]);
+	return MKCoordinateSpanMake([[self.regionDict objectForKey:@"spanLat"] doubleValue],
+								[[self.regionDict objectForKey:@"spanLon"] doubleValue]);
 }
 
 - (MKCoordinateRegion)region {
 	return MKCoordinateRegionMake(self.coordinate, self.span);
+}
+
+- (void)setAddressDictWithPlacemark:(MKPlacemark *)placemark {
+	if (!placemark)
+		return;
+	
+	NSMutableDictionary *tempDict = [NSMutableDictionary dictionaryWithDictionary:placemark.addressDictionary];
+	
+	if (placemark.thoroughfare)
+		[tempDict setObject:placemark.thoroughfare forKey:@"address"];
+	
+	if (placemark.locality)
+		[tempDict setObject:placemark.locality forKey:@"city"];
+	
+	if (placemark.country)
+		[tempDict setObject:placemark.locality forKey:@"country"];
+	
+	if (placemark.countryCode)
+		[tempDict setObject:placemark.countryCode forKey:@"countryCode"];
+	
+	if (placemark.subAdministrativeArea)
+		[tempDict setObject:placemark.subAdministrativeArea forKey:@"county"];
+	
+	if (placemark.administrativeArea)
+		[tempDict setObject:placemark.administrativeArea forKey:@"state"];
+	
+	if (placemark.administrativeArea)
+		[tempDict setObject:placemark.administrativeArea forKey:@"stateCode"];
+	
+	if (placemark.postalCode)
+		[tempDict setObject:placemark.postalCode forKey:@"zip"];
+	
+	
+	//////////
+	NSString *formatted = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
+	if (formatted)
+		[tempDict setObject:formatted forKey:@"formattedAddress"];
+	
+	self.addressDict = tempDict;
+	
+	[self reloadTitle];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:kCustomAnnotationDidChangeNotificationKey object:self];
 }
 
 @end
