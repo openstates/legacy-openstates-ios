@@ -14,7 +14,7 @@
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 #import "DistrictMapObj.h"
-
+#import "TexLegeCoreDataUtils.h"
 
 @interface DistrictOfficeMasterViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
