@@ -27,7 +27,7 @@
 { return @"Capitol Maps"; }
 
 - (NSString *)name
-{ return @"Maps"; }
+{ return @"Capitol Maps"; }
  
 - (UIImage *)tabBarImage 
 { return [UIImage imageNamed:@"71-compass.png"]; }

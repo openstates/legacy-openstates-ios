@@ -10,6 +10,7 @@
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
 #import "TexLegeCoreDataUtils.h"
+#import "CommitteePositionObj.h"
 
 @implementation CommitteesDataSource
 
@@ -310,9 +311,9 @@
 				// NOW LETS GET THE PROPER LEGISLATOR OBJECT TO LINK THE RELATIONSHIP
 				LegislatorObj *legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:[eachMember valueForKey:@"memberId"] withContext:context];
 				if (legislator)
-					positionObject.legislator = legislator;;
+					positionObject.legislator = legislator;
 				
-				[committeeObject addCommitteePositionsObject:positionObject]; //<label id="code.SVC.addSessionObject"/>
+				[committeeObject addCommitteePositionsObject:positionObject];
 			}
 
 			// Save the context.

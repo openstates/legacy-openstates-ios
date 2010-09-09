@@ -10,11 +10,14 @@
 #import "TexLegeTheme.h"
 #import "DistrictOfficeObj.h"
 #import "DisclosureQuartzView.h"
+#import "BSForwardGeocoder.h"
 
 @interface DistrictOfficeDataSource (Private)
 
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
 - (void)initializeDatabase;	
+- (NSError *) geocodeDistrictOffice:(DistrictOfficeObj *)office;
+- (IBAction) saveAction:(id)sender;
 #endif
 
 @end
@@ -281,83 +284,6 @@
 #pragma mark -
 #pragma mark Core Data Methods
 
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
-#warning initializeDatabase IS TURNED ON!!!
-#warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
-
-- (void)initializeDatabase {
-		
-	// Create a new instance of the entity managed by the fetched results controller.
-	NSManagedObjectContext *context = [fetchedResultsController managedObjectContext];
-	NSEntityDescription *entity = [[fetchedResultsController fetchRequest] entity];
-	
-	// read the legislator data from the plist
-	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"Committees" ofType:@"plist"];
-	NSArray *rawPlistArray = [[NSArray alloc] initWithContentsOfFile:thePath];
-	
-	NSFetchRequest *lege_request = [[NSFetchRequest alloc] init];
-	
-	// iterate over the values in the raw  dictionary
-	for (NSDictionary * eachCommittee in rawPlistArray)
-	{
-		// create an legislator instance for each
-		CommitteeObj *committeeObject = [NSEntityDescription insertNewObjectForEntityForName:
-										 [entity name] inManagedObjectContext:context];
-		
-		[committeeObject setValue:[eachCommittee valueForKey:@"committeeId"] forKey:@"committeeId"];
-		[committeeObject setValue:[eachCommittee valueForKey:@"parentId"] forKey:@"parentId"];
-		[committeeObject setValue:[eachCommittee valueForKey:@"committeeType"] forKey:@"committeeType"];
-		[committeeObject setValue:[eachCommittee valueForKey:@"committeeName"] forKey:@"committeeName"];
-		[committeeObject setValue:[eachCommittee valueForKey:@"url"] forKey:@"url"];
-		[committeeObject setValue:[eachCommittee valueForKey:@"clerk"] forKey:@"clerk"];
-		[committeeObject setValue:[eachCommittee valueForKey:@"clerk_email"] forKey:@"clerk_email"];
-		[committeeObject setValue:[eachCommittee valueForKey:@"phone"] forKey:@"phone"];
-		[committeeObject setValue:[eachCommittee valueForKey:@"office"] forKey:@"office"];
-		
-		// DO SOMETHING HERE FOR COMMITTEE POSITIONS...
-		for (NSDictionary * eachMember in [eachCommittee valueForKey:@"members"]) // returns a dictionary array
-		{
-			CommitteePositionObj *positionObject = 
-			[NSEntityDescription insertNewObjectForEntityForName:@"CommitteePositionObj"
-										  inManagedObjectContext:context];
-			
-			// If appropriate, configure the new managed object.
-			[positionObject setValue:[eachMember valueForKey:@"memberPos"] forKey:@"position"];
-			[positionObject setValue:[eachMember valueForKey:@"memberId"] forKey:@"legislatorID"];
-			//[memberObject setValue:nextId forKey:@"sessionID"];
-			
-			// NOW LETS GET THE PROPER LEGISLATOR OBJECT TO LINK THE RELATIONSHIP
-			NSEntityDescription *lege_entity = [NSEntityDescription entityForName:@"LegislatorObj" 
-														   inManagedObjectContext:managedObjectContext];
-			[lege_request setEntity:lege_entity];
-			
-			NSPredicate *lege_predicate = [NSPredicate predicateWithFormat:@"self.legislatorID == %@", [eachMember valueForKey:@"memberId"]];
-			[lege_request setPredicate:lege_predicate];
-			
-			NSError *error = nil;
-			NSArray *lege_array = [managedObjectContext executeFetchRequest:lege_request error:&error];
-			if (lege_array != nil) {
-				if ([lege_array count] > 0) { // may be 0 if the object has been deleted
-					LegislatorObj * legislatorObject = [lege_array objectAtIndex:0]; // just get the first (only!!) one.
-					[positionObject setValue:legislatorObject forKey:@"legislator"];
-				}
-			}
-			[committeeObject addCommitteePositionsObject:positionObject]; //<label id="code.SVC.addSessionObject"/>
-		}
-		
-		// Save the context.
-		NSError *error;
-		if (![context save:&error]) {
-			// Handle the error...
-		}
-	}
-	[lege_request release];
-	
-	// release the raw data
-	[rawPlistArray release];
-}
-#endif
-
 /*
  Set up the fetched results controller.
  */
@@ -402,6 +328,166 @@
 	
 	return fetchedResultsController;
 }    
+
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#warning initializeDatabase IS TURNED ON!!!
+#warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
+	
+/**
+ Performs the save action for the application, which is to send the save:
+ message to the application's managed object context.
+ */
+- (IBAction)saveAction:(id)sender {
+	
+    NSError *error;
+    if (managedObjectContext != nil) {
+        if ([[self managedObjectContext] hasChanges] && ![[self managedObjectContext] save:&error]) {
+			// Handle error.
+			debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        } 
+    }
+}
+
    
+- (NSError *) geocodeDistrictOffice:(DistrictOfficeObj *)office {
+	NSError *parseError = nil;
+	NSString *searchQuery = [NSString stringWithFormat:@"%@, %@, TX, %@", office.address, office.city, office.zipCode];
+	
+	// Create the url to Googles geocoding API, we want the response to be in XML
+	NSString* mapsUrl = [[NSString alloc] initWithFormat:@"http://maps.google.com/maps/api/geocode/xml?address=%@&sensor=false&region=us", 
+						 searchQuery];
+	
+	// Create the url object for our request. It's important to escape the 
+	// search string to support spaces and international characters
+	NSURL *url = [[NSURL alloc] initWithString:[mapsUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	
+	// Run the KML parser
+	BSGoogleV3KmlParser *parser = [[BSGoogleV3KmlParser alloc] init];
+	
+	[parser parseXMLFileAtURL:url parseError:&parseError ignoreAddressComponents:NO];
+	
+	[url release];
+	[mapsUrl release];
+	
+	// If the query was successfull we store the array with results
+	if(parser.statusCode == G_GEO_SUCCESS)
+	{
+		BSKmlResult *firstResult = nil;
+		
+		for (BSKmlResult *result in parser.results) {
+			if (result.addressDict && ([[result.addressDict valueForKey:@"address"] length]|| [result.formattedAddress length])) {
+				//debug_NSLog(@"%@ ..... %@", [result.addressDict valueForKey:@"address"], result.formattedAddress);
+				firstResult = result;
+				continue;
+			}
+		}
+		if (!firstResult) {
+			firstResult = [parser.results objectAtIndex:0];
+			debug_NSLog(@"Troublesome address for %@", [office.legislator legProperName]);
+		}
+		
+		NSDictionary *addressDict = firstResult.addressDict;
+		
+		
+		BOOL missingAddress = (addressDict && [[addressDict valueForKey:@"address"] length] == 0);
+		
+		if (missingAddress) {
+			debug_NSLog(@"[Forward Geocoder] Has a missing address: MISSINGADDR=%d, %@", missingAddress, searchQuery);
+			//[addressDict setValue:@"Post Office Box" forKey:@"formattedAddress"];
+			[addressDict setValue:office.address forKey:@"formattedAddress"];
+		}
+		
+		office.formattedAddress = [addressDict valueForKey:@"formattedAddress"];
+		office.county = [firstResult county];
+		office.latitude = [NSNumber numberWithDouble:[firstResult latitude]];
+		office.longitude = [NSNumber numberWithDouble:[firstResult longitude]];
+		office.spanLat = [NSNumber numberWithDouble:firstResult.coordinateSpan.latitudeDelta];
+		office.spanLon = [NSNumber numberWithDouble:firstResult.coordinateSpan.longitudeDelta];
+	}
+	
+	//debug_NSLog(@"Found placemarks: %d", [parser.results count]);
+	
+	if ([parser.results count] == 0)
+		debug_NSLog(@"Nothing found for %@", searchQuery);
+	
+	
+	[parser release];	
+	
+	
+	if(parseError != nil)
+	{
+		debug_NSLog(@"Geocode parse error: %@", [parseError localizedDescription]);
+	}
+	
+	
+	return parseError;
+	
+}
+
+- (void) checkDistrictOffices {
+	// Create the fetch request for the entity.
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	
+	// Get our table-specific Core Data.
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictOfficeObj" 
+											  inManagedObjectContext:self.managedObjectContext];
+	[fetchRequest setEntity:entity];
+	
+	//[fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"legislatorID", nil]];
+	
+	NSError *error = nil;
+	NSArray *objArray = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+	
+	[fetchRequest release];
+	
+	
+	if (error) {
+		debug_NSLog(@"DirectoryDataSource:fetch - unresolved error %@, %@", error, [error userInfo]);
+		return;
+	}
+	
+	for (DistrictOfficeObj *obj in objArray) {
+		if ([obj.latitude doubleValue] < 20.0f) { // we don't have a valid location
+			[self geocodeDistrictOffice:obj];
+			if ([obj.latitude doubleValue] < 20.0f) // we don't have a valid location
+				debug_NSLog(@"Found invalid location: %@", [obj address]);
+			else
+				debug_NSLog(@"Fixed one: %@", [obj address]);
+		}
+	}
+	[self saveAction:nil];
+	
+}
+
+
+- (void) initializeDatabase {
+	
+	NSManagedObjectContext *context = self.managedObjectContext;
+		
+	// read the legislator data from the plist
+	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"DistrictOffices" ofType:@"plist"];
+	NSArray *rawPlistArray = [[NSArray alloc] initWithContentsOfFile:thePath];
+	
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictOfficeObj" 
+														inManagedObjectContext:self.managedObjectContext];
+	
+	// iterate over the values in the raw  dictionary
+	for (NSDictionary * aDictionary in rawPlistArray)
+	{
+		DistrictOfficeObj *object = [NSEntityDescription insertNewObjectForEntityForName:
+										 [entity name] inManagedObjectContext:context];
+		if (object) {
+			[object importFromDictionary:aDictionary];
+			if ([object.pinColorIndex integerValue]==MKPinAnnotationColorRed)
+				object.pinColorIndex = [NSNumber numberWithInteger:MKPinAnnotationColorGreen];
+		}		
+		
+	}
+	[self saveAction:nil];
+	debug_NSLog(@"---------------------------------------------------------Saved District Office Entities");
+	[rawPlistArray release];
+	
+}
+#endif
 
 @end
