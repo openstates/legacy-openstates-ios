@@ -59,7 +59,7 @@ NSInteger kNoSelection = -1;
 
 @synthesize managedObjectContext;
 
-@synthesize legislatorMasterVC, committeeMasterVC, capitolMapsMasterVC, linksMasterVC, calendarMasterVC, districtOfficeMasterVC;
+@synthesize legislatorMasterVC, committeeMasterVC, capitolMapsMasterVC, linksMasterVC, calendarMasterVC, districtMapMasterVC, districtOfficeMasterVC;
 
 + (TexLegeAppDelegate *)appDelegate {
 	return (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -89,6 +89,7 @@ NSInteger kNoSelection = -1;
 	self.legislatorMasterVC = nil;
 	self.committeeMasterVC = nil;
 	self.districtOfficeMasterVC = nil;
+	self.districtMapMasterVC = nil;
 
 	self.managedObjectContext = nil;
 		
@@ -227,8 +228,8 @@ NSInteger kNoSelection = -1;
 		exit(0);
 	}
 	
-	NSArray *VCs = [[NSArray alloc] initWithObjects:self.legislatorMasterVC, self.committeeMasterVC, self.districtOfficeMasterVC,
-					self.calendarMasterVC, self.capitolMapsMasterVC, self.linksMasterVC, nil];
+	NSArray *VCs = [[NSArray alloc] initWithObjects:self.legislatorMasterVC, self.committeeMasterVC, self.districtMapMasterVC,
+					self.calendarMasterVC, self.capitolMapsMasterVC, self.districtOfficeMasterVC, self.linksMasterVC, nil];
 	
 	NSString * tempVCKey = [self.savedTableSelection objectForKey:@"viewController"];
 	NSInteger savedTabSelectionIndex = -1;
@@ -273,8 +274,10 @@ NSInteger kNoSelection = -1;
 	[self.tabBarController setSelectedViewController:savedTabController];
 	
 	[self.mainWindow addSubview:self.tabBarController.view];
-		
-	self.districtMapDataSource = [[[DistrictMapDataSource alloc] initWithManagedObjectContext:self.managedObjectContext] autorelease];
+	
+	self.districtMapDataSource = [self.districtMapMasterVC valueForKey:@"dataSource"];
+	
+	//self.districtMapDataSource = [[[DistrictMapDataSource alloc] initWithManagedObjectContext:self.managedObjectContext] autorelease];
 	//[self.tabBarController setSelectedIndex:selection];
 }
 
@@ -549,12 +552,16 @@ NSInteger kNoSelection = -1;
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
 	
 	static NSString *DATABASE_NAME = @"TexLege.v2";
-	//static NSString *DATABASE_FILE = @"TexLege.v2.sqlite";
 	
 	
     if (persistentStoreCoordinator != nil) {
         return persistentStoreCoordinator;
     }
+	
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
+	static NSString *DATABASE_FILE = @"TexLege.v2.sqlite";
+	#define IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB 1
+#endif
 	
 	// If we ever want to allow editing or changing the database, we must use a copy of the database!
 #ifdef IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB
