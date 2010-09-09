@@ -11,7 +11,7 @@
 #import "BSKmlResult.h"
 #import "SynthesizeSingleton.h"
 
-@class DistrictOfficeObj;
+@class DistrictOfficeObj, CustomAnnotation;
 @interface MapViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate, UIPopoverControllerDelegate,
 		MKReverseGeocoderDelegate, BSForwardGeocoderDelegate, UISplitViewControllerDelegate, UIActionSheetDelegate> {
 }
@@ -30,13 +30,14 @@
 @property (nonatomic,retain) MKReverseGeocoder *reverseGeocoder;
 @property (nonatomic,retain) BSForwardGeocoder *forwardGeocoder;
 @property (nonatomic,readonly) MKCoordinateRegion texasRegion;
+@property (nonatomic,retain) CustomAnnotation *searchLocation;
 
 - (IBAction) mapControlSheet:(id)sender;
 - (IBAction) showAllDistricts:(id)sender;
 - (IBAction) showAllDistrictOffices:(id)sender;
 - (IBAction) changeMapType:(id)sender;
 - (IBAction) locateUser:(id)sender;
-- (IBAction) reverseGeocodeCurrentLocation;
+- (IBAction) reverseGeocodeLocation:(CLLocationCoordinate2D)coordinate;
 - (void) clearAnnotationsAndOverlays;
 - (void) clearAnnotationsAndOverlaysExceptRecent;
 - (void) resetMapViewWithAnimation:(BOOL)animated;
