@@ -18,6 +18,7 @@
 + (BOOL) isLandscapeOrientation;
 + (BOOL) isIPadDevice;
 
++ (NSURL *)urlToMainBundle;
 + (NSString *) titleFromURL:(NSURL *)url;
 + (NSURL *) safeWebUrlFromString:(NSString *)urlString;
 + (CapitolMap *) capitolMapFromOfficeString:(NSString *)office;
