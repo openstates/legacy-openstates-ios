@@ -160,12 +160,9 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 	
 	//self.rank = @"3rd most partisan (out of 76 Repubs)";
 
-	NSArray *legislators = nil;
-	
-	legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[legislator.legtype integerValue] 
+	NSArray *legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[legislator.legtype integerValue] 
 																		   andPartyID:[legislator.party_id integerValue] 
 																			  context:self.legislator.managedObjectContext];
-	
 	if (legislators) {
 		NSInteger rankIndex = [legislators indexOfObject:self.legislator] + 1;
 		NSInteger count = [legislators count];
@@ -184,25 +181,30 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 		return;
 	}
 	[legislator release];
-	legislator = [value retain];
 	
-	self.title = [self.legislator legTypeShortName];
-	self.district = [NSString stringWithFormat:@"District %@", legislator.district];
-	self.party = self.legislator.party_name;
-	self.name = [self.legislator legProperName];
-	self.tenure = [self.legislator tenureString];
-	
-	PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
-	CGFloat minSlider = [[indexStats minPartisanIndexUsingLegislator:legislator] floatValue];
-	CGFloat maxSlider = [[indexStats maxPartisanIndexUsingLegislator:legislator] floatValue];
-	
-	self.sliderMax = maxSlider;
-	self.sliderMin = minSlider;	
-	self.sliderValue = self.legislator.partisan_index.floatValue;
-	
+	if (value) {
+		legislator = [value retain];
+
+		self.title = [self.legislator legTypeShortName];
+		self.district = [NSString stringWithFormat:@"District %@", legislator.district];
+		self.party = self.legislator.party_name;
+		self.name = [self.legislator legProperName];
+		self.tenure = [self.legislator tenureString];
 		
-	self.rank = [self partisanRankStringForLegislator];
-	
+		PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
+		CGFloat minSlider = [[indexStats minPartisanIndexUsingLegislator:legislator] floatValue];
+		CGFloat maxSlider = [[indexStats maxPartisanIndexUsingLegislator:legislator] floatValue];
+		
+		self.sliderMax = maxSlider;
+		self.sliderMin = minSlider;	
+		self.sliderValue = self.legislator.partisan_index.floatValue;
+		
+		self.rank = [self partisanRankStringForLegislator];
+	}
+	else {
+		debug_NSLog(@"what's happening y'all?");
+	}
+
 	[self setNeedsDisplay];	
 }
 
