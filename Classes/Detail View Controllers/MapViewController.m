@@ -264,7 +264,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 
 - (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
-    
     barButtonItem.title = @"Districts";
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     self.masterPopover = pc;
