@@ -246,7 +246,7 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
 							<reference key="IBUIParentViewController" ref="795113160"/>
-							<string key="IBUINibName">CommitteeDetailViewController</string>
+							<string key="IBUINibName">CommitteeDetailViewController~ipad</string>
 							<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
 								<int key="IBUIStatusBarStyle">2</int>
 							</object>
@@ -1547,6 +1547,38 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">CommitteeDetailViewController</string>
 					<string key="superclassName">UITableViewController</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>membershipLab</string>
+							<string>partisanSlider</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>UILabel</string>
+							<string>PartisanScaleView</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>membershipLab</string>
+							<string>partisanSlider</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">membershipLab</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">partisanSlider</string>
+								<string key="candidateClassName">PartisanScaleView</string>
+							</object>
+						</object>
+					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Classes/Detail View Controllers/CommitteeDetailViewController.h</string>
@@ -1659,85 +1691,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Classes/Master View Controllers/DistrictMapMasterViewController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">DistrictOfficeMasterViewController</string>
-					<string key="superclassName">GeneralTableViewController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>filterChamber:</string>
-							<string>sortType:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>filterChamber:</string>
-							<string>sortType:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBActionInfo">
-								<string key="name">filterChamber:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">sortType:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="outlets">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>chamberControl</string>
-							<string>filterControls</string>
-							<string>sortControl</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>UISegmentedControl</string>
-							<string>UIView</string>
-							<string>UISegmentedControl</string>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>chamberControl</string>
-							<string>filterControls</string>
-							<string>sortControl</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBToOneOutletInfo">
-								<string key="name">chamberControl</string>
-								<string key="candidateClassName">UISegmentedControl</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">filterControls</string>
-								<string key="candidateClassName">UIView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">sortControl</string>
-								<string key="candidateClassName">UISegmentedControl</string>
-							</object>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/Master View Controllers/DistrictOfficeMasterViewController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -2359,7 +2312,6 @@
 							<string>capitolMapsMasterVC</string>
 							<string>committeeMasterVC</string>
 							<string>districtMapMasterVC</string>
-							<string>districtOfficeMasterVC</string>
 							<string>legislatorMasterVC</string>
 							<string>linksMasterVC</string>
 							<string>managedObjectContext</string>
@@ -2371,7 +2323,6 @@
 							<string>CapitolMapsMasterViewController</string>
 							<string>CommitteeMasterViewController</string>
 							<string>DistrictMapMasterViewController</string>
-							<string>DistrictOfficeMasterViewController</string>
 							<string>LegislatorMasterViewController</string>
 							<string>LinksMasterViewController</string>
 							<string>NSManagedObjectContext</string>
@@ -2386,7 +2337,6 @@
 							<string>capitolMapsMasterVC</string>
 							<string>committeeMasterVC</string>
 							<string>districtMapMasterVC</string>
-							<string>districtOfficeMasterVC</string>
 							<string>legislatorMasterVC</string>
 							<string>linksMasterVC</string>
 							<string>managedObjectContext</string>
@@ -2409,10 +2359,6 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">districtMapMasterVC</string>
 								<string key="candidateClassName">DistrictMapMasterViewController</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">districtOfficeMasterVC</string>
-								<string key="candidateClassName">DistrictOfficeMasterViewController</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">legislatorMasterVC</string>
