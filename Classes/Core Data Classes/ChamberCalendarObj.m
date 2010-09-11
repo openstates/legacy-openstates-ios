@@ -122,6 +122,24 @@
 						if (timeString) {
 							[entryDict setObject:[timeFormatter dateFromString:timeString] forKey:@"time"];
 							[entryDict setObject:timeString forKey:@"timeString"];
+						
+							// fullDate = (date + time) ... if possible
+							NSString *gotDate = [entryDict objectForKey:@"dateString"];
+							if (timeString && gotDate) {
+								NSDateFormatter *fullFormatter = [[NSDateFormatter alloc] init];
+								[fullFormatter setLenient:YES];
+								[fullFormatter setDateFormat:@"M/d/yyyy h:mm a"];
+								NSString *fullString = [NSString stringWithFormat:@"%@ %@", gotDate, timeString];
+								NSDate *fullDate = [fullFormatter dateFromString:fullString];
+								if (fullDate) {
+									[entryDict setObject:fullDate forKey:@"fullDate"];
+									//debug_NSLog(@"String from date %@", [fullFormatter stringFromDate:fullDate]);
+								}
+								else
+									debug_NSLog(@"Trouble parsing full date from %@", fullString);
+								
+								[fullFormatter release];
+							}
 						}
 					}						
 				}
@@ -139,7 +157,6 @@
 							[entryDict setObject:placeString forKey:@"location"];
 					}					
 				}
-				
 			}
 			
 			[entryArray addObject:entryDict];

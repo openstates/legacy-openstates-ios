@@ -17,6 +17,19 @@
 @property (nonatomic,retain) NSArray *feedURLS;
 @property (nonatomic,retain) CFeedStore *feedStore;
 
+
+/* keys in a feed entry dictionary:
+	date
+	dateString
+	time
+	timeString
+	committee
+	chamber
+	location
+	url
+	fullDate (date + time) ... if possible
+ */
+
 - (NSArray *)feedEntries;
 
 @end
