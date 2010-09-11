@@ -117,7 +117,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 - (NSArray *) aggregatePartisanIndexForChamber:(NSInteger)chamber andPartyID:(NSInteger)party {
 	
 	if (chamber == BOTH_CHAMBERS) {
-		debug_NSLog(@"allMembersByChamber: ... cannot be BOTH chambers");
+		debug_NSLog(@"aggregatePartisanIndexForChamber: ... cannot be BOTH chambers");
 		return nil;
 	}
 	
