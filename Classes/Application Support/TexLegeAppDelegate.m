@@ -59,7 +59,7 @@ NSInteger kNoSelection = -1;
 
 @synthesize managedObjectContext;
 
-@synthesize legislatorMasterVC, committeeMasterVC, capitolMapsMasterVC, linksMasterVC, calendarMasterVC, districtMapMasterVC, districtOfficeMasterVC;
+@synthesize legislatorMasterVC, committeeMasterVC, capitolMapsMasterVC, linksMasterVC, calendarMasterVC, districtMapMasterVC;
 
 + (TexLegeAppDelegate *)appDelegate {
 	return (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -88,7 +88,6 @@ NSInteger kNoSelection = -1;
 	self.calendarMasterVC = nil;
 	self.legislatorMasterVC = nil;
 	self.committeeMasterVC = nil;
-	self.districtOfficeMasterVC = nil;
 	self.districtMapMasterVC = nil;
 
 	self.managedObjectContext = nil;
@@ -229,7 +228,7 @@ NSInteger kNoSelection = -1;
 	}
 	
 	NSArray *VCs = [[NSArray alloc] initWithObjects:self.legislatorMasterVC, self.committeeMasterVC, self.districtMapMasterVC,
-					self.calendarMasterVC, self.capitolMapsMasterVC, self.districtOfficeMasterVC, self.linksMasterVC, nil];
+					self.calendarMasterVC, self.capitolMapsMasterVC, self.linksMasterVC, nil];
 	
 	NSString * tempVCKey = [self.savedTableSelection objectForKey:@"viewController"];
 	NSInteger savedTabSelectionIndex = -1;

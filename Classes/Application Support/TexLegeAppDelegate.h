@@ -13,7 +13,6 @@
 @class LinksMasterViewController;
 @class CapitolMapsMasterViewController;
 @class CalendarMasterViewController;
-@class DistrictOfficeMasterViewController;
 @class DistrictMapMasterViewController;
 @class AnalyticsOptInAlertController;
 @class DistrictMapDataSource;
@@ -44,7 +43,6 @@
 @property (nonatomic, retain) IBOutlet CommitteeMasterViewController *committeeMasterVC;
 @property (nonatomic, retain) IBOutlet LegislatorMasterViewController *legislatorMasterVC;
 @property (nonatomic, retain) IBOutlet CalendarMasterViewController *calendarMasterVC;
-@property (nonatomic, retain) IBOutlet DistrictOfficeMasterViewController *districtOfficeMasterVC;
 @property (nonatomic, retain) IBOutlet DistrictMapMasterViewController *districtMapMasterVC;
 
 // For iPhone Interface
