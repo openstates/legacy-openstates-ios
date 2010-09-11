@@ -81,8 +81,13 @@ const CGFloat kPartisanScaleViewHeight = 32.0f;
 	else
 		self.showUnknown = NO;
 	
-	CGFloat magicNumber = (144.0f / (sliderMax - sliderMin));
-	CGFloat offset = 72.5;
+#define	kStarAtDemoc 0.5f
+#define kStarAtRepub 144.5f
+#define	kStarAtHalf 72.5f
+#define kStarMagnifierBase (kStarAtRepub - kStarAtDemoc)
+	
+	CGFloat magicNumber = (kStarMagnifierBase / (sliderMax - sliderMin));
+	CGFloat offset = kStarAtHalf;
 	sliderValue = sliderValue * magicNumber + offset;
 
 	[self setNeedsDisplay];
