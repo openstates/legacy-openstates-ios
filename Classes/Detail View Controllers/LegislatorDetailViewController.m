@@ -115,9 +115,6 @@
 	self.indivSlider = nil;
 	self.partySlider = nil;
 	self.allSlider = nil;
-//	self.indivPHolder = nil;
-//	self.partyPHolder = nil;
-//	self.allPHolder = nil;
 	self.legislator = nil;
 	self.dataSource = nil;
 	self.headerView = nil;
@@ -139,9 +136,6 @@
 	self.indivSlider = nil;
 	self.partySlider = nil;
 	self.allSlider = nil;
-//	self.indivPHolder = nil;
-//	self.partyPHolder = nil;
-//	self.allPHolder = nil;
 	self.dataSource = nil;
 	self.legislator = nil;
 	self.headerView = nil;
@@ -263,7 +257,6 @@
 // Called on the delegate when the user has taken action to dismiss the popover. This is not called when -dismissPopoverAnimated: is called directly.
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
 	[self.tableView reloadData];
-	debug_NSLog(@"%@", self.tableView);
 	if (self.notesPopover && [self.notesPopover isEqual:popoverController])
 		self.notesPopover = nil;
 }
@@ -488,7 +481,7 @@
 
 	if ([UtilityMethods canReachHostWithURL:url]) { // do we have a good URL/connection?
 		MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
-		[mbc display:self];
+		[mbc display:self.tabBarController];
 	}
 
 }	
