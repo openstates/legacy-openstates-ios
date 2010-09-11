@@ -80,10 +80,10 @@
 	
 	[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
 
-	//if (![UtilityMethods isIPadDevice]) {
+	if (![UtilityMethods isIPadDevice]) {
 		debug_NSLog(@"about to release a view controller %@", self.detailViewController);
 		self.detailViewController = nil;
-	//}
+	}
 	
 	self.selectObjectOnAppear = nil;
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
