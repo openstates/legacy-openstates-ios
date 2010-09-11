@@ -76,7 +76,7 @@
 	
 	//UIImage *sealImage = [UIImage imageWithContentsOfResolutionIndependentFile:@"seal.png"];
 	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
-	UIColor *sealColor = [UIColor colorWithPatternImage:sealImage];	
+	UIColor *sealColor = [[UIColor colorWithPatternImage:sealImage] colorWithAlphaComponent:0.5f];	
 	self.miniBackgroundView.backgroundColor = sealColor;
 	//self.headerView.backgroundColor = sealColor;
 	
@@ -246,8 +246,6 @@
 		LegislatorDetailDataSource *ds = [[LegislatorDetailDataSource alloc] initWithLegislator:legislator];
 		self.tableView.dataSource = self.dataSource = ds;
 		[ds release];
-		
-		debug_NSLog(@"landscape? = %d", [UtilityMethods isLandscapeOrientation]);
 		
 		[self setupHeader];
 		
