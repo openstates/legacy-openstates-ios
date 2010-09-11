@@ -32,6 +32,7 @@
 @property (nonatomic,retain) UIColor *sealColor;
 @property (nonatomic,retain) LinkObj *link;
 @property (nonatomic) BOOL m_shouldHideDoneButton;
+@property (nonatomic) BOOL isSharedBrowser;
 
 + (MiniBrowserController *)sharedBrowser;
 + (MiniBrowserController *)sharedBrowserWithURL:(NSURL *)urlOrNil;

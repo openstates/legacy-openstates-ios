@@ -300,7 +300,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 			}
 			else {
 				MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
-				[mbc display:self];
+				[mbc display:self.tabBarController];
 			}		
 		}
 	}

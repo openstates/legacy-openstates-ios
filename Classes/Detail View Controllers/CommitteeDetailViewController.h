@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @class CommitteeObj;
-
+@class PartisanScaleView;
 @interface CommitteeDetailViewController : UITableViewController <UISplitViewControllerDelegate> 
 
 @property (nonatomic, retain) CommitteeObj *committee;
 @property (nonatomic, retain) UIPopoverController *masterPopover;
+@property (nonatomic, retain) IBOutlet UILabel *membershipLab;
+@property (nonatomic, retain) IBOutlet PartisanScaleView *partisanSlider;
 
 @end

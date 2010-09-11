@@ -11,6 +11,7 @@
 #import "CommitteeMasterViewController.h"
 
 #import "CommitteeObj.h"
+#import "CommitteePositionObj.h"
 #import "LegislatorObj.h"
 #import "UtilityMethods.h"
 #import "CapitolMapsDetailViewController.h"
@@ -19,10 +20,16 @@
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 #import "LegislatorMasterCell.h"
+#import "CommitteeMemberCell.h"
+#import "CommitteeMemberCellView.h"
+
+#import "PartisanScaleView.h"
+#import "PartisanIndexStats.h"
 
 @implementation CommitteeDetailViewController
 
 @synthesize committee, masterPopover;
+@synthesize partisanSlider, membershipLab;
 
 enum Sections {
     //kHeaderSection = 0,
@@ -43,7 +50,58 @@ enum InfoSectionRows {
 
 CGFloat quartzRowHeight = 73.f;
 
+- (NSString *)nibName {
+	if ([UtilityMethods isIPadDevice])
+		return @"CommitteeDetailViewController~ipad";
+	else
+		return @"CommitteeDetailViewController~iphone";	
+}
+
+- (void) calcCommitteePartisanship {
+	NSArray *positions = [self.committee.committeePositions allObjects];
+	if (!positions && [positions count])
+		return;
+	
+	CGFloat avg = 0.0f;
+	NSNumber *avgNum = [positions valueForKeyPath:@"@avg.legislator.partisan_index"];
+	if (avgNum)
+		avg = [avgNum floatValue];
+	
+	NSInteger democCount = 0, repubCount = 0;
+	NSArray *repubs = [positions findAllWhereKeyPath:@"legislator.party_id" equals:[NSNumber numberWithInteger:REPUBLICAN]];	
+	if (repubs)
+		repubCount = [repubs count];
+	democCount = [positions count] - repubCount;
+	
+	NSString *repubString = @"Republicans";
+	if (repubCount == 1)
+		repubString = @"Republican";
+	
+	NSString *democString = @"Democrats";
+	if (democCount == 1)
+		democString = @"Democrat";
+	
+	self.membershipLab.text = [NSString stringWithFormat:@"%d %@ and %d %@", repubCount, repubString, democCount, democString];
+		
+
+
+	LegislatorObj *anyMember = [[positions objectAtIndex:0] legislator];
+
+	if (anyMember) {
+		PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
+		
+		CGFloat minSlider = [[indexStats minPartisanIndexUsingLegislator:anyMember] floatValue];
+		CGFloat maxSlider = [[indexStats maxPartisanIndexUsingLegislator:anyMember] floatValue];
+		
+		self.partisanSlider.sliderMin = minSlider;
+		self.partisanSlider.sliderMax = maxSlider;
+	}
+
+	self.partisanSlider.sliderValue = avg;	
+}
+
 - (void)setCommittee:(CommitteeObj *)newObj {
+	[self view];
 	
 	if (committee) [committee release], committee = nil;
 	if (newObj) {
@@ -52,8 +110,9 @@ CGFloat quartzRowHeight = 73.f;
 
 		committee = [newObj retain];
 		self.navigationItem.title = self.committee.committeeName;
-
-				
+		
+		[self calcCommitteePartisanship];
+		
 		[self.tableView reloadData];
 		[self.view setNeedsDisplay];
 	}
@@ -67,11 +126,13 @@ CGFloat quartzRowHeight = 73.f;
 - (void)viewDidLoad {
     [super viewDidLoad];
 	self.clearsSelectionOnViewWillAppear = NO;
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
+	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
+	UIColor *sealColor = [[UIColor colorWithPatternImage:sealImage] colorWithAlphaComponent:0.5f];	
+	self.tableView.tableHeaderView.backgroundColor = sealColor;	
 	
-	if ([UtilityMethods isIPadDevice])
-		quartzRowHeight = quartzRowHeight*1.5;
+	//if ([UtilityMethods isIPadDevice])
+	//	quartzRowHeight = 73.f*1.5f;
 }
 
 
@@ -114,14 +175,14 @@ CGFloat quartzRowHeight = 73.f;
     // Releases the view if it doesn't have a superview.
 	[[self navigationController] popToRootViewControllerAnimated:YES];
 	
-	self.committee = nil;
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
 - (void)viewDidUnload {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
+	self.partisanSlider = nil;
+	self.membershipLab = nil;
 	self.committee = nil;
 	self.masterPopover = nil;
 	self.tableView = nil;
@@ -228,7 +289,7 @@ CGFloat quartzRowHeight = 73.f;
 	NSInteger InfoSectionEnd = ([UtilityMethods canMakePhoneCalls]) ? kInfoSectionClerk : kInfoSectionPhone;
 	
 	if (section > kInfoSection)
-		CellIdentifier = @"LegislatorQuartz";
+		CellIdentifier = @"CommitteeMember";
 	else if (row > InfoSectionEnd)
 		CellIdentifier = @"CommitteeInfo";
 	else // the non-clickable / no disclosure items
@@ -239,14 +300,22 @@ CGFloat quartzRowHeight = 73.f;
 	
 	if (cell == nil) {
 		
-		if (CellIdentifier == @"LegislatorQuartz") {
-			LegislatorMasterCell *newcell = [[[LegislatorMasterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-			//cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
-			newcell.frame = CGRectMake(0.0, 0.0, 234.0, quartzRowHeight);		
-			newcell.cellView.useDarkBackground = NO;
-			newcell.accessoryView.hidden = NO;
-			cell = newcell;
-
+		if (CellIdentifier == @"CommitteeMember") {
+			if (![UtilityMethods isIPadDevice]) {
+				LegislatorMasterCell *newcell = [[[LegislatorMasterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+				//cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
+				newcell.frame = CGRectMake(0.0, 0.0, 234.0, quartzRowHeight);		
+				newcell.cellView.useDarkBackground = NO;
+				newcell.accessoryView.hidden = NO;
+				cell = newcell;
+			}
+			else {
+				CommitteeMemberCell *newcell = [[[CommitteeMemberCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+				//cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
+				newcell.frame = CGRectMake(0.0, 0.0, kCommitteeMemberCellViewWidth, quartzRowHeight);		
+				newcell.accessoryView.hidden = NO;
+				cell = newcell;
+			}
 		}
 		else {
 			cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:CellIdentifier] autorelease];			
@@ -381,7 +450,7 @@ CGFloat quartzRowHeight = 73.f;
 - (void) pushInternalBrowserWithURL:(NSURL *)url {
 	if ([UtilityMethods canReachHostWithURL:url]) { // do we have a good URL/connection?
 		MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
-		[mbc display:self];
+		[mbc display:self.tabBarController];
 	}
 }
 

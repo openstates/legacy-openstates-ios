@@ -30,7 +30,7 @@ enum
 
 @implementation MiniBrowserController
 
-@synthesize m_urlRequestToLoad, m_loadingItemList, link, m_activity, m_loadingLabel;
+@synthesize m_urlRequestToLoad, m_loadingItemList, link, m_activity, m_loadingLabel, isSharedBrowser;
 
 @synthesize m_toolBar, m_webView, m_shouldStopLoadingOnHide;
 @synthesize m_backButton, m_reloadButton, m_fwdButton, m_doneButton;
@@ -56,7 +56,8 @@ static MiniBrowserController *s_browser = nil;
 		s_browser = [[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil];
 		//s_browser.m_webView.detectsPhoneNumbers = YES;
 		s_browser.m_shouldHideDoneButton = NO;
-
+		s_browser.isSharedBrowser = YES;
+		
 		s_browser.m_webView.scalesPageToFit = YES;
 		[s_browser.view setNeedsDisplay];
 	}
@@ -88,6 +89,7 @@ static MiniBrowserController *s_browser = nil;
 		//m_activity = nil;
 		//m_loadingLabel = nil;
 		m_parentCtrl = nil;
+		self.isSharedBrowser = NO;
 		m_shouldUseParentsView = NO;
 		m_shouldDisplayOnViewLoad = NO;
 		m_shouldHideDoneButton = YES;
@@ -113,6 +115,7 @@ static MiniBrowserController *s_browser = nil;
 	m_urlRequestToLoad = nil;
 	//m_activity = nil;
 	//m_loadingLabel = nil;
+	self.isSharedBrowser = NO;
 	m_parentCtrl = nil;
 	m_shouldUseParentsView = NO;
 	m_shouldDisplayOnViewLoad = NO;
@@ -290,7 +293,7 @@ static MiniBrowserController *s_browser = nil;
 		[self normalizeToolbarButtons];
 	}
 	
-	if ([UtilityMethods isIPadDevice] && !self.link && ![UtilityMethods isLandscapeOrientation])  {
+	if ([UtilityMethods isIPadDevice] && !self.link && !self.isSharedBrowser && ![UtilityMethods isLandscapeOrientation])  {
 		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 		LinksMasterViewController *masterVC = [appDelegate linksMasterVC];
 		if (!masterVC)
@@ -436,7 +439,7 @@ static MiniBrowserController *s_browser = nil;
 				return;
 			
 			self.title = link.label;
-			self.m_toolBar.hidden = ([link.label isEqualToString:@"TexLege Information"]);
+			//self.m_toolBar.hidden = ([UtilityMethods isIPadDevice] && [link.label isEqualToString:@"TexLege Information"]);
 
 		}
 		
