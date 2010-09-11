@@ -38,6 +38,42 @@
 	return [TexLegeCoreDataUtils dataObjectWithPredicate:predicate entityName:@"LegislatorObj" context:context];
 }
 
++ (NSArray *) allLegislatorsSortedByPartisanshipFromChamber:(NSInteger)chamber andPartyID:(NSInteger)party context:(NSManagedObjectContext *)context
+{
+	if (chamber == BOTH_CHAMBERS) {
+		debug_NSLog(@"allMembersByChamber: ... cannot be BOTH chambers");
+		return nil;
+	}
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"LegislatorObj" 
+											  inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];
+	
+	NSString *predicateString = nil;
+	if (party > kUnknownParty)
+		predicateString = [NSString stringWithFormat:@"legtype == %d AND party_id == %d", chamber, party];
+	else
+		predicateString = [NSString stringWithFormat:@"legtype == %d", chamber];
+	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateString]; 
+	[fetchRequest setPredicate:predicate];
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
+										initWithKey:@"partisan_index" ascending:(party != REPUBLICAN)];
+	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+	[sortDescriptor release];
+	
+	NSError *error;
+	NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+	[fetchRequest release];
+	//if (error)
+	//	debug_NSLog(@"allMembersByChamber:andParty: error in executeFetchRequest: %@, %@", error, [error userInfo]);
+	
+	return fetchedObjects;
+	
+}
+
+
 // You better make the predicate specific ... so that it only provides one result.  
 + (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName context:(NSManagedObjectContext*)context
 {
