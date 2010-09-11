@@ -96,17 +96,14 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 		sliderValue = (sliderMin + sliderMin)/2;
 	}
 	
+#define	kStarAtDemoc 0.5f
+#define kStarAtRepub 162.0f
+#define	kStarAtHalf 81.5f
+#define kStarMagnifierBase (kStarAtRepub - kStarAtDemoc)
 	
-	/*
-	 StarAtDemoc = -5.0f;
-	 StarAtRepub = 168.0f;
-	 StarAtHalf = 86.5f;
-	 173.0 total length of gradient bar
-	 */
-	
-	//CGFloat 
-	CGFloat magicNumber = (163.0f / (sliderMax - sliderMin));
-	CGFloat offset = 81.5;								//(gradientWidth / 2) + lowStarX;
+	CGFloat magicNumber = (kStarMagnifierBase / (sliderMax - sliderMin));
+	CGFloat offset = kStarAtHalf;
+		
 	sliderValue = sliderValue * magicNumber + offset;
 	
 	//[self setNeedsDisplay];
@@ -216,14 +213,14 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 
 	// Tenure
 	
-	drawRect = CGRectMake(187.0f, 51.0f, 61.5f, 15.0f);
+	drawRect = CGRectMake(189.5f, 52.0f, 45.5, 13.0f);
 	drawRect.origin.x = roundf(resolution * drawRect.origin.x) / resolution;
 	drawRect.origin.y = roundf(resolution * drawRect.origin.y) / resolution;
 	drawRect.size.width = roundf(resolution * drawRect.size.width) / resolution;
 	drawRect.size.height = roundf(resolution * drawRect.size.height) / resolution;
 	font = [TexLegeTheme boldTen];
 	[tenureColor set];
-	[[self tenure] drawInRect:drawRect withFont:font];
+	[[self tenure] drawInRect:drawRect withFont:font lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentRight];
 	
 	// Title
 	
