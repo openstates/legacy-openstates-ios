@@ -652,106 +652,6 @@
 					</object>
 				</object>
 			</object>
-			<object class="IBUISplitViewController" id="104634115">
-				<bool key="IBUIAutoresizesArchivedViewToFullSize">NO</bool>
-				<string key="IBUITitle">District Offices</string>
-				<reference key="IBUIToolbarItems" ref="0"/>
-				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
-					<int key="IBUIStatusBarStyle">2</int>
-				</object>
-				<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-					<int key="interfaceOrientation">3</int>
-				</object>
-				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-				<bool key="IBUIHorizontal">YES</bool>
-				<object class="IBUINavigationController" key="IBUIMasterViewController" id="424533646">
-					<bool key="IBUIAutoresizesArchivedViewToFullSize">NO</bool>
-					<reference key="IBUIParentViewController" ref="104634115"/>
-					<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
-						<int key="IBUIStatusBarStyle">2</int>
-					</object>
-					<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-						<int key="interfaceOrientation">1</int>
-					</object>
-					<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-					<bool key="IBUIHorizontal">NO</bool>
-					<object class="IBUINavigationBar" key="IBUINavigationBar" id="634413242">
-						<nil key="NSNextResponder"/>
-						<int key="NSvFlags">256</int>
-						<string key="NSFrameSize">{0, 0}</string>
-						<bool key="IBUIClipsSubviews">YES</bool>
-						<bool key="IBUIMultipleTouchEnabled">YES</bool>
-						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<object class="NSColor" key="IBUITintColor" id="1061518535">
-							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MC4zMDU4ODIzNTI5IDAuMzYwNzg0MzEzNyAwLjM4ODIzNTI5NDEAA</bytes>
-						</object>
-					</object>
-					<object class="NSMutableArray" key="IBUIViewControllers">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="IBUITableViewController" id="184789693">
-							<string key="IBUITitle">District Offices</string>
-							<object class="IBUINavigationItem" key="IBUINavigationItem" id="626877931">
-								<reference key="IBUINavigationBar"/>
-								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-							</object>
-							<reference key="IBUIParentViewController" ref="424533646"/>
-							<string key="IBUINibName">DistrictOfficeMasterViewController</string>
-							<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
-								<int key="IBUIStatusBarStyle">2</int>
-							</object>
-							<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-								<int key="interfaceOrientation">1</int>
-							</object>
-							<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-							<bool key="IBUIHorizontal">NO</bool>
-							<bool key="IBUIClearsSelectionOnViewWillAppear">NO</bool>
-						</object>
-					</object>
-				</object>
-				<object class="IBUINavigationController" key="IBUIDetailViewController" id="326860044">
-					<bool key="IBUIAutoresizesArchivedViewToFullSize">NO</bool>
-					<reference key="IBUIParentViewController" ref="104634115"/>
-					<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
-						<int key="IBUIStatusBarStyle">2</int>
-					</object>
-					<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-						<int key="interfaceOrientation">1</int>
-					</object>
-					<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-					<bool key="IBUIHorizontal">NO</bool>
-					<object class="IBUINavigationBar" key="IBUINavigationBar" id="343128469">
-						<nil key="NSNextResponder"/>
-						<int key="NSvFlags">256</int>
-						<string key="NSFrameSize">{0, 0}</string>
-						<reference key="IBUIBackgroundColor" ref="764088680"/>
-						<bool key="IBUIClipsSubviews">YES</bool>
-						<bool key="IBUIMultipleTouchEnabled">YES</bool>
-						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<reference key="IBUITintColor" ref="1061518535"/>
-					</object>
-					<object class="NSMutableArray" key="IBUIViewControllers">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="IBUIViewController" id="485165744">
-							<object class="IBUINavigationItem" key="IBUINavigationItem" id="309239688">
-								<reference key="IBUINavigationBar"/>
-								<string key="IBUITitle">District Offices</string>
-								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-							</object>
-							<reference key="IBUIParentViewController" ref="326860044"/>
-							<string key="IBUINibName">MapViewController</string>
-							<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
-								<int key="IBUIStatusBarStyle">2</int>
-							</object>
-							<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-								<int key="interfaceOrientation">1</int>
-							</object>
-							<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-							<bool key="IBUIHorizontal">NO</bool>
-						</object>
-					</object>
-				</object>
-			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
 			<object class="NSMutableArray" key="connectionRecords">
@@ -891,30 +791,6 @@
 						<reference key="destination" ref="841351856"/>
 					</object>
 					<int key="connectionID">80</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">delegate</string>
-						<reference key="source" ref="104634115"/>
-						<reference key="destination" ref="485165744"/>
-					</object>
-					<int key="connectionID">105</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">detailViewController</string>
-						<reference key="source" ref="184789693"/>
-						<reference key="destination" ref="485165744"/>
-					</object>
-					<int key="connectionID">106</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">districtOfficeMasterVC</string>
-						<reference key="source" ref="841351856"/>
-						<reference key="destination" ref="184789693"/>
-					</object>
-					<int key="connectionID">107</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -1321,76 +1197,6 @@
 						<reference key="parent" ref="463174589"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">92</int>
-						<reference key="object" ref="104634115"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="326860044"/>
-							<reference ref="424533646"/>
-						</object>
-						<reference key="parent" ref="0"/>
-						<string key="objectName">DistrictOfficesSplitView</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">93</int>
-						<reference key="object" ref="326860044"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="343128469"/>
-							<reference ref="485165744"/>
-						</object>
-						<reference key="parent" ref="104634115"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">94</int>
-						<reference key="object" ref="424533646"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="634413242"/>
-							<reference ref="184789693"/>
-						</object>
-						<reference key="parent" ref="104634115"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">95</int>
-						<reference key="object" ref="634413242"/>
-						<reference key="parent" ref="424533646"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">96</int>
-						<reference key="object" ref="184789693"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="626877931"/>
-						</object>
-						<reference key="parent" ref="424533646"/>
-						<string key="objectName">District Offices Master View Controller</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">97</int>
-						<reference key="object" ref="626877931"/>
-						<reference key="parent" ref="184789693"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">98</int>
-						<reference key="object" ref="343128469"/>
-						<reference key="parent" ref="326860044"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">103</int>
-						<reference key="object" ref="485165744"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="309239688"/>
-						</object>
-						<reference key="parent" ref="326860044"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">104</int>
-						<reference key="object" ref="309239688"/>
-						<reference key="parent" ref="485165744"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">109</int>
 						<reference key="object" ref="987264846"/>
 						<object class="NSMutableArray" key="children">
@@ -1469,8 +1275,6 @@
 					<string>-1.CustomClassName</string>
 					<string>-2.CustomClassName</string>
 					<string>10.IBPluginDependency</string>
-					<string>103.CustomClassName</string>
-					<string>103.IBPluginDependency</string>
 					<string>109.IBEditorWindowLastContentRect</string>
 					<string>109.IBPluginDependency</string>
 					<string>11.IBPluginDependency</string>
@@ -1539,22 +1343,11 @@
 					<string>8.IBPluginDependency</string>
 					<string>9.IBEditorWindowLastContentRect</string>
 					<string>9.IBPluginDependency</string>
-					<string>92.IBEditorWindowLastContentRect</string>
-					<string>92.IBPluginDependency</string>
-					<string>93.IBEditorWindowLastContentRect</string>
-					<string>93.IBPluginDependency</string>
-					<string>94.IBPluginDependency</string>
-					<string>95.IBPluginDependency</string>
-					<string>96.CustomClassName</string>
-					<string>96.IBPluginDependency</string>
-					<string>98.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>TexLegeAppDelegate</string>
 					<string>UIResponder</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>MapViewController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>{{400, 4}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -1623,15 +1416,6 @@
 					<string>{{374, 62}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>{{312, 4}, {783, 1002}}</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{215, 4}, {1024, 768}}</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{312, 4}, {783, 1002}}</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>DistrictOfficeMasterViewController</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				</object>
 			</object>
