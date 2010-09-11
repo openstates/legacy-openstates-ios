@@ -36,57 +36,6 @@
 				</object>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<bool key="IBUIHorizontal">NO</bool>
-				<object class="IBUINavigationController" key="IBUISelectedViewController" id="166951870">
-					<object class="IBUITabBarItem" key="IBUITabBarItem" id="382139066">
-						<int key="IBUITag">1</int>
-						<string key="IBUITitle">District Offices</string>
-						<object class="NSCustomResource" key="IBUIImage">
-							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">Building.png</string>
-						</object>
-						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-					</object>
-					<array key="IBUIToolbarItems" id="0"/>
-					<reference key="IBUIParentViewController" ref="131916064"/>
-					<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-						<int key="interfaceOrientation">1</int>
-					</object>
-					<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-					<bool key="IBUIHorizontal">NO</bool>
-					<object class="IBUINavigationBar" key="IBUINavigationBar" id="785372258">
-						<nil key="NSNextResponder"/>
-						<int key="NSvFlags">256</int>
-						<string key="NSFrameSize">{320, 44}</string>
-						<bool key="IBUIClipsSubviews">YES</bool>
-						<bool key="IBUIMultipleTouchEnabled">YES</bool>
-						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<object class="NSColor" key="IBUITintColor">
-							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MC4zMDU4ODIzNTI5IDAuMzYwNzg0MzEzNyAwLjM4ODIzNTI5NDEAA</bytes>
-						</object>
-					</object>
-					<array class="NSMutableArray" key="IBUIViewControllers">
-						<object class="IBUIViewController" id="80528363">
-							<reference key="IBUIToolbarItems" ref="0"/>
-							<object class="IBUINavigationItem" key="IBUINavigationItem" id="921922483">
-								<string key="IBUITitle">Districts</string>
-								<object class="IBUIBarButtonItem" key="IBUIBackBarButtonItem" id="301630541">
-									<string key="IBUITitle">Back</string>
-									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-									<int key="IBUIStyle">1</int>
-								</object>
-								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-							</object>
-							<reference key="IBUIParentViewController" ref="166951870"/>
-							<string key="IBUINibName">DistrictOfficeMasterViewController</string>
-							<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-								<int key="interfaceOrientation">1</int>
-							</object>
-							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-							<bool key="IBUIHorizontal">NO</bool>
-						</object>
-					</array>
-				</object>
 				<array class="NSMutableArray" key="IBUIViewControllers">
 					<object class="IBUINavigationController" id="505626866">
 						<string key="IBUITitle">Legislators</string>
@@ -98,7 +47,7 @@
 							</object>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
-						<reference key="IBUIToolbarItems" ref="0"/>
+						<array key="IBUIToolbarItems" id="0"/>
 						<reference key="IBUIParentViewController" ref="131916064"/>
 						<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
 							<int key="interfaceOrientation">1</int>
@@ -401,7 +350,6 @@
 							</object>
 						</array>
 					</object>
-					<reference ref="166951870"/>
 				</array>
 				<object class="IBUITabBar" key="IBUITabBar" id="671102759">
 					<nil key="NSNextResponder"/>
@@ -479,14 +427,6 @@
 					</object>
 					<int key="connectionID">105</int>
 				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">districtOfficeMasterVC</string>
-						<reference key="source" ref="841351856"/>
-						<reference key="destination" ref="80528363"/>
-					</object>
-					<int key="connectionID">112</int>
-				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -517,7 +457,6 @@
 							<reference ref="662939867"/>
 							<reference ref="740118704"/>
 							<reference ref="161276953"/>
-							<reference ref="166951870"/>
 							<reference ref="431203068"/>
 						</array>
 						<reference key="parent" ref="0"/>
@@ -780,49 +719,6 @@
 						<reference key="object" ref="1030786775"/>
 						<reference key="parent" ref="856697139"/>
 					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">106</int>
-						<reference key="object" ref="166951870"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="382139066"/>
-							<reference ref="80528363"/>
-							<reference ref="785372258"/>
-						</array>
-						<reference key="parent" ref="131916064"/>
-						<string key="objectName">Offices</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">109</int>
-						<reference key="object" ref="382139066"/>
-						<reference key="parent" ref="166951870"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">108</int>
-						<reference key="object" ref="80528363"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="921922483"/>
-						</array>
-						<reference key="parent" ref="166951870"/>
-						<string key="objectName">District Office Master View Controller (District Offices)</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">110</int>
-						<reference key="object" ref="921922483"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="301630541"/>
-						</array>
-						<reference key="parent" ref="80528363"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">111</int>
-						<reference key="object" ref="301630541"/>
-						<reference key="parent" ref="921922483"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">107</int>
-						<reference key="object" ref="785372258"/>
-						<reference key="parent" ref="166951870"/>
-					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -830,7 +726,6 @@
 				<string key="-2.CustomClassName">UIResponder</string>
 				<string key="10.IBEditorWindowLastContentRect">{{361, 285}, {320, 480}}</string>
 				<string key="10.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="108.CustomClassName">DistrictOfficeMasterViewController</string>
 				<string key="11.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="23.CustomClassName">LegislatorMasterViewController</string>
 				<string key="28.CustomClassName">CommitteeMasterViewController</string>
@@ -1787,7 +1682,6 @@
 			<string key="60-signpost.png">{22, 28}</string>
 			<string key="73-radar.png">{27, 27}</string>
 			<string key="83-calendar.png">{23, 25}</string>
-			<string key="Building.png">{30, 30}</string>
 		</dictionary>
 		<string key="IBCocoaTouchPluginVersion">123</string>
 	</data>
