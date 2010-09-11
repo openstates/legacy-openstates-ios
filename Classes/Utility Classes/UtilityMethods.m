@@ -52,7 +52,8 @@
 
 
 + (BOOL) isLandscapeOrientation {
-	return (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation));
+	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	return UIInterfaceOrientationIsLandscape(orientation);	
 }
 
 + (BOOL)isIPadDevice;
@@ -108,6 +109,9 @@
 
 #pragma mark -
 #pragma mark URL Handling
++ (NSURL *)urlToMainBundle {
+	return [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
+}
 
 + (NSString *) titleFromURL:(NSURL *)url {
 	debug_NSLog(@"%@", [url absoluteString]);
@@ -368,6 +372,32 @@
 	return [NSString stringWithCString:csignid encoding:NSUTF8StringEncoding];
 }
 
++(NSString*)ordinalNumberFormat:(NSInteger)num{
+    NSString *ending;
+	
+    int ones = num % 10;
+    int tens = floor(num / 10);
+    tens = tens % 10;
+    if(tens == 1){
+        ending = @"th";
+    }else {
+        switch (ones) {
+            case 1:
+                ending = @"st";
+                break;
+            case 2:
+                ending = @"nd";
+                break;
+            case 3:
+                ending = @"rd";
+                break;
+            default:
+                ending = @"th";
+                break;
+        }
+    }
+    return [NSString stringWithFormat:@"%d%@", num, ending];
+}
 
 @end
 

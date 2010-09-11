@@ -34,6 +34,7 @@
 + (BOOL) canReachHostWithURL:(NSURL *)url;
 + (void) alertNotAPhone;
 + (void) noInternetAlert;
++(NSString*)ordinalNumberFormat:(NSInteger)num;
 
 + (NSString*)cipher32Byte;
 
