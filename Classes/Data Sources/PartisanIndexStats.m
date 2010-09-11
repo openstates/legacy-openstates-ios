@@ -12,11 +12,11 @@
 #import "UtilityMethods.h"
 #import "UIColor-Expanded.h"
 #import "TexLegeTheme.h"
+#import "TexLegeCoreDataUtils.h"
 
 @interface PartisanIndexStats (Private)
 
 - (NSArray *) aggregatePartisanIndexForChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
-- (NSArray *) allMembersByChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
 
 @end
 
@@ -187,12 +187,13 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	NSArray *legislators = nil;
 	
 	if (inParty)
-		legislators = [self allMembersByChamber:[legislator.legtype integerValue] 
-									 andPartyID:[legislator.party_id integerValue]];
+		legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[legislator.legtype integerValue] 
+																			   andPartyID:[legislator.party_id integerValue] 
+																				  context:self.managedObjectContext];
 	else
-		legislators = [self allMembersByChamber:[legislator.legtype integerValue] 
-									 andPartyID:kUnknownParty];
-	
+		legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[legislator.legtype integerValue] 
+																			   andPartyID:kUnknownParty 
+																				  context:self.managedObjectContext];
 	if (legislators) {
 		NSInteger rank = [legislators indexOfObject:legislator] + 1;
 		NSInteger count = [legislators count];
@@ -203,41 +204,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	}
 }
 
-
-- (NSArray *) allMembersByChamber:(NSInteger)chamber andPartyID:(NSInteger)party
-{
-	if (chamber == BOTH_CHAMBERS) {
-		debug_NSLog(@"allMembersByChamber: ... cannot be BOTH chambers");
-		return nil;
-	}
-	
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"LegislatorObj" 
-											  inManagedObjectContext:self.managedObjectContext];
-	[fetchRequest setEntity:entity];
-	
-	NSString *predicateString = nil;
-	if (party > kUnknownParty)
-		predicateString = [NSString stringWithFormat:@"legtype == %d AND party_id == %d", chamber, party];
-	else
-		predicateString = [NSString stringWithFormat:@"legtype == %d", chamber];
-	
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateString]; 
-	[fetchRequest setPredicate:predicate];
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
-										initWithKey:@"partisan_index" ascending:(party != REPUBLICAN)];
-	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-	[sortDescriptor release];
-	
-	NSError *error;
-	NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-	[fetchRequest release];
-	//if (error)
-	//	debug_NSLog(@"allMembersByChamber:andParty: error in executeFetchRequest: %@, %@", error, [error userInfo]);
-	
-	return fetchedObjects;
-	
-}
 
 - (NSDictionary *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber {
 	NSDictionary *historyDict = nil;
@@ -333,9 +299,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	NSMutableString *memberData = [[NSMutableString alloc] initWithString:@"["];
 	//NSMutableString *timeData = [[NSMutableString alloc] initWithString:@"["];
 	
-	NSString *firstYear = nil;
+	CGFloat min = -0.85f, max = 0.85f;
+
 	
+	NSString *firstYear = nil;
 	NSUInteger i;
+	
 	for ( i = 0; i < countOfScores ; i++) {
 		//BOOL showLabel = ((i % 2 == 0) || countOfScores < 3);
 		
@@ -352,6 +321,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 			firstYear = [[wnomObj year] stringValue];
 		
 		CGFloat legVal = [[wnomObj wnomAdj] floatValue];
+		if (legVal > max && legVal > [repubY floatValue])
+			max = legVal;
+		if (legVal < min && legVal < [democY floatValue])
+			min = legVal;
+		
 		if (legVal != 0.0f)
 			[memberData appendString:[[wnomObj wnomAdj] stringValue]];
 		else
@@ -375,11 +349,20 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 		timeData =  firstYear;
 	}
 	
+	
+	NSString *minmax = @"min: -0.85, max: 0.85";
+	if (min < -1.04f || max > 1.04f)
+		minmax = [NSString stringWithFormat:@"min: %f, max: %f", min, max];
+	
+	//debug_NSLog(@"minmax = %@", minmax);
+	
 	NSDictionary *dataDict = [NSDictionary dictionaryWithObjectsAndKeys:	
 							  repubData, @"repub", 
 							  democData, @"democ", 
 							  memberData, @"member", 
-							  timeData, @"time", nil];
+							  timeData, @"time",
+							  minmax, @"minmax",
+							  nil];
 	
 	[repubData release], [democData release], [memberData release];
 	//	, [timeData release];
@@ -414,6 +397,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 		matches += [content replaceOccurrencesOfString:@"DATA_MEMBER" withString:[chartData objectForKey:@"member"] 
 											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
 		matches += [content replaceOccurrencesOfString:@"DATA_TIME" withString:[chartData objectForKey:@"time"] 
+											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
+		matches += [content replaceOccurrencesOfString:@"DATA_MINMAX" withString:[chartData objectForKey:@"minmax"]
 											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
 		
 		NSString *style = @"";
