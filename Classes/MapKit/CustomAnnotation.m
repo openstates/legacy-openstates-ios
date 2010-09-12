@@ -116,8 +116,8 @@
 - (CLLocationCoordinate2D) coordinate {
 	CLLocationCoordinate2D tempCoord;
 	if (self.regionDict) {
-		tempCoord = CLLocationCoordinate2DMake([[self.regionDict objectForKey:@"latitude"] doubleValue], 
-											   [[self.regionDict objectForKey:@"longitude"] doubleValue]);
+		tempCoord.latitude = [[self.regionDict objectForKey:@"latitude"] doubleValue];
+		tempCoord.longitude = [[self.regionDict objectForKey:@"longitude"] doubleValue];
 	}
 	return tempCoord;
 }
