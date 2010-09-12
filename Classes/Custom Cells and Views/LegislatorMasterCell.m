@@ -11,6 +11,7 @@
 #import "LegislatorObj.h"
 #import "DisclosureQuartzView.h"
 
+
 @implementation LegislatorMasterCell
 @synthesize legislator, cellView;
 
@@ -25,11 +26,10 @@
 		//self.imageView.image = tempImage;
 		
 		DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 25.f, 25.f)];
-		//UIImageView *iv = [[UIImageView alloc] initWithImage:[qv imageFromUIView]];
 		self.accessoryView = qv;
 		[qv release];
-		//[iv release];
 		
+		//debug_NSLog(@"content view = %@", self.contentView);
 		CGFloat endX = self.contentView.bounds.size.width - 53.f;
 		CGRect tzvFrame = CGRectMake(53.f, 0.0, endX, self.contentView.bounds.size.height);
 		cellView = [[LegislatorMasterCellView alloc] initWithFrame:tzvFrame];
@@ -56,6 +56,8 @@
 - (void)setLegislator:(LegislatorObj *)value {
 	if ([legislator isEqual:value])
 		return;
+	if (legislator)
+		[legislator release], legislator=nil;
 	legislator = [value retain];
 	self.imageView.image = [UIImage imageNamed:legislator.photo_name];
 		
