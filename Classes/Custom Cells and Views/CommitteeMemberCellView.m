@@ -180,7 +180,8 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 	if ([legislator isEqual:value]) {
 		return;
 	}
-	[legislator release];
+	if (legislator)
+		[legislator release], legislator=nil;
 	
 	if (value) {
 		legislator = [value retain];
@@ -201,10 +202,6 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 		
 		self.rank = [self partisanRankStringForLegislator];
 	}
-	else {
-		debug_NSLog(@"what's happening y'all?");
-	}
-
 	[self setNeedsDisplay];	
 }
 
