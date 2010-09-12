@@ -11,7 +11,9 @@
 #include "MiniBrowserController.h"
 #import "TexLegeAppDelegate.h"
 #import "ChamberCalendarObj.h"
-
+#import "TexLegeTheme.h"
+#import <EventKit/EventKit.h>
+#import <EventKitUI/EventKitUI.h>
 
 @interface CalendarDetailViewController (Private) 
 
@@ -35,12 +37,14 @@
 		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
 		UIColor *sealColor = [UIColor colorWithPatternImage:sealImage];		
 		self.view.backgroundColor = sealColor;
-	}		
+	}
+	if (![UtilityMethods supportsEventKit])
+		self.tableView.tableFooterView = nil;
+	
 		//self.navigationItem.title = @"Upcoming Committee Meetings";
 	self.searchDisplayController.searchBar.tintColor = self.navigationController.navigationBar.tintColor;
 	self.navigationItem.titleView = self.searchDisplayController.searchBar;
 
-	
 	self.currentEvents = [NSMutableArray array];
 	self.searchResults = [NSMutableArray array];
 	
@@ -272,6 +276,9 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		cellText = [[NSString alloc] initWithFormat:@"%@\nTime:%@ - Location: %@", committeeString, [entry objectForKey:@"timeString"], [entry objectForKey:@"location"]];
 
 	}
+	if ([UtilityMethods supportsEventKit])
+		cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+
 	cell.textLabel.text = cellText;
 	[committeeString release];
 	[cellText release];
@@ -279,7 +286,21 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	
 }
 
+- (void)tableView:(UITableView *)tv accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+	NSDictionary *eventDict = nil;
+	if (tv == self.searchDisplayController.searchResultsTableView)
+		eventDict = [self.searchResults objectAtIndex:indexPath.row];
+	else
+		eventDict = [self.currentEvents objectAtIndex:indexPath.row];
+	
+	if (eventDict)
+		[UtilityMethods addEventToiCal:eventDict parent:self.navigationController];	
+}
+
+
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	
 	NSDictionary *eventDict = nil;
 	if (tv == self.searchDisplayController.searchResultsTableView) {
@@ -290,6 +311,8 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	}
 	else {
 		eventDict = [self.currentEvents objectAtIndex:indexPath.row];
+		// add something to enable/disable the "addToiCal" button?
+		
 		NSURL *url = [NSURL URLWithString:[eventDict objectForKey:@"url"]];
 		
 		if ([UtilityMethods canReachHostWithURL:url]) { // do we have a good URL/connection?
@@ -299,7 +322,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 					[self.webView loadRequest:urlReq];	
 			}
 			else {
-				MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
+				MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];				
 				[mbc display:self.tabBarController];
 			}		
 		}

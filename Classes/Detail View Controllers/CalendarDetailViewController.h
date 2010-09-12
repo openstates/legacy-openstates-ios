@@ -21,4 +21,6 @@
 @property (nonatomic, retain) NSMutableArray *currentEvents;
 @property (nonatomic, retain) NSMutableArray *searchResults;
 @property (nonatomic, retain) UIPopoverController *masterPopover;
+
+
 @end
