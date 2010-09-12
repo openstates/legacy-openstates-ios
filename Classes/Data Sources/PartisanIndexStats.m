@@ -376,29 +376,28 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	if (!legislator)
 		return nil;
 	
-	NSUInteger matches = 0;
 	NSMutableString *content = [self.chartTemplate mutableCopy];
 	
 	NSString *legName = [legislator lastname];
 	
-	matches += [content replaceOccurrencesOfString:@"LEGISLATOR" withString:legName
+	[content replaceOccurrencesOfString:@"LEGISLATOR" withString:legName
 										   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
 	
-	matches += [content replaceOccurrencesOfString:@"CHAMBER" withString:[legislator chamberName] 
+	[content replaceOccurrencesOfString:@"CHAMBER" withString:[legislator chamberName] 
 										   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
 	
 	NSDictionary *chartData = [self chartDataForLegislator:legislator];
 	if (chartData) {
 		
-		matches += [content replaceOccurrencesOfString:@"DATA_DEMOC" withString:[chartData objectForKey:@"democ"] 
+		[content replaceOccurrencesOfString:@"DATA_DEMOC" withString:[chartData objectForKey:@"democ"] 
 											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
-		matches += [content replaceOccurrencesOfString:@"DATA_REPUB" withString:[chartData objectForKey:@"repub"] 
+		[content replaceOccurrencesOfString:@"DATA_REPUB" withString:[chartData objectForKey:@"repub"] 
 											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
-		matches += [content replaceOccurrencesOfString:@"DATA_MEMBER" withString:[chartData objectForKey:@"member"] 
+		[content replaceOccurrencesOfString:@"DATA_MEMBER" withString:[chartData objectForKey:@"member"] 
 											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
-		matches += [content replaceOccurrencesOfString:@"DATA_TIME" withString:[chartData objectForKey:@"time"] 
+		[content replaceOccurrencesOfString:@"DATA_TIME" withString:[chartData objectForKey:@"time"] 
 											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
-		matches += [content replaceOccurrencesOfString:@"DATA_MINMAX" withString:[chartData objectForKey:@"minmax"]
+		[content replaceOccurrencesOfString:@"DATA_MINMAX" withString:[chartData objectForKey:@"minmax"]
 											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
 		
 		NSString *style = @"";
@@ -418,10 +417,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 			
 			//viewport = @"initial-scale = 1";
 		}
-		matches += [content replaceOccurrencesOfString:@"VIEWPORT_SETTING" withString:viewport options:NSLiteralSearch range:NSMakeRange(0, [content length])];
-		matches += [content replaceOccurrencesOfString:@"CONTENT_STYLE" withString:style options:NSLiteralSearch range:NSMakeRange(0, [content length])];
+		[content replaceOccurrencesOfString:@"VIEWPORT_SETTING" withString:viewport options:NSLiteralSearch range:NSMakeRange(0, [content length])];
+		[content replaceOccurrencesOfString:@"CONTENT_STYLE" withString:style options:NSLiteralSearch range:NSMakeRange(0, [content length])];
 	}
-	//debug_NSLog(@"Partisan chart template, found/replaced %d matches", matches);
 	return [content autorelease];
 }
 
