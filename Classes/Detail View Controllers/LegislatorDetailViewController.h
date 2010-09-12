@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CorePlot-CocoaTouch.h"
 
 @class LegislatorObj;
 @class PartisanScaleView;
