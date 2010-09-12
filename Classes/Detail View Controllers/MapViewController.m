@@ -34,6 +34,8 @@
 - (void) animateToState;
 - (void) animateToAnnotation:(id<MKAnnotation>)annotation;
 - (void) clearAnnotationsAndOverlays;
+- (void) clearOverlaysExceptRecent;
+- (void) clearAnnotationsExceptRecent;	
 - (void) clearAnnotationsAndOverlaysExcept:(id)overlayOrAnnotation;
 - (void) resetMapViewWithAnimation:(BOOL)animated;
 - (BOOL) region:(MKCoordinateRegion)region1 isEqualTo:(MKCoordinateRegion)region2;
@@ -94,7 +96,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	self.forwardGeocoder = nil;
 	self.reverseGeocoder = nil;
 
-	[self clearAnnotationsAndOverlaysExceptRecent];
+	//[self clearAnnotationsAndOverlaysExceptRecent];
+	[self clearOverlaysExceptRecent];
 
 	[super didReceiveMemoryWarning];
 }
@@ -202,24 +205,43 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	}
 }
 
-//#warning This doesn't actually work, because MapKit uses Z-Ordering of annotations and overlays!!!
-- (void) clearAnnotationsAndOverlaysExceptRecent {
+- (void) clearOverlaysExceptRecent {
 	self.mapView.showsUserLocation = NO;
 	
 	NSMutableArray *toRemove = [[NSMutableArray alloc] init];
 	if (toRemove) {
 		[toRemove setArray:self.mapView.overlays];
-		if ([toRemove count]) {
+		if ([toRemove count]>2) {
+			[toRemove removeLastObject];
 			[toRemove removeLastObject];
 			[self.mapView removeOverlays:toRemove];
 		}
-		[toRemove setArray:self.mapView.annotations];
-		if ([toRemove count]) {
-			[toRemove removeLastObject];
-			[self.mapView removeAnnotations:toRemove];
-		}
 		[toRemove release];
 	}
+}
+
+- (void) clearAnnotationsExceptRecent {	
+	NSMutableArray *toRemove = [[NSMutableArray alloc] init];
+	if (toRemove) {
+		[toRemove setArray:self.mapView.annotations];
+		if ([toRemove containsObject:self.mapView.userLocation])
+			[toRemove removeObject:self.mapView.userLocation];
+		
+		if ([toRemove count]>2) {
+			[toRemove removeLastObject];
+			[toRemove removeLastObject];
+		}
+		
+		[self.mapView removeAnnotations:toRemove];
+		[toRemove release];
+	}
+}
+
+//#warning This doesn't actually work, because MapKit uses Z-Ordering of annotations and overlays!!!
+- (void) clearAnnotationsAndOverlaysExceptRecent {
+	
+	[self clearOverlaysExceptRecent];
+	[self clearAnnotationsExceptRecent];	
 }
 
 
@@ -353,14 +375,56 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	self.mapView.mapType = index;
 }
 
+- (void)showLocateUserButton {
+	UIBarButtonItem *locateItem = [[UIBarButtonItem alloc] 
+								   initWithImage:[UIImage imageNamed:@"locationarrow.png"]
+									style:UIBarButtonItemStyleBordered
+									target:self
+									action:@selector(locateUser:)];
+
+	locateItem.tag = 999;
+	
+	NSMutableArray *items = [[NSMutableArray alloc] initWithArray:self.toolbar.items];
+
+	UIBarButtonItem *otherButton = [items objectAtIndex:0];
+	if (otherButton.tag == 998)
+		[items removeObjectAtIndex:0];
+	[items insertObject:locateItem atIndex:0];
+	self.userLocationButton = locateItem;
+	[locateItem release];
+	[self.toolbar setItems:items animated:YES];
+	[items release];
+}
+
+- (void)showLocateActivityButton {
+	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+	[activityIndicator startAnimating];
+	UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+	[activityIndicator release];
+	activityItem.tag = 998;
+	
+	NSMutableArray *items = [[NSMutableArray alloc] initWithArray:self.toolbar.items];
+	
+	UIBarButtonItem *otherButton = [items objectAtIndex:0];
+	if (otherButton.tag == 999)
+		[items removeObjectAtIndex:0];
+	[items insertObject:activityItem atIndex:0];
+	[activityItem release];
+	[self.toolbar setItems:items animated:YES];
+	[items release];
+}
+
 - (IBAction)locateUser:(id)sender {
 	[self clearAnnotationsAndOverlays];
+	[self showLocateActivityButton];
 
 	if ([UtilityMethods locationServicesEnabled]) 
 		self.mapView.showsUserLocation = YES;
 }
 
 - (IBAction) showAllDistricts:(id)sender {
+#warning turn on the system wide network activity thingy?
+	
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"SHOWING_ALL_DISTRICTS"];
 	
 	NSArray *districts = [TexLegeCoreDataUtils allDistrictMapsLightWithContext:[[TexLegeAppDelegate appDelegate]managedObjectContext]];
@@ -440,6 +504,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	{
 		[self clearAnnotationsAndOverlays];		
 		
+		[self showLocateUserButton];
+		
 		NSInteger searchResults = [self.forwardGeocoder.results count];
 		
 		// Add placemarks for each result
@@ -489,6 +555,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void) searchBarSearchButtonClicked:(UISearchBar *)theSearchBar {
+	[self showLocateActivityButton];
+	
+#warning turn on the system wide network activity thingy?
+
 	debug_NSLog(@"Searching for: %@", theSearchBar.text);
 	if(self.forwardGeocoder == nil)
 	{
@@ -560,6 +630,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 			if (!theMapView.userLocationVisible)
 				[self performSelector:@selector(moveMapToAnnotation:) withObject:aView.annotation afterDelay:.5f];
 			
+			[self showLocateUserButton];
 			return;
 		}
 	}
