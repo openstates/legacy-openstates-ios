@@ -225,6 +225,80 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	}
 }
 
+#pragma mark -
+#pragma mark EventKit
+- (void)addEventToiCal:(NSDictionary *)eventDict parent:(id)parentController {
+	
+	if (!eventDict)
+		return;
+	
+	if (![UtilityMethods supportsEventKit]) {
+		debug_NSLog(@"EventKit not available on this device");
+		return;
+	}
+	if (!parentController)
+		parentController = [[TexLegeAppDelegate appDelegate] detailNavigationController];
+	
+	/* keys in our event dictionary:
+	 fullDate (hopefully)
+	 date
+	 dateString
+	 time
+	 timeString
+	 committee
+	 chamber
+	 location
+	 url
+	 */	
+	
+	NSDate *meetingDate = [eventDict objectForKey:@"fullDate"];
+	if (!meetingDate) {
+		debug_NSLog(@"Calendar Detail ... couldn't locate full meeting date");
+		return;
+	}
+	NSString *chamberString = @""; 
+	NSInteger chamber = [[eventDict objectForKey:@"chamber"] integerValue];
+	if (chamber == HOUSE)
+		chamberString = @"House";
+	else if (chamber == SENATE)
+		chamberString = @"Senate";
+	else
+		chamberString = @"Joint";
+	
+	NSString *committee = [eventDict objectForKey:@"committee"];	
+	
+	EKEventStore *eventStore = [[EKEventStore alloc] init];
+	EKCalendar *defaultCalendar = [eventStore defaultCalendarForNewEvents];
+	
+	EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+    event.title     = [NSString stringWithFormat:@"%@ %@", chamberString, committee];
+	event.location = [eventDict objectForKey:@"location"];
+	event.notes = @"[TexLege] Length of this meeting is only an estimate.";
+	
+	
+    event.startDate = meetingDate;
+    event.endDate   = [NSDate dateWithTimeInterval:3600 sinceDate:event.startDate];
+	
+    [event setCalendar:defaultCalendar];
+	
+    NSError *err;
+    [eventStore saveEvent:event span:EKSpanThisEvent error:&err];     
+	
+	[eventStore release];
+	
+	EKEventViewController *eventVC = [[EKEventViewController alloc] initWithNibName:nil bundle:nil];			
+	eventVC.event = event;
+	
+	// Allow event editing.
+	eventVC.allowsEditing = YES;
+	
+	//	Push eventViewController onto the navigation controller stack
+	//	If the underlying event gets deleted, detailViewController will remove itself from
+	//	the stack and clear its event property.
+	[parentController pushViewController:eventVC animated:YES];
+	[eventVC release];
+}	
+
 #pragma -
 #pragma UITableViewDelegate
 
@@ -294,7 +368,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		eventDict = [self.currentEvents objectAtIndex:indexPath.row];
 	
 	if (eventDict)
-		[UtilityMethods addEventToiCal:eventDict parent:self.navigationController];	
+		[self addEventToiCal:eventDict parent:self.navigationController];	
 }
 
 

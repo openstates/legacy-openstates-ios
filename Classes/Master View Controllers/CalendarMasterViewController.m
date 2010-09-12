@@ -13,7 +13,7 @@
 #import "TableDataSourceProtocol.h"
 
 #import "CalendarDataSource.h"
-#import "CalendarComboViewController.h"
+#import "CalendarDetailViewController.h"
 
 #import "TexLegeTheme.h"
 #import "TexLegeEmailComposer.h"
@@ -81,9 +81,9 @@
 	
 	if (!self.detailViewController) {
 		if ([UtilityMethods isIPadDevice])
-			self.detailViewController = [[[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController~ipad" bundle:nil] autorelease];
+			self.detailViewController = [[[CalendarDetailViewController alloc] initWithNibName:@"CalendarDetailViewController~ipad" bundle:nil] autorelease];
 		else
-			self.detailViewController = [[[CalendarComboViewController alloc] initWithNibName:@"CalendarComboViewController~iphone" bundle:nil] autorelease];
+			self.detailViewController = [[[CalendarDetailViewController alloc] initWithNibName:@"CalendarDetailViewController~iphone" bundle:nil] autorelease];
 	}
 	
 	if (!dataObject || ![dataObject isKindOfClass:[ChamberCalendarObj class]])
