@@ -25,6 +25,7 @@ enum
 	eTAG_FORWARD = 997,
 	eTAG_CLOSE   = 996,
 	eTAG_STOP    = 995,
+	eTAG_SAFARI  = 994,
 };
 
 
@@ -326,7 +327,7 @@ static MiniBrowserController *s_browser = nil;
 	self.m_loadingInterrupted = NO;
 	
 	[self enableBackButton:self.m_webView.canGoBack];
-	[self enableFwdButton:self.m_webView.canGoForward];
+	[self enableFwdButton:self.m_webView.canGoForward];	
 }
 
 
@@ -342,8 +343,6 @@ static MiniBrowserController *s_browser = nil;
 	}
 	
 	[super viewWillDisappear:animated];
-//	if (self.masterPopover)
-//		[self.masterPopover dismissPopoverAnimated:YES];
 }
 
 
