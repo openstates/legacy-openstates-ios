@@ -106,16 +106,16 @@
 	// END: IPAD ONLY
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-	//[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
-	//[[TexLegeAppDelegate appDelegate] resetPopoverMenus];
-	
+- (IBAction)redisplayVisibleCells:(id)sender {
 	NSArray *visibleCells = self.tableView.visibleCells;
 	for (id cell in visibleCells) {
 		if ([cell respondsToSelector:@selector(redisplay)])
 			[cell performSelector:@selector(redisplay)];
 	}
-	
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {	
+	[self redisplayVisibleCells:nil];	
 }
 
 #pragma mark -

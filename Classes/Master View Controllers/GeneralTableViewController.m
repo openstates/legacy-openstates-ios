@@ -172,7 +172,6 @@
 			[self tableView:self.tableView didSelectRowAtIndexPath:selectedPath];
 		}
 		self.selectObjectOnAppear = nil;
-
 	}
 	
 	// We're on an iphone, without a splitview or popovers, so if we get here, let's stop
