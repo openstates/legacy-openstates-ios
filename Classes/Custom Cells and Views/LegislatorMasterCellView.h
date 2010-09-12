@@ -1,6 +1,5 @@
 //
 //	LegislatorMasterCellView.h
-//	LegislatorMasterCellView
 //
 //	Created by Gregory Combs on 8/30/10
 //	Copyright Like Thought, LLC. All rights reserved.

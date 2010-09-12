@@ -147,7 +147,6 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 	
 }
 
-
 - (void)setLegislator:(LegislatorObj *)value {
 	if ([legislator isEqual:value]) {
 		return;
@@ -172,9 +171,14 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 
 - (void)drawRect:(CGRect)dirtyRect
 {
+	//debug_NSLog(@"dirty rect: %f %f %f %f", dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height);
+
 	CGRect imageBounds = CGRectMake(0.0f, 0.0f, kLegislatorMasterCellViewWidth, kLegislatorMasterCellViewHeight);
+	//debug_NSLog(@"image rect: %f %f %f %f", imageBounds.origin.x, imageBounds.origin.y, imageBounds.size.width, imageBounds.size.height);
 	
 	CGRect bounds = [self bounds];
+//	debug_NSLog(@"self bounds: %f %f %f %f", bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
+
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	CGFloat alignStroke;
 	CGFloat resolution;

@@ -1,6 +1,5 @@
 //
 //	CommitteeMemberCellView.h
-//	LegislatorMasterCellView
 //
 //	Created by Gregory Combs on 9/10/10
 //	Copyright Like Thought, LLC. All rights reserved.
