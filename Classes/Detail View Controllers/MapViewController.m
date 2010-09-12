@@ -202,7 +202,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	}
 }
 
-#warning This doesn't actually work, because MapKit uses Z-Ordering of annotations and overlays!!!
+//#warning This doesn't actually work, because MapKit uses Z-Ordering of annotations and overlays!!!
 - (void) clearAnnotationsAndOverlaysExceptRecent {
 	self.mapView.showsUserLocation = NO;
 	
