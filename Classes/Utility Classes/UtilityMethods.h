@@ -12,6 +12,8 @@
 @interface UtilityMethods : NSObject {
 }
 
++ (BOOL) supportsEventKit;
+
 + (BOOL) supportsMKPolyline;
 + (BOOL) locationServicesEnabled;
 

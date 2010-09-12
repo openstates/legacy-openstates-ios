@@ -10,6 +10,8 @@
 #import "TexLegeAppDelegate.h"
 #import "CapitolMap.h"
 #import <MapKit/MapKit.h>
+#import <EventKit/EventKit.h>
+#import <EventKitUI/EventKitUI.h>
 
 #pragma mark -
 #pragma mark NSArray Categories
@@ -53,6 +55,7 @@
 
 + (BOOL) isLandscapeOrientation {
 	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	debug_NSLog(@"Is landscape = %d .... orientation = %d", UIInterfaceOrientationIsLandscape(orientation), orientation);
 	return UIInterfaceOrientationIsLandscape(orientation);	
 }
 
@@ -248,6 +251,14 @@
 	
 	return foundMap;
 }
+#pragma mark -
+#pragma mark EventKit
+
++ (BOOL)supportsEventKit {
+	Class theClass = NSClassFromString(@"EKEventStore");
+	return (theClass != nil);
+}
+
 
 #pragma mark -
 #pragma mark Device Hardware Alerts and Reachability
