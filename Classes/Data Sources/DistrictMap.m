@@ -138,8 +138,12 @@
 }
 
 - (CLLocationCoordinate2D) center {
-	return CLLocationCoordinate2DMake([[self.regionDict valueForKey:@"centerLat"] doubleValue],
-									  [[self.regionDict valueForKey:@"centerLon"] doubleValue]);
+	CLLocationCoordinate2D tempCord;
+	
+	tempCoord.latitude = [[self.regionDict objectForKey:@"centerLat"] doubleValue];
+	tempCoord.longitude = [[self.regionDict objectForKey:@"centerLon"] doubleValue];
+
+	return tempCord;
 }
 
 - (MKCoordinateSpan) span {
