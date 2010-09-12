@@ -11,7 +11,6 @@
 #import "WnomObj.h"
 #import "UtilityMethods.h"
 #import "ImageCache.h"
-#import "LegislatorMasterCellView.h"
 #import "TexLegeTheme.h"
 #import "LegislatorMasterCell.h"
 #import "UIDevice-Hardware.h"
@@ -121,8 +120,6 @@
 		debug_NSLog(@"Busted in DirectoryDataSource.m: cellForRowAtIndexPath -> Couldn't get legislator data for row.");
 		return nil;
 	}
-	
-
 		static NSString *leg_cell_ID = @"LegislatorQuartz";		
 			
 		LegislatorMasterCell *cell = (LegislatorMasterCell *)[tableView dequeueReusableCellWithIdentifier:leg_cell_ID];
@@ -131,7 +128,6 @@
 			cell = [[[LegislatorMasterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:leg_cell_ID] autorelease];
 			//cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
 			cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
-
 		}
 		
 		cell.legislator = dataObj;
