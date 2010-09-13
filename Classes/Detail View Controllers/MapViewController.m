@@ -26,7 +26,7 @@
 #import "UIColor-Expanded.h"
 
 #import "TexLegeMapPins.h"
-
+#import "TexLegePinAnnotationView.h"
 #import "MKPinAnnotationView+ZIndexFix.h"
 
 
@@ -730,7 +730,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
     //
     if ([annotation isKindOfClass:[DistrictOfficeObj class]]) 
     {
-		DistrictOfficeObj *districtOffice = (DistrictOfficeObj *)annotation;
+		//DistrictOfficeObj *districtOffice = (DistrictOfficeObj *)annotation;
 		
         // try to dequeue an existing pin view first
         static NSString* districtOfficeAnnotationID = @"districtOfficeAnnotationID";
@@ -738,28 +738,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
         if (!pinView)
         {
             // if an existing pin view was not available, create one
-            MKPinAnnotationView* customPinView = [[[MKPinAnnotationView alloc]
+            TexLegePinAnnotationView* customPinView = [[[TexLegePinAnnotationView alloc]
 												   initWithAnnotation:annotation reuseIdentifier:districtOfficeAnnotationID] autorelease];
-			customPinView.animatesDrop = YES;
-            customPinView.canShowCallout = YES;
-            
-            UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];			
-            customPinView.rightCalloutAccessoryView = rightButton;
-			
-			UIImageView *iconView = [[UIImageView alloc] initWithImage:[districtOffice image]];
-            customPinView.leftCalloutAccessoryView = iconView;
-            [iconView release];
-			
-			NSInteger pinColorIndex = [[districtOffice pinColorIndex] integerValue];
-			if (pinColorIndex >= TexLegePinAnnotationColorBlue) {
-				UIImage *pinImage = [TexLegeMapPins imageForPinColorIndex:pinColorIndex status:TexLegePinAnnotationStatusHead];
-				UIImageView *pinHead = [[UIImageView alloc] initWithImage:pinImage];
-				[customPinView addSubview:pinHead];
-				[pinHead release];
-			}
-			else
-				customPinView.pinColor = [[districtOffice pinColorIndex] integerValue];
-
             return customPinView;
         }
         else
@@ -773,7 +753,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 	if ([annotation isKindOfClass:[DistrictMapObj class]]) 
     {
-		DistrictMapObj *districtMap = (DistrictMapObj *)annotation;
+		//DistrictMapObj *districtMap = (DistrictMapObj *)annotation;
 		
         // try to dequeue an existing pin view first
         static NSString* districtMapAnnotationID = @"districtMapAnnotationID";
@@ -781,29 +761,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
         if (!pinView)
         {
             // if an existing pin view was not available, create one
-            MKPinAnnotationView* customPinView = [[[MKPinAnnotationView alloc]
+            TexLegePinAnnotationView* customPinView = [[[TexLegePinAnnotationView alloc]
 														   initWithAnnotation:annotation reuseIdentifier:districtMapAnnotationID] autorelease];
-            customPinView.animatesDrop = YES;
-            customPinView.canShowCallout = YES;
-            
-            UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];			
-            customPinView.rightCalloutAccessoryView = rightButton;
-			
-			UIImageView *iconView = [[UIImageView alloc] initWithImage:[districtMap image]];
-            customPinView.leftCalloutAccessoryView = iconView;
-            [iconView release];
-			
-			NSInteger pinColorIndex = [[districtMap pinColorIndex] integerValue];
-			if (pinColorIndex >= TexLegePinAnnotationColorBlue) {
-				UIImage *pinImage = [TexLegeMapPins imageForPinColorIndex:pinColorIndex status:TexLegePinAnnotationStatusHead];
-				UIImageView *pinHead = [[UIImageView alloc] initWithImage:pinImage];
-				[customPinView addSubview:pinHead];
-				[pinHead release];
-			}
-			else
-				customPinView.pinColor = [[districtMap pinColorIndex] integerValue];
-			
-			
             return customPinView;
         }
         else

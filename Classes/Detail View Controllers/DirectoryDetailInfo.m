@@ -57,9 +57,10 @@
 				tempURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://m.twitter.com/%@",twitString]];
 			}
 				break;
-			case DirectoryTypeMap:
+/*			case DirectoryTypeMap:
 				tempURL = [UtilityMethods googleMapUrlFromStreetAddress:entryValue];
 				break;
+*/
 			default:
 				tempURL = nil;
 				break;

@@ -359,7 +359,7 @@
 			[self.navigationController pushViewController:subDetailController animated:YES];
 			[subDetailController release];
 		}
-		else if (cellInfo.entryType == DirectoryTypeOfficeMap || cellInfo.entryType == DirectoryTypeChamberMap) {
+		else if (cellInfo.entryType == DirectoryTypeOfficeMap /*|| cellInfo.entryType == DirectoryTypeChamberMap*/) {
 			CapitolMap *capMap = cellInfo.entryValue;			
 			[self pushMapViewWithMap:capMap];
 		}
@@ -396,9 +396,6 @@
 					[self.navigationController popToViewController:self.mapViewController animated:YES];
 				else
 					[self.navigationController pushViewController:self.mapViewController animated:YES];
-
-				//if (![UtilityMethods isIPadDevice]) 
-				//	self.mapViewController = nil;
 			}
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&
@@ -423,13 +420,11 @@
 
 - (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = 44.0f;
-	NSInteger row = [indexPath row];
-	NSInteger section = [indexPath section];
 	
 	DirectoryDetailInfo *cellInfo = [self.dataSource dataObjectForIndexPath:indexPath];
 	
 	if (cellInfo == nil) {
-		debug_NSLog(@"LegislatorDetailViewController:heightForRow: error finding table entry for section:%d row:%d", section, row);
+		debug_NSLog(@"LegislatorDetailViewController:heightForRow: error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);
 		return height;
 	}
 	
