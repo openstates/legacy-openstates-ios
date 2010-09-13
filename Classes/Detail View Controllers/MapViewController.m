@@ -320,7 +320,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		
 		// Add a placemark on the map
 		CustomAnnotation *annotation = [[[CustomAnnotation alloc] initWithRegion:newRegion] autorelease];
-		//self.searchLocation = annotation;
+		annotation.coordinateChangedDelegate = self;
 		[self.mapView addAnnotation:annotation];	
 		
 		DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
