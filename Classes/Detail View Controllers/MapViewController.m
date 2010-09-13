@@ -320,6 +320,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		
 		// Add a placemark on the map
 		CustomAnnotation *annotation = [[[CustomAnnotation alloc] initWithRegion:newRegion] autorelease];
+		//self.searchLocation = annotation;
 		[self.mapView addAnnotation:annotation];	
 		
 		DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
@@ -568,8 +569,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 			// Add a placemark on the map
 			CustomAnnotation *annotation = [[[CustomAnnotation alloc] initWithBSKmlResult:place] autorelease];
 			
-#warning find conditional to return the version number of the OS .. if less than 4, do this
-			if ([UtilityMethods isIPadDevice])
+			if (![UtilityMethods iOSVersion4])
 				annotation.coordinateChangedDelegate = self;
 			
 			[self.mapView addAnnotation:annotation];	
@@ -662,8 +662,12 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	//if (oldState == MKAnnotationViewDragStateDragging)
 	if (newState == MKAnnotationViewDragStateEnding)
 	{
-		if ([annotationView.annotation isEqual:self.searchLocation])
-			[self annotationCoordinateChanged:self.searchLocation];		
+		if ([annotationView.annotation isEqual:self.searchLocation]) {
+			if (self.searchLocation.coordinateChangedDelegate)
+				self.searchLocation.coordinateChangedDelegate = nil;		// it'll handle it once, then we'll do it.
+			else
+				[self annotationCoordinateChanged:self.searchLocation];	
+		}
 	}
 }
 
