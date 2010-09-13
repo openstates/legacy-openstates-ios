@@ -567,6 +567,11 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 			
 			// Add a placemark on the map
 			CustomAnnotation *annotation = [[[CustomAnnotation alloc] initWithBSKmlResult:place] autorelease];
+			
+#warning find conditional to return the version number of the OS .. if less than 4, do this
+			if ([UtilityMethods isIPadDevice])
+				annotation.coordinateChangedDelegate = self;
+			
 			[self.mapView addAnnotation:annotation];	
 			
 			DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
@@ -632,22 +637,33 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 }
 
+- (void)annotationCoordinateChanged:(id)sender {
+	if (![sender isKindOfClass:[CustomAnnotation class]])
+		return;
+	
+	CustomAnnotation *theAnnotation = sender;
+	
+	//if ([theAnnotation isEqual:self.searchLocation]) {
+		[self clearAnnotationsAndOverlaysExcept:theAnnotation];
+		
+		[self reverseGeocodeLocation:theAnnotation.coordinate];
+		
+		DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
+		[dataSource searchDistrictMapsForCoordinate:theAnnotation.coordinate withDelegate:self];
+	//}
+	
+}
+
 #pragma mark -
 #pragma mark MapViewDelegate
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
 	
-	if (oldState == MKAnnotationViewDragStateDragging) {
-
-		if ([annotationView.annotation isEqual:self.searchLocation]) {	
-			[self clearAnnotationsAndOverlaysExcept:self.searchLocation];
-
-			[self reverseGeocodeLocation:self.searchLocation.coordinate];
-			
-			DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
-			[dataSource searchDistrictMapsForCoordinate:self.searchLocation.coordinate withDelegate:self];
-		}
-		
+	//if (oldState == MKAnnotationViewDragStateDragging)
+	if (newState == MKAnnotationViewDragStateEnding)
+	{
+		if ([annotationView.annotation isEqual:self.searchLocation])
+			[self annotationCoordinateChanged:self.searchLocation];		
 	}
 }
 
