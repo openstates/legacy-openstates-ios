@@ -140,7 +140,6 @@
 
 - (void)viewDidUnload {
 	self.tableView.dataSource = nil;
-	//self.tableView.delegate = nil;
 	self.selectObjectOnAppear = nil;
 	self.tableView = nil;
 	[super viewDidUnload];
@@ -198,24 +197,24 @@
 // the *user* selected a row in the table, so turn on animations and save their selection.
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath {
 	
-
 	[self tableView:aTableView didSelectRowAtIndexPath:newIndexPath withAnimation:YES];
 	
 	// if we have a stack of view controllers and someone selected a new cell from our master list, 
-	//	lets go all the way back to accomodate their selection, and scroll to the top.
+	//	lets go all the way back to accomodate their selection.
 	if ([UtilityMethods isIPadDevice]) {
-		UITableView *detailTable = nil;
 		UINavigationController *detailNav = nil;
-		if ([self.detailViewController respondsToSelector:@selector(tableView)])
-			detailTable = [self.detailViewController performSelector:@selector(tableView)];
 		if ([self.detailViewController respondsToSelector:@selector(navigationController)])
 			detailNav = [self.detailViewController performSelector:@selector(navigationController)];
 		
-		if (detailTable && detailNav) {
-			if ([detailNav.viewControllers count] > 1) { 
-				CGRect guessTop = CGRectMake(0, 0, 10.0f, 10.0f);
-				[detailNav popToRootViewControllerAnimated:YES];
-				[detailTable scrollRectToVisible:guessTop animated:YES];
+		if (detailNav && detailNav.viewControllers && [detailNav.viewControllers count] > 1) { 
+			[detailNav popToRootViewControllerAnimated:YES];
+			
+			if ([self.detailViewController respondsToSelector:@selector(tableView)]) {
+				UITableView *detailTable = [self.detailViewController performSelector:@selector(tableView)];
+				if (detailTable) {
+					CGRect guessTop = CGRectMake(0, 0, 10.0f, 10.0f);
+					[detailTable scrollRectToVisible:guessTop animated:YES];
+				}
 			}
 		}
 	}
