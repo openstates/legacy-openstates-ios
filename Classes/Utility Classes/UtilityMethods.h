@@ -12,6 +12,9 @@
 @interface UtilityMethods : NSObject {
 }
 
++ (CGFloat) iOSVersion;
++ (BOOL) iOSVersion4;
+	
 + (BOOL) supportsEventKit;
 
 + (BOOL) supportsMKPolyline;

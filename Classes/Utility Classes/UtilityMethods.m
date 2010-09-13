@@ -49,6 +49,14 @@
 
 @implementation UtilityMethods
 
++ (CGFloat) iOSVersion {
+	return [[[UIDevice currentDevice] systemVersion] floatValue];
+}
+
++ (BOOL) iOSVersion4 {
+	return ([UtilityMethods iOSVersion] >= 4.0f);
+}
+
 #pragma mark -
 #pragma mark Device Checks and Screen Methods
 
