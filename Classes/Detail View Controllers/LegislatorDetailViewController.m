@@ -51,13 +51,12 @@
 @implementation LegislatorDetailViewController
 
 @synthesize legislator, dataSource;
-@synthesize startupSplashView, headerView, miniBackgroundView;
+@synthesize headerView, miniBackgroundView;
 
 @synthesize chartView;
 @synthesize leg_indexTitleLab, leg_rankLab, leg_chamberPartyLab, leg_chamberLab;
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab, freshmanPlotLab;
 @synthesize indivSlider, partySlider, allSlider;
-//@synthesize indivPHolder, partyPHolder, allPHolder;
 @synthesize notesPopover, masterPopover;
 @synthesize mapViewController;
 
@@ -104,7 +103,6 @@
 	[[self navigationController] popToRootViewControllerAnimated:YES];
 	
 	self.leg_photoView = nil;
-	self.startupSplashView = nil;
 	self.mapViewController = nil;
 	
     [super didReceiveMemoryWarning];
@@ -118,7 +116,6 @@
 	self.legislator = nil;
 	self.dataSource = nil;
 	self.headerView = nil;
-	self.startupSplashView = nil;	
 	self.leg_photoView = nil;
 	self.tableView = nil;
 	self.miniBackgroundView = nil;
@@ -139,7 +136,6 @@
 	self.dataSource = nil;
 	self.legislator = nil;
 	self.headerView = nil;
-	self.startupSplashView = nil;	
 	self.leg_photoView = nil;
 	self.tableView = nil;
 	self.chartView = nil;
@@ -230,9 +226,6 @@
 }
 
 - (void)setLegislator:(LegislatorObj *)newLegislator {
-	if (self.startupSplashView) {
-		[self.startupSplashView removeFromSuperview];
-	}
 	if (legislator) [legislator release], legislator = nil;
 	if (newLegislator) {
 		legislator = [newLegislator retain];
@@ -272,23 +265,6 @@
 	
 	if (self.legislator)
 		[self setupHeader];
-
-	if (ipad) {
-		if (portrait && !self.legislator) {
-			// TODO: We could alternatively use this opportunity to open a proper informational introduction
-			// for instance, drop in a new view taking the full screen that gives a full menu and helpful info
-			
-			if (self.startupSplashView == nil) {
-				NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"StartupSplashView-Portrait" owner:self options:NULL];
-				self.startupSplashView = [objects objectAtIndex:0];
-			}
-			[self.view addSubview:self.startupSplashView];
-		}
-		else {
-			[self.startupSplashView removeFromSuperview];
-			self.startupSplashView = nil;
-		}
-	}
 }
 
 #pragma mark -
