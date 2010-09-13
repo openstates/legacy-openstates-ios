@@ -19,7 +19,7 @@
 @implementation CustomAnnotationView
 
 - (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:kCustomAnnotationDidChangeNotificationKey object:self.annotation];	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:kCustomAnnotationAddressChangeNotificationKey object:self.annotation];	
 
 	[super dealloc];
 }
@@ -63,7 +63,7 @@
 		//self.centerOffset = CGPointMake(8, -14);
 		//self.calloutOffset = CGPointMake(-8, 0);
 		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(annotationChanged_:) name:kCustomAnnotationDidChangeNotificationKey object:annotation];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(annotationChanged_:) name:kCustomAnnotationAddressChangeNotificationKey object:annotation];
 	}
 	return self;
 }

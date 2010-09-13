@@ -20,12 +20,11 @@
 
 @implementation CustomAnnotation
 
-@synthesize pinColorIndex, regionDict, addressDict, title, subtitle, imageName;
+@synthesize pinColorIndex, regionDict, addressDict, title, subtitle, imageName, coordinateChangedDelegate;
 
 -(id)initWithRegion:(MKCoordinateRegion) newRegion {
 	self = [super init];
-	
-	if (self != nil) {		
+	if (self != nil) {
 		self.regionDict = [NSDictionary dictionaryWithObjectsAndKeys:
 						   [NSNumber numberWithDouble:newRegion.center.latitude], @"latitude",
 						   [NSNumber numberWithDouble:newRegion.center.longitude], @"longitude",
@@ -98,7 +97,7 @@
 	self.pinColorIndex = nil;
 	self.regionDict = nil;
 	self.addressDict = nil;
-
+	self.coordinateChangedDelegate = nil;
 	[super dealloc];
 }
 
@@ -164,6 +163,9 @@
 		
 	//self.title = @"Updating Address...";
 	self.title = [NSString	stringWithFormat:@"%f %f", newCoordinate.latitude, newCoordinate.longitude];
+	
+	if (self.coordinateChangedDelegate && [self.coordinateChangedDelegate respondsToSelector:@selector(annotationCoordinateChanged:)])
+		[self.coordinateChangedDelegate performSelector:@selector(annotationCoordinateChanged:) withObject:self];
 }
 
 
@@ -216,7 +218,7 @@
 	
 	[self reloadTitle];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:kCustomAnnotationDidChangeNotificationKey object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kCustomAnnotationAddressChangeNotificationKey object:self];
 }
 
 @end

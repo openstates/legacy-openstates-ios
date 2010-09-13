@@ -10,7 +10,7 @@
 #import <MapKit/MapKit.h>
 
 
-#define kCustomAnnotationDidChangeNotificationKey @"CustomAnnotationDidChangeNotification"
+#define kCustomAnnotationAddressChangeNotificationKey @"CustomAnnotationAddressChangeNotification"
 @class BSKmlResult;
 @interface CustomAnnotation : NSObject <MKAnnotation, NSCoding> {
 }
@@ -25,6 +25,7 @@
 @property (nonatomic, readonly) CLLocationCoordinate2D	coordinate;
 @property (nonatomic, readonly) MKCoordinateRegion		region;
 @property (nonatomic, readonly) MKCoordinateSpan		span;
+@property (nonatomic, retain) id	coordinateChangedDelegate;
 
 -(id)initWithBSKmlResult:(BSKmlResult*)kmlResult;
 -(id)initWithRegion:(MKCoordinateRegion) newRegion;
