@@ -27,6 +27,7 @@
 @property (nonatomic, readonly) MKCoordinateSpan		span;
 
 -(id)initWithBSKmlResult:(BSKmlResult*)kmlResult;
+-(id)initWithRegion:(MKCoordinateRegion) newRegion;
 
 - (UIImage *)image;
 

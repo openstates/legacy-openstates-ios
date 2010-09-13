@@ -22,6 +22,28 @@
 
 @synthesize pinColorIndex, regionDict, addressDict, title, subtitle, imageName;
 
+-(id)initWithRegion:(MKCoordinateRegion) newRegion {
+	self = [super init];
+	
+	if (self != nil) {		
+		self.regionDict = [NSDictionary dictionaryWithObjectsAndKeys:
+						   [NSNumber numberWithDouble:newRegion.center.latitude], @"latitude",
+						   [NSNumber numberWithDouble:newRegion.center.longitude], @"longitude",
+						   [NSNumber numberWithDouble:newRegion.span.latitudeDelta], @"spanLat",
+						   [NSNumber numberWithDouble:newRegion.span.longitudeDelta], @"spanLon", nil];
+		
+		
+//		self.addressDict = newRegion.addressDict;
+		
+		self.pinColorIndex = [NSNumber numberWithInteger:MKPinAnnotationColorPurple]; 
+		self.imageName = @"silverstar.png";
+		
+		[self reloadTitle];
+	}
+	
+	return self;
+}
+
 -(id)initWithBSKmlResult:(BSKmlResult*) kmlResult {
 	self = [super init];
 	
