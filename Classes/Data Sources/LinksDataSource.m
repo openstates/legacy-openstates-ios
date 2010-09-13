@@ -83,8 +83,9 @@ enum HeaderSectionRows {
 		{
 			debug_NSLog(@"LinksMenuDataSource-init: Unresolved error %@, %@", error, [error userInfo]);
 		}		
-		else if ([self.fetchedResultsController.fetchedObjects count] == 0)
+		else if ([self.fetchedResultsController.fetchedObjects count] == 0) {
 			debug_NSLog(@"No link resources in a database...");
+		}
 			
 	}
 	return self;

@@ -247,19 +247,6 @@
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;
 	} 
-	if (self.legislator && self.legislator.chamber_desk && [self.legislator.chamber_desk length]) {
-		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 @"Desk #", @"subtitle",
-					 [UtilityMethods capitolMapFromChamber:self.legislator.legtype.integerValue], @"entryValue",
-					 self.legislator.chamber_desk, @"title",
-					 [NSNumber numberWithBool:YES], @"isClickable",
-					 [NSNumber numberWithInteger:DirectoryTypeChamberMap], @"entryType",
-					 nil];
-		cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
-		[entryDict release];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;
-	}
 	if (self.legislator && self.legislator.cap_phone && [self.legislator.cap_phone length]) {
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 					 @"Phone", @"subtitle",

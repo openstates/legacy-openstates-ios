@@ -162,10 +162,8 @@
  - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {	
 	if (section == 0)
 		return @"Interior Maps";
-	else if (section == 1)
+	else //if (section == 1)
 		return @"Exterior Maps";
-	else // if (section == 3)
-		return @"Chamber Floor Desk Maps";
 }
 
 
