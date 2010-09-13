@@ -129,6 +129,12 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	if (![UtilityMethods supportsMKPolyline])
 		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"__NO_MKPOLYLINE!__"];
 	
+	UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+	longPressRecognizer.delegate = self;
+	[self.mapView addGestureRecognizer:longPressRecognizer];        
+	[longPressRecognizer release];
+	
+	
 }
 
 - (void) viewDidUnload {
@@ -280,6 +286,46 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		[self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:0.5];	
 }
 
+#pragma mark -
+#pragma mark Gesture Recognizer
+
+#pragma mark Handling long presses
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+	id theView = gestureRecognizer.view;
+	debug_NSLog(@"long press view: %@", theView);
+	if ([theView isKindOfClass:[MKPinAnnotationView class]])
+		return NO;
+	else if ([theView isKindOfClass:[MKMapView class]])
+		return YES;
+	else
+		return NO;
+
+}
+
+-(void)handleLongPress:(UILongPressGestureRecognizer*)longPressRecognizer {
+    
+    /*
+     For the long press, the only state of interest is Began.
+     If there is a row at the location, create a suitable menu controller and display it.
+     */
+    if (longPressRecognizer.state == UIGestureRecognizerStateBegan) {
+        CGPoint touchPoint = [longPressRecognizer locationInView:self.mapView];
+		CLLocationCoordinate2D touchCoord = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
+		
+		[self clearAnnotationsAndOverlays];
+		
+		MKCoordinateSpan newSpan = self.mapView.region.span;
+		MKCoordinateRegion newRegion = MKCoordinateRegionMake(touchCoord, newSpan);
+		
+		// Add a placemark on the map
+		CustomAnnotation *annotation = [[[CustomAnnotation alloc] initWithRegion:newRegion] autorelease];
+		[self.mapView addAnnotation:annotation];	
+		
+		DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
+		[dataSource searchDistrictMapsForCoordinate:annotation.coordinate withDelegate:self];
+    }
+}
 
 #pragma mark -
 #pragma mark Popover Support
@@ -376,6 +422,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void)showLocateUserButton {
+	NSInteger buttonIndex = 0;
+	
 	UIBarButtonItem *locateItem = [[UIBarButtonItem alloc] 
 								   initWithImage:[UIImage imageNamed:@"locationarrow.png"]
 									style:UIBarButtonItemStyleBordered
@@ -386,10 +434,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 	NSMutableArray *items = [[NSMutableArray alloc] initWithArray:self.toolbar.items];
 
-	UIBarButtonItem *otherButton = [items objectAtIndex:0];
+	UIBarButtonItem *otherButton = [items objectAtIndex:buttonIndex];
 	if (otherButton.tag == 998)
-		[items removeObjectAtIndex:0];
-	[items insertObject:locateItem atIndex:0];
+		[items removeObjectAtIndex:buttonIndex];
+	[items insertObject:locateItem atIndex:buttonIndex];
 	self.userLocationButton = locateItem;
 	[locateItem release];
 	[self.toolbar setItems:items animated:YES];
@@ -397,6 +445,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void)showLocateActivityButton {
+	NSInteger buttonIndex = 0;
+
 	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
 	[activityIndicator startAnimating];
 	UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
@@ -405,10 +455,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 	NSMutableArray *items = [[NSMutableArray alloc] initWithArray:self.toolbar.items];
 	
-	UIBarButtonItem *otherButton = [items objectAtIndex:0];
+	UIBarButtonItem *otherButton = [items objectAtIndex:buttonIndex];
 	if (otherButton.tag == 999)
-		[items removeObjectAtIndex:0];
-	[items insertObject:activityItem atIndex:0];
+		[items removeObjectAtIndex:buttonIndex];
+	[items insertObject:activityItem atIndex:buttonIndex];
 	[activityItem release];
 	[self.toolbar setItems:items animated:YES];
 	[items release];
@@ -423,7 +473,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (IBAction) showAllDistricts:(id)sender {
-#warning turn on the system wide network activity thingy?
+//#warning turn on the system wide network activity thingy?
 	
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"SHOWING_ALL_DISTRICTS"];
 	
@@ -557,7 +607,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 - (void) searchBarSearchButtonClicked:(UISearchBar *)theSearchBar {
 	[self showLocateActivityButton];
 	
-#warning turn on the system wide network activity thingy?
+//#warning turn on the system wide network activity thingy?
 
 	debug_NSLog(@"Searching for: %@", theSearchBar.text);
 	if(self.forwardGeocoder == nil)

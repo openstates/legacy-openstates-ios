@@ -13,7 +13,8 @@
 
 @class DistrictOfficeObj, CustomAnnotation;
 @interface MapViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate, UIPopoverControllerDelegate,
-		MKReverseGeocoderDelegate, BSForwardGeocoderDelegate, UISplitViewControllerDelegate, UIActionSheetDelegate> {
+		MKReverseGeocoderDelegate, BSForwardGeocoderDelegate, UISplitViewControllerDelegate, UIActionSheetDelegate,
+		UIGestureRecognizerDelegate> {
 }
 //+ (MapViewController *)sharedMapViewController;
 
