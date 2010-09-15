@@ -21,6 +21,16 @@
 #import "LocalyticsSession.h"
 #import "DistrictMapDataSource.h"
 
+#if NEEDS_TO_INITIALIZE_DATABASE == 1
+	#define IMPORTING_DATA 1
+#else
+	#define IMPORTING_DATA 0
+#endif
+
+#if IMPORTING_DATA == 1
+#import "TexLegeDataImporter.h"
+#endif
+
 #define EXPORTING_DATA 0
 #if EXPORTING_DATA == 1
 #import "TexLegeDataExporter.h"
@@ -284,6 +294,12 @@ NSInteger kNoSelection = -1;
  - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {	
 		
+#if IMPORTING_DATA == 1
+	TexLegeDataImporter *importer = [[TexLegeDataImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
+	[importer importObjectsWithEntityName:@"LinkObj"];
+	[importer release];
+#endif
+	
     [[Reachability sharedReachability] setHostName:[self hostName]];
     
     // The Reachability class is capable of notifying your application when the network
@@ -334,7 +350,7 @@ NSInteger kNoSelection = -1;
 	
 #if EXPORTING_DATA == 1
 	TexLegeDataExporter *exporter = [[TexLegeDataExporter alloc] initWithManagedObjectContext:self.managedObjectContext];
-	[exporter exportDistrictOffices];
+	[exporter exportObjectsWithEntityName:@"LinkObj"];
 	[exporter release];
 #endif
 	return YES;
