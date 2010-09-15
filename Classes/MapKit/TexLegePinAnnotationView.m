@@ -48,15 +48,16 @@
 		[foundPinImage removeFromSuperview];
 	
 	NSInteger pinColorIndex = MKPinAnnotationColorRed;
-	
-	NSNumber *pinColorNumber = [anAnnotation performSelector:@selector(pinColorIndex)];
-	if (!pinColorNumber)
-		self.pinColor = pinColorIndex;
-	else if ([pinColorNumber integerValue] < TexLegePinAnnotationColorBlue)
-		self.pinColor = [pinColorNumber integerValue];
-	else {
-		NSInteger pinColorIndex = [pinColorNumber integerValue];
+	if ([anAnnotation respondsToSelector:@selector(pinColorIndex)]) {
+		NSNumber *pinColorNumber = [anAnnotation performSelector:@selector(pinColorIndex)];
+		if (pinColorNumber)
+			pinColorIndex = [pinColorNumber integerValue];
+	}
 		
+	if (pinColorIndex < TexLegePinAnnotationColorBlue)
+		
+		[self setPinColor:pinColorIndex];
+	else {
 		UIImage *pinImage = [TexLegeMapPins imageForPinColorIndex:pinColorIndex status:TexLegePinAnnotationStatusHead];
 		UIImageView *pinHead = [[UIImageView alloc] initWithImage:pinImage];
 		pinHead.tag = 999;
@@ -70,12 +71,6 @@
 		self.leftCalloutAccessoryView = iconView;
 		[iconView release];
 	}
-}
-
-- (void)setAnnotation:(id <MKAnnotation>)newAnnotation {
-	[super setAnnotation:newAnnotation];
-	
-	[self resetPinColorWithAnnotation:newAnnotation];
 }
 
 @end
