@@ -13,6 +13,10 @@
 
 }
 
++ (NSData *) encryptedDataWithObject:(id)object;
++ (id) decryptedObjectWithData:(NSData *)encryptedData;
+	
++ (NSString*)cipher32Byte;
 - (NSData *)AES256EncryptWithKey:(NSString *)key;
 - (NSData *)AES256DecryptWithKey:(NSString *)key;
 	

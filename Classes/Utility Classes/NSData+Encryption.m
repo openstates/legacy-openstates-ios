@@ -12,6 +12,39 @@
 
 @implementation NSData (Encryption)
 
++ (NSData *) encryptedDataWithObject:(id)object {
+	NSData *clearData = [NSKeyedArchiver archivedDataWithRootObject:object];
+	NSData *encryptedData = [clearData AES256EncryptWithKey:[NSData cipher32Byte]];
+	return encryptedData;
+}
+
++ (id) decryptedObjectWithData:(NSData *)encryptedData {
+	NSData *clearData = [encryptedData AES256DecryptWithKey:[NSData cipher32Byte]];
+	id object = [NSKeyedUnarchiver unarchiveObjectWithData:clearData];
+	return object;
+}
+
+// "Thisisalongstringsowatchoutkid"
+// http://www.iwillapps.com/tuts/symcipher.php?sub_str=Thisisalongstringsowatchoutkid
++ (NSString*)cipher32Byte {
+	char symCipher[] = { ';', 'R', ',', 'S', 'y', '&', 'W', '^', '#', 'x', '\\', '"', 'G', 'i', '7', 'q', '{', 'v', '8', 'o', '_', 'E', 'z', '3', '5', 'c', 'g', 'l', 'm', 'D', 'K', 'F', '(', ':', 'n', 'Z', '-', 'a', 'U', '*', 'X', 'I', 'j', 'Y', 'O', 'A', '=', 'f', '.', '`', '\'', ']', 'M', '%', 'u', '/', '|', 't', 'L', '4', '@', 'd', '+', 'k', 'p', 'e', '?', '0', ')', '1', 'P', '6', '[', 'h', 'r', 'H', 'B', 's', '9', 'C', '2', 'w', 'T', '}', 'V', '$', 'N', 'b', 'J', '!', '<', '>', 'Q' }; 
+	char csignid[] = "]6[T[TpH9sPT}w[sPT9Np}?69V}r[0";
+	NSInteger i = 0;
+	for(i=0;i<strlen(csignid);i++)
+	{
+		int j = 0;
+		for(j=0;j<sizeof(symCipher);j++)
+		{
+			if(csignid[i] == symCipher[j])
+			{
+				csignid[i] = j+0x21;
+				break;
+			}
+		}
+	}
+	return [NSString stringWithCString:csignid encoding:NSUTF8StringEncoding];
+}
+
 - (NSData *)AES256EncryptWithKey:(NSString *)key {
 	// 'key' should be 32 bytes for AES256, will be null-padded otherwise
 	char keyPtr[kCCKeySizeAES256+1]; // room for terminator (unused)
