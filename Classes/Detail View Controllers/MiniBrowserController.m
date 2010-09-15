@@ -226,7 +226,8 @@ static MiniBrowserController *s_browser = nil;
 		if (self.m_loadingItemList)
 			self.m_loadingItemList = nil;
 		
-		self.m_loadingItemList = (NSArray *)tmpArray;
+		self.m_loadingItemList = tmpArray;
+		[tmpArray release];
 	}
 	
 }
