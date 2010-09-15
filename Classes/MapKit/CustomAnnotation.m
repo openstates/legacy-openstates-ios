@@ -184,6 +184,7 @@
 	
 	NSMutableDictionary *tempDict = [NSMutableDictionary dictionaryWithDictionary:placemark.addressDictionary];
 	
+		
 	if (placemark.thoroughfare)
 		[tempDict setObject:placemark.thoroughfare forKey:@"address"];
 	
@@ -191,7 +192,7 @@
 		[tempDict setObject:placemark.locality forKey:@"city"];
 	
 	if (placemark.country)
-		[tempDict setObject:placemark.locality forKey:@"country"];
+		[tempDict setObject:placemark.country forKey:@"country"];
 	
 	if (placemark.countryCode)
 		[tempDict setObject:placemark.countryCode forKey:@"countryCode"];
