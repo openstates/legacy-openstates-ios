@@ -14,11 +14,10 @@
 #import "LegislatorObj.h"
 #import "DistrictOfficeObj.h"
 #import "DistrictMapObj.h"
-
 #import "CommitteeObj.h"
 #import "CommitteePositionObj.h"
 #import "WnomObj.h"
-
+#import "TexLegeCoreDataUtils.h"
 #import "UtilityMethods.h"
 #import "TableDataSourceProtocol.h"
 #import "DirectoryDetailInfo.h"
@@ -45,6 +44,10 @@
 - (void) showWebViewWithURL:(NSURL *)url;
 - (void) setupHeaderView;
 - (void) setupHeader;
+
+- (void)hideChartLoading;
+- (void)showChartLoading;
+	
 @end
 
 
@@ -53,7 +56,7 @@
 @synthesize legislator, dataSource;
 @synthesize headerView, miniBackgroundView;
 
-@synthesize chartView;
+@synthesize chartView, chartLoadingLab, chartLoadingAct;
 @synthesize leg_indexTitleLab, leg_rankLab, leg_chamberPartyLab, leg_chamberLab;
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab, freshmanPlotLab;
 @synthesize indivSlider, partySlider, allSlider;
@@ -151,16 +154,34 @@
 - (NSString *)chamberPartyAbbrev {
 	NSString *partyName = nil;
 	if ([self.legislator.party_id integerValue] == DEMOCRAT) // Democrat
-		partyName = @"Dem.";
+		partyName = @"Dems";
 	else if ([self.legislator.party_id integerValue] == REPUBLICAN) // Republican
-		partyName = @"Rep.";
+		partyName = @"Repubs";
 	else // don't know the party?
-		partyName = @"Ind.";
+		partyName = @"Indeps";
 	
-	return [NSString stringWithFormat:@"%@ %@ Avg.", [self.legislator chamberName], partyName];
+	return [NSString stringWithFormat:@"%@ %@", [self.legislator chamberName], partyName];
 }
 
+- (NSString *) partisanRankStringForLegislator {
+	//self.rank = @"3rd most partisan (out of 76 Repubs)";
 	
+	NSArray *legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[self.legislator.legtype integerValue] 
+																					andPartyID:[self.legislator.party_id integerValue] 
+																					   context:self.legislator.managedObjectContext];
+	if (legislators) {
+		NSInteger rankIndex = [legislators indexOfObject:self.legislator] + 1;
+		NSInteger count = [legislators count];
+		NSString *partyShortName = [self.legislator.party_id integerValue] == DEMOCRAT ? @"Dems" : @"Repubs";
+		
+		NSString *ordinalRank = [UtilityMethods ordinalNumberFormat:rankIndex];
+		return [NSString stringWithFormat:@"%@ most partisan (out of %d %@)", ordinalRank, count, partyShortName];	
+	}
+	else {
+		return nil;
+	}
+}
+
 - (void)setupHeader {	
 	NSString *legName = [NSString stringWithFormat:@"%@ %@",  [self.legislator legTypeShortName], [self.legislator legProperName]];
 	self.leg_nameLab.text = legName;
@@ -173,6 +194,9 @@
 	self.leg_tenureLab.text = [self.legislator tenureString];
 	
 	BOOL hasScores = (self.legislator.wnomScores && [self.legislator.wnomScores count]);
+	if (!hasScores) {
+		[self hideChartLoading];			
+	}
 	self.freshmanPlotLab.hidden = hasScores;
 
 #define kChartPortraitWidth ([UtilityMethods isIPadDevice]) ? @"685px" : @"305px"
@@ -186,19 +210,12 @@
 	
 	PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
 	if (self.leg_indexTitleLab)
-		self.leg_indexTitleLab.text = [NSString stringWithFormat:@"Legislator Roll Call Index (%@)",
-									   [indexStats currentSessionYear]];
+		self.leg_indexTitleLab.text = [NSString stringWithFormat:@"%@ %@", 
+									   [self.legislator legTypeShortName], [self.legislator lastname]];
 
-	if (self.leg_rankLab) {
-		self.leg_rankLab.enabled = hasScores;
-		if ([UtilityMethods isIPadDevice])
-			self.leg_rankLab.text = [NSString stringWithFormat:@"Rank: %@",
-								 [indexStats partisanRankForLegislator:self.legislator onlyParty:YES]];
-		else
-			self.leg_rankLab.text = [NSString stringWithFormat:@"(Partisanship: %@)",
-									 [indexStats partisanRankForLegislator:self.legislator onlyParty:YES]];
-
-	}
+	if (self.leg_rankLab)
+		self.leg_rankLab.text = [self partisanRankStringForLegislator];
+	
 	if (self.leg_chamberPartyLab) {
 		self.leg_chamberPartyLab.text = [self chamberPartyAbbrev];
 		self.leg_chamberLab.text = [[self.legislator chamberName] stringByAppendingString:@" Avg."];				
@@ -316,6 +333,38 @@
 	
 }
 
+#pragma mark -
+#pragma mark Web View Delegate
+
+- (void)hideChartLoading {
+	[self.chartLoadingAct stopAnimating];
+	self.chartLoadingAct.hidden = YES;
+	self.chartLoadingLab.hidden = YES;
+}
+
+- (void)showChartLoading {
+	[self.chartLoadingAct startAnimating];
+	self.chartLoadingAct.hidden = NO;
+	self.chartLoadingLab.hidden = NO;
+}
+
+- (void)webViewDidStartLoad:(UIWebView *)webView {
+	[self showChartLoading];
+}
+
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+	debug_NSLog(@"Web view finished loading");
+	[self hideChartLoading];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+	[self hideChartLoading];
+
+}
+
+#pragma mark -
+#pragma mark Table View Delegate
 // the user selected a row in the table.
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath {
 	
