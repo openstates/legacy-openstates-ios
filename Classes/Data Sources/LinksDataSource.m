@@ -12,17 +12,6 @@
 #import "UtilityMethods.h"
 #import "DisclosureQuartzView.h"
 
-@interface LinksDataSource (Private)
-- (IBAction)saveAction:(id)sender;
-
-
-#if NEEDS_TO_INITIALIZE_DATABASE == 1 || JUST_INITIALIZE_LINKS == 1
-- (void) setupDataArray;
-- (void) initializeDatabase;
-#endif
-
-@end
-
 @implementation LinksDataSource
 
 enum Sections {
@@ -37,11 +26,6 @@ enum HeaderSectionRows {
 };
 
 @synthesize fetchedResultsController, managedObjectContext;
-
-
-#if NEEDS_TO_INITIALIZE_DATABASE == 1 || JUST_INITIALIZE_LINKS == 1
-@synthesize linksData;
-#endif
 
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
@@ -73,11 +57,6 @@ enum HeaderSectionRows {
 	if (self = [super init]) {
 		if (newContext) self.managedObjectContext = newContext;
 	
-#if NEEDS_TO_INITIALIZE_DATABASE == 1 || JUST_INITIALIZE_LINKS == 1
-#error now that we have lots of view controllers in the tabs, this won't get called unless we're on an ipad
-		[self initializeDatabase];
-#endif
-
 		NSError *error = nil;
 		if (![[self fetchedResultsController] performFetch:&error])
 		{
@@ -92,50 +71,12 @@ enum HeaderSectionRows {
 }
 
 - (void)dealloc {	
-#if NEEDS_TO_INITIALIZE_DATABASE == 1 || JUST_INITIALIZE_LINKS == 1
-	[linksData release];
-#endif
 	self.fetchedResultsController = nil;
 	self.managedObjectContext = nil;
 
     [super dealloc];
 }
 
-#if NEEDS_TO_INITIALIZE_DATABASE == 1 || JUST_INITIALIZE_LINKS == 1
-#warning initializeDatabase IS TURNED ON!!!
-#warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
-
-- (void) setupDataArray {
-	NSString *DataPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Links.plist"];		
-	NSDictionary *tempDict = [[NSDictionary alloc] initWithContentsOfFile:DataPath];
-	NSArray *tempArray = [[NSArray alloc] initWithArray:[tempDict objectForKey:@"Links"]];
-	self.linksData = tempArray;
-	[tempArray release];
-	[tempDict release];		
-}
-
-- (void)initializeDatabase {
-	NSInteger count = [[self.fetchedResultsController sections] count];
-	if (count == 0) { // try initializing it...
-		
-		// if numberOfSections is dynamic, we should move this up...
-		if (self.linksData == nil) {
-			[self setupDataArray];
-		}
-		
-		// Create a new instance of the entity managed by the fetched results controller.
-		NSEntityDescription *entity = [[fetchedResultsController fetchRequest] entity];
-		
-		for (NSDictionary *dictionary in self.linksData) {
-			NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:
-												 [entity name] inManagedObjectContext:self.managedObjectContext];
-			
-			[newManagedObject setValuesForKeysWithDictionary:dictionary];
-		}
-		[self saveAction:nil];			
-	}
-}
-#endif
 
 #pragma mark -
 #pragma mark UITableViewDataSource methods
@@ -226,25 +167,6 @@ enum HeaderSectionRows {
 	}
 	return cell;
 }
-
-
-#pragma mark -
-#pragma mark Core Data
-- (IBAction)saveAction:(id)sender{
-	
-	@try {
-		NSError *error = nil;
-		if (self.managedObjectContext != nil) {
-			if ([self.managedObjectContext hasChanges] && ![self.managedObjectContext save:&error]) {
-				debug_NSLog(@"LinksMenuDataSource:save - unresolved error %@, %@", error, [error userInfo]);
-			} 
-		}
-	}
-	@catch (NSException * e) {
-		debug_NSLog(@"Failure in LinksMenuDataSource:save, name=%@ reason=%@", e.name, e.reason);
-	}
-}
-
 	
 #pragma mark -
 #pragma mark Fetched results controller
@@ -261,24 +183,6 @@ enum HeaderSectionRows {
 	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortSection, sortOrder, nil];  
 	[fetchRequest setSortDescriptors:sortDescriptors];
 	
-	/* This was so we could edit core data contents on the fly ... keep it for an example
-	NSError *error;
-	NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-	if (fetchedObjects == nil) {
-		debug_NSLog(@"There's no links objects ???");
-	}
-	for (LinkObj *object in fetchedObjects) {
-		if ([object.section integerValue] == kHeaderSection) {
-			if ([object.url isEqualToString:@"voteInfoView"]) {	// we've changed out this old thingy
-				debug_NSLog(@"%@", object.url);
-				object.url = @"contactMail";
-				object.label = @"Contact TexLege Support";
-				continue;
-			}
-		}
-	}	
-	[self saveAction:nil];
-	*/
 	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
 																								managedObjectContext:managedObjectContext
 																								  sectionNameKeyPath:@"section" cacheName:@"LinksCache"];

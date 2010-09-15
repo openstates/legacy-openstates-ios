@@ -69,7 +69,8 @@
 
 		for (NSDictionary * mapEntry in section)
 		{
-			CapitolMap *newMap = [[CapitolMap alloc] initWithDictionary:mapEntry];
+			CapitolMap *newMap = [[CapitolMap alloc] init];
+			[newMap importFromDictionary:mapEntry];
 			[tempSection addObject:newMap];
 			[newMap release];
 		}
