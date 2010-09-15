@@ -8,42 +8,119 @@
 
 #import "LegislatorObj.h"
 #import "CommitteePositionObj.h"
+#import "TexLegeCoreDataUtils.h"
 
 @implementation LegislatorObj 
 
-@dynamic suffix;
-@dynamic legtype;
-@dynamic email;
-@dynamic bio_url;
-@dynamic cap_phone2;
-@dynamic tenure;
-@dynamic cap_phone;
-@dynamic cap_phone2_name;
-@dynamic lastname;
 @dynamic legislatorID;
-@dynamic middlename;
-@dynamic notes;
-@dynamic district;
-@dynamic cap_fax;
-@dynamic party_id;
-@dynamic chamber_desk;
-@dynamic twitter;
-@dynamic party_name;
-@dynamic partisan_index;
-@dynamic photo_name;
-@dynamic nickname;
-@dynamic legtype_name;
-@dynamic cap_office;
-@dynamic firstname;
-@dynamic staff;
 
+@dynamic firstname;
+@dynamic middlename;
+@dynamic lastname;
+@dynamic nickname;
+@dynamic suffix;
 @dynamic lastnameInitial;
 @dynamic searchName;
+
+@dynamic legtype;
+@dynamic legtype_name;
+@dynamic district;
+@dynamic party_id;
+@dynamic party_name;
+@dynamic partisan_index;
+
+@dynamic photo_name;
+@dynamic bio_url;
+@dynamic tenure;
+@dynamic email;
+@dynamic twitter;
+@dynamic chamber_desk;
+
+@dynamic staff;
+@dynamic cap_office;
+@dynamic cap_phone;
+@dynamic cap_phone2;
+@dynamic cap_phone2_name;
+@dynamic cap_fax;
+
 @dynamic districtMap;
+@dynamic notes;
 
 @dynamic committeePositions;
 @dynamic wnomScores;
 @dynamic districtOffices;
+
+- (void) importFromDictionary: (NSDictionary *)dictionary
+{
+	if (dictionary) {
+		self.legislatorID = [dictionary objectForKey:@"legislatorID"];
+		
+		self.firstname = [dictionary objectForKey:@"firstname"];
+		self.middlename = [dictionary objectForKey:@"middlename"];
+		self.lastname = [dictionary objectForKey:@"lastname"];
+		self.nickname = [dictionary objectForKey:@"nickname"];
+		self.suffix = [dictionary objectForKey:@"suffix"];
+		
+		self.legtype = [dictionary objectForKey:@"legtype"];
+		self.legtype_name = [dictionary objectForKey:@"legtype_name"];
+		self.district = [dictionary objectForKey:@"district"];
+		self.party_id = [dictionary objectForKey:@"party_id"];
+		self.party_name = [dictionary objectForKey:@"party_name"];
+		self.partisan_index = [dictionary objectForKey:@"partisan_index"];
+		
+		self.photo_name = [dictionary objectForKey:@"photo_name"];
+		self.bio_url = [dictionary objectForKey:@"bio_url"];
+		self.tenure = [dictionary objectForKey:@"tenure"];
+		self.email = [dictionary objectForKey:@"email"];
+		self.twitter = [dictionary objectForKey:@"twitter"];
+		self.chamber_desk = [dictionary objectForKey:@"chamber_desk"];
+		
+		self.staff = [dictionary objectForKey:@"staff"];
+		self.cap_office = [dictionary objectForKey:@"cap_office"];
+		self.cap_phone = [dictionary objectForKey:@"cap_phone"];
+		self.cap_phone2 = [dictionary objectForKey:@"cap_phone2"];
+		self.cap_phone2_name = [dictionary objectForKey:@"cap_phone2_name"];
+		self.cap_fax = [dictionary objectForKey:@"cap_fax"];
+		self.notes = [dictionary objectForKey:@"notes"];		
+
+	}
+}
+
+
+- (NSDictionary *)exportToDictionary {
+	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  self.legislatorID, @"legislatorID",
+							  self.firstname, @"firstname",
+							  self.middlename, @"middlename",
+							  self.lastname, @"lastname",
+							  self.nickname, @"nickname",
+							  self.suffix, @"suffix",
+							  
+							  self.legtype, @"legtype",
+							  self.legtype_name, @"legtype_name",
+							  self.district, @"district",
+							  self.party_id, @"party_id",
+							  self.party_name, @"party_name",
+							  self.partisan_index, @"partisan_index",
+							  
+							  self.photo_name, @"photo_name",
+							  self.bio_url, @"bio_url",
+							  self.tenure, @"tenure",
+							  self.email, @"email",
+							  self.twitter, @"twitter",
+							  self.chamber_desk, @"chamber_desk",
+							  
+							  self.staff, @"staff",
+							  self.cap_office, @"cap_office",
+							  self.cap_phone2, @"cap_phone2",
+							  self.cap_phone2_name, @"cap_phone2_name",
+							  self.cap_fax, @"cap_fax",
+							  self.notes, @"notes",
+							  
+							  nil];
+	return tempDict;
+}
+
 
 - (NSComparisonResult)compareMembersByName:(LegislatorObj *)p
 {	

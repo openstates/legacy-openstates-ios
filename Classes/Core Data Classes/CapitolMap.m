@@ -12,15 +12,29 @@
 @implementation CapitolMap
 @synthesize name = m_name, file = m_file, type = m_type, order = m_order;
 
-- (id)initWithDictionary:(NSDictionary *)mapDict {
-	if (self = [super init]) {
-		self.name = [mapDict valueForKey:@"name"];
-		self.file = [mapDict valueForKey:@"file"];
-		self.type = [mapDict valueForKey:@"type"];
-		self.order = [mapDict valueForKey:@"order"];		
+- (void) importFromDictionary: (NSDictionary *)dictionary
+{				
+	if (dictionary) {
+		self.name = [dictionary objectForKey:@"name"];
+		self.file = [dictionary objectForKey:@"file"];
+		self.type = [dictionary objectForKey:@"type"];
+		self.order = [dictionary objectForKey:@"order"];
 	}
-	return self;
 }
+
+
+- (NSDictionary *)exportToDictionary {
+	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  self.name, @"name",
+							  self.file, @"file",
+							  self.type, @"type",
+							  self.order, @"order",
+							  nil];
+	return tempDict;
+}
+
+
+
 
 - (NSURL *)url {
 	NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];

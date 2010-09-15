@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TexLegeDataObjectProtocol.h"
 
-
-@interface CapitolMap : NSObject {
+@interface CapitolMap : NSObject <TexLegeDataObjectProtocol>
+{
 	NSString *m_name;
 	NSString *m_file;
 	NSNumber *m_type;
@@ -21,7 +22,5 @@
 @property (nonatomic,retain) NSNumber *type;
 @property (nonatomic,retain) NSNumber *order;
 @property (nonatomic,readonly) NSURL *url;
-
-- (id)initWithDictionary:(NSDictionary *)mapDict;
 
 @end

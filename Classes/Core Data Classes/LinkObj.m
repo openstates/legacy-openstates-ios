@@ -17,4 +17,28 @@
 @dynamic timeStamp;
 @dynamic section;
 
+- (void) importFromDictionary: (NSDictionary *)dictionary
+{				
+	if (dictionary) {
+		self.order = [dictionary objectForKey:@"order"];
+		self.url = [dictionary objectForKey:@"url"];
+		self.label = [dictionary objectForKey:@"label"];
+		self.timeStamp = [dictionary objectForKey:@"timeStamp"];
+		self.section = [dictionary objectForKey:@"section"];
+	}
+}
+
+
+- (NSDictionary *)exportToDictionary {
+	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  self.order, @"order",
+							  self.url, @"url",
+							  self.label, @"label",
+							  self.timeStamp, @"timeStamp",
+							  self.section, @"section",
+							  nil];
+	return tempDict;
+}
+
+
 @end

@@ -7,9 +7,9 @@
 //
 
 #import <CoreData/CoreData.h>
+#import "TexLegeDataObjectProtocol.h"
 
-
-@interface LinkObj :  NSManagedObject  
+@interface LinkObj :  NSManagedObject <TexLegeDataObjectProtocol>
 {
 }
 

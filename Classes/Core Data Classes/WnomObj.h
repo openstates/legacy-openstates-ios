@@ -7,10 +7,11 @@
 //
 
 #import <CoreData/CoreData.h>
+#import "TexLegeDataObjectProtocol.h"
 
 @class LegislatorObj;
 
-@interface WnomObj :  NSManagedObject  
+@interface WnomObj :  NSManagedObject  <TexLegeDataObjectProtocol>
 {
 }
 

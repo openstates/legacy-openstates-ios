@@ -10,6 +10,7 @@
 
 #import "CommitteePositionObj.h"
 #import "LegislatorObj.h"
+#import "TexLegeCoreDataUtils.h"
 
 @implementation CommitteeObj 
 
@@ -24,6 +25,37 @@
 @dynamic committeeType;
 @dynamic committeeNameInitial;
 @dynamic committeePositions;
+
+- (void) importFromDictionary: (NSDictionary *)dictionary
+{				
+	if (dictionary) {
+		self.clerk = [dictionary objectForKey:@"clerk"];
+		self.clerk_email = [dictionary objectForKey:@"clerk_email"];
+		self.phone = [dictionary objectForKey:@"phone"];
+		self.parentId = [dictionary objectForKey:@"parentId"];
+		self.committeeId = [dictionary objectForKey:@"committeeId"];
+		self.url = [dictionary objectForKey:@"url"];
+		self.committeeName = [dictionary objectForKey:@"committeeName"];
+		self.committeeType = [dictionary objectForKey:@"committeeType"];
+	}
+}
+
+
+- (NSDictionary *)exportToDictionary {
+	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  self.clerk, @"clerk",
+							  self.clerk_email, @"clerk_email",
+							  self.phone, @"phone",
+							  self.parentId, @"parentId",
+							  self.committeeId, @"committeeId",
+							  self.url, @"url",
+							  self.committeeName, @"committeeName",
+							  self.committeeType, @"committeeType",
+							  nil];
+	return tempDict;
+}
+
+
 
 - (NSString *) committeeNameInitial {
 	[self willAccessValueForKey:@"committeeNameInitial"];

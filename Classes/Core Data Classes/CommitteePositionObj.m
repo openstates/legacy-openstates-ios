@@ -9,6 +9,7 @@
 #import "CommitteePositionObj.h"
 #import "CommitteeObj.h"
 #import "LegislatorObj.h"
+#import "TexLegeCoreDataUtils.h"
 
 @implementation CommitteePositionObj 
 
@@ -16,6 +17,32 @@
 @dynamic legislator;
 @dynamic committee;
 @dynamic legislatorID;
+
+- (void) importFromDictionary: (NSDictionary *)dictionary
+{
+	if (dictionary) {
+		self.position = [dictionary objectForKey:@"position"];
+		
+		self.legislatorID = [dictionary objectForKey:@"legislatorID"];
+		if (self.legislatorID)
+			self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:self.legislatorID withContext:[self managedObjectContext]];
+
+		NSNumber *committeeId = [dictionary objectForKey:@"committeeId"];
+		if (committeeId)
+			self.committee = [TexLegeCoreDataUtils committeeWithCommitteeID:committeeId withContext:[self managedObjectContext]];
+		
+	}
+}
+
+
+- (NSDictionary *)exportToDictionary {
+	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  self.position, @"position",
+							  self.committee.committeeId, @"committeeId",
+							  self.legislator.legislatorID, @"legislatorID",
+							  nil];
+	return tempDict;
+}
 
 - (NSString*)positionString {
 	if ([[self position] integerValue] == POS_CHAIR) 
