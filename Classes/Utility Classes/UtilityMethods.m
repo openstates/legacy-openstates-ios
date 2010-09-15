@@ -368,27 +368,6 @@
 	return [UtilityMethods canReachHostWithURL:url alert:YES];
 }
 
-// "Thisisalongstringsowatchoutkid"
-// http://www.iwillapps.com/tuts/symcipher.php?sub_str=Thisisalongstringsowatchoutkid
-+ (NSString*)cipher32Byte {
-	char symCipher[] = { ';', 'R', ',', 'S', 'y', '&', 'W', '^', '#', 'x', '\\', '"', 'G', 'i', '7', 'q', '{', 'v', '8', 'o', '_', 'E', 'z', '3', '5', 'c', 'g', 'l', 'm', 'D', 'K', 'F', '(', ':', 'n', 'Z', '-', 'a', 'U', '*', 'X', 'I', 'j', 'Y', 'O', 'A', '=', 'f', '.', '`', '\'', ']', 'M', '%', 'u', '/', '|', 't', 'L', '4', '@', 'd', '+', 'k', 'p', 'e', '?', '0', ')', '1', 'P', '6', '[', 'h', 'r', 'H', 'B', 's', '9', 'C', '2', 'w', 'T', '}', 'V', '$', 'N', 'b', 'J', '!', '<', '>', 'Q' }; 
-	char csignid[] = "]6[T[TpH9sPT}w[sPT9Np}?69V}r[0";
-	NSInteger i = 0;
-	for(i=0;i<strlen(csignid);i++)
-	{
-		int j = 0;
-		for(j=0;j<sizeof(symCipher);j++)
-		{
-			if(csignid[i] == symCipher[j])
-			{
-				csignid[i] = j+0x21;
-				break;
-			}
-		}
-	}
-	return [NSString stringWithCString:csignid encoding:NSUTF8StringEncoding];
-}
-
 +(NSString*)ordinalNumberFormat:(NSInteger)num{
     NSString *ending;
 	

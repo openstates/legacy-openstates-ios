@@ -41,8 +41,6 @@
 + (void) noInternetAlert;
 +(NSString*)ordinalNumberFormat:(NSInteger)num;
 
-+ (NSString*)cipher32Byte;
-
 @end
 
 
