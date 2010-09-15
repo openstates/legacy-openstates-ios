@@ -408,7 +408,7 @@
 			[self.navigationController pushViewController:subDetailController animated:YES];
 			[subDetailController release];
 		}
-		else if (cellInfo.entryType == DirectoryTypeOfficeMap /*|| cellInfo.entryType == DirectoryTypeChamberMap*/) {
+		else if (cellInfo.entryType == DirectoryTypeOfficeMap) {
 			CapitolMap *capMap = cellInfo.entryValue;			
 			[self pushMapViewWithMap:capMap];
 		}
@@ -430,13 +430,13 @@
 				
 				[self.mapViewController resetMapViewWithAnimation:NO];
 
-				[self.mapViewController.mapView addOverlay:[self.legislator.districtMap polygon]];
 				if (districtOffice) {
 					[self.mapViewController.mapView addAnnotation:districtOffice];
 					[self.mapViewController moveMapToAnnotation:districtOffice];
 				}
 				else {
 					[self.mapViewController.mapView addAnnotation:self.legislator.districtMap];
+					[self.mapViewController.mapView addOverlay:[self.legislator.districtMap polygon]];
 					//[mapVC.mapView setRegion:self.legislator.districtMap.region animated:YES]; 
 					[self.mapViewController moveMapToAnnotation:self.legislator.districtMap];
 
