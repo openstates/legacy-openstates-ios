@@ -15,6 +15,7 @@
 @property (nonatomic,retain) NSManagedObjectContext *managedObjectContext;
 
 - (id) initWithManagedObjectContext:(NSManagedObjectContext*)newContext;
-- (void)exportDistrictOffices;
+- (void)exportObjectsWithEntityName:(NSString *)entityName;
+- (void)exportAllDataObjects;
 	
 @end
