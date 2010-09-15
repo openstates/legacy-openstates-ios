@@ -11,12 +11,11 @@
 #include "UtilityMethods.h"
 
 @implementation DirectoryDetailInfo
-@synthesize /*entryName, */entryValue, isClickable, entryType, title, subtitle;
+@synthesize entryValue, isClickable, entryType, title, subtitle;
 
 - (id)initWithDictionary:(NSDictionary *)aDictionary {
 	if ([self init]) {
 		
-		//self.entryName = [aDictionary valueForKey:@"entryName"];
 		self.entryValue = [aDictionary valueForKey:@"entryValue"];
 		self.entryType = [[aDictionary valueForKey:@"entryType"] integerValue];		
 		self.isClickable = [[aDictionary valueForKey:@"isClickable"] boolValue];
@@ -53,14 +52,11 @@
 			case DirectoryTypeTwitter: {
 				NSMutableString *twitString = [NSMutableString stringWithString:entryValue];
 				if ([twitString hasPrefix:@"@"])
-					[twitString deleteCharactersInRange:NSMakeRange(0, 1)]; // delete the initial "@" character.
-				tempURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://m.twitter.com/%@",twitString]];
+					[twitString deleteCharactersInRange:NSMakeRange(0, 1)];
+				[twitString insertString:@"http://m.twitter.com/" atIndex:0]
+				tempURL = [NSURL URLWithString:twitString]];
 			}
 				break;
-/*			case DirectoryTypeMap:
-				tempURL = [UtilityMethods googleMapUrlFromStreetAddress:entryValue];
-				break;
-*/
 			default:
 				tempURL = nil;
 				break;

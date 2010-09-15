@@ -18,7 +18,6 @@ enum {
 	// URL types go below here
 	kDirectoryTypeIsURLHandler,
 	DirectoryTypeOfficeMap,
-//	DirectoryTypeChamberMap,
 	DirectoryTypeWeb,
 	DirectoryTypeTwitter,
 	kDirectoryTypeIsExternalHandler,
@@ -32,7 +31,6 @@ enum {
 @interface DirectoryDetailInfo : NSObject {
 	
 }
-//@property (nonatomic, retain)NSString *entryName;
 @property (nonatomic, retain)id entryValue;
 @property (nonatomic)BOOL isClickable;
 @property (nonatomic)NSInteger entryType;
