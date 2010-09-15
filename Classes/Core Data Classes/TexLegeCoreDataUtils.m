@@ -8,6 +8,7 @@
 
 #import "TexLegeCoreDataUtils.h"
 #import "LegislatorObj.h"
+#import "CommitteeObj.h"
 #import "DistrictMapObj.h"
 #import "DistrictOfficeObj.h"
 
@@ -37,6 +38,13 @@
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.legislatorID == %@", legID];
 	return [TexLegeCoreDataUtils dataObjectWithPredicate:predicate entityName:@"LegislatorObj" context:context];
 }
+
++ (CommitteeObj*)committeeWithCommitteeID:(NSNumber*)comID withContext:(NSManagedObjectContext*)context
+{
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.committeeId == %@", comID];
+	return [TexLegeCoreDataUtils dataObjectWithPredicate:predicate entityName:@"CommitteeObj" context:context];
+}
+
 
 + (NSArray *) allLegislatorsSortedByPartisanshipFromChamber:(NSInteger)chamber andPartyID:(NSInteger)party context:(NSManagedObjectContext *)context
 {
