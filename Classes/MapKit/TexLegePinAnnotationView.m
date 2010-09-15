@@ -24,6 +24,9 @@
 		self.opaque = NO;
 		self.draggable = NO;
 		self.canShowCallout = YES;
+				
+		UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];			
+		self.rightCalloutAccessoryView = rightButton;
 		
 		[self resetPinColorWithAnnotation:annotation];
 		
