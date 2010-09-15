@@ -16,7 +16,7 @@
 @property (nonatomic, retain) NSNumber * order;
 @property (nonatomic, retain) NSString * url;
 @property (nonatomic, retain) NSString * label;
-@property (nonatomic, retain) NSDate * timeStamp;
+//@property (nonatomic, retain) NSDate * timeStamp;
 @property (nonatomic, retain) NSNumber * section;
 
 @end
