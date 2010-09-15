@@ -19,24 +19,21 @@
 
 - (void) importFromDictionary: (NSDictionary *)dictionary
 {				
-	if (dictionary) {
-		self.order = [dictionary objectForKey:@"order"];
-		self.url = [dictionary objectForKey:@"url"];
-		self.label = [dictionary objectForKey:@"label"];
-		self.timeStamp = [dictionary objectForKey:@"timeStamp"];
-		self.section = [dictionary objectForKey:@"section"];
-	}
+	if (dictionary)
+		[self setValuesForKeysWithDictionary:dictionary];
 }
 
 
 - (NSDictionary *)exportToDictionary {
-	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  self.order, @"order",
-							  self.url, @"url",
-							  self.label, @"label",
-							  self.timeStamp, @"timeStamp",
-							  self.section, @"section",
-							  nil];
+	NSArray *keys = [NSArray arrayWithObjects:
+					 @"order",
+					 @"url",
+					 @"label",
+					 @"section",
+//					 @"timeStamp",
+					 nil];
+	
+	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:keys];
 	return tempDict;
 }
 

@@ -9,6 +9,8 @@
 #import "TexLegeDataImporter.h"
 #import "TexLegeCoreDataUtils.h"
 #import "TexLegeDataObjectProtocol.h"
+#import "UtilityMethods.h"
+
 @interface TexLegeDataImporter (Private)
 
 - (IBAction)saveAction:(id)sender;
@@ -48,11 +50,18 @@
 
 - (void)importObjectsWithEntityName:(NSString *)entityName {
 	NSString *importPath = [[NSBundle mainBundle] pathForResource:entityName ofType:@"plist"];
-	NSArray *importPlist = [NSArray arrayWithContentsOfFile:importPath];	
+	NSArray *importPlist = [NSArray arrayWithContentsOfFile:importPath];
 	
 	if (!importPlist || ![importPlist count]) {
-		debug_NSLog(@"DataImporter: ERROR ... couldn't not find data to import: %@", importPath);
-		return;
+		debug_NSLog(@"DataImporter: %@ plist not found in bundle, looking in documents directory", entityName);
+		NSString *outFile = [NSString stringWithFormat:@"%@.plist", entityName];
+		importPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:outFile];
+		importPlist = [NSArray arrayWithContentsOfFile:importPath];
+		
+		if (!importPlist || ![importPlist count]) {
+			debug_NSLog(@"DataImporter: ERROR ... couldn't not find data to import: %@", importPath);
+			return;
+		}
 	}
 	
 	debug_NSLog(@"DataImporter: IMPORTING %@ OBJECTS FROM: %@", entityName, importPath);
