@@ -22,14 +22,20 @@
 #import "LegislatorMasterCell.h"
 #import "CommitteeMemberCell.h"
 #import "CommitteeMemberCellView.h"
-
+#import "TexLegeStandardGroupCell.h"
 #import "PartisanScaleView.h"
 #import "PartisanIndexStats.h"
+
+@interface CommitteeDetailViewController (Private)
+
+- (void) buildInfoSectionArray;
+
+@end
 
 @implementation CommitteeDetailViewController
 
 @synthesize committee, masterPopover;
-@synthesize partisanSlider, membershipLab;
+@synthesize partisanSlider, membershipLab, infoSectionArray;
 
 enum Sections {
     //kHeaderSection = 0,
@@ -109,6 +115,8 @@ CGFloat quartzRowHeight = 73.f;
 			[self.masterPopover dismissPopoverAnimated:YES];
 
 		committee = [newObj retain];
+		
+		[self buildInfoSectionArray];
 		self.navigationItem.title = self.committee.committeeName;
 		
 		[self calcCommitteePartisanship];
@@ -186,8 +194,8 @@ CGFloat quartzRowHeight = 73.f;
 	self.committee = nil;
 	self.masterPopover = nil;
 	self.tableView = nil;
+	self.infoSectionArray = nil;
 	[super viewDidUnload];
-	
 }
 
 
@@ -195,6 +203,7 @@ CGFloat quartzRowHeight = 73.f;
 	self.committee = nil;
 	self.tableView = nil;
 	self.masterPopover = nil;
+	self.infoSectionArray = nil;
     [super dealloc];
 }
 
@@ -246,6 +255,77 @@ CGFloat quartzRowHeight = 73.f;
 
 #pragma mark -
 #pragma mark Table view data source
+
+- (void)buildInfoSectionArray {	
+	NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:12]; // arbitrary
+	NSDictionary *infoDict = nil;
+	DirectoryDetailInfo *cellInfo = nil;
+//case kInfoSectionName:
+	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+				@"Committee", @"subtitle",
+				self.committee.committeeName, @"title",
+				[NSNumber numberWithBool:NO], @"isClickable",
+				nil, @"entryValue",
+				nil];
+	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:infoDict];
+	[tempArray addObject:cellInfo];
+	[infoDict release];
+	[cellInfo release];
+
+//case kInfoSectionClerk:	// do email, someday
+	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+				@"Clerk", @"subtitle",
+				self.committee.clerk, @"title",
+				[NSNumber numberWithBool:NO], @"isClickable",
+				nil, @"entryValue",
+				nil];
+	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:infoDict];
+	[tempArray addObject:cellInfo];
+	[infoDict release];
+	[cellInfo release];
+	
+//case kInfoSectionPhone:	// dial the number
+	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+				@"Phone", @"subtitle",
+				self.committee.phone, @"title",
+				[NSNumber numberWithBool:[UtilityMethods canMakePhoneCalls]], @"isClickable",
+				[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",self.committee.phone]], @"entryValue",
+				nil];
+	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:infoDict];
+	[tempArray addObject:cellInfo];
+	[infoDict release];
+	[cellInfo release];
+	
+	//case kInfoSectionOffice: // open the office map
+	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+				@"Location", @"subtitle",
+				self.committee.office, @"title",
+				[NSNumber numberWithBool:YES], @"isClickable",
+				[UtilityMethods capitolMapFromOfficeString:self.committee.office], @"entryValue",
+				nil];
+	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:infoDict];
+	[tempArray addObject:cellInfo];
+	[infoDict release];
+	[cellInfo release];
+	
+//case kInfoSectionWeb:	 // open the web page
+	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+				@"Web", @"subtitle",
+				@"Website & Meetings", @"title",
+				[NSNumber numberWithBool:YES], @"isClickable",
+				[UtilityMethods safeWebUrlFromString:self.committee.url], @"entryValue",
+				nil];
+	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:infoDict];
+	[tempArray addObject:cellInfo];
+	[infoDict release];
+	[cellInfo release];
+	
+	if (self.infoSectionArray)
+		self.infoSectionArray = nil;
+	self.infoSectionArray = tempArray;
+	[tempArray release];
+
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 	return NUM_SECTIONS;
@@ -318,7 +398,7 @@ CGFloat quartzRowHeight = 73.f;
 			}
 		}
 		else {
-			cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:CellIdentifier] autorelease];			
+			cell = (UITableViewCell *)[[[TexLegeStandardGroupCell alloc] initWithStyle:style reuseIdentifier:CellIdentifier] autorelease];			
 		}
 
 		cell.backgroundColor = [TexLegeTheme backgroundLight];
@@ -341,38 +421,9 @@ CGFloat quartzRowHeight = 73.f;
 		}
 			break;
 		case kInfoSection: {
-			switch (row) {
-				case kInfoSectionName:
-					cell.textLabel.text = @"Committee";
-					cell.detailTextLabel.text = self.committee.committeeName;
-					cell.selectionStyle = UITableViewCellSelectionStyleNone;
-					break;
-				case kInfoSectionClerk:	// do email, someday
-					cell.textLabel.text = @"Clerk";
-					cell.detailTextLabel.text = self.committee.clerk;
-					cell.selectionStyle = UITableViewCellSelectionStyleNone; // for now, later do email...
-					break;
-				case kInfoSectionPhone:	// dial the number
-					cell.textLabel.text = @"Phone";
-					cell.detailTextLabel.text = self.committee.phone;
-					if ([UtilityMethods canMakePhoneCalls])
-						cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-					else
-						cell.selectionStyle = UITableViewCellSelectionStyleNone;
-					break;
-				case kInfoSectionOffice: // open the office map
-					cell.textLabel.text = @"Location";
-					cell.detailTextLabel.text = self.committee.office;
-					cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-					break;
-				case kInfoSectionWeb:	 // open the web page
-					cell.textLabel.text = @"Web";
-					cell.detailTextLabel.text = @"Website & Meetings";
-					cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-					break;
-				default:
-					break;
-			}
+			NSDictionary *cellInfo = [self.infoSectionArray objectAtIndex:row];
+			if (cellInfo && [cell respondsToSelector:@selector(setCellInfo:)])
+				[cell performSelector:@selector(setCellInfo:) withObject:cellInfo];
 		}
 			break;
 			
@@ -441,8 +492,6 @@ CGFloat quartzRowHeight = 73.f;
 - (void) pushMapViewWithMap:(CapitolMap *)capMap {
 	CapitolMapsDetailViewController *detailController = [[CapitolMapsDetailViewController alloc] initWithNibName:@"CapitolMapsDetailViewController" bundle:nil];
 	detailController.map = capMap;
-	//detailController.navigationItem.title = @"Maps";
-	// push the detail view controller onto the navigation stack to display it
 	[[self navigationController] pushViewController:detailController animated:YES];
 	[detailController release];
 }
@@ -462,23 +511,29 @@ CGFloat quartzRowHeight = 73.f;
 	[tableView deselectRowAtIndexPath:newIndexPath animated:YES];	
 	
 	if (section == kInfoSection) {
+		DirectoryDetailInfo *cellInfo = [self.infoSectionArray objectAtIndex:row];
+		if (!cellInfo)
+			return;
+		
 		switch (row) {
 			case kInfoSectionClerk:	// do email, someday
 				break;
 			case kInfoSectionPhone:	{// dial the number
 				if ([UtilityMethods canMakePhoneCalls]) {
-					NSURL *myURL = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",self.committee.phone]];
-					// Switch to the appropriate application for this url...
+					NSURL *myURL = cellInfo.entryValue;
 					[UtilityMethods openURLWithoutTrepidation:myURL];
 				}
-				
 			}
 				break;
-			case kInfoSectionOffice: // open the office map
-				[self pushMapViewWithMap:[UtilityMethods capitolMapFromOfficeString:self.committee.office]];
+			case kInfoSectionOffice: {// open the office map
+				CapitolMap *capMap = cellInfo.entryValue;
+				[self pushMapViewWithMap:capMap];
+			}
 				break;
-			case kInfoSectionWeb:	 // open the web page
-				[self pushInternalBrowserWithURL:[UtilityMethods safeWebUrlFromString:self.committee.url]];
+			case kInfoSectionWeb: {	 // open the web page
+				NSURL *myURL = cellInfo.entryValue;
+				[self pushInternalBrowserWithURL:myURL];
+			}
 				break;
 			default:
 				break;

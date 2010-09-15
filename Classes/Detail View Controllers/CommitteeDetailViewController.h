@@ -16,5 +16,5 @@
 @property (nonatomic, retain) UIPopoverController *masterPopover;
 @property (nonatomic, retain) IBOutlet UILabel *membershipLab;
 @property (nonatomic, retain) IBOutlet PartisanScaleView *partisanSlider;
-
+@property (nonatomic, retain) NSMutableArray *infoSectionArray;
 @end
