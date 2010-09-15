@@ -8,11 +8,12 @@
 
 #import <CoreData/CoreData.h>
 #import <MapKit/MapKit.h>
+#import "TexLegeDataObjectProtocol.h"
 
 @class DistrictMapObj;
 @class LegislatorObj;
 
-@interface DistrictOfficeObj :  NSManagedObject  <NSCoding, MKAnnotation>
+@interface DistrictOfficeObj :  NSManagedObject  <NSCoding, MKAnnotation, TexLegeDataObjectProtocol>
 {
 }
 
@@ -44,9 +45,6 @@
 - (UIImage *)image;
 
 - (NSString *)cellAddress;
-
-- (void) importFromDictionary: (NSDictionary *)dictionary;
-- (NSDictionary *)exportToDictionary;
 @end
 
 

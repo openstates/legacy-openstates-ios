@@ -8,11 +8,12 @@
 
 #import <CoreData/CoreData.h>
 #import <MapKit/MapKit.h>
+#import "TexLegeDataObjectProtocol.h"
 
 @class DistrictOfficeObj;
 @class LegislatorObj;
 
-@interface DistrictMapObj :  NSManagedObject  <NSCoding, MKAnnotation>
+@interface DistrictMapObj :  NSManagedObject  <NSCoding, MKAnnotation, TexLegeDataObjectProtocol>
 {
 }
 
@@ -46,10 +47,7 @@
 - (BOOL) districtContainsCoordinate:(CLLocationCoordinate2D)aCoordinate;
 
 - (id) initWithCoder: (NSCoder *)coder;
-- (void)encodeWithCoder:(NSCoder *)coder;
-- (void) importFromDictionary: (NSDictionary *)dictionary;
-- (NSDictionary *)exportToDictionary;
-	
+- (void)encodeWithCoder:(NSCoder *)coder;	
 + (NSArray *)lightPropertiesToFetch;
 
 @end
