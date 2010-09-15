@@ -200,7 +200,7 @@
 + (CapitolMap *) capitolMapFromOfficeString:(NSString *)office {
 	NSString *fileString = nil;
 	NSString *thePath = [[NSBundle mainBundle] pathForResource:@"CapitolMaps" ofType:@"plist"];
-	NSArray *mapSectionsPlist = [[NSArray alloc] initWithContentsOfFile:thePath];	
+	NSArray *mapSectionsPlist = [NSArray arrayWithContentsOfFile:thePath];	
 	NSArray *searchArray = [mapSectionsPlist objectAtIndex:0];
 	CapitolMap *foundMap = nil;
 	
@@ -230,8 +230,6 @@
 			continue;
 		}
 	}
-
-	[mapSectionsPlist release];
 
 	return foundMap;
 }
