@@ -98,19 +98,6 @@
 	
 	
 	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 @"Web", @"subtitle",
-				 self.legislator.website, @"entryValue",
-				 @"Official Website", @"title",
-				 [NSNumber numberWithBool:YES], @"isClickable",
-				 [NSNumber numberWithInteger:DirectoryTypeWeb], @"entryType",
-				 nil];
-	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
-	[entryDict release];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
-	
-	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 				 @"Map", @"subtitle",
 				 self.legislator.districtMap, @"entryValue",
 				 @"District Map", @"title",
@@ -123,19 +110,20 @@
 	[cellInfo release], cellInfo = nil;
 	
 	
-	
-	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 @"Web", @"subtitle",
-				 self.legislator.bio_url, @"entryValue",
-				 @"Votesmart Bio", @"title",
-				 [NSNumber numberWithBool:YES], @"isClickable",
-				 [NSNumber numberWithInteger:DirectoryTypeWeb], @"entryType",
-				 nil];
-	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
-	[entryDict release];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
+	if (self.legislator && self.legislator.transDataContributorID) {
+		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+					 @"Finances", @"subtitle",
+					 self.legislator.transDataContributorID, @"entryValue",
+					 @"Top 20 Contributors", @"title",
+					 [NSNumber numberWithBool:YES], @"isClickable",
+					 [NSNumber numberWithInteger:DirectoryTypeContributions], @"entryType",
+					 nil];
+		cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+		[entryDict release];
+		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
+		[cellInfo release], cellInfo = nil;
+		
+	}
 	
 	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 				 @"Email", @"subtitle",
@@ -166,22 +154,34 @@
 		[cellInfo release], cellInfo = nil;
 		
 	}
-	/*
 	
-	if ([UtilityMethods isIPadDevice] == NO && [self.legislator.partisan_index floatValue] != 0.0f) {
-		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 @"", @"subtitle",
-					 [self.legislator.partisan_index description], @"entryValue",
-					 @"", @"title",
-					 [NSNumber numberWithBool:NO], @"isClickable",
-					 [NSNumber numberWithInteger:DirectoryTypeIndex], @"entryType",
-					 nil];
-		cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
-		[entryDict release];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;
-	}
-	*/
+	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+				 @"Web", @"subtitle",
+				 self.legislator.website, @"entryValue",
+				 @"Official Website", @"title",
+				 [NSNumber numberWithBool:YES], @"isClickable",
+				 [NSNumber numberWithInteger:DirectoryTypeWeb], @"entryType",
+				 nil];
+	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+	[entryDict release];
+	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
+	[cellInfo release], cellInfo = nil;
+	
+		
+		
+	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+				 @"Web", @"subtitle",
+				 self.legislator.bio_url, @"entryValue",
+				 @"Votesmart Bio", @"title",
+				 [NSNumber numberWithBool:YES], @"isClickable",
+				 [NSNumber numberWithInteger:DirectoryTypeWeb], @"entryType",
+				 nil];
+	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+	[entryDict release];
+	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
+	[cellInfo release], cellInfo = nil;
+	
+
 	if (self.legislator.notes.length > 0)
 		tempString = self.legislator.notes;
 	else

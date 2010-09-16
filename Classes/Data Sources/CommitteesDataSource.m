@@ -12,6 +12,10 @@
 #import "TexLegeCoreDataUtils.h"
 #import "CommitteePositionObj.h"
 
+@interface CommitteesDataSource (Private)
+- (void)initializeDatabase;
+@end
+
 @implementation CommitteesDataSource
 
 @synthesize fetchedResultsController, managedObjectContext;
@@ -26,7 +30,11 @@
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
 		
+
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
+//		[TexLegeCoreDataUtils deleteAllObjectsInEntityNamed:@"CommitteeObj" context:self.managedObjectContext];
+//		[TexLegeCoreDataUtils deleteAllObjectsInEntityNamed:@"CommitteePositionObj" context:self.managedObjectContext];
+		
 		[self initializeDatabase];
 #endif
 		
