@@ -465,7 +465,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 - (IBAction)locateUser:(id)sender {
 	[self clearAnnotationsAndOverlays];
-	[self showLocateActivityButton];
+	[self showLocateActivityButton];				// this gets changed in viewForAnnotation once we receive the location
 
 	if ([UtilityMethods locationServicesEnabled]) 
 		self.mapView.showsUserLocation = YES;
