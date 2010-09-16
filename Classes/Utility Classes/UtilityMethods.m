@@ -226,7 +226,8 @@
 	for (NSDictionary * mapEntry in searchArray)
 	{
 		if ([fileString isEqualToString:[mapEntry valueForKey:@"file"]]) {
-			foundMap = [[[CapitolMap alloc] initWithDictionary:mapEntry] autorelease];
+			foundMap = [[[CapitolMap alloc] init] autorelease];
+			[foundMap importFromDictionary:mapEntry];
 			continue;
 		}
 	}
@@ -249,7 +250,8 @@
 	for (NSDictionary * mapEntry in searchArray)
 	{
 		if ([fileString isEqualToString:[mapEntry valueForKey:@"file"]]) {
-			foundMap = [[[CapitolMap alloc] initWithDictionary:mapEntry] autorelease];
+			foundMap = [[[CapitolMap alloc] init] autorelease];
+			[foundMap importFromDictionary:mapEntry];
 			continue;
 		}
 	}
