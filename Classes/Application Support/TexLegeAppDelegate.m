@@ -296,7 +296,7 @@ NSInteger kNoSelection = -1;
 		
 #if IMPORTING_DATA == 1
 	TexLegeDataImporter *importer = [[TexLegeDataImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
-	[importer importObjectsWithEntityName:@"LinkObj"];
+	[importer importAllDataObjects];
 	[importer release];
 #endif
 	
@@ -350,7 +350,7 @@ NSInteger kNoSelection = -1;
 	
 #if EXPORTING_DATA == 1
 	TexLegeDataExporter *exporter = [[TexLegeDataExporter alloc] initWithManagedObjectContext:self.managedObjectContext];
-	[exporter exportObjectsWithEntityName:@"LinkObj"];
+	[exporter exportAllDataObjects];
 	[exporter release];
 #endif
 	return YES;
@@ -573,7 +573,7 @@ NSInteger kNoSelection = -1;
         return persistentStoreCoordinator;
     }
 	
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if IMPORTING_DATA == 1 || NEEDS_TO_INITIALIZE_DATABASE == 1
 	static NSString *DATABASE_FILE = @"TexLege.v2.sqlite";
 	#define IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB 1
 #endif
