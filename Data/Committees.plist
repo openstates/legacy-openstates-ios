@@ -3008,6 +3008,8 @@
 		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C037</string>
 	</dict>
 	<dict>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C038</string>
 		<key>committeeId</key>
 		<integer>12988</integer>
 		<key>committeeName</key>
