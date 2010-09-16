@@ -745,6 +745,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
         else
         {
             pinView.annotation = annotation;
+			if ([pinView respondsToSelector:@selector(resetPinColorWithAnnotation:)])
+				[pinView performSelector:@selector(resetPinColorWithAnnotation:) withObject:annotation];
         }		
 
 		
@@ -763,11 +765,14 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
             // if an existing pin view was not available, create one
             TexLegePinAnnotationView* customPinView = [[[TexLegePinAnnotationView alloc]
 														   initWithAnnotation:annotation reuseIdentifier:districtMapAnnotationID] autorelease];
+		
             return customPinView;
         }
         else
         {
             pinView.annotation = annotation;
+			if ([pinView respondsToSelector:@selector(resetPinColorWithAnnotation:)])
+				[pinView performSelector:@selector(resetPinColorWithAnnotation:) withObject:annotation];
         }		
 		
 		
