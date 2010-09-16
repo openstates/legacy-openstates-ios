@@ -14,7 +14,6 @@
 @dynamic order;
 @dynamic url;
 @dynamic label;
-//@dynamic timeStamp;
 @dynamic section;
 
 - (void) importFromDictionary: (NSDictionary *)dictionary
@@ -30,7 +29,6 @@
 					 @"url",
 					 @"label",
 					 @"section",
-//					 @"timeStamp",			// we don't use this, so it's NULL anyway
 					 nil];
 	
 	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:keys];

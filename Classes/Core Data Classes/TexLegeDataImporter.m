@@ -10,6 +10,7 @@
 #import "TexLegeCoreDataUtils.h"
 #import "TexLegeDataObjectProtocol.h"
 #import "UtilityMethods.h"
+#import "CommitteeObj.h"
 
 @interface TexLegeDataImporter (Private)
 
@@ -75,6 +76,10 @@
 		if (object) {
 			[object importFromDictionary:aDictionary];
 			importCount++;
+			if ([(id)object isKindOfClass:[CommitteeObj class]]) {
+				CommitteeObj *committee = object;
+				debug_NSLog(@"%@ %@",[committee committeeNameInitial], committee.committeeId); 
+			}
 		}
 	}
 	debug_NSLog(@"DataImporter: IMPORTED %d %@ OBJECTS", importCount, entityName);

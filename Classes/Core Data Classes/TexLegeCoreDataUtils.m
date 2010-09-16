@@ -241,7 +241,10 @@
 	for (NSManagedObject *object in fetchedObjects) {
 		[context deleteObject:object];
 	}
+	/*NSUndoManager *undomgr = [context undoManager];
+	[context setUndoManager:nil];
 	[TexLegeCoreDataUtils saveWithContext:context];
+	[context setUndoManager:undomgr];*/
 }
 
 

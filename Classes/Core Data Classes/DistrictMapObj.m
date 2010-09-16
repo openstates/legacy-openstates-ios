@@ -77,7 +77,7 @@
 		self.district = [dictionary objectForKey:@"district"];
 		self.chamber = [dictionary objectForKey:@"chamber"];
 		self.pinColorIndex = [dictionary objectForKey:@"pinColorIndex"];
-		self.lineColor = [dictionary objectForKey:@"lineColor"];
+		//self.lineColor = [dictionary objectForKey:@"lineColor"];
 		self.lineWidth = [dictionary objectForKey:@"lineWidth"];
 		self.centerLon = [dictionary objectForKey:@"centerLon"];
 		self.centerLat = [dictionary objectForKey:@"centerLat"];
@@ -100,24 +100,25 @@
 
 
 - (NSDictionary *)exportToDictionary {
-	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  self.district, @"district",
-							  self.chamber, @"chamber",
-							  self.pinColorIndex, @"pinColorIndex",
-							  self.lineColor, @"lineColor",
-							  self.lineWidth, @"lineWidth",
-							  self.centerLon, @"centerLon",
-							  self.centerLat, @"centerLat",
-							  self.spanLon, @"spanLon",
-							  self.spanLat, @"spanLat",
-							  self.maxLon, @"maxLon",
-							  self.maxLat, @"maxLat",
-							  self.minLon, @"minLon",
-							  self.minLat, @"minLat",
-							  self.numberOfCoords, @"numberOfCoords",
-							  self.legislator.legislatorID, @"legislatorID",
-							  self.coordinatesData, @"coordinatesData",
-							  nil];
+	NSMutableDictionary *tempDict = [NSMutableDictionary dictionary];
+	[tempDict setObject:self.district forKey:@"district"];
+	[tempDict setObject:self.chamber forKey:@"chamber"];
+	[tempDict setObject:self.pinColorIndex forKey:@"pinColorIndex"];
+//	[tempDict setObject:self.lineColor forKey:@"lineColor"];
+	[tempDict setObject:self.lineWidth forKey:@"lineWidth"];
+	[tempDict setObject:self.centerLon forKey:@"centerLon"];
+	[tempDict setObject:self.centerLat forKey:@"centerLat"];
+	[tempDict setObject:self.spanLon forKey:@"spanLon"];
+	[tempDict setObject:self.spanLat forKey:@"spanLat"];
+	[tempDict setObject:self.maxLon forKey:@"maxLon"];
+	[tempDict setObject:self.maxLat forKey:@"maxLat"];
+	[tempDict setObject:self.minLon forKey:@"minLon"];
+	[tempDict setObject:self.minLat forKey:@"minLat"];
+	[tempDict setObject:self.numberOfCoords forKey:@"numberOfCoords"];
+	[tempDict setObject:self.legislator.legislatorID forKey:@"legislatorID"];
+	
+	[tempDict setObject:self.coordinatesData forKey:@"coordinatesData"];
+
 	return tempDict;
 }
 

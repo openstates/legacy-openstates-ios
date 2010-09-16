@@ -30,7 +30,6 @@
 @property (nonatomic, retain) NSNumber * district;
 @property (nonatomic, retain) NSString * cap_fax;
 @property (nonatomic, retain) NSNumber * party_id;
-@property (nonatomic, retain) NSString * chamber_desk;
 @property (nonatomic, retain) NSString * twitter;
 @property (nonatomic, retain) NSString * party_name;
 @property (nonatomic, retain) NSNumber * partisan_index;
@@ -47,6 +46,7 @@
 @property (nonatomic, retain) NSSet* wnomScores;
 @property (nonatomic, retain) NSSet* districtOffices;
 @property (nonatomic, readonly) NSString * districtMapURL;
+@property (nonatomic, retain) NSString * transDataContributorID;
 
 - (NSComparisonResult)compareMembersByName:(LegislatorObj *)p;
 - (NSString *)partyShortName;

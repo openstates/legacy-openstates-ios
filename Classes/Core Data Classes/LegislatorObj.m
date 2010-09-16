@@ -13,6 +13,7 @@
 @implementation LegislatorObj 
 
 @dynamic legislatorID;
+@dynamic transDataContributorID;
 
 @dynamic firstname;
 @dynamic middlename;
@@ -34,7 +35,6 @@
 @dynamic tenure;
 @dynamic email;
 @dynamic twitter;
-@dynamic chamber_desk;
 
 @dynamic staff;
 @dynamic cap_office;
@@ -54,6 +54,7 @@
 {
 	if (dictionary) {
 		self.legislatorID = [dictionary objectForKey:@"legislatorID"];
+		self.transDataContributorID = [dictionary objectForKey:@"transDataContributorID"];
 		
 		self.firstname = [dictionary objectForKey:@"firstname"];
 		self.middlename = [dictionary objectForKey:@"middlename"];
@@ -73,7 +74,6 @@
 		self.tenure = [dictionary objectForKey:@"tenure"];
 		self.email = [dictionary objectForKey:@"email"];
 		self.twitter = [dictionary objectForKey:@"twitter"];
-		self.chamber_desk = [dictionary objectForKey:@"chamber_desk"];
 		
 		self.staff = [dictionary objectForKey:@"staff"];
 		self.cap_office = [dictionary objectForKey:@"cap_office"];
@@ -90,6 +90,7 @@
 - (NSDictionary *)exportToDictionary {
 	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  self.legislatorID, @"legislatorID",
+							  self.transDataContributorID, @"transDataContributorID",
 							  self.firstname, @"firstname",
 							  self.middlename, @"middlename",
 							  self.lastname, @"lastname",
@@ -108,7 +109,6 @@
 							  self.tenure, @"tenure",
 							  self.email, @"email",
 							  self.twitter, @"twitter",
-							  self.chamber_desk, @"chamber_desk",
 							  
 							  self.staff, @"staff",
 							  self.cap_office, @"cap_office",
