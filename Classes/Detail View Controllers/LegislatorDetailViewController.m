@@ -9,6 +9,7 @@
 #import "TableDataSourceProtocol.h"
 #import "LegislatorDetailViewController.h"
 #import "LegislatorDetailDataSource.h"
+#import "LegislatorContributionsViewController.h"
 
 #import "LegislatorMasterViewController.h"
 #import "LegislatorObj.h"
@@ -352,15 +353,12 @@
 	[self showChartLoading];
 }
 
-
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-	debug_NSLog(@"Web view finished loading");
 	[self hideChartLoading];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
 	[self hideChartLoading];
-
 }
 
 #pragma mark -
@@ -405,6 +403,12 @@
 		else if (cellInfo.entryType == DirectoryTypeCommittee) {
 			CommitteeDetailViewController *subDetailController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
 			subDetailController.committee = cellInfo.entryValue;
+			[self.navigationController pushViewController:subDetailController animated:YES];
+			[subDetailController release];
+		}
+		else if (cellInfo.entryType == DirectoryTypeContributions) {
+			LegislatorContributionsViewController *subDetailController = [[LegislatorContributionsViewController alloc] init];
+			subDetailController.legislator = self.legislator;
 			[self.navigationController pushViewController:subDetailController animated:YES];
 			[subDetailController release];
 		}

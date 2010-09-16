@@ -15,6 +15,7 @@ enum {
 	DirectoryTypeNotes,
 	DirectoryTypeIndex,
 	DirectoryTypeCommittee,
+	DirectoryTypeContributions,
 	// URL types go below here
 	kDirectoryTypeIsURLHandler,
 	DirectoryTypeOfficeMap,
