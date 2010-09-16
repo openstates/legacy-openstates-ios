@@ -25,7 +25,7 @@
 @property (nonatomic,retain) IBOutlet UIBarButtonItem *mapTypeControlButton;
 @property (nonatomic,retain) IBOutlet UIBarButtonItem *userLocationButton;
 @property (nonatomic,retain) IBOutlet UIBarButtonItem *districtOfficesButton;
-@property (nonatomic,retain) IBOutlet UIBarButtonItem *mapControlsButton;
+//@property (nonatomic,retain) IBOutlet UIBarButtonItem *mapControlsButton;
 @property (nonatomic,retain) IBOutlet UIBarButtonItem *searchBarButton;
 @property (nonatomic,retain) IBOutlet UISearchBar *searchBar;
 @property (nonatomic,retain) MKReverseGeocoder *reverseGeocoder;
@@ -33,9 +33,9 @@
 @property (nonatomic,readonly) MKCoordinateRegion texasRegion;
 @property (nonatomic,retain) CustomAnnotation *searchLocation;
 
-- (IBAction) mapControlSheet:(id)sender;
+//- (IBAction) mapControlSheet:(id)sender;
 - (IBAction) showAllDistricts:(id)sender;
-- (IBAction) showAllDistrictOffices:(id)sender;
+//- (IBAction) showAllDistrictOffices:(id)sender;
 - (IBAction) changeMapType:(id)sender;
 - (IBAction) locateUser:(id)sender;
 - (IBAction) reverseGeocodeLocation:(CLLocationCoordinate2D)coordinate;
