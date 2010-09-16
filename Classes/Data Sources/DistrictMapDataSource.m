@@ -11,8 +11,9 @@
 #import "DistrictMapDataSource.h"
 #import "DisclosureQuartzView.h"
 #import "TexLegeCoreDataUtils.h"
-#import "DistrictOfficeObj.h"
+
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
+#import "DistrictOfficeObj.h"
 #import "DistrictOfficeDataSource.h"
 #import "DistrictMap.h"
 #import "DistrictMapImporter.h"
@@ -46,9 +47,9 @@
 		
 		
 #if NEEDS_TO_INITIALIZE_DATABASE == 1
-		
+
 		DistrictOfficeDataSource *tempDistOff = [[DistrictOfficeDataSource alloc] initWithManagedObjectContext:newContext];
-#warning hacky plce to put this....
+#warning hacky place to put this, but we need to initialize district offices i guess? ....
 		
 		//[self initializeDatabase];
 		mapCount = 0;
@@ -135,7 +136,7 @@
 	self.districtSearchDelegate = mapSearchDelegate;
 	
 	NSArray *objectsArray = [TexLegeCoreDataUtils allObjectIDsInEntityNamed:@"DistrictMapObj" context:self.managedObjectContext];
-	debug_NSLog(@"Starting search for coordinate");
+	//debug_NSLog(@"Starting search for coordinate");
 	DistrictMapSearchOperation *op = [[DistrictMapSearchOperation alloc] initWithDelegate:self objects:objectsArray coordinate:aCoordinate];
 	if (!op)
 		return;
@@ -147,10 +148,14 @@
 }
 
 - (void)DistrictMapSearchOperationDidFinishSuccessfully:(DistrictMapSearchOperation *)op {	
-	debug_NSLog(@"Found some search results in %d districts", [op.foundDistricts count]);
+	//debug_NSLog(@"Found some search results in %d districts", [op.foundDistricts count]);
 	
 	if (self.districtSearchDelegate && [self.districtSearchDelegate respondsToSelector:@selector(foundDistrictMapsWithObjectIDs:)])
 		[self.districtSearchDelegate performSelector:@selector(foundDistrictMapsWithObjectIDs:) withObject:op.foundDistricts];
+
+	if (self.genericOperationQueue)
+		[self.genericOperationQueue cancelAllOperations];
+	self.genericOperationQueue = nil;
 	
 }
 
@@ -158,50 +163,13 @@
 							 errorMessage:(NSString *)errorMessage 
 								   option:(DistrictMapSearchOperationFailOption)failOption {
 	
-	debug_NSLog(@"The search for the coordinate failed: %@", errorMessage);
-
+	//debug_NSLog(@"The search for the coordinate failed: %@", errorMessage);
+	
+	if (self.genericOperationQueue)
+		[self.genericOperationQueue cancelAllOperations];
+	self.genericOperationQueue = nil;
 }
 
-/*
-- (NSArray *) districtsContainingCoordinate:(CLLocationCoordinate2D)aCoordinate {
-	
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	NSManagedObjectContext *context = self.managedObjectContext;
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictMapObj" inManagedObjectContext:context];
-	[fetchRequest setEntity:entity];
-	
-	[fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"legislator", @"district", @"chamber", 
-										@"minLat", @"maxLat", @"minLon", @"maxLon", nil]];
-	
-	NSSortDescriptor *sort1 = [[NSSortDescriptor alloc] initWithKey:@"district" ascending:YES] ;
-	NSSortDescriptor *sort2 = [[NSSortDescriptor alloc] initWithKey:@"chamber" ascending:NO] ;
-	[fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sort1, sort2, nil]];
-	[sort1 release];
-	[sort2 release];
-	
-	NSError *error = nil;
-	NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
-	[fetchRequest release];
-	if (error) {
-		debug_NSLog(@"Problem fetching district maps.");
-		return nil;
-	}
-	
-	NSMutableArray *districts = [[[NSMutableArray alloc] initWithCapacity:181] autorelease];
-	for (DistrictMapObj *map in fetchedObjects) {
-		if ([map districtContainsCoordinate:aCoordinate])
-			[districts addObject:map];
-	}
-	
-	//[self.mapView removeOverlays:[self.mapView overlays]];
-	
-	//[self performSelector:@selector(animateToState) withObject:nil afterDelay:0.3f];
-	//self.shouldAnimate = NO;
-	//[self.mapView addOverlays:array];	
-	
-	return districts;
-}
-*/
 #pragma mark -
 #pragma UITableViewDataSource
 
@@ -236,7 +204,7 @@
 	DistrictMapObj *tempEntry = [self dataObjectForIndexPath:indexPath];
 	
 	if (tempEntry == nil) {
-		debug_NSLog(@"Busted in DistrictOfficeDataSource.m: cellForRowAtIndexPath -> Couldn't get object data for row.");
+		debug_NSLog(@"Busted in DistrictMapDataSource.m: cellForRowAtIndexPath -> Couldn't get object data for row.");
 		return nil;
 	}
 	
@@ -423,14 +391,7 @@
 
 
 - (void)insertDistrictMaps:(NSArray *)districtMaps
-{
-    // this will allow us as an observer to notified (see observeValueForKeyPath)
-    // so we can update our UITableView
-    //
-    //[self willChangeValueForKey:@"districtMapList"];
-    //[self.districtMapList addObjectsFromArray:districtMaps];
-    //[self didChangeValueForKey:@"districtMapList"];
-	
+{	
 	NSManagedObjectContext *context = self.managedObjectContext;
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictMapObj" 
 											  inManagedObjectContext:context];
