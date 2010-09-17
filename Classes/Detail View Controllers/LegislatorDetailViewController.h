@@ -10,7 +10,7 @@
 
 @class LegislatorObj;
 @class PartisanScaleView;
-@class DirectoryDetailInfo;
+@class TableCellDataObject;
 @class LegislatorDetailDataSource;
 @class MapViewController;
 @interface LegislatorDetailViewController : UITableViewController <UISplitViewControllerDelegate, 

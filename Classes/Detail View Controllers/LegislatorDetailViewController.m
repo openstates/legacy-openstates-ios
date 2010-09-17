@@ -21,7 +21,7 @@
 #import "TexLegeCoreDataUtils.h"
 #import "UtilityMethods.h"
 #import "TableDataSourceProtocol.h"
-#import "DirectoryDetailInfo.h"
+#import "TableCellDataObject.h"
 #import "NotesViewController.h"
 #import "TexLegeAppDelegate.h"
 
@@ -369,7 +369,7 @@
 	// deselect the new row using animation
 	[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];	
 	
-	DirectoryDetailInfo *cellInfo = [self.dataSource dataObjectForIndexPath:newIndexPath];
+	TableCellDataObject *cellInfo = [self.dataSource dataObjectForIndexPath:newIndexPath];
 
 	if (!cellInfo.isClickable)
 		return;
@@ -407,8 +407,8 @@
 			[subDetailController release];
 		}
 		else if (cellInfo.entryType == DirectoryTypeContributions) {
-			LegislatorContributionsViewController *subDetailController = [[LegislatorContributionsViewController alloc] init];
-			subDetailController.legislator = self.legislator;
+			LegislatorContributionsViewController *subDetailController = [[LegislatorContributionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+			[subDetailController setQueryEntityID:cellInfo.entryValue withQueryType:[NSNumber numberWithInteger:kContributionQueryRecipient]];
 			[self.navigationController pushViewController:subDetailController animated:YES];
 			[subDetailController release];
 		}
@@ -453,11 +453,11 @@
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&
 				 cellInfo.entryType < kDirectoryTypeIsExternalHandler) {	// handle the URL ourselves in a webView
-			[self showWebViewWithURL:[cellInfo generateURL:self.legislator]];
+			[self showWebViewWithURL:[cellInfo generateURL]];
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsExternalHandler)		// tell the device to open the url externally
 		{
-			NSURL *myURL = [cellInfo generateURL:self.legislator];
+			NSURL *myURL = [cellInfo generateURL];
 			// do the URL
 			
 			BOOL isPhone = ([UtilityMethods canMakePhoneCalls]);
@@ -474,7 +474,7 @@
 - (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = 44.0f;
 	
-	DirectoryDetailInfo *cellInfo = [self.dataSource dataObjectForIndexPath:indexPath];
+	TableCellDataObject *cellInfo = [self.dataSource dataObjectForIndexPath:indexPath];
 	
 	if (cellInfo == nil) {
 		debug_NSLog(@"LegislatorDetailViewController:heightForRow: error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);

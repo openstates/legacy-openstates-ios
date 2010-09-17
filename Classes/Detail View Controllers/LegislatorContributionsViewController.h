@@ -7,14 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LegislatorContributionsDataSource.h"
 
-@class LegislatorObj;
-
-@interface LegislatorContributionsViewController : UITableViewController{
+@interface LegislatorContributionsViewController : UITableViewController {
 
 }
-@property (nonatomic,retain) NSMutableArray *topContributors;
-@property (nonatomic,retain) LegislatorObj *legislator;
-@property (nonatomic,retain) NSURLConnection *urlConnection;
-@property (nonatomic,retain) NSMutableData *receivedData;
+@property (nonatomic,retain) LegislatorContributionsDataSource *dataSource;
+@property (nonatomic,copy) NSString *queryEntityID;
+@property (nonatomic,copy) NSNumber *contributionQueryType;
+
+- (void)setQueryEntityID:(NSString *)newObj withQueryType:(NSNumber *)newType;
+
 @end

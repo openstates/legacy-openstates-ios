@@ -259,7 +259,7 @@ CGFloat quartzRowHeight = 73.f;
 - (void)buildInfoSectionArray {	
 	NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:12]; // arbitrary
 	NSDictionary *infoDict = nil;
-	DirectoryDetailInfo *cellInfo = nil;
+	TableCellDataObject *cellInfo = nil;
 //case kInfoSectionName:
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 				@"Committee", @"subtitle",
@@ -267,7 +267,7 @@ CGFloat quartzRowHeight = 73.f;
 				[NSNumber numberWithBool:NO], @"isClickable",
 				nil, @"entryValue",
 				nil];
-	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:infoDict];
+	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
 	[tempArray addObject:cellInfo];
 	[infoDict release];
 	[cellInfo release];
@@ -279,7 +279,7 @@ CGFloat quartzRowHeight = 73.f;
 				[NSNumber numberWithBool:NO], @"isClickable",
 				nil, @"entryValue",
 				nil];
-	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:infoDict];
+	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
 	[tempArray addObject:cellInfo];
 	[infoDict release];
 	[cellInfo release];
@@ -291,7 +291,7 @@ CGFloat quartzRowHeight = 73.f;
 				[NSNumber numberWithBool:[UtilityMethods canMakePhoneCalls]], @"isClickable",
 				[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",self.committee.phone]], @"entryValue",
 				nil];
-	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:infoDict];
+	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
 	[tempArray addObject:cellInfo];
 	[infoDict release];
 	[cellInfo release];
@@ -303,7 +303,7 @@ CGFloat quartzRowHeight = 73.f;
 				[NSNumber numberWithBool:YES], @"isClickable",
 				[UtilityMethods capitolMapFromOfficeString:self.committee.office], @"entryValue",
 				nil];
-	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:infoDict];
+	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
 	[tempArray addObject:cellInfo];
 	[infoDict release];
 	[cellInfo release];
@@ -315,7 +315,7 @@ CGFloat quartzRowHeight = 73.f;
 				[NSNumber numberWithBool:YES], @"isClickable",
 				[UtilityMethods safeWebUrlFromString:self.committee.url], @"entryValue",
 				nil];
-	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:infoDict];
+	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
 	[tempArray addObject:cellInfo];
 	[infoDict release];
 	[cellInfo release];
@@ -511,7 +511,7 @@ CGFloat quartzRowHeight = 73.f;
 	[tableView deselectRowAtIndexPath:newIndexPath animated:YES];	
 	
 	if (section == kInfoSection) {
-		DirectoryDetailInfo *cellInfo = [self.infoSectionArray objectAtIndex:row];
+		TableCellDataObject *cellInfo = [self.infoSectionArray objectAtIndex:row];
 		if (!cellInfo)
 			return;
 		
