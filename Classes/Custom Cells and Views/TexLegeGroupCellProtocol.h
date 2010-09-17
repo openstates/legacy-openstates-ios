@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DirectoryDetailInfo.h"
+#import "TableCellDataObject.h"
 
 @protocol TexLegeGroupCellProtocol
 
 @required
 + (UITableViewCellStyle)cellStyle;
 + (NSString*)cellIdentifier;
-@property (nonatomic,retain) DirectoryDetailInfo *cellInfo;
+@property (nonatomic,retain) TableCellDataObject *cellInfo;
 
 @end
 

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "TexLegeGroupCellProtocol.h"
 
-@class DirectoryDetailInfo;
+@class TableCellDataObject;
 @interface TexLegeStandardGroupCell : UITableViewCell <TexLegeGroupCellProtocol> {
 
 }

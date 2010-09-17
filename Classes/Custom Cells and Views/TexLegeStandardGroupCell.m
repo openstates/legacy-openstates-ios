@@ -7,7 +7,7 @@
 //
 
 #import "TexLegeStandardGroupCell.h"
-#import "DirectoryDetailInfo.h"
+#import "TableCellDataObject.h"
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
 
@@ -59,7 +59,7 @@
     [super dealloc];
 }
 
-- (void)setCellInfo:(DirectoryDetailInfo *)newCellInfo {	
+- (void)setCellInfo:(TableCellDataObject *)newCellInfo {	
 	if (cellInfo)
 		[cellInfo release], cellInfo = nil;
 	
