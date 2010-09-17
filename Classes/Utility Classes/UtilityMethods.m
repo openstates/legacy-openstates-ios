@@ -63,7 +63,6 @@
 
 + (BOOL) isLandscapeOrientation {
 	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-	debug_NSLog(@"Is landscape = %d .... orientation = %d", UIInterfaceOrientationIsLandscape(orientation), orientation);
 	return UIInterfaceOrientationIsLandscape(orientation);	
 }
 
