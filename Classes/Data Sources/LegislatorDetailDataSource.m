@@ -18,7 +18,7 @@
 #import "WnomObj.h"
 
 #import "UtilityMethods.h"
-#import "DirectoryDetailInfo.h"
+#import "TableCellDataObject.h"
 #import "TexLegeAppDelegate.h"
 
 #import "PartisanIndexStats.h"
@@ -70,7 +70,7 @@
 	NSInteger numberOfSections = 3 + [self.legislator numberOfDistrictOffices];	
 	NSString *tempString = nil;
 	BOOL isPhone = [UtilityMethods canMakePhoneCalls];
-	DirectoryDetailInfo *cellInfo = nil;
+	TableCellDataObject *cellInfo = nil;
 	
 	// create an array of sections, with arrays of DirectoryDetailInfo entries as contents
 	self.sectionArray = nil;	// this calls removeAllObjects and release automatically
@@ -91,7 +91,7 @@
 							   [NSNumber numberWithBool:NO], @"isClickable",
 							   [NSNumber numberWithInteger:DirectoryTypeNone], @"entryType",
 							   nil];
-	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+	cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 	[entryDict release];
 	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 	[cellInfo release], cellInfo = nil;
@@ -104,7 +104,7 @@
 				 [NSNumber numberWithBool:YES], @"isClickable",
 				 [NSNumber numberWithInteger:DirectoryTypeMap], @"entryType",
 				 nil];
-	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+	cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 	[entryDict release];
 	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 	[cellInfo release], cellInfo = nil;
@@ -114,11 +114,11 @@
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 					 @"Finances", @"subtitle",
 					 self.legislator.transDataContributorID, @"entryValue",
-					 @"Top 20 Contributors", @"title",
+					 @"Campaign Contributions", @"title",
 					 [NSNumber numberWithBool:YES], @"isClickable",
 					 [NSNumber numberWithInteger:DirectoryTypeContributions], @"entryType",
 					 nil];
-		cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 		[entryDict release];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;
@@ -132,7 +132,7 @@
 				 [NSNumber numberWithBool:YES], @"isClickable",
 				 [NSNumber numberWithInteger:DirectoryTypeMail], @"entryType",
 				 nil];
-	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+	cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 	[entryDict release];
 	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 	[cellInfo release], cellInfo = nil;
@@ -148,7 +148,7 @@
 					 [NSNumber numberWithBool:YES], @"isClickable",
 					 [NSNumber numberWithInteger:DirectoryTypeTwitter], @"entryType",
 					 nil];
-		cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 		[entryDict release];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;
@@ -162,7 +162,7 @@
 				 [NSNumber numberWithBool:YES], @"isClickable",
 				 [NSNumber numberWithInteger:DirectoryTypeWeb], @"entryType",
 				 nil];
-	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+	cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 	[entryDict release];
 	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 	[cellInfo release], cellInfo = nil;
@@ -176,7 +176,7 @@
 				 [NSNumber numberWithBool:YES], @"isClickable",
 				 [NSNumber numberWithInteger:DirectoryTypeWeb], @"entryType",
 				 nil];
-	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+	cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 	[entryDict release];
 	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 	[cellInfo release], cellInfo = nil;
@@ -194,7 +194,7 @@
 				 [NSNumber numberWithBool:YES], @"isClickable",
 				 [NSNumber numberWithInteger:DirectoryTypeNotes], @"entryType",
 				 nil];
-	cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+	cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 	[entryDict release];
 	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 	[cellInfo release], cellInfo = nil;
@@ -210,7 +210,7 @@
 					 [NSNumber numberWithBool:YES], @"isClickable",
 					 [NSNumber numberWithInteger:DirectoryTypeCommittee], @"entryType",
 					 nil];
-		cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 		[entryDict release];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;
@@ -228,7 +228,7 @@
 					 [NSNumber numberWithBool:NO], @"isClickable",
 					 [NSNumber numberWithInteger:DirectoryTypeNone], @"entryType",
 					 nil];
-		cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 		[entryDict release];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;
@@ -242,7 +242,7 @@
 					 [NSNumber numberWithBool:YES], @"isClickable",
 					 [NSNumber numberWithInteger:DirectoryTypeOfficeMap], @"entryType",
 					 nil];
-		cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 		[entryDict release];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;
@@ -255,7 +255,7 @@
 					 [NSNumber numberWithBool:isPhone], @"isClickable",
 					 [NSNumber numberWithInteger:DirectoryTypePhone], @"entryType",
 					 nil];
-		cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 		[entryDict release];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;
@@ -268,7 +268,7 @@
 					 [NSNumber numberWithBool:NO], @"isClickable",
 					 [NSNumber numberWithInteger:DirectoryTypeNone], @"entryType",
 					 nil];
-		cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 		[entryDict release];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;
@@ -282,7 +282,7 @@
 					 [NSNumber numberWithBool:isPhone], @"isClickable",
 					 [NSNumber numberWithInteger:DirectoryTypePhone], @"entryType",
 					 nil];
-		cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 		[entryDict release];
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;
@@ -300,7 +300,7 @@
 						 [NSNumber numberWithBool:isPhone], @"isClickable",
 						 [NSNumber numberWithInteger:DirectoryTypePhone], @"entryType",
 						 nil];
-			cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+			cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 			[entryDict release];
 			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 			[cellInfo release], cellInfo = nil;
@@ -313,7 +313,7 @@
 						 [NSNumber numberWithBool:NO], @"isClickable",
 						 [NSNumber numberWithInteger:DirectoryTypeNone], @"entryType",
 						 nil];
-			cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+			cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 			[entryDict release];
 			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 			[cellInfo release], cellInfo = nil;
@@ -327,7 +327,7 @@
 						 [NSNumber numberWithBool:YES], @"isClickable",
 						 [NSNumber numberWithInteger:DirectoryTypeMap], @"entryType",
 						 nil];
-			cellInfo = [[DirectoryDetailInfo alloc] initWithDictionary:entryDict];
+			cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 			[entryDict release];
 			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 			[cellInfo release], cellInfo = nil;
@@ -465,7 +465,7 @@
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {		
 		
-	DirectoryDetailInfo *cellInfo = [self dataObjectForIndexPath:indexPath];
+	TableCellDataObject *cellInfo = [self dataObjectForIndexPath:indexPath];
 		
 	if (cellInfo == nil) {
 		debug_NSLog(@"LegislatorDetailDataSource:cellForRow: error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);
