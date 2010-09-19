@@ -23,6 +23,8 @@
 + (BOOL) isLandscapeOrientation;
 + (BOOL) isIPadDevice;
 
+//+ (BOOL) fileExistsAtPath:(NSString *)path;
+
 + (NSURL *)urlToMainBundle;
 + (NSString *) titleFromURL:(NSURL *)url;
 + (NSURL *) safeWebUrlFromString:(NSString *)urlString;

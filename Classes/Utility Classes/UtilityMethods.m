@@ -106,6 +106,12 @@
 
 #pragma mark -
 #pragma mark File Handling
+/*
+	// This is so short, just use the real one instead of dropping a convenience method here.
+- (BOOL)fileExistsAtPath:(NSString *)thePath {
+	return [[NSFileManager defaultManager] fileExistsAtPath:thePath];
+}
+*/
 
 /**
  Returns the path to the application's documents directory.
@@ -227,7 +233,7 @@
 		if ([fileString isEqualToString:[mapEntry valueForKey:@"file"]]) {
 			foundMap = [[[CapitolMap alloc] init] autorelease];
 			[foundMap importFromDictionary:mapEntry];
-			continue;
+			break;
 		}
 	}
 
@@ -251,7 +257,7 @@
 		if ([fileString isEqualToString:[mapEntry valueForKey:@"file"]]) {
 			foundMap = [[[CapitolMap alloc] init] autorelease];
 			[foundMap importFromDictionary:mapEntry];
-			continue;
+			break;
 		}
 	}
 	[mapSectionsPlist release];
