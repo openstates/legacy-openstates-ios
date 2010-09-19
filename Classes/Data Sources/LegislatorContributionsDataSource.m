@@ -196,8 +196,8 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 		
 		if ([self.contributionQueryType integerValue]== kContributionQueryRecipient) {
 			cellInfo = [[TableCellDataObject alloc] init];
+			cellInfo.subtitle = @"Other";
 			cellInfo.title = @"Top 20 Contributors";
-			cellInfo.subtitle = @"";
 			cellInfo.entryValue = [jsonDict objectForKey:@"id"];
 			cellInfo.entryType = kContributionQueryTop20Contributors;
 			cellInfo.isClickable = YES;
@@ -207,7 +207,6 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 		}
 				
 		thisSection = [[NSMutableArray alloc] init];
-		TableCellDataObject *foundTotalInfo = nil;
 		NSString *amountKey = ([self.contributionQueryType integerValue] == kContributionQueryRecipient) ? @"recipient_amount" : @"contributor_amount";
 		NSString *countKey = ([self.contributionQueryType integerValue] == kContributionQueryRecipient) ? @"recipient_count" : @"contributor_count";
 		for (NSString *yearKey in [yearKeys reverseObjectEnumerator]) {			
@@ -225,22 +224,16 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 			cellInfo.isClickable = NO;
 			
 			if ([yearKey isEqualToString:@"-1"]) {
-				foundTotalInfo = [cellInfo retain];
-				continue;
+				cellInfo.subtitle = @"Total";
+				cellInfo.entryType = kContributionTotal;
 			}
-			else
-				[thisSection addObject:cellInfo];
+
+			[thisSection addObject:cellInfo];
 			
 			[cellInfo release];
 			
 		}
 		
-		if (foundTotalInfo) {
-			foundTotalInfo.subtitle = @"Total";
-			foundTotalInfo.entryType = kContributionTotal;
-			[thisSection addObject:foundTotalInfo];
-			[foundTotalInfo release];
-		}
 		
 		[self.sectionList addObject:thisSection];
 		[thisSection release];
@@ -380,13 +373,13 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 		UITableViewCellStyle style;
 		
 		if ([self.contributionQueryType integerValue] == kContributionQueryTop20Contributors)
-			style = UITableViewCellStyleSubtitle;
+			style = UITableViewCellStyleValue1;
 		else if (cellInfo.isClickable && [self.contributionQueryType integerValue] == kContributionQueryRecipient)
-			style = UITableViewCellStyleDefault;
+			style = [TexLegeStandardGroupCell cellStyle];
 		else
 			style = [TexLegeStandardGroupCell cellStyle];
 		
-		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:[TexLegeStandardGroupCell cellStyle] reuseIdentifier:cellIdentifier] autorelease];
+		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:style reuseIdentifier:cellIdentifier] autorelease];
     }
     
 	if ([cell conformsToProtocol:@protocol(TexLegeGroupCellProtocol)])
