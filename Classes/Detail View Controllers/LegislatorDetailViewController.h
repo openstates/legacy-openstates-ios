@@ -28,7 +28,6 @@
 @property (nonatomic,retain) IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab, *freshmanPlotLab;
 @property (nonatomic,retain) IBOutlet PartisanScaleView *indivSlider, *partySlider, *allSlider;
 @property (nonatomic,retain) IBOutlet UIActivityIndicatorView *chartLoadingAct;
-@property (nonatomic,retain) IBOutlet UILabel *chartLoadingLab;
 
 
 @property (nonatomic,retain) UIPopoverController *notesPopover;

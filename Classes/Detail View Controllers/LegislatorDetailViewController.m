@@ -57,9 +57,9 @@
 @implementation LegislatorDetailViewController
 
 @synthesize legislator, dataSource;
-@synthesize headerView, miniBackgroundView, isChartSVG;
+@synthesize headerView, miniBackgroundView;
 
-@synthesize chartView, chartLoadingLab, chartLoadingAct;
+@synthesize chartView, chartLoadingAct, isChartSVG;
 @synthesize leg_indexTitleLab, leg_rankLab, leg_chamberPartyLab, leg_chamberLab;
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab, freshmanPlotLab;
 @synthesize indivSlider, partySlider, allSlider;
@@ -390,7 +390,6 @@
 - (void)hideChartLoading {
 	[self.chartLoadingAct stopAnimating];
 	self.chartLoadingAct.hidden = YES;
-	self.chartLoadingLab.hidden = YES;
 }
 
 - (void)showChartLoading {
@@ -399,7 +398,6 @@
 	if (hasScores && !self.isChartSVG) {
 		[self.chartLoadingAct startAnimating];
 		self.chartLoadingAct.hidden = NO;
-		self.chartLoadingLab.hidden = NO;
 	}
 }
 
@@ -419,9 +417,9 @@
 		
 		if (data)
 			[data writeToFile:svgPath atomically:NO encoding:NSUTF8StringEncoding error:&error];
-		if (error)
-			debug_NSLog(@"Error writing svg to file, %@", svgPath);
-		
+		if (error) {
+			NSLog(@"Error writing svg to file, %@", svgPath);
+		}
 		if ([[NSFileManager defaultManager] fileExistsAtPath:svgPath])
 			[self reloadChartForOrientationChange];
 	}
