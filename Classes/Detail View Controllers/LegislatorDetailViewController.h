@@ -37,4 +37,6 @@
 @property (nonatomic, retain) LegislatorDetailDataSource *dataSource;
 @property (nonatomic, retain) IBOutlet MapViewController *mapViewController;
 
+@property (nonatomic) BOOL isChartSVG;
+
 @end

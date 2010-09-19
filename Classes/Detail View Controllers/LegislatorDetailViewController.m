@@ -48,14 +48,16 @@
 
 - (void)hideChartLoading;
 - (void)showChartLoading;
-	
+- (void)reloadChartForOrientationChange;	
+- (NSString *)svgChartPath;
+- (BOOL)svgChartPathExists;	
 @end
 
 
 @implementation LegislatorDetailViewController
 
 @synthesize legislator, dataSource;
-@synthesize headerView, miniBackgroundView;
+@synthesize headerView, miniBackgroundView, isChartSVG;
 
 @synthesize chartView, chartLoadingLab, chartLoadingAct;
 @synthesize leg_indexTitleLab, leg_rankLab, leg_chamberPartyLab, leg_chamberLab;
@@ -152,6 +154,71 @@
 	[super dealloc];
 }
 
+// 134123212.2009.iphone.port.svg
+// 134123212.2009.iphone.land.svg
+- (NSString *)svgChartPath {
+	NSString *device = [UtilityMethods isIPadDevice] ? @"ipad" : @"iphone";
+	NSString *orientation = [UtilityMethods isLandscapeOrientation] ? @"land" : @"port";
+	NSString *svgFile = [[NSString alloc] initWithFormat:@"%@.2009.%@.%@.svg", self.legislator.legislatorID, device, orientation];
+	NSString *svgPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent: svgFile];
+	[svgFile release];
+	
+	return svgPath;
+}
+
+- (NSString *)chartWidth {
+	BOOL isIPad = [UtilityMethods isIPadDevice];
+	BOOL isLandscape = [UtilityMethods isLandscapeOrientation];
+	NSString *chartWidth = nil;
+	if (!isLandscape)
+		chartWidth = (isIPad) ? @"685px" : @"305px";
+	else
+		chartWidth = (isIPad) ? @"623px" : @"465px";
+
+	return chartWidth;
+}
+
+- (void)reloadChartForOrientationChange {
+	BOOL hasScores = (self.legislator.wnomScores && [self.legislator.wnomScores count]);
+	NSString *svgPath = [self svgChartPath];
+	
+	self.freshmanPlotLab.hidden = hasScores;
+	self.chartView.hidden = !hasScores;
+
+	if (!hasScores)
+		[self hideChartLoading];
+	else if (![[NSFileManager defaultManager] fileExistsAtPath:svgPath]) {
+		self.isChartSVG = NO;
+		PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
+		NSString *chartHTML = [indexStats partisanChartForLegislator:self.legislator 
+															   width:[self chartWidth]];
+		if (chartHTML) {
+			[self.chartView loadHTMLString:chartHTML baseURL:[UtilityMethods urlToMainBundle]];
+		}
+	}
+	else {		// we have scores, and we have an SVG file
+		self.isChartSVG = YES;
+		// <meta name="viewport" content="initial-scale=1.0" />
+		NSURL *fileURL = [[NSURL alloc] initFileURLWithPath:svgPath];
+		
+#if 0			
+		NSString *chartHTML = [NSString stringWithFormat:
+//								@"<body style=\"background-color: transparent\"><center><embed src=\"%@\" width=\"320\" height=\"192\" auto type=\"image/svg+xml\"/></center></body>",
+							   @"<body style=\"background-color: transparent\"><center><img src=\"%@\" auto type=\"image/svg+xml\"/></center></body>",
+								[fileURL absoluteString]];
+		
+		[self.chartView loadHTMLString:chartHTML baseURL:nil];
+		debug_NSLog(@"%@", chartHTML);
+		
+#else		
+		//[self.chartView setScalesPageToFit:YES];
+		NSURLRequest *req = [NSURLRequest requestWithURL:fileURL];
+		[self.chartView loadRequest:req];
+#endif
+		[fileURL release];
+	}
+}
+
 - (NSString *)chamberPartyAbbrev {
 	NSString *partyName = nil;
 	if ([self.legislator.party_id integerValue] == DEMOCRAT) // Democrat
@@ -194,22 +261,10 @@
 	self.leg_districtLab.text = [NSString stringWithFormat:@"District %@", self.legislator.district];
 	self.leg_tenureLab.text = [self.legislator tenureString];
 	
-	BOOL hasScores = (self.legislator.wnomScores && [self.legislator.wnomScores count]);
-	if (!hasScores) {
-		[self hideChartLoading];			
-	}
-	self.freshmanPlotLab.hidden = hasScores;
-
-#define kChartPortraitWidth ([UtilityMethods isIPadDevice]) ? @"685px" : @"305px"
-#define kChartLandscapeWidth ([UtilityMethods isIPadDevice]) ? @"623px" : @"465px"
-#define kChartWidth ([UtilityMethods isLandscapeOrientation]) ? kChartLandscapeWidth : kChartPortraitWidth
-	
-	NSString *chartHTML = [[PartisanIndexStats sharedPartisanIndexStats] partisanChartForLegislator:self.legislator width:kChartWidth];
-	if (chartHTML) {
-		[self.chartView loadHTMLString:chartHTML baseURL:[UtilityMethods urlToMainBundle]];
-	}
-	
 	PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
+
+	[self reloadChartForOrientationChange];
+
 	if (self.leg_indexTitleLab)
 		self.leg_indexTitleLab.text = [NSString stringWithFormat:@"%@ %@", 
 									   [self.legislator legTypeShortName], [self.legislator lastname]];
@@ -326,12 +381,7 @@
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration 
 //- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	NSString *chartWidth = UIDeviceOrientationIsLandscape(toInterfaceOrientation) ? kChartLandscapeWidth : kChartPortraitWidth;
-	NSString *chartHTML = [[PartisanIndexStats sharedPartisanIndexStats] partisanChartForLegislator:self.legislator width:chartWidth];
-	if (chartHTML) {
-		[self.chartView loadHTMLString:chartHTML baseURL:[UtilityMethods urlToMainBundle]];
-	}
-	
+	[self reloadChartForOrientationChange];
 }
 
 #pragma mark -
@@ -344,9 +394,13 @@
 }
 
 - (void)showChartLoading {
-	[self.chartLoadingAct startAnimating];
-	self.chartLoadingAct.hidden = NO;
-	self.chartLoadingLab.hidden = NO;
+	BOOL hasScores = (self.legislator.wnomScores && [self.legislator.wnomScores count]);
+
+	if (hasScores && !self.isChartSVG) {
+		[self.chartLoadingAct startAnimating];
+		self.chartLoadingAct.hidden = NO;
+		self.chartLoadingLab.hidden = NO;
+	}
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
@@ -355,7 +409,28 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
 	[self hideChartLoading];
+		
+	if (!self.isChartSVG)
+	{		
+		NSString *javaScript = @"{ chart.getSVG(); }";
+		NSString *svgPath = [self svgChartPath];
+		NSString *data = [self.chartView stringByEvaluatingJavaScriptFromString:javaScript];
+		NSError *error = nil;
+		
+		if (data)
+			[data writeToFile:svgPath atomically:NO encoding:NSUTF8StringEncoding error:&error];
+		if (error)
+			debug_NSLog(@"Error writing svg to file, %@", svgPath);
+		
+		if ([[NSFileManager defaultManager] fileExistsAtPath:svgPath])
+			[self reloadChartForOrientationChange];
+	}
+	
+#ifdef AUTOMATED_TESTING_CHARTS
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"AUTOMATED_TESTING_CHARTS" object:self.legislator];
+#endif
 }
+
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
 	[self hideChartLoading];
@@ -440,10 +515,8 @@
 				}
 				else {
 					[self.mapViewController.mapView addAnnotation:self.legislator.districtMap];
-					[self.mapViewController.mapView addOverlay:[self.legislator.districtMap polygon]];
-					//[mapVC.mapView setRegion:self.legislator.districtMap.region animated:YES]; 
 					[self.mapViewController moveMapToAnnotation:self.legislator.districtMap];
-
+					[self.mapViewController.mapView performSelector:@selector(addOverlay:) withObject:[self.legislator.districtMap polygon] afterDelay:0.5f];
 				}
 				if ([self.navigationController.viewControllers containsObject:self.mapViewController])
 					[self.navigationController popToViewController:self.mapViewController animated:YES];
