@@ -104,7 +104,10 @@
 
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return YES;
+	if ([UtilityMethods isIPadDevice])
+		return YES;
+	else
+		return UIInterfaceOrientationIsPortrait(interfaceOrientation);
 }
 
 
@@ -433,7 +436,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		for (NSDictionary *entry in self.feedEntries) {
 			if ([[entry objectForKey:@"date"] isEqualToDate:d]) {
 				mark = YES;
-				continue;
+				break;
 			}
 		}
 		
