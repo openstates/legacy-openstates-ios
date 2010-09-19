@@ -32,6 +32,7 @@
 @property (nonatomic,retain) BSForwardGeocoder *forwardGeocoder;
 @property (nonatomic,readonly) MKCoordinateRegion texasRegion;
 @property (nonatomic,retain) CustomAnnotation *searchLocation;
+@property (nonatomic,retain) MKPolygonView *senateDistrictView, *houseDistrictView;
 
 //- (IBAction) mapControlSheet:(id)sender;
 - (IBAction) showAllDistricts:(id)sender;

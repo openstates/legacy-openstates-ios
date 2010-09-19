@@ -40,7 +40,7 @@
 - (void) resetMapViewWithAnimation:(BOOL)animated;
 - (BOOL) region:(MKCoordinateRegion)region1 isEqualTo:(MKCoordinateRegion)region2;
 - (IBAction) showHidePopoverButton:(id)sender;
-
+- (void) invalidateDistrictView:(NSInteger)chamber;
 @end
 
 NSInteger colorIndex;
@@ -51,7 +51,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 @synthesize mapTypeControl, mapTypeControlButton;
 @synthesize mapView, userLocationButton, reverseGeocoder, searchLocation;
 @synthesize toolbar, searchBar, searchBarButton, districtOfficesButton;
-@synthesize /*mapControlsButton,*/ forwardGeocoder, texasRegion;
+@synthesize forwardGeocoder, texasRegion;
+@synthesize senateDistrictView, houseDistrictView;
 @synthesize masterPopover;
 
 //SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
@@ -74,9 +75,26 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	return self;
 }
 */
+
+- (void) invalidateDistrictView:(NSInteger)chamber {
+	BOOL senate = (chamber == SENATE) || (chamber == BOTH_CHAMBERS);
+	BOOL house = (chamber == HOUSE) || (chamber == BOTH_CHAMBERS);
+	
+	if (senate && self.senateDistrictView) {
+		[self.senateDistrictView invalidatePath];
+		self.senateDistrictView = nil;
+	}
+	else if (house && self.houseDistrictView) {
+		[self.houseDistrictView invalidatePath];
+		self.houseDistrictView = nil;
+	}
+}
+
 - (void) dealloc {
+	[self invalidateDistrictView:BOTH_CHAMBERS];
 	[self.mapView removeOverlays:self.mapView.overlays];
 	[self.mapView removeAnnotations:self.mapView.annotations];
+
 	self.mapTypeControl = nil;
 	self.searchBarButton = nil;
 	self.mapTypeControlButton = nil;
@@ -140,6 +158,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void) viewDidUnload {
+	[self invalidateDistrictView:BOTH_CHAMBERS];
 	[self.mapView removeOverlays:self.mapView.overlays];
 	[self.mapView removeAnnotations:self.mapView.annotations];
 
@@ -176,6 +195,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	self.mapView.showsUserLocation = NO;
 		
 	//if (![self isEqual:[self.navigationController.viewControllers objectAtIndex:0]])
+	[self invalidateDistrictView:BOTH_CHAMBERS];
 	[self.mapView removeOverlays:self.mapView.overlays];
 	
 	[super viewDidDisappear:animated];
@@ -187,26 +207,26 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 - (void) clearAnnotationsAndOverlays {
 	self.mapView.showsUserLocation = NO;
+	[self invalidateDistrictView:BOTH_CHAMBERS];
 	[self.mapView removeOverlays:self.mapView.overlays];
 	[self.mapView removeAnnotations:self.mapView.annotations];
 }
 
-- (void) clearAnnotationsAndOverlaysExcept:(id)annotation {
-	self.mapView.showsUserLocation = NO;
-	[self.mapView removeOverlays:self.mapView.overlays];
-	
-	if (!annotation) {
-		[self.mapView removeAnnotations:self.mapView.annotations];
-		return;
-	}
-	
-	NSMutableArray *toRemove = [[NSMutableArray alloc] initWithArray:self.mapView.annotations];
-	for (id temp in toRemove) {
-		if (![annotation isEqual:temp])
-			[self.mapView removeAnnotation:annotation];
-	}	
-	[toRemove release];
 
+- (void) clearAnnotationsAndOverlaysExcept:(id)keep {
+	self.mapView.showsUserLocation = NO;	
+	
+	NSMutableArray *annotes = [[NSMutableArray alloc] initWithCapacity:[self.mapView.annotations count]];
+	for (id object in self.mapView.annotations) {
+		if (![object isEqual:keep])
+			[annotes addObject:object];
+	}
+	if (annotes && [annotes count]) {
+		[self invalidateDistrictView:BOTH_CHAMBERS];
+		[self.mapView removeOverlays:self.mapView.overlays];
+		[self.mapView removeAnnotations:annotes];
+	}
+	[annotes release];
 }
 
 - (void) clearOverlaysExceptRecent {
@@ -218,6 +238,19 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		if ([toRemove count]>2) {
 			[toRemove removeLastObject];
 			[toRemove removeLastObject];
+			BOOL dropSenate = NO;
+			BOOL dropHouse = NO;
+			for (id <MKOverlay>overlay in toRemove) {
+				if (self.senateDistrictView && [self.senateDistrictView.overlay isEqual:overlay])
+					dropSenate = YES;
+				if (self.houseDistrictView && [self.houseDistrictView.overlay isEqual:overlay])
+					dropHouse = YES;
+				
+			}
+			if (dropSenate)
+				[self invalidateDistrictView:SENATE];
+			if (dropHouse)
+				[self invalidateDistrictView:HOUSE];
 			[self.mapView removeOverlays:toRemove];
 		}
 		[toRemove release];
@@ -314,6 +347,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		[self clearAnnotationsAndOverlays];
 		
 		MKCoordinateSpan newSpan = self.mapView.region.span;
+		[self.mapView setCenterCoordinate:touchCoord animated:YES];
+		
 		MKCoordinateRegion newRegion = MKCoordinateRegionMake(touchCoord, newSpan);
 		
 		// Add a placemark on the map
@@ -421,6 +456,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void)showLocateUserButton {
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+
 	NSInteger buttonIndex = 0;
 	
 	UIBarButtonItem *locateItem = [[UIBarButtonItem alloc] 
@@ -444,6 +481,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void)showLocateActivityButton {
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+
 	NSInteger buttonIndex = 0;
 
 	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
@@ -472,8 +511,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (IBAction) showAllDistricts:(id)sender {
-//#warning turn on the system wide network activity thingy?
-	
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"SHOWING_ALL_DISTRICTS"];
 	
 	NSArray *districts = [TexLegeCoreDataUtils allDistrictMapsLightWithContext:[[TexLegeAppDelegate appDelegate]managedObjectContext]];
@@ -603,7 +640,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 - (void) searchBarSearchButtonClicked:(UISearchBar *)theSearchBar {
 	[self showLocateActivityButton];
-	
+
 	if(self.forwardGeocoder == nil)
 		self.forwardGeocoder = [[[BSForwardGeocoder alloc] initWithDelegate:self] autorelease];
 	
@@ -623,20 +660,22 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 	self.forwardGeocoder = nil;
 	[self showLocateUserButton];
+
 }
 
 - (void)annotationCoordinateChanged:(id)sender {
 	if (![sender isKindOfClass:[CustomAnnotation class]])
 		return;
 	
-	CustomAnnotation *theAnnotation = sender;
+	if (!self.searchLocation || ![sender isEqual:self.searchLocation])
+		self.searchLocation = sender;
 	
-	[self clearAnnotationsAndOverlaysExcept:theAnnotation];
+	[self clearAnnotationsAndOverlaysExcept:sender];
 	
-	[self reverseGeocodeLocation:theAnnotation.coordinate];
+	[self reverseGeocodeLocation:self.searchLocation.coordinate];
 	
 	DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
-	[dataSource searchDistrictMapsForCoordinate:theAnnotation.coordinate withDelegate:self];
+	[dataSource searchDistrictMapsForCoordinate:self.searchLocation.coordinate withDelegate:self];
 }
 
 #pragma mark -
@@ -657,7 +696,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 
-
 - (IBAction) foundDistrictMapsWithObjectIDs:(NSArray *)objectIDs {
 	if (!objectIDs)
 		return;
@@ -667,7 +705,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		if (district) {
 			[self.mapView addAnnotation:district];
 			[self.mapView performSelector:@selector(addOverlay:) withObject:[district polygon] afterDelay:0.5f];
-			[self.mapView addOverlay:[district polygon]];
 			//for (DistrictOfficeObj *office in district.legislator.districtOffices)
 			//	[self.mapView addAnnotation:office];
 		}
@@ -759,16 +796,32 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		colorIndex = 0;
 	
 	if ([overlay isKindOfClass:[MKPolygon class]])
-    {
-        MKPolygonView*    aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
-		
+    {		
+		BOOL senate = NO;
 		NSString *ovTitle = [overlay title];
-		if (ovTitle && [ovTitle hasPrefix:@"House"])
+		if (ovTitle && [ovTitle hasPrefix:@"House"]) {
 			myColor = [TexLegeTheme texasGreen];
-		else if (ovTitle && [ovTitle hasPrefix:@"Senate"])
+			senate = NO;
+		}
+		else if (ovTitle && [ovTitle hasPrefix:@"Senate"]) {
 			myColor = [TexLegeTheme texasOrange];
+			senate = YES;
+		}
 
-        aView.fillColor = [/*[UIColor cyanColor]*/myColor colorWithAlphaComponent:0.2];
+		//MKPolygonView*    aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
+		MKPolygonView *aView = nil;
+		if (senate) {
+			[self invalidateDistrictView:SENATE];
+			self.senateDistrictView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
+			aView = self.senateDistrictView;
+		}
+		else {
+			[self invalidateDistrictView:HOUSE];
+			self.houseDistrictView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
+			aView = self.houseDistrictView;
+		}
+
+		aView.fillColor = [/*[UIColor cyanColor]*/myColor colorWithAlphaComponent:0.2];
         aView.strokeColor = [myColor colorWithAlphaComponent:0.7];
         aView.lineWidth = 3;
 		
@@ -802,27 +855,96 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	if (!annotation)
 		return;
 	
+	if (![aView isSelected])
+		return;
+	
+	[self.mapView setCenterCoordinate:annotation.coordinate animated:YES];
+	
 	if ([annotation isKindOfClass:[CustomAnnotation class]]) {
 		self.searchLocation = annotation;
-		//[self reverseGeocodeLocation:self.searchLocation.coordinate];
 	}	
 
-	MKCoordinateRegion region;
 	if ([annotation isKindOfClass:[DistrictMapObj class]]) {
+		MKCoordinateRegion region;
 		region = [(DistrictMapObj *)annotation region];
 		
-		[self.mapView removeOverlays:self.mapView.overlays];
-		[self.mapView addOverlay:[(DistrictMapObj*)annotation polygon]];
+		NSMutableArray *toRemove = [[NSMutableArray alloc] initWithArray:self.mapView.overlays];
+		NSInteger deleteOne = BOTH_CHAMBERS;
+		BOOL foundOne = NO;
+		
+		for (id<MKOverlay>item in self.mapView.overlays) {
+			if ([[item title] isEqualToString:[annotation title]]) {	// we clicked on an existing overlay
+				if ([[item title] isEqualToString:[self.senateDistrictView.polygon title]]) { // it's the senate
+					deleteOne = HOUSE;
+					foundOne = YES;
+					[toRemove removeObject:item];
+					break;
+				}
+				else if ([[item title] isEqualToString:[self.houseDistrictView.polygon title]]) { // it's the house
+					deleteOne = SENATE;
+					foundOne = YES;
+					[toRemove removeObject:item];
+					break;
+				}
+				
+			}
+		}
+		
+		//[self.mapView removeOverlays:self.mapView.overlays];
+		[self invalidateDistrictView:deleteOne];
+		if (toRemove && [toRemove count])
+			[self.mapView performSelector:@selector(removeOverlays:) withObject:toRemove];
+
+		[toRemove release];
+		
+		if (!foundOne) {
+			MKPolygon *mapPoly = [(DistrictMapObj*)annotation polygon];
+			[self.mapView performSelector:@selector(addOverlay:) withObject:mapPoly afterDelay:0.2f];
+		}
 		[self.mapView setRegion:region animated:TRUE];
 	}			
 }
 
 /*
-- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
+- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)aView {
+	id<MKAnnotation> annotation = aView.annotation;
+	if (!annotation)
+		return;
 	
+	if ([annotation isKindOfClass:[DistrictMapObj class]]) {
+		MKCoordinateRegion region;
+		region = [(DistrictMapObj *)annotation region];
+		
+		NSMutableArray *toRemove = [[NSMutableArray alloc] initWithCapacity:[self.mapView.overlays count]];
+		NSInteger deleteOne = -1;
+		
+		for (id<MKOverlay>item in self.mapView.overlays) {
+			if ([[item title] isEqualToString:[annotation title]]) {	// we clicked on an existing overlay
+				if ([[item title] isEqualToString:[self.senateDistrictView.polygon title]]) { // it's the senate
+					deleteOne = SENATE;
+					[toRemove addObject:item];
+					break;
+				}
+				else if ([[item title] isEqualToString:[self.houseDistrictView.polygon title]]) { // it's the house
+					deleteOne = HOUSE;
+					[toRemove addObject:item];
+					break;
+				}
+				
+			}
+		}
+		
+		if (deleteOne >= 0 && toRemove && [toRemove count]) {
+			[self invalidateDistrictView:deleteOne];
+			[self.mapView performSelector:@selector(removeOverlays:) withObject:toRemove];
+		}
+		[toRemove release];
+		
+		[self.mapView setRegion:region animated:TRUE];
+	}			
 }
-*/
 
+*/
 
 #pragma mark -
 #pragma mark Orientation
