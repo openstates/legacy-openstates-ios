@@ -136,6 +136,10 @@
 	return initial;
 }
 
+- (void) setLastnameInitial:(NSString *)newName {
+	// ignore this
+}
+
 - (NSString *)partyShortName {
 	NSString *shortName;
 	if ([self.party_id integerValue] == DEMOCRAT) // Democrat

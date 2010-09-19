@@ -88,7 +88,7 @@
 		for (NSDictionary *tempDict in plistArray) {
 			if ([legislator.legislatorID isEqualToNumber:[tempDict objectForKey:@"oldID"]]) {
 				transDataContributorID = [tempDict objectForKey:@"newID"];
-				continue;
+				break;
 			}
 		}
 		if (transDataContributorID)
@@ -166,7 +166,7 @@
 										 
 				[list addObject:newDict];
 				
-				continue;
+				continue;	// this should be a break but it helps us by dropping in multiple entries for ambiguous search results
 			}
 		}
 		if (!found) {

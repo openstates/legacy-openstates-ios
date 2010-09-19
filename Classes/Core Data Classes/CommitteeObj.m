@@ -35,6 +35,7 @@
 		self.parentId = [dictionary objectForKey:@"parentId"];
 		self.committeeId = [dictionary objectForKey:@"committeeId"];
 		self.url = [dictionary objectForKey:@"url"];
+		self.office = [dictionary objectForKey:@"office"];
 		self.committeeName = [dictionary objectForKey:@"committeeName"];
 		self.committeeType = [dictionary objectForKey:@"committeeType"];
 	}
@@ -45,6 +46,7 @@
 	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  self.clerk, @"clerk",
 							  self.clerk_email, @"clerk_email",
+							  self.office, @"office",
 							  self.phone, @"phone",
 							  self.parentId, @"parentId",
 							  self.committeeId, @"committeeId",

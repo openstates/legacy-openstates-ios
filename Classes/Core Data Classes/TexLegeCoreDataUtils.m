@@ -212,7 +212,6 @@
 	
 	//[self performSelector:@selector(animateToState) withObject:nil afterDelay:0.3f];
 	//self.shouldAnimate = NO;
-	//[self.mapView addOverlays:array];	
 	
 	return districts;
 	

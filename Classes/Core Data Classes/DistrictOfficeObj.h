@@ -33,7 +33,6 @@
 @property (nonatomic, retain) NSNumber * spanLon;
 @property (nonatomic, retain) NSString * zipCode;
 @property (nonatomic, retain) LegislatorObj * legislator;
-@property (nonatomic, retain) DistrictMapObj * districtMap;
 
 // MKAnnotation protocol
 @property (nonatomic, readonly) CLLocationCoordinate2D	coordinate;
