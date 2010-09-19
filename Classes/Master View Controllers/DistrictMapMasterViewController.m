@@ -112,7 +112,7 @@
 				for (id<MKAnnotation>annotation in mapVC.mapView.annotations) {
 					if ([annotation isKindOfClass:[DistrictOfficeObj class]]) {
 						detailObject = annotation;
-						continue;
+						break;
 					}
 				}
 			}
@@ -170,9 +170,9 @@
 			
 			[mapVC clearAnnotationsAndOverlays];
 
-			[mapView addOverlay:[map polygon]];
 			[mapView addAnnotation:map];
-			[mapVC moveMapToAnnotation:map];			
+			[mapVC moveMapToAnnotation:map];	
+			[mapView performSelector:@selector(addOverlay:) withObject:[map polygon] afterDelay:1.0f];
 		}
 		if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
 			[self searchBarCancelButtonClicked:nil];
