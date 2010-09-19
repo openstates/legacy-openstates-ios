@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBuildNumber</key>
-	<string>4</string>
+	<string>183</string>
 	<key>CFBuildVersion</key>
 	<string>${CURRENT_PROJECT_VERSION}</string>
 	<key>CFBundleDevelopmentRegion</key>
@@ -26,7 +26,7 @@
 		<string>Icon-Small.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>5EMVYB9KRX.com.texlege.${PRODUCT_NAME:identifier}</string>
+	<string>com.texlege.${PRODUCT_NAME:identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -36,7 +36,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>${CURRENT_PROJECT_VERSION} (Build 4)</string>
+	<string>${CURRENT_PROJECT_VERSION}.183</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIInterfaceOrientation~ipad</key>
