@@ -43,7 +43,7 @@
 	for (UIView* suspect in self.subviews) {
 		if (suspect.tag == 999) {
 			foundPinImage = suspect;
-			continue;
+			break;
 		}
 	}
 	
