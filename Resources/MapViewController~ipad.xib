@@ -80,7 +80,7 @@
 					<object class="IBUISegmentedControl" id="750709019">
 						<reference key="NSNextResponder" ref="275054592"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{153, 7}, {160, 30}}</string>
+						<string key="NSFrame">{{155, 7}, {160, 30}}</string>
 						<reference key="NSSuperview" ref="275054592"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -125,7 +125,7 @@
 					<object class="IBUISearchBar" id="107545398">
 						<reference key="NSNextResponder" ref="275054592"/>
 						<int key="NSvFlags">258</int>
-						<string key="NSFrame">{{348, 0}, {245, 44}}</string>
+						<string key="NSFrame">{{325, 0}, {235, 44}}</string>
 						<reference key="NSSuperview" ref="275054592"/>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<string key="IBText"/>
@@ -136,7 +136,11 @@
 						<object class="IBUITextInputTraits" key="IBTextInputTraits">
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
-						<reference key="IBScopeButtonTitles" ref="0"/>
+						<object class="NSArray" key="IBScopeButtonTitles">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>Scope</string>
+							<string>Scope</string>
+						</object>
 						<bool key="IBIsInBar">YES</bool>
 					</object>
 				</object>
@@ -180,17 +184,17 @@
 						<reference key="IBUICustomView" ref="750709019"/>
 						<reference key="IBUIToolbar" ref="275054592"/>
 					</object>
+					<object class="IBUIBarButtonItem" id="530868576">
+						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<float key="IBUIWidth">235</float>
+						<int key="IBUIStyle">1</int>
+						<reference key="IBUICustomView" ref="107545398"/>
+						<reference key="IBUIToolbar" ref="275054592"/>
+					</object>
 					<object class="IBUIBarButtonItem" id="1031406591">
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<reference key="IBUIToolbar" ref="275054592"/>
 						<int key="IBUISystemItemIdentifier">5</int>
-					</object>
-					<object class="IBUIBarButtonItem" id="530868576">
-						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<float key="IBUIWidth">245</float>
-						<int key="IBUIStyle">1</int>
-						<reference key="IBUICustomView" ref="107545398"/>
-						<reference key="IBUIToolbar" ref="275054592"/>
 					</object>
 				</object>
 				<object class="NSColor" key="IBUITintColor">
@@ -357,10 +361,10 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="324810363"/>
 							<reference ref="530868576"/>
-							<reference ref="1031406591"/>
 							<reference ref="217027828"/>
 							<reference ref="27968564"/>
 							<reference ref="654648440"/>
+							<reference ref="1031406591"/>
 						</object>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">iPad Toolbar</string>
@@ -481,17 +485,13 @@
 							<string>changeMapType:</string>
 							<string>foundDistrictMapsWithObjectIDs:</string>
 							<string>locateUser:</string>
-							<string>mapControlSheet:</string>
 							<string>reverseGeocodeLocation:</string>
-							<string>showAllDistrictOffices:</string>
 							<string>showAllDistricts:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>id</string>
 							<string>NSArray</string>
-							<string>id</string>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -504,9 +504,7 @@
 							<string>changeMapType:</string>
 							<string>foundDistrictMapsWithObjectIDs:</string>
 							<string>locateUser:</string>
-							<string>mapControlSheet:</string>
 							<string>reverseGeocodeLocation:</string>
-							<string>showAllDistrictOffices:</string>
 							<string>showAllDistricts:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -524,15 +522,7 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">mapControlSheet:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
 								<string key="name">reverseGeocodeLocation:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">showAllDistrictOffices:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -546,7 +536,6 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>districtOfficesButton</string>
-							<string>mapControlsButton</string>
 							<string>mapTypeControl</string>
 							<string>mapTypeControlButton</string>
 							<string>mapView</string>
@@ -558,7 +547,6 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>UIBarButtonItem</string>
 							<string>UIBarButtonItem</string>
 							<string>UISegmentedControl</string>
 							<string>UIBarButtonItem</string>
@@ -575,7 +563,6 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>districtOfficesButton</string>
-							<string>mapControlsButton</string>
 							<string>mapTypeControl</string>
 							<string>mapTypeControlButton</string>
 							<string>mapView</string>
@@ -589,10 +576,6 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
 								<string key="name">districtOfficesButton</string>
-								<string key="candidateClassName">UIBarButtonItem</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">mapControlsButton</string>
 								<string key="candidateClassName">UIBarButtonItem</string>
 							</object>
 							<object class="IBToOneOutletInfo">
@@ -647,6 +630,20 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Classes/Utility Classes/UtilityMethods.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../../Frameworks/JSON-Framework/NSObject+SBJSON.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../../Frameworks/JSON-Framework/SBJsonWriter.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
