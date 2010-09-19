@@ -300,14 +300,11 @@ NSInteger kNoSelection = -1;
 	[importer release];
 #endif
 	
-    [[Reachability sharedReachability] setHostName:[self hostName]];
-    
-    // The Reachability class is capable of notifying your application when the network
-    // status changes. By default, those notifications are not enabled.
-    [[Reachability sharedReachability] setNetworkStatusNotificationsEnabled:YES];
-        
-    [self updateStatus];
-	
+	[[Reachability sharedReachability] setHostName:[self hostName]];
+	[self updateStatus];
+	[[Reachability sharedReachability] setNetworkStatusNotificationsEnabled:YES];
+	[self updateStatus];	// we do this twice because of an issue with concurrence, one must be synchronous
+		
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:@"kNetworkReachabilityChangedNotification" object:nil];
 	
     // Set up the mainWindow and content view
