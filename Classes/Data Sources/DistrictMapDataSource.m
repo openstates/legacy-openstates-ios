@@ -305,9 +305,8 @@
 			[predString appendString:@" AND "];
 		[predString appendFormat:@"((legislator.lastname CONTAINS[cd] '%@') OR (legislator.firstname CONTAINS[cd] '%@')", self.filterString, self.filterString];
 		[predString appendFormat:@" OR (legislator.middlename CONTAINS[cd] '%@') OR (legislator.nickname CONTAINS[cd] '%@')", self.filterString, self.filterString];
-		[predString appendFormat:@" OR (district CONTAINS[cd] '%@'))", self.filterString];
+		[predString appendFormat:@" OR (district CONTAINS[cd] '%@') OR (ANY legislator.districtOffices.formattedAddress CONTAINS [cd] '%@'))", self.filterString, self.filterString];
 	}
-	
 	NSPredicate *predicate = (predString.length > 0) ? [NSPredicate predicateWithFormat:predString] : nil;
 	
 	// You've got to delete the cache, or disable caching before you modify the predicate...
@@ -372,7 +371,7 @@
 					map.centerLat = office.latitude;
 					map.centerLon = office.longitude;
 					foundOne = YES;
-					continue;
+					break;
 				}
 			}
 			if (!foundOne)
