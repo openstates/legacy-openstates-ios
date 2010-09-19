@@ -31,8 +31,8 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 
 - (NSString *)title {
 	NSString *title = nil;
-	if ([self.contributionQueryType integerValue] == kContributionQueryTop20Contributors)
-		title = @"Top 20 Contributors";
+	if ([self.contributionQueryType integerValue] == kContributionQueryTop10Contributors)
+		title = @"Top 10 Contributors";
 	else if ([self.contributionQueryType integerValue] == kContributionQueryRecipient)
 		title = @"Contributions";
 	else if ([self.contributionQueryType integerValue] == kContributionQueryDonor)
@@ -65,9 +65,9 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 	NSString *urlMethod = nil;
 	NSString *urlRoot = @"http://transparencydata.com/api/1.0";
 	//NSString *memberID = self.legislator.transDataContributorID;
-	if ([self.contributionQueryType integerValue] == kContributionQueryTop20Contributors) {
-		// http://transparencydata.com/api/1.0/aggregates/pol/7c299471e4414887acc94f98785a90b0/contributors.json?limit=20&apikey=350284d0c6af453b9b56f6c1c7fea1f9
-		urlMethod = [NSString stringWithFormat:@"/aggregates/pol/%@/contributors.json?limit=20&%@", aQuery, apiKey];	
+	if ([self.contributionQueryType integerValue] == kContributionQueryTop10Contributors) {
+		// http://transparencydata.com/api/1.0/aggregates/pol/7c299471e4414887acc94f98785a90b0/contributors.json?apikey=350284d0c6af453b9b56f6c1c7fea1f9
+		urlMethod = [NSString stringWithFormat:@"/aggregates/pol/%@/contributors.json?%@", aQuery, apiKey];	
 	}
 	else if ([self.contributionQueryType integerValue] == kContributionQueryRecipient ||
 			 [self.contributionQueryType integerValue] == kContributionQueryDonor) {
@@ -144,7 +144,7 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 	if (!self.sectionList)
 		self.sectionList = [NSMutableArray array];
 	
-	if ([self.contributionQueryType integerValue] == kContributionQueryTop20Contributors) {
+	if ([self.contributionQueryType integerValue] == kContributionQueryTop10Contributors) {
 		NSArray *jsonArray = jsonDeserialized;	
 		
 		// only one section right now
@@ -197,9 +197,9 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 		if ([self.contributionQueryType integerValue]== kContributionQueryRecipient) {
 			cellInfo = [[TableCellDataObject alloc] init];
 			cellInfo.subtitle = @"Other";
-			cellInfo.title = @"Top 20 Contributors";
+			cellInfo.title = @"Top 10 Contributors";
 			cellInfo.entryValue = [jsonDict objectForKey:@"id"];
-			cellInfo.entryType = kContributionQueryTop20Contributors;
+			cellInfo.entryType = kContributionQueryTop10Contributors;
 			cellInfo.isClickable = YES;
 			thisSection = [NSMutableArray arrayWithObject:cellInfo];
 			[self.sectionList addObject:thisSection];
@@ -340,7 +340,7 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 			}
 		}
 			break;
-		case kContributionQueryTop20Contributors:
+		case kContributionQueryTop10Contributors:
 			title = @"Largest Donors";
 			break;
 		default:
@@ -372,7 +372,7 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
     if (cell == nil) {
 		UITableViewCellStyle style;
 		
-		if ([self.contributionQueryType integerValue] == kContributionQueryTop20Contributors)
+		if ([self.contributionQueryType integerValue] == kContributionQueryTop10Contributors)
 			style = UITableViewCellStyleValue1;
 		else if (cellInfo.isClickable && [self.contributionQueryType integerValue] == kContributionQueryRecipient)
 			style = [TexLegeStandardGroupCell cellStyle];

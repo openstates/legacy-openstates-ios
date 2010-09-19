@@ -10,7 +10,7 @@
 
 enum ContributionQueryType {
 	kContributionQueryRecipient	= 0,
-	kContributionQueryTop20Contributors,
+	kContributionQueryTop10Contributors,
 	kContributionQueryDonor,
 	kContributionTotal			= 997,
 } ContributionQueryType;

@@ -43,11 +43,8 @@
 
 - (void) pushMapViewWithMap:(CapitolMap *)capMap;
 - (void) showWebViewWithURL:(NSURL *)url;
-- (void) setupHeaderView;
 - (void) setupHeader;
 
-- (void)hideChartLoading;
-- (void)showChartLoading;
 - (void)reloadChartForOrientationChange;	
 - (NSString *)svgChartPath;
 - (BOOL)svgChartPathExists;	
@@ -127,6 +124,7 @@
 	self.miniBackgroundView = nil;
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
 	self.chartView = nil;
+	self.chartLoadingAct = nil;
 	self.mapViewController = nil;
 	self.notesPopover = nil;
 	self.masterPopover = nil;
@@ -145,6 +143,7 @@
 	self.leg_photoView = nil;
 	self.tableView = nil;
 	self.chartView = nil;
+	self.chartLoadingAct = nil;
 	self.miniBackgroundView = nil;
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
 	self.mapViewController = nil;
@@ -166,55 +165,38 @@
 	return svgPath;
 }
 
-- (NSString *)chartWidth {
+- (void)reloadChartForOrientationChangeTo:(UIInterfaceOrientation)orientation {
+	BOOL isLandscape = UIInterfaceOrientationIsLandscape(orientation);
 	BOOL isIPad = [UtilityMethods isIPadDevice];
-	BOOL isLandscape = [UtilityMethods isLandscapeOrientation];
 	NSString *chartWidth = nil;
 	if (!isLandscape)
-		chartWidth = (isIPad) ? @"685px" : @"305px";
+		chartWidth = (isIPad) ? @"685px" : @"305px";	// we actually ignore the width on iPhones
 	else
 		chartWidth = (isIPad) ? @"623px" : @"465px";
-
-	return chartWidth;
-}
-
-- (void)reloadChartForOrientationChange {
+	
 	BOOL hasScores = (self.legislator.wnomScores && [self.legislator.wnomScores count]);
 	NSString *svgPath = [self svgChartPath];
 	
 	self.freshmanPlotLab.hidden = hasScores;
-	self.chartView.hidden = !hasScores;
+	//self.chartView.hidden = !hasScores;
 
 	if (!hasScores)
-		[self hideChartLoading];
+		[self.chartLoadingAct stopAnimating];
 	else if (![[NSFileManager defaultManager] fileExistsAtPath:svgPath]) {
 		self.isChartSVG = NO;
 		PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
 		NSString *chartHTML = [indexStats partisanChartForLegislator:self.legislator 
-															   width:[self chartWidth]];
+															   width:chartWidth];
 		if (chartHTML) {
 			[self.chartView loadHTMLString:chartHTML baseURL:[UtilityMethods urlToMainBundle]];
 		}
 	}
 	else {		// we have scores, and we have an SVG file
 		self.isChartSVG = YES;
-		// <meta name="viewport" content="initial-scale=1.0" />
 		NSURL *fileURL = [[NSURL alloc] initFileURLWithPath:svgPath];
 		
-#if 0			
-		NSString *chartHTML = [NSString stringWithFormat:
-//								@"<body style=\"background-color: transparent\"><center><embed src=\"%@\" width=\"320\" height=\"192\" auto type=\"image/svg+xml\"/></center></body>",
-							   @"<body style=\"background-color: transparent\"><center><img src=\"%@\" auto type=\"image/svg+xml\"/></center></body>",
-								[fileURL absoluteString]];
-		
-		[self.chartView loadHTMLString:chartHTML baseURL:nil];
-		debug_NSLog(@"%@", chartHTML);
-		
-#else		
-		//[self.chartView setScalesPageToFit:YES];
 		NSURLRequest *req = [NSURLRequest requestWithURL:fileURL];
 		[self.chartView loadRequest:req];
-#endif
 		[fileURL release];
 	}
 }
@@ -251,6 +233,8 @@
 }
 
 - (void)setupHeader {	
+	self.chartView.hidden = YES;
+	
 	NSString *legName = [NSString stringWithFormat:@"%@ %@",  [self.legislator legTypeShortName], [self.legislator legProperName]];
 	self.leg_nameLab.text = legName;
 	self.navigationItem.title = legName;
@@ -263,7 +247,7 @@
 	
 	PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
 
-	[self reloadChartForOrientationChange];
+	[self reloadChartForOrientationChangeTo:[[UIApplication sharedApplication] statusBarOrientation]];
 
 	if (self.leg_indexTitleLab)
 		self.leg_indexTitleLab.text = [NSString stringWithFormat:@"%@ %@", 
@@ -299,10 +283,13 @@
 }
 
 - (void)setLegislator:(LegislatorObj *)newLegislator {
+	if (newLegislator && self.legislator && [[newLegislator objectID] isEqual:[self.legislator objectID]])
+		return;
+	
 	if (legislator) [legislator release], legislator = nil;
 	if (newLegislator) {
 		legislator = [newLegislator retain];
-		
+
 		LegislatorDetailDataSource *ds = [[LegislatorDetailDataSource alloc] initWithLegislator:legislator];
 		self.tableView.dataSource = self.dataSource = ds;
 		[ds release];
@@ -381,32 +368,21 @@
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration 
 //- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	[self reloadChartForOrientationChange];
+	[self reloadChartForOrientationChangeTo:toInterfaceOrientation];
 }
 
 #pragma mark -
 #pragma mark Web View Delegate
 
-- (void)hideChartLoading {
-	[self.chartLoadingAct stopAnimating];
-	self.chartLoadingAct.hidden = YES;
-}
-
-- (void)showChartLoading {
+- (void)webViewDidStartLoad:(UIWebView *)webView {
 	BOOL hasScores = (self.legislator.wnomScores && [self.legislator.wnomScores count]);
-
+	
 	if (hasScores && !self.isChartSVG) {
 		[self.chartLoadingAct startAnimating];
-		self.chartLoadingAct.hidden = NO;
 	}
 }
 
-- (void)webViewDidStartLoad:(UIWebView *)webView {
-	[self showChartLoading];
-}
-
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-	[self hideChartLoading];
 		
 	if (!self.isChartSVG)
 	{		
@@ -420,8 +396,17 @@
 		if (error) {
 			NSLog(@"Error writing svg to file, %@", svgPath);
 		}
-		if ([[NSFileManager defaultManager] fileExistsAtPath:svgPath])
-			[self reloadChartForOrientationChange];
+		if ([[NSFileManager defaultManager] fileExistsAtPath:svgPath]) {
+			[self reloadChartForOrientationChangeTo:[[UIApplication sharedApplication] statusBarOrientation]];
+		}
+		else {	// There must have been some sort of problem, so just stop the activity indicator
+			[self.chartLoadingAct stopAnimating];
+		}
+
+	}
+	else {
+		self.chartView.hidden = NO;
+		[self.chartLoadingAct stopAnimating];
 	}
 	
 #ifdef AUTOMATED_TESTING_CHARTS
@@ -431,7 +416,7 @@
 
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-	[self hideChartLoading];
+	[self.chartLoadingAct stopAnimating];
 }
 
 #pragma mark -

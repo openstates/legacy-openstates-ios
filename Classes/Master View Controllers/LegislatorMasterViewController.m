@@ -17,6 +17,8 @@
 
 @interface LegislatorMasterViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
+- (IBAction)redisplayVisibleCells:(id)sender;
+
 @end
 
 
@@ -109,6 +111,7 @@
 	if ([UtilityMethods isIPadDevice])
 		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
 	
+	[self redisplayVisibleCells:nil];	
 	// END: IPAD ONLY
 }
 
