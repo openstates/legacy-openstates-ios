@@ -194,7 +194,7 @@ static MiniBrowserController *s_browser = nil;
 		for (UIBarButtonItem *button in m_toolBar.items) {
 			if (button.tag == eTAG_CLOSE) {
 				[alteredButtonList removeObject:button];
-				continue;
+				break;
 			}
 		}
 	}
