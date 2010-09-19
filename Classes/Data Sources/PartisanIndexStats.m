@@ -182,28 +182,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	
 }
 
-- (NSString *) partisanRankForLegislator:(LegislatorObj *)legislator onlyParty:(BOOL)inParty {
-	
-	NSArray *legislators = nil;
-	
-	if (inParty)
-		legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[legislator.legtype integerValue] 
-																			   andPartyID:[legislator.party_id integerValue] 
-																				  context:self.managedObjectContext];
-	else
-		legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[legislator.legtype integerValue] 
-																			   andPartyID:kUnknownParty 
-																				  context:self.managedObjectContext];
-	if (legislators) {
-		NSInteger rank = [legislators indexOfObject:legislator] + 1;
-		NSInteger count = [legislators count];
-		return [NSString stringWithFormat:@"%d out of %d", rank, count];	
-	}
-	else {
-		return nil;
-	}
-}
-
 
 - (NSDictionary *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber {
 	NSDictionary *historyDict = nil;
@@ -403,23 +381,21 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 		NSString *style = @"";
 		NSString *viewport = @"";
 		if ([UtilityMethods isIPadDevice]) {
-			//style = @"width: 500px; height: 180px; margin: 0 auto  background-color: transparent";
-			style = [NSString stringWithFormat:@"width: %@; height: 180px; auto", width];
-			debug_NSLog(@"%@", style);
-			
+//			style = [NSString stringWithFormat:@"width: %@; height: 180px; auto", width];
+//			viewport = @"width = device-width";
+			style = [NSString stringWithFormat:@"width: %@; height: 184px; auto", width];
+
 		}
 		else {
-			//style = @"width: 320px; height: 192px; margin: 0 auto";
-			//style = @"width: 100%; height: 192px;";
-			//style = @"height: 180px; auto";
-			style = [NSString stringWithFormat:@"width: %@; height: 180px; auto", width];
+			style = @"height: 184px; auto";
 			viewport = @"width = device-width";
-			
-			//viewport = @"initial-scale = 1";
+			//style = [NSString stringWithFormat:@"width: %@; height: 180px; auto", width];
+//			viewport = @"initial-scale = 1";
 		}
 		[content replaceOccurrencesOfString:@"VIEWPORT_SETTING" withString:viewport options:NSLiteralSearch range:NSMakeRange(0, [content length])];
 		[content replaceOccurrencesOfString:@"CONTENT_STYLE" withString:style options:NSLiteralSearch range:NSMakeRange(0, [content length])];
 	}
+	
 	return [content autorelease];
 }
 
