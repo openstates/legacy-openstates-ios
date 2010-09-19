@@ -23,10 +23,8 @@
 	NSPersistentStoreCoordinator *persistentStoreCoordinator;
 }
 
-@property (nonatomic) BOOL appIsQuitting;
-
+@property (nonatomic)		  BOOL				appIsQuitting;
 @property (nonatomic, retain) UIWindow			*mainWindow;
-
 @property (nonatomic, retain) NSMutableDictionary	*savedTableSelection;
 
 // For Core Data
@@ -45,7 +43,6 @@
 @property (nonatomic, retain) IBOutlet CalendarMasterViewController *calendarMasterVC;
 @property (nonatomic, retain) IBOutlet DistrictMapMasterViewController *districtMapMasterVC;
 
-// For iPhone Interface
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 
 // For iPad Interface
