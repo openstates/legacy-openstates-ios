@@ -7,6 +7,7 @@
 		<script type="text/javascript">document.documentElement.style.webkitTapHighlightColor = "rgba(0,0,0,0)";</script>
 		<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="highcharts.js"></script>
+		<script type="text/javascript" src="exporting.src.js"></script>
 		<script type="text/javascript">
 			var chart;
 			$(document).ready(function() {
@@ -21,6 +22,14 @@
 						borderColor: 'AAAAAA',		// lightGray
 						backgroundColor: 'FAFBFB'	//backgroundLight
 					},
+					legend: {
+						layout: 'horizontal',
+						align: 'center',
+						verticalAlign: 'top',
+						x: 0,
+						y: 145,
+						borderWidth: 0
+					},
 					title: {
 						text: 'Historical Voting Comparison',
 						color: '435662',
@@ -29,7 +38,6 @@
 					plotOptions: {
 						series: {
 							animation: false,
-
 							events: {
 								legendItemClick: function(event) {
 									return false;
@@ -71,20 +79,13 @@
 						}],
 						DATA_MINMAX
 					},
-					tooltip: {
+	/*				tooltip: {
                         formatter: function() {
                                 return '<b>'+ this.series.name +'</b><br/>'+
 									Highcharts.dateFormat('%Y', this.x) +': '+ Highcharts.numberFormat(this.y, 3, '.');
                         }
                     },
-					legend: {
-						layout: 'horizontal',
-						align: 'center',
-						verticalAlign: 'bottom',
-						x: 0,
-						y: -10,
-						borderWidth: 0
-					},
+	*/
 					series: [
 					{
 						name: 'Dem',
@@ -112,7 +113,7 @@
 			});
 		</script>
 	</head>
-	<body>
+	<body style="background-color: transparent">
 		<div id="container" style="CONTENT_STYLE"></div>
 	</body>
 </html>
