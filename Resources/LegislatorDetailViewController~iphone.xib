@@ -11,7 +11,7 @@
 			<string key="NS.object.0">123</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="206"/>
+			<integer value="203"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -37,7 +37,7 @@
 							<object class="IBUIWebView" id="681173032">
 								<reference key="NSNextResponder" ref="304484639"/>
 								<int key="NSvFlags">290</int>
-								<string key="NSFrame">{{0, 97}, {320, 192}}</string>
+								<string key="NSFrame">{{7, 105}, {315, 186}}</string>
 								<reference key="NSSuperview" ref="304484639"/>
 								<object class="NSColor" key="IBUIBackgroundColor" id="585006431">
 									<int key="NSColorSpace">10</int>
@@ -71,7 +71,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								</object>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIAutoresizesSubviews">NO</bool>
-								<bool key="IBUIMultipleTouchEnabled">YES</bool>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
 							<object class="IBUILabel" id="288306408">
@@ -503,10 +503,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="object" ref="304484639"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="1044557839"/>
-							<reference ref="681173032"/>
 							<reference ref="565075137"/>
 							<reference ref="746379277"/>
 							<reference ref="288306408"/>
+							<reference ref="681173032"/>
 						</array>
 						<reference key="parent" ref="729910629"/>
 					</object>
@@ -584,7 +584,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
 				<string key="-1.CustomClassName">LegislatorDetailViewController</string>
 				<string key="-2.CustomClassName">UIResponder</string>
-				<string key="13.IBEditorWindowLastContentRect">{{875, 488}, {320, 480}}</string>
+				<string key="13.IBEditorWindowLastContentRect">{{876, 488}, {320, 480}}</string>
 				<object class="NSMutableDictionary" key="13.IBLastUsedUIStatusBarStylesToTargetRuntimesMap">
 					<string key="NS.key.0">IBIPadFramework</string>
 					<integer value="2" key="NS.object.0"/>
@@ -602,7 +602,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<string key="205.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<object class="NSAffineTransform" key="205.IBViewBoundsToFrameTransform">
-					<bytes key="NSTransformStruct">P4AAAL+AAAAAAAAAw4+AAA</bytes>
+					<bytes key="NSTransformStruct">P4AAAL+AAABA4AAAw5CAAA</bytes>
 				</object>
 				<string key="206.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<object class="NSAffineTransform" key="206.IBViewBoundsToFrameTransform">
@@ -777,9 +777,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<string key="changeMapType:">id</string>
 						<string key="foundDistrictMapsWithObjectIDs:">NSArray</string>
 						<string key="locateUser:">id</string>
-						<string key="mapControlSheet:">id</string>
 						<string key="reverseGeocodeLocation:">id</string>
-						<string key="showAllDistrictOffices:">id</string>
 						<string key="showAllDistricts:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
@@ -795,16 +793,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string key="name">locateUser:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="mapControlSheet:">
-							<string key="name">mapControlSheet:</string>
-							<string key="candidateClassName">id</string>
-						</object>
 						<object class="IBActionInfo" key="reverseGeocodeLocation:">
 							<string key="name">reverseGeocodeLocation:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="showAllDistrictOffices:">
-							<string key="name">showAllDistrictOffices:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="showAllDistricts:">
@@ -814,7 +804,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="districtOfficesButton">UIBarButtonItem</string>
-						<string key="mapControlsButton">UIBarButtonItem</string>
 						<string key="mapTypeControl">UISegmentedControl</string>
 						<string key="mapTypeControlButton">UIBarButtonItem</string>
 						<string key="mapView">MKMapView</string>
@@ -827,10 +816,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="districtOfficesButton">
 							<string key="name">districtOfficesButton</string>
-							<string key="candidateClassName">UIBarButtonItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="mapControlsButton">
-							<string key="name">mapControlsButton</string>
 							<string key="candidateClassName">UIBarButtonItem</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="mapTypeControl">
@@ -876,6 +861,20 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Classes/Utility Classes/UtilityMethods.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../../Frameworks/JSON-Framework/NSObject+SBJSON.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../../Frameworks/JSON-Framework/SBJsonWriter.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
