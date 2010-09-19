@@ -375,10 +375,10 @@
 		BSKmlResult *firstResult = nil;
 		
 		for (BSKmlResult *result in parser.results) {
-			if (result.addressDict && ([[result.addressDict valueForKey:@"address"] length]|| [result.formattedAddress length])) {
+			if (result.addressDict && ([[result.addressDict valueForKey:@"address"] length] || [result.formattedAddress length])) {
 				//debug_NSLog(@"%@ ..... %@", [result.addressDict valueForKey:@"address"], result.formattedAddress);
 				firstResult = result;
-				continue;
+				break;
 			}
 		}
 		if (!firstResult) {
