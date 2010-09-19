@@ -103,14 +103,13 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							</object>
 							<object class="IBUIActivityIndicatorView" id="746379277">
 								<reference key="NSNextResponder" ref="304484639"/>
-								<int key="NSvFlags">293</int>
+								<int key="NSvFlags">-2147483355</int>
 								<string key="NSFrame">{{142, 149}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="304484639"/>
 								<reference key="IBUIBackgroundColor" ref="585006431"/>
 								<bool key="IBUIOpaque">NO</bool>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<bool key="IBUIHidesWhenStopped">NO</bool>
-								<bool key="IBUIAnimating">YES</bool>
 								<int key="IBUIStyle">0</int>
 							</object>
 							<object class="IBUIView" id="1044557839">
@@ -614,7 +613,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="allSlider">PartisanScaleView</string>
 						<string key="chartLoadingAct">UIActivityIndicatorView</string>
-						<string key="chartLoadingLab">UILabel</string>
 						<string key="chartView">UIWebView</string>
 						<string key="freshmanPlotLab">UILabel</string>
 						<string key="headerView">UIView</string>
@@ -641,10 +639,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="IBToOneOutletInfo" key="chartLoadingAct">
 							<string key="name">chartLoadingAct</string>
 							<string key="candidateClassName">UIActivityIndicatorView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="chartLoadingLab">
-							<string key="name">chartLoadingLab</string>
-							<string key="candidateClassName">UILabel</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="chartView">
 							<string key="name">chartView</string>
