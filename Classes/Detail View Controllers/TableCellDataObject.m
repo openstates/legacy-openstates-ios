@@ -10,7 +10,7 @@
 #include "UtilityMethods.h"
 
 @implementation TableCellDataObject
-@synthesize entryValue, isClickable, entryType, title, subtitle;
+@synthesize entryValue, isClickable, entryType, title, subtitle, action, parameter;
 
 - (id)initWithDictionary:(NSDictionary *)aDictionary {
 	if ([self init]) {
@@ -20,6 +20,10 @@
 		self.isClickable = [[aDictionary valueForKey:@"isClickable"] boolValue];
 		self.title = [aDictionary valueForKey:@"title"];
 		self.subtitle = [aDictionary valueForKey:@"subtitle"];
+		if ([aDictionary valueForKey:@"action"])
+			self.action = [aDictionary valueForKey:@"action"];
+		if ([aDictionary valueForKey:@"parameter"])
+			self.parameter = [aDictionary valueForKey:@"parameter"];
 	}
 	return self;
 }
@@ -27,13 +31,22 @@
 
 - (void)dealloc {
 	self.entryValue = self.subtitle = self.title = nil;
+	self.parameter = nil;
+	self.action = nil;
 	
     [super dealloc];
 }
 
 - (NSString *)description {
-	NSString *string = [NSString stringWithFormat:@"title = %@  subtitle = %@   entryValue = %@  entryType = %d  isClickable = %d", 
-						self.title, self.subtitle, self.entryValue, self.entryType, self.isClickable];
+	NSString *string = [NSString stringWithFormat:@"CellDataObject properties: \
+						title = %@ \
+						subtitle = %@ \
+						entryValue = %@ \
+						entryType = %d \
+						isClickable = %d \
+						action = %@ \
+						parameter = %@", 
+						self.title, self.subtitle, self.entryValue, self.entryType, self.isClickable, self.action, self.parameter];
 	return string;
 }
 

@@ -33,7 +33,8 @@ enum {
 @property (nonatomic, retain)id entryValue;
 @property (nonatomic)BOOL isClickable;
 @property (nonatomic)NSInteger entryType;
-
+@property (nonatomic, retain) id action;
+@property (nonatomic, retain) id parameter;
 @property (nonatomic, retain) NSString *title;
 @property (nonatomic, retain) NSString *subtitle;
 

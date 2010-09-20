@@ -9,12 +9,14 @@
 #import "LegislatorContributionsViewController.h"
 #import "LegislatorContributionsDataSource.h"
 #import "TableCellDataObject.h"
+#import "UtilityMethods.h"
+#import "LocalyticsSession.h"
 
 @interface LegislatorContributionsViewController (Private)
 @end
 
 @implementation LegislatorContributionsViewController
-@synthesize queryEntityID, contributionQueryType, dataSource;
+@synthesize dataSource;
 
 #pragma mark -
 #pragma mark Initialization
@@ -31,6 +33,8 @@
 
 
 - (IBAction)contributionDataChanged:(id)sender {
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+
 	[self.tableView reloadData];
 }
 
@@ -49,7 +53,6 @@
 
 
 - (void)viewDidUnload {
-	self.queryEntityID = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:kContributionsDataChangeNotificationKey object:self.dataSource];	
 	self.dataSource = nil;
 }
@@ -64,9 +67,7 @@
 
 
 - (void)dealloc {
-	self.queryEntityID = nil;
 	self.dataSource = nil;
-	self.contributionQueryType = nil;
     [super dealloc];
 }
 
@@ -79,22 +80,36 @@
 #pragma mark -
 #pragma mark Data Objects
 
-- (void)setQueryEntityID:(NSString *)newObj withQueryType:(NSNumber *)newType {
-	self.contributionQueryType = newType;
-	self.dataSource.contributionQueryType = newType;
+- (void)setQueryEntityID:(NSString *)newObj type:(NSNumber *)newType cycle:(NSString *)newCycle {
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	
-	self.queryEntityID = newObj;
-}
-
-- (void)setQueryEntityID:(NSString *)newObj {
-	[self view];
-	
-	if (queryEntityID) [queryEntityID release], queryEntityID = nil;
-	if (newObj) {		
-		queryEntityID = [newObj retain];
-		self.dataSource.queryEntityID = queryEntityID;
-		self.navigationItem.title = [self.dataSource title];
+	NSString *typeString = @"";
+	switch ([newType integerValue]) {
+		case kContributionQueryDonor:
+			typeString = @"DonorSummaryQuery";
+			break;
+		case kContributionQueryRecipient:
+			typeString = @"RecipientSummaryQuery";
+			break;
+		case kContributionQueryTop10Donors:
+			typeString = @"Top10DonorsQuery";
+			break;
+		case kContributionQueryTop10Recipients:
+			typeString = @"Top10RecipientsQuery";
+			break;
+		case kContributionQueryEntitySearch:
+			typeString = @"EntitySearchQuery";
+			break;
+		default:
+			break;
 	}
+	NSDictionary *logDict = [[NSDictionary alloc] initWithObjectsAndKeys:newType, @"queryType", nil];
+	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"CONTRIBUTIONS_QUERY" attributes:logDict];
+	[logDict release];
+
+	[self.dataSource initiateQueryWithQueryID:newObj type:newType cycle:newCycle];
+	self.navigationItem.title = [self.dataSource title];
+
 }
 
 
@@ -104,15 +119,45 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	TableCellDataObject *dataObject = [self.dataSource dataObjectForIndexPath:indexPath];
 	
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	
 	if (dataObject && dataObject.isClickable) {
+		if (!dataObject.entryValue || ![dataObject.entryValue length]) {
+			NSString *queryName = @"";
+			if (dataObject.title)
+				queryName = dataObject.title;
+			
+			NSDictionary *logDict = [[NSDictionary alloc] initWithObjectsAndKeys:queryName, @"queryName", nil];
+			[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"CONTRIBUTION_QUERY_ERROR" attributes:logDict];
+			[logDict release];
+			
+			UIAlertView *dataAlert = [[[UIAlertView alloc] initWithTitle:@"Incomplete Records" 
+																 message:@"The campaign finance data provider has incomplete information for this request.  You may visit followthemoney.org to perform a manual search." 
+																delegate:self 
+													   cancelButtonTitle:@"Cancel" 
+													   otherButtonTitles:@"Open Website", nil] autorelease];
+			if (dataAlert)
+				[dataAlert show];
+			
+			return;
+		}
+		
+		
 		LegislatorContributionsViewController *detail = [[LegislatorContributionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-		[detail setQueryEntityID:dataObject.entryValue withQueryType:[NSNumber numberWithInteger:dataObject.entryType]];		
+
+		[detail setQueryEntityID:dataObject.entryValue type:dataObject.action cycle:dataObject.parameter];		
 		[self.navigationController pushViewController:detail animated:YES];
 		[detail release];
 		
 	}
 }
 
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+	if (buttonIndex == [alertView firstOtherButtonIndex]) {
+		NSURL *url = [NSURL URLWithString:@"http://www.followthemoney.org"];
+		[UtilityMethods openURLWithTrepidation:url];
+	}
+}
 
 
 @end

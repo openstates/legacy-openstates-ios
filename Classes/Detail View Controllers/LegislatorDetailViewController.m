@@ -466,7 +466,7 @@
 		}
 		else if (cellInfo.entryType == DirectoryTypeContributions) {
 			LegislatorContributionsViewController *subDetailController = [[LegislatorContributionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			[subDetailController setQueryEntityID:cellInfo.entryValue withQueryType:[NSNumber numberWithInteger:kContributionQueryRecipient]];
+			[subDetailController setQueryEntityID:cellInfo.entryValue type:[NSNumber numberWithInteger:kContributionQueryRecipient] cycle:@"-1"];
 			[self.navigationController pushViewController:subDetailController animated:YES];
 			[subDetailController release];
 		}

@@ -9,13 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "LegislatorContributionsDataSource.h"
 
-@interface LegislatorContributionsViewController : UITableViewController {
+@interface LegislatorContributionsViewController : UITableViewController <UIAlertViewDelegate> {
 
 }
 @property (nonatomic,retain) LegislatorContributionsDataSource *dataSource;
-@property (nonatomic,copy) NSString *queryEntityID;
-@property (nonatomic,copy) NSNumber *contributionQueryType;
 
-- (void)setQueryEntityID:(NSString *)newObj withQueryType:(NSNumber *)newType;
+- (void)setQueryEntityID:(NSString *)newObj type:(NSNumber *)newType cycle:(NSString *)newCycle;
 
 @end
