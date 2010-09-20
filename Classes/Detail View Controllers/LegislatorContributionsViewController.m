@@ -103,7 +103,7 @@
 		default:
 			break;
 	}
-	NSDictionary *logDict = [[NSDictionary alloc] initWithObjectsAndKeys:newType, @"queryType", nil];
+	NSDictionary *logDict = [[NSDictionary alloc] initWithObjectsAndKeys:typeString, @"queryType", nil];
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"CONTRIBUTIONS_QUERY" attributes:logDict];
 	[logDict release];
 
