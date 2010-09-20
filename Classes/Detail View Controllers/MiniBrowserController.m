@@ -498,6 +498,7 @@ static MiniBrowserController *s_browser = nil;
 	if ( self.m_webView.loading )
 	{
 		[self.m_webView stopLoading];
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 		[self.m_activity stopAnimating];
 		[self.m_loadingLabel setHidden:YES];
 	}
@@ -638,6 +639,7 @@ static MiniBrowserController *s_browser = nil;
 {
 	[self.m_toolBar setItems:self.m_loadingItemList animated:NO];
 	
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	[self.m_activity startAnimating];
 	[self.m_loadingLabel setHidden:NO];
 	[self.m_webView setAlpha:0.75f];
@@ -650,6 +652,7 @@ static MiniBrowserController *s_browser = nil;
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
 	[self.m_toolBar setItems:self.m_normalItemList animated:NO];
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 	[self.m_activity stopAnimating];
 	[self.m_loadingLabel setHidden:YES];
 	[self.m_webView setAlpha:1.0f];
@@ -686,6 +689,7 @@ static MiniBrowserController *s_browser = nil;
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	[self.m_activity startAnimating];
 	[self.m_loadingLabel setHidden:NO];
 	[self.m_webView setAlpha:0.75f];
