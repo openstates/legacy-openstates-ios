@@ -22,6 +22,7 @@ extern NSString * const kRestoreSelectionKey;
 extern NSString * const kAnalyticsAskedForOptInKey;
 extern NSString * const kAnalyticsSettingsSwitch;
 extern NSString * const kShowedSplashScreenKey;
+extern NSString * const kSegmentControlPrefKey;
 
 #define m_iTunesAppID 326478866
 //#define m_iTunesURL @"http://itunes.com/us/app/TexLege"

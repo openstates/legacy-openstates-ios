@@ -94,6 +94,14 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+	
+	NSDictionary *segPrefs = [[NSUserDefaults standardUserDefaults] objectForKey:kSegmentControlPrefKey];
+	if (segPrefs) {
+		NSNumber *segIndex = [segPrefs objectForKey:[self viewControllerKey]];
+		if (segIndex)
+			self.chamberControl.selectedSegmentIndex = [segIndex integerValue];
+	}
+
 		
 	//// ALL OF THE FOLLOWING MUST NOT RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER	
 	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
@@ -244,6 +252,17 @@ NSIndexPath *current = nil;
 	if (sender == chamberControl) {
 		[self filterContentForSearchText:self.searchDisplayController.searchBar.text 
 								   scope:self.chamberControl.selectedSegmentIndex];
+		
+		NSDictionary *segPrefs = [[NSUserDefaults standardUserDefaults] objectForKey:kSegmentControlPrefKey];
+		if (segPrefs) {
+			NSNumber *segIndex = [NSNumber numberWithInteger:self.chamberControl.selectedSegmentIndex];
+			NSMutableDictionary *newDict = [segPrefs mutableCopy];
+			[newDict setObject:segIndex forKey:[self viewControllerKey]];
+			[[NSUserDefaults standardUserDefaults] setObject:newDict forKey:kSegmentControlPrefKey];
+			[[NSUserDefaults standardUserDefaults] synchronize];
+			[newDict release];
+		}
+		
 		[self.tableView reloadData];
 	}
 }

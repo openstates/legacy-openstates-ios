@@ -52,6 +52,7 @@ NSString * const kRestoreSelectionKey = @"RestoreSelection";
 NSString * const kAnalyticsAskedForOptInKey = @"HasAskedForOptIn";
 NSString * const kAnalyticsSettingsSwitch = @"PermitUseOfAnalytics";
 NSString * const kShowedSplashScreenKey = @"HasShownSplashScreen";
+NSString * const kSegmentControlPrefKey = @"SegmentControlPrefs";
 
 NSUInteger kNumMaxTabs = 11;
 NSInteger kNoSelection = -1;
@@ -330,6 +331,7 @@ NSInteger kNoSelection = -1;
 									[NSNumber numberWithBool:NO], kAnalyticsAskedForOptInKey,
 									[NSNumber numberWithBool:YES], kAnalyticsSettingsSwitch,
 									[NSNumber numberWithBool:NO], kShowedSplashScreenKey,
+									[NSDictionary dictionary], kSegmentControlPrefKey,
 									version, @"CFBundleVersion",
 									nil];
 	
