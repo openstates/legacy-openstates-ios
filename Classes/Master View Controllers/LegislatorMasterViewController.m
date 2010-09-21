@@ -41,11 +41,13 @@
 	return [LegislatorsDataSource class];
 }
 
-/*
+
 - (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
 	[super configureWithManagedObjectContext:context];	
+	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
+		self.selectObjectOnAppear = [self firstDataObject];
 }
-*/
+
 
 - (void)dealloc {
 	self.chamberControl = nil;
@@ -82,9 +84,6 @@
 	self.chamberControl.tintColor = [TexLegeTheme accent];
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
 	self.navigationItem.titleView = self.chamberControl;
-
-	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
-		self.selectObjectOnAppear = [self firstDataObject];
 }
 
 - (void)viewDidUnload {
@@ -117,7 +116,7 @@
 		self.selectObjectOnAppear = detailObject;
 	}	
 	if ([UtilityMethods isIPadDevice])
-		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
+		[self.tableView reloadData]; // popovers look like shit without this
 	
 	[self redisplayVisibleCells:nil];	
 	// END: IPAD ONLY
@@ -167,7 +166,9 @@ NSIndexPath *current = nil;
 		NSIndexPath *newPath = [NSIndexPath indexPathForRow:theRow inSection:theSection];
 		[current release];
 		current = [newPath retain];
-		[self.navigationController popToRootViewControllerAnimated:NO];
+		UINavigationController *nav = [self navigationController];
+		//if (nav && [nav.viewControllers count]>1)
+			[nav popToRootViewControllerAnimated:NO];
 		
 		[self.tableView selectRowAtIndexPath:newPath animated:NO scrollPosition:UITableViewScrollPositionTop];
 		[self.tableView.delegate tableView:self.tableView didSelectRowAtIndexPath:newPath];

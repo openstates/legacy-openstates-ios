@@ -129,7 +129,6 @@
 		37413B1712114D09003CA7E8 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37413B1612114D09003CA7E8 /* MessageUI.framework */; };
 		3742D6EF122E18D100698483 /* DistrictMapSearchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3742D6EE122E18D100698483 /* DistrictMapSearchOperation.m */; };
 		3742D723122E1FDF00698483 /* NSInvocation+CWVariableArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 3742D722122E1FDF00698483 /* NSInvocation+CWVariableArguments.m */; };
-		37442388120C8ED9007CBD96 /* ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 37442387120C8ED9007CBD96 /* ImageCache.m */; };
 		3747BFA811E6890600A6D8C6 /* seal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3747BFA611E6890600A6D8C6 /* seal@2x.png */; };
 		3747BFA911E6890600A6D8C6 /* seal.png in Resources */ = {isa = PBXBuildFile; fileRef = 3747BFA711E6890600A6D8C6 /* seal.png */; };
 		3747C25D11E7B15300A6D8C6 /* PartisanIndexStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 3747C25C11E7B15300A6D8C6 /* PartisanIndexStats.m */; };
@@ -143,7 +142,6 @@
 		376487C310274F1E001E482D /* MiniBrowserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 376487C010274F1E001E482D /* MiniBrowserView.xib */; };
 		3764887110275511001E482D /* fwdButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 3764886F10275511001E482D /* fwdButton.png */; };
 		3764887210275511001E482D /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 3764887010275511001E482D /* backButton.png */; };
-		3764E8501217A6B1008DF726 /* ColoredBarButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3764E84F1217A6B1008DF726 /* ColoredBarButtonView.m */; };
 		3764E8CB1217B83F008DF726 /* NotesView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3764E8CA1217B83F008DF726 /* NotesView~ipad.xib */; };
 		3766EFC112109F110073C705 /* TexLegeStrings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3766EFC012109F110073C705 /* TexLegeStrings.plist */; };
 		3767142211E833BA00D004C8 /* UIImage+ResolutionIndependent.m in Sources */ = {isa = PBXBuildFile; fileRef = 3767142111E833BA00D004C8 /* UIImage+ResolutionIndependent.m */; };
@@ -200,7 +198,10 @@
 		37A720B4122ECD3B0015AAE0 /* TexLegeInfo~iphone.htm in Resources */ = {isa = PBXBuildFile; fileRef = 37A720B3122ECD3B0015AAE0 /* TexLegeInfo~iphone.htm */; };
 		37AD57BB11DA651700D68934 /* CommitteeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37AD57B911DA651500D68934 /* CommitteeDetailViewController.m */; };
 		37AD57BC11DA651700D68934 /* CommitteeDetailViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37AD57BA11DA651700D68934 /* CommitteeDetailViewController~iphone.xib */; };
-		37ADAF500FD260E600282EA0 /* unknown.png in Resources */ = {isa = PBXBuildFile; fileRef = 37ADAF4F0FD260E600282EA0 /* unknown.png */; };
+		37B3CE911249365E00FB3F94 /* MapMiniDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B3CE901249365E00FB3F94 /* MapMiniDetailViewController.m */; };
+		37B3CE991249373100FB3F94 /* MapMiniDetailViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37B3CE981249373100FB3F94 /* MapMiniDetailViewController~ipad.xib */; };
+		37B3CEB412493D3100FB3F94 /* MapMiniDetailViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37B3CEB312493D3100FB3F94 /* MapMiniDetailViewController~iphone.xib */; };
+		37B3CF20124946B800FB3F94 /* IntelligentSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B3CF1F124946B800FB3F94 /* IntelligentSplitViewController.m */; };
 		37B64234120FE9FF0076B196 /* LegislatorMasterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B64233120FE9FF0076B196 /* LegislatorMasterCell.m */; };
 		37BACDFB1218D834000C8E5D /* UIApplication+ScreenMirroring.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BACDF91218D834000C8E5D /* UIApplication+ScreenMirroring.m */; };
 		37BE344E1232A018001D28B1 /* ChartsTemplate~iphone.htm in Resources */ = {isa = PBXBuildFile; fileRef = 37BE344D1232A018001D28B1 /* ChartsTemplate~iphone.htm */; };
@@ -605,10 +606,8 @@
 		37D364F612369DDC00CCF86E /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37D364F512369DDC00CCF86E /* AddressBookUI.framework */; };
 		37D46C01123B483800C2C403 /* CommitteeMemberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D46C00123B483800C2C403 /* CommitteeMemberCell.m */; };
 		37D46DCA123BFA9800C2C403 /* CommitteeDetailViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37D46DC9123BFA9800C2C403 /* CommitteeDetailViewController~ipad.xib */; };
-		37D52B9C124885E5005BC5EC /* TexLegeDataImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 37242B50124117E2005C43D3 /* TexLegeDataImporter.m */; };
 		37D6E82810175F0800D4D7C2 /* UtilityMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6E82710175F0800D4D7C2 /* UtilityMethods.m */; };
 		37D6E8C51017772B00D4D7C2 /* Map.SamHoustonLoc.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37D6E8C41017772B00D4D7C2 /* Map.SamHoustonLoc.pdf */; };
-		37DC99171217D05000AD53BD /* ColoredBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 37DC99161217D05000AD53BD /* ColoredBarButtonItem.m */; };
 		37E2068412204D5000103D76 /* DistrictOfficeObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E2068112204D5000103D76 /* DistrictOfficeObj.m */; };
 		37E2068512204D5000103D76 /* DistrictMapObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E2068312204D5000103D76 /* DistrictMapObj.m */; };
 		37E207C71220779B00103D76 /* bluestar.png in Resources */ = {isa = PBXBuildFile; fileRef = 37E207C31220779B00103D76 /* bluestar.png */; };
@@ -626,10 +625,8 @@
 		37EAE4B4121A57D100BF4277 /* BSGoogleV3KmlParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE480121A57D100BF4277 /* BSGoogleV3KmlParser.m */; };
 		37EAE4B5121A57D100BF4277 /* BSKmlResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE482121A57D100BF4277 /* BSKmlResult.m */; };
 		37EAE54F121A6D9A00BF4277 /* CustomAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE54E121A6D9A00BF4277 /* CustomAnnotation.m */; };
-		37EC28FD120DFFB600174836 /* UACellBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EC28FC120DFFB600174836 /* UACellBackgroundView.m */; };
 		37F1B93D123E089500FB25AF /* 103-map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3726FC3C120A99800043D6B9 /* 103-map@2x.png */; };
 		37F510AA0FF1ADEF0020A13B /* Icon_80.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F510A90FF1ADEF0020A13B /* Icon_80.png */; };
-		37FBB74A12224A8400CD8E20 /* DistrictOfficeDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FBB74912224A8400CD8E20 /* DistrictOfficeDataSource.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1026,8 +1023,13 @@
 		37AD57B811DA651300D68934 /* CommitteeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommitteeDetailViewController.h; path = "Classes/Detail View Controllers/CommitteeDetailViewController.h"; sourceTree = SOURCE_ROOT; };
 		37AD57B911DA651500D68934 /* CommitteeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommitteeDetailViewController.m; path = "Classes/Detail View Controllers/CommitteeDetailViewController.m"; sourceTree = SOURCE_ROOT; };
 		37AD57BA11DA651700D68934 /* CommitteeDetailViewController~iphone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "CommitteeDetailViewController~iphone.xib"; path = "Resources/CommitteeDetailViewController~iphone.xib"; sourceTree = "<group>"; };
-		37ADAF4F0FD260E600282EA0 /* unknown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unknown.png; sourceTree = "<group>"; };
 		37B2D28A10224B2800B493C8 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
+		37B3CE8F1249365E00FB3F94 /* MapMiniDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapMiniDetailViewController.h; path = "Classes/Detail View Controllers/MapMiniDetailViewController.h"; sourceTree = SOURCE_ROOT; };
+		37B3CE901249365E00FB3F94 /* MapMiniDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapMiniDetailViewController.m; path = "Classes/Detail View Controllers/MapMiniDetailViewController.m"; sourceTree = SOURCE_ROOT; };
+		37B3CE981249373100FB3F94 /* MapMiniDetailViewController~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapMiniDetailViewController~ipad.xib"; path = "Resources/MapMiniDetailViewController~ipad.xib"; sourceTree = "<group>"; };
+		37B3CEB312493D3100FB3F94 /* MapMiniDetailViewController~iphone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapMiniDetailViewController~iphone.xib"; path = "Resources/MapMiniDetailViewController~iphone.xib"; sourceTree = SOURCE_ROOT; };
+		37B3CF1E124946B800FB3F94 /* IntelligentSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntelligentSplitViewController.h; sourceTree = "<group>"; };
+		37B3CF1F124946B800FB3F94 /* IntelligentSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntelligentSplitViewController.m; sourceTree = "<group>"; };
 		37B64232120FE9FF0076B196 /* LegislatorMasterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorMasterCell.h; path = "Classes/Custom Cells and Views/LegislatorMasterCell.h"; sourceTree = SOURCE_ROOT; };
 		37B64233120FE9FF0076B196 /* LegislatorMasterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegislatorMasterCell.m; path = "Classes/Custom Cells and Views/LegislatorMasterCell.m"; sourceTree = SOURCE_ROOT; };
 		37BACDF91218D834000C8E5D /* UIApplication+ScreenMirroring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+ScreenMirroring.m"; path = "Classes/Utility Classes/UIApplication+ScreenMirroring.m"; sourceTree = SOURCE_ROOT; };
@@ -2032,6 +2034,8 @@
 				374C36E51215E8DA006B6ADA /* CapitolMapsMasterViewController.m */,
 				374C37031215EB2D006B6ADA /* LinksMasterViewController.h */,
 				374C37041215EB2D006B6ADA /* LinksMasterViewController.m */,
+				37B3CF1E124946B800FB3F94 /* IntelligentSplitViewController.h */,
+				37B3CF1F124946B800FB3F94 /* IntelligentSplitViewController.m */,
 			);
 			path = "Master View Controllers";
 			sourceTree = "<group>";
@@ -2044,6 +2048,7 @@
 				37BE34511232A0A1001D28B1 /* ChartsTemplate~ipad.htm */,
 				37D46DC9123BFA9800C2C403 /* CommitteeDetailViewController~ipad.xib */,
 				37BF251111D64B5400B71688 /* LegislatorDetailViewController~ipad.xib */,
+				37B3CE981249373100FB3F94 /* MapMiniDetailViewController~ipad.xib */,
 				37CDD9CC12150651004EC1B7 /* MapViewController~ipad.xib */,
 				37D1C5CC12027D2D00507757 /* CalendarDetailViewController~ipad.xib */,
 				3764E8CA1217B83F008DF726 /* NotesView~ipad.xib */,
@@ -2092,6 +2097,8 @@
 				37A0E4480FD2DEAA009B65F7 /* CapitolMapsDetailViewController.m */,
 				378B57A81219913400F7ED0B /* MapViewController.h */,
 				378B57A91219913400F7ED0B /* MapViewController.m */,
+				37B3CE8F1249365E00FB3F94 /* MapMiniDetailViewController.h */,
+				37B3CE901249365E00FB3F94 /* MapMiniDetailViewController.m */,
 				37242D3412415CC4005C43D3 /* LegislatorContributionsViewController.h */,
 				37242D3512415CC4005C43D3 /* LegislatorContributionsViewController.m */,
 			);
@@ -2180,6 +2187,7 @@
 				37A720B3122ECD3B0015AAE0 /* TexLegeInfo~iphone.htm */,
 				37BE344D1232A018001D28B1 /* ChartsTemplate~iphone.htm */,
 				3739DBE4123355EF00D4F7D2 /* LegislatorDetailViewController~iphone.xib */,
+				37B3CEB312493D3100FB3F94 /* MapMiniDetailViewController~iphone.xib */,
 				37A2CCF5122C173B00339495 /* MapViewController~iphone.xib */,
 				3732A0F711DB203F009E8957 /* iPhoneTabBarController.xib */,
 				3735DD3C12087CEF0000AF5A /* CalendarDetailViewController~iphone.xib */,
@@ -2362,7 +2370,6 @@
 			children = (
 				37C1FEB2120B90D50031E13D /* house */,
 				37C1FFE1120B90D50031E13D /* senate */,
-				37ADAF4F0FD260E600282EA0 /* unknown.png */,
 			);
 			name = "Legislator Photos";
 			path = "Resources/Legislator Photos";
@@ -3191,7 +3198,6 @@
 				1D60589A0D05DD50006BFB54 /* Icon.png in Resources */,
 				376B59F60FC1BDCF0094D80B /* Default.png in Resources */,
 				3738E07A1226A86B00DDD605 /* Settings.bundle in Resources */,
-				37ADAF500FD260E600282EA0 /* unknown.png in Resources */,
 				37F510AA0FF1ADEF0020A13B /* Icon_80.png in Resources */,
 				379C1F031012E0CD007844B5 /* NotesView.xib in Resources */,
 				376487C310274F1E001E482D /* MiniBrowserView.xib in Resources */,
@@ -3647,6 +3653,8 @@
 				37D46DCA123BFA9800C2C403 /* CommitteeDetailViewController~ipad.xib in Resources */,
 				37F1B93D123E089500FB25AF /* 103-map@2x.png in Resources */,
 				37C1882712489F1A0028FD83 /* TexLege.v2.sqlite in Resources */,
+				37B3CE991249373100FB3F94 /* MapMiniDetailViewController~ipad.xib in Resources */,
+				37B3CEB412493D3100FB3F94 /* MapMiniDetailViewController~iphone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3706,8 +3714,6 @@
 				3735DDAF120899980000AF5A /* UISearchDisplayController+NoHideNav.m in Sources */,
 				3735DFFE120917490000AF5A /* CommitteeMasterViewController.m in Sources */,
 				3735E1CE1209B09F0000AF5A /* TexLegeTheme.m in Sources */,
-				37442388120C8ED9007CBD96 /* ImageCache.m in Sources */,
-				37EC28FD120DFFB600174836 /* UACellBackgroundView.m in Sources */,
 				37892DCE120EA44300AB1752 /* LegislatorMasterCellView.m in Sources */,
 				37B64234120FE9FF0076B196 /* LegislatorMasterCell.m in Sources */,
 				37A0C6031211DB810067F7AF /* TexLegeEmailComposer.m in Sources */,
@@ -3715,8 +3721,6 @@
 				374C36BA1215E55F006B6ADA /* CalendarMasterViewController.m in Sources */,
 				374C36E61215E8DA006B6ADA /* CapitolMapsMasterViewController.m in Sources */,
 				374C37051215EB2D006B6ADA /* LinksMasterViewController.m in Sources */,
-				3764E8501217A6B1008DF726 /* ColoredBarButtonView.m in Sources */,
-				37DC99171217D05000AD53BD /* ColoredBarButtonItem.m in Sources */,
 				37BACDFB1218D834000C8E5D /* UIApplication+ScreenMirroring.m in Sources */,
 				378B57AA1219913400F7ED0B /* MapViewController.m in Sources */,
 				378B57BE121994C400F7ED0B /* UIDevice-Hardware.m in Sources */,
@@ -3728,7 +3732,6 @@
 				37E2068412204D5000103D76 /* DistrictOfficeObj.m in Sources */,
 				37E2068512204D5000103D76 /* DistrictMapObj.m in Sources */,
 				37E208B51220F0FD00103D76 /* TexLege 2.xcdatamodel in Sources */,
-				37FBB74A12224A8400CD8E20 /* DistrictOfficeDataSource.m in Sources */,
 				37A4E5ED122388F300BCE44D /* LocalyticsSession.m in Sources */,
 				37A4E5EE122388F300BCE44D /* UploaderThread.m in Sources */,
 				3704F4D6122437AC00DC486F /* AnalyticsOptInAlertController.m in Sources */,
@@ -3821,7 +3824,8 @@
 				37242DE412417662005C43D3 /* SBJsonParser.m in Sources */,
 				37242DE512417662005C43D3 /* SBJsonWriter.m in Sources */,
 				37412A39124322C400807502 /* LegislatorContributionsDataSource.m in Sources */,
-				37D52B9C124885E5005BC5EC /* TexLegeDataImporter.m in Sources */,
+				37B3CE911249365E00FB3F94 /* MapMiniDetailViewController.m in Sources */,
+				37B3CF20124946B800FB3F94 /* IntelligentSplitViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3894,6 +3898,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Gregory Combs";
 				CURRENT_PROJECT_VERSION = 2.0;
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -3953,6 +3958,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Gregory Combs";
 				CURRENT_PROJECT_VERSION = 2.0;
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -3962,6 +3968,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				LIBRARY_SEARCH_PATHS = "";
+				LLVM_LTO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-licucore",
@@ -4012,6 +4019,8 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Gregory Combs (MJMLU3U99Y)";
 				CURRENT_PROJECT_VERSION = 2.0;
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DEBUGGING_SYMBOLS = full;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -4031,7 +4040,10 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos4.1;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 				VERSIONING_SYSTEM = "";
@@ -4048,6 +4060,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Gregory Combs (MJMLU3U99Y)";
 				CURRENT_PROJECT_VERSION = 2.0;
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -4057,6 +4070,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				LIBRARY_SEARCH_PATHS = "";
+				LLVM_LTO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-licucore",
