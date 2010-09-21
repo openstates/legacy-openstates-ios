@@ -54,8 +54,7 @@
 {
 	if (dictionary) {
 		self.legislatorID = [dictionary objectForKey:@"legislatorID"];
-		self.transDataContributorID = [dictionary objectForKey:@"transDataContributorID"];
-		
+				
 		self.firstname = [dictionary objectForKey:@"firstname"];
 		self.middlename = [dictionary objectForKey:@"middlename"];
 		self.lastname = [dictionary objectForKey:@"lastname"];
@@ -83,41 +82,43 @@
 		self.cap_fax = [dictionary objectForKey:@"cap_fax"];
 		self.notes = [dictionary objectForKey:@"notes"];		
 
+		self.transDataContributorID = [dictionary objectForKey:@"transDataContributorID"];
+
 	}
 }
 
-
 - (NSDictionary *)exportToDictionary {
-	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  self.legislatorID, @"legislatorID",
-							  self.transDataContributorID, @"transDataContributorID",
-							  self.firstname, @"firstname",
-							  self.middlename, @"middlename",
-							  self.lastname, @"lastname",
-							  self.nickname, @"nickname",
-							  self.suffix, @"suffix",
-							  
-							  self.legtype, @"legtype",
-							  self.legtype_name, @"legtype_name",
-							  self.district, @"district",
-							  self.party_id, @"party_id",
-							  self.party_name, @"party_name",
-							  self.partisan_index, @"partisan_index",
-							  
-							  self.photo_name, @"photo_name",
-							  self.bio_url, @"bio_url",
-							  self.tenure, @"tenure",
-							  self.email, @"email",
-							  self.twitter, @"twitter",
-							  
-							  self.staff, @"staff",
-							  self.cap_office, @"cap_office",
-							  self.cap_phone2, @"cap_phone2",
-							  self.cap_phone2_name, @"cap_phone2_name",
-							  self.cap_fax, @"cap_fax",
-							  self.notes, @"notes",
-							  
-							  nil];
+	NSMutableDictionary *tempDict = [NSMutableDictionary dictionary];
+	[tempDict setObject:self.legislatorID forKey:@"legislatorID"];
+	[tempDict setObject:self.firstname forKey:@"firstname"];
+	[tempDict setObject:self.middlename forKey:@"middlename"];
+	[tempDict setObject:self.lastname forKey:@"lastname"];
+	[tempDict setObject:self.nickname forKey:@"nickname"];
+	[tempDict setObject:self.suffix forKey:@"suffix"];
+	
+	[tempDict setObject:self.legtype forKey:@"legtype"];
+	[tempDict setObject:self.legtype_name forKey:@"legtype_name"];
+	[tempDict setObject:self.district forKey:@"district"];
+	[tempDict setObject:self.party_id forKey:@"party_id"];
+	[tempDict setObject:self.party_name forKey:@"party_name"];
+	[tempDict setObject:self.partisan_index forKey:@"partisan_index"];
+	
+	[tempDict setObject:self.photo_name forKey:@"photo_name"];
+	[tempDict setObject:self.bio_url forKey:@"bio_url"];
+	[tempDict setObject:self.tenure forKey:@"tenure"];
+	[tempDict setObject:self.email forKey:@"email"];
+	[tempDict setObject:self.twitter forKey:@"twitter"];
+	
+	[tempDict setObject:self.staff forKey:@"staff"];
+	[tempDict setObject:self.cap_office forKey:@"cap_office"];
+	[tempDict setObject:self.cap_phone forKey:@"cap_phone"];
+	[tempDict setObject:self.cap_phone2 forKey:@"cap_phone2"];
+	[tempDict setObject:self.cap_phone2_name forKey:@"cap_phone2_name"];
+	[tempDict setObject:self.cap_fax forKey:@"cap_fax"];
+	[tempDict setObject:self.notes forKey:@"notes"];
+
+	[tempDict setObject:self.transDataContributorID forKey:@"transDataContributorID"];
+	
 	return tempDict;
 }
 

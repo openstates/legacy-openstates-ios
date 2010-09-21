@@ -3,7 +3,7 @@
  Abstract: The model class that stores the information about an districtMap.
  */
 
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if NEEDS_TO_PARSE_KMLMAPS == 1
 
 #import "DistrictMap.h"
 
@@ -138,12 +138,12 @@
 }
 
 - (CLLocationCoordinate2D) center {
-	CLLocationCoordinate2D tempCord;
+	CLLocationCoordinate2D tempCoord;
 	
 	tempCoord.latitude = [[self.regionDict objectForKey:@"centerLat"] doubleValue];
 	tempCoord.longitude = [[self.regionDict objectForKey:@"centerLon"] doubleValue];
 
-	return tempCord;
+	return tempCoord;
 }
 
 - (MKCoordinateSpan) span {

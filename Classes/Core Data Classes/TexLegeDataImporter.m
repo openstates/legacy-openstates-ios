@@ -11,6 +11,7 @@
 #import "TexLegeDataObjectProtocol.h"
 #import "UtilityMethods.h"
 #import "CommitteeObj.h"
+#import "LegislatorObj.h"
 
 @interface TexLegeDataImporter (Private)
 
@@ -33,10 +34,32 @@
 	[super dealloc];
 }
 
+/*
+ - (void)fixLegislators {
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"Legislators" ofType:@"plist"];
+	assert(path);
+	
+	NSMutableArray *oldLegeArray = [NSMutableArray arrayWithContentsOfFile:path];
+	
+	for (NSDictionary *oldLegDict in oldLegeArray) {
+		NSNumber *oldID = [oldLegDict objectForKey:@"legislatorID"];
+		
+		LegislatorObj *newLeg = [TexLegeCoreDataUtils legislatorWithLegislatorID:oldID withContext:self.managedObjectContext];
+		NSString *cap_phone = [oldLegDict objectForKey:@"cap_phone"];
+		if (cap_phone)
+			newLeg.cap_phone = cap_phone;
+	}
+	
+}
+*/
+
 - (void)importAllDataObjects {
-	debug_NSLog(@"DataExporter: EXPORTING ALL CORE DATA OBJECTS");
+	debug_NSLog(@"DataImporter: IMPORTING ALL CORE DATA OBJECTS");
 	
 	[self importObjectsWithEntityName:@"LegislatorObj"];
+//#warning this is hacky
+//	[self fixLegislators];
+	
 	[self importObjectsWithEntityName:@"WnomObj"];
 
 	[self importObjectsWithEntityName:@"CommitteeObj"];
@@ -45,7 +68,9 @@
 	[self importObjectsWithEntityName:@"LinkObj"];
 
 	[self importObjectsWithEntityName:@"DistrictOfficeObj"];
+#if IMPORTING == 1 && NEEDS_TO_PARSE_KMLMAPS == 0
 	[self importObjectsWithEntityName:@"DistrictMapObj"];
+#endif
 }
 
 
@@ -77,8 +102,8 @@
 			[object importFromDictionary:aDictionary];
 			importCount++;
 			if ([(id)object isKindOfClass:[CommitteeObj class]]) {
-				CommitteeObj *committee = object;
-				debug_NSLog(@"%@ %@",[committee committeeNameInitial], committee.committeeId); 
+				//CommitteeObj *committee = object;
+				//debug_NSLog(@"%@ %@",[committee committeeNameInitial], committee.committeeId); 
 			}
 		}
 	}

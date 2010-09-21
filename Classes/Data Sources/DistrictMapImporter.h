@@ -1,4 +1,4 @@
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if NEEDS_TO_PARSE_KMLMAPS == 1
 
 //
 //  DistrictMapImporter.h

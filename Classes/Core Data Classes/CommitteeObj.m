@@ -43,17 +43,18 @@
 
 
 - (NSDictionary *)exportToDictionary {
-	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  self.clerk, @"clerk",
-							  self.clerk_email, @"clerk_email",
-							  self.office, @"office",
-							  self.phone, @"phone",
-							  self.parentId, @"parentId",
-							  self.committeeId, @"committeeId",
-							  self.url, @"url",
-							  self.committeeName, @"committeeName",
-							  self.committeeType, @"committeeType",
-							  nil];
+	
+	NSMutableDictionary *tempDict = [NSMutableDictionary dictionary];
+	[tempDict setObject:self.clerk forKey:@"clerk"];
+	[tempDict setObject:self.clerk_email forKey:@"clerk_email"];
+	[tempDict setObject:self.office forKey:@"office"];
+	[tempDict setObject:self.phone forKey:@"phone"];
+	[tempDict setObject:self.parentId forKey:@"parentId"];
+	[tempDict setObject:self.committeeId forKey:@"committeeId"];
+	[tempDict setObject:self.url forKey:@"url"];
+	[tempDict setObject:self.committeeName forKey:@"committeeName"];
+	[tempDict setObject:self.committeeType forKey:@"committeeType"];
+
 	return tempDict;
 }
 
