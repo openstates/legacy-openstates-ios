@@ -90,7 +90,7 @@ CGFloat quartzRowHeight = 73.f;
 	self.membershipLab.text = [NSString stringWithFormat:@"%d %@ and %d %@", repubCount, repubString, democCount, democString];
 		
 
-
+	// This will give inacurate results in joint committees, at least until we're in a common dimensional space
 	LegislatorObj *anyMember = [[positions objectAtIndex:0] legislator];
 
 	if (anyMember) {

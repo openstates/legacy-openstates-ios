@@ -141,7 +141,7 @@
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	
 	cell.detailTextLabel.text = tempEntry.committeeName;
-	cell.textLabel.text = (tempEntry.committeeType.integerValue == HOUSE) ? @"House" : @"Senate";
+	cell.textLabel.text = [tempEntry typeString];
 
 	/*
 	 if (tableView == self.searchDisplayController.searchResultsTableView) {
@@ -268,75 +268,6 @@
 
 #pragma mark -
 #pragma mark Core Data Methods
-
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
-#warning initializeDatabase IS TURNED ON!!!
-#warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
-
-- (void)initializeDatabase {
-	NSInteger count = [[self.fetchedResultsController sections] count];
-	if (count == 0) { // try initializing it...
-		
-		// Create a new instance of the entity managed by the fetched results controller.
-		NSManagedObjectContext *context = [fetchedResultsController managedObjectContext];
-		NSEntityDescription *entity = [[fetchedResultsController fetchRequest] entity];
-		
-		// read the legislator data from the plist
-		NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"Committees" ofType:@"plist"];
-		NSArray *rawPlistArray = [[NSArray alloc] initWithContentsOfFile:thePath];
-		
-		NSFetchRequest *lege_request = [[NSFetchRequest alloc] init];
-
-		// iterate over the values in the raw  dictionary
-		for (NSDictionary * eachCommittee in rawPlistArray)
-		{
-			// create an legislator instance for each
-			CommitteeObj *committeeObject = [NSEntityDescription insertNewObjectForEntityForName:
-												 [entity name] inManagedObjectContext:context];
-			
-			[committeeObject setValue:[eachCommittee valueForKey:@"committeeId"] forKey:@"committeeId"];
-			[committeeObject setValue:[eachCommittee valueForKey:@"parentId"] forKey:@"parentId"];
-			[committeeObject setValue:[eachCommittee valueForKey:@"committeeType"] forKey:@"committeeType"];
-			[committeeObject setValue:[eachCommittee valueForKey:@"committeeName"] forKey:@"committeeName"];
-			[committeeObject setValue:[eachCommittee valueForKey:@"url"] forKey:@"url"];
-			[committeeObject setValue:[eachCommittee valueForKey:@"clerk"] forKey:@"clerk"];
-			[committeeObject setValue:[eachCommittee valueForKey:@"clerk_email"] forKey:@"clerk_email"];
-			[committeeObject setValue:[eachCommittee valueForKey:@"phone"] forKey:@"phone"];
-			[committeeObject setValue:[eachCommittee valueForKey:@"office"] forKey:@"office"];
-						
-			// DO SOMETHING HERE FOR COMMITTEE POSITIONS...
-			for (NSDictionary * eachMember in [eachCommittee valueForKey:@"members"]) // returns a dictionary array
-			{
-				CommitteePositionObj *positionObject = 
-				[NSEntityDescription insertNewObjectForEntityForName:@"CommitteePositionObj"
-											  inManagedObjectContext:context];
-				
-				// If appropriate, configure the new managed object.
-				[positionObject setValue:[eachMember valueForKey:@"memberPos"] forKey:@"position"];
-				[positionObject setValue:[eachMember valueForKey:@"memberId"] forKey:@"legislatorID"];
-				//[memberObject setValue:nextId forKey:@"sessionID"];
-
-				// NOW LETS GET THE PROPER LEGISLATOR OBJECT TO LINK THE RELATIONSHIP
-				LegislatorObj *legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:[eachMember valueForKey:@"memberId"] withContext:context];
-				if (legislator)
-					positionObject.legislator = legislator;
-				
-				[committeeObject addCommitteePositionsObject:positionObject];
-			}
-
-			// Save the context.
-			NSError *error;
-			if (![context save:&error]) {
-				// Handle the error...
-			}
-		}
-		[lege_request release];
-
-		// release the raw data
-		[rawPlistArray release];
-	}
-}
-#endif
 
 /*
  Set up the fetched results controller.

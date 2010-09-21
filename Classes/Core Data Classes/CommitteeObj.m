@@ -67,8 +67,20 @@
 }
 
 - (NSString*)typeString {
-	NSString * tempString = ([[self committeeType] integerValue] == HOUSE) ? @"House" : @"Senate";
-	return tempString;
+	switch ([self.committeeType integerValue]) {
+		case JOINT:
+			return @"Joint";
+			break;
+		case HOUSE:
+			return @"House";
+			break;
+		case SENATE:
+			return @"Senate";
+			break;
+		default:
+			return @"All";
+			break;
+	}
 }
 
 - (NSString*)description {
