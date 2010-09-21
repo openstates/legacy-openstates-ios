@@ -47,7 +47,7 @@
 
 // For iPad Interface
 @property (nonatomic, readonly)  UISplitViewController *splitViewController;
-@property (nonatomic, readonly)  UIViewController *currentMasterViewController, *currentDetailViewController;
+@property (nonatomic, readonly)  UIViewController *currentMasterViewController;//, *currentDetailViewController;
 @property (nonatomic, readonly) UINavigationController * masterNavigationController, *detailNavigationController;
 
 @property NetworkStatus remoteHostStatus;

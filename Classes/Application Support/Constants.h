@@ -14,9 +14,9 @@
 #define debug_NSLog(format, ...)
 #endif
 
-#define NEEDS_TO_INITIALIZE_DATABASE 0
-
-#define kDeviceSensitiveRowHeight 1
+#define IMPORTING_DATA 0
+#define EXPORTING_DATA 0
+#define NEEDS_TO_PARSE_KMLMAPS 0
 
 extern NSString * const kRestoreSelectionKey;
 extern NSString * const kAnalyticsAskedForOptInKey;

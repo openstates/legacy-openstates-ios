@@ -21,17 +21,12 @@
 #import "LocalyticsSession.h"
 #import "DistrictMapDataSource.h"
 
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
-	#define IMPORTING_DATA 1
-#else
-	#define IMPORTING_DATA 0
-#endif
+//#import "JSONDataImporter.h"
 
 #if IMPORTING_DATA == 1
 #import "TexLegeDataImporter.h"
 #endif
 
-#define EXPORTING_DATA 0
 #if EXPORTING_DATA == 1
 #import "TexLegeDataExporter.h"
 #endif
@@ -163,6 +158,7 @@ NSInteger kNoSelection = -1;
 	return nil;
 }
 
+/* Probably works, but ugly as hell and we don't need it.
 - (UIViewController *) currentDetailViewController {	
 	UINavigationController *nav = [self detailNavigationController];
 	NSInteger numVCs = 0;
@@ -176,6 +172,7 @@ NSInteger kNoSelection = -1;
 
 	return nil;
 }
+*/
 
 - (UIViewController *) currentMasterViewController {
 	UINavigationController *nav = [self masterNavigationController];
@@ -352,6 +349,11 @@ NSInteger kNoSelection = -1;
 	[exporter exportAllDataObjects];
 	[exporter release];
 #endif
+	
+	//JSONDataImporter *jsonImporter = [[JSONDataImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
+	//[jsonImporter release];
+	
+	
 	return YES;
 }
 
@@ -572,7 +574,7 @@ NSInteger kNoSelection = -1;
         return persistentStoreCoordinator;
     }
 	
-#if IMPORTING_DATA == 1 || NEEDS_TO_INITIALIZE_DATABASE == 1
+#if IMPORTING_DATA == 1
 	static NSString *DATABASE_FILE = @"TexLege.v2.sqlite";
 	#define IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB 1
 #endif
@@ -581,7 +583,7 @@ NSInteger kNoSelection = -1;
 #ifdef IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB
 	NSString *storePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent: DATABASE_FILE];
 	
-	#if NEEDS_TO_INITIALIZE_DATABASE == 0 // don't use this if we're setting up & initializing from property lists...
+	#if IMPORTING_DATA == 0 // don't use this if we're setting up & initializing from property lists...
 	/*
 	 Set up the store.
 	 Provide a pre-populated default store.
