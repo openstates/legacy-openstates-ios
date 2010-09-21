@@ -140,7 +140,7 @@
 
 - (void)viewDidUnload {
 	self.tableView.dataSource = nil;
-	//self.selectObjectOnAppear = nil;
+	self.selectObjectOnAppear = nil;
 	self.tableView = nil;
 	[super viewDidUnload];
 }
