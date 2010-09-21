@@ -140,7 +140,7 @@
 
 - (void)viewDidUnload {
 	self.tableView.dataSource = nil;
-	self.selectObjectOnAppear = nil;
+	//self.selectObjectOnAppear = nil;
 	self.tableView = nil;
 	[super viewDidUnload];
 }
@@ -206,14 +206,16 @@
 		if ([self.detailViewController respondsToSelector:@selector(navigationController)])
 			detailNav = [self.detailViewController performSelector:@selector(navigationController)];
 		
-		if (detailNav && detailNav.viewControllers && [detailNav.viewControllers count] > 1) { 
-			[detailNav popToRootViewControllerAnimated:YES];
-			
-			if ([self.detailViewController respondsToSelector:@selector(tableView)]) {
-				UITableView *detailTable = [self.detailViewController performSelector:@selector(tableView)];
-				if (detailTable) {
-					CGRect guessTop = CGRectMake(0, 0, 10.0f, 10.0f);
-					[detailTable scrollRectToVisible:guessTop animated:YES];
+		if (!self.selectObjectOnAppear) {	// otherwise we pop whenever we're automatically selecting stuff ... right?
+			if (detailNav && detailNav.viewControllers && [detailNav.viewControllers count] > 1) { 
+				[detailNav popToRootViewControllerAnimated:YES];
+				
+				if ([self.detailViewController respondsToSelector:@selector(tableView)]) {
+					UITableView *detailTable = [self.detailViewController performSelector:@selector(tableView)];
+					if (detailTable) {
+						CGRect guessTop = CGRectMake(0, 0, 10.0f, 10.0f);
+						[detailTable scrollRectToVisible:guessTop animated:YES];
+					}
 				}
 			}
 		}
