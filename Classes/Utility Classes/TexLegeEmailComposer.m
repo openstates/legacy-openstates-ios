@@ -50,7 +50,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
 	if (!body)
 		body = @"";
 	
-	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"EMAILING_TEXLEGE_SUPPORT"];
+	if ([recipient hasSuffix:@"texlege.com"])
+		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"EMAILING_TEXLEGE_SUPPORT"];
+	else
+		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"EMAILING_OFFICIALS"];
+
 
 	
 	if ([MFMailComposeViewController canSendMail]) {
@@ -87,7 +91,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
 	
 	if (result == MFMailComposeResultFailed) {
 		[self presentMailFailureAlertViewWithTitle:@"Failure, Message Not Sent" 
-										   message:@"Sadly, an error prevented successful transmission of your message. Check your network settings or email me directly (support@texlege.com)"];
+										   message:@"Sadly, an error prevented successful transmission of your message. Check your email and network settings or try emailing manually."];
 	}
 	
 	self.isComposingMail = NO;
