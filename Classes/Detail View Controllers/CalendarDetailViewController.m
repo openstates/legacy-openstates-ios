@@ -113,8 +113,10 @@
 
 
 - (void)didReceiveMemoryWarning {
-	[[self navigationController] popToRootViewControllerAnimated:YES];
-
+	UINavigationController *nav = [self navigationController];
+	//if (nav && [nav.viewControllers count]>1)
+		[nav popToRootViewControllerAnimated:YES];
+	
 	self.leftShadow = self.rightShadow = self.portShadow = self.landShadow = nil;
 	[self.currentEvents removeAllObjects];
 	[self.searchResults removeAllObjects];
@@ -159,7 +161,7 @@
 
 
 - (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
-    
+	//debug_NSLog(@"Entering portrait, showing the button: %@", [aViewController class]);
     barButtonItem.title = @"Meetings";
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     self.masterPopover = pc;
@@ -168,7 +170,7 @@
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
 - (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-    
+	//debug_NSLog(@"Entering landscape, hiding the button: %@", [aViewController class]);
     [self.navigationItem setRightBarButtonItem:nil animated:YES];
     self.masterPopover = nil;
 }
@@ -176,6 +178,9 @@
 - (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
    willPresentViewController: (UIViewController *)aViewController
 {
+	if ([UtilityMethods isLandscapeOrientation]) {
+		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"ERR_POPOVER_IN_LANDSCAPE"];
+	}		 
 }	
 
 #pragma -

@@ -12,7 +12,6 @@
 @class PartisanScaleView;
 @class TableCellDataObject;
 @class LegislatorDetailDataSource;
-@class MapViewController;
 @interface LegislatorDetailViewController : UITableViewController <UISplitViewControllerDelegate, 
 													UIPopoverControllerDelegate, UIWebViewDelegate>
 {	
@@ -34,7 +33,6 @@
 @property (nonatomic,retain) UIPopoverController *masterPopover;
 @property (nonatomic, retain) IBOutlet LegislatorObj *legislator;
 @property (nonatomic, retain) LegislatorDetailDataSource *dataSource;
-@property (nonatomic, retain) IBOutlet MapViewController *mapViewController;
 
 @property (nonatomic) BOOL isChartSVG;
 

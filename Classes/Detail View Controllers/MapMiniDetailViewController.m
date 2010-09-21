@@ -1,26 +1,21 @@
 //
-//  MapViewController.m
+//  MapMiniDetailViewController.m
 //
 //  Created by Gregory Combs on 8/16/10.
 //  Copyright 2010 University of Texas at Dallas. All rights reserved.
 //
 
-#import "MapViewController.h"
+#import "MapMiniDetailViewController.h"
 #import "TexLegeTheme.h"
 #import "UtilityMethods.h"
-#import "LegislatorDetailViewController.h"
 #import "DistrictOfficeObj.h"
 #import "DistrictMapObj.h"
-#import "DistrictMapDataSource.h"
 
 #import "CustomAnnotation.h"
 #import "CustomAnnotationView.h"
 
 #import "TexLegeAppDelegate.h"
 #import "TexLegeCoreDataUtils.h"
-
-//#import "DistrictOfficeMasterViewController.h"
-//#import "DistrictOfficeDataSource.h"
 
 #import "LocalyticsSession.h"
 #import "UIColor-Expanded.h"
@@ -30,7 +25,7 @@
 #import "MKPinAnnotationView+ZIndexFix.h"
 
 
-@interface MapViewController (Private)
+@interface MapMiniDetailViewController (Private)
 - (void) animateToState;
 - (void) animateToAnnotation:(id<MKAnnotation>)annotation;
 - (void) clearAnnotationsAndOverlays;
@@ -40,31 +35,28 @@
 - (void) resetMapViewWithAnimation:(BOOL)animated;
 - (BOOL) region:(MKCoordinateRegion)region1 isEqualTo:(MKCoordinateRegion)region2;
 - (IBAction) showHidePopoverButton:(id)sender;
-- (void) invalidateDistrictView:(NSInteger)chamber;
+- (void) invalidateDistrictView;
 @end
 
 NSInteger colorIndex;
 static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 
-@implementation MapViewController
+@implementation MapMiniDetailViewController
 @synthesize mapTypeControl, mapTypeControlButton;
-@synthesize mapView, userLocationButton, reverseGeocoder, searchLocation;
-@synthesize toolbar, searchBar, searchBarButton, districtOfficesButton;
+@synthesize mapView, reverseGeocoder, searchLocation;
+@synthesize toolbar, searchBar, searchBarButton;
 @synthesize forwardGeocoder, texasRegion;
-@synthesize senateDistrictView, houseDistrictView;
-@synthesize masterPopover;
-
-//SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
+@synthesize districtView;
 
 #pragma mark -
 #pragma mark Initialization and Memory Management
 
 - (NSString *)nibName {
 	if ([UtilityMethods isIPadDevice])
-		return @"MapViewController~ipad";
+		return @"MapMiniDetailViewController~ipad";
 	else
-		return @"MapViewController~iphone";
+		return @"MapMiniDetailViewController~iphone";
 }
 
 /*- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -76,22 +68,15 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 */
 
-- (void) invalidateDistrictView:(NSInteger)chamber {
-	BOOL senate = (chamber == SENATE) || (chamber == BOTH_CHAMBERS);
-	BOOL house = (chamber == HOUSE) || (chamber == BOTH_CHAMBERS);
-	
-	if (senate && self.senateDistrictView) {
-		[self.senateDistrictView invalidatePath];
-		self.senateDistrictView = nil;
-	}
-	else if (house && self.houseDistrictView) {
-		[self.houseDistrictView invalidatePath];
-		self.houseDistrictView = nil;
+- (void) invalidateDistrictView {
+	if (self.districtView) {
+		[self.districtView invalidatePath];
+		self.districtView = nil;
 	}
 }
 
 - (void) dealloc {
-	[self invalidateDistrictView:BOTH_CHAMBERS];
+	[self invalidateDistrictView];
 	[self.mapView removeOverlays:self.mapView.overlays];
 	[self.mapView removeAnnotations:self.mapView.annotations];
 
@@ -100,13 +85,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	self.mapTypeControlButton = nil;
 	self.mapView = nil;
 	//self.mapControlsButton = nil;
-	self.userLocationButton = nil;
 	[self.reverseGeocoder cancel];
 	self.reverseGeocoder = nil;
 	self.forwardGeocoder = nil;
-	self.districtOfficesButton = nil;
 	self.searchBar = nil;
-	self.masterPopover = nil;
 	self.searchLocation = nil;
 	[super dealloc];
 }
@@ -149,30 +131,17 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	if (![UtilityMethods supportsMKPolyline])
 		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"__NO_MKPOLYLINE!__"];
 	
-	UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-	longPressRecognizer.delegate = self;
-	[self.mapView addGestureRecognizer:longPressRecognizer];        
-	[longPressRecognizer release];
-	
-	
 }
 
 - (void) viewDidUnload {
-	[self invalidateDistrictView:BOTH_CHAMBERS];
+	[self invalidateDistrictView];
 	[self.mapView removeOverlays:self.mapView.overlays];
 	[self.mapView removeAnnotations:self.mapView.annotations];
 
-//	self.mapTypeControl = nil;
-//	self.mapControlsButton = nil;
-//	self.mapTypeControlButton = nil;
 	self.mapView = nil;
-//	self.searchBarButton = nil;
-//	self.userLocationButton = nil;
 	self.reverseGeocoder = nil;
 	self.forwardGeocoder = nil;
-//	self.searchBar = nil;
 	self.searchLocation = nil;
-	self.masterPopover = nil;
 	[super viewDidUnload];
 }
 
@@ -195,7 +164,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	self.mapView.showsUserLocation = NO;
 		
 	//if (![self isEqual:[self.navigationController.viewControllers objectAtIndex:0]])
-	[self invalidateDistrictView:BOTH_CHAMBERS];
+	[self invalidateDistrictView];
 	[self.mapView removeOverlays:self.mapView.overlays];
 	
 	[super viewDidDisappear:animated];
@@ -207,7 +176,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 - (void) clearAnnotationsAndOverlays {
 	self.mapView.showsUserLocation = NO;
-	[self invalidateDistrictView:BOTH_CHAMBERS];
+	[self invalidateDistrictView];
 	[self.mapView removeOverlays:self.mapView.overlays];
 	[self.mapView removeAnnotations:self.mapView.annotations];
 }
@@ -222,7 +191,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 			[annotes addObject:object];
 	}
 	if (annotes && [annotes count]) {
-		[self invalidateDistrictView:BOTH_CHAMBERS];
+		[self invalidateDistrictView];
 		[self.mapView removeOverlays:self.mapView.overlays];
 		[self.mapView removeAnnotations:annotes];
 	}
@@ -235,22 +204,17 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	NSMutableArray *toRemove = [[NSMutableArray alloc] init];
 	if (toRemove) {
 		[toRemove setArray:self.mapView.overlays];
-		if ([toRemove count]>2) {
+		if ([toRemove count]>1) {
 			[toRemove removeLastObject];
-			[toRemove removeLastObject];
-			BOOL dropSenate = NO;
-			BOOL dropHouse = NO;
+			BOOL dropMe = NO;
 			for (id <MKOverlay>overlay in toRemove) {
-				if (self.senateDistrictView && [self.senateDistrictView.overlay isEqual:overlay])
-					dropSenate = YES;
-				if (self.houseDistrictView && [self.houseDistrictView.overlay isEqual:overlay])
-					dropHouse = YES;
+				if (self.districtView && [self.districtView.overlay isEqual:overlay])
+					dropMe = YES;
 				
 			}
-			if (dropSenate)
-				[self invalidateDistrictView:SENATE];
-			if (dropHouse)
-				[self invalidateDistrictView:HOUSE];
+			if (dropMe)
+				[self invalidateDistrictView];
+
 			[self.mapView removeOverlays:toRemove];
 		}
 		[toRemove release];
@@ -305,10 +269,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
     [self.mapView setRegion:region animated:YES];	
 }
 
-- (void)moveMapToAnnotation:(id<MKAnnotation>)annotation {
-	if (masterPopover)
-		[masterPopover dismissPopoverAnimated:YES];
-	
+- (void)moveMapToAnnotation:(id<MKAnnotation>)annotation {	
 	if (![self region:self.mapView.region isEqualTo:self.texasRegion]) { // it's another region, let's zoom out/in
 		[self performSelector:@selector(animateToState) withObject:nil afterDelay:0.3];
 		[self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:1.7];        
@@ -316,78 +277,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	else
 		[self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:0.7];	
 }
-
-#pragma mark -
-#pragma mark Gesture Recognizer
-
-#pragma mark Handling long presses
-
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-	id theView = gestureRecognizer.view;
-
-	if ([theView isKindOfClass:[MKPinAnnotationView class]])
-		return NO;
-	else if ([theView isKindOfClass:[MKMapView class]])
-		return YES;
-	else
-		return NO;
-
-}
-
--(void)handleLongPress:(UILongPressGestureRecognizer*)longPressRecognizer {
-    
-    /*
-     For the long press, the only state of interest is Began.
-     If there is a row at the location, create a suitable menu controller and display it.
-     */
-    if (longPressRecognizer.state == UIGestureRecognizerStateBegan) {
-        CGPoint touchPoint = [longPressRecognizer locationInView:self.mapView];
-		CLLocationCoordinate2D touchCoord = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
-		
-		[self clearAnnotationsAndOverlays];
-		
-		MKCoordinateSpan newSpan = self.mapView.region.span;
-		[self.mapView setCenterCoordinate:touchCoord animated:YES];
-		
-		MKCoordinateRegion newRegion = MKCoordinateRegionMake(touchCoord, newSpan);
-		
-		// Add a placemark on the map
-		CustomAnnotation *annotation = [[[CustomAnnotation alloc] initWithRegion:newRegion] autorelease];
-		annotation.coordinateChangedDelegate = self;
-		[self.mapView addAnnotation:annotation];	
-		
-		DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
-		[dataSource searchDistrictMapsForCoordinate:annotation.coordinate withDelegate:self];
-    }
-}
-
-#pragma mark -
-#pragma mark Popover Support
-
-
-- (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
-	//debug_NSLog(@"Entering portrait, showing the button: %@", [aViewController class]);
-    barButtonItem.title = @"Districts";
-    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
-    self.masterPopover = pc;
-}
-
-
-// Called when the view is shown again in the split view, invalidating the button and popover controller.
-- (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-	//debug_NSLog(@"Entering landscape, hiding the button: %@", [aViewController class]);
-    [self.navigationItem setRightBarButtonItem:nil animated:YES];
-    self.masterPopover = nil;
-}
-
-- (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
-   willPresentViewController: (UIViewController *)aViewController
-{
-	if ([UtilityMethods isLandscapeOrientation]) {
-		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"ERR_POPOVER_IN_LANDSCAPE"];
-	}		 
-}	
-
 
 #pragma mark -
 #pragma mark Properties
@@ -413,47 +302,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 #pragma mark -
 #pragma mark Control Element Actions
-/*
-- (IBAction) mapControlSheet:(id)sender {
-	UIActionSheet *popupQuery = [[UIActionSheet alloc]
-								 initWithTitle:nil
-								 delegate:self
-								 cancelButtonTitle:@"Cancel"
-								 destructiveButtonTitle:nil
-								 otherButtonTitles:@"My Location's Districts",
-								 @"All District Offices",@"Map: Normal", @"Map: Satellite", @"Map: Hybrid", nil];
-	
-	popupQuery.actionSheetStyle = UIActionSheetStyleAutomatic;
-	//[popupQuery showFromBarButtonItem:sender animated:YES];
-	[popupQuery showFromTabBar:self.tabBarController.tabBar];
-	[popupQuery release];
-}
 
-//- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex 
-{
-	switch (buttonIndex) {
-		case 0:
-			[self locateUser:actionSheet];
-			break;
-		case 1:
-			[self showAllDistrictOffices:actionSheet];
-			break;
-		case 2:
-			self.mapView.mapType = MKMapTypeStandard;
-			break;
-		case 3:
-			self.mapView.mapType = MKMapTypeSatellite;
-			break;
-		case 4:
-			self.mapView.mapType = MKMapTypeHybrid;
-			break;
-		case 5:
-		default:
-			break;			
-	}
-}
-*/
 - (IBAction)changeMapType:(id)sender {
 	NSInteger index = self.mapTypeControl.selectedSegmentIndex;
 	self.mapView.mapType = index;
@@ -478,7 +327,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	if (otherButton.tag == 998 || otherButton.tag == 999)
 		[items removeObjectAtIndex:buttonIndex];
 	[items insertObject:locateItem atIndex:buttonIndex];
-	self.userLocationButton = locateItem;
 	[locateItem release];
 	[self.toolbar setItems:items animated:YES];
 	[items release];
@@ -507,45 +355,11 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (IBAction)locateUser:(id)sender {
-	[self clearAnnotationsAndOverlays];
+	//[self clearAnnotationsAndOverlays];
 	[self showLocateActivityButton];				// this gets changed in viewForAnnotation once we receive the location
 
 	if ([UtilityMethods locationServicesEnabled]) 
 		self.mapView.showsUserLocation = YES;
-}
-
-- (IBAction) showAllDistricts:(id)sender {
-	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"SHOWING_ALL_DISTRICTS"];
-	
-	NSArray *districts = [TexLegeCoreDataUtils allDistrictMapsLightWithContext:[[TexLegeAppDelegate appDelegate]managedObjectContext]];
-	if (districts) {
-		[self resetMapViewWithAnimation:YES];
-		[self.mapView addAnnotations:districts];
-	}
-}
-/*
-- (IBAction) showAllDistrictOffices:(id)sender {
-	
-	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"SHOWING_ALL_DISTRICT_OFFICES"];
-	
-	NSArray *districtOffices = [TexLegeCoreDataUtils allObjectsInEntityNamed:@"DistrictOfficeObj" context:[[TexLegeAppDelegate appDelegate]managedObjectContext]];
-	if (districtOffices) {
-		[self resetMapViewWithAnimation:YES];
-		[self.mapView addAnnotations:districtOffices];
-	}
-}
-*/
-
-
-- (void)showLegislatorDetails:(LegislatorObj *)legislator
-{
-	if (!legislator)
-		return;
-	
-	LegislatorDetailViewController *legVC = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
-	legVC.legislator = legislator;
-	[self.navigationController pushViewController:legVC animated:YES];
-	[legVC release];
 }
 
 
@@ -587,7 +401,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 	if(self.forwardGeocoder.status == G_GEO_SUCCESS)
 	{
-		[self clearAnnotationsAndOverlays];		
+		[self clearAnnotationsExceptRecent];		
 		
 		NSInteger searchResults = [self.forwardGeocoder.results count];
 		
@@ -606,9 +420,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 			
 			[self.mapView addAnnotation:annotation];	
 			
-			DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
-			[dataSource searchDistrictMapsForCoordinate:annotation.coordinate withDelegate:self];
-
 			lastAnnotation = annotation;
 			
 		}
@@ -674,12 +485,9 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	if (!self.searchLocation || ![sender isEqual:self.searchLocation])
 		self.searchLocation = sender;
 	
-	[self clearAnnotationsAndOverlaysExcept:sender];
+	[self clearAnnotationsAndOverlaysExceptRecent];
 	
 	[self reverseGeocodeLocation:self.searchLocation.coordinate];
-	
-	DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
-	[dataSource searchDistrictMapsForCoordinate:self.searchLocation.coordinate withDelegate:self];
 }
 
 #pragma mark -
@@ -700,30 +508,11 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 
-- (IBAction) foundDistrictMapsWithObjectIDs:(NSArray *)objectIDs {
-	if (!objectIDs)
-		return;
-
-	for (NSManagedObjectID *objectID in objectIDs) {
-		DistrictMapObj *district = (DistrictMapObj *)[[[TexLegeAppDelegate appDelegate] managedObjectContext] objectWithID:objectID];
-		if (district) {
-			[self.mapView addAnnotation:district];
-			[self.mapView performSelector:@selector(addOverlay:) withObject:[district polygon] afterDelay:0.5f];
-			//for (DistrictOfficeObj *office in district.legislator.districtOffices)
-			//	[self.mapView addAnnotation:office];
-		}
-	}	
-}
-
-
 - (void)mapView:(MKMapView *)theMapView didAddAnnotationViews:(NSArray *)views
 {
 	for (MKAnnotationView *aView in views) {
 		if ([aView.annotation class] == [MKUserLocation class])
-		{			
-			DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
-			[dataSource searchDistrictMapsForCoordinate:self.mapView.userLocation.coordinate withDelegate:self];
-			
+		{						
 			if (!theMapView.userLocationVisible)
 				[self performSelector:@selector(moveMapToAnnotation:) withObject:aView.annotation afterDelay:.5f];
 			
@@ -733,19 +522,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	}
 }
 
-
-- (void)mapView:(MKMapView *)theMapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
-	id <MKAnnotation> annotation = view.annotation;
-	
-	if ([annotation isKindOfClass:[DistrictOfficeObj class]] || [annotation isKindOfClass:[DistrictMapObj class]])
-    {
-		if ([annotation respondsToSelector:@selector(legislator)]) {
-			LegislatorObj *legislator = [annotation performSelector:@selector(legislator)];
-				if (legislator)
-					[self showLegislatorDetails:legislator];
-		}
-	}		
-}
 
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
@@ -761,6 +537,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
         {
             TexLegePinAnnotationView* customPinView = [[[TexLegePinAnnotationView alloc]
 												   initWithAnnotation:annotation reuseIdentifier:districtAnnotationID] autorelease];
+			customPinView.rightCalloutAccessoryView = nil;
+			
             return customPinView;
         }
         else
@@ -768,6 +546,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
             pinView.annotation = annotation;
 			if ([pinView respondsToSelector:@selector(resetPinColorWithAnnotation:)])
 				[pinView performSelector:@selector(resetPinColorWithAnnotation:) withObject:annotation];
+			
+			pinView.rightCalloutAccessoryView = nil;
         }		
 
         return pinView;
@@ -780,12 +560,14 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
         if (!pinView)
         {
             CustomAnnotationView *customPinView = [[[CustomAnnotationView alloc] initWithAnnotation:annotation
-                                                                             reuseIdentifier:customAnnotationIdentifier] autorelease];            
+                                                                             reuseIdentifier:customAnnotationIdentifier] autorelease];
+            customPinView.rightCalloutAccessoryView = nil;
             return customPinView;
         }
         else
         {
             pinView.annotation = annotation;
+			pinView.rightCalloutAccessoryView = nil;
         }
         return pinView;
     }
@@ -801,30 +583,21 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 	if ([overlay isKindOfClass:[MKPolygon class]])
     {		
-		BOOL senate = NO;
 		NSString *ovTitle = [overlay title];
 		if (ovTitle && [ovTitle hasPrefix:@"House"]) {
 			myColor = [TexLegeTheme texasGreen];
-			senate = NO;
 		}
 		else if (ovTitle && [ovTitle hasPrefix:@"Senate"]) {
 			myColor = [TexLegeTheme texasOrange];
-			senate = YES;
 		}
 
 		//MKPolygonView*    aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
 		MKPolygonView *aView = nil;
-		if (senate) {
-			[self invalidateDistrictView:SENATE];
-			self.senateDistrictView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
-			aView = self.senateDistrictView;
-		}
-		else {
-			[self invalidateDistrictView:HOUSE];
-			self.houseDistrictView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
-			aView = self.houseDistrictView;
-		}
 
+		[self invalidateDistrictView];
+		self.districtView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
+		aView = self.districtView;
+		
 		aView.fillColor = [/*[UIColor cyanColor]*/myColor colorWithAlphaComponent:0.2];
         aView.strokeColor = [myColor colorWithAlphaComponent:0.7];
         aView.lineWidth = 3;
@@ -873,29 +646,21 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		region = [(DistrictMapObj *)annotation region];
 		
 		NSMutableArray *toRemove = [[NSMutableArray alloc] initWithArray:self.mapView.overlays];
-		NSInteger deleteOne = BOTH_CHAMBERS;
 		BOOL foundOne = NO;
 		
 		for (id<MKOverlay>item in self.mapView.overlays) {
 			if ([[item title] isEqualToString:[annotation title]]) {	// we clicked on an existing overlay
-				if ([[item title] isEqualToString:[self.senateDistrictView.polygon title]]) { // it's the senate
-					deleteOne = HOUSE;
+				if ([[item title] isEqualToString:[self.districtView.polygon title]]) { // it's the senate
 					foundOne = YES;
 					[toRemove removeObject:item];
 					break;
 				}
-				else if ([[item title] isEqualToString:[self.houseDistrictView.polygon title]]) { // it's the house
-					deleteOne = SENATE;
-					foundOne = YES;
-					[toRemove removeObject:item];
-					break;
-				}
-				
 			}
 		}
 		
 		//[self.mapView removeOverlays:self.mapView.overlays];
-		[self invalidateDistrictView:deleteOne];
+		if (!foundOne)
+			[self invalidateDistrictView];
 		if (toRemove && [toRemove count])
 			[self.mapView performSelector:@selector(removeOverlays:) withObject:toRemove];
 
@@ -909,46 +674,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	}			
 }
 
-/*
-- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)aView {
-	id<MKAnnotation> annotation = aView.annotation;
-	if (!annotation)
-		return;
-	
-	if ([annotation isKindOfClass:[DistrictMapObj class]]) {
-		MKCoordinateRegion region;
-		region = [(DistrictMapObj *)annotation region];
-		
-		NSMutableArray *toRemove = [[NSMutableArray alloc] initWithCapacity:[self.mapView.overlays count]];
-		NSInteger deleteOne = -1;
-		
-		for (id<MKOverlay>item in self.mapView.overlays) {
-			if ([[item title] isEqualToString:[annotation title]]) {	// we clicked on an existing overlay
-				if ([[item title] isEqualToString:[self.senateDistrictView.polygon title]]) { // it's the senate
-					deleteOne = SENATE;
-					[toRemove addObject:item];
-					break;
-				}
-				else if ([[item title] isEqualToString:[self.houseDistrictView.polygon title]]) { // it's the house
-					deleteOne = HOUSE;
-					[toRemove addObject:item];
-					break;
-				}
-				
-			}
-		}
-		
-		if (deleteOne >= 0 && toRemove && [toRemove count]) {
-			[self invalidateDistrictView:deleteOne];
-			[self.mapView performSelector:@selector(removeOverlays:) withObject:toRemove];
-		}
-		[toRemove release];
-		
-		[self.mapView setRegion:region animated:TRUE];
-	}			
-}
-
-*/
 
 #pragma mark -
 #pragma mark Orientation

@@ -28,16 +28,16 @@
 #import "CommitteeDetailViewController.h"
 #import "DistrictOfficeMasterViewController.h"
 
-#import "MapViewController.h"
+#import "MapMiniDetailViewController.h"
 #import "MiniBrowserController.h"
 #import "CapitolMapsDetailViewController.h"
 
 #import "PartisanIndexStats.h"
 #import "UIImage+ResolutionIndependent.h"
-//#import "ImageCache.h"
 
 #import "TexLegeEmailComposer.h"
 #import "PartisanScaleView.h"
+#import "LocalyticsSession.h"
 
 @interface LegislatorDetailViewController (Private)
 
@@ -61,7 +61,6 @@
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab, freshmanPlotLab;
 @synthesize indivSlider, partySlider, allSlider;
 @synthesize notesPopover, masterPopover;
-@synthesize mapViewController;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -103,10 +102,11 @@
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
-	[[self navigationController] popToRootViewControllerAnimated:YES];
+	UINavigationController *nav = [self navigationController];
+	//if (nav && [nav.viewControllers count]>1)
+		[nav popToRootViewControllerAnimated:YES];
 	
 	self.leg_photoView = nil;
-	self.mapViewController = nil;
 	
     [super didReceiveMemoryWarning];
 }
@@ -125,7 +125,6 @@
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
 	self.chartView = nil;
 	self.chartLoadingAct = nil;
-	self.mapViewController = nil;
 	self.notesPopover = nil;
 	self.masterPopover = nil;
 
@@ -146,7 +145,6 @@
 	self.chartLoadingAct = nil;
 	self.miniBackgroundView = nil;
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
-	self.mapViewController = nil;
 	self.notesPopover = nil;
 	self.masterPopover = nil;
 
@@ -333,7 +331,7 @@
 - (void)splitViewController: (UISplitViewController*)svc 
 	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
 	   forPopoverController: (UIPopoverController*)pc {
-	
+	//debug_NSLog(@"Entering portrait, showing the button: %@", [aViewController class]);
 	barButtonItem.title = @"Legislators";
 	[self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
 	self.masterPopover = pc;
@@ -343,7 +341,7 @@
 - (void)splitViewController: (UISplitViewController*)svc 
 	 willShowViewController:(UIViewController *)aViewController 
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-		
+	//debug_NSLog(@"Entering landscape, hiding the button: %@", [aViewController class]);
 	[self.navigationItem setRightBarButtonItem:nil animated:YES];
 	self.masterPopover = nil;
 }
@@ -351,6 +349,10 @@
 - (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
    willPresentViewController: (UIViewController *)aViewController
 {
+	if ([UtilityMethods isLandscapeOrientation]) {
+		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"ERR_POPOVER_IN_LANDSCAPE"];
+	}
+		 
 	if (self.notesPopover) {
 		[self.notesPopover dismissPopoverAnimated:YES];
 		self.notesPopover = nil;
@@ -482,29 +484,26 @@
 		else if (cellInfo.entryType == DirectoryTypeMap) {
 			if ([cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]] || [cellInfo.entryValue isKindOfClass:[DistrictMapObj class]])
 			{		
-				if (!self.mapViewController)
-					self.mapViewController = [[[MapViewController alloc] init] autorelease];
-				[self.mapViewController view];
+				MapMiniDetailViewController *mapViewController = [[MapMiniDetailViewController alloc] init];
+				[mapViewController view];
 				
 				DistrictOfficeObj *districtOffice = nil;
 				if ([cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]])
 					districtOffice = cellInfo.entryValue;
 				
-				[self.mapViewController resetMapViewWithAnimation:NO];
+				[mapViewController resetMapViewWithAnimation:NO];
 
 				if (districtOffice) {
-					[self.mapViewController.mapView addAnnotation:districtOffice];
-					[self.mapViewController moveMapToAnnotation:districtOffice];
+					[mapViewController.mapView addAnnotation:districtOffice];
+					[mapViewController moveMapToAnnotation:districtOffice];
 				}
 				else {
-					[self.mapViewController.mapView addAnnotation:self.legislator.districtMap];
-					[self.mapViewController moveMapToAnnotation:self.legislator.districtMap];
-					[self.mapViewController.mapView performSelector:@selector(addOverlay:) withObject:[self.legislator.districtMap polygon] afterDelay:0.5f];
+					[mapViewController.mapView addAnnotation:self.legislator.districtMap];
+					[mapViewController moveMapToAnnotation:self.legislator.districtMap];
+					[mapViewController.mapView performSelector:@selector(addOverlay:) withObject:[self.legislator.districtMap polygon] afterDelay:0.5f];
 				}
-				if ([self.navigationController.viewControllers containsObject:self.mapViewController])
-					[self.navigationController popToViewController:self.mapViewController animated:YES];
-				else
-					[self.navigationController pushViewController:self.mapViewController animated:YES];
+				[self.navigationController pushViewController:mapViewController animated:YES];
+				[mapViewController release];
 			}
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&
