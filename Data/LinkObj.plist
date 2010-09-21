@@ -4,26 +4,6 @@
 <array>
 	<dict>
 		<key>label</key>
-		<string>Legislative Reference Library</string>
-		<key>order</key>
-		<integer>3</integer>
-		<key>section</key>
-		<integer>1</integer>
-		<key>url</key>
-		<string>http://www.lrl.state.tx.us/</string>
-	</dict>
-	<dict>
-		<key>label</key>
-		<string>The Handbook of Texas</string>
-		<key>order</key>
-		<integer>12</integer>
-		<key>section</key>
-		<integer>1</integer>
-		<key>url</key>
-		<string>http://www.tshaonline.org/handbook/online/</string>
-	</dict>
-	<dict>
-		<key>label</key>
 		<string>Texas Ethics Commission</string>
 		<key>order</key>
 		<integer>10</integer>
@@ -31,76 +11,6 @@
 		<integer>1</integer>
 		<key>url</key>
 		<string>http://www.ethics.state.tx.us/</string>
-	</dict>
-	<dict>
-		<key>label</key>
-		<string>Texas House Speakers Oral History</string>
-		<key>order</key>
-		<integer>13</integer>
-		<key>section</key>
-		<integer>1</integer>
-		<key>url</key>
-		<string>http://www.cah.utexas.edu/projects/speakers.php</string>
-	</dict>
-	<dict>
-		<key>label</key>
-		<string>House Resource Organization</string>
-		<key>order</key>
-		<integer>5</integer>
-		<key>section</key>
-		<integer>1</integer>
-		<key>url</key>
-		<string>http://www.house.state.tx.us/analyses/hro/welcome.htm</string>
-	</dict>
-	<dict>
-		<key>label</key>
-		<string>Who Represents Me?</string>
-		<key>order</key>
-		<integer>2</integer>
-		<key>section</key>
-		<integer>1</integer>
-		<key>url</key>
-		<string>http://www.fyi.legis.state.tx.us/</string>
-	</dict>
-	<dict>
-		<key>label</key>
-		<string>Project Vote Smart</string>
-		<key>order</key>
-		<integer>7</integer>
-		<key>section</key>
-		<integer>1</integer>
-		<key>url</key>
-		<string>http://www.votesmart.org/mystate_summary.php?state_id=TX</string>
-	</dict>
-	<dict>
-		<key>label</key>
-		<string>Welcome to Texas Politics</string>
-		<key>order</key>
-		<integer>11</integer>
-		<key>section</key>
-		<integer>1</integer>
-		<key>url</key>
-		<string>http://texaspolitics.laits.utexas.edu/</string>
-	</dict>
-	<dict>
-		<key>label</key>
-		<string>Follow The Money</string>
-		<key>order</key>
-		<integer>8</integer>
-		<key>section</key>
-		<integer>1</integer>
-		<key>url</key>
-		<string>http://www.followthemoney.org/database/state_overview.phtml?s=TX&amp;y=2008</string>
-	</dict>
-	<dict>
-		<key>label</key>
-		<string>Texas Legislature Online</string>
-		<key>order</key>
-		<integer>1</integer>
-		<key>section</key>
-		<integer>1</integer>
-		<key>url</key>
-		<string>http://www.legis.state.tx.us/</string>
 	</dict>
 	<dict>
 		<key>label</key>
@@ -124,16 +34,6 @@
 	</dict>
 	<dict>
 		<key>label</key>
-		<string>Contact TexLege Support</string>
-		<key>order</key>
-		<integer>-1</integer>
-		<key>section</key>
-		<integer>0</integer>
-		<key>url</key>
-		<string>contactMail</string>
-	</dict>
-	<dict>
-		<key>label</key>
 		<string>TexLege Information</string>
 		<key>order</key>
 		<integer>-2</integer>
@@ -144,6 +44,66 @@
 	</dict>
 	<dict>
 		<key>label</key>
+		<string>Who Represents Me?</string>
+		<key>order</key>
+		<integer>2</integer>
+		<key>section</key>
+		<integer>1</integer>
+		<key>url</key>
+		<string>http://www.fyi.legis.state.tx.us/</string>
+	</dict>
+	<dict>
+		<key>label</key>
+		<string>Contact TexLege Support</string>
+		<key>order</key>
+		<integer>-1</integer>
+		<key>section</key>
+		<integer>0</integer>
+		<key>url</key>
+		<string>contactMail</string>
+	</dict>
+	<dict>
+		<key>label</key>
+		<string>Texas Legislature Online</string>
+		<key>order</key>
+		<integer>1</integer>
+		<key>section</key>
+		<integer>1</integer>
+		<key>url</key>
+		<string>http://www.legis.state.tx.us/</string>
+	</dict>
+	<dict>
+		<key>label</key>
+		<string>Welcome to Texas Politics</string>
+		<key>order</key>
+		<integer>11</integer>
+		<key>section</key>
+		<integer>1</integer>
+		<key>url</key>
+		<string>http://texaspolitics.laits.utexas.edu/</string>
+	</dict>
+	<dict>
+		<key>label</key>
+		<string>House Resource Organization</string>
+		<key>order</key>
+		<integer>5</integer>
+		<key>section</key>
+		<integer>1</integer>
+		<key>url</key>
+		<string>http://www.house.state.tx.us/analyses/hro/welcome.htm</string>
+	</dict>
+	<dict>
+		<key>label</key>
+		<string>The Handbook of Texas</string>
+		<key>order</key>
+		<integer>12</integer>
+		<key>section</key>
+		<integer>1</integer>
+		<key>url</key>
+		<string>http://www.tshaonline.org/handbook/online/</string>
+	</dict>
+	<dict>
+		<key>label</key>
 		<string>Texas Secretary of State</string>
 		<key>order</key>
 		<integer>9</integer>
@@ -151,6 +111,46 @@
 		<integer>1</integer>
 		<key>url</key>
 		<string>http://www.sos.state.tx.us/</string>
+	</dict>
+	<dict>
+		<key>label</key>
+		<string>Legislative Reference Library</string>
+		<key>order</key>
+		<integer>3</integer>
+		<key>section</key>
+		<integer>1</integer>
+		<key>url</key>
+		<string>http://www.lrl.state.tx.us/</string>
+	</dict>
+	<dict>
+		<key>label</key>
+		<string>Follow The Money</string>
+		<key>order</key>
+		<integer>8</integer>
+		<key>section</key>
+		<integer>1</integer>
+		<key>url</key>
+		<string>http://www.followthemoney.org/database/state_overview.phtml?s=TX&amp;y=2008</string>
+	</dict>
+	<dict>
+		<key>label</key>
+		<string>Project Vote Smart</string>
+		<key>order</key>
+		<integer>7</integer>
+		<key>section</key>
+		<integer>1</integer>
+		<key>url</key>
+		<string>http://www.votesmart.org/mystate_summary.php?state_id=TX</string>
+	</dict>
+	<dict>
+		<key>label</key>
+		<string>Texas House Speakers Oral History</string>
+		<key>order</key>
+		<integer>13</integer>
+		<key>section</key>
+		<integer>1</integer>
+		<key>url</key>
+		<string>http://www.cah.utexas.edu/projects/speakers.php</string>
 	</dict>
 	<dict>
 		<key>label</key>

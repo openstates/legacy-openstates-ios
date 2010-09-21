@@ -4,369 +4,9 @@
 <array>
 	<dict>
 		<key>clerk</key>
-		<string>Jim Terrell</string>
+		<string>Andrea Stingley</string>
 		<key>clerk_email</key>
-		<string>Jim.Terrell_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11353</integer>
-		<key>committeeName</key>
-		<string>Agriculture and Livestock</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.114</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0762</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C020</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Amy Peterson</string>
-		<key>clerk_email</key>
-		<string>Amy.Patterson_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2735</integer>
-		<key>committeeName</key>
-		<string>Appropriations</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E1.032</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-1091</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C030</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>David Wilkie</string>
-		<key>clerk_email</key>
-		<string>David.Wilkie_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11355</integer>
-		<key>committeeName</key>
-		<string>Border and Intergovernmental Affairs</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.158</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-1211</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C039</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Ben Fitzgibbons</string>
-		<key>clerk_email</key>
-		<string>Benjamin.Fitzgibbons_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>3511</integer>
-		<key>committeeName</key>
-		<string>Business and Industry</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.128</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0766</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C040</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Juan Garcia</string>
-		<key>clerk_email</key>
-		<string>Juan.Garcia_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2740</integer>
-		<key>committeeName</key>
-		<string>Calendars</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.148</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0758</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C050</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Travis Sampley</string>
-		<key>clerk_email</key>
-		<string>Travis.Sampley_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2743</integer>
-		<key>committeeName</key>
-		<string>Corrections</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.110</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0796</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C200</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Revlynn Lawson</string>
-		<key>clerk_email</key>
-		<string>Revlynn.Lawson_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2745</integer>
-		<key>committeeName</key>
-		<string>County Affairs</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.130</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0760</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C210</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Adrianna Bernal</string>
-		<key>clerk_email</key>
-		<string>Adrianna.Bernal_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2746</integer>
-		<key>committeeName</key>
-		<string>Criminal Jurisprudence</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.112</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0768</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C220</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Gabe Valenzuela</string>
-		<key>clerk_email</key>
-		<string>Gabe.Valenzuela_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11362</integer>
-		<key>committeeName</key>
-		<string>Culture, Recreation, and Tourism</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.134</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-1974</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C430</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Teri Avery</string>
-		<key>clerk_email</key>
-		<string>Teri.Avery_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11363</integer>
-		<key>committeeName</key>
-		<string>Defense and Veterans Affairs</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.160</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-1393</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C305</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Steven Schar</string>
-		<key>clerk_email</key>
-		<string>Steven.Schar_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2754</integer>
-		<key>committeeName</key>
-		<string>Elections</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.144</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0772</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C240</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Ky Ash</string>
-		<key>clerk_email</key>
-		<string>Ky.Ash_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2756</integer>
-		<key>committeeName</key>
-		<string>Energy Resources</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.162</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0774</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C250</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Sherri Walker</string>
-		<key>clerk_email</key>
-		<string>Sherri.Walker_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2758</integer>
-		<key>committeeName</key>
-		<string>Environmental Regulation</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.154</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0776</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C260</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Chelsea Reilly</string>
-		<key>clerk_email</key>
-		<string>Chelsea.Reilly_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>12983</integer>
-		<key>committeeName</key>
-		<string>Federal Economic Stabilization Funding</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.202</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0240</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C272</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Cheryl Lively</string>
-		<key>clerk_email</key>
-		<string>Cheryl.Lively_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>3515</integer>
-		<key>committeeName</key>
-		<string>General Investigating and Ethics</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.170</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0592</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C280</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Jonathan Mathers</string>
-		<key>clerk_email</key>
-		<string>Jonathan.Mathers_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2764</integer>
-		<key>committeeName</key>
-		<string>Higher Education</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.106</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0782</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C290</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Laura Grable</string>
-		<key>clerk_email</key>
-		<string>Laura.Grable_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2767</integer>
-		<key>committeeName</key>
-		<string>House Administration</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.140</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0784</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C300</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Michael Ruggieri</string>
-		<key>clerk_email</key>
-		<string>Michael.Ruggieri_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11374</integer>
-		<key>committeeName</key>
-		<string>Human Services</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.152</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0786</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C310</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>LyAnna Johnson</string>
-		<key>clerk_email</key>
-		<string>LyAnna.Johnson_sc@house.state.tx.us</string>
+		<string>Andrea.Stingley_sc@house.state.tx.us</string>
 		<key>committeeId</key>
 		<integer>2770</integer>
 		<key>committeeName</key>
@@ -380,347 +20,27 @@
 		<key>phone</key>
 		<string>512-463-0788</string>
 		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C320</string>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C320</string>
 	</dict>
 	<dict>
 		<key>clerk</key>
-		<string>Jennifer Welch</string>
+		<string>Larance Coleman</string>
 		<key>clerk_email</key>
-		<string>Jennifer.Welch_sc@house.state.tx.us</string>
+		<string>Larance.Coleman_sc@senate.state.tx.us</string>
 		<key>committeeId</key>
-		<integer>2772</integer>
+		<integer>11397</integer>
 		<key>committeeName</key>
-		<string>Judiciary and Civil Jurisprudence</string>
+		<string>Criminal Justice</string>
 		<key>committeeType</key>
-		<integer>1</integer>
+		<integer>2</integer>
 		<key>office</key>
-		<string>E2.120</string>
+		<string>SHB 470</string>
 		<key>parentId</key>
 		<integer>-1</integer>
 		<key>phone</key>
-		<string>512-463-0790</string>
+		<string>512-463-0345</string>
 		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C330</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Trey Burke</string>
-		<key>clerk_email</key>
-		<string>Trey.Burke_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>3518</integer>
-		<key>committeeName</key>
-		<string>Land and Resource Management</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.136</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-1623</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C360</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Brittney Thomas</string>
-		<key>clerk_email</key>
-		<string>Brittney.Thomas_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>3519</integer>
-		<key>committeeName</key>
-		<string>Licensing and Administrative Procedures</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.156</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0798</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C350</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Milda Mora</string>
-		<key>clerk_email</key>
-		<string>Milda.Mora_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>3520</integer>
-		<key>committeeName</key>
-		<string>Local and Consent Calendars</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.166</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0800</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C380</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Elizabeth Fazio</string>
-		<key>clerk_email</key>
-		<string>Elizabeth.Fazio_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11383</integer>
-		<key>committeeName</key>
-		<string>Natural Resources</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.104</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0802</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C390</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Merita Zoga</string>
-		<key>clerk_email</key>
-		<string>Merita.Zoga_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>3522</integer>
-		<key>committeeName</key>
-		<string>Pensions, Investments and Financial Services</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.164</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-2054</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C395</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Rita Ashley</string>
-		<key>clerk_email</key>
-		<string>Rita.Ashley_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2787</integer>
-		<key>committeeName</key>
-		<string>Public Education</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.124</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0804</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C400</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Doug Brown</string>
-		<key>clerk_email</key>
-		<string>Douglas.Brown_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2789</integer>
-		<key>committeeName</key>
-		<string>Public Health</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.172</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0806</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C410</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Paul Kamprath</string>
-		<key>clerk_email</key>
-		<string>Paul.Kamprath_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>12984</integer>
-		<key>committeeName</key>
-		<string>Public Safety</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.146</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0133</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C420</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Gregory Watson</string>
-		<key>clerk_email</key>
-		<string>Gregory.Watson_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2792</integer>
-		<key>committeeName</key>
-		<string>Redistricting</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.142</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-9948</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C080</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Nicole Gilmore</string>
-		<key>clerk_email</key>
-		<string>Nicole.Gilmore_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>3525</integer>
-		<key>committeeName</key>
-		<string>Rules and Resolutions</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.138</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0812</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C440</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Lesley French</string>
-		<key>clerk_email</key>
-		<string>Lesley.French_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11390</integer>
-		<key>committeeName</key>
-		<string>State Affairs</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.108</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0814</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C450</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Joaquin Guadarrama</string>
-		<key>clerk_email</key>
-		<string>Joaquin.Guadarrama_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>12986</integer>
-		<key>committeeName</key>
-		<string>Subcommittee on Business and Economic Development</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E1.032</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-1091</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C033</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Kathy Panaszek</string>
-		<key>clerk_email</key>
-		<string>Kathy.Panaszek_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>12179</integer>
-		<key>committeeName</key>
-		<string>Subcommittee on Criminal Justice</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E1.032</string>
-		<key>parentId</key>
-		<integer>2735</integer>
-		<key>phone</key>
-		<string>512-463-1091</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C035</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Hunter Thompson</string>
-		<key>clerk_email</key>
-		<string>Hunter.Thompson_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>12034</integer>
-		<key>committeeName</key>
-		<string>Subcommittee on Education</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E1.032</string>
-		<key>parentId</key>
-		<integer>2735</integer>
-		<key>phone</key>
-		<string>512-463-1091</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C032</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Casey Fannin</string>
-		<key>clerk_email</key>
-		<string>Casey.Fannin_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>12035</integer>
-		<key>committeeName</key>
-		<string>Subcommittee on General Government</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E1.032</string>
-		<key>parentId</key>
-		<integer>2735</integer>
-		<key>phone</key>
-		<string>512-463-1091</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C036</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Julie Haeber</string>
-		<key>clerk_email</key>
-		<string>Julie.Haeber_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>12036</integer>
-		<key>committeeName</key>
-		<string>Subcommittee on Health and Human Services</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E1.032</string>
-		<key>parentId</key>
-		<integer>2735</integer>
-		<key>phone</key>
-		<string>512-463-1091</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C034</string>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C590</string>
 	</dict>
 	<dict>
 		<key>clerk</key>
@@ -740,207 +60,27 @@
 		<key>phone</key>
 		<string>512-463-1091</string>
 		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C037</string>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C037</string>
 	</dict>
 	<dict>
 		<key>clerk</key>
-		<string>Kathy Panaszek</string>
+		<string>Amanda Brant</string>
 		<key>clerk_email</key>
-		<string>Kathy.Panaszek_sc@house.state.tx.us</string>
+		<string>Amanda.Brant_sc@house.state.tx.us</string>
 		<key>committeeId</key>
-		<integer>12988</integer>
+		<integer>2758</integer>
 		<key>committeeName</key>
-		<string>Subcommittee on Stimulus</string>
+		<string>Environmental Regulation</string>
 		<key>committeeType</key>
 		<integer>1</integer>
 		<key>office</key>
-		<string>E1.032</string>
-		<key>parentId</key>
-		<integer>2735</integer>
-		<key>phone</key>
-		<string>512-463-1091</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C038</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Laurie McAnally</string>
-		<key>clerk_email</key>
-		<string>Laurie.McAnally_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>12985</integer>
-		<key>committeeName</key>
-		<string>Technology, Economic Development and Workforce</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.118</string>
+		<string>E2.154</string>
 		<key>parentId</key>
 		<integer>-1</integer>
 		<key>phone</key>
-		<string>512-463-0794</string>
+		<string>512-463-0776</string>
 		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C230</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Brian O'Reilly</string>
-		<key>clerk_email</key>
-		<string>Brian.OReilly_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2797</integer>
-		<key>committeeName</key>
-		<string>Transportation</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.122</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0818</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C470</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Lemuel Price</string>
-		<key>clerk_email</key>
-		<string>Lemuel.Price_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>2799</integer>
-		<key>committeeName</key>
-		<string>Urban Affairs</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.126</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-9904</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C480</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Carolyn Merchan Saeger</string>
-		<key>clerk_email</key>
-		<string>Carolyn.Saeger_sc@house.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>3526</integer>
-		<key>committeeName</key>
-		<string>Ways and Means</string>
-		<key>committeeType</key>
-		<integer>1</integer>
-		<key>office</key>
-		<string>E2.116</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0822</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C490</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Candace Hargenrader</string>
-		<key>clerk_email</key>
-		<string>Candace.Hargenrader_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>15354</integer>
-		<key>committeeName</key>
-		<string>Administration</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>E1.714</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0350</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C500</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Ren Nance</string>
-		<key>clerk_email</key>
-		<string>Ren.Nance_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>12752</integer>
-		<key>committeeName</key>
-		<string>Agriculture and Rural Affairs</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>SHB 445</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0340</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C505</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Tatum Reagan</string>
-		<key>clerk_email</key>
-		<string>Tatum.Reagan_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11395</integer>
-		<key>committeeName</key>
-		<string>Business and Commerce</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>SHB 370</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0365</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C510</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Patsy Spaw</string>
-		<key>clerk_email</key>
-		<string>Patsy.Spaw_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11396</integer>
-		<key>committeeName</key>
-		<string>Committee of the Whole Senate</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>2E.22</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0100</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C600</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Vanessa Valdez</string>
-		<key>clerk_email</key>
-		<string>Vanessa.Valdez_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11397</integer>
-		<key>committeeName</key>
-		<string>Criminal Justice</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>SHB 470</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0345</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C590</string>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C260</string>
 	</dict>
 	<dict>
 		<key>clerk</key>
@@ -960,207 +100,27 @@
 		<key>phone</key>
 		<string>512-463-1171</string>
 		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C525</string>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C525</string>
 	</dict>
 	<dict>
 		<key>clerk</key>
-		<string>Holly Mabry</string>
+		<string>Kathy Panaszek</string>
 		<key>clerk_email</key>
-		<string>Holly.Mabry_sc@senate.state.tx.us</string>
+		<string>Kathy.Panaszek_sc@house.state.tx.us</string>
 		<key>committeeId</key>
-		<integer>11398</integer>
+		<integer>12179</integer>
 		<key>committeeName</key>
-		<string>Education</string>
+		<string>Subcommittee on Criminal Justice</string>
 		<key>committeeType</key>
-		<integer>2</integer>
+		<integer>1</integer>
 		<key>office</key>
-		<string>SHB 440</string>
+		<string>E1.032</string>
 		<key>parentId</key>
-		<integer>-1</integer>
+		<integer>2735</integer>
 		<key>phone</key>
-		<string>512-463-0355</string>
+		<string>512-463-1091</string>
 		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C530</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Amy Jeter</string>
-		<key>clerk_email</key>
-		<string>Amy.Jeter_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11400</integer>
-		<key>committeeName</key>
-		<string>Finance</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>E1.038</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0370</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C540</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Mattie Murray</string>
-		<key>clerk_email</key>
-		<string>Mattie.Murray_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11401</integer>
-		<key>committeeName</key>
-		<string>Government Organization</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>SHB 630</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-1818</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C565</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Kyle Baum</string>
-		<key>clerk_email</key>
-		<string>Kyle.Baum_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11402</integer>
-		<key>committeeName</key>
-		<string>Health and Human Services</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>SHB 420</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0360</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C610</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Lauren Cook</string>
-		<key>clerk_email</key>
-		<string>Lauren.Cook_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>12754</integer>
-		<key>committeeName</key>
-		<string>Higher Education</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>SHB 320</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-4788</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C560</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Tiffany White</string>
-		<key>clerk_email</key>
-		<string>Tiffany.White_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11403</integer>
-		<key>committeeName</key>
-		<string>Intergovernmental Relations</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>SHB 475</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-2527</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C520</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Nicanor Pesina</string>
-		<key>clerk_email</key>
-		<string>Nicanor.Pesina_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11404</integer>
-		<key>committeeName</key>
-		<string>International Relations and Trade</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>SHB 335</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0385</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C545</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Stephanie Hoover</string>
-		<key>clerk_email</key>
-		<string>Stephanie.Hoover_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>4117</integer>
-		<key>committeeName</key>
-		<string>Jurisprudence</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>SHB 350</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0395</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C550</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Teddy Carter</string>
-		<key>clerk_email</key>
-		<string>Teddy.Carter_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11406</integer>
-		<key>committeeName</key>
-		<string>Natural Resources</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>SHB 325</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-0390</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C580</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Brian Carey</string>
-		<key>clerk_email</key>
-		<string>Brian.Carey_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11407</integer>
-		<key>committeeName</key>
-		<string>Nominations</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>E1.716</string>
-		<key>parentId</key>
-		<integer>-1</integer>
-		<key>phone</key>
-		<string>512-463-2084</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C572</string>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C035</string>
 	</dict>
 	<dict>
 		<key>clerk</key>
@@ -1180,37 +140,17 @@
 		<key>phone</key>
 		<string>512-463-0380</string>
 		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C655</string>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C570</string>
 	</dict>
 	<dict>
 		<key>clerk</key>
-		<string>Lindsey Reed</string>
+		<string>Raenetta Nance</string>
 		<key>clerk_email</key>
-		<string>Lindsey.Reed_sc@senate.state.tx.us</string>
+		<string>Ren.Nance_sc@senate.state.tx.us</string>
 		<key>committeeId</key>
-		<integer>12297</integer>
+		<integer>12752</integer>
 		<key>committeeName</key>
-		<string>Subcommittee on Flooding and Evacuations</string>
-		<key>committeeType</key>
-		<integer>2</integer>
-		<key>office</key>
-		<string>E1.804</string>
-		<key>parentId</key>
-		<integer>11403</integer>
-		<key>phone</key>
-		<string>512-463-0106</string>
-		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C523</string>
-	</dict>
-	<dict>
-		<key>clerk</key>
-		<string>Kelsey Erickson</string>
-		<key>clerk_email</key>
-		<string>Kelsey.Erickson_sc@senate.state.tx.us</string>
-		<key>committeeId</key>
-		<integer>11409</integer>
-		<key>committeeName</key>
-		<string>Transportation and Homeland Security</string>
+		<string>Agriculture and Rural Affairs</string>
 		<key>committeeType</key>
 		<integer>2</integer>
 		<key>office</key>
@@ -1218,15 +158,35 @@
 		<key>parentId</key>
 		<integer>-1</integer>
 		<key>phone</key>
-		<string>512-463-0067</string>
+		<string>512-463-0340</string>
 		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C640</string>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C505</string>
 	</dict>
 	<dict>
 		<key>clerk</key>
-		<string>Estella French</string>
+		<string>Hunter Thompson</string>
 		<key>clerk_email</key>
-		<string>Estella.French_sc@senate.state.tx.us</string>
+		<string>Hunter.Thompson_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>12034</integer>
+		<key>committeeName</key>
+		<string>Subcommittee on Education</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E1.032</string>
+		<key>parentId</key>
+		<integer>2735</integer>
+		<key>phone</key>
+		<string>512-463-1091</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C032</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Felicia Wright</string>
+		<key>clerk_email</key>
+		<string>Felicia.Wright_sc@senate.state.tx.us</string>
 		<key>committeeId</key>
 		<integer>11410</integer>
 		<key>committeeName</key>
@@ -1240,7 +200,1027 @@
 		<key>phone</key>
 		<string>512-463-2211</string>
 		<key>url</key>
-		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C650</string>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C650</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Bryan Law</string>
+		<key>clerk_email</key>
+		<string>Bryan.Law_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2789</integer>
+		<key>committeeName</key>
+		<string>Public Health</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.172</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0806</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C410</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Jim Terrell</string>
+		<key>clerk_email</key>
+		<string>Jim.Terrell_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11353</integer>
+		<key>committeeName</key>
+		<string>Agriculture and Livestock</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.114</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0762</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C020</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Robert Haley</string>
+		<key>clerk_email</key>
+		<string>Robert.Haley_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11407</integer>
+		<key>committeeName</key>
+		<string>Nominations</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>E1.716</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-2084</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C572</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Nicole Gilmore</string>
+		<key>clerk_email</key>
+		<string>Nicole.Gilmore_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>3525</integer>
+		<key>committeeName</key>
+		<string>Rules and Resolutions</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.138</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0812</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C440</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Carolyn Merchan Saeger</string>
+		<key>clerk_email</key>
+		<string>Carolyn.Saeger_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>3526</integer>
+		<key>committeeName</key>
+		<string>Ways and Means</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.116</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0822</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C490</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Nicanor Pesina</string>
+		<key>clerk_email</key>
+		<string>Nicanor.Pesina_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11404</integer>
+		<key>committeeName</key>
+		<string>International Relations and Trade</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>SHB 335</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0385</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C545</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Revlynn Lawson</string>
+		<key>clerk_email</key>
+		<string>Revlynn.Lawson_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2745</integer>
+		<key>committeeName</key>
+		<string>County Affairs</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.130</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0760</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C210</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Kathy Panaszek</string>
+		<key>clerk_email</key>
+		<string>Kathy.Panaszek_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>12988</integer>
+		<key>committeeName</key>
+		<string>Subcommittee on Stimulus</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E1.032</string>
+		<key>parentId</key>
+		<integer>2735</integer>
+		<key>phone</key>
+		<string>512-463-1091</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C038</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Patsy Spaw</string>
+		<key>clerk_email</key>
+		<string>Patsy.Spaw_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11396</integer>
+		<key>committeeName</key>
+		<string>Committee of the Whole Senate</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>2E.22</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0100</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C600</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Tiffany White</string>
+		<key>clerk_email</key>
+		<string>Tiffany.White_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11403</integer>
+		<key>committeeName</key>
+		<string>Intergovernmental Relations</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>SHB 475</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-2527</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C520</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Milda Mora</string>
+		<key>clerk_email</key>
+		<string>Milda.Mora_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>3520</integer>
+		<key>committeeName</key>
+		<string>Local and Consent Calendars</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.166</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0800</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C380</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Casey Fannin</string>
+		<key>clerk_email</key>
+		<string>Casey.Fannin_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>12035</integer>
+		<key>committeeName</key>
+		<string>Subcommittee on General Government</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E1.032</string>
+		<key>parentId</key>
+		<integer>2735</integer>
+		<key>phone</key>
+		<string>512-463-1091</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C036</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Juan Garcia</string>
+		<key>clerk_email</key>
+		<string>Juan.Garcia_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2740</integer>
+		<key>committeeName</key>
+		<string>Calendars</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.148</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0758</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C050</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Tulsi Reddy</string>
+		<key>clerk_email</key>
+		<string>Tulsi.Reddy_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11409</integer>
+		<key>committeeName</key>
+		<string>Transportation and Homeland Security</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>SHB 445</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0067</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C640</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Kristen Webb</string>
+		<key>clerk_email</key>
+		<string>Kristen.Webb_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>4117</integer>
+		<key>committeeName</key>
+		<string>Jurisprudence</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>SHB 350</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0395</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C550</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Steven Schar</string>
+		<key>clerk_email</key>
+		<string>Steven.Schar_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2754</integer>
+		<key>committeeName</key>
+		<string>Elections</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.144</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0772</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C240</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Steven Polunsky</string>
+		<key>clerk_email</key>
+		<string>Steven.Polunsky_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11395</integer>
+		<key>committeeName</key>
+		<string>Business and Commerce</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>SHB 370</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0365</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C510</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Tatum Reagan</string>
+		<key>clerk_email</key>
+		<string>Tatum.Reagan_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11406</integer>
+		<key>committeeName</key>
+		<string>Natural Resources</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>SHB 325</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0390</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C580</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Laurie McAnally</string>
+		<key>clerk_email</key>
+		<string>Laurie.McAnally_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>12985</integer>
+		<key>committeeName</key>
+		<string>Technology, Economic Development and Workforce</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.118</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0794</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C230</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Cheryl Lively</string>
+		<key>clerk_email</key>
+		<string>Cheryl.Lively_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>3515</integer>
+		<key>committeeName</key>
+		<string>General Investigating and Ethics</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.170</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0592</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C280</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Ben Fitzgibbons</string>
+		<key>clerk_email</key>
+		<string>Benjamin.Fitzgibbons_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>3511</integer>
+		<key>committeeName</key>
+		<string>Business and Industry</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.128</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0766</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C040</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Andrea Hinckson</string>
+		<key>clerk_email</key>
+		<string>Andrea.Hinckson_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11401</integer>
+		<key>committeeName</key>
+		<string>Government Organization</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>SHB 630</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-1818</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C565</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Julie Haeber</string>
+		<key>clerk_email</key>
+		<string>Julie.Haeber_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>12036</integer>
+		<key>committeeName</key>
+		<string>Subcommittee on Health and Human Services</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E1.032</string>
+		<key>parentId</key>
+		<integer>2735</integer>
+		<key>phone</key>
+		<string>512-463-1091</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C034</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Amy Jeter</string>
+		<key>clerk_email</key>
+		<string>Amy.Jeter_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11400</integer>
+		<key>committeeName</key>
+		<string>Finance</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>E1.038</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0370</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C540</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Kara Crawford</string>
+		<key>clerk_email</key>
+		<string>Kara.Crawford_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>15354</integer>
+		<key>committeeName</key>
+		<string>Administration</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>E1.714</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0350</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C500</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Gabe Valenzuela</string>
+		<key>clerk_email</key>
+		<string>Gabe.Valenzuela_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11362</integer>
+		<key>committeeName</key>
+		<string>Culture, Recreation, and Tourism</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.134</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-1974</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C430</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Holly Mabry</string>
+		<key>clerk_email</key>
+		<string>Holly.Mabry_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11398</integer>
+		<key>committeeName</key>
+		<string>Education</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>SHB 440</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0355</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C530</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Gregory Watson</string>
+		<key>clerk_email</key>
+		<string>Gregory.Watson_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2792</integer>
+		<key>committeeName</key>
+		<string>Redistricting</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.142</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-9948</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C080</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Michael Ruggieri</string>
+		<key>clerk_email</key>
+		<string>Michael.Ruggieri_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11374</integer>
+		<key>committeeName</key>
+		<string>Human Services</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.152</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0786</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C310</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Brittney Grigg</string>
+		<key>clerk_email</key>
+		<string>Brittney.Grigg_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>3519</integer>
+		<key>committeeName</key>
+		<string>Licensing and Administrative Procedures</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.156</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0798</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C350</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Elizabeth Barrett</string>
+		<key>clerk_email</key>
+		<string>Elizabeth.Barrett_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>12983</integer>
+		<key>committeeName</key>
+		<string>Federal Economic Stabilization Funding</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.202</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0240</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C272</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Travis Sampley</string>
+		<key>clerk_email</key>
+		<string>Travis.Sampley_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2743</integer>
+		<key>committeeName</key>
+		<string>Corrections</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.110</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0796</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C200</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Leigh Lauderdale</string>
+		<key>clerk_email</key>
+		<string>Leigh.Lauderdale_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2797</integer>
+		<key>committeeName</key>
+		<string>Transportation</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.122</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0818</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C470</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Laura Grable</string>
+		<key>clerk_email</key>
+		<string>Laura.Grable_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2767</integer>
+		<key>committeeName</key>
+		<string>House Administration</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.140</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0784</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C300</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Natalie Foerster-Gonzalez</string>
+		<key>clerk_email</key>
+		<string>Natalie.Foerster.Gonzalez_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11390</integer>
+		<key>committeeName</key>
+		<string>State Affairs</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.108</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0814</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C450</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Gonzalo Serrano</string>
+		<key>clerk_email</key>
+		<string>Gonzalo.Serrano_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>12754</integer>
+		<key>committeeName</key>
+		<string>Higher Education</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>SHB 320</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-4788</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C560</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Lemuel Price</string>
+		<key>clerk_email</key>
+		<string>Lemuel.Price_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2799</integer>
+		<key>committeeName</key>
+		<string>Urban Affairs</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.126</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-9904</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C480</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>David Wilkie</string>
+		<key>clerk_email</key>
+		<string>David.Wilkie_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11355</integer>
+		<key>committeeName</key>
+		<string>Border and Intergovernmental Affairs</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.158</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-1211</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C039</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Amy Peterson</string>
+		<key>clerk_email</key>
+		<string>Amy.Patterson_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2735</integer>
+		<key>committeeName</key>
+		<string>Appropriations</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E1.032</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-1091</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C030</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Ky Ash</string>
+		<key>clerk_email</key>
+		<string>Ky.Ash_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2756</integer>
+		<key>committeeName</key>
+		<string>Energy Resources</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.162</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0774</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C250</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Jenna Watts</string>
+		<key>clerk_email</key>
+		<string>Jenna.Watts_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2787</integer>
+		<key>committeeName</key>
+		<string>Public Education</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.124</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0804</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C400</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Sean Abbott</string>
+		<key>clerk_email</key>
+		<string>Sean.Abbott_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>12297</integer>
+		<key>committeeName</key>
+		<string>Subcommittee on Flooding and Evacuations</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>E1.804</string>
+		<key>parentId</key>
+		<integer>11403</integer>
+		<key>phone</key>
+		<string>512-463-0106</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C523</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Kirby Portley</string>
+		<key>clerk_email</key>
+		<string>Kirby.Portley_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>12984</integer>
+		<key>committeeName</key>
+		<string>Public Safety</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.146</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0133</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C420</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Jennifer Welch</string>
+		<key>clerk_email</key>
+		<string>Jennifer.Welch_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2772</integer>
+		<key>committeeName</key>
+		<string>Judiciary and Civil Jurisprudence</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.120</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0790</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C330</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Trey Burke</string>
+		<key>clerk_email</key>
+		<string>Trey.Burke_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>3518</integer>
+		<key>committeeName</key>
+		<string>Land and Resource Management</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.136</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-1623</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C360</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Dustin Meador</string>
+		<key>clerk_email</key>
+		<string>Dustin.Meador_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2764</integer>
+		<key>committeeName</key>
+		<string>Higher Education</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.106</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0782</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C290</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Teri Avery</string>
+		<key>clerk_email</key>
+		<string>Teri.Avery_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11363</integer>
+		<key>committeeName</key>
+		<string>Defense and Veterans Affairs</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.160</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-1393</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C305</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Elizabeth Fazio</string>
+		<key>clerk_email</key>
+		<string>Elizabeth.Fazio_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11383</integer>
+		<key>committeeName</key>
+		<string>Natural Resources</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.104</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0802</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C390</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Merita Zoga</string>
+		<key>clerk_email</key>
+		<string>Merita.Zoga_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>3522</integer>
+		<key>committeeName</key>
+		<string>Pensions, Investments and Financial Services</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.164</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-2054</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C395</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Jose Aguayo</string>
+		<key>clerk_email</key>
+		<string>Jose.Aguayo_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>2746</integer>
+		<key>committeeName</key>
+		<string>Criminal Jurisprudence</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E2.112</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0768</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C220</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Austin Holder</string>
+		<key>clerk_email</key>
+		<string>Austin.Holder_sc@senate.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>11402</integer>
+		<key>committeeName</key>
+		<string>Health and Human Services</string>
+		<key>committeeType</key>
+		<integer>2</integer>
+		<key>office</key>
+		<string>SHB 420</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-0360</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C610</string>
 	</dict>
 	<dict>
 		<key>clerk</key>
@@ -1260,7 +1240,27 @@
 		<key>phone</key>
 		<string>512-463-8802</string>
 		<key>url</key>
-		<string>http://www.legis.state.tx.us/Committees/MembershipCmte.aspx?LegSess=81R&amp;CmteCode=C625</string>
+		<string>http://www.legis.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C625</string>
+	</dict>
+	<dict>
+		<key>clerk</key>
+		<string>Joaquin Guadarrama</string>
+		<key>clerk_email</key>
+		<string>Joaquin.Guadarrama_sc@house.state.tx.us</string>
+		<key>committeeId</key>
+		<integer>12986</integer>
+		<key>committeeName</key>
+		<string>Subcommittee on Business and Economic Development</string>
+		<key>committeeType</key>
+		<integer>1</integer>
+		<key>office</key>
+		<string>E1.032</string>
+		<key>parentId</key>
+		<integer>-1</integer>
+		<key>phone</key>
+		<string>512-463-1091</string>
+		<key>url</key>
+		<string>http://www.capitol.state.tx.us/Committees/MembershipCmte.aspx?LegSess=811&amp;CmteCode=C033</string>
 	</dict>
 </array>
 </plist>
