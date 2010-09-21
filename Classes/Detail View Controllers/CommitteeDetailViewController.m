@@ -25,6 +25,7 @@
 #import "TexLegeStandardGroupCell.h"
 #import "PartisanScaleView.h"
 #import "PartisanIndexStats.h"
+#import "TexLegeEmailComposer.h"
 
 @interface CommitteeDetailViewController (Private)
 
@@ -272,12 +273,12 @@ CGFloat quartzRowHeight = 73.f;
 	[infoDict release];
 	[cellInfo release];
 
-//case kInfoSectionClerk:	// do email, someday
+//case kInfoSectionClerk:
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 				@"Clerk", @"subtitle",
 				self.committee.clerk, @"title",
-				[NSNumber numberWithBool:NO], @"isClickable",
-				nil, @"entryValue",
+				[NSNumber numberWithBool:YES], @"isClickable",
+				self.committee.clerk_email, @"entryValue",
 				nil];
 	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
 	[tempArray addObject:cellInfo];
@@ -516,7 +517,9 @@ CGFloat quartzRowHeight = 73.f;
 			return;
 		
 		switch (row) {
-			case kInfoSectionClerk:	// do email, someday
+			case kInfoSectionClerk:	
+				[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:cellInfo.entryValue 
+																				 subject:@"" body:@"" commander:self];
 				break;
 			case kInfoSectionPhone:	{// dial the number
 				if ([UtilityMethods canMakePhoneCalls]) {
@@ -561,11 +564,8 @@ CGFloat quartzRowHeight = 73.f;
 		
 		//	[self.navigationController setNavigationBarHidden:NO];
 		[subDetailController release];
-	}
-	
+	}	
 }
-
-
 
 
 @end
