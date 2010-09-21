@@ -377,7 +377,7 @@
 - (void)webViewDidStartLoad:(UIWebView *)webView {
 	BOOL hasScores = (self.legislator.wnomScores && [self.legislator.wnomScores count]);
 	
-	if (hasScores && !self.isChartSVG) {
+	if (hasScores /*&& !self.isChartSVG*/) {
 		[self.chartLoadingAct startAnimating];
 	}
 }
