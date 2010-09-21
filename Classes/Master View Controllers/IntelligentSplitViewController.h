@@ -12,5 +12,4 @@
 @interface IntelligentSplitViewController : UISplitViewController {
 
 }
-
 @end
