@@ -14,7 +14,7 @@
 
 @interface DistrictOfficeDataSource (Private)
 
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if WANTS_OLD_SCHOOL_IMPORT == 1
 - (void)initializeDatabase;	
 - (NSError *) geocodeDistrictOffice:(DistrictOfficeObj *)office;
 - (IBAction) saveAction:(id)sender;
@@ -35,7 +35,7 @@
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
 		
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if WANTS_OLD_SCHOOL_IMPORT == 1
 		[self initializeDatabase];
 #endif
 		self.byDistrict = NO;
@@ -329,7 +329,7 @@
 	return fetchedResultsController;
 }    
 
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if WANTS_OLD_SCHOOL_IMPORT == 1
 #warning initializeDatabase IS TURNED ON!!!
 #warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
 	

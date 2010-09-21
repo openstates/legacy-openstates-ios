@@ -10,12 +10,12 @@
 #import "DistrictMapSearchOperation.h"
 #import <MapKit/MapKit.h>
 
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if NEEDS_TO_PARSE_KMLMAPS == 1
 @class DistrictMapImporter;
 #endif
 
 @interface DistrictMapDataSource : NSObject <TableDataSource, DistrictMapSearchOperationDelegate> {
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if NEEDS_TO_PARSE_KMLMAPS == 1
 	NSInteger mapCount;
 #endif
 }
@@ -38,7 +38,7 @@
 - (void) removeFilter;
 - (IBAction) sortByType:(id)sender;
 
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if NEEDS_TO_PARSE_KMLMAPS == 1
 - (void)insertDistrictMaps:(NSArray *)districtMaps;
 @property (nonatomic, retain) DistrictMapImporter *importer;
 #endif

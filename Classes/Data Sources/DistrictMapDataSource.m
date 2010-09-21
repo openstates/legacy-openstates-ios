@@ -12,7 +12,7 @@
 #import "DisclosureQuartzView.h"
 #import "TexLegeCoreDataUtils.h"
 
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if NEEDS_TO_PARSE_KMLMAPS == 1
 #import "DistrictOfficeObj.h"
 #import "DistrictOfficeDataSource.h"
 #import "DistrictMap.h"
@@ -21,10 +21,6 @@
 #endif
 
 @interface DistrictMapDataSource (Private)
-
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
-- (void)initializeDatabase;	
-#endif
 
 @end
 
@@ -35,7 +31,7 @@
 @synthesize filterChamber, filterString, searchDisplayController;
 @synthesize genericOperationQueue, districtSearchDelegate;
 
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if NEEDS_TO_PARSE_KMLMAPS == 1
 @synthesize importer;
 #endif
 
@@ -46,12 +42,11 @@
 		self.filterString = [NSMutableString stringWithString:@""];
 		
 		
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if NEEDS_TO_PARSE_KMLMAPS == 1
 
 		DistrictOfficeDataSource *tempDistOff = [[DistrictOfficeDataSource alloc] initWithManagedObjectContext:newContext];
-#warning hacky place to put this, but we need to initialize district offices i guess? ....
+///#warning hacky place to put this, but we need to initialize district offices i guess? ....
 		
-		//[self initializeDatabase];
 		mapCount = 0;
 		self.importer = [[DistrictMapImporter alloc] initWithChamber:SENATE dataSource:self];
 		
@@ -63,7 +58,7 @@
 }
 
 - (void)dealloc {
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
+#if NEEDS_TO_PARSE_KMLMAPS == 1
 	self.importer = nil;
 #endif
 	self.fetchedResultsController = nil;
@@ -347,9 +342,8 @@
     }           
 }
 
-#if NEEDS_TO_INITIALIZE_DATABASE == 1
-#warning initializeDatabase IS TURNED ON!!!
-#warning DON'T FORGET TO LINK IN THE APPROPRIATE PLIST FILES
+#if NEEDS_TO_PARSE_KMLMAPS == 1
+#warning PARSE KML IS TURNED ON!!! MAKE SURE TO INCLUDE KMLs
 
 
 - (void)checkDistrictMaps {
