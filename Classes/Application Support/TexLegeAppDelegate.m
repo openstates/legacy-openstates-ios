@@ -150,7 +150,7 @@ NSInteger kNoSelection = -1;
 - (UINavigationController *) detailNavigationController {
 	if ([UtilityMethods isIPadDevice]) {
 		UISplitViewController *split = [self splitViewController];
-		if (split && split.viewControllers && [split.viewControllers count])
+		if (split && split.viewControllers && [split.viewControllers count]>1)
 			return [split.viewControllers objectAtIndex:1];
 	}
 	else
@@ -184,11 +184,11 @@ NSInteger kNoSelection = -1;
 
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
-	if (![UtilityMethods isIPadDevice]) {
+	if (/*![UtilityMethods isIPadDevice]*/1) {
 		if (![viewController isEqual:self.tabBarController.selectedViewController]) {
 			//debug_NSLog(@"About to switch tabs, popping to root view controller.");
 			UINavigationController *nav = [self detailNavigationController];
-			if (nav)
+			if (nav && [nav.viewControllers count]>1)
 				[nav popToRootViewControllerAnimated:YES];
 		}
 	}
