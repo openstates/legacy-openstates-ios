@@ -1274,6 +1274,7 @@
 					<string>-1.CustomClassName</string>
 					<string>-2.CustomClassName</string>
 					<string>10.IBPluginDependency</string>
+					<string>109.CustomClassName</string>
 					<string>109.IBEditorWindowLastContentRect</string>
 					<string>109.IBPluginDependency</string>
 					<string>11.IBPluginDependency</string>
@@ -1293,6 +1294,7 @@
 					<string>2.IBPluginDependency</string>
 					<string>21.CustomClassName</string>
 					<string>21.IBPluginDependency</string>
+					<string>26.CustomClassName</string>
 					<string>26.IBEditorWindowLastContentRect</string>
 					<string>26.IBPluginDependency</string>
 					<string>27.IBPluginDependency</string>
@@ -1305,6 +1307,7 @@
 					<string>32.CustomClassName</string>
 					<string>32.IBPluginDependency</string>
 					<string>33.IBPluginDependency</string>
+					<string>35.CustomClassName</string>
 					<string>35.IBEditorWindowLastContentRect</string>
 					<string>35.IBPluginDependency</string>
 					<string>36.IBEditorWindowLastContentRect</string>
@@ -1316,6 +1319,7 @@
 					<string>41.IBPluginDependency</string>
 					<string>44.CustomClassName</string>
 					<string>44.IBPluginDependency</string>
+					<string>46.CustomClassName</string>
 					<string>46.IBEditorWindowLastContentRect</string>
 					<string>46.IBPluginDependency</string>
 					<string>47.IBPluginDependency</string>
@@ -1327,6 +1331,7 @@
 					<string>52.CustomClassName</string>
 					<string>52.IBPluginDependency</string>
 					<string>53.IBPluginDependency</string>
+					<string>55.CustomClassName</string>
 					<string>55.IBEditorWindowLastContentRect</string>
 					<string>55.IBPluginDependency</string>
 					<string>56.IBEditorWindowLastContentRect</string>
@@ -1338,6 +1343,7 @@
 					<string>61.IBPluginDependency</string>
 					<string>62.CustomClassName</string>
 					<string>62.IBPluginDependency</string>
+					<string>8.CustomClassName</string>
 					<string>8.IBEditorWindowLastContentRect</string>
 					<string>8.IBPluginDependency</string>
 					<string>9.IBEditorWindowLastContentRect</string>
@@ -1348,6 +1354,7 @@
 					<string>TexLegeAppDelegate</string>
 					<string>UIResponder</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>IntelligentSplitViewController</string>
 					<string>{{400, 4}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -1367,6 +1374,7 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>LegislatorDetailViewController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>IntelligentSplitViewController</string>
 					<string>{{374, 62}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -1379,6 +1387,7 @@
 					<string>CommitteeMasterViewController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>IntelligentSplitViewController</string>
 					<string>{{374, 62}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>{{312, 4}, {783, 1002}}</string>
@@ -1390,6 +1399,7 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>CalendarDetailViewController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>IntelligentSplitViewController</string>
 					<string>{{374, 62}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -1401,6 +1411,7 @@
 					<string>CapitolMapsMasterViewController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>IntelligentSplitViewController</string>
 					<string>{{374, 62}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>{{312, 4}, {783, 1002}}</string>
@@ -1412,6 +1423,7 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>MiniBrowserController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>IntelligentSplitViewController</string>
 					<string>{{374, 62}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>{{312, 4}, {783, 1002}}</string>
@@ -1759,6 +1771,14 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">IntelligentSplitViewController</string>
+					<string key="superclassName">UISplitViewController</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Classes/Master View Controllers/IntelligentSplitViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">LegislatorDetailViewController</string>
 					<string key="superclassName">UITableViewController</string>
 					<object class="NSMutableDictionary" key="outlets">
@@ -1766,6 +1786,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>allSlider</string>
+							<string>chartLoadingAct</string>
 							<string>chartView</string>
 							<string>freshmanPlotLab</string>
 							<string>headerView</string>
@@ -1780,14 +1801,13 @@
 							<string>leg_rankLab</string>
 							<string>leg_tenureLab</string>
 							<string>legislator</string>
-							<string>mapViewController</string>
 							<string>miniBackgroundView</string>
 							<string>partySlider</string>
-							<string>startupSplashView</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>PartisanScaleView</string>
+							<string>UIActivityIndicatorView</string>
 							<string>UIWebView</string>
 							<string>UILabel</string>
 							<string>UIView</string>
@@ -1802,10 +1822,8 @@
 							<string>UILabel</string>
 							<string>UILabel</string>
 							<string>LegislatorObj</string>
-							<string>MapViewController</string>
 							<string>UIView</string>
 							<string>PartisanScaleView</string>
-							<string>UIView</string>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
@@ -1813,6 +1831,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>allSlider</string>
+							<string>chartLoadingAct</string>
 							<string>chartView</string>
 							<string>freshmanPlotLab</string>
 							<string>headerView</string>
@@ -1827,16 +1846,18 @@
 							<string>leg_rankLab</string>
 							<string>leg_tenureLab</string>
 							<string>legislator</string>
-							<string>mapViewController</string>
 							<string>miniBackgroundView</string>
 							<string>partySlider</string>
-							<string>startupSplashView</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
 								<string key="name">allSlider</string>
 								<string key="candidateClassName">PartisanScaleView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">chartLoadingAct</string>
+								<string key="candidateClassName">UIActivityIndicatorView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">chartView</string>
@@ -1895,20 +1916,12 @@
 								<string key="candidateClassName">LegislatorObj</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">mapViewController</string>
-								<string key="candidateClassName">MapViewController</string>
-							</object>
-							<object class="IBToOneOutletInfo">
 								<string key="name">miniBackgroundView</string>
 								<string key="candidateClassName">UIView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">partySlider</string>
 								<string key="candidateClassName">PartisanScaleView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">startupSplashView</string>
-								<string key="candidateClassName">UIView</string>
 							</object>
 						</object>
 					</object>
@@ -1973,17 +1986,13 @@
 							<string>changeMapType:</string>
 							<string>foundDistrictMapsWithObjectIDs:</string>
 							<string>locateUser:</string>
-							<string>mapControlSheet:</string>
 							<string>reverseGeocodeLocation:</string>
-							<string>showAllDistrictOffices:</string>
 							<string>showAllDistricts:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>id</string>
 							<string>NSArray</string>
-							<string>id</string>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -1996,9 +2005,7 @@
 							<string>changeMapType:</string>
 							<string>foundDistrictMapsWithObjectIDs:</string>
 							<string>locateUser:</string>
-							<string>mapControlSheet:</string>
 							<string>reverseGeocodeLocation:</string>
-							<string>showAllDistrictOffices:</string>
 							<string>showAllDistricts:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -2016,15 +2023,7 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">mapControlSheet:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
 								<string key="name">reverseGeocodeLocation:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">showAllDistrictOffices:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -2038,7 +2037,6 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>districtOfficesButton</string>
-							<string>mapControlsButton</string>
 							<string>mapTypeControl</string>
 							<string>mapTypeControlButton</string>
 							<string>mapView</string>
@@ -2050,7 +2048,6 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>UIBarButtonItem</string>
 							<string>UIBarButtonItem</string>
 							<string>UISegmentedControl</string>
 							<string>UIBarButtonItem</string>
@@ -2067,7 +2064,6 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>districtOfficesButton</string>
-							<string>mapControlsButton</string>
 							<string>mapTypeControl</string>
 							<string>mapTypeControlButton</string>
 							<string>mapView</string>
@@ -2081,10 +2077,6 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
 								<string key="name">districtOfficesButton</string>
-								<string key="candidateClassName">UIBarButtonItem</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">mapControlsButton</string>
 								<string key="candidateClassName">UIBarButtonItem</string>
 							</object>
 							<object class="IBToOneOutletInfo">
@@ -2280,6 +2272,20 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Classes/Core Data Classes/TexLegeCoreDataUtils.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../../Frameworks/JSON-Framework/NSObject+SBJSON.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../../Frameworks/JSON-Framework/SBJsonWriter.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
