@@ -10,9 +10,7 @@
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">123</string>
 		</object>
-		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="175"/>
-		</array>
+		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs"/>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 		</array>
@@ -27,7 +25,7 @@
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 			</object>
 			<object class="IBUITableView" id="729910629">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="705775946">
@@ -4683,7 +4681,7 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 							</object>
 							<object class="IBUIActivityIndicatorView" id="327855199">
 								<reference key="NSNextResponder" ref="705775946"/>
-								<int key="NSvFlags">-2147483355</int>
+								<int key="NSvFlags">293</int>
 								<string key="NSFrame">{{381, 270}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="705775946"/>
 								<object class="NSColor" key="IBUIBackgroundColor">
@@ -4692,6 +4690,7 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 								</object>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+								<bool key="IBUIAnimating">YES</bool>
 								<int key="IBUIStyle">0</int>
 							</object>
 							<object class="IBUILabel" id="126117740">
@@ -4738,7 +4737,6 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 					</object>
 				</array>
 				<string key="NSFrameSize">{768, 960}</string>
-				<reference key="NSSuperview"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">1</int>
 					<bytes key="NSRGB">MCAwIDAgMAA</bytes>
@@ -5174,7 +5172,6 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="allSlider">PartisanScaleView</string>
 						<string key="chartLoadingAct">UIActivityIndicatorView</string>
-						<string key="chartLoadingLab">UILabel</string>
 						<string key="chartView">UIWebView</string>
 						<string key="freshmanPlotLab">UILabel</string>
 						<string key="headerView">UIView</string>
@@ -5201,10 +5198,6 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 						<object class="IBToOneOutletInfo" key="chartLoadingAct">
 							<string key="name">chartLoadingAct</string>
 							<string key="candidateClassName">UIActivityIndicatorView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="chartLoadingLab">
-							<string key="name">chartLoadingLab</string>
-							<string key="candidateClassName">UILabel</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="chartView">
 							<string key="name">chartView</string>
