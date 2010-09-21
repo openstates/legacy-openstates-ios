@@ -8,10 +8,11 @@
 #import "CalendarDetailViewController.h"
 #import "CalendarMasterViewController.h"
 #import "UtilityMethods.h"
-#include "MiniBrowserController.h"
+#import "MiniBrowserController.h"
 #import "TexLegeAppDelegate.h"
 #import "ChamberCalendarObj.h"
 #import "TexLegeTheme.h"
+#import "LocalyticsSession.h"
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
 
@@ -242,6 +243,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	if (!parentController)
 		parentController = [[TexLegeAppDelegate appDelegate] detailNavigationController];
 	
+	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"iCAL_EVENT"];
 	/* keys in our event dictionary:
 	 fullDate (hopefully)
 	 date

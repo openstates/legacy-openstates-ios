@@ -23,7 +23,7 @@
 
 #import "PartisanIndexStats.h"
 #import "UIImage+ResolutionIndependent.h"
-#import "ImageCache.h"
+//#import "ImageCache.h"
 
 #import "TexLegeStandardGroupCell.h"
 #import "TexLegeGroupCellProtocol.h"

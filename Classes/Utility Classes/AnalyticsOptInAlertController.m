@@ -81,7 +81,9 @@
 				didOptIn = -1;
 			
 		}
-		
+		if (didOptIn == 0) {
+			[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"OPTED_OUT_OF_LOCALYTICS"];
+		}
 		[[LocalyticsSession sharedLocalyticsSession] setOptIn:didOptIn];
 
 		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:kAnalyticsAskedForOptInKey];

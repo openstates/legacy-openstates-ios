@@ -107,6 +107,7 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
+	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"LOW_MEMORY_WARNING"];
 	self.analyticsOptInController = nil;
 }
 
@@ -196,9 +197,16 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)tabBarController:(UITabBarController *)theTabBarController didSelectViewController:(UIViewController *)viewController {
-	NSString *tabchangetag = [NSString stringWithFormat:@"SELECTTAB_%@", viewController.tabBarItem.title];
-	[[LocalyticsSession sharedLocalyticsSession] tagEvent:tabchangetag];
+	NSString *vcTitle = @"More";
+	id masterVC = self.currentMasterViewController;
+	if (masterVC && [masterVC respondsToSelector:@selector(viewControllerKey)])
+		vcTitle = [masterVC performSelector:@selector(viewControllerKey)];
+	if (!vcTitle)
+		vcTitle = viewController.tabBarItem.title;
 	
+	NSDictionary *tabSelectionDict = [NSDictionary dictionaryWithObject:vcTitle forKey:@"Feature"];
+	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"SELECTTAB" attributes:tabSelectionDict];
+		
 	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 
@@ -341,8 +349,11 @@ NSInteger kNoSelection = -1;
 	if (self.analyticsOptInController && ![self.analyticsOptInController presentAnalyticsOptInAlertIfNecessary])
 		[self.analyticsOptInController updateOptInFromSettings];
 		
-	[[LocalyticsSession sharedLocalyticsSession] startSession:@"111c245bdf4ad08686ac12b-eae4b72e-9439-11df-5b0c-009ee7c87684"];
-		
+#ifdef DEBUG
+	[[LocalyticsSession sharedLocalyticsSession] startSession:@"c3641d53749cde2eaf32359-2b477ece-c58f-11df-ee10-00fcbf263dff"];
+#else
+	[[LocalyticsSession sharedLocalyticsSession] startSession:@"8bde685867a8375008c3272-3afa437e-c58f-11df-ee10-00fcbf263dff"];
+#endif
 	
 #if EXPORTING_DATA == 1
 	TexLegeDataExporter *exporter = [[TexLegeDataExporter alloc] initWithManagedObjectContext:self.managedObjectContext];

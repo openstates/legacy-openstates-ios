@@ -4,18 +4,5 @@
 <dict>
 	<key>AnalyticsOptInText</key>
 	<string>TexLege can unobtrusively submit anonymous usage data (like launch time and features used) to the developer.  This is solely intended to improve app development, and will NEVER be used for advertising or marketing.  It submits no geographic or identifying information. Please consider enabling this service.  You may change this later in the Settings app.</string>
-	<key>PartisanIndexText</key>
-	<string>	Thank you for using TexLege, it&apos;s is the only application of it&apos;s kind that includes a roll call vote dimensional index for legislators (along with historical data going back a decade or more). This index is a measure of partisanship within the legislative voting record.
-
-     I calculate the Roll Call Index scores using the many thousands of votes taken in the legislature since 1991 for the House and 1999 for the Senate.  To get historical comparisons, I apply a statistical transformation on the data such that a legislator&apos;s current voting record score is influenced by their scores from previous sessions (but not the other way around!).  As the Speaker rarely votes, I calculate his scores for the current session using his voting record from the prior sessions where he is a regular member.  For the purposes of the historical graph plots, I simulate the Speaker&apos;s score from the scores of the members on the Speaker&apos;s Team. 
-
-	Don&apos;t compare the scores between a House and a Senator member (yet), the scales are not the same.  I&apos;m actively working on a transformation that will normalize the indexes for the two chambers, but it&apos;s not included here.
-
-For much more detailed information on the roll call analysis, please contact me or see my doctoral dissertation titled “The Power of the Texas Speaker: Maintaining Influence and Governing over a Divided House”, available from http://disill.umi.com/dxweb or through your local university’s library.
-
-Gregory S. Combs, PhD
-www.texlege.com</string>
-	<key>AboutText</key>
-	<string></string>
 </dict>
 </plist>

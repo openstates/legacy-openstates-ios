@@ -6,9 +6,6 @@
 //  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
-
 @interface UISearchDisplayControllerNoHideNav : UISearchDisplayController 
 {
 
