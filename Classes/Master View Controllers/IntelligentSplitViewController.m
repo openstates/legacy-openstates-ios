@@ -11,26 +11,23 @@
 
 @implementation IntelligentSplitViewController
 
-/*
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        // Custom initialization
-			
-    }
-    return self;
-}
-*/
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void) awakeFromNib {
+	[super awakeFromNib];
 
+	// Custom initialization
+		
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(willRotate:)
 												 name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(didRotate:)
-												 name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+												 name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];		
+}
+
+// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -41,16 +38,17 @@
 
 - (void)viewDidUnload {
     [super viewDidUnload];
+}
 
+
+- (void)dealloc {
+	
 	[[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:UIApplicationWillChangeStatusBarOrientationNotification];
 	[[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:UIApplicationDidChangeStatusBarOrientationNotification];
-}
 
-/*
-- (void)dealloc {
     [super dealloc];
 }
-*/
+
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Overriden to allow any orientation.
@@ -60,11 +58,18 @@
 
 - (void)willRotate:(id)sender {
 	NSNotification *notification = sender;
+	if (!notification)
+		return;
+	
 	UIInterfaceOrientation toOrientation = [[notification.userInfo valueForKey:UIApplicationStatusBarOrientationUserInfoKey] integerValue];
 	//UIInterfaceOrientation fromOrientation = [UIApplication sharedApplication].statusBarOrientation;
+	UITabBarController *tabBar = self.tabBarController;
+	BOOL notModal = (!tabBar.modalViewController);
+	BOOL isSelectedTab = [self.tabBarController.selectedViewController isEqual:self];
 	
 	NSTimeInterval duration = [[UIApplication sharedApplication] statusBarOrientationAnimationDuration];
-	if (![self.tabBarController.selectedViewController isEqual:self])  { // I don't think we're visible...
+	
+	if (!isSelectedTab || !notModal)  { // I don't think we're visible...
 		[super willRotateToInterfaceOrientation:toOrientation duration:duration];
 		
 		UIViewController *master = [self.viewControllers objectAtIndex:0];
@@ -106,10 +111,16 @@
 
 - (void)didRotate:(id)sender {
 	NSNotification *notification = sender;
+	if (!notification)
+		return;
 	UIInterfaceOrientation fromOrientation = [[notification.userInfo valueForKey:UIApplicationStatusBarOrientationUserInfoKey] integerValue];
 	//UIInterfaceOrientation toOrientation = [UIApplication sharedApplication].statusBarOrientation;
 	
-	if (![self.tabBarController.selectedViewController isEqual:self]) { // I don't think we're visible...
+	UITabBarController *tabBar = self.tabBarController;
+	BOOL notModal = (!tabBar.modalViewController);
+	BOOL isSelectedTab = [self.tabBarController.selectedViewController isEqual:self];
+	
+	if (!isSelectedTab || !notModal)  { // I don't think we're visible...
 		[super didRotateFromInterfaceOrientation:fromOrientation];
 	}
 	
