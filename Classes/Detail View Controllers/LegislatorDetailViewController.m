@@ -315,6 +315,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+	[[PartisanIndexStats sharedPartisanIndexStats] resetChartCacheIfNecessary];
+
 	BOOL ipad = [UtilityMethods isIPadDevice];
 	BOOL portrait = (![UtilityMethods isLandscapeOrientation]);
 	

@@ -37,6 +37,6 @@
 - (NSDictionary *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber;
 
 - (NSString *)partisanChartForLegislator:(LegislatorObj*)legislator width:(NSString *)width;
-
+- (BOOL) resetChartCacheIfNecessary;
 
 @end

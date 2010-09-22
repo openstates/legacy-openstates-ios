@@ -48,6 +48,7 @@ NSString * const kAnalyticsAskedForOptInKey = @"HasAskedForOptIn";
 NSString * const kAnalyticsSettingsSwitch = @"PermitUseOfAnalytics";
 NSString * const kShowedSplashScreenKey = @"HasShownSplashScreen";
 NSString * const kSegmentControlPrefKey = @"SegmentControlPrefs";
+NSString * const kResetChartCacheKey = @"ResetChartCache";
 
 NSUInteger kNumMaxTabs = 11;
 NSInteger kNoSelection = -1;
@@ -337,6 +338,7 @@ NSInteger kNoSelection = -1;
 									[NSNumber numberWithBool:YES], kAnalyticsSettingsSwitch,
 									[NSNumber numberWithBool:NO], kShowedSplashScreenKey,
 									[NSDictionary dictionary], kSegmentControlPrefKey,
+									[NSNumber numberWithBool:NO], kResetChartCacheKey,
 									version, @"CFBundleVersion",
 									nil];
 	
@@ -348,7 +350,7 @@ NSInteger kNoSelection = -1;
 	self.analyticsOptInController = [[[AnalyticsOptInAlertController alloc] init] autorelease];
 	if (self.analyticsOptInController && ![self.analyticsOptInController presentAnalyticsOptInAlertIfNecessary])
 		[self.analyticsOptInController updateOptInFromSettings];
-		
+			
 #ifdef DEBUG
 	[[LocalyticsSession sharedLocalyticsSession] startSession:@"c3641d53749cde2eaf32359-2b477ece-c58f-11df-ee10-00fcbf263dff"];
 #else

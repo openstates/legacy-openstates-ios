@@ -399,4 +399,43 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	return [content autorelease];
 }
 
+- (void) resetChartCache:(id)sender {
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+	NSError *error = nil;
+	NSString *pathToDocs = [UtilityMethods applicationDocumentsDirectory];
+	NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:pathToDocs error:&error];
+	
+	if (error) {
+		debug_NSLog(@"Error reading documents directory for svg cache reset: %@", error);
+	}
+	if (files && [files count]) {
+		for (NSString *file in files) {
+			if ([file hasSuffix:@".land.svg"] || [file hasSuffix:@".port.svg"]) {
+				NSString *filePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:file];
+				
+				[[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+				if (error) {
+					debug_NSLog(@"Error deleting svg cache at path:%@ --- %@", filePath, error);
+				}
+			}
+		}
+	}	
+	[pool drain];
+}
+
+- (BOOL) resetChartCacheIfNecessary {
+	
+	BOOL needsReset = [[NSUserDefaults standardUserDefaults] boolForKey:kResetChartCacheKey];
+	
+	if (needsReset) {
+		[self performSelectorInBackground:@selector(resetChartCache:) withObject:nil]; 
+	}
+	
+	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kResetChartCacheKey];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+
+	return needsReset;
+}
 @end
