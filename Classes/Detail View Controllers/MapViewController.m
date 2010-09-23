@@ -804,7 +804,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		BOOL senate = NO;
 		NSString *ovTitle = [overlay title];
 		if (ovTitle && [ovTitle hasPrefix:@"House"]) {
-			myColor = [TexLegeTheme texasGreen];
+			if (self.mapView.mapType > MKMapTypeStandard)
+				myColor = [UIColor cyanColor];
+			else
+				myColor = [TexLegeTheme texasGreen];
 			senate = NO;
 		}
 		else if (ovTitle && [ovTitle hasPrefix:@"Senate"]) {
