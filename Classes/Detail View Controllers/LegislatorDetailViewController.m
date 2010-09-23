@@ -469,10 +469,12 @@
 			[subDetailController release];
 		}
 		else if (cellInfo.entryType == DirectoryTypeContributions) {
-			LegislatorContributionsViewController *subDetailController = [[LegislatorContributionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-			[subDetailController setQueryEntityID:cellInfo.entryValue type:[NSNumber numberWithInteger:kContributionQueryRecipient] cycle:@"-1"];
-			[self.navigationController pushViewController:subDetailController animated:YES];
-			[subDetailController release];
+			if ([UtilityMethods canReachHostWithURL:[NSURL URLWithString:@"http://transparencydata.org"]]) { 
+				LegislatorContributionsViewController *subDetailController = [[LegislatorContributionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+				[subDetailController setQueryEntityID:cellInfo.entryValue type:[NSNumber numberWithInteger:kContributionQueryRecipient] cycle:@"-1"];
+				[self.navigationController pushViewController:subDetailController animated:YES];
+				[subDetailController release];
+			}
 		}
 		else if (cellInfo.entryType == DirectoryTypeOfficeMap) {
 			CapitolMap *capMap = cellInfo.entryValue;			
@@ -494,16 +496,23 @@
 					districtOffice = cellInfo.entryValue;
 				
 				[mapViewController resetMapViewWithAnimation:NO];
-
+				
+				id<MKAnnotation> theAnnotation = nil;
 				if (districtOffice) {
-					[mapViewController.mapView addAnnotation:districtOffice];
-					[mapViewController moveMapToAnnotation:districtOffice];
+					theAnnotation = districtOffice;
+					[mapViewController.mapView addAnnotation:theAnnotation];
+					[mapViewController moveMapToAnnotation:theAnnotation];
 				}
 				else {
-					[mapViewController.mapView addAnnotation:self.legislator.districtMap];
-					[mapViewController moveMapToAnnotation:self.legislator.districtMap];
-					[mapViewController.mapView performSelector:@selector(addOverlay:) withObject:[self.legislator.districtMap polygon] afterDelay:0.5f];
+					theAnnotation = self.legislator.districtMap;
+					[mapViewController.mapView addAnnotation:theAnnotation];
+					[mapViewController moveMapToAnnotation:theAnnotation];
+					[mapViewController.mapView performSelector:@selector(addOverlay:) 
+													withObject:[self.legislator.districtMap polygon] afterDelay:0.5f];
 				}
+				if (theAnnotation)
+					mapViewController.navigationItem.title = [theAnnotation title];
+
 				[self.navigationController pushViewController:mapViewController animated:YES];
 				[mapViewController release];
 			}
