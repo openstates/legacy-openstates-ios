@@ -11,9 +11,6 @@
 #import "DistrictOfficeObj.h"
 #import "DistrictMapObj.h"
 
-#import "CustomAnnotation.h"
-#import "CustomAnnotationView.h"
-
 #import "TexLegeAppDelegate.h"
 #import "TexLegeCoreDataUtils.h"
 
@@ -34,7 +31,6 @@
 - (void) clearAnnotationsAndOverlaysExcept:(id)annotation;
 - (void) resetMapViewWithAnimation:(BOOL)animated;
 - (BOOL) region:(MKCoordinateRegion)region1 isEqualTo:(MKCoordinateRegion)region2;
-- (IBAction) showHidePopoverButton:(id)sender;
 - (void) invalidateDistrictView;
 @end
 
@@ -43,10 +39,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 
 @implementation MapMiniDetailViewController
-@synthesize mapTypeControl, mapTypeControlButton;
-@synthesize mapView, reverseGeocoder, searchLocation;
-@synthesize toolbar, searchBar, searchBarButton;
-@synthesize forwardGeocoder, texasRegion;
+@synthesize mapView;
+@synthesize texasRegion;
 @synthesize districtView;
 
 #pragma mark -
@@ -80,23 +74,11 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	[self.mapView removeOverlays:self.mapView.overlays];
 	[self.mapView removeAnnotations:self.mapView.annotations];
 
-	self.mapTypeControl = nil;
-	self.searchBarButton = nil;
-	self.mapTypeControlButton = nil;
 	self.mapView = nil;
-	//self.mapControlsButton = nil;
-	[self.reverseGeocoder cancel];
-	self.reverseGeocoder = nil;
-	self.forwardGeocoder = nil;
-	self.searchBar = nil;
-	self.searchLocation = nil;
 	[super dealloc];
 }
 
 - (void) didReceiveMemoryWarning {	
-	self.forwardGeocoder = nil;
-	[self.reverseGeocoder cancel];
-	self.reverseGeocoder = nil;
 
 	//[self clearAnnotationsAndOverlaysExceptRecent];
 	[self clearOverlaysExceptRecent];
@@ -119,14 +101,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	self.mapView.region = self.texasRegion;
 	
 	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
-	self.toolbar.tintColor = [TexLegeTheme navbar];
-	self.searchBar.tintColor = [TexLegeTheme navbar];
-	if ([UtilityMethods isIPadDevice]) {
-		self.navigationItem.titleView = self.toolbar; 
-	}
-	else {
-		self.navigationItem.titleView = self.searchBar;
-	}
+	//self.navigationItem.title = @"District Location";
 	
 	if (![UtilityMethods supportsMKPolyline])
 		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"__NO_MKPOLYLINE!__"];
@@ -139,9 +114,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	[self.mapView removeAnnotations:self.mapView.annotations];
 
 	self.mapView = nil;
-	self.reverseGeocoder = nil;
-	self.forwardGeocoder = nil;
-	self.searchLocation = nil;
 	[super viewDidUnload];
 }
 
@@ -300,228 +272,9 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	return (coordsEqual && spanEqual);
 }
 
-#pragma mark -
-#pragma mark Control Element Actions
-
-- (IBAction)changeMapType:(id)sender {
-	NSInteger index = self.mapTypeControl.selectedSegmentIndex;
-	self.mapView.mapType = index;
-}
-
-- (void)showLocateUserButton {
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-
-	NSInteger buttonIndex = 0;
-	
-	UIBarButtonItem *locateItem = [[UIBarButtonItem alloc] 
-								   initWithImage:[UIImage imageNamed:@"locationarrow.png"]
-									style:UIBarButtonItemStyleBordered
-									target:self
-									action:@selector(locateUser:)];
-
-	locateItem.tag = 999;
-	
-	NSMutableArray *items = [[NSMutableArray alloc] initWithArray:self.toolbar.items];
-
-	UIBarButtonItem *otherButton = [items objectAtIndex:buttonIndex];
-	if (otherButton.tag == 998 || otherButton.tag == 999)
-		[items removeObjectAtIndex:buttonIndex];
-	[items insertObject:locateItem atIndex:buttonIndex];
-	[locateItem release];
-	[self.toolbar setItems:items animated:YES];
-	[items release];
-}
-
-- (void)showLocateActivityButton {
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-
-	NSInteger buttonIndex = 0;
-
-	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-	[activityIndicator startAnimating];
-	UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-	[activityIndicator release];
-	activityItem.tag = 998;
-	
-	NSMutableArray *items = [[NSMutableArray alloc] initWithArray:self.toolbar.items];
-	
-	UIBarButtonItem *otherButton = [items objectAtIndex:buttonIndex];
-	if (otherButton.tag == 999 || otherButton.tag == 998)
-		[items removeObjectAtIndex:buttonIndex];
-	[items insertObject:activityItem atIndex:buttonIndex];
-	[activityItem release];
-	[self.toolbar setItems:items animated:YES];
-	[items release];
-}
-
-- (IBAction)locateUser:(id)sender {
-	//[self clearAnnotationsAndOverlays];
-	[self showLocateActivityButton];				// this gets changed in viewForAnnotation once we receive the location
-
-	if ([UtilityMethods locationServicesEnabled]) 
-		self.mapView.showsUserLocation = YES;
-}
-
-
-#pragma mark -
-#pragma mark Geocoding and Reverse Geocoding
-
-- (IBAction)reverseGeocodeLocation:(CLLocationCoordinate2D)coordinate
-{
-	if (!self.reverseGeocoder) {
-		self.reverseGeocoder = [[[MKReverseGeocoder alloc] initWithCoordinate:coordinate] autorelease];
-		self.reverseGeocoder.delegate = self;
-		[self.reverseGeocoder start];
-	}
-}
-
-
-- (void)reverseGeocoder:(MKReverseGeocoder *)geocoder didFindPlacemark:(MKPlacemark *)placemark
-{
-	[self.searchLocation setAddressDictWithPlacemark:placemark];
-		
-	if (self.reverseGeocoder) {
-		[self.reverseGeocoder cancel];
-		self.reverseGeocoder = nil;
-	}
-}
-
-- (void)reverseGeocoder:(MKReverseGeocoder *)geocoder didFailWithError:(NSError *)error
-{
-    debug_NSLog(@"MKReverseGeocoder has failed: %@", error);
-	if (self.reverseGeocoder) {
-		[self.reverseGeocoder cancel];
-		self.reverseGeocoder = nil;
-	}	
-}
-
--(void)forwardGeocoderFoundLocation
-{
-	[self showLocateUserButton];
-	
-	if(self.forwardGeocoder.status == G_GEO_SUCCESS)
-	{
-		[self clearAnnotationsExceptRecent];		
-		
-		NSInteger searchResults = [self.forwardGeocoder.results count];
-		
-		// Add placemarks for each result
-		id<MKAnnotation> lastAnnotation = nil;
-		
-		for(NSInteger i = 0; i < searchResults; i++)
-		{
-			BSKmlResult *place = [self.forwardGeocoder.results objectAtIndex:i];
-			
-			// Add a placemark on the map
-			CustomAnnotation *annotation = [[[CustomAnnotation alloc] initWithBSKmlResult:place] autorelease];
-			
-			if (![UtilityMethods iOSVersion4])
-				annotation.coordinateChangedDelegate = self;
-			
-			[self.mapView addAnnotation:annotation];	
-			
-			lastAnnotation = annotation;
-			
-		}
-		if (lastAnnotation) {
-			[self moveMapToAnnotation:lastAnnotation];
-		}
-		// Dismiss the keyboard
-		[self.searchBar resignFirstResponder];
-	}
-	else {
-		NSString *message = @"";
-		
-		switch (forwardGeocoder.status) {
-			case G_GEO_UNKNOWN_ADDRESS:
-				message = [NSString stringWithFormat:@"Could not find %@", forwardGeocoder.searchQuery];
-				break;
-			case G_GEO_SERVER_ERROR:
-			default:
-				message = @"Map server error, please try again.";
-				break;
-		}
-		
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Information" 
-														message:message
-													   delegate:nil 
-											  cancelButtonTitle:@"OK" 
-											  otherButtonTitles: nil];
-		[alert show];
-		[alert release];
-	}
-	self.forwardGeocoder = nil;
-}
-
-- (void) searchBarSearchButtonClicked:(UISearchBar *)theSearchBar {
-	[self showLocateActivityButton];
-
-	if(self.forwardGeocoder == nil)
-		self.forwardGeocoder = [[[BSForwardGeocoder alloc] initWithDelegate:self] autorelease];
-	
-	if(self.forwardGeocoder)
-		[self.forwardGeocoder findLocation:theSearchBar.text];
-}
-
--(void)forwardGeocoderError:(NSString *)errorMessage
-{
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error!" 
-													message:errorMessage
-												   delegate:nil 
-										  cancelButtonTitle:@"OK" 
-										  otherButtonTitles: nil];
-	[alert show];
-	[alert release];
-	
-	self.forwardGeocoder = nil;
-	[self showLocateUserButton];
-
-}
-
-- (void)annotationCoordinateChanged:(id)sender {
-	if (![sender isKindOfClass:[CustomAnnotation class]])
-		return;
-	
-	if (!self.searchLocation || ![sender isEqual:self.searchLocation])
-		self.searchLocation = sender;
-	
-	[self clearAnnotationsAndOverlaysExceptRecent];
-	
-	[self reverseGeocodeLocation:self.searchLocation.coordinate];
-}
 
 #pragma mark -
 #pragma mark MapViewDelegate
-
-- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
-	
-	//if (oldState == MKAnnotationViewDragStateDragging)
-	if (newState == MKAnnotationViewDragStateEnding)
-	{
-		if ([annotationView.annotation isEqual:self.searchLocation]) {
-			if (self.searchLocation.coordinateChangedDelegate)
-				self.searchLocation.coordinateChangedDelegate = nil;		// it'll handle it once, then we'll do it.
-			else
-				[self annotationCoordinateChanged:self.searchLocation];	
-		}
-	}
-}
-
-
-- (void)mapView:(MKMapView *)theMapView didAddAnnotationViews:(NSArray *)views
-{
-	for (MKAnnotationView *aView in views) {
-		if ([aView.annotation class] == [MKUserLocation class])
-		{						
-			if (!theMapView.userLocationVisible)
-				[self performSelector:@selector(moveMapToAnnotation:) withObject:aView.annotation afterDelay:.5f];
-			
-			[self showLocateUserButton];
-			return;
-		}
-	}
-}
-
 
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
@@ -553,25 +306,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
         return pinView;
     }
 	
-	if ([annotation isKindOfClass:[CustomAnnotation class]])  
-    {
-        static NSString* customAnnotationIdentifier = @"customAnnotationIdentifier";
-        MKPinAnnotationView* pinView = (MKPinAnnotationView *)[theMapView dequeueReusableAnnotationViewWithIdentifier:customAnnotationIdentifier];
-        if (!pinView)
-        {
-            CustomAnnotationView *customPinView = [[[CustomAnnotationView alloc] initWithAnnotation:annotation
-                                                                             reuseIdentifier:customAnnotationIdentifier] autorelease];
-            customPinView.rightCalloutAccessoryView = nil;
-            return customPinView;
-        }
-        else
-        {
-            pinView.annotation = annotation;
-			pinView.rightCalloutAccessoryView = nil;
-        }
-        return pinView;
-    }
-    return nil;
+	return nil;
 }
 
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id)overlay{
@@ -583,12 +318,14 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 	if ([overlay isKindOfClass:[MKPolygon class]])
     {		
+		myColor = [TexLegeTheme texasOrange];
+
 		NSString *ovTitle = [overlay title];
 		if (ovTitle && [ovTitle hasPrefix:@"House"]) {
-			myColor = [TexLegeTheme texasGreen];
-		}
-		else if (ovTitle && [ovTitle hasPrefix:@"Senate"]) {
-			myColor = [TexLegeTheme texasOrange];
+			if (self.mapView.mapType > MKMapTypeStandard)
+				myColor = [UIColor cyanColor];
+			else
+				myColor = [TexLegeTheme texasGreen];
 		}
 
 		//MKPolygonView*    aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
@@ -637,10 +374,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 	[self.mapView setCenterCoordinate:annotation.coordinate animated:YES];
 	
-	if ([annotation isKindOfClass:[CustomAnnotation class]]) {
-		self.searchLocation = annotation;
-	}	
-
 	if ([annotation isKindOfClass:[DistrictMapObj class]]) {
 		MKCoordinateRegion region;
 		region = [(DistrictMapObj *)annotation region];
