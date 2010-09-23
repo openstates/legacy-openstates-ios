@@ -574,44 +574,68 @@ NSInteger kNoSelection = -1;
 }
 
 
+#define DATABASE_NAME @"TexLege.v2"
+#define DATABASE_FILE @"TexLege.v2.sqlite"
+
+- (void)copyPersistentStoreIfNeeded:(id)sender {	
+#if IMPORTING_DATA == 0 // don't use this if we're setting up & initializing from property lists...
+	/*
+	 Set up the store.
+	 Provide a pre-populated default store.
+	 */
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+	NSString *storePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent: DATABASE_FILE];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	// If the expected store doesn't exist, copy the default store.
+	if (![fileManager fileExistsAtPath:storePath]) {
+		NSString *defaultStorePath = [[NSBundle mainBundle] pathForResource:DATABASE_NAME ofType:@"sqlite"];
+		if (defaultStorePath) {
+			NSError *error = nil;
+			[fileManager copyItemAtPath:defaultStorePath toPath:storePath error:&error];
+			if (error)
+				NSLog(@"Error attempting to copy persistent store to docs folder: %@", error);
+			else {
+				[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENT_STORE_COPIED" object:storePath];	
+				NSLog(@"Successfully created a backup database in %@", storePath);
+			}
+		}
+	}
+	[pool drain];
+#endif
+}
+
 /**
  Returns the persistent store coordinator for the application.
  If the coordinator doesn't already exist, it is created and the application's store added to it.
  */
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
 	
-	static NSString *DATABASE_NAME = @"TexLege.v2";
-	
-	
     if (persistentStoreCoordinator != nil) {
         return persistentStoreCoordinator;
     }
 	
 #if IMPORTING_DATA == 1
-	static NSString *DATABASE_FILE = @"TexLege.v2.sqlite";
 	#define IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB 1
 #endif
 	
-	// If we ever want to allow editing or changing the database, we must use a copy of the database!
+	NSString *storePath = nil;
+	NSString *inMainBundle = [[NSBundle mainBundle] pathForResource:DATABASE_NAME ofType:@"sqlite"];
 #ifdef IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB
-	NSString *storePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent: DATABASE_FILE];
-	
-	#if IMPORTING_DATA == 0 // don't use this if we're setting up & initializing from property lists...
-	/*
-	 Set up the store.
-	 Provide a pre-populated default store.
-	 */
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	// If the expected store doesn't exist, copy the default store.
-	if (![fileManager fileExistsAtPath:storePath]) {
-		NSString *defaultStorePath = [[NSBundle mainBundle] pathForResource:DATABASE_NAME ofType:@"sqlite"];
-		if (defaultStorePath) {
-			[fileManager copyItemAtPath:defaultStorePath toPath:storePath error:NULL];
-		}
+	NSString *inDocsPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:DATABASE_FILE];
+
+	if (![[NSFileManager defaultManager] fileExistsAtPath:inDocsPath]) {
+		storePath = inMainBundle;  // for now at least until it gets copies properly
+		[self performSelectorInBackground:@selector(copyPersistentStoreIfNeeded:) withObject:nil];
+		
+		// Need to find a way to tell the core data objects that we've got a new/safer persistent store ready to go
 	}
-	#endif
+	else {
+		storePath = inDocsPath;
+	}
+
 #else
-	NSString *storePath = [[NSBundle mainBundle] pathForResource:DATABASE_NAME ofType:@"sqlite"];
+	storePath = inMainBundle;
 #endif
 	debug_NSLog(@"%@", storePath);
 	NSURL *storeUrl = [NSURL fileURLWithPath:storePath];
