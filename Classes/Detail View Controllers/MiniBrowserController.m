@@ -40,7 +40,7 @@ enum
 @synthesize m_currentURL;
 @synthesize sealColor;
 @synthesize m_loadingInterrupted, m_normalItemList, m_shouldDisplayOnViewLoad, m_parentCtrl, m_authCallback;
-@synthesize masterPopover, m_shouldHideDoneButton;
+@synthesize masterPopover, m_shouldHideDoneButton, userAgent;
 
 static MiniBrowserController *s_browser = nil;
 
@@ -144,6 +144,7 @@ static MiniBrowserController *s_browser = nil;
 
 - (void)dealloc 
 {
+	self.userAgent = nil;
 	self.sealColor = nil;
 	self.m_currentURL = nil;
 	self.m_doneButton = nil;
@@ -479,11 +480,12 @@ static MiniBrowserController *s_browser = nil;
 
 - (void)LoadRequest:(NSURLRequest *)urlRequest
 {
+
 	self.m_loadingInterrupted = NO;
 	
 	// cancel any transaction currently taking place
 	if ( self.m_webView.loading ) [self.m_webView stopLoading];
-	
+		
 	if ( [self.view isHidden] )
 	{
 		// do it this goofy way just in case (url == m_urlRequestToLoad)
@@ -691,6 +693,17 @@ static MiniBrowserController *s_browser = nil;
     "}";
 	[self.m_webView stringByEvaluatingJavaScriptFromString: js];
     [self.m_webView stringByEvaluatingJavaScriptFromString: @"bkModifyBaseTargets()"];
+	
+	if (self.m_webView.request && !self.userAgent) {
+		//debug_NSLog(@"%@", [self.m_webView.request allHTTPHeaderFields]);
+		self.userAgent = [self.m_webView.request valueForHTTPHeaderField:@"User-Agent"];
+		if (self.userAgent) {
+			//debug_NSLog(@"User Agent: %@", userAgent);
+			NSDictionary *userAgentDict = [NSDictionary dictionaryWithObject:self.userAgent forKey:@"userAgent"];
+			[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"BROWSER_USER_AGENT" attributes:userAgentDict];
+		}
+	}
+	
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView

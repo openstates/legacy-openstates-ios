@@ -31,6 +31,7 @@
 @property (nonatomic,retain) NSURL *m_currentURL;
 @property (nonatomic,retain) UIColor *sealColor;
 @property (nonatomic,retain) LinkObj *link;
+@property (nonatomic,retain) NSString *userAgent;
 @property (nonatomic) BOOL m_shouldHideDoneButton;
 @property (nonatomic) BOOL isSharedBrowser;
 
