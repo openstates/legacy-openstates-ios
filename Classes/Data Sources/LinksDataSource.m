@@ -109,8 +109,11 @@ enum HeaderSectionRows {
 		else
 			path = [[NSBundle mainBundle] pathForResource:@"TexLegeInfo~iphone" ofType:@"htm"];
 		
-		link.url = [NSString stringWithFormat:@"file://%@", path];
+		path = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 		
+		NSString *urlString = [[NSString alloc] initWithFormat:@"file://%@", path];
+		link.url = urlString;
+		[urlString release];
 	}
 	
 	return link;	
