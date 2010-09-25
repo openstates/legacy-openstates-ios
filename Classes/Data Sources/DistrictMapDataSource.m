@@ -137,7 +137,7 @@
 		return;
 	
 	if (!self.genericOperationQueue)
-		self.genericOperationQueue = [[NSOperationQueue alloc] init];
+		self.genericOperationQueue = [[[NSOperationQueue alloc] init] autorelease];
 	[self.genericOperationQueue addOperation:op];
 	[op release];
 }
