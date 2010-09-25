@@ -255,6 +255,8 @@ static MiniBrowserController *s_browser = nil;
 		self.view.backgroundColor = self.sealColor;
 	}
 	else {
+		self.hidesBottomBarWhenPushed = YES;
+
 		[self.m_webView setBackgroundColor:[TexLegeTheme backgroundLight]];
 		[self.m_webView setOpaque:YES];
 		self.view.backgroundColor = [TexLegeTheme backgroundLight];

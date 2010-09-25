@@ -606,9 +606,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 			
 			[self.mapView addAnnotation:annotation];	
 			
-			DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
-			[dataSource searchDistrictMapsForCoordinate:annotation.coordinate withDelegate:self];
-
+			if (i==0) {	// Only add maps for the first location found
+				DistrictMapDataSource *dataSource = [[TexLegeAppDelegate appDelegate] districtMapDataSource];
+				[dataSource searchDistrictMapsForCoordinate:annotation.coordinate withDelegate:self];
+			}
 			lastAnnotation = annotation;
 			
 		}
