@@ -304,6 +304,8 @@ NSInteger kNoSelection = -1;
 #if IMPORTING_DATA == 1
 	TexLegeDataImporter *importer = [[TexLegeDataImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
 	[importer importAllDataObjects];
+	//[importer importObjectsWithEntityName:@"LinkObj"];
+
 	[importer release];
 #endif
 	
@@ -615,6 +617,9 @@ NSInteger kNoSelection = -1;
         return persistentStoreCoordinator;
     }
 	
+#define IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB 1
+
+
 #if IMPORTING_DATA == 1
 	#define IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB 1
 #endif
