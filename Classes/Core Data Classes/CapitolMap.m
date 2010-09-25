@@ -12,6 +12,14 @@
 @implementation CapitolMap
 @synthesize name = m_name, file = m_file, type = m_type, order = m_order;
 
+- (void)dealloc {
+	self.name = nil;
+	self.file = nil;
+	self.type = nil;
+	self.order = nil;
+	[super dealloc];
+}
+
 - (void) importFromDictionary: (NSDictionary *)dictionary
 {				
 	if (dictionary) {
