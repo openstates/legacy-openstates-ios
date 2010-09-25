@@ -68,7 +68,7 @@
 	[self importObjectsWithEntityName:@"LinkObj"];
 
 	[self importObjectsWithEntityName:@"DistrictOfficeObj"];
-#if IMPORTING == 1 && NEEDS_TO_PARSE_KMLMAPS == 0
+#if NEEDS_TO_PARSE_KMLMAPS == 0
 	[self importObjectsWithEntityName:@"DistrictMapObj"];
 #endif
 }
