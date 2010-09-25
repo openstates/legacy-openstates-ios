@@ -34,9 +34,19 @@
 	</dict>
 	<dict>
 		<key>label</key>
-		<string>TexLege Information</string>
+		<string>TexLege User's Guide</string>
 		<key>order</key>
 		<integer>-2</integer>
+		<key>section</key>
+		<integer>0</integer>
+		<key>url</key>
+		<string>http://www.texlege.com/TexLegeUsersGuide/</string>
+	</dict>
+	<dict>
+		<key>label</key>
+		<string>TexLege Information</string>
+		<key>order</key>
+		<integer>-3</integer>
 		<key>section</key>
 		<integer>0</integer>
 		<key>url</key>
