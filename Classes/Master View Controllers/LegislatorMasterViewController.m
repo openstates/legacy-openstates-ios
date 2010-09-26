@@ -51,10 +51,10 @@
 
 - (void)dealloc {
 	self.chamberControl = nil;
-    [super dealloc];
 #ifdef AUTOMATED_TESTING_CHARTS
 	[[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:@"AUTOMATED_TESTING_CHARTS"];
 #endif
+    [super dealloc];
 }
 
 
@@ -70,16 +70,13 @@
 	
 	self.tableView.rowHeight = 73.0f;
 	
-	self.tableView.delegate = self;
-	self.tableView.dataSource = self.dataSource;	
-	
 	if ([UtilityMethods isIPadDevice])
 	    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 	
 	self.searchDisplayController.delegate = self;
 	self.searchDisplayController.searchResultsDelegate = self;
-	self.dataSource.searchDisplayController = self.searchDisplayController;
-	self.searchDisplayController.searchResultsDataSource = self.dataSource;
+	//self.dataSource.searchDisplayController = self.searchDisplayController;
+	//self.searchDisplayController.searchResultsDataSource = self.dataSource;
 	
 	self.chamberControl.tintColor = [TexLegeTheme accent];
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
@@ -190,6 +187,9 @@ NSIndexPath *current = nil;
 	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]);
 	
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
+	if (!dataObject)
+		return;
+	
 	if ([dataObject isKindOfClass:[NSManagedObject class]])
 		[appDelegate setSavedTableSelection:[dataObject objectID] forKey:self.viewControllerKey];
 	else
@@ -212,9 +212,7 @@ NSIndexPath *current = nil;
 			[self.navigationController pushViewController:self.detailViewController animated:YES];
 			self.detailViewController = nil;
 		}
-		
 	}
-	
 }
 //END:code.split.delegate
 
@@ -231,6 +229,9 @@ NSIndexPath *current = nil;
 
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSInteger)scope
 {
+	if (!self.dataSource)
+		return;
+	
 	/*
 	 Update the filtered array based on the search text and scope.
 	 */
@@ -271,20 +272,17 @@ NSIndexPath *current = nil;
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
     [self filterContentForSearchText:searchString scope:self.chamberControl.selectedSegmentIndex];
-    
-	// Return YES to cause the search result table view to be reloaded.
     return YES;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
 	self.searchDisplayController.searchBar.text = @"";
 	[self.dataSource removeFilter];
-
 	[self.searchDisplayController setActive:NO animated:YES];
 }
 
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
-	[self.dataSource setHideTableIndex:YES];	
+	self.dataSource.hideTableIndex = YES;
 	// for some reason, these get zeroed out after we restart searching.
 	self.searchDisplayController.searchResultsTableView.rowHeight = self.tableView.rowHeight;
 	self.searchDisplayController.searchResultsTableView.backgroundColor = self.tableView.backgroundColor;
@@ -293,7 +291,7 @@ NSIndexPath *current = nil;
 }
 
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
-	[self.dataSource setHideTableIndex:NO];	
+	self.dataSource.hideTableIndex = NO;
 }
 @end
 
