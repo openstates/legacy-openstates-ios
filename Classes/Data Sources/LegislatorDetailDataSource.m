@@ -39,8 +39,7 @@
 - (id)initWithLegislator:(LegislatorObj *)newObject {
 	if (self = [super init]) {
 		if (newObject) 
-			self.legislator = newObject;
-		
+			[self setLegislator:newObject];
 	}
 	return self;
 }
