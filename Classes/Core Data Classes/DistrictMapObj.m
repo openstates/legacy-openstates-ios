@@ -139,21 +139,17 @@
 	@"minLat",
 	@"numberOfCoords",
 	@"legislator.legislatorID",
+	@"legislator.firstname",
+	@"legislator.lastname",
 	nil];
 	return props;
 }
 
-- (NSString *) chamberName {
-	
-	if ([self.chamber integerValue] == HOUSE)
-		return @"House";
-	else
-		return @"Senate";
-}
-
 - (NSString *)title
 {
-    return [NSString stringWithFormat:@"%@ District %@", [self chamberName], self.district];
+	NSString *chamberString = ([self.chamber integerValue] == HOUSE) ? @"House" : @"Senate";
+	
+    return [NSString stringWithFormat:@"%@ District %@", chamberString, self.district];
 }
 
 - (UIImage *)image {
@@ -192,8 +188,8 @@
 	
 	MKPolyline *polyLine=[MKPolyline polylineWithCoordinates:(CLLocationCoordinate2D *)[self.coordinatesData bytes] 
 													   count:[self.numberOfCoords integerValue]];
-	polyLine.title = self.title;
-	polyLine.subtitle = self.subtitle;
+	polyLine.title = [self title];
+	polyLine.subtitle = [self subtitle];
 	return polyLine;
 }
 
@@ -201,8 +197,8 @@
 	
 	MKPolygon *polyGon=[MKPolygon polygonWithCoordinates:(CLLocationCoordinate2D *)[self.coordinatesData bytes] 
 													   count:[self.numberOfCoords integerValue]];
-	polyGon.title = self.title;
-	polyGon.subtitle = self.subtitle;
+	polyGon.title = [self title];
+	polyGon.subtitle = [self subtitle];
 	return polyGon;
 }
 

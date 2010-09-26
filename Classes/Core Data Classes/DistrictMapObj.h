@@ -38,8 +38,6 @@
 @property (nonatomic, readonly) MKCoordinateRegion		region;
 @property (nonatomic, readonly) MKCoordinateSpan		span;
 
-- (NSString *)title;
-- (NSString *)subtitle;
 - (UIImage *)image;
 - (MKPolyline *)polyline;
 - (MKPolygon *)polygon;
