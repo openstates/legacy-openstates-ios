@@ -8,12 +8,13 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 
-@interface MapMiniDetailViewController : UIViewController <MKMapViewDelegate> {
+@interface MapMiniDetailViewController : UIViewController <MKMapViewDelegate, UIActionSheetDelegate> {
 }
 
 @property (nonatomic,retain) IBOutlet MKMapView *mapView;
 @property (nonatomic,readonly) MKCoordinateRegion texasRegion;
 @property (nonatomic,retain) MKPolygonView *districtView;
+@property (nonatomic) CLLocationCoordinate2D annotationActionCoord;
 
 - (void) clearAnnotationsAndOverlays;
 - (void) clearAnnotationsAndOverlaysExceptRecent;

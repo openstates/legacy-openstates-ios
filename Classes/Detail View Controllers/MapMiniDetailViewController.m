@@ -42,6 +42,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 @synthesize mapView;
 @synthesize texasRegion;
 @synthesize districtView;
+@synthesize annotationActionCoord;
 
 #pragma mark -
 #pragma mark Initialization and Memory Management
@@ -63,7 +64,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 */
 
 - (void) invalidateDistrictView {
-	if (self.districtView) {
+	if (districtView) {
 		[self.districtView invalidatePath];
 		self.districtView = nil;
 	}
@@ -110,9 +111,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 - (void) viewDidUnload {
 	[self invalidateDistrictView];
-	[self.mapView removeOverlays:self.mapView.overlays];
-	[self.mapView removeAnnotations:self.mapView.annotations];
-
 	self.mapView = nil;
 	[super viewDidUnload];
 }
@@ -272,9 +270,58 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	return (coordsEqual && spanEqual);
 }
 
+#pragma mark -
+#pragma mark Action Sheet
+
+- (IBAction) annotationActionSheet:(id)sender {
+	UIActionSheet *popupQuery = [[UIActionSheet alloc]
+								 initWithTitle:nil
+								 delegate:self
+								 cancelButtonTitle:@"Cancel"
+								 destructiveButtonTitle:nil
+								 otherButtonTitles:@"Open in Google Maps", nil];
+	
+	
+	popupQuery.actionSheetStyle = UIActionSheetStyleAutomatic;
+	
+	UIView *aView = sender;
+	if (aView)
+		[popupQuery showFromRect:aView.bounds inView:aView animated:YES];
+	else
+		[popupQuery showInView:self.mapView];
+	[popupQuery release];
+}
+
+//- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex 
+{
+	if (buttonIndex == 0) {
+		// if you want driving directions, daddr is the destination, saddr is the origin
+		// @"http://maps.google.com/maps?daddr=San+Francisco,+CA&saddr=cupertino"
+		// [NSString stringWithFormat: @"http://maps.google.com/maps?q=%f,%f", loc.latitude, loc.longitude];
+		
+		NSString *urlString =  [NSString stringWithFormat:@"http://maps.google.com/maps?q=%f,%f",
+							self.annotationActionCoord.latitude, self.annotationActionCoord.longitude];	
+		
+		NSURL *url = [UtilityMethods safeWebUrlFromString:urlString];
+		[UtilityMethods openURLWithTrepidation:url];
+	}
+}
+
 
 #pragma mark -
 #pragma mark MapViewDelegate
+
+- (void)mapView:(MKMapView *)theMapView annotationView:(MKAnnotationView *)annotationView 
+									calloutAccessoryControlTapped:(UIControl *)control {
+	id <MKAnnotation> annotation = annotationView.annotation;
+	if ([annotation isKindOfClass:[DistrictOfficeObj class]])
+    {
+		self.annotationActionCoord = annotation.coordinate;
+		[self annotationActionSheet:control];		
+	}		
+}
+
 
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
@@ -289,9 +336,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
         if (!pinView)
         {
             TexLegePinAnnotationView* customPinView = [[[TexLegePinAnnotationView alloc]
-												   initWithAnnotation:annotation reuseIdentifier:districtAnnotationID] autorelease];
-			customPinView.rightCalloutAccessoryView = nil;
-			
+												   initWithAnnotation:annotation reuseIdentifier:districtAnnotationID] autorelease];			
             return customPinView;
         }
         else
