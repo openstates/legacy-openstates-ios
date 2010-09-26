@@ -25,11 +25,10 @@
 		self.draggable = NO;
 		self.canShowCallout = YES;
 				
-		UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];			
+		UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];		// UIButtonTypeInfoLight
 		self.rightCalloutAccessoryView = rightButton;
 		
 		[self resetPinColorWithAnnotation:annotation];
-		
 	}
 	return self;
 }
@@ -57,17 +56,17 @@
 			pinColorIndex = [pinColorNumber integerValue];
 	}
 		
-	if (pinColorIndex < TexLegePinAnnotationColorBlue)
-		
+	if (pinColorIndex < TexLegePinAnnotationColorBlue && pinColorIndex >= 0)
 		[self setPinColor:pinColorIndex];
 	else {
 		UIImage *pinImage = [TexLegeMapPins imageForPinColorIndex:pinColorIndex status:TexLegePinAnnotationStatusHead];
-		UIImageView *pinHead = [[UIImageView alloc] initWithImage:pinImage];
-		pinHead.tag = 999;
-		[self addSubview:pinHead];
-		[pinHead release];
+		if (pinImage) {
+			UIImageView *pinHead = [[UIImageView alloc] initWithImage:pinImage];
+			pinHead.tag = 999;
+			[self addSubview:pinHead];
+			[pinHead release];
+		}
 	}
-	
 	UIImage *anImage = [self.annotation performSelector:@selector(image)];
 	if (anImage) {
 		UIImageView *iconView = [[UIImageView alloc] initWithImage:anImage];
