@@ -159,6 +159,8 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 }
 
 - (void)parseJSONObject:(id)jsonDeserialized {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
 	NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
 	[numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
 	[numberFormatter setMaximumFractionDigits:0];
@@ -399,7 +401,8 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 	
 	[numberFormatter release];
 	
-	
+	[pool drain];
+
 	[[NSNotificationCenter defaultCenter] postNotificationName:kContributionsDataChangeNotificationKey object:self];
 
 }
