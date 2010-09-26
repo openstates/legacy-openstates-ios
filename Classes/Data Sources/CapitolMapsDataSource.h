@@ -10,9 +10,6 @@
 #import "CapitolMap.h"
 
 @interface CapitolMapsDataSource : NSObject <TableDataSource> {
-	IBOutlet NSManagedObjectContext *managedObjectContext;
-@private
-	NSMutableArray *sectionList;
 }
 @property (nonatomic,retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 @property (nonatomic,retain) NSMutableArray *sectionList;

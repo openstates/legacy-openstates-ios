@@ -55,17 +55,17 @@ enum HeaderSectionRows {
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
 	if (self = [super init]) {
-		if (newContext) self.managedObjectContext = newContext;
+		if (newContext) 
+			managedObjectContext = [newContext retain];
 	
 		NSError *error = nil;
-		if (![[self fetchedResultsController] performFetch:&error])
+		if (![self.fetchedResultsController performFetch:&error])
 		{
 			debug_NSLog(@"LinksMenuDataSource-init: Unresolved error %@, %@", error, [error userInfo]);
 		}		
 		else if ([self.fetchedResultsController.fetchedObjects count] == 0) {
 			debug_NSLog(@"No link resources in a database...");
 		}
-			
 	}
 	return self;
 }
@@ -77,17 +77,15 @@ enum HeaderSectionRows {
     [super dealloc];
 }
 
-
 #pragma mark -
 #pragma mark UITableViewDataSource methods
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-	return [[fetchedResultsController sections] count];
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+	return [self.fetchedResultsController.sections count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:section];
+	id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController.sections objectAtIndex:section];
 	return [sectionInfo numberOfObjects];
 }
 
@@ -100,7 +98,7 @@ enum HeaderSectionRows {
 }
 
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
-	LinkObj * link = [fetchedResultsController objectAtIndexPath:indexPath];	
+	LinkObj * link = [self.fetchedResultsController objectAtIndexPath:indexPath];	
 	
 	if ([link.url isEqualToString:@"aboutView"]) {
 		NSString *path = nil;
@@ -186,13 +184,11 @@ enum HeaderSectionRows {
 	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortSection, sortOrder, nil];  
 	[fetchRequest setSortDescriptors:sortDescriptors];
 	
-	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
+	fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
 																								managedObjectContext:managedObjectContext
-																								  sectionNameKeyPath:@"section" cacheName:@"LinksCache"];
-	aFetchedResultsController.delegate = self;
-	self.fetchedResultsController = aFetchedResultsController;
+																								  sectionNameKeyPath:@"section" cacheName:@"Links"];
+	fetchedResultsController.delegate = self;
 	
-	[aFetchedResultsController release];
 	[fetchRequest release];
 	[sortSection release];
 	[sortOrder release];

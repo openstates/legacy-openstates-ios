@@ -54,7 +54,7 @@
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
 	if (self = [super init]) {
 		if (newContext)
-			self.managedObjectContext = newContext;
+			managedObjectContext = [newContext retain];
 		
 		self.feedStore = [CFeedStore instance];
 		[self loadChamberCalendars];
@@ -64,7 +64,18 @@
 	return self;
 }
 
+- (void)dealloc {
+	self.senateURL = self.houseURL = self.jointURL = nil;
+	self.feedStore = nil;
+	self.calendarList = nil;
+	self.managedObjectContext = nil;
+	[super dealloc];
+}
+
+
 - (void) loadChamberCalendars {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
 	static NSString *senateURLString = @"http://www.capitol.state.tx.us/MyTLO/RSS/RSS.aspx?Type=upcomingmeetingssenate";
 	static NSString *houseURLString = @"http://www.capitol.state.tx.us/MyTLO/RSS/RSS.aspx?Type=upcomingmeetingshouse";
 	static NSString *jointURLString = @"http://www.capitol.state.tx.us/MyTLO/RSS/RSS.aspx?Type=upcomingmeetingsjoint";
@@ -118,10 +129,13 @@
 	[calendar release];
 	[calendarDict release];
 	
+	[pool drain];
+	
 }
 
 - (void) subscribeToAllFeeds {
-	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
 	NSError *theError = NULL;
 	
 	@try {
@@ -137,6 +151,8 @@
 	@catch (NSException * e) {
 		debug_NSLog(@"Error when initializing calendar feed subscriptions:\n  %@\n   %@", [theError description], [e description]);
 	}
+	
+	[pool drain];
 }
 
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
@@ -203,14 +219,6 @@
 	return [self.calendarList count];
 }
 
-- (void)dealloc {
-	self.senateURL = self.houseURL = self.jointURL = nil;
-	self.feedStore = nil;
-
-	self.calendarList = nil;
-	self.managedObjectContext = nil;
-	[super dealloc];
-}
 
 
 @end

@@ -49,7 +49,8 @@
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
 	if (self = [super init]) {
-		if (newContext) self.managedObjectContext = newContext;
+		if (newContext) 
+			managedObjectContext = [newContext retain];
 		
 		self.sectionList = [[[NSMutableArray alloc] init] autorelease];
 		[self createSectionList];
@@ -57,9 +58,17 @@
 	return self;
 }
 
+- (void)dealloc {
+	self.sectionList = nil;
+	self.managedObjectContext = nil;
+	[super dealloc];
+}
+
 
 /* Build a list of files */
 - (void)createSectionList {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
 	NSString *thePath = [[NSBundle mainBundle] pathForResource:@"CapitolMaps" ofType:@"plist"];
 	NSArray *mapSectionsPlist = [[NSArray alloc] initWithContentsOfFile:thePath];
 	
@@ -79,6 +88,7 @@
 	}
 	
 	[mapSectionsPlist release];
+	[pool drain];
 }
 
 
@@ -166,14 +176,5 @@
 	else //if (section == 1)
 		return @"Exterior Maps";
 }
-
-
-- (void)dealloc {
-	self.sectionList = nil;
-	self.managedObjectContext = nil;
-	[super dealloc];
-}
-
-
 
 @end

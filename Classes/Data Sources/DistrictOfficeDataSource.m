@@ -48,7 +48,7 @@
 	self.fetchedResultsController = nil;
 	self.managedObjectContext = nil;	
 	self.filterString = nil;
-	
+	self.searchDisplayController = nil;
     [super dealloc];
 }
 
@@ -315,15 +315,13 @@
 		
 	}
 		
-	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] 
+	fetchedResultsController = [[NSFetchedResultsController alloc] 
 															 initWithFetchRequest:fetchRequest 
 															 managedObjectContext:self.managedObjectContext 
-															 sectionNameKeyPath:nil cacheName:@"Root"];
+															 sectionNameKeyPath:nil cacheName:@"DistrictOffices"];
 	
-    aFetchedResultsController.delegate = self;
-	self.fetchedResultsController = aFetchedResultsController;
+    fetchedResultsController.delegate = self;
 	
-	[aFetchedResultsController release];
 	[fetchRequest release];
 	
 	return fetchedResultsController;
@@ -350,6 +348,8 @@
 
    
 - (NSError *) geocodeDistrictOffice:(DistrictOfficeObj *)office {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
 	NSError *parseError = nil;
 	NSString *searchQuery = [NSString stringWithFormat:@"%@, %@, TX, %@", office.address, office.city, office.zipCode];
 	
@@ -419,7 +419,8 @@
 		debug_NSLog(@"Geocode parse error: %@", [parseError localizedDescription]);
 	}
 	
-	
+	[pool drain];
+
 	return parseError;
 	
 }

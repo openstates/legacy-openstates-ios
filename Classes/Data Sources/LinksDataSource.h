@@ -9,7 +9,6 @@
 #import "TableDataSourceProtocol.h"
 
 @interface LinksDataSource : NSObject <TableDataSource>  {
-		
 }
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
