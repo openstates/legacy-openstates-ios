@@ -11,7 +11,7 @@
 #import "BSKmlResult.h"
 #import "SynthesizeSingleton.h"
 
-@class DistrictOfficeObj, CustomAnnotation;
+@class DistrictMapDataSource, CustomAnnotation;
 @interface MapViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate, UIPopoverControllerDelegate,
 		MKReverseGeocoderDelegate, BSForwardGeocoderDelegate, UISplitViewControllerDelegate, UIActionSheetDelegate,
 		UIGestureRecognizerDelegate> {
@@ -33,6 +33,7 @@
 @property (nonatomic,readonly) MKCoordinateRegion texasRegion;
 @property (nonatomic,retain) CustomAnnotation *searchLocation;
 @property (nonatomic,retain) MKPolygonView *senateDistrictView, *houseDistrictView;
+@property (nonatomic,retain) DistrictMapDataSource *districtMapDataSource;
 
 //- (IBAction) mapControlSheet:(id)sender;
 - (IBAction) showAllDistricts:(id)sender;
