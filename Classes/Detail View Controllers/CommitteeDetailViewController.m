@@ -109,10 +109,11 @@ CGFloat quartzRowHeight = 73.f;
 }
 
 - (void)setCommittee:(CommitteeObj *)newObj {
-	[self view];
 	
 	if (committee) [committee release], committee = nil;
 	if (newObj) {
+		[self view];
+
 		if (self.masterPopover)
 			[self.masterPopover dismissPopoverAnimated:YES];
 
@@ -162,22 +163,6 @@ CGFloat quartzRowHeight = 73.f;
 	}
 }
 
-/*
- - (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
-
 #pragma mark -
 #pragma mark Memory management
 
@@ -197,7 +182,7 @@ CGFloat quartzRowHeight = 73.f;
 	self.membershipLab = nil;
 	self.committee = nil;
 	self.masterPopover = nil;
-	self.tableView = nil;
+//	self.tableView = nil;
 	self.infoSectionArray = nil;
 	[super viewDidUnload];
 }
@@ -205,7 +190,9 @@ CGFloat quartzRowHeight = 73.f;
 
 - (void)dealloc {
 	self.committee = nil;
-	self.tableView = nil;
+	self.membershipLab = nil;
+	self.partisanSlider = nil;
+//	self.tableView = nil;
 	self.masterPopover = nil;
 	self.infoSectionArray = nil;
     [super dealloc];
