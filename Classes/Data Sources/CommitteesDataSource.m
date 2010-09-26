@@ -34,7 +34,7 @@
 
 - (void)dealloc {
 	self.fetchedResultsController = nil;
-	//self.searchDisplayController = nil;
+	self.searchDisplayController = nil;
 	self.managedObjectContext = nil;	
 	self.filterString = nil;
 	
@@ -288,15 +288,13 @@
 	else
 		sectionString = @"committeeNameInitial";
 	
-	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] 
+	fetchedResultsController = [[NSFetchedResultsController alloc] 
 															 initWithFetchRequest:fetchRequest 
 															 managedObjectContext:managedObjectContext 
-															 sectionNameKeyPath:sectionString cacheName:@"Root"];
+															 sectionNameKeyPath:sectionString cacheName:@"Committees"];
 
-    aFetchedResultsController.delegate = self;
-	self.fetchedResultsController = aFetchedResultsController;
+    fetchedResultsController.delegate = self;
 	
-	[aFetchedResultsController release];
 	[fetchRequest release];
 	[nameInitialSortOrder release];	
 	
