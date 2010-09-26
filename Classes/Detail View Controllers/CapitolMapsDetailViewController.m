@@ -73,9 +73,7 @@
 	//if (nav && [nav.viewControllers count]>1)
 		[nav popToRootViewControllerAnimated:YES];
 	
-	self.webView = nil;
-	self.map = nil;
-	
+	self.map = nil;	
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
     // Release anything that's not essential, such as cached data
 }
