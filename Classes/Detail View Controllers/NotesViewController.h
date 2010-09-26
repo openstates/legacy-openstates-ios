@@ -20,6 +20,6 @@
 @property (nonatomic, retain) IBOutlet UINavigationItem *navTitle;
 @property (nonatomic, retain) IBOutlet UINavigationBar *navBar;
 
-@property (nonatomic, assign) UITableView *backView;
+@property (nonatomic, assign) UITableViewController *backViewController;
 
 @end

@@ -15,7 +15,7 @@
 @implementation NotesViewController
 
 @synthesize legislator, notesText, nameLabel;
-@synthesize backView, navBar, navTitle;
+@synthesize backViewController, navBar, navTitle;
 
 
 - (void)viewDidLoad {
@@ -82,7 +82,8 @@
 			// Handle error
 			debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		}
-		[self.backView reloadData];
+		if ([self.backViewController respondsToSelector:@selector(resetTableData:)])
+			[self.backViewController performSelector:@selector(resetTableData:) withObject:self];
 
 	}		
 }
