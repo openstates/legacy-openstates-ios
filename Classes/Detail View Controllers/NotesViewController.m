@@ -89,9 +89,9 @@
 
 
 - (void)dealloc {
-    [legislator release];
-    [notesText release];
-    [nameLabel release];
+	self.legislator = nil;
+	self.notesText = nil;
+	self.nameLabel = nil;
 	self.navTitle = nil;
 	self.navBar = nil;
     [super dealloc];
