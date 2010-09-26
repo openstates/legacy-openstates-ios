@@ -17,7 +17,7 @@
 //#import "NSData+Encryption.h"
 
 @interface LegislatorsDataSource (Private)
-
+//- (void)dataSourceReceivedMemoryWarning:(id)sender;
 @end
 
 
@@ -28,20 +28,25 @@
 @synthesize filterChamber, filterString, searchDisplayController;
 
 
-
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
 	if (self = [super init]) {
 		if (newContext)
-			self.managedObjectContext = newContext;
+			managedObjectContext = [newContext retain];
 	
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
 
+/*		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(dataSourceReceivedMemoryWarning:)
+													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+*/		
 	}
 	return self;
 }
 
 - (void)dealloc {	
+//	[[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:UIApplicationDidReceiveMemoryWarningNotification];
+
 	self.fetchedResultsController = nil;
 	self.searchDisplayController = nil;
 	self.managedObjectContext = nil;	// I THINK THIS IS CORRECT, SINCE WE'VE SYNTHESIZED IT AS RETAIN...
@@ -49,6 +54,15 @@
 	
     [super dealloc];
 }
+
+/*-(void)dataSourceReceivedMemoryWarning:(id)sender {
+	// let's give this a swinging shot....
+	
+	// since fetchedResultsControllers automatically purge on low memory, this is not helpful.
+	///////if (fetchedResultsController)
+	/////////	[fetchedResultsController release], fetchedResultsController = nil;
+}
+*/
 
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
@@ -110,21 +124,21 @@
 		debug_NSLog(@"Busted in DirectoryDataSource.m: cellForRowAtIndexPath -> Couldn't get legislator data for row.");
 		return nil;
 	}
-		static NSString *leg_cell_ID = @"LegislatorQuartz";		
-			
-		LegislatorMasterCell *cell = (LegislatorMasterCell *)[tableView dequeueReusableCellWithIdentifier:leg_cell_ID];
+	static NSString *leg_cell_ID = @"LegislatorQuartz";		
 		
-		if (cell == nil) {
-			cell = [[[LegislatorMasterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:leg_cell_ID] autorelease];
-			//cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
-			cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
-		}
-		
-		cell.legislator = dataObj;
-		cell.cellView.useDarkBackground = (indexPath.row % 2 == 0);
-		cell.accessoryView.hidden = (![self showDisclosureIcon] || tableView == self.searchDisplayController.searchResultsTableView);
-		
-		return cell;	
+	LegislatorMasterCell *cell = (LegislatorMasterCell *)[tableView dequeueReusableCellWithIdentifier:leg_cell_ID];
+	
+	if (cell == nil) {
+		cell = [[[LegislatorMasterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:leg_cell_ID] autorelease];
+		//cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
+		cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
+	}
+	
+	cell.legislator = dataObj;
+	cell.cellView.useDarkBackground = (indexPath.row % 2 == 0);
+	cell.accessoryView.hidden = (![self showDisclosureIcon] || tableView == self.searchDisplayController.searchResultsTableView);
+	
+	return cell;	
 }
 
 #pragma mark -
@@ -278,15 +292,12 @@
 	else
 		sectionString = @"lastnameInitial";
 	
-	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] 
+	fetchedResultsController = [[NSFetchedResultsController alloc] 
 															 initWithFetchRequest:fetchRequest 
 															 managedObjectContext:self.managedObjectContext 
-															 sectionNameKeyPath:sectionString cacheName:@"Root"];
+															 sectionNameKeyPath:sectionString cacheName:@"Legislators"];
+    fetchedResultsController.delegate = self;
 	
-    aFetchedResultsController.delegate = self;
-	self.fetchedResultsController = aFetchedResultsController;
-	
-	[aFetchedResultsController release];
 	[fetchRequest release];
 	[nameInitialSortOrder release];	
 	[firstDescriptor release];	
