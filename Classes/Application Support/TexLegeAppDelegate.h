@@ -15,7 +15,6 @@
 @class CalendarMasterViewController;
 @class DistrictMapMasterViewController;
 @class AnalyticsOptInAlertController;
-@class DistrictMapDataSource;
 
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate> 
 {
@@ -36,12 +35,12 @@
 @property (nonatomic, retain) AnalyticsOptInAlertController *analyticsOptInController;
 
 // For Functional View Controllers
-@property (nonatomic, retain) IBOutlet LinksMasterViewController *linksMasterVC;
-@property (nonatomic, retain) IBOutlet CapitolMapsMasterViewController *capitolMapsMasterVC;
-@property (nonatomic, retain) IBOutlet CommitteeMasterViewController *committeeMasterVC;
-@property (nonatomic, retain) IBOutlet LegislatorMasterViewController *legislatorMasterVC;
-@property (nonatomic, retain) IBOutlet CalendarMasterViewController *calendarMasterVC;
-@property (nonatomic, retain) IBOutlet DistrictMapMasterViewController *districtMapMasterVC;
+@property (nonatomic, assign) IBOutlet LinksMasterViewController *linksMasterVC;
+@property (nonatomic, assign) IBOutlet CapitolMapsMasterViewController *capitolMapsMasterVC;
+@property (nonatomic, assign) IBOutlet CommitteeMasterViewController *committeeMasterVC;
+@property (nonatomic, assign) IBOutlet LegislatorMasterViewController *legislatorMasterVC;
+@property (nonatomic, assign) IBOutlet CalendarMasterViewController *calendarMasterVC;
+@property (nonatomic, assign) IBOutlet DistrictMapMasterViewController *districtMapMasterVC;
 
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 
@@ -55,7 +54,9 @@
 @property NetworkStatus localWiFiConnectionStatus;
 
 //- (void)setTabOrderIfSaved;
+#if IMPORTING_DATA == 1
 - (IBAction)saveAction:sender;
+#endif
 
 - (void)updateStatus;
 
@@ -64,5 +65,4 @@
 
 + (TexLegeAppDelegate *)appDelegate;
 
-@property (nonatomic,retain) DistrictMapDataSource *districtMapDataSource;
 @end

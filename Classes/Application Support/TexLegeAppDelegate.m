@@ -57,7 +57,6 @@ NSInteger kNoSelection = -1;
 @implementation TexLegeAppDelegate
 
 @synthesize tabBarController;
-@synthesize districtMapDataSource;
 @synthesize savedTableSelection, appIsQuitting;
 
 @synthesize mainWindow;
@@ -76,7 +75,6 @@ NSInteger kNoSelection = -1;
 	if (self = [super init]) {
 		// initialize  to nil
 		mainWindow = nil;
-		
 		self.appIsQuitting = NO;
 		self.savedTableSelection = [NSMutableDictionary dictionaryWithCapacity:2];
 	}
@@ -84,7 +82,6 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)dealloc {
-	self.districtMapDataSource = nil;
 	self.savedTableSelection = nil;
 	self.analyticsOptInController = nil;
 	self.tabBarController = nil;
@@ -290,9 +287,7 @@ NSInteger kNoSelection = -1;
 	[self.tabBarController setSelectedViewController:savedTabController];
 	
 	[self.mainWindow addSubview:self.tabBarController.view];
-	
-	self.districtMapDataSource = [self.districtMapMasterVC valueForKey:@"dataSource"];
-	
+		
 	//self.districtMapDataSource = [[[DistrictMapDataSource alloc] initWithManagedObjectContext:self.managedObjectContext] autorelease];
 	//[self.tabBarController setSelectedIndex:selection];
 }
@@ -396,7 +391,9 @@ NSInteger kNoSelection = -1;
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
 	// Core Data Saving
+#if IMPORTING_DATA == 1
 	[self saveAction:nil];	
+#endif
 }
 
 
@@ -525,6 +522,8 @@ NSInteger kNoSelection = -1;
  Performs the save action for the application, which is to send the save:
  message to the application's managed object context.
  */
+#if IMPORTING_DATA == 1
+
 - (IBAction)saveAction:(id)sender {
 	
     NSError *error;
@@ -535,6 +534,7 @@ NSInteger kNoSelection = -1;
         } 
     }
 }
+#endif
 
 
 #pragma mark -
