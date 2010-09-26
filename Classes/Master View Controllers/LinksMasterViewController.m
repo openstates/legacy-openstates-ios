@@ -19,10 +19,6 @@
 
 @implementation LinksMasterViewController
 
-
-@synthesize dataSource, detailViewController;
-@synthesize selectObjectOnAppear;
-
 - (NSString *) viewControllerKey {
 	return @"LinksMasterViewController";
 }
@@ -31,18 +27,8 @@
 	return [LinksDataSource class];
 }
 
-- (id)init {
-	if (self = [super init]) {
-		debug_NSLog(@"AppDelegate Managed Context %@", [[[TexLegeAppDelegate appDelegate] managedObjectContext] description]);
-	
-	}
-	return self;
-}
-
-
 - (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
-	[super configureWithManagedObjectContext:context];
-			
+	[super configureWithManagedObjectContext:context];				
 //	if (self.selectObjectOnAppear && [self.selectObjectOnAppear isKindOfClass:[LinkObj class]]) {
 		self.selectObjectOnAppear = nil; // let's not go hitting up websites on startup (Resources) 
 //	}
@@ -75,32 +61,30 @@
 
 
 
-/*- (void)viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {	
 	[super viewWillAppear:animated];
 	
 	//// ALL OF THE FOLLOWING MUST *NOT* RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER
 	
 	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
-		id detailObject = nil;
-		if (self.detailViewController && [self.detailViewController respondsToSelector:@selector(link)])
-			detailObject = self.detailViewController ? [self.detailViewController valueForKey:@"link"] : nil;
-		
+		id detailObject = self.detailViewController ? [self.detailViewController valueForKey:@"link"] : nil;
 		if (!detailObject) {
 			NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
 			if (!currentIndexPath) {			
 				NSUInteger ints[2] = {0,0};	// just pick the first one then
 				currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
 			}
-			detailObject = [self.dataSource dataObjectForIndexPath:currentIndexPath];			
+			detailObject = [self.dataSource dataObjectForIndexPath:currentIndexPath];				
 		}
 		self.selectObjectOnAppear = detailObject;
 	}	
+	
 	if ([UtilityMethods isIPadDevice])
-		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
+		[self.tableView reloadData]; 
 	
 	// END: IPAD ONLY
-}*/
+}
 
 #pragma -
 #pragma UITableViewDelegate
