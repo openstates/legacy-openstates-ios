@@ -98,6 +98,8 @@
 	self.regionDict = nil;
 	self.addressDict = nil;
 	self.coordinateChangedDelegate = nil;
+	self.title = nil;
+	self.subtitle = nil;
 	[super dealloc];
 }
 
