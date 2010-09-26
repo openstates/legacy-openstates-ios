@@ -36,4 +36,6 @@
 
 @property (nonatomic) BOOL isChartSVG;
 
+- (IBAction)resetTableData:(id)sender;
+
 @end
