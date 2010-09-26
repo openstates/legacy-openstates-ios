@@ -210,8 +210,8 @@
 	
 	MKPolyline *polyLine=[MKPolyline polylineWithCoordinates:self.coordinatesCArray 
 													   count:[self.numberOfCoords integerValue]];
-	polyLine.title = self.title;
-	polyLine.subtitle = self.subtitle;
+	polyLine.title = [self title];
+	polyLine.subtitle = [self subtitle];
 	return polyLine;
 }
 
