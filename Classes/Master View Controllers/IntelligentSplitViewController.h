@@ -12,4 +12,6 @@
 @interface IntelligentSplitViewController : UISplitViewController {
 
 }
+
+@property (nonatomic) BOOL isListening;
 @end
