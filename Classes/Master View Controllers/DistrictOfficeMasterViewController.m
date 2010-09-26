@@ -66,16 +66,14 @@
     [super viewDidLoad];
 	
 	self.tableView.rowHeight = 44.0f;
-	self.tableView.delegate = self;
-	self.tableView.dataSource = self.dataSource;	
 	
 	if ([UtilityMethods isIPadDevice])
 	    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 	
 	self.searchDisplayController.delegate = self;
 	self.searchDisplayController.searchResultsDelegate = self;
-	self.dataSource.searchDisplayController = self.searchDisplayController;
-	self.searchDisplayController.searchResultsDataSource = self.dataSource;
+	//self.dataSource.searchDisplayController = self.searchDisplayController;
+	//self.searchDisplayController.searchResultsDataSource = self.dataSource;
 	
 	self.chamberControl.tintColor = [TexLegeTheme accent];
 	self.sortControl.tintColor = [TexLegeTheme accent];
