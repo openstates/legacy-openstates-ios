@@ -37,9 +37,9 @@
 }
 
 - (void) dealloc {
-	[managedObjectContext release];
-	[searchDistricts release];
-	[foundDistricts release];
+	self.managedObjectContext = nil;
+	self.searchDistricts = nil;
+	self.foundDistricts = nil;
 	delegate = nil;
 	[super dealloc];
 }
@@ -68,43 +68,54 @@
 #pragma mark -
 - (void)main 
 {
+	NSManagedObjectContext *sourceMOC = [[NSManagedObjectContext alloc] init];
+	BOOL success = NO;
+	
     @try 
-    {
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		
+    {		
         // Operation task here
 		
 		NSManagedObjectContext *threadedMOC = [self managedObjectContext];
-		if (!threadedMOC)
-			return;
+		if (threadedMOC) {
 		
-		NSPersistentStoreCoordinator *sourceStore = nil;
-		sourceStore = [[TexLegeAppDelegate appDelegate] persistentStoreCoordinator];
-		NSManagedObjectContext *sourceMOC = [[NSManagedObjectContext alloc] init];
-		[sourceMOC setPersistentStoreCoordinator:sourceStore];
-		
-		if (foundDistricts)
-			[foundDistricts release];
-		foundDistricts = [[[NSMutableArray alloc] initWithCapacity:[[self searchDistricts] count]] retain];
-		
-		for (NSManagedObjectID *objectID in [self searchDistricts]) {
-			NSManagedObject * object = [sourceMOC objectWithID:objectID];
+			NSPersistentStoreCoordinator *sourceStore = nil;
+			sourceStore = [[TexLegeAppDelegate appDelegate] persistentStoreCoordinator];
+			[sourceMOC setPersistentStoreCoordinator:sourceStore];
+			
+			if (foundDistricts)
+				[foundDistricts release];
+			foundDistricts = [[NSMutableArray alloc] init];
+			
+			for (NSManagedObjectID *objectID in [self searchDistricts]) {
+				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-			if ([object respondsToSelector:@selector(districtContainsCoordinate:)]) {
-				DistrictMapObj *map = (DistrictMapObj *)object;
-				if ([map districtContainsCoordinate:[self searchCoordinate]])
-					[foundDistricts addObject:[map objectID]];
+				NSManagedObject * object = [sourceMOC objectWithID:objectID];
+
+				if ([object respondsToSelector:@selector(districtContainsCoordinate:)]) {
+					DistrictMapObj *map = (DistrictMapObj *)object;
+					if ([map districtContainsCoordinate:[self searchCoordinate]]) {
+						[foundDistricts addObject:[map objectID]];
+						success = YES;
+					}
+				}
+				[pool drain];
 			}
 		}
-		
-        [self informDelegateOfSuccess];
-        [pool drain];
     }
     @catch (NSException * e) 
     {
         debug_NSLog(@"Exception: %@", e);
     }
-}
+	if (sourceMOC)
+		[sourceMOC release], sourceMOC = nil;
+	
+	if (success)
+		[self informDelegateOfSuccess];
+	else
+		[self informDelegateOfFailureWithMessage:@"Could not find a district map with those coordinates." failOption:DistrictMapSearchOperationFailOptionLog];
+	
 
+}
+	
 
 @end

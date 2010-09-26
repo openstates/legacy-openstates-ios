@@ -37,18 +37,19 @@
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
 	if (self = [super init]) {
-		if (newContext) self.managedObjectContext = newContext;
+		if (newContext) 
+			managedObjectContext = [newContext retain];
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
 		
 		
 #if NEEDS_TO_PARSE_KMLMAPS == 1
 
-		DistrictOfficeDataSource *tempDistOff = [[DistrictOfficeDataSource alloc] initWithManagedObjectContext:newContext];
+		DistrictOfficeDataSource *tempDistOff = [[[DistrictOfficeDataSource alloc] initWithManagedObjectContext:newContext] autorelease];
 ///#warning hacky place to put this, but we need to initialize district offices i guess? ....
 		
 		mapCount = 0;
-		self.importer = [[DistrictMapImporter alloc] initWithChamber:SENATE dataSource:self];
+		self.importer = [[[DistrictMapImporter alloc] initWithChamber:SENATE dataSource:self] autorelease];
 		
 		self.byDistrict = NO;
 #endif
@@ -68,6 +69,7 @@
 		[self.genericOperationQueue cancelAllOperations];
 	self.genericOperationQueue = nil;
 	self.districtSearchDelegate = nil;
+	self.searchDisplayController = nil;
     [super dealloc];
 }
 
@@ -158,8 +160,11 @@
 							 errorMessage:(NSString *)errorMessage 
 								   option:(DistrictMapSearchOperationFailOption)failOption {
 	
-	//debug_NSLog(@"The search for the coordinate failed: %@", errorMessage);
 	
+	if (failOption == DistrictMapSearchOperationFailOptionLog) {
+		NSLog(@"%@", errorMessage);
+	}
+		
 	if (self.genericOperationQueue)
 		[self.genericOperationQueue cancelAllOperations];
 	self.genericOperationQueue = nil;
@@ -235,7 +240,7 @@
 
 // This is for the little index along the right side of the table ... use nil if you don't want it.
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-	//return  hideTableIndex ? nil : [fetchedResultsController sectionIndexTitles] ;
+	//return  hideTableIndex ? nil : [self.fetchedResultsController sectionIndexTitles] ;
 	return  nil ;
 }
 
@@ -469,7 +474,7 @@
 											  inManagedObjectContext:self.managedObjectContext];
 	[fetchRequest setEntity:entity];
 	
-	[fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"legislator", @"district", @"chamber", nil]];
+	[fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"legislator.lastname", @"legislator.firstname", @"district", @"chamber", nil]];
 
 	if (self.byDistrict) {
 		NSSortDescriptor *sort1 = [[NSSortDescriptor alloc] initWithKey:@"district" ascending:YES] ;
@@ -487,20 +492,17 @@
 		
 	}
 	
-	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] 
+	fetchedResultsController = [[NSFetchedResultsController alloc] 
 															 initWithFetchRequest:fetchRequest 
 															 managedObjectContext:self.managedObjectContext 
-															 sectionNameKeyPath:nil cacheName:@"Root"];
+															 sectionNameKeyPath:nil cacheName:@"DistrictMaps"];
 	
-    aFetchedResultsController.delegate = self;
-	self.fetchedResultsController = aFetchedResultsController;
-	
-	[aFetchedResultsController release];
-	
+    fetchedResultsController.delegate = self;
+		
 	[fetchRequest release];
 	
-	NSError *error = nil;
-	[self.fetchedResultsController performFetch:&error];
+	//NSError *error = nil;
+	//[fetchedResultsController performFetch:&error];		// is this really necessary???
 	return fetchedResultsController;
 }    
 
