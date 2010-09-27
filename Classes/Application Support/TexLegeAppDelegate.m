@@ -554,6 +554,7 @@ NSInteger kNoSelection = -1;
     if (coordinator != nil) {
         managedObjectContext = [[NSManagedObjectContext alloc] init];
         [managedObjectContext setPersistentStoreCoordinator: coordinator];
+		[managedObjectContext setUndoManager:nil];	// we don't want to hassle with undos, big performance boost.
     }
     return managedObjectContext;
 }
