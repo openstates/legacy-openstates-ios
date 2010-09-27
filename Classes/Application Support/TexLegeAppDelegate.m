@@ -10,7 +10,7 @@
 #import "UtilityMethods.h"
 #import "PartisanIndexStats.h"
 
-#import "Reachability.h"
+#import "TexLegeReachability.h"
 
 #import "MiniBrowserController.h"
 #import "GeneralTableViewController.h"
@@ -34,9 +34,6 @@
 @interface TexLegeAppDelegate (Private)
 
 - (void)setupFeatures;
-
-- (NSString *)hostName;
-
 - (void)restoreArchivableSavedTableSelection;
 - (NSData *)archivableSavedTableSelection;
 	
@@ -61,7 +58,6 @@ NSInteger kNoSelection = -1;
 
 @synthesize mainWindow;
 @synthesize analyticsOptInController;
-@synthesize remoteHostStatus, internetConnectionStatus, localWiFiConnectionStatus;
 
 @synthesize managedObjectContext;
 
@@ -292,7 +288,6 @@ NSInteger kNoSelection = -1;
 	//[self.tabBarController setSelectedIndex:selection];
 }
 
-
  - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {	
 		
@@ -303,13 +298,8 @@ NSInteger kNoSelection = -1;
 
 	[importer release];
 #endif
-	
-	[[Reachability sharedReachability] setHostName:[self hostName]];
-	[self updateStatus];
-	[[Reachability sharedReachability] setNetworkStatusNotificationsEnabled:YES];
-	[self updateStatus];	// we do this twice because of an issue with concurrence, one must be synchronous
 		
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:@"kNetworkReachabilityChangedNotification" object:nil];
+	[[TexLegeReachability sharedTexLegeReachability] startCheckingReachability];
 	
     // Set up the mainWindow and content view
 	UIWindow *localMainWindow;
@@ -396,8 +386,6 @@ NSInteger kNoSelection = -1;
 #endif
 }
 
-
-
 - (void)applicationDidBecomeActive:(UIApplication *)application		{[[UIApplication sharedApplication] setupScreenMirroring];}
 
 - (void)applicationWillResignActive:(UIApplication *)application	{[[UIApplication sharedApplication] disableScreenMirroring];}
@@ -424,46 +412,6 @@ NSInteger kNoSelection = -1;
 	[[LocalyticsSession sharedLocalyticsSession] close];
 	[[LocalyticsSession sharedLocalyticsSession] upload];	
 }
-
-
-#pragma mark - 
-#pragma mark Reachability
-
-/*
- Remote Host Reachable
- Not reachable | Reachable via EDGE | Reachable via WiFi
- 
- Connection to Internet
- Not available | Available via EDGE | Available via WiFi
- 
- Connection to Local Network.
- Not available | Available via WiFi
-*/
-
-- (void)reachabilityChanged:(NSNotification *)note
-{
-    [self updateStatus];
-}
-
-- (void)updateStatus
-{
-    // Query the SystemConfiguration framework for the state of the device's network connections.
-    self.remoteHostStatus           = [[Reachability sharedReachability] remoteHostStatus];
-    self.internetConnectionStatus    = [[Reachability sharedReachability] internetConnectionStatus];
-    self.localWiFiConnectionStatus    = [[Reachability sharedReachability] localWiFiConnectionStatus];
-}
-
-
-- (BOOL)isCarrierDataNetworkActive
-{
-    return (self.remoteHostStatus == ReachableViaCarrierDataNetwork);
-}
-
-- (NSString *)hostName
-{	return @"www.apple.com";	}
-
-- (NSString *)hostNameLabel
-{	return [NSString stringWithFormat:@"Remote Host: %@", [self hostName]];	}
 
 #pragma mark -
 #pragma mark Saving

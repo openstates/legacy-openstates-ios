@@ -6,8 +6,6 @@
 //  Copyright 2009 Gregory S. Combs. All rights reserved.
 //
 
-#import "Reachability.h"
-
 @class LegislatorMasterViewController;
 @class CommitteeMasterViewController;
 @class LinksMasterViewController;
@@ -19,7 +17,7 @@
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate> 
 {
 	NSManagedObjectModel *managedObjectModel;
-	NSPersistentStoreCoordinator *persistentStoreCoordinator;
+	NSPersistentStoreCoordinator *persistentStoreCoordinator;	
 }
 
 @property (nonatomic)		  BOOL				appIsQuitting;
@@ -47,18 +45,12 @@
 // For iPad Interface
 @property (nonatomic, readonly)  UISplitViewController *splitViewController;
 @property (nonatomic, readonly)  UIViewController *currentMasterViewController;//, *currentDetailViewController;
-@property (nonatomic, readonly) UINavigationController * masterNavigationController, *detailNavigationController;
-
-@property NetworkStatus remoteHostStatus;
-@property NetworkStatus internetConnectionStatus;
-@property NetworkStatus localWiFiConnectionStatus;
+@property (nonatomic, readonly)  UINavigationController * masterNavigationController, *detailNavigationController;
 
 //- (void)setTabOrderIfSaved;
 #if IMPORTING_DATA == 1
 - (IBAction)saveAction:sender;
 #endif
-
-- (void)updateStatus;
 
 - (id) savedTableSelectionForKey:(NSString *)vcKey;
 - (void)setSavedTableSelection:(id)object forKey:(NSString *)vcKey;
