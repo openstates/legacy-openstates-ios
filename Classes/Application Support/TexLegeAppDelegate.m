@@ -46,6 +46,7 @@ NSString * const kAnalyticsSettingsSwitch = @"PermitUseOfAnalytics";
 NSString * const kShowedSplashScreenKey = @"HasShownSplashScreen";
 NSString * const kSegmentControlPrefKey = @"SegmentControlPrefs";
 NSString * const kResetChartCacheKey = @"ResetChartCache";
+NSString * const kResetSavedDatabaseKey = @"ResetSavedDatabase";
 
 NSUInteger kNumMaxTabs = 11;
 NSInteger kNoSelection = -1;
@@ -326,6 +327,7 @@ NSInteger kNoSelection = -1;
 									[NSNumber numberWithBool:NO], kShowedSplashScreenKey,
 									[NSDictionary dictionary], kSegmentControlPrefKey,
 									[NSNumber numberWithBool:NO], kResetChartCacheKey,
+									[NSNumber numberWithBool:NO], kResetSavedDatabaseKey,
 									version, @"CFBundleVersion",
 									nil];
 	
@@ -353,7 +355,8 @@ NSInteger kNoSelection = -1;
 	//JSONDataImporter *jsonImporter = [[JSONDataImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
 	//[jsonImporter release];
 	
-	
+	[self resetSavedDatabaseIfNecessary];
+
 	return YES;
 }
 
@@ -393,7 +396,7 @@ NSInteger kNoSelection = -1;
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
 	self.appIsQuitting = NO;
-	
+		
 	if (self.analyticsOptInController && ![self.analyticsOptInController shouldPresentAnalyticsOptInAlert])
 		[self.analyticsOptInController updateOptInFromSettings];
 	
@@ -554,6 +557,97 @@ NSInteger kNoSelection = -1;
 	}
 	[pool drain];
 #endif
+}
+
+- (void) resetSavedDatabase:(id)sender {
+	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_RESET"];
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	NSError *error = nil;
+	NSString *pathToDocs = [UtilityMethods applicationDocumentsDirectory];
+	NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:pathToDocs error:&error];
+	
+	if (error) {
+		debug_NSLog(@"DB_RESET: Couldn't read documents directory for database reset: %@", error);
+	}
+	if (files && [files count]) {
+		BOOL plannedFailure = NO;
+		
+		[self.persistentStoreCoordinator lock];	// no more changes
+		for (NSPersistentStore *suspectStore in [self.persistentStoreCoordinator persistentStores]) {
+			NSError *error = nil;
+			[self.persistentStoreCoordinator removePersistentStore:suspectStore error:&error];
+			if (error) {
+				debug_NSLog(@"DB_RESET: Couldn't remove the database store... error: %@", [error localizedFailureReason]);
+				plannedFailure = YES;
+			}
+
+		}
+
+		for (NSString *file in files) {
+			if ([file hasSuffix:@".sqlite"]) {
+				NSString *filePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:file];
+				NSError *error = nil;
+				[[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+				if (error) {
+					debug_NSLog(@"DB_RESET: Couldn't remove the database file... error: %@", [error localizedFailureReason]);
+					plannedFailure = YES;
+				}
+			}
+		}
+		
+		[self copyPersistentStoreIfNeeded:nil];		
+		
+		if (plannedFailure) {
+			NSLog(@"DB_RESET: (FAIL, sort of) We had trouble in our attempts to reset the database, so we'll quit and see if the restart fixes it.");
+		}
+		else {
+			NSLog(@"DB_RESET: (SUCCESS) Database removed and recreated.  The application must now quit.  Restart it at your convenience.");
+		}
+		exit(0);
+
+/*		NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], 
+								 NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], 
+								 NSInferMappingModelAutomaticallyOption, nil];
+		
+		NSString *inDocsPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:DATABASE_FILE];
+		NSURL *storeUrl = [NSURL fileURLWithPath:inDocsPath];
+		
+		if (![self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error]) {
+			// Handle the error.
+			debug_NSLog(@"error: %@", [error localizedFailureReason]);
+			NSLog(@"We had trouble in our attempts to add the new database, so we'll quit and see if the restart fixes it.");
+			exit(0);
+		} 
+		[self.persistentStoreCoordinator unlock];
+*/
+	}	
+	[pool drain];
+}
+
+- (BOOL) resetSavedDatabaseIfNecessary {
+	
+	BOOL needsReset = [[NSUserDefaults standardUserDefaults] boolForKey:kResetSavedDatabaseKey];
+	
+	
+	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kResetSavedDatabaseKey];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+	
+	if (needsReset) {
+		UIAlertView *resetDB = [[UIAlertView alloc] initWithTitle:@"Settings: Reset Data and Quit?" 
+														  message:@"Are you sure you want to restore the factory database?  Any custom legislator notes will be lost by proceeding.  NOTE: The application will automatically quit after the reset." 
+														 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Reset",nil];
+		[resetDB show];
+		[resetDB release];
+	}
+	
+	return needsReset;
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+	if (buttonIndex == alertView.firstOtherButtonIndex)
+		[self resetSavedDatabase:nil]; 
 }
 
 /**

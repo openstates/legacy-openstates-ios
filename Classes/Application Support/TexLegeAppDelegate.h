@@ -14,7 +14,7 @@
 @class DistrictMapMasterViewController;
 @class AnalyticsOptInAlertController;
 
-@interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate> 
+@interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate> 
 {
 	NSManagedObjectModel *managedObjectModel;
 	NSPersistentStoreCoordinator *persistentStoreCoordinator;	
