@@ -49,8 +49,10 @@
 	self.currentEvents = [NSMutableArray array];
 	self.searchResults = [NSMutableArray array];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
-
+	if ([UtilityMethods isIPadDevice])
+		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:@"UIApplicationDidChangeStatusBarOrientationNotification" object:nil];
+	
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -61,7 +63,11 @@
 		self.chamberCalendar = [[appDelegate calendarMasterVC] selectObjectOnAppear];		
 	}
 	
-	[self changeLayoutForOrientation:[UIDevice currentDevice].orientation];
+	if ([UtilityMethods isIPadDevice])
+		[self changeLayoutForOrientation:[UIApplication sharedApplication].statusBarOrientation];
+	else 
+		[self changeLayoutForOrientation:UIInterfaceOrientationPortrait];
+		
 	if (self.chamberCalendar)
 		self.searchDisplayController.searchBar.placeholder = self.chamberCalendar.title;
 }
@@ -131,14 +137,17 @@
     // Release any retained subviews of the main view.
 	self.leftShadow = self.rightShadow = self.portShadow = self.landShadow = nil;
 	self.chamberCalendar = nil;
-	self.tableView = nil;
+	self.tableView = nil;		// this is okay, since we're not a decendent of UITableViewController
 	self.webView = nil;
 	self.feedEntries = nil;
 	self.currentEvents = nil;
 	self.searchResults = nil;
 	self.masterPopover = nil;
 	// add this to done: or something
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+
+	if ([UtilityMethods isIPadDevice])
+		//[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIApplicationDidChangeStatusBarOrientationNotification" object:nil];
 
     [super viewDidUnload];
 }
@@ -151,7 +160,7 @@
 	self.webView = nil;
 	self.leftShadow = self.rightShadow = self.portShadow = self.landShadow = nil;
 	self.searchResults = nil;
-	self.tableView = nil;
+	self.tableView = nil;		// this is okay, since we're not a decendent of UITableViewController
 	self.masterPopover = nil;
     [super dealloc];
 }

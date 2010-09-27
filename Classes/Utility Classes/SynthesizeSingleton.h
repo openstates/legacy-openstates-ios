@@ -12,23 +12,48 @@
 //  appreciated but not required.
 //
 
+//// Using Grand Central Dispatch, we can wipe out all the wird slow crap in the intialization with the following:
+/*
+ + (id)sharedFoo
+{
+	static dispatch_once_t pred;
+	static Foo *foo = nil;
+	
+	dispatch_once(&pred, ^{ foo = [[self alloc] init]; });
+	return foo;
+}
+ */
+
+/*
+ #define SYNTHESIZE_SINGLETON_FOR_CLASS(classname) \
+ \
+ static classname *shared##classname = nil; \
+ \
+ + (classname *)shared##classname \
+ { \
+ @synchronized(self) \
+ { \
+ if (shared##classname == nil) \
+ { \
+ shared##classname = [[self alloc] init]; \
+ } \
+ } \
+ \
+ return shared##classname; \
+ } \
+ \
+*/ 
+
 #define SYNTHESIZE_SINGLETON_FOR_CLASS(classname) \
- \
+\
 static classname *shared##classname = nil; \
- \
 + (classname *)shared##classname \
 { \
-	@synchronized(self) \
-	{ \
-		if (shared##classname == nil) \
-		{ \
-			shared##classname = [[self alloc] init]; \
-		} \
-	} \
-	 \
+	static dispatch_once_t pred; \
+	dispatch_once(&pred, ^{ shared##classname = [[self alloc] init]; }); \
 	return shared##classname; \
 } \
- \
+\
 + (id)allocWithZone:(NSZone *)zone \
 { \
 	@synchronized(self) \

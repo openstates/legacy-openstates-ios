@@ -58,23 +58,31 @@ enum HeaderSectionRows {
 		if (newContext) 
 			managedObjectContext = [newContext retain];
 	
-		NSError *error = nil;
-		if (![self.fetchedResultsController performFetch:&error])
+		//NSError *error = nil;
+		/*if (![self.fetchedResultsController performFetch:&error])
 		{
 			debug_NSLog(@"LinksMenuDataSource-init: Unresolved error %@, %@", error, [error userInfo]);
-		}		
-		else if ([self.fetchedResultsController.fetchedObjects count] == 0) {
-			debug_NSLog(@"No link resources in a database...");
-		}
+		}*/		
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(dataSourceReceivedMemoryWarning:)
+													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];		
 	}
 	return self;
 }
 
-- (void)dealloc {	
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
 	self.fetchedResultsController = nil;
-	self.managedObjectContext = nil;
-
+	self.managedObjectContext = nil;	
     [super dealloc];
+}
+
+-(void)dataSourceReceivedMemoryWarning:(id)sender {
+	// let's give this a swinging shot....	
+	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
+		[self.managedObjectContext refreshObject:object mergeChanges:NO];
+	}
 }
 
 #pragma mark -

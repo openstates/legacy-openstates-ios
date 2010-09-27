@@ -176,9 +176,7 @@
 		MapViewController *mapVC = (MapViewController *)self.detailViewController;
 		[mapVC view];
 		MKMapView *mapView = mapVC.mapView;
-		if (mapVC && mapView) {
-			mapVC.districtMapDataSource = self.dataSource;
-			
+		if (mapVC && mapView) {			
 			[mapVC clearAnnotationsAndOverlays];
 
 			[mapView addAnnotation:map];
@@ -194,7 +192,7 @@
 			[self.navigationController pushViewController:self.detailViewController animated:YES];
 			self.detailViewController = nil;
 		}
-		
+		[self.managedObjectContext refreshObject:map mergeChanges:YES];
 	}
 	
 }

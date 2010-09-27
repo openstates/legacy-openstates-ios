@@ -7,23 +7,16 @@
 //
 
 #import "TableDataSourceProtocol.h"
-#import "DistrictMapSearchOperation.h"
-#import <MapKit/MapKit.h>
 
 #if NEEDS_TO_PARSE_KMLMAPS == 1
 @class DistrictMapImporter;
 #endif
 
-@interface DistrictMapDataSource : NSObject <TableDataSource, DistrictMapSearchOperationDelegate> {
+@interface DistrictMapDataSource : NSObject <TableDataSource> {
 #if NEEDS_TO_PARSE_KMLMAPS == 1
 	NSInteger mapCount;
 #endif
 }
-
-//- (NSArray *) districtsContainingCoordinate:(CLLocationCoordinate2D)aCoordinate;
-- (void) searchDistrictMapsForCoordinate:(CLLocationCoordinate2D)aCoordinate withDelegate:(id)delegate;
-@property (nonatomic, retain) NSOperationQueue *genericOperationQueue;
-@property (nonatomic, retain) id districtSearchDelegate;
 
 @property (nonatomic, retain)			NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) IBOutlet	NSManagedObjectContext *managedObjectContext;

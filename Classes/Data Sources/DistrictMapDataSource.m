@@ -29,7 +29,6 @@
 @synthesize fetchedResultsController, managedObjectContext;
 @synthesize hideTableIndex, byDistrict;
 @synthesize filterChamber, filterString, searchDisplayController;
-@synthesize genericOperationQueue, districtSearchDelegate;
 
 #if NEEDS_TO_PARSE_KMLMAPS == 1
 @synthesize importer;
@@ -53,22 +52,29 @@
 		
 		self.byDistrict = NO;
 #endif
-		
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(dataSourceReceivedMemoryWarning:)
+													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];		
 	}
 	return self;
 }
 
+-(void)dataSourceReceivedMemoryWarning:(id)sender {
+	// let's give this a swinging shot....	
+	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
+		[self.managedObjectContext refreshObject:object mergeChanges:NO];
+	}
+}
+
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+
 #if NEEDS_TO_PARSE_KMLMAPS == 1
 	self.importer = nil;
 #endif
 	self.fetchedResultsController = nil;
 	self.managedObjectContext = nil;	
 	self.filterString = nil;
-	if (self.genericOperationQueue)
-		[self.genericOperationQueue cancelAllOperations];
-	self.genericOperationQueue = nil;
-	self.districtSearchDelegate = nil;
 	self.searchDisplayController = nil;
     [super dealloc];
 }
@@ -123,52 +129,6 @@
 	return [self.fetchedResultsController indexPathForObject:dataObject];
 }
 
-
-#pragma mark -
-#pragma DistrictMapSearchOperationDelegate
-
-- (void) searchDistrictMapsForCoordinate:(CLLocationCoordinate2D)aCoordinate withDelegate:(id)mapSearchDelegate {
-	if (self.districtSearchDelegate)
-		self.districtSearchDelegate = nil;
-	self.districtSearchDelegate = mapSearchDelegate;
-	
-	NSArray *objectsArray = [TexLegeCoreDataUtils allObjectIDsInEntityNamed:@"DistrictMapObj" context:self.managedObjectContext];
-	//debug_NSLog(@"Starting search for coordinate");
-	DistrictMapSearchOperation *op = [[DistrictMapSearchOperation alloc] initWithDelegate:self objects:objectsArray coordinate:aCoordinate];
-	if (!op)
-		return;
-	
-	if (!self.genericOperationQueue)
-		self.genericOperationQueue = [[[NSOperationQueue alloc] init] autorelease];
-	[self.genericOperationQueue addOperation:op];
-	[op release];
-}
-
-- (void)DistrictMapSearchOperationDidFinishSuccessfully:(DistrictMapSearchOperation *)op {	
-	//debug_NSLog(@"Found some search results in %d districts", [op.foundDistricts count]);
-	
-	if (self.districtSearchDelegate && [self.districtSearchDelegate respondsToSelector:@selector(foundDistrictMapsWithObjectIDs:)])
-		[self.districtSearchDelegate performSelector:@selector(foundDistrictMapsWithObjectIDs:) withObject:op.foundDistricts];
-
-	if (self.genericOperationQueue)
-		[self.genericOperationQueue cancelAllOperations];
-	self.genericOperationQueue = nil;
-	
-}
-
-- (void)DistrictMapSearchOperationDidFail:(DistrictMapSearchOperation *)op 
-							 errorMessage:(NSString *)errorMessage 
-								   option:(DistrictMapSearchOperationFailOption)failOption {
-	
-	
-	if (failOption == DistrictMapSearchOperationFailOptionLog) {
-		NSLog(@"%@", errorMessage);
-	}
-		
-	if (self.genericOperationQueue)
-		[self.genericOperationQueue cancelAllOperations];
-	self.genericOperationQueue = nil;
-}
 
 #pragma mark -
 #pragma UITableViewDataSource
@@ -474,7 +434,7 @@
 											  inManagedObjectContext:self.managedObjectContext];
 	[fetchRequest setEntity:entity];
 	
-	[fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"legislator.lastname", @"legislator.firstname", @"district", @"chamber", nil]];
+	[fetchRequest setPropertiesToFetch:[DistrictMapObj lightPropertiesToFetch]];
 
 	if (self.byDistrict) {
 		NSSortDescriptor *sort1 = [[NSSortDescriptor alloc] initWithKey:@"district" ascending:YES] ;

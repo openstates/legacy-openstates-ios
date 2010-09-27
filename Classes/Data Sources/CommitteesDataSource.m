@@ -28,17 +28,30 @@
 		if (newContext) self.managedObjectContext = newContext;
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(dataSourceReceivedMemoryWarning:)
+													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];		
 	}
 	return self;
 }
 
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+
 	self.fetchedResultsController = nil;
 	self.searchDisplayController = nil;
 	self.managedObjectContext = nil;	
 	self.filterString = nil;
 	
     [super dealloc];
+}
+
+-(void)dataSourceReceivedMemoryWarning:(id)sender {
+	// let's give this a swinging shot....	
+	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
+		[self.managedObjectContext refreshObject:object mergeChanges:NO];
+	}
 }
 
 

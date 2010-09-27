@@ -16,14 +16,6 @@
 	[super awakeFromNib];
 	debug_NSLog(@"Splitview awaking title = %@", self.title);
 
-	self.isListening = NO;
-}
-
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    [super viewDidLoad];
-	
-	if (!self.isListening) {
 		self.isListening = YES;	
 		debug_NSLog(@"Splitview loading title = %@", self.title);
 		
@@ -33,7 +25,13 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(didRotate:)
 													 name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];	
-	}
+	
+}
+
+// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+- (void)viewDidLoad {
+    [super viewDidLoad];
+	
 }
 
 - (void)didReceiveMemoryWarning {
@@ -53,8 +51,8 @@
 		
 		@try {
 			debug_NSLog(@"Splitview unloading ??? title = %@", self.title);
-			[[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:UIApplicationWillChangeStatusBarOrientationNotification];
-			[[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:UIApplicationDidChangeStatusBarOrientationNotification];
+			[[NSNotificationCenter defaultCenter] removeObserver:self /*forKeyPath:UIApplicationWillChangeStatusBarOrientationNotification */];
+			[[NSNotificationCenter defaultCenter] removeObserver:self /*forKeyPath:UIApplicationDidChangeStatusBarOrientationNotification */];
 		}
 		@catch (NSException * e) {
 			debug_NSLog(@"Splitview DE-OBSERVING CRASHED title = %@ ... %@", self.title, e);

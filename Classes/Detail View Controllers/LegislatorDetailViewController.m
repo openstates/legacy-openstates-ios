@@ -103,7 +103,7 @@
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
 	UINavigationController *nav = [self navigationController];
-	//if (nav && [nav.viewControllers count]>1)
+	if (nav && [nav.viewControllers count]>2)
 		[nav popToRootViewControllerAnimated:YES];
 	
 	self.leg_photoView = nil;
@@ -116,11 +116,11 @@
 	self.indivSlider = nil;
 	self.partySlider = nil;
 	self.allSlider = nil;
-	self.legislator = nil;
+	//self.legislator = nil;
 	self.dataSource = nil;
 	self.headerView = nil;
 	self.leg_photoView = nil;
-	self.tableView = nil;
+	//self.tableView = nil;
 	self.miniBackgroundView = nil;
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
 	self.chartView = nil;
@@ -140,7 +140,7 @@
 	self.legislator = nil;
 	self.headerView = nil;
 	self.leg_photoView = nil;
-	self.tableView = nil;
+	//self.tableView = nil;
 	self.chartView = nil;
 	self.chartLoadingAct = nil;
 	self.miniBackgroundView = nil;
@@ -280,18 +280,34 @@
 	
 }
 
+
+- (LegislatorDetailDataSource *)dataSource {
+	if (!dataSource && self.legislator) {
+		dataSource = [[LegislatorDetailDataSource alloc] initWithLegislator:legislator];
+	}
+	return dataSource;
+}
+
+- (void)setDataSource:(LegislatorDetailDataSource *)newObj {	
+	if (newObj == dataSource)
+		return;
+	if (dataSource)
+		[dataSource release], dataSource = nil;
+	if (newObj)
+		dataSource = [newObj retain];
+}
+
 - (void)setLegislator:(LegislatorObj *)newLegislator {
-	if (newLegislator && self.legislator && [[newLegislator objectID] isEqual:[self.legislator objectID]])
+	if (self.dataSource && newLegislator && self.legislator && [[newLegislator objectID] isEqual:[self.legislator objectID]])
 		return;
 	
+	self.dataSource = nil;
 	if (legislator) [legislator release], legislator = nil;
 	if (newLegislator) {
 		legislator = [newLegislator retain];
 
-		LegislatorDetailDataSource *ds = [[LegislatorDetailDataSource alloc] initWithLegislator:legislator];
-		self.tableView.dataSource = self.dataSource = ds;
-		[ds release];
-		
+		self.tableView.dataSource = self.dataSource;
+
 		[self setupHeader];
 		
 		if (masterPopover != nil) {
@@ -305,11 +321,18 @@
 #pragma mark -
 #pragma mark Managing the popover
 
+- (IBAction)resetTableData:(id)sender {
+	// this will force our datasource to renew everything
+	self.dataSource.legislator = self.legislator;
+	[self.tableView reloadData];	
+}
+
 // Called on the delegate when the user has taken action to dismiss the popover. This is not called when -dismissPopoverAnimated: is called directly.
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
 	[self.tableView reloadData];
-	if (self.notesPopover && [self.notesPopover isEqual:popoverController])
+	if (self.notesPopover && [self.notesPopover isEqual:popoverController]) {
 		self.notesPopover = nil;
+	}
 }
 	
 - (void)viewWillAppear:(BOOL)animated {
@@ -446,7 +469,7 @@
 			// If we got a new view controller, push it .
 			if (nextViewController) {
 				nextViewController.legislator = self.legislator;
-				nextViewController.backView = aTableView;
+				nextViewController.backViewController = self;
 				
 				if ([UtilityMethods isIPadDevice]) {
 					//nextViewController.toolbar.hidden = NO;
@@ -496,7 +519,7 @@
 					districtOffice = cellInfo.entryValue;
 				
 				[mapViewController resetMapViewWithAnimation:NO];
-				
+				BOOL isDistMap = NO;
 				id<MKAnnotation> theAnnotation = nil;
 				if (districtOffice) {
 					theAnnotation = districtOffice;
@@ -509,12 +532,16 @@
 					[mapViewController moveMapToAnnotation:theAnnotation];
 					[mapViewController.mapView performSelector:@selector(addOverlay:) 
 													withObject:[self.legislator.districtMap polygon] afterDelay:0.5f];
+					isDistMap = YES;
 				}
 				if (theAnnotation)
 					mapViewController.navigationItem.title = [theAnnotation title];
 
 				[self.navigationController pushViewController:mapViewController animated:YES];
 				[mapViewController release];
+				
+				if (isDistMap)
+					[[[TexLegeAppDelegate appDelegate] managedObjectContext] refreshObject:self.legislator.districtMap mergeChanges:NO];
 			}
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&

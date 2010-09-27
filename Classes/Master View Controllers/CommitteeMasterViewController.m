@@ -138,7 +138,6 @@
 			[self.navigationController pushViewController:self.detailViewController animated:YES];
 			self.detailViewController = nil;
 		}
-
 	}
 	
 }

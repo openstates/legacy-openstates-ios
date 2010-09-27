@@ -18,8 +18,8 @@ typedef enum {
 @class DistrictMapSearchOperation;
 
 @protocol DistrictMapSearchOperationDelegate
-- (void)DistrictMapSearchOperationDidFinishSuccessfully:(DistrictMapSearchOperation *)op;
-- (void)DistrictMapSearchOperationDidFail:(DistrictMapSearchOperation *)op 
+- (void)districtMapSearchOperationDidFinishSuccessfully:(DistrictMapSearchOperation *)op;
+- (void)districtMapSearchOperationDidFail:(DistrictMapSearchOperation *)op 
 							 errorMessage:(NSString *)errorMessage 
 								   option:(DistrictMapSearchOperationFailOption)failOption;
 @end
@@ -31,9 +31,8 @@ typedef enum {
 }
 @property (assign) NSObject <DistrictMapSearchOperationDelegate> *delegate;
 @property (retain) NSManagedObjectContext * managedObjectContext;
-@property (retain) NSArray *searchDistricts;
 @property (retain) NSMutableArray *foundDistricts;
 @property (assign) CLLocationCoordinate2D searchCoordinate;
-- (id) initWithDelegate:(id<DistrictMapSearchOperationDelegate>)newDelegate objects:(NSArray*)objectIDArray coordinate:(CLLocationCoordinate2D)aCoordinate;
+- (id) initWithDelegate:(id<DistrictMapSearchOperationDelegate>)newDelegate coordinate:(CLLocationCoordinate2D)aCoordinate;
 
 @end

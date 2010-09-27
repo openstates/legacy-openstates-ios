@@ -29,27 +29,39 @@
 	return [NSObject class];
 }
 
-- (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
-	self.managedObjectContext = context;
-	
-		//self.tableView = nil;
-	self.dataSource = [[[[self dataSourceClass] alloc] initWithManagedObjectContext:self.managedObjectContext] autorelease];
-	self.title = [self.dataSource name];	
-	// set the long name shown in the navigation bar
-	//self.navigationItem.title=[dataSource navigationBarName];
-	
-	// FETCH CORE DATA
-	if ([self.dataSource usesCoreData])
-	{		
-		NSError *error;
-		// You've got to delete the cache, or disable caching before you modify the predicate...
-		[NSFetchedResultsController deleteCacheWithName:[[self.dataSource fetchedResultsController] cacheName]];
+- (id<TableDataSource>)dataSource {
+	if (!dataSource) {
+		dataSource = [[[self dataSourceClass] alloc] initWithManagedObjectContext:self.managedObjectContext];
+		self.title = [dataSource name];	
+		// set the long name shown in the navigation bar
+		//self.navigationItem.title=[dataSource navigationBarName];
 		
-		if (![[self.dataSource fetchedResultsController] performFetch:&error]) {
-			// Handle the error...
-		}		
+		// FETCH CORE DATA
+		if ([dataSource usesCoreData])
+		{		
+			NSError *error;
+			// You've got to delete the cache, or disable caching before you modify the predicate...
+			[NSFetchedResultsController deleteCacheWithName:[[dataSource fetchedResultsController] cacheName]];
+			
+			if (![[dataSource fetchedResultsController] performFetch:&error]) {
+				// Handle the error...
+			}		
+		}
+		self.tableView.dataSource = dataSource;
+		if (self.searchDisplayController)
+			self.searchDisplayController.searchResultsDataSource = dataSource;
+		if (self.searchDisplayController && [dataSource respondsToSelector:@selector(setSearchDisplayController:)])
+			[dataSource performSelector:@selector(setSearchDisplayController:) withObject:self.searchDisplayController];
 	}
+	return dataSource;
+}
+
+- (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
+	if (context)
+		managedObjectContext = [context retain];
 	
+	//self.dataSource = [[[[self dataSourceClass] alloc] initWithManagedObjectContext:self.managedObjectContext] autorelease];
+		
 	if ([self.dataSource usesCoreData]) {
 		id objectID = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:self.viewControllerKey];
 		if (objectID && [objectID isKindOfClass:[NSManagedObjectID class]])
@@ -67,10 +79,12 @@
 }
 
 - (void)dealloc {
-	self.tableView = nil;
+	//self.tableView = nil;
 	self.dataSource = nil; 
 	self.selectObjectOnAppear = nil;
 	self.managedObjectContext = nil;
+	self.detailViewController = nil;
+
 	[super dealloc];
 }
 
@@ -86,6 +100,13 @@
 	}
 	
 	self.selectObjectOnAppear = nil;
+	
+	/*
+	 if ([UtilityMethods isIPadDevice] && ![self.tabBarController.selectedViewController isEqual:self.splitViewController])
+		self.dataSource = nil;
+	else if (![UtilityMethods isIPadDevice] && ![self.tabBarController.selectedViewController isEqual:self.navigationController])
+		self.dataSource = nil;
+	*/	
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
 }
 
@@ -104,19 +125,20 @@
 	// set the cell separator to a single straight line.
 	//self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	//self.tableView.separatorColor = [UIColor lightGrayColor];
-	
-	// set the tableview delegate to this object and the datasource to the datasource which has already been set
-	self.tableView.delegate = self;
-	self.tableView.dataSource = self.dataSource;
-	
+		
 	self.tableView.sectionIndexMinimumDisplayRowCount=15;
 	
 	// set the tableview as the controller view
 	self.view = self.tableView;
+	
 }
 
 -(void)viewDidLoad {
 	[super viewDidLoad];
+	
+	// set the tableview delegate to this object and the datasource to the datasource which has already been set
+	self.tableView.delegate = self;
+	self.tableView.dataSource = self.dataSource;
 	
 	self.clearsSelectionOnViewWillAppear = NO;
 	self.tableView.separatorColor = [TexLegeTheme separator];
@@ -139,9 +161,9 @@
 }
 
 - (void)viewDidUnload {
-	self.tableView.dataSource = nil;
+	self.dataSource = nil;
 	self.selectObjectOnAppear = nil;
-	self.tableView = nil;
+	//self.tableView = nil;
 	[super viewDidUnload];
 }
 
