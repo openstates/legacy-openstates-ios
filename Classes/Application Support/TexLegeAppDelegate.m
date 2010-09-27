@@ -11,6 +11,7 @@
 #import "PartisanIndexStats.h"
 
 #import "TexLegeReachability.h"
+#import "TexLegeTheme.h"
 
 #import "MiniBrowserController.h"
 #import "GeneralTableViewController.h"
@@ -279,7 +280,10 @@ NSInteger kNoSelection = -1;
 		debug_NSLog (@"Couldn't find a view/navigation controller at index: %d", savedTabSelectionIndex);
 		savedTabController = [self.tabBarController.viewControllers objectAtIndex:0];
 	}
-	
+	else {
+		if (self.tabBarController.moreNavigationController)
+			self.tabBarController.moreNavigationController.navigationBar.tintColor = [TexLegeTheme navbar];
+	}
 	[self setTabOrderIfSaved];
 	
 	[self.tabBarController setSelectedViewController:savedTabController];
@@ -290,36 +294,30 @@ NSInteger kNoSelection = -1;
 	//[self.tabBarController setSelectedIndex:selection];
 }
 
- - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{	
-		
+- (void)finalizeStartup:(id)sender {
 #if IMPORTING_DATA == 1
 	TexLegeDataImporter *importer = [[TexLegeDataImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
 	[importer importAllDataObjects];
 	//[importer importObjectsWithEntityName:@"LinkObj"];
-
+	
 	[importer release];
 #endif
-		
+	
 	[[TexLegeReachability sharedTexLegeReachability] startCheckingReachability];
 	
-    // Set up the mainWindow and content view
-	UIWindow *localMainWindow;
-	localMainWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.mainWindow = localMainWindow;
-	[localMainWindow release];
-	
-    [self.mainWindow setBackgroundColor:[UIColor whiteColor]];
+	NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 	
 	[self restoreArchivableSavedTableSelection];
 	[self setupFeatures];
-			
-	// make the window visible
-	[self.mainWindow makeKeyAndVisible];
 
-	NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-
-	
+	NSArray *subviews = self.mainWindow.subviews;
+	for (UIView *aView in subviews) {
+		if (aView.tag == 8888) {
+			[aView removeFromSuperview];
+			break;
+		}
+	}
+			 
 	// register our preference selection data to be archived
 	NSDictionary *savedPrefsDict = [NSDictionary dictionaryWithObjectsAndKeys: 
 									[self archivableSavedTableSelection],kRestoreSelectionKey,
@@ -340,7 +338,7 @@ NSInteger kNoSelection = -1;
 	self.analyticsOptInController = [[[AnalyticsOptInAlertController alloc] init] autorelease];
 	if (self.analyticsOptInController && ![self.analyticsOptInController presentAnalyticsOptInAlertIfNecessary])
 		[self.analyticsOptInController updateOptInFromSettings];
-			
+	
 #ifdef DEBUG
 	[[LocalyticsSession sharedLocalyticsSession] startSession:@"c3641d53749cde2eaf32359-2b477ece-c58f-11df-ee10-00fcbf263dff"];
 #else
@@ -355,12 +353,42 @@ NSInteger kNoSelection = -1;
 	
 	//JSONDataImporter *jsonImporter = [[JSONDataImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
 	//[jsonImporter release];
-	
+		
 	[self resetSavedDatabaseIfNecessary];
 
-	return YES;
 }
 
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{	
+    // Set up the mainWindow and content view
+	UIWindow *localMainWindow;
+	localMainWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.mainWindow = localMainWindow;
+	[localMainWindow release];
+	
+    //[self.mainWindow setBackgroundColor:[UIColor whiteColor]];
+	
+	NSString *loadingString = @"Default.png";
+	if ([UtilityMethods isIPadDevice]) {
+		if ([UtilityMethods isLandscapeOrientation])
+			loadingString = @"Default-iPad-Landscape.png";
+		else
+			loadingString = @"Default-iPad-Portrait.png";
+	}
+	
+	UIImage *loadingImage = [UIImage imageNamed:loadingString];
+	UIImageView *loadingView = [[UIImageView alloc] initWithImage:loadingImage];
+	loadingView.tag = 8888;
+ 	[self.mainWindow addSubview:loadingView];
+	[loadingView release];
+	
+	// make the window visible
+	[self.mainWindow makeKeyAndVisible];
+	
+	[self performSelector:@selector(finalizeStartup:) withObject:nil afterDelay:0.0f];
+	
+	return YES;
+}
 
 
 - (void)prepareToQuit {
