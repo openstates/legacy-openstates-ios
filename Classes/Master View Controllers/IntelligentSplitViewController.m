@@ -14,7 +14,7 @@
 
 - (void)awakeFromNib {
 	[super awakeFromNib];
-	debug_NSLog(@"IntelligentSplitViewController awoke from NIB: %@", self.title);
+	//debug_NSLog(@"IntelligentSplitViewController awoke from NIB: %@", self.title);
 
 //	self.isListening = YES;	
 	
@@ -30,7 +30,7 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-	debug_NSLog(@"IntelligentSplitViewController loaded: %@", self.title);
+	//debug_NSLog(@"IntelligentSplitViewController loaded: %@", self.title);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -39,7 +39,7 @@
 }
 
 - (void)viewDidUnload {
-	debug_NSLog(@"IntelligentSplitViewController unloaded: %@", self.title);
+	//debug_NSLog(@"IntelligentSplitViewController unloaded: %@", self.title);
 
     [super viewDidUnload];
 }
