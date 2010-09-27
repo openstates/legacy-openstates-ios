@@ -56,7 +56,7 @@
 								<int key="IBUITag">999</int>
 								<object class="NSCustomResource" key="IBUIImage">
 									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">backButton.png</string>
+									<string key="NSResourceName">arrow_left.png</string>
 								</object>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<reference key="IBUIToolbar" ref="85708569"/>
@@ -81,7 +81,7 @@
 								<int key="IBUITag">997</int>
 								<object class="NSCustomResource" key="IBUIImage">
 									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">fwdButton.png</string>
+									<string key="NSResourceName">arrow_right.png</string>
 								</object>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<reference key="IBUIToolbar" ref="85708569"/>
@@ -109,7 +109,7 @@
 						</array>
 						<object class="NSColor" key="IBUITintColor">
 							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MC42MDAwMDAwMjM4IDAuNzQ1MDk4MDU0NCAwLjM1Mjk0MTE4NTIAA</bytes>
+							<bytes key="NSRGB">MC4yNjI3NDUxMTIyIDAuMzM3MjU0OTExNyAwLjM4NDMxMzczMjQAA</bytes>
 						</object>
 					</object>
 					<object class="IBUIWebView" id="830067594">
@@ -454,7 +454,6 @@
 					<string key="className">MiniBrowserController</string>
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="addEventToiCal:">id</string>
 						<string key="backButtonPressed:">id</string>
 						<string key="closeButtonPressed:">id</string>
 						<string key="fwdButtonPressed:">id</string>
@@ -462,10 +461,6 @@
 						<string key="refreshButtonPressed:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="addEventToiCal:">
-							<string key="name">addEventToiCal:</string>
-							<string key="candidateClassName">id</string>
-						</object>
 						<object class="IBActionInfo" key="backButtonPressed:">
 							<string key="name">backButtonPressed:</string>
 							<string key="candidateClassName">id</string>
@@ -534,6 +529,20 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Classes/Detail View Controllers/MiniBrowserController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../../Frameworks/JSON-Framework/NSObject+SBJSON.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../../Frameworks/JSON-Framework/SBJsonWriter.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -787,8 +796,8 @@
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="71-compass.png">{24, 24}</string>
-			<string key="backButton.png">{32, 32}</string>
-			<string key="fwdButton.png">{32, 32}</string>
+			<string key="arrow_left.png">{32, 32}</string>
+			<string key="arrow_right.png">{32, 32}</string>
 		</dictionary>
 		<string key="IBCocoaTouchPluginVersion">123</string>
 	</data>

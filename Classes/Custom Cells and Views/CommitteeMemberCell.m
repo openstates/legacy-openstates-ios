@@ -24,7 +24,7 @@
 		//UIImage *tempImage = [UIImage imageNamed:@"anchia.png"];
 		//self.imageView.image = tempImage;
 		
-		DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 30.f, 30.f)];
+		DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 28.f, 28.f)];
 		//UIImageView *iv = [[UIImageView alloc] initWithImage:[qv imageFromUIView]];
 		self.accessoryView = qv;
 		[qv release];
