@@ -7,6 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MapKit/MapKit.h>
+
+@interface NSManagedObjectContext (EZFetch)
+
+// Convenience method to fetch the array of objects for a given Entity
+// name in the context, optionally limiting by a predicate or by a predicate
+// made from a format NSString and variable arguments.
+//
+- (NSSet *)fetchObjectsForEntityName:(NSString *)newEntityName withPredicate:(id)stringOrPredicate, ...;
+- (NSArray *)fetchObjectIDsForEntityName:(NSString *)newEntityName withPredicate:(id)stringOrPredicate, ...; 
+
+@end
+
 
 @class LegislatorObj, CommitteeObj;
 @interface TexLegeCoreDataUtils : NSObject {
@@ -20,6 +33,7 @@
 
 + (NSArray *) allLegislatorsSortedByPartisanshipFromChamber:(NSInteger)chamber andPartyID:(NSInteger)party context:(NSManagedObjectContext *)context;
 + (NSArray *) allDistrictMapsLightWithContext:(NSManagedObjectContext*)context;
++ (NSArray *)allDistrictMapIDsWithBoundingBoxesContaining:(CLLocationCoordinate2D)coordinate withContext:(NSManagedObjectContext*)context;
 
 + (NSArray*)allObjectIDsInEntityNamed:(NSString*)entityName context:(NSManagedObjectContext*)context;
 + (NSArray*)allObjectsInEntityNamed:(NSString*)entityName context:(NSManagedObjectContext*)context;
@@ -28,12 +42,3 @@
 
 @end
 
-@interface NSManagedObjectContext (EZFetch)
-
-
-// Convenience method to fetch the array of objects for a given Entity
-// name in the context, optionally limiting by a predicate or by a predicate
-// made from a format NSString and variable arguments.
-//
-- (NSSet *)fetchObjectsForEntityName:(NSString *)newEntityName withPredicate:(id)stringOrPredicate, ...;
-@end
