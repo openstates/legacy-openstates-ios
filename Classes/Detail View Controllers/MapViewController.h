@@ -9,14 +9,13 @@
 #import <MapKit/MapKit.h>
 #import "BSForwardGeocoder.h"
 #import "BSKmlResult.h"
-#import "SynthesizeSingleton.h"
+#import "DistrictMapSearchOperation.h"
 
 @class DistrictMapDataSource, CustomAnnotation;
 @interface MapViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate, UIPopoverControllerDelegate,
 		MKReverseGeocoderDelegate, BSForwardGeocoderDelegate, UISplitViewControllerDelegate, UIActionSheetDelegate,
-		UIGestureRecognizerDelegate> {
+		UIGestureRecognizerDelegate, DistrictMapSearchOperationDelegate> {
 }
-//+ (MapViewController *)sharedMapViewController;
 
 @property (nonatomic,retain) IBOutlet UIPopoverController *masterPopover;
 @property (nonatomic,retain) IBOutlet MKMapView *mapView;
@@ -32,8 +31,10 @@
 @property (nonatomic,retain) BSForwardGeocoder *forwardGeocoder;
 @property (nonatomic,readonly) MKCoordinateRegion texasRegion;
 @property (nonatomic,retain) CustomAnnotation *searchLocation;
-@property (nonatomic,retain) MKPolygonView *senateDistrictView, *houseDistrictView;
-@property (nonatomic,retain) DistrictMapDataSource *districtMapDataSource;
+@property (nonatomic,assign) MKPolygonView *senateDistrictView, *houseDistrictView;
+@property (nonatomic,retain) NSOperationQueue *genericOperationQueue;
+
+@property (nonatomic,readonly) NSManagedObjectContext *managedObjectContext;
 
 //- (IBAction) mapControlSheet:(id)sender;
 - (IBAction) showAllDistricts:(id)sender;
@@ -45,9 +46,6 @@
 - (void) clearAnnotationsAndOverlaysExceptRecent;
 - (void) resetMapViewWithAnimation:(BOOL)animated;
 - (void) moveMapToAnnotation:(id<MKAnnotation>)annotation;
-- (IBAction) foundDistrictMapsWithObjectIDs:(NSArray *)objectIDs;
-
-	
-//- (NSString *)popoverButtonTitle;
+- (void) searchDistrictMapsForCoordinate:(CLLocationCoordinate2D)aCoordinate;
 
 @end

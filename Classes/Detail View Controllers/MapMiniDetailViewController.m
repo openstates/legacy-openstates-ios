@@ -65,9 +65,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 - (void) invalidateDistrictView {
 	if (districtView) {
-		[self.districtView invalidatePath];
-		self.districtView = nil;
+		[districtView invalidatePath];
+		districtView = nil;
 	}
+
 }
 
 - (void) dealloc {
@@ -377,13 +378,13 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		MKPolygonView *aView = nil;
 
 		[self invalidateDistrictView];
-		self.districtView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
-		aView = self.districtView;
-		
+		aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];		
 		aView.fillColor = [/*[UIColor cyanColor]*/myColor colorWithAlphaComponent:0.2];
         aView.strokeColor = [myColor colorWithAlphaComponent:0.7];
         aView.lineWidth = 3;
 		
+		self.districtView = aView;
+
         return aView;
     }
 	
