@@ -499,7 +499,7 @@ CGFloat quartzRowHeight = 73.f;
 }
 
 - (void) pushInternalBrowserWithURL:(NSURL *)url {
-	if ([UtilityMethods canReachHostWithURL:url]) { // do we have a good URL/connection?
+	if ([TexLegeReachability canReachHostWithURL:url]) { // do we have a good URL/connection?
 		MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
 		[mbc display:self.tabBarController];
 	}
