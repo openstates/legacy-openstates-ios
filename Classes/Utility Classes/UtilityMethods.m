@@ -158,8 +158,8 @@
 + (BOOL) openURLWithTrepidation:(NSURL *)url {
 	BOOL canOpenURL = NO;
 	
-	if (![UtilityMethods isNetworkReachable]) {
-		[UtilityMethods noInternetAlert];
+	if (![[TexLegeReachability sharedTexLegeReachability] isNetworkReachable]) {
+		[TexLegeReachability noInternetAlert];
 	}
 	else if ([[UIApplication sharedApplication] canOpenURL:url]) {
 		[[UIApplication sharedApplication] openURL:url];
@@ -310,70 +310,6 @@
 	[ noPhoneAlert show ];		
 }
 
-+ (void)noInternetAlert {
-	UIAlertView *noInternetAlert = [[[ UIAlertView alloc ] 
-								  initWithTitle:@"Internet Unavailable" 
-								  message:@"This feature requires an Internet connection.  Perhaps your iOS device is in Airplane mode or there is no WiFi service in this area." 
-								  delegate:nil // we're static, so don't do "self"
-								  cancelButtonTitle: @"Cancel" 
-								  otherButtonTitles:nil, nil] autorelease];
-	[ noInternetAlert show ];		
-}
-
-
-+ (BOOL) isNetworkReachable {
-	BOOL reachable = YES;
-	
-	reachable = ([TexLegeAppDelegate appDelegate].internetConnectionStatus != NotReachable);
-	
-	return reachable;
-}
-
-+ (BOOL) canReachHostWithURL:(NSURL *)url alert:(BOOL)doAlert {
-	UIAlertView * alert = nil;	
-	BOOL reachableHost = NO;
-	
-	if ([url isFileURL])
-		return YES;
-		
-	if (![UtilityMethods isNetworkReachable]) {
-		if (doAlert)
-			[UtilityMethods noInternetAlert];
-	}
-	else if (url == nil) { // problem with url string
-		if (doAlert) {
-			alert = [[[ UIAlertView alloc ] 
-					  initWithTitle:@"Invalid URL" 
-					  message:@"There was a problem with the URL, please double-check for typographical errors." 
-					  delegate:nil // we're static, so don't do "self"
-					  cancelButtonTitle: @"Cancel" 
-					  otherButtonTitles:nil, nil] autorelease];
-			[ alert show ];		
-		}
-	}
-	else if (![[Reachability sharedReachability] isHostReachable:[url host]]) {
-		if (doAlert) {
-			alert = [[[ UIAlertView alloc ] 
-				  initWithTitle:@"Host Unreachable" 
-				  message:@"There was a problem contacting the website host, please double-check the URL for typographical errors or try the connection again later." 
-				  delegate:nil // we're static, so don't do "self"
-				  cancelButtonTitle: @"Cancel" 
-				  otherButtonTitles:nil, nil] autorelease];
-			[ alert show ];	
-		}
-	}
-	else {
-		reachableHost = YES;
-	}
-	
-	return reachableHost;	
-}
-
-// throw up some appropriate errors while you're at it...
-+ (BOOL) canReachHostWithURL:(NSURL *)url {
-	
-	return [UtilityMethods canReachHostWithURL:url alert:YES];
-}
 
 +(NSString*)ordinalNumberFormat:(NSInteger)num{
     NSString *ending;

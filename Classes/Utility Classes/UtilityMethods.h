@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TexLegeReachability.h"
 
 @class CapitolMap;
 @interface UtilityMethods : NSObject {
@@ -36,11 +37,7 @@
 + (BOOL) openURLWithTrepidation:(NSURL *)url;
 + (BOOL) openURLWithoutTrepidation:(NSURL *)url;
 + (BOOL) canMakePhoneCalls;
-+ (BOOL) isNetworkReachable;
-+ (BOOL) canReachHostWithURL:(NSURL *)url alert:(BOOL)doAlert;
-+ (BOOL) canReachHostWithURL:(NSURL *)url;
 + (void) alertNotAPhone;
-+ (void) noInternetAlert;
 +(NSString*)ordinalNumberFormat:(NSInteger)num;
 
 @end
