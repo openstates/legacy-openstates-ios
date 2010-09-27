@@ -13,5 +13,5 @@
 
 }
 
-@property (nonatomic) BOOL isListening;
+//@property (nonatomic) BOOL isListening;
 @end

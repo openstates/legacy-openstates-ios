@@ -10,28 +10,27 @@
 #import <objc/message.h>
 
 @implementation IntelligentSplitViewController
-@synthesize isListening;
+//@synthesize isListening;
 
 - (void)awakeFromNib {
 	[super awakeFromNib];
-	debug_NSLog(@"Splitview awaking title = %@", self.title);
+	debug_NSLog(@"IntelligentSplitViewController awoke from NIB: %@", self.title);
 
-		self.isListening = YES;	
-		debug_NSLog(@"Splitview loading title = %@", self.title);
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(willRotate:)
-													 name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(didRotate:)
-													 name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];	
+//	self.isListening = YES;	
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(willRotate:)
+												 name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(didRotate:)
+												 name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];	
 	
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-	
+	debug_NSLog(@"IntelligentSplitViewController loaded: %@", self.title);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -40,24 +39,25 @@
 }
 
 - (void)viewDidUnload {
-	
+	debug_NSLog(@"IntelligentSplitViewController unloaded: %@", self.title);
+
     [super viewDidUnload];
 }
 
 
 - (void)dealloc {
-	if (self.isListening) {
+/*	if (self.isListening) {
 		self.isListening = NO;
-		
+*/		
 		@try {
-			debug_NSLog(@"Splitview unloading ??? title = %@", self.title);
+			//debug_NSLog(@"Splitview unloading ??? title = %@", self.title);
 			[[NSNotificationCenter defaultCenter] removeObserver:self /*forKeyPath:UIApplicationWillChangeStatusBarOrientationNotification */];
 			[[NSNotificationCenter defaultCenter] removeObserver:self /*forKeyPath:UIApplicationDidChangeStatusBarOrientationNotification */];
 		}
 		@catch (NSException * e) {
-			debug_NSLog(@"Splitview DE-OBSERVING CRASHED title = %@ ... %@", self.title, e);
+			debug_NSLog(@"IntelligentSplitViewController DE-OBSERVING CRASHED: %@ ... error:%@", self.title, [e description]);
 		}
-	}
+//	}
 
 	[super dealloc];
 }
@@ -70,6 +70,9 @@
 
 
 - (void)willRotate:(id)sender {
+	if (![self isViewLoaded]) // we haven't even loaded up yet, let's turn away from this place
+		return;
+		  
 	NSNotification *notification = sender;
 	if (!notification)
 		return;
@@ -89,7 +92,7 @@
 		UIBarButtonItem *button = [super valueForKey:@"_barButtonItem"];
 		NSObject *theDelegate = (NSObject *)self.delegate;
 		//UIBarButtonItem *buttonUgly = [[[[[self.viewControllers objectAtIndex:1] viewControllers] objectAtIndex:0] navigationItem] rightBarButtonItem];
-	
+		
 		if (UIInterfaceOrientationIsPortrait(toOrientation)) {
 			if (theDelegate && [theDelegate respondsToSelector:@selector(splitViewController:willHideViewController:withBarButtonItem:forPopoverController:)]) {
 
@@ -116,13 +119,17 @@
 	
 	//debug_NSLog(@"MINE WillRotate ---- sender = %@  to = %d   from = %d", [sender class], toOrientation, fromOrientation);
 }
-		 
+
+/*
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 	//debug_NSLog(@"Theirs --- will rotate");
 }
-
+*/
 - (void)didRotate:(id)sender {
+	if (![self isViewLoaded]) // we haven't even loaded up yet, let's turn away from this place
+		return;
+
 	NSNotification *notification = sender;
 	if (!notification)
 		return;
@@ -139,10 +146,10 @@
 	
 	//debug_NSLog(@"MINE DidRotate ---- sender = %@  from = %d   to = %d", [sender class], fromOrientation, toOrientation);
 }
-
+/*
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 	//debug_NSLog(@"Theirs --- did rotate");
 }
-
+*/
 @end
