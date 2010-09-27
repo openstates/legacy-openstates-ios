@@ -42,7 +42,7 @@
 
 - (NSArray *)feedEntries {
 	
-	if (![UtilityMethods canReachHostWithURL:[self.feedURLS objectAtIndex:0]])		// I think just doing it once is enough?
+	if (![TexLegeReachability canReachHostWithURL:[self.feedURLS objectAtIndex:0]])		// I think just doing it once is enough?
 		return nil;
 	if (!self.feedStore)
 		return nil;
