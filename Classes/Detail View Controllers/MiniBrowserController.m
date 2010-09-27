@@ -155,6 +155,14 @@ static MiniBrowserController *s_browser = nil;
 	[super dealloc];
 }
 
+- (id)dataObject {
+	return self.link;
+}
+
+- (void)setDataObject:(id)newObj {
+	[self setLink:newObj];
+}
+
 #pragma mark -
 #pragma mark Popovers and Split Views
 /*

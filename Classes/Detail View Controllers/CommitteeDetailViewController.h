@@ -12,6 +12,8 @@
 @class PartisanScaleView;
 @interface CommitteeDetailViewController : UITableViewController <UISplitViewControllerDelegate> 
 
+@property (nonatomic, assign) id dataObject;
+
 @property (nonatomic, retain) CommitteeObj *committee;
 @property (nonatomic, retain) UIPopoverController *masterPopover;
 @property (nonatomic, retain) IBOutlet UILabel *membershipLab;

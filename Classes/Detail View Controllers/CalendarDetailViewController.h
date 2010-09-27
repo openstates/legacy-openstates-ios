@@ -13,6 +13,8 @@
 @interface CalendarDetailViewController : TKCalendarMonthTableViewController <UISplitViewControllerDelegate> {
 
 }
+@property (nonatomic, assign) id dataObject;
+
 @property (nonatomic, retain) IBOutlet UIImageView *leftShadow, *rightShadow;
 @property (nonatomic, retain) IBOutlet UIImageView *portShadow, *landShadow;
 @property (nonatomic, retain) IBOutlet UIWebView *webView;

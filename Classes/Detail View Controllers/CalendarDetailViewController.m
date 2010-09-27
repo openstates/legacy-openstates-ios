@@ -30,6 +30,15 @@
 @synthesize leftShadow, rightShadow, portShadow, landShadow;
 @synthesize masterPopover;
 
+- (id)dataObject {
+	return self.chamberCalendar;
+}
+
+- (void)setDataObject:(id)newObj {
+	[self setChamberCalendar:newObj];
+}
+
+
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];

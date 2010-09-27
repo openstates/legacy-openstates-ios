@@ -76,6 +76,13 @@
 			self.selectObjectOnAppear = [self.dataSource dataObjectForIndexPath:object];
 		}
 	}
+	
+	if (self.selectObjectOnAppear && self.detailViewController && [UtilityMethods isIPadDevice]) {
+		NSLog(@"Presetting a detail view's dataObject in %@!", [self description]);
+		if ([self.detailViewController respondsToSelector:@selector(setDataObject:)])
+			[self.detailViewController performSelector:@selector(setDataObject:) withObject:self.selectObjectOnAppear];
+	}
+		
 }
 
 - (void)dealloc {
@@ -194,8 +201,8 @@
 		}
 		self.selectObjectOnAppear = nil;
 	}
-	
-	// We're on an iphone, without a splitview or popovers, so if we get here, let's stop
+
+	// We're on an iphone, without a splitview or popovers, so if we get here, let's stop traversing our replay breadcrumbs
 	if (![UtilityMethods isIPadDevice]) {
 		[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
 	}

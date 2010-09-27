@@ -78,6 +78,15 @@
     // Release anything that's not essential, such as cached data
 }
 
+- (id)dataObject {
+	return self.map;
+}
+
+- (void)setDataObject:(id)newObj {
+	[self setMap:newObj];
+}
+
+
 - (void)setMap:(CapitolMap *)newObj {
 	
 	if (map) [map release], map = nil;

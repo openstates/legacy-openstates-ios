@@ -16,7 +16,7 @@
 													UIPopoverControllerDelegate, UIWebViewDelegate>
 {	
 }
-
+@property (nonatomic,assign) id dataObject;
 
 @property (nonatomic,retain) IBOutlet UIWebView *chartView;
 

@@ -11,6 +11,8 @@
 
 @interface CapitolMapsDetailViewController : UIViewController <UISplitViewControllerDelegate> {
 }
+@property (nonatomic,assign) id dataObject;
+
 @property (nonatomic,retain) CapitolMap *map;
 @property (nonatomic,retain) IBOutlet UIWebView *webView;
 @property (nonatomic,retain) UIPopoverController *masterPopover;

@@ -9,6 +9,7 @@
 @interface MiniBrowserController : UIViewController <UIWebViewDelegate, UISplitViewControllerDelegate>
 {
 }
+@property (nonatomic,assign) id dataObject;
 
 @property BOOL m_loadingInterrupted;
 @property (retain) NSURLRequest *m_urlRequestToLoad;

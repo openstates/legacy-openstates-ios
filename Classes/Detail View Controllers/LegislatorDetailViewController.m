@@ -151,6 +151,17 @@
 	[super dealloc];
 }
 
+- (id)dataObject {
+	return self.legislator;
+}
+
+- (void)setDataObject:(id)newObj {
+	[self setLegislator:newObj];
+}
+
+#pragma mark -
+#pragma mark SVG Charts
+
 // 134123212.2009.iphone.port.svg
 // 134123212.2009.iphone.land.svg
 - (NSString *)svgChartPath {

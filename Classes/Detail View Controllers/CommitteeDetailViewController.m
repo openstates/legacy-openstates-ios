@@ -65,6 +65,14 @@ CGFloat quartzRowHeight = 73.f;
 		return @"CommitteeDetailViewController~iphone";	
 }
 
+- (id)dataObject {
+	return self.committee;
+}
+
+- (void)setDataObject:(id)newObj {
+	[self setCommittee:newObj];
+}
+
 - (void) calcCommitteePartisanship {
 	NSArray *positions = [self.committee.committeePositions allObjects];
 	if (!positions && [positions count])
