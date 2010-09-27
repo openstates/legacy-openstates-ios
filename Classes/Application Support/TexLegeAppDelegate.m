@@ -36,6 +36,7 @@
 - (void)setupFeatures;
 - (void)restoreArchivableSavedTableSelection;
 - (NSData *)archivableSavedTableSelection;
+- (BOOL)resetSavedDatabaseIfNecessary;
 	
 @end
 
