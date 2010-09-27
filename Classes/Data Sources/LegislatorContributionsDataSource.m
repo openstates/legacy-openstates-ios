@@ -99,7 +99,7 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 	
 	NSURL *url = [NSURL URLWithString:urlString];
 	
-	if ([UtilityMethods canReachHostWithURL:url alert:YES]) {
+	if ([TexLegeReachability canReachHostWithURL:url alert:YES]) {
 		[self establishConnectionWithURL:url];
 	}
 }

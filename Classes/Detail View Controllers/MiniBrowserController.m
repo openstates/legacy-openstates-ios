@@ -447,7 +447,7 @@ static MiniBrowserController *s_browser = nil;
 																				body:@"" commander:[[TexLegeAppDelegate appDelegate] detailNavigationController]];
 		else {
 			NSURL *aURL = [UtilityMethods safeWebUrlFromString:link.url];
-			if (aURL && [UtilityMethods canReachHostWithURL:aURL alert:YES]) { // got a network connection
+			if (aURL && [TexLegeReachability canReachHostWithURL:aURL alert:YES]) { // got a network connection
 				[self loadURL:aURL];
 			}
 			else

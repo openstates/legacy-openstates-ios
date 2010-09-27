@@ -181,7 +181,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	[super viewWillAppear:animated];
 	
 	NSURL *tempURL = [NSURL URLWithString:@"http://maps.google.com"];		
-	if (![UtilityMethods canReachHostWithURL:tempURL])// do we have a good URL/connection?
+	if (![TexLegeReachability canReachHostWithURL:tempURL])// do we have a good URL/connection?
 		return;
 }
 

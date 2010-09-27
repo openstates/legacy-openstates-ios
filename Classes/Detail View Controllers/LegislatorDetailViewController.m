@@ -106,7 +106,7 @@
 	if (nav && [nav.viewControllers count]>2)
 		[nav popToRootViewControllerAnimated:YES];
 	
-	self.leg_photoView = nil;
+	//self.leg_photoView.image = nil;
 	
     [super didReceiveMemoryWarning];
 }
@@ -503,7 +503,7 @@
 			[subDetailController release];
 		}
 		else if (cellInfo.entryType == DirectoryTypeContributions) {
-			if ([UtilityMethods canReachHostWithURL:[NSURL URLWithString:@"http://transparencydata.org"]]) { 
+			if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:@"http://transparencydata.org"]]) { 
 				LegislatorContributionsViewController *subDetailController = [[LegislatorContributionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
 				[subDetailController setQueryEntityID:cellInfo.entryValue type:[NSNumber numberWithInteger:kContributionQueryRecipient] cycle:@"-1"];
 				[self.navigationController pushViewController:subDetailController animated:YES];
@@ -607,7 +607,7 @@
 
 - (void) showWebViewWithURL:(NSURL *)url { 
 
-	if ([UtilityMethods canReachHostWithURL:url]) { // do we have a good URL/connection?
+	if ([TexLegeReachability canReachHostWithURL:url]) { // do we have a good URL/connection?
 		MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
 		[mbc display:self.tabBarController];
 	}
