@@ -157,6 +157,7 @@
 		376B5BE20FC1DC640094D80B /* Map.WheelchairAccess.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 376B5BDB0FC1DC640094D80B /* Map.WheelchairAccess.pdf */; };
 		376B5BE30FC1DC640094D80B /* Map.CapitolComplex.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 376B5BDC0FC1DC640094D80B /* Map.CapitolComplex.pdf */; };
 		376B5BE80FC1DC640094D80B /* Map.MonumentGuide.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 376B5BE10FC1DC640094D80B /* Map.MonumentGuide.pdf */; };
+		3771334C12523025000D7207 /* TVOutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3771333C12523025000D7207 /* TVOutManager.m */; };
 		3775F9C111D860BA00D69AC5 /* Default-iPad-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 3775F9BF11D860BA00D69AC5 /* Default-iPad-Landscape.png */; };
 		3775F9C211D860BA00D69AC5 /* Default-iPad-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 3775F9C011D860BA00D69AC5 /* Default-iPad-Portrait.png */; };
 		3775FA3D11D86E1700D69AC5 /* LegislatorDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3775FA3B11D86E1700D69AC5 /* LegislatorDetailViewController.m */; };
@@ -956,6 +957,10 @@
 		376F0FB90FCBD4140011F813 /* Legislators.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Legislators.plist; sourceTree = "<group>"; };
 		37712D1812512A8300EC664D /* libisimulate-3.x.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libisimulate-3.x.a"; path = "../../Frameworks/iSimulate/libisimulate-3/libisimulate-3.x.a"; sourceTree = SOURCE_ROOT; };
 		37712D1B12512A8300EC664D /* libisimulate-4.x.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libisimulate-4.x.a"; path = "../../Frameworks/iSimulate/libisimulate-4/libisimulate-4.x.a"; sourceTree = SOURCE_ROOT; };
+		37713326125229AD000D7207 /* libisimulate-ipad-opengl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libisimulate-ipad-opengl.a"; path = "../../Frameworks/iSimulate/ipad/libisimulate-ipad-opengl.a"; sourceTree = SOURCE_ROOT; };
+		37713327125229AD000D7207 /* libisimulate-ipad.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libisimulate-ipad.a"; path = "../../Frameworks/iSimulate/ipad/libisimulate-ipad.a"; sourceTree = SOURCE_ROOT; };
+		3771333B12523025000D7207 /* TVOutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TVOutManager.h; path = ../../Frameworks/TVOutManager/TVOutManager.h; sourceTree = SOURCE_ROOT; };
+		3771333C12523025000D7207 /* TVOutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TVOutManager.m; path = ../../Frameworks/TVOutManager/TVOutManager.m; sourceTree = SOURCE_ROOT; };
 		3775F9BF11D860BA00D69AC5 /* Default-iPad-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-iPad-Landscape.png"; path = "../../Resources-iPad/Default-iPad-Landscape.png"; sourceTree = "<group>"; };
 		3775F9C011D860BA00D69AC5 /* Default-iPad-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-iPad-Portrait.png"; path = "../../Resources-iPad/Default-iPad-Portrait.png"; sourceTree = "<group>"; };
 		3775FA3A11D86E1700D69AC5 /* LegislatorDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorDetailViewController.h; path = "Classes/Detail View Controllers/LegislatorDetailViewController.h"; sourceTree = SOURCE_ROOT; };
@@ -1958,6 +1963,7 @@
 		3721EA4F11D6E6EA00CA33DA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3771332D12523025000D7207 /* TVOutManager */,
 				37712D1612512A8300EC664D /* iSimulate */,
 				37242DD512417662005C43D3 /* JSON-Framework */,
 				37CF6BB11226595D00456D29 /* UIColor+Expanded */,
@@ -2074,14 +2080,6 @@
 			);
 			name = "Concurrent Images";
 			path = "UIImageView+Cached";
-			sourceTree = "<group>";
-		};
-		374E98C81251A6A400E04639 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-				37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */,
-			);
-			name = "New Group";
 			sourceTree = "<group>";
 		};
 		376366DD11FFB45D0052A2A9 /* TouchCode */ = {
@@ -2201,6 +2199,7 @@
 		37712D1612512A8300EC664D /* iSimulate */ = {
 			isa = PBXGroup;
 			children = (
+				37713325125229AD000D7207 /* ipad */,
 				37712D1712512A8300EC664D /* libisimulate-3 */,
 				37712D1A12512A8300EC664D /* libisimulate-4 */,
 			);
@@ -2224,6 +2223,26 @@
 			);
 			name = "libisimulate-4";
 			path = "../../Frameworks/iSimulate/libisimulate-4";
+			sourceTree = SOURCE_ROOT;
+		};
+		37713325125229AD000D7207 /* ipad */ = {
+			isa = PBXGroup;
+			children = (
+				37713326125229AD000D7207 /* libisimulate-ipad-opengl.a */,
+				37713327125229AD000D7207 /* libisimulate-ipad.a */,
+			);
+			name = ipad;
+			path = ../../Frameworks/iSimulate/ipad;
+			sourceTree = SOURCE_ROOT;
+		};
+		3771332D12523025000D7207 /* TVOutManager */ = {
+			isa = PBXGroup;
+			children = (
+				3771333B12523025000D7207 /* TVOutManager.h */,
+				3771333C12523025000D7207 /* TVOutManager.m */,
+			);
+			name = TVOutManager;
+			path = ../../Frameworks/TVOutManager;
 			sourceTree = SOURCE_ROOT;
 		};
 		378678F511E452EF0003690F /* Resources-iPhone */ = {
@@ -2289,7 +2308,7 @@
 				3735E1CC1209B09F0000AF5A /* TexLegeTheme.h */,
 				3735E1CD1209B09F0000AF5A /* TexLegeTheme.m */,
 				37A0C6011211DB810067F7AF /* TexLegeEmailComposer.h */,
-				374E98C81251A6A400E04639 /* New Group */,
+				37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */,
 				3747C29411E7B8F400A6D8C6 /* SynthesizeSingleton.h */,
 				37BACDFA1218D834000C8E5D /* UIApplication+ScreenMirroring.h */,
 				37BACDF91218D834000C8E5D /* UIApplication+ScreenMirroring.m */,
@@ -3878,6 +3897,7 @@
 				37B3CF20124946B800FB3F94 /* IntelligentSplitViewController.m in Sources */,
 				371B6B8E124C074C00442B74 /* TexLegeDataImporter.m in Sources */,
 				379B9CD11250FE7E0032E616 /* TexLegeReachability.m in Sources */,
+				3771334C12523025000D7207 /* TVOutManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3912,6 +3932,7 @@
 					"\"$(SRCROOT)/../../Frameworks/Localytics\"",
 					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-3\"",
 					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-4\"",
+					"\"$(SRCROOT)/../../Frameworks/iSimulate/ipad\"",
 				);
 				PRODUCT_NAME = TexLege;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3938,6 +3959,7 @@
 					"\"$(SRCROOT)/../../Frameworks/Localytics\"",
 					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-3\"",
 					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-4\"",
+					"\"$(SRCROOT)/../../Frameworks/iSimulate/ipad\"",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
@@ -4000,6 +4022,7 @@
 					"\"$(SRCROOT)/../../Frameworks/Localytics\"",
 					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-3\"",
 					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-4\"",
+					"\"$(SRCROOT)/../../Frameworks/iSimulate/ipad\"",
 				);
 				PREBINDING = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4063,6 +4086,7 @@
 					"\"$(SRCROOT)/../../Frameworks/Localytics\"",
 					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-3\"",
 					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-4\"",
+					"\"$(SRCROOT)/../../Frameworks/iSimulate/ipad\"",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
