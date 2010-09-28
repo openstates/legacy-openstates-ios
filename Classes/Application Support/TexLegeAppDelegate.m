@@ -16,7 +16,7 @@
 #import "MiniBrowserController.h"
 #import "GeneralTableViewController.h"
 #import "TableDataSourceProtocol.h"
-#import "UIApplication+ScreenMirroring.h"
+//#import "UIApplication+ScreenMirroring.h"
 #import "AnalyticsOptInAlertController.h"
 
 #import "LocalyticsSession.h"
@@ -368,24 +368,21 @@ NSInteger kNoSelection = -1;
 	
     //[self.mainWindow setBackgroundColor:[UIColor whiteColor]];
 	
-	NSString *loadingString = @"Default.png";
-	if ([UtilityMethods isIPadDevice]) {
-		if ([UtilityMethods isLandscapeOrientation])
-			loadingString = @"Default-iPad-Landscape.png";
-		else
-			loadingString = @"Default-iPad-Portrait.png";
+	if (![UtilityMethods isIPadDevice]) {
+		NSString *loadingString = @"Default.png";
+		UIImage *loadingImage = [UIImage imageNamed:loadingString];
+		UIImageView *loadingView = [[UIImageView alloc] initWithImage:loadingImage];
+		loadingView.tag = 8888;
+		[self.mainWindow addSubview:loadingView];
+		[loadingView release];
+		[self performSelector:@selector(finalizeStartup:) withObject:nil afterDelay:0.0f];
 	}
-	
-	UIImage *loadingImage = [UIImage imageNamed:loadingString];
-	UIImageView *loadingView = [[UIImageView alloc] initWithImage:loadingImage];
-	loadingView.tag = 8888;
- 	[self.mainWindow addSubview:loadingView];
-	[loadingView release];
+	else
+		[self performSelector:@selector(finalizeStartup:) withObject:nil];
 	
 	// make the window visible
 	[self.mainWindow makeKeyAndVisible];
 	
-	[self performSelector:@selector(finalizeStartup:) withObject:nil afterDelay:0.0f];
 	
 	return YES;
 }
@@ -418,9 +415,9 @@ NSInteger kNoSelection = -1;
 #endif
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application		{[[UIApplication sharedApplication] setupScreenMirroring];}
+//- (void)applicationDidBecomeActive:(UIApplication *)application		{[[UIApplication sharedApplication] setupScreenMirroring];}
 
-- (void)applicationWillResignActive:(UIApplication *)application	{[[UIApplication sharedApplication] disableScreenMirroring];}
+//- (void)applicationWillResignActive:(UIApplication *)application	{[[UIApplication sharedApplication] disableScreenMirroring];}
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {

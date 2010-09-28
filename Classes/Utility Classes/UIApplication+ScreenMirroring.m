@@ -37,7 +37,7 @@ NSString * const UIApplicationDidDisableScreenMirroringNotification = @"UIApplic
 // Assuming CA loops at 60.0 fps (which is true on iPhone OS 3 : iPhone, iPad...)
 #define CORE_ANIMATION_MAX_FRAMES_PER_SECOND (60)
 
-CGImageRef UIGetScreenImage(); // Not so private API anymore
+//CGImageRef UIGetScreenImage(); // Not so private API anymore
 
 static CFTimeInterval startTime = 0;
 static NSUInteger frames = 0;
@@ -251,14 +251,35 @@ static UIImageView *mirroredImageView = nil;
 
 - (void) updateMirroredScreenOnDisplayLink
 {
-	// Get a screenshot of the main window
-	CGImageRef mainWindowScreenshot = UIGetScreenImage();
+	// from http://developer.apple.com/iphone/library/qa/qa2010/qa1703.html	
+	// bonus, this works in the simulator; sadly, it doesn't capture the status bar
+	//
+	// if you are making an OpenGL app, use UIGetScreenImage() above or switch the
+	// following code to match Apple's sample at http://developer.apple.com/iphone/library/qa/qa2010/qa1704.html
+	// note that you'll need to pass in a reference to your eaglview to get that to work.
+	UIGraphicsBeginImageContext([[UIApplication sharedApplication] keyWindow].bounds.size);
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	
+	// get every window's contents (i.e. so you can see alerts, ads, etc.)
+	for (UIWindow *window in [[UIApplication sharedApplication] windows])
+	{
+		if (![window respondsToSelector:@selector(screen)] || [window screen] == [UIScreen mainScreen])
+		{
+			CGContextSaveGState(context);
+			CGContextTranslateCTM(context, [window center].x, [window center].y);
+			CGContextConcatCTM(context, [window transform]);
+			CGContextTranslateCTM(context, -[window bounds].size.width * window.layer.anchorPoint.x, -[window bounds].size.height * window.layer.anchorPoint.y);
+			[[window layer] renderInContext:context];
+			CGContextRestoreGState(context);
+		}
+	}	
+	UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
+	CGImageRef mainWindowScreenshot = [image CGImage];
+	UIGraphicsEndImageContext();	
+	
 	if (mainWindowScreenshot) {
 		// Copy to secondary screen
 		mirroredScreenWindow.layer.contents = (id) mainWindowScreenshot;
-		// Clean up as UIGetScreenImage does NOT respect retain / release semantics
-		CFRelease(mainWindowScreenshot); 
 	}
 }
-
 @end
