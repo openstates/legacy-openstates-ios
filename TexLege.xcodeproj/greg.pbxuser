@@ -22,9 +22,9 @@
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeArchitecturePreference = armv6;
-		activeBuildConfigurationName = Debug;
+		activeBuildConfigurationName = "AdHoc Distribution";
 		activeExecutable = 37315BBA0F6C739400D0A9DF /* TexLege */;
-		activeSDKPreference = iphonesimulator4.1;
+		activeSDKPreference = iphoneos4.1;
 		activeTarget = 1D6058900D05DD3D006BFB54 /* TexLege */;
 		addToTargets = (
 			1D6058900D05DD3D006BFB54 /* TexLege */,
@@ -274,6 +274,12 @@
 			3771340812524493000D7207 /* PBXTextBookmark */ = 3771340812524493000D7207 /* PBXTextBookmark */;
 			3771340912524493000D7207 /* PBXTextBookmark */ = 3771340912524493000D7207 /* PBXTextBookmark */;
 			377134131252466A000D7207 /* PBXTextBookmark */ = 377134131252466A000D7207 /* PBXTextBookmark */;
+			3771345512524B3B000D7207 /* XCBuildMessageTextBookmark */ = 3771345512524B3B000D7207 /* XCBuildMessageTextBookmark */;
+			3771345612524B3B000D7207 /* PBXTextBookmark */ = 3771345612524B3B000D7207 /* PBXTextBookmark */;
+			3771345712524B46000D7207 /* XCBuildMessageTextBookmark */ = 3771345712524B46000D7207 /* XCBuildMessageTextBookmark */;
+			3771345812524B46000D7207 /* PBXTextBookmark */ = 3771345812524B46000D7207 /* PBXTextBookmark */;
+			3771345912524B97000D7207 /* PBXTextBookmark */ = 3771345912524B97000D7207 /* PBXTextBookmark */;
+			3771345A12524B98000D7207 /* PBXTextBookmark */ = 3771345A12524B98000D7207 /* PBXTextBookmark */;
 			37C3AD061251B05200F93269 = 37C3AD061251B05200F93269 /* PBXTextBookmark */;
 			37C3AD071251B05200F93269 = 37C3AD071251B05200F93269 /* PBXTextBookmark */;
 			37C3AD511251B4C500F93269 = 37C3AD511251B4C500F93269 /* PBXTextBookmark */;
@@ -1469,9 +1475,9 @@
 	};
 	3771333C12523025000D7207 /* TVOutManager.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1209, 3627}}";
-			sepNavSelRange = "{8043, 0}";
-			sepNavVisRange = "{7614, 1523}";
+			sepNavIntBoundsRect = "{{0, 0}, {825, 3705}}";
+			sepNavSelRange = "{2076, 33}";
+			sepNavVisRange = "{0, 0}";
 		};
 	};
 	3771335C1252310A000D7207 /* PlistBookmark */ = {
@@ -2124,6 +2130,64 @@
 		rType = 0;
 		vrLen = 2181;
 		vrLoc = 8251;
+	};
+	3771345512524B3B000D7207 /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "Writable atomic property 'tvSafeMode' cannot pair a synthesized setter/getter with a user defined setter/getter";
+		fRef = 3771333C12523025000D7207 /* TVOutManager.m */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 1;
+		rLoc = 68;
+		rType = 1;
+	};
+	3771345612524B3B000D7207 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3771333C12523025000D7207 /* TVOutManager.m */;
+		name = "TVOutManager.m: 69";
+		rLen = 33;
+		rLoc = 2076;
+		rType = 0;
+		vrLen = 399;
+		vrLoc = 1974;
+	};
+	3771345712524B46000D7207 /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "Writable atomic property 'tvSafeMode' cannot pair a synthesized setter/getter with a user defined setter/getter";
+		fRef = 3771333C12523025000D7207 /* TVOutManager.m */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 1;
+		rLoc = 68;
+		rType = 1;
+	};
+	3771345812524B46000D7207 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3771333C12523025000D7207 /* TVOutManager.m */;
+		name = "TVOutManager.m: 69";
+		rLen = 33;
+		rLoc = 2076;
+		rType = 0;
+		vrLen = 0;
+		vrLoc = 0;
+	};
+	3771345912524B97000D7207 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3771333C12523025000D7207 /* TVOutManager.m */;
+		name = "TVOutManager.m: 69";
+		rLen = 33;
+		rLoc = 2076;
+		rType = 0;
+		vrLen = 399;
+		vrLoc = 1974;
+	};
+	3771345A12524B98000D7207 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3771333C12523025000D7207 /* TVOutManager.m */;
+		name = "TVOutManager.m: 69";
+		rLen = 33;
+		rLoc = 2076;
+		rType = 0;
+		vrLen = 0;
+		vrLoc = 0;
 	};
 	3775FA3A11D86E1700D69AC5 /* LegislatorDetailViewController.h */ = {
 		uiCtxt = {
