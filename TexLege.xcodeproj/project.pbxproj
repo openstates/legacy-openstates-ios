@@ -204,7 +204,6 @@
 		37B3CEB412493D3100FB3F94 /* MapMiniDetailViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37B3CEB312493D3100FB3F94 /* MapMiniDetailViewController~iphone.xib */; };
 		37B3CF20124946B800FB3F94 /* IntelligentSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B3CF1F124946B800FB3F94 /* IntelligentSplitViewController.m */; };
 		37B64234120FE9FF0076B196 /* LegislatorMasterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B64233120FE9FF0076B196 /* LegislatorMasterCell.m */; };
-		37BACDFB1218D834000C8E5D /* UIApplication+ScreenMirroring.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BACDF91218D834000C8E5D /* UIApplication+ScreenMirroring.m */; };
 		37BE344E1232A018001D28B1 /* ChartsTemplate~iphone.htm in Resources */ = {isa = PBXBuildFile; fileRef = 37BE344D1232A018001D28B1 /* ChartsTemplate~iphone.htm */; };
 		37BE34521232A0A1001D28B1 /* ChartsTemplate~ipad.htm in Resources */ = {isa = PBXBuildFile; fileRef = 37BE34511232A0A1001D28B1 /* ChartsTemplate~ipad.htm */; };
 		37BF251211D64B5400B71688 /* LegislatorDetailViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37BF251111D64B5400B71688 /* LegislatorDetailViewController~ipad.xib */; };
@@ -2077,6 +2076,14 @@
 			path = "UIImageView+Cached";
 			sourceTree = "<group>";
 		};
+		374E98C81251A6A400E04639 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */,
+			);
+			name = "New Group";
+			sourceTree = "<group>";
+		};
 		376366DD11FFB45D0052A2A9 /* TouchCode */ = {
 			isa = PBXGroup;
 			children = (
@@ -2282,7 +2289,7 @@
 				3735E1CC1209B09F0000AF5A /* TexLegeTheme.h */,
 				3735E1CD1209B09F0000AF5A /* TexLegeTheme.m */,
 				37A0C6011211DB810067F7AF /* TexLegeEmailComposer.h */,
-				37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */,
+				374E98C81251A6A400E04639 /* New Group */,
 				3747C29411E7B8F400A6D8C6 /* SynthesizeSingleton.h */,
 				37BACDFA1218D834000C8E5D /* UIApplication+ScreenMirroring.h */,
 				37BACDF91218D834000C8E5D /* UIApplication+ScreenMirroring.m */,
@@ -3765,7 +3772,6 @@
 				374C36BA1215E55F006B6ADA /* CalendarMasterViewController.m in Sources */,
 				374C36E61215E8DA006B6ADA /* CapitolMapsMasterViewController.m in Sources */,
 				374C37051215EB2D006B6ADA /* LinksMasterViewController.m in Sources */,
-				37BACDFB1218D834000C8E5D /* UIApplication+ScreenMirroring.m in Sources */,
 				378B57AA1219913400F7ED0B /* MapViewController.m in Sources */,
 				378B57BE121994C400F7ED0B /* UIDevice-Hardware.m in Sources */,
 				37EAE4B1121A57D100BF4277 /* BSAddressComponent.m in Sources */,
@@ -4030,7 +4036,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
-				PROVISIONING_PROFILE = "4A16030E-4490-4690-B3AA-CC40BDF63302";
+				PROVISIONING_PROFILE = "D70575FB-7E7D-4022-AE95-E720D41D6C7D";
 				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
