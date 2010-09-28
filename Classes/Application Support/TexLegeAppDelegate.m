@@ -16,7 +16,7 @@
 #import "MiniBrowserController.h"
 #import "GeneralTableViewController.h"
 #import "TableDataSourceProtocol.h"
-//#import "UIApplication+ScreenMirroring.h"
+
 #import "AnalyticsOptInAlertController.h"
 
 #import "LocalyticsSession.h"
@@ -32,7 +32,8 @@
 #import "TexLegeDataExporter.h"
 #endif
 
-#define APPLICATION_DATA_VERSION 2
+//#import "UIApplication+ScreenMirroring.h"
+#import "TVOutManager.h"
 
 @interface TexLegeAppDelegate (Private)
 
@@ -419,9 +420,15 @@ NSInteger kNoSelection = -1;
 #endif
 }
 
-//- (void)applicationDidBecomeActive:(UIApplication *)application		{[[UIApplication sharedApplication] setupScreenMirroring];}
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+	//[[UIApplication sharedApplication] setupScreenMirroring];
+	[[TVOutManager sharedInstance] startTVOut];
+}
 
-//- (void)applicationWillResignActive:(UIApplication *)application	{[[UIApplication sharedApplication] disableScreenMirroring];}
+- (void)applicationWillResignActive:(UIApplication *)application {
+	//[[UIApplication sharedApplication] disableScreenMirroring];
+	[[TVOutManager sharedInstance] stopTVOut];
+}
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {

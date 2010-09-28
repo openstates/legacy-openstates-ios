@@ -29,7 +29,6 @@ enum
 	eTAG_SAFARI  = 994,
 };
 
-
 @implementation MiniBrowserController
 
 @synthesize m_urlRequestToLoad, m_loadingItemList, link, m_activity, m_loadingLabel, isSharedBrowser;
@@ -446,7 +445,9 @@ static MiniBrowserController *s_browser = nil;
 																			 subject:@"TexLege Support Question" 
 																				body:@"" commander:[[TexLegeAppDelegate appDelegate] detailNavigationController]];
 		else {
-			NSURL *aURL = [UtilityMethods safeWebUrlFromString:link.url];
+			// if we add escapes, we'll wind up junking our existing "safe" url string.  We do this since we don't allow editing links anymore.  
+			//NSURL *aURL = [UtilityMethods safeWebUrlFromString:link.url];
+			NSURL *aURL = [link actualURL];
 			if (aURL && [TexLegeReachability canReachHostWithURL:aURL alert:YES]) { // got a network connection
 				[self loadURL:aURL];
 			}
@@ -454,10 +455,7 @@ static MiniBrowserController *s_browser = nil;
 				return;
 			
 			self.title = link.label;
-			//self.m_toolBar.hidden = ([UtilityMethods isIPadDevice] && [link.label isEqualToString:@"TexLege Information"]);
-
 		}
-		
 	}
 	
 }

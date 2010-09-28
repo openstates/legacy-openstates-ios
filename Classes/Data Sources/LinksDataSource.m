@@ -19,11 +19,6 @@ enum Sections {
     kBodySection,
     NUM_SECTIONS
 };
-enum HeaderSectionRows {
-    kHeaderSectionThisAppRow = 0,
-	kHeaderSectionContactRow,
-    NUM_HEADER_SECTION_ROWS,		
-};
 
 @synthesize fetchedResultsController, managedObjectContext;
 
@@ -105,24 +100,8 @@ enum HeaderSectionRows {
 		return @"Web Resources";		
 }
 
-- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
-	LinkObj * link = [self.fetchedResultsController objectAtIndexPath:indexPath];	
-	
-	if ([link.url isEqualToString:@"aboutView"]) {
-		NSString *path = nil;
-		if ([UtilityMethods isIPadDevice])
-			path = [[NSBundle mainBundle] pathForResource:@"TexLegeInfo~ipad" ofType:@"htm"];
-		else
-			path = [[NSBundle mainBundle] pathForResource:@"TexLegeInfo~iphone" ofType:@"htm"];
-		
-		path = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		
-		NSString *urlString = [[NSString alloc] initWithFormat:@"file://%@", path];
-		link.url = urlString;
-		[urlString release];
-	}
-	
-	return link;	
+- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {		
+	return [self.fetchedResultsController objectAtIndexPath:indexPath];;	
 }
 
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject {

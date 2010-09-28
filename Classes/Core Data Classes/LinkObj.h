@@ -18,6 +18,8 @@
 @property (nonatomic, retain) NSString * label;
 @property (nonatomic, retain) NSNumber * section;
 
+- (NSURL *) actualURL;
+
 @end
 
 
