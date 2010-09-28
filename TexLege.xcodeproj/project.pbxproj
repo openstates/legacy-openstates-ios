@@ -94,6 +94,8 @@
 		370C270C1225BF7E004273E3 /* DistrictMapDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */; };
 		370F7AA911FEAF730004AC50 /* PolygonMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 370F7AA811FEAF730004AC50 /* PolygonMath.m */; };
 		37155728100859E700FA57DB /* CommitteeObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37155727100859E700FA57DB /* CommitteeObj.m */; };
+		371B6B85124C06E500442B74 /* LinkObj.plist in Resources */ = {isa = PBXBuildFile; fileRef = 37242C3F12414ED4005C43D3 /* LinkObj.plist */; };
+		371B6B8E124C074C00442B74 /* TexLegeDataImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 37242B50124117E2005C43D3 /* TexLegeDataImporter.m */; };
 		37242D3612415CC4005C43D3 /* LegislatorContributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37242D3512415CC4005C43D3 /* LegislatorContributionsViewController.m */; };
 		37242DE112417662005C43D3 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 37242DD812417662005C43D3 /* NSObject+SBJSON.m */; };
 		37242DE212417662005C43D3 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 37242DDA12417662005C43D3 /* NSString+SBJSON.m */; };
@@ -140,8 +142,6 @@
 		376472C211D5AAFB00E6E27F /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 376472C111D5AAFB00E6E27F /* UIImage+Resize.m */; };
 		376487C210274F1E001E482D /* MiniBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376487BF10274F1E001E482D /* MiniBrowserController.m */; };
 		376487C310274F1E001E482D /* MiniBrowserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 376487C010274F1E001E482D /* MiniBrowserView.xib */; };
-		3764887110275511001E482D /* fwdButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 3764886F10275511001E482D /* fwdButton.png */; };
-		3764887210275511001E482D /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 3764887010275511001E482D /* backButton.png */; };
 		3764E8CB1217B83F008DF726 /* NotesView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3764E8CA1217B83F008DF726 /* NotesView~ipad.xib */; };
 		3766EFC112109F110073C705 /* TexLegeStrings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3766EFC012109F110073C705 /* TexLegeStrings.plist */; };
 		3767142211E833BA00D004C8 /* UIImage+ResolutionIndependent.m in Sources */ = {isa = PBXBuildFile; fileRef = 3767142111E833BA00D004C8 /* UIImage+ResolutionIndependent.m */; };
@@ -176,6 +176,7 @@
 		378B57BE121994C400F7ED0B /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3767140011E8319900D004C8 /* UIDevice-Hardware.m */; };
 		378B58FB1219BB9C00F7ED0B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 378B58FA1219BB9C00F7ED0B /* CoreLocation.framework */; };
 		379393FE123B1A82003103B3 /* CommitteeMemberCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 379393FD123B1A82003103B3 /* CommitteeMemberCellView.m */; };
+		379B9CD11250FE7E0032E616 /* TexLegeReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 379B9CD01250FE7E0032E616 /* TexLegeReachability.m */; };
 		379C1EEA1012DF28007844B5 /* NotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 379C1EE81012DF28007844B5 /* NotesViewController.m */; };
 		379C1F031012E0CD007844B5 /* NotesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 379C1F021012E0CD007844B5 /* NotesView.xib */; };
 		379D0D45122D5CDE0021969C /* TexLegeCoreDataUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 379D0CC2122D49000021969C /* TexLegeCoreDataUtils.m */; };
@@ -627,6 +628,10 @@
 		37EAE54F121A6D9A00BF4277 /* CustomAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE54E121A6D9A00BF4277 /* CustomAnnotation.m */; };
 		37F1B93D123E089500FB25AF /* 103-map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3726FC3C120A99800043D6B9 /* 103-map@2x.png */; };
 		37F510AA0FF1ADEF0020A13B /* Icon_80.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F510A90FF1ADEF0020A13B /* Icon_80.png */; };
+		37FF9E931251458C00FA56E0 /* arrow_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 37FF9E8F1251458C00FA56E0 /* arrow_left.png */; };
+		37FF9E941251458C00FA56E0 /* arrow_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37FF9E901251458C00FA56E0 /* arrow_left@2x.png */; };
+		37FF9E951251458C00FA56E0 /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 37FF9E911251458C00FA56E0 /* arrow_right.png */; };
+		37FF9E961251458C00FA56E0 /* arrow_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37FF9E921251458C00FA56E0 /* arrow_right@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -894,7 +899,6 @@
 		37412A37124322C400807502 /* LegislatorContributionsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorContributionsDataSource.h; sourceTree = "<group>"; };
 		37412A38124322C400807502 /* LegislatorContributionsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorContributionsDataSource.m; sourceTree = "<group>"; };
 		37413B1612114D09003CA7E8 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		3741417310054AAA0025D3AE /* leave_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leave_arrow.png; sourceTree = "<group>"; };
 		3742D6ED122E18D100698483 /* DistrictMapSearchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictMapSearchOperation.h; sourceTree = "<group>"; };
 		3742D6EE122E18D100698483 /* DistrictMapSearchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictMapSearchOperation.m; sourceTree = "<group>"; };
 		3742D721122E1FDF00698483 /* NSInvocation+CWVariableArguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSInvocation+CWVariableArguments.h"; path = "Classes/Utility Classes/NSInvocation+CWVariableArguments.h"; sourceTree = SOURCE_ROOT; };
@@ -920,8 +924,6 @@
 		376487BF10274F1E001E482D /* MiniBrowserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MiniBrowserController.m; sourceTree = "<group>"; };
 		376487C010274F1E001E482D /* MiniBrowserView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MiniBrowserView.xib; path = Resources/MiniBrowserView.xib; sourceTree = "<group>"; };
 		376487C110274F1E001E482D /* MiniBrowserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MiniBrowserController.h; sourceTree = "<group>"; };
-		3764886F10275511001E482D /* fwdButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fwdButton.png; sourceTree = "<group>"; };
-		3764887010275511001E482D /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backButton.png; sourceTree = "<group>"; };
 		3764E84E1217A6B1008DF726 /* ColoredBarButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColoredBarButtonView.h; path = "Classes/Custom Cells and Views/ColoredBarButtonView.h"; sourceTree = SOURCE_ROOT; };
 		3764E84F1217A6B1008DF726 /* ColoredBarButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColoredBarButtonView.m; path = "Classes/Custom Cells and Views/ColoredBarButtonView.m"; sourceTree = SOURCE_ROOT; };
 		3764E8CA1217B83F008DF726 /* NotesView~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "NotesView~ipad.xib"; path = "Resources-iPad/NotesView~ipad.xib"; sourceTree = "<group>"; };
@@ -953,6 +955,8 @@
 		376B5BDC0FC1DC640094D80B /* Map.CapitolComplex.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.CapitolComplex.pdf; path = Resources/Maps/Map.CapitolComplex.pdf; sourceTree = "<group>"; };
 		376B5BE10FC1DC640094D80B /* Map.MonumentGuide.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.MonumentGuide.pdf; path = Resources/Maps/Map.MonumentGuide.pdf; sourceTree = "<group>"; };
 		376F0FB90FCBD4140011F813 /* Legislators.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Legislators.plist; sourceTree = "<group>"; };
+		37712D1812512A8300EC664D /* libisimulate-3.x.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libisimulate-3.x.a"; path = "../../Frameworks/iSimulate/libisimulate-3/libisimulate-3.x.a"; sourceTree = SOURCE_ROOT; };
+		37712D1B12512A8300EC664D /* libisimulate-4.x.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libisimulate-4.x.a"; path = "../../Frameworks/iSimulate/libisimulate-4/libisimulate-4.x.a"; sourceTree = SOURCE_ROOT; };
 		3775F9BF11D860BA00D69AC5 /* Default-iPad-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-iPad-Landscape.png"; path = "../../Resources-iPad/Default-iPad-Landscape.png"; sourceTree = "<group>"; };
 		3775F9C011D860BA00D69AC5 /* Default-iPad-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-iPad-Portrait.png"; path = "../../Resources-iPad/Default-iPad-Portrait.png"; sourceTree = "<group>"; };
 		3775FA3A11D86E1700D69AC5 /* LegislatorDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorDetailViewController.h; path = "Classes/Detail View Controllers/LegislatorDetailViewController.h"; sourceTree = SOURCE_ROOT; };
@@ -961,7 +965,6 @@
 		37782582121217B7001BD23D /* NSData+Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Encryption.h"; path = "Classes/Utility Classes/NSData+Encryption.h"; sourceTree = SOURCE_ROOT; };
 		37782583121217B7001BD23D /* NSData+Encryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Encryption.m"; path = "Classes/Utility Classes/NSData+Encryption.m"; sourceTree = SOURCE_ROOT; };
 		37782771121303C1001BD23D /* Default@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x~iphone.png"; sourceTree = "<group>"; };
-		3778292B12133709001BD23D /* uparrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = uparrow.png; sourceTree = "<group>"; };
 		3778E80D11EDC19800278273 /* Slider_Question_big.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Slider_Question_big.png; sourceTree = "<group>"; };
 		3778E80E11EDC19800278273 /* Slider_Question_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Slider_Question_big@2x.png"; sourceTree = "<group>"; };
 		3778E80F11EDC19800278273 /* Slider_Question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Slider_Question.png; sourceTree = "<group>"; };
@@ -988,6 +991,8 @@
 		378B58FA1219BB9C00F7ED0B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		379393FC123B1A82003103B3 /* CommitteeMemberCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommitteeMemberCellView.h; path = "Classes/Custom Cells and Views/CommitteeMemberCellView.h"; sourceTree = SOURCE_ROOT; };
 		379393FD123B1A82003103B3 /* CommitteeMemberCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommitteeMemberCellView.m; path = "Classes/Custom Cells and Views/CommitteeMemberCellView.m"; sourceTree = SOURCE_ROOT; };
+		379B9CCF1250FE7E0032E616 /* TexLegeReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeReachability.h; sourceTree = "<group>"; };
+		379B9CD01250FE7E0032E616 /* TexLegeReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeReachability.m; sourceTree = "<group>"; };
 		379C1EE81012DF28007844B5 /* NotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotesViewController.m; path = "Classes/Detail View Controllers/NotesViewController.m"; sourceTree = SOURCE_ROOT; };
 		379C1EE91012DF28007844B5 /* NotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotesViewController.h; path = "Classes/Detail View Controllers/NotesViewController.h"; sourceTree = SOURCE_ROOT; };
 		379C1F021012E0CD007844B5 /* NotesView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = NotesView.xib; path = Resources/NotesView.xib; sourceTree = "<group>"; };
@@ -1662,6 +1667,10 @@
 		37FBB75A122253BC00CD8E20 /* DistrictOfficeMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictOfficeMasterViewController.h; sourceTree = "<group>"; };
 		37FBB75B122253BC00CD8E20 /* DistrictOfficeMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictOfficeMasterViewController.m; sourceTree = "<group>"; };
 		37FBB77B122257AF00CD8E20 /* DistrictOfficeMasterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = DistrictOfficeMasterViewController.xib; path = Resources/DistrictOfficeMasterViewController.xib; sourceTree = SOURCE_ROOT; };
+		37FF9E8F1251458C00FA56E0 /* arrow_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_left.png; path = "Resources/UI Graphics/arrow_left.png"; sourceTree = SOURCE_ROOT; };
+		37FF9E901251458C00FA56E0 /* arrow_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrow_left@2x.png"; path = "Resources/UI Graphics/arrow_left@2x.png"; sourceTree = SOURCE_ROOT; };
+		37FF9E911251458C00FA56E0 /* arrow_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_right.png; path = "Resources/UI Graphics/arrow_right.png"; sourceTree = SOURCE_ROOT; };
+		37FF9E921251458C00FA56E0 /* arrow_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrow_right@2x.png"; path = "Resources/UI Graphics/arrow_right@2x.png"; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1950,6 +1959,7 @@
 		3721EA4F11D6E6EA00CA33DA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				37712D1612512A8300EC664D /* iSimulate */,
 				37242DD512417662005C43D3 /* JSON-Framework */,
 				37CF6BB11226595D00456D29 /* UIColor+Expanded */,
 				37A4E5BA1223830800BCE44D /* Localytics */,
@@ -2081,14 +2091,14 @@
 		3766EE1212108E610073C705 /* Detail View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				373AB3B70FD3389F0065740E /* TableCellDataObject.h */,
+				373AB3B80FD3389F0065740E /* TableCellDataObject.m */,
 				376487C110274F1E001E482D /* MiniBrowserController.h */,
 				376487BF10274F1E001E482D /* MiniBrowserController.m */,
 				379C1EE91012DF28007844B5 /* NotesViewController.h */,
 				379C1EE81012DF28007844B5 /* NotesViewController.m */,
 				3775FA3A11D86E1700D69AC5 /* LegislatorDetailViewController.h */,
 				3775FA3B11D86E1700D69AC5 /* LegislatorDetailViewController.m */,
-				373AB3B70FD3389F0065740E /* TableCellDataObject.h */,
-				373AB3B80FD3389F0065740E /* TableCellDataObject.m */,
 				37AD57B811DA651300D68934 /* CommitteeDetailViewController.h */,
 				37AD57B911DA651500D68934 /* CommitteeDetailViewController.m */,
 				37D1C525120272F000507757 /* CalendarDetailViewController.h */,
@@ -2110,6 +2120,10 @@
 			children = (
 				37C1FC88120B54F90031E13D /* TapkuLibrary.bundle */,
 				37D3640612362A7D00CCF86E /* map elements */,
+				37FF9E8F1251458C00FA56E0 /* arrow_left.png */,
+				37FF9E901251458C00FA56E0 /* arrow_left@2x.png */,
+				37FF9E911251458C00FA56E0 /* arrow_right.png */,
+				37FF9E921251458C00FA56E0 /* arrow_right@2x.png */,
 				37A2CCF0122C129B00339495 /* locationarrow.png */,
 				37A2CCF1122C129B00339495 /* locationarrow@2x.png */,
 				37E207C31220779B00103D76 /* bluestar.png */,
@@ -2124,14 +2138,10 @@
 				37D1C4D112026FE300507757 /* Month Calendar Shadow.png */,
 				3747BFA611E6890600A6D8C6 /* seal@2x.png */,
 				3747BFA711E6890600A6D8C6 /* seal.png */,
-				3741417310054AAA0025D3AE /* leave_arrow.png */,
-				3764886F10275511001E482D /* fwdButton.png */,
-				3764887010275511001E482D /* backButton.png */,
 				3778E80D11EDC19800278273 /* Slider_Question_big.png */,
 				3778E80E11EDC19800278273 /* Slider_Question_big@2x.png */,
 				3778E80F11EDC19800278273 /* Slider_Question.png */,
 				3778E81011EDC19800278273 /* Slider_Question@2x.png */,
-				3778292B12133709001BD23D /* uparrow.png */,
 				3726FC94120AABE10043D6B9 /* disclosure.png */,
 				3726FC95120AABE10043D6B9 /* disclosure@2x.png */,
 				3738E1211226DA3700DDD605 /* multipins.png */,
@@ -2180,6 +2190,34 @@
 			);
 			name = Maps;
 			sourceTree = "<group>";
+		};
+		37712D1612512A8300EC664D /* iSimulate */ = {
+			isa = PBXGroup;
+			children = (
+				37712D1712512A8300EC664D /* libisimulate-3 */,
+				37712D1A12512A8300EC664D /* libisimulate-4 */,
+			);
+			name = iSimulate;
+			path = ../../Frameworks/iSimulate;
+			sourceTree = SOURCE_ROOT;
+		};
+		37712D1712512A8300EC664D /* libisimulate-3 */ = {
+			isa = PBXGroup;
+			children = (
+				37712D1812512A8300EC664D /* libisimulate-3.x.a */,
+			);
+			name = "libisimulate-3";
+			path = "../../Frameworks/iSimulate/libisimulate-3";
+			sourceTree = SOURCE_ROOT;
+		};
+		37712D1A12512A8300EC664D /* libisimulate-4 */ = {
+			isa = PBXGroup;
+			children = (
+				37712D1B12512A8300EC664D /* libisimulate-4.x.a */,
+			);
+			name = "libisimulate-4";
+			path = "../../Frameworks/iSimulate/libisimulate-4";
+			sourceTree = SOURCE_ROOT;
 		};
 		378678F511E452EF0003690F /* Resources-iPhone */ = {
 			isa = PBXGroup;
@@ -2237,17 +2275,17 @@
 		37A0E4460FD2DEAA009B65F7 /* Utility Classes */ = {
 			isa = PBXGroup;
 			children = (
+				37D6E82610175F0800D4D7C2 /* UtilityMethods.h */,
+				37D6E82710175F0800D4D7C2 /* UtilityMethods.m */,
+				379B9CCF1250FE7E0032E616 /* TexLegeReachability.h */,
+				379B9CD01250FE7E0032E616 /* TexLegeReachability.m */,
 				3735E1CC1209B09F0000AF5A /* TexLegeTheme.h */,
 				3735E1CD1209B09F0000AF5A /* TexLegeTheme.m */,
 				37A0C6011211DB810067F7AF /* TexLegeEmailComposer.h */,
 				37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */,
+				3747C29411E7B8F400A6D8C6 /* SynthesizeSingleton.h */,
 				37BACDFA1218D834000C8E5D /* UIApplication+ScreenMirroring.h */,
 				37BACDF91218D834000C8E5D /* UIApplication+ScreenMirroring.m */,
-				3747C29411E7B8F400A6D8C6 /* SynthesizeSingleton.h */,
-				37D6E82610175F0800D4D7C2 /* UtilityMethods.h */,
-				37D6E82710175F0800D4D7C2 /* UtilityMethods.m */,
-				3709AEAC101FBE7900C1061B /* Reachability.h */,
-				3709AEAD101FBE7900C1061B /* Reachability.m */,
 				378B57BF121994DF00F7ED0B /* UIDevice-Hardware.h */,
 				3767140011E8319900D004C8 /* UIDevice-Hardware.m */,
 				376472C011D5AAFB00E6E27F /* UIImage+Resize.h */,
@@ -2263,6 +2301,8 @@
 				3742D721122E1FDF00698483 /* NSInvocation+CWVariableArguments.h */,
 				3742D722122E1FDF00698483 /* NSInvocation+CWVariableArguments.m */,
 				37F1B9E1123E754300FB25AF /* NSManagedObject+MCManagedObjectDebug.h */,
+				3709AEAC101FBE7900C1061B /* Reachability.h */,
+				3709AEAD101FBE7900C1061B /* Reachability.m */,
 			);
 			path = "Utility Classes";
 			sourceTree = "<group>";
@@ -3154,6 +3194,7 @@
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				en,
+				English,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -3201,8 +3242,6 @@
 				37F510AA0FF1ADEF0020A13B /* Icon_80.png in Resources */,
 				379C1F031012E0CD007844B5 /* NotesView.xib in Resources */,
 				376487C310274F1E001E482D /* MiniBrowserView.xib in Resources */,
-				3764887110275511001E482D /* fwdButton.png in Resources */,
-				3764887210275511001E482D /* backButton.png in Resources */,
 				37BF251211D64B5400B71688 /* LegislatorDetailViewController~ipad.xib in Resources */,
 				3775F9C111D860BA00D69AC5 /* Default-iPad-Landscape.png in Resources */,
 				3775F9C211D860BA00D69AC5 /* Default-iPad-Portrait.png in Resources */,
@@ -3655,6 +3694,11 @@
 				37C1882712489F1A0028FD83 /* TexLege.v2.sqlite in Resources */,
 				37B3CE991249373100FB3F94 /* MapMiniDetailViewController~ipad.xib in Resources */,
 				37B3CEB412493D3100FB3F94 /* MapMiniDetailViewController~iphone.xib in Resources */,
+				371B6B85124C06E500442B74 /* LinkObj.plist in Resources */,
+				37FF9E931251458C00FA56E0 /* arrow_left.png in Resources */,
+				37FF9E941251458C00FA56E0 /* arrow_left@2x.png in Resources */,
+				37FF9E951251458C00FA56E0 /* arrow_right.png in Resources */,
+				37FF9E961251458C00FA56E0 /* arrow_right@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3826,6 +3870,8 @@
 				37412A39124322C400807502 /* LegislatorContributionsDataSource.m in Sources */,
 				37B3CE911249365E00FB3F94 /* MapMiniDetailViewController.m in Sources */,
 				37B3CF20124946B800FB3F94 /* IntelligentSplitViewController.m in Sources */,
+				371B6B8E124C074C00442B74 /* TexLegeDataImporter.m in Sources */,
+				379B9CD11250FE7E0032E616 /* TexLegeReachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3858,6 +3904,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../Frameworks/Localytics\"",
+					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-3\"",
+					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-4\"",
 				);
 				PRODUCT_NAME = TexLege;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3882,6 +3930,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../Frameworks/Localytics\"",
+					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-3\"",
+					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-4\"",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
@@ -3917,7 +3967,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3F7452DA-1F1E-4FD6-8E3B-053B66A674C6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EEEF3965-982D-44FE-A704-5FD26393F455";
 				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -3942,6 +3992,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../Frameworks/Localytics\"",
+					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-3\"",
+					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-4\"",
 				);
 				PREBINDING = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3978,7 +4030,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
-				PROVISIONING_PROFILE = "2947845B-547F-4783-B0C3-5CE68624E75D";
+				PROVISIONING_PROFILE = "4A16030E-4490-4690-B3AA-CC40BDF63302";
 				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -4003,6 +4055,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../Frameworks/Localytics\"",
+					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-3\"",
+					"\"$(SRCROOT)/../../Frameworks/iSimulate/libisimulate-4\"",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
@@ -4020,6 +4074,7 @@
 				CURRENT_PROJECT_VERSION = 2.0;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DEBUGGING_SYMBOLS = full;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
