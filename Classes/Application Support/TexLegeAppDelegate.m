@@ -44,7 +44,7 @@
 @end
 
 // user default dictionary keys
-NSString * const kSavedTabOrderKey = @"SavedTabOrderVersion2"
+NSString * const kSavedTabOrderKey = @"SavedTabOrderVersion2";
 NSString * const kRestoreSelectionKey = @"RestoreSelection";
 NSString * const kAnalyticsAskedForOptInKey = @"HasAskedForOptIn";
 NSString * const kAnalyticsSettingsSwitch = @"PermitUseOfAnalytics";
