@@ -32,6 +32,8 @@
 #import "TexLegeDataExporter.h"
 #endif
 
+#define APPLICATION_DATA_VERSION 2
+
 @interface TexLegeAppDelegate (Private)
 
 - (void)setupFeatures;
@@ -42,6 +44,7 @@
 @end
 
 // user default dictionary keys
+NSString * const kSavedTabOrderKey = @"SavedTabOrderVersion2"
 NSString * const kRestoreSelectionKey = @"RestoreSelection";
 NSString * const kAnalyticsAskedForOptInKey = @"HasAskedForOptIn";
 NSString * const kAnalyticsSettingsSwitch = @"PermitUseOfAnalytics";
@@ -211,7 +214,7 @@ NSInteger kNoSelection = -1;
 
 - (void)setTabOrderIfSaved {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSArray *savedOrder = [defaults arrayForKey:@"savedTabOrder"];
+	NSArray *savedOrder = [defaults arrayForKey:kSavedTabOrderKey];
 	NSMutableArray *orderedTabs = [NSMutableArray arrayWithCapacity:[self.tabBarController.viewControllers count]];
 	if ([savedOrder count] > 0 ) {
 		for (NSInteger i = 0; i < [savedOrder count]; i++){
@@ -401,7 +404,8 @@ NSInteger kNoSelection = -1;
 		for (UIViewController *aViewController in tabOrderToSave) {
 			[savedOrder addObject:aViewController.tabBarItem.title];
 		}
-		[[NSUserDefaults standardUserDefaults] setObject:savedOrder forKey:@"savedTabOrder"];
+		
+		[[NSUserDefaults standardUserDefaults] setObject:savedOrder forKey:kSavedTabOrderKey];
 	}
 	
 	// save the drill-down hierarchy of selections to preferences

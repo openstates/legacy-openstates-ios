@@ -25,6 +25,7 @@ extern NSString * const kShowedSplashScreenKey;
 extern NSString * const kSegmentControlPrefKey;
 extern NSString * const kResetChartCacheKey;
 extern NSString * const kResetSavedDatabaseKey;
+extern NSString * const kSavedTabOrderKey;
 
 #define m_iTunesAppID 326478866
 //#define m_iTunesURL @"http://itunes.com/us/app/TexLege"
