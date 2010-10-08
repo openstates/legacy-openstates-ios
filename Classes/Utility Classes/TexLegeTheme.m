@@ -44,6 +44,7 @@
 
 + (UIFont *)boldTen {return [UIFont fontWithName:@"HelveticaNeue-Bold" size:10.f];}
 + (UIFont *)boldTwelve {return [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.f];}
++ (UIFont *)boldFourteen {return [UIFont fontWithName:@"HelveticaNeue-Bold" size:14.f];}
 + (UIFont *)boldFifteen {return [UIFont fontWithName:@"HelveticaNeue-Bold" size:15.f];}
 
 + (void) logFontNames {	
