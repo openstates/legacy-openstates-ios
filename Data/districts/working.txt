@@ -4,5 +4,4 @@
 pimpdaddy:Programs greg$ pwd
 /Library/Frameworks/GDAL.framework/Versions/1.6/Programs
 -----------
-pimpdaddy:Programs greg$ ./ogr2ogr -f "KML" ~/Desktop/districts/planS01188/planS011885-5percent.kml ~/Desktop/districts/planS01188/planS01188.shp
-pimpdaddy:Programs greg$ ./ogr2ogr -f "KML" ~/Desktop/districts/planH01369/planH01369-5percent.kml ~/Desktop/districts/planH01369/planH01369.shp
+ ./ogr2ogr -f "KML" ~/Desktop/mything.kml ~/Desktop/planS01188.shp
