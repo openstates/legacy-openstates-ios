@@ -3,7 +3,7 @@
 //  TexLege
 //
 //  Created by Gregory Combs on 7/27/10.
-//  Copyright (c) 2010 University of Texas at Dallas. All rights reserved.
+//  Copyright (c) 2010 Gregory S. Combs. All rights reserved.
 //
 
 #import "CalendarDataSource.h"

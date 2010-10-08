@@ -1,10 +1,10 @@
 //
 //	LegislatorMasterTableViewCell.m
-//	New Image
 //
-//	Created by Gregory Combs on 8/8/10
-//	Copyright Like Thought, LLC. All rights reserved.
-//	THIS CODE IS FOR EVALUATION ONLY. YOU MAY NOT USE IT FOR ANY OTHER PURPOSE UNLESS YOU PURCHASE A LICENSE FOR OPACITY.
+//  TexLege
+//
+//  Created by Gregory Combs on 8/29/10.
+//  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
 #import "LegislatorCellQuartz.h"
@@ -502,7 +502,6 @@ const CGFloat kLegislatorTableViewCellHeight = 73.0;
 	CGImageRelease(contextImage);
 	
 	CGContextRestoreGState(context);
-	NSLog(@"Unregistered Copy of Opacity");
 	CGColorSpaceRelease(space);
 }
 

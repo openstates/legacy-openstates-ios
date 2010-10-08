@@ -1,10 +1,10 @@
 //
 //	DisclosureQuartzView.m
-//	
 //
-//	Created by  on 8/30/10
-//	Copyright Like Thought, LLC. All rights reserved.
-//	THIS CODE IS FOR EVALUATION ONLY. YOU MAY NOT USE IT FOR ANY OTHER PURPOSE UNLESS YOU PURCHASE A LICENSE FOR OPACITY.
+//  TexLege
+//
+//  Created by Gregory Combs on 8/29/10.
+//  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
 #import "DisclosureQuartzView.h"

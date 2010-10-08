@@ -3,7 +3,7 @@
  *  TexLege
  *
  *  Created by Gregory Combs on 7/13/09.
- *  Copyright 2009 University of Texas at Dallas. All rights reserved.
+ *  Copyright 2009 Gregory S. Combs. All rights reserved.
  *
  */
 

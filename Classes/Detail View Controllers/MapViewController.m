@@ -2,7 +2,7 @@
 //  MapViewController.m
 //
 //  Created by Gregory Combs on 8/16/10.
-//  Copyright 2010 University of Texas at Dallas. All rights reserved.
+//  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
 #import "MapViewController.h"

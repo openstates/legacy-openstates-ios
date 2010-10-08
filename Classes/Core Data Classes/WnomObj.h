@@ -3,7 +3,7 @@
 //  TexLege
 //
 //  Created by Gregory Combs on 7/22/10.
-//  Copyright 2010 University of Texas at Dallas. All rights reserved.
+//  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
 #import <CoreData/CoreData.h>
