@@ -59,7 +59,7 @@
 	nimsp.textColor = [TexLegeTheme navbar];
 	nimsp.lineBreakMode = UILineBreakModeWordWrap;
 	nimsp.numberOfLines = 3;
-	nimsp.text = @"Data generously provided by the National Institute for Money in State Politics.";
+	nimsp.text = @"Data generously provided by the National Institute on Money in State Politics.";
 	self.tableView.tableFooterView = nimsp;
 }
 
