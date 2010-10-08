@@ -97,6 +97,8 @@ enum {
  */
 
 @interface UIDevice (Hardware)
+- (double)availableMemory;
+
 - (NSString *) platform;
 - (NSUInteger) platformType;
 - (NSUInteger) platformCapabilities;
