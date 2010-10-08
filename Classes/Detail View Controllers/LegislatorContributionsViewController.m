@@ -11,6 +11,7 @@
 #import "TableCellDataObject.h"
 #import "UtilityMethods.h"
 #import "LocalyticsSession.h"
+#import "TexLegeTheme.h"
 
 @interface LegislatorContributionsViewController (Private)
 @end
@@ -49,6 +50,17 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contributionDataChanged:) name:kContributionsDataChangeNotificationKey object:self.dataSource];
 	self.tableView.dataSource = self.dataSource;
+	
+	UILabel *nimsp = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 66)] autorelease];
+	nimsp.backgroundColor = [UIColor clearColor];
+	nimsp.font = [TexLegeTheme boldFourteen];
+	nimsp.shadowColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+	nimsp.textAlignment = UITextAlignmentCenter;
+	nimsp.textColor = [TexLegeTheme navbar];
+	nimsp.lineBreakMode = UILineBreakModeWordWrap;
+	nimsp.numberOfLines = 3;
+	nimsp.text = @"Data generously provided by the National Institute for Money in State Politics.";
+	self.tableView.tableFooterView = nimsp;
 }
 
 
