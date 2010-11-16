@@ -193,7 +193,6 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 				action = [NSNumber numberWithInteger:kContributionQueryIndividual];
 			}
 			
-			
 			//double tempDouble = [[dict objectForKey:valueKey] doubleValue];
 			//NSNumber *amount = [NSNumber numberWithDouble:tempDouble];
 			
@@ -244,20 +243,26 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 			TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
 			NSString *name = [[dict objectForKey:@"recipient_name"] capitalizedString];
 			
+			id dataID = [dict objectForKey:@"recipient_entity"];
+
 			cellInfo.title = name;
 			cellInfo.subtitle = [numberFormatter stringFromNumber:amount];
-			cellInfo.entryValue = [dict objectForKey:@"recipient_entity"];
+			cellInfo.entryValue = dataID;
 			cellInfo.entryType = [self.queryType integerValue];
 			cellInfo.isClickable = YES;
 			cellInfo.parameter = self.queryCycle;
 			cellInfo.action = [NSNumber numberWithInteger:kContributionQueryRecipient];
 			
-			
-			if (!cellInfo.entryValue || ![cellInfo.entryValue length]) {	// we didn't receive an ID!!!
+			if (!dataID || [[NSNull null] isEqual:dataID] || ![dataID isKindOfClass:[NSString class]]) {
+				NSLog(@"ERROR - Contribution results lack have an empty entity ID for entity: %@", name);								
 				if ([[name uppercaseString] isEqualToString:@"BOB PERRY HOMES"])	// ala Bob Perry Homes
 					name = @"Perry Homes";
 				else if ([[name uppercaseString] hasPrefix:@"BOB PERRY"])	// ala Bob Perry Homes
 					name = @"Bob Perry";
+				else if ([[name uppercaseString] hasPrefix:@"HUMAN RIGHTS CAMPAIGN TEXAS FAMILIES"])
+					name = @"HRC TEXAS FAMILIES PAC";
+				else if ([[name uppercaseString] hasPrefix:@"TEXANS FOR RICK PERRY"])
+					name = @"RICK PERRY";
 				NSString *nameSearch = [name stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 				cellInfo.entryValue = nameSearch;
 				cellInfo.action = [NSNumber numberWithInteger:kContributionQueryEntitySearch];
@@ -286,9 +291,11 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 			TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
 			NSString *name = [[dict objectForKey:@"name"] capitalizedString];
 
+			id dataID = [dict objectForKey:@"id"];
+			
 			cellInfo.title = name;
 			cellInfo.subtitle = [numberFormatter stringFromNumber:amount];
-			cellInfo.entryValue = [dict objectForKey:@"id"];
+			cellInfo.entryValue = dataID;
 			cellInfo.entryType = [self.queryType integerValue];
 			cellInfo.isClickable = YES;
 			cellInfo.parameter = self.queryCycle;
@@ -297,12 +304,17 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 			else
 				cellInfo.action = [NSNumber numberWithInteger:kContributionQueryRecipient];
 			
-			
-			if (!cellInfo.entryValue || ![cellInfo.entryValue length]) {	// we didn't receive an ID!!!
+			if (!dataID || [[NSNull null] isEqual:dataID] || ![dataID isKindOfClass:[NSString class]]) {
+				NSLog(@"ERROR - Contribution results lack have an empty entity ID for entity: %@", name);								
 				if ([[name uppercaseString] isEqualToString:@"BOB PERRY HOMES"])	// ala Bob Perry Homes
 					name = @"Perry Homes";
 				else if ([[name uppercaseString] hasPrefix:@"BOB PERRY"])	// ala Bob Perry Homes
 					name = @"Bob Perry";
+				else if ([[name uppercaseString] hasPrefix:@"HUMAN RIGHTS CAMPAIGN TEXAS FAMILIES"])
+					name = @"HRC TEXAS FAMILIES PAC";
+				else if ([[name uppercaseString] hasPrefix:@"TEXANS FOR RICK PERRY"])
+					name = @"RICK PERRY";
+				
 				NSString *nameSearch = [name stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 				cellInfo.entryValue = nameSearch;
 				cellInfo.action = [NSNumber numberWithInteger:kContributionQueryEntitySearch];
@@ -510,7 +522,7 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 			title = @"Biggest Recipients";
 			break;
 		case kContributionQueryEntitySearch:
-			title = @"Entity Search Results";
+			title = @"Search Closest Matching Entity";
 			break;
 		default:
 			break;
