@@ -65,10 +65,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 - (void) invalidateDistrictView {
 	if (districtView) {
-		[districtView invalidatePath];
-		districtView = nil;
+		if (![UtilityMethods iOSVersion4])
+			[districtView invalidatePath];
 	}
-
+	districtView = nil;
 }
 
 - (void) dealloc {
@@ -429,7 +429,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		
 		for (id<MKOverlay>item in self.mapView.overlays) {
 			if ([[item title] isEqualToString:[annotation title]]) {	// we clicked on an existing overlay
-				if ([[item title] isEqualToString:[self.districtView.polygon title]]) { // it's the senate
+				if (self.districtView && [[item title] isEqualToString:[self.districtView.polygon title]]) { // it's the senate
 					foundOne = YES;
 					[toRemove removeObject:item];
 					break;

@@ -213,12 +213,24 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	BOOL senate = (chamber == SENATE) || (chamber == BOTH_CHAMBERS);
 	BOOL house = (chamber == HOUSE) || (chamber == BOTH_CHAMBERS);
 	
-	if (senate && senateDistrictView) {
-		[senateDistrictView invalidatePath];
+	if (senate) {
+		if (![UtilityMethods iOSVersion4] && senateDistrictView) {
+			if ([senateDistrictView respondsToSelector:@selector(path)]) {
+				if (senateDistrictView.path) {
+					[senateDistrictView invalidatePath];
+				}
+			}
+		}
 		senateDistrictView = nil;
 	}
-	if (house && houseDistrictView) {
-		[houseDistrictView invalidatePath];
+	if (house) {
+		if (![UtilityMethods iOSVersion4] && houseDistrictView) {
+			if ([houseDistrictView respondsToSelector:@selector(path)]) {
+				if (houseDistrictView.path) {
+					[houseDistrictView invalidatePath];
+				}
+			}
+		}
 		houseDistrictView = nil;
 	}
 }
@@ -645,7 +657,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 - (void)reverseGeocoder:(MKReverseGeocoder *)geocoder didFailWithError:(NSError *)error
 {
-    debug_NSLog(@"MKReverseGeocoder has failed: %@", error);
+    NSLog(@"MKReverseGeocoder has failed: %@", error);
 	if (self.reverseGeocoder) {
 		[self.reverseGeocoder cancel];
 		self.reverseGeocoder = nil;
@@ -749,6 +761,42 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 #pragma mark -
 #pragma mark MapViewDelegate
+
+// Only in 4.0+
+- (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error {
+	
+	NSString *message = [NSString stringWithFormat:@"Failed to locate the user due to the following:", [error localizedDescription]];
+	
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Locate User Error" 
+													message:message
+												   delegate:nil 
+										  cancelButtonTitle:@"OK" 
+										  otherButtonTitles: nil];
+	[alert show];
+	[alert release];
+	self.mapView.showsUserLocation = NO;
+	[self showLocateUserButton];
+
+}
+
+// Only in 4.0+
+- (void)mapView:(MKMapView *)theMapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+	if (userLocation) {
+		[self searchDistrictMapsForCoordinate:userLocation.coordinate];
+		
+		if (!theMapView.userLocationVisible) {
+			for (id annotation in theMapView.annotations) {
+				if ([annotation isKindOfClass:[MKUserLocation class]]) {
+					[self performSelector:@selector(moveMapToAnnotation:) withObject:annotation afterDelay:.5f];
+					break;
+				}
+			}
+		}
+		
+		//self.mapView.showsUserLocation = NO;
+		[self showLocateUserButton];
+	}
+}
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
 	
@@ -946,7 +994,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		}
 		
 		//[self.mapView removeOverlays:self.mapView.overlays];
-		[self invalidateDistrictView:deleteOne];
+		if (!foundOne)
+			[self invalidateDistrictView:deleteOne];
 		if (toRemove && [toRemove count])
 			[self.mapView performSelector:@selector(removeOverlays:) withObject:toRemove];
 
