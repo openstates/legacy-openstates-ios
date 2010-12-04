@@ -58,6 +58,8 @@
 	[timeFormatter setLenient:YES];
 	[timeFormatter setDateFormat:@"h:mm a"];
 	
+	NSMutableArray *noMeetingsList = [NSMutableArray arrayWithCapacity:4];
+									  
 	NSInteger index = 1;
 	for (NSURL *url in self.feedURLS) {
 		[self.feedStore.feedFetcher subscribeToURL:url error:&theError];
@@ -65,13 +67,32 @@
 		
 		for (CFeedEntry *entry in theFeed.entries) {
 			NSNumber *entryChamber = self.chamber;
-			
 			if ([self.chamber integerValue] == BOTH_CHAMBERS) /// this is when we've got mutliple feeds, must be "all", educate it
 				entryChamber = [NSNumber numberWithInteger:index];
 			
+			if ([entry.title isEqualToString:@"No committee meetings scheduled."]) {
+				NSString *chamberName = nil;
+				switch ([entryChamber integerValue]) {
+					case HOUSE:
+						chamberName = @"House";
+						break;
+					case SENATE:
+						chamberName = @"Senate";
+						break;
+					case JOINT:
+					default:
+						chamberName = @"Joint";
+						break;
+				}
+				
+				[noMeetingsList addObject:chamberName];
+				
+				break;
+			}
+						
 			NSMutableDictionary *entryDict = [[NSMutableDictionary alloc] initWithCapacity:15];
 			[entryDict setObject:entryChamber forKey:@"chamber"];
-			
+						
 			NSArray *components = [entry.title componentsSeparatedByString:@" - "];
 			if (components && ([components count] >= 2)) {
 				[entryDict setObject:[components objectAtIndex:0] forKey:@"committee"];
@@ -164,6 +185,48 @@
 		}	
 		index++;
 	}	
+									  
+	// At least one of our calendar feeds was empty (no meetings)
+	if ([noMeetingsList count]) {
+		NSString *titleString = nil;
+		NSString *messageString = nil;
+		
+		if ([noMeetingsList count] > 1) {
+			NSMutableString *chamberList = [NSMutableString string];
+			NSInteger index = 1;
+			for (NSString *chamberName in noMeetingsList) {
+				if (index > 1) {
+					if ([noMeetingsList count] > 2)
+						[chamberList appendString:@", "];
+					else
+						[chamberList appendString:@" "];
+				}
+				if (index == [noMeetingsList count]) {
+					[chamberList appendString:@"or "];
+				}
+				[chamberList appendString:chamberName];
+				index++;
+			}
+			titleString = [NSString stringWithFormat:@"No meetings scheduled.", chamberList];
+			messageString = [NSString stringWithFormat:@"Currently, there are no %@ meetings scheduled. Try again later.", chamberList];
+			
+		}
+		else {
+			NSString *chamberName = [noMeetingsList objectAtIndex:0];
+			titleString = [NSString stringWithFormat:@"No %@ meetings scheduled.", chamberName];
+			messageString = [NSString stringWithFormat:@"Currently, there are no %@ meetings scheduled. Try again later.", chamberName];
+		}
+
+		UIAlertView *noMeetingsAlert = [[[ UIAlertView alloc ] 
+										 initWithTitle:titleString 
+										 message:messageString 
+										 delegate:nil // we're static, so don't do "self"
+										 cancelButtonTitle: @"Cancel" 
+										 otherButtonTitles:nil, nil] autorelease];
+		
+		[ noMeetingsAlert show ];		
+	}
+	
 	[dateFormatter release];
 	[timeFormatter release];
 	
