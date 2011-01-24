@@ -62,8 +62,10 @@
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
 	self.navigationItem.titleView = self.chamberControl;
 	
-	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
-		self.selectObjectOnAppear = [self firstDataObject];
+	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice]) {
+		if ([self.tableView numberOfRowsInSection:0] > 0)
+			self.selectObjectOnAppear = [self firstDataObject];
+	}
 
 }
 
@@ -74,7 +76,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-	//// ALL OF THE FOLLOWING MUST *NOT* RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER
 		
 	NSDictionary *segPrefs = [[NSUserDefaults standardUserDefaults] objectForKey:kSegmentControlPrefKey];
 	if (segPrefs) {
@@ -83,7 +84,20 @@
 			self.chamberControl.selectedSegmentIndex = [segIndex integerValue];
 	}
 	
+	if (![self.dataSource hasFilter] && [self.tableView numberOfRowsInSection:0] == 0) {
+		UIAlertView *noCommittees = [[[ UIAlertView alloc ] 
+									  initWithTitle:@"No Committees Listed" 
+									  message:@"Currently, here are no committees or assignments listed." 
+									  delegate:nil // we're static, so don't do "self"
+									  cancelButtonTitle: @"Cancel" 
+									  otherButtonTitles:nil, nil] autorelease];
+		
+		[ noCommittees show ];		
+		return;
+		
+	}
 	
+	//// ALL OF THE FOLLOWING MUST *NOT* RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER
 	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
 		id detailObject = self.detailViewController ? [self.detailViewController valueForKey:@"committee"] : nil;
 		if (!detailObject) {
