@@ -13,18 +13,20 @@
 @class CalendarMasterViewController;
 @class DistrictMapMasterViewController;
 @class AnalyticsOptInAlertController;
+@class DataModelUpdateManager;
 
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate> 
 {
 	NSManagedObjectModel *managedObjectModel;
 	NSPersistentStoreCoordinator *persistentStoreCoordinator;	
 }
-
+@property (nonatomic)		  BOOL				databaseIsCopying;
 @property (nonatomic)		  BOOL				appIsQuitting;
 @property (nonatomic, retain) UIWindow			*mainWindow;
 @property (nonatomic, retain) NSMutableDictionary	*savedTableSelection;
 
 // For Core Data
+@property (nonatomic, retain)			DataModelUpdateManager *dataUpdater;
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;

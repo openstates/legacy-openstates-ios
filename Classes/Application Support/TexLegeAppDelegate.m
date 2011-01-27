@@ -7,6 +7,7 @@
 //
 
 #import "TexLegeAppDelegate.h"
+#import "TexLegeCoreDataUtils.h"
 #import "UtilityMethods.h"
 #import "PartisanIndexStats.h"
 
@@ -22,15 +23,15 @@
 #import "LocalyticsSession.h"
 #import "DistrictMapDataSource.h"
 
+#import "DataModelUpdateManager.h"
+
 //#import "JSONDataImporter.h"
 
 #if IMPORTING_DATA == 1
 #import "TexLegeDataImporter.h"
 #endif
 
-#if EXPORTING_DATA == 1
 #import "TexLegeDataExporter.h"
-#endif
 
 //#import "UIApplication+ScreenMirroring.h"
 #import "TVOutManager.h"
@@ -41,6 +42,8 @@
 - (void)restoreArchivableSavedTableSelection;
 - (NSData *)archivableSavedTableSelection;
 - (BOOL)resetSavedDatabaseIfNecessary;
+- (void)persistentStoreCopyStarted:(NSNotification *)aNotification;
+- (void)persistentStoreCopyStopped:(NSNotification *)aNotification;
 	
 @end
 
@@ -61,12 +64,12 @@ NSInteger kNoSelection = -1;
 @implementation TexLegeAppDelegate
 
 @synthesize tabBarController;
-@synthesize savedTableSelection, appIsQuitting;
+@synthesize savedTableSelection, appIsQuitting, databaseIsCopying;
 
 @synthesize mainWindow;
 @synthesize analyticsOptInController;
 
-@synthesize managedObjectContext;
+@synthesize managedObjectContext, dataUpdater;
 
 @synthesize legislatorMasterVC, committeeMasterVC, capitolMapsMasterVC, linksMasterVC, calendarMasterVC, districtMapMasterVC;
 
@@ -79,12 +82,15 @@ NSInteger kNoSelection = -1;
 		// initialize  to nil
 		mainWindow = nil;
 		self.appIsQuitting = NO;
+		self.databaseIsCopying = NO;
 		self.savedTableSelection = [NSMutableDictionary dictionaryWithCapacity:2];
+		self.dataUpdater = nil;
 	}
 	return self;
 }
 
 - (void)dealloc {
+	self.dataUpdater = nil;
 	self.savedTableSelection = nil;
 	self.analyticsOptInController = nil;
 	self.tabBarController = nil;
@@ -185,6 +191,9 @@ NSInteger kNoSelection = -1;
 
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
+	if (!viewController.tabBarItem.enabled)
+		return NO;
+	
 	if (/*![UtilityMethods isIPadDevice]*/1) {
 		if (![viewController isEqual:self.tabBarController.selectedViewController]) {
 			//debug_NSLog(@"About to switch tabs, popping to root view controller.");
@@ -270,17 +279,32 @@ NSInteger kNoSelection = -1;
 				split.title = [[controller dataSource] name];
 				split.tabBarItem = [[[UITabBarItem alloc] initWithTitle:
 									[[controller dataSource] name] image:[[controller dataSource] tabBarImage] tag:index] autorelease];
+						
+				if ([[controller viewControllerKey] isEqualToString:@"CommitteeMasterViewController"]) {
+					NSArray *committeeList = [TexLegeCoreDataUtils allObjectIDsInEntityNamed:@"CommitteeObj" context:self.managedObjectContext];
+					if (!committeeList || [[NSNull null] isEqual:committeeList] || [committeeList count] == 0)
+						split.tabBarItem.enabled = NO;
+				}		
+				
 				[splitViewControllers addObject:split];
 			}
 			index++;
 		}
 		[self.tabBarController setViewControllers:splitViewControllers];
 		[splitViewControllers release];
+	} else {
+		for (GeneralTableViewController *controller in VCs) {
+			if ([[controller viewControllerKey] isEqualToString:@"CommitteeMasterViewController"]) {
+				NSArray *committeeList = [TexLegeCoreDataUtils allObjectIDsInEntityNamed:@"CommitteeObj" context:self.managedObjectContext];
+				if (!committeeList || [[NSNull null] isEqual:committeeList] || [committeeList count] == 0)
+					controller.navigationController.tabBarItem.enabled = NO;
+			}		
+		}
 	}
 	[VCs release];
 	
-	id savedTabController = [self.tabBarController.viewControllers objectAtIndex:savedTabSelectionIndex];
-	if (!savedTabController) {
+	UIViewController * savedTabController = [self.tabBarController.viewControllers objectAtIndex:savedTabSelectionIndex];
+	if (!savedTabController || !savedTabController.tabBarItem.enabled) {
 		debug_NSLog (@"Couldn't find a view/navigation controller at index: %d", savedTabSelectionIndex);
 		savedTabController = [self.tabBarController.viewControllers objectAtIndex:0];
 	}
@@ -349,21 +373,45 @@ NSInteger kNoSelection = -1;
 	[[LocalyticsSession sharedLocalyticsSession] startSession:@"8bde685867a8375008c3272-3afa437e-c58f-11df-ee10-00fcbf263dff"];
 #endif
 	
-#if EXPORTING_DATA == 1
 	TexLegeDataExporter *exporter = [[TexLegeDataExporter alloc] initWithManagedObjectContext:self.managedObjectContext];
+#if EXPORTING_DATA == 1
 	[exporter exportAllDataObjects];
-	[exporter release];
 #endif
+	[exporter exportAllDataObjectsWithJSON:YES force:NO];
+	[exporter release];
 	
-	//JSONDataImporter *jsonImporter = [[JSONDataImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
-	//[jsonImporter release];
+	BOOL resetting = [self resetSavedDatabaseIfNecessary];
+	
+	if (!resetting) {
+		//JSONDataImporter *jsonImporter = [[JSONDataImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
+		//[jsonImporter release];
 		
-	[self resetSavedDatabaseIfNecessary];
+		if (!self.dataUpdater)
+			self.dataUpdater = [[[DataModelUpdateManager alloc] initWithManagedObjectContext:self.managedObjectContext] autorelease];
+		if (self.dataUpdater && [self.dataUpdater isDataUpdateAvailable]) {
+			
+			UIAlertView *updaterAlert = [[UIAlertView alloc] initWithTitle:@"Update Available" 
+																   message:@"A data update for TexLege is available. This update may result in the loss of any custom legislator notes. This update is optional."  
+																  delegate:self 
+														 cancelButtonTitle:@"Cancel" 
+														 otherButtonTitles:@"Update", nil];
+			updaterAlert.tag = 6666;
+			[updaterAlert show];
+			[updaterAlert release];
+		}	
+		
+	}
 
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {	
+	
+	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+	[center addObserver:self selector:@selector(persistentStoreCopyStarted:) name:@"PERSISTENTSTORE_COPY_STARTED" object:nil]; 
+	[center addObserver:self selector:@selector(persistentStoreCopyStopped:) name:@"PERSISTENTSTORE_COPY_FAILED" object:nil]; 
+	[center addObserver:self selector:@selector(persistentStoreCopyStopped:) name:@"PERSISTENTSTORE_COPY_COMPLETED" object:nil]; 
+		
     // Set up the mainWindow and content view
 	UIWindow *localMainWindow;
 	localMainWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -439,6 +487,23 @@ NSInteger kNoSelection = -1;
 	
  	[[LocalyticsSession sharedLocalyticsSession] resume];
  	[[LocalyticsSession sharedLocalyticsSession] upload];
+	
+	BOOL resetting = [self resetSavedDatabaseIfNecessary];
+	if (!resetting) {
+		if (!self.dataUpdater)
+			self.dataUpdater = [[[DataModelUpdateManager alloc] initWithManagedObjectContext:self.managedObjectContext] autorelease];
+		if (self.dataUpdater && [self.dataUpdater isDataUpdateAvailable]) {
+			
+			UIAlertView *updaterAlert = [[UIAlertView alloc] initWithTitle:@"Update Available" 
+																   message:@"A data update for TexLege is available. This update may result in the loss of any custom legislator notes. This update is optional."  
+																  delegate:self 
+														 cancelButtonTitle:@"Cancel" 
+														 otherButtonTitles:@"Update", nil];
+			updaterAlert.tag = 6666;
+			[updaterAlert show];
+			[updaterAlert release];
+		}	
+	}
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -451,6 +516,13 @@ NSInteger kNoSelection = -1;
 	[self prepareToQuit];
 	[[LocalyticsSession sharedLocalyticsSession] close];
 	[[LocalyticsSession sharedLocalyticsSession] upload];	
+	
+	// Unregister from screen notifications
+	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+	[center removeObserver:self name:@"PERSISTENTSTORE_COPY_STARTED" object:nil];
+	[center removeObserver:self name:@"PERSISTENTSTORE_COPY_FAILED" object:nil];
+	[center removeObserver:self name:@"PERSISTENTSTORE_COPY_COMPLETED" object:nil];
+	
 }
 
 #pragma mark -
@@ -564,9 +636,16 @@ NSInteger kNoSelection = -1;
     return managedObjectModel;
 }
 
+- (void)persistentStoreCopyStarted:(NSNotification *)aNotification {
+	self.databaseIsCopying = YES;
+}
 
-#define DATABASE_NAME @"TexLege.v2"
-#define DATABASE_FILE @"TexLege.v2.sqlite"
+- (void)persistentStoreCopyStopped:(NSNotification *)aNotification {
+	self.databaseIsCopying = NO;
+}
+
+#define DATABASE_NAME @"TexLege.v3"
+#define DATABASE_FILE @"TexLege.v3.sqlite"
 
 - (void)copyPersistentStoreIfNeeded:(id)sender {	
 #if IMPORTING_DATA == 0 // don't use this if we're setting up & initializing from property lists...
@@ -580,14 +659,18 @@ NSInteger kNoSelection = -1;
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	// If the expected store doesn't exist, copy the default store.
 	if (![fileManager fileExistsAtPath:storePath]) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENTSTORE_COPY_STARTED" object:nil];
+		
 		NSString *defaultStorePath = [[NSBundle mainBundle] pathForResource:DATABASE_NAME ofType:@"sqlite"];
 		if (defaultStorePath) {
 			NSError *error = nil;
 			[fileManager copyItemAtPath:defaultStorePath toPath:storePath error:&error];
-			if (error)
+			if (error) {
+				[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENTSTORE_COPY_FAILED" object:nil];
 				NSLog(@"Error attempting to copy persistent store to docs folder: %@", error);
+			}
 			else {
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENT_STORE_COPIED" object:storePath];	
+				[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENTSTORE_COPY_COMPLETED" object:nil];	
 				NSLog(@"Successfully created a backup database in %@", storePath);
 			}
 		}
@@ -628,10 +711,20 @@ NSInteger kNoSelection = -1;
 				NSError *error = nil;
 				[[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
 				if (error) {
-					debug_NSLog(@"DB_RESET: Couldn't remove the database file... error: %@", [error localizedFailureReason]);
+					debug_NSLog(@"DB_RESET: Couldn't remove the user's database file... error: %@", [error localizedFailureReason]);
 					plannedFailure = YES;
 				}
 			}
+			if ([file isEqualToString:@"jsonDataVersion.json"]) {
+				NSString *filePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:file];
+				NSError *error = nil;
+				[[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+				if (error) {
+					debug_NSLog(@"DB_RESET: Couldn't remove the user's JSON data catalog... error: %@", [error localizedFailureReason]);
+					plannedFailure = YES;
+				}
+			}
+			
 		}
 		
 		[self copyPersistentStoreIfNeeded:nil];		
@@ -673,8 +766,9 @@ NSInteger kNoSelection = -1;
 	
 	if (needsReset) {
 		UIAlertView *resetDB = [[UIAlertView alloc] initWithTitle:@"Settings: Reset Data and Quit?" 
-														  message:@"Are you sure you want to restore the factory database?  Any custom legislator notes will be lost by proceeding.  NOTE: The application will automatically quit after the reset." 
+														  message:@"Are you sure you want to restore the factory database?  Any interim data updates and custom legislator notes will be lost by proceeding.  NOTE: The application will automatically quit after the reset." 
 														 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Reset",nil];
+		resetDB.tag = 5555;
 		[resetDB show];
 		[resetDB release];
 	}
@@ -683,8 +777,14 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	if (buttonIndex == alertView.firstOtherButtonIndex)
-		[self resetSavedDatabase:nil]; 
+	if (buttonIndex == alertView.firstOtherButtonIndex) {
+		if (alertView.tag == 5555)
+			[self resetSavedDatabase:nil]; 
+		else if (alertView.tag == 6666) {
+			[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_UPDATE_REQUEST"];
+			[self.dataUpdater downloadDataUpdatesUsingCachedList:NO];	// set this to no, if we use a dialog box in between? ...
+		}
+	}
 }
 
 /**
@@ -706,22 +806,36 @@ NSInteger kNoSelection = -1;
 	
 	NSString *storePath = nil;
 	NSString *inMainBundle = [[NSBundle mainBundle] pathForResource:DATABASE_NAME ofType:@"sqlite"];
-#ifdef IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB
-	NSString *inDocsPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:DATABASE_FILE];
-
-	if (![[NSFileManager defaultManager] fileExistsAtPath:inDocsPath]) {
-		storePath = inMainBundle;  // for now at least until it gets copies properly
-		[self performSelectorInBackground:@selector(copyPersistentStoreIfNeeded:) withObject:nil];
+	
+	BOOL createNewStore = NO;
+#if IMPORTING_DATA == 1
+	
+	if (!inMainBundle) {
+		createNewStore = YES;
 		
-		// Need to find a way to tell the core data objects that we've got a new/safer persistent store ready to go
+		NSString *appBundlePath = [[NSBundle mainBundle] bundlePath];
+		storePath = [appBundlePath stringByAppendingPathComponent:DATABASE_FILE];
 	}
-	else {
-		storePath = inDocsPath;
-	}
-
-#else
-	storePath = inMainBundle;
 #endif
+		
+	if (!createNewStore) {
+#ifdef IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB
+		NSString *inDocsPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:DATABASE_FILE];
+		
+		if (![[NSFileManager defaultManager] fileExistsAtPath:inDocsPath]) {
+			storePath = inMainBundle;  // for now at least until it gets copies properly
+			[self performSelectorInBackground:@selector(copyPersistentStoreIfNeeded:) withObject:nil];
+			
+			// Need to find a way to tell the core data objects that we've got a new/safer persistent store ready to go
+		}
+		else {
+			storePath = inDocsPath;
+		}
+		
+#else
+		storePath = inMainBundle;
+#endif
+	}
 	debug_NSLog(@"%@", storePath);
 	NSURL *storeUrl = [NSURL fileURLWithPath:storePath];
 
