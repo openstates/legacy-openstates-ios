@@ -30,37 +30,83 @@
 	[super dealloc];
 }
 
-- (void)exportAllDataObjects {
+- (void)exportAllDataObjectsWithJSON:(BOOL)doJSON force:(BOOL)force {
 	debug_NSLog(@"DataExporter: EXPORTING ALL CORE DATA OBJECTS");
 	
-	[self exportObjectsWithEntityName:@"LegislatorObj"];
-	[self exportObjectsWithEntityName:@"CommitteeObj"];
-	[self exportObjectsWithEntityName:@"CommitteePositionObj"];
-	[self exportObjectsWithEntityName:@"WnomObj"];
-	[self exportObjectsWithEntityName:@"DistrictOfficeObj"];
-	[self exportObjectsWithEntityName:@"DistrictMapObj"];
-	[self exportObjectsWithEntityName:@"LinkObj"];
+	[self exportObjectsWithEntityName:@"LegislatorObj" JSON:doJSON force:force];
+	[self exportObjectsWithEntityName:@"CommitteeObj" JSON:doJSON force:force];
+	[self exportObjectsWithEntityName:@"CommitteePositionObj" JSON:doJSON force:force];
+	[self exportObjectsWithEntityName:@"WnomObj" JSON:doJSON force:force];
+	[self exportObjectsWithEntityName:@"StafferObj" JSON:doJSON force:force];
+	[self exportObjectsWithEntityName:@"DistrictOfficeObj" JSON:doJSON force:force];
+	[self exportObjectsWithEntityName:@"DistrictMapObj" JSON:doJSON force:force];
+	[self exportObjectsWithEntityName:@"LinkObj" JSON:doJSON force:force];
 
 }
+- (void)exportAllDataObjects {
+	[self exportAllDataObjectsWithJSON:NO force:YES];
+}
 
-- (void)exportObjectsWithEntityName:(NSString *)entityName {
-	NSString *outFile = [NSString stringWithFormat:@"%@.plist", entityName];
-	NSString *outPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:outFile];
-
-	debug_NSLog(@"DataExporter: EXPORTING %@ OBJECTS TO: %@", entityName, outPath);
-
-	NSArray *objArray = [TexLegeCoreDataUtils allObjectsInEntityNamed:entityName context:self.managedObjectContext];
-
-	NSMutableArray *archivedObjects = [[NSMutableArray alloc] initWithCapacity:[objArray count]];
-	for (id<TexLegeDataObjectProtocol> object in objArray) {
-		[archivedObjects addObject:[object exportToDictionary]];
+- (void)writeFileInBackground:(id)dictObject {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	if (dictObject && [dictObject isKindOfClass:[NSDictionary class]]) {
+		id fileData = [dictObject objectForKey:@"data"];
+		NSString *filePath = [dictObject objectForKey:@"path"];
+		
+		if (fileData && [fileData isKindOfClass:[NSString class]]) {
+			if (fileData && [fileData length]) {
+				NSError *error = nil;
+				[fileData writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+				if (error)
+					NSLog(@"DataExporter:exportObjectsWithEntityName:%@ - export to file was unsuccessful; error: %@", 
+						  filePath, [error localizedDescription]);
+			}
+		}
+		else if (fileData && [fileData isKindOfClass:[NSArray class]]) {
+			NSMutableArray *archivedObjects = [[NSMutableArray alloc] initWithCapacity:[fileData count]];
+			for (id<TexLegeDataObjectProtocol> object in fileData) {
+				[archivedObjects addObject:[object exportToDictionary]];
+			}
+			if (![archivedObjects writeToFile:filePath atomically:YES]) {
+				NSLog(@"DataExporter:exportObjectsWithEntityName:%@ - export to file was unsuccessful", filePath);
+			}
+			[archivedObjects release];
+		}
 	}
-	if (![archivedObjects writeToFile:outPath atomically:YES])
-			debug_NSLog(@"DataExporter:exportObjectsWithEntityName:%@ - export to file was unsuccessful", entityName);
-	[archivedObjects release];
-	
-	
+	[pool drain];
 }
+
+- (void)exportObjectsWithEntityName:(NSString *)entityName JSON:(BOOL)doJSON force:(BOOL)force{
+	
+	if ([entityName isEqualToString:@"DistrictMapObj"])
+		doJSON = NO;
+	
+	NSString *outFile = nil;
+	if (!doJSON)
+		outFile = [NSString stringWithFormat:@"%@.plist", entityName];
+	else
+		outFile = [NSString stringWithFormat:@"%@.v0.json", entityName];
+
+	NSString *outPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:outFile];
+		
+	if (force || (![[NSFileManager defaultManager] fileExistsAtPath:outPath])) {
+		debug_NSLog(@"DataExporter: EXPORTING %@ OBJECTS TO: %@", entityName, outPath);
+		NSArray *objArray = [TexLegeCoreDataUtils allObjectsInEntityNamed:entityName context:self.managedObjectContext];
+
+		NSDictionary *outputDict = nil;
+		if (!doJSON)
+			outputDict = [NSDictionary dictionaryWithObjectsAndKeys:objArray, @"data", outPath, @"path", nil];
+		else {
+			NSString *jsonString = [objArray JSONRepresentation];
+			if (jsonString && [jsonString length])
+				outputDict = [NSDictionary dictionaryWithObjectsAndKeys:jsonString, @"data", outPath, @"path", nil];
+		}
+		if (outputDict)
+			[self performSelectorInBackground:@selector(writeFileInBackground:) withObject:outputDict];
+	}
+}
+
+
 #if 0
 
 - (void)hackyLegislatorIDs {
@@ -106,6 +152,7 @@
 	[self exportObjectsWithEntityName:@"CommitteeObj"];
 	[self exportObjectsWithEntityName:@"CommitteePositionObj"];
 	[self exportObjectsWithEntityName:@"WnomObj"];
+	[self exportObjectsWithEntityName:@"StafferObj"];
 	[self exportObjectsWithEntityName:@"DistrictOfficeObj"];
 	[self exportObjectsWithEntityName:@"DistrictMapObj"];
 	[self exportObjectsWithEntityName:@"LinkObj"];

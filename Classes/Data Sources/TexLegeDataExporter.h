@@ -15,7 +15,8 @@
 @property (nonatomic,retain) NSManagedObjectContext *managedObjectContext;
 
 - (id) initWithManagedObjectContext:(NSManagedObjectContext*)newContext;
-- (void)exportObjectsWithEntityName:(NSString *)entityName;
+- (void)exportObjectsWithEntityName:(NSString *)entityName JSON:(BOOL)doJSON force:(BOOL)force;
 - (void)exportAllDataObjects;
+- (void)exportAllDataObjectsWithJSON:(BOOL)doJSON force:(BOOL)force;
 	
 @end
