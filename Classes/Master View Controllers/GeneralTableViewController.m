@@ -45,7 +45,7 @@
 			
 			if (![[dataSource fetchedResultsController] performFetch:&error]) {
 				// Handle the error...
-			}		
+			}					
 		}
 		self.tableView.dataSource = dataSource;
 		if (self.searchDisplayController)
