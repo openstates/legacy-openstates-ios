@@ -18,7 +18,7 @@ extern const CGFloat kLegislatorMasterCellViewHeight;
 @property (copy, nonatomic) NSString *title;
 @property (copy, nonatomic) NSString *name;
 @property (copy, nonatomic) NSString *tenure;
-@property (nonatomic, retain) LegislatorObj *legislator;
+@property (nonatomic, copy) LegislatorObj *legislator;
 @property (nonatomic) BOOL useDarkBackground;
 @property (nonatomic) BOOL highlighted;
 @property (nonatomic, retain) UIImage *questionImage;
