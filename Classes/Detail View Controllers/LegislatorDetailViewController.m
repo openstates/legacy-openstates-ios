@@ -42,7 +42,6 @@
 @interface LegislatorDetailViewController (Private)
 
 - (void) pushMapViewWithMap:(CapitolMap *)capMap;
-- (void) showWebViewWithURL:(NSURL *)url;
 - (void) setupHeader;
 
 - (void)reloadChartForOrientationChange;	
@@ -557,7 +556,17 @@
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&
 				 cellInfo.entryType < kDirectoryTypeIsExternalHandler) {	// handle the URL ourselves in a webView
-			[self showWebViewWithURL:[cellInfo generateURL]];
+			NSURL *myURL = [cellInfo generateURL];
+			
+			if ([TexLegeReachability canReachHostWithURL:myURL]) { // do we have a good URL/connection?
+
+				if ([[myURL scheme] isEqualToString:@"twitter"])
+					[[UIApplication sharedApplication] openURL:myURL];
+				else {
+					MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:myURL];
+					[mbc display:self.tabBarController];
+				}
+			}
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsExternalHandler)		// tell the device to open the url externally
 		{
@@ -604,15 +613,6 @@
 	[[self navigationController] pushViewController:detailController animated:YES];
 	[detailController release];
 }
-
-- (void) showWebViewWithURL:(NSURL *)url { 
-
-	if ([TexLegeReachability canReachHostWithURL:url]) { // do we have a good URL/connection?
-		MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
-		[mbc display:self.tabBarController];
-	}
-
-}	
 
 @end
 
