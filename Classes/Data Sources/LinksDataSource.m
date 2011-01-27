@@ -60,7 +60,10 @@ enum Sections {
 		}*/		
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(dataSourceReceivedMemoryWarning:)
-													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];		
+													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];	
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(resetData:) name:@"DATAMODEL_UPDATED" object:nil];		
+		
 	}
 	return self;
 }
@@ -78,6 +81,12 @@ enum Sections {
 	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
 		[self.managedObjectContext refreshObject:object mergeChanges:NO];
 	}
+}
+
+- (void)resetData:(NSNotificationCenter *)notification {
+	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
+	NSError *error = nil;
+	[self.fetchedResultsController performFetch:&error];
 }
 
 #pragma mark -
@@ -167,7 +176,7 @@ enum Sections {
 	[fetchRequest setEntity:entity];
 	
 	NSSortDescriptor *sortSection = [[NSSortDescriptor alloc] initWithKey:@"section" ascending:YES];
-	NSSortDescriptor *sortOrder = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
+	NSSortDescriptor *sortOrder = [[NSSortDescriptor alloc] initWithKey:@"sortOrder" ascending:YES];
 	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortSection, sortOrder, nil];  
 	[fetchRequest setSortDescriptors:sortDescriptors];
 	

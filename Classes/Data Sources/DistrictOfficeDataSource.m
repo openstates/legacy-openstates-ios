@@ -40,11 +40,17 @@
 #endif
 		self.byDistrict = NO;
 		
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(resetData:) name:@"DATAMODEL_UPDATED" object:nil];		
+
+		
 	}
 	return self;
 }
 
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
 	self.fetchedResultsController = nil;
 	self.managedObjectContext = nil;	
 	self.filterString = nil;
@@ -52,6 +58,11 @@
     [super dealloc];
 }
 
+- (void)resetData:(NSNotificationCenter *)notification {
+	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
+	NSError *error = nil;
+	[self.fetchedResultsController performFetch:&error];
+}
 
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods

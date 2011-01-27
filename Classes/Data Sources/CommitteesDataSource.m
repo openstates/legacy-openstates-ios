@@ -31,7 +31,9 @@
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(dataSourceReceivedMemoryWarning:)
-													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];		
+													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(resetData:) name:@"DATAMODEL_UPDATED" object:nil];		
 	}
 	return self;
 }
@@ -54,6 +56,11 @@
 	}
 }
 
+- (void)resetData:(NSNotificationCenter *)notification {
+	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
+	NSError *error = nil;
+	[self.fetchedResultsController performFetch:&error];
+}
 
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
