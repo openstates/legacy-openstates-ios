@@ -121,6 +121,10 @@
 	return tempDict;
 }
 
+- (id)proxyForJson {
+    return [self exportToDictionary];
+}
+
 // we're overriding what's stored in core data ... is this a good idea?
 - (NSNumber *) pinColorIndex {
 	/*	if (self.legislator) {

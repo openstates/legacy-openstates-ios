@@ -34,6 +34,7 @@
 + (NSArray *) allLegislatorsSortedByPartisanshipFromChamber:(NSInteger)chamber andPartyID:(NSInteger)party context:(NSManagedObjectContext *)context;
 + (NSArray *) allDistrictMapsLightWithContext:(NSManagedObjectContext*)context;
 + (NSArray *)allDistrictMapIDsWithBoundingBoxesContaining:(CLLocationCoordinate2D)coordinate withContext:(NSManagedObjectContext*)context;
++ (NSArray *) allStaffersForLegislator:(NSNumber *)legislatorID context:(NSManagedObjectContext *)context;
 
 + (NSArray*)allObjectIDsInEntityNamed:(NSString*)entityName context:(NSManagedObjectContext*)context;
 + (NSArray*)allObjectsInEntityNamed:(NSString*)entityName context:(NSManagedObjectContext*)context;

@@ -11,7 +11,7 @@
 
 @implementation LinkObj
 
-@dynamic order;
+@dynamic sortOrder;
 @dynamic url;
 @dynamic label;
 @dynamic section;
@@ -25,7 +25,7 @@
 
 - (NSDictionary *)exportToDictionary {
 	NSArray *keys = [NSArray arrayWithObjects:
-					 @"order",
+					 @"sortOrder",
 					 @"url",
 					 @"label",
 					 @"section",
@@ -33,6 +33,10 @@
 	
 	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:keys];
 	return tempDict;
+}
+
+- (id)proxyForJson {
+    return [self exportToDictionary];
 }
 
 - (NSURL *) actualURL {	

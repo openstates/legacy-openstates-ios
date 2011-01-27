@@ -45,6 +45,10 @@
 	return tempDict;
 }
 
+- (id)proxyForJson {
+    return [self exportToDictionary];
+}
+
 - (NSNumber *) year {
 	return [NSNumber numberWithInteger:1847+(2*[self.session integerValue])];
 }

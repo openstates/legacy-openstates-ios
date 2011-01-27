@@ -26,6 +26,10 @@
 @dynamic committeeNameInitial;
 @dynamic committeePositions;
 
+@dynamic votesmartID;
+@dynamic openstatesID;
+@dynamic txlonline_id;
+
 - (void) importFromDictionary: (NSDictionary *)dictionary
 {				
 	if (dictionary) {
@@ -38,6 +42,11 @@
 		self.office = [dictionary objectForKey:@"office"];
 		self.committeeName = [dictionary objectForKey:@"committeeName"];
 		self.committeeType = [dictionary objectForKey:@"committeeType"];
+
+		self.votesmartID = [dictionary objectForKey:@"votesmartID"];
+		self.openstatesID = [dictionary objectForKey:@"openstatesID"];
+		self.txlonline_id = [dictionary objectForKey:@"txlonline_id"];
+
 	}
 }
 
@@ -54,10 +63,17 @@
 	[tempDict setObject:self.url forKey:@"url"];
 	[tempDict setObject:self.committeeName forKey:@"committeeName"];
 	[tempDict setObject:self.committeeType forKey:@"committeeType"];
+	
+	[tempDict setObject:self.votesmartID forKey:@"votesmartID"];
+	[tempDict setObject:self.openstatesID forKey:@"openstatesID"];
+	[tempDict setObject:self.txlonline_id forKey:@"txlonline_id"];
 
 	return tempDict;
 }
 
+- (id)proxyForJson {
+    return [self exportToDictionary];
+}
 
 
 - (NSString *) committeeNameInitial {

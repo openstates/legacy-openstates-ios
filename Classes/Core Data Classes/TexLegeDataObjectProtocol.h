@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+#if DEBUG
+//#import "NSManagedObject+MCManagedObjectDebug.h"
+#endif
 
 @protocol TexLegeDataObjectProtocol
 
@@ -15,6 +18,6 @@
 
 - (void) importFromDictionary: (NSDictionary *)dictionary;
 - (NSDictionary *)exportToDictionary;
-	
+- (id)proxyForJson;
 @end
 

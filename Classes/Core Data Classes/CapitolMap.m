@@ -41,7 +41,9 @@
 	return tempDict;
 }
 
-
+- (id)proxyForJson {
+    return [self exportToDictionary];
+}
 
 
 - (NSURL *)url {

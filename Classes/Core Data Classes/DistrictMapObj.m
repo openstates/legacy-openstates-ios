@@ -52,11 +52,7 @@
 		self.numberOfCoords = [coder decodeObjectForKey:@"numberOfCoords"];
 		self.coordinatesData = [[coder decodeObjectForKey:@"coordinatesData"] copy];
 		
-		NSNumber *legislatorID = [coder decodeObjectForKey:@"legislatorID"];
-		if (legislatorID)
-			self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
-		else
-			self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
+		self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
     }
 	return self;
 }
@@ -90,11 +86,7 @@
 		self.numberOfCoords = [dictionary objectForKey:@"numberOfCoords"];
 		self.coordinatesData = [[dictionary objectForKey:@"coordinatesData"] copy];
 
-		NSNumber *legislatorID = [dictionary objectForKey:@"legislatorID"];
-		if (legislatorID)
-			self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
-		else
-			self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
+		self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
 	}
 }
 
@@ -115,11 +107,15 @@
 	[tempDict setObject:self.minLon forKey:@"minLon"];
 	[tempDict setObject:self.minLat forKey:@"minLat"];
 	[tempDict setObject:self.numberOfCoords forKey:@"numberOfCoords"];
-	[tempDict setObject:self.legislator.legislatorID forKey:@"legislatorID"];
+	//[tempDict setObject:self.legislator.legislatorID forKey:@"legislatorID"];
 	
 	[tempDict setObject:self.coordinatesData forKey:@"coordinatesData"];
 
 	return tempDict;
+}
+
+- (id)proxyForJson {
+    return [self exportToDictionary];
 }
 
 + (NSArray *)lightPropertiesToFetch {

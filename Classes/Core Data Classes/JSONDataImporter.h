@@ -13,7 +13,5 @@
 
 }
 @property (nonatomic,retain) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic,retain) NSMutableDictionary *legeVsToOpenStatesIdDict;
-@property (nonatomic,retain) NSMutableDictionary *commVsToOpenStatesIdDict;
 
 @end

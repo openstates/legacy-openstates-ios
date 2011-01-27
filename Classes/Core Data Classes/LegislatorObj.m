@@ -36,7 +36,7 @@
 @dynamic email;
 @dynamic twitter;
 
-@dynamic staff;
+//@dynamic staff;
 @dynamic cap_office;
 @dynamic cap_phone;
 @dynamic cap_phone2;
@@ -49,6 +49,19 @@
 @dynamic committeePositions;
 @dynamic wnomScores;
 @dynamic districtOffices;
+
+@dynamic nextElection;
+@dynamic nimsp_id;
+@dynamic openstatesID;
+@dynamic photo_url;
+@dynamic preferredname;
+@dynamic stateID;
+@dynamic txlonline_id;
+@dynamic votesmartDistrictID;
+@dynamic votesmartID;
+@dynamic votesmartOfficeID;
+@dynamic staffers;
+
 
 - (void) importFromDictionary: (NSDictionary *)dictionary
 {
@@ -74,7 +87,7 @@
 		self.email = [dictionary objectForKey:@"email"];
 		self.twitter = [dictionary objectForKey:@"twitter"];
 		
-		self.staff = [dictionary objectForKey:@"staff"];
+		//self.staff = [dictionary objectForKey:@"staff"];
 		self.cap_office = [dictionary objectForKey:@"cap_office"];
 		self.cap_phone = [dictionary objectForKey:@"cap_phone"];
 		self.cap_phone2 = [dictionary objectForKey:@"cap_phone2"];
@@ -84,6 +97,17 @@
 
 		self.transDataContributorID = [dictionary objectForKey:@"transDataContributorID"];
 
+		self.nextElection = [dictionary objectForKey:@"nextElection"];
+		self.nimsp_id = [dictionary objectForKey:@"nimsp_id"];
+		self.openstatesID = [dictionary objectForKey:@"openstatesID"];
+		self.photo_url = [dictionary objectForKey:@"photo_url"];
+		self.preferredname = [dictionary objectForKey:@"preferredname"];
+		self.stateID = [dictionary objectForKey:@"stateID"];
+		self.txlonline_id = [dictionary objectForKey:@"txlonline_id"];
+		self.votesmartDistrictID = [dictionary objectForKey:@"votesmartDistrictID"];
+		self.votesmartID = [dictionary objectForKey:@"votesmartID"];
+		self.votesmartOfficeID = [dictionary objectForKey:@"votesmartOfficeID"];
+		
 	}
 }
 
@@ -107,9 +131,10 @@
 	[tempDict setObject:self.bio_url forKey:@"bio_url"];
 	[tempDict setObject:self.tenure forKey:@"tenure"];
 	[tempDict setObject:self.email forKey:@"email"];
-	[tempDict setObject:self.twitter forKey:@"twitter"];
+	if (self.twitter)
+		[tempDict setObject:self.twitter forKey:@"twitter"];
 	
-	[tempDict setObject:self.staff forKey:@"staff"];
+	//[tempDict setObject:self.staff forKey:@"staff"];
 	[tempDict setObject:self.cap_office forKey:@"cap_office"];
 	[tempDict setObject:self.cap_phone forKey:@"cap_phone"];
 	[tempDict setObject:self.cap_phone2 forKey:@"cap_phone2"];
@@ -119,9 +144,23 @@
 
 	[tempDict setObject:self.transDataContributorID forKey:@"transDataContributorID"];
 	
+	[tempDict setObject:self.nextElection forKey:@"nextElection"];
+	[tempDict setObject:self.nimsp_id forKey:@"nimsp_id"];
+	[tempDict setObject:self.openstatesID forKey:@"openstatesID"];
+	[tempDict setObject:self.photo_url forKey:@"photo_url"];
+	[tempDict setObject:self.preferredname forKey:@"preferredname"];
+	[tempDict setObject:self.stateID forKey:@"stateID"];
+	[tempDict setObject:self.txlonline_id forKey:@"txlonline_id"];
+	[tempDict setObject:self.votesmartDistrictID forKey:@"votesmartDistrictID"];
+	[tempDict setObject:self.votesmartID forKey:@"votesmartID"];
+	[tempDict setObject:self.votesmartOfficeID forKey:@"votesmartOfficeID"];
+
 	return tempDict;
 }
 
+- (id)proxyForJson {
+    return [self exportToDictionary];
+}
 
 - (NSComparisonResult)compareMembersByName:(LegislatorObj *)p
 {	
@@ -252,9 +291,21 @@
 	return tempString;
 }
 
-- (NSInteger)numberOfDistrictOffices {
-	return [self.districtOffices count];
+
+ - (NSInteger)numberOfDistrictOffices {
+	if (!self.districtOffices || [[NSNull null] isEqual:self.districtOffices])
+		return 0;
+	else
+		return [self.districtOffices count];
 }
+
+- (NSInteger)numberOfStaffers {
+	if (!self.staffers || [[NSNull null] isEqual:self.staffers])
+		return 0;
+	else
+		return [self.staffers count];
+}
+ 
 
 - (NSString *)tenureString {
 	NSString *stringVal = nil;

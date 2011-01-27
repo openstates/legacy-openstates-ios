@@ -44,6 +44,10 @@
 	return tempDict;
 }
 
+- (id)proxyForJson {
+    return [self exportToDictionary];
+}
+
 - (NSString*)positionString {
 	if ([[self position] integerValue] == POS_CHAIR) 
 		return @"Chair";

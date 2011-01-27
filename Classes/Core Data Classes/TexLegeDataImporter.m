@@ -12,6 +12,7 @@
 #import "UtilityMethods.h"
 #import "CommitteeObj.h"
 #import "LegislatorObj.h"
+#import "TexLegeReachability.h"
 
 @interface TexLegeDataImporter (Private)
 
@@ -64,6 +65,8 @@
 
 	[self importObjectsWithEntityName:@"CommitteeObj"];
 	[self importObjectsWithEntityName:@"CommitteePositionObj"];
+
+	[self importObjectsWithEntityName:@"StafferObj"];
 
 	[self importObjectsWithEntityName:@"LinkObj"];
 
@@ -127,7 +130,6 @@
 		debug_NSLog(@"Failure in DataImporter:saveAction, name=%@ reason=%@", e.name, e.reason);
 	}
 }
-
 
 
 @end

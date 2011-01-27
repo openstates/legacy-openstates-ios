@@ -13,7 +13,7 @@
 {
 }
 
-@property (nonatomic, retain) NSNumber * order;
+@property (nonatomic, retain) NSNumber * sortOrder;
 @property (nonatomic, retain) NSString * url;
 @property (nonatomic, retain) NSString * label;
 @property (nonatomic, retain) NSNumber * section;

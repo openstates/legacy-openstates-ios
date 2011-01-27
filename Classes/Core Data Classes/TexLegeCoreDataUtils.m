@@ -174,6 +174,31 @@
 	
 }
 
++ (NSArray *) allStaffersForLegislator:(NSNumber *)legislatorID context:(NSManagedObjectContext *)context
+{
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"StafferObj" 
+											  inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];
+	
+	NSString *predicateString = [NSString stringWithFormat:@"legislatorID == %@", legislatorID];
+	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateString]; 
+	[fetchRequest setPredicate:predicate];
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
+										initWithKey:@"title" ascending:YES];
+	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+	[sortDescriptor release];
+	
+	NSError *error;
+	NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+	[fetchRequest release];
+	
+	return fetchedObjects;
+	
+}
+
+
 
 // You better make the predicate specific ... so that it only provides one result.  
 + (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName context:(NSManagedObjectContext*)context

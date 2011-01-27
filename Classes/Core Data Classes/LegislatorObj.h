@@ -9,7 +9,7 @@
 #import <CoreData/CoreData.h>
 #import "TexLegeDataObjectProtocol.h"
 
-@class CommitteePositionObj, WnomObj, DistrictOfficeObj, DistrictMapObj;
+@class CommitteePositionObj, WnomObj, DistrictOfficeObj, DistrictMapObj, StafferObj;
 
 @interface LegislatorObj :  NSManagedObject  <TexLegeDataObjectProtocol>
 {
@@ -38,7 +38,7 @@
 @property (nonatomic, retain) NSString * legtype_name;
 @property (nonatomic, retain) NSString * cap_office;
 @property (nonatomic, retain) NSString * firstname;
-@property (nonatomic, retain) NSString * staff;
+//@property (nonatomic, retain) NSString * staff;
 @property (nonatomic, retain) NSString * lastnameInitial;
 @property (nonatomic, retain) NSString * searchName;
 @property (nonatomic, retain) DistrictMapObj *districtMap;
@@ -47,6 +47,19 @@
 @property (nonatomic, retain) NSSet* districtOffices;
 @property (nonatomic, readonly) NSString * districtMapURL;
 @property (nonatomic, retain) NSString * transDataContributorID;
+
+@property (nonatomic, retain) NSSet* staffers;
+@property (nonatomic, retain) NSNumber * nimsp_id;
+@property (nonatomic, retain) NSString * openstatesID;
+@property (nonatomic, retain) NSString * photo_url;
+@property (nonatomic, retain) NSString * preferredname;
+@property (nonatomic, retain) NSString * stateID;
+@property (nonatomic, retain) NSString * txlonline_id;
+@property (nonatomic, retain) NSNumber * votesmartDistrictID;
+@property (nonatomic, retain) NSNumber * votesmartID;
+@property (nonatomic, retain) NSNumber * votesmartOfficeID;
+@property (nonatomic, retain) NSNumber * nextElection;
+
 
 - (NSComparisonResult)compareMembersByName:(LegislatorObj *)p;
 - (NSString *)partyShortName;
@@ -60,6 +73,7 @@
 - (NSString *)shortNameForButtons;
 - (NSString *)labelSubText;
 - (NSInteger) numberOfDistrictOffices;
+- (NSInteger)numberOfStaffers;
 - (NSString *)tenureString;
 - (NSArray *) sortedCommitteePositions;
 @end
@@ -80,5 +94,11 @@
 - (void)removeWnomScoresObject:(WnomObj *)value;
 - (void)addWnomScores:(NSSet *)value;
 - (void)removeWnomScores:(NSSet *)value;
+
+- (void)addStaffersObject:(StafferObj *)value;
+- (void)removeStaffersObject:(StafferObj *)value;
+- (void)addStaffers:(NSSet *)value;
+- (void)removeStaffers:(NSSet *)value;
+
 @end
 

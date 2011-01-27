@@ -19,18 +19,14 @@ static const NSString *baseURL = @"http://openstates.sunlightlabs.com/api/v1";
 static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 @interface JSONDataImporter (Private)
 
-- (void)legislatorIDConversionDict;
-- (void)committeeIDConversionDict;
-- (void)verifyLegislatorIDsInDictionary;
-- (void)verifyCommitteeIDsInDictionary;
+- (void)verifyLegislatorsHaveOpenStatesID;
+- (void)verifyCommitteesHaveOpenStatesID;
 
 @end
 
 
 @implementation JSONDataImporter
 @synthesize managedObjectContext;
-@synthesize legeVsToOpenStatesIdDict;
-@synthesize commVsToOpenStatesIdDict;
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)context {
 	if (self = [super init]) {
@@ -39,11 +35,8 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 				[managedObjectContext release], managedObjectContext = nil;
 			managedObjectContext = [context retain];
 			
-			//[self legislatorIDConversionDicts];
-			//[self verifyLegislatorIDsInDictionary];
-
-			[self committeeIDConversionDict];
-			//[self verifyCommitteeIDsInDictionary];
+			//[self verifyLegislatorsHaveOpenStatesID];
+			//[self verifyCommitteesHaveOpenStatesID];
 
 		}
 	}
@@ -52,8 +45,6 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 
 - (void)dealloc {
 	self.managedObjectContext = nil;
-	self.legeVsToOpenStatesIdDict = nil;
-	self.commVsToOpenStatesIdDict = nil;
 	[super dealloc];
 }
 
@@ -243,111 +234,26 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 	return jsonArray;
 }
 
-- (void)legislatorIDConversionDict {
-	self.legeVsToOpenStatesIdDict = [NSMutableDictionary dictionaryWithCapacity:200];
-	
-	NSArray *jsonHouseMembers = [self getJSONLegislatorsByChamber:HOUSE];
-	for (NSDictionary *houseMember in jsonHouseMembers) {
-		NSString *votesmart = [houseMember objectForKey:@"votesmart_id"];
-		NSString *openStates = [houseMember objectForKey:@"leg_id"];
-		
-		if (votesmart && openStates && ![votesmart isKindOfClass:[NSNull class]] && ![openStates isKindOfClass:[NSNull class]] && [votesmart length] && [openStates length]) {
-			[self.legeVsToOpenStatesIdDict setObject:openStates forKey:votesmart];
-		}
-		else {
-			debug_NSLog(@"Legislator didn't have necessary ids: %@ votesmart: %@ openStates:%@", [houseMember objectForKey:@"last_name"], votesmart, openStates);
-		}
-	}
-	
-	NSArray *jsonSenateMembers = [self getJSONLegislatorsByChamber:SENATE];
-	for (NSDictionary *senateMember in jsonSenateMembers) {
-		NSString *votesmart = [senateMember objectForKey:@"votesmart_id"];
-		NSString *openStates = [senateMember objectForKey:@"leg_id"];
-		
-		if (votesmart && openStates && ![votesmart isKindOfClass:[NSNull class]] && ![openStates isKindOfClass:[NSNull class]] && [votesmart length] && [openStates length]) {
-			[self.legeVsToOpenStatesIdDict setObject:openStates forKey:votesmart];
-		}
-		else {
-			debug_NSLog(@"Legislator didn't have necessary ids: %@ votesmart: %@ openStates:%@", [senateMember objectForKey:@"last_name"], votesmart, openStates);
-		}
-		
-	}
-	
-	if ([self.legeVsToOpenStatesIdDict count]) {
-		NSString *path = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:@"LegeVsToOpenStates.plist"];
-		BOOL worked = [self.legeVsToOpenStatesIdDict writeToFile:path atomically:YES];
-		debug_NSLog(@"dict write worked? = %d", worked);
-		if (!worked)
-			debug_NSLog(@"lege dict %@", self.legeVsToOpenStatesIdDict);
-	}
-}
 
-- (void)verifyLegislatorIDsInDictionary {
-	//NSString *path = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:@"VotesmartToOpenStates.plist"];
-	NSString *path = [[NSBundle mainBundle] pathForResource:@"LegeVsToOpenStates" ofType:@"plist"];
-	if (path)
-		self.legeVsToOpenStatesIdDict = [NSMutableDictionary dictionaryWithContentsOfFile:path];
-	
+- (void)verifyLegislatorsHaveOpenStatesID {	
 	NSArray *legislators = [TexLegeCoreDataUtils allObjectsInEntityNamed:@"LegislatorObj" context:self.managedObjectContext];
 	for (LegislatorObj *leg in legislators) {
-		NSString *openstates = [self.legeVsToOpenStatesIdDict objectForKey:[leg.legislatorID stringValue]];
-		if (!openstates) {
+		NSString *openstates = leg.openstatesID;
+		if (!openstates || [openstates length] == 0) {
 			debug_NSLog(@"No OpenStates ID for legislator: %@ -- %@", [leg legProperName], leg.legislatorID);
 		}
 	}
 
 }
 
-- (void)committeeIDConversionDict {
-	self.commVsToOpenStatesIdDict = [NSMutableDictionary dictionaryWithCapacity:200];
-	
-	NSArray *jsonHouse = [self getJSONCommitteesByChamber:HOUSE];
-	for (NSDictionary *houseObj in jsonHouse) {
-		NSString *votesmart = [houseObj objectForKey:@"votesmart_id"];
-		NSString *openStates = [houseObj objectForKey:@"id"];
-		
-		if (votesmart && openStates && ![votesmart isKindOfClass:[NSNull class]] && ![openStates isKindOfClass:[NSNull class]] && [votesmart length] && [openStates length]) {
-			[self.commVsToOpenStatesIdDict setObject:openStates forKey:votesmart];
-		}
-		else {
-			debug_NSLog(@"Committee didn't have necessary ids: %@ votesmart: %@ openStates:%@", [houseObj objectForKey:@"committee"], votesmart, openStates);
-		}
-	}
-	
-	NSArray *jsonSenate = [self getJSONCommitteesByChamber:SENATE];
-	for (NSDictionary *senateObj in jsonSenate) {
-		NSString *votesmart = [senateObj objectForKey:@"votesmart_id"];
-		NSString *openStates = [senateObj objectForKey:@"id"];
-		
-		if (votesmart && openStates && ![votesmart isKindOfClass:[NSNull class]] && ![openStates isKindOfClass:[NSNull class]] && [votesmart length] && [openStates length]) {
-			[self.commVsToOpenStatesIdDict setObject:openStates forKey:votesmart];
-		}
-		else {
-			debug_NSLog(@"Committee didn't have necessary ids: %@ votesmart: %@ openStates:%@", [senateObj objectForKey:@"committee"], votesmart, openStates);
-		}
-		
-	}
-	
-	if ([self.commVsToOpenStatesIdDict count]) {
-		NSString *path = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:@"CommVsToOpenStates.plist"];
-		BOOL worked = [self.commVsToOpenStatesIdDict writeToFile:path atomically:YES];
-		debug_NSLog(@"dict write worked? = %d", worked);
-		if (!worked)
-			debug_NSLog(@"committee dict %@", self.commVsToOpenStatesIdDict);
-	}
-}
 
-
-- (void)verifyCommitteeIDsInDictionary {
+- (void)verifyCommitteesHaveOpenStatesID {
 	//NSString *path = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:@"VotesmartToOpenStates.plist"];
-	NSString *path = [[NSBundle mainBundle] pathForResource:@"CommVsToOpenStates" ofType:@"plist"];
-	if (path)
-		self.legeVsToOpenStatesIdDict = [NSMutableDictionary dictionaryWithContentsOfFile:path];
 	
 	NSArray *committees = [TexLegeCoreDataUtils allObjectsInEntityNamed:@"CommitteeObj" context:self.managedObjectContext];
 	for (CommitteeObj *com in committees) {
-		NSString *openstates = [self.commVsToOpenStatesIdDict objectForKey:[com.committeeId stringValue]];
-		if (!openstates) {
+		NSString *openstates = com.openstatesID;
+		if (!openstates || [openstates length] == 0) {
 			debug_NSLog(@"No OpenStates ID for committee: %@ -- %@", [com committeeName], com.committeeId);
 		}
 	}
@@ -356,20 +262,23 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 
 
 - (void)verifyCommitteeAssignmentsByChamber:(NSInteger)chamber {
-#warning unfinished ... needs reconceptualization
 	NSArray *jsonArray = [self getJSONCommitteesByChamber:chamber];
 	if (!jsonArray)
 		return;
 	for (NSDictionary *dict in jsonArray) {
-		NSString *votesmart = [dict objectForKey:@"votesmart_id"];
-		if (!votesmart || ![votesmart length]) {
-			debug_NSLog(@"No votesmart id for committee: %@ - id: %@", [dict objectForKey:@"committee"], [dict objectForKey:@"id"]);
+		// should we use openstates instead of votesmart??  where are we finding these committees?
+		
+		NSString *idString = [dict objectForKey:@"id"];
+		if (!idString || ![openStatesID length]) {
+			debug_NSLog(@"No OpenStates ID  for committee: %@ - id: %@", [dict objectForKey:@"committee"], [dict objectForKey:@"id"]);
 			continue;
 		}
-		NSNumber *legID = [NSNumber numberWithInteger:[votesmart integerValue]];
-		CommitteeObj *committee = [TexLegeCoreDataUtils committeeWithCommitteeID:legID withContext:self.managedObjectContext];
+		NSNumber *openStatesID = [NSNumber numberWithInteger:[idString integerValue]];
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.openstatesID == %@", openStatesID];
+		CommitteeObj *committee  = [TexLegeCoreDataUtils dataObjectWithPredicate:predicate entityName:@"CommitteeObj" context:self.managedObjectContext];
+		
 		if (!committee) {
-			debug_NSLog(@"No committee object found for: %@ - votesmart_id: %@", [dict objectForKey:@"committee"], votesmart);
+			debug_NSLog(@"No committee object found for: %@ - openStatesID: %@", [dict objectForKey:@"committee"], openStatesID);
 			continue;
 		}
 		
@@ -383,6 +292,8 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 			[jsonMembers addObject:[jsonPosition objectForKey:@"leg_id"]];
 		}
 		
+#warning unfinished ... needs some sort of comparison between these two arrays
+
 	}
 	
 	//NSArray *currentCommittees = [TexLegeCoreDataUtils allObjectsInEntityNamed:@"CommitteeObj" context:self.managedObjectContext];

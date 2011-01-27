@@ -27,6 +27,10 @@
 @property (nonatomic, retain) NSString * phone;
 @property (nonatomic, retain) NSString * office;
 
+@property (nonatomic, retain) NSNumber * votesmartID;
+@property (nonatomic, retain) NSString * openstatesID;
+@property (nonatomic, retain) NSString * txlonline_id;
+
 - (NSString *) typeString;
 - (NSString *) description;
 - (LegislatorObj *) chair;
