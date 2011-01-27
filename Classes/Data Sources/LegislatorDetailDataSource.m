@@ -12,6 +12,7 @@
 #import "TexLegeTheme.h"
 #import "DistrictMapObj.h"
 
+#import "StafferObj.h"
 #import "DistrictOfficeObj.h"
 #import "CommitteeObj.h"
 #import "CommitteePositionObj.h"
@@ -66,7 +67,8 @@
 }
 
 - (void) createSectionList {
-	NSInteger numberOfSections = 3 + [self.legislator numberOfDistrictOffices];	
+	NSInteger numberOfSections = 4 + [self.legislator numberOfDistrictOffices];
+	
 	NSString *tempString = nil;
 	BOOL isPhone = [UtilityMethods canMakePhoneCalls];
 	TableCellDataObject *cellInfo = nil;
@@ -217,13 +219,28 @@
 	
 	/* Now we handle all the office locations ... */
 	sectionIndex++;
-	/*	Section 1: Capitol Office */		
+	/*	Section 1: Staffers */
 	
-	if (self.legislator && self.legislator.staff && [self.legislator.staff length]) {
+	if ([self.legislator numberOfStaffers] > 0) {
+		for (StafferObj *staffer in self.legislator.staffers) {
+			entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+						 staffer.title, @"subtitle",
+						 staffer.email, @"entryValue",
+						 staffer.name, @"title",
+						 [NSNumber numberWithBool:YES], @"isClickable",
+						 [NSNumber numberWithInteger:DirectoryTypeMail], @"entryType",
+						 nil];
+			cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
+			[entryDict release];
+			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
+			[cellInfo release], cellInfo = nil;
+		}
+	}
+	else {
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 					 @"Staff", @"subtitle",
-					 self.legislator.staff, @"entryValue",
-					 self.legislator.staff, @"title",
+					 @"NoneListed", @"entryValue",
+					 @"No Staff Listed", @"title",
 					 [NSNumber numberWithBool:NO], @"isClickable",
 					 [NSNumber numberWithInteger:DirectoryTypeNone], @"entryType",
 					 nil];
@@ -232,7 +249,11 @@
 		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 		[cellInfo release], cellInfo = nil;
 	}
-	
+		
+	/* Now we handle all the office locations ... */
+	sectionIndex++;
+	/*	Section 2: Capitol Office */		
+		
 	if (self.legislator && self.legislator.cap_office && [self.legislator.cap_office length]) {
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 					 @"Office", @"subtitle",
@@ -288,6 +309,7 @@
 	} 
 	
 	/* after that section's done... */
+	/*	Section 3+: District Offices */		
 	
 	for (DistrictOfficeObj *office in self.legislator.districtOffices) {
 		sectionIndex++;
@@ -393,22 +415,37 @@
 }
 
 - (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {	
-	if (section == 0)
-		return @"Legislator Information";
-	else if (section == 1)
-		return @"Committee Assignments";
-	else if (section == 2)
-		return @"Capitol Office";
-	else if (section == 3)
-		return @"District Office #1";
-	else if (section == 4)
-		return @"District Office #2";
-	else if (section == 5)
-		return @"District Office #3";
-	else //if (section == 6)
-		return @"District Office #4";
+	NSString *title = nil;
+	
+	switch (section) {
+		case 0:
+			title = @"Legislator Information";
+			break;
+		case 1:
+			title = @"Committee Assignments";
+			break;
+		case 2:
+			title = @"Staff Members";
+			break;
+		case 3:
+			title = @"Capitol Office";
+			break;
+		case 4:
+			title = @"District Office #1";
+			break;
+		case 5:
+			title = @"District Office #2";
+			break;
+		case 6:
+			title = @"District Office #3";
+			break;
+		case 7:
+		default:
+			title = @"District Office #4";
+			break;
+	}
+	return title;
 }
-
 
 
 - (NSString *)chamberAbbrev {
