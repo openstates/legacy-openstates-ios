@@ -90,7 +90,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-	
+
 	NSDictionary *segPrefs = [[NSUserDefaults standardUserDefaults] objectForKey:kSegmentControlPrefKey];
 	if (segPrefs) {
 		NSNumber *segIndex = [segPrefs objectForKey:[self viewControllerKey]];
@@ -98,7 +98,6 @@
 			self.chamberControl.selectedSegmentIndex = [segIndex integerValue];
 	}
 
-		
 	//// ALL OF THE FOLLOWING MUST NOT RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER	
 	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
 		id detailObject = self.detailViewController ? [self.detailViewController valueForKey:@"legislator"] : nil;
