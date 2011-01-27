@@ -171,6 +171,9 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 
 - (void)drawRect:(CGRect)dirtyRect
 {
+	if (!self.legislator)
+		return;
+	
 	//debug_NSLog(@"dirty rect: %f %f %f %f", dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height);
 
 	CGRect imageBounds = CGRectMake(0.0f, 0.0f, kLegislatorMasterCellViewWidth, kLegislatorMasterCellViewHeight);
@@ -298,8 +301,7 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 	CGContextRestoreGState(context);
 	CGPathRelease(path);
 	
-	
-	if (self.legislator.partisan_index.floatValue == 0.0f) {
+	if (self.legislator.partisan_index && [self.legislator.partisan_index floatValue] == 0.0f) {
 		if (!self.questionImage) {
 			NSString *imageString = /*(self.usesSmallStar) ? @"Slider_Question.png" :*/ @"Slider_Question_big.png";
 			self.questionImage = [UIImage imageNamed:imageString];
