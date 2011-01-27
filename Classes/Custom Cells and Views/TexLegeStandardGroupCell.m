@@ -34,7 +34,9 @@
 		self.textLabel.font =				[TexLegeTheme boldTen];
 		self.detailTextLabel.textColor = 	[TexLegeTheme textDark];
 		self.textLabel.textColor =			[TexLegeTheme accent];
-		
+
+		self.textLabel.adjustsFontSizeToFitWidth =	YES;
+
 		self.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
 		self.detailTextLabel.adjustsFontSizeToFitWidth = YES;
 		self.detailTextLabel.minimumFontSize = 12.0f;
