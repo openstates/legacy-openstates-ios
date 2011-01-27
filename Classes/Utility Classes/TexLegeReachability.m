@@ -136,6 +136,10 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 			[ alert show ];		
 		}
 	}
+	else if ([[url scheme] isEqualToString:@"twitter"] && 
+			 [[UIApplication sharedApplication] canOpenURL:url])
+		reachableHost = YES;
+	
 	else if (![TexLegeReachability isHostReachable:[url host]]) {
 		if (doAlert) {
 			alert = [[[ UIAlertView alloc ] 
