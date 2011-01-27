@@ -71,8 +71,17 @@
 				NSMutableString *twitString = [NSMutableString stringWithString:entryValue];
 				if ([twitString hasPrefix:@"@"])
 					[twitString deleteCharactersInRange:NSMakeRange(0, 1)];
-				[twitString insertString:@"http://m.twitter.com/" atIndex:0];
-				tempURL = [NSURL URLWithString:twitString];
+				
+				NSString *interAppTwitter = [NSString stringWithFormat:@"twitter://user?screen_name=%@", twitString];
+				NSURL *interAppTwitterURL = [NSURL URLWithString:interAppTwitter];
+				
+				if ([[UIApplication sharedApplication] canOpenURL:interAppTwitterURL]) {
+					tempURL = interAppTwitterURL;
+				}
+				else {
+					[twitString insertString:@"http://m.twitter.com/" atIndex:0];
+					tempURL = [NSURL URLWithString:twitString];
+				}
 			}
 				break;
 			default:
