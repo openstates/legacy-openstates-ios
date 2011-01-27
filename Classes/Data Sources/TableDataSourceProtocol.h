@@ -32,6 +32,8 @@
 - (BOOL)showDisclosureIcon;
 
 @optional
+
+@property (nonatomic, readonly) BOOL hasFilter;
 - (void) setFilterByString:(NSString *)filter;
 - (void) removeFilter;
 
@@ -57,6 +59,7 @@
 @property (nonatomic) BOOL hideTableIndex;
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
+- (void)resetData:(NSNotificationCenter *)notification;
 
 
 @end
