@@ -1,6 +1,9 @@
 
-
 #if DEBUG
+#import <Foundation/Foundation.h>
+#import <objc/runtime.h>
+#import <CoreData/CoreData.h>
+
 @implementation NSObject(MCManagedObjectDebug)
 + (NSMutableArray *)MCproperties
 {
