@@ -116,20 +116,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>39</integer>
-        <key>name</key>
-        <string>Lila Tompkins</string>
-        <key>title</key>
-        <string>Administrative Assistant</string>
-        <key>legislatorID</key>
-        <integer>5551</integer>
-        <key>email</key>
-        <string>lila.tompkins@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>40</integer>
         <key>name</key>
         <string>Nina Sidoryanskaya</string>
@@ -214,20 +200,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>46</integer>
-        <key>name</key>
-        <string>Rosa Alfaro</string>
-        <key>title</key>
-        <string>Administrative Assistant</string>
-        <key>legislatorID</key>
-        <integer>9968</integer>
-        <key>email</key>
-        <string>rosa.alfaro@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>47</integer>
         <key>name</key>
         <string>Adriana Alanis</string>
@@ -279,20 +251,6 @@
         <integer>49739</integer>
         <key>email</key>
         <string>laura.bowman@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>51</integer>
-        <key>name</key>
-        <string>Cassandra Mata-Brigante</string>
-        <key>title</key>
-        <string>Administrative Assistant</string>
-        <key>legislatorID</key>
-        <integer>10060</integer>
-        <key>email</key>
-        <string>cassandra.mata_brigante@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -410,34 +368,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>60</integer>
-        <key>name</key>
-        <string>Chase Carter</string>
-        <key>title</key>
-        <string>Administrative Assistant</string>
-        <key>legislatorID</key>
-        <integer>5517</integer>
-        <key>email</key>
-        <string>chase.carter@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>61</integer>
-        <key>name</key>
-        <string>Lila Tompkins</string>
-        <key>title</key>
-        <string>Administrative Assistant</string>
-        <key>legislatorID</key>
-        <integer>5551</integer>
-        <key>email</key>
-        <string>lila.tompkins@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>62</integer>
         <key>name</key>
         <string>Nina Sidoryanskaya</string>
@@ -466,20 +396,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>64</integer>
-        <key>name</key>
-        <string>Linda Christofilis</string>
-        <key>title</key>
-        <string>Administrative Assistant</string>
-        <key>legislatorID</key>
-        <integer>5438</integer>
-        <key>email</key>
-        <string>linda.christofilis@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>66</integer>
         <key>name</key>
         <string>Sarah Thigpen</string>
@@ -503,20 +419,6 @@
         <integer>59338</integer>
         <key>email</key>
         <string>mandy.morton@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>68</integer>
-        <key>name</key>
-        <string>Rosa Alfaro</string>
-        <key>title</key>
-        <string>Administrative Assistant</string>
-        <key>legislatorID</key>
-        <integer>9968</integer>
-        <key>email</key>
-        <string>rosa.alfaro@senate.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -578,20 +480,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>73</integer>
-        <key>name</key>
-        <string>Cassandra Mata-Brigante</string>
-        <key>title</key>
-        <string>Administrative Assistant</string>
-        <key>legislatorID</key>
-        <integer>10060</integer>
-        <key>email</key>
-        <string>cassandra.mata_brigante@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>74</integer>
         <key>name</key>
         <string>Sarah Hensley</string>
@@ -601,20 +489,6 @@
         <integer>9959</integer>
         <key>email</key>
         <string>sarah.hensley@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>75</integer>
-        <key>name</key>
-        <string>Amy L'Etoile</string>
-        <key>title</key>
-        <string>Administrative Assistant</string>
-        <key>legislatorID</key>
-        <integer>5482</integer>
-        <key>email</key>
-        <string>amy.letoile@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -652,13 +526,15 @@
         <key>name</key>
         <string>Leah Alexander</string>
         <key>title</key>
-        <string>Administrative Assistant</string>
+        <string>District Director</string>
         <key>legislatorID</key>
-        <integer>49636</integer>
+        <integer>116941</integer>
         <key>email</key>
         <string>leah.alexander@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 23:12:55</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -718,20 +594,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>83</integer>
-        <key>name</key>
-        <string>Tiffany Norman</string>
-        <key>title</key>
-        <string>Administrative Assistant</string>
-        <key>legislatorID</key>
-        <integer>10019</integer>
-        <key>email</key>
-        <string>tiffany.norman@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>84</integer>
         <key>name</key>
         <string>Wesley Starnes</string>
@@ -769,34 +631,6 @@
         <integer>25471</integer>
         <key>email</key>
         <string>ryan.little@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>87</integer>
-        <key>name</key>
-        <string>Christa Quinn</string>
-        <key>title</key>
-        <string>Administrative Assistant</string>
-        <key>legislatorID</key>
-        <integer>5536</integer>
-        <key>email</key>
-        <string>christa.quinn@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>88</integer>
-        <key>name</key>
-        <string>Andrea Laws</string>
-        <key>title</key>
-        <string>Administrative Assistant</string>
-        <key>legislatorID</key>
-        <integer>49709</integer>
-        <key>email</key>
-        <string>andrea.laws@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -970,20 +804,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>101</integer>
-        <key>name</key>
-        <string>Yvonne Reynolds</string>
-        <key>title</key>
-        <string>Administrative Director</string>
-        <key>legislatorID</key>
-        <integer>57991</integer>
-        <key>email</key>
-        <string>yvonne.reynolds@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>102</integer>
         <key>name</key>
         <string>Jean Dendy</string>
@@ -1030,13 +850,15 @@
         <key>name</key>
         <string>Kimberly Lile</string>
         <key>title</key>
-        <string>Administrative Director</string>
+        <string>District Director</string>
         <key>legislatorID</key>
-        <integer>15097</integer>
+        <integer>117461</integer>
         <key>email</key>
         <string>kimberly.lile@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:34:32</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -1082,20 +904,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>109</integer>
-        <key>name</key>
-        <string>Cheryl Tarochione</string>
-        <key>title</key>
-        <string>Administrative Director</string>
-        <key>legislatorID</key>
-        <integer>49709</integer>
-        <key>email</key>
-        <string>cheryl.tarochione@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>110</integer>
         <key>name</key>
         <string>Rose Guajardo Walker</string>
@@ -1119,34 +927,6 @@
         <integer>5477</integer>
         <key>email</key>
         <string>judith.wynn@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>112</integer>
-        <key>name</key>
-        <string>Lindsay Pearson</string>
-        <key>title</key>
-        <string>Administrative Director</string>
-        <key>legislatorID</key>
-        <integer>59409</integer>
-        <key>email</key>
-        <string>lindsay.pearson@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>113</integer>
-        <key>name</key>
-        <string>Brenda Crook</string>
-        <key>title</key>
-        <string>Administrative Director</string>
-        <key>legislatorID</key>
-        <integer>25518</integer>
-        <key>email</key>
-        <string>brenda.crook@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -1184,27 +964,15 @@
         <key>name</key>
         <string>Deanna Zimmerman</string>
         <key>title</key>
-        <string>Administrative Director</string>
+        <string>District Director</string>
         <key>legislatorID</key>
-        <integer>49633</integer>
+        <integer>49612</integer>
         <key>email</key>
         <string>deanna.zimmerman@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>117</integer>
-        <key>name</key>
-        <string>Heather Harward</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>5470</integer>
-        <key>email</key>
-        <string>heather.harward@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
+        <key>updated</key>
+        <string>2011-01-27 23:30:31</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -1404,20 +1172,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>132</integer>
-        <key>name</key>
-        <string>Steve Roddy</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>5451</integer>
-        <key>email</key>
-        <string>steve.roddy@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>133</integer>
         <key>name</key>
         <string>Steven Albright</string>
@@ -1474,31 +1228,19 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>137</integer>
-        <key>name</key>
-        <string>Eduardo Hagert</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>9968</integer>
-        <key>email</key>
-        <string>eduardo.hagert@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>138</integer>
         <key>name</key>
-        <string>Tomas Larralde</string>
+        <string>Jason Hassay</string>
         <key>title</key>
         <string>Chief of Staff</string>
         <key>legislatorID</key>
         <integer>15218</integer>
         <key>email</key>
-        <string>tomas.larralde@senate.state.tx.us</string>
+        <string>jason.hassay@senate.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-28 00:29:18</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -1518,15 +1260,17 @@
         <key>stafferID</key>
         <integer>140</integer>
         <key>name</key>
-        <string>Trent Townsend</string>
+        <string>Sarah Howard</string>
         <key>title</key>
         <string>Chief of Staff</string>
         <key>legislatorID</key>
         <integer>57991</integer>
         <key>email</key>
-        <string>trent.townsend@senate.state.tx.us</string>
+        <string>sarah.howard@senate.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-28 00:31:18</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -1698,20 +1442,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>153</integer>
-        <key>name</key>
-        <string>Elizabeth Hartman</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>58512</integer>
-        <key>email</key>
-        <string>elizabeth.hartman@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>154</integer>
         <key>name</key>
         <string>Shera Eichler</string>
@@ -1746,11 +1476,13 @@
         <key>title</key>
         <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>25426</integer>
+        <integer>116957</integer>
         <key>email</key>
         <string>jackie.king@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:07:20</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -1796,20 +1528,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>160</integer>
-        <key>name</key>
-        <string>Ali Razavi</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>10060</integer>
-        <key>email</key>
-        <string>ali.razavi@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>161</integer>
         <key>name</key>
         <string>David White</string>
@@ -1819,20 +1537,6 @@
         <integer>9959</integer>
         <key>email</key>
         <string>david.white@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>162</integer>
-        <key>name</key>
-        <string>Bill Kelly</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>59409</integer>
-        <key>email</key>
-        <string>bill.kelly@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -1964,20 +1668,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>172</integer>
-        <key>name</key>
-        <string>Jenny Casey</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>10055</integer>
-        <key>email</key>
-        <string>jenny.casey@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>173</integer>
         <key>name</key>
         <string>Lynette Kilgore</string>
@@ -2020,34 +1710,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>176</integer>
-        <key>name</key>
-        <string>Theresa Huchingson</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>59353</integer>
-        <key>email</key>
-        <string>theresa.huchingson@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>177</integer>
-        <key>name</key>
-        <string>Thure Cannon</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>25518</integer>
-        <key>email</key>
-        <string>thure.cannon@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>178</integer>
         <key>name</key>
         <string>Clifton Walker</string>
@@ -2070,7 +1732,7 @@
         <key>legislatorID</key>
         <integer>5503</integer>
         <key>email</key>
-        <string>lillian.aguirre.ortiz@house.state.tx.us</string>
+        <string>lillian.ortiz@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -2090,31 +1752,19 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>181</integer>
-        <key>name</key>
-        <string>Lee R. Loya</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>10025</integer>
-        <key>email</key>
-        <string>lee.loya@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>182</integer>
         <key>name</key>
         <string>Patsy Clapper</string>
         <key>title</key>
         <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>49928</integer>
+        <integer>116981</integer>
         <key>email</key>
         <string>patsy.clapper@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:53:50</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -2174,20 +1824,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>187</integer>
-        <key>name</key>
-        <string>Nelson Salinas</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>49820</integer>
-        <key>email</key>
-        <string>nelson.salinas@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>188</integer>
         <key>name</key>
         <string>Robert McVey</string>
@@ -2197,20 +1833,6 @@
         <integer>49248</integer>
         <key>email</key>
         <string>robert.mcvey@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>189</integer>
-        <key>name</key>
-        <string>Thelma De Leon</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>106951</integer>
-        <key>email</key>
-        <string>thelma.deleon@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -2300,34 +1922,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>196</integer>
-        <key>name</key>
-        <string>Trish Conradt</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>57251</integer>
-        <key>email</key>
-        <string>trish.conradt@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>197</integer>
-        <key>name</key>
-        <string>Jaclyn J. Uresti</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>50002</integer>
-        <key>email</key>
-        <string>jaclyn.uresti@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>198</integer>
         <key>name</key>
         <string>Debra Van Bibber</string>
@@ -2337,20 +1931,6 @@
         <integer>5523</integer>
         <key>email</key>
         <string>debra.van.bibber@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>199</integer>
-        <key>name</key>
-        <string>Clint Magee</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>10065</integer>
-        <key>email</key>
-        <string>clint.magee@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -2404,11 +1984,13 @@
         <key>title</key>
         <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>15097</integer>
+        <integer>117461</integer>
         <key>email</key>
         <string>robin.macewan@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:05:15</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -2426,20 +2008,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>205</integer>
-        <key>name</key>
-        <string>Barbara Crawford</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>5536</integer>
-        <key>email</key>
-        <string>barbara.crawford@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>206</integer>
         <key>name</key>
         <string>Ky Ash</string>
@@ -2449,20 +2017,6 @@
         <integer>10028</integer>
         <key>email</key>
         <string>ky.ash@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>207</integer>
-        <key>name</key>
-        <string>Will Stovall</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>102275</integer>
-        <key>email</key>
-        <string>will.stovall@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -2538,20 +2092,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>213</integer>
-        <key>name</key>
-        <string>Brittney Thomas</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>5542</integer>
-        <key>email</key>
-        <string>brittney.thomas@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>214</integer>
         <key>name</key>
         <string>Suzanne Bowers</string>
@@ -2580,20 +2120,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>216</integer>
-        <key>name</key>
-        <string>Rob Borja</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>49742</integer>
-        <key>email</key>
-        <string>rob.borja@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>217</integer>
         <key>name</key>
         <string>Scott Sims</string>
@@ -2617,20 +2143,6 @@
         <integer>56543</integer>
         <key>email</key>
         <string>ruben.obell@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>219</integer>
-        <key>name</key>
-        <string>Tommy Tynes</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>102254</integer>
-        <key>email</key>
-        <string>tommy.tynes@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -2678,20 +2190,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>223</integer>
-        <key>name</key>
-        <string>Sean Cunningham</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>5551</integer>
-        <key>email</key>
-        <string>sean.cunningham@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>224</integer>
         <key>name</key>
         <string>Janis Reinken</string>
@@ -2720,34 +2218,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>226</integer>
-        <key>name</key>
-        <string>Jennifer Foster</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>9957</integer>
-        <key>email</key>
-        <string>jennifer.foster@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>227</integer>
-        <key>name</key>
-        <string>Brian Hodgdon</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>102273</integer>
-        <key>email</key>
-        <string>brian.hodgdon@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>228</integer>
         <key>name</key>
         <string>Karen Kolb</string>
@@ -2771,20 +2241,6 @@
         <integer>102045</integer>
         <key>email</key>
         <string>fritz.reinig@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>230</integer>
-        <key>name</key>
-        <string>Daniel Mahoney</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>102266</integer>
-        <key>email</key>
-        <string>daniel.mahoney@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -2848,15 +2304,17 @@
         <key>stafferID</key>
         <integer>235</integer>
         <key>name</key>
-        <string>Rick Dennis</string>
+        <string>Richard Dennis</string>
         <key>title</key>
         <string>Chief of Staff</string>
         <key>legislatorID</key>
         <integer>59370</integer>
         <key>email</key>
-        <string>rick.dennis@house.state.tx.us</string>
+        <string>richard.dennis@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 23:03:59</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -2869,20 +2327,6 @@
         <integer>59327</integer>
         <key>email</key>
         <string>julie.freeman@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>237</integer>
-        <key>name</key>
-        <string>James Lampley</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>50000</integer>
-        <key>email</key>
-        <string>james.lampley@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -2911,20 +2355,6 @@
         <integer>5563</integer>
         <key>email</key>
         <string>katharine.chambers@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>240</integer>
-        <key>name</key>
-        <string>Maureen Perro</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>58009</integer>
-        <key>email</key>
-        <string>maureen.perro@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -2972,20 +2402,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>244</integer>
-        <key>name</key>
-        <string>Edward Gonzales</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>102267</integer>
-        <key>email</key>
-        <string>edward.gonzales@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>245</integer>
         <key>name</key>
         <string>Sean Haynes</string>
@@ -3014,31 +2430,19 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>247</integer>
-        <key>name</key>
-        <string>Mireya Zapata</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>49709</integer>
-        <key>email</key>
-        <string>mireya.zapata@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>248</integer>
         <key>name</key>
         <string>Molly Quirk</string>
         <key>title</key>
         <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>102041</integer>
+        <integer>57985</integer>
         <key>email</key>
         <string>molly.quirk@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 23:02:13</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -3132,11 +2536,13 @@
         <key>title</key>
         <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>5585</integer>
+        <integer>79279</integer>
         <key>email</key>
         <string>allison.scott@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:54:51</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -3160,11 +2566,13 @@
         <key>title</key>
         <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>59408</integer>
+        <integer>102294</integer>
         <key>email</key>
         <string>jennifer.brader@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 23:10:57</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -3182,20 +2590,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>259</integer>
-        <key>name</key>
-        <string>Emily Amps</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>102270</integer>
-        <key>email</key>
-        <string>emily.amps@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>260</integer>
         <key>name</key>
         <string>Alison Brock</string>
@@ -3205,20 +2599,6 @@
         <integer>8018</integer>
         <key>email</key>
         <string>alison.brock@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>261</integer>
-        <key>name</key>
-        <string>Lauren Mish</string>
-        <key>title</key>
-        <string>Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>58225</integer>
-        <key>email</key>
-        <string>lauren.mish@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -3328,11 +2708,13 @@
         <key>title</key>
         <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>49636</integer>
+        <integer>116959</integer>
         <key>email</key>
         <string>hal.talton@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 23:09:55</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -3392,20 +2774,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>274</integer>
-        <key>name</key>
-        <string>Arthur Reyna III</string>
-        <key>title</key>
-        <string>Communications Assistant</string>
-        <key>legislatorID</key>
-        <integer>15218</integer>
-        <key>email</key>
-        <string>arthur.reyna@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>275</integer>
         <key>name</key>
         <string>Kathryn Freeman</string>
@@ -3456,7 +2824,7 @@
         <key>legislatorID</key>
         <integer>5497</integer>
         <key>email</key>
-        <string>deon.daugherty.allen@senate.state.tx.us</string>
+        <string>deon.allen@senate.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -3508,33 +2876,21 @@
         <key>name</key>
         <string>Dave Nelson</string>
         <key>title</key>
-        <string>Communications Director</string>
+        <string>Chief of Staff</string>
         <key>legislatorID</key>
         <integer>5451</integer>
         <key>email</key>
         <string>dave.nelson@senate.state.tx.us</string>
         <key>phone</key>
         <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>283</integer>
-        <key>name</key>
-        <string>Daniel Collins</string>
-        <key>title</key>
-        <string>Communications Director</string>
-        <key>legislatorID</key>
-        <integer>9968</integer>
-        <key>email</key>
-        <string>daniel.collins@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
+        <key>updated</key>
+        <string>2011-01-28 00:22:49</string>
     </dict>
     <dict>
         <key>stafferID</key>
         <integer>284</integer>
         <key>name</key>
-        <string>Rebecca Acuna</string>
+        <string>Rebecca Acuña</string>
         <key>title</key>
         <string>Communications Director</string>
         <key>legislatorID</key>
@@ -3543,6 +2899,8 @@
         <string>rebecca.acuna@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-28 00:25:16</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -3662,27 +3020,15 @@
         <key>name</key>
         <string>Sonia C. Lopez</string>
         <key>title</key>
-        <string>Communications Director</string>
+        <string>District Director</string>
         <key>legislatorID</key>
         <integer>59301</integer>
         <key>email</key>
         <string>sonia.lopez@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>294</integer>
-        <key>name</key>
-        <string>Lindsay Taylor</string>
-        <key>title</key>
-        <string>Communications Director</string>
-        <key>legislatorID</key>
-        <integer>25383</integer>
-        <key>email</key>
-        <string>lindsay.taylor@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:43:37</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -3695,20 +3041,6 @@
         <integer>56543</integer>
         <key>email</key>
         <string>arnold.flores@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>296</integer>
-        <key>name</key>
-        <string>Jon Niven</string>
-        <key>title</key>
-        <string>Communications Director</string>
-        <key>legislatorID</key>
-        <integer>102254</integer>
-        <key>email</key>
-        <string>jon.niven@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -3744,29 +3076,17 @@
         <key>stafferID</key>
         <integer>299</integer>
         <key>name</key>
-        <string>Addie Smith</string>
+        <string>Janet Elliott</string>
         <key>title</key>
         <string>Communications Director</string>
         <key>legislatorID</key>
         <integer>5451</integer>
         <key>email</key>
-        <string>addie.smith@senate.state.tx.us</string>
+        <string>janet.elliott@senate.state.tx.us</string>
         <key>phone</key>
         <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>300</integer>
-        <key>name</key>
-        <string>Sarah Chanslor</string>
-        <key>title</key>
-        <string>Deputy Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>57991</integer>
-        <key>email</key>
-        <string>sarah.chanslor@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
+        <key>updated</key>
+        <string>2011-01-28 00:24:02</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -3779,20 +3099,6 @@
         <integer>5462</integer>
         <key>email</key>
         <string>pat.kelly@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>302</integer>
-        <key>name</key>
-        <string>Ellen Gale</string>
-        <key>title</key>
-        <string>Deputy Chief of Staff</string>
-        <key>legislatorID</key>
-        <integer>25426</integer>
-        <key>email</key>
-        <string>ellen.gale@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -3840,20 +3146,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>306</integer>
-        <key>name</key>
-        <string>Heather Welles</string>
-        <key>title</key>
-        <string>Scheduler</string>
-        <key>legislatorID</key>
-        <integer>58512</integer>
-        <key>email</key>
-        <string>heather.welles@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>307</integer>
         <key>name</key>
         <string>Scott Daigle</string>
@@ -3882,20 +3174,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>309</integer>
-        <key>name</key>
-        <string>Russell Devorsky</string>
-        <key>title</key>
-        <string>District Director</string>
-        <key>legislatorID</key>
-        <integer>10055</integer>
-        <key>email</key>
-        <string>russell.devorsky@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>310</integer>
         <key>name</key>
         <string>Nina Serna</string>
@@ -3914,41 +3192,15 @@
         <key>name</key>
         <string>Timothy Head</string>
         <key>title</key>
-        <string>General Counsel</string>
+        <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>50173</integer>
+        <integer>116939</integer>
         <key>email</key>
         <string>timothy.head@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>312</integer>
-        <key>name</key>
-        <string>Susan Turner Nold</string>
-        <key>title</key>
-        <string>General Counsel</string>
-        <key>legislatorID</key>
-        <integer>57991</integer>
-        <key>email</key>
-        <string>susan.nold@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>313</integer>
-        <key>name</key>
-        <string>Edna Butts</string>
-        <key>title</key>
-        <string>General Counsel</string>
-        <key>legislatorID</key>
-        <integer>57991</integer>
-        <key>email</key>
-        <string>edna.butts@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
+        <key>updated</key>
+        <string>2011-01-27 23:27:12</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -3975,34 +3227,6 @@
         <integer>49917</integer>
         <key>email</key>
         <string>jesse.ancira@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>316</integer>
-        <key>name</key>
-        <string>John Kearney</string>
-        <key>title</key>
-        <string>General Counsel</string>
-        <key>legislatorID</key>
-        <integer>10060</integer>
-        <key>email</key>
-        <string>john.kearney@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>317</integer>
-        <key>name</key>
-        <string>Elizabeth Hadley</string>
-        <key>title</key>
-        <string>General Counsel</string>
-        <key>legislatorID</key>
-        <integer>5470</integer>
-        <key>email</key>
-        <string>elizabeth.hadley@senate.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -4045,34 +3269,6 @@
         <integer>5451</integer>
         <key>email</key>
         <string>charlotte.shivers.johnson@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>321</integer>
-        <key>name</key>
-        <string>David S. Edmonson</string>
-        <key>title</key>
-        <string>General Counsel</string>
-        <key>legislatorID</key>
-        <integer>9968</integer>
-        <key>email</key>
-        <string>david.edmonson@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>322</integer>
-        <key>name</key>
-        <string>Jason Hassay</string>
-        <key>title</key>
-        <string>General Counsel</string>
-        <key>legislatorID</key>
-        <integer>15218</integer>
-        <key>email</key>
-        <string>jason.hassay@senate.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -4148,45 +3344,19 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>328</integer>
-        <key>name</key>
-        <string>Elizabeth Choate</string>
-        <key>title</key>
-        <string>General Counsel</string>
-        <key>legislatorID</key>
-        <integer>5479</integer>
-        <key>email</key>
-        <string>elizabeth.choate@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>329</integer>
-        <key>name</key>
-        <string>Erin Gilmer</string>
-        <key>title</key>
-        <string>General Counsel</string>
-        <key>legislatorID</key>
-        <integer>5479</integer>
-        <key>email</key>
-        <string>erin.gilmer@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>330</integer>
         <key>name</key>
-        <string>David Brooks</string>
+        <string>Allison Brooks</string>
         <key>title</key>
-        <string>General Counsel</string>
+        <string>Scheduling</string>
         <key>legislatorID</key>
         <integer>15218</integer>
         <key>email</key>
-        <string>david.brooks@senate.state.tx.us</string>
+        <string>allison.brooks@senate.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-28 00:30:04</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -4232,31 +3402,19 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>334</integer>
-        <key>name</key>
-        <string>Jose &quot;Chito&quot; Vela</string>
-        <key>title</key>
-        <string>General Counsel</string>
-        <key>legislatorID</key>
-        <integer>69267</integer>
-        <key>email</key>
-        <string>jose.vela@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>335</integer>
         <key>name</key>
-        <string>Anne Creixell</string>
+        <string>Orlando Salinas</string>
         <key>title</key>
-        <string>General Counsel</string>
+        <string>District Director</string>
         <key>legislatorID</key>
         <integer>50000</integer>
         <key>email</key>
-        <string>anne.creixell@house.state.tx.us</string>
+        <string>orlando.salinas@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 23:05:45</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -4339,20 +3497,6 @@
         <integer>49376</integer>
         <key>email</key>
         <string>vernon.effenberger@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>342</integer>
-        <key>name</key>
-        <string>Libby Goss</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>5551</integer>
-        <key>email</key>
-        <string>libby.goss@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -5020,41 +4164,15 @@
         <key>name</key>
         <string>Chris Sanchez</string>
         <key>title</key>
-        <string>Legislative Aide</string>
+        <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>10044</integer>
+        <integer>117456</integer>
         <key>email</key>
         <string>chris.sanchez@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>391</integer>
-        <key>name</key>
-        <string>Kelley Brault</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>58512</integer>
-        <key>email</key>
-        <string>kelley.brault@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>392</integer>
-        <key>name</key>
-        <string>Melanie Harrison</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>58512</integer>
-        <key>email</key>
-        <string>melanie.harrison@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:13:32</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -5188,13 +4306,15 @@
         <key>name</key>
         <string>Amy DeWeese</string>
         <key>title</key>
-        <string>Legislative Aide</string>
+        <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>49685</integer>
+        <integer>117472</integer>
         <key>email</key>
         <string>amy.deweese@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 23:15:08</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -5226,34 +4346,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>405</integer>
-        <key>name</key>
-        <string>Jon Harris Maurer</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>59409</integer>
-        <key>email</key>
-        <string>jon.maurer@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>406</integer>
-        <key>name</key>
-        <string>Eronn Putman</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>59409</integer>
-        <key>email</key>
-        <string>eronn.putman@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>407</integer>
         <key>name</key>
         <string>Gabriel Sepulveda</string>
@@ -5263,20 +4355,6 @@
         <integer>50125</integer>
         <key>email</key>
         <string>gabriel.sepulveda@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>408</integer>
-        <key>name</key>
-        <string>Adrian Rocha</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>5484</integer>
-        <key>email</key>
-        <string>adrian.rocha@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -5436,48 +4514,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>420</integer>
-        <key>name</key>
-        <string>Anthony Burton</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>59353</integer>
-        <key>email</key>
-        <string>anthony.burton@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>421</integer>
-        <key>name</key>
-        <string>Noah Beaudette</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>59353</integer>
-        <key>email</key>
-        <string>noah.beaudette@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>422</integer>
-        <key>name</key>
-        <string>Ben Trotter</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>25518</integer>
-        <key>email</key>
-        <string>ben.trotter@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>423</integer>
         <key>name</key>
         <string>Julianna Gonzaba</string>
@@ -5529,20 +4565,6 @@
         <integer>9956</integer>
         <key>email</key>
         <string>karah.carr@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>427</integer>
-        <key>name</key>
-        <string>Patrick Steck</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>49636</integer>
-        <key>email</key>
-        <string>patrick.steck@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -5632,48 +4654,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>434</integer>
-        <key>name</key>
-        <string>Maria Molina</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>49820</integer>
-        <key>email</key>
-        <string>maria.molina@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>435</integer>
-        <key>name</key>
-        <string>Christopher Kirkpatrick</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>49820</integer>
-        <key>email</key>
-        <string>christopher.kirkpatrick@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>436</integer>
-        <key>name</key>
-        <string>Jamie Nodarse</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>106951</integer>
-        <key>email</key>
-        <string>jamie.nodarse@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>437</integer>
         <key>name</key>
         <string>Jeff Madden</string>
@@ -5716,20 +4696,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>440</integer>
-        <key>name</key>
-        <string>Reina Cisneros</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>57251</integer>
-        <key>email</key>
-        <string>reina.cisneros@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>441</integer>
         <key>name</key>
         <string>Rahul Sreenivasan</string>
@@ -5758,20 +4724,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>443</integer>
-        <key>name</key>
-        <string>Sandy Pickell</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>10065</integer>
-        <key>email</key>
-        <string>sandy.pickell@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>444</integer>
         <key>name</key>
         <string>Jake Hale</string>
@@ -5795,20 +4747,6 @@
         <integer>5532</integer>
         <key>email</key>
         <string>justin.hudman@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>446</integer>
-        <key>name</key>
-        <string>Matt Weinstein</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>102275</integer>
-        <key>email</key>
-        <string>matt.weinstein@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -5846,13 +4784,15 @@
         <key>name</key>
         <string>Taurie Randermann</string>
         <key>title</key>
-        <string>Legislative Aide</string>
+        <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>49608</integer>
+        <integer>117470</integer>
         <key>email</key>
         <string>taurie.randermann@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:09:55</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -5865,20 +4805,6 @@
         <integer>49608</integer>
         <key>email</key>
         <string>allen.match@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>451</integer>
-        <key>name</key>
-        <string>Jennifer Dykstra</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>5542</integer>
-        <key>email</key>
-        <string>jennifer.dykstra@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -5926,20 +4852,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>455</integer>
-        <key>name</key>
-        <string>Eloy LaQue</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>49742</integer>
-        <key>email</key>
-        <string>eloy.laque@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>456</integer>
         <key>name</key>
         <string>Alex San Martin</string>
@@ -5963,20 +4875,6 @@
         <integer>5548</integer>
         <key>email</key>
         <string>mark.hey@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>458</integer>
-        <key>name</key>
-        <string>Jasser Awad</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>102254</integer>
-        <key>email</key>
-        <string>jasser.awad@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -6010,101 +4908,19 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>461</integer>
-        <key>name</key>
-        <string>Resha Thomas</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>9998</integer>
-        <key>email</key>
-        <string>resha.thomas@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>462</integer>
-        <key>name</key>
-        <string>Scott Glenn</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>9998</integer>
-        <key>email</key>
-        <string>scott.glenn@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>463</integer>
-        <key>name</key>
-        <string>Nicole Robbins</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>9998</integer>
-        <key>email</key>
-        <string>nicole.robbins@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>464</integer>
         <key>name</key>
         <string>Michael Lozano</string>
         <key>title</key>
         <string>Legislative Aide</string>
         <key>legislatorID</key>
-        <integer>9957</integer>
+        <integer>106951</integer>
         <key>email</key>
         <string>michael.lozano@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>465</integer>
-        <key>name</key>
-        <string>Kip Smith</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>9957</integer>
-        <key>email</key>
-        <string>kip.smith@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>466</integer>
-        <key>name</key>
-        <string>Tammy Tijerina</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>102273</integer>
-        <key>email</key>
-        <string>tammy.tijerina@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>467</integer>
-        <key>name</key>
-        <string>Chelsea Thurman</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>102273</integer>
-        <key>email</key>
-        <string>chelsea.thurman@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:41:03</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -6262,76 +5078,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>479</integer>
-        <key>name</key>
-        <string>Stefani Williams</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>10019</integer>
-        <key>email</key>
-        <string>stefani.williams@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>480</integer>
-        <key>name</key>
-        <string>Laura Bellows</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>10019</integer>
-        <key>email</key>
-        <string>laura.bellows@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>481</integer>
-        <key>name</key>
-        <string>Keleen Miller</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>10019</integer>
-        <key>email</key>
-        <string>keleen.miller@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>482</integer>
-        <key>name</key>
-        <string>Monica Desiree Castro</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>69267</integer>
-        <key>email</key>
-        <string>monica.castro@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>483</integer>
-        <key>name</key>
-        <string>Curtis Smith</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>69267</integer>
-        <key>email</key>
-        <string>curtis.smith@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>484</integer>
         <key>name</key>
         <string>Jessica Lutrell</string>
@@ -6362,15 +5108,17 @@
         <key>stafferID</key>
         <integer>486</integer>
         <key>name</key>
-        <string>Stuart Chaney</string>
+        <string>Mikael Garcia</string>
         <key>title</key>
-        <string>Legislative Aide</string>
+        <string>Legislative Director</string>
         <key>legislatorID</key>
         <integer>50000</integer>
         <key>email</key>
-        <string>stuart.chaney@house.state.tx.us</string>
+        <string>mikael.garcia@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 23:06:09</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -6378,13 +5126,15 @@
         <key>name</key>
         <string>Maricela DeLeon</string>
         <key>title</key>
-        <string>Legislative Aide</string>
+        <string>Chief of Staff</string>
         <key>legislatorID</key>
         <integer>50000</integer>
         <key>email</key>
         <string>maricela.deleon@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 23:05:07</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -6486,20 +5236,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>495</integer>
-        <key>name</key>
-        <string>Cesar De Leon</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>102267</integer>
-        <key>email</key>
-        <string>cesar.deleon@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>496</integer>
         <key>name</key>
         <string>Peter Salatich</string>
@@ -6584,73 +5320,19 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>502</integer>
-        <key>name</key>
-        <string>Joe Stephens</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>49709</integer>
-        <key>email</key>
-        <string>joe.stephens@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>503</integer>
         <key>name</key>
         <string>Maggie Irwin</string>
         <key>title</key>
-        <string>Legislative Aide</string>
+        <string>Legislative Director</string>
         <key>legislatorID</key>
-        <integer>102041</integer>
+        <integer>117477</integer>
         <key>email</key>
         <string>maggie.irwin@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>504</integer>
-        <key>name</key>
-        <string>Caitlin Styrsky</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>102058</integer>
-        <key>email</key>
-        <string>caitlin.styrsky@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>505</integer>
-        <key>name</key>
-        <string>Richard Shelton</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>102058</integer>
-        <key>email</key>
-        <string>richard.shelton@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>506</integer>
-        <key>name</key>
-        <string>Rebecca Rogers</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>102058</integer>
-        <key>email</key>
-        <string>rebecca.rogers@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:44:43</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -6714,13 +5396,15 @@
         <key>name</key>
         <string>Aaron Gibson</string>
         <key>title</key>
-        <string>Legislative Aide</string>
+        <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>5585</integer>
+        <integer>116944</integer>
         <key>email</key>
         <string>aaron.gibson@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:21:21</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -6733,20 +5417,6 @@
         <integer>25471</integer>
         <key>email</key>
         <string>lauren.connett@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>513</integer>
-        <key>name</key>
-        <string>Alex Hammond</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>59408</integer>
-        <key>email</key>
-        <string>alex.hammond@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -6775,20 +5445,6 @@
         <integer>25434</integer>
         <key>email</key>
         <string>sophia.lecky@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>516</integer>
-        <key>name</key>
-        <string>Brittany Rosales</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>102270</integer>
-        <key>email</key>
-        <string>brittany.rosales@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -6845,34 +5501,6 @@
         <integer>49576</integer>
         <key>email</key>
         <string>brooke.boutwell@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>521</integer>
-        <key>name</key>
-        <string>Jorge Lopez</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>102289</integer>
-        <key>email</key>
-        <string>jorge.lopez@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>522</integer>
-        <key>name</key>
-        <string>Weston Woodward</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>102026</integer>
-        <key>email</key>
-        <string>weston.woodward@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -7116,20 +5744,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>541</integer>
-        <key>name</key>
-        <string>Micah Rodriguez</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>15218</integer>
-        <key>email</key>
-        <string>micah.rodriguez@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>542</integer>
         <key>name</key>
         <string>Linda Townsend</string>
@@ -7200,20 +5814,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>547</integer>
-        <key>name</key>
-        <string>Joe Hamill</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>57991</integer>
-        <key>email</key>
-        <string>joe.hamill@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>548</integer>
         <key>name</key>
         <string>Susan Fontenette</string>
@@ -7251,20 +5851,6 @@
         <integer>49227</integer>
         <key>email</key>
         <string>giovanna.colson_basurto@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>551</integer>
-        <key>name</key>
-        <string>Loretta Class</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>5482</integer>
-        <key>email</key>
-        <string>loretta.class@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -7312,34 +5898,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>555</integer>
-        <key>name</key>
-        <string>Tommy Micah</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>10055</integer>
-        <key>email</key>
-        <string>tommy.micah@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>556</integer>
-        <key>name</key>
-        <string>Austin Lytle</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>10055</integer>
-        <key>email</key>
-        <string>austin.lytle@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>557</integer>
         <key>name</key>
         <string>Joey Oliva</string>
@@ -7349,20 +5907,6 @@
         <integer>5503</integer>
         <key>email</key>
         <string>joey.oliva@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>558</integer>
-        <key>name</key>
-        <string>Roxanne M. Garza</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>10025</integer>
-        <key>email</key>
-        <string>roxanne.garza@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -7410,20 +5954,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>562</integer>
-        <key>name</key>
-        <string>Darryl Pool</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>49636</integer>
-        <key>email</key>
-        <string>darryl.pool@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>563</integer>
         <key>name</key>
         <string>Paul Hanna</string>
@@ -7438,31 +5968,19 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>564</integer>
-        <key>name</key>
-        <string>Juliana Ibarra</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>50002</integer>
-        <key>email</key>
-        <string>juliana.ibarra@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>565</integer>
         <key>name</key>
         <string>Carrie Nelson</string>
         <key>title</key>
-        <string>Legislative Aide</string>
+        <string>District Director</string>
         <key>legislatorID</key>
-        <integer>5529</integer>
+        <integer>116946</integer>
         <key>email</key>
         <string>carrie.nelson@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:46:15</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -7538,15 +6056,17 @@
         <key>stafferID</key>
         <integer>571</integer>
         <key>name</key>
-        <string>Jessica Castilleja</string>
+        <string>Hector Morales</string>
         <key>title</key>
-        <string>Legislative Aide</string>
+        <string>Legislative Director</string>
         <key>legislatorID</key>
         <integer>49908</integer>
         <key>email</key>
-        <string>jessica.castilleja@house.state.tx.us</string>
+        <string>hector.morales@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:59:34</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -7559,20 +6079,6 @@
         <integer>49937</integer>
         <key>email</key>
         <string>devra.feld@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>573</integer>
-        <key>name</key>
-        <string>Baylor Johnson</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>58009</integer>
-        <key>email</key>
-        <string>baylor.johnson@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -7610,13 +6116,15 @@
         <key>name</key>
         <string>Austin Talbert</string>
         <key>title</key>
-        <string>Legislative Aide</string>
+        <string>Communications Director</string>
         <key>legislatorID</key>
-        <integer>5564</integer>
+        <integer>116935</integer>
         <key>email</key>
         <string>austin.talbert@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:39:31</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -7643,20 +6151,6 @@
         <integer>8034</integer>
         <key>email</key>
         <string>amy.rister@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>579</integer>
-        <key>name</key>
-        <string>Ana Villalobos</string>
-        <key>title</key>
-        <string>Legislative Aide</string>
-        <key>legislatorID</key>
-        <integer>15218</integer>
-        <key>email</key>
-        <string>ana.villalobos@senate.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -7708,13 +6202,15 @@
         <key>name</key>
         <string>Claudia Tijerina</string>
         <key>title</key>
-        <string>Legislative Director</string>
+        <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>5465</integer>
+        <integer>116984</integer>
         <key>email</key>
-        <string>claudia.tijerina@senate.state.tx.us</string>
+        <string>claudia.tijerina@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:14:16</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -7727,20 +6223,6 @@
         <integer>50173</integer>
         <key>email</key>
         <string>cody.terry@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>585</integer>
-        <key>name</key>
-        <string>Liz Campos</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>15218</integer>
-        <key>email</key>
-        <string>liz.campos@senate.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -7930,15 +6412,17 @@
         <key>stafferID</key>
         <integer>599</integer>
         <key>name</key>
-        <string>Stacy Pearson</string>
+        <string>Sandy Guzman</string>
         <key>title</key>
         <string>Legislative Director</string>
         <key>legislatorID</key>
         <integer>57991</integer>
         <key>email</key>
-        <string>stacy.pearson@senate.state.tx.us</string>
+        <string>sandy.guzman@senate.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-28 00:31:58</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -8012,20 +6496,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>605</integer>
-        <key>name</key>
-        <string>Andrew Dupuy</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>58512</integer>
-        <key>email</key>
-        <string>andrew.dupuy@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>606</integer>
         <key>name</key>
         <string>Carson Hooks</string>
@@ -8044,13 +6514,15 @@
         <key>name</key>
         <string>Thomas Holloway</string>
         <key>title</key>
-        <string>Legislative Director</string>
+        <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>14236</integer>
+        <integer>116941</integer>
         <key>email</key>
         <string>thomas.holloway@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 23:12:43</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -8110,31 +6582,19 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>612</integer>
-        <key>name</key>
-        <string>Ashley Brooks</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>59409</integer>
-        <key>email</key>
-        <string>ashley.brooks@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>613</integer>
         <key>name</key>
         <string>Brigitt Hartin</string>
         <key>title</key>
-        <string>Legislative Director</string>
+        <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>49842</integer>
+        <integer>116949</integer>
         <key>email</key>
         <string>brigitt.hartin@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:09:18</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -8175,34 +6635,6 @@
         <integer>5448</integer>
         <key>email</key>
         <string>melissa.rosser@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>617</integer>
-        <key>name</key>
-        <string>Clinton Knorpp</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>10055</integer>
-        <key>email</key>
-        <string>clinton.knorpp@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>618</integer>
-        <key>name</key>
-        <string>Murry Matthews</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>5499</integer>
-        <key>email</key>
-        <string>murry.matthews@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -8264,20 +6696,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>623</integer>
-        <key>name</key>
-        <string>Collin Ronan</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>49928</integer>
-        <key>email</key>
-        <string>collin.ronan@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>624</integer>
         <key>name</key>
         <string>Liliana Mireles</string>
@@ -8306,20 +6724,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>626</integer>
-        <key>name</key>
-        <string>Sabrina Sullivan</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>49820</integer>
-        <key>email</key>
-        <string>sabrina.sullivan@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>627</integer>
         <key>name</key>
         <string>Sandra Frizzell</string>
@@ -8336,15 +6740,17 @@
         <key>stafferID</key>
         <integer>628</integer>
         <key>name</key>
-        <string>Margaret Frain Wallace</string>
+        <string>Margaret Frain-Wallace</string>
         <key>title</key>
-        <string>Legislative Director</string>
+        <string>Chief of Staff</string>
         <key>legislatorID</key>
         <integer>106951</integer>
         <key>email</key>
-        <string>margaret.wallace@house.state.tx.us</string>
+        <string>margaret.frain_wallace@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:41:44</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -8371,34 +6777,6 @@
         <integer>5517</integer>
         <key>email</key>
         <string>rowland.greenwade@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>631</integer>
-        <key>name</key>
-        <string>Erica Grigg</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>57251</integer>
-        <key>email</key>
-        <string>erica.grigg@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>632</integer>
-        <key>name</key>
-        <string>Laura Hernandez</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>50002</integer>
-        <key>email</key>
-        <string>laura.hernandez@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -8432,20 +6810,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>635</integer>
-        <key>name</key>
-        <string>Jim Boynton</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>25383</integer>
-        <key>email</key>
-        <string>jim.boynton@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>636</integer>
         <key>name</key>
         <string>Scheleen Walker</string>
@@ -8460,20 +6824,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>637</integer>
-        <key>name</key>
-        <string>Dan Paschal</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>15097</integer>
-        <key>email</key>
-        <string>dan.paschal@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>638</integer>
         <key>name</key>
         <string>Ryan Fisher</string>
@@ -8483,20 +6833,6 @@
         <integer>49641</integer>
         <key>email</key>
         <string>ryan.fisher@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>639</integer>
-        <key>name</key>
-        <string>Phil Lovegren</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>102275</integer>
-        <key>email</key>
-        <string>phil.lovegren@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -8530,20 +6866,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>642</integer>
-        <key>name</key>
-        <string>Mandeep Chatha</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>5542</integer>
-        <key>email</key>
-        <string>mandeep.chatha@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>643</integer>
         <key>name</key>
         <string>Rachael Hendrickson</string>
@@ -8553,20 +6875,6 @@
         <integer>50001</integer>
         <key>email</key>
         <string>rachael.hendrickson@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>644</integer>
-        <key>name</key>
-        <string>Kristina Garza</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>49742</integer>
-        <key>email</key>
-        <string>kristina.garza@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -8600,20 +6908,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>647</integer>
-        <key>name</key>
-        <string>Amy Bruno</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>102254</integer>
-        <key>email</key>
-        <string>amy.bruno@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>648</integer>
         <key>name</key>
         <string>Karen Gilbert</string>
@@ -8634,81 +6928,29 @@
         <key>title</key>
         <string>Legislative Director</string>
         <key>legislatorID</key>
-        <integer>49471</integer>
+        <integer>49304</integer>
         <key>email</key>
         <string>scott.jenkines@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>650</integer>
-        <key>name</key>
-        <string>Heather Fleming</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>9998</integer>
-        <key>email</key>
-        <string>heather.fleming@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:57:13</string>
     </dict>
     <dict>
         <key>stafferID</key>
         <integer>651</integer>
         <key>name</key>
-        <string>Margaret Richardson</string>
+        <string>Victoria Flores</string>
         <key>title</key>
-        <string>Legislative Director</string>
+        <string>Legislative Assistant</string>
         <key>legislatorID</key>
         <integer>49908</integer>
         <key>email</key>
-        <string>margaret.richardson@house.state.tx.us</string>
+        <string>victoria.flores@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>652</integer>
-        <key>name</key>
-        <string>Lisa Mayes</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>9957</integer>
-        <key>email</key>
-        <string>lisa.mayes@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>653</integer>
-        <key>name</key>
-        <string>Analiese Kornely</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>102273</integer>
-        <key>email</key>
-        <string>analiese.kornely@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>654</integer>
-        <key>name</key>
-        <string>Chaille Jolink</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>102266</integer>
-        <key>email</key>
-        <string>chaille.jolink@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:59:54</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -8740,20 +6982,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>657</integer>
-        <key>name</key>
-        <string>Stephen Vigorito</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>10019</integer>
-        <key>email</key>
-        <string>stephen.vigorito@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>658</integer>
         <key>name</key>
         <string>Matthew Miller</string>
@@ -8768,20 +6996,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>659</integer>
-        <key>name</key>
-        <string>Will Krueger</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>69267</integer>
-        <key>email</key>
-        <string>will.krueger@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>660</integer>
         <key>name</key>
         <string>Ben Williams</string>
@@ -8791,20 +7005,6 @@
         <integer>49425</integer>
         <key>email</key>
         <string>ben.williams@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>661</integer>
-        <key>name</key>
-        <string>Andrew Billingsley</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>58009</integer>
-        <key>email</key>
-        <string>andrew.billingsley@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -8838,20 +7038,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>664</integer>
-        <key>name</key>
-        <string>Rogelio Chanes</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>102267</integer>
-        <key>email</key>
-        <string>rogelio.chanes@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>665</integer>
         <key>name</key>
         <string>Robin Chandler</string>
@@ -8861,34 +7047,6 @@
         <integer>49637</integer>
         <key>email</key>
         <string>robin.chandler@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>666</integer>
-        <key>name</key>
-        <string>Melissa Henderson</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>49709</integer>
-        <key>email</key>
-        <string>melissa.henderson@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>667</integer>
-        <key>name</key>
-        <string>Ashley McAndrew</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>102058</integer>
-        <key>email</key>
-        <string>ashley.mcandrew@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -8950,45 +7108,19 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>672</integer>
-        <key>name</key>
-        <string>Erica Prosser</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>102270</integer>
-        <key>email</key>
-        <string>erica.prosser@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>673</integer>
         <key>name</key>
         <string>Jo Cassandra Cuevas</string>
         <key>title</key>
         <string>Legislative Director</string>
         <key>legislatorID</key>
-        <integer>58225</integer>
+        <integer>59301</integer>
         <key>email</key>
         <string>jo.cuevas@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>674</integer>
-        <key>name</key>
-        <string>Frederick Lopez</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>58225</integer>
-        <key>email</key>
-        <string>frederick.lopez@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
+        <key>updated</key>
+        <string>2011-01-27 22:43:19</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -9020,20 +7152,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>677</integer>
-        <key>name</key>
-        <string>Natalie Rovira</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>102289</integer>
-        <key>email</key>
-        <string>natalie.rovira@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>678</integer>
         <key>name</key>
         <string>Bryan Law</string>
@@ -9048,59 +7166,19 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>679</integer>
-        <key>name</key>
-        <string>Josh Meeks</string>
-        <key>title</key>
-        <string>Legislative Director</string>
-        <key>legislatorID</key>
-        <integer>5470</integer>
-        <key>email</key>
-        <string>josh.meeks@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>680</integer>
         <key>name</key>
         <string>Randy Samuelson</string>
         <key>title</key>
-        <string>Legislative Director</string>
+        <string>Chief of Staff</string>
         <key>legislatorID</key>
         <integer>49425</integer>
         <key>email</key>
         <string>randy.samuelson@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>681</integer>
-        <key>name</key>
-        <string>Sushma Jasti</string>
-        <key>title</key>
-        <string>Policy Analyst</string>
-        <key>legislatorID</key>
-        <integer>9968</integer>
-        <key>email</key>
-        <string>sushma.jasti@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>682</integer>
-        <key>name</key>
-        <string>Sandy Hentges</string>
-        <key>title</key>
-        <string>Policy Analyst</string>
-        <key>legislatorID</key>
-        <integer>57991</integer>
-        <key>email</key>
-        <string>sandy.hentges@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
+        <key>updated</key>
+        <string>2011-01-28 00:33:10</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -9150,27 +7228,15 @@
         <key>name</key>
         <string>Kathi Seay</string>
         <key>title</key>
-        <string>Policy Analyst</string>
+        <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>5482</integer>
+        <integer>116936</integer>
         <key>email</key>
         <string>kathi.seay@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>687</integer>
-        <key>name</key>
-        <string>Johanna Sheffield</string>
-        <key>title</key>
-        <string>Policy Analyst</string>
-        <key>legislatorID</key>
-        <integer>5470</integer>
-        <key>email</key>
-        <string>johanna.sheffield@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
+        <key>updated</key>
+        <string>2011-01-27 23:19:09</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -9258,20 +7324,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>694</integer>
-        <key>name</key>
-        <string>erry Needham</string>
-        <key>title</key>
-        <string>Policy Analyst</string>
-        <key>legislatorID</key>
-        <integer>15218</integer>
-        <key>email</key>
-        <string>erry.needham@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>695</integer>
         <key>name</key>
         <string>Vincent Cho</string>
@@ -9281,48 +7333,6 @@
         <integer>5465</integer>
         <key>email</key>
         <string>vincent.cho@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>696</integer>
-        <key>name</key>
-        <string>Joshua Bekerman</string>
-        <key>title</key>
-        <string>Policy Analyst</string>
-        <key>legislatorID</key>
-        <integer>5479</integer>
-        <key>email</key>
-        <string>joshua.bekerman@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>697</integer>
-        <key>name</key>
-        <string>Juliana Kerker</string>
-        <key>title</key>
-        <string>Policy Analyst</string>
-        <key>legislatorID</key>
-        <integer>5479</integer>
-        <key>email</key>
-        <string>juliana.kerker@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>698</integer>
-        <key>name</key>
-        <string>Rebecca Reyes</string>
-        <key>title</key>
-        <string>Policy Analyst</string>
-        <key>legislatorID</key>
-        <integer>5479</integer>
-        <key>email</key>
-        <string>rebecca.reyes@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -9365,20 +7375,6 @@
         <integer>59301</integer>
         <key>email</key>
         <string>alejandro.diaz@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>702</integer>
-        <key>name</key>
-        <string>Dimetrius Holland</string>
-        <key>title</key>
-        <string>Policy Analyst</string>
-        <key>legislatorID</key>
-        <integer>25383</integer>
-        <key>email</key>
-        <string>dimetrius.holland@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -9496,20 +7492,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>711</integer>
-        <key>name</key>
-        <string>Rachel Johnston</string>
-        <key>title</key>
-        <string>Policy Analyst</string>
-        <key>legislatorID</key>
-        <integer>15218</integer>
-        <key>email</key>
-        <string>rachel.johnston@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>712</integer>
         <key>name</key>
         <string>Stephanie Chiarello</string>
@@ -9594,20 +7576,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>718</integer>
-        <key>name</key>
-        <string>Marcos A. Lopez</string>
-        <key>title</key>
-        <string>Policy Director</string>
-        <key>legislatorID</key>
-        <integer>10025</integer>
-        <key>email</key>
-        <string>marcos.lopez@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>719</integer>
         <key>name</key>
         <string>Natalie Shafir</string>
@@ -9664,20 +7632,6 @@
     </dict>
     <dict>
         <key>stafferID</key>
-        <integer>723</integer>
-        <key>name</key>
-        <string>Lacie Ritchie</string>
-        <key>title</key>
-        <string>Scheduler</string>
-        <key>legislatorID</key>
-        <integer>49709</integer>
-        <key>email</key>
-        <string>lacie.ritchie@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
         <integer>724</integer>
         <key>name</key>
         <string>Ana Reyes</string>
@@ -9715,34 +7669,6 @@
         <integer>50173</integer>
         <key>email</key>
         <string>ben.garner@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>727</integer>
-        <key>name</key>
-        <string>Stephen Rispoli</string>
-        <key>title</key>
-        <string>Scheduler</string>
-        <key>legislatorID</key>
-        <integer>102275</integer>
-        <key>email</key>
-        <string>stephen.rispoli@house.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>728</integer>
-        <key>name</key>
-        <string>Natalie Colley</string>
-        <key>title</key>
-        <string>Scheduler</string>
-        <key>legislatorID</key>
-        <integer>5470</integer>
-        <key>email</key>
-        <string>natalie.colley@senate.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -9904,29 +7830,17 @@
         <key>stafferID</key>
         <integer>740</integer>
         <key>name</key>
-        <string>Molly Banas</string>
+        <string>Sheacy Thompson</string>
         <key>title</key>
-        <string>Scheduler</string>
+        <string>District Director</string>
         <key>legislatorID</key>
         <integer>49425</integer>
         <key>email</key>
-        <string>molly.banas@house.state.tx.us</string>
+        <string>sheacy.thompson@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>741</integer>
-        <key>name</key>
-        <string>Mark Reyna</string>
-        <key>title</key>
-        <string>Scheduler</string>
-        <key>legislatorID</key>
-        <integer>15218</integer>
-        <key>email</key>
-        <string>mark.reyna@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
+        <key>updated</key>
+        <string>2011-01-28 00:33:31</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -9962,13 +7876,15 @@
         <key>name</key>
         <string>Martha Bell</string>
         <key>title</key>
-        <string>Scheduler</string>
+        <string>Chief of Staff</string>
         <key>legislatorID</key>
-        <integer>102041</integer>
+        <integer>102027</integer>
         <key>email</key>
         <string>martha.bell@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
+        <key>updated</key>
+        <string>2011-01-27 23:21:35</string>
     </dict>
     <dict>
         <key>stafferID</key>
@@ -10009,20 +7925,6 @@
         <integer>10049</integer>
         <key>email</key>
         <string>luis.moreno@senate.state.tx.us</string>
-        <key>phone</key>
-        <string></string>
-    </dict>
-    <dict>
-        <key>stafferID</key>
-        <integer>748</integer>
-        <key>name</key>
-        <string>Amy Ellsworth</string>
-        <key>title</key>
-        <string>Scheduler</string>
-        <key>legislatorID</key>
-        <integer>49636</integer>
-        <key>email</key>
-        <string>amy.ellsworth@house.state.tx.us</string>
         <key>phone</key>
         <string></string>
     </dict>
@@ -10151,6 +8053,1128 @@
         <string>ashley.hughes@house.state.tx.us</string>
         <key>updated</key>
         <string>2011-01-23 20:54:26</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>758</integer>
+        <key>name</key>
+        <string>Matthew Brownfield</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>117468</integer>
+        <key>email</key>
+        <string>matthew.brownfield@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:03:02</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>759</integer>
+        <key>name</key>
+        <string>Jay Wiley</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>116933</integer>
+        <key>email</key>
+        <string>jay.wiley@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:04:07</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>760</integer>
+        <key>name</key>
+        <string>Katherine Munal</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>59349</integer>
+        <key>email</key>
+        <string>katherine.munal@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:06:10</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>761</integer>
+        <key>name</key>
+        <string>Marc Alcedo</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>116961</integer>
+        <key>email</key>
+        <string>marc.alcedo@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:06:54</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>763</integer>
+        <key>name</key>
+        <string>Vince Sudela</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>117479</integer>
+        <key>email</key>
+        <string>vince.sudela@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:11:07</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>764</integer>
+        <key>name</key>
+        <string>Art Martinez DeVara</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>102065</integer>
+        <key>email</key>
+        <string>art.devara@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:35:35</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>765</integer>
+        <key>name</key>
+        <string>Lindsey Johnson</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>116935</integer>
+        <key>email</key>
+        <string>lindsey.johnson@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:15:02</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>766</integer>
+        <key>name</key>
+        <string>Casey Christman</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>117477</integer>
+        <key>email</key>
+        <string>casey.christman@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:15:51</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>767</integer>
+        <key>name</key>
+        <string>Ellen Troxclair</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>116946</integer>
+        <key>email</key>
+        <string>ellen.troxclair@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:16:32</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>768</integer>
+        <key>name</key>
+        <string>Juan Ayala</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>116968</integer>
+        <key>email</key>
+        <string>juan.ayala@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:17:13</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>769</integer>
+        <key>name</key>
+        <string>Brittney Grigg</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>128461</integer>
+        <key>email</key>
+        <string>brittney.grigg@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:18:52</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>770</integer>
+        <key>name</key>
+        <string>Matt Lamon</string>
+        <key>title</key>
+        <string>Legislative Director</string>
+        <key>legislatorID</key>
+        <integer>116944</integer>
+        <key>email</key>
+        <string>matt.lamon@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:22:18</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>771</integer>
+        <key>name</key>
+        <string>Melissa Wagner</string>
+        <key>title</key>
+        <string>Legislative Aide</string>
+        <key>legislatorID</key>
+        <integer>116949</integer>
+        <key>email</key>
+        <string>melissa.wagner@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:23:55</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>772</integer>
+        <key>name</key>
+        <string>Nancy Hendryx</string>
+        <key>title</key>
+        <string>District Director</string>
+        <key>legislatorID</key>
+        <integer>116949</integer>
+        <key>email</key>
+        <string>nancy.hendryx@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:24:23</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>773</integer>
+        <key>name</key>
+        <string>Lauren Hamner</string>
+        <key>title</key>
+        <string>Legislative Director</string>
+        <key>legislatorID</key>
+        <integer>117468</integer>
+        <key>email</key>
+        <string>lauren.hamner@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:25:30</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>774</integer>
+        <key>name</key>
+        <string>Michelle Atnip</string>
+        <key>title</key>
+        <string>Constituent Services</string>
+        <key>legislatorID</key>
+        <integer>117468</integer>
+        <key>email</key>
+        <string>michelle.atnip@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:26:04</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>775</integer>
+        <key>name</key>
+        <string>Sabrina Thomas</string>
+        <key>title</key>
+        <string>District Director</string>
+        <key>legislatorID</key>
+        <integer>117468</integer>
+        <key>email</key>
+        <string>sabrina.thomas@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:28:00</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>776</integer>
+        <key>name</key>
+        <string>Cassie Daniel</string>
+        <key>title</key>
+        <string>Legislative Director</string>
+        <key>legislatorID</key>
+        <integer>116933</integer>
+        <key>email</key>
+        <string>cassie.daniel@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:29:49</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>777</integer>
+        <key>name</key>
+        <string>Amanda Robertson</string>
+        <key>title</key>
+        <string>Administrative Director</string>
+        <key>legislatorID</key>
+        <integer>116933</integer>
+        <key>email</key>
+        <string>amanda.robertson@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:30:34</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>778</integer>
+        <key>name</key>
+        <string>Chase Weber</string>
+        <key>title</key>
+        <string>Legislative Analyst</string>
+        <key>legislatorID</key>
+        <integer>117470</integer>
+        <key>email</key>
+        <string>chase.weber@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:31:25</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>779</integer>
+        <key>name</key>
+        <string>Michael Walter</string>
+        <key>title</key>
+        <string>Administrative Aide</string>
+        <key>legislatorID</key>
+        <integer>117470</integer>
+        <key>email</key>
+        <string>michael.walter@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:31:49</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>780</integer>
+        <key>name</key>
+        <string>Elise Legros</string>
+        <key>title</key>
+        <string>Administrative Assistant</string>
+        <key>legislatorID</key>
+        <integer>117479</integer>
+        <key>email</key>
+        <string>elise.legros@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:33:12</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>781</integer>
+        <key>name</key>
+        <string>Caroline Negley</string>
+        <key>title</key>
+        <string>District Director</string>
+        <key>legislatorID</key>
+        <integer>117479</integer>
+        <key>email</key>
+        <string>caroline.negley@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:33:52</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>782</integer>
+        <key>name</key>
+        <string>Amy Lane</string>
+        <key>title</key>
+        <string>Capitol Office Director</string>
+        <key>legislatorID</key>
+        <integer>117461</integer>
+        <key>email</key>
+        <string>amy.lane@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:36:05</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>783</integer>
+        <key>name</key>
+        <string>Courtney Forsell</string>
+        <key>title</key>
+        <string>Legislative Aide</string>
+        <key>legislatorID</key>
+        <integer>117456</integer>
+        <key>email</key>
+        <string>courtney.forsell@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:37:01</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>784</integer>
+        <key>name</key>
+        <string>Betty Horton</string>
+        <key>title</key>
+        <string>Administrative Aide</string>
+        <key>legislatorID</key>
+        <integer>117456</integer>
+        <key>email</key>
+        <string>betty.horton@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:37:23</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>785</integer>
+        <key>name</key>
+        <string>Kate Mason</string>
+        <key>title</key>
+        <string>Legislative Aide</string>
+        <key>legislatorID</key>
+        <integer>116984</integer>
+        <key>email</key>
+        <string>kate.mason@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:38:30</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>786</integer>
+        <key>name</key>
+        <string>Hillary Heisel</string>
+        <key>title</key>
+        <string>Administrative Aide</string>
+        <key>legislatorID</key>
+        <integer>116935</integer>
+        <key>email</key>
+        <string>hillary.heisel@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:40:03</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>787</integer>
+        <key>name</key>
+        <string>Autumn Jodzio</string>
+        <key>title</key>
+        <string>Administrative Assistant</string>
+        <key>legislatorID</key>
+        <integer>117477</integer>
+        <key>email</key>
+        <string>autumn.jodzio@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:45:10</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>788</integer>
+        <key>name</key>
+        <string>Ryan Paylor</string>
+        <key>title</key>
+        <string>Policy Director</string>
+        <key>legislatorID</key>
+        <integer>116946</integer>
+        <key>email</key>
+        <string>ryan.paylor@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:45:54</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>789</integer>
+        <key>name</key>
+        <string>Brent Rubin</string>
+        <key>title</key>
+        <string>Legislative Director</string>
+        <key>legislatorID</key>
+        <integer>116968</integer>
+        <key>email</key>
+        <string>brent.rubin@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:47:13</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>790</integer>
+        <key>name</key>
+        <string>Ocie Kazee-McCalister</string>
+        <key>title</key>
+        <string>District Director</string>
+        <key>legislatorID</key>
+        <integer>116968</integer>
+        <key>email</key>
+        <string>ocie.kazee@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:47:48</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>791</integer>
+        <key>name</key>
+        <string>Jason Briggs</string>
+        <key>title</key>
+        <string>Legislative Aide</string>
+        <key>legislatorID</key>
+        <integer>59349</integer>
+        <key>email</key>
+        <string>jason.briggs@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:48:58</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>792</integer>
+        <key>name</key>
+        <string>Katie Weissman</string>
+        <key>title</key>
+        <string>Scheduler</string>
+        <key>legislatorID</key>
+        <integer>59349</integer>
+        <key>email</key>
+        <string>katie.weissman@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:49:22</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>793</integer>
+        <key>name</key>
+        <string>Lynlie Wallace</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>98049</integer>
+        <key>email</key>
+        <string>lynlie.wallace@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:50:32</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>794</integer>
+        <key>name</key>
+        <string>Emily Eppright</string>
+        <key>title</key>
+        <string>Legislative Director</string>
+        <key>legislatorID</key>
+        <integer>98049</integer>
+        <key>email</key>
+        <string>emily.eppright@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:50:55</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>795</integer>
+        <key>name</key>
+        <string>Geoffrey Tahuahua</string>
+        <key>title</key>
+        <string>District Director</string>
+        <key>legislatorID</key>
+        <integer>98049</integer>
+        <key>email</key>
+        <string>geoffrey.tahuahua@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:51:20</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>796</integer>
+        <key>name</key>
+        <string>Andrea Williams</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>9955</integer>
+        <key>email</key>
+        <string>andrea.williams@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:52:23</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>797</integer>
+        <key>name</key>
+        <string>Benjamin Pollock</string>
+        <key>title</key>
+        <string>Legislative Director</string>
+        <key>legislatorID</key>
+        <integer>9955</integer>
+        <key>email</key>
+        <string>benjamin.pollock@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:52:48</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>798</integer>
+        <key>name</key>
+        <string>Matthew Ashley</string>
+        <key>title</key>
+        <string>Administrative Aide</string>
+        <key>legislatorID</key>
+        <integer>9955</integer>
+        <key>email</key>
+        <string>matthew.ashley@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:53:11</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>799</integer>
+        <key>name</key>
+        <string>Josh Reyna</string>
+        <key>title</key>
+        <string>Legislative Director</string>
+        <key>legislatorID</key>
+        <integer>116981</integer>
+        <key>email</key>
+        <string>josh.reyna@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:54:19</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>801</integer>
+        <key>name</key>
+        <string>Olivia Zepeda</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>57965</integer>
+        <key>email</key>
+        <string>olivia.zepeda@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:56:06</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>802</integer>
+        <key>name</key>
+        <string>Justin Dudley</string>
+        <key>title</key>
+        <string>Legislative Director</string>
+        <key>legislatorID</key>
+        <integer>57965</integer>
+        <key>email</key>
+        <string>justin.dudley@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:56:39</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>803</integer>
+        <key>name</key>
+        <string>Jesse Ozuna</string>
+        <key>title</key>
+        <string>Constituent Services</string>
+        <key>legislatorID</key>
+        <integer>49304</integer>
+        <key>email</key>
+        <string>jesse.ozuna@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:57:47</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>804</integer>
+        <key>name</key>
+        <string>Sandra Morales</string>
+        <key>title</key>
+        <string>Legislative Aide</string>
+        <key>legislatorID</key>
+        <integer>49304</integer>
+        <key>email</key>
+        <string>sandra.morales@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 22:58:20</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>805</integer>
+        <key>name</key>
+        <string>Richard Sanchez</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>5424</integer>
+        <key>email</key>
+        <string>richard.sanchez@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:01:15</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>806</integer>
+        <key>name</key>
+        <string>Scott Stewart</string>
+        <key>title</key>
+        <string>Legislative Aide</string>
+        <key>legislatorID</key>
+        <integer>57985</integer>
+        <key>email</key>
+        <string>scott.stewart@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:02:38</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>807</integer>
+        <key>name</key>
+        <string>John Furlow</string>
+        <key>title</key>
+        <string>Policy Analyst</string>
+        <key>legislatorID</key>
+        <integer>59370</integer>
+        <key>email</key>
+        <string>john.furlow@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:04:33</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>808</integer>
+        <key>name</key>
+        <string>Catherine Rodman</string>
+        <key>title</key>
+        <string>Scheduler</string>
+        <key>legislatorID</key>
+        <integer>116957</integer>
+        <key>email</key>
+        <string>catherine.rodman@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:07:06</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>809</integer>
+        <key>name</key>
+        <string>Courtney Reid</string>
+        <key>title</key>
+        <string>Legislative Director</string>
+        <key>legislatorID</key>
+        <integer>49937</integer>
+        <key>email</key>
+        <string>courtney.reid@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:08:25</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>810</integer>
+        <key>name</key>
+        <string>Chris Tarter</string>
+        <key>title</key>
+        <string>District Director</string>
+        <key>legislatorID</key>
+        <integer>49937</integer>
+        <key>email</key>
+        <string>chris.tarter@house.state.tx.us</string>
+        <key>phone</key>
+        <string>903-891-7297</string>
+        <key>updated</key>
+        <string>2011-01-27 23:09:02</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>811</integer>
+        <key>name</key>
+        <string>Katharine McAden</string>
+        <key>title</key>
+        <string>Legislative Director</string>
+        <key>legislatorID</key>
+        <integer>116959</integer>
+        <key>email</key>
+        <string>katharine.mcaden@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:10:26</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>812</integer>
+        <key>name</key>
+        <string>Naomi Showers</string>
+        <key>title</key>
+        <string>Legislative Aide</string>
+        <key>legislatorID</key>
+        <integer>102294</integer>
+        <key>email</key>
+        <string>naomi.showers@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:11:25</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>813</integer>
+        <key>name</key>
+        <string>Laolu Yemitan</string>
+        <key>title</key>
+        <string>Legislative Aide</string>
+        <key>legislatorID</key>
+        <integer>102294</integer>
+        <key>email</key>
+        <string>laolu.yemitan@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:11:56</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>814</integer>
+        <key>name</key>
+        <string>Rachel Nicholson</string>
+        <key>title</key>
+        <string>Legislative Aide</string>
+        <key>legislatorID</key>
+        <integer>116941</integer>
+        <key>email</key>
+        <string>rachel.nicholson@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:13:22</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>815</integer>
+        <key>name</key>
+        <string>Anne Billingsley</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>102028</integer>
+        <key>email</key>
+        <string>anne.billingsley@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:14:14</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>816</integer>
+        <key>name</key>
+        <string>Jeff Marks</string>
+        <key>title</key>
+        <string>Legislative Aide</string>
+        <key>legislatorID</key>
+        <integer>102028</integer>
+        <key>email</key>
+        <string>jeff.marks@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:14:39</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>817</integer>
+        <key>name</key>
+        <string>Hunter Thomas</string>
+        <key>title</key>
+        <string>Legislative Aide</string>
+        <key>legislatorID</key>
+        <integer>117472</integer>
+        <key>email</key>
+        <string>hunter.thomas@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:15:29</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>818</integer>
+        <key>name</key>
+        <string>Travis Sampley</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>102041</integer>
+        <key>email</key>
+        <string>travis.sampley@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:16:15</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>819</integer>
+        <key>name</key>
+        <string>Jessica Fajans</string>
+        <key>title</key>
+        <string>Scheduler</string>
+        <key>legislatorID</key>
+        <integer>102041</integer>
+        <key>email</key>
+        <string>jessica.fajans@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:16:33</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>820</integer>
+        <key>name</key>
+        <string>Sierra Stephens</string>
+        <key>title</key>
+        <string>Policy Analyst</string>
+        <key>legislatorID</key>
+        <integer>102058</integer>
+        <key>email</key>
+        <string>sierra.stephens@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:17:59</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>821</integer>
+        <key>name</key>
+        <string>Peeler Howell</string>
+        <key>title</key>
+        <string>District Director</string>
+        <key>legislatorID</key>
+        <integer>102058</integer>
+        <key>email</key>
+        <string>peeler.howell@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:18:39</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>822</integer>
+        <key>name</key>
+        <string>Michael Bullock</string>
+        <key>title</key>
+        <string>Adminstrative Assistant</string>
+        <key>legislatorID</key>
+        <integer>116936</integer>
+        <key>email</key>
+        <string>michael.bullock@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:19:50</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>823</integer>
+        <key>name</key>
+        <string>Michael Levens</string>
+        <key>title</key>
+        <string>Legislative Aide</string>
+        <key>legislatorID</key>
+        <integer>116936</integer>
+        <key>email</key>
+        <string>michael.levens@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:20:09</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>824</integer>
+        <key>name</key>
+        <string>Ray Wilson</string>
+        <key>title</key>
+        <string>District Director</string>
+        <key>legislatorID</key>
+        <integer>116936</integer>
+        <key>email</key>
+        <string>ray.wilson@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:20:29</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>825</integer>
+        <key>name</key>
+        <string>Eugene Seaman</string>
+        <key>title</key>
+        <string>Legislative Director</string>
+        <key>legislatorID</key>
+        <integer>102027</integer>
+        <key>email</key>
+        <string>eugene.seaman@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:22:06</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>826</integer>
+        <key>name</key>
+        <string>Chris Duke</string>
+        <key>title</key>
+        <string>Legislative Assistant</string>
+        <key>legislatorID</key>
+        <integer>102027</integer>
+        <key>email</key>
+        <string>chris.duke@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:22:36</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>827</integer>
+        <key>name</key>
+        <string>Celest Hernandez</string>
+        <key>title</key>
+        <string>District Director</string>
+        <key>legislatorID</key>
+        <integer>102027</integer>
+        <key>email</key>
+        <string>celest.hernandez@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:23:23</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>828</integer>
+        <key>name</key>
+        <string>Laura Martin</string>
+        <key>title</key>
+        <string>Legislative Director</string>
+        <key>legislatorID</key>
+        <integer>102289</integer>
+        <key>email</key>
+        <string>laura.martin@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:24:00</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>830</integer>
+        <key>name</key>
+        <string>Sarah Majzoub</string>
+        <key>title</key>
+        <string>Legislative Assistant</string>
+        <key>legislatorID</key>
+        <integer>102026</integer>
+        <key>email</key>
+        <string>sarah.majzoub@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:25:44</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>831</integer>
+        <key>name</key>
+        <string>Janet Rizzo</string>
+        <key>title</key>
+        <string>District Director</string>
+        <key>legislatorID</key>
+        <integer>102026</integer>
+        <key>email</key>
+        <string>janet.rizzo@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:26:04</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>832</integer>
+        <key>name</key>
+        <string>Jillian Henderson</string>
+        <key>title</key>
+        <string>Scheduler</string>
+        <key>legislatorID</key>
+        <integer>116939</integer>
+        <key>email</key>
+        <string>jillian.henderson@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:27:46</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>833</integer>
+        <key>name</key>
+        <string>Shawn Dunn</string>
+        <key>title</key>
+        <string>District Director</string>
+        <key>legislatorID</key>
+        <integer>116939</integer>
+        <key>email</key>
+        <string>shawn.dunn@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:28:11</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>834</integer>
+        <key>name</key>
+        <string>Araminta Everton</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>116948</integer>
+        <key>email</key>
+        <string>araminta.everton@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:29:10</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>835</integer>
+        <key>name</key>
+        <string>Stuart Moss</string>
+        <key>title</key>
+        <string>Legislative Director</string>
+        <key>legislatorID</key>
+        <integer>116948</integer>
+        <key>email</key>
+        <string>stuart.moss@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:29:36</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>836</integer>
+        <key>name</key>
+        <string>Truett Jones</string>
+        <key>title</key>
+        <string>Legislative Aide</string>
+        <key>legislatorID</key>
+        <integer>116948</integer>
+        <key>email</key>
+        <string>truett.jones@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:29:55</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>837</integer>
+        <key>name</key>
+        <string>Phil Fountain</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>49612</integer>
+        <key>email</key>
+        <string>phil.fountain@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:30:52</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>838</integer>
+        <key>name</key>
+        <string>Bryan Schufelt</string>
+        <key>title</key>
+        <string>Adminstrative Aide</string>
+        <key>legislatorID</key>
+        <integer>49612</integer>
+        <key>email</key>
+        <string>bryan.schufelt@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-27 23:31:14</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>839</integer>
+        <key>name</key>
+        <string>Joseph Madden</string>
+        <key>title</key>
+        <string>Chief of Staff</string>
+        <key>legislatorID</key>
+        <integer>5479</integer>
+        <key>email</key>
+        <string>joseph.madden@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-28 00:26:19</string>
+    </dict>
+    <dict>
+        <key>stafferID</key>
+        <integer>840</integer>
+        <key>name</key>
+        <string>Juliana Kerken</string>
+        <key>title</key>
+        <string>Legislative Director</string>
+        <key>legislatorID</key>
+        <integer>5479</integer>
+        <key>email</key>
+        <string>juliana.kerken@house.state.tx.us</string>
+        <key>updated</key>
+        <string>2011-01-28 00:26:48</string>
     </dict>
 </array>
 </plist>
