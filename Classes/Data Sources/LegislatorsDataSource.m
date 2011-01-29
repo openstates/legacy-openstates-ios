@@ -141,7 +141,7 @@
 		cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
 	}
 	
-	cell.legislator = dataObj;
+	[cell setLegislator:dataObj];
 	cell.cellView.useDarkBackground = (indexPath.row % 2 == 0);
 	cell.accessoryView.hidden = (![self showDisclosureIcon] || tableView == self.searchDisplayController.searchResultsTableView);
 	
@@ -265,6 +265,14 @@
 #pragma mark -
 #pragma mark Core Data Methods
 
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_START" object:self];
+//    [self.tableView beginUpdates];
+}
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_END" object:self];
+//    [self.tableView endUpdates];
+}
 
 /*
  Set up the fetched results controller.

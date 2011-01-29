@@ -242,7 +242,8 @@
 		if (self.filterChamber > 0) {		// do some chamber filtering
 			if (predString.length > 0)	// we already have some predicate action, insert "AND"
 				[predString appendString:@" AND "];
-			[predString appendFormat:@"(committeeType == %@)", [NSNumber numberWithInteger:self.filterChamber]];
+			[predString appendFormat:@"((committeeType == %@) OR (committeeType == 3))", [NSNumber numberWithInteger:self.filterChamber]];
+			
 		}
 		
 	NSPredicate *predicate = (predString.length > 0) ? [NSPredicate predicateWithFormat:predString] : nil;
