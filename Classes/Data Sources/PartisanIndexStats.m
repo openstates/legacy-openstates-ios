@@ -13,6 +13,9 @@
 #import "UIColor-Expanded.h"
 #import "TexLegeTheme.h"
 #import "TexLegeCoreDataUtils.h"
+#import "NSDate+Helper.h"
+#import "DataModelUpdateManager.h"
+#import "JSON.h"
 
 @interface PartisanIndexStats (Private)
 
@@ -39,6 +42,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 		self.managedObjectContext = newContext;
 		m_partisanIndexAggregates = nil;
 		
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(resetData:) name:@"DATAMODEL_UPDATED" object:nil];
+
 		// initialize these
 		[self partisanIndexAggregates];
 		
@@ -46,7 +52,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	return self;
 }
 
+
+
 - (void)dealloc {	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+
 	self.managedObjectContext = nil;	// I THINK THIS IS CORRECT, SINCE WE'VE SYNTHESIZED IT AS RETAIN...
 	if (m_partisanIndexAggregates) [m_partisanIndexAggregates release], m_partisanIndexAggregates = nil;
 	
@@ -56,8 +66,15 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 }
 
 - (NSNumber *) currentSessionYear {
-	return [NSNumber numberWithInteger:2009];
+	return [NSNumber numberWithInteger:[[NSDate date] year]];
+	//return [NSNumber numberWithInteger:2009];
 }
+
+- (void)resetData:(NSNotificationCenter *)notification {
+	if (m_partisanIndexAggregates) [m_partisanIndexAggregates release], m_partisanIndexAggregates = nil;
+	[self partisanIndexAggregates];
+}
+
 
 - (NSDictionary *)partisanIndexAggregates {
 	
@@ -182,51 +199,55 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	
 }
 
+#define	WNOMAGGREGATES_KEY	@"WnomAggregates"
+- (NSDictionary *) loadAggregatesData {
+	NSDictionary *aggregatesData = nil;
+	
+	DataModelUpdateManager *updater = [[DataModelUpdateManager alloc] initWithManagedObjectContext:self.managedObjectContext];
+	NSDictionary *dataCatalog = [updater getLocalDataModelCatalog];
+	[updater release];
+	
+	NSString *dataFile = nil;
+	if (dataCatalog) {
+		NSDictionary *modelInfo = [dataCatalog objectForKey:WNOMAGGREGATES_KEY];
+		if (modelInfo) {
+			dataFile = [modelInfo objectForKey:@"URL"];
+		}
+	}
+	if (!dataFile)
+		dataFile = [NSString stringWithFormat:@"%@.json", WNOMAGGREGATES_KEY];
+	
+	NSString *filePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:dataFile];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSError *error = nil;
+
+	if (![fileManager fileExistsAtPath:filePath]) {
+		NSString *defaultFilePath = [[NSBundle mainBundle] pathForResource:WNOMAGGREGATES_KEY ofType:@"json"];
+		if (defaultFilePath) {
+			[fileManager copyItemAtPath:defaultFilePath toPath:filePath error:&error];
+			if (error)
+				NSLog(@"Error copying WnomAggregates data file to user's directory: %@; [path: %@", [error localizedDescription], filePath);
+		}
+	}
+	NSString *jsonString = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
+	if (error)
+		NSLog(@"Error parsing WnomAggregates data file: %@; [path: %@", [error localizedDescription], filePath);
+	if (jsonString && [jsonString length])
+		aggregatesData = [jsonString JSONValue];
+
+	return aggregatesData;
+}
 
 - (NSDictionary *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber {
-	NSDictionary *historyDict = nil;
 	
-	if (party == REPUBLICAN && chamber == HOUSE)
-		historyDict = [NSDictionary dictionaryWithObjectsAndKeys:
-					   [NSNumber numberWithFloat:0.54409], [NSNumber numberWithInteger:72],
-					   [NSNumber numberWithFloat:0.559875531], [NSNumber numberWithInteger:73],
-					   [NSNumber numberWithFloat:0.552640372], [NSNumber numberWithInteger:74],
-					   [NSNumber numberWithFloat:0.621388023], [NSNumber numberWithInteger:75],
-					   [NSNumber numberWithFloat:0.629700791], [NSNumber numberWithInteger:76],
-					   [NSNumber numberWithFloat:0.621778609], [NSNumber numberWithInteger:77],
-					   [NSNumber numberWithFloat:0.621042716], [NSNumber numberWithInteger:78],
-					   [NSNumber numberWithFloat:0.617089494], [NSNumber numberWithInteger:79],
-					   [NSNumber numberWithFloat:0.636998902], [NSNumber numberWithInteger:80],
-					   [NSNumber numberWithFloat:0.734943024], [NSNumber numberWithInteger:81],nil];
-	else if (party == DEMOCRAT && chamber == HOUSE)
-		historyDict = [NSDictionary dictionaryWithObjectsAndKeys:
-					   [NSNumber numberWithFloat:-0.42222], [NSNumber numberWithInteger:72],
-					   [NSNumber numberWithFloat:-0.449964135], [NSNumber numberWithInteger:73],
-					   [NSNumber numberWithFloat:-0.445684078], [NSNumber numberWithInteger:74],
-					   [NSNumber numberWithFloat:-0.536115388], [NSNumber numberWithInteger:75],
-					   [NSNumber numberWithFloat:-0.581599285], [NSNumber numberWithInteger:76],
-					   [NSNumber numberWithFloat:-0.585928296], [NSNumber numberWithInteger:77],
-					   [NSNumber numberWithFloat:-0.644611479], [NSNumber numberWithInteger:78],
-					   [NSNumber numberWithFloat:-0.695038928], [NSNumber numberWithInteger:79],
-					   [NSNumber numberWithFloat:-0.689908867], [NSNumber numberWithInteger:80],
-					   [NSNumber numberWithFloat:-0.816011438], [NSNumber numberWithInteger:81],nil];
-	else if (party == REPUBLICAN && chamber == SENATE)
-		historyDict = [NSDictionary dictionaryWithObjectsAndKeys:
-					   [NSNumber numberWithFloat:0.4383], [NSNumber numberWithInteger:76],
-					   [NSNumber numberWithFloat:0.607931], [NSNumber numberWithInteger:77],
-					   [NSNumber numberWithFloat:0.799931], [NSNumber numberWithInteger:78],
-					   [NSNumber numberWithFloat:0.722995], [NSNumber numberWithInteger:79],
-					   [NSNumber numberWithFloat:0.386157], [NSNumber numberWithInteger:80],
-					   [NSNumber numberWithFloat:0.599742], [NSNumber numberWithInteger:81],nil];
-	else if (party == DEMOCRAT && chamber == SENATE)
-		historyDict = [NSDictionary dictionaryWithObjectsAndKeys:
-					   [NSNumber numberWithFloat:-0.4161], [NSNumber numberWithInteger:76],
-					   [NSNumber numberWithFloat:-0.5796], [NSNumber numberWithInteger:77],
-					   [NSNumber numberWithFloat:-0.833222], [NSNumber numberWithInteger:78],
-					   [NSNumber numberWithFloat:-0.656078], [NSNumber numberWithInteger:79],
-					   [NSNumber numberWithFloat:-0.688802], [NSNumber numberWithInteger:80],
-					   [NSNumber numberWithFloat:-0.69183], [NSNumber numberWithInteger:81],nil];
+	NSDictionary *aggregatesData = [self loadAggregatesData];
+	if (!aggregatesData)
+		return nil;
 	
+	NSString *key = [NSString stringWithFormat:@"%d_%d", chamber, party];
+	NSDictionary *chamberPartyDict = [aggregatesData objectForKey:key];
+	NSDictionary *historyDict = [chamberPartyDict objectForKey:WNOMAGGREGATES_KEY];
+
 	return historyDict;
 }
 
@@ -288,8 +309,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 		
 		WnomObj *wnomObj = [sortedScores objectAtIndex:i];
 		
-		id democY = [democDict objectForKey:[wnomObj session]];
-		id repubY = [repubDict objectForKey:[wnomObj session]];
+		id democY = [democDict objectForKey:[[wnomObj session] stringValue]];
+		id repubY = [repubDict objectForKey:[[wnomObj session] stringValue]];
+		if (!democY)
+			democY = [NSNumber numberWithFloat:0.0f];
+		if (!repubY)
+			repubY = [NSNumber numberWithFloat:0.0f];
 		
 		[repubData appendString:[repubY stringValue]];
 		[democData appendString:[democY stringValue]];
