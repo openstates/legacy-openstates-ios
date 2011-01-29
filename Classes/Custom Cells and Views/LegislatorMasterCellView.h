@@ -25,6 +25,7 @@ extern const CGFloat kLegislatorMasterCellViewHeight;
 @property (nonatomic) CGFloat sliderValue;
 @property (nonatomic) CGFloat sliderMin;
 @property (nonatomic) CGFloat sliderMax;
+@property (nonatomic) CGFloat partisan_index;
 
 - (void)setLegislator:(LegislatorObj *)value;
 

@@ -20,7 +20,7 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 @synthesize title;
 @synthesize name;
 @synthesize tenure;
-@synthesize sliderValue, sliderMin, sliderMax;
+@synthesize sliderValue, sliderMin, sliderMax, partisan_index;
 @synthesize useDarkBackground;
 @synthesize highlighted, questionImage;
 
@@ -31,7 +31,7 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 		title = [@"Representative - (D-23)" retain];
 		name = [@"Rafael Anchía" retain];
 		tenure = [@"4 Years" retain];
-		sliderValue = 0.0f;
+		sliderValue = 0.0f, partisan_index = 0.0f;
 		sliderMin = -1.5f;
 		sliderMax = 1.5f;
 		questionImage = nil;
@@ -48,7 +48,7 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 		title = [@"Representative - (D-23)" retain];
 		name = [@"Rafael Anchía" retain];
 		tenure = [@"4 Years" retain];
-		sliderValue = 0.0f;
+		sliderValue = 0.0f, partisan_index = 0.0f;
 		sliderMin = -1.5f;
 		sliderMax = 1.5f;
 		questionImage = nil;
@@ -64,7 +64,7 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 	title = [@"Representative - (D-23)" retain];
 	name = [@"Rafael Anchía" retain];
 	tenure = [@"4 Years" retain];
-	sliderValue = 0.0f;
+	sliderValue = 0.0f, partisan_index = 0.0f;
 	sliderMin = -1.5f;
 	sliderMax = 1.5f;
 	questionImage = nil;
@@ -147,18 +147,18 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 }
 
 - (void)setLegislator:(LegislatorObj *)value {
-
+	self.partisan_index = [value.partisan_index floatValue];
 	self.title = [value.legtype_name stringByAppendingFormat:@" - %@", [value districtPartyString]];
 	self.name = [value legProperName];
 	self.tenure = [value tenureString];
 		
 	PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
-	CGFloat minSlider = [[indexStats minPartisanIndexUsingLegislator:value] floatValue];
-	CGFloat maxSlider = [[indexStats maxPartisanIndexUsingLegislator:value] floatValue];
+	CGFloat minSlider = [indexStats minPartisanIndexUsingChamber:[value.legtype integerValue]];
+	CGFloat maxSlider = [indexStats maxPartisanIndexUsingChamber:[value.legtype integerValue]];
 	self.sliderMax = maxSlider;
 	self.sliderMin = minSlider;	
-	self.sliderValue = value.partisan_index.floatValue;
-
+	self.sliderValue = self.partisan_index;
+	
 	[self setNeedsDisplay];	
 }
 
@@ -218,7 +218,7 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 	drawRect.size.height = roundf(resolution * drawRect.size.height) / resolution;
 	font = [TexLegeTheme boldTen];
 	[tenureColor set];
-	[[self tenure] drawInRect:drawRect withFont:font lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentRight];
+	[[self tenure] drawInRect:drawRect withFont:font lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentRight];
 	
 	// Title
 	
@@ -292,7 +292,7 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 	CGContextRestoreGState(context);
 	CGPathRelease(path);
 	
-	if (self.sliderValue == 0.0f) {
+	if (self.partisan_index == 0.0f) {
 		if (!self.questionImage) {
 			NSString *imageString = /*(self.usesSmallStar) ? @"Slider_Question.png" :*/ @"Slider_Question_big.png";
 			self.questionImage = [UIImage imageNamed:imageString];

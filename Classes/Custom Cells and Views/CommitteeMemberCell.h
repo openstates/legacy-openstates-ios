@@ -14,5 +14,6 @@
 	
 }
 @property (nonatomic,retain) IBOutlet CommitteeMemberCellView *cellView;
-@property (nonatomic,retain) IBOutlet LegislatorObj *legislator;
+- (void)setLegislator:(LegislatorObj *)value;
+
 @end

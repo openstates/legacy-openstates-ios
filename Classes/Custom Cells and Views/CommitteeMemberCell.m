@@ -12,7 +12,7 @@
 #import "DisclosureQuartzView.h"
 
 @implementation CommitteeMemberCell
-@synthesize legislator, cellView;
+@synthesize cellView;
 
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -54,12 +54,8 @@
 
 
 - (void)setLegislator:(LegislatorObj *)value {
-	if ([legislator isEqual:value])
-		return;
-	legislator = [value retain];
-	self.imageView.image = [UIImage imageNamed:legislator.photo_name];
-		
-	self.cellView.legislator = value;
+	self.imageView.image = [UIImage imageNamed:value.photo_name];
+	[self.cellView setLegislator:value];
 }
 
 - (void)redisplay {
@@ -69,7 +65,6 @@
 
 
 - (void)dealloc {
-	[legislator release], legislator = nil;
 	[cellView release], cellView = nil;
 	
     [super dealloc];

@@ -19,8 +19,7 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 
 @implementation CommitteeMemberCellView
 
-@synthesize legislator;
-@synthesize title, name, tenure, party, rank, district;
+@synthesize title, name, tenure, party, party_id, rank, district, partisan_index;
 @synthesize highlighted, questionImage;
 @synthesize sliderValue, sliderMin, sliderMax;
 
@@ -34,7 +33,8 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 		party = [@"Republican" retain];
 		rank = [@"3rd most partisan (out of 76 Repubs)" retain];
 		district = [@"District 21" retain];
-		sliderValue = 0.0f;
+		party_id = 2;
+		sliderValue = 0.0f, partisan_index = 0.0f;
 		sliderMin = -1.5f;
 		sliderMax = 1.5f;
 		questionImage = nil;
@@ -55,7 +55,8 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 		party = [@"Republican" retain];
 		rank = [@"3rd most partisan (out of 76 Repubs)" retain];
 		district = [@"District 21" retain];
-		sliderValue = 0.0f;
+		party_id = 2;
+		sliderValue = 0.0f, partisan_index = 0.0f;
 		sliderMin = -1.5f;
 		sliderMax = 1.5f;
 		questionImage = nil;
@@ -74,7 +75,8 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 	party = [@"Republican" retain];
 	rank = [@"3rd most partisan (out of 76 Repubs)" retain];
 	district = [@"District 21" retain];
-	sliderValue = 0.0f;
+	party_id = 2;
+	sliderValue = 0.0f, partisan_index = 0.0f;
 	sliderMin = -1.5f;
 	sliderMax = 1.5f;
 	questionImage = nil;
@@ -114,7 +116,7 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 #define kStarMagnifierBase (kStarAtRepub - kStarAtDemoc)
 	
 #ifdef JUSTTESTINGHERE
-	sliderValue = [legislator.party_id integerValue] == DEMOCRAT ? 0 : +1.5;
+	sliderValue = [party_id integerValue] == DEMOCRAT ? 0 : +1.5;
 	sliderMin = -1.5;
 	sliderMax = +1.5;
 #endif
@@ -156,17 +158,17 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 	
 }
 
-- (NSString *) partisanRankStringForLegislator {
+- (NSString *) partisanRankStringForLegislator:(LegislatorObj *)value {
 	
 	//self.rank = @"3rd most partisan (out of 76 Repubs)";
 
-	NSArray *legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[legislator.legtype integerValue] 
-																		   andPartyID:[legislator.party_id integerValue] 
-																			  context:self.legislator.managedObjectContext];
+	NSArray *legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[value.legtype integerValue] 
+																		   andPartyID:[value.party_id integerValue] 
+																			  context:value.managedObjectContext];
 	if (legislators) {
-		NSInteger rankIndex = [legislators indexOfObject:self.legislator] + 1;
+		NSInteger rankIndex = [legislators indexOfObject:value] + 1;
 		NSInteger count = [legislators count];
-		NSString *partyShortName = [self.legislator.party_id integerValue] == DEMOCRAT ? @"Dems" : @"Repubs";
+		NSString *partyShortName = [value.party_id integerValue] == DEMOCRAT ? @"Dems" : @"Repubs";
 		
 		NSString *ordinalRank = [UtilityMethods ordinalNumberFormat:rankIndex];
 		return [NSString stringWithFormat:@"%@ most partisan (out of %d %@)", ordinalRank, count, partyShortName];	
@@ -176,31 +178,25 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 	}
 }
 
-- (void)setLegislator:(LegislatorObj *)value {
-	if ([legislator isEqual:value]) {
-		return;
-	}
-	if (legislator)
-		[legislator release], legislator=nil;
-	
+- (void)setLegislator:(LegislatorObj *)value {	
 	if (value) {
-		legislator = [value retain];
-
-		self.title = [self.legislator legTypeShortName];
-		self.district = [NSString stringWithFormat:@"District %@", legislator.district];
-		self.party = self.legislator.party_name;
-		self.name = [self.legislator legProperName];
-		self.tenure = [self.legislator tenureString];
+		self.partisan_index = [value.partisan_index floatValue];
+		self.title = [value legTypeShortName];
+		self.district = [NSString stringWithFormat:@"District %@", value.district];
+		self.party = value.party_name;
+		self.name = [value legProperName];
+		self.tenure = [value tenureString];
+		self.party_id = [[value party_id] integerValue];
 		
 		PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
-		CGFloat minSlider = [[indexStats minPartisanIndexUsingLegislator:legislator] floatValue];
-		CGFloat maxSlider = [[indexStats maxPartisanIndexUsingLegislator:legislator] floatValue];
+		CGFloat minSlider = [indexStats minPartisanIndexUsingChamber:[value.legtype integerValue]];
+		CGFloat maxSlider = [indexStats maxPartisanIndexUsingChamber:[value.legtype integerValue]];
 		
 		self.sliderMax = maxSlider;
 		self.sliderMin = minSlider;	
-		self.sliderValue = self.legislator.partisan_index.floatValue;
+		self.sliderValue = self.partisan_index;
 		
-		self.rank = [self partisanRankStringForLegislator];
+		self.rank = [self partisanRankStringForLegislator:value];
 	}
 	[self setNeedsDisplay];	
 }
@@ -240,7 +236,7 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 		nameColor = [TexLegeTheme textDark];
 		tenureColor = rankColor = districtColor = [TexLegeTheme textLight];
 		titleColor = [TexLegeTheme accent];
-		partyColor = [legislator.party_id integerValue] == REPUBLICAN ? [TexLegeTheme texasRed] : [TexLegeTheme texasBlue];
+		partyColor = party_id == REPUBLICAN ? [TexLegeTheme texasRed] : [TexLegeTheme texasBlue];
 	}
 	
 	CGContextSaveGState(context);
@@ -256,7 +252,7 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 	drawRect.size.height = roundf(resolution * drawRect.size.height) / resolution;
 	font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:11.0f];
 	[tenureColor set];
-	[[self tenure] drawInRect:drawRect withFont:font lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentRight];
+	[[self tenure] drawInRect:drawRect withFont:font lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentRight];
 	
 	// District
 	
@@ -363,7 +359,7 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 	CGContextRestoreGState(context);
 	CGPathRelease(path);
 	
-	if (self.legislator.partisan_index.floatValue == 0.0f) {
+	if (self.partisan_index == 0.0f) {
 		if (!self.questionImage) {
 			NSString *imageString = /*(self.usesSmallStar) ? @"Slider_Question.png" :*/ @"Slider_Question_big.png";
 			self.questionImage = [UIImage imageNamed:imageString];
