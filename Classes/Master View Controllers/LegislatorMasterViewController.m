@@ -83,7 +83,7 @@
 	self.navigationItem.titleView = self.chamberControl;
 }
 
-- (void)viewDidUnload {
+- (void)viewDidUnload {	
 	self.chamberControl = nil;
 	[super viewDidUnload];
 }
@@ -174,7 +174,7 @@ NSIndexPath *current = nil;
 #endif
 
 #pragma mark -
-#pragma mark able view delegate
+#pragma mark Table view delegate
 
 //START:code.split.delegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
