@@ -165,9 +165,14 @@
 		self.contentSizeForViewInPopover = CGSizeMake(320.0, tableHeight);
 		//self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 	}
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(beginUpdates:) name:@"TABLEUPDATE_START" object:self.dataSource];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endUpdates:) name:@"TABLEUPDATE_END" object:self.dataSource];
 }
-
+	
 - (void)viewDidUnload {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"TABLEUPDATE_START" object:self.dataSource];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"TABLEUPDATE_END" object:self.dataSource];
+
 	self.dataSource = nil;
 	self.selectObjectOnAppear = nil;
 	//self.tableView = nil;
@@ -211,6 +216,14 @@
 
 #pragma -
 #pragma UITableViewDelegate
+
+- (void)beginUpdates:(NSNotification *)aNotification {
+	[self.tableView beginUpdates];
+}
+
+- (void)endUpdates:(NSNotification *)aNotification {
+	[self.tableView endUpdates];
+}
 
 - (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 	BOOL useDark = (indexPath.row % 2 == 0);

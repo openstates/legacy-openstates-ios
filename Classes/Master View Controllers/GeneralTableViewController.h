@@ -23,4 +23,8 @@
 - (Class)dataSourceClass;
 - (IBAction)selectDefaultObject:(id)sender;
 - (id)firstDataObject;
+
+- (void)beginUpdates:(NSNotification *)aNotification;
+- (void)endUpdates:(NSNotification *)aNotification;
+
 @end
