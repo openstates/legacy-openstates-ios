@@ -28,11 +28,10 @@
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
-- (NSNumber *) minPartisanIndexUsingLegislator:(LegislatorObj *)legislator;
-- (NSNumber *) maxPartisanIndexUsingLegislator:(LegislatorObj *)legislator;
-	
-- (NSNumber *) partyPartisanIndexUsingLegislator:(LegislatorObj *)legislator;
-- (NSNumber *) overallPartisanIndexUsingLegislator:(LegislatorObj *)legislator;
+- (CGFloat) minPartisanIndexUsingChamber:(NSInteger)chamber;
+- (CGFloat) maxPartisanIndexUsingChamber:(NSInteger)chamber;
+- (CGFloat) overallPartisanIndexUsingChamber:(NSInteger)chamber;
+- (CGFloat) partyPartisanIndexUsingChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
 
 - (NSDictionary *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber;
 

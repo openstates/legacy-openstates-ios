@@ -106,25 +106,25 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	return m_partisanIndexAggregates;
 }
 
-- (NSNumber *) minPartisanIndexUsingLegislator:(LegislatorObj *)legislator {
-	return [self.partisanIndexAggregates objectForKey:
-			[NSString stringWithFormat:@"MinC%d+P0", [legislator.legtype integerValue]]];
+- (CGFloat) minPartisanIndexUsingChamber:(NSInteger)chamber {
+	return [[self.partisanIndexAggregates objectForKey:
+			[NSString stringWithFormat:@"MinC%d+P0", chamber]] floatValue];
 };
 
-- (NSNumber *) maxPartisanIndexUsingLegislator:(LegislatorObj *)legislator {
-	return [self.partisanIndexAggregates objectForKey:
-			[NSString stringWithFormat:@"MaxC%d+P0", [legislator.legtype integerValue]]];
+- (CGFloat) maxPartisanIndexUsingChamber:(NSInteger)chamber {
+	return [[self.partisanIndexAggregates objectForKey:
+			[NSString stringWithFormat:@"MaxC%d+P0", chamber]] floatValue];
 };
 
-- (NSNumber *) overallPartisanIndexUsingLegislator:(LegislatorObj *)legislator {
-	return [self.partisanIndexAggregates objectForKey:
-			[NSString stringWithFormat:@"AvgC%d+P0", [legislator.legtype integerValue]]];
+- (CGFloat) overallPartisanIndexUsingChamber:(NSInteger)chamber {
+	return [[self.partisanIndexAggregates objectForKey:
+			[NSString stringWithFormat:@"AvgC%d+P0", chamber]] floatValue];
 };
 
 
-- (NSNumber *) partyPartisanIndexUsingLegislator:(LegislatorObj *)legislator {
-	return [self.partisanIndexAggregates objectForKey:
-			[NSString stringWithFormat:@"AvgC%d+P%d", [legislator.legtype integerValue], [legislator.party_id integerValue]]];
+- (CGFloat) partyPartisanIndexUsingChamber:(NSInteger)chamber andPartyID:(NSInteger)party {
+	return [[self.partisanIndexAggregates objectForKey:
+			[NSString stringWithFormat:@"AvgC%d+P%d", chamber, party]] floatValue];
 };
 
 
