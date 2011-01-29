@@ -14,5 +14,5 @@
 	
 }
 @property (nonatomic,retain) IBOutlet LegislatorMasterCellView *cellView;
-@property (nonatomic,retain) IBOutlet LegislatorObj *legislator;
+- (void)setLegislator:(LegislatorObj *)value;
 @end

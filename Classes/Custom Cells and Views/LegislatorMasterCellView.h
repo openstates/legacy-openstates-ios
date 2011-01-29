@@ -18,7 +18,6 @@ extern const CGFloat kLegislatorMasterCellViewHeight;
 @property (copy, nonatomic) NSString *title;
 @property (copy, nonatomic) NSString *name;
 @property (copy, nonatomic) NSString *tenure;
-@property (nonatomic, copy) LegislatorObj *legislator;
 @property (nonatomic) BOOL useDarkBackground;
 @property (nonatomic) BOOL highlighted;
 @property (nonatomic, retain) UIImage *questionImage;
@@ -26,5 +25,7 @@ extern const CGFloat kLegislatorMasterCellViewHeight;
 @property (nonatomic) CGFloat sliderValue;
 @property (nonatomic) CGFloat sliderMin;
 @property (nonatomic) CGFloat sliderMax;
+
+- (void)setLegislator:(LegislatorObj *)value;
 
 @end

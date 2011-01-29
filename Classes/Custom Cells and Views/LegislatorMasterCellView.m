@@ -21,7 +21,6 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 @synthesize name;
 @synthesize tenure;
 @synthesize sliderValue, sliderMin, sliderMax;
-@synthesize legislator;
 @synthesize useDarkBackground;
 @synthesize highlighted, questionImage;
 
@@ -148,22 +147,17 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 }
 
 - (void)setLegislator:(LegislatorObj *)value {
-	if ([legislator isEqual:value]) {
-		return;
-	}
-	[legislator release];
-	legislator = [value retain];
-		
-	self.title = [self.legislator.legtype_name stringByAppendingFormat:@" - %@", [self.legislator districtPartyString]];
-	self.name = [self.legislator legProperName];
-	self.tenure = [self.legislator tenureString];
+
+	self.title = [value.legtype_name stringByAppendingFormat:@" - %@", [value districtPartyString]];
+	self.name = [value legProperName];
+	self.tenure = [value tenureString];
 		
 	PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
-	CGFloat minSlider = [[indexStats minPartisanIndexUsingLegislator:legislator] floatValue];
-	CGFloat maxSlider = [[indexStats maxPartisanIndexUsingLegislator:legislator] floatValue];
+	CGFloat minSlider = [[indexStats minPartisanIndexUsingLegislator:value] floatValue];
+	CGFloat maxSlider = [[indexStats maxPartisanIndexUsingLegislator:value] floatValue];
 	self.sliderMax = maxSlider;
 	self.sliderMin = minSlider;	
-	self.sliderValue = self.legislator.partisan_index.floatValue;
+	self.sliderValue = value.partisan_index.floatValue;
 
 	[self setNeedsDisplay];	
 }
@@ -171,9 +165,6 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 
 - (void)drawRect:(CGRect)dirtyRect
 {
-	if (!self.legislator)
-		return;
-	
 	//debug_NSLog(@"dirty rect: %f %f %f %f", dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height);
 
 	CGRect imageBounds = CGRectMake(0.0f, 0.0f, kLegislatorMasterCellViewWidth, kLegislatorMasterCellViewHeight);
@@ -301,7 +292,7 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 	CGContextRestoreGState(context);
 	CGPathRelease(path);
 	
-	if (self.legislator.partisan_index && [self.legislator.partisan_index floatValue] == 0.0f) {
+	if (self.sliderValue == 0.0f) {
 		if (!self.questionImage) {
 			NSString *imageString = /*(self.usesSmallStar) ? @"Slider_Question.png" :*/ @"Slider_Question_big.png";
 			self.questionImage = [UIImage imageNamed:imageString];
