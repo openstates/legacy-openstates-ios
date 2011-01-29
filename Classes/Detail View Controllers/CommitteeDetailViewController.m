@@ -79,10 +79,21 @@ CGFloat quartzRowHeight = 73.f;
 		return;
 	
 	CGFloat avg = 0.0f;
-	NSNumber *avgNum = [positions valueForKeyPath:@"@avg.legislator.partisan_index"];
-	if (avgNum)
-		avg = [avgNum floatValue];
-	
+	CGFloat totalNum = 0.0f;
+	NSInteger totalLege = 0;
+	for (CommitteePositionObj *position in positions) {
+		if (position.legislator.partisan_index) {
+			CGFloat legePart = [position.legislator.partisan_index floatValue];
+			if (legePart != 0.0f) {
+				totalNum += legePart;
+				totalLege++;
+			}
+		}
+	}
+	if (totalLege) {
+		avg = totalNum / totalLege;
+	}
+		
 	NSInteger democCount = 0, repubCount = 0;
 	NSArray *repubs = [positions findAllWhereKeyPath:@"legislator.party_id" equals:[NSNumber numberWithInteger:REPUBLICAN]];	
 	if (repubs)
@@ -99,15 +110,14 @@ CGFloat quartzRowHeight = 73.f;
 	
 	self.membershipLab.text = [NSString stringWithFormat:@"%d %@ and %d %@", repubCount, repubString, democCount, democString];
 		
-
 	// This will give inacurate results in joint committees, at least until we're in a common dimensional space
 	LegislatorObj *anyMember = [[positions objectAtIndex:0] legislator];
 
 	if (anyMember) {
 		PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
 		
-		CGFloat minSlider = [[indexStats minPartisanIndexUsingLegislator:anyMember] floatValue];
-		CGFloat maxSlider = [[indexStats maxPartisanIndexUsingLegislator:anyMember] floatValue];
+		CGFloat minSlider = [indexStats minPartisanIndexUsingChamber:[anyMember.legtype integerValue]];
+		CGFloat maxSlider = [indexStats maxPartisanIndexUsingChamber:[anyMember.legtype integerValue]];
 		
 		self.partisanSlider.sliderMin = minSlider;
 		self.partisanSlider.sliderMax = maxSlider;

@@ -269,8 +269,8 @@
 		self.leg_chamberLab.text = [[self.legislator chamberName] stringByAppendingString:@" Avg."];				
 	}
 	
-	CGFloat minSlider = [[indexStats minPartisanIndexUsingLegislator:self.legislator] floatValue];
-	CGFloat maxSlider = [[indexStats maxPartisanIndexUsingLegislator:self.legislator] floatValue];
+	CGFloat minSlider = [indexStats minPartisanIndexUsingChamber:[self.legislator.legtype integerValue]];
+	CGFloat maxSlider = [indexStats maxPartisanIndexUsingChamber:[self.legislator.legtype integerValue]];
 	
 	if (self.indivSlider) {
 		self.indivSlider.sliderMin = minSlider;
@@ -280,12 +280,12 @@
 	if (self.partySlider) {
 		self.partySlider.sliderMin = minSlider;
 		self.partySlider.sliderMax = maxSlider;
-		self.partySlider.sliderValue = [[indexStats partyPartisanIndexUsingLegislator:self.legislator] floatValue];
+		self.partySlider.sliderValue = [indexStats partyPartisanIndexUsingChamber:[self.legislator.legtype integerValue] andPartyID:[self.legislator.party_id integerValue]];
 	}	
 	if (self.allSlider) {
 		self.allSlider.sliderMin = minSlider;
 		self.allSlider.sliderMax = maxSlider;
-		self.allSlider.sliderValue = [[indexStats overallPartisanIndexUsingLegislator:self.legislator] floatValue];
+		self.allSlider.sliderValue = [indexStats overallPartisanIndexUsingChamber:[self.legislator.legtype integerValue]];
 	}	
 	
 }
