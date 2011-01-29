@@ -13,14 +13,17 @@
 
 @interface DataModelUpdateManager : NSObject {
 }
+
 @property (nonatomic,retain) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic,retain) NSDictionary *localModelCatalog;
 @property (nonatomic,retain) NSDictionary *remoteModelCatalog;
 @property (nonatomic,retain) NSArray *availableUpdates;
 @property (nonatomic,retain) NSMutableArray *downloadedUpdates;
+@property (nonatomic,retain) NSDictionary *statusBlurbsAndModels;
 
 - (id) initWithManagedObjectContext:(NSManagedObjectContext*)newContext;
 - (BOOL)isDataUpdateAvailable;
 - (void)downloadDataUpdatesUsingCachedList:(BOOL)cached;
+- (NSDictionary *)getLocalDataModelCatalog;
 
 @end

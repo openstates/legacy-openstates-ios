@@ -12,7 +12,6 @@
 #define JSONDATA_VERSIONKEY		@"Version"
 #define JSONDATA_TIMESTAMPKEY	@"Timestamp"
 #define JSONDATA_URLKEY			@"URL"
-//#define JSONDATA_ENCODING		NSMacOSRomanStringEncoding	
 #define JSONDATA_ENCODING		NSUTF8StringEncoding
 
 #import "DataModelUpdateManager.h"
@@ -23,13 +22,10 @@
 #import "TexLegeDataObjectProtocol.h"
 #import "TexLegeAppDelegate.h"
 #import "TexLegeDataImporter.h"
-
-//#import "CommitteeObj.h"
-//#import "LegislatorObj.h"
+#import "MTStatusBarOverlay.h"
 
 @interface DataModelUpdateManager (Private)
 
-- (NSDictionary *)getLocalDataModelCatalog;
 - (NSDictionary *)getRemoteDataModelCatalog;
 - (NSArray *)getListOfAvailableUpdates;
 - (NSArray *)getRemoteModelWithKey:(NSString *)key;
@@ -41,18 +37,35 @@
 @implementation DataModelUpdateManager
 
 @synthesize managedObjectContext;
-@synthesize localModelCatalog, remoteModelCatalog, availableUpdates, downloadedUpdates;
+@synthesize localModelCatalog, remoteModelCatalog, availableUpdates, downloadedUpdates, statusBlurbsAndModels;
 
 - (id) initWithManagedObjectContext:(NSManagedObjectContext*)newContext {
 	if (self=[super init]) {
 		self.managedObjectContext = newContext;	
 		self.remoteModelCatalog = self.localModelCatalog = nil;
 		self.downloadedUpdates = [NSMutableArray array];
+		
+		self.statusBlurbsAndModels = [NSDictionary dictionaryWithObjectsAndKeys: 
+									  @"Legislators", @"LegislatorObj",
+									  @"Partisanship Scores", @"WnomObj",
+									  @"Staffers", @"StafferObj",
+									  @"Committees", @"CommitteeObj",
+									  @"Committee Positions", @"CommitteePositionObj",
+									  @"District Offices", @"DistrictOfficeObj",
+									  @"Resources", @"LinkObj",
+									  @"District Maps", @"DistrictMapsObj", nil];		
+		
+		[MTStatusBarOverlay sharedInstance].animation = MTStatusBarOverlayAnimationFallDown;
+		[MTStatusBarOverlay sharedInstance].historyEnabled = YES;
+		[MTStatusBarOverlay sharedInstance].detailViewMode = MTDetailViewModeHistory;
+
+
 	}
 	return self;
 }
 
 - (void) dealloc {
+	self.statusBlurbsAndModels = nil;
 	self.managedObjectContext = nil;
 	self.downloadedUpdates = nil;
 	self.availableUpdates = nil;
@@ -98,6 +111,9 @@
 	
 	if ([[TexLegeReachability sharedTexLegeReachability] isNetworkReachable]) {
 		
+		//[[MTStatusBarOverlay sharedInstance] postMessage:@"Checking for Updates" animated:YES];
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+
 		NSString *urlMethod = [NSString stringWithFormat:@"%@/%@", JSONDATA_BASE_URL, JSONDATA_VERSIONFILE];
 		NSURL *url = [NSURL URLWithString:urlMethod];
 		NSError *error = nil;
@@ -110,17 +126,9 @@
 			if (!remoteVersionDict) {
 				NSLog(@"Error parsing remote json data version string: %@", remoteVersionString);
 			}
-/*
-			else {
-				outFile = [NSString stringWithFormat:@"%@.remotecache", JSONDATA_VERSIONFILE];
-				outPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:outFile];
-				[remoteVersionString writeToFile:outPath atomically:YES encoding:JSONDATA_ENCODING error:&error];
-				if (error) {
-					NSLog(@"Error attempting to cache remote json data version file with error: %@ [path: %@]", error, outPath);
-				}
-			}
-*/
 		}
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+
 	}
 	else {
 		NSLog(@"Network is unreachable, cannot obtain remote json data version file.");
@@ -237,12 +245,22 @@
 		
 		if (modelKey && updatedModelInfo) {			
 			[self.downloadedUpdates addObject:updatedModelDict];
+			NSString *statusString = [NSString stringWithFormat:@"Downloaded %@", [statusBlurbsAndModels objectForKey:modelKey]];
+			[[MTStatusBarOverlay sharedInstance] postMessage:statusString animated:YES];
+			//[MTStatusBarOverlay sharedInstance].detailText = statusString;
+			//[[MTStatusBarOverlay sharedInstance] postFinishMessage:statusString duration:2];
+
 			[self checkUpdateFinished];
 		}
 	}
 }
  
 - (void)downloadDataUpdatesUsingCachedList:(BOOL)cached {
+	if (![[TexLegeReachability sharedTexLegeReachability] isNetworkReachable]) {
+		NSLog(@"DataModelUpdateManager:downloadDataUpdates -- Network is unreachable, ignoring request.");
+		return;
+	}
+
 	if (!cached || !self.availableUpdates)
 		self.availableUpdates = [self getListOfAvailableUpdates];
 		
@@ -257,10 +275,15 @@
 	if (!self.remoteModelCatalog)
 		return;
 	
-	[self.downloadedUpdates removeAllObjects];
-	
-	for (NSString * modelKey in self.availableUpdates) {
-		if ([[TexLegeReachability sharedTexLegeReachability] isNetworkReachable]) {
+	if ([[TexLegeReachability sharedTexLegeReachability] isNetworkReachable]) {
+
+		[self.downloadedUpdates removeAllObjects];
+		
+		//	[[MTStatusBarOverlay sharedInstance] setDetailViewHidden:NO animated:YES];
+		NSString *statusString = [NSString stringWithFormat:@"Downloading %d Updates", [self.availableUpdates count]];
+		[[MTStatusBarOverlay sharedInstance] postMessage:statusString animated:YES];
+		
+		for (NSString * modelKey in self.availableUpdates) {			
 			NSDictionary *requestDict = [NSDictionary dictionaryWithObjectsAndKeys:
 										 self.remoteModelCatalog, @"catalog", 
 										 modelKey, @"modelKey", nil];
@@ -277,21 +300,26 @@
 	NSArray *installOrderOfKeys = [NSArray arrayWithObjects:@"LegislatorObj", @"WnomObj", 
 								   @"CommitteeObj", @"CommitteePositionObj", @"StafferObj", 
 								   @"DistrictOfficeObj", /*@"DistrictMapObj",*/ @"LinkObj", nil]; 
+								   
+	//[[MTStatusBarOverlay sharedInstance] postMessage:@"Installing Updates"];
 	
 	NSInteger installedCount = 0;
 	for (NSString *modelKey in installOrderOfKeys) {
-		NSString *modelFile = [self.localModelCatalog objectForKey:JSONDATA_URLKEY];
+		//NSDictionary *temp = self.localModelCatalog;
+		NSString *modelFile = [[self.localModelCatalog objectForKey:modelKey] objectForKey:JSONDATA_URLKEY];
 		if (modelFile && [modelFile length]) {
 			NSError *error = nil;
 			NSString *modelPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:modelFile];			
 			NSString *modelString = [[NSString alloc] initWithContentsOfFile:modelPath encoding:JSONDATA_ENCODING error:&error];
 			if (!modelString || error) {
 				NSLog(@"DataModelUpdateManager - InstallDataUpdates: Error reading a data file: %@; error: %@", modelFile, [error localizedDescription]);
+				[[MTStatusBarOverlay sharedInstance] postErrorMessage:@"Error Reading Update" duration:3];
 			}
 			else {
 				NSArray *modelArray = [modelString JSONValue];
 				if (!modelArray) {
 					NSLog(@"Error parsing local json data in file: %@", modelFile);
+					[[MTStatusBarOverlay sharedInstance] postErrorMessage:@"Error Parsing Update" duration:3];
 				}
 				else {
 					NSInteger importCount = 0;
@@ -316,6 +344,7 @@
 					else {
 						[self.managedObjectContext rollback];
 						debug_NSLog(@"DataModelUpdateManager: Failed to update %@ model objects, rolling back changes.", modelKey);
+						[[MTStatusBarOverlay sharedInstance] postErrorMessage:@"Update Failed" duration:3];
 					}	
 				}
 			}
@@ -323,14 +352,23 @@
 		}
 	}
 	
+	// ------------- Special Cases
+	
+	// DistrictMapObj
 	TexLegeDataImporter *importer = [[TexLegeDataImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
 	if (importer) {
 		[importer importObjectsWithEntityName:@"DistrictMapObj"];
 		[importer release];
 	}
+	// WnomAggregates
+		// Don't do anything special, because we'll handle it with this notification below....
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"DATAMODEL_UPDATED" object:nil];
 	
+//	[[MTStatusBarOverlay sharedInstance] setDetailViewHidden:YES animated:YES];
+	[[MTStatusBarOverlay sharedInstance] postFinishMessage:@"Update Completed" duration:5];	
+
+
 	return installedCount == [installOrderOfKeys count];;
 }
 
@@ -344,10 +382,10 @@
 		[catalogString writeToFile:outPath atomically:YES encoding:JSONDATA_ENCODING error:&error];
 		if (error) {
 			NSLog(@"Error attempting to write update json data version catalog with error: %@ [path: %@]", error, outPath);
+			[[MTStatusBarOverlay sharedInstance] postErrorMessage:@"Error Writing Catalog" duration:3];
 		}
 		else {
 			self.availableUpdates = nil;
-			
 			[self installDataUpdates];
 		}
 	}
