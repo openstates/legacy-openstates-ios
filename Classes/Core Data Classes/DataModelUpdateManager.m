@@ -163,8 +163,12 @@
 				if (localModel) {
 					modelVersionNum = [localModel objectForKey:JSONDATA_VERSIONKEY];
 					if (modelVersionNum) {
+#ifdef DEBUG
+						addModelToUpdates = remoteModelVersion > 0;
+#else
 						NSInteger localModelVersion = [modelVersionNum integerValue];
 						addModelToUpdates = remoteModelVersion > localModelVersion;
+#endif
 					}
 				}
 			}
@@ -321,7 +325,7 @@
 					NSLog(@"Error parsing local json data in file: %@", modelFile);
 					[[MTStatusBarOverlay sharedInstance] postErrorMessage:@"Error Parsing Update" duration:3];
 				}
-				else {
+				else if ([modelArray count]) {
 					NSInteger importCount = 0;
 					debug_NSLog(@"DataModelUpdateManager: Beginning update for data model: %@", modelKey);
 					[TexLegeCoreDataUtils deleteAllObjectsInEntityNamed:modelKey context:self.managedObjectContext];
