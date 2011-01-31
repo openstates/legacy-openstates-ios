@@ -16,6 +16,7 @@
 #import "MiniBrowserController.h"
 #import "TexLegeTheme.h"
 #import "TexLegeEmailComposer.h"
+#import "TexLegeReachability.h"
 
 @implementation LinksMasterViewController
 
@@ -115,6 +116,17 @@
 			self.detailViewController = [[[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil] autorelease];
 		}
 
+		if ([link.label isEqualToString:@"Legislator Twitter Feeds"]) {
+
+			NSString *interAppTwitter = @"twitter://list?screen_name=grgcombs&slug=texas-politicians";
+			NSURL *interAppTwitterURL = [NSURL URLWithString:interAppTwitter];
+			if ([[UIApplication sharedApplication] canOpenURL:interAppTwitterURL]) {
+				if ([TexLegeReachability canReachHostWithURL:interAppTwitterURL alert:YES])
+					[[UIApplication sharedApplication] openURL:interAppTwitterURL];
+				return;
+			}
+		}
+		
 		MiniBrowserController *detailVC = self.detailViewController;
 		
 		if ([link.url isEqualToString:@"contactMail"]) {
