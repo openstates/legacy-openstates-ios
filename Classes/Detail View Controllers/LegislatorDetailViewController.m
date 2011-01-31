@@ -56,7 +56,7 @@
 @synthesize headerView, miniBackgroundView;
 
 @synthesize chartView, chartLoadingAct, isChartSVG;
-@synthesize leg_indexTitleLab, leg_rankLab, leg_chamberPartyLab, leg_chamberLab;
+@synthesize leg_indexTitleLab, leg_rankLab, leg_chamberPartyLab, leg_chamberLab, leg_reelection;
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab, freshmanPlotLab;
 @synthesize indivSlider, partySlider, allSlider;
 @synthesize notesPopover, masterPopover;
@@ -119,6 +119,7 @@
 	self.dataSource = nil;
 	self.headerView = nil;
 	self.leg_photoView = nil;
+	self.leg_reelection = nil;
 	//self.tableView = nil;
 	self.miniBackgroundView = nil;
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
@@ -139,6 +140,7 @@
 	self.legislator = nil;
 	self.headerView = nil;
 	self.leg_photoView = nil;
+	self.leg_reelection = nil;
 	//self.tableView = nil;
 	self.chartView = nil;
 	self.chartLoadingAct = nil;
@@ -224,6 +226,9 @@
 - (NSString *) partisanRankStringForLegislator {
 	//self.rank = @"3rd most partisan (out of 76 Repubs)";
 	
+	if (self.legislator.tenure.integerValue == 0)
+		return @"";
+
 	NSArray *legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[self.legislator.legtype integerValue] 
 																					andPartyID:[self.legislator.party_id integerValue] 
 																					   context:self.legislator.managedObjectContext];
@@ -236,7 +241,7 @@
 		return [NSString stringWithFormat:@"%@ most partisan (out of %d %@)", ordinalRank, count, partyShortName];	
 	}
 	else {
-		return nil;
+		return @"";
 	}
 }
 
@@ -252,6 +257,10 @@
 	self.leg_partyLab.text = [self.legislator party_name];
 	self.leg_districtLab.text = [NSString stringWithFormat:@"District %@", self.legislator.district];
 	self.leg_tenureLab.text = [self.legislator tenureString];
+	if (self.legislator.nextElection) {
+		
+		self.leg_reelection.text = [NSString stringWithFormat:@"Reelection: %@", self.legislator.nextElection];
+	}
 	
 	PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
 

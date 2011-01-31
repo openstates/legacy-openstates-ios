@@ -25,6 +25,7 @@
 @property (nonatomic,retain) IBOutlet UIImageView *leg_photoView;
 @property (nonatomic,retain) IBOutlet UILabel *leg_indexTitleLab, *leg_rankLab, *leg_chamberPartyLab, *leg_chamberLab;
 @property (nonatomic,retain) IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab, *freshmanPlotLab;
+@property (nonatomic,retain) IBOutlet UILabel *leg_reelection;
 @property (nonatomic,retain) IBOutlet PartisanScaleView *indivSlider, *partySlider, *allSlider;
 @property (nonatomic,retain) IBOutlet UIActivityIndicatorView *chartLoadingAct;
 
