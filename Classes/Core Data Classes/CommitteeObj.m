@@ -54,19 +54,27 @@
 - (NSDictionary *)exportToDictionary {
 	
 	NSMutableDictionary *tempDict = [NSMutableDictionary dictionary];
-	[tempDict setObject:self.clerk forKey:@"clerk"];
-	[tempDict setObject:self.clerk_email forKey:@"clerk_email"];
-	[tempDict setObject:self.office forKey:@"office"];
-	[tempDict setObject:self.phone forKey:@"phone"];
-	[tempDict setObject:self.parentId forKey:@"parentId"];
+	if (self.clerk)
+		[tempDict setObject:self.clerk forKey:@"clerk"];
+	if (self.clerk_email)
+		[tempDict setObject:self.clerk_email forKey:@"clerk_email"];
+	if (self.office)
+		[tempDict setObject:self.office forKey:@"office"];
+	if (self.phone)
+		[tempDict setObject:self.phone forKey:@"phone"];
+	if (self.parentId)
+		[tempDict setObject:self.parentId forKey:@"parentId"];
 	[tempDict setObject:self.committeeId forKey:@"committeeId"];
 	[tempDict setObject:self.url forKey:@"url"];
 	[tempDict setObject:self.committeeName forKey:@"committeeName"];
 	[tempDict setObject:self.committeeType forKey:@"committeeType"];
 	
-	[tempDict setObject:self.votesmartID forKey:@"votesmartID"];
-	[tempDict setObject:self.openstatesID forKey:@"openstatesID"];
-	[tempDict setObject:self.txlonline_id forKey:@"txlonline_id"];
+	if (self.votesmartID)
+		[tempDict setObject:self.votesmartID forKey:@"votesmartID"];
+	if (self.openstatesID)
+		[tempDict setObject:self.openstatesID forKey:@"openstatesID"];
+	if (self.txlonline_id)
+		[tempDict setObject:self.txlonline_id forKey:@"txlonline_id"];
 
 	return tempDict;
 }
