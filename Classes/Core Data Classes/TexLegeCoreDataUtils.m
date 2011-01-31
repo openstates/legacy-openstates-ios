@@ -153,8 +153,10 @@
 	
 	NSString *predicateString = nil;
 	if (party > kUnknownParty)
+//		predicateString = [NSString stringWithFormat:@"legtype == %d AND party_id == %d AND partisan_index <> 0.0", chamber, party];
 		predicateString = [NSString stringWithFormat:@"legtype == %d AND party_id == %d", chamber, party];
 	else
+		//predicateString = [NSString stringWithFormat:@"legtype == %d AND partisan_index <> 0.0", chamber];
 		predicateString = [NSString stringWithFormat:@"legtype == %d", chamber];
 	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateString]; 
