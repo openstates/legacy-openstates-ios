@@ -92,7 +92,8 @@
 	if (![UtilityMethods isIPadDevice]) {
 		
 		CGRect monthPortrait = CGRectMake(0, 0, 320, 265);
-		CGRect tablePortrait = CGRectMake(0, 265, 320, 151);
+		//CGRect tablePortrait = CGRectMake(0, 265, 320, 151);
+		CGRect tablePortrait = CGRectMake(0, 307, 320, 109);
 		CGRect tableLandscape = CGRectMake(320.f, 0.f, 160.f, 268.f);
 		//CGRect shadowLandscape = CGRectMake(143.f, 0.f, 198.f, 268.f);
 		
