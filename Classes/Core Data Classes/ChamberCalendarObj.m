@@ -141,7 +141,12 @@
 						timeRange = NSMakeRange(start, end-start);
 						NSString *timeString = [searchString substringWithRange:timeRange];
 						if (timeString) {
-							[entryDict setObject:[timeFormatter dateFromString:timeString] forKey:@"time"];
+							if ([timeString length] > 8)	// assholes
+								timeString = [timeString substringToIndex:8];
+
+							NSDate *tempTime = [timeFormatter dateFromString:timeString];
+							if (tempTime)
+								[entryDict setObject:tempTime forKey:@"time"];
 							[entryDict setObject:timeString forKey:@"timeString"];
 						
 							// fullDate = (date + time) ... if possible
