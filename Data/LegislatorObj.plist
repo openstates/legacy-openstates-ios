@@ -6162,7 +6162,7 @@
         <key>photo_name</key>
         <string>A5150.png</string>
         <key>tenure</key>
-        <integer>0</integer>
+        <integer>6</integer>
         <key>twitter</key>
         <string>@bill_zedler</string>
         <key>nextElection</key>
@@ -11460,7 +11460,7 @@
         <key>votesmartID</key>
         <integer>116949</integer>
         <key>transDataContributorID</key>
-        <string></string>
+        <string>cdd107e3fae343fa982cc6043a60bace</string>
         <key>openstatesID</key>
         <string>TXL000372</string>
         <key>photo_url</key>
@@ -12318,7 +12318,7 @@
         <key>votesmartID</key>
         <integer>117471</integer>
         <key>transDataContributorID</key>
-        <string></string>
+        <string>5be016094b294c61a7e50a8fb76582e6</string>
         <key>openstatesID</key>
         <string>TXL000370</string>
         <key>photo_url</key>
@@ -12390,7 +12390,7 @@
         <key>votesmartID</key>
         <integer>117472</integer>
         <key>transDataContributorID</key>
-        <string></string>
+        <string>5702371b294a416a876776b8ad8280ba</string>
         <key>openstatesID</key>
         <string>TXL000407</string>
         <key>photo_url</key>
@@ -12606,7 +12606,7 @@
         <key>votesmartID</key>
         <integer>127373</integer>
         <key>transDataContributorID</key>
-        <string></string>
+        <string>a6542d226bbc48caa009ee09f8e95d5d</string>
         <key>openstatesID</key>
         <string>TXL000364</string>
         <key>photo_url</key>

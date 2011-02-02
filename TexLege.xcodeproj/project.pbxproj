@@ -92,7 +92,6 @@
 		370B9DC1122AC5DF00AC9CC8 /* LegislatorDetailDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 370B9DC0122AC5DF00AC9CC8 /* LegislatorDetailDataSource.m */; };
 		370B9DD0122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 370B9DCF122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m */; };
 		370C270C1225BF7E004273E3 /* DistrictMapDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */; };
-		370E8C4D12F6581A00D02B58 /* TexLege.v3.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 37A9B44612EE392600B4D557 /* TexLege.v3.sqlite */; };
 		370F7AA911FEAF730004AC50 /* PolygonMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 370F7AA811FEAF730004AC50 /* PolygonMath.m */; };
 		37155728100859E700FA57DB /* CommitteeObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37155727100859E700FA57DB /* CommitteeObj.m */; };
 		3718895C12EE917B00E3300D /* NSDate+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718895B12EE917B00E3300D /* NSDate+Helper.m */; };
@@ -576,6 +575,7 @@
 		37B64234120FE9FF0076B196 /* LegislatorMasterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B64233120FE9FF0076B196 /* LegislatorMasterCell.m */; };
 		37BE344E1232A018001D28B1 /* ChartsTemplate~iphone.htm in Resources */ = {isa = PBXBuildFile; fileRef = 37BE344D1232A018001D28B1 /* ChartsTemplate~iphone.htm */; };
 		37BE34521232A0A1001D28B1 /* ChartsTemplate~ipad.htm in Resources */ = {isa = PBXBuildFile; fileRef = 37BE34511232A0A1001D28B1 /* ChartsTemplate~ipad.htm */; };
+		37BEF57612F8D4B40042E936 /* TexLege.v3.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 37A9B44612EE392600B4D557 /* TexLege.v3.sqlite */; };
 		37BF251211D64B5400B71688 /* LegislatorDetailViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37BF251111D64B5400B71688 /* LegislatorDetailViewController~ipad.xib */; };
 		37C1FC89120B54F90031E13D /* TapkuLibrary.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 37C1FC88120B54F90031E13D /* TapkuLibrary.bundle */; };
 		37C63DC511D9B52200352CF3 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 37C63DC011D9B52200352CF3 /* Icon-Small-50.png */; };
@@ -3734,7 +3734,7 @@
 				3764E5ED12ED600B00703FBD /* A5170@2x.png in Resources */,
 				373EBA4612F07C6F00A3E604 /* jsonDataVersion.json in Resources */,
 				373EBCFD12F209DA00A3E604 /* WnomAggregates.json in Resources */,
-				370E8C4D12F6581A00D02B58 /* TexLege.v3.sqlite in Resources */,
+				37BEF57612F8D4B40042E936 /* TexLege.v3.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
