@@ -6,10 +6,13 @@
 //  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "CFeedStore.h"
+#import "Kal.h"
 
-@interface ChamberCalendarObj : NSObject {	
+@interface ChamberCalendarObj : NSObject <KalDataSource> {	
+	NSMutableArray *rows;
+	NSMutableArray *events;
+	BOOL hasPostedAlert;
 }
 
 @property (nonatomic,retain) NSString *title;
@@ -18,18 +21,20 @@
 @property (nonatomic,retain) CFeedStore *feedStore;
 
 
-/* keys in a feed entry dictionary:
-	date
-	dateString
-	time
-	timeString
-	committee
-	chamber
-	location
-	url
-	fullDate (date + time) ... if possible
+/* Each event dictionary looks like this:
+ @"chamber": NSNumber of BOTH_CHAMBERS/HOUSE/SENATE/JOINT 
+ @"committee": NSString of the committee name 
+ @"date": NSDate
+ @"dateString": NSString of NSDate
+ @"url": NSString of the url string
+ @"cancelled": NSNumber of a BOOL, whether or not the event is cancelled
+ @"time": NSDate of the time
+ @"timeString": NSString of the time
+ @"fullDate": NSDate of the date & time
+ @"location": NSString of the event location
  */
 
-- (NSArray *)feedEntries;
+- (NSDictionary *)eventForIndexPath:(NSIndexPath*)indexPath;
+- (NSArray *)filterEventsByString:(NSString *)filterString;
 
 @end

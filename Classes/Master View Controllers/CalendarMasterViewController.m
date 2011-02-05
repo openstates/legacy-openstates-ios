@@ -42,9 +42,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {	
 	[super viewWillAppear:animated];
-	
-	//// ALL OF THE FOLLOWING MUST *NOT* RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER
-	
+		
 	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
 		id detailObject = self.detailViewController ? [self.detailViewController valueForKey:@"chamberCalendar"] : nil;
 		
@@ -58,10 +56,11 @@
 		}
 		self.selectObjectOnAppear = detailObject;
 	}	
-	if ([UtilityMethods isIPadDevice])
+	if ([UtilityMethods isIPadDevice]) {
+		self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
+	}
 	
-	// END: IPAD ONLY
 }
 
 #pragma -
@@ -80,10 +79,11 @@
 	[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
 	
 	if (!self.detailViewController) {
-		if ([UtilityMethods isIPadDevice])
-			self.detailViewController = [[[CalendarDetailViewController alloc] initWithNibName:@"CalendarDetailViewController~ipad" bundle:nil] autorelease];
-		else
-			self.detailViewController = [[[CalendarDetailViewController alloc] initWithNibName:@"CalendarDetailViewController~iphone" bundle:nil] autorelease];
+		CalendarDetailViewController *idiotic = [[CalendarDetailViewController alloc] initWithNibName:@"CalendarDetailViewController" bundle:nil];
+		if (idiotic && !idiotic.logic) {
+			[[NSBundle mainBundle] loadNibNamed:@"CalendarDetailViewController" owner:idiotic options:nil];
+		}
+		self.detailViewController = [idiotic autorelease];
 	}
 	
 	if (!dataObject || ![dataObject isKindOfClass:[ChamberCalendarObj class]])
