@@ -16,4 +16,5 @@
     #import <UIKit/UIKit.h>
 	#import <CoreData/CoreData.h>
 	#import "Constants.h"
+	#import "TexLegeLibrary.h"
 #endif
