@@ -9,6 +9,7 @@
 
 #import "TableDataSourceProtocol.h"
 @interface GeneralTableViewController : UITableViewController <UITableViewDelegate> {
+	IBOutlet id detailViewController;
 }
 
 @property (nonatomic,retain) IBOutlet NSManagedObjectContext *managedObjectContext;
