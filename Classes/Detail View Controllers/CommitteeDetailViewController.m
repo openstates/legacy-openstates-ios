@@ -100,15 +100,15 @@ CGFloat quartzRowHeight = 73.f;
 		repubCount = [repubs count];
 	democCount = [positions count] - repubCount;
 	
-	NSString *repubString = @"Republicans";
-	if (repubCount == 1)
-		repubString = @"Republican";
+	NSString *repubString = @"";
+	if (repubCount != 1)
+		repubString = @"s";
 	
-	NSString *democString = @"Democrats";
-	if (democCount == 1)
-		democString = @"Democrat";
+	NSString *democString = @"";
+	if (democCount != 1)
+		democString = @"s";
 	
-	self.membershipLab.text = [NSString stringWithFormat:@"%d %@ and %d %@", repubCount, repubString, democCount, democString];
+	self.membershipLab.text = [NSString stringWithFormat:@"%d Republican%@ and %d Democrat%@", repubCount, repubString, democCount, democString];
 		
 	// This will give inacurate results in joint committees, at least until we're in a common dimensional space
 	LegislatorObj *anyMember = [[positions objectAtIndex:0] legislator];

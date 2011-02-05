@@ -181,25 +181,11 @@
 }
 
 - (NSString *)partyShortName {
-	NSString *shortName;
-	if ([self.party_id integerValue] == DEMOCRAT) // Democrat
-		shortName = @"D";
-	else if ([self.party_id integerValue] == REPUBLICAN) // Republican
-		shortName = @"R";
-	else // don't know the party?
-		shortName = @"I";
-	return shortName;
+	return stringForParty([self.party_id integerValue], TLReturnInitial);
 }
 
 - (NSString *)legTypeShortName {
-	NSString *shortName;
-	if ([self.legtype integerValue] == HOUSE) // Representative
-		shortName = @"Rep.";
-	else if ([self.legtype integerValue] == SENATE) // Senator
-		shortName = @"Sen.";
-	else // don't know the party?
-		shortName = @"";
-	return shortName;
+	return stringForChamber([self.legtype integerValue], TLReturnAbbrev);
 }
 
 - (NSString *)legProperName {
@@ -345,14 +331,8 @@
 	return url;	
 }
 
-- (NSString *)chamberName {
-	NSString *chamberString = nil;
-	if ([self.legtype integerValue] == SENATE) // Democrat
-		chamberString = @"Senate";
-	else //if ([self.legislator.legtype integerValue] == HOUSE) // Republican
-		chamberString = @"House";
-	
-	return  chamberString;
+- (NSString *)chamberName {	
+	return  stringForChamber([self.legtype integerValue], TLReturnFull);
 }
 
 @end

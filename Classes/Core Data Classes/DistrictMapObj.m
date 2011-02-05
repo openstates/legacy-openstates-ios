@@ -143,7 +143,7 @@
 
 - (NSString *)title
 {
-	NSString *chamberString = ([self.chamber integerValue] == HOUSE) ? @"House" : @"Senate";
+	NSString *chamberString = stringForChamber([self.chamber integerValue], TLReturnFull);
 	
     return [NSString stringWithFormat:@"%@ District %@", chamberString, self.district];
 }
