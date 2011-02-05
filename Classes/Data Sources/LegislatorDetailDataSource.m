@@ -448,32 +448,11 @@
 }
 
 
-- (NSString *)chamberAbbrev {
-	NSString *chamberName = nil;
-	if ([self.legislator.legtype integerValue] == HOUSE) // Representative
-		chamberName = @"House";
-	else if ([self.legislator.legtype integerValue] == SENATE) // Senator
-		chamberName = @"Senate";
-	else // don't know the party?
-		chamberName = @"";
-	
-	return chamberName;
-}
-
 - (NSString *)chamberPartyAbbrev {
-	NSString *partyName = nil;
-	if ([self.legislator.party_id integerValue] == DEMOCRAT) // Democrat
-		partyName = @"Dem.";
-	else if ([self.legislator.party_id integerValue] == REPUBLICAN) // Republican
-		partyName = @"Rep.";
-	else // don't know the party?
-		partyName = @"Ind.";
+	NSString *partyName = stringForParty([self.legislator.party_id integerValue], TLReturnAbbrev);
 	
-	return [NSString stringWithFormat:@"%@ %@ Avg.", [self chamberAbbrev], partyName];
+	return [NSString stringWithFormat:@"%@ %@ Avg.", [self.legislator chamberName], partyName];
 }
-
-
-
 
 #pragma mark -
 #pragma mark Custom Slider
