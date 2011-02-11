@@ -45,7 +45,7 @@
 - (void)persistentStoreCopyStarted:(NSNotification *)aNotification;
 - (void)persistentStoreCopyStopped:(NSNotification *)aNotification;
 - (BOOL)replaceOldDatabaseIfNeeded;
-	
+- (void)resetSavedTableSelection:(id)sender;
 @end
 
 // user default dictionary keys
@@ -531,9 +531,15 @@ NSInteger kNoSelection = -1;
 
 - (id) savedTableSelectionForKey:(NSString *)vcKey {
 	id object = nil;
-	id savedVC = [self.savedTableSelection objectForKey:@"viewController"];
-	if (vcKey && savedVC && [vcKey isEqualToString:savedVC])
-		object = [self.savedTableSelection objectForKey:@"object"];
+	@try {
+		id savedVC = [self.savedTableSelection objectForKey:@"viewController"];
+		if (vcKey && savedVC && [vcKey isEqualToString:savedVC])
+			object = [self.savedTableSelection objectForKey:@"object"];
+		
+	}
+	@catch (NSException * e) {
+		[self resetSavedTableSelection:nil];
+	}
 	
 	return object;
 }
@@ -550,32 +556,51 @@ NSInteger kNoSelection = -1;
 		[self.savedTableSelection removeObjectForKey:@"object"];
 }
 
+- (void)resetSavedTableSelection:(id)sender {
+	self.savedTableSelection = [NSMutableDictionary dictionary];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kRestoreSelectionKey];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (void)restoreArchivableSavedTableSelection {
-	NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:kRestoreSelectionKey];
-	if (data) {
-		NSMutableDictionary *tempDict = [[NSKeyedUnarchiver unarchiveObjectWithData:data] mutableCopy];	
-		if (tempDict) {
-			id object = [tempDict objectForKey:@"object"];
-			if (object && [object isKindOfClass:[NSURL class]] && [[object scheme] isEqualToString:@"x-coredata"])	{		// try to get a managed object ID				
-				NSManagedObjectID *tempID = [self.persistentStoreCoordinator managedObjectIDForURIRepresentation:object];
-				if (tempID)
-					[tempDict setObject:tempID forKey:@"object"]; 
-			}
-			
-			self.savedTableSelection = tempDict;
-			[tempDict release];
-		}	
+	@try {
+		NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:kRestoreSelectionKey];
+		if (data) {
+			NSMutableDictionary *tempDict = [[NSKeyedUnarchiver unarchiveObjectWithData:data] mutableCopy];	
+			if (tempDict) {
+				id object = [tempDict objectForKey:@"object"];
+				if (object && [object isKindOfClass:[NSURL class]] && [[object scheme] isEqualToString:@"x-coredata"])	{		// try to get a managed object ID				
+					NSManagedObjectID *tempID = [self.persistentStoreCoordinator managedObjectIDForURIRepresentation:object];
+					if (tempID)
+						[tempDict setObject:tempID forKey:@"object"]; 
+				}
+				
+				self.savedTableSelection = tempDict;
+				[tempDict release];
+			}	
+		}		
 	}
+	@catch (NSException * e) {
+		[self resetSavedTableSelection:nil];
+	}
+
 }
 
 - (NSData *)archivableSavedTableSelection {
-	NSMutableDictionary *tempDict = [self.savedTableSelection mutableCopy];
-	id object = [tempDict objectForKey:@"object"];
-	if (object && [object isKindOfClass:[NSManagedObjectID class]])
-		[tempDict setObject:[object URIRepresentation] forKey:@"object"]; 
-
-	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:tempDict];
-	[tempDict release];
+	NSData *data = nil;
+	
+	@try {
+		NSMutableDictionary *tempDict = [self.savedTableSelection mutableCopy];
+		id object = [tempDict objectForKey:@"object"];
+		if (object && [object isKindOfClass:[NSManagedObjectID class]])
+			[tempDict setObject:[object URIRepresentation] forKey:@"object"]; 
+		
+		data = [NSKeyedArchiver archivedDataWithRootObject:tempDict];
+		[tempDict release];		
+	}
+	@catch (NSException * e) {
+		[self resetSavedTableSelection:nil];
+	}
 	return data;
 }
 
@@ -650,6 +675,9 @@ NSInteger kNoSelection = -1;
 
 - (void)copyPersistentStore:(id)sender {
 #if IMPORTING_DATA == 0 // don't use this if we're setting up & initializing from property lists...
+	
+	[self performSelectorOnMainThread:@selector(resetSavedTableSelection:) withObject:nil waitUntilDone:YES];
+
 	/*
 	 Set up the store.
 	 Provide a pre-populated default store.
@@ -708,7 +736,13 @@ NSInteger kNoSelection = -1;
 					NSLog(@"TexLege has an older v3 database, resetting");
 					[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_IS_OUTOFDATE"];
 					hasOld = YES;
-					[self copyPersistentStore:nil];
+					
+					UIAlertView *resetDB = [[UIAlertView alloc] initWithTitle:@"Replace Old Data File" 
+																	  message:@"Your old TexLege user data file is outdated.  A reset is necessary to ensure application stability and data validity." 
+																	 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Reset",nil];
+					resetDB.tag = 5555;
+					[resetDB show];
+					[resetDB release];					
 				}
 				else
 					NSLog(@"TexLege likely has a current v3 database");
@@ -822,6 +856,7 @@ NSInteger kNoSelection = -1;
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
 	if (buttonIndex == alertView.firstOtherButtonIndex) {
+		[self resetSavedTableSelection:nil];
 		if (alertView.tag == 5555)
 			[self resetSavedDatabase:nil]; 
 		else if (alertView.tag == 6666) {
