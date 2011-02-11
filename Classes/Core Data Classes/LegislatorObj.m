@@ -85,7 +85,11 @@
 		self.bio_url = [dictionary objectForKey:@"bio_url"];
 		self.tenure = [dictionary objectForKey:@"tenure"];
 		self.email = [dictionary objectForKey:@"email"];
-		self.twitter = [dictionary objectForKey:@"twitter"];
+		
+		if ([[NSNull null] isEqual:[dictionary objectForKey:@"twitter"]] || ![dictionary objectForKey:@"twitter"])
+			self.twitter = @"";
+		else
+			self.twitter = [dictionary objectForKey:@"twitter"];
 		
 		//self.staff = [dictionary objectForKey:@"staff"];
 		self.cap_office = [dictionary objectForKey:@"cap_office"];
@@ -133,6 +137,8 @@
 	[tempDict setObject:self.email forKey:@"email"];
 	if (self.twitter)
 		[tempDict setObject:self.twitter forKey:@"twitter"];
+	else
+		[tempDict setObject:@"" forKey:@"twitter"];
 	
 	//[tempDict setObject:self.staff forKey:@"staff"];
 	[tempDict setObject:self.cap_office forKey:@"cap_office"];
