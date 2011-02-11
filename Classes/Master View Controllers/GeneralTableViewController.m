@@ -79,8 +79,15 @@
 	
 	if (self.selectObjectOnAppear && self.detailViewController && [UtilityMethods isIPadDevice]) {
 		NSLog(@"Presetting a detail view's dataObject in %@!", [self description]);
-		if ([self.detailViewController respondsToSelector:@selector(setDataObject:)])
-			[self.detailViewController performSelector:@selector(setDataObject:) withObject:self.selectObjectOnAppear];
+		if ([self.detailViewController respondsToSelector:@selector(setDataObject:)]) {
+			@try {
+				[self.detailViewController performSelector:@selector(setDataObject:) withObject:self.selectObjectOnAppear];
+			}
+			@catch (NSException * e) {
+				self.selectObjectOnAppear = nil;
+				//self.selectObjectOnAppear = [self.dataSource dataObjectForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+			}
+		}
 	}
 		
 }
