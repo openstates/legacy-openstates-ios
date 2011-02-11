@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBuildNumber</key>
-	<string>256</string>
+	<string>301</string>
 	<key>CFBuildVersion</key>
 	<string>${CURRENT_PROJECT_VERSION}</string>
 	<key>CFBundleDevelopmentRegion</key>
@@ -36,7 +36,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>${CURRENT_PROJECT_VERSION}.256</string>
+	<string>${CURRENT_PROJECT_VERSION}.301</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIInterfaceOrientation~ipad</key>
