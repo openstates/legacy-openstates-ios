@@ -39,7 +39,9 @@
 	[self exportObjectsWithEntityName:@"WnomObj" JSON:doJSON force:force];
 	[self exportObjectsWithEntityName:@"StafferObj" JSON:doJSON force:force];
 	[self exportObjectsWithEntityName:@"DistrictOfficeObj" JSON:doJSON force:force];
-	[self exportObjectsWithEntityName:@"DistrictMapObj" JSON:doJSON force:force];
+	[self exportObjectsWithEntityName:@"DistrictMapObj" JSON:doJSON force:force];			// do a plist or json
+	if (doJSON)
+		[self exportObjectsWithEntityName:@"DistrictMapObj" JSON:NO force:force];			// but do a plist too, always
 	[self exportObjectsWithEntityName:@"LinkObj" JSON:doJSON force:force];
 
 }
@@ -78,8 +80,8 @@
 
 - (void)exportObjectsWithEntityName:(NSString *)entityName JSON:(BOOL)doJSON force:(BOOL)force{
 	
-	if ([entityName isEqualToString:@"DistrictMapObj"])
-		doJSON = NO;
+	//if ([entityName isEqualToString:@"DistrictMapObj"])
+	//	doJSON = NO;
 	
 	NSString *outFile = nil;
 	if (!doJSON)

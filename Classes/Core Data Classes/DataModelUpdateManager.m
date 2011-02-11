@@ -8,7 +8,11 @@
 
 #define JSONDATA_VERSIONNAME	@"jsonDataVersion"
 #define JSONDATA_VERSIONFILE	@"jsonDataVersion.json"
-#define JSONDATA_BASE_URL		@"http://www.texlege.com/jsonData"
+#if DEBUG
+	#define JSONDATA_BASE_URL		@"http://www.texlege.com/jsonDataTest"
+#else
+	#define JSONDATA_BASE_URL		@"http://www.texlege.com/jsonData"
+#endif
 #define JSONDATA_VERSIONKEY		@"Version"
 #define JSONDATA_TIMESTAMPKEY	@"Timestamp"
 #define JSONDATA_URLKEY			@"URL"
@@ -53,7 +57,7 @@
 									  @"Committee Positions", @"CommitteePositionObj",
 									  @"District Offices", @"DistrictOfficeObj",
 									  @"Resources", @"LinkObj",
-									  @"District Maps", @"DistrictMapsObj", nil];		
+									  @"District Maps", @"DistrictMapObj", nil];		
 		
 		[MTStatusBarOverlay sharedInstance].animation = MTStatusBarOverlayAnimationFallDown;
 		[MTStatusBarOverlay sharedInstance].historyEnabled = YES;
@@ -163,7 +167,7 @@
 				if (localModel) {
 					modelVersionNum = [localModel objectForKey:JSONDATA_VERSIONKEY];
 					if (modelVersionNum) {
-#ifdef DEBUG
+#ifdef TESTING
 						addModelToUpdates = remoteModelVersion > 0;
 #else
 						NSInteger localModelVersion = [modelVersionNum integerValue];
@@ -247,7 +251,7 @@
 		NSString *modelKey = [updatedModelDict objectForKey:@"modelKey"];
 		//NSNumber *modelSize = [updatedModelDict objectForKey:@"modelSize"];
 		
-		if (modelKey && updatedModelInfo) {			
+		if (modelKey && updatedModelInfo) {
 			[self.downloadedUpdates addObject:updatedModelDict];
 			NSString *statusString = [NSString stringWithFormat:@"Downloaded %@", [statusBlurbsAndModels objectForKey:modelKey]];
 			[[MTStatusBarOverlay sharedInstance] postMessage:statusString animated:YES];
@@ -303,7 +307,7 @@
 
 	NSArray *installOrderOfKeys = [NSArray arrayWithObjects:@"LegislatorObj", @"WnomObj", 
 								   @"CommitteeObj", @"CommitteePositionObj", @"StafferObj", 
-								   @"DistrictOfficeObj", /*@"DistrictMapObj",*/ @"LinkObj", nil]; 
+								   @"DistrictOfficeObj", @"DistrictMapObj", @"LinkObj", nil]; 
 								   
 	//[[MTStatusBarOverlay sharedInstance] postMessage:@"Installing Updates"];
 	
@@ -357,13 +361,13 @@
 	}
 	
 	// ------------- Special Cases
-	
+	/*
 	// DistrictMapObj
 	TexLegeDataImporter *importer = [[TexLegeDataImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
 	if (importer) {
 		[importer importObjectsWithEntityName:@"DistrictMapObj"];
 		[importer release];
-	}
+	}*/
 	// WnomAggregates
 		// Don't do anything special, because we'll handle it with this notification below....
 	
