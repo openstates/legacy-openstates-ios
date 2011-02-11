@@ -9,9 +9,10 @@
 #define JSONDATA_VERSIONNAME	@"jsonDataVersion"
 #define JSONDATA_VERSIONFILE	@"jsonDataVersion.json"
 #if DEBUG
-	#define JSONDATA_BASE_URL		@"http://www.texlege.com/jsonDataTest"
+	#define JSONDATA_BASE_URL					@"http://www.texlege.com/jsonDataTest"
 #else
-	#define JSONDATA_BASE_URL		@"http://www.texlege.com/jsonData"
+	//V0-Broken #define JSONDATA_BASE_URL		@"http://www.texlege.com/jsonData"
+	#define JSONDATA_BASE_URL					@"http://www.texlege.com/jsonDataV1"
 #endif
 #define JSONDATA_VERSIONKEY		@"Version"
 #define JSONDATA_TIMESTAMPKEY	@"Timestamp"
@@ -141,6 +142,23 @@
 	return remoteVersionDict;
 }
 
+- (id)getCatalogValueForKey:(NSString *)catKey model:(NSString *)modelKey {
+	id value = nil;
+	
+	self.localModelCatalog = [self getLocalDataModelCatalog];
+	if (self.localModelCatalog) {
+		@try {
+			NSDictionary *localModel = [self.localModelCatalog objectForKey:modelKey];
+			if (localModel) {
+				value = [localModel objectForKey:catKey];
+			}
+		}
+		@catch (NSException * e) {
+		}
+	}
+	
+	return value;
+}
 
 - (NSArray *)getListOfAvailableUpdates {
 	NSMutableArray *updatableArray = [NSMutableArray array];
