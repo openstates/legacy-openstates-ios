@@ -110,6 +110,8 @@
 		3726FC48120A99800043D6B9 /* 113-navigation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3726FC3D120A99800043D6B9 /* 113-navigation@2x.png */; };
 		3726FC49120A99800043D6B9 /* 123-id-card@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3726FC3E120A99800043D6B9 /* 123-id-card@2x.png */; };
 		3729EC2910077F83000AD804 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3729EC2810077F83000AD804 /* CoreData.framework */; };
+		372D061C12FC799200E63696 /* Kal.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 372D061812FC799200E63696 /* Kal.bundle */; };
+		372D066712FC901C00E63696 /* TexLegeLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 372D066612FC901C00E63696 /* TexLegeLibrary.m */; };
 		372D5CC011E9983A005A21E2 /* CapitolMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 372D5CBF11E9983A005A21E2 /* CapitolMap.m */; };
 		372D5D4311E9AEB8005A21E2 /* CapitolMaps.plist in Resources */ = {isa = PBXBuildFile; fileRef = 372D5D4211E9AEB8005A21E2 /* CapitolMaps.plist */; };
 		372FAB5A12147B2000AEF237 /* ChamberCalendarObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 372FAB5912147B2000AEF237 /* ChamberCalendarObj.m */; };
@@ -144,6 +146,8 @@
 		374C36E61215E8DA006B6ADA /* CapitolMapsMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374C36E51215E8DA006B6ADA /* CapitolMapsMasterViewController.m */; };
 		374C37051215EB2D006B6ADA /* LinksMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374C37041215EB2D006B6ADA /* LinksMasterViewController.m */; };
 		374E2A6B12360C6E0005E245 /* TexLegeMapPins.m in Sources */ = {isa = PBXBuildFile; fileRef = 374E2A6A12360C6E0005E245 /* TexLegeMapPins.m */; };
+		374F6DA512FD0FFD00AD7EEC /* libKal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 372D061F12FC799200E63696 /* libKal.a */; };
+		374F70A612FD45D600AD7EEC /* TexLegeNavBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 374F70A512FD45D600AD7EEC /* TexLegeNavBar.m */; };
 		376472C211D5AAFB00E6E27F /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 376472C111D5AAFB00E6E27F /* UIImage+Resize.m */; };
 		376487C210274F1E001E482D /* MiniBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376487BF10274F1E001E482D /* MiniBrowserController.m */; };
 		376487C310274F1E001E482D /* MiniBrowserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 376487C010274F1E001E482D /* MiniBrowserView.xib */; };
@@ -577,7 +581,6 @@
 		37BE34521232A0A1001D28B1 /* ChartsTemplate~ipad.htm in Resources */ = {isa = PBXBuildFile; fileRef = 37BE34511232A0A1001D28B1 /* ChartsTemplate~ipad.htm */; };
 		37BEF57612F8D4B40042E936 /* TexLege.v3.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 37A9B44612EE392600B4D557 /* TexLege.v3.sqlite */; };
 		37BF251211D64B5400B71688 /* LegislatorDetailViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37BF251111D64B5400B71688 /* LegislatorDetailViewController~ipad.xib */; };
-		37C1FC89120B54F90031E13D /* TapkuLibrary.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 37C1FC88120B54F90031E13D /* TapkuLibrary.bundle */; };
 		37C63DC511D9B52200352CF3 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 37C63DC011D9B52200352CF3 /* Icon-Small-50.png */; };
 		37C63DC611D9B52200352CF3 /* Icon-Settings@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 37C63DC111D9B52200352CF3 /* Icon-Settings@2x~iphone.png */; };
 		37C63DC711D9B52200352CF3 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 37C63DC211D9B52200352CF3 /* Icon-Small.png */; };
@@ -599,7 +602,6 @@
 		37D1C4D512026FE300507757 /* Month Calendar Shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C4D112026FE300507757 /* Month Calendar Shadow.png */; };
 		37D1C527120272F000507757 /* CalendarDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D1C526120272F000507757 /* CalendarDetailViewController.m */; };
 		37D1C5CD12027D2D00507757 /* CalendarDetailViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C5CC12027D2D00507757 /* CalendarDetailViewController~ipad.xib */; };
-		37D1C7C412030DAE00507757 /* libTapkuLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37D1C5B612027C3500507757 /* libTapkuLibrary.a */; };
 		37D1C89F120344D000507757 /* 01-refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C806120344D000507757 /* 01-refresh.png */; };
 		37D1C8A0120344D000507757 /* 02-redo.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C807120344D000507757 /* 02-redo.png */; };
 		37D1C8AC120344D000507757 /* 103-map.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C813120344D000507757 /* 103-map.png */; };
@@ -639,26 +641,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		37605500120A750C005D59EB /* PBXContainerItemProxy */ = {
+		372D061E12FC799200E63696 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 3702980911F97A0500D65FCB /* TapkuLibrary.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC07D0554694100DB518D;
-			remoteInfo = TapkuLibrary;
-		};
-		37D1C5B512027C3500507757 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3702980911F97A0500D65FCB /* TapkuLibrary.xcodeproj */;
+			containerPortal = 372D061912FC799200E63696 /* Kal.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = D2AAC07E0554694100DB518D;
-			remoteInfo = TapkuLibrary;
-		};
-		37D1C5B712027C3500507757 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3702980911F97A0500D65FCB /* TapkuLibrary.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3B6EDD521154791900E454DA;
-			remoteInfo = TapkuLibraryExtra;
+			remoteInfo = Kal;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -674,7 +662,6 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "Classes/Application Support/main.m"; sourceTree = SOURCE_ROOT; };
 		32CA4F630368D1EE00C91783 /* TexLege_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLege_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		3702412512198C11002D169E /* LegislatorMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorMasterViewController.h; path = "Classes/Master View Controllers/LegislatorMasterViewController.h"; sourceTree = SOURCE_ROOT; };
-		3702980911F97A0500D65FCB /* TapkuLibrary.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TapkuLibrary.xcodeproj; path = ../../Frameworks/TapkuLibrary/src/TapkuLibrary.xcodeproj; sourceTree = SOURCE_ROOT; };
 		370298CD11F97C7A00D65FCB /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		3704586D12284CA300A07E71 /* Base64Transcoder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Base64Transcoder.c; sourceTree = "<group>"; };
 		3704586E12284CA300A07E71 /* Base64Transcoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64Transcoder.h; sourceTree = "<group>"; };
@@ -877,6 +864,10 @@
 		3726FC94120AABE10043D6B9 /* disclosure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = disclosure.png; sourceTree = "<group>"; };
 		3726FC95120AABE10043D6B9 /* disclosure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "disclosure@2x.png"; sourceTree = "<group>"; };
 		3729EC2810077F83000AD804 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		372D061812FC799200E63696 /* Kal.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Kal.bundle; path = Kal/src/Kal.bundle; sourceTree = "<group>"; };
+		372D061912FC799200E63696 /* Kal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Kal.xcodeproj; path = Kal/src/Kal.xcodeproj; sourceTree = "<group>"; };
+		372D066512FC901C00E63696 /* TexLegeLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeLibrary.h; sourceTree = "<group>"; };
+		372D066612FC901C00E63696 /* TexLegeLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeLibrary.m; sourceTree = "<group>"; };
 		372D5CBE11E9983A005A21E2 /* CapitolMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapitolMap.h; sourceTree = "<group>"; };
 		372D5CBF11E9983A005A21E2 /* CapitolMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CapitolMap.m; sourceTree = "<group>"; };
 		372D5D4211E9AEB8005A21E2 /* CapitolMaps.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CapitolMaps.plist; sourceTree = "<group>"; };
@@ -931,6 +922,8 @@
 		374C37041215EB2D006B6ADA /* LinksMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LinksMasterViewController.m; path = "Classes/Master View Controllers/LinksMasterViewController.m"; sourceTree = SOURCE_ROOT; };
 		374E2A6912360C6E0005E245 /* TexLegeMapPins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeMapPins.h; sourceTree = "<group>"; };
 		374E2A6A12360C6E0005E245 /* TexLegeMapPins.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeMapPins.m; sourceTree = "<group>"; };
+		374F70A412FD45D600AD7EEC /* TexLegeNavBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeNavBar.h; sourceTree = "<group>"; };
+		374F70A512FD45D600AD7EEC /* TexLegeNavBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeNavBar.m; sourceTree = "<group>"; };
 		376472C011D5AAFB00E6E27F /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Resize.h"; path = "Classes/Utility Classes/UIImage+Resize.h"; sourceTree = SOURCE_ROOT; };
 		376472C111D5AAFB00E6E27F /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Resize.m"; path = "Classes/Utility Classes/UIImage+Resize.m"; sourceTree = SOURCE_ROOT; };
 		376487BF10274F1E001E482D /* MiniBrowserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MiniBrowserController.m; sourceTree = "<group>"; };
@@ -1424,7 +1417,6 @@
 		37BE344D1232A018001D28B1 /* ChartsTemplate~iphone.htm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "ChartsTemplate~iphone.htm"; path = "Data/ChartsTemplate~iphone.htm"; sourceTree = "<group>"; };
 		37BE34511232A0A1001D28B1 /* ChartsTemplate~ipad.htm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "ChartsTemplate~ipad.htm"; path = "Data/ChartsTemplate~ipad.htm"; sourceTree = "<group>"; };
 		37BF251111D64B5400B71688 /* LegislatorDetailViewController~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "LegislatorDetailViewController~ipad.xib"; path = "Resources-iPad/LegislatorDetailViewController~ipad.xib"; sourceTree = "<group>"; };
-		37C1FC88120B54F90031E13D /* TapkuLibrary.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TapkuLibrary.bundle; sourceTree = "<group>"; };
 		37C63DC011D9B52200352CF3 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
 		37C63DC111D9B52200352CF3 /* Icon-Settings@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Settings@2x~iphone.png"; sourceTree = "<group>"; };
 		37C63DC211D9B52200352CF3 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
@@ -1445,6 +1437,8 @@
 		37CF6A7512262B4600456D29 /* planS01188.kml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = planS01188.kml; path = Data/planS01188.kml; sourceTree = SOURCE_ROOT; };
 		37CF6BB71226597500456D29 /* UIColor-Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor-Expanded.h"; path = "../../Frameworks/UIColor+Expanded/UIColor-Expanded.h"; sourceTree = SOURCE_ROOT; };
 		37CF6BB81226597500456D29 /* UIColor-Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor-Expanded.m"; path = "../../Frameworks/UIColor+Expanded/UIColor-Expanded.m"; sourceTree = SOURCE_ROOT; };
+		37CFBA0212FE8936007C3808 /* BillsMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsMasterViewController.h; sourceTree = "<group>"; };
+		37CFBA0312FE8936007C3808 /* BillsMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsMasterViewController.m; sourceTree = "<group>"; };
 		37D0A8ED123ED55A00232B2C /* TexLegePinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegePinAnnotationView.h; sourceTree = "<group>"; };
 		37D0A8EE123ED55A00232B2C /* TexLegePinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegePinAnnotationView.m; sourceTree = "<group>"; };
 		37D1C4CE12026FE300507757 /* Month Calendar Shadow Down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Month Calendar Shadow Down.png"; path = "../../Frameworks/TapkuLibrary/universaldemo/Shared/Images/Month Calendar Shadow Down.png"; sourceTree = SOURCE_ROOT; };
@@ -1701,13 +1695,13 @@
 				3729EC2910077F83000AD804 /* CoreData.framework in Frameworks */,
 				3709AF0D101FBF5100C1061B /* SystemConfiguration.framework in Frameworks */,
 				370298CE11F97C7A00D65FCB /* MapKit.framework in Frameworks */,
-				37D1C7C412030DAE00507757 /* libTapkuLibrary.a in Frameworks */,
 				37413B1712114D09003CA7E8 /* MessageUI.framework in Frameworks */,
 				378B58FB1219BB9C00F7ED0B /* CoreLocation.framework in Frameworks */,
 				37D364F612369DDC00CCF86E /* AddressBookUI.framework in Frameworks */,
 				379D7190123C2B470094F45B /* EventKitUI.framework in Frameworks */,
 				379D7193123C2B510094F45B /* EventKit.framework in Frameworks */,
 				379D72AA123CA39B0094F45B /* QuartzCore.framework in Frameworks */,
+				374F6DA512FD0FFD00AD7EEC /* libKal.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1777,7 +1771,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3702980911F97A0500D65FCB /* TapkuLibrary.xcodeproj */,
 				3709AF0C101FBF5100C1061B /* SystemConfiguration.framework */,
 				3729EC2810077F83000AD804 /* CoreData.framework */,
 				1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */,
@@ -1975,6 +1968,7 @@
 		3721EA4F11D6E6EA00CA33DA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				372D061712FC799200E63696 /* Kal Library */,
 				3771332D12523025000D7207 /* TVOutManager */,
 				37712D1612512A8300EC664D /* iSimulate */,
 				37242DD512417662005C43D3 /* JSON-Framework */,
@@ -2022,6 +2016,23 @@
 			name = "Data Import";
 			sourceTree = "<group>";
 		};
+		372D061712FC799200E63696 /* Kal Library */ = {
+			isa = PBXGroup;
+			children = (
+				372D061812FC799200E63696 /* Kal.bundle */,
+				372D061912FC799200E63696 /* Kal.xcodeproj */,
+			);
+			name = "Kal Library";
+			sourceTree = "<group>";
+		};
+		372D061A12FC799200E63696 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				372D061F12FC799200E63696 /* libKal.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		372D5DDB11E9C0B5005A21E2 /* MapKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -2062,6 +2073,8 @@
 				374C37041215EB2D006B6ADA /* LinksMasterViewController.m */,
 				37B3CF1E124946B800FB3F94 /* IntelligentSplitViewController.h */,
 				37B3CF1F124946B800FB3F94 /* IntelligentSplitViewController.m */,
+				37CFBA0212FE8936007C3808 /* BillsMasterViewController.h */,
+				37CFBA0312FE8936007C3808 /* BillsMasterViewController.m */,
 			);
 			path = "Master View Controllers";
 			sourceTree = "<group>";
@@ -2503,7 +2516,6 @@
 		376B59430FC1ADF50094D80B /* UI Graphics */ = {
 			isa = PBXGroup;
 			children = (
-				37C1FC88120B54F90031E13D /* TapkuLibrary.bundle */,
 				37D3640612362A7D00CCF86E /* map elements */,
 				37FF9E8F1251458C00FA56E0 /* arrow_left.png */,
 				37FF9E901251458C00FA56E0 /* arrow_left@2x.png */,
@@ -2685,6 +2697,8 @@
 		37A0E4460FD2DEAA009B65F7 /* Utility Classes */ = {
 			isa = PBXGroup;
 			children = (
+				372D066512FC901C00E63696 /* TexLegeLibrary.h */,
+				372D066612FC901C00E63696 /* TexLegeLibrary.m */,
 				3718895A12EE917B00E3300D /* NSDate+Helper.h */,
 				3718895B12EE917B00E3300D /* NSDate+Helper.m */,
 				37D6E82610175F0800D4D7C2 /* UtilityMethods.h */,
@@ -2704,6 +2718,8 @@
 				376472C111D5AAFB00E6E27F /* UIImage+Resize.m */,
 				3767142011E833BA00D004C8 /* UIImage+ResolutionIndependent.h */,
 				3767142111E833BA00D004C8 /* UIImage+ResolutionIndependent.m */,
+				374F70A412FD45D600AD7EEC /* TexLegeNavBar.h */,
+				374F70A512FD45D600AD7EEC /* TexLegeNavBar.m */,
 				3735DDAD120899980000AF5A /* UISearchDisplayController+NoHideNav.h */,
 				3735DDAE120899980000AF5A /* UISearchDisplayController+NoHideNav.m */,
 				37782582121217B7001BD23D /* NSData+Encryption.h */,
@@ -2837,15 +2853,6 @@
 				37CF6BB81226597500456D29 /* UIColor-Expanded.m */,
 			);
 			path = "UIColor+Expanded";
-			sourceTree = "<group>";
-		};
-		37D1C5B112027C3500507757 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				37D1C5B612027C3500507757 /* libTapkuLibrary.a */,
-				37D1C5B812027C3500507757 /* libTapkuLibraryExtra.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		37D1C805120344D000507757 /* icons */ = {
@@ -3210,7 +3217,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				37605501120A750C005D59EB /* PBXTargetDependency */,
 			);
 			name = TexLege;
 			productName = foo;
@@ -3237,8 +3243,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 37D1C5B112027C3500507757 /* Products */;
-					ProjectRef = 3702980911F97A0500D65FCB /* TapkuLibrary.xcodeproj */;
+					ProductGroup = 372D061A12FC799200E63696 /* Products */;
+					ProjectRef = 372D061912FC799200E63696 /* Kal.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -3249,18 +3255,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		37D1C5B612027C3500507757 /* libTapkuLibrary.a */ = {
+		372D061F12FC799200E63696 /* libKal.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libTapkuLibrary.a;
-			remoteRef = 37D1C5B512027C3500507757 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		37D1C5B812027C3500507757 /* libTapkuLibraryExtra.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libTapkuLibraryExtra.a;
-			remoteRef = 37D1C5B712027C3500507757 /* PBXContainerItemProxy */;
+			path = libKal.a;
+			remoteRef = 372D061E12FC799200E63696 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -3321,7 +3320,6 @@
 				3726FC46120A99800043D6B9 /* 83-calendar@2x.png in Resources */,
 				3726FC48120A99800043D6B9 /* 113-navigation@2x.png in Resources */,
 				3726FC49120A99800043D6B9 /* 123-id-card@2x.png in Resources */,
-				37C1FC89120B54F90031E13D /* TapkuLibrary.bundle in Resources */,
 				3766EFC112109F110073C705 /* TexLegeStrings.plist in Resources */,
 				376B5BE20FC1DC640094D80B /* Map.WheelchairAccess.pdf in Resources */,
 				376B5BE30FC1DC640094D80B /* Map.CapitolComplex.pdf in Resources */,
@@ -3735,6 +3733,7 @@
 				373EBA4612F07C6F00A3E604 /* jsonDataVersion.json in Resources */,
 				373EBCFD12F209DA00A3E604 /* WnomAggregates.json in Resources */,
 				37BEF57612F8D4B40042E936 /* TexLege.v3.sqlite in Resources */,
+				372D061C12FC799200E63696 /* Kal.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3913,18 +3912,12 @@
 				3718895C12EE917B00E3300D /* NSDate+Helper.m in Sources */,
 				373EBA5112F0A01100A3E604 /* DataModelUpdateManager.m in Sources */,
 				37400B9F12F37436002B6042 /* MTStatusBarOverlay.m in Sources */,
+				372D066712FC901C00E63696 /* TexLegeLibrary.m in Sources */,
+				374F70A612FD45D600AD7EEC /* TexLegeNavBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		37605501120A750C005D59EB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = TapkuLibrary;
-			targetProxy = 37605500120A750C005D59EB /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
@@ -3994,6 +3987,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					"\"$HOME/Source Code/Frameworks/Kal/src/\"",
 					"\"$HOME/Source Code/Frameworks/TapkuLibrary/src/\"/**",
 					"\"/usr/include/libxml2\"/**",
 				);
@@ -4056,6 +4050,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					"\"$HOME/Source Code/Frameworks/Kal/src/\"",
 					"\"$HOME/Source Code/Frameworks/TapkuLibrary/src/\"/**",
 					"\"/usr/include/libxml2\"/**",
 				);
@@ -4122,6 +4117,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					"\"$HOME/Source Code/Frameworks/Kal/src/\"",
 					"\"$HOME/Source Code/Frameworks/TapkuLibrary/src/\"/**",
 					"\"/usr/include/libxml2\"/**",
 				);
@@ -4161,6 +4157,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					"\"$HOME/Source Code/Frameworks/Kal/src/\"",
 					"\"$HOME/Source Code/Frameworks/TapkuLibrary/src/\"/**",
 					"\"/usr/include/libxml2\"/**",
 				);
