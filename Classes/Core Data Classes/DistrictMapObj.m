@@ -12,6 +12,7 @@
 #import "PolygonMath.h"
 #import "TexLegeCoreDataUtils.h"
 #import "TexLegeMapPins.h"
+#import "NSData_Base64Extensions.h"
 
 @implementation DistrictMapObj 
 
@@ -84,7 +85,39 @@
 		self.minLon = [dictionary objectForKey:@"minLon"];
 		self.minLat = [dictionary objectForKey:@"minLat"];
 		self.numberOfCoords = [dictionary objectForKey:@"numberOfCoords"];
-		self.coordinatesData = [[dictionary objectForKey:@"coordinatesData"] copy];
+		
+		id data = [dictionary objectForKey:@"coordinatesData"];
+		
+		if ([data isKindOfClass:[NSString class]]) {
+			self.coordinatesData = [[NSData dataWithBase64EncodedString:data] copy];
+		}
+		else if ([data isKindOfClass:[NSArray class]]) {
+
+			NSInteger numberOfPairs = [self.numberOfCoords integerValue];
+			CLLocationCoordinate2D *coordinatesCArray = calloc(numberOfPairs, sizeof(CLLocationCoordinate2D));
+			NSInteger count = 0;
+			if (coordinatesCArray) {
+				for (NSArray *spot in data) {
+					
+					NSNumber *longitude = [spot objectAtIndex:0];
+					NSNumber *latitude = [spot objectAtIndex:1];
+					
+					if (longitude && latitude) {
+						double lng = [longitude doubleValue];
+						double lat = [latitude doubleValue];
+						coordinatesCArray[count++] = CLLocationCoordinate2DMake(lat,lng);
+					}
+				}
+				
+				self.coordinatesData = [NSData dataWithBytes:(const void *)coordinatesCArray 
+													  length:numberOfPairs*sizeof(CLLocationCoordinate2D)];
+				
+				free(coordinatesCArray);
+			}
+		}
+		else if ([data isKindOfClass:[NSData class]])
+			self.coordinatesData = [data copy];
+
 
 		self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
 	}
@@ -115,7 +148,28 @@
 }
 
 - (id)proxyForJson {
-    return [self exportToDictionary];
+	NSMutableDictionary *jsonDict = [NSMutableDictionary dictionaryWithDictionary:[self exportToDictionary]];
+	
+#if JSON_EXPORTS_COORDINATES == 1
+	[jsonDict removeObjectForKey:@"coordinatesData"];
+	
+	CLLocationCoordinate2D *pointsArray = (CLLocationCoordinate2D *)[self.coordinatesData bytes];
+
+	NSInteger i = 0, N = [self.numberOfCoords integerValue];
+	
+	NSMutableArray *jsonPoints = [NSMutableArray array];
+	
+	for (i=1;i<=N;i++) {
+		CLLocationCoordinate2D point = pointsArray[i % N];
+			
+		[jsonPoints addObject:[NSArray arrayWithObjects:
+							   [NSNumber numberWithDouble:point.longitude], [NSNumber numberWithDouble:point.latitude], nil]];
+	}
+	
+	[jsonDict setObject:jsonPoints forKey:@"coordinatesData"];
+#endif
+	
+    return jsonDict;
 }
 
 + (NSArray *)lightPropertiesToFetch {
@@ -157,6 +211,22 @@
 		return [UIImage imageNamed:@"silverstar.png"];
 }
 
+/*
+- (NSNumber *)pinColorIndex {
+	NSNumber *pinColor = nil;
+	
+	LegislatorObj *tempLege = self.legislator;
+	if (!tempLege)
+		tempLege = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];
+
+	if (tempLege)
+		pinColor = ([tempLege.party_id integerValue] == REPUBLICAN) ? [NSNumber numberWithInteger:TexLegePinAnnotationColorRed] : [NSNumber numberWithInteger:TexLegePinAnnotationColorBlue];
+	else
+		pinColor = [NSNumber numberWithInteger:TexLegePinAnnotationColorGreen];
+		
+	return pinColor;
+}*/
+
 - (NSString *)subtitle
 {
 	NSString *tempString = [NSString stringWithFormat:@"%@ %@ (%@)", [self.legislator legTypeShortName], [self.legislator legProperName], [self.legislator partyShortName]];
@@ -190,8 +260,26 @@
 }
 
 - (MKPolygon *)polygon {
-	
-	MKPolygon *polyGon=[MKPolygon polygonWithCoordinates:(CLLocationCoordinate2D *)[self.coordinatesData bytes] 
+	MKPolygon *polyGon=nil;
+		
+	if (self.district && [self.district integerValue] == 83) {	// special case (until districts change)
+		NSArray *interiorPolygons = nil;
+		
+		DistrictMapObj *interiorDistrict = [TexLegeCoreDataUtils districtMapForDistrict:[NSNumber numberWithInt:84] 
+																	 andChamber:self.chamber 
+																	withContext:[self managedObjectContext]];
+		if (interiorDistrict) {
+			MKPolygon *interiorPolygon = [interiorDistrict polygon];
+			if (interiorPolygon)
+				interiorPolygons = [NSArray arrayWithObject:interiorPolygon];
+		}
+									
+		polyGon = [MKPolygon polygonWithCoordinates:(CLLocationCoordinate2D *)[self.coordinatesData bytes] 
+											  count:[self.numberOfCoords integerValue] 
+								   interiorPolygons:interiorPolygons];
+	}
+	else
+		polyGon = [MKPolygon polygonWithCoordinates:(CLLocationCoordinate2D *)[self.coordinatesData bytes] 
 													   count:[self.numberOfCoords integerValue]];
 	polyGon.title = [self title];
 	polyGon.subtitle = [self subtitle];
