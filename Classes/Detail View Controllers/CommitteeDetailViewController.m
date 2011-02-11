@@ -269,6 +269,8 @@ CGFloat quartzRowHeight = 73.f;
 #pragma mark Table view data source
 
 - (void)buildInfoSectionArray {	
+	BOOL clickable = NO;
+	
 	NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:12]; // arbitrary
 	NSDictionary *infoDict = nil;
 	TableCellDataObject *cellInfo = nil;
@@ -285,11 +287,18 @@ CGFloat quartzRowHeight = 73.f;
 	[cellInfo release];
 
 //case kInfoSectionClerk:
+	NSString *text = self.committee.clerk;
+	id val = self.committee.clerk_email;
+	clickable = (text && [text length] && val && [val length]);
+	if (!text)
+		text = @"";
+	if (!val)
+		val = @"";
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 				@"Clerk", @"subtitle",
-				self.committee.clerk, @"title",
-				[NSNumber numberWithBool:YES], @"isClickable",
-				self.committee.clerk_email, @"entryValue",
+				text, @"title",
+				[NSNumber numberWithBool:clickable], @"isClickable",
+				val, @"entryValue",
 				nil];
 	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
 	[tempArray addObject:cellInfo];
@@ -297,11 +306,19 @@ CGFloat quartzRowHeight = 73.f;
 	[cellInfo release];
 	
 //case kInfoSectionPhone:	// dial the number
+	text = self.committee.phone;
+	clickable = (text && [text length] && [UtilityMethods canMakePhoneCalls]);
+	if (!text)
+		text = @"";
+	if (clickable)
+		val = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",text]];
+	else
+		val = @"";
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 				@"Phone", @"subtitle",
-				self.committee.phone, @"title",
-				[NSNumber numberWithBool:[UtilityMethods canMakePhoneCalls]], @"isClickable",
-				[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",self.committee.phone]], @"entryValue",
+				text, @"title",
+				[NSNumber numberWithBool:clickable], @"isClickable",
+				val, @"entryValue",
 				nil];
 	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
 	[tempArray addObject:cellInfo];
@@ -309,11 +326,20 @@ CGFloat quartzRowHeight = 73.f;
 	[cellInfo release];
 	
 	//case kInfoSectionOffice: // open the office map
+	text = self.committee.office;
+	clickable = (text && [text length]);
+	if (!text)
+		text = @"";
+	if (clickable)
+		val = [UtilityMethods capitolMapFromOfficeString:self.committee.office];
+	else
+		val = @"";
+	
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 				@"Location", @"subtitle",
-				self.committee.office, @"title",
-				[NSNumber numberWithBool:YES], @"isClickable",
-				[UtilityMethods capitolMapFromOfficeString:self.committee.office], @"entryValue",
+				text, @"title",
+				[NSNumber numberWithBool:clickable], @"isClickable",
+				val, @"entryValue",
 				nil];
 	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
 	[tempArray addObject:cellInfo];
@@ -321,11 +347,19 @@ CGFloat quartzRowHeight = 73.f;
 	[cellInfo release];
 	
 //case kInfoSectionWeb:	 // open the web page
+	text = self.committee.url;
+	clickable = (text && [text length]);
+	if (!text)
+		text = @"";
+	if (clickable)
+		val = [UtilityMethods safeWebUrlFromString:self.committee.url];
+	else
+		val = @"";
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 				@"Web", @"subtitle",
 				@"Website & Meetings", @"title",
-				[NSNumber numberWithBool:YES], @"isClickable",
-				[UtilityMethods safeWebUrlFromString:self.committee.url], @"entryValue",
+				[NSNumber numberWithBool:clickable], @"isClickable",
+				val, @"entryValue",
 				nil];
 	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
 	[tempArray addObject:cellInfo];
@@ -336,7 +370,6 @@ CGFloat quartzRowHeight = 73.f;
 		self.infoSectionArray = nil;
 	self.infoSectionArray = tempArray;
 	[tempArray release];
-
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -433,9 +466,11 @@ CGFloat quartzRowHeight = 73.f;
 		}
 			break;
 		case kInfoSection: {
-			NSDictionary *cellInfo = [self.infoSectionArray objectAtIndex:row];
-			if (cellInfo && [cell respondsToSelector:@selector(setCellInfo:)])
-				[cell performSelector:@selector(setCellInfo:) withObject:cellInfo];
+			if (row < [self.infoSectionArray count]) {
+				NSDictionary *cellInfo = [self.infoSectionArray objectAtIndex:row];
+				if (cellInfo && [cell respondsToSelector:@selector(setCellInfo:)])
+					[cell performSelector:@selector(setCellInfo:) withObject:cellInfo];
+			}
 		}
 			break;
 			
@@ -524,7 +559,7 @@ CGFloat quartzRowHeight = 73.f;
 	
 	if (section == kInfoSection) {
 		TableCellDataObject *cellInfo = [self.infoSectionArray objectAtIndex:row];
-		if (!cellInfo)
+		if (!cellInfo || !cellInfo.isClickable)
 			return;
 		
 		switch (row) {
