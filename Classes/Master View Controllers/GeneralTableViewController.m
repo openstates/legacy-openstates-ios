@@ -198,7 +198,15 @@
 		NSIndexPath *selectedPath = nil;
 		
 		//if (![self.dataSource.name isEqualToString:@"Resources"])
+		@try {
 			selectedPath = [self.dataSource indexPathForDataObject:self.selectObjectOnAppear];
+		}
+		@catch (NSException * e) {
+		}
+		@finally {
+			//if (!selectedPath)
+			//	selectedPath = [NSIndexPath indexPathForRow:0 inSection:0];
+		}
 				
 		if (selectedPath) {
 			[self.tableView selectRowAtIndexPath:selectedPath animated:animated scrollPosition:UITableViewScrollPositionNone];
