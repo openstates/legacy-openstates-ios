@@ -224,6 +224,9 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 
 - (void)fetchEvents {
 	
+	// We should start looking into openstates' Event API:
+	// http://openstates.sunlightlabs.com/api/v1/events/?state=tx&type=committee:meeting&apikey=350284d0c6af453b9b56f6c1c7fea1f9
+	
 	if (![TexLegeReachability canReachHostWithURL:[self.feedURLS objectAtIndex:0]])		// I think just doing it once is enough?
 		return;
 	if (!self.feedStore)
