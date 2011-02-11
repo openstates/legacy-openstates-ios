@@ -10,7 +10,14 @@
 
 @class CommitteeObj;
 @class PartisanScaleView;
-@interface CommitteeDetailViewController : UITableViewController <UISplitViewControllerDelegate> 
+@interface CommitteeDetailViewController : UITableViewController <UISplitViewControllerDelegate>  {
+	id dataObject;
+	CommitteeObj *committee;
+	UIPopoverController *masterPopover;
+	IBOutlet UILabel *membershipLab;
+	IBOutlet PartisanScaleView *partisanSlider;
+	NSMutableArray *infoSectionArray;
+}
 
 @property (nonatomic, assign) id dataObject;
 
