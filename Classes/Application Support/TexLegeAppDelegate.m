@@ -44,6 +44,7 @@
 - (BOOL)resetSavedDatabaseIfNecessary;
 - (void)persistentStoreCopyStarted:(NSNotification *)aNotification;
 - (void)persistentStoreCopyStopped:(NSNotification *)aNotification;
+- (BOOL)replaceOldDatabaseIfNeeded;
 	
 @end
 
@@ -382,7 +383,7 @@ NSInteger kNoSelection = -1;
 	
 	BOOL resetting = [self resetSavedDatabaseIfNecessary];
 	
-	if (!resetting) {
+	if (!resetting && ![self replaceOldDatabaseIfNeeded]) {
 		//JSONDataImporter *jsonImporter = [[JSONDataImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
 		//[jsonImporter release];
 		
@@ -489,7 +490,7 @@ NSInteger kNoSelection = -1;
  	[[LocalyticsSession sharedLocalyticsSession] upload];
 	
 	BOOL resetting = [self resetSavedDatabaseIfNecessary];
-	if (!resetting) {
+	if (!resetting && ![self replaceOldDatabaseIfNeeded]) {
 		if (!self.dataUpdater)
 			self.dataUpdater = [[[DataModelUpdateManager alloc] initWithManagedObjectContext:self.managedObjectContext] autorelease];
 		if (self.dataUpdater && [self.dataUpdater isDataUpdateAvailable]) {
@@ -647,36 +648,79 @@ NSInteger kNoSelection = -1;
 #define DATABASE_NAME @"TexLege.v3"
 #define DATABASE_FILE @"TexLege.v3.sqlite"
 
-- (void)copyPersistentStoreIfNeeded:(id)sender {	
+- (void)copyPersistentStore:(id)sender {
 #if IMPORTING_DATA == 0 // don't use this if we're setting up & initializing from property lists...
 	/*
 	 Set up the store.
 	 Provide a pre-populated default store.
 	 */
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	NSString *storePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent: DATABASE_FILE];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENTSTORE_COPY_STARTED" object:nil];
+		
+	NSString *defaultStorePath = [[NSBundle mainBundle] pathForResource:DATABASE_NAME ofType:@"sqlite"];
+	if (defaultStorePath) {
+		NSError *error = nil;
+		[fileManager copyItemAtPath:defaultStorePath toPath:storePath error:&error];
+		if (error) {
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENTSTORE_COPY_FAILED" object:nil];
+			NSLog(@"Error attempting to copy persistent store to docs folder: %@", error);
+		}
+		else {
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENTSTORE_COPY_COMPLETED" object:nil];	
+			NSLog(@"Successfully created a backup database in %@", storePath);
+		}
+	}
+	[pool drain];
+#endif
+}
+
+- (void)copyPersistentStoreIfNeeded:(id)sender {	
+#if IMPORTING_DATA == 0 // don't use this if we're setting up & initializing from property lists...
 
 	NSString *storePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent: DATABASE_FILE];
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	// If the expected store doesn't exist, copy the default store.
 	if (![fileManager fileExistsAtPath:storePath]) {
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENTSTORE_COPY_STARTED" object:nil];
-		
-		NSString *defaultStorePath = [[NSBundle mainBundle] pathForResource:DATABASE_NAME ofType:@"sqlite"];
-		if (defaultStorePath) {
-			NSError *error = nil;
-			[fileManager copyItemAtPath:defaultStorePath toPath:storePath error:&error];
-			if (error) {
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENTSTORE_COPY_FAILED" object:nil];
-				NSLog(@"Error attempting to copy persistent store to docs folder: %@", error);
-			}
-			else {
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENTSTORE_COPY_COMPLETED" object:nil];	
-				NSLog(@"Successfully created a backup database in %@", storePath);
-			}
-		}
+		[self copyPersistentStore:sender];
 	}
-	[pool drain];
 #endif
+}
+
+- (BOOL)replaceOldDatabaseIfNeeded {
+	BOOL hasOld = NO;
+	
+	if (!databaseIsCopying) {
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		
+		@try {
+			DistrictMapObj *dist83 = [TexLegeCoreDataUtils districtMapForDistrict:[NSNumber numberWithInt:83] 
+																	   andChamber:[NSNumber numberWithInt:HOUSE] 
+																	  withContext:self.managedObjectContext 
+																  lightProperties:YES];
+			
+			if (dist83) {
+				NSNumber *coordinatesInPolygon = [dist83 valueForKey:@"numberOfCoords"];
+				if (coordinatesInPolygon && [coordinatesInPolygon integerValue] == 315) {
+					NSLog(@"TexLege has an older v3 database, resetting");
+					[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_IS_OUTOFDATE"];
+					hasOld = YES;
+					[self copyPersistentStore:nil];
+				}
+				else
+					NSLog(@"TexLege likely has a current v3 database");
+			}
+			
+		}
+		@catch (NSException * e) {
+		}	
+		
+		[pool drain];
+	}
+	return hasOld;
 }
 
 - (void) resetSavedDatabase:(id)sender {
@@ -821,10 +865,9 @@ NSInteger kNoSelection = -1;
 	if (!createNewStore) {
 #ifdef IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB
 		NSString *inDocsPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:DATABASE_FILE];
-		
 		if (![[NSFileManager defaultManager] fileExistsAtPath:inDocsPath]) {
 			storePath = inMainBundle;  // for now at least until it gets copies properly
-			[self performSelectorInBackground:@selector(copyPersistentStoreIfNeeded:) withObject:nil];
+			[self performSelectorInBackground:@selector(copyPersistentStore:) withObject:nil];
 			
 			// Need to find a way to tell the core data objects that we've got a new/safer persistent store ready to go
 		}
