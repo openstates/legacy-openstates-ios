@@ -347,10 +347,7 @@ CGFloat quartzRowHeight = 73.f;
 	[cellInfo release];
 	
 //case kInfoSectionWeb:	 // open the web page
-	text = self.committee.url;
 	clickable = (text && [text length]);
-	if (!text)
-		text = @"";
 	if (clickable)
 		val = [UtilityMethods safeWebUrlFromString:self.committee.url];
 	else
