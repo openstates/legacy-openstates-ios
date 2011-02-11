@@ -15,6 +15,23 @@
 
 @interface DistrictMapObj :  NSManagedObject  <NSCoding, MKAnnotation, TexLegeDataObjectProtocol>
 {
+	NSNumber * chamber;
+	NSNumber * centerLon;
+	NSNumber * spanLat;
+	NSNumber * lineWidth;
+	NSData * coordinatesData;
+	NSNumber * numberOfCoords;
+	NSNumber * maxLat;
+	NSNumber * minLat;
+	NSNumber * spanLon;
+	NSNumber * maxLon;
+	NSNumber * district;
+	id lineColor;
+	NSNumber * minLon;
+	NSNumber * centerLat;
+	LegislatorObj * legislator;
+	NSNumber		*pinColorIndex;
+	
 }
 
 @property (nonatomic, retain) NSNumber * chamber;
