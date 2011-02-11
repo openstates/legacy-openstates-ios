@@ -120,12 +120,14 @@
 	}
 }
 
-+ (DistrictMapObj*)districtMapForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber withContext:(NSManagedObjectContext*)context
-{
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.district == %@ AND self.chamber == %@", district, chamber];
-	return [TexLegeCoreDataUtils dataObjectWithPredicate:predicate entityName:@"DistrictMapObj" context:context];
++ (DistrictMapObj*)districtMapForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber withContext:(NSManagedObjectContext*)context {
+	return [TexLegeCoreDataUtils districtMapForDistrict:district andChamber:chamber withContext:context lightProperties:NO];
 }
 
++ (DistrictMapObj*)districtMapForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber withContext:(NSManagedObjectContext*)context lightProperties:(BOOL)light {
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.district == %@ AND self.chamber == %@", district, chamber];
+	return [TexLegeCoreDataUtils dataObjectWithPredicate:predicate entityName:@"DistrictMapObj" context:context lightProperties:light];
+}
 
 + (LegislatorObj*)legislatorForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber withContext:(NSManagedObjectContext*)context
 {
@@ -207,11 +209,13 @@
 	
 }
 
++ (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName context:(NSManagedObjectContext*)context {
+	return [TexLegeCoreDataUtils dataObjectWithPredicate:predicate entityName:entityName context:context lightProperties:NO];
+}
 
 
 // You better make the predicate specific ... so that it only provides one result.  
-+ (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName context:(NSManagedObjectContext*)context
-{
++ (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName context:(NSManagedObjectContext*)context lightProperties:(BOOL)light {
 	if (!context || !predicate || !entityName)
 		return nil;
 	
@@ -221,7 +225,9 @@
 											  inManagedObjectContext:context];
 	[request setEntity:entity];
 	
-	
+	if (light && [entityName isEqualToString:@"DistrictMapObj"])
+		[request setPropertiesToFetch:[DistrictMapObj lightPropertiesToFetch]];
+
 	//NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.district == %@ AND self.legtype == %@", district, chamber];
 	[request setPredicate:predicate];
 	
