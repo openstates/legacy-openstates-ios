@@ -89,7 +89,7 @@
 		id data = [dictionary objectForKey:@"coordinatesData"];
 		
 		if ([data isKindOfClass:[NSString class]]) {
-			self.coordinatesData = [[NSData dataWithBase64EncodedString:data] copy];
+			self.coordinatesData = [NSData dataWithBase64EncodedString:data];
 		}
 		else if ([data isKindOfClass:[NSArray class]]) {
 
