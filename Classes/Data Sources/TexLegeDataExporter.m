@@ -10,6 +10,7 @@
 #import "UtilityMethods.h"
 #import "TexLegeCoreDataUtils.h"
 #import "TexLegeDataObjectProtocol.h"
+#import "DataModelUpdateManager.h"
 
 #import "JSON.h"
 #import "LegislatorObj.h"
@@ -86,8 +87,24 @@
 	NSString *outFile = nil;
 	if (!doJSON)
 		outFile = [NSString stringWithFormat:@"%@.plist", entityName];
-	else
-		outFile = [NSString stringWithFormat:@"%@.v0.json", entityName];
+	else {
+		NSNumber *version = [NSNumber numberWithInteger:0];
+		DataModelUpdateManager *updater = nil;
+		@try {
+			updater = [[DataModelUpdateManager alloc] initWithManagedObjectContext:self.managedObjectContext];
+			version = [updater getCatalogValueForKey:@"Version" model:entityName];
+			outFile = [updater getCatalogValueForKey:@"URL" model:entityName];
+		}
+		@catch (NSException * e) {
+		}
+		@finally {
+			if (updater)
+				[updater release];
+			if (!outFile) {
+				outFile = [NSString stringWithFormat:@"%@.v%@.json", entityName, version];
+			}
+		}
+	}
 
 	NSString *outPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:outFile];
 		
