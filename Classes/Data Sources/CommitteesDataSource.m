@@ -112,7 +112,6 @@
 		tempIndex = [self.fetchedResultsController indexPathForObject:dataObject];
 	}
 	@catch (NSException * e) {
-		tempIndex = [NSIndexPath indexPathForRow:0 inSection:0];
 	}
 	
 	return tempIndex;

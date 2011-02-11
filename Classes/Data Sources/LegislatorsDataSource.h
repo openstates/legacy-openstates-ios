@@ -12,6 +12,12 @@
 
 
 @interface LegislatorsDataSource : NSObject <TableDataSource>  {
+	NSFetchedResultsController *fetchedResultsController;
+	IBOutlet NSManagedObjectContext *managedObjectContext;
+	
+	NSInteger filterChamber;		// 0 means don't filter
+	NSMutableString *filterString;	// @"" means don't filter
+	BOOL hasFilter;
 }
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
