@@ -12,6 +12,7 @@
 
 
 @interface DataModelUpdateManager : NSObject {
+	NSDictionary *statusBlurbsAndModels;
 }
 
 @property (nonatomic,retain) NSManagedObjectContext *managedObjectContext;
