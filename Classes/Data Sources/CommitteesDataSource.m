@@ -107,7 +107,15 @@
 }
 
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject {
-	return [self.fetchedResultsController indexPathForObject:dataObject];
+	NSIndexPath *tempIndex = nil;
+	@try {
+		tempIndex = [self.fetchedResultsController indexPathForObject:dataObject];
+	}
+	@catch (NSException * e) {
+		tempIndex = [NSIndexPath indexPathForRow:0 inSection:0];
+	}
+	
+	return tempIndex;
 }
 
 // UITableViewDataSource methods
