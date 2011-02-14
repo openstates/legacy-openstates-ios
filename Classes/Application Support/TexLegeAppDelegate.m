@@ -392,7 +392,7 @@ NSInteger kNoSelection = -1;
 		if (self.dataUpdater && [self.dataUpdater isDataUpdateAvailable]) {
 			
 			UIAlertView *updaterAlert = [[UIAlertView alloc] initWithTitle:@"Update Available" 
-																   message:@"A data update for TexLege is available. This update may result in the loss of any custom legislator notes. This update is optional."  
+																   message:@"An optional interim data update for TexLege is available.  Would you like to download and install the new TexLege data?"  
 																  delegate:self 
 														 cancelButtonTitle:@"Cancel" 
 														 otherButtonTitles:@"Update", nil];
@@ -496,7 +496,7 @@ NSInteger kNoSelection = -1;
 		if (self.dataUpdater && [self.dataUpdater isDataUpdateAvailable]) {
 			
 			UIAlertView *updaterAlert = [[UIAlertView alloc] initWithTitle:@"Update Available" 
-																   message:@"A data update for TexLege is available. This update may result in the loss of any custom legislator notes. This update is optional."  
+																   message:@"An optional interim data update for TexLege is available.  Would you like to download and install the new TexLege data?"  
 																  delegate:self 
 														 cancelButtonTitle:@"Cancel" 
 														 otherButtonTitles:@"Update", nil];
@@ -721,6 +721,24 @@ NSInteger kNoSelection = -1;
 - (BOOL)replaceOldDatabaseIfNeeded {
 	BOOL hasOld = NO;
 	
+	// Save any custom notes, if we haven't done this already.
+	NSDictionary *storedNotesDict = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"LEGE_NOTES"];	
+	if (!storedNotesDict) {
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		NSMutableDictionary *newDictionary = [[NSMutableDictionary alloc] init];
+		
+		NSArray *legs = [TexLegeCoreDataUtils allObjectsInEntityNamed:@"LegislatorObj" context:self.managedObjectContext];
+		for (LegislatorObj *leg in legs) {
+			if (leg.notes && [leg.notes length])
+				[newDictionary setObject:leg.notes forKey:[leg.legislatorID stringValue]];
+		}
+		[[NSUserDefaults standardUserDefaults] setObject:newDictionary forKey:@"LEGE_NOTES"];
+		[[NSUserDefaults standardUserDefaults] synchronize];
+		
+		[newDictionary release];
+		[pool drain];
+	}
+	
 	if (!databaseIsCopying) {
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 		
@@ -844,7 +862,7 @@ NSInteger kNoSelection = -1;
 	
 	if (needsReset) {
 		UIAlertView *resetDB = [[UIAlertView alloc] initWithTitle:@"Settings: Reset Data and Quit?" 
-														  message:@"Are you sure you want to restore the factory database?  Any interim data updates and custom legislator notes will be lost by proceeding.  NOTE: The application will automatically quit after the reset." 
+														  message:@"Are you sure you want to restore the factory database?  Any interim data updates will be lost by proceeding.  NOTE: The application will automatically quit after the reset." 
 														 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Reset",nil];
 		resetDB.tag = 5555;
 		[resetDB show];

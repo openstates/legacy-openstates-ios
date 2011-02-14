@@ -182,11 +182,20 @@
 	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 	[cellInfo release], cellInfo = nil;
 	
-
-	if (self.legislator.notes.length > 0)
-		tempString = self.legislator.notes;
-	else
-		tempString = @"Notes";
+	tempString = nil;
+	NSDictionary *storedNotesDict = [[NSUserDefaults standardUserDefaults] valueForKey:@"LEGE_NOTES"];
+	if (storedNotesDict) {
+		tempString = [storedNotesDict valueForKey:[self.legislator.legislatorID stringValue]];
+	}
+	
+	if (tempString && [tempString length])
+		self.legislator.notes = tempString;
+	else  {
+		if (self.legislator.notes && [self.legislator.notes length])
+			tempString = self.legislator.notes;
+		else
+			tempString = @"Notes";
+	}
 	
 	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 				 @"Notes", @"subtitle",
