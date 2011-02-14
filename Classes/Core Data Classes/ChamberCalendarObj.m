@@ -78,8 +78,15 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 			self.title, self.chamber, self.feedURLS, self.feedStore];
 }
 
-- (NSDictionary *) eventForIndexPath:(NSIndexPath *)indexPath {		
-	return [rows objectAtIndex:indexPath.row];	
+- (NSDictionary *) eventForIndexPath:(NSIndexPath *)indexPath {
+	NSDictionary *event = nil;
+	@try {
+		event = [rows objectAtIndex:indexPath.row];
+	}
+	@catch (NSException * e) {
+		event = nil;
+	}
+	return event;	
 }
 
 #pragma mark UITableViewDataSource
@@ -123,101 +130,106 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 #pragma mark Data Storage
 
 - (NSDictionary *)parseFeedEntry:(CFeedEntry*)entry forChamber:(NSNumber*)entryChamber {
-	NSMutableDictionary *entryDict = [NSMutableDictionary dictionaryWithCapacity:15];
+	NSMutableDictionary *entryDict = [NSMutableDictionary dictionary];
 	[entryDict setObject:entryChamber forKey:@"chamber"];
 	
-	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-	[dateFormatter setLenient:YES];
-									  
-	NSArray *components = [entry.title componentsSeparatedByString:@" - "];
-	if (components && ([components count] >= 2)) {
-		[entryDict setObject:[components objectAtIndex:0] forKey:@"committee"];
+	@try {
+		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+		[dateFormatter setLenient:YES];
 		
-		[dateFormatter setDateFormat:@"M/d/yyyy"];
-		NSDate *refDate = [dateFormatter dateFromString:[components objectAtIndex:1]];
-		if (refDate)
-			[entryDict setObject:refDate forKey:@"date"];
-		
-		if ([components objectAtIndex:1])
-			[entryDict setObject:[components objectAtIndex:1] forKey:@"dateString"];
-	}
-	
-	if (entry.link)
-		[entryDict setObject:entry.link forKey:@"url"];
-	
-	NSString *searchString = entry.content;
-	if (searchString) {
-		
-		// Catches:			"Time: 8:00 AM  (Canceled), Location: North Texas Tollway Authority Headquarters, Plano"
-		//   also:			"Time: 9:00 AM, Location: Senate Chamber"				
-		
-		//static NSRange kRangeNotFound = {NSNotFound, 0};
-		
-		// Set whether it's cancelled/canceled(!)
-		NSRange cancelRange = [searchString rangeOfString:@" (Canceled),"];
-		if (cancelRange.length > 0)
-			cancelRange = [searchString rangeOfString:@" (Cancelled),"];
-		[entryDict setObject:[NSNumber numberWithBool:(cancelRange.length > 0)] forKey:@"cancelled"];
-		
-		// Time
-		NSRange timeRange = [searchString rangeOfString:@"Time: "];
-		NSRange placeRange = [searchString rangeOfString:@" Location: "];
-		if ( timeRange.length <= 0 )
-			debug_NSLog(@"Unexpected content in schedule parsing ... expected 'Time:[...]', got: %@", searchString);
-		else {
-			NSInteger start = timeRange.location + timeRange.length;
-			NSInteger end = 0;
-			if (cancelRange.location != NSNotFound && cancelRange.location > 0)
-				end = cancelRange.location-1;
-			else if (placeRange.location != NSNotFound && placeRange.location > 0)
-				end = placeRange.location-1;
+		NSArray *components = [entry.title componentsSeparatedByString:@" - "];
+		if (components && ([components count] >= 2)) {
+			[entryDict setObject:[components objectAtIndex:0] forKey:@"committee"];
 			
-			if (start < end) {
-				timeRange = NSMakeRange(start, end-start);
-				NSString *timeString = [searchString substringWithRange:timeRange];
-				if (timeString) {
-					if ([timeString length] > 8)	// assholes
-						timeString = [timeString substringToIndex:8];
-					
-					[dateFormatter setDateFormat:@"h:mm a"];	
-					NSDate *tempTime = [dateFormatter dateFromString:timeString];
-					if (tempTime)
-						[entryDict setObject:tempTime forKey:@"time"];
-					[entryDict setObject:timeString forKey:@"timeString"];
-					
-					// fullDate = (date + time) ... if possible
-					NSString *gotDate = [entryDict objectForKey:@"dateString"];
-					if (timeString && gotDate) {
-						NSString *fullString = [NSString stringWithFormat:@"%@ %@", gotDate, timeString];
-						
-						[dateFormatter setDateFormat:@"M/d/yyyy h:mm a"];
-						NSDate *fullDate = [dateFormatter dateFromString:fullString];
-						if (fullDate) {
-							[entryDict setObject:fullDate forKey:@"fullDate"];
-						}
-						else
-							debug_NSLog(@"Trouble parsing full date from %@", fullString);						
-					}
-				}
-			}						
+			[dateFormatter setDateFormat:@"M/d/yyyy"];
+			NSDate *refDate = [dateFormatter dateFromString:[components lastObject]];
+			if (refDate)
+				[entryDict setObject:refDate forKey:@"date"];
+			
+			if ([components lastObject])
+				[entryDict setObject:[components lastObject] forKey:@"dateString"];
 		}
 		
-		// Location
-		if ( placeRange.length <= 0 )
-			debug_NSLog(@"Unexpected content in schedule parsing ... expected 'Location:[...]', got: %@", searchString);
-		else {
-			NSInteger start = placeRange.location + placeRange.length;
-			NSInteger end = [searchString length];
-			if (start < end) {
-				placeRange = NSMakeRange(start, end-start);
-				NSString *placeString = [searchString substringWithRange:placeRange];
-				if (placeString)
-					[entryDict setObject:placeString forKey:@"location"];
-			}					
+		if (entry.link)
+			[entryDict setObject:entry.link forKey:@"url"];
+		
+		NSString *searchString = entry.content;
+		if (searchString) {
+			
+			// Catches:			"Time: 8:00 AM  (Canceled), Location: North Texas Tollway Authority Headquarters, Plano"
+			//   also:			"Time: 9:00 AM, Location: Senate Chamber"				
+			
+			//static NSRange kRangeNotFound = {NSNotFound, 0};
+			
+			// Set whether it's cancelled/canceled(!)
+			NSRange cancelRange = [searchString rangeOfString:@" (Canceled),"];
+			if (cancelRange.length > 0)
+				cancelRange = [searchString rangeOfString:@" (Cancelled),"];
+			[entryDict setObject:[NSNumber numberWithBool:(cancelRange.length > 0)] forKey:@"cancelled"];
+			
+			// Time
+			NSRange timeRange = [searchString rangeOfString:@"Time: "];
+			NSRange placeRange = [searchString rangeOfString:@" Location: "];
+			if ( timeRange.length <= 0 )
+				debug_NSLog(@"Unexpected content in schedule parsing ... expected 'Time:[...]', got: %@", searchString);
+			else {
+				NSInteger start = timeRange.location + timeRange.length;
+				NSInteger end = 0;
+				if (cancelRange.location != NSNotFound && cancelRange.location > 0)
+					end = cancelRange.location-1;
+				else if (placeRange.location != NSNotFound && placeRange.location > 0)
+					end = placeRange.location-1;
+				
+				if (start < end) {
+					timeRange = NSMakeRange(start, end-start);
+					NSString *timeString = [searchString substringWithRange:timeRange];
+					if (timeString) {
+						if ([timeString length] > 8)	// assholes
+							timeString = [timeString substringToIndex:8];
+						
+						[dateFormatter setDateFormat:@"h:mm a"];	
+						NSDate *tempTime = [dateFormatter dateFromString:timeString];
+						if (tempTime)
+							[entryDict setObject:tempTime forKey:@"time"];
+						[entryDict setObject:timeString forKey:@"timeString"];
+						
+						// fullDate = (date + time) ... if possible
+						NSString *gotDate = [entryDict objectForKey:@"dateString"];
+						if (timeString && gotDate) {
+							NSString *fullString = [NSString stringWithFormat:@"%@ %@", gotDate, timeString];
+							
+							[dateFormatter setDateFormat:@"M/d/yyyy h:mm a"];
+							NSDate *fullDate = [dateFormatter dateFromString:fullString];
+							if (fullDate) {
+								[entryDict setObject:fullDate forKey:@"fullDate"];
+							}
+							else
+								debug_NSLog(@"Trouble parsing full date from %@", fullString);						
+						}
+					}
+				}						
+			}
+			
+			// Location
+			if ( placeRange.length <= 0 )
+				debug_NSLog(@"Unexpected content in schedule parsing ... expected 'Location:[...]', got: %@", searchString);
+			else {
+				NSInteger start = placeRange.location + placeRange.length;
+				NSInteger end = [searchString length];
+				if (start < end) {
+					placeRange = NSMakeRange(start, end-start);
+					NSString *placeString = [searchString substringWithRange:placeRange];
+					if (placeString)
+						[entryDict setObject:placeString forKey:@"location"];
+				}					
+			}
 		}
+		
+		[dateFormatter release];		
 	}
-	
-	[dateFormatter release];
+	@catch (NSException * e) {
+		NSLog(@"Error parsing event entry: %@", entry.content);
+	}
 	
 	return entryDict;
 }
