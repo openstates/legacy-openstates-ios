@@ -233,7 +233,7 @@
 #pragma mark -
 #pragma mark Parser constants
 
-// Change this number to something more reasonable for testing (like 40, or 3)
+// Change this number to something more reasonable for testing (like 3)
 static const const NSUInteger kMaximumNumberOfDistrictMapsToParse = 200;
 
 // When an DistrictMap object has been fully constructed, it must be passed to the main thread and
