@@ -18,6 +18,24 @@
 #define INSIDE YES
 #define OUTSIDE NO
 
+/* This will supposedly work when there's holes ... but it'll have to go in the view controller, not in here.... ?
+ 
+ CLLocationCoordinate2D mapCoordinate = ...; //user location or annot coord
+ 
+ MKMapPoint mapPoint = MKMapPointForCoordinate(mapCoordinate);
+ 
+ MKPolygonView *polygonView = 
+ (MKPolygonView *)[mapView viewForOverlay:polygonOverlay];
+ 
+ CGPoint polygonViewPoint = [polygonView pointForMapPoint:mapPoint];
+ 
+ BOOL mapCoordinateIsInPolygon = 
+ CGPathContainsPoint(polygonView.path, NULL, polygonViewPoint, NO);
+
+ 
+ */
+
+
 + (BOOL) insidePolygon:(CLLocationCoordinate2D *)polygon count:(NSInteger)N point:(CLLocationCoordinate2D) p
 {
 	//debug_NSLog(@"Starting insidePolygon: %@", [NSDate date]);
