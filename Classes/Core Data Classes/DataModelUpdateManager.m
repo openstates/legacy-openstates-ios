@@ -114,7 +114,9 @@
 - (NSDictionary *)getRemoteDataModelCatalog {
 	NSDictionary *remoteVersionDict = nil;
 	
-	if ([[TexLegeReachability sharedTexLegeReachability] isNetworkReachable]) {
+	if ([[TexLegeReachability sharedTexLegeReachability] isNetworkReachable])
+	//if ([[TexLegeReachability sharedTexLegeReachability] isNetworkReachableViaWiFi])
+	{
 		
 		//[[MTStatusBarOverlay sharedInstance] postMessage:@"Checking for Updates" animated:YES];
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
