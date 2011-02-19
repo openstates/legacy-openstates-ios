@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BillMenuItems</key>
+	<array>
+		<string>Watch List</string>
+		<string>Key Bills</string>
+		<string>Recently Active</string>
+		<string>By Subject</string>
+	</array>
 	<key>AnalyticsOptInText</key>
 	<string>TexLege can unobtrusively submit anonymous usage data (like launch time and features used) to the developer.  This is solely intended to improve app development, and will NEVER be used for advertising or marketing.  It submits no geographic or identifying information. Please consider enabling this service.  You may change this later in the Settings app.</string>
 </dict>
