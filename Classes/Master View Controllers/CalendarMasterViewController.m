@@ -80,8 +80,14 @@
 	
 	if (!self.detailViewController) {
 		CalendarDetailViewController *idiotic = [[CalendarDetailViewController alloc] initWithNibName:@"CalendarDetailViewController" bundle:nil];
-		if (idiotic && !idiotic.logic) {
-			[[NSBundle mainBundle] loadNibNamed:@"CalendarDetailViewController" owner:idiotic options:nil];
+		if (idiotic) {
+			@try {
+				KalLogic *idiotLogic = [idiotic valueForKey:@"logic"];
+				if (idiotLogic)
+					[[NSBundle mainBundle] loadNibNamed:@"CalendarDetailViewController" owner:idiotic options:nil];				
+			}
+			@catch (NSException * e) {
+			}
 		}
 		self.detailViewController = [idiotic autorelease];
 	}
