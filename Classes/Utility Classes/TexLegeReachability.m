@@ -103,6 +103,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 	return reachable;
 }
 
+- (BOOL) isNetworkReachableViaWiFi {
+	BOOL reachable = (self.internetConnectionStatus == ReachableViaWiFi);
+
+	return reachable;
+}
+
 + (BOOL) isHostReachable:(NSString *)host {
 	BOOL reachable = YES;
 	

@@ -23,6 +23,7 @@
 
 - (void)startCheckingReachability;
 - (BOOL) isNetworkReachable;
+- (BOOL) isNetworkReachableViaWiFi;
 
 + (TexLegeReachability *)sharedTexLegeReachability;
 
