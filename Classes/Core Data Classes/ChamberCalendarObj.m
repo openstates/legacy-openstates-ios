@@ -112,7 +112,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@\n%@", 
 					[event objectForKey:@"dateString"], [event objectForKey:@"timeString"], committeeString];
 	else */
-		cell.textLabel.text = [NSString stringWithFormat:@"%@\nTime:%@ - Location: %@", 
+		cell.textLabel.text = [NSString stringWithFormat:@"%@\n Time:%@ - Location: %@", 
 					committeeString, [event objectForKey:@"timeString"], [event objectForKey:@"location"]];
 	
 	if ([UtilityMethods supportsEventKit])
