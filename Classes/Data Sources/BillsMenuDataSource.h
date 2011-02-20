@@ -10,11 +10,11 @@
 
 
 @interface BillsMenuDataSource : NSObject <TableDataSource> {
-
+	NSArray *_menuItems;
 }
 
 @property (nonatomic,retain) IBOutlet NSManagedObjectContext *managedObjectContext;
-@property (nonatomic,retain) NSMutableArray *sectionList;
+@property (nonatomic,readonly) NSArray *menuItems;
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 

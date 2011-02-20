@@ -9,8 +9,12 @@
 #import <UIKit/UIKit.h>
 
 #import "GeneralTableViewController.h"
+@class BillSearchDataSource;
 
-@interface BillsMasterViewController : GeneralTableViewController {
+@interface BillsMasterViewController : GeneralTableViewController <UISearchDisplayDelegate> {
+	IBOutlet BillSearchDataSource *billSearchDS;
+	NSString *_searchString;
 }
+@property (nonatomic,assign) IBOutlet BillSearchDataSource *billSearchDS;
 
 @end

@@ -17,24 +17,56 @@
 
 #import "BillsMenuDataSource.h"
 
+#import "BillSearchDataSource.h"
+
+@interface BillsMasterViewController (Private)
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
+@end
+
 @implementation BillsMasterViewController
+@synthesize billSearchDS;
 
 - (void) dealloc {
 	[super dealloc];
+}
+
+- (NSString *)nibName {
+	return [self viewControllerKey];
 }
 
 - (NSString *) viewControllerKey {
 	return @"BillsMasterViewController";
 }
 
-- (void)loadView {	
+/*- (void)loadView {	
 	[super runLoadView];
-}
+}*/
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	
+	if (!billSearchDS)
+		billSearchDS = [[[BillSearchDataSource alloc] initWithSearchDisplayController:self.searchDisplayController] retain];
+	
+	self.searchDisplayController.delegate = self;
+	self.searchDisplayController.searchResultsDelegate = self;
+	self.searchDisplayController.searchResultsDataSource = self.billSearchDS;
+
+	//self.dataSource.searchDisplayController = self.searchDisplayController;
+	//self.searchDisplayController.searchResultsDataSource = self.dataSource;
+	
+	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
+	//self.navigationItem.titleView = self.chamberControl;
+	
 	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
 		self.selectObjectOnAppear = [self firstDataObject];
+}
+
+- (void)viewDidUnload {
+	[billSearchDS release];
+	billSearchDS = nil;
+	
+	[super viewDidUnload];
 }
 
 - (Class)dataSourceClass {
@@ -44,6 +76,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {	
 	[super viewWillAppear:animated];
+	
+	[self.searchDisplayController.searchBar setHidden:NO];
 	
 	//// ALL OF THE FOLLOWING MUST *NOT* RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER
 	
@@ -99,6 +133,9 @@
 	
 	if (dataObject) {
 		[self.detailViewController setValue:dataObject forKey:@"selectedMenu"];
+		if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
+			[self searchBarCancelButtonClicked:nil];
+		}
 		if (isSplitViewDetail == NO) {
 			// push the detail view controller onto the navigation stack to display it				
 			[self.navigationController pushViewController:self.detailViewController animated:YES];
@@ -106,4 +143,54 @@
 		}
 	}
 }
+
+#pragma mark -
+#pragma mark Search Distplay Controller
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+	if (_searchString) {
+		[_searchString release];
+		_searchString = nil;
+	}
+	
+	if (searchString) {
+		_searchString = [searchString retain];
+		
+		if ([_searchString length] > 3) {
+			[self.billSearchDS startSearchWithString:_searchString chamber:self.searchDisplayController.searchBar.selectedScopeButtonIndex+1];
+		}		
+	}
+	return NO;
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
+	[self.billSearchDS startSearchWithString:_searchString chamber:searchOption+1];
+	return NO;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
+	if (_searchString) {
+		[_searchString release];
+		_searchString = nil;
+	}
+	_searchString = [[[NSString alloc] initWithString:@""] retain];
+
+	self.searchDisplayController.searchBar.text = _searchString;
+	[self.searchDisplayController setActive:NO animated:YES];
+}
+
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
+	////////self.dataSource.hideTableIndex = YES;
+	// for some reason, these get zeroed out after we restart searching.
+	self.searchDisplayController.searchResultsTableView.rowHeight = self.tableView.rowHeight;
+	self.searchDisplayController.searchResultsTableView.backgroundColor = self.tableView.backgroundColor;
+	self.searchDisplayController.searchResultsTableView.sectionIndexMinimumDisplayRowCount = self.tableView.sectionIndexMinimumDisplayRowCount;
+	
+}
+
+- (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
+	////////self.dataSource.hideTableIndex = NO;
+}
+
 @end

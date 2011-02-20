@@ -11,13 +11,9 @@
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
 
-@interface BillsMenuDataSource (Private)
-- (void)createSectionList;
-@end
-
 @implementation BillsMenuDataSource
 
-@synthesize managedObjectContext, sectionList;
+@synthesize managedObjectContext, menuItems = _menuItems, searchDisplayController;
 
 enum _menuOrder {
 	kMenuFavorites = 0,
@@ -56,69 +52,37 @@ enum _menuOrder {
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
 	if (self = [super init]) {
 		if (newContext) 
-			managedObjectContext = [newContext retain];
-		
-		self.sectionList = [[[NSMutableArray alloc] init] autorelease];
-		[self createSectionList];
+			managedObjectContext = [newContext retain];		
 	}
 	return self;
 }
 
 - (void)dealloc {
-	self.sectionList = nil;
+	[_menuItems release];
+	self.searchDisplayController = nil;
 	self.managedObjectContext = nil;
 	[super dealloc];
 }
 
 
 /* Build a list of files */
-- (void)createSectionList {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"TexLegeStrings" ofType:@"plist"];
-	NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
-	NSArray *menuItems = [textDict objectForKey:@"BillMenuItems"];
-	
-	if (menuItems && [menuItems count]) {
-		[self.sectionList removeAllObjects];
-		if ([menuItems count] != kMenuLASTITEM) {
-			NSLog(@"Something's wrong with the bill menu");
-			[pool drain];
-			return;
-		}
-	}
-	
-	NSArray *classes = [[NSArray alloc] initWithObjects:
-						@"BillsFavoritesViewController",
-						"BillsKeyViewController", 
-						"BillsRecentViewController",
-						"BillsCategoriesViewController",
-						nil];
-	// use the following:
-	//		[[NSClassFromString(className) alloc] initWithSomething:stuff];
-	
-	for (NSInteger index = 0; index < kMenuLASTITEM; index++) {
-		NSDictionary *itemDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-								  @"BillsMenuItem", @"dataObject",
-								  [menuItems objectAtIndex:index], @"title",
-								  [classes objectAtIndex:index], @"class",
-								  nil];
-		[self.sectionList addObject:itemDict];
-		[itemDict release];
-	}
-	[classes release];
+- (NSArray *)menuItems {
+	if (!_menuItems) {
+			
+		NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"TexLegeStrings" ofType:@"plist"];
+		NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
+		_menuItems = [[textDict objectForKey:@"BillMenuItems"] retain];
 		
-	[pool drain];
+		if (!_menuItems)
+			_menuItems = [[[NSArray alloc] init] retain];
+	}
+	return _menuItems;
 }
 
 
 // return the map at the index in the array
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
-	NSArray *thisSection = [self.sectionList objectAtIndex:indexPath.section];
-	if (thisSection)
-		return [thisSection objectAtIndex:indexPath.row];
-	
-	return nil;
+	return [self.menuItems objectAtIndex:indexPath.row];
 }
 
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject {	
@@ -132,7 +96,7 @@ enum _menuOrder {
 			theClass = dataObject;
 		
 		NSInteger row = 0;
-		for (NSDictionary *object in self.sectionList) {
+		for (NSDictionary *object in self.menuItems) {
 			if ([theClass isEqualToString:[object objectForKey:@"class"]])
 				path = [NSIndexPath indexPathForRow:row inSection:0];
 			row++;
@@ -157,7 +121,7 @@ enum _menuOrder {
 		cell.textLabel.textColor =	[TexLegeTheme textDark];
 		cell.textLabel.textAlignment = UITextAlignmentLeft;
 		cell.textLabel.font = [UIFont boldSystemFontOfSize:15];
-		
+				
 		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
 		cell.textLabel.adjustsFontSizeToFitWidth = YES;
 		cell.textLabel.minimumFontSize = 12.0f;
@@ -179,8 +143,12 @@ enum _menuOrder {
 	//if ([self showDisclosureIcon])
 	//cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	
-	cell.textLabel.text = [[self dataObjectForIndexPath:indexPath] objectForKey:@"title"];
-	
+///	cell.accessoryView.hidden = (![self showDisclosureIcon] || tableView == self.searchDisplayController.searchResultsTableView);
+
+	NSDictionary *dataObject = [self dataObjectForIndexPath:indexPath];
+	cell.textLabel.text = [dataObject objectForKey:@"title"];
+	cell.imageView.image = [UIImage imageNamed:[dataObject objectForKey:@"icon"]];
+
 	return cell;
 }
 
@@ -190,7 +158,7 @@ enum _menuOrder {
 
 - (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section 
 {		
-	return [self.sectionList count];
+	return [self.menuItems count];
 }
 
 @end
