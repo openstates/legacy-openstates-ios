@@ -12,6 +12,7 @@
 @class CapitolMapsMasterViewController;
 @class CalendarMasterViewController;
 @class DistrictMapMasterViewController;
+@class BillsMasterViewController;
 @class AnalyticsOptInAlertController;
 @class DataModelUpdateManager;
 
@@ -41,6 +42,7 @@
 @property (nonatomic, assign) IBOutlet LegislatorMasterViewController *legislatorMasterVC;
 @property (nonatomic, assign) IBOutlet CalendarMasterViewController *calendarMasterVC;
 @property (nonatomic, assign) IBOutlet DistrictMapMasterViewController *districtMapMasterVC;
+@property (nonatomic, assign) IBOutlet BillsMasterViewController *billsMasterVC;
 
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 
