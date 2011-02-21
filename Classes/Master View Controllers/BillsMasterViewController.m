@@ -7,6 +7,7 @@
 //
 
 #import "BillsMasterViewController.h"
+#import "BillsDetailViewController.h"
 #import "UtilityMethods.h"
 
 #import "TexLegeAppDelegate.h"
@@ -18,6 +19,7 @@
 #import "BillsMenuDataSource.h"
 
 #import "BillSearchDataSource.h"
+#import "JSON.h"
 
 @interface BillsMasterViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
@@ -27,6 +29,8 @@
 @synthesize billSearchDS;
 
 - (void) dealloc {
+	[_requestDictionary release];
+	[_requestSenders release];
 	[super dealloc];
 }
 
@@ -48,6 +52,12 @@
 	if (!billSearchDS)
 		billSearchDS = [[[BillSearchDataSource alloc] initWithSearchDisplayController:self.searchDisplayController] retain];
 	
+	if (!_requestDictionary)
+		_requestDictionary = [[[NSMutableDictionary alloc] init] retain];
+
+	if (!_requestSenders)
+		_requestSenders = [[[NSMutableDictionary alloc] init] retain];
+
 	self.searchDisplayController.delegate = self;
 	self.searchDisplayController.searchResultsDelegate = self;
 	self.searchDisplayController.searchResultsDataSource = self.billSearchDS;
@@ -65,6 +75,11 @@
 - (void)viewDidUnload {
 	[billSearchDS release];
 	billSearchDS = nil;
+	
+	[_requestDictionary release];
+	_requestDictionary = nil;
+	[_requestSenders release];
+	_requestSenders = nil;
 	
 	[super viewDidUnload];
 }
@@ -115,31 +130,56 @@
 	//if (!isSplitViewDetail)
 	//	self.navigationController.toolbarHidden = YES;
 	
-	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
-	// save off this item's selection to our AppDelegate
-	[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
-	
-	// create a BillsMenuDetailViewController. This controller will display the full size tile for the element
-	if (self.detailViewController == nil) {
-		if (!dataObject || [dataObject isKindOfClass:[NSDictionary class]])
-			return;
+	id dataObject = nil;
+	if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
+		dataObject = [self.billSearchDS dataObjectForIndexPath:newIndexPath];
+		//[self searchBarCancelButtonClicked:nil];
 		
-		NSString *theClass = [dataObject objectForKey:@"class"];
-		if (!theClass || !NSClassFromString(theClass))
-			return;
-		
-		self.detailViewController = [[[NSClassFromString(theClass) alloc] initWithNibName:theClass bundle:nil] autorelease];
+		if (dataObject) {
+
+			self.detailViewController = [[[BillsDetailViewController alloc] initWithNibName:@"BillsDetailViewController" bundle:nil] autorelease];
+//		http://openstates.sunlightlabs.com/api/v1/bills/tx/82/HB%201109/?apikey=350284d0c6af453b9b56f6c1c7fea1f9
+
+			NSString *queryString = [NSString stringWithFormat:@"http://openstates.sunlightlabs.com/api/v1/bills/tx/%@/%@/?apikey=350284d0c6af453b9b56f6c1c7fea1f9", 
+									 [dataObject objectForKey:@"session"], [[dataObject objectForKey:@"bill_id"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+			
+			[self JSONRequestWithURLString:queryString sender:self.detailViewController];	// DetailViewController get's "setDataObject" called with the results.
+			
+			if (isSplitViewDetail == NO) {
+				// push the detail view controller onto the navigation stack to display it				
+				[self.navigationController pushViewController:self.detailViewController animated:YES];
+				self.detailViewController = nil;
+			}
+		}			
 	}
+	else {
+		dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	
-	if (dataObject) {
-		[self.detailViewController setValue:dataObject forKey:@"selectedMenu"];
-		if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
-			[self searchBarCancelButtonClicked:nil];
+		// save off this item's selection to our AppDelegate
+		[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
+	
+		// create a BillsMenuDetailViewController. This controller will display the full size tile for the element
+		if (self.detailViewController == nil) {
+			if (!dataObject || ![dataObject isKindOfClass:[NSDictionary class]])
+				return;
+			
+			NSString *theClass = [dataObject objectForKey:@"class"];
+			if (!theClass || !NSClassFromString(theClass))
+				return;
+			
+			self.detailViewController = [[[NSClassFromString(theClass) alloc] initWithNibName:theClass bundle:nil] autorelease];
 		}
-		if (isSplitViewDetail == NO) {
-			// push the detail view controller onto the navigation stack to display it				
-			[self.navigationController pushViewController:self.detailViewController animated:YES];
-			self.detailViewController = nil;
+		if (dataObject) {
+			if ([self.detailViewController respondsToSelector:@selector(setSelectedMenu:)])
+				[self.detailViewController setValue:dataObject forKey:@"selectedMenu"];
+			if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
+				[self searchBarCancelButtonClicked:nil];
+			}
+			if (isSplitViewDetail == NO) {
+				// push the detail view controller onto the navigation stack to display it				
+				[self.navigationController pushViewController:self.detailViewController animated:YES];
+				self.detailViewController = nil;
+			}
 		}
 	}
 }
@@ -157,7 +197,7 @@
 	if (searchString) {
 		_searchString = [searchString retain];
 		
-		if ([_searchString length] > 3) {
+		if ([_searchString length] >= 4) {
 			[self.billSearchDS startSearchWithString:_searchString chamber:self.searchDisplayController.searchBar.selectedScopeButtonIndex+1];
 		}		
 	}
@@ -192,5 +232,66 @@
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
 	////////self.dataSource.hideTableIndex = NO;
 }
+
+- (void)JSONRequestWithURLString:(NSString *)queryString sender:(id)sender {
+	//in the viewDidLoad
+		
+	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:queryString]];
+	NSURLConnection *newConnection = [[[NSURLConnection alloc] initWithRequest:request delegate:self] autorelease];
+	
+	NSMutableData *data = [NSMutableData data];	
+	[_requestDictionary setObject:data forKey:[newConnection description]];
+	[_requestSenders setObject:sender forKey:[newConnection description]];
+	
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+	
+    [[_requestDictionary objectForKey:[connection description]] setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    [[_requestDictionary objectForKey:[connection description]] appendData:data];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    NSLog(@"%@", error);
+	if ([_requestDictionary objectForKey:[connection description]])
+		[_requestDictionary removeObjectForKey:[connection description]];
+
+	if ([_requestSenders objectForKey:[connection description]])
+		[_requestSenders removeObjectForKey:[connection description]];
+
+/*	if (connection) {
+		[connection release];
+		connection = nil;
+	}
+*/
+}
+
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+	
+	NSMutableData *data = [_requestDictionary objectForKey:[connection description]];
+    NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+	
+	id sender = [_requestSenders objectForKey:[connection description]];
+	id object = [responseString JSONValue];
+	[responseString release];
+
+	if (sender && object) {
+		[sender performSelector:@selector(setDataObject:) withObject:object];
+	}
+	
+	if ([_requestDictionary objectForKey:[connection description]])
+		[_requestDictionary removeObjectForKey:[connection description]];
+	if ([_requestSenders objectForKey:[connection description]])
+		[_requestSenders removeObjectForKey:[connection description]];
+
+/*    [connection release];
+	connection = nil;
+*/
+}
+
 
 @end

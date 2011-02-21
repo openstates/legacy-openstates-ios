@@ -14,7 +14,11 @@
 @interface BillsMasterViewController : GeneralTableViewController <UISearchDisplayDelegate> {
 	IBOutlet BillSearchDataSource *billSearchDS;
 	NSString *_searchString;
+	NSMutableDictionary *_requestDictionary;
+	NSMutableDictionary *_requestSenders;
 }
 @property (nonatomic,assign) IBOutlet BillSearchDataSource *billSearchDS;
+
+- (void)JSONRequestWithURLString:(NSString *)queryString sender:(id)sender;
 
 @end
