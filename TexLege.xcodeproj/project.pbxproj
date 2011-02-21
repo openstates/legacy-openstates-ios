@@ -96,6 +96,7 @@
 		37155728100859E700FA57DB /* CommitteeObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37155727100859E700FA57DB /* CommitteeObj.m */; };
 		3718895C12EE917B00E3300D /* NSDate+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718895B12EE917B00E3300D /* NSDate+Helper.m */; };
 		371B6B8E124C074C00442B74 /* TexLegeDataImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 37242B50124117E2005C43D3 /* TexLegeDataImporter.m */; };
+		371E96F6131211E50035439E /* BillsDetailViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37B2C206130BCF9800140212 /* BillsDetailViewController~ipad.xib */; };
 		37242D3612415CC4005C43D3 /* LegislatorContributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37242D3512415CC4005C43D3 /* LegislatorContributionsViewController.m */; };
 		37242DE112417662005C43D3 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 37242DD812417662005C43D3 /* NSObject+SBJSON.m */; };
 		37242DE212417662005C43D3 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 37242DDA12417662005C43D3 /* NSString+SBJSON.m */; };
@@ -148,6 +149,15 @@
 		374E2A6B12360C6E0005E245 /* TexLegeMapPins.m in Sources */ = {isa = PBXBuildFile; fileRef = 374E2A6A12360C6E0005E245 /* TexLegeMapPins.m */; };
 		374F6DA512FD0FFD00AD7EEC /* libKal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 372D061F12FC799200E63696 /* libKal.a */; };
 		374F70A612FD45D600AD7EEC /* TexLegeNavBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 374F70A512FD45D600AD7EEC /* TexLegeNavBar.m */; };
+		37507ED5130F64BF00A925F5 /* 11-clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C81A120344D000507757 /* 11-clock.png */; };
+		37507ED6130F64D000A925F5 /* 28-star.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C840120344D000507757 /* 28-star.png */; };
+		37507ED7130F64D400A925F5 /* 30-key.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C842120344D000507757 /* 30-key.png */; };
+		37507ED8130F64EE00A925F5 /* 96-book.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C886120344D000507757 /* 96-book.png */; };
+		37507EE4130F652100A925F5 /* 11-clock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37507EE0130F652100A925F5 /* 11-clock@2x.png */; };
+		37507EE5130F652100A925F5 /* 28-star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37507EE1130F652100A925F5 /* 28-star@2x.png */; };
+		37507EE6130F652100A925F5 /* 30-key@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37507EE2130F652100A925F5 /* 30-key@2x.png */; };
+		37507EE7130F652100A925F5 /* 96-book@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37507EE3130F652100A925F5 /* 96-book@2x.png */; };
+		37507F36130F816500A925F5 /* BillsMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37B2C1FA130BCEFC00140212 /* BillsMasterViewController.xib */; };
 		376472C211D5AAFB00E6E27F /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 376472C111D5AAFB00E6E27F /* UIImage+Resize.m */; };
 		376487C210274F1E001E482D /* MiniBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376487BF10274F1E001E482D /* MiniBrowserController.m */; };
 		376487C310274F1E001E482D /* MiniBrowserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 376487C010274F1E001E482D /* MiniBrowserView.xib */; };
@@ -547,6 +557,8 @@
 		378B57AA1219913400F7ED0B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 378B57A91219913400F7ED0B /* MapViewController.m */; };
 		378B57BE121994C400F7ED0B /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3767140011E8319900D004C8 /* UIDevice-Hardware.m */; };
 		378B58FB1219BB9C00F7ED0B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 378B58FA1219BB9C00F7ED0B /* CoreLocation.framework */; };
+		378E1242130F4D6100C425D4 /* BillsMenuDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F4A815130CAA4F00705EDD /* BillsMenuDataSource.m */; };
+		378E1247130F4D7900C425D4 /* BillsMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFBA0312FE8936007C3808 /* BillsMasterViewController.m */; };
 		379393FE123B1A82003103B3 /* CommitteeMemberCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 379393FD123B1A82003103B3 /* CommitteeMemberCellView.m */; };
 		379B9CD11250FE7E0032E616 /* TexLegeReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 379B9CD01250FE7E0032E616 /* TexLegeReachability.m */; };
 		379C1EEA1012DF28007844B5 /* NotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 379C1EE81012DF28007844B5 /* NotesViewController.m */; };
@@ -594,6 +606,8 @@
 		37C94A3A12387D6500D2D582 /* DistrictMapMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37C94A3912387D6500D2D582 /* DistrictMapMasterViewController.xib */; };
 		37C9B67E11EDB28E001F0010 /* TexLege.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 37C9B67D11EDB28E001F0010 /* TexLege.xcdatamodeld */; };
 		37CDD9CD12150651004EC1B7 /* MapViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37CDD9CC12150651004EC1B7 /* MapViewController~ipad.xib */; };
+		37CF21B7130DDBF9005BBF69 /* gavel.png in Resources */ = {isa = PBXBuildFile; fileRef = 37CF21B5130DDBF9005BBF69 /* gavel.png */; };
+		37CF21B8130DDBF9005BBF69 /* gavel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37CF21B6130DDBF9005BBF69 /* gavel@2x.png */; };
 		37CF6BB91226597500456D29 /* UIColor-Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CF6BB81226597500456D29 /* UIColor-Expanded.m */; };
 		37D0A8EF123ED55A00232B2C /* TexLegePinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0A8EE123ED55A00232B2C /* TexLegePinAnnotationView.m */; };
 		37D1C4D212026FE300507757 /* Month Calendar Shadow Down.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C4CE12026FE300507757 /* Month Calendar Shadow Down.png */; };
@@ -632,8 +646,11 @@
 		37EAE4B5121A57D100BF4277 /* BSKmlResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE482121A57D100BF4277 /* BSKmlResult.m */; };
 		37EAE54F121A6D9A00BF4277 /* CustomAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE54E121A6D9A00BF4277 /* CustomAnnotation.m */; };
 		37F1B93D123E089500FB25AF /* 103-map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3726FC3C120A99800043D6B9 /* 103-map@2x.png */; };
+		37F4926F1311C556005D5DE1 /* BillsDetailViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37F4926E1311C556005D5DE1 /* BillsDetailViewController~iphone.xib */; };
+		37F492761311C640005D5DE1 /* BillsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F492751311C640005D5DE1 /* BillsDetailViewController.m */; };
 		37F510AA0FF1ADEF0020A13B /* Icon_80.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F510A90FF1ADEF0020A13B /* Icon_80.png */; };
 		37F6D1B512ED57F10010DCCB /* TexLege 3.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 37B253D912EBF072000B6EE2 /* TexLege 3.xcdatamodel */; };
+		37FC487013110A9E00A4C0B2 /* BillSearchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC486F13110A9E00A4C0B2 /* BillSearchDataSource.m */; };
 		37FF9E931251458C00FA56E0 /* arrow_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 37FF9E8F1251458C00FA56E0 /* arrow_left.png */; };
 		37FF9E941251458C00FA56E0 /* arrow_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37FF9E901251458C00FA56E0 /* arrow_left@2x.png */; };
 		37FF9E951251458C00FA56E0 /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 37FF9E911251458C00FA56E0 /* arrow_right.png */; };
@@ -924,6 +941,11 @@
 		374E2A6A12360C6E0005E245 /* TexLegeMapPins.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeMapPins.m; sourceTree = "<group>"; };
 		374F70A412FD45D600AD7EEC /* TexLegeNavBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeNavBar.h; sourceTree = "<group>"; };
 		374F70A512FD45D600AD7EEC /* TexLegeNavBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeNavBar.m; sourceTree = "<group>"; };
+		37507EE0130F652100A925F5 /* 11-clock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "11-clock@2x.png"; path = "Resources/UI Graphics/glyphish/gregs_EPS_hacks/11-clock@2x.png"; sourceTree = SOURCE_ROOT; };
+		37507EE1130F652100A925F5 /* 28-star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "28-star@2x.png"; path = "Resources/UI Graphics/glyphish/gregs_EPS_hacks/28-star@2x.png"; sourceTree = SOURCE_ROOT; };
+		37507EE2130F652100A925F5 /* 30-key@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "30-key@2x.png"; path = "Resources/UI Graphics/glyphish/gregs_EPS_hacks/30-key@2x.png"; sourceTree = SOURCE_ROOT; };
+		37507EE3130F652100A925F5 /* 96-book@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "96-book@2x.png"; path = "Resources/UI Graphics/glyphish/gregs_EPS_hacks/96-book@2x.png"; sourceTree = SOURCE_ROOT; };
+		3759C7CC1311AB1000A52C26 /* BillSearchDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillSearchDataSource.h; sourceTree = "<group>"; };
 		376472C011D5AAFB00E6E27F /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Resize.h"; path = "Classes/Utility Classes/UIImage+Resize.h"; sourceTree = SOURCE_ROOT; };
 		376472C111D5AAFB00E6E27F /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Resize.m"; path = "Classes/Utility Classes/UIImage+Resize.m"; sourceTree = SOURCE_ROOT; };
 		376487BF10274F1E001E482D /* MiniBrowserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MiniBrowserController.m; sourceTree = "<group>"; };
@@ -1403,6 +1425,8 @@
 		37B253D912EBF072000B6EE2 /* TexLege 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TexLege 3.xcdatamodel"; sourceTree = "<group>"; };
 		37B253E312EBF681000B6EE2 /* StafferObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StafferObj.h; sourceTree = "<group>"; };
 		37B253E412EBF681000B6EE2 /* StafferObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StafferObj.m; sourceTree = "<group>"; };
+		37B2C1FA130BCEFC00140212 /* BillsMasterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = BillsMasterViewController.xib; path = Resources/BillsMasterViewController.xib; sourceTree = "<group>"; };
+		37B2C206130BCF9800140212 /* BillsDetailViewController~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "BillsDetailViewController~ipad.xib"; path = "Resources-iPad/BillsDetailViewController~ipad.xib"; sourceTree = "<group>"; };
 		37B2D28A10224B2800B493C8 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		37B3CE8F1249365E00FB3F94 /* MapMiniDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapMiniDetailViewController.h; path = "Classes/Detail View Controllers/MapMiniDetailViewController.h"; sourceTree = SOURCE_ROOT; };
 		37B3CE901249365E00FB3F94 /* MapMiniDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapMiniDetailViewController.m; path = "Classes/Detail View Controllers/MapMiniDetailViewController.m"; sourceTree = SOURCE_ROOT; };
@@ -1433,6 +1457,8 @@
 		37C94C1E1238BFC100D2D582 /* Building.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Building.png; path = "Resources/UI Graphics/Building.png"; sourceTree = SOURCE_ROOT; };
 		37C94C1F1238BFC100D2D582 /* Building@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Building@2x.png"; path = "Resources/UI Graphics/Building@2x.png"; sourceTree = SOURCE_ROOT; };
 		37CDD9CC12150651004EC1B7 /* MapViewController~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapViewController~ipad.xib"; path = "Resources/MapViewController~ipad.xib"; sourceTree = "<group>"; };
+		37CF21B5130DDBF9005BBF69 /* gavel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gavel.png; path = glyphish/gregs_EPS_hacks/gavel.png; sourceTree = "<group>"; };
+		37CF21B6130DDBF9005BBF69 /* gavel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gavel@2x.png"; path = "glyphish/gregs_EPS_hacks/gavel@2x.png"; sourceTree = "<group>"; };
 		37CF6A7412262B4600456D29 /* planH01369.kml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = planH01369.kml; path = Data/planH01369.kml; sourceTree = SOURCE_ROOT; };
 		37CF6A7512262B4600456D29 /* planS01188.kml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = planS01188.kml; path = Data/planS01188.kml; sourceTree = SOURCE_ROOT; };
 		37CF6BB71226597500456D29 /* UIColor-Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor-Expanded.h"; path = "../../Frameworks/UIColor+Expanded/UIColor-Expanded.h"; sourceTree = SOURCE_ROOT; };
@@ -1670,6 +1696,11 @@
 		37ECDA771065358800E43497 /* Release Notes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "Release Notes.rtf"; sourceTree = "<group>"; };
 		37EFDD7D11F80F4300268D53 /* TexLege.v2.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = TexLege.v2.sqlite; path = Data/TexLege.v2.sqlite; sourceTree = SOURCE_ROOT; };
 		37F1B9E1123E754300FB25AF /* NSManagedObject+MCManagedObjectDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+MCManagedObjectDebug.h"; sourceTree = "<group>"; };
+		37F4926E1311C556005D5DE1 /* BillsDetailViewController~iphone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "BillsDetailViewController~iphone.xib"; path = "Resources/BillsDetailViewController~iphone.xib"; sourceTree = "<group>"; };
+		37F492741311C640005D5DE1 /* BillsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsDetailViewController.h; sourceTree = "<group>"; };
+		37F492751311C640005D5DE1 /* BillsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsDetailViewController.m; sourceTree = "<group>"; };
+		37F4A814130CAA4F00705EDD /* BillsMenuDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsMenuDataSource.h; sourceTree = "<group>"; };
+		37F4A815130CAA4F00705EDD /* BillsMenuDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsMenuDataSource.m; sourceTree = "<group>"; };
 		37F510A90FF1ADEF0020A13B /* Icon_80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon_80.png; sourceTree = "<group>"; };
 		37F9523F1211409300206241 /* 110-bug@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "110-bug@2x.png"; sourceTree = "<group>"; };
 		37FBB74812224A8400CD8E20 /* DistrictOfficeDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictOfficeDataSource.h; sourceTree = "<group>"; };
@@ -1677,6 +1708,7 @@
 		37FBB75A122253BC00CD8E20 /* DistrictOfficeMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictOfficeMasterViewController.h; sourceTree = "<group>"; };
 		37FBB75B122253BC00CD8E20 /* DistrictOfficeMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictOfficeMasterViewController.m; sourceTree = "<group>"; };
 		37FBB77B122257AF00CD8E20 /* DistrictOfficeMasterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = DistrictOfficeMasterViewController.xib; path = Resources/DistrictOfficeMasterViewController.xib; sourceTree = SOURCE_ROOT; };
+		37FC486F13110A9E00A4C0B2 /* BillSearchDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillSearchDataSource.m; sourceTree = "<group>"; };
 		37FF9E8F1251458C00FA56E0 /* arrow_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_left.png; path = "Resources/UI Graphics/arrow_left.png"; sourceTree = SOURCE_ROOT; };
 		37FF9E901251458C00FA56E0 /* arrow_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrow_left@2x.png"; path = "Resources/UI Graphics/arrow_left@2x.png"; sourceTree = SOURCE_ROOT; };
 		37FF9E911251458C00FA56E0 /* arrow_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_right.png; path = "Resources/UI Graphics/arrow_right.png"; sourceTree = SOURCE_ROOT; };
@@ -1751,6 +1783,7 @@
 				378678F511E452EF0003690F /* Resources-iPhone */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				3766EFC012109F110073C705 /* TexLegeStrings.plist */,
+				37B2C1FA130BCEFC00140212 /* BillsMasterViewController.xib */,
 				373B820511E378CD00A81142 /* LegislatorMasterViewController.xib */,
 				3735DFFD120917490000AF5A /* CommitteeMasterViewController.xib */,
 				37C94A3912387D6500D2D582 /* DistrictMapMasterViewController.xib */,
@@ -2092,6 +2125,7 @@
 				37D1C5CC12027D2D00507757 /* CalendarDetailViewController~ipad.xib */,
 				3764E8CA1217B83F008DF726 /* NotesView~ipad.xib */,
 				374C36B11215E26E006B6ADA /* iPadTabBarController.xib */,
+				37B2C206130BCF9800140212 /* BillsDetailViewController~ipad.xib */,
 			);
 			name = "Resources-iPad";
 			sourceTree = "<group>";
@@ -2509,6 +2543,8 @@
 				37B3CE901249365E00FB3F94 /* MapMiniDetailViewController.m */,
 				37242D3412415CC4005C43D3 /* LegislatorContributionsViewController.h */,
 				37242D3512415CC4005C43D3 /* LegislatorContributionsViewController.m */,
+				37F492741311C640005D5DE1 /* BillsDetailViewController.h */,
+				37F492751311C640005D5DE1 /* BillsDetailViewController.m */,
 			);
 			path = "Detail View Controllers";
 			sourceTree = "<group>";
@@ -2543,6 +2579,8 @@
 				3726FC95120AABE10043D6B9 /* disclosure@2x.png */,
 				3738E1211226DA3700DDD605 /* multipins.png */,
 				3738E1221226DA3700DDD605 /* multipins@2x.png */,
+				37CF21B5130DDBF9005BBF69 /* gavel.png */,
+				37CF21B6130DDBF9005BBF69 /* gavel@2x.png */,
 				37C94C1E1238BFC100D2D582 /* Building.png */,
 				37C94C1F1238BFC100D2D582 /* Building@2x.png */,
 				376B59460FC1AE060094D80B /* glyphish */,
@@ -2648,6 +2686,7 @@
 				3732A0F711DB203F009E8957 /* iPhoneTabBarController.xib */,
 				3735DD3C12087CEF0000AF5A /* CalendarDetailViewController~iphone.xib */,
 				37AD57BA11DA651700D68934 /* CommitteeDetailViewController~iphone.xib */,
+				37F4926E1311C556005D5DE1 /* BillsDetailViewController~iphone.xib */,
 			);
 			name = "Resources-iPhone";
 			sourceTree = "<group>";
@@ -2804,6 +2843,10 @@
 				370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */,
 				3742D6ED122E18D100698483 /* DistrictMapSearchOperation.h */,
 				3742D6EE122E18D100698483 /* DistrictMapSearchOperation.m */,
+				37F4A814130CAA4F00705EDD /* BillsMenuDataSource.h */,
+				37F4A815130CAA4F00705EDD /* BillsMenuDataSource.m */,
+				3759C7CC1311AB1000A52C26 /* BillSearchDataSource.h */,
+				37FC486F13110A9E00A4C0B2 /* BillSearchDataSource.m */,
 			);
 			path = "Data Sources";
 			sourceTree = "<group>";
@@ -2858,6 +2901,10 @@
 		37D1C805120344D000507757 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				37507EE0130F652100A925F5 /* 11-clock@2x.png */,
+				37507EE1130F652100A925F5 /* 28-star@2x.png */,
+				37507EE2130F652100A925F5 /* 30-key@2x.png */,
+				37507EE3130F652100A925F5 /* 96-book@2x.png */,
 				37F9523F1211409300206241 /* 110-bug@2x.png */,
 				3726FC34120A99800043D6B9 /* 01-refresh@2x.png */,
 				3726FC35120A99800043D6B9 /* 12-eye@2x.png */,
@@ -3734,6 +3781,19 @@
 				373EBCFD12F209DA00A3E604 /* WnomAggregates.json in Resources */,
 				37BEF57612F8D4B40042E936 /* TexLege.v3.sqlite in Resources */,
 				372D061C12FC799200E63696 /* Kal.bundle in Resources */,
+				37CF21B7130DDBF9005BBF69 /* gavel.png in Resources */,
+				37CF21B8130DDBF9005BBF69 /* gavel@2x.png in Resources */,
+				37507ED5130F64BF00A925F5 /* 11-clock.png in Resources */,
+				37507ED6130F64D000A925F5 /* 28-star.png in Resources */,
+				37507ED7130F64D400A925F5 /* 30-key.png in Resources */,
+				37507ED8130F64EE00A925F5 /* 96-book.png in Resources */,
+				37507EE4130F652100A925F5 /* 11-clock@2x.png in Resources */,
+				37507EE5130F652100A925F5 /* 28-star@2x.png in Resources */,
+				37507EE6130F652100A925F5 /* 30-key@2x.png in Resources */,
+				37507EE7130F652100A925F5 /* 96-book@2x.png in Resources */,
+				37507F36130F816500A925F5 /* BillsMasterViewController.xib in Resources */,
+				37F4926F1311C556005D5DE1 /* BillsDetailViewController~iphone.xib in Resources */,
+				371E96F6131211E50035439E /* BillsDetailViewController~ipad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3914,6 +3974,10 @@
 				37400B9F12F37436002B6042 /* MTStatusBarOverlay.m in Sources */,
 				372D066712FC901C00E63696 /* TexLegeLibrary.m in Sources */,
 				374F70A612FD45D600AD7EEC /* TexLegeNavBar.m in Sources */,
+				378E1242130F4D6100C425D4 /* BillsMenuDataSource.m in Sources */,
+				378E1247130F4D7900C425D4 /* BillsMasterViewController.m in Sources */,
+				37FC487013110A9E00A4C0B2 /* BillSearchDataSource.m in Sources */,
+				37F492761311C640005D5DE1 /* BillsDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
