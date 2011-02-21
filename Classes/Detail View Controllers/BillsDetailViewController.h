@@ -1,0 +1,32 @@
+//
+//  BillsDetailViewController.h
+//  TexLege
+//
+//  Created by Gregory Combs on 2/20/11.
+//  Copyright 2011 Gregory S. Combs. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@class TableCellDataObject;
+
+@interface BillsDetailViewController : UITableViewController <UISplitViewControllerDelegate, 
+UIPopoverControllerDelegate/*, UIWebViewDelegate*/> {
+
+}
+@property (nonatomic,assign) id dataObject;
+
+//@property (nonatomic,retain) IBOutlet UIWebView *chartView;
+
+@property (nonatomic,retain) IBOutlet UIView *headerView, *descriptionView, *statusView;
+
+@property (nonatomic,retain) IBOutlet UILabel *lab_status, *lab_title, *lab_sponsors, *lab_subject, *lab_description;
+@property (nonatomic,retain) IBOutlet UILabel *stat_filed, *stat_thisPassComm, *stat_thisPassVote, *stat_thatPassComm, *stat_thatPassVote, *stat_governor, *stat_isLaw;
+
+
+@property (nonatomic,retain) UIPopoverController *masterPopover;
+@property (nonatomic, retain) IBOutlet NSDictionary *bill;
+
+- (IBAction)resetTableData:(id)sender;
+
+@end
