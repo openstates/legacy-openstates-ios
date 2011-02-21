@@ -13,7 +13,7 @@
 
 @implementation BillsMenuDataSource
 
-@synthesize managedObjectContext, menuItems = _menuItems, searchDisplayController;
+@synthesize managedObjectContext, menuItems = _menuItems/*, searchDisplayController*/;
 
 enum _menuOrder {
 	kMenuFavorites = 0,
@@ -59,7 +59,7 @@ enum _menuOrder {
 
 - (void)dealloc {
 	[_menuItems release];
-	self.searchDisplayController = nil;
+	//self.searchDisplayController = nil;
 	self.managedObjectContext = nil;
 	[super dealloc];
 }

@@ -26,10 +26,13 @@
 - (id)initWithSearchDisplayController:(UISearchDisplayController *)newController; {
 	if ([super init]) {
 		_rows = [[NSMutableArray alloc] init];
-		if (newController)
-			searchDisplayController = [newController retain];
-		
 		_activeConnection = nil;
+
+		if (newController) {
+			searchDisplayController = [newController retain];
+			searchDisplayController.searchResultsDataSource = self;
+		}
+		
 	}
 	return self;
 }
@@ -81,8 +84,25 @@
 	return cell;
 }
 
+// #define TESTING_BILLSEARCH 1
+#ifdef TESTING_BILLSEARCH
+
+- (void)mockData:(NSTimer*)timer {
+	[_rows removeAllObjects];
+	int count = 1 + random() % 20;
+	for (int i = 0; i < count; i++) {
+		NSDictionary *fakeDict = [NSDictionary dictionaryWithObjectsAndKeys:
+								  [NSString stringWithFormat:@"FAKE %d", i], @"bill_id",
+								  timer.userInfo, @"title", nil];
+		[_rows addObject:fakeDict];
+	}
+	[self.searchDisplayController.searchResultsTableView reloadData];	
+}
+#endif
+
 - (void)startSearchWithString:(NSString *)searchString chamber:(NSInteger)chamber
 {
+#ifndef TESTING_BILLSEARCH
 	if (_activeConnection) {
 		[_activeConnection cancel];
 		[_activeConnection release];
@@ -111,17 +131,23 @@
 	
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:queryString]];//asynchronous call
 	_activeConnection = [[[NSURLConnection alloc] initWithRequest:request delegate:self] retain];
-	
+#else
+	[NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(mockData:) userInfo:searchString repeats:NO];
+#endif
 }
 
 - (void)dealloc {
 	[searchDisplayController release];
 	[_rows release];
-	if (_data)
+	_rows = nil;
+	if (_data) {
 		[_data release];
+		_data = nil;
+	}
 	if (_activeConnection) {
 		[_activeConnection cancel];
 		[_activeConnection release];
+		_activeConnection = nil;
 	}
  	[super dealloc];
 }

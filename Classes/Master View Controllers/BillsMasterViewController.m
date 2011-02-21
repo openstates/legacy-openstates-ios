@@ -58,15 +58,10 @@
 	if (!_requestSenders)
 		_requestSenders = [[[NSMutableDictionary alloc] init] retain];
 
-	self.searchDisplayController.delegate = self;
-	self.searchDisplayController.searchResultsDelegate = self;
-	self.searchDisplayController.searchResultsDataSource = self.billSearchDS;
-
-	//self.dataSource.searchDisplayController = self.searchDisplayController;
-	//self.searchDisplayController.searchResultsDataSource = self.dataSource;
+	if ([UtilityMethods isIPadDevice])
+	    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 	
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
-	//self.navigationItem.titleView = self.chamberControl;
 	
 	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
 		self.selectObjectOnAppear = [self firstDataObject];
@@ -92,20 +87,28 @@
 {	
 	[super viewWillAppear:animated];
 	
+	// this has to be here because GeneralTVC will overwrite it once anyone calls self.dataSource,
+	//		if we remove this, it will wind up setting our searchResultsDataSource to the BillsMenuDataSource
+	self.searchDisplayController.searchResultsDataSource = self.billSearchDS;	
+	
 	[self.searchDisplayController.searchBar setHidden:NO];
 	
 	//// ALL OF THE FOLLOWING MUST *NOT* RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER
 	
 	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
-		id detailObject = self.detailViewController ? [self.detailViewController valueForKey:@"selectedMenu"] : nil;
+		id detailObject = nil;
 		
-		if (!detailObject) {
-			NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
-			if (!currentIndexPath) {			
-				NSUInteger ints[2] = {0,0};	// just pick the first one then
-				currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
+		if (self.detailViewController && [self.detailViewController respondsToSelector:@selector(selectedMenu)]) {
+			detailObject = [self.detailViewController valueForKey:@"selectedMenu"];
+			
+			if (!detailObject) {
+				NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
+				if (!currentIndexPath) {			
+					NSUInteger ints[2] = {0,0};	// just pick the first one then
+					currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
+				}
+				detailObject = [self.dataSource dataObjectForIndexPath:currentIndexPath];			
 			}
-			detailObject = [self.dataSource dataObjectForIndexPath:currentIndexPath];			
 		}
 		self.selectObjectOnAppear = detailObject;
 	}	
@@ -137,7 +140,8 @@
 		
 		if (dataObject) {
 
-			self.detailViewController = [[[BillsDetailViewController alloc] initWithNibName:@"BillsDetailViewController" bundle:nil] autorelease];
+			if (!self.detailViewController || ![self.detailViewController isKindOfClass:[BillsDetailViewController class]])
+				self.detailViewController = [[[BillsDetailViewController alloc] initWithNibName:@"BillsDetailViewController" bundle:nil] autorelease];
 //		http://openstates.sunlightlabs.com/api/v1/bills/tx/82/HB%201109/?apikey=350284d0c6af453b9b56f6c1c7fea1f9
 
 			NSString *queryString = [NSString stringWithFormat:@"http://openstates.sunlightlabs.com/api/v1/bills/tx/%@/%@/?apikey=350284d0c6af453b9b56f6c1c7fea1f9", 
@@ -205,7 +209,8 @@
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
-	[self.billSearchDS startSearchWithString:_searchString chamber:searchOption+1];
+	if (_searchString && [_searchString length])
+		[self.billSearchDS startSearchWithString:_searchString chamber:searchOption+1];
 	return NO;
 }
 
