@@ -43,6 +43,20 @@
 	return [_rows count];
 }
 
+/* Build a list of files */
+- (NSArray *)billResults {
+	return _rows;
+}
+
+// return the map at the index in the array
+- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
+	return [self.billResults objectAtIndex:indexPath.row];
+}
+
+- (NSIndexPath *)indexPathForDataObject:(id)dataObject {
+	return [NSIndexPath indexPathForRow:[_rows indexOfObject:dataObject] inSection:0];	
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	static NSString *CellIdentifier = @"CellIdentifier";

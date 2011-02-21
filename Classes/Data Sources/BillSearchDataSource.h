@@ -15,9 +15,13 @@
 	IBOutlet UISearchDisplayController *searchDisplayController;
 }
 @property (nonatomic, retain) IBOutlet UISearchDisplayController *searchDisplayController;
+@property (nonatomic, readonly) NSArray *billResults;
 
 - (void)startSearchWithString:(NSString *)searchString chamber:(NSInteger)chamber;
 - (id)initWithSearchDisplayController:(UISearchDisplayController *)newController;
 
+- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath;
+- (NSIndexPath *)indexPathForDataObject:(id)dataObject;
+	
 @end
 
