@@ -56,8 +56,8 @@
 		NSNumber *legislatorID = [coder decodeObjectForKey:@"legislatorID"];
 		if (legislatorID)
 			self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
-		else
-			self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
+//		else	// Turned this off because there were some old offices that shouldn't be tied to anyone.
+//			self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
     }
 	return self;
 }
@@ -93,8 +93,8 @@
 		NSNumber *legislatorID = [dictionary objectForKey:@"legislatorID"];
 		if (legislatorID)
 			self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
-		else
-			self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
+//		else // Turned this off because there were some old offices that shouldn't be tied to anyone.
+//			self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
 	}
 }
 
