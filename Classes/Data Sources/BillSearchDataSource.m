@@ -8,6 +8,7 @@
 
 #import "BillSearchDataSource.h"
 #import "JSON.h"
+#import "TexLegeReachability.h"
 
 @interface NSDictionary (BillIDComparison)
 - (NSComparisonResult)compareBillsByID:(NSDictionary *)p;
@@ -130,7 +131,9 @@
 	NSString *queryString = [NSString stringWithFormat:@"%@%@", baseurl, endQuery];
 	
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:queryString]];//asynchronous call
-	_activeConnection = [[[NSURLConnection alloc] initWithRequest:request delegate:self] retain];
+
+	if ([TexLegeReachability canReachHostWithURL:[request URL] alert:YES])
+		_activeConnection = [[[NSURLConnection alloc] initWithRequest:request delegate:self] retain];
 #else
 	[NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(mockData:) userInfo:searchString repeats:NO];
 #endif
