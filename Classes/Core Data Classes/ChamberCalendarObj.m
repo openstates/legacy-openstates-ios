@@ -163,7 +163,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 			
 			// Set whether it's cancelled/canceled(!)
 			NSRange cancelRange = [searchString rangeOfString:@" (Canceled),"];
-			if (cancelRange.length > 0)
+			if (cancelRange.length == 0)
 				cancelRange = [searchString rangeOfString:@" (Cancelled),"];
 			[entryDict setObject:[NSNumber numberWithBool:(cancelRange.length > 0)] forKey:@"cancelled"];
 			
