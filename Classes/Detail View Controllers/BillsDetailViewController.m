@@ -7,7 +7,7 @@
 //
 
 #import "BillsDetailViewController.h"
-//#import "BillsMasterViewController.h"
+#import "BillsFavoritesViewController.h"
 #import "TableDataSourceProtocol.h"
 #import "TexLegeCoreDataUtils.h"
 #import "UtilityMethods.h"
@@ -49,7 +49,7 @@ enum _billSections {
 	kBillLASTITEM
 };
 
-@synthesize bill;
+@synthesize bill, starButton;
 @synthesize masterPopover, headerView, descriptionView, statusView;
 
 @synthesize lab_title, lab_description;
@@ -76,7 +76,6 @@ enum _billSections {
 	
 	//self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 	self.clearsSelectionOnViewWillAppear = NO;
-		
 }
 
 #pragma mark -
@@ -96,6 +95,7 @@ enum _billSections {
 	self.headerView = self.descriptionView = self.statusView = nil;
 	self.lab_title = nil;
 	self.lab_description = nil;
+	self.starButton = nil;
 	self.stat_filed = self.stat_thisPassComm = self.stat_thisPassVote = self.stat_thatPassComm = self.stat_thatPassVote = self.stat_governor = self.stat_isLaw = nil;
 	self.masterPopover = nil;
 	
@@ -110,7 +110,7 @@ enum _billSections {
 	self.lab_description = nil;
 	self.stat_filed = self.stat_thisPassComm = self.stat_thisPassVote = self.stat_thatPassComm = self.stat_thatPassVote = self.stat_governor = self.stat_isLaw = nil;
 	self.masterPopover = nil;
-	
+	self.starButton = nil;
 	[super dealloc];
 }
 
@@ -120,6 +120,54 @@ enum _billSections {
 
 - (void)setDataObject:(id)newObj {
 	[self setBill:newObj];
+}
+
+- (BOOL)isFavorite {
+	if (self.bill)
+	{
+		NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillFavoritesStorageFile];
+		NSArray *watchList = [[NSArray alloc] initWithContentsOfFile:thePath];
+		
+		NSString *watchID = [NSString stringWithFormat:@"%@:%@", [self.bill objectForKey:@"session"],[self.bill objectForKey:@"bill_id"]]; 
+		NSDictionary *foundItem = [watchList findWhereKeyPath:@"watchID" equals:watchID];
+		[watchList release];
+		
+		if (foundItem)
+			return YES;
+	}
+	return NO;
+}
+
+- (void)setFavorite:(BOOL)newValue {
+	if (self.bill)
+	{
+		NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillFavoritesStorageFile];
+		NSMutableArray *watchList = [[NSMutableArray alloc] initWithContentsOfFile:thePath];
+		
+		NSString *watchID = [NSString stringWithFormat:@"%@:%@", [self.bill objectForKey:@"session"],[self.bill objectForKey:@"bill_id"]]; 
+		NSMutableDictionary *foundItem = [[watchList findWhereKeyPath:@"watchID" equals:watchID] retain];
+		if (!foundItem && newValue == YES) {
+			foundItem = [[NSMutableDictionary dictionaryWithObjectsAndKeys:
+						 watchID, @"watchID",
+						 [self.bill objectForKey:@"bill_id"], @"name",
+						 [self.bill objectForKey:@"session"], @"session",
+						 [self.bill objectForKey:@"title"], @"description",
+						 nil] retain];
+			if (newValue == YES) {
+				NSNumber *count = [NSNumber numberWithInteger:[watchList count]];
+				[foundItem setObject:count forKey:@"displayOrder"];
+				[watchList addObject:foundItem];
+			}
+		}
+		else if (foundItem && newValue == NO)
+			[watchList removeObject:foundItem];
+
+		[watchList writeToFile:thePath atomically:YES];
+
+		[foundItem release];
+		[watchList release];
+		
+	}
 }
 
 #pragma mark -
@@ -289,16 +337,22 @@ enum _billSections {
 
 
 - (void)setBill:(NSDictionary *)newBill {
+	if (self.starButton)
+		self.starButton.enabled = (newBill != nil);		
+
 	if (newBill && self.bill && [[newBill objectForKey:@"bill_id"] isEqualToString:[self.bill objectForKey:@"bill_id"]])
 		return;
 	
 	if (bill) [bill release], bill = nil;
 	if (newBill) {
-		bill = [newBill retain];
+		bill = [[newBill copy]retain];
 		
 		self.tableView.dataSource = self;
 		
 		[self setupHeader];
+		
+		if (self.starButton)
+			self.starButton.selected = [self isFavorite];
 		
 		if (masterPopover != nil) {
 			[masterPopover dismissPopoverAnimated:YES];
@@ -332,8 +386,61 @@ enum _billSections {
 	///////if (portrait && ipad && !self.bill)
 	//////	self.bill = [[[TexLegeAppDelegate appDelegate] billsMasterVC] selectObjectOnAppear];		
 	
-	if (self.bill)
-		[self setupHeader];
+	
+	//if (self.bill)
+	//	[self setupHeader];
+
+	if (self.starButton)
+		self.starButton.enabled = (self.bill != nil);		
+}
+
+- (IBAction)starButtonToggle:(id)sender { 	
+	if ([sender isKindOfClass:[UIButton class]]) {
+		UIButton *buttonView = sender;
+		
+		buttonView.adjustsImageWhenHighlighted = NO;
+		[buttonView setImage:nil forState:UIControlStateHighlighted]; 
+		buttonView.selected = !buttonView.selected;
+		
+		[self setFavorite:buttonView.selected];
+		
+		/*			if (buttonView.selected)
+		 {
+		 UIImage *imageUnwatch = [UIImage imageNamed:@"starButtonOff.png"];
+		 [buttonView setImage:imageUnwatch forState:UIControlStateHighlighted]; 
+		 }
+		 else {
+		 UIImage *imageWatch = [UIImage imageNamed:@"starButtonOn.png"];
+		 [buttonView setImage:imageWatch forState:UIControlStateHighlighted]; 
+		 }
+		 */
+	}
+	
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	/*
+	UIButton *buttonView = [UIButton buttonWithType:UIButtonTypeCustom];
+	UIImage *imageWatch = [UIImage imageNamed:@"watchButton.png"];
+	UIImage *imageUnwatch = [UIImage imageNamed:@"unwatchButton.png"];
+	[buttonView setImage:imageWatch forState:UIControlStateNormal];
+	[buttonView setImage:imageWatch forState:UIControlStateHighlighted]; 
+	[buttonView setImage:imageUnwatch forState:UIControlStateSelected];
+	[buttonView setBackgroundColor:[UIColor clearColor]]; 
+	buttonView.frame = CGRectMake(0, 0, imageWatch.size.width, imageWatch.size.height);
+
+	//adjustsImageWhenDisabled;       // default is YES. if YES, image is drawn lighter when disabled
+	buttonView.adjustsImageWhenHighlighted = YES;
+	[buttonView addTarget:self action:@selector(watchButtonToggle:) forControlEvents:UIControlEventTouchUpInside];
+	 */
+	
+	if (self.starButton) {
+		if (![UtilityMethods isIPadDevice]) {
+			UIBarButtonItem *watchItem = [[[UIBarButtonItem alloc] initWithCustomView:starButton] autorelease];
+			[self.navigationItem setRightBarButtonItem:watchItem animated:YES];
+		}
+	}
 }
 
 #pragma mark -
