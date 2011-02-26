@@ -62,6 +62,16 @@
 	    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 	
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
+/*	for (id subview in self.searchDisplayController.searchBar.subviews )
+	{
+		if([subview isMemberOfClass:[UISegmentedControl class]])
+		{
+			UISegmentedControl *scopeBar=(UISegmentedControl *) subview;
+			scopeBar.segmentedControlStyle = UISegmentedControlStyleBar; //required for color change
+			scopeBar.tintColor =  [TexLegeTheme accent];         
+		}
+	}
+*/	
 	
 	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
 		self.selectObjectOnAppear = [self firstDataObject];
@@ -134,6 +144,8 @@
 	//	self.navigationController.toolbarHidden = YES;
 	
 	id dataObject = nil;
+
+//	IF WE'RE CLICKING ON SOME SEARCH RESULTS ... PULL UP THE BILL DETAIL VIEW CONTROLLER
 	if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
 		dataObject = [self.billSearchDS dataObjectForIndexPath:newIndexPath];
 		//[self searchBarCancelButtonClicked:nil];
@@ -142,7 +154,6 @@
 
 			if (!self.detailViewController || ![self.detailViewController isKindOfClass:[BillsDetailViewController class]])
 				self.detailViewController = [[[BillsDetailViewController alloc] initWithNibName:@"BillsDetailViewController" bundle:nil] autorelease];
-//		http://openstates.sunlightlabs.com/api/v1/bills/tx/82/HB%201109/?apikey=350284d0c6af453b9b56f6c1c7fea1f9
 
 			NSString *queryString = [NSString stringWithFormat:@"http://openstates.sunlightlabs.com/api/v1/bills/tx/%@/%@/?apikey=350284d0c6af453b9b56f6c1c7fea1f9", 
 									 [dataObject objectForKey:@"session"], [[dataObject objectForKey:@"bill_id"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
@@ -156,6 +167,7 @@
 			}
 		}			
 	}
+//	WE'RE CLICKING ON ONE OF OUR STANDARD MENU ITEMS
 	else {
 		dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	
@@ -171,7 +183,10 @@
 			if (!theClass || !NSClassFromString(theClass))
 				return;
 			
-			self.detailViewController = [[[NSClassFromString(theClass) alloc] initWithNibName:theClass bundle:nil] autorelease];
+			if ([theClass isEqualToString:@"BillsFavoritesViewController"])
+				self.detailViewController = [[[NSClassFromString(theClass) alloc] initWithNibName:nil bundle:nil] autorelease];
+			else
+				self.detailViewController = [[[NSClassFromString(theClass) alloc] initWithNibName:theClass bundle:nil] autorelease];
 		}
 		if (dataObject) {
 			if ([self.detailViewController respondsToSelector:@selector(setSelectedMenu:)])
