@@ -112,8 +112,19 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@\n%@", 
 					[event objectForKey:@"dateString"], [event objectForKey:@"timeString"], committeeString];
 	else */
-		cell.textLabel.text = [NSString stringWithFormat:@"%@\n Time:%@ - Location: %@", 
-					committeeString, [event objectForKey:@"timeString"], [event objectForKey:@"location"]];
+	
+	NSString *timeLocation = nil;
+	if ([event objectForKey:@"time"])
+		timeLocation = [NSString stringWithFormat:@"Time:%@ - Location: %@",[event objectForKey:@"timeString"], [event objectForKey:@"location"]];
+	else
+		timeLocation = [event objectForKey:@"rawDateTime"];
+
+	cell.textLabel.text = [NSString stringWithFormat:@"%@\n %@", committeeString, timeLocation];
+	
+	
+	if ([[event objectForKey:@"cancelled"] boolValue] == YES)
+		cell.textLabel.text = [cell.textLabel.text stringByAppendingString:@" (Cancelled)"];
+	
 	
 	if ([UtilityMethods supportsEventKit])
 		cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
@@ -183,7 +194,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 				if (start < end) {
 					timeRange = NSMakeRange(start, end-start);
 					NSString *timeString = [searchString substringWithRange:timeRange];
-					if (timeString) {
+					if (timeString) {						
 						if ([timeString length] > 8)	// assholes
 							timeString = [timeString substringToIndex:8];
 						
@@ -207,7 +218,9 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 								debug_NSLog(@"Trouble parsing full date from %@", fullString);						
 						}
 					}
-				}						
+				}	
+				
+				[entryDict setObject:searchString forKey:@"rawDateTime"];
 			}
 			
 			// Location
