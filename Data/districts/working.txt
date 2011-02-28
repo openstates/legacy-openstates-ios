@@ -5,3 +5,8 @@ pimpdaddy:Programs greg$ pwd
 /Library/Frameworks/GDAL.framework/Versions/1.6/Programs
 -----------
  ./ogr2ogr -f "KML" ~/Desktop/mything.kml ~/Desktop/planS01188.shp
+
+----- ogr2ogr -t_srs EPSG:4326 -f KML output.kml input.shp
+
+ftp://ftpgis1.tlc.state.tx.us/DistrictViewer/PLANH100.zip
+ftp://ftpgis1.tlc.state.tx.us/DistrictViewer/PLANS100.zip
