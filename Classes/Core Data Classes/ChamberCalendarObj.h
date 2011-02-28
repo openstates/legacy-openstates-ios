@@ -32,6 +32,7 @@
  @"timeString": NSString of the time
  @"fullDate": NSDate of the date & time
  @"location": NSString of the event location
+ @"rawDateTime" : Failsafe NSString of the entire date/time string
  */
 
 - (NSDictionary *)eventForIndexPath:(NSIndexPath*)indexPath;
