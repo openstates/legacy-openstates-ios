@@ -49,5 +49,9 @@
 
 @end
 
+@interface NSString (FlattenHtml)
+- (NSString *)flattenHTML;
+@end
+
 
 

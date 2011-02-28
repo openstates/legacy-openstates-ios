@@ -16,6 +16,47 @@
 #pragma mark -
 #pragma mark NSArray Categories
 
+@implementation NSString (FlattenHtml)
+
+- (NSString *)flattenHTML {
+    NSScanner *theScanner;
+    NSString *text = nil;
+	NSMutableString *html = [NSMutableString stringWithString:[self description]];
+	
+    theScanner = [NSScanner scannerWithString:html];
+	
+    while ([theScanner isAtEnd] == NO) {
+		
+        // find start of tag
+        [theScanner scanUpToString:@"<" intoString:NULL] ; 
+		
+        // find end of tag
+        [theScanner scanUpToString:@">" intoString:&text] ;
+		
+        // replace the found tag with a space
+        //(you can filter multi-spaces out later if you wish)
+        //[html stringByReplacingOccurrencesOfString:
+		//		[ NSString stringWithFormat:@"%@>", text]
+		//									   withString:@""];
+		
+		[html replaceOccurrencesOfString:[ NSString stringWithFormat:@"%@>", text] 
+							  withString:@"" options:0 range:NSMakeRange(0, [html length])];
+
+		
+    } // while //
+    
+	[html replaceOccurrencesOfString:@"\u00a0" withString:@"" options:NSWidthInsensitiveSearch range:NSMakeRange(0, [html length])];
+	[html replaceOccurrencesOfString:@"&amp;" withString:@"&" options:NSWidthInsensitiveSearch range:NSMakeRange(0, [html length])];
+	[html replaceOccurrencesOfString:@"&nbsp;" withString:@" " options:NSWidthInsensitiveSearch range:NSMakeRange(0, [html length])];
+	[html replaceOccurrencesOfString:@"\r\n " withString:@"\r\n" options:NSWidthInsensitiveSearch range:NSMakeRange(0, [html length])];
+	[html replaceOccurrencesOfString:@"\r\n\r\n\r\n" withString:@"\r\n" options:NSWidthInsensitiveSearch range:NSMakeRange(0, [html length])];
+	[html replaceOccurrencesOfString:@"\r\n\r\n\r\n" withString:@"\r\n" options:NSWidthInsensitiveSearch range:NSMakeRange(0, [html length])];
+	[html replaceOccurrencesOfString:@"\r\n\r\n" withString:@"\r\n" options:NSWidthInsensitiveSearch range:NSMakeRange(0, [html length])];
+    return html;
+}
+
+@end
+
 @implementation NSArray (Find)
 
 // Implementation example
