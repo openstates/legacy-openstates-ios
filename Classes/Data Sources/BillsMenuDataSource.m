@@ -10,10 +10,11 @@
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
+#import "TexLegeAppDelegate.h"
 
 @implementation BillsMenuDataSource
 
-@synthesize managedObjectContext, menuItems = _menuItems/*, searchDisplayController*/;
+@synthesize menuItems = _menuItems/*, searchDisplayController*/;
 
 enum _menuOrder {
 	kMenuFavorites = 0,
@@ -43,16 +44,17 @@ enum _menuOrder {
 - (BOOL)canEdit
 { return NO; }
 
+- (NSManagedObjectContext *)managedObjectContext {
+	return nil;
+}
 
 // displayed in a plain style tableview
 - (UITableViewStyle)tableViewStyle {
 	return UITableViewStylePlain;
 }
 
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
+- (id)init {
 	if (self = [super init]) {
-		if (newContext) 
-			managedObjectContext = [newContext retain];		
 	}
 	return self;
 }
@@ -60,7 +62,6 @@ enum _menuOrder {
 - (void)dealloc {
 	[_menuItems release];
 	//self.searchDisplayController = nil;
-	self.managedObjectContext = nil;
 	[super dealloc];
 }
 

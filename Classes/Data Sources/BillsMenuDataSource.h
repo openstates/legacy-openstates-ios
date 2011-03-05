@@ -13,9 +13,6 @@
 	NSArray *_menuItems;
 }
 
-@property (nonatomic,retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 @property (nonatomic,readonly) NSArray *menuItems;
-
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
 @end
