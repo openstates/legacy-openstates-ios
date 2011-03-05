@@ -19,7 +19,7 @@
 
 @implementation CapitolMapsDataSource
 
-@synthesize managedObjectContext, sectionList;
+@synthesize sectionList;
 
 // TableDataSourceProtocol methods
 
@@ -41,16 +41,17 @@
 - (BOOL)canEdit
 { return NO; }
 
-
 // displayed in a plain style tableview
 - (UITableViewStyle)tableViewStyle {
 	return UITableViewStylePlain;
 }
 
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
+- (NSManagedObjectContext *)managedObjectContext {
+	return nil;
+}
+
+- (id)init {
 	if (self = [super init]) {
-		if (newContext) 
-			managedObjectContext = [newContext retain];
 		
 		self.sectionList = [[[NSMutableArray alloc] init] autorelease];
 		[self createSectionList];
@@ -60,7 +61,6 @@
 
 - (void)dealloc {
 	self.sectionList = nil;
-	self.managedObjectContext = nil;
 	[super dealloc];
 }
 

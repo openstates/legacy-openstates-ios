@@ -11,9 +11,7 @@
 
 @interface CapitolMapsDataSource : NSObject <TableDataSource> {
 }
-@property (nonatomic,retain) IBOutlet NSManagedObjectContext *managedObjectContext;
+@property (nonatomic,readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic,retain) NSMutableArray *sectionList;
-
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
 @end
