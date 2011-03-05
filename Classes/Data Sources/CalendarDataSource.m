@@ -15,6 +15,7 @@
 #import "TexLegeTheme.h"
 #import "ChamberCalendarObj.h"
 #import "DisclosureQuartzView.h"
+#import "TexLegeAppDelegate.h"
 
 @interface CalendarDataSource (Private)
 - (void) subscribeToAllFeeds;
@@ -23,7 +24,6 @@
 
 
 @implementation CalendarDataSource
-@synthesize managedObjectContext;
 @synthesize calendarList, senateURL, houseURL, jointURL, feedStore;
 
 
@@ -51,10 +51,12 @@
 	return UITableViewStylePlain;
 }
 
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
+- (NSManagedObjectContext *)managedObjectContext {
+	return nil;
+}
+
+- (id)init {
 	if (self = [super init]) {
-		if (newContext)
-			managedObjectContext = [newContext retain];
 		
 		self.feedStore = [CFeedStore instance];
 		[self loadChamberCalendars];
@@ -68,7 +70,6 @@
 	self.senateURL = self.houseURL = self.jointURL = nil;
 	self.feedStore = nil;
 	self.calendarList = nil;
-	self.managedObjectContext = nil;
 	[super dealloc];
 }
 
