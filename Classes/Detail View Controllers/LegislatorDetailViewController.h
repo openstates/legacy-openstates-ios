@@ -17,6 +17,7 @@
 {	
 }
 @property (nonatomic,assign) id dataObject;
+@property (nonatomic,retain) NSNumber *dataObjectID;
 
 @property (nonatomic,retain) IBOutlet UIWebView *chartView;
 
@@ -32,7 +33,7 @@
 
 @property (nonatomic,retain) UIPopoverController *notesPopover;
 @property (nonatomic,retain) UIPopoverController *masterPopover;
-@property (nonatomic, retain) IBOutlet LegislatorObj *legislator;
+@property (nonatomic, assign) LegislatorObj *legislator;
 @property (nonatomic, retain) LegislatorDetailDataSource *dataSource;
 
 @property (nonatomic) BOOL isChartSVG;
