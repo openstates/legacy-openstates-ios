@@ -195,16 +195,9 @@
 	if (storedNotesDict) {
 		tempString = [storedNotesDict valueForKey:[self.legislator.legislatorID stringValue]];
 	}
-	
-	if (tempString && [tempString length])
-		self.legislator.notes = tempString;
-	else  {
-		if (self.legislator.notes && [self.legislator.notes length])
-			tempString = self.legislator.notes;
-		else
+	if (!tempString || ![tempString length])
 			tempString = @"Notes";
-	}
-	
+
 	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 				 @"Notes", @"subtitle",
 				 tempString, @"entryValue",
@@ -518,7 +511,7 @@
 		 [cell performSelector:@selector(setCellInfo:) withObject:cellInfo];
 		
 	if (cellInfo.entryType == DirectoryTypeNotes) {
-		if (self.legislator.notes.length > 0)
+		if (![cellInfo.entryValue isEqualToString:@"Notes"])
 			cell.detailTextLabel.textColor = [UIColor blackColor];
 		else
 			cell.detailTextLabel.textColor = [UIColor grayColor];
