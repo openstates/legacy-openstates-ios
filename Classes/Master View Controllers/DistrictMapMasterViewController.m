@@ -53,12 +53,6 @@
 	return [DistrictMapDataSource class];
 }
 
-/*
- - (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
- [super configureWithManagedObjectContext:context];	
- }
- */
-
 #pragma mark -
 #pragma mark View lifecycle
 
@@ -192,7 +186,7 @@
 			[self.navigationController pushViewController:self.detailViewController animated:YES];
 			self.detailViewController = nil;
 		}
-		[self.managedObjectContext refreshObject:map mergeChanges:YES];
+		[[DistrictMapObj managedObjectContext] refreshObject:map mergeChanges:YES];
 	}
 	
 }
