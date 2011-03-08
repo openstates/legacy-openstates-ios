@@ -8,10 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#if DEBUG
-//#import "NSManagedObject+MCManagedObjectDebug.h"
-#endif
-
 @protocol TexLegeDataObjectProtocol
 
 @required
