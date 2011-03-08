@@ -163,8 +163,7 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 	//self.rank = @"3rd most partisan (out of 76 Repubs)";
 
 	NSArray *legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[value.legtype integerValue] 
-																		   andPartyID:[value.party_id integerValue] 
-																			  context:value.managedObjectContext];
+																		   andPartyID:[value.party_id integerValue]];
 	if (legislators) {
 		NSInteger rankIndex = [legislators indexOfObject:value] + 1;
 		NSInteger count = [legislators count];
