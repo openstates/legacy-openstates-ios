@@ -51,8 +51,8 @@
 
 
 @implementation LegislatorDetailViewController
-
-@synthesize legislator, dataSource;
+@synthesize dataObjectID;
+@synthesize dataSource;
 @synthesize headerView, miniBackgroundView;
 
 @synthesize chartView, chartLoadingAct, isChartSVG;
@@ -71,8 +71,25 @@
 		return @"LegislatorDetailViewController~iphone";
 }
 
+	
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+		
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_LEGISLATOROBJ" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_STAFFEROBJ" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_DISTRICTOFFICEOBJ" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_DISTRICTMAPOBJ" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_COMMITTEEOBJ" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_COMMITTEEPOSITIONOBJ" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_WNOMOBJ" object:nil];
 	
 	//UIImage *sealImage = [UIImage imageWithContentsOfResolutionIndependentFile:@"seal.png"];
 	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
@@ -111,6 +128,8 @@
 }
 
 - (void)viewDidUnload {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
 	self.indivSlider = nil;
 	self.partySlider = nil;
@@ -133,11 +152,11 @@
 
 
 - (void)dealloc {
+	
 	self.indivSlider = nil;
 	self.partySlider = nil;
 	self.allSlider = nil;
 	self.dataSource = nil;
-	self.legislator = nil;
 	self.headerView = nil;
 	self.leg_photoView = nil;
 	self.leg_reelection = nil;
@@ -148,6 +167,7 @@
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
 	self.notesPopover = nil;
 	self.masterPopover = nil;
+	self.dataObjectID = nil;
 
 	[super dealloc];
 }
@@ -230,8 +250,7 @@
 		return @"";
 
 	NSArray *legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[self.legislator.legtype integerValue] 
-																					andPartyID:[self.legislator.party_id integerValue] 
-																					   context:self.legislator.managedObjectContext];
+																					andPartyID:[self.legislator.party_id integerValue]];
 	if (legislators) {
 		NSInteger rankIndex = [legislators indexOfObject:self.legislator] + 1;
 		NSInteger count = [legislators count];
@@ -302,7 +321,7 @@
 
 - (LegislatorDetailDataSource *)dataSource {
 	if (!dataSource && self.legislator) {
-		dataSource = [[LegislatorDetailDataSource alloc] initWithLegislator:legislator];
+		dataSource = [[LegislatorDetailDataSource alloc] initWithLegislator:self.legislator];
 	}
 	return dataSource;
 }
@@ -316,14 +335,28 @@
 		dataSource = [newObj retain];
 }
 
-- (void)setLegislator:(LegislatorObj *)newLegislator {
-	if (self.dataSource && newLegislator && self.legislator && [[newLegislator objectID] isEqual:[self.legislator objectID]])
+
+- (LegislatorObj *)legislator {
+	LegislatorObj *anObject = nil;
+	if (self.dataObjectID) {
+		@try {
+			anObject = [LegislatorObj objectWithPrimaryKeyValue:self.dataObjectID];
+		}
+		@catch (NSException * e) {
+		}
+	}
+	return anObject;
+}
+
+- (void)setLegislator:(LegislatorObj *)anObject {
+	if (self.dataSource && anObject && self.dataObjectID && [[anObject legislatorID] isEqual:self.dataObjectID])
 		return;
 	
 	self.dataSource = nil;
-	if (legislator) [legislator release], legislator = nil;
-	if (newLegislator) {
-		legislator = [newLegislator retain];
+	self.dataObjectID = nil;
+	
+	if (anObject) {
+		self.dataObjectID = [anObject legislatorID];
 
 		self.tableView.dataSource = self.dataSource;
 
@@ -560,7 +593,7 @@
 				[mapViewController release];
 				
 				if (isDistMap)
-					[[[TexLegeAppDelegate appDelegate] managedObjectContext] refreshObject:self.legislator.districtMap mergeChanges:NO];
+					[[DistrictMapObj managedObjectContext] refreshObject:self.legislator.districtMap mergeChanges:NO];
 			}
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&
