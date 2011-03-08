@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<array>
+		<dict>
+			<key>order</key>
+			<integer>0</integer>
+			<key>type</key>
+			<integer>0</integer>
+			<key>name</key>
+			<string>Fourth Floor</string>
+			<key>file</key>
+			<string>Map.Floor4.pdf</string>
+		</dict>
+		<dict>
+			<key>order</key>
+			<integer>1</integer>
+			<key>type</key>
+			<integer>0</integer>
+			<key>name</key>
+			<string>Third Floor</string>
+			<key>file</key>
+			<string>Map.Floor3.pdf</string>
+		</dict>
+		<dict>
+			<key>order</key>
+			<integer>2</integer>
+			<key>type</key>
+			<integer>0</integer>
+			<key>name</key>
+			<string>Second Floor</string>
+			<key>file</key>
+			<string>Map.Floor2.pdf</string>
+		</dict>
+		<dict>
+			<key>order</key>
+			<integer>3</integer>
+			<key>type</key>
+			<integer>0</integer>
+			<key>name</key>
+			<string>First Floor</string>
+			<key>file</key>
+			<string>Map.Floor1.pdf</string>
+		</dict>
+		<dict>
+			<key>order</key>
+			<integer>4</integer>
+			<key>type</key>
+			<integer>0</integer>
+			<key>name</key>
+			<string>Ground Floor</string>
+			<key>file</key>
+			<string>Map.FloorG.pdf</string>
+		</dict>
+		<dict>
+			<key>order</key>
+			<integer>5</integer>
+			<key>type</key>
+			<integer>0</integer>
+			<key>name</key>
+			<string>Extension 1st Floor (E1)</string>
+			<key>file</key>
+			<string>Map.FloorE1.pdf</string>
+		</dict>
+		<dict>
+			<key>order</key>
+			<integer>6</integer>
+			<key>type</key>
+			<integer>0</integer>
+			<key>name</key>
+			<string>Extension 2nd Floor (E2)</string>
+			<key>file</key>
+			<string>Map.FloorE2.pdf</string>
+		</dict>
+	</array>
+	<array>
+		<dict>
+			<key>order</key>
+			<integer>7</integer>
+			<key>type</key>
+			<integer>1</integer>
+			<key>name</key>
+			<string>Capitol Complex</string>
+			<key>file</key>
+			<string>Map.CapitolComplex.pdf</string>
+		</dict>
+		<dict>
+			<key>order</key>
+			<integer>8</integer>
+			<key>type</key>
+			<integer>1</integer>
+			<key>name</key>
+			<string>Sam Houston Building</string>
+			<key>file</key>
+			<string>Map.SamHoustonLoc.pdf</string>
+		</dict>
+		<dict>
+			<key>order</key>
+			<integer>9</integer>
+			<key>type</key>
+			<integer>1</integer>
+			<key>name</key>
+			<string>Wheelchair Access</string>
+			<key>file</key>
+			<string>Map.WheelchairAccess.pdf</string>
+		</dict>
+		<dict>
+			<key>order</key>
+			<integer>10</integer>
+			<key>type</key>
+			<integer>1</integer>
+			<key>name</key>
+			<string>Monument Guide</string>
+			<key>file</key>
+			<string>Map.MonumentGuide.pdf</string>
+		</dict>
+	</array>
+</array>
+</plist>
