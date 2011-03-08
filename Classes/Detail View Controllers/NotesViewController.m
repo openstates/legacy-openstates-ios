@@ -11,14 +11,30 @@
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "LocalyticsSession.h"
+#import "TexLegeCoreDataUtils.h"
+#import "TexLegeAppDelegate.h"
 
 @implementation NotesViewController
 
-@synthesize legislator, notesText, nameLabel;
+@synthesize notesText, nameLabel, dataObjectID;
 @synthesize backViewController, navBar, navTitle;
 
+- (LegislatorObj *)legislator {
+	LegislatorObj *anObject = nil;
+	if (self.dataObjectID) {
+		anObject = [LegislatorObj objectWithPrimaryKeyValue:self.dataObjectID];
+	}
+	return anObject;
+}
 
-- (void)viewDidLoad {
+- (void)setLegislator:(LegislatorObj *)anObject {	
+	self.dataObjectID = nil;
+	if (anObject) {
+		self.dataObjectID = [anObject legislatorID];
+	}
+}
+
+- (void)viewDidLoad {	
 	[super viewDidLoad];
 	if ([UtilityMethods isIPadDevice]) {
 		self.navBar.tintColor = [TexLegeTheme accent];
@@ -36,10 +52,9 @@
 	self.navTitle = nil;
 	self.legislator = nil;
 	self.notesText = nil;
+	self.dataObjectID = nil;
 	[super viewDidUnload];
 }
-
-
 
 - (void)viewWillAppear:(BOOL)animated {   
 	[super viewWillAppear:animated];
@@ -56,7 +71,7 @@
 		notesString = self.legislator.notes;
 		
     // Update the views appropriately
-    self.nameLabel.text = [legislator shortNameForButtons];    
+    self.nameLabel.text = [self.legislator shortNameForButtons];    
 	if (!notesString || [notesString length] == 0) {
 		self.notesText.text = kStaticNotes;
 	}
@@ -119,7 +134,7 @@
 
 
 - (void)dealloc {
-	self.legislator = nil;
+	self.dataObjectID = nil;
 	self.notesText = nil;
 	self.nameLabel = nil;
 	self.navTitle = nil;

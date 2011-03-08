@@ -12,15 +12,14 @@
 @class LegislatorObj;
 
 @interface NotesViewController : UIViewController {
-	LegislatorObj *legislator;
 	IBOutlet UITextView *notesText;
 	IBOutlet UILabel *nameLabel;
 	IBOutlet UINavigationItem *navTitle;
 	IBOutlet UINavigationBar *navBar;
 	UITableViewController *backViewController;
 }
-
-@property (nonatomic, retain) LegislatorObj *legislator;
+@property (nonatomic, retain) NSNumber *dataObjectID;
+@property (nonatomic, assign) LegislatorObj *legislator;
 @property (nonatomic, retain) IBOutlet UITextView *notesText;
 @property (nonatomic, retain) IBOutlet UILabel *nameLabel;
 @property (nonatomic, retain) IBOutlet UINavigationItem *navTitle;
