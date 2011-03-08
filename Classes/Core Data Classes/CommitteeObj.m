@@ -29,60 +29,42 @@
 @dynamic votesmartID;
 @dynamic openstatesID;
 @dynamic txlonline_id;
+@dynamic updated;
 
-- (void) importFromDictionary: (NSDictionary *)dictionary
-{				
-	if (dictionary) {
-		self.clerk = [dictionary objectForKey:@"clerk"];
-		self.clerk_email = [dictionary objectForKey:@"clerk_email"];
-		self.phone = [dictionary objectForKey:@"phone"];
-		self.parentId = [dictionary objectForKey:@"parentId"];
-		self.committeeId = [dictionary objectForKey:@"committeeId"];
-		self.url = [dictionary objectForKey:@"url"];
-		self.office = [dictionary objectForKey:@"office"];
-		self.committeeName = [dictionary objectForKey:@"committeeName"];
-		self.committeeType = [dictionary objectForKey:@"committeeType"];
+#pragma mark RKObjectMappable methods
 
-		self.votesmartID = [dictionary objectForKey:@"votesmartID"];
-		self.openstatesID = [dictionary objectForKey:@"openstatesID"];
-		self.txlonline_id = [dictionary objectForKey:@"txlonline_id"];
-
-	}
++ (NSDictionary*)elementToPropertyMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"committeeId", @"committeeId",
+			@"clerk", @"clerk",
+			@"clerk_email", @"clerk_email",
+			@"committeeName", @"committeeName",
+			@"committeeType", @"committeeType",
+			@"office", @"office",
+			@"openstatesID", @"openstatesID",
+			@"parentId", @"parentId",
+			@"phone", @"phone",
+			@"txlonline_id", @"txlonline_id",
+			@"url", @"url",
+			@"votesmartID", @"votesmartID",
+			@"updated", @"updated",
+			nil];
 }
-
-
-- (NSDictionary *)exportToDictionary {
-	
-	NSMutableDictionary *tempDict = [NSMutableDictionary dictionary];
-	if (self.clerk)
-		[tempDict setObject:self.clerk forKey:@"clerk"];
-	if (self.clerk_email)
-		[tempDict setObject:self.clerk_email forKey:@"clerk_email"];
-	if (self.office)
-		[tempDict setObject:self.office forKey:@"office"];
-	if (self.phone)
-		[tempDict setObject:self.phone forKey:@"phone"];
-	if (self.parentId)
-		[tempDict setObject:self.parentId forKey:@"parentId"];
-	[tempDict setObject:self.committeeId forKey:@"committeeId"];
-	[tempDict setObject:self.url forKey:@"url"];
-	[tempDict setObject:self.committeeName forKey:@"committeeName"];
-	[tempDict setObject:self.committeeType forKey:@"committeeType"];
-	
-	if (self.votesmartID)
-		[tempDict setObject:self.votesmartID forKey:@"votesmartID"];
-	if (self.openstatesID)
-		[tempDict setObject:self.openstatesID forKey:@"openstatesID"];
-	if (self.txlonline_id)
-		[tempDict setObject:self.txlonline_id forKey:@"txlonline_id"];
-
-	return tempDict;
+/*
++ (NSDictionary*)elementToRelationshipMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"committeePositions", @"committeePositions.committeePosition",
+			nil];
+}
+*/
++ (NSString*)primaryKeyProperty {
+	return @"committeeId";
 }
 
 - (id)proxyForJson {
-    return [self exportToDictionary];
+	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
+	return tempDict;	
 }
-
 
 - (NSString *) committeeNameInitial {
 	[self willAccessValueForKey:@"committeeNameInitial"];
@@ -133,9 +115,6 @@
 
 - (NSArray *)sortedMembers
 {
-	//return [[self.committeePositions allObjects] 
-	//		sortedArrayUsingSelector:@selector(compareMembersByName:)];
-
 	NSMutableArray *memberArray = [[[NSMutableArray alloc] init] autorelease];
 	for (CommitteePositionObj *position in [self committeePositions]) {
 		if ([[position position] integerValue] == POS_MEMBER)

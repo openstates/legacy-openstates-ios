@@ -24,14 +24,20 @@
 
 
 @implementation DistrictOfficeDataSource
-@synthesize fetchedResultsController, managedObjectContext;
+@synthesize fetchedResultsController;
 @synthesize hideTableIndex, byDistrict;
 @synthesize filterChamber, filterString, searchDisplayController;
 
+- (Class)dataClass {
+	return [DistrictOfficeObj class];
+}
 
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
+- (NSManagedObjectContext *)managedObjectContext {
+	return [DistrictOfficeObj managedObjectContext];
+}
+
+- (id)init {
 	if (self = [super init]) {
-		if (newContext) self.managedObjectContext = newContext;
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
 		
@@ -39,29 +45,29 @@
 		[self initializeDatabase];
 #endif
 		self.byDistrict = NO;
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(resetData:) name:@"DATAMODEL_UPDATED" object:nil];		
 
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(resetCoreData:) name:@"RESTKIT_LOADED_DISTRICTOFFICEOBJ" object:nil];
 		
 	}
 	return self;
 }
 
+- (void)resetCoreData:(NSNotificationCenter *)notification {
+	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
+	self.fetchedResultsController = nil;
+	NSError *error = nil;
+	[self.fetchedResultsController performFetch:&error];
+}
+
+
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	self.fetchedResultsController = nil;
-	self.managedObjectContext = nil;	
 	self.filterString = nil;
 	self.searchDisplayController = nil;
     [super dealloc];
-}
-
-- (void)resetData:(NSNotificationCenter *)notification {
-	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
-	NSError *error = nil;
-	[self.fetchedResultsController performFetch:&error];
 }
 
 #pragma mark -
@@ -91,7 +97,6 @@
 - (UITableViewStyle)tableViewStyle {
 	return UITableViewStylePlain;
 }
-
 
 // return the committee at the index in the sorted by symbol array
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
@@ -311,11 +316,7 @@
         return fetchedResultsController;
     }
     
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictOfficeObj" 
-											  inManagedObjectContext:self.managedObjectContext];
-	[fetchRequest setEntity:entity];
+	NSFetchRequest *fetchRequest = [DistrictOfficeObj fetchRequest];
 	
 	if (self.byDistrict) {
 		NSSortDescriptor *sort1 = [[NSSortDescriptor alloc] initWithKey:@"district" ascending:YES] ;
@@ -335,13 +336,11 @@
 		
 	fetchedResultsController = [[NSFetchedResultsController alloc] 
 															 initWithFetchRequest:fetchRequest 
-															 managedObjectContext:self.managedObjectContext 
+															 managedObjectContext:[DistrictOfficeObj managedObjectContext] 
 															 sectionNameKeyPath:nil cacheName:@"DistrictOffices"];
 	
     fetchedResultsController.delegate = self;
-	
-	[fetchRequest release];
-	
+		
 	return fetchedResultsController;
 }    
 
@@ -356,7 +355,7 @@
 - (IBAction)saveAction:(id)sender {
 	
     NSError *error;
-    if (managedObjectContext != nil) {
+    if (self.managedObjectContext != nil) {
         if ([[self managedObjectContext] hasChanges] && ![[self managedObjectContext] save:&error]) {
 			// Handle error.
 			debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -480,9 +479,7 @@
 
 
 - (void) initializeDatabase {
-	
-	NSManagedObjectContext *context = self.managedObjectContext;
-		
+			
 	// read the legislator data from the plist
 	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"DistrictOffices" ofType:@"plist"];
 	NSArray *rawPlistArray = [[NSArray alloc] initWithContentsOfFile:thePath];
@@ -494,7 +491,7 @@
 	for (NSDictionary * aDictionary in rawPlistArray)
 	{
 		DistrictOfficeObj *object = [NSEntityDescription insertNewObjectForEntityForName:
-										 [entity name] inManagedObjectContext:context];
+										 [entity name] inManagedObjectContext:self.managedObjectContext];
 		if (object) {
 			[object importFromDictionary:aDictionary];
 			if ([object.pinColorIndex integerValue]==MKPinAnnotationColorRed)

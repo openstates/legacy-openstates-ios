@@ -11,6 +11,7 @@
 #import "LinkObj.h"
 #import "LinksMasterViewController.h"
 #import "LocalyticsSession.h"
+#import "TexLegeCoreDataUtils.h"
 
 @interface MiniBrowserController (Private)
 	- (void)animate;
@@ -31,8 +32,8 @@ enum
 
 @implementation MiniBrowserController
 
-@synthesize m_urlRequestToLoad, m_loadingItemList, link, m_activity, m_loadingLabel, isSharedBrowser;
-
+@synthesize m_urlRequestToLoad, m_loadingItemList, m_activity, m_loadingLabel, isSharedBrowser;
+@synthesize dataObjectID;
 @synthesize m_toolBar, m_webView, m_shouldStopLoadingOnHide;
 @synthesize m_backButton, m_reloadButton, m_fwdButton, m_doneButton;
 @synthesize m_shouldUseParentsView;
@@ -97,6 +98,7 @@ static MiniBrowserController *s_browser = nil;
 		self.m_normalItemList = nil;
 		m_loadingItemList = nil;
 		m_authCallback = nil;
+		self.dataObjectID = nil;
 		[self enableBackButton:NO];
 		[self enableFwdButton:NO];
 		
@@ -124,6 +126,7 @@ static MiniBrowserController *s_browser = nil;
 	self.m_normalItemList = nil;
 	m_loadingItemList = nil;
 	m_authCallback = nil;
+	self.dataObjectID = nil;
 	[self enableBackButton:NO];
 	[self enableFwdButton:NO];
 	
@@ -151,6 +154,7 @@ static MiniBrowserController *s_browser = nil;
 	if (m_urlRequestToLoad) [m_urlRequestToLoad release];
 	if (m_loadingItemList) [m_loadingItemList release];
 	self.masterPopover = nil;
+	self.dataObjectID = nil;
 	[super dealloc];
 }
 
@@ -287,7 +291,6 @@ static MiniBrowserController *s_browser = nil;
 	self.m_webView = nil;
 	self.m_toolBar = nil;
 	self.m_loadingLabel = nil;
-	self.link = nil;
 	self.m_backButton = nil;
 	self.m_reloadButton = nil;
 	self.m_fwdButton = nil;
@@ -432,29 +435,42 @@ static MiniBrowserController *s_browser = nil;
 	}
 }
 
-- (void)setLink:(LinkObj *)newLink {
+- (LinkObj *)link {
+	LinkObj *anObject = nil;
+	if (self.dataObjectID) {
+		@try {
+			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.sortOrder == %@", self.dataObjectID];
+			anObject = [TexLegeCoreDataUtils dataObjectWithPredicate:predicate entityName:@"LinkObj"];
+		}
+		@catch (NSException * e) {
+		}
+	}
+	return anObject;
+}
+
+- (void)setLink:(LinkObj *)anObject {
 	if (self.masterPopover)
 		[self.masterPopover dismissPopoverAnimated:YES];
 	
-	if (link) [link release], link = nil;
-	if (newLink) link = [newLink retain];
-	
-	if (link) {
-		if ([self.link.url isEqualToString:@"contactMail"])
+	self.dataObjectID = nil;
+	if (anObject) {
+		self.dataObjectID = [anObject sortOrder];
+
+		if ([anObject.url isEqualToString:@"contactMail"])
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
 																			 subject:@"TexLege Support Question" 
 																				body:@"" commander:[[TexLegeAppDelegate appDelegate] detailNavigationController]];
 		else {
 			// if we add escapes, we'll wind up junking our existing "safe" url string.  We do this since we don't allow editing links anymore.  
 			//NSURL *aURL = [UtilityMethods safeWebUrlFromString:link.url];
-			NSURL *aURL = [link actualURL];
+			NSURL *aURL = [anObject actualURL];
 			if (aURL && [TexLegeReachability canReachHostWithURL:aURL alert:YES]) { // got a network connection
 				[self loadURL:aURL];
 			}
 			else
 				return;
 			
-			self.title = link.label;
+			self.title = anObject.label;
 		}
 	}
 	

@@ -19,7 +19,13 @@
 
 
 @synthesize dataSource, detailViewController;
-@synthesize selectObjectOnAppear, managedObjectContext;
+@synthesize selectObjectOnAppear;
+
+#ifdef BUILTINNOTRESTKIT
+- (NSManagedObjectContext *)managedObjectContext {
+	return [[TexLegeAppDelegate appDelegate] managedObjectContext];
+}
+#endif
 
 - (NSString *) viewControllerKey {
 	return @"GENERALTABLEVIEWCONTROLLER_TEMPLATE";
@@ -31,7 +37,7 @@
 
 - (id<TableDataSource>)dataSource {
 	if (!dataSource) {
-		dataSource = [[[self dataSourceClass] alloc] initWithManagedObjectContext:self.managedObjectContext];
+		dataSource = [[[self dataSourceClass] alloc] init];			// GREG should this be autoreleased?  when we we call release?
 		self.title = [dataSource name];	
 		// set the long name shown in the navigation bar
 		//self.navigationItem.title=[dataSource navigationBarName];
@@ -56,16 +62,19 @@
 	return dataSource;
 }
 
-- (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
-	if (context)
-		managedObjectContext = [context retain];
-	
-	//self.dataSource = [[[[self dataSourceClass] alloc] initWithManagedObjectContext:self.managedObjectContext] autorelease];
+- (void)configure {	
+	//self.dataSource = [[[[self dataSourceClass] alloc] init] autorelease];
 		
 	if ([self.dataSource usesCoreData]) {
 		id objectID = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:self.viewControllerKey];
-		if (objectID && [objectID isKindOfClass:[NSManagedObjectID class]])
-			self.selectObjectOnAppear = [self.dataSource.managedObjectContext objectWithID:objectID];		
+		if (objectID && [objectID isKindOfClass:[NSNumber class]]) {
+			@try {
+				if ([self.dataSource respondsToSelector:@selector(dataClass)])
+					self.selectObjectOnAppear = [[self.dataSource dataClass] objectWithPrimaryKeyValue:objectID];	
+			}
+			@catch (NSException * e) {
+			}
+		}			
 	}
 	else { // Let's just do this for maps, and meetings, ... we'll handle them like integer row selections
 		id object = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:self.viewControllerKey];
@@ -96,7 +105,6 @@
 	//self.tableView = nil;
 	self.dataSource = nil; 
 	self.selectObjectOnAppear = nil;
-	self.managedObjectContext = nil;
 	self.detailViewController = nil;
 
 	[super dealloc];
@@ -233,11 +241,12 @@
 #pragma UITableViewDelegate
 
 - (void)beginUpdates:(NSNotification *)aNotification {
-	[self.tableView beginUpdates];
+//	[self.tableView beginUpdates];
 }
 
 - (void)endUpdates:(NSNotification *)aNotification {
-	[self.tableView endUpdates];
+//	[self.tableView endUpdates];
+	[self.tableView reloadData];
 }
 
 - (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {

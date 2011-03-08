@@ -15,28 +15,30 @@
 @dynamic url;
 @dynamic label;
 @dynamic section;
+@dynamic updated;
 
-- (void) importFromDictionary: (NSDictionary *)dictionary
-{				
-	if (dictionary)
-		[self setValuesForKeysWithDictionary:dictionary];
+#pragma mark RKObjectMappable methods
+
++ (NSDictionary*)elementToPropertyMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"sortOrder", @"sortOrder",
+			@"url", @"url",
+			@"label", @"label",
+			@"section", @"section",
+			@"updated", @"updated",
+			nil];
 }
 
-
-- (NSDictionary *)exportToDictionary {
-	NSArray *keys = [NSArray arrayWithObjects:
-					 @"sortOrder",
-					 @"url",
-					 @"label",
-					 @"section",
-					 nil];
-	
-	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:keys];
-	return tempDict;
++ (NSString*)primaryKeyProperty {
+	return @"sortOrder";
 }
+
+#pragma mark Core Data Initialization
+
 
 - (id)proxyForJson {
-    return [self exportToDictionary];
+	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
+	return tempDict;	
 }
 
 - (NSURL *) actualURL {	

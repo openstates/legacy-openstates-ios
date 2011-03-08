@@ -76,6 +76,14 @@ enum _billSections {
 	
 	//self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 	self.clearsSelectionOnViewWillAppear = NO;
+	
+	NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillFavoritesStorageFile];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	if (![fileManager fileExistsAtPath:thePath]) {
+		NSArray *tempArray = [[NSArray alloc] init];
+		[tempArray writeToFile:thePath atomically:YES];
+		[tempArray release];
+	}	
 }
 
 #pragma mark -

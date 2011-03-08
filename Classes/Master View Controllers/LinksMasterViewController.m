@@ -28,8 +28,8 @@
 	return [LinksDataSource class];
 }
 
-- (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
-	[super configureWithManagedObjectContext:context];				
+- (void)configure {
+	[super configure];				
 //	if (self.selectObjectOnAppear && [self.selectObjectOnAppear isKindOfClass:[LinkObj class]]) {
 		self.selectObjectOnAppear = nil; // let's not go hitting up websites on startup (Resources) 
 //	}
@@ -51,7 +51,7 @@
 }
 
 - (void)viewDidLoad {
-	[super viewDidLoad];
+	[super viewDidLoad];	
 	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
 		self.selectObjectOnAppear = [self firstDataObject];
 }
@@ -59,7 +59,6 @@
 - (void)viewDidUnload {
 	[super viewDidUnload];
 }
-
 
 
 - (void)viewWillAppear:(BOOL)animated

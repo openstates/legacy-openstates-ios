@@ -9,43 +9,73 @@
 #import "CommitteePositionObj.h"
 #import "CommitteeObj.h"
 #import "LegislatorObj.h"
-#import "TexLegeCoreDataUtils.h"
+//#import "TexLegeCoreDataUtils.h"
 
 @implementation CommitteePositionObj 
 
+@dynamic committeePositionID;
 @dynamic position;
 @dynamic legislator;
 @dynamic committee;
 @dynamic legislatorID;
+@dynamic committeeId;
+@dynamic updated;
 
-- (void) importFromDictionary: (NSDictionary *)dictionary
-{
-	if (dictionary) {
-		self.position = [dictionary objectForKey:@"position"];
-		
-		self.legislatorID = [dictionary objectForKey:@"legislatorID"];
-		if (self.legislatorID)
-			self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:self.legislatorID withContext:[self managedObjectContext]];
+#pragma mark RKObjectMappable methods
 
-		NSNumber *committeeId = [dictionary objectForKey:@"committeeId"];
-		if (committeeId)
-			self.committee = [TexLegeCoreDataUtils committeeWithCommitteeID:committeeId withContext:[self managedObjectContext]];
-		
-	}
++ (NSDictionary*)elementToPropertyMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"committeePositionID", @"committeePositionID",
+			@"legislatorID", @"legislatorID",
+			@"committeeId", @"committeeId",
+			@"position", @"position",
+			@"updated", @"updated",
+			nil];
+}
+/*
++ (NSDictionary*)elementToRelationshipMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"legislator", @"legislator",
+			@"committee", @"committee",
+			nil];
+}
+*/
++ (NSDictionary*)relationshipToPrimaryKeyPropertyMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"legislator", @"legislatorID",
+			@"committee", @"committeeId",
+			nil];
 }
 
-
-- (NSDictionary *)exportToDictionary {
-	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  self.position, @"position",
-							  self.committee.committeeId, @"committeeId",
-							  self.legislator.legislatorID, @"legislatorID",
-							  nil];
-	return tempDict;
++ (NSString*)primaryKeyProperty {
+	return @"committeePositionID";
+}
+/*
+- (void)setCommitteeId:(NSNumber *)newID {
+	NSString *key = @"committeeId";
+	[self willChangeValueForKey:key];
+	[self setPrimitiveValue:newID forKey:key];
+	
+	CommitteeObj *newComm = [CommitteeObj objectWithPrimaryKeyValue:newID];
+	self.committee = newComm;
+	
+	[self didChangeValueForKey:key];
 }
 
+- (void)setLegislatorID:(NSNumber *)newID {
+	NSString *key = @"legislatorID";
+	[self willChangeValueForKey:key];
+	[self setPrimitiveValue:newID forKey:key];
+	
+	LegislatorObj *newObj = [LegislatorObj objectWithPrimaryKeyValue:newID];
+	self.legislator = newComm;
+	
+	[self didChangeValueForKey:key];
+}
+*/
 - (id)proxyForJson {
-    return [self exportToDictionary];
+	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
+	return tempDict;	
 }
 
 - (NSString*)positionString {

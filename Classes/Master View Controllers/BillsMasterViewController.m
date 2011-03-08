@@ -164,7 +164,7 @@
 				// push the detail view controller onto the navigation stack to display it				
 				[self.navigationController pushViewController:self.detailViewController animated:YES];
 				self.detailViewController = nil;
-			}
+			}			
 		}			
 	}
 //	WE'RE CLICKING ON ONE OF OUR STANDARD MENU ITEMS
@@ -174,32 +174,31 @@
 		// save off this item's selection to our AppDelegate
 		[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
 	
+		if (!dataObject || ![dataObject isKindOfClass:[NSDictionary class]])
+			return;
+
+		NSString *theClass = [dataObject objectForKey:@"class"];
+		if (!theClass || !NSClassFromString(theClass))
+			return;
+		
 		// create a BillsMenuDetailViewController. This controller will display the full size tile for the element
-		if (self.detailViewController == nil) {
-			if (!dataObject || ![dataObject isKindOfClass:[NSDictionary class]])
-				return;
-			
-			NSString *theClass = [dataObject objectForKey:@"class"];
-			if (!theClass || !NSClassFromString(theClass))
-				return;
-			
+		if (self.detailViewController == nil || ![self.detailViewController isKindOfClass:NSClassFromString(theClass)]) {
 			if ([theClass isEqualToString:@"BillsFavoritesViewController"])
 				self.detailViewController = [[[NSClassFromString(theClass) alloc] initWithNibName:nil bundle:nil] autorelease];
 			else
 				self.detailViewController = [[[NSClassFromString(theClass) alloc] initWithNibName:theClass bundle:nil] autorelease];
 		}
-		if (dataObject) {
-			if ([self.detailViewController respondsToSelector:@selector(setSelectedMenu:)])
-				[self.detailViewController setValue:dataObject forKey:@"selectedMenu"];
-			if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
-				[self searchBarCancelButtonClicked:nil];
-			}
-			if (isSplitViewDetail == NO) {
-				// push the detail view controller onto the navigation stack to display it				
-				[self.navigationController pushViewController:self.detailViewController animated:YES];
-				self.detailViewController = nil;
-			}
+		if ([self.detailViewController respondsToSelector:@selector(setSelectedMenu:)])
+			[self.detailViewController setValue:dataObject forKey:@"selectedMenu"];
+		if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
+			[self searchBarCancelButtonClicked:nil];
 		}
+		if (isSplitViewDetail == NO) {
+			// push the detail view controller onto the navigation stack to display it				
+			[self.navigationController pushViewController:self.detailViewController animated:YES];
+			self.detailViewController = nil;
+		}
+
 	}
 }
 

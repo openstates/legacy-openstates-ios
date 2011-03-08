@@ -16,113 +16,70 @@
 @implementation DistrictOfficeObj 
 
 @dynamic chamber;
-@dynamic spanLat;
 @dynamic pinColorIndex;
+@dynamic spanLat;
+@dynamic spanLon;
 @dynamic longitude;
-@dynamic stateCode;
 @dynamic latitude;
 @dynamic formattedAddress;
+@dynamic stateCode;
 @dynamic address;
 @dynamic city;
 @dynamic county;
 @dynamic phone;
 @dynamic fax;
 @dynamic district;
-@dynamic spanLon;
 @dynamic zipCode;
 @dynamic legislator;
+@dynamic districtOfficeID;
+@dynamic legislatorID;
+@dynamic updated;
 
+#pragma mark RKObjectMappable methods
 
-- (id) initWithCoder: (NSCoder *)coder
-{
-    if (self = [super init])
-    {
-        self.district = [coder decodeObjectForKey:@"district"];
-        self.chamber = [coder decodeObjectForKey:@"chamber"];
-		self.pinColorIndex = [coder decodeObjectForKey:@"pinColorIndex"];
-		self.longitude = [coder decodeObjectForKey:@"longitude"];
-		self.latitude = [coder decodeObjectForKey:@"latitude"];
-		self.spanLon = [coder decodeObjectForKey:@"spanLon"];
-		self.spanLat = [coder decodeObjectForKey:@"spanLat"];
-		self.stateCode = [coder decodeObjectForKey:@"stateCode"];
-		self.formattedAddress = [coder decodeObjectForKey:@"formattedAddress"];
-		self.address = [coder decodeObjectForKey:@"address"];
-		self.city = [coder decodeObjectForKey:@"city"];
-		self.county = [coder decodeObjectForKey:@"county"];
-		self.phone = [coder decodeObjectForKey:@"phone"];
-		self.fax = [coder decodeObjectForKey:@"fax"];
-		self.zipCode = [coder decodeObjectForKey:@"zipCode"];
-		
-		NSNumber *legislatorID = [coder decodeObjectForKey:@"legislatorID"];
-		if (legislatorID)
-			self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
-//		else	// Turned this off because there were some old offices that shouldn't be tied to anyone.
-//			self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
-    }
-	return self;
++ (NSDictionary*)elementToPropertyMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"districtOfficeID", @"districtOfficeID",
+			@"district", @"district",
+			@"chamber", @"chamber",
+			@"pinColorIndex", @"pinColorIndex",
+			@"spanLat", @"spanLat",
+			@"spanLon", @"spanLon",
+			@"longitude", @"longitude",
+			@"latitude", @"latitude",
+			@"formattedAddress", @"formattedAddress",
+			@"stateCode", @"stateCode",
+			@"address", @"address",
+			@"city", @"city",
+			@"county", @"county",
+			@"phone", @"phone",
+			@"fax", @"fax",
+			@"zipCode", @"zipCode",
+			@"legislatorID", @"legislatorID",
+			@"updated", @"updated",
+			nil];
+}
+/*
++ (NSDictionary*)elementToRelationshipMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"legislator", @"legislator",
+			nil];
+}
+*/
++ (NSDictionary*)relationshipToPrimaryKeyPropertyMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"legislator", @"legislatorID",
+			nil];
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder;
-{
-	NSDictionary *tempDict = [self exportToDictionary];
-	for (NSString *key in [tempDict allKeys]) {
-		id object = [tempDict objectForKey:key];
-		[coder encodeObject:object];	
-	}
++ (NSString*)primaryKeyProperty {
+	return @"districtOfficeID";
 }
 
-- (void) importFromDictionary: (NSDictionary *)dictionary
-{
-	if (dictionary) {
-		self.district = [dictionary objectForKey:@"district"];
-		self.chamber = [dictionary objectForKey:@"chamber"];
-		self.pinColorIndex = [dictionary objectForKey:@"pinColorIndex"];
-		self.longitude = [dictionary objectForKey:@"longitude"];
-		self.latitude = [dictionary objectForKey:@"latitude"];
-		self.spanLon = [dictionary objectForKey:@"spanLon"];
-		self.spanLat = [dictionary objectForKey:@"spanLat"];
-		self.stateCode = [dictionary objectForKey:@"stateCode"];
-		self.formattedAddress = [dictionary objectForKey:@"formattedAddress"];
-		self.address = [dictionary objectForKey:@"address"];
-		self.city = [dictionary objectForKey:@"city"];
-		self.county = [dictionary objectForKey:@"county"];
-		self.phone = [dictionary objectForKey:@"phone"];
-		self.fax = [dictionary objectForKey:@"fax"];
-		self.zipCode = [dictionary objectForKey:@"zipCode"];
-		
-		NSNumber *legislatorID = [dictionary objectForKey:@"legislatorID"];
-		if (legislatorID)
-			self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
-//		else // Turned this off because there were some old offices that shouldn't be tied to anyone.
-//			self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
-	}
-}
-
-
-- (NSDictionary *)exportToDictionary {
-	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  self.district, @"district",
-							  self.chamber, @"chamber",
-							  self.pinColorIndex, @"pinColorIndex",
-							  self.longitude, @"longitude",
-							  self.latitude, @"latitude",
-							  self.spanLon, @"spanLon",
-							  self.spanLat, @"spanLat",
-							  self.stateCode, @"stateCode",
-							  self.formattedAddress, @"formattedAddress",
-							  self.address, @"address",
-							  self.city, @"city",
-							  self.county, @"county",
-							  self.phone, @"phone",
-							  self.fax, @"fax",
-							  self.zipCode, @"zipCode",
-							  self.legislator.legislatorID, @"legislatorID",
-							  nil];
-	return tempDict;
-}
 
 - (id)proxyForJson {
-    return [self exportToDictionary];
+	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
+	return tempDict;
 }
 
 // we're overriding what's stored in core data ... is this a good idea?

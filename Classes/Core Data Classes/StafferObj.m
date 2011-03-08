@@ -8,7 +8,6 @@
 
 #import "StafferObj.h"
 #import "LegislatorObj.h"
-#import "TexLegeCoreDataUtils.h"
 
 @implementation StafferObj 
 
@@ -17,40 +16,43 @@
 @dynamic email;
 @dynamic name;
 @dynamic stafferID;
-@dynamic legislator;
 @dynamic legislatorID;
+@dynamic legislator;
+@dynamic updated;
 
+#pragma mark RKObjectMappable methods
 
-- (void) importFromDictionary: (NSDictionary *)dictionary
-{
-	if (dictionary) {
-		self.phone = [dictionary objectForKey:@"phone"];
-		self.title = [dictionary objectForKey:@"title"];
-		self.email = [dictionary objectForKey:@"email"];
-		self.name = [dictionary objectForKey:@"name"];
-		self.stafferID = [dictionary objectForKey:@"stafferID"];
-		
-		NSNumber *legislatorID = [dictionary objectForKey:@"legislatorID"];
-		if (legislatorID)
-			self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
-	}
++ (NSDictionary*)elementToPropertyMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"phone", @"phone",
+			@"stafferID", @"stafferID",
+			@"legislatorID", @"legislatorID",
+			@"name", @"name",
+			@"email", @"email",
+			@"title", @"title",
+			@"updated", @"updated",
+			nil];
+}
+/*
++ (NSDictionary*)elementToRelationshipMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"legislator", @"legislator",
+			nil];
+}
+*/
++ (NSDictionary*)relationshipToPrimaryKeyPropertyMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"legislator", @"legislatorID",
+			nil];
 }
 
-
-- (NSDictionary *)exportToDictionary {
-	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  self.phone, @"phone",
-							  self.title, @"title",
-							  self.email, @"email",
-							  self.name, @"name",
-							  self.stafferID, @"stafferID",
-							  self.legislator.legislatorID, @"legislatorID",
-							  nil];
-	return tempDict;
++ (NSString*)primaryKeyProperty {
+	return @"stafferID";
 }
 
 - (id)proxyForJson {
-    return [self exportToDictionary];
+	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
+	return tempDict;	
 }
 
 @end

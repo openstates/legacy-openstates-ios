@@ -9,6 +9,10 @@
 #import "LegislatorObj.h"
 #import "CommitteePositionObj.h"
 #import "TexLegeCoreDataUtils.h"
+#import "DistrictMapObj.h"
+#import "StafferObj.h"
+#import "DistrictOfficeObj.h"
+#import "WnomObj.h"
 
 @implementation LegislatorObj 
 
@@ -36,14 +40,12 @@
 @dynamic email;
 @dynamic twitter;
 
-//@dynamic staff;
 @dynamic cap_office;
 @dynamic cap_phone;
 @dynamic cap_phone2;
 @dynamic cap_phone2_name;
 @dynamic cap_fax;
 
-@dynamic districtMap;
 @dynamic notes;
 
 @dynamic committeePositions;
@@ -61,119 +63,84 @@
 @dynamic votesmartID;
 @dynamic votesmartOfficeID;
 @dynamic staffers;
+@dynamic updated;
 
+@dynamic districtMap;
 
-- (void) importFromDictionary: (NSDictionary *)dictionary
-{
-	if (dictionary) {
-		self.legislatorID = [dictionary objectForKey:@"legislatorID"];
-				
-		self.firstname = [dictionary objectForKey:@"firstname"];
-		self.middlename = [dictionary objectForKey:@"middlename"];
-		self.lastname = [dictionary objectForKey:@"lastname"];
-		self.nickname = [dictionary objectForKey:@"nickname"];
-		self.suffix = [dictionary objectForKey:@"suffix"];
-		
-		self.legtype = [dictionary objectForKey:@"legtype"];
-		self.legtype_name = [dictionary objectForKey:@"legtype_name"];
-		self.district = [dictionary objectForKey:@"district"];
-		self.party_id = [dictionary objectForKey:@"party_id"];
-		self.party_name = [dictionary objectForKey:@"party_name"];
-		self.partisan_index = [dictionary objectForKey:@"partisan_index"];
-		
-		self.photo_name = [dictionary objectForKey:@"photo_name"];
-		self.bio_url = [dictionary objectForKey:@"bio_url"];
-		self.tenure = [dictionary objectForKey:@"tenure"];
-		self.email = [dictionary objectForKey:@"email"];
-		
-		if ([[NSNull null] isEqual:[dictionary objectForKey:@"twitter"]] || ![dictionary objectForKey:@"twitter"])
-			self.twitter = @"";
-		else
-			self.twitter = [dictionary objectForKey:@"twitter"];
-		
-		//self.staff = [dictionary objectForKey:@"staff"];
-		self.cap_office = [dictionary objectForKey:@"cap_office"];
-		self.cap_phone = [dictionary objectForKey:@"cap_phone"];
-		self.cap_phone2 = [dictionary objectForKey:@"cap_phone2"];
-		self.cap_phone2_name = [dictionary objectForKey:@"cap_phone2_name"];
-		self.cap_fax = [dictionary objectForKey:@"cap_fax"];
-		self.notes = [dictionary objectForKey:@"notes"];		
+#pragma mark RKObjectMappable methods
 
-		self.transDataContributorID = [dictionary objectForKey:@"transDataContributorID"];
-
-		self.nextElection = [dictionary objectForKey:@"nextElection"];
-		self.nimsp_id = [dictionary objectForKey:@"nimsp_id"];
-		self.openstatesID = [dictionary objectForKey:@"openstatesID"];
-		self.photo_url = [dictionary objectForKey:@"photo_url"];
-		self.preferredname = [dictionary objectForKey:@"preferredname"];
-		self.stateID = [dictionary objectForKey:@"stateID"];
-		self.txlonline_id = [dictionary objectForKey:@"txlonline_id"];
-		self.votesmartDistrictID = [dictionary objectForKey:@"votesmartDistrictID"];
-		self.votesmartID = [dictionary objectForKey:@"votesmartID"];
-		self.votesmartOfficeID = [dictionary objectForKey:@"votesmartOfficeID"];
-		
-	}
++ (NSDictionary*)elementToPropertyMappings {	
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"partisan_index", @"partisan_index",
+			@"bio_url", @"bio_url",
+			@"cap_fax", @"cap_fax",
+			@"cap_office", @"cap_office",
+			@"cap_phone", @"cap_phone",
+			@"cap_phone2", @"cap_phone2",
+			@"cap_phone2_name", @"cap_phone2_name",
+			@"district", @"district",
+			@"email", @"email",
+			@"firstname", @"firstname",
+			@"lastname", @"lastname",
+			@"legislatorID", @"legislatorID",
+			@"legtype", @"legtype",
+			@"legtype_name", @"legtype_name",
+			@"middlename", @"middlename",
+			@"nextElection", @"nextElection",
+			@"nickname", @"nickname",
+			@"nimsp_id", @"nimsp_id",
+			@"notes", @"notes",
+			@"openstatesID", @"openstatesID",
+			@"party_id", @"party_id",
+			@"party_name", @"party_name",
+			@"photo_name", @"photo_name",
+			@"photo_url", @"photo_url",
+			@"preferredname", @"preferredname",
+			@"stateID", @"stateID",
+			@"suffix", @"suffix",
+			@"tenure", @"tenure",
+			@"transDataContributorID", @"transDataContributorID",
+			@"twitter", @"twitter",
+			@"txlonline_id", @"txlonline_id",
+			@"votesmartDistrictID", @"votesmartDistrictID",
+			@"votesmartID", @"votesmartID",
+			@"votesmartOfficeID", @"votesmartOfficeID",
+			@"updated",@"updated",
+			nil];
+}
+/*
++ (NSDictionary*)elementToRelationshipMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"committeePositions", @"committeePositions.committeePosition",
+			@"districtOffices", @"districtOffices.districtOffice",
+			@"wnomScores", @"wnomScores.wnomScore",
+			@"staffers", @"staffers.staffer",
+			nil];
+}
+*/
++ (NSString*)primaryKeyProperty {
+	return @"legislatorID";
 }
 
-- (NSDictionary *)exportToDictionary {
-	NSMutableDictionary *tempDict = [NSMutableDictionary dictionary];
-	[tempDict setObject:self.legislatorID forKey:@"legislatorID"];
-	[tempDict setObject:self.firstname forKey:@"firstname"];
-	[tempDict setObject:self.middlename forKey:@"middlename"];
-	[tempDict setObject:self.lastname forKey:@"lastname"];
-	[tempDict setObject:self.nickname forKey:@"nickname"];
-	[tempDict setObject:self.suffix forKey:@"suffix"];
-	
-	[tempDict setObject:self.legtype forKey:@"legtype"];
-	[tempDict setObject:self.legtype_name forKey:@"legtype_name"];
-	[tempDict setObject:self.district forKey:@"district"];
-	[tempDict setObject:self.party_id forKey:@"party_id"];
-	[tempDict setObject:self.party_name forKey:@"party_name"];
-	[tempDict setObject:self.partisan_index forKey:@"partisan_index"];
-	
-	[tempDict setObject:self.photo_name forKey:@"photo_name"];
-	[tempDict setObject:self.bio_url forKey:@"bio_url"];
-	[tempDict setObject:self.tenure forKey:@"tenure"];
-	[tempDict setObject:self.email forKey:@"email"];
-	if (self.twitter)
-		[tempDict setObject:self.twitter forKey:@"twitter"];
-	else
-		[tempDict setObject:@"" forKey:@"twitter"];
-	
-	//[tempDict setObject:self.staff forKey:@"staff"];
-	[tempDict setObject:self.cap_office forKey:@"cap_office"];
-	[tempDict setObject:self.cap_phone forKey:@"cap_phone"];
-	[tempDict setObject:self.cap_phone2 forKey:@"cap_phone2"];
-	[tempDict setObject:self.cap_phone2_name forKey:@"cap_phone2_name"];
-	[tempDict setObject:self.cap_fax forKey:@"cap_fax"];
-	[tempDict setObject:self.notes forKey:@"notes"];
 
-	[tempDict setObject:self.transDataContributorID forKey:@"transDataContributorID"];
-	
-	[tempDict setObject:self.nextElection forKey:@"nextElection"];
-	[tempDict setObject:self.nimsp_id forKey:@"nimsp_id"];
-	[tempDict setObject:self.openstatesID forKey:@"openstatesID"];
-	[tempDict setObject:self.photo_url forKey:@"photo_url"];
-	[tempDict setObject:self.preferredname forKey:@"preferredname"];
-	[tempDict setObject:self.stateID forKey:@"stateID"];
-	[tempDict setObject:self.txlonline_id forKey:@"txlonline_id"];
-	[tempDict setObject:self.votesmartDistrictID forKey:@"votesmartDistrictID"];
-	[tempDict setObject:self.votesmartID forKey:@"votesmartID"];
-	[tempDict setObject:self.votesmartOfficeID forKey:@"votesmartOfficeID"];
-
-	return tempDict;
-}
-
-- (id)proxyForJson {
-    return [self exportToDictionary];
+- (id)proxyForJson {					 
+	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
+	return tempDict;	
 }
 
 - (NSComparisonResult)compareMembersByName:(LegislatorObj *)p
 {	
 	return [[self fullNameLastFirst] compare: [p fullNameLastFirst]];	
 }
-
-
+/*
+- (DistrictMapObj *)districtMap {
+	DistrictMapObj *aDistrict = nil;
+	if (self.district && self.legtype) {
+		aDistrict = [TexLegeCoreDataUtils districtMapForDistrict:self.district andChamber:self.legtype lightProperties:YES];
+		//aDistrict.legislator = self;		// should we do this, since we already do it in the map object?
+	}
+	return aDistrict;
+}*/
 
 - (NSString *) lastnameInitial {
 	[self willAccessValueForKey:@"lastnameInitial"];
@@ -321,6 +288,12 @@
 {
 	return [[self.committeePositions allObjects] 
 							sortedArrayUsingSelector:@selector(comparePositionAndCommittee:)];
+}
+
+- (NSArray *)sortedStaffers {
+	NSSortDescriptor *sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES] autorelease];
+	return [[self.staffers allObjects] 
+			sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
 }
 
 - (NSString *)districtMapURL

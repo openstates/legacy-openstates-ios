@@ -40,11 +40,6 @@
 
 #pragma mark -
 #pragma mark View lifecycle
-/*
- - (void) configureWithManagedObjectContext:(NSManagedObjectContext *)context {
-	[super configureWithManagedObjectContext:context];	
-}
-*/
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -62,12 +57,13 @@
 	self.chamberControl.tintColor = [TexLegeTheme accent];
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
 	self.navigationItem.titleView = self.chamberControl;
-	
-	NSArray *committeeList = [TexLegeCoreDataUtils allObjectIDsInEntityNamed:@"CommitteeObj" context:self.managedObjectContext];
-	if (!committeeList || [[NSNull null] isEqual:committeeList] || [committeeList count] == 0) {
+	/*
+	NSError *error = nil;
+	NSInteger count = [CommitteeObj count:&error];
+	if (error || count == 0) {
 		self.navigationController.tabBarItem.enabled = NO;
 		return;
-	}
+	}*/
 	
 	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
 		self.selectObjectOnAppear = [self firstDataObject];
@@ -122,8 +118,8 @@
 	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]) && (self.splitViewController != nil);
 	
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
-	if ([dataObject isKindOfClass:[NSManagedObject class]])
-		[appDelegate setSavedTableSelection:[dataObject objectID] forKey:self.viewControllerKey];
+	if ([dataObject isKindOfClass:[RKManagedObject class]])
+		[appDelegate setSavedTableSelection:[dataObject primaryKeyValue] forKey:self.viewControllerKey];
 	else
 		[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
 		

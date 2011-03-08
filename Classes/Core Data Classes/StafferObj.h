@@ -6,13 +6,21 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <CoreData/CoreData.h>
-#import "TexLegeDataObjectProtocol.h"
+#import <RestKit/RestKit.h>
+#import <RestKit/CoreData/CoreData.h>
 
 @class LegislatorObj;
 
-@interface StafferObj :  NSManagedObject <TexLegeDataObjectProtocol>
+@interface StafferObj :  RKManagedObject
 {
+	NSNumber * stafferID;
+	NSNumber * legislatorID;
+	NSString * name;
+	NSString * title;
+	NSString * phone;
+	NSString * email;
+	NSString * updated;	
+	LegislatorObj * legislator;
 }
 
 @property (nonatomic, retain) NSString * phone;
@@ -22,6 +30,7 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * stafferID;
 @property (nonatomic, retain) LegislatorObj * legislator;
+@property (nonatomic, retain) NSString * updated;
 
 @end
 

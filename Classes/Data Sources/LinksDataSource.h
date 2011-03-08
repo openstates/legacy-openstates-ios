@@ -12,9 +12,7 @@
 }
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
-
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
+@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
 
 @end
  

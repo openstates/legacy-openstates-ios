@@ -7,6 +7,7 @@
 //
 
 #import "LegislatorDetailDataSource.h"
+#import "TexLegeCoreDataUtils.h"
 
 #import "LegislatorObj.h"
 #import "TexLegeTheme.h"
@@ -35,7 +36,7 @@
 
 
 @implementation LegislatorDetailDataSource
-@synthesize legislator, sectionArray;
+@synthesize dataObjectID, sectionArray;
 
 - (id)initWithLegislator:(LegislatorObj *)newObject {
 	if (self = [super init]) {
@@ -47,26 +48,33 @@
 
 - (void)dealloc {
 	self.sectionArray = nil;
-	self.legislator = nil;
+	self.dataObjectID = nil;
 	
     [super dealloc];
 }
 
-- (NSManagedObjectContext *)managedObjectContext {
-	return [self.legislator managedObjectContext];
+- (LegislatorObj *)legislator {
+	LegislatorObj *anObject = nil;
+	if (self.dataObjectID) {
+		@try {
+			anObject = [LegislatorObj objectWithPrimaryKeyValue:self.dataObjectID];
+		}
+		@catch (NSException * e) {
+		}
+	}
+	return anObject;
 }
 
 - (void)setLegislator:(LegislatorObj *)newLegislator {
-	
-	if (legislator) [legislator release], legislator = nil;
+	self.dataObjectID = nil;
 	if (newLegislator) {
-		legislator = [newLegislator retain];
+		self.dataObjectID = newLegislator.legislatorID;
 		
 		[self createSectionList];		
 	}
 }
 
-- (void) createSectionList {
+- (void) createSectionList {	
 	NSInteger numberOfSections = 4 + [self.legislator numberOfDistrictOffices];
 	
 	NSString *tempString = nil;
@@ -231,7 +239,7 @@
 	/*	Section 1: Staffers */
 	
 	if ([self.legislator numberOfStaffers] > 0) {
-		for (StafferObj *staffer in self.legislator.staffers) {
+		for (StafferObj *staffer in [self.legislator sortedStaffers]) {
 			entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 						 staffer.title, @"subtitle",
 						 staffer.email, @"entryValue",
@@ -526,6 +534,5 @@
 	return cell;
 	
 }
-
 
 @end

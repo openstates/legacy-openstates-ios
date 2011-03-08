@@ -42,8 +42,8 @@
 }
 
 
-- (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
-	[super configureWithManagedObjectContext:context];	
+- (void)configure {
+	[super configure];	
 	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
 		self.selectObjectOnAppear = [self firstDataObject];
 }
@@ -189,8 +189,8 @@ NSIndexPath *current = nil;
 	if (!dataObject)
 		return;
 	
-	if ([dataObject isKindOfClass:[NSManagedObject class]])
-		[appDelegate setSavedTableSelection:[dataObject objectID] forKey:self.viewControllerKey];
+	if ([dataObject isKindOfClass:[RKManagedObject class]])
+		[appDelegate setSavedTableSelection:[dataObject primaryKeyValue] forKey:self.viewControllerKey];
 	else
 		[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
 	

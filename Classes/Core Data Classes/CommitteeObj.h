@@ -6,13 +6,29 @@
 //  Copyright 2009 Gregory S. Combs. All rights reserved.
 //
 
-#import <CoreData/CoreData.h>
+#import <RestKit/RestKit.h>
+#import <RestKit/CoreData/CoreData.h>
 #import "TexLegeDataObjectProtocol.h"
 
 @class CommitteePositionObj, LegislatorObj;
 
-@interface CommitteeObj :  NSManagedObject  <TexLegeDataObjectProtocol>
+@interface CommitteeObj :  RKManagedObject
 {
+	NSNumber * committeeId;
+	NSString * committeeName;
+	NSNumber * committeeType;
+	NSNumber * parentId;
+	NSString * url;
+	NSString * committeeNameInitial;
+	NSString * clerk;
+	NSString * clerk_email;
+	NSString * phone;
+	NSString * office;
+	NSNumber * votesmartID;
+	NSString * openstatesID;
+	NSString * txlonline_id;
+	NSString * updated;
+	NSSet * committeePositions;	
 }
 
 @property (nonatomic, retain) NSNumber * parentId;
@@ -30,6 +46,7 @@
 @property (nonatomic, retain) NSNumber * votesmartID;
 @property (nonatomic, retain) NSString * openstatesID;
 @property (nonatomic, retain) NSString * txlonline_id;
+@property (nonatomic, retain) NSString * updated;
 
 - (NSString *) typeString;
 - (NSString *) description;

@@ -7,46 +7,54 @@
 //
 
 #import "WnomObj.h"
-
 #import "LegislatorObj.h"
 #import "TexLegeCoreDataUtils.h"
 
 @implementation WnomObj 
 
+@dynamic wnomID;
+@dynamic legislatorID;
 @dynamic wnomAdj;
 @dynamic session;
 @dynamic wnomStderr;
 @dynamic legislator;
 @dynamic adjMean;
+@dynamic updated;
 
-- (void) importFromDictionary: (NSDictionary *)dictionary
-{
-	if (dictionary) {
-		self.wnomAdj = [dictionary objectForKey:@"wnomAdj"];
-		self.session = [dictionary objectForKey:@"session"];
-		self.wnomStderr = [dictionary objectForKey:@"wnomStderr"];
-		self.adjMean = [dictionary objectForKey:@"adjMean"];
-		
-		NSNumber *legislatorID = [dictionary objectForKey:@"legislatorID"];
-		if (legislatorID)
-			self.legislator = [TexLegeCoreDataUtils legislatorWithLegislatorID:legislatorID withContext:[self managedObjectContext]];
-	}
+#pragma mark RKObjectMappable methods
+
++ (NSDictionary*)elementToPropertyMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"wnomID", @"wnomID",
+			@"legislatorID", @"legislatorID",
+			@"wnomAdj", @"wnomAdj",
+			@"session", @"session",
+			@"wnomStderr", @"wnomStderr",
+			@"adjMean", @"adjMean",
+			@"updated", @"updated",
+			nil];
+}
+/*
++ (NSDictionary*)elementToRelationshipMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"legislator", @"legislator",
+			nil];
+}
+*/
++ (NSDictionary*)relationshipToPrimaryKeyPropertyMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"legislator", @"legislatorID",
+			nil];
 }
 
 
-- (NSDictionary *)exportToDictionary {
-	NSDictionary *tempDict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  self.wnomAdj, @"wnomAdj",
-							  self.session, @"session",
-							  self.wnomStderr, @"wnomStderr",
-							  self.adjMean, @"adjMean",
-							  self.legislator.legislatorID, @"legislatorID",
-							  nil];
-	return tempDict;
++ (NSString*)primaryKeyProperty {
+	return @"wnomID";
 }
 
 - (id)proxyForJson {
-    return [self exportToDictionary];
+	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
+	return tempDict;	
 }
 
 - (NSNumber *) year {

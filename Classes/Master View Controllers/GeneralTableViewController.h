@@ -10,19 +10,20 @@
 #import "TableDataSourceProtocol.h"
 @interface GeneralTableViewController : UITableViewController <UITableViewDelegate> {
 	IBOutlet id detailViewController;
-	IBOutlet NSManagedObjectContext *managedObjectContext;
 	IBOutlet id<TableDataSource> dataSource;
 	id					selectObjectOnAppear;
 }
 
-@property (nonatomic,retain) IBOutlet NSManagedObjectContext *managedObjectContext;
+#ifdef BUILTINNOTRESTKIT
+@property (nonatomic,readonly) NSManagedObjectContext *managedObjectContext;
+#endif
 
 @property (nonatomic,retain) IBOutlet id<TableDataSource> dataSource;
 @property (nonatomic,retain) IBOutlet id detailViewController;
 @property (nonatomic,readonly) NSString			*viewControllerKey;
 @property (nonatomic,retain) id					selectObjectOnAppear;
 
-- (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context;
+- (void)configure;
 - (void)runLoadView;
 - (Class)dataSourceClass;
 - (IBAction)selectDefaultObject:(id)sender;

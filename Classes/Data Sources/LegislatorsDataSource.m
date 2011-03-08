@@ -7,14 +7,14 @@
 //
 
 #import "LegislatorsDataSource.h"
+#import "TexLegeCoreDataUtils.h"
 #import "LegislatorObj.h"
 #import "WnomObj.h"
 #import "UtilityMethods.h"
-//#import "ImageCache.h"
 #import "TexLegeTheme.h"
 #import "LegislatorMasterCell.h"
 #import "UIDevice-Hardware.h"
-//#import "NSData+Encryption.h"
+#import "TexLegeAppDelegate.h"
 
 @interface LegislatorsDataSource (Private)
 - (void)dataSourceReceivedMemoryWarning:(id)sender;
@@ -23,15 +23,20 @@
 
 @implementation LegislatorsDataSource
 
-@synthesize fetchedResultsController, managedObjectContext;
+@synthesize fetchedResultsController;
 @synthesize hideTableIndex;
 @synthesize filterChamber, filterString, searchDisplayController;
 
+- (Class)dataClass {
+	return [LegislatorObj class];
+}
 
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
+- (NSManagedObjectContext *)managedObjectContext {
+	return [LegislatorObj managedObjectContext];
+}
+
+- (id)init {
 	if (self = [super init]) {
-		if (newContext)
-			managedObjectContext = [newContext retain];
 	
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
@@ -41,10 +46,16 @@
 													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(resetData:) name:@"DATAMODEL_UPDATED" object:nil];
-		
+												 selector:@selector(resetCoreData:) name:@"RESTKIT_LOADED_LEGISLATOROBJ" object:nil];
 	}
 	return self;
+}
+
+- (void)resetCoreData:(NSNotificationCenter *)notification {
+	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
+	self.fetchedResultsController = nil;
+	NSError *error = nil;
+	[self.fetchedResultsController performFetch:&error];
 }
 
 - (void)dealloc {	
@@ -52,7 +63,6 @@
 
 	self.fetchedResultsController = nil;
 	self.searchDisplayController = nil;
-	self.managedObjectContext = nil;	// I THINK THIS IS CORRECT, SINCE WE'VE SYNTHESIZED IT AS RETAIN...
 	self.filterString = nil;
 	
     [super dealloc];
@@ -63,12 +73,6 @@
 	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
 		[self.managedObjectContext refreshObject:object mergeChanges:NO];
 	}
-}
-
-- (void)resetData:(NSNotificationCenter *)notification {
-	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
-	NSError *error = nil;
-	[self.fetchedResultsController performFetch:&error];
 }
 
 #pragma mark -
@@ -164,13 +168,12 @@
 	if (count > 1 /*&! self.hasFilter*/)  {
 		return count; 
 	}
-	return 1;	
+	return 0;	
 }
 
 // This is for the little index along the right side of the table ... use nil if you don't want it.
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
 	return  hideTableIndex ? nil : [self.fetchedResultsController sectionIndexTitles] ;
-	//return  nil ;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
@@ -192,12 +195,18 @@
 	// [A,B,C,D,E,F,G,H,I,K,L,M,N,O,P,R,S,T,U,V,X,Y,Z]
 	// return the letter that represents the requested section
 	
+	NSString *headerTitle = nil;
 	NSInteger count = [[self.fetchedResultsController sections] count];		
 	if (count > 1 /*&! self.hasFilter*/)  {
 		id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
-		return [sectionInfo indexTitle]; // or [sectionInfo name];
+		headerTitle = [sectionInfo indexTitle];
+		if (!headerTitle)
+			headerTitle = [sectionInfo name];
 	}
-	return @"";
+	if (!headerTitle)
+		headerTitle = @"";
+
+	return headerTitle;
 }
 
 #pragma mark -
@@ -288,17 +297,10 @@
     
     if (fetchedResultsController != nil) {
         return fetchedResultsController;
-    }
-    
+    }    
 	// Create the fetch request for the entity.
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSFetchRequest *fetchRequest = [LegislatorObj fetchRequest];
 	
-	// Get our table-specific Core Data.
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"LegislatorObj" 
-											  inManagedObjectContext:self.managedObjectContext];
-	[fetchRequest setEntity:entity];
-	
-	// Sort by committeeName.
 	NSSortDescriptor *nameInitialSortOrder = [[NSSortDescriptor alloc] initWithKey:@"lastname"
 																   ascending:YES] ;
 	NSSortDescriptor *firstDescriptor = [[NSSortDescriptor alloc] initWithKey:@"firstname"
@@ -316,14 +318,14 @@
 	
 	fetchedResultsController = [[NSFetchedResultsController alloc] 
 															 initWithFetchRequest:fetchRequest 
-															 managedObjectContext:self.managedObjectContext 
+															 managedObjectContext:[LegislatorObj managedObjectContext] 
 															 sectionNameKeyPath:sectionString cacheName:@"Legislators"];
     fetchedResultsController.delegate = self;
 	
-	[fetchRequest release];
 	[nameInitialSortOrder release];	
 	[firstDescriptor release];	
 
 	return fetchedResultsController;
 }    
+
 @end

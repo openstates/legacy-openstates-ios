@@ -9,39 +9,31 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-@interface NSManagedObjectContext (EZFetch)
-
-// Convenience method to fetch the array of objects for a given Entity
-// name in the context, optionally limiting by a predicate or by a predicate
-// made from a format NSString and variable arguments.
-//
-- (NSSet *)fetchObjectsForEntityName:(NSString *)newEntityName withPredicate:(id)stringOrPredicate, ...;
-- (NSArray *)fetchObjectIDsForEntityName:(NSString *)newEntityName withPredicate:(id)stringOrPredicate, ...; 
-
-@end
-
+#if DEBUG
+#define RESTKIT_BASE_URL					@"http://www.texlege.com/jsonDataTest"
+#else
+#define RESTKIT_BASE_URL					@"http://www.texlege.com/rest"
+#endif
 
 @class LegislatorObj, CommitteeObj, DistrictMapObj;
 @interface TexLegeCoreDataUtils : NSObject {
 
 }
-+ (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName context:(NSManagedObjectContext*)context lightProperties:(BOOL)light;
-+ (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName context:(NSManagedObjectContext*)context;
-+ (LegislatorObj*)legislatorForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber withContext:(NSManagedObjectContext*)context;
-+ (LegislatorObj*)legislatorWithLegislatorID:(NSNumber*)legID withContext:(NSManagedObjectContext*)context;
-+ (CommitteeObj*)committeeWithCommitteeID:(NSNumber*)comID withContext:(NSManagedObjectContext*)context;
-+ (DistrictMapObj*)districtMapForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber withContext:(NSManagedObjectContext*)context;
-+ (DistrictMapObj*)districtMapForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber withContext:(NSManagedObjectContext*)context lightProperties:(BOOL)light;
++ (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName lightProperties:(BOOL)light;
++ (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName;
++ (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName;
++ (LegislatorObj*)legislatorForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber;
++ (DistrictMapObj*)districtMapForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber;
++ (DistrictMapObj*)districtMapForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber lightProperties:(BOOL)light;
 
-+ (NSArray *) allLegislatorsSortedByPartisanshipFromChamber:(NSInteger)chamber andPartyID:(NSInteger)party context:(NSManagedObjectContext *)context;
-+ (NSArray *) allDistrictMapsLightWithContext:(NSManagedObjectContext*)context;
-+ (NSArray *)allDistrictMapIDsWithBoundingBoxesContaining:(CLLocationCoordinate2D)coordinate withContext:(NSManagedObjectContext*)context;
-+ (NSArray *) allStaffersForLegislator:(NSNumber *)legislatorID context:(NSManagedObjectContext *)context;
++ (NSArray *) allLegislatorsSortedByPartisanshipFromChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
++ (NSArray *) allDistrictMapsLight;
++ (NSArray *) allDistrictMapIDsWithBoundingBoxesContaining:(CLLocationCoordinate2D)coordinate context:(NSManagedObjectContext *)context;
 
-+ (NSArray*)allObjectIDsInEntityNamed:(NSString*)entityName context:(NSManagedObjectContext*)context;
-+ (NSArray*)allObjectsInEntityNamed:(NSString*)entityName context:(NSManagedObjectContext*)context;
++ (void) deleteAllObjectsInEntityNamed:(NSString*)entityName;
 
-+ (void) deleteAllObjectsInEntityNamed:(NSString*)entityName context:(NSManagedObjectContext*)context;
++ (void)loadDataFromRest:(NSString *)entityName delegate:(id)delegate;
++ (void)initRestKitObjects:(id)sender;
 
 @end
 

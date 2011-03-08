@@ -15,8 +15,8 @@
 // Credits go to:
 // -------------------------------
 // http://stackoverflow.com/questions/2833724/adding-view-on-statusbar-in-iphone
-// http://cocoabyss.com/2010/ios-custom-status-bar/
-// @reederapp
+// http://www.cocoabyss.com/uikit/custom-status-bar-ios/
+// @reederapp for inspiration
 // -------------------------------
 
 #import <Foundation/Foundation.h>
@@ -29,9 +29,9 @@
 
 // Animation that happens, when the user touches the status bar overlay
 typedef enum MTStatusBarOverlayAnimation {
-	MTStatusBarOverlayAnimationNone,	// nothing happens
-	MTStatusBarOverlayAnimationShrink,  // the status bar shrinks to the right side and only shows the activity indicator
-	MTStatusBarOverlayAnimationFallDown	// the status bar falls down and displays more information
+	MTStatusBarOverlayAnimationNone,      // nothing happens
+	MTStatusBarOverlayAnimationShrink,    // the status bar shrinks to the right side and only shows the activity indicator
+	MTStatusBarOverlayAnimationFallDown   // the status bar falls down and displays more information
 } MTStatusBarOverlayAnimation;
 
 
@@ -50,15 +50,20 @@ typedef enum MTMessageType {
 } MTMessageType;
 
 
-// forward-declaration of delegate-protocol
-@protocol MTStatusBarOverlayDelegate;
-
-
+// keys used in the dictionary-representation of a status message
 #define kMTStatusBarOverlayMessageKey			@"MessageText"
 #define kMTStatusBarOverlayMessageTypeKey		@"MessageType"
 #define kMTStatusBarOverlayDurationKey			@"MessageDuration"
 #define kMTStatusBarOverlayAnimationKey			@"MessageAnimation"
 #define kMTStatusBarOverlayImmediateKey			@"MessageImmediate"
+
+// keys used for saving state to NSUserDefaults
+#define kMTStatusBarOverlayStateShrinked        @"kMTStatusBarOverlayStateShrinked"
+
+
+// forward-declaration of delegate-protocol
+@protocol MTStatusBarOverlayDelegate;
+
 
 
 //===========================================================
@@ -74,26 +79,31 @@ typedef enum MTMessageType {
 // messages for free by setting historyEnabled to YES
 @interface MTStatusBarOverlay : UIWindow <UITableViewDataSource> {
 	// holds all subviews, is touchable to change size of Status Bar
-	UIControl *backgroundView_;
+	UIView *backgroundView_;
 	// the view that is shown in animation mode "FallDown" when the user touches the status bar
-	UIControl *detailView_;
-
+	UIView *detailView_;
+	
 	// background of Status Bar Black or gray
 	UIImageView *statusBarBackgroundImageView_;
 	// for displaying Text information
 	UILabel *statusLabel1_;
 	UILabel *statusLabel2_;
 	UILabel *hiddenStatusLabel_;
+    
+    // used for displaying progress-information
+    UIImageView *progressView_;
+    double progress_;
+    
 	// for displaying activity indication
 	UIActivityIndicatorView *activityIndicator_;
 	UILabel *finishedLabel_;
 	// if set to YES, neither activityIndicator nor finishedLabel are shown
 	BOOL hidesActivity_;
-
+	
 	// Image of gray Status Bar
 	UIImage *defaultStatusBarImage_;
 	UIImage *defaultStatusBarImageShrinked_;
-
+	
 	// Animation-Type
 	MTStatusBarOverlayAnimation animation_;
 	// Small size of Status Bar
@@ -105,21 +115,21 @@ typedef enum MTMessageType {
 	BOOL hideInProgress_;
 	// flag that indicates whether currently a message is in the queue
 	BOOL active_;
-
+	
 	// Queue stuff
 	NSMutableArray *messageQueue_;
 	// if YES older immediate messages in the queue get removed, when a new one gets posted
 	BOOL canRemoveImmediateMessagesFromQueue_;
-
+	
 	// Detail View
 	MTDetailViewMode detailViewMode_;
 	NSString *detailText_;
 	UITextView *detailTextView_;
-
+	
 	// Message history (is reset when finish is called)
 	NSMutableArray *messageHistory_;
 	UITableView *historyTableView_;
-
+	
 	// the delegate
 	id<MTStatusBarOverlayDelegate> delegate_;
 }
@@ -129,9 +139,11 @@ typedef enum MTMessageType {
 #pragma mark Properties
 //===========================================================
 // the view that holds all the components of the overlay (except for the detailView)
-@property (nonatomic, retain) UIControl *backgroundView;
+@property (nonatomic, retain) UIView *backgroundView;
 // the detailView is shown when animation is set to "FallDown"
-@property (nonatomic, retain) UIControl *detailView;
+@property (nonatomic, retain) UIView *detailView;
+// the current progress
+@property (nonatomic, assign) double progress;
 // the frame of the status bar when animation is set to "Shrink" and it is shrinked
 @property (nonatomic, assign) CGRect smallFrame;
 // the current active animation
@@ -181,9 +193,12 @@ typedef enum MTMessageType {
 
 // shows an activity indicator and the given message
 - (void)postMessage:(NSString *)message;
+- (void)postMessage:(NSString *)message duration:(NSTimeInterval)duration;
+- (void)postMessage:(NSString *)message duration:(NSTimeInterval)duration animated:(BOOL)animated;
 - (void)postMessage:(NSString *)message animated:(BOOL)animated;
 // clears the message queue and shows this message instantly
 - (void)postImmediateMessage:(NSString *)message animated:(BOOL)animated;
+- (void)postImmediateMessage:(NSString *)message duration:(NSTimeInterval)duration animated:(BOOL)animated;
 
 // shows a checkmark instead of the activity indicator and hides the status bar after the specified duration
 - (void)postFinishMessage:(NSString *)message duration:(NSTimeInterval)duration;
@@ -200,6 +215,12 @@ typedef enum MTMessageType {
 // hides the status bar overlay
 - (void)hide;
 
+// saves the state in NSUserDefaults and synchronizes them
+- (void)saveState;
+- (void)saveStateSynchronized:(BOOL)synchronizeAtEnd;
+// restores the state from NSUserDefaults
+- (void)restoreState;
+
 @end
 
 
@@ -212,6 +233,8 @@ typedef enum MTMessageType {
 
 @protocol MTStatusBarOverlayDelegate <NSObject>
 @optional
+// is called, when a gesture on the overlay is recognized
+- (void)statusBarOverlayDidRecognizeGesture:(UIGestureRecognizer *)gestureRecognizer;
 // is called when the status bar overlay gets hidden
 - (void)statusBarOverlayDidHide;
 // is called, when the status bar overlay changed it's displayed message from one message to another

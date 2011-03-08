@@ -53,12 +53,6 @@
 	return [DistrictOfficeDataSource class];
 }
 
-/*
- - (void)configureWithManagedObjectContext:(NSManagedObjectContext *)context {
- [super configureWithManagedObjectContext:context];	
- }
- */
-
 #pragma mark -
 #pragma mark View lifecycle
 

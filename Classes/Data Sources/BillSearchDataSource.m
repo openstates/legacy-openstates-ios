@@ -179,15 +179,16 @@
 	[responseString release];
     [connection release];
 
-	[_rows sortUsingSelector:@selector(compareBillsByID:)];
-	
-	/* if we wanted blocks, we'd do this instead:
+#if	0 //NS_BLOCKS_AVAILABLE
+	// if we wanted blocks, we'd do this instead:
 	 [_rows sortUsingComparator:^(NSDictionary *item1, NSDictionary *item2) {
 		NSString *bill_id1 = [item1 objectForKey:@"bill_id"];
 		NSString *bill_id2 = [item2 objectForKey:@"bill_id"];
 		return [bill_id1 compare:bill_id2 options:NSNumericSearch];
 	}];
-	 */
+#else
+	[_rows sortUsingSelector:@selector(compareBillsByID:)];
+#endif
 	
 	[self.searchDisplayController.searchResultsTableView reloadData];
 	

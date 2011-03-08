@@ -18,19 +18,12 @@
 
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate> 
 {
-	NSManagedObjectModel *managedObjectModel;
-	NSPersistentStoreCoordinator *persistentStoreCoordinator;	
 }
-@property (nonatomic)		  BOOL				databaseIsCopying;
-@property (nonatomic)		  BOOL				appIsQuitting;
+@property (nonatomic, retain) DataModelUpdateManager *dataUpdater;
 @property (nonatomic, retain) UIWindow			*mainWindow;
 @property (nonatomic, retain) NSMutableDictionary	*savedTableSelection;
+@property (nonatomic)		  BOOL				appIsQuitting;
 
-// For Core Data
-@property (nonatomic, retain)			DataModelUpdateManager *dataUpdater;
-@property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
-@property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 // For Alerts and Modal Dialogs
 @property (nonatomic, retain) AnalyticsOptInAlertController *analyticsOptInController;
@@ -52,9 +45,6 @@
 @property (nonatomic, readonly)  UINavigationController * masterNavigationController, *detailNavigationController;
 
 //- (void)setTabOrderIfSaved;
-#if IMPORTING_DATA == 1
-- (IBAction)saveAction:sender;
-#endif
 
 - (id) savedTableSelectionForKey:(NSString *)vcKey;
 - (void)setSavedTableSelection:(id)object forKey:(NSString *)vcKey;

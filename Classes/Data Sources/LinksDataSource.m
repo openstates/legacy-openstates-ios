@@ -20,7 +20,7 @@ enum Sections {
     NUM_SECTIONS
 };
 
-@synthesize fetchedResultsController, managedObjectContext;
+@synthesize fetchedResultsController;
 
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
@@ -48,10 +48,16 @@ enum Sections {
 	return UITableViewStylePlain;
 } 
 
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
+- (Class)dataClass {
+	return [LinkObj class];
+}
+
+- (NSManagedObjectContext *)managedObjectContext {
+	return [LinkObj managedObjectContext];
+}
+
+- (id)init {
 	if (self = [super init]) {
-		if (newContext) 
-			managedObjectContext = [newContext retain];
 	
 		//NSError *error = nil;
 		/*if (![self.fetchedResultsController performFetch:&error])
@@ -62,17 +68,23 @@ enum Sections {
 												 selector:@selector(dataSourceReceivedMemoryWarning:)
 													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];	
 		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(resetData:) name:@"DATAMODEL_UPDATED" object:nil];		
-		
+												 selector:@selector(resetCoreData:) name:@"RESTKIT_LOADED_LINKOBJ" object:nil];	
 	}
 	return self;
 }
+
+- (void)resetCoreData:(NSNotificationCenter *)notification {
+	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
+	self.fetchedResultsController = nil;
+	NSError *error = nil;
+	[self.fetchedResultsController performFetch:&error];
+}
+
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	self.fetchedResultsController = nil;
-	self.managedObjectContext = nil;	
     [super dealloc];
 }
 
@@ -81,12 +93,6 @@ enum Sections {
 	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
 		[self.managedObjectContext refreshObject:object mergeChanges:NO];
 	}
-}
-
-- (void)resetData:(NSNotificationCenter *)notification {
-	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
-	NSError *error = nil;
-	[self.fetchedResultsController performFetch:&error];
 }
 
 #pragma mark -
@@ -172,15 +178,23 @@ enum Sections {
 	return cell;
 }
 	
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_START" object:self];
+	//    [self.tableView beginUpdates];
+}
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_END" object:self];
+	//    [self.tableView endUpdates];
+}
+
+
 #pragma mark -
 #pragma mark Fetched results controller
 - (NSFetchedResultsController *)fetchedResultsController
 {  
 	if (fetchedResultsController != nil) return fetchedResultsController;
 	
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"LinkObj" inManagedObjectContext:[self managedObjectContext]];
-	[fetchRequest setEntity:entity];
+	NSFetchRequest *fetchRequest = [LinkObj fetchRequest];
 	
 	NSSortDescriptor *sortSection = [[NSSortDescriptor alloc] initWithKey:@"section" ascending:YES];
 	NSSortDescriptor *sortOrder = [[NSSortDescriptor alloc] initWithKey:@"sortOrder" ascending:YES];
@@ -188,11 +202,10 @@ enum Sections {
 	[fetchRequest setSortDescriptors:sortDescriptors];
 	
 	fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
-																								managedObjectContext:managedObjectContext
-																								  sectionNameKeyPath:@"section" cacheName:@"Links"];
+																   managedObjectContext:[LinkObj managedObjectContext]
+																	 sectionNameKeyPath:@"section" cacheName:@"Links"];
 	fetchedResultsController.delegate = self;
 	
-	[fetchRequest release];
 	[sortSection release];
 	[sortOrder release];
 	[sortDescriptors release];

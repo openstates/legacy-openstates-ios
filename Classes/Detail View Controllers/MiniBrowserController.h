@@ -10,6 +10,7 @@
 {
 }
 @property (nonatomic,assign) id dataObject;
+@property (nonatomic,retain) NSNumber *dataObjectID;
 
 @property BOOL m_loadingInterrupted;
 @property (retain) NSURLRequest *m_urlRequestToLoad;

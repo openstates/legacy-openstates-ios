@@ -11,7 +11,6 @@
 @class LegislatorObj;
 
 @interface PartisanIndexStats : NSObject {
-	IBOutlet NSManagedObjectContext *managedObjectContext;
 	//CGFloat	avgRepubHouseIndex, avgDemocHouseIndex, avgRepubSenateIndex, avgDemocSenateIndex;
 	
 @private
@@ -20,20 +19,17 @@
 }
 
 @property (nonatomic, readonly) NSDictionary *partisanIndexAggregates;
-@property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, readonly) NSNumber *currentSessionYear;
 @property (nonatomic, retain) NSString *chartTemplate;
 
 + (PartisanIndexStats *)sharedPartisanIndexStats;
-
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 
 - (CGFloat) minPartisanIndexUsingChamber:(NSInteger)chamber;
 - (CGFloat) maxPartisanIndexUsingChamber:(NSInteger)chamber;
 - (CGFloat) overallPartisanIndexUsingChamber:(NSInteger)chamber;
 - (CGFloat) partyPartisanIndexUsingChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
 
-- (NSDictionary *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber;
+- (NSArray *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber;
 
 - (NSString *)partisanChartForLegislator:(LegislatorObj*)legislator width:(NSString *)width;
 - (BOOL) resetChartCacheIfNecessary;

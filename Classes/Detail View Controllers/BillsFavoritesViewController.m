@@ -6,6 +6,7 @@
 //  Copyright 2011 Gregory S. Combs. All rights reserved.
 //
 
+#import "TexLegeAppDelegate.h"
 #import "BillsFavoritesViewController.h"
 #import "BillsDetailViewController.h"
 #import "JSON.h"
@@ -283,7 +284,11 @@
 													  initWithNibName:@"BillsDetailViewController" bundle:nil] autorelease];
 						
 			[detailView setDataObject:bill];
-			[self.navigationController pushViewController:detailView animated:YES];
+			if (![UtilityMethods isIPadDevice])
+				[self.navigationController pushViewController:detailView animated:YES];
+			else
+				[[[TexLegeAppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:NO];
+			
 		}			
 	}
 }

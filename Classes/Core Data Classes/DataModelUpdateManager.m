@@ -6,48 +6,35 @@
 //  Copyright 2011 Gregory S. Combs. All rights reserved.
 //
 
-#define JSONDATA_VERSIONNAME	@"jsonDataVersion"
-#define JSONDATA_VERSIONFILE	@"jsonDataVersion.json"
-#if DEBUG
-	#define JSONDATA_BASE_URL					@"http://www.texlege.com/jsonDataTest"
-#else
-	//V0-Broken #define JSONDATA_BASE_URL		@"http://www.texlege.com/jsonData"
-	#define JSONDATA_BASE_URL					@"http://www.texlege.com/jsonDataV1"
-#endif
-#define JSONDATA_VERSIONKEY		@"Version"
-#define JSONDATA_TIMESTAMPKEY	@"Timestamp"
-#define JSONDATA_URLKEY			@"URL"
-#define JSONDATA_ENCODING		NSUTF8StringEncoding
-
 #import "DataModelUpdateManager.h"
 #import "JSON.h"
 #import "UtilityMethods.h"
 #import "TexLegeReachability.h"
 #import "TexLegeCoreDataUtils.h"
-#import "TexLegeDataObjectProtocol.h"
-#import "TexLegeAppDelegate.h"
-#import "TexLegeDataImporter.h"
 #import "MTStatusBarOverlay.h"
+#import "LocalyticsSession.h"
+#import "DistrictMapObj.h"
+
+#define JSONDATA_TIMESTAMPFILE	@"dataVersion.json"
+#define JSONDATA_IDKEY			@"id"
+#define JSONDATA_TIMESTAMPKEY	@"updated"
+#define JSONDATA_FILEKEY		@"resource"
+#define JSONDATA_ENCODING		NSUTF8StringEncoding
+
+#define TESTING 0	// turn this on to fake the updater into believing all remote data is newer than local.  
 
 @interface DataModelUpdateManager (Private)
-
-- (NSDictionary *)getRemoteDataModelCatalog;
-- (NSArray *)getListOfAvailableUpdates;
-- (NSArray *)getRemoteModelWithKey:(NSString *)key;
-- (IBAction)saveAction:(id)sender;
-- (BOOL)checkUpdateFinished;
-
+- (NSArray *) localDataTimestamps;
+- (NSArray *) remoteDataTimestamps;
+- (NSArray *) deltaLocalTimestamps:(NSArray *)local toRemote:(NSArray *)remote;
 @end
 
 @implementation DataModelUpdateManager
 
-@synthesize managedObjectContext;
-@synthesize localModelCatalog, remoteModelCatalog, availableUpdates, downloadedUpdates, statusBlurbsAndModels;
+@synthesize availableUpdates, downloadedUpdates, statusBlurbsAndModels;
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext*)newContext {
+- (id) init {
 	if (self=[super init]) {
-		self.managedObjectContext = newContext;	
-		self.remoteModelCatalog = self.localModelCatalog = nil;
 		self.downloadedUpdates = [NSMutableArray array];
 		
 		self.statusBlurbsAndModels = [NSDictionary dictionaryWithObjectsAndKeys: 
@@ -58,12 +45,9 @@
 									  @"Committee Positions", @"CommitteePositionObj",
 									  @"District Offices", @"DistrictOfficeObj",
 									  @"Resources", @"LinkObj",
-									  @"District Maps", @"DistrictMapObj", nil];		
-		
-		[MTStatusBarOverlay sharedInstance].animation = MTStatusBarOverlayAnimationFallDown;
-		[MTStatusBarOverlay sharedInstance].historyEnabled = YES;
-		[MTStatusBarOverlay sharedInstance].detailViewMode = MTDetailViewModeHistory;
-
+									  @"District Maps", @"DistrictMapObj",
+									  @"Party Scores", @"WnomAggregateObj",
+									  nil];		
 
 	}
 	return self;
@@ -71,368 +55,237 @@
 
 - (void) dealloc {
 	self.statusBlurbsAndModels = nil;
-	self.managedObjectContext = nil;
 	self.downloadedUpdates = nil;
 	self.availableUpdates = nil;
-	self.localModelCatalog = self.remoteModelCatalog = nil;
 	[super dealloc];
 }
 
-- (NSDictionary *)getLocalDataModelCatalog {
-	NSDictionary *localVersionDict = nil;
-	NSError *error = nil;
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	NSString *localVersionPath = [[UtilityMethods applicationDocumentsDirectory] 
-								  stringByAppendingPathComponent:JSONDATA_VERSIONFILE];
-	
-	if (![fileManager fileExistsAtPath:localVersionPath]) {
-		NSString *defaultVersionPath = [[NSBundle mainBundle] pathForResource:JSONDATA_VERSIONNAME ofType:@"json"];
-		if (defaultVersionPath) {
-			[fileManager copyItemAtPath:defaultVersionPath toPath:localVersionPath error:&error];
-			if (error) {
-				NSLog(@"Error attempting to copy default json data version file to docs folder: %@", error);
-			}
-			else {
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"JSONDATAVERSION_COPIED" object:localVersionPath];	
-				NSLog(@"Successfully copied a jsonDataVersion file in %@", localVersionPath);
-			}
-		}
-	}
-	NSString * localVersionString = [NSString stringWithContentsOfFile:localVersionPath encoding:NSUTF8StringEncoding error:&error];
-	if (error) {
-		NSLog(@"Error attempting to read local json data version file with error: %@ [path: %@]", error, localVersionPath);
-	}
-	if (localVersionString && [localVersionString length]) {
-		localVersionDict = [localVersionString JSONValue];
-		if (!localVersionDict)
-			NSLog(@"Error parsing local json data version string: %@", localVersionString);
-	}
-	
-	return localVersionDict;
+#pragma mark -
+#pragma mark Check & Perform Updates
+
+- (void) checkAndAlertAvailableUpdates:(id)sender {
+	if ([self isDataUpdateAvailable])
+		[self alertHasUpdates:self];
 }
 
-- (NSDictionary *)getRemoteDataModelCatalog {
-	NSDictionary *remoteVersionDict = nil;
+- (BOOL) isDataUpdateAvailable {
+	BOOL hasUpdate = NO;
+	NSArray *local = [self localDataTimestamps];
+	NSArray *remote = [self remoteDataTimestamps];
+	if (local && remote) {
+		self.availableUpdates = [self deltaLocalTimestamps:local toRemote:remote];
+		hasUpdate = ([self.availableUpdates count] > 0);
+	}
+	return hasUpdate;
+}
+
+- (void) alertHasUpdates:(id)delegate {
+	UIAlertView *updaterAlert = [[UIAlertView alloc] initWithTitle:@"Update Available" 
+														   message:@"An optional interim data update for TexLege is available.  Would you like to download and install the new data?"  
+														  delegate:delegate 
+												 cancelButtonTitle:@"Cancel" 
+												 otherButtonTitles:@"Update", nil];
+	updaterAlert.tag = 6666;
+	[updaterAlert show];
+	[updaterAlert release];
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+	if (buttonIndex == alertView.firstOtherButtonIndex) {
+		if (alertView.tag == 6666)
+			[self performAvailableUpdates];
+	}
+}
+
+- (void) performAvailableUpdates {
+	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_UPDATE_REQUEST"];
+
+	[self.downloadedUpdates removeAllObjects];
 	
-	if ([[TexLegeReachability sharedTexLegeReachability] isNetworkReachable])
-	//if ([[TexLegeReachability sharedTexLegeReachability] isNetworkReachableViaWiFi])
+	NSString *statusString = [NSString stringWithFormat:@"Downloading %d Updates", [self.availableUpdates count]];
+	
+	MTStatusBarOverlay *overlay = [MTStatusBarOverlay sharedInstance];
+	overlay.historyEnabled = YES;
+	overlay.animation = MTStatusBarOverlayAnimationFallDown;  // MTStatusBarOverlayAnimationShrink
+	overlay.detailViewMode = MTDetailViewModeHistory;         // enable automatic history-tracking and show in detail-view
+	//overlay.delegate = self;
+	overlay.progress = 0.0;
+	
+	[overlay postMessage:statusString animated:YES];
+
+	
+	for (NSString *update in self.availableUpdates) {
+		[TexLegeCoreDataUtils loadDataFromRest:update delegate:self];
+	}
+	[[[RKObjectManager sharedManager] objectStore] save];
+}
+
+
+- (BOOL)checkUpdateFinished {
+	BOOL success = self.availableUpdates && ([self.downloadedUpdates count] == [self.availableUpdates count]);
+	CGFloat progress = (CGFloat)([self.downloadedUpdates count]) / (CGFloat)[self.availableUpdates count];
+	[MTStatusBarOverlay sharedInstance].progress = progress;
+
+	if (success) {
+		[[MTStatusBarOverlay sharedInstance] postFinishMessage:@"Update Completed" duration:5];	
+		self.availableUpdates = nil;
+	}
+	return success;
+}
+
+#pragma mark -
+#pragma mark RKObjectLoaderDelegate methods
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {
+	if (objects && [objects count]) {
+		@try {
+			NSString *className = NSStringFromClass([[objects objectAtIndex:0] class]);
+			if (className) {
+				NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
+				debug_NSLog(@"%@ %d objects", notification, [objects count]);
+				
+				if ([className isEqualToString:@"DistrictMapObj"] || [className isEqualToString:@"LegislatorObj"])					
+					for (DistrictMapObj *map in [DistrictMapObj allObjects])
+						[map resetRelationship:self];
+				
+				[[[RKObjectManager sharedManager] objectStore] save];
+				
+				/*				NSError *error = nil;
+				 [[[objectLoader managedObjectStore] managedObjectContext]save:&error];
+				 if (error)
+				 NSLog(@"RestKit save error while loading");
+				 */
+				[[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
+				
+				[self.downloadedUpdates addObject:className];
+				NSString *statusString = [NSString stringWithFormat:@"Updated %@", [statusBlurbsAndModels objectForKey:className]];
+				NSLog(@"%@", statusString);
+				//[[MTStatusBarOverlay sharedInstance] postMessage:statusString animated:YES];				
+				[self checkUpdateFinished];
+			}			
+		}
+		@catch (NSException * e) {
+			NSLog(@"RestKit Load Error: %@", [e description]);
+		}
+	}
+}
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
+	UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Data Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+	[alert show];
+	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"RESTKIT_DATA_ERROR"];
+	NSLog(@"RestKit Data error: %@", [error localizedDescription]);
+	
+	[[MTStatusBarOverlay sharedInstance] postErrorMessage:@"Error During Update" duration:8];
+
+}
+
+#pragma mark -
+#pragma mark Timestamp Files
+
+- (NSArray *) localDataTimestamps {
+	NSMutableArray *dataArray = [NSMutableArray array];
+	
+	NSArray *objects = [self.statusBlurbsAndModels allKeys];
+	for (NSString *classString in objects) {
+		if (NSClassFromString(classString)) {
+			NSFetchRequest *request = [NSClassFromString(classString) fetchRequest];
+			NSSortDescriptor *desc = [[NSSortDescriptor alloc] initWithKey:JSONDATA_TIMESTAMPKEY ascending:NO];	// the most recent update will be the first item in the array (descending)
+			[request setSortDescriptors:[NSArray arrayWithObject:desc]];
+			[request setResultType:NSDictionaryResultType];												// This is necessary to limit it to specific properties during the fetch
+			[request setPropertiesToFetch:[NSArray arrayWithObject:JSONDATA_TIMESTAMPKEY]];						// We don't want to fetch everything, we'll get a huge ass memory hit otherwise.
+			[desc release];
+			NSDictionary *vers = [[NSDictionary alloc] initWithObjectsAndKeys:
+								  classString, JSONDATA_IDKEY,
+								  [[NSClassFromString(classString) objectWithFetchRequest:request] valueForKey:JSONDATA_TIMESTAMPKEY], JSONDATA_TIMESTAMPKEY,
+								  [NSString stringWithFormat:@"%@.json", classString], JSONDATA_FILEKEY,
+								  nil];
+			[dataArray addObject:vers];
+			[vers release];
+		}
+	}
+	
+	NSSortDescriptor *idDesc = [[[NSSortDescriptor alloc] initWithKey:JSONDATA_IDKEY
+								 ascending:YES
+								  selector:@selector(localizedCompare:)] autorelease];
+	[dataArray sortUsingDescriptors:[NSArray arrayWithObject:idDesc]];
+	return dataArray;
+}
+
+- (NSArray *)remoteDataTimestamps {
+	NSMutableArray *dataArray = nil;
+	NSString *urlMethod = [NSString stringWithFormat:@"%@/%@", RESTKIT_BASE_URL, JSONDATA_TIMESTAMPFILE];
+	NSURL *url = [NSURL URLWithString:urlMethod];
+
+	if ([TexLegeReachability canReachHostWithURL:url alert:NO])
 	{
-		
-		//[[MTStatusBarOverlay sharedInstance] postMessage:@"Checking for Updates" animated:YES];
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 
-		NSString *urlMethod = [NSString stringWithFormat:@"%@/%@", JSONDATA_BASE_URL, JSONDATA_VERSIONFILE];
-		NSURL *url = [NSURL URLWithString:urlMethod];
 		NSError *error = nil;
 		NSString * remoteVersionString = [NSString stringWithContentsOfURL:url encoding:JSONDATA_ENCODING error:&error];
 		if (error) {
 			NSLog(@"Error retrieving remote JSON data version file:%@", error);
 		}
 		if (remoteVersionString && [remoteVersionString length]) {
-			remoteVersionDict = [remoteVersionString JSONValue];
-			if (!remoteVersionDict) {
+			NSArray *tempArray = [remoteVersionString JSONValue];
+			if (!tempArray) {
 				NSLog(@"Error parsing remote json data version string: %@", remoteVersionString);
+			}
+			else {
+				dataArray = [NSMutableArray arrayWithArray:tempArray];
+				NSSortDescriptor *idDesc = [[NSSortDescriptor alloc] initWithKey:JSONDATA_IDKEY ascending:YES selector:@selector(localizedCompare:)];
+				[dataArray sortUsingDescriptors:[NSArray arrayWithObject:idDesc]];
+				[idDesc release];
 			}
 		}
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-
 	}
-	else {
+	else
 		NSLog(@"Network is unreachable, cannot obtain remote json data version file.");
-	}
-	
-	return remoteVersionDict;
+	return dataArray;
 }
 
-- (id)getCatalogValueForKey:(NSString *)catKey model:(NSString *)modelKey {
-	id value = nil;
-	
-	self.localModelCatalog = [self getLocalDataModelCatalog];
-	if (self.localModelCatalog) {
-		@try {
-			NSDictionary *localModel = [self.localModelCatalog objectForKey:modelKey];
-			if (localModel) {
-				value = [localModel objectForKey:catKey];
-			}
-		}
-		@catch (NSException * e) {
-		}
+- (NSArray *)deltaLocalTimestamps:(NSArray *)local toRemote:(NSArray *)remote {
+	NSMutableArray *different = [NSMutableArray array];
+#if TESTING
+	for (NSDictionary *remoteItem in remote) {
+		[different addObject:[remoteItem objectForKey:JSONDATA_IDKEY]];
 	}
-	
-	return value;
-}
-
-- (NSArray *)getListOfAvailableUpdates {
-	NSMutableArray *updatableArray = [NSMutableArray array];
-		
-	self.remoteModelCatalog = [self getRemoteDataModelCatalog];
-	self.localModelCatalog = [self getLocalDataModelCatalog];
-	//updateAvail = ([self.localModelCatalog isEqualToDictionary:self.remoteModelCatalog] == NO);
-
-	if (self.remoteModelCatalog) {
-		for (NSString *remoteModelKey in [self.remoteModelCatalog allKeys]) {
-			NSDictionary *remoteModel = [self.remoteModelCatalog objectForKey:remoteModelKey];
-			if (!remoteModel)
-				continue;			
-			NSNumber *modelVersionNum = [remoteModel objectForKey:JSONDATA_VERSIONKEY];
-			if (!modelVersionNum)
-				continue;
-			
-			NSInteger remoteModelVersion = [modelVersionNum integerValue];
-			BOOL addModelToUpdates = remoteModelVersion > 0;
-			
-			if (addModelToUpdates && self.localModelCatalog) {
-				NSDictionary *localModel = [self.localModelCatalog objectForKey:remoteModelKey];
-				
-				if (localModel) {
-					modelVersionNum = [localModel objectForKey:JSONDATA_VERSIONKEY];
-					if (modelVersionNum) {
-#ifdef TESTING
-						addModelToUpdates = remoteModelVersion > 0;
 #else
-						NSInteger localModelVersion = [modelVersionNum integerValue];
-						addModelToUpdates = remoteModelVersion > localModelVersion;
+	if (local && remote && ![local isEqualToArray:remote]) {
+		BOOL localIsLarger = [local count] > [remote count];
+		NSArray *larger = localIsLarger ? local : remote;
+		NSArray *smaller = localIsLarger ? remote : local;
+		
+		for (NSDictionary *largerItem in larger) {
+			NSString *largeID = [largerItem objectForKey:JSONDATA_IDKEY];
+			NSString *largeStamp = [largerItem objectForKey:JSONDATA_TIMESTAMPKEY];
+			BOOL wasFound = NO;
+			for (NSDictionary *smallerItem in smaller) {
+				NSString *smallID = [smallerItem objectForKey:JSONDATA_IDKEY];
+				NSString *smallStamp = [smallerItem objectForKey:JSONDATA_TIMESTAMPKEY];
+				if ([largeID isEqualToString:smallID]) {
+					if (![largeStamp isEqualToString:smallStamp] ) {
+						NSDictionary *remoteItem = nil; 
+						if (localIsLarger)
+							remoteItem = smallerItem;
+						else
+							remoteItem = largerItem;
+						[different addObject:remoteItem];
+					}
+					wasFound = YES;
+					break;
+				}
+			}
+			if (!wasFound && !localIsLarger) {
+				[different addObject:largerItem];
+			}
+		}
+	}
 #endif
-					}
-				}
-			}
-			if (addModelToUpdates)
-				[updatableArray addObject:remoteModelKey];
-		}
-	}
-	
-	return updatableArray;
+	NSLog(@"DataModelUpdateManager: Found %d Differences in Local vs. Remote Data Timestamps", [different count]);
+	return different;
 }
 
-- (BOOL)isDataUpdateAvailable {
-	self.availableUpdates = [self getListOfAvailableUpdates];	
-	return (self.availableUpdates && [self.availableUpdates count]);
-}	
-
-- (void)requestRemoteModelWithDict:(NSDictionary *)requestDict {
-	if (!requestDict)
-		return;
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-	NSDictionary *catalog = [requestDict objectForKey:@"catalog"];
-	NSString *key = [requestDict objectForKey:@"modelKey"];
-	
-	if (!catalog || !key)
-		return;
-	
-	NSDictionary *remoteModelInfo = [catalog objectForKey:key];
-	
-	// this reachability can't be in a thread, right?
-	if (remoteModelInfo) {
-		NSNumber *versionNumber = [remoteModelInfo objectForKey:JSONDATA_VERSIONKEY];
-		if (versionNumber && ([versionNumber integerValue] > 0)) {
-			NSString *modelFile = [remoteModelInfo objectForKey:JSONDATA_URLKEY];
-			if (modelFile) {
-				NSString *urlString = [NSString stringWithFormat:@"%@/%@", JSONDATA_BASE_URL, modelFile];
-				NSURL *url = [NSURL URLWithString:urlString];
-				
-				NSError *error = nil;
-				NSString * modelString = [NSString stringWithContentsOfURL:url encoding:JSONDATA_ENCODING error:&error];
-				if (error) {
-					NSLog(@"Error retrieving remote JSON data update:%@ [file:%@]", error, modelFile);
-				}
-				if (modelString && [modelString length]) {
-					NSArray *modelArray = [modelString JSONValue];
-					if (!modelArray) {
-						NSLog(@"Error parsing remote json data update in file: %@", modelFile);
-					}
-					else {
-						NSString *outPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:modelFile];
-						[modelString writeToFile:outPath atomically:YES encoding:JSONDATA_ENCODING error:&error];
-						if (error) {
-							NSLog(@"Error attempting to write json data update file with error: %@ [path: %@]", error, outPath);
-						}
-						
-						if (remoteModelInfo && key && modelArray && [modelArray count]) {
-							NSDictionary *updatedModelDict = [NSDictionary dictionaryWithObjectsAndKeys:
-															  remoteModelInfo, @"modelInfo",
-															  key, @"modelKey",
-															  /*[modelArray count], @"modelSize",*/ nil];
-							
-							[self performSelectorOnMainThread:@selector(receiveDataModelUpdate:) withObject:updatedModelDict waitUntilDone:NO];
-						}
-					}
-				}
-			}
-		}
-	}
-	[pool drain];
-}
-
-- (void)receiveDataModelUpdate:(NSDictionary *)updatedModelDict {	
-	if (updatedModelDict) {
-		NSArray *updatedModelInfo = [updatedModelDict objectForKey:@"modelInfo"];
-		NSString *modelKey = [updatedModelDict objectForKey:@"modelKey"];
-		//NSNumber *modelSize = [updatedModelDict objectForKey:@"modelSize"];
-		
-		if (modelKey && updatedModelInfo) {
-			[self.downloadedUpdates addObject:updatedModelDict];
-			NSString *statusString = [NSString stringWithFormat:@"Downloaded %@", [statusBlurbsAndModels objectForKey:modelKey]];
-			[[MTStatusBarOverlay sharedInstance] postMessage:statusString animated:YES];
-			//[MTStatusBarOverlay sharedInstance].detailText = statusString;
-			//[[MTStatusBarOverlay sharedInstance] postFinishMessage:statusString duration:2];
-
-			[self checkUpdateFinished];
-		}
-	}
-}
- 
-- (void)downloadDataUpdatesUsingCachedList:(BOOL)cached {
-	if (![[TexLegeReachability sharedTexLegeReachability] isNetworkReachable]) {
-		NSLog(@"DataModelUpdateManager:downloadDataUpdates -- Network is unreachable, ignoring request.");
-		return;
-	}
-
-	if (!cached || !self.availableUpdates)
-		self.availableUpdates = [self getListOfAvailableUpdates];
-		
-	if (NO == (self.availableUpdates && [self.availableUpdates count])) {
-		NSLog(@"[DataModelUpdateManager performUpdate]: No available updates, nothing to do.");
-		return;
-	}
-	if ([[TexLegeAppDelegate appDelegate] databaseIsCopying]) {
-		NSLog(@"[DataModelUpdateManager performUpdate]: Persistent Store is still copying, can't peform an update right now.");
-		return;
-	}
-	if (!self.remoteModelCatalog)
-		return;
-	
-	if ([[TexLegeReachability sharedTexLegeReachability] isNetworkReachable]) {
-
-		[self.downloadedUpdates removeAllObjects];
-		
-		//	[[MTStatusBarOverlay sharedInstance] setDetailViewHidden:NO animated:YES];
-		NSString *statusString = [NSString stringWithFormat:@"Downloading %d Updates", [self.availableUpdates count]];
-		[[MTStatusBarOverlay sharedInstance] postMessage:statusString animated:YES];
-		
-		for (NSString * modelKey in self.availableUpdates) {			
-			NSDictionary *requestDict = [NSDictionary dictionaryWithObjectsAndKeys:
-										 self.remoteModelCatalog, @"catalog", 
-										 modelKey, @"modelKey", nil];
-			[self performSelectorInBackground:@selector(requestRemoteModelWithDict:) withObject:requestDict];
-		}
-	}
-}
-
-
-// DistrictMapObj doesn't work correctly in JSON, due to binary data  ... we import it from a plist at the end
-- (BOOL)installDataUpdates {	
-	self.localModelCatalog = [self getLocalDataModelCatalog];
-
-	NSArray *installOrderOfKeys = [NSArray arrayWithObjects:@"LegislatorObj", @"WnomObj", 
-								   @"CommitteeObj", @"CommitteePositionObj", @"StafferObj", 
-								   @"DistrictOfficeObj", @"DistrictMapObj", @"LinkObj", nil]; 
-								   
-	//[[MTStatusBarOverlay sharedInstance] postMessage:@"Installing Updates"];
-	
-	NSInteger installedCount = 0;
-	for (NSString *modelKey in installOrderOfKeys) {
-		//NSDictionary *temp = self.localModelCatalog;
-		NSString *modelFile = [[self.localModelCatalog objectForKey:modelKey] objectForKey:JSONDATA_URLKEY];
-		if (modelFile && [modelFile length]) {
-			NSError *error = nil;
-			NSString *modelPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:modelFile];			
-			NSString *modelString = [[NSString alloc] initWithContentsOfFile:modelPath encoding:JSONDATA_ENCODING error:&error];
-			if (!modelString || error) {
-				NSLog(@"DataModelUpdateManager - InstallDataUpdates: Error reading a data file: %@; error: %@", modelFile, [error localizedDescription]);
-				[[MTStatusBarOverlay sharedInstance] postErrorMessage:@"Error Reading Update" duration:3];
-			}
-			else {
-				NSArray *modelArray = [modelString JSONValue];
-				if (!modelArray) {
-					NSLog(@"Error parsing local json data in file: %@", modelFile);
-					[[MTStatusBarOverlay sharedInstance] postErrorMessage:@"Error Parsing Update" duration:3];
-				}
-				else if ([modelArray count]) {
-					NSInteger importCount = 0;
-					debug_NSLog(@"DataModelUpdateManager: Beginning update for data model: %@", modelKey);
-					[TexLegeCoreDataUtils deleteAllObjectsInEntityNamed:modelKey context:self.managedObjectContext];
-					
-					for (NSDictionary * aDictionary in modelArray) {				
-						id<TexLegeDataObjectProtocol> object = [NSEntityDescription insertNewObjectForEntityForName:modelKey inManagedObjectContext:self.managedObjectContext];
-						
-						if (object) {
-							[object importFromDictionary:aDictionary];
-							importCount++;
-						}
-					}
-					if (importCount) {
-						[self saveAction:nil];
-						installedCount++;
-						debug_NSLog(@"DataModelUpdateManager: Updated %d %@ model objects", importCount, modelKey);
-						//	[[NSNotificationCenter defaultCenter] postNotificationName:@"DATAMODEL_UPDATED" object:nil];
-
-					}
-					else {
-						[self.managedObjectContext rollback];
-						debug_NSLog(@"DataModelUpdateManager: Failed to update %@ model objects, rolling back changes.", modelKey);
-						[[MTStatusBarOverlay sharedInstance] postErrorMessage:@"Update Failed" duration:3];
-					}	
-				}
-			}
-			[modelString release];			
-		}
-	}
-	
-	// ------------- Special Cases
-	/*
-	// DistrictMapObj
-	TexLegeDataImporter *importer = [[TexLegeDataImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
-	if (importer) {
-		[importer importObjectsWithEntityName:@"DistrictMapObj"];
-		[importer release];
-	}*/
-	// WnomAggregates
-		// Don't do anything special, because we'll handle it with this notification below....
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"DATAMODEL_UPDATED" object:nil];
-	
-//	[[MTStatusBarOverlay sharedInstance] setDetailViewHidden:YES animated:YES];
-	[[MTStatusBarOverlay sharedInstance] postFinishMessage:@"Update Completed" duration:5];	
-
-
-	return installedCount == [installOrderOfKeys count];;
-}
-
-- (BOOL)checkUpdateFinished {
-	BOOL success = self.availableUpdates && ([self.downloadedUpdates count] == [self.availableUpdates count]);
-	
-	if (success && self.remoteModelCatalog) {
-		NSError *error = nil;
-		NSString *catalogString = [self.remoteModelCatalog JSONRepresentation];
-		NSString *outPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:JSONDATA_VERSIONFILE];
-		[catalogString writeToFile:outPath atomically:YES encoding:JSONDATA_ENCODING error:&error];
-		if (error) {
-			NSLog(@"Error attempting to write update json data version catalog with error: %@ [path: %@]", error, outPath);
-			[[MTStatusBarOverlay sharedInstance] postErrorMessage:@"Error Writing Catalog" duration:3];
-		}
-		else {
-			self.availableUpdates = nil;
-			[self installDataUpdates];
-		}
-	}
-	return success;
-}
-
-- (IBAction)saveAction:(id)sender{
-	
-	@try {
-		NSError *error = nil;
-		if (self.managedObjectContext != nil) {
-			if ([self.managedObjectContext hasChanges] && ![self.managedObjectContext save:&error]) {
-				debug_NSLog(@"DataModelUpdateManager:saveAction - unresolved error %@, %@", error, [error userInfo]);
-			} 
-		}
-	}
-	@catch (NSException * e) {
-		debug_NSLog(@"Failure in DataModelUpdateManager:saveAction, name=%@ reason=%@", e.name, e.reason);
-	}
-}
 
 @end

@@ -11,21 +11,28 @@
 #import "DisclosureQuartzView.h"
 #import "TexLegeCoreDataUtils.h"
 #import "CommitteePositionObj.h"
+#import "TexLegeAppDelegate.h"
 
 @interface CommitteesDataSource (Private)
 @end
 
 @implementation CommitteesDataSource
 
-@synthesize fetchedResultsController, managedObjectContext;
+@synthesize fetchedResultsController;
 
 @synthesize hideTableIndex;
 @synthesize filterChamber, filterString, searchDisplayController;
 
+- (Class)dataClass {
+	return [CommitteeObj class];
+}
 
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
+- (NSManagedObjectContext *)managedObjectContext {
+	return [CommitteeObj managedObjectContext];
+}
+
+- (id)init {
 	if (self = [super init]) {
-		if (newContext) self.managedObjectContext = newContext;
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
 		
@@ -33,17 +40,25 @@
 												 selector:@selector(dataSourceReceivedMemoryWarning:)
 													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(resetData:) name:@"DATAMODEL_UPDATED" object:nil];		
+												 selector:@selector(resetCoreData:) name:@"RESTKIT_LOADED_COMMITTEEOBJ" object:nil];	
+		
 	}
 	return self;
 }
+
+- (void)resetCoreData:(NSNotificationCenter *)notification {
+	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
+	self.fetchedResultsController = nil;
+	NSError *error = nil;
+	[self.fetchedResultsController performFetch:&error];
+}
+
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 
 	self.fetchedResultsController = nil;
 	self.searchDisplayController = nil;
-	self.managedObjectContext = nil;	
 	self.filterString = nil;
 	
     [super dealloc];
@@ -54,12 +69,6 @@
 	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
 		[self.managedObjectContext refreshObject:object mergeChanges:NO];
 	}
-}
-
-- (void)resetData:(NSNotificationCenter *)notification {
-	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
-	NSError *error = nil;
-	[self.fetchedResultsController performFetch:&error];
 }
 
 #pragma mark -
@@ -287,6 +296,15 @@
 #pragma mark -
 #pragma mark Core Data Methods
 
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_START" object:self];
+	//    [self.tableView beginUpdates];
+}
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_END" object:self];
+	//    [self.tableView endUpdates];
+}
+
 /*
  Set up the fetched results controller.
  */
@@ -297,17 +315,12 @@
     }
     
 	// Create the fetch request for the entity.
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	
-	// Get our table-specific Core Data.
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"CommitteeObj" inManagedObjectContext:managedObjectContext];
-	[fetchRequest setEntity:entity];
-		
+	NSFetchRequest *fetchRequest = [CommitteeObj fetchRequest];
+			
 	// Sort by committeeName.
 	NSSortDescriptor *nameInitialSortOrder = [[NSSortDescriptor alloc] initWithKey:@"committeeName" ascending:YES];
 	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:nameInitialSortOrder]];
 	
-
 	NSString * sectionString;
 	// we don't want sections when searching, change to hasFilter if you don't want it for toolbarAction either...
     // nil for section name key path means "no sections".
@@ -318,12 +331,10 @@
 	
 	fetchedResultsController = [[NSFetchedResultsController alloc] 
 															 initWithFetchRequest:fetchRequest 
-															 managedObjectContext:managedObjectContext 
+															 managedObjectContext:[CommitteeObj managedObjectContext] 
 															 sectionNameKeyPath:sectionString cacheName:@"Committees"];
 
     fetchedResultsController.delegate = self;
-	
-	[fetchRequest release];
 	[nameInitialSortOrder release];	
 	
 	return fetchedResultsController;

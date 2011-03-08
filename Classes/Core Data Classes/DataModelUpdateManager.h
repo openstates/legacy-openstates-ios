@@ -7,30 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import <RestKit/RestKit.h>
+#import <RestKit/CoreData/CoreData.h>
 
-
-
-@interface DataModelUpdateManager : NSObject {
+@interface DataModelUpdateManager : NSObject <RKObjectLoaderDelegate, UIAlertViewDelegate> {
 	NSDictionary *statusBlurbsAndModels;
-	NSManagedObjectContext *managedObjectContext;
-	NSDictionary *localModelCatalog;
-	NSDictionary *remoteModelCatalog;
 	NSArray *availableUpdates;
 	NSMutableArray *downloadedUpdates;
 }
 
-@property (nonatomic,retain) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic,retain) NSDictionary *localModelCatalog;
-@property (nonatomic,retain) NSDictionary *remoteModelCatalog;
 @property (nonatomic,retain) NSArray *availableUpdates;
 @property (nonatomic,retain) NSMutableArray *downloadedUpdates;
 @property (nonatomic,retain) NSDictionary *statusBlurbsAndModels;
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext*)newContext;
-- (BOOL)isDataUpdateAvailable;
-- (void)downloadDataUpdatesUsingCachedList:(BOOL)cached;
-- (NSDictionary *)getLocalDataModelCatalog;
-- (id)getCatalogValueForKey:(NSString *)catKey model:(NSString *)modelKey;
 
+- (void) checkAndAlertAvailableUpdates:(id)sender;
+- (BOOL) isDataUpdateAvailable;
+- (void) alertHasUpdates:(id)delegate;
+- (void) performAvailableUpdates;
 @end

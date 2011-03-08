@@ -15,8 +15,8 @@
 @protocol TableDataSource <UITableViewDataSource, NSFetchedResultsControllerDelegate>
  
 @required
-@property (nonatomic, retain) IBOutlet NSManagedObjectContext *managedObjectContext;
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
+
+@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
 
 // these properties are used by the view controller
 // for the navigation and tab bar
@@ -32,6 +32,7 @@
 - (BOOL)showDisclosureIcon;
 
 @optional
+- (Class)dataClass;
 
 @property (nonatomic, readonly) BOOL hasFilter;
 - (void) setFilterByString:(NSString *)filter;
@@ -58,7 +59,6 @@
 // set this on when you don't want to see the index, ala keyboard active
 @property (nonatomic) BOOL hideTableIndex;
 
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 - (void)resetData:(NSNotificationCenter *)notification;
 
 

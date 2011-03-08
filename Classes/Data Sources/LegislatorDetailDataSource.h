@@ -10,15 +10,13 @@
 #import "LegislatorObj.h"
 
 @interface LegislatorDetailDataSource : NSObject <UITableViewDataSource> {
-
 }
 
 - (id)initWithLegislator:(LegislatorObj *)newObject;
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject;
 	
-
-@property (nonatomic,readonly) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic,retain) NSNumber *dataObjectID;
 @property (nonatomic,retain) LegislatorObj *legislator;
 @property (nonatomic,retain) NSMutableArray *sectionArray;
 

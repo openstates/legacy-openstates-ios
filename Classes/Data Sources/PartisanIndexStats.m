@@ -16,6 +16,7 @@
 #import "NSDate+Helper.h"
 #import "DataModelUpdateManager.h"
 #import "JSON.h"
+#import "TexLegeAppDelegate.h"
 
 @interface PartisanIndexStats (Private)
 
@@ -25,25 +26,20 @@
 
 @implementation PartisanIndexStats
 
-@synthesize managedObjectContext, chartTemplate;
+@synthesize chartTemplate;
 
 SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 
-// setup the data collection
 - (id)init {
 	if (self = [super init]) {
-		
-	}
-	return self;
-}
-
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
-	if ([self init]) {
-		self.managedObjectContext = newContext;
 		m_partisanIndexAggregates = nil;
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(resetData:) name:@"DATAMODEL_UPDATED" object:nil];
+												 selector:@selector(resetData:) name:@"RESTKIT_LOADED_LEGISLATOROBJ" object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(resetData:) name:@"RESTKIT_LOADED_WNOMOBJ" object:nil];
+//		[[NSNotificationCenter defaultCenter] addObserver:self
+//												 selector:@selector(resetData:) name:@"RESTKIT_LOADED_WNOMAGGREGATEOBJ" object:nil];
 
 		// initialize these
 		[self partisanIndexAggregates];
@@ -57,7 +53,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 - (void)dealloc {	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 
-	self.managedObjectContext = nil;	// I THINK THIS IS CORRECT, SINCE WE'VE SYNTHESIZED IT AS RETAIN...
 	if (m_partisanIndexAggregates) [m_partisanIndexAggregates release], m_partisanIndexAggregates = nil;
 	
 	self.chartTemplate = nil;
@@ -79,24 +74,26 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 - (NSDictionary *)partisanIndexAggregates {
 	
 	if (m_partisanIndexAggregates == nil) {
-		
 		NSMutableDictionary *tempAggregates = [NSMutableDictionary dictionaryWithCapacity:4];
 		NSInteger chamber, party;
 		for (chamber = HOUSE; chamber <= SENATE; chamber++) {
 			for (party = kUnknownParty; party <= REPUBLICAN; party++) {
 				NSArray *aggregatesArray = [self aggregatePartisanIndexForChamber:chamber andPartyID:party];
-				NSNumber *avgIndex = [aggregatesArray objectAtIndex:0];
-				if (avgIndex)
-					[tempAggregates setObject:avgIndex forKey:[NSString stringWithFormat:@"AvgC%d+P%d", chamber, party]];
-				
-				NSNumber *maxIndex = [aggregatesArray objectAtIndex:1];
-				if (maxIndex)
-					[tempAggregates setObject:maxIndex forKey:[NSString stringWithFormat:@"MaxC%d+P%d", chamber, party]];
-				
-				NSNumber *minIndex = [aggregatesArray objectAtIndex:2];
-				if (minIndex)
-					[tempAggregates setObject:minIndex forKey:[NSString stringWithFormat:@"MinC%d+P%d", chamber, party]];
-				
+				if (aggregatesArray && [aggregatesArray count]) {
+					NSNumber *avgIndex = [aggregatesArray objectAtIndex:0];
+					if (avgIndex)
+						[tempAggregates setObject:avgIndex forKey:[NSString stringWithFormat:@"AvgC%d+P%d", chamber, party]];
+					
+					NSNumber *maxIndex = [aggregatesArray objectAtIndex:1];
+					if (maxIndex)
+						[tempAggregates setObject:maxIndex forKey:[NSString stringWithFormat:@"MaxC%d+P%d", chamber, party]];
+					
+					NSNumber *minIndex = [aggregatesArray objectAtIndex:2];
+					if (minIndex)
+						[tempAggregates setObject:minIndex forKey:[NSString stringWithFormat:@"MinC%d+P%d", chamber, party]];
+				}
+				else
+					NSLog(@"PartisanIndexStates: Error pulling aggregate dictionary.");
 			}
 		}
 		//debug_NSLog(@"Index Aggregates: %@", [tempAggregates description]);			
@@ -169,21 +166,16 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	
 	/*_____________________*/
 	
-	NSFetchRequest *request = [[NSFetchRequest alloc] init];
+	NSFetchRequest *request = [LegislatorObj fetchRequest];
 	[request setPredicate:predicate];
 	[request setPropertiesToFetch:[NSArray arrayWithObjects:edAvg, edMax, edMin, nil]];
 	[request setResultType:NSDictionaryResultType];
 	[edAvg release], [edMax release], [edMin release];
 	
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"LegislatorObj" 
-											  inManagedObjectContext:self.managedObjectContext];
-	[request setEntity:entity];
-	NSError *error;
-	NSArray *objects = [self.managedObjectContext executeFetchRequest:request error:&error];
-	[request release];
+	NSArray *objects = [LegislatorObj objectsWithFetchRequest:request];
 	if (objects == nil) {
 		// Handle the error.
-		debug_NSLog(@"Error");
+		debug_NSLog(@"PartisanIndexStats Error while fetching Legislators");
 	}
 	else {
 		if ([objects count] > 0) {
@@ -199,56 +191,26 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	
 }
 
-#define	WNOMAGGREGATES_KEY	@"WnomAggregates"
-- (NSDictionary *) loadAggregatesData {
-	NSDictionary *aggregatesData = nil;
-	
-	DataModelUpdateManager *updater = [[DataModelUpdateManager alloc] initWithManagedObjectContext:self.managedObjectContext];
-	NSDictionary *dataCatalog = [updater getLocalDataModelCatalog];
-	[updater release];
-	
-	NSString *dataFile = nil;
-	if (dataCatalog) {
-		NSDictionary *modelInfo = [dataCatalog objectForKey:WNOMAGGREGATES_KEY];
-		if (modelInfo) {
-			dataFile = [modelInfo objectForKey:@"URL"];
-		}
-	}
-	if (!dataFile)
-		dataFile = [NSString stringWithFormat:@"%@.json", WNOMAGGREGATES_KEY];
-	
-	NSString *filePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:dataFile];
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	NSError *error = nil;
+#define	WNOMAGGREGATES_KEY	@"WnomAggregateObj"
 
-	if (![fileManager fileExistsAtPath:filePath]) {
-		NSString *defaultFilePath = [[NSBundle mainBundle] pathForResource:WNOMAGGREGATES_KEY ofType:@"json"];
-		if (defaultFilePath) {
-			[fileManager copyItemAtPath:defaultFilePath toPath:filePath error:&error];
-			if (error)
-				NSLog(@"Error copying WnomAggregates data file to user's directory: %@; [path: %@", [error localizedDescription], filePath);
-		}
-	}
+- (NSArray *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber {
+	
+	NSError *error = nil;
+	NSString *filePath = [[NSBundle mainBundle] pathForResource:WNOMAGGREGATES_KEY ofType:@"json"];
 	NSString *jsonString = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
 	if (error)
-		NSLog(@"Error parsing WnomAggregates data file: %@; [path: %@", [error localizedDescription], filePath);
+		NSLog(@"Error parsing WnomAggregateObj data file: %@; [path: %@", [error localizedDescription], filePath);
 	if (jsonString && [jsonString length])
-		aggregatesData = [jsonString JSONValue];
-
-	return aggregatesData;
-}
-
-- (NSDictionary *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber {
-	
-	NSDictionary *aggregatesData = [self loadAggregatesData];
-	if (!aggregatesData)
-		return nil;
-	
-	NSString *key = [NSString stringWithFormat:@"%d_%d", chamber, party];
-	NSDictionary *chamberPartyDict = [aggregatesData objectForKey:key];
-	NSDictionary *historyDict = [chamberPartyDict objectForKey:WNOMAGGREGATES_KEY];
-
-	return historyDict;
+	{
+		NSArray *jsonArray = [jsonString JSONValue];
+		NSArray *chamberArray = [jsonArray findAllWhereKeyPath:@"chamber" equals:[NSNumber numberWithInt:chamber]];
+		if (chamberArray) {
+			NSArray *partyArray = [chamberArray findAllWhereKeyPath:@"party" equals:[NSNumber numberWithInt:party]];
+			return partyArray;
+		}
+	}
+		
+	return nil;
 }
 
 #pragma mark -
@@ -290,8 +252,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	
 	
 	NSInteger chamber = [legislator.legtype integerValue];
-	NSDictionary *democDict = [self historyForParty:DEMOCRAT Chamber:chamber];
-	NSDictionary *repubDict = [self historyForParty:REPUBLICAN Chamber:chamber];
+	NSArray *democHistory = [self historyForParty:DEMOCRAT Chamber:chamber];
+	NSArray *repubHistory = [self historyForParty:REPUBLICAN Chamber:chamber];
 	
 	NSMutableString *repubData = [[NSMutableString alloc] initWithString:@"["];
 	NSMutableString *democData = [[NSMutableString alloc] initWithString:@"["];
@@ -308,9 +270,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 		//BOOL showLabel = ((i % 2 == 0) || countOfScores < 3);
 		
 		WnomObj *wnomObj = [sortedScores objectAtIndex:i];
-		
-		id democY = [democDict objectForKey:[[wnomObj session] stringValue]];
-		id repubY = [repubDict objectForKey:[[wnomObj session] stringValue]];
+		NSNumber *democY = [[democHistory findWhereKeyPath:@"session" equals:wnomObj.session] objectForKey:@"wnom"];
+		NSNumber *repubY = [[repubHistory findWhereKeyPath:@"session" equals:wnomObj.session] objectForKey:@"wnom"];
 		if (!democY)
 			democY = [NSNumber numberWithFloat:0.0f];
 		if (!repubY)

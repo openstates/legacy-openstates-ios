@@ -6,13 +6,55 @@
 //  Copyright 2009 Gregory S. Combs. All rights reserved.
 //
 
-#import <CoreData/CoreData.h>
-#import "TexLegeDataObjectProtocol.h"
+#import <RestKit/RestKit.h>
+#import <RestKit/CoreData/CoreData.h>
 
 @class CommitteePositionObj, WnomObj, DistrictOfficeObj, DistrictMapObj, StafferObj;
 
-@interface LegislatorObj :  NSManagedObject  <TexLegeDataObjectProtocol>
+@interface LegislatorObj :  RKManagedObject
 {
+	NSString * suffix;
+	NSNumber * legtype;
+	NSString * email;
+	NSString * bio_url;
+	NSString * cap_phone2;
+	NSNumber * tenure;
+	NSString * cap_phone;
+	NSString * cap_phone2_name;
+	NSString * lastname;
+	NSNumber * legislatorID;
+	NSString * middlename;
+	NSString * notes;
+	NSNumber * district;
+	NSString * cap_fax;
+	NSNumber * party_id;
+	NSString * twitter;
+	NSString * party_name;
+	NSNumber * partisan_index;
+	NSString * photo_name;
+	NSString * nickname;
+	NSString * legtype_name;
+	NSString * cap_office;
+	NSString * firstname;
+	NSString * lastnameInitial;
+	NSString * searchName;
+	NSString * transDataContributorID;
+	NSNumber * nimsp_id;
+	NSString * openstatesID;
+	NSString * photo_url;
+	NSString * preferredname;
+	NSString * stateID;
+	NSString * txlonline_id;
+	NSNumber * votesmartDistrictID;
+	NSNumber * votesmartID;
+	NSNumber * votesmartOfficeID;
+	NSNumber * nextElection;
+	NSString * updated;	
+	DistrictMapObj *districtMap;
+	NSSet* committeePositions;
+	NSSet* wnomScores;
+	NSSet* districtOffices;
+	NSSet* staffers;
 }
 
 @property (nonatomic, retain) NSString * suffix;
@@ -38,17 +80,10 @@
 @property (nonatomic, retain) NSString * legtype_name;
 @property (nonatomic, retain) NSString * cap_office;
 @property (nonatomic, retain) NSString * firstname;
-//@property (nonatomic, retain) NSString * staff;
 @property (nonatomic, retain) NSString * lastnameInitial;
 @property (nonatomic, retain) NSString * searchName;
-@property (nonatomic, retain) DistrictMapObj *districtMap;
-@property (nonatomic, retain) NSSet* committeePositions;
-@property (nonatomic, retain) NSSet* wnomScores;
-@property (nonatomic, retain) NSSet* districtOffices;
-@property (nonatomic, readonly) NSString * districtMapURL;
 @property (nonatomic, retain) NSString * transDataContributorID;
 
-@property (nonatomic, retain) NSSet* staffers;
 @property (nonatomic, retain) NSNumber * nimsp_id;
 @property (nonatomic, retain) NSString * openstatesID;
 @property (nonatomic, retain) NSString * photo_url;
@@ -59,7 +94,15 @@
 @property (nonatomic, retain) NSNumber * votesmartID;
 @property (nonatomic, retain) NSNumber * votesmartOfficeID;
 @property (nonatomic, retain) NSNumber * nextElection;
+@property (nonatomic, retain) NSString * updated;
 
+@property (nonatomic, retain) NSSet* staffers;
+@property (nonatomic, retain) NSSet* committeePositions;
+@property (nonatomic, retain) NSSet* wnomScores;
+@property (nonatomic, retain) NSSet* districtOffices;
+@property (nonatomic, retain) DistrictMapObj *districtMap;
+
+@property (nonatomic, readonly) NSString * districtMapURL;
 
 - (NSComparisonResult)compareMembersByName:(LegislatorObj *)p;
 - (NSString *)partyShortName;
@@ -76,6 +119,7 @@
 - (NSInteger)numberOfStaffers;
 - (NSString *)tenureString;
 - (NSArray *) sortedCommitteePositions;
+- (NSArray *)sortedStaffers;
 @end
 
 

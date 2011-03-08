@@ -9,6 +9,7 @@
 #import "TableDataSourceProtocol.h"
 #import "CommitteeDetailViewController.h"
 #import "CommitteeMasterViewController.h"
+#import "TexLegeCoreDataUtils.h"
 
 #import "CommitteeObj.h"
 #import "CommitteePositionObj.h"
@@ -36,7 +37,7 @@
 
 @implementation CommitteeDetailViewController
 
-@synthesize committee, masterPopover;
+@synthesize dataObjectID, masterPopover;
 @synthesize partisanSlider, membershipLab, infoSectionArray;
 
 enum Sections {
@@ -71,6 +72,12 @@ CGFloat quartzRowHeight = 73.f;
 
 - (void)setDataObject:(id)newObj {
 	[self setCommittee:newObj];
+}
+
+- (void)resetTableData:(NSNotificationCenter *)notification {
+	if (self.dataObject) {
+		[self setDataObject:self.dataObject];
+	}
 }
 
 - (void) calcCommitteePartisanship {
@@ -110,35 +117,49 @@ CGFloat quartzRowHeight = 73.f;
 	
 	self.membershipLab.text = [NSString stringWithFormat:@"%d Republican%@ and %d Democrat%@", repubCount, repubString, democCount, democString];
 		
-	// This will give inacurate results in joint committees, at least until we're in a common dimensional space
-	LegislatorObj *anyMember = [[positions objectAtIndex:0] legislator];
-
-	if (anyMember) {
-		PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
+	if (positions && [positions count]) {
+		// This will give inacurate results in joint committees, at least until we're in a common dimensional space
+		LegislatorObj *anyMember = [[positions objectAtIndex:0] legislator];
 		
-		CGFloat minSlider = [indexStats minPartisanIndexUsingChamber:[anyMember.legtype integerValue]];
-		CGFloat maxSlider = [indexStats maxPartisanIndexUsingChamber:[anyMember.legtype integerValue]];
-		
-		self.partisanSlider.sliderMin = minSlider;
-		self.partisanSlider.sliderMax = maxSlider;
+		if (anyMember) {
+			PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
+			
+			CGFloat minSlider = [indexStats minPartisanIndexUsingChamber:[anyMember.legtype integerValue]];
+			CGFloat maxSlider = [indexStats maxPartisanIndexUsingChamber:[anyMember.legtype integerValue]];
+			
+			self.partisanSlider.sliderMin = minSlider;
+			self.partisanSlider.sliderMax = maxSlider;
+		}
 	}
 
 	self.partisanSlider.sliderValue = avg;	
 }
 
+- (CommitteeObj *)committee {
+	CommitteeObj *anObject = nil;
+	if (self.dataObjectID) {
+		@try {
+			anObject = [CommitteeObj objectWithPrimaryKeyValue:self.dataObjectID];
+		}
+		@catch (NSException * e) {
+		}
+	}
+	return anObject;
+}
+
+
 - (void)setCommittee:(CommitteeObj *)newObj {
-	
-	if (committee) [committee release], committee = nil;
+	self.dataObjectID = nil;
 	if (newObj) {
 		[self view];
 
 		if (self.masterPopover)
 			[self.masterPopover dismissPopoverAnimated:YES];
 
-		committee = [newObj retain];
+		self.dataObjectID = newObj.committeeId;
 		
 		[self buildInfoSectionArray];
-		self.navigationItem.title = self.committee.committeeName;
+		self.navigationItem.title = newObj.committeeName;
 		
 		[self calcCommitteePartisanship];
 		
@@ -154,6 +175,14 @@ CGFloat quartzRowHeight = 73.f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_LEGISLATOROBJ" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_COMMITTEEOBJ" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_COMMITTEEPOSITIONOBJ" object:nil];
+
 	self.clearsSelectionOnViewWillAppear = NO;
 
 	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
@@ -195,10 +224,12 @@ CGFloat quartzRowHeight = 73.f;
 }
 
 - (void)viewDidUnload {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
 	self.partisanSlider = nil;
 	self.membershipLab = nil;
-	self.committee = nil;
+	self.dataObjectID = nil;
 	self.masterPopover = nil;
 //	self.tableView = nil;
 	self.infoSectionArray = nil;
@@ -207,7 +238,7 @@ CGFloat quartzRowHeight = 73.f;
 
 
 - (void)dealloc {
-	self.committee = nil;
+	self.dataObjectID = nil;
 	self.membershipLab = nil;
 	self.partisanSlider = nil;
 //	self.tableView = nil;
