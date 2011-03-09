@@ -18,6 +18,11 @@
 #import "TexLegeAppDelegate.h"
 #import "NSDate+Helper.h"
 
+//#define VERIFYCOMMITTEES 1
+#ifdef VERIFYCOMMITTEES
+#import "JSONDataImporter.h"
+#endif
+
 @implementation TexLegeCoreDataUtils
 
 + (DistrictMapObj*)districtMapForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber {
@@ -205,6 +210,15 @@
 	objectManager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:@"TexLege.sqlite" 
 															 usingSeedDatabaseName:@"TexLegeSeed.sqlite" 
 																managedObjectModel:mom];
+	
+#ifdef VERIFYCOMMITTEES
+	JSONDataImporter *importer = [[JSONDataImporter alloc] init];
+	[importer verifyCommitteeAssignmentsByChamber:HOUSE];
+	[importer verifyCommitteeAssignmentsByChamber:SENATE];
+	[importer verifyCommitteeAssignmentsByChamber:JOINT];
+	[importer release];
+	
+#endif
 }
 
 @end
