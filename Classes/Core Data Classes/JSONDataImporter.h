@@ -12,6 +12,7 @@
 @interface JSONDataImporter : NSObject {
 
 }
-@property (nonatomic,retain) NSManagedObjectContext *managedObjectContext;
+
+- (void)verifyCommitteeAssignmentsByChamber:(NSInteger)chamber;
 
 @end

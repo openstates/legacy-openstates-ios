@@ -14,6 +14,7 @@
 #import "TexLegeAppDelegate.h"
 #import "UtilityMethods.h"
 #import "JSON.h"
+#import "TexLegeLibrary.h"
 
 static const NSString *baseURL = @"http://openstates.sunlightlabs.com/api/v1";
 static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
@@ -26,34 +27,12 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 
 
 @implementation JSONDataImporter
-@synthesize managedObjectContext;
 
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)context {
-	if (self = [super init]) {
-		if (context) {
-			if (managedObjectContext)
-				[managedObjectContext release], managedObjectContext = nil;
-			managedObjectContext = [context retain];
-			
-			//[self verifyLegislatorsHaveOpenStatesID];
-			//[self verifyCommitteesHaveOpenStatesID];
-
-		}
-	}
-	return self;
-}
 
 - (void)dealloc {
-	self.managedObjectContext = nil;
 	[super dealloc];
 }
 
-- (NSManagedObjectContext *)managedObjectContext {
-	if (!managedObjectContext) {
-		self.managedObjectContext = [[TexLegeAppDelegate appDelegate] managedObjectContext];
-	}
-	return (managedObjectContext);
-}
 
 // These methods will get data synchronously, on the main thread for simplicity 
 // ... we won't be using these in production builds yet
@@ -71,11 +50,7 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 */
 - (NSArray *)getJSONCommitteesByChamber:(NSInteger)chamber {
 	// http://openstates.sunlightlabs.com/api/v1/committees/?state=tx&active=true&chamber=upper&apikey=350284d0c6af453b9b56f6c1c7fea1f9
-	NSString *chamberString = @"";
-	if (chamber == HOUSE)
-		chamberString = @"lower";
-	else if (chamber == SENATE)
-		chamberString = @"upper";
+	NSString *chamberString = [stringForChamber(chamber, TLReturnFull) lowercaseString];
 	
 	NSString *urlMethod = [NSString stringWithFormat:@"%@/committees/?state=tx&chamber=%@&%@", baseURL, chamberString, apiKey];
 	NSURL *url = [NSURL URLWithString:urlMethod];
@@ -153,11 +128,7 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 
 - (NSArray *)getJSONLegislatorsByChamber:(NSInteger)chamber {
 	// http://openstates.sunlightlabs.com/api/v1/legislators/?state=tx&chamber=%@&active=true&apikey=350284d0c6af453b9b56f6c1c7fea1f9
-	NSString *chamberString = @"";
-	if (chamber == HOUSE)
-		chamberString = @"lower";
-	else if (chamber == SENATE)
-		chamberString = @"upper";
+	NSString *chamberString = [stringForChamber(chamber, TLReturnFull) lowercaseString];
 	
 	NSString *urlMethod = [NSString stringWithFormat:@"%@/legislators/?state=tx&chamber=%@&active=true&%@", baseURL, chamberString, apiKey];
 	NSURL *url = [NSURL URLWithString:urlMethod];
@@ -236,7 +207,7 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 
 
 - (void)verifyLegislatorsHaveOpenStatesID {	
-	NSArray *legislators = [TexLegeCoreDataUtils allObjectsInEntityNamed:@"LegislatorObj" context:self.managedObjectContext];
+	NSArray *legislators = [LegislatorObj allObjects];
 	for (LegislatorObj *leg in legislators) {
 		NSString *openstates = leg.openstatesID;
 		if (!openstates || [openstates length] == 0) {
@@ -250,7 +221,7 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 - (void)verifyCommitteesHaveOpenStatesID {
 	//NSString *path = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:@"VotesmartToOpenStates.plist"];
 	
-	NSArray *committees = [TexLegeCoreDataUtils allObjectsInEntityNamed:@"CommitteeObj" context:self.managedObjectContext];
+	NSArray *committees = [CommitteeObj allObjects];
 	for (CommitteeObj *com in committees) {
 		NSString *openstates = com.openstatesID;
 		if (!openstates || [openstates length] == 0) {
@@ -265,46 +236,143 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 	NSArray *jsonArray = [self getJSONCommitteesByChamber:chamber];
 	if (!jsonArray)
 		return;
-	for (NSDictionary *dict in jsonArray) {
-		// should we use openstates instead of votesmart??  where are we finding these committees?
-		
-		NSString *idString = [dict objectForKey:@"id"];
-		if (!idString || ![openStatesID length]) {
-			debug_NSLog(@"No OpenStates ID  for committee: %@ - id: %@", [dict objectForKey:@"committee"], [dict objectForKey:@"id"]);
+	
+	NSMutableArray *errors = [NSMutableArray array];
+	NSMutableArray *identicals = [NSMutableArray array];
+	NSMutableArray *missing = [NSMutableArray array];
+	NSMutableArray *missingMembers = [NSMutableArray array];
+	
+	for (NSDictionary *summary in jsonArray) {
+		NSString *idString = [summary objectForKey:@"id"];
+		if (!idString || ![idString length]) {
+			NSString *theErr = [NSString stringWithFormat:@"No OpenStates ID for openstate committee: %@ - id: %@", 
+								[summary objectForKey:@"committee"], [summary objectForKey:@"id"]];
+			[errors addObject:theErr];
 			continue;
 		}
-		NSNumber *openStatesID = [NSNumber numberWithInteger:[idString integerValue]];
-		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.openstatesID == %@", openStatesID];
-		CommitteeObj *committee  = [TexLegeCoreDataUtils dataObjectWithPredicate:predicate entityName:@"CommitteeObj" context:self.managedObjectContext];
+		
+		NSDictionary *dict = [self getJSONCommitteeInfoWithCommitteeID:idString];
+
+		NSInteger hasMembers = ([dict objectForKey:@"members"] ? [[dict objectForKey:@"members"] count] : 0);
+		if (hasMembers == 0)
+			continue;
+			
+		// should we use openstates instead of votesmart??  where are we finding these committees?
+		
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.openstatesID == %@", idString];
+		CommitteeObj *committee  = [CommitteeObj objectWithPredicate:predicate];
 		
 		if (!committee) {
-			debug_NSLog(@"No committee object found for: %@ - openStatesID: %@", [dict objectForKey:@"committee"], openStatesID);
+			NSString *theErr = [NSString stringWithFormat:@"(%d members -- ID:%@ - Committee: %@ - Chamber: %@", 
+								hasMembers, idString, [dict objectForKey:@"committee"], [dict objectForKey:@"chamber"]];
+			[missing addObject:theErr];
 			continue;
 		}
 		
 		NSMutableArray *currMembers = [NSMutableArray arrayWithCapacity:[committee.committeePositions count]];
 		for (CommitteePositionObj *currentPosition in committee.committeePositions) {
-			[currMembers addObject:currentPosition.legislatorID];
+			NSString *role = nil;
+			switch ([currentPosition.position integerValue]) {
+				case 2:
+					role = @"chair";
+					break;
+				case 1:
+					role = @"vice chair";
+					break;
+				case 0:
+				default:
+					role = @"member";
+					break;
+			}
+			NSDictionary *positionDict = [NSDictionary dictionaryWithObjectsAndKeys:
+										  currentPosition.legislator.openstatesID, @"leg_id",
+										  role, @"role", 
+										  nil];
+										  
+			[currMembers addObject:positionDict];
 		}
+		
+		[currMembers sortUsingComparator:^(NSDictionary *item1, NSDictionary *item2) {
+			NSString *leg_id1 = [item1 objectForKey:@"leg_id"];
+			NSString *leg_id2 = [item2 objectForKey:@"leg_id"];
+			return [leg_id1 compare:leg_id2 options:NSNumericSearch];
+		}];
 		
 		NSMutableArray *jsonMembers = [NSMutableArray arrayWithCapacity:[[dict objectForKey:@"members"] count]];
 		for (NSDictionary *jsonPosition in [dict objectForKey:@"members"]) {
-			[jsonMembers addObject:[jsonPosition objectForKey:@"leg_id"]];
-		}
-		
-#warning unfinished ... needs some sort of comparison between these two arrays
+			
+			NSDictionary *positionDict = [NSDictionary dictionaryWithObjectsAndKeys:
+										  [jsonPosition objectForKey:@"leg_id"], @"leg_id",
+										  [jsonPosition objectForKey:@"role"], @"role",
+										  nil];
 
+			[jsonMembers addObject:positionDict];
+		}
+
+		[jsonMembers sortUsingComparator:^(NSDictionary *item1, NSDictionary *item2) {
+			NSString *leg_id1 = [item1 objectForKey:@"leg_id"];
+			NSString *leg_id2 = [item2 objectForKey:@"leg_id"];
+			return [leg_id1 compare:leg_id2 options:NSNumericSearch];
+		}];
+		
+		NSString *theStr = [NSString stringWithFormat:@"ID: %@ - Committee: %@ - Chamber: %@", 
+							idString, committee.committeeName, [dict objectForKey:@"chamber"]];
+
+		
+		BOOL equal = [currMembers isEqualToArray:jsonMembers];
+		if (equal) {
+			[identicals addObject:theStr];
+		}
+		else {
+			if ([currMembers count] != [jsonMembers count]) {
+				[errors addObject:[NSString stringWithFormat:@"Different # (%d-%d)---- %@", [currMembers count], [jsonMembers count], theStr]];
+			}
+			else {
+				[missing addObject:[NSString stringWithFormat:@"Same # (%d): wrong members ---- %@", hasMembers, theStr]];
+				[missingMembers addObject:@"----- US ----"];
+				[missingMembers addObject:[NSString stringWithFormat:@"%@", currMembers]];
+				[missingMembers addObject:@"----- THEM ----"];
+				[missingMembers addObject:[NSString stringWithFormat:@"%@", jsonMembers]];
+				 
+			}
+
+		}
 	}
 	
-	//NSArray *currentCommittees = [TexLegeCoreDataUtils allObjectsInEntityNamed:@"CommitteeObj" context:self.managedObjectContext];
+	NSLog(@"ERRORS AND MISSING GO HERE: %@", [UtilityMethods applicationDocumentsDirectory]);
+	
+	NSString *fileOut = nil;
+	if ([errors count]) {
+		fileOut = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingFormat:@"/COMMITTEE_ERRORS_%d.txt", chamber];
+		[errors writeToFile:fileOut atomically:YES];
+/*	NSLog(@"ERRORS -----------------------------");
+	for (NSString *different in errors) {
+		NSLog(@"%@", different);
+	}*/
+	}
 
+	if ([missing count]) {
+		fileOut = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingFormat:@"/COMMITTEE_MISSING_%d.txt", chamber];
+		[missing writeToFile:fileOut atomically:YES];
+
+		/*	NSLog(@"MISSING -----------------------------");
+		 for (NSString *different in missing) {
+		 NSLog(@"%@", different);
+		 }*/
+	}
+ 
 	
-	//NSArray *currentPositions = [TexLegeCoreDataUtils allObjectsInEntityNamed:@"CommitteePositionObj" context:self.managedObjectContext];
-	
+	if ([missingMembers count]) {
+		fileOut = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingFormat:@"/COMMITTEE_MISSING_MEMBERS_%d.txt", chamber];
+		[missingMembers writeToFile:fileOut atomically:YES];
+		/*	NSLog(@"MISSING Members-----------------------------");
+		 for (NSString *different in missingMembers) {
+		 NSLog(@"%@", different);
+		 }*/
+	}
 	
 	//NSArray *friendsWithDadsNamedBob = [friends findAllWhereKeyPath:@"father.name" equals:@"Bob"]
 
-	
 }
 
 @end
