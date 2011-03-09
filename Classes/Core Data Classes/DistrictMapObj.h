@@ -6,15 +6,17 @@
 //  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
-#import <CoreData/CoreData.h>
-#import <MapKit/MapKit.h>
+#import <RestKit/RestKit.h>
+#import <RestKit/CoreData/CoreData.h>
 #import "TexLegeDataObjectProtocol.h"
 
-@class DistrictOfficeObj;
+#import <MapKit/MapKit.h>
+
 @class LegislatorObj;
 
-@interface DistrictMapObj :  NSManagedObject  <NSCoding, MKAnnotation, TexLegeDataObjectProtocol>
+@interface DistrictMapObj :  RKManagedObject  <NSCoding, MKAnnotation>
 {
+	NSNumber * districtMapID;
 	NSNumber * chamber;
 	NSNumber * centerLon;
 	NSNumber * spanLat;
@@ -29,16 +31,19 @@
 	id lineColor;
 	NSNumber * minLon;
 	NSNumber * centerLat;
-	LegislatorObj * legislator;
-	NSNumber		*pinColorIndex;
-	
+	NSNumber *pinColorIndex;
+	NSString *updated;
+	NSString *coordinatesBase64;
+	LegislatorObj *legislator;
 }
 
+@property (nonatomic, retain) NSNumber * districtMapID;
 @property (nonatomic, retain) NSNumber * chamber;
 @property (nonatomic, retain) NSNumber * centerLon;
 @property (nonatomic, retain) NSNumber * spanLat;
 @property (nonatomic, retain) NSNumber * lineWidth;
 @property (nonatomic, retain) NSData * coordinatesData;
+@property (nonatomic, retain) NSString * coordinatesBase64;
 @property (nonatomic, retain) NSNumber * numberOfCoords;
 @property (nonatomic, retain) NSNumber * maxLat;
 @property (nonatomic, retain) NSNumber * minLat;
@@ -48,13 +53,15 @@
 @property (nonatomic, retain) id lineColor;
 @property (nonatomic, retain) NSNumber * minLon;
 @property (nonatomic, retain) NSNumber * centerLat;
+@property (nonatomic, retain) NSNumber * pinColorIndex;
+@property (nonatomic, retain) NSString * updated;
 @property (nonatomic, retain) LegislatorObj * legislator;
-@property (nonatomic, retain) NSNumber		*pinColorIndex;
 
 @property (nonatomic, readonly) CLLocationCoordinate2D	coordinate;
 @property (nonatomic, readonly) MKCoordinateRegion		region;
 @property (nonatomic, readonly) MKCoordinateSpan		span;
 
+- (void)resetRelationship:(id)sender;
 - (UIImage *)image;
 - (MKPolyline *)polyline;
 - (MKPolygon *)polygon;

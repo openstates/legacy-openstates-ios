@@ -93,34 +93,25 @@
 	return [DistrictMapObj objectsWithFetchRequest:fetchRequest];
 }
 
-+ (NSArray *)allDistrictMapIDsWithBoundingBoxesContaining:(CLLocationCoordinate2D)coordinate context:(NSManagedObjectContext *)context
++ (NSArray *)allDistrictMapIDsWithBoundingBoxesContaining:(CLLocationCoordinate2D)coordinate
 {		
 	NSNumber *lat = [NSNumber numberWithDouble:coordinate.latitude];
 	NSNumber *lon = [NSNumber numberWithDouble:coordinate.longitude];
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"maxLat >= %@ AND minLat <= %@ AND maxLon >=%@ AND minLon <= %@", lat, lat, lon, lon];
 	
-	NSFetchRequest *request = nil;
-	if (!context) {
-		request = [DistrictMapObj fetchRequest];
-		[request setResultType:NSManagedObjectIDResultType];	// only return object IDs
-		[request setPredicate:predicate];
-		return [DistrictMapObj objectsWithFetchRequest:request];
-	}
-	else {
-		request = [[NSFetchRequest alloc] init];
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictMapObj" inManagedObjectContext:context];
-		[request setEntity:entity];
-		[request setResultType:NSManagedObjectIDResultType];	// only return object IDs
-		[request setPredicate:predicate];
-		NSError *error = nil;
-		NSArray *fetchedObjects = [context executeFetchRequest:request error:&error];
-		[request release];
-		if (error) {
-			debug_NSLog(@"Problem fetching district maps IDs with bounding boxes containing coordinate.");
-			return nil;
+	NSFetchRequest * request = [DistrictMapObj fetchRequest];
+	[request setPropertiesToFetch:[NSArray arrayWithObject:@"districtMapID"]];
+	[request setResultType:NSDictionaryResultType];	// only return object IDs
+	[request setPredicate:predicate];
+	NSArray *results = [DistrictMapObj objectsWithFetchRequest:request];
+	if (results && [results count]) {
+		NSMutableArray *list = [NSMutableArray arrayWithCapacity:[results count]];
+		for (NSDictionary *result in results) {
+			[list addObject:[result objectForKey:@"districtMapID"]];
 		}
-		return fetchedObjects;
+		return list;
 	}
+	return nil;
 }
 
 

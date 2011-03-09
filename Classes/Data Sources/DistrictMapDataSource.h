@@ -19,14 +19,13 @@
 }
 
 @property (nonatomic, retain)			NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, retain) IBOutlet	NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, readonly)	NSManagedObjectContext *managedObjectContext;
 
 @property (nonatomic)			NSInteger filterChamber;		// 0 means don't filter
 @property (nonatomic,retain)	NSMutableString *filterString;	// @"" means don't filter
 @property (nonatomic, readonly) BOOL hasFilter;
 @property (nonatomic)			BOOL byDistrict;
 
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext;
 - (void) setFilterByString:(NSString *)filter;
 - (void) removeFilter;
 - (IBAction) sortByType:(id)sender;

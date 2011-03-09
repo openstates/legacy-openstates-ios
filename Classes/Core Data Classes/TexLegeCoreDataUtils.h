@@ -28,7 +28,7 @@
 
 + (NSArray *) allLegislatorsSortedByPartisanshipFromChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
 + (NSArray *) allDistrictMapsLight;
-+ (NSArray *) allDistrictMapIDsWithBoundingBoxesContaining:(CLLocationCoordinate2D)coordinate context:(NSManagedObjectContext *)context;
++ (NSArray *)allDistrictMapIDsWithBoundingBoxesContaining:(CLLocationCoordinate2D)coordinate;
 
 + (void) deleteAllObjectsInEntityNamed:(NSString*)entityName;
 

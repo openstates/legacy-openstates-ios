@@ -13,31 +13,31 @@
 #import "TexLegeCoreDataUtils.h"
 
 @interface DistrictMapSearchOperation()
-{
-}
 - (void)informDelegateOfFailureWithMessage:(NSString *)message failOption:(DistrictMapSearchOperationFailOption)failOption;
 - (void)informDelegateOfSuccess;
 @end
 
 @implementation DistrictMapSearchOperation
-@synthesize delegate, managedObjectContext;
-@synthesize foundDistricts, searchCoordinate;
+@synthesize delegate;
+@synthesize searchCoordinate, searchIDs, foundIDs;
 
-- (id) initWithDelegate:(id<DistrictMapSearchOperationDelegate>)newDelegate coordinate:(CLLocationCoordinate2D)aCoordinate {
+- (id) initWithDelegate:(id<DistrictMapSearchOperationDelegate>)newDelegate 
+			 coordinate:(CLLocationCoordinate2D)aCoordinate searchDistricts:(NSArray *)districtIDs {
 	if (self = [super init]) {
-
+		
 		if (newDelegate)
 			delegate = newDelegate;
 		searchCoordinate = aCoordinate;
-		if ([delegate respondsToSelector:@selector(managedObjectContext)])
-			managedObjectContext = [delegate performSelector:@selector(managedObjectContext)];
+		
+		if (districtIDs)
+			searchIDs = [districtIDs retain];
 	}
 	return self;
 }
 
 - (void) dealloc {
-	self.managedObjectContext = nil;
-	self.foundDistricts = nil;
+	self.foundIDs = nil;
+	self.searchIDs = nil;
 	delegate = nil;
 	[super dealloc];
 }
@@ -65,14 +65,7 @@
 
 #pragma mark -
 - (void)main 
-{
-	/*NSManagedObjectContext *threadedMOC = [self managedObjectContext];
-	if (!threadedMOC)
-		return; */
-
-	NSManagedObjectContext *sourceMOC = [[NSManagedObjectContext alloc] init];
-	[sourceMOC setUndoManager:nil];
-	
+{	
 	BOOL success = NO;
 	
     @try 
@@ -80,33 +73,20 @@
         // Operation task here
 		
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-		NSPersistentStoreCoordinator *sourceStore = nil;
-		sourceStore = [[TexLegeAppDelegate appDelegate] persistentStoreCoordinator];
-		[sourceMOC setPersistentStoreCoordinator:sourceStore];
 		
-		if (foundDistricts)
-			[foundDistricts release];
-		foundDistricts = [[NSMutableArray alloc] init];
-		
-		NSArray *searchDistricts = [TexLegeCoreDataUtils allDistrictMapIDsWithBoundingBoxesContaining:[self searchCoordinate] withContext:sourceMOC];
-			
-		for (NSManagedObjectID *objectID in searchDistricts) {
+		if (foundIDs)
+			[foundIDs release];
+		foundIDs = [[NSMutableArray alloc] init];
+					
+		for (NSNumber *distID in searchIDs) {
 
-			NSManagedObject * object = [sourceMOC objectWithID:objectID];
-
-			if ([object respondsToSelector:@selector(districtContainsCoordinate:)]) {
-				DistrictMapObj *map = (DistrictMapObj *)object;
-				if ([map districtContainsCoordinate:[self searchCoordinate]]) {
-					[foundDistricts addObject:[map objectID]];
-					success = YES;
-				}
-				else {
-					// this frees up memory and re-faults the unneeded objects
-					[sourceMOC refreshObject:map mergeChanges:NO];
-				}
-
+			DistrictMapObj * map = [DistrictMapObj objectWithPrimaryKeyValue:distID];
+			if ([map districtContainsCoordinate:[self searchCoordinate]]) {
+				[foundIDs addObject:distID];
+				success = YES;
 			}
+			// this frees up memory and re-faults the unneeded objects
+			[[map managedObjectContext] refreshObject:map mergeChanges:NO];
 		}
 		[pool drain];
     }
@@ -114,20 +94,12 @@
     {
         debug_NSLog(@"Exception: %@", e);
     }
-	if (sourceMOC)
-		[sourceMOC release], sourceMOC = nil;
 	
 	if (success)
 		[self informDelegateOfSuccess];
 	else
 		[self informDelegateOfFailureWithMessage:@"Could not find a district map with those coordinates." failOption:DistrictMapSearchOperationFailOptionLog];
 	
-/*	NSError *error = nil;
-	if (![threadedMOC save:&error]) {
-        NSLog(@"Error: %@", error);
-	}
-*/	
-
 }
 	
 

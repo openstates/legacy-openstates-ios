@@ -152,6 +152,7 @@
 		
 	
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
+	
 /*	if ([dataObject isKindOfClass:[NSManagedObject class]])
 		[appDelegate setSavedTableSelection:[dataObject objectID] forKey:self.viewControllerKey];
 	else
@@ -159,13 +160,14 @@
 */
 	[appDelegate setSavedTableSelection:nil forKey:self.viewControllerKey];
 	
+	DistrictMapObj *map = dataObject;
+
 	if (!self.detailViewController) {
 		MapViewController *tempVC = [[MapViewController alloc] init];
 		self.detailViewController = tempVC;
 		[tempVC release];
 	}
 
-	DistrictMapObj *map = dataObject;
 	if (map) {
 		MapViewController *mapVC = (MapViewController *)self.detailViewController;
 		[mapVC view];

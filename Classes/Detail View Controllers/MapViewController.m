@@ -54,7 +54,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 @synthesize forwardGeocoder, texasRegion;
 @synthesize senateDistrictView, houseDistrictView;
 @synthesize masterPopover;
-@synthesize genericOperationQueue, managedObjectContext;
+@synthesize genericOperationQueue;
 
 //SYNTHESIZE_SINGLETON_FOR_CLASS(MapViewController);
 
@@ -204,7 +204,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 #pragma mark -
 #pragma mark Animation and Zoom
 - (NSManagedObjectContext *)managedObjectContext {
-	return [[TexLegeAppDelegate appDelegate] managedObjectContext];
+	return [DistrictMapObj managedObjectContext];
 }
 
 
@@ -220,8 +220,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 					[senateDistrictView invalidatePath];
 				}
 			}
+			senateDistrictView = nil;
 		}
-		senateDistrictView = nil;
 	}
 	if (house) {
 		if (![UtilityMethods iOSVersion4] && houseDistrictView) {
@@ -230,8 +230,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 					[houseDistrictView invalidatePath];
 				}
 			}
+			houseDistrictView = nil;
 		}
-		houseDistrictView = nil;
 	}
 }
 
@@ -445,8 +445,12 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 #pragma DistrictMapSearchOperationDelegate
 
 - (void) searchDistrictMapsForCoordinate:(CLLocationCoordinate2D)aCoordinate {	
-	//debug_NSLog(@"Starting search for coordinate");
-	DistrictMapSearchOperation *op = [[DistrictMapSearchOperation alloc] initWithDelegate:self coordinate:aCoordinate];
+
+	NSArray *list = [TexLegeCoreDataUtils allDistrictMapIDsWithBoundingBoxesContaining:aCoordinate];
+	
+	DistrictMapSearchOperation *op = [[DistrictMapSearchOperation alloc] initWithDelegate:self 
+																			   coordinate:aCoordinate 
+																				searchDistricts:list];
 	if (op) {
 		if (!self.genericOperationQueue)
 			self.genericOperationQueue = [[[NSOperationQueue alloc] init] autorelease];
@@ -459,16 +463,15 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	//debug_NSLog(@"Found some search results in %d districts", [op.foundDistricts count]);
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-	NSArray *objectIDs = op.foundDistricts;
-	for (NSManagedObjectID *objectID in objectIDs) {
-		DistrictMapObj *district = (DistrictMapObj *)[self.managedObjectContext objectWithID:objectID];
+	for (NSNumber *districtID in op.foundIDs) {
+		DistrictMapObj *district = [DistrictMapObj objectWithPrimaryKeyValue:districtID];
 		if (district) {
 			[self.mapView addAnnotation:district];
 			[self.mapView performSelector:@selector(addOverlay:) withObject:[district polygon] afterDelay:0.5f];
 			//for (DistrictOfficeObj *office in district.legislator.districtOffices)
 			//	[self.mapView addAnnotation:office];
 			
-			[self.managedObjectContext refreshObject:district mergeChanges:NO];	// re-fault it to free memory
+			[[DistrictMapObj managedObjectContext] refreshObject:district mergeChanges:NO];	// re-fault it to free memory
 		}
 	}	
 	
@@ -599,7 +602,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"SHOWING_ALL_DISTRICTS"];
 	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	NSArray *districts = [TexLegeCoreDataUtils allDistrictMapsLightWithContext:self.managedObjectContext];
+	NSArray *districts = [TexLegeCoreDataUtils allDistrictMapsLight];
 	if (districts) {
 		[self resetMapViewWithAnimation:YES];
 		[self.mapView addAnnotations:districts];
@@ -1004,7 +1007,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		if (!foundOne) {
 			MKPolygon *mapPoly = [(DistrictMapObj*)annotation polygon];
 			[self.mapView performSelector:@selector(addOverlay:) withObject:mapPoly afterDelay:0.2f];
-			[self.managedObjectContext refreshObject:(DistrictMapObj*)annotation mergeChanges:NO];
+			[[DistrictMapObj managedObjectContext] refreshObject:(DistrictMapObj*)annotation mergeChanges:NO];
 		}
 		[self.mapView setRegion:region animated:TRUE];
 	}			

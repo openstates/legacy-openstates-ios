@@ -27,12 +27,16 @@ typedef enum {
 @interface DistrictMapSearchOperation : NSOperation 
 {
     __weak  NSObject <DistrictMapSearchOperationDelegate> *delegate;
-	
+	CLLocationCoordinate2D searchCoordinate;
+	NSArray *searchIDs;
+	NSMutableArray *foundIDs;
 }
 @property (assign) NSObject <DistrictMapSearchOperationDelegate> *delegate;
-@property (retain) NSManagedObjectContext * managedObjectContext;
-@property (retain) NSMutableArray *foundDistricts;
 @property (assign) CLLocationCoordinate2D searchCoordinate;
-- (id) initWithDelegate:(id<DistrictMapSearchOperationDelegate>)newDelegate coordinate:(CLLocationCoordinate2D)aCoordinate;
+@property (retain) NSArray *searchIDs;
+@property (retain) NSMutableArray *foundIDs;
 
+- (id) initWithDelegate:(id<DistrictMapSearchOperationDelegate>)newDelegate 
+			 coordinate:(CLLocationCoordinate2D)aCoordinate searchDistricts:(NSArray *)districtIDs;
+	
 @end

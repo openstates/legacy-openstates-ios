@@ -30,124 +30,160 @@
 @dynamic numberOfCoords;
 @dynamic district;
 @dynamic lineColor;
-@dynamic legislator;
 @dynamic pinColorIndex;
+@dynamic districtMapID;
+@dynamic updated;
+@dynamic legislator;
+@dynamic coordinatesBase64;
+
+#pragma mark RKObjectMappable methods
+
++ (NSDictionary*)elementToPropertyMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"districtMapID", @"districtMapID",
+			@"district", @"district",
+			@"chamber", @"chamber",
+			@"pinColorIndex", @"pinColorIndex",
+//			@"lineColor", @"lineColor",
+			@"lineWidth", @"lineWidth",
+			@"centerLon", @"centerLon",
+			@"centerLat", @"centerLat",
+			@"spanLon", @"spanLon",
+			@"spanLat", @"spanLat",
+			@"maxLon", @"maxLon",
+			@"maxLat", @"maxLat",
+			@"minLon", @"minLon",
+			@"minLat", @"minLat",
+			@"numberOfCoords", @"numberOfCoords",
+//			@"coordinatesData", @"coordinatesData",
+			@"updated", @"updated",
+			@"coordinatesBase64", @"coordinatesBase64",
+			nil];
+}
+
+//#warning Why not also add a new attribute listing the districts or coordinates that this district map contains as internal polygons
++ (NSString*)primaryKeyProperty {
+	return @"districtMapID";
+}
+/*
++ (NSDictionary*)elementToRelationshipMappings {
+	return [NSDictionary dictionaryWithKeysAndObjects:
+			@"legislator", @"legislator",
+			nil];
+}
+*/
+
+- (void)resetRelationship:(id)sender {
+	LegislatorObj * aLegislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber];
+	self.legislator = aLegislator;
+}
+
+/* (LegislatorObj *)legislator {
+	LegislatorObj * aLegislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber];
+	return aLegislator;
+}*/
+
+- (void) setCoordinatesBase64:(NSString *)newCoords {
+	NSString *key = @"coordinatesBase64";
+	
+	self.coordinatesData = [NSData dataWithBase64EncodedString:newCoords];
+	
+	[self willChangeValueForKey:key];
+	[self setPrimitiveValue:nil forKey:key];
+	[self didChangeValueForKey:key];
+}
 
 - (id) initWithCoder: (NSCoder *)coder
 {
     if (self = [super init])
     {
-        self.district = [coder decodeObjectForKey:@"district"];
-        self.chamber = [coder decodeObjectForKey:@"chamber"];
-		self.pinColorIndex = [coder decodeObjectForKey:@"pinColorIndex"];
-		self.lineColor = [coder decodeObjectForKey:@"lineColor"];
-		self.lineWidth = [coder decodeObjectForKey:@"lineWidth"];
-		self.centerLon = [coder decodeObjectForKey:@"centerLon"];
-		self.centerLat = [coder decodeObjectForKey:@"centerLat"];
-		self.spanLon = [coder decodeObjectForKey:@"spanLon"];
-		self.spanLat = [coder decodeObjectForKey:@"spanLat"];
-		self.maxLon = [coder decodeObjectForKey:@"maxLon"];
-		self.maxLat = [coder decodeObjectForKey:@"maxLat"];
-		self.minLon = [coder decodeObjectForKey:@"minLon"];
-		self.minLat = [coder decodeObjectForKey:@"minLat"];
-		self.numberOfCoords = [coder decodeObjectForKey:@"numberOfCoords"];
-		self.coordinatesData = [[coder decodeObjectForKey:@"coordinatesData"] copy];
-		
-		self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
+		for (NSString *key in [[[self class] elementToPropertyMappings] allKeys]) {
+			if ([key isEqualToString:@"coordinatesData"]) {
+				self.coordinatesData = [[coder decodeObjectForKey:@"coordinatesData"] copy];
+			}
+			else {
+				[self setValue:[coder decodeObjectForKey:key] forKey:key];
+			}
+		}
     }
 	return self;
 }
 
+- (NSDictionary *)exportToDictionary {
+	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
+	return tempDict;
+}
 
 - (void)encodeWithCoder:(NSCoder *)coder;
 {
 	NSDictionary *tempDict = [self exportToDictionary];
-	for (NSString *key in [tempDict allKeys]) {
+	for (NSString *key in [[[self class] elementToPropertyMappings] allKeys]) {
 		id object = [tempDict objectForKey:key];
 		[coder encodeObject:object];	
 	}
 }
 
+
 - (void) importFromDictionary: (NSDictionary *)dictionary
 {				
 	if (dictionary) {
-		self.district = [dictionary objectForKey:@"district"];
-		self.chamber = [dictionary objectForKey:@"chamber"];
-		self.pinColorIndex = [dictionary objectForKey:@"pinColorIndex"];
-		//self.lineColor = [dictionary objectForKey:@"lineColor"];
-		self.lineWidth = [dictionary objectForKey:@"lineWidth"];
-		self.centerLon = [dictionary objectForKey:@"centerLon"];
-		self.centerLat = [dictionary objectForKey:@"centerLat"];
-		self.spanLon = [dictionary objectForKey:@"spanLon"];
-		self.spanLat = [dictionary objectForKey:@"spanLat"];
-		self.maxLon = [dictionary objectForKey:@"maxLon"];
-		self.maxLat = [dictionary objectForKey:@"maxLat"];
-		self.minLon = [dictionary objectForKey:@"minLon"];
-		self.minLat = [dictionary objectForKey:@"minLat"];
-		self.numberOfCoords = [dictionary objectForKey:@"numberOfCoords"];
-		
-		id data = [dictionary objectForKey:@"coordinatesData"];
-		
-		if ([data isKindOfClass:[NSString class]]) {
-			self.coordinatesData = [NSData dataWithBase64EncodedString:data];
-		}
-		else if ([data isKindOfClass:[NSArray class]]) {
-
-			NSInteger numberOfPairs = [self.numberOfCoords integerValue];
-			CLLocationCoordinate2D *coordinatesCArray = calloc(numberOfPairs, sizeof(CLLocationCoordinate2D));
-			NSInteger count = 0;
-			if (coordinatesCArray) {
-				for (NSArray *spot in data) {
+		for (NSString *key in [dictionary allKeys]) {
+			if ([key isEqualToString:@"coordinatesData"]) {				
+				id data = [dictionary objectForKey:@"coordinatesData"];
+				
+				if ([data isKindOfClass:[NSString class]]) {   
+					self.coordinatesData = [NSData dataWithBase64EncodedString:data];
+				}
+				else if ([data isKindOfClass:[NSArray class]]) {
 					
-					NSNumber *longitude = [spot objectAtIndex:0];
-					NSNumber *latitude = [spot objectAtIndex:1];
-					
-					if (longitude && latitude) {
-						double lng = [longitude doubleValue];
-						double lat = [latitude doubleValue];
-						coordinatesCArray[count++] = CLLocationCoordinate2DMake(lat,lng);
+					NSInteger numberOfPairs = [self.numberOfCoords integerValue];
+					CLLocationCoordinate2D *coordinatesCArray = calloc(numberOfPairs, sizeof(CLLocationCoordinate2D));
+					NSInteger count = 0;
+					if (coordinatesCArray) {
+						for (NSArray *spot in data) {
+							
+							NSNumber *longitude = [spot objectAtIndex:0];
+							NSNumber *latitude = [spot objectAtIndex:1];
+							
+							if (longitude && latitude) {
+								double lng = [longitude doubleValue];
+								double lat = [latitude doubleValue];
+								coordinatesCArray[count++] = CLLocationCoordinate2DMake(lat,lng);
+							}
+						}
+						
+						self.coordinatesData = [NSData dataWithBytes:(const void *)coordinatesCArray 
+															  length:numberOfPairs*sizeof(CLLocationCoordinate2D)];
+						
+						free(coordinatesCArray);
 					}
 				}
-				
-				self.coordinatesData = [NSData dataWithBytes:(const void *)coordinatesCArray 
-													  length:numberOfPairs*sizeof(CLLocationCoordinate2D)];
-				
-				free(coordinatesCArray);
+				else if ([data isKindOfClass:[NSData class]])
+					self.coordinatesData = [data copy];				
 			}
-		}
-		else if ([data isKindOfClass:[NSData class]])
-			self.coordinatesData = [data copy];
-
-
-		self.legislator = [TexLegeCoreDataUtils legislatorForDistrict:self.district andChamber:self.chamber withContext:[self managedObjectContext]];		
+			else {
+				NSArray *myKeys = [[[self class] elementToPropertyMappings] allKeys];
+				if ([myKeys containsObject:key])
+					[self setValue:[dictionary objectForKey:key] forKey:key];
+			}
+		}				
 	}
 }
-
-
-- (NSDictionary *)exportToDictionary {
-	NSMutableDictionary *tempDict = [NSMutableDictionary dictionary];
-	[tempDict setObject:self.district forKey:@"district"];
-	[tempDict setObject:self.chamber forKey:@"chamber"];
-	[tempDict setObject:self.pinColorIndex forKey:@"pinColorIndex"];
-//	[tempDict setObject:self.lineColor forKey:@"lineColor"];
-	[tempDict setObject:self.lineWidth forKey:@"lineWidth"];
-	[tempDict setObject:self.centerLon forKey:@"centerLon"];
-	[tempDict setObject:self.centerLat forKey:@"centerLat"];
-	[tempDict setObject:self.spanLon forKey:@"spanLon"];
-	[tempDict setObject:self.spanLat forKey:@"spanLat"];
-	[tempDict setObject:self.maxLon forKey:@"maxLon"];
-	[tempDict setObject:self.maxLat forKey:@"maxLat"];
-	[tempDict setObject:self.minLon forKey:@"minLon"];
-	[tempDict setObject:self.minLat forKey:@"minLat"];
-	[tempDict setObject:self.numberOfCoords forKey:@"numberOfCoords"];
-	//[tempDict setObject:self.legislator.legislatorID forKey:@"legislatorID"];
-	
-	[tempDict setObject:self.coordinatesData forKey:@"coordinatesData"];
-
-	return tempDict;
+/*
+- (NSData *)coordinatesData {
+#ifdef WE_DONT_CARE_ABOUT_FUTURE_ONLINE_UPDATES_TOTHE_COORDINATES
+	NSData *tempData = [self primitiveValueForKey:@"coordinatesData"];
+	if (!tempData) {
+		tempData = [NSData dataWithBase64EncodedString:self.coordinatesBase64];
+		self.coordinatesData = [tempData copy];
+	}
+#else // WE_ACTUALLY_DO_WANT_TO_UPDATE_COORDINATES_WHEN_NECESSARY
+	NSData *tempData = [NSData dataWithBase64EncodedString:self.coordinatesBase64];
+#endif
+	return tempData;
 }
-
-- (id)proxyForJson {
+*/
+- (id)proxyForJson {	
 	NSMutableDictionary *jsonDict = [NSMutableDictionary dictionaryWithDictionary:[self exportToDictionary]];
 	
 #if JSON_EXPORTS_COORDINATES == 1
@@ -174,10 +210,11 @@
 
 + (NSArray *)lightPropertiesToFetch {
 	NSArray *props = [NSArray arrayWithObjects:
+	@"districtMapID",
 	@"district",
 	@"chamber",
 	@"pinColorIndex",
-	@"lineColor",
+//	@"lineColor",
 	@"lineWidth",
 	@"centerLon",
 	@"centerLat",
@@ -188,9 +225,9 @@
 	@"minLon",
 	@"minLat",
 	@"numberOfCoords",
-	@"legislator.legislatorID",
-	@"legislator.firstname",
+	@"updated",
 	@"legislator.lastname",
+	@"legislator.firstname",
 	nil];
 	return props;
 }
@@ -265,9 +302,7 @@
 	if (self.district && [self.district integerValue] == 83) {	// special case (until districts change)
 		NSArray *interiorPolygons = nil;
 		
-		DistrictMapObj *interiorDistrict = [TexLegeCoreDataUtils districtMapForDistrict:[NSNumber numberWithInt:84] 
-																	 andChamber:self.chamber 
-																	withContext:[self managedObjectContext]];
+		DistrictMapObj *interiorDistrict = [TexLegeCoreDataUtils districtMapForDistrict:[NSNumber numberWithInt:84] andChamber:self.chamber lightProperties:NO];
 		if (interiorDistrict) {
 			MKPolygon *interiorPolygon = [interiorDistrict polygon];
 			if (interiorPolygon)
@@ -295,11 +330,11 @@
 
 - (BOOL) districtContainsCoordinate:(CLLocationCoordinate2D)aCoordinate {
 
-	if (![self boundingBoxContainsCoordinate:aCoordinate])
-		return NO;
+	//if (![self boundingBoxContainsCoordinate:aCoordinate])
+	//	return NO;
 	
-	return [PolygonMath insidePolygon:(CLLocationCoordinate2D *)[self.coordinatesData bytes]
-						 count:[self.numberOfCoords integerValue] point:aCoordinate];
+	return [PolygonMath insidePolygon:(CLLocationCoordinate2D *)[[self valueForKey:@"coordinatesData"] bytes]
+						 count:[[self valueForKey:@"numberOfCoords"] integerValue] point:aCoordinate];
 
 }
 

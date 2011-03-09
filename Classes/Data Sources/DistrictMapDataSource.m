@@ -11,6 +11,7 @@
 #import "DistrictMapDataSource.h"
 #import "DisclosureQuartzView.h"
 #import "TexLegeCoreDataUtils.h"
+#import "TexLegeAppDelegate.h"
 
 #if NEEDS_TO_PARSE_KMLMAPS == 1
 #import "DistrictOfficeObj.h"
@@ -21,12 +22,12 @@
 #endif
 
 @interface DistrictMapDataSource (Private)
-
+- (NSArray *)sortDescriptors;
 @end
 
 
 @implementation DistrictMapDataSource
-@synthesize fetchedResultsController, managedObjectContext;
+@synthesize fetchedResultsController;
 @synthesize hideTableIndex, byDistrict;
 @synthesize filterChamber, filterString, searchDisplayController;
 
@@ -34,17 +35,23 @@
 @synthesize importer;
 #endif
 
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)newContext {
+- (Class)dataClass {
+	return [DistrictMapObj class];
+}
+
+- (NSManagedObjectContext *)managedObjectContext {
+	return [DistrictMapObj managedObjectContext];
+}
+
+- (id)init {
 	if (self = [super init]) {
-		if (newContext) 
-			managedObjectContext = [newContext retain];
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
-		
+		fetchedResultsController = nil;
 		
 #if NEEDS_TO_PARSE_KMLMAPS == 1
 
-		DistrictOfficeDataSource *tempDistOff = [[[DistrictOfficeDataSource alloc] initWithManagedObjectContext:newContext] autorelease];
+		DistrictOfficeDataSource *tempDistOff = [[[DistrictOfficeDataSource alloc] init] autorelease];
 ///#warning hacky place to put this, but we need to initialize district offices i guess? ....
 		
 		mapCount = 0;
@@ -56,9 +63,19 @@
 												 selector:@selector(dataSourceReceivedMemoryWarning:)
 													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];				
 		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(resetData:) name:@"DATAMODEL_UPDATED" object:nil];		
+												 selector:@selector(resetCoreData:) name:@"RESTKIT_LOADED_DISTRICTMAPOBJ" object:nil];		
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(resetCoreData:) name:@"RESTKIT_LOADED_LEGISLATOROBJ" object:nil];		
+		
 	}
 	return self;
+}
+
+- (void)resetCoreData:(NSNotificationCenter *)notification {
+	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
+	self.fetchedResultsController = nil;
+	NSError *error = nil;
+	[self.fetchedResultsController performFetch:&error];
 }
 
 -(void)dataSourceReceivedMemoryWarning:(id)sender {
@@ -68,12 +85,6 @@
 	}
 }
 
-- (void)resetData:(NSNotificationCenter *)notification {
-	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
-	NSError *error = nil;
-	[self.fetchedResultsController performFetch:&error];
-}
-
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 
@@ -81,7 +92,6 @@
 	self.importer = nil;
 #endif
 	self.fetchedResultsController = nil;
-	self.managedObjectContext = nil;	
 	self.filterString = nil;
 	self.searchDisplayController = nil;
     [super dealloc];
@@ -119,7 +129,7 @@
 #pragma mark Data Object Methods
 // return the committee at the index in the sorted by symbol array
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
-	DistrictMapObj *tempEntry = nil;
+	NSDictionary *tempEntry = nil;
 	@try {
 		tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	}
@@ -171,8 +181,6 @@
 		cell.accessoryView = qv;
 		[qv release];
 		//[iv release];
-		
-		
 	}
     
 	DistrictMapObj *tempEntry = [self dataObjectForIndexPath:indexPath];
@@ -186,11 +194,15 @@
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	
 	if (self.byDistrict)
-		cell.detailTextLabel.text = [NSString stringWithFormat:@"District %@ (%@)", tempEntry.district, [tempEntry.legislator lastname]];
+		cell.detailTextLabel.text = [NSString stringWithFormat:@"District %@ (%@)", 
+									 [tempEntry valueForKey:@"district"], 
+									 [tempEntry valueForKeyPath:@"legislator.lastname"]];
 	else
-		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (Dist. %@)", [tempEntry.legislator legProperName], tempEntry.district];
+		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (Dist. %@)", 
+									 [[tempEntry valueForKey:@"legislator"] legProperName], 
+									 [tempEntry valueForKey:@"district"]];
 	
-	cell.textLabel.text = (tempEntry.chamber.integerValue == HOUSE) ? @"House" : @"Senate";
+	cell.textLabel.text = ([[tempEntry valueForKey:@"chamber"] integerValue] == HOUSE) ? @"House" : @"Senate";
 	
 	
 	cell.accessoryView.hidden = (tableView == self.searchDisplayController.searchResultsTableView);
@@ -327,7 +339,7 @@
 
 - (void)checkDistrictMaps {
 	
-	for (DistrictMapObj *map in [TexLegeCoreDataUtils allDistrictMapsLightWithContext:self.managedObjectContext]) {
+	for (DistrictMapObj *map in [TexLegeCoreDataUtils allDistrictMapsLight]) {
 		if (!map.legislator) {
 			debug_NSLog(@"district without a legislator!");
 			assert(map.legislator);
@@ -364,9 +376,8 @@
 
 - (void)insertDistrictMaps:(NSArray *)districtMaps
 {	
-	NSManagedObjectContext *context = self.managedObjectContext;
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictMapObj" 
-											  inManagedObjectContext:context];
+											  inManagedObjectContext:self.managedObjectContext];
 	
 	
 	// iterate over the values in the raw  dictionary
@@ -374,7 +385,7 @@
 	{
 		// create an legislator instance for each
 		DistrictMapObj *newObject = [NSEntityDescription insertNewObjectForEntityForName:
-										 [entity name] inManagedObjectContext:context];
+										 [entity name] inManagedObjectContext:self.managedObjectContext];
 		
 //		CLLocationCoordinate2D *coordinatesCArray;
 //		UIColor					*lineColor;
@@ -433,38 +444,51 @@
 
 #endif
 
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_START" object:self];
+	//    [self.tableView beginUpdates];
+}
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_END" object:self];
+	//    [self.tableView endUpdates];
+}
+
 /*
  Set up the fetched results controller.
  */
-- (NSFetchedResultsController *)fetchedResultsController {
-    
-    if (fetchedResultsController != nil) {
-        return fetchedResultsController;
-    }
-    
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictMapObj" 
-											  inManagedObjectContext:self.managedObjectContext];
-	[fetchRequest setEntity:entity];
-	
-	[fetchRequest setPropertiesToFetch:[DistrictMapObj lightPropertiesToFetch]];
-
+- (NSArray *)sortDescriptors {
+	NSArray *descriptors = nil;
 	if (self.byDistrict) {
 		NSSortDescriptor *sort1 = [[NSSortDescriptor alloc] initWithKey:@"district" ascending:YES] ;
 		NSSortDescriptor *sort2 = [[NSSortDescriptor alloc] initWithKey:@"chamber" ascending:NO] ;
-		[fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sort1, sort2, nil]];
+		descriptors = [NSArray arrayWithObjects:sort1, sort2, nil];
 		[sort1 release];
 		[sort2 release];
 	}
 	else {
 		NSSortDescriptor *sort1 = [[NSSortDescriptor alloc] initWithKey:@"legislator.lastname" ascending:YES] ;
 		NSSortDescriptor *sort2 = [[NSSortDescriptor alloc] initWithKey:@"legislator.firstname" ascending:YES] ;
-		[fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sort1, sort2, nil]];
+		descriptors = [NSArray arrayWithObjects:sort1, sort2, nil];
 		[sort1 release];
 		[sort2 release];
-		
 	}
+	return descriptors;
+}
+
+- (NSFetchedResultsController *)fetchedResultsController {
+    if (fetchedResultsController != nil) {
+        return fetchedResultsController;
+    }
+	NSFetchRequest *fetchRequest = [DistrictMapObj fetchRequest];
+	
+	/* GREG -- in reality, the light properties thing doesn't actually work without a DictionaryResultType
+				However, you can't use a dictionary result in conjunction with change notification in the FRC.
+				and we need change notification in order to make updating work ... so now we just have to rely
+				on some judicious use of refreshObject: to clear the memory footprint
+	 */
+	[fetchRequest setPropertiesToFetch:[DistrictMapObj lightPropertiesToFetch]];
+//	[fetchRequest setResultType:NSDictionaryResultType];
+	[fetchRequest setSortDescriptors:[self sortDescriptors]];
 	
 	fetchedResultsController = [[NSFetchedResultsController alloc] 
 															 initWithFetchRequest:fetchRequest 
@@ -472,11 +496,6 @@
 															 sectionNameKeyPath:nil cacheName:@"DistrictMaps"];
 	
     fetchedResultsController.delegate = self;
-		
-	[fetchRequest release];
-	
-	//NSError *error = nil;
-	//[fetchedResultsController performFetch:&error];		// is this really necessary???
 	return fetchedResultsController;
 }    
 
