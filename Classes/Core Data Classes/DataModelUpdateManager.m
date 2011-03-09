@@ -21,7 +21,7 @@
 #define JSONDATA_FILEKEY		@"resource"
 #define JSONDATA_ENCODING		NSUTF8StringEncoding
 
-#define TESTING 1	// turn this on to fake the updater into believing all remote data is newer than local.  
+#define TESTING 0	// turn this on to fake the updater into believing all remote data is newer than local.  
 
 @interface DataModelUpdateManager (Private)
 - (NSArray *) localDataTimestamps;
