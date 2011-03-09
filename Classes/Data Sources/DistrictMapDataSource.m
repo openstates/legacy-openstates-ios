@@ -346,12 +346,12 @@
 			return;
 		}
 		
-		if (![map districtContainsCoordinate:map.coordinate]) {
+		if (![map boundingBoxContainsCoordinate:map.coordinate] || ![map districtContainsCoordinate:map.coordinate]) {
 			//debug_NSLog(@"District %@ center is outside the district, finding appropriate district office...", map.district);
 			
 			BOOL foundOne = NO;
 			for (DistrictOfficeObj *office in map.legislator.districtOffices) {
-				if ([map districtContainsCoordinate:office.coordinate]) {
+				if ([map boundingBoxContainsCoordinate:office.coordinate] && [map districtContainsCoordinate:office.coordinate]) {
 					//debug_NSLog(@"Found one at %@", office.address);
 					map.centerLat = office.latitude;
 					map.centerLon = office.longitude;

@@ -19,9 +19,6 @@
 #import "TexLegeAppDelegate.h"
 #import "TexLegeCoreDataUtils.h"
 
-//#import "DistrictOfficeMasterViewController.h"
-//#import "DistrictOfficeDataSource.h"
-
 #import "LocalyticsSession.h"
 #import "UIColor-Expanded.h"
 
@@ -768,9 +765,9 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 // Only in 4.0+
 - (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error {
 	
-	NSString *message = [NSString stringWithFormat:@"Failed to locate the user due to the following:", [error localizedDescription]];
+	NSString *message = [NSString stringWithFormat:@"Failed to locate you due to the following:", [error localizedDescription]];
 	
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Locate User Error" 
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Fix Error" 
 													message:message
 												   delegate:nil 
 										  cancelButtonTitle:@"OK" 

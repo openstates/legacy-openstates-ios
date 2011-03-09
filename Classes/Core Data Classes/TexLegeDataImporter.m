@@ -13,6 +13,7 @@
 #import "CommitteeObj.h"
 #import "LegislatorObj.h"
 #import "TexLegeReachability.h"
+#import "TexLegeAppDelegate.h"
 
 @interface TexLegeDataImporter (Private)
 
@@ -21,17 +22,18 @@
 @end
 
 @implementation TexLegeDataImporter
-@synthesize managedObjectContext;
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext*)newContext {
+- (NSManagedObjectContext *)managedObjectContext {
+	return [LegislatorObj managedObjectContext];
+}
+
+- (id) init {
 	if (self=[super init]) {
-		self.managedObjectContext = newContext;			
 	}
 	return self;
 }
 
 - (void) dealloc {
-	self.managedObjectContext = nil;
 	[super dealloc];
 }
 
@@ -95,7 +97,7 @@
 	
 	debug_NSLog(@"DataImporter: IMPORTING %@ OBJECTS FROM: %@", entityName, importPath);
 	
-	[TexLegeCoreDataUtils deleteAllObjectsInEntityNamed:entityName context:self.managedObjectContext];
+	[TexLegeCoreDataUtils deleteAllObjectsInEntityNamed:entityName];
 
 	NSInteger importCount = 0;
 	for (NSDictionary * aDictionary in importPlist) {

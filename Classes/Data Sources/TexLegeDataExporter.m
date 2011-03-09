@@ -10,24 +10,15 @@
 #import "UtilityMethods.h"
 #import "TexLegeCoreDataUtils.h"
 #import "TexLegeDataObjectProtocol.h"
-#import "DataModelUpdateManager.h"
+#import "TexLegeAppDelegate.h"
 
 #import "JSON.h"
 #import "LegislatorObj.h"
 #import "NSString_Extensions.h"
 
 @implementation TexLegeDataExporter
-@synthesize managedObjectContext;
-
-- (id) initWithManagedObjectContext:(NSManagedObjectContext*)newContext {
-	if (self=[super init]) {
-		self.managedObjectContext = newContext;			
-	}
-	return self;
-}
 
 - (void) dealloc {
-	self.managedObjectContext = nil;
 	[super dealloc];
 }
 
@@ -38,11 +29,10 @@
 	[self exportObjectsWithEntityName:@"CommitteeObj" JSON:doJSON force:force];
 	[self exportObjectsWithEntityName:@"CommitteePositionObj" JSON:doJSON force:force];
 	[self exportObjectsWithEntityName:@"WnomObj" JSON:doJSON force:force];
+	[self exportObjectsWithEntityName:@"WnomObj" JSON:doJSON force:force];
 	[self exportObjectsWithEntityName:@"StafferObj" JSON:doJSON force:force];
 	[self exportObjectsWithEntityName:@"DistrictOfficeObj" JSON:doJSON force:force];
 	[self exportObjectsWithEntityName:@"DistrictMapObj" JSON:doJSON force:force];			// do a plist or json
-	if (doJSON)
-		[self exportObjectsWithEntityName:@"DistrictMapObj" JSON:NO force:force];			// but do a plist too, always
 	[self exportObjectsWithEntityName:@"LinkObj" JSON:doJSON force:force];
 
 }
@@ -50,6 +40,7 @@
 	[self exportAllDataObjectsWithJSON:NO force:YES];
 }
 
+// I don't think this really helps ... it's not magically on a seperate thread, as far as I can tell.  So it blocks to UI, doesn't it?
 - (void)writeFileInBackground:(id)dictObject {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	if (dictObject && [dictObject isKindOfClass:[NSDictionary class]]) {
@@ -88,21 +79,8 @@
 	if (!doJSON)
 		outFile = [NSString stringWithFormat:@"%@.plist", entityName];
 	else {
-		NSNumber *version = [NSNumber numberWithInteger:0];
-		DataModelUpdateManager *updater = nil;
-		@try {
-			updater = [[DataModelUpdateManager alloc] initWithManagedObjectContext:self.managedObjectContext];
-			version = [updater getCatalogValueForKey:@"Version" model:entityName];
-			outFile = [updater getCatalogValueForKey:@"URL" model:entityName];
-		}
-		@catch (NSException * e) {
-		}
-		@finally {
-			if (updater)
-				[updater release];
-			if (!outFile) {
-				outFile = [NSString stringWithFormat:@"%@.v%@.json", entityName, version];
-			}
+		if (!outFile) {
+			outFile = [NSString stringWithFormat:@"%@.builtInExport.json", entityName];
 		}
 	}
 
@@ -110,7 +88,7 @@
 		
 	if (force || (![[NSFileManager defaultManager] fileExistsAtPath:outPath])) {
 		debug_NSLog(@"DataExporter: EXPORTING %@ OBJECTS TO: %@", entityName, outPath);
-		NSArray *objArray = [TexLegeCoreDataUtils allObjectsInEntityNamed:entityName context:self.managedObjectContext];
+		NSArray *objArray = [NSClassFromString(entityName) allObjects];
 
 		NSDictionary *outputDict = nil;
 		if (!doJSON)
@@ -136,7 +114,7 @@
 	
 	debug_NSLog(@"DataExporter: EXPORTING %@ OBJECTS TO: %@", entityName, outPath);
 	
-	NSArray *objArray = [TexLegeCoreDataUtils allObjectsInEntityNamed:entityName context:self.managedObjectContext];
+	NSArray *objArray = [TexLegeCoreDataUtils allObjectsInEntityNamed:entityName];
 	
 	NSString *inFile = [NSString stringWithFormat:@"hacky.plist"];
 	NSString *inPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:inFile];
@@ -179,7 +157,7 @@
 }
 
 - (void)hackyLegislatorIDs {
-	NSArray *legislators = [TexLegeCoreDataUtils allObjectsInEntityNamed:@"LegislatorObj" context:self.managedObjectContext];
+	NSArray *legislators = [LegislatorObj allObjects];
 	
 	static const NSString *urlRoot = @"http://transparencydata.com/api/1.0/entities.json?apikey=350284d0c6af453b9b56f6c1c7fea1f9&search=";
 

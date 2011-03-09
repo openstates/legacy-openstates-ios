@@ -12,9 +12,8 @@
 @interface TexLegeDataImporter : NSObject {
 
 }
-@property (nonatomic,retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic,readonly) NSManagedObjectContext *managedObjectContext;
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext*)newContext;
 - (void)importAllDataObjects;
 - (void)importObjectsWithEntityName:(NSString *)entityName;
 	

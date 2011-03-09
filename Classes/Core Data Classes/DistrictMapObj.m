@@ -85,7 +85,7 @@
 
 - (void) setCoordinatesBase64:(NSString *)newCoords {
 	NSString *key = @"coordinatesBase64";
-	
+
 	self.coordinatesData = [NSData dataWithBase64EncodedString:newCoords];
 	
 	[self willChangeValueForKey:key];
