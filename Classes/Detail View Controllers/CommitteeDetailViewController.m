@@ -30,9 +30,7 @@
 #import "LocalyticsSession.h"
 
 @interface CommitteeDetailViewController (Private)
-
 - (void) buildInfoSectionArray;
-
 @end
 
 @implementation CommitteeDetailViewController
@@ -537,11 +535,19 @@ CGFloat quartzRowHeight = 73.f;
 	NSString * sectionName;
 	
 	switch (section) {
-		case kChairSection:
-			sectionName = @"Chair";
+		case kChairSection: {
+			if ([self.committee.committeeType integerValue] == JOINT)
+				sectionName = @"Co-Chair";
+			else
+				sectionName = @"Chair";
+		}
 			break;
-		case kViceChairSection:
-			sectionName = @"Vice Chair";
+		case kViceChairSection: {
+			if ([self.committee.committeeType integerValue] == JOINT)
+				sectionName = @"Co-Chair";
+			else
+				sectionName = @"Vice Chair";
+		}
 			break;
 		case kMembersSection:
 			sectionName = @"Members";
