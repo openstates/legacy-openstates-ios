@@ -208,15 +208,20 @@ NSInteger kNoSelection = -1;
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSArray *savedOrder = [defaults arrayForKey:kSavedTabOrderKey];
 	NSMutableArray *orderedTabs = [NSMutableArray arrayWithCapacity:[self.tabBarController.viewControllers count]];
-	if ([savedOrder count] > 0 ) {
+	NSInteger foundVCs = 0;
+	if (savedOrder && [savedOrder count] > 0 ) {
 		for (NSInteger i = 0; i < [savedOrder count]; i++){
 			for (UIViewController *aController in self.tabBarController.viewControllers) {
 				if ([aController.tabBarItem.title isEqualToString:[savedOrder objectAtIndex:i]]) {
 					[orderedTabs addObject:aController];
+					foundVCs++;
 				}
 			}
 		}
-		tabBarController.viewControllers = orderedTabs;
+		if (foundVCs < [self.tabBarController.viewControllers count]) // we've got more now than we used to
+			[defaults removeObjectForKey:kSavedTabOrderKey];
+		else
+			tabBarController.viewControllers = orderedTabs;
 	}
 }
 

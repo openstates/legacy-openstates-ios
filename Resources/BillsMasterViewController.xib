@@ -308,14 +308,12 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>dataSource</string>
 							<string>detailViewController</string>
-							<string>managedObjectContext</string>
 							<string>selectObjectOnAppear</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>id</string>
 							<string>id</string>
-							<string>NSManagedObjectContext</string>
 							<string>id</string>
 						</object>
 					</object>
@@ -325,7 +323,6 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>dataSource</string>
 							<string>detailViewController</string>
-							<string>managedObjectContext</string>
 							<string>selectObjectOnAppear</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -339,10 +336,6 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">managedObjectContext</string>
-								<string key="candidateClassName">NSManagedObjectContext</string>
-							</object>
-							<object class="IBToOneOutletInfo">
 								<string key="name">selectObjectOnAppear</string>
 								<string key="candidateClassName">id</string>
 							</object>
@@ -351,20 +344,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Classes/Master View Controllers/GeneralTableViewController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">NSManagedObjectContext</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">../../Frameworks/TouchCode/TouchFoundation/Source/CoreData/NSManagedObjectContext_Extensions.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">NSManagedObjectContext</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/Core Data Classes/TexLegeCoreDataUtils.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -391,14 +370,6 @@
 			</object>
 			<object class="NSMutableArray" key="referencedPartialClassDescriptionsV3.2+">
 				<bool key="EncodedWithXMLCoder">YES</bool>
-				<object class="IBPartialClassDescription">
-					<string key="className">NSManagedObjectContext</string>
-					<string key="superclassName">NSObject</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBFrameworkSource</string>
-						<string key="minorKey">CoreData.framework/Headers/NSManagedObjectContext.h</string>
-					</object>
-				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

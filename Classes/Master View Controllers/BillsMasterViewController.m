@@ -48,7 +48,7 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	
+		
 	if (!billSearchDS)
 		billSearchDS = [[[BillSearchDataSource alloc] initWithSearchDisplayController:self.searchDisplayController] retain];
 	
@@ -85,7 +85,7 @@
 	_requestDictionary = nil;
 	[_requestSenders release];
 	_requestSenders = nil;
-	
+		
 	[super viewDidUnload];
 }
 
@@ -105,7 +105,8 @@
 	
 	//// ALL OF THE FOLLOWING MUST *NOT* RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER
 	
-	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
+	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {		
+		
 		id detailObject = nil;
 		
 		if (self.detailViewController && [self.detailViewController respondsToSelector:@selector(selectedMenu)]) {
@@ -144,6 +145,7 @@
 	//	self.navigationController.toolbarHidden = YES;
 	
 	id dataObject = nil;
+	BOOL changingDetails = NO;
 
 //	IF WE'RE CLICKING ON SOME SEARCH RESULTS ... PULL UP THE BILL DETAIL VIEW CONTROLLER
 	if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
@@ -152,9 +154,11 @@
 		
 		if (dataObject) {
 
-			if (!self.detailViewController || ![self.detailViewController isKindOfClass:[BillsDetailViewController class]])
+			if (!self.detailViewController || ![self.detailViewController isKindOfClass:[BillsDetailViewController class]]) {
 				self.detailViewController = [[[BillsDetailViewController alloc] initWithNibName:@"BillsDetailViewController" bundle:nil] autorelease];
-
+				changingDetails = YES;
+			}
+			
 			NSString *queryString = [NSString stringWithFormat:@"http://openstates.sunlightlabs.com/api/v1/bills/tx/%@/%@/?apikey=350284d0c6af453b9b56f6c1c7fea1f9", 
 									 [dataObject objectForKey:@"session"], [[dataObject objectForKey:@"bill_id"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 			
@@ -187,6 +191,7 @@
 				self.detailViewController = [[[NSClassFromString(theClass) alloc] initWithNibName:nil bundle:nil] autorelease];
 			else
 				self.detailViewController = [[[NSClassFromString(theClass) alloc] initWithNibName:theClass bundle:nil] autorelease];
+			changingDetails = YES;
 		}
 		if ([self.detailViewController respondsToSelector:@selector(setSelectedMenu:)])
 			[self.detailViewController setValue:dataObject forKey:@"selectedMenu"];
@@ -198,7 +203,9 @@
 			[self.navigationController pushViewController:self.detailViewController animated:YES];
 			self.detailViewController = nil;
 		}
-
+	}
+	if (isSplitViewDetail && changingDetails) {
+		[[self.splitViewController.viewControllers objectAtIndex:1] setViewControllers:[NSArray arrayWithObject:self.detailViewController] animated:NO];
 	}
 }
 
