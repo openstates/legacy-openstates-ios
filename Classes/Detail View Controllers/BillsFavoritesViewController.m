@@ -48,7 +48,7 @@
 	
 	if (menuItem)
 		self.title = [menuItem objectForKey:@"title"];
-	
+	//self.navigationController.navigationItem.rightBarButtonItem
 	[[self navigationItem] setRightBarButtonItem:[self editButtonItem] animated:YES];
 	
 	self.tableView.separatorColor = [TexLegeTheme separator];
@@ -280,14 +280,25 @@
 	if (item && [item objectForKey:@"watchID"]) {
 		NSDictionary *bill = [_cachedBills objectForKey:[item objectForKey:@"watchID"]];
 		if (bill) {
-			BillsDetailViewController *detailView = [[[BillsDetailViewController alloc] 
+			BOOL changingViews = NO;
+			
+			BillsDetailViewController *detailView = nil;
+			if ([UtilityMethods isIPadDevice]) {
+				id aDetail = [[[TexLegeAppDelegate appDelegate] detailNavigationController] visibleViewController];
+				if ([aDetail isKindOfClass:[BillsDetailViewController class]])
+					detailView = aDetail;
+			}
+			if (!detailView) {
+				detailView = [[[BillsDetailViewController alloc] 
 													  initWithNibName:@"BillsDetailViewController" bundle:nil] autorelease];
+				changingViews = YES;
+			}
 						
 			[detailView setDataObject:bill];
 			if (![UtilityMethods isIPadDevice])
 				[self.navigationController pushViewController:detailView animated:YES];
-			else
-				[[[TexLegeAppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:NO];
+			else if (changingViews)
+				[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
 			
 		}			
 	}

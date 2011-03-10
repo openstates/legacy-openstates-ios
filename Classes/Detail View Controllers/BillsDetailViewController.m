@@ -445,7 +445,10 @@ enum _billSections {
 	
 	if (self.starButton) {
 		UIBarButtonItem *watchItem = [[[UIBarButtonItem alloc] initWithCustomView:starButton] autorelease];
-		[self.navigationItem setRightBarButtonItem:watchItem animated:YES];
+		if ([UtilityMethods isIPadDevice])
+			[self.navigationItem setLeftBarButtonItem:watchItem animated:YES];
+		else
+			[self.navigationItem setRightBarButtonItem:watchItem animated:YES];
 	}
 }
 

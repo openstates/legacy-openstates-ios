@@ -103,30 +103,9 @@
 	
 	[self.searchDisplayController.searchBar setHidden:NO];
 	
-	//// ALL OF THE FOLLOWING MUST *NOT* RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER
-	
-	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {		
-		
-		id detailObject = nil;
-		
-		if (self.detailViewController && [self.detailViewController respondsToSelector:@selector(selectedMenu)]) {
-			detailObject = [self.detailViewController valueForKey:@"selectedMenu"];
-			
-			if (!detailObject) {
-				NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
-				if (!currentIndexPath) {			
-					NSUInteger ints[2] = {0,0};	// just pick the first one then
-					currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
-				}
-				detailObject = [self.dataSource dataObjectForIndexPath:currentIndexPath];			
-			}
-		}
-		self.selectObjectOnAppear = detailObject;
-	}	
 	if ([UtilityMethods isIPadDevice])
 		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
 	
-	// END: IPAD ONLY
 }
 
 #pragma -
@@ -168,7 +147,10 @@
 				// push the detail view controller onto the navigation stack to display it				
 				[self.navigationController pushViewController:self.detailViewController animated:YES];
 				self.detailViewController = nil;
-			}			
+			}
+			else if (changingDetails)
+				[[self.splitViewController.viewControllers objectAtIndex:1] setViewControllers:[NSArray arrayWithObject:self.detailViewController] animated:NO];
+			
 		}			
 	}
 //	WE'RE CLICKING ON ONE OF OUR STANDARD MENU ITEMS
@@ -186,26 +168,21 @@
 			return;
 		
 		// create a BillsMenuDetailViewController. This controller will display the full size tile for the element
-		if (self.detailViewController == nil || ![self.detailViewController isKindOfClass:NSClassFromString(theClass)]) {
-			if ([theClass isEqualToString:@"BillsFavoritesViewController"])
-				self.detailViewController = [[[NSClassFromString(theClass) alloc] initWithNibName:nil bundle:nil] autorelease];
-			else
-				self.detailViewController = [[[NSClassFromString(theClass) alloc] initWithNibName:theClass bundle:nil] autorelease];
-			changingDetails = YES;
-		}
-		if ([self.detailViewController respondsToSelector:@selector(setSelectedMenu:)])
-			[self.detailViewController setValue:dataObject forKey:@"selectedMenu"];
+		UITableViewController *tempVC = nil;
+		if ([theClass isEqualToString:@"BillsFavoritesViewController"])
+			tempVC = [[[NSClassFromString(theClass) alloc] initWithNibName:nil bundle:nil] autorelease];	// we don't want a nib for this one
+		else
+			tempVC = [[[NSClassFromString(theClass) alloc] initWithNibName:theClass bundle:nil] autorelease];
+		
+		if ([tempVC respondsToSelector:@selector(setSelectedMenu:)])
+			[tempVC setValue:dataObject forKey:@"selectedMenu"];
+		
 		if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
 			[self searchBarCancelButtonClicked:nil];
 		}
-		if (isSplitViewDetail == NO) {
-			// push the detail view controller onto the navigation stack to display it				
-			[self.navigationController pushViewController:self.detailViewController animated:YES];
-			self.detailViewController = nil;
-		}
-	}
-	if (isSplitViewDetail && changingDetails) {
-		[[self.splitViewController.viewControllers objectAtIndex:1] setViewControllers:[NSArray arrayWithObject:self.detailViewController] animated:NO];
+		
+		// push the detail view controller onto the navigation stack to display it				
+		[self.navigationController pushViewController:tempVC animated:YES];
 	}
 }
 
