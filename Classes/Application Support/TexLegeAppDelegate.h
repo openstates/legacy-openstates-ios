@@ -18,6 +18,19 @@
 
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate> 
 {
+	DataModelUpdateManager *dataUpdater;
+	UIWindow			*mainWindow;
+	NSMutableDictionary	*savedTableSelection;
+	BOOL				appIsQuitting;
+	AnalyticsOptInAlertController *analyticsOptInController;
+	IBOutlet LinksMasterViewController *linksMasterVC;
+	IBOutlet CapitolMapsMasterViewController *capitolMapsMasterVC;
+	IBOutlet CommitteeMasterViewController *committeeMasterVC;
+	IBOutlet LegislatorMasterViewController *legislatorMasterVC;
+	IBOutlet CalendarMasterViewController *calendarMasterVC;
+	IBOutlet DistrictMapMasterViewController *districtMapMasterVC;
+	IBOutlet BillsMasterViewController *billsMasterVC;
+	IBOutlet UITabBarController *tabBarController;	
 }
 @property (nonatomic, retain) DataModelUpdateManager *dataUpdater;
 @property (nonatomic, retain) UIWindow			*mainWindow;
