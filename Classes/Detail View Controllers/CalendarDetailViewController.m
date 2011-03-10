@@ -106,15 +106,17 @@
 }
 
 
-- (void)viewDidUnload {
+/*
+ - (void)viewDidUnload {
     // Release any retained subviews of the main view.
 	self.chamberCalendar = nil;
-	self.webView = nil;
+	if (![UtilityMethods isIPadDevice])
+		self.webView = nil;
 	self.masterPopover = nil;
 	// add this to done: or something
 
     [super viewDidUnload];
-}
+}*/
 
 
 - (void)dealloc {
