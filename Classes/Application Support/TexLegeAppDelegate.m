@@ -266,30 +266,27 @@ NSInteger kNoSelection = -1;
 				split.title = [[controller dataSource] name];
 				split.tabBarItem = [[[UITabBarItem alloc] initWithTitle:
 									[[controller dataSource] name] image:[[controller dataSource] tabBarImage] tag:index] autorelease];
-/*	
-				if ([[controller viewControllerKey] isEqualToString:@"CommitteeMasterViewController"]) {
-					NSError *error = nil;
-					NSInteger count = [CommitteeObj count:&error];
-					if (error || count == 0)
-						split.tabBarItem.enabled = NO;
-				}		
-*/
 				[splitViewControllers addObject:split];
 			}
 			index++;
 		}
 		[self.tabBarController setViewControllers:splitViewControllers];
 		[splitViewControllers release];
-	} /*else {
-		for (GeneralTableViewController *controller in VCs) {
-			if ([[controller viewControllerKey] isEqualToString:@"CommitteeMasterViewController"]) {
-				NSError *error = nil;
-				NSInteger count = [CommitteeObj count:&error];
-				if (error || count == 0)
-					controller.navigationController.tabBarItem.enabled = NO;
-			}		
+	} 
+
+	for (GeneralTableViewController *controller in VCs) {
+		/*if ([[controller viewControllerKey] isEqualToString:@"CommitteeMasterViewController"]) {
+			NSError *error = nil;
+			NSInteger count = [CommitteeObj count:&error];
+			if (error || count == 0)
+				controller.navigationController.tabBarItem.enabled = NO;
+		}*/	
+		if ([[controller viewControllerKey] isEqualToString:@"BillsMasterViewController"]) {
+			if (![TexLegeReachability canReachHostWithURL:[NSURL URLWithString:@"http://openstates.sunlightlabs.com"] alert:NO])
+				controller.navigationController.tabBarItem.enabled = NO;
 		}
-	}*/
+		
+	}
 	[VCs release];
 	
 	UIViewController * savedTabController = [self.tabBarController.viewControllers objectAtIndex:savedTabSelectionIndex];
