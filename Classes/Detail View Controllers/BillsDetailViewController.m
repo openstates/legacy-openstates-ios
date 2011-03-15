@@ -348,8 +348,9 @@ enum _billSections {
 	if (self.starButton)
 		self.starButton.enabled = (newBill != nil);		
 
-	if (newBill && self.bill && [[newBill objectForKey:@"bill_id"] isEqualToString:[self.bill objectForKey:@"bill_id"]])
-		return;
+	// this breaks our lazy loading
+	//if (newBill && self.bill && [[newBill objectForKey:@"bill_id"] isEqualToString:[self.bill objectForKey:@"bill_id"]])
+	//	return;
 	
 	if (bill) [bill release], bill = nil;
 	if (newBill) {

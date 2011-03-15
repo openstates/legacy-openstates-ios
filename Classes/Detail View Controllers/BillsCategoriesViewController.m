@@ -1,5 +1,5 @@
 //
-//  BillsFavoritesViewController.m
+//  BillsCategoriesViewController.m
 //  TexLege
 //
 //  Created by Gregory Combs on 2/25/11.
@@ -7,139 +7,127 @@
 //
 
 #import "TexLegeAppDelegate.h"
-#import "BillsFavoritesViewController.h"
+#import "BillsCategoriesViewController.h"
 #import "BillsDetailViewController.h"
 #import "JSON.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
+#import "TexLegeReachability.h"
+#import "TexLegeCoreDataUtils.h"
+#import "BillsListDetailViewController.h"
+#import "BillSearchDataSource.h"
 
-@interface BillsFavoritesViewController (Private)
+@interface BillsCategoriesViewController (Private)
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
-- (IBAction)save:(id)sender;
-- (NSString *)watchIDForBill:(NSDictionary *)aBill;
+//- (NSString *)watchIDForBill:(NSDictionary *)aBill;
 @end
 
-@implementation BillsFavoritesViewController
+@implementation BillsCategoriesViewController
 
 
 #pragma mark -
 #pragma mark View lifecycle
 
 /*
-- (void)didReceiveMemoryWarning {
-	[_cachedBills release];
-	_cachedBills = nil;	
-}*/
+ - (void)didReceiveMemoryWarning {
+ [_cachedBills release];
+ _cachedBills = nil;	
+ }*/
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-		
+/*	
 	if (!_requestDictionary)
 		_requestDictionary = [[[NSMutableDictionary alloc] init] retain];
 	
 	if (!_requestSenders)
 		_requestSenders = [[[NSMutableDictionary alloc] init] retain];	
-	
+*/		
+	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"TexLegeStrings" ofType:@"plist"];
+	NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
 	NSString *myClass = [[self class] description];
-	NSArray *menuArray = [UtilityMethods texLegeStringWithKeyPath:@"BillMenuItems"];
-	NSDictionary *menuItem = [menuArray findWhereKeyPath:@"class" equals:myClass];
+	NSDictionary *menuItem = [[textDict objectForKey:@"BillMenuItems"] findWhereKeyPath:@"class" equals:myClass];
 	
 	if (menuItem)
 		self.title = [menuItem objectForKey:@"title"];
-	//self.navigationController.navigationItem.rightBarButtonItem
-	[[self navigationItem] setRightBarButtonItem:[self editButtonItem] animated:YES];
+
+	//	[[self navigationItem] setRightBarButtonItem:[self editButtonItem] animated:YES];
 	
 	self.tableView.separatorColor = [TexLegeTheme separator];
 	self.tableView.backgroundColor = [TexLegeTheme tableBackground];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 	
-	NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillFavoritesStorageFile];
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	if (![fileManager fileExistsAtPath:thePath]) {
-		NSArray *tempArray = [[NSArray alloc] init];
-		[tempArray writeToFile:thePath atomically:YES];
-		[tempArray release];
-	}
+	[self refreshCategories:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	
-	if (_watchList) {
-		[_watchList release];
-		_watchList = nil;
-	}
-	NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillFavoritesStorageFile];
-	_watchList = [[[NSMutableArray alloc] initWithContentsOfFile:thePath] retain];
-	if (!_watchList)
-		_watchList = [[[NSMutableArray alloc] init] retain];
-	
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"displayOrder" ascending:YES];
-	[_watchList sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-	[sortDescriptor release];	
-	
-	if (![_watchList count]) {
-		UIAlertView *noWatchedBills = [[[ UIAlertView alloc ] 
-										 initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NoWatchedTitle"] 
-										 message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NoWatchedText"] 
-										 delegate:nil // we're static, so don't do "self"
-										 cancelButtonTitle: @"Cancel" 
-										 otherButtonTitles:nil, nil] autorelease];
-		[ noWatchedBills show ];		
-		
-	}
+	if (![TexLegeReachability canReachHostWithURL:[NSURL URLWithString:@"http://openstates.sunlightlabs.com"] alert:YES])
+		return;
+			
 	[self.tableView reloadData];
-	
-	[self refreshAllBills:nil];
-
 }
 
 /*- (void)viewWillDisappear:(BOOL)animated {
-//	[self save:nil];
-	[super viewWillDisappear:animated];
-}*/
+ //	[self save:nil];
+ [super viewWillDisappear:animated];
+ }*/
 
-- (NSString *)watchIDForBill:(NSDictionary *)aBill {
-	if (aBill && [aBill objectForKey:@"session"] && [aBill objectForKey:@"bill_id"])
-		return [NSString stringWithFormat:@"%@:%@", [aBill objectForKey:@"session"],[aBill objectForKey:@"bill_id"]]; 
-	else
-		return @"";
+- (IBAction)refreshCategories:(id)sender {
+	if (_CategoriesList)
+		[_CategoriesList release], _CategoriesList = nil;	
+	
+	NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillCategoriesFile];
+	NSString *remotePath = [NSString stringWithFormat:@"%@/%@", RESTKIT_BASE_URL, kBillCategoriesFile];
+	
+	NSURL *categoriesURL = [NSURL URLWithString:remotePath];
+	if ([TexLegeReachability canReachHostWithURL:categoriesURL alert:NO]){
+		NSError *error = nil;
+		NSString *jsonMenus = [NSString stringWithContentsOfURL:categoriesURL encoding:NSUTF8StringEncoding error:&error];
+		NSDictionary *metaData = [jsonMenus JSONValue];
+		if (metaData) {
+			[metaData writeToFile:localPath atomically:YES];	
+			_CategoriesList = [[metaData objectForKey:@"subjects"] retain];
+		}		
+	}
+	if (!_CategoriesList) {	// let's try the one we have stored
+		NSError *error = nil;
+		NSFileManager *fileManager = [NSFileManager defaultManager];
+		if (![fileManager fileExistsAtPath:localPath]) {
+			NSString *defaultPath = [[NSBundle mainBundle] pathForResource:kBillCategoriesPath ofType:@"json"];
+			[fileManager copyItemAtPath:defaultPath toPath:localPath error:&error];
+		}
+		NSString *jsonMenus = [NSString stringWithContentsOfFile:localPath encoding:NSUTF8StringEncoding error:&error];
+		NSDictionary *metaData = [jsonMenus JSONValue];
+		if (metaData)
+			_CategoriesList = [[metaData objectForKey:@"subjects"] retain];
+	}
+	if (_CategoriesList && [_CategoriesList count]) {
+		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
+		[_CategoriesList sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+		[sortDescriptor release];	
+	}	
+	[self.tableView reloadData];
 }
-
+/*
 - (IBAction)refreshBill:(NSDictionary *)watchedItem sender:(id)sender {
 	NSString *queryString = [NSString stringWithFormat:@"http://openstates.sunlightlabs.com/api/v1/bills/tx/%@/%@/?apikey=350284d0c6af453b9b56f6c1c7fea1f9", 
 							 [watchedItem objectForKey:@"session"], [[watchedItem objectForKey:@"name"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	
 	[self JSONRequestWithURLString:queryString sender:sender];
 }
-
-- (IBAction)refreshAllBills:(id)sender {
-	if (_cachedBills) {
-		[_cachedBills release];
-		_cachedBills = nil;
-	}
-	
-	_cachedBills = [[[NSMutableDictionary alloc] init] retain];
-	
-	for (NSDictionary *item in _watchList) {
-		[self refreshBill:item sender:item];
-	}	
-}
-
-- (IBAction)save:(id)sender {
-	if (_watchList) {
-		NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillFavoritesStorageFile];
-		[_watchList writeToFile:thePath atomically:YES];		
-	}
-}
+*/
 
 - (void)viewDidUnload {
-	[_requestDictionary release];
+/*	[_requestDictionary release];
 	_requestDictionary = nil;
 	[_requestSenders release];
 	_requestSenders = nil;
+*/
+	[_CategoriesList release];
+	_CategoriesList = nil;
 	[super viewDidUnload];
 }
 
@@ -148,8 +136,7 @@
 	BOOL useDark = (indexPath.row % 2 == 0);
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	
-	cell.textLabel.text = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"name"];
-	cell.detailTextLabel.text = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"description"];	
+	cell.textLabel.text = [[_CategoriesList objectAtIndex:indexPath.row] objectForKey:@"title"];
 }
 
 #pragma mark -
@@ -167,25 +154,20 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if (_watchList && [_watchList count])
-		return [_watchList count];
+	if (_CategoriesList && [_CategoriesList count])
+		return [_CategoriesList count];
 	else
 		return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	NSString *CellIdentifier = @"CellOff";
-	if (_watchList && [_watchList count] > indexPath.row) {
-		NSString *watchID = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"watchID"];
-		if (_cachedBills && [[_cachedBills allKeys] containsObject:watchID])
-			CellIdentifier = @"CellOn";
-	}
+	NSString *CellIdentifier = @"CellOn";
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil)
 	{
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle 
+		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
 									   reuseIdentifier:CellIdentifier] autorelease];
 		
 		cell.textLabel.textColor =	[TexLegeTheme textDark];
@@ -202,67 +184,36 @@
 			cell.accessoryView = qv;
 			[qv release];			
 		}
-
+		
     }
 	
-	if (_watchList && [_watchList count])
+	if (_CategoriesList && [_CategoriesList count])
 		[self configureCell:cell atIndexPath:indexPath];		
 	
 	return cell;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	if (editingStyle == UITableViewCellEditingStyleDelete)
-	{
-		NSDictionary *toRemove = [_watchList objectAtIndex:indexPath.row];
-		if (toRemove && _cachedBills) {
-			NSString *watchID = [toRemove objectForKey:@"watchID"];
-			if (watchID && [[_cachedBills allKeys] containsObject:watchID])
-				[_cachedBills removeObjectForKey:watchID];
-		}
-		[_watchList removeObjectAtIndex:indexPath.row];
-		[self save:nil];		
-		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-	}   
-}
-
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	return YES;
-}
-
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath 
-      toIndexPath:(NSIndexPath *)destinationIndexPath;
-{  	
-	if (!_watchList)
-		return;
-	
-	NSDictionary *item = [[_watchList objectAtIndex:sourceIndexPath.row] retain];	
-	[_watchList removeObject:item];
-	[_watchList insertObject:item atIndex:[destinationIndexPath row]];	
-	[item release];
-	
-	int i = 0;
-	for (NSMutableDictionary *anItem in _watchList)
-		[anItem setValue:[NSNumber numberWithInt:i++] forKey:@"displayOrder"];
-	
-	[self save:nil];
 }
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	
-	if (!_watchList)
+	if (!_CategoriesList)
 		return;
 	
-	NSDictionary *item = [_watchList objectAtIndex:indexPath.row];
-	if (item && [item objectForKey:@"watchID"]) {
-		NSDictionary *bill = [_cachedBills objectForKey:[item objectForKey:@"watchID"]];
-		if (bill) {
-			BOOL changingViews = NO;
+	NSDictionary *item = [_CategoriesList objectAtIndex:indexPath.row];
+	if (item && [item objectForKey:@"title"]) {
+		NSString *cat = [item objectForKey:@"title"];
+		if (cat) {
+			//BOOL changingViews = NO;
+			BillsListDetailViewController *catResultsView = [[[BillsListDetailViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+			BillSearchDataSource *dataSource = [catResultsView valueForKey:@"dataSource"];
+			catResultsView.title = cat;
+			//[dataSource startSearchWithString:cat chamber:0];
+			[dataSource startSearchForSubject:cat chamber:BOTH_CHAMBERS];
 			
+			[self.navigationController pushViewController:catResultsView animated:YES];
+
+			/*
 			BillsDetailViewController *detailView = nil;
 			if ([UtilityMethods isIPadDevice]) {
 				id aDetail = [[[TexLegeAppDelegate appDelegate] detailNavigationController] visibleViewController];
@@ -271,26 +222,27 @@
 			}
 			if (!detailView) {
 				detailView = [[[BillsDetailViewController alloc] 
-													  initWithNibName:@"BillsDetailViewController" bundle:nil] autorelease];
+							   initWithNibName:@"BillsDetailViewController" bundle:nil] autorelease];
 				changingViews = YES;
 			}
-						
+			
 			[detailView setDataObject:bill];
 			if (![UtilityMethods isIPadDevice])
 				[self.navigationController pushViewController:detailView animated:YES];
 			else if (changingViews)
 				[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
-			
+*/
 		}			
 	}
 }
 
 - (void)dealloc {	
-
-	if (_watchList) {
-		[_watchList release];
-		_watchList = nil;
+	
+	if (_CategoriesList) {
+		[_CategoriesList release];
+		_CategoriesList = nil;
 	}
+	/*
 	if (_cachedBills) {
 		[_cachedBills release];
 		_cachedBills = nil;
@@ -300,11 +252,11 @@
 	_requestDictionary = nil;
 	[_requestSenders release];
 	_requestSenders = nil;
-	
+	*/
 	
 	[super dealloc];
 }
-
+/*
 - (void)JSONRequestWithURLString:(NSString *)queryString sender:(id)sender {
 	//in the viewDidLoad
 	
@@ -334,11 +286,11 @@
 	if ([_requestSenders objectForKey:[connection description]])
 		[_requestSenders removeObjectForKey:[connection description]];
 	
-	/*	if (connection) {
+	/	if (connection) {
 	 [connection release];
 	 connection = nil;
 	 }
-	 */
+	 *
 }
 
 
@@ -383,11 +335,11 @@
 	if ([_requestSenders objectForKey:[connection description]])
 		[_requestSenders removeObjectForKey:[connection description]];
 	
-	/*    [connection release];
+	/    [connection release];
 	 connection = nil;
-	 */
+	 *
 }
-
+*/
 @end
 
 
