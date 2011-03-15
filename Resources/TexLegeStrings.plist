@@ -2,6 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>Reachability</key>
+	<dict>
+		<key>NoInternetTitle</key>
+		<string>Internet Unavailable</string>
+		<key>NoInternetText</key>
+		<string>This feature requires an Internet connection.  Perhaps your iOS device is in Airplane mode or there is no WiFi service in this area.</string>
+		<key>BadUrlTitle</key>
+		<string>Invalid URL</string>
+		<key>BadUrlText</key>
+		<string>There was a problem with the URL, please double-check for typographical errors.</string>
+		<key>NoHostTitle</key>
+		<string>Host Unreachable</string>
+		<key>NoHostText</key>
+		<string>There was a problem contacting the website host, please double-check the URL for typographical errors or try the connection again later.</string>
+	</dict>
+	<key>Bills</key>
+	<dict>
+		<key>NoWatchedTitle</key>
+		<string>No Watched Bills, Yet</string>
+		<key>NoWatchedText</key>
+		<string>To add a bill to this watch list, first search for one, open it, and then tab the star button in it&apos;s header.</string>
+	</dict>
 	<key>BillMenuItems</key>
 	<array>
 		<dict>
@@ -45,7 +67,21 @@
 			<string>BillsMenuItem</string>
 		</dict>
 	</array>
-	<key>AnalyticsOptInText</key>
-	<string>TexLege can unobtrusively submit anonymous usage data (like launch time and features used) to the developer.  This is solely intended to improve app development, and will NEVER be used for advertising or marketing.  It submits no geographic or identifying information. Please consider enabling this service.  You may change this later in the Settings app.</string>
+	<key>Analytics</key>
+	<dict>
+		<key>OptInTitle</key>
+		<string>Permission To Use Analytics</string>
+		<key>OptInText</key>
+		<string>TexLege can unobtrusively submit anonymous usage data (like launch time and features used) to the developer.  This is solely intended to improve app development, and will NEVER be used for advertising or marketing.  It submits no geographic or identifying information. Please consider enabling this service.  You may change this later in the Settings app.</string>
+	</dict>
+	<key>Contributions</key>
+	<dict>
+		<key>IncompleteTitle</key>
+		<string>Incomplete Records</string>
+		<key>IncompleteText</key>
+		<string>The campaign finance data provider has incomplete information for this request.  You may visit followthemoney.org to perform a manual search.</string>
+		<key>ThanksNIMSP</key>
+		<string>Data generously provided by the National Institute on Money in State Politics.</string>
+	</dict>
 </dict>
 </plist>
