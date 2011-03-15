@@ -13,6 +13,8 @@
 @interface UtilityMethods : NSObject {
 }
 
++ (id) texLegeStringWithKeyPath:(NSString *)keyPath;
+
 + (CGFloat) iOSVersion;
 + (BOOL) iOSVersion4;
 	

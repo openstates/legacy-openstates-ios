@@ -90,6 +90,12 @@
 
 @implementation UtilityMethods
 
++ (id) texLegeStringWithKeyPath:(NSString *)keyPath {
+	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"TexLegeStrings" ofType:@"plist"];
+	NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
+	return [textDict valueForKeyPath:keyPath];
+}
+
 + (CGFloat) iOSVersion {
 	return [[[UIDevice currentDevice] systemVersion] floatValue];
 }

@@ -7,6 +7,7 @@
 //
 
 #import "TexLegeReachability.h"
+#import "UtilityMethods.h"
 
 @interface TexLegeReachability (Private)
 - (void)updateStatusWithReachability:(Reachability*) curReach;
@@ -86,8 +87,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 
 + (void)noInternetAlert {
 	UIAlertView *noInternetAlert = [[[ UIAlertView alloc ] 
-									 initWithTitle:@"Internet Unavailable" 
-									 message:@"This feature requires an Internet connection.  Perhaps your iOS device is in Airplane mode or there is no WiFi service in this area." 
+									 initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoInternetTitle"]
+									 message:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoInternetText"] 
 									 delegate:nil // we're static, so don't do "self"
 									 cancelButtonTitle: @"Cancel" 
 									 otherButtonTitles:nil, nil] autorelease];
@@ -134,8 +135,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 	else if (url == nil) { // problem with url string
 		if (doAlert) {
 			alert = [[[ UIAlertView alloc ] 
-					  initWithTitle:@"Invalid URL" 
-					  message:@"There was a problem with the URL, please double-check for typographical errors." 
+					  initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.BadUrlTitle"] 
+					  message:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.BadUrlText"]  
 					  delegate:nil // we're static, so don't do "self"
 					  cancelButtonTitle: @"Cancel" 
 					  otherButtonTitles:nil, nil] autorelease];
@@ -149,8 +150,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 	else if (![TexLegeReachability isHostReachable:[url host]]) {
 		if (doAlert) {
 			alert = [[[ UIAlertView alloc ] 
-					  initWithTitle:@"Host Unreachable" 
-					  message:@"There was a problem contacting the website host, please double-check the URL for typographical errors or try the connection again later." 
+					  initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoHostTitle"] 
+					  message:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoHostText"] 
 					  delegate:nil // we're static, so don't do "self"
 					  cancelButtonTitle: @"Cancel" 
 					  otherButtonTitles:nil, nil] autorelease];

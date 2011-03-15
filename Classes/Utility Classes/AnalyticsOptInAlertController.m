@@ -8,17 +8,13 @@
 
 #import "AnalyticsOptInAlertController.h"
 #import "LocalyticsSession.h"
+#import "UtilityMethods.h"
 
 @implementation AnalyticsOptInAlertController
-@synthesize optInText, currentAlert;
+@synthesize currentAlert;
 
 - (id)init {
 	if (self=[super init]) {
-		
-		NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"TexLegeStrings" ofType:@"plist"];
-		NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
-		self.optInText = [textDict objectForKey:@"AnalyticsOptInText"];
-		
 	}
 	return self;
 }
@@ -53,8 +49,8 @@
 - (void)presentAnalyticsOptInAlert {
 
 	self.currentAlert = [[[UIAlertView alloc] 
-						 initWithTitle:@"Permission To Use Analytics"
-						 message:self.optInText
+						 initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Analytics.OptInTitle"]
+						 message:[UtilityMethods texLegeStringWithKeyPath:@"Analytics.OptInText"]
 						 delegate:self cancelButtonTitle:@"Deny" otherButtonTitles:@"Permit", nil] autorelease];
 	[self.currentAlert show];
 	
@@ -62,7 +58,6 @@
 
 - (void)dealloc {
 	self.currentAlert = nil;
-	self.optInText = nil;
     [super dealloc];
 }
 
@@ -70,16 +65,13 @@
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
 	if ([alertView isEqual:self.currentAlert]) {
 		self.currentAlert = nil;
-		self.optInText = nil;
 		
 		NSInteger didOptIn = buttonIndex;
 		if (didOptIn != 1 && didOptIn != 0) {
-			debug_NSLog(@"Received an unknown button selection for analytics opt-in alert: %d", buttonIndex);
 			if (didOptIn > 1)
 				didOptIn = 1;
 			else if (didOptIn < -1)
 				didOptIn = -1;
-			
 		}
 		if (didOptIn == 0) {
 			[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"OPTED_OUT_OF_LOCALYTICS"];
