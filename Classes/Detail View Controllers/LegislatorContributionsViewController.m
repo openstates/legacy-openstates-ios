@@ -59,7 +59,7 @@
 	nimsp.textColor = [TexLegeTheme navbar];
 	nimsp.lineBreakMode = UILineBreakModeWordWrap;
 	nimsp.numberOfLines = 3;
-	nimsp.text = @"Data generously provided by the National Institute on Money in State Politics.";
+	nimsp.text = [UtilityMethods texLegeStringWithKeyPath:@"Contributions.ThanksNIMSP"];
 	self.tableView.tableFooterView = nimsp;
 }
 
@@ -143,8 +143,8 @@
 			[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"CONTRIBUTION_QUERY_ERROR" attributes:logDict];
 			[logDict release];
 			
-			UIAlertView *dataAlert = [[[UIAlertView alloc] initWithTitle:@"Incomplete Records" 
-																 message:@"The campaign finance data provider has incomplete information for this request.  You may visit followthemoney.org to perform a manual search." 
+			UIAlertView *dataAlert = [[[UIAlertView alloc] initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Contributions.IncompleteTitle"] 
+																 message:[UtilityMethods texLegeStringWithKeyPath:@"Contributions.IncompleteText"] 
 																delegate:self 
 													   cancelButtonTitle:@"Cancel" 
 													   otherButtonTitles:@"Open Website", nil] autorelease];
