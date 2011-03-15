@@ -14,6 +14,7 @@
 #import "TexLegeReachability.h"
 #import "BillsListDetailViewController.h"
 #import "BillSearchDataSource.h"
+#import "TexLegeStandardGroupCell.h"
 
 @interface BillsCategoriesViewController (Private)
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -73,7 +74,9 @@
 {
 	BOOL useDark = (indexPath.row % 2 == 0);
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
-	cell.textLabel.text = [[_CategoriesList objectAtIndex:indexPath.row] objectForKey:@"title"];
+	NSDictionary *category = [_CategoriesList objectAtIndex:indexPath.row];
+	cell.detailTextLabel.text = [category objectForKey:@"title"];
+	cell.textLabel.text = [NSString stringWithFormat:@"Approx. %@ Bills", [category objectForKey:@"count"]];
 }
 
 #pragma mark -
@@ -99,28 +102,15 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	NSString *CellIdentifier = @"CellOn";
+	NSString *CellIdentifier = [TexLegeStandardGroupCell cellIdentifier];
+	
+	BOOL enabled = YES;
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil)
 	{
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
-									   reuseIdentifier:CellIdentifier] autorelease];
-		
-		cell.textLabel.textColor =	[TexLegeTheme textDark];
-		cell.textLabel.textAlignment = UITextAlignmentLeft;
-		cell.textLabel.font = [UIFont boldSystemFontOfSize:15];
-		
-		if ([CellIdentifier isEqualToString:@"CellOff"])
-			cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		else {
-			cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-			cell.textLabel.adjustsFontSizeToFitWidth = YES;
-			cell.textLabel.minimumFontSize = 12.0f;
-			DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 28.f, 28.f)];
-			cell.accessoryView = qv;
-			[qv release];			
-		}
+		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:UITableViewCellStyleSubtitle 
+									   reuseIdentifier:CellIdentifier] autorelease];		
     }
 	
 	if (_CategoriesList && [_CategoriesList count])
