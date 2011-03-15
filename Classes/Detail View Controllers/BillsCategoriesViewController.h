@@ -7,20 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <RestKit/RestKit.h>
 
 #define kBillCategoriesFile @"BillMetadata.json"
 #define kBillCategoriesPath @"BillMetadata"
 
-@interface BillsCategoriesViewController : UITableViewController <UITableViewDelegate> {
+@interface BillsCategoriesViewController : UITableViewController <UITableViewDelegate,RKRequestDelegate> {
 	NSMutableArray *_CategoriesList;
-//	NSMutableDictionary *_requestDictionary;
-//	NSMutableDictionary *_requestSenders;
-//	NSMutableDictionary *_cachedBills;
 }
-//- (void)JSONRequestWithURLString:(NSString *)queryString sender:(id)sender;
-//- (IBAction)refreshBill:(NSDictionary *)watchedItem sender:(id)sender;
-//- (IBAction)refreshAllBills:(id)sender;
-
 - (IBAction)refreshCategories:(id)sender;
 
 @end
