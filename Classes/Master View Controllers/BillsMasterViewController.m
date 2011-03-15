@@ -169,13 +169,13 @@
 		
 		// create a BillsMenuDetailViewController. This controller will display the full size tile for the element
 		UITableViewController *tempVC = nil;
-		if ([theClass isEqualToString:@"BillsFavoritesViewController"])
+		if ([theClass isEqualToString:@"BillsFavoritesViewController"] || [theClass isEqualToString:@"BillsCategoriesViewController"])
 			tempVC = [[[NSClassFromString(theClass) alloc] initWithNibName:nil bundle:nil] autorelease];	// we don't want a nib for this one
 		else
 			tempVC = [[[NSClassFromString(theClass) alloc] initWithNibName:theClass bundle:nil] autorelease];
 		
-		if ([tempVC respondsToSelector:@selector(setSelectedMenu:)])
-			[tempVC setValue:dataObject forKey:@"selectedMenu"];
+		//if ([tempVC respondsToSelector:@selector(setSelectedMenu:)])
+		//	[tempVC setValue:dataObject forKey:@"selectedMenu"];
 		
 		if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
 			[self searchBarCancelButtonClicked:nil];
