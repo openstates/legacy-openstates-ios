@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ResetDB</key>
+	<dict>
+		<key>ConfirmTitle</key>
+		<string>Settings: Reset Data to Factory?</string>
+		<key>ConfirmText</key>
+		<string>Are you sure you want to restore the factory database?  NOTE: The application may quit after this reset.  Data updates will be applied automatically via the Internet during the next app launch.</string>
+	</dict>
 	<key>Reachability</key>
 	<dict>
 		<key>NoInternetTitle</key>
