@@ -37,7 +37,7 @@
 
 - (id<TableDataSource>)dataSource {
 	if (!dataSource) {
-		dataSource = [[[self dataSourceClass] alloc] init];			// GREG should this be autoreleased?  when we we call release?
+		dataSource = [[[self dataSourceClass] alloc] init];
 		self.title = [dataSource name];	
 		// set the long name shown in the navigation bar
 		//self.navigationItem.title=[dataSource navigationBarName];

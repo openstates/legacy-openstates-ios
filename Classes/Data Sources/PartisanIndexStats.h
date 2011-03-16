@@ -19,7 +19,6 @@
 }
 
 @property (nonatomic, readonly) NSDictionary *partisanIndexAggregates;
-@property (nonatomic, readonly) NSNumber *currentSessionYear;
 @property (nonatomic, retain) NSString *chartTemplate;
 
 + (PartisanIndexStats *)sharedPartisanIndexStats;

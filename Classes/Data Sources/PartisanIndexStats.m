@@ -19,13 +19,10 @@
 #import "TexLegeAppDelegate.h"
 
 @interface PartisanIndexStats (Private)
-
 - (NSArray *) aggregatePartisanIndexForChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
-
 @end
 
 @implementation PartisanIndexStats
-
 @synthesize chartTemplate;
 
 SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
@@ -58,11 +55,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	self.chartTemplate = nil;
 	
     [super dealloc];
-}
-
-- (NSNumber *) currentSessionYear {
-	return [NSNumber numberWithInteger:[[NSDate date] year]];
-	//return [NSNumber numberWithInteger:2009];
 }
 
 - (void)resetData:(NSNotificationCenter *)notification {
@@ -194,8 +186,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 #define	WNOMAGGREGATES_KEY	@"WnomAggregateObj"
 
 - (NSArray *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber {
-	
 	NSError *error = nil;
+	
+	//TODO: right now the aggregates are pulled only from the app bundle, consider allowing for network updates
 	NSString *filePath = [[NSBundle mainBundle] pathForResource:WNOMAGGREGATES_KEY ofType:@"json"];
 	NSString *jsonString = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
 	if (error)
@@ -412,7 +405,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 }
 
 - (BOOL) resetChartCacheIfNecessary {
-	
+	[[NSUserDefaults standardUserDefaults] synchronize];	
 	BOOL needsReset = [[NSUserDefaults standardUserDefaults] boolForKey:kResetChartCacheKey];
 	
 	if (needsReset) {

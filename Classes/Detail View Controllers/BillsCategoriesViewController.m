@@ -103,9 +103,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSString *CellIdentifier = [TexLegeStandardGroupCell cellIdentifier];
-	
-	BOOL enabled = YES;
-	
+		
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil)
 	{

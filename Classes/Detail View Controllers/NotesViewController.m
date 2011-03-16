@@ -61,6 +61,7 @@
 
 	NSString *notesString = nil;
 	
+	[[NSUserDefaults standardUserDefaults] synchronize];	
 	NSDictionary *storedNotesDict = [[NSUserDefaults standardUserDefaults] valueForKey:@"LEGE_NOTES"];
 	if (storedNotesDict) {
 		NSString *temp = [storedNotesDict valueForKey:[self.legislator.legislatorID stringValue]];
@@ -100,9 +101,7 @@
 	 */
 	if (!editing) {
 		if (![self.notesText.text isEqualToString:kStaticNotes]) {
-			//	NSMutableDictionary *tempNotesDict = [NSMutableDictionary dictionaryWithDictionary:storedNotesDict];	
-			//	[[NSUserDefaults standardUserDefaults] synchronize];
-
+			[[NSUserDefaults standardUserDefaults] synchronize];
 			NSDictionary *storedNotesDict = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"LEGE_NOTES"];
 			NSMutableDictionary *newDictionary = nil;
 			

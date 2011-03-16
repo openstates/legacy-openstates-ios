@@ -13,9 +13,8 @@
 @class CalendarMasterViewController;
 @class DistrictMapMasterViewController;
 @class BillsMasterViewController;
-@class AnalyticsOptInAlertController;
 @class DataModelUpdateManager;
-
+@class AnalyticsOptInAlertController;
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate> 
 {
 	DataModelUpdateManager *dataUpdater;
@@ -36,10 +35,6 @@
 @property (nonatomic, retain) UIWindow			*mainWindow;
 @property (nonatomic, retain) NSMutableDictionary	*savedTableSelection;
 @property (nonatomic)		  BOOL				appIsQuitting;
-
-
-// For Alerts and Modal Dialogs
-@property (nonatomic, retain) AnalyticsOptInAlertController *analyticsOptInController;
 
 // For Functional View Controllers
 @property (nonatomic, assign) IBOutlet LinksMasterViewController *linksMasterVC;

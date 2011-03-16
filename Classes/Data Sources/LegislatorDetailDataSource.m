@@ -25,7 +25,6 @@
 
 #import "PartisanIndexStats.h"
 #import "UIImage+ResolutionIndependent.h"
-//#import "ImageCache.h"
 
 #import "TexLegeStandardGroupCell.h"
 #import "TexLegeGroupCellProtocol.h"
@@ -191,6 +190,7 @@
 	[cellInfo release], cellInfo = nil;
 	
 	tempString = nil;
+	[[NSUserDefaults standardUserDefaults] synchronize];	
 	NSDictionary *storedNotesDict = [[NSUserDefaults standardUserDefaults] valueForKey:@"LEGE_NOTES"];
 	if (storedNotesDict) {
 		tempString = [storedNotesDict valueForKey:[self.legislator.legislatorID stringValue]];
