@@ -30,12 +30,13 @@
 #import "TVOutManager.h"
 
 @interface TexLegeAppDelegate (Private)
-- (void)runOnAppStart;
+- (void)runOnEveryAppStart;
 - (void)runOnAppQuit;
 - (void)setupFeatures;
 - (void)restoreArchivableSavedTableSelection;
 - (NSData *)archivableSavedTableSelection;
 - (void)resetSavedTableSelection:(id)sender;
+- (BOOL)isDatabaseResetNeeded;
 @end
 
 // user default dictionary keys
@@ -57,7 +58,6 @@ NSInteger kNoSelection = -1;
 @synthesize savedTableSelection, appIsQuitting;
 
 @synthesize mainWindow;
-@synthesize analyticsOptInController;
 @synthesize dataUpdater;
 
 @synthesize legislatorMasterVC, committeeMasterVC, capitolMapsMasterVC, linksMasterVC, calendarMasterVC, districtMapMasterVC;
@@ -74,13 +74,16 @@ NSInteger kNoSelection = -1;
 		self.appIsQuitting = NO;
 		self.savedTableSelection = [NSMutableDictionary dictionary];
 		self.dataUpdater = [[[DataModelUpdateManager alloc] init] autorelease];
+		analyticsOptInController = nil;
 	}
 	return self;
 }
 
 - (void)dealloc {
+	if (analyticsOptInController)
+		[analyticsOptInController release], analyticsOptInController = nil;
+	
 	self.savedTableSelection = nil;
-	self.analyticsOptInController = nil;
 	self.tabBarController = nil;
 	self.mainWindow = nil;    
 	
@@ -98,7 +101,6 @@ NSInteger kNoSelection = -1;
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"LOW_MEMORY_WARNING"];
-	self.analyticsOptInController = nil;
 }
 
 
@@ -205,6 +207,8 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)setTabOrderIfSaved {
+	[[NSUserDefaults standardUserDefaults] synchronize];	
+
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSArray *savedOrder = [defaults arrayForKey:kSavedTabOrderKey];
 	NSMutableArray *orderedTabs = [NSMutableArray arrayWithCapacity:[self.tabBarController.viewControllers count]];
@@ -305,7 +309,7 @@ NSInteger kNoSelection = -1;
 	[self.mainWindow addSubview:self.tabBarController.view];		
 }
 
-- (void)finalizeStartup:(id)sender {	
+- (void)runOnInitialAppStart:(id)sender {	
 	
 	NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 	
@@ -336,18 +340,14 @@ NSInteger kNoSelection = -1;
 	
 	[[NSUserDefaults standardUserDefaults] setObject:version forKey:@"CFBundleVersion"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
-	
-	self.analyticsOptInController = [[[AnalyticsOptInAlertController alloc] init] autorelease];
-	if (self.analyticsOptInController && ![self.analyticsOptInController presentAnalyticsOptInAlertIfNecessary])
-		[self.analyticsOptInController updateOptInFromSettings];
-	
+		
 #ifdef DEBUG
 	[[LocalyticsSession sharedLocalyticsSession] startSession:@"c3641d53749cde2eaf32359-2b477ece-c58f-11df-ee10-00fcbf263dff"];
 #else
 	[[LocalyticsSession sharedLocalyticsSession] startSession:@"8bde685867a8375008c3272-3afa437e-c58f-11df-ee10-00fcbf263dff"];
 #endif
 	
-	[self runOnAppStart];
+	[self runOnEveryAppStart];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -369,10 +369,10 @@ NSInteger kNoSelection = -1;
 		loadingView.tag = 8888;
 		[self.mainWindow addSubview:loadingView];
 		[loadingView release];
-		[self performSelector:@selector(finalizeStartup:) withObject:nil afterDelay:0.0f];
+		[self performSelector:@selector(runOnInitialAppStart:) withObject:nil afterDelay:0.0f];
 	}
 	else
-		[self performSelector:@selector(finalizeStartup:) withObject:nil];
+		[self performSelector:@selector(runOnInitialAppStart:) withObject:nil];
 	
 	// make the window visible
 	[self.mainWindow makeKeyAndVisible];
@@ -391,7 +391,7 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-	[self runOnAppStart];	
+	[self runOnEveryAppStart];	
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -402,23 +402,18 @@ NSInteger kNoSelection = -1;
 	[self runOnAppQuit];
 }
 
-- (void)runOnAppStart {
+- (void)runOnEveryAppStart {
 	self.appIsQuitting = NO;
 	
-#ifdef BUILTINNOTRESTKIT
-	if (![self resetSavedDatabaseIfNecessary])
-		[self replaceOldDatabaseIfNeeded];
-	else {
-#endif	
+	if (![self isDatabaseResetNeeded]) {
+		analyticsOptInController = [[[AnalyticsOptInAlertController alloc] init] retain];
+		if (analyticsOptInController && ![analyticsOptInController presentAnalyticsOptInAlertIfNecessary])
+			[analyticsOptInController updateOptInFromSettings];
+		
 		if (self.dataUpdater)
-			[self.dataUpdater performSelector:@selector(checkAndAlertAvailableUpdates:) withObject:self afterDelay:10.f];
-		
-		if (self.analyticsOptInController && ![self.analyticsOptInController shouldPresentAnalyticsOptInAlert])
-			[self.analyticsOptInController updateOptInFromSettings];
-		
-#ifdef BUILTINNOTRESTKIT
+			[self.dataUpdater performSelector:@selector(performDataUpdatesIfAvailable:) withObject:self afterDelay:10.f];
+				
 	}
-#endif
 	[[LocalyticsSession sharedLocalyticsSession] resume];
  	[[LocalyticsSession sharedLocalyticsSession] upload];
 }
@@ -439,6 +434,9 @@ NSInteger kNoSelection = -1;
 		[[NSUserDefaults standardUserDefaults] setObject:savedOrder forKey:kSavedTabOrderKey];
 	}
 	
+	if (analyticsOptInController)
+		[analyticsOptInController release], analyticsOptInController = nil;
+
 	// save the drill-down hierarchy of selections to preferences
 	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
 	
@@ -515,342 +513,32 @@ NSInteger kNoSelection = -1;
 	return data;
 }
 
-
-#ifdef BUILTINNOTRESTKIT
-
-#pragma mark -
-#pragma mark Core Data stack
-
-- (void)persistentStoreCopyStarted:(NSNotification *)aNotification {
-	self.databaseIsCopying = YES;
-}
-
-- (void)persistentStoreCopyStopped:(NSNotification *)aNotification {
-	self.databaseIsCopying = NO;
-}
-
-#define DATABASE_NAME @"TexLege.v3"
-#define DATABASE_FILE @"TexLege.v3.sqlite"
-
-- (void)copyPersistentStore:(id)sender {
-#if IMPORTING_DATA == 0 // don't use this if we're setting up & initializing from property lists...
-	
-	[self performSelectorOnMainThread:@selector(resetSavedTableSelection:) withObject:nil waitUntilDone:YES];
-
-	/*
-	 Set up the store.
-	 Provide a pre-populated default store.
-	 */
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	NSString *storePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent: DATABASE_FILE];
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENTSTORE_COPY_STARTED" object:nil];
-		
-	NSString *defaultStorePath = [[NSBundle mainBundle] pathForResource:DATABASE_NAME ofType:@"sqlite"];
-	if (defaultStorePath) {
-		NSError *error = nil;
-		[fileManager copyItemAtPath:defaultStorePath toPath:storePath error:&error];
-		if (error) {
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENTSTORE_COPY_FAILED" object:nil];
-			NSLog(@"Error attempting to copy persistent store to docs folder: %@", error);
-		}
-		else {
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENTSTORE_COPY_COMPLETED" object:nil];	
-			NSLog(@"Successfully created a backup database in %@", storePath);
-		}
-	}
-	[pool drain];
-#endif
-}
-
-- (void)switchPersistentStores:(NSNotification *)aNotification {
-	[self persistentStoreCopyStopped:aNotification];
-#warning this crap is broken
-	NSString *storePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent: DATABASE_FILE];
-	NSURL *storeURL = [NSURL fileURLWithPath:storePath isDirectory:NO];
-
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	if ([fileManager fileExistsAtPath:storePath]) {
-		
-		NSString *mainStorePath = [[NSBundle mainBundle] pathForResource:DATABASE_NAME ofType:@"sqlite"];
-		NSURL *mainStoreURL = [NSURL fileURLWithPath:mainStorePath isDirectory:NO];
-		NSPersistentStore *mainStore = [self.persistentStoreCoordinator persistentStoreForURL:mainStoreURL];
-		if (mainStore) {
-			NSError *error = nil;
-			
-			[self.persistentStoreCoordinator lock];
-
-			NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], 
-									 NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], 
-									 NSInferMappingModelAutomaticallyOption, nil];
-						
-			[self.persistentStoreCoordinator removePersistentStore:mainStore error:&error];
-			if (error) {
-				NSLog(@"DB Switch error removing main store: %@", [error localizedFailureReason]);
-			}
-			else {
-				NSPersistentStore *userStore = [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType 
-																							 configuration:nil 
-																									   URL:storeURL 
-																								   options:options 
-																									 error:&error];    
-				
-				if (!userStore || error) {
-					NSLog(@"DB Switch error adding user store: %@", [error localizedFailureReason]);
-					abort();
-				}
-				
-				else
-					NSLog(@"DB Switch completed, new store at: %@", storeURL);
-				
-			}
-			
-			
-			
-			[self.persistentStoreCoordinator unlock];
-		}
-		
-	}	
-	self.managedObjectContext = nil;
-	[persistentStoreCoordinator release];
-	persistentStoreCoordinator = nil;
-	[managedObjectModel release];
-	managedObjectModel = nil;
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"PERSISTENTSTORE_SWITCHED" object:nil];	
-}
-
-- (void)copyPersistentStoreIfNeeded:(id)sender {	
-#if IMPORTING_DATA == 0 // don't use this if we're setting up & initializing from property lists...
-
-	NSString *storePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent: DATABASE_FILE];
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	// If the expected store doesn't exist, copy the default store.
-	if (![fileManager fileExistsAtPath:storePath]) {
-		[self copyPersistentStore:sender];
-	}
-#endif
-}
-
-- (BOOL)replaceOldDatabaseIfNeeded {
-	BOOL hasOld = NO;
-	
-	// Save any custom notes, if we haven't done this already.
-	NSDictionary *storedNotesDict = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"LEGE_NOTES"];	
-	if (!storedNotesDict) {
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		NSMutableDictionary *newDictionary = [[NSMutableDictionary alloc] init];
-		
-		NSArray *legs = [TexLegeCoreDataUtils allObjectsInEntityNamed:@"LegislatorObj" context:self.managedObjectContext];
-		for (LegislatorObj *leg in legs) {
-			if (leg.notes && [leg.notes length])
-				[newDictionary setObject:leg.notes forKey:[leg.legislatorID stringValue]];
-		}
-		[[NSUserDefaults standardUserDefaults] setObject:newDictionary forKey:@"LEGE_NOTES"];
-		[[NSUserDefaults standardUserDefaults] synchronize];
-		
-		[newDictionary release];
-		[pool drain];
-	}
-	
-	if (!databaseIsCopying) {
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		
-		@try {
-			DistrictMapObj *dist83 = [TexLegeCoreDataUtils districtMapForDistrict:[NSNumber numberWithInt:83] 
-																	   andChamber:[NSNumber numberWithInt:HOUSE] 
-																	  withContext:self.managedObjectContext 
-																  lightProperties:YES];
-			
-			if (dist83) {
-				NSNumber *coordinatesInPolygon = [dist83 valueForKey:@"numberOfCoords"];
-				if (coordinatesInPolygon && [coordinatesInPolygon integerValue] == 315) {
-					NSLog(@"TexLege has an older v3 database, resetting");
-					[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_IS_OUTOFDATE"];
-					hasOld = YES;
-					
-					UIAlertView *resetDB = [[UIAlertView alloc] initWithTitle:@"Replace Old Data File" 
-																	  message:@"Your old TexLege user data file is outdated.  A reset is necessary to ensure application stability and data validity." 
-																	 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Reset",nil];
-					resetDB.tag = 5555;
-					[resetDB show];
-					[resetDB release];					
-				}
-				else
-					NSLog(@"TexLege likely has a current v3 database");
-			}
-			
-		}
-		@catch (NSException * e) {
-		}	
-		
-		[pool drain];
-	}
-	return hasOld;
-}
-
-- (void) resetSavedDatabase:(id)sender {
-	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_RESET"];
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	NSError *error = nil;
-	NSString *pathToDocs = [UtilityMethods applicationDocumentsDirectory];
-	NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:pathToDocs error:&error];
-	
-	if (error) {
-		debug_NSLog(@"DB_RESET: Couldn't read documents directory for database reset: %@", error);
-	}
-	if (files && [files count]) {
-		BOOL plannedFailure = NO;
-		
-		[self.persistentStoreCoordinator lock];	// no more changes
-		for (NSPersistentStore *suspectStore in [self.persistentStoreCoordinator persistentStores]) {
-			NSError *error = nil;
-			[self.persistentStoreCoordinator removePersistentStore:suspectStore error:&error];
-			if (error) {
-				debug_NSLog(@"DB_RESET: Couldn't remove the database store... error: %@", [error localizedFailureReason]);
-				plannedFailure = YES;
-			}
-
-		}
-
-		for (NSString *file in files) {
-			if ([file hasSuffix:@".sqlite"]) {
-				NSString *filePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:file];
-				NSError *error = nil;
-				[[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
-				if (error) {
-					debug_NSLog(@"DB_RESET: Couldn't remove the user's database file... error: %@", [error localizedFailureReason]);
-					plannedFailure = YES;
-				}
-			}			
-		}
-		
-		[self copyPersistentStoreIfNeeded:nil];		
-		
-		if (plannedFailure) {
-			NSLog(@"DB_RESET: (FAIL, sort of) We had trouble in our attempts to reset the database, so we'll quit and see if the restart fixes it.");
-		}
-		else {
-			NSLog(@"DB_RESET: (SUCCESS) Database removed and recreated.  The application must now quit.  Restart it at your convenience.");
-		}
-		exit(0);
-
-/*		NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], 
-								 NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], 
-								 NSInferMappingModelAutomaticallyOption, nil];
-		
-		NSString *inDocsPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:DATABASE_FILE];
-		NSURL *storeUrl = [NSURL fileURLWithPath:inDocsPath];
-		
-		if (![self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error]) {
-			// Handle the error.
-			debug_NSLog(@"error: %@", [error localizedFailureReason]);
-			NSLog(@"We had trouble in our attempts to add the new database, so we'll quit and see if the restart fixes it.");
-			exit(0);
-		} 
-		[self.persistentStoreCoordinator unlock];
-*/
-	}	
-	[pool drain];
-}
-
-- (BOOL) resetSavedDatabaseIfNecessary {
-	
-	BOOL needsReset = [[NSUserDefaults standardUserDefaults] boolForKey:kResetSavedDatabaseKey];
-	
-	
-	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kResetSavedDatabaseKey];
+- (BOOL) isDatabaseResetNeeded {
 	[[NSUserDefaults standardUserDefaults] synchronize];
-	
+	BOOL needsReset = [[NSUserDefaults standardUserDefaults] boolForKey:kResetSavedDatabaseKey];
+		
 	if (needsReset) {
-		UIAlertView *resetDB = [[UIAlertView alloc] initWithTitle:@"Settings: Reset Data and Quit?" 
-														  message:@"Are you sure you want to restore the factory database?  Any interim data updates will be lost by proceeding.  NOTE: The application will automatically quit after the reset." 
+		UIAlertView *resetDB = [[UIAlertView alloc] initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"ResetDB.ConfirmTitle"] 
+														  message:[UtilityMethods texLegeStringWithKeyPath:@"ResetDB.ConfirmText"] 
 														 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Reset",nil];
-		resetDB.tag = 5555;
+		resetDB.tag = 23452;
 		[resetDB show];
 		[resetDB release];
 	}
-	
 	return needsReset;
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	if (buttonIndex == alertView.firstOtherButtonIndex) {
-		[self resetSavedTableSelection:nil];
-		if (alertView.tag == 5555)
-			[self resetSavedDatabase:nil]; 
+	if (alertView.tag == 23452) {
+		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kResetSavedDatabaseKey];
+		[[NSUserDefaults standardUserDefaults] synchronize];
+
+		if (buttonIndex == alertView.firstOtherButtonIndex) {
+			[self resetSavedTableSelection:nil];
+			[TexLegeCoreDataUtils resetSavedDatabase:nil]; 
+		}
 	}
 }
-
-/**
- Returns the persistent store coordinator for the application.
- If the coordinator doesn't already exist, it is created and the application's store added to it.
- */
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-	
-    if (persistentStoreCoordinator != nil) {
-        return persistentStoreCoordinator;
-    }
-	
-#define IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB 1
-
-
-#if IMPORTING_DATA == 1
-	#define IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB 1
-#endif
-	
-	NSString *storePath = nil;
-	NSString *inMainBundle = [[NSBundle mainBundle] pathForResource:DATABASE_NAME ofType:@"sqlite"];
-	
-	BOOL createNewStore = NO;
-#if IMPORTING_DATA == 1
-	
-	if (!inMainBundle) {
-		createNewStore = YES;
-		
-		NSString *appBundlePath = [[NSBundle mainBundle] bundlePath];
-		storePath = [appBundlePath stringByAppendingPathComponent:DATABASE_FILE];
-	}
-#endif
-		
-	if (!createNewStore) {
-#ifdef IF_WE_ALLOW_SAVING_IN_CORE_DATA_USE_A_COPY_OF_THE_DB
-		NSString *inDocsPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:DATABASE_FILE];
-		if (![[NSFileManager defaultManager] fileExistsAtPath:inDocsPath]) {
-			storePath = inMainBundle;  // for now at least until it gets copies properly
-			[self performSelectorInBackground:@selector(copyPersistentStore:) withObject:nil];
-			
-			// Need to find a way to tell the core data objects that we've got a new/safer persistent store ready to go
-		}
-		else {
-			storePath = inDocsPath;
-		}
-		
-#else
-		storePath = inMainBundle;
-#endif
-	}
-	debug_NSLog(@"%@", storePath);
-	NSURL *storeUrl = [NSURL fileURLWithPath:storePath];
-
-	NSError *error;
-	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], 
-							 NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], 
-							 NSInferMappingModelAutomaticallyOption, nil];
-	
-    persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel: [self managedObjectModel]];
-    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error]) {
-        // Handle the error.
-		debug_NSLog(@"error: %@", [error localizedFailureReason]);
-    }    
-		
-    return persistentStoreCoordinator;
-}
-
-#endif
 
 @end
 
