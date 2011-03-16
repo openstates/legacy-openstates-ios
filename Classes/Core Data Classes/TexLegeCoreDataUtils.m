@@ -17,11 +17,15 @@
 #import "LinkObj.h"
 #import "TexLegeAppDelegate.h"
 #import "NSDate+Helper.h"
+#import "LocalyticsSession.h"
 
 //#define VERIFYCOMMITTEES 1
 #ifdef VERIFYCOMMITTEES
 #import "JSONDataImporter.h"
 #endif
+
+#define SEED_DB_NAME @"TexLegeSeed.sqlite"
+#define APP_DB_NAME @"TexLege.sqlite"
 
 @implementation TexLegeCoreDataUtils
 
@@ -183,7 +187,7 @@
 	
 #ifdef RESTKIT_GENERATE_SEED_DB
 	// Initialize object store
-    objectManager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:@"TexLegeSeed.sqlite" 
+    objectManager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:SEED_DB_NAME 
 															 usingSeedDatabaseName:nil /// this is stupid ... we can't supply it yet.
 																managedObjectModel:mom];
 	
@@ -207,8 +211,8 @@
     // [RKManagedObjectSeeder generateSeedDatabaseWithObjectManager:objectManager fromFiles:@"users.json", nil];
 #endif
 	
-	objectManager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:@"TexLege.sqlite" 
-															 usingSeedDatabaseName:@"TexLegeSeed.sqlite" 
+	objectManager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:APP_DB_NAME 
+															 usingSeedDatabaseName:SEED_DB_NAME 
 																managedObjectModel:mom];
 	
 #ifdef VERIFYCOMMITTEES
@@ -219,6 +223,26 @@
 	[importer release];
 	
 #endif
+}
+
++ (NSArray *)registeredDataModels {
+	return [[[[[RKObjectManager sharedManager] objectStore] managedObjectModel] entitiesByName] allKeys];
+}
+
++ (void) resetSavedDatabase:(id)sender {
+	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_RESET"];
+	[[[RKObjectManager sharedManager] objectStore] deletePersistantStoreUsingSeedDatabaseName:SEED_DB_NAME];
+	
+	//exit(0);
+
+	for (DistrictMapObj *map in [DistrictMapObj allObjects])
+		[map resetRelationship:self];
+	[[[RKObjectManager sharedManager] objectStore] save];
+
+	for (NSString *className in [TexLegeCoreDataUtils registeredDataModels]) {
+		NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
+		[[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
+	}
 }
 
 @end

@@ -14,6 +14,7 @@
 #import "MTStatusBarOverlay.h"
 #import "LocalyticsSession.h"
 #import "DistrictMapObj.h"
+#import "NSDate+Helper.h"
 
 #define JSONDATA_TIMESTAMPFILE	@"dataVersion.json"
 #define JSONDATA_IDKEY			@"id"
@@ -22,11 +23,22 @@
 #define JSONDATA_ENCODING		NSUTF8StringEncoding
 
 #define TESTING 0	// turn this on to fake the updater into believing all remote data is newer than local.  
+#define WNOMAGGREGATES_UPDATING 0
 
 @interface DataModelUpdateManager (Private)
+
+- (void) performDataUpdateIfAvailableForModel:(NSString *)entityName;
+- (NSString *)localDataTimestampForModel:(NSString *)classString;
+
+#if WNOMAGGREGATES_UPDATING
+/*
 - (NSArray *) localDataTimestamps;
 - (NSArray *) remoteDataTimestamps;
 - (NSArray *) deltaLocalTimestamps:(NSArray *)local toRemote:(NSArray *)remote;
+*/
+- (NSString *) localDataTimestampForArray:(NSArray *)entityArray;
+#endif	
+
 @end
 
 @implementation DataModelUpdateManager
@@ -63,63 +75,62 @@
 #pragma mark -
 #pragma mark Check & Perform Updates
 
-- (void) checkAndAlertAvailableUpdates:(id)sender {
-	if ([self isDataUpdateAvailable])
-		[self alertHasUpdates:self];
-}
+- (void) performDataUpdatesIfAvailable:(id)sender {
+	NSArray *objects = [self.statusBlurbsAndModels allKeys];
+	//NSArray *objects = [TexLegeCoreDataUtils registeredDataModels];
 
-- (BOOL) isDataUpdateAvailable {
-	BOOL hasUpdate = NO;
-	NSArray *local = [self localDataTimestamps];
-	NSArray *remote = [self remoteDataTimestamps];
-	if (local && remote) {
-		self.availableUpdates = [self deltaLocalTimestamps:local toRemote:remote];
-		hasUpdate = ([self.availableUpdates count] > 0);
-	}
-	return hasUpdate;
-}
+	
+	NSURL *serverURL = [NSURL URLWithString:RESTKIT_BASE_URL];
+	
+	if ([TexLegeReachability canReachHostWithURL:serverURL alert:NO]) {
+		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_UPDATE_REQUEST"];
+		[self.downloadedUpdates removeAllObjects];
+		
+		self.availableUpdates = [NSMutableArray array];
+		
+		NSString *statusString = @"Checking for Data Updates";
+		MTStatusBarOverlay *overlay = [MTStatusBarOverlay sharedInstance];
+		overlay.historyEnabled = YES;
+		overlay.animation = MTStatusBarOverlayAnimationFallDown;  // MTStatusBarOverlayAnimationShrink
+		overlay.detailViewMode = MTDetailViewModeHistory;         // enable automatic history-tracking and show in detail-view
+		//overlay.delegate = self;
+		overlay.progress = 0.0;
+		[overlay postMessage:statusString animated:YES];
 
-- (void) alertHasUpdates:(id)delegate {
-	UIAlertView *updaterAlert = [[UIAlertView alloc] initWithTitle:@"Update Available" 
-														   message:@"An optional interim data update for TexLege is available.  Would you like to download and install the new data?"  
-														  delegate:delegate 
-												 cancelButtonTitle:@"Cancel" 
-												 otherButtonTitles:@"Update", nil];
-	updaterAlert.tag = 6666;
-	[updaterAlert show];
-	[updaterAlert release];
-}
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	if (buttonIndex == alertView.firstOtherButtonIndex) {
-		if (alertView.tag == 6666)
-			[self performAvailableUpdates];
+		
+		for (NSString *classString in objects) {
+			[self performDataUpdateIfAvailableForModel:classString];
+		}		
 	}
 }
 
-- (void) performAvailableUpdates {
-	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_UPDATE_REQUEST"];
-
-	[self.downloadedUpdates removeAllObjects];
+- (void) performDataUpdateIfAvailableForModel:(NSString *)entityName {	
+	NSString *localTS = [self localDataTimestampForModel:entityName];
 	
-	NSString *statusString = [NSString stringWithFormat:@"Downloading %d Updates", [self.availableUpdates count]];
+	RKObjectManager* objectManager = [RKObjectManager sharedManager];
+	NSString *resourcePath = [NSString stringWithFormat:@"/rest.php/%@", entityName];
+	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
+								 localTS,@"updated_since",nil];
+	//	http://www.texlege.com/jsonDataTest/rest.php/CommitteeObj?updated_since=2011-03-01%2017:05:13
 	
-	MTStatusBarOverlay *overlay = [MTStatusBarOverlay sharedInstance];
-	overlay.historyEnabled = YES;
-	overlay.animation = MTStatusBarOverlayAnimationFallDown;  // MTStatusBarOverlayAnimationShrink
-	overlay.detailViewMode = MTDetailViewModeHistory;         // enable automatic history-tracking and show in detail-view
-	//overlay.delegate = self;
-	overlay.progress = 0.0;
-	
-	[overlay postMessage:statusString animated:YES];
-
-	
-	for (NSString *update in self.availableUpdates) {
-		[TexLegeCoreDataUtils loadDataFromRest:update delegate:self];
+	Class entityClass = NSClassFromString(entityName);
+	if (entityClass) {
+		[self.availableUpdates addObject:entityName];	// we don't add WnomAggregateObj because we don't get it loaded the same way.
+		[objectManager loadObjectsAtResourcePath:resourcePath queryParams:queryParams objectClass:entityClass delegate:self];
 	}
-	[[[RKObjectManager sharedManager] objectStore] save];
-}
+	else if ([entityName isEqualToString:@"WnomAggregateObj"]) {
+#if WNOMAGGREGATES_UPDATING
+		//TODO:	Figure out some way of pulling the latest and greatest WnomAggregateObj once in a while.
+		//		This requires WnomAggregateObj.json to be copied and updated in the documents directory (right now it's only in the bundle)
+	#warning This requires WnomAggregateObj to be in the documents directory (it's only in the app bundle now)
+#endif
+	}
+	else {
+		debug_NSLog(@"DataModelUpdateManager:performDataUpdateIfAvailableForModel - Unexpected entity name: %@", entityName);
+	}
 
+
+}
 
 - (BOOL)checkUpdateFinished {
 	BOOL success = self.availableUpdates && ([self.downloadedUpdates count] == [self.availableUpdates count]);
@@ -137,45 +148,43 @@
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {
-	if (objects && [objects count]) {
-		@try {
-			NSString *className = NSStringFromClass([[objects objectAtIndex:0] class]);
-			if (className) {
+		
+	@try {
+		NSString *className = NSStringFromClass(objectLoader.objectClass);
+		if (className) {
+			[self.downloadedUpdates addObject:className];
+
+			if (objects && [objects count]) {
 				NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
 				debug_NSLog(@"%@ %d objects", notification, [objects count]);
-				
+			
 				if ([className isEqualToString:@"DistrictMapObj"] || [className isEqualToString:@"LegislatorObj"])					
 					for (DistrictMapObj *map in [DistrictMapObj allObjects])
 						[map resetRelationship:self];
-				
+			
 				[[[RKObjectManager sharedManager] objectStore] save];
-				
-				/*				NSError *error = nil;
-				 [[[objectLoader managedObjectStore] managedObjectContext]save:&error];
-				 if (error)
-				 NSLog(@"RestKit save error while loading");
-				 */
 				[[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
 				
-				[self.downloadedUpdates addObject:className];
 				NSString *statusString = [NSString stringWithFormat:@"Updated %@", [statusBlurbsAndModels objectForKey:className]];
 				NSLog(@"%@", statusString);
-				//[[MTStatusBarOverlay sharedInstance] postMessage:statusString animated:YES];				
-				[self checkUpdateFinished];
-			}			
-		}
-		@catch (NSException * e) {
-			NSLog(@"RestKit Load Error: %@", [e description]);
-		}
+				[[MTStatusBarOverlay sharedInstance] postMessage:statusString animated:YES];				
+
+			}
+			
+			[self checkUpdateFinished];
+		}			
+	}
+	@catch (NSException * e) {
+		NSLog(@"RestKit Load Error: %@", [e description]);
 	}
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
-	UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Data Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+	UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Data Update Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
 	[alert show];
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"RESTKIT_DATA_ERROR"];
 	NSLog(@"RestKit Data error: %@", [error localizedDescription]);
-	
+
 	[[MTStatusBarOverlay sharedInstance] postErrorMessage:@"Error During Update" duration:8];
 
 }
@@ -183,6 +192,64 @@
 #pragma mark -
 #pragma mark Timestamp Files
 
+- (NSString *)localDataTimestampForModel:(NSString *)classString {
+	if (NSClassFromString(classString)) {
+		NSFetchRequest *request = [NSClassFromString(classString) fetchRequest];
+		NSSortDescriptor *desc = [[NSSortDescriptor alloc] initWithKey:JSONDATA_TIMESTAMPKEY ascending:NO];	// the most recent update will be the first item in the array (descending)
+		[request setSortDescriptors:[NSArray arrayWithObject:desc]];
+		[request setResultType:NSDictionaryResultType];												// This is necessary to limit it to specific properties during the fetch
+		[request setPropertiesToFetch:[NSArray arrayWithObject:JSONDATA_TIMESTAMPKEY]];						// We don't want to fetch everything, we'll get a huge ass memory hit otherwise.
+		[desc release];
+		
+		return [[NSClassFromString(classString) objectWithFetchRequest:request] valueForKey:JSONDATA_TIMESTAMPKEY];
+	}
+	else if ([classString isEqualToString:@"WnomAggregateObj"]) {
+#if WNOMAGGREGATES_UPDATING
+		NSError *error = nil;
+		NSString *path = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:@"WnomAggregateObj.json"];
+		NSString *json = [NSString stringWithContentsOfFile:path encoding:JSONDATA_ENCODING error:&error];
+		if (!error && json) {
+			NSArray *aggregates = [json JSONValue];
+			NSString *timestamp = [self localDataTimestampForArray:aggregates];
+		}
+		else {
+			NSLog(@"DataModelUpdateManager:timestampForModel - error loading aggregates json - %@", path);
+		}
+#endif
+	}
+	
+	return nil;
+}
+
+#if WNOMAGGREGATES_UPDATING
+- (NSString *) localDataTimestampForArray:(NSArray *)entityArray {
+	if (!entityArray || ![entityArray count])
+		return [[NSDate date] timestampString];
+	
+	NSMutableArray *tempSorted = [[NSMutableArray alloc] initWithArray:entityArray];
+	NSSortDescriptor *desc = [[NSSortDescriptor alloc] initWithKey:JSONDATA_TIMESTAMPKEY ascending:NO];	// the most recent update will be the first item in the array (descending)
+	[tempSorted sortUsingDescriptors:desc];
+	[desc release];
+
+	NSString *timestamp = nil;
+	id object = [[tempSorted objectAtIndex:0] objectForKey:JSONDATA_TIMESTAMPKEY];
+	if (!object) {
+		NSLog(@"DataModelUpdateManager:timestampForArray - no 'updated' timestamp key found.");
+	}
+	else if ([object isKindOfClass:[NSString class]])
+		timestamp = object;
+	else if ([object isKindOfClass:[NSDate class]])
+		timestamp = [object timestampString];
+	else {
+		NSLog(@"DataModelUpdateManager:timestampForArray - Unexpected type in dictionary, wanted timestamp string, %@", [object description]);
+	}
+
+	[tempSorted release];
+	return timestamp;
+}
+#endif
+
+/*
 - (NSArray *) localDataTimestamps {
 	NSMutableArray *dataArray = [NSMutableArray array];
 	
@@ -286,6 +353,6 @@
 	NSLog(@"DataModelUpdateManager: Found %d Differences in Local vs. Remote Data Timestamps", [different count]);
 	return different;
 }
-
+*/
 
 @end

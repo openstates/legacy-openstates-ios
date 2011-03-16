@@ -28,12 +28,13 @@
 
 + (NSArray *) allLegislatorsSortedByPartisanshipFromChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
 + (NSArray *) allDistrictMapsLight;
-+ (NSArray *)allDistrictMapIDsWithBoundingBoxesContaining:(CLLocationCoordinate2D)coordinate;
++ (NSArray *) allDistrictMapIDsWithBoundingBoxesContaining:(CLLocationCoordinate2D)coordinate;
 
 + (void) deleteAllObjectsInEntityNamed:(NSString*)entityName;
 
 + (void)loadDataFromRest:(NSString *)entityName delegate:(id)delegate;
 + (void)initRestKitObjects:(id)sender;
-
++ (void)resetSavedDatabase:(id)sender;
++ (NSArray *)registeredDataModels;
 @end
 
