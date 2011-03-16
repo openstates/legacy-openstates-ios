@@ -22,7 +22,7 @@
 - (void)updateOptInFromSettings {
 	if ([self shouldPresentAnalyticsOptInAlert])	// we don't have a valid setting yet, wait till they get asked first
 		return;
-	
+	[[NSUserDefaults standardUserDefaults] synchronize];	
 	NSNumber *optInUserSetting = [[NSUserDefaults standardUserDefaults] objectForKey:kAnalyticsSettingsSwitch];
 	if (!optInUserSetting)	// we didn't find a switch setting in the bundle??? shouldn't happen...
 		optInUserSetting = [NSNumber numberWithBool:YES];
@@ -32,6 +32,7 @@
 
 
 - (BOOL) shouldPresentAnalyticsOptInAlert {
+	[[NSUserDefaults standardUserDefaults] synchronize];	
 	BOOL hasAsked = [[NSUserDefaults standardUserDefaults] boolForKey:kAnalyticsAskedForOptInKey];
 	if (!hasAsked)
 		return YES;
@@ -52,6 +53,7 @@
 						 initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Analytics.OptInTitle"]
 						 message:[UtilityMethods texLegeStringWithKeyPath:@"Analytics.OptInText"]
 						 delegate:self cancelButtonTitle:@"Deny" otherButtonTitles:@"Permit", nil] autorelease];
+	self.currentAlert.tag = 6134;
 	[self.currentAlert show];
 	
 }
@@ -63,7 +65,7 @@
 
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	if ([alertView isEqual:self.currentAlert]) {
+	if (alertView.tag == 6134) {
 		self.currentAlert = nil;
 		
 		NSInteger didOptIn = buttonIndex;
