@@ -9,12 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
 
-#define kBillCategoriesFile @"BillMetadata.json"
-#define kBillCategoriesPath @"BillMetadata"
-
-@interface BillsCategoriesViewController : UITableViewController <UITableViewDelegate,RKRequestDelegate> {
+@interface BillsCategoriesViewController : UITableViewController <UITableViewDelegate> {
 	NSMutableArray *_CategoriesList;
 }
-- (IBAction)refreshCategories:(id)sender;
+- (IBAction)refreshCategories:(NSNotificationCenter *)notification;
 
 @end

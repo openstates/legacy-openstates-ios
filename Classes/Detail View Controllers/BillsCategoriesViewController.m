@@ -15,6 +15,7 @@
 #import "BillsListDetailViewController.h"
 #import "BillSearchDataSource.h"
 #import "TexLegeStandardGroupCell.h"
+#import "BillMetadataLoader.h"
 
 @interface BillsCategoriesViewController (Private)
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -35,6 +36,9 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(refreshCategories:) name:kBillMetadataNotifyLoaded object:nil];
+
 	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"TexLegeStrings" ofType:@"plist"];
 	NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
 	NSString *myClass = [[self class] description];
@@ -53,20 +57,29 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	if (![TexLegeReachability canReachHostWithURL:[NSURL URLWithString:@"http://openstates.sunlightlabs.com"] alert:YES])
-		return;
-			
+	
 	[self.tableView reloadData];
 }
 
 
-- (IBAction)refreshCategories:(id)sender {
-	[[RKClient sharedClient] get:[NSString stringWithFormat:@"/%@", kBillCategoriesFile] delegate:self];  	
+- (IBAction)refreshCategories:(NSNotificationCenter *)notification {
+	if (_CategoriesList)
+		[_CategoriesList release];
+	_CategoriesList = [[[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:@"subjects"] retain];	
+	if (_CategoriesList && [_CategoriesList count]) {
+		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
+		[_CategoriesList sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+		[sortDescriptor release];	
+		
+	}		
+	[self.tableView reloadData];
 }
 
 - (void)viewDidUnload {
 	[_CategoriesList release];
 	_CategoriesList = nil;
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[super viewDidUnload];
 }
 
@@ -148,64 +161,6 @@
 	[super dealloc];
 }
 
-- (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
-	if (error)
-		debug_NSLog(@"Error loading bill metadata from %@: %@", [request description], [error localizedDescription]);
-
-	NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillCategoriesFile];
-
-	if (_CategoriesList)
-		[_CategoriesList release], _CategoriesList = nil;	
-
-	error = nil;
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	if (![fileManager fileExistsAtPath:localPath]) {
-		NSString *defaultPath = [[NSBundle mainBundle] pathForResource:kBillCategoriesPath ofType:@"json"];
-		[fileManager copyItemAtPath:defaultPath toPath:localPath error:&error];
-	}
-	NSString *jsonMenus = [NSString stringWithContentsOfFile:localPath encoding:NSUTF8StringEncoding error:&error];
-	NSDictionary *metaData = [jsonMenus JSONValue];
-	if (metaData)
-		_CategoriesList = [[metaData objectForKey:@"subjects"] retain];
-
-	if (_CategoriesList && [_CategoriesList count]) {
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
-		[_CategoriesList sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-		[sortDescriptor release];	
-	}	
-	[self.tableView reloadData];
-	
-}
-
-
-- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
-	if ([request isGET]) {  
-		// Handling GET /BillMetadata.json  
-		
-		if ([response isOK]) {  // Success! Let's take a look at the data  
-			if (_CategoriesList)
-				[_CategoriesList release], _CategoriesList = nil;	
-
-			NSDictionary *metaData = [response bodyAsJSON];			
-			if (metaData) {
-				NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillCategoriesFile];
-				[metaData writeToFile:localPath atomically:YES];	
-				_CategoriesList = [[metaData objectForKey:@"subjects"] retain];
-			}		
-			if (_CategoriesList && [_CategoriesList count]) {
-				NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
-				[_CategoriesList sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-				[sortDescriptor release];	
-				[self.tableView reloadData];
-			}
-			else {
-				NSError *error = nil;
-				[self request:request didFailLoadWithError:error];
-				return;
-			}
-		}  
-	}
-}		
 @end
 
 
