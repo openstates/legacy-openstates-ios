@@ -65,9 +65,9 @@
 - (IBAction)refreshCategories:(NSNotificationCenter *)notification {
 	if (_CategoriesList)
 		[_CategoriesList release];
-	_CategoriesList = [[[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:@"subjects"] retain];	
+	_CategoriesList = [[[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:kBillMetadataSubjectsKey] retain];	
 	if (_CategoriesList && [_CategoriesList count]) {
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
+		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:kBillMetadataTitleKey ascending:YES];
 		[_CategoriesList sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
 		[sortDescriptor release];	
 		
@@ -88,8 +88,8 @@
 	BOOL useDark = (indexPath.row % 2 == 0);
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	NSDictionary *category = [_CategoriesList objectAtIndex:indexPath.row];
-	cell.detailTextLabel.text = [category objectForKey:@"title"];
-	cell.textLabel.text = [NSString stringWithFormat:@"Approx. %@ Bills", [category objectForKey:@"count"]];
+	cell.detailTextLabel.text = [category objectForKey:kBillMetadataTitleKey];
+	cell.textLabel.text = [NSString stringWithFormat:@"Approx. %@ Bills", [category objectForKey:kBillMetadataSubjectsCountKey]];
 }
 
 #pragma mark -
@@ -138,8 +138,8 @@
 		return;
 	
 	NSDictionary *item = [_CategoriesList objectAtIndex:indexPath.row];
-	if (item && [item objectForKey:@"title"]) {
-		NSString *cat = [item objectForKey:@"title"];
+	if (item && [item objectForKey:kBillMetadataTitleKey]) {
+		NSString *cat = [item objectForKey:kBillMetadataTitleKey];
 		if (cat) {
 			BillsListDetailViewController *catResultsView = [[[BillsListDetailViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
 			BillSearchDataSource *dataSource = [catResultsView valueForKey:@"dataSource"];
