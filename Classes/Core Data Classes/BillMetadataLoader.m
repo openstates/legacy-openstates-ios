@@ -27,6 +27,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 }
 
 - (void)dealloc {
+	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 	if (_metadata)
 		[_metadata release], _metadata = nil;
 	
