@@ -6,6 +6,7 @@
 //  Copyright 2009 Gregory S. Combs. All rights reserved.
 //
 
+#import <RestKit/RestKit.h>
 
 #import "TexLegeAppDelegate.h"
 #import "TexLegeCoreDataUtils.h"
@@ -24,8 +25,7 @@
 #import "LegislatorObj.h"
 #import "DistrictMapObj.h"
 #import "DataModelUpdateManager.h"
-
-#import <RestKit/RestKit.h>
+#import "BillMetadataLoader.h"
 
 #import "TVOutManager.h"
 
@@ -405,6 +405,8 @@ NSInteger kNoSelection = -1;
 - (void)runOnEveryAppStart {
 	self.appIsQuitting = NO;
 	
+	[[BillMetadataLoader sharedBillMetadataLoader] loadMetadata:self];
+	
 	if (![self isDatabaseResetNeeded]) {
 		analyticsOptInController = [[[AnalyticsOptInAlertController alloc] init] retain];
 		if (analyticsOptInController && ![analyticsOptInController presentAnalyticsOptInAlertIfNecessary])
@@ -422,7 +424,7 @@ NSInteger kNoSelection = -1;
 	if (self.appIsQuitting)
 		return;
 	self.appIsQuitting = YES;
-	
+		
 	if (self.tabBarController) {
 		// Smarten this up later for Core Data tab saving
 		NSMutableArray *savedOrder = [NSMutableArray arrayWithCapacity:[self.tabBarController.viewControllers count]];
