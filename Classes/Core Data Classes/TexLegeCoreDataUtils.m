@@ -95,6 +95,20 @@
 	return nil;
 }
 
++ (NSArray*)allPrimaryKeyIDsInEntityNamed:(NSString*)entityName {
+	Class entityClass = NSClassFromString(entityName);
+	if (entityName && entityClass)
+	{	
+		NSFetchRequest *request = [entityClass fetchRequest];
+		
+		// only return primary key IDs
+		[request setResultType:NSDictionaryResultType];	
+		[request setPropertiesToFetch:[NSArray arrayWithObject:[entityClass primaryKeyProperty]]];
+		
+		return [[entityClass objectsWithFetchRequest:request] valueForKeyPath:[entityClass primaryKeyProperty]];
+	}
+	return nil;
+}
 
 + (NSArray *) allDistrictMapsLight {
 	NSFetchRequest *fetchRequest = [DistrictMapObj fetchRequest];	
@@ -123,6 +137,18 @@
 	return nil;
 }
 
++ (void) deleteObjectInEntityNamed:(NSString *)entityName withPrimaryKeyValue:(id)keyValue {
+	if (!entityName || !NSClassFromString(entityName))
+		return;
+	
+	RKManagedObject *object = [NSClassFromString(entityName) objectWithPrimaryKeyValue:keyValue];
+	if (object == nil) {
+		debug_NSLog(@"Can't Delete: There's no %@ objects matching ID: %@", entityName, keyValue);
+	}
+	else {
+		[[NSClassFromString(entityName) managedObjectContext] deleteObject:object];
+	}
+}
 
 + (void) deleteAllObjectsInEntityNamed:(NSString*)entityName {
 	debug_NSLog(@"I HOPE YOU REALLY WANT TO DO THIS ... DELETING ALL OBJECTS IN %@", entityName);
@@ -130,12 +156,11 @@
 	
 	if (!entityName || !NSClassFromString(entityName))
 		return;
-	
+
 	NSArray *fetchedObjects = [NSClassFromString(entityName) allObjects];
 	if (fetchedObjects == nil) {
 		debug_NSLog(@"There's no objects to delete ???");
 	}
-	
 	for (NSManagedObject *object in fetchedObjects) {
 		[[NSClassFromString(entityName) managedObjectContext] deleteObject:object];
 	}

@@ -29,7 +29,9 @@
 + (NSArray *) allLegislatorsSortedByPartisanshipFromChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
 + (NSArray *) allDistrictMapsLight;
 + (NSArray *) allDistrictMapIDsWithBoundingBoxesContaining:(CLLocationCoordinate2D)coordinate;
++ (NSArray*) allPrimaryKeyIDsInEntityNamed:(NSString*)entityName;
 
++ (void) deleteObjectInEntityNamed:(NSString *)entityName withPrimaryKeyValue:(id)keyValue;
 + (void) deleteAllObjectsInEntityNamed:(NSString*)entityName;
 
 + (void)loadDataFromRest:(NSString *)entityName delegate:(id)delegate;

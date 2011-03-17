@@ -16,11 +16,26 @@
 #import "DistrictMapObj.h"
 #import "NSDate+Helper.h"
 
-#define JSONDATA_TIMESTAMPFILE	@"dataVersion.json"
 #define JSONDATA_IDKEY			@"id"
-#define JSONDATA_TIMESTAMPKEY	@"updated"
-#define JSONDATA_FILEKEY		@"resource"
 #define JSONDATA_ENCODING		NSUTF8StringEncoding
+
+#define TXLUPDMGR_CLASSKEY		@"className"
+#define TXLUPDMGR_QUERYKEY		@"queryType"
+#define TXLUPDMGR_UPDATEDPROP	@"updated"
+#define TXLUPDMGR_UPDATEDPARAM	@"updated_since"
+
+						// QUERIES RETURN AN ARRAY OF ROWS
+enum TXL_QueryTypes {
+	QUERYTYPE_IDS_NEW = 1,		//	 *filtered* by updated_since;	contains only primaryKey
+	QUERYTYPE_IDS_ALL_PRUNE,	//	 **PRUNES CORE DATA**		;	contains only primaryKey
+	QUERYTYPE_COMPLETE_NEW,		//   *filtered* by updated_since;	contains *all* properties
+	QUERYTYPE_COMPLETE_ALL		//						all rows;	contains *all* properties
+};
+#define queryIsComplete(query) (query >= QUERYTYPE_COMPLETE_NEW)
+#define queryIsNew(query) ((query == QUERYTYPE_IDS_NEW) || (query == QUERYTYPE_COMPLETE_NEW))
+
+#define numToInt(number) (number ? [number integerValue] : 0)	// should this be NSNotFound or nil or null?
+#define intToNum(integer) [NSNumber numberWithInt:integer]
 
 #define TESTING 0	// turn this on to fake the updater into believing all remote data is newer than local.  
 #define WNOMAGGREGATES_UPDATING 0
@@ -44,9 +59,11 @@
 @implementation DataModelUpdateManager
 
 @synthesize availableUpdates, downloadedUpdates, statusBlurbsAndModels;
+@synthesize availableUpdatesDict;
 
 - (id) init {
 	if (self=[super init]) {
+		availableUpdatesDict = [[NSMutableDictionary dictionary] retain];
 		self.downloadedUpdates = [NSMutableArray array];
 		
 		self.statusBlurbsAndModels = [NSDictionary dictionaryWithObjectsAndKeys: 
@@ -66,9 +83,12 @@
 }
 
 - (void) dealloc {
+	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
+
 	self.statusBlurbsAndModels = nil;
 	self.downloadedUpdates = nil;
 	self.availableUpdates = nil;
+	self.availableUpdatesDict = nil;
 	[super dealloc];
 }
 
@@ -79,7 +99,6 @@
 	NSArray *objects = [self.statusBlurbsAndModels allKeys];
 	//NSArray *objects = [TexLegeCoreDataUtils registeredDataModels];
 
-	
 	NSURL *serverURL = [NSURL URLWithString:RESTKIT_BASE_URL];
 	
 	if ([TexLegeReachability canReachHostWithURL:serverURL alert:NO]) {
@@ -104,13 +123,47 @@
 	}
 }
 
+// Send a simple query to our server's REST API.  The queryType determines the content and the resulting actions once we receive the response
+
+- (void) queryModel:(NSString *)entityName queryType:(NSInteger)queryType {
+	NSMutableString *resourcePath = [[NSMutableString alloc] init];
+	NSDictionary *queryParams = nil;
+	
+	if (queryIsComplete(queryType)) 
+		[resourcePath appendFormat:@"/rest.php/%@", entityName];
+	else
+		[resourcePath appendFormat:@"/rest_ids.php/%@", entityName];
+		
+	if (queryIsNew(queryType)) {
+		NSString *localTS = [self localDataTimestampForModel:entityName];
+		queryParams = [NSDictionary dictionaryWithObjectsAndKeys:localTS,TXLUPDMGR_UPDATEDPARAM,nil];
+	}
+	
+	RKRequest *request = nil;
+	if (queryParams)
+		request = [[RKClient sharedClient] get:resourcePath queryParams:queryParams delegate:self];
+	else
+		request = [[RKClient sharedClient] get:resourcePath delegate:self];
+
+	if (request) {
+		NSDictionary *userData = [NSDictionary dictionaryWithObjectsAndKeys:
+								  entityName, TXLUPDMGR_CLASSKEY,
+								  intToNum(queryType), TXLUPDMGR_QUERYKEY, nil];
+		
+		request.userData = userData;
+	}
+	else
+		NSLog(@"DataUpdateManager Error, unable to obtain RestKit request for %@", resourcePath);
+	
+	[resourcePath release];
+}
+
 - (void) performDataUpdateIfAvailableForModel:(NSString *)entityName {	
 	NSString *localTS = [self localDataTimestampForModel:entityName];
 	
 	RKObjectManager* objectManager = [RKObjectManager sharedManager];
 	NSString *resourcePath = [NSString stringWithFormat:@"/rest.php/%@", entityName];
-	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-								 localTS,@"updated_since",nil];
+	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:localTS,TXLUPDMGR_UPDATEDPARAM,nil];
 	//	http://www.texlege.com/jsonDataTest/rest.php/CommitteeObj?updated_since=2011-03-01%2017:05:13
 	
 	Class entityClass = NSClassFromString(entityName);
@@ -126,10 +179,8 @@
 #endif
 	}
 	else {
-		debug_NSLog(@"DataModelUpdateManager:performDataUpdateIfAvailableForModel - Unexpected entity name: %@", entityName);
+		debug_NSLog(@"DataUpdateManager:performDataUpdateIfAvailableForModel - Unexpected entity name: %@", entityName);
 	}
-
-
 }
 
 - (BOOL)checkUpdateFinished {
@@ -140,9 +191,69 @@
 	if (success) {
 		[[MTStatusBarOverlay sharedInstance] postFinishMessage:@"Update Completed" duration:5];	
 		self.availableUpdates = nil;
+		
 	}
 	return success;
 }
+
+// This scans the core data entity looking for "stale" objects, ones that were deleted on the server database
+- (void)pruneModel:(NSString *)className forUpstreamIDs:(NSArray *)upstreamIDs {
+	if (![[TexLegeCoreDataUtils registeredDataModels] containsObject:className])
+		return;			// What do we do for WnomAggregateObj ???
+
+	BOOL changed = NO;
+	
+	NSArray *tempList = [TexLegeCoreDataUtils allPrimaryKeyIDsInEntityNamed:className];
+	for (NSNumber *storedObjID in tempList) {
+		
+		//	#define LOGIC_TESTING ([className isEqualToString:@"LegislatorObj"] && [storedObjID isEqualToNumber:intToNum(116944)])	
+		if (NO == [upstreamIDs containsObject:storedObjID])
+		{
+			NSLog(@"DataUpdateManager: PRUNING OBJECT FROM %@: ID = %@", className, storedObjID);
+			[TexLegeCoreDataUtils deleteObjectInEntityNamed:className withPrimaryKeyValue:storedObjID];			
+			changed = YES;
+		}
+	}
+	if (changed) {
+		[[[RKObjectManager sharedManager] objectStore] save];
+
+		NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
+		[[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
+	}
+}
+
+#pragma mark -
+#pragma mark RKRequestDelegate methods
+
+- (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
+	if (error && request) {
+		debug_NSLog(@"Error loading data model query from %@: %@", [request description], [error localizedDescription]);
+	}	
+}
+
+
+// Handling GET Requests  
+- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
+	if ([request isGET] && [response isOK]) {  
+		// Success! Let's take a look at the data  
+		
+		if (!request.userData)
+			return; // We've got no user data, can't do anything...
+
+		NSString *className = [request.userData objectForKey:TXLUPDMGR_CLASSKEY];
+		NSInteger queryType = numToInt([request.userData objectForKey:TXLUPDMGR_QUERYKEY]);
+		
+		if (NO == queryIsComplete(queryType)) { // we're only working with an array of IDs
+			NSArray *resultIDs = [response bodyAsJSON];
+			if (resultIDs && [resultIDs count]) {
+				if (queryType == QUERYTYPE_IDS_NEW)
+					[self.availableUpdatesDict setObject:resultIDs forKey:className];
+				else if (queryType == QUERYTYPE_IDS_ALL_PRUNE)
+					[self pruneModel:className forUpstreamIDs:resultIDs];
+			}
+		}
+	}
+}		
 
 #pragma mark -
 #pragma mark RKObjectLoaderDelegate methods
@@ -169,7 +280,14 @@
 				NSLog(@"%@", statusString);
 				[[MTStatusBarOverlay sharedInstance] postMessage:statusString animated:YES];				
 
+#if TESTING == 0
+				[self queryModel:className queryType:QUERYTYPE_IDS_ALL_PRUNE];	// THIS TRIGGERS A PRUNING
+#endif				
 			}
+#if TESTING == 1
+			[self queryModel:className queryType:QUERYTYPE_IDS_ALL_PRUNE];	// THIS TRIGGERS A PRUNING
+			#warning pruning should only happen after an update actually has changes ... move this for production.
+#endif
 			
 			[self checkUpdateFinished];
 		}			
@@ -195,13 +313,13 @@
 - (NSString *)localDataTimestampForModel:(NSString *)classString {
 	if (NSClassFromString(classString)) {
 		NSFetchRequest *request = [NSClassFromString(classString) fetchRequest];
-		NSSortDescriptor *desc = [[NSSortDescriptor alloc] initWithKey:JSONDATA_TIMESTAMPKEY ascending:NO];	// the most recent update will be the first item in the array (descending)
+		NSSortDescriptor *desc = [[NSSortDescriptor alloc] initWithKey:TXLUPDMGR_UPDATEDPROP ascending:NO];	// the most recent update will be the first item in the array (descending)
 		[request setSortDescriptors:[NSArray arrayWithObject:desc]];
 		[request setResultType:NSDictionaryResultType];												// This is necessary to limit it to specific properties during the fetch
-		[request setPropertiesToFetch:[NSArray arrayWithObject:JSONDATA_TIMESTAMPKEY]];						// We don't want to fetch everything, we'll get a huge ass memory hit otherwise.
+		[request setPropertiesToFetch:[NSArray arrayWithObject:TXLUPDMGR_UPDATEDPROP]];						// We don't want to fetch everything, we'll get a huge ass memory hit otherwise.
 		[desc release];
 		
-		return [[NSClassFromString(classString) objectWithFetchRequest:request] valueForKey:JSONDATA_TIMESTAMPKEY];
+		return [[NSClassFromString(classString) objectWithFetchRequest:request] valueForKey:TXLUPDMGR_UPDATEDPROP];	// this relies on objectWithFetchRequest returning the object at index 0
 	}
 	else if ([classString isEqualToString:@"WnomAggregateObj"]) {
 #if WNOMAGGREGATES_UPDATING

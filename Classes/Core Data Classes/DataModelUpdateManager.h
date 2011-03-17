@@ -14,8 +14,11 @@
 	NSDictionary *statusBlurbsAndModels;
 	NSMutableArray *availableUpdates;
 	NSMutableArray *downloadedUpdates;
+
+	NSMutableDictionary *availableUpdatesDict;
 }
 
+@property (nonatomic,retain) NSMutableDictionary *availableUpdatesDict;
 @property (nonatomic,retain) NSMutableArray *availableUpdates;
 @property (nonatomic,retain) NSMutableArray *downloadedUpdates;
 @property (nonatomic,retain) NSDictionary *statusBlurbsAndModels;
