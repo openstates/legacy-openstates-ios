@@ -12,15 +12,12 @@
 
 @interface DataModelUpdateManager : NSObject <RKObjectLoaderDelegate, UIAlertViewDelegate> {
 	NSDictionary *statusBlurbsAndModels;
-	NSMutableArray *availableUpdates;
-	NSMutableArray *downloadedUpdates;
-
-	NSMutableDictionary *availableUpdatesDict;
+	NSMutableDictionary *availableUpdates;
+	NSCountedSet *activeUpdates;
 }
 
-@property (nonatomic,retain) NSMutableDictionary *availableUpdatesDict;
-@property (nonatomic,retain) NSMutableArray *availableUpdates;
-@property (nonatomic,retain) NSMutableArray *downloadedUpdates;
+@property (nonatomic,retain) NSCountedSet *activeUpdates;
+@property (nonatomic,retain) NSMutableDictionary *availableUpdates;
 @property (nonatomic,retain) NSDictionary *statusBlurbsAndModels;
 
 - (void) performDataUpdatesIfAvailable:(id)sender;

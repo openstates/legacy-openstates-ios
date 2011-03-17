@@ -58,13 +58,14 @@ enum TXL_QueryTypes {
 
 @implementation DataModelUpdateManager
 
-@synthesize availableUpdates, downloadedUpdates, statusBlurbsAndModels;
-@synthesize availableUpdatesDict;
+@synthesize statusBlurbsAndModels;
+@synthesize availableUpdates, activeUpdates;
 
 - (id) init {
 	if (self=[super init]) {
-		availableUpdatesDict = [[NSMutableDictionary dictionary] retain];
-		self.downloadedUpdates = [NSMutableArray array];
+		activeUpdates = [[[NSCountedSet alloc] init] retain];
+		
+		availableUpdates = [[NSMutableDictionary dictionary] retain];
 		
 		self.statusBlurbsAndModels = [NSDictionary dictionaryWithObjectsAndKeys: 
 									  @"Legislators", @"LegislatorObj",
@@ -85,10 +86,9 @@ enum TXL_QueryTypes {
 - (void) dealloc {
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 
+	self.activeUpdates = nil;
 	self.statusBlurbsAndModels = nil;
-	self.downloadedUpdates = nil;
 	self.availableUpdates = nil;
-	self.availableUpdatesDict = nil;
 	[super dealloc];
 }
 
@@ -103,10 +103,9 @@ enum TXL_QueryTypes {
 	
 	if ([TexLegeReachability canReachHostWithURL:serverURL alert:NO]) {
 		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_UPDATE_REQUEST"];
-		[self.downloadedUpdates removeAllObjects];
-		
-		self.availableUpdates = [NSMutableArray array];
-		
+
+		self.activeUpdates = [NSCountedSet set];
+				
 		NSString *statusString = @"Checking for Data Updates";
 		MTStatusBarOverlay *overlay = [MTStatusBarOverlay sharedInstance];
 		overlay.historyEnabled = YES;
@@ -167,8 +166,9 @@ enum TXL_QueryTypes {
 	//	http://www.texlege.com/jsonDataTest/rest.php/CommitteeObj?updated_since=2011-03-01%2017:05:13
 	
 	Class entityClass = NSClassFromString(entityName);
-	if (entityClass) {
-		[self.availableUpdates addObject:entityName];	// we don't add WnomAggregateObj because we don't get it loaded the same way.
+	if (entityClass) {							
+		[self.activeUpdates addObject:entityName];		// we don't add WnomAggregateObj because we don't get it loaded the same way.
+		
 		[objectManager loadObjectsAtResourcePath:resourcePath queryParams:queryParams objectClass:entityClass delegate:self];
 	}
 	else if ([entityName isEqualToString:@"WnomAggregateObj"]) {
@@ -183,43 +183,76 @@ enum TXL_QueryTypes {
 	}
 }
 
-- (BOOL)checkUpdateFinished {
-	BOOL success = self.availableUpdates && ([self.downloadedUpdates count] == [self.availableUpdates count]);
-	CGFloat progress = (CGFloat)([self.downloadedUpdates count]) / (CGFloat)[self.availableUpdates count];
+- (void)updateProgress {
+	//BOOL success = self.availableUpdates && ([self.downloadedUpdates count] == [self.availableUpdates count]);
+	//CGFloat progress = (CGFloat)([self.downloadedUpdates count]) / (CGFloat)[self.availableUpdates count];
+	
+	NSInteger count = [self.activeUpdates count];
+	CGFloat progress = 1.0f;
+	if (count > 0)
+		progress = 1.0f / (CGFloat)count;
+	
 	[MTStatusBarOverlay sharedInstance].progress = progress;
 
-	if (success) {
+	if (count == 0)
 		[[MTStatusBarOverlay sharedInstance] postFinishMessage:@"Update Completed" duration:5];	
-		self.availableUpdates = nil;
-		
-	}
-	return success;
 }
+
 
 // This scans the core data entity looking for "stale" objects, ones that were deleted on the server database
 - (void)pruneModel:(NSString *)className forUpstreamIDs:(NSArray *)upstreamIDs {
-	if (![[TexLegeCoreDataUtils registeredDataModels] containsObject:className])
+	Class entityClass = NSClassFromString(className);
+
+	if (!entityClass || ![[TexLegeCoreDataUtils registeredDataModels] containsObject:className])
 		return;			// What do we do for WnomAggregateObj ???
+
+	RKObjectManager* objectManager = [RKObjectManager sharedManager];
 
 	BOOL changed = NO;
 	
-	NSArray *tempList = [TexLegeCoreDataUtils allPrimaryKeyIDsInEntityNamed:className];
-	for (NSNumber *storedObjID in tempList) {
-		
-		//	#define LOGIC_TESTING ([className isEqualToString:@"LegislatorObj"] && [storedObjID isEqualToNumber:intToNum(116944)])	
-		if (NO == [upstreamIDs containsObject:storedObjID])
-		{
-			NSLog(@"DataUpdateManager: PRUNING OBJECT FROM %@: ID = %@", className, storedObjID);
-			[TexLegeCoreDataUtils deleteObjectInEntityNamed:className withPrimaryKeyValue:storedObjID];			
-			changed = YES;
-		}
+	NSSet *existingSet = [NSSet setWithArray:[TexLegeCoreDataUtils allPrimaryKeyIDsInEntityNamed:className]];	
+	NSSet *newSet = [NSSet setWithArray:upstreamIDs];
+	
+	// Determine which items were removed
+	NSMutableSet *removedItems = [NSMutableSet setWithSet:existingSet];
+	[removedItems minusSet:newSet];
+	
+	// Determine which items were added
+	NSMutableSet *addedItems = [NSMutableSet setWithSet:newSet];
+	[addedItems minusSet:existingSet];
+	
+	// Modify the original array
+	//[existingItemArray removeObjectsInArray:[removedItems allObjects]];
+	//[existingItemArray addObjectsFromArray:[addedItems allObjects]];
+	
+	// TESTING PURPOSES
+	/*#warning TESTING PURPOSES
+	if ([className isEqualToString:@"LegislatorObj"])
+		[removedItems addObject:intToNum(116944)];			// delete jose aliseda
+	*/
+	for (NSNumber *staleObjID in removedItems) {
+		NSLog(@"DataUpdateManager: PRUNING OBJECT FROM %@: ID = %@", className, staleObjID);
+		[TexLegeCoreDataUtils deleteObjectInEntityNamed:className withPrimaryKeyValue:staleObjID];			
+		changed = YES;
 	}
 	if (changed) {
-		[[[RKObjectManager sharedManager] objectStore] save];
-
+		[[objectManager objectStore] save];
+		
 		NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
 		[[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
+		
+		NSString *statusString = [NSString stringWithFormat:@"Pruned %@", [statusBlurbsAndModels objectForKey:className]];
+		[[MTStatusBarOverlay sharedInstance] postImmediateMessage:statusString duration:1 animated:YES];
+	}	
+		
+	// Now we need to add any *completely* new (not just updated) objects on the server, and download accordingly
+	for (NSNumber *newObjID in addedItems) {
+		[self.activeUpdates addObject:className];
+		NSString *resourcePath = [NSString stringWithFormat:@"/rest.php/%@/%@", className, newObjID];
+		[objectManager loadObjectsAtResourcePath:resourcePath objectClass:entityClass delegate:self];
 	}
+	
+	
 }
 
 #pragma mark -
@@ -227,7 +260,7 @@ enum TXL_QueryTypes {
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
 	if (error && request) {
-		debug_NSLog(@"Error loading data model query from %@: %@", [request description], [error localizedDescription]);
+		debug_NSLog(@"Error loading data model query from %@: %@", [request description], [error localizedDescription]);		
 	}	
 }
 
@@ -247,7 +280,7 @@ enum TXL_QueryTypes {
 			NSArray *resultIDs = [response bodyAsJSON];
 			if (resultIDs && [resultIDs count]) {
 				if (queryType == QUERYTYPE_IDS_NEW)
-					[self.availableUpdatesDict setObject:resultIDs forKey:className];
+					[self.availableUpdates setObject:resultIDs forKey:className];
 				else if (queryType == QUERYTYPE_IDS_ALL_PRUNE)
 					[self pruneModel:className forUpstreamIDs:resultIDs];
 			}
@@ -259,11 +292,11 @@ enum TXL_QueryTypes {
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {
-		
+	NSString *className = NSStringFromClass(objectLoader.objectClass);
+
 	@try {
-		NSString *className = NSStringFromClass(objectLoader.objectClass);
 		if (className) {
-			[self.downloadedUpdates addObject:className];
+			[self.activeUpdates removeObject:className];
 
 			if (objects && [objects count]) {
 				NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
@@ -280,31 +313,29 @@ enum TXL_QueryTypes {
 				NSLog(@"%@", statusString);
 				[[MTStatusBarOverlay sharedInstance] postMessage:statusString animated:YES];				
 
-#if TESTING == 0
-				[self queryModel:className queryType:QUERYTYPE_IDS_ALL_PRUNE];	// THIS TRIGGERS A PRUNING
-#endif				
 			}
-#if TESTING == 1
 			[self queryModel:className queryType:QUERYTYPE_IDS_ALL_PRUNE];	// THIS TRIGGERS A PRUNING
-			#warning pruning should only happen after an update actually has changes ... move this for production.
-#endif
 			
-			[self checkUpdateFinished];
+			[self updateProgress];
 		}			
 	}
 	@catch (NSException * e) {
-		NSLog(@"RestKit Load Error: %@", [e description]);
+		NSLog(@"RestKit Load Error %@: %@", className, [e description]);
 	}
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
-	UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Data Update Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
-	[alert show];
+	//if ([error code] != NSValidationMissingMandatoryPropertyError)
+	/*	UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Data Update Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+		[alert show];*/
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"RESTKIT_DATA_ERROR"];
-	NSLog(@"RestKit Data error: %@", [error localizedDescription]);
-
 	[[MTStatusBarOverlay sharedInstance] postErrorMessage:@"Error During Update" duration:8];
 
+	NSString *className = NSStringFromClass(objectLoader.objectClass);
+	if (className)
+		[self.activeUpdates removeObject:className];
+	
+	NSLog(@"RestKit Data error loading %@: %@", className, [error localizedDescription]);
 }
 
 #pragma mark -
