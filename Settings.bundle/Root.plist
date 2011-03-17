@@ -32,7 +32,7 @@
 			<key>Key</key>
 			<string>CFBundleVersion</string>
 			<key>DefaultValue</key>
-			<string>2.0</string>
+			<string>2.5</string>
 		</dict>
 		<dict>
 			<key>Type</key>
@@ -70,7 +70,7 @@
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
-			<string>Reset Legislator Database to Factory</string>
+			<string>Reset Database to Factory</string>
 		</dict>
 		<dict>
 			<key>Type</key>
