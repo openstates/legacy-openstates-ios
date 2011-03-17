@@ -184,6 +184,9 @@
 	NSURL *momURL = [NSURL fileURLWithPath:modelPath];
 	NSManagedObjectModel *mom = [[[NSManagedObjectModel alloc] initWithContentsOfURL:momURL] autorelease];
 		
+	objectManager.client.username = @"restread";
+	objectManager.client.password = @"teentita";
+	
 	// Add our element to object mappings
 	[mapper registerClass:[LegislatorObj class] forElementNamed:@"legislators"];
 	[mapper registerClass:[CommitteeObj class] forElementNamed:@"committees"];
