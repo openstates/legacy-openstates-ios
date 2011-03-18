@@ -15,9 +15,8 @@
 #import "UtilityMethods.h"
 #import "JSON.h"
 #import "TexLegeLibrary.h"
+#import "LegislativeAPIUtils.h"
 
-static const NSString *baseURL = @"http://openstates.sunlightlabs.com/api/v1";
-static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 @interface JSONDataImporter (Private)
 
 - (void)verifyLegislatorsHaveOpenStatesID;
