@@ -227,9 +227,19 @@ enum TXL_QueryTypes {
 	
 	// TESTING PURPOSES
 	/*#warning TESTING PURPOSES
-	if ([className isEqualToString:@"LegislatorObj"])
-		[removedItems addObject:intToNum(116944)];			// delete jose aliseda
-	*/
+	if ([className isEqualToString:@"LegislatorObj"]) {
+		[addedItems removeObject:intToNum(116944)];		// delete jose aliseda
+		[removedItems addObject:intToNum(116944)];		// delete jose aliseda
+	}
+	else {
+		// We'd actually need to remove his staffers, district offices, wnom, etc.
+		// and make sure we remove them from the list of people to be added too.
+	}*/
+
+
+
+	
+	
 	for (NSNumber *staleObjID in removedItems) {
 		NSLog(@"DataUpdateManager: PRUNING OBJECT FROM %@: ID = %@", className, staleObjID);
 		[TexLegeCoreDataUtils deleteObjectInEntityNamed:className withPrimaryKeyValue:staleObjID];			
