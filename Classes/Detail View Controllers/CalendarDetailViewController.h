@@ -18,5 +18,7 @@
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
 @property (nonatomic, retain) ChamberCalendarObj *chamberCalendar;
 
++ (NSString *)nibName;
+
 
 @end

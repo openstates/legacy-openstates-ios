@@ -29,11 +29,15 @@
 @synthesize webView;
 @synthesize masterPopover;
 
-- (NSString *)nibName {
++ (NSString *)nibName {
 	if ([UtilityMethods isIPadDevice])
 		return @"CalendarDetailViewController~ipad";
 	else
 		return @"CalendarDetailViewController~iphone";	
+}
+
+- (NSString *)nibName {
+	return [CalendarDetailViewController nibName];	
 }
 
 - (id)dataObject {

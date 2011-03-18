@@ -79,15 +79,13 @@
 	[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
 	
 	if (!self.detailViewController) {
-		CalendarDetailViewController *idiotic = [[CalendarDetailViewController alloc] initWithNibName:@"CalendarDetailViewController" bundle:nil];
-		if (idiotic) {
-			@try {
-				KalLogic *idiotLogic = [idiotic valueForKey:@"logic"];
-				if (idiotLogic)
-					[[NSBundle mainBundle] loadNibNamed:@"CalendarDetailViewController" owner:idiotic options:nil];				
-			}
-			@catch (NSException * e) {
-			}
+		CalendarDetailViewController *idiotic = nil;
+		if ([UtilityMethods isIPadDevice]) {
+			idiotic = [[CalendarDetailViewController alloc] initWithNibName:[CalendarDetailViewController nibName] bundle:nil];
+		}
+		else {
+			idiotic = [[CalendarDetailViewController alloc] init];
+			[[NSBundle mainBundle] loadNibNamed:[CalendarDetailViewController nibName] owner:idiotic options:nil];
 		}
 		self.detailViewController = [idiotic autorelease];
 	}
