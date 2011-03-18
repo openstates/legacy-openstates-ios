@@ -9,14 +9,12 @@
 #import "LegislatorContributionsDataSource.h"
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
-
+#import "LegislativeAPIUtils.h"
 #import "TexLegeStandardGroupCell.h"
 #import "TexLegeTheme.h"
 #import "UtilityMethods.h"
 
 #import "JSON.h"
-
-static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 
 @interface LegislatorContributionsDataSource(Private)
 - (void)createSectionWithData:(NSData *)jsonData;
@@ -69,35 +67,32 @@ static const NSString *apiKey = @"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
 	self.queryType = type;
 	self.queryCycle = cycle;
 	
-	NSString *urlMethod = nil;
-	NSString *urlRoot = @"http://transparencydata.com/api/1.0";
+	NSMutableString *urlMethod = [NSMutableString stringWithString:transApiBaseURL];;
 	//NSString *memberID = self.legislator.transDataContributorID;
 	if ([self.queryType integerValue] == kContributionQueryTop10Donors) {
 		// http://transparencydata.com/api/1.0/aggregates/pol/7c299471e4414887acc94f98785a90b0/contributors.json?apikey=350284d0c6af453b9b56f6c1c7fea1f9
-		urlMethod = [NSString stringWithFormat:@"/aggregates/pol/%@/contributors.json?cycle=%@&%@", aQuery, self.queryCycle, apiKey];	
+		[urlMethod appendFormat:@"/aggregates/pol/%@/contributors.json?cycle=%@&%@", aQuery, self.queryCycle, osApiKey];	
 	}
 	else if ([self.queryType integerValue] == kContributionQueryTop10RecipientsIndiv) {
 		// http://transparencydata.com/api/1.0/aggregates/pol/7c299471e4414887acc94f98785a90b0/contributors.json?apikey=350284d0c6af453b9b56f6c1c7fea1f9
-		urlMethod = [NSString stringWithFormat:@"/aggregates/indiv/%@/recipient_pols.json?cycle=%@&%@", aQuery, self.queryCycle, apiKey];	
+		[urlMethod appendFormat:@"/aggregates/indiv/%@/recipient_pols.json?cycle=%@&%@", aQuery, self.queryCycle, osApiKey];	
 	}
 	else if ([self.queryType integerValue] == kContributionQueryTop10Recipients) {
 		//urlMethod = [NSString stringWithFormat:@"/aggregates/indiv/%@/recipient_pols.json?cycle=%@&%@", aQuery, self.queryCycle, apiKey];	
-		urlMethod = [NSString stringWithFormat:@"/aggregates/org/%@/recipients.json?cycle=%@&%@", aQuery, self.queryCycle, apiKey];			
+		[urlMethod appendFormat:@"/aggregates/org/%@/recipients.json?cycle=%@&%@", aQuery, self.queryCycle, osApiKey];			
 	}
 	else if ([self.queryType integerValue] == kContributionQueryRecipient ||
 			 [self.queryType integerValue] == kContributionQueryDonor ||
 			 [self.queryType integerValue] == kContributionQueryIndividual) {
 		// http://transparencydata.com/api/1.0/entities/7c299471e4414887acc94f98785a90b0.json?apikey=350284d0c6af453b9b56f6c1c7fea1f9
-		urlMethod = [NSString stringWithFormat:@"/entities/%@.json?cycle=%@&%@", aQuery, self.queryCycle, apiKey];	
+		[urlMethod appendFormat:@"/entities/%@.json?cycle=%@&%@", aQuery, self.queryCycle, osApiKey];	
 	}
 	else if ([self.queryType integerValue] == kContributionQueryEntitySearch) {
-		urlMethod = [NSString stringWithFormat:@"/entities.json?search=%@&%@", aQuery, apiKey];
-	}
-	NSString *urlString = [urlRoot stringByAppendingString:urlMethod];
+		[urlMethod appendFormat:@"/entities.json?search=%@&%@", aQuery, osApiKey];
+	}	
+	debug_NSLog(@"Contributions URL: %@", urlMethod);
 	
-	debug_NSLog(@"Contributions URL: %@", urlString);
-	
-	NSURL *url = [NSURL URLWithString:urlString];
+	NSURL *url = [NSURL URLWithString:urlMethod];
 	
 	if ([TexLegeReachability canReachHostWithURL:url alert:YES]) {
 		[self establishConnectionWithURL:url];
