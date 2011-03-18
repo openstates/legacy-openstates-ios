@@ -11,6 +11,7 @@
 #import "TexLegeCoreDataUtils.h"
 #import "TexLegeDataObjectProtocol.h"
 #import "TexLegeAppDelegate.h"
+#import "LegislativeAPIUtils.h"
 
 #import "JSON.h"
 #import "LegislatorObj.h"
@@ -159,7 +160,7 @@
 - (void)hackyLegislatorIDs {
 	NSArray *legislators = [LegislatorObj allObjects];
 	
-	static const NSString *urlRoot = @"http://transparencydata.com/api/1.0/entities.json?apikey=350284d0c6af453b9b56f6c1c7fea1f9&search=";
+	NSString *urlRoot = [NSString stringWithFormat:@"%@/entities.json?%@&search=", transApiBaseURL, osApiKey];
 
 	NSMutableArray *list = [NSMutableArray array];
 	
