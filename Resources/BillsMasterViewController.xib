@@ -45,7 +45,7 @@
 					<object class="IBUISearchBar" id="981040110">
 						<reference key="NSNextResponder" ref="28282396"/>
 						<int key="NSvFlags">290</int>
-						<string key="NSFrameSize">{320, 44}</string>
+						<string key="NSFrameSize">{320, 88}</string>
 						<reference key="NSSuperview" ref="28282396"/>
 						<int key="IBUIContentMode">3</int>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -62,9 +62,11 @@
 						</object>
 						<object class="NSArray" key="IBScopeButtonTitles">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>All</string>
 							<string>House</string>
 							<string>Senate</string>
 						</object>
+						<bool key="IBShowsScopeBar">YES</bool>
 					</object>
 				</object>
 				<string key="NSFrameSize">{320, 768}</string>
@@ -254,14 +256,35 @@
 					<string key="className">BillSearchDataSource</string>
 					<string key="superclassName">NSObject</string>
 					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">searchDisplayController</string>
-						<string key="NS.object.0">UISearchDisplayController</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>delegateTVC</string>
+							<string>searchDisplayController</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>UITableViewController</string>
+							<string>UISearchDisplayController</string>
+						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">searchDisplayController</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">searchDisplayController</string>
-							<string key="candidateClassName">UISearchDisplayController</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>delegateTVC</string>
+							<string>searchDisplayController</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">delegateTVC</string>
+								<string key="candidateClassName">UITableViewController</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">searchDisplayController</string>
+								<string key="candidateClassName">UISearchDisplayController</string>
+							</object>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
