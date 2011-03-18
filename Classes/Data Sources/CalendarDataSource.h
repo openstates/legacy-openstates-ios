@@ -8,12 +8,9 @@
 
 #import "TableDataSourceProtocol.h"
 
-@class CFeedStore;
 @interface CalendarDataSource : NSObject <TableDataSource> {
 }
 @property (nonatomic,readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic,retain) NSMutableArray *calendarList;
-@property (nonatomic,retain) NSURL *senateURL, *houseURL, *jointURL;
-@property (nonatomic,retain) CFeedStore *feedStore;
 
 @end

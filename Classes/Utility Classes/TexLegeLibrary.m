@@ -19,10 +19,12 @@ NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
 			case SENATE:
 				chamberString = @"Senate";
 				break;
-			case BOTH_CHAMBERS:
 			case JOINT:
-			default:
 				chamberString = @"Joint";
+				break;
+			case BOTH_CHAMBERS:
+			default:
+				chamberString = @"All";
 				break;
 		}
 	}
@@ -34,10 +36,12 @@ NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
 			case HOUSE:
 				chamberString = @"(H)";
 				break;
-			case BOTH_CHAMBERS:
 			case JOINT:
-			default:
 				chamberString = @"(J)";
+				break;
+			case BOTH_CHAMBERS:
+			default:
+				chamberString = @"(All)";
 				break;
 		}	
 	}

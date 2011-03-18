@@ -2,6 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>OfficialURLs</key>
+	<dict>
+		<key>houseWeb</key>
+		<string>http://www.house.state.tx.us/members/member-page/?district=%@</string>
+		<key>senateWeb</key>
+		<string>http://www.senate.state.tx.us/75r/Senate/members/dist%@/dist%@.htm</string>
+		<key>mapPdfUrl</key>
+		<string>http://www.fyi.legis.state.tx.us/fyiwebdocs/PDF/%@/dist%@/m1.pdf</string>
+	</dict>
 	<key>ResetDB</key>
 	<dict>
 		<key>ConfirmTitle</key>

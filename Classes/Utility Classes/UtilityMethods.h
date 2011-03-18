@@ -6,8 +6,11 @@
 //  Copyright 2009 Gregory S. Combs. All rights reserved.
 //
 
+
 #import <Foundation/Foundation.h>
 #import "TexLegeReachability.h"
+
+BOOL IsEmpty(id thing);
 
 @class CapitolMap;
 @interface UtilityMethods : NSObject {
@@ -53,7 +56,14 @@
 
 @interface NSString (FlattenHtml)
 - (NSString *)flattenHTML;
+- (NSString *)convertFromUTF8;
+
 @end
+
+@interface NSString  (HasSubstring)
+- (BOOL) hasSubstring:(NSString*)substring caseInsensitive:(BOOL)insensitive;
+@end
+
 
 
 

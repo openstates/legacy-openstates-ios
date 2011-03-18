@@ -26,6 +26,7 @@
 #import "DistrictMapObj.h"
 #import "DataModelUpdateManager.h"
 #import "BillMetadataLoader.h"
+#import "CalendarEventsLoader.h"
 
 #import "TVOutManager.h"
 
@@ -406,6 +407,7 @@ NSInteger kNoSelection = -1;
 	self.appIsQuitting = NO;
 	
 	[[BillMetadataLoader sharedBillMetadataLoader] loadMetadata:self];
+	[[CalendarEventsLoader sharedCalendarEventsLoader] loadEvents:self];
 	
 	if (![self isDatabaseResetNeeded]) {
 		analyticsOptInController = [[[AnalyticsOptInAlertController alloc] init] retain];
@@ -421,6 +423,8 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)runOnAppQuit {
+	//[[CalendarEventsLoader sharedCalendarEventsLoader] addAllEventsToiCal:self];		//testing
+	
 	if (self.appIsQuitting)
 		return;
 	self.appIsQuitting = YES;

@@ -15,6 +15,7 @@
 #import "LocalyticsSession.h"
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
+#import "CalendarEventsLoader.h"
 
 @interface CalendarDetailViewController (Private) 
 
@@ -187,93 +188,14 @@
 }
 
 
-#pragma mark -
-#pragma mark EventKit
-- (void)addEventToiCal:(NSDictionary *)eventDict parent:(id)parentController {
-	
-	if (!eventDict)
-		return;
-	
-	if (![UtilityMethods supportsEventKit]) {
-		debug_NSLog(@"EventKit not available on this device");
-		return;
-	}
-	if (!parentController)
-		parentController = [[TexLegeAppDelegate appDelegate] detailNavigationController];
-	
-	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"iCAL_EVENT"];
-	
-	NSString *chamberString = stringForChamber([[eventDict objectForKey:@"chamber"] integerValue], TLReturnFull); 
-	
-	NSString *committee = [eventDict objectForKey:@"committee"];	
-	
-	EKEventStore *eventStore = [[EKEventStore alloc] init];
-	EKCalendar *defaultCalendar = [eventStore defaultCalendarForNewEvents];
-	
-	EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
-    event.title     = [NSString stringWithFormat:@"%@ %@", chamberString, committee];
-	if ([eventDict objectForKey:@"cancelled"] && [[eventDict objectForKey:@"cancelled"] boolValue] == YES)
-		event.title = [NSString stringWithFormat:@"%@ (CANCELLED)", event.title];
-					   
-	event.location = [eventDict objectForKey:@"location"];
-
-	event.notes = @"[TexLege] Length of this meeting is only an estimate.";
-	if ([eventDict objectForKey:@"url"] && [[eventDict objectForKey:@"url"] length]) {
-		NSURL *url = [NSURL URLWithString:[eventDict objectForKey:@"url"]];
-		if ([TexLegeReachability canReachHostWithURL:url alert:NO]) {
-			NSError *error = nil;
-			NSString *urlcontents = [NSString stringWithContentsOfURL:url encoding:NSWindowsCP1252StringEncoding error:&error];
-			if (!error && urlcontents && [urlcontents length]) {
-				NSString *flattened = [[urlcontents flattenHTML] stringByReplacingOccurrencesOfString:@"Schedule Display" withString:@""];
-				flattened = [flattened stringByReplacingOccurrencesOfString:@"\r\n\r\n" withString:@"\r\n"];
-				event.notes = flattened;
-			}
-		}
-	}
-	
-	NSDate *meetingDate = [eventDict objectForKey:@"fullDate"];
-	if (!meetingDate) {
-		debug_NSLog(@"Calendar Detail ... couldn't locate full meeting date");
-		event.allDay = YES; 
-		if ([eventDict objectForKey:@"date"]) {
-			event.startDate = [eventDict objectForKey:@"date"];
-			event.endDate = [eventDict objectForKey:@"date"];
-		}
-		event.location = [eventDict objectForKey:@"rawDateTime"];
-	}
-	else {
-		event.startDate = meetingDate;
-		event.endDate   = [NSDate dateWithTimeInterval:3600 sinceDate:event.startDate];
-	}
-	
-    [event setCalendar:defaultCalendar];
-	
-    NSError *err;
-    [eventStore saveEvent:event span:EKSpanThisEvent error:&err];     
-	
-	[eventStore release];
-	
-	EKEventViewController *eventVC = [[EKEventViewController alloc] initWithNibName:nil bundle:nil];			
-	eventVC.event = event;
-	
-	// Allow event editing.
-	eventVC.allowsEditing = YES;
-	
-	//	Push eventViewController onto the navigation controller stack
-	//	If the underlying event gets deleted, detailViewController will remove itself from
-	//	the stack and clear its event property.
-	[parentController pushViewController:eventVC animated:YES];
-	[eventVC release];
-}	
-
 #pragma -
 #pragma UITableViewDelegate
 
 
 - (void)tableView:(UITableView *)tv accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
 	NSDictionary *eventDict = [self.chamberCalendar eventForIndexPath:indexPath];
-	if (eventDict)
-		[self addEventToiCal:eventDict parent:self.navigationController];	
+	if (eventDict && [UtilityMethods supportsEventKit])
+		[[CalendarEventsLoader sharedCalendarEventsLoader] addEventToiCal:eventDict delegate:self.navigationController];	
 }
 
 
@@ -285,11 +207,10 @@
 	
 	if (tv == self.searchDisplayController.searchResultsTableView) {
 		[self.searchDisplayController setActive:NO animated:YES];
-		[self showAndSelectDate:[eventDict objectForKey:@"date"]];
-		
+		[self showAndSelectDate:[eventDict objectForKey:kCalendarEventsLocalizedDateKey]];
 	}
 		
-	NSURL *url = [NSURL URLWithString:[eventDict objectForKey:@"url"]];
+	NSURL *url = [NSURL URLWithString:[eventDict objectForKey:kCalendarEventsAnnouncementURLKey]];
 	
 	if ([TexLegeReachability canReachHostWithURL:url]) { // do we have a good URL/connection?
 		if ([UtilityMethods isIPadDevice]) {	

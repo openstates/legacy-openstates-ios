@@ -8,10 +8,10 @@
 
 #import "ChamberCalendarObj.h"
 #import "UtilityMethods.h"
-#import "CFeedFetcher.h"
-#import "CFeedEntry.h"
-#import "CFeed.h"
+#import "NSDate+Helper.h"
 #import "NSDate+TKCategory.h"
+
+#import "CalendarEventsLoader.h"
 
 static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 {
@@ -23,37 +23,40 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
  */
 NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 {
-	NSDate *firstDate = [firstItem objectForKey:@"date"];
-	NSDate *secondDate = [secondItem objectForKey:@"date"];
-    
-    /* Compare both date strings */
-    NSComparisonResult comparison = [firstDate compare:secondDate];
+	NSComparisonResult comparison = NSOrderedSame;
 	
-	if (comparison == NSOrderedSame) {
-		firstDate = [firstItem objectForKey:@"time"];
-		secondDate = [secondItem objectForKey:@"time"];
+	NSDate *firstDate = [firstItem objectForKey:kCalendarEventsLocalizedDateKey];
+	NSDate *secondDate = [secondItem objectForKey:kCalendarEventsLocalizedDateKey];
+	
+	NSString *firstWhen = [firstItem objectForKey:kCalendarEventsWhenKey];
+	NSString *secondWhen = [secondItem objectForKey:kCalendarEventsWhenKey];
+
+	NSString *firstID = [firstItem objectForKey:kCalendarEventsIDKey];
+	NSString *secondID = [secondItem objectForKey:kCalendarEventsIDKey];
+
+	if (firstDate && secondDate)
 		comparison = [firstDate compare:secondDate];
-	}
-	
-    return comparison;
+	else if (firstWhen && secondWhen)
+		comparison = [firstWhen compare:secondWhen];
+	else if (firstID && secondID)
+		comparison = [firstID compare:secondID];
+
+	return comparison;
 }
 
 @interface ChamberCalendarObj (Private)
 - (NSArray *)eventsFrom:(NSDate *)fromDate to:(NSDate *)toDate;
-- (NSDictionary *)parseFeedEntry:(CFeedEntry*)entry forChamber:(NSNumber*)entryChamber;
 - (void)fetchEvents;
 @end
 
 @implementation ChamberCalendarObj
 
-@synthesize title, chamber, feedURLS, feedStore;
+@synthesize title, chamber;
 
 - (id)initWithDictionary:(NSDictionary *)calendarDict {
 	if (self = [super init]) {
 		self.title = [calendarDict valueForKey:@"title"];
 		self.chamber = [calendarDict valueForKey:@"chamber"];
-		self.feedURLS = [calendarDict valueForKey:@"feedURLS"];
-		self.feedStore = [calendarDict valueForKey:@"feedStore"];
 		rows = [[NSMutableArray alloc] init];
 		events = [[NSMutableArray alloc] init];
 		hasPostedAlert = NO;
@@ -65,8 +68,6 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	
 	self.title = nil;
 	self.chamber = nil;
-	self.feedURLS = nil;
-	self.feedStore = nil;
 	[rows release];
 	[events release];
 
@@ -74,8 +75,8 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"title: %@ - chamber: %@ - feedURLS: %@ - feedStore: %@", 
-			self.title, self.chamber, self.feedURLS, self.feedStore];
+	return [NSString stringWithFormat:@"title: %@ - chamber: %@", 
+			self.title, self.chamber];
 }
 
 - (NSDictionary *) eventForIndexPath:(NSIndexPath *)indexPath {
@@ -104,25 +105,22 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	
 	NSDictionary *event = [self eventForIndexPath:indexPath];
 	
-	NSString *chamberString = stringForChamber([[event objectForKey:@"chamber"] integerValue], TLReturnInitial);
-	NSString *committeeString = [NSString stringWithFormat:@"%@ %@", chamberString, [event objectForKey:@"committee"]];
+	NSString *chamberString = stringForChamber([[event objectForKey:kCalendarEventsTypeChamberValue] integerValue], TLReturnInitial);
+	NSString *committeeString = [NSString stringWithFormat:@"%@ %@", chamberString, [event objectForKey:kCalendarEventsCommitteeNameKey]];
+	
+	NSString *time = [event objectForKey:kCalendarEventsLocalizedTimeStringKey];
+	if (IsEmpty(time) || [[event objectForKey:kCalendarEventsUnknownTimeKey] boolValue])
+		time = @"(?)";
+		
+	NSString *timeLoc = [NSString stringWithFormat:@"Time: %@ - Place: %@", time, [event objectForKey:kCalendarEventsLocationKey]]; 
 
-	/*
-	 if ([self.filterString length])
-		cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@\n%@", 
-					[event objectForKey:@"dateString"], [event objectForKey:@"timeString"], committeeString];
-	else */
-	
-	NSString *timeLocation = nil;
-	if ([event objectForKey:@"time"])
-		timeLocation = [NSString stringWithFormat:@"Time:%@ - Location: %@",[event objectForKey:@"timeString"], [event objectForKey:@"location"]];
-	else
-		timeLocation = [event objectForKey:@"rawDateTime"];
+//	else
+//		timeLoc = [event objectForKey:@"rawDateTime"];
 
-	cell.textLabel.text = [NSString stringWithFormat:@"%@\n %@", committeeString, timeLocation];
+	cell.textLabel.text = [NSString stringWithFormat:@"%@\n %@", committeeString, timeLoc];
 	
 	
-	if ([[event objectForKey:@"cancelled"] boolValue] == YES)
+	if ([[event objectForKey:kCalendarEventsCanceledKey] boolValue] == YES)
 		cell.textLabel.text = [cell.textLabel.text stringByAppendingString:@" (Cancelled)"];
 	
 	
@@ -140,197 +138,14 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 #pragma mark -
 #pragma mark Data Storage
 
-- (NSDictionary *)parseFeedEntry:(CFeedEntry*)entry forChamber:(NSNumber*)entryChamber {
-	NSMutableDictionary *entryDict = [NSMutableDictionary dictionary];
-	[entryDict setObject:entryChamber forKey:@"chamber"];
-	
-	@try {
-		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-		[dateFormatter setLenient:YES];
-		
-		NSArray *components = [entry.title componentsSeparatedByString:@" - "];
-		if (components && ([components count] >= 2)) {
-			[entryDict setObject:[components objectAtIndex:0] forKey:@"committee"];
-			
-			[dateFormatter setDateFormat:@"M/d/yyyy"];
-			NSDate *refDate = [dateFormatter dateFromString:[components lastObject]];
-			if (refDate)
-				[entryDict setObject:refDate forKey:@"date"];
-			
-			if ([components lastObject])
-				[entryDict setObject:[components lastObject] forKey:@"dateString"];
-		}
-		
-		if (entry.link)
-			[entryDict setObject:entry.link forKey:@"url"];
-		
-		NSString *searchString = entry.content;
-		if (searchString) {
-			
-			// Catches:			"Time: 8:00 AM  (Canceled), Location: North Texas Tollway Authority Headquarters, Plano"
-			//   also:			"Time: 9:00 AM, Location: Senate Chamber"				
-			
-			//static NSRange kRangeNotFound = {NSNotFound, 0};
-			
-			// Set whether it's cancelled/canceled(!)
-			NSRange cancelRange = [searchString rangeOfString:@" (Canceled),"];
-			if (cancelRange.length == 0)
-				cancelRange = [searchString rangeOfString:@" (Cancelled),"];
-			[entryDict setObject:[NSNumber numberWithBool:(cancelRange.length > 0)] forKey:@"cancelled"];
-			
-			// Time
-			NSRange timeRange = [searchString rangeOfString:@"Time: "];
-			NSRange placeRange = [searchString rangeOfString:@" Location: "];
-			if ( timeRange.length <= 0 )
-				debug_NSLog(@"Unexpected content in schedule parsing ... expected 'Time:[...]', got: %@", searchString);
-			else {
-				NSInteger start = timeRange.location + timeRange.length;
-				NSInteger end = 0;
-				if (cancelRange.location != NSNotFound && cancelRange.location > 0)
-					end = cancelRange.location-1;
-				else if (placeRange.location != NSNotFound && placeRange.location > 0)
-					end = placeRange.location-1;
-				
-				if (start < end) {
-					timeRange = NSMakeRange(start, end-start);
-					NSString *timeString = [searchString substringWithRange:timeRange];
-					if (timeString) {						
-						if ([timeString length] > 8)	// assholes
-							timeString = [timeString substringToIndex:8];
-						
-						[dateFormatter setDateFormat:@"h:mm a"];	
-						NSDate *tempTime = [dateFormatter dateFromString:timeString];
-						if (tempTime)
-							[entryDict setObject:tempTime forKey:@"time"];
-						[entryDict setObject:timeString forKey:@"timeString"];
-						
-						// fullDate = (date + time) ... if possible
-						NSString *gotDate = [entryDict objectForKey:@"dateString"];
-						if (timeString && gotDate) {
-							NSString *fullString = [NSString stringWithFormat:@"%@ %@", gotDate, timeString];
-							
-							[dateFormatter setDateFormat:@"M/d/yyyy h:mm a"];
-							NSDate *fullDate = [dateFormatter dateFromString:fullString];
-							if (fullDate) {
-								[entryDict setObject:fullDate forKey:@"fullDate"];
-							}
-							else
-								debug_NSLog(@"Trouble parsing full date from %@", fullString);						
-						}
-					}
-				}	
-				
-				[entryDict setObject:searchString forKey:@"rawDateTime"];
-			}
-			
-			// Location
-			if ( placeRange.length <= 0 )
-				debug_NSLog(@"Unexpected content in schedule parsing ... expected 'Location:[...]', got: %@", searchString);
-			else {
-				NSInteger start = placeRange.location + placeRange.length;
-				NSInteger end = [searchString length];
-				if (start < end) {
-					placeRange = NSMakeRange(start, end-start);
-					NSString *placeString = [searchString substringWithRange:placeRange];
-					if (placeString)
-						[entryDict setObject:placeString forKey:@"location"];
-				}					
-			}
-		}
-		
-		[dateFormatter release];		
-	}
-	@catch (NSException * e) {
-		NSLog(@"Error parsing event entry: %@", entry.content);
-	}
-	
-	return entryDict;
-}
 
 - (void)fetchEvents {
-	
-	// We should start looking into openstates' Event API:
-	// http://openstates.sunlightlabs.com/api/v1/events/?state=tx&type=committee:meeting&apikey=350284d0c6af453b9b56f6c1c7fea1f9
-	
-	if (![TexLegeReachability canReachHostWithURL:[self.feedURLS objectAtIndex:0]])		// I think just doing it once is enough?
-		return;
-	if (!self.feedStore)
-		return;
-	
 	[events removeAllObjects];
+	[events addObjectsFromArray:[[CalendarEventsLoader sharedCalendarEventsLoader] commiteeeMeetingsForChamber:[self.chamber integerValue]]];
 	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-	NSMutableArray *noMeetingsList = [NSMutableArray arrayWithCapacity:4];
-									  
-	NSInteger index = 1;
-	for (NSURL *url in self.feedURLS) {
-		CFeed * theFeed = [self.feedStore feedForURL:url fetch:YES];
-		if (!theFeed) {
-			NSLog(@"ChamberCalendarObj-feedEntries: error obtaining the necessary feed for the url:%@", url);
-			continue;
-		}
-		for (CFeedEntry *entry in theFeed.entries) {
-			NSNumber *entryChamber = self.chamber;
-			if ([self.chamber integerValue] == BOTH_CHAMBERS) /// this is when we've got mutliple feeds, must be "all", educate it
-				entryChamber = [NSNumber numberWithInteger:index];
-			
-			if ([entry.title isEqualToString:@"No committee meetings scheduled."]) {				
-				[noMeetingsList addObject:stringForChamber([entryChamber integerValue], TLReturnFull)];
-				break;
-			}
-			NSDictionary *entryDict = [self parseFeedEntry:entry forChamber:entryChamber];
-			if (entryDict)
-				[events addObject:entryDict];
-		}	
-		index++;
-	}
-									  
-	// At least one of our calendar feeds was empty (no meetings)
-	if (!hasPostedAlert && [noMeetingsList count]) {
-		NSString *titleString = nil;
-		NSString *messageString = nil;
-		
-		if ([noMeetingsList count] > 1) {
-			NSMutableString *chamberList = [NSMutableString string];
-			NSInteger index = 1;
-			for (NSString *chamberName in noMeetingsList) {
-				if (index > 1) {
-					if ([noMeetingsList count] > 2)
-						[chamberList appendString:@", "];
-					else
-						[chamberList appendString:@" "];
-				}
-				if (index == [noMeetingsList count]) {
-					[chamberList appendString:@"or "];
-				}
-				[chamberList appendString:chamberName];
-				index++;
-			}
-			titleString = [NSString stringWithFormat:@"No meetings scheduled.", chamberList];
-			messageString = [NSString stringWithFormat:@"Currently, there are no %@ meetings scheduled.", chamberList];
-			
-		}
-		else {
-			NSString *chamberName = [noMeetingsList objectAtIndex:0];
-			titleString = [NSString stringWithFormat:@"No %@ meetings scheduled.", chamberName];
-			messageString = [NSString stringWithFormat:@"Currently, there are no %@ meetings scheduled.", chamberName];
-		}
-
-		UIAlertView *noMeetingsAlert = [[[ UIAlertView alloc ] 
-										 initWithTitle:titleString 
-										 message:messageString 
-										 delegate:nil // we're static, so don't do "self"
-										 cancelButtonTitle: @"Cancel" 
-										 otherButtonTitles:nil, nil] autorelease];
-		hasPostedAlert = YES;
-		[ noMeetingsAlert show ];		
-	}
-	
-	if (events && [events count]) {
+	if (NO == IsEmpty(events)) {
 		[events sortUsingFunction:sortByDate context:nil];
 	}
-	[pool drain];
 }
 
 - (NSArray *)eventsFrom:(NSDate *)fromDate to:(NSDate *)toDate
@@ -338,7 +153,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	NSMutableArray *matches = [NSMutableArray array];
 	for (NSDictionary *event in events) {
 		
-		if (IsDateBetweenInclusive([event objectForKey:@"date"], fromDate, toDate))
+		if (IsDateBetweenInclusive([event objectForKey:kCalendarEventsLocalizedDateKey], fromDate, toDate))
 			[matches addObject:event];
 	}
 	
@@ -382,7 +197,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 - (NSArray *)markedDatesFrom:(NSDate *)fromDate to:(NSDate *)toDate
 {	
 	if (events && [events count])
-		return [[self eventsFrom:fromDate to:toDate] valueForKeyPath:@"date"];
+		return [[self eventsFrom:fromDate to:toDate] valueForKeyPath:kCalendarEventsLocalizedDateKey];
 	else
 		return [NSArray array];
 }
@@ -411,10 +226,10 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		[rows removeAllObjects];
 		
 		for (NSDictionary *event in events) {
-			NSRange committeeRange = [[event objectForKey:@"committee"] 
+			NSRange committeeRange = [[event objectForKey:kCalendarEventsCommitteeNameKey] 
 									  rangeOfString:filterString options:(NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch)];
 			
-			NSRange locationRange = [[event objectForKey:@"location"] 
+			NSRange locationRange = [[event objectForKey:kCalendarEventsLocationKey] 
 									 rangeOfString:filterString options:(NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch)];
 			
 			if (committeeRange.location != NSNotFound || locationRange.location != NSNotFound) {

@@ -13,15 +13,34 @@
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
 
+BOOL IsEmpty(id thing) {
+    return thing == nil
+	|| ([[NSNull null] isEqual:thing])
+	|| ([thing respondsToSelector:@selector(length)]
+        && [(NSData *)thing length] == 0)
+	|| ([thing respondsToSelector:@selector(count)]
+        && [(NSArray *)thing count] == 0);
+}
+
 #pragma mark -
 #pragma mark NSArray Categories
 
 @implementation NSString (FlattenHtml)
 
+- (NSString *)convertFromUTF8 {
+	//unichar ellipsis = 0x2026;
+	//NSString *theString = [NSString stringWithFormat:@"To be continued%C", ellipsis];
+	
+	NSData *asciiData = [self dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+	
+	return [[NSString alloc] initWithData:asciiData encoding:NSASCIIStringEncoding];
+}
+
 - (NSString *)flattenHTML {
     NSScanner *theScanner;
     NSString *text = nil;
-	NSMutableString *html = [NSMutableString stringWithString:[self description]];
+
+	NSMutableString *html = [NSMutableString stringWithString:[self convertFromUTF8]];
 	
     theScanner = [NSScanner scannerWithString:html];
 	
@@ -45,7 +64,7 @@
 		
     } // while //
     
-	[html replaceOccurrencesOfString:@"\u00a0" withString:@"" options:NSWidthInsensitiveSearch range:NSMakeRange(0, [html length])];
+//	[html replaceOccurrencesOfString:@"\u00a0" withString:@"" options:NSWidthInsensitiveSearch range:NSMakeRange(0, [html length])];
 	[html replaceOccurrencesOfString:@"&amp;" withString:@"&" options:NSWidthInsensitiveSearch range:NSMakeRange(0, [html length])];
 	[html replaceOccurrencesOfString:@"&nbsp;" withString:@" " options:NSWidthInsensitiveSearch range:NSMakeRange(0, [html length])];
 	[html replaceOccurrencesOfString:@"\r\n " withString:@"\r\n" options:NSWidthInsensitiveSearch range:NSMakeRange(0, [html length])];
@@ -55,6 +74,23 @@
     return html;
 }
 
+@end
+
+@implementation NSString  (HasSubstring)
+- (BOOL) hasSubstring:(NSString*)substring caseInsensitive:(BOOL)insensitive
+{
+	if(IsEmpty(substring))
+		return NO;
+	
+	NSString *temp = self;
+	if (insensitive) {
+		temp = [temp lowercaseString];
+		substring = [substring lowercaseString];
+	}
+		
+	NSRange substringRange = [temp rangeOfString:substring];
+	return substringRange.location != NSNotFound && substringRange.length > 0;
+}
 @end
 
 @implementation NSArray (Find)

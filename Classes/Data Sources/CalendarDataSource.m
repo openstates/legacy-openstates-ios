@@ -7,24 +7,20 @@
 //
 
 #import "CalendarDataSource.h"
-#import "CFeedStore.h"
-#import "CFeedFetcher.h"
-#import "CFeedEntry.h"
-#import "CFeed.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "ChamberCalendarObj.h"
 #import "DisclosureQuartzView.h"
 #import "TexLegeAppDelegate.h"
+#import "CalendarEventsLoader.h"
 
 @interface CalendarDataSource (Private)
-- (void) subscribeToAllFeeds;
 - (void) loadChamberCalendars;
 @end
 
 
 @implementation CalendarDataSource
-@synthesize calendarList, senateURL, houseURL, jointURL, feedStore;
+@synthesize calendarList;
 
 
 - (NSString *)navigationBarName
@@ -58,43 +54,29 @@
 - (id)init {
 	if (self = [super init]) {
 		
-		self.feedStore = [CFeedStore instance];
 		[self loadChamberCalendars];
-		[self subscribeToAllFeeds];
 		
 	}
 	return self;
 }
 
 - (void)dealloc {
-	self.senateURL = self.houseURL = self.jointURL = nil;
-	self.feedStore = nil;
 	self.calendarList = nil;
 	[super dealloc];
 }
 
 
 - (void) loadChamberCalendars {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-	static NSString *senateURLString = @"http://www.capitol.state.tx.us/MyTLO/RSS/RSS.aspx?Type=upcomingmeetingssenate";
-	static NSString *houseURLString = @"http://www.capitol.state.tx.us/MyTLO/RSS/RSS.aspx?Type=upcomingmeetingshouse";
-	static NSString *jointURLString = @"http://www.capitol.state.tx.us/MyTLO/RSS/RSS.aspx?Type=upcomingmeetingsjoint";
+	[[CalendarEventsLoader sharedCalendarEventsLoader] loadEvents:self];
 	
-	self.senateURL = [NSURL URLWithString:senateURLString];
-	self.houseURL = [NSURL URLWithString:houseURLString];
-	self.jointURL = [NSURL URLWithString:jointURLString];
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	self.calendarList = [NSMutableArray arrayWithCapacity:4];
 	
-	
 	NSMutableDictionary *calendarDict = [[NSMutableDictionary alloc] initWithCapacity:10];
 	ChamberCalendarObj *calendar = nil;
-	
 	[calendarDict setObject:@"All Upcoming Meetings" forKey:@"title"];
-	[calendarDict setObject:[NSArray arrayWithObjects:self.houseURL, self.senateURL, self.jointURL, nil] forKey:@"feedURLS"];
 	[calendarDict setObject:[NSNumber numberWithInteger:BOTH_CHAMBERS] forKey:@"chamber"];
-	[calendarDict setObject:self.feedStore forKey:@"feedStore"];
 	calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
 	[self.calendarList addObject:calendar];
 	[calendar release];
@@ -102,9 +84,7 @@
 	
 	
 	[calendarDict setObject:@"Upcoming House Meetings" forKey:@"title"];
-	[calendarDict setObject:[NSArray arrayWithObject:self.houseURL]  forKey:@"feedURLS"];
 	[calendarDict setObject:[NSNumber numberWithInteger:HOUSE] forKey:@"chamber"];
-	[calendarDict setObject:self.feedStore forKey:@"feedStore"];
 	calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
 	[self.calendarList addObject:calendar];
 	[calendar release];
@@ -112,9 +92,7 @@
 	
 	
 	[calendarDict setObject:@"Upcoming Senate Meetings" forKey:@"title"];
-	[calendarDict setObject:[NSArray arrayWithObject:self.senateURL] forKey:@"feedURLS"];
 	[calendarDict setObject:[NSNumber numberWithInteger:SENATE] forKey:@"chamber"];
-	[calendarDict setObject:self.feedStore forKey:@"feedStore"];
 	calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
 	[self.calendarList addObject:calendar];
 	[calendar release];
@@ -122,9 +100,7 @@
 	
 	   
 	[calendarDict setObject:@"Upcoming Joint Meetings" forKey:@"title"];
-	[calendarDict setObject:[NSArray arrayWithObject:self.jointURL] forKey:@"feedURLS"];
 	[calendarDict setObject:[NSNumber numberWithInteger:JOINT] forKey:@"chamber"];
-	[calendarDict setObject:self.feedStore forKey:@"feedStore"];
 	calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
 	[self.calendarList addObject:calendar];
 	[calendar release];
@@ -132,28 +108,6 @@
 	
 	[pool drain];
 	
-}
-
-- (void) subscribeToAllFeeds {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-	NSError *theError = NULL;
-	
-	@try {
-		NSArray *feedURLs = [[self.calendarList objectAtIndex:BOTH_CHAMBERS] valueForKey:@"feedURLS"];
-
-		debug_NSLog(@"Beginning feed subscriptions - %@", [NSDate date]);
-		
-		for (NSURL *url in feedURLs) {
-			[self.feedStore.feedFetcher subscribeToURL:url error:&theError];
-		}			
-		debug_NSLog(@"Ended feed subscriptions -- %@", [NSDate date]);
-	}
-	@catch (NSException * e) {
-		debug_NSLog(@"Error when initializing calendar feed subscriptions:\n  %@\n   %@", [theError description], [e description]);
-	}
-	
-	[pool drain];
 }
 
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {

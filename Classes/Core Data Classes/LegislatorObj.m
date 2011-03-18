@@ -253,14 +253,14 @@
 
 
  - (NSInteger)numberOfDistrictOffices {
-	if (!self.districtOffices || [[NSNull null] isEqual:self.districtOffices])
+	if (IsEmpty(self.districtOffices))
 		return 0;
 	else
 		return [self.districtOffices count];
 }
 
 - (NSInteger)numberOfStaffers {
-	if (!self.staffers || [[NSNull null] isEqual:self.staffers])
+	if (IsEmpty(self.staffers))
 		return 0;
 	else
 		return [self.staffers count];

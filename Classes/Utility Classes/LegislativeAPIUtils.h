@@ -9,6 +9,8 @@
 
 static NSString *osApiBaseURL =		@"http://openstates.sunlightlabs.com/api/v1";
 static NSString *osApiKey =			@"apikey=350284d0c6af453b9b56f6c1c7fea1f9";
+static NSString *osApiKeyKey =		@"apikey";
+static NSString *osApiKeyValue =	@"350284d0c6af453b9b56f6c1c7fea1f9";
 
 static NSString *transApiBaseURL =	@"http://transparencydata.com/api/1.0";
 
