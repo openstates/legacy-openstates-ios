@@ -42,21 +42,37 @@ NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
 		}	
 	}
 	else if (type == TLReturnAbbrev) {
-		if (type == TLReturnAbbrev) {
-			switch (chamber) {
-				case SENATE:
-					chamberString = @"Sen.";
-					break;
-				case HOUSE:
-					chamberString = @"Rep.";
-					break;
-				case BOTH_CHAMBERS:
-				case JOINT:
-				default:
-					chamberString = @"Jnt.";
-					break;
-			}
-		}		
+		switch (chamber) {
+			case SENATE:
+				chamberString = @"Sen.";
+				break;
+			case HOUSE:
+				chamberString = @"Rep.";
+				break;
+			case BOTH_CHAMBERS:
+			case JOINT:
+				chamberString = @"Jnt.";
+				break;
+			default:
+				chamberString = @"";
+		}
+		
+	}
+	else if (type == TLReturnOpenstates) {
+		switch (chamber) {
+			case SENATE:
+				chamberString = @"&chamber=upper";
+				break;
+			case HOUSE:
+				chamberString = @"&chamber=lower";
+				break;
+			case JOINT:
+				chamberString = @"&chamber=joint";
+				break;
+			case BOTH_CHAMBERS:
+			default:
+				chamberString = @"";
+		}
 	}
 	
 	return chamberString;
