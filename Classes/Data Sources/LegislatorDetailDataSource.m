@@ -497,7 +497,11 @@
 		return nil;
 	}
 	
-	NSString *cellIdentifier = [NSString stringWithFormat:@"%@-%d", [TexLegeStandardGroupCell cellIdentifier], cellInfo.isClickable];
+	NSString *stdCellID = [TexLegeStandardGroupCell cellIdentifier];
+	if (cellInfo.entryType == DirectoryTypeNotes)
+		stdCellID = @"TexLegeNotesGroupCell";
+		
+	NSString *cellIdentifier = [NSString stringWithFormat:@"%@-%d", stdCellID, cellInfo.isClickable];
 	
 	/* Look up cell in the table queue */
 	UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
