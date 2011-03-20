@@ -13,6 +13,7 @@
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
+#import "LegislativeAPIUtils.h"
 
 @interface BillsFavoritesViewController (Private)
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -109,8 +110,11 @@
 }
 
 - (IBAction)refreshBill:(NSDictionary *)watchedItem sender:(id)sender {
-	NSString *queryString = [NSString stringWithFormat:@"http://openstates.sunlightlabs.com/api/v1/bills/tx/%@/%@/?apikey=350284d0c6af453b9b56f6c1c7fea1f9", 
-							 [watchedItem objectForKey:@"session"], [[watchedItem objectForKey:@"name"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	NSString *queryString = [NSString stringWithFormat:@"%@/bills/tx/%@/%@/?%@", 
+							 osApiBaseURL,
+							 [watchedItem objectForKey:@"session"], 
+							 [[watchedItem objectForKey:@"name"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
+							 osApiKey];
 	
 	[self JSONRequestWithURLString:queryString sender:sender];
 }
