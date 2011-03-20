@@ -10,7 +10,6 @@
 
 @interface ChamberCalendarObj : NSObject <KalDataSource> {	
 	NSMutableArray *rows;
-	NSMutableArray *events;
 	BOOL hasPostedAlert;
 }
 

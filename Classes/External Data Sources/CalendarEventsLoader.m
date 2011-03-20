@@ -15,6 +15,36 @@
 #import <EventKitUI/EventKitUI.h>
 #import "LocalyticsSession.h"
 
+/*
+ Sorts an array of CalendarItems objects by date.  
+ */
+NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
+{
+	NSComparisonResult comparison = NSOrderedSame;
+	
+	NSDate *firstDate = [firstItem objectForKey:kCalendarEventsLocalizedDateKey];
+	NSDate *secondDate = [secondItem objectForKey:kCalendarEventsLocalizedDateKey];
+	
+	NSString *firstWhen = [firstItem objectForKey:kCalendarEventsWhenKey];
+	NSString *secondWhen = [secondItem objectForKey:kCalendarEventsWhenKey];
+	
+	NSString *firstID = [firstItem objectForKey:kCalendarEventsIDKey];
+	NSString *secondID = [secondItem objectForKey:kCalendarEventsIDKey];
+	
+	if (firstDate && secondDate)
+		comparison = [firstDate compare:secondDate];
+	else if (firstWhen && secondWhen)
+		comparison = [firstWhen compare:secondWhen];
+	else if (firstID && secondID)
+		comparison = [firstID compare:secondID];
+	
+	return comparison;
+}
+
+@interface CalendarEventsLoader (Private)
+- (NSDictionary *)parseEvent:(NSDictionary *)inEvent;
+@end
+
 @implementation CalendarEventsLoader
 SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 @synthesize isFresh, eventApiClient;
@@ -84,7 +114,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 }
 
 - (NSArray*)events {
-	if (!isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > 3600)) {	// if we're over an hour old, let's refresh
+	if (!isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > 1800)) {	// if we're over a half-hour old, let's refresh
 		isFresh = NO;
 		debug_NSLog(@"CalendarEventsLoader is stale, need to refresh");
 		
@@ -137,16 +167,28 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data  
 		if (_events)
-			[_events release];	
+			[_events release], _events = nil;	
 		
-		_events = [[NSMutableArray arrayWithArray:[response bodyAsJSON]] retain];
-		if (_events) {
+		NSArray *allEvents = [response bodyAsJSON];
+		if (IsEmpty(allEvents))
+			return;
+		
+		allEvents = [[NSArray alloc] initWithArray:[allEvents findAllWhereKeyPath:kCalendarEventsTypeKey 
+																		   equals:kCalendarEventsTypeCommitteeValue]];		
+		if (allEvents) {
+			_events = [[[NSMutableArray alloc] init] retain];
+			for (NSDictionary *event in allEvents) {
+				[_events addObject:[self parseEvent:event]];
+			}
+			[_events sortUsingFunction:sortByDate context:nil];
+
 			NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
 			[_events writeToFile:localPath atomically:YES];	
 			isFresh = YES;
 			updated = [[NSDate date] retain];
+			
 			[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyLoaded object:nil];
-			debug_NSLog(@"EventsLoader network download successfull, archiving for others.");
+			//debug_NSLog(@"EventsLoader network download successfull, archiving for others.");
 		}		
 		else {
 			[self request:request didFailLoadWithError:nil];
@@ -155,8 +197,24 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 	}
 }
 
-- (NSDictionary *)parseEvent:(NSMutableDictionary *)loadedEvent {
+- (NSDictionary *)parseEvent:(NSDictionary *)inEvent {
+	NSMutableDictionary *loadedEvent = [NSMutableDictionary dictionaryWithDictionary:inEvent];
 	
+	id sourcePath = [loadedEvent valueForKeyPath:kCalendarEventsSourceURLKeyPath];
+	NSString *sourceURL = nil;
+	if ([sourcePath isKindOfClass:[NSArray class]])
+		sourceURL = [sourcePath objectAtIndex:0];
+	else if ([sourcePath isKindOfClass:[NSString class]])
+		sourceURL = sourcePath;
+	
+	for (NSInteger eventChamber = HOUSE; eventChamber<=JOINT; eventChamber++) {
+		NSString *guessString = [stringForChamber(eventChamber, TLReturnFull) lowercaseString];
+		if ([sourceURL hasSuffix:guessString]) {
+			[loadedEvent setObject:[NSNumber numberWithInt:eventChamber] forKey:kCalendarEventsTypeChamberValue];
+			break;
+		}
+	}
+				
 	BOOL unknownTime = YES;
 	NSString *when = [loadedEvent objectForKey:kCalendarEventsWhenKey];
 	if (when) {
@@ -200,36 +258,13 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 }
 
 - (NSArray *)commiteeeMeetingsForChamber:(NSInteger)chamber {
-	if (!self.events || ![_events count])
+	if (IsEmpty(self.events))
 		return nil;
 	
-	NSArray *meetings = [_events findAllWhereKeyPath:kCalendarEventsTypeKey equals:kCalendarEventsTypeCommitteeValue];
-	if (meetings && [meetings count]) {
-		NSMutableArray *chamberMeetings = [NSMutableArray array];
-		
-		for (NSDictionary *meeting in meetings) {
-			NSMutableDictionary *newMeeting = [NSMutableDictionary dictionaryWithDictionary:meeting];
-			id sourcePath = [meeting valueForKeyPath:kCalendarEventsSourceURLKeyPath];
-			NSString *sourceURL = nil;
-			if ([sourcePath isKindOfClass:[NSArray class]])
-				sourceURL = [sourcePath objectAtIndex:0];
-			else if ([sourcePath isKindOfClass:[NSString class]])
-				sourceURL = sourcePath;
-			
-			for (NSInteger eventChamber = HOUSE; eventChamber<=JOINT; eventChamber++) {
-				NSString *guessString = [stringForChamber(eventChamber, TLReturnFull) lowercaseString];
-				if ([sourceURL hasSuffix:guessString]) {
-					if (chamber == BOTH_CHAMBERS || chamber == eventChamber) {
-						[newMeeting setObject:[NSNumber numberWithInt:eventChamber] forKey:kCalendarEventsTypeChamberValue];
-						[chamberMeetings addObject:[self parseEvent:newMeeting]];
-					}
-					break;
-				}
-			}
-		}
-		meetings = chamberMeetings;
-	}
-	return meetings;	
+	if (chamber == BOTH_CHAMBERS)
+		return _events;
+	else
+		return [_events findAllWhereKeyPath:@"chamber" equals:[NSNumber numberWithInteger:chamber]];
 }
 
 
@@ -238,6 +273,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 - (void)addAllEventsToiCal:(id)sender {
 #warning see about asking what calendar they want to put these in
 
+	if (![UtilityMethods supportsEventKit] || !eventStore) {
+		debug_NSLog(@"EventKit not available on this device");
+		return;
+	}
+	
 	NSLog(@"CalendarEventsLoader == ADDING ALL MEETINGS TO ICAL == (MESSY)");
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"iCAL_ALL_MEETINGS"];
 

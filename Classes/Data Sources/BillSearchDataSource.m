@@ -11,6 +11,10 @@
 #import "TexLegeReachability.h"
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
+#import "BillMetadataLoader.h"
+#import "LegislativeAPIUtils.h"
+#import "TexLegeLibrary.h"
+#import "UtilityMethods.h"
 
 @interface NSDictionary (BillIDComparison)
 - (NSComparisonResult)compareBillsByID:(NSDictionary *)p;
@@ -26,33 +30,46 @@
 @implementation BillSearchDataSource
 @synthesize searchDisplayController, delegateTVC;
 
-- (id)initWithSearchDisplayController:(UISearchDisplayController *)newController; {
-	if ([super init]) {
+- (id)init {
+	if (self=[super init]) {
+		osApiClient = [[RKClient clientWithBaseURL:osApiBaseURL] retain];
 		_rows = [[NSMutableArray alloc] init];
-		_activeConnection = nil;
 		delegateTVC = nil;
-		
-		if (newController) {
-			searchDisplayController = [newController retain];
-			searchDisplayController.searchResultsDataSource = self;
-		}
-		
+		searchDisplayController = nil;
 	}
 	return self;
 }
 
-- (id)initWithTableViewController:(UITableViewController *)newDelegate; {
-	if ([super init]) {
-		_rows = [[NSMutableArray alloc] init];
-		_activeConnection = nil;
-		searchDisplayController = nil;
-		
+- (id)initWithSearchDisplayController:(UISearchDisplayController *)newController {
+	if (self=[self init]) {
+		if (newController) {
+			searchDisplayController = [newController retain];
+			searchDisplayController.searchResultsDataSource = self;
+		}
+	}
+	return self;
+}
+
+- (id)initWithTableViewController:(UITableViewController *)newDelegate {
+	if (self=[self init]) {		
 		if (newDelegate) {
 			delegateTVC = [newDelegate retain];
 		}
-		
 	}
 	return self;
+}
+
+- (void)dealloc {
+	[searchDisplayController release];
+	[delegateTVC release];
+	[_rows release];
+	_rows = nil;
+
+	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
+	
+	if (osApiClient)
+		[osApiClient release], osApiClient = nil;
+ 	[super dealloc];
 }
 
 
@@ -118,198 +135,127 @@
 			cell.accessoryView = qv;
 			[qv release];			
 		}
-		
     }
 		
-	if (_rows && [_rows count])
+	if (!IsEmpty(_rows))
 		[self configureCell:cell atIndexPath:indexPath];		
 
 	return cell;
 }
 
-// #define TESTING_BILLSEARCH 1
-#ifdef TESTING_BILLSEARCH
-
-- (void)mockData:(NSTimer*)timer {
-	[_rows removeAllObjects];
-	int count = 1 + random() % 20;
-	for (int i = 0; i < count; i++) {
-		NSDictionary *fakeDict = [NSDictionary dictionaryWithObjectsAndKeys:
-								  [NSString stringWithFormat:@"FAKE %d", i], @"bill_id",
-								  timer.userInfo, @"title", nil];
-		[_rows addObject:fakeDict];
-	}
-	if (searchDisplayController)
-		[self.searchDisplayController.searchResultsTableView reloadData];
-	else if (delegateTVC)
-		[delegateTVC.tableView reloadData];
-}
-#endif
-
 - (void)startSearchWithString:(NSString *)searchString chamber:(NSInteger)chamber
 {
-#ifndef TESTING_BILLSEARCH
-	if (_activeConnection) {
-		[_activeConnection cancel];
-		[_activeConnection release];
-		_activeConnection = nil;
+	searchString = [searchString uppercaseString];
+	NSMutableString *queryString = [NSMutableString stringWithString:@"/bills"];
+	
+	BOOL isBillID = NO;
+	
+	for (NSDictionary *type in [[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:kBillMetadataTypesKey]) {
+		NSString *billType = [type objectForKey:kBillMetadataTitleKey];
+	 
+		if (billType && [searchString hasPrefix:billType]) {
+			NSString *tail = [searchString substringFromIndex:[billType length]];
+			if (tail) {
+				tail = [tail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+				
+				if ([tail integerValue] > 0) {
+					isBillID = YES;
+					NSNumber *billNumber = [NSNumber numberWithInteger:[tail integerValue]];		// we specifically convolute this to ensure we're grabbing only the numerical of the string
+					
+					NSString *billSession = @"82";
+#warning hard coded session
+					[queryString appendFormat:@"/tx/%@/%@%%20%@", billSession, billType, billNumber];
+					
+					break;
+				}
+			}			
+		}
 	}
 	
-	//in the viewDidLoad
-	if (_data) {
-		[_data release];
-		_data = nil;
+	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+										@"session", @"search_window",
+										@"tx", @"state",
+										osApiKeyValue, osApiKeyKey,
+										nil];
+	
+	NSString *chamberString = stringForChamber(chamber, TLReturnOpenstatesShort);
+	if (!IsEmpty(chamberString)) {
+		[queryParams setObject:chamberString forKey:@"chamber"];
 	}
-	
-	_data = [[NSMutableData data] retain];
-	NSString *baseurl = @"http://openstates.sunlightlabs.com/api/v1/bills/?search_window=session&state=tx&apikey=350284d0c6af453b9b56f6c1c7fea1f9";
-	NSString *chamberString = @"";
-	if (chamber == HOUSE)
-		chamberString = @"&chamber=lower";
-	else if (chamber == SENATE)
-		chamberString = @"&chamber=upper";
-	
-	if (!searchString)
+	if (IsEmpty(searchString))
 		searchString = @"";
 	
-	searchString = [searchString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-
-	NSString *endQuery = [NSString stringWithFormat:@"%@&q=%@", chamberString, searchString];
-	NSString *queryString = [NSString stringWithFormat:@"%@%@", baseurl, endQuery];
+	if (!isBillID){
+		[queryParams setObject:searchString forKey:@"q"];
+	}
+	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:YES])
+		[osApiClient get:queryString queryParams:queryParams delegate:self];
 	
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:queryString]];//asynchronous call
-
-	if ([TexLegeReachability canReachHostWithURL:[request URL] alert:YES])
-		_activeConnection = [[[NSURLConnection alloc] initWithRequest:request delegate:self] retain];
-#else
-	[NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(mockData:) userInfo:searchString repeats:NO];
-#endif
 }
 
 - (void)startSearchForSubject:(NSString *)searchSubject chamber:(NSInteger)chamber {
+	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+								 @"session", @"search_window",
+								 @"tx", @"state",
+								 osApiKeyValue, osApiKeyKey,
+								 nil];
 	
-
-#ifndef TESTING_BILLSEARCH
-	if (_activeConnection) {
-		[_activeConnection cancel];
-		[_activeConnection release];
-		_activeConnection = nil;
+	NSString *chamberString = stringForChamber(chamber, TLReturnOpenstatesShort);
+	if (!IsEmpty(chamberString)) {
+		[queryParams setObject:chamberString forKey:@"chamber"];
 	}
-	
-	//in the viewDidLoad
-	if (_data) {
-		[_data release];
-		_data = nil;
-	}
-	
-	_data = [[NSMutableData data] retain];
-	//http://openstates.sunlightlabs.com/api/v1/bills/?subject=Sexual%20Orientation%20and%20Gender%20Issues&state=tx&chamber=upper&apikey=350284d0c6af453b9b56f6c1c7fea1f9
-	NSString *baseurl = @"http://openstates.sunlightlabs.com/api/v1/bills/?search_window=session&state=tx&apikey=350284d0c6af453b9b56f6c1c7fea1f9";
-	//&search_window=session
-	NSString *chamberString = @"";
-	if (chamber == HOUSE)
-		chamberString = @"&chamber=lower";
-	else if (chamber == SENATE)
-		chamberString = @"&chamber=upper";
-	
-	if (!searchSubject)
+	if (IsEmpty(searchSubject))
 		searchSubject = @"";
 	
-	searchSubject = [searchSubject stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	
-	NSString *endQuery = [NSString stringWithFormat:@"%@&subject=%@", chamberString, searchSubject];
-	NSString *queryString = [NSString stringWithFormat:@"%@%@", baseurl, endQuery];
-	
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:queryString]];//asynchronous call
-	
-	if ([TexLegeReachability canReachHostWithURL:[request URL] alert:YES])
-		_activeConnection = [[[NSURLConnection alloc] initWithRequest:request delegate:self] retain];
-#else
-	[NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(mockData:) userInfo:searchString repeats:NO];
-#endif
-	
+	[queryParams setObject:searchSubject forKey:@"subject"];
+			
+	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:YES])
+		[osApiClient get:@"/bills" queryParams:queryParams delegate:self];
 }
 
-- (void)dealloc {
-	[searchDisplayController release];
-	[delegateTVC release];
-	[_rows release];
-	_rows = nil;
-	if (_data) {
-		[_data release];
-		_data = nil;
+
+#pragma mark -
+#pragma mark RestKit:RKObjectLoaderDelegate
+
+- (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
+	if (error && request) {
+		debug_NSLog(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
+		[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:nil];
 	}
-	if (_activeConnection) {
-		[_activeConnection cancel];
-		[_activeConnection release];
-		_activeConnection = nil;
-	}
- 	[super dealloc];
 }
 
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    [_data setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [_data appendData:data];
-	
-	NSString *responseString = [[NSString alloc] initWithData:_data encoding:NSUTF8StringEncoding];
-	
-	[_rows removeAllObjects];
-	[_rows addObjectsFromArray:[responseString JSONValue]];
-	[responseString release];
-	
-#if	0 //NS_BLOCKS_AVAILABLE
-	// if we wanted blocks, we'd do this instead:
-	[_rows sortUsingComparator:^(NSDictionary *item1, NSDictionary *item2) {
-		NSString *bill_id1 = [item1 objectForKey:@"bill_id"];
-		NSString *bill_id2 = [item2 objectForKey:@"bill_id"];
-		return [bill_id1 compare:bill_id2 options:NSNumericSearch];
-	}];
-#else
-	[_rows sortUsingSelector:@selector(compareBillsByID:)];
-#endif
-	
-	if (searchDisplayController)
-		[self.searchDisplayController.searchResultsTableView reloadData];
-	else if (delegateTVC)
-		[delegateTVC.tableView reloadData];
-	
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    NSLog(@"%@", error);
-}
-
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSString *responseString = [[NSString alloc] initWithData:_data encoding:NSUTF8StringEncoding];
-    [_data release];
-	_data = nil;
-	
-	[_rows removeAllObjects];
-	[_rows addObjectsFromArray:[responseString JSONValue]];
-	[responseString release];
-    [connection release];
+// Handling GET /BillMetadata.json  
+- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
+	if ([request isGET] && [response isOK]) {  
+		// Success! Let's take a look at the data  
+		
+		[_rows removeAllObjects];	
+		
+		id results = [response bodyAsJSON];
+		if ([results isKindOfClass:[NSArray class]])
+			[_rows addObjectsFromArray:results];
+		else if ([results isKindOfClass:[NSDictionary class]])
+			[_rows addObject:results];
 
 #if	0 //NS_BLOCKS_AVAILABLE
-	// if we wanted blocks, we'd do this instead:
-	 [_rows sortUsingComparator:^(NSDictionary *item1, NSDictionary *item2) {
-		NSString *bill_id1 = [item1 objectForKey:@"bill_id"];
-		NSString *bill_id2 = [item2 objectForKey:@"bill_id"];
-		return [bill_id1 compare:bill_id2 options:NSNumericSearch];
-	}];
+		// if we wanted blocks, we'd do this instead:
+		[_rows sortUsingComparator:^(NSDictionary *item1, NSDictionary *item2) {
+			NSString *bill_id1 = [item1 objectForKey:@"bill_id"];
+			NSString *bill_id2 = [item2 objectForKey:@"bill_id"];
+			return [bill_id1 compare:bill_id2 options:NSNumericSearch];
+		}];
 #else
-	[_rows sortUsingSelector:@selector(compareBillsByID:)];
+		[_rows sortUsingSelector:@selector(compareBillsByID:)];
 #endif
-	
-	if (searchDisplayController)
-		[self.searchDisplayController.searchResultsTableView reloadData];
-	else if (delegateTVC)
-		[delegateTVC.tableView reloadData];
-	
+		
+		if (searchDisplayController)
+			[self.searchDisplayController.searchResultsTableView reloadData];
+		else if (delegateTVC)
+			[delegateTVC.tableView reloadData];
+		
+		[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataLoaded object:nil];
+	}
 }
 
 @end

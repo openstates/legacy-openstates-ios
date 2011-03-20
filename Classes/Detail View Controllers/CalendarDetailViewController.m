@@ -76,11 +76,19 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(reloadEvents:) name:kCalendarEventsNotifyLoaded object:nil];	
 	[self finalizeUI];
+}
+
+- (void)reloadEvents:(NSNotification*)notification {
+	[self reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+	[[CalendarEventsLoader sharedCalendarEventsLoader] loadEvents:self];
+	
 	if ([UtilityMethods isIPadDevice] && !self.chamberCalendar && ![UtilityMethods isLandscapeOrientation])  {
 		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 		
@@ -111,17 +119,12 @@
 }
 
 
-/*
- - (void)viewDidUnload {
-    // Release any retained subviews of the main view.
-	self.chamberCalendar = nil;
-	if (![UtilityMethods isIPadDevice])
-		self.webView = nil;
-	self.masterPopover = nil;
-	// add this to done: or something
 
-    [super viewDidUnload];
-}*/
+ - (void)viewDidUnload {
+	 [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+	 [super viewDidUnload];
+}
 
 
 - (void)dealloc {

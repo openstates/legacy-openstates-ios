@@ -7,22 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <RestKit/RestKit.h>
+
+#define kBillSearchNotifyDataError	@"BILLSEARCH_DATA_ERROR"
+#define kBillSearchNotifyDataLoaded	@"BILLSEARCH_DATA_LOADED"
 
 @interface BillSearchDataSource : NSObject <UITableViewDataSource> {
 	NSMutableArray* _rows;
-	NSMutableData * _data;
-	NSURLConnection *_activeConnection;
 	IBOutlet UISearchDisplayController *searchDisplayController;
 	IBOutlet UITableViewController *delegateTVC;
+	RKClient *osApiClient;
 }
 @property (nonatomic, retain) IBOutlet UISearchDisplayController *searchDisplayController;
 @property (nonatomic, retain) IBOutlet UITableViewController *delegateTVC;
 @property (nonatomic, readonly) NSArray *billResults;
 
-- (void)startSearchWithString:(NSString *)searchString chamber:(NSInteger)chamber;
 - (id)initWithSearchDisplayController:(UISearchDisplayController *)newController;
-
 - (id)initWithTableViewController:(UITableViewController *)newDelegate;
+
+- (void)startSearchWithString:(NSString *)searchString chamber:(NSInteger)chamber;
 - (void)startSearchForSubject:(NSString *)searchSubject chamber:(NSInteger)chamber;
 
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath;
