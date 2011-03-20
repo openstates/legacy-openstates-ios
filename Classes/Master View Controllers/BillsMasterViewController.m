@@ -15,9 +15,9 @@
 
 #import "MiniBrowserController.h"
 #import "TexLegeTheme.h"
+#import "LegislativeAPIUtils.h"
 
 #import "BillsMenuDataSource.h"
-
 #import "BillSearchDataSource.h"
 #import "JSON.h"
 
@@ -72,9 +72,6 @@
 		}
 	}
 */	
-	
-	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
-		self.selectObjectOnAppear = [self firstDataObject];
 }
 
 - (void)viewDidUnload {
@@ -100,11 +97,10 @@
 	// this has to be here because GeneralTVC will overwrite it once anyone calls self.dataSource,
 	//		if we remove this, it will wind up setting our searchResultsDataSource to the BillsMenuDataSource
 	self.searchDisplayController.searchResultsDataSource = self.billSearchDS;	
-	
 	[self.searchDisplayController.searchBar setHidden:NO];
 	
 	if ([UtilityMethods isIPadDevice])
-		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
+		[self.tableView reloadData];
 	
 }
 
@@ -138,8 +134,10 @@
 				changingDetails = YES;
 			}
 			
-			NSString *queryString = [NSString stringWithFormat:@"http://openstates.sunlightlabs.com/api/v1/bills/tx/%@/%@/?apikey=350284d0c6af453b9b56f6c1c7fea1f9", 
-									 [dataObject objectForKey:@"session"], [[dataObject objectForKey:@"bill_id"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+			NSString *queryString = [NSString stringWithFormat:@"%@/bills/tx/%@/%@/?%@", osApiBaseURL,
+									 [dataObject objectForKey:@"session"], 
+									 [[dataObject objectForKey:@"bill_id"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
+									 osApiKey];
 			
 			[self JSONRequestWithURLString:queryString sender:self.detailViewController];	// DetailViewController get's "setDataObject" called with the results.
 			
@@ -199,8 +197,8 @@
 	if (searchString) {
 		_searchString = [searchString retain];
 		
-		if ([_searchString length] >= 4) {
-			[self.billSearchDS startSearchWithString:_searchString chamber:self.searchDisplayController.searchBar.selectedScopeButtonIndex+1];
+		if ([_searchString length] >= 3) {
+			[self.billSearchDS startSearchWithString:_searchString chamber:self.searchDisplayController.searchBar.selectedScopeButtonIndex];
 		}		
 	}
 	return NO;
