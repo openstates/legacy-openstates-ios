@@ -78,6 +78,22 @@ NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
 				chamberString = @"";
 		}
 	}
+	else if (type == TLReturnOpenstatesShort) {
+		switch (chamber) {
+			case SENATE:
+				chamberString = @"upper";
+				break;
+			case HOUSE:
+				chamberString = @"lower";
+				break;
+			case JOINT:
+				chamberString = @"joint";
+				break;
+			case BOTH_CHAMBERS:
+			default:
+				chamberString = @"";
+		}
+	}
 	
 	return chamberString;
 }
