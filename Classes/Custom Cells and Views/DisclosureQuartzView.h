@@ -12,8 +12,8 @@
 extern const CGFloat kDisclosureQuartzViewWidth;
 extern const CGFloat kDisclosureQuartzViewHeight;
 
-@interface DisclosureQuartzView : UIView
-
-- (UIImage *)imageFromUIView;
+@interface DisclosureQuartzView : UIView {
+	NSInteger scaleMod;
+}
 
 @end

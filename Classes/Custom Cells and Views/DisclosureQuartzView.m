@@ -22,6 +22,10 @@ const CGFloat kDisclosureQuartzViewHeight = 32.0f;
 	self = [super initWithFrame:frame];
 	if (self) {
 		[self setOpaque:NO];
+		
+		scaleMod = 1;
+		if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+			scaleMod =  [[UIScreen mainScreen] scale];
 	}
 	return self;
 }
@@ -39,16 +43,6 @@ const CGFloat kDisclosureQuartzViewHeight = 32.0f;
 {
 	return CGSizeMake(kDisclosureQuartzViewWidth, kDisclosureQuartzViewHeight);
 }
-
-- (UIImage *)imageFromUIView {
-	
-	UIGraphicsBeginImageContext(self.bounds.size);
-	[self.layer renderInContext:UIGraphicsGetCurrentContext()];
-	UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();
-	return viewImage;
-}
-
 
 - (void)drawRect:(CGRect)dirtyRect
 {
@@ -86,13 +80,13 @@ const CGFloat kDisclosureQuartzViewHeight = 32.0f;
 	// DisclosureGroup
 	
 	// Setup for Inner Shadow Effect
-	bytesPerRow = 4 * roundf(bounds.size.width);
+	bytesPerRow = scaleMod * 4 * roundf(bounds.size.width);
 
 	bitmapData = calloc(bytesPerRow * round(bounds.size.height), 8);
-	context = CGBitmapContextCreate(bitmapData, round(bounds.size.width), round(bounds.size.height), 8, bytesPerRow, space, kCGImageAlphaPremultipliedLast);
+	context = CGBitmapContextCreate(bitmapData, scaleMod*round(bounds.size.width), scaleMod*round(bounds.size.height), 8, bytesPerRow, space, kCGImageAlphaPremultipliedLast);
 
 	UIGraphicsPushContext(context);
-	CGContextScaleCTM(context, (bounds.size.width / imageBounds.size.width), (bounds.size.height / imageBounds.size.height));
+	CGContextScaleCTM(context, scaleMod*(bounds.size.width / imageBounds.size.width), scaleMod*(bounds.size.height / imageBounds.size.height));
 	
 	// Disclosure
 	
@@ -188,8 +182,6 @@ const CGFloat kDisclosureQuartzViewHeight = 32.0f;
 		bitmapData = calloc(bytesPerRow * round(effectBounds.size.height), 8);
 		maskContext = CGBitmapContextCreate(bitmapData, round(effectBounds.size.width), round(effectBounds.size.height), 8, bytesPerRow, NULL, kCGImageAlphaOnly);
 
-		//[shadowBuffer setLength:(bytesPerRow * roundf(effectBounds.size.height) * roundf(effectBounds.size.width))];
-		//maskContext = CGBitmapContextCreate([shadowBuffer mutableBytes], roundf(effectBounds.size.width), roundf(effectBounds.size.height), 8, bytesPerRow, NULL, kCGImageAlphaOnly);
 		CGContextDrawImage(maskContext, CGRectMake(-effectBounds.origin.x, -effectBounds.origin.y, bounds.size.width, bounds.size.height), contextImage);
 		maskImage = CGBitmapContextCreateImage(maskContext);
 		data = [NSData dataWithBytes:bitmapData length:bytesPerRow * round(effectBounds.size.height)];
@@ -212,7 +204,6 @@ const CGFloat kDisclosureQuartzViewHeight = 32.0f;
 	
 	CGContextRestoreGState(context);
 	CGColorSpaceRelease(space);
-	//[shadowBuffer release];
 }
 
 @end
