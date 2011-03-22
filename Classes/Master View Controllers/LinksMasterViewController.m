@@ -114,18 +114,18 @@
 		if (self.detailViewController == nil) {
 			self.detailViewController = [[[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil] autorelease];
 		}
-
+/*  TODO: do something smart with the Twitter API to drop results in a tableview or something.  (TTKit or whatever?)
 		if ([link.label isEqualToString:@"Legislator Twitter Feeds"]) {
 
 			NSString *interAppTwitter = @"twitter://list?screen_name=grgcombs&slug=texas-politicians";
 			NSURL *interAppTwitterURL = [NSURL URLWithString:interAppTwitter];
-			if ([[UIApplication sharedApplication] canOpenURL:interAppTwitterURL]) {
+			if (![UtilityMethods isIPadDevice] && [[UIApplication sharedApplication] canOpenURL:interAppTwitterURL]) {
 				if ([TexLegeReachability canReachHostWithURL:interAppTwitterURL alert:YES])
 					[[UIApplication sharedApplication] openURL:interAppTwitterURL];
 				return;
 			}
 		}
-		
+*/		
 		MiniBrowserController *detailVC = self.detailViewController;
 		
 		if ([link.url isEqualToString:@"contactMail"]) {
