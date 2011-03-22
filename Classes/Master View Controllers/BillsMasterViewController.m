@@ -118,7 +118,9 @@
 				self.detailViewController = [[[BillsDetailViewController alloc] initWithNibName:@"BillsDetailViewController" bundle:nil] autorelease];
 				changingDetails = YES;
 			}
-
+			if ([self.detailViewController respondsToSelector:@selector(setDataObject:)])
+				[self.detailViewController performSelector:@selector(setDataObject:) withObject:dataObject];
+			
 			[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:[dataObject objectForKey:@"bill_id"] 
 																			   session:[dataObject objectForKey:@"session"] 
 																			  delegate:self.detailViewController];			
@@ -128,7 +130,7 @@
 				self.detailViewController = nil;
 			}
 			else if (changingDetails)
-				[[self.splitViewController.viewControllers objectAtIndex:1] setViewControllers:[NSArray arrayWithObject:self.detailViewController] animated:NO];
+				[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.detailViewController] animated:NO];
 		}			
 	}
 //	WE'RE CLICKING ON ONE OF OUR STANDARD MENU ITEMS
@@ -147,10 +149,10 @@
 		
 		// create a BillsMenuDetailViewController. This controller will display the full size tile for the element
 		UITableViewController *tempVC = nil;
-		if ([theClass isEqualToString:@"BillsFavoritesViewController"] || [theClass isEqualToString:@"BillsCategoriesViewController"])
+		//if ([theClass isEqualToString:@"BillsFavoritesViewController"] || [theClass isEqualToString:@"BillsCategoriesViewController"])
 			tempVC = [[[NSClassFromString(theClass) alloc] initWithNibName:nil bundle:nil] autorelease];	// we don't want a nib for this one
-		else
-			tempVC = [[[NSClassFromString(theClass) alloc] initWithNibName:theClass bundle:nil] autorelease];
+		//else
+		//	tempVC = [[[NSClassFromString(theClass) alloc] initWithNibName:theClass bundle:nil] autorelease];
 		
 		//if ([tempVC respondsToSelector:@selector(setSelectedMenu:)])
 		//	[tempVC setValue:dataObject forKey:@"selectedMenu"];

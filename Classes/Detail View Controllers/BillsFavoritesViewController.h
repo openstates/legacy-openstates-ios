@@ -7,17 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <RestKit/RestKit.h>
 
 #define kBillFavoritesStorageFile @"FavoriteBills.plist"
 
-@interface BillsFavoritesViewController : UITableViewController <UITableViewDelegate> {
+@interface BillsFavoritesViewController : UITableViewController <RKRequestDelegate, UITableViewDelegate> {
 	NSMutableArray *_watchList;
-	NSMutableDictionary *_requestDictionary;
-	NSMutableDictionary *_requestSenders;
 	NSMutableDictionary *_cachedBills;
 }
-- (void)JSONRequestWithURLString:(NSString *)queryString sender:(id)sender;
-- (IBAction)refreshBill:(NSDictionary *)watchedItem sender:(id)sender;
-- (IBAction)refreshAllBills:(id)sender;
+- (IBAction)loadBills:(id)sender;
 	
 @end

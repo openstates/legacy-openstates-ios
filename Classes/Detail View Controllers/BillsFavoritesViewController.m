@@ -9,11 +9,11 @@
 #import "TexLegeAppDelegate.h"
 #import "BillsFavoritesViewController.h"
 #import "BillsDetailViewController.h"
-#import "JSON.h"
+#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
-#import "LegislativeAPIUtils.h"
+#import "OpenLegislativeAPIs.h"
 
 @interface BillsFavoritesViewController (Private)
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -36,12 +36,6 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 		
-	if (!_requestDictionary)
-		_requestDictionary = [[[NSMutableDictionary alloc] init] retain];
-	
-	if (!_requestSenders)
-		_requestSenders = [[[NSMutableDictionary alloc] init] retain];	
-	
 	NSString *myClass = [[self class] description];
 	NSArray *menuArray = [UtilityMethods texLegeStringWithKeyPath:@"BillMenuItems"];
 	NSDictionary *menuItem = [menuArray findWhereKeyPath:@"class" equals:myClass];
@@ -93,7 +87,7 @@
 	}
 	[self.tableView reloadData];
 	
-	[self refreshAllBills:nil];
+	[self loadBills:nil];
 
 }
 
@@ -109,17 +103,7 @@
 		return @"";
 }
 
-- (IBAction)refreshBill:(NSDictionary *)watchedItem sender:(id)sender {
-	NSString *queryString = [NSString stringWithFormat:@"%@/bills/tx/%@/%@/?%@", 
-							 osApiBaseURL,
-							 [watchedItem objectForKey:@"session"], 
-							 [[watchedItem objectForKey:@"name"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-							 osApiKey];
-	
-	[self JSONRequestWithURLString:queryString sender:sender];
-}
-
-- (IBAction)refreshAllBills:(id)sender {
+- (IBAction)loadBills:(id)sender {
 	if (_cachedBills) {
 		[_cachedBills release];
 		_cachedBills = nil;
@@ -128,7 +112,9 @@
 	_cachedBills = [[[NSMutableDictionary alloc] init] retain];
 	
 	for (NSDictionary *item in _watchList) {
-		[self refreshBill:item sender:item];
+		[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:[item objectForKey:@"name"] 
+																		   session:[item objectForKey:@"session"] 
+																		  delegate:self];
 	}	
 }
 
@@ -140,10 +126,6 @@
 }
 
 - (void)viewDidUnload {
-	[_requestDictionary release];
-	_requestDictionary = nil;
-	[_requestSenders release];
-	_requestSenders = nil;
 	[super viewDidUnload];
 }
 
@@ -290,6 +272,7 @@
 }
 
 - (void)dealloc {	
+	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 
 	if (_watchList) {
 		[_watchList release];
@@ -300,69 +283,33 @@
 		_cachedBills = nil;
 	}
 	
-	[_requestDictionary release];
-	_requestDictionary = nil;
-	[_requestSenders release];
-	_requestSenders = nil;
-	
-	
 	[super dealloc];
 }
 
-- (void)JSONRequestWithURLString:(NSString *)queryString sender:(id)sender {
-	//in the viewDidLoad
-	
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:queryString]];
-	NSURLConnection *newConnection = [[[NSURLConnection alloc] initWithRequest:request delegate:self] autorelease];
-	
-	NSMutableData *data = [NSMutableData data];	
-	[_requestDictionary setObject:data forKey:[newConnection description]];
-	[_requestSenders setObject:sender forKey:[newConnection description]];
-	
-}
+#pragma mark -
+#pragma mark RestKit:RKObjectLoaderDelegate
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	
-    [[_requestDictionary objectForKey:[connection description]] setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [[_requestDictionary objectForKey:[connection description]] appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    NSLog(@"%@", error);
-	if ([_requestDictionary objectForKey:[connection description]])
-		[_requestDictionary removeObjectForKey:[connection description]];
-	
-	if ([_requestSenders objectForKey:[connection description]])
-		[_requestSenders removeObjectForKey:[connection description]];
-	
-	/*	if (connection) {
-	 [connection release];
-	 connection = nil;
-	 }
-	 */
-}
-
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	
-	NSMutableData *data = [_requestDictionary objectForKey:[connection description]];
-    NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-	
-	id sender = [_requestSenders objectForKey:[connection description]];
-	id object = [responseString JSONValue];
-	[responseString release];
-	
-	if (sender && object && _cachedBills) {
-		NSString *watchID = [self watchIDForBill:object];
-		[_cachedBills setObject:object forKey:watchID];
+- (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
+	if (error && request) {
+		debug_NSLog(@"BillFavorites - Error loading bill results from %@: %@", [request description], [error localizedDescription]);
 		
-		NSInteger row = NSNotFound;
-		if ([sender isKindOfClass:[NSDictionary class]])
-			row = [_watchList indexOfObject:sender];
-		else {
+#warning present an error?
+		
+		//[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:nil];
+	}
+}
+
+
+- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
+	if ([request isGET] && [response isOK]) {  
+		// Success! Let's take a look at the data  
+		
+		NSDictionary *object = [response.body objectFromJSONData];
+		if (object && _cachedBills) {
+			NSString *watchID = [self watchIDForBill:object];
+			[_cachedBills setObject:object forKey:watchID];
+			
+			NSInteger row = 0;
 			NSInteger index = 0;
 			for (NSDictionary *search in _watchList) {
 				if ([[search objectForKey:@"watchID"] isEqualToString:watchID]) {
@@ -371,26 +318,16 @@
 				}
 				index++;
 			}
+			NSIndexPath *rowPath = [NSIndexPath indexPathForRow:row inSection:0];
+			//[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:rowPath] withRowAnimation:UITableViewRowAnimationMiddle];
+			if (row+1 > [_watchList count])
+				[self.tableView reloadData];
+			else
+				[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:rowPath] withRowAnimation:UITableViewRowAnimationNone];
 		}
-		if (row == NSNotFound)
-			row = 0;
-		NSIndexPath *rowPath = [NSIndexPath indexPathForRow:row inSection:0];
-		//[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:rowPath] withRowAnimation:UITableViewRowAnimationMiddle];
-		if (row+1 > [_watchList count])
-			[self.tableView reloadData];
-		else
-			[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:rowPath] withRowAnimation:UITableViewRowAnimationNone];
 	}
-	
-	if ([_requestDictionary objectForKey:[connection description]])
-		[_requestDictionary removeObjectForKey:[connection description]];
-	if ([_requestSenders objectForKey:[connection description]])
-		[_requestSenders removeObjectForKey:[connection description]];
-	
-	/*    [connection release];
-	 connection = nil;
-	 */
 }
+
 
 @end
 
