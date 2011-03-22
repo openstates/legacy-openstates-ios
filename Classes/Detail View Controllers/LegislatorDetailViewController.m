@@ -186,6 +186,7 @@
 // 134123212.2009.iphone.port.svg
 // 134123212.2009.iphone.land.svg
 - (NSString *)svgChartPath {
+	// TODO: Move these into the caches folder, and reset the resetty thingy switcher to the new path
 	NSString *device = [UtilityMethods isIPadDevice] ? @"ipad" : @"iphone";
 	NSString *orientation = [UtilityMethods isLandscapeOrientation] ? @"land" : @"port";
 	NSString *svgFile = [[NSString alloc] initWithFormat:@"%@.2009.%@.%@.svg", self.legislator.legislatorID, device, orientation];
