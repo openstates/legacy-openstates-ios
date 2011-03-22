@@ -11,12 +11,7 @@
 @class BillSearchDataSource;
 @interface BillsListDetailViewController : UITableViewController <UITableViewDelegate> {
 	IBOutlet BillSearchDataSource *dataSource;
-	NSMutableDictionary *_requestDictionary;
-	NSMutableDictionary *_requestSenders;
 }
 @property (nonatomic,retain) BillSearchDataSource *dataSource;
-
-- (void)JSONRequestWithURLString:(NSString *)queryString sender:(id)sender;
-- (IBAction)refreshBill:(NSDictionary *)watchedItem sender:(id)sender;
 
 @end

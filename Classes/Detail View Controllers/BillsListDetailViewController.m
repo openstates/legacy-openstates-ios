@@ -9,12 +9,12 @@
 #import "BillsListDetailViewController.h"
 #import "TexLegeAppDelegate.h"
 #import "BillsDetailViewController.h"
-#import "JSON.h"
+#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
 #import "BillSearchDataSource.h"
-#import "LegislativeAPIUtils.h"
+#import "OpenLegislativeAPIs.h"
 
 @interface BillsListDetailViewController (Private)
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -42,12 +42,6 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	if (!_requestDictionary)
-		_requestDictionary = [[[NSMutableDictionary alloc] init] retain];
-	
-	if (!_requestSenders)
-		_requestSenders = [[[NSMutableDictionary alloc] init] retain];	
-	
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self.dataSource;
 	self.tableView.separatorColor = [TexLegeTheme separator];
@@ -65,21 +59,7 @@
  [super viewWillDisappear:animated];
  }*/
 
-
-- (IBAction)refreshBill:(NSDictionary *)watchedItem sender:(id)sender {
-	NSString *queryString = [NSString stringWithFormat:@"%@/bills/tx/%@/%@/?%@", osApiBaseURL,
-							 [watchedItem objectForKey:@"session"], 
-							 [[watchedItem objectForKey:@"bill_id"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-							 osApiKey];
-	
-	[self JSONRequestWithURLString:queryString sender:sender];
-}
-
 - (void)viewDidUnload {
-	[_requestDictionary release];
-	_requestDictionary = nil;
-	[_requestSenders release];
-	_requestSenders = nil;
 	[super viewDidUnload];
 }
 
@@ -115,7 +95,9 @@
 			}
 			
 			[detailView setDataObject:bill];
-			[self refreshBill:bill sender:detailView];
+			[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:[bill objectForKey:@"bill_id"] 
+																			   session:[bill objectForKey:@"session"] 
+																			  delegate:detailView];
 			
 			if (![UtilityMethods isIPadDevice])
 				[self.navigationController pushViewController:detailView animated:YES];
@@ -127,74 +109,9 @@
 
 - (void)dealloc {	
 		
-	[_requestDictionary release];
-	_requestDictionary = nil;
-	[_requestSenders release];
-	_requestSenders = nil;
-	
 	[dataSource release];
 	
 	[super dealloc];
-}
-
-- (void)JSONRequestWithURLString:(NSString *)queryString sender:(id)sender {
-	//in the viewDidLoad
-	
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:queryString]];
-	NSURLConnection *newConnection = [[[NSURLConnection alloc] initWithRequest:request delegate:self] autorelease];
-	
-	NSMutableData *data = [NSMutableData data];	
-	[_requestDictionary setObject:data forKey:[newConnection description]];
-	[_requestSenders setObject:sender forKey:[newConnection description]];
-	
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	
-    [[_requestDictionary objectForKey:[connection description]] setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [[_requestDictionary objectForKey:[connection description]] appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    NSLog(@"%@", error);
-	if ([_requestDictionary objectForKey:[connection description]])
-		[_requestDictionary removeObjectForKey:[connection description]];
-	
-	if ([_requestSenders objectForKey:[connection description]])
-		[_requestSenders removeObjectForKey:[connection description]];
-	
-	/*	if (connection) {
-	 [connection release];
-	 connection = nil;
-	 }
-	 */
-}
-
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	
-	NSMutableData *data = [_requestDictionary objectForKey:[connection description]];
-    NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-	
-	id sender = [_requestSenders objectForKey:[connection description]];
-	id object = [responseString JSONValue];
-	[responseString release];
-	
-	if (sender && object) {		
-		[sender setDataObject:object];
-	}
-	
-	if ([_requestDictionary objectForKey:[connection description]])
-		[_requestDictionary removeObjectForKey:[connection description]];
-	if ([_requestSenders objectForKey:[connection description]])
-		[_requestSenders removeObjectForKey:[connection description]];
-	
-	/*    [connection release];
-	 connection = nil;
-	 */
 }
 
 @end
