@@ -15,7 +15,7 @@
 #import "TexLegeCoreDataUtils.h"
 #import "NSDate+Helper.h"
 #import "DataModelUpdateManager.h"
-#import "JSON.h"
+#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "TexLegeAppDelegate.h"
 
 @interface PartisanIndexStats (Private)
@@ -195,7 +195,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 		NSLog(@"Error parsing WnomAggregateObj data file: %@; [path: %@", [error localizedDescription], filePath);
 	if (jsonString && [jsonString length])
 	{
-		NSArray *jsonArray = [jsonString JSONValue];
+		NSArray *jsonArray = [jsonString objectFromJSONString];
 		NSArray *chamberArray = [jsonArray findAllWhereKeyPath:@"chamber" equals:[NSNumber numberWithInt:chamber]];
 		if (chamberArray) {
 			NSArray *partyArray = [chamberArray findAllWhereKeyPath:@"party" equals:[NSNumber numberWithInt:party]];
