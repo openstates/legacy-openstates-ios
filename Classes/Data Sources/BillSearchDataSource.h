@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <RestKit/RestKit.h>
 
 #define kBillSearchNotifyDataError	@"BILLSEARCH_DATA_ERROR"
 #define kBillSearchNotifyDataLoaded	@"BILLSEARCH_DATA_LOADED"
@@ -16,7 +15,6 @@
 	NSMutableArray* _rows;
 	IBOutlet UISearchDisplayController *searchDisplayController;
 	IBOutlet UITableViewController *delegateTVC;
-	RKClient *osApiClient;
 }
 @property (nonatomic, retain) IBOutlet UISearchDisplayController *searchDisplayController;
 @property (nonatomic, retain) IBOutlet UITableViewController *delegateTVC;

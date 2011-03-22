@@ -7,15 +7,16 @@
 //
 
 #import "BillSearchDataSource.h"
-#import "JSON.h"
 #import "TexLegeReachability.h"
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
 #import "BillMetadataLoader.h"
-#import "LegislativeAPIUtils.h"
+#import "OpenLegislativeAPIs.h"
 #import "TexLegeLibrary.h"
 #import "UtilityMethods.h"
+#import "OpenLegislativeAPIs.h"
 
+#if	DISABLE_PRE_iOS4_SUPPORT
 @interface NSDictionary (BillIDComparison)
 - (NSComparisonResult)compareBillsByID:(NSDictionary *)p;
 @end
@@ -25,14 +26,14 @@
 	return [[self objectForKey:@"bill_id"] compare: [p objectForKey:@"bill_id"] options:NSNumericSearch];	
 }
 @end
-
+#endif
 
 @implementation BillSearchDataSource
 @synthesize searchDisplayController, delegateTVC;
 
 - (id)init {
 	if (self=[super init]) {
-		osApiClient = [[RKClient clientWithBaseURL:osApiBaseURL] retain];
+		[OpenLegislativeAPIs sharedOpenLegislativeAPIs];
 		_rows = [[NSMutableArray alloc] init];
 		delegateTVC = nil;
 		searchDisplayController = nil;
@@ -67,8 +68,6 @@
 
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 	
-	if (osApiClient)
-		[osApiClient release], osApiClient = nil;
  	[super dealloc];
 }
 
@@ -189,7 +188,7 @@
 		[queryParams setObject:searchString forKey:@"q"];
 	}
 	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:YES])
-		[osApiClient get:queryString queryParams:queryParams delegate:self];
+		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:queryString queryParams:queryParams delegate:self];
 	
 }
 
@@ -210,7 +209,7 @@
 	[queryParams setObject:searchSubject forKey:@"subject"];
 			
 	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:YES])
-		[osApiClient get:@"/bills" queryParams:queryParams delegate:self];
+		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/bills" queryParams:queryParams delegate:self];
 }
 
 
@@ -238,7 +237,7 @@
 		else if ([results isKindOfClass:[NSDictionary class]])
 			[_rows addObject:results];
 
-#if	0 //NS_BLOCKS_AVAILABLE
+#if	DISABLE_PRE_iOS4_SUPPORT
 		// if we wanted blocks, we'd do this instead:
 		[_rows sortUsingComparator:^(NSDictionary *item1, NSDictionary *item2) {
 			NSString *bill_id1 = [item1 objectForKey:@"bill_id"];
