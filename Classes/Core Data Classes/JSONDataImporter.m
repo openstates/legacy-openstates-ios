@@ -13,9 +13,9 @@
 #import "TexLegeCoreDataUtils.h"
 #import "TexLegeAppDelegate.h"
 #import "UtilityMethods.h"
-#import "JSON.h"
+#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "TexLegeLibrary.h"
-#import "LegislativeAPIUtils.h"
+#import "OpenLegislativeAPIs.h"
 
 @interface JSONDataImporter (Private)
 
@@ -58,7 +58,7 @@
 	if (error) {
 		debug_NSLog(@"Error retrieving JSON committees from url:%@ error:%@", url, error);
 	}
-	NSArray *jsonArray = [jsonString JSONValue];
+	NSArray *jsonArray = [jsonString objectFromJSONStringWithParseOptions:(JKParseOptionUnicodeNewlines & JKParseOptionLooseUnicode)];
 	return jsonArray;
 }
 
@@ -99,7 +99,7 @@
 	if (error) {
 		debug_NSLog(@"Error retrieving JSON committee from url:%@ error:%@", url, error);
 	}
-	NSDictionary *jsonDict = [jsonString JSONValue];
+	NSDictionary *jsonDict = [jsonString objectFromJSONStringWithParseOptions:(JKParseOptionUnicodeNewlines & JKParseOptionLooseUnicode)];
 	return jsonDict;
 }
 
@@ -136,7 +136,7 @@
 	if (error) {
 		debug_NSLog(@"Error retrieving JSON legislators from url:%@ error:%@", url, error);
 	}
-	NSArray *jsonArray = [jsonString JSONValue];
+	NSArray *jsonArray = [jsonString objectFromJSONStringWithParseOptions:(JKParseOptionUnicodeNewlines & JKParseOptionLooseUnicode)];
 	
 	return jsonArray;
 }
@@ -200,7 +200,7 @@
 	if (error) {
 		debug_NSLog(@"Error retrieving JSON legislator from url:%@ error:%@", url, error);
 	}
-	NSArray *jsonArray = [jsonString JSONValue];
+	NSArray *jsonArray = [jsonString objectFromJSONStringWithParseOptions:(JKParseOptionUnicodeNewlines & JKParseOptionLooseUnicode)];
 	return jsonArray;
 }
 

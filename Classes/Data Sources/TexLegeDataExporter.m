@@ -11,9 +11,9 @@
 #import "TexLegeCoreDataUtils.h"
 #import "TexLegeDataObjectProtocol.h"
 #import "TexLegeAppDelegate.h"
-#import "LegislativeAPIUtils.h"
+#import "OpenLegislativeAPIs.h"
 
-#import "JSON.h"
+#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "LegislatorObj.h"
 #import "NSString_Extensions.h"
 
@@ -95,7 +95,8 @@
 		if (!doJSON)
 			outputDict = [NSDictionary dictionaryWithObjectsAndKeys:objArray, @"data", outPath, @"path", nil];
 		else {
-			NSString *jsonString = [objArray JSONRepresentation];
+			NSError *error = nil;
+			NSString *jsonString = [objArray JSONStringWithOptions:JKSerializeOptionEscapeUnicode error:&error];
 			if (jsonString && [jsonString length])
 				outputDict = [NSDictionary dictionaryWithObjectsAndKeys:jsonString, @"data", outPath, @"path", nil];
 		}
@@ -187,7 +188,7 @@
 		NSURL *url = [NSURL URLWithString:urlString];
 		NSError *error = nil;
 		NSString *jsonString = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:&error];
-		NSArray *tempArray = [jsonString JSONValue];
+		NSArray *tempArray = [jsonString objectFromJSONStringWithParseOptions:(JKParseOptionUnicodeNewlines & JKParseOptionLooseUnicode)];
 		NSDictionary *found = nil;
 		for (NSDictionary *dict in tempArray) {
 			NSString *state = [dict objectForKey:@"state"];	// hope it's TX
