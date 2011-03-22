@@ -9,7 +9,6 @@
 #import "BillsListDetailViewController.h"
 #import "TexLegeAppDelegate.h"
 #import "BillsDetailViewController.h"
-#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
