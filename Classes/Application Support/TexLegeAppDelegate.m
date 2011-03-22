@@ -407,7 +407,7 @@ NSInteger kNoSelection = -1;
 	self.appIsQuitting = NO;
 	
 	[[BillMetadataLoader sharedBillMetadataLoader] loadMetadata:self];
-	[[CalendarEventsLoader sharedCalendarEventsLoader] loadEvents:self];
+	//[[CalendarEventsLoader sharedCalendarEventsLoader] loadEvents:self];
 	
 	if (![self isDatabaseResetNeeded]) {
 		analyticsOptInController = [[[AnalyticsOptInAlertController alloc] init] retain];

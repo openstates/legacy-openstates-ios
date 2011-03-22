@@ -18,6 +18,8 @@
 #define EXPORTING_DATA 0
 #define NEEDS_TO_PARSE_KMLMAPS 0
 
+#define DISABLE_PRE_iOS4_SUPPORT 1
+
 extern NSString * const kRestoreSelectionKey;
 extern NSString * const kAnalyticsAskedForOptInKey;
 extern NSString * const kAnalyticsSettingsSwitch;

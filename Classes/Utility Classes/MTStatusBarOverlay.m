@@ -627,6 +627,7 @@ kDetailViewWidth, kHistoryTableRowHeight*kMaxHistoryTableRowCount + kStatusBarHe
 	if (!self.reallyHidden && [self.visibleStatusLabel.text isEqualToString:message]) {
 		// remove unneccesary message
 		@synchronized(self.messageQueue) {
+          if (self.messageQueue.count > 0)
 			[self.messageQueue removeLastObject];
 		}
         
@@ -700,6 +701,7 @@ kDetailViewWidth, kHistoryTableRowHeight*kMaxHistoryTableRowCount + kStatusBarHe
                              
                              // remove the message from the queue
                              @synchronized(self.messageQueue) {
+                               if (self.messageQueue.count > 0)
                                  [self.messageQueue removeLastObject];
                              }
                              
@@ -722,6 +724,7 @@ kDetailViewWidth, kHistoryTableRowHeight*kMaxHistoryTableRowCount + kStatusBarHe
         
         // remove the message from the queue
         @synchronized(self.messageQueue) {
+          if (self.messageQueue.count > 0)
             [self.messageQueue removeLastObject];
         }
         
@@ -819,9 +822,9 @@ kDetailViewWidth, kHistoryTableRowHeight*kMaxHistoryTableRowCount + kStatusBarHe
 		// TODO:
 		// somehow this doesn't work anymore since rotation-method was changed from
 		// DeviceDidRotate-Notification to StatusBarFrameChanged-Notification
-		// therefore iplemented it with a UIView-Animation instead
+		// therefore implemented it with a UIView-Animation instead
 		//[self performSelector:@selector(setHiddenUsingAlpha:) withObject:[NSNumber numberWithBool:NO] afterDelay:kRotationAppearDelay];
-        
+
 		[UIView animateWithDuration:kAppearAnimationDuration
 							  delay:kRotationAppearDelay
 							options:UIViewAnimationOptionCurveEaseInOut
@@ -1323,12 +1326,26 @@ static MTStatusBarOverlay *sharedMTStatusBarOverlay = nil;
 
 + (MTStatusBarOverlay *)sharedInstance {
 	@synchronized(self) {
-		if (sharedMTStatusBarOverlay == nil) {
+		if (sharedMTStatusBarOverlay == nil && [[UIView class] respondsToSelector:@selector(animateWithDuration:animations:)]) {
 			sharedMTStatusBarOverlay = [[self alloc] initWithFrame:CGRectZero];
 		}
 	}
     
 	return sharedMTStatusBarOverlay;
+}
+
++ (MTStatusBarOverlay *)sharedOverlay {
+	return [self sharedInstance];
+}
+
++(MTStatusBarOverlay *)threadSafeSharedInstance {
+	[self performSelectorOnMainThread:@selector(sharedInstance) withObject:nil waitUntilDone:YES];
+
+	return [self sharedInstance];
+}
+
++(MTStatusBarOverlay *)threadSafeSharedOverlay {
+	return [self threadSafeSharedInstance];
 }
 
 + (id)allocWithZone:(NSZone *)zone {

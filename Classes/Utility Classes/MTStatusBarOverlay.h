@@ -181,6 +181,9 @@ typedef enum MTMessageType {
 
 // Singleton Instance
 + (MTStatusBarOverlay *)sharedInstance;
++ (MTStatusBarOverlay *)sharedOverlay;
++ (MTStatusBarOverlay *)threadSafeSharedInstance;
++ (MTStatusBarOverlay *)threadSafeSharedOverlay;
 
 //===========================================================
 #pragma mark -

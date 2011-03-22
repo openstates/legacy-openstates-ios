@@ -206,6 +206,17 @@ BOOL IsEmpty(id thing) {
     return basePath;
 }
 
++ (NSString *)applicationCachesDirectory {
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+	NSString *cachePath = [paths objectAtIndex:0];
+	BOOL isDir = NO;
+	NSError *error;
+	if (! [[NSFileManager defaultManager] fileExistsAtPath:cachePath isDirectory:&isDir] && isDir == NO) {
+		[[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:NO attributes:nil error:&error];
+	}
+	return cachePath;
+}
+
 #pragma mark -
 #pragma mark URL Handling
 + (NSURL *)urlToMainBundle {

@@ -38,6 +38,7 @@ BOOL IsEmpty(id thing);
 + (CapitolMap *) capitolMapFromChamber:(NSInteger)chamber;
 + (NSURL *) googleMapUrlFromStreetAddress:(NSString *)address;
 + (NSString *)applicationDocumentsDirectory;
++ (NSString *)applicationCachesDirectory;
 
 + (BOOL) openURLWithTrepidation:(NSURL *)url;
 + (BOOL) openURLWithoutTrepidation:(NSURL *)url;
