@@ -76,12 +76,12 @@
 	return @"districtOfficeID";
 }
 
-
+/*
 - (id)proxyForJson {
 	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
 	return tempDict;
 }
-
+*/
 // we're overriding what's stored in core data ... is this a good idea?
 - (NSNumber *) pinColorIndex {
 	/*	if (self.legislator) {

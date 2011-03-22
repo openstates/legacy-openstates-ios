@@ -60,12 +60,12 @@
 + (NSString*)primaryKeyProperty {
 	return @"committeeId";
 }
-
+/*
 - (id)proxyForJson {
 	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
 	return tempDict;	
 }
-
+*/
 - (NSString *) committeeNameInitial {
 	[self willAccessValueForKey:@"committeeNameInitial"];
 	NSString * initial = [[self committeeName] substringToIndex:1];

@@ -14,6 +14,5 @@
 
 - (void) importFromDictionary: (NSDictionary *)dictionary;
 - (NSDictionary *)exportToDictionary;
-- (id)proxyForJson;
 @end
 

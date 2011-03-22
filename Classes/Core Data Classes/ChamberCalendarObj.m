@@ -95,7 +95,9 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 		cell.textLabel.text = [cell.textLabel.text stringByAppendingString:@" (Cancelled)"];
 	
 	
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 	if ([UtilityMethods supportsEventKit])
+#endif
 		cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
 	
 	return cell;

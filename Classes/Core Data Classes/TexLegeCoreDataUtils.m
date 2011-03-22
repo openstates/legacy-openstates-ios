@@ -18,6 +18,7 @@
 #import "TexLegeAppDelegate.h"
 #import "NSDate+Helper.h"
 #import "LocalyticsSession.h"
+#import "TexLegeObjectCache.h"
 
 //#define VERIFYCOMMITTEES 1
 #ifdef VERIFYCOMMITTEES
@@ -242,6 +243,7 @@
 	objectManager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:APP_DB_NAME 
 															 usingSeedDatabaseName:SEED_DB_NAME 
 																managedObjectModel:mom];
+	//objectManager.objectStore.managedObjectCache = [[TexLegeObjectCache new] autorelease];
 	
 #ifdef VERIFYCOMMITTEES
 	JSONDataImporter *importer = [[JSONDataImporter alloc] init];

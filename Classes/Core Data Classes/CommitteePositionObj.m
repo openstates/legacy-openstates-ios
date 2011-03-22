@@ -73,11 +73,12 @@
 	[self didChangeValueForKey:key];
 }
 */
+/*
 - (id)proxyForJson {
 	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
 	return tempDict;	
 }
-
+*/
 - (NSString*)positionString {
 	if ([[self position] integerValue] == POS_CHAIR) 
 		return @"Chair";

@@ -35,12 +35,12 @@
 
 #pragma mark Core Data Initialization
 
-
+/*
 - (id)proxyForJson {
 	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
 	return tempDict;	
 }
-
+*/
 - (NSURL *) actualURL {	
 	NSURL * actualURL = nil;
 	

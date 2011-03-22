@@ -49,10 +49,10 @@
 + (NSString*)primaryKeyProperty {
 	return @"stafferID";
 }
-
+/*
 - (id)proxyForJson {
 	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
 	return tempDict;	
 }
-
+*/
 @end

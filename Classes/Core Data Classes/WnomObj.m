@@ -51,12 +51,12 @@
 + (NSString*)primaryKeyProperty {
 	return @"wnomID";
 }
-
+/*
 - (id)proxyForJson {
 	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
 	return tempDict;	
 }
-
+*/
 - (NSNumber *) year {
 	return [NSNumber numberWithInteger:1847+(2*[self.session integerValue])];
 }

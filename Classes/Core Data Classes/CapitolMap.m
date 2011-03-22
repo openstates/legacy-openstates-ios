@@ -40,11 +40,11 @@
 							  nil];
 	return tempDict;
 }
-
+/*
 - (id)proxyForJson {
     return [self exportToDictionary];
 }
-
+*/
 
 - (NSURL *)url {
 	NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];

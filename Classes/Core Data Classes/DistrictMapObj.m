@@ -183,6 +183,7 @@
 	return tempData;
 }
 */
+/*
 - (id)proxyForJson {	
 	NSMutableDictionary *jsonDict = [NSMutableDictionary dictionaryWithDictionary:[self exportToDictionary]];
 	
@@ -207,7 +208,7 @@
 	
     return jsonDict;
 }
-
+*/
 + (NSArray *)lightPropertiesToFetch {
 	NSArray *props = [NSArray arrayWithObjects:
 	@"districtMapID",

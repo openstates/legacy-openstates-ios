@@ -123,12 +123,12 @@
 	return @"legislatorID";
 }
 
-
+/*
 - (id)proxyForJson {					 
 	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
 	return tempDict;	
 }
-
+*/
 - (NSComparisonResult)compareMembersByName:(LegislatorObj *)p
 {	
 	return [[self fullNameLastFirst] compare: [p fullNameLastFirst]];	
