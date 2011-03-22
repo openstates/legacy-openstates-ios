@@ -8,12 +8,13 @@
 
 #import "CalendarEventsLoader.h"
 #import "NSDate+Helper.h"
-#import "JSON.h"
+#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "UtilityMethods.h"
 #import "TexLegeReachability.h"
-#import "LegislativeAPIUtils.h"
+#import "OpenLegislativeAPIs.h"
 #import <EventKitUI/EventKitUI.h>
 #import "LocalyticsSession.h"
+#import "OpenLegislativeAPIs.h"
 
 /*
  Sorts an array of CalendarItems objects by date.  
@@ -42,21 +43,24 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 }
 
 @interface CalendarEventsLoader (Private)
-- (NSDictionary *)parseEvent:(NSDictionary *)inEvent;
+- (NSMutableDictionary *)parseEvent:(NSDictionary *)inEvent;
 @end
 
 @implementation CalendarEventsLoader
 SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
-@synthesize isFresh, eventApiClient;
+@synthesize isFresh;
 
 - (id)init {
 	if (self=[super init]) {
 		isFresh = NO;
 		_events = nil;
 		updated = nil;
-		eventApiClient = [[RKClient clientWithBaseURL:osApiBaseURL] retain];
+
+		[OpenLegislativeAPIs sharedOpenLegislativeAPIs];
 		
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 		if ([UtilityMethods supportsEventKit]) {
+#endif
 			eventStore = [[[EKEventStore alloc] init] retain];
 			[eventStore defaultCalendarForNewEvents];
 
@@ -78,7 +82,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 			}
 			*/
 
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 		}
+#endif
 	}
 	return self;
 }
@@ -87,15 +93,17 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 	if (updated)
 		[updated release], updated = nil;
-	if (eventApiClient)
-		[eventApiClient release], eventApiClient = nil;
 	if (_events)
 		[_events release], _events = nil;
 	
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 	if ([UtilityMethods supportsEventKit]) {
+#endif
 		if (eventStore)
 			[eventStore release], eventStore = nil;
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 	}
+#endif
 	[super dealloc];
 }
 
@@ -103,13 +111,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:NO]) {
 		//	http://openstates.sunlightlabs.com/api/v1/events/?state=tx&apikey=350284d0c6af453b9b56f6c1c7fea1f9
 
-		if (eventApiClient) {
-			NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-										 @"tx", @"state",
-										 osApiKeyValue, osApiKeyKey,
-										 nil];
-			[eventApiClient get:@"/events" queryParams:queryParams delegate:self];
-		}
+		NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
+									 @"tx", @"state",
+									 osApiKeyValue, osApiKeyKey,
+									 nil];
+		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/events" queryParams:queryParams delegate:self];
 	}
 }
 
@@ -135,30 +141,21 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 	
 	isFresh = NO;
 
-	// We had trouble loading the events online, so pull up the cache from the one in the documents folder, if possible
-	NSError *newError = nil;
-	NSArray *jsonArray = nil;
-	NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	if (![fileManager fileExistsAtPath:localPath]) {
-		debug_NSLog(@"EventsLoader: No events cache and no network connection, can't show any events.");
-	}
-	else {
-		debug_NSLog(@"EventsLoader: using cached events in the documents folder.");
-		NSString *jsonMenus = [NSString stringWithContentsOfFile:localPath encoding:NSUTF8StringEncoding error:&newError];
-		if (!error)
-			jsonArray = [jsonMenus JSONValue];
-	}
-	
 	if (_events)
 		[_events release];
-	if (jsonArray)
-		_events = [[NSMutableArray arrayWithArray:jsonArray] retain];
-	else
+
+	// We had trouble loading the events online, so pull up the cache from the one in the documents folder, if possible
+	NSString *thePath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
+	//NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	if ([fileManager fileExistsAtPath:thePath]) {
+		debug_NSLog(@"EventsLoader: using cached events in the documents folder.");
+		_events = [[NSMutableArray arrayWithContentsOfFile:thePath] retain];
+	}
+	if (!_events)
 		_events = [[NSMutableArray array] retain];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyLoaded object:nil];
-	
 }
 
 
@@ -169,12 +166,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 		if (_events)
 			[_events release], _events = nil;	
 		
-		NSArray *allEvents = [response bodyAsJSON];
+		NSArray *allEvents = [response.body objectFromJSONData];
 		if (IsEmpty(allEvents))
 			return;
 		
-		allEvents = [[NSArray alloc] initWithArray:[allEvents findAllWhereKeyPath:kCalendarEventsTypeKey 
-																		   equals:kCalendarEventsTypeCommitteeValue]];		
+		allEvents = [allEvents findAllWhereKeyPath:kCalendarEventsTypeKey equals:kCalendarEventsTypeCommitteeValue];		
 		if (allEvents) {
 			_events = [[[NSMutableArray alloc] init] retain];
 			for (NSDictionary *event in allEvents) {
@@ -182,11 +178,15 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 			}
 			[_events sortUsingFunction:sortByDate context:nil];
 
-			NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
-			[_events writeToFile:localPath atomically:YES];	
+			NSString *thePath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
+			///NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
+			//NSFileManager *fileManager = [NSFileManager defaultManager];
+			if (![_events writeToFile:thePath atomically:YES])
+				NSLog(@"CalendarEventsLoader: Error writing event cache to file: %@", thePath);
+			
 			isFresh = YES;
 			updated = [[NSDate date] retain];
-			
+						
 			[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyLoaded object:nil];
 			//debug_NSLog(@"EventsLoader network download successfull, archiving for others.");
 		}		
@@ -197,7 +197,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 	}
 }
 
-- (NSDictionary *)parseEvent:(NSDictionary *)inEvent {
+- (NSMutableDictionary *)parseEvent:(NSDictionary *)inEvent {
 	NSMutableDictionary *loadedEvent = [NSMutableDictionary dictionaryWithDictionary:inEvent];
 	
 	id sourcePath = [loadedEvent valueForKeyPath:kCalendarEventsSourceURLKeyPath];
@@ -215,6 +215,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 		}
 	}
 				
+	if ([[NSNull null] isEqual:[loadedEvent objectForKey:kCalendarEventsEndKey]])
+		[loadedEvent removeObjectForKey:kCalendarEventsEndKey];
+		
 	BOOL unknownTime = YES;
 	NSString *when = [loadedEvent objectForKey:kCalendarEventsWhenKey];
 	if (when) {
@@ -288,15 +291,17 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 }
 
 - (void)addEventToiCal:(NSDictionary *)eventDict delegate:(id)delegate {
-	if (!eventDict)
+	if (!eventDict || !eventStore)
 		return;
 	
 	
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 	if (![UtilityMethods supportsEventKit] || !eventStore) {
 		debug_NSLog(@"EventKit not available on this device");
 		return;
 	}
-			
+#endif
+	
 	NSString *chamberString = stringForChamber([[eventDict objectForKey:kCalendarEventsTypeChamberValue] integerValue], TLReturnFull); 
 	NSString *committee = [eventDict objectForKey:kCalendarEventsCommitteeNameKey];	
 	NSDate *meetingDate = [eventDict objectForKey:kCalendarEventsLocalizedDateKey];

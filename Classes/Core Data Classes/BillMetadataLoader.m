@@ -7,7 +7,7 @@
 //
 
 #import "BillMetadataLoader.h"
-#import "JSON.h"
+#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "UtilityMethods.h"
 #import "TexLegeReachability.h"
 
@@ -19,6 +19,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 
 - (id)init {
 	if (self=[super init]) {
+		updated = nil;
 		isFresh = NO;
 		_metadata = nil;
 		//[self loadMetadata:nil];
@@ -28,6 +29,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 
 - (void)dealloc {
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
+	if (updated)
+		[updated release], updated = nil;
+
 	if (_metadata)
 		[_metadata release], _metadata = nil;
 	
@@ -44,8 +48,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 }
 
 - (NSDictionary *)metadata {
-	if (!isFresh)
+	if (!isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > 3600*24)) {	// if we're over a day old, let's refresh
+		isFresh = NO;
+		debug_NSLog(@"BillMetaData is stale, need to refresh");
+		
 		[self loadMetadata:nil];
+	}
 	
 	return _metadata;
 }
@@ -72,10 +80,10 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 		debug_NSLog(@"BillMetadata: using cached metadata in the documents folder.");
 	}
 
-	NSString *jsonMenus = [NSString stringWithContentsOfFile:localPath encoding:NSUTF8StringEncoding error:&newError];
+	NSData *jsonFile = [NSData dataWithContentsOfFile:localPath];
 	if (_metadata)
 		[_metadata release];	
-	_metadata = [[NSMutableDictionary dictionaryWithDictionary:[jsonMenus JSONValue]] retain];
+	_metadata = [[jsonFile mutableObjectFromJSONData] retain];
 	if (_metadata) {
 		[[NSNotificationCenter defaultCenter] postNotificationName:kBillMetadataNotifyLoaded object:nil];
 	}
@@ -89,10 +97,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 		if (_metadata)
 			[_metadata release];	
 		
-		_metadata = [[NSMutableDictionary dictionaryWithDictionary:[response bodyAsJSON]] retain];
+		_metadata = [[response.body mutableObjectFromJSONData] retain];
 		if (_metadata) {
+			updated = [[NSDate date] retain];
 			NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillMetadataFile];
-			[_metadata writeToFile:localPath atomically:YES];	
+			if (![[_metadata JSONData] writeToFile:localPath atomically:YES])
+				NSLog(@"BillMetadataLoader: error writing cache to file: %@", localPath);
 			isFresh = YES;
 			[[NSNotificationCenter defaultCenter] postNotificationName:kBillMetadataNotifyLoaded object:nil];
 			debug_NSLog(@"BillMetadata network download successfull, archiving for others.");

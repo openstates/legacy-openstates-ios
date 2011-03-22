@@ -19,6 +19,7 @@
 @interface BillMetadataLoader : NSObject <RKRequestDelegate> {
 	NSMutableDictionary *_metadata;
 	BOOL isFresh;
+	NSDate *updated;
 }
 + (BillMetadataLoader *)sharedBillMetadataLoader;
 - (void)loadMetadata:(id)sender;

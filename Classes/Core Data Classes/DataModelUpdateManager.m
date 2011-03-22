@@ -7,7 +7,7 @@
 //
 
 #import "DataModelUpdateManager.h"
-#import "JSON.h"
+#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "UtilityMethods.h"
 #import "TexLegeReachability.h"
 #import "TexLegeCoreDataUtils.h"
@@ -129,9 +129,9 @@ enum TXL_QueryTypes {
 	NSDictionary *queryParams = nil;
 	
 	if (queryIsComplete(queryType)) 
-		[resourcePath appendFormat:@"/rest.php/%@", entityName];
+		[resourcePath appendFormat:@"/rest.php/%@/", entityName];
 	else
-		[resourcePath appendFormat:@"/rest_ids.php/%@", entityName];
+		[resourcePath appendFormat:@"/rest_ids.php/%@/", entityName];
 		
 	if (queryIsNew(queryType)) {
 		NSString *localTS = [self localDataTimestampForModel:entityName];
@@ -161,7 +161,7 @@ enum TXL_QueryTypes {
 	NSString *localTS = [self localDataTimestampForModel:entityName];
 	
 	RKObjectManager* objectManager = [RKObjectManager sharedManager];
-	NSString *resourcePath = [NSString stringWithFormat:@"/rest.php/%@", entityName];
+	NSString *resourcePath = [NSString stringWithFormat:@"/rest.php/%@/", entityName];
 	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:localTS,TXLUPDMGR_UPDATEDPARAM,nil];
 	//	http://www.texlege.com/jsonDataTest/rest.php/CommitteeObj?updated_since=2011-03-01%2017:05:13
 	
@@ -218,27 +218,12 @@ enum TXL_QueryTypes {
 	[removedItems minusSet:newSet];
 	
 	// Determine which items were added
-	NSMutableSet *addedItems = [NSMutableSet setWithSet:newSet];
-	[addedItems minusSet:existingSet];
+	//NSMutableSet *addedItems = [NSMutableSet setWithSet:newSet];
+	//[addedItems minusSet:existingSet];
 	
 	// Modify the original array
 	//[existingItemArray removeObjectsInArray:[removedItems allObjects]];
 	//[existingItemArray addObjectsFromArray:[addedItems allObjects]];
-	
-	// TESTING PURPOSES
-	/*#warning TESTING PURPOSES
-	if ([className isEqualToString:@"LegislatorObj"]) {
-		[addedItems removeObject:intToNum(116944)];		// delete jose aliseda
-		[removedItems addObject:intToNum(116944)];		// delete jose aliseda
-	}
-	else {
-		// We'd actually need to remove his staffers, district offices, wnom, etc.
-		// and make sure we remove them from the list of people to be added too.
-	}*/
-
-
-
-	
 	
 	for (NSNumber *staleObjID in removedItems) {
 		NSLog(@"DataUpdateManager: PRUNING OBJECT FROM %@: ID = %@", className, staleObjID);
@@ -254,14 +239,14 @@ enum TXL_QueryTypes {
 		NSString *statusString = [NSString stringWithFormat:@"Pruned %@", [statusBlurbsAndModels objectForKey:className]];
 		[[MTStatusBarOverlay sharedInstance] postImmediateMessage:statusString duration:1 animated:YES];
 	}	
-		
+	/* This shouldn't be necessary!  We will already have our newly added objects, if it's done right in MySQL
 	// Now we need to add any *completely* new (not just updated) objects on the server, and download accordingly
 	for (NSNumber *newObjID in addedItems) {
 		[self.activeUpdates addObject:className];
-		NSString *resourcePath = [NSString stringWithFormat:@"/rest.php/%@/%@", className, newObjID];
+		NSString *resourcePath = [NSString stringWithFormat:@"/rest.php/%@/%@/", className, newObjID];
 		[objectManager loadObjectsAtResourcePath:resourcePath objectClass:entityClass delegate:self];
 	}
-	
+	*/
 	
 }
 
@@ -368,7 +353,7 @@ enum TXL_QueryTypes {
 		NSString *path = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:@"WnomAggregateObj.json"];
 		NSString *json = [NSString stringWithContentsOfFile:path encoding:JSONDATA_ENCODING error:&error];
 		if (!error && json) {
-			NSArray *aggregates = [json JSONValue];
+			NSArray *aggregates = [json objectFromJSONString];
 			NSString *timestamp = [self localDataTimestampForArray:aggregates];
 		}
 		else {
@@ -453,7 +438,7 @@ enum TXL_QueryTypes {
 			NSLog(@"Error retrieving remote JSON data version file:%@", error);
 		}
 		if (remoteVersionString && [remoteVersionString length]) {
-			NSArray *tempArray = [remoteVersionString JSONValue];
+			NSArray *tempArray = [remoteVersionString objectFromJSONString];
 			if (!tempArray) {
 				NSLog(@"Error parsing remote json data version string: %@", remoteVersionString);
 			}

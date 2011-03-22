@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "SynthesizeSingleton.h"
-#import <RestKit/RestKit.h>
 #import <EventKit/EventKit.h>
+#import <RestKit/RestKit.h>
 
 #define kCalendarEventsNotifyError	@"CALENDAR_EVENTS_ERROR"
 #define kCalendarEventsNotifyLoaded	@"CALENDAR_EVENTS_LOADED"
 
-#define kCalendarEventsCacheFile		@"eventsCache.json"
+#define kCalendarEventsCacheFile		@"TexLegeEventsCache.plist"
 #define kTLEventKitKey					@"TLEventKit"
 #define kTLEventKitEKIDKey				@"TLEventEKID"
 #define kTLEventKitTLIDKey				@"TLEventTLID"
@@ -22,7 +22,6 @@
 
 @interface CalendarEventsLoader : NSObject <RKRequestDelegate> {
 	NSMutableArray *_events;
-	RKClient *eventApiClient;
 	BOOL isFresh;
 	NSDate *updated;
 	
@@ -34,12 +33,12 @@
 - (void)addEventToiCal:(NSDictionary *)eventDict delegate:(id)delegate;
 - (void)addAllEventsToiCal:(id)sender;
 
-@property (nonatomic, retain) RKClient *eventApiClient;
 @property (nonatomic,readonly) NSArray *events;
 @property (nonatomic) BOOL isFresh;
 
 #define kCalendarEventsIDKey				@"id"
 #define kCalendarEventsWhenKey				@"when"			// In UTC ... so subtract for local time zone
+#define kCalendarEventsEndKey				@"end"			// In UTC ... so subtract for local time zone
 #define kCalendarEventsDescriptionKey		@"description"
 #define kCalendarEventsLocationKey			@"location"
 #define kCalendarEventsTypeKey				@"type"			// we want to limit this to "committee:meeting"
