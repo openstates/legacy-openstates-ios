@@ -13,13 +13,12 @@
 #import "TexLegeAppDelegate.h"
 #import "TableDataSourceProtocol.h"
 
-#import "MiniBrowserController.h"
 #import "TexLegeTheme.h"
-#import "LegislativeAPIUtils.h"
+#import "OpenLegislativeAPIs.h"
 
 #import "BillsMenuDataSource.h"
 #import "BillSearchDataSource.h"
-#import "JSON.h"
+#import "OpenLegislativeAPIs.h"
 
 @interface BillsMasterViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
@@ -29,8 +28,6 @@
 @synthesize billSearchDS;
 
 - (void) dealloc {
-	[_requestDictionary release];
-	[_requestSenders release];
 	[super dealloc];
 }
 
@@ -52,12 +49,6 @@
 	if (!billSearchDS)
 		billSearchDS = [[[BillSearchDataSource alloc] initWithSearchDisplayController:self.searchDisplayController] retain];
 	
-	if (!_requestDictionary)
-		_requestDictionary = [[[NSMutableDictionary alloc] init] retain];
-
-	if (!_requestSenders)
-		_requestSenders = [[[NSMutableDictionary alloc] init] retain];
-
 	if ([UtilityMethods isIPadDevice])
 	    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 	
@@ -78,11 +69,6 @@
 	[billSearchDS release];
 	billSearchDS = nil;
 	
-	[_requestDictionary release];
-	_requestDictionary = nil;
-	[_requestSenders release];
-	_requestSenders = nil;
-		
 	[super viewDidUnload];
 }
 
@@ -101,7 +87,6 @@
 	
 	if ([UtilityMethods isIPadDevice])
 		[self.tableView reloadData];
-	
 }
 
 #pragma -
@@ -133,14 +118,10 @@
 				self.detailViewController = [[[BillsDetailViewController alloc] initWithNibName:@"BillsDetailViewController" bundle:nil] autorelease];
 				changingDetails = YES;
 			}
-			
-			NSString *queryString = [NSString stringWithFormat:@"%@/bills/tx/%@/%@/?%@", osApiBaseURL,
-									 [dataObject objectForKey:@"session"], 
-									 [[dataObject objectForKey:@"bill_id"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-									 osApiKey];
-			
-			[self JSONRequestWithURLString:queryString sender:self.detailViewController];	// DetailViewController get's "setDataObject" called with the results.
-			
+
+			[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:[dataObject objectForKey:@"bill_id"] 
+																			   session:[dataObject objectForKey:@"session"] 
+																			  delegate:self.detailViewController];			
 			if (isSplitViewDetail == NO) {
 				// push the detail view controller onto the navigation stack to display it				
 				[self.navigationController pushViewController:self.detailViewController animated:YES];
@@ -148,7 +129,6 @@
 			}
 			else if (changingDetails)
 				[[self.splitViewController.viewControllers objectAtIndex:1] setViewControllers:[NSArray arrayWithObject:self.detailViewController] animated:NO];
-			
 		}			
 	}
 //	WE'RE CLICKING ON ONE OF OUR STANDARD MENU ITEMS
@@ -193,10 +173,8 @@
 		[_searchString release];
 		_searchString = nil;
 	}
-	
 	if (searchString) {
 		_searchString = [searchString retain];
-		
 		if ([_searchString length] >= 3) {
 			[self.billSearchDS startSearchWithString:_searchString chamber:self.searchDisplayController.searchBar.selectedScopeButtonIndex];
 		}		
@@ -206,7 +184,7 @@
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
 	if (_searchString && [_searchString length])
-		[self.billSearchDS startSearchWithString:_searchString chamber:searchOption+1];
+		[self.billSearchDS startSearchWithString:_searchString chamber:searchOption];
 	return NO;
 }
 
@@ -233,66 +211,4 @@
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
 	////////self.dataSource.hideTableIndex = NO;
 }
-
-- (void)JSONRequestWithURLString:(NSString *)queryString sender:(id)sender {
-	//in the viewDidLoad
-		
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:queryString]];
-	NSURLConnection *newConnection = [[[NSURLConnection alloc] initWithRequest:request delegate:self] autorelease];
-	
-	NSMutableData *data = [NSMutableData data];	
-	[_requestDictionary setObject:data forKey:[newConnection description]];
-	[_requestSenders setObject:sender forKey:[newConnection description]];
-	
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	
-    [[_requestDictionary objectForKey:[connection description]] setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [[_requestDictionary objectForKey:[connection description]] appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    NSLog(@"%@", error);
-	if ([_requestDictionary objectForKey:[connection description]])
-		[_requestDictionary removeObjectForKey:[connection description]];
-
-	if ([_requestSenders objectForKey:[connection description]])
-		[_requestSenders removeObjectForKey:[connection description]];
-
-/*	if (connection) {
-		[connection release];
-		connection = nil;
-	}
-*/
-}
-
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	
-	NSMutableData *data = [_requestDictionary objectForKey:[connection description]];
-    NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-	
-	id sender = [_requestSenders objectForKey:[connection description]];
-	id object = [responseString JSONValue];
-	[responseString release];
-
-	if (sender && object) {
-		[sender performSelector:@selector(setDataObject:) withObject:object];
-	}
-	
-	if ([_requestDictionary objectForKey:[connection description]])
-		[_requestDictionary removeObjectForKey:[connection description]];
-	if ([_requestSenders objectForKey:[connection description]])
-		[_requestSenders removeObjectForKey:[connection description]];
-
-/*    [connection release];
-	connection = nil;
-*/
-}
-
-
 @end

@@ -7,7 +7,6 @@
 //
 
 #import "BillsCategoriesViewController.h"
-#import "JSON.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
@@ -65,7 +64,7 @@
 - (IBAction)refreshCategories:(NSNotificationCenter *)notification {
 	if (_CategoriesList)
 		[_CategoriesList release];
-	_CategoriesList = [[[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:kBillMetadataSubjectsKey] retain];	
+	_CategoriesList = [[[[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:kBillMetadataSubjectsKey] mutableCopy] retain];	
 	if (_CategoriesList && [_CategoriesList count]) {
 		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:kBillMetadataTitleKey ascending:YES];
 		[_CategoriesList sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];

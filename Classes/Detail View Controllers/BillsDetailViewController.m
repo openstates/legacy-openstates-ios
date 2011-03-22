@@ -16,6 +16,7 @@
 #import "MiniBrowserController.h"
 #import "LocalyticsSession.h"
 #import "NSDate+Helper.h"
+#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 
 /*
 @interface NSDictionary (ActionComparison)
@@ -99,6 +100,7 @@ enum _billSections {
 }
 
 - (void)viewDidUnload {
+	
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.	
 	self.headerView = self.descriptionView = self.statusView = nil;
 	self.lab_title = nil;
@@ -112,6 +114,8 @@ enum _billSections {
 
 
 - (void)dealloc {
+	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
+
 	self.bill = nil;
 	self.headerView = self.descriptionView = self.statusView = nil;
 	self.lab_title = nil;
@@ -572,6 +576,31 @@ enum _billSections {
 	}
 	 */
 }
+
+
+#pragma mark -
+#pragma mark RestKit:RKObjectLoaderDelegate
+
+- (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
+	if (error && request) {
+		debug_NSLog(@"BillDetail - Error loading bill results from %@: %@", [request description], [error localizedDescription]);
+#warning present an error?
+		//[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:nil];
+	}
+}
+
+
+// Handling GET /BillMetadata.json  
+- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
+	if ([request isGET] && [response isOK]) {  
+		// Success! Let's take a look at the data  
+		
+		self.bill = [response.body objectFromJSONData];
+				
+		//[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataLoaded object:nil];
+	}
+}
+
 
 @end
 

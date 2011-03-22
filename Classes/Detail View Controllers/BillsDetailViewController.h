@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <RestKit/RestKit.h>
 
 @class TableCellDataObject;
 
-@interface BillsDetailViewController : UITableViewController <UISplitViewControllerDelegate, UIPopoverControllerDelegate/*, UIWebViewDelegate*/> {
+@interface BillsDetailViewController : UITableViewController <RKRequestDelegate, UISplitViewControllerDelegate, UIPopoverControllerDelegate/*, UIWebViewDelegate*/> {
 	IBOutlet NSDictionary *bill;
 	IBOutlet UIView *headerView, *descriptionView, *statusView;
 	IBOutlet UITextView *lab_description;
