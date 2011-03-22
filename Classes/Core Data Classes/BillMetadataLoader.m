@@ -48,7 +48,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 }
 
 - (NSDictionary *)metadata {
-	if (!isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > 3600*24)) {	// if we're over a day old, let's refresh
+	if (!isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > (3600*24))) {	// if we're over a day old, let's refresh
 		isFresh = NO;
 		debug_NSLog(@"BillMetaData is stale, need to refresh");
 		
