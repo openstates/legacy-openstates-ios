@@ -197,7 +197,11 @@
 
 - (void)tableView:(UITableView *)tv accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
 	NSDictionary *eventDict = [self.chamberCalendar eventForIndexPath:indexPath];
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 	if (eventDict && [UtilityMethods supportsEventKit])
+#else
+	if (eventDict)
+#endif
 		[[CalendarEventsLoader sharedCalendarEventsLoader] addEventToiCal:eventDict delegate:self.navigationController];	
 }
 

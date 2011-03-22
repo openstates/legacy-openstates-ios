@@ -31,7 +31,9 @@
 - (void) clearAnnotationsAndOverlaysExcept:(id)annotation;
 - (void) resetMapViewWithAnimation:(BOOL)animated;
 - (BOOL) region:(MKCoordinateRegion)region1 isEqualTo:(MKCoordinateRegion)region2;
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 - (void) invalidateDistrictView;
+#endif
 @end
 
 NSInteger colorIndex;
@@ -63,6 +65,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 */
 
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 - (void) invalidateDistrictView {
 	if (districtView) {
 		if (![UtilityMethods iOSVersion4])
@@ -70,9 +73,12 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	}
 	districtView = nil;
 }
+#endif
 
 - (void) dealloc {
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 	[self invalidateDistrictView];
+#endif
 	[self.mapView removeOverlays:self.mapView.overlays];
 	[self.mapView removeAnnotations:self.mapView.annotations];
 
@@ -111,7 +117,9 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void) viewDidUnload {
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 	[self invalidateDistrictView];
+#endif
 	self.mapView = nil;
 	[super viewDidUnload];
 }
@@ -135,7 +143,9 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	self.mapView.showsUserLocation = NO;
 		
 	//if (![self isEqual:[self.navigationController.viewControllers objectAtIndex:0]])
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 	[self invalidateDistrictView];
+#endif
 	[self.mapView removeOverlays:self.mapView.overlays];
 	
 	[super viewDidDisappear:animated];
@@ -147,7 +157,9 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 - (void) clearAnnotationsAndOverlays {
 	self.mapView.showsUserLocation = NO;
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 	[self invalidateDistrictView];
+#endif
 	[self.mapView removeOverlays:self.mapView.overlays];
 	[self.mapView removeAnnotations:self.mapView.annotations];
 }
@@ -162,7 +174,9 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 			[annotes addObject:object];
 	}
 	if (annotes && [annotes count]) {
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 		[self invalidateDistrictView];
+#endif
 		[self.mapView removeOverlays:self.mapView.overlays];
 		[self.mapView removeAnnotations:annotes];
 	}
@@ -177,15 +191,15 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		[toRemove setArray:self.mapView.overlays];
 		if ([toRemove count]>1) {
 			[toRemove removeLastObject];
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 			BOOL dropMe = NO;
 			for (id <MKOverlay>overlay in toRemove) {
 				if (self.districtView && [self.districtView.overlay isEqual:overlay])
 					dropMe = YES;
-				
 			}
 			if (dropMe)
 				[self invalidateDistrictView];
-
+#endif
 			[self.mapView removeOverlays:toRemove];
 		}
 		[toRemove release];
@@ -377,7 +391,9 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		//MKPolygonView*    aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
 		MKPolygonView *aView = nil;
 
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 		[self invalidateDistrictView];
+#endif
 		aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];		
 		aView.fillColor = [/*[UIColor cyanColor]*/myColor colorWithAlphaComponent:0.2];
         aView.strokeColor = [myColor colorWithAlphaComponent:0.7];
@@ -438,8 +454,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		}
 		
 		//[self.mapView removeOverlays:self.mapView.overlays];
+#if	DISABLE_PRE_iOS4_SUPPORT == 0
 		if (!foundOne)
 			[self invalidateDistrictView];
+#endif
 		if (toRemove && [toRemove count])
 			[self.mapView performSelector:@selector(removeOverlays:) withObject:toRemove];
 
