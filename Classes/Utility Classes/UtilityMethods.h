@@ -33,6 +33,8 @@ BOOL IsEmpty(id thing);
 
 + (NSURL *)urlToMainBundle;
 + (NSString *) titleFromURL:(NSURL *)url;
++ (NSDictionary *)parametersOfQuery:(NSString *)queryString;
+
 + (NSURL *) safeWebUrlFromString:(NSString *)urlString;
 + (CapitolMap *) capitolMapFromOfficeString:(NSString *)office;
 + (CapitolMap *) capitolMapFromChamber:(NSInteger)chamber;
@@ -44,7 +46,7 @@ BOOL IsEmpty(id thing);
 + (BOOL) openURLWithoutTrepidation:(NSURL *)url;
 + (BOOL) canMakePhoneCalls;
 + (void) alertNotAPhone;
-+(NSString*)ordinalNumberFormat:(NSInteger)num;
++ (NSString*)ordinalNumberFormat:(NSInteger)num;
 
 @end
 
