@@ -160,9 +160,7 @@
 				if ([tail integerValue] > 0) {
 					isBillID = YES;
 					NSNumber *billNumber = [NSNumber numberWithInteger:[tail integerValue]];		// we specifically convolute this to ensure we're grabbing only the numerical of the string
-					
-					NSString *billSession = @"82";
-#warning hard coded session
+					NSString *billSession = [[OpenLegislativeAPIs sharedOpenLegislativeAPIs] currentSession];
 					[queryString appendFormat:@"/tx/%@/%@%%20%@", billSession, billType, billNumber];
 					
 					break;
