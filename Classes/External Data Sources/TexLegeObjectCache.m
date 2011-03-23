@@ -17,6 +17,7 @@
 #import "WnomObj.h"
 #import "LinkObj.h"
 #import "NSDate+Helper.h"
+#import "UtilityMethods.h"
 
 @implementation TexLegeObjectCache
 
@@ -41,12 +42,13 @@
 	
 	NSString *primaryKey = [modelClass primaryKeyProperty];
 
-	NSString *params = nil;
 	if (count > 1) {
-		params = [components objectAtIndex:1];
+		NSString *params = [components objectAtIndex:1];
 		if ([params hasPrefix:@"?"]) {
-			if ([params hasPrefix:@"?updated_since="]) {
-				NSString* updatedString = [[params substringFromIndex:[@"?updated_since=" length]] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+			NSDictionary *paramsDict = [UtilityMethods parametersOfQuery:[params substringFromIndex:1]];	// chop off the ?
+
+			if ([[paramsDict allKeys] containsObject:@"updated_since"]) {
+				NSString* updatedString = [[paramsDict objectForKey:@"updated_since"] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
 				NSDate *updatedDate = [NSDate dateFromString:updatedString];
 				NSFetchRequest* request = [modelClass fetchRequest];
 				NSPredicate* predicate = [NSPredicate predicateWithFormat:@"updated >= %@", updatedDate, nil];
