@@ -113,7 +113,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
 									 @"tx", @"state",
-									 osApiKeyValue, osApiKeyKey,
+									 osApiKeyValue, @"apikey",
 									 nil];
 		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/events" queryParams:queryParams delegate:self];
 	}

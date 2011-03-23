@@ -172,7 +172,7 @@
 	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 										@"session", @"search_window",
 										@"tx", @"state",
-										osApiKeyValue, osApiKeyKey,
+										osApiKeyValue, @"apikey",
 										nil];
 	
 	NSString *chamberString = stringForChamber(chamber, TLReturnOpenstatesShort);
@@ -194,7 +194,7 @@
 	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 								 @"session", @"search_window",
 								 @"tx", @"state",
-								 osApiKeyValue, osApiKeyKey,
+								 osApiKeyValue, @"apikey",
 								 nil];
 	
 	NSString *chamberString = stringForChamber(chamber, TLReturnOpenstatesShort);

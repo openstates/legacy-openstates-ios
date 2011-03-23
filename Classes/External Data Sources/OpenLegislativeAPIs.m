@@ -51,7 +51,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OpenLegislativeAPIs);
 - (void)queryOpenStatesBillWithID:(NSString *)billID session:(NSString *)session delegate:(id)sender {
 	if (IsEmpty(billID) || IsEmpty(session) || !sender || !osApiClient)
 		return;
-	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:osApiKeyValue, osApiKeyKey,nil];
+	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:osApiKeyValue, @"apikey",nil];
 	NSString *queryString = [NSString stringWithFormat:@"/bills/tx/%@/%@",session, [billID stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	[osApiClient get:queryString queryParams:queryParams delegate:sender];	
 }
@@ -63,7 +63,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OpenLegislativeAPIs);
 			[_currentSession release];
 		_currentSession = [OPENAPIS_DEFAULT_SESSION retain];
 		
-		NSDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:osApiKeyValue, osApiKeyKey,nil];
+		NSDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:osApiKeyValue, @"apikey",nil];
 		[osApiClient get:@"/metadata/tx" queryParams:queryParams delegate:self];	
 	}
 	return _currentSession;
