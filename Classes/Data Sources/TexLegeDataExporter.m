@@ -161,7 +161,7 @@
 - (void)hackyLegislatorIDs {
 	NSArray *legislators = [LegislatorObj allObjects];
 	
-	NSString *urlRoot = [NSString stringWithFormat:@"%@/entities.json?%@&search=", transApiBaseURL, osApiKey];
+	NSString *urlRoot = [NSString stringWithFormat:@"%@/entities.json?apikey=%@&search=", transApiBaseURL, osApiKeyValue];
 
 	NSMutableArray *list = [NSMutableArray array];
 	
