@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <RestKit/RestKit.h>
 
 enum ContributionQueryType {
 	kContributionQueryRecipient	= 0,
@@ -18,18 +19,16 @@ enum ContributionQueryType {
 	kContributionQueryEntitySearch,
 } ContributionQueryType;
 
-#define kContributionsDataChangeNotificationKey @"ContributionsDataChangedKey"
+#define kContributionsDataNotifyLoaded	@"ContributionsDataChangedKey"
+#define kContributionsDataNotifyError	@"ContributionsDataErrorKey"
 
-@interface LegislatorContributionsDataSource : NSObject <UITableViewDataSource> {
+@interface LegislatorContributionsDataSource : NSObject <RKRequestDelegate, UITableViewDataSource> {
 
 }
 @property (nonatomic,copy) NSString *queryCycle;
 @property (nonatomic,copy) NSString *queryEntityID;
 @property (nonatomic,copy) NSNumber * queryType;
 @property (nonatomic,retain) NSMutableArray *sectionList;
-
-@property (nonatomic,retain) NSURLConnection *urlConnection;
-@property (nonatomic,retain) NSMutableData *receivedData;
 
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *) indexPathForDataObject:(id)dataObject;

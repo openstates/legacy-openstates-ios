@@ -9,37 +9,46 @@
 #import "LegislatorContributionsDataSource.h"
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
-#import "LegislativeAPIUtils.h"
+#import "OpenLegislativeAPIs.h"
 #import "TexLegeStandardGroupCell.h"
 #import "TexLegeTheme.h"
 #import "UtilityMethods.h"
-
-#import "JSON.h"
+#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 
 @interface LegislatorContributionsDataSource(Private)
-- (void)createSectionWithData:(NSData *)jsonData;
 - (void)parseJSONObject:(id)jsonDeserialized;
-- (void)establishConnectionWithURL:(NSURL *)url;
 @end
 
-
 @implementation LegislatorContributionsDataSource
-@synthesize sectionList, queryEntityID, queryType, queryCycle, urlConnection, receivedData;
+@synthesize sectionList, queryEntityID, queryType, queryCycle;
 
 - (NSString *)title {
 	NSString *title = nil;
-	if ([self.queryType integerValue] == kContributionQueryTop10Donors)
-		title = @"Top Contributions";
-	else if ([self.queryType integerValue] == kContributionQueryTop10Recipients || [self.queryType integerValue] == kContributionQueryTop10RecipientsIndiv)
-		title = @"Top Recipients";
-	else if ([self.queryType integerValue] == kContributionQueryRecipient)
-		title = @"Recipient Details";
-	else if ([self.queryType integerValue] == kContributionQueryDonor || [self.queryType integerValue] == kContributionQueryIndividual)
-		title = @"Contributor Details";
-	else if ([self.queryType integerValue] == kContributionQueryEntitySearch)
-		title = @"Entity Search";
 	
-	if (self.queryCycle && [self.queryCycle length]) {
+	switch ([self.queryType integerValue]) {
+		case kContributionQueryTop10Donors:
+			title = @"Top Contributions";
+			break;
+		case kContributionQueryTop10Recipients:
+		case kContributionQueryTop10RecipientsIndiv:
+			title = @"Top Recipients";
+			break;
+		case kContributionQueryRecipient:
+			title = @"Recipient Details";
+			break;
+		case kContributionQueryDonor:
+		case kContributionQueryIndividual:
+			title = @"Contributor Details";
+			break;
+		case kContributionQueryEntitySearch:
+			title = @"Entity Search";
+			break;
+		default:
+			title = @"";
+			break;
+	}
+	
+	if (!IsEmpty(self.queryCycle)) {
 		NSString *year = self.queryCycle;
 		if (![year isEqualToString:@"-1"])
 			title = [NSString stringWithFormat:@"%@ %@", year, title];
@@ -52,106 +61,145 @@
 	self.queryCycle = nil;
 	self.sectionList = nil;
 	self.queryEntityID = nil;
-	[self.urlConnection cancel];
-	self.urlConnection = nil;
-	self.receivedData = nil;
 	self.queryType = nil;
 	[super dealloc];
 }
 
 #pragma mark -
-#pragma mark URL Connection
+#pragma mark UITableViewDataSource methods
+
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {	
+	if (!IsEmpty(self.sectionList))
+		return [self.sectionList count];
+	else
+		return 0;
+}
+
+// This is for the little index along the right side of the table ... use nil if you don't want it.
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+	return  nil ;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+	return index; // index ..........
+}
+
+- (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section {
+	NSInteger count = 0;
+	if (self.sectionList) {
+		NSArray *group = [self.sectionList objectAtIndex:section];
+		if (group)
+			count = [group count];
+	}
+	return count;
+}
+
+- (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+	NSString *title = @"Contributions";
+	
+	switch ([self.queryType integerValue]) {
+		case kContributionQueryRecipient:
+			title = (section == 0) ? @"Recipient Information" : @"Aggregate Contributions";
+			break;
+		case kContributionQueryDonor: 
+		case kContributionQueryIndividual:
+			title = (section == 0) ? @"Contributor Information" : @"Contributions (to everyone)";
+			break;
+		case kContributionQueryTop10Donors:
+			title = @"Biggest Contributors";
+			break;
+		case kContributionQueryTop10Recipients:
+		case kContributionQueryTop10RecipientsIndiv:
+			title = @"Biggest Recipients";
+			break;
+		case kContributionQueryEntitySearch:
+			title = @"Search Closest Matching Entity";
+			break;
+		default:
+			break;
+	}
+	return title;
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{		
+	TableCellDataObject *cellInfo = [self dataObjectForIndexPath:indexPath];
+	
+	if (cellInfo == nil) {
+		debug_NSLog(@"ContributionsDataSource: error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);
+		return nil;
+	}
+	
+	NSString *cellIdentifier = [NSString stringWithFormat:@"%@-%d", [TexLegeStandardGroupCell cellIdentifier], cellInfo.isClickable];
+	
+	/* Look up cell in the table queue */
+	UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	
+	/* Not found in queue, create a new cell object */
+    if (cell == nil) {
+		UITableViewCellStyle style;
+		
+		if (([self.queryType integerValue] == kContributionQueryTop10Donors) || 
+			([self.queryType integerValue] == kContributionQueryTop10Recipients) ||
+			([self.queryType integerValue] == kContributionQueryTop10RecipientsIndiv))
+			style = UITableViewCellStyleValue1;
+		else
+			style = [TexLegeStandardGroupCell cellStyle];
+		
+		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:style reuseIdentifier:cellIdentifier] autorelease];
+    }
+    
+	if ([cell conformsToProtocol:@protocol(TexLegeGroupCellProtocol)])
+		[cell performSelector:@selector(setCellInfo:) withObject:cellInfo];
+	
+	[cell sizeToFit];
+	[cell setNeedsDisplay];
+	return cell;
+}
+
+#pragma mark -
+#pragma mark Data Query
 
 - (void)initiateQueryWithQueryID:(NSString *)aQuery type:(NSNumber *)type cycle:(NSString *)cycle {
 	self.queryEntityID = aQuery;
 	self.queryType = type;
 	self.queryCycle = cycle;
 	
-	NSMutableString *urlMethod = [NSMutableString stringWithString:transApiBaseURL];;
-	//NSString *memberID = self.legislator.transDataContributorID;
-	if ([self.queryType integerValue] == kContributionQueryTop10Donors) {
-		// http://transparencydata.com/api/1.0/aggregates/pol/7c299471e4414887acc94f98785a90b0/contributors.json?apikey=350284d0c6af453b9b56f6c1c7fea1f9
-		[urlMethod appendFormat:@"/aggregates/pol/%@/contributors.json?cycle=%@&%@", aQuery, self.queryCycle, osApiKey];	
+	NSString *resourcePath = nil;
+	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+										osApiKeyValue, osApiKeyKey,
+										self.queryCycle, @"cycle",nil];
+	switch ([self.queryType integerValue]) {
+		case kContributionQueryEntitySearch:
+			[queryParams removeObjectForKey:@"cycle"];
+			[queryParams setObject:aQuery forKey:@"search"];	
+			resourcePath = @"/entities.json";
+			break;
+		case kContributionQueryTop10Donors:
+			resourcePath = [NSString stringWithFormat:@"/aggregates/pol/%@/contributors.json", aQuery];
+			break;
+		case kContributionQueryTop10RecipientsIndiv:
+			resourcePath = [NSString stringWithFormat:@"/aggregates/indiv/%@/recipient_pols.json", aQuery];
+			break;
+		case kContributionQueryTop10Recipients:
+			resourcePath = [NSString stringWithFormat:@"/aggregates/org/%@/recipients.json", aQuery];
+			break;
+		case kContributionQueryRecipient:
+		case kContributionQueryDonor:
+		case kContributionQueryIndividual:
+		default:
+			resourcePath = [NSString stringWithFormat:@"/entities/%@.json", aQuery];;
+			break;
 	}
-	else if ([self.queryType integerValue] == kContributionQueryTop10RecipientsIndiv) {
-		// http://transparencydata.com/api/1.0/aggregates/pol/7c299471e4414887acc94f98785a90b0/contributors.json?apikey=350284d0c6af453b9b56f6c1c7fea1f9
-		[urlMethod appendFormat:@"/aggregates/indiv/%@/recipient_pols.json?cycle=%@&%@", aQuery, self.queryCycle, osApiKey];	
-	}
-	else if ([self.queryType integerValue] == kContributionQueryTop10Recipients) {
-		//urlMethod = [NSString stringWithFormat:@"/aggregates/indiv/%@/recipient_pols.json?cycle=%@&%@", aQuery, self.queryCycle, apiKey];	
-		[urlMethod appendFormat:@"/aggregates/org/%@/recipients.json?cycle=%@&%@", aQuery, self.queryCycle, osApiKey];			
-	}
-	else if ([self.queryType integerValue] == kContributionQueryRecipient ||
-			 [self.queryType integerValue] == kContributionQueryDonor ||
-			 [self.queryType integerValue] == kContributionQueryIndividual) {
-		// http://transparencydata.com/api/1.0/entities/7c299471e4414887acc94f98785a90b0.json?apikey=350284d0c6af453b9b56f6c1c7fea1f9
-		[urlMethod appendFormat:@"/entities/%@.json?cycle=%@&%@", aQuery, self.queryCycle, osApiKey];	
-	}
-	else if ([self.queryType integerValue] == kContributionQueryEntitySearch) {
-		[urlMethod appendFormat:@"/entities.json?search=%@&%@", aQuery, osApiKey];
-	}	
-	debug_NSLog(@"Contributions URL: %@", urlMethod);
 	
-	NSURL *url = [NSURL URLWithString:urlMethod];
-	
-	if ([TexLegeReachability canReachHostWithURL:url alert:YES]) {
-		[self establishConnectionWithURL:url];
+	debug_NSLog(@"Contributions resource path: %@", resourcePath);
+	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:transApiBaseURL] alert:YES]) {
+		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] transApiClient] get:resourcePath queryParams:queryParams delegate:self];
 	}
 }
 
-
-
-- (void)establishConnectionWithURL:(NSURL *)url {
-	// Create the request.
-	NSURLRequest *theRequest=[NSURLRequest requestWithURL:url
-											  cachePolicy:NSURLRequestUseProtocolCachePolicy
-										  timeoutInterval:15.0];
-	self.urlConnection = nil;
-	self.urlConnection =[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-	if (self.urlConnection) {
-		self.receivedData = [NSMutableData data];
-	} else {
-		// Inform the user that the connection failed.
-		debug_NSLog(@"Could not establish a connection to the url: %@", url);
-	}	
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-    // This method is called when the server has determined that it
-    // has enough information to create the NSURLResponse.
-    // It can be called multiple times, for example in the case of a
-    // redirect, so each time we reset the data.
-	
-    [self.receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    // Append the new data to receivedData.
-    [self.receivedData appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    [connection release];
-    self.receivedData = nil;
-	
-    NSLog(@"Connection failed! Error - %@ %@",
-          [error localizedDescription],
-          [[error userInfo] description]);
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-	NSString *jsonString = [[NSString alloc] initWithBytes:self.receivedData.bytes length:self.receivedData.length encoding:NSUTF8StringEncoding];	
-	id jsonDeserialized = [jsonString JSONValue];
-	[jsonString release];
-	[connection release];
-	self.receivedData = nil;
-	
-	[self parseJSONObject:jsonDeserialized];
-}
 
 - (void)parseJSONObject:(id)jsonDeserialized {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -187,9 +235,6 @@
 				//valueKey = @"total_given";
 				action = [NSNumber numberWithInteger:kContributionQueryIndividual];
 			}
-			
-			//double tempDouble = [[dict objectForKey:valueKey] doubleValue];
-			//NSNumber *amount = [NSNumber numberWithDouble:tempDouble];
 			
 			TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
 			cellInfo.title = [dict valueForKey:@"name"];
@@ -327,10 +372,8 @@
 			 [self.queryType integerValue] == kContributionQueryIndividual )
 	{
 		NSDictionary *jsonDict = jsonDeserialized;
-		
-		// info and body
+
 		[self.sectionList removeAllObjects];
-				
 		NSMutableArray *thisSection = nil;
 		
 		NSDictionary *totals = [jsonDict objectForKey:@"totals"];
@@ -350,25 +393,12 @@
 		[self.sectionList addObject:thisSection];
 		[cellInfo release];
 		
-		/*if ([self.queryType integerValue]== kContributionQueryRecipient) {
-			cellInfo = [[TableCellDataObject alloc] init];
-			cellInfo.subtitle = @"Total";
-			cellInfo.title = @"Top 10 Contributors";
-			cellInfo.entryValue = [jsonDict objectForKey:@"id"];
-			cellInfo.entryType = kContributionQueryTop10Contributors;
-			cellInfo.isClickable = YES;
-			thisSection = [NSMutableArray arrayWithObject:cellInfo];
-			[self.sectionList addObject:thisSection];
-			[cellInfo release];
-		}
-		*/		
 		thisSection = [[NSMutableArray alloc] init];
 		NSString *amountKey = ([self.queryType integerValue] == kContributionQueryRecipient) ? @"recipient_amount" : @"contributor_amount";
-		//NSString *countKey = ([self.queryType integerValue] == kContributionQueryRecipient) ? @"recipient_count" : @"contributor_count";
+
 		for (NSString *yearKey in [yearKeys reverseObjectEnumerator]) {			
 			NSDictionary *dict = [totals objectForKey:yearKey];
 			
-			//NSNumber *numContribs = [dict objectForKey:countKey];
 			double tempDouble = [[dict objectForKey:amountKey] doubleValue];
 			NSNumber *amount = [NSNumber numberWithDouble:tempDouble];
 			
@@ -387,7 +417,6 @@
 			else
 				cellInfo.action = [NSNumber numberWithInteger:kContributionQueryTop10Recipients];
 			
-			
 			if ([yearKey isEqualToString:@"-1"]) {
 				cellInfo.subtitle = @"Total";
 				//cellInfo.entryType = kContributionTotal;
@@ -395,23 +424,15 @@
 			}
 
 			[thisSection addObject:cellInfo];
-			
 			[cellInfo release];
-			
 		}
-		
 		
 		[self.sectionList addObject:thisSection];
 		[thisSection release];
-		
 	}
 	
 	[numberFormatter release];
-	
 	[pool drain];
-
-	[[NSNotificationCenter defaultCenter] postNotificationName:kContributionsDataChangeNotificationKey object:self];
-
 }
 
 
@@ -446,127 +467,27 @@
 }
 
 
-
 #pragma mark -
-#pragma mark UITableViewDataSource methods
+#pragma mark RestKit:RKObjectLoaderDelegate
 
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {	
-	NSInteger count = 0;
-	if (self.sectionList)
-		count = [self.sectionList count];
-	return count;
-}
-
-// This is for the little index along the right side of the table ... use nil if you don't want it.
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-	return  nil ;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
-	return index; // index ..........
-}
-
-- (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section {
-	NSInteger count = 0;
-	if (self.sectionList) {
-		NSArray *group = [self.sectionList objectAtIndex:section];
-		if (group)
-			count = [group count];
+- (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
+	if (error && request) {
+		debug_NSLog(@"ContributionsDataSource - Error loading from %@: %@", [request description], [error localizedDescription]);
+		[[NSNotificationCenter defaultCenter] postNotificationName:kContributionsDataNotifyError object:nil];
 	}
-	return count;
 }
 
-- (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
-	NSString *title = @"Contributions";
-	
-	switch ([self.queryType integerValue]) {
-		case kContributionQueryRecipient: {
-			switch (section) {
-				case 0:
-					title = @"Recipient Information";
-					break;
-				case 1:
-/*					title = @"Contributor Details";
-					break;
-				case 2:
-*/				default:
-					title = @"Aggregate Contributions";
-					break;
-			}
-		}
-			break;
-		case kContributionQueryDonor: 
-		case kContributionQueryIndividual:
-		{
-			switch (section) {
-				case 0:
-					title = @"Contributor Information";
-					break;
-				case 1:
-					title = @"Contributions (to everyone)";
-					break;
-			}
-		}
-			break;
-		case kContributionQueryTop10Donors:
-			title = @"Biggest Contributors";
-			break;
-		case kContributionQueryTop10Recipients:
-		case kContributionQueryTop10RecipientsIndiv:
-			title = @"Biggest Recipients";
-			break;
-		case kContributionQueryEntitySearch:
-			title = @"Search Closest Matching Entity";
-			break;
-		default:
-			break;
+- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
+	if ([request isGET] && [response isOK]) {  
+		// Success! Let's take a look at the data  
+
+		id jsonDeserialized = [response.body mutableObjectFromJSONDataWithParseOptions:(JKParseOptionUnicodeNewlines & JKParseOptionLooseUnicode)];
+		if (IsEmpty(jsonDeserialized))
+			return;
+		
+		[self parseJSONObject:jsonDeserialized];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kContributionsDataNotifyLoaded object:self];
 	}
-
-	return title;
-}
-
-
-
-
-- (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{		
-	
-	TableCellDataObject *cellInfo = [self dataObjectForIndexPath:indexPath];
-	
-	if (cellInfo == nil) {
-		debug_NSLog(@"LegislatorContributionsDataSource:cellForRow: error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);
-		return nil;
-	}
-	
-	NSString *cellIdentifier = [NSString stringWithFormat:@"%@-%d", [TexLegeStandardGroupCell cellIdentifier], cellInfo.isClickable];
-	
-	/* Look up cell in the table queue */
-	UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
-	
-	/* Not found in queue, create a new cell object */
-    if (cell == nil) {
-		UITableViewCellStyle style;
-		
-		if (([self.queryType integerValue] == kContributionQueryTop10Donors) || 
-			([self.queryType integerValue] == kContributionQueryTop10Recipients) ||
-			([self.queryType integerValue] == kContributionQueryTop10RecipientsIndiv))
-			style = UITableViewCellStyleValue1;
-		else
-			style = [TexLegeStandardGroupCell cellStyle];
-		
-		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:style reuseIdentifier:cellIdentifier] autorelease];
-    }
-    
-	if ([cell conformsToProtocol:@protocol(TexLegeGroupCellProtocol)])
-		[cell performSelector:@selector(setCellInfo:) withObject:cellInfo];
-	
-		
-	[cell sizeToFit];
-	[cell setNeedsDisplay];
-	
-	return cell;
-	
 }
 
 
