@@ -48,7 +48,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 }
 
 - (NSDictionary *)metadata {
-	if (!isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > (3600*24))) {	// if we're over a day old, let's refresh
+	if (!_metadata || !isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > (3600*24))) {	// if we're over a day old, let's refresh
 		isFresh = NO;
 		debug_NSLog(@"BillMetaData is stale, need to refresh");
 		
@@ -90,7 +90,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 }
 
 
-// Handling GET /BillMetadata.json  
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data  
@@ -99,6 +98,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 		
 		_metadata = [[response.body mutableObjectFromJSONData] retain];
 		if (_metadata) {
+			if (updated)
+				[updated release];
 			updated = [[NSDate date] retain];
 			NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillMetadataFile];
 			if (![[_metadata JSONData] writeToFile:localPath atomically:YES])

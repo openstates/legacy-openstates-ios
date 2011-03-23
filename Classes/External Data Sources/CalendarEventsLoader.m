@@ -120,13 +120,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 }
 
 - (NSArray*)events {
-	if (!isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > 1800)) {	// if we're over a half-hour old, let's refresh
+	if (!_events || !isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > 1800)) {	// if we're over a half-hour old, let's refresh
 		isFresh = NO;
 		debug_NSLog(@"CalendarEventsLoader is stale, need to refresh");
 		
 		[self loadEvents:nil];
 	}
-	
 	return _events;
 }
 
@@ -159,7 +158,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 }
 
 
-// Handling GET /BillMetadata.json  
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data  
@@ -185,6 +183,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 				NSLog(@"CalendarEventsLoader: Error writing event cache to file: %@", thePath);
 			
 			isFresh = YES;
+			if (updated)
+				[updated release];
 			updated = [[NSDate date] retain];
 						
 			[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyLoaded object:nil];
