@@ -36,7 +36,7 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 		
-	NSString *myClass = [[self class] description];
+	NSString *myClass = NSStringFromClass([self class]);
 	NSArray *menuArray = [UtilityMethods texLegeStringWithKeyPath:@"BillMenuItems"];
 	NSDictionary *menuItem = [menuArray findWhereKeyPath:@"class" equals:myClass];
 	

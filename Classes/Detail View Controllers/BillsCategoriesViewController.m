@@ -40,7 +40,7 @@
 
 	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"TexLegeStrings" ofType:@"plist"];
 	NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
-	NSString *myClass = [[self class] description];
+	NSString *myClass = NSStringFromClass([self class]);
 	NSDictionary *menuItem = [[textDict objectForKey:@"BillMenuItems"] findWhereKeyPath:@"class" equals:myClass];
 	
 	if (menuItem)
