@@ -279,6 +279,28 @@ BOOL IsEmpty(id thing) {
 	return canOpenURL;
 }
 
++ (NSDictionary *)parametersOfQuery:(NSString *)queryString
+{
+	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    
+    // Handle & or ; as separators, as per W3C recommendation
+    NSCharacterSet *seperatorChars = [NSCharacterSet characterSetWithCharactersInString:@"&;"];
+	NSArray *keyValues = [queryString componentsSeparatedByCharactersInSet:seperatorChars];
+	NSEnumerator *theEnum = [keyValues objectEnumerator];
+	NSString *keyValuePair;
+	
+	while (nil != (keyValuePair = [theEnum nextObject]) )
+	{
+		NSRange whereEquals = [keyValuePair rangeOfString:@"="];
+		if (NSNotFound != whereEquals.location)
+		{
+			NSString *key = [keyValuePair substringToIndex:whereEquals.location];
+			NSString *value = [[keyValuePair substringFromIndex:whereEquals.location+1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+			[result setValue:value forKey:key];
+		}
+	}
+	return result;
+}
 
 #pragma mark -
 #pragma mark Maps and Map Files
