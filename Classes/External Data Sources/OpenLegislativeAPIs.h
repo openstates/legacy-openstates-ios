@@ -20,11 +20,19 @@ static NSString *transApiBaseURL =	@"http://transparencydata.com/api/1.0";
 static NSString *vsApiBaseURL =		@"http://api.votesmart.org";
 static NSString *vsApiKey =			@"key=5fb3b476c47fcb8a21dc2ec22ca92cbb&stateId=TX&o=JSON";
 
-@interface OpenLegislativeAPIs : NSObject {
+@interface OpenLegislativeAPIs : NSObject <RKRequestDelegate> {
 	RKClient *osApiClient;	
+	RKClient *transApiClient;
+	NSString *_currentSession;
+	NSMutableDictionary *_osMetadata;
+	NSDate *updated;
+	BOOL isFresh;
 }
 + (OpenLegislativeAPIs *)sharedOpenLegislativeAPIs;
 @property (nonatomic, retain) RKClient *osApiClient;
+@property (nonatomic, retain) RKClient *transApiClient;
+@property (nonatomic, readonly) NSString *currentSession;
+@property (nonatomic, readonly) NSMutableDictionary *osMetadata;
 
 - (void)queryOpenStatesBillWithID:(NSString *)billID session:(NSString *)session delegate:(id)sender;
 
