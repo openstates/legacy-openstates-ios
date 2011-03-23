@@ -48,7 +48,7 @@
 	if (!self.dataSource)
 		self.dataSource = [[[LegislatorContributionsDataSource alloc] init] autorelease];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contributionDataChanged:) name:kContributionsDataChangeNotificationKey object:self.dataSource];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contributionDataChanged:) name:kContributionsDataNotifyLoaded object:self.dataSource];
 	self.tableView.dataSource = self.dataSource;
 	
 	UILabel *nimsp = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 66)] autorelease];
@@ -65,7 +65,7 @@
 
 
 - (void)viewDidUnload {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:kContributionsDataChangeNotificationKey object:self.dataSource];	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:kContributionsDataNotifyLoaded object:self.dataSource];	
 	self.dataSource = nil;
 }
 
