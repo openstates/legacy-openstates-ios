@@ -245,7 +245,7 @@
 	
 	NSDictionary *item = [_watchList objectAtIndex:indexPath.row];
 	if (item && [item objectForKey:@"watchID"]) {
-		NSDictionary *bill = [_cachedBills objectForKey:[item objectForKey:@"watchID"]];
+		NSMutableDictionary *bill = [_cachedBills objectForKey:[item objectForKey:@"watchID"]];
 		if (bill) {
 			BOOL changingViews = NO;
 			
@@ -304,7 +304,7 @@
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data  
 		
-		NSDictionary *object = [response.body objectFromJSONData];
+		NSMutableDictionary *object = [response.body mutableObjectFromJSONData];
 		if (object && _cachedBills) {
 			NSString *watchID = [self watchIDForBill:object];
 			[_cachedBills setObject:object forKey:watchID];

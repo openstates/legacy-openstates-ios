@@ -12,7 +12,7 @@
 @class TableCellDataObject;
 
 @interface BillsDetailViewController : UITableViewController <RKRequestDelegate, UISplitViewControllerDelegate, UIPopoverControllerDelegate/*, UIWebViewDelegate*/> {
-	IBOutlet NSDictionary *bill;
+	IBOutlet NSMutableDictionary *bill;
 	IBOutlet UIView *headerView, *descriptionView, *statusView;
 	IBOutlet UITextView *lab_description;
 	IBOutlet UILabel *lab_title;
@@ -30,7 +30,7 @@
 
 
 @property (nonatomic,retain) UIPopoverController *masterPopover;
-@property (nonatomic,retain) IBOutlet NSDictionary *bill;
+@property (nonatomic,retain) IBOutlet NSMutableDictionary *bill;
 
 - (IBAction)resetTableData:(id)sender;
 
