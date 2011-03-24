@@ -13,11 +13,11 @@
 #import "TexLegeReachability.h"
 #import "BillsListDetailViewController.h"
 #import "BillSearchDataSource.h"
-#import "TexLegeStandardGroupCell.h"
+#import "TexLegeBadgeGroupCell.h"
 #import "BillMetadataLoader.h"
 
 @interface BillsCategoriesViewController (Private)
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+- (void)configureCell:(TexLegeBadgeGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @implementation BillsCategoriesViewController
@@ -57,7 +57,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
-	[self.tableView reloadData];
+//	[self.tableView reloadData];
 }
 
 
@@ -65,7 +65,7 @@
 	if (_CategoriesList)
 		[_CategoriesList release];
 	_CategoriesList = [[[[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:kBillMetadataSubjectsKey] mutableCopy] retain];	
-	if (_CategoriesList && [_CategoriesList count]) {
+	if (!IsEmpty(_CategoriesList)) {
 		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:kBillMetadataTitleKey ascending:YES];
 		[_CategoriesList sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
 		[sortDescriptor release];	
@@ -82,13 +82,23 @@
 	[super viewDidUnload];
 }
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+- (void)configureCell:(TexLegeBadgeGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
 	BOOL useDark = (indexPath.row % 2 == 0);
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	NSDictionary *category = [_CategoriesList objectAtIndex:indexPath.row];
-	cell.detailTextLabel.text = [category objectForKey:kBillMetadataTitleKey];
-	cell.textLabel.text = [NSString stringWithFormat:@"Approx. %@ Bills", [category objectForKey:kBillMetadataSubjectsCountKey]];
+	//cell.detailTextLabel.text = [category objectForKey:kBillMetadataTitleKey];
+	//cell.textLabel.text = [NSString stringWithFormat:@"Approx. %@ Bills", [category objectForKey:kBillMetadataSubjectsCountKey]];
+	
+	BOOL clickable = [[category objectForKey:kBillMetadataSubjectsCountKey] integerValue] > 0;
+	NSDictionary *cellDict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  [category objectForKey:kBillMetadataSubjectsCountKey], @"entryValue",
+							  [NSNumber numberWithBool:clickable], @"isClickable",
+							  [category objectForKey:kBillMetadataTitleKey], @"title",
+							  nil];
+	TableCellDataObject *cellInfo = [[TableCellDataObject alloc] initWithDictionary:cellDict];
+	cell.cellInfo = cellInfo;
+	[cellInfo release];
 }
 
 #pragma mark -
@@ -106,7 +116,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if (_CategoriesList && [_CategoriesList count])
+	if (!IsEmpty(_CategoriesList))
 		return [_CategoriesList count];
 	else
 		return 0;
@@ -114,16 +124,16 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	NSString *CellIdentifier = [TexLegeStandardGroupCell cellIdentifier];
+	NSString *CellIdentifier = [TexLegeBadgeGroupCell cellIdentifier];
 		
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	TexLegeBadgeGroupCell *cell = (TexLegeBadgeGroupCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil)
 	{
-		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:UITableViewCellStyleSubtitle 
+		cell = [[[TexLegeBadgeGroupCell alloc] initWithStyle:UITableViewCellStyleSubtitle 
 									   reuseIdentifier:CellIdentifier] autorelease];		
     }
 	
-	if (_CategoriesList && [_CategoriesList count])
+	if (!IsEmpty(_CategoriesList))
 		[self configureCell:cell atIndexPath:indexPath];		
 	
 	return cell;
@@ -139,7 +149,8 @@
 	NSDictionary *item = [_CategoriesList objectAtIndex:indexPath.row];
 	if (item && [item objectForKey:kBillMetadataTitleKey]) {
 		NSString *cat = [item objectForKey:kBillMetadataTitleKey];
-		if (cat) {
+		NSInteger count = [[item objectForKey:kBillMetadataSubjectsCountKey] integerValue];
+		if (cat && count) {
 			BillsListDetailViewController *catResultsView = [[[BillsListDetailViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
 			BillSearchDataSource *dataSource = [catResultsView valueForKey:@"dataSource"];
 			catResultsView.title = cat;
