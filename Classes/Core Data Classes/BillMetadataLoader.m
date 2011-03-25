@@ -10,7 +10,7 @@
 #import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "UtilityMethods.h"
 #import "TexLegeReachability.h"
-
+#import "OpenLegislativeAPIs.h"
 
 @implementation BillMetadataLoader
 SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
@@ -88,7 +88,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 		[[NSNotificationCenter defaultCenter] postNotificationName:kBillMetadataNotifyLoaded object:nil];
 	}
 }
-
 
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
 	if ([request isGET] && [response isOK]) {  

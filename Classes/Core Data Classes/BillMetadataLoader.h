@@ -30,10 +30,7 @@
 #define kBillMetadataUpdatedKey @"updated"
 #define kBillMetadataContentsKey @"contents"
 #define kBillMetadataTypesKey @"types"
-#define kBillMetadataSubjectsKey @"subjects"
-#define kBillMetadataIDKey @"id"
 #define kBillMetadataTitleKey @"title"
-#define kBillMetadataSubjectsCountKey @"count"
 
 /* metdata contains the following:*
 {
@@ -45,11 +42,6 @@
 		 { "id":3,"title":"HJR"},
 		 ...
 		 ],
-	"subjects": [
-		 {"id":1,"title":"Agriculture and Food","count":155},
-		 {"id":2,"title":"Animal Rights and Wildlife Issues","count":101},
-		 ...
-		]
 }
 */
 

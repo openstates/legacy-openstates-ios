@@ -96,7 +96,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OpenLegislativeAPIs);
 			
 		NSMutableDictionary *sessions = [_osMetadata objectForKey:@"session_details"];
 		
-		NSLog(@"%@", sessions);
+//		NSLog(@"%@", sessions);
 		
 		NSString *maxdate = @"1969-01-01 00:00:00";
 		NSString *maxsession = nil;
