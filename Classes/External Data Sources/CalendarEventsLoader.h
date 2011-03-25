@@ -43,18 +43,21 @@
 #define kCalendarEventsLocationKey			@"location"
 #define kCalendarEventsTypeKey				@"type"			// we want to limit this to "committee:meeting"
 #define kCalendarEventsSourceURLKeyPath		@"sources.url"
-#define kCalendarEventsAnnouncementURLKey	@"+link"
+#define kCalendarEventsAnnouncementURLKey	@"link"
+#define kCalendarEventsNotesKey				@"notes"		// holdes the ascii text of the announcement
 
 #define kCalendarEventsLocalizedDateKey				@"date"			// NSDate in local time zone
 #define kCalendarEventsLocalizedDateStringKey		@"dateString"	// 12/31/11
 #define kCalendarEventsLocalizedTimeStringKey		@"timeString"	// 12:31pm
-#define kCalendarEventsUnknownTimeKey				@"unknownTime"	// BOOL = true if we can't parse a time from the header
+#define kCalendarEventsAllDayKey					@"all_day"		// BOOL = true if we can't parse a time from the header
 #define kCalendarEventsCanceledKey					@"canceled"		// BOOL = true if the event has been cancelled
+#define kCalendarEventsStatusKey					@"status"		// BOOL = true if the event has been cancelled
 
 #define kCalendarEventsParticipantsKey			@"participants"			//Array of participant dictionaries
 #define kCalendarEventsParticipantNameKey		@"participant"			//name of the participant
 #define kCalendarEventsParticipantTypeKey		@"type"					//name of the participant
 #define kCalendarEventsParticipantNameKeyPath	@"participants.participant"	// assuming type = "committee:meeting"
+#define kCalendarEventsParticipantChamberKeyPath @"participants.chamber"	// assuming type = "committee:meeting"
 #define kCalendarEventsParticipantTypeKeyPath	@"participants.type"	// assuming type = "committee:meeting"
 #define kCalendarEventsCommitteeNameKey			@"committee"			//simplified access to participants name in case of committees
 #define kCalendarEventsTypeCommitteeValue		@"committee:meeting"

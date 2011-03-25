@@ -80,25 +80,27 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 	NSString *committeeString = [NSString stringWithFormat:@"%@ %@", chamberString, [event objectForKey:kCalendarEventsCommitteeNameKey]];
 	
 	NSString *time = [event objectForKey:kCalendarEventsLocalizedTimeStringKey];
-	if (IsEmpty(time) || [[event objectForKey:kCalendarEventsUnknownTimeKey] boolValue])
-		time = @"(?)";
+	if (IsEmpty(time) || [[event objectForKey:kCalendarEventsAllDayKey] boolValue]) {
+		NSRange loc = [[event objectForKey:kCalendarEventsNotesKey] rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]];
+		if (loc.location != NSNotFound && loc.length > 0) {
+			time = [[event objectForKey:kCalendarEventsNotesKey] substringToIndex:loc.location];
+		}
+		else {
+			time = [event objectForKey:kCalendarEventsNotesKey];
+		}
+
+	}
 		
 	NSString *timeLoc = [NSString stringWithFormat:@"Time: %@ - Place: %@", time, [event objectForKey:kCalendarEventsLocationKey]]; 
-
-//	else
-//		timeLoc = [event objectForKey:@"rawDateTime"];
 
 	cell.textLabel.text = [NSString stringWithFormat:@"%@\n %@", committeeString, timeLoc];
 	
 	
 	if ([[event objectForKey:kCalendarEventsCanceledKey] boolValue] == YES)
-		cell.textLabel.text = [cell.textLabel.text stringByAppendingString:@" (Cancelled)"];
+		cell.textLabel.text = [cell.textLabel.text stringByAppendingString:@" (Canceled)"];
 	
 	
-#if	DISABLE_PRE_iOS4_SUPPORT == 0
-	if ([UtilityMethods supportsEventKit])
-#endif
-		cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+	cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
 	
 	return cell;
 }

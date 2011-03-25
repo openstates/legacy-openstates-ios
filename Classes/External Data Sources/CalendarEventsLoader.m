@@ -58,9 +58,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 
 		[OpenLegislativeAPIs sharedOpenLegislativeAPIs];
 		
-#if	DISABLE_PRE_iOS4_SUPPORT == 0
-		if ([UtilityMethods supportsEventKit]) {
-#endif
 			eventStore = [[[EKEventStore alloc] init] retain];
 			[eventStore defaultCalendarForNewEvents];
 
@@ -82,9 +79,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 			}
 			*/
 
-#if	DISABLE_PRE_iOS4_SUPPORT == 0
-		}
-#endif
 	}
 	return self;
 }
@@ -96,14 +90,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 	if (_events)
 		[_events release], _events = nil;
 	
-#if	DISABLE_PRE_iOS4_SUPPORT == 0
-	if ([UtilityMethods supportsEventKit]) {
-#endif
 		if (eventStore)
 			[eventStore release], eventStore = nil;
-#if	DISABLE_PRE_iOS4_SUPPORT == 0
-	}
-#endif
 	[super dealloc];
 }
 
@@ -172,15 +160,29 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 		if (allEvents) {
 			_events = [[[NSMutableArray alloc] init] retain];
 			for (NSDictionary *event in allEvents) {
-				[_events addObject:[self parseEvent:event]];
+				NSString *when = [event objectForKey:kCalendarEventsWhenKey];
+				NSInteger daysAgo = [[NSDate dateFromTimestampString:when] daysAgo];
+				if (daysAgo < 5) {
+					NSMutableDictionary *newEvent = [self parseEvent:event];
+					NSArray *tempKeys = [newEvent allKeys];
+					for (NSString *key in tempKeys) {
+						id value = [newEvent objectForKey:key];
+						if ([[NSNull null] isEqual:value]) {
+							[newEvent removeObjectForKey:key];
+						}
+					}
+					[_events addObject:newEvent];
+				}
+					
 			}
 			[_events sortUsingFunction:sortByDate context:nil];
 
 			NSString *thePath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
 			///NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
 			//NSFileManager *fileManager = [NSFileManager defaultManager];
-			if (![_events writeToFile:thePath atomically:YES])
+			if (![_events writeToFile:thePath atomically:YES]) {
 				NSLog(@"CalendarEventsLoader: Error writing event cache to file: %@", thePath);
+			}
 			
 			isFresh = YES;
 			if (updated)
@@ -200,61 +202,44 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 - (NSMutableDictionary *)parseEvent:(NSDictionary *)inEvent {
 	NSMutableDictionary *loadedEvent = [NSMutableDictionary dictionaryWithDictionary:inEvent];
 	
-	id sourcePath = [loadedEvent valueForKeyPath:kCalendarEventsSourceURLKeyPath];
-	NSString *sourceURL = nil;
-	if ([sourcePath isKindOfClass:[NSArray class]])
-		sourceURL = [sourcePath objectAtIndex:0];
-	else if ([sourcePath isKindOfClass:[NSString class]])
-		sourceURL = sourcePath;
-	
-	for (NSInteger eventChamber = HOUSE; eventChamber<=JOINT; eventChamber++) {
-		NSString *guessString = [stringForChamber(eventChamber, TLReturnFull) lowercaseString];
-		if ([sourceURL hasSuffix:guessString]) {
-			[loadedEvent setObject:[NSNumber numberWithInt:eventChamber] forKey:kCalendarEventsTypeChamberValue];
-			break;
-		}
-	}
 				
 	if ([[NSNull null] isEqual:[loadedEvent objectForKey:kCalendarEventsEndKey]])
 		[loadedEvent removeObjectForKey:kCalendarEventsEndKey];
+	if ([[NSNull null] isEqual:[loadedEvent objectForKey:kCalendarEventsNotesKey]])
+		[loadedEvent setObject:@"" forKey:kCalendarEventsNotesKey];
+
 		
-	BOOL unknownTime = YES;
 	NSString *when = [loadedEvent objectForKey:kCalendarEventsWhenKey];
-	if (when) {
-		NSDate *utcDate = [NSDate dateFromTimestampString:when];
-		NSDate *localDate = [NSDate dateFromDate:utcDate fromTimeZone:@"UTC"];
+	NSDate *utcDate = [NSDate dateFromTimestampString:when];
+	NSDate *localDate = [NSDate dateFromDate:utcDate fromTimeZone:@"UTC"];
+	
+	// Set the date and time, and pre-format our strings
+	if (localDate) {
+		[loadedEvent setObject:localDate forKey:kCalendarEventsLocalizedDateKey];
 		
-		unknownTime = ([when hasSuffix:@"00:00:00"] || [utcDate equalsDefaultDate] || [localDate equalsDefaultDate]);
+		NSString *dateString = [localDate stringWithDateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterNoStyle];
+		if (dateString)
+			[loadedEvent setObject:dateString forKey:kCalendarEventsLocalizedDateStringKey];
 		
-		if (localDate) {
-			[loadedEvent setObject:localDate forKey:kCalendarEventsLocalizedDateKey];
-			
-			NSString *dateString = [localDate stringWithDateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterNoStyle];
-			if (dateString)
-				[loadedEvent setObject:dateString forKey:kCalendarEventsLocalizedDateStringKey];
-			
-			NSString *timeString = [localDate stringWithDateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
-			if (timeString) {
-				if ([timeString isEqualToString:@"12:00am"])
-					unknownTime = YES;
-				[loadedEvent setObject:timeString forKey:kCalendarEventsLocalizedTimeStringKey];
-			}
+		NSString *timeString = [localDate stringWithDateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+		if (timeString) {
+			[loadedEvent setObject:timeString forKey:kCalendarEventsLocalizedTimeStringKey];
 		}
 	}
-	[loadedEvent setObject:[NSNumber numberWithBool:unknownTime] forKey:kCalendarEventsUnknownTimeKey];
 	
 	NSArray *participants = [loadedEvent objectForKey:kCalendarEventsParticipantsKey];
 	if (participants) {
 		NSDictionary *participant = [participants findWhereKeyPath:kCalendarEventsParticipantTypeKey equals:@"committee"];
-		if (participant)
+		if (participant) {
 			[loadedEvent setObject:[participant objectForKey:kCalendarEventsParticipantNameKey] forKey:kCalendarEventsCommitteeNameKey];
+			
+			NSString * chamberString = [participant objectForKey:kCalendarEventsTypeChamberValue];
+			if (!IsEmpty(chamberString))
+				[loadedEvent setObject:[NSNumber numberWithInteger:chamberForString(chamberString)] forKey:kCalendarEventsTypeChamberValue];
+		}
 	}
-	
-	NSString *description = [loadedEvent objectForKey:kCalendarEventsDescriptionKey];
-	
-	BOOL canceled = NO;
-	if (description && [description hasSubstring:@"(canceled)" caseInsensitive:YES])
-		canceled = YES;
+		
+	BOOL canceled = ([[loadedEvent objectForKey:kCalendarEventsStatusKey] isEqualToString:kCalendarEventsCanceledKey]);
 	[loadedEvent setObject:[NSNumber numberWithBool:canceled] forKey:kCalendarEventsCanceledKey];
 	
 	return loadedEvent;
@@ -267,7 +252,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 	if (chamber == BOTH_CHAMBERS)
 		return _events;
 	else
-		return [_events findAllWhereKeyPath:@"chamber" equals:[NSNumber numberWithInteger:chamber]];
+		return [_events findAllWhereKeyPath:kCalendarEventsTypeChamberValue equals:[NSNumber numberWithInteger:chamber]];
 }
 
 
@@ -334,12 +319,14 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 	
 	event.title     = chamberCommitteeString;
 	if ([[eventDict objectForKey:kCalendarEventsCanceledKey] boolValue] == YES)
-		event.title = [NSString stringWithFormat:@"%@ (CANCELLED)", event.title];
+		event.title = [NSString stringWithFormat:@"%@ (CANCELED)", event.title];
 	
 	event.location = [eventDict objectForKey:kCalendarEventsLocationKey];
 	
 	event.notes = @"[TexLege] Length of this meeting is only an estimate.";
-	if (NO == IsEmpty([eventDict objectForKey:kCalendarEventsAnnouncementURLKey])) {
+	if (NO == IsEmpty([eventDict objectForKey:kCalendarEventsNotesKey]))
+		event.notes = [eventDict objectForKey:kCalendarEventsNotesKey];
+	else if (NO == IsEmpty([eventDict objectForKey:kCalendarEventsAnnouncementURLKey])) {
 		NSURL *url = [NSURL URLWithString:[eventDict objectForKey:kCalendarEventsAnnouncementURLKey]];
 		if ([TexLegeReachability canReachHostWithURL:url alert:NO]) {
 			NSError *error = nil;
@@ -352,7 +339,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 		}
 	}
 	
-	if (!meetingDate || [[eventDict objectForKey:kCalendarEventsUnknownTimeKey] boolValue]) {
+	if (!meetingDate || [[eventDict objectForKey:kCalendarEventsAllDayKey] boolValue]) {
 		debug_NSLog(@"Calendar Detail ... don't know the complete event time/date");
 		event.allDay = YES; 
 		if ([eventDict objectForKey:kCalendarEventsLocalizedDateKey]) {
