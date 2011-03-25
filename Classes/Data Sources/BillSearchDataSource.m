@@ -175,7 +175,7 @@
 										osApiKeyValue, @"apikey",
 										nil];
 	
-	NSString *chamberString = stringForChamber(chamber, TLReturnOpenstatesShort);
+	NSString *chamberString = stringForChamber(chamber, TLReturnOpenStates);
 	if (!IsEmpty(chamberString)) {
 		[queryParams setObject:chamberString forKey:@"chamber"];
 	}
@@ -197,7 +197,7 @@
 								 osApiKeyValue, @"apikey",
 								 nil];
 	
-	NSString *chamberString = stringForChamber(chamber, TLReturnOpenstatesShort);
+	NSString *chamberString = stringForChamber(chamber, TLReturnOpenStates);
 	if (!IsEmpty(chamberString)) {
 		[queryParams setObject:chamberString forKey:@"chamber"];
 	}

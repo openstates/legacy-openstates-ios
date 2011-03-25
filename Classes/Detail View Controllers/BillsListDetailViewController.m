@@ -73,7 +73,8 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	if (![UtilityMethods isIPadDevice])
+		[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	
 	NSDictionary *bill = [dataSource dataObjectForIndexPath:indexPath];
 	if (bill && [bill objectForKey:@"bill_id"]) {
@@ -82,7 +83,7 @@
 			BOOL changingViews = NO;
 			
 			BillsDetailViewController *detailView = nil;
-			if ([UtilityMethods isIPadDevice]) {
+			if (0) { //if ([UtilityMethods isIPadDevice]) {
 				id aDetail = [[[TexLegeAppDelegate appDelegate] detailNavigationController] visibleViewController];
 				if ([aDetail isKindOfClass:[BillsDetailViewController class]])
 					detailView = aDetail;
@@ -101,6 +102,8 @@
 			if (![UtilityMethods isIPadDevice])
 				[self.navigationController pushViewController:detailView animated:YES];
 			else if (changingViews)
+				//[[[self.splitViewController viewControllers] objectAtIndex:1] pushViewController:detailView animated:YES];
+				//[[[TexLegeAppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:YES];
 				[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
 		}			
 	}

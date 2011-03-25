@@ -150,7 +150,7 @@
 		// create a BillsMenuDetailViewController. This controller will display the full size tile for the element
 		UITableViewController *tempVC = nil;
 		//if ([theClass isEqualToString:@"BillsFavoritesViewController"] || [theClass isEqualToString:@"BillsCategoriesViewController"])
-			tempVC = [[[NSClassFromString(theClass) alloc] initWithNibName:nil bundle:nil] autorelease];	// we don't want a nib for this one
+			tempVC = [[[NSClassFromString(theClass) alloc] initWithStyle:UITableViewStylePlain] autorelease];	// we don't want a nib for this one
 		//else
 		//	tempVC = [[[NSClassFromString(theClass) alloc] initWithNibName:theClass bundle:nil] autorelease];
 		

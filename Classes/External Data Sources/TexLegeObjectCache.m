@@ -45,7 +45,7 @@
 	if (count > 1) {
 		NSString *params = [components objectAtIndex:1];
 		if ([params hasPrefix:@"?"]) {
-			NSDictionary *paramsDict = [UtilityMethods parametersOfQuery:[params substringFromIndex:1]];	// chop off the ?
+			NSDictionary *paramsDict = [UtilityMethods parametersOfQuery:params];	// chop off the ?
 
 			if ([[paramsDict allKeys] containsObject:@"updated_since"]) {
 				NSString* updatedString = [[paramsDict objectForKey:@"updated_since"] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
