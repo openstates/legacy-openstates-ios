@@ -78,7 +78,7 @@
         currentBadgeColor = [TexLegeTheme accentGreener]; //[UIColor colorWithRed:0.53 green:0.6 blue:0.738 alpha:1.];
     }
     
-	if (self.cell.isClickable && (self.cell.isHighlighted || self.cell.isSelected)) {
+	if (self.cell && self.cell.isClickable && (self.cell.isHighlighted || self.cell.isSelected)) {
         currentSummaryColor = [UIColor whiteColor];
         //currentDetailColor = [UIColor whiteColor];
 		currentBadgeColor = self.cell.badgeHighlightedColor;
@@ -87,7 +87,7 @@
 		}
 	} 
 	
-	if (self.cell.isEditing) {
+	if (self.cell && self.cell.isEditing) {
 		[currentSummaryColor set];
 		[self.cell.summary drawAtPoint:CGPointMake(10, 10) forWidth:rect.size.width withFont:[TexLegeTheme boldFifteen] lineBreakMode:UILineBreakModeTailTruncation];
 		
@@ -147,7 +147,7 @@
 }
 
 + (UITableViewCellStyle)cellStyle {
-	return UITableViewCellStyleValue2;
+	return UITableViewCellStyleDefault;
 	//return UITableViewCellStyleSubtitle;
 }
 

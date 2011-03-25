@@ -134,16 +134,9 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 {
 	if (highlighted == flag)
 		return;
-	
 	highlighted = flag;
-	/*
-	if (flag)
-		self.backgroundColor = [TexLegeTheme accent];
-	else
-		self.backgroundColor = (useDarkBackground) ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
-	*/
-	[self setNeedsDisplay];
 	
+	[self setNeedsDisplay];
 }
 
 - (void)setLegislator:(LegislatorObj *)value {
@@ -162,16 +155,10 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 	[self setNeedsDisplay];	
 }
 
-
 - (void)drawRect:(CGRect)dirtyRect
 {
-	//debug_NSLog(@"dirty rect: %f %f %f %f", dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height);
-
-	CGRect imageBounds = CGRectMake(0.0f, 0.0f, kLegislatorMasterCellViewWidth, kLegislatorMasterCellViewHeight);
-	//debug_NSLog(@"image rect: %f %f %f %f", imageBounds.origin.x, imageBounds.origin.y, imageBounds.size.width, imageBounds.size.height);
-	
+	CGRect imageBounds = CGRectMake(0.0f, 0.0f, kLegislatorMasterCellViewWidth, kLegislatorMasterCellViewHeight);	
 	CGRect bounds = [self bounds];
-//	debug_NSLog(@"self bounds: %f %f %f %f", bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
 
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	CGFloat alignStroke;
@@ -310,7 +297,6 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 		CGContextBeginTransparencyLayer(context, NULL);
 		
 		// Star
-		
 		stroke = 1.0f;
 		stroke *= resolution;
 		if (stroke < 1.0f) {
@@ -322,52 +308,88 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 		
 		stroke /= resolution;
 		alignStroke = fmodf(0.5f * stroke * resolution, 1.0f);
+		
+		
+		/* BEGIN: DrawStar
+		float starRadius = 15.f;	
+		// Rearrange the coordinate system for the DrawStar routine then call it to draw the star.
+		CGContextSaveGState(context);
+		CGContextTranslateCTM(context, starCenter+13.f, 58.187f);
+		CGContextScaleCTM(context, starRadius, starRadius);
+		CGContextRotateCTM(context, 53.f * (M_PI / 180));
+		//CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
+		// this is the angle of the sides/points, not the overall tilt of the star
+		const float starAngle = 2.0 * M_PI / 5.0;		
+		
+		// Begin a new path (any previous path is discarded)
+		CGContextBeginPath(context);
+		// The point (1,0) is equivalent to (cos(0), sin(0))
+		CGContextMoveToPoint(context, 1, 0);	
+		
+		// nextPointIndex is used to find every other point
+		short nextPointIndex = 2;	
+		for(short pointCounter = 1; pointCounter < 5; pointCounter++) {
+			CGContextAddLineToPoint(context, 
+									cos( nextPointIndex * starAngle ), 
+									sin( nextPointIndex * starAngle ));
+			nextPointIndex = (nextPointIndex + 2) % 5;
+		}
+		
+		CGContextClosePath(context);
+		CGContextFillPath(context);
+		CGContextRestoreGState(context);
+		* END: DrawStar */
+
+		
+		CGFloat yShift = 40.5f;
+		
 		path = CGPathCreateMutable();
-		point = CGPointMake(starCenter+5.157f, 68.5f);
+		point = CGPointMake(starCenter+5.157f, 28.0f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathMoveToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+13.5f, 62.126f);
+		point = CGPointMake(starCenter+13.5f, 21.71f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+21.843f, 68.5f);
+		point = CGPointMake(starCenter+21.843f, 28.0f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+18.657f, 58.187f);
+		point = CGPointMake(starCenter+18.732f, 17.713f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+27.0f, 51.813f);
+		point = CGPointMake(starCenter+27.0f, 11.313f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+16.687f, 51.813f);
+		point = CGPointMake(starCenter+16.734f, 11.245f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+13.5f, 41.5f);
+		point = CGPointMake(starCenter+13.5f, 1.0f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+10.313f, 51.813f);
+		point = CGPointMake(starCenter+10.266f, 11.245f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter, 51.813f);													/// top dead center
+		point = CGPointMake(starCenter+0.0f, 11.313f+yShift);				// top dead center
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+8.343f, 58.187f);
+		point = CGPointMake(starCenter+8.268f, 17.713f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+5.157f, 68.5f);
+		point = CGPointMake(starCenter+5.157f, 28.0f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
 		CGPathCloseSubpath(path);
+		
 		colors = [NSMutableArray arrayWithCapacity:2];
 		color = [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f];
 		[colors addObject:(id)[color CGColor]];
@@ -379,8 +401,8 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 		CGContextAddPath(context, path);
 		CGContextSaveGState(context);
 		CGContextEOClip(context);
-		point = CGPointMake(starCenter+14.0f, 52.0f);
-		point2 = CGPointMake(starCenter+9.5f, 62.0f);
+		point = CGPointMake(starCenter+14.0f, 11.5f+yShift);
+		point2 = CGPointMake(starCenter+9.5f, 21.5f+yShift);
 		CGContextDrawLinearGradient(context, gradient, point, point2, (kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation));
 		CGContextRestoreGState(context);
 		CGGradientRelease(gradient);

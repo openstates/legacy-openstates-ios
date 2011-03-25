@@ -14,10 +14,10 @@ const CGFloat kPartisanScaleViewWidth = 172.0f;
 const CGFloat kPartisanScaleViewHeight = 32.0f;
 
 @implementation PartisanScaleView
+
 @synthesize  questionImage;
 @synthesize sliderValue, sliderMin, sliderMax;
 @synthesize highlighted, showUnknown;
-
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -60,9 +60,10 @@ const CGFloat kPartisanScaleViewHeight = 32.0f;
 	
 }
 
-- (CGSize)sizeThatFits:(CGSize)size
+- (void)dealloc
 {
-	return CGSizeMake(kPartisanScaleViewWidth, kPartisanScaleViewHeight);
+	[questionImage release];
+	[super dealloc];
 }
 
 - (void)setSliderValue:(CGFloat)value
@@ -88,15 +89,27 @@ const CGFloat kPartisanScaleViewHeight = 32.0f;
 	
 	CGFloat magicNumber = (kStarMagnifierBase / (sliderMax - sliderMin));
 	CGFloat offset = kStarAtHalf;
+		
 	sliderValue = sliderValue * magicNumber + offset;
 
 	[self setNeedsDisplay];
+}
+
+
+- (CGSize)sizeThatFits:(CGSize)size
+{
+	return CGSizeMake(kPartisanScaleViewWidth, kPartisanScaleViewHeight);
+}
+
+- (BOOL)highlighted{
+	return highlighted;
 }
 
 - (void)setHighlighted:(BOOL)flag
 {
 	if (highlighted == flag)
 		return;
+	
 	highlighted = flag;
 	[self setNeedsDisplay];
 	
@@ -206,52 +219,56 @@ const CGFloat kPartisanScaleViewHeight = 32.0f;
 		
 		stroke /= resolution;
 		alignStroke = fmodf(0.5f * stroke * resolution, 1.0f);
+		
+		CGFloat yShift = 0.0f;
+		
 		path = CGPathCreateMutable();
-		point = CGPointMake(starCenter+5.157f, 28.0f);
+		point = CGPointMake(starCenter+5.157f, 28.0f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathMoveToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+13.5f, 21.71f);
+		point = CGPointMake(starCenter+13.5f, 21.71f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+21.843f, 28.0f);
+		point = CGPointMake(starCenter+21.843f, 28.0f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+18.732f, 17.713f);
+		point = CGPointMake(starCenter+18.732f, 17.713f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+27.0f, 11.313f);
+		point = CGPointMake(starCenter+27.0f, 11.313f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+16.734f, 11.245f);
+		point = CGPointMake(starCenter+16.734f, 11.245f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+13.5f, 1.0f);
+		point = CGPointMake(starCenter+13.5f, 1.0f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+10.266f, 11.245f);
+		point = CGPointMake(starCenter+10.266f, 11.245f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+0.0f, 11.313f);				// top dead center
+		point = CGPointMake(starCenter+0.0f, 11.313f+yShift);				// top dead center
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+8.268f, 17.713f);
+		point = CGPointMake(starCenter+8.268f, 17.713f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
-		point = CGPointMake(starCenter+5.157f, 28.0f);
+		point = CGPointMake(starCenter+5.157f, 28.0f+yShift);
 		point.x = (roundf(resolution * point.x + alignStroke) - alignStroke) / resolution;
 		point.y = (roundf(resolution * point.y + alignStroke) - alignStroke) / resolution;
 		CGPathAddLineToPoint(path, NULL, point.x, point.y);
 		CGPathCloseSubpath(path);
+		
 		colors = [NSMutableArray arrayWithCapacity:2];
 		color = [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f];
 		[colors addObject:(id)[color CGColor]];
@@ -263,8 +280,8 @@ const CGFloat kPartisanScaleViewHeight = 32.0f;
 		CGContextAddPath(context, path);
 		CGContextSaveGState(context);
 		CGContextEOClip(context);
-		point = CGPointMake(starCenter+14.0f, 11.5f);
-		point2 = CGPointMake(starCenter+9.5f, 21.5f);
+		point = CGPointMake(starCenter+14.0f, 11.5f+yShift);
+		point2 = CGPointMake(starCenter+9.5f, 21.5f+yShift);
 		CGContextDrawLinearGradient(context, gradient, point, point2, (kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation));
 		CGContextRestoreGState(context);
 		CGGradientRelease(gradient);

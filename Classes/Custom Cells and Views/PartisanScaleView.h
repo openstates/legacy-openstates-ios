@@ -12,7 +12,15 @@
 extern const CGFloat kPartisanScaleViewWidth;
 extern const CGFloat kPartisanScaleViewHeight;
 
-@interface PartisanScaleView : UIView
+@interface PartisanScaleView : UIView {
+	BOOL highlighted;
+	BOOL showUnknown;
+	
+	CGFloat sliderValue;
+	CGFloat sliderMin;
+	CGFloat sliderMax;
+	UIImage *questionImage;
+}
 @property (nonatomic) BOOL highlighted;
 @property (nonatomic) BOOL showUnknown;
 
