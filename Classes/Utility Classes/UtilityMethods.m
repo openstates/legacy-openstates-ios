@@ -281,6 +281,11 @@ BOOL IsEmpty(id thing) {
 
 + (NSDictionary *)parametersOfQuery:(NSString *)queryString
 {
+	if ([queryString hasSubstring:@"?" caseInsensitive:NO]) {
+		NSRange index = [queryString rangeOfString:@"?"];
+		if (index.location != NSNotFound && index.length > 0 && [queryString length] > index.location)
+			queryString = [queryString substringFromIndex:index.location+1];
+	}
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
     
     // Handle & or ; as separators, as per W3C recommendation

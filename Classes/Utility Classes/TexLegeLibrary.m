@@ -62,23 +62,7 @@ NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
 		}
 		
 	}
-	else if (type == TLReturnOpenstates) {
-		switch (chamber) {
-			case SENATE:
-				chamberString = @"&chamber=upper";
-				break;
-			case HOUSE:
-				chamberString = @"&chamber=lower";
-				break;
-			case JOINT:
-				chamberString = @"&chamber=joint";
-				break;
-			case BOTH_CHAMBERS:
-			default:
-				chamberString = @"";
-		}
-	}
-	else if (type == TLReturnOpenstatesShort) {
+	else if (type == TLReturnOpenStates) {
 		switch (chamber) {
 			case SENATE:
 				chamberString = @"upper";
@@ -97,6 +81,30 @@ NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
 	
 	return chamberString;
 }
+
+NSInteger chamberForString(NSString *chamberString) {
+	if (!chamberString)
+		return BOTH_CHAMBERS;
+	
+	if ([chamberString isEqualToString:@"upper"] ||
+		[chamberString isEqualToString:@"Sen."] ||
+		[chamberString isEqualToString:@"(S)"] ||
+		[chamberString isEqualToString:@"Senate"])
+		return SENATE;
+	else if ([chamberString isEqualToString:@"lower"] ||
+			 [chamberString isEqualToString:@"Rep."] ||
+			 [chamberString isEqualToString:@"(R)"] ||
+			 [chamberString isEqualToString:@"House"])
+		return HOUSE;
+	else if ([chamberString isEqualToString:@"joint"] ||
+			 [chamberString isEqualToString:@"Jnt."] ||
+			 [chamberString isEqualToString:@"(J)"] ||
+			 [chamberString isEqualToString:@"Joint"])
+		return JOINT;
+	else
+		return BOTH_CHAMBERS;
+}
+
 
 
 NSString *stringForParty(NSInteger party, TLStringReturnType type) {

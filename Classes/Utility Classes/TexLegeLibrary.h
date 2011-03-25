@@ -32,9 +32,9 @@ typedef enum  {
     TLReturnFull = 0,		// Return the full string
     TLReturnAbbrev,			// Return an abbreviation
     TLReturnInitial,		// Return an initial
-	TLReturnOpenstates,
-	TLReturnOpenstatesShort
+	TLReturnOpenStates
 } TLStringReturnType;
 
+NSInteger chamberForString(NSString *chamberString);
 NSString *stringForChamber(NSInteger chamber, TLStringReturnType type);
 NSString *stringForParty(NSInteger party, TLStringReturnType type);
