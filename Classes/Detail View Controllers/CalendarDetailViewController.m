@@ -79,6 +79,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(reloadEvents:) name:kCalendarEventsNotifyLoaded object:nil];	
 	[self finalizeUI];
+
 }
 
 - (void)reloadEvents:(NSNotification*)notification {
@@ -87,8 +88,9 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	[[CalendarEventsLoader sharedCalendarEventsLoader] loadEvents:self];
 	
+	[[CalendarEventsLoader sharedCalendarEventsLoader] events];
+
 	if ([UtilityMethods isIPadDevice] && !self.chamberCalendar && ![UtilityMethods isLandscapeOrientation])  {
 		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 		
