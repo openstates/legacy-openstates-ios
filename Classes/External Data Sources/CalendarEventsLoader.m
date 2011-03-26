@@ -279,14 +279,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 	if (!eventDict || !eventStore)
 		return;
 	
-	
-#if	DISABLE_PRE_iOS4_SUPPORT == 0
-	if (![UtilityMethods supportsEventKit] || !eventStore) {
-		debug_NSLog(@"EventKit not available on this device");
-		return;
-	}
-#endif
-	
 	NSString *chamberString = stringForChamber([[eventDict objectForKey:kCalendarEventsTypeChamberValue] integerValue], TLReturnFull); 
 	NSString *committee = [eventDict objectForKey:kCalendarEventsCommitteeNameKey];	
 	NSDate *meetingDate = [eventDict objectForKey:kCalendarEventsLocalizedDateKey];

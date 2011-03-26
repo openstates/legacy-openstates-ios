@@ -19,6 +19,8 @@
 @interface TexLegeCoreDataUtils : NSObject {
 
 }
++ (id) fetchCalculation:(NSString *)calc ofProperty:(NSString *)prop withType:(NSAttributeType)retType onEntity:(NSString *)entityName;
+
 + (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName lightProperties:(BOOL)light;
 + (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName;
 + (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName;

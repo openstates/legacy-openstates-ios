@@ -19,6 +19,7 @@
 #import "NSDate+Helper.h"
 #import "LocalyticsSession.h"
 #import "TexLegeObjectCache.h"
+#import "UtilityMethods.h"
 
 //#define VERIFYCOMMITTEES 1
 #ifdef VERIFYCOMMITTEES
@@ -30,6 +31,43 @@
 
 @implementation TexLegeCoreDataUtils
 
++ (id) fetchCalculation:(NSString *)calc ofProperty:(NSString *)prop withType:(NSAttributeType)retType onEntity:(NSString *)entityName {
+	
+	// Let's just hope it's the kind of class we want
+	Class modelClass = NSClassFromString(entityName);
+	if (!modelClass || NO == [modelClass isSubclassOfClass:[RKManagedObject class]])
+		return nil;
+
+	// setup request
+	NSFetchRequest *request = [modelClass fetchRequest];	
+	// need to use dictionary to access values
+	[request setResultType:NSDictionaryResultType];
+	// build expression (must do this for each value you want to retrieve)
+	NSExpression *attributeToFetch = [NSExpression expressionForKeyPath:prop];
+	NSExpression *functionToPerformOnAttribute = [NSExpression expressionForFunction:calc 
+																		   arguments:[NSArray arrayWithObject:attributeToFetch]];
+	
+	NSExpressionDescription *propertyToFetch = [[NSExpressionDescription alloc] init];
+	[propertyToFetch setName:@"myFetchedValue"]; // name used to access value in dictionary
+	[propertyToFetch setExpression:functionToPerformOnAttribute];
+	[propertyToFetch setExpressionResultType:retType];
+	// modify request to fetch only the attribute
+	[request setPropertiesToFetch:[NSArray arrayWithObject:propertyToFetch]];
+	[propertyToFetch release];
+	
+	// execute fetch
+	NSArray *results = [modelClass objectsWithFetchRequest:request];
+	
+	// get value
+	id fetchedVal = nil;
+	if (!IsEmpty(results))
+		fetchedVal = [[results objectAtIndex:0] valueForKey:@"myFetchedValue"];
+	else
+		NSLog(@"CoreData Error while fetching calc (%@) of property (%@) on entity (%@).", calc, prop, entityName);
+	
+	return fetchedVal;
+}
+		
 + (DistrictMapObj*)districtMapForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber {
 	return [TexLegeCoreDataUtils districtMapForDistrict:district andChamber:chamber lightProperties:YES];
 }
@@ -61,12 +99,25 @@
 	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateString]; 
 	[fetchRequest setPredicate:predicate];
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
-										initWithKey:@"partisan_index" ascending:(party != REPUBLICAN)];
-	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-	[sortDescriptor release];
+
+	NSMutableArray *results = [[NSMutableArray alloc] initWithArray:[LegislatorObj objectsWithFetchRequest:fetchRequest]];
+	BOOL ascending = (party != REPUBLICAN);
 	
-	return [LegislatorObj objectsWithFetchRequest:fetchRequest];	
+	if (ascending) {
+		[results sortUsingComparator:^(LegislatorObj *item1, LegislatorObj *item2) {
+			NSNumber *latestWnomFloat1 = [NSNumber numberWithFloat:item1.latestWnomFloat];
+			NSNumber *latestWnomFloat2 = [NSNumber numberWithFloat:item2.latestWnomFloat];
+			return [latestWnomFloat1 compare:latestWnomFloat2];
+		}];
+	}
+	else {
+		[results sortUsingComparator:^(LegislatorObj *item1, LegislatorObj *item2) {
+			NSNumber *latestWnomFloat1 = [NSNumber numberWithFloat:item1.latestWnomFloat];
+			NSNumber *latestWnomFloat2 = [NSNumber numberWithFloat:item2.latestWnomFloat];
+			return [latestWnomFloat2 compare:latestWnomFloat1];
+		}];
+	}
+	return [results autorelease];	
 }
 
 + (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName {

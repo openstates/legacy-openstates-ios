@@ -11,8 +11,6 @@
 #import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "NSDate+Helper.h"
 
-#define OPENAPIS_DEFAULT_SESSION	@"82"
-
 @implementation OpenLegislativeAPIs
 SYNTHESIZE_SINGLETON_FOR_CLASS(OpenLegislativeAPIs);
 @synthesize osApiClient, transApiClient, osMetadata=_osMetadata;

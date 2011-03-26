@@ -103,6 +103,9 @@
 @property (nonatomic, retain) DistrictMapObj *districtMap;
 
 @property (nonatomic, readonly) NSString * districtMapURL;
+@property (nonatomic, readonly) WnomObj *latestWnomScore;
+@property (nonatomic, readonly) CGFloat latestWnomFloat;
+
 
 - (NSComparisonResult)compareMembersByName:(LegislatorObj *)p;
 - (NSString *)partyShortName;
