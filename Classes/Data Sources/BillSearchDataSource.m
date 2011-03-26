@@ -16,18 +16,6 @@
 #import "UtilityMethods.h"
 #import "OpenLegislativeAPIs.h"
 
-#if	DISABLE_PRE_iOS4_SUPPORT
-@interface NSDictionary (BillIDComparison)
-- (NSComparisonResult)compareBillsByID:(NSDictionary *)p;
-@end
-@implementation NSDictionary (BillIDComparison)
-- (NSComparisonResult)compareBillsByID:(NSDictionary *)p
-{	
-	return [[self objectForKey:@"bill_id"] compare: [p objectForKey:@"bill_id"] options:NSNumericSearch];	
-}
-@end
-#endif
-
 @implementation BillSearchDataSource
 @synthesize searchDisplayController, delegateTVC;
 
@@ -235,16 +223,12 @@
 		else if ([results isKindOfClass:[NSDictionary class]])
 			[_rows addObject:results];
 
-#if	DISABLE_PRE_iOS4_SUPPORT
 		// if we wanted blocks, we'd do this instead:
 		[_rows sortUsingComparator:^(NSDictionary *item1, NSDictionary *item2) {
 			NSString *bill_id1 = [item1 objectForKey:@"bill_id"];
 			NSString *bill_id2 = [item2 objectForKey:@"bill_id"];
 			return [bill_id1 compare:bill_id2 options:NSNumericSearch];
 		}];
-#else
-		[_rows sortUsingSelector:@selector(compareBillsByID:)];
-#endif
 		
 		if (searchDisplayController)
 			[self.searchDisplayController.searchResultsTableView reloadData];
