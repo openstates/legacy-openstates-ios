@@ -174,29 +174,29 @@
 }
 
 - (NSString *)chamberPartyAbbrev {
+	LegislatorObj *member = self.legislator;
 	NSString *partyName = nil;
-	if ([self.legislator.party_id integerValue] == DEMOCRAT) // Democrat
+	if ([member.party_id integerValue] == DEMOCRAT) // Democrat
 		partyName = @"Dems";
-	else if ([self.legislator.party_id integerValue] == REPUBLICAN) // Republican
+	else if ([member.party_id integerValue] == REPUBLICAN) // Republican
 		partyName = @"Repubs";
 	else // don't know the party?
 		partyName = @"Indeps";
 	
-	return [NSString stringWithFormat:@"%@ %@", [self.legislator chamberName], partyName];
+	return [NSString stringWithFormat:@"%@ %@", [member chamberName], partyName];
 }
 
 - (NSString *) partisanRankStringForLegislator {
-	//self.rank = @"3rd most partisan (out of 76 Repubs)";
-	
-	if (self.legislator.tenure.integerValue == 0)
+	LegislatorObj *member = self.legislator;
+	if (member.tenure.integerValue == 0)
 		return @"";
 
-	NSArray *legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[self.legislator.legtype integerValue] 
-																					andPartyID:[self.legislator.party_id integerValue]];
+	NSArray *legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[member.legtype integerValue] 
+																					andPartyID:[member.party_id integerValue]];
 	if (legislators) {
-		NSInteger rankIndex = [legislators indexOfObject:self.legislator] + 1;
+		NSInteger rankIndex = [legislators indexOfObject:member] + 1;
 		NSInteger count = [legislators count];
-		NSString *partyShortName = [self.legislator.party_id integerValue] == DEMOCRAT ? @"Dems" : @"Repubs";
+		NSString *partyShortName = [member.party_id integerValue] == DEMOCRAT ? @"Dems" : @"Repubs";
 		
 		NSString *ordinalRank = [UtilityMethods ordinalNumberFormat:rankIndex];
 		return [NSString stringWithFormat:@"%@ most partisan (out of %d %@)", ordinalRank, count, partyShortName];	
@@ -206,19 +206,21 @@
 	}
 }
 
-- (void)setupHeader {		
-	NSString *legName = [NSString stringWithFormat:@"%@ %@",  [self.legislator legTypeShortName], [self.legislator legProperName]];
+- (void)setupHeader {
+	LegislatorObj *member = self.legislator;
+	
+	NSString *legName = [NSString stringWithFormat:@"%@ %@",  [member legTypeShortName], [member legProperName]];
 	self.leg_nameLab.text = legName;
 	self.navigationItem.title = legName;
 
-	//[[ImageCache sharedImageCache] loadImageView:self.leg_photoView fromPath:[UIImage highResImagePathWithPath:self.legislator.photo_name]];
-	self.leg_photoView.image = [UIImage imageNamed:[UIImage highResImagePathWithPath:self.legislator.photo_name]];
-	self.leg_partyLab.text = [self.legislator party_name];
-	self.leg_districtLab.text = [NSString stringWithFormat:@"District %@", self.legislator.district];
-	self.leg_tenureLab.text = [self.legislator tenureString];
-	if (self.legislator.nextElection) {
+	//[[ImageCache sharedImageCache] loadImageView:self.leg_photoView fromPath:[UIImage highResImagePathWithPath:member.photo_name]];
+	self.leg_photoView.image = [UIImage imageNamed:[UIImage highResImagePathWithPath:member.photo_name]];
+	self.leg_partyLab.text = [member party_name];
+	self.leg_districtLab.text = [NSString stringWithFormat:@"District %@", member.district];
+	self.leg_tenureLab.text = [member tenureString];
+	if (member.nextElection) {
 		
-		self.leg_reelection.text = [NSString stringWithFormat:@"Reelection: %@", self.legislator.nextElection];
+		self.leg_reelection.text = [NSString stringWithFormat:@"Reelection: %@", member.nextElection];
 	}
 	
 	PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
@@ -227,36 +229,36 @@
 
 	if (self.leg_indexTitleLab)
 		self.leg_indexTitleLab.text = [NSString stringWithFormat:@"%@ %@", 
-									   [self.legislator legTypeShortName], [self.legislator lastname]];
+									   [member legTypeShortName], [member lastname]];
 
 	if (self.leg_rankLab)
 		self.leg_rankLab.text = [self partisanRankStringForLegislator];
 	
 	if (self.leg_chamberPartyLab) {
 		self.leg_chamberPartyLab.text = [self chamberPartyAbbrev];
-		self.leg_chamberLab.text = [[self.legislator chamberName] stringByAppendingString:@" Avg."];				
+		self.leg_chamberLab.text = [[member chamberName] stringByAppendingString:@" Avg."];				
 	}
 	
-	CGFloat minSlider = [indexStats minPartisanIndexUsingChamber:[self.legislator.legtype integerValue]];
-	CGFloat maxSlider = [indexStats maxPartisanIndexUsingChamber:[self.legislator.legtype integerValue]];
+	CGFloat minSlider = [indexStats minPartisanIndexUsingChamber:[member.legtype integerValue]];
+	CGFloat maxSlider = [indexStats maxPartisanIndexUsingChamber:[member.legtype integerValue]];
 	
 	if (self.indivSlider) {
 		self.indivSlider.sliderMin = minSlider;
 		self.indivSlider.sliderMax = maxSlider;
-		self.indivSlider.sliderValue = self.legislator.partisan_index.floatValue;
+		self.indivSlider.sliderValue = member.latestWnomFloat;
 	}	
 	if (self.partySlider) {
 		self.partySlider.sliderMin = minSlider;
 		self.partySlider.sliderMax = maxSlider;
-		self.partySlider.sliderValue = [indexStats partyPartisanIndexUsingChamber:[self.legislator.legtype integerValue] andPartyID:[self.legislator.party_id integerValue]];
+		self.partySlider.sliderValue = [indexStats partyPartisanIndexUsingChamber:[member.legtype integerValue] andPartyID:[member.party_id integerValue]];
 	}	
 	if (self.allSlider) {
 		self.allSlider.sliderMin = minSlider;
 		self.allSlider.sliderMax = maxSlider;
-		self.allSlider.sliderValue = [indexStats overallPartisanIndexUsingChamber:[self.legislator.legtype integerValue]];
+		self.allSlider.sliderValue = [indexStats overallPartisanIndexUsingChamber:[member.legtype integerValue]];
 	}	
 	
-	BOOL hasScores = (self.legislator.wnomScores && [self.legislator.wnomScores count]);
+	BOOL hasScores = (member.wnomScores && [member.wnomScores count]);
 	self.freshmanPlotLab.hidden = hasScores;
 	self.newChartView.hidden = !hasScores;
 
@@ -264,8 +266,9 @@
 
 
 - (LegislatorDetailDataSource *)dataSource {
-	if (!dataSource && self.legislator) {
-		dataSource = [[LegislatorDetailDataSource alloc] initWithLegislator:self.legislator];
+	LegislatorObj *member = self.legislator;
+	if (!dataSource && member) {
+		dataSource = [[LegislatorDetailDataSource alloc] initWithLegislator:member];
 	}
 	return dataSource;
 }
@@ -338,8 +341,6 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-	[[PartisanIndexStats sharedPartisanIndexStats] resetChartCacheIfNecessary];
-
 	BOOL ipad = [UtilityMethods isIPadDevice];
 	BOOL portrait = (![UtilityMethods isLandscapeOrientation]);
 	
@@ -409,6 +410,7 @@
 	[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];	
 	
 	TableCellDataObject *cellInfo = [self.dataSource dataObjectForIndexPath:newIndexPath];
+	LegislatorObj *member = self.legislator;
 
 	if (!cellInfo.isClickable)
 		return;
@@ -422,7 +424,7 @@
 			
 			// If we got a new view controller, push it .
 			if (nextViewController) {
-				nextViewController.legislator = self.legislator;
+				nextViewController.legislator = member;
 				nextViewController.backViewController = self;
 				
 				if ([UtilityMethods isIPadDevice]) {
@@ -481,11 +483,11 @@
 					[mapViewController moveMapToAnnotation:theAnnotation];
 				}
 				else {
-					theAnnotation = self.legislator.districtMap;
+					theAnnotation = member.districtMap;
 					[mapViewController.mapView addAnnotation:theAnnotation];
 					[mapViewController moveMapToAnnotation:theAnnotation];
 					[mapViewController.mapView performSelector:@selector(addOverlay:) 
-													withObject:[self.legislator.districtMap polygon] afterDelay:0.5f];
+													withObject:[member.districtMap polygon] afterDelay:0.5f];
 					isDistMap = YES;
 				}
 				if (theAnnotation)
@@ -495,7 +497,7 @@
 				[mapViewController release];
 				
 				if (isDistMap)
-					[[DistrictMapObj managedObjectContext] refreshObject:self.legislator.districtMap mergeChanges:NO];
+					[[DistrictMapObj managedObjectContext] refreshObject:member.districtMap mergeChanges:NO];
 			}
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&

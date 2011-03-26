@@ -87,12 +87,10 @@ CGFloat quartzRowHeight = 73.f;
 	CGFloat totalNum = 0.0f;
 	NSInteger totalLege = 0;
 	for (CommitteePositionObj *position in positions) {
-		if (position.legislator.partisan_index) {
-			CGFloat legePart = [position.legislator.partisan_index floatValue];
-			if (legePart != 0.0f) {
-				totalNum += legePart;
-				totalLege++;
-			}
+		CGFloat legePart = position.legislator.latestWnomFloat;
+		if (legePart != 0.0f) {
+			totalNum += legePart;
+			totalLege++;
 		}
 	}
 	if (totalLege) {
@@ -115,7 +113,7 @@ CGFloat quartzRowHeight = 73.f;
 	
 	self.membershipLab.text = [NSString stringWithFormat:@"%d Republican%@ and %d Democrat%@", repubCount, repubString, democCount, democString];
 		
-	if (positions && [positions count]) {
+	if (!IsEmpty(positions)) {
 		// This will give inacurate results in joint committees, at least until we're in a common dimensional space
 		LegislatorObj *anyMember = [[positions objectAtIndex:0] legislator];
 		
