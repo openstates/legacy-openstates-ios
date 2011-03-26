@@ -70,11 +70,6 @@ const CGFloat kPartisanScaleViewHeight = 32.0f;
 {
 	sliderValue = value;
 	
-	if (sliderValue < sliderMin) // lets say -1.5
-		sliderValue = sliderMin;
-	if (sliderValue > sliderMax) // let's say +1.5
-		sliderValue = sliderMax;
-	
 	if (sliderValue == 0.0f) {	// this gives us the center, in cases of no roll call scores
 		sliderValue = (sliderMin + sliderMin)/2;
 		self.showUnknown = YES;
@@ -82,10 +77,21 @@ const CGFloat kPartisanScaleViewHeight = 32.0f;
 	else
 		self.showUnknown = NO;
 	
+	if (sliderMax > (-sliderMin))
+		sliderMin = (-sliderMax);
+	else
+		sliderMax = (-sliderMin);
+		
 #define	kStarAtDemoc 0.5f
 #define kStarAtRepub 144.5f
 #define	kStarAtHalf 72.5f
 #define kStarMagnifierBase (kStarAtRepub - kStarAtDemoc)
+	
+#ifdef JUSTTESTINGHERE
+	sliderValue = (sliderValue < 0.f) ? -1.5f : +1.5f;
+	sliderMin = -1.5;
+	sliderMax = +1.5;
+#endif
 	
 	CGFloat magicNumber = (kStarMagnifierBase / (sliderMax - sliderMin));
 	CGFloat offset = kStarAtHalf;

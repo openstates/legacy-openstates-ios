@@ -109,7 +109,11 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 		sliderValue = (sliderMin + sliderMin)/2;
 	}
 	
-	
+	if (sliderMax > (-sliderMin))
+		sliderMin = (-sliderMax);
+	else
+		sliderMax = (-sliderMin);
+		
 #define	kStarAtDemoc 270.5f
 #define kStarAtRepub 478.5f
 #define	kStarAtHalf 374.5f
@@ -179,7 +183,7 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 
 - (void)setLegislator:(LegislatorObj *)value {	
 	if (value) {
-		self.partisan_index = [value.partisan_index floatValue];
+		self.partisan_index = value.latestWnomFloat;
 		self.title = [value legTypeShortName];
 		self.district = [NSString stringWithFormat:@"District %@", value.district];
 		self.party = value.party_name;
@@ -193,7 +197,7 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 		
 		self.sliderMax = maxSlider;
 		self.sliderMin = minSlider;	
-		self.sliderValue = self.partisan_index;
+		[self setSliderValue:self.partisan_index];
 		
 		self.rank = [self partisanRankStringForLegislator:value];
 	}
@@ -358,6 +362,7 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 	CGContextRestoreGState(context);
 	CGPathRelease(path);
 	
+	// we don't use sliderVal here because it's already been adjusted to compensate for minMax...
 	if (self.partisan_index == 0.0f) {
 		if (!self.questionImage) {
 			NSString *imageString = /*(self.usesSmallStar) ? @"Slider_Question.png" :*/ @"Slider_Question_big.png";

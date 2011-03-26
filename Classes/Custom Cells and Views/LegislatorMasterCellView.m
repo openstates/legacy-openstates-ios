@@ -86,15 +86,15 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 {
 	sliderValue = value;
 		
-	if (sliderValue < sliderMin) // lets say -1.5
-		sliderValue = sliderMin;
-	if (sliderValue > sliderMax) // let's say +1.5
-		sliderValue = sliderMax;
-	
 	if (sliderValue == 0.0f) {	// this gives us the center, in cases of no roll call scores
 		sliderValue = (sliderMin + sliderMin)/2;
 	}
 	
+	if (sliderMax > (-sliderMin))
+		sliderMin = (-sliderMax);
+	else
+		sliderMax = (-sliderMin);
+		
 #define	kStarAtDemoc 0.5f
 #define kStarAtRepub 162.0f
 #define	kStarAtHalf 81.5f
@@ -140,7 +140,7 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 }
 
 - (void)setLegislator:(LegislatorObj *)value {
-	self.partisan_index = [value.partisan_index floatValue];
+	self.partisan_index = value.latestWnomFloat;
 	self.title = [value.legtype_name stringByAppendingFormat:@" - %@", [value districtPartyString]];
 	self.name = [value legProperName];
 	self.tenure = [value tenureString];
@@ -150,7 +150,7 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 	CGFloat maxSlider = [indexStats maxPartisanIndexUsingChamber:[value.legtype integerValue]];
 	self.sliderMax = maxSlider;
 	self.sliderMin = minSlider;	
-	self.sliderValue = self.partisan_index;
+	[self setSliderValue:self.partisan_index];
 	
 	[self setNeedsDisplay];	
 }
@@ -279,6 +279,7 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 	CGContextRestoreGState(context);
 	CGPathRelease(path);
 	
+	// we don't use sliderVal here because it's already been adjusted to compensate for minMax...
 	if (self.partisan_index == 0.0f) {
 		if (!self.questionImage) {
 			NSString *imageString = /*(self.usesSmallStar) ? @"Slider_Question.png" :*/ @"Slider_Question_big.png";
