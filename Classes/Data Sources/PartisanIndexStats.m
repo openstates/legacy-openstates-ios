@@ -17,6 +17,7 @@
 #import "DataModelUpdateManager.h"
 #import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "TexLegeAppDelegate.h"
+#import "NSDate+Helper.h"
 
 @interface PartisanIndexStats (Private)
 - (NSArray *) aggregatePartisanIndexForChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
@@ -230,6 +231,69 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 		chartTemplate = [[NSString stringWithContentsOfFile:thePath encoding:NSUTF8StringEncoding error:&error] retain];
 	}
 	return chartTemplate;
+}
+
+- (NSDictionary *)partisanshipDataForLegislatorID:(NSNumber*)legislatorID {
+	if (!legislatorID)
+		return nil;
+	
+	LegislatorObj *legislator = [LegislatorObj objectWithPrimaryKeyValue:legislatorID];
+	if (!legislator)
+		return nil;
+	
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"session" ascending:YES];
+	NSArray *descriptors = [[NSArray alloc] initWithObjects:sortDescriptor,nil];
+	NSArray *sortedScores = [[legislator.wnomScores allObjects] sortedArrayUsingDescriptors:descriptors];
+	[sortDescriptor release];
+	[descriptors release];
+	NSInteger countOfScores = [legislator.wnomScores count];
+	
+	
+	NSInteger chamber = [legislator.legtype integerValue];
+	NSArray *democHistory = [self historyForParty:DEMOCRAT Chamber:chamber];
+	NSArray *repubHistory = [self historyForParty:REPUBLICAN Chamber:chamber];
+		
+	NSUInteger i;
+	
+	NSMutableDictionary *results = [NSMutableDictionary dictionaryWithCapacity:3];
+	NSMutableArray *repubScores = [[NSMutableArray alloc] init];
+	NSMutableArray *demScores = [[NSMutableArray alloc] init];
+	NSMutableArray *memberScores = [[NSMutableArray alloc] init];
+	NSMutableArray *dates = [[NSMutableArray alloc] init];
+	
+	for ( i = 0; i < countOfScores ; i++) {
+		
+		WnomObj *wnomObj = [sortedScores objectAtIndex:i];
+		NSDate *date = [NSDate dateFromString:[[wnomObj year] stringValue] withFormat:@"yyyy"];
+		NSNumber *democY = [[democHistory findWhereKeyPath:@"session" equals:wnomObj.session] objectForKey:@"wnom"];
+		NSNumber *repubY = [[repubHistory findWhereKeyPath:@"session" equals:wnomObj.session] objectForKey:@"wnom"];
+		if (!democY)
+			democY = [NSNumber numberWithFloat:0.0f];
+		if (!repubY)
+			repubY = [NSNumber numberWithFloat:0.0f];
+		
+		[repubScores addObject:repubY];
+		[demScores addObject:democY];
+		[dates addObject:date];
+
+		CGFloat legVal = [[wnomObj wnomAdj] floatValue];
+		if (legVal != 0.0f)
+			[memberScores addObject:[wnomObj wnomAdj]];
+		else
+			[memberScores addObject:[NSNumber numberWithFloat:CGFLOAT_MIN]];
+	}
+		
+	[results setObject:repubScores forKey:@"repub"];
+	[results setObject:demScores forKey:@"democ"];
+	[results setObject:memberScores forKey:@"member"];
+	[results setObject:dates forKey:@"time"];
+	[repubScores release];
+	[demScores release];
+	[memberScores release];
+	[dates release];
+	
+	return results;
+	
 }
 
 - (NSDictionary *)chartDataForLegislator:(LegislatorObj*)legislator {	
