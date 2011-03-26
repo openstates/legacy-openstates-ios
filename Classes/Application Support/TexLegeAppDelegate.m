@@ -47,7 +47,6 @@ NSString * const kAnalyticsAskedForOptInKey = @"HasAskedForOptIn";
 NSString * const kAnalyticsSettingsSwitch = @"PermitUseOfAnalytics";
 NSString * const kShowedSplashScreenKey = @"HasShownSplashScreen";
 NSString * const kSegmentControlPrefKey = @"SegmentControlPrefs";
-NSString * const kResetChartCacheKey = @"ResetChartCache";
 NSString * const kResetSavedDatabaseKey = @"ResetSavedDatabase";
 
 NSUInteger kNumMaxTabs = 11;
@@ -332,7 +331,6 @@ NSInteger kNoSelection = -1;
 									[NSNumber numberWithBool:YES], kAnalyticsSettingsSwitch,
 									[NSNumber numberWithBool:NO], kShowedSplashScreenKey,
 									[NSDictionary dictionary], kSegmentControlPrefKey,
-									[NSNumber numberWithBool:NO], kResetChartCacheKey,
 									[NSNumber numberWithBool:NO], kResetSavedDatabaseKey,
 									version, @"CFBundleVersion",
 									nil];
