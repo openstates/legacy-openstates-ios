@@ -6,6 +6,9 @@
 //  Copyright 2011 Gregory S. Combs. All rights reserved.
 //
 
+#define OPENAPIS_DEFAULT_SESSION		@"82"
+#define WNOM_DEFAULT_LATEST_SESSION		81
+
 // Legislative Chamber / Legislator Type
 enum kChambers {
     BOTH_CHAMBERS = 0,
