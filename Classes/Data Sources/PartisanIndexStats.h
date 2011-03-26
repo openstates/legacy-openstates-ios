@@ -10,16 +10,13 @@
 
 @class LegislatorObj;
 
-@interface PartisanIndexStats : NSObject {
-	//CGFloat	avgRepubHouseIndex, avgDemocHouseIndex, avgRepubSenateIndex, avgDemocSenateIndex;
-	
+@interface PartisanIndexStats : NSObject {	
 @private
 	NSDictionary *m_partisanIndexAggregates;	
 
 }
 
 @property (nonatomic, readonly) NSDictionary *partisanIndexAggregates;
-@property (nonatomic, retain) NSString *chartTemplate;
 
 + (PartisanIndexStats *)sharedPartisanIndexStats;
 
@@ -30,9 +27,6 @@
 
 - (NSArray *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber;
 
-- (NSString *)partisanChartForLegislator:(LegislatorObj*)legislator width:(NSString *)width;
 - (NSDictionary *)partisanshipDataForLegislatorID:(NSNumber*)legislatorID;
-
-- (BOOL) resetChartCacheIfNecessary;
 
 @end

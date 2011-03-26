@@ -10,21 +10,17 @@
 #import "LegislatorObj.h"
 #import "WnomObj.h"
 #import "UtilityMethods.h"
-#import "UIColor-Expanded.h"
-#import "TexLegeTheme.h"
 #import "TexLegeCoreDataUtils.h"
 #import "NSDate+Helper.h"
 #import "DataModelUpdateManager.h"
 #import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "TexLegeAppDelegate.h"
-#import "NSDate+Helper.h"
 
 @interface PartisanIndexStats (Private)
 - (NSArray *) aggregatePartisanIndexForChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
 @end
 
 @implementation PartisanIndexStats
-@synthesize chartTemplate;
 
 SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 
@@ -53,8 +49,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 
 	if (m_partisanIndexAggregates) [m_partisanIndexAggregates release], m_partisanIndexAggregates = nil;
 	
-	self.chartTemplate = nil;
-	
     [super dealloc];
 }
 
@@ -63,9 +57,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	[self partisanIndexAggregates];
 }
 
+#pragma mark -
+#pragma mark Statistics for Partisan Sliders
 
+/* This collects the calculations of partisanship across members in each chamber and party, then caches the results*/
 - (NSDictionary *)partisanIndexAggregates {
-	
 	if (m_partisanIndexAggregates == nil) {
 		NSMutableDictionary *tempAggregates = [NSMutableDictionary dictionaryWithCapacity:4];
 		NSInteger chamber, party;
@@ -96,6 +92,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	return m_partisanIndexAggregates;
 }
 
+/* These are convenience methods for accessing our aggregate calculations from cache */
 - (CGFloat) minPartisanIndexUsingChamber:(NSInteger)chamber {
 	return [[self.partisanIndexAggregates objectForKey:
 			[NSString stringWithFormat:@"MinC%d+P0", chamber]] floatValue];
@@ -118,40 +115,52 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 };
 
 
-#pragma mark -
-#pragma mark Partisan Indexing
+- (NSNumber *) maxWnomSession {
+	return [TexLegeCoreDataUtils fetchCalculation:@"max:" 
+									   ofProperty:@"session" 
+										 withType:NSInteger32AttributeType 
+										 onEntity:@"WnomObj"];
+}
 
+/* This queries the partisan index from each legislator and calculates aggregate statistics */
 - (NSArray *) aggregatePartisanIndexForChamber:(NSInteger)chamber andPartyID:(NSInteger)party {
-	
 	if (chamber == BOTH_CHAMBERS) {
 		debug_NSLog(@"aggregatePartisanIndexForChamber: ... cannot be BOTH chambers");
 		return nil;
 	}
 	
-	NSString *predicateString = nil;
+	NSNumber *tempNum = [self maxWnomSession];
+	NSInteger maxWnomSession = WNOM_DEFAULT_LATEST_SESSION;
+	if (tempNum)
+		maxWnomSession = [tempNum integerValue];
+	
+	NSMutableString *predicateString = [NSMutableString stringWithFormat:@"self.legislator.legtype == %d AND self.session == %d", chamber, maxWnomSession];
+	
 	if (party > kUnknownParty)
-		predicateString = [NSString stringWithFormat:@"legtype == %d AND party_id == %d", chamber, party];
-	else
-		predicateString = [NSString stringWithFormat:@"legtype == %d", chamber];	
+		[predicateString appendFormat:@" AND self.legislator.party_id == %d", party];
+
+	if (maxWnomSession == 81)	// let's try some special cases for the party switchers Pena and Hopson and Ritter
+		[predicateString appendString:@" AND self.legislator.legislatorID != 50000 AND self.legislator.legislatorID != 49745 AND self.legislator.legislatorID != 25363"];
+	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateString]; 
 	/*_____________________*/
 	
 	NSExpression *ex = [NSExpression expressionForFunction:@"average:" arguments:
-						[NSArray arrayWithObject:[NSExpression expressionForKeyPath:@"partisan_index"]]];
+						[NSArray arrayWithObject:[NSExpression expressionForKeyPath:@"wnomAdj"]]];
 	NSExpressionDescription *edAvg = [[NSExpressionDescription alloc] init];
 	[edAvg setName:@"averagePartisanIndex"];
 	[edAvg setExpression:ex];
 	[edAvg setExpressionResultType:NSFloatAttributeType];
 	
 	ex = [NSExpression expressionForFunction:@"max:" arguments:
-		  [NSArray arrayWithObject:[NSExpression expressionForKeyPath:@"partisan_index"]]];
+		  [NSArray arrayWithObject:[NSExpression expressionForKeyPath:@"wnomAdj"]]];
 	NSExpressionDescription *edMax = [[NSExpressionDescription alloc] init];
 	[edMax setName:@"maxPartisanIndex"];
 	[edMax setExpression:ex];
 	[edMax setExpressionResultType:NSFloatAttributeType];
 	
 	ex = [NSExpression expressionForFunction:@"min:" arguments:
-		  [NSArray arrayWithObject:[NSExpression expressionForKeyPath:@"partisan_index"]]];
+		  [NSArray arrayWithObject:[NSExpression expressionForKeyPath:@"wnomAdj"]]];
 	NSExpressionDescription *edMin = [[NSExpressionDescription alloc] init];
 	[edMin setName:@"minPartisanIndex"];
 	[edMin setExpression:ex];
@@ -159,33 +168,35 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	
 	/*_____________________*/
 	
-	NSFetchRequest *request = [LegislatorObj fetchRequest];
+	NSFetchRequest *request = [WnomObj fetchRequest];
 	[request setPredicate:predicate];
 	[request setPropertiesToFetch:[NSArray arrayWithObjects:edAvg, edMax, edMin, nil]];
 	[request setResultType:NSDictionaryResultType];
 	[edAvg release], [edMax release], [edMin release];
 	
-	NSArray *objects = [LegislatorObj objectsWithFetchRequest:request];
-	if (objects == nil) {
-		// Handle the error.
+	NSArray *objects = [WnomObj objectsWithFetchRequest:request];
+	if (IsEmpty(objects)) {
 		debug_NSLog(@"PartisanIndexStats Error while fetching Legislators");
 	}
 	else {
-		if ([objects count] > 0) {
-			NSNumber *avgPartisanIndex = [[objects objectAtIndex:0] valueForKey:@"averagePartisanIndex"];
-			NSNumber *maxPartisanIndex = [[objects objectAtIndex:0] valueForKey:@"maxPartisanIndex"];
-			NSNumber *minPartisanIndex = [[objects objectAtIndex:0] valueForKey:@"minPartisanIndex"];
-			//return [avgPartisanIndex floatValue];
-			return [NSArray arrayWithObjects:avgPartisanIndex, maxPartisanIndex, minPartisanIndex, nil];
-		}
+		NSNumber *avgPartisanIndex = [[objects objectAtIndex:0] valueForKey:@"averagePartisanIndex"];
+		NSNumber *maxPartisanIndex = [[objects objectAtIndex:0] valueForKey:@"maxPartisanIndex"];
+		NSNumber *minPartisanIndex = [[objects objectAtIndex:0] valueForKey:@"minPartisanIndex"];
+		debug_NSLog(@"Partisanship for Chamber (%d) Party (%d): min=%@ max=%@ avg=%@", 
+					chamber, party, minPartisanIndex, maxPartisanIndex, avgPartisanIndex);
+		return [NSArray arrayWithObjects:avgPartisanIndex, maxPartisanIndex, minPartisanIndex, nil];
 	}
 	
 	return nil;
-	
 }
+
+#pragma mark -
+#pragma mark Statistics for Historical Chart
 
 #define	WNOMAGGREGATES_KEY	@"WnomAggregateObj"
 
+/* This gathers our pre-calculated overall aggregate scores for parties and chambers, from JSON		
+	We use this for our red/blue lines in our historical partisanship chart.*/
 - (NSArray *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber {
 	NSError *error = nil;
 	
@@ -209,29 +220,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 
 #pragma mark -
 #pragma mark Chart Generation
-
-- (NSString *)chartTemplate {
-	if (!chartTemplate) {
-		/*
-		 NSString *thePath = [[NSBundle mainBundle] pathForResource:@"TexLegeStrings" ofType:@"plist"];
-		 NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
-		 if ([UtilityMethods isIPadDevice])
-		 chartTemplate = [[textDict objectForKey:@"ChartTemplate"] retain];
-		 else
-		 chartTemplate = [[textDict objectForKey:@"ChartTemplateSmall"] retain];
-		 */
-		NSString *file = nil;
-		if ([UtilityMethods isIPadDevice])
-			file = @"ChartsTemplate~ipad";
-		else
-			file = @"ChartsTemplate~iphone";
-		
-		NSString *thePath = [[NSBundle mainBundle] pathForResource:file ofType:@"htm"];
-		NSError *error;
-		chartTemplate = [[NSString stringWithContentsOfFile:thePath encoding:NSUTF8StringEncoding error:&error] retain];
-	}
-	return chartTemplate;
-}
 
 - (NSDictionary *)partisanshipDataForLegislatorID:(NSNumber*)legislatorID {
 	if (!legislatorID)
@@ -296,189 +284,4 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	
 }
 
-- (NSDictionary *)chartDataForLegislator:(LegislatorObj*)legislator {	
-	if (!legislator)
-		return nil;
-	
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"session" ascending:YES];
-	NSArray *descriptors = [[NSArray alloc] initWithObjects:sortDescriptor,nil];
-	NSArray *sortedScores = [[legislator.wnomScores allObjects] sortedArrayUsingDescriptors:descriptors];
-	[sortDescriptor release];
-	[descriptors release];
-	NSInteger countOfScores = [legislator.wnomScores count];
-	
-	
-	NSInteger chamber = [legislator.legtype integerValue];
-	NSArray *democHistory = [self historyForParty:DEMOCRAT Chamber:chamber];
-	NSArray *repubHistory = [self historyForParty:REPUBLICAN Chamber:chamber];
-	
-	NSMutableString *repubData = [[NSMutableString alloc] initWithString:@"["];
-	NSMutableString *democData = [[NSMutableString alloc] initWithString:@"["];
-	NSMutableString *memberData = [[NSMutableString alloc] initWithString:@"["];
-	//NSMutableString *timeData = [[NSMutableString alloc] initWithString:@"["];
-	
-	CGFloat min = -0.85f, max = 0.85f;
-
-	
-	NSString *firstYear = nil;
-	NSUInteger i;
-	
-	for ( i = 0; i < countOfScores ; i++) {
-		//BOOL showLabel = ((i % 2 == 0) || countOfScores < 3);
-		
-		WnomObj *wnomObj = [sortedScores objectAtIndex:i];
-		NSNumber *democY = [[democHistory findWhereKeyPath:@"session" equals:wnomObj.session] objectForKey:@"wnom"];
-		NSNumber *repubY = [[repubHistory findWhereKeyPath:@"session" equals:wnomObj.session] objectForKey:@"wnom"];
-		if (!democY)
-			democY = [NSNumber numberWithFloat:0.0f];
-		if (!repubY)
-			repubY = [NSNumber numberWithFloat:0.0f];
-		
-		[repubData appendString:[repubY stringValue]];
-		[democData appendString:[democY stringValue]];
-		
-		//[timeData appendString:[[wnomObj year] stringValue]];
-		if (i==0)
-			firstYear = [[wnomObj year] stringValue];
-		
-		CGFloat legVal = [[wnomObj wnomAdj] floatValue];
-		if (legVal > max && legVal > [repubY floatValue])
-			max = legVal;
-		if (legVal < min && legVal < [democY floatValue])
-			min = legVal;
-		
-		if (legVal != 0.0f)
-			[memberData appendString:[[wnomObj wnomAdj] stringValue]];
-		else
-			[memberData appendString:@"null"];
-		
-		if (i<(countOfScores-1)) {
-			[repubData appendString:@", "];
-			[democData appendString:@", "];
-			[memberData appendString:@", "];
-			//[timeData appendString:@", "];
-		}
-		
-	}
-	[repubData appendString:@"]"];
-	[democData appendString:@"]"];
-	[memberData appendString:@"]"];
-	//[timeData appendString:@"]"];
-	
-	NSString *timeData = @"";
-	if (firstYear) {
-		timeData =  firstYear;
-	}
-	
-	
-	NSString *minmax = @"min: -0.85, max: 0.85";
-	if (min < -1.04f || max > 1.04f)
-		minmax = [NSString stringWithFormat:@"min: %f, max: %f", min, max];
-	
-	//debug_NSLog(@"minmax = %@", minmax);
-	
-	NSDictionary *dataDict = [NSDictionary dictionaryWithObjectsAndKeys:	
-							  repubData, @"repub", 
-							  democData, @"democ", 
-							  memberData, @"member", 
-							  timeData, @"time",
-							  minmax, @"minmax",
-							  nil];
-	
-	[repubData release], [democData release], [memberData release];
-	//	, [timeData release];
-	
-	return dataDict;
-	
-}
-
-
-- (NSString *)partisanChartForLegislator:(LegislatorObj*)legislator width:(NSString*)width {
-	if (!legislator)
-		return nil;
-	
-	NSMutableString *content = [self.chartTemplate mutableCopy];
-	
-	NSString *legName = [legislator lastname];
-	
-	[content replaceOccurrencesOfString:@"LEGISLATOR" withString:legName
-										   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
-	
-	[content replaceOccurrencesOfString:@"CHAMBER" withString:[legislator chamberName] 
-										   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
-	
-	NSDictionary *chartData = [self chartDataForLegislator:legislator];
-	if (chartData) {
-		
-		[content replaceOccurrencesOfString:@"DATA_DEMOC" withString:[chartData objectForKey:@"democ"] 
-											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
-		[content replaceOccurrencesOfString:@"DATA_REPUB" withString:[chartData objectForKey:@"repub"] 
-											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
-		[content replaceOccurrencesOfString:@"DATA_MEMBER" withString:[chartData objectForKey:@"member"] 
-											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
-		[content replaceOccurrencesOfString:@"DATA_TIME" withString:[chartData objectForKey:@"time"] 
-											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
-		[content replaceOccurrencesOfString:@"DATA_MINMAX" withString:[chartData objectForKey:@"minmax"]
-											   options:NSLiteralSearch range:NSMakeRange(0, [content length])];
-		
-		NSString *style = @"";
-		NSString *viewport = @"";
-		if ([UtilityMethods isIPadDevice]) {
-//			style = [NSString stringWithFormat:@"width: %@; height: 180px; auto", width];
-//			viewport = @"width = device-width";
-			style = [NSString stringWithFormat:@"width: %@; height: 184px; auto", width];
-
-		}
-		else {
-			style = @"height: 184px; auto";
-			viewport = @"width = device-width";
-			//style = [NSString stringWithFormat:@"width: %@; height: 180px; auto", width];
-//			viewport = @"initial-scale = 1";
-		}
-		[content replaceOccurrencesOfString:@"VIEWPORT_SETTING" withString:viewport options:NSLiteralSearch range:NSMakeRange(0, [content length])];
-		[content replaceOccurrencesOfString:@"CONTENT_STYLE" withString:style options:NSLiteralSearch range:NSMakeRange(0, [content length])];
-	}
-	
-	return [content autorelease];
-}
-
-- (void) resetChartCache:(id)sender {
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-	NSError *error = nil;
-	NSString *pathToDocs = [UtilityMethods applicationDocumentsDirectory];
-	NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:pathToDocs error:&error];
-	
-	if (error) {
-		debug_NSLog(@"Error reading documents directory for svg cache reset: %@", error);
-	}
-	if (files && [files count]) {
-		for (NSString *file in files) {
-			if ([file hasSuffix:@".land.svg"] || [file hasSuffix:@".port.svg"]) {
-				NSString *filePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:file];
-				
-				[[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
-				if (error) {
-					debug_NSLog(@"Error deleting svg cache at path:%@ --- %@", filePath, error);
-				}
-			}
-		}
-	}	
-	[pool drain];
-}
-
-- (BOOL) resetChartCacheIfNecessary {
-	[[NSUserDefaults standardUserDefaults] synchronize];	
-	BOOL needsReset = [[NSUserDefaults standardUserDefaults] boolForKey:kResetChartCacheKey];
-	
-	if (needsReset) {
-		[self performSelectorInBackground:@selector(resetChartCache:) withObject:nil]; 
-	}
-	
-	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kResetChartCacheKey];
-	[[NSUserDefaults standardUserDefaults] synchronize];
-
-	return needsReset;
-}
 @end
