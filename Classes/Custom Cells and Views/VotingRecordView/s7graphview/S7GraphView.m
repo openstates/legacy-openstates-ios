@@ -38,6 +38,79 @@
 #import "TexLegeTheme.h"
 #import <QuartzCore/QuartzCore.h>
 
+#define ChartLabelID 62552
+
+@interface LabelThingy : UIView {
+	
+}
+@property (nonatomic,retain) NSString *labelText;
+@property (nonatomic,retain) UIColor *labelColor;
+
+@end
+
+@implementation LabelThingy
+@synthesize labelText, labelColor;
+- (id)initWithFrame:(CGRect)frame {
+	if (self=[super initWithFrame:frame]) {
+		self.backgroundColor = [UIColor clearColor];
+		self.tag = ChartLabelID;
+	}
+	return self;
+}
+
+- (void)dealloc {
+	self.labelText = nil;
+	[super dealloc];
+}
+
+- (void) displayBarBox: (CGSize) stringSize offsetY: (CGFloat) offsetY displayX: (CGFloat) displayX c: (CGContextRef) c valueString: (NSString *) valueString color:(UIColor *)currentColor {
+	// Build the rounded rectangle box for the display
+	
+	CGRect displayBar;
+	CGPoint topLeftCorner = CGPointMake(displayX, offsetY-stringSize.height);
+	CGPoint bottomLeftCorner = CGPointMake(topLeftCorner.x, topLeftCorner.y+([TexLegeTheme boldTen].pointSize+5.0));
+	CGPoint topRightCorner = CGPointMake(topLeftCorner.x+stringSize.width+5.0, topLeftCorner.y);
+	CGPoint bottomRightCorner = CGPointMake(topRightCorner.x, bottomLeftCorner.y);
+	
+	CGFloat radius = (bottomRightCorner.y - topRightCorner.y)/2;
+	
+	// Draw the arcs for the rounded box
+	CGContextAddArc(c, topRightCorner.x, topRightCorner.y+radius, radius, 3.14/2, (3/2)*(3.14), 1);
+	CGContextSetFillColorWithColor(c, currentColor.CGColor);
+	CGContextFillPath(c);
+	CGContextAddArc(c, topLeftCorner.x, topLeftCorner.y+radius, radius,  0, (2)*(3.14), 0);
+	CGContextSetFillColorWithColor(c, currentColor.CGColor);
+	CGContextFillPath(c);
+	CGFloat displayY = (offsetY-stringSize.height);
+	displayBar = CGRectMake(displayX, displayY, stringSize.width+5.0, [TexLegeTheme boldTen].pointSize+5.0);
+
+	CGContextAddRect(c ,displayBar);
+	CGContextFillRect(c, displayBar);
+	
+	CGContextSetFillColorWithColor(c, currentColor.CGColor);
+	
+	CGContextSetFillColorWithColor(c, [UIColor whiteColor].CGColor);
+	CGSize offset = CGSizeMake(-1.5, -1.5 );
+	UIColor * shadow = RGB( 50, 50, 50);
+	CGContextSetShadowWithColor(c, offset, 2, shadow.CGColor);
+	[valueString drawInRect:displayBar withFont:[TexLegeTheme boldTen]
+			  lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentCenter];
+	CGContextSetShadowWithColor(c, offset, 0, NULL);
+	//NSLog(@"%@ - %f", valueString,[valueString sizeWithFont:_detailFont].width);
+	CGContextSetFillColorWithColor(c, [TexLegeTheme textLight].CGColor);
+	
+}
+
+- (void)drawRect:(CGRect)rect {
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	CGSize stringSize = [self.labelText sizeWithFont:[TexLegeTheme boldTen]];
+	CGFloat displayX = ((rect.size.width/2)-stringSize.width/2);	
+	[self displayBarBox:stringSize offsetY:(rect.size.height/2) displayX:displayX c:context valueString:self.labelText color:self.labelColor];	
+}
+
+@end
+
+
 @interface S7GraphView (PrivateMethods)
 
 - (void)initializeComponent;
@@ -182,17 +255,17 @@
 		return;
 	}
 	
+	NSDictionary *minmax = [self.dataSource graphViewMinAndMaxY:self];
+	if (minmax) {
+		minY = [[minmax objectForKey:@"minY"] floatValue];
+		maxY = [[minmax objectForKey:@"maxY"] floatValue];
+	}
+
 	CGFloat offsetX = _drawAxisY ? 60.0f : 10.0f;
 	CGFloat offsetY = (_drawAxisX || _drawInfo) ? 30.0f : 10.0f;
-	
-	CGFloat minY = 0.0;
-	CGFloat maxY = 0.0;
-	
+		
 	UIFont *font = [TexLegeTheme boldTen];
 	
-	minY = -1.5f;
-	maxY = 1.5f;
-
 	NSInteger numSteps = 6;
 	CGFloat step = (maxY - minY) / numSteps;	// five vertical lines / steps
 	CGFloat stepY = (rect.size.height - (offsetY * 2)) / (maxY - minY);
@@ -408,8 +481,6 @@
 					CGContextAddEllipseInRect(c, elipsisRect);
 					CGContextSetFillColorWithColor(c, plotColor);
 					CGContextFillEllipseInRect(c, elipsisRect);
-					
-					CGContextClosePath(c);
 				}
 			}
 		}
@@ -483,8 +554,7 @@
 		[self.infoColor set];
 		[_info drawInRect:CGRectMake(0.0f, 5.0f, rect.size.width, 20.0f) withFont:font
 			lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentCenter];
-	}
-		
+	}	
 }
 
 - (void)xAxisWasTapped:(UIButton *)sendor{
@@ -502,10 +572,13 @@
                 [UIView commitAnimations];
             }
         }
+		else if (view.tag == ChartLabelID)
+			[view removeFromSuperview];
     }
-    
+		
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGRect rect = sendor.frame;
+	
     [sendor setBounds:CGRectMake(rect.origin.x/2, rect.origin.y/2, 0, 0)];
     [UIView beginAnimations:nil context:context];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
@@ -513,6 +586,50 @@
     
     [sendor setBackgroundColor:_highlightColor];
     [sendor setBounds:rect];
+	
+	NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    [numberFormatter setMinimumFractionDigits:1];
+    [numberFormatter setMaximumFractionDigits:1];
+	
+	NSNumber *value = [[self.dataSource graphView:self yValuesForPlot:1] objectAtIndex:sendor.tag];
+	NSString *memberString = [numberFormatter stringFromNumber:value];
+	value = [[self.dataSource graphView:self yValuesForPlot:0] objectAtIndex:sendor.tag];
+	NSString *repubString = [numberFormatter stringFromNumber:value];
+	value = [[self.dataSource graphView:self yValuesForPlot:2] objectAtIndex:sendor.tag];
+	NSString *demString = [numberFormatter stringFromNumber:value];
+
+	[numberFormatter release];
+	
+	CGFloat height = self.frame.size.height - 30.f;
+	CGFloat step = (height / 3)-15.f;
+	
+	CGFloat xShift = sendor.frame.origin.x+10.f;
+	NSInteger lastIndex = [self.dataSource graphViewMaximumNumberOfXaxisValues:self] - 1;
+	if (sendor.tag >= lastIndex)
+		xShift = xShift-90.f;
+	
+	CGRect labelRect = CGRectMake(xShift, step,90.f,60.f); 
+	LabelThingy *newLabel = [[LabelThingy alloc] initWithFrame:labelRect];
+	newLabel.labelText = [NSString stringWithFormat:@"%@: %@", [self.dataSource graphView:self nameForPlot:0], repubString];
+	newLabel.labelColor = [TexLegeTheme texasRed];
+	[self addSubview:newLabel];
+	[newLabel release];
+	
+	labelRect = CGRectMake(xShift, step*2,90.f,60.f); 
+	newLabel = [[LabelThingy alloc] initWithFrame:labelRect];
+	newLabel.labelText = [NSString stringWithFormat:@"%@: %@", [self.dataSource graphView:self nameForPlot:1], memberString];
+	newLabel.labelColor = [TexLegeTheme accent];
+	[self addSubview:newLabel];
+	[newLabel release];
+	
+	labelRect = CGRectMake(xShift, step*3,90.f,60.f); 
+	newLabel = [[LabelThingy alloc] initWithFrame:labelRect];
+	newLabel.labelText = [NSString stringWithFormat:@"%@: %@", [self.dataSource graphView:self nameForPlot:2], demString];
+	newLabel.labelColor = [TexLegeTheme texasBlue];
+	[self addSubview:newLabel];
+	[newLabel release];
+	
     [UIView commitAnimations];
     
     [self.delegate graphView:self indexOfTappedXaxis:sendor.tag];
@@ -525,6 +642,8 @@
         if ([view isKindOfClass:[UIButton class]]) {
             [view removeFromSuperview];
         }
+		else if (view.tag == ChartLabelID)
+			[view removeFromSuperview];
     }
     
 	[self setNeedsDisplay];
@@ -534,6 +653,8 @@
 
 - (void)initializeComponent {
 	
+	minY = CGFLOAT_MIN;
+	maxY = CGFLOAT_MAX;
 	_drawAxisX = YES;
 	_drawAxisY = YES;
 	_drawGridX = YES;
@@ -562,7 +683,7 @@
 	*/
 	self.layer.cornerRadius = 10.f;
 	self.layer.masksToBounds = YES;
+	
 
 }
-
 @end

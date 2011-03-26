@@ -43,6 +43,10 @@
 
 @required
 
+- (NSString *)graphView:(S7GraphView *)graphView nameForPlot:(NSInteger)plotIndex;
+
+- (NSDictionary *)graphViewMinAndMaxY:(S7GraphView *)graphView;
+
 /** 
  * Returns the number of plots your want to be rendered in the view.
  * 
@@ -146,6 +150,9 @@
 
     NSString *_xUnit;
     NSString *_yUnit;
+	
+	CGFloat minY;
+	CGFloat maxY;
 }
 
 /** Returns a different color for the first 10 plots. */

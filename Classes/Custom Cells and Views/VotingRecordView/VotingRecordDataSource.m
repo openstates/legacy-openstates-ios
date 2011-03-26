@@ -33,8 +33,9 @@
 	if (legislatorID)
 		[legislatorID release];
 	if (newID) {
+		legislatorID = [newID retain];
 		self.chartData = [[PartisanIndexStats sharedPartisanIndexStats] partisanshipDataForLegislatorID:newID];	
-#error find a way to drop in a graph key ... like what colors mean...
+#warning find a way to drop in a graph key ... like what colors mean...
 	}
 }
 
@@ -84,6 +85,24 @@
 }
 
 #pragma mark protocol S7GraphViewDataSource
+
+- (NSDictionary *)graphViewMinAndMaxY:(S7GraphView *)graphView {
+	
+	LegislatorObj *member = [LegislatorObj objectWithPrimaryKeyValue:self.legislatorID];
+	PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
+	CGFloat sliderMin = [indexStats minPartisanIndexUsingChamber:[member.legtype integerValue]];
+	CGFloat sliderMax = [indexStats maxPartisanIndexUsingChamber:[member.legtype integerValue]];
+
+	if (sliderMax > (-sliderMin))
+		sliderMin = (-sliderMax);
+	else
+		sliderMax = (-sliderMin);
+	
+	return [NSDictionary dictionaryWithObjectsAndKeys:
+			[NSNumber numberWithFloat:sliderMin], @"minY",
+			[NSNumber numberWithFloat:sliderMax], @"maxY",
+			nil];
+}
 
 - (NSUInteger)graphViewMaximumNumberOfXaxisValues:(S7GraphView *)graphView {
 	if (chartData)
@@ -156,7 +175,25 @@
 						[time stringWithFormat:@"yyyy"],
 						[legislator legProperName], diff1, @"repubs",
 						[legislator legProperName], diff2, @"dems"];
+	
     NSLog(@"%@",string);
+}
+
+- (NSString *)graphView:(S7GraphView *)graphView nameForPlot:(NSInteger)plotIndex {
+    switch (plotIndex) {
+        case 0:
+			return 	@"Reps";
+            break;
+		case 2:
+			return 	@"Dems";
+            break;
+        case 1:
+        default: {
+			LegislatorObj *member = [LegislatorObj objectWithPrimaryKeyValue:self.legislatorID];
+			return member.lastname;
+		}
+            break;
+    }
 }
 
 @end
