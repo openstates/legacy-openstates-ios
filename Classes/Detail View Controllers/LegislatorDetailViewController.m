@@ -39,14 +39,12 @@
 #import "PartisanScaleView.h"
 #import "LocalyticsSession.h"
 
+#import "VotingRecordDataSource.h"
+
 @interface LegislatorDetailViewController (Private)
 
 - (void) pushMapViewWithMap:(CapitolMap *)capMap;
 - (void) setupHeader;
-
-- (void)reloadChartForOrientationChange;	
-- (NSString *)svgChartPath;
-- (BOOL)svgChartPathExists;	
 @end
 
 
@@ -55,11 +53,11 @@
 @synthesize dataSource;
 @synthesize headerView, miniBackgroundView;
 
-@synthesize chartView, chartLoadingAct, isChartSVG;
 @synthesize leg_indexTitleLab, leg_rankLab, leg_chamberPartyLab, leg_chamberLab, leg_reelection;
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab, freshmanPlotLab;
 @synthesize indivSlider, partySlider, allSlider;
 @synthesize notesPopover, masterPopover;
+@synthesize newChartView, votingDataSource;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -99,18 +97,12 @@
 	
 	self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 	self.clearsSelectionOnViewWillAppear = NO;
-		
-	self.chartView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-	//self.chartView.backgroundColor = sealColor;
+				
+	VotingRecordDataSource *votingDS = [[VotingRecordDataSource alloc] init];
+	[votingDS prepareVotingRecordView:self.newChartView];
+	self.votingDataSource = votingDS;
+	[votingDS release];
 	
-	UIScrollView* sv = nil;
-	for(UIView* v in self.chartView.subviews){
-		if([v isKindOfClass:[UIScrollView class] ]){
-			sv = (UIScrollView*) v;
-			sv.scrollEnabled = NO;
-			sv.bounces = NO;
-		}
-	}		
 }
 
 #pragma mark -
@@ -142,11 +134,11 @@
 	//self.tableView = nil;
 	self.miniBackgroundView = nil;
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
-	self.chartView = nil;
-	self.chartLoadingAct = nil;
 	self.notesPopover = nil;
 	self.masterPopover = nil;
 
+	self.newChartView = nil;
+	self.votingDataSource = nil;
 	[super viewDidUnload];
 }
 
@@ -161,13 +153,14 @@
 	self.leg_photoView = nil;
 	self.leg_reelection = nil;
 	//self.tableView = nil;
-	self.chartView = nil;
-	self.chartLoadingAct = nil;
 	self.miniBackgroundView = nil;
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
 	self.notesPopover = nil;
 	self.masterPopover = nil;
 	self.dataObjectID = nil;
+
+	self.newChartView = nil;
+	self.votingDataSource = nil;
 
 	[super dealloc];
 }
@@ -178,58 +171,6 @@
 
 - (void)setDataObject:(id)newObj {
 	[self setLegislator:newObj];
-}
-
-#pragma mark -
-#pragma mark SVG Charts
-
-// 134123212.2009.iphone.port.svg
-// 134123212.2009.iphone.land.svg
-- (NSString *)svgChartPath {
-	// TODO: Move these into the caches folder, and reset the resetty thingy switcher to the new path
-	NSString *device = [UtilityMethods isIPadDevice] ? @"ipad" : @"iphone";
-	NSString *orientation = [UtilityMethods isLandscapeOrientation] ? @"land" : @"port";
-	NSString *svgFile = [[NSString alloc] initWithFormat:@"%@.2009.%@.%@.svg", self.legislator.legislatorID, device, orientation];
-	NSString *svgPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent: svgFile];
-	[svgFile release];
-	
-	return svgPath;
-}
-
-- (void)reloadChartForOrientationChangeTo:(UIInterfaceOrientation)orientation {
-	BOOL isLandscape = UIInterfaceOrientationIsLandscape(orientation);
-	BOOL isIPad = [UtilityMethods isIPadDevice];
-	NSString *chartWidth = nil;
-	if (!isLandscape)
-		chartWidth = (isIPad) ? @"685px" : @"305px";	// we actually ignore the width on iPhones
-	else
-		chartWidth = (isIPad) ? @"623px" : @"465px";
-	
-	BOOL hasScores = (self.legislator.wnomScores && [self.legislator.wnomScores count]);
-	NSString *svgPath = [self svgChartPath];
-	
-	self.freshmanPlotLab.hidden = hasScores;
-	//self.chartView.hidden = !hasScores;
-
-	if (!hasScores)
-		[self.chartLoadingAct stopAnimating];
-	else if (![[NSFileManager defaultManager] fileExistsAtPath:svgPath]) {
-		self.isChartSVG = NO;
-		PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
-		NSString *chartHTML = [indexStats partisanChartForLegislator:self.legislator 
-															   width:chartWidth];
-		if (chartHTML) {
-			[self.chartView loadHTMLString:chartHTML baseURL:[UtilityMethods urlToMainBundle]];
-		}
-	}
-	else {		// we have scores, and we have an SVG file
-		self.isChartSVG = YES;
-		NSURL *fileURL = [[NSURL alloc] initFileURLWithPath:svgPath];
-		
-		NSURLRequest *req = [NSURLRequest requestWithURL:fileURL];
-		[self.chartView loadRequest:req];
-		[fileURL release];
-	}
 }
 
 - (NSString *)chamberPartyAbbrev {
@@ -265,9 +206,7 @@
 	}
 }
 
-- (void)setupHeader {	
-	self.chartView.hidden = YES;
-	
+- (void)setupHeader {		
 	NSString *legName = [NSString stringWithFormat:@"%@ %@",  [self.legislator legTypeShortName], [self.legislator legProperName]];
 	self.leg_nameLab.text = legName;
 	self.navigationItem.title = legName;
@@ -284,7 +223,7 @@
 	
 	PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
 
-	[self reloadChartForOrientationChangeTo:[[UIApplication sharedApplication] statusBarOrientation]];
+	//[self reloadChartForOrientationChangeTo:[[UIApplication sharedApplication] statusBarOrientation]];
 
 	if (self.leg_indexTitleLab)
 		self.leg_indexTitleLab.text = [NSString stringWithFormat:@"%@ %@", 
@@ -317,6 +256,10 @@
 		self.allSlider.sliderValue = [indexStats overallPartisanIndexUsingChamber:[self.legislator.legtype integerValue]];
 	}	
 	
+	BOOL hasScores = (self.legislator.wnomScores && [self.legislator.wnomScores count]);
+	self.freshmanPlotLab.hidden = hasScores;
+	self.newChartView.hidden = !hasScores;
+
 }
 
 
@@ -362,12 +305,15 @@
 		self.tableView.dataSource = self.dataSource;
 
 		[self setupHeader];
-		
+		self.votingDataSource.legislatorID = [anObject legislatorID];
+
 		if (masterPopover != nil) {
 			[masterPopover dismissPopoverAnimated:YES];
 		}		
 		
+		
 		[self.tableView reloadData];
+		[self.newChartView reloadData];
 		[self.view setNeedsDisplay];
 	}
 }
@@ -378,6 +324,7 @@
 	// this will force our datasource to renew everything
 	self.dataSource.legislator = self.legislator;
 	[self.tableView reloadData];	
+	[self.newChartView reloadData];
 }
 
 // Called on the delegate when the user has taken action to dismiss the popover. This is not called when -dismissPopoverAnimated: is called directly.
@@ -448,55 +395,9 @@
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration 
 //- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	[self reloadChartForOrientationChangeTo:toInterfaceOrientation];
-}
-
-#pragma mark -
-#pragma mark Web View Delegate
-
-- (void)webViewDidStartLoad:(UIWebView *)webView {
-	BOOL hasScores = (self.legislator.wnomScores && [self.legislator.wnomScores count]);
+	[self.newChartView reloadData];
 	
-	if (hasScores /*&& !self.isChartSVG*/) {
-		[self.chartLoadingAct startAnimating];
-	}
-}
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-		
-	if (!self.isChartSVG)
-	{		
-		NSString *javaScript = @"{ chart.getSVG(); }";
-		NSString *svgPath = [self svgChartPath];
-		NSString *data = [self.chartView stringByEvaluatingJavaScriptFromString:javaScript];
-		NSError *error = nil;
-		
-		if (data)
-			[data writeToFile:svgPath atomically:NO encoding:NSUTF8StringEncoding error:&error];
-		if (error) {
-			NSLog(@"Error writing svg to file, %@", svgPath);
-		}
-		if ([[NSFileManager defaultManager] fileExistsAtPath:svgPath]) {
-			[self reloadChartForOrientationChangeTo:[[UIApplication sharedApplication] statusBarOrientation]];
-		}
-		else {	// There must have been some sort of problem, so just stop the activity indicator
-			[self.chartLoadingAct stopAnimating];
-		}
-
-	}
-	else {
-		self.chartView.hidden = NO;
-		[self.chartLoadingAct stopAnimating];
-	}
-	
-#ifdef AUTOMATED_TESTING_CHARTS
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"AUTOMATED_TESTING_CHARTS" object:self.legislator];
-#endif
-}
-
-
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-	[self.chartLoadingAct stopAnimating];
+//	[self reloadChartForOrientationChangeTo:toInterfaceOrientation];
 }
 
 #pragma mark -
