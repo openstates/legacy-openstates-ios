@@ -497,18 +497,21 @@
                     CGContextSetLineWidth(c, 2.f);
                     
                     CGPoint startPoint = CGPointMake(x + offsetX, rect.size.height - y - offsetY);
-                    CGPoint endPoint;
+                    CGPoint endPoint = {CGFLOAT_MIN,CGFLOAT_MIN};
 					
 					CGRect elipsisRect = CGRectMake(startPoint.x-(elipsisSize/2), startPoint.y-(elipsisSize/2), elipsisSize, elipsisSize);
 					CGContextAddEllipseInRect(c, elipsisRect);
 					CGContextSetFillColorWithColor(c, plotColor);
 					CGContextFillEllipseInRect(c, elipsisRect);
 					
+					BOOL skipNext = NO;
                     if ([@"NSCFNumber" isEqualToString:NSStringFromClass([[values objectAtIndex:valueIndex + 1] class])] || [@"NSNumber" isEqualToString:NSStringFromClass([[values objectAtIndex:valueIndex + 1] class])]) {
-                        x = (valueIndex + 1) * stepX;
-                        y = ([[values objectAtIndex:valueIndex + 1] floatValue] - minY) * stepY;
-                        endPoint = CGPointMake(x + offsetX, rect.size.height - y - offsetY);    						
-                    } else {
+						CGFloat nextVal = [[values objectAtIndex:valueIndex+1] floatValue];
+						x = (valueIndex + 1) * stepX;
+						y = (nextVal - minY) * stepY;
+						endPoint = CGPointMake(x + offsetX, rect.size.height - y - offsetY); 
+						skipNext = (nextVal == CGFLOAT_MIN || nextVal == 0.0f);
+					} else {
                         for (NSUInteger idx = valueIndex+1; idx < values.count; idx++) {
                             if ([@"NSCFNumber" isEqualToString:NSStringFromClass([[values objectAtIndex:idx] class])] || [@"NSNumber" isEqualToString:NSStringFromClass([[values objectAtIndex:idx] class])]) {
                                 x = idx * stepX;
@@ -520,8 +523,10 @@
                     }
 										
                     CGContextMoveToPoint(c, startPoint.x, startPoint.y);
-                    
-                    CGContextAddLineToPoint(c, endPoint.x, endPoint.y);
+
+					// don't put a line on a missing value
+					if (!skipNext)
+						CGContextAddLineToPoint(c, endPoint.x, endPoint.y);
 					
                     CGContextClosePath(c);
 
@@ -529,7 +534,6 @@
                     CGContextStrokePath(c);
                     
                     if (shouldFill) {
-                        
                         CGContextMoveToPoint(c, startPoint.x, rect.size.height - offsetY);
                         CGContextAddLineToPoint(c, startPoint.x, startPoint.y);
                         CGContextAddLineToPoint(c, endPoint.x, endPoint.y);
@@ -539,10 +543,13 @@
                         CGContextSetFillColorWithColor(c, plotColor);
                         CGContextFillPath(c);
                     }
-					elipsisRect = CGRectMake(endPoint.x-(elipsisSize/2), endPoint.y-(elipsisSize/2), elipsisSize, elipsisSize);
-					CGContextAddEllipseInRect(c, elipsisRect);
-					CGContextSetFillColorWithColor(c, plotColor);
-					CGContextFillEllipseInRect(c, elipsisRect);					
+					// don't put a dot on a missing value
+					if (!skipNext) {
+						elipsisRect = CGRectMake(endPoint.x-(elipsisSize/2), endPoint.y-(elipsisSize/2), elipsisSize, elipsisSize);
+						CGContextAddEllipseInRect(c, elipsisRect);
+						CGContextSetFillColorWithColor(c, plotColor);
+						CGContextFillEllipseInRect(c, elipsisRect);	
+					}
                 }
             }
         }
@@ -587,49 +594,77 @@
     [sendor setBackgroundColor:_highlightColor];
     [sendor setBounds:rect];
 	
+	NSNumber *repV = [[self.dataSource graphView:self yValuesForPlot:0] objectAtIndex:sendor.tag];
+	NSNumber *memV = [[self.dataSource graphView:self yValuesForPlot:1] objectAtIndex:sendor.tag];
+	NSNumber *demV = [[self.dataSource graphView:self yValuesForPlot:2] objectAtIndex:sendor.tag];
+
 	NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
     [numberFormatter setMinimumFractionDigits:1];
     [numberFormatter setMaximumFractionDigits:1];
 	
-	NSNumber *value = [[self.dataSource graphView:self yValuesForPlot:1] objectAtIndex:sendor.tag];
-	NSString *memberString = [numberFormatter stringFromNumber:value];
-	value = [[self.dataSource graphView:self yValuesForPlot:0] objectAtIndex:sendor.tag];
-	NSString *repubString = [numberFormatter stringFromNumber:value];
-	value = [[self.dataSource graphView:self yValuesForPlot:2] objectAtIndex:sendor.tag];
-	NSString *demString = [numberFormatter stringFromNumber:value];
-
-	[numberFormatter release];
 	
+	NSDictionary *repub = [[NSDictionary alloc] initWithObjectsAndKeys:
+						   [NSNumber numberWithInteger:0], @"plotIndex",
+						   [TexLegeTheme texasRed], @"color",
+						   [numberFormatter stringFromNumber:repV], @"valueString",
+						   nil];
+	
+	NSDictionary *member = [[NSDictionary alloc] initWithObjectsAndKeys:
+							[NSNumber numberWithInteger:1], @"plotIndex",
+							[TexLegeTheme accent], @"color",
+							[numberFormatter stringFromNumber:memV], @"valueString",
+							nil];
+	
+	NSDictionary *dem = [[NSDictionary alloc] initWithObjectsAndKeys:
+							[NSNumber numberWithInteger:2], @"plotIndex",
+							[TexLegeTheme texasBlue], @"color",
+							[numberFormatter stringFromNumber:demV], @"valueString",
+							nil];
+
+	NSArray *order = nil;
+	// set the visual order of the labels
+	if ([memV floatValue] > [repV floatValue])
+		order = [[NSArray alloc] initWithObjects:member, repub, dem, nil];
+	else if ([memV floatValue] < [demV floatValue])
+		order = [[NSArray alloc] initWithObjects:repub, dem, member, nil];
+	else
+		order = [[NSArray alloc] initWithObjects:repub, member, dem, nil];
+		
+	
+	// this sets up the vertical spacing of the labels, evenly across the chart
 	CGFloat height = self.frame.size.height - 30.f;
 	CGFloat step = (height / 3)-15.f;
 	
+	// this shifts the labels to the left or right side, in we're touching too close to the edge of the chart
 	CGFloat xShift = sendor.frame.origin.x+10.f;
 	NSInteger lastIndex = [self.dataSource graphViewMaximumNumberOfXaxisValues:self] - 1;
-	if (sendor.tag >= lastIndex)
+	if (sendor.tag > 0 && sendor.tag >= lastIndex)
 		xShift = xShift-90.f;
 	
-	CGRect labelRect = CGRectMake(xShift, step,90.f,60.f); 
-	LabelThingy *newLabel = [[LabelThingy alloc] initWithFrame:labelRect];
-	newLabel.labelText = [NSString stringWithFormat:@"%@: %@", [self.dataSource graphView:self nameForPlot:0], repubString];
-	newLabel.labelColor = [TexLegeTheme texasRed];
-	[self addSubview:newLabel];
-	[newLabel release];
-	
-	labelRect = CGRectMake(xShift, step*2,90.f,60.f); 
-	newLabel = [[LabelThingy alloc] initWithFrame:labelRect];
-	newLabel.labelText = [NSString stringWithFormat:@"%@: %@", [self.dataSource graphView:self nameForPlot:1], memberString];
-	newLabel.labelColor = [TexLegeTheme accent];
-	[self addSubview:newLabel];
-	[newLabel release];
-	
-	labelRect = CGRectMake(xShift, step*3,90.f,60.f); 
-	newLabel = [[LabelThingy alloc] initWithFrame:labelRect];
-	newLabel.labelText = [NSString stringWithFormat:@"%@: %@", [self.dataSource graphView:self nameForPlot:2], demString];
-	newLabel.labelColor = [TexLegeTheme texasBlue];
-	[self addSubview:newLabel];
-	[newLabel release];
-	
+		
+	NSInteger index = 1;
+	for (NSDictionary *dict in order) {
+		NSInteger plotIndex = [[dict objectForKey:@"plotIndex"] integerValue];
+		NSString *valString = [dict objectForKey:@"valueString"];
+		NSString *name = [self.dataSource graphView:self nameForPlot:plotIndex];
+		
+		CGRect labelRect = CGRectMake(xShift, step*index,90.f,60.f); 
+		LabelThingy *newLabel = [[LabelThingy alloc] initWithFrame:labelRect];
+		newLabel.labelText = [NSString stringWithFormat:@"%@: %@", 
+							  name, valString];
+		newLabel.labelColor = [dict objectForKey:@"color"];
+		[self addSubview:newLabel];
+		[newLabel release];
+		index++;
+		
+	}
+	[numberFormatter release];
+	[member release];
+	[repub release];
+	[dem release];
+	[order release];
+		
     [UIView commitAnimations];
     
     [self.delegate graphView:self indexOfTappedXaxis:sendor.tag];
