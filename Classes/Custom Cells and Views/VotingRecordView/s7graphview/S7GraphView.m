@@ -646,13 +646,14 @@
 	NSInteger index = 1;
 	for (NSDictionary *dict in order) {
 		NSInteger plotIndex = [[dict objectForKey:@"plotIndex"] integerValue];
-		NSString *valString = [dict objectForKey:@"valueString"];
-		NSString *name = [self.dataSource graphView:self nameForPlot:plotIndex];
-		
-		CGRect labelRect = CGRectMake(xShift, step*index,90.f,60.f); 
+		NSString *labelString = [NSString stringWithFormat:@"%@: %@",
+								 [self.dataSource graphView:self nameForPlot:plotIndex], 
+								 [dict objectForKey:@"valueString"]];
+		CGSize stringSize = [labelString sizeWithFont:[TexLegeTheme boldTen]];
+
+		CGRect labelRect = CGRectMake(xShift, step*index,stringSize.width+30.f,stringSize.height+15.f); 
 		LabelThingy *newLabel = [[LabelThingy alloc] initWithFrame:labelRect];
-		newLabel.labelText = [NSString stringWithFormat:@"%@: %@", 
-							  name, valString];
+		newLabel.labelText = labelString;
 		newLabel.labelColor = [dict objectForKey:@"color"];
 		[self addSubview:newLabel];
 		[newLabel release];
