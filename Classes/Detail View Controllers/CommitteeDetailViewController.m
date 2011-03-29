@@ -72,7 +72,7 @@ CGFloat quartzRowHeight = 73.f;
 	[self setCommittee:newObj];
 }
 
-- (void)resetTableData:(NSNotificationCenter *)notification {
+- (void)resetTableData:(NSNotification *)notification {
 	if (self.dataObject) {
 		[self setDataObject:self.dataObject];
 	}

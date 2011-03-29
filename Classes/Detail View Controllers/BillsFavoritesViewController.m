@@ -26,12 +26,47 @@
 
 #pragma mark -
 #pragma mark View lifecycle
-
+- (id)initWithStyle:(UITableViewStyle)style {
+	if (self=[super initWithStyle:style]) {
+		
+	}
+	return self;	
+}
 /*
 - (void)didReceiveMemoryWarning {
 	[_cachedBills release];
 	_cachedBills = nil;	
 }*/
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+	return YES;
+}
+
+- (void)didReceiveMemoryWarning {
+	UINavigationController *nav = [self navigationController];
+	if (nav && [nav.viewControllers count]>1)
+		[nav popToRootViewControllerAnimated:YES];
+	
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    // Release any cached data, images, etc that aren't in use.
+}
+
+
+- (void)dealloc {	
+	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
+	
+	if (_watchList) {
+		[_watchList release];
+		_watchList = nil;
+	}
+	if (_cachedBills) {
+		[_cachedBills release];
+		_cachedBills = nil;
+	}
+	
+	[super dealloc];
+}
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
@@ -271,21 +306,6 @@
 	}
 }
 
-- (void)dealloc {	
-	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
-
-	if (_watchList) {
-		[_watchList release];
-		_watchList = nil;
-	}
-	if (_cachedBills) {
-		[_cachedBills release];
-		_cachedBills = nil;
-	}
-	
-	[super dealloc];
-}
-
 #pragma mark -
 #pragma mark RestKit:RKObjectLoaderDelegate
 
@@ -293,6 +313,15 @@
 	if (error && request) {
 		debug_NSLog(@"BillFavorites - Error loading bill results from %@: %@", [request description], [error localizedDescription]);
 		//[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:nil];
+
+		UIAlertView *alert = [[[ UIAlertView alloc ] 
+							   initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
+							   message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
+							   delegate:nil // we're static, so don't do "self"
+							   cancelButtonTitle: @"Cancel" 
+							   otherButtonTitles:nil, nil] autorelease];
+		[ alert show ];	
+		
 	}
 }
 

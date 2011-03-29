@@ -43,16 +43,47 @@ enum _billSections {
 @synthesize lab_title, lab_description;
 @synthesize stat_filed, stat_thisPassComm, stat_thisPassVote, stat_thatPassComm, stat_thatPassVote, stat_governor, stat_isLaw;
 
-
-#pragma mark -
-#pragma mark View lifecycle
-
 - (NSString *)nibName {
 	if ([UtilityMethods isIPadDevice])
 		return @"BillsDetailViewController~ipad";
 	else
 		return @"BillsDetailViewController~iphone";
 }
+
+
+#pragma mark -
+#pragma mark Memory management
+
+- (void)didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
+	UINavigationController *nav = [self navigationController];
+	if (nav && [nav.viewControllers count]>2)
+		[nav popToRootViewControllerAnimated:YES];
+	
+    [super didReceiveMemoryWarning];
+}
+
+- (void)dealloc {
+	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
+	
+	self.bill = nil;
+	self.headerView = self.descriptionView = self.statusView = nil;
+	self.lab_title = nil;
+	self.lab_description = nil;
+	self.stat_filed = self.stat_thisPassComm = self.stat_thisPassVote = self.stat_thatPassComm = self.stat_thatPassVote = self.stat_governor = self.stat_isLaw = nil;
+	self.masterPopover = nil;
+	self.starButton = nil;
+	[super dealloc];
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    // Override to allow orientations other than the default portrait orientation.
+    return YES;
+}
+
+
+#pragma mark -
+#pragma mark View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -74,18 +105,6 @@ enum _billSections {
 	}	
 }
 
-#pragma mark -
-#pragma mark Memory management
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-	UINavigationController *nav = [self navigationController];
-	if (nav && [nav.viewControllers count]>2)
-		[nav popToRootViewControllerAnimated:YES];
-		
-    [super didReceiveMemoryWarning];
-}
-
 - (void)viewDidUnload {
 	
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.	
@@ -99,19 +118,6 @@ enum _billSections {
 	[super viewDidUnload];
 }
 
-
-- (void)dealloc {
-	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
-
-	self.bill = nil;
-	self.headerView = self.descriptionView = self.statusView = nil;
-	self.lab_title = nil;
-	self.lab_description = nil;
-	self.stat_filed = self.stat_thisPassComm = self.stat_thisPassVote = self.stat_thatPassComm = self.stat_thatPassVote = self.stat_governor = self.stat_isLaw = nil;
-	self.masterPopover = nil;
-	self.starButton = nil;
-	[super dealloc];
-}
 
 - (id)dataObject {
 	return self.bill;
@@ -421,7 +427,7 @@ enum _billSections {
 	
 	if (self.starButton) {
 		UIBarButtonItem *watchItem = [[[UIBarButtonItem alloc] initWithCustomView:starButton] autorelease];
-		if ([UtilityMethods isIPadDevice])
+		if ([UtilityMethods isIPadDevice] && [[self.navigationController viewControllers] count] == 1) // idiotic
 			[self.navigationItem setLeftBarButtonItem:watchItem animated:YES];
 		else
 			[self.navigationItem setRightBarButtonItem:watchItem animated:YES];
@@ -458,15 +464,6 @@ enum _billSections {
 }
 
 #pragma mark -
-#pragma mark orientations
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Override to allow orientations other than the default portrait orientation.
-    return YES;
-}
-
-
-#pragma mark -
 #pragma mark Web View Delegate
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {	
@@ -493,16 +490,28 @@ enum _billSections {
 	switch (newIndexPath.section) {
 		case kBillSubjects: {
 			NSString *subject = [[bill objectForKey:@"subjects"] objectAtIndex:newIndexPath.row];
-			
-			BillsListDetailViewController *catResultsView = [[BillsListDetailViewController alloc] initWithStyle:UITableViewStylePlain];
+			BillsListDetailViewController *catResultsView = nil;
+			BOOL preexisting = NO;
+			if ([UtilityMethods isIPadDevice] && [UtilityMethods isLandscapeOrientation]) {
+				id tempView = [[[TexLegeAppDelegate appDelegate] masterNavigationController] visibleViewController];
+				if ([tempView isKindOfClass:[BillsListDetailViewController class]]) {
+					catResultsView = (BillsListDetailViewController *)[tempView retain];
+					preexisting = YES;
+				}
+			}
+			if (!catResultsView) {
+				catResultsView = [[BillsListDetailViewController alloc] initWithStyle:UITableViewStylePlain];
+			}
+			[catResultsView setTitle:subject];
 			BillSearchDataSource *dataSource = [catResultsView valueForKey:@"dataSource"];
-			catResultsView.title = subject;
 			[dataSource startSearchForSubject:subject chamber:[[bill objectForKey:@"chamber"] integerValue]];
-			if ([UtilityMethods isIPadDevice])
-				[[[TexLegeAppDelegate appDelegate] masterNavigationController] pushViewController:catResultsView animated:YES];
-			else
-				[self.navigationController pushViewController:catResultsView animated:YES];
-			[catResultsView release];			
+			if (!preexisting) {
+				if ([UtilityMethods isIPadDevice] && [UtilityMethods isLandscapeOrientation])
+					[[[TexLegeAppDelegate appDelegate] masterNavigationController] pushViewController:catResultsView animated:YES];
+				else
+					[self.navigationController pushViewController:catResultsView animated:YES];
+			}
+			[catResultsView release];
 		}
 			break;
 		case kBillSponsors: {
@@ -529,8 +538,14 @@ enum _billSections {
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
 	if (error && request) {
 		debug_NSLog(@"BillDetail - Error loading bill results from %@: %@", [request description], [error localizedDescription]);
-#warning present an error?
-		//[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:nil];
+
+			UIAlertView *alert = [[[ UIAlertView alloc ] 
+					  initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
+					  message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
+					  delegate:nil // we're static, so don't do "self"
+					  cancelButtonTitle: @"Cancel" 
+					  otherButtonTitles:nil, nil] autorelease];
+			[ alert show ];	
 	}
 }
 
@@ -539,9 +554,7 @@ enum _billSections {
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data  
 		
-		self.bill = [response.body mutableObjectFromJSONData];
-				
-		//[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataLoaded object:nil];
+		self.bill = [response.body mutableObjectFromJSONData];				
 	}
 }
 

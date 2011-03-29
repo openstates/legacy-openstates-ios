@@ -25,17 +25,46 @@
 #pragma mark -
 #pragma mark View lifecycle
 
-/*
- - (void)didReceiveMemoryWarning {
- [_cachedBills release];
- _cachedBills = nil;	
- }*/
-
 - (id)initWithStyle:(UITableViewStyle)style {
 	if (self = [super initWithStyle:style]) {
 		dataSource = [[[BillSearchDataSource alloc] initWithTableViewController:self] retain];
 	}
 	return self;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+	return YES;
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	if ([UtilityMethods isIPadDevice] && UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
+		if ([[[[TexLegeAppDelegate appDelegate] masterNavigationController] topViewController] isKindOfClass:[BillsListDetailViewController class]])
+			if ([self.navigationController isEqual:[[TexLegeAppDelegate appDelegate] detailNavigationController]])
+				[self.navigationController popToRootViewControllerAnimated:YES];
+		
+	}	
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+	NSLog(@"did rotate");
+}
+
+- (void)didReceiveMemoryWarning {
+	UINavigationController *nav = [self navigationController];
+	if (nav && [nav.viewControllers count]>1)
+		[nav popToRootViewControllerAnimated:YES];
+	
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    // Release any cached data, images, etc that aren't in use.
+}
+
+
+- (void)dealloc {	
+	
+	[dataSource release];
+	
+	[super dealloc];
 }
 
 - (void)viewDidLoad {
@@ -83,7 +112,7 @@
 			BOOL changingViews = NO;
 			
 			BillsDetailViewController *detailView = nil;
-			if (0) { //if ([UtilityMethods isIPadDevice]) {
+			if ([UtilityMethods isIPadDevice]) {
 				id aDetail = [[[TexLegeAppDelegate appDelegate] detailNavigationController] visibleViewController];
 				if ([aDetail isKindOfClass:[BillsDetailViewController class]])
 					detailView = aDetail;
@@ -103,17 +132,10 @@
 				[self.navigationController pushViewController:detailView animated:YES];
 			else if (changingViews)
 				//[[[self.splitViewController viewControllers] objectAtIndex:1] pushViewController:detailView animated:YES];
-				//[[[TexLegeAppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:YES];
-				[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
+				[[[TexLegeAppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:YES];
+				///[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
 		}			
 	}
-}
-
-- (void)dealloc {	
-		
-	[dataSource release];
-	
-	[super dealloc];
 }
 
 @end

@@ -225,8 +225,6 @@
 	
 	PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
 
-	//[self reloadChartForOrientationChangeTo:[[UIApplication sharedApplication] statusBarOrientation]];
-
 	if (self.leg_indexTitleLab)
 		self.leg_indexTitleLab.text = [NSString stringWithFormat:@"%@ %@", 
 									   [member legTypeShortName], [member lastname]];
