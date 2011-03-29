@@ -82,8 +82,18 @@
 
 			DistrictMapObj * map = [DistrictMapObj objectWithPrimaryKeyValue:distID];
 			if ([map districtContainsCoordinate:[self searchCoordinate]]) {
-				[foundIDs addObject:distID];
-				success = YES;
+				if ([map.districtMapID integerValue] == 43 || [map.district integerValue] == 85) {
+					DistrictMapObj * holeDist = [DistrictMapObj objectWithPrimaryKeyValue:[NSNumber numberWithInt:40]];	// dist 84
+					if (NO == [holeDist districtContainsCoordinate:[self searchCoordinate]]) {
+						[foundIDs addObject:distID];
+						success = YES;
+					}
+					[[holeDist managedObjectContext] refreshObject:map mergeChanges:NO];
+				}
+				else {
+					[foundIDs addObject:distID];
+					success = YES;
+				}
 			}
 			// this frees up memory and re-faults the unneeded objects
 			[[map managedObjectContext] refreshObject:map mergeChanges:NO];

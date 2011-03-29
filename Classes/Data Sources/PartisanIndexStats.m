@@ -52,7 +52,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
     [super dealloc];
 }
 
-- (void)resetData:(NSNotificationCenter *)notification {
+- (void)resetData:(NSNotification *)notification {
 	if (m_partisanIndexAggregates) [m_partisanIndexAggregates release], m_partisanIndexAggregates = nil;
 	[self partisanIndexAggregates];
 }

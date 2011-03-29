@@ -51,7 +51,7 @@
 	return self;
 }
 
-- (void)resetCoreData:(NSNotificationCenter *)notification {
+- (void)resetCoreData:(NSNotification *)notification {
 	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
 	self.fetchedResultsController = nil;
 	NSError *error = nil;

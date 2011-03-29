@@ -59,7 +59,7 @@
 // set this on when you don't want to see the index, ala keyboard active
 @property (nonatomic) BOOL hideTableIndex;
 
-- (void)resetData:(NSNotificationCenter *)notification;
+- (void)resetData:(NSNotification *)notification;
 
 
 @end
