@@ -35,6 +35,10 @@
 	</dict>
 	<key>Bills</key>
 	<dict>
+		<key>NetworkErrorTitle</key>
+		<string>Network Error</string>
+		<key>NetworkErrorText</key>
+		<string>There was an error while contacting the server for bill information.  Please check your network connectivity or try again.</string>
 		<key>NoWatchedTitle</key>
 		<string>No Watched Bills, Yet</string>
 		<key>NoWatchedText</key>
