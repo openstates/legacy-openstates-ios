@@ -681,12 +681,14 @@ static MiniBrowserController *s_browser = nil;
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
+
 	[self.m_toolBar setItems:self.m_normalItemList animated:NO];
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 	[self.m_activity stopAnimating];
 	[self.m_loadingLabel setHidden:YES];
 	[self.m_webView setAlpha:1.0f];
-	
+	[self.m_webView setBackgroundColor:[TexLegeTheme backgroundLight]];
+
 	[self enableBackButton:self.m_webView.canGoBack];
 	[self enableFwdButton:self.m_webView.canGoForward];
 	
