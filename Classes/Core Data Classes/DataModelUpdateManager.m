@@ -196,10 +196,7 @@ enum TXL_QueryTypes {
 	}
 }
 
-- (void)updateProgress {
-	//BOOL success = self.availableUpdates && ([self.downloadedUpdates count] == [self.availableUpdates count]);
-	//CGFloat progress = (CGFloat)([self.downloadedUpdates count]) / (CGFloat)[self.availableUpdates count];
-	
+- (void)updateProgress {	
 #if MTStatusBarOverlayON
 	NSInteger count = [self.activeUpdates count];
 	CGFloat progress = 1.0f;
