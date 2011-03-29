@@ -267,10 +267,12 @@ kDetailViewWidth, kHistoryTableRowHeight*kMaxHistoryTableRowCount + kStatusBarHe
 #pragma mark Lifecycle
 //===========================================================
 
-- (id)initWithFrame:(CGRect)frame {
-    if ((self = [super initWithFrame:frame])) {
+- (id)initWithFrame:(CGRect)newFrame {
+    if ((self = [super initWithFrame:newFrame])) {
+		NSLog(@"Status bar frame before: %@", NSStringFromCGRect([UIApplication sharedApplication].statusBarFrame));
+
         CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
-        
+		
 		// only use height of 20px even is status bar is doubled
 		statusBarFrame.size.height = statusBarFrame.size.height == 2*kStatusBarHeight ? kStatusBarHeight : statusBarFrame.size.height;
 		// if we are on the iPad but in iPhone-Mode (non-universal-app) correct the width
@@ -284,6 +286,8 @@ kDetailViewWidth, kHistoryTableRowHeight*kMaxHistoryTableRowCount + kStatusBarHe
 		self.alpha = 0.0f;
 		self.hidden = NO;
         
+		NSLog(@"Status bar frame after: %@", NSStringFromCGRect(self.frame));
+
 		// Default Small size: just show Activity Indicator
 		smallFrame_ = CGRectMake(statusBarFrame.size.width - kWidthSmall, 0.0f, kWidthSmall, statusBarFrame.size.height);
         
@@ -833,6 +837,7 @@ kDetailViewWidth, kHistoryTableRowHeight*kMaxHistoryTableRowCount + kStatusBarHe
                          }
 						 completion:NULL];
 	}
+	NSLog(@"Status bar frame: %@", NSStringFromCGRect([statusBarFrameValue CGRectValue]));
 }
 
 //===========================================================
@@ -1158,6 +1163,7 @@ kDetailViewWidth, kHistoryTableRowHeight*kMaxHistoryTableRowCount + kStatusBarHe
 }
 
 - (void)updateUIForMessageType:(MTMessageType)messageType duration:(NSTimeInterval)duration {
+
 	// set properties depending on message-type
 	switch (messageType) {
 		case MTMessageTypeActivity:
@@ -1329,8 +1335,7 @@ static MTStatusBarOverlay *sharedMTStatusBarOverlay = nil;
 		if (sharedMTStatusBarOverlay == nil && [[UIView class] respondsToSelector:@selector(animateWithDuration:animations:)]) {
 			sharedMTStatusBarOverlay = [[self alloc] initWithFrame:CGRectZero];
 		}
-	}
-    
+	}    
 	return sharedMTStatusBarOverlay;
 }
 
