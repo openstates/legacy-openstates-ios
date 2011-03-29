@@ -51,8 +51,7 @@
 */		
 		@try {
 			//debug_NSLog(@"Splitview unloading ??? title = %@", self.title);
-			[[NSNotificationCenter defaultCenter] removeObserver:self /*forKeyPath:UIApplicationWillChangeStatusBarOrientationNotification */];
-			[[NSNotificationCenter defaultCenter] removeObserver:self /*forKeyPath:UIApplicationDidChangeStatusBarOrientationNotification */];
+			[[NSNotificationCenter defaultCenter] removeObserver:self];
 		}
 		@catch (NSException * e) {
 			debug_NSLog(@"IntelligentSplitViewController DE-OBSERVING CRASHED: %@ ... error:%@", self.title, [e description]);
@@ -85,8 +84,10 @@
 	
 	NSTimeInterval duration = [[UIApplication sharedApplication] statusBarOrientationAnimationDuration];
 	
+	[super willRotateToInterfaceOrientation:toOrientation duration:duration];
+
 	if (!isSelectedTab || !notModal)  { // I don't think we're visible...
-		[super willRotateToInterfaceOrientation:toOrientation duration:duration];
+// ???? GREG?  this or the previous one?		[super willRotateToInterfaceOrientation:toOrientation duration:duration];
 		
 		UIViewController *master = [self.viewControllers objectAtIndex:0];
 		UIBarButtonItem *button = [super valueForKey:@"_barButtonItem"];
