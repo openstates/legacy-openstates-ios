@@ -10,3 +10,8 @@ pimpdaddy:Programs greg$ pwd
 
 ftp://ftpgis1.tlc.state.tx.us/DistrictViewer/PLANH100.zip
 ftp://ftpgis1.tlc.state.tx.us/DistrictViewer/PLANS100.zip
+
+
+
+
+ogr2ogr -t_srs EPSG:4326 -f SHP output.shp input.shp
