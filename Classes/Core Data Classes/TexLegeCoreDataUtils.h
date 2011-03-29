@@ -15,6 +15,8 @@
 #define RESTKIT_BASE_URL					@"http://www.texlege.com/rest"
 #endif
 
+//@class TexLegeDataMaintenance;
+
 @class LegislatorObj, CommitteeObj, DistrictMapObj;
 @interface TexLegeCoreDataUtils : NSObject {
 
@@ -36,9 +38,34 @@
 + (void) deleteObjectInEntityNamed:(NSString *)entityName withPrimaryKeyValue:(id)keyValue;
 + (void) deleteAllObjectsInEntityNamed:(NSString*)entityName;
 
-+ (void)loadDataFromRest:(NSString *)entityName delegate:(id)delegate;
+//+ (void)loadDataFromRest:(NSString *)entityName delegate:(id)delegate;
 + (void)initRestKitObjects:(id)sender;
 + (void)resetSavedDatabase:(id)sender;
 + (NSArray *)registeredDataModels;
 @end
 
+/*
+typedef enum {
+    TexLegeDataMaintenanceFailOptionLog,
+    TexLegeDataMaintenanceFailShowAlert,
+    
+	TexLegeDataMaintenanceFailOptionCount
+} TexLegeDataMaintenanceFailOption;
+
+@protocol TexLegeDataMaintenanceDelegate
+- (void)dataMaintenanceDidFinishSuccessfully:(TexLegeDataMaintenance *)op;
+- (void)dataMaintenanceDidFail:(TexLegeDataMaintenance *)op 
+							 errorMessage:(NSString *)errorMessage 
+								   option:(TexLegeDataMaintenanceFailOption)failOption;
+@end
+
+@interface TexLegeDataMaintenance : NSOperation 
+{
+    __weak  NSObject <TexLegeDataMaintenanceDelegate> *delegate;
+}
+@property (assign) NSObject <TexLegeDataMaintenanceDelegate> *delegate;
+
+- (id) initWithDelegate:(id<TexLegeDataMaintenanceDelegate>)newDelegate;
+
+@end
+ */

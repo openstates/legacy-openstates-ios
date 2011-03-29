@@ -21,6 +21,8 @@
 #import "TexLegeObjectCache.h"
 #import "UtilityMethods.h"
 
+#import "NSInvocation+CWVariableArguments.h"
+
 //#define VERIFYCOMMITTEES 1
 #ifdef VERIFYCOMMITTEES
 #import "JSONDataImporter.h"
@@ -218,15 +220,6 @@
 	}
 }
 
-+ (void)loadDataFromRest:(NSString *)entityName delegate:(id)delegate {
-	if (!entityName || !NSClassFromString(entityName))
-		return;
-	RKObjectManager* objectManager = [RKObjectManager sharedManager];
-	NSString *resourcePath = [NSString stringWithFormat:@"/%@.json", entityName];
-	[objectManager loadObjectsAtResourcePath:resourcePath objectClass:NSClassFromString(entityName) delegate:delegate];
-//	[[objectManager objectStore] save];
-}
-
 + (void)initRestKitObjects:(id)sender {
 	
 	RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:RESTKIT_BASE_URL];
@@ -325,6 +318,77 @@
 		[[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
 	}
 }
-
 @end
 
+/*
+
+ @interface TexLegeDataMaintenance()
+- (void)informDelegateOfFailureWithMessage:(NSString *)message failOption:(TexLegeDataMaintenanceFailOption)failOption;
+- (void)informDelegateOfSuccess;
+@end
+
+
+@implementation TexLegeDataMaintenance
+
+@synthesize delegate;
+
+- (id) initWithDelegate:(id<TexLegeDataMaintenanceDelegate>)newDelegate {
+	if (self = [super init]) {
+		if (newDelegate)
+			delegate = newDelegate;
+	}
+	return self;
+}
+
+- (void) dealloc {
+	delegate = nil;
+	[super dealloc];
+}
+
+- (void)informDelegateOfFailureWithMessage:(NSString *)message failOption:(TexLegeDataMaintenanceFailOption)failOption;
+{
+    if ([delegate respondsToSelector:@selector(dataMaintenanceDidFail:errorMessage:option:)])
+    {
+        NSInvocation *invocation = [NSInvocation invocationWithTarget:delegate 
+                                                             selector:@selector(dataMaintenanceDidFail:errorMessage:option:) 
+                                                      retainArguments:YES, self, message, failOption];
+        [invocation invokeOnMainThreadWaitUntilDone:YES];
+    } 
+}
+
+- (void)informDelegateOfSuccess
+{
+    if ([delegate respondsToSelector:@selector(dataMaintenanceDidFinishSuccessfully:)])
+    {
+        [delegate performSelectorOnMainThread:@selector(dataMaintenanceDidFinishSuccessfully:) 
+                                   withObject:self 
+                                waitUntilDone:NO];
+    }
+}
+
+#pragma mark -
+- (void)main 
+{	
+	BOOL success = NO;
+    @try 
+    {		
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		for (DistrictMapObj *map in [DistrictMapObj allObjects])
+			[map resetRelationship:self];
+		
+		[[[RKObjectManager sharedManager] objectStore] save];
+		success = YES;
+		[pool drain];
+    }
+    @catch (NSException * e) 
+    {
+        debug_NSLog(@"Exception: %@", e);
+    }
+	if (success)
+		[self informDelegateOfSuccess];
+	else
+		[self informDelegateOfFailureWithMessage:@"Could not reset core data relationships." failOption:TexLegeDataMaintenanceFailOptionLog];
+}
+
+@end
+*/
