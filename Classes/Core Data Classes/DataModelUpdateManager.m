@@ -16,6 +16,8 @@
 #import "DistrictMapObj.h"
 #import "NSDate+Helper.h"
 
+#define MTStatusBarOverlayON 1
+
 #define JSONDATA_IDKEY			@"id"
 #define JSONDATA_ENCODING		NSUTF8StringEncoding
 
@@ -60,9 +62,11 @@ enum TXL_QueryTypes {
 
 @synthesize statusBlurbsAndModels;
 @synthesize availableUpdates, activeUpdates;
+//@synthesize genericOperationQueue;
 
 - (id) init {
 	if (self=[super init]) {
+		//genericOperationQueue = nil;
 		activeUpdates = [[[NSCountedSet alloc] init] retain];
 		
 		availableUpdates = [[NSMutableDictionary dictionary] retain];
@@ -78,19 +82,26 @@ enum TXL_QueryTypes {
 									  @"District Maps", @"DistrictMapObj",
 									  @"Party Scores", @"WnomAggregateObj",
 									  nil];		
+		
+
+		//[[NSNotificationCenter defaultCenter] addObserver:self
+		//										 selector:@selector(mergeCoreDataSaves:) name:@"NSManagedObjectContextDidSaveNotification" object:nil];	
 
 	}
 	return self;
 }
 
+
 - (void) dealloc {
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 
+	//self.genericOperationQueue = nil;
 	self.activeUpdates = nil;
 	self.statusBlurbsAndModels = nil;
 	self.availableUpdates = nil;
 	[super dealloc];
 }
+
 
 #pragma mark -
 #pragma mark Check & Perform Updates
@@ -106,15 +117,16 @@ enum TXL_QueryTypes {
 
 		self.activeUpdates = [NSCountedSet set];
 				
+#if MTStatusBarOverlayON
 		NSString *statusString = @"Checking for Data Updates";
-		MTStatusBarOverlay *overlay = [MTStatusBarOverlay sharedInstance];
+		MTStatusBarOverlay *overlay = [MTStatusBarOverlay sharedInstance] ;
 		overlay.historyEnabled = YES;
 		overlay.animation = MTStatusBarOverlayAnimationFallDown;  // MTStatusBarOverlayAnimationShrink
 		overlay.detailViewMode = MTDetailViewModeHistory;         // enable automatic history-tracking and show in detail-view
 		//overlay.delegate = self;
 		overlay.progress = 0.0;
 		[overlay postMessage:statusString animated:YES];
-
+#endif
 		
 		for (NSString *classString in objects) {
 			[self performDataUpdateIfAvailableForModel:classString];
@@ -158,6 +170,7 @@ enum TXL_QueryTypes {
 }
 
 - (void) performDataUpdateIfAvailableForModel:(NSString *)entityName {	
+	
 	NSString *localTS = [self localDataTimestampForModel:entityName];
 	
 	RKObjectManager* objectManager = [RKObjectManager sharedManager];
@@ -187,6 +200,7 @@ enum TXL_QueryTypes {
 	//BOOL success = self.availableUpdates && ([self.downloadedUpdates count] == [self.availableUpdates count]);
 	//CGFloat progress = (CGFloat)([self.downloadedUpdates count]) / (CGFloat)[self.availableUpdates count];
 	
+#if MTStatusBarOverlayON
 	NSInteger count = [self.activeUpdates count];
 	CGFloat progress = 1.0f;
 	if (count > 0)
@@ -196,6 +210,7 @@ enum TXL_QueryTypes {
 
 	if (count == 0)
 		[[MTStatusBarOverlay sharedInstance] postFinishMessage:@"Update Completed" duration:5];	
+#endif
 }
 
 
@@ -236,8 +251,10 @@ enum TXL_QueryTypes {
 		NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
 		[[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
 		
+#if MTStatusBarOverlayON
 		NSString *statusString = [NSString stringWithFormat:@"Pruned %@", [statusBlurbsAndModels objectForKey:className]];
 		[[MTStatusBarOverlay sharedInstance] postImmediateMessage:statusString duration:1 animated:YES];
+#endif
 	}	
 	/* This shouldn't be necessary!  We will already have our newly added objects, if it's done right in MySQL
 	// Now we need to add any *completely* new (not just updated) objects on the server, and download accordingly
@@ -284,6 +301,61 @@ enum TXL_QueryTypes {
 }		
 
 #pragma mark -
+#pragma DistrictMapSearchOperationDelegate
+/*
+- (void) mergeCoreDataSaves:(NSNotification*)notification {
+	// 		pass the notification as an argument to mergeChangesFromContextDidSaveNotification
+	NSLog(@"merging changes!");
+	[[[[RKObjectManager sharedManager] objectStore] managedObjectContext] mergeChangesFromContextDidSaveNotification:notification];
+	NSLog(@"done merging!");
+	
+}
+
+- (void)dataMaintenanceDidFinishSuccessfully:(TexLegeDataMaintenance *)op {	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	NSError *error = nil;
+	[[[[RKObjectManager sharedManager] objectStore] managedObjectContext] save:&error];
+	if (error) {
+		NSLog(@"Error %@", error);
+		return;
+	}
+	
+	NSArray *theArray = [[NSArray alloc] initWithObjects:@"DistrictMapObj", @"LegislatorObj", nil];
+	for (NSString *className in theArray) {
+		NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
+		[[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
+		
+	#if MTStatusBarOverlayON
+		NSString *statusString = [NSString stringWithFormat:@"Updated %@", [statusBlurbsAndModels objectForKey:className]];
+		NSLog(@"%@", statusString);
+		[[MTStatusBarOverlay sharedInstance] postMessage:statusString animated:YES];				
+	#endif
+		[self queryModel:className queryType:QUERYTYPE_IDS_ALL_PRUNE];	// THIS TRIGGERS A PRUNING
+	}
+	[theArray release];
+	//if (self.genericOperationQueue)
+	//		[self.genericOperationQueue cancelAllOperations];
+	//self.genericOperationQueue = nil;
+	[pool drain];
+	NSLog(@"Data maintenance: finished ok");
+
+}
+
+- (void)dataMaintenanceDidFail:(TexLegeDataMaintenance *)op 
+							 errorMessage:(NSString *)errorMessage 
+								   option:(TexLegeDataMaintenanceFailOption)failOption {	
+	
+	if (failOption == TexLegeDataMaintenanceFailOptionLog) {
+		NSLog(@"Data maintenance: %@", errorMessage);
+	}
+	
+	if (self.genericOperationQueue)
+		[self.genericOperationQueue cancelAllOperations];
+	self.genericOperationQueue = nil;
+}
+*/
+#pragma mark -
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {
@@ -293,24 +365,43 @@ enum TXL_QueryTypes {
 		if (className) {
 			[self.activeUpdates removeObject:className];
 
+//			BOOL operating = NO;
+			
 			if (objects && [objects count]) {
 				NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
 				debug_NSLog(@"%@ %d objects", notification, [objects count]);
 			
-				if ([className isEqualToString:@"DistrictMapObj"] || [className isEqualToString:@"LegislatorObj"])					
+				if ([className isEqualToString:@"DistrictMapObj"] || [className isEqualToString:@"LegislatorObj"]) {
+/*					[[[RKObjectManager sharedManager] objectStore] save];
+
+					TexLegeDataMaintenance *op = [[TexLegeDataMaintenance alloc] initWithDelegate:self];
+					if (op) {
+						if (!self.genericOperationQueue)
+							self.genericOperationQueue = [[[NSOperationQueue alloc] init] autorelease];
+						[self.genericOperationQueue addOperation:op];
+						[op release];
+						
+						operating = YES;
+					}
+*/					
 					for (DistrictMapObj *map in [DistrictMapObj allObjects])
 						[map resetRelationship:self];
-			
-				[[[RKObjectManager sharedManager] objectStore] save];
-				[[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
-				
-				NSString *statusString = [NSString stringWithFormat:@"Updated %@", [statusBlurbsAndModels objectForKey:className]];
-				NSLog(@"%@", statusString);
-				[[MTStatusBarOverlay sharedInstance] postMessage:statusString animated:YES];				
+				}
 
+//				if (!operating) {
+					[[[RKObjectManager sharedManager] objectStore] save];
+					[[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
+					
+	#if MTStatusBarOverlayON
+					NSString *statusString = [NSString stringWithFormat:@"Updated %@", [statusBlurbsAndModels objectForKey:className]];
+					NSLog(@"%@", statusString);
+					[[MTStatusBarOverlay sharedInstance] postMessage:statusString animated:YES];				
+	#endif
+//				}
 			}
-			[self queryModel:className queryType:QUERYTYPE_IDS_ALL_PRUNE];	// THIS TRIGGERS A PRUNING
-			
+//			if (!operating) {
+				[self queryModel:className queryType:QUERYTYPE_IDS_ALL_PRUNE];	// THIS TRIGGERS A PRUNING
+//			}			
 			[self updateProgress];
 		}			
 	}
@@ -324,8 +415,9 @@ enum TXL_QueryTypes {
 	/*	UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Data Update Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
 		[alert show];*/
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"RESTKIT_DATA_ERROR"];
+#if MTStatusBarOverlayON
 	[[MTStatusBarOverlay sharedInstance] postErrorMessage:@"Error During Update" duration:8];
-
+#endif
 	NSString *className = NSStringFromClass(objectLoader.objectClass);
 	if (className)
 		[self.activeUpdates removeObject:className];
@@ -392,111 +484,5 @@ enum TXL_QueryTypes {
 	return timestamp;
 }
 #endif
-
-/*
-- (NSArray *) localDataTimestamps {
-	NSMutableArray *dataArray = [NSMutableArray array];
-	
-	NSArray *objects = [self.statusBlurbsAndModels allKeys];
-	for (NSString *classString in objects) {
-		if (NSClassFromString(classString)) {
-			NSFetchRequest *request = [NSClassFromString(classString) fetchRequest];
-			NSSortDescriptor *desc = [[NSSortDescriptor alloc] initWithKey:JSONDATA_TIMESTAMPKEY ascending:NO];	// the most recent update will be the first item in the array (descending)
-			[request setSortDescriptors:[NSArray arrayWithObject:desc]];
-			[request setResultType:NSDictionaryResultType];												// This is necessary to limit it to specific properties during the fetch
-			[request setPropertiesToFetch:[NSArray arrayWithObject:JSONDATA_TIMESTAMPKEY]];						// We don't want to fetch everything, we'll get a huge ass memory hit otherwise.
-			[desc release];
-			NSDictionary *vers = [[NSDictionary alloc] initWithObjectsAndKeys:
-								  classString, JSONDATA_IDKEY,
-								  [[NSClassFromString(classString) objectWithFetchRequest:request] valueForKey:JSONDATA_TIMESTAMPKEY], JSONDATA_TIMESTAMPKEY,
-								  [NSString stringWithFormat:@"%@.json", classString], JSONDATA_FILEKEY,
-								  nil];
-			[dataArray addObject:vers];
-			[vers release];
-		}
-	}
-	
-	NSSortDescriptor *idDesc = [[[NSSortDescriptor alloc] initWithKey:JSONDATA_IDKEY
-								 ascending:YES
-								  selector:@selector(localizedCompare:)] autorelease];
-	[dataArray sortUsingDescriptors:[NSArray arrayWithObject:idDesc]];
-	return dataArray;
-}
-
-- (NSArray *)remoteDataTimestamps {
-	NSMutableArray *dataArray = nil;
-	NSString *urlMethod = [NSString stringWithFormat:@"%@/%@", RESTKIT_BASE_URL, JSONDATA_TIMESTAMPFILE];
-	NSURL *url = [NSURL URLWithString:urlMethod];
-
-	if ([TexLegeReachability canReachHostWithURL:url alert:NO])
-	{
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-
-		NSError *error = nil;
-		NSString * remoteVersionString = [NSString stringWithContentsOfURL:url encoding:JSONDATA_ENCODING error:&error];
-		if (error) {
-			NSLog(@"Error retrieving remote JSON data version file:%@", error);
-		}
-		if (remoteVersionString && [remoteVersionString length]) {
-			NSArray *tempArray = [remoteVersionString objectFromJSONString];
-			if (!tempArray) {
-				NSLog(@"Error parsing remote json data version string: %@", remoteVersionString);
-			}
-			else {
-				dataArray = [NSMutableArray arrayWithArray:tempArray];
-				NSSortDescriptor *idDesc = [[NSSortDescriptor alloc] initWithKey:JSONDATA_IDKEY ascending:YES selector:@selector(localizedCompare:)];
-				[dataArray sortUsingDescriptors:[NSArray arrayWithObject:idDesc]];
-				[idDesc release];
-			}
-		}
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-	}
-	else
-		NSLog(@"Network is unreachable, cannot obtain remote json data version file.");
-	return dataArray;
-}
-
-- (NSArray *)deltaLocalTimestamps:(NSArray *)local toRemote:(NSArray *)remote {
-	NSMutableArray *different = [NSMutableArray array];
-#if TESTING
-	for (NSDictionary *remoteItem in remote) {
-		[different addObject:[remoteItem objectForKey:JSONDATA_IDKEY]];
-	}
-#else
-	if (local && remote && ![local isEqualToArray:remote]) {
-		BOOL localIsLarger = [local count] > [remote count];
-		NSArray *larger = localIsLarger ? local : remote;
-		NSArray *smaller = localIsLarger ? remote : local;
-		
-		for (NSDictionary *largerItem in larger) {
-			NSString *largeID = [largerItem objectForKey:JSONDATA_IDKEY];
-			NSString *largeStamp = [largerItem objectForKey:JSONDATA_TIMESTAMPKEY];
-			BOOL wasFound = NO;
-			for (NSDictionary *smallerItem in smaller) {
-				NSString *smallID = [smallerItem objectForKey:JSONDATA_IDKEY];
-				NSString *smallStamp = [smallerItem objectForKey:JSONDATA_TIMESTAMPKEY];
-				if ([largeID isEqualToString:smallID]) {
-					if (![largeStamp isEqualToString:smallStamp] ) {
-						NSDictionary *remoteItem = nil; 
-						if (localIsLarger)
-							remoteItem = smallerItem;
-						else
-							remoteItem = largerItem;
-						[different addObject:remoteItem];
-					}
-					wasFound = YES;
-					break;
-				}
-			}
-			if (!wasFound && !localIsLarger) {
-				[different addObject:largerItem];
-			}
-		}
-	}
-#endif
-	NSLog(@"DataModelUpdateManager: Found %d Differences in Local vs. Remote Data Timestamps", [different count]);
-	return different;
-}
-*/
 
 @end
