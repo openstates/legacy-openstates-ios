@@ -15,6 +15,7 @@
 #import "TexLegeLibrary.h"
 #import "UtilityMethods.h"
 #import "OpenLegislativeAPIs.h"
+#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 
 @implementation BillSearchDataSource
 @synthesize searchDisplayController, delegateTVC;
@@ -23,6 +24,7 @@
 	if (self=[super init]) {
 		[OpenLegislativeAPIs sharedOpenLegislativeAPIs];
 		_rows = [[NSMutableArray alloc] init];
+		_sections = [[NSMutableDictionary alloc] init];
 		delegateTVC = nil;
 		searchDisplayController = nil;
 	}
@@ -53,35 +55,106 @@
 	[delegateTVC release];
 	[_rows release];
 	_rows = nil;
+	[_sections release];
+	_sections = nil;
 
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 	
  	[super dealloc];
 }
 
+// return the map at the index in the array
+- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
+	//return [self.billResults objectAtIndex:indexPath.row];
+	NSMutableDictionary *bill = [[_sections valueForKey:[[[_sections allKeys] 
+												   sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] 
+												  objectAtIndex:indexPath.section]] objectAtIndex:indexPath.row];
+	return bill;
+}
+
+- (NSIndexPath *)indexPathForDataObject:(id)dataObject {
+	if (dataObject && [dataObject isKindOfClass:[NSDictionary class]] && [dataObject objectForKey:@"bill_id"]) {
+		NSString *typeString = billTypeStringFromBillID([dataObject objectForKey:@"bill_id"]);
+		if (!IsEmpty(typeString)) {
+			NSMutableArray *sectionRow = [_sections objectForKey:typeString];
+			if (!IsEmpty(sectionRow)) {
+				NSArray *sortedSections = [[_sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+				NSInteger section = [sortedSections indexOfObject:typeString];
+				NSInteger row = [sectionRow indexOfObject:dataObject];
+				return [NSIndexPath indexPathForRow:row inSection:section];
+			}
+		}
+	}
+	return nil; //[NSIndexPath indexPathForRow:0 inSection:0];
+}
+
+- (void) generateSections {
+	BOOL found;
+	
+	[_sections removeAllObjects];
+	
+    // Loop through the bills and create our keys
+    for (NSDictionary *bill in _rows)
+    {				
+		NSString *c = billTypeStringFromBillID([bill objectForKey:@"bill_id"]);
+	
+        found = NO;
+        for (NSString *str in [_sections allKeys])
+        {
+            if ([str isEqualToString:c])
+            {
+                found = YES;
+            }
+        }
+        if (!found)
+        {
+            [_sections setValue:[NSMutableArray array] forKey:c];
+        }
+    }	
+	
+	// Loop again and sort the bills into their respective keys
+    for (NSDictionary *bill in _rows)
+    {
+		NSString *typeString = billTypeStringFromBillID([bill objectForKey:@"bill_id"]);
+		if (!IsEmpty(typeString))
+			[[_sections objectForKey:typeString] addObject:bill];
+    }
+	
+	// Sort each section array
+    for (NSString *key in [_sections allKeys])
+    {
+		[[_sections objectForKey:key] sortUsingComparator:^(NSDictionary *item1, NSDictionary *item2) {
+			NSString *bill_id1 = [item1 objectForKey:@"bill_id"];
+			NSString *bill_id2 = [item2 objectForKey:@"bill_id"];
+			return [bill_id1 compare:bill_id2 options:NSNumericSearch];
+		}];		
+    }
+}
+
+#pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 1;
+	//return 1;
+	return [[_sections allKeys] count];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [[[_sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] objectAtIndex:section];
+}
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+    return [[_sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section 
 {		
-	return [_rows count];
+	//return [_rows count];
+	return [[_sections valueForKey:[[[_sections allKeys] 
+									 sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] 
+									objectAtIndex:section]] count];
 }
 
-/* Build a list of files */
-- (NSArray *)billResults {
-	return _rows;
-}
-
-// return the map at the index in the array
-- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
-	return [self.billResults objectAtIndex:indexPath.row];
-}
-
-- (NSIndexPath *)indexPathForDataObject:(id)dataObject {
-	return [NSIndexPath indexPathForRow:[_rows indexOfObject:dataObject] inSection:0];	
-}
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
@@ -89,7 +162,11 @@
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 		
 	// Configure the cell.
-	NSDictionary *bill = [_rows objectAtIndex:indexPath.row];
+	//NSDictionary *bill = [_rows objectAtIndex:indexPath.row];
+	NSDictionary *bill = [self dataObjectForIndexPath:indexPath];
+	if (!bill || [[NSNull null] isEqual:bill])
+		return;  // ?????
+	
 	NSString *bill_id = [bill objectForKey:@"bill_id"];
 	NSString *bill_title = [bill objectForKey:@"title"];
 	if (!bill_title)
@@ -123,12 +200,13 @@
 			[qv release];			
 		}
     }
-		
 	if (!IsEmpty(_rows))
 		[self configureCell:cell atIndexPath:indexPath];		
 
 	return cell;
 }
+
+#pragma mark - Searching
 
 - (void)startSearchWithString:(NSString *)searchString chamber:(NSInteger)chamber
 {
@@ -225,18 +303,20 @@
 		
 		[_rows removeAllObjects];	
 		
-		id results = [response bodyAsJSON];
-		if ([results isKindOfClass:[NSArray class]])
+		id results = [response.body mutableObjectFromJSONData];
+		if ([results isKindOfClass:[NSMutableArray class]])
 			[_rows addObjectsFromArray:results];
-		else if ([results isKindOfClass:[NSDictionary class]])
+		else if ([results isKindOfClass:[NSMutableDictionary class]])
 			[_rows addObject:results];
 
 		// if we wanted blocks, we'd do this instead:
-		[_rows sortUsingComparator:^(NSDictionary *item1, NSDictionary *item2) {
+		[_rows sortUsingComparator:^(NSMutableDictionary *item1, NSMutableDictionary *item2) {
 			NSString *bill_id1 = [item1 objectForKey:@"bill_id"];
 			NSString *bill_id2 = [item2 objectForKey:@"bill_id"];
 			return [bill_id1 compare:bill_id2 options:NSNumericSearch];
 		}];
+		
+		[self generateSections];
 		
 		if (searchDisplayController)
 			[self.searchDisplayController.searchResultsTableView reloadData];

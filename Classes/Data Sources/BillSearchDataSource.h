@@ -13,12 +13,12 @@
 
 @interface BillSearchDataSource : NSObject <UITableViewDataSource> {
 	NSMutableArray* _rows;
+	NSMutableDictionary* _sections;
 	IBOutlet UISearchDisplayController *searchDisplayController;
 	IBOutlet UITableViewController *delegateTVC;
 }
 @property (nonatomic, retain) IBOutlet UISearchDisplayController *searchDisplayController;
 @property (nonatomic, retain) IBOutlet UITableViewController *delegateTVC;
-@property (nonatomic, readonly) NSArray *billResults;
 
 - (id)initWithSearchDisplayController:(UISearchDisplayController *)newController;
 - (id)initWithTableViewController:(UITableViewController *)newDelegate;
