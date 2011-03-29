@@ -85,7 +85,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 					NSLog(@"PartisanIndexStates: Error pulling aggregate dictionary.");
 			}
 		}
-		//debug_NSLog(@"Index Aggregates: %@", [tempAggregates description]);			
 		m_partisanIndexAggregates = [[NSDictionary dictionaryWithDictionary:tempAggregates] retain];
 	}
 	
@@ -182,8 +181,10 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 		NSNumber *avgPartisanIndex = [[objects objectAtIndex:0] valueForKey:@"averagePartisanIndex"];
 		NSNumber *maxPartisanIndex = [[objects objectAtIndex:0] valueForKey:@"maxPartisanIndex"];
 		NSNumber *minPartisanIndex = [[objects objectAtIndex:0] valueForKey:@"minPartisanIndex"];
-		debug_NSLog(@"Partisanship for Chamber (%d) Party (%d): min=%@ max=%@ avg=%@", 
+
+/*		debug_NSLog(@"Partisanship for Chamber (%d) Party (%d): min=%@ max=%@ avg=%@", 
 					chamber, party, minPartisanIndex, maxPartisanIndex, avgPartisanIndex);
+*/
 		return [NSArray arrayWithObjects:avgPartisanIndex, maxPartisanIndex, minPartisanIndex, nil];
 	}
 	
