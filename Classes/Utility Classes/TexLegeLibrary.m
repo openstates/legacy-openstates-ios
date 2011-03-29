@@ -7,6 +7,7 @@
 //
 
 #import "TexLegeLibrary.h"
+#import "UtilityMethods.h"
 
 NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
 	NSString *chamberString = nil;
@@ -150,4 +151,12 @@ NSString *stringForParty(NSInteger party, TLStringReturnType type) {
 		}
 	}
 	return partyString;
+}
+
+NSString *billTypeStringFromBillID(NSString *billID) {
+	NSArray *words = [billID componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+	if (!IsEmpty(words))
+		return [words objectAtIndex:0];
+	else
+		return nil;
 }

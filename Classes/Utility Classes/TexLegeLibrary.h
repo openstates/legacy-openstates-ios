@@ -41,3 +41,5 @@ typedef enum  {
 NSInteger chamberForString(NSString *chamberString);
 NSString *stringForChamber(NSInteger chamber, TLStringReturnType type);
 NSString *stringForParty(NSInteger party, TLStringReturnType type);
+NSString *billTypeStringFromBillID(NSString *billID);
+
