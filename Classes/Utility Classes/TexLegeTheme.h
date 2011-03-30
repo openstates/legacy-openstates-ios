@@ -14,6 +14,7 @@
 + (UIFont *)boldTwelve;
 + (UIFont *)boldFourteen;
 + (UIFont *)boldFifteen;
++ (UIFont *)boldEighteen;
 + (void) logFontNames;	
 + (UIFont *)disclosureFontSmall;
 + (UIFont *)disclosureFont;
