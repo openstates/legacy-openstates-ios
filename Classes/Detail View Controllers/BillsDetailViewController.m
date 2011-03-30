@@ -22,6 +22,7 @@
 #import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "BillMetadataLoader.h"
 #import "DDActionHeaderView.h"
+#import "TexLegeTheme.h"
 
 @interface BillsDetailViewController (Private)
 - (void) setupHeader;
@@ -293,7 +294,25 @@ enum _billSections {
 			case kBillVersions: 
 			{				
 				NSDictionary *version = [[bill objectForKey:@"versions"] objectAtIndex:indexPath.row];
-				cell.textLabel.text = [NSString stringWithFormat:@"Bill Text (%@)", [version objectForKey:@"name"]];
+				NSString *textName = nil;
+				NSString *name = [version objectForKey:@"name"];
+				if ([name hasSuffix:@"I"])
+					textName = @"Introduced";
+				else if ([name hasSuffix:@"E"])
+					textName = @"Engrossed";
+				else if ([name hasSuffix:@"S"])
+					textName = @"Senate Committee Report";
+				else if ([name hasSuffix:@"H"])
+					textName = @"House Committee Report";
+				else if ([name hasSuffix:@"A"])
+					textName = @"Amendments Printing";
+				else if ([name hasSuffix:@"F"])
+					textName = @"Enrolled";
+				else
+					textName = name;
+				
+				cell.textLabel.text = textName;
+				
 			}
 				break;
 			case kBillVotes: 
@@ -318,6 +337,114 @@ enum _billSections {
     return cell;
 }
 
+enum  {
+	BillStageUnknown = 0,
+	BillStageFiled,
+	BillStageOutOfCommittee,
+	BillStageChamberVoted,
+	BillStageOutOfOpposingCommittee,
+	BillStageOpposingChamberVoted,
+	BillStageSentToGovernor,
+	BillStageBecomesLaw,
+	BillStageVetoed = -1
+} TexLegeBillStages;
+/*
+ 1. Filed
+ 2. Out of (current chamber) Committee
+ 3. Voted on by (current chamber)
+ 4. Out of (opposing chamber) Committee
+ 5. Voted on by (opposing chamber)
+ 6. Submitted to Governor
+ 7. Bill Becomes Law
+ */
+
+- (void)checkStage {
+	NSInteger status = BillStageUnknown;
+	NSMutableDictionary *stages = [NSMutableDictionary dictionary];
+	for (NSMutableDictionary *action in [[bill objectForKey:@"actions"] reverseObjectEnumerator]) {
+		NSDate *actionDate = [NSDate dateFromString:[action objectForKey:@"date"]];
+		
+		if ([[action objectForKey:@"action"] isEqualToString:@"Filed"]) {
+			status++;
+		}
+		else if ([[action objectForKey:@"action"] hasSubstring:@"reported favorably" caseInsensitive:YES]) {
+			status++;
+		}
+		else if ([[action objectForKey:@"action"] hasSubstring:@"recommitted to committee" caseInsensitive:YES]) {
+			status--;
+		}
+		else if ([[action objectForKey:@"action"] isEqualToString:@"Passed"]) {
+			status++;
+		}
+		else if ([[action objectForKey:@"action"] isEqualToString:@"Sent to the Governor"]) {
+			status = BillStageSentToGovernor;
+		}
+		else if ([[action objectForKey:@"action"] isEqualToString:@"Signed by the Governor"]) {
+			status = BillStageBecomesLaw;
+		}
+		else if ([[action objectForKey:@"action"] hasSubstring:@"vetoed" caseInsensitive:YES]) {
+			status = BillStageVetoed;
+		}
+		[stages setObject:actionDate forKey:[NSNumber numberWithInteger:status]];
+	}
+	//NSLog(@"Bill stages: %@", stages);
+	
+	[self.bill setObject:[NSNumber numberWithInteger:status] forKey:@"stage"];
+}
+
+- (void)handleBillStages {
+	[self checkStage];
+	
+	NSInteger status = [[self.bill objectForKey:@"stage"] integerValue];
+	
+	NSArray *tiles = [NSArray arrayWithObjects:self.stat_filed, self.stat_thisPassComm, self.stat_thisPassVote, 
+					  self.stat_thatPassComm, self.stat_thatPassVote, self.stat_governor, self.stat_isLaw, nil];
+	
+	for (UILabel *tile in tiles) {
+		tile.backgroundColor = [TexLegeTheme texasBlue];
+		tile.alpha = 0.4f;
+	}
+	NSInteger this = chamberForString([bill objectForKey:@"chamber"]);
+	NSInteger that = this == HOUSE ? SENATE : HOUSE;
+
+	NSString *chamberString = stringForChamber(this, TLReturnFull);
+	self.stat_thisPassComm.text = [chamberString stringByAppendingString:@" Committee"];
+	self.stat_thisPassVote.text = [chamberString stringByAppendingString:@" Voted"];
+	
+	chamberString = stringForChamber(that, TLReturnFull);
+	self.stat_thatPassComm.text = [chamberString stringByAppendingString:@" Committee"];
+	self.stat_thatPassVote.text = [chamberString stringByAppendingString:@" Voted"];
+	
+	if (status >= BillStageFiled) {
+		self.stat_filed.backgroundColor = [TexLegeTheme texasGreen];
+		self.stat_filed.alpha = 1.0f;
+		self.stat_thisPassComm.alpha = 1.0f;
+	}
+	if (status >= BillStageOutOfCommittee) {
+		self.stat_thisPassComm.backgroundColor = [TexLegeTheme texasGreen];
+		self.stat_thisPassVote.alpha = 1.0f;
+	}
+	if (status >= BillStageChamberVoted) {
+		self.stat_thisPassVote.backgroundColor = [TexLegeTheme texasGreen];
+		self.stat_thatPassComm.alpha = 1.0f;
+	}
+	if (status >= BillStageOutOfOpposingCommittee) {
+		self.stat_thatPassComm.backgroundColor = [TexLegeTheme texasGreen];
+		self.stat_thatPassVote.alpha = 1.0f;
+	}
+	if (status >= BillStageOpposingChamberVoted) {
+		self.stat_thatPassVote.backgroundColor = [TexLegeTheme texasGreen];
+		self.stat_governor.alpha = 1.0f;
+	}
+	if (status >= BillStageSentToGovernor) {
+		self.stat_governor.backgroundColor = [TexLegeTheme texasGreen];
+		self.stat_isLaw.alpha = 1.0f;
+	}
+	if (status == BillStageVetoed)
+		self.stat_isLaw.backgroundColor = [TexLegeTheme texasRed];
+	if (status >= BillStageBecomesLaw)
+		self.stat_isLaw.backgroundColor = [TexLegeTheme texasGreen];
+}
 
 - (void)setupHeader {	
 	if (!bill)
@@ -355,11 +482,12 @@ enum _billSections {
 	NSMutableString *descText = [NSMutableString stringWithString:@"Activity: "];
 	[descText appendFormat:@"%@ (%@)", [currentAction objectForKey:@"action"], actionDateString];
 	[descText appendString:@"\r\r"];
-	[descText appendString:[bill objectForKey:@"title"]];
+	[descText appendString:[bill objectForKey:@"title"]];	// the summary of the bill
 	self.lab_description.text = descText;
 	
+	[self handleBillStages];
+	
 }
-
 
 - (void)setBill:(NSMutableDictionary *)newBill {
 	if (self.starButton)
@@ -378,7 +506,7 @@ enum _billSections {
 		[[bill objectForKey:@"actions"] sortUsingDescriptors:[NSArray arrayWithObjects:byDate, byNum, nil]];
 		
 		self.tableView.dataSource = self;
-		
+				
 		[self setupHeader];
 		
 		if (self.starButton)
