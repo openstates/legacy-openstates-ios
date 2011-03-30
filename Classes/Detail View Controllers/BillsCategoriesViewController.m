@@ -22,7 +22,7 @@
 - (void)configureCell:(TexLegeBadgeGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 - (void)createChamberControl;
 - (IBAction)filterChamber:(id)sender;
-- (IBAction)loadCategoriesForChamber:(NSNumber *)newChamber;
+- (IBAction)loadCategoriesForChamber:(NSInteger)newChamber;
 @end
 
 @implementation BillsCategoriesViewController
@@ -115,7 +115,7 @@
 - (IBAction)filterChamber:(id)sender {
 	NSDictionary *segPrefs = [[NSUserDefaults standardUserDefaults] objectForKey:kSegmentControlPrefKey];
 	if (segPrefs) {
-		NSNumber *segIndex = [NSNumber numberWithInteger:self.chamberControl.selectedSegmentIndex];
+		NSString *segIndex = [NSString stringWithFormat:@"%d",self.chamberControl.selectedSegmentIndex];
 		NSMutableDictionary *newDict = [segPrefs mutableCopy];
 		[newDict setObject:segIndex forKey:NSStringFromClass([self class])];
 		[[NSUserDefaults standardUserDefaults] setObject:newDict forKey:kSegmentControlPrefKey];
@@ -126,11 +126,11 @@
 	[self.tableView reloadData];
 }
 
-- (NSNumber *)chamber {
+- (NSString *)chamber {
 	NSInteger theChamber = BOTH_CHAMBERS;
 	if (chamberControl)
 		theChamber = chamberControl.selectedSegmentIndex;
-	return [NSNumber numberWithInteger:theChamber];
+	return [NSString stringWithFormat:@"%d", theChamber];
 }
 
 - (void)viewDidUnload {
@@ -221,15 +221,14 @@
 //http://openstates.sunlightlabs.com/api/v1/subject_counts/tx/82/upper/?apikey=350284d0c6af453b9b56f6c1c7fea1f9
 //We now get subject frequency counts, filtered by state, session and originating chamber.
 
-- (IBAction)loadCategoriesForChamber:(NSNumber *)newChamber {
+- (IBAction)loadCategoriesForChamber:(NSInteger)newChamber {
 	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:NO]) {
 		OpenLegislativeAPIs *api = [OpenLegislativeAPIs sharedOpenLegislativeAPIs];
 		
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObject:osApiKeyValue forKey:@"apikey"];
 		NSMutableString *resourcePath = [NSMutableString stringWithFormat:@"/subject_counts/tx/%@/", api.currentSession];
-		NSInteger selection = [newChamber integerValue];
-		if (selection > BOTH_CHAMBERS)
-			[resourcePath appendFormat:@"%@/", stringForChamber(selection, TLReturnOpenStates)];
+		if (newChamber > BOTH_CHAMBERS)
+			[resourcePath appendFormat:@"%@/", stringForChamber(newChamber, TLReturnOpenStates)];
 			
 		[[api osApiClient] get:resourcePath queryParams:queryParams delegate:self];
 	}
@@ -243,7 +242,7 @@
 		isFresh = NO;
 		debug_NSLog(@"BillCategories is stale, need to refresh");
 		
-		[self loadCategoriesForChamber:[NSNumber numberWithInteger:BOTH_CHAMBERS]];	// let's get everything
+		[self loadCategoriesForChamber:BOTH_CHAMBERS];	// let's get everything
 	}
 	return categories_;
 }
@@ -290,8 +289,11 @@
 	//NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	if ([fileManager fileExistsAtPath:thePath]) {
-		debug_NSLog(@"EventsLoader: using cached categories in the documents folder.");
-		categories_ = [[NSMutableDictionary dictionaryWithContentsOfFile:thePath] retain];
+		debug_NSLog(@"BillCategories: using cached categories in the documents folder.");
+		//categories_ = [[NSMutableDictionary dictionaryWithContentsOfFile:thePath] retain];
+		NSData *json = [NSData dataWithContentsOfFile:thePath];
+		if (json)
+			categories_ = [[json mutableObjectFromJSONData] retain];
 	}
 	if (!categories_)
 		categories_ = [[NSMutableDictionary dictionary] retain];
@@ -307,7 +309,7 @@
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data  
 		
-		NSMutableDictionary *newCats = [response.body objectFromJSONData];
+		NSMutableDictionary *newCats = [response.body mutableObjectFromJSONData];
 		if (!newCats)
 			return;
 		
@@ -330,16 +332,19 @@
 		else if ([[request resourcePath] hasSubstring:@"/lower" caseInsensitive:NO])
 			inChamber = HOUSE;
 
-		[categories_ setObject:newArray forKey:[NSNumber numberWithInteger:inChamber]];
+		[categories_ setObject:newArray forKey:[NSString stringWithFormat:@"%d", inChamber]];
 		[newArray release];
 		
 		if (inChamber < SENATE)
-			[self loadCategoriesForChamber:[NSNumber numberWithInteger:inChamber+1]];	// let's load the next chamber too
+			[self loadCategoriesForChamber:inChamber+1];	// let's load the next chamber too
 		
 		if ([[categories_ allKeys] count] == 3) { // once we have all three arrays ready to go, let's save it
 			NSString *thePath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:kBillCategoriesCacheFile];
-			if (![categories_ writeToFile:thePath atomically:YES])
-				NSLog(@"BillCategories: Error writing categories cache to file: %@", thePath);
+			NSError *error = nil;
+			NSData *json = [categories_ JSONDataWithOptions:JKSerializeOptionEscapeUnicode error:&error];
+			if (![json writeToFile:thePath atomically:YES]) {
+				NSLog(@"BillCategories: Error writing categories cache to file: %@ = %@", [error localizedDescription], thePath);
+			}
 		}
 		
 		isFresh = YES;

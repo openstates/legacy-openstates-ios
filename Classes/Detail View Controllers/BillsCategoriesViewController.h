@@ -25,6 +25,6 @@
 }
 @property (nonatomic,retain) IBOutlet	UISegmentedControl *chamberControl;
 @property (nonatomic,retain)	NSMutableDictionary *chamberCategories;
-@property (nonatomic,readonly)	NSNumber *chamber; 
+@property (nonatomic,readonly)	NSString *chamber; 
 
 @end
