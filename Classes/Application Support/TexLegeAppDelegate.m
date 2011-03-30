@@ -306,11 +306,17 @@ NSInteger kNoSelection = -1;
 	
 	[self.tabBarController setSelectedViewController:savedTabController];
 	
-	[self.mainWindow addSubview:self.tabBarController.view];		
+	[self.mainWindow addSubview:self.tabBarController.view];	
+	[self.tabBarController viewDidLoad];
+	// make the window visible
+	[self.mainWindow makeKeyAndVisible];
+
+
 }
 
 - (void)runOnInitialAppStart:(id)sender {	
-	
+	[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+
 	NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 	
 	[self restoreArchivableSavedTableSelection];
@@ -350,7 +356,7 @@ NSInteger kNoSelection = -1;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{	
+{		
 	[[TexLegeReachability sharedTexLegeReachability] startCheckingReachability];
 	
 	// initialize RestKit to handle our seed database and user database
@@ -372,20 +378,15 @@ NSInteger kNoSelection = -1;
 	}
 	else
 		[self performSelector:@selector(runOnInitialAppStart:) withObject:nil];
-	
-	// make the window visible
-	[self.mainWindow makeKeyAndVisible];
-	
+		
 	return YES;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-	//[[UIApplication sharedApplication] setupScreenMirroring];
 	[[TVOutManager sharedInstance] startTVOut];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-	//[[UIApplication sharedApplication] disableScreenMirroring];
 	[[TVOutManager sharedInstance] stopTVOut];
 }
 
@@ -398,6 +399,8 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {	
+	[[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+
 	[self runOnAppQuit];
 }
 
