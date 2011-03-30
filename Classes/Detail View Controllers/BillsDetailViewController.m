@@ -20,10 +20,15 @@
 #import "LocalyticsSession.h"
 #import "NSDate+Helper.h"
 #import <RestKit/Support/JSON/JSONKit/JSONKit.h>
+#import "BillMetadataLoader.h"
+#import "DDActionHeaderView.h"
 
 @interface BillsDetailViewController (Private)
 - (void) setupHeader;
 - (void)showLegislatorDetailsWithOpenStatesID:(id)legeID;
+
+- (void)starButtonSetState:(BOOL)isOn;
+	
 @end
 
 @implementation BillsDetailViewController
@@ -37,10 +42,10 @@ enum _billSections {
 	kBillLASTITEM
 };
 
-@synthesize bill, starButton;
+@synthesize bill, starButton, actionHeader;
 @synthesize masterPopover, headerView, descriptionView, statusView;
 
-@synthesize lab_title, lab_description;
+@synthesize lab_description;
 @synthesize stat_filed, stat_thisPassComm, stat_thisPassVote, stat_thatPassComm, stat_thatPassVote, stat_governor, stat_isLaw;
 
 - (NSString *)nibName {
@@ -68,11 +73,11 @@ enum _billSections {
 	
 	self.bill = nil;
 	self.headerView = self.descriptionView = self.statusView = nil;
-	self.lab_title = nil;
 	self.lab_description = nil;
 	self.stat_filed = self.stat_thisPassComm = self.stat_thisPassVote = self.stat_thatPassComm = self.stat_thatPassVote = self.stat_governor = self.stat_isLaw = nil;
 	self.masterPopover = nil;
 	self.starButton = nil;
+	self.actionHeader = nil;
 	[super dealloc];
 }
 
@@ -87,15 +92,24 @@ enum _billSections {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	
-	//UIImage *sealImage = [UIImage imageWithContentsOfResolutionIndependentFile:@"seal.png"];
+
 	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
 	UIColor *sealColor = [[UIColor colorWithPatternImage:sealImage] colorWithAlphaComponent:0.5f];	
 	self.headerView.backgroundColor = sealColor;
+	self.actionHeader.backgroundColor = sealColor;
 	
 	//self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 	self.clearsSelectionOnViewWillAppear = NO;
 	
+	self.starButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//	[starButton addTarget:self action:@selector(itemAction:) forControlEvents:UIControlEventTouchUpInside];
+    [starButton addTarget:self action:@selector(starButtonToggle:) forControlEvents:UIControlEventTouchDown];
+	[self starButtonSetState:NO];
+    starButton.frame = CGRectMake(0.0f, 0.0f, 66.0f, 66.0f);
+    starButton.center = CGPointMake(25.0f, 25.0f);
+	self.actionHeader.items = [NSArray arrayWithObjects:starButton, nil];
+	self.actionHeader.borderGradientHidden = YES;
+
 	NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillFavoritesStorageFile];
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	if (![fileManager fileExistsAtPath:thePath]) {
@@ -108,12 +122,11 @@ enum _billSections {
 - (void)viewDidUnload {
 	
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.	
-	self.headerView = self.descriptionView = self.statusView = nil;
-	self.lab_title = nil;
-	self.lab_description = nil;
+	//self.headerView = self.descriptionView = self.statusView = nil;
+	//self.lab_description = nil;
 	self.starButton = nil;
-	self.stat_filed = self.stat_thisPassComm = self.stat_thisPassVote = self.stat_thatPassComm = self.stat_thatPassVote = self.stat_governor = self.stat_isLaw = nil;
-	self.masterPopover = nil;
+	//self.stat_filed = self.stat_thisPassComm = self.stat_thisPassVote = self.stat_thatPassComm = self.stat_thatPassVote = self.stat_governor = self.stat_isLaw = nil;
+	//self.masterPopover = nil;
 	
 	[super viewDidUnload];
 }
@@ -322,23 +335,18 @@ enum _billSections {
 	self.navigationItem.title = billTitle;
 
 	@try {
-		if ([bill objectForKey:@"chamber"] && [bill objectForKey:@"type"]) {
-			NSString *chamber = @"House";
-			if ([[bill objectForKey:@"chamber"] isEqualToString:@"upper"])
-				chamber = @"Senate";
-			id billType = [bill objectForKey:@"type"];
-			if ([billType isKindOfClass:[NSArray class]])
-				billType = [billType objectAtIndex:0];
-			if ([billType isKindOfClass:[NSString class]]) {
-				NSArray *idComponents = [[bill objectForKey:@"bill_id"] componentsSeparatedByString:@" "];				
-				billTitle = [NSString stringWithFormat:@"%@ %@ %@", 
-							 chamber, [billType capitalizedString], [idComponents lastObject]];
-			}
-		}			
+		NSArray *idComponents = [[bill objectForKey:@"bill_id"] componentsSeparatedByString:@" "];
+		
+		NSString *longTitle = [[[[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:@"types"] 
+							   findWhereKeyPath:@"title" 
+							   equals:[idComponents objectAtIndex:0]] objectForKey:@"titleLong"];
+		billTitle = [NSString stringWithFormat:@"%@ %@", 
+					 longTitle, [idComponents lastObject]];
+		
 	}
 	@catch (NSException * e) {
 	}
-	self.lab_title.text = billTitle;	
+	self.actionHeader.titleLabel.text = billTitle;
 	
 	NSDictionary *currentAction = [[bill objectForKey:@"actions"] objectAtIndex:0];	// actions is already in descending order from our setBill
 	NSDate *currentActionDate = [NSDate dateFromString:[currentAction objectForKey:@"date"]];
@@ -374,7 +382,7 @@ enum _billSections {
 		[self setupHeader];
 		
 		if (self.starButton)
-			self.starButton.selected = [self isFavorite];
+			[self starButtonSetState:[self isFavorite]];
 		
 		if (masterPopover != nil) {
 			[masterPopover dismissPopoverAnimated:YES];
@@ -410,8 +418,21 @@ enum _billSections {
 		self.starButton.enabled = (bill != nil);		
 }
 
+- (void)starButtonSetState:(BOOL)isOn {
+	starButton.tag = isOn;
+	if (isOn) {
+		[starButton setImage:[UIImage imageNamed:@"starButtonLargeOff"] forState:UIControlStateHighlighted];
+		[starButton setImage:[UIImage imageNamed:@"starButtonLargeOn"] forState:UIControlStateNormal];
+	}
+	else {
+		[starButton setImage:[UIImage imageNamed:@"starButtonLargeOff"] forState:UIControlStateNormal];
+		[starButton setImage:[UIImage imageNamed:@"starButtonLargeOn"] forState:UIControlStateHighlighted];
+	}
+}
+
 - (IBAction)starButtonToggle:(id)sender { 	
-	if ([sender isKindOfClass:[UIButton class]]) {
+/*
+ if ([sender isKindOfClass:[UIButton class]]) {
 		UIButton *buttonView = sender;
 		
 		buttonView.adjustsImageWhenHighlighted = NO;
@@ -419,19 +440,28 @@ enum _billSections {
 		buttonView.selected = !buttonView.selected;
 		
 		[self setFavorite:buttonView.selected];		
-	}	
+	}*/
+	if (sender && [sender isEqual:starButton]) {
+		BOOL isFavorite = [self isFavorite];
+		[self starButtonSetState:!isFavorite];
+		[self setFavorite:!isFavorite];		
+	}
+	// We're turning this off for now, we don't need the extended action menu, yet.
+	// Reset action picker
+	//		[self.actionHeader shrinkActionPicker];
+	
 }
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
-	if (self.starButton) {
+/*	if (self.starButton) {
 		UIBarButtonItem *watchItem = [[[UIBarButtonItem alloc] initWithCustomView:starButton] autorelease];
 		if ([UtilityMethods isIPadDevice] && [[self.navigationController viewControllers] count] == 1) // idiotic
 			[self.navigationItem setLeftBarButtonItem:watchItem animated:YES];
 		else
 			[self.navigationItem setRightBarButtonItem:watchItem animated:YES];
-	}
+	}*/
 }
 
 #pragma mark -

@@ -10,22 +10,22 @@
 #import <RestKit/RestKit.h>
 
 @class TableCellDataObject;
-
+@class DDActionHeaderView;
 @interface BillsDetailViewController : UITableViewController <RKRequestDelegate, UISplitViewControllerDelegate, UIPopoverControllerDelegate/*, UIWebViewDelegate*/> {
 	IBOutlet NSMutableDictionary *bill;
 	IBOutlet UIView *headerView, *descriptionView, *statusView;
 	IBOutlet UITextView *lab_description;
-	IBOutlet UILabel *lab_title;
 	IBOutlet UIButton *starButton;
 	IBOutlet UILabel *stat_filed, *stat_thisPassComm, *stat_thisPassVote, *stat_thatPassComm, *stat_thatPassVote, *stat_governor, *stat_isLaw;
+	IBOutlet DDActionHeaderView *actionHeader;
 	id dataObject;
 }
 @property (nonatomic,assign) id dataObject;
 
 @property (nonatomic,retain) IBOutlet UIView *headerView, *descriptionView, *statusView;
 @property (nonatomic,retain) IBOutlet UITextView *lab_description;
-@property (nonatomic,retain) IBOutlet UILabel *lab_title;
 @property (nonatomic,retain) IBOutlet UIButton *starButton;
+@property (nonatomic,retain) IBOutlet DDActionHeaderView *actionHeader;
 @property (nonatomic,retain) IBOutlet UILabel *stat_filed, *stat_thisPassComm, *stat_thisPassVote, *stat_thatPassComm, *stat_thatPassVote, *stat_governor, *stat_isLaw;
 
 
