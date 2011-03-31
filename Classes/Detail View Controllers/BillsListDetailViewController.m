@@ -45,10 +45,6 @@
 	}	
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-	NSLog(@"did rotate");
-}
-
 - (void)didReceiveMemoryWarning {
 	UINavigationController *nav = [self navigationController];
 	if (nav && [nav.viewControllers count]>1)

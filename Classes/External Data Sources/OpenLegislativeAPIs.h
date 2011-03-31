@@ -21,6 +21,7 @@ static NSString *vsApiKey =			@"5fb3b476c47fcb8a21dc2ec22ca92cbb";	// for "key" 
 @interface OpenLegislativeAPIs : NSObject <RKRequestDelegate> {
 	RKClient *osApiClient;	
 	RKClient *transApiClient;
+	RKClient *vsApiClient;
 	NSString *_currentSession;
 	NSMutableDictionary *_osMetadata;
 	NSDate *updated;
@@ -29,6 +30,7 @@ static NSString *vsApiKey =			@"5fb3b476c47fcb8a21dc2ec22ca92cbb";	// for "key" 
 + (OpenLegislativeAPIs *)sharedOpenLegislativeAPIs;
 @property (nonatomic, retain) RKClient *osApiClient;
 @property (nonatomic, retain) RKClient *transApiClient;
+@property (nonatomic, retain) RKClient *vsApiClient;
 @property (nonatomic, readonly) NSString *currentSession;
 @property (nonatomic, readonly) NSMutableDictionary *osMetadata;
 

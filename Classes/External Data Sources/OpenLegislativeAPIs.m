@@ -13,7 +13,7 @@
 
 @implementation OpenLegislativeAPIs
 SYNTHESIZE_SINGLETON_FOR_CLASS(OpenLegislativeAPIs);
-@synthesize osApiClient, transApiClient, osMetadata=_osMetadata;
+@synthesize osApiClient, transApiClient, vsApiClient, osMetadata=_osMetadata;
 
 - (id)init {
 	if (self=[super init]) {
@@ -23,6 +23,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OpenLegislativeAPIs);
 		updated = nil;
 		osApiClient = [[RKClient clientWithBaseURL:osApiBaseURL] retain];
 		transApiClient = [[RKClient clientWithBaseURL:transApiBaseURL] retain];
+		vsApiClient = [[RKClient clientWithBaseURL:vsApiBaseURL] retain];
 		
 		[self currentSession];
 	}
@@ -42,11 +43,16 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OpenLegislativeAPIs);
 		[osApiClient release], osApiClient = nil;
 	if (transApiClient)
 		[transApiClient release], transApiClient = nil;
+	if (vsApiClient)
+		[vsApiClient release], vsApiClient = nil;
 
 	[super dealloc];
 }
 
 - (void)queryOpenStatesBillWithID:(NSString *)billID session:(NSString *)session delegate:(id)sender {
+	if (!session)
+		session = [self currentSession];
+	
 	if (IsEmpty(billID) || IsEmpty(session) || !sender || !osApiClient)
 		return;
 	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:osApiKeyValue, @"apikey",nil];
