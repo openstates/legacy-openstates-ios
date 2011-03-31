@@ -11,7 +11,7 @@
 
 @class TableCellDataObject;
 @class DDActionHeaderView;
-@interface BillsDetailViewController : UITableViewController <RKRequestDelegate, UISplitViewControllerDelegate, UIPopoverControllerDelegate/*, UIWebViewDelegate*/> {
+@interface BillsDetailViewController : UITableViewController <RKRequestDelegate, UISplitViewControllerDelegate, UIPopoverControllerDelegate> {
 	IBOutlet NSMutableDictionary *bill;
 	IBOutlet UIView *headerView, *descriptionView, *statusView;
 	IBOutlet UITextView *lab_description;

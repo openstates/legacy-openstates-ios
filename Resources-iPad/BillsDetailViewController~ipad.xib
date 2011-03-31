@@ -11,7 +11,7 @@
 			<string key="NS.object.0">132</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="178"/>
+			<integer value="244"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -95,6 +95,7 @@
 											<bytes key="NSRGB">MC45NTI1NTQ3NjI0IDAuNjk2NTY5NDQyNyAwLjE5NjU0NzEwNTkAA</bytes>
 										</object>
 										<bool key="IBUIClipsSubviews">YES</bool>
+										<int key="IBUITag">9997</int>
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<string key="IBUIText"/>
@@ -129,6 +130,7 @@
 											<bytes key="NSRGB">MC45NTI1NTQ3NjI0IDAuNjk2NTY5NDQyNyAwLjE5NjU0NzEwNTkAA</bytes>
 										</object>
 										<bool key="IBUIClipsSubviews">YES</bool>
+										<int key="IBUITag">9994</int>
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<string key="IBUIText"/>
@@ -156,6 +158,7 @@
 											<bytes key="NSRGB">MC45NTI1NTQ3NjI0IDAuNjk2NTY5NDQyNyAwLjE5NjU0NzEwNTkAA</bytes>
 										</object>
 										<bool key="IBUIClipsSubviews">YES</bool>
+										<int key="IBUITag">9995</int>
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<string key="IBUIText"/>
@@ -183,6 +186,7 @@
 											<bytes key="NSRGB">MC45NTI1NTQ3NjI0IDAuNjk2NTY5NDQyNyAwLjE5NjU0NzEwNTkAA</bytes>
 										</object>
 										<bool key="IBUIClipsSubviews">YES</bool>
+										<int key="IBUITag">9993</int>
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<string key="IBUIText"/>
@@ -210,6 +214,7 @@
 											<bytes key="NSRGB">MC45NTI1NTQ3NjI0IDAuNjk2NTY5NDQyNyAwLjE5NjU0NzEwNTkAA</bytes>
 										</object>
 										<bool key="IBUIClipsSubviews">YES</bool>
+										<int key="IBUITag">9996</int>
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<string key="IBUIText"/>
@@ -237,6 +242,7 @@
 											<bytes key="NSRGB">MC45NTI1NTQ3NjI0IDAuNjk2NTY5NDQyNyAwLjE5NjU0NzEwNTkAA</bytes>
 										</object>
 										<bool key="IBUIClipsSubviews">YES</bool>
+										<int key="IBUITag">9992</int>
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<string key="IBUIText"/>
