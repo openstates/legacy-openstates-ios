@@ -160,3 +160,26 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 	else
 		return nil;
 }
+
+BOOL billTypeRequiresOpposingChamber(NSString *billType) {
+	BOOL requires = YES;
+	if (!IsEmpty(billType)) {
+		if (([billType isEqualToString:@"HR"]) || 
+			([billType isEqualToString:@"SR"]))
+			requires = NO;
+	}
+	return requires;
+}
+
+BOOL billTypeRequiresGovernor(NSString *billType) {
+	BOOL requires = billTypeRequiresOpposingChamber(billType);
+	if (!IsEmpty(billType)) {
+		if (([billType hasSuffix:@"JR"]) ||
+			([billType hasSuffix:@"CR"]))	// shouldn't this be TRUE though?
+			requires = NO;
+	}
+	return requires;
+}
+
+
+
