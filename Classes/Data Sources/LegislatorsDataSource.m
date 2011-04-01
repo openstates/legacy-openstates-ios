@@ -1,5 +1,5 @@
 //
-//  DirectoryDataSource.m
+//  LegislatorsDataSource.m
 //  TexLege
 //
 //  Created by Gregory S. Combs on 5/31/09.
