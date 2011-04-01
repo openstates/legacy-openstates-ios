@@ -657,22 +657,45 @@ static MiniBrowserController *s_browser = nil;
 
 #pragma mark UIWebViewDelegate Methods 
 
+- (void)startLoadingAnimation:(id)sender {
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+	[self.m_activity startAnimating];
+	[self.m_loadingLabel setHidden:NO];
+	[self.m_webView setAlpha:0.75f];	
+}
+
+
+- (void)stopLoadingAnimation:(id)sender {
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+	[self.m_activity stopAnimating];
+	[self.m_loadingLabel setHidden:YES];
+	[self.m_webView setAlpha:1.0f];	
+}
+
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
 	// notify of an error?
 	[self.m_toolBar setItems:m_normalItemList animated:NO];
+	
+	[self stopLoadingAnimation:webView];
+	
+	UIAlertView *alert = [[[ UIAlertView alloc ] 
+			  initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.BrowserErrorTitle"] 
+			  message:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.BrowserErrorText"]  
+			  delegate:nil // we're static, so don't do "self"
+			  cancelButtonTitle: @"Cancel" 
+			  otherButtonTitles:nil, nil] autorelease];
+	[ alert show ];		
+	
 }
 
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
 	[self.m_toolBar setItems:self.m_loadingItemList animated:NO];
-	
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-	[self.m_activity startAnimating];
-	[self.m_loadingLabel setHidden:NO];
-	[self.m_webView setAlpha:0.75f];
+		
+	//[self startLoadingAnimation:webView];
 	
 	// always start loading - we're not real restrictive here...
 	return YES;
@@ -683,10 +706,9 @@ static MiniBrowserController *s_browser = nil;
 {
 
 	[self.m_toolBar setItems:self.m_normalItemList animated:NO];
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-	[self.m_activity stopAnimating];
-	[self.m_loadingLabel setHidden:YES];
-	[self.m_webView setAlpha:1.0f];
+	
+	[self stopLoadingAnimation:webView];
+
 	[self.m_webView setBackgroundColor:[TexLegeTheme backgroundLight]];
 
 	[self enableBackButton:self.m_webView.canGoBack];
@@ -732,10 +754,8 @@ static MiniBrowserController *s_browser = nil;
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-	[self.m_activity startAnimating];
-	[self.m_loadingLabel setHidden:NO];
-	[self.m_webView setAlpha:0.75f];
+	[self startLoadingAnimation:webView];
+	[self performSelector:@selector(stopLoadingAnimation:) withObject:webView afterDelay:10];
 	
 	self.title = @"loading...";
 }
