@@ -18,10 +18,13 @@ static NSString *transApiBaseURL =	@"http://transparencydata.com/api/1.0";
 static NSString *vsApiBaseURL =		@"http://api.votesmart.org";
 static NSString *vsApiKey =			@"5fb3b476c47fcb8a21dc2ec22ca92cbb";	// for "key" ... you'll want to add "&stateId=TX&o=JSON" too...
 
+static NSString *tloApiBaseURL =	@"http://www.legis.state.tx.us";
+
 @interface OpenLegislativeAPIs : NSObject <RKRequestDelegate> {
 	RKClient *osApiClient;	
 	RKClient *transApiClient;
 	RKClient *vsApiClient;
+	RKClient *tloApiClient;
 	NSString *_currentSession;
 	NSMutableDictionary *_osMetadata;
 	NSDate *updated;
@@ -31,6 +34,7 @@ static NSString *vsApiKey =			@"5fb3b476c47fcb8a21dc2ec22ca92cbb";	// for "key" 
 @property (nonatomic, retain) RKClient *osApiClient;
 @property (nonatomic, retain) RKClient *transApiClient;
 @property (nonatomic, retain) RKClient *vsApiClient;
+@property (nonatomic, retain) RKClient *tloApiClient;
 @property (nonatomic, readonly) NSString *currentSession;
 @property (nonatomic, readonly) NSMutableDictionary *osMetadata;
 
