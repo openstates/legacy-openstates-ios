@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <RestKit/RestKit.h>
 
 @class BillSearchDataSource;
-@interface BillsKeyViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource> {
+@interface BillsKeyViewController : UITableViewController <RKRequestDelegate, UITableViewDelegate, UITableViewDataSource> {
 	NSMutableArray *keyBills_;
 }
 @property (nonatomic,retain) NSMutableArray *keyBills;
