@@ -87,39 +87,39 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OpenLegislativeAPIs);
 	//[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyLoaded object:nil];
 }
 
-
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data  
-		if (_osMetadata)
-			[_osMetadata release];
-
-		_osMetadata = [[response.body mutableObjectFromJSONData] retain];
-		if (IsEmpty(_osMetadata))
-			return;
+		
+		if (YES == [request.resourcePath hasPrefix:@"/metadata"]) {	// This is about our current session
+			if (_osMetadata)
+				[_osMetadata release];
 			
-		NSMutableDictionary *sessions = [_osMetadata objectForKey:@"session_details"];
-		
-//		NSLog(@"%@", sessions);
-		
-		NSString *maxdate = @"1969-01-01 00:00:00";
-		NSString *maxsession = nil;
-		for (NSString *sessionKey in [sessions allKeys]) {
-			NSDictionary *session = [sessions objectForKey:sessionKey];
-			NSString *startDate = [session objectForKey:@"start_date"];
-			if ([startDate compare:maxdate] == NSOrderedDescending) {
-				maxdate = startDate;
-				maxsession = sessionKey;
+			_osMetadata = [[response.body mutableObjectFromJSONData] retain];
+			if (IsEmpty(_osMetadata))
+				return;
+			
+			NSMutableDictionary *sessions = [_osMetadata objectForKey:@"session_details"];
+
+			NSString *maxdate = @"1969-01-01 00:00:00";
+			NSString *maxsession = nil;
+			for (NSString *sessionKey in [sessions allKeys]) {
+				NSDictionary *session = [sessions objectForKey:sessionKey];
+				NSString *startDate = [session objectForKey:@"start_date"];
+				if ([startDate compare:maxdate] == NSOrderedDescending) {
+					maxdate = startDate;
+					maxsession = sessionKey;
+				}
 			}
-		}
-		if (maxsession) {
-			if (_currentSession)
-				[_currentSession release];
-			_currentSession = [maxsession retain];	
-			isFresh = TRUE;
-			if (updated)
-				[updated release];
-			updated = [[NSDate date] retain];
+			if (maxsession) {
+				if (_currentSession)
+					[_currentSession release];
+				_currentSession = [maxsession retain];	
+				isFresh = TRUE;
+				if (updated)
+					[updated release];
+				updated = [[NSDate date] retain];
+			}
 		}
 	}
 }
