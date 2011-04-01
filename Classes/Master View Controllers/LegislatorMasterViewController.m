@@ -51,9 +51,6 @@
 
 - (void)dealloc {
 	self.chamberControl = nil;
-#ifdef AUTOMATED_TESTING_CHARTS
-	[[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:@"AUTOMATED_TESTING_CHARTS"];
-#endif
     [super dealloc];
 }
 
@@ -64,10 +61,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 		
-#ifdef AUTOMATED_TESTING_CHARTS
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(automatedChartsNext:) name:@"AUTOMATED_TESTING_CHARTS" object:nil];
-#endif
-	
 	self.tableView.rowHeight = 73.0f;
 	
 	if ([UtilityMethods isIPadDevice])
@@ -129,49 +122,6 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {	
 	[self redisplayVisibleCells:nil];	
 }
-
-#ifdef AUTOMATED_TESTING_CHARTS
-NSIndexPath *current = nil;
-
-- (void) automatedChartsNext:(id)sender {
-	//NSManagedObjectID *theID = sender;
-	//id object = [self.managedObjectContext objectWithID:theID];
-	
-	if (!current)
-		current = [[NSIndexPath indexPathForRow:0 inSection:0] retain];
-	
-	NSInteger numSections = [self.dataSource numberOfSectionsInTableView:self.tableView];
-	NSInteger numRowsInSection = [self.dataSource tableView:self.tableView  numberOfRowsInSection:current.section];
-
-	NSInteger theRow = current.row;
-	NSInteger theSection = current.section;
-	
-	BOOL stop = NO;
-	if ((theRow + 1) < numRowsInSection)
-		theRow++;
-	else if ((theSection+1) < numSections) {
-		theRow = 0;
-		theSection++;
-	}
-	else {
-		stop = YES;
-		[current release];
-	}
-	
-	if (!stop) {
-		NSIndexPath *newPath = [NSIndexPath indexPathForRow:theRow inSection:theSection];
-		[current release];
-		current = [newPath retain];
-		UINavigationController *nav = [self navigationController];
-		//if (nav && [nav.viewControllers count]>1)
-			[nav popToRootViewControllerAnimated:NO];
-		
-		[self.tableView selectRowAtIndexPath:newPath animated:NO scrollPosition:UITableViewScrollPositionTop];
-		[self.tableView.delegate tableView:self.tableView didSelectRowAtIndexPath:newPath];
-	}
-	
-}
-#endif
 
 #pragma mark -
 #pragma mark Table view delegate
