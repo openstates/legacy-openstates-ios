@@ -60,7 +60,7 @@
 		
 		actualURL = [NSURL URLWithString:tempString];
 	}
-	else if ([self.url isEqualToString:@"contactMail"]) {
+	else if ([self.url isEqualToString:@"mailto:support@texlege.com"]) {
 		actualURL = nil;
 	}
 	else if (self.url) {
