@@ -110,6 +110,16 @@
 	
 	if (link) {
 		
+		if ([link.url hasPrefix:@"http://realvideo"]) {
+			
+			NSURL *interAppURL = [NSURL URLWithString:link.url];
+			if ([[UIApplication sharedApplication] canOpenURL:interAppURL]) {
+				if ([TexLegeReachability canReachHostWithURL:interAppURL alert:YES])
+					[[UIApplication sharedApplication] openURL:interAppURL];
+				return;
+			}
+		}
+		
 		// create a CapitolMapsDetailViewController. This controller will display the full size tile for the element
 		if (self.detailViewController == nil) {
 			self.detailViewController = [[[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil] autorelease];

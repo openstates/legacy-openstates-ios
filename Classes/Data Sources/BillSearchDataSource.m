@@ -9,7 +9,7 @@
 #import "BillSearchDataSource.h"
 #import "TexLegeReachability.h"
 #import "TexLegeTheme.h"
-#import "DisclosureQuartzView.h"
+#import "TexLegeStandardGroupCell.h"
 #import "BillMetadataLoader.h"
 #import "OpenLegislativeAPIs.h"
 #import "TexLegeLibrary.h"
@@ -156,7 +156,7 @@
 }
 
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+- (void)configureCell:(TexLegeStandardGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
 	BOOL useDark = (indexPath.row % 2 == 0);
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
@@ -179,25 +179,20 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSString *CellIdentifier = @"CellOn";
 	
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil)
 	{
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle 
+		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:UITableViewCellStyleSubtitle 
 									   reuseIdentifier:CellIdentifier] autorelease];
-		
-		cell.textLabel.textColor =	[TexLegeTheme textDark];
-		cell.textLabel.textAlignment = UITextAlignmentLeft;
-		cell.textLabel.font = [UIFont boldSystemFontOfSize:15];
-		
-		if ([CellIdentifier isEqualToString:@"CellOff"])
+
+		cell.textLabel.textColor = [TexLegeTheme textDark];
+		cell.detailTextLabel.textColor = [TexLegeTheme indexText];
+		cell.textLabel.font = [TexLegeTheme boldFifteen];
+				
+		if ([CellIdentifier isEqualToString:@"CellOff"]) {
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		else {
-			cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-			cell.textLabel.adjustsFontSizeToFitWidth = YES;
-			cell.textLabel.minimumFontSize = 12.0f;
-			DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 28.f, 28.f)];
-			cell.accessoryView = qv;
-			[qv release];			
+			cell.accessoryView = nil;
+			cell.accessoryType = UITableViewCellAccessoryNone;
 		}
     }
 	if (!IsEmpty(_rows))

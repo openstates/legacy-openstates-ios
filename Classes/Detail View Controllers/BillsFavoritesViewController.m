@@ -14,9 +14,10 @@
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
 #import "OpenLegislativeAPIs.h"
+#import "TexLegeStandardGroupCell.h"
 
 @interface BillsFavoritesViewController (Private)
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+- (void)configureCell:(TexLegeStandardGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 - (IBAction)save:(id)sender;
 - (NSString *)watchIDForBill:(NSDictionary *)aBill;
 @end
@@ -164,22 +165,8 @@
 	[super viewDidUnload];
 }
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
-	BOOL useDark = (indexPath.row % 2 == 0);
-	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
-	
-	cell.textLabel.text = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"name"];
-	cell.detailTextLabel.text = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"description"];	
-}
-
 #pragma mark -
 #pragma mark Table view data source
-
-- (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-	BOOL useDark = (indexPath.row % 2 == 0);
-	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
-}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -194,6 +181,20 @@
 		return 0;
 }
 
+- (void)configureCell:(TexLegeStandardGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+	BOOL useDark = (indexPath.row % 2 == 0);
+	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
+	
+	cell.textLabel.text = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"name"];
+	cell.detailTextLabel.text = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"description"];		
+}
+
+- (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+	BOOL useDark = (indexPath.row % 2 == 0);
+	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSString *CellIdentifier = @"CellOff";
@@ -203,27 +204,18 @@
 			CellIdentifier = @"CellOn";
 	}
 	
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil)
 	{
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle 
+		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:UITableViewCellStyleSubtitle 
 									   reuseIdentifier:CellIdentifier] autorelease];
 		
-		cell.textLabel.textColor =	[TexLegeTheme textDark];
-		cell.textLabel.textAlignment = UITextAlignmentLeft;
-		cell.textLabel.font = [UIFont boldSystemFontOfSize:15];
+		cell.textLabel.textColor = [TexLegeTheme textDark];
+		cell.textLabel.font = [TexLegeTheme boldFifteen];
+		cell.detailTextLabel.textColor = [TexLegeTheme indexText];
 		
 		if ([CellIdentifier isEqualToString:@"CellOff"])
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		else {
-			cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-			cell.textLabel.adjustsFontSizeToFitWidth = YES;
-			cell.textLabel.minimumFontSize = 12.0f;
-			DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 28.f, 28.f)];
-			cell.accessoryView = qv;
-			[qv release];			
-		}
-
     }
 	
 	if (_watchList && [_watchList count])

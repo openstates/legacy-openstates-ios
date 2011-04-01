@@ -103,7 +103,7 @@
 	
 	if (cell == nil) {
 		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:leg_cell_ID] autorelease];
-		cell.accessoryView = [[[UIImageView alloc] initWithFrame:CGRectMake(0.f, 0.f, 30.f, 30.f)] autorelease];
+		cell.accessoryView = [[[UIImageView alloc] initWithFrame:CGRectMake(0.f, 0.f, 50.f, 50.f)] autorelease];
 		cell.detailTextLabel.font = [TexLegeTheme boldFifteen];
 		cell.textLabel.font =		[TexLegeTheme boldTwelve];
 	}
@@ -112,14 +112,14 @@
 	
 	switch (voteCode) {
 		case BillVotesTypeYea:
-			imageView.image = [UIImage imageNamed:@"ball_green"];
+			imageView.image = [UIImage imageNamed:@"VoteYea"];
 			break;
 		case BillVotesTypeNay:
-			imageView.image = [UIImage imageNamed:@"ball_red"];
+			imageView.image = [UIImage imageNamed:@"VoteNay"];
 			break;
 		case BillVotesTypePNV:
 		default:
-			imageView.image = [UIImage imageNamed:@"ball_yellow"];
+			imageView.image = [UIImage imageNamed:@"VotePNV"];
 			break;
 	}
 	cell.textLabel.text = [dataObj objectForKey:@"subtitle"];

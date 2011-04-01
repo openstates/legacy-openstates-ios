@@ -10,7 +10,8 @@
 #import "TexLegeAppDelegate.h"
 #import "LinkObj.h"
 #import "UtilityMethods.h"
-#import "DisclosureQuartzView.h"
+#import "TexLegeStandardGroupCell.h"
+#import "TexLegeTheme.h"
 
 @implementation LinksDataSource
 
@@ -142,30 +143,18 @@ enum Sections {
 	else
 		CellIdentifier = @"LinksBodyLink";
 	
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil)
-	{
-		UITableViewCellStyle style = UITableViewCellStyleSubtitle;
-		UITableViewCellAccessoryType disclosure = UITableViewCellAccessoryDisclosureIndicator;
-
+	{		
+		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"] autorelease];
 		if (section == kHeaderSection) {
-			style = UITableViewCellStyleDefault;
-			disclosure = UITableViewCellAccessoryDetailDisclosureButton;
-		}
-
-		cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:@"Cell"] autorelease];
-		if (section == kHeaderSection) {
-			cell.accessoryType = disclosure;
-		}
-		else {
-			DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 28.f, 28.f)];
-			//UIImageView *iv = [[UIImageView alloc] initWithImage:[qv imageFromUIView]];
-			cell.accessoryView = qv;
-			[qv release];
-			//[iv release];			
-		}
-
+			cell.accessoryView = nil;
+			cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+		}		
 		
+		cell.textLabel.font = [TexLegeTheme boldFifteen];
+		cell.textLabel.textColor = [TexLegeTheme textDark];
+		cell.detailTextLabel.textColor = [TexLegeTheme indexText];
 	}
 	
 	LinkObj *link = [self dataObjectForIndexPath:indexPath];

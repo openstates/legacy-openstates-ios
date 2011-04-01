@@ -9,7 +9,7 @@
 #import "CapitolMapsDataSource.h"
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
-#import "DisclosureQuartzView.h"
+#import "TexLegeStandardGroupCell.h"
 
 @interface CapitolMapsDataSource(Private)
 
@@ -125,36 +125,18 @@
 	static NSString *CellIdentifier = @"Cell";
 	
 	/* Look up cell in the table queue */
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	
 	/* Not found in queue, create a new cell object */
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewStylePlain reuseIdentifier:CellIdentifier] autorelease];
 		cell.textLabel.textColor =	[TexLegeTheme textDark];
-		cell.textLabel.textAlignment = UITextAlignmentLeft;
-		cell.textLabel.font = [UIFont boldSystemFontOfSize:15];
-
-		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-		cell.textLabel.adjustsFontSizeToFitWidth = YES;
-		cell.textLabel.minimumFontSize = 12.0f;
-		//cell.accessoryView = [TexLegeTheme disclosureLabel:YES];
-		//cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]] autorelease];
-		DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 28.f, 28.f)];
-		//UIImageView *iv = [[UIImageView alloc] initWithImage:[qv imageFromUIView]];
-		cell.accessoryView = qv;
-		[qv release];
-		//[iv release];
-		
-		
+		cell.textLabel.font = [TexLegeTheme boldFifteen];
     }
 	BOOL useDark = (indexPath.row % 2 == 0);
 
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
-			
-	// configure cell contents
-	//if ([self showDisclosureIcon])
-		//cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-	
+				
 	cell.textLabel.text = [[self dataObjectForIndexPath:indexPath] name];
 				 
 	return cell;
