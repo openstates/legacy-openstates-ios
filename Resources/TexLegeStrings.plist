@@ -20,6 +20,10 @@
 	</dict>
 	<key>Reachability</key>
 	<dict>
+		<key>BrowserErrorTitle</key>
+		<string>Error Loading Page</string>
+		<key>BrowserErrorText</key>
+		<string>There was an error while attempting to load the web page.  The server may be unavailable or your device&apos;s network connectivity is unavailable or unstable.</string>
 		<key>NoInternetTitle</key>
 		<string>Internet Unavailable</string>
 		<key>NoInternetText</key>
@@ -72,7 +76,7 @@
 			<key>class</key>
 			<string>BillsRecentViewController</string>
 			<key>title</key>
-			<string>Recently Active</string>
+			<string>Bills Passed Today</string>
 			<key>dataObject</key>
 			<string>BillsMenuItem</string>
 		</dict>
