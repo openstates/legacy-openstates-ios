@@ -456,7 +456,7 @@ static MiniBrowserController *s_browser = nil;
 	if (anObject) {
 		self.dataObjectID = [anObject sortOrder];
 
-		if ([anObject.url isEqualToString:@"contactMail"])
+		if ([anObject.url isEqualToString:@"mailto:support@texlege.com"])
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
 																			 subject:@"TexLege Support Question" 
 																				body:@"" commander:[[TexLegeAppDelegate appDelegate] detailNavigationController]];

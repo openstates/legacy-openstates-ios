@@ -128,7 +128,7 @@
 */		
 		MiniBrowserController *detailVC = self.detailViewController;
 		
-		if ([link.url isEqualToString:@"contactMail"]) {
+		if ([link.url isEqualToString:@"mailto:support@texlege.com"]) {
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
 																			 subject:@"TexLege Support Question / Concern" 
 																				body:@"" commander:self];
