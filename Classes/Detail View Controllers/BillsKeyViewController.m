@@ -62,7 +62,7 @@
 
 - (void)dealloc {	
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
-
+	
 	[keyBills_ release];
 	
 	[super dealloc];
@@ -122,7 +122,7 @@
 		cell.detailTextLabel.text = [bill objectForKey:@"title"];
 		cell.textLabel.text = [bill objectForKey:@"billNumber"];
 	}
-
+	
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -133,8 +133,12 @@
 	if (cell == nil)
 	{
 		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:UITableViewCellStyleSubtitle 
-											 reuseIdentifier:CellIdentifier] autorelease];		
-    }
+												reuseIdentifier:CellIdentifier] autorelease];		
+		
+		cell.textLabel.textColor = [TexLegeTheme textDark];
+		cell.detailTextLabel.textColor = [TexLegeTheme indexText];
+		cell.textLabel.font = [TexLegeTheme boldFourteen];
+	}
 	[self configureCell:cell atIndexPath:indexPath];		
 	return cell;
 }
@@ -194,12 +198,12 @@
 
 - (void)startSearchForKeyBills {
 	NSDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-										@"JSON", @"o",
-										@"TX", @"stateId",
-										[[NSDate date] stringWithFormat:@"yyyy"], @"year",
-										vsApiKey, @"key",
-										nil];
-			
+								 @"JSON", @"o",
+								 @"TX", @"stateId",
+								 [[NSDate date] stringWithFormat:@"yyyy"], @"year",
+								 vsApiKey, @"key",
+								 nil];
+	
 	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:vsApiBaseURL] alert:YES])
 		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] vsApiClient] get:@"/Votes.getBillsByYearState" 
 															   queryParams:queryParams 
@@ -207,7 +211,7 @@
 	else {
 		NSLog(@"NotWorking");
 	}
-
+	
 }
 
 
@@ -230,7 +234,6 @@
 }
 
 
-// Handling GET /BillMetadata.json  
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data  
@@ -249,7 +252,7 @@
 			NSString *bill_id2 = [item2 objectForKey:@"billNumber"];
 			return [bill_id1 compare:bill_id2 options:NSNumericSearch];
 		}];
-				
+		
 		[self.tableView reloadData];		
 	}
 }
