@@ -11,6 +11,7 @@
 
 @class TableCellDataObject;
 @class DDActionHeaderView;
+@class BillVotesDataSource;
 @interface BillsDetailViewController : UITableViewController <RKRequestDelegate, UISplitViewControllerDelegate, UIPopoverControllerDelegate> {
 	IBOutlet NSMutableDictionary *bill;
 	IBOutlet UIView *headerView, *descriptionView, *statusView;
@@ -19,6 +20,7 @@
 	IBOutlet UILabel *stat_filed, *stat_thisPassComm, *stat_thisPassVote, *stat_thatPassComm, *stat_thatPassVote, *stat_governor, *stat_isLaw;
 	IBOutlet DDActionHeaderView *actionHeader;
 	id dataObject;
+	BillVotesDataSource *voteDS;
 }
 @property (nonatomic,assign) id dataObject;
 

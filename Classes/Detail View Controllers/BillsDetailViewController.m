@@ -24,6 +24,7 @@
 #import "DDActionHeaderView.h"
 #import "TexLegeTheme.h"
 #import "TexLegeStandardGroupCell.h"
+#import "BillVotesDataSource.h"
 
 @interface BillsDetailViewController (Private)
 - (void) setupHeader;
@@ -72,7 +73,6 @@ enum _billSections {
 
 - (void)dealloc {
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
-	
 	self.bill = nil;
 	self.headerView = self.descriptionView = self.statusView = nil;
 	self.lab_description = nil;
@@ -80,6 +80,8 @@ enum _billSections {
 	self.masterPopover = nil;
 	self.starButton = nil;
 	self.actionHeader = nil;
+	if (voteDS)
+		[voteDS release];
 	[super dealloc];
 }
 
@@ -95,6 +97,8 @@ enum _billSections {
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+	voteDS = nil;
+	
 	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
 	UIColor *sealColor = [[UIColor colorWithPatternImage:sealImage] colorWithAlphaComponent:0.5f];	
 	self.headerView.backgroundColor = sealColor;
@@ -122,6 +126,8 @@ enum _billSections {
 }
 
 - (void)viewDidUnload {
+	if (voteDS)
+		[voteDS release], voteDS = nil;
 	
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.	
 	//self.headerView = self.descriptionView = self.statusView = nil;
@@ -327,13 +333,16 @@ enum _billSections {
 			case kBillVotes: 
 			{				
 				NSDictionary *vote = [[bill objectForKey:@"votes"] objectAtIndex:indexPath.row];
+				NSDate *voteDate = [NSDate dateFromString:[vote objectForKey:@"date"]];
+				NSString *voteDateString = [NSDate stringForDisplayFromDate:voteDate];
+
 				BOOL passed = [[vote objectForKey:@"passed"] boolValue];
 				NSString *passedString = passed ? @"Passed" : @"Failed";
 				NSInteger chamber = chamberForString([vote objectForKey:@"chamber"]);
 				NSString *chamberString = stringForChamber(chamber, TLReturnFull);
-				cell.detailTextLabel.text = [NSString stringWithFormat:@"%@: %@",
+				cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@ (%@)",
 											 [[vote objectForKey:@"motion"] capitalizedString],
-											 chamberString];
+											 chamberString, voteDateString];
 				cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@ - %@)", passedString,
 									   [vote objectForKey:@"yes_count"], [vote objectForKey:@"no_count"]];
 			}
@@ -471,13 +480,13 @@ enum _billSections {
 
 	if (![stages objectForKey:[NSNumber numberWithInteger:BillStageOutOfCommittee]] && lastStage > BillStageOutOfCommittee)
 	{
-		self.stat_thisPassComm.backgroundColor = [TexLegeTheme texasOrange];
+		self.stat_thisPassComm.backgroundColor = [UIColor darkGrayColor];
 		self.stat_thisPassComm.alpha = 0.3f;
 	}
 
 	if (![stages objectForKey:[NSNumber numberWithInteger:BillStageOutOfOpposingCommittee]] && lastStage > BillStageOutOfOpposingCommittee)
 	{
-		self.stat_thatPassComm.backgroundColor = [TexLegeTheme texasOrange];
+		self.stat_thatPassComm.backgroundColor = [UIColor darkGrayColor];
 		self.stat_thatPassComm.alpha = 0.3f;
 	}
 	
@@ -694,11 +703,24 @@ enum _billSections {
 		}
 			break;
 		case kBillVotes: {
-			NSDictionary *vote = [[bill objectForKey:@"votes"] objectAtIndex:newIndexPath.row];
+			NSMutableDictionary *vote = [[bill objectForKey:@"votes"] objectAtIndex:newIndexPath.row];
 			if (vote) {
-//				UITableViewController *voteViewController = [[UITableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-				// push the vote data for yes_votes and no_votes
-				
+				if (!voteDS || NO == [voteDS.voteID isEqualToString:[vote objectForKey:@"vote_id"]]) {
+					if (voteDS)
+						[voteDS release];
+					voteDS = [[BillVotesDataSource alloc] initWithBillVotes:vote];
+				}
+				NSString *titleString = [NSString stringWithFormat:@"%@ %@ Vote", 
+										 [bill objectForKey:@"bill_id"], [[vote objectForKey:@"motion"] capitalizedString]];
+				UITableViewController *voteViewController = [[UITableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+				voteViewController.tableView.dataSource = voteDS;
+				voteViewController.tableView.delegate = voteDS;
+				voteViewController.tableView.rowHeight = 73.0f;
+				voteDS.viewController = voteViewController;
+				[self.navigationController pushViewController:voteViewController animated:YES];
+				voteViewController.navigationItem.title = titleString;
+				[voteViewController release];
+	
 			}
 		}
 			break;
