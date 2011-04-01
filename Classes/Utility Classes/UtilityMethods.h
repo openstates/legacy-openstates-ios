@@ -67,6 +67,10 @@ BOOL IsEmpty(id thing);
 - (BOOL) hasSubstring:(NSString*)substring caseInsensitive:(BOOL)insensitive;
 @end
 
+@interface NSArray (indexKeyedDictionaryExtension)
+- (NSDictionary *)indexKeyedDictionaryWithKey:(NSString *)key;
+@end
+
 
 
 

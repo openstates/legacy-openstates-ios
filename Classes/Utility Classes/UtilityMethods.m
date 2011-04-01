@@ -145,8 +145,25 @@ BOOL IsEmpty(id thing) {
 
 
 + (BOOL) isLandscapeOrientation {
-	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-	return UIInterfaceOrientationIsLandscape(orientation);	
+	//UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+	UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
+	if (UIDeviceOrientationIsValidInterfaceOrientation(orientation) && UIDeviceOrientationIsLandscape(orientation) && !UIInterfaceOrientationIsLandscape(statusBarOrientation)) {
+		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
+		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
+		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
+		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
+		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
+		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
+		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
+		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
+		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
+		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
+		[[UIApplication sharedApplication] setStatusBarOrientation:orientation animated:NO];
+		return UIInterfaceOrientationIsLandscape(orientation);	
+	}
+	else
+		return UIInterfaceOrientationIsLandscape(statusBarOrientation);
 }
 
 + (BOOL)isIPadDevice;
@@ -458,6 +475,25 @@ BOOL IsEmpty(id thing) {
     }
     return [NSString stringWithFormat:@"%d%@", num, ending];
 }
+
+@end
+
+@implementation NSArray (indexKeyedDictionaryExtension)
+
+- (NSDictionary *) indexKeyedDictionaryWithKey:(NSString *)key 
+{
+	if (![self count] || !key)
+		return nil;
+	
+	id objectInstance = nil;
+	NSMutableDictionary *mutableDictionary = [[NSMutableDictionary alloc] init];
+	for (objectInstance in self) {
+		[mutableDictionary setObject:objectInstance forKey:[objectInstance valueForKey:key]];
+	}
+	
+	return (NSDictionary *)[mutableDictionary autorelease];
+}
+
 
 @end
 
