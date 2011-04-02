@@ -19,6 +19,7 @@
 #import "BillsMenuDataSource.h"
 #import "BillSearchDataSource.h"
 #import "OpenLegislativeAPIs.h"
+#import "LocalyticsSession.h"
 
 @interface BillsMasterViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
@@ -121,6 +122,12 @@
 			if ([self.detailViewController respondsToSelector:@selector(setDataObject:)])
 				[self.detailViewController performSelector:@selector(setDataObject:) withObject:dataObject];
 			
+			NSDictionary *tagBill = [[NSDictionary alloc] initWithObjectsAndKeys:
+									 [dataObject objectForKey:@"bill_id"], @"bill_id",
+									 [dataObject objectForKey:@"session"], @"session", nil];
+			[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"BILL_SELECT" attributes:tagBill];
+			[tagBill release];
+			
 			[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:[dataObject objectForKey:@"bill_id"] 
 																			   session:[dataObject objectForKey:@"session"] 
 																			  delegate:self.detailViewController];			
@@ -147,19 +154,16 @@
 		if (!theClass || !NSClassFromString(theClass))
 			return;
 		
-		// create a BillsMenuDetailViewController. This controller will display the full size tile for the element
 		UITableViewController *tempVC = nil;
-		//if ([theClass isEqualToString:@"BillsFavoritesViewController"] || [theClass isEqualToString:@"BillsCategoriesViewController"])
-			tempVC = [[[NSClassFromString(theClass) alloc] initWithStyle:UITableViewStylePlain] autorelease];	// we don't want a nib for this one
-		//else
-		//	tempVC = [[[NSClassFromString(theClass) alloc] initWithNibName:theClass bundle:nil] autorelease];
-		
-		//if ([tempVC respondsToSelector:@selector(setSelectedMenu:)])
-		//	[tempVC setValue:dataObject forKey:@"selectedMenu"];
+		tempVC = [[[NSClassFromString(theClass) alloc] initWithStyle:UITableViewStylePlain] autorelease];	// we don't want a nib for this one
 		
 		if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
 			[self searchBarCancelButtonClicked:nil];
 		}
+		
+		NSDictionary *tagMenu = [[NSDictionary alloc] initWithObjectsAndKeys:theClass, @"FEATURE", nil];
+		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"BILL_MENU" attributes:tagMenu];
+		[tagMenu release];
 		
 		// push the detail view controller onto the navigation stack to display it				
 		[self.navigationController pushViewController:tempVC animated:YES];
