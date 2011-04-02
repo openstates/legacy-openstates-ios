@@ -1,5 +1,5 @@
 //
-//  LegislatorsDataSource.m
+//  BillVotesDataSource.m
 //  TexLege
 //
 //  Created by Gregory S. Combs on 3/31/11.
@@ -15,6 +15,22 @@
 
 @interface BillVotesDataSource (Private)
 - (void) loadVotesAndVoters;
+@end
+
+@implementation BillVotesViewController
+
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	self.tableView.rowHeight = 73.0f;
+	self.tableView.separatorColor = [TexLegeTheme separator];
+	self.tableView.backgroundColor = [TexLegeTheme tableBackground];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];	
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+	return YES;
+}
 @end
 
 @implementation BillVotesDataSource
@@ -174,6 +190,12 @@
 		
 		if ([billVotes_ objectForKey:countString] && [[billVotes_ objectForKey:countString] integerValue]) {
 			for (NSMutableDictionary *voter in [billVotes_ objectForKey:votesString]) {
+				/* We sometimes (all the time?) have to hard code in the Speaker ... let's just hope 
+				 they don't get rid of Joe Straus any time soon. */
+				if ((![voter objectForKey:@"leg_id"] || [[voter objectForKey:@"leg_id"] isEqual:[NSNull null]]) &&
+					([[voter objectForKey:@"name"] hasSubstring:@"Speaker" caseInsensitive:NO]))
+					[voter setObject:@"TXL000347" forKey:@"leg_id"];
+					
 				LegislatorObj *member = [memberLookup objectForKey:[voter objectForKey:@"leg_id"]];
 				if (member) {
 					NSMutableDictionary *voter = [[NSMutableDictionary alloc] initWithObjectsAndKeys:

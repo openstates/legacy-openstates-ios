@@ -28,3 +28,9 @@ enum {
 - (id)initWithBillVotes:(NSMutableDictionary *)newVotes;
 
 @end
+
+@interface BillVotesViewController : UITableViewController {
+}
+
+@end
+
