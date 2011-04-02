@@ -271,19 +271,19 @@ enum _billSections {
 				}
 			}
 		}
-		if ([[action objectForKey:@"action"] isEqualToString:@"Passed"]) {
+		if ([[action objectForKey:@"action"] caseInsensitiveCompare:@"Passed"] == NSOrderedSame) {
 			if (NO == [[action objectForKey:@"actor"] isEqualToString:[self.bill objectForKey:@"chamber"]])
 				status = BillStageOpposingChamberVoted;
 			else
 				status = BillStageChamberVoted;		
 		}
 		
-		if ([[action objectForKey:@"action"] isEqualToString:@"Sent to the Governor"]) {
+		if ([[action objectForKey:@"action"] caseInsensitiveCompare:@"Sent to the Governor"] == NSOrderedSame) {
 			status = BillStageSentToGovernor;
 		}
-		else if (([[action objectForKey:@"action"] isEqualToString:@"Signed by the Governor"]) ||
+		else if (([[action objectForKey:@"action"] caseInsensitiveCompare:@"Signed by the Governor"] == NSOrderedSame) ||
 				 ([[action objectForKey:@"action"] hasPrefix:@"Effective"]) ||
-				 ([[action objectForKey:@"action"] isEqualToString:@"Reported Enrolled"]))
+				 ([[action objectForKey:@"action"] caseInsensitiveCompare:@"Reported Enrolled"] == NSOrderedSame))
 		{
 			status = BillStageBecomesLaw;
 		}
