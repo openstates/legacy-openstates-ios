@@ -17,6 +17,7 @@
 #import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "TexLegeStandardGroupCell.h"
 #import "NSDate+Helper.h"
+#import "TexLegeCoreDataUtils.h"
 
 @interface BillsKeyViewController (Private)
 - (void)configureCell:(TexLegeStandardGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -120,7 +121,10 @@
 	NSDictionary *bill = [keyBills_ objectAtIndex:indexPath.row];
 	if (bill) {
 		cell.detailTextLabel.text = [bill objectForKey:@"title"];
-		cell.textLabel.text = [bill objectForKey:@"billNumber"];
+		NSMutableString *name = [NSMutableString stringWithString:[bill objectForKey:@"bill_id"]];
+		if (!IsEmpty([bill objectForKey:@"passFail"]))
+			[name appendFormat:@" - %@", [bill objectForKey:@"passFail"]];
+		cell.textLabel.text = name;
 	}
 	
 }
@@ -161,7 +165,7 @@
 		[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	
 	NSDictionary *bill = [keyBills_ objectAtIndex:indexPath.row];
-	if (bill && [bill objectForKey:@"billNumber"]) {
+	if (bill && [bill objectForKey:@"bill_id"]) {
 		if (bill) {
 			
 			BOOL changingViews = NO;
@@ -179,7 +183,7 @@
 			}
 			
 			[detailView setDataObject:bill];
-			[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:[bill objectForKey:@"billNumber"] 
+			[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:[bill objectForKey:@"bill_id"] 
 																			   session:nil			// defaults to current session
 																			  delegate:detailView];
 			
@@ -197,21 +201,12 @@
 // http://api.votesmart.org/Votes.getBillsByYearState?key=5fb3b476c47fcb8a21dc2ec22ca92cbb&year=2011&stateId=TX&o=JSON
 
 - (void)startSearchForKeyBills {
-	NSDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-								 @"JSON", @"o",
-								 @"TX", @"stateId",
-								 [[NSDate date] stringWithFormat:@"yyyy"], @"year",
-								 vsApiKey, @"key",
-								 nil];
-	
-	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:vsApiBaseURL] alert:YES])
-		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] vsApiClient] get:@"/Votes.getBillsByYearState" 
-															   queryParams:queryParams 
-																  delegate:self];
-	else {
-		NSLog(@"NotWorking");
+	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:RESTKIT_BASE_URL] alert:NO]) {
+		RKRequest *request = [[RKClient sharedClient] get:@"/rest.php/KeyBills" delegate:self];
+		if (!request)
+			NSLog(@"BillsKeyViewController: Error, unable to create RestKit request for KeyBills");
 	}
-	
+
 }
 
 
@@ -240,16 +235,12 @@
 		
 		[keyBills_ removeAllObjects];	
 		
-		id results = [response.body mutableObjectFromJSONData];
-		if ([results isKindOfClass:[NSMutableArray class]])
-			[keyBills_ addObjectsFromArray:results];
-		else if ([results isKindOfClass:[NSMutableDictionary class]])
-			[keyBills_ addObjectsFromArray:[results valueForKeyPath:@"bills.bill"]];
-		
+		[keyBills_  addObjectsFromArray:[response.body mutableObjectFromJSONData]];
+
 		// if we wanted blocks, we'd do this instead:
 		[keyBills_ sortUsingComparator:^(NSMutableDictionary *item1, NSMutableDictionary *item2) {
-			NSString *bill_id1 = [item1 objectForKey:@"billNumber"];
-			NSString *bill_id2 = [item2 objectForKey:@"billNumber"];
+			NSString *bill_id1 = [item1 objectForKey:@"bill_id"];
+			NSString *bill_id2 = [item2 objectForKey:@"bill_id"];
 			return [bill_id1 compare:bill_id2 options:NSNumericSearch];
 		}];
 		

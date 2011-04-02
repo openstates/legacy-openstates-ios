@@ -655,10 +655,25 @@ enum _billSections {
 			case kBillActions: 
 			{
 				NSDictionary *currentAction = [[bill objectForKey:@"actions"] objectAtIndex:indexPath.row];
-				NSDate *currentActionDate = [NSDate dateFromString:[currentAction objectForKey:@"date"]];
-				NSString *actionDateString = [NSDate stringForDisplayFromDate:currentActionDate];
-				cell.detailTextLabel.text = [currentAction objectForKey:@"action"];
-				cell.textLabel.text = actionDateString;
+				if (!IsEmpty([currentAction objectForKey:@"date"])) {
+					NSDate *currentActionDate = [NSDate dateFromString:[currentAction objectForKey:@"date"]];
+					NSString *actionDateString = [NSDate stringForDisplayFromDate:currentActionDate];
+					cell.textLabel.text = actionDateString;
+				}
+				if (!IsEmpty([currentAction objectForKey:@"action"])) {
+					NSString *desc = nil;
+					if (!IsEmpty([currentAction objectForKey:@"actor"])) {
+						NSInteger chamberCode = chamberForString([currentAction objectForKey:@"actor"]);
+						if (chamberCode == HOUSE || chamberCode == SENATE) {
+							desc = [NSString stringWithFormat:@"(%@) %@", 
+									stringForChamber(chamberCode, TLReturnFull), 
+									[currentAction objectForKey:@"action"]];
+						}
+					}
+					if (!desc)
+						desc = [currentAction objectForKey:@"action"];
+					cell.detailTextLabel.text = desc;
+				}
 			}
 				break;
 			default:
