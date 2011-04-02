@@ -282,7 +282,8 @@ enum _billSections {
 			status = BillStageSentToGovernor;
 		}
 		else if (([[action objectForKey:@"action"] isEqualToString:@"Signed by the Governor"]) ||
-				 ([[action objectForKey:@"action"] hasPrefix:@"Effective"]))
+				 ([[action objectForKey:@"action"] hasPrefix:@"Effective"]) ||
+				 ([[action objectForKey:@"action"] isEqualToString:@"Reported Enrolled"]))
 		{
 			status = BillStageBecomesLaw;
 		}
@@ -327,21 +328,30 @@ enum _billSections {
 	self.stat_thatPassVote.text = [chamberString stringByAppendingString:@" Voted"];
 	
 	NSString *billType = billTypeStringFromBillID([self.bill objectForKey:@"bill_id"]);
-	self.stat_governor.hidden = NO == billTypeRequiresGovernor(billType);
-	NSString *conclusion = billTypeRequiresGovernor(billType) ? @"Becomes Law" : @"Enrolled";
+	BOOL requiresGovernor = billTypeRequiresGovernor(billType);
+	BOOL requiresOpposing = billTypeRequiresOpposingChamber(billType);
+	
+	self.stat_thatPassComm.hidden = NO == requiresOpposing;
+	self.stat_thatPassVote.hidden = NO == requiresOpposing;
+	self.stat_governor.hidden = NO == requiresGovernor;
+	NSString *conclusion = nil;
+	if (requiresGovernor)
+		conclusion = @"Becomes Law";
+	else if (requiresOpposing)
+		conclusion = @"Enrolled";
+	else
+		conclusion = @"Adopted";
 	self.stat_isLaw.text = conclusion;
 
-	self.stat_thatPassComm.hidden = NO == billTypeRequiresOpposingChamber(billType);
-	self.stat_thatPassVote.hidden = NO == billTypeRequiresOpposingChamber(billType);
 	
 	for (UIView* strip in self.statusView.subviews) {
 		if ((strip.tag == 9990 + BillStageOpposingChamberVoted) ||
 			(strip.tag == 9990 + BillStageOutOfOpposingCommittee)) {
-			strip.hidden = NO == billTypeRequiresOpposingChamber(billType);
+			strip.hidden = NO == requiresOpposing;
 			continue;
 		}
 		if (strip.tag == 9990 + BillStageSentToGovernor) {
-			strip.hidden = NO == billTypeRequiresGovernor(billType);
+			strip.hidden = NO == requiresGovernor;
 			continue;
 		}
 	}
