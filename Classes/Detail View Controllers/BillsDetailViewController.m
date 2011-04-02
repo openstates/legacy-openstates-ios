@@ -25,23 +25,23 @@
 #import "TexLegeTheme.h"
 #import "TexLegeStandardGroupCell.h"
 #import "BillVotesDataSource.h"
+#import "OpenLegislativeAPIs.h"
+#import "LocalyticsSession.h"
 
 @interface BillsDetailViewController (Private)
-- (void) setupHeader;
+- (void)setupHeader;
 - (void)showLegislatorDetailsWithOpenStatesID:(id)legeID;
-
 - (void)starButtonSetState:(BOOL)isOn;
-	
 @end
 
 @implementation BillsDetailViewController
 
 enum _billSections {
 	kBillSubjects = 0,
-	kBillSponsors,
 	kBillVersions,
-	kBillActions,
 	kBillVotes,
+	kBillSponsors,
+	kBillActions,
 	kBillLASTITEM
 };
 
@@ -57,7 +57,6 @@ enum _billSections {
 	else
 		return @"BillsDetailViewController~iphone";
 }
-
 
 #pragma mark -
 #pragma mark Memory management
@@ -140,6 +139,22 @@ enum _billSections {
 }
 
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+	
+	if (NO == [UtilityMethods isLandscapeOrientation] && [UtilityMethods isIPadDevice] && !bill) {
+		[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:@"HB 1" 
+																		   session:nil			// defaults to current session
+																		  delegate:self];
+	}
+	
+	if (self.starButton)
+		self.starButton.enabled = (bill != nil);		
+}
+
+#pragma mark -
+#pragma mark Data Objects
+
 - (id)dataObject {
 	return self.bill;
 }
@@ -183,6 +198,13 @@ enum _billSections {
 				NSNumber *count = [NSNumber numberWithInteger:[watchList count]];
 				[foundItem setObject:count forKey:@"displayOrder"];
 				[watchList addObject:foundItem];
+				
+				NSDictionary *tagBill = [[NSDictionary alloc] initWithObjectsAndKeys:
+										 [bill objectForKey:@"bill_id"], @"bill_id",
+										 [bill objectForKey:@"session"], @"session", nil];
+				[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"BILL_FAVORITE" attributes:tagBill];
+				[tagBill release];
+				
 			}
 		}
 		else if (foundItem && newValue == NO)
@@ -208,160 +230,6 @@ enum _billSections {
 		[self.navigationController pushViewController:legVC animated:YES];
 		[legVC release];
 	}
-}
-
-#pragma mark -
-#pragma mark Table view data source
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	NSString *secTitle = nil;
-	switch (section) {
-		case kBillSubjects:
-			secTitle = @"Subject(s)";
-			break;
-		case kBillSponsors:
-			secTitle = @"Sponsor(s)";
-			break;
-		case kBillVersions:
-			secTitle = @"Version(s)";
-			break;
-		case kBillActions:
-			secTitle = @"Action History";
-			break;
-		case kBillVotes:
-			secTitle = @"Votes";
-			break;
-		default:
-			secTitle = @"";
-			break;
-	}
-	return secTitle;
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return kBillLASTITEM;
-}
-
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	/* ////// Section 0: Basic Info
-	 */
-	NSInteger rows = 0;
-	if (bill) {
-		switch (section) {
-			case kBillSubjects:
-				rows = [[bill objectForKey:@"subjects"] count];
-				break;
-			case kBillSponsors:
-				rows = [[bill objectForKey:@"sponsors"] count];
-				break;
-			case kBillVersions:
-				rows = [[bill objectForKey:@"versions"] count];
-				break;
-			case kBillActions:
-				rows = [[bill objectForKey:@"actions"] count];
-				break;
-			case kBillVotes:
-				rows = [[bill objectForKey:@"votes"] count];
-				break;
-			default:
-				break;
-		}
-	}
-	return rows;
-
-}
-
-
-// Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-	BOOL isClickable = 	NO == (([indexPath section] == kBillActions) || 
-							   ([indexPath section] == kBillVotes));
-
-    NSString *CellIdentifier =[NSString stringWithFormat:@"%@-%d", [TexLegeStandardGroupCell cellIdentifier], isClickable];
-    
-    TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-		if (!isClickable) {
-			cell.selectionStyle = UITableViewCellSelectionStyleNone;
-			cell.accessoryType = UITableViewCellAccessoryNone;
-			cell.accessoryView = nil;
-		}
-    }
-    
-	if (bill) {
-		switch ([indexPath section]) {
-			case kBillSubjects:
-			{
-				NSString *subject = [[bill objectForKey:@"subjects"] objectAtIndex:indexPath.row];
-				//cell.textLabel.text = subject;
-				cell.detailTextLabel.text = subject;
-			}
-				break;
-			case kBillSponsors: 
-			{
-				NSDictionary *sponsor = [[bill objectForKey:@"sponsors"] objectAtIndex:indexPath.row];
-				cell.detailTextLabel.text = [sponsor objectForKey:@"name"];
-				cell.textLabel.text = [[sponsor objectForKey:@"type"] capitalizedString];
-			}
-				break;
-			case kBillVersions: 
-			{				
-				NSDictionary *version = [[bill objectForKey:@"versions"] objectAtIndex:indexPath.row];
-				NSString *textName = nil;
-				NSString *name = [version objectForKey:@"name"];
-				if ([name hasSuffix:@"I"])
-					textName = @"Introduced";
-				else if ([name hasSuffix:@"E"])
-					textName = @"Engrossed";
-				else if ([name hasSuffix:@"S"])
-					textName = @"Senate Committee Report";
-				else if ([name hasSuffix:@"H"])
-					textName = @"House Committee Report";
-				else if ([name hasSuffix:@"A"])
-					textName = @"Amendments Printing";
-				else if ([name hasSuffix:@"F"])
-					textName = @"Enrolled";
-				else
-					textName = name;
-				
-				cell.detailTextLabel.text = textName;
-			}
-				break;
-			case kBillVotes: 
-			{				
-				NSDictionary *vote = [[bill objectForKey:@"votes"] objectAtIndex:indexPath.row];
-				NSDate *voteDate = [NSDate dateFromString:[vote objectForKey:@"date"]];
-				NSString *voteDateString = [NSDate stringForDisplayFromDate:voteDate];
-
-				BOOL passed = [[vote objectForKey:@"passed"] boolValue];
-				NSString *passedString = passed ? @"Passed" : @"Failed";
-				NSInteger chamber = chamberForString([vote objectForKey:@"chamber"]);
-				NSString *chamberString = stringForChamber(chamber, TLReturnFull);
-				cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@ (%@)",
-											 [[vote objectForKey:@"motion"] capitalizedString],
-											 chamberString, voteDateString];
-				cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@ - %@)", passedString,
-									   [vote objectForKey:@"yes_count"], [vote objectForKey:@"no_count"]];
-			}
-				break;
-			case kBillActions: 
-			{
-				NSDictionary *currentAction = [[bill objectForKey:@"actions"] objectAtIndex:indexPath.row];
-				NSDate *currentActionDate = [NSDate dateFromString:[currentAction objectForKey:@"date"]];
-				NSString *actionDateString = [NSDate stringForDisplayFromDate:currentActionDate];
-				cell.detailTextLabel.text = [currentAction objectForKey:@"action"];
-				cell.textLabel.text = actionDateString;
-			}
-				break;
-			default:
-				break;
-		}
-	}
-    
-    return cell;
 }
 
 - (NSDictionary *)calcStages {
@@ -583,19 +451,6 @@ enum _billSections {
 	[self.tableView reloadData];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-		
-	///////if (portrait && ipad && !bill)
-	//////	self.bill = [[[TexLegeAppDelegate appDelegate] billsMasterVC] selectObjectOnAppear];		
-	
-	//if (bill)
-	//	[self setupHeader];
-
-	if (self.starButton)
-		self.starButton.enabled = (bill != nil);		
-}
-
 - (void)starButtonSetState:(BOOL)isOn {
 	starButton.tag = isOn;
 	if (isOn) {
@@ -618,10 +473,6 @@ enum _billSections {
 	// Reset action picker
 	//		[self.actionHeader shrinkActionPicker];
 	
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-	[super viewDidAppear:animated];	
 }
 
 #pragma mark -
@@ -654,7 +505,160 @@ enum _billSections {
 }
 
 #pragma mark -
-#pragma mark Table View Delegate
+#pragma mark Table view data source
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+	NSString *secTitle = nil;
+	switch (section) {
+		case kBillSubjects:
+			secTitle = @"Subject(s)";
+			break;
+		case kBillSponsors:
+			secTitle = @"Sponsor(s)";
+			break;
+		case kBillVersions:
+			secTitle = @"Version(s)";
+			break;
+		case kBillActions:
+			secTitle = @"Action History";
+			break;
+		case kBillVotes:
+			secTitle = @"Votes";
+			break;
+		default:
+			secTitle = @"";
+			break;
+	}
+	return secTitle;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return kBillLASTITEM;
+}
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	/* ////// Section 0: Basic Info
+	 */
+	NSInteger rows = 0;
+	if (bill) {
+		switch (section) {
+			case kBillSubjects:
+				rows = [[bill objectForKey:@"subjects"] count];
+				break;
+			case kBillSponsors:
+				rows = [[bill objectForKey:@"sponsors"] count];
+				break;
+			case kBillVersions:
+				rows = [[bill objectForKey:@"versions"] count];
+				break;
+			case kBillActions:
+				rows = [[bill objectForKey:@"actions"] count];
+				break;
+			case kBillVotes:
+				rows = [[bill objectForKey:@"votes"] count];
+				break;
+			default:
+				break;
+		}
+	}
+	return rows;
+	
+}
+
+// Customize the appearance of table view cells.
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+	BOOL isClickable = 	NO == (([indexPath section] == kBillActions) || 
+							   ([indexPath section] == kBillVotes));
+	
+    NSString *CellIdentifier =[NSString stringWithFormat:@"%@-%d", [TexLegeStandardGroupCell cellIdentifier], isClickable];
+    
+    TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+		if (!isClickable) {
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+			cell.accessoryType = UITableViewCellAccessoryNone;
+			cell.accessoryView = nil;
+		}
+    }
+    
+	if (bill) {
+		switch ([indexPath section]) {
+			case kBillSubjects:
+			{
+				NSString *subject = [[bill objectForKey:@"subjects"] objectAtIndex:indexPath.row];
+				//cell.textLabel.text = subject;
+				cell.detailTextLabel.text = subject;
+				cell.textLabel.text = @"";
+			}
+				break;
+			case kBillSponsors: 
+			{
+				NSDictionary *sponsor = [[bill objectForKey:@"sponsors"] objectAtIndex:indexPath.row];
+				cell.detailTextLabel.text = [sponsor objectForKey:@"name"];
+				cell.textLabel.text = [[sponsor objectForKey:@"type"] capitalizedString];
+			}
+				break;
+			case kBillVersions: 
+			{				
+				NSDictionary *version = [[bill objectForKey:@"versions"] objectAtIndex:indexPath.row];
+				NSString *textName = nil;
+				NSString *name = [version objectForKey:@"name"];
+				if ([name hasSuffix:@"I"])
+					textName = @"Introduced";
+				else if ([name hasSuffix:@"E"])
+					textName = @"Engrossed";
+				else if ([name hasSuffix:@"S"])
+					textName = @"Senate Committee Report";
+				else if ([name hasSuffix:@"H"])
+					textName = @"House Committee Report";
+				else if ([name hasSuffix:@"A"])
+					textName = @"Amendments Printing";
+				else if ([name hasSuffix:@"F"])
+					textName = @"Enrolled";
+				else
+					textName = name;
+				cell.textLabel.text = @"";
+				cell.detailTextLabel.text = textName;
+			}
+				break;
+			case kBillVotes: 
+			{				
+				NSDictionary *vote = [[bill objectForKey:@"votes"] objectAtIndex:indexPath.row];
+				NSDate *voteDate = [NSDate dateFromString:[vote objectForKey:@"date"]];
+				NSString *voteDateString = [NSDate stringForDisplayFromDate:voteDate];
+				
+				BOOL passed = [[vote objectForKey:@"passed"] boolValue];
+				NSString *passedString = passed ? @"Passed" : @"Failed";
+				NSInteger chamber = chamberForString([vote objectForKey:@"chamber"]);
+				NSString *chamberString = stringForChamber(chamber, TLReturnFull);
+				cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@ (%@)",
+											 [[vote objectForKey:@"motion"] capitalizedString],
+											 chamberString, voteDateString];
+				cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@ - %@ - %@)", passedString,
+									   [vote objectForKey:@"yes_count"], [vote objectForKey:@"no_count"],
+									   [vote objectForKey:@"other_count"]];
+			}
+				break;
+			case kBillActions: 
+			{
+				NSDictionary *currentAction = [[bill objectForKey:@"actions"] objectAtIndex:indexPath.row];
+				NSDate *currentActionDate = [NSDate dateFromString:[currentAction objectForKey:@"date"]];
+				NSString *actionDateString = [NSDate stringForDisplayFromDate:currentActionDate];
+				cell.detailTextLabel.text = [currentAction objectForKey:@"action"];
+				cell.textLabel.text = actionDateString;
+			}
+				break;
+			default:
+				break;
+		}
+	}
+    
+    return cell;
+}
+
 // the user selected a row in the table.
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath {
 	
@@ -712,10 +716,9 @@ enum _billSections {
 				}
 				NSString *titleString = [NSString stringWithFormat:@"%@ %@ Vote", 
 										 [bill objectForKey:@"bill_id"], [[vote objectForKey:@"motion"] capitalizedString]];
-				UITableViewController *voteViewController = [[UITableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+				BillVotesViewController *voteViewController = [[BillVotesViewController alloc] initWithStyle:UITableViewStyleGrouped];
 				voteViewController.tableView.dataSource = voteDS;
 				voteViewController.tableView.delegate = voteDS;
-				voteViewController.tableView.rowHeight = 73.0f;
 				voteDS.viewController = voteViewController;
 				[self.navigationController pushViewController:voteViewController animated:YES];
 				voteViewController.navigationItem.title = titleString;
