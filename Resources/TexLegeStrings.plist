@@ -47,6 +47,10 @@
 		<string>No Watched Bills, Yet</string>
 		<key>NoWatchedText</key>
 		<string>To add a bill to this watch list, first search for one, open it, and then tab the star button in it&apos;s header.</string>
+		<key>NoPassedBillsTitle</key>
+		<string>No Bills Passed Today (Yet)</string>
+		<key>NoPassedBillsText</key>
+		<string>There are no bills passed today.  Either it is (very) early in the day, or the legislature is in recess.</string>
 	</dict>
 	<key>BillMenuItems</key>
 	<array>

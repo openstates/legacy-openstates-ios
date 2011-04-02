@@ -15,6 +15,7 @@
 #import "OpenLegislativeAPIs.h"
 #import "TexLegeStandardGroupCell.h"
 #import "XMLReader.h"
+#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 
 @interface BillsRecentViewController (Private)
 - (void)configureCell:(TexLegeStandardGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -204,16 +205,16 @@
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
 	if (error && request) {
 		debug_NSLog(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
-		[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:self];
-		
-		UIAlertView *alert = [[[ UIAlertView alloc ] 
-							   initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
-							   message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
-							   delegate:nil // we're static, so don't do "self"
-							   cancelButtonTitle: @"Cancel" 
-							   otherButtonTitles:nil, nil] autorelease];
-		[ alert show ];			
 	}
+	[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:self];
+	
+	UIAlertView *alert = [[[ UIAlertView alloc ] 
+						   initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
+						   message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
+						   delegate:nil // we're static, so don't do "self"
+						   cancelButtonTitle: @"Cancel" 
+						   otherButtonTitles:nil, nil] autorelease];
+	[ alert show ];			
 }
 
 
@@ -221,44 +222,68 @@
 	// Success! Let's take a look at the data  
 	
 	[recentBills_ removeAllObjects];	
-	
 	NSError *error = nil;
 	NSMutableDictionary *results = [XMLReader dictionaryForXMLData:response.body error:&error];
-	
 	if (!error) {
-		for (NSMutableDictionary *bill in [results valueForKeyPath:@"rss.channel.item"]) {
-			NSString *billNumber = [bill valueForKeyPath:@"title.text"];
-			NSString *billDesc = [bill valueForKeyPath:@"description.text"];
-			if (IsEmpty(billNumber))
-				continue;
-			
-			NSMutableDictionary *newBill = [[NSMutableDictionary alloc] init];
-
-			if (!IsEmpty(billDesc))
-				[newBill setObject:billDesc forKey:@"title"];
-			
-			NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[HSBCR]+ [0-9]+" 
-																				   options:NSRegularExpressionCaseInsensitive 
-																					 error:&error];
-			NSRange theRange = NSMakeRange(0, [billNumber length]);
-			NSTextCheckingResult *match = [regex firstMatchInString:billNumber options:0 range:theRange];
-			if (match && !NSEqualRanges(match.range, NSMakeRange(NSNotFound, 0))) {
-                // Since we know that we found a match, get the substring from the parent string by using our NSRange object
-				NSString *billID = [billNumber substringWithRange:match.range];
-				if (!IsEmpty(billID))
-					[newBill setObject:billID forKey:@"bill_id"];
+		@try {
+			for (NSMutableDictionary *bill in [results valueForKeyPath:@"rss.channel.item"]) {
+				NSString *billNumber = [bill valueForKeyPath:@"title.text"];
+				NSString *billDesc = [bill valueForKeyPath:@"description.text"];
+				if (IsEmpty(billNumber))
+					continue;
+				
+				NSMutableDictionary *newBill = [[NSMutableDictionary alloc] init];
+				
+				if (!IsEmpty(billDesc))
+					[newBill setObject:billDesc forKey:@"title"];
+				
+				NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[HSBJCR]+ [0-9]+" 
+																					   options:NSRegularExpressionCaseInsensitive 
+																						 error:&error];
+				NSRange theRange = NSMakeRange(0, [billNumber length]);
+				NSTextCheckingResult *match = [regex firstMatchInString:billNumber options:0 range:theRange];
+				if (match && !NSEqualRanges(match.range, NSMakeRange(NSNotFound, 0))) {
+					// Since we know that we found a match, get the substring from the parent string by using our NSRange object
+					NSString *billID = [billNumber substringWithRange:match.range];
+					if (!IsEmpty(billID))
+						[newBill setObject:billID forKey:@"bill_id"];
+				}
+				[recentBills_ addObject:newBill];
+				
+				[newBill release];
 			}
-			[recentBills_ addObject:newBill];
-			
-			[newBill release];
+			[recentBills_ sortUsingComparator:^(NSMutableDictionary *item1, NSMutableDictionary *item2) {
+				NSString *bill_id1 = [item1 objectForKey:@"bill_id"];
+				NSString *bill_id2 = [item2 objectForKey:@"bill_id"];
+				return [bill_id1 compare:bill_id2 options:NSNumericSearch];
+			}];		
 		}
+		@catch (NSException * e) {
+			@try {
+				id issue = [results valueForKeyPath:@"rss.channel.item.title.text"];
+				if ([issue isKindOfClass:[NSString class]] && !IsEmpty(issue))
+					if ([issue hasPrefix:@"No bills have been passed today"]) {
+						UIAlertView *alert = [[[ UIAlertView alloc ] 
+											   initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NoPassedBillsTitle"] 
+											   message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NoPassedBillsText"] 
+											   delegate:nil // we're static, so don't do "self"
+											   cancelButtonTitle: @"Cancel" 
+											   otherButtonTitles:nil, nil] autorelease];
+						[ alert show ];			
+					}
+			}
+			@catch (NSException * eOther) {
+				error = [NSError errorWithDomain:@"com.texlege.texlege" code:-9999 userInfo:[NSDictionary dictionaryWithObject:e forKey:@"Exception"]];
+			}
+			//NSString *json = [results JSONString];
+			//NSLog(@"%@", json);
+			//NSLog(@"%@", [results valueForKeyPath:@"rss.channel.item.title.text"]);
+		}
+		
 	}
-	
-	[recentBills_ sortUsingComparator:^(NSMutableDictionary *item1, NSMutableDictionary *item2) {
-		NSString *bill_id1 = [item1 objectForKey:@"bill_id"];
-		NSString *bill_id2 = [item2 objectForKey:@"bill_id"];
-		return [bill_id1 compare:bill_id2 options:NSNumericSearch];
-	}];
+	if (error) {
+		[self request:request didFailLoadWithError:error];
+	}
 	
 	[self.tableView reloadData];		
 }
