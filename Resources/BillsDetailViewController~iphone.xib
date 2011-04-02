@@ -241,14 +241,17 @@
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 										<string key="IBUIText">Filed</string>
-										<reference key="IBUIFont" ref="551147398"/>
+										<object class="NSFont" key="IBUIFont" id="350100144">
+											<string key="NSName">HelveticaNeue-Bold</string>
+											<double key="NSSize">12</double>
+											<int key="NSfFlags">16</int>
+										</object>
 										<object class="NSColor" key="IBUITextColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
 										<reference key="IBUIShadowColor" ref="854201539"/>
-										<string key="IBUIShadowOffset">{-1, -1}</string>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">12</float>
 										<int key="IBUITextAlignment">1</int>
@@ -266,14 +269,13 @@
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 										<string key="IBUIText">House Committee</string>
-										<reference key="IBUIFont" ref="551147398"/>
+										<reference key="IBUIFont" ref="350100144"/>
 										<object class="NSColor" key="IBUITextColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
 										<reference key="IBUIShadowColor" ref="854201539"/>
-										<string key="IBUIShadowOffset">{-1, -1}</string>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">12</float>
 										<int key="IBUINumberOfLines">2</int>
@@ -294,14 +296,13 @@
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 										<string key="IBUIText">House Voted</string>
-										<reference key="IBUIFont" ref="551147398"/>
+										<reference key="IBUIFont" ref="350100144"/>
 										<object class="NSColor" key="IBUITextColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
 										<reference key="IBUIShadowColor" ref="854201539"/>
-										<string key="IBUIShadowOffset">{-1, -1}</string>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">12</float>
 										<int key="IBUINumberOfLines">2</int>
@@ -322,14 +323,13 @@
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 										<string key="IBUIText">Senate Committee</string>
-										<reference key="IBUIFont" ref="551147398"/>
+										<reference key="IBUIFont" ref="350100144"/>
 										<object class="NSColor" key="IBUITextColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
 										<reference key="IBUIShadowColor" ref="854201539"/>
-										<string key="IBUIShadowOffset">{-1, -1}</string>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">12</float>
 										<int key="IBUINumberOfLines">2</int>
@@ -350,14 +350,13 @@
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 										<string key="IBUIText">Senate Voted</string>
-										<reference key="IBUIFont" ref="551147398"/>
+										<reference key="IBUIFont" ref="350100144"/>
 										<object class="NSColor" key="IBUITextColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
 										<reference key="IBUIShadowColor" ref="854201539"/>
-										<string key="IBUIShadowOffset">{-1, -1}</string>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">12</float>
 										<int key="IBUINumberOfLines">2</int>
@@ -378,14 +377,13 @@
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 										<string key="IBUIText">To Governor</string>
-										<reference key="IBUIFont" ref="551147398"/>
+										<reference key="IBUIFont" ref="350100144"/>
 										<object class="NSColor" key="IBUITextColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
 										<reference key="IBUIShadowColor" ref="854201539"/>
-										<string key="IBUIShadowOffset">{-1, -1}</string>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">12</float>
 										<int key="IBUINumberOfLines">2</int>
@@ -395,7 +393,7 @@
 									<object class="IBUILabel" id="804170608">
 										<reference key="NSNextResponder" ref="1037843631"/>
 										<int key="NSvFlags">295</int>
-										<string key="NSFrame">{{163, 53}, {78, 27}}</string>
+										<string key="NSFrame">{{163, 53}, {82, 27}}</string>
 										<reference key="NSSuperview" ref="1037843631"/>
 										<object class="NSColor" key="IBUIBackgroundColor">
 											<int key="NSColorSpace">1</int>
@@ -406,14 +404,13 @@
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 										<string key="IBUIText">Becomes Law</string>
-										<reference key="IBUIFont" ref="551147398"/>
+										<reference key="IBUIFont" ref="350100144"/>
 										<object class="NSColor" key="IBUITextColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
 										<reference key="IBUIShadowColor" ref="854201539"/>
-										<string key="IBUIShadowOffset">{-1, -1}</string>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">12</float>
 										<int key="IBUINumberOfLines">2</int>

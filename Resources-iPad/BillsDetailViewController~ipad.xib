@@ -11,7 +11,7 @@
 			<string key="NS.object.0">132</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="244"/>
+			<integer value="178"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -56,7 +56,7 @@
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
-										<object class="NSFont" key="IBUIFont" id="757682415">
+										<object class="NSFont" key="IBUIFont">
 											<string key="NSName">HelveticaNeue</string>
 											<double key="NSSize">14</double>
 											<int key="NSfFlags">16</int>
@@ -273,14 +273,17 @@
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<string key="IBUIText">Filed</string>
-										<reference key="IBUIFont" ref="757682415"/>
+										<object class="NSFont" key="IBUIFont" id="1033489975">
+											<string key="NSName">HelveticaNeue-Bold</string>
+											<double key="NSSize">14</double>
+											<int key="NSfFlags">16</int>
+										</object>
 										<object class="NSColor" key="IBUITextColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
 										<reference key="IBUIShadowColor" ref="854201539"/>
-										<string key="IBUIShadowOffset">{-1, -1}</string>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">12</float>
 										<int key="IBUINumberOfLines">2</int>
@@ -300,14 +303,13 @@
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<string key="IBUIText">Out Of House Committee</string>
-										<reference key="IBUIFont" ref="757682415"/>
+										<reference key="IBUIFont" ref="1033489975"/>
 										<object class="NSColor" key="IBUITextColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
 										<reference key="IBUIShadowColor" ref="854201539"/>
-										<string key="IBUIShadowOffset">{-1, -1}</string>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">12</float>
 										<int key="IBUINumberOfLines">2</int>
@@ -328,14 +330,13 @@
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<string key="IBUIText">House Voted</string>
-										<reference key="IBUIFont" ref="757682415"/>
+										<reference key="IBUIFont" ref="1033489975"/>
 										<object class="NSColor" key="IBUITextColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
 										<reference key="IBUIShadowColor" ref="854201539"/>
-										<string key="IBUIShadowOffset">{-1, -1}</string>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">12</float>
 										<int key="IBUINumberOfLines">2</int>
@@ -356,14 +357,13 @@
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<string key="IBUIText">Out of Senate Committee</string>
-										<reference key="IBUIFont" ref="757682415"/>
+										<reference key="IBUIFont" ref="1033489975"/>
 										<object class="NSColor" key="IBUITextColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
 										<reference key="IBUIShadowColor" ref="854201539"/>
-										<string key="IBUIShadowOffset">{-1, -1}</string>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">12</float>
 										<int key="IBUINumberOfLines">2</int>
@@ -384,14 +384,13 @@
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<string key="IBUIText">Senate Voted</string>
-										<reference key="IBUIFont" ref="757682415"/>
+										<reference key="IBUIFont" ref="1033489975"/>
 										<object class="NSColor" key="IBUITextColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
 										<reference key="IBUIShadowColor" ref="854201539"/>
-										<string key="IBUIShadowOffset">{-1, -1}</string>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">12</float>
 										<int key="IBUINumberOfLines">2</int>
@@ -412,14 +411,13 @@
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<string key="IBUIText">Sent to Governor</string>
-										<reference key="IBUIFont" ref="757682415"/>
+										<reference key="IBUIFont" ref="1033489975"/>
 										<object class="NSColor" key="IBUITextColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
 										<reference key="IBUIShadowColor" ref="854201539"/>
-										<string key="IBUIShadowOffset">{-1, -1}</string>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">12</float>
 										<int key="IBUINumberOfLines">2</int>
@@ -440,14 +438,13 @@
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<string key="IBUIText">Becomes Law</string>
-										<reference key="IBUIFont" ref="757682415"/>
+										<reference key="IBUIFont" ref="1033489975"/>
 										<object class="NSColor" key="IBUITextColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC44NjI3NDUxNjU4IDAuODk0MTE3NzEzIDAuOTIxNTY4NjkxNwA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
 										<reference key="IBUIShadowColor" ref="854201539"/>
-										<string key="IBUIShadowOffset">{-1, -1}</string>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">12</float>
 										<int key="IBUINumberOfLines">2</int>
