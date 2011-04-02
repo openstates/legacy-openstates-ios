@@ -159,7 +159,10 @@
 }
 
 - (NSString *)legTypeShortName {
-	return stringForChamber([self.legtype integerValue], TLReturnAbbrev);
+	if ([self.legtype_name isEqualToString:@"Speaker"])
+		return @"Spk.";
+	else
+		return [[self.legtype_name substringToIndex:3] stringByAppendingString:@"."];
 }
 
 - (NSString *)legProperName {
