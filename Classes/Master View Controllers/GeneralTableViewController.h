@@ -14,10 +14,6 @@
 	id					selectObjectOnAppear;
 }
 
-#ifdef BUILTINNOTRESTKIT
-@property (nonatomic,readonly) NSManagedObjectContext *managedObjectContext;
-#endif
-
 @property (nonatomic,retain) IBOutlet id<TableDataSource> dataSource;
 @property (nonatomic,retain) IBOutlet id detailViewController;
 @property (nonatomic,readonly) NSString			*viewControllerKey;

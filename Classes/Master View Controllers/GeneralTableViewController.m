@@ -12,7 +12,7 @@
 
 #import "TexLegeAppDelegate.h"
 #import "TableDataSourceProtocol.h"
-
+#import "BillsMenuDataSource.h"
 #import "TexLegeTheme.h"
 
 @implementation GeneralTableViewController
@@ -81,7 +81,7 @@
 		if (!object)
 			return;
 		
-		if ([object isKindOfClass:[NSIndexPath class]]) {
+		if ([object isKindOfClass:[NSIndexPath class]] && NO == [self.dataSource isKindOfClass:[BillsMenuDataSource class]]) {
 			self.selectObjectOnAppear = [self.dataSource dataObjectForIndexPath:object];
 		}
 	}
