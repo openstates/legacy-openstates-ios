@@ -19,21 +19,6 @@
 @synthesize notesText, nameLabel, dataObjectID;
 @synthesize backViewController, navBar, navTitle;
 
-- (LegislatorObj *)legislator {
-	LegislatorObj *anObject = nil;
-	if (self.dataObjectID) {
-		anObject = [LegislatorObj objectWithPrimaryKeyValue:self.dataObjectID];
-	}
-	return anObject;
-}
-
-- (void)setLegislator:(LegislatorObj *)anObject {	
-	self.dataObjectID = nil;
-	if (anObject) {
-		self.dataObjectID = [anObject legislatorID];
-	}
-}
-
 - (void)viewDidLoad {	
 	[super viewDidLoad];
 	if ([UtilityMethods isIPadDevice]) {
@@ -48,17 +33,21 @@
 }
 
 - (void)viewDidUnload {
-	self.navBar = nil;
-	self.navTitle = nil;
-	self.legislator = nil;
-	self.notesText = nil;
-	self.dataObjectID = nil;
 	[super viewDidUnload];
+}
+
+- (void)dealloc {
+	self.dataObjectID = nil;
+	self.notesText = nil;
+	self.nameLabel = nil;
+	self.navTitle = nil;
+	self.navBar = nil;
+    [super dealloc];
 }
 
 - (void)viewWillAppear:(BOOL)animated {   
 	[super viewWillAppear:animated];
-
+	
 	NSString *notesString = nil;
 	
 	[[NSUserDefaults standardUserDefaults] synchronize];	
@@ -70,7 +59,7 @@
 	}
 	if (!notesString)
 		notesString = self.legislator.notes;
-		
+	
     // Update the views appropriately
     self.nameLabel.text = [self.legislator shortNameForButtons];    
 	if (!notesString || [notesString length] == 0) {
@@ -86,6 +75,23 @@
     return YES;
 }
 
+#pragma mark -
+#pragma mark Data Objects
+
+- (LegislatorObj *)legislator {
+	LegislatorObj *anObject = nil;
+	if (self.dataObjectID) {
+		anObject = [LegislatorObj objectWithPrimaryKeyValue:self.dataObjectID];
+	}
+	return anObject;
+}
+
+- (void)setLegislator:(LegislatorObj *)anObject {	
+	self.dataObjectID = nil;
+	if (anObject) {
+		self.dataObjectID = [anObject legislatorID];
+	}
+}
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
 
@@ -129,16 +135,6 @@
 			[self.backViewController performSelector:@selector(resetTableData:) withObject:self];
 
 	}		
-}
-
-
-- (void)dealloc {
-	self.dataObjectID = nil;
-	self.notesText = nil;
-	self.nameLabel = nil;
-	self.navTitle = nil;
-	self.navBar = nil;
-    [super dealloc];
 }
 
 @end
