@@ -12,6 +12,7 @@
 @class BillSearchDataSource;
 @interface BillsRecentViewController : UITableViewController <RKRequestDelegate, UITableViewDelegate, UITableViewDataSource> {
 	NSMutableArray *recentBills_;
+	NSInteger loadingStatus;
 }
 @property (nonatomic,retain) NSMutableArray *recentBills;
 

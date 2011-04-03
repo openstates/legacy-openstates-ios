@@ -12,6 +12,7 @@
 @class BillSearchDataSource;
 @interface BillsKeyViewController : UITableViewController <RKRequestDelegate, UITableViewDelegate, UITableViewDataSource> {
 	NSMutableArray *keyBills_;
+	NSInteger loadingStatus;
 }
 @property (nonatomic,retain) NSMutableArray *keyBills;
 

@@ -16,6 +16,7 @@
 #import "TexLegeStandardGroupCell.h"
 #import "XMLReader.h"
 #import <RestKit/Support/JSON/JSONKit/JSONKit.h>
+#import "LoadingCell.h"
 
 @interface BillsRecentViewController (Private)
 - (void)configureCell:(TexLegeStandardGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -30,6 +31,7 @@
 
 - (id)initWithStyle:(UITableViewStyle)style {
 	if (self = [super initWithStyle:style]) {
+		loadingStatus = LOADING_IDLE;
 		recentBills_ = [[NSMutableArray alloc] init];
 	}
 	return self;
@@ -121,6 +123,15 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	if (loadingStatus > LOADING_IDLE) {
+		if (indexPath.row == 0) {
+			return [LoadingCell loadingCellWithStatus:loadingStatus tableView:tableView];
+		}
+		else {	// to make things work with our upcoming configureCell:, we need to trick this a little
+			indexPath = [NSIndexPath indexPathForRow:(indexPath.row-1) inSection:indexPath.section];
+		}
+	}
+
 	NSString *CellIdentifier = [TexLegeStandardGroupCell cellIdentifier];
 	
 	TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -146,6 +157,8 @@
 {
 	if (!IsEmpty(recentBills_))
 		return [recentBills_ count];
+	else if (loadingStatus > LOADING_IDLE)
+		return 1;
 	else
 		return 0;
 }
@@ -154,6 +167,9 @@
 	if (![UtilityMethods isIPadDevice])
 		[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	
+	if (IsEmpty(recentBills_) || [recentBills_ count] <= indexPath.row)
+		return;
+
 	NSDictionary *bill = [recentBills_ objectAtIndex:indexPath.row];
 	if (bill && [bill objectForKey:@"bill_id"]) {
 		if (bill) {
@@ -179,9 +195,8 @@
 			if (![UtilityMethods isIPadDevice])
 				[self.navigationController pushViewController:detailView animated:YES];
 			else if (changingViews)
-				//[[[self.splitViewController viewControllers] objectAtIndex:1] pushViewController:detailView animated:YES];
-				[[[TexLegeAppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:YES];
-			///[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
+				//[[[TexLegeAppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:YES];
+				[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
 		}			
 	}
 }
@@ -190,12 +205,14 @@
 	NSDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 								 @"todaysbillspassed", @"Type",
 								 nil];
-	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:tloApiBaseURL] alert:YES])
+	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:tloApiBaseURL] alert:YES]) {
+		loadingStatus = LOADING_ACTIVE;
 		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] tloApiClient] get:@"/MyTLO/RSS/RSS.aspx" 
 																queryParams:queryParams 
 																   delegate:self];
+	}
 	else {
-		NSLog(@"NotWorking");
+		loadingStatus = LOADING_NO_NET;
 	}
 }
 
@@ -214,18 +231,22 @@
 						   delegate:nil // we're static, so don't do "self"
 						   cancelButtonTitle: @"Cancel" 
 						   otherButtonTitles:nil, nil] autorelease];
-	[ alert show ];			
+	[ alert show ];	
+	loadingStatus = LOADING_NO_NET;
 }
 
 
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
 	// Success! Let's take a look at the data  
 	
+	loadingStatus = LOADING_NO_NET;
+
 	[recentBills_ removeAllObjects];	
 	NSError *error = nil;
 	NSMutableDictionary *results = [XMLReader dictionaryForXMLData:response.body error:&error];
 	if (!error) {
 		@try {
+			loadingStatus = LOADING_IDLE;
 			for (NSMutableDictionary *bill in [results valueForKeyPath:@"rss.channel.item"]) {
 				NSString *billNumber = [bill valueForKeyPath:@"title.text"];
 				NSString *billDesc = [bill valueForKeyPath:@"description.text"];
@@ -263,6 +284,7 @@
 				id issue = [results valueForKeyPath:@"rss.channel.item.title.text"];
 				if ([issue isKindOfClass:[NSString class]] && !IsEmpty(issue))
 					if ([issue hasPrefix:@"No bills have been passed today"]) {
+						loadingStatus = LOADING_IDLE;
 						UIAlertView *alert = [[[ UIAlertView alloc ] 
 											   initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NoPassedBillsTitle"] 
 											   message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NoPassedBillsText"] 

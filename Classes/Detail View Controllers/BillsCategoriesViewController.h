@@ -22,6 +22,7 @@
 	IBOutlet UISegmentedControl *chamberControl;
 	BOOL isFresh;
 	NSDate *updated;
+	NSInteger loadingStatus;
 }
 @property (nonatomic,retain) IBOutlet	UISegmentedControl *chamberControl;
 @property (nonatomic,retain)	NSMutableDictionary *chamberCategories;

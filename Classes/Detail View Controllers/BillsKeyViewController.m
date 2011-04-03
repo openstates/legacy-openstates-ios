@@ -18,6 +18,7 @@
 #import "TexLegeStandardGroupCell.h"
 #import "NSDate+Helper.h"
 #import "TexLegeCoreDataUtils.h"
+#import "LoadingCell.h"
 
 @interface BillsKeyViewController (Private)
 - (void)configureCell:(TexLegeStandardGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -32,6 +33,7 @@
 
 - (id)initWithStyle:(UITableViewStyle)style {
 	if (self = [super initWithStyle:style]) {
+		loadingStatus = LOADING_IDLE;
 		keyBills_ = [[NSMutableArray alloc] init];
 	}
 	return self;
@@ -46,7 +48,6 @@
 		if ([[[[TexLegeAppDelegate appDelegate] masterNavigationController] topViewController] isKindOfClass:[BillsKeyViewController class]])
 			if ([self.navigationController isEqual:[[TexLegeAppDelegate appDelegate] detailNavigationController]])
 				[self.navigationController popToRootViewControllerAnimated:YES];
-		
 	}	
 }
 
@@ -65,7 +66,6 @@
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 	
 	[keyBills_ release];
-	
 	[super dealloc];
 }
 
@@ -125,12 +125,20 @@
 		if (!IsEmpty([bill objectForKey:@"passFail"]))
 			[name appendFormat:@" - %@", [bill objectForKey:@"passFail"]];
 		cell.textLabel.text = name;
-	}
-	
+	}	
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	if (loadingStatus > LOADING_IDLE) {
+		if (indexPath.row == 0) {
+			return [LoadingCell loadingCellWithStatus:loadingStatus tableView:tableView];
+		}
+		else {	// to make things work with our upcoming configureCell:, we need to trick this a little
+			indexPath = [NSIndexPath indexPathForRow:(indexPath.row-1) inSection:indexPath.section];
+		}
+	}
+	
 	NSString *CellIdentifier = [TexLegeStandardGroupCell cellIdentifier];
 	
 	TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -156,6 +164,8 @@
 {
 	if (!IsEmpty(keyBills_))
 		return [keyBills_ count];
+	else if (loadingStatus > LOADING_IDLE)
+		return 1;
 	else
 		return 0;
 }
@@ -163,6 +173,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (![UtilityMethods isIPadDevice])
 		[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	
+	if (IsEmpty(keyBills_) || [keyBills_ count] <= indexPath.row)
+		return;
 	
 	NSDictionary *bill = [keyBills_ objectAtIndex:indexPath.row];
 	if (bill && [bill objectForKey:@"bill_id"]) {
@@ -184,15 +197,14 @@
 			
 			[detailView setDataObject:bill];
 			[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:[bill objectForKey:@"bill_id"] 
-																			   session:nil			// defaults to current session
+																			   session:[bill objectForKey:@"session"] // nil defaults to current session
 																			  delegate:detailView];
 			
 			if (![UtilityMethods isIPadDevice])
 				[self.navigationController pushViewController:detailView animated:YES];
 			else if (changingViews)
-				//[[[self.splitViewController viewControllers] objectAtIndex:1] pushViewController:detailView animated:YES];
-				[[[TexLegeAppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:YES];
-			///[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
+				//[[[TexLegeAppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:YES];
+				[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
 		}			
 	}
 }
@@ -202,11 +214,14 @@
 
 - (void)startSearchForKeyBills {
 	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:RESTKIT_BASE_URL] alert:NO]) {
+		loadingStatus = LOADING_ACTIVE;
 		RKRequest *request = [[RKClient sharedClient] get:@"/rest.php/KeyBills" delegate:self];
 		if (!request)
 			NSLog(@"BillsKeyViewController: Error, unable to create RestKit request for KeyBills");
 	}
-
+	else {
+		loadingStatus = LOADING_NO_NET;
+	}
 }
 
 
@@ -216,26 +231,26 @@
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
 	if (error && request) {
 		debug_NSLog(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
-		[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:self];
-		
-		UIAlertView *alert = [[[ UIAlertView alloc ] 
-							   initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
-							   message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
-							   delegate:nil // we're static, so don't do "self"
-							   cancelButtonTitle: @"Cancel" 
-							   otherButtonTitles:nil, nil] autorelease];
-		[ alert show ];			
 	}
+	[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:self];
+	
+	UIAlertView *alert = [[[ UIAlertView alloc ] 
+						   initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
+						   message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
+						   delegate:nil // we're static, so don't do "self"
+						   cancelButtonTitle: @"Cancel" 
+						   otherButtonTitles:nil, nil] autorelease];
+	[ alert show ];
+	loadingStatus = LOADING_NO_NET;
 }
-
 
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data  
-		
+		loadingStatus = LOADING_IDLE;
+
 		[keyBills_ removeAllObjects];	
-		
-		[keyBills_  addObjectsFromArray:[response.body mutableObjectFromJSONData]];
+		[keyBills_ addObjectsFromArray:[response.body mutableObjectFromJSONData]];
 
 		// if we wanted blocks, we'd do this instead:
 		[keyBills_ sortUsingComparator:^(NSMutableDictionary *item1, NSMutableDictionary *item2) {

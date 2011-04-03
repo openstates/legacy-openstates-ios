@@ -17,6 +17,7 @@
 #import "BillMetadataLoader.h"
 #import "OpenLegislativeAPIs.h"
 #import <RestKit/Support/JSON/JSONKit/JSONKit.h>
+#import "LoadingCell.h"
 
 @interface BillsCategoriesViewController (Private)
 - (void)configureCell:(TexLegeBadgeGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -33,6 +34,7 @@
 
 - (id)initWithStyle:(UITableViewStyle)style {
 	if (self=[super initWithStyle:style]) {
+		loadingStatus = LOADING_IDLE;
 		categories_ = [[[NSMutableDictionary alloc] init] retain];
 		updated = nil;
 		isFresh = NO;
@@ -175,12 +177,23 @@
 {
 	if (categories_ && !IsEmpty([categories_ objectForKey:self.chamber]))
 		return [[categories_ objectForKey:self.chamber] count];
+	else if (loadingStatus > LOADING_IDLE)
+		return 1;
 	else
 		return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	if (loadingStatus > LOADING_IDLE) {
+		if (indexPath.row == 0) {
+			return [LoadingCell loadingCellWithStatus:loadingStatus tableView:tableView];
+		}
+		else {	// to make things work with our upcoming configureCell:, we need to trick this a little
+			indexPath = [NSIndexPath indexPathForRow:(indexPath.row-1) inSection:indexPath.section];
+		}
+	}
+	
 	NSString *CellIdentifier = [TexLegeBadgeGroupCell cellIdentifier];
 		
 	TexLegeBadgeGroupCell *cell = (TexLegeBadgeGroupCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -213,7 +226,7 @@
 			
 			[self.navigationController pushViewController:catResultsView animated:YES];
 		}			
-	}
+	}	
 }
 
 #pragma mark Properties
@@ -223,6 +236,7 @@
 
 - (IBAction)loadCategoriesForChamber:(NSInteger)newChamber {
 	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:NO]) {
+		loadingStatus = LOADING_ACTIVE;
 		OpenLegislativeAPIs *api = [OpenLegislativeAPIs sharedOpenLegislativeAPIs];
 		
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObject:osApiKeyValue forKey:@"apikey"];
@@ -231,6 +245,9 @@
 			[resourcePath appendFormat:@"%@/", stringForChamber(newChamber, TLReturnOpenStates)];
 			
 		[[api osApiClient] get:resourcePath queryParams:queryParams delegate:self];
+	}
+	else {
+		loadingStatus = LOADING_NO_NET;
 	}
 }
 
@@ -276,9 +293,10 @@
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
 	if (error && request) {
 		debug_NSLog(@"Error loading categories from %@: %@", [request description], [error localizedDescription]);
-		[[NSNotificationCenter defaultCenter] postNotificationName:kBillCategoriesNotifyError object:nil];
 	}
-	
+	[[NSNotificationCenter defaultCenter] postNotificationName:kBillCategoriesNotifyError object:nil];
+	loadingStatus = LOADING_IDLE;
+
 	isFresh = NO;
 	
 	if (categories_)
@@ -295,8 +313,10 @@
 		if (json)
 			categories_ = [[json mutableObjectFromJSONData] retain];
 	}
-	if (!categories_)
+	if (!categories_) {
 		categories_ = [[NSMutableDictionary dictionary] retain];
+		loadingStatus = LOADING_NO_NET;
+	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:kBillCategoriesNotifyLoaded object:nil];
 	
@@ -352,6 +372,8 @@
 			[updated release];
 		updated = [[NSDate date] retain];
 		
+		loadingStatus = LOADING_IDLE;
+
 		[[NSNotificationCenter defaultCenter] postNotificationName:kBillCategoriesNotifyLoaded object:nil];
 		
 		[self.tableView reloadData];
