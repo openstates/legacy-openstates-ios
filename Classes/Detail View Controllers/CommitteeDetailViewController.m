@@ -31,6 +31,7 @@
 
 @interface CommitteeDetailViewController (Private)
 - (void) buildInfoSectionArray;
+- (void) calcCommitteePartisanship;
 @end
 
 @implementation CommitteeDetailViewController
@@ -64,6 +65,94 @@ CGFloat quartzRowHeight = 73.f;
 		return @"CommitteeDetailViewController~iphone";	
 }
 
+#pragma mark -
+#pragma mark View lifecycle
+
+- (void)dealloc {
+	self.dataObjectID = nil;
+	self.membershipLab = nil;
+	self.partisanSlider = nil;
+	self.masterPopover = nil;
+	self.infoSectionArray = nil;
+    [super dealloc];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_LEGISLATOROBJ" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_COMMITTEEOBJ" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_COMMITTEEPOSITIONOBJ" object:nil];
+	
+	self.clearsSelectionOnViewWillAppear = NO;
+	
+	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
+	UIColor *sealColor = [[UIColor colorWithPatternImage:sealImage] colorWithAlphaComponent:0.5f];	
+	self.tableView.tableHeaderView.backgroundColor = sealColor;	
+}
+
+- (void)viewDidUnload {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
+	[super viewDidUnload];
+}
+
+
+- (void)viewWillAppear:(BOOL)animated 
+{
+    [super viewWillAppear:animated];
+	
+	if ([UtilityMethods isIPadDevice] == NO)
+		return;
+	
+	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
+	if (self.committee == nil && ![UtilityMethods isLandscapeOrientation])  {
+		
+		self.committee = [[[TexLegeAppDelegate appDelegate] committeeMasterVC] selectObjectOnAppear];		
+	}
+}
+
+#pragma mark -
+#pragma mark Memory management
+
+- (void)didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
+	UINavigationController *nav = [self navigationController];
+	//if (nav && [nav.viewControllers count]>1)
+	[nav popToRootViewControllerAnimated:YES];
+	
+    [super didReceiveMemoryWarning];
+    // Relinquish ownership any cached data, images, etc that aren't in use.
+}
+
+/*
+ - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+ [self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
+ }
+ */
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+	//[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
+	//[[TexLegeAppDelegate appDelegate] resetPopoverMenus];
+	
+	NSArray *visibleCells = self.tableView.visibleCells;
+	for (id cell in visibleCells) {
+		if ([cell respondsToSelector:@selector(redisplay)])
+			[cell performSelector:@selector(redisplay)];
+	}
+	
+}
+
+// Override to allow orientations other than the default portrait orientation.
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return YES;
+}
+
+#pragma mark -
+#pragma mark Data Objects
 - (id)dataObject {
 	return self.committee;
 }
@@ -76,59 +165,6 @@ CGFloat quartzRowHeight = 73.f;
 	if (self.dataObject) {
 		[self setDataObject:self.dataObject];
 	}
-}
-
-- (void) calcCommitteePartisanship {
-	NSArray *positions = [self.committee.committeePositions allObjects];
-	if (!positions && [positions count])
-		return;
-	
-	CGFloat avg = 0.0f;
-	CGFloat totalNum = 0.0f;
-	NSInteger totalLege = 0;
-	for (CommitteePositionObj *position in positions) {
-		CGFloat legePart = position.legislator.latestWnomFloat;
-		if (legePart != 0.0f) {
-			totalNum += legePart;
-			totalLege++;
-		}
-	}
-	if (totalLege) {
-		avg = totalNum / totalLege;
-	}
-		
-	NSInteger democCount = 0, repubCount = 0;
-	NSArray *repubs = [positions findAllWhereKeyPath:@"legislator.party_id" equals:[NSNumber numberWithInteger:REPUBLICAN]];	
-	if (repubs)
-		repubCount = [repubs count];
-	democCount = [positions count] - repubCount;
-	
-	NSString *repubString = @"";
-	if (repubCount != 1)
-		repubString = @"s";
-	
-	NSString *democString = @"";
-	if (democCount != 1)
-		democString = @"s";
-	
-	self.membershipLab.text = [NSString stringWithFormat:@"%d Republican%@ and %d Democrat%@", repubCount, repubString, democCount, democString];
-		
-	if (!IsEmpty(positions)) {
-		// This will give inacurate results in joint committees, at least until we're in a common dimensional space
-		LegislatorObj *anyMember = [[positions objectAtIndex:0] legislator];
-		
-		if (anyMember) {
-			PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
-			
-			CGFloat minSlider = [indexStats minPartisanIndexUsingChamber:[anyMember.legtype integerValue]];
-			CGFloat maxSlider = [indexStats maxPartisanIndexUsingChamber:[anyMember.legtype integerValue]];
-			
-			self.partisanSlider.sliderMin = minSlider;
-			self.partisanSlider.sliderMax = maxSlider;
-		}
-	}
-
-	self.partisanSlider.sliderValue = avg;	
 }
 
 - (CommitteeObj *)committee {
@@ -166,107 +202,6 @@ CGFloat quartzRowHeight = 73.f;
 }
 
 #pragma mark -
-#pragma mark View lifecycle
-
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_LEGISLATOROBJ" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_COMMITTEEOBJ" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_COMMITTEEPOSITIONOBJ" object:nil];
-
-	self.clearsSelectionOnViewWillAppear = NO;
-
-	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
-	UIColor *sealColor = [[UIColor colorWithPatternImage:sealImage] colorWithAlphaComponent:0.5f];	
-	self.tableView.tableHeaderView.backgroundColor = sealColor;	
-	
-	//if ([UtilityMethods isIPadDevice])
-	//	quartzRowHeight = 73.f*1.5f;
-}
-
-
-- (void)viewWillAppear:(BOOL)animated 
-{
-    [super viewWillAppear:animated];
-	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
-
-	if ([UtilityMethods isIPadDevice] == NO)
-		return;
-	
-		// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
-	if (self.committee == nil && ![UtilityMethods isLandscapeOrientation])  {
-		
-		self.committee = [[appDelegate committeeMasterVC] selectObjectOnAppear];		
-
-	}
-}
-
-#pragma mark -
-#pragma mark Memory management
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-	UINavigationController *nav = [self navigationController];
-	//if (nav && [nav.viewControllers count]>1)
-		[nav popToRootViewControllerAnimated:YES];
-	
-    [super didReceiveMemoryWarning];
-    // Relinquish ownership any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-	self.partisanSlider = nil;
-	self.membershipLab = nil;
-	self.dataObjectID = nil;
-	self.masterPopover = nil;
-//	self.tableView = nil;
-	self.infoSectionArray = nil;
-	[super viewDidUnload];
-}
-
-
-- (void)dealloc {
-	self.dataObjectID = nil;
-	self.membershipLab = nil;
-	self.partisanSlider = nil;
-//	self.tableView = nil;
-	self.masterPopover = nil;
-	self.infoSectionArray = nil;
-    [super dealloc];
-}
-
-/*
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
-}
-*/
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-	//[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
-	//[[TexLegeAppDelegate appDelegate] resetPopoverMenus];
-
-	NSArray *visibleCells = self.tableView.visibleCells;
-		for (id cell in visibleCells) {
-			if ([cell respondsToSelector:@selector(redisplay)])
-				[cell performSelector:@selector(redisplay)];
-		}
-	
-}
-
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
-}
-
-#pragma mark -
 #pragma mark Popover Support
 
 - (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
@@ -293,7 +228,7 @@ CGFloat quartzRowHeight = 73.f;
 }	
 
 #pragma mark -
-#pragma mark Table view data source
+#pragma mark View Setup
 
 - (void)buildInfoSectionArray {	
 	BOOL clickable = NO;
@@ -395,6 +330,62 @@ CGFloat quartzRowHeight = 73.f;
 	self.infoSectionArray = tempArray;
 	[tempArray release];
 }
+
+- (void) calcCommitteePartisanship {
+	NSArray *positions = [self.committee.committeePositions allObjects];
+	if (!positions && [positions count])
+		return;
+	
+	CGFloat avg = 0.0f;
+	CGFloat totalNum = 0.0f;
+	NSInteger totalLege = 0;
+	for (CommitteePositionObj *position in positions) {
+		CGFloat legePart = position.legislator.latestWnomFloat;
+		if (legePart != 0.0f) {
+			totalNum += legePart;
+			totalLege++;
+		}
+	}
+	if (totalLege) {
+		avg = totalNum / totalLege;
+	}
+	
+	NSInteger democCount = 0, repubCount = 0;
+	NSArray *repubs = [positions findAllWhereKeyPath:@"legislator.party_id" equals:[NSNumber numberWithInteger:REPUBLICAN]];	
+	if (repubs)
+		repubCount = [repubs count];
+	democCount = [positions count] - repubCount;
+	
+	NSString *repubString = @"";
+	if (repubCount != 1)
+		repubString = @"s";
+	
+	NSString *democString = @"";
+	if (democCount != 1)
+		democString = @"s";
+	
+	self.membershipLab.text = [NSString stringWithFormat:@"%d Republican%@ and %d Democrat%@", repubCount, repubString, democCount, democString];
+	
+	if (!IsEmpty(positions)) {
+		// This will give inacurate results in joint committees, at least until we're in a common dimensional space
+		LegislatorObj *anyMember = [[positions objectAtIndex:0] legislator];
+		
+		if (anyMember) {
+			PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
+			
+			CGFloat minSlider = [indexStats minPartisanIndexUsingChamber:[anyMember.legtype integerValue]];
+			CGFloat maxSlider = [indexStats maxPartisanIndexUsingChamber:[anyMember.legtype integerValue]];
+			
+			self.partisanSlider.sliderMin = minSlider;
+			self.partisanSlider.sliderMax = maxSlider;
+		}
+	}
+	
+	self.partisanSlider.sliderValue = avg;	
+}
+
+#pragma mark -
+#pragma mark Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 	return NUM_SECTIONS;
