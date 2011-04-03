@@ -188,9 +188,8 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"TABLEUPDATE_START" object:self.dataSource];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"TABLEUPDATE_END" object:self.dataSource];
 
-	self.dataSource = nil;
+	//self.dataSource = nil;
 	self.selectObjectOnAppear = nil;
-	//self.tableView = nil;
 	[super viewDidUnload];
 }
 
