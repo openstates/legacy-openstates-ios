@@ -77,7 +77,6 @@
 }
 
 - (void)viewDidUnload {	
-	self.chamberControl = nil;
 	[super viewDidUnload];
 }
 
