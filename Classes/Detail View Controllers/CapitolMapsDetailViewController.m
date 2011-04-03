@@ -38,14 +38,9 @@
 	}
 	else
 		self.navigationItem.title = @"Maps";
-	
-	//self.navigationController.toolbarHidden = YES;	
 }
 
 - (void)viewDidUnload {
-	self.webView = nil;
-	self.map = nil;
-	self.masterPopover = nil;
 	[super viewDidUnload];
 }
 
