@@ -41,14 +41,6 @@
 	return [CalendarDetailViewController nibName];	
 }
 
-- (id)dataObject {
-	return self.chamberCalendar;
-}
-
-- (void)setDataObject:(id)newObj {
-	[self setChamberCalendar:newObj];
-}
-
 - (void)finalizeUI {
 	if ([UtilityMethods isIPadDevice]) {
 		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
@@ -79,24 +71,42 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(reloadEvents:) name:kCalendarEventsNotifyLoaded object:nil];	
 	[self finalizeUI];
-
 }
 
-- (void)reloadEvents:(NSNotification*)notification {
-	[self reloadData];
+- (void)viewDidUnload {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
+	[super viewDidUnload];
+}
+
+- (void)didReceiveMemoryWarning {
+	UINavigationController *nav = [self navigationController];
+	//if (nav && [nav.viewControllers count]>1)
+	[nav popToRootViewControllerAnimated:YES];
+	
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    // Release any cached data, images, etc that aren't in use.
+}
+
+- (void)dealloc {
+	self.chamberCalendar = nil;
+	self.webView = nil;
+	self.masterPopover = nil;
+    [super dealloc];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
 	[[CalendarEventsLoader sharedCalendarEventsLoader] events];
-
+	
 	if ([UtilityMethods isIPadDevice] && !self.chamberCalendar && ![UtilityMethods isLandscapeOrientation])  {
 		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
 		
 		self.chamberCalendar = [[appDelegate calendarMasterVC] selectObjectOnAppear];		
 	}
-			
+	
 	if (self.chamberCalendar)
 		self.searchDisplayController.searchBar.placeholder = self.chamberCalendar.title;
 }
@@ -109,31 +119,45 @@
 		return UIInterfaceOrientationIsPortrait(interfaceOrientation);
 }
 
+#pragma mark -
+#pragma mark Data Objects
 
-- (void)didReceiveMemoryWarning {
-	UINavigationController *nav = [self navigationController];
-	//if (nav && [nav.viewControllers count]>1)
-		[nav popToRootViewControllerAnimated:YES];
+- (void)reloadEvents:(NSNotification*)notification {
+	[self reloadData];
+}
+
+- (id)dataObject {
+	return self.chamberCalendar;
+}
+
+- (void)setDataObject:(id)newObj {
+	[self setChamberCalendar:newObj];
+}
+
+- (void)setChamberCalendar:(ChamberCalendarObj *)newObj {
+	if (chamberCalendar && newObj && self.webView) {
+		if (![[chamberCalendar valueForKey:@"title"] isEqualToString:[newObj valueForKey:@"title"]])
+			[self.webView loadHTMLString:@"<html></html>" baseURL:nil];
+	}
+	
+	if (chamberCalendar) [chamberCalendar release], chamberCalendar = nil;
+	if (newObj) {
+		if (masterPopover)
+			[masterPopover dismissPopoverAnimated:YES];
 		
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    // Release any cached data, images, etc that aren't in use.
-}
-
-
-
- - (void)viewDidUnload {
-	 [[NSNotificationCenter defaultCenter] removeObserver:self];
-
-	 [super viewDidUnload];
-}
-
-
-- (void)dealloc {
-	self.chamberCalendar = nil;
-	self.webView = nil;
-	self.masterPopover = nil;
-    [super dealloc];
+		chamberCalendar = [newObj retain];
+		
+		[self view];
+		
+		[self setDelegate:self];
+		[self setDataSource:chamberCalendar];
+		[self.searchDisplayController setSearchResultsDataSource:chamberCalendar];
+		
+		//[newObj filterEventsByString:@""]; 
+		
+		[self reloadData];
+		//		[self.monthView reload];
+	}
 }
 
 #pragma mark -
@@ -162,36 +186,6 @@
 		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"ERR_POPOVER_IN_LANDSCAPE"];
 	}		 
 }	
-
-#pragma -
-#pragma ComboVC Utilities
-
-- (void)setChamberCalendar:(ChamberCalendarObj *)newObj {
-	if (chamberCalendar && newObj && self.webView) {
-		if (![[chamberCalendar valueForKey:@"title"] isEqualToString:[newObj valueForKey:@"title"]])
-			[self.webView loadHTMLString:@"<html></html>" baseURL:nil];
-	}
-	
-	if (chamberCalendar) [chamberCalendar release], chamberCalendar = nil;
-	if (newObj) {
-		if (masterPopover)
-			[masterPopover dismissPopoverAnimated:YES];
-
-		chamberCalendar = [newObj retain];
-		
-		[self view];
-
-		[self setDelegate:self];
-		[self setDataSource:chamberCalendar];
-		[self.searchDisplayController setSearchResultsDataSource:chamberCalendar];
-		
-		//[newObj filterEventsByString:@""]; 
-
-		[self reloadData];
-//		[self.monthView reload];
-	}
-}
-
 
 #pragma -
 #pragma UITableViewDelegate
