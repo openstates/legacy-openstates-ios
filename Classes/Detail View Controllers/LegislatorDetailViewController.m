@@ -69,8 +69,6 @@
 		return @"LegislatorDetailViewController~iphone";
 }
 
-	
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 		
@@ -102,7 +100,13 @@
 	[votingDS prepareVotingRecordView:self.newChartView];
 	self.votingDataSource = votingDS;
 	[votingDS release];
+}
+
+- (void)viewDidUnload {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
+	self.votingDataSource = nil;
+	[super viewDidUnload];
 }
 
 #pragma mark -
@@ -113,35 +117,9 @@
 	UINavigationController *nav = [self navigationController];
 	if (nav && [nav.viewControllers count]>2)
 		[nav popToRootViewControllerAnimated:YES];
-	
-	//self.leg_photoView.image = nil;
-	
+		
     [super didReceiveMemoryWarning];
 }
-
-- (void)viewDidUnload {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-	self.indivSlider = nil;
-	self.partySlider = nil;
-	self.allSlider = nil;
-	//self.legislator = nil;
-	self.dataSource = nil;
-	self.headerView = nil;
-	self.leg_photoView = nil;
-	self.leg_reelection = nil;
-	//self.tableView = nil;
-	self.miniBackgroundView = nil;
-	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
-	self.notesPopover = nil;
-	self.masterPopover = nil;
-
-	self.newChartView = nil;
-	self.votingDataSource = nil;
-	[super viewDidUnload];
-}
-
 
 - (void)dealloc {
 	
@@ -394,9 +372,7 @@
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration 
 //- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	[self.newChartView reloadData];
-	
-//	[self reloadChartForOrientationChangeTo:toInterfaceOrientation];
+	[self.newChartView reloadData];	
 }
 
 #pragma mark -
@@ -554,7 +530,7 @@
 	detailController.map = capMap;
 
 	// push the detail view controller onto the navigation stack to display it
-	[[self navigationController] pushViewController:detailController animated:YES];
+	[self.navigationController pushViewController:detailController animated:YES];
 	[detailController release];
 }
 
