@@ -288,7 +288,8 @@ static MiniBrowserController *s_browser = nil;
 }
 
 - (void)viewDidUnload {
-	self.m_webView = nil;
+/*
+ self.m_webView = nil;
 	self.m_toolBar = nil;
 	self.m_loadingLabel = nil;
 	self.m_backButton = nil;
@@ -298,6 +299,7 @@ static MiniBrowserController *s_browser = nil;
 	self.m_loadingItemList = nil;
 	self.m_normalItemList = nil;
 	self.masterPopover = nil;
+*/
 	[super viewDidUnload];
 }
 
@@ -322,9 +324,7 @@ static MiniBrowserController *s_browser = nil;
 			masterVC.selectObjectOnAppear = [masterVC firstDataObject];
 
 		self.link = masterVC.selectObjectOnAppear;	
-		
 	}	
-	
 }
 
 
@@ -354,12 +354,9 @@ static MiniBrowserController *s_browser = nil;
 	if ( self.m_shouldStopLoadingOnHide )
 	{
 		if ( self.m_webView.loading )
-		{
 			self.m_loadingInterrupted = YES;
-		}
 		[self stopLoading];
 	}
-	
 	[super viewWillDisappear:animated];
 }
 
