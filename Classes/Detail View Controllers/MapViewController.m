@@ -147,27 +147,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 }
 
-- (void) viewDidUnload {
-	if (self.mapView) {
-		[self.mapView removeAnnotations:self.mapView.annotations];
-		[self.mapView removeOverlays:self.mapView.overlays];
-		self.mapView = nil;
-	}
-	
+- (void) viewDidUnload {	
 	if (self.genericOperationQueue)
 		[self.genericOperationQueue cancelAllOperations];
 	self.genericOperationQueue = nil;
-		
-//	self.mapTypeControl = nil;
-//	self.mapControlsButton = nil;
-//	self.mapTypeControlButton = nil;
-//	self.searchBarButton = nil;
-//	self.userLocationButton = nil;
-	self.reverseGeocoder = nil;
-	self.forwardGeocoder = nil;
-//	self.searchBar = nil;
-	self.searchLocation = nil;
-	self.masterPopover = nil;
 	
 	[super viewDidUnload];
 }
