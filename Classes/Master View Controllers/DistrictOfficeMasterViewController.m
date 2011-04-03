@@ -82,9 +82,6 @@
 }
 
 - (void)viewDidUnload {
-	self.chamberControl = nil;
-	self.sortControl = nil;
-	self.filterControls = nil;
 	[super viewDidUnload];
 }
 
