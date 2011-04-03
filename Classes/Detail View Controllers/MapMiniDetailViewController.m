@@ -92,7 +92,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void) viewDidUnload {
-	self.mapView = nil;
 	[super viewDidUnload];
 }
 
