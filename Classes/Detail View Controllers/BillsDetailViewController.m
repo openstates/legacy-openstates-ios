@@ -27,6 +27,7 @@
 #import "BillVotesDataSource.h"
 #import "OpenLegislativeAPIs.h"
 #import "LocalyticsSession.h"
+//#import "BillStageStackPanel.h"
 
 @interface BillsDetailViewController (Private)
 - (void)setupHeader;
@@ -73,7 +74,8 @@ enum _billSections {
 - (void)dealloc {
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 	self.bill = nil;
-	self.headerView = self.descriptionView = self.statusView = nil;
+	self.headerView = self.descriptionView = nil;
+	self.statusView = nil;
 	self.lab_description = nil;
 	self.stat_filed = self.stat_thisPassComm = self.stat_thisPassVote = self.stat_thatPassComm = self.stat_thatPassVote = self.stat_governor = self.stat_isLaw = nil;
 	self.masterPopover = nil;
@@ -96,6 +98,13 @@ enum _billSections {
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+/*	Whenever we figure out the stacking view thing.
+	if (self.statusView) {
+		self.statusView.resizeFrame = NO;
+		self.statusView.spacing = NO;
+		self.statusView.orientation = HORIZONTAL;
+	}	
+*/
 	voteDS = nil;
 	
 	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
@@ -126,14 +135,9 @@ enum _billSections {
 
 - (void)viewDidUnload {
 	if (voteDS)
-		[voteDS release], voteDS = nil;
-	
+		[voteDS release], voteDS = nil;	
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.	
-	//self.headerView = self.descriptionView = self.statusView = nil;
-	//self.lab_description = nil;
 	self.starButton = nil;
-	//self.stat_filed = self.stat_thisPassComm = self.stat_thisPassVote = self.stat_thatPassComm = self.stat_thatPassVote = self.stat_governor = self.stat_isLaw = nil;
-	//self.masterPopover = nil;
 	
 	[super viewDidUnload];
 }
@@ -141,7 +145,8 @@ enum _billSections {
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-	
+	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
+
 	if (NO == [UtilityMethods isLandscapeOrientation] && [UtilityMethods isIPadDevice] && !bill) {
 		[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:@"HB 1" 
 																		   session:nil			// defaults to current session
@@ -403,6 +408,7 @@ enum _billSections {
 	@catch (NSException * e) {
 	}
 	self.actionHeader.titleLabel.text = billTitle;
+	[self.actionHeader setNeedsDisplay];
 	
 	NSDictionary *currentAction = [[bill objectForKey:@"actions"] objectAtIndex:0];	// actions is already in descending order from our setBill
 	NSDate *currentActionDate = [NSDate dateFromString:[currentAction objectForKey:@"date"]];

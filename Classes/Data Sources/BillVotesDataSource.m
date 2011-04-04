@@ -28,6 +28,11 @@
 	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];	
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];	
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
 	return YES;
 }

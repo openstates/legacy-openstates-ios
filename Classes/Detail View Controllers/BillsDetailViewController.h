@@ -12,9 +12,11 @@
 @class TableCellDataObject;
 @class DDActionHeaderView;
 @class BillVotesDataSource;
+//@class BillStageStackPanel;
 @interface BillsDetailViewController : UITableViewController <RKRequestDelegate, UISplitViewControllerDelegate, UIPopoverControllerDelegate> {
 	IBOutlet NSMutableDictionary *bill;
-	IBOutlet UIView *headerView, *descriptionView, *statusView;
+	IBOutlet UIView *headerView, *descriptionView;
+	IBOutlet UIView *statusView;
 	IBOutlet UITextView *lab_description;
 	IBOutlet UIButton *starButton;
 	IBOutlet UILabel *stat_filed, *stat_thisPassComm, *stat_thisPassVote, *stat_thatPassComm, *stat_thatPassVote, *stat_governor, *stat_isLaw;
@@ -24,7 +26,8 @@
 }
 @property (nonatomic,assign) id dataObject;
 
-@property (nonatomic,retain) IBOutlet UIView *headerView, *descriptionView, *statusView;
+@property (nonatomic,retain) IBOutlet UIView *headerView, *descriptionView;
+@property (nonatomic,retain) IBOutlet UIView *statusView;
 @property (nonatomic,retain) IBOutlet UITextView *lab_description;
 @property (nonatomic,retain) IBOutlet UIButton *starButton;
 @property (nonatomic,retain) IBOutlet DDActionHeaderView *actionHeader;

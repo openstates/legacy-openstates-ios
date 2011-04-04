@@ -105,7 +105,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-	
+	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
+
 	NSDictionary *segPrefs = [[NSUserDefaults standardUserDefaults] objectForKey:kSegmentControlPrefKey];
 	if (segPrefs) {
 		NSNumber *segIndex = [segPrefs objectForKey:NSStringFromClass([self class])];

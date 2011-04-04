@@ -76,6 +76,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
+
 }
 
 /*- (void)viewWillDisappear:(BOOL)animated {

@@ -97,7 +97,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	
+	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
+
 	if (_watchList) {
 		[_watchList release];
 		_watchList = nil;
