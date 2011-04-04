@@ -11,6 +11,16 @@
 		<key>mapPdfUrl</key>
 		<string>http://www.fyi.legis.state.tx.us/fyiwebdocs/PDF/%@/dist%@/m1.pdf</string>
 	</dict>
+	<key>MailComposer</key>
+	<dict>
+		<key>EmailingLinkTitle</key>
+		<string>A Link from TexLege</string>
+		<key>EmailingLinkText</key>
+		<string>Here is a web link you should see:
+%@
+
+Sent from TexLege.</string>
+	</dict>
 	<key>ResetDB</key>
 	<dict>
 		<key>ConfirmTitle</key>
