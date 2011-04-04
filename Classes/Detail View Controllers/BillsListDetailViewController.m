@@ -28,6 +28,8 @@
 - (id)initWithStyle:(UITableViewStyle)style {
 	if (self = [super initWithStyle:style]) {
 		dataSource = [[[BillSearchDataSource alloc] initWithTableViewController:self] retain];
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(reloadData:) name:kBillSearchNotifyDataLoaded object:dataSource];	
 	}
 	return self;
 }
@@ -57,7 +59,7 @@
 
 
 - (void)dealloc {	
-	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[dataSource release];
 	
 	[super dealloc];
@@ -89,6 +91,9 @@
 	[super viewDidUnload];
 }
 
+- (void)reloadData:(NSNotification *)notification {
+	[self.tableView reloadData];
+}
 
 #pragma mark -
 #pragma mark Table view data source
