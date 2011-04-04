@@ -10,6 +10,7 @@
 #import "SynthesizeSingleton.h"
 #import <RestKit/RestKit.h>
 
+static NSString *osApiHost =		@"openstates.sunlightlabs.com";
 static NSString *osApiBaseURL =		@"http://openstates.sunlightlabs.com/api/v1";
 static NSString *osApiKeyValue =	@"350284d0c6af453b9b56f6c1c7fea1f9";
 
@@ -18,6 +19,7 @@ static NSString *transApiBaseURL =	@"http://transparencydata.com/api/1.0";
 static NSString *vsApiBaseURL =		@"http://api.votesmart.org";
 static NSString *vsApiKey =			@"5fb3b476c47fcb8a21dc2ec22ca92cbb";	// for "key" ... you'll want to add "&stateId=TX&o=JSON" too...
 
+static NSString *tloApiHost =		@"www.legis.state.tx.us";
 static NSString *tloApiBaseURL =	@"http://www.legis.state.tx.us";
 
 @interface OpenLegislativeAPIs : NSObject <RKRequestDelegate> {
