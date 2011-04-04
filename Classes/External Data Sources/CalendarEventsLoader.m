@@ -190,7 +190,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 			updated = [[NSDate date] retain];
 						
 			[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyLoaded object:nil];
-			debug_NSLog(@"EventsLoader network download successfull, archiving for others.");
+			debug_NSLog(@"EventsLoader network download successful, archiving for others.");
 		}		
 		else {
 			[self request:request didFailLoadWithError:nil];

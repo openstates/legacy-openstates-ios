@@ -105,7 +105,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 				NSLog(@"BillMetadataLoader: error writing cache to file: %@", localPath);
 			isFresh = YES;
 			[[NSNotificationCenter defaultCenter] postNotificationName:kBillMetadataNotifyLoaded object:nil];
-			debug_NSLog(@"BillMetadata network download successfull, archiving for others.");
+			debug_NSLog(@"BillMetadata network download successful, archiving for others.");
 		}		
 		else {
 			[self request:request didFailLoadWithError:nil];
