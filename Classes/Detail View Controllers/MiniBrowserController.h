@@ -8,6 +8,33 @@
 @class LinkObj;
 @interface MiniBrowserController : UIViewController <UIWebViewDelegate, UISplitViewControllerDelegate>
 {
+	id dataObject;
+	NSNumber *dataObjectID;
+	
+	BOOL m_loadingInterrupted;
+	NSURLRequest *m_urlRequestToLoad;
+	UIActivityIndicatorView *m_activity;
+	UILabel					*m_loadingLabel;
+	NSArray *m_normalItemList;
+	NSArray *m_loadingItemList;
+	BOOL m_shouldDisplayOnViewLoad;
+	id m_parentCtrl;
+	
+	UIToolbar *m_toolBar;
+	UIWebView *m_webView;
+	BOOL m_shouldUseParentsView;
+	BOOL m_shouldStopLoadingOnHide;
+	UIBarButtonItem *m_backButton;
+	UIBarButtonItem *m_reloadButton;
+	UIBarButtonItem *m_fwdButton;
+	UIBarButtonItem *m_doneButton;
+	NSURL *m_currentURL;
+	UIColor *sealColor;
+	LinkObj *link;
+	NSString *userAgent;
+	BOOL m_shouldHideDoneButton;
+	BOOL isSharedBrowser;
+	
 }
 @property (nonatomic,assign) id dataObject;
 @property (nonatomic,retain) NSNumber *dataObjectID;
@@ -49,6 +76,7 @@
 - (IBAction)fwdButtonPressed:(id)button;
 - (IBAction)refreshButtonPressed:(id)button;
 - (IBAction)openInSafari:(id)button;
+- (IBAction)emailURL:(id)button;
 
 - (void)loadURL:(NSURL *)url;
 - (void)LoadRequest:(NSURLRequest *)urlRequest;
