@@ -234,7 +234,6 @@
 	if (error && request) {
 		debug_NSLog(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
 	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:self];
 	
 	UIAlertView *alert = [[[ UIAlertView alloc ] 
 						   initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
