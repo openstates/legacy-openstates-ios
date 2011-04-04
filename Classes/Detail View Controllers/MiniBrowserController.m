@@ -28,6 +28,7 @@ enum
 	eTAG_CLOSE   = 996,
 	eTAG_STOP    = 995,
 	eTAG_SAFARI  = 994,
+	eTAG_EMAILURL= 993,
 };
 
 @implementation MiniBrowserController
@@ -432,6 +433,17 @@ static MiniBrowserController *s_browser = nil;
 	}
 }
 
+- (IBAction)emailURL:(id)button {
+	if (self.m_currentURL) {
+		NSString *body = [NSString stringWithFormat:[UtilityMethods texLegeStringWithKeyPath:@"MailComposer.EmailingLinkText"],
+						  self.m_currentURL.absoluteString];
+		[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"someone@example.com" 
+																		 subject:[UtilityMethods texLegeStringWithKeyPath:@"MailComposer.EmailingLinkTitle"] 
+																			body:body 
+																	   commander:self];
+	}
+}
+
 - (LinkObj *)link {
 	LinkObj *anObject = nil;
 	if (self.dataObjectID) {
@@ -456,7 +468,8 @@ static MiniBrowserController *s_browser = nil;
 		if ([anObject.url isEqualToString:@"mailto:support@texlege.com"])
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
 																			 subject:@"TexLege Support Question" 
-																				body:@"" commander:[[TexLegeAppDelegate appDelegate] detailNavigationController]];
+																				body:@"" 
+																		   commander:[[TexLegeAppDelegate appDelegate] detailNavigationController]];
 		else {
 			// if we add escapes, we'll wind up junking our existing "safe" url string.  We do this since we don't allow editing links anymore.  
 			//NSURL *aURL = [UtilityMethods safeWebUrlFromString:link.url];
@@ -464,9 +477,6 @@ static MiniBrowserController *s_browser = nil;
 			if (aURL && [TexLegeReachability canReachHostWithURL:aURL alert:YES]) { // got a network connection
 				[self loadURL:aURL];
 			}
-			else
-				return;
-			
 			self.title = anObject.label;
 		}
 	}
@@ -752,6 +762,13 @@ static MiniBrowserController *s_browser = nil;
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
 	[self startLoadingAnimation:webView];
+	
+	for (UIBarButtonItem *item in m_toolBar.items) {
+		if (item.tag == eTAG_EMAILURL || item.tag == eTAG_SAFARI)
+			item.enabled = ([m_currentURL.absoluteString hasPrefix:@"http"] || 
+							[m_currentURL.absoluteString hasPrefix:@"ftp"] );
+	}
+	
 	[self performSelector:@selector(stopLoadingAnimation:) withObject:webView afterDelay:10];
 	
 	self.title = @"loading...";
