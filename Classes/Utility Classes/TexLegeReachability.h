@@ -13,15 +13,26 @@
 
 @interface TexLegeReachability : NSObject
 {
+	id appDelegate;
 	Reachability* hostReach;
     Reachability* internetReach;
     Reachability* wifiReach;	
+	
+	Reachability* openstatesReach;
+	Reachability* texlegeReach;
+	Reachability* tloReach;
+	Reachability* googleReach;
+
 }
 @property NetworkStatus remoteHostStatus;
 @property NetworkStatus internetConnectionStatus;
 @property NetworkStatus localWiFiConnectionStatus;
+@property NetworkStatus texlegeConnectionStatus;
+@property NetworkStatus openstatesConnectionStatus;
+@property NetworkStatus tloConnectionStatus;
+@property NetworkStatus googleConnectionStatus;
 
-- (void)startCheckingReachability;
+- (void) startCheckingReachability:(id)delegate;
 - (BOOL) isNetworkReachable;
 - (BOOL) isNetworkReachableViaWiFi;
 

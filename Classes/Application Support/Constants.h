@@ -32,3 +32,20 @@ enum kURLActionDestinations {
     URLAction_internalBrowser = 0,
     URLAction_externalBrowser,
 };
+
+#if DEBUG
+#define RESTKIT_BASE_URL					@"http://www.texlege.com/jsonDataTest"
+#else
+#define RESTKIT_BASE_URL					@"http://www.texlege.com/rest"
+#endif
+#define RESTKIT_HOST						@"www.texlege.com"
+
+enum TABBAR_ITEM_TAGS {
+	TAB_LEGISLATOR,
+	TAB_COMMITTEE,
+	TAB_DISTRICTMAP,
+	TAB_CALENDAR,
+	TAB_BILL,
+	TAB_CAPMAP,
+	TAB_LINK
+};

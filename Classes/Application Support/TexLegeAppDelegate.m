@@ -268,6 +268,7 @@ NSInteger kNoSelection = -1;
 		for (GeneralTableViewController * controller in VCs) {
 			UISplitViewController * split = [controller splitViewController];
 			if (split) {
+				// THIS SETS UP THE TAB BAR ITEMS/IMAGES AND SET THE TAG FOR TABBAR_ITEM_TAGS
 				split.title = [[controller dataSource] name];
 				split.tabBarItem = [[[UITabBarItem alloc] initWithTitle:
 									[[controller dataSource] name] image:[[controller dataSource] tabBarImage] tag:index] autorelease];
@@ -286,11 +287,6 @@ NSInteger kNoSelection = -1;
 			if (error || count == 0)
 				controller.navigationController.tabBarItem.enabled = NO;
 		}*/	
-		if ([[controller viewControllerKey] isEqualToString:@"BillsMasterViewController"]) {
-			if (![TexLegeReachability canReachHostWithURL:[NSURL URLWithString:@"http://openstates.sunlightlabs.com"] alert:NO])
-				controller.navigationController.tabBarItem.enabled = NO;
-		}
-		
 	}
 	[VCs release];
 	
@@ -313,6 +309,17 @@ NSInteger kNoSelection = -1;
 	[self.mainWindow makeKeyAndVisible];
 	[MTStatusBarOverlay sharedOverlay];
 
+}
+
+- (void)changingReachability:(id)sender {
+	TexLegeReachability *myReach = [TexLegeReachability sharedTexLegeReachability];
+	
+	for (UITabBarItem *item in [self.tabBarController valueForKeyPath:@"viewControllers.tabBarItem"]) {
+		if (item.tag == TAB_BILL || item.tag == TAB_CALENDAR)
+			item.enabled = myReach.openstatesConnectionStatus > NotReachable;
+		else if (item.tag == TAB_DISTRICTMAP)
+			item.enabled = myReach.googleConnectionStatus > NotReachable;
+	}
 }
 
 - (void)runOnInitialAppStart:(id)sender {	
@@ -358,7 +365,7 @@ NSInteger kNoSelection = -1;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {		
-	[[TexLegeReachability sharedTexLegeReachability] startCheckingReachability];
+	[[TexLegeReachability sharedTexLegeReachability] startCheckingReachability:self];
 	
 	// initialize RestKit to handle our seed database and user database
 	[TexLegeCoreDataUtils initRestKitObjects:self];	

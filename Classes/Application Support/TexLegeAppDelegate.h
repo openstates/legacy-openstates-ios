@@ -15,6 +15,7 @@
 @class BillsMasterViewController;
 @class DataModelUpdateManager;
 @class AnalyticsOptInAlertController;
+
 @interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate> 
 {
 	DataModelUpdateManager *dataUpdater;
@@ -56,6 +57,7 @@
 
 - (id) savedTableSelectionForKey:(NSString *)vcKey;
 - (void)setSavedTableSelection:(id)object forKey:(NSString *)vcKey;
+- (void)changingReachability:(id)sender;
 
 + (TexLegeAppDelegate *)appDelegate;
 

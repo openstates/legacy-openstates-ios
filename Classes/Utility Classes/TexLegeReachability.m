@@ -8,6 +8,7 @@
 
 #import "TexLegeReachability.h"
 #import "UtilityMethods.h"
+#import "OpenLegislativeAPIs.h"
 
 @interface TexLegeReachability (Private)
 - (void)updateStatusWithReachability:(Reachability*) curReach;
@@ -17,8 +18,7 @@
 SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 
 @synthesize remoteHostStatus, internetConnectionStatus, localWiFiConnectionStatus;
-
-
+@synthesize texlegeConnectionStatus, tloConnectionStatus, openstatesConnectionStatus, googleConnectionStatus;
 
 #pragma mark - 
 #pragma mark Reachability
@@ -34,7 +34,21 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
  Not available | Available via WiFi
  */
 
-- (void)startCheckingReachability {
+- (void)dealloc {
+	[hostReach release];
+	[openstatesReach release];
+	[texlegeReach release];
+	[tloReach release];
+	[googleReach release];
+	[internetReach release];
+	[wifiReach release];
+	[super dealloc];
+}
+
+- (void)startCheckingReachability:(id)delegate {
+	if (delegate)
+		appDelegate = delegate;
+	
 	// Observe the kNetworkReachabilityChangedNotification. When that notification is posted, the
     // method "reachabilityChanged" will be called. 
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
@@ -42,6 +56,22 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 	hostReach = [[Reachability reachabilityWithHostName: @"www.apple.com"] retain];
 	[hostReach startNotifier];
 	[self updateStatusWithReachability: hostReach];
+	
+	openstatesReach = [[Reachability reachabilityWithHostName:osApiHost] retain];
+	[openstatesReach startNotifier];
+	[self updateStatusWithReachability: openstatesReach];
+	
+	googleReach = [[Reachability reachabilityWithHostName:@"maps.google.com"] retain];
+	[googleReach startNotifier];
+	[self updateStatusWithReachability: googleReach];
+	
+	texlegeReach = [[Reachability reachabilityWithHostName:RESTKIT_HOST] retain];
+	[texlegeReach startNotifier];
+	[self updateStatusWithReachability: texlegeReach];
+	
+	tloReach = [[Reachability reachabilityWithHostName:tloApiHost] retain];
+	[tloReach startNotifier];
+	[self updateStatusWithReachability: tloReach];
 	
 	internetReach = [[Reachability reachabilityForInternetConnection] retain];
 	[internetReach startNotifier];
@@ -61,9 +91,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 
 - (void)updateStatusWithReachability:(Reachability*) curReach
 {
+	NetworkStatus currentStatus = [curReach currentReachabilityStatus];
+	
 	if(curReach == hostReach)
 	{
-        self.remoteHostStatus = [curReach currentReachabilityStatus];
+        self.remoteHostStatus = currentStatus;
         BOOL connectionRequired= [curReach connectionRequired];
 		if (self.remoteHostStatus != ReachableViaWWAN) {
 			if(connectionRequired)
@@ -72,14 +104,28 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 				NSLog(@"Cellular data network is active.\n  Internet traffic will be routed through it.");
 		}
 	}
-	if(curReach == internetReach)
+	else if(curReach == internetReach)
 	{	
-		self.internetConnectionStatus = [curReach currentReachabilityStatus];
+		self.internetConnectionStatus = currentStatus;
 	}
-	if(curReach == wifiReach)
+	else if(curReach == wifiReach)
 	{	
-		self.localWiFiConnectionStatus = [curReach currentReachabilityStatus];
-	}	
+		self.localWiFiConnectionStatus = currentStatus;
+	}
+	else {
+		if(curReach == googleReach)
+			self.googleConnectionStatus = currentStatus;
+		if(curReach == texlegeReach)
+			self.texlegeConnectionStatus = currentStatus;
+		if(curReach == openstatesReach)
+			self.openstatesConnectionStatus = currentStatus;
+		if(curReach == tloReach)
+			self.tloConnectionStatus = currentStatus;
+		
+		if (appDelegate && [appDelegate respondsToSelector:@selector(changingReachability:)])
+			[appDelegate performSelector:@selector(changingReachability:) withObject:curReach];
+				
+	}
 }
 
 #pragma mark -
@@ -113,10 +159,18 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 + (BOOL) isHostReachable:(NSString *)host {
 	BOOL reachable = YES;
 	
-	Reachability *curReach = [Reachability reachabilityWithHostName:host];
-	if (curReach) {
-		NetworkStatus status = [curReach currentReachabilityStatus];
-		reachable = status > NotReachable;
+	if ([host isEqualToString:RESTKIT_HOST])
+		reachable = [[TexLegeReachability sharedTexLegeReachability] texlegeConnectionStatus] > NotReachable;
+	else if ([host isEqualToString:tloApiHost])
+		reachable = [[TexLegeReachability sharedTexLegeReachability] tloConnectionStatus] > NotReachable;
+	else if ([host isEqualToString:osApiHost])
+		reachable = [[TexLegeReachability sharedTexLegeReachability] openstatesConnectionStatus] > NotReachable;
+	else {
+		Reachability *curReach = [Reachability reachabilityWithHostName:host];
+		if (curReach) {
+			NetworkStatus status = [curReach currentReachabilityStatus];
+			reachable = status > NotReachable;
+		}
 	}
 	return reachable;
 }
