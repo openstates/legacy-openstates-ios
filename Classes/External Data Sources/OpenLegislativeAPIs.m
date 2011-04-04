@@ -61,6 +61,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OpenLegislativeAPIs);
 	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:osApiKeyValue, @"apikey",nil];
 	NSString *queryString = [NSString stringWithFormat:@"/bills/tx/%@/%@",session, [billID stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	[osApiClient get:queryString queryParams:queryParams delegate:sender];	
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
 
 - (NSString *)currentSession {

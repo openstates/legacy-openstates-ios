@@ -766,23 +766,26 @@ enum _billSections {
 #pragma mark RestKit:RKObjectLoaderDelegate
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
-	if (error && request) {
+	if (error && request)
 		debug_NSLog(@"BillDetail - Error loading bill results from %@: %@", [request description], [error localizedDescription]);
+	
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 
-			UIAlertView *alert = [[[ UIAlertView alloc ] 
-					  initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
-					  message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
-					  delegate:nil // we're static, so don't do "self"
-					  cancelButtonTitle: @"Cancel" 
-					  otherButtonTitles:nil, nil] autorelease];
-			[ alert show ];	
-	}
+	UIAlertView *alert = [[[ UIAlertView alloc ] 
+			  initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
+			  message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
+			  delegate:nil // we're static, so don't do "self"
+			  cancelButtonTitle: @"Cancel" 
+			  otherButtonTitles:nil, nil] autorelease];
+	[ alert show ];	
 }
 
 
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data  
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+
 		self.bill = [response.body mutableObjectFromJSONData];				
 	}
 }
