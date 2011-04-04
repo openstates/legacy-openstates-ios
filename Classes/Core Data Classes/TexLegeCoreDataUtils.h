@@ -9,12 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-#if DEBUG
-#define RESTKIT_BASE_URL					@"http://www.texlege.com/jsonDataTest"
-#else
-#define RESTKIT_BASE_URL					@"http://www.texlege.com/rest"
-#endif
-
 //@class TexLegeDataMaintenance;
 
 @class LegislatorObj, CommitteeObj, DistrictMapObj;
