@@ -159,7 +159,8 @@
 }
 
 - (void)graphView:(S7GraphView *)graphView indexOfTappedXaxis:(NSInteger)indexOfTappedXaxis {
-	NSNumber *repub = [[chartData objectForKey:@"repub"] objectAtIndex:indexOfTappedXaxis];
+/*
+ NSNumber *repub = [[chartData objectForKey:@"repub"] objectAtIndex:indexOfTappedXaxis];
 	NSNumber *democ = [[chartData objectForKey:@"democ"] objectAtIndex:indexOfTappedXaxis];
 	NSNumber *member = [[chartData objectForKey:@"member"] objectAtIndex:indexOfTappedXaxis];
 	NSDate *time = [[chartData objectForKey:@"time"] objectAtIndex:indexOfTappedXaxis];
@@ -176,7 +177,8 @@
 						[legislator legProperName], diff1, @"repubs",
 						[legislator legProperName], diff2, @"dems"];
 	
-    NSLog(@"%@",string);
+    debug_NSLog(@"%@",string);
+ */
 }
 
 - (NSString *)graphView:(S7GraphView *)graphView nameForPlot:(NSInteger)plotIndex {
