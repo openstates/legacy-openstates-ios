@@ -269,7 +269,7 @@ kDetailViewWidth, kHistoryTableRowHeight*kMaxHistoryTableRowCount + kStatusBarHe
 
 - (id)initWithFrame:(CGRect)newFrame {
     if ((self = [super initWithFrame:newFrame])) {
-		NSLog(@"Status bar frame before: %@", NSStringFromCGRect([UIApplication sharedApplication].statusBarFrame));
+		//NSLog(@"Status bar frame before: %@", NSStringFromCGRect([UIApplication sharedApplication].statusBarFrame));
 
         CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
 		
@@ -286,7 +286,7 @@ kDetailViewWidth, kHistoryTableRowHeight*kMaxHistoryTableRowCount + kStatusBarHe
 		self.alpha = 0.0f;
 		self.hidden = NO;
         
-		NSLog(@"Status bar frame after: %@", NSStringFromCGRect(self.frame));
+		//NSLog(@"Status bar frame after: %@", NSStringFromCGRect(self.frame));
 
 		// Default Small size: just show Activity Indicator
 		smallFrame_ = CGRectMake(statusBarFrame.size.width - kWidthSmall, 0.0f, kWidthSmall, statusBarFrame.size.height);
@@ -837,7 +837,7 @@ kDetailViewWidth, kHistoryTableRowHeight*kMaxHistoryTableRowCount + kStatusBarHe
                          }
 						 completion:NULL];
 	}
-	NSLog(@"Status bar frame: %@", NSStringFromCGRect([statusBarFrameValue CGRectValue]));
+	//NSLog(@"Status bar frame: %@", NSStringFromCGRect([statusBarFrameValue CGRectValue]));
 }
 
 //===========================================================
