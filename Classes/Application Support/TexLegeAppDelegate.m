@@ -29,6 +29,7 @@
 #import "CalendarEventsLoader.h"
 
 #import "TVOutManager.h"
+#import "MTStatusBarOverlay.h"
 
 @interface TexLegeAppDelegate (Private)
 - (void)runOnEveryAppStart;
@@ -310,7 +311,7 @@ NSInteger kNoSelection = -1;
 	[self.tabBarController viewDidLoad];
 	// make the window visible
 	[self.mainWindow makeKeyAndVisible];
-
+	[MTStatusBarOverlay sharedOverlay];
 
 }
 
