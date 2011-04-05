@@ -19,7 +19,6 @@
 @interface BillsFavoritesViewController (Private)
 - (void)configureCell:(TexLegeStandardGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 - (IBAction)save:(id)sender;
-- (NSString *)watchIDForBill:(NSDictionary *)aBill;
 @end
 
 @implementation BillsFavoritesViewController
@@ -29,7 +28,7 @@
 #pragma mark View lifecycle
 - (id)initWithStyle:(UITableViewStyle)style {
 	if (self=[super initWithStyle:style]) {
-		
+		_cachedBills = [[NSMutableDictionary alloc] init];
 	}
 	return self;	
 }
@@ -78,7 +77,6 @@
 	
 	if (menuItem)
 		self.title = [menuItem objectForKey:@"title"];
-	//self.navigationController.navigationItem.rightBarButtonItem
 	[[self navigationItem] setRightBarButtonItem:[self editButtonItem] animated:YES];
 	
 	self.tableView.separatorColor = [TexLegeTheme separator];
@@ -133,26 +131,13 @@
 	[super viewWillDisappear:animated];
 }*/
 
-- (NSString *)watchIDForBill:(NSDictionary *)aBill {
-	if (aBill && [aBill objectForKey:@"session"] && [aBill objectForKey:@"bill_id"])
-		return [NSString stringWithFormat:@"%@:%@", [aBill objectForKey:@"session"],[aBill objectForKey:@"bill_id"]]; 
-	else
-		return @"";
-}
-
 - (IBAction)loadBills:(id)sender {
-	if (_cachedBills) {
-		[_cachedBills release];
-		_cachedBills = nil;
-	}
-	
-	_cachedBills = [[[NSMutableDictionary alloc] init] retain];
-	
+	/*
 	for (NSDictionary *item in _watchList) {
-		[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:[item objectForKey:@"name"] 
+		[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:[item objectForKey:@"bill_id"] 
 																		   session:[item objectForKey:@"session"] 
 																		  delegate:self];
-	}	
+	}*/	
 }
 
 - (IBAction)save:(id)sender {
@@ -187,8 +172,8 @@
 	BOOL useDark = (indexPath.row % 2 == 0);
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	
-	cell.textLabel.text = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"name"];
-	cell.detailTextLabel.text = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"description"];		
+	cell.textLabel.text = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"bill_id"];
+	cell.detailTextLabel.text = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"title"];		
 }
 
 - (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -199,12 +184,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSString *CellIdentifier = @"CellOff";
-	if (_watchList && [_watchList count] > indexPath.row) {
+/*	if (_watchList && [_watchList count] > indexPath.row) {
 		NSString *watchID = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"watchID"];
 		if (_cachedBills && [[_cachedBills allKeys] containsObject:watchID])
 			CellIdentifier = @"CellOn";
 	}
-	
+*/	
 	TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil)
 	{
@@ -215,8 +200,8 @@
 		cell.textLabel.font = [TexLegeTheme boldFifteen];
 		cell.detailTextLabel.textColor = [TexLegeTheme indexText];
 		
-		if ([CellIdentifier isEqualToString:@"CellOff"])
-			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//		if ([CellIdentifier isEqualToString:@"CellOff"])
+//			cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
 	
 	if (_watchList && [_watchList count])
@@ -272,50 +257,51 @@
 		return;
 	
 	NSDictionary *item = [_watchList objectAtIndex:indexPath.row];
-	if (item && [item objectForKey:@"watchID"]) {
-		NSMutableDictionary *bill = [_cachedBills objectForKey:[item objectForKey:@"watchID"]];
-		if (bill) {
-			BOOL changingViews = NO;
-			
-			BillsDetailViewController *detailView = nil;
-			if ([UtilityMethods isIPadDevice]) {
-				id aDetail = [[[TexLegeAppDelegate appDelegate] detailNavigationController] visibleViewController];
-				if ([aDetail isKindOfClass:[BillsDetailViewController class]])
-					detailView = aDetail;
-			}
-			if (!detailView) {
-				detailView = [[[BillsDetailViewController alloc] 
-													  initWithNibName:@"BillsDetailViewController" bundle:nil] autorelease];
-				changingViews = YES;
-			}
-						
-			[detailView setDataObject:bill];
-			if (![UtilityMethods isIPadDevice])
-				[self.navigationController pushViewController:detailView animated:YES];
-			else if (changingViews)
-				[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
-			
-		}			
-	}
+	if (item && [item objectForKey:@"watchID"]) {		
+		
+		//NSMutableDictionary *bill = [_cachedBills objectForKey:[item objectForKey:@"watchID"]];
+		BOOL changingViews = NO;
+		
+		BillsDetailViewController *detailView = nil;
+		if ([UtilityMethods isIPadDevice]) {
+			id aDetail = [[[TexLegeAppDelegate appDelegate] detailNavigationController] visibleViewController];
+			if ([aDetail isKindOfClass:[BillsDetailViewController class]])
+				detailView = aDetail;
+		}
+		if (!detailView) {
+			detailView = [[[BillsDetailViewController alloc] 
+												  initWithNibName:@"BillsDetailViewController" bundle:nil] autorelease];
+			changingViews = YES;
+		}
+		[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:[item objectForKey:@"bill_id"] 
+																		   session:[item objectForKey:@"session"] 
+																		  delegate:detailView];
+		
+		[detailView setDataObject:item];
+		if (![UtilityMethods isIPadDevice])
+			[self.navigationController pushViewController:detailView animated:YES];
+		else if (changingViews)
+			[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
+		
+	}			
 }
 
 #pragma mark -
 #pragma mark RestKit:RKObjectLoaderDelegate
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
-	if (error && request) {
+	if (error && request)
 		debug_NSLog(@"BillFavorites - Error loading bill results from %@: %@", [request description], [error localizedDescription]);
 		//[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:nil];
 
-		UIAlertView *alert = [[[ UIAlertView alloc ] 
+/*		UIAlertView *alert = [[[ UIAlertView alloc ] 
 							   initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
 							   message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
 							   delegate:nil // we're static, so don't do "self"
 							   cancelButtonTitle: @"Cancel" 
 							   otherButtonTitles:nil, nil] autorelease];
 		[ alert show ];	
-		
-	}
+*/		
 }
 
 
@@ -325,7 +311,7 @@
 		
 		NSMutableDictionary *object = [response.body mutableObjectFromJSONData];
 		if (object && _cachedBills) {
-			NSString *watchID = [self watchIDForBill:object];
+			NSString *watchID = watchIDForBill(object);
 			[_cachedBills setObject:object forKey:watchID];
 			
 			NSInteger row = 0;
