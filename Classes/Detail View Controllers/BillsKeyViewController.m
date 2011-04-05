@@ -215,7 +215,7 @@
 // http://api.votesmart.org/Votes.getBillsByYearState?key=5fb3b476c47fcb8a21dc2ec22ca92cbb&year=2011&stateId=TX&o=JSON
 
 - (void)startSearchForKeyBills {
-	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:RESTKIT_BASE_URL] alert:NO]) {
+	if ([TexLegeReachability texlegeReachable]) {
 		loadingStatus = LOADING_ACTIVE;
 		RKRequest *request = [[RKClient sharedClient] get:@"/rest.php/KeyBills" delegate:self];
 		if (!request)

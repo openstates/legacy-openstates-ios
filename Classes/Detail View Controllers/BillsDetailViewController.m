@@ -174,7 +174,7 @@ enum _billSections {
 		NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillFavoritesStorageFile];
 		NSArray *watchList = [[NSArray alloc] initWithContentsOfFile:thePath];
 		
-		NSString *watchID = [NSString stringWithFormat:@"%@:%@", [bill objectForKey:@"session"],[bill objectForKey:@"bill_id"]]; 
+		NSString *watchID = watchIDForBill(bill); 
 		NSDictionary *foundItem = [watchList findWhereKeyPath:@"watchID" equals:watchID];
 		[watchList release];
 		
@@ -190,26 +190,22 @@ enum _billSections {
 		NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillFavoritesStorageFile];
 		NSMutableArray *watchList = [[NSMutableArray alloc] initWithContentsOfFile:thePath];
 		
-		NSString *watchID = [NSString stringWithFormat:@"%@:%@", [bill objectForKey:@"session"],[bill objectForKey:@"bill_id"]]; 
+		NSString *watchID = watchIDForBill(bill);
 		NSMutableDictionary *foundItem = [[watchList findWhereKeyPath:@"watchID" equals:watchID] retain];
 		if (!foundItem && newValue == YES) {
 			foundItem = [[NSMutableDictionary dictionaryWithObjectsAndKeys:
 						 watchID, @"watchID",
-						 [bill objectForKey:@"bill_id"], @"name",
+						 [bill objectForKey:@"bill_id"], @"bill_id",
 						 [bill objectForKey:@"session"], @"session",
-						 [bill objectForKey:@"title"], @"description",
+						 [bill objectForKey:@"title"], @"title",
 						 nil] retain];
 			if (newValue == YES) {
 				NSNumber *count = [NSNumber numberWithInteger:[watchList count]];
 				[foundItem setObject:count forKey:@"displayOrder"];
 				[watchList addObject:foundItem];
 				
-				NSDictionary *tagBill = [[NSDictionary alloc] initWithObjectsAndKeys:
-										 [bill objectForKey:@"bill_id"], @"bill_id",
-										 [bill objectForKey:@"session"], @"session", nil];
-				[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"BILL_FAVORITE" attributes:tagBill];
-				[tagBill release];
-				
+				NSDictionary *tagBill = [NSDictionary dictionaryWithObject:watchID forKey:@"bill"];
+				[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"BILL_FAVORITE" attributes:tagBill];				
 			}
 		}
 		else if (foundItem && newValue == NO)
@@ -786,7 +782,10 @@ enum _billSections {
 		// Success! Let's take a look at the data  
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 
-		self.bill = [response.body mutableObjectFromJSONData];				
+		self.bill = [response.body mutableObjectFromJSONData];	
+		
+		NSDictionary *tagBill = [NSDictionary dictionaryWithObject:watchIDForBill(dataObject) forKey:@"bill"];
+		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"BILL_SELECT" attributes:tagBill];
 	}
 }
 

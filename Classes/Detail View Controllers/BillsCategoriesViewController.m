@@ -236,7 +236,7 @@
 //We now get subject frequency counts, filtered by state, session and originating chamber.
 
 - (IBAction)loadCategoriesForChamber:(NSInteger)newChamber {
-	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:NO]) {
+	if ([TexLegeReachability openstatesReachable]) {
 		loadingStatus = LOADING_ACTIVE;
 		OpenLegislativeAPIs *api = [OpenLegislativeAPIs sharedOpenLegislativeAPIs];
 		
