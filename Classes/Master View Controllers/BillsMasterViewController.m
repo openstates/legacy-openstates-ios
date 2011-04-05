@@ -50,6 +50,9 @@
 	if (!billSearchDS)
 		billSearchDS = [[[BillSearchDataSource alloc] initWithSearchDisplayController:self.searchDisplayController] retain];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(reloadData:) name:kBillSearchNotifyDataLoaded object:billSearchDS];	
+
 	if ([UtilityMethods isIPadDevice])
 	    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 	
@@ -67,10 +70,17 @@
 }
 
 - (void)viewDidUnload {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[billSearchDS release];
 	billSearchDS = nil;
 	
 	[super viewDidUnload];
+}
+
+- (void)reloadData:(NSNotification *)notification {
+	[self.tableView reloadData];
+	if (self.searchDisplayController.searchResultsTableView)
+		[self.searchDisplayController.searchResultsTableView reloadData];
 }
 
 - (Class)dataSourceClass {
@@ -121,12 +131,6 @@
 			}
 			if ([self.detailViewController respondsToSelector:@selector(setDataObject:)])
 				[self.detailViewController performSelector:@selector(setDataObject:) withObject:dataObject];
-			
-			NSDictionary *tagBill = [[NSDictionary alloc] initWithObjectsAndKeys:
-									 [dataObject objectForKey:@"bill_id"], @"bill_id",
-									 [dataObject objectForKey:@"session"], @"session", nil];
-			[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"BILL_SELECT" attributes:tagBill];
-			[tagBill release];
 			
 			[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:[dataObject objectForKey:@"bill_id"] 
 																			   session:[dataObject objectForKey:@"session"] 
