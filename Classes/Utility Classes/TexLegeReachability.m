@@ -131,6 +131,14 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 #pragma mark -
 #pragma mark Alerts and Convenience Methods
 
++ (BOOL)texlegeReachable {
+	return [[TexLegeReachability sharedTexLegeReachability] texlegeConnectionStatus] > NotReachable;
+}
+
++ (BOOL)openstatesReachable {
+	return [[TexLegeReachability sharedTexLegeReachability] openstatesConnectionStatus] > NotReachable;
+}
+
 + (void)noInternetAlert {
 	UIAlertView *noInternetAlert = [[[ UIAlertView alloc ] 
 									 initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoInternetTitle"]

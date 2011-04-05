@@ -65,5 +65,5 @@ NSString *stringForParty(NSInteger party, TLStringReturnType type);
 NSString *billTypeStringFromBillID(NSString *billID);
 BOOL billTypeRequiresGovernor(NSString *billType);
 BOOL billTypeRequiresOpposingChamber(NSString *billType);
-
+NSString * watchIDForBill(NSDictionary *aBill);
 

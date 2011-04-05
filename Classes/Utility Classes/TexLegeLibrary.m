@@ -181,5 +181,11 @@ BOOL billTypeRequiresGovernor(NSString *billType) {
 	return requires;
 }
 
+NSString * watchIDForBill(NSDictionary *aBill) {
+	if (aBill && [aBill objectForKey:@"session"] && [aBill objectForKey:@"bill_id"])
+		return [NSString stringWithFormat:@"%@:%@", [aBill objectForKey:@"session"],[aBill objectForKey:@"bill_id"]]; 
+	else
+		return @"";
+}
 
 

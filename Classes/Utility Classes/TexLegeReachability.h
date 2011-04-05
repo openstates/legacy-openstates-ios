@@ -37,6 +37,8 @@
 - (BOOL) isNetworkReachableViaWiFi;
 
 + (TexLegeReachability *)sharedTexLegeReachability;
++ (BOOL)texlegeReachable;
++ (BOOL)openstatesReachable;
 
 + (BOOL) canReachHostWithURL:(NSURL *)url alert:(BOOL)doAlert;
 + (BOOL) canReachHostWithURL:(NSURL *)url;
