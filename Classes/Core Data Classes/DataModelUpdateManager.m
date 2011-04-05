@@ -109,10 +109,8 @@ enum TXL_QueryTypes {
 - (void) performDataUpdatesIfAvailable:(id)sender {
 	NSArray *objects = [self.statusBlurbsAndModels allKeys];
 	//NSArray *objects = [TexLegeCoreDataUtils registeredDataModels];
-
-	NSURL *serverURL = [NSURL URLWithString:RESTKIT_BASE_URL];
 	
-	if ([TexLegeReachability canReachHostWithURL:serverURL alert:NO]) {
+	if ([TexLegeReachability texlegeReachable]) {
 		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_UPDATE_REQUEST"];
 
 		self.activeUpdates = [NSCountedSet set];

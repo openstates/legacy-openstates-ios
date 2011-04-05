@@ -39,7 +39,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 }
 
 - (void)loadMetadata:(id)sender {
-	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:@"http://www.texlege.com"] alert:NO]) {
+	if ([TexLegeReachability texlegeReachable]) {
 		[[RKClient sharedClient] get:[NSString stringWithFormat:@"/%@", kBillMetadataFile] delegate:self];  	
 	}
 	else {
