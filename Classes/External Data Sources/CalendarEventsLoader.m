@@ -96,7 +96,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 }
 
 - (void)loadEvents:(id)sender {
-	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:NO]) {
+	if ([TexLegeReachability openstatesReachable]) {
 		//	http://openstates.sunlightlabs.com/api/v1/events/?state=tx&apikey=350284d0c6af453b9b56f6c1c7fea1f9
 
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
