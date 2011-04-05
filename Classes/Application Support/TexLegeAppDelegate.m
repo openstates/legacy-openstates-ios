@@ -174,13 +174,12 @@ NSInteger kNoSelection = -1;
 	return nil;
 }
 
-
-- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
+- (BOOL)tabBarController:(UITabBarController *)tbc shouldSelectViewController:(UIViewController *)viewController {
 	if (!viewController.tabBarItem.enabled)
 		return NO;
 	
 	if (/*![UtilityMethods isIPadDevice]*/1) {
-		if (![viewController isEqual:self.tabBarController.selectedViewController]) {
+		if (![viewController isEqual:tbc.selectedViewController]) {
 			//debug_NSLog(@"About to switch tabs, popping to root view controller.");
 			UINavigationController *nav = [self detailNavigationController];
 			if (nav && [nav.viewControllers count]>1)
@@ -280,14 +279,14 @@ NSInteger kNoSelection = -1;
 		[splitViewControllers release];
 	} 
 
-	for (GeneralTableViewController *controller in VCs) {
-		/*if ([[controller viewControllerKey] isEqualToString:@"CommitteeMasterViewController"]) {
+	/*for (GeneralTableViewController *controller in VCs) {
+		if ([[controller viewControllerKey] isEqualToString:@"CommitteeMasterViewController"]) {
 			NSError *error = nil;
 			NSInteger count = [CommitteeObj count:&error];
 			if (error || count == 0)
 				controller.navigationController.tabBarItem.enabled = NO;
-		}*/	
-	}
+		}	
+	}*/
 	[VCs release];
 	
 	UIViewController * savedTabController = [self.tabBarController.viewControllers objectAtIndex:savedTabSelectionIndex];
