@@ -502,7 +502,9 @@ static MiniBrowserController *s_browser = nil;
 	}
 	else
 	{
-		[self.m_webView loadRequest:[NSURLRequest requestWithURL:url]];
+		[self.m_webView loadRequest:[NSURLRequest requestWithURL:url 
+													 cachePolicy:NSURLRequestUseProtocolCachePolicy 
+												 timeoutInterval:90.0]];
 	}
 }
 

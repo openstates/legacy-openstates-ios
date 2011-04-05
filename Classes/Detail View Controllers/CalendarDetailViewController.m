@@ -213,7 +213,9 @@
 	
 	if ([TexLegeReachability canReachHostWithURL:url]) { // do we have a good URL/connection?
 		if ([UtilityMethods isIPadDevice]) {	
-			NSURLRequest *urlReq = [NSURLRequest requestWithURL:url];
+			NSURLRequest *urlReq = [NSURLRequest requestWithURL:url 
+													cachePolicy:NSURLRequestUseProtocolCachePolicy 
+												timeoutInterval:60.0];
 			if (urlReq)
 				[self.webView loadRequest:urlReq];	
 		}
