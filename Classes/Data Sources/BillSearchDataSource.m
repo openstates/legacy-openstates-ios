@@ -276,18 +276,17 @@
 #pragma mark RestKit:RKObjectLoaderDelegate
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
-	if (error && request) {
+	if (error && request)
 		debug_NSLog(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
-		[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:self];
 
-		UIAlertView *alert = [[[ UIAlertView alloc ] 
-							   initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
-							   message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
-							   delegate:nil // we're static, so don't do "self"
-							   cancelButtonTitle: @"Cancel" 
-							   otherButtonTitles:nil, nil] autorelease];
-		[ alert show ];			
-	}
+	UIAlertView *alert = [[[ UIAlertView alloc ] 
+						   initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
+						   message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
+						   delegate:nil // we're static, so don't do "self"
+						   cancelButtonTitle: @"Cancel" 
+						   otherButtonTitles:nil, nil] autorelease];
+	[ alert show ];			
 }
 
 
