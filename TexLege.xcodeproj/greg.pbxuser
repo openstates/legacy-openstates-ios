@@ -22,9 +22,9 @@
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeArchitecturePreference = armv6;
-		activeBuildConfigurationName = Debug;
+		activeBuildConfigurationName = "iTunes Distribution";
 		activeExecutable = 37315BBA0F6C739400D0A9DF /* TexLege */;
-		activeSDKPreference = iphonesimulator4.2;
+		activeSDKPreference = iphoneos4.2;
 		activeTarget = 1D6058900D05DD3D006BFB54 /* TexLege */;
 		addToTargets = (
 			1D6058900D05DD3D006BFB54 /* TexLege */,
@@ -212,8 +212,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 323653374;
-			PBXWorkspaceStateSaveDate = 323653374;
+			PBXPerProjectTemplateStateSaveDate = 323660244;
+			PBXWorkspaceStateSaveDate = 323660244;
 			com.apple.ide.smrt.PBXUserSmartGroupsKey.Rev10 = <040b73747265616d747970656481e8038401408484840e4e534d757461626c654172726179008484074e534172726179008484084e534f626a65637400858401690192848484134e534d757461626c6544696374696f6e6172790084840c4e5344696374696f6e6172790095960792848484084e53537472696e67019584012b046e616d658692849a9a0d42696c6c20547261636b696e678692849a9a195042585472616e7369656e744c6f636174696f6e4174546f708692849a9a06626f74746f6d8692849a9a0b707265666572656e63657386928497960892849a9a0669734c6561668692848484084e534e756d626572008484074e5356616c7565009584012a848401639e008692849a9a09726563757273697665869284a29da49e018692849a9a04726f6f748692849a9a183337363645453132313231303845363130303733433730358692849a9a05696d6167658692849a9a0b536d617274466f6c6465728692849a9a0763616e536176658692a692849a9a1250425850726f6a65637453636f70654b65798692849a9a035945538692849a9a0572656765788692849a9a0c42696c6c2e2b5c2e5b6d685d8692849a9a07666e6d617463688692849a9a00868692849a9a146162736f6c75746550617468546f42756e646c658692b192849a9a0b6465736372697074696f6e8692849a9a103c6e6f206465736372697074696f6e3e8692849a9a08676c6f62616c49448692849a9a183337374443343644313334344431384630303030363845318692849a9a03636c7a8692849a9a1550425846696c656e616d65536d61727447726f7570868686>;
 		};
 		sourceControlManager = 37315BCC0F6C739A00D0A9DF /* Source Control */;
@@ -1151,7 +1151,7 @@
 		ignoreCount = 0;
 		lineNumber = 509;
 		location = TexLege;
-		modificationTime = 323656409.135369;
+		modificationTime = 323658920.957479;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -1220,7 +1220,7 @@
 	};
 	376C2811132583C800EB7688 /* WnomAggregateObj.json */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {21600, 604}}";
+			sepNavIntBoundsRect = "{{0, 0}, {21600, 225}}";
 			sepNavSelRange = "{2974, 0}";
 			sepNavVisRange = "{0, 3084}";
 		};
@@ -1255,7 +1255,7 @@
 	};
 	376F62D3132973D800F2B3DA /* BillMetadata.json */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {5626, 555}}";
+			sepNavIntBoundsRect = "{{0, 0}, {5626, 225}}";
 			sepNavSelRange = "{802, 0}";
 			sepNavVisRange = "{0, 802}";
 		};
@@ -1274,7 +1274,7 @@
 		ignoreCount = 0;
 		lineNumber = 67;
 		location = TexLege;
-		modificationTime = 323656409.135099;
+		modificationTime = 323658920.9572111;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1287,9 +1287,9 @@
 	};
 	3770F57413182BF500686DE3 /* BillsFavoritesViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1034, 4420}}";
-			sepNavSelRange = "{10313, 1}";
-			sepNavVisRange = "{9686, 1647}";
+			sepNavIntBoundsRect = "{{0, 0}, {1020, 4498}}";
+			sepNavSelRange = "{9813, 0}";
+			sepNavVisRange = "{9203, 1298}";
 		};
 	};
 	3771333B12523025000D7207 /* TVOutManager.h */ = {
@@ -1317,7 +1317,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = libobjc.A.dylib;
-		modificationTime = 323656409.150729;
+		modificationTime = 323658920.960909;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 		symbolName = objc_exception_throw;
@@ -1362,16 +1362,16 @@
 	};
 	37735C23132310E90033F343 /* CommitteeObj.json */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {191042, 572}}";
+			sepNavIntBoundsRect = "{{0, 0}, {196138, 225}}";
 			sepNavSelRange = "{27290, 0}";
-			sepNavVisRange = "{0, 27290}";
+			sepNavVisRange = "{0, 28018}";
 		};
 	};
 	37735C24132310E90033F343 /* CommitteePositionObj.json */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {497845, 570}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 71119}";
+			sepNavIntBoundsRect = "{{0, 0}, {505006, 225}}";
+			sepNavSelRange = "{72142, 0}";
+			sepNavVisRange = "{0, 72142}";
 		};
 	};
 	37735C25132310E90033F343 /* DistrictMapObj.json */ = {
@@ -1402,7 +1402,7 @@
 		ignoreCount = 0;
 		lineNumber = 148;
 		location = TexLege;
-		modificationTime = 323656409.135407;
+		modificationTime = 323658920.957506;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -2264,7 +2264,7 @@
 		ignoreCount = 0;
 		lineNumber = 251;
 		location = TexLege;
-		modificationTime = 323656409.135233;
+		modificationTime = 323658920.957274;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -2352,7 +2352,7 @@
 		ignoreCount = 0;
 		lineNumber = 149;
 		location = TexLege;
-		modificationTime = 323656409.135445;
+		modificationTime = 323658920.957534;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -2370,7 +2370,7 @@
 		ignoreCount = 0;
 		lineNumber = 145;
 		location = TexLege;
-		modificationTime = 323656409.135568;
+		modificationTime = 323658920.957543;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -2465,7 +2465,7 @@
 		ignoreCount = 0;
 		lineNumber = 109;
 		location = TexLege;
-		modificationTime = 323656409.135161;
+		modificationTime = 323658920.957259;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -2500,9 +2500,9 @@
 	};
 	37E2068312204D5000103D76 /* DistrictMapObj.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1335, 4381}}";
-			sepNavSelRange = "{10021, 13}";
-			sepNavVisRange = "{8912, 1290}";
+			sepNavIntBoundsRect = "{{0, 0}, {1157, 4485}}";
+			sepNavSelRange = "{2295, 0}";
+			sepNavVisRange = "{1877, 811}";
 		};
 	};
 	37E207E81220839600103D76 /* PBXTextBookmark */ = {
@@ -2529,9 +2529,9 @@
 		ignoreCount = 0;
 		lineNumber = 89;
 		location = TexLege;
-		modificationTime = 323656409.135301;
+		modificationTime = 323658920.957321;
 		originalNumberOfMultipleMatches = 1;
-		state = 1;
+		state = 2;
 	};
 	37EAE479121A57D100BF4277 /* BSAddressComponent.h */ = {
 		uiCtxt = {
@@ -2605,9 +2605,9 @@
 	};
 	37ECDA771065358800E43497 /* Release Notes.rtf */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {905, 2055}}";
-			sepNavSelRange = "{944, 0}";
-			sepNavVisRect = "{{0, 0}, {905, 554}}";
+			sepNavIntBoundsRect = "{{0, 0}, {905, 2127}}";
+			sepNavSelRange = "{301, 0}";
+			sepNavVisRect = "{{0, 0}, {905, 438}}";
 		};
 	};
 	37F2CA101343AE40001D9D7B /* DDActionHeaderView.m */ = {
@@ -2626,9 +2626,9 @@
 	};
 	37F492751311C640005D5DE1 /* BillsDetailViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {950, 10426}}";
-			sepNavSelRange = "{6283, 0}";
-			sepNavVisRange = "{5495, 1750}";
+			sepNavIntBoundsRect = "{{0, 0}, {1300, 10244}}";
+			sepNavSelRange = "{26924, 0}";
+			sepNavVisRange = "{25994, 1631}";
 		};
 	};
 	37F4A814130CAA4F00705EDD /* BillsMenuDataSource.h */ = {
@@ -2675,9 +2675,9 @@
 	};
 	37FC486F13110A9E00A4C0B2 /* BillSearchDataSource.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1349, 4277}}";
-			sepNavSelRange = "{8823, 12}";
-			sepNavVisRange = "{7111, 1898}";
+			sepNavIntBoundsRect = "{{0, 0}, {1349, 4186}}";
+			sepNavSelRange = "{9391, 47}";
+			sepNavVisRange = "{8511, 1519}";
 		};
 	};
 	8D1107310486CEB800E47090 /* Info.plist */ = {

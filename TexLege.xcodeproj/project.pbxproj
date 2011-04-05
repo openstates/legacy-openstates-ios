@@ -5309,7 +5309,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Gregory Combs";
-				CURRENT_PROJECT_VERSION = 2.4;
+				CURRENT_PROJECT_VERSION = 2.5;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -5352,7 +5352,6 @@
 				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../Frameworks/Localytics\"",
@@ -5361,7 +5360,6 @@
 					"\"$(SRCROOT)/../../Frameworks/iSimulate/ipad\"",
 				);
 				PREBINDING = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "iTunes Distribution";
 		};
@@ -5373,7 +5371,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_ENTITLEMENTS = Data/Entitlements.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Gregory Combs";
-				CURRENT_PROJECT_VERSION = 2.4;
+				CURRENT_PROJECT_VERSION = 2.5;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -5482,7 +5480,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Gregory Combs (MJMLU3U99Y)";
-				CURRENT_PROJECT_VERSION = 2.4;
+				CURRENT_PROJECT_VERSION = 2.5;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
