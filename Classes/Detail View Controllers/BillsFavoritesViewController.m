@@ -290,8 +290,9 @@
 #pragma mark RestKit:RKObjectLoaderDelegate
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
-	if (error && request)
+	if (error && request) {
 		debug_NSLog(@"BillFavorites - Error loading bill results from %@: %@", [request description], [error localizedDescription]);
+	}
 		//[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:nil];
 
 /*		UIAlertView *alert = [[[ UIAlertView alloc ] 

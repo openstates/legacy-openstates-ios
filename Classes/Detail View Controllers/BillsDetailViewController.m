@@ -762,8 +762,9 @@ enum _billSections {
 #pragma mark RestKit:RKObjectLoaderDelegate
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
-	if (error && request)
+	if (error && request) {
 		debug_NSLog(@"BillDetail - Error loading bill results from %@: %@", [request description], [error localizedDescription]);
+	}
 	
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 
