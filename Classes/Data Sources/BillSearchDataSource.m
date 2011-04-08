@@ -16,6 +16,7 @@
 #import "UtilityMethods.h"
 #import "OpenLegislativeAPIs.h"
 #import <RestKit/Support/JSON/JSONKit/JSONKit.h>
+#import "LocalyticsSession.h"
 
 @implementation BillSearchDataSource
 @synthesize searchDisplayController, delegateTVC;
@@ -264,9 +265,12 @@
 	}
 	if (IsEmpty(searchSubject))
 		searchSubject = @"";
-	
+	else {
+		NSDictionary *tagSubject = [NSDictionary dictionaryWithObject:searchSubject forKey:@"subject"];
+		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"BILL_SUBJECTS" attributes:tagSubject];	
+	}
 	[queryParams setObject:searchSubject forKey:@"subject"];
-			
+				
 	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:YES])
 		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/bills" queryParams:queryParams delegate:self];
 }
