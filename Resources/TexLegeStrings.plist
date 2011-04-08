@@ -30,22 +30,14 @@ Sent from TexLege.</string>
 	</dict>
 	<key>Reachability</key>
 	<dict>
-		<key>BrowserErrorTitle</key>
-		<string>Error Loading Page</string>
-		<key>BrowserErrorText</key>
-		<string>There was an error while attempting to load the web page.  The server may be unavailable or your device&apos;s network connectivity is unavailable or unstable.</string>
 		<key>NoInternetTitle</key>
 		<string>Internet Unavailable</string>
 		<key>NoInternetText</key>
-		<string>This feature requires an Internet connection.  Perhaps your iOS device is in Airplane mode or there is no WiFi service in this area.</string>
-		<key>BadUrlTitle</key>
-		<string>Invalid URL</string>
-		<key>BadUrlText</key>
-		<string>There was a problem with the URL, please double-check for typographical errors.</string>
+		<string>This feature requires an Internet connection, and a connection is unavailable.  Your device may be in &apos;Airplane&apos; mode or is suffering poor network coverage.</string>
 		<key>NoHostTitle</key>
 		<string>Host Unreachable</string>
 		<key>NoHostText</key>
-		<string>There was a problem contacting the website host, please double-check the URL for typographical errors or try the connection again later.</string>
+		<string>There was a problem contacting the specified host, the URL may have changed or may contain typographical errors. Perhaps try the connection again later.</string>
 	</dict>
 	<key>Bills</key>
 	<dict>
