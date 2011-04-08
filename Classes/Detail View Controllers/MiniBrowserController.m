@@ -18,6 +18,8 @@
 	- (void)animationFinished:(NSString *)animationID finished:(BOOL)finished context:(void *)context;
 	- (void)enableBackButton:(BOOL)enable;
 	- (void)enableFwdButton:(BOOL)enable;
+	- (void)stopLoadingAnimation:(id)sender;
+	- (void)startLoadingAnimation:(id)sender;
 @end
 
 enum
@@ -336,7 +338,6 @@ static MiniBrowserController *s_browser = nil;
 	if ( self.m_urlRequestToLoad != nil )
 	{
 		[self LoadRequest:m_urlRequestToLoad];
-		[m_urlRequestToLoad release];
 		self.m_urlRequestToLoad = nil;
 	}
 	else if ( self.m_loadingInterrupted )
@@ -352,6 +353,8 @@ static MiniBrowserController *s_browser = nil;
 
 - (void)viewWillDisappear:(BOOL)animated 
 {
+	[self stopLoadingAnimation:nil];
+
 	if ( self.m_shouldStopLoadingOnHide )
 	{
 		if ( self.m_webView.loading )
@@ -497,7 +500,6 @@ static MiniBrowserController *s_browser = nil;
 	
 	if ( [self.view isHidden] )
 	{
-		self.m_urlRequestToLoad = nil;
 		self.m_urlRequestToLoad = [[[NSURLRequest alloc] initWithURL:url] autorelease];
 	}
 	else
@@ -510,8 +512,7 @@ static MiniBrowserController *s_browser = nil;
 
 
 - (void)LoadRequest:(NSURLRequest *)urlRequest
-{
-
+{	
 	self.m_loadingInterrupted = NO;
 	
 	// cancel any transaction currently taking place
@@ -519,11 +520,7 @@ static MiniBrowserController *s_browser = nil;
 		
 	if ( [self.view isHidden] )
 	{
-		// do it this goofy way just in case (url == m_urlRequestToLoad)
-		[urlRequest retain];
-		self.m_urlRequestToLoad = nil;
-		self.m_urlRequestToLoad = [[[NSURLRequest alloc] initWithURL:[urlRequest URL]]autorelease];
-		[urlRequest release];
+		self.m_urlRequestToLoad = urlRequest;
 	}
 	else
 	{
@@ -563,7 +560,7 @@ static MiniBrowserController *s_browser = nil;
 	}
 	
 	// do the auth-callback if requested
-	if (m_authCallback )
+	if (m_authCallback && m_parentCtrl)
 	{
 		if ( [m_parentCtrl respondsToSelector:m_authCallback] )
 		{
@@ -667,38 +664,72 @@ static MiniBrowserController *s_browser = nil;
 #pragma mark UIWebViewDelegate Methods 
 
 - (void)startLoadingAnimation:(id)sender {
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-	[self.m_activity startAnimating];
-	[self.m_loadingLabel setHidden:NO];
-	[self.m_webView setAlpha:0.75f];	
+	@try {
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+		if (self.m_activity)
+			[self.m_activity startAnimating];
+		if (self.m_loadingLabel)
+			[self.m_loadingLabel setHidden:NO];
+		if (self.m_webView)
+		[self.m_webView setAlpha:0.75f];	
+	}
+	@catch (NSException * e) {
+	}
 }
 
 
 - (void)stopLoadingAnimation:(id)sender {
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-	[self.m_activity stopAnimating];
-	[self.m_loadingLabel setHidden:YES];
-	[self.m_webView setAlpha:1.0f];	
+	@try {
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+		if (self.m_activity)
+			[self.m_activity stopAnimating];
+		if (self.m_loadingLabel)
+			[self.m_loadingLabel setHidden:YES];
+		if (self.m_webView)
+			[self.m_webView setAlpha:1.0f];	
+	}
+	@catch (NSException * e) {
+	}
 }
 
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
 	// notify of an error?
-	[self.m_toolBar setItems:m_normalItemList animated:NO];
+	if (m_toolBar && m_normalItemList)
+		[self.m_toolBar setItems:m_normalItemList animated:NO];
 	
-	[self stopLoadingAnimation:webView];
+	[self stopLoadingAnimation:nil];
 	
-	UIAlertView *alert = [[[ UIAlertView alloc ] 
-			  initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.BrowserErrorTitle"] 
-			  message:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.BrowserErrorText"]  
-			  delegate:nil // we're static, so don't do "self"
-			  cancelButtonTitle: @"Cancel" 
-			  otherButtonTitles:nil, nil] autorelease];
-	[ alert show ];		
-	
+	NSString *errorMsg = nil;
+	NSString *errorTitle = nil;
+    if (error && [[error domain] isEqualToString:NSURLErrorDomain]) {
+        switch ([error code]) {
+            case NSURLErrorCannotFindHost:
+            case NSURLErrorCannotConnectToHost:
+				errorTitle = [UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoHostTitle"] ;
+                errorMsg = [UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoHostText"] ;
+                break;
+            case NSURLErrorNotConnectedToInternet:
+				errorTitle = [UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoInternetTitle"] ;
+                errorMsg = [UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoInternetText"] ;
+                break;
+            default:
+                break;
+        }
+		if (!IsEmpty(errorMsg) && !IsEmpty(errorTitle)) {
+			UIAlertView *alert = [[ UIAlertView alloc ] 
+								  initWithTitle:errorTitle 
+								  message:errorMsg  
+								  delegate:nil 
+								  cancelButtonTitle: @"Cancel" 
+								  otherButtonTitles:nil, nil];
+			
+			[ alert show ];		
+			[ alert release ];
+		}
+	}
 }
-
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -724,10 +755,11 @@ static MiniBrowserController *s_browser = nil;
 	[self enableFwdButton:self.m_webView.canGoForward];
 	
 	// set the navigation bar title based on URL
-	if (self.link)
+	NSString *docTitle = [self.m_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+	if (!IsEmpty(docTitle))
+		self.title = docTitle;
+	else if (self.link)
 		self.title = self.link.label;
-	else
-		self.title = [self.m_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
 	
 	static NSString* js = @""
     "function bkModifyBaseTargets()"
@@ -770,10 +802,8 @@ static MiniBrowserController *s_browser = nil;
 			item.enabled = ([m_currentURL.absoluteString hasPrefix:@"http"] || 
 							[m_currentURL.absoluteString hasPrefix:@"ftp"] );
 	}
-	
-	[self performSelector:@selector(stopLoadingAnimation:) withObject:webView afterDelay:10];
-	
-	self.title = @"loading...";
+		
+	self.title = @"Loading...";
 }
 
 @end
