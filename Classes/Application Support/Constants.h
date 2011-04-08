@@ -34,7 +34,7 @@ enum kURLActionDestinations {
 };
 
 #if DEBUG
-#define RESTKIT_BASE_URL					@"http://www.texlege.com/jsonDataTest"
+#define RESTKIT_BASE_URL					@"http://www.texlege.com/restDataTest"
 #else
 #define RESTKIT_BASE_URL					@"http://www.texlege.com/restData"
 #endif
