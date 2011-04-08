@@ -186,6 +186,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 + (BOOL) canReachHostWithURL:(NSURL *)url alert:(BOOL)doAlert {
 	UIAlertView * alert = nil;	
 	BOOL reachableHost = NO;
+	if (!url)
+		return NO;
 	
 	if ([url isFileURL])
 		return YES;
@@ -193,17 +195,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 	if (![[TexLegeReachability sharedTexLegeReachability] isNetworkReachable]) {
 		if (doAlert)
 			[TexLegeReachability noInternetAlert];
-	}
-	else if (url == nil) { // problem with url string
-		if (doAlert) {
-			alert = [[[ UIAlertView alloc ] 
-					  initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.BadUrlTitle"] 
-					  message:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.BadUrlText"]  
-					  delegate:nil // we're static, so don't do "self"
-					  cancelButtonTitle: @"Cancel" 
-					  otherButtonTitles:nil, nil] autorelease];
-			[ alert show ];		
-		}
 	}
 	else if ([[url scheme] isEqualToString:@"twitter"] && 
 			 [[UIApplication sharedApplication] canOpenURL:url])
