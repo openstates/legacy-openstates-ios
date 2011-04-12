@@ -12,6 +12,43 @@
 @implementation CapitolMap
 @synthesize name = m_name, file = m_file, type = m_type, order = m_order;
 
++ (CapitolMap *) mapFromOfficeString:(NSString *)office {
+	NSString *fileString = nil;
+	NSString *thePath = [[NSBundle mainBundle] pathForResource:@"CapitolMaps" ofType:@"plist"];
+	NSArray *mapSectionsPlist = [NSArray arrayWithContentsOfFile:thePath];	
+	NSArray *searchArray = [mapSectionsPlist objectAtIndex:0];
+	CapitolMap *foundMap = nil;
+	
+	if ([office hasPrefix:@"4"])
+		fileString = @"Map.Floor4.pdf";
+	else if ([office hasPrefix:@"3"])
+		fileString = @"Map.Floor3.pdf";
+	else if ([office hasPrefix:@"2"])
+		fileString = @"Map.Floor2.pdf";
+	else if ([office hasPrefix:@"1"])
+		fileString = @"Map.Floor1.pdf";
+	else if ([office hasPrefix:@"G"])
+		fileString = @"Map.FloorG.pdf";
+	else if ([office hasPrefix:@"E1."])
+		fileString = @"Map.FloorE1.pdf";
+	else if ([office hasPrefix:@"E2."])
+		fileString = @"Map.FloorE2.pdf";
+	else if ([office hasPrefix:@"SHB"]) {
+		fileString = @"Map.SamHoustonLoc.pdf";
+		searchArray = [mapSectionsPlist objectAtIndex:1];
+	}
+	
+	for (NSDictionary * mapEntry in searchArray)
+	{
+		if ([fileString isEqualToString:[mapEntry valueForKey:@"file"]]) {
+			foundMap = [[[CapitolMap alloc] init] autorelease];
+			[foundMap importFromDictionary:mapEntry];
+			break;
+		}
+	}
+	return foundMap;
+}
+
 - (void)dealloc {
 	self.name = nil;
 	self.file = nil;
