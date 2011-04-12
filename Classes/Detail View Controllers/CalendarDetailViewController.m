@@ -18,10 +18,6 @@
 #import "CalendarEventsLoader.h"
 
 @interface CalendarDetailViewController (Private) 
-
-- (void)selectSoonestEvent;
-- (void)changeLayoutForOrientation:(UIInterfaceOrientation)interfaceOrientation;
-- (void)deviceOrientationDidChange:(void*)object;
 	
 @end
 
@@ -42,14 +38,14 @@
 }
 
 - (void)finalizeUI {
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(reloadEvents:) name:kCalendarEventsNotifyLoaded object:nil];	
+
 	if ([UtilityMethods isIPadDevice]) {
 		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
 		UIColor *sealColor = [UIColor colorWithPatternImage:sealImage];		
 		self.view.backgroundColor = sealColor;
 	}
-	//if (![UtilityMethods supportsEventKit])
-	//	self.tableView.tableFooterView = nil;
-	
 	//self.navigationItem.title = @"Upcoming Committee Meetings";
 	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme navbar];
@@ -68,8 +64,6 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(reloadEvents:) name:kCalendarEventsNotifyLoaded object:nil];	
 	[self finalizeUI];
 }
 
@@ -98,7 +92,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	
+	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
+
 	[[CalendarEventsLoader sharedCalendarEventsLoader] events];
 	
 	if ([UtilityMethods isIPadDevice] && !self.chamberCalendar && ![UtilityMethods isLandscapeOrientation])  {
