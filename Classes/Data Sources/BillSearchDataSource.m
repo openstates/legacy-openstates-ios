@@ -170,8 +170,8 @@
 	
 	NSString *bill_id = [bill objectForKey:@"bill_id"];
 	NSString *bill_title = [bill objectForKey:@"title"];
-	if (!bill_title)
-		bill_title = @"";
+	
+	bill_title = [bill_title chopPrefix:@"Relating to " capitalizingFirst:YES];
 	
 	cell.textLabel.text = bill_id;
 	cell.detailTextLabel.text = bill_title;
