@@ -122,7 +122,10 @@
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	NSDictionary *bill = [keyBills_ objectAtIndex:indexPath.row];
 	if (bill) {
-		cell.detailTextLabel.text = [bill objectForKey:@"title"];
+		NSString *bill_title = [bill objectForKey:@"title"];
+		bill_title = [bill_title chopPrefix:@"Relating to " capitalizingFirst:YES];
+
+		cell.detailTextLabel.text = bill_title;
 		NSMutableString *name = [NSMutableString stringWithString:[bill objectForKey:@"bill_id"]];
 		if (!IsEmpty([bill objectForKey:@"passFail"]))
 			[name appendFormat:@" - %@", [bill objectForKey:@"passFail"]];

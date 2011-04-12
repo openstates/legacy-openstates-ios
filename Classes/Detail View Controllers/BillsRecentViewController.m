@@ -118,7 +118,10 @@
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	NSDictionary *bill = [recentBills_ objectAtIndex:indexPath.row];
 	if (bill) {
-		cell.detailTextLabel.text = [bill objectForKey:@"title"];	// (description/summary)
+		NSString *bill_title = [bill objectForKey:@"title"];
+		bill_title = [bill_title chopPrefix:@"Relating to " capitalizingFirst:YES];
+
+		cell.detailTextLabel.text = bill_title;	// (description/summary)
 		cell.textLabel.text = [bill objectForKey:@"bill_id"];
 	}	
 }

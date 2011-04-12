@@ -172,8 +172,11 @@
 	BOOL useDark = (indexPath.row % 2 == 0);
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	
+	NSString *bill_title = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"title"];
+	bill_title = [bill_title chopPrefix:@"Relating to " capitalizingFirst:YES];
+
 	cell.textLabel.text = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"bill_id"];
-	cell.detailTextLabel.text = [[_watchList objectAtIndex:indexPath.row] objectForKey:@"title"];		
+	cell.detailTextLabel.text = bill_title;		
 }
 
 - (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {

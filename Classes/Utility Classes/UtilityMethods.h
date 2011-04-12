@@ -63,8 +63,10 @@ BOOL IsEmpty(id thing);
 
 @end
 
-@interface NSString  (HasSubstring)
+@interface NSString  (MoreStringUtils)
 - (BOOL) hasSubstring:(NSString*)substring caseInsensitive:(BOOL)insensitive;
+- (NSString*)firstLetterCaptialized;
+- (NSString *)chopPrefix:(NSString *)prefix capitalizingFirst:(BOOL)capitalize;
 @end
 
 @interface NSArray (indexKeyedDictionaryExtension)

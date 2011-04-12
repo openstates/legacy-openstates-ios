@@ -76,7 +76,7 @@ BOOL IsEmpty(id thing) {
 
 @end
 
-@implementation NSString  (HasSubstring)
+@implementation NSString  (MoreStringUtils)
 - (BOOL) hasSubstring:(NSString*)substring caseInsensitive:(BOOL)insensitive
 {
 	if(IsEmpty(substring))
@@ -91,6 +91,38 @@ BOOL IsEmpty(id thing) {
 	NSRange substringRange = [temp rangeOfString:substring];
 	return substringRange.location != NSNotFound && substringRange.length > 0;
 }
+
+- (NSString*)firstLetterCaptialized {
+//#ifdef __APPLE__
+	NSRange startRange = NSMakeRange(0, 1);
+	return [self stringByReplacingCharactersInRange:startRange withString:[[self substringWithRange:startRange] uppercaseString]];
+/* #else		// I think this was a nasty hack to deal with a bug in Foundation classes.
+	NSString* firstCharCapital = [[self substringWithRange:NSMakeRange(0, 1)] uppercaseString];
+	NSString* lastPartOfString = [self substringWithRange:NSMakeRange(1, self.length-1)];
+	return [firstCharCapital stringByAppendingString:lastPartOfString];
+#endif */
+}
+
+- (NSString *)chopPrefix:(NSString *)prefix capitalizingFirst:(BOOL)capitalize {
+	if (IsEmpty(prefix))
+		return self;
+	else if (IsEmpty(self))
+		return @"";
+	
+	NSString *strVal = [NSString stringWithString:self];
+	
+	if ([strVal hasPrefix:prefix]){
+		strVal = [strVal stringByReplacingOccurrencesOfString:prefix 
+														   withString:@"" 
+															  options:(NSCaseInsensitiveSearch | NSAnchoredSearch) 
+																range:NSMakeRange(0, [prefix length])];
+		
+		if (capitalize)
+			strVal = [strVal firstLetterCaptialized];
+	}	
+	return strVal;
+}
+
 @end
 
 @implementation NSArray (Find)
