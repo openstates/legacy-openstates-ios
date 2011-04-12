@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "TexLegeDataObjectProtocol.h"
 
+
 @interface CapitolMap : NSObject <TexLegeDataObjectProtocol>
 {
 	NSString *m_name;
@@ -23,4 +24,7 @@
 @property (nonatomic,retain) NSNumber *order;
 @property (nonatomic,readonly) NSURL *url;
 
++ (CapitolMap *) mapFromOfficeString:(NSString *)office;
+
 @end
+
