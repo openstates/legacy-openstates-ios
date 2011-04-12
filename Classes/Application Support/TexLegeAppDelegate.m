@@ -329,14 +329,14 @@ NSInteger kNoSelection = -1;
 	[self restoreArchivableSavedTableSelection];
 	[self setupFeatures];
 
-	NSArray *subviews = self.mainWindow.subviews;
+/*	NSArray *subviews = self.mainWindow.subviews;		// WHY DID WE DO THIS?????
 	for (UIView *aView in subviews) {
 		if (aView.tag == 8888) {
 			[aView removeFromSuperview];
 			break;
 		}
 	}
-			 
+*/			 
 	// register our preference selection data to be archived
 	NSDictionary *savedPrefsDict = [NSDictionary dictionaryWithObjectsAndKeys: 
 									[self archivableSavedTableSelection],kRestoreSelectionKey,
@@ -374,7 +374,7 @@ NSInteger kNoSelection = -1;
     self.mainWindow = localMainWindow;
 	[localMainWindow release];
 		
-	if (![UtilityMethods isIPadDevice]) {
+/*	if (![UtilityMethods isIPadDevice]) {		//// WHY DID WE DO THIS????
 		NSString *loadingString = @"Default.png";
 		UIImage *loadingImage = [UIImage imageNamed:loadingString];
 		UIImageView *loadingView = [[UIImageView alloc] initWithImage:loadingImage];
@@ -384,7 +384,9 @@ NSInteger kNoSelection = -1;
 		[self performSelector:@selector(runOnInitialAppStart:) withObject:nil afterDelay:0.0f];
 	}
 	else
-		[self performSelector:@selector(runOnInitialAppStart:) withObject:nil];
+		[self performSelector:@selector(runOnInitialAppStart:) withObject:nil];*/
+	
+	[self runOnInitialAppStart:nil];
 		
 	return YES;
 }

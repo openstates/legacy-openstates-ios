@@ -180,7 +180,7 @@ BOOL IsEmpty(id thing) {
 	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
 	UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
 	if (UIDeviceOrientationIsValidInterfaceOrientation(orientation) && UIDeviceOrientationIsLandscape(orientation) && !UIInterfaceOrientationIsLandscape(statusBarOrientation)) {
-		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
+/*		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
 		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
 		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
 		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
@@ -191,6 +191,7 @@ BOOL IsEmpty(id thing) {
 		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
 		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
 		[[UIApplication sharedApplication] setStatusBarOrientation:orientation animated:NO];
+*/
 		return UIInterfaceOrientationIsLandscape(orientation);	
 	}
 	else
