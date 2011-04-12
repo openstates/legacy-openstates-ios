@@ -785,7 +785,7 @@ enum _billSections {
 
 		self.bill = [response.body mutableObjectFromJSONData];	
 		
-		NSDictionary *tagBill = [NSDictionary dictionaryWithObject:watchIDForBill(dataObject) forKey:@"bill"];
+		NSDictionary *tagBill = [NSDictionary dictionaryWithObject:watchIDForBill(self.bill) forKey:@"bill"];
 		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"BILL_SELECT" attributes:tagBill];
 	}
 }
