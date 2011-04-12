@@ -10,9 +10,11 @@
 #import "SynthesizeSingleton.h"
 #import <EventKit/EventKit.h>
 #import <RestKit/RestKit.h>
+#import "Kal.h"
 
 #define kCalendarEventsNotifyError	@"CALENDAR_EVENTS_ERROR"
-#define kCalendarEventsNotifyLoaded	@"CALENDAR_EVENTS_LOADED"
+#define kCalendarEventsNotifyLoaded	KalDataSourceChangedNotification 
+//@"CALENDAR_EVENTS_LOADED"
 
 #define kCalendarEventsCacheFile		@"TexLegeEventsCache.plist"
 #define kTLEventKitKey					@"TLEventKit"

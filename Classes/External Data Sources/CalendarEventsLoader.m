@@ -56,6 +56,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 		_events = nil;
 		updated = nil;
 
+		[[TexLegeReachability sharedTexLegeReachability] addObserver:self 
+														  forKeyPath:@"openstatesConnectionStatus" 
+															 options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) 
+															 context:nil];
+
 		[OpenLegislativeAPIs sharedOpenLegislativeAPIs];
 		
 			eventStore = [[[EKEventStore alloc] init] retain];
@@ -84,6 +89,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 }
 
 - (void)dealloc {
+	[[TexLegeReachability sharedTexLegeReachability] removeObserver:self forKeyPath:@"openstatesConnectionStatus"];
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 	if (updated)
 		[updated release], updated = nil;
@@ -93,6 +99,16 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 		if (eventStore)
 			[eventStore release], eventStore = nil;
 	[super dealloc];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if (!IsEmpty(keyPath) && [keyPath isEqualToString:@"openstatesConnectionStatus"]) {
+		/*
+		if ([change valueForKey:NSKeyValueChangeKindKey] == NSKeyValueChangeSetting) {
+			id newVal = [change valueForKey:NSKeyValueChangeNewKey];
+		}*/
+		[self loadEvents:nil];
+	}
 }
 
 - (void)loadEvents:(id)sender {
