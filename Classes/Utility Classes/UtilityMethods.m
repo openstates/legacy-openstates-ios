@@ -8,7 +8,6 @@
 
 #import "UtilityMethods.h"
 #import "TexLegeAppDelegate.h"
-#import "CapitolMap.h"
 #import <MapKit/MapKit.h>
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
@@ -372,68 +371,6 @@ BOOL IsEmpty(id thing) {
 	return [UtilityMethods safeWebUrlFromString:temp2];
 }
 
-+ (CapitolMap *) capitolMapFromOfficeString:(NSString *)office {
-	NSString *fileString = nil;
-	NSString *thePath = [[NSBundle mainBundle] pathForResource:@"CapitolMaps" ofType:@"plist"];
-	NSArray *mapSectionsPlist = [NSArray arrayWithContentsOfFile:thePath];	
-	NSArray *searchArray = [mapSectionsPlist objectAtIndex:0];
-	CapitolMap *foundMap = nil;
-	
-	if ([office hasPrefix:@"4"])
-		fileString = @"Map.Floor4.pdf";
-	else if ([office hasPrefix:@"3"])
-		fileString = @"Map.Floor3.pdf";
-	else if ([office hasPrefix:@"2"])
-		fileString = @"Map.Floor2.pdf";
-	else if ([office hasPrefix:@"1"])
-		fileString = @"Map.Floor1.pdf";
-	else if ([office hasPrefix:@"G"])
-		fileString = @"Map.FloorG.pdf";
-	else if ([office hasPrefix:@"E1."])
-		fileString = @"Map.FloorE1.pdf";
-	else if ([office hasPrefix:@"E2."])
-		fileString = @"Map.FloorE2.pdf";
-	else if ([office hasPrefix:@"SHB"]) {
-		fileString = @"Map.SamHoustonLoc.pdf";
-		searchArray = [mapSectionsPlist objectAtIndex:1];
-	}
-		
-	for (NSDictionary * mapEntry in searchArray)
-	{
-		if ([fileString isEqualToString:[mapEntry valueForKey:@"file"]]) {
-			foundMap = [[[CapitolMap alloc] init] autorelease];
-			[foundMap importFromDictionary:mapEntry];
-			break;
-		}
-	}
-
-	return foundMap;
-}
-
-+ (CapitolMap *) capitolMapFromChamber:(NSInteger)chamber {
-	NSString *fileString = nil;
-	NSString *thePath = [[NSBundle mainBundle] pathForResource:@"CapitolMaps" ofType:@"plist"];
-	NSArray *mapSectionsPlist = [[NSArray alloc] initWithContentsOfFile:thePath];	
-	NSArray *searchArray = [mapSectionsPlist objectAtIndex:2];
-	CapitolMap *foundMap = nil;
-
-	if (chamber == HOUSE)
-		fileString = @"Map.HouseChamber.pdf";
-	else // (chamber == SENATE)
-		fileString = @"Map.SenateChamber.pdf";
-	
-	for (NSDictionary * mapEntry in searchArray)
-	{
-		if ([fileString isEqualToString:[mapEntry valueForKey:@"file"]]) {
-			foundMap = [[[CapitolMap alloc] init] autorelease];
-			[foundMap importFromDictionary:mapEntry];
-			break;
-		}
-	}
-	[mapSectionsPlist release];
-	
-	return foundMap;
-}
 #pragma mark -
 #pragma mark EventKit
 

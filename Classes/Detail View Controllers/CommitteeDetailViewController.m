@@ -293,7 +293,7 @@ CGFloat quartzRowHeight = 73.f;
 	if (!text)
 		text = @"";
 	if (clickable)
-		val = [UtilityMethods capitolMapFromOfficeString:self.committee.office];
+		val = [CapitolMap mapFromOfficeString:self.committee.office];
 	else
 		val = @"";
 	

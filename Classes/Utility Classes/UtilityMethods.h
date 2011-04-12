@@ -36,8 +36,6 @@ BOOL IsEmpty(id thing);
 + (NSDictionary *)parametersOfQuery:(NSString *)queryString;
 
 + (NSURL *) safeWebUrlFromString:(NSString *)urlString;
-+ (CapitolMap *) capitolMapFromOfficeString:(NSString *)office;
-+ (CapitolMap *) capitolMapFromChamber:(NSInteger)chamber;
 + (NSURL *) googleMapUrlFromStreetAddress:(NSString *)address;
 + (NSString *)applicationDocumentsDirectory;
 + (NSString *)applicationCachesDirectory;

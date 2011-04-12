@@ -28,6 +28,7 @@
 
 #import "TexLegeStandardGroupCell.h"
 #import "TexLegeGroupCellProtocol.h"
+#import "CapitolMap.h"
 
 @interface LegislatorDetailDataSource (Private)
 - (void) createSectionList;
@@ -267,7 +268,7 @@
 	if (self.legislator && self.legislator.cap_office && [self.legislator.cap_office length]) {
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 					 @"Office", @"subtitle",
-					 [UtilityMethods capitolMapFromOfficeString:self.legislator.cap_office], @"entryValue",
+					 [CapitolMap mapFromOfficeString:self.legislator.cap_office], @"entryValue",
 					 self.legislator.cap_office, @"title",
 					 [NSNumber numberWithBool:YES], @"isClickable",
 					 [NSNumber numberWithInteger:DirectoryTypeOfficeMap], @"entryType",
