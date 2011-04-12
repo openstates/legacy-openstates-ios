@@ -21,6 +21,8 @@
 #import "OpenLegislativeAPIs.h"
 #import "LocalyticsSession.h"
 
+#define LIVE_SEARCHING 1
+
 @interface BillsMasterViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
 @end
@@ -95,6 +97,10 @@
 	//		if we remove this, it will wind up setting our searchResultsDataSource to the BillsMenuDataSource
 	self.searchDisplayController.searchResultsDataSource = self.billSearchDS;	
 	[self.searchDisplayController.searchBar setHidden:NO];
+
+#if LIVE_SEARCHING == 0
+	self.searchDisplayController.searchBar.delegate = self;
+#endif
 	
 	if ([UtilityMethods isIPadDevice])
 		[self.tableView reloadData];
@@ -179,6 +185,7 @@
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
+#if LIVE_SEARCHING == 1
 	if (_searchString) {
 		[_searchString release];
 		_searchString = nil;
@@ -189,12 +196,20 @@
 			[self.billSearchDS startSearchWithString:_searchString chamber:self.searchDisplayController.searchBar.selectedScopeButtonIndex];
 		}		
 	}
+#endif
 	return NO;
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
-	if (_searchString && [_searchString length])
-		[self.billSearchDS startSearchWithString:_searchString chamber:searchOption];
+	if (IsEmpty(controller.searchBar.text)) 
+		return NO;
+	
+	if (_searchString) {
+		[_searchString release];
+		_searchString = nil;
+	}
+	_searchString = [controller.searchBar.text copy];
+	[self.billSearchDS startSearchWithString:_searchString chamber:searchOption];
 	return NO;
 }
 
@@ -209,13 +224,29 @@
 	[self.searchDisplayController setActive:NO animated:YES];
 }
 
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+#if LIVE_SEARCHING == 0
+	if (IsEmpty(searchBar.text)) 
+		return;
+	
+	if (_searchString) {
+		[_searchString release];
+		_searchString = nil;
+	}
+	_searchString = [searchBar.text copy];
+	//if ([_searchString length] >= 3) {
+		[self.billSearchDS startSearchWithString:_searchString 
+										 chamber:self.searchDisplayController.searchBar.selectedScopeButtonIndex];
+	//}		
+#endif
+}
+
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
 	////////self.dataSource.hideTableIndex = YES;
 	// for some reason, these get zeroed out after we restart searching.
 	self.searchDisplayController.searchResultsTableView.rowHeight = self.tableView.rowHeight;
 	self.searchDisplayController.searchResultsTableView.backgroundColor = self.tableView.backgroundColor;
 	self.searchDisplayController.searchResultsTableView.sectionIndexMinimumDisplayRowCount = self.tableView.sectionIndexMinimumDisplayRowCount;
-	
 }
 
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
