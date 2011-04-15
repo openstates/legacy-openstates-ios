@@ -6,30 +6,12 @@
 //  Copyright 2009 Gregory S. Combs. All rights reserved.
 //
 
-#import "CommitteeObj.h"
+#import "CommitteeObj+RestKit.h"
 
 #import "CommitteePositionObj.h"
 #import "LegislatorObj.h"
-#import "TexLegeCoreDataUtils.h"
 
-@implementation CommitteeObj 
-
-@dynamic clerk;
-@dynamic clerk_email;
-@dynamic phone;
-@dynamic office;
-@dynamic parentId;
-@dynamic committeeId;
-@dynamic url;
-@dynamic committeeName;
-@dynamic committeeType;
-@dynamic committeeNameInitial;
-@dynamic committeePositions;
-
-@dynamic votesmartID;
-@dynamic openstatesID;
-@dynamic txlonline_id;
-@dynamic updated;
+@implementation CommitteeObj (RestKit)
 
 #pragma mark RKObjectMappable methods
 
@@ -50,22 +32,29 @@
 			@"updated", @"updated",
 			nil];
 }
-/*
-+ (NSDictionary*)elementToRelationshipMappings {
-	return [NSDictionary dictionaryWithKeysAndObjects:
-			@"committeePositions", @"committeePositions.committeePosition",
-			nil];
-}
-*/
+
 + (NSString*)primaryKeyProperty {
 	return @"committeeId";
 }
-/*
-- (id)proxyForJson {
-	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
-	return tempDict;	
+
+#pragma mark Property Accessor Issues
+/* These methods are the exact same thing (or at least *should* be the same) as the default core data object methods
+ However, for whatever reason, sometimes the default returns an NSNumber instead of an NSString ... this makes sure */
+- (NSString *)updated {
+	[self willAccessValueForKey:@"updated"];
+	NSString *outValue = [self primitiveValueForKey:@"updated"];
+	[self didAccessValueForKey:@"updated"];
+	return outValue;
 }
-*/
+
+- (void)setUpdated:(NSString *)inValue {
+	[self willChangeValueForKey:@"updated"];
+	[self setPrimitiveValue:inValue forKey:@"updated"];
+	[self didChangeValueForKey:@"updated"];
+}
+
+#pragma mark Custom Accessors
+
 - (NSString *) committeeNameInitial {
 	[self willAccessValueForKey:@"committeeNameInitial"];
 	NSString * initial = [[self committeeName] substringToIndex:1];

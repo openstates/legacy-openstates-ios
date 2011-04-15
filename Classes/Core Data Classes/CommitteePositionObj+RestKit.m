@@ -6,20 +6,10 @@
 //  Copyright 2009 Gregory S. Combs. All rights reserved.
 //
 
-#import "CommitteePositionObj.h"
+#import "CommitteePositionObj+RestKit.h"
 #import "CommitteeObj.h"
-#import "LegislatorObj.h"
-//#import "TexLegeCoreDataUtils.h"
 
-@implementation CommitteePositionObj 
-
-@dynamic committeePositionID;
-@dynamic position;
-@dynamic legislator;
-@dynamic committee;
-@dynamic legislatorID;
-@dynamic committeeId;
-@dynamic updated;
+@implementation CommitteePositionObj (RestKit)
 
 #pragma mark RKObjectMappable methods
 
@@ -32,14 +22,7 @@
 			@"updated", @"updated",
 			nil];
 }
-/*
-+ (NSDictionary*)elementToRelationshipMappings {
-	return [NSDictionary dictionaryWithKeysAndObjects:
-			@"legislator", @"legislator",
-			@"committee", @"committee",
-			nil];
-}
-*/
+
 + (NSDictionary*)relationshipToPrimaryKeyPropertyMappings {
 	return [NSDictionary dictionaryWithKeysAndObjects:
 			@"legislator", @"legislatorID",
@@ -50,35 +33,25 @@
 + (NSString*)primaryKeyProperty {
 	return @"committeePositionID";
 }
-/*
-- (void)setCommitteeId:(NSNumber *)newID {
-	NSString *key = @"committeeId";
-	[self willChangeValueForKey:key];
-	[self setPrimitiveValue:newID forKey:key];
-	
-	CommitteeObj *newComm = [CommitteeObj objectWithPrimaryKeyValue:newID];
-	self.committee = newComm;
-	
-	[self didChangeValueForKey:key];
+
+#pragma mark Property Accessor Issues
+/* These methods are the exact same thing (or at least *should* be the same) as the default core data object methods
+ However, for whatever reason, sometimes the default returns an NSNumber instead of an NSString ... this makes sure */
+- (NSString *)updated {
+	[self willAccessValueForKey:@"updated"];
+	NSString *outValue = [self primitiveValueForKey:@"updated"];
+	[self didAccessValueForKey:@"updated"];
+	return outValue;
 }
 
-- (void)setLegislatorID:(NSNumber *)newID {
-	NSString *key = @"legislatorID";
-	[self willChangeValueForKey:key];
-	[self setPrimitiveValue:newID forKey:key];
-	
-	LegislatorObj *newObj = [LegislatorObj objectWithPrimaryKeyValue:newID];
-	self.legislator = newComm;
-	
-	[self didChangeValueForKey:key];
+- (void)setUpdated:(NSString *)inValue {
+	[self willChangeValueForKey:@"updated"];
+	[self setPrimitiveValue:inValue forKey:@"updated"];
+	[self didChangeValueForKey:@"updated"];
 }
-*/
-/*
-- (id)proxyForJson {
-	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
-	return tempDict;	
-}
-*/
+
+#pragma mark Custom Accessors
+
 - (NSString*)positionString {
 	if ([[self position] integerValue] == POS_CHAIR) 
 		return @"Chair";
@@ -101,7 +74,6 @@
 	else { // they're both the same position (i.e. just a regular committee member)
 		result = [[[self committee] committeeName] compare: [[p committee] committeeName]];
 	}
-	
 	return result;	
 }
 

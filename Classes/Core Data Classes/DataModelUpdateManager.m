@@ -13,7 +13,7 @@
 #import "TexLegeCoreDataUtils.h"
 #import "MTStatusBarOverlay.h"
 #import "LocalyticsSession.h"
-#import "DistrictMapObj.h"
+#import "DistrictMapObj+RestKit.h"
 #import "NSDate+Helper.h"
 
 #define MTStatusBarOverlayON 1

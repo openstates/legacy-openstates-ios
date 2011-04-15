@@ -57,7 +57,7 @@
 	[super dealloc];
 }
 
-- (void) importFromDictionary: (NSDictionary *)dictionary
+- (void)importFromDictionary:(NSDictionary *)dictionary
 {				
 	if (dictionary) {
 		self.name = [dictionary objectForKey:@"name"];
@@ -89,7 +89,6 @@
 						 @"%@/%@.app/%@",NSHomeDirectory(),appName, self.file ];
 	
 	return [NSURL fileURLWithPath:filePath];
-	
 }
 
 @end

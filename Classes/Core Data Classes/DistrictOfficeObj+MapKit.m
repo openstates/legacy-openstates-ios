@@ -6,82 +6,13 @@
 //  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
-#import "DistrictOfficeObj.h"
+#import "DistrictOfficeObj+MapKit.h"
 
-#import "DistrictMapObj.h"
-#import "LegislatorObj.h"
-#import "TexLegeCoreDataUtils.h"
+#import "LegislatorObj+RestKit.h"
 #import "TexLegeMapPins.h"
 
-@implementation DistrictOfficeObj 
+@implementation DistrictOfficeObj (MapKit)
 
-@dynamic chamber;
-@dynamic pinColorIndex;
-@dynamic spanLat;
-@dynamic spanLon;
-@dynamic longitude;
-@dynamic latitude;
-@dynamic formattedAddress;
-@dynamic stateCode;
-@dynamic address;
-@dynamic city;
-@dynamic county;
-@dynamic phone;
-@dynamic fax;
-@dynamic district;
-@dynamic zipCode;
-@dynamic legislator;
-@dynamic districtOfficeID;
-@dynamic legislatorID;
-@dynamic updated;
-
-#pragma mark RKObjectMappable methods
-
-+ (NSDictionary*)elementToPropertyMappings {
-	return [NSDictionary dictionaryWithKeysAndObjects:
-			@"districtOfficeID", @"districtOfficeID",
-			@"district", @"district",
-			@"chamber", @"chamber",
-			@"pinColorIndex", @"pinColorIndex",
-			@"spanLat", @"spanLat",
-			@"spanLon", @"spanLon",
-			@"longitude", @"longitude",
-			@"latitude", @"latitude",
-			@"formattedAddress", @"formattedAddress",
-			@"stateCode", @"stateCode",
-			@"address", @"address",
-			@"city", @"city",
-			@"county", @"county",
-			@"phone", @"phone",
-			@"fax", @"fax",
-			@"zipCode", @"zipCode",
-			@"legislatorID", @"legislatorID",
-			@"updated", @"updated",
-			nil];
-}
-/*
-+ (NSDictionary*)elementToRelationshipMappings {
-	return [NSDictionary dictionaryWithKeysAndObjects:
-			@"legislator", @"legislator",
-			nil];
-}
-*/
-+ (NSDictionary*)relationshipToPrimaryKeyPropertyMappings {
-	return [NSDictionary dictionaryWithKeysAndObjects:
-			@"legislator", @"legislatorID",
-			nil];
-}
-
-+ (NSString*)primaryKeyProperty {
-	return @"districtOfficeID";
-}
-
-/*
-- (id)proxyForJson {
-	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
-	return tempDict;
-}
-*/
 // we're overriding what's stored in core data ... is this a good idea?
 - (NSNumber *) pinColorIndex {
 	/*	if (self.legislator) {

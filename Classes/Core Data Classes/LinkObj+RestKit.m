@@ -6,16 +6,10 @@
 //  Copyright 2009 Gregory S. Combs. All rights reserved.
 //
 
-#import "LinkObj.h"
+#import "LinkObj+RestKit.h"
 #import "UtilityMethods.h"
 
-@implementation LinkObj
-
-@dynamic sortOrder;
-@dynamic url;
-@dynamic label;
-@dynamic section;
-@dynamic updated;
+@implementation LinkObj (RestKit)
 
 #pragma mark RKObjectMappable methods
 
@@ -33,17 +27,28 @@
 	return @"sortOrder";
 }
 
-#pragma mark Core Data Initialization
-
-/*
-- (id)proxyForJson {
-	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
-	return tempDict;	
+#pragma mark Property Accessor Issues
+/* These methods are the exact same thing (or at least *should* be the same) as the default core data object methods
+ However, for whatever reason, sometimes the default returns an NSNumber instead of an NSString ... this makes sure */
+- (NSString *)updated {
+	[self willAccessValueForKey:@"updated"];
+	NSString *outValue = [self primitiveValueForKey:@"updated"];
+	[self didAccessValueForKey:@"updated"];
+	return outValue;
 }
-*/
+
+- (void)setUpdated:(NSString *)inValue {
+	[self willChangeValueForKey:@"updated"];
+	[self setPrimitiveValue:inValue forKey:@"updated"];
+	[self didChangeValueForKey:@"updated"];
+}
+
+#pragma mark Custom Accessors
+
 - (NSURL *) actualURL {	
 	NSURL * actualURL = nil;
-	
+	static NSString *followTheMoney = @"http://www.followthemoney.org/";
+
 	if ([self.url isEqualToString:@"aboutView"]) {
 		NSString *file = nil;
 
@@ -55,16 +60,13 @@
 		NSURL *baseURL = [UtilityMethods urlToMainBundle];
 		actualURL = [NSURL URLWithString:file relativeToURL:baseURL];
 	}
-	else if ([self.url hasPrefix:@"http://www.followthemoney.org/"]) {
-		NSString *tempString = @"http://www.followthemoney.org/";
-		
-		actualURL = [NSURL URLWithString:tempString];
+	else if ([self.url hasPrefix:followTheMoney]) {		
+		actualURL = [NSURL URLWithString:followTheMoney];
 	}
 	else if ([self.url isEqualToString:@"mailto:support@texlege.com"]) {
 		actualURL = nil;
 	}
 	else if (self.url) {
-		//NSURL *aURL = [UtilityMethods safeWebUrlFromString:self.url];
 		actualURL = [NSURL URLWithString:self.url];
 	}
 	

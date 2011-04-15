@@ -6,67 +6,12 @@
 //  Copyright 2009 Gregory S. Combs. All rights reserved.
 //
 
-#import "LegislatorObj.h"
+#import "LegislatorObj+RestKit.h"
 #import "CommitteePositionObj.h"
-#import "TexLegeCoreDataUtils.h"
-#import "DistrictMapObj.h"
-#import "StafferObj.h"
-#import "DistrictOfficeObj.h"
 #import "WnomObj.h"
 #import "UtilityMethods.h"
 
-@implementation LegislatorObj 
-
-@dynamic legislatorID;
-@dynamic transDataContributorID;
-
-@dynamic firstname;
-@dynamic middlename;
-@dynamic lastname;
-@dynamic nickname;
-@dynamic suffix;
-@dynamic lastnameInitial;
-@dynamic searchName;
-
-@dynamic legtype;
-@dynamic legtype_name;
-@dynamic district;
-@dynamic party_id;
-@dynamic party_name;
-@dynamic partisan_index;
-
-@dynamic photo_name;
-@dynamic bio_url;
-@dynamic tenure;
-@dynamic email;
-@dynamic twitter;
-
-@dynamic cap_office;
-@dynamic cap_phone;
-@dynamic cap_phone2;
-@dynamic cap_phone2_name;
-@dynamic cap_fax;
-
-@dynamic notes;
-
-@dynamic committeePositions;
-@dynamic wnomScores;
-@dynamic districtOffices;
-
-@dynamic nextElection;
-@dynamic nimsp_id;
-@dynamic openstatesID;
-@dynamic photo_url;
-@dynamic preferredname;
-@dynamic stateID;
-@dynamic txlonline_id;
-@dynamic votesmartDistrictID;
-@dynamic votesmartID;
-@dynamic votesmartOfficeID;
-@dynamic staffers;
-@dynamic updated;
-
-@dynamic districtMap;
+@implementation LegislatorObj (RestKit)
 
 #pragma mark RKObjectMappable methods
 
@@ -109,39 +54,33 @@
 			@"updated",@"updated",
 			nil];
 }
-/*
-+ (NSDictionary*)elementToRelationshipMappings {
-	return [NSDictionary dictionaryWithKeysAndObjects:
-			@"committeePositions", @"committeePositions.committeePosition",
-			@"districtOffices", @"districtOffices.districtOffice",
-			@"wnomScores", @"wnomScores.wnomScore",
-			@"staffers", @"staffers.staffer",
-			nil];
-}
-*/
+
 + (NSString*)primaryKeyProperty {
 	return @"legislatorID";
 }
 
-/*
-- (id)proxyForJson {					 
-	NSDictionary *tempDict = [self dictionaryWithValuesForKeys:[[[self class] elementToPropertyMappings] allKeys]];	
-	return tempDict;	
+#pragma mark Property Accessor Issues
+/* These methods are the exact same thing (or at least *should* be the same) as the default core data object methods
+ However, for whatever reason, sometimes the default returns an NSNumber instead of an NSString ... this makes sure */
+- (NSString *)updated {
+	[self willAccessValueForKey:@"updated"];
+	NSString *outValue = [self primitiveValueForKey:@"updated"];
+	[self didAccessValueForKey:@"updated"];
+	return outValue;
 }
-*/
+
+- (void)setUpdated:(NSString *)inValue {
+	[self willChangeValueForKey:@"updated"];
+	[self setPrimitiveValue:inValue forKey:@"updated"];
+	[self didChangeValueForKey:@"updated"];
+}
+
+#pragma mark Custom Accessors
+
 - (NSComparisonResult)compareMembersByName:(LegislatorObj *)p
 {	
 	return [[self fullNameLastFirst] compare: [p fullNameLastFirst]];	
 }
-/*
-- (DistrictMapObj *)districtMap {
-	DistrictMapObj *aDistrict = nil;
-	if (self.district && self.legtype) {
-		aDistrict = [TexLegeCoreDataUtils districtMapForDistrict:self.district andChamber:self.legtype lightProperties:YES];
-		//aDistrict.legislator = self;		// should we do this, since we already do it in the map object?
-	}
-	return aDistrict;
-}*/
 
 - (NSString *) lastnameInitial {
 	[self willAccessValueForKey:@"lastnameInitial"];
@@ -217,7 +156,6 @@
 	return name;
 }
 
-
 - (NSString *)shortNameForButtons {
 	NSString *string;
 	string = [NSString stringWithFormat:@"%@ (%@)", [self legProperName], [self partyShortName]];
@@ -244,7 +182,6 @@
 	return nil;
 }
 
-
 - (NSString*)searchName {
 	NSString * tempString;
 	[self willAccessValueForKey:@"searchName"];
@@ -253,7 +190,6 @@
 	[self didAccessValueForKey:@"searchName"];
 	return tempString;
 }
-
 
  - (NSInteger)numberOfDistrictOffices {
 	if (IsEmpty(self.districtOffices))
@@ -268,7 +204,6 @@
 	else
 		return [self.staffers count];
 }
- 
 
 - (NSString *)tenureString {
 	NSString *stringVal = nil;
