@@ -7,11 +7,12 @@
 //
 
 #import "TexLegeTheme.h"
-#import "DistrictMapObj.h"
+#import "DistrictMapObj+RestKit.h"
 #import "DistrictMapDataSource.h"
 #import "DisclosureQuartzView.h"
 #import "TexLegeCoreDataUtils.h"
 #import "TexLegeAppDelegate.h"
+#import "LegislatorObj+RestKit.h"
 
 #if NEEDS_TO_PARSE_KMLMAPS == 1
 #import "DistrictOfficeObj.h"

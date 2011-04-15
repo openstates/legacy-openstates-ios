@@ -8,7 +8,7 @@
 
 #import "PartisanIndexStats.h"
 #import "LegislatorObj.h"
-#import "WnomObj.h"
+#import "WnomObj+RestKit.h"
 #import "UtilityMethods.h"
 #import "TexLegeCoreDataUtils.h"
 #import "NSDate+Helper.h"

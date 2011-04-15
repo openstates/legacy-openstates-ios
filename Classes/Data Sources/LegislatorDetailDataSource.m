@@ -9,15 +9,15 @@
 #import "LegislatorDetailDataSource.h"
 #import "TexLegeCoreDataUtils.h"
 
-#import "LegislatorObj.h"
+#import "LegislatorObj+RestKit.h"
 #import "TexLegeTheme.h"
-#import "DistrictMapObj.h"
+#import "DistrictMapObj+RestKit.h"
 
 #import "StafferObj.h"
-#import "DistrictOfficeObj.h"
-#import "CommitteeObj.h"
-#import "CommitteePositionObj.h"
-#import "WnomObj.h"
+#import "DistrictOfficeObj+MapKit.h"
+#import "CommitteeObj+RestKit.h"
+#import "CommitteePositionObj+RestKit.h"
+#import "WnomObj+RestKit.h"
 
 #import "UtilityMethods.h"
 #import "TableCellDataObject.h"

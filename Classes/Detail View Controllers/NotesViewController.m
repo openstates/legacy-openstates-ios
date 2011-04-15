@@ -7,7 +7,7 @@
 //
 
 #import "NotesViewController.h"
-#import "LegislatorObj.h"
+#import "LegislatorObj+RestKit.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "LocalyticsSession.h"

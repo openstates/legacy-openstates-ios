@@ -8,7 +8,7 @@
 //
 
 #import "CommitteeMemberCellView.h"
-#import "LegislatorObj.h"
+#import "LegislatorObj+RestKit.h"
 #import "TexLegeTheme.h"
 #import "PartisanIndexStats.h"
 #import "TexLegeCoreDataUtils.h"

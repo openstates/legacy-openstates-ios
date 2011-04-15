@@ -11,9 +11,6 @@
 #import "CommitteeMasterViewController.h"
 #import "TexLegeCoreDataUtils.h"
 
-#import "CommitteeObj.h"
-#import "CommitteePositionObj.h"
-#import "LegislatorObj.h"
 #import "UtilityMethods.h"
 #import "CapitolMapsDetailViewController.h"
 #import "LegislatorDetailViewController.h"
@@ -28,6 +25,9 @@
 #import "PartisanIndexStats.h"
 #import "TexLegeEmailComposer.h"
 #import "LocalyticsSession.h"
+#import "LegislatorObj+RestKit.h"
+#import "CommitteePositionObj+RestKit.h"
+#import "CommitteeObj+RestKit.h"
 
 @interface CommitteeDetailViewController (Private)
 - (void) buildInfoSectionArray;

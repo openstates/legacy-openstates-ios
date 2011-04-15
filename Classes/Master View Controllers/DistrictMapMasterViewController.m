@@ -8,7 +8,7 @@
 
 #import "DistrictMapMasterViewController.h"
 #import "DistrictMapDataSource.h"
-#import "DistrictMapObj.h"
+#import "DistrictMapObj+MapKit.h"
 #import "MapViewController.h"
 #import "UtilityMethods.h"
 #import "TexLegeAppDelegate.h"

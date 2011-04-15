@@ -9,8 +9,8 @@
 #import "TexLegeTheme.h"
 #import "UtilityMethods.h"
 #import "LegislatorDetailViewController.h"
-#import "DistrictOfficeObj.h"
-#import "DistrictMapObj.h"
+#import "DistrictOfficeObj+MapKit.h"
+#import "DistrictMapObj+MapKit.h"
 #import "DistrictMapDataSource.h"
 
 #import "CustomAnnotation.h"

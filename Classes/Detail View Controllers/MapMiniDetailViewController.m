@@ -9,7 +9,7 @@
 #import "TexLegeTheme.h"
 #import "UtilityMethods.h"
 #import "DistrictOfficeObj.h"
-#import "DistrictMapObj.h"
+#import "DistrictMapObj+MapKit.h"
 
 #import "TexLegeAppDelegate.h"
 #import "TexLegeCoreDataUtils.h"

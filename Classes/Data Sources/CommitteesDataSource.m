@@ -10,7 +10,8 @@
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
 #import "TexLegeCoreDataUtils.h"
-#import "CommitteePositionObj.h"
+#import "CommitteePositionObj+RestKit.h"
+#import "CommitteeObj+RestKit.h"
 #import "TexLegeAppDelegate.h"
 
 @interface CommitteesDataSource (Private)

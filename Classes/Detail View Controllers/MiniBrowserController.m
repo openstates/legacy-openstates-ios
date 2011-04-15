@@ -8,7 +8,7 @@
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "TexLegeEmailComposer.h"
-#import "LinkObj.h"
+#import "LinkObj+RestKit.h"
 #import "LinksMasterViewController.h"
 #import "LocalyticsSession.h"
 #import "TexLegeCoreDataUtils.h"
