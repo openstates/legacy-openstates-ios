@@ -9,7 +9,7 @@
 #import "DistrictMapSearchOperation.h"
 #import "NSInvocation+CWVariableArguments.h"
 #import "TexLegeAppDelegate.h"
-#import "DistrictMapObj.h"
+#import "DistrictMapObj+MapKit.h"
 #import "TexLegeCoreDataUtils.h"
 
 @interface DistrictMapSearchOperation()

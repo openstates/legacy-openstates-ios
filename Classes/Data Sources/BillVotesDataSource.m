@@ -12,6 +12,7 @@
 #import "TexLegeTheme.h"
 #import "TexLegeStandardGroupCell.h"
 #import "LegislatorDetailViewController.h"
+#import "LegislatorObj+RestKit.h"
 
 @interface BillVotesDataSource (Private)
 - (void) loadVotesAndVoters;
