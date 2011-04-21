@@ -120,7 +120,6 @@
 			}
 		}
 		
-		// create a CapitolMapsDetailViewController. This controller will display the full size tile for the element
 		if (self.detailViewController == nil) {
 			self.detailViewController = [[[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil] autorelease];
 		}
@@ -138,10 +137,17 @@
 */		
 		MiniBrowserController *detailVC = self.detailViewController;
 		
-		if ([link.url isEqualToString:@"mailto:support@texlege.com"]) {
+		if ([link.url hasPrefix:@"mailto:support@texlege.com"]) {
+			NSString *appVer = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+
+			NSMutableString *body = [NSMutableString string];
+			[body appendFormat:@"TexLege Version: %@\n", appVer];
+			[body appendFormat:@"iOS Version: %@\n", [[UIDevice currentDevice] systemVersion]];
+			[body appendFormat:@"iOS Device: %@\n", [[UIDevice currentDevice] model]];
+			[body appendString:@"\nDescription of Problem, Concern, or Question:\n"];
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
 																			 subject:@"TexLege Support Question / Concern" 
-																				body:@"" commander:self];
+																				body:body commander:self];
 			return;
 		}
 
