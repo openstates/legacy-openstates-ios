@@ -63,7 +63,7 @@
 	else if ([self.url hasPrefix:followTheMoney]) {		
 		actualURL = [NSURL URLWithString:followTheMoney];
 	}
-	else if ([self.url isEqualToString:@"mailto:support@texlege.com"]) {
+	else if ([self.url hasPrefix:@"mailto:"]) {
 		actualURL = nil;
 	}
 	else if (self.url) {

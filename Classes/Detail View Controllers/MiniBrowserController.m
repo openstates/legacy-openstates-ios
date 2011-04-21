@@ -468,22 +468,12 @@ static MiniBrowserController *s_browser = nil;
 	if (anObject) {
 		self.dataObjectID = [anObject sortOrder];
 
-		if ([anObject.url isEqualToString:@"mailto:support@texlege.com"])
-			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
-																			 subject:@"TexLege Support Question" 
-																				body:@"" 
-																		   commander:[[TexLegeAppDelegate appDelegate] detailNavigationController]];
-		else {
-			// if we add escapes, we'll wind up junking our existing "safe" url string.  We do this since we don't allow editing links anymore.  
-			//NSURL *aURL = [UtilityMethods safeWebUrlFromString:link.url];
-			NSURL *aURL = [anObject actualURL];
-			if (aURL && [TexLegeReachability canReachHostWithURL:aURL alert:YES]) { // got a network connection
-				[self loadURL:aURL];
-			}
-			self.title = anObject.label;
+		NSURL *aURL = [anObject actualURL];
+		if (aURL && [TexLegeReachability canReachHostWithURL:aURL alert:YES]) { // got a network connection
+			[self loadURL:aURL];
 		}
+		self.title = anObject.label;
 	}
-	
 }
 
 - (void)loadURL:(NSURL *)url

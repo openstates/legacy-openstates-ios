@@ -104,38 +104,8 @@
 	if (!isSplitViewDetail)
 		self.navigationController.toolbarHidden = YES;
 	
-	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
-	
-	LinkObj *link = dataObject;
-	
+	LinkObj *link = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	if (link) {
-		
-		if ([link.url hasPrefix:@"http://realvideo"]) {
-			
-			NSURL *interAppURL = [NSURL URLWithString:link.url];
-			if ([[UIApplication sharedApplication] canOpenURL:interAppURL]) {
-				if ([TexLegeReachability canReachHostWithURL:interAppURL alert:YES])
-					[[UIApplication sharedApplication] openURL:interAppURL];
-				return;
-			}
-		}
-		
-		if (self.detailViewController == nil) {
-			self.detailViewController = [[[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil] autorelease];
-		}
-/*  TODO: do something smart with the Twitter API to drop results in a tableview or something.  (TTKit or whatever?)
-		if ([link.label isEqualToString:@"Legislator Twitter Feeds"]) {
-
-			NSString *interAppTwitter = @"twitter://list?screen_name=grgcombs&slug=texas-politicians";
-			NSURL *interAppTwitterURL = [NSURL URLWithString:interAppTwitter];
-			if (![UtilityMethods isIPadDevice] && [[UIApplication sharedApplication] canOpenURL:interAppTwitterURL]) {
-				if ([TexLegeReachability canReachHostWithURL:interAppTwitterURL alert:YES])
-					[[UIApplication sharedApplication] openURL:interAppTwitterURL];
-				return;
-			}
-		}
-*/		
-		MiniBrowserController *detailVC = self.detailViewController;
 		
 		if ([link.url hasPrefix:@"mailto:support@texlege.com"]) {
 			NSString *appVer = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
@@ -151,14 +121,39 @@
 			return;
 		}
 
+		if ([link.url hasPrefix:@"http://realvideo"]) {
+			NSURL *interAppURL = [NSURL URLWithString:link.url];
+			if ([[UIApplication sharedApplication] canOpenURL:interAppURL]) {
+				if ([TexLegeReachability canReachHostWithURL:interAppURL alert:YES])
+					[[UIApplication sharedApplication] openURL:interAppURL];
+				return;
+			}
+		}
 		
+		/*  TODO: do something smart with the Twitter API to drop results in a tableview or something.  (TTKit or whatever?)
+		 if ([link.label isEqualToString:@"Legislator Twitter Feeds"]) {
+		 
+		 NSString *interAppTwitter = @"twitter://list?screen_name=grgcombs&slug=texas-politicians";
+		 NSURL *interAppTwitterURL = [NSURL URLWithString:interAppTwitter];
+		 if (![UtilityMethods isIPadDevice] && [[UIApplication sharedApplication] canOpenURL:interAppTwitterURL]) {
+		 if ([TexLegeReachability canReachHostWithURL:interAppTwitterURL alert:YES])
+		 [[UIApplication sharedApplication] openURL:interAppTwitterURL];
+		 return;
+		 }
+		 }
+		 */				
+
+		if (self.detailViewController == nil) {
+			self.detailViewController = [[[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil] autorelease];
+		}
+		MiniBrowserController *detailVC = self.detailViewController;
 		[detailVC view];
 		[detailVC removeDoneButton];
 		
 		// save off this item's selection to our AppDelegate
 		[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
-
 		[detailVC setLink:link];
+
 		if (isSplitViewDetail == NO) {
 			// push the detail view controller onto the navigation stack to display it				
 			[self.navigationController pushViewController:self.detailViewController animated:YES];
