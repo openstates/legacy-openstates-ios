@@ -13,9 +13,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
+               BlueprintIdentifier = "3773596F1323104A0033F343"
                BuildableName = "TexLege.app"
-               BlueprintName = "TexLege"
+               BlueprintName = "TexLege (Seeding DB)"
                ReferencedContainer = "container:TexLege.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -40,34 +40,12 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
+            BlueprintIdentifier = "3773596F1323104A0033F343"
             BuildableName = "TexLege.app"
-            BlueprintName = "TexLege"
+            BlueprintName = "TexLege (Seeding DB)"
             ReferencedContainer = "container:TexLege.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "NSDebugEnabled"
-            value = "YES"
-            isEnabled = "NO">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "NSZombieEnabled"
-            value = "YES"
-            isEnabled = "NO">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "MallocStackLoggingNoCompact"
-            value = "YES"
-            isEnabled = "NO">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "MallocStackLogging"
-            value = "YES"
-            isEnabled = "NO">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -81,9 +59,9 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
+            BlueprintIdentifier = "3773596F1323104A0033F343"
             BuildableName = "TexLege.app"
-            BlueprintName = "TexLege"
+            BlueprintName = "TexLege (Seeding DB)"
             ReferencedContainer = "container:TexLege.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
