@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBuildNumber</key>
-	<string>1</string>
+	<string>107</string>
 	<key>CFBuildVersion</key>
 	<string>${CURRENT_PROJECT_VERSION}</string>
 	<key>CFBundleDevelopmentRegion</key>
@@ -36,15 +36,13 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>${CURRENT_PROJECT_VERSION}.1</string>
+	<string>${CURRENT_PROJECT_VERSION}.107</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIInterfaceOrientation~ipad</key>
 	<string>UIInterfaceOrientationLandscapeLeft</string>
 	<key>UIInterfaceOrientation~iphone</key>
 	<string>UIInterfaceOrientationPortrait</string>
-	<key>UILaunchImageFile~ipad</key>
-	<string>Default-iPad.png</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

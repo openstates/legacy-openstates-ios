@@ -43,8 +43,6 @@
 	<string>UIInterfaceOrientationLandscapeLeft</string>
 	<key>UIInterfaceOrientation~iphone</key>
 	<string>UIInterfaceOrientationPortrait</string>
-	<key>UILaunchImageFile~ipad</key>
-	<string>Default-iPad.png</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
