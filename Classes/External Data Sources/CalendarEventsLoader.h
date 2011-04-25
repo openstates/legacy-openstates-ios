@@ -27,6 +27,8 @@
 	BOOL isFresh;
 	NSDate *updated;
 	
+	NSInteger loadingStatus;
+
 	EKEventStore *eventStore;
 }
 + (CalendarEventsLoader *)sharedCalendarEventsLoader;
@@ -37,6 +39,7 @@
 
 @property (nonatomic,readonly) NSArray *events;
 @property (nonatomic) BOOL isFresh;
+@property (nonatomic) NSInteger loadingStatus;
 
 #define kCalendarEventsIDKey				@"id"
 #define kCalendarEventsWhenKey				@"when"			// In UTC ... so subtract for local time zone

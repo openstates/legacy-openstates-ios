@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1056</int>
-		<string key="IBDocument.SystemVersion">10J567</string>
+		<string key="IBDocument.SystemVersion">10J869</string>
 		<string key="IBDocument.InterfaceBuilderVersion">823</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
-		<string key="IBDocument.HIToolboxVersion">462.00</string>
+		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">132</string>
@@ -440,7 +440,7 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
 							<reference key="IBUIParentViewController" ref="949613019"/>
-							<string key="IBUINibName">CalendarDetailViewController</string>
+							<string key="IBUINibName">CalendarDetailViewController~ipad</string>
 							<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
 								<int key="IBUIStatusBarStyle">2</int>
 							</object>
@@ -1547,6 +1547,7 @@
 					<string>56.IBEditorWindowLastContentRect</string>
 					<string>56.IBPluginDependency</string>
 					<string>57.IBPluginDependency</string>
+					<string>58.CustomClassName</string>
 					<string>58.IBPluginDependency</string>
 					<string>59.CustomClassName</string>
 					<string>59.IBPluginDependency</string>
@@ -1614,7 +1615,7 @@
 					<string>TexLegeNavBar</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>IntelligentSplitViewController</string>
-					<string>{{656, 174}, {1024, 768}}</string>
+					<string>{{74, 174}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>{{312, 4}, {783, 1002}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -1640,11 +1641,12 @@
 					<string>TexLegeNavBar</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>IntelligentSplitViewController</string>
-					<string>{{374, 62}, {1024, 768}}</string>
+					<string>{{74, 62}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>{{312, 4}, {783, 1002}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>TexLegeNavBar</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>LinksMasterViewController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -1683,14 +1685,35 @@
 					<string key="className">BillSearchDataSource</string>
 					<string key="superclassName">NSObject</string>
 					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">searchDisplayController</string>
-						<string key="NS.object.0">UISearchDisplayController</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>delegateTVC</string>
+							<string>searchDisplayController</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>UITableViewController</string>
+							<string>UISearchDisplayController</string>
+						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">searchDisplayController</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">searchDisplayController</string>
-							<string key="candidateClassName">UISearchDisplayController</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>delegateTVC</string>
+							<string>searchDisplayController</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">delegateTVC</string>
+								<string key="candidateClassName">UITableViewController</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">searchDisplayController</string>
+								<string key="candidateClassName">UISearchDisplayController</string>
+							</object>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -1737,12 +1760,12 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>actionHeader</string>
 							<string>bill</string>
 							<string>dataObject</string>
 							<string>descriptionView</string>
 							<string>headerView</string>
 							<string>lab_description</string>
-							<string>lab_title</string>
 							<string>starButton</string>
 							<string>stat_filed</string>
 							<string>stat_governor</string>
@@ -1755,12 +1778,12 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>NSDictionary</string>
+							<string>DDActionHeaderView</string>
+							<string>NSMutableDictionary</string>
 							<string>id</string>
 							<string>UIView</string>
 							<string>UIView</string>
 							<string>UITextView</string>
-							<string>UILabel</string>
 							<string>UIButton</string>
 							<string>UILabel</string>
 							<string>UILabel</string>
@@ -1776,12 +1799,12 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>actionHeader</string>
 							<string>bill</string>
 							<string>dataObject</string>
 							<string>descriptionView</string>
 							<string>headerView</string>
 							<string>lab_description</string>
-							<string>lab_title</string>
 							<string>starButton</string>
 							<string>stat_filed</string>
 							<string>stat_governor</string>
@@ -1795,8 +1818,12 @@
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
+								<string key="name">actionHeader</string>
+								<string key="candidateClassName">DDActionHeaderView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
 								<string key="name">bill</string>
-								<string key="candidateClassName">NSDictionary</string>
+								<string key="candidateClassName">NSMutableDictionary</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">dataObject</string>
@@ -1813,10 +1840,6 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">lab_description</string>
 								<string key="candidateClassName">UITextView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">lab_title</string>
-								<string key="candidateClassName">UILabel</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">starButton</string>
@@ -1884,14 +1907,35 @@
 					<string key="className">CalendarDetailViewController</string>
 					<string key="superclassName">KalViewController</string>
 					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">webView</string>
-						<string key="NS.object.0">UIWebView</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>dataObject</string>
+							<string>webView</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>UIWebView</string>
+						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">webView</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">webView</string>
-							<string key="candidateClassName">UIWebView</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>dataObject</string>
+							<string>webView</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">dataObject</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">webView</string>
+								<string key="candidateClassName">UIWebView</string>
+							</object>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -2025,6 +2069,14 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Classes/Master View Controllers/CommitteeMasterViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">DDActionHeaderView</string>
+					<string key="superclassName">UIView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Classes/Custom Cells and Views/DDActionHeaderView/DDActionHeaderView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -2191,8 +2243,6 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>allSlider</string>
-							<string>chartLoadingAct</string>
-							<string>chartView</string>
 							<string>freshmanPlotLab</string>
 							<string>headerView</string>
 							<string>indivSlider</string>
@@ -2207,13 +2257,12 @@
 							<string>leg_reelection</string>
 							<string>leg_tenureLab</string>
 							<string>miniBackgroundView</string>
+							<string>newChartView</string>
 							<string>partySlider</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>PartisanScaleView</string>
-							<string>UIActivityIndicatorView</string>
-							<string>UIWebView</string>
 							<string>UILabel</string>
 							<string>UIView</string>
 							<string>PartisanScaleView</string>
@@ -2228,6 +2277,7 @@
 							<string>UILabel</string>
 							<string>UILabel</string>
 							<string>UIView</string>
+							<string>S7GraphView</string>
 							<string>PartisanScaleView</string>
 						</object>
 					</object>
@@ -2236,8 +2286,6 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>allSlider</string>
-							<string>chartLoadingAct</string>
-							<string>chartView</string>
 							<string>freshmanPlotLab</string>
 							<string>headerView</string>
 							<string>indivSlider</string>
@@ -2252,6 +2300,7 @@
 							<string>leg_reelection</string>
 							<string>leg_tenureLab</string>
 							<string>miniBackgroundView</string>
+							<string>newChartView</string>
 							<string>partySlider</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -2259,14 +2308,6 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">allSlider</string>
 								<string key="candidateClassName">PartisanScaleView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">chartLoadingAct</string>
-								<string key="candidateClassName">UIActivityIndicatorView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">chartView</string>
-								<string key="candidateClassName">UIWebView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">freshmanPlotLab</string>
@@ -2323,6 +2364,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">miniBackgroundView</string>
 								<string key="candidateClassName">UIView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">newChartView</string>
+								<string key="candidateClassName">S7GraphView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">partySlider</string>
@@ -2517,12 +2562,14 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>backButtonPressed:</string>
 							<string>closeButtonPressed:</string>
+							<string>emailURL:</string>
 							<string>fwdButtonPressed:</string>
 							<string>openInSafari:</string>
 							<string>refreshButtonPressed:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -2536,6 +2583,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>backButtonPressed:</string>
 							<string>closeButtonPressed:</string>
+							<string>emailURL:</string>
 							<string>fwdButtonPressed:</string>
 							<string>openInSafari:</string>
 							<string>refreshButtonPressed:</string>
@@ -2548,6 +2596,10 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">closeButtonPressed:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">emailURL:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -2568,22 +2620,26 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>dataObject</string>
 							<string>m_activity</string>
 							<string>m_backButton</string>
 							<string>m_doneButton</string>
 							<string>m_fwdButton</string>
 							<string>m_loadingLabel</string>
+							<string>m_parentCtrl</string>
 							<string>m_reloadButton</string>
 							<string>m_toolBar</string>
 							<string>m_webView</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>UIActivityIndicatorView</string>
 							<string>UIBarButtonItem</string>
 							<string>UIBarButtonItem</string>
 							<string>UIBarButtonItem</string>
 							<string>UILabel</string>
+							<string>id</string>
 							<string>UIBarButtonItem</string>
 							<string>UIToolbar</string>
 							<string>UIWebView</string>
@@ -2593,17 +2649,23 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>dataObject</string>
 							<string>m_activity</string>
 							<string>m_backButton</string>
 							<string>m_doneButton</string>
 							<string>m_fwdButton</string>
 							<string>m_loadingLabel</string>
+							<string>m_parentCtrl</string>
 							<string>m_reloadButton</string>
 							<string>m_toolBar</string>
 							<string>m_webView</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">dataObject</string>
+								<string key="candidateClassName">id</string>
+							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">m_activity</string>
 								<string key="candidateClassName">UIActivityIndicatorView</string>
@@ -2625,6 +2687,10 @@
 								<string key="candidateClassName">UILabel</string>
 							</object>
 							<object class="IBToOneOutletInfo">
+								<string key="name">m_parentCtrl</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
 								<string key="name">m_reloadButton</string>
 								<string key="candidateClassName">UIBarButtonItem</string>
 							</object>
@@ -2644,27 +2710,6 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">NSObject</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">../../Frameworks/JSON-Framework/NSObject+SBJSON.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">NSObject</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">../../Frameworks/JSON-Framework/SBJsonWriter.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">NSObject</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">../../Frameworks/TouchCode/TouchFoundation/Source/InvocationGrabber/NSObject_InvocationGrabberExtensions.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
 					<string key="className">PartisanScaleView</string>
 					<string key="superclassName">UIView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -2673,8 +2718,73 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">S7GraphView</string>
+					<string key="superclassName">UIView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>dataSource</string>
+							<string>delegate</string>
+							<string>xValuesFormatter</string>
+							<string>yValuesFormatter</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>NSFormatter</string>
+							<string>NSFormatter</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>dataSource</string>
+							<string>delegate</string>
+							<string>xValuesFormatter</string>
+							<string>yValuesFormatter</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">dataSource</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">delegate</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">xValuesFormatter</string>
+								<string key="candidateClassName">NSFormatter</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">yValuesFormatter</string>
+								<string key="candidateClassName">NSFormatter</string>
+							</object>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Classes/Custom Cells and Views/VotingRecordView/s7graphview/S7GraphView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">TexLegeAppDelegate</string>
 					<string key="superclassName">NSObject</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">changingReachability:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">changingReachability:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">changingReachability:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
@@ -2762,13 +2872,6 @@
 						<string key="minorKey">Classes/Utility Classes/TexLegeNavBar.h</string>
 					</object>
 				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">UIImageView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">../../Frameworks/UIImageView+Cached/ImageCache.h</string>
-					</object>
-				</object>
 			</object>
 			<object class="NSMutableArray" key="referencedPartialClassDescriptionsV3.1+">
 				<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2793,7 +2896,7 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">NSDictionary</string>
 					<string key="superclassName">NSObject</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+					<object class="IBClassDescriptionSource" key="sourceIdentifier" id="14273803">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">Foundation.framework/Headers/NSDictionary.h</string>
 					</object>
@@ -2811,6 +2914,23 @@
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">Foundation.framework/Headers/NSKeyValueCoding.h</string>
 					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSFormatter</string>
+					<string key="superclassName">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">Foundation.framework/Headers/NSFormatter.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSMutableDictionary</string>
+					<string key="superclassName">NSDictionary</string>
+					<reference key="sourceIdentifier" ref="14273803"/>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSMutableDictionary</string>
+					<reference key="sourceIdentifier" ref="141011805"/>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>

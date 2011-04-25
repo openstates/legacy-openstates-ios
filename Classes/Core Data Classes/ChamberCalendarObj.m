@@ -9,8 +9,8 @@
 #import "ChamberCalendarObj.h"
 #import "UtilityMethods.h"
 #import "NSDate+Helper.h"
-#import "NSDate+TKCategory.h"
-
+//#import "NSDate+TKCategory.h"
+#import "LoadingCell.h"
 #import "CalendarEventsLoader.h"
 
 static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
@@ -31,13 +31,12 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 		self.title = [calendarDict valueForKey:@"title"];
 		self.chamber = [calendarDict valueForKey:@"chamber"];
 		rows = [[NSMutableArray alloc] init];
-		hasPostedAlert = NO;
+		hasPostedAlert = NO;		
 	}
 	return self;
 }
 
-- (void)dealloc {
-	
+- (void)dealloc {	
 	self.title = nil;
 	self.chamber = nil;
 	[rows release];
@@ -65,11 +64,21 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	NSInteger loadingStatus = [CalendarEventsLoader sharedCalendarEventsLoader].loadingStatus;
+	if (loadingStatus > LOADING_IDLE) {
+		if (indexPath.row == 0) {
+			return [LoadingCell loadingCellWithStatus:loadingStatus tableView:tableView];
+		}
+		else {	// to make things work with our upcoming configureCell:, we need to trick this a little
+			indexPath = [NSIndexPath indexPathForRow:(indexPath.row-1) inSection:indexPath.section];
+		}
+	}
+	
 	static NSString *identifier = @"Cell";
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
 	if (!cell) {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:identifier] autorelease];
-		cell.textLabel.numberOfLines = 2;
+		cell.textLabel.numberOfLines = 3;
 		cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
 		cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
 	}
@@ -88,18 +97,26 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 		else {
 			time = [event objectForKey:kCalendarEventsNotesKey];
 		}
-
 	}
 		
-	NSString *timeLoc = [NSString stringWithFormat:@"Time: %@ - Place: %@", time, [event objectForKey:kCalendarEventsLocationKey]]; 
+	BOOL isCancelled = ([[event objectForKey:kCalendarEventsCanceledKey] boolValue] == YES);		
+	BOOL isSearching = NO;
+	NSMutableString *cellText = [NSMutableString stringWithFormat:@"%@\n   ", committeeString];
+	
+	if (tableView.delegate && [tableView.delegate respondsToSelector:@selector(searchDisplayController)]) {
+		UISearchDisplayController *sdc = [tableView.delegate performSelector:@selector(searchDisplayController)];
+		if (sdc && sdc.searchResultsTableView && [tableView isEqual:sdc.searchResultsTableView]) {
+			isSearching = YES;			
+		}
+	}
+	[cellText appendFormat:@"When: %@ - %@", [event objectForKey:kCalendarEventsLocalizedDateStringKey], time];
+	
+	if (isCancelled)
+		[cellText appendString:@" - CANCELED"];
+	else if (!isSearching)
+		[cellText appendFormat:@"\n   Where: %@", [event objectForKey:kCalendarEventsLocationKey]];
 
-	cell.textLabel.text = [NSString stringWithFormat:@"%@\n %@", committeeString, timeLoc];
-	
-	
-	if ([[event objectForKey:kCalendarEventsCanceledKey] boolValue] == YES)
-		cell.textLabel.text = [cell.textLabel.text stringByAppendingString:@" (Canceled)"];
-	
-	
+	cell.textLabel.text = cellText;
 	cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
 	
 	return cell;
@@ -107,7 +124,12 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [rows count];
+	NSInteger count = 0;
+	if (!IsEmpty(rows))
+		count = [rows count];
+	if ([CalendarEventsLoader sharedCalendarEventsLoader].loadingStatus > LOADING_IDLE)
+		count++;
+	return count;	
 }
 
 #pragma mark -
@@ -116,7 +138,8 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 - (NSArray *)eventsFrom:(NSDate *)fromDate to:(NSDate *)toDate
 {
 	NSMutableArray *matches = [NSMutableArray array];
-	for (NSDictionary *event in [[CalendarEventsLoader sharedCalendarEventsLoader] commiteeeMeetingsForChamber:[self.chamber integerValue]]) {
+	NSArray *events = [[CalendarEventsLoader sharedCalendarEventsLoader] commiteeeMeetingsForChamber:[self.chamber integerValue]];
+	for (NSDictionary *event in events) {
 		
 		if (IsDateBetweenInclusive([event objectForKey:kCalendarEventsLocalizedDateKey], fromDate, toDate))
 			[matches addObject:event];

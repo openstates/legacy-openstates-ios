@@ -41,6 +41,9 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(reloadEvents:) name:kCalendarEventsNotifyLoaded object:nil];	
 
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(reloadEvents:) name:kCalendarEventsNotifyError object:nil];	
+
 	if ([UtilityMethods isIPadDevice]) {
 		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
 		UIColor *sealColor = [UIColor colorWithPatternImage:sealImage];		
@@ -54,7 +57,7 @@
 
 - (void)awakeFromNib {
 	[super awakeFromNib];
-	if (!self.logic) {
+	if (!self.webView && [UtilityMethods isIPadDevice]) {
 		[[NSBundle mainBundle] loadNibNamed:[self nibName] owner:self options:nil];
 	}
 	
@@ -147,11 +150,8 @@
 		[self setDelegate:self];
 		[self setDataSource:chamberCalendar];
 		[self.searchDisplayController setSearchResultsDataSource:chamberCalendar];
-		
-		//[newObj filterEventsByString:@""]; 
-		
-		[self reloadData];
-		//		[self.monthView reload];
+				
+		[self showAndSelectDate:[NSDate date]];
 	}
 }
 

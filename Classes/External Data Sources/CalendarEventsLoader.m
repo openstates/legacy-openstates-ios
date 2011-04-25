@@ -15,7 +15,7 @@
 #import <EventKitUI/EventKitUI.h>
 #import "LocalyticsSession.h"
 #import "OpenLegislativeAPIs.h"
-
+#import "LoadingCell.h"
 /*
  Sorts an array of CalendarItems objects by date.  
  */
@@ -48,13 +48,14 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 
 @implementation CalendarEventsLoader
 SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
-@synthesize isFresh;
+@synthesize isFresh, loadingStatus;
 
 - (id)init {
 	if (self=[super init]) {
 		isFresh = NO;
 		_events = nil;
 		updated = nil;
+		loadingStatus = LOADING_IDLE;
 
 		[[TexLegeReachability sharedTexLegeReachability] addObserver:self 
 														  forKeyPath:@"openstatesConnectionStatus" 
@@ -107,7 +108,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 		if ([change valueForKey:NSKeyValueChangeKindKey] == NSKeyValueChangeSetting) {
 			id newVal = [change valueForKey:NSKeyValueChangeNewKey];
 		}*/
-		[self loadEvents:nil];
+		if ([TexLegeReachability openstatesReachable])
+			[self loadEvents:nil];
+		else if (self.loadingStatus != LOADING_NO_NET) {
+			self.loadingStatus = LOADING_NO_NET;
+			[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyError object:nil];	
+		}
 	}
 }
 
@@ -115,16 +121,21 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 	if ([TexLegeReachability openstatesReachable]) {
 		//	http://openstates.sunlightlabs.com/api/v1/events/?state=tx&apikey=350284d0c6af453b9b56f6c1c7fea1f9
 
+		self.loadingStatus = LOADING_ACTIVE;
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
 									 @"tx", @"state",
 									 osApiKeyValue, @"apikey",
 									 nil];
 		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/events" queryParams:queryParams delegate:self];
 	}
+	else if (self.loadingStatus != LOADING_NO_NET) {
+		self.loadingStatus = LOADING_NO_NET;
+		[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyError object:nil];	
+	}	
 }
 
 - (NSArray*)events {
-	if (!_events || !isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > 1800)) {	// if we're over a half-hour old, let's refresh
+	if (self.loadingStatus > LOADING_NO_NET && !_events || !isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > 1800)) {	// if we're over a half-hour old, let's refresh
 		isFresh = NO;
 		debug_NSLog(@"CalendarEventsLoader is stale, need to refresh");
 		
@@ -139,7 +150,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
 	if (error && request) {
 		debug_NSLog(@"Error loading events from %@: %@", [request description], [error localizedDescription]);
-		[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyError object:nil];
 	}
 	
 	isFresh = NO;
@@ -158,13 +168,18 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 	if (!_events)
 		_events = [[NSMutableArray array] retain];
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyLoaded object:nil];
+	if (self.loadingStatus != LOADING_NO_NET) {
+		self.loadingStatus = LOADING_NO_NET;
+		[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyError object:nil];
+	}
 }
 
 
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
 	if ([request isGET] && [response isOK]) {  
-		// Success! Let's take a look at the data  
+		// Success! Let's take a look at the data
+		self.loadingStatus = LOADING_IDLE;
+
 		if (_events)
 			[_events release], _events = nil;	
 		

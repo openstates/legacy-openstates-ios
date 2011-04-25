@@ -10,12 +10,16 @@
 @class ChamberCalendarObj;
 
 @interface CalendarDetailViewController : KalViewController <UISplitViewControllerDelegate,UISearchDisplayDelegate,UITableViewDelegate> {
-
+	id dataObject;
+	UIPopoverController *masterPopover;
+	
+	IBOutlet UIWebView *webView;
+	ChamberCalendarObj *chamberCalendar;
 }
 @property (nonatomic, assign) id dataObject;
 @property (nonatomic, retain) UIPopoverController *masterPopover;
 
-@property (nonatomic, retain) IBOutlet UIWebView *webView;
+@property (nonatomic, retain) UIWebView *webView;
 @property (nonatomic, retain) ChamberCalendarObj *chamberCalendar;
 
 + (NSString *)nibName;
