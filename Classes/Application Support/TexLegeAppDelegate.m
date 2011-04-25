@@ -303,7 +303,7 @@ NSInteger kNoSelection = -1;
 	[self.tabBarController setSelectedViewController:savedTabController];
 	
 	[self.mainWindow addSubview:self.tabBarController.view];	
-	[self.tabBarController viewDidLoad];
+	//[self.tabBarController viewDidLoad];	///// GREG???? delete this line if things work okay now.
 	// make the window visible
 	[self.mainWindow makeKeyAndVisible];
 	[MTStatusBarOverlay sharedOverlay];
