@@ -22,7 +22,7 @@
 @synthesize searchDisplayController, delegateTVC;
 
 - (id)init {
-	if (self=[super init]) {
+	if ((self=[super init])) {
 		[OpenLegislativeAPIs sharedOpenLegislativeAPIs];
 		_rows = [[NSMutableArray alloc] init];
 		_sections = [[NSMutableDictionary alloc] init];
@@ -33,7 +33,7 @@
 }
 
 - (id)initWithSearchDisplayController:(UISearchDisplayController *)newController {
-	if (self=[self init]) {
+	if ((self=[self init])) {
 		if (newController) {
 			searchDisplayController = [newController retain];
 			searchDisplayController.searchResultsDataSource = self;
@@ -43,7 +43,7 @@
 }
 
 - (id)initWithTableViewController:(UITableViewController *)newDelegate {
-	if (self=[self init]) {		
+	if ((self=[self init])) {		
 		if (newDelegate) {
 			delegateTVC = [newDelegate retain];
 		}

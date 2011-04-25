@@ -16,7 +16,7 @@
 @synthesize legislatorID, chartData;
 
 - (id)init {
-	if (self=[super init]) {
+	if ((self=[super init])) {
 		legislatorID = nil;
 		chartData = nil;
 	}

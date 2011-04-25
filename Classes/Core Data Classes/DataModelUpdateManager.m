@@ -65,7 +65,7 @@ enum TXL_QueryTypes {
 //@synthesize genericOperationQueue;
 
 - (id) init {
-	if (self=[super init]) {
+	if ((self=[super init])) {
 		//genericOperationQueue = nil;
 		activeUpdates = [[[NSCountedSet alloc] init] retain];
 		

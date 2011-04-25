@@ -51,7 +51,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 @synthesize isFresh, loadingStatus;
 
 - (id)init {
-	if (self=[super init]) {
+	if ((self=[super init])) {
 		isFresh = NO;
 		_events = nil;
 		updated = nil;

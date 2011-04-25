@@ -83,7 +83,7 @@ static MiniBrowserController *s_browser = nil;
 }
 
 - (id) initWithNibName:(NSString *)nib bundle:(NSBundle *)bundle {
-	if (self = [super initWithNibName:nib bundle:bundle]) {
+	if ((self = [super initWithNibName:nib bundle:bundle])) {
 		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
 		self.sealColor = [UIColor colorWithPatternImage:sealImage];		
 		

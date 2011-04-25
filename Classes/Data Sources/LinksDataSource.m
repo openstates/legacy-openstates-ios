@@ -58,7 +58,7 @@ enum Sections {
 }
 
 - (id)init {
-	if (self = [super init]) {
+	if ((self = [super init])) {
 	
 		//NSError *error = nil;
 		/*if (![self.fetchedResultsController performFetch:&error])

@@ -39,7 +39,7 @@
 @synthesize dataObjectID, sectionArray;
 
 - (id)initWithLegislator:(LegislatorObj *)newObject {
-	if (self = [super init]) {
+	if ((self = [super init])) {
 		if (newObject) 
 			[self setLegislator:newObject];
 	}

@@ -226,12 +226,6 @@ BOOL IsEmpty(id thing) {
 	BOOL locationEnabled = NO;
 	if ([[CLLocationManager class] respondsToSelector:@selector(locationServicesEnabled)])
 		locationEnabled = [CLLocationManager locationServicesEnabled];
-	else {
-		CLLocationManager *locMan = [[CLLocationManager alloc] init];
-		if (locMan)
-			locationEnabled = [locMan locationServicesEnabled];
-		[locMan release];
-	}
 	return locationEnabled;
 }
 

@@ -27,7 +27,7 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 @synthesize title, chamber;
 
 - (id)initWithDictionary:(NSDictionary *)calendarDict {
-	if (self = [super init]) {
+	if ((self = [super init])) {
 		self.title = [calendarDict valueForKey:@"title"];
 		self.chamber = [calendarDict valueForKey:@"chamber"];
 		rows = [[NSMutableArray alloc] init];

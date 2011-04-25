@@ -51,7 +51,7 @@
 @implementation LabelThingy
 @synthesize labelText, labelColor;
 - (id)initWithFrame:(CGRect)frame {
-	if (self=[super initWithFrame:frame]) {
+	if ((self=[super initWithFrame:frame])) {
 		self.backgroundColor = [UIColor clearColor];
 		self.tag = ChartLabelID;
 	}
@@ -161,7 +161,7 @@
 
 - (id)initWithFrame:(CGRect)frame {
 	
-    if (self = [super initWithFrame:frame]) {
+    if ((self = [super initWithFrame:frame])) {
 		[self initializeComponent];
     }
 	
@@ -170,7 +170,7 @@
 
 - (id)initWithCoder:(NSCoder *)decoder {
 	
-	if (self = [super initWithCoder:decoder]) {
+	if ((self = [super initWithCoder:decoder])) {
 		[self initializeComponent];
 	}
 	
@@ -295,7 +295,7 @@
 			CGContextStrokePath(c);
 		}
 		
-		if (i >= 0 && _drawAxisY) {
+		if (_drawAxisY) {
 			
 			NSNumber *valueToFormat = [NSNumber numberWithFloat:value];
 			NSString *valueString;

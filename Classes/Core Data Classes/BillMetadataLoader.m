@@ -18,7 +18,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 @synthesize isFresh;
 
 - (id)init {
-	if (self=[super init]) {
+	if ((self=[super init])) {
 		updated = nil;
 		isFresh = NO;
 		_metadata = nil;

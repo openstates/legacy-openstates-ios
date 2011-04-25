@@ -33,7 +33,7 @@
 #pragma mark View lifecycle
 
 - (id)initWithStyle:(UITableViewStyle)style {
-	if (self=[super initWithStyle:style]) {
+	if ((self=[super initWithStyle:style])) {
 		loadingStatus = LOADING_IDLE;
 		categories_ = [[[NSMutableDictionary alloc] init] retain];
 		updated = nil;

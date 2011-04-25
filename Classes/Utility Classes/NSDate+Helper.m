@@ -14,7 +14,7 @@
 SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeDateHelper);
 
 - (id)init {
-	if (self=[super init]) {
+	if ((self=[super init])) {
 		t_formatter = nil;
 		t_modFormatter = nil;
 		t_calendar = nil;

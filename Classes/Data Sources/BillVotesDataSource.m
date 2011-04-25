@@ -52,7 +52,7 @@
 }
 
 - (id)initWithBillVotes:(NSMutableDictionary *)newVotes {
-	if (self = [super init]) {
+	if ((self = [super init])) {
 		voters_ = nil;
 		if (newVotes) {
 			billVotes_ = [newVotes retain];

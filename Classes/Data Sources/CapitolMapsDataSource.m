@@ -51,7 +51,7 @@
 }
 
 - (id)init {
-	if (self = [super init]) {
+	if ((self = [super init])) {
 		
 		self.sectionList = [[[NSMutableArray alloc] init] autorelease];
 		[self createSectionList];

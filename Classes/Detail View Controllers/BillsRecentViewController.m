@@ -30,7 +30,7 @@
 #pragma mark View lifecycle
 
 - (id)initWithStyle:(UITableViewStyle)style {
-	if (self = [super initWithStyle:style]) {
+	if ((self = [super initWithStyle:style])) {
 		loadingStatus = LOADING_IDLE;
 		recentBills_ = [[NSMutableArray alloc] init];
 	}

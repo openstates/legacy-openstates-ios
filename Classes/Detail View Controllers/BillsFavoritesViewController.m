@@ -27,7 +27,7 @@
 #pragma mark -
 #pragma mark View lifecycle
 - (id)initWithStyle:(UITableViewStyle)style {
-	if (self=[super initWithStyle:style]) {
+	if ((self=[super initWithStyle:style])) {
 		_cachedBills = [[NSMutableDictionary alloc] init];
 	}
 	return self;	

@@ -33,7 +33,7 @@
 }
 
 - (id)init {
-	if (self = [super init]) {
+	if ((self = [super init])) {
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
 		

@@ -16,7 +16,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OpenLegislativeAPIs);
 @synthesize osApiClient, transApiClient, vsApiClient, tloApiClient, osMetadata=_osMetadata;
 
 - (id)init {
-	if (self=[super init]) {
+	if ((self=[super init])) {
 		_currentSession = nil;
 		_osMetadata = nil;
 		isFresh = NO;

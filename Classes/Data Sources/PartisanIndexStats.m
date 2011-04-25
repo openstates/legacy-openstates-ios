@@ -25,7 +25,7 @@
 SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 
 - (id)init {
-	if (self = [super init]) {
+	if ((self = [super init])) {
 		m_partisanIndexAggregates = nil;
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self

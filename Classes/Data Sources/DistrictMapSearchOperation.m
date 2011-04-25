@@ -23,7 +23,7 @@
 
 - (id) initWithDelegate:(id<DistrictMapSearchOperationDelegate>)newDelegate 
 			 coordinate:(CLLocationCoordinate2D)aCoordinate searchDistricts:(NSArray *)districtIDs {
-	if (self = [super init]) {
+	if ((self = [super init])) {
 		
 		if (newDelegate)
 			delegate = newDelegate;

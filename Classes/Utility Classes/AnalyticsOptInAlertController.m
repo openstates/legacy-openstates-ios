@@ -14,7 +14,7 @@
 @synthesize currentAlert;
 
 - (id)init {
-	if (self=[super init]) {
+	if ((self=[super init])) {
 	}
 	return self;
 }
