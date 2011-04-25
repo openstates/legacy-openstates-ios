@@ -67,7 +67,7 @@
 
 - (id) initWithCoder: (NSCoder *)coder
 {
-    if (self = [super init])
+    if ((self = [super init]))
     {
         self.title = [coder decodeObjectForKey:@"title"];
         self.subtitle = [coder decodeObjectForKey:@"subtitle"];

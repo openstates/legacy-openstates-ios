@@ -69,7 +69,7 @@ NSInteger kNoSelection = -1;
 }
 
 - init {
-	if (self = [super init]) {
+	if ((self = [super init])) {
 		// initialize  to nil
 		mainWindow = nil;
 		self.appIsQuitting = NO;
