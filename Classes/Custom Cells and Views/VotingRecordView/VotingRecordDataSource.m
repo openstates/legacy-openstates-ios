@@ -35,7 +35,6 @@
 	if (newID) {
 		legislatorID = [newID retain];
 		self.chartData = [[PartisanIndexStats sharedPartisanIndexStats] partisanshipDataForLegislatorID:newID];	
-#warning find a way to drop in a graph key ... like what colors mean...
 	}
 }
 
