@@ -114,14 +114,14 @@
 	//if ([self.dataSource respondsToSelector:@selector(didReceiveMemoryWarning)])
 	//	[self.dataSource performSelector:@selector(didReceiveMemoryWarning)];
 	
-	[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
+	//[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
 
 	if (![UtilityMethods isIPadDevice]) {
 		debug_NSLog(@"about to release a view controller %@", self.detailViewController);
 		self.detailViewController = nil;
 	}
 	
-	self.selectObjectOnAppear = nil;
+	//self.selectObjectOnAppear = nil;
 	
 	/*
 	 if ([UtilityMethods isIPadDevice] && ![self.tabBarController.selectedViewController isEqual:self.splitViewController])
