@@ -12,7 +12,7 @@
 //  appreciated but not required.
 //
 
-//// Using Grand Central Dispatch, we can wipe out all the wird slow crap in the intialization with the following:
+//// Using Grand Central Dispatch, we can wipe out all the weird slow crap in the intialization with only the following:
 /*
  + (id)sharedFoo
 {
