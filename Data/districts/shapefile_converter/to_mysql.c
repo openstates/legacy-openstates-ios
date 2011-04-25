@@ -5,6 +5,11 @@
 #include <string.h>
 #include "shapefile_src/shapefil.h"
 
+#define DBF_ID_START 181
+#define PLAN "100"
+#define CHAMBER "H"
+
+
 int main(int argc, char **argv)
 {
   if (argc == 1) { printf("usage: shapefile_to_mysqldump [FILENAME]\n"); exit(1); }
@@ -44,9 +49,10 @@ int main(int argc, char **argv)
   printf("DBF has %d records (with %d fields)\n", nRecordCount, nFieldCount);
 	
   fprintf(fp, "SET CHARSET UTF8;\n");
-  fprintf(fp, "DROP TABLE IF EXISTS DBF;\n");
-  fprintf(fp, "CREATE TABLE DBF (dbf_id MEDIUMINT primary key auto_increment");
-  for (int i = 0 ; i < nFieldCount ; i++)
+#if DBF_ID_START == 0
+	fprintf(fp, "DROP TABLE IF EXISTS DBF;\n");
+	fprintf(fp, "CREATE TABLE DBF (dbf_id MEDIUMINT primary key auto_increment");
+	for (int i = 0 ; i < nFieldCount ; i++)
   {
     char pszFieldName[12];
     int pnWidth;
@@ -69,7 +75,9 @@ int main(int argc, char **argv)
         break;
     }
   }
+
   fprintf(fp, ");\n");
+#endif
   
   for (int i = 0 ; i < nRecordCount ; i++)
   {
@@ -78,8 +86,12 @@ int main(int argc, char **argv)
     char pszFieldName[12];
     int pnWidth;
     int pnDecimals;
-    fprintf(fp, "INSERT INTO DBF VALUES (''");
-    for (int j = 0 ; j < nFieldCount ; j++)
+#if DBF_ID_START == 0
+	  fprintf(fp, "INSERT INTO DBF VALUES (''");
+#else
+	  fprintf(fp, "INSERT INTO DBF (plan, chamber, dbf_id, district) VALUES (\"%s\", \"%s\", %d", PLAN, CHAMBER, i+1+DBF_ID_START);
+#endif
+	  for (int j = 0 ; j < nFieldCount ; j++)
     {
       DBFFieldType ft = DBFGetFieldInfo(d, j, pszFieldName, &pnWidth, &pnDecimals);
       switch (ft)
@@ -114,11 +126,13 @@ int main(int argc, char **argv)
   SHPGetInfo(h, &nEntities, &nShapeType, adfMinBound, adfMaxBound);
   printf("SHP has %d entities\n", nEntities);
   
+#if DBF_ID_START == 0
   fprintf(fp, "DROP TABLE IF EXISTS shape_points;\n");
-  fprintf(fp, "CREATE TABLE shape_points (id MEDIUMINTPRIMARY KEY AUTO_INCREMENT, dbf_id MEDIUMINT, part_id MEDIUMINT, x DOUBLE(18,15), y DOUBLE(18,15));\n");
+  fprintf(fp, "CREATE TABLE shape_points (id MEDIUMINT PRIMARY KEY AUTO_INCREMENT, dbf_id MEDIUMINT, part_id MEDIUMINT, x DOUBLE(18,15), y DOUBLE(18,15));\n");
   fprintf(fp, "DROP TABLE IF EXISTS edges;\n");
-  fprintf(fp, "CREATE TABLE edges (id MEDIUMINTPRIMARY KEY AUTO_INCREMENT, dbf_id MEDIUMINT, part_id INT, part_type VARCHAR(50));\n");
+  fprintf(fp, "CREATE TABLE edges (id MEDIUMINT PRIMARY KEY AUTO_INCREMENT, dbf_id MEDIUMINT, part_id INT, part_type VARCHAR(50));\n");
   fprintf(fp, "ALTER TABLE shape_points ADD KEY dbf_id (dbf_id);\n");
+#endif
   for (int i = 0; i < nEntities; i++)
   {
     SHPObject	*psShape = SHPReadObject(h, i);
@@ -130,14 +144,14 @@ int main(int argc, char **argv)
       if (j == 0 && psShape->nParts > 0)
       {
         pszPartType = SHPPartTypeName(psShape->panPartType[0]);
-        fprintf(fp, "INSERT INTO edges (dbf_id, part_id, part_type) VALUES (%d, %d, \"%s\");\n", i+1, iPart, pszPartType);
+        fprintf(fp, "INSERT INTO edges (dbf_id, part_id, part_type) VALUES (%d, %d, \"%s\");\n", i+1+DBF_ID_START, iPart, pszPartType);
       }
       if (iPart < psShape->nParts && psShape->panPartStart[iPart] == j)
       {
         pszPartType = SHPPartTypeName(psShape->panPartType[iPart]);
         iPart++;
         pszPlus = "+";
-        fprintf(fp, "INSERT INTO edges (dbf_id, part_id, part_type) VALUES (%d, %d, \"%s\");\n", i+1, iPart, pszPartType);
+        fprintf(fp, "INSERT INTO edges (dbf_id, part_id, part_type) VALUES (%d, %d, \"%s\");\n", i+1+DBF_ID_START, iPart, pszPartType);
       }
       else
         pszPlus = " ";
@@ -162,7 +176,7 @@ int main(int argc, char **argv)
       else
         fprintf(fp, "),(");
       
-      fprintf(fp, "%d, %d, %3.15lf, %3.15lf", i+1, iPart, psShape->padfX[j], psShape->padfY[j]);
+      fprintf(fp, "%d, %d, %3.15lf, %3.15lf", i+1+DBF_ID_START, iPart, psShape->padfX[j], psShape->padfY[j]);
     }
     fprintf(fp, ");\n");
     
