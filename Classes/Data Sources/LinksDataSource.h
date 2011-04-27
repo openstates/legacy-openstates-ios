@@ -12,7 +12,6 @@
 }
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
 
 @end
  

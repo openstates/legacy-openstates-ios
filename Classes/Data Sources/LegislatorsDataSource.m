@@ -31,10 +31,6 @@
 	return [LegislatorObj class];
 }
 
-- (NSManagedObjectContext *)managedObjectContext {
-	return [LegislatorObj managedObjectContext];
-}
-
 - (id)init {
 	if ((self = [super init])) {
 	
@@ -71,7 +67,7 @@
 -(void)dataSourceReceivedMemoryWarning:(id)sender {
 	// let's give this a swinging shot....	
 	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
-		[self.managedObjectContext refreshObject:object mergeChanges:NO];
+		[[LegislatorObj managedObjectContext] refreshObject:object mergeChanges:NO];
 	}
 }
 

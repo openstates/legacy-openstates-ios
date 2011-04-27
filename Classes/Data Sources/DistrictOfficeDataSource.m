@@ -32,10 +32,6 @@
 	return [DistrictOfficeObj class];
 }
 
-- (NSManagedObjectContext *)managedObjectContext {
-	return [DistrictOfficeObj managedObjectContext];
-}
-
 - (id)init {
 	if (self = [super init]) {
 		self.filterChamber = 0;
@@ -355,8 +351,9 @@
 - (IBAction)saveAction:(id)sender {
 	
     NSError *error;
-    if (self.managedObjectContext != nil) {
-        if ([[self managedObjectContext] hasChanges] && ![[self managedObjectContext] save:&error]) {
+	NSManagedObjectContext *moc = [DistrictOfficeObj managedObjectContext];
+    if (moc) {
+        if ([moc hasChanges] && ![moc save:&error]) {
 			// Handle error.
 			debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         } 
@@ -448,13 +445,13 @@
 	
 	// Get our table-specific Core Data.
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictOfficeObj" 
-											  inManagedObjectContext:self.managedObjectContext];
+											  inManagedObjectContext:[DistrictOfficeObj managedObjectContext]];
 	[fetchRequest setEntity:entity];
 	
 	//[fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"legislatorID", nil]];
 	
 	NSError *error = nil;
-	NSArray *objArray = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+	NSArray *objArray = [[DistrictOfficeObj managedObjectContext] executeFetchRequest:fetchRequest error:&error];
 	
 	[fetchRequest release];
 	
@@ -484,14 +481,15 @@
 	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"DistrictOffices" ofType:@"plist"];
 	NSArray *rawPlistArray = [[NSArray alloc] initWithContentsOfFile:thePath];
 	
+	NSManagedObjectContext *moc = [DistrictOfficeObj managedObjectContext];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictOfficeObj" 
-														inManagedObjectContext:self.managedObjectContext];
+														inManagedObjectContext:moc];
 	
 	// iterate over the values in the raw  dictionary
 	for (NSDictionary * aDictionary in rawPlistArray)
 	{
 		DistrictOfficeObj *object = [NSEntityDescription insertNewObjectForEntityForName:
-										 [entity name] inManagedObjectContext:self.managedObjectContext];
+										 [entity name] inManagedObjectContext:moc];
 		if (object) {
 			[object importFromDictionary:aDictionary];
 			if ([object.pinColorIndex integerValue]==MKPinAnnotationColorRed)

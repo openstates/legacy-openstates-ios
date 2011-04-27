@@ -44,10 +44,6 @@ enum _menuOrder {
 - (BOOL)canEdit
 { return NO; }
 
-- (NSManagedObjectContext *)managedObjectContext {
-	return nil;
-}
-
 // displayed in a plain style tableview
 - (UITableViewStyle)tableViewStyle {
 	return UITableViewStylePlain;

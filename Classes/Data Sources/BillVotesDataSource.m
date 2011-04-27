@@ -47,10 +47,6 @@
 	return nil;
 }
 
-- (NSManagedObjectContext *)managedObjectContext {
-	return nil;
-}
-
 - (id)initWithBillVotes:(NSMutableDictionary *)newVotes {
 	if ((self = [super init])) {
 		voters_ = nil;

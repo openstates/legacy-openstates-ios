@@ -16,8 +16,6 @@
  
 @required
 
-@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
-
 // these properties are used by the view controller
 // for the navigation and tab bar
 @property (readonly) NSString *name;

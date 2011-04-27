@@ -53,10 +53,6 @@ enum Sections {
 	return [LinkObj class];
 }
 
-- (NSManagedObjectContext *)managedObjectContext {
-	return [LinkObj managedObjectContext];
-}
-
 - (id)init {
 	if ((self = [super init])) {
 	
@@ -92,7 +88,7 @@ enum Sections {
 -(void)dataSourceReceivedMemoryWarning:(id)sender {
 	// let's give this a swinging shot....	
 	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
-		[self.managedObjectContext refreshObject:object mergeChanges:NO];
+		[[LinkObj managedObjectContext] refreshObject:object mergeChanges:NO];
 	}
 }
 

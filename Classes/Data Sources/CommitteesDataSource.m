@@ -28,10 +28,6 @@
 	return [CommitteeObj class];
 }
 
-- (NSManagedObjectContext *)managedObjectContext {
-	return [CommitteeObj managedObjectContext];
-}
-
 - (id)init {
 	if ((self = [super init])) {
 		self.filterChamber = 0;
@@ -68,7 +64,7 @@
 -(void)dataSourceReceivedMemoryWarning:(id)sender {
 	// let's give this a swinging shot....	
 	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
-		[self.managedObjectContext refreshObject:object mergeChanges:NO];
+		[[CommitteeObj managedObjectContext] refreshObject:object mergeChanges:NO];
 	}
 }
 

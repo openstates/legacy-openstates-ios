@@ -40,10 +40,6 @@
 	return [DistrictMapObj class];
 }
 
-- (NSManagedObjectContext *)managedObjectContext {
-	return [DistrictMapObj managedObjectContext];
-}
-
 - (id)init {
 	if ((self = [super init])) {
 		self.filterChamber = 0;
@@ -82,7 +78,7 @@
 -(void)dataSourceReceivedMemoryWarning:(id)sender {
 	// let's give this a swinging shot....	
 	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
-		[self.managedObjectContext refreshObject:object mergeChanges:NO];
+		[[DistrictMapObj managedObjectContext] refreshObject:object mergeChanges:NO];
 	}
 }
 
@@ -368,7 +364,7 @@
 	}	 
  	// Save the context.
 	NSError *error;
-	if (![self.managedObjectContext save:&error]) {
+	if (![[DistrictMapObj managedObjectContext] save:&error]) {
 		// Handle the error...
 	}
 	
@@ -377,8 +373,9 @@
 
 - (void)insertDistrictMaps:(NSArray *)districtMaps
 {	
+	NSManagedObjectContext *moc = [DistrictMapObj managedObjectContext];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictMapObj" 
-											  inManagedObjectContext:self.managedObjectContext];
+											  inManagedObjectContext:moc];
 	
 	
 	// iterate over the values in the raw  dictionary
@@ -386,7 +383,7 @@
 	{
 		// create an legislator instance for each
 		DistrictMapObj *newObject = [NSEntityDescription insertNewObjectForEntityForName:
-										 [entity name] inManagedObjectContext:self.managedObjectContext];
+										 [entity name] inManagedObjectContext:moc];
 		
 //		CLLocationCoordinate2D *coordinatesCArray;
 //		UIColor					*lineColor;
@@ -429,7 +426,7 @@
 	}
 	// Save the context.
 	NSError *error;
-	if (![context save:&error]) {
+	if (![moc save:&error]) {
 		// Handle the error...
 	}
 	
@@ -493,7 +490,7 @@
 	
 	fetchedResultsController = [[NSFetchedResultsController alloc] 
 															 initWithFetchRequest:fetchRequest 
-															 managedObjectContext:self.managedObjectContext 
+															 managedObjectContext:[DistrictMapObj managedObjectContext] 
 															 sectionNameKeyPath:nil cacheName:@"DistrictMaps"];
 	
     fetchedResultsController.delegate = self;

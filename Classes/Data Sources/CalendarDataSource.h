@@ -10,7 +10,6 @@
 
 @interface CalendarDataSource : NSObject <TableDataSource> {
 }
-@property (nonatomic,readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic,retain) NSMutableArray *calendarList;
 
 @end

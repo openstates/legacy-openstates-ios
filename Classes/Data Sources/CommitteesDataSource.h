@@ -12,7 +12,6 @@
 }
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
 
 @property (nonatomic) NSInteger filterChamber;		// 0 means don't filter
 @property (nonatomic,retain) NSMutableString *filterString;	// @"" means don't filter

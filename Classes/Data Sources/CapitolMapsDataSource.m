@@ -46,10 +46,6 @@
 	return UITableViewStylePlain;
 }
 
-- (NSManagedObjectContext *)managedObjectContext {
-	return nil;
-}
-
 - (id)init {
 	if ((self = [super init])) {
 		
