@@ -16,7 +16,7 @@
 @class DataModelUpdateManager;
 @class AnalyticsOptInAlertController;
 
-@interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate> 
+@interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate, UINavigationControllerDelegate> 
 {
 	DataModelUpdateManager *dataUpdater;
 	UIWindow			*mainWindow;

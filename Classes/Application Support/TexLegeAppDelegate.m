@@ -191,19 +191,36 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)tabBarController:(UITabBarController *)theTabBarController didSelectViewController:(UIViewController *)viewController {
-	NSString *vcTitle = @"More";
-	id masterVC = self.currentMasterViewController;
-	if (masterVC && [masterVC respondsToSelector:@selector(viewControllerKey)])
-		vcTitle = [masterVC performSelector:@selector(viewControllerKey)];
-	if (!vcTitle)
-		vcTitle = viewController.tabBarItem.title;
-	
-	NSDictionary *tabSelectionDict = [NSDictionary dictionaryWithObject:vcTitle forKey:@"Feature"];
-	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"SELECTTAB" attributes:tabSelectionDict];
+    if (viewController == theTabBarController.moreNavigationController)
+    {
+        theTabBarController.moreNavigationController.delegate = self;
+    }
+	else {
+		NSString *vcTitle = nil;
+		id masterVC = self.currentMasterViewController;
+		if (masterVC)
+			vcTitle = NSStringFromClass([masterVC class]);
+		if (!vcTitle)
+			vcTitle = viewController.tabBarItem.title;
 		
+		NSDictionary *tabSelectionDict = [NSDictionary dictionaryWithObject:vcTitle forKey:@"Feature"];
+		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"SELECTTAB" attributes:tabSelectionDict];		
+	}
+
 	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
 	[[NSUserDefaults standardUserDefaults] synchronize];
+}
 
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if (navigationController == self.tabBarController.moreNavigationController)
+    {
+		NSString *vcTitle = NSStringFromClass([viewController class]);
+		if (NO == [vcTitle hasPrefix:@"UIMore"]) {		
+			NSDictionary *tabSelectionDict = [NSDictionary dictionaryWithObject:vcTitle forKey:@"Feature"];
+			[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"SELECTTAB" attributes:tabSelectionDict];
+		}
+    }
 }
 
 - (void)setTabOrderIfSaved {
@@ -254,7 +271,7 @@ NSInteger kNoSelection = -1;
 		[masterVC configure];
 		
 		// If we have a preferred VC and we've found it in our array, save it
-		if (savedTabSelectionIndex < 0 && tempVCKey && [tempVCKey isEqualToString:[masterVC viewControllerKey]]) // we have a saved view controller in mind
+		if (savedTabSelectionIndex < 0 && tempVCKey && [tempVCKey isEqualToString:NSStringFromClass([masterVC class])]) // we have a saved view controller in mind
 			savedTabSelectionIndex = loopIndex;
 		loopIndex++;
 	}
@@ -280,7 +297,7 @@ NSInteger kNoSelection = -1;
 	} 
 
 	/*for (GeneralTableViewController *controller in VCs) {
-		if ([[controller viewControllerKey] isEqualToString:@"CommitteeMasterViewController"]) {
+		if ([controller isKindOfClass:[CommitteeMasterViewController class]]) {
 			NSError *error = nil;
 			NSInteger count = [CommitteeObj count:&error];
 			if (error || count == 0)
