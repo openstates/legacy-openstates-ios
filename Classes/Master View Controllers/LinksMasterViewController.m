@@ -20,10 +20,6 @@
 
 @implementation LinksMasterViewController
 
-- (NSString *) viewControllerKey {
-	return @"LinksMasterViewController";
-}
-
 - (Class)dataSourceClass {
 	return [LinksDataSource class];
 }
@@ -151,7 +147,7 @@
 		[detailVC removeDoneButton];
 		
 		// save off this item's selection to our AppDelegate
-		[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
+		[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 		[detailVC setLink:link];
 
 		if (isSplitViewDetail == NO) {

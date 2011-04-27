@@ -40,14 +40,9 @@
 #pragma mark -
 #pragma mark Initialization
 
-- (NSString *) viewControllerKey {
-	return @"DistrictOfficeMasterViewController";
-}
-
 - (NSString *)nibName {
-	return [self viewControllerKey];
+	return NSStringFromClass([self class]);
 }
-
 
 - (Class)dataSourceClass {
 	return [DistrictOfficeDataSource class];
@@ -138,11 +133,11 @@
 	
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
 /*	if ([dataObject isKindOfClass:[NSManagedObject class]])
-		[appDelegate setSavedTableSelection:[dataObject objectID] forKey:self.viewControllerKey];
+		[appDelegate setSavedTableSelection:[dataObject objectID] forKey:NSStringFromClass([self class])];
 	else
-		[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
+		[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 */
-	[appDelegate setSavedTableSelection:nil forKey:self.viewControllerKey];
+	[appDelegate setSavedTableSelection:nil forKey:NSStringFromClass([self class])];
 	
 	if (!self.detailViewController) {
 		MapViewController *tempVC = [[MapViewController alloc] init];

@@ -23,10 +23,6 @@
 
 @implementation TexLegeDataImporter
 
-- (NSManagedObjectContext *)managedObjectContext {
-	return [LegislatorObj managedObjectContext];
-}
-
 - (id) init {
 	if (self=[super init]) {
 	}
@@ -100,8 +96,10 @@
 	[TexLegeCoreDataUtils deleteAllObjectsInEntityNamed:entityName];
 
 	NSInteger importCount = 0;
+	NSManagedObjectContext *moc = [LegislatorObj managedObjectContext];
 	for (NSDictionary * aDictionary in importPlist) {
-		id<TexLegeDataObjectProtocol> object = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:self.managedObjectContext];
+		id<TexLegeDataObjectProtocol> object = [NSEntityDescription insertNewObjectForEntityForName:entityName 
+																			 inManagedObjectContext:moc];
 		
 		if (object) {
 			[object importFromDictionary:aDictionary];
@@ -122,8 +120,9 @@
 	
 	@try {
 		NSError *error = nil;
-		if (self.managedObjectContext != nil) {
-			if ([self.managedObjectContext hasChanges] && ![self.managedObjectContext save:&error]) {
+		NSManagedObjectContext *moc = [LegislatorObj managedObjectContext];
+		if (moc) {
+			if ([moc hasChanges] && ![moc save:&error]) {
 				debug_NSLog(@"DataImporter:saveAction - unresolved error %@, %@", error, [error userInfo]);
 			} 
 		}

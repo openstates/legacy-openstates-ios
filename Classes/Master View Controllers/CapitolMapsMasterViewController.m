@@ -21,10 +21,6 @@
 @implementation CapitolMapsMasterViewController
 
 
-- (NSString *) viewControllerKey {
-	return @"CapitolMapsMasterViewController";
-}
-
 - (void)loadView {	
 	[super runLoadView];
 }
@@ -81,7 +77,7 @@
 	
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	// save off this item's selection to our AppDelegate
-	[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
+	[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 	
 	// create a CapitolMapsDetailViewController. This controller will display the full size tile for the element
 	if (self.detailViewController == nil) {

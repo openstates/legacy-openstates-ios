@@ -28,12 +28,8 @@
 #pragma mark -
 #pragma mark Initialization
 
-- (NSString *) viewControllerKey {
-	return @"LegislatorMasterViewController";
-}
-
 - (NSString *)nibName {
-	return [self viewControllerKey];
+	return NSStringFromClass([self class]);
 }
 
 
@@ -85,7 +81,7 @@
 
 	NSDictionary *segPrefs = [[NSUserDefaults standardUserDefaults] objectForKey:kSegmentControlPrefKey];
 	if (segPrefs) {
-		NSNumber *segIndex = [segPrefs objectForKey:[self viewControllerKey]];
+		NSNumber *segIndex = [segPrefs objectForKey:NSStringFromClass([self class])];
 		if (segIndex)
 			self.chamberControl.selectedSegmentIndex = [segIndex integerValue];
 	}
@@ -139,9 +135,9 @@
 		return;
 	
 	if ([dataObject isKindOfClass:[RKManagedObject class]])
-		[appDelegate setSavedTableSelection:[dataObject primaryKeyValue] forKey:self.viewControllerKey];
+		[appDelegate setSavedTableSelection:[dataObject primaryKeyValue] forKey:NSStringFromClass([self class])];
 	else
-		[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
+		[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 	
 	// create a LegislatorDetailViewController. This controller will display the full size tile for the element
 	if (self.detailViewController == nil) {
@@ -207,7 +203,7 @@
 		if (segPrefs) {
 			NSNumber *segIndex = [NSNumber numberWithInteger:self.chamberControl.selectedSegmentIndex];
 			NSMutableDictionary *newDict = [segPrefs mutableCopy];
-			[newDict setObject:segIndex forKey:[self viewControllerKey]];
+			[newDict setObject:segIndex forKey:NSStringFromClass([self class])];
 			[[NSUserDefaults standardUserDefaults] setObject:newDict forKey:kSegmentControlPrefKey];
 			[[NSUserDefaults standardUserDefaults] synchronize];
 			[newDict release];

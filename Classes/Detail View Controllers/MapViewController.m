@@ -180,18 +180,12 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 #pragma mark -
 #pragma mark Animation and Zoom
-- (NSManagedObjectContext *)managedObjectContext {
-	return [DistrictMapObj managedObjectContext];
-}
-
-
 
 - (void) clearAnnotationsAndOverlays {
 	self.mapView.showsUserLocation = NO;
 	[self.mapView removeOverlays:self.mapView.overlays];
 	[self.mapView removeAnnotations:self.mapView.annotations];
 }
-
 
 - (void) clearAnnotationsAndOverlaysExcept:(id)keep {
 	self.mapView.showsUserLocation = NO;	

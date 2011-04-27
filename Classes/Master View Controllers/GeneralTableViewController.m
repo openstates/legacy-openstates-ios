@@ -21,16 +21,6 @@
 @synthesize dataSource, detailViewController;
 @synthesize selectObjectOnAppear;
 
-#ifdef BUILTINNOTRESTKIT
-- (NSManagedObjectContext *)managedObjectContext {
-	return [[TexLegeAppDelegate appDelegate] managedObjectContext];
-}
-#endif
-
-- (NSString *) viewControllerKey {
-	return @"GENERALTABLEVIEWCONTROLLER_TEMPLATE";
-}
-
 - (Class)dataSourceClass {
 	return [NSObject class];
 }
@@ -66,7 +56,7 @@
 	//self.dataSource = [[[[self dataSourceClass] alloc] init] autorelease];
 		
 	if ([self.dataSource usesCoreData]) {
-		id objectID = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:self.viewControllerKey];
+		id objectID = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:NSStringFromClass([self class])];
 		if (objectID && [objectID isKindOfClass:[NSNumber class]]) {
 			@try {
 				if ([self.dataSource respondsToSelector:@selector(dataClass)])
@@ -77,7 +67,7 @@
 		}			
 	}
 	else { // Let's just do this for maps, and meetings, ... we'll handle them like integer row selections
-		id object = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:self.viewControllerKey];
+		id object = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:NSStringFromClass([self class])];
 		if (!object)
 			return;
 		
@@ -114,7 +104,7 @@
 	//if ([self.dataSource respondsToSelector:@selector(didReceiveMemoryWarning)])
 	//	[self.dataSource performSelector:@selector(didReceiveMemoryWarning)];
 	
-	//[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
+	//[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:NSStringFromClass([self class])];
 
 	if (![UtilityMethods isIPadDevice]) {
 		debug_NSLog(@"about to release a view controller %@", self.detailViewController);
@@ -231,7 +221,7 @@
 
 	// We're on an iphone, without a splitview or popovers, so if we get here, let's stop traversing our replay breadcrumbs
 	if (![UtilityMethods isIPadDevice]) {
-		[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:self.viewControllerKey];
+		[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:NSStringFromClass([self class])];
 	}
 }
 

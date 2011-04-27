@@ -131,9 +131,8 @@
 			self.legislator.notes = self.notesText.text;
 		}
 		
-		NSManagedObjectContext *context = self.legislator.managedObjectContext;
 		NSError *error = nil;
-		if (![context save:&error]) {
+		if (![self.legislator.managedObjectContext save:&error]) {
 			// Handle error
 			debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		}

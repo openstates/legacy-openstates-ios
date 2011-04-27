@@ -35,11 +35,7 @@
 }
 
 - (NSString *)nibName {
-	return [self viewControllerKey];
-}
-
-- (NSString *) viewControllerKey {
-	return @"BillsMasterViewController";
+	return NSStringFromClass([self class]);
 }
 
 /*- (void)loadView {	
@@ -155,7 +151,7 @@
 		dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	
 		// save off this item's selection to our AppDelegate
-		[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
+		[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 	
 		if (!dataObject || ![dataObject isKindOfClass:[NSDictionary class]])
 			return;

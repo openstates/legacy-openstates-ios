@@ -16,8 +16,7 @@
 
 @property (nonatomic,retain) IBOutlet id<TableDataSource> dataSource;
 @property (nonatomic,retain) IBOutlet id detailViewController;
-@property (nonatomic,readonly) NSString			*viewControllerKey;
-@property (nonatomic,retain) id					selectObjectOnAppear;
+@property (nonatomic,retain)		  id selectObjectOnAppear;
 
 - (void)configure;
 - (void)runLoadView;

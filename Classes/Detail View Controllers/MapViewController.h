@@ -34,8 +34,6 @@
 @property (nonatomic,assign) MKPolygonView *senateDistrictView, *houseDistrictView;
 @property (nonatomic,retain) NSOperationQueue *genericOperationQueue;
 
-@property (nonatomic,readonly) NSManagedObjectContext *managedObjectContext;
-
 //- (IBAction) mapControlSheet:(id)sender;
 - (IBAction) showAllDistricts:(id)sender;
 //- (IBAction) showAllDistrictOffices:(id)sender;

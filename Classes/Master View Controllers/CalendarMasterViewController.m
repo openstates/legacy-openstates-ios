@@ -20,11 +20,6 @@
 
 @implementation CalendarMasterViewController
 
-
-- (NSString *) viewControllerKey {
-	return @"CalendarsMasterViewController";
-}
-
 - (void)loadView {
 	[super runLoadView];
 }
@@ -76,7 +71,7 @@
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	// save off this item's selection to our AppDelegate
 
-	[appDelegate setSavedTableSelection:newIndexPath forKey:self.viewControllerKey];
+	[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 	
 	if (!self.detailViewController) {
 		CalendarDetailViewController *temp = [[CalendarDetailViewController alloc] initWithNibName:[CalendarDetailViewController nibName] 
