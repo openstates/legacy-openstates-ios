@@ -26,6 +26,8 @@
 #import "NotesViewController.h"
 #import "TexLegeAppDelegate.h"
 
+#import "BillSearchDataSource.h"
+#import "BillsListDetailViewController.h"
 #import "CommitteeDetailViewController.h"
 #import "DistrictOfficeMasterViewController.h"
 
@@ -429,6 +431,16 @@
 				[self.navigationController pushViewController:subDetailController animated:YES];
 				[subDetailController release];
 			}
+		}
+		else if (cellInfo.entryType == DirectoryTypeBills) {
+			//if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:@"http://openstates.sunlightlabs.com"]]) { 
+				BillsListDetailViewController *subDetailController = [[BillsListDetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
+				BillSearchDataSource *searchDS = [subDetailController valueForKey:@"dataSource"];
+				subDetailController.title = [NSString stringWithFormat:@"Bills for %@", [member shortNameForButtons]];
+				[searchDS startSearchForSponsor:cellInfo.entryValue];
+				[self.navigationController pushViewController:subDetailController animated:YES];
+				[subDetailController release];
+			//}
 		}
 		else if (cellInfo.entryType == DirectoryTypeOfficeMap) {
 			CapitolMap *capMap = cellInfo.entryValue;			

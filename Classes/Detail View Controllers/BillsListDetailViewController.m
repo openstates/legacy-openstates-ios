@@ -113,12 +113,16 @@
 		if (bill) {
 						
 			BOOL changingViews = NO;
+			BOOL needsPushVC = (NO == [UtilityMethods isIPadDevice]);
 			
 			BillsDetailViewController *detailView = nil;
 			if ([UtilityMethods isIPadDevice]) {
 				id aDetail = [[[TexLegeAppDelegate appDelegate] detailNavigationController] visibleViewController];
 				if ([aDetail isKindOfClass:[BillsDetailViewController class]])
 					detailView = aDetail;
+				else if ([aDetail isKindOfClass:[BillsListDetailViewController class]]) {
+					needsPushVC = YES;
+				}
 			}
 			if (!detailView) {
 				detailView = [[[BillsDetailViewController alloc] 
@@ -131,7 +135,7 @@
 																			   session:[bill objectForKey:@"session"] 
 																			  delegate:detailView];
 			
-			if (![UtilityMethods isIPadDevice])
+			if (needsPushVC)
 				[self.navigationController pushViewController:detailView animated:YES];
 			else if (changingViews)
 				//[[[TexLegeAppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:YES];

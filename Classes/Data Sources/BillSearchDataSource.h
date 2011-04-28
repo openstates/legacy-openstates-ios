@@ -25,6 +25,7 @@
 
 - (void)startSearchWithString:(NSString *)searchString chamber:(NSInteger)chamber;
 - (void)startSearchForSubject:(NSString *)searchSubject chamber:(NSInteger)chamber;
+- (void)startSearchForSponsor:(NSString *)searchSponsorID;
 
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject;

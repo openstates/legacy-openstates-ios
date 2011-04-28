@@ -64,12 +64,15 @@
  	[super dealloc];
 }
 
+// This is just a short cut, we wind up using this array several times.  Perhaps we should remember it instead of recreating?
+- (NSArray *) billTypes {
+	return [[_sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];	
+}
+
 // return the map at the index in the array
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
-	//return [self.billResults objectAtIndex:indexPath.row];
-	NSMutableDictionary *bill = [[_sections valueForKey:[[[_sections allKeys] 
-												   sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] 
-												  objectAtIndex:indexPath.section]] objectAtIndex:indexPath.row];
+	NSMutableDictionary *bill = [[_sections valueForKey:[[self billTypes] objectAtIndex:indexPath.section]] 
+								 objectAtIndex:indexPath.row];
 	return bill;
 }
 
@@ -79,19 +82,18 @@
 		if (!IsEmpty(typeString)) {
 			NSMutableArray *sectionRow = [_sections objectForKey:typeString];
 			if (!IsEmpty(sectionRow)) {
-				NSArray *sortedSections = [[_sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+				NSArray *sortedSections = [self billTypes];
 				NSInteger section = [sortedSections indexOfObject:typeString];
 				NSInteger row = [sectionRow indexOfObject:dataObject];
 				return [NSIndexPath indexPathForRow:row inSection:section];
 			}
 		}
 	}
-	return nil; //[NSIndexPath indexPathForRow:0 inSection:0];
+	return nil;
 }
 
 - (void) generateSections {
-	BOOL found;
-	
+	BOOL found = NO;
 	[_sections removeAllObjects];
 	
     // Loop through the bills and create our keys
@@ -135,25 +137,24 @@
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	//return 1;
 	return [[_sections allKeys] count];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return [[[_sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] objectAtIndex:section];
+{	
+	NSString *billType = [[self billTypes] objectAtIndex:section];
+	return [[[[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:@"types"] 
+							findWhereKeyPath:@"title" 
+							equals:billType] objectForKey:@"titleLong"];
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return [[_sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    return [self billTypes];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section 
 {		
-	//return [_rows count];
-	return [[_sections valueForKey:[[[_sections allKeys] 
-									 sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] 
-									objectAtIndex:section]] count];
+	return [[_sections valueForKey:[[self billTypes] objectAtIndex:section]] count];
 }
 
 
@@ -274,6 +275,24 @@
 	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:YES])
 		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/bills" queryParams:queryParams delegate:self];
 }
+
+- (void)startSearchForSponsor:(NSString *)searchSponsorID {
+	if (NO == IsEmpty(searchSponsorID)) {
+		NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
+									 searchSponsorID, @"sponsor_id",
+									 @"tx", @"state",
+									 @"session", @"search_window",
+									 osApiKeyValue, @"apikey",
+									 nil];
+		
+		if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:YES]) {
+			[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/bills" 
+																   queryParams:queryParams 
+																	  delegate:self];
+		}
+	}
+}
+
 
 
 #pragma mark -

@@ -190,6 +190,18 @@
 	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
 	[cellInfo release], cellInfo = nil;
 	
+	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+				 @"Legislation", @"subtitle",
+				 self.legislator.openstatesID, @"entryValue",
+				 @"Sponsored Bills", @"title",
+				 [NSNumber numberWithBool:YES], @"isClickable",
+				 [NSNumber numberWithInteger:DirectoryTypeBills], @"entryType",
+				 nil];
+	cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
+	[entryDict release];
+	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
+	[cellInfo release], cellInfo = nil;
+	
 	tempString = nil;
 	[[NSUserDefaults standardUserDefaults] synchronize];	
 	NSDictionary *storedNotesDict = [[NSUserDefaults standardUserDefaults] valueForKey:@"LEGE_NOTES"];
