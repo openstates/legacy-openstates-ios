@@ -45,8 +45,6 @@
 #import "VotingRecordDataSource.h"
 
 @interface LegislatorDetailViewController (Private)
-
-- (void) pushMapViewWithMap:(CapitolMap *)capMap;
 - (void) setupHeader;
 @end
 
@@ -90,7 +88,6 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_WNOMOBJ" object:nil];
 	
-	//UIImage *sealImage = [UIImage imageWithContentsOfResolutionIndependentFile:@"seal.png"];
 	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
 	UIColor *sealColor = [[UIColor colorWithPatternImage:sealImage] colorWithAlphaComponent:0.5f];	
 	self.miniBackgroundView.backgroundColor = sealColor;
@@ -125,7 +122,6 @@
 }
 
 - (void)dealloc {
-	
 	self.indivSlider = nil;
 	self.partySlider = nil;
 	self.allSlider = nil;
@@ -133,13 +129,11 @@
 	self.headerView = nil;
 	self.leg_photoView = nil;
 	self.leg_reelection = nil;
-	//self.tableView = nil;
 	self.miniBackgroundView = nil;
 	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
 	self.notesPopover = nil;
 	self.masterPopover = nil;
 	self.dataObjectID = nil;
-
 	self.newChartView = nil;
 	self.votingDataSource = nil;
 
@@ -292,8 +286,6 @@
 		if (masterPopover != nil) {
 			[masterPopover dismissPopoverAnimated:YES];
 		}		
-		
-		
 		[self.tableView reloadData];
 		[self.newChartView reloadData];
 		[self.view setNeedsDisplay];
@@ -322,7 +314,7 @@
 
 	BOOL ipad = [UtilityMethods isIPadDevice];
 	BOOL portrait = (![UtilityMethods isLandscapeOrientation]);
-	
+
 	if (portrait && ipad && !self.legislator)
 		self.legislator = [[[TexLegeAppDelegate appDelegate] legislatorMasterVC] selectObjectOnAppear];		
 	
@@ -357,7 +349,6 @@
 	if ([UtilityMethods isLandscapeOrientation]) {
 		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"ERR_POPOVER_IN_LANDSCAPE"];
 	}
-		 
 	if (self.notesPopover) {
 		[self.notesPopover dismissPopoverAnimated:YES];
 		self.notesPopover = nil;
@@ -373,7 +364,6 @@
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration 
-//- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
 	[self.newChartView reloadData];	
 }
@@ -405,18 +395,17 @@
 				nextViewController.backViewController = self;
 				
 				if ([UtilityMethods isIPadDevice]) {
-					//nextViewController.toolbar.hidden = NO;
 					self.notesPopover = [[[UIPopoverController alloc] initWithContentViewController:nextViewController] autorelease];
 					self.notesPopover.delegate = self;
 					CGRect cellRect = [aTableView rectForRowAtIndexPath:newIndexPath];
 					[self.notesPopover presentPopoverFromRect:cellRect inView:aTableView permittedArrowDirections:(UIPopoverArrowDirectionLeft & UIPopoverArrowDirectionRight & UIPopoverArrowDirectionDown ) animated:YES];
 				}
-				else
+				else {
 					[self.navigationController pushViewController:nextViewController animated:YES];
+				}
 				
 				[nextViewController release];
 			}
-			
 		}
 		else if (cellInfo.entryType == DirectoryTypeCommittee) {
 			CommitteeDetailViewController *subDetailController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
@@ -433,18 +422,22 @@
 			}
 		}
 		else if (cellInfo.entryType == DirectoryTypeBills) {
-			//if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:@"http://openstates.sunlightlabs.com"]]) { 
-				BillsListDetailViewController *subDetailController = [[BillsListDetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
+			if ([TexLegeReachability openstatesReachable]) { 
+				BillsListDetailViewController *subDetailController = [[BillsListDetailViewController alloc] initWithStyle:UITableViewStylePlain];
 				BillSearchDataSource *searchDS = [subDetailController valueForKey:@"dataSource"];
 				subDetailController.title = [NSString stringWithFormat:@"Bills for %@", [member shortNameForButtons]];
 				[searchDS startSearchForSponsor:cellInfo.entryValue];
 				[self.navigationController pushViewController:subDetailController animated:YES];
 				[subDetailController release];
-			//}
+			}
 		}
 		else if (cellInfo.entryType == DirectoryTypeOfficeMap) {
 			CapitolMap *capMap = cellInfo.entryValue;			
-			[self pushMapViewWithMap:capMap];
+			CapitolMapsDetailViewController *detailController = [[CapitolMapsDetailViewController alloc] initWithNibName:@"CapitolMapsDetailViewController" bundle:nil];
+			detailController.map = capMap;
+			
+			[self.navigationController pushViewController:detailController animated:YES];
+			[detailController release];
 		}
 		else if (cellInfo.entryType == DirectoryTypeMail) {
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:cellInfo.entryValue 
@@ -503,10 +496,9 @@
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsExternalHandler)		// tell the device to open the url externally
 		{
-			NSURL *myURL = [cellInfo generateURL];
-			// do the URL
-			
+			NSURL *myURL = [cellInfo generateURL];			
 			BOOL isPhone = ([UtilityMethods canMakePhoneCalls]);
+			
 			if ((cellInfo.entryType == DirectoryTypePhone) && (!isPhone)) {
 				debug_NSLog(@"Tried to make a phonecall, but this isn't a phone: %@", myURL.description);
 				[UtilityMethods alertNotAPhone];
@@ -519,7 +511,6 @@
 
 - (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = 44.0f;
-	
 	TableCellDataObject *cellInfo = [self.dataSource dataObjectForIndexPath:indexPath];
 	
 	if (cellInfo == nil) {
@@ -536,15 +527,6 @@
 		}
 	}
 	return height;
-}
-
-- (void) pushMapViewWithMap:(CapitolMap *)capMap {
-	CapitolMapsDetailViewController *detailController = [[CapitolMapsDetailViewController alloc] initWithNibName:@"CapitolMapsDetailViewController" bundle:nil];
-	detailController.map = capMap;
-
-	// push the detail view controller onto the navigation stack to display it
-	[self.navigationController pushViewController:detailController animated:YES];
-	[detailController release];
 }
 
 @end
