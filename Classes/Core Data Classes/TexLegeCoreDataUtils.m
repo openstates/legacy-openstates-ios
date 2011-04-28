@@ -232,6 +232,8 @@
 	objectManager.client.username = @"restread";
 	objectManager.client.password = @"teentita";
 	
+	[RKRequestQueue sharedQueue].showsNetworkActivityIndicatorWhenBusy = YES;
+	
 	// Add our element to object mappings
 	[mapper registerClass:[LegislatorObj class] forElementNamed:@"legislators"];
 	[mapper registerClass:[CommitteeObj class] forElementNamed:@"committees"];
