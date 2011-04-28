@@ -34,8 +34,6 @@
 
 
 - (IBAction)contributionDataChanged:(id)sender {
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-
 	[self.tableView reloadData];
 }
 
@@ -92,9 +90,7 @@
 #pragma mark -
 #pragma mark Data Objects
 
-- (void)setQueryEntityID:(NSString *)newObj type:(NSNumber *)newType cycle:(NSString *)newCycle {
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-	
+- (void)setQueryEntityID:(NSString *)newObj type:(NSNumber *)newType cycle:(NSString *)newCycle {	
 	NSString *typeString = @"";
 	switch ([newType integerValue]) {
 		case kContributionQueryDonor:

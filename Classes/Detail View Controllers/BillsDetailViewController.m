@@ -766,8 +766,6 @@ enum _billSections {
 		debug_NSLog(@"BillDetail - Error loading bill results from %@: %@", [request description], [error localizedDescription]);
 	}
 	
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-
 	UIAlertView *alert = [[[ UIAlertView alloc ] 
 			  initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
 			  message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
@@ -781,8 +779,6 @@ enum _billSections {
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data  
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-
 		self.bill = [response.body mutableObjectFromJSONData];	
 		
 		NSDictionary *tagBill = [NSDictionary dictionaryWithObject:watchIDForBill(self.bill) forKey:@"bill"];
