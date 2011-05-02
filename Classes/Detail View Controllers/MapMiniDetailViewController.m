@@ -85,10 +85,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 	//self.navigationItem.title = @"District Location";
-	
-	if (![UtilityMethods supportsMKPolyline])
-		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"__NO_MKPOLYLINE!__"];
-	
 }
 
 - (void) viewDidUnload {

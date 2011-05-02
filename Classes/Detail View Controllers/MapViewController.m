@@ -136,9 +136,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		self.navigationItem.titleView = self.searchBar;
 	}
 	
-	if (![UtilityMethods supportsMKPolyline])
-		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"__NO_MKPOLYLINE!__"];
-	
 	UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
 	longPressRecognizer.delegate = self;
 	[self.mapView addGestureRecognizer:longPressRecognizer];        
