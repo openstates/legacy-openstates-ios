@@ -1,9 +1,11 @@
-    //
+//
 //  IntelligentSplitViewController.m
 //  TexLege
 //
-//  Created by Gregory Combs on 9/21/10.
-//  Copyright 2010 Gregory S. Combs. All rights reserved.
+//  Released under the Creative Commons Attribution-ShareAlide 3.0 Unported License
+//  Please see the included license page for more information.
+//
+//  In a nutshell, you can use this, just attribute this class to me in your thank you notes or about box.
 //
 
 #import "IntelligentSplitViewController.h"
