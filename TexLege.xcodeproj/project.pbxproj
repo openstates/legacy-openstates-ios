@@ -1410,6 +1410,13 @@
 			remoteGlobalIDString = D2AAC07E0554694100DB518D;
 			remoteInfo = Kal;
 		};
+		37E8787D136F2152004473BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3775C7C8131C44C600638ED4 /* RestKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 255B7588133BABBF00ED76AD;
+			remoteInfo = RestKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -2429,9 +2436,9 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				372D5DDB11E9C0B5005A21E2 /* MapKit */,
 				C83CD92C0D5822C30066AE4B /* Application Support */,
 				37A0E4460FD2DEAA009B65F7 /* Utility Classes */,
+				372D5DDB11E9C0B5005A21E2 /* MapKit */,
 				37AD577C11DA577C00D68934 /* Data Sources */,
 				37AD577911DA573D00D68934 /* View Controllers */,
 				37AD57B511DA644900D68934 /* Custom Cells and Views */,
@@ -3787,6 +3794,7 @@
 			);
 			dependencies = (
 				371D546D1365F67200A61BD4 /* PBXTargetDependency */,
+				37E8787E136F2152004473BC /* PBXTargetDependency */,
 				371D547D1365F6A600A61BD4 /* PBXTargetDependency */,
 				371D547F1365F6A600A61BD4 /* PBXTargetDependency */,
 				371D54811365F6A600A61BD4 /* PBXTargetDependency */,
@@ -5263,6 +5271,11 @@
 			isa = PBXTargetDependency;
 			name = RestKitCoreData;
 			targetProxy = 371D54841365F6A600A61BD4 /* PBXContainerItemProxy */;
+		};
+		37E8787E136F2152004473BC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RestKit;
+			targetProxy = 37E8787D136F2152004473BC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
