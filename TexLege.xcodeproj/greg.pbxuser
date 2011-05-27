@@ -3,15 +3,15 @@
 	1D3623240D0F684500981E51 /* TexLegeAppDelegate.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {891, 845}}";
-			sepNavSelRange = "{2112, 0}";
-			sepNavVisRange = "{477, 2277}";
+			sepNavSelRange = "{1492, 0}";
+			sepNavVisRange = "{478, 2308}";
 		};
 	};
 	1D3623250D0F684500981E51 /* TexLegeAppDelegate.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 7553}}";
-			sepNavSelRange = "{265, 0}";
-			sepNavVisRange = "{0, 755}";
+			sepNavIntBoundsRect = "{{0, 0}, {1146, 7514}}";
+			sepNavSelRange = "{13872, 207}";
+			sepNavVisRange = "{145, 1403}";
 		};
 	};
 	1D6058900D05DD3D006BFB54 /* TexLege */ = {
@@ -39,12 +39,12 @@
 			3774933713406F6100EA4F32 /* TVOutManager.m:148 */,
 			37D2471D1341078F004C8F6E /* IntelligentSplitViewController.m:145 */,
 			37281ADE134D14CE00E73B57 /* RKObjectLoader.m:169 */,
-			37075FB2135F2F87007B6BFD /* GeneralTableViewController.m:117 */,
+			37075FB2135F2F87007B6BFD /* GeneralTableViewController.m:107 */,
 			37075FB8135F303E007B6BFD /* IntelligentSplitViewController.m:38 */,
 			37076285135F86F1007B6BFD /* CalendarEventsLoader.m:174 */,
-			372638CE1360953A00B9B5EF /* BillsDetailViewController.m:784 */,
-			372638D4136095DF00B9B5EF /* DataModelUpdateManager.m:269 */,
-			372638D6136095E700B9B5EF /* DataModelUpdateManager.m:412 */,
+			372638CE1360953A00B9B5EF /* BillsDetailViewController.m:781 */,
+			372638D4136095DF00B9B5EF /* DataModelUpdateManager.m:216 */,
+			372638D6136095E700B9B5EF /* DataModelUpdateManager.m:283 */,
 		);
 		codeSenseManager = 37315BCD0F6C739A00D0A9DF /* Code sense */;
 		executables = (
@@ -217,16 +217,9 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 325449418;
-			PBXWorkspaceStateSaveDate = 325449418;
+			PBXPerProjectTemplateStateSaveDate = 327885706;
+			PBXWorkspaceStateSaveDate = 327885706;
 			com.apple.ide.smrt.PBXUserSmartGroupsKey.Rev10 = <040b73747265616d747970656481e8038401408484840e4e534d757461626c654172726179008484074e534172726179008484084e534f626a65637400858401690192848484134e534d757461626c6544696374696f6e6172790084840c4e5344696374696f6e6172790095960792848484084e53537472696e67019584012b046e616d658692849a9a0d42696c6c20547261636b696e678692849a9a195042585472616e7369656e744c6f636174696f6e4174546f708692849a9a06626f74746f6d8692849a9a0b707265666572656e63657386928497960892849a9a0669734c6561668692848484084e534e756d626572008484074e5356616c7565009584012a848401639e008692849a9a09726563757273697665869284a29da49e018692849a9a04726f6f748692849a9a183337363645453132313231303845363130303733433730358692849a9a05696d6167658692849a9a0b536d617274466f6c6465728692849a9a0763616e536176658692a692849a9a1250425850726f6a65637453636f70654b65798692849a9a035945538692849a9a0572656765788692849a9a0c42696c6c2e2b5c2e5b6d685d8692849a9a07666e6d617463688692849a9a00868692849a9a146162736f6c75746550617468546f42756e646c658692b192849a9a0b6465736372697074696f6e8692849a9a103c6e6f206465736372697074696f6e3e8692849a9a08676c6f62616c49448692849a9a183337374443343644313334344431384630303030363845318692849a9a03636c7a8692849a9a1550425846696c656e616d65536d61727447726f7570868686>;
-		};
-		perUserProjectItems = {
-			371D543B1365F5F100A61BD4 = 371D543B1365F5F100A61BD4 /* PBXTextBookmark */;
-			371D54881365F6B600A61BD4 = 371D54881365F6B600A61BD4 /* PBXTextBookmark */;
-			371D54891365F6B600A61BD4 = 371D54891365F6B600A61BD4 /* PBXTextBookmark */;
-			371D54961365F6C100A61BD4 = 371D54961365F6C100A61BD4 /* PBXTextBookmark */;
-			37429BA71365F6D900F25BC3 /* PBXTextBookmark */ = 37429BA71365F6D900F25BC3 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 37315BCC0F6C739A00D0A9DF /* Source Control */;
 		userBookmarkGroup = 37E2064B1220422C00103D76 /* PBXBookmarkGroup */;
@@ -235,8 +228,8 @@
 	};
 	29B97316FDCFA39411CA2CEA /* main.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 656}}";
-			sepNavSelRange = "{256, 0}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 620}}";
+			sepNavSelRange = "{189, 0}";
 			sepNavVisRange = "{0, 368}";
 		};
 	};
@@ -268,7 +261,7 @@
 			sepNavVisRange = "{0, 1319}";
 		};
 	};
-	37075FB2135F2F87007B6BFD /* GeneralTableViewController.m:117 */ = {
+	37075FB2135F2F87007B6BFD /* GeneralTableViewController.m:107 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -280,9 +273,9 @@
 		functionName = "-didReceiveMemoryWarning";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 117;
+		lineNumber = 107;
 		location = TexLege;
-		modificationTime = 325449446.12245;
+		modificationTime = 327823927.375402;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -300,7 +293,7 @@
 		ignoreCount = 0;
 		lineNumber = 38;
 		location = TexLege;
-		modificationTime = 325449446.122466;
+		modificationTime = 327823927.37543;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -318,7 +311,7 @@
 		ignoreCount = 0;
 		lineNumber = 174;
 		location = TexLege;
-		modificationTime = 325449446.122479;
+		modificationTime = 327823927.375471;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -366,16 +359,16 @@
 	};
 	370B9DBF122AC5DF00AC9CC8 /* LegislatorDetailDataSource.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {993, 464}}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 631}}";
 			sepNavSelRange = "{460, 0}";
 			sepNavVisRange = "{0, 634}";
 		};
 	};
 	370B9DC0122AC5DF00AC9CC8 /* LegislatorDetailDataSource.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1371, 7267}}";
-			sepNavSelRange = "{378, 0}";
-			sepNavVisRange = "{261, 346}";
+			sepNavIntBoundsRect = "{{0, 0}, {1216, 7124}}";
+			sepNavSelRange = "{6498, 18}";
+			sepNavVisRange = "{1017, 1209}";
 		};
 	};
 	370B9DCE122AD22C00AC9CC8 /* TexLegeStandardGroupCell.h */ = {
@@ -402,15 +395,15 @@
 	370C270A1225BF7E004273E3 /* DistrictMapDataSource.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {944, 634}}";
-			sepNavSelRange = "{499, 24}";
-			sepNavVisRange = "{0, 1061}";
+			sepNavSelRange = "{467, 0}";
+			sepNavVisRange = "{0, 983}";
 		};
 	};
 	370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1300, 6890}}";
-			sepNavSelRange = "{374, 0}";
-			sepNavVisRange = "{0, 945}";
+			sepNavIntBoundsRect = "{{0, 0}, {1524, 6396}}";
+			sepNavSelRange = "{18139, 0}";
+			sepNavVisRange = "{16426, 1914}";
 		};
 	};
 	370C284D1225C2B8004273E3 /* DistrictMapImporter.h */ = {
@@ -422,9 +415,9 @@
 	};
 	370C284E1225C2B8004273E3 /* DistrictMapImporter.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 5174}}";
-			sepNavSelRange = "{2287, 14}";
-			sepNavVisRange = "{1213, 1867}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 5070}}";
+			sepNavSelRange = "{5782, 8}";
+			sepNavVisRange = "{4592, 2421}";
 		};
 	};
 	370C28501225C70F004273E3 /* DistrictMap.h */ = {
@@ -457,16 +450,16 @@
 	};
 	370EAD2D1338028C007788BC /* OpenLegislativeAPIs.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1096, 637}}";
-			sepNavSelRange = "{748, 0}";
-			sepNavVisRange = "{423, 641}";
+			sepNavIntBoundsRect = "{{0, 0}, {1157, 598}}";
+			sepNavSelRange = "{1133, 0}";
+			sepNavVisRange = "{694, 887}";
 		};
 	};
 	370EAD301338029E007788BC /* OpenLegislativeAPIs.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1104, 1768}}";
-			sepNavSelRange = "{1470, 25}";
-			sepNavVisRange = "{1200, 382}";
+			sepNavIntBoundsRect = "{{0, 0}, {1167, 1729}}";
+			sepNavSelRange = "{2028, 0}";
+			sepNavVisRange = "{892, 1649}";
 		};
 	};
 	370F7AA711FEAF730004AC50 /* PolygonMath.h */ = {
@@ -499,9 +492,9 @@
 	};
 	3718895A12EE917B00E3300D /* NSDate+Helper.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1356, 1898}}";
+			sepNavIntBoundsRect = "{{0, 0}, {2021, 1690}}";
 			sepNavSelRange = "{3141, 0}";
-			sepNavVisRange = "{2862, 353}";
+			sepNavVisRange = "{2312, 1092}";
 		};
 	};
 	3718895B12EE917B00E3300D /* NSDate+Helper.m */ = {
@@ -525,44 +518,6 @@
 			sepNavVisRange = "{3093, 1662}";
 		};
 	};
-	371D543B1365F5F100A61BD4 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 375E5AC7133D6F8B0070EA64 /* VotingRecordDataSource.m */;
-		name = "VotingRecordDataSource.m: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 697;
-		vrLoc = 0;
-	};
-	371D54881365F6B600A61BD4 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 372D066512FC901C00E63696 /* TexLegeLibrary.h */;
-		name = "TexLegeLibrary.h: 42";
-		rLen = 0;
-		rLoc = 755;
-		rType = 0;
-		vrLen = 952;
-		vrLoc = 456;
-	};
-	371D54891365F6B600A61BD4 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "'RestKit/RestKit.h' file not found";
-		fRef = 1D3623250D0F684500981E51 /* TexLegeAppDelegate.m */;
-		rLen = 1;
-		rLoc = 8;
-		rType = 1;
-	};
-	371D54961365F6C100A61BD4 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 1D3623250D0F684500981E51 /* TexLegeAppDelegate.m */;
-		name = "TexLegeAppDelegate.m: 15";
-		rLen = 0;
-		rLoc = 297;
-		rType = 0;
-		vrLen = 783;
-		vrLoc = 0;
-	};
 	371FB1D61333B43C0003740A /* CalendarEventsLoader.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {950, 936}}";
@@ -579,16 +534,16 @@
 	};
 	37242B4F124117E2005C43D3 /* TexLegeDataImporter.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {993, 381}}";
-			sepNavSelRange = "{304, 0}";
-			sepNavVisRange = "{0, 401}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 634}}";
+			sepNavSelRange = "{226, 0}";
+			sepNavVisRange = "{0, 324}";
 		};
 	};
 	37242B50124117E2005C43D3 /* TexLegeDataImporter.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1139, 1755}}";
-			sepNavSelRange = "{2368, 166}";
-			sepNavVisRange = "{627, 1134}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 1781}}";
+			sepNavSelRange = "{3625, 0}";
+			sepNavVisRange = "{1817, 1924}";
 		};
 	};
 	37242D3412415CC4005C43D3 /* LegislatorContributionsViewController.h */ = {
@@ -600,12 +555,12 @@
 	};
 	37242D3512415CC4005C43D3 /* LegislatorContributionsViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1160, 2301}}";
-			sepNavSelRange = "{2072, 0}";
-			sepNavVisRange = "{4113, 1575}";
+			sepNavIntBoundsRect = "{{0, 0}, {1160, 2197}}";
+			sepNavSelRange = "{2848, 0}";
+			sepNavVisRange = "{2144, 1529}";
 		};
 	};
-	372638CE1360953A00B9B5EF /* BillsDetailViewController.m:784 */ = {
+	372638CE1360953A00B9B5EF /* BillsDetailViewController.m:781 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -617,13 +572,13 @@
 		functionName = "-request:didLoadResponse:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 784;
+		lineNumber = 781;
 		location = TexLege;
-		modificationTime = 325449446.122497;
+		modificationTime = 327823927.375487;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
-	372638D4136095DF00B9B5EF /* DataModelUpdateManager.m:269 */ = {
+	372638D4136095DF00B9B5EF /* DataModelUpdateManager.m:216 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -635,13 +590,12 @@
 		functionName = "-request:didFailLoadWithError:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 269;
-		location = TexLege;
-		modificationTime = 325449446.12251;
+		lineNumber = 216;
+		modificationTime = 327823927.375525;
 		originalNumberOfMultipleMatches = 1;
-		state = 1;
+		state = 0;
 	};
-	372638D6136095E700B9B5EF /* DataModelUpdateManager.m:412 */ = {
+	372638D6136095E700B9B5EF /* DataModelUpdateManager.m:283 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -653,11 +607,10 @@
 		functionName = "-objectLoader:didFailWithError:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 412;
-		location = TexLege;
-		modificationTime = 325449446.122519;
+		lineNumber = 283;
+		modificationTime = 327823927.375542;
 		originalNumberOfMultipleMatches = 1;
-		state = 1;
+		state = 0;
 	};
 	37281ADE134D14CE00E73B57 /* RKObjectLoader.m:169 */ = {
 		isa = PBXFileBreakpoint;
@@ -673,22 +626,22 @@
 		ignoreCount = 0;
 		lineNumber = 169;
 		location = TexLege;
-		modificationTime = 325449446.122438;
+		modificationTime = 327823927.3753871;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
 	372D066512FC901C00E63696 /* TexLegeLibrary.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 988}}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 910}}";
 			sepNavSelRange = "{755, 0}";
-			sepNavVisRange = "{456, 827}";
+			sepNavVisRange = "{338, 1192}";
 		};
 	};
 	372D066612FC901C00E63696 /* TexLegeLibrary.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 2392}}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 2496}}";
 			sepNavSelRange = "{4105, 0}";
-			sepNavVisRange = "{0, 848}";
+			sepNavVisRange = "{2928, 1177}";
 		};
 	};
 	372D5CBE11E9983A005A21E2 /* CapitolMap.h */ = {
@@ -835,9 +788,9 @@
 	};
 	3735DFFC120917490000AF5A /* CommitteeMasterViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1062, 2990}}";
-			sepNavSelRange = "{1826, 21}";
-			sepNavVisRange = "{1132, 1656}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 3068}}";
+			sepNavSelRange = "{525, 0}";
+			sepNavVisRange = "{0, 1269}";
 		};
 	};
 	3735E1CC1209B09F0000AF5A /* TexLegeTheme.h */ = {
@@ -1028,9 +981,9 @@
 	};
 	373AB3B70FD3389F0065740E /* TableCellDataObject.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {993, 624}}";
-			sepNavSelRange = "{538, 0}";
-			sepNavVisRange = "{0, 987}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 637}}";
+			sepNavSelRange = "{303, 18}";
+			sepNavVisRange = "{0, 1008}";
 		};
 	};
 	373AB3B80FD3389F0065740E /* TableCellDataObject.m */ = {
@@ -1042,30 +995,30 @@
 	};
 	373EBA4F12F0A01100A3E604 /* DataModelUpdateManager.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {908, 587}}";
-			sepNavSelRange = "{845, 0}";
-			sepNavVisRange = "{0, 846}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 592}}";
+			sepNavSelRange = "{555, 0}";
+			sepNavVisRange = "{0, 612}";
 		};
 	};
 	373EBA5012F0A01100A3E604 /* DataModelUpdateManager.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1328, 6253}}";
-			sepNavSelRange = "{18283, 0}";
-			sepNavVisRange = "{16566, 612}";
+			sepNavIntBoundsRect = "{{0, 0}, {1328, 4654}}";
+			sepNavSelRange = "{10437, 0}";
+			sepNavVisRange = "{0, 1768}";
 		};
 	};
 	37400B9D12F37436002B6042 /* MTStatusBarOverlay.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1132, 3068}}";
-			sepNavSelRange = "{8473, 6}";
-			sepNavVisRange = "{7162, 1799}";
+			sepNavIntBoundsRect = "{{0, 0}, {1132, 3198}}";
+			sepNavSelRange = "{1945, 8}";
+			sepNavVisRange = "{307, 2706}";
 		};
 	};
 	37400B9E12F37436002B6042 /* MTStatusBarOverlay.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1132, 21450}}";
-			sepNavSelRange = "{12466, 3}";
-			sepNavVisRange = "{0, 2146}";
+			sepNavIntBoundsRect = "{{0, 0}, {1328, 21632}}";
+			sepNavSelRange = "{22870, 66}";
+			sepNavVisRange = "{23215, 2390}";
 		};
 	};
 	37412A37124322C400807502 /* LegislatorContributionsDataSource.h */ = {
@@ -1082,16 +1035,6 @@
 			sepNavVisRange = "{5167, 1846}";
 		};
 	};
-	37429BA71365F6D900F25BC3 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 1D3623250D0F684500981E51 /* TexLegeAppDelegate.m */;
-		name = "TexLegeAppDelegate.m: 15";
-		rLen = 0;
-		rLoc = 297;
-		rType = 0;
-		vrLen = 755;
-		vrLoc = 0;
-	};
 	3742D6ED122E18D100698483 /* DistrictMapSearchOperation.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {891, 559}}";
@@ -1101,9 +1044,9 @@
 	};
 	3742D6EE122E18D100698483 /* DistrictMapSearchOperation.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1300, 1586}}";
-			sepNavSelRange = "{298, 0}";
-			sepNavVisRange = "{0, 1096}";
+			sepNavIntBoundsRect = "{{0, 0}, {1118, 1521}}";
+			sepNavSelRange = "{3120, 20}";
+			sepNavVisRange = "{1744, 1496}";
 		};
 	};
 	3742D721122E1FDF00698483 /* NSInvocation+CWVariableArguments.h */ = {
@@ -1150,9 +1093,9 @@
 	};
 	374C36B91215E55F006B6ADA /* CalendarMasterViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {978, 1573}}";
-			sepNavSelRange = "{2262, 0}";
-			sepNavVisRange = "{2067, 1932}";
+			sepNavIntBoundsRect = "{{0, 0}, {901, 1612}}";
+			sepNavSelRange = "{569, 0}";
+			sepNavVisRange = "{0, 1378}";
 		};
 	};
 	374C36E41215E8DA006B6ADA /* CapitolMapsMasterViewController.h */ = {
@@ -1164,9 +1107,9 @@
 	};
 	374C36E51215E8DA006B6ADA /* CapitolMapsMasterViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1090, 1326}}";
-			sepNavSelRange = "{816, 0}";
-			sepNavVisRange = "{1438, 1751}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 1404}}";
+			sepNavSelRange = "{665, 0}";
+			sepNavVisRange = "{0, 1356}";
 		};
 	};
 	374C37031215EB2D006B6ADA /* LinksMasterViewController.h */ = {
@@ -1178,9 +1121,9 @@
 	};
 	374C37041215EB2D006B6ADA /* LinksMasterViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 2444}}";
-			sepNavSelRange = "{634, 9}";
-			sepNavVisRange = "{560, 888}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 2366}}";
+			sepNavSelRange = "{569, 0}";
+			sepNavVisRange = "{0, 1186}";
 		};
 	};
 	374DCF4F134A086400CA3FFE /* BillStageStackPanel.h */ = {
@@ -1192,9 +1135,9 @@
 	};
 	374DCF50134A086400CA3FFE /* BillStageStackPanel.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 1729}}";
-			sepNavSelRange = "{370, 0}";
-			sepNavVisRange = "{0, 1028}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 1638}}";
+			sepNavSelRange = "{509, 0}";
+			sepNavVisRange = "{1585, 1330}";
 		};
 	};
 	374E2A6912360C6E0005E245 /* TexLegeMapPins.h */ = {
@@ -1227,9 +1170,9 @@
 	};
 	3759C7CC1311AB1000A52C26 /* BillSearchDataSource.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1157, 442}}";
-			sepNavSelRange = "{89, 0}";
-			sepNavVisRange = "{0, 785}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 592}}";
+			sepNavSelRange = "{1083, 0}";
+			sepNavVisRange = "{0, 1205}";
 		};
 	};
 	375E5AC6133D6F8B0070EA64 /* VotingRecordDataSource.h */ = {
@@ -1283,16 +1226,16 @@
 	};
 	376487BF10274F1E001E482D /* MiniBrowserController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 10387}}";
-			sepNavSelRange = "{1142, 0}";
-			sepNavVisRange = "{0, 1169}";
+			sepNavIntBoundsRect = "{{0, 0}, {1510, 10699}}";
+			sepNavSelRange = "{17031, 8}";
+			sepNavVisRange = "{16146, 999}";
 		};
 	};
 	376487C110274F1E001E482D /* MiniBrowserController.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 1274}}";
-			sepNavSelRange = "{848, 0}";
-			sepNavVisRange = "{0, 1041}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 1170}}";
+			sepNavSelRange = "{1096, 8}";
+			sepNavVisRange = "{897, 1960}";
 		};
 	};
 	3765EE2F133F1A800061403D /* S7GraphView.m:509 */ = {
@@ -1309,7 +1252,7 @@
 		ignoreCount = 0;
 		lineNumber = 509;
 		location = TexLege;
-		modificationTime = 325449446.122386;
+		modificationTime = 327823927.375324;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -1336,7 +1279,7 @@
 	};
 	376AE79B13445CA400825C4D /* BillsKeyViewController.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1300, 502}}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 592}}";
 			sepNavSelRange = "{384, 26}";
 			sepNavVisRange = "{0, 473}";
 		};
@@ -1378,9 +1321,9 @@
 	};
 	376DFEB513492FF700360BF4 /* LoadingCell.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 923}}";
-			sepNavSelRange = "{1640, 0}";
-			sepNavVisRange = "{3, 1637}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 923}}";
+			sepNavSelRange = "{1074, 8}";
+			sepNavVisRange = "{639, 1484}";
 		};
 	};
 	376F62CF132972E200F2B3DA /* BillsCategoriesViewController.h */ = {
@@ -1393,8 +1336,8 @@
 	376F62D0132972E200F2B3DA /* BillsCategoriesViewController.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1062, 5161}}";
-			sepNavSelRange = "{8556, 19}";
-			sepNavVisRange = "{7229, 2078}";
+			sepNavSelRange = "{7953, 192}";
+			sepNavVisRange = "{7231, 2078}";
 		};
 	};
 	376F62D3132973D800F2B3DA /* BillMetadata.json */ = {
@@ -1417,10 +1360,9 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 67;
-		location = TexLege;
-		modificationTime = 325449446.122313;
+		modificationTime = 327823927.375244;
 		originalNumberOfMultipleMatches = 1;
-		state = 1;
+		state = 0;
 	};
 	3770F57313182BF500686DE3 /* BillsFavoritesViewController.h */ = {
 		uiCtxt = {
@@ -1461,7 +1403,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = libobjc.A.dylib;
-		modificationTime = 325449446.128863;
+		modificationTime = 327823927.375865;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 		symbolName = objc_exception_throw;
@@ -1545,10 +1487,9 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 148;
-		location = TexLege;
-		modificationTime = 325449446.122408;
+		modificationTime = 327823927.375347;
 		originalNumberOfMultipleMatches = 1;
-		state = 1;
+		state = 0;
 	};
 	3775C57E131BF8DE00638ED4 /* NSString+HTML.h */ = {
 		uiCtxt = {
@@ -1594,16 +1535,16 @@
 	};
 	3775FA3B11D86E1700D69AC5 /* LegislatorDetailViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1552, 6877}}";
-			sepNavSelRange = "{17408, 11}";
-			sepNavVisRange = "{15455, 2273}";
+			sepNavIntBoundsRect = "{{0, 0}, {1157, 7267}}";
+			sepNavSelRange = "{10251, 0}";
+			sepNavVisRange = "{9877, 857}";
 		};
 	};
 	3775FA4B11D8701B00D69AC5 /* LegislatorMasterViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 3380}}";
-			sepNavSelRange = "{1840, 1}";
-			sepNavVisRange = "{1134, 1397}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 3432}}";
+			sepNavSelRange = "{499, 0}";
+			sepNavVisRange = "{0, 1083}";
 		};
 	};
 	37782582121217B7001BD23D /* NSData+Encryption.h */ = {
@@ -1622,37 +1563,37 @@
 	};
 	377ACE4611FFA30E002C7E49 /* CalendarDataSource.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {993, 466}}";
-			sepNavSelRange = "{187, 0}";
-			sepNavVisRange = "{0, 392}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 634}}";
+			sepNavSelRange = "{250, 0}";
+			sepNavVisRange = "{0, 315}";
 		};
 	};
 	377ACE4711FFA30E002C7E49 /* CalendarDataSource.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 2665}}";
-			sepNavSelRange = "{474, 0}";
-			sepNavVisRange = "{438, 709}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 2522}}";
+			sepNavSelRange = "{917, 0}";
+			sepNavVisRange = "{503, 1001}";
 		};
 	};
 	377DC4A71344D475000068E1 /* BillVotesDataSource.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 504}}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 659}}";
 			sepNavSelRange = "{770, 0}";
 			sepNavVisRange = "{0, 779}";
 		};
 	};
 	377DC4A81344D475000068E1 /* BillVotesDataSource.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1062, 3016}}";
-			sepNavSelRange = "{1573, 4}";
-			sepNavVisRange = "{4978, 1951}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 3276}}";
+			sepNavSelRange = "{1284, 0}";
+			sepNavVisRange = "{521, 1296}";
 		};
 	};
 	377E8CF0100C39F300686B23 /* Constants.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {891, 676}}";
-			sepNavSelRange = "{1101, 0}";
-			sepNavVisRange = "{140, 1142}";
+			sepNavSelRange = "{1072, 0}";
+			sepNavVisRange = "{19, 1237}";
 		};
 	};
 	37892DCC120EA44300AB1752 /* LegislatorMasterCellView.h */ = {
@@ -1713,44 +1654,44 @@
 	};
 	378AFC7E100BDD640040706A /* CommitteesDataSource.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {993, 541}}";
-			sepNavSelRange = "{623, 0}";
-			sepNavVisRange = "{0, 700}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 634}}";
+			sepNavSelRange = "{338, 0}";
+			sepNavVisRange = "{0, 622}";
 		};
 	};
 	378AFC7F100BDD640040706A /* CommitteesDataSource.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1300, 4706}}";
-			sepNavSelRange = "{348, 0}";
-			sepNavVisRange = "{0, 1009}";
+			sepNavIntBoundsRect = "{{0, 0}, {992, 4524}}";
+			sepNavSelRange = "{11576, 20}";
+			sepNavVisRange = "{10090, 1713}";
 		};
 	};
 	378AFC82100BDD940040706A /* LegislatorsDataSource.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1006, 4238}}";
-			sepNavSelRange = "{10155, 56}";
-			sepNavVisRange = "{6108, 2066}";
+			sepNavIntBoundsRect = "{{0, 0}, {999, 4576}}";
+			sepNavSelRange = "{2274, 39}";
+			sepNavVisRange = "{1990, 1293}";
 		};
 	};
 	378AFC83100BDD940040706A /* LegislatorsDataSource.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 465}}";
-			sepNavSelRange = "{188, 0}";
-			sepNavVisRange = "{0, 914}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 634}}";
+			sepNavSelRange = "{608, 20}";
+			sepNavVisRange = "{0, 836}";
 		};
 	};
 	378B57A81219913400F7ED0B /* MapViewController.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 676}}";
-			sepNavSelRange = "{1669, 70}";
-			sepNavVisRange = "{443, 1934}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 650}}";
+			sepNavSelRange = "{623, 0}";
+			sepNavVisRange = "{30, 2274}";
 		};
 	};
 	378B57A91219913400F7ED0B /* MapViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 13169}}";
-			sepNavSelRange = "{2899, 32}";
-			sepNavVisRange = "{0, 1221}";
+			sepNavIntBoundsRect = "{{0, 0}, {1062, 13169}}";
+			sepNavSelRange = "{4130, 22}";
+			sepNavVisRange = "{3686, 1242}";
 		};
 	};
 	378B57BF121994DF00F7ED0B /* UIDevice-Hardware.h */ = {
@@ -1934,23 +1875,23 @@
 	};
 	379B9CCF1250FE7E0032E616 /* TexLegeReachability.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1157, 624}}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 624}}";
 			sepNavSelRange = "{753, 45}";
-			sepNavVisRange = "{507, 701}";
+			sepNavVisRange = "{3, 1205}";
 		};
 	};
 	379B9CD01250FE7E0032E616 /* TexLegeReachability.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1090, 2977}}";
-			sepNavSelRange = "{4018, 20}";
-			sepNavVisRange = "{5933, 1161}";
+			sepNavIntBoundsRect = "{{0, 0}, {1090, 2938}}";
+			sepNavSelRange = "{4337, 19}";
+			sepNavVisRange = "{3636, 1533}";
 		};
 	};
 	379C1EE81012DF28007844B5 /* NotesViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 1989}}";
-			sepNavSelRange = "{1276, 0}";
-			sepNavVisRange = "{0, 1033}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 1898}}";
+			sepNavSelRange = "{3741, 0}";
+			sepNavVisRange = "{2418, 1682}";
 		};
 	};
 	379C1EE91012DF28007844B5 /* NotesViewController.h */ = {
@@ -1983,9 +1924,9 @@
 	};
 	379D0CC2122D49000021969C /* TexLegeCoreDataUtils.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1371, 5135}}";
-			sepNavSelRange = "{16054, 0}";
-			sepNavVisRange = "{13325, 533}";
+			sepNavIntBoundsRect = "{{0, 0}, {1055, 5200}}";
+			sepNavSelRange = "{8740, 1}";
+			sepNavVisRange = "{8201, 2229}";
 		};
 	};
 	37A0C6011211DB810067F7AF /* TexLegeEmailComposer.h */ = {
@@ -2004,16 +1945,16 @@
 	};
 	37A0E4440FD2DEAA009B65F7 /* LinksDataSource.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 455}}";
-			sepNavSelRange = "{411, 0}";
-			sepNavVisRange = "{0, 418}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 634}}";
+			sepNavSelRange = "{333, 0}";
+			sepNavVisRange = "{0, 340}";
 		};
 	};
 	37A0E4450FD2DEAA009B65F7 /* LinksDataSource.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {929, 2704}}";
-			sepNavSelRange = "{1498, 150}";
-			sepNavVisRange = "{4356, 1483}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 2626}}";
+			sepNavSelRange = "{5494, 20}";
+			sepNavVisRange = "{4113, 1639}";
 		};
 	};
 	37A0E4470FD2DEAA009B65F7 /* CapitolMapsDetailViewController.h */ = {
@@ -2025,44 +1966,44 @@
 	};
 	37A0E4480FD2DEAA009B65F7 /* CapitolMapsDetailViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 2054}}";
-			sepNavSelRange = "{1559, 31}";
-			sepNavVisRange = "{1077, 1058}";
+			sepNavIntBoundsRect = "{{0, 0}, {1510, 1833}}";
+			sepNavSelRange = "{3518, 22}";
+			sepNavVisRange = "{2182, 1824}";
 		};
 	};
 	37A0E4490FD2DEAA009B65F7 /* GeneralTableViewController.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1157, 416}}";
-			sepNavSelRange = "{386, 0}";
-			sepNavVisRange = "{150, 737}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 620}}";
+			sepNavSelRange = "{555, 0}";
+			sepNavVisRange = "{0, 824}";
 		};
 	};
 	37A0E44A0FD2DEAA009B65F7 /* GeneralTableViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 4069}}";
-			sepNavSelRange = "{337, 5}";
-			sepNavVisRange = "{153, 1148}";
+			sepNavIntBoundsRect = "{{0, 0}, {1013, 3731}}";
+			sepNavSelRange = "{5729, 0}";
+			sepNavVisRange = "{5112, 2211}";
 		};
 	};
 	37A0E44B0FD2DEAA009B65F7 /* TableDataSourceProtocol.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1328, 858}}";
-			sepNavSelRange = "{2187, 0}";
-			sepNavVisRange = "{363, 1843}";
+			sepNavIntBoundsRect = "{{0, 0}, {1328, 832}}";
+			sepNavSelRange = "{432, 20}";
+			sepNavVisRange = "{363, 1769}";
 		};
 	};
 	37A0E44D0FD2DEAA009B65F7 /* CapitolMapsDataSource.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {944, 634}}";
-			sepNavSelRange = "{410, 0}";
-			sepNavVisRange = "{0, 416}";
+			sepNavSelRange = "{275, 0}";
+			sepNavVisRange = "{0, 339}";
 		};
 	};
 	37A0E44E0FD2DEAA009B65F7 /* CapitolMapsDataSource.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1371, 2184}}";
-			sepNavSelRange = "{1690, 0}";
-			sepNavVisRange = "{1497, 367}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 2249}}";
+			sepNavSelRange = "{867, 0}";
+			sepNavVisRange = "{454, 1069}";
 		};
 	};
 	37A4E5BD1223830800BCE44D /* LocalyticsSession.h */ = {
@@ -2117,15 +2058,15 @@
 	37A8F14313315D4D00085AAF /* BillMetadataLoader.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {891, 650}}";
-			sepNavSelRange = "{241, 47}";
-			sepNavVisRange = "{84, 1077}";
+			sepNavSelRange = "{991, 0}";
+			sepNavVisRange = "{28, 1140}";
 		};
 	};
 	37A8F14413315D4D00085AAF /* BillMetadataLoader.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1083, 1729}}";
-			sepNavSelRange = "{585, 0}";
-			sepNavVisRange = "{460, 226}";
+			sepNavIntBoundsRect = "{{0, 0}, {1083, 1469}}";
+			sepNavSelRange = "{963, 17}";
+			sepNavVisRange = "{0, 1062}";
 		};
 	};
 	37AD57B811DA651300D68934 /* CommitteeDetailViewController.h */ = {
@@ -2137,9 +2078,9 @@
 	};
 	37AD57B911DA651500D68934 /* CommitteeDetailViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {971, 8411}}";
-			sepNavSelRange = "{3266, 31}";
-			sepNavVisRange = "{2782, 1434}";
+			sepNavIntBoundsRect = "{{0, 0}, {971, 8385}}";
+			sepNavSelRange = "{3095, 11}";
+			sepNavVisRange = "{2671, 1600}";
 		};
 	};
 	37B17D7913032B3800C0BAA9 /* PBXTextBookmark */ = {
@@ -2147,7 +2088,7 @@
 		fRef = 373EBA5012F0A01100A3E604 /* DataModelUpdateManager.m */;
 		name = statsBlurbs;
 		rLen = 0;
-		rLoc = 2093;
+		rLoc = 1915;
 		rType = 0;
 		vrLen = 1405;
 		vrLoc = 845;
@@ -2326,9 +2267,9 @@
 	};
 	37B3CE901249365E00FB3F94 /* MapMiniDetailViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 5603}}";
-			sepNavSelRange = "{1616, 32}";
-			sepNavVisRange = "{424, 1189}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 5629}}";
+			sepNavSelRange = "{2010, 0}";
+			sepNavVisRange = "{1652, 1183}";
 		};
 	};
 	37B3CF1E124946B800FB3F94 /* IntelligentSplitViewController.h */ = {
@@ -2340,9 +2281,9 @@
 	};
 	37B3CF1F124946B800FB3F94 /* IntelligentSplitViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1157, 2236}}";
-			sepNavSelRange = "{1113, 0}";
-			sepNavVisRange = "{751, 591}";
+			sepNavIntBoundsRect = "{{0, 0}, {1216, 2041}}";
+			sepNavSelRange = "{2094, 0}";
+			sepNavVisRange = "{1477, 2250}";
 		};
 	};
 	37B64232120FE9FF0076B196 /* LegislatorMasterCell.h */ = {
@@ -2382,9 +2323,9 @@
 	};
 	37C94A2612387ABA00D2D582 /* DistrictMapMasterViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1300, 4173}}";
-			sepNavSelRange = "{270, 0}";
-			sepNavVisRange = "{0, 984}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 3939}}";
+			sepNavSelRange = "{5529, 20}";
+			sepNavVisRange = "{4716, 1433}";
 		};
 	};
 	37CF6A7412262B4600456D29 /* planH01369.kml */ = {
@@ -2424,9 +2365,9 @@
 	};
 	37CFBA0312FE8936007C3808 /* BillsMasterViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1153, 3328}}";
-			sepNavSelRange = "{7861, 0}";
-			sepNavVisRange = "{6869, 1680}";
+			sepNavIntBoundsRect = "{{0, 0}, {1153, 3276}}";
+			sepNavSelRange = "{6461, 0}";
+			sepNavVisRange = "{0, 946}";
 		};
 	};
 	37D0A8ED123ED55A00232B2C /* TexLegePinAnnotationView.h */ = {
@@ -2585,9 +2526,9 @@
 	};
 	37D1C526120272F000507757 /* CalendarDetailViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {908, 3406}}";
-			sepNavSelRange = "{1241, 0}";
-			sepNavVisRange = "{858, 1426}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 3497}}";
+			sepNavSelRange = "{3376, 11}";
+			sepNavVisRange = "{2118, 1424}";
 		};
 	};
 	37D2471D1341078F004C8F6E /* IntelligentSplitViewController.m:145 */ = {
@@ -2604,7 +2545,7 @@
 		ignoreCount = 0;
 		lineNumber = 145;
 		location = TexLege;
-		modificationTime = 325449446.122419;
+		modificationTime = 327823927.3753719;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -2624,16 +2565,16 @@
 	};
 	37D38B0D132ECFFA002F1730 /* BillsListDetailViewController.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 539}}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 592}}";
 			sepNavSelRange = "{50, 0}";
 			sepNavVisRange = "{0, 415}";
 		};
 	};
 	37D38B0E132ECFFA002F1730 /* BillsListDetailViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1048, 1911}}";
-			sepNavSelRange = "{944, 4}";
-			sepNavVisRange = "{199, 1675}";
+			sepNavIntBoundsRect = "{{0, 0}, {1048, 1963}}";
+			sepNavSelRange = "{4582, 0}";
+			sepNavVisRange = "{0, 1685}";
 		};
 	};
 	37D46BFF123B483800C2C403 /* CommitteeMemberCell.h */ = {
@@ -2666,16 +2607,16 @@
 	};
 	37D6E82610175F0800D4D7C2 /* UtilityMethods.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {944, 1001}}";
-			sepNavSelRange = "{782, 0}";
-			sepNavVisRange = "{455, 1307}";
+			sepNavIntBoundsRect = "{{0, 0}, {1041, 1235}}";
+			sepNavSelRange = "{999, 0}";
+			sepNavVisRange = "{659, 1241}";
 		};
 	};
 	37D6E82710175F0800D4D7C2 /* UtilityMethods.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1251, 5967}}";
-			sepNavSelRange = "{5520, 40}";
-			sepNavVisRange = "{2981, 1405}";
+			sepNavIntBoundsRect = "{{0, 0}, {1251, 7306}}";
+			sepNavSelRange = "{10251, 0}";
+			sepNavVisRange = "{9588, 1700}";
 		};
 	};
 	37D92004131F59D00079EBC2 /* RKObjectLoader.m */ = {
@@ -2699,7 +2640,7 @@
 		ignoreCount = 0;
 		lineNumber = 109;
 		location = TexLege;
-		modificationTime = 325449446.122342;
+		modificationTime = 327823927.375269;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -2734,9 +2675,9 @@
 	};
 	37E2068312204D5000103D76 /* DistrictMapObj+MapKit.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1371, 1703}}";
-			sepNavSelRange = "{208, 0}";
-			sepNavVisRange = "{0, 296}";
+			sepNavIntBoundsRect = "{{0, 0}, {1335, 1664}}";
+			sepNavSelRange = "{1108, 20}";
+			sepNavVisRange = "{25, 1631}";
 		};
 	};
 	37E207E81220839600103D76 /* PBXTextBookmark */ = {
@@ -2763,7 +2704,7 @@
 		ignoreCount = 0;
 		lineNumber = 16;
 		location = TexLege;
-		modificationTime = 325449446.122366;
+		modificationTime = 327823927.375294;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -2867,9 +2808,9 @@
 	};
 	37F492751311C640005D5DE1 /* BillsDetailViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {950, 10374}}";
-			sepNavSelRange = "{27654, 25}";
-			sepNavVisRange = "{26521, 1368}";
+			sepNavIntBoundsRect = "{{0, 0}, {1167, 10504}}";
+			sepNavSelRange = "{24817, 22}";
+			sepNavVisRange = "{23034, 2020}";
 		};
 	};
 	37F4A814130CAA4F00705EDD /* BillsMenuDataSource.h */ = {
@@ -2881,23 +2822,23 @@
 	};
 	37F4A815130CAA4F00705EDD /* BillsMenuDataSource.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {929, 1859}}";
-			sepNavSelRange = "{2532, 0}";
-			sepNavVisRange = "{1892, 1599}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 2080}}";
+			sepNavSelRange = "{830, 0}";
+			sepNavVisRange = "{341, 793}";
 		};
 	};
 	37FBB74812224A8400CD8E20 /* DistrictOfficeDataSource.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {993, 501}}";
-			sepNavSelRange = "{257, 0}";
-			sepNavVisRange = "{0, 787}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 634}}";
+			sepNavSelRange = "{345, 0}";
+			sepNavVisRange = "{0, 709}";
 		};
 	};
 	37FBB74912224A8400CD8E20 /* DistrictOfficeDataSource.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {985, 6994}}";
-			sepNavSelRange = "{1313, 14}";
-			sepNavVisRange = "{740, 1239}";
+			sepNavIntBoundsRect = "{{0, 0}, {985, 6708}}";
+			sepNavSelRange = "{17689, 0}";
+			sepNavVisRange = "{15912, 1799}";
 		};
 	};
 	37FBB75A122253BC00CD8E20 /* DistrictOfficeMasterViewController.h */ = {
@@ -2909,16 +2850,16 @@
 	};
 	37FBB75B122253BC00CD8E20 /* DistrictOfficeMasterViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {891, 3640}}";
-			sepNavSelRange = "{2132, 0}";
-			sepNavVisRange = "{1211, 1224}";
+			sepNavIntBoundsRect = "{{0, 0}, {891, 3523}}";
+			sepNavSelRange = "{1060, 0}";
+			sepNavVisRange = "{575, 1325}";
 		};
 	};
 	37FC486F13110A9E00A4C0B2 /* BillSearchDataSource.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1349, 4446}}";
-			sepNavSelRange = "{6448, 81}";
-			sepNavVisRange = "{0, 1239}";
+			sepNavIntBoundsRect = "{{0, 0}, {1349, 4706}}";
+			sepNavSelRange = "{6471, 0}";
+			sepNavVisRange = "{6136, 1622}";
 		};
 	};
 	8D1107310486CEB800E47090 /* Info.plist */ = {
