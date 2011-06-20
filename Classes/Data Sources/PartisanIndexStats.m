@@ -209,7 +209,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 /* This gathers our pre-calculated overall aggregate scores for parties and chambers, from JSON		
 	We use this for our red/blue lines in our historical partisanship chart.*/
 - (NSArray *) historyForParty:(NSInteger)party chamber:(NSInteger)chamber {
-	if (IsEmpty(m_rawPartisanIndexAggregates) || !isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > (3600*24))) {	// if we're over a day old, let's refresh
+	if (IsEmpty(m_rawPartisanIndexAggregates) || !isFresh || !updated || 
+		([[NSDate date] timeIntervalSinceDate:updated] > (3600*24*2)))
+	{	// if we're over 2 days old, let's refresh
 		if (!isLoading) {
 			[self loadPartisanIndex:nil];
 		}
