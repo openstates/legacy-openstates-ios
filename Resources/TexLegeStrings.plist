@@ -11,49 +11,6 @@
 		<key>mapPdfUrl</key>
 		<string>http://www.fyi.legis.state.tx.us/fyiwebdocs/PDF/%@/dist%@/m1.pdf</string>
 	</dict>
-	<key>MailComposer</key>
-	<dict>
-		<key>EmailingLinkTitle</key>
-		<string>A Link from TexLege</string>
-		<key>EmailingLinkText</key>
-		<string>Here is a web link you should see:
-%@
-
-Sent from TexLege.</string>
-	</dict>
-	<key>ResetDB</key>
-	<dict>
-		<key>ConfirmTitle</key>
-		<string>Settings: Reset Data to Factory?</string>
-		<key>ConfirmText</key>
-		<string>Are you sure you want to restore the factory database?  NOTE: The application may quit after this reset.  Data updates will be applied automatically via the Internet during the next app launch.</string>
-	</dict>
-	<key>Reachability</key>
-	<dict>
-		<key>NoInternetTitle</key>
-		<string>Internet Unavailable</string>
-		<key>NoInternetText</key>
-		<string>This feature requires an Internet connection, and a connection is unavailable.  Your device may be in &apos;Airplane&apos; mode or is suffering poor network coverage.</string>
-		<key>NoHostTitle</key>
-		<string>Host Unreachable</string>
-		<key>NoHostText</key>
-		<string>There was a problem contacting the specified host, the URL may have changed or may contain typographical errors. Perhaps try the connection again later.</string>
-	</dict>
-	<key>Bills</key>
-	<dict>
-		<key>NetworkErrorTitle</key>
-		<string>Network Error</string>
-		<key>NetworkErrorText</key>
-		<string>There was an error while contacting the server for bill information.  Please check your network connectivity or try again.</string>
-		<key>NoWatchedTitle</key>
-		<string>No Watched Bills, Yet</string>
-		<key>NoWatchedText</key>
-		<string>To add a bill to this watch list, first search for one, open it, and then tab the star button in it&apos;s header.</string>
-		<key>NoPassedBillsTitle</key>
-		<string>No Bills Passed Today (Yet)</string>
-		<key>NoPassedBillsText</key>
-		<string>There are no bills passed today.  Either it is (very) early in the day, or the legislature is in recess.</string>
-	</dict>
 	<key>BillMenuItems</key>
 	<array>
 		<dict>
@@ -78,11 +35,21 @@ Sent from TexLege.</string>
 		</dict>
 		<dict>
 			<key>icon</key>
+			<string>138-scales.png</string>
+			<key>class</key>
+			<string>BillsTodayViewController</string>
+			<key>title</key>
+			<string>Bills Passed Today</string>
+			<key>dataObject</key>
+			<string>BillsMenuItem</string>
+		</dict>
+		<dict>
+			<key>icon</key>
 			<string>11-clock.png</string>
 			<key>class</key>
 			<string>BillsRecentViewController</string>
 			<key>title</key>
-			<string>Bills Passed Today</string>
+			<string>Recently Active Bills</string>
 			<key>dataObject</key>
 			<string>BillsMenuItem</string>
 		</dict>
@@ -97,21 +64,12 @@ Sent from TexLege.</string>
 			<string>BillsMenuItem</string>
 		</dict>
 	</array>
-	<key>Analytics</key>
+	<key>ExternalURLs</key>
 	<dict>
-		<key>OptInTitle</key>
-		<string>Permission To Use Analytics</string>
-		<key>OptInText</key>
-		<string>TexLege can unobtrusively submit anonymous usage data (like launch time and features used) to the developer.  This is solely intended to improve app development, and will NEVER be used for advertising or marketing.  It submits no geographic or identifying information. Please consider enabling this service.  You may change this later in the Settings app.</string>
-	</dict>
-	<key>Contributions</key>
-	<dict>
-		<key>IncompleteTitle</key>
-		<string>Incomplete Records</string>
-		<key>IncompleteText</key>
-		<string>The campaign finance data provider has incomplete information for this request.  You may visit followthemoney.org to perform a manual search.</string>
-		<key>ThanksNIMSP</key>
-		<string>Data generously provided by the National Institute on Money in State Politics.</string>
+		<key>googleMapsWeb</key>
+		<string>http://maps.google.com</string>
+		<key>nimspWeb</key>
+		<string>http://www.followthemoney.org</string>
 	</dict>
 </dict>
 </plist>
