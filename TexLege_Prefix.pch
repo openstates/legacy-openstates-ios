@@ -15,6 +15,10 @@
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
 	#import <CoreData/CoreData.h>
+	#import "VTPGAdvancedLog.h"
 	#import "Constants.h"
 	#import "TexLegeLibrary.h"
+
+	#define nice_release(var) if (var) [var release], var = nil
+
 #endif
