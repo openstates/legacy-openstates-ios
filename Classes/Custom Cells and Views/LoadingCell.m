@@ -21,7 +21,7 @@
 											  reuseIdentifier:loadingCellIdentifier] autorelease];		
 		
 		if (loadingStatus == LOADING_ACTIVE) {
-			loadingCell.textLabel.text = @"Contacting Server";
+			loadingCell.textLabel.text = NSLocalizedStringFromTable(@"Contacting Server", @"StandardUI", @"Notifies the user that data is currently loading");
 			UIActivityIndicatorView *activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
 												 UIActivityIndicatorViewStyleWhiteLarge];
 			activity.hidesWhenStopped = YES;
@@ -30,7 +30,7 @@
 			[activity release];
 		}
 		else { // (loadingStatus == LOADING_NO_NET)
-			loadingCell.textLabel.text = @"Network Connection Unavailable";
+			loadingCell.textLabel.text = NSLocalizedStringFromTable(@"Network Connection Unavailable", @"StandardUI", @"");
 			UIImageView *errorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 24.f, 24.f)];
 			errorView.image = [UIImage imageNamed:@"error"];
 			loadingCell.accessoryView = errorView;

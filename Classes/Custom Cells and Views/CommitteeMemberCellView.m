@@ -171,10 +171,11 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 	if (legislators) {
 		NSInteger rankIndex = [legislators indexOfObject:value] + 1;
 		NSInteger count = [legislators count];
-		NSString *partyShortName = [value.party_id integerValue] == DEMOCRAT ? @"Dems" : @"Repubs";
+		NSString *partyShortName = stringForParty([value.party_id integerValue], TLReturnAbbrevPlural);
 		
 		NSString *ordinalRank = [UtilityMethods ordinalNumberFormat:rankIndex];
-		return [NSString stringWithFormat:@"%@ most partisan (out of %d %@)", ordinalRank, count, partyShortName];	
+		return [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ most partisan (out of %d %@)", @"DataTableUI", @"Partisan ranking, ie. 32nd most partisan out of 55 Democrats"),
+			ordinalRank, count, partyShortName];	
 	}
 	else {
 		return nil;
@@ -185,7 +186,8 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 	if (value) {
 		self.partisan_index = value.latestWnomFloat;
 		self.title = [value legTypeShortName];
-		self.district = [NSString stringWithFormat:@"District %@", value.district];
+		self.district = [NSString stringWithFormat:NSLocalizedStringFromTable(@"District %@", @"DataTableUI", @"District number"),
+						 value.district];
 		self.party = value.party_name;
 		self.name = [value legProperName];
 		self.tenure = [value tenureString];

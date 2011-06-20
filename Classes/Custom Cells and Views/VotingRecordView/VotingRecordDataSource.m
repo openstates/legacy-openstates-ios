@@ -59,13 +59,13 @@
     aView.gridXColor = [UIColor darkGrayColor];
     aView.gridYColor = [UIColor darkGrayColor];
 	
-	aView.info = @"Historical Voting Comparison";
+	aView.info = NSLocalizedStringFromTable(@"Historical Voting Comparison", @"DataTableUI", @"Title for the partisanship chart");
 	aView.infoColor = [TexLegeTheme textDark];
     aView.drawInfo = YES;
 	
 	aView.highlightColor = [UIColor colorWithRed:0.6f green:0.745f blue:0.353f alpha:.3f]; // accent + transp
 	
-	aView.xUnit = @"Year";
+	aView.xUnit = NSLocalizedStringFromTable(@"Year", @"DataTableUI", @"The year for a given legislative session");
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
     [numberFormatter setMinimumFractionDigits:1];
@@ -80,7 +80,7 @@
     [dateFormatter release];
     [numberFormatter release];
     
-    aView.yUnit = @"Partisanship";
+    aView.yUnit = NSLocalizedStringFromTable(@"Partisanship", @"DataTableUI", @"The data value axis for the partisanship chart, like 'dollars', or 'car sales'");
 }
 
 #pragma mark protocol S7GraphViewDataSource
@@ -183,10 +183,10 @@
 - (NSString *)graphView:(S7GraphView *)graphView nameForPlot:(NSInteger)plotIndex {
     switch (plotIndex) {
         case 0:
-			return 	@"Reps";
+			return 	stringForParty(REPUBLICAN, TLReturnAbbrevPlural);
             break;
 		case 2:
-			return 	@"Dems";
+			return 	stringForParty(DEMOCRAT, TLReturnAbbrevPlural);
             break;
         case 1:
         default: {

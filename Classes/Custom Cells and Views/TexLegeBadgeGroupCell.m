@@ -199,7 +199,8 @@
 		
 		self.summary = cellInfo.title;
 		//self.detail = cellInfo.subtitle;
-		self.badgeText = [NSString stringWithFormat:@"%@ Bills", cellInfo.entryValue];
+		self.badgeText = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ Bills", @"DataTableUI", @"Lists the number of bills for a givensubject"), 
+						  cellInfo.entryValue];
 		isClickable = cellInfo.isClickable;
 
 		if (!cellInfo.isClickable) {
