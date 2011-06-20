@@ -23,12 +23,12 @@
 
 // TableDataSourceProtocol methods
 
-- (NSString *)navigationBarName
-{ return @"Capitol Maps"; }
+- (NSString *)name 
+{ return NSLocalizedStringFromTable(@"Capitol Maps", @"StandardUI", @"The short title for buttons and tabs related to maps of the building"); }
 
-- (NSString *)name
-{ return @"Capitol Maps"; }
- 
+- (NSString *)navigationBarName 
+{ return [self name]; }
+
 - (UIImage *)tabBarImage 
 { return [UIImage imageNamed:@"71-compass.png"]; }
 
@@ -150,9 +150,9 @@
 
  - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {	
 	if (section == 0)
-		return @"Interior Maps";
+		return NSLocalizedStringFromTable(@"Interior Maps", @"DataTableUI", @"Cell title for interor maps of a building (office locations)");
 	else //if (section == 1)
-		return @"Exterior Maps";
+		return NSLocalizedStringFromTable(@"Exterior Maps", @"DataTableUI", @"Cell title for outside maps of a building (outdoor locations)");
 }
 
 @end

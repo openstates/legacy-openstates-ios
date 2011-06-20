@@ -76,10 +76,10 @@
 // return the data used by the navigation controller and tab bar item
 
 - (NSString *)name 
-{ return @"Legislators"; }
+{ return NSLocalizedStringFromTable(@"Legislators", @"StandardUI", @"The short title for buttons and tabs related to legislators"); }
 
 - (NSString *)navigationBarName 
-{ return @"Legislator Directory"; }
+{ return NSLocalizedStringFromTable(@"Legislator Directory", @"StandardUI", @"The long title for buttons and tabs related to legislators"); }
 
 - (UIImage *)tabBarImage 
 { return [UIImage imageNamed:@"123-id-card.png"]; }
@@ -259,9 +259,7 @@
 - (void) setFilterByString:(NSString *)filter {
 	if (!filter) filter = @"";
 	
-	if (![self.filterString isEqualToString:filter]) {
-		self.filterString = [NSMutableString stringWithString:filter];
-	}
+	self.filterString = [NSMutableString stringWithString:filter];
 
 	// we also get called on toolbar chamber switches, with or without a search string, so update anyway...
 	[self updateFilterPredicate];	

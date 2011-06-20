@@ -72,11 +72,11 @@
 #pragma mark TableDataSourceProtocol methods
 
 // return the data used by the navigation controller and tab bar item
-- (NSString *)navigationBarName 
-{ return @"Committee Information"; }
+- (NSString *)name 
+{ return NSLocalizedStringFromTable(@"Committees", @"StandardUI", @"The short title for buttons and tabs related to legislative committees"); }
 
-- (NSString *)name
-{ return @"Committees"; }
+- (NSString *)navigationBarName 
+{ return NSLocalizedStringFromTable(@"Committee Information", @"StandardUI", @"The long title for buttons and tabs related to legislative committees"); }
 
 - (UIImage *)tabBarImage
 { return [UIImage imageNamed:@"60-signpost.png"]; }

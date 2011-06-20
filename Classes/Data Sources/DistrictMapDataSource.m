@@ -98,11 +98,11 @@
 #pragma mark TableDataSourceProtocol methods
 
 // return the data used by the navigation controller and tab bar item
-- (NSString *)navigationBarName 
-{ return @"District Maps"; }
-
 - (NSString *)name
-{ return @"District Maps"; }
+{ return NSLocalizedStringFromTable(@"District Maps", @"StandardUI", @"Short name for district maps tab"); }
+
+- (NSString *)navigationBarName 
+{ return [self name]; }
 
 - (UIImage *)tabBarImage
 { return [UIImage imageNamed:@"73-radar.png"]; }
@@ -190,16 +190,18 @@
 	// let's override some of the datasource's settings ... specifically, the background color.
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	
+	NSString *localDist = NSLocalizedStringFromTable(@"District", @"StandardUI", @"The title for a legislative district, as in District 1");
+	NSString *localAbbrev = NSLocalizedStringFromTable(@"Dist.", @"StandardUI", @"The abbreviation for the word 'District', i.e. 'Dist.'");
 	if (self.byDistrict)
-		cell.detailTextLabel.text = [NSString stringWithFormat:@"District %@ (%@)", 
+		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@ (%@)", localDist, 
 									 [tempEntry valueForKey:@"district"], 
 									 [tempEntry valueForKeyPath:@"legislator.lastname"]];
 	else
-		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (Dist. %@)", 
-									 [[tempEntry valueForKey:@"legislator"] legProperName], 
+		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%@ %@)", 
+									 [[tempEntry valueForKey:@"legislator"] legProperName], localAbbrev,
 									 [tempEntry valueForKey:@"district"]];
 	
-	cell.textLabel.text = ([[tempEntry valueForKey:@"chamber"] integerValue] == HOUSE) ? @"House" : @"Senate";
+	cell.textLabel.text = stringForChamber([[tempEntry valueForKey:@"chamber"] integerValue], TLReturnFull);
 	
 	
 	cell.accessoryView.hidden = (tableView == self.searchDisplayController.searchResultsTableView);

@@ -26,11 +26,11 @@ enum Sections {
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
 
-- (NSString *)name
-{ return @"Resources"; }
+- (NSString *)name 
+{ return NSLocalizedStringFromTable(@"Resources", @"StandardUI", @"The short title for buttons and tabs related to web links (for more information, see ...)"); }
 
-- (NSString *)navigationBarName
-{ return @"Resources and Info"; }
+- (NSString *)navigationBarName 
+{ return NSLocalizedStringFromTable(@"Resources and Info", @"StandardUI", @"The long title for buttons and tabs related to web links (for more information, see ...)"); }
 
 - (UIImage *)tabBarImage {
 	return [UIImage imageNamed:@"113-navigation.png"];
@@ -107,9 +107,9 @@ enum Sections {
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	
 	if (section == kHeaderSection)
-		return @"This Application";
+		return NSLocalizedStringFromTable(@"This Application", @"DataTableUI", @"Table section listing resources for this application");
 	else
-		return @"Web Resources";		
+		return NSLocalizedStringFromTable(@"Web Resources", @"DataTableUI", @"Table section listing resources on the web");		
 }
 
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {		
@@ -135,7 +135,7 @@ enum Sections {
 	NSString *CellIdentifier = @"Cell";
 
 	if (section == kHeaderSection)
-			CellIdentifier = @"LinksHeader";
+		CellIdentifier = @"LinksHeader";
 	else
 		CellIdentifier = @"LinksBodyLink";
 	

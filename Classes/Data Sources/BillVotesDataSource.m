@@ -170,13 +170,12 @@
 	if (!billVotes_)
 		return;
 	
-	if (voters_)
-		[voters_ release];
+	nice_release(voters_);
 	voters_ = [[NSMutableArray alloc] init];
 	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	NSInteger chamber = chamberForString([billVotes_ objectForKey:@"chamber"]);
+	NSInteger chamber = chamberFromOpenStatesString([billVotes_ objectForKey:@"chamber"]);
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.legtype == %d", chamber];
 	
 	NSArray *allMembers = [LegislatorObj objectsWithPredicate:predicate];
@@ -190,6 +189,7 @@
 		NSString *votesString = [type stringByAppendingString:@"_votes"];
 		NSNumber *voteCode = [NSNumber numberWithInteger:codeIndex];
 		
+#warning state specific
 		if ([billVotes_ objectForKey:countString] && [[billVotes_ objectForKey:countString] integerValue]) {
 			for (NSMutableDictionary *voter in [billVotes_ objectForKey:votesString]) {
 				/* We sometimes (all the time?) have to hard code in the Speaker ... let's just hope 

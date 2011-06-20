@@ -69,15 +69,18 @@
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
 
-// return the data used by the navigation controller and tab bar item
-- (NSString *)navigationBarName 
-{ return @"District Offices"; }
+#warning localization
+
 
 - (NSString *)name
-{ return @"Districts Offices"; }
+{ return NSLocalizedStringFromTable(@"Districts Offices", @"StandardUI", @"Short name for district office tabs"); }
+
+// return the data used by the navigation controller and tab bar item
+- (NSString *)navigationBarName 
+{ return [self name]; }
 
 - (UIImage *)tabBarImage
-{ return [UIImage imageNamed:@"Building.png"]; }
+{ return [UIImage imageNamed:@"177-building-inv.png"]; }
 
 - (BOOL)showDisclosureIcon
 { return YES; }
@@ -160,13 +163,14 @@
 	// let's override some of the datasource's settings ... specifically, the background color.
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	
+	NSString *localDist = NSLocalizedStringFromTable(@"District", @"StandardUI", @"The title for a legislative district, as in District 1");
+	NSString *localAbbrev = NSLocalizedStringFromTable(@"Dist.", @"StandardUI", @"The abbreviation for the word 'District', i.e. 'Dist.'");
 	if (self.byDistrict)
-		cell.detailTextLabel.text = [NSString stringWithFormat:@"District %@ (%@: %@)", tempEntry.district, [tempEntry.legislator lastname], tempEntry.city];
+		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@ (%@: %@)", localDist, tempEntry.district, [tempEntry.legislator lastname], tempEntry.city];
 	else
-		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (Dist. %@: %@)", [tempEntry.legislator legProperName], tempEntry.district, tempEntry.city];
+		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%@ %@: %@)", [tempEntry.legislator legProperName], localAbbrev, tempEntry.district, tempEntry.city];
 		
-	cell.textLabel.text = (tempEntry.chamber.integerValue == HOUSE) ? @"House" : @"Senate";
-	
+	cell.textLabel.text = stringForChamber(temp.chamber.integerValue, TLReturnFull);
 	
 	cell.accessoryView.hidden = (tableView == self.searchDisplayController.searchResultsTableView);
 	
@@ -361,11 +365,12 @@
 }
 
    
+#warning state specific
 - (NSError *) geocodeDistrictOffice:(DistrictOfficeObj *)office {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
 	NSError *parseError = nil;
-	NSString *searchQuery = [NSString stringWithFormat:@"%@, %@, TX, %@", office.address, office.city, office.zipCode];
+	NSString *searchQuery = [NSString stringWithFormat:@"%@, %@, %@, %@", office.address, office.city, office.stateCode, office.zipCode];
 	
 	// Create the url to Googles geocoding API, we want the response to be in XML
 	NSString* mapsUrl = [[NSString alloc] initWithFormat:@"http://maps.google.com/maps/api/geocode/xml?address=%@&sensor=false&region=us", 

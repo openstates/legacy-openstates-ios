@@ -17,13 +17,22 @@
 #import "OpenLegislativeAPIs.h"
 #import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "LocalyticsSession.h"
+#import "LoadingCell.h"
+#import "StateMetaLoader.h"
+
+#warning state specific
 
 @implementation BillSearchDataSource
 @synthesize searchDisplayController, delegateTVC;
+@synthesize useLoadingDataCell;
 
 - (id)init {
 	if ((self=[super init])) {
+		loadingStatus = LOADING_IDLE;
+		useLoadingDataCell = NO;
+
 		[OpenLegislativeAPIs sharedOpenLegislativeAPIs];
+		
 		_rows = [[NSMutableArray alloc] init];
 		_sections = [[NSMutableDictionary alloc] init];
 		delegateTVC = nil;
@@ -52,12 +61,10 @@
 }
 
 - (void)dealloc {
-	[searchDisplayController release];
-	[delegateTVC release];
-	[_rows release];
-	_rows = nil;
-	[_sections release];
-	_sections = nil;
+	self.searchDisplayController = nil;
+	self.delegateTVC = nil;
+	nice_release(_rows);
+	nice_release(_sections);
 
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 	
@@ -137,11 +144,16 @@
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+	if (IsEmpty(_sections))
+		return 1;
 	return [[_sections allKeys] count];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {	
+	if (IsEmpty(_sections) || IsEmpty([self billTypes]))
+		return @"";
+	
 	NSString *billType = [[self billTypes] objectAtIndex:section];
 	return [[[[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:@"types"] 
 							findWhereKeyPath:@"title" 
@@ -149,14 +161,20 @@
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+	if (IsEmpty(_sections) || IsEmpty([self billTypes]))
+		return nil;
     return [self billTypes];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section 
 {		
-	return [[_sections valueForKey:[[self billTypes] objectAtIndex:section]] count];
+	if (NO == IsEmpty(_sections))
+		return [[_sections valueForKey:[[self billTypes] objectAtIndex:section]] count];
+	else if (useLoadingDataCell && loadingStatus > LOADING_IDLE)
+		return 1;
+	else
+		return 0;
 }
-
 
 - (void)configureCell:(TexLegeStandardGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
@@ -179,6 +197,15 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (useLoadingDataCell && loadingStatus > LOADING_IDLE) {
+		if (indexPath.row == 0) {
+			return [LoadingCell loadingCellWithStatus:loadingStatus tableView:tableView];
+		}
+		else {	// to make things work with our upcoming configureCell:, we need to trick this a little
+			indexPath = [NSIndexPath indexPathForRow:(indexPath.row-1) inSection:indexPath.section];
+		}
+	}
+	
 	NSString *CellIdentifier = @"CellOn";
 	
 	TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -197,7 +224,7 @@
 			cell.accessoryType = UITableViewCellAccessoryNone;
 		}
     }
-	if (!IsEmpty(_rows))
+	if (NO == IsEmpty(_rows))
 		[self configureCell:cell atIndexPath:indexPath];		
 
 	return cell;
@@ -205,12 +232,37 @@
 
 #pragma mark - Searching
 
-- (void)startSearchWithString:(NSString *)searchString chamber:(NSInteger)chamber
+// This is the standard search method ... fill in the search parameters and it'll handle the rest.
+- (RKRequest *)startSearchWithQueryString:(NSString *)queryString params:(NSDictionary *)queryParams {
+	if (IsEmpty(queryParams) || IsEmpty(queryString))
+		return nil;
+		
+	RKRequest *request = nil;
+	
+	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:YES])
+	{		
+		if (useLoadingDataCell)
+			loadingStatus = LOADING_ACTIVE;
+		
+		OpenLegislativeAPIs *api = [OpenLegislativeAPIs sharedOpenLegislativeAPIs];
+		request = [[api osApiClient] get:queryString queryParams:queryParams delegate:self];
+	}
+	else if (useLoadingDataCell) {
+		loadingStatus = LOADING_NO_NET;
+	}
+	
+	return request;
+}
+
+- (void)startSearchForText:(NSString *)searchString chamber:(NSInteger)chamber
 {
 	searchString = [searchString uppercaseString];
 	NSMutableString *queryString = [NSMutableString stringWithString:@"/bills"];
 	
 	BOOL isBillID = NO;
+	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
+	if (IsEmpty(meta.selectedState) || IsEmpty(meta.currentSession))
+		return;
 	
 	for (NSDictionary *type in [[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:kBillMetadataTypesKey]) {
 		NSString *billType = [type objectForKey:kBillMetadataTitleKey];
@@ -222,9 +274,9 @@
 				
 				if ([tail integerValue] > 0) {
 					isBillID = YES;
+#warning state specific ID assumptions
 					NSNumber *billNumber = [NSNumber numberWithInteger:[tail integerValue]];		// we specifically convolute this to ensure we're grabbing only the numerical of the string
-					NSString *billSession = [[OpenLegislativeAPIs sharedOpenLegislativeAPIs] currentSession];
-					[queryString appendFormat:@"/tx/%@/%@%%20%@", billSession, billType, billNumber];
+					[queryString appendFormat:@"/%@/%@/%@%%20%@", meta.selectedState, meta.currentSession, billType, billNumber];
 					
 					break;
 				}
@@ -234,7 +286,7 @@
 	
 	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 										@"session", @"search_window",
-										@"tx", @"state",
+										meta.selectedState, @"state",
 										osApiKeyValue, @"apikey",
 										nil];
 	
@@ -248,15 +300,19 @@
 	if (!isBillID){
 		[queryParams setObject:searchString forKey:@"q"];
 	}
-	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:YES])
-		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:queryString queryParams:queryParams delegate:self];
 	
+	[self startSearchWithQueryString:queryString params:queryParams];
+		
 }
 
 - (void)startSearchForSubject:(NSString *)searchSubject chamber:(NSInteger)chamber {
+	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
+	if (IsEmpty(meta.selectedState))
+		return;
+	
 	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 								 @"session", @"search_window",
-								 @"tx", @"state",
+								 meta.selectedState, @"state",
 								 osApiKeyValue, @"apikey",
 								 nil];
 	
@@ -272,27 +328,61 @@
 	}
 	[queryParams setObject:searchSubject forKey:@"subject"];
 				
-	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:YES])
-		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/bills" queryParams:queryParams delegate:self];
+	[self startSearchWithQueryString:@"/bills" params:queryParams];
 }
 
-- (void)startSearchForSponsor:(NSString *)searchSponsorID {
+- (void)startSearchForBillsAuthoredBy:(NSString *)searchSponsorID {
 	if (NO == IsEmpty(searchSponsorID)) {
+		StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
+		if (IsEmpty(meta.selectedState))
+			return;
+		
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
 									 searchSponsorID, @"sponsor_id",
-									 @"tx", @"state",
+									 meta.selectedState, @"state",
 									 @"session", @"search_window",
 									 osApiKeyValue, @"apikey",
+									 // now for the fun part
+									 @"sponsors,bill_id,title,session,state,type,update_at,subjects", @"fields",
 									 nil];
-		
-		if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:YES]) {
-			[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/bills" 
-																   queryParams:queryParams 
-																	  delegate:self];
+
+		RKRequest *request = [self startSearchWithQueryString:@"/bills" params:queryParams];
+		if (request) {
+			request.userData = [NSDictionary dictionaryWithObjectsAndKeys:
+								searchSponsorID, @"sponsor_id", nil];
 		}
+		
 	}
 }
 
+- (void)pruneBillsForAuthor:(NSString *)sponsorID {
+	// We must be requesting specific bills for a given sponsors
+	debug_NSLog(@"Pruning the list of sought-after bills for a given sponsor...");
+
+	NSArray *tempRows = [[NSArray alloc] initWithArray:_rows];
+	
+	for (NSDictionary *bill in tempRows) {
+		BOOL found = NO;
+		BOOL hasSponsors = NO;
+		
+		for (NSDictionary *sponsor in [bill valueForKey:@"sponsors"]) {
+			hasSponsors = YES;
+			
+			NSString *type = [sponsor valueForKey:@"type"];
+			NSString *sponID = [sponsor valueForKey:@"leg_id"];
+			if (NO == IsEmpty(type) && NO == IsEmpty(sponID)) {
+				if ([type isEqualToString:@"author"] && [sponID isEqualToString:sponsorID]) {
+					found = YES;
+				}
+			}
+		}
+		if (YES == hasSponsors && NO == found) {
+			//debug_NSLog(@"Pruning bill %@ for %@", [bill valueForKey:@"bill_id"], sponsorID);
+			[_rows removeObject:bill];
+		}
+	}
+	[tempRows release];
+}
 
 
 #pragma mark -
@@ -301,26 +391,37 @@
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
 	if (error && request) {
 		debug_NSLog(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
-	}
+	}	
+	
+	if (useLoadingDataCell)
+		loadingStatus = LOADING_NO_NET;
+
 	[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:self];
 
-	UIAlertView *alert = [[[ UIAlertView alloc ] 
-						   initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
-						   message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
+	UIAlertView *alert = [[ UIAlertView alloc ] 
+						   initWithTitle:NSLocalizedStringFromTable(@"Network Error", @"AppAlerts", @"Title for alert stating there's been an error when connecting to a server")
+						   message:NSLocalizedStringFromTable(@"There was an error while contacting the server for bill information.  Please check your network connectivity or try again.", @"AppAlerts", @"")
 						   delegate:nil // we're static, so don't do "self"
-						   cancelButtonTitle: @"Cancel" 
-						   otherButtonTitles:nil, nil] autorelease];
-	[ alert show ];			
+						   cancelButtonTitle: NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")
+						   otherButtonTitles:nil];
+	[ alert show ];	
+	[ alert release];
+	
 }
-
 
 // Handling GET /BillMetadata.json  
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
+	if (useLoadingDataCell)
+		loadingStatus = LOADING_NO_NET;
+
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data  
 		
+		if (useLoadingDataCell)
+			loadingStatus = LOADING_IDLE;
+
 		[_rows removeAllObjects];	
-		
+				
 		id results = [response.body mutableObjectFromJSONData];
 		if ([results isKindOfClass:[NSMutableArray class]])
 			[_rows addObjectsFromArray:results];
@@ -334,6 +435,15 @@
 			return [bill_id1 compare:bill_id2 options:NSNumericSearch];
 		}];
 		
+		if (request.userData) {
+		
+			NSString *sponsorID = [request.userData objectForKey:@"sponsor_id"];
+			if (NO == IsEmpty(sponsorID)) {
+				// We must be requesting specific bills for a given sponsors			
+				[self pruneBillsForAuthor:sponsorID];
+			}
+		}
+				
 		[self generateSections];
 		
 		if (searchDisplayController)

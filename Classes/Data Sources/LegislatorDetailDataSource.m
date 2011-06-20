@@ -29,6 +29,7 @@
 #import "TexLegeStandardGroupCell.h"
 #import "TexLegeGroupCellProtocol.h"
 #import "CapitolMap.h"
+#import "NotesViewController.h"
 
 @interface LegislatorDetailDataSource (Private)
 - (void) createSectionList;
@@ -94,7 +95,7 @@
 	NSInteger sectionIndex = 0;	
 	
 	NSDictionary *entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-							   @"Name", @"subtitle",
+							   NSLocalizedStringFromTable(@"Name", @"DataTableUI", @"Title for cell"), @"subtitle",
 							   [self.legislator fullName], @"entryValue",
 							   [self.legislator fullName], @"title",
 							   [NSNumber numberWithBool:NO], @"isClickable",
@@ -107,9 +108,9 @@
 	
 	
 	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 @"Map", @"subtitle",
+				 NSLocalizedStringFromTable(@"Map", @"DataTableUI", @"Title for cell"), @"subtitle",
 				 self.legislator.districtMap, @"entryValue",
-				 @"District Map", @"title",
+				 NSLocalizedStringFromTable(@"District Map", @"DataTableUI", @"Title for cell"), @"title",
 				 [NSNumber numberWithBool:YES], @"isClickable",
 				 [NSNumber numberWithInteger:DirectoryTypeMap], @"entryType",
 				 nil];
@@ -121,9 +122,9 @@
 	
 	if (self.legislator && self.legislator.transDataContributorID) {
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 @"Finances", @"subtitle",
+					 NSLocalizedStringFromTable(@"Finances", @"DataTableUI", @"Title for Cell"), @"subtitle",
 					 self.legislator.transDataContributorID, @"entryValue",
-					 @"Campaign Contributions", @"title",
+					 NSLocalizedStringFromTable(@"Campaign Contributions", @"DataTableUI", @"title for cell"), @"title",
 					 [NSNumber numberWithBool:YES], @"isClickable",
 					 [NSNumber numberWithInteger:DirectoryTypeContributions], @"entryType",
 					 nil];
@@ -135,7 +136,7 @@
 	}
 	
 	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 @"Email", @"subtitle",
+				 NSLocalizedStringFromTable(@"Email", @"DataTableUI", @"Title for Cell"), @"subtitle",
 				 self.legislator.email, @"entryValue",
 				 self.legislator.email, @"title",
 				 [NSNumber numberWithBool:YES], @"isClickable",
@@ -151,7 +152,7 @@
 	if (self.legislator && self.legislator.twitter && [self.legislator.twitter length]) {
 		tempString = ([self.legislator.twitter hasPrefix:@"@"]) ? self.legislator.twitter : [[[NSString alloc] initWithFormat:@"@%@", self.legislator.twitter] autorelease];
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 @"Twitter", @"subtitle",
+					 NSLocalizedStringFromTable(@"Twitter", @"DataTableUI", @"Title for Cell"), @"subtitle",
 					 tempString, @"entryValue",
 					 tempString, @"title",
 					 [NSNumber numberWithBool:YES], @"isClickable",
@@ -165,9 +166,9 @@
 	}
 	
 	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 @"Web", @"subtitle",
+				 NSLocalizedStringFromTable(@"Web", @"DataTableUI", @"Title for Cell, As in, a web address"), @"subtitle",
 				 self.legislator.website, @"entryValue",
-				 @"Official Website", @"title",
+				 NSLocalizedStringFromTable(@"Official Website", @"DataTableUI", @"Title for Cell"), @"title",
 				 [NSNumber numberWithBool:YES], @"isClickable",
 				 [NSNumber numberWithInteger:DirectoryTypeWeb], @"entryType",
 				 nil];
@@ -179,9 +180,9 @@
 		
 		
 	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 @"Web", @"subtitle",
+				 NSLocalizedStringFromTable(@"Web", @"DataTableUI", @"Title for cell, As in, a web adress"), @"subtitle",
 				 self.legislator.bio_url, @"entryValue",
-				 @"Votesmart Bio", @"title",
+				 NSLocalizedStringFromTable(@"Votesmart Bio", @"DataTableUI", @"Title for cell, Biographical information available at VoteSmart.org"), @"title",
 				 [NSNumber numberWithBool:YES], @"isClickable",
 				 [NSNumber numberWithInteger:DirectoryTypeWeb], @"entryType",
 				 nil];
@@ -191,9 +192,9 @@
 	[cellInfo release], cellInfo = nil;
 	
 	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 @"Legislation", @"subtitle",
+				 NSLocalizedStringFromTable(@"Legislation", @"DataTableUI", @"Title for cell, Bills and resolutions this person has authored"), @"subtitle",
 				 self.legislator.openstatesID, @"entryValue",
-				 @"Sponsored Bills", @"title",
+				 NSLocalizedStringFromTable(@"Authored Bills", @"DataTableUI", @"Title for cell, Bills and resolutions this person has authored"), @"title",
 				 [NSNumber numberWithBool:YES], @"isClickable",
 				 [NSNumber numberWithInteger:DirectoryTypeBills], @"entryType",
 				 nil];
@@ -208,11 +209,11 @@
 	if (storedNotesDict) {
 		tempString = [storedNotesDict valueForKey:[self.legislator.legislatorID stringValue]];
 	}
-	if (!tempString || ![tempString length])
-			tempString = @"Notes";
-
+	if (IsEmpty(tempString)) {
+		tempString = kStaticNotes;
+	}
 	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 @"Notes", @"subtitle",
+				 NSLocalizedStringFromTable(@"Notes", @"DataTableUI", @"Title for the cell indicating custom notes option"), @"subtitle",
 				 tempString, @"entryValue",
 				 tempString, @"title",
 				 [NSNumber numberWithBool:YES], @"isClickable",
@@ -261,10 +262,10 @@
 	}
 	else {
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 @"Staff", @"subtitle",
+					 NSLocalizedStringFromTable(@"Staff", @"DataTableUI", @"Office employees"), @"subtitle",
 					 @"NoneListed", @"entryValue",
-					 @"No Staff Listed", @"title",
-					 [NSNumber numberWithBool:NO], @"isClickable",
+					 NSLocalizedStringFromTable(@"No Staff Listed", @"DataTableUI", @"Title for cell indicating this person hasn't publish a list of office employees"), 
+							@"title", [NSNumber numberWithBool:NO], @"isClickable",
 					 [NSNumber numberWithInteger:DirectoryTypeNone], @"entryType",
 					 nil];
 		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
@@ -279,7 +280,7 @@
 		
 	if (self.legislator && self.legislator.cap_office && [self.legislator.cap_office length]) {
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 @"Office", @"subtitle",
+					 NSLocalizedStringFromTable(@"Office", @"DataTableUI", @"The person's office number, indicating the location inside the building"), @"subtitle",
 					 [CapitolMap mapFromOfficeString:self.legislator.cap_office], @"entryValue",
 					 self.legislator.cap_office, @"title",
 					 [NSNumber numberWithBool:YES], @"isClickable",
@@ -292,7 +293,7 @@
 	} 
 	if (self.legislator && self.legislator.cap_phone && [self.legislator.cap_phone length]) {
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 @"Phone", @"subtitle",
+					 NSLocalizedStringFromTable(@"Phone", @"DataTableUI", @"Cell title listing a phone number"), @"subtitle",
 					 self.legislator.cap_phone, @"entryValue",
 					 self.legislator.cap_phone, @"title",
 					 [NSNumber numberWithBool:isPhone], @"isClickable",
@@ -305,7 +306,7 @@
 	} 
 	if (self.legislator && self.legislator.cap_fax && [self.legislator.cap_fax length]) {
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 @"Fax", @"subtitle",
+					 NSLocalizedStringFromTable(@"Fax", @"DataTableUI", @"Cell title listing a fax number"), @"subtitle",
 					 self.legislator.cap_fax, @"entryValue",
 					 self.legislator.cap_fax, @"title",
 					 [NSNumber numberWithBool:NO], @"isClickable",
@@ -317,7 +318,7 @@
 		[cellInfo release], cellInfo = nil;
 	}
 	if (self.legislator && self.legislator.cap_phone2 && [self.legislator.cap_phone2 length]) {
-		tempString = (self.legislator.cap_phone2_name.length > 0) ? self.legislator.cap_phone2_name : @"Phone #2";
+		tempString = (self.legislator.cap_phone2_name.length > 0) ? self.legislator.cap_phone2_name : NSLocalizedStringFromTable(@"Phone #2", @"DataTableUI", @"Second phone number");
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 					 tempString, @"subtitle",
 					 self.legislator.cap_phone2, @"entryValue",
@@ -338,7 +339,7 @@
 		sectionIndex++;
 		if (office.phone && [office.phone length]) {
 			entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-						 @"Phone", @"subtitle",
+						 NSLocalizedStringFromTable(@"Phone", @"DataTableUI", @"Cell title listing a phone number"), @"subtitle",
 						 office.phone, @"entryValue",
 						 office.phone, @"title",
 						 [NSNumber numberWithBool:isPhone], @"isClickable",
@@ -351,7 +352,7 @@
 		}			
 		if (office.fax && [office.fax length]) {
 			entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-						 @"Fax", @"subtitle",
+						 NSLocalizedStringFromTable(@"Fax", @"DataTableUI", @"Cell title listing a fax number"), @"subtitle",
 						 office.fax, @"entryValue",
 						 office.fax, @"title",
 						 [NSNumber numberWithBool:NO], @"isClickable",
@@ -365,7 +366,7 @@
 		if (office.address && [office.address length]) {
 			
 			entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-						 @"Address", @"subtitle",
+						 NSLocalizedStringFromTable(@"Address", @"DataTableUI", @"Cell title listing a street address"), @"subtitle",
 						 office, @"entryValue",
 						 [office cellAddress], @"title",
 						 [NSNumber numberWithBool:YES], @"isClickable",
@@ -442,29 +443,29 @@
 	
 	switch (section) {
 		case 0:
-			title = @"Legislator Information";
+			title = NSLocalizedStringFromTable(@"Legislator Information", @"DataTableUI", @"Cell title");
 			break;
 		case 1:
-			title = @"Committee Assignments";
+			title = NSLocalizedStringFromTable(@"Committee Assignments", @"DataTableUI", @"Cell title");;
 			break;
 		case 2:
-			title = @"Staff Members";
+			title = NSLocalizedStringFromTable(@"Staff Members", @"DataTableUI", @"Cell title");
 			break;
 		case 3:
-			title = @"Capitol Office";
+			title = NSLocalizedStringFromTable(@"Capitol Office", @"DataTableUI", @"Cell title");
 			break;
 		case 4:
-			title = @"District Office #1";
+			title = NSLocalizedStringFromTable(@"District Office #1", @"DataTableUI", @"Cell title");
 			break;
 		case 5:
-			title = @"District Office #2";
+			title = NSLocalizedStringFromTable(@"District Office #2", @"DataTableUI", @"Cell title");
 			break;
 		case 6:
-			title = @"District Office #3";
+			title = NSLocalizedStringFromTable(@"District Office #3", @"DataTableUI", @"Cell title");
 			break;
 		case 7:
 		default:
-			title = @"District Office #4";
+			title = NSLocalizedStringFromTable(@"District Office #4", @"DataTableUI", @"Cell title");
 			break;
 	}
 	return title;
@@ -474,7 +475,8 @@
 - (NSString *)chamberPartyAbbrev {
 	NSString *partyName = stringForParty([self.legislator.party_id integerValue], TLReturnAbbrev);
 	
-	return [NSString stringWithFormat:@"%@ %@ Avg.", [self.legislator chamberName], partyName];
+	return [NSString stringWithFormat:@"%@ %@ %@", [self.legislator chamberName], partyName, 
+			 NSLocalizedStringFromTable(@"Avg.", @"DataTableUI", @"Abbreviation for the word average.")];
 }
 
 #pragma mark -
@@ -528,7 +530,7 @@
 		 [cell performSelector:@selector(setCellInfo:) withObject:cellInfo];
 		
 	if (cellInfo.entryType == DirectoryTypeNotes) {
-		if (![cellInfo.entryValue isEqualToString:@"Notes"])
+		if (![cellInfo.entryValue isEqualToString:kStaticNotes])
 			cell.detailTextLabel.textColor = [UIColor blackColor];
 		else
 			cell.detailTextLabel.textColor = [UIColor grayColor];

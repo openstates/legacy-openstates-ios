@@ -23,11 +23,11 @@
 @synthesize calendarList;
 
 
-- (NSString *)navigationBarName
-{ return @"Upcoming Meetings"; }
+- (NSString *)name 
+{ return NSLocalizedStringFromTable(@"Meetings", @"StandardUI", @"The short title for buttons and tabs related to committee meetings (or calendar events)"); }
 
-- (NSString *)name
-{ return @"Meetings"; }
+- (NSString *)navigationBarName 
+{ return NSLocalizedStringFromTable(@"Upcoming Meetings", @"StandardUI", @"The long title for buttons and tabs related to committee meetings (or calendar events)"); }
 
 - (UIImage *)tabBarImage 
 { return [UIImage imageNamed:@"83-calendar.png"]; }
@@ -63,44 +63,41 @@
 
 
 - (void) loadChamberCalendars {
+#warning state specific elements
 	[[CalendarEventsLoader sharedCalendarEventsLoader] loadEvents:self];
 	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
 	self.calendarList = [NSMutableArray arrayWithCapacity:4];
 	
+	/* ALL OR BOTH LEGISLATIVE CHAMBERS */
+	NSInteger numberOfChambers = 4;	// All chambers, House only, Senate only, Joint committees
+	NSInteger chamberIndex = BOTH_CHAMBERS;
+	NSString *chamberName = stringForChamber(chamberIndex, TLReturnFull);
+	
+	NSString *localizedString = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ Upcoming Meetings", @"DataTableUI", @"Menu item to display upcoming calendar events in a legislative chamber"), 
+					   chamberName];
+
 	NSMutableDictionary *calendarDict = [[NSMutableDictionary alloc] initWithCapacity:10];
 	ChamberCalendarObj *calendar = nil;
-	[calendarDict setObject:@"All Upcoming Meetings" forKey:@"title"];
-	[calendarDict setObject:[NSNumber numberWithInteger:BOTH_CHAMBERS] forKey:@"chamber"];
+	[calendarDict setObject:localizedString forKey:@"title"];
+	[calendarDict setObject:[NSNumber numberWithInteger:chamberIndex] forKey:@"chamber"];
 	calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
 	[self.calendarList addObject:calendar];
 	[calendar release];
 	[calendarDict removeAllObjects];
-	
-	
-	[calendarDict setObject:@"Upcoming House Meetings" forKey:@"title"];
-	[calendarDict setObject:[NSNumber numberWithInteger:HOUSE] forKey:@"chamber"];
-	calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
-	[self.calendarList addObject:calendar];
-	[calendar release];
-	[calendarDict removeAllObjects];
-	
-	
-	[calendarDict setObject:@"Upcoming Senate Meetings" forKey:@"title"];
-	[calendarDict setObject:[NSNumber numberWithInteger:SENATE] forKey:@"chamber"];
-	calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
-	[self.calendarList addObject:calendar];
-	[calendar release];
-	[calendarDict removeAllObjects];
-	
-	   
-	[calendarDict setObject:@"Upcoming Joint Meetings" forKey:@"title"];
-	[calendarDict setObject:[NSNumber numberWithInteger:JOINT] forKey:@"chamber"];
-	calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
-	[self.calendarList addObject:calendar];
-	[calendar release];
-	[calendarDict release];
+
+	chamberIndex++;
+	for (chamberIndex=chamberIndex; chamberIndex < numberOfChambers; chamberIndex++) {
+		chamberName = stringForChamber(chamberIndex, TLReturnFull);
+		localizedString = [NSString stringWithFormat:NSLocalizedStringFromTable(@"Upcoming %@ Meetings", @"DataTableUI", @"Menu item to display upcoming calendar events in a legislative chamber"), 
+						   chamberName];
+		[calendarDict setObject:localizedString forKey:@"title"];
+		[calendarDict setObject:[NSNumber numberWithInteger:chamberIndex] forKey:@"chamber"];
+		calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
+		[self.calendarList addObject:calendar];
+		[calendar release];
+		[calendarDict removeAllObjects];
+	}
 	
 	[pool drain];
 	

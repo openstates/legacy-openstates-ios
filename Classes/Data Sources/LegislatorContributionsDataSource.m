@@ -27,21 +27,21 @@
 	
 	switch ([self.queryType integerValue]) {
 		case kContributionQueryTop10Donors:
-			title = @"Top Contributions";
+			title = NSLocalizedStringFromTable(@"Top Contributions", @"DataTableUI", @"Title for table listing top 10 campaign donors.");
 			break;
 		case kContributionQueryTop10Recipients:
 		case kContributionQueryTop10RecipientsIndiv:
-			title = @"Top Recipients";
+			title = NSLocalizedStringFromTable(@"Top Recipients", @"DataTableUI", @"Title for table listing top 10 campaign donation recipients");
 			break;
 		case kContributionQueryRecipient:
-			title = @"Recipient Details";
+			title = NSLocalizedStringFromTable(@"Recipient Details", @"DataTableUI", @"Title for table listing details of a recipient of campaign money");
 			break;
 		case kContributionQueryDonor:
 		case kContributionQueryIndividual:
-			title = @"Contributor Details";
+			title = NSLocalizedStringFromTable(@"Contributor Details", @"DataTableUI", @"Title for table listing details for campaign contributors");
 			break;
 		case kContributionQueryEntitySearch:
-			title = @"Entity Search";
+			title = NSLocalizedStringFromTable(@"Entity Search", @"DataTableUI", @"Title for cell that allows user to search for a campaign donation recipient or contributor.");
 			break;
 		default:
 			title = @"";
@@ -96,25 +96,29 @@
 }
 
 - (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
-	NSString *title = @"Contributions";
+	NSString *title = NSLocalizedStringFromTable(@"Contributions",@"DataTableUI", @"Listing campaign contributions");
 	
 	switch ([self.queryType integerValue]) {
 		case kContributionQueryRecipient:
-			title = (section == 0) ? @"Recipient Information" : @"Aggregate Contributions";
+			title = (section == 0) ? 
+				NSLocalizedStringFromTable(@"Recipient Information", @"DataTableUI",@"Information for campaign contribution recipients")
+					: NSLocalizedStringFromTable(@"Aggregate Contributions", @"DataTableUI",@"Total campaign contributions for someone");
 			break;
 		case kContributionQueryDonor: 
 		case kContributionQueryIndividual:
-			title = (section == 0) ? @"Contributor Information" : @"Contributions (to everyone)";
+			title = (section == 0) ? 
+				NSLocalizedStringFromTable(@"Contributor Information", @"DataTableUI",@"Campaign contributor information")
+					: NSLocalizedStringFromTable(@"Contributions (to everyone)", @"DataTableUI",@"Details of campaign contributions");
 			break;
 		case kContributionQueryTop10Donors:
-			title = @"Biggest Contributors";
+			title = NSLocalizedStringFromTable(@"Biggest Contributors", @"DataTableUI",@"Top 10 campaign donors");
 			break;
 		case kContributionQueryTop10Recipients:
 		case kContributionQueryTop10RecipientsIndiv:
-			title = @"Biggest Recipients";
+			title = NSLocalizedStringFromTable(@"Biggest Recipients", @"DataTableUI", @"Top 10 campaign donation recipients");
 			break;
 		case kContributionQueryEntitySearch:
-			title = @"Search Closest Matching Entity";
+			title = NSLocalizedStringFromTable(@"Search Closest Matching Entity", @"DataTableUI", @"Allows user to search for campaign donation information");
 			break;
 		default:
 			break;
@@ -220,25 +224,30 @@
 		NSMutableArray *thisSection = [[NSMutableArray alloc] init];
 		
 		for (NSDictionary *dict in jsonArray) {
+			NSString *localizedString = NSLocalizedStringFromTable(@"Unknown", @"DataTableUI", @"This is an unknown entity (person, company, group, etc)");
+			
 			NSString *entityType = [[dict objectForKey:@"type"] capitalizedString];
 			//NSString *valueKey = @"";
 			NSNumber *action = nil;
 			if ([entityType isEqualToString:@"Politician"]) {
 				//valueKey = @"total_received";
+				localizedString = NSLocalizedStringFromTable(@"Politician", @"DataTableUI", @"The entity is a politician");
 				action = [NSNumber numberWithInteger:kContributionQueryRecipient];
 			}
 			else if ([entityType isEqualToString:@"Organization"]) {
 				//valueKey = @"total_given";
+				localizedString = NSLocalizedStringFromTable(@"Organization", @"DataTableUI", @"The entity is an organization or interest group");
 				action = [NSNumber numberWithInteger:kContributionQueryDonor];
 			}
 			else if ([entityType isEqualToString:@"Individual"]) {
 				//valueKey = @"total_given";
+				localizedString = NSLocalizedStringFromTable(@"Individual", @"DataTableUI", @"The entity is an individual / private citizen");
 				action = [NSNumber numberWithInteger:kContributionQueryIndividual];
 			}
 			
 			TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
 			cellInfo.title = [dict valueForKey:@"name"];
-			cellInfo.subtitle = entityType;
+			cellInfo.subtitle = localizedString;
 			cellInfo.entryValue = [dict objectForKey:@"id"];
 			cellInfo.entryType = [self.queryType integerValue];
 			cellInfo.isClickable = YES;
@@ -254,7 +263,7 @@
 			
 			TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
 			cellInfo.title = name;
-			cellInfo.subtitle = @"Nothing for";
+			cellInfo.subtitle = NSLocalizedStringFromTable(@"Nothing for", @"DataTableUI", @"There is no information available for .... someone");
 			cellInfo.entryValue = nil;
 			cellInfo.entryType = [self.queryType integerValue];
 			cellInfo.isClickable = NO;
@@ -292,7 +301,7 @@
 			cellInfo.isClickable = YES;
 			cellInfo.parameter = self.queryCycle;
 			cellInfo.action = [NSNumber numberWithInteger:kContributionQueryRecipient];
-			
+#warning state specific hacks
 			if (!dataID || [[NSNull null] isEqual:dataID] || ![dataID isKindOfClass:[NSString class]]) {
 				NSLog(@"ERROR - Contribution results lack have an empty entity ID for entity: %@", name);								
 				if ([[name uppercaseString] isEqualToString:@"BOB PERRY HOMES"])	// ala Bob Perry Homes
@@ -418,7 +427,7 @@
 				cellInfo.action = [NSNumber numberWithInteger:kContributionQueryTop10Recipients];
 			
 			if ([yearKey isEqualToString:@"-1"]) {
-				cellInfo.subtitle = @"Total";
+				cellInfo.subtitle = NSLocalizedStringFromTable(@"Total", @"DataTableUI", @"Total contributions for a political campaign");
 				//cellInfo.entryType = kContributionTotal;
 				//cellInfo.isClickable = NO;
 			}

@@ -113,10 +113,8 @@
     if ((([httpResponse statusCode]/100) == 2) && [[response MIMEType] isEqual:@"application/atom+xml"]) {
         self.districtMapData = [NSMutableData data];
     } else {
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:
-								  NSLocalizedString(@"HTTP Error",
-													@"Error message displayed when receving a connection error.")
-															 forKey:NSLocalizedDescriptionKey];
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"Import / HTTP Error"
+													forKey:NSLocalizedDescriptionKey];
         NSError *error = [NSError errorWithDomain:@"HTTP" code:[httpResponse statusCode] userInfo:userInfo];
         [self handleError:error];
     }
@@ -133,9 +131,7 @@
     if ([error code] == kCFURLErrorNotConnectedToInternet) {
         // if we can identify the error, we can present a more precise message to the user.
         NSDictionary *userInfo =
-		[NSDictionary dictionaryWithObject:
-		 NSLocalizedString(@"No Connection Error",
-						   @"Error message displayed when not connected to the Internet.")
+		[NSDictionary dictionaryWithObject:@"No Connection"
 									forKey:NSLocalizedDescriptionKey];
         NSError *noConnectionError = [NSError errorWithDomain:NSCocoaErrorDomain
                                                          code:kCFURLErrorNotConnectedToInternet
@@ -203,9 +199,7 @@
 - (void)handleError:(NSError *)error {
     NSString *errorMessage = [error localizedDescription];
     UIAlertView *alertView =
-	[[UIAlertView alloc] initWithTitle:
-	 NSLocalizedString(@"Error Title",
-					   @"Title for alert displayed when download or parse error occurs.")
+	[[UIAlertView alloc] initWithTitle:@"Import Error"
 							   message:errorMessage
 							  delegate:nil
 					 cancelButtonTitle:@"OK"
@@ -307,7 +301,6 @@ static NSString * const kGeoRSSPointElementName = @"coordinates";
         // The georss:point element contains the latitude and longitude of the districtMap epicenter.
         // 18.6477 -66.7452
         //
-#warning this only works on iOS4
 		NSError *error=NULL;
 		static NSString *matchPattern = @"(-?[0-9.]+),(-?[0-9.]+)";
 		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:matchPattern options:NSRegularExpressionCaseInsensitive error:&error];

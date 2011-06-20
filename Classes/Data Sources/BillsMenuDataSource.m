@@ -23,14 +23,16 @@ enum _menuOrder {
 	kMenuCategories,
 	kMenuLASTITEM
 };
+#warning localization
 
 // TableDataSourceProtocol methods
 
-- (NSString *)navigationBarName
-{ return @"Bills"; }
-
+// return the data used by the navigation controller and tab bar item
 - (NSString *)name
-{ return @"Bills"; }
+{ return NSLocalizedStringFromTable(@"Bills", @"StandardUI", @"Short name for bills (legislative documents, pre-law) tab"); }
+
+- (NSString *)navigationBarName 
+{ return [self name]; }
 
 - (UIImage *)tabBarImage 
 { return [UIImage imageNamed:@"gavel.png"]; }
@@ -71,7 +73,7 @@ enum _menuOrder {
 		_menuItems = [[textDict objectForKey:@"BillMenuItems"] retain];
 		
 		if (!_menuItems)
-			_menuItems = [[[NSArray alloc] init] retain];
+			_menuItems = [[NSArray alloc] init];
 	}
 	return _menuItems;
 }
