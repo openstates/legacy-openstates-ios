@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TexLegeAppDelegate.h"
 
 int main(int argc, char *argv[])
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, nil, @"TexLegeAppDelegate");
+	int retVal = UIApplicationMain(argc, argv, nil, NSStringFromClass([TexLegeAppDelegate class]));
     [pool drain];
     return retVal;
 }
