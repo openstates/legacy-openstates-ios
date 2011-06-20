@@ -21,20 +21,25 @@
 @end
 
 @implementation PartisanIndexStats
+@synthesize isFresh;
 
 SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 
 - (id)init {
 	if ((self = [super init])) {
+		updated = nil;
+		isFresh = NO;
+		isLoading = NO;
 		m_partisanIndexAggregates = nil;
+		m_rawPartisanIndexAggregates = nil;
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(resetData:) name:@"RESTKIT_LOADED_LEGISLATOROBJ" object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(resetData:) name:@"RESTKIT_LOADED_WNOMOBJ" object:nil];
-//		[[NSNotificationCenter defaultCenter] addObserver:self
-//												 selector:@selector(resetData:) name:@"RESTKIT_LOADED_WNOMAGGREGATEOBJ" object:nil];
 
+		[self loadPartisanIndex:nil];
+		
 		// initialize these
 		[self partisanIndexAggregates];
 		
@@ -46,7 +51,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 
 - (void)dealloc {	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-
+	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
+	if (updated)
+		[updated release], updated = nil;
+		
+	if (m_rawPartisanIndexAggregates) [m_rawPartisanIndexAggregates release], m_rawPartisanIndexAggregates = nil;
 	if (m_partisanIndexAggregates) [m_partisanIndexAggregates release], m_partisanIndexAggregates = nil;
 	
     [super dealloc];
@@ -194,22 +203,21 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 #pragma mark -
 #pragma mark Statistics for Historical Chart
 
-#define	WNOMAGGREGATES_KEY	@"WnomAggregateObj"
+#define	kPartisanIndexPath @"WnomAggregateObj"
+#define kPartisanIndexFile @"WnomAggregateObj.json"
 
 /* This gathers our pre-calculated overall aggregate scores for parties and chambers, from JSON		
 	We use this for our red/blue lines in our historical partisanship chart.*/
-- (NSArray *) historyForParty:(NSInteger)party Chamber:(NSInteger)chamber {
-	NSError *error = nil;
+- (NSArray *) historyForParty:(NSInteger)party chamber:(NSInteger)chamber {
+	if (IsEmpty(m_rawPartisanIndexAggregates) || !isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > (3600*24))) {	// if we're over a day old, let's refresh
+		if (!isLoading) {
+			[self loadPartisanIndex:nil];
+		}
+	}
 	
-	//TODO: right now the aggregates are pulled only from the app bundle, consider allowing for network updates
-	NSString *filePath = [[NSBundle mainBundle] pathForResource:WNOMAGGREGATES_KEY ofType:@"json"];
-	NSString *jsonString = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
-	if (error)
-		NSLog(@"Error parsing WnomAggregateObj data file: %@; [path: %@", [error localizedDescription], filePath);
-	if (jsonString && [jsonString length])
+	if (!IsEmpty(m_rawPartisanIndexAggregates))
 	{
-		NSArray *jsonArray = [jsonString objectFromJSONString];
-		NSArray *chamberArray = [jsonArray findAllWhereKeyPath:@"chamber" equals:[NSNumber numberWithInt:chamber]];
+		NSArray *chamberArray = [m_rawPartisanIndexAggregates findAllWhereKeyPath:@"chamber" equals:[NSNumber numberWithInt:chamber]];
 		if (chamberArray) {
 			NSArray *partyArray = [chamberArray findAllWhereKeyPath:@"party" equals:[NSNumber numberWithInt:party]];
 			return partyArray;
@@ -239,8 +247,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	
 	
 	NSInteger chamber = [legislator.legtype integerValue];
-	NSArray *democHistory = [self historyForParty:DEMOCRAT Chamber:chamber];
-	NSArray *repubHistory = [self historyForParty:REPUBLICAN Chamber:chamber];
+	NSArray *democHistory = [self historyForParty:DEMOCRAT chamber:chamber];
+	NSArray *repubHistory = [self historyForParty:REPUBLICAN chamber:chamber];
 		
 	NSUInteger i;
 	
@@ -284,5 +292,86 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 	return results;
 	
 }
+
+- (void)loadPartisanIndexFromCache:(id)sender {
+	// We had trouble loading the metadata online, so pull it up from the one in the documents folder (or the app bundle)
+	NSError *newError = nil;
+	NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kPartisanIndexFile];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	if (![fileManager fileExistsAtPath:localPath]) {
+		NSString *defaultPath = [[NSBundle mainBundle] pathForResource:kPartisanIndexPath ofType:@"json"];
+		[fileManager copyItemAtPath:defaultPath toPath:localPath error:&newError];
+		debug_NSLog(@"PartisanIndex: copied metadata from the app bundle's original.");
+	}
+	else {
+		debug_NSLog(@"PartisanIndex: using cached metadata in the documents folder.");
+	}
+	
+	NSData *jsonFile = [NSData dataWithContentsOfFile:localPath];
+	if (m_rawPartisanIndexAggregates)
+		[m_rawPartisanIndexAggregates release];	
+	m_rawPartisanIndexAggregates = [[jsonFile mutableObjectFromJSONData] retain];
+	if (m_rawPartisanIndexAggregates) {
+		[self resetData:nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kPartisanIndexNotifyLoaded object:nil];
+	}
+}
+
+- (void)loadPartisanIndex:(id)sender {	
+	if ([TexLegeReachability texlegeReachable]) {
+		if (IsEmpty(m_rawPartisanIndexAggregates)) {
+			[self loadPartisanIndexFromCache:nil];		// we do this automatically if we're not reachable
+		}
+		
+		isLoading = YES;
+		[[RKClient sharedClient] get:[NSString stringWithFormat:@"/rest.php/%@", kPartisanIndexPath] delegate:self];  	
+	}
+	else {
+		[self request:nil didFailLoadWithError:nil];
+	}
+}
+
+#pragma mark -
+#pragma mark RestKit:RKObjectLoaderDelegate
+
+- (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
+	isLoading = NO;
+	
+	if (error && request) {
+		debug_NSLog(@"Error loading partisan index from %@: %@", [request description], [error localizedDescription]);
+		[[NSNotificationCenter defaultCenter] postNotificationName:kPartisanIndexNotifyError object:nil];
+	}
+	
+	[self loadPartisanIndexFromCache:nil];
+}
+
+- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
+	isLoading = NO;
+	
+	if ([request isGET] && [response isOK]) {  
+		// Success! Let's take a look at the data  
+		if (m_rawPartisanIndexAggregates)
+			[m_rawPartisanIndexAggregates release];	
+		
+		m_rawPartisanIndexAggregates = [[response.body mutableObjectFromJSONData] retain];
+		if (m_rawPartisanIndexAggregates) {
+			if (updated)
+				[updated release];
+			updated = [[NSDate date] retain];
+			NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kPartisanIndexFile];
+			if (![[m_rawPartisanIndexAggregates JSONData] writeToFile:localPath atomically:YES])
+				NSLog(@"PartisanIndex: error writing cache to file: %@", localPath);
+			isFresh = YES;
+			[self resetData:nil];
+			[[NSNotificationCenter defaultCenter] postNotificationName:kPartisanIndexNotifyLoaded object:nil];
+			debug_NSLog(@"PartisanIndex network download successful, archiving for others.");
+		}		
+		else {
+			[self request:request didFailLoadWithError:nil];
+			return;
+		}
+	}
+}		
+
 
 @end

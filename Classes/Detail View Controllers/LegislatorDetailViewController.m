@@ -87,6 +87,8 @@
 											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_COMMITTEEPOSITIONOBJ" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_WNOMOBJ" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(resetTableData:) name:kPartisanIndexNotifyLoaded object:nil];
 	
 	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
 	UIColor *sealColor = [[UIColor colorWithPatternImage:sealImage] colorWithAlphaComponent:0.5f];	
@@ -231,7 +233,7 @@
 		self.allSlider.sliderValue = [indexStats overallPartisanIndexUsingChamber:[member.legtype integerValue]];
 	}	
 	
-	BOOL hasScores = (member.wnomScores && [member.wnomScores count]);
+	BOOL hasScores = !IsEmpty(member.wnomScores);
 	self.freshmanPlotLab.hidden = hasScores;
 	self.newChartView.hidden = !hasScores;
 
