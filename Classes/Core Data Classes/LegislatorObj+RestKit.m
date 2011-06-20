@@ -11,6 +11,8 @@
 #import "WnomObj.h"
 #import "UtilityMethods.h"
 
+#warning state specific
+
 @implementation LegislatorObj (RestKit)
 
 #pragma mark RKObjectMappable methods
@@ -98,10 +100,12 @@
 }
 
 - (NSString *)legTypeShortName {
-	if ([self.legtype_name isEqualToString:@"Speaker"])
-		return @"Spk.";
+	return abbreviateString(self.legtype_name);
+/*	if ([self.legtype_name isEqualToString:NSLocalizedStringFromTable(@"Speaker", @"DataTableUI", @"The speaker of the house")])
+		return NSLocalizedStringFromTable(@"Spk.", @"DataTableUI", @"Abbreviation for the Speaker");
 	else
 		return [[self.legtype_name substringToIndex:3] stringByAppendingString:@"."];
+*/
 }
 
 - (NSString *)legProperName {
@@ -164,13 +168,12 @@
 
 - (NSString *)labelSubText {
 	NSString *string;
-	string = [NSString stringWithFormat: @"%@ - District %d", 
+	string = [NSString stringWithFormat: NSLocalizedStringFromTable(@"%@ - District %d", @"DataTableUI", @"The person and their district number"),
 			self.legtype_name, [self.district integerValue]];
 	return string;
 }
 
 - (NSString *)website {
-
 	NSString *formatString = nil;
 	if ([self.legtype integerValue] == HOUSE)
 		formatString = [UtilityMethods texLegeStringWithKeyPath:@"OfficialURLs.houseWeb"];	// contains format placeholders
@@ -211,13 +214,15 @@
 	
 	switch (years) {
 		case 0:
-			stringVal = @"Freshman";
+			stringVal = NSLocalizedStringFromTable(@"Freshman", @"DataTableUI", @"The title for a legislator who was recently elected for the first time");
 			break;
 		case 1:
-			stringVal = [NSString stringWithFormat:@"%d Year",  years];
+			stringVal = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%d Year", @"DataTableUI", @"Singular form of a year"),
+						 years];
 			break;
 		default:
-			stringVal = [NSString stringWithFormat:@"%d Years",  years];
+			stringVal = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%d Years", @"DataTableUI", @"Plural form of a year"), 
+						 years];
 			break;
 	}
 	return stringVal;

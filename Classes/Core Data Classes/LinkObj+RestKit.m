@@ -47,7 +47,7 @@
 
 - (NSURL *) actualURL {	
 	NSURL * actualURL = nil;
-	static NSString *followTheMoney = @"http://www.followthemoney.org/";
+	NSString *followTheMoney = [UtilityMethods texLegeStringWithKeyPath:@"ExternalURLs.nimspWeb"];
 
 	if ([self.url isEqualToString:@"aboutView"]) {
 		NSString *file = nil;

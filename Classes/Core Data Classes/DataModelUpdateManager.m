@@ -61,15 +61,15 @@ enum TXL_QueryTypes {
 		
 		activeUpdates = [[NSCountedSet alloc] init];
 		statusBlurbsAndModels = [[NSDictionary alloc] initWithObjectsAndKeys: 
-									  @"Legislators", @"LegislatorObj",
-									  @"Partisanship Scores", @"WnomObj",
-									  @"Staffers", @"StafferObj",
-									  @"Committees", @"CommitteeObj",
-									  @"Committee Positions", @"CommitteePositionObj",
-									  @"District Offices", @"DistrictOfficeObj",
-									  @"Resources", @"LinkObj",
-									  @"District Maps", @"DistrictMapObj",
-									  @"Party Scores", @"WnomAggregateObj",
+									  NSLocalizedStringFromTable(@"Legislators", @"DataTableUI", @"Status indicator for updates"), @"LegislatorObj",
+									  NSLocalizedStringFromTable(@"Partisanship Scores", @"DataTableUI", @"Status indicator for updates"), @"WnomObj",
+									  NSLocalizedStringFromTable(@"Staffers", @"DataTableUI", @"Status indicator for updates"), @"StafferObj",
+									  NSLocalizedStringFromTable(@"Committees", @"DataTableUI", @"Status indicator for updates"), @"CommitteeObj",
+									  NSLocalizedStringFromTable(@"Committee Positions", @"DataTableUI", @"Status indicator for updates"), @"CommitteePositionObj",
+									  NSLocalizedStringFromTable(@"District Offices", @"DataTableUI", @"Status indicator for updates"), @"DistrictOfficeObj",
+									  NSLocalizedStringFromTable(@"Resources", @"DataTableUI", @"Status indicator for updates"), @"LinkObj",
+									  NSLocalizedStringFromTable(@"District Maps", @"DataTableUI", @"Status indicator for updates"), @"DistrictMapObj",
+									  NSLocalizedStringFromTable(@"Party Scores", @"DataTableUI", @"Status indicator for updates"), @"WnomAggregateObj",
 									  nil];		
 	}
 	return self;
@@ -93,7 +93,7 @@ enum TXL_QueryTypes {
 	NSArray *objects = [statusBlurbsAndModels allKeys];
 	if ([TexLegeReachability texlegeReachable]) {
 		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_UPDATE_REQUEST"];
-		NSString *statusString = @"Checking for Data Updates";
+		NSString *statusString = NSLocalizedStringFromTable(@"Checking for Data Updates", @"DataTableUI", @"Status indicator for updates");
 		MTStatusBarOverlay *overlay = [MTStatusBarOverlay sharedInstance] ;
 		overlay.historyEnabled = YES;
 		overlay.animation = MTStatusBarOverlayAnimationFallDown;  // MTStatusBarOverlayAnimationShrink
@@ -113,7 +113,7 @@ enum TXL_QueryTypes {
 #endif
 			NSString *resourcePath = [NSString stringWithFormat:@"/rest.php/%@/", entityName];
 			NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:localTS,TXLUPDMGR_UPDATEDPARAM,nil];
-			NSString* resourcePathWithQuery = [objectManager.client resourcePath:resourcePath withQueryParams:queryParams];
+			NSString* resourcePathWithQuery = RKPathAppendQueryParams(resourcePath, queryParams);
 			
 			Class entityClass = NSClassFromString(entityName);
 			if (entityClass) {							
@@ -176,7 +176,8 @@ enum TXL_QueryTypes {
 		NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
 		[[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
 		
-		NSString *statusString = [NSString stringWithFormat:@"Pruned %@", [statusBlurbsAndModels objectForKey:className]];
+		NSString *statusString = [NSString stringWithFormat:NSLocalizedStringFromTable(@"Pruned %@", @"DataTableUI", @"Status indicator for updates, these objects are being removed from the database"), 
+								  [statusBlurbsAndModels objectForKey:className]];
 		[[MTStatusBarOverlay sharedInstance] postImmediateMessage:statusString duration:1 animated:YES];
 	}	
 }
@@ -206,7 +207,7 @@ enum TXL_QueryTypes {
 //    _statusLabel.text = [NSString stringWithFormat:@"Queue %@ Finished Loading...", queue];
 	[self updateProgress];
 	if ([_queue count] == 0)
-		[[MTStatusBarOverlay sharedInstance] postFinishMessage:@"Update Completed" duration:5];	
+		[[MTStatusBarOverlay sharedInstance] postFinishMessage:NSLocalizedStringFromTable(@"Update Completed", @"DataTableUI", @"Status indicator for updates") duration:5];	
 }
 
 #pragma mark -
@@ -257,7 +258,8 @@ enum TXL_QueryTypes {
 				NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
 				debug_NSLog(@"%@ %d objects", notification, [objects count]);
 				
-				NSString *statusString = [NSString stringWithFormat:@"Updated %@", [statusBlurbsAndModels objectForKey:className]];
+				NSString *statusString = [NSString stringWithFormat:NSLocalizedStringFromTable(@"Updated %@", @"DataTableUI", @"Status indicator for updates"), 
+										  [statusBlurbsAndModels objectForKey:className]];
 				[[MTStatusBarOverlay sharedInstance] postMessage:statusString animated:YES];				
 			
 				// We shouldn't do a costly reset if there's another reset headed out way in a few seconds.
@@ -281,7 +283,7 @@ enum TXL_QueryTypes {
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"RESTKIT_DATA_ERROR"];
-	[[MTStatusBarOverlay sharedInstance] postErrorMessage:@"Error During Update" duration:8];
+	[[MTStatusBarOverlay sharedInstance] postErrorMessage:NSLocalizedStringFromTable(@"Error During Update", @"AppAlerts", @"Status indicator for updates") duration:8];
 	NSString *className = NSStringFromClass(objectLoader.objectClass);
 	if (className)
 		[self.activeUpdates removeObject:className];

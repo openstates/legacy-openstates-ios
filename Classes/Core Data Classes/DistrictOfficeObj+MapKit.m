@@ -10,6 +10,7 @@
 
 #import "LegislatorObj+RestKit.h"
 #import "TexLegeMapPins.h"
+#import "UtilityMethods.h"
 
 @implementation DistrictOfficeObj (MapKit)
 
@@ -31,46 +32,39 @@
 
 - (NSString *)title
 {
-	if (!self.legislator)
-		return @"District Office";
+	if (!self.legislator) {
+		return NSLocalizedStringFromTable(@"District Office", @"DataTableUI", @"The actual office building/address");
+	}
 
-	NSString *tempString = [NSString stringWithFormat:@"%@ %@ (%@)", [self.legislator legTypeShortName], [self.legislator legProperName], [self.legislator partyShortName]];
-    return tempString;
+    return [NSString stringWithFormat:@"%@ %@ (%@)", 
+			[self.legislator legTypeShortName], 
+			[self.legislator legProperName], 
+			[self.legislator partyShortName]];
 }
 
 - (UIImage *)image {
-	if (self.legislator && [self.legislator.party_id integerValue] == DEMOCRAT)
-		return [UIImage imageNamed:@"bluestar.png"];
-	else if (self.legislator && [self.legislator.party_id integerValue] == REPUBLICAN)
-		return [UIImage imageNamed:@"redstar.png"];
-	else
-		return [UIImage imageNamed:@"silverstar.png"];
+	NSString *imageFile = @"silverstar.png";
+	if (self.legislator) {
+		if (DEMOCRAT == [self.legislator.party_id integerValue]) {
+			imageFile = @"bluestar.png";
+		}
+		else if ([self.legislator.party_id integerValue] == REPUBLICAN) {
+			imageFile = @"redstar.png";
+		}
+	}
+	return [UIImage imageNamed:imageFile];
 }
 
 // optional
 - (NSString *)subtitle
-{
-	//debug_NSLog(@"addressDict: %@", self.addressDict);
-	NSString *formattedString = self.formattedAddress;
-	NSString *componentString = self.address;
-	
-	if (!formattedString && !componentString)
-		return nil;
-	
-	/*
-	 NSInteger formattedLength = [formattedString length];
-	 NSRange strRange = NSMakeRange(NSNotFound, 0);
-	 if (formattedString && formattedLength)
-	 strRange = [formattedString rangeOfString:@","];
-	 if (strRange.length > 0 && strRange.location < formattedLength)
-	 formattedString = [formattedString substringToIndex:strRange.location];
-	 */
-	if (formattedString && [formattedString length])
-		return formattedString;
-	else {
-		//debug_NSLog(@"formatted address not found, using component address: %@", componentString);
-		return componentString;
+{	
+	if (NO == IsEmpty(self.formattedAddress)) {
+		return self.formattedAddress;
 	}
+	else if (NO == IsEmpty(self.address)){
+		return self.address;
+	}
+	return nil;
 }
 
 - (CLLocationCoordinate2D) coordinate {
@@ -87,8 +81,9 @@
 }
 
 - (NSString *)cellAddress {
+	NSString *crAddress = [self.address stringByReplacingOccurrencesOfString:@", " withString:@"\n"];
 	NSString *tempString = [NSString stringWithFormat:@"%@\n%@, %@\n%@", 
-							[self.address stringByReplacingOccurrencesOfString:@", " withString:@"\n"], 
+							crAddress, 
 							self.city, self.stateCode, self.zipCode];
 	return tempString;
 }

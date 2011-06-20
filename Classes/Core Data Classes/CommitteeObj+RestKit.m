@@ -63,20 +63,7 @@
 }
 
 - (NSString*)typeString {
-	switch ([self.committeeType integerValue]) {
-		case JOINT:
-			return @"Joint";
-			break;
-		case HOUSE:
-			return @"House";
-			break;
-		case SENATE:
-			return @"Senate";
-			break;
-		default:
-			return @"All";
-			break;
-	}
+	return stringForChamber([self.committeeType integerValue], TLReturnFull);
 }
 
 - (NSString*)description {

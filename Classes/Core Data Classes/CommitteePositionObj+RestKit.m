@@ -54,11 +54,11 @@
 
 - (NSString*)positionString {
 	if ([[self position] integerValue] == POS_CHAIR) 
-		return @"Chair";
+		return NSLocalizedStringFromTable(@"Chair", @"DataTableUI", @"Abbreviation / title for a person who is the committee chairperson");
 	else if ([[self position] integerValue] == POS_VICE) 
-		return @"Vice Chair";
+		return NSLocalizedStringFromTable(@"Vice Chair", @"DataTableUI", @"Abbreviation / title for a person who is second to the committee chairperson");
 	else
-		return @"Member";
+		return NSLocalizedStringFromTable(@"Member", @"DataTableUI", @"Title for a person who is a regular member of a committe (not chair/vice-chair)");
 }
 
 - (NSComparisonResult)comparePositionAndCommittee:(CommitteePositionObj *)p

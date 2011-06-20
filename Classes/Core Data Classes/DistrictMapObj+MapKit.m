@@ -18,7 +18,8 @@
 {
 	NSString *chamberString = stringForChamber([self.chamber integerValue], TLReturnFull);
 	
-    return [NSString stringWithFormat:@"%@ District %@", chamberString, self.district];
+    return [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ District %@", @"DataTableUI", @"As in 'House District 32'"), 
+			chamberString, self.district];
 }
 
 - (UIImage *)image {
@@ -48,7 +49,8 @@
 
 - (NSString *)subtitle
 {
-	NSString *tempString = [NSString stringWithFormat:@"%@ %@ (%@)", [self.legislator legTypeShortName], [self.legislator legProperName], [self.legislator partyShortName]];
+	NSString *tempString = [NSString stringWithFormat:@"%@ %@ (%@)", 
+							[self.legislator legTypeShortName], [self.legislator legProperName], [self.legislator partyShortName]];
 	return tempString;
 }
 
@@ -78,13 +80,17 @@
 	return polyLine;
 }
 
+#warning state specific
+
 - (MKPolygon *)polygon {
 	MKPolygon *polyGon=nil;
 		
 	if (self.district && [self.district integerValue] == 83) {	// special case (until districts change)
 		NSArray *interiorPolygons = nil;
 		
-		DistrictMapObj *interiorDistrict = [TexLegeCoreDataUtils districtMapForDistrict:[NSNumber numberWithInt:84] andChamber:self.chamber lightProperties:NO];
+		DistrictMapObj *interiorDistrict = [TexLegeCoreDataUtils districtMapForDistrict:[NSNumber numberWithInt:84] 
+																			 andChamber:self.chamber 
+																		lightProperties:NO];
 		if (interiorDistrict) {
 			MKPolygon *interiorPolygon = [interiorDistrict polygon];
 			if (interiorPolygon)

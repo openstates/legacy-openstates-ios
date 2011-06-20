@@ -9,7 +9,6 @@
 #import "ChamberCalendarObj.h"
 #import "UtilityMethods.h"
 #import "NSDate+Helper.h"
-//#import "NSDate+TKCategory.h"
 #import "LoadingCell.h"
 #import "CalendarEventsLoader.h"
 
@@ -109,12 +108,14 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 			isSearching = YES;			
 		}
 	}
-	[cellText appendFormat:@"When: %@ - %@", [event objectForKey:kCalendarEventsLocalizedDateStringKey], time];
+	[cellText appendFormat:NSLocalizedStringFromTable(@"When: %@ - %@", @"DataTableUI", @"The date and time for an event"), 
+			[event objectForKey:kCalendarEventsLocalizedDateStringKey], time];
 	
 	if (isCancelled)
-		[cellText appendString:@" - CANCELED"];
+		[cellText appendString:NSLocalizedStringFromTable(@" - CANCELED", @"DataTableUI", @"an event was cancelled")];
 	else if (!isSearching)
-		[cellText appendFormat:@"\n   Where: %@", [event objectForKey:kCalendarEventsLocationKey]];
+		[cellText appendFormat:NSLocalizedStringFromTable(@"\n   Where: %@", @"DataTableUI", @"the location of an event"), 
+			[event objectForKey:kCalendarEventsLocationKey]];
 
 	cell.textLabel.text = cellText;
 	cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
