@@ -140,15 +140,26 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 }
 
 + (void)noInternetAlert {
-	UIAlertView *noInternetAlert = [[[ UIAlertView alloc ] 
-									 initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoInternetTitle"]
-									 message:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoInternetText"] 
+	UIAlertView *noInternetAlert = [[ UIAlertView alloc ] 
+									 initWithTitle:NSLocalizedStringFromTable(@"Internet Unavailable", @"AppAlerts", @"Alert title, network access is unavailable.")
+									 message:NSLocalizedStringFromTable(@"This feature requires an Internet connection, and a connection is unavailable.  Your device may be in 'Airplane' mode or is suffering poor network coverage.", @"AppAlerts", @"") 
 									 delegate:nil // we're static, so don't do "self"
-									 cancelButtonTitle: @"Cancel" 
-									 otherButtonTitles:nil, nil] autorelease];
-	[ noInternetAlert show ];		
+									 cancelButtonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Cancelling some activity")
+									 otherButtonTitles:nil];
+	[ noInternetAlert show ];	
+	[ noInternetAlert release ];
 }
 
++ (void)noHostAlert {
+	UIAlertView *alert = [[ UIAlertView alloc ] 
+			 initWithTitle:NSLocalizedStringFromTable(@"Host Unreachable", @"AppAlerts", @"Internet host is down")
+			 message:NSLocalizedStringFromTable(@"There was a problem contacting the specified host, the URL may have changed or may contain typographical errors. Perhaps try the connection again later.", @"AppAlerts", @"")
+			 delegate:nil // we're static, so don't do "self"
+			 cancelButtonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Cancelling some activity") 
+			 otherButtonTitles:nil];
+	[ alert show ];	
+	[ alert release ];
+}
 
 - (BOOL) isNetworkReachable {
 	BOOL reachable = YES;
@@ -184,31 +195,25 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 }
 
 + (BOOL) canReachHostWithURL:(NSURL *)url alert:(BOOL)doAlert {
-	UIAlertView * alert = nil;	
 	BOOL reachableHost = NO;
-	if (!url)
+	if (!url) {
 		return NO;
-	
-	if ([url isFileURL])
+	}
+	if ([url isFileURL]) {
 		return YES;
-	
+	}
 	if (![[TexLegeReachability sharedTexLegeReachability] isNetworkReachable]) {
-		if (doAlert)
+		if (doAlert) {
 			[TexLegeReachability noInternetAlert];
+		}
 	}
 	else if ([[url scheme] isEqualToString:@"twitter"] && 
-			 [[UIApplication sharedApplication] canOpenURL:url])
+			 [[UIApplication sharedApplication] canOpenURL:url]) {
 		reachableHost = YES;
-	
+	}
 	else if (![TexLegeReachability isHostReachable:[url host]]) {
 		if (doAlert) {
-			alert = [[[ UIAlertView alloc ] 
-					  initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoHostTitle"] 
-					  message:[UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoHostText"] 
-					  delegate:nil // we're static, so don't do "self"
-					  cancelButtonTitle: @"Cancel" 
-					  otherButtonTitles:nil, nil] autorelease];
-			[ alert show ];	
+			[self noHostAlert];
 		}
 	}
 	else {

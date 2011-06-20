@@ -80,7 +80,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
 		NSURL *mailto = [NSURL URLWithString:[message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 		
 		if (![UtilityMethods openURLWithTrepidation:mailto])
-			[self presentMailFailureAlertViewWithTitle:@"Cannot Open Mail Composer" message:@"There was an error while attempting to open an email composer.  Please check your network settings and try again"];
+			[self presentMailFailureAlertViewWithTitle:NSLocalizedStringFromTable(@"Cannot Open Mail Composer", @"AppAlerts", @"Error on email attempt")
+											   message:NSLocalizedStringFromTable(@"There was an error while attempting to open an email composer.  Please check your network settings and try again",
+																				  @"AppAlerts", @"Error on email attempt")];
 	}
 }
 
@@ -90,8 +92,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
 - (void)mailComposeController:(MFMailComposeViewController*)mailController didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
 	
 	if (result == MFMailComposeResultFailed) {
-		[self presentMailFailureAlertViewWithTitle:@"Failure, Message Not Sent" 
-										   message:@"Sadly, an error prevented successful transmission of your message. Check your email and network settings or try emailing manually."];
+		[self presentMailFailureAlertViewWithTitle:NSLocalizedStringFromTable(@"Failure, Message Not Sent", @"AppAlerts", @"Error on email attempt.")
+										   message:NSLocalizedStringFromTable(@"An error prevented successful transmission of your message. Check your email and network settings or try emailing manually.", @"AppAlerts", @"Error on email attempt")];
 	}
 	
 	self.isComposingMail = NO;
@@ -107,7 +109,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
 	self.currentAlert = [[[UIAlertView alloc] 
 						 initWithTitle:failTitle
 						 message:failMessage 
-						 delegate:self cancelButtonTitle:@"Dang It" otherButtonTitles:nil] autorelease];
+						 delegate:self 
+						  cancelButtonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Cancelling some activity") 
+						  otherButtonTitles:nil] autorelease];
 	[self.currentAlert show];
 	
 }

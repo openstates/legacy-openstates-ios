@@ -117,6 +117,7 @@ To use it in your Cocoa project, import the header and implementation files, and
 - (NSDate *)beginningOfWeek;
 - (NSDate *)beginningOfDay;
 - (NSDate *)endOfWeek;
+- (NSDate *)dateByAddingDays:(NSInteger)days;
 
 - (BOOL) isEarlierThanDate:(NSDate *)laterDate;
 

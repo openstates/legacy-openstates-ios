@@ -11,6 +11,8 @@
 @implementation TexLegeDateHelper
 @synthesize formatter = t_formatter, calendar = t_calendar, modFormatter = t_modFormatter;
 
+#warning localize
+
 SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeDateHelper);
 
 - (id)init {
@@ -278,6 +280,19 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeDateHelper);
 	
 	return endOfWeek;
 }
+
+- (NSDate *)dateByAddingDays:(NSInteger)days {
+	NSCalendar *calendar = [[TexLegeDateHelper sharedTexLegeDateHelper] calendar];
+	// Get the weekday component of the current date
+	NSDateComponents *componentsToAdd = [[NSDateComponents alloc] init];
+	// to get the week offset for a particular date, subtract 7 days
+	[componentsToAdd setDay:days];
+	NSDate *timeFrom = [calendar dateByAddingComponents:componentsToAdd toDate:self options:0];
+	[componentsToAdd release];
+	
+	return timeFrom;
+}
+
 
 + (NSString *)dateFormatString {
 	return @"yyyy-MM-dd";

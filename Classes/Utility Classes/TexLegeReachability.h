@@ -43,5 +43,5 @@
 + (BOOL) canReachHostWithURL:(NSURL *)url alert:(BOOL)doAlert;
 + (BOOL) canReachHostWithURL:(NSURL *)url;
 + (void) noInternetAlert;
-
++ (void) noHostAlert;
 @end

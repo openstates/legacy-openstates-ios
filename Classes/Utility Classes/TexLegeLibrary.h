@@ -14,7 +14,8 @@ enum kChambers {
     BOTH_CHAMBERS = 0,
     HOUSE,
     SENATE,
-	JOINT	
+	JOINT,
+	EXECUTIVE	// Used in open states / bill actions	
 };
 
 // Political Party
@@ -35,7 +36,9 @@ typedef enum  {
     TLReturnFull = 0,		// Return the full string
     TLReturnAbbrev,			// Return an abbreviation
     TLReturnInitial,		// Return an initial
-	TLReturnOpenStates
+	TLReturnOpenStates,
+	TLReturnAbbrevPlural,	// Like "Dems", "Repubs", etc.
+	TLReturnTitle			// Return a member title like Senator or Representative
 } TLStringReturnType;
 
 enum  {
@@ -59,7 +62,10 @@ enum  {
 										 7. Bill Becomes Law
 										 */
 
-NSInteger chamberForString(NSString *chamberString);
+NSString *stringInitial(NSString *inString, BOOL parens);
+NSString *abbreviateString(NSString *inString);
+
+NSInteger chamberFromOpenStatesString(NSString *chamberString);
 NSString *stringForChamber(NSInteger chamber, TLStringReturnType type);
 NSString *stringForParty(NSInteger party, TLStringReturnType type);
 NSString *billTypeStringFromBillID(NSString *billID);
