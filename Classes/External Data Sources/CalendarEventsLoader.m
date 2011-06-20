@@ -12,10 +12,16 @@
 #import "UtilityMethods.h"
 #import "TexLegeReachability.h"
 #import "OpenLegislativeAPIs.h"
-#import <EventKitUI/EventKitUI.h>
+
 #import "LocalyticsSession.h"
 #import "OpenLegislativeAPIs.h"
 #import "LoadingCell.h"
+
+#import "CalendarDetailViewController.h"
+#import "StateMetaLoader.h"
+
+#warning state specific
+
 /*
  Sorts an array of CalendarItems objects by date.  
  */
@@ -64,10 +70,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 
 		[OpenLegislativeAPIs sharedOpenLegislativeAPIs];
 		
-			eventStore = [[[EKEventStore alloc] init] retain];
+			eventStore = [[EKEventStore alloc] init];
 			[eventStore defaultCalendarForNewEvents];
 
-			/*#warning danger
+			/*
+			#warning danger
 			NSDate *past = [NSDate dateFromString:@"December 1, 2009" withFormat:@"MMM d, yyyy"];
 			NSDate *future = [NSDate dateFromString:@"December 1, 2011" withFormat:@"MMM d, yyyy"];
 			NSPredicate *pred = [eventStore predicateForEventsWithStartDate:past endDate:future calendars:nil];
@@ -96,9 +103,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 		[updated release], updated = nil;
 	if (_events)
 		[_events release], _events = nil;
-	
-		if (eventStore)
-			[eventStore release], eventStore = nil;
+	if (eventStore)
+		[eventStore release], eventStore = nil;
 	[super dealloc];
 }
 
@@ -119,11 +125,16 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 
 - (void)loadEvents:(id)sender {
 	if ([TexLegeReachability openstatesReachable]) {
+		StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
+		
+		if (IsEmpty(meta.selectedState))
+			return;
+		
 		//	http://openstates.sunlightlabs.com/api/v1/events/?state=tx&apikey=350284d0c6af453b9b56f6c1c7fea1f9
 
 		self.loadingStatus = LOADING_ACTIVE;
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-									 @"tx", @"state",
+									 meta.selectedState, @"state",
 									 osApiKeyValue, @"apikey",
 									 nil];
 		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/events" queryParams:queryParams delegate:self];
@@ -189,7 +200,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 		
 		allEvents = [allEvents findAllWhereKeyPath:kCalendarEventsTypeKey equals:kCalendarEventsTypeCommitteeValue];		
 		if (allEvents) {
-			_events = [[[NSMutableArray alloc] init] retain];
+			_events = [[NSMutableArray alloc] init];
 			for (NSDictionary *event in allEvents) {
 				NSString *when = [event objectForKey:kCalendarEventsWhenKey];
 				NSInteger daysAgo = [[NSDate dateFromTimestampString:when] daysAgo];
@@ -266,7 +277,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 			
 			NSString * chamberString = [participant objectForKey:kCalendarEventsTypeChamberValue];
 			if (!IsEmpty(chamberString))
-				[loadedEvent setObject:[NSNumber numberWithInteger:chamberForString(chamberString)] forKey:kCalendarEventsTypeChamberValue];
+				[loadedEvent setObject:[NSNumber numberWithInteger:chamberFromOpenStatesString(chamberString)] forKey:kCalendarEventsTypeChamberValue];
 		}
 	}
 		
@@ -342,11 +353,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 	
 	event.title     = chamberCommitteeString;
 	if ([[eventDict objectForKey:kCalendarEventsCanceledKey] boolValue] == YES)
-		event.title = [NSString stringWithFormat:@"%@ (CANCELED)", event.title];
+		event.title = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ (CANCELED)", @"DataTableUI", @"the event was cancelled"), 
+					   event.title];
 	
 	event.location = [eventDict objectForKey:kCalendarEventsLocationKey];
 	
-	event.notes = @"[TexLege] Length of this meeting is only an estimate.";
+	event.notes = NSLocalizedStringFromTable(@"[TexLege] Length of this meeting is only an estimate.", @"DataTableUI", @"inserted into iOS calendar events");
 	if (NO == IsEmpty([eventDict objectForKey:kCalendarEventsNotesKey]))
 		event.notes = [eventDict objectForKey:kCalendarEventsNotesKey];
 	else if (NO == IsEmpty([eventDict objectForKey:kCalendarEventsAnnouncementURLKey])) {
@@ -394,27 +406,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 
 	[[NSUserDefaults standardUserDefaults] setObject:eventIDs forKey:kTLEventKitKey];
 	[[NSUserDefaults standardUserDefaults] synchronize];
-		
-	//if (!delegate)
-	//	delegate = [[TexLegeAppDelegate appDelegate] detailNavigationController];
-	
-	if (delegate) {
-		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"iCAL_EVENT"];
-
-		EKEventViewController *eventVC = [[EKEventViewController alloc] initWithNibName:nil bundle:nil];			
-		eventVC.event = event;
-		
-		// Allow event editing.
-		eventVC.allowsEditing = YES;
-		
-		//	Push eventViewController onto the navigation controller stack
-		//	If the underlying event gets deleted, detailViewController will remove itself from
-		//	the stack and clear its event property.
-		[delegate pushViewController:eventVC animated:YES];
-		[eventVC release];
+			
+	if (delegate && [delegate respondsToSelector:@selector(presentEventEditorForEvent:)]) {
+		[delegate performSelector:@selector(presentEventEditorForEvent:) withObject:event];
 	}
 	[eventIDs release];
 }	
-
 
 @end
