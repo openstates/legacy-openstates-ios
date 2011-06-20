@@ -9,7 +9,7 @@
 #import <MapKit/MapKit.h>
 
 
-@interface TexLegePinAnnotationView : MKPinAnnotationView {
+@interface DistrictPinAnnotationView : MKPinAnnotationView {
 
 }
 

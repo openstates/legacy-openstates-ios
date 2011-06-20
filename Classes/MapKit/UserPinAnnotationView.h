@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-@interface CustomAnnotationView : MKPinAnnotationView {
+@interface UserPinAnnotationView : MKPinAnnotationView {
 
 }
 

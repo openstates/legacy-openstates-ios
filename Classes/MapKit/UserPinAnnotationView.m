@@ -6,20 +6,20 @@
 //  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
-#import "CustomAnnotationView.h"
-#import "CustomAnnotation.h"
+#import "UserPinAnnotationView.h"
+#import "UserPinAnnotation.h"
 #import "TexLegeMapPins.h"
 
-@interface CustomAnnotation (Private)
+@interface UserPinAnnotationView (Private)
 
 - (void)annotationChanged_:(NSNotification *)notification;
 
 @end
 
-@implementation CustomAnnotationView
+@implementation UserPinAnnotationView
 
 - (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:kCustomAnnotationAddressChangeNotificationKey object:self.annotation];	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];	
 
 	[super dealloc];
 }
@@ -33,10 +33,10 @@
 		self.opaque = NO;
 		self.draggable = YES;
 		
-		if (![annotation isKindOfClass:[CustomAnnotation class]])  
+		if (![annotation isKindOfClass:[UserPinAnnotation class]])  
 			return self;
 		
-		CustomAnnotation *customAnnotation = (CustomAnnotation *)annotation;
+		UserPinAnnotation *customAnnotation = (UserPinAnnotation *)annotation;
 
 		self.canShowCallout = YES;
 
@@ -58,12 +58,7 @@
 			[iconView release];
 		}			
 	
-		//self.image = [TexLegeMapPins imageForPinColorIndex:TexLegePinAnnotationColorBlue status:TexLegePinAnnotationStatusNormal];
-		//self.image = [UIImage imageNamed:@"Pin.png"];
-		//self.centerOffset = CGPointMake(8, -14);
-		//self.calloutOffset = CGPointMake(-8, 0);
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(annotationChanged_:) name:kCustomAnnotationAddressChangeNotificationKey object:annotation];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(annotationChanged_:) name:kUserPinAnnotationAddressChangeKey object:annotation];
 	}
 	return self;
 }
@@ -72,4 +67,11 @@
 	[self setNeedsDisplay];
 }
 	
+// MKPinAnnotationView+ZIndexFix
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
+{
+	[self.superview bringSubviewToFront:self];
+	[super touchesBegan:touches withEvent:event];
+}
+
 @end

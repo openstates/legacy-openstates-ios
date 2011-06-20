@@ -6,16 +6,16 @@
 //  Copyright 2010 Gregory S. Combs. All rights reserved.
 //
 
-#import "TexLegePinAnnotationView.h"
+#import "DistrictPinAnnotationView.h"
 #import "DistrictMapObj.h"
 #import "DistrictOfficeObj.h"
 #import "TexLegeMapPins.h"
 
-@interface TexLegePinAnnotationView (Private)
+@interface DistrictPinAnnotationView (Private)
 - (void)resetPinColorWithAnnotation:(id <MKAnnotation>)anAnnotation;
 @end
 	
-@implementation TexLegePinAnnotationView
+@implementation DistrictPinAnnotationView
 
 
 - (id)initWithAnnotation:(id <MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
@@ -73,6 +73,13 @@
 		self.leftCalloutAccessoryView = iconView;
 		[iconView release];
 	}
+}
+
+// MKPinAnnotationView+ZIndexFix
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
+{
+	[self.superview bringSubviewToFront:self];
+	[super touchesBegan:touches withEvent:event];
 }
 
 @end
