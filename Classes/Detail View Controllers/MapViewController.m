@@ -31,7 +31,6 @@
 - (void) animateToAnnotation:(id<MKAnnotation>)annotation;
 - (void) clearAnnotationsAndOverlays;
 - (void) clearOverlaysExceptRecent;
-- (void) clearAnnotationsExceptRecent;	
 - (void) clearAnnotationsAndOverlaysExcept:(id)annotation;
 - (void) resetMapViewWithAnimation:(BOOL)animated;
 - (BOOL) region:(MKCoordinateRegion)region1 isEqualTo:(MKCoordinateRegion)region2;
@@ -91,7 +90,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void) didReceiveMemoryWarning {	
-	//[self clearAnnotationsAndOverlaysExceptRecent];
 	[self clearOverlaysExceptRecent];
 
 	[super didReceiveMemoryWarning];
@@ -190,31 +188,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		[toRemove release];
 	}
 }
-
-- (void) clearAnnotationsExceptRecent {	
-	NSMutableArray *toRemove = [[NSMutableArray alloc] init];
-	if (toRemove) {
-		[toRemove setArray:self.mapView.annotations];
-		if ([toRemove containsObject:self.mapView.userLocation])
-			[toRemove removeObject:self.mapView.userLocation];
-		
-		if ([toRemove count]>2) {
-			[toRemove removeLastObject];
-			[toRemove removeLastObject];
-		}
-		
-		[self.mapView removeAnnotations:toRemove];
-		[toRemove release];
-	}
-}
-
-//#warning This doesn't actually work great, because MapKit uses Z-Ordering of annotations and overlays!!!
-- (void) clearAnnotationsAndOverlaysExceptRecent {
-	
-	[self clearOverlaysExceptRecent];
-	[self clearAnnotationsExceptRecent];	
-}
-
 
 - (void) resetMapViewWithAnimation:(BOOL)animated {
 	[self clearAnnotationsAndOverlays];
@@ -458,8 +431,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		[items removeObjectAtIndex:buttonIndex];
 	[items insertObject:locateItem atIndex:buttonIndex];
 	self.userLocationButton = locateItem;
-	[locateItem release];
 	[self.toolbar setItems:items animated:YES];
+	[locateItem release];
 	[items release];
 }
 
@@ -480,8 +453,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	if (otherButton.tag == 999 || otherButton.tag == 998)
 		[items removeObjectAtIndex:buttonIndex];
 	[items insertObject:activityItem atIndex:buttonIndex];
-	[activityItem release];
 	[self.toolbar setItems:items animated:YES];
+	[activityItem release];
 	[items release];
 }
 
@@ -763,18 +736,15 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 			senate = YES;
 		}
 
-		//MKPolygonView*    aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
-		MKPolygonView *aView = nil;
+		MKPolygonView *aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
 		if (senate) {
-			aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
 			self.senateDistrictView = aView;
 		}
 		else {
-			aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
 			self.houseDistrictView = aView;
 		}
 
-		aView.fillColor = [/*[UIColor cyanColor]*/myColor colorWithAlphaComponent:0.2];
+		aView.fillColor = [myColor colorWithAlphaComponent:0.2];
         aView.strokeColor = [myColor colorWithAlphaComponent:0.7];
         aView.lineWidth = 3;
 		
@@ -791,12 +761,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
         return aView;
     }
 	
-	/*
-	 MultiPolylineView *multiPolyView = [[[MultiPolylineView alloc] initWithOverlay: overlay] autorelease];
-	 multiPolyView.strokeColor = [UIColor redColor];
-	 multiPolyView.lineWidth   = 5.0;
-	 return multiPolyView;
-	 */
 	return nil;
 }
 
@@ -839,10 +803,9 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 			}
 		}
 		
-		//[self.mapView removeOverlays:self.mapView.overlays];
-		if (toRemove && [toRemove count])
+		if (!IsEmpty(toRemove)) {
 			[self.mapView performSelector:@selector(removeOverlays:) withObject:toRemove];
-
+		}
 		[toRemove release];
 		
 		if (!foundOne) {
@@ -853,47 +816,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		[self.mapView setRegion:region animated:TRUE];
 	}			
 }
-
-/*
-- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)aView {
-	id<MKAnnotation> annotation = aView.annotation;
-	if (!annotation)
-		return;
-	
-	if ([annotation isKindOfClass:[DistrictMapObj class]]) {
-		MKCoordinateRegion region;
-		region = [(DistrictMapObj *)annotation region];
-		
-		NSMutableArray *toRemove = [[NSMutableArray alloc] initWithCapacity:[self.mapView.overlays count]];
-		NSInteger deleteOne = -1;
-		
-		for (id<MKOverlay>item in self.mapView.overlays) {
-			if ([[item title] isEqualToString:[annotation title]]) {	// we clicked on an existing overlay
-				if ([[item title] isEqualToString:[self.senateDistrictView.polygon title]]) { // it's the senate
-					deleteOne = SENATE;
-					[toRemove addObject:item];
-					break;
-				}
-				else if ([[item title] isEqualToString:[self.houseDistrictView.polygon title]]) { // it's the house
-					deleteOne = HOUSE;
-					[toRemove addObject:item];
-					break;
-				}
-				
-			}
-		}
-		
-		if (deleteOne >= 0 && toRemove && [toRemove count]) {
-			[self invalidateDistrictView:deleteOne];
-			[self.mapView performSelector:@selector(removeOverlays:) withObject:toRemove];
-		}
-		[toRemove release];
-		
-		[self.mapView setRegion:region animated:TRUE];
-	}			
-}
-
-*/
 
 #pragma mark -
 #pragma mark Orientation

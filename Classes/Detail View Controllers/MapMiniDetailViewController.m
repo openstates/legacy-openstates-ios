@@ -23,10 +23,7 @@
 @interface MapMiniDetailViewController (Private)
 - (void) animateToState;
 - (void) animateToAnnotation:(id<MKAnnotation>)annotation;
-- (void) clearAnnotationsAndOverlays;
 - (void) clearOverlaysExceptRecent;
-- (void) clearAnnotationsExceptRecent;	
-- (void) clearAnnotationsAndOverlaysExcept:(id)annotation;
 - (void) resetMapViewWithAnimation:(BOOL)animated;
 - (BOOL) region:(MKCoordinateRegion)region1 isEqualTo:(MKCoordinateRegion)region2;
 @end
@@ -53,15 +50,12 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void) dealloc {
-	[self.mapView removeOverlays:self.mapView.overlays];
-	[self.mapView removeAnnotations:self.mapView.annotations];
 	self.mapView = nil;
 	[super dealloc];
 }
 
 - (void) didReceiveMemoryWarning {	
 
-	//[self clearAnnotationsAndOverlaysExceptRecent];
 	[self clearOverlaysExceptRecent];
 
 	[super didReceiveMemoryWarning];
@@ -124,21 +118,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 
-- (void) clearAnnotationsAndOverlaysExcept:(id)keep {
-	self.mapView.showsUserLocation = NO;	
-	
-	NSMutableArray *annotes = [[NSMutableArray alloc] initWithCapacity:[self.mapView.annotations count]];
-	for (id object in self.mapView.annotations) {
-		if (![object isEqual:keep])
-			[annotes addObject:object];
-	}
-	if (annotes && [annotes count]) {
-		[self.mapView removeOverlays:self.mapView.overlays];
-		[self.mapView removeAnnotations:annotes];
-	}
-	[annotes release];
-}
-
 - (void) clearOverlaysExceptRecent {
 	self.mapView.showsUserLocation = NO;
 	
@@ -152,31 +131,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		[toRemove release];
 	}
 }
-
-- (void) clearAnnotationsExceptRecent {	
-	NSMutableArray *toRemove = [[NSMutableArray alloc] init];
-	if (toRemove) {
-		[toRemove setArray:self.mapView.annotations];
-		if ([toRemove containsObject:self.mapView.userLocation])
-			[toRemove removeObject:self.mapView.userLocation];
-		
-		if ([toRemove count]>2) {
-			[toRemove removeLastObject];
-			[toRemove removeLastObject];
-		}
-		
-		[self.mapView removeAnnotations:toRemove];
-		[toRemove release];
-	}
-}
-
-//#warning This doesn't actually work great, because MapKit uses Z-Ordering of annotations and overlays!!!
-- (void) clearAnnotationsAndOverlaysExceptRecent {
-	
-	[self clearOverlaysExceptRecent];
-	[self clearAnnotationsExceptRecent];	
-}
-
 
 - (void) resetMapViewWithAnimation:(BOOL)animated {
 	[self clearAnnotationsAndOverlays];

@@ -16,7 +16,6 @@
 @property (nonatomic) CLLocationCoordinate2D annotationActionCoord;
 
 - (void) clearAnnotationsAndOverlays;
-- (void) clearAnnotationsAndOverlaysExceptRecent;
 - (void) resetMapViewWithAnimation:(BOOL)animated;
 - (void) moveMapToAnnotation:(id<MKAnnotation>)annotation;
 

@@ -37,7 +37,6 @@
 - (IBAction) changeMapType:(id)sender;
 - (IBAction) locateUser:(id)sender;
 - (void) clearAnnotationsAndOverlays;
-- (void) clearAnnotationsAndOverlaysExceptRecent;
 - (void) resetMapViewWithAnimation:(BOOL)animated;
 - (void) moveMapToAnnotation:(id<MKAnnotation>)annotation;
 - (void) searchDistrictMapsForCoordinate:(CLLocationCoordinate2D)aCoordinate;
