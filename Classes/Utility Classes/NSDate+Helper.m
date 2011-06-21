@@ -11,8 +11,6 @@
 @implementation TexLegeDateHelper
 @synthesize formatter = t_formatter, calendar = t_calendar, modFormatter = t_modFormatter;
 
-#warning localize
-
 SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeDateHelper);
 
 - (id)init {

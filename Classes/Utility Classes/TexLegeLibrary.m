@@ -187,7 +187,7 @@ NSString *stringForParty(NSInteger party, TLStringReturnType type) {
 	return partyString;
 }
 
-#warning state specific elements
+#warning state specific (Bill IDs)
 
 NSString *billTypeStringFromBillID(NSString *billID) {
 	NSArray *words = [billID componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -195,26 +195,6 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 		return [words objectAtIndex:0];
 	else
 		return nil;
-}
-
-BOOL billTypeRequiresOpposingChamber(NSString *billType) {
-	BOOL requires = YES;
-	if (!IsEmpty(billType)) {
-		if (([billType isEqualToString:@"HR"]) || 
-			([billType isEqualToString:@"SR"]))
-			requires = NO;
-	}
-	return requires;
-}
-
-BOOL billTypeRequiresGovernor(NSString *billType) {
-	BOOL requires = billTypeRequiresOpposingChamber(billType);
-	if (!IsEmpty(billType)) {
-		if (([billType hasSuffix:@"JR"]) ||
-			([billType hasSuffix:@"CR"]))	// shouldn't this be TRUE though?
-			requires = NO;
-	}
-	return requires;
 }
 
 NSString * watchIDForBill(NSDictionary *aBill) {

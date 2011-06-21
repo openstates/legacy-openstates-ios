@@ -31,10 +31,11 @@
 #import "TVOutManager.h"
 #import "MTStatusBarOverlay.h"
 
+#import "StateMetaLoader.h"
+
 @interface TexLegeAppDelegate (Private)
 - (void)runOnEveryAppStart;
 - (void)runOnAppQuit;
-- (void)setupFeatures;
 - (void)restoreArchivableSavedTableSelection;
 - (NSData *)archivableSavedTableSelection;
 - (void)resetSavedTableSelection:(id)sender;
@@ -81,8 +82,7 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)dealloc {
-	if (analyticsOptInController)
-		[analyticsOptInController release], analyticsOptInController = nil;
+	nice_release(analyticsOptInController);
 	
 	self.savedTableSelection = nil;
 	self.tabBarController = nil;
@@ -246,17 +246,15 @@ NSInteger kNoSelection = -1;
 	}
 }
 
-- (void) setupFeatures {
-	
-	[PartisanIndexStats sharedPartisanIndexStats];
-	
+- (void) setupViewControllerHierarchy {
+		
 	NSArray *nibObjects = nil;
 	if ([UtilityMethods isIPadDevice]) 
 		nibObjects = [[NSBundle mainBundle] loadNibNamed:@"iPadTabBarController" owner:self options:nil];
 	else
 		nibObjects = [[NSBundle mainBundle] loadNibNamed:@"iPhoneTabBarController" owner:self options:nil];
 	
-	if (!nibObjects || [nibObjects count] == 0) {
+	if (IsEmpty(nibObjects)) {
 		debug_NSLog(@"Error loading user interface NIB components! Can't find the nib file and can't continue this charade.");
 		exit(0);
 	}
@@ -295,46 +293,33 @@ NSInteger kNoSelection = -1;
 		[self.tabBarController setViewControllers:splitViewControllers];
 		[splitViewControllers release];
 	} 
-
-	/*for (GeneralTableViewController *controller in VCs) {
-		if ([controller isKindOfClass:[CommitteeMasterViewController class]]) {
-			NSError *error = nil;
-			NSInteger count = [CommitteeObj count:&error];
-			if (error || count == 0)
-				controller.navigationController.tabBarItem.enabled = NO;
-		}	
-	}*/
-	[VCs release];
 	
 	UIViewController * savedTabController = [self.tabBarController.viewControllers objectAtIndex:savedTabSelectionIndex];
 	if (!savedTabController || !savedTabController.tabBarItem.enabled) {
 		debug_NSLog (@"Couldn't find a view/navigation controller at index: %d", savedTabSelectionIndex);
 		savedTabController = [self.tabBarController.viewControllers objectAtIndex:0];
 	}
-	else {
-		if (self.tabBarController.moreNavigationController)
-			self.tabBarController.moreNavigationController.navigationBar.tintColor = [TexLegeTheme navbar];
+	else if (self.tabBarController.moreNavigationController) {
+		self.tabBarController.moreNavigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 	}
 	[self setTabOrderIfSaved];
 	
 	[self.tabBarController setSelectedViewController:savedTabController];
+	self.mainWindow.rootViewController = self.tabBarController;
 	
-	[self.mainWindow addSubview:self.tabBarController.view];	
-	//[self.tabBarController viewDidLoad];	///// GREG???? delete this line if things work okay now.
-	// make the window visible
-	[self.mainWindow makeKeyAndVisible];
-	[MTStatusBarOverlay sharedOverlay];
-
+	nice_release(VCs);
 }
 
 - (void)changingReachability:(id)sender {
-	TexLegeReachability *myReach = [TexLegeReachability sharedTexLegeReachability];
-	
-	for (UITabBarItem *item in [self.tabBarController valueForKeyPath:@"viewControllers.tabBarItem"]) {
-		if (item.tag == TAB_BILL || item.tag == TAB_CALENDAR)
-			item.enabled = myReach.openstatesConnectionStatus > NotReachable;
-		else if (item.tag == TAB_DISTRICTMAP)
-			item.enabled = myReach.googleConnectionStatus > NotReachable;
+	if (self.tabBarController) {
+		TexLegeReachability *myReach = [TexLegeReachability sharedTexLegeReachability];
+		
+		for (UITabBarItem *item in [self.tabBarController valueForKeyPath:@"viewControllers.tabBarItem"]) {
+			if (item.tag == TAB_BILL || item.tag == TAB_CALENDAR)
+				item.enabled = myReach.openstatesConnectionStatus > NotReachable;
+			else if (item.tag == TAB_DISTRICTMAP)
+				item.enabled = myReach.googleConnectionStatus > NotReachable;
+		}
 	}
 }
 
@@ -344,16 +329,12 @@ NSInteger kNoSelection = -1;
 	NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 	
 	[self restoreArchivableSavedTableSelection];
-	[self setupFeatures];
+	
+	[self setupViewControllerHierarchy];
 
-/*	NSArray *subviews = self.mainWindow.subviews;		// WHY DID WE DO THIS?????
-	for (UIView *aView in subviews) {
-		if (aView.tag == 8888) {
-			[aView removeFromSuperview];
-			break;
-		}
-	}
-*/			 
+	[self.mainWindow makeKeyAndVisible];
+	[MTStatusBarOverlay sharedOverlay];
+
 	// register our preference selection data to be archived
 	NSDictionary *savedPrefsDict = [NSDictionary dictionaryWithObjectsAndKeys: 
 									[self archivableSavedTableSelection],kRestoreSelectionKey,
@@ -390,19 +371,7 @@ NSInteger kNoSelection = -1;
 	UIWindow *localMainWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.mainWindow = localMainWindow;
 	[localMainWindow release];
-		
-/*	if (![UtilityMethods isIPadDevice]) {		//// WHY DID WE DO THIS????
-		NSString *loadingString = @"Default.png";
-		UIImage *loadingImage = [UIImage imageNamed:loadingString];
-		UIImageView *loadingView = [[UIImageView alloc] initWithImage:loadingImage];
-		loadingView.tag = 8888;
-		[self.mainWindow addSubview:loadingView];
-		[loadingView release];
-		[self performSelector:@selector(runOnInitialAppStart:) withObject:nil afterDelay:0.0f];
-	}
-	else
-		[self performSelector:@selector(runOnInitialAppStart:) withObject:nil];*/
-	
+			
 	[self runOnInitialAppStart:nil];
 		
 	return YES;
@@ -433,17 +402,19 @@ NSInteger kNoSelection = -1;
 - (void)runOnEveryAppStart {
 	self.appIsQuitting = NO;
 	
+	[[StateMetaLoader sharedStateMeta] setSelectedState:@"tx"];
+	[PartisanIndexStats sharedPartisanIndexStats];
 	[[BillMetadataLoader sharedBillMetadataLoader] loadMetadata:self];
 	//[[CalendarEventsLoader sharedCalendarEventsLoader] loadEvents:self];
 	
 	if (![self isDatabaseResetNeeded]) {
-		analyticsOptInController = [[[AnalyticsOptInAlertController alloc] init] retain];
-		if (analyticsOptInController && ![analyticsOptInController presentAnalyticsOptInAlertIfNecessary])
+		analyticsOptInController = [[AnalyticsOptInAlertController alloc] init];
+		if (![analyticsOptInController presentAnalyticsOptInAlertIfNecessary])
 			[analyticsOptInController updateOptInFromSettings];
 		
-		if (self.dataUpdater)
+		if (self.dataUpdater) {
 			[self.dataUpdater performSelector:@selector(performDataUpdatesIfAvailable:) withObject:self afterDelay:10.f];
-				
+		}
 	}
 	[[LocalyticsSession sharedLocalyticsSession] resume];
  	[[LocalyticsSession sharedLocalyticsSession] upload];
@@ -467,8 +438,7 @@ NSInteger kNoSelection = -1;
 		[[NSUserDefaults standardUserDefaults] setObject:savedOrder forKey:kSavedTabOrderKey];
 	}
 	
-	if (analyticsOptInController)
-		[analyticsOptInController release], analyticsOptInController = nil;
+	nice_release(analyticsOptInController);
 
 	// save the drill-down hierarchy of selections to preferences
 	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
@@ -551,9 +521,10 @@ NSInteger kNoSelection = -1;
 	BOOL needsReset = [[NSUserDefaults standardUserDefaults] boolForKey:kResetSavedDatabaseKey];
 		
 	if (needsReset) {
-		UIAlertView *resetDB = [[UIAlertView alloc] initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"ResetDB.ConfirmTitle"] 
-														  message:[UtilityMethods texLegeStringWithKeyPath:@"ResetDB.ConfirmText"] 
-														 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Reset",nil];
+		UIAlertView *resetDB = [[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"Settings: Reset Data to Factory?", @"AppAlerts", @"Confirmation to delete and reset the app's database.")
+														  message:NSLocalizedStringFromTable(@"Are you sure you want to restore the factory database?  NOTE: The application may quit after this reset.  Data updates will be applied automatically via the Internet during the next app launch.", @"AppAlerts",@"") 
+														 delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"Cancel",@"StandardUI",@"Cancelling some activity")
+												otherButtonTitles:NSLocalizedStringFromTable(@"Reset", @"StandardUI", @"Reset application settings to defaults"),nil];
 		resetDB.tag = 23452;
 		[resetDB show];
 		[resetDB release];
