@@ -79,7 +79,7 @@
 { return NSLocalizedStringFromTable(@"Committee Information", @"StandardUI", @"The long title for buttons and tabs related to legislative committees"); }
 
 - (UIImage *)tabBarImage
-{ return [UIImage imageNamed:@"60-signpost.png"]; }
+{ return [UIImage imageNamed:@"60-signpost-inv.png"]; }
 
 - (BOOL)showDisclosureIcon
 { return YES; }

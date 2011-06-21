@@ -35,7 +35,7 @@ enum _menuOrder {
 { return [self name]; }
 
 - (UIImage *)tabBarImage 
-{ return [UIImage imageNamed:@"gavel.png"]; }
+{ return [UIImage imageNamed:@"gavel-inv.png"]; }
 
 - (BOOL)showDisclosureIcon
 { return YES; }

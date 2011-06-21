@@ -30,7 +30,7 @@
 { return NSLocalizedStringFromTable(@"Upcoming Meetings", @"StandardUI", @"The long title for buttons and tabs related to committee meetings (or calendar events)"); }
 
 - (UIImage *)tabBarImage 
-{ return [UIImage imageNamed:@"83-calendar.png"]; }
+{ return [UIImage imageNamed:@"83-calendar-inv.png"]; }
 
 - (BOOL)showDisclosureIcon
 { return YES; }

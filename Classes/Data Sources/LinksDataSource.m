@@ -33,7 +33,7 @@ enum Sections {
 { return NSLocalizedStringFromTable(@"Resources and Info", @"StandardUI", @"The long title for buttons and tabs related to web links (for more information, see ...)"); }
 
 - (UIImage *)tabBarImage {
-	return [UIImage imageNamed:@"113-navigation.png"];
+	return [UIImage imageNamed:@"113-navigation-inv.png"];
 }
 
 - (BOOL)showDisclosureIcon

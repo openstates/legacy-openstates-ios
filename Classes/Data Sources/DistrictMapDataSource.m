@@ -105,7 +105,7 @@
 { return [self name]; }
 
 - (UIImage *)tabBarImage
-{ return [UIImage imageNamed:@"73-radar.png"]; }
+{ return [UIImage imageNamed:@"73-radar-inv.png"]; }
 
 - (BOOL)showDisclosureIcon
 { return YES; }

@@ -82,7 +82,7 @@
 { return NSLocalizedStringFromTable(@"Legislator Directory", @"StandardUI", @"The long title for buttons and tabs related to legislators"); }
 
 - (UIImage *)tabBarImage 
-{ return [UIImage imageNamed:@"123-id-card.png"]; }
+{ return [UIImage imageNamed:@"123-id-card-inv.png"]; }
 
 - (BOOL)showDisclosureIcon
 { return YES; }
