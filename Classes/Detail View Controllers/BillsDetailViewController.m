@@ -36,8 +36,6 @@
 - (void)starButtonSetState:(BOOL)isOn;
 @end
 
-#warning state specific
-
 @implementation BillsDetailViewController
 
 enum _billSections {
@@ -239,17 +237,10 @@ enum _billSections {
 	if (!bill)
 		return;
 	
-	NSString *session = nil;
-	@try {
-		session = [UtilityMethods ordinalNumberFormat:[[bill objectForKey:@"session"] integerValue]];
-	}
-	@catch (NSException * e) {
-		session = [bill objectForKey:@"session"];
-	}
-	
+	NSString *session = [bill objectForKey:@"session"];
 	NSString *billTitle = [NSString stringWithFormat:@"(%@) %@", session, [bill objectForKey:@"bill_id"]];
 	self.navigationItem.title = billTitle;
-
+	
 	@try {
 		NSArray *idComponents = [[bill objectForKey:@"bill_id"] componentsSeparatedByString:@" "];
 		
