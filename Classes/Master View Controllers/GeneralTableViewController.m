@@ -14,12 +14,45 @@
 #import "TableDataSourceProtocol.h"
 #import "BillsMenuDataSource.h"
 #import "TexLegeTheme.h"
+#import "TexLegeReachability.h"
 
 @implementation GeneralTableViewController
-
-
-@synthesize dataSource, detailViewController;
+@synthesize dataSource, detailViewController, controllerEnabled;
 @synthesize selectObjectOnAppear;
+
+- (NSString *)reachabilityStatusKey {
+	return nil;
+}
+
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+	if ((self=[super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
+		controllerEnabled = [[NSNumber numberWithBool:YES] retain];
+		
+		NSString *statusKey = [self reachabilityStatusKey];
+		if (!IsEmpty(statusKey)) {
+			[[TexLegeReachability sharedTexLegeReachability] addObserver:self 
+															  forKeyPath:statusKey 
+																 options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) 
+																 context:nil];			
+		}
+	}
+	return self;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if (!IsEmpty(keyPath) && [self reachabilityStatusKey] && [keyPath isEqualToString:[self reachabilityStatusKey]]) {
+		BOOL enbl = [self.controllerEnabled boolValue];
+		
+		id newVal = [change valueForKey:NSKeyValueChangeNewKey];
+		if (newVal && [newVal isKindOfClass:[NSNumber class]]) {
+			enbl = [newVal intValue] > NotReachable;
+		}
+		self.controllerEnabled = [NSNumber numberWithBool:enbl];
+	}
+	/*if (!IsEmpty(keyPath) && [keyPath isEqualToString:@"frame"]) {
+		NSLog(@"Class=%@ w=%f h=%f", NSStringFromClass([self class]), self.tableView.frame.size.width, self.tableView.frame.size.height);
+	}*/	
+}
 
 - (Class)dataSourceClass {
 	return [NSObject class];
@@ -28,33 +61,14 @@
 - (id<TableDataSource>)dataSource {
 	if (!dataSource) {
 		dataSource = [[[self dataSourceClass] alloc] init];
-		self.title = [dataSource name];	
-		// set the long name shown in the navigation bar
-		//self.navigationItem.title=[dataSource navigationBarName];
-		
-		// FETCH CORE DATA
-		if ([dataSource usesCoreData])
-		{		
-			NSError *error;
-			// You've got to delete the cache, or disable caching before you modify the predicate...
-			[NSFetchedResultsController deleteCacheWithName:[[dataSource fetchedResultsController] cacheName]];
-			
-			if (![[dataSource fetchedResultsController] performFetch:&error]) {
-				// Handle the error...
-			}					
-		}
-		self.tableView.dataSource = dataSource;
-		if (self.searchDisplayController)
-			self.searchDisplayController.searchResultsDataSource = dataSource;
-		if (self.searchDisplayController && [dataSource respondsToSelector:@selector(setSearchDisplayController:)])
-			[dataSource performSelector:@selector(setSearchDisplayController:) withObject:self.searchDisplayController];
 	}
 	return dataSource;
 }
 
 - (void)configure {	
-	//self.dataSource = [[[[self dataSourceClass] alloc] init] autorelease];
 		
+	[self dataSource];
+	
 	if ([self.dataSource usesCoreData]) {
 		id objectID = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:NSStringFromClass([self class])];
 		if (objectID && [objectID isKindOfClass:[NSNumber class]]) {
@@ -88,37 +102,22 @@
 			}
 		}
 	}
-		
+	
 }
 
 - (void)dealloc {
+	[[TexLegeReachability sharedTexLegeReachability] removeObserver:self forKeyPath:[self reachabilityStatusKey]];
+
 	//self.tableView = nil;
 	self.dataSource = nil; 
 	self.selectObjectOnAppear = nil;
 	self.detailViewController = nil;
-
+	self.controllerEnabled = nil;
 	[super dealloc];
 }
 
 - (void)didReceiveMemoryWarning {
-	//if ([self.dataSource respondsToSelector:@selector(didReceiveMemoryWarning)])
-	//	[self.dataSource performSelector:@selector(didReceiveMemoryWarning)];
-	
-	//[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:NSStringFromClass([self class])];
-
-	if (![UtilityMethods isIPadDevice]) {
-		debug_NSLog(@"about to release a view controller %@", self.detailViewController);
-		self.detailViewController = nil;
-	}
-	
-	//self.selectObjectOnAppear = nil;
-	
-	/*
-	 if ([UtilityMethods isIPadDevice] && ![self.tabBarController.selectedViewController isEqual:self.splitViewController])
-		self.dataSource = nil;
-	else if (![UtilityMethods isIPadDevice] && ![self.tabBarController.selectedViewController isEqual:self.navigationController])
-		self.dataSource = nil;
-	*/	
+			
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
 }
 
@@ -128,11 +127,12 @@
 	// create a new table using the full application frame
 	// we'll ask the datasource which type of table to use (plain or grouped)
 	CGRect tempFrame = [[UIScreen mainScreen] applicationFrame];
-	self.tableView = [[[UITableView alloc] initWithFrame:tempFrame style:[self.dataSource tableViewStyle]] autorelease];
 	
-	// set the autoresizing mask so that the table will always fill the view
-	self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
-	self.tableView.autoresizesSubviews = YES;
+	if (self.navigationController) {
+		tempFrame = self.navigationController.view.bounds;
+	}
+	
+	self.tableView = [[[UITableView alloc] initWithFrame:tempFrame style:[self.dataSource tableViewStyle]] autorelease];
 	
 	// set the cell separator to a single straight line.
 	//self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -147,10 +147,38 @@
 
 -(void)viewDidLoad {
 	[super viewDidLoad];
+	//NSLog(@"--------------Loading %@", NSStringFromClass([self class]));
+
+	//[self.navigationController.view addObserver:self forKeyPath:@"frame" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
+	
+	self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
+	self.tableView.autoresizesSubviews = YES;
+
+	self.title = [self.dataSource name];	
+	// set the long name shown in the navigation bar
+	//self.navigationItem.title=[dataSource navigationBarName];
+	
+	// FETCH CORE DATA
+	if ([self.dataSource usesCoreData])
+	{		
+		NSError *error;
+		// You've got to delete the cache, or disable caching before you modify the predicate...
+		[NSFetchedResultsController deleteCacheWithName:[[dataSource fetchedResultsController] cacheName]];
+		
+		if (![[dataSource fetchedResultsController] performFetch:&error]) {
+			// Handle the error...
+		}					
+	}
+	self.tableView.dataSource = dataSource;
+	if (self.searchDisplayController) {
+		self.searchDisplayController.searchResultsDataSource = dataSource;
+		if ([dataSource respondsToSelector:@selector(setSearchDisplayController:)])
+			[dataSource performSelector:@selector(setSearchDisplayController:) withObject:self.searchDisplayController];
+	}
 	
 	// set the tableview delegate to this object and the datasource to the datasource which has already been set
 	self.tableView.delegate = self;
-	self.tableView.dataSource = self.dataSource;
+	//self.tableView.dataSource = self.dataSource;
 	
 	self.clearsSelectionOnViewWillAppear = NO;
 	self.tableView.separatorColor = [TexLegeTheme separator];
@@ -168,13 +196,14 @@
 			tableHeight += [self.tableView rectForSection:section].size.height;
 		}
 		self.contentSizeForViewInPopover = CGSizeMake(320.0, tableHeight);
-		//self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 	}
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(beginUpdates:) name:@"TABLEUPDATE_START" object:self.dataSource];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endUpdates:) name:@"TABLEUPDATE_END" object:self.dataSource];
 }
 	
 - (void)viewDidUnload {
+	//NSLog(@"--------------Unloading %@", NSStringFromClass([self class]));
+	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"TABLEUPDATE_START" object:self.dataSource];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"TABLEUPDATE_END" object:self.dataSource];
 
