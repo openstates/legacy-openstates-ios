@@ -63,7 +63,6 @@
 
 
 - (void) loadChamberCalendars {
-#warning state specific elements
 	[[CalendarEventsLoader sharedCalendarEventsLoader] loadEvents:self];
 	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];

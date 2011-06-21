@@ -301,7 +301,9 @@
 			cellInfo.isClickable = YES;
 			cellInfo.parameter = self.queryCycle;
 			cellInfo.action = [NSNumber numberWithInteger:kContributionQueryRecipient];
-#warning state specific hacks
+
+#warning state specific (Bob Perry Contributions)
+
 			if (!dataID || [[NSNull null] isEqual:dataID] || ![dataID isKindOfClass:[NSString class]]) {
 				NSLog(@"ERROR - Contribution results lack have an empty entity ID for entity: %@", name);								
 				if ([[name uppercaseString] isEqualToString:@"BOB PERRY HOMES"])	// ala Bob Perry Homes
