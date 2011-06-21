@@ -117,9 +117,7 @@
 {
 	if (IsEmpty(keyBills_))
 		return;
-	
-#warning state specific
-	
+		
 	BOOL useDark = (indexPath.row % 2 == 0);
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	NSDictionary *bill = [keyBills_ objectAtIndex:indexPath.row];
