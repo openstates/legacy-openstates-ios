@@ -83,7 +83,7 @@
 			DistrictMapObj * map = [DistrictMapObj objectWithPrimaryKeyValue:distID];
 			if ([map districtContainsCoordinate:[self searchCoordinate]]) {
 #warning state specific hack
-				if ([map.districtMapID integerValue] == 43 || [map.district integerValue] == 85) {
+				if ([map.districtMapID integerValue] == 41 || [map.district integerValue] == 83) {
 					DistrictMapObj * holeDist = [DistrictMapObj objectWithPrimaryKeyValue:[NSNumber numberWithInt:40]];	// dist 84
 					if (NO == [holeDist districtContainsCoordinate:[self searchCoordinate]]) {
 						[foundIDs addObject:distID];
