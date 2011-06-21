@@ -10,7 +10,6 @@
 #import "CapitolMapsMasterViewController.h"
 #import "CommitteeObj.h"
 #import "UtilityMethods.h"
-#import "MiniBrowserController.h"
 #import "TexLegeAppDelegate.h"
 #import "LocalyticsSession.h"
 
@@ -36,8 +35,9 @@
 		self.navigationItem.title = self.map.name;
 		[self.webView loadRequest:[NSURLRequest requestWithURL:self.map.url]];
 	}
-	else
-		self.navigationItem.title = @"Maps";
+	else {
+		self.navigationItem.title = NSLocalizedStringFromTable(@"Capitol Maps", @"StandardUI", @"The short title for buttons and tabs related to maps of the building");
+	}
 }
 
 - (void)viewDidUnload {
@@ -65,8 +65,9 @@
 
 - (void)didReceiveMemoryWarning {
 	UINavigationController *nav = [self navigationController];
-	//if (nav && [nav.viewControllers count]>1)
+	if (nav) {
 		[nav popToRootViewControllerAnimated:YES];
+	}
 	
 	self.map = nil;	
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
@@ -86,8 +87,9 @@
 	
 	if (map) [map release], map = nil;
 	if (newObj) {
-		if (masterPopover)
+		if (masterPopover) {
 			[masterPopover dismissPopoverAnimated:YES];
+		}
 		
 		map = [newObj retain];
 
@@ -101,10 +103,9 @@
 #pragma mark -
 #pragma mark Popover Support
 
-
 - (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
 	//debug_NSLog(@"Entering portrait, showing the button: %@", [aViewController class]);
-    barButtonItem.title = @"Capitol Maps";
+    barButtonItem.title = NSLocalizedStringFromTable(@"Capitol Maps", @"StandardUI", @"The short title for buttons and tabs related to maps of the building");
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     self.masterPopover = pc;
 }

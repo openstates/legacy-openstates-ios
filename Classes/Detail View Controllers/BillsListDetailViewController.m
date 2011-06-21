@@ -28,6 +28,12 @@
 - (id)initWithStyle:(UITableViewStyle)style {
 	if ((self = [super initWithStyle:style])) {
 		dataSource = [[[BillSearchDataSource alloc] initWithTableViewController:self] retain];
+		
+		// This will tell the data source to produce a "loading" cell for the table whenever it's searching.
+		dataSource.useLoadingDataCell = YES;
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(reloadData:) name:kBillSearchNotifyDataError object:dataSource];	
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(reloadData:) name:kBillSearchNotifyDataLoaded object:dataSource];	
 	}
@@ -60,7 +66,7 @@
 
 - (void)dealloc {	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[dataSource release];
+	self.dataSource = nil;
 	
 	[super dealloc];
 }

@@ -27,7 +27,7 @@
 		self.contentSizeForViewInPopover = CGSizeMake(320.f, 320.f);
 	}
 	else {
-		self.navigationItem.title = @"Notes";
+		self.navigationItem.title = NSLocalizedStringFromTable(@"Notes", @"DataTableUI", @"Title for the cell indicating custom notes option");
 		self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	}
 }

@@ -18,6 +18,7 @@
 #import "OpenLegislativeAPIs.h"
 #import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "LoadingCell.h"
+#import "StateMetaLoader.h"
 
 @interface BillsCategoriesViewController (Private)
 - (void)configureCell:(TexLegeBadgeGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -35,7 +36,7 @@
 - (id)initWithStyle:(UITableViewStyle)style {
 	if ((self=[super initWithStyle:style])) {
 		loadingStatus = LOADING_IDLE;
-		categories_ = [[[NSMutableDictionary alloc] init] retain];
+		categories_ = [[NSMutableDictionary alloc] init];
 		updated = nil;
 		isFresh = NO;
 	}
@@ -75,7 +76,7 @@
 	NSString *myClass = NSStringFromClass([self class]);
 	NSDictionary *menuItem = [[textDict objectForKey:@"BillMenuItems"] findWhereKeyPath:@"class" equals:myClass];
 	
-	if (menuItem)
+	if (menuItem) {
 		self.title = [menuItem objectForKey:@"title"];
 	
 	self.tableView.separatorColor = [TexLegeTheme separator];
@@ -96,7 +97,7 @@
 	label.textColor = [TexLegeTheme backgroundLight];
 	label.lineBreakMode = UILineBreakModeTailTruncation;
 	//label.numberOfLines =
-	label.text = @"Large subjects download slowly."; 
+	label.text = NSLocalizedStringFromTable(@"Large subjects download slowly.", @"DataTableUI", @"Tells the user that downloading a long list of bills for a given subject will take some time."); 
 	self.tableView.tableHeaderView = label;
 	[label release];
 	
@@ -239,9 +240,12 @@
 	if ([TexLegeReachability openstatesReachable]) {
 		loadingStatus = LOADING_ACTIVE;
 		OpenLegislativeAPIs *api = [OpenLegislativeAPIs sharedOpenLegislativeAPIs];
+		StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
+		if (IsEmpty(meta.selectedState) || IsEmpty(meta.currentSession))
+			return;
 		
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObject:osApiKeyValue forKey:@"apikey"];
-		NSMutableString *resourcePath = [NSMutableString stringWithFormat:@"/subject_counts/tx/%@/", api.currentSession];
+		NSMutableString *resourcePath = [NSMutableString stringWithFormat:@"/subject_counts/%@/%@/", meta.selectedState, meta.currentSession];
 		if (newChamber > BOTH_CHAMBERS)
 			[resourcePath appendFormat:@"%@/", stringForChamber(newChamber, TLReturnOpenStates)];
 			
@@ -269,8 +273,12 @@
 #pragma mark -
 #pragma mark Chamber Control
 
-- (void)createChamberControl {
-	UISegmentedControl *ctl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"All", @"House", @"Senate", nil]];
+- (void)createChamberControl {	
+	UISegmentedControl *ctl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:
+																		 stringForChamber(BOTH_CHAMBERS, TLReturnFull), 
+																		stringForChamber(HOUSE, TLReturnFull), 
+																		 stringForChamber(SENATE, TLReturnFull), 
+																		 nil]];
 	ctl.frame = CGRectMake(0.0, 0.0, 163.0, 30.0);
 	ctl.autoresizesSubviews = YES;
 	ctl.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -300,8 +308,7 @@
 
 	isFresh = NO;
 	
-	if (categories_)
-		[categories_ release];
+	nice_release(categories_);
 	
 	// We had trouble loading the events online, so pull up the cache from the one in the documents folder, if possible
 	NSString *thePath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:kBillCategoriesCacheFile];

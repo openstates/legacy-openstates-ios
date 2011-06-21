@@ -7,7 +7,7 @@
 //
 
 
-#define kStaticNotes @"Notes"
+#define kStaticNotes NSLocalizedStringFromTable(@"Notes", @"DataTableUI", @"Default entry for a custom notes field.")
 
 @class LegislatorObj;
 

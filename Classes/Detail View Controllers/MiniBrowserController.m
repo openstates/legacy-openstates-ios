@@ -110,8 +110,8 @@ static MiniBrowserController *s_browser = nil;
 }
 
 - (void)awakeFromNib {
-	
 	[super awakeFromNib];
+	
 	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
 	self.sealColor = [UIColor colorWithPatternImage:sealImage];		
 	
@@ -438,10 +438,11 @@ static MiniBrowserController *s_browser = nil;
 
 - (IBAction)emailURL:(id)button {
 	if (self.m_currentURL) {
-		NSString *body = [NSString stringWithFormat:[UtilityMethods texLegeStringWithKeyPath:@"MailComposer.EmailingLinkText"],
+		NSString *body = [NSString stringWithFormat:
+						  NSLocalizedStringFromTable(@"Here is a web link you might be interested in:\n\n%@\n\nSent from TexLege.", @"StandardUI", @"Default text for an outgoing email"),
 						  self.m_currentURL.absoluteString];
-		[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"someone@example.com" 
-																		 subject:[UtilityMethods texLegeStringWithKeyPath:@"MailComposer.EmailingLinkTitle"] 
+		[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:NSLocalizedStringFromTable(@"someone@example.com", @"StandardUI", @"Default recipient for emailer") 
+																		 subject:NSLocalizedStringFromTable(@"A Web Link from TexLege", @"StandardUI", @"Subject line for mailing urls from the app") 
 																			body:body 
 																	   commander:self];
 	}
@@ -691,33 +692,13 @@ static MiniBrowserController *s_browser = nil;
 	
 	[self stopLoadingAnimation:nil];
 	
-	NSString *errorMsg = nil;
-	NSString *errorTitle = nil;
     if (error && [[error domain] isEqualToString:NSURLErrorDomain]) {
-        switch ([error code]) {
-            case NSURLErrorCannotFindHost:
-            case NSURLErrorCannotConnectToHost:
-				errorTitle = [UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoHostTitle"] ;
-                errorMsg = [UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoHostText"] ;
-                break;
-            case NSURLErrorNotConnectedToInternet:
-				errorTitle = [UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoInternetTitle"] ;
-                errorMsg = [UtilityMethods texLegeStringWithKeyPath:@"Reachability.NoInternetText"] ;
-                break;
-            default:
-                break;
-        }
-		if (!IsEmpty(errorMsg) && !IsEmpty(errorTitle)) {
-			UIAlertView *alert = [[ UIAlertView alloc ] 
-								  initWithTitle:errorTitle 
-								  message:errorMsg  
-								  delegate:nil 
-								  cancelButtonTitle: @"Cancel" 
-								  otherButtonTitles:nil, nil];
-			
-			[ alert show ];		
-			[ alert release ];
+		if ([error code] == NSURLErrorNotConnectedToInternet) {
+			[TexLegeReachability noInternetAlert];
 		}
+		else { // if ([error code] == NSURLErrorCannotFindHost || [error code] == NSURLErrorCannotConnectToHost)
+			[TexLegeReachability noHostAlert];
+		}		
 	}
 }
 

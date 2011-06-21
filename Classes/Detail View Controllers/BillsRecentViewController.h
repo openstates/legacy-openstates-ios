@@ -9,11 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
 
-@class BillSearchDataSource;
-@interface BillsRecentViewController : UITableViewController <RKRequestDelegate, UITableViewDelegate, UITableViewDataSource> {
-	NSMutableArray *recentBills_;
-	NSInteger loadingStatus;
+#import "BillsListDetailViewController.h"
+
+@interface BillsRecentViewController : BillsListDetailViewController {
 }
-@property (nonatomic,retain) NSMutableArray *recentBills;
 
 @end

@@ -44,6 +44,8 @@
 
 #import "VotingRecordDataSource.h"
 
+#import "OpenLegislativeAPIs.h"
+
 @interface LegislatorDetailViewController (Private)
 - (void) setupHeader;
 @end
@@ -152,20 +154,14 @@
 
 - (NSString *)chamberPartyAbbrev {
 	LegislatorObj *member = self.legislator;
-	NSString *partyName = nil;
-	if ([member.party_id integerValue] == DEMOCRAT) // Democrat
-		partyName = @"Dems";
-	else if ([member.party_id integerValue] == REPUBLICAN) // Republican
-		partyName = @"Repubs";
-	else // don't know the party?
-		partyName = @"Indeps";
+	NSString *partyName = stringForParty([member.party_id integerValue], TLReturnAbbrevPlural);
 	
 	return [NSString stringWithFormat:@"%@ %@", [member chamberName], partyName];
 }
 
 - (NSString *) partisanRankStringForLegislator {
 	LegislatorObj *member = self.legislator;
-	if (member.tenure.integerValue == 0)
+	if (IsEmpty(member.wnomScores))
 		return @"";
 
 	NSArray *legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[member.legtype integerValue] 
@@ -173,10 +169,11 @@
 	if (legislators) {
 		NSInteger rankIndex = [legislators indexOfObject:member] + 1;
 		NSInteger count = [legislators count];
-		NSString *partyShortName = [member.party_id integerValue] == DEMOCRAT ? @"Dems" : @"Repubs";
+		NSString *partyShortName = stringForParty([member.party_id integerValue], TLReturnAbbrevPlural);
 		
 		NSString *ordinalRank = [UtilityMethods ordinalNumberFormat:rankIndex];
-		return [NSString stringWithFormat:@"%@ most partisan (out of %d %@)", ordinalRank, count, partyShortName];	
+		return [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ most partisan (out of %d %@)", @"DataTableUI", @"Partisan ranking, ie. 32nd most partisan out of 55 Democrats"), 
+				ordinalRank, count, partyShortName];	
 	}
 	else {
 		return @"";
@@ -193,11 +190,13 @@
 	//[[ImageCache sharedImageCache] loadImageView:self.leg_photoView fromPath:[UIImage highResImagePathWithPath:member.photo_name]];
 	self.leg_photoView.image = [UIImage imageNamed:[UIImage highResImagePathWithPath:member.photo_name]];
 	self.leg_partyLab.text = [member party_name];
-	self.leg_districtLab.text = [NSString stringWithFormat:@"District %@", member.district];
+	self.leg_districtLab.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"District %@", @"DataTableUI", @"District number"), 
+								 member.district];
 	self.leg_tenureLab.text = [member tenureString];
 	if (member.nextElection) {
 		
-		self.leg_reelection.text = [NSString stringWithFormat:@"Reelection: %@", member.nextElection];
+		self.leg_reelection.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"Reelection: %@", @"DataTableUI", @"Year of person's next reelection"), 
+									member.nextElection];
 	}
 	
 	PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
@@ -211,7 +210,7 @@
 	
 	if (self.leg_chamberPartyLab) {
 		self.leg_chamberPartyLab.text = [self chamberPartyAbbrev];
-		self.leg_chamberLab.text = [[member chamberName] stringByAppendingString:@" Avg."];				
+		self.leg_chamberLab.text = [[member chamberName] stringByAppendingFormat:@" %@", NSLocalizedStringFromTable(@"Avg.", @"DataTableUI", @"Abbreviation for 'average'")];				
 	}
 	
 	CGFloat minSlider = [indexStats minPartisanIndexUsingChamber:[member.legtype integerValue]];
@@ -331,7 +330,7 @@
 	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
 	   forPopoverController: (UIPopoverController*)pc {
 	//debug_NSLog(@"Entering portrait, showing the button: %@", [aViewController class]);
-	barButtonItem.title = @"Legislators";
+	barButtonItem.title = NSLocalizedStringFromTable(@"Legislators", @"StandardUI", @"The short title for buttons and tabs related to legislators");
 	[self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
 	self.masterPopover = pc;
 }
@@ -385,6 +384,7 @@
 		return;
 	
 		if (cellInfo.entryType == DirectoryTypeNotes) { // We need to edit the notes thing...
+			
 			NotesViewController *nextViewController = nil;
 			if ([UtilityMethods isIPadDevice])
 				nextViewController = [[NotesViewController alloc] initWithNibName:@"NotesView~ipad" bundle:nil];
@@ -400,7 +400,7 @@
 					self.notesPopover = [[[UIPopoverController alloc] initWithContentViewController:nextViewController] autorelease];
 					self.notesPopover.delegate = self;
 					CGRect cellRect = [aTableView rectForRowAtIndexPath:newIndexPath];
-					[self.notesPopover presentPopoverFromRect:cellRect inView:aTableView permittedArrowDirections:(UIPopoverArrowDirectionLeft & UIPopoverArrowDirectionRight & UIPopoverArrowDirectionDown ) animated:YES];
+					[self.notesPopover presentPopoverFromRect:cellRect inView:aTableView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 				}
 				else {
 					[self.navigationController pushViewController:nextViewController animated:YES];
@@ -416,7 +416,7 @@
 			[subDetailController release];
 		}
 		else if (cellInfo.entryType == DirectoryTypeContributions) {
-			if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:@"http://transparencydata.org"]]) { 
+			if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:transApiBaseURL]]) { 
 				LegislatorContributionsViewController *subDetailController = [[LegislatorContributionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
 				[subDetailController setQueryEntityID:cellInfo.entryValue type:[NSNumber numberWithInteger:kContributionQueryRecipient] cycle:@"-1"];
 				[self.navigationController pushViewController:subDetailController animated:YES];
@@ -426,9 +426,9 @@
 		else if (cellInfo.entryType == DirectoryTypeBills) {
 			if ([TexLegeReachability openstatesReachable]) { 
 				BillsListDetailViewController *subDetailController = [[BillsListDetailViewController alloc] initWithStyle:UITableViewStylePlain];
-				BillSearchDataSource *searchDS = [subDetailController valueForKey:@"dataSource"];
-				subDetailController.title = [NSString stringWithFormat:@"Bills for %@", [member shortNameForButtons]];
-				[searchDS startSearchForSponsor:cellInfo.entryValue];
+				subDetailController.title = [NSString stringWithFormat:NSLocalizedStringFromTable(@"Bills Authored by %@", @"DataTableUI", @"Title for cell, the legislative bills authored by someone."), 
+											 [member shortNameForButtons]];
+				[subDetailController.dataSource startSearchForBillsAuthoredBy:cellInfo.entryValue];
 				[self.navigationController pushViewController:subDetailController animated:YES];
 				[subDetailController release];
 			}
@@ -472,14 +472,16 @@
 													withObject:[member.districtMap polygon] afterDelay:0.5f];
 					isDistMap = YES;
 				}
-				if (theAnnotation)
+				if (theAnnotation) {
 					mapViewController.navigationItem.title = [theAnnotation title];
+				}
 
 				[self.navigationController pushViewController:mapViewController animated:YES];
 				[mapViewController release];
 				
-				if (isDistMap)
+				if (isDistMap) {
 					[[DistrictMapObj managedObjectContext] refreshObject:member.districtMap mergeChanges:NO];
+				}
 			}
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&
@@ -502,7 +504,7 @@
 			BOOL isPhone = ([UtilityMethods canMakePhoneCalls]);
 			
 			if ((cellInfo.entryType == DirectoryTypePhone) && (!isPhone)) {
-				debug_NSLog(@"Tried to make a phonecall, but this isn't a phone: %@", myURL.description);
+				debug_NSLog(@"Tried to make a phone call, but this isn't a phone: %@", myURL.description);
 				[UtilityMethods alertNotAPhone];
 				return;
 			}
@@ -519,9 +521,10 @@
 		debug_NSLog(@"LegislatorDetailViewController:heightForRow: error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);
 		return height;
 	}
-	
-	if ([cellInfo.subtitle rangeOfString:@"Address"].length )
+	if (cellInfo.subtitle && [cellInfo.subtitle hasSubstring:NSLocalizedStringFromTable(@"Address", @"DataTableUI", @"Cell title listing a street address")
+											 caseInsensitive:YES]) {
 		height = 98.0f;
+	}
 	else if ([cellInfo.entryValue isKindOfClass:[NSString string]]) {
 		NSString *tempStr = cellInfo.entryValue;
 		if (!tempStr || [tempStr length] <= 0) {

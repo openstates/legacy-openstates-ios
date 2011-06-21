@@ -55,15 +55,8 @@
 
 - (void)dealloc {	
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
-	
-	if (_watchList) {
-		[_watchList release];
-		_watchList = nil;
-	}
-	if (_cachedBills) {
-		[_cachedBills release];
-		_cachedBills = nil;
-	}
+	nice_release(_watchList);
+	nice_release(_cachedBills);
 	
 	[super dealloc];
 }
@@ -97,27 +90,27 @@
 	[super viewWillAppear:animated];
 	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 
-	if (_watchList) {
-		[_watchList release];
-		_watchList = nil;
-	}
+	nice_release(_watchList);
+
 	NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillFavoritesStorageFile];
-	_watchList = [[[NSMutableArray alloc] initWithContentsOfFile:thePath] retain];
-	if (!_watchList)
-		_watchList = [[[NSMutableArray alloc] init] retain];
+	_watchList = [[NSMutableArray alloc] initWithContentsOfFile:thePath];
+	if (!_watchList) {
+		_watchList = [[NSMutableArray alloc] init];
+	}
 	
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"displayOrder" ascending:YES];
 	[_watchList sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
 	[sortDescriptor release];	
 	
 	if (![_watchList count]) {
-		UIAlertView *noWatchedBills = [[[ UIAlertView alloc ] 
-										 initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NoWatchedTitle"] 
-										 message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NoWatchedText"] 
+		UIAlertView *noWatchedBills = [[ UIAlertView alloc ] 
+										 initWithTitle:NSLocalizedStringFromTable(@"No Watched Bills, Yet", @"AppAlerts", @"Alert box title")
+										 message:NSLocalizedStringFromTable(@"To add a bill to this watch list, first search for one, open it, and then tap the star button in it's header.", @"AppAlerts", @"") 
 										 delegate:nil // we're static, so don't do "self"
-										 cancelButtonTitle: @"Cancel" 
-										 otherButtonTitles:nil, nil] autorelease];
-		[ noWatchedBills show ];		
+										 cancelButtonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button to cancel something") 
+										 otherButtonTitles:nil];
+		[ noWatchedBills show ];	
+		[ noWatchedBills release ];
 		
 	}
 	[self.tableView reloadData];
@@ -167,6 +160,7 @@
 		return 0;
 }
 
+#warning state specific
 - (void)configureCell:(TexLegeStandardGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
 	BOOL useDark = (indexPath.row % 2 == 0);
@@ -298,14 +292,16 @@
 	}
 		//[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:nil];
 
-/*		UIAlertView *alert = [[[ UIAlertView alloc ] 
-							   initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
-							   message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
-							   delegate:nil // we're static, so don't do "self"
-							   cancelButtonTitle: @"Cancel" 
-							   otherButtonTitles:nil, nil] autorelease];
-		[ alert show ];	
-*/		
+
+	/*UIAlertView *alert = [[ UIAlertView alloc ] 
+						  initWithTitle:NSLocalizedStringFromTable(@"Network Error", @"AppAlerts", @"Title for alert stating there's been an error when connecting to a server")
+						  message:NSLocalizedStringFromTable(@"There was an error while contacting the server for bill information.  Please check your network connectivity or try again.", @"AppAlerts", @"")
+						  delegate:nil // we're static, so don't do "self"
+						  cancelButtonTitle: NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")
+						  otherButtonTitles:nil];
+	[ alert show ];	
+	[ alert release];
+	*/		
 }
 
 

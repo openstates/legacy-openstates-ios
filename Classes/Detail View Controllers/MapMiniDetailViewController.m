@@ -18,9 +18,7 @@
 #import "UIColor-Expanded.h"
 
 #import "TexLegeMapPins.h"
-#import "TexLegePinAnnotationView.h"
-#import "MKPinAnnotationView+ZIndexFix.h"
-
+#import "DistrictPinAnnotationView.h"
 
 @interface MapMiniDetailViewController (Private)
 - (void) animateToState;
@@ -36,6 +34,7 @@
 NSInteger colorIndex;
 static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
+#warning state specific
 
 @implementation MapMiniDetailViewController
 @synthesize mapView;
@@ -56,7 +55,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 - (void) dealloc {
 	[self.mapView removeOverlays:self.mapView.overlays];
 	[self.mapView removeAnnotations:self.mapView.annotations];
-
 	self.mapView = nil;
 	[super dealloc];
 }
@@ -94,7 +92,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 - (void) viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
-	NSURL *tempURL = [NSURL URLWithString:@"http://maps.google.com"];		
+	NSURL *tempURL = [NSURL URLWithString:[UtilityMethods texLegeStringWithKeyPath:@"ExternalURLs.googleMapsWeb"]];		
 	if (![TexLegeReachability canReachHostWithURL:tempURL])// do we have a good URL/connection?
 		return;
 	
@@ -241,9 +239,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	UIActionSheet *popupQuery = [[UIActionSheet alloc]
 								 initWithTitle:nil
 								 delegate:self
-								 cancelButtonTitle:@"Cancel"
+								 cancelButtonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button to cancel something")
 								 destructiveButtonTitle:nil
-								 otherButtonTitles:@"Open in Google Maps", nil];
+								 otherButtonTitles:NSLocalizedStringFromTable(@"Open in Google Maps", @"AppAlerts", @"Button to open google maps"), 
+								 nil];
 	
 	
 	popupQuery.actionSheetStyle = UIActionSheetStyleAutomatic;
@@ -264,7 +263,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		// @"http://maps.google.com/maps?daddr=San+Francisco,+CA&saddr=cupertino"
 		// [NSString stringWithFormat: @"http://maps.google.com/maps?q=%f,%f", loc.latitude, loc.longitude];
 		
-		NSString *urlString =  [NSString stringWithFormat:@"http://maps.google.com/maps?q=%f,%f",
+		NSString *urlString =  [NSString stringWithFormat:@"%@/maps?q=%f,%f",
+								[UtilityMethods texLegeStringWithKeyPath:@"ExternalURLs.googleMapsWeb"],
 							self.annotationActionCoord.latitude, self.annotationActionCoord.longitude];	
 		
 		NSURL *url = [UtilityMethods safeWebUrlFromString:urlString];
@@ -299,7 +299,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
         MKPinAnnotationView* pinView = (MKPinAnnotationView *)[theMapView dequeueReusableAnnotationViewWithIdentifier:districtAnnotationID];
         if (!pinView)
         {
-            TexLegePinAnnotationView* customPinView = [[[TexLegePinAnnotationView alloc]
+            DistrictPinAnnotationView* customPinView = [[[DistrictPinAnnotationView alloc]
 												   initWithAnnotation:annotation reuseIdentifier:districtAnnotationID] autorelease];			
             return customPinView;
         }
@@ -330,7 +330,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		myColor = [TexLegeTheme texasOrange];
 
 		NSString *ovTitle = [overlay title];
-		if (ovTitle && [ovTitle hasPrefix:@"House"]) {
+		if (ovTitle && [ovTitle hasSubstring:stringForChamber(HOUSE, TLReturnFull) caseInsensitive:NO]) {
 			if (self.mapView.mapType > MKMapTypeStandard)
 				myColor = [UIColor cyanColor];
 			else

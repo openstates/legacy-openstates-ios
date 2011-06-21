@@ -7,13 +7,13 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import "BSForwardGeocoder.h"
-#import "BSKmlResult.h"
+#import "SVGeocoder.h"
+#import "SVPlacemark.h"
 #import "DistrictMapSearchOperation.h"
 
-@class DistrictMapDataSource, CustomAnnotation;
+@class DistrictMapDataSource, UserPinAnnotation;
 @interface MapViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate, UIPopoverControllerDelegate,
-		MKReverseGeocoderDelegate, BSForwardGeocoderDelegate, UISplitViewControllerDelegate, UIActionSheetDelegate,
+		SVGeocoderDelegate, UISplitViewControllerDelegate, UIActionSheetDelegate,
 		UIGestureRecognizerDelegate, DistrictMapSearchOperationDelegate> {
 }
 
@@ -24,22 +24,18 @@
 @property (nonatomic,retain) IBOutlet UIBarButtonItem *mapTypeControlButton;
 @property (nonatomic,retain) IBOutlet UIBarButtonItem *userLocationButton;
 @property (nonatomic,retain) IBOutlet UIBarButtonItem *districtOfficesButton;
-//@property (nonatomic,retain) IBOutlet UIBarButtonItem *mapControlsButton;
 @property (nonatomic,retain) IBOutlet UIBarButtonItem *searchBarButton;
 @property (nonatomic,retain) IBOutlet UISearchBar *searchBar;
-@property (nonatomic,retain) MKReverseGeocoder *reverseGeocoder;
-@property (nonatomic,retain) BSForwardGeocoder *forwardGeocoder;
+@property (nonatomic,retain) SVGeocoder *geocoder;
 @property (nonatomic,readonly) MKCoordinateRegion texasRegion;
-@property (nonatomic,retain) CustomAnnotation *searchLocation;
+@property (nonatomic,retain) UserPinAnnotation *searchLocation;
 @property (nonatomic,assign) MKPolygonView *senateDistrictView, *houseDistrictView;
 @property (nonatomic,retain) NSOperationQueue *genericOperationQueue;
 
-//- (IBAction) mapControlSheet:(id)sender;
 - (IBAction) showAllDistricts:(id)sender;
 //- (IBAction) showAllDistrictOffices:(id)sender;
 - (IBAction) changeMapType:(id)sender;
 - (IBAction) locateUser:(id)sender;
-- (IBAction) reverseGeocodeLocation:(CLLocationCoordinate2D)coordinate;
 - (void) clearAnnotationsAndOverlays;
 - (void) clearAnnotationsAndOverlaysExceptRecent;
 - (void) resetMapViewWithAnimation:(BOOL)animated;

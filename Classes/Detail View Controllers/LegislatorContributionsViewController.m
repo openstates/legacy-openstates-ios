@@ -57,7 +57,7 @@
 	nimsp.textColor = [TexLegeTheme navbar];
 	nimsp.lineBreakMode = UILineBreakModeWordWrap;
 	nimsp.numberOfLines = 3;
-	nimsp.text = [UtilityMethods texLegeStringWithKeyPath:@"Contributions.ThanksNIMSP"];
+	nimsp.text = NSLocalizedStringFromTable(@"Data generously provided by the National Institute on Money in State Politics.", @"DataTableUI", @"Attribution for NIMSP");
 	self.tableView.tableFooterView = nimsp;
 }
 
@@ -139,13 +139,13 @@
 			[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"CONTRIBUTION_QUERY_ERROR" attributes:logDict];
 			[logDict release];
 			
-			UIAlertView *dataAlert = [[[UIAlertView alloc] initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Contributions.IncompleteTitle"] 
-																 message:[UtilityMethods texLegeStringWithKeyPath:@"Contributions.IncompleteText"] 
+			UIAlertView *dataAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"Incomplete Records", @"AppAlerts", @"Title for alert indicating insufficient record data for the requested campaign contributor.")
+																 message:NSLocalizedStringFromTable(@"The campaign finance data provider has incomplete information for this request.  You may visit followthemoney.org to perform a manual search.", @"AppAlerts", @"")
 																delegate:self 
-													   cancelButtonTitle:@"Cancel" 
-													   otherButtonTitles:@"Open Website", nil] autorelease];
-			if (dataAlert)
-				[dataAlert show];
+													   cancelButtonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button title cancelling some action")
+													   otherButtonTitles:NSLocalizedStringFromTable(@"Open Website", @"StandardUI", @"Button title"), nil];
+			[dataAlert show];
+			[dataAlert release];
 			
 			return;
 		}
@@ -162,7 +162,7 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
 	if (buttonIndex == [alertView firstOtherButtonIndex]) {
-		NSURL *url = [NSURL URLWithString:@"http://www.followthemoney.org"];
+		NSURL *url = [NSURL URLWithString:[UtilityMethods texLegeStringWithKeyPath:@"ExternalURLs.nimspWeb"]];
 		[UtilityMethods openURLWithTrepidation:url];
 	}
 }

@@ -25,6 +25,8 @@
 @synthesize chamberCalendar;
 @synthesize webView;
 @synthesize masterPopover;
+@synthesize selectedRowRect;
+@synthesize eventPopover;
 
 + (NSString *)nibName {
 	if ([UtilityMethods isIPadDevice])
@@ -44,12 +46,16 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(reloadEvents:) name:kCalendarEventsNotifyError object:nil];	
 
+	self.selectedRowRect = CGRectZero;
+	
 	if ([UtilityMethods isIPadDevice]) {
 		UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
 		UIColor *sealColor = [UIColor colorWithPatternImage:sealImage];		
-		self.view.backgroundColor = sealColor;
+		self.calendarView.backgroundColor = sealColor;
 	}
+	
 	//self.navigationItem.title = @"Upcoming Committee Meetings";
+
 	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme navbar];
 	self.navigationItem.titleView = self.searchDisplayController.searchBar;
@@ -90,6 +96,7 @@
 	self.chamberCalendar = nil;
 	self.webView = nil;
 	self.masterPopover = nil;
+	self.eventPopover = nil;
     [super dealloc];
 }
 
@@ -161,7 +168,7 @@
 
 - (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
 	//debug_NSLog(@"Entering portrait, showing the button: %@", [aViewController class]);
-    barButtonItem.title = @"Meetings";
+    barButtonItem.title =  NSLocalizedStringFromTable(@"Meetings", @"StandardUI", @"The short title for buttons and tabs related to committee meetings (or calendar events)");
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     self.masterPopover = pc;
 }
@@ -188,15 +195,29 @@
 
 - (void)tableView:(UITableView *)tv accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
 	NSDictionary *eventDict = [self.chamberCalendar eventForIndexPath:indexPath];
-	if (eventDict)
-		[[CalendarEventsLoader sharedCalendarEventsLoader] addEventToiCal:eventDict delegate:self.navigationController];	
+	if (eventDict) {
+		
+		self.selectedRowRect = [tv rectForRowAtIndexPath:indexPath];
+		
+		id navDel = nil; 
+		if ([UtilityMethods isIPadDevice]) {
+			navDel = self;
+		}
+		else {
+			navDel = self.navigationController;
+		}
+
+		[[CalendarEventsLoader sharedCalendarEventsLoader] addEventToiCal:eventDict delegate:navDel];	
+	}
 }
 
 
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
+	[tv deselectRowAtIndexPath:indexPath animated:YES];
 	
-	[tableView deselectRowAtIndexPath:indexPath animated:YES];
-	
+	self.selectedRowRect = [tv rectForRowAtIndexPath:indexPath];
+
 	NSDictionary *eventDict = [self.chamberCalendar eventForIndexPath:indexPath];
 	
 	if (tv == self.searchDisplayController.searchResultsTableView) {
@@ -211,11 +232,12 @@
 			NSURLRequest *urlReq = [NSURLRequest requestWithURL:url 
 													cachePolicy:NSURLRequestUseProtocolCachePolicy 
 												timeoutInterval:60.0];
-			if (urlReq)
+			if (urlReq) {
 				[self.webView loadRequest:urlReq];	
+			}
 		}
 		else {
-			MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];				
+			MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
 			[mbc display:self.tabBarController];
 		}		
 	}
@@ -225,24 +247,70 @@
 #pragma mark Search Results Delegate
 
 - (void) searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
-	id gridView = [self.view valueForKey:@"gridView"];
-	if (gridView && [gridView respondsToSelector:@selector(setAlpha:)])
+	id gridView = self.calendarView.gridView;
+	if (gridView && [gridView respondsToSelector:@selector(setAlpha:)]) {
 		[gridView setAlpha:0.4f];
+	}
 }
 
 - (void) searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller {
-	id gridView = [self.view valueForKey:@"gridView"];
-	if (gridView && [gridView respondsToSelector:@selector(setAlpha:)])
+	id gridView = self.calendarView.gridView;
+	if (gridView && [gridView respondsToSelector:@selector(setAlpha:)]) {
 		[gridView setAlpha:1.0f];
-	
+	}
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
-	//NSArray *foundItems = 
-		[self.chamberCalendar filterEventsByString:searchString];
+	[self.chamberCalendar filterEventsByString:searchString];
 	
 	return YES; // or foundSomething?
 }
 
+- (void) presentEventEditorForEvent:(EKEvent *)event {
+	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"iCAL_EVENT"];
+	
+	EKEventViewController *controller = [[EKEventViewController alloc] init];			
+	controller.event = event;
+	controller.allowsEditing = YES;
+	
+	if (NO == [UtilityMethods isIPadDevice]) {
+		//	Push eventViewController onto the navigation controller stack
+		//	If the underlying event gets deleted, detailViewController will remove itself from
+		//	the stack and clear its event property.
+		[self.navigationController pushViewController:controller animated:YES];
+	}
+	else  {	
+		/* This is a hacky way to do this, but since we aren't using a navigationController
+		 we create a popover, but first we have to wrap the content in a new navigationController
+		 in order to get the necessary button in a nav bar to edit the event.
+		 */
+		
+		controller.modalInPopover = NO;
+		
+		UINavigationController *navC = [[UINavigationController alloc]initWithRootViewController:controller];
+		navC.navigationBar.tintColor = [TexLegeTheme navbar];
+		UIPopoverController* aPopover = [[UIPopoverController alloc]
+										 initWithContentViewController:navC];
+		self.eventPopover = aPopover;
+		self.eventPopover.delegate = self;
+		[self.eventPopover presentPopoverFromRect:self.selectedRowRect 
+												inView:self.calendarView.tableView
+							  permittedArrowDirections:UIPopoverArrowDirectionAny 
+											  animated:YES];
+		[navC release];
+		[aPopover release];				
+	}
+	[controller release];
+}
+
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)newPop {
+	return YES;
+}
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)newPop {
+	if ([newPop isEqual:self.eventPopover]) {
+		self.eventPopover = nil;
+	}
+}
 
 @end

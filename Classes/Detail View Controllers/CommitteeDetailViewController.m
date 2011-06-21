@@ -39,6 +39,8 @@
 @synthesize dataObjectID, masterPopover;
 @synthesize partisanSlider, membershipLab, infoSectionArray;
 
+#warning state specific
+
 enum Sections {
     //kHeaderSection = 0,
 	kInfoSection = 0,
@@ -238,7 +240,7 @@ CGFloat quartzRowHeight = 73.f;
 	TableCellDataObject *cellInfo = nil;
 //case kInfoSectionName:
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				@"Committee", @"subtitle",
+				NSLocalizedStringFromTable(@"Committee", @"DataTableUI", @"Cell title listing a legislative committee"), @"subtitle",
 				self.committee.committeeName, @"title",
 				[NSNumber numberWithBool:NO], @"isClickable",
 				nil, @"entryValue",
@@ -257,7 +259,7 @@ CGFloat quartzRowHeight = 73.f;
 	if (!val)
 		val = @"";
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				@"Clerk", @"subtitle",
+				NSLocalizedStringFromTable(@"Clerk", @"DataTableUI", @"Cell title listing a committee's assigned clerk"), @"subtitle",
 				text, @"title",
 				[NSNumber numberWithBool:clickable], @"isClickable",
 				val, @"entryValue",
@@ -277,7 +279,7 @@ CGFloat quartzRowHeight = 73.f;
 	else
 		val = @"";
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				@"Phone", @"subtitle",
+				NSLocalizedStringFromTable(@"Phone", @"DataTableUI", @"Cell title listing a phone number"), @"subtitle",
 				text, @"title",
 				[NSNumber numberWithBool:clickable], @"isClickable",
 				val, @"entryValue",
@@ -298,7 +300,7 @@ CGFloat quartzRowHeight = 73.f;
 		val = @"";
 	
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				@"Location", @"subtitle",
+				NSLocalizedStringFromTable(@"Location", @"DataTableUI", @"Cell title listing an office location (office number or stree address)"), @"subtitle",
 				text, @"title",
 				[NSNumber numberWithBool:clickable], @"isClickable",
 				val, @"entryValue",
@@ -315,8 +317,8 @@ CGFloat quartzRowHeight = 73.f;
 	else
 		val = @"";
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				@"Web", @"subtitle",
-				@"Website & Meetings", @"title",
+				NSLocalizedStringFromTable(@"Web", @"DataTableUI", @"Cell title listing a web address"), @"subtitle",
+				NSLocalizedStringFromTable(@"Website & Meetings", @"DataTableUI", @"Cell title for a website link detailing committee meetings"), @"title",
 				[NSNumber numberWithBool:clickable], @"isClickable",
 				val, @"entryValue",
 				nil];
@@ -356,15 +358,16 @@ CGFloat quartzRowHeight = 73.f;
 		repubCount = [repubs count];
 	democCount = [positions count] - repubCount;
 	
-	NSString *repubString = @"";
-	if (repubCount != 1)
-		repubString = @"s";
+	NSString *repubString = stringForParty(REPUBLICAN, TLReturnAbbrevPlural);
+	NSString *democString = stringForParty(DEMOCRAT, TLReturnAbbrevPlural);
+	if (repubCount == 1)
+		repubString = stringForParty(REPUBLICAN, TLReturnAbbrev);
+	if (democCount == 1)
+		democString = stringForParty(DEMOCRAT, TLReturnAbbrev);
 	
-	NSString *democString = @"";
-	if (democCount != 1)
-		democString = @"s";
 	
-	self.membershipLab.text = [NSString stringWithFormat:@"%d Republican%@ and %d Democrat%@", repubCount, repubString, democCount, democString];
+	self.membershipLab.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%d %@ and %d %@", @"DataTableUI", @"As in, 43 Republicans and 1 Democrat"), 
+							   repubCount, repubString, democCount, democString];
 	
 	if (!IsEmpty(positions)) {
 		// This will give inacurate results in joint committees, at least until we're in a common dimensional space
@@ -443,7 +446,6 @@ CGFloat quartzRowHeight = 73.f;
 		if (CellIdentifier == @"CommitteeMember") {
 			if (![UtilityMethods isIPadDevice]) {
 				LegislatorMasterCell *newcell = [[[LegislatorMasterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-				//cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
 				newcell.frame = CGRectMake(0.0, 0.0, 234.0, quartzRowHeight);		
 				newcell.cellView.useDarkBackground = NO;
 				newcell.accessoryView.hidden = NO;
@@ -451,7 +453,6 @@ CGFloat quartzRowHeight = 73.f;
 			}
 			else {
 				CommitteeMemberCell *newcell = [[[CommitteeMemberCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-				//cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
 				newcell.frame = CGRectMake(0.0, 0.0, kCommitteeMemberCellViewWidth, quartzRowHeight);		
 				newcell.accessoryView.hidden = NO;
 				cell = newcell;
@@ -526,16 +527,16 @@ CGFloat quartzRowHeight = 73.f;
 	switch (section) {
 		case kChairSection: {
 			if ([self.committee.committeeType integerValue] == JOINT)
-				sectionName = @"Co-Chair";
+				sectionName = NSLocalizedStringFromTable(@"Co-Chair", @"DataTableUI", @"For joint committees, House and Senate leaders are co-chair persons");
 			else
-				sectionName = @"Chair";
+				sectionName = NSLocalizedStringFromTable(@"Chair", @"DataTableUI", @"Cell title for a person who leads a given committee, an abbreviation for Chairperson");
 		}
 			break;
 		case kViceChairSection: {
 			if ([self.committee.committeeType integerValue] == JOINT)
-				sectionName = @"Co-Chair";
+				sectionName = NSLocalizedStringFromTable(@"Co-Chair", @"DataTableUI", @"For joint committees, House and Senate leaders are co-chair persons");
 			else
-				sectionName = @"Vice Chair";
+				sectionName = NSLocalizedStringFromTable(@"Vice Chair", @"DataTableUI", @"Cell title for a person who is second in command of a given committee, behind the Chairperson");
 		}
 			break;
 		case kMembersSection:
@@ -544,9 +545,11 @@ CGFloat quartzRowHeight = 73.f;
 		case kInfoSection:
 		default:
 			if (self.committee.parentId.integerValue == -1) 
-				sectionName = [NSString stringWithFormat:@"%@ Committee Info",[self.committee typeString]];
+				sectionName = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ Committee Info",@"DataTableUI", @"Information for a given legislative committee"),
+							   [self.committee typeString]];
 			else
-				sectionName = [NSString stringWithFormat:@"%@ Subcommittee Info",[self.committee typeString]];			
+				sectionName = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ Subcommittee Info",@"DataTableUI", @"Information for a given legislative subcommittee"),
+							   [self.committee typeString]];			
 			break;
 	}
 	return sectionName;

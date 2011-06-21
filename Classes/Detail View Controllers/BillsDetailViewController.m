@@ -27,13 +27,16 @@
 #import "BillVotesDataSource.h"
 #import "OpenLegislativeAPIs.h"
 #import "LocalyticsSession.h"
-//#import "BillStageStackPanel.h"
+#import "AppendingFlowView.h"
+#import "BillActionParser.h"
 
 @interface BillsDetailViewController (Private)
 - (void)setupHeader;
 - (void)showLegislatorDetailsWithOpenStatesID:(id)legeID;
 - (void)starButtonSetState:(BOOL)isOn;
 @end
+
+#warning state specific
 
 @implementation BillsDetailViewController
 
@@ -114,7 +117,7 @@ enum _billSections {
 	
 	//self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 	self.clearsSelectionOnViewWillAppear = NO;
-	
+
 	self.starButton = [UIButton buttonWithType:UIButtonTypeCustom];
 //	[starButton addTarget:self action:@selector(itemAction:) forControlEvents:UIControlEventTouchUpInside];
     [starButton addTarget:self action:@selector(starButtonToggle:) forControlEvents:UIControlEventTouchDown];
@@ -134,8 +137,7 @@ enum _billSections {
 }
 
 - (void)viewDidUnload {
-	if (voteDS)
-		[voteDS release], voteDS = nil;	
+	nice_release(voteDS);
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.	
 	self.starButton = nil;
 	
@@ -233,149 +235,6 @@ enum _billSections {
 	}
 }
 
-- (NSDictionary *)calcStages {
-	NSInteger status = BillStageUnknown;
-	NSMutableDictionary *stages = [NSMutableDictionary dictionary];
-	for (NSMutableDictionary *action in [[bill objectForKey:@"actions"] reverseObjectEnumerator]) {
-		NSDate *actionDate = [NSDate dateFromString:[action objectForKey:@"date"]];
-				
-		if ([[action objectForKey:@"action"] isEqualToString:@"Filed"])
-			status = BillStageFiled;
-		
-		if ([[action objectForKey:@"action"] hasSubstring:@"reported favorably" caseInsensitive:YES]) {
-			if (NO == [[action objectForKey:@"actor"] isEqualToString:[self.bill objectForKey:@"chamber"]])
-				status = BillStageOutOfOpposingCommittee;
-			else
-				status = BillStageOutOfCommittee;
-		}
-		else if ([[action objectForKey:@"action"] hasSubstring:@"recommitted to committee" caseInsensitive:YES]){
-			// demote the stage, they sent it back to committee
-			
-			if (NO == [[action objectForKey:@"actor"] isEqualToString:[self.bill objectForKey:@"chamber"]])
-				status = BillStageChamberVoted;
-			else
-				status = BillStageFiled;		
-		}
-		
-		for (id type in [action objectForKey:@"type"]) {
-			if ([type isKindOfClass:[NSString class]]) {
-				if ([type isEqualToString:@"bill:filed"]) {
-					status = BillStageFiled;
-					break;
-				}
-				else if ([type isEqualToString:@"bill:passed"]) {
-					if (NO == [[action objectForKey:@"actor"] isEqualToString:[self.bill objectForKey:@"chamber"]])
-						status = BillStageOpposingChamberVoted;
-					else
-						status = BillStageChamberVoted;
-					break;
-				}
-			}
-		}
-		if ([[action objectForKey:@"action"] caseInsensitiveCompare:@"Passed"] == NSOrderedSame) {
-			if (NO == [[action objectForKey:@"actor"] isEqualToString:[self.bill objectForKey:@"chamber"]])
-				status = BillStageOpposingChamberVoted;
-			else
-				status = BillStageChamberVoted;		
-		}
-		
-		if ([[action objectForKey:@"action"] caseInsensitiveCompare:@"Sent to the Governor"] == NSOrderedSame) {
-			status = BillStageSentToGovernor;
-		}
-		else if (([[action objectForKey:@"action"] caseInsensitiveCompare:@"Signed by the Governor"] == NSOrderedSame) ||
-				 ([[action objectForKey:@"action"] hasPrefix:@"Effective"]) ||
-				 ([[action objectForKey:@"action"] caseInsensitiveCompare:@"Reported Enrolled"] == NSOrderedSame))
-		{
-			status = BillStageBecomesLaw;
-		}
-		else if ([[action objectForKey:@"action"] hasSubstring:@"vetoed" caseInsensitive:YES]) {
-			status = BillStageVetoed;
-		}
-		[stages setObject:actionDate forKey:[NSNumber numberWithInteger:status]];
-	}	
-	[self.bill setObject:stages forKey:@"stages"];
-	
-	return stages;
-}
-
-- (void)handleBillStages {	
-	NSDictionary *stages = [self calcStages];
-	NSInteger lastStage = [[[[stages allKeys] sortedArrayUsingSelector:@selector(compare:)] lastObject] integerValue];
-	
-	NSArray *tiles = [NSArray arrayWithObjects:self.stat_filed, self.stat_thisPassComm, self.stat_thisPassVote, 
-					  self.stat_thatPassComm, self.stat_thatPassVote, self.stat_governor, self.stat_isLaw, nil];
-	
-	NSInteger tileIndex = 1;
-	for (UILabel *tile in tiles) {
-		if (lastStage >= tileIndex) {
-			tile.backgroundColor = [TexLegeTheme accentGreener];
-			tile.alpha = 1.0f;
-		}
-		else {
-			tile.backgroundColor = [TexLegeTheme texasBlue];
-			tile.alpha = 0.4f;
-		}
-		tileIndex++;
-	}
-	NSInteger this = chamberForString([bill objectForKey:@"chamber"]);
-	NSInteger that = this == HOUSE ? SENATE : HOUSE;
-
-	NSString *chamberString = stringForChamber(this, TLReturnFull);
-	self.stat_thisPassComm.text = [chamberString stringByAppendingString:@" Committee"];
-	self.stat_thisPassVote.text = [chamberString stringByAppendingString:@" Voted"];
-	
-	chamberString = stringForChamber(that, TLReturnFull);
-	self.stat_thatPassComm.text = [chamberString stringByAppendingString:@" Committee"];
-	self.stat_thatPassVote.text = [chamberString stringByAppendingString:@" Voted"];
-	
-	NSString *billType = billTypeStringFromBillID([self.bill objectForKey:@"bill_id"]);
-	BOOL requiresGovernor = billTypeRequiresGovernor(billType);
-	BOOL requiresOpposing = billTypeRequiresOpposingChamber(billType);
-	
-	self.stat_thatPassComm.hidden = NO == requiresOpposing;
-	self.stat_thatPassVote.hidden = NO == requiresOpposing;
-	self.stat_governor.hidden = NO == requiresGovernor;
-	NSString *conclusion = nil;
-	if (requiresGovernor)
-		conclusion = @"Becomes Law";
-	else if (requiresOpposing)
-		conclusion = @"Enrolled";
-	else
-		conclusion = @"Adopted";
-	self.stat_isLaw.text = conclusion;
-
-	
-	for (UIView* strip in self.statusView.subviews) {
-		if ((strip.tag == 9990 + BillStageOpposingChamberVoted) ||
-			(strip.tag == 9990 + BillStageOutOfOpposingCommittee)) {
-			strip.hidden = NO == requiresOpposing;
-			continue;
-		}
-		if (strip.tag == 9990 + BillStageSentToGovernor) {
-			strip.hidden = NO == requiresGovernor;
-			continue;
-		}
-	}
-
-	if (![stages objectForKey:[NSNumber numberWithInteger:BillStageOutOfCommittee]] && lastStage > BillStageOutOfCommittee)
-	{
-		self.stat_thisPassComm.backgroundColor = [UIColor darkGrayColor];
-		self.stat_thisPassComm.alpha = 0.3f;
-	}
-
-	if (![stages objectForKey:[NSNumber numberWithInteger:BillStageOutOfOpposingCommittee]] && lastStage > BillStageOutOfOpposingCommittee)
-	{
-		self.stat_thatPassComm.backgroundColor = [UIColor darkGrayColor];
-		self.stat_thatPassComm.alpha = 0.3f;
-	}
-	
-	if ([stages objectForKey:[NSNumber numberWithInteger:BillStageVetoed]] && lastStage <= BillStageVetoed) {
-		self.stat_isLaw.backgroundColor = [TexLegeTheme texasRed];
-		self.stat_isLaw.alpha = 1.0f;
-	}
-
-}
-
 - (void)setupHeader {	
 	if (!bill)
 		return;
@@ -406,35 +265,44 @@ enum _billSections {
 	self.actionHeader.titleLabel.text = billTitle;
 	[self.actionHeader setNeedsDisplay];
 	
-	NSDictionary *currentAction = [[bill objectForKey:@"actions"] objectAtIndex:0];	// actions is already in descending order from our setBill
+	NSDictionary *currentAction = [[bill objectForKey:@"actions"] lastObject];
 	NSDate *currentActionDate = [NSDate dateFromString:[currentAction objectForKey:@"date"]];
 	NSString *actionDateString = [NSDate stringForDisplayFromDate:currentActionDate];
 	
-	NSMutableString *descText = [NSMutableString stringWithString:@"Activity: "];
-	[descText appendFormat:@"%@ (%@)", [currentAction objectForKey:@"action"], actionDateString];
-	[descText appendString:@"\r\r"];
+	NSMutableString *descText = [NSMutableString stringWithString:NSLocalizedStringFromTable(@"Activity: ", @"DataTableUI", @"Section header to list latest bill activity")];
+	[descText appendFormat:@"%@ (%@)\r", [currentAction objectForKey:@"action"], actionDateString];
 	[descText appendString:[bill objectForKey:@"title"]];	// the summary of the bill
 	self.lab_description.text = descText;
 	
-	[self handleBillStages];
-	
+	AppendingFlowView *statV = self.statusView;
+	statV.uniformWidth = NO;
+	if ([UtilityMethods isIPadDevice]) {
+		statV.preferredBoxSize = CGSizeMake(80.f, 43.f);	
+		statV.connectorSize = CGSizeMake(25.f, 6.f);
+	}
+	else {
+		statV.preferredBoxSize = CGSizeMake(75.f, 40.f);	
+		statV.connectorSize = CGSizeMake(7.f, 6.f);	
+		statV.font = [TexLegeTheme boldTwelve];
+		statV.insetMargin = CGSizeMake(13.f, 10.f);
+	}
+
+	BillActionParser *parser = [[BillActionParser alloc] init];
+	NSArray *tempList = [[parser parseStagesForBill:bill] allValues];
+	if (NO == IsEmpty(tempList)) {
+		NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"stageNumber" ascending:YES];
+		tempList = [tempList sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDesc]];
+		self.statusView.stages = tempList;
+	}		
 }
 
 - (void)setBill:(NSMutableDictionary *)newBill {
 	if (self.starButton)
 		self.starButton.enabled = (newBill != nil);		
 
-	// this breaks our lazy loading
-	//if (newBill && bill && [[newBill objectForKey:@"bill_id"] isEqualToString:[bill objectForKey:@"bill_id"]])
-	//	return;
-	
 	if (bill) [bill release], bill = nil;
 	if (newBill) {
 		bill = [newBill retain];
-		
-		NSSortDescriptor *byDate = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
-		NSSortDescriptor *byNum = [NSSortDescriptor sortDescriptorWithKey:@"+action_number" ascending:NO];
-		[[bill objectForKey:@"actions"] sortUsingDescriptors:[NSArray arrayWithObjects:byDate, byNum, nil]];
 		
 		self.tableView.dataSource = self;
 				
@@ -523,19 +391,19 @@ enum _billSections {
 	NSString *secTitle = nil;
 	switch (section) {
 		case kBillSubjects:
-			secTitle = @"Subject(s)";
+			secTitle = NSLocalizedStringFromTable(@"Subject(s)", @"DataTableUI", @"Section title listing the subjects or categories of the bill");
 			break;
 		case kBillSponsors:
-			secTitle = @"Sponsor(s)";
+			secTitle = NSLocalizedStringFromTable(@"Sponsor(s)", @"DataTableUI", @"Section title listing the legislators who sponsored the bill");
 			break;
 		case kBillVersions:
-			secTitle = @"Version(s)";
+			secTitle = NSLocalizedStringFromTable(@"Version(s)", @"DataTableUI", @"Section title listing the various versions of the bill text");
 			break;
 		case kBillActions:
-			secTitle = @"Action History";
+			secTitle = NSLocalizedStringFromTable(@"Action History", @"DataTableUI", @"Section title listing the latest actions for the bill");
 			break;
 		case kBillVotes:
-			secTitle = @"Votes";
+			secTitle = NSLocalizedStringFromTable(@"Votes", @"DataTableUI", @"Section title listing the available legislative votes on the bill");
 			break;
 		default:
 			secTitle = @"";
@@ -617,19 +485,23 @@ enum _billSections {
 			{				
 				NSDictionary *version = [[bill objectForKey:@"versions"] objectAtIndex:indexPath.row];
 				NSString *textName = nil;
+				NSString *senateString = stringForChamber(SENATE, TLReturnFull);
+				NSString *houseString = stringForChamber(HOUSE, TLReturnFull);
+				NSString *comRep = NSLocalizedStringFromTable(@"%@ Committee Report", @"DataTableUI", @"Preceded by the legislative chamber");
+				
 				NSString *name = [version objectForKey:@"name"];
 				if ([name hasSuffix:@"I"])
-					textName = @"Introduced";
+					textName = NSLocalizedStringFromTable(@"Introduced", @"DataTableUI", @"A bill activity stating the bill has been introduced");
 				else if ([name hasSuffix:@"E"])
-					textName = @"Engrossed";
+					textName = NSLocalizedStringFromTable(@"Engrossed", @"DataTableUI", @"A bill activity stating the bill has been engrossed (passed and sent to the other chamber)");
 				else if ([name hasSuffix:@"S"])
-					textName = @"Senate Committee Report";
+					textName = [NSString stringWithFormat:comRep, senateString];
 				else if ([name hasSuffix:@"H"])
-					textName = @"House Committee Report";
+					textName = [NSString stringWithFormat:comRep, houseString];
 				else if ([name hasSuffix:@"A"])
-					textName = @"Amendments Printing";
+					textName = NSLocalizedStringFromTable(@"Amendments Printing", @"DataTableUI", @"A bill activity saying that they legislature is printing amendments");
 				else if ([name hasSuffix:@"F"])
-					textName = @"Enrolled";
+					textName = NSLocalizedStringFromTable(@"Enrolled", @"DataTableUI", @"A bill activity stating that the bill has been enrolled (like a law)");
 				else
 					textName = name;
 				cell.textLabel.text = @"";
@@ -643,8 +515,8 @@ enum _billSections {
 				NSString *voteDateString = [NSDate stringForDisplayFromDate:voteDate];
 				
 				BOOL passed = [[vote objectForKey:@"passed"] boolValue];
-				NSString *passedString = passed ? @"Passed" : @"Failed";
-				NSInteger chamber = chamberForString([vote objectForKey:@"chamber"]);
+				NSString *passedString = passed ? NSLocalizedStringFromTable(@"Passed", @"DataTableUI", @"Whether a bill passed/failed") : NSLocalizedStringFromTable(@"Failed", @"DataTableUI", @"Whether a bill passed/failed");
+				NSInteger chamber = chamberFromOpenStatesString([vote objectForKey:@"chamber"]);
 				NSString *chamberString = stringForChamber(chamber, TLReturnFull);
 				cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@ (%@)",
 											 [[vote objectForKey:@"motion"] capitalizedString],
@@ -665,7 +537,7 @@ enum _billSections {
 				if (!IsEmpty([currentAction objectForKey:@"action"])) {
 					NSString *desc = nil;
 					if (!IsEmpty([currentAction objectForKey:@"actor"])) {
-						NSInteger chamberCode = chamberForString([currentAction objectForKey:@"actor"]);
+						NSInteger chamberCode = chamberFromOpenStatesString([currentAction objectForKey:@"actor"]);
 						if (chamberCode == HOUSE || chamberCode == SENATE) {
 							desc = [NSString stringWithFormat:@"(%@) %@", 
 									stringForChamber(chamberCode, TLReturnFull), 
@@ -741,7 +613,7 @@ enum _billSections {
 						[voteDS release];
 					voteDS = [[BillVotesDataSource alloc] initWithBillVotes:vote];
 				}
-				NSString *titleString = [NSString stringWithFormat:@"%@ %@ Vote", 
+				NSString *titleString = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ %@ Vote", @"DataTableUI", @"As in HB 323 Final Passage Vote"), 
 										 [bill objectForKey:@"bill_id"], [[vote objectForKey:@"motion"] capitalizedString]];
 				BillVotesViewController *voteViewController = [[BillVotesViewController alloc] initWithStyle:UITableViewStyleGrouped];
 				voteViewController.tableView.dataSource = voteDS;
@@ -766,13 +638,14 @@ enum _billSections {
 		debug_NSLog(@"BillDetail - Error loading bill results from %@: %@", [request description], [error localizedDescription]);
 	}
 	
-	UIAlertView *alert = [[[ UIAlertView alloc ] 
-			  initWithTitle:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorTitle"] 
-			  message:[UtilityMethods texLegeStringWithKeyPath:@"Bills.NetworkErrorText"] 
-			  delegate:nil // we're static, so don't do "self"
-			  cancelButtonTitle: @"Cancel" 
-			  otherButtonTitles:nil, nil] autorelease];
+	UIAlertView *alert = [[ UIAlertView alloc ] 
+						  initWithTitle:NSLocalizedStringFromTable(@"Network Error", @"AppAlerts", @"Title for alert stating there's been an error when connecting to a server")
+						  message:NSLocalizedStringFromTable(@"There was an error while contacting the server for bill information.  Please check your network connectivity or try again.", @"AppAlerts", @"")
+						  delegate:nil // we're static, so don't do "self"
+						  cancelButtonTitle: NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")
+						  otherButtonTitles:nil];
 	[ alert show ];	
+	[ alert release];
 }
 
 
