@@ -17,9 +17,6 @@
 #import "XMLReader.h"
 #import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 #import "LoadingCell.h"
-#import "UIViewController+Stackable.h"
-
-#warning state specific
 
 @interface BillsTodayViewController (Private)
 - (void)configureCell:(TexLegeStandardGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -126,11 +123,11 @@
 	}	
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	if (loadingStatus > LOADING_IDLE) {
 		if (indexPath.row == 0) {
-			return [LoadingCell loadingCellWithStatus:loadingStatus tableView:tableView];
+			return [LoadingCell loadingCellWithStatus:loadingStatus tableView:aTableView];
 		}
 		else {	// to make things work with our upcoming configureCell:, we need to trick this a little
 			indexPath = [NSIndexPath indexPathForRow:(indexPath.row-1) inSection:indexPath.section];
@@ -139,7 +136,7 @@
 
 	NSString *CellIdentifier = [TexLegeStandardGroupCell cellIdentifier];
 	
-	TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil)
 	{
 		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:UITableViewCellStyleSubtitle 
@@ -153,12 +150,12 @@
 	return cell;
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView
 {
 	return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section
 {
 	if (!IsEmpty(recentBills_))
 		return [recentBills_ count];
@@ -175,23 +172,38 @@
 	
 	if (IsEmpty(recentBills_) || [recentBills_ count] <= indexPath.row)
 		return;
-
+	
 	NSDictionary *bill = [recentBills_ objectAtIndex:indexPath.row];
 	if (bill && [bill objectForKey:@"bill_id"]) {
-		if (bill) {
-			BillsDetailViewController *detailView = [[BillsDetailViewController alloc] 
-							   initWithNibName:@"BillsDetailViewController" bundle:nil] ;
-
-			[detailView setDataObject:bill];
-			[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:[bill objectForKey:@"bill_id"] 
-																			   session:nil			// defaults to current session
-																			  delegate:detailView];
-			[self stackOrPushViewController:detailView];
-			[detailView release];
-		}			
-	}
+			
+		BOOL changingViews = NO;
+		
+		BillsDetailViewController *detailView = nil;
+		if ([UtilityMethods isIPadDevice]) {
+			id aDetail = [[[TexLegeAppDelegate appDelegate] detailNavigationController] visibleViewController];
+			if ([aDetail isKindOfClass:[BillsDetailViewController class]])
+				detailView = aDetail;
+		}
+		if (!detailView) {
+			detailView = [[[BillsDetailViewController alloc] 
+						   initWithNibName:@"BillsDetailViewController" bundle:nil] autorelease];
+			changingViews = YES;
+		}
+		
+		[detailView setDataObject:bill];
+		[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] queryOpenStatesBillWithID:[bill objectForKey:@"bill_id"] 
+																		   session:[bill objectForKey:@"session"] // nil defaults to current session
+																		  delegate:detailView];
+		
+		if (![UtilityMethods isIPadDevice])
+			[self.navigationController pushViewController:detailView animated:YES];
+		else if (changingViews)
+			//[[[TexLegeAppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:YES];
+			[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
+	}			
 }
 
+#warning state specific (Todays Bills)
 - (void)startSearchForRecentBills {
 	NSDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 								 @"todaysbillspassed", @"Type",
