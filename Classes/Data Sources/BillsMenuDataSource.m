@@ -23,7 +23,6 @@ enum _menuOrder {
 	kMenuCategories,
 	kMenuLASTITEM
 };
-#warning localization
 
 // TableDataSourceProtocol methods
 

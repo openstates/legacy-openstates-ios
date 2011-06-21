@@ -20,8 +20,6 @@
 #import "LoadingCell.h"
 #import "StateMetaLoader.h"
 
-#warning state specific
-
 @implementation BillSearchDataSource
 @synthesize searchDisplayController, delegateTVC;
 @synthesize useLoadingDataCell;
@@ -274,7 +272,8 @@
 				
 				if ([tail integerValue] > 0) {
 					isBillID = YES;
-#warning state specific ID assumptions
+
+#warning state specific (Bill IDs)
 					NSNumber *billNumber = [NSNumber numberWithInteger:[tail integerValue]];		// we specifically convolute this to ensure we're grabbing only the numerical of the string
 					[queryString appendFormat:@"/%@/%@/%@%%20%@", meta.selectedState, meta.currentSession, billType, billNumber];
 					
