@@ -78,6 +78,7 @@
 	
 	if (menuItem) {
 		self.title = [menuItem objectForKey:@"title"];
+	}
 	
 	self.tableView.separatorColor = [TexLegeTheme separator];
 	self.tableView.backgroundColor = [TexLegeTheme tableBackground];

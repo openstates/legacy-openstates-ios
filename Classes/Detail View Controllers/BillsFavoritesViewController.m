@@ -32,6 +32,7 @@
 	}
 	return self;	
 }
+
 /*
 - (void)didReceiveMemoryWarning {
 	[_cachedBills release];
@@ -115,8 +116,6 @@
 	}
 	[self.tableView reloadData];
 	
-	[self loadBills:nil];
-
 }
 
 /*- (void)viewWillDisappear:(BOOL)animated {
@@ -154,13 +153,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if (_watchList && [_watchList count])
+	if (!IsEmpty(_watchList))
 		return [_watchList count];
 	else
 		return 0;
 }
 
-#warning state specific
 - (void)configureCell:(TexLegeStandardGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
 	BOOL useDark = (indexPath.row % 2 == 0);
@@ -290,18 +288,6 @@
 	if (error && request) {
 		debug_NSLog(@"BillFavorites - Error loading bill results from %@: %@", [request description], [error localizedDescription]);
 	}
-		//[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:nil];
-
-
-	/*UIAlertView *alert = [[ UIAlertView alloc ] 
-						  initWithTitle:NSLocalizedStringFromTable(@"Network Error", @"AppAlerts", @"Title for alert stating there's been an error when connecting to a server")
-						  message:NSLocalizedStringFromTable(@"There was an error while contacting the server for bill information.  Please check your network connectivity or try again.", @"AppAlerts", @"")
-						  delegate:nil // we're static, so don't do "self"
-						  cancelButtonTitle: NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")
-						  otherButtonTitles:nil];
-	[ alert show ];	
-	[ alert release];
-	*/		
 }
 
 
