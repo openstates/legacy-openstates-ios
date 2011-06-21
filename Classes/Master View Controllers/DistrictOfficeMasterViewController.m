@@ -64,6 +64,12 @@
 	//self.dataSource.searchDisplayController = self.searchDisplayController;
 	//self.searchDisplayController.searchResultsDataSource = self.dataSource;
 	
+	self.searchDisplayController.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:
+																stringForChamber(BOTH_CHAMBERS, TLReturnFull),
+																stringForChamber(HOUSE, TLReturnFull),
+																stringForChamber(SENATE, TLReturnFull),
+																nil];
+	
 	self.chamberControl.tintColor = [TexLegeTheme accent];
 	self.sortControl.tintColor = [TexLegeTheme accent];
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];

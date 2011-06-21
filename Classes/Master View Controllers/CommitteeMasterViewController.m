@@ -59,11 +59,17 @@
 	if (error || count == 0) {
 		self.navigationController.tabBarItem.enabled = NO;
 		return;
-	}*/
+	}*/	
 	
 	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
-		self.selectObjectOnAppear = [self firstDataObject];
+			self.selectObjectOnAppear = [self firstDataObject];
 
+	self.searchDisplayController.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:
+																stringForChamber(BOTH_CHAMBERS, TLReturnFull),
+																stringForChamber(HOUSE, TLReturnFull),
+																stringForChamber(SENATE, TLReturnFull),
+																nil];
+	
 }
 
 - (void)viewDidUnload {

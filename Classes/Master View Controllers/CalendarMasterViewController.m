@@ -20,6 +20,11 @@
 
 @implementation CalendarMasterViewController
 
+// Set this to non-nil whenever you want to automatically enable/disable the view controller based on network/host reachability
+- (NSString *)reachabilityStatusKey {
+	return @"openstatesConnectionStatus";
+}
+
 - (void)loadView {
 	[super runLoadView];
 }
@@ -52,10 +57,10 @@
 		self.selectObjectOnAppear = detailObject;
 	}	
 	if ([UtilityMethods isIPadDevice]) {
-		self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
+		if (self.navigationController)
+			self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
 	}
-	
 }
 
 #pragma -

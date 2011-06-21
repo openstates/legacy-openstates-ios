@@ -56,7 +56,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-		
+			
 	self.tableView.rowHeight = 73.0f;
 	
 	if ([UtilityMethods isIPadDevice])
@@ -70,6 +70,13 @@
 	self.chamberControl.tintColor = [TexLegeTheme accent];
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
 	self.navigationItem.titleView = self.chamberControl;
+	
+	self.searchDisplayController.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:
+																stringForChamber(BOTH_CHAMBERS, TLReturnFull),
+																stringForChamber(HOUSE, TLReturnFull),
+																stringForChamber(SENATE, TLReturnFull),
+																nil];
+	
 }
 
 - (void)viewDidUnload {	

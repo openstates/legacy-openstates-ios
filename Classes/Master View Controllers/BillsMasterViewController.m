@@ -21,6 +21,8 @@
 #import "OpenLegislativeAPIs.h"
 #import "LocalyticsSession.h"
 
+#import <objc/message.h>
+
 #define LIVE_SEARCHING 1
 
 @interface BillsMasterViewController (Private)
@@ -29,6 +31,11 @@
 
 @implementation BillsMasterViewController
 @synthesize billSearchDS;
+
+// Set this to non-nil whenever you want to automatically enable/disable the view controller based on network/host reachability
+- (NSString *)reachabilityStatusKey {
+	return @"openstatesConnectionStatus";
+}
 
 - (void) dealloc {
 	[super dealloc];
@@ -50,11 +57,25 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(reloadData:) name:kBillSearchNotifyDataLoaded object:billSearchDS];	
-
-	if ([UtilityMethods isIPadDevice])
-	    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 	
-	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
+	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];	
+	
+	self.searchDisplayController.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:
+																stringForChamber(BOTH_CHAMBERS, TLReturnFull),
+																stringForChamber(HOUSE, TLReturnFull),
+																stringForChamber(SENATE, TLReturnFull),
+																nil];
+	
+	if ([UtilityMethods isIPadDevice]) {	
+		self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
+	    	
+		/* This "avoids" a bug on iPads where the scope bar get's crammed into the top line in landscape. */
+		if ([self.searchDisplayController.searchBar respondsToSelector:@selector(setCombinesLandscapeBars:)]) 
+		{ 
+			objc_msgSend(self.searchDisplayController.searchBar, @selector(setCombinesLandscapeBars:), NO );
+		}
+	}
+		
 /*	for (id subview in self.searchDisplayController.searchBar.subviews )
 	{
 		if([subview isMemberOfClass:[UISegmentedControl class]])
@@ -189,7 +210,7 @@
 	if (searchString) {
 		_searchString = [searchString retain];
 		if ([_searchString length] >= 3) {
-			[self.billSearchDS startSearchWithString:_searchString chamber:self.searchDisplayController.searchBar.selectedScopeButtonIndex];
+			[self.billSearchDS startSearchForText:_searchString chamber:self.searchDisplayController.searchBar.selectedScopeButtonIndex];
 		}		
 	}
 #endif
@@ -205,7 +226,7 @@
 		_searchString = nil;
 	}
 	_searchString = [controller.searchBar.text copy];
-	[self.billSearchDS startSearchWithString:_searchString chamber:searchOption];
+	[self.billSearchDS startSearchForText:_searchString chamber:searchOption];
 	return NO;
 }
 
@@ -231,7 +252,7 @@
 	}
 	_searchString = [searchBar.text copy];
 	//if ([_searchString length] >= 3) {
-		[self.billSearchDS startSearchWithString:_searchString 
+		[self.billSearchDS startSearchForText:_searchString 
 										 chamber:self.searchDisplayController.searchBar.selectedScopeButtonIndex];
 	//}		
 #endif

@@ -24,6 +24,10 @@
 @implementation DistrictMapMasterViewController
 @synthesize chamberControl, sortControl, filterControls;
 
+// Set this to non-nil whenever you want to automatically enable/disable the view controller based on network/host reachability
+- (NSString *)reachabilityStatusKey {
+	return @"googleConnectionStatus";
+}
 
 #pragma mark -
 #pragma mark Memory management
@@ -67,11 +71,12 @@
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
 	self.navigationItem.titleView = self.filterControls;
 	
-	self.selectObjectOnAppear = nil;
-/*
- if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
-		self.selectObjectOnAppear = [self firstDataObject];
-*/
+	self.searchDisplayController.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:
+																stringForChamber(BOTH_CHAMBERS, TLReturnFull),
+																stringForChamber(HOUSE, TLReturnFull),
+																stringForChamber(SENATE, TLReturnFull),
+																nil];
+	
 }
 
 - (void)viewDidUnload {
@@ -93,40 +98,6 @@
 			self.sortControl.selectedSegmentIndex = [segIndex integerValue];
 		
 	}
-	
-	
-	/*
-	//// ALL OF THE FOLLOWING MUST NOT RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER	
-	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
-		id detailObject = nil;
-
-		if (self.detailViewController && [self.detailViewController isKindOfClass:[MapViewController class]]) {
-			MapViewController *mapVC = (MapViewController *)self.detailViewController;
-			if (mapVC && [mapVC.mapView.annotations count]) {
-				for (id<MKAnnotation>annotation in mapVC.mapView.annotations) {
-					if ([annotation isKindOfClass:[DistrictOfficeObj class]]) {
-						detailObject = annotation;
-						break;
-					}
-				}
-			}
-			if (!detailObject) {
-				NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
-				if (!currentIndexPath) {			
-					NSUInteger ints[2] = {0,0};	// just pick the first one then
-					currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
-				}
-				detailObject = [self.dataSource dataObjectForIndexPath:currentIndexPath];				
-			}
-			self.selectObjectOnAppear = detailObject;
-			
-		}
-			
-		self.selectObjectOnAppear = detailObject;
-	}	
-	
-	// END: IPAD ONLY
-	 */
 }
 
 
@@ -161,6 +132,7 @@
 	if (map) {
 		MapViewController *mapVC = (MapViewController *)self.detailViewController;
 		[mapVC view];
+		
 		MKMapView *mapView = mapVC.mapView;
 		if (mapVC && mapView) {			
 			[mapVC clearAnnotationsAndOverlays];

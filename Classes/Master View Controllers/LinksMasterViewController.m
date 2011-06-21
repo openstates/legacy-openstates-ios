@@ -107,12 +107,12 @@
 			NSString *appVer = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 
 			NSMutableString *body = [NSMutableString string];
-			[body appendFormat:@"TexLege Version: %@\n", appVer];
-			[body appendFormat:@"iOS Version: %@\n", [[UIDevice currentDevice] systemVersion]];
-			[body appendFormat:@"iOS Device: %@\n", [[UIDevice currentDevice] model]];
-			[body appendString:@"\nDescription of Problem, Concern, or Question:\n"];
+			[body appendFormat:NSLocalizedStringFromTable(@"TexLege Version: %@\n", @"StandardUI", @"Text to be included in TexLege support emails."), appVer];
+			[body appendFormat:NSLocalizedStringFromTable(@"iOS Version: %@\n", @"StandardUI", @"Text to be included in TexLege support emails."), [[UIDevice currentDevice] systemVersion]];
+			[body appendFormat:NSLocalizedStringFromTable(@"iOS Device: %@\n", @"StandardUI", @"Text to be included in TexLege support emails."), [[UIDevice currentDevice] model]];
+			[body appendString:NSLocalizedStringFromTable(@"\nDescription of Problem, Concern, or Question:\n", @"StandardUI", @"Text to be included in TexLege support emails.")];
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
-																			 subject:@"TexLege Support Question / Concern" 
+																			 subject:NSLocalizedStringFromTable(@"TexLege Support Question / Concern", @"StandardUI", @"Subject to be included in TexLege support emails.") 
 																				body:body commander:self];
 			return;
 		}
