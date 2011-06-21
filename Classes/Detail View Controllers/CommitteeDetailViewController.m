@@ -39,8 +39,6 @@
 @synthesize dataObjectID, masterPopover;
 @synthesize partisanSlider, membershipLab, infoSectionArray;
 
-#warning state specific
-
 enum Sections {
     //kHeaderSection = 0,
 	kInfoSection = 0,

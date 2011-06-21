@@ -11,8 +11,6 @@
 #import "WnomObj.h"
 #import "UtilityMethods.h"
 
-#warning state specific
-
 @implementation LegislatorObj (RestKit)
 
 #pragma mark RKObjectMappable methods

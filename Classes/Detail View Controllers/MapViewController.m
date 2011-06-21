@@ -43,8 +43,6 @@
 NSInteger colorIndex;
 static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
-#warning state specific
-
 @implementation MapViewController
 @synthesize mapTypeControl, mapTypeControlButton;
 @synthesize mapView, userLocationButton, geocoder, searchLocation;
@@ -290,6 +288,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 #pragma mark -
 #pragma mark Properties
 
+#warning state specific (Map Region)
 
 - (MKCoordinateRegion) texasRegion {
 	// Set up the map's region to frame the state of Texas.
@@ -365,47 +364,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 #pragma mark -
 #pragma mark Control Element Actions
-/*
-- (IBAction) mapControlSheet:(id)sender {
-	UIActionSheet *popupQuery = [[UIActionSheet alloc]
-								 initWithTitle:nil
-								 delegate:self
-								 cancelButtonTitle:@"Cancel"
-								 destructiveButtonTitle:nil
-								 otherButtonTitles:@"My Location's Districts",
-								 @"All District Offices",@"Map: Normal", @"Map: Satellite", @"Map: Hybrid", nil];
-	
-	popupQuery.actionSheetStyle = UIActionSheetStyleAutomatic;
-	//[popupQuery showFromBarButtonItem:sender animated:YES];
-	[popupQuery showFromTabBar:self.tabBarController.tabBar];
-	[popupQuery release];
-}
 
-//- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex 
-{
-	switch (buttonIndex) {
-		case 0:
-			[self locateUser:actionSheet];
-			break;
-		case 1:
-			[self showAllDistrictOffices:actionSheet];
-			break;
-		case 2:
-			self.mapView.mapType = MKMapTypeStandard;
-			break;
-		case 3:
-			self.mapView.mapType = MKMapTypeSatellite;
-			break;
-		case 4:
-			self.mapView.mapType = MKMapTypeHybrid;
-			break;
-		case 5:
-		default:
-			break;			
-	}
-}
-*/
 - (IBAction)changeMapType:(id)sender {
 	NSInteger index = self.mapTypeControl.selectedSegmentIndex;
 	self.mapView.mapType = index;
@@ -477,6 +436,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	}
 	[pool drain];
 }
+
 /*
 - (IBAction) showAllDistrictOffices:(id)sender {
 	

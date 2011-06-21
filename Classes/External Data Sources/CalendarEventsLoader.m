@@ -20,8 +20,6 @@
 #import "CalendarDetailViewController.h"
 #import "StateMetaLoader.h"
 
-#warning state specific
-
 /*
  Sorts an array of CalendarItems objects by date.  
  */
@@ -170,7 +168,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 
 	// We had trouble loading the events online, so pull up the cache from the one in the documents folder, if possible
 	NSString *thePath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
-	//NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	if ([fileManager fileExistsAtPath:thePath]) {
 		debug_NSLog(@"EventsLoader: using cached events in the documents folder.");
@@ -220,8 +217,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 			[_events sortUsingFunction:sortByDate context:nil];
 
 			NSString *thePath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
-			///NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
-			//NSFileManager *fileManager = [NSFileManager defaultManager];
 			if (![_events writeToFile:thePath atomically:YES]) {
 				NSLog(@"CalendarEventsLoader: Error writing event cache to file: %@", thePath);
 			}

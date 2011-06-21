@@ -80,7 +80,7 @@
 	return polyLine;
 }
 
-#warning state specific
+#warning state specific (Hole in District 83 Map)
 
 - (MKPolygon *)polygon {
 	MKPolygon *polyGon=nil;

@@ -45,8 +45,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OpenLegislativeAPIs);
 - (void)queryOpenStatesBillWithID:(NSString *)billID session:(NSString *)session delegate:(id)sender {
 	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
 
-	if (!session)
+	if (!session && !IsEmpty(meta.currentSession)) {
 		session = meta.currentSession;
+	}
 	
 	if (IsEmpty(billID) || IsEmpty(session) || !sender || !osApiClient)
 		return;

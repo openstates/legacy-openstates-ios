@@ -31,8 +31,6 @@
 NSInteger colorIndex;
 static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
-#warning state specific
-
 @implementation MapMiniDetailViewController
 @synthesize mapView;
 @synthesize texasRegion;
@@ -167,6 +165,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 #pragma mark -
 #pragma mark Properties
 
+#warning state specific (Map Region)
 
 - (MKCoordinateRegion) texasRegion {
 	// Set up the map's region to frame the state of Texas.
