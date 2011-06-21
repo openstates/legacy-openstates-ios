@@ -44,6 +44,7 @@ enum
 @synthesize sealColor;
 @synthesize m_loadingInterrupted, m_normalItemList, m_shouldDisplayOnViewLoad, m_parentCtrl, m_authCallback;
 @synthesize masterPopover, m_shouldHideDoneButton, userAgent;
+@synthesize isStoppingLoad;
 
 static MiniBrowserController *s_browser = nil;
 
@@ -102,6 +103,7 @@ static MiniBrowserController *s_browser = nil;
 		m_loadingItemList = nil;
 		m_authCallback = nil;
 		self.dataObjectID = nil;
+		isStoppingLoad = NO;
 		[self enableBackButton:NO];
 		[self enableFwdButton:NO];
 		
@@ -129,6 +131,7 @@ static MiniBrowserController *s_browser = nil;
 	self.m_normalItemList = nil;
 	m_loadingItemList = nil;
 	m_authCallback = nil;
+	isStoppingLoad = NO;
 	self.dataObjectID = nil;
 	[self enableBackButton:NO];
 	[self enableFwdButton:NO];
@@ -149,6 +152,8 @@ static MiniBrowserController *s_browser = nil;
 
 - (void)dealloc 
 {
+	[self stopLoading];
+	
 	self.userAgent = nil;
 	self.sealColor = nil;
 	self.m_currentURL = nil;
@@ -310,6 +315,7 @@ static MiniBrowserController *s_browser = nil;
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+	isStoppingLoad = NO;
 	
 	if (m_shouldHideDoneButton)
 	{
@@ -353,6 +359,8 @@ static MiniBrowserController *s_browser = nil;
 
 - (void)viewWillDisappear:(BOOL)animated 
 {
+	isStoppingLoad = YES;
+	
 	[self stopLoadingAnimation:nil];
 
 	if ( self.m_shouldStopLoadingOnHide )
@@ -397,6 +405,9 @@ static MiniBrowserController *s_browser = nil;
 
 - (IBAction)closeButtonPressed:(id)button
 {
+	isStoppingLoad = YES;
+	[self stopLoading];
+	
 	// dismiss the view
 	if (m_parentCtrl /*&& [m_parentCtrl modalViewController]*/)
 		[m_parentCtrl dismissModalViewControllerAnimated:YES];
@@ -422,10 +433,12 @@ static MiniBrowserController *s_browser = nil;
 {
 	if ( self.m_webView.loading )
 	{
+		isStoppingLoad = YES;
 		[self stopLoading];
 	}
 	else 
 	{
+		isStoppingLoad = NO;
 		[self.m_webView reload];
 	}
 }
@@ -692,13 +705,16 @@ static MiniBrowserController *s_browser = nil;
 	
 	[self stopLoadingAnimation:nil];
 	
-    if (error && [[error domain] isEqualToString:NSURLErrorDomain]) {
-		if ([error code] == NSURLErrorNotConnectedToInternet) {
-			[TexLegeReachability noInternetAlert];
+	if (!isStoppingLoad) {	// do we care about alerts if we're closing shop?
+	
+		if (error && [[error domain] isEqualToString:NSURLErrorDomain]) {
+			if ([error code] == NSURLErrorNotConnectedToInternet) {
+				[TexLegeReachability noInternetAlert];
+			}
+			else { // if ([error code] == NSURLErrorCannotFindHost || [error code] == NSURLErrorCannotConnectToHost)
+				[TexLegeReachability noHostAlert];
+			}		
 		}
-		else { // if ([error code] == NSURLErrorCannotFindHost || [error code] == NSURLErrorCannotConnectToHost)
-			[TexLegeReachability noHostAlert];
-		}		
 	}
 }
 

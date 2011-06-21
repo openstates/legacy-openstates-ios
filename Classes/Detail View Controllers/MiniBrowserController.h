@@ -63,6 +63,7 @@
 @property (nonatomic,retain) NSString *userAgent;
 @property (nonatomic) BOOL m_shouldHideDoneButton;
 @property (nonatomic) BOOL isSharedBrowser;
+@property (nonatomic) BOOL isStoppingLoad;
 
 + (MiniBrowserController *)sharedBrowser;
 + (MiniBrowserController *)sharedBrowserWithURL:(NSURL *)urlOrNil;
