@@ -129,7 +129,11 @@
 		NSMutableString *name = [NSMutableString stringWithString:[bill objectForKey:@"bill_id"]];
 		if (!IsEmpty([bill objectForKey:@"passFail"]))
 			[name appendFormat:@" - %@", [bill objectForKey:@"passFail"]];
-		cell.textLabel.text = name;
+		
+		cell.textLabel.text = [NSString stringWithFormat:@"(%@) %@", 
+							   [bill objectForKey:@"session"],
+							   name];
+		//cell.textLabel.text = name;
 	}	
 }
 

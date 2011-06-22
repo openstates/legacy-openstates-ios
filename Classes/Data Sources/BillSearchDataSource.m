@@ -190,7 +190,9 @@
 	
 	bill_title = [bill_title chopPrefix:@"Relating to " capitalizingFirst:YES];
 	
-	cell.textLabel.text = bill_id;
+	cell.textLabel.text = [NSString stringWithFormat:@"(%@) %@", 
+						   [bill objectForKey:@"session"],
+						   bill_id];
 	cell.detailTextLabel.text = bill_title;
 }
 
