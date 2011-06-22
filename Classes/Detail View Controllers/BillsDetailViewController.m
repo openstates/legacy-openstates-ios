@@ -16,7 +16,7 @@
 #import "UtilityMethods.h"
 #import "TableCellDataObject.h"
 #import "TexLegeAppDelegate.h"
-#import "MiniBrowserController.h"
+#import "SVWebViewController.h"
 #import "LocalyticsSession.h"
 #import "NSDate+Helper.h"
 #import <RestKit/Support/JSON/JSONKit/JSONKit.h>
@@ -590,9 +590,11 @@ enum _billSections {
 		case kBillVersions: {
 			NSDictionary *version = [[bill objectForKey:@"versions"] objectAtIndex:newIndexPath.row];
 			if (version) {
-				NSURL *url = [NSURL URLWithString:[version objectForKey:@"url"]];
-				MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
-				[mbc display:self.tabBarController];
+				SVWebViewController *browser = [[SVWebViewController alloc] initWithAddress:[version objectForKey:@"url"]];
+				browser.toolbar.tintColor = [TexLegeTheme navbar];
+				browser.modalPresentationStyle = UIModalPresentationPageSheet;
+				[self presentModalViewController:browser animated:YES];	
+				[browser release];				
 			}
 		}
 			break;

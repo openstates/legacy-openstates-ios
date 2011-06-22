@@ -14,7 +14,7 @@
 #import "UtilityMethods.h"
 #import "CapitolMapsDetailViewController.h"
 #import "LegislatorDetailViewController.h"
-#import "MiniBrowserController.h"
+#import "SVWebViewController.h"
 #import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 #import "LegislatorMasterCell.h"
@@ -569,8 +569,11 @@ CGFloat quartzRowHeight = 73.f;
 
 - (void) pushInternalBrowserWithURL:(NSURL *)url {
 	if ([TexLegeReachability canReachHostWithURL:url]) { // do we have a good URL/connection?
-		MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
-		[mbc display:self.tabBarController];
+		SVWebViewController *browser = [[SVWebViewController alloc] initWithAddress:[url absoluteString]];
+		browser.toolbar.tintColor = [TexLegeTheme navbar];
+		browser.modalPresentationStyle = UIModalPresentationPageSheet;
+		[self presentModalViewController:browser animated:YES];	
+		[browser release];
 	}
 }
 

@@ -8,7 +8,7 @@
 #import "CalendarDetailViewController.h"
 #import "CalendarMasterViewController.h"
 #import "UtilityMethods.h"
-#import "MiniBrowserController.h"
+#import "SVWebViewController.h"
 #import "TexLegeAppDelegate.h"
 #import "ChamberCalendarObj.h"
 #import "TexLegeTheme.h"
@@ -199,15 +199,7 @@
 		
 		self.selectedRowRect = [tv rectForRowAtIndexPath:indexPath];
 		
-		id navDel = nil; 
-		if ([UtilityMethods isIPadDevice]) {
-			navDel = self;
-		}
-		else {
-			navDel = self.navigationController;
-		}
-
-		[[CalendarEventsLoader sharedCalendarEventsLoader] addEventToiCal:eventDict delegate:navDel];	
+		[[CalendarEventsLoader sharedCalendarEventsLoader] addEventToiCal:eventDict delegate:self];	
 	}
 }
 
@@ -237,8 +229,11 @@
 			}
 		}
 		else {
-			MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:url];
-			[mbc display:self.tabBarController];
+			SVWebViewController *browser = [[SVWebViewController alloc] initWithAddress:[url absoluteString]];
+			browser.toolbar.tintColor = [TexLegeTheme navbar];
+			browser.modalPresentationStyle = UIModalPresentationPageSheet;
+			[self presentModalViewController:browser animated:YES];	
+			[browser release];			
 		}		
 	}
 }

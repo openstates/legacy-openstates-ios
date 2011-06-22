@@ -13,10 +13,13 @@
 #import "TableDataSourceProtocol.h"
 #import "LinksDataSource.h"
 
+#import "SVWebViewController.h"
+
 #import "MiniBrowserController.h"
 #import "TexLegeTheme.h"
 #import "TexLegeEmailComposer.h"
 #import "TexLegeReachability.h"
+#import "LinkObj+RestKit.h"
 
 @implementation LinksMasterViewController
 
@@ -138,22 +141,23 @@
 		 }
 		 }
 		 */				
-
-		if (self.detailViewController == nil) {
-			self.detailViewController = [[[MiniBrowserController alloc] initWithNibName:@"MiniBrowserView" bundle:nil] autorelease];
-		}
-		MiniBrowserController *detailVC = self.detailViewController;
-		[detailVC view];
-		[detailVC removeDoneButton];
 		
 		// save off this item's selection to our AppDelegate
 		[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
-		[detailVC setLink:link];
 
 		if (isSplitViewDetail == NO) {
-			// push the detail view controller onto the navigation stack to display it				
-			[self.navigationController pushViewController:self.detailViewController animated:YES];
-			self.detailViewController = nil;
+			SVWebViewController *browser = [[SVWebViewController alloc] initWithAddress:[[link actualURL] absoluteString]];
+			browser.toolbar.tintColor = [TexLegeTheme navbar];
+			browser.modalPresentationStyle = UIModalPresentationPageSheet;
+			browser.hidesBottomBarWhenPushed = YES;
+			[self.navigationController pushViewController:browser animated:YES];	
+			[browser release];			
+		}
+		else if (self.detailViewController) {
+			MiniBrowserController *browser = self.detailViewController;
+			[browser view];
+			[browser removeDoneButton];
+			[browser setLink:link];
 		}
 	}
 }

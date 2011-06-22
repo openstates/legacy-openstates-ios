@@ -32,7 +32,7 @@
 #import "DistrictOfficeMasterViewController.h"
 
 #import "MapMiniDetailViewController.h"
-#import "MiniBrowserController.h"
+#import "SVWebViewController.h"
 #import "CapitolMapsDetailViewController.h"
 
 #import "PartisanIndexStats.h"
@@ -45,6 +45,7 @@
 #import "VotingRecordDataSource.h"
 
 #import "OpenLegislativeAPIs.h"
+#import "TexLegeTheme.h"
 
 @interface LegislatorDetailViewController (Private)
 - (void) setupHeader;
@@ -493,8 +494,11 @@
 				if ([[myURL scheme] isEqualToString:@"twitter"])
 					[[UIApplication sharedApplication] openURL:myURL];
 				else {
-					MiniBrowserController *mbc = [MiniBrowserController sharedBrowserWithURL:myURL];
-					[mbc display:self.tabBarController];
+					SVWebViewController *browser = [[SVWebViewController alloc] initWithAddress:[myURL absoluteString]];
+					browser.toolbar.tintColor = [TexLegeTheme navbar];
+					browser.modalPresentationStyle = UIModalPresentationPageSheet;
+					[self presentModalViewController:browser animated:YES];	
+					[browser release];
 				}
 			}
 		}
