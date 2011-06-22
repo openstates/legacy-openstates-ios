@@ -12,6 +12,7 @@
 #import "TexLegeReachability.h"
 #import "OpenLegislativeAPIs.h"
 #import "TexLegeLibrary.h"
+#import "NSDate+Helper.h"
 
 @interface StateMetaLoader (Private)
 - (NSMutableDictionary *)metadataFromCache;
@@ -146,32 +147,41 @@
 		return _currentSession;
 	NSDictionary *stateMeta = [_metadata objectForKey:_selectedState];
 	
-	NSDictionary *sessions = [stateMeta objectForKey:kMetaSessionsKey];
-	if (NO == IsEmpty(sessions)) {
-		NSString *maxdate = @"1969-01-01 00:00:00";
-		for (NSString *sessionKey in [sessions allKeys]) {
-			NSDictionary *session = [sessions objectForKey:sessionKey];
-			NSString *startDate = [session objectForKey:@"start_date"];
-			if ([startDate compare:maxdate] == NSOrderedDescending) {
-				maxdate = startDate;
-				_currentSession = [[session objectForKey:@"name"] copy];
-				if (IsEmpty(_currentSession)) {
-					_currentSession = [sessionKey copy];
+	NSMutableArray *terms = [[NSMutableArray alloc] initWithArray:[stateMeta objectForKey:kMetaSessionsAltKey]];
+	NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"start_year" ascending:NO];
+	[terms sortUsingDescriptors:[NSArray arrayWithObject:sortDesc]];
+			
+	NSInteger maxyear = -1;
+	NSString *foundSession = nil;
+	
+	for (NSDictionary *term in terms) {
+		NSNumber *startYear = [term objectForKey:@"start_year"];
+		//NSNumber *endYear = [term objectForKey:@"end_year"];
+		NSInteger thisYear = [[NSDate date] year];
+		if (startYear) {
+			NSInteger startInt = [startYear integerValue];
+			if (startInt > thisYear) {
+				continue;
+			}
+			else if (startInt > maxyear) {
+				maxyear = startInt;
+				NSArray *sessions = [term objectForKey:@"sessions"];
+				if (!IsEmpty(sessions)) {
+					id latest = [sessions lastObject]; 
+					if ([latest isKindOfClass:[NSString class]])
+						foundSession = latest;
+					else if ([latest isKindOfClass:[NSNumber class]])
+						foundSession = [latest stringValue];
 				}
 			}
 		}
 	}
-	else {	// some states don't have the good/detailed session listing
-		NSInteger maxyear = -1;
-		sessions = [_metadata objectForKey:kMetaSessionsAltKey];
-		for (NSDictionary *term in sessions) {
-			NSNumber *yearNum = [term objectForKey:@"start_year"];
-			if (yearNum && [yearNum integerValue] > maxyear) {
-				maxyear = [yearNum integerValue];
-				_currentSession = [[term objectForKey:@"name"] copy];
-			}
-		}
+
+	if (!IsEmpty(foundSession)) {
+		_currentSession = [foundSession copy];	
 	}
+	nice_release(terms);
+
 	return _currentSession;	
 }
 
