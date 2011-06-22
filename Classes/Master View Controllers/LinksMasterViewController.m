@@ -14,8 +14,6 @@
 #import "LinksDataSource.h"
 
 #import "SVWebViewController.h"
-
-#import "MiniBrowserController.h"
 #import "TexLegeTheme.h"
 #import "TexLegeEmailComposer.h"
 #import "TexLegeReachability.h"
@@ -66,18 +64,18 @@
 	
 	//// ALL OF THE FOLLOWING MUST *NOT* RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER
 	
-	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
-		id detailObject = self.detailViewController ? [self.detailViewController valueForKey:@"link"] : nil;
-		if (!detailObject) {
+	/*if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
+		id detailObject = nil; //self.detailViewController ? [self.detailViewController valueForKey:@"link"] : nil;
+		//if (!detailObject) {
 			NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
 			if (!currentIndexPath) {			
 				NSUInteger ints[2] = {0,0};	// just pick the first one then
 				currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
 			}
 			detailObject = [self.dataSource dataObjectForIndexPath:currentIndexPath];				
-		}
+		//}
 		self.selectObjectOnAppear = detailObject;
-	}	
+	}	*/
 	
 	if ([UtilityMethods isIPadDevice])
 		[self.tableView reloadData]; 
@@ -105,7 +103,6 @@
 	
 	LinkObj *link = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	if (link) {
-		
 		if ([link.url hasPrefix:@"mailto:support@texlege.com"]) {
 			NSString *appVer = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 
@@ -144,20 +141,18 @@
 		
 		// save off this item's selection to our AppDelegate
 		[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
+		//self.selectObjectOnAppear= link;
 
 		if (isSplitViewDetail == NO) {
 			SVWebViewController *browser = [[SVWebViewController alloc] initWithAddress:[[link actualURL] absoluteString]];
-			browser.toolbar.tintColor = [TexLegeTheme navbar];
 			browser.modalPresentationStyle = UIModalPresentationPageSheet;
 			browser.hidesBottomBarWhenPushed = YES;
 			[self.navigationController pushViewController:browser animated:YES];	
 			[browser release];			
 		}
 		else if (self.detailViewController) {
-			MiniBrowserController *browser = self.detailViewController;
-			[browser view];
-			[browser removeDoneButton];
-			[browser setLink:link];
+			SVWebViewController *browser = self.detailViewController;
+			[browser setAddress:[[link actualURL] absoluteString]];
 		}
 	}
 }

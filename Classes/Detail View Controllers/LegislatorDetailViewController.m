@@ -27,7 +27,7 @@
 #import "TexLegeAppDelegate.h"
 
 #import "BillSearchDataSource.h"
-#import "BillsListDetailViewController.h"
+#import "BillsListViewController.h"
 #import "CommitteeDetailViewController.h"
 #import "DistrictOfficeMasterViewController.h"
 
@@ -426,7 +426,7 @@
 		}
 		else if (cellInfo.entryType == DirectoryTypeBills) {
 			if ([TexLegeReachability openstatesReachable]) { 
-				BillsListDetailViewController *subDetailController = [[BillsListDetailViewController alloc] initWithStyle:UITableViewStylePlain];
+				BillsListViewController *subDetailController = [[BillsListViewController alloc] initWithStyle:UITableViewStylePlain];
 				subDetailController.title = [NSString stringWithFormat:NSLocalizedStringFromTable(@"Bills Authored by %@", @"DataTableUI", @"Title for cell, the legislative bills authored by someone."), 
 											 [member shortNameForButtons]];
 				[subDetailController.dataSource startSearchForBillsAuthoredBy:cellInfo.entryValue];
@@ -495,7 +495,6 @@
 					[[UIApplication sharedApplication] openURL:myURL];
 				else {
 					SVWebViewController *browser = [[SVWebViewController alloc] initWithAddress:[myURL absoluteString]];
-					browser.toolbar.tintColor = [TexLegeTheme navbar];
 					browser.modalPresentationStyle = UIModalPresentationPageSheet;
 					[self presentModalViewController:browser animated:YES];	
 					[browser release];

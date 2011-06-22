@@ -9,7 +9,7 @@
 #import "BillsDetailViewController.h"
 #import "BillsFavoritesViewController.h"
 #import "BillSearchDataSource.h"
-#import "BillsListDetailViewController.h"
+#import "BillsListViewController.h"
 #import "LegislatorDetailViewController.h"
 #import "TableDataSourceProtocol.h"
 #import "TexLegeCoreDataUtils.h"
@@ -247,8 +247,8 @@ enum _billSections {
 		NSString *longTitle = [[[[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:@"types"] 
 							   findWhereKeyPath:@"title" 
 							   equals:[idComponents objectAtIndex:0]] objectForKey:@"titleLong"];
-		billTitle = [NSString stringWithFormat:@"%@ %@", 
-					 longTitle, [idComponents lastObject]];
+		billTitle = [NSString stringWithFormat:@"(%@) %@ %@", 
+					 session, longTitle, [idComponents lastObject]];
 		
 	}
 	@catch (NSException * e) {
@@ -558,17 +558,17 @@ enum _billSections {
 	switch (newIndexPath.section) {
 		case kBillSubjects: {
 			NSString *subject = [[bill objectForKey:@"subjects"] objectAtIndex:newIndexPath.row];
-			BillsListDetailViewController *catResultsView = nil;
+			BillsListViewController *catResultsView = nil;
 			BOOL preexisting = NO;
 			if ([UtilityMethods isIPadDevice] && [UtilityMethods isLandscapeOrientation]) {
 				id tempView = [[[TexLegeAppDelegate appDelegate] masterNavigationController] visibleViewController];
-				if ([tempView isKindOfClass:[BillsListDetailViewController class]]) {
-					catResultsView = (BillsListDetailViewController *)[tempView retain];
+				if ([tempView isKindOfClass:[BillsListViewController class]]) {
+					catResultsView = (BillsListViewController *)[tempView retain];
 					preexisting = YES;
 				}
 			}
 			if (!catResultsView) {
-				catResultsView = [[BillsListDetailViewController alloc] initWithStyle:UITableViewStylePlain];
+				catResultsView = [[BillsListViewController alloc] initWithStyle:UITableViewStylePlain];
 			}
 			[catResultsView setTitle:subject];
 			BillSearchDataSource *dataSource = [catResultsView valueForKey:@"dataSource"];
@@ -591,7 +591,6 @@ enum _billSections {
 			NSDictionary *version = [[bill objectForKey:@"versions"] objectAtIndex:newIndexPath.row];
 			if (version) {
 				SVWebViewController *browser = [[SVWebViewController alloc] initWithAddress:[version objectForKey:@"url"]];
-				browser.toolbar.tintColor = [TexLegeTheme navbar];
 				browser.modalPresentationStyle = UIModalPresentationPageSheet;
 				[self presentModalViewController:browser animated:YES];	
 				[browser release];				

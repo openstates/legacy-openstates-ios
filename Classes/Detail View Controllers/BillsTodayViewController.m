@@ -61,10 +61,6 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	if ([UtilityMethods isIPadDevice]) {
-		self.view.frame = CGRectMake(0, 0, 700.f, self.view.bounds.size.height);		
-	}
-		
 	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"TexLegeStrings" ofType:@"plist"];
 	NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
 	NSString *myClass = NSStringFromClass([self class]);

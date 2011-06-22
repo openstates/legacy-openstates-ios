@@ -230,7 +230,6 @@
 		}
 		else {
 			SVWebViewController *browser = [[SVWebViewController alloc] initWithAddress:[url absoluteString]];
-			browser.toolbar.tintColor = [TexLegeTheme navbar];
 			browser.modalPresentationStyle = UIModalPresentationPageSheet;
 			[self presentModalViewController:browser animated:YES];	
 			[browser release];			

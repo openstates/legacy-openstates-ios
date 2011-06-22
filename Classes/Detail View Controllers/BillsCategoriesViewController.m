@@ -11,7 +11,7 @@
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
 #import "TexLegeReachability.h"
-#import "BillsListDetailViewController.h"
+#import "BillsListViewController.h"
 #import "BillSearchDataSource.h"
 #import "TexLegeBadgeGroupCell.h"
 #import "BillMetadataLoader.h"
@@ -222,7 +222,7 @@
 		NSString *cat = [item objectForKey:kBillCategoriesTitleKey];
 		NSInteger count = [[item objectForKey:kBillCategoriesCountKey] integerValue];
 		if (cat && count) {
-			BillsListDetailViewController *catResultsView = [[[BillsListDetailViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+			BillsListViewController *catResultsView = [[[BillsListViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
 			BillSearchDataSource *dataSource = [catResultsView valueForKey:@"dataSource"];
 			catResultsView.title = cat;
 			[dataSource startSearchForSubject:cat chamber:[self.chamber integerValue]];
