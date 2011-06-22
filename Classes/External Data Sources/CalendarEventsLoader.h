@@ -69,3 +69,5 @@
 #define kCalendarEventsTypeChamberValue			@"chamber"				// NSNumber of chamber
 
 @end
+
+NSComparisonResult sortByDate(id firstItem, id secondItem, void *context);
