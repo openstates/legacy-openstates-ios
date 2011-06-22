@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
 
-#import "BillsListDetailViewController.h"
+#import "BillsListViewController.h"
 
-@interface BillsRecentViewController : BillsListDetailViewController {
+@interface BillsRecentViewController : BillsListViewController {
 }
 
 @end
