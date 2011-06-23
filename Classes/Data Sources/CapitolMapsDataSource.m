@@ -30,7 +30,7 @@
 { return [self name]; }
 
 - (UIImage *)tabBarImage 
-{ return [UIImage imageNamed:@"71-compass-inv.png"]; }
+{ return [UIImage imageNamed:@"103-map-inv.png"]; }
 
 - (BOOL)showDisclosureIcon
 { return YES; }
