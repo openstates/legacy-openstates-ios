@@ -15,6 +15,6 @@
 	IBOutlet BillSearchDataSource *billSearchDS;
 	NSString *_searchString;
 }
-@property (nonatomic,assign) IBOutlet BillSearchDataSource *billSearchDS;
+@property (nonatomic,retain) BillSearchDataSource *billSearchDS;
 
 @end

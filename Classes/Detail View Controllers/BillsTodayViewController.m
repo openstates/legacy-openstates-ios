@@ -54,7 +54,7 @@
 
 - (void)dealloc {	
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
-	[recentBills_ release];
+	nice_release(recentBills_);
 	[super dealloc];
 }
 
@@ -255,6 +255,7 @@
 			for (NSMutableDictionary *bill in [results valueForKeyPath:@"rss.channel.item"]) {
 				NSString *billNumber = [bill valueForKeyPath:@"title.text"];
 				NSString *billDesc = [bill valueForKeyPath:@"description.text"];
+				NSString *billSession = [bill valueForKeyPath:@"link.text"];
 				if (IsEmpty(billNumber))
 					continue;
 				
@@ -263,11 +264,30 @@
 				if (!IsEmpty(billDesc))
 					[newBill setObject:billDesc forKey:@"title"];
 				
-				NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[HSBJCR]+ [0-9]+" 
+				NSRegularExpression *regex = nil;
+				
+				if (!IsEmpty(billSession)) {
+					regex = [NSRegularExpression regularExpressionWithPattern:@"LegSess=[0-9]+" 
+																	  options:NSRegularExpressionCaseInsensitive 
+																		error:&error];
+
+					NSTextCheckingResult *match = [regex firstMatchInString:billSession options:0 range:NSMakeRange(0, [billSession length])];
+					if (match && !NSEqualRanges(match.range, NSMakeRange(NSNotFound, 0))) {
+						// Since we know that we found a match, get the substring from the parent string by using our NSRange object
+						NSRange newRange;
+						newRange.location = match.range.location+8; // length of LegSess=
+						newRange.length = match.range.length-8;
+						NSString *session = [billSession substringWithRange:newRange];
+						if (!IsEmpty(session))
+							[newBill setObject:session forKey:@"session"];
+					}
+				}
+				
+				regex = [NSRegularExpression regularExpressionWithPattern:@"[HSBJCR]+ [0-9]+" 
 																					   options:NSRegularExpressionCaseInsensitive 
 																						 error:&error];
-				NSRange theRange = NSMakeRange(0, [billNumber length]);
-				NSTextCheckingResult *match = [regex firstMatchInString:billNumber options:0 range:theRange];
+
+				NSTextCheckingResult *match = [regex firstMatchInString:billNumber options:0 range:NSMakeRange(0, [billNumber length])];
 				if (match && !NSEqualRanges(match.range, NSMakeRange(NSNotFound, 0))) {
 					// Since we know that we found a match, get the substring from the parent string by using our NSRange object
 					NSString *billID = [billNumber substringWithRange:match.range];

@@ -107,6 +107,8 @@
 
 - (void)dealloc {
 	[[TexLegeReachability sharedTexLegeReachability] removeObserver:self forKeyPath:[self reachabilityStatusKey]];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"TABLEUPDATE_START" object:self.dataSource];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"TABLEUPDATE_END" object:self.dataSource];
 
 	//self.tableView = nil;
 	self.dataSource = nil; 

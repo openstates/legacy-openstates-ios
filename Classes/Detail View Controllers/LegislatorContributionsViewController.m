@@ -77,6 +77,8 @@
 
 
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:kContributionsDataNotifyLoaded object:self.dataSource];	
+
 	self.dataSource = nil;
     [super dealloc];
 }

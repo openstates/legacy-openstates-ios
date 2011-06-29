@@ -55,7 +55,6 @@
 	}	
 }
 
-
 - (void)dealloc {
 	self.webView = nil;
 	self.map = nil;

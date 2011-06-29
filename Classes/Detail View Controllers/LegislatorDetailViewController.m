@@ -127,6 +127,8 @@
 }
 
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
 	self.indivSlider = nil;
 	self.partySlider = nil;
 	self.allSlider = nil;

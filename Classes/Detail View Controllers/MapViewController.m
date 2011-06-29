@@ -135,7 +135,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 - (void) viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	
+		
 	NSURL *tempURL = [NSURL URLWithString:[UtilityMethods texLegeStringWithKeyPath:@"ExternalURLs.googleMapsWeb"]];		
 	if (![TexLegeReachability canReachHostWithURL:tempURL])// do we have a good URL/connection?
 		return;

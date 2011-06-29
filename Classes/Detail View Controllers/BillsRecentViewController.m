@@ -12,6 +12,7 @@
 #import "BillSearchDataSource.h"
 #import "NSDate+Helper.h"
 #import "StateMetaLoader.h"
+#import "TexLegeTheme.h"
 
 @implementation BillsRecentViewController
 
@@ -47,6 +48,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
+
 	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
 	if (IsEmpty(meta.selectedState))
 		return;

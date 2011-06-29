@@ -38,6 +38,9 @@
 }
 
 - (void) dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	self.billSearchDS = nil;
+
 	[super dealloc];
 }
 
@@ -52,8 +55,8 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 		
-	if (!billSearchDS)
-		billSearchDS = [[[BillSearchDataSource alloc] initWithSearchDisplayController:self.searchDisplayController] retain];
+	if (!self.billSearchDS)
+		self.billSearchDS = [[[BillSearchDataSource alloc] initWithSearchDisplayController:self.searchDisplayController] autorelease];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(reloadData:) name:kBillSearchNotifyDataLoaded object:billSearchDS];	
@@ -90,8 +93,7 @@
 
 - (void)viewDidUnload {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[billSearchDS release];
-	billSearchDS = nil;
+	self.billSearchDS = nil;
 	
 	[super viewDidUnload];
 }
@@ -203,13 +205,11 @@
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
 #if LIVE_SEARCHING == 1
-	if (_searchString) {
-		[_searchString release];
-		_searchString = nil;
-	}
-	if (searchString) {
-		_searchString = [searchString retain];
-		if ([_searchString length] >= 3) {
+	nice_release(_searchString);
+
+	if (searchString && [searchString length]) {
+		_searchString = [searchString copy];
+		if (_searchString && [_searchString length] >= 3) {
 			[self.billSearchDS startSearchForText:_searchString chamber:self.searchDisplayController.searchBar.selectedScopeButtonIndex];
 		}		
 	}
@@ -218,24 +218,20 @@
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
-	if (IsEmpty(controller.searchBar.text)) 
+	if (!controller || !controller.searchBar || !controller.searchBar.text || ![controller.searchBar.text length]) 
 		return NO;
 	
-	if (_searchString) {
-		[_searchString release];
-		_searchString = nil;
-	}
+	nice_release(_searchString);
+
 	_searchString = [controller.searchBar.text copy];
 	[self.billSearchDS startSearchForText:_searchString chamber:searchOption];
 	return NO;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
-	if (_searchString) {
-		[_searchString release];
-		_searchString = nil;
-	}
-	_searchString = [[[NSString alloc] initWithString:@""] retain];
+	nice_release(_searchString);
+
+	_searchString = [[NSString alloc] initWithString:@""];
 
 	self.searchDisplayController.searchBar.text = _searchString;
 	[self.searchDisplayController setActive:NO animated:YES];
@@ -246,10 +242,8 @@
 	if (IsEmpty(searchBar.text)) 
 		return;
 	
-	if (_searchString) {
-		[_searchString release];
-		_searchString = nil;
-	}
+	nice_release(_searchString);
+
 	_searchString = [searchBar.text copy];
 	//if ([_searchString length] >= 3) {
 		[self.billSearchDS startSearchForText:_searchString 
@@ -261,9 +255,11 @@
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
 	////////self.dataSource.hideTableIndex = YES;
 	// for some reason, these get zeroed out after we restart searching.
-	self.searchDisplayController.searchResultsTableView.rowHeight = self.tableView.rowHeight;
-	self.searchDisplayController.searchResultsTableView.backgroundColor = self.tableView.backgroundColor;
-	self.searchDisplayController.searchResultsTableView.sectionIndexMinimumDisplayRowCount = self.tableView.sectionIndexMinimumDisplayRowCount;
+	if (self.tableView && self.searchDisplayController.searchResultsTableView) {
+		self.searchDisplayController.searchResultsTableView.rowHeight = self.tableView.rowHeight;
+		self.searchDisplayController.searchResultsTableView.backgroundColor = self.tableView.backgroundColor;
+		self.searchDisplayController.searchResultsTableView.sectionIndexMinimumDisplayRowCount = self.tableView.sectionIndexMinimumDisplayRowCount;
+	}
 }
 
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {

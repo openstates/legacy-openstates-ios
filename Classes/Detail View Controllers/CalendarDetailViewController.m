@@ -93,6 +93,8 @@
 }
 
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+
 	self.chamberCalendar = nil;
 	self.webView = nil;
 	self.masterPopover = nil;

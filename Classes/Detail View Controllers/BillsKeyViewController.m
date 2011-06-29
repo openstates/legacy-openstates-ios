@@ -65,7 +65,7 @@
 - (void)dealloc {	
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 	
-	[keyBills_ release];
+	nice_release(keyBills_);
 	[super dealloc];
 }
 

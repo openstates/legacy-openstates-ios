@@ -51,7 +51,6 @@ enum _billSections {
 @synthesize masterPopover, headerView, descriptionView, statusView;
 
 @synthesize lab_description;
-@synthesize stat_filed, stat_thisPassComm, stat_thisPassVote, stat_thatPassComm, stat_thatPassVote, stat_governor, stat_isLaw;
 
 - (NSString *)nibName {
 	if ([UtilityMethods isIPadDevice])
@@ -72,18 +71,19 @@ enum _billSections {
     [super didReceiveMemoryWarning];
 }
 
+
 - (void)dealloc {
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
+	
 	self.bill = nil;
 	self.headerView = self.descriptionView = nil;
 	self.statusView = nil;
 	self.lab_description = nil;
-	self.stat_filed = self.stat_thisPassComm = self.stat_thisPassVote = self.stat_thatPassComm = self.stat_thatPassVote = self.stat_governor = self.stat_isLaw = nil;
 	self.masterPopover = nil;
 	self.starButton = nil;
 	self.actionHeader = nil;
-	if (voteDS)
-		[voteDS release];
+	nice_release(voteDS);
+
 	[super dealloc];
 }
 
@@ -99,13 +99,6 @@ enum _billSections {
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-/*	Whenever we figure out the stacking view thing.
-	if (self.statusView) {
-		self.statusView.resizeFrame = NO;
-		self.statusView.spacing = NO;
-		self.statusView.orientation = HORIZONTAL;
-	}	
-*/
 	voteDS = nil;
 	
 	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
@@ -135,9 +128,11 @@ enum _billSections {
 }
 
 - (void)viewDidUnload {
-	nice_release(voteDS);
+	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
+
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.	
 	self.starButton = nil;
+	nice_release(voteDS);
 	
 	[super viewDidUnload];
 }
@@ -280,6 +275,8 @@ enum _billSections {
 
 	BillActionParser *parser = [[BillActionParser alloc] init];
 	NSArray *tempList = [[parser parseStagesForBill:bill] allValues];
+	[parser release];
+	
 	if (NO == IsEmpty(tempList)) {
 		NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"stageNumber" ascending:YES];
 		tempList = [tempList sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDesc]];
@@ -291,7 +288,8 @@ enum _billSections {
 	if (self.starButton)
 		self.starButton.enabled = (newBill != nil);		
 
-	if (bill) [bill release], bill = nil;
+	nice_release(bill);
+	
 	if (newBill) {
 		bill = [newBill retain];
 		

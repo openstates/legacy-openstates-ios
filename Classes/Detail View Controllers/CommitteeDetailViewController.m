@@ -69,6 +69,8 @@ CGFloat quartzRowHeight = 73.f;
 #pragma mark View lifecycle
 
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+
 	self.dataObjectID = nil;
 	self.membershipLab = nil;
 	self.partisanSlider = nil;

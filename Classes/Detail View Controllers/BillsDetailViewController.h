@@ -19,7 +19,6 @@
 	IBOutlet AppendingFlowView *statusView;
 	IBOutlet UITextView *lab_description;
 	IBOutlet UIButton *starButton;
-	IBOutlet UILabel *stat_filed, *stat_thisPassComm, *stat_thisPassVote, *stat_thatPassComm, *stat_thatPassVote, *stat_governor, *stat_isLaw;
 	IBOutlet DDActionHeaderView *actionHeader;
 	id dataObject;
 	BillVotesDataSource *voteDS;
@@ -31,8 +30,6 @@
 @property (nonatomic,retain) IBOutlet UITextView *lab_description;
 @property (nonatomic,retain) IBOutlet UIButton *starButton;
 @property (nonatomic,retain) IBOutlet DDActionHeaderView *actionHeader;
-@property (nonatomic,retain) IBOutlet UILabel *stat_filed, *stat_thisPassComm, *stat_thisPassVote, *stat_thatPassComm, *stat_thatPassVote, *stat_governor, *stat_isLaw;
-
 
 @property (nonatomic,retain) UIPopoverController *masterPopover;
 @property (nonatomic,retain) IBOutlet NSMutableDictionary *bill;

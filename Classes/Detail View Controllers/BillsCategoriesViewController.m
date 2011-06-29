@@ -46,10 +46,8 @@
 - (void)dealloc {	
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 	self.chamberControl = nil;
-	if (updated)
-		[updated release], updated = nil;
-	if (categories_)
-		[categories_ release], categories_ = nil;
+	nice_release(updated);
+	nice_release(categories_);
 	[super dealloc];
 }
 

@@ -71,12 +71,10 @@
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
 	self.navigationItem.titleView = self.filterControls;
 	
-	self.searchDisplayController.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:
-																stringForChamber(BOTH_CHAMBERS, TLReturnFull),
-																stringForChamber(HOUSE, TLReturnFull),
-																stringForChamber(SENATE, TLReturnFull),
-																nil];
-	
+	[self.chamberControl setTitle:stringForChamber(BOTH_CHAMBERS, TLReturnFull) forSegmentAtIndex:0];
+	[self.chamberControl setTitle:stringForChamber(HOUSE, TLReturnFull) forSegmentAtIndex:1];
+	[self.chamberControl setTitle:stringForChamber(SENATE, TLReturnFull) forSegmentAtIndex:2];
+		
 }
 
 - (void)viewDidUnload {
