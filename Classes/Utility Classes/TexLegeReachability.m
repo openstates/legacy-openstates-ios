@@ -219,7 +219,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 	}
 	else if (![TexLegeReachability isHostReachable:[url host]]) {
 		if (doAlert) {
-			[self noHostAlert];
+			[TexLegeReachability noHostAlert];
 		}
 	}
 	else {
