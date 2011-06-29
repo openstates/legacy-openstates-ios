@@ -10,6 +10,8 @@
 #import "UtilityMethods.h"
 #import "OpenLegislativeAPIs.h"
 
+#define ALLOW_SLOW_DNS_LOOKUPS	0
+
 @interface TexLegeReachability (Private)
 - (void)updateStatusWithReachability:(Reachability*) curReach;
 @end
@@ -35,13 +37,13 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
  */
 
 - (void)dealloc {
-	[hostReach release];
-	[openstatesReach release];
-	[texlegeReach release];
-	[tloReach release];
-	[googleReach release];
-	[internetReach release];
-	[wifiReach release];
+	nice_release(hostReach);
+	nice_release(openstatesReach);
+	nice_release(texlegeReach);
+	nice_release(tloReach);
+	nice_release(googleReach);
+	nice_release(internetReach);
+	nice_release(wifiReach);
 	[super dealloc];
 }
 
@@ -185,11 +187,15 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 	else if ([host isEqualToString:osApiHost])
 		reachable = [[TexLegeReachability sharedTexLegeReachability] openstatesConnectionStatus] > NotReachable;
 	else {
+#if ALLOW_SLOW_DNS_LOOKUPS
 		Reachability *curReach = [Reachability reachabilityWithHostName:host];
 		if (curReach) {
 			NetworkStatus status = [curReach currentReachabilityStatus];
 			reachable = status > NotReachable;
 		}
+#else
+		reachable = [[TexLegeReachability sharedTexLegeReachability] isNetworkReachable];
+#endif
 	}
 	return reachable;
 }
