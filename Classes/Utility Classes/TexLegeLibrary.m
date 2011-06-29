@@ -38,7 +38,7 @@ NSString *abbreviateString(NSString *inString) {
 
 NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {	
 	NSDictionary *stateMeta = [[StateMetaLoader sharedStateMeta] stateMetadata];
-
+	
 	NSString *chamberName = nil;
 	if (NO == IsEmpty(stateMeta)) {
 		if (chamber == SENATE)
@@ -46,7 +46,7 @@ NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
 		else if (chamber == HOUSE) {
 			chamberName = [stateMeta objectForKey:kMetaLowerChamberNameKey];
 		}
-		if (NO == IsEmpty(chamberName)) {	// shorten the ting if its a couple of sentences long
+		if (NO == IsEmpty(chamberName)) {	// shorten the thing if its a couple of sentences long
 			chamberName = abbreviateString(chamberName);	
 			// Just shortens it to the first word (at least that's how we set it up in the file
 			
