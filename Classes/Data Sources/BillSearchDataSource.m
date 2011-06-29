@@ -239,7 +239,7 @@
 		
 	RKRequest *request = nil;
 	
-	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:YES])
+	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:osApiBaseURL] alert:NO])
 	{		
 		if (useLoadingDataCell)
 			loadingStatus = LOADING_ACTIVE;
@@ -358,8 +358,12 @@
 
 - (void)pruneBillsForAuthor:(NSString *)sponsorID {
 	// We must be requesting specific bills for a given sponsors
-	debug_NSLog(@"Pruning the list of sought-after bills for a given sponsor...");
 
+	if (IsEmpty(_rows))
+		return;
+
+	debug_NSLog(@"Pruning the list of sought-after bills for a given sponsor...");
+	
 	NSArray *tempRows = [[NSArray alloc] initWithArray:_rows];
 	
 	for (NSDictionary *bill in tempRows) {
@@ -399,14 +403,16 @@
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:self];
 
-	UIAlertView *alert = [[ UIAlertView alloc ] 
-						   initWithTitle:NSLocalizedStringFromTable(@"Network Error", @"AppAlerts", @"Title for alert stating there's been an error when connecting to a server")
-						   message:NSLocalizedStringFromTable(@"There was an error while contacting the server for bill information.  Please check your network connectivity or try again.", @"AppAlerts", @"")
-						   delegate:nil // we're static, so don't do "self"
-						   cancelButtonTitle: NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")
-						   otherButtonTitles:nil];
-	[ alert show ];	
-	[ alert release];
+	if (!useLoadingDataCell) {	// if we don't have some visual cue (loading cell) already, send up an alert
+		UIAlertView *alert = [[ UIAlertView alloc ] 
+							   initWithTitle:NSLocalizedStringFromTable(@"Network Error", @"AppAlerts", @"Title for alert stating there's been an error when connecting to a server")
+							   message:NSLocalizedStringFromTable(@"There was an error while contacting the server for bill information.  Please check your network connectivity or try again.", @"AppAlerts", @"")
+							   delegate:nil // we're static, so don't do "self"
+							   cancelButtonTitle: NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")
+							   otherButtonTitles:nil];
+		[ alert show ];	
+		[ alert release];
+	}
 	
 }
 
