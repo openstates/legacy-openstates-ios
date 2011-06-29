@@ -91,7 +91,6 @@
 		374C37051215EB2D006B6ADA /* LinksMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374C37041215EB2D006B6ADA /* LinksMasterViewController.m */; };
 		374DA89B1325C6FB00CCBC40 /* CapitolMaps.plist in Resources */ = {isa = PBXBuildFile; fileRef = 374DA89A1325C6FB00CCBC40 /* CapitolMaps.plist */; };
 		374DA89C1325C6FB00CCBC40 /* CapitolMaps.plist in Resources */ = {isa = PBXBuildFile; fileRef = 374DA89A1325C6FB00CCBC40 /* CapitolMaps.plist */; };
-		374DCF52134A086400CA3FFE /* BillStageStackPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 374DCF50134A086400CA3FFE /* BillStageStackPanel.m */; };
 		374E2A6B12360C6E0005E245 /* TexLegeMapPins.m in Sources */ = {isa = PBXBuildFile; fileRef = 374E2A6A12360C6E0005E245 /* TexLegeMapPins.m */; };
 		374F70A612FD45D600AD7EEC /* TexLegeNavBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 374F70A512FD45D600AD7EEC /* TexLegeNavBar.m */; };
 		37507ED5130F64BF00A925F5 /* 11-clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C81A120344D000507757 /* 11-clock.png */; };
@@ -1142,6 +1141,7 @@
 		379393FE123B1A82003103B3 /* CommitteeMemberCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 379393FD123B1A82003103B3 /* CommitteeMemberCellView.m */; };
 		3794A781131CD7FA00D0B648 /* TexLege 4.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 3794A692131CABF900D0B648 /* TexLege 4.xcdatamodel */; };
 		379B9CD11250FE7E0032E616 /* TexLegeReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 379B9CD01250FE7E0032E616 /* TexLegeReachability.m */; };
+		379BD08513B3A4CB0075D484 /* UIView+JMNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 379BD08313B3A4CB0075D484 /* UIView+JMNoise.m */; };
 		379C1EEA1012DF28007844B5 /* NotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 379C1EE81012DF28007844B5 /* NotesViewController.m */; };
 		379C1F031012E0CD007844B5 /* NotesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 379C1F021012E0CD007844B5 /* NotesView.xib */; };
 		379C8C8B139A03230035C321 /* grabthumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 379C8C89139A03230035C321 /* grabthumb.png */; };
@@ -1586,8 +1586,6 @@
 		374C37031215EB2D006B6ADA /* LinksMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LinksMasterViewController.h; path = "Classes/Master View Controllers/LinksMasterViewController.h"; sourceTree = SOURCE_ROOT; };
 		374C37041215EB2D006B6ADA /* LinksMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LinksMasterViewController.m; path = "Classes/Master View Controllers/LinksMasterViewController.m"; sourceTree = SOURCE_ROOT; };
 		374DA89A1325C6FB00CCBC40 /* CapitolMaps.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = CapitolMaps.plist; path = SeedDB/CapitolMaps.plist; sourceTree = "<group>"; };
-		374DCF4F134A086400CA3FFE /* BillStageStackPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillStageStackPanel.h; sourceTree = "<group>"; };
-		374DCF50134A086400CA3FFE /* BillStageStackPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillStageStackPanel.m; sourceTree = "<group>"; };
 		374E2A6912360C6E0005E245 /* TexLegeMapPins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeMapPins.h; sourceTree = "<group>"; };
 		374E2A6A12360C6E0005E245 /* TexLegeMapPins.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeMapPins.m; sourceTree = "<group>"; };
 		374F70A412FD45D600AD7EEC /* TexLegeNavBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeNavBar.h; sourceTree = "<group>"; };
@@ -2088,6 +2086,8 @@
 		3794A692131CABF900D0B648 /* TexLege 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TexLege 4.xcdatamodel"; sourceTree = "<group>"; };
 		379B9CCF1250FE7E0032E616 /* TexLegeReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeReachability.h; sourceTree = "<group>"; };
 		379B9CD01250FE7E0032E616 /* TexLegeReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeReachability.m; sourceTree = "<group>"; };
+		379BD08213B3A4CB0075D484 /* UIView+JMNoise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+JMNoise.h"; sourceTree = "<group>"; };
+		379BD08313B3A4CB0075D484 /* UIView+JMNoise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+JMNoise.m"; sourceTree = "<group>"; };
 		379C1EE81012DF28007844B5 /* NotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotesViewController.m; path = "Classes/Detail View Controllers/NotesViewController.m"; sourceTree = SOURCE_ROOT; };
 		379C1EE91012DF28007844B5 /* NotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotesViewController.h; path = "Classes/Detail View Controllers/NotesViewController.h"; sourceTree = SOURCE_ROOT; };
 		379C1F021012E0CD007844B5 /* NotesView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = NotesView.xib; path = Resources/NotesView.xib; sourceTree = "<group>"; };
@@ -3022,6 +3022,15 @@
 			path = "Core Data Classes";
 			sourceTree = "<group>";
 		};
+		379BD08113B3A4CB0075D484 /* JMNoise */ = {
+			isa = PBXGroup;
+			children = (
+				379BD08213B3A4CB0075D484 /* UIView+JMNoise.h */,
+				379BD08313B3A4CB0075D484 /* UIView+JMNoise.m */,
+			);
+			path = JMNoise;
+			sourceTree = "<group>";
+		};
 		379C8C7C139A02F90035C321 /* GrabThumb */ = {
 			isa = PBXGroup;
 			children = (
@@ -3155,6 +3164,7 @@
 		37AD57B511DA644900D68934 /* Custom Cells and Views */ = {
 			isa = PBXGroup;
 			children = (
+				379BD08113B3A4CB0075D484 /* JMNoise */,
 				37F2CA0A1343ADFC001D9D7B /* DDActionHeaderView */,
 				37D3780413A191E900621CB4 /* AppendingFlowView.h */,
 				37D3780513A191E900621CB4 /* AppendingFlowView.m */,
@@ -3163,8 +3173,6 @@
 				37094D95133B162E00B9693C /* TexLegeBadgeGroupCell.m */,
 				370B9DCE122AD22C00AC9CC8 /* TexLegeStandardGroupCell.h */,
 				370B9DCF122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m */,
-				374DCF4F134A086400CA3FFE /* BillStageStackPanel.h */,
-				374DCF50134A086400CA3FFE /* BillStageStackPanel.m */,
 				376850201234AAFD00AEEC3D /* PartisanScaleView.h */,
 				376850211234AAFD00AEEC3D /* PartisanScaleView.m */,
 				37D46BFF123B483800C2C403 /* CommitteeMemberCell.h */,
@@ -5390,7 +5398,6 @@
 				376C1CC31345A7EB009436B5 /* XMLReader.m in Sources */,
 				371A447313467C8C00DFDBB8 /* BillsTodayViewController.m in Sources */,
 				376DFEB713492FF800360BF4 /* LoadingCell.m in Sources */,
-				374DCF52134A086400CA3FFE /* BillStageStackPanel.m in Sources */,
 				3763ED6F1354E0F4000E524C /* UIImage+ResolutionIndependent.m in Sources */,
 				37D0D1E81357A198003DA1BB /* CommitteeObj.m in Sources */,
 				37D0D1E91357A198003DA1BB /* LinkObj.m in Sources */,
@@ -5415,6 +5422,7 @@
 				37CD0A6B13A340E100F4C68B /* NSString+DKAdditions.m in Sources */,
 				3770C66813A49BE800906021 /* BillActionParser.m in Sources */,
 				3768E93C13B156F600BA5A67 /* SVWebViewController.m in Sources */,
+				379BD08513B3A4CB0075D484 /* UIView+JMNoise.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5535,39 +5543,18 @@
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
-				"ARCHS[sdk=iphonesimulator*]" = i386;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = TexLege;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		1D6058950D05DD3E006BFB54 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
-				"ARCHS[sdk=iphonesimulator*]" = i386;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Gregory Combs (MJMLU3U99Y)";
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -5655,11 +5642,17 @@
 				ADDITIONAL_SDKS = "";
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
+				"ARCHS[sdk=iphonesimulator*]" = i386;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CURRENT_PROJECT_VERSION = 2.5;
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DEBUGGING_SYMBOLS = full;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -5681,11 +5674,12 @@
 					"-all_load",
 					"-lxml2",
 				);
-				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
+				SEPARATE_STRIP = YES;
+				STRIP_STYLE = all;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
@@ -5697,16 +5691,8 @@
 		377629CA102A0A45004700EC /* iTunes Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
-				"ARCHS[sdk=iphonesimulator*]" = i386;
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PREBINDING = NO;
 			};
 			name = "iTunes Distribution";
 		};
@@ -5716,12 +5702,18 @@
 				ADDITIONAL_SDKS = "";
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
+				"ARCHS[sdk=iphonesimulator*]" = i386;
 				CODE_SIGN_ENTITLEMENTS = Data/Entitlements.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Gregory Combs";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Gregory Combs";
 				CURRENT_PROJECT_VERSION = 2.5;
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DEBUGGING_SYMBOLS = full;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -5744,13 +5736,15 @@
 					"-all_load",
 					"-lxml2",
 				);
-				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
 				PROVISIONING_PROFILE = "C7A58625-FE56-4B4B-AF02-6C4684EF4ECE";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C7A58625-FE56-4B4B-AF02-6C4684EF4ECE";
 				SDKROOT = iphoneos;
+				SEPARATE_STRIP = YES;
+				STRIP_STYLE = all;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
+				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "";
 				VERSION_INFO_BUILDER = greg;
 			};
@@ -5759,18 +5753,9 @@
 		37B2D28510224AC900B493C8 /* AdHoc Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
-				"ARCHS[sdk=iphonesimulator*]" = i386;
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "AdHoc Distribution";
 		};
@@ -5780,13 +5765,18 @@
 				ADDITIONAL_SDKS = "";
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
+				"ARCHS[sdk=iphonesimulator*]" = i386;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 2.5;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DEBUGGING_SYMBOLS = full;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -5809,13 +5799,13 @@
 					"-all_load",
 					"-lxml2",
 				);
-				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
+				SEPARATE_STRIP = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
-				STRIP_STYLE = debugging;
+				STRIP_STYLE = all;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 				VERSIONING_SYSTEM = "";
@@ -5829,11 +5819,18 @@
 				ADDITIONAL_SDKS = "";
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Gregory Combs";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Gregory Combs";
+				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
+				"ARCHS[sdk=iphonesimulator*]" = i386;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 2.5;
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DEBUGGING_SYMBOLS = full;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -5848,7 +5845,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../../Frameworks/Localytics\"",
 				);
-				LLVM_LTO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-licucore",
@@ -5856,13 +5852,16 @@
 					"-all_load",
 					"-lxml2",
 				);
-				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
-				PROVISIONING_PROFILE = "EEEF3965-982D-44FE-A704-5FD26393F455";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EEEF3965-982D-44FE-A704-5FD26393F455";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
+				SEPARATE_STRIP = YES;
+				STRIP_INSTALLED_PRODUCT = YES;
+				STRIP_STYLE = all;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
+				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "";
 				VERSION_INFO_BUILDER = greg;
 			};
