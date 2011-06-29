@@ -237,7 +237,7 @@ STAGE7:Bill becomes law / Bill does not become law
 				
 				if ([stage shouldPromoteTypeTo:FlowStagePending] &&
 					([types containsObject:@"bill:reading:2"] ||
-					 [types containsObject:@"bill:reading:3"])) {						
+					 [types containsObject:@"bill:reading:3"])) {
 						stage.stageType = FlowStagePending;
 					}
 				
