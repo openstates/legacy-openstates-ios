@@ -9,6 +9,7 @@
 
 #import "PartisanScaleView.h"
 #import "TexLegeTheme.h"
+//#import "UIView+JMNoise.h"
 
 const CGFloat kPartisanScaleViewWidth = 172.0f;
 const CGFloat kPartisanScaleViewHeight = 32.0f;
@@ -194,6 +195,8 @@ const CGFloat kPartisanScaleViewHeight = 32.0f;
 	CGContextRestoreGState(context);
 	CGPathRelease(path);
 	
+	//[self drawCGNoiseWithOpacity:.08f];
+
 	if (self.showUnknown) {
 		if (!self.questionImage) {
 			NSString *imageString = /*(self.usesSmallStar) ? @"Slider_Question.png" :*/ @"Slider_Question_big.png";
@@ -307,6 +310,7 @@ const CGFloat kPartisanScaleViewHeight = 32.0f;
 		CGContextEndTransparencyLayer(context);
 		CGContextRestoreGState(context);
 	}
+
 	CGContextRestoreGState(context);
 	CGColorSpaceRelease(space);
 }

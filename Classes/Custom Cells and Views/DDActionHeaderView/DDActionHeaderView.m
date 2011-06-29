@@ -26,6 +26,7 @@
 
 #import "DDActionHeaderView.h"
 #import "TexLegeTheme.h"
+//#import "UIView+JMNoise.h"
 
 @interface DDActionHeaderView ()
 @property(nonatomic, retain) UILabel *titleLabel;
@@ -104,6 +105,7 @@
 	[tapGesture release];
 #endif		
 	borderGradientHidden_ = NO;	
+	
 }
 
 - (void)dealloc {
@@ -157,7 +159,9 @@
     [self drawLineInRect:CGRectMake(0.0f, 0.0f, rect.size.width, 0.0f) colors:line1];
     
     CGFloat line2[]={94.0f / 255.0f,  103.0f / 255.0f, 109.0f / 255.0f, 1.0f};
-    [self drawLineInRect:CGRectMake(0.0f, 64.5f, rect.size.width, 0.0f) colors:line2];        
+    [self drawLineInRect:CGRectMake(0.0f, 64.5f, rect.size.width, 0.0f) colors:line2];      
+	
+	//[self drawCGNoiseWithOpacity:0.08f];
 }
 
 #pragma mark Drawing private methods
