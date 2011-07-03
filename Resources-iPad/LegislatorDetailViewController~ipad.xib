@@ -3,7 +3,7 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1024</int>
 		<string key="IBDocument.SystemVersion">10J869</string>
-		<string key="IBDocument.InterfaceBuilderVersion">851</string>
+		<string key="IBDocument.InterfaceBuilderVersion">904</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
@@ -4936,11 +4936,11 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">newChartView</string>
+						<string key="label">chartView</string>
 						<reference key="source" ref="372490531"/>
 						<reference key="destination" ref="683478895"/>
 					</object>
-					<int key="connectionID">222</int>
+					<int key="connectionID">223</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -5163,7 +5163,7 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">222</int>
+			<int key="maxID">223</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -5183,6 +5183,7 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="allSlider">PartisanScaleView</string>
+						<string key="chartView">S7GraphView</string>
 						<string key="freshmanPlotLab">UILabel</string>
 						<string key="headerView">UIView</string>
 						<string key="indivSlider">PartisanScaleView</string>
@@ -5197,13 +5198,16 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 						<string key="leg_reelection">UILabel</string>
 						<string key="leg_tenureLab">UILabel</string>
 						<string key="miniBackgroundView">UIView</string>
-						<string key="newChartView">S7GraphView</string>
 						<string key="partySlider">PartisanScaleView</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="allSlider">
 							<string key="name">allSlider</string>
 							<string key="candidateClassName">PartisanScaleView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="chartView">
+							<string key="name">chartView</string>
+							<string key="candidateClassName">S7GraphView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="freshmanPlotLab">
 							<string key="name">freshmanPlotLab</string>
@@ -5260,10 +5264,6 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 						<object class="IBToOneOutletInfo" key="miniBackgroundView">
 							<string key="name">miniBackgroundView</string>
 							<string key="candidateClassName">UIView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="newChartView">
-							<string key="name">newChartView</string>
-							<string key="candidateClassName">S7GraphView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="partySlider">
 							<string key="name">partySlider</string>
