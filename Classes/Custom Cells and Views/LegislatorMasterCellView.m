@@ -75,10 +75,10 @@ const CGFloat kLegislatorMasterCellViewHeight = 73.0f;
 
 - (void)dealloc
 {
-	[questionImage release];
-	[title release];
-	[name release];
-	[tenure release];
+	nice_release(questionImage);
+	nice_release(title);
+	nice_release(name);
+	nice_release(tenure);
 	[super dealloc];
 }
 

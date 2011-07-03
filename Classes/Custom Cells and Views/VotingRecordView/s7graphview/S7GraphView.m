@@ -179,22 +179,22 @@
 
 - (void)dealloc {
 	
-	[_xValuesFormatter release];
-	[_yValuesFormatter release];
+	nice_release(_xValuesFormatter);
+	nice_release(_yValuesFormatter);
 	
-	[_xValuesColor release];
-	[_yValuesColor release];
+	nice_release(_xValuesColor);
+	nice_release(_yValuesColor);
 	
-	[_gridXColor release];
-	[_gridYColor release];
+	nice_release(_gridXColor);
+	nice_release(_gridYColor);
 	
-	[_info release];
-	[_infoColor release];
+	nice_release(_info);
+	nice_release(_infoColor);
     
-    [_xUnit release];
-    [_yUnit release];
+    nice_release(_xUnit);
+    nice_release(_yUnit);
 	
-	[_highlightColor release];
+	nice_release(_highlightColor);
 	[super dealloc];
 }
 

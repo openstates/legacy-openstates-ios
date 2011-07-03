@@ -109,10 +109,10 @@
 }
 
 - (void)dealloc {
-    [titleLabel_ release];
-    [items_ release];
-    [actionPickerView_ release];
-    [actionPickerGradientLayer_ release];
+    nice_release(titleLabel_);
+    nice_release(items_);
+    nice_release(actionPickerView_);
+    nice_release(actionPickerGradientLayer_);
     
     [super dealloc];
 }

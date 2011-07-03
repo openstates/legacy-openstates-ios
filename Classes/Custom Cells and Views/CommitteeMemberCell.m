@@ -65,7 +65,8 @@
 
 
 - (void)dealloc {
-	[cellView release], cellView = nil;
+	if (cellView)
+		[cellView release], cellView = nil;
 	
     [super dealloc];
 }

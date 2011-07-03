@@ -63,7 +63,7 @@ const CGFloat kPartisanScaleViewHeight = 32.0f;
 
 - (void)dealloc
 {
-	[questionImage release];
+	nice_release(questionImage);
 	[super dealloc];
 }
 

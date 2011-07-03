@@ -87,12 +87,13 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 
 - (void)dealloc
 {
-	[title release];
-	[name release];
-	[tenure release];
-	[party release];
-	[rank release];
-	[district release];
+	nice_release(title);
+	nice_release(name);
+	nice_release(tenure);
+	nice_release(party);
+	nice_release(rank);
+	nice_release(district);
+	
 	[super dealloc];
 }
 

@@ -65,7 +65,7 @@
 
 
 - (void)dealloc {
-	[cellView release], cellView = nil;
+	nice_release(cellView);
 	
     [super dealloc];
 }
