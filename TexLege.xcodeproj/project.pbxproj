@@ -483,10 +483,8 @@
 		37674B341002C492003FD09F /* Map.FloorE2.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B2D1002C492003FD09F /* Map.FloorE2.pdf */; };
 		376850221234AAFD00AEEC3D /* PartisanScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 376850211234AAFD00AEEC3D /* PartisanScaleView.m */; };
 		3768E93913B156F600BA5A67 /* SVWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3768E93613B156F600BA5A67 /* SVWebViewController.m */; };
-		3768E93A13B156F600BA5A67 /* SVWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3768E93713B156F600BA5A67 /* SVWebViewController.xib */; };
 		3768E93B13B156F600BA5A67 /* SVWebViewController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3768E93813B156F600BA5A67 /* SVWebViewController.bundle */; };
 		3768E93C13B156F600BA5A67 /* SVWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3768E93613B156F600BA5A67 /* SVWebViewController.m */; };
-		3768E93D13B156F600BA5A67 /* SVWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3768E93713B156F600BA5A67 /* SVWebViewController.xib */; };
 		3768E93E13B156F600BA5A67 /* SVWebViewController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3768E93813B156F600BA5A67 /* SVWebViewController.bundle */; };
 		376AE79D13445CA400825C4D /* BillsKeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376AE79C13445CA400825C4D /* BillsKeyViewController.m */; };
 		376AE79E13445CA400825C4D /* BillsKeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376AE79C13445CA400825C4D /* BillsKeyViewController.m */; };
@@ -1977,7 +1975,6 @@
 		376850211234AAFD00AEEC3D /* PartisanScaleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PartisanScaleView.m; path = "Classes/Custom Cells and Views/PartisanScaleView.m"; sourceTree = SOURCE_ROOT; };
 		3768E93513B156F600BA5A67 /* SVWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVWebViewController.h; sourceTree = "<group>"; };
 		3768E93613B156F600BA5A67 /* SVWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVWebViewController.m; sourceTree = "<group>"; };
-		3768E93713B156F600BA5A67 /* SVWebViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SVWebViewController.xib; sourceTree = "<group>"; };
 		3768E93813B156F600BA5A67 /* SVWebViewController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVWebViewController.bundle; sourceTree = "<group>"; };
 		376AE79B13445CA400825C4D /* BillsKeyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsKeyViewController.h; sourceTree = "<group>"; };
 		376AE79C13445CA400825C4D /* BillsKeyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsKeyViewController.m; sourceTree = "<group>"; };
@@ -2812,7 +2809,6 @@
 			children = (
 				3768E93513B156F600BA5A67 /* SVWebViewController.h */,
 				3768E93613B156F600BA5A67 /* SVWebViewController.m */,
-				3768E93713B156F600BA5A67 /* SVWebViewController.xib */,
 				3768E93813B156F600BA5A67 /* SVWebViewController.bundle */,
 			);
 			name = SVWebViewController;
@@ -4615,7 +4611,6 @@
 				378ABD37139F0BCA00928FBF /* StateSpecific.strings in Resources */,
 				37CD0A9413A3567900F4C68B /* Abbreviations.strings in Resources */,
 				372C280F13B06C7500836162 /* iPadTabBarController.xib in Resources */,
-				3768E93A13B156F600BA5A67 /* SVWebViewController.xib in Resources */,
 				3768E93B13B156F600BA5A67 /* SVWebViewController.bundle in Resources */,
 				375F316313B238CC0002F12F /* action.png in Resources */,
 				375F316413B238CC0002F12F /* action@2x.png in Resources */,
@@ -5137,7 +5132,6 @@
 				378ABD36139F0BCA00928FBF /* StandardUI.strings in Resources */,
 				378ABD38139F0BCA00928FBF /* StateSpecific.strings in Resources */,
 				37CD0A9313A3567900F4C68B /* Abbreviations.strings in Resources */,
-				3768E93D13B156F600BA5A67 /* SVWebViewController.xib in Resources */,
 				3768E93E13B156F600BA5A67 /* SVWebViewController.bundle in Resources */,
 				375F316513B238CC0002F12F /* action.png in Resources */,
 				375F316613B238CC0002F12F /* action@2x.png in Resources */,
@@ -5545,6 +5539,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = TexLege;
 			};
 			name = Debug;
@@ -5554,6 +5549,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = TexLege;
 			};
 			name = Release;
@@ -5565,7 +5561,6 @@
 				"ARCHS[sdk=iphonesimulator*]" = i386;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
@@ -5588,14 +5583,12 @@
 				"ARCHS[sdk=iphonesimulator*]" = i386;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Gregory Combs (MJMLU3U99Y)";
 				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "Info (Seed).plist";
 				INSTALL_PATH = /Applications;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -5607,13 +5600,11 @@
 				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
 				"ARCHS[sdk=iphonesimulator*]" = i386;
 				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
 				INFOPLIST_FILE = "Info (Seed).plist";
 				INSTALL_PATH = /Applications;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PREBINDING = NO;
 				PRODUCT_NAME = TexLege;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -5625,13 +5616,11 @@
 				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
 				"ARCHS[sdk=iphonesimulator*]" = i386;
 				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
 				INFOPLIST_FILE = "Info (Seed).plist";
 				INSTALL_PATH = /Applications;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PREBINDING = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "iTunes Distribution";
@@ -5649,10 +5638,11 @@
 				CURRENT_PROJECT_VERSION = 2.5;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DEBUGGING_SYMBOLS = full;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
+				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv6]" = NO;
+				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv7]" = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -5693,6 +5683,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = "iTunes Distribution";
 		};
@@ -5710,10 +5701,11 @@
 				CURRENT_PROJECT_VERSION = 2.5;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DEBUGGING_SYMBOLS = full;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
+				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv6]" = NO;
+				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv7]" = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -5755,6 +5747,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = TexLege;
 			};
 			name = "AdHoc Distribution";
@@ -5773,11 +5766,12 @@
 				CURRENT_PROJECT_VERSION = 2.5;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DEBUGGING_SYMBOLS = full;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv6]" = NO;
+				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv7]" = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -5826,11 +5820,12 @@
 				CURRENT_PROJECT_VERSION = 2.5;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DEBUGGING_SYMBOLS = full;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
+				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv6]" = NO;
+				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv7]" = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
