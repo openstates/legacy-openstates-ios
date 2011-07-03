@@ -59,6 +59,7 @@
 		isFresh = NO;
 		_currentSession = nil;
 		_selectedState = nil;
+		_loadingStates = [[NSMutableArray alloc] init];
 		
 		[[NSUserDefaults standardUserDefaults] synchronize];
 		NSString *tempState = [[NSUserDefaults standardUserDefaults] objectForKey:kMetaSelectedStateKey];
@@ -77,7 +78,7 @@
 	nice_release(_metadata);
 	nice_release(_currentSession);
 	nice_release(_selectedState);
-	
+	nice_release(_loadingStates);
 	[super dealloc];
 }
 
@@ -96,7 +97,9 @@
 }
 
 - (NSMutableDictionary *)metadataFromCache {
+	
 	nice_release(_metadata);
+	
 	NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kStateMetaFile];
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	if ([fileManager fileExistsAtPath:localPath]) {
@@ -111,7 +114,12 @@
 - (void)loadMetadataForState:(NSString *)stateID {
 	RKRequest *request = nil;
 	
+	if (IsEmpty(stateID) || [_loadingStates containsObject:stateID])	// we're already working on it
+		return;
+	
 	isFresh = NO;
+	[_loadingStates addObject:stateID];	// add it to our list of active loads
+	
 	RKClient *osApiClient = [[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient];
 	NSDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:osApiKeyValue, @"apikey",nil];
 	NSString *method = [NSString stringWithFormat:@"/metadata/%@", stateID];
@@ -218,10 +226,13 @@
 		NSString *wantedStateID = nil;
 		if (request.userData) {	// try getting our new state id from our initial query info
 			wantedStateID = [request.userData objectForKey:kMetaSelectedStateKey];
+			if (!IsEmpty(wantedStateID) && [_loadingStates containsObject:wantedStateID]) {
+				[_loadingStates removeObject:wantedStateID];
+			}			
 		}
 		
 		NSString *gotStateID = [stateMeta objectForKey:kMetaStateAbbrevKey];
-		
+				
 		if (IsEmpty(wantedStateID) || IsEmpty(gotStateID) || NO == [wantedStateID isEqualToString:gotStateID]) {
 			NSLog(@"StateMetaDataLoader: requested metadata for %@, but incoming data is for %@", wantedStateID, gotStateID);
 			[self request:request didFailLoadWithError:nil];
@@ -233,6 +244,10 @@
 		if (NO == IsEmpty(gotStateID)) {
 			[_metadata setObject:stateMeta forKey:gotStateID];
 		
+			if ([_loadingStates containsObject:gotStateID]) {
+				[_loadingStates removeObject:gotStateID];
+			}
+			
 			NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kStateMetaFile];
 			if (![[_metadata JSONData] writeToFile:localPath atomically:YES])
 				NSLog(@"StateMetadataLoader: error writing cache to file: %@", localPath);

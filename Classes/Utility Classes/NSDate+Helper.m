@@ -11,7 +11,14 @@
 @implementation TexLegeDateHelper
 @synthesize formatter = t_formatter, calendar = t_calendar, modFormatter = t_modFormatter;
 
-SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeDateHelper);
++ (id)sharedTexLegeDateHelper
+{
+	static dispatch_once_t pred;
+	static TexLegeDateHelper *foo = nil;
+	
+	dispatch_once(&pred, ^{ foo = [[self alloc] init]; });
+	return foo;
+}
 
 - (id)init {
 	if ((self=[super init])) {

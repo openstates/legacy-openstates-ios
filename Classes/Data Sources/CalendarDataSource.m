@@ -85,8 +85,7 @@
 	[calendar release];
 	[calendarDict removeAllObjects];
 
-	chamberIndex++;
-	for (chamberIndex=chamberIndex; chamberIndex < numberOfChambers; chamberIndex++) {
+	for (chamberIndex=HOUSE; chamberIndex < numberOfChambers; chamberIndex++) {
 		chamberName = stringForChamber(chamberIndex, TLReturnFull);
 		localizedString = [NSString stringWithFormat:NSLocalizedStringFromTable(@"Upcoming %@ Meetings", @"DataTableUI", @"Menu item to display upcoming calendar events in a legislative chamber"), 
 						   chamberName];
@@ -97,7 +96,7 @@
 		[calendar release];
 		[calendarDict removeAllObjects];
 	}
-	
+	[calendarDict release];
 	[pool drain];
 	
 }
@@ -128,7 +127,7 @@
 	
 	/* Not found in queue, create a new cell object */
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewStylePlain reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.textLabel.textColor =	[TexLegeTheme textDark];
 		cell.textLabel.textAlignment = UITextAlignmentLeft;
 		cell.textLabel.font = [UIFont boldSystemFontOfSize:15];

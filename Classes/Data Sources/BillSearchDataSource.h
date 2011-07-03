@@ -12,7 +12,7 @@
 #define kBillSearchNotifyDataError	@"BILLSEARCH_DATA_ERROR"
 #define kBillSearchNotifyDataLoaded	@"BILLSEARCH_DATA_LOADED"
 
-@interface BillSearchDataSource : NSObject <UITableViewDataSource> {
+@interface BillSearchDataSource : NSObject <UITableViewDataSource, RKRequestDelegate> {
 	NSMutableArray* _rows;
 	NSMutableDictionary* _sections;
 	IBOutlet UISearchDisplayController *searchDisplayController;

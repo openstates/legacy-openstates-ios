@@ -76,7 +76,7 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 	static NSString *identifier = @"Cell";
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
 	if (!cell) {
-        cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:identifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier] autorelease];
 		cell.textLabel.numberOfLines = 3;
 		cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
 		cell.textLabel.font = [UIFont boldSystemFontOfSize:12];

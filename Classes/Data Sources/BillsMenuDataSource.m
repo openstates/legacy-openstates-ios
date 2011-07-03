@@ -115,7 +115,7 @@ enum _menuOrder {
 	
 	/* Not found in queue, create a new cell object */
     if (cell == nil) {
-        cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:UITableViewStylePlain reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.textLabel.textColor =	[TexLegeTheme textDark];
 		cell.textLabel.font = [TexLegeTheme boldFifteen];				
     }

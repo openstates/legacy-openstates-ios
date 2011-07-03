@@ -14,8 +14,17 @@
 
 
 @implementation OpenLegislativeAPIs
-SYNTHESIZE_SINGLETON_FOR_CLASS(OpenLegislativeAPIs);
 @synthesize osApiClient, transApiClient, vsApiClient, tloApiClient;
+
++ (id)sharedOpenLegislativeAPIs
+{
+	static dispatch_once_t pred;
+	static OpenLegislativeAPIs *foo = nil;
+	
+	dispatch_once(&pred, ^{ foo = [[self alloc] init]; });
+	return foo;
+}
+
 
 - (id)init {
 	if ((self=[super init])) {

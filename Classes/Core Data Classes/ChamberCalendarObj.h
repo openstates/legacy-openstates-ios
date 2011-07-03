@@ -18,5 +18,6 @@
 
 - (NSDictionary *)eventForIndexPath:(NSIndexPath*)indexPath;
 - (NSArray *)filterEventsByString:(NSString *)filterString;
+- (id)initWithDictionary:(NSDictionary *)calendarDict;
 
 @end

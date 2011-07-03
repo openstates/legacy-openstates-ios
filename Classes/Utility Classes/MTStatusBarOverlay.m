@@ -1328,60 +1328,13 @@ kDetailViewWidth, kHistoryTableRowHeight*kMaxHistoryTableRowCount + kStatusBarHe
 #pragma mark Singleton definitons
 //===========================================================
 
-static MTStatusBarOverlay *sharedMTStatusBarOverlay = nil;
-
-+ (MTStatusBarOverlay *)sharedInstance {
-	@synchronized(self) {
-		if (sharedMTStatusBarOverlay == nil && [[UIView class] respondsToSelector:@selector(animateWithDuration:animations:)]) {
-			sharedMTStatusBarOverlay = [[self alloc] initWithFrame:CGRectZero];
-		}
-	}    
-	return sharedMTStatusBarOverlay;
-}
-
-+ (MTStatusBarOverlay *)sharedOverlay {
-	return [self sharedInstance];
-}
-
-+(MTStatusBarOverlay *)threadSafeSharedInstance {
-	[self performSelectorOnMainThread:@selector(sharedInstance) withObject:nil waitUntilDone:YES];
-
-	return [self sharedInstance];
-}
-
-+(MTStatusBarOverlay *)threadSafeSharedOverlay {
-	return [self threadSafeSharedInstance];
-}
-
-+ (id)allocWithZone:(NSZone *)zone {
-	@synchronized(self) {
-		if (sharedMTStatusBarOverlay == nil) {
-			sharedMTStatusBarOverlay = [super allocWithZone:zone];
-            
-			return sharedMTStatusBarOverlay;
-		}
-	}
-    
-	return nil;
-}
-
-- (id)copyWithZone:(NSZone *)zone {
-	return self;
-}
-
-- (id)retain {
-	return self;
-}
-
-- (NSUInteger)retainCount {
-	return NSUIntegerMax;
-}
-
-- (void)release {
-}
-
-- (id)autorelease {
-	return self;
++ (id)sharedMTStatusBarOverlay
+{
+	static dispatch_once_t pred;
+	static MTStatusBarOverlay *foo = nil;
+	if ([[UIView class] respondsToSelector:@selector(animateWithDuration:animations:)])
+		dispatch_once(&pred, ^{ foo = [[self alloc] initWithFrame:CGRectZero]; });
+	return foo;
 }
 
 @end

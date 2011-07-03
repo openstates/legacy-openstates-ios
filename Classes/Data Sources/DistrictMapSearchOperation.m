@@ -21,7 +21,7 @@
 @synthesize delegate;
 @synthesize searchCoordinate, searchIDs, foundIDs;
 
-- (id) initWithDelegate:(id<DistrictMapSearchOperationDelegate>)newDelegate 
+- (id) initWithDelegate:(NSObject <DistrictMapSearchOperationDelegate> *)newDelegate 
 			 coordinate:(CLLocationCoordinate2D)aCoordinate searchDistricts:(NSArray *)districtIDs {
 	if ((self = [super init])) {
 		

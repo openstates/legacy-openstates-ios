@@ -43,6 +43,10 @@
 		self.byDistrict = NO;
 
 		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(dataSourceReceivedMemoryWarning:)
+													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+
+		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(resetCoreData:) name:@"RESTKIT_LOADED_DISTRICTOFFICEOBJ" object:nil];
 		
 	}
@@ -64,6 +68,13 @@
 	self.filterString = nil;
 	self.searchDisplayController = nil;
     [super dealloc];
+}
+
+-(void)dataSourceReceivedMemoryWarning:(id)sender {
+	// let's give this a swinging shot....	
+	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
+		[[DistrictOfficeObj managedObjectContext] refreshObject:object mergeChanges:NO];
+	}
 }
 
 #pragma mark -

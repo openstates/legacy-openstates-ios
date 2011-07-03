@@ -51,8 +51,17 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 @end
 
 @implementation CalendarEventsLoader
-SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
+
 @synthesize isFresh, loadingStatus;
+
++ (id)sharedCalendarEventsLoader
+{
+	static dispatch_once_t pred;
+	static CalendarEventsLoader *foo = nil;
+	
+	dispatch_once(&pred, ^{ foo = [[self alloc] init]; });
+	return foo;
+}
 
 - (id)init {
 	if ((self=[super init])) {
@@ -144,7 +153,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CalendarEventsLoader);
 }
 
 - (NSArray*)events {
-	if (self.loadingStatus > LOADING_NO_NET && !_events || !isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > 1800)) {	// if we're over a half-hour old, let's refresh
+	if (self.loadingStatus > LOADING_NO_NET || !_events || !isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > 1800)) {	// if we're over a half-hour old, let's refresh
 		isFresh = NO;
 		debug_NSLog(@"CalendarEventsLoader is stale, need to refresh");
 		

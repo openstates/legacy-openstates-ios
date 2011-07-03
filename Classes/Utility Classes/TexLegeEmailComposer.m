@@ -18,9 +18,16 @@
 
 @implementation TexLegeEmailComposer
 
-SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
 @synthesize mailComposerVC, isComposingMail, currentAlert, currentCommander;
 
++ (id)sharedTexLegeEmailComposer
+{
+	static dispatch_once_t pred;
+	static TexLegeEmailComposer *foo = nil;
+	
+	dispatch_once(&pred, ^{ foo = [[self alloc] init]; });
+	return foo;
+}
 
 - (id) init
 {
@@ -41,7 +48,10 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
     [super dealloc];
 }
 
-- (void)presentMailComposerTo:(NSString*)recipient subject:(NSString*)subject body:(NSString*)body commander:(UIViewController *)commander{
+- (void)presentMailComposerTo:(NSString*)recipient 
+					  subject:(NSString*)subject 
+						 body:(NSString*)body 
+					commander:(UIViewController *)commander{
 	if (!commander)
 		return;
 	
@@ -89,7 +99,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeEmailComposer);
 #pragma mark -
 #pragma mark Mail Composer Delegate
 
-- (void)mailComposeController:(MFMailComposeViewController*)mailController didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+- (void)mailComposeController:(MFMailComposeViewController*)mailController 
+		  didFinishWithResult:(MFMailComposeResult)result 
+						error:(NSError*)error {
 	
 	if (result == MFMailComposeResultFailed) {
 		[self presentMailFailureAlertViewWithTitle:NSLocalizedStringFromTable(@"Failure, Message Not Sent", @"AppAlerts", @"Error on email attempt.")

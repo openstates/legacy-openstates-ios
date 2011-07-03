@@ -324,6 +324,15 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)runOnInitialAppStart:(id)sender {	
+	
+	if(
+	   getenv("NSZombieEnabled") || getenv("NSAutoreleaseFreedObjectCheckEnabled")
+	   ) {
+		for (int loop=0;loop < 15;loop++) {
+			NSLog(@"**************** NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!*************");
+		}
+	}
+	
 	[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 
 	NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
@@ -333,7 +342,7 @@ NSInteger kNoSelection = -1;
 	[self setupViewControllerHierarchy];
 
 	[self.mainWindow makeKeyAndVisible];
-	[MTStatusBarOverlay sharedOverlay];
+	[MTStatusBarOverlay sharedMTStatusBarOverlay];
 
 	// register our preference selection data to be archived
 	NSDictionary *savedPrefsDict = [NSDictionary dictionaryWithObjectsAndKeys: 
@@ -362,6 +371,8 @@ NSInteger kNoSelection = -1;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {		
+	NSLog(@"iOS Version: %@", [[UIDevice currentDevice] systemVersion]);
+	
 	[[TexLegeReachability sharedTexLegeReachability] startCheckingReachability:self];
 	
 	// initialize RestKit to handle our seed database and user database
@@ -378,11 +389,11 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-	[[TVOutManager sharedInstance] startTVOut];
+	[[TVOutManager sharedTVOutManager] startTVOut];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-	[[TVOutManager sharedInstance] stopTVOut];
+	[[TVOutManager sharedTVOutManager] stopTVOut];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {

@@ -17,6 +17,7 @@
 
 @interface StateMetaLoader : NSObject <RKRequestDelegate> {
 	NSMutableDictionary *_metadata;
+	NSMutableArray *_loadingStates;
 	BOOL isFresh;
 	NSDate *updated;
 	

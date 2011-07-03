@@ -13,33 +13,48 @@
 #import "OpenLegislativeAPIs.h"
 
 @implementation BillMetadataLoader
-SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
-//@synthesize metadata=_metadata;
 @synthesize isFresh;
+
++ (id)sharedBillMetadataLoader
+{
+	static dispatch_once_t pred;
+	static BillMetadataLoader *foo = nil;
+	
+	dispatch_once(&pred, ^{ foo = [[self alloc] init]; });
+	return foo;
+}
 
 - (id)init {
 	if ((self=[super init])) {
-		updated = nil;
+		isLoading = NO;
 		isFresh = NO;
+		updated = nil;
 		_metadata = nil;
-		//[self loadMetadata:nil];
 	}
 	return self;
 }
 
 - (void)dealloc {
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
-	if (updated)
-		[updated release], updated = nil;
 
-	if (_metadata)
-		[_metadata release], _metadata = nil;
-	
+	nice_release(updated);
+	nice_release(_metadata);
 	[super dealloc];
 }
 
 - (void)loadMetadata:(id)sender {
+
+	if (isLoading)	// we're already working on it
+		return;
+	
+	isFresh = NO;
+
+	debug_NSLog(@"BillMetaData is stale, refreshing");
+
 	if ([TexLegeReachability texlegeReachable]) {
+		
+		isLoading = YES;
+		
 		[[RKClient sharedClient] get:[NSString stringWithFormat:@"/%@", kBillMetadataFile] delegate:self];  	
 	}
 	else {
@@ -50,7 +65,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 - (NSDictionary *)metadata {
 	if (!_metadata || !isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > (3600*24))) {	// if we're over a day old, let's refresh
 		isFresh = NO;
-		debug_NSLog(@"BillMetaData is stale, need to refresh");
 		
 		[self loadMetadata:nil];
 	}
@@ -62,6 +76,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 #pragma mark RestKit:RKObjectLoaderDelegate
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
+	
+	isLoading = NO;
+	
 	if (error && request) {
 		debug_NSLog(@"Error loading bill metadata from %@: %@", [request description], [error localizedDescription]);
 		[[NSNotificationCenter defaultCenter] postNotificationName:kBillMetadataNotifyError object:nil];
@@ -90,16 +107,19 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(BillMetadataLoader);
 }
 
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
+	
+	isLoading = NO;
+
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data  
-		if (_metadata)
-			[_metadata release];	
+		nice_release(_metadata);
 		
 		_metadata = [[response.body mutableObjectFromJSONData] retain];
 		if (_metadata) {
-			if (updated)
-				[updated release];
+			
+			nice_release(updated);
 			updated = [[NSDate date] retain];
+			
 			NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillMetadataFile];
 			if (![[_metadata JSONData] writeToFile:localPath atomically:YES])
 				NSLog(@"BillMetadataLoader: error writing cache to file: %@", localPath);

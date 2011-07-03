@@ -23,7 +23,14 @@
 @implementation PartisanIndexStats
 @synthesize isFresh;
 
-SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
++ (id)sharedPartisanIndexStats
+{
+	static dispatch_once_t pred;
+	static PartisanIndexStats *foo = nil;
+	
+	dispatch_once(&pred, ^{ foo = [[self alloc] init]; });
+	return foo;
+}
 
 - (id)init {
 	if ((self = [super init])) {
@@ -62,7 +69,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PartisanIndexStats);
 }
 
 - (void)resetData:(NSNotification *)notification {
-	if (m_partisanIndexAggregates) [m_partisanIndexAggregates release], m_partisanIndexAggregates = nil;
+	nice_release(m_partisanIndexAggregates);
 	[self partisanIndexAggregates];
 }
 

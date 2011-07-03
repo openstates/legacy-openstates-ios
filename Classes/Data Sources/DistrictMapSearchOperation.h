@@ -36,7 +36,7 @@ typedef enum {
 @property (retain) NSArray *searchIDs;
 @property (retain) NSMutableArray *foundIDs;
 
-- (id) initWithDelegate:(id<DistrictMapSearchOperationDelegate>)newDelegate 
+- (id) initWithDelegate:(NSObject <DistrictMapSearchOperationDelegate> *)newDelegate 
 			 coordinate:(CLLocationCoordinate2D)aCoordinate searchDistricts:(NSArray *)districtIDs;
 	
 @end

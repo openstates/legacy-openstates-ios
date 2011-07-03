@@ -17,10 +17,18 @@
 @end
 
 @implementation TexLegeReachability
-SYNTHESIZE_SINGLETON_FOR_CLASS(TexLegeReachability);
 
 @synthesize remoteHostStatus, internetConnectionStatus, localWiFiConnectionStatus;
 @synthesize texlegeConnectionStatus, tloConnectionStatus, openstatesConnectionStatus, googleConnectionStatus;
+
++ (id)sharedTexLegeReachability
+{
+	static dispatch_once_t pred;
+	static TexLegeReachability *foo = nil;
+	
+	dispatch_once(&pred, ^{ foo = [[self alloc] init]; });
+	return foo;
+}
 
 #pragma mark - 
 #pragma mark Reachability
