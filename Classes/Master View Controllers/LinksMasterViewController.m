@@ -143,16 +143,17 @@
 		[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 		//self.selectObjectOnAppear= link;
 
+		NSString *urlString = [[link actualURL] absoluteString];
+		
 		if (isSplitViewDetail == NO) {
-			SVWebViewController *browser = [[SVWebViewController alloc] initWithAddress:[[link actualURL] absoluteString]];
-			browser.modalPresentationStyle = UIModalPresentationPageSheet;
-			browser.hidesBottomBarWhenPushed = YES;
-			[self.navigationController pushViewController:browser animated:YES];	
-			[browser release];			
+			SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:urlString];
+			webViewController.hidesBottomBarWhenPushed = YES;
+			[self.navigationController pushViewController:webViewController animated:YES];	
+			[webViewController release];			
 		}
 		else if (self.detailViewController) {
-			SVWebViewController *browser = self.detailViewController;
-			[browser setAddress:[[link actualURL] absoluteString]];
+			SVWebViewController *webViewController = self.detailViewController;
+			webViewController.address = urlString;
 		}
 	}
 }

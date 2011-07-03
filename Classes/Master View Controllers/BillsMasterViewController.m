@@ -98,6 +98,15 @@
 	[super viewDidUnload];
 }
 
+- (void)didReceiveMemoryWarning {
+	UINavigationController *nav = [self navigationController];
+	if (nav && [nav.viewControllers count]>3) {
+		[nav popToRootViewControllerAnimated:YES];
+	}
+	
+	[super didReceiveMemoryWarning];
+}
+
 - (void)reloadData:(NSNotification *)notification {
 	[self.tableView reloadData];
 	if (self.searchDisplayController.searchResultsTableView)
