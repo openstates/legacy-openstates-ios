@@ -738,7 +738,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	[self.mapView setCenterCoordinate:annotation.coordinate animated:YES];
 	
 	if ([annotation isKindOfClass:[UserPinAnnotation class]]) {
-		self.searchLocation = annotation;
+		self.searchLocation = (UserPinAnnotation *)annotation;
 	}	
 
 	if ([annotation isKindOfClass:[DistrictMapObj class]]) {

@@ -61,7 +61,7 @@
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab, freshmanPlotLab;
 @synthesize indivSlider, partySlider, allSlider;
 @synthesize notesPopover, masterPopover;
-@synthesize newChartView, votingDataSource;
+@synthesize chartView, votingDataSource;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -102,7 +102,7 @@
 	self.clearsSelectionOnViewWillAppear = NO;
 				
 	VotingRecordDataSource *votingDS = [[VotingRecordDataSource alloc] init];
-	[votingDS prepareVotingRecordView:self.newChartView];
+	[votingDS prepareVotingRecordView:self.chartView];
 	self.votingDataSource = votingDS;
 	[votingDS release];
 }
@@ -120,7 +120,7 @@
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
 	UINavigationController *nav = [self navigationController];
-	if (nav && [nav.viewControllers count]>2)
+	if (nav && [nav.viewControllers count]>3)
 		[nav popToRootViewControllerAnimated:YES];
 		
     [super didReceiveMemoryWarning];
@@ -141,7 +141,7 @@
 	self.notesPopover = nil;
 	self.masterPopover = nil;
 	self.dataObjectID = nil;
-	self.newChartView = nil;
+	self.chartView = nil;
 	self.votingDataSource = nil;
 
 	[super dealloc];
@@ -237,7 +237,7 @@
 	
 	BOOL hasScores = !IsEmpty(member.wnomScores);
 	self.freshmanPlotLab.hidden = hasScores;
-	self.newChartView.hidden = !hasScores;
+	self.chartView.hidden = !hasScores;
 
 }
 
@@ -291,7 +291,7 @@
 			[masterPopover dismissPopoverAnimated:YES];
 		}		
 		[self.tableView reloadData];
-		[self.newChartView reloadData];
+		[self.chartView reloadData];
 		[self.view setNeedsDisplay];
 	}
 }
@@ -302,7 +302,7 @@
 	// this will force our datasource to renew everything
 	self.dataSource.legislator = self.legislator;
 	[self.tableView reloadData];	
-	[self.newChartView reloadData];
+	[self.chartView reloadData];
 }
 
 // Called on the delegate when the user has taken action to dismiss the popover. This is not called when -dismissPopoverAnimated: is called directly.
@@ -369,7 +369,7 @@
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration 
 {
-	[self.newChartView reloadData];	
+	[self.chartView reloadData];	
 }
 
 #pragma mark -
@@ -489,17 +489,19 @@
 		}
 		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&
 				 cellInfo.entryType < kDirectoryTypeIsExternalHandler) {	// handle the URL ourselves in a webView
-			NSURL *myURL = [cellInfo generateURL];
+			NSURL *url = [cellInfo generateURL];
 			
-			if ([TexLegeReachability canReachHostWithURL:myURL]) { // do we have a good URL/connection?
+			if ([TexLegeReachability canReachHostWithURL:url]) { // do we have a good URL/connection?
 
-				if ([[myURL scheme] isEqualToString:@"twitter"])
-					[[UIApplication sharedApplication] openURL:myURL];
+				if ([[url scheme] isEqualToString:@"twitter"])
+					[[UIApplication sharedApplication] openURL:url];
 				else {
-					SVWebViewController *browser = [[SVWebViewController alloc] initWithAddress:[myURL absoluteString]];
-					browser.modalPresentationStyle = UIModalPresentationPageSheet;
-					[self presentModalViewController:browser animated:YES];	
-					[browser release];
+					NSString *urlString = [url absoluteString];
+					
+					SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:urlString];
+					webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+					[self presentModalViewController:webViewController animated:YES];	
+					[webViewController release];
 				}
 			}
 		}

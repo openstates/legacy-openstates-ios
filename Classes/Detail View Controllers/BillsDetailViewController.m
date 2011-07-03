@@ -65,7 +65,7 @@ enum _billSections {
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
 	UINavigationController *nav = [self navigationController];
-	if (nav && [nav.viewControllers count]>2)
+	if (nav && [nav.viewControllers count]>3)
 		[nav popToRootViewControllerAnimated:YES];
 	
     [super didReceiveMemoryWarning];
@@ -74,15 +74,14 @@ enum _billSections {
 
 - (void)dealloc {
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
-	
-	self.bill = nil;
-	self.headerView = self.descriptionView = nil;
+	nice_release(bill);
 	self.statusView = nil;
 	self.lab_description = nil;
 	self.masterPopover = nil;
 	self.starButton = nil;
 	self.actionHeader = nil;
 	nice_release(voteDS);
+	self.headerView = self.descriptionView = nil;
 
 	[super dealloc];
 }
@@ -588,10 +587,12 @@ enum _billSections {
 		case kBillVersions: {
 			NSDictionary *version = [[bill objectForKey:@"versions"] objectAtIndex:newIndexPath.row];
 			if (version) {
-				SVWebViewController *browser = [[SVWebViewController alloc] initWithAddress:[version objectForKey:@"url"]];
-				browser.modalPresentationStyle = UIModalPresentationPageSheet;
-				[self presentModalViewController:browser animated:YES];	
-				[browser release];				
+				NSString *urlString = [version objectForKey:@"url"];
+								
+				SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:urlString];
+				webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+				[self presentModalViewController:webViewController animated:YES];	
+				[webViewController release];
 			}
 		}
 			break;

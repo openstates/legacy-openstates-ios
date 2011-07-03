@@ -82,11 +82,7 @@
 	[super viewDidUnload];
 }
 
-- (void)didReceiveMemoryWarning {
-	UINavigationController *nav = [self navigationController];
-	//if (nav && [nav.viewControllers count]>1)
-	[nav popToRootViewControllerAnimated:YES];
-	
+- (void)didReceiveMemoryWarning {	
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
@@ -231,10 +227,12 @@
 			}
 		}
 		else {
-			SVWebViewController *browser = [[SVWebViewController alloc] initWithAddress:[url absoluteString]];
-			browser.modalPresentationStyle = UIModalPresentationPageSheet;
-			[self presentModalViewController:browser animated:YES];	
-			[browser release];			
+			NSString *urlString = [url absoluteString];
+			
+			SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:urlString];
+			webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+			[self presentModalViewController:webViewController animated:YES];	
+			[webViewController release];
 		}		
 	}
 }

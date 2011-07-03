@@ -21,7 +21,7 @@
 @property (nonatomic,assign) id dataObject;
 @property (nonatomic,retain) NSNumber *dataObjectID;
 
-@property (nonatomic,retain) IBOutlet S7GraphView *newChartView;
+@property (nonatomic,retain) IBOutlet S7GraphView *chartView;
 @property (nonatomic,retain) VotingRecordDataSource *votingDataSource;
 
 @property (nonatomic,retain) IBOutlet UIView *miniBackgroundView;

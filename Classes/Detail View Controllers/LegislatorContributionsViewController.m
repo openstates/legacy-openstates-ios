@@ -70,11 +70,8 @@
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-	
     // Relinquish ownership any cached data, images, etc that aren't in use.
-	// don't release our tableEntries array merely on low memory, since we'll be using it!
 }
-
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:kContributionsDataNotifyLoaded object:self.dataSource];	

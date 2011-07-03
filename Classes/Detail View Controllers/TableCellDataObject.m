@@ -13,7 +13,7 @@
 @synthesize entryValue, isClickable, entryType, title, subtitle, action, parameter;
 
 - (id)initWithDictionary:(NSDictionary *)aDictionary {
-	if ([self init]) {
+	if ((self = [super init])) {
 		
 		if (!IsEmpty([aDictionary valueForKey:@"entryValue"]))
 			self.entryValue = [aDictionary valueForKey:@"entryValue"];

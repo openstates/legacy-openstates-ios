@@ -123,8 +123,8 @@ CGFloat quartzRowHeight = 73.f;
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
 	UINavigationController *nav = [self navigationController];
-	//if (nav && [nav.viewControllers count]>1)
-	[nav popToRootViewControllerAnimated:YES];
+	if (nav && [nav.viewControllers count]>3)
+		[nav popToRootViewControllerAnimated:YES];
 	
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
@@ -571,10 +571,12 @@ CGFloat quartzRowHeight = 73.f;
 
 - (void) pushInternalBrowserWithURL:(NSURL *)url {
 	if ([TexLegeReachability canReachHostWithURL:url]) { // do we have a good URL/connection?
-		SVWebViewController *browser = [[SVWebViewController alloc] initWithAddress:[url absoluteString]];
-		browser.modalPresentationStyle = UIModalPresentationPageSheet;
-		[self presentModalViewController:browser animated:YES];	
-		[browser release];
+		NSString *urlString = [url absoluteString];
+		
+		SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:urlString];
+		webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+		[self presentModalViewController:webViewController animated:YES];	
+		[webViewController release];
 	}
 }
 

@@ -54,10 +54,6 @@
 }
 
 - (void)didReceiveMemoryWarning {
-	UINavigationController *nav = [self navigationController];
-	if (nav && [nav.viewControllers count]>1)
-		[nav popToRootViewControllerAnimated:YES];
-	
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
