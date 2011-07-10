@@ -152,7 +152,7 @@ NSInteger kNoSelection = -1;
 	return nil;
 }
 
-/* Probably works, but ugly as hell and we don't need it.
+/* Probably works, but ugly and we don't need it.
 - (UIViewController *) currentDetailViewController {	
 	UINavigationController *nav = [self detailNavigationController];
 	NSInteger numVCs = 0;

@@ -111,7 +111,7 @@
 		self.selectObjectOnAppear = detailObject;
 	}	
 	if ([UtilityMethods isIPadDevice])
-		[self.tableView reloadData]; // popovers look like shit without this
+		[self.tableView reloadData]; // popovers look bad without this
 	
 	[self redisplayVisibleCells:nil];	
 	// END: IPAD ONLY

@@ -1,7 +1,6 @@
 +proj=lcc +lat_1=27.41666666666667 +lat_2=34.91666666666666 +lat_0=31.16666666666667 +lon_0=-100 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +datum=NAD83 +units=m +no_defs 
 
 
-pimpdaddy:Programs greg$ pwd
 /Library/Frameworks/GDAL.framework/Versions/1.6/Programs
 -----------
  ./ogr2ogr -f "KML" ~/Desktop/mything.kml ~/Desktop/planS01188.shp
@@ -16,4 +15,4 @@ ftp://ftpgis1.tlc.state.tx.us/DistrictViewer/PLANS100.zip
 
 ogr2ogr -t_srs EPSG:4326 -f 'ESRI Shapefile'  out.WGS84.shp in.shp
 
-ogr2ogr -f "MySQL" MySQL:"gis,user=greg,host=gamura.sleestacks.com,password=PASSWORDGOESHERE" -nln districts -nlt POLYGON -append -t_srs "EPSG:4326" -lco engine=MYISAM PLANH100.shp
+ogr2ogr -f "MySQL" MySQL:"gis,user=greg,host=MYSQLHOSTGOESHERE,password=PASSWORDGOESHERE" -nln districts -nlt POLYGON -append -t_srs "EPSG:4326" -lco engine=MYISAM PLANH100.shp

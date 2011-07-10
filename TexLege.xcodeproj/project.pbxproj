@@ -1550,8 +1550,8 @@
 		373AB3B70FD3389F0065740E /* TableCellDataObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableCellDataObject.h; sourceTree = "<group>"; };
 		373AB3B80FD3389F0065740E /* TableCellDataObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableCellDataObject.m; sourceTree = "<group>"; };
 		373B820511E378CD00A81142 /* LegislatorMasterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = LegislatorMasterViewController.xib; path = "Resources-iPad/LegislatorMasterViewController.xib"; sourceTree = "<group>"; };
-		373EBA4F12F0A01100A3E604 /* DataModelUpdateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataModelUpdateManager.h; path = "../Core Data Classes/DataModelUpdateManager.h"; sourceTree = "<group>"; };
-		373EBA5012F0A01100A3E604 /* DataModelUpdateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataModelUpdateManager.m; path = "../Core Data Classes/DataModelUpdateManager.m"; sourceTree = "<group>"; };
+		373EBA4F12F0A01100A3E604 /* DataModelUpdateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataModelUpdateManager.h; sourceTree = "<group>"; };
+		373EBA5012F0A01100A3E604 /* DataModelUpdateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataModelUpdateManager.m; sourceTree = "<group>"; };
 		37400B9D12F37436002B6042 /* MTStatusBarOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTStatusBarOverlay.h; sourceTree = "<group>"; };
 		37400B9E12F37436002B6042 /* MTStatusBarOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTStatusBarOverlay.m; sourceTree = "<group>"; };
 		37412A37124322C400807502 /* LegislatorContributionsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorContributionsDataSource.h; sourceTree = "<group>"; };
@@ -2016,8 +2016,6 @@
 		3775FA3A11D86E1700D69AC5 /* LegislatorDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorDetailViewController.h; path = "Classes/Detail View Controllers/LegislatorDetailViewController.h"; sourceTree = SOURCE_ROOT; };
 		3775FA3B11D86E1700D69AC5 /* LegislatorDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegislatorDetailViewController.m; path = "Classes/Detail View Controllers/LegislatorDetailViewController.m"; sourceTree = SOURCE_ROOT; };
 		3775FA4B11D8701B00D69AC5 /* LegislatorMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegislatorMasterViewController.m; path = "Classes/Master View Controllers/LegislatorMasterViewController.m"; sourceTree = SOURCE_ROOT; };
-		37782582121217B7001BD23D /* NSData+Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Encryption.h"; path = "Classes/Utility Classes/NSData+Encryption.h"; sourceTree = SOURCE_ROOT; };
-		37782583121217B7001BD23D /* NSData+Encryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Encryption.m"; path = "Classes/Utility Classes/NSData+Encryption.m"; sourceTree = SOURCE_ROOT; };
 		37782771121303C1001BD23D /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		3778E80D11EDC19800278273 /* Slider_Question_big.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Slider_Question_big.png; sourceTree = "<group>"; };
 		3778E80E11EDC19800278273 /* Slider_Question_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Slider_Question_big@2x.png"; sourceTree = "<group>"; };
@@ -2108,8 +2106,8 @@
 		37A72062122EB9A30015AAE0 /* TexLegeInfoImage~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TexLegeInfoImage~ipad.png"; path = "Resources-iPad/TexLegeInfoImage~ipad.png"; sourceTree = SOURCE_ROOT; };
 		37A720AC122ECBBD0015AAE0 /* IconWood_80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconWood_80.png; path = "Resources/Default and Icon/IconWood_80.png"; sourceTree = SOURCE_ROOT; };
 		37A720B3122ECD3B0015AAE0 /* TexLegeInfo~iphone.htm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "TexLegeInfo~iphone.htm"; path = "Data/TexLegeInfo~iphone.htm"; sourceTree = SOURCE_ROOT; };
-		37A8F14313315D4D00085AAF /* BillMetadataLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BillMetadataLoader.h; path = "../Core Data Classes/BillMetadataLoader.h"; sourceTree = "<group>"; };
-		37A8F14413315D4D00085AAF /* BillMetadataLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BillMetadataLoader.m; path = "../Core Data Classes/BillMetadataLoader.m"; sourceTree = "<group>"; };
+		37A8F14313315D4D00085AAF /* BillMetadataLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillMetadataLoader.h; sourceTree = "<group>"; };
+		37A8F14413315D4D00085AAF /* BillMetadataLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillMetadataLoader.m; sourceTree = "<group>"; };
 		37AD57B811DA651300D68934 /* CommitteeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommitteeDetailViewController.h; path = "Classes/Detail View Controllers/CommitteeDetailViewController.h"; sourceTree = SOURCE_ROOT; };
 		37AD57B911DA651500D68934 /* CommitteeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommitteeDetailViewController.m; path = "Classes/Detail View Controllers/CommitteeDetailViewController.m"; sourceTree = SOURCE_ROOT; };
 		37AD57BA11DA651700D68934 /* CommitteeDetailViewController~iphone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "CommitteeDetailViewController~iphone.xib"; path = "Resources/CommitteeDetailViewController~iphone.xib"; sourceTree = "<group>"; };
@@ -3019,8 +3017,6 @@
 				374F70A512FD45D600AD7EEC /* TexLegeNavBar.m */,
 				3735DDAD120899980000AF5A /* UISearchDisplayController+NoHideNav.h */,
 				3735DDAE120899980000AF5A /* UISearchDisplayController+NoHideNav.m */,
-				37782582121217B7001BD23D /* NSData+Encryption.h */,
-				37782583121217B7001BD23D /* NSData+Encryption.m */,
 				37CD0A6913A340E100F4C68B /* NSString+DKAdditions.h */,
 				37CD0A6A13A340E100F4C68B /* NSString+DKAdditions.m */,
 				3704F4D4122437AC00DC486F /* AnalyticsOptInAlertController.h */,
