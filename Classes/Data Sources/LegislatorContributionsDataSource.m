@@ -173,7 +173,7 @@
 	
 	NSString *resourcePath = nil;
 	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-										osApiKeyValue, @"apikey",
+										SUNLIGHT_APIKEY, @"apikey",
 										self.queryCycle, @"cycle",nil];
 	switch ([self.queryType integerValue]) {
 		case kContributionQueryEntitySearch:

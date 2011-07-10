@@ -228,7 +228,7 @@
 
 #pragma mark Properties
 
-//http://openstates.sunlightlabs.com/api/v1/subject_counts/tx/82/upper/?apikey=350284d0c6af453b9b56f6c1c7fea1f9
+//http://openstates.sunlightlabs.com/api/v1/subject_counts/tx/82/upper/?apikey=xxxxxxxxxxxxxxxx
 //We now get subject frequency counts, filtered by state, session and originating chamber.
 
 - (IBAction)loadCategoriesForChamber:(NSInteger)newChamber {
@@ -239,7 +239,7 @@
 		if (IsEmpty(meta.selectedState) || IsEmpty(meta.currentSession))
 			return;
 		
-		NSDictionary *queryParams = [NSDictionary dictionaryWithObject:osApiKeyValue forKey:@"apikey"];
+		NSDictionary *queryParams = [NSDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
 		NSMutableString *resourcePath = [NSMutableString stringWithFormat:@"/subject_counts/%@/%@/", meta.selectedState, meta.currentSession];
 		if (newChamber > BOTH_CHAMBERS)
 			[resourcePath appendFormat:@"%@/", stringForChamber(newChamber, TLReturnOpenStates)];

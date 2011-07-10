@@ -229,8 +229,8 @@
 	NSURL *momURL = [NSURL fileURLWithPath:modelPath];
 	NSManagedObjectModel *mom = [[[NSManagedObjectModel alloc] initWithContentsOfURL:momURL] autorelease];
 		
-	objectManager.client.username = @"restread";
-	objectManager.client.password = @"teentita";
+	objectManager.client.username = RESTKIT_USERNAME;
+	objectManager.client.password = RESTKIT_PASSWORD;
 	
 	[RKRequestQueue sharedQueue].showsNetworkActivityIndicatorWhenBusy = YES;
 	

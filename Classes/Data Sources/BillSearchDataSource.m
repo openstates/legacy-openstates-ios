@@ -288,7 +288,7 @@
 	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 										@"session", @"search_window",
 										meta.selectedState, @"state",
-										osApiKeyValue, @"apikey",
+										SUNLIGHT_APIKEY, @"apikey",
 										nil];
 	
 	NSString *chamberString = stringForChamber(chamber, TLReturnOpenStates);
@@ -314,7 +314,7 @@
 	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 								 @"session", @"search_window",
 								 meta.selectedState, @"state",
-								 osApiKeyValue, @"apikey",
+								 SUNLIGHT_APIKEY, @"apikey",
 								 nil];
 	
 	NSString *chamberString = stringForChamber(chamber, TLReturnOpenStates);
@@ -342,7 +342,7 @@
 									 searchSponsorID, @"sponsor_id",
 									 meta.selectedState, @"state",
 									 @"session", @"search_window",
-									 osApiKeyValue, @"apikey",
+									 SUNLIGHT_APIKEY, @"apikey",
 									 // now for the fun part
 									 @"sponsors,bill_id,title,session,state,type,update_at,subjects", @"fields",
 									 nil];

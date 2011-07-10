@@ -161,7 +161,7 @@
 - (void)hackyLegislatorIDs {
 	NSArray *legislators = [LegislatorObj allObjects];
 	
-	NSString *urlRoot = [NSString stringWithFormat:@"%@/entities.json?apikey=%@&search=", transApiBaseURL, osApiKeyValue];
+	NSString *urlRoot = [NSString stringWithFormat:@"%@/entities.json?apikey=%@&search=", transApiBaseURL, SUNLIGHT_APIKEY];
 
 	NSMutableArray *list = [NSMutableArray array];
 	
@@ -217,7 +217,7 @@
 		}
 		if (!found) {
 			if ([legislator.lastname isEqualToString:@"Birdwell"]) {
-					//http://transparencydata.com/api/1.0/entities/id_lookup.json?apikey=350284d0c6af453b9b56f6c1c7fea1f9&namespace=urn:nimsp:recipient&id=145549
+					//http://transparencydata.com/api/1.0/entities/id_lookup.json?apikey=xxxxxxxxxxxxxxxx&namespace=urn:nimsp:recipient&id=145549
 			}
 			
 			debug_NSLog(@"hacky didn't find one for %@", urlString);

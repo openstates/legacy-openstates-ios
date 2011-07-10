@@ -121,7 +121,7 @@
 	[_loadingStates addObject:stateID];	// add it to our list of active loads
 	
 	RKClient *osApiClient = [[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient];
-	NSDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:osApiKeyValue, @"apikey",nil];
+	NSDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY, @"apikey",nil];
 	NSString *method = [NSString stringWithFormat:@"/metadata/%@", stateID];
 	request = [osApiClient get:method queryParams:queryParams delegate:self];	
 	if (request) {

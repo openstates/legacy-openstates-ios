@@ -50,6 +50,7 @@ NSString * const kAnalyticsSettingsSwitch = @"PermitUseOfAnalytics";
 NSString * const kShowedSplashScreenKey = @"HasShownSplashScreen";
 NSString * const kSegmentControlPrefKey = @"SegmentControlPrefs";
 NSString * const kResetSavedDatabaseKey = @"ResetSavedDatabase";
+NSString * const kSupportEmailKey = @"supportEmail";
 
 NSUInteger kNumMaxTabs = 11;
 NSInteger kNoSelection = -1;
@@ -352,6 +353,7 @@ NSInteger kNoSelection = -1;
 									[NSNumber numberWithBool:NO], kShowedSplashScreenKey,
 									[NSDictionary dictionary], kSegmentControlPrefKey,
 									[NSNumber numberWithBool:NO], kResetSavedDatabaseKey,
+									[NSString stringWithString:@"support@texlege.com"], kSupportEmailKey,
 									version, @"CFBundleVersion",
 									nil];
 	
@@ -360,11 +362,7 @@ NSInteger kNoSelection = -1;
 	[[NSUserDefaults standardUserDefaults] setObject:version forKey:@"CFBundleVersion"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 		
-#ifdef DEBUG
-	[[LocalyticsSession sharedLocalyticsSession] startSession:@"c3641d53749cde2eaf32359-2b477ece-c58f-11df-ee10-00fcbf263dff"];
-#else
-	[[LocalyticsSession sharedLocalyticsSession] startSession:@"8bde685867a8375008c3272-3afa437e-c58f-11df-ee10-00fcbf263dff"];
-#endif
+	[[LocalyticsSession sharedLocalyticsSession] startSession:LOCALITICS_APIKEY];
 	
 	[self runOnEveryAppStart];
 }

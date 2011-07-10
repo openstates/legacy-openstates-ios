@@ -48,7 +48,7 @@
 	} 
 */
 - (NSArray *)getJSONCommitteesByChamber:(NSInteger)chamber {
-	// http://openstates.sunlightlabs.com/api/v1/committees/?state=tx&active=true&chamber=upper&apikey=350284d0c6af453b9b56f6c1c7fea1f9
+	// http://openstates.sunlightlabs.com/api/v1/committees/?state=tx&active=true&chamber=upper&apikey=xxxxxxxxxxxxxxxx
 	NSString *chamberString = [stringForChamber(chamber, TLReturnFull) lowercaseString];
 	
 	NSString *urlMethod = [NSString stringWithFormat:@"%@/committees/?state=tx&chamber=%@&%@", baseURL, chamberString, apiKey];
@@ -91,7 +91,7 @@
  */
 
 - (NSDictionary *)getJSONCommitteeInfoWithCommitteeID:(NSString *)committeeID {
-	// http://openstates.sunlightlabs.com/api/v1/committees/TXC000065/?apikey=350284d0c6af453b9b56f6c1c7fea1f9	
+	// http://openstates.sunlightlabs.com/api/v1/committees/TXC000065/?apikey=xxxxxxxxxxxxxxxx
 	NSString *urlMethod = [NSString stringWithFormat:@"%@/committees/%@/?%@", baseURL, committeeID, apiKey];
 	NSURL *url = [NSURL URLWithString:urlMethod];
 	NSError *error = nil;
@@ -126,7 +126,7 @@
 */
 
 - (NSArray *)getJSONLegislatorsByChamber:(NSInteger)chamber {
-	// http://openstates.sunlightlabs.com/api/v1/legislators/?state=tx&chamber=%@&active=true&apikey=350284d0c6af453b9b56f6c1c7fea1f9
+	// http://openstates.sunlightlabs.com/api/v1/legislators/?state=tx&chamber=%@&active=true&apikey=xxxxxxxxxxxxxxxx
 	NSString *chamberString = [stringForChamber(chamber, TLReturnFull) lowercaseString];
 	
 	NSString *urlMethod = [NSString stringWithFormat:@"%@/legislators/?state=tx&chamber=%@&active=true&%@", baseURL, chamberString, apiKey];
@@ -192,7 +192,7 @@
 */
 
 - (NSArray *)getJSONLegislatorInfoWithLegislatorID:(NSString *)legislatorID {
-	// http://openstates.sunlightlabs.com/api/v1/legislators/TXL000321/?apikey=350284d0c6af453b9b56f6c1c7fea1f9	
+	// http://openstates.sunlightlabs.com/api/v1/legislators/TXL000321/?apikey=xxxxxxxxxxxxxxxx
 	NSString *urlMethod = [NSString stringWithFormat:@"%@/legislators/%@/?%@", baseURL, legislatorID, apiKey];
 	NSURL *url = [NSURL URLWithString:urlMethod];
 	NSError *error = nil;

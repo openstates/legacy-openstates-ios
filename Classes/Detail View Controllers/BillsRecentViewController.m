@@ -64,7 +64,7 @@
 	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
 								 dateString, @"updated_since",
 								 meta.selectedState, @"state",
-								 osApiKeyValue, @"apikey",
+								 SUNLIGHT_APIKEY, @"apikey",
 								 nil];
 	
 	[self.dataSource startSearchWithQueryString:@"/bills" params:queryParams];

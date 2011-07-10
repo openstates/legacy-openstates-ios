@@ -50,7 +50,5 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
-	<key>projectWebsite</key>
-	<string>http://www.texlege.com</string>
 </dict>
 </plist>

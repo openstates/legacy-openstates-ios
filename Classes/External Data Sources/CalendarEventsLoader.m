@@ -137,12 +137,12 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		if (IsEmpty(meta.selectedState))
 			return;
 		
-		//	http://openstates.sunlightlabs.com/api/v1/events/?state=tx&apikey=350284d0c6af453b9b56f6c1c7fea1f9
+		//	http://openstates.sunlightlabs.com/api/v1/events/?state=tx&apikey=xxxxxxxxxxxxxxxx
 
 		self.loadingStatus = LOADING_ACTIVE;
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
 									 meta.selectedState, @"state",
-									 osApiKeyValue, @"apikey",
+									 SUNLIGHT_APIKEY, @"apikey",
 									 nil];
 		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/events" queryParams:queryParams delegate:self];
 	}

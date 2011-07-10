@@ -175,7 +175,7 @@
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	
 	NSString *localDist = NSLocalizedStringFromTable(@"District", @"StandardUI", @"The title for a legislative district, as in District 1");
-	NSString *localAbbrev = NSLocalizedStringFromTable(@"Dist.", @"StandardUI", @"The abbreviation for the word 'District', i.e. 'Dist.'");
+	NSString *localAbbrev = abbreviateString(@"District");
 	if (self.byDistrict)
 		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@ (%@: %@)", localDist, tempEntry.district, [tempEntry.legislator lastname], tempEntry.city];
 	else

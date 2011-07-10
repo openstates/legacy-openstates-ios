@@ -103,7 +103,8 @@
 	
 	LinkObj *link = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	if (link) {
-		if ([link.url hasPrefix:@"mailto:support@texlege.com"]) {
+		NSString *supportEmail = [[NSUserDefaults standardUserDefaults] stringForKey:kSupportEmailKey];
+		if ([link.url hasSuffix:supportEmail]) {
 			NSString *appVer = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 
 			NSMutableString *body = [NSMutableString string];
@@ -111,7 +112,7 @@
 			[body appendFormat:NSLocalizedStringFromTable(@"iOS Version: %@\n", @"StandardUI", @"Text to be included in TexLege support emails."), [[UIDevice currentDevice] systemVersion]];
 			[body appendFormat:NSLocalizedStringFromTable(@"iOS Device: %@\n", @"StandardUI", @"Text to be included in TexLege support emails."), [[UIDevice currentDevice] model]];
 			[body appendString:NSLocalizedStringFromTable(@"\nDescription of Problem, Concern, or Question:\n", @"StandardUI", @"Text to be included in TexLege support emails.")];
-			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:@"support@texlege.com" 
+			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:supportEmail 
 																			 subject:NSLocalizedStringFromTable(@"TexLege Support Question / Concern", @"StandardUI", @"Subject to be included in TexLege support emails.") 
 																				body:body commander:self];
 			return;

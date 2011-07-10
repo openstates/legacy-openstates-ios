@@ -1127,8 +1127,6 @@
 		378ABD34139F0BCA00928FBF /* DataTableUI.strings in Resources */ = {isa = PBXBuildFile; fileRef = 378ABD2B139F0BCA00928FBF /* DataTableUI.strings */; };
 		378ABD35139F0BCA00928FBF /* StandardUI.strings in Resources */ = {isa = PBXBuildFile; fileRef = 378ABD2D139F0BCA00928FBF /* StandardUI.strings */; };
 		378ABD36139F0BCA00928FBF /* StandardUI.strings in Resources */ = {isa = PBXBuildFile; fileRef = 378ABD2D139F0BCA00928FBF /* StandardUI.strings */; };
-		378ABD37139F0BCA00928FBF /* StateSpecific.strings in Resources */ = {isa = PBXBuildFile; fileRef = 378ABD2F139F0BCA00928FBF /* StateSpecific.strings */; };
-		378ABD38139F0BCA00928FBF /* StateSpecific.strings in Resources */ = {isa = PBXBuildFile; fileRef = 378ABD2F139F0BCA00928FBF /* StateSpecific.strings */; };
 		378AFC81100BDD640040706A /* CommitteesDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 378AFC7F100BDD640040706A /* CommitteesDataSource.m */; };
 		378AFC84100BDD940040706A /* LegislatorsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 378AFC82100BDD940040706A /* LegislatorsDataSource.m */; };
 		378B57AA1219913400F7ED0B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 378B57A91219913400F7ED0B /* MapViewController.m */; };
@@ -1139,7 +1137,6 @@
 		379393FE123B1A82003103B3 /* CommitteeMemberCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 379393FD123B1A82003103B3 /* CommitteeMemberCellView.m */; };
 		3794A781131CD7FA00D0B648 /* TexLege 4.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 3794A692131CABF900D0B648 /* TexLege 4.xcdatamodel */; };
 		379B9CD11250FE7E0032E616 /* TexLegeReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 379B9CD01250FE7E0032E616 /* TexLegeReachability.m */; };
-		379BD08513B3A4CB0075D484 /* UIView+JMNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 379BD08313B3A4CB0075D484 /* UIView+JMNoise.m */; };
 		379C1EEA1012DF28007844B5 /* NotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 379C1EE81012DF28007844B5 /* NotesViewController.m */; };
 		379C1F031012E0CD007844B5 /* NotesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 379C1F021012E0CD007844B5 /* NotesView.xib */; };
 		379C8C8B139A03230035C321 /* grabthumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 379C8C89139A03230035C321 /* grabthumb.png */; };
@@ -2069,7 +2066,6 @@
 		378ABD2A139F0BCA00928FBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/AppAlerts.strings; sourceTree = "<group>"; };
 		378ABD2C139F0BCA00928FBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/DataTableUI.strings; sourceTree = "<group>"; };
 		378ABD2E139F0BCA00928FBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/StandardUI.strings; sourceTree = "<group>"; };
-		378ABD30139F0BCA00928FBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/StateSpecific.strings; sourceTree = "<group>"; };
 		378AFC7E100BDD640040706A /* CommitteesDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommitteesDataSource.h; path = "Classes/Data Sources/CommitteesDataSource.h"; sourceTree = SOURCE_ROOT; };
 		378AFC7F100BDD640040706A /* CommitteesDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommitteesDataSource.m; path = "Classes/Data Sources/CommitteesDataSource.m"; sourceTree = SOURCE_ROOT; };
 		378AFC82100BDD940040706A /* LegislatorsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegislatorsDataSource.m; path = "Classes/Data Sources/LegislatorsDataSource.m"; sourceTree = SOURCE_ROOT; };
@@ -2083,8 +2079,6 @@
 		3794A692131CABF900D0B648 /* TexLege 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TexLege 4.xcdatamodel"; sourceTree = "<group>"; };
 		379B9CCF1250FE7E0032E616 /* TexLegeReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeReachability.h; sourceTree = "<group>"; };
 		379B9CD01250FE7E0032E616 /* TexLegeReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeReachability.m; sourceTree = "<group>"; };
-		379BD08213B3A4CB0075D484 /* UIView+JMNoise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+JMNoise.h"; sourceTree = "<group>"; };
-		379BD08313B3A4CB0075D484 /* UIView+JMNoise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+JMNoise.m"; sourceTree = "<group>"; };
 		379C1EE81012DF28007844B5 /* NotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotesViewController.m; path = "Classes/Detail View Controllers/NotesViewController.m"; sourceTree = SOURCE_ROOT; };
 		379C1EE91012DF28007844B5 /* NotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotesViewController.h; path = "Classes/Detail View Controllers/NotesViewController.h"; sourceTree = SOURCE_ROOT; };
 		379C1F021012E0CD007844B5 /* NotesView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = NotesView.xib; path = Resources/NotesView.xib; sourceTree = "<group>"; };
@@ -2422,6 +2416,7 @@
 		37F2C9ED1343AD45001D9D7B /* starButtonLargeOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "starButtonLargeOn@2x.png"; sourceTree = "<group>"; };
 		37F2CA0F1343AE40001D9D7B /* DDActionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDActionHeaderView.h; sourceTree = "<group>"; };
 		37F2CA101343AE40001D9D7B /* DDActionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDActionHeaderView.m; sourceTree = "<group>"; };
+		37F3568913CA459000C1EE29 /* TexLegePrivateStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegePrivateStrings.h; sourceTree = "<group>"; };
 		37F4926E1311C556005D5DE1 /* BillsDetailViewController~iphone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "BillsDetailViewController~iphone.xib"; path = "Resources/BillsDetailViewController~iphone.xib"; sourceTree = "<group>"; };
 		37F492741311C640005D5DE1 /* BillsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsDetailViewController.h; sourceTree = "<group>"; };
 		37F492751311C640005D5DE1 /* BillsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsDetailViewController.m; sourceTree = "<group>"; };
@@ -2698,7 +2693,6 @@
 				378ABD29139F0BCA00928FBF /* AppAlerts.strings */,
 				378ABD2B139F0BCA00928FBF /* DataTableUI.strings */,
 				378ABD2D139F0BCA00928FBF /* StandardUI.strings */,
-				378ABD2F139F0BCA00928FBF /* StateSpecific.strings */,
 			);
 			name = Strings;
 			sourceTree = "<group>";
@@ -3018,15 +3012,6 @@
 			path = "Core Data Classes";
 			sourceTree = "<group>";
 		};
-		379BD08113B3A4CB0075D484 /* JMNoise */ = {
-			isa = PBXGroup;
-			children = (
-				379BD08213B3A4CB0075D484 /* UIView+JMNoise.h */,
-				379BD08313B3A4CB0075D484 /* UIView+JMNoise.m */,
-			);
-			path = JMNoise;
-			sourceTree = "<group>";
-		};
 		379C8C7C139A02F90035C321 /* GrabThumb */ = {
 			isa = PBXGroup;
 			children = (
@@ -3160,7 +3145,6 @@
 		37AD57B511DA644900D68934 /* Custom Cells and Views */ = {
 			isa = PBXGroup;
 			children = (
-				379BD08113B3A4CB0075D484 /* JMNoise */,
 				37F2CA0A1343ADFC001D9D7B /* DDActionHeaderView */,
 				37D3780413A191E900621CB4 /* AppendingFlowView.h */,
 				37D3780513A191E900621CB4 /* AppendingFlowView.m */,
@@ -3946,11 +3930,12 @@
 		C83CD92C0D5822C30066AE4B /* Application Support */ = {
 			isa = PBXGroup;
 			children = (
+				29B97316FDCFA39411CA2CEA /* main.m */,
+				32CA4F630368D1EE00C91783 /* TexLege_Prefix.pch */,
+				37F3568913CA459000C1EE29 /* TexLegePrivateStrings.h */,
 				1D3623240D0F684500981E51 /* TexLegeAppDelegate.h */,
 				1D3623250D0F684500981E51 /* TexLegeAppDelegate.m */,
-				32CA4F630368D1EE00C91783 /* TexLege_Prefix.pch */,
 				377E8CF0100C39F300686B23 /* Constants.h */,
-				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
 			path = "Application Support";
 			sourceTree = "<group>";
@@ -4608,7 +4593,6 @@
 				378ABD31139F0BCA00928FBF /* AppAlerts.strings in Resources */,
 				378ABD33139F0BCA00928FBF /* DataTableUI.strings in Resources */,
 				378ABD35139F0BCA00928FBF /* StandardUI.strings in Resources */,
-				378ABD37139F0BCA00928FBF /* StateSpecific.strings in Resources */,
 				37CD0A9413A3567900F4C68B /* Abbreviations.strings in Resources */,
 				372C280F13B06C7500836162 /* iPadTabBarController.xib in Resources */,
 				3768E93B13B156F600BA5A67 /* SVWebViewController.bundle in Resources */,
@@ -5130,7 +5114,6 @@
 				378ABD32139F0BCA00928FBF /* AppAlerts.strings in Resources */,
 				378ABD34139F0BCA00928FBF /* DataTableUI.strings in Resources */,
 				378ABD36139F0BCA00928FBF /* StandardUI.strings in Resources */,
-				378ABD38139F0BCA00928FBF /* StateSpecific.strings in Resources */,
 				37CD0A9313A3567900F4C68B /* Abbreviations.strings in Resources */,
 				3768E93E13B156F600BA5A67 /* SVWebViewController.bundle in Resources */,
 				375F316513B238CC0002F12F /* action.png in Resources */,
@@ -5416,7 +5399,6 @@
 				37CD0A6B13A340E100F4C68B /* NSString+DKAdditions.m in Sources */,
 				3770C66813A49BE800906021 /* BillActionParser.m in Sources */,
 				3768E93C13B156F600BA5A67 /* SVWebViewController.m in Sources */,
-				379BD08513B3A4CB0075D484 /* UIView+JMNoise.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5513,14 +5495,6 @@
 				378ABD2E139F0BCA00928FBF /* en */,
 			);
 			name = StandardUI.strings;
-			sourceTree = "<group>";
-		};
-		378ABD2F139F0BCA00928FBF /* StateSpecific.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				378ABD30139F0BCA00928FBF /* en */,
-			);
-			name = StateSpecific.strings;
 			sourceTree = "<group>";
 		};
 		37CD0A9113A3567900F4C68B /* Abbreviations.strings */ = {
