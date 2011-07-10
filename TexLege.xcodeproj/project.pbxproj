@@ -1031,11 +1031,9 @@
 		37735BE21323104A0033F343 /* LegislatorContributionsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37412A38124322C400807502 /* LegislatorContributionsDataSource.m */; };
 		37735BE31323104A0033F343 /* MapMiniDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B3CE901249365E00FB3F94 /* MapMiniDetailViewController.m */; };
 		37735BE41323104A0033F343 /* IntelligentSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B3CF1F124946B800FB3F94 /* IntelligentSplitViewController.m */; };
-		37735BE51323104A0033F343 /* TexLegeDataImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 37242B50124117E2005C43D3 /* TexLegeDataImporter.m */; };
 		37735BE61323104A0033F343 /* TexLegeReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 379B9CD01250FE7E0032E616 /* TexLegeReachability.m */; };
 		37735BE71323104A0033F343 /* TVOutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3771333C12523025000D7207 /* TVOutManager.m */; };
 		37735BE81323104A0033F343 /* StafferObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B253E412EBF681000B6EE2 /* StafferObj+RestKit.m */; };
-		37735BE91323104A0033F343 /* TexLegeDataExporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 379D0CBD122D43590021969C /* TexLegeDataExporter.m */; };
 		37735BEA1323104A0033F343 /* NSDate+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718895B12EE917B00E3300D /* NSDate+Helper.m */; };
 		37735BEB1323104A0033F343 /* DataModelUpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 373EBA5012F0A01100A3E604 /* DataModelUpdateManager.m */; };
 		37735BEC1323104A0033F343 /* MTStatusBarOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 37400B9E12F37436002B6042 /* MTStatusBarOverlay.m */; };
@@ -1481,10 +1479,6 @@
 		370B9DDB122AD91600AC9CC8 /* TexLegeGroupCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeGroupCellProtocol.h; sourceTree = "<group>"; };
 		370C270A1225BF7E004273E3 /* DistrictMapDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictMapDataSource.h; sourceTree = "<group>"; };
 		370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictMapDataSource.m; sourceTree = "<group>"; };
-		370C284D1225C2B8004273E3 /* DistrictMapImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DistrictMapImporter.h; path = "../Data Sources/DistrictMapImporter.h"; sourceTree = "<group>"; };
-		370C284E1225C2B8004273E3 /* DistrictMapImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DistrictMapImporter.m; path = "../Data Sources/DistrictMapImporter.m"; sourceTree = "<group>"; };
-		370C28501225C70F004273E3 /* DistrictMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DistrictMap.h; path = "Classes/Data Sources/DistrictMap.h"; sourceTree = SOURCE_ROOT; };
-		370C28511225C70F004273E3 /* DistrictMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DistrictMap.m; path = "Classes/Data Sources/DistrictMap.m"; sourceTree = SOURCE_ROOT; };
 		370EAC351337E3CF007788BC /* TexLegeObjectCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeObjectCache.h; sourceTree = "<group>"; };
 		370EAC361337E3CF007788BC /* TexLegeObjectCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeObjectCache.m; sourceTree = "<group>"; };
 		370EAD2D1338028C007788BC /* OpenLegislativeAPIs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenLegislativeAPIs.h; sourceTree = "<group>"; };
@@ -1511,8 +1505,6 @@
 		371D54441365F60E00A61BD4 /* NSData_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSData_Extensions.m; sourceTree = "<group>"; };
 		371FB1D61333B43C0003740A /* CalendarEventsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarEventsLoader.h; sourceTree = "<group>"; };
 		371FB1D71333B43C0003740A /* CalendarEventsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarEventsLoader.m; sourceTree = "<group>"; };
-		37242B4F124117E2005C43D3 /* TexLegeDataImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TexLegeDataImporter.h; path = "../Core Data Classes/TexLegeDataImporter.h"; sourceTree = "<group>"; };
-		37242B50124117E2005C43D3 /* TexLegeDataImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TexLegeDataImporter.m; path = "../Core Data Classes/TexLegeDataImporter.m"; sourceTree = "<group>"; };
 		37242D3412415CC4005C43D3 /* LegislatorContributionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorContributionsViewController.h; sourceTree = "<group>"; };
 		37242D3512415CC4005C43D3 /* LegislatorContributionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorContributionsViewController.m; sourceTree = "<group>"; };
 		3726FC34120A99800043D6B9 /* 01-refresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "01-refresh@2x.png"; sourceTree = "<group>"; };
@@ -2084,8 +2076,6 @@
 		379C1F021012E0CD007844B5 /* NotesView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = NotesView.xib; path = Resources/NotesView.xib; sourceTree = "<group>"; };
 		379C8C89139A03230035C321 /* grabthumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grabthumb.png; sourceTree = "<group>"; };
 		379C8C8A139A03230035C321 /* grabthumb@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "grabthumb@2x.png"; sourceTree = "<group>"; };
-		379D0CBC122D43590021969C /* TexLegeDataExporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TexLegeDataExporter.h; path = "../Data Sources/TexLegeDataExporter.h"; sourceTree = "<group>"; };
-		379D0CBD122D43590021969C /* TexLegeDataExporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TexLegeDataExporter.m; path = "../Data Sources/TexLegeDataExporter.m"; sourceTree = "<group>"; };
 		379D0CC1122D49000021969C /* TexLegeCoreDataUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeCoreDataUtils.h; sourceTree = "<group>"; };
 		379D0CC2122D49000021969C /* TexLegeCoreDataUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeCoreDataUtils.m; sourceTree = "<group>"; };
 		379D7144123C1FB80094F45B /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
@@ -2384,8 +2374,6 @@
 		37D46BFF123B483800C2C403 /* CommitteeMemberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommitteeMemberCell.h; path = "Classes/Custom Cells and Views/CommitteeMemberCell.h"; sourceTree = SOURCE_ROOT; };
 		37D46C00123B483800C2C403 /* CommitteeMemberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommitteeMemberCell.m; path = "Classes/Custom Cells and Views/CommitteeMemberCell.m"; sourceTree = SOURCE_ROOT; };
 		37D46DC9123BFA9800C2C403 /* CommitteeDetailViewController~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "CommitteeDetailViewController~ipad.xib"; path = "Resources-iPad/CommitteeDetailViewController~ipad.xib"; sourceTree = SOURCE_ROOT; };
-		37D52AE8124818FB005BC5EC /* JSONDataImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONDataImporter.h; path = "../Core Data Classes/JSONDataImporter.h"; sourceTree = "<group>"; };
-		37D52AE9124818FB005BC5EC /* JSONDataImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONDataImporter.m; path = "../Core Data Classes/JSONDataImporter.m"; sourceTree = "<group>"; };
 		37D6E82610175F0800D4D7C2 /* UtilityMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UtilityMethods.h; path = "Classes/Utility Classes/UtilityMethods.h"; sourceTree = SOURCE_ROOT; };
 		37D6E82710175F0800D4D7C2 /* UtilityMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UtilityMethods.m; path = "Classes/Utility Classes/UtilityMethods.m"; sourceTree = SOURCE_ROOT; };
 		37D6E8C41017772B00D4D7C2 /* Map.SamHoustonLoc.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.SamHoustonLoc.pdf; path = Resources/Maps/Map.SamHoustonLoc.pdf; sourceTree = "<group>"; };
@@ -2416,7 +2404,7 @@
 		37F2C9ED1343AD45001D9D7B /* starButtonLargeOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "starButtonLargeOn@2x.png"; sourceTree = "<group>"; };
 		37F2CA0F1343AE40001D9D7B /* DDActionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDActionHeaderView.h; sourceTree = "<group>"; };
 		37F2CA101343AE40001D9D7B /* DDActionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDActionHeaderView.m; sourceTree = "<group>"; };
-		37F3568913CA459000C1EE29 /* TexLegePrivateStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegePrivateStrings.h; sourceTree = "<group>"; };
+		37F3571313CA5B2500C1EE29 /* TexLegePrivateStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegePrivateStrings.h; sourceTree = "<group>"; };
 		37F4926E1311C556005D5DE1 /* BillsDetailViewController~iphone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "BillsDetailViewController~iphone.xib"; path = "Resources/BillsDetailViewController~iphone.xib"; sourceTree = "<group>"; };
 		37F492741311C640005D5DE1 /* BillsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsDetailViewController.h; sourceTree = "<group>"; };
 		37F492751311C640005D5DE1 /* BillsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsDetailViewController.m; sourceTree = "<group>"; };
@@ -2494,6 +2482,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				37F3570813CA5B2500C1EE29 /* PrivateData */,
 				C83CD92C0D5822C30066AE4B /* Application Support */,
 				37A0E4460FD2DEAA009B65F7 /* Utility Classes */,
 				372D5DDB11E9C0B5005A21E2 /* MapKit */,
@@ -2620,26 +2609,8 @@
 				371FB1D71333B43C0003740A /* CalendarEventsLoader.m */,
 				373EBA4F12F0A01100A3E604 /* DataModelUpdateManager.h */,
 				373EBA5012F0A01100A3E604 /* DataModelUpdateManager.m */,
-				371FB1D31333B3DB0003740A /* Not For Distribution */,
 			);
 			path = "External Data Sources";
-			sourceTree = "<group>";
-		};
-		371FB1D31333B3DB0003740A /* Not For Distribution */ = {
-			isa = PBXGroup;
-			children = (
-				37D52AE8124818FB005BC5EC /* JSONDataImporter.h */,
-				37D52AE9124818FB005BC5EC /* JSONDataImporter.m */,
-				379D0CBC122D43590021969C /* TexLegeDataExporter.h */,
-				379D0CBD122D43590021969C /* TexLegeDataExporter.m */,
-				37242B4F124117E2005C43D3 /* TexLegeDataImporter.h */,
-				37242B50124117E2005C43D3 /* TexLegeDataImporter.m */,
-				370C28501225C70F004273E3 /* DistrictMap.h */,
-				370C28511225C70F004273E3 /* DistrictMap.m */,
-				370C284D1225C2B8004273E3 /* DistrictMapImporter.h */,
-				370C284E1225C2B8004273E3 /* DistrictMapImporter.m */,
-			);
-			name = "Not For Distribution";
 			sourceTree = "<group>";
 		};
 		3721EA4F11D6E6EA00CA33DA /* Frameworks */ = {
@@ -3927,12 +3898,19 @@
 			path = DDActionHeaderView;
 			sourceTree = "<group>";
 		};
+		37F3570813CA5B2500C1EE29 /* PrivateData */ = {
+			isa = PBXGroup;
+			children = (
+				37F3571313CA5B2500C1EE29 /* TexLegePrivateStrings.h */,
+			);
+			path = PrivateData;
+			sourceTree = SOURCE_ROOT;
+		};
 		C83CD92C0D5822C30066AE4B /* Application Support */ = {
 			isa = PBXGroup;
 			children = (
 				29B97316FDCFA39411CA2CEA /* main.m */,
 				32CA4F630368D1EE00C91783 /* TexLege_Prefix.pch */,
-				37F3568913CA459000C1EE29 /* TexLegePrivateStrings.h */,
 				1D3623240D0F684500981E51 /* TexLegeAppDelegate.h */,
 				1D3623250D0F684500981E51 /* TexLegeAppDelegate.m */,
 				377E8CF0100C39F300686B23 /* Constants.h */,
@@ -5344,11 +5322,9 @@
 				37735BE21323104A0033F343 /* LegislatorContributionsDataSource.m in Sources */,
 				37735BE31323104A0033F343 /* MapMiniDetailViewController.m in Sources */,
 				37735BE41323104A0033F343 /* IntelligentSplitViewController.m in Sources */,
-				37735BE51323104A0033F343 /* TexLegeDataImporter.m in Sources */,
 				37735BE61323104A0033F343 /* TexLegeReachability.m in Sources */,
 				37735BE71323104A0033F343 /* TVOutManager.m in Sources */,
 				37735BE81323104A0033F343 /* StafferObj+RestKit.m in Sources */,
-				37735BE91323104A0033F343 /* TexLegeDataExporter.m in Sources */,
 				37735BEA1323104A0033F343 /* NSDate+Helper.m in Sources */,
 				37735BEB1323104A0033F343 /* DataModelUpdateManager.m in Sources */,
 				37735BEC1323104A0033F343 /* MTStatusBarOverlay.m in Sources */,
