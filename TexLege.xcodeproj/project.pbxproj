@@ -2450,7 +2450,7 @@
 			isa = PBXGroup;
 			children = (
 				37ECDA771065358800E43497 /* Release Notes.rtf */,
-				3721EA4F11D6E6EA00CA33DA /* Frameworks */,
+				3721EA4F11D6E6EA00CA33DA /* Vendor Modules */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -2554,10 +2554,11 @@
 			path = "External Data Sources";
 			sourceTree = "<group>";
 		};
-		3721EA4F11D6E6EA00CA33DA /* Frameworks */ = {
+		3721EA4F11D6E6EA00CA33DA /* Vendor Modules */ = {
 			isa = PBXGroup;
 			children = (
 				3775C7C8131C44C600638ED4 /* RestKit.xcodeproj */,
+				375E5ACA133D6F9E0070EA64 /* s7graphview */,
 				37E635F7139B4B3200A9CC27 /* TTTOrdinalNumberFormatter */,
 				37FE1C4D13CB677000655550 /* JSONKit */,
 				376C1CC01345A7EB009436B5 /* XMLReader */,
@@ -2567,8 +2568,9 @@
 				37A4E5BA1223830800BCE44D /* Localytics */,
 				3768E93413B156F600BA5A67 /* SVWebViewController */,
 				377074CE1397B2B400E82CA8 /* SVGeocoder */,
+				37F2CA0A1343ADFC001D9D7B /* DDActionHeaderView */,
 			);
-			name = Frameworks;
+			name = "Vendor Modules";
 			path = ../../Frameworks;
 			sourceTree = "<group>";
 		};
@@ -2669,7 +2671,6 @@
 		375E5A8E133D6F010070EA64 /* VotingRecordView */ = {
 			isa = PBXGroup;
 			children = (
-				375E5ACA133D6F9E0070EA64 /* s7graphview */,
 				375E5AC6133D6F8B0070EA64 /* VotingRecordDataSource.h */,
 				375E5AC7133D6F8B0070EA64 /* VotingRecordDataSource.m */,
 			);
@@ -2683,8 +2684,9 @@
 				375E5ACC133D6F9E0070EA64 /* S7GraphView.m */,
 				375E5ACD133D6F9E0070EA64 /* S7Macros.h */,
 			);
-			path = s7graphview;
-			sourceTree = "<group>";
+			name = s7graphview;
+			path = Vendor/S7GraphView/s7graphview;
+			sourceTree = SOURCE_ROOT;
 		};
 		3766EE1212108E610073C705 /* Detail View Controllers */ = {
 			isa = PBXGroup;
@@ -3051,7 +3053,6 @@
 		37AD57B511DA644900D68934 /* Custom Cells and Views */ = {
 			isa = PBXGroup;
 			children = (
-				37F2CA0A1343ADFC001D9D7B /* DDActionHeaderView */,
 				37D3780413A191E900621CB4 /* AppendingFlowView.h */,
 				37D3780513A191E900621CB4 /* AppendingFlowView.m */,
 				370B9DDB122AD91600AC9CC8 /* TexLegeGroupCellProtocol.h */,
@@ -3508,8 +3509,8 @@
 				37CF6BB81226597500456D29 /* UIColor-Expanded.m */,
 			);
 			name = "UIColor-Utilities";
-			path = "../GitHub/StatesLege/Vendor/UIColor-Utilities";
-			sourceTree = "<group>";
+			path = "Vendor/UIColor-Utilities";
+			sourceTree = SOURCE_ROOT;
 		};
 		37D0D1D41357A0F0003DA1BB /* Stock Models */ = {
 			isa = PBXGroup;
@@ -3763,8 +3764,9 @@
 				37F2CA0F1343AE40001D9D7B /* DDActionHeaderView.h */,
 				37F2CA101343AE40001D9D7B /* DDActionHeaderView.m */,
 			);
-			path = DDActionHeaderView;
-			sourceTree = "<group>";
+			name = DDActionHeaderView;
+			path = Vendor/DDActionHeaderView;
+			sourceTree = SOURCE_ROOT;
 		};
 		37F3570813CA5B2500C1EE29 /* PrivateData */ = {
 			isa = PBXGroup;

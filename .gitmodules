@@ -25,3 +25,9 @@
 [submodule "Vendor/TTTOrdinalNumberFormatter"]
 	path = Vendor/TTTOrdinalNumberFormatter
 	url = git://github.com/grgcombs/TTTOrdinalNumberFormatter.git
+[submodule "Vendor/S7GraphView"]
+	path = Vendor/S7GraphView
+	url = git://github.com/grgcombs/Customed-s7graphview.git
+[submodule "Vendor/DDActionHeaderView"]
+	path = Vendor/DDActionHeaderView
+	url = git://github.com/grgcombs/DDActionHeaderView.git
