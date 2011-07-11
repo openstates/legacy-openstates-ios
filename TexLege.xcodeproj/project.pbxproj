@@ -1468,7 +1468,6 @@
 		370813E5122C536B00D8CA69 /* DisclosureQuartzView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DisclosureQuartzView.m; sourceTree = "<group>"; };
 		37094D94133B162E00B9693C /* TexLegeBadgeGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeBadgeGroupCell.h; sourceTree = "<group>"; };
 		37094D95133B162E00B9693C /* TexLegeBadgeGroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeBadgeGroupCell.m; sourceTree = "<group>"; };
-		3709AB30101A092500C1061B /* EditingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = EditingTableViewCell.xib; path = Resources/EditingTableViewCell.xib; sourceTree = "<group>"; };
 		3709AEAC101FBE7900C1061B /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = "Classes/Utility Classes/Reachability.h"; sourceTree = SOURCE_ROOT; };
 		3709AEAD101FBE7900C1061B /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = "Classes/Utility Classes/Reachability.m"; sourceTree = SOURCE_ROOT; };
 		3709AF0C101FBF5100C1061B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -2529,7 +2528,6 @@
 				37C94A3912387D6500D2D582 /* DistrictMapMasterViewController.xib */,
 				37FBB77B122257AF00CD8E20 /* DistrictOfficeMasterViewController.xib */,
 				3786786211E442800003690F /* CapitolMapsDetailViewController.xib */,
-				3709AB30101A092500C1061B /* EditingTableViewCell.xib */,
 				379C1F021012E0CD007844B5 /* NotesView.xib */,
 				37A0E4870FD2DFB1009B65F7 /* Data */,
 				37D714640FFD0818008E59E7 /* Default and Icon */,

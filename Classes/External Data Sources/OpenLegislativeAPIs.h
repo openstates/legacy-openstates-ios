@@ -7,7 +7,6 @@
  *
  */
 
-#import "SynthesizeSingleton.h"
 #import <RestKit/RestKit.h>
 
 static NSString *osApiHost =		@"openstates.sunlightlabs.com";

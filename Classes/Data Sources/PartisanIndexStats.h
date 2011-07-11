@@ -10,7 +10,6 @@
 //
 //
 
-#import "SynthesizeSingleton.h"
 #import <RestKit/RestKit.h>
 
 #define kPartisanIndexNotifyError	@"PARTISAN_INDEX_ERROR"

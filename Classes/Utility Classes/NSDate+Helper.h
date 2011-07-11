@@ -75,8 +75,6 @@ To use it in your Cocoa project, import the header and implementation files, and
 //  Copyright 2009, 2010 Zetetic LLC. All rights reserved.
 //
 
-#import "SynthesizeSingleton.h"
-
 @interface TexLegeDateHelper : NSObject
 {
 	NSDateFormatter *t_modFormatter;

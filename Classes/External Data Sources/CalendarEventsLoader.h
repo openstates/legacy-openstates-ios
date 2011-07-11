@@ -11,7 +11,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SynthesizeSingleton.h"
 #import <EventKit/EventKit.h>
 #import <RestKit/RestKit.h>
 #import "Kal.h"

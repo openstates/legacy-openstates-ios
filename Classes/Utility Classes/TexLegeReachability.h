@@ -11,7 +11,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SynthesizeSingleton.h"
 #import "Reachability.h"
 
 
