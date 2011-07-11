@@ -39,4 +39,6 @@ License
 Screenshots
 =========================
 
-- Screenshots go here.
+![Screenshot](https://github.com/sunlightlabs/StatesLege/raw/master/Screenshots/iPad/LegeDetail.png "Legislator Details")
+
+![Screenshot](https://github.com/sunlightlabs/StatesLege/raw/master/Screenshots/iPhone/BillDetail.png "Bill Details")
