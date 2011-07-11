@@ -1,11 +1,11 @@
 Development Milestones
 =======================
- 1. **(*mostly* done)** Move project development to GitHub.  
+ 1. **(done)** Move project development to GitHub.  
 - **(done)** Clean up code a little, including removal of any swearing in comments.  
 - **(done)** Upload sources.  
 - **(done)** Point repository to any existing GitHub submodules, where possible.   
 - **(done)** Move to Creative Commons licensing.  
-- **(*TBD*)** Create a TexLege branch/fork of the public repository.  
+- **(done)** Create a TexLege branch/fork of the public repository.  
   
  
  2. Remove TexLege specific application features:  
