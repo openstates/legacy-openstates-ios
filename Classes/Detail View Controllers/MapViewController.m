@@ -479,7 +479,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 - (void)geocodeCoordinateWithAddress:(NSString *)address {
 	[self showLocateActivityButton];
 	
-	self.geocoder = [[[SVGeocoder alloc] initWithAddress:address inRegion:self.texasRegion] autorelease];
+	self.geocoder = [[[SVGeocoder alloc] initWithAddress:address inBounds:self.texasRegion] autorelease];
 	[self.geocoder setDelegate:self];
 	[self.geocoder startAsynchronous];
 }

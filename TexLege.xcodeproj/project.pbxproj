@@ -1273,6 +1273,8 @@
 		37F492761311C640005D5DE1 /* BillsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F492751311C640005D5DE1 /* BillsDetailViewController.m */; };
 		37F510AA0FF1ADEF0020A13B /* Icon_80.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F510A90FF1ADEF0020A13B /* Icon_80.png */; };
 		37FC487013110A9E00A4C0B2 /* BillSearchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC486F13110A9E00A4C0B2 /* BillSearchDataSource.m */; };
+		37FE1C8E13CB677100655550 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1C7513CB677100655550 /* JSONKit.m */; };
+		37FE1CA713CB677100655550 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1C7513CB677100655550 /* JSONKit.m */; };
 		37FE46301357BF1600E8C038 /* CommitteePositionObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DF1357A198003DA1BB /* CommitteePositionObj.m */; };
 		37FE46311357BF1900E8C038 /* LinkObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DB1357A198003DA1BB /* LinkObj.m */; };
 		37FE46321357BF2100E8C038 /* LegislatorObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DD1357A198003DA1BB /* LegislatorObj.m */; };
@@ -2358,6 +2360,8 @@
 		37FBB75B122253BC00CD8E20 /* DistrictOfficeMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictOfficeMasterViewController.m; sourceTree = "<group>"; };
 		37FBB77B122257AF00CD8E20 /* DistrictOfficeMasterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = DistrictOfficeMasterViewController.xib; path = Resources/DistrictOfficeMasterViewController.xib; sourceTree = SOURCE_ROOT; };
 		37FC486F13110A9E00A4C0B2 /* BillSearchDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillSearchDataSource.m; sourceTree = "<group>"; };
+		37FE1C7413CB677100655550 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
+		37FE1C7513CB677100655550 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2556,6 +2560,7 @@
 			isa = PBXGroup;
 			children = (
 				3775C7C8131C44C600638ED4 /* RestKit.xcodeproj */,
+				37FE1C4D13CB677000655550 /* JSONKit */,
 				376C1CC01345A7EB009436B5 /* XMLReader */,
 				372D061712FC799200E63696 /* Kal */,
 				3771332D12523025000D7207 /* TVOutManager */,
@@ -3784,6 +3789,16 @@
 			);
 			path = custom;
 			sourceTree = "<group>";
+		};
+		37FE1C4D13CB677000655550 /* JSONKit */ = {
+			isa = PBXGroup;
+			children = (
+				37FE1C7413CB677100655550 /* JSONKit.h */,
+				37FE1C7513CB677100655550 /* JSONKit.m */,
+			);
+			name = JSONKit;
+			path = ../JSONKit;
+			sourceTree = SOURCE_ROOT;
 		};
 		C83CD92C0D5822C30066AE4B /* Application Support */ = {
 			isa = PBXGroup;
@@ -5131,6 +5146,7 @@
 				37CD09B213A2A6F100F4C68B /* StateMetaLoader.m in Sources */,
 				3770C66913A49BE800906021 /* BillActionParser.m in Sources */,
 				3768E93913B156F600BA5A67 /* SVWebViewController.m in Sources */,
+				37FE1C8E13CB677100655550 /* JSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5254,6 +5270,7 @@
 				37CD0A6B13A340E100F4C68B /* NSString+DKAdditions.m in Sources */,
 				3770C66813A49BE800906021 /* BillActionParser.m in Sources */,
 				3768E93C13B156F600BA5A67 /* SVWebViewController.m in Sources */,
+				37FE1CA713CB677100655550 /* JSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
