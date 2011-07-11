@@ -1022,7 +1022,6 @@
 		37735BDC1323104A0033F343 /* LegislatorContributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37242D3512415CC4005C43D3 /* LegislatorContributionsViewController.m */; };
 		37735BE21323104A0033F343 /* LegislatorContributionsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37412A38124322C400807502 /* LegislatorContributionsDataSource.m */; };
 		37735BE31323104A0033F343 /* MapMiniDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B3CE901249365E00FB3F94 /* MapMiniDetailViewController.m */; };
-		37735BE41323104A0033F343 /* IntelligentSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B3CF1F124946B800FB3F94 /* IntelligentSplitViewController.m */; };
 		37735BE61323104A0033F343 /* TexLegeReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 379B9CD01250FE7E0032E616 /* TexLegeReachability.m */; };
 		37735BE71323104A0033F343 /* TVOutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3771333C12523025000D7207 /* TVOutManager.m */; };
 		37735BE81323104A0033F343 /* StafferObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B253E412EBF681000B6EE2 /* StafferObj+RestKit.m */; };
@@ -1156,7 +1155,6 @@
 		37B3CE911249365E00FB3F94 /* MapMiniDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B3CE901249365E00FB3F94 /* MapMiniDetailViewController.m */; };
 		37B3CE991249373100FB3F94 /* MapMiniDetailViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37B3CE981249373100FB3F94 /* MapMiniDetailViewController~ipad.xib */; };
 		37B3CEB412493D3100FB3F94 /* MapMiniDetailViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37B3CEB312493D3100FB3F94 /* MapMiniDetailViewController~iphone.xib */; };
-		37B3CF20124946B800FB3F94 /* IntelligentSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B3CF1F124946B800FB3F94 /* IntelligentSplitViewController.m */; };
 		37B614F4139D1863003B85B4 /* 103-map-inv@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37B614F0139D1863003B85B4 /* 103-map-inv@2x.png */; };
 		37B614F5139D1863003B85B4 /* 103-map-inv.png in Resources */ = {isa = PBXBuildFile; fileRef = 37B614F1139D1863003B85B4 /* 103-map-inv.png */; };
 		37B64234120FE9FF0076B196 /* LegislatorMasterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B64233120FE9FF0076B196 /* LegislatorMasterCell.m */; };
@@ -1217,8 +1215,6 @@
 		37D1C89F120344D000507757 /* 01-refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C806120344D000507757 /* 01-refresh.png */; };
 		37D3649D1236869200CCF86E /* UserPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D3649C1236869200CCF86E /* UserPinAnnotationView.m */; };
 		37D364F612369DDC00CCF86E /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37D364F512369DDC00CCF86E /* AddressBookUI.framework */; };
-		37D3780613A191E900621CB4 /* AppendingFlowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D3780513A191E900621CB4 /* AppendingFlowView.m */; };
-		37D3780713A191E900621CB4 /* AppendingFlowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D3780513A191E900621CB4 /* AppendingFlowView.m */; };
 		37D38B0F132ECFFA002F1730 /* BillsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D38B0E132ECFFA002F1730 /* BillsListViewController.m */; };
 		37D38B10132ECFFB002F1730 /* BillsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D38B0E132ECFFA002F1730 /* BillsListViewController.m */; };
 		37D46C01123B483800C2C403 /* CommitteeMemberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D46C00123B483800C2C403 /* CommitteeMemberCell.m */; };
@@ -1274,6 +1270,10 @@
 		37FE1CDE13CB75FD00655550 /* UploaderThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1CDB13CB75FD00655550 /* UploaderThread.m */; };
 		37FE1CDF13CB75FD00655550 /* LocalyticsSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1CD913CB75FD00655550 /* LocalyticsSession.m */; };
 		37FE1CE013CB75FD00655550 /* UploaderThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1CDB13CB75FD00655550 /* UploaderThread.m */; };
+		37FE1E0C13CB8E3300655550 /* AppendingFlowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1D9A13CB8E3300655550 /* AppendingFlowView.m */; };
+		37FE1E5613CB8E3300655550 /* AppendingFlowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1D9A13CB8E3300655550 /* AppendingFlowView.m */; };
+		37FE1F1513CB8EFE00655550 /* IntelligentSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1ED813CB8EFE00655550 /* IntelligentSplitViewController.m */; };
+		37FE1F3E13CB8EFE00655550 /* IntelligentSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1ED813CB8EFE00655550 /* IntelligentSplitViewController.m */; };
 		37FE46301357BF1600E8C038 /* CommitteePositionObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DF1357A198003DA1BB /* CommitteePositionObj.m */; };
 		37FE46311357BF1900E8C038 /* LinkObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DB1357A198003DA1BB /* LinkObj.m */; };
 		37FE46321357BF2100E8C038 /* LegislatorObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DD1357A198003DA1BB /* LegislatorObj.m */; };
@@ -2105,8 +2105,6 @@
 		37B3CE901249365E00FB3F94 /* MapMiniDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapMiniDetailViewController.m; path = "Classes/Detail View Controllers/MapMiniDetailViewController.m"; sourceTree = SOURCE_ROOT; };
 		37B3CE981249373100FB3F94 /* MapMiniDetailViewController~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapMiniDetailViewController~ipad.xib"; path = "Resources/MapMiniDetailViewController~ipad.xib"; sourceTree = "<group>"; };
 		37B3CEB312493D3100FB3F94 /* MapMiniDetailViewController~iphone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapMiniDetailViewController~iphone.xib"; path = "Resources/MapMiniDetailViewController~iphone.xib"; sourceTree = SOURCE_ROOT; };
-		37B3CF1E124946B800FB3F94 /* IntelligentSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntelligentSplitViewController.h; sourceTree = "<group>"; };
-		37B3CF1F124946B800FB3F94 /* IntelligentSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntelligentSplitViewController.m; sourceTree = "<group>"; };
 		37B614F0139D1863003B85B4 /* 103-map-inv@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "103-map-inv@2x.png"; sourceTree = "<group>"; };
 		37B614F1139D1863003B85B4 /* 103-map-inv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "103-map-inv.png"; sourceTree = "<group>"; };
 		37B64232120FE9FF0076B196 /* LegislatorMasterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorMasterCell.h; path = "Classes/Custom Cells and Views/LegislatorMasterCell.h"; sourceTree = SOURCE_ROOT; };
@@ -2298,8 +2296,6 @@
 		37D3649B1236869200CCF86E /* UserPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserPinAnnotationView.h; sourceTree = "<group>"; };
 		37D3649C1236869200CCF86E /* UserPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserPinAnnotationView.m; sourceTree = "<group>"; };
 		37D364F512369DDC00CCF86E /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
-		37D3780413A191E900621CB4 /* AppendingFlowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppendingFlowView.h; path = ../../GitHub/AppendingFlowView/Classes/AppendingFlowView.h; sourceTree = SOURCE_ROOT; };
-		37D3780513A191E900621CB4 /* AppendingFlowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppendingFlowView.m; path = ../../GitHub/AppendingFlowView/Classes/AppendingFlowView.m; sourceTree = SOURCE_ROOT; };
 		37D38B0D132ECFFA002F1730 /* BillsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsListViewController.h; sourceTree = "<group>"; };
 		37D38B0E132ECFFA002F1730 /* BillsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsListViewController.m; sourceTree = "<group>"; };
 		37D46BFF123B483800C2C403 /* CommitteeMemberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommitteeMemberCell.h; path = "Classes/Custom Cells and Views/CommitteeMemberCell.h"; sourceTree = SOURCE_ROOT; };
@@ -2360,6 +2356,10 @@
 		37FE1CDA13CB75FD00655550 /* UploaderThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploaderThread.h; sourceTree = "<group>"; };
 		37FE1CDB13CB75FD00655550 /* UploaderThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploaderThread.m; sourceTree = "<group>"; };
 		37FE1CDC13CB75FD00655550 /* WebserviceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebserviceConstants.h; sourceTree = "<group>"; };
+		37FE1D9913CB8E3300655550 /* AppendingFlowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppendingFlowView.h; sourceTree = "<group>"; };
+		37FE1D9A13CB8E3300655550 /* AppendingFlowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppendingFlowView.m; sourceTree = "<group>"; };
+		37FE1ED713CB8EFE00655550 /* IntelligentSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntelligentSplitViewController.h; sourceTree = "<group>"; };
+		37FE1ED813CB8EFE00655550 /* IntelligentSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntelligentSplitViewController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2558,6 +2558,8 @@
 			isa = PBXGroup;
 			children = (
 				3775C7C8131C44C600638ED4 /* RestKit.xcodeproj */,
+				37FE1EAE13CB8EFE00655550 /* IntelligentSplitViewController */,
+				37FE1D9413CB8E3300655550 /* AppendingFlowView */,
 				375E5ACA133D6F9E0070EA64 /* s7graphview */,
 				37E635F7139B4B3200A9CC27 /* TTTOrdinalNumberFormatter */,
 				37FE1C4D13CB677000655550 /* JSONKit */,
@@ -2632,8 +2634,6 @@
 				374C36E51215E8DA006B6ADA /* CapitolMapsMasterViewController.m */,
 				374C37031215EB2D006B6ADA /* LinksMasterViewController.h */,
 				374C37041215EB2D006B6ADA /* LinksMasterViewController.m */,
-				37B3CF1E124946B800FB3F94 /* IntelligentSplitViewController.h */,
-				37B3CF1F124946B800FB3F94 /* IntelligentSplitViewController.m */,
 				37CFBA0212FE8936007C3808 /* BillsMasterViewController.h */,
 				37CFBA0312FE8936007C3808 /* BillsMasterViewController.m */,
 			);
@@ -3053,8 +3053,6 @@
 		37AD57B511DA644900D68934 /* Custom Cells and Views */ = {
 			isa = PBXGroup;
 			children = (
-				37D3780413A191E900621CB4 /* AppendingFlowView.h */,
-				37D3780513A191E900621CB4 /* AppendingFlowView.m */,
 				370B9DDB122AD91600AC9CC8 /* TexLegeGroupCellProtocol.h */,
 				37094D94133B162E00B9693C /* TexLegeBadgeGroupCell.h */,
 				37094D95133B162E00B9693C /* TexLegeBadgeGroupCell.m */,
@@ -3800,6 +3798,26 @@
 			);
 			name = JSONKit;
 			path = Vendor/JSONKit;
+			sourceTree = SOURCE_ROOT;
+		};
+		37FE1D9413CB8E3300655550 /* AppendingFlowView */ = {
+			isa = PBXGroup;
+			children = (
+				37FE1D9913CB8E3300655550 /* AppendingFlowView.h */,
+				37FE1D9A13CB8E3300655550 /* AppendingFlowView.m */,
+			);
+			name = AppendingFlowView;
+			path = Vendor/AppendingFlowView/Classes;
+			sourceTree = SOURCE_ROOT;
+		};
+		37FE1EAE13CB8EFE00655550 /* IntelligentSplitViewController */ = {
+			isa = PBXGroup;
+			children = (
+				37FE1ED713CB8EFE00655550 /* IntelligentSplitViewController.h */,
+				37FE1ED813CB8EFE00655550 /* IntelligentSplitViewController.m */,
+			);
+			name = IntelligentSplitViewController;
+			path = Vendor/IntelligentSplitViewController;
 			sourceTree = SOURCE_ROOT;
 		};
 		C83CD92C0D5822C30066AE4B /* Application Support */ = {
@@ -5093,7 +5111,6 @@
 				37242D3612415CC4005C43D3 /* LegislatorContributionsViewController.m in Sources */,
 				37412A39124322C400807502 /* LegislatorContributionsDataSource.m in Sources */,
 				37B3CE911249365E00FB3F94 /* MapMiniDetailViewController.m in Sources */,
-				37B3CF20124946B800FB3F94 /* IntelligentSplitViewController.m in Sources */,
 				379B9CD11250FE7E0032E616 /* TexLegeReachability.m in Sources */,
 				37B253E512EBF681000B6EE2 /* StafferObj+RestKit.m in Sources */,
 				3718895C12EE917B00E3300D /* NSDate+Helper.m in Sources */,
@@ -5142,12 +5159,13 @@
 				37E635FC139B4B3200A9CC27 /* TTTOrdinalNumberFormatter.m in Sources */,
 				37E36CF1139E695C00917F40 /* BillsRecentViewController.m in Sources */,
 				37E36D03139E6D0A00917F40 /* VTPGAdvancedLog.m in Sources */,
-				37D3780613A191E900621CB4 /* AppendingFlowView.m in Sources */,
 				37CD09B213A2A6F100F4C68B /* StateMetaLoader.m in Sources */,
 				3770C66913A49BE800906021 /* BillActionParser.m in Sources */,
 				3768E93913B156F600BA5A67 /* SVWebViewController.m in Sources */,
 				37FE1CDD13CB75FD00655550 /* LocalyticsSession.m in Sources */,
 				37FE1CDE13CB75FD00655550 /* UploaderThread.m in Sources */,
+				37FE1E0C13CB8E3300655550 /* AppendingFlowView.m in Sources */,
+				37FE1F1513CB8EFE00655550 /* IntelligentSplitViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5215,7 +5233,6 @@
 				37735BDC1323104A0033F343 /* LegislatorContributionsViewController.m in Sources */,
 				37735BE21323104A0033F343 /* LegislatorContributionsDataSource.m in Sources */,
 				37735BE31323104A0033F343 /* MapMiniDetailViewController.m in Sources */,
-				37735BE41323104A0033F343 /* IntelligentSplitViewController.m in Sources */,
 				37735BE61323104A0033F343 /* TexLegeReachability.m in Sources */,
 				37735BE71323104A0033F343 /* TVOutManager.m in Sources */,
 				37735BE81323104A0033F343 /* StafferObj+RestKit.m in Sources */,
@@ -5264,7 +5281,6 @@
 				37E635FE139B4B3200A9CC27 /* TTTOrdinalNumberFormatter.m in Sources */,
 				37E36CF2139E695C00917F40 /* BillsRecentViewController.m in Sources */,
 				37E36D04139E6D0A00917F40 /* VTPGAdvancedLog.m in Sources */,
-				37D3780713A191E900621CB4 /* AppendingFlowView.m in Sources */,
 				37CD09B113A2A6F100F4C68B /* StateMetaLoader.m in Sources */,
 				37CD0A6B13A340E100F4C68B /* NSString+DKAdditions.m in Sources */,
 				3770C66813A49BE800906021 /* BillActionParser.m in Sources */,
@@ -5272,6 +5288,8 @@
 				37FE1CA713CB677100655550 /* JSONKit.m in Sources */,
 				37FE1CDF13CB75FD00655550 /* LocalyticsSession.m in Sources */,
 				37FE1CE013CB75FD00655550 /* UploaderThread.m in Sources */,
+				37FE1E5613CB8E3300655550 /* AppendingFlowView.m in Sources */,
+				37FE1F3E13CB8EFE00655550 /* IntelligentSplitViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5500,10 +5518,7 @@
 					"\"/usr/include/libxml2\"/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../Frameworks/Localytics\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-licucore",
@@ -5563,10 +5578,7 @@
 					"\"/usr/include/libxml2\"/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../Frameworks/Localytics\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				LLVM_LTO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -5629,10 +5641,7 @@
 					"\"/usr/include/libxml2\"/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../Frameworks/Localytics\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-licucore",
@@ -5683,10 +5692,7 @@
 					"\"/usr/include/libxml2\"/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../Frameworks/Localytics\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-licucore",
