@@ -1,13 +1,11 @@
 //
 //  IntelligentSplitViewController.h
-//  Created by Gregory Combs on 9/21/10.
+//  From TexLege by Gregory S. Combs
 //
-//  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
+//  Released under the Creative Commons Attribution 3.0 Unported License
+//  Please see the included license page for more information.
 //
-//  This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License. 
-//  To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/
-//  or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
-//
+//  In a nutshell, you can use this, just attribute this to me in your "thank you" notes or about box.
 //
 
 #import <UIKit/UIKit.h>
@@ -17,5 +15,4 @@
 
 }
 
-//@property (nonatomic) BOOL isListening;
 @end

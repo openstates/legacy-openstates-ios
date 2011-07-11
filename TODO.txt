@@ -1,1 +1,14 @@
 TODO:
+
+Set up git submodules for:
+- grgcombs/SVWebViewController
+- grgcombs/SVGeocoder
+- grgcombs/RestKit
+- grgcombs/Kal
+- grgcombs/IntelligentSplitViewController
+- grgcombs/AppendingFlowView
+- XMLReader (?)
+- TVOutManager (?)
+- TTTOrdinalNumberFormatter (?)
+- Localytics (?)
+- UIColor-Expanded (?)
