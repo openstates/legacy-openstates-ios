@@ -6,7 +6,23 @@ Based on work at [GitHub](https://github.com/sunlightlabs/StatesLege).
 Description
 =============
 
-- Description goes here.
+- This is an application that provides in-depth information on various state legislatures, using available public data from the Sunlight Foundation's [Open States Project](http://openstates.sunlightlabs.com).
+
+Compiling and Running the Project (The current state of StatesLege)
+=============
+In it's current state, the project is simply a fork of TexLege for iOS.  Over the next couple of months, we'll be reworking this project to directly target the Open States API from the Sunlight Foundation with data from over thirty state legislatures (and growing).  However, until the project moves completely over to the Open States API, it makes a few key assumptions:  
+
+  1. The Texas legislature is the only state legislature you are interested in, for now.  
+
+  2. You have a REST-friendly web server somewhere that serves up-to-date data for the Texas legislature. (It will complain, but should still work if you don't have this.)  
+
+  3. You have a folder in the branch's root directory titled "PrivateData", with a file named "TexLegePrivateStrings.h" containing something like the following:  
+
+    `#define RESTKIT_BASE_URL  @"http://SomeRestServer.SomeDomain.com/LocationOfRestDataDirectory"`  
+    `#define RESTKIT_HOST      @"SomeRestServer.SomeDomain.com"`  
+    `#define RESTKIT_USERNAME  @"SomeRestUser"`  
+    `#define RESTKIT_PASSWORD  @"SomeRestPwd"`  
+    `#define SUNLIGHT_APIKEY   @"YourAPIKeyFromSunlightFoundation"`  
 
 Attributions and Thanks
 =============
