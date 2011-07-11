@@ -2000,11 +2000,6 @@
 		37735C29132310E90033F343 /* StafferObj.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = StafferObj.json; sourceTree = "<group>"; };
 		37735C2A132310E90033F343 /* WnomObj.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WnomObj.json; sourceTree = "<group>"; };
 		37735E22132363930033F343 /* TexLegeSeed.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = TexLegeSeed.sqlite; sourceTree = "<group>"; };
-		3775C57E131BF8DE00638ED4 /* NSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HTML.h"; sourceTree = "<group>"; };
-		3775C57F131BF8DE00638ED4 /* NSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HTML.m"; sourceTree = "<group>"; };
-		3775C584131BF92500638ED4 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
-		3775C587131BF96C00638ED4 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
-		3775C59C131BFA4300638ED4 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		3775C7C8131C44C600638ED4 /* RestKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RestKit.xcodeproj; path = ../GitHub/RestKit/RestKit.xcodeproj; sourceTree = "<group>"; };
 		3775C7FB131C459900638ED4 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		3775C7FD131C459900638ED4 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -2305,56 +2300,6 @@
 		37D1C887120344D000507757 /* 97-puzzle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "97-puzzle.png"; sourceTree = "<group>"; };
 		37D1C888120344D000507757 /* 98-palette.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "98-palette.png"; sourceTree = "<group>"; };
 		37D1C889120344D000507757 /* 99-umbrella.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "99-umbrella.png"; sourceTree = "<group>"; };
-		37D3640712362A7D00CCF86E /* Pin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pin.png; sourceTree = "<group>"; };
-		37D3640812362A7D00CCF86E /* Pin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Pin@2x.png"; sourceTree = "<group>"; };
-		37D3640912362A7D00CCF86E /* PinBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinBlue.png; sourceTree = "<group>"; };
-		37D3640A12362A7D00CCF86E /* PinBlue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinBlue@2x.png"; sourceTree = "<group>"; };
-		37D3640B12362A7D00CCF86E /* PinDown1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinDown1.png; sourceTree = "<group>"; };
-		37D3640C12362A7D00CCF86E /* PinDown1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinDown1@2x.png"; sourceTree = "<group>"; };
-		37D3640D12362A7D00CCF86E /* PinDown1Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinDown1Blue.png; sourceTree = "<group>"; };
-		37D3640E12362A7D00CCF86E /* PinDown1Blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinDown1Blue@2x.png"; sourceTree = "<group>"; };
-		37D3640F12362A7D00CCF86E /* PinDown1Green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinDown1Green.png; sourceTree = "<group>"; };
-		37D3641012362A7D00CCF86E /* PinDown1Green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinDown1Green@2x.png"; sourceTree = "<group>"; };
-		37D3641112362A7D00CCF86E /* PinDown1Purple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinDown1Purple.png; sourceTree = "<group>"; };
-		37D3641212362A7D00CCF86E /* PinDown1Purple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinDown1Purple@2x.png"; sourceTree = "<group>"; };
-		37D3641312362A7D00CCF86E /* PinDown2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinDown2.png; sourceTree = "<group>"; };
-		37D3641412362A7D00CCF86E /* PinDown2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinDown2@2x.png"; sourceTree = "<group>"; };
-		37D3641512362A7D00CCF86E /* PinDown2Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinDown2Blue.png; sourceTree = "<group>"; };
-		37D3641612362A7D00CCF86E /* PinDown2Blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinDown2Blue@2x.png"; sourceTree = "<group>"; };
-		37D3641712362A7D00CCF86E /* PinDown2Green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinDown2Green.png; sourceTree = "<group>"; };
-		37D3641812362A7D00CCF86E /* PinDown2Green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinDown2Green@2x.png"; sourceTree = "<group>"; };
-		37D3641912362A7D00CCF86E /* PinDown2Purple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinDown2Purple.png; sourceTree = "<group>"; };
-		37D3641A12362A7D00CCF86E /* PinDown2Purple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinDown2Purple@2x.png"; sourceTree = "<group>"; };
-		37D3641B12362A7D00CCF86E /* PinDown3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinDown3.png; sourceTree = "<group>"; };
-		37D3641C12362A7D00CCF86E /* PinDown3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinDown3@2x.png"; sourceTree = "<group>"; };
-		37D3641D12362A7D00CCF86E /* PinDown3Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinDown3Blue.png; sourceTree = "<group>"; };
-		37D3641E12362A7D00CCF86E /* PinDown3Blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinDown3Blue@2x.png"; sourceTree = "<group>"; };
-		37D3641F12362A7D00CCF86E /* PinDown3Green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinDown3Green.png; sourceTree = "<group>"; };
-		37D3642012362A7D00CCF86E /* PinDown3Green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinDown3Green@2x.png"; sourceTree = "<group>"; };
-		37D3642112362A7D00CCF86E /* PinDown3Purple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinDown3Purple.png; sourceTree = "<group>"; };
-		37D3642212362A7D00CCF86E /* PinDown3Purple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinDown3Purple@2x.png"; sourceTree = "<group>"; };
-		37D3642312362A7D00CCF86E /* PinFloating.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinFloating.png; sourceTree = "<group>"; };
-		37D3642412362A7D00CCF86E /* PinFloating@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinFloating@2x.png"; sourceTree = "<group>"; };
-		37D3642512362A7D00CCF86E /* PinFloatingBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinFloatingBlue.png; sourceTree = "<group>"; };
-		37D3642612362A7D00CCF86E /* PinFloatingBlue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinFloatingBlue@2x.png"; sourceTree = "<group>"; };
-		37D3642712362A7D00CCF86E /* PinFloatingGreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinFloatingGreen.png; sourceTree = "<group>"; };
-		37D3642812362A7D00CCF86E /* PinFloatingGreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinFloatingGreen@2x.png"; sourceTree = "<group>"; };
-		37D3642912362A7D00CCF86E /* PinFloatingPurple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinFloatingPurple.png; sourceTree = "<group>"; };
-		37D3642A12362A7D00CCF86E /* PinFloatingPurple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinFloatingPurple@2x.png"; sourceTree = "<group>"; };
-		37D3642B12362A7D00CCF86E /* PinGreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinGreen.png; sourceTree = "<group>"; };
-		37D3642C12362A7D00CCF86E /* PinGreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinGreen@2x.png"; sourceTree = "<group>"; };
-		37D3642D12362A7D00CCF86E /* PinPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinPressed.png; sourceTree = "<group>"; };
-		37D3642E12362A7D00CCF86E /* PinPressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinPressed@2x.png"; sourceTree = "<group>"; };
-		37D3642F12362A7D00CCF86E /* PinPressedBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinPressedBlue.png; sourceTree = "<group>"; };
-		37D3643012362A7D00CCF86E /* PinPressedBlue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinPressedBlue@2x.png"; sourceTree = "<group>"; };
-		37D3643112362A7D00CCF86E /* PinPressedGreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinPressedGreen.png; sourceTree = "<group>"; };
-		37D3643212362A7D00CCF86E /* PinPressedGreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinPressedGreen@2x.png"; sourceTree = "<group>"; };
-		37D3643312362A7D00CCF86E /* PinPressedPurple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinPressedPurple.png; sourceTree = "<group>"; };
-		37D3643412362A7D00CCF86E /* PinPressedPurple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinPressedPurple@2x.png"; sourceTree = "<group>"; };
-		37D3643512362A7D00CCF86E /* PinPurple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinPurple.png; sourceTree = "<group>"; };
-		37D3643612362A7D00CCF86E /* PinPurple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinPurple@2x.png"; sourceTree = "<group>"; };
-		37D3643712362A7D00CCF86E /* PinShadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinShadow.png; sourceTree = "<group>"; };
-		37D3643812362A7D00CCF86E /* PinShadow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinShadow@2x.png"; sourceTree = "<group>"; };
 		37D3649B1236869200CCF86E /* UserPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserPinAnnotationView.h; sourceTree = "<group>"; };
 		37D3649C1236869200CCF86E /* UserPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserPinAnnotationView.m; sourceTree = "<group>"; };
 		37D364F512369DDC00CCF86E /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
@@ -3022,11 +2967,6 @@
 				3709AEAD101FBE7900C1061B /* Reachability.m */,
 				37400B9D12F37436002B6042 /* MTStatusBarOverlay.h */,
 				37400B9E12F37436002B6042 /* MTStatusBarOverlay.m */,
-				3775C57E131BF8DE00638ED4 /* NSString+HTML.h */,
-				3775C57F131BF8DE00638ED4 /* NSString+HTML.m */,
-				3775C59C131BFA4300638ED4 /* GTMDefines.h */,
-				3775C584131BF92500638ED4 /* GTMNSString+HTML.h */,
-				3775C587131BF96C00638ED4 /* GTMNSString+HTML.m */,
 				3763ED6D1354E0F4000E524C /* UIImage+ResolutionIndependent.h */,
 				3763ED6E1354E0F4000E524C /* UIImage+ResolutionIndependent.m */,
 			);
@@ -3532,58 +3472,8 @@
 		37BA160D13B2F9F50088057B /* Map Pins */ = {
 			isa = PBXGroup;
 			children = (
-				37D3640712362A7D00CCF86E /* Pin.png */,
-				37D3640812362A7D00CCF86E /* Pin@2x.png */,
 				37C945D91237DDC000D2D582 /* PinHeadBlue.png */,
 				37C945DA1237DDC000D2D582 /* PinHeadBlue@2x.png */,
-				37D3640912362A7D00CCF86E /* PinBlue.png */,
-				37D3640A12362A7D00CCF86E /* PinBlue@2x.png */,
-				37D3640B12362A7D00CCF86E /* PinDown1.png */,
-				37D3640C12362A7D00CCF86E /* PinDown1@2x.png */,
-				37D3640D12362A7D00CCF86E /* PinDown1Blue.png */,
-				37D3640E12362A7D00CCF86E /* PinDown1Blue@2x.png */,
-				37D3640F12362A7D00CCF86E /* PinDown1Green.png */,
-				37D3641012362A7D00CCF86E /* PinDown1Green@2x.png */,
-				37D3641112362A7D00CCF86E /* PinDown1Purple.png */,
-				37D3641212362A7D00CCF86E /* PinDown1Purple@2x.png */,
-				37D3641312362A7D00CCF86E /* PinDown2.png */,
-				37D3641412362A7D00CCF86E /* PinDown2@2x.png */,
-				37D3641512362A7D00CCF86E /* PinDown2Blue.png */,
-				37D3641612362A7D00CCF86E /* PinDown2Blue@2x.png */,
-				37D3641712362A7D00CCF86E /* PinDown2Green.png */,
-				37D3641812362A7D00CCF86E /* PinDown2Green@2x.png */,
-				37D3641912362A7D00CCF86E /* PinDown2Purple.png */,
-				37D3641A12362A7D00CCF86E /* PinDown2Purple@2x.png */,
-				37D3641B12362A7D00CCF86E /* PinDown3.png */,
-				37D3641C12362A7D00CCF86E /* PinDown3@2x.png */,
-				37D3641D12362A7D00CCF86E /* PinDown3Blue.png */,
-				37D3641E12362A7D00CCF86E /* PinDown3Blue@2x.png */,
-				37D3641F12362A7D00CCF86E /* PinDown3Green.png */,
-				37D3642012362A7D00CCF86E /* PinDown3Green@2x.png */,
-				37D3642112362A7D00CCF86E /* PinDown3Purple.png */,
-				37D3642212362A7D00CCF86E /* PinDown3Purple@2x.png */,
-				37D3642312362A7D00CCF86E /* PinFloating.png */,
-				37D3642412362A7D00CCF86E /* PinFloating@2x.png */,
-				37D3642512362A7D00CCF86E /* PinFloatingBlue.png */,
-				37D3642612362A7D00CCF86E /* PinFloatingBlue@2x.png */,
-				37D3642712362A7D00CCF86E /* PinFloatingGreen.png */,
-				37D3642812362A7D00CCF86E /* PinFloatingGreen@2x.png */,
-				37D3642912362A7D00CCF86E /* PinFloatingPurple.png */,
-				37D3642A12362A7D00CCF86E /* PinFloatingPurple@2x.png */,
-				37D3642B12362A7D00CCF86E /* PinGreen.png */,
-				37D3642C12362A7D00CCF86E /* PinGreen@2x.png */,
-				37D3642D12362A7D00CCF86E /* PinPressed.png */,
-				37D3642E12362A7D00CCF86E /* PinPressed@2x.png */,
-				37D3642F12362A7D00CCF86E /* PinPressedBlue.png */,
-				37D3643012362A7D00CCF86E /* PinPressedBlue@2x.png */,
-				37D3643112362A7D00CCF86E /* PinPressedGreen.png */,
-				37D3643212362A7D00CCF86E /* PinPressedGreen@2x.png */,
-				37D3643312362A7D00CCF86E /* PinPressedPurple.png */,
-				37D3643412362A7D00CCF86E /* PinPressedPurple@2x.png */,
-				37D3643512362A7D00CCF86E /* PinPurple.png */,
-				37D3643612362A7D00CCF86E /* PinPurple@2x.png */,
-				37D3643712362A7D00CCF86E /* PinShadow.png */,
-				37D3643812362A7D00CCF86E /* PinShadow@2x.png */,
 			);
 			name = "Map Pins";
 			sourceTree = "<group>";
