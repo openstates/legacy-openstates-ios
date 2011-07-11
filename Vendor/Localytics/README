@@ -1,0 +1,22 @@
+Thank you for downloading the Localytics iPhone client library.
+
+For the latest integration information, check out the Localytics wiki:
+http://wiki.localytics.com/
+
+This library is open source.  Feel free to integrate with either the
+binary or source version.  Both are on the wiki listed above.
+
+Changelist:
+1.0 - initial release
+
+1.1 - performance and stability improvements
+
+1.5 - new metrics
+      * is phone jailbroken
+      * is app cracked
+      * proper device model
+    - added support for event attributes
+    - All YML strings are properly escaped  
+
+1.6 - Optional opt-out API
+    - App version now supports all possible strings

@@ -1003,8 +1003,6 @@
 		37735B841323104A0033F343 /* UserPinAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE54E121A6D9A00BF4277 /* UserPinAnnotation.m */; };
 		37735B851323104A0033F343 /* DistrictOfficeObj+MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E2068112204D5000103D76 /* DistrictOfficeObj+MapKit.m */; };
 		37735B861323104A0033F343 /* DistrictMapObj+MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E2068312204D5000103D76 /* DistrictMapObj+MapKit.m */; };
-		37735B871323104A0033F343 /* LocalyticsSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A4E5E9122388F300BCE44D /* LocalyticsSession.m */; };
-		37735B881323104A0033F343 /* UploaderThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A4E5EB122388F300BCE44D /* UploaderThread.m */; };
 		37735B891323104A0033F343 /* AnalyticsOptInAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3704F4D5122437AC00DC486F /* AnalyticsOptInAlertController.m */; };
 		37735B8A1323104A0033F343 /* DistrictMapDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */; };
 		37735B8B1323104A0033F343 /* UIColor-Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CF6BB81226597500456D29 /* UIColor-Expanded.m */; };
@@ -1147,8 +1145,6 @@
 		37A2CCF2122C129B00339495 /* locationarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 37A2CCF0122C129B00339495 /* locationarrow.png */; };
 		37A2CCF3122C129B00339495 /* locationarrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37A2CCF1122C129B00339495 /* locationarrow@2x.png */; };
 		37A2CCF6122C173B00339495 /* MapViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37A2CCF5122C173B00339495 /* MapViewController~iphone.xib */; };
-		37A4E5ED122388F300BCE44D /* LocalyticsSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A4E5E9122388F300BCE44D /* LocalyticsSession.m */; };
-		37A4E5EE122388F300BCE44D /* UploaderThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A4E5EB122388F300BCE44D /* UploaderThread.m */; };
 		37A72064122EB9A30015AAE0 /* TexLegeInfoImage~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 37A72062122EB9A30015AAE0 /* TexLegeInfoImage~ipad.png */; };
 		37A720AE122ECBBD0015AAE0 /* IconWood_80.png in Resources */ = {isa = PBXBuildFile; fileRef = 37A720AC122ECBBD0015AAE0 /* IconWood_80.png */; };
 		37A720B4122ECD3B0015AAE0 /* TexLegeInfo~iphone.htm in Resources */ = {isa = PBXBuildFile; fileRef = 37A720B3122ECD3B0015AAE0 /* TexLegeInfo~iphone.htm */; };
@@ -1273,8 +1269,11 @@
 		37F492761311C640005D5DE1 /* BillsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F492751311C640005D5DE1 /* BillsDetailViewController.m */; };
 		37F510AA0FF1ADEF0020A13B /* Icon_80.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F510A90FF1ADEF0020A13B /* Icon_80.png */; };
 		37FC487013110A9E00A4C0B2 /* BillSearchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC486F13110A9E00A4C0B2 /* BillSearchDataSource.m */; };
-		37FE1C8E13CB677100655550 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1C7513CB677100655550 /* JSONKit.m */; };
 		37FE1CA713CB677100655550 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1C7513CB677100655550 /* JSONKit.m */; };
+		37FE1CDD13CB75FD00655550 /* LocalyticsSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1CD913CB75FD00655550 /* LocalyticsSession.m */; };
+		37FE1CDE13CB75FD00655550 /* UploaderThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1CDB13CB75FD00655550 /* UploaderThread.m */; };
+		37FE1CDF13CB75FD00655550 /* LocalyticsSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1CD913CB75FD00655550 /* LocalyticsSession.m */; };
+		37FE1CE013CB75FD00655550 /* UploaderThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1CDB13CB75FD00655550 /* UploaderThread.m */; };
 		37FE46301357BF1600E8C038 /* CommitteePositionObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DF1357A198003DA1BB /* CommitteePositionObj.m */; };
 		37FE46311357BF1900E8C038 /* LinkObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DB1357A198003DA1BB /* LinkObj.m */; };
 		37FE46321357BF2100E8C038 /* LegislatorObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DD1357A198003DA1BB /* LegislatorObj.m */; };
@@ -1564,7 +1563,6 @@
 		3747BFA711E6890600A6D8C6 /* seal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = seal.png; path = ../seal.png; sourceTree = "<group>"; };
 		3747C25B11E7B15300A6D8C6 /* PartisanIndexStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PartisanIndexStats.h; path = "Classes/Data Sources/PartisanIndexStats.h"; sourceTree = SOURCE_ROOT; };
 		3747C25C11E7B15300A6D8C6 /* PartisanIndexStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PartisanIndexStats.m; path = "Classes/Data Sources/PartisanIndexStats.m"; sourceTree = SOURCE_ROOT; };
-		3747C29411E7B8F400A6D8C6 /* SynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SynthesizeSingleton.h; path = "Classes/Utility Classes/SynthesizeSingleton.h"; sourceTree = SOURCE_ROOT; };
 		374C36B81215E55F006B6ADA /* CalendarMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalendarMasterViewController.h; path = "Classes/Master View Controllers/CalendarMasterViewController.h"; sourceTree = SOURCE_ROOT; };
 		374C36B91215E55F006B6ADA /* CalendarMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalendarMasterViewController.m; path = "Classes/Master View Controllers/CalendarMasterViewController.m"; sourceTree = SOURCE_ROOT; };
 		374C36E41215E8DA006B6ADA /* CapitolMapsMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CapitolMapsMasterViewController.h; path = "Classes/Master View Controllers/CapitolMapsMasterViewController.h"; sourceTree = SOURCE_ROOT; };
@@ -1989,8 +1987,8 @@
 		3770C66713A49BE800906021 /* BillActionParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillActionParser.m; sourceTree = "<group>"; };
 		3770F57313182BF500686DE3 /* BillsFavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsFavoritesViewController.h; sourceTree = "<group>"; };
 		3770F57413182BF500686DE3 /* BillsFavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsFavoritesViewController.m; sourceTree = "<group>"; };
-		3771333B12523025000D7207 /* TVOutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TVOutManager.h; path = ../../Frameworks/TVOutManager/TVOutManager.h; sourceTree = SOURCE_ROOT; };
-		3771333C12523025000D7207 /* TVOutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TVOutManager.m; path = ../../Frameworks/TVOutManager/TVOutManager.m; sourceTree = SOURCE_ROOT; };
+		3771333B12523025000D7207 /* TVOutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVOutManager.h; sourceTree = "<group>"; };
+		3771333C12523025000D7207 /* TVOutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TVOutManager.m; sourceTree = "<group>"; };
 		37735C101323104A0033F343 /* TexLege.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TexLege.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37735C121323104A0033F343 /* Info (Seed).plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info (Seed).plist"; sourceTree = "<group>"; };
 		37735C23132310E90033F343 /* CommitteeObj.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CommitteeObj.json; sourceTree = "<group>"; };
@@ -2084,11 +2082,6 @@
 		37A2CCF0122C129B00339495 /* locationarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = locationarrow.png; sourceTree = "<group>"; };
 		37A2CCF1122C129B00339495 /* locationarrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "locationarrow@2x.png"; sourceTree = "<group>"; };
 		37A2CCF5122C173B00339495 /* MapViewController~iphone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapViewController~iphone.xib"; path = "Resources/MapViewController~iphone.xib"; sourceTree = "<group>"; };
-		37A4E5BD1223830800BCE44D /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocalyticsSession.h; path = ../../Frameworks/Localytics/LocalyticsSession.h; sourceTree = SOURCE_ROOT; };
-		37A4E5E9122388F300BCE44D /* LocalyticsSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocalyticsSession.m; path = ../../Frameworks/Localytics/LocalyticsSession.m; sourceTree = SOURCE_ROOT; };
-		37A4E5EA122388F300BCE44D /* UploaderThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UploaderThread.h; path = ../../Frameworks/Localytics/UploaderThread.h; sourceTree = SOURCE_ROOT; };
-		37A4E5EB122388F300BCE44D /* UploaderThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UploaderThread.m; path = ../../Frameworks/Localytics/UploaderThread.m; sourceTree = SOURCE_ROOT; };
-		37A4E5EC122388F300BCE44D /* WebserviceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebserviceConstants.h; path = ../../Frameworks/Localytics/WebserviceConstants.h; sourceTree = SOURCE_ROOT; };
 		37A58AA1139DF6A2003DE299 /* 138-scales-inv@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "138-scales-inv@2x.png"; sourceTree = "<group>"; };
 		37A58AA2139DF6A2003DE299 /* 138-scales-inv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "138-scales-inv.png"; sourceTree = "<group>"; };
 		37A58AA3139DF6A2003DE299 /* 177-building-inv@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "177-building-inv@2x.png"; sourceTree = "<group>"; };
@@ -2138,8 +2131,8 @@
 		37CDD9CC12150651004EC1B7 /* MapViewController~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapViewController~ipad.xib"; path = "Resources/MapViewController~ipad.xib"; sourceTree = "<group>"; };
 		37CF6A7412262B4600456D29 /* planH01369.kml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = planH01369.kml; path = Data/planH01369.kml; sourceTree = SOURCE_ROOT; };
 		37CF6A7512262B4600456D29 /* planS01188.kml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = planS01188.kml; path = Data/planS01188.kml; sourceTree = SOURCE_ROOT; };
-		37CF6BB71226597500456D29 /* UIColor-Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor-Expanded.h"; path = "../../Frameworks/UIColor+Expanded/UIColor-Expanded.h"; sourceTree = SOURCE_ROOT; };
-		37CF6BB81226597500456D29 /* UIColor-Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor-Expanded.m"; path = "../../Frameworks/UIColor+Expanded/UIColor-Expanded.m"; sourceTree = SOURCE_ROOT; };
+		37CF6BB71226597500456D29 /* UIColor-Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor-Expanded.h"; sourceTree = "<group>"; };
+		37CF6BB81226597500456D29 /* UIColor-Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor-Expanded.m"; sourceTree = "<group>"; };
 		37CFBA0212FE8936007C3808 /* BillsMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsMasterViewController.h; sourceTree = "<group>"; };
 		37CFBA0312FE8936007C3808 /* BillsMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsMasterViewController.m; sourceTree = "<group>"; };
 		37D0A8ED123ED55A00232B2C /* DistrictPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictPinAnnotationView.h; sourceTree = "<group>"; };
@@ -2362,6 +2355,11 @@
 		37FC486F13110A9E00A4C0B2 /* BillSearchDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillSearchDataSource.m; sourceTree = "<group>"; };
 		37FE1C7413CB677100655550 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		37FE1C7513CB677100655550 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		37FE1CD813CB75FD00655550 /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
+		37FE1CD913CB75FD00655550 /* LocalyticsSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsSession.m; sourceTree = "<group>"; };
+		37FE1CDA13CB75FD00655550 /* UploaderThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploaderThread.h; sourceTree = "<group>"; };
+		37FE1CDB13CB75FD00655550 /* UploaderThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploaderThread.m; sourceTree = "<group>"; };
+		37FE1CDC13CB75FD00655550 /* WebserviceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebserviceConstants.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2560,11 +2558,12 @@
 			isa = PBXGroup;
 			children = (
 				3775C7C8131C44C600638ED4 /* RestKit.xcodeproj */,
+				37E635F7139B4B3200A9CC27 /* TTTOrdinalNumberFormatter */,
 				37FE1C4D13CB677000655550 /* JSONKit */,
 				376C1CC01345A7EB009436B5 /* XMLReader */,
 				372D061712FC799200E63696 /* Kal */,
 				3771332D12523025000D7207 /* TVOutManager */,
-				37CF6BB11226595D00456D29 /* UIColor+Expanded */,
+				37CF6BB11226595D00456D29 /* UIColor-Utilities */,
 				37A4E5BA1223830800BCE44D /* Localytics */,
 				3768E93413B156F600BA5A67 /* SVWebViewController */,
 				377074CE1397B2B400E82CA8 /* SVGeocoder */,
@@ -2580,8 +2579,8 @@
 				372D061912FC799200E63696 /* Kal.xcodeproj */,
 			);
 			name = Kal;
-			path = ../GitHub/Kal;
-			sourceTree = "<group>";
+			path = Vendor/Kal;
+			sourceTree = SOURCE_ROOT;
 		};
 		372D5DDB11E9C0B5005A21E2 /* MapKit */ = {
 			isa = PBXGroup;
@@ -2721,7 +2720,7 @@
 				3768E93813B156F600BA5A67 /* SVWebViewController.bundle */,
 			);
 			name = SVWebViewController;
-			path = ../../GitHub/SVWebViewController/SVWebViewController;
+			path = Vendor/SVWebViewController/SVWebViewController;
 			sourceTree = SOURCE_ROOT;
 		};
 		376B59430FC1ADF50094D80B /* UI Graphics */ = {
@@ -2772,8 +2771,9 @@
 				376C1CC11345A7EB009436B5 /* XMLReader.h */,
 				376C1CC21345A7EB009436B5 /* XMLReader.m */,
 			);
-			path = XMLReader;
-			sourceTree = "<group>";
+			name = XMLReader;
+			path = Vendor/XMLReader;
+			sourceTree = SOURCE_ROOT;
 		};
 		376DFE9113492C1400360BF4 /* Common UI Elements */ = {
 			isa = PBXGroup;
@@ -2799,7 +2799,7 @@
 				377074D71397B2B400E82CA8 /* SVPlacemark.m */,
 			);
 			name = SVGeocoder;
-			path = ../../GitHub/SVGeocoder/SVGeocoder;
+			path = Vendor/SVGeocoder/SVGeocoder;
 			sourceTree = SOURCE_ROOT;
 		};
 		3771332D12523025000D7207 /* TVOutManager */ = {
@@ -2809,7 +2809,7 @@
 				3771333C12523025000D7207 /* TVOutManager.m */,
 			);
 			name = TVOutManager;
-			path = ../../Frameworks/TVOutManager;
+			path = Vendor/TVOutManager;
 			sourceTree = SOURCE_ROOT;
 		};
 		37735C22132310E90033F343 /* SeedDB */ = {
@@ -2939,7 +2939,6 @@
 		37A0E4460FD2DEAA009B65F7 /* Utility Classes */ = {
 			isa = PBXGroup;
 			children = (
-				37E635F7139B4B3200A9CC27 /* TTTOrdinalNumberFormatter */,
 				371D543E1365F60E00A61BD4 /* TouchCode_Base64 */,
 				372D066512FC901C00E63696 /* TexLegeLibrary.h */,
 				372D066612FC901C00E63696 /* TexLegeLibrary.m */,
@@ -2955,7 +2954,6 @@
 				3735E1CD1209B09F0000AF5A /* TexLegeTheme.m */,
 				37A0C6011211DB810067F7AF /* TexLegeEmailComposer.h */,
 				37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */,
-				3747C29411E7B8F400A6D8C6 /* SynthesizeSingleton.h */,
 				378B57BF121994DF00F7ED0B /* UIDevice-Hardware.h */,
 				3767140011E8319900D004C8 /* UIDevice-Hardware.m */,
 				374F70A412FD45D600AD7EEC /* TexLegeNavBar.h */,
@@ -2995,14 +2993,15 @@
 		37A4E5BA1223830800BCE44D /* Localytics */ = {
 			isa = PBXGroup;
 			children = (
-				37A4E5BD1223830800BCE44D /* LocalyticsSession.h */,
-				37A4E5E9122388F300BCE44D /* LocalyticsSession.m */,
-				37A4E5EA122388F300BCE44D /* UploaderThread.h */,
-				37A4E5EB122388F300BCE44D /* UploaderThread.m */,
-				37A4E5EC122388F300BCE44D /* WebserviceConstants.h */,
+				37FE1CD813CB75FD00655550 /* LocalyticsSession.h */,
+				37FE1CD913CB75FD00655550 /* LocalyticsSession.m */,
+				37FE1CDA13CB75FD00655550 /* UploaderThread.h */,
+				37FE1CDB13CB75FD00655550 /* UploaderThread.m */,
+				37FE1CDC13CB75FD00655550 /* WebserviceConstants.h */,
 			);
-			path = Localytics;
-			sourceTree = "<group>";
+			name = Localytics;
+			path = Vendor/Localytics;
+			sourceTree = SOURCE_ROOT;
 		};
 		37AD577911DA573D00D68934 /* View Controllers */ = {
 			isa = PBXGroup;
@@ -3502,13 +3501,14 @@
 			name = "Bill Elements";
 			sourceTree = "<group>";
 		};
-		37CF6BB11226595D00456D29 /* UIColor+Expanded */ = {
+		37CF6BB11226595D00456D29 /* UIColor-Utilities */ = {
 			isa = PBXGroup;
 			children = (
 				37CF6BB71226597500456D29 /* UIColor-Expanded.h */,
 				37CF6BB81226597500456D29 /* UIColor-Expanded.m */,
 			);
-			path = "UIColor+Expanded";
+			name = "UIColor-Utilities";
+			path = "../GitHub/StatesLege/Vendor/UIColor-Utilities";
 			sourceTree = "<group>";
 		};
 		37D0D1D41357A0F0003DA1BB /* Stock Models */ = {
@@ -3746,7 +3746,7 @@
 				37E635FA139B4B3200A9CC27 /* TTTOrdinalNumberFormatter.m */,
 			);
 			name = TTTOrdinalNumberFormatter;
-			path = ../../Frameworks/TTTOrdinalNumberFormatter;
+			path = Vendor/TTTOrdinalNumberFormatter;
 			sourceTree = SOURCE_ROOT;
 		};
 		37E6A96C1362909A0095D9AE /* Products */ = {
@@ -3797,7 +3797,7 @@
 				37FE1C7513CB677100655550 /* JSONKit.m */,
 			);
 			name = JSONKit;
-			path = ../JSONKit;
+			path = Vendor/JSONKit;
 			sourceTree = SOURCE_ROOT;
 		};
 		C83CD92C0D5822C30066AE4B /* Application Support */ = {
@@ -5072,8 +5072,6 @@
 				37EAE54F121A6D9A00BF4277 /* UserPinAnnotation.m in Sources */,
 				37E2068412204D5000103D76 /* DistrictOfficeObj+MapKit.m in Sources */,
 				37E2068512204D5000103D76 /* DistrictMapObj+MapKit.m in Sources */,
-				37A4E5ED122388F300BCE44D /* LocalyticsSession.m in Sources */,
-				37A4E5EE122388F300BCE44D /* UploaderThread.m in Sources */,
 				3704F4D6122437AC00DC486F /* AnalyticsOptInAlertController.m in Sources */,
 				370C270C1225BF7E004273E3 /* DistrictMapDataSource.m in Sources */,
 				37CF6BB91226597500456D29 /* UIColor-Expanded.m in Sources */,
@@ -5146,7 +5144,8 @@
 				37CD09B213A2A6F100F4C68B /* StateMetaLoader.m in Sources */,
 				3770C66913A49BE800906021 /* BillActionParser.m in Sources */,
 				3768E93913B156F600BA5A67 /* SVWebViewController.m in Sources */,
-				37FE1C8E13CB677100655550 /* JSONKit.m in Sources */,
+				37FE1CDD13CB75FD00655550 /* LocalyticsSession.m in Sources */,
+				37FE1CDE13CB75FD00655550 /* UploaderThread.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5195,8 +5194,6 @@
 				37735B841323104A0033F343 /* UserPinAnnotation.m in Sources */,
 				37735B851323104A0033F343 /* DistrictOfficeObj+MapKit.m in Sources */,
 				37735B861323104A0033F343 /* DistrictMapObj+MapKit.m in Sources */,
-				37735B871323104A0033F343 /* LocalyticsSession.m in Sources */,
-				37735B881323104A0033F343 /* UploaderThread.m in Sources */,
 				37735B891323104A0033F343 /* AnalyticsOptInAlertController.m in Sources */,
 				37735B8A1323104A0033F343 /* DistrictMapDataSource.m in Sources */,
 				37735B8B1323104A0033F343 /* UIColor-Expanded.m in Sources */,
@@ -5271,6 +5268,8 @@
 				3770C66813A49BE800906021 /* BillActionParser.m in Sources */,
 				3768E93C13B156F600BA5A67 /* SVWebViewController.m in Sources */,
 				37FE1CA713CB677100655550 /* JSONKit.m in Sources */,
+				37FE1CDF13CB75FD00655550 /* LocalyticsSession.m in Sources */,
+				37FE1CE013CB75FD00655550 /* UploaderThread.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

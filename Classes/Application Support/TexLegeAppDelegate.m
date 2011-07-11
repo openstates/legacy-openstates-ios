@@ -391,11 +391,11 @@ NSInteger kNoSelection = -1;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-	[[TVOutManager sharedTVOutManager] startTVOut];
+	[[TVOutManager sharedInstance] startTVOut];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-	[[TVOutManager sharedTVOutManager] stopTVOut];
+	[[TVOutManager sharedInstance] stopTVOut];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
