@@ -15,7 +15,7 @@
 #import "DistrictMapDataSource.h"
 #import "DisclosureQuartzView.h"
 #import "TexLegeCoreDataUtils.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "LegislatorObj+RestKit.h"
 
 #if NEEDS_TO_PARSE_KMLMAPS == 1

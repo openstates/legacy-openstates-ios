@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1D3623260D0F684500981E51 /* TexLegeAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* TexLegeAppDelegate.m */; };
+		1D3623260D0F684500981E51 /* StatesLegeAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* StatesLegeAppDelegate.m */; };
 		1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */; };
 		1D60589A0D05DD50006BFB54 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D30AB170D05D02000671497 /* Icon.png */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -60,7 +60,6 @@
 		372C280F13B06C7500836162 /* iPadTabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 372C280E13B06C7500836162 /* iPadTabBarController.xib */; };
 		372D061C12FC799200E63696 /* Kal.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 372D061812FC799200E63696 /* Kal.bundle */; };
 		372D066712FC901C00E63696 /* TexLegeLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 372D066612FC901C00E63696 /* TexLegeLibrary.m */; };
-		372D5CC011E9983A005A21E2 /* CapitolMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 372D5CBF11E9983A005A21E2 /* CapitolMap.m */; };
 		372FAB5A12147B2000AEF237 /* ChamberCalendarObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 372FAB5912147B2000AEF237 /* ChamberCalendarObj.m */; };
 		372FDB23139F1CFB00D39374 /* LegislatorDetailViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3739DBE4123355EF00D4F7D2 /* LegislatorDetailViewController~iphone.xib */; };
 		372FDB24139F1CFB00D39374 /* LegislatorDetailViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3739DBE4123355EF00D4F7D2 /* LegislatorDetailViewController~iphone.xib */; };
@@ -71,7 +70,6 @@
 		3735DFFE120917490000AF5A /* CommitteeMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3735DFFC120917490000AF5A /* CommitteeMasterViewController.m */; };
 		3735DFFF120917490000AF5A /* CommitteeMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3735DFFD120917490000AF5A /* CommitteeMasterViewController.xib */; };
 		3735E1CE1209B09F0000AF5A /* TexLegeTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 3735E1CD1209B09F0000AF5A /* TexLegeTheme.m */; };
-		3737803B11F8082500E36500 /* WnomObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 3737803A11F8082500E36500 /* WnomObj+RestKit.m */; };
 		3738E07A1226A86B00DDD605 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3738E0791226A86B00DDD605 /* Settings.bundle */; };
 		373AB3B90FD3389F0065740E /* TableCellDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 373AB3B80FD3389F0065740E /* TableCellDataObject.m */; };
 		373B820611E378CD00A81142 /* LegislatorMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 373B820511E378CD00A81142 /* LegislatorMasterViewController.xib */; };
@@ -83,12 +81,8 @@
 		3742D723122E1FDF00698483 /* NSInvocation+CWVariableArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 3742D722122E1FDF00698483 /* NSInvocation+CWVariableArguments.m */; };
 		3747BFA811E6890600A6D8C6 /* seal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3747BFA611E6890600A6D8C6 /* seal@2x.png */; };
 		3747BFA911E6890600A6D8C6 /* seal.png in Resources */ = {isa = PBXBuildFile; fileRef = 3747BFA711E6890600A6D8C6 /* seal.png */; };
-		3747C25D11E7B15300A6D8C6 /* PartisanIndexStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 3747C25C11E7B15300A6D8C6 /* PartisanIndexStats.m */; };
 		374C36BA1215E55F006B6ADA /* CalendarMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374C36B91215E55F006B6ADA /* CalendarMasterViewController.m */; };
-		374C36E61215E8DA006B6ADA /* CapitolMapsMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374C36E51215E8DA006B6ADA /* CapitolMapsMasterViewController.m */; };
 		374C37051215EB2D006B6ADA /* LinksMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374C37041215EB2D006B6ADA /* LinksMasterViewController.m */; };
-		374DA89B1325C6FB00CCBC40 /* CapitolMaps.plist in Resources */ = {isa = PBXBuildFile; fileRef = 374DA89A1325C6FB00CCBC40 /* CapitolMaps.plist */; };
-		374DA89C1325C6FB00CCBC40 /* CapitolMaps.plist in Resources */ = {isa = PBXBuildFile; fileRef = 374DA89A1325C6FB00CCBC40 /* CapitolMaps.plist */; };
 		374E2A6B12360C6E0005E245 /* TexLegeMapPins.m in Sources */ = {isa = PBXBuildFile; fileRef = 374E2A6A12360C6E0005E245 /* TexLegeMapPins.m */; };
 		374F70A612FD45D600AD7EEC /* TexLegeNavBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 374F70A512FD45D600AD7EEC /* TexLegeNavBar.m */; };
 		37507ED5130F64BF00A925F5 /* 11-clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C81A120344D000507757 /* 11-clock.png */; };
@@ -96,10 +90,6 @@
 		37507ED7130F64D400A925F5 /* 30-key.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C842120344D000507757 /* 30-key.png */; };
 		37507ED8130F64EE00A925F5 /* 96-book.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C886120344D000507757 /* 96-book.png */; };
 		37507F36130F816500A925F5 /* BillsMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37B2C1FA130BCEFC00140212 /* BillsMasterViewController.xib */; };
-		375E5AC8133D6F8B0070EA64 /* VotingRecordDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 375E5AC7133D6F8B0070EA64 /* VotingRecordDataSource.m */; };
-		375E5AC9133D6F8B0070EA64 /* VotingRecordDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 375E5AC7133D6F8B0070EA64 /* VotingRecordDataSource.m */; };
-		375E5ACE133D6F9E0070EA64 /* S7GraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 375E5ACC133D6F9E0070EA64 /* S7GraphView.m */; };
-		375E5ACF133D6F9E0070EA64 /* S7GraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 375E5ACC133D6F9E0070EA64 /* S7GraphView.m */; };
 		375F316313B238CC0002F12F /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = 375F316113B238CC0002F12F /* action.png */; };
 		375F316413B238CC0002F12F /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 375F316213B238CC0002F12F /* action@2x.png */; };
 		375F316513B238CC0002F12F /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = 375F316113B238CC0002F12F /* action.png */; };
@@ -472,14 +462,6 @@
 		3764E5ED12ED600B00703FBD /* A5170@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3764E48312ED600B00703FBD /* A5170@2x.png */; };
 		3764E8CB1217B83F008DF726 /* NotesView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3764E8CA1217B83F008DF726 /* NotesView~ipad.xib */; };
 		3766EFC112109F110073C705 /* TexLegeStrings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3766EFC012109F110073C705 /* TexLegeStrings.plist */; };
-		37674B2E1002C492003FD09F /* Map.Floor4.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B271002C492003FD09F /* Map.Floor4.pdf */; };
-		37674B2F1002C492003FD09F /* Map.Floor2.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B281002C492003FD09F /* Map.Floor2.pdf */; };
-		37674B301002C492003FD09F /* Map.FloorG.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B291002C492003FD09F /* Map.FloorG.pdf */; };
-		37674B311002C492003FD09F /* Map.Floor1.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B2A1002C492003FD09F /* Map.Floor1.pdf */; };
-		37674B321002C492003FD09F /* Map.FloorE1.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B2B1002C492003FD09F /* Map.FloorE1.pdf */; };
-		37674B331002C492003FD09F /* Map.Floor3.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B2C1002C492003FD09F /* Map.Floor3.pdf */; };
-		37674B341002C492003FD09F /* Map.FloorE2.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B2D1002C492003FD09F /* Map.FloorE2.pdf */; };
-		376850221234AAFD00AEEC3D /* PartisanScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 376850211234AAFD00AEEC3D /* PartisanScaleView.m */; };
 		3768E93913B156F600BA5A67 /* SVWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3768E93613B156F600BA5A67 /* SVWebViewController.m */; };
 		3768E93B13B156F600BA5A67 /* SVWebViewController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3768E93813B156F600BA5A67 /* SVWebViewController.bundle */; };
 		3768E93C13B156F600BA5A67 /* SVWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3768E93613B156F600BA5A67 /* SVWebViewController.m */; };
@@ -487,12 +469,7 @@
 		376AE79D13445CA400825C4D /* BillsKeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376AE79C13445CA400825C4D /* BillsKeyViewController.m */; };
 		376AE79E13445CA400825C4D /* BillsKeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376AE79C13445CA400825C4D /* BillsKeyViewController.m */; };
 		376B59F60FC1BDCF0094D80B /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 376B59F50FC1BDCF0094D80B /* Default.png */; };
-		376B5BE20FC1DC640094D80B /* Map.WheelchairAccess.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 376B5BDB0FC1DC640094D80B /* Map.WheelchairAccess.pdf */; };
-		376B5BE30FC1DC640094D80B /* Map.CapitolComplex.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 376B5BDC0FC1DC640094D80B /* Map.CapitolComplex.pdf */; };
-		376B5BE80FC1DC640094D80B /* Map.MonumentGuide.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 376B5BE10FC1DC640094D80B /* Map.MonumentGuide.pdf */; };
 		376C1CC31345A7EB009436B5 /* XMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 376C1CC21345A7EB009436B5 /* XMLReader.m */; };
-		376C2812132583C800EB7688 /* WnomAggregateObj.json in Resources */ = {isa = PBXBuildFile; fileRef = 376C2811132583C800EB7688 /* WnomAggregateObj.json */; };
-		376C2813132583C800EB7688 /* WnomAggregateObj.json in Resources */ = {isa = PBXBuildFile; fileRef = 376C2811132583C800EB7688 /* WnomAggregateObj.json */; };
 		376DFE9513492C1400360BF4 /* error.png in Resources */ = {isa = PBXBuildFile; fileRef = 376DFE9213492C1400360BF4 /* error.png */; };
 		376DFE9713492C1400360BF4 /* error@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 376DFE9413492C1400360BF4 /* error@2x.png */; };
 		376DFE9813492C1400360BF4 /* error.png in Resources */ = {isa = PBXBuildFile; fileRef = 376DFE9213492C1400360BF4 /* error.png */; };
@@ -529,11 +506,8 @@
 		377359881323104A0033F343 /* iPhoneTabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3732A0F711DB203F009E8957 /* iPhoneTabBarController.xib */; };
 		377359891323104A0033F343 /* Icon_512.png in Resources */ = {isa = PBXBuildFile; fileRef = 3730B43211DD4B4D00BA10D0 /* Icon_512.png */; };
 		3773598A1323104A0033F343 /* LegislatorMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 373B820511E378CD00A81142 /* LegislatorMasterViewController.xib */; };
-		3773598B1323104A0033F343 /* CapitolMapsDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3786786211E442800003690F /* CapitolMapsDetailViewController.xib */; };
 		3773598C1323104A0033F343 /* seal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3747BFA611E6890600A6D8C6 /* seal@2x.png */; };
 		3773598D1323104A0033F343 /* seal.png in Resources */ = {isa = PBXBuildFile; fileRef = 3747BFA711E6890600A6D8C6 /* seal.png */; };
-		3773598E1323104A0033F343 /* Slider_Question_big.png in Resources */ = {isa = PBXBuildFile; fileRef = 3778E80D11EDC19800278273 /* Slider_Question_big.png */; };
-		3773598F1323104A0033F343 /* Slider_Question_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3778E80E11EDC19800278273 /* Slider_Question_big@2x.png */; };
 		377359901323104A0033F343 /* Month Calendar Shadow Down.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C4CE12026FE300507757 /* Month Calendar Shadow Down.png */; };
 		377359911323104A0033F343 /* Month Calendar Shadow Right.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C4CF12026FE300507757 /* Month Calendar Shadow Right.png */; };
 		377359921323104A0033F343 /* Month Calendar Shadow Vertical.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C4D012026FE300507757 /* Month Calendar Shadow Vertical.png */; };
@@ -558,17 +532,6 @@
 		377359A51323104A0033F343 /* 113-navigation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3726FC3D120A99800043D6B9 /* 113-navigation@2x.png */; };
 		377359A61323104A0033F343 /* 123-id-card@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3726FC3E120A99800043D6B9 /* 123-id-card@2x.png */; };
 		377359A71323104A0033F343 /* TexLegeStrings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3766EFC012109F110073C705 /* TexLegeStrings.plist */; };
-		377359A81323104A0033F343 /* Map.WheelchairAccess.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 376B5BDB0FC1DC640094D80B /* Map.WheelchairAccess.pdf */; };
-		377359A91323104A0033F343 /* Map.CapitolComplex.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 376B5BDC0FC1DC640094D80B /* Map.CapitolComplex.pdf */; };
-		377359AA1323104A0033F343 /* Map.MonumentGuide.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 376B5BE10FC1DC640094D80B /* Map.MonumentGuide.pdf */; };
-		377359AB1323104A0033F343 /* Map.Floor4.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B271002C492003FD09F /* Map.Floor4.pdf */; };
-		377359AC1323104A0033F343 /* Map.Floor2.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B281002C492003FD09F /* Map.Floor2.pdf */; };
-		377359AD1323104A0033F343 /* Map.FloorG.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B291002C492003FD09F /* Map.FloorG.pdf */; };
-		377359AE1323104A0033F343 /* Map.Floor1.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B2A1002C492003FD09F /* Map.Floor1.pdf */; };
-		377359AF1323104A0033F343 /* Map.FloorE1.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B2B1002C492003FD09F /* Map.FloorE1.pdf */; };
-		377359B01323104A0033F343 /* Map.Floor3.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B2C1002C492003FD09F /* Map.Floor3.pdf */; };
-		377359B11323104A0033F343 /* Map.FloorE2.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37674B2D1002C492003FD09F /* Map.FloorE2.pdf */; };
-		377359B21323104A0033F343 /* Map.SamHoustonLoc.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37D6E8C41017772B00D4D7C2 /* Map.SamHoustonLoc.pdf */; };
 		377359B31323104A0033F343 /* MapViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37CDD9CC12150651004EC1B7 /* MapViewController~ipad.xib */; };
 		377359B51323104A0033F343 /* NotesView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3764E8CA1217B83F008DF726 /* NotesView~ipad.xib */; };
 		377359B61323104A0033F343 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37782771121303C1001BD23D /* Default@2x.png */; };
@@ -963,11 +926,9 @@
 		37735B4E1323104A0033F343 /* BillsDetailViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37F4926E1311C556005D5DE1 /* BillsDetailViewController~iphone.xib */; };
 		37735B4F1323104A0033F343 /* BillsDetailViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37B2C206130BCF9800140212 /* BillsDetailViewController~ipad.xib */; };
 		37735B571323104A0033F343 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
-		37735B581323104A0033F343 /* TexLegeAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* TexLegeAppDelegate.m */; };
+		37735B581323104A0033F343 /* StatesLegeAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* StatesLegeAppDelegate.m */; };
 		37735B591323104A0033F343 /* LinksDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A0E4450FD2DEAA009B65F7 /* LinksDataSource.m */; };
-		37735B5A1323104A0033F343 /* CapitolMapsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A0E4480FD2DEAA009B65F7 /* CapitolMapsDetailViewController.m */; };
 		37735B5B1323104A0033F343 /* GeneralTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A0E44A0FD2DEAA009B65F7 /* GeneralTableViewController.m */; };
-		37735B5C1323104A0033F343 /* CapitolMapsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A0E44E0FD2DEAA009B65F7 /* CapitolMapsDataSource.m */; };
 		37735B5D1323104A0033F343 /* TableCellDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 373AB3B80FD3389F0065740E /* TableCellDataObject.m */; };
 		37735B5E1323104A0033F343 /* TexLege.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 37C9B67D11EDB28E001F0010 /* TexLege.xcdatamodeld */; };
 		37735B5F1323104A0033F343 /* CommitteePositionObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A1CD71007FF4600BEC4ED /* CommitteePositionObj+RestKit.m */; };
@@ -982,9 +943,6 @@
 		37735B6A1323104A0033F343 /* LegislatorDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3775FA3B11D86E1700D69AC5 /* LegislatorDetailViewController.m */; };
 		37735B6B1323104A0033F343 /* LegislatorMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3775FA4B11D8701B00D69AC5 /* LegislatorMasterViewController.m */; };
 		37735B6C1323104A0033F343 /* CommitteeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37AD57B911DA651500D68934 /* CommitteeDetailViewController.m */; };
-		37735B6D1323104A0033F343 /* PartisanIndexStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 3747C25C11E7B15300A6D8C6 /* PartisanIndexStats.m */; };
-		37735B6F1323104A0033F343 /* CapitolMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 372D5CBF11E9983A005A21E2 /* CapitolMap.m */; };
-		37735B701323104A0033F343 /* WnomObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 3737803A11F8082500E36500 /* WnomObj+RestKit.m */; };
 		37735B711323104A0033F343 /* PolygonMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 370F7AA811FEAF730004AC50 /* PolygonMath.m */; };
 		37735B721323104A0033F343 /* CalendarDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 377ACE4711FFA30E002C7E49 /* CalendarDataSource.m */; };
 		37735B731323104A0033F343 /* CalendarDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D1C526120272F000507757 /* CalendarDetailViewController.m */; };
@@ -996,7 +954,6 @@
 		37735B791323104A0033F343 /* TexLegeEmailComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */; };
 		37735B7A1323104A0033F343 /* ChamberCalendarObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 372FAB5912147B2000AEF237 /* ChamberCalendarObj.m */; };
 		37735B7B1323104A0033F343 /* CalendarMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374C36B91215E55F006B6ADA /* CalendarMasterViewController.m */; };
-		37735B7C1323104A0033F343 /* CapitolMapsMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374C36E51215E8DA006B6ADA /* CapitolMapsMasterViewController.m */; };
 		37735B7D1323104A0033F343 /* LinksMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374C37041215EB2D006B6ADA /* LinksMasterViewController.m */; };
 		37735B7E1323104A0033F343 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 378B57A91219913400F7ED0B /* MapViewController.m */; };
 		37735B7F1323104A0033F343 /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3767140011E8319900D004C8 /* UIDevice-Hardware.m */; };
@@ -1012,7 +969,6 @@
 		37735BD11323104A0033F343 /* TexLegeCoreDataUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 379D0CC2122D49000021969C /* TexLegeCoreDataUtils.m */; };
 		37735BD21323104A0033F343 /* DistrictMapSearchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3742D6EE122E18D100698483 /* DistrictMapSearchOperation.m */; };
 		37735BD31323104A0033F343 /* NSInvocation+CWVariableArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 3742D722122E1FDF00698483 /* NSInvocation+CWVariableArguments.m */; };
-		37735BD41323104A0033F343 /* PartisanScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 376850211234AAFD00AEEC3D /* PartisanScaleView.m */; };
 		37735BD51323104A0033F343 /* TexLegeMapPins.m in Sources */ = {isa = PBXBuildFile; fileRef = 374E2A6A12360C6E0005E245 /* TexLegeMapPins.m */; };
 		37735BD61323104A0033F343 /* UserPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D3649C1236869200CCF86E /* UserPinAnnotationView.m */; };
 		37735BD81323104A0033F343 /* DistrictMapMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C94A2612387ABA00D2D582 /* DistrictMapMasterViewController.m */; };
@@ -1057,7 +1013,6 @@
 		37735C2F132310E90033F343 /* LegislatorObj.json in Resources */ = {isa = PBXBuildFile; fileRef = 37735C27132310E90033F343 /* LegislatorObj.json */; };
 		37735C30132310E90033F343 /* LinkObj.json in Resources */ = {isa = PBXBuildFile; fileRef = 37735C28132310E90033F343 /* LinkObj.json */; };
 		37735C31132310E90033F343 /* StafferObj.json in Resources */ = {isa = PBXBuildFile; fileRef = 37735C29132310E90033F343 /* StafferObj.json */; };
-		37735C32132310E90033F343 /* WnomObj.json in Resources */ = {isa = PBXBuildFile; fileRef = 37735C2A132310E90033F343 /* WnomObj.json */; };
 		37735E23132363930033F343 /* TexLegeSeed.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 37735E22132363930033F343 /* TexLegeSeed.sqlite */; };
 		3775C7FC131C459900638ED4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3775C7FB131C459900638ED4 /* CFNetwork.framework */; };
 		3775C7FE131C459900638ED4 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3775C7FD131C459900638ED4 /* MobileCoreServices.framework */; };
@@ -1066,8 +1021,6 @@
 		3775FA3D11D86E1700D69AC5 /* LegislatorDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3775FA3B11D86E1700D69AC5 /* LegislatorDetailViewController.m */; };
 		3775FA4C11D8701B00D69AC5 /* LegislatorMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3775FA4B11D8701B00D69AC5 /* LegislatorMasterViewController.m */; };
 		37782772121303C1001BD23D /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37782771121303C1001BD23D /* Default@2x.png */; };
-		3778E81111EDC19800278273 /* Slider_Question_big.png in Resources */ = {isa = PBXBuildFile; fileRef = 3778E80D11EDC19800278273 /* Slider_Question_big.png */; };
-		3778E81211EDC19800278273 /* Slider_Question_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3778E80E11EDC19800278273 /* Slider_Question_big@2x.png */; };
 		377A4F4D139A9BC100CDBACE /* 113-navigation-inv.png in Resources */ = {isa = PBXBuildFile; fileRef = 377A4F38139A9BC100CDBACE /* 113-navigation-inv.png */; };
 		377A4F4E139A9BC100CDBACE /* 113-navigation-inv@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 377A4F39139A9BC100CDBACE /* 113-navigation-inv@2x.png */; };
 		377A4F50139A9BC100CDBACE /* 123-id-card-inv.png in Resources */ = {isa = PBXBuildFile; fileRef = 377A4F3B139A9BC100CDBACE /* 123-id-card-inv.png */; };
@@ -1105,7 +1058,6 @@
 		377ACE4811FFA30E002C7E49 /* CalendarDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 377ACE4711FFA30E002C7E49 /* CalendarDataSource.m */; };
 		377DC4A91344D475000068E1 /* BillVotesDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 377DC4A81344D475000068E1 /* BillVotesDataSource.m */; };
 		377DC4AA1344D475000068E1 /* BillVotesDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 377DC4A81344D475000068E1 /* BillVotesDataSource.m */; };
-		3786786311E442800003690F /* CapitolMapsDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3786786211E442800003690F /* CapitolMapsDetailViewController.xib */; };
 		37892DCE120EA44300AB1752 /* LegislatorMasterCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37892DCD120EA44300AB1752 /* LegislatorMasterCellView.m */; };
 		378A1CDD1007FF4600BEC4ED /* CommitteePositionObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A1CD71007FF4600BEC4ED /* CommitteePositionObj+RestKit.m */; };
 		378A1CDE1007FF4600BEC4ED /* LegislatorObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A1CD91007FF4600BEC4ED /* LegislatorObj+RestKit.m */; };
@@ -1138,9 +1090,7 @@
 		379D72AA123CA39B0094F45B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2883B6A00D944613003F08B5 /* QuartzCore.framework */; };
 		37A0C6031211DB810067F7AF /* TexLegeEmailComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */; };
 		37A0E4720FD2DEAA009B65F7 /* LinksDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A0E4450FD2DEAA009B65F7 /* LinksDataSource.m */; };
-		37A0E4730FD2DEAA009B65F7 /* CapitolMapsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A0E4480FD2DEAA009B65F7 /* CapitolMapsDetailViewController.m */; };
 		37A0E4740FD2DEAA009B65F7 /* GeneralTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A0E44A0FD2DEAA009B65F7 /* GeneralTableViewController.m */; };
-		37A0E4750FD2DEAA009B65F7 /* CapitolMapsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A0E44E0FD2DEAA009B65F7 /* CapitolMapsDataSource.m */; };
 		37A2CCF2122C129B00339495 /* locationarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 37A2CCF0122C129B00339495 /* locationarrow.png */; };
 		37A2CCF3122C129B00339495 /* locationarrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37A2CCF1122C129B00339495 /* locationarrow@2x.png */; };
 		37A2CCF6122C173B00339495 /* MapViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37A2CCF5122C173B00339495 /* MapViewController~iphone.xib */; };
@@ -1220,7 +1170,6 @@
 		37D46C01123B483800C2C403 /* CommitteeMemberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D46C00123B483800C2C403 /* CommitteeMemberCell.m */; };
 		37D46DCA123BFA9800C2C403 /* CommitteeDetailViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37D46DC9123BFA9800C2C403 /* CommitteeDetailViewController~ipad.xib */; };
 		37D6E82810175F0800D4D7C2 /* UtilityMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6E82710175F0800D4D7C2 /* UtilityMethods.m */; };
-		37D6E8C51017772B00D4D7C2 /* Map.SamHoustonLoc.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 37D6E8C41017772B00D4D7C2 /* Map.SamHoustonLoc.pdf */; };
 		37DEFF141363F7C9002D4956 /* libKal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E6A9701362909A0095D9AE /* libKal.a */; };
 		37DEFF881365BD17002D4956 /* libRestKitNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37DEFF751365BD05002D4956 /* libRestKitNetwork.a */; };
 		37E2068412204D5000103D76 /* DistrictOfficeObj+MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E2068112204D5000103D76 /* DistrictOfficeObj+MapKit.m */; };
@@ -1453,14 +1402,14 @@
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D30AB170D05D02000671497 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		1D3623240D0F684500981E51 /* TexLegeAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TexLegeAppDelegate.h; path = "Classes/Application Support/TexLegeAppDelegate.h"; sourceTree = SOURCE_ROOT; };
-		1D3623250D0F684500981E51 /* TexLegeAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TexLegeAppDelegate.m; path = "Classes/Application Support/TexLegeAppDelegate.m"; sourceTree = SOURCE_ROOT; };
+		1D3623240D0F684500981E51 /* StatesLegeAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesLegeAppDelegate.h; sourceTree = "<group>"; };
+		1D3623250D0F684500981E51 /* StatesLegeAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatesLegeAppDelegate.m; sourceTree = "<group>"; };
 		1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		1D6058910D05DD3D006BFB54 /* TexLege.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TexLege.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* StatesLege.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StatesLege.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2883B6A00D944613003F08B5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "Classes/Application Support/main.m"; sourceTree = SOURCE_ROOT; };
-		32CA4F630368D1EE00C91783 /* TexLege_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLege_Prefix.pch; sourceTree = SOURCE_ROOT; };
+		32CA4F630368D1EE00C91783 /* StatesLege_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesLege_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		3702412512198C11002D169E /* LegislatorMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorMasterViewController.h; path = "Classes/Master View Controllers/LegislatorMasterViewController.h"; sourceTree = SOURCE_ROOT; };
 		370298CD11F97C7A00D65FCB /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		3704F4D4122437AC00DC486F /* AnalyticsOptInAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsOptInAlertController.h; sourceTree = "<group>"; };
@@ -1526,8 +1475,6 @@
 		372D061912FC799200E63696 /* Kal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Kal.xcodeproj; path = src/Kal.xcodeproj; sourceTree = "<group>"; };
 		372D066512FC901C00E63696 /* TexLegeLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeLibrary.h; sourceTree = "<group>"; };
 		372D066612FC901C00E63696 /* TexLegeLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeLibrary.m; sourceTree = "<group>"; };
-		372D5CBE11E9983A005A21E2 /* CapitolMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapitolMap.h; sourceTree = "<group>"; };
-		372D5CBF11E9983A005A21E2 /* CapitolMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CapitolMap.m; sourceTree = "<group>"; };
 		372FAB5812147B2000AEF237 /* ChamberCalendarObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChamberCalendarObj.h; sourceTree = "<group>"; };
 		372FAB5912147B2000AEF237 /* ChamberCalendarObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChamberCalendarObj.m; sourceTree = "<group>"; };
 		3730B43211DD4B4D00BA10D0 /* Icon_512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon_512.png; sourceTree = "<group>"; };
@@ -1541,8 +1488,6 @@
 		3735E1CC1209B09F0000AF5A /* TexLegeTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeTheme.h; sourceTree = "<group>"; };
 		3735E1CD1209B09F0000AF5A /* TexLegeTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeTheme.m; sourceTree = "<group>"; };
 		3737802211F800AF00E36500 /* TexLege 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TexLege 2.xcdatamodel"; sourceTree = "<group>"; };
-		3737803911F8082500E36500 /* WnomObj+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WnomObj+RestKit.h"; sourceTree = "<group>"; };
-		3737803A11F8082500E36500 /* WnomObj+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WnomObj+RestKit.m"; sourceTree = "<group>"; };
 		3738E0791226A86B00DDD605 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = SOURCE_ROOT; };
 		3739DBE4123355EF00D4F7D2 /* LegislatorDetailViewController~iphone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "LegislatorDetailViewController~iphone.xib"; path = "Resources/LegislatorDetailViewController~iphone.xib"; sourceTree = "<group>"; };
 		373AB3B70FD3389F0065740E /* TableCellDataObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableCellDataObject.h; sourceTree = "<group>"; };
@@ -1561,25 +1506,15 @@
 		3742D722122E1FDF00698483 /* NSInvocation+CWVariableArguments.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSInvocation+CWVariableArguments.m"; path = "Classes/Utility Classes/NSInvocation+CWVariableArguments.m"; sourceTree = SOURCE_ROOT; };
 		3747BFA611E6890600A6D8C6 /* seal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "seal@2x.png"; path = "../seal@2x.png"; sourceTree = "<group>"; };
 		3747BFA711E6890600A6D8C6 /* seal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = seal.png; path = ../seal.png; sourceTree = "<group>"; };
-		3747C25B11E7B15300A6D8C6 /* PartisanIndexStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PartisanIndexStats.h; path = "Classes/Data Sources/PartisanIndexStats.h"; sourceTree = SOURCE_ROOT; };
-		3747C25C11E7B15300A6D8C6 /* PartisanIndexStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PartisanIndexStats.m; path = "Classes/Data Sources/PartisanIndexStats.m"; sourceTree = SOURCE_ROOT; };
 		374C36B81215E55F006B6ADA /* CalendarMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalendarMasterViewController.h; path = "Classes/Master View Controllers/CalendarMasterViewController.h"; sourceTree = SOURCE_ROOT; };
 		374C36B91215E55F006B6ADA /* CalendarMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalendarMasterViewController.m; path = "Classes/Master View Controllers/CalendarMasterViewController.m"; sourceTree = SOURCE_ROOT; };
-		374C36E41215E8DA006B6ADA /* CapitolMapsMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CapitolMapsMasterViewController.h; path = "Classes/Master View Controllers/CapitolMapsMasterViewController.h"; sourceTree = SOURCE_ROOT; };
-		374C36E51215E8DA006B6ADA /* CapitolMapsMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CapitolMapsMasterViewController.m; path = "Classes/Master View Controllers/CapitolMapsMasterViewController.m"; sourceTree = SOURCE_ROOT; };
 		374C37031215EB2D006B6ADA /* LinksMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LinksMasterViewController.h; path = "Classes/Master View Controllers/LinksMasterViewController.h"; sourceTree = SOURCE_ROOT; };
 		374C37041215EB2D006B6ADA /* LinksMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LinksMasterViewController.m; path = "Classes/Master View Controllers/LinksMasterViewController.m"; sourceTree = SOURCE_ROOT; };
-		374DA89A1325C6FB00CCBC40 /* CapitolMaps.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = CapitolMaps.plist; path = SeedDB/CapitolMaps.plist; sourceTree = "<group>"; };
 		374E2A6912360C6E0005E245 /* TexLegeMapPins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeMapPins.h; sourceTree = "<group>"; };
 		374E2A6A12360C6E0005E245 /* TexLegeMapPins.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeMapPins.m; sourceTree = "<group>"; };
 		374F70A412FD45D600AD7EEC /* TexLegeNavBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeNavBar.h; sourceTree = "<group>"; };
 		374F70A512FD45D600AD7EEC /* TexLegeNavBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeNavBar.m; sourceTree = "<group>"; };
 		3759C7CC1311AB1000A52C26 /* BillSearchDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillSearchDataSource.h; sourceTree = "<group>"; };
-		375E5AC6133D6F8B0070EA64 /* VotingRecordDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VotingRecordDataSource.h; sourceTree = "<group>"; };
-		375E5AC7133D6F8B0070EA64 /* VotingRecordDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VotingRecordDataSource.m; sourceTree = "<group>"; };
-		375E5ACB133D6F9E0070EA64 /* S7GraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = S7GraphView.h; sourceTree = "<group>"; };
-		375E5ACC133D6F9E0070EA64 /* S7GraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = S7GraphView.m; sourceTree = "<group>"; };
-		375E5ACD133D6F9E0070EA64 /* S7Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = S7Macros.h; sourceTree = "<group>"; };
 		375F316113B238CC0002F12F /* action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = action.png; sourceTree = "<group>"; };
 		375F316213B238CC0002F12F /* action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action@2x.png"; sourceTree = "<group>"; };
 		3760AB8B139EFAA700386A90 /* TexLegeInfo~ipad.htm */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = "TexLegeInfo~ipad.htm"; path = "Data/TexLegeInfo~ipad.htm"; sourceTree = SOURCE_ROOT; };
@@ -1950,27 +1885,14 @@
 		3764E8CA1217B83F008DF726 /* NotesView~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "NotesView~ipad.xib"; path = "Resources-iPad/NotesView~ipad.xib"; sourceTree = "<group>"; };
 		3766EFC012109F110073C705 /* TexLegeStrings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = TexLegeStrings.plist; path = Resources/TexLegeStrings.plist; sourceTree = "<group>"; };
 		3767140011E8319900D004C8 /* UIDevice-Hardware.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; name = "UIDevice-Hardware.m"; path = "Classes/Utility Classes/UIDevice-Hardware.m"; sourceTree = SOURCE_ROOT; };
-		37674B271002C492003FD09F /* Map.Floor4.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.Floor4.pdf; path = Resources/Maps/Map.Floor4.pdf; sourceTree = "<group>"; };
-		37674B281002C492003FD09F /* Map.Floor2.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.Floor2.pdf; path = Resources/Maps/Map.Floor2.pdf; sourceTree = "<group>"; };
-		37674B291002C492003FD09F /* Map.FloorG.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.FloorG.pdf; path = Resources/Maps/Map.FloorG.pdf; sourceTree = "<group>"; };
-		37674B2A1002C492003FD09F /* Map.Floor1.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.Floor1.pdf; path = Resources/Maps/Map.Floor1.pdf; sourceTree = "<group>"; };
-		37674B2B1002C492003FD09F /* Map.FloorE1.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.FloorE1.pdf; path = Resources/Maps/Map.FloorE1.pdf; sourceTree = "<group>"; };
-		37674B2C1002C492003FD09F /* Map.Floor3.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.Floor3.pdf; path = Resources/Maps/Map.Floor3.pdf; sourceTree = "<group>"; };
-		37674B2D1002C492003FD09F /* Map.FloorE2.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.FloorE2.pdf; path = Resources/Maps/Map.FloorE2.pdf; sourceTree = "<group>"; };
-		376850201234AAFD00AEEC3D /* PartisanScaleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PartisanScaleView.h; path = "Classes/Custom Cells and Views/PartisanScaleView.h"; sourceTree = SOURCE_ROOT; };
-		376850211234AAFD00AEEC3D /* PartisanScaleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PartisanScaleView.m; path = "Classes/Custom Cells and Views/PartisanScaleView.m"; sourceTree = SOURCE_ROOT; };
 		3768E93513B156F600BA5A67 /* SVWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVWebViewController.h; sourceTree = "<group>"; };
 		3768E93613B156F600BA5A67 /* SVWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVWebViewController.m; sourceTree = "<group>"; };
 		3768E93813B156F600BA5A67 /* SVWebViewController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVWebViewController.bundle; sourceTree = "<group>"; };
 		376AE79B13445CA400825C4D /* BillsKeyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsKeyViewController.h; sourceTree = "<group>"; };
 		376AE79C13445CA400825C4D /* BillsKeyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsKeyViewController.m; sourceTree = "<group>"; };
 		376B59F50FC1BDCF0094D80B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		376B5BDB0FC1DC640094D80B /* Map.WheelchairAccess.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.WheelchairAccess.pdf; path = Resources/Maps/Map.WheelchairAccess.pdf; sourceTree = "<group>"; };
-		376B5BDC0FC1DC640094D80B /* Map.CapitolComplex.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.CapitolComplex.pdf; path = Resources/Maps/Map.CapitolComplex.pdf; sourceTree = "<group>"; };
-		376B5BE10FC1DC640094D80B /* Map.MonumentGuide.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.MonumentGuide.pdf; path = Resources/Maps/Map.MonumentGuide.pdf; sourceTree = "<group>"; };
 		376C1CC11345A7EB009436B5 /* XMLReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLReader.h; sourceTree = "<group>"; };
 		376C1CC21345A7EB009436B5 /* XMLReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMLReader.m; sourceTree = "<group>"; };
-		376C2811132583C800EB7688 /* WnomAggregateObj.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = WnomAggregateObj.json; path = SeedDB/WnomAggregateObj.json; sourceTree = "<group>"; };
 		376DFE9213492C1400360BF4 /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = error.png; sourceTree = "<group>"; };
 		376DFE9413492C1400360BF4 /* error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "error@2x.png"; sourceTree = "<group>"; };
 		376DFEB413492FF700360BF4 /* LoadingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingCell.h; sourceTree = "<group>"; };
@@ -1989,7 +1911,7 @@
 		3770F57413182BF500686DE3 /* BillsFavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsFavoritesViewController.m; sourceTree = "<group>"; };
 		3771333B12523025000D7207 /* TVOutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVOutManager.h; sourceTree = "<group>"; };
 		3771333C12523025000D7207 /* TVOutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TVOutManager.m; sourceTree = "<group>"; };
-		37735C101323104A0033F343 /* TexLege.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TexLege.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		37735C101323104A0033F343 /* StatesLege.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StatesLege.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37735C121323104A0033F343 /* Info (Seed).plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info (Seed).plist"; sourceTree = "<group>"; };
 		37735C23132310E90033F343 /* CommitteeObj.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CommitteeObj.json; sourceTree = "<group>"; };
 		37735C24132310E90033F343 /* CommitteePositionObj.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CommitteePositionObj.json; sourceTree = "<group>"; };
@@ -1998,7 +1920,6 @@
 		37735C27132310E90033F343 /* LegislatorObj.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LegislatorObj.json; sourceTree = "<group>"; };
 		37735C28132310E90033F343 /* LinkObj.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LinkObj.json; sourceTree = "<group>"; };
 		37735C29132310E90033F343 /* StafferObj.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = StafferObj.json; sourceTree = "<group>"; };
-		37735C2A132310E90033F343 /* WnomObj.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WnomObj.json; sourceTree = "<group>"; };
 		37735E22132363930033F343 /* TexLegeSeed.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = TexLegeSeed.sqlite; sourceTree = "<group>"; };
 		3775C7C8131C44C600638ED4 /* RestKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RestKit.xcodeproj; path = ../GitHub/RestKit/RestKit.xcodeproj; sourceTree = "<group>"; };
 		3775C7FB131C459900638ED4 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -2009,8 +1930,6 @@
 		3775FA3B11D86E1700D69AC5 /* LegislatorDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegislatorDetailViewController.m; path = "Classes/Detail View Controllers/LegislatorDetailViewController.m"; sourceTree = SOURCE_ROOT; };
 		3775FA4B11D8701B00D69AC5 /* LegislatorMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegislatorMasterViewController.m; path = "Classes/Master View Controllers/LegislatorMasterViewController.m"; sourceTree = SOURCE_ROOT; };
 		37782771121303C1001BD23D /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		3778E80D11EDC19800278273 /* Slider_Question_big.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Slider_Question_big.png; path = "partisanship elements/Slider_Question_big.png"; sourceTree = "<group>"; };
-		3778E80E11EDC19800278273 /* Slider_Question_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Slider_Question_big@2x.png"; path = "partisanship elements/Slider_Question_big@2x.png"; sourceTree = "<group>"; };
 		377A4F38139A9BC100CDBACE /* 113-navigation-inv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "113-navigation-inv.png"; sourceTree = "<group>"; };
 		377A4F39139A9BC100CDBACE /* 113-navigation-inv@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "113-navigation-inv@2x.png"; sourceTree = "<group>"; };
 		377A4F3B139A9BC100CDBACE /* 123-id-card-inv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "123-id-card-inv.png"; sourceTree = "<group>"; };
@@ -2034,7 +1953,6 @@
 		377DC4A71344D475000068E1 /* BillVotesDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillVotesDataSource.h; sourceTree = "<group>"; };
 		377DC4A81344D475000068E1 /* BillVotesDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillVotesDataSource.m; sourceTree = "<group>"; };
 		377E8CF0100C39F300686B23 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = "Classes/Application Support/Constants.h"; sourceTree = SOURCE_ROOT; };
-		3786786211E442800003690F /* CapitolMapsDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CapitolMapsDetailViewController.xib; path = Resources/CapitolMapsDetailViewController.xib; sourceTree = "<group>"; };
 		37892DCC120EA44300AB1752 /* LegislatorMasterCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorMasterCellView.h; path = "Classes/Custom Cells and Views/LegislatorMasterCellView.h"; sourceTree = SOURCE_ROOT; };
 		37892DCD120EA44300AB1752 /* LegislatorMasterCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegislatorMasterCellView.m; path = "Classes/Custom Cells and Views/LegislatorMasterCellView.m"; sourceTree = SOURCE_ROOT; };
 		378A1CD61007FF4600BEC4ED /* CommitteePositionObj+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CommitteePositionObj+RestKit.h"; sourceTree = "<group>"; };
@@ -2072,13 +1990,9 @@
 		37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeEmailComposer.m; sourceTree = "<group>"; };
 		37A0E4440FD2DEAA009B65F7 /* LinksDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LinksDataSource.h; path = "Classes/Data Sources/LinksDataSource.h"; sourceTree = SOURCE_ROOT; };
 		37A0E4450FD2DEAA009B65F7 /* LinksDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LinksDataSource.m; path = "Classes/Data Sources/LinksDataSource.m"; sourceTree = SOURCE_ROOT; };
-		37A0E4470FD2DEAA009B65F7 /* CapitolMapsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CapitolMapsDetailViewController.h; path = "Classes/Detail View Controllers/CapitolMapsDetailViewController.h"; sourceTree = SOURCE_ROOT; };
-		37A0E4480FD2DEAA009B65F7 /* CapitolMapsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CapitolMapsDetailViewController.m; path = "Classes/Detail View Controllers/CapitolMapsDetailViewController.m"; sourceTree = SOURCE_ROOT; };
 		37A0E4490FD2DEAA009B65F7 /* GeneralTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeneralTableViewController.h; path = "Classes/Master View Controllers/GeneralTableViewController.h"; sourceTree = SOURCE_ROOT; };
 		37A0E44A0FD2DEAA009B65F7 /* GeneralTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeneralTableViewController.m; path = "Classes/Master View Controllers/GeneralTableViewController.m"; sourceTree = SOURCE_ROOT; };
 		37A0E44B0FD2DEAA009B65F7 /* TableDataSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TableDataSourceProtocol.h; path = "Classes/Data Sources/TableDataSourceProtocol.h"; sourceTree = SOURCE_ROOT; };
-		37A0E44D0FD2DEAA009B65F7 /* CapitolMapsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CapitolMapsDataSource.h; path = "Classes/Data Sources/CapitolMapsDataSource.h"; sourceTree = SOURCE_ROOT; };
-		37A0E44E0FD2DEAA009B65F7 /* CapitolMapsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CapitolMapsDataSource.m; path = "Classes/Data Sources/CapitolMapsDataSource.m"; sourceTree = SOURCE_ROOT; };
 		37A2CCF0122C129B00339495 /* locationarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = locationarrow.png; sourceTree = "<group>"; };
 		37A2CCF1122C129B00339495 /* locationarrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "locationarrow@2x.png"; sourceTree = "<group>"; };
 		37A2CCF5122C173B00339495 /* MapViewController~iphone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapViewController~iphone.xib"; path = "Resources/MapViewController~iphone.xib"; sourceTree = "<group>"; };
@@ -2303,7 +2217,6 @@
 		37D46DC9123BFA9800C2C403 /* CommitteeDetailViewController~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "CommitteeDetailViewController~ipad.xib"; path = "Resources-iPad/CommitteeDetailViewController~ipad.xib"; sourceTree = SOURCE_ROOT; };
 		37D6E82610175F0800D4D7C2 /* UtilityMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UtilityMethods.h; path = "Classes/Utility Classes/UtilityMethods.h"; sourceTree = SOURCE_ROOT; };
 		37D6E82710175F0800D4D7C2 /* UtilityMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UtilityMethods.m; path = "Classes/Utility Classes/UtilityMethods.m"; sourceTree = SOURCE_ROOT; };
-		37D6E8C41017772B00D4D7C2 /* Map.SamHoustonLoc.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = Map.SamHoustonLoc.pdf; path = Resources/Maps/Map.SamHoustonLoc.pdf; sourceTree = "<group>"; };
 		37E2068012204D5000103D76 /* DistrictOfficeObj+MapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DistrictOfficeObj+MapKit.h"; sourceTree = "<group>"; };
 		37E2068112204D5000103D76 /* DistrictOfficeObj+MapKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DistrictOfficeObj+MapKit.m"; sourceTree = "<group>"; };
 		37E2068212204D5000103D76 /* DistrictMapObj+MapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DistrictMapObj+MapKit.h"; sourceTree = "<group>"; };
@@ -2347,7 +2260,6 @@
 		37FBB74912224A8400CD8E20 /* DistrictOfficeDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictOfficeDataSource.m; sourceTree = "<group>"; };
 		37FBB75A122253BC00CD8E20 /* DistrictOfficeMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictOfficeMasterViewController.h; sourceTree = "<group>"; };
 		37FBB75B122253BC00CD8E20 /* DistrictOfficeMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictOfficeMasterViewController.m; sourceTree = "<group>"; };
-		37FBB77B122257AF00CD8E20 /* DistrictOfficeMasterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = DistrictOfficeMasterViewController.xib; path = Resources/DistrictOfficeMasterViewController.xib; sourceTree = SOURCE_ROOT; };
 		37FC486F13110A9E00A4C0B2 /* BillSearchDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillSearchDataSource.m; sourceTree = "<group>"; };
 		37FE1C7413CB677100655550 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		37FE1C7513CB677100655550 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
@@ -2440,8 +2352,8 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* TexLege.app */,
-				37735C101323104A0033F343 /* TexLege.app */,
+				1D6058910D05DD3D006BFB54 /* StatesLege.app */,
+				37735C101323104A0033F343 /* StatesLege.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2473,13 +2385,10 @@
 				373B820511E378CD00A81142 /* LegislatorMasterViewController.xib */,
 				3735DFFD120917490000AF5A /* CommitteeMasterViewController.xib */,
 				37C94A3912387D6500D2D582 /* DistrictMapMasterViewController.xib */,
-				37FBB77B122257AF00CD8E20 /* DistrictOfficeMasterViewController.xib */,
-				3786786211E442800003690F /* CapitolMapsDetailViewController.xib */,
 				379C1F021012E0CD007844B5 /* NotesView.xib */,
 				37A0E4870FD2DFB1009B65F7 /* Data */,
 				37D714640FFD0818008E59E7 /* Default and Icon */,
 				37ADADE10FD25F4200282EA0 /* Legislator Photos */,
-				376B5BDA0FC1DC430094D80B /* Capitol Complex Maps */,
 				376B59430FC1ADF50094D80B /* UI Graphics */,
 			);
 			name = Resources;
@@ -2560,7 +2469,6 @@
 				3775C7C8131C44C600638ED4 /* RestKit.xcodeproj */,
 				37FE1EAE13CB8EFE00655550 /* IntelligentSplitViewController */,
 				37FE1D9413CB8E3300655550 /* AppendingFlowView */,
-				375E5ACA133D6F9E0070EA64 /* s7graphview */,
 				37E635F7139B4B3200A9CC27 /* TTTOrdinalNumberFormatter */,
 				37FE1C4D13CB677000655550 /* JSONKit */,
 				376C1CC01345A7EB009436B5 /* XMLReader */,
@@ -2630,8 +2538,6 @@
 				37FBB75B122253BC00CD8E20 /* DistrictOfficeMasterViewController.m */,
 				374C36B81215E55F006B6ADA /* CalendarMasterViewController.h */,
 				374C36B91215E55F006B6ADA /* CalendarMasterViewController.m */,
-				374C36E41215E8DA006B6ADA /* CapitolMapsMasterViewController.h */,
-				374C36E51215E8DA006B6ADA /* CapitolMapsMasterViewController.m */,
 				374C37031215EB2D006B6ADA /* LinksMasterViewController.h */,
 				374C37041215EB2D006B6ADA /* LinksMasterViewController.m */,
 				37CFBA0212FE8936007C3808 /* BillsMasterViewController.h */,
@@ -2668,26 +2574,6 @@
 			path = starButton;
 			sourceTree = "<group>";
 		};
-		375E5A8E133D6F010070EA64 /* VotingRecordView */ = {
-			isa = PBXGroup;
-			children = (
-				375E5AC6133D6F8B0070EA64 /* VotingRecordDataSource.h */,
-				375E5AC7133D6F8B0070EA64 /* VotingRecordDataSource.m */,
-			);
-			path = VotingRecordView;
-			sourceTree = "<group>";
-		};
-		375E5ACA133D6F9E0070EA64 /* s7graphview */ = {
-			isa = PBXGroup;
-			children = (
-				375E5ACB133D6F9E0070EA64 /* S7GraphView.h */,
-				375E5ACC133D6F9E0070EA64 /* S7GraphView.m */,
-				375E5ACD133D6F9E0070EA64 /* S7Macros.h */,
-			);
-			name = s7graphview;
-			path = Vendor/S7GraphView/s7graphview;
-			sourceTree = SOURCE_ROOT;
-		};
 		3766EE1212108E610073C705 /* Detail View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -2701,8 +2587,6 @@
 				37AD57B911DA651500D68934 /* CommitteeDetailViewController.m */,
 				37D1C525120272F000507757 /* CalendarDetailViewController.h */,
 				37D1C526120272F000507757 /* CalendarDetailViewController.m */,
-				37A0E4470FD2DEAA009B65F7 /* CapitolMapsDetailViewController.h */,
-				37A0E4480FD2DEAA009B65F7 /* CapitolMapsDetailViewController.m */,
 				378B57A81219913400F7ED0B /* MapViewController.h */,
 				378B57A91219913400F7ED0B /* MapViewController.m */,
 				37B3CE8F1249365E00FB3F94 /* MapMiniDetailViewController.h */,
@@ -2747,24 +2631,6 @@
 			);
 			name = Glyphish;
 			path = glyphish;
-			sourceTree = "<group>";
-		};
-		376B5BDA0FC1DC430094D80B /* Capitol Complex Maps */ = {
-			isa = PBXGroup;
-			children = (
-				376B5BDB0FC1DC640094D80B /* Map.WheelchairAccess.pdf */,
-				376B5BDC0FC1DC640094D80B /* Map.CapitolComplex.pdf */,
-				37D6E8C41017772B00D4D7C2 /* Map.SamHoustonLoc.pdf */,
-				37674B271002C492003FD09F /* Map.Floor4.pdf */,
-				37674B281002C492003FD09F /* Map.Floor2.pdf */,
-				37674B291002C492003FD09F /* Map.FloorG.pdf */,
-				37674B2A1002C492003FD09F /* Map.Floor1.pdf */,
-				37674B2B1002C492003FD09F /* Map.FloorE1.pdf */,
-				37674B2C1002C492003FD09F /* Map.Floor3.pdf */,
-				37674B2D1002C492003FD09F /* Map.FloorE2.pdf */,
-				376B5BE10FC1DC640094D80B /* Map.MonumentGuide.pdf */,
-			);
-			name = "Capitol Complex Maps";
 			sourceTree = "<group>";
 		};
 		376C1CC01345A7EB009436B5 /* XMLReader */ = {
@@ -2825,7 +2691,6 @@
 				37735C27132310E90033F343 /* LegislatorObj.json */,
 				37735C28132310E90033F343 /* LinkObj.json */,
 				37735C29132310E90033F343 /* StafferObj.json */,
-				37735C2A132310E90033F343 /* WnomObj.json */,
 			);
 			path = SeedDB;
 			sourceTree = "<group>";
@@ -2907,8 +2772,6 @@
 				37E2068312204D5000103D76 /* DistrictMapObj+MapKit.m */,
 				37D0D20E1357A630003DA1BB /* DistrictMapObj+RestKit.h */,
 				37D0D20F1357A685003DA1BB /* DistrictMapObj+RestKit.m */,
-				3737803911F8082500E36500 /* WnomObj+RestKit.h */,
-				3737803A11F8082500E36500 /* WnomObj+RestKit.m */,
 				37155726100859E700FA57DB /* CommitteeObj+RestKit.h */,
 				37155727100859E700FA57DB /* CommitteeObj+RestKit.m */,
 				378A1CD61007FF4600BEC4ED /* CommitteePositionObj+RestKit.h */,
@@ -2919,8 +2782,6 @@
 				378A1CDB1007FF4600BEC4ED /* LinkObj+RestKit.m */,
 				379D0CC1122D49000021969C /* TexLegeCoreDataUtils.h */,
 				379D0CC2122D49000021969C /* TexLegeCoreDataUtils.m */,
-				372D5CBE11E9983A005A21E2 /* CapitolMap.h */,
-				372D5CBF11E9983A005A21E2 /* CapitolMap.m */,
 				372FAB5812147B2000AEF237 /* ChamberCalendarObj.h */,
 				372FAB5912147B2000AEF237 /* ChamberCalendarObj.m */,
 			);
@@ -2944,22 +2805,22 @@
 				371D543E1365F60E00A61BD4 /* TouchCode_Base64 */,
 				372D066512FC901C00E63696 /* TexLegeLibrary.h */,
 				372D066612FC901C00E63696 /* TexLegeLibrary.m */,
+				379B9CCF1250FE7E0032E616 /* TexLegeReachability.h */,
+				379B9CD01250FE7E0032E616 /* TexLegeReachability.m */,
+				3735E1CC1209B09F0000AF5A /* TexLegeTheme.h */,
+				3735E1CD1209B09F0000AF5A /* TexLegeTheme.m */,
+				374F70A412FD45D600AD7EEC /* TexLegeNavBar.h */,
+				374F70A512FD45D600AD7EEC /* TexLegeNavBar.m */,
+				37A0C6011211DB810067F7AF /* TexLegeEmailComposer.h */,
+				37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */,
 				3718895A12EE917B00E3300D /* NSDate+Helper.h */,
 				3718895B12EE917B00E3300D /* NSDate+Helper.m */,
 				37E36D01139E6D0A00917F40 /* VTPGAdvancedLog.h */,
 				37E36D02139E6D0A00917F40 /* VTPGAdvancedLog.m */,
 				37D6E82610175F0800D4D7C2 /* UtilityMethods.h */,
 				37D6E82710175F0800D4D7C2 /* UtilityMethods.m */,
-				379B9CCF1250FE7E0032E616 /* TexLegeReachability.h */,
-				379B9CD01250FE7E0032E616 /* TexLegeReachability.m */,
-				3735E1CC1209B09F0000AF5A /* TexLegeTheme.h */,
-				3735E1CD1209B09F0000AF5A /* TexLegeTheme.m */,
-				37A0C6011211DB810067F7AF /* TexLegeEmailComposer.h */,
-				37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */,
 				378B57BF121994DF00F7ED0B /* UIDevice-Hardware.h */,
 				3767140011E8319900D004C8 /* UIDevice-Hardware.m */,
-				374F70A412FD45D600AD7EEC /* TexLegeNavBar.h */,
-				374F70A512FD45D600AD7EEC /* TexLegeNavBar.m */,
 				3735DDAD120899980000AF5A /* UISearchDisplayController+NoHideNav.h */,
 				3735DDAE120899980000AF5A /* UISearchDisplayController+NoHideNav.m */,
 				37CD0A6913A340E100F4C68B /* NSString+DKAdditions.h */,
@@ -2981,9 +2842,7 @@
 		37A0E4870FD2DFB1009B65F7 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				374DA89A1325C6FB00CCBC40 /* CapitolMaps.plist */,
 				376F62D3132973D800F2B3DA /* BillMetadata.json */,
-				376C2811132583C800EB7688 /* WnomAggregateObj.json */,
 				37735C22132310E90033F343 /* SeedDB */,
 				37CF6A7412262B4600456D29 /* planH01369.kml */,
 				37CF6A7512262B4600456D29 /* planS01188.kml */,
@@ -3017,8 +2876,6 @@
 		37AD577C11DA577C00D68934 /* Data Sources */ = {
 			isa = PBXGroup;
 			children = (
-				3747C25B11E7B15300A6D8C6 /* PartisanIndexStats.h */,
-				3747C25C11E7B15300A6D8C6 /* PartisanIndexStats.m */,
 				37A0E44B0FD2DEAA009B65F7 /* TableDataSourceProtocol.h */,
 				378AFC83100BDD940040706A /* LegislatorsDataSource.h */,
 				378AFC82100BDD940040706A /* LegislatorsDataSource.m */,
@@ -3028,8 +2885,6 @@
 				37412A38124322C400807502 /* LegislatorContributionsDataSource.m */,
 				378AFC7E100BDD640040706A /* CommitteesDataSource.h */,
 				378AFC7F100BDD640040706A /* CommitteesDataSource.m */,
-				37A0E44D0FD2DEAA009B65F7 /* CapitolMapsDataSource.h */,
-				37A0E44E0FD2DEAA009B65F7 /* CapitolMapsDataSource.m */,
 				37A0E4440FD2DEAA009B65F7 /* LinksDataSource.h */,
 				37A0E4450FD2DEAA009B65F7 /* LinksDataSource.m */,
 				377ACE4611FFA30E002C7E49 /* CalendarDataSource.h */,
@@ -3058,8 +2913,6 @@
 				37094D95133B162E00B9693C /* TexLegeBadgeGroupCell.m */,
 				370B9DCE122AD22C00AC9CC8 /* TexLegeStandardGroupCell.h */,
 				370B9DCF122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m */,
-				376850201234AAFD00AEEC3D /* PartisanScaleView.h */,
-				376850211234AAFD00AEEC3D /* PartisanScaleView.m */,
 				37D46BFF123B483800C2C403 /* CommitteeMemberCell.h */,
 				37D46C00123B483800C2C403 /* CommitteeMemberCell.m */,
 				379393FC123B1A82003103B3 /* CommitteeMemberCellView.h */,
@@ -3072,7 +2925,6 @@
 				370813E5122C536B00D8CA69 /* DisclosureQuartzView.m */,
 				376DFEB413492FF700360BF4 /* LoadingCell.h */,
 				376DFEB513492FF700360BF4 /* LoadingCell.m */,
-				375E5A8E133D6F010070EA64 /* VotingRecordView */,
 			);
 			name = "Custom Cells and Views";
 			path = "Classes/Custom Cells and Views";
@@ -3485,8 +3337,6 @@
 			isa = PBXGroup;
 			children = (
 				37BA160713B2F9760088057B /* Political Party Stars */,
-				3778E80D11EDC19800278273 /* Slider_Question_big.png */,
-				3778E80E11EDC19800278273 /* Slider_Question_big@2x.png */,
 			);
 			name = "Legislator Elements";
 			sourceTree = "<group>";
@@ -3824,9 +3674,9 @@
 			isa = PBXGroup;
 			children = (
 				29B97316FDCFA39411CA2CEA /* main.m */,
-				32CA4F630368D1EE00C91783 /* TexLege_Prefix.pch */,
-				1D3623240D0F684500981E51 /* TexLegeAppDelegate.h */,
-				1D3623250D0F684500981E51 /* TexLegeAppDelegate.m */,
+				32CA4F630368D1EE00C91783 /* StatesLege_Prefix.pch */,
+				1D3623240D0F684500981E51 /* StatesLegeAppDelegate.h */,
+				1D3623250D0F684500981E51 /* StatesLegeAppDelegate.m */,
 				377E8CF0100C39F300686B23 /* Constants.h */,
 			);
 			path = "Application Support";
@@ -3835,9 +3685,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* TexLege */ = {
+		1D6058900D05DD3D006BFB54 /* StatesLege */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "TexLege" */;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "StatesLege" */;
 			buildPhases = (
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
@@ -3855,14 +3705,14 @@
 				371D54831365F6A600A61BD4 /* PBXTargetDependency */,
 				371D54851365F6A600A61BD4 /* PBXTargetDependency */,
 			);
-			name = TexLege;
+			name = StatesLege;
 			productName = foo;
-			productReference = 1D6058910D05DD3D006BFB54 /* TexLege.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* StatesLege.app */;
 			productType = "com.apple.product-type.application";
 		};
-		3773596F1323104A0033F343 /* TexLege (Seeding DB) */ = {
+		3773596F1323104A0033F343 /* StatesLege (Seeding DB) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 37735C0B1323104A0033F343 /* Build configuration list for PBXNativeTarget "TexLege (Seeding DB)" */;
+			buildConfigurationList = 37735C0B1323104A0033F343 /* Build configuration list for PBXNativeTarget "StatesLege (Seeding DB)" */;
 			buildPhases = (
 				377359741323104A0033F343 /* Resources */,
 				37735B561323104A0033F343 /* Sources */,
@@ -3879,9 +3729,9 @@
 				371D54791365F68E00A61BD4 /* PBXTargetDependency */,
 				371D547B1365F68E00A61BD4 /* PBXTargetDependency */,
 			);
-			name = "TexLege (Seeding DB)";
+			name = "StatesLege (Seeding DB)";
 			productName = foo;
-			productReference = 37735C101323104A0033F343 /* TexLege.app */;
+			productReference = 37735C101323104A0033F343 /* StatesLege.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -3892,7 +3742,7 @@
 			attributes = {
 				ORGANIZATIONNAME = "Gregory S. Combs";
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "TexLege" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "StatesLege" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -3914,8 +3764,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* TexLege */,
-				3773596F1323104A0033F343 /* TexLege (Seeding DB) */,
+				1D6058900D05DD3D006BFB54 /* StatesLege */,
+				3773596F1323104A0033F343 /* StatesLege (Seeding DB) */,
 			);
 		};
 /* End PBXProject section */
@@ -4023,11 +3873,8 @@
 				3732A0F811DB203F009E8957 /* iPhoneTabBarController.xib in Resources */,
 				3730B43311DD4B4D00BA10D0 /* Icon_512.png in Resources */,
 				373B820611E378CD00A81142 /* LegislatorMasterViewController.xib in Resources */,
-				3786786311E442800003690F /* CapitolMapsDetailViewController.xib in Resources */,
 				3747BFA811E6890600A6D8C6 /* seal@2x.png in Resources */,
 				3747BFA911E6890600A6D8C6 /* seal.png in Resources */,
-				3778E81111EDC19800278273 /* Slider_Question_big.png in Resources */,
-				3778E81211EDC19800278273 /* Slider_Question_big@2x.png in Resources */,
 				37D1C4D212026FE300507757 /* Month Calendar Shadow Down.png in Resources */,
 				37D1C4D312026FE300507757 /* Month Calendar Shadow Right.png in Resources */,
 				37D1C4D412026FE300507757 /* Month Calendar Shadow Vertical.png in Resources */,
@@ -4038,17 +3885,6 @@
 				3735DFFF120917490000AF5A /* CommitteeMasterViewController.xib in Resources */,
 				3726FC3F120A99800043D6B9 /* 01-refresh@2x.png in Resources */,
 				3766EFC112109F110073C705 /* TexLegeStrings.plist in Resources */,
-				376B5BE20FC1DC640094D80B /* Map.WheelchairAccess.pdf in Resources */,
-				376B5BE30FC1DC640094D80B /* Map.CapitolComplex.pdf in Resources */,
-				376B5BE80FC1DC640094D80B /* Map.MonumentGuide.pdf in Resources */,
-				37674B2E1002C492003FD09F /* Map.Floor4.pdf in Resources */,
-				37674B2F1002C492003FD09F /* Map.Floor2.pdf in Resources */,
-				37674B301002C492003FD09F /* Map.FloorG.pdf in Resources */,
-				37674B311002C492003FD09F /* Map.Floor1.pdf in Resources */,
-				37674B321002C492003FD09F /* Map.FloorE1.pdf in Resources */,
-				37674B331002C492003FD09F /* Map.Floor3.pdf in Resources */,
-				37674B341002C492003FD09F /* Map.FloorE2.pdf in Resources */,
-				37D6E8C51017772B00D4D7C2 /* Map.SamHoustonLoc.pdf in Resources */,
 				37CDD9CD12150651004EC1B7 /* MapViewController~ipad.xib in Resources */,
 				3764E8CB1217B83F008DF726 /* NotesView~ipad.xib in Resources */,
 				37782772121303C1001BD23D /* Default@2x.png in Resources */,
@@ -4443,8 +4279,6 @@
 				37F4926F1311C556005D5DE1 /* BillsDetailViewController~iphone.xib in Resources */,
 				371E96F6131211E50035439E /* BillsDetailViewController~ipad.xib in Resources */,
 				37735E23132363930033F343 /* TexLegeSeed.sqlite in Resources */,
-				376C2812132583C800EB7688 /* WnomAggregateObj.json in Resources */,
-				374DA89B1325C6FB00CCBC40 /* CapitolMaps.plist in Resources */,
 				376F62D5132973D800F2B3DA /* BillMetadata.json in Resources */,
 				37F2C9F21343AD45001D9D7B /* starButtonLargeOff.png in Resources */,
 				37F2C9F31343AD45001D9D7B /* starButtonLargeOff@2x.png in Resources */,
@@ -4517,11 +4351,8 @@
 				377359881323104A0033F343 /* iPhoneTabBarController.xib in Resources */,
 				377359891323104A0033F343 /* Icon_512.png in Resources */,
 				3773598A1323104A0033F343 /* LegislatorMasterViewController.xib in Resources */,
-				3773598B1323104A0033F343 /* CapitolMapsDetailViewController.xib in Resources */,
 				3773598C1323104A0033F343 /* seal@2x.png in Resources */,
 				3773598D1323104A0033F343 /* seal.png in Resources */,
-				3773598E1323104A0033F343 /* Slider_Question_big.png in Resources */,
-				3773598F1323104A0033F343 /* Slider_Question_big@2x.png in Resources */,
 				377359901323104A0033F343 /* Month Calendar Shadow Down.png in Resources */,
 				377359911323104A0033F343 /* Month Calendar Shadow Right.png in Resources */,
 				377359921323104A0033F343 /* Month Calendar Shadow Vertical.png in Resources */,
@@ -4546,17 +4377,6 @@
 				377359A51323104A0033F343 /* 113-navigation@2x.png in Resources */,
 				377359A61323104A0033F343 /* 123-id-card@2x.png in Resources */,
 				377359A71323104A0033F343 /* TexLegeStrings.plist in Resources */,
-				377359A81323104A0033F343 /* Map.WheelchairAccess.pdf in Resources */,
-				377359A91323104A0033F343 /* Map.CapitolComplex.pdf in Resources */,
-				377359AA1323104A0033F343 /* Map.MonumentGuide.pdf in Resources */,
-				377359AB1323104A0033F343 /* Map.Floor4.pdf in Resources */,
-				377359AC1323104A0033F343 /* Map.Floor2.pdf in Resources */,
-				377359AD1323104A0033F343 /* Map.FloorG.pdf in Resources */,
-				377359AE1323104A0033F343 /* Map.Floor1.pdf in Resources */,
-				377359AF1323104A0033F343 /* Map.FloorE1.pdf in Resources */,
-				377359B01323104A0033F343 /* Map.Floor3.pdf in Resources */,
-				377359B11323104A0033F343 /* Map.FloorE2.pdf in Resources */,
-				377359B21323104A0033F343 /* Map.SamHoustonLoc.pdf in Resources */,
 				377359B31323104A0033F343 /* MapViewController~ipad.xib in Resources */,
 				377359B51323104A0033F343 /* NotesView~ipad.xib in Resources */,
 				377359B61323104A0033F343 /* Default@2x.png in Resources */,
@@ -4959,9 +4779,6 @@
 				37735C2F132310E90033F343 /* LegislatorObj.json in Resources */,
 				37735C30132310E90033F343 /* LinkObj.json in Resources */,
 				37735C31132310E90033F343 /* StafferObj.json in Resources */,
-				37735C32132310E90033F343 /* WnomObj.json in Resources */,
-				376C2813132583C800EB7688 /* WnomAggregateObj.json in Resources */,
-				374DA89C1325C6FB00CCBC40 /* CapitolMaps.plist in Resources */,
 				376F62D4132973D800F2B3DA /* BillMetadata.json in Resources */,
 				37F2C9EE1343AD45001D9D7B /* starButtonLargeOff.png in Resources */,
 				37F2C9EF1343AD45001D9D7B /* starButtonLargeOff@2x.png in Resources */,
@@ -5052,11 +4869,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
-				1D3623260D0F684500981E51 /* TexLegeAppDelegate.m in Sources */,
+				1D3623260D0F684500981E51 /* StatesLegeAppDelegate.m in Sources */,
 				37A0E4720FD2DEAA009B65F7 /* LinksDataSource.m in Sources */,
-				37A0E4730FD2DEAA009B65F7 /* CapitolMapsDetailViewController.m in Sources */,
 				37A0E4740FD2DEAA009B65F7 /* GeneralTableViewController.m in Sources */,
-				37A0E4750FD2DEAA009B65F7 /* CapitolMapsDataSource.m in Sources */,
 				373AB3B90FD3389F0065740E /* TableCellDataObject.m in Sources */,
 				37C9B67E11EDB28E001F0010 /* TexLege.xcdatamodeld in Sources */,
 				378A1CDD1007FF4600BEC4ED /* CommitteePositionObj+RestKit.m in Sources */,
@@ -5071,9 +4886,6 @@
 				3775FA3D11D86E1700D69AC5 /* LegislatorDetailViewController.m in Sources */,
 				3775FA4C11D8701B00D69AC5 /* LegislatorMasterViewController.m in Sources */,
 				37AD57BB11DA651700D68934 /* CommitteeDetailViewController.m in Sources */,
-				3747C25D11E7B15300A6D8C6 /* PartisanIndexStats.m in Sources */,
-				372D5CC011E9983A005A21E2 /* CapitolMap.m in Sources */,
-				3737803B11F8082500E36500 /* WnomObj+RestKit.m in Sources */,
 				370F7AA911FEAF730004AC50 /* PolygonMath.m in Sources */,
 				377ACE4811FFA30E002C7E49 /* CalendarDataSource.m in Sources */,
 				37D1C527120272F000507757 /* CalendarDetailViewController.m in Sources */,
@@ -5085,7 +4897,6 @@
 				37A0C6031211DB810067F7AF /* TexLegeEmailComposer.m in Sources */,
 				372FAB5A12147B2000AEF237 /* ChamberCalendarObj.m in Sources */,
 				374C36BA1215E55F006B6ADA /* CalendarMasterViewController.m in Sources */,
-				374C36E61215E8DA006B6ADA /* CapitolMapsMasterViewController.m in Sources */,
 				374C37051215EB2D006B6ADA /* LinksMasterViewController.m in Sources */,
 				378B57AA1219913400F7ED0B /* MapViewController.m in Sources */,
 				378B57BE121994C400F7ED0B /* UIDevice-Hardware.m in Sources */,
@@ -5101,7 +4912,6 @@
 				379D0D45122D5CDE0021969C /* TexLegeCoreDataUtils.m in Sources */,
 				3742D6EF122E18D100698483 /* DistrictMapSearchOperation.m in Sources */,
 				3742D723122E1FDF00698483 /* NSInvocation+CWVariableArguments.m in Sources */,
-				376850221234AAFD00AEEC3D /* PartisanScaleView.m in Sources */,
 				374E2A6B12360C6E0005E245 /* TexLegeMapPins.m in Sources */,
 				37D3649D1236869200CCF86E /* UserPinAnnotationView.m in Sources */,
 				37C94A2712387ABA00D2D582 /* DistrictMapMasterViewController.m in Sources */,
@@ -5131,8 +4941,6 @@
 				370EAC381337E3CF007788BC /* TexLegeObjectCache.m in Sources */,
 				370EAD321338029E007788BC /* OpenLegislativeAPIs.m in Sources */,
 				37094D97133B162E00B9693C /* TexLegeBadgeGroupCell.m in Sources */,
-				375E5AC9133D6F8B0070EA64 /* VotingRecordDataSource.m in Sources */,
-				375E5ACF133D6F9E0070EA64 /* S7GraphView.m in Sources */,
 				37F2CA121343AE40001D9D7B /* DDActionHeaderView.m in Sources */,
 				37F2CA961343BF1A001D9D7B /* TVOutManager.m in Sources */,
 				376AE79E13445CA400825C4D /* BillsKeyViewController.m in Sources */,
@@ -5174,11 +4982,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				37735B571323104A0033F343 /* main.m in Sources */,
-				37735B581323104A0033F343 /* TexLegeAppDelegate.m in Sources */,
+				37735B581323104A0033F343 /* StatesLegeAppDelegate.m in Sources */,
 				37735B591323104A0033F343 /* LinksDataSource.m in Sources */,
-				37735B5A1323104A0033F343 /* CapitolMapsDetailViewController.m in Sources */,
 				37735B5B1323104A0033F343 /* GeneralTableViewController.m in Sources */,
-				37735B5C1323104A0033F343 /* CapitolMapsDataSource.m in Sources */,
 				37735B5D1323104A0033F343 /* TableCellDataObject.m in Sources */,
 				37735B5E1323104A0033F343 /* TexLege.xcdatamodeld in Sources */,
 				37735B5F1323104A0033F343 /* CommitteePositionObj+RestKit.m in Sources */,
@@ -5193,9 +4999,6 @@
 				37735B6A1323104A0033F343 /* LegislatorDetailViewController.m in Sources */,
 				37735B6B1323104A0033F343 /* LegislatorMasterViewController.m in Sources */,
 				37735B6C1323104A0033F343 /* CommitteeDetailViewController.m in Sources */,
-				37735B6D1323104A0033F343 /* PartisanIndexStats.m in Sources */,
-				37735B6F1323104A0033F343 /* CapitolMap.m in Sources */,
-				37735B701323104A0033F343 /* WnomObj+RestKit.m in Sources */,
 				37735B711323104A0033F343 /* PolygonMath.m in Sources */,
 				37735B721323104A0033F343 /* CalendarDataSource.m in Sources */,
 				37735B731323104A0033F343 /* CalendarDetailViewController.m in Sources */,
@@ -5207,7 +5010,6 @@
 				37735B791323104A0033F343 /* TexLegeEmailComposer.m in Sources */,
 				37735B7A1323104A0033F343 /* ChamberCalendarObj.m in Sources */,
 				37735B7B1323104A0033F343 /* CalendarMasterViewController.m in Sources */,
-				37735B7C1323104A0033F343 /* CapitolMapsMasterViewController.m in Sources */,
 				37735B7D1323104A0033F343 /* LinksMasterViewController.m in Sources */,
 				37735B7E1323104A0033F343 /* MapViewController.m in Sources */,
 				37735B7F1323104A0033F343 /* UIDevice-Hardware.m in Sources */,
@@ -5223,7 +5025,6 @@
 				37735BD11323104A0033F343 /* TexLegeCoreDataUtils.m in Sources */,
 				37735BD21323104A0033F343 /* DistrictMapSearchOperation.m in Sources */,
 				37735BD31323104A0033F343 /* NSInvocation+CWVariableArguments.m in Sources */,
-				37735BD41323104A0033F343 /* PartisanScaleView.m in Sources */,
 				37735BD51323104A0033F343 /* TexLegeMapPins.m in Sources */,
 				37735BD61323104A0033F343 /* UserPinAnnotationView.m in Sources */,
 				37735BD81323104A0033F343 /* DistrictMapMasterViewController.m in Sources */,
@@ -5254,8 +5055,6 @@
 				370EAC371337E3CF007788BC /* TexLegeObjectCache.m in Sources */,
 				370EAD311338029E007788BC /* OpenLegislativeAPIs.m in Sources */,
 				37094D96133B162E00B9693C /* TexLegeBadgeGroupCell.m in Sources */,
-				375E5AC8133D6F8B0070EA64 /* VotingRecordDataSource.m in Sources */,
-				375E5ACE133D6F9E0070EA64 /* S7GraphView.m in Sources */,
 				37F2CA111343AE40001D9D7B /* DDActionHeaderView.m in Sources */,
 				376AE79D13445CA400825C4D /* BillsKeyViewController.m in Sources */,
 				377DC4A91344D475000068E1 /* BillVotesDataSource.m in Sources */,
@@ -5405,7 +5204,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PRODUCT_NAME = TexLege;
+				PRODUCT_NAME = StatesLege;
 			};
 			name = Debug;
 		};
@@ -5415,7 +5214,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PRODUCT_NAME = TexLege;
+				PRODUCT_NAME = StatesLege;
 			};
 			name = Release;
 		};
@@ -5428,7 +5227,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
+				GCC_PREFIX_HEADER = StatesLege_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"RESTKIT_GENERATE_SEED_DB=1",
 					"DEBUG=1",
@@ -5436,7 +5235,7 @@
 				INFOPLIST_FILE = "Info (Seed).plist";
 				INSTALL_PATH = /Applications;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PRODUCT_NAME = TexLege;
+				PRODUCT_NAME = StatesLege;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -5449,12 +5248,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Gregory Combs (MJMLU3U99Y)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
+				GCC_PREFIX_HEADER = StatesLege_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "Info (Seed).plist";
 				INSTALL_PATH = /Applications;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PRODUCT_NAME = TexLege;
+				PRODUCT_NAME = StatesLege;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -5466,11 +5265,11 @@
 				"ARCHS[sdk=iphonesimulator*]" = i386;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
+				GCC_PREFIX_HEADER = StatesLege_Prefix.pch;
 				INFOPLIST_FILE = "Info (Seed).plist";
 				INSTALL_PATH = /Applications;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PRODUCT_NAME = TexLege;
+				PRODUCT_NAME = StatesLege;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "AdHoc Distribution";
@@ -5482,10 +5281,11 @@
 				"ARCHS[sdk=iphonesimulator*]" = i386;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
+				GCC_PREFIX_HEADER = StatesLege_Prefix.pch;
 				INFOPLIST_FILE = "Info (Seed).plist";
 				INSTALL_PATH = /Applications;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				PRODUCT_NAME = StatesLege;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "iTunes Distribution";
@@ -5505,7 +5305,7 @@
 				GCC_DEBUGGING_SYMBOLS = full;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
+				GCC_PREFIX_HEADER = "$(PROJECT_NAME)_Prefix.pch";
 				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv6]" = NO;
 				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv7]" = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -5546,6 +5346,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				PRODUCT_NAME = StatesLege;
 			};
 			name = "iTunes Distribution";
 		};
@@ -5565,7 +5366,7 @@
 				GCC_DEBUGGING_SYMBOLS = full;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
+				GCC_PREFIX_HEADER = "$(PROJECT_NAME)_Prefix.pch";
 				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv6]" = NO;
 				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv7]" = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -5607,7 +5408,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PRODUCT_NAME = TexLege;
+				PRODUCT_NAME = StatesLege;
 			};
 			name = "AdHoc Distribution";
 		};
@@ -5627,7 +5428,7 @@
 				GCC_DEBUGGING_SYMBOLS = full;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
+				GCC_PREFIX_HEADER = "$(PROJECT_NAME)_Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv6]" = NO;
 				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv7]" = YES;
@@ -5679,7 +5480,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TexLege_Prefix.pch;
+				GCC_PREFIX_HEADER = "$(PROJECT_NAME)_Prefix.pch";
 				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv6]" = NO;
 				"GCC_THUMB_SUPPORT[sdk=iphoneos*][arch=armv7]" = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -5718,7 +5519,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "TexLege" */ = {
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "StatesLege" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
@@ -5729,7 +5530,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		37735C0B1323104A0033F343 /* Build configuration list for PBXNativeTarget "TexLege (Seeding DB)" */ = {
+		37735C0B1323104A0033F343 /* Build configuration list for PBXNativeTarget "StatesLege (Seeding DB)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				37735C0C1323104A0033F343 /* Debug */,
@@ -5740,7 +5541,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "TexLege" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "StatesLege" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,

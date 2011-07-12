@@ -13,7 +13,7 @@
 #import "CalendarMasterViewController.h"
 #import "UtilityMethods.h"
 
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "TableDataSourceProtocol.h"
 
 #import "CalendarDataSource.h"
@@ -82,7 +82,7 @@
 
 // the user selected a row in the table.
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
-	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+	StatesLegeAppDelegate *appDelegate = [StatesLegeAppDelegate appDelegate];
 	
 	if (![UtilityMethods isIPadDevice])
 		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];

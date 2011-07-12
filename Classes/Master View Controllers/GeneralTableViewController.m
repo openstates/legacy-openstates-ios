@@ -14,7 +14,7 @@
 
 #import "GeneralTableViewController.h"
 
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "TableDataSourceProtocol.h"
 #import "BillsMenuDataSource.h"
 #import "TexLegeTheme.h"
@@ -74,7 +74,7 @@
 	[self dataSource];
 	
 	if ([self.dataSource usesCoreData]) {
-		id objectID = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:NSStringFromClass([self class])];
+		id objectID = [[StatesLegeAppDelegate appDelegate] savedTableSelectionForKey:NSStringFromClass([self class])];
 		if (objectID && [objectID isKindOfClass:[NSNumber class]]) {
 			@try {
 				if ([self.dataSource respondsToSelector:@selector(dataClass)])
@@ -85,7 +85,7 @@
 		}			
 	}
 	else { // Let's just do this for maps, and meetings, ... we'll handle them like integer row selections
-		id object = [[TexLegeAppDelegate appDelegate] savedTableSelectionForKey:NSStringFromClass([self class])];
+		id object = [[StatesLegeAppDelegate appDelegate] savedTableSelectionForKey:NSStringFromClass([self class])];
 		if (!object)
 			return;
 		
@@ -256,7 +256,7 @@
 
 	// We're on an iphone, without a splitview or popovers, so if we get here, let's stop traversing our replay breadcrumbs
 	if (![UtilityMethods isIPadDevice]) {
-		[[TexLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:NSStringFromClass([self class])];
+		[[StatesLegeAppDelegate appDelegate] setSavedTableSelection:nil forKey:NSStringFromClass([self class])];
 	}
 }
 

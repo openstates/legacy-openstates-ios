@@ -20,7 +20,7 @@
 #import "TexLegeBadgeGroupCell.h"
 #import "BillMetadataLoader.h"
 #import "OpenLegislativeAPIs.h"
-#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
+#import "JSONKit.h"
 #import "LoadingCell.h"
 #import "StateMetaLoader.h"
 

@@ -11,13 +11,13 @@
 //
 
 #import "LegislatorContributionsDataSource.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 #import "OpenLegislativeAPIs.h"
 #import "TexLegeStandardGroupCell.h"
 #import "TexLegeTheme.h"
 #import "UtilityMethods.h"
-#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
+#import "JSONKit.h"
 
 @interface LegislatorContributionsDataSource(Private)
 - (void)parseJSONObject:(id)jsonDeserialized;

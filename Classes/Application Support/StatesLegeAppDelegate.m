@@ -1,5 +1,5 @@
 //
-//  TexLegeAppDelegate.m
+//  StatesLegeAppDelegate.m
 //  Created by Gregory Combs on 7/22/09.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -12,10 +12,9 @@
 
 #import <RestKit/RestKit.h>
 
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "TexLegeCoreDataUtils.h"
 #import "UtilityMethods.h"
-#import "PartisanIndexStats.h"
 
 #import "TexLegeReachability.h"
 #import "TexLegeTheme.h"
@@ -37,7 +36,7 @@
 
 #import "StateMetaLoader.h"
 
-@interface TexLegeAppDelegate (Private)
+@interface StatesLegeAppDelegate (Private)
 - (void)runOnEveryAppStart;
 - (void)runOnAppQuit;
 - (void)restoreArchivableSavedTableSelection;
@@ -59,7 +58,7 @@ NSString * const kSupportEmailKey = @"supportEmail";
 NSUInteger kNumMaxTabs = 11;
 NSInteger kNoSelection = -1;
 
-@implementation TexLegeAppDelegate
+@implementation StatesLegeAppDelegate
 
 @synthesize tabBarController;
 @synthesize savedTableSelection, appIsQuitting;
@@ -67,11 +66,11 @@ NSInteger kNoSelection = -1;
 @synthesize mainWindow;
 @synthesize dataUpdater;
 
-@synthesize legislatorMasterVC, committeeMasterVC, capitolMapsMasterVC, linksMasterVC, calendarMasterVC, districtMapMasterVC;
+@synthesize legislatorMasterVC, committeeMasterVC, linksMasterVC, calendarMasterVC, districtMapMasterVC;
 @synthesize billsMasterVC;
 
-+ (TexLegeAppDelegate *)appDelegate {
-	return (TexLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
++ (StatesLegeAppDelegate *)appDelegate {
+	return (StatesLegeAppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
 - init {
@@ -93,7 +92,6 @@ NSInteger kNoSelection = -1;
 	self.tabBarController = nil;
 	self.mainWindow = nil;    
 	
-	self.capitolMapsMasterVC = nil;
 	self.linksMasterVC = nil; 
 	self.calendarMasterVC = nil;
 	self.legislatorMasterVC = nil;
@@ -265,7 +263,7 @@ NSInteger kNoSelection = -1;
 	}
 	
 	NSArray *VCs = [[NSArray alloc] initWithObjects:self.legislatorMasterVC, self.committeeMasterVC, self.districtMapMasterVC,
-					self.calendarMasterVC, self.billsMasterVC, self.capitolMapsMasterVC, self.linksMasterVC, nil];
+					self.calendarMasterVC, self.billsMasterVC, self.linksMasterVC, nil];
 	
 	NSString * tempVCKey = [self.savedTableSelection objectForKey:@"viewController"];
 	NSInteger savedTabSelectionIndex = -1;
@@ -416,7 +414,7 @@ NSInteger kNoSelection = -1;
 	self.appIsQuitting = NO;
 	
 	[[StateMetaLoader sharedStateMeta] setSelectedState:@"tx"];
-	[PartisanIndexStats sharedPartisanIndexStats];
+
 	[[BillMetadataLoader sharedBillMetadataLoader] loadMetadata:self];
 	//[[CalendarEventsLoader sharedCalendarEventsLoader] loadEvents:self];
 	

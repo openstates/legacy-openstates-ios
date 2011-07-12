@@ -16,7 +16,7 @@
 #import "DistrictOfficeObj.h"
 #import "DistrictMapObj+MapKit.h"
 
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "TexLegeCoreDataUtils.h"
 
 #import "LocalyticsSession.h"

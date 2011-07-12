@@ -1,5 +1,5 @@
 //
-//  TexLegeAppDelegate.h
+//  StatesLegeAppDelegate.h
 //  Created by Gregory Combs on 7/22/09.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -13,14 +13,13 @@
 @class LegislatorMasterViewController;
 @class CommitteeMasterViewController;
 @class LinksMasterViewController;
-@class CapitolMapsMasterViewController;
 @class CalendarMasterViewController;
 @class DistrictMapMasterViewController;
 @class BillsMasterViewController;
 @class DataModelUpdateManager;
 @class AnalyticsOptInAlertController;
 
-@interface TexLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate, UINavigationControllerDelegate> 
+@interface StatesLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate, UINavigationControllerDelegate> 
 {
 	DataModelUpdateManager *dataUpdater;
 	UIWindow			*mainWindow;
@@ -28,7 +27,6 @@
 	BOOL				appIsQuitting;
 	AnalyticsOptInAlertController *analyticsOptInController;
 	IBOutlet LinksMasterViewController *linksMasterVC;
-	IBOutlet CapitolMapsMasterViewController *capitolMapsMasterVC;
 	IBOutlet CommitteeMasterViewController *committeeMasterVC;
 	IBOutlet LegislatorMasterViewController *legislatorMasterVC;
 	IBOutlet CalendarMasterViewController *calendarMasterVC;
@@ -43,7 +41,6 @@
 
 // For Functional View Controllers
 @property (nonatomic, assign) IBOutlet LinksMasterViewController *linksMasterVC;
-@property (nonatomic, assign) IBOutlet CapitolMapsMasterViewController *capitolMapsMasterVC;
 @property (nonatomic, assign) IBOutlet CommitteeMasterViewController *committeeMasterVC;
 @property (nonatomic, assign) IBOutlet LegislatorMasterViewController *legislatorMasterVC;
 @property (nonatomic, assign) IBOutlet CalendarMasterViewController *calendarMasterVC;
@@ -63,6 +60,6 @@
 - (void)setSavedTableSelection:(id)object forKey:(NSString *)vcKey;
 - (void)changingReachability:(id)sender;
 
-+ (TexLegeAppDelegate *)appDelegate;
++ (StatesLegeAppDelegate *)appDelegate;
 
 @end

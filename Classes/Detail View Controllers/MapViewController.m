@@ -21,7 +21,7 @@
 #import "UserPinAnnotation.h"
 #import "UserPinAnnotationView.h"
 
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "TexLegeCoreDataUtils.h"
 
 #import "LocalyticsSession.h"

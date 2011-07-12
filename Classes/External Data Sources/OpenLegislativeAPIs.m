@@ -12,7 +12,7 @@
 
 #import "OpenLegislativeAPIs.h"
 #import "UtilityMethods.h"
-#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
+#import "JSONKit.h"
 #import "NSDate+Helper.h"
 #import "StateMetaLoader.h"
 

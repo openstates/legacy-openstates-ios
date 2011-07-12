@@ -12,7 +12,7 @@
 
 #import "CalendarEventsLoader.h"
 #import "NSDate+Helper.h"
-#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
+#import "JSONKit.h"
 #import "UtilityMethods.h"
 #import "TexLegeReachability.h"
 #import "OpenLegislativeAPIs.h"

@@ -19,11 +19,11 @@
 #import "TexLegeCoreDataUtils.h"
 #import "UtilityMethods.h"
 #import "TableCellDataObject.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "SVWebViewController.h"
 #import "LocalyticsSession.h"
 #import "NSDate+Helper.h"
-#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
+#import "JSONKit.h"
 #import "BillMetadataLoader.h"
 #import "DDActionHeaderView.h"
 #import "TexLegeTheme.h"
@@ -562,7 +562,7 @@ enum _billSections {
 			BillsListViewController *catResultsView = nil;
 			BOOL preexisting = NO;
 			if ([UtilityMethods isIPadDevice] && [UtilityMethods isLandscapeOrientation]) {
-				id tempView = [[[TexLegeAppDelegate appDelegate] masterNavigationController] visibleViewController];
+				id tempView = [[[StatesLegeAppDelegate appDelegate] masterNavigationController] visibleViewController];
 				if ([tempView isKindOfClass:[BillsListViewController class]]) {
 					catResultsView = (BillsListViewController *)[tempView retain];
 					preexisting = YES;
@@ -576,7 +576,7 @@ enum _billSections {
 			[dataSource startSearchForSubject:subject chamber:[[bill objectForKey:@"chamber"] integerValue]];
 			if (!preexisting) {
 				if ([UtilityMethods isIPadDevice] && [UtilityMethods isLandscapeOrientation])
-					[[[TexLegeAppDelegate appDelegate] masterNavigationController] pushViewController:catResultsView animated:YES];
+					[[[StatesLegeAppDelegate appDelegate] masterNavigationController] pushViewController:catResultsView animated:YES];
 				else
 					[self.navigationController pushViewController:catResultsView animated:YES];
 			}

@@ -11,10 +11,9 @@
 //
 
 #import "BillsMenuDataSource.h"
-#import "TexLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 #import "TexLegeStandardGroupCell.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 
 @implementation BillsMenuDataSource
 

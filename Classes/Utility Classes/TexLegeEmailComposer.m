@@ -11,7 +11,7 @@
 //
 
 #import "TexLegeEmailComposer.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 

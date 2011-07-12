@@ -16,7 +16,7 @@
 #import "TexLegeCoreDataUtils.h"
 #import "CommitteePositionObj+RestKit.h"
 #import "CommitteeObj+RestKit.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 
 @interface CommitteesDataSource (Private)
 @end

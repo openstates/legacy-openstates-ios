@@ -12,7 +12,7 @@
 //
 
 #import "UserPinAnnotation.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import <AddressBookUI/ABAddressFormatting.h>
 #import "UtilityMethods.h"
 @interface UserPinAnnotation (Private)

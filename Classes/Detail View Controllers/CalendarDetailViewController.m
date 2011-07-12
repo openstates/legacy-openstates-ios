@@ -13,7 +13,7 @@
 #import "CalendarMasterViewController.h"
 #import "UtilityMethods.h"
 #import "SVWebViewController.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "ChamberCalendarObj.h"
 #import "TexLegeTheme.h"
 #import "LocalyticsSession.h"
@@ -109,7 +109,7 @@
 	[[CalendarEventsLoader sharedCalendarEventsLoader] events];
 	
 	if ([UtilityMethods isIPadDevice] && !self.chamberCalendar && ![UtilityMethods isLandscapeOrientation])  {
-		TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+		StatesLegeAppDelegate *appDelegate = [StatesLegeAppDelegate appDelegate];
 		
 		self.chamberCalendar = [[appDelegate calendarMasterVC] selectObjectOnAppear];		
 	}

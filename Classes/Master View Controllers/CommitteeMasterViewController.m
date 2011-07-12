@@ -17,7 +17,7 @@
 #import "CommitteeObj.h"
 
 #import "UtilityMethods.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 
 @interface CommitteeMasterViewController (Private)
@@ -114,7 +114,7 @@
 
 //START:code.split.delegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
-	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+	StatesLegeAppDelegate *appDelegate = [StatesLegeAppDelegate appDelegate];
 
 	if (![UtilityMethods isIPadDevice])
 		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];

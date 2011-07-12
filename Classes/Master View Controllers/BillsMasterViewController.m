@@ -14,7 +14,7 @@
 #import "BillsDetailViewController.h"
 #import "UtilityMethods.h"
 
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "TableDataSourceProtocol.h"
 
 #import "TexLegeTheme.h"
@@ -143,7 +143,7 @@
 
 // the user selected a row in the table.
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
-	TexLegeAppDelegate *appDelegate = [TexLegeAppDelegate appDelegate];
+	StatesLegeAppDelegate *appDelegate = [StatesLegeAppDelegate appDelegate];
 	
 	if (![UtilityMethods isIPadDevice])
 		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
@@ -179,7 +179,7 @@
 				self.detailViewController = nil;
 			}
 			else if (changingDetails)
-				[[[TexLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.detailViewController] animated:NO];
+				[[[StatesLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.detailViewController] animated:NO];
 		}			
 	}
 //	WE'RE CLICKING ON ONE OF OUR STANDARD MENU ITEMS

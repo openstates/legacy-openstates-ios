@@ -19,7 +19,7 @@
 #import "TexLegeLibrary.h"
 #import "UtilityMethods.h"
 #import "OpenLegislativeAPIs.h"
-#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
+#import "JSONKit.h"
 #import "LocalyticsSession.h"
 #import "LoadingCell.h"
 #import "StateMetaLoader.h"

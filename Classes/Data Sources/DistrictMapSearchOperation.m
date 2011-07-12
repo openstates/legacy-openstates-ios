@@ -12,7 +12,7 @@
 
 #import "DistrictMapSearchOperation.h"
 #import "NSInvocation+CWVariableArguments.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "DistrictMapObj+MapKit.h"
 #import "TexLegeCoreDataUtils.h"
 
