@@ -13,12 +13,11 @@
 #import "LegislatorsDataSource.h"
 #import "TexLegeCoreDataUtils.h"
 #import "LegislatorObj.h"
-#import "WnomObj.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "LegislatorMasterCell.h"
 #import "UIDevice-Hardware.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 
 @interface LegislatorsDataSource (Private)
 - (void)dataSourceReceivedMemoryWarning:(id)sender;

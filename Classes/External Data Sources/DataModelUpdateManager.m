@@ -11,7 +11,7 @@
 //
 
 #import "DataModelUpdateManager.h"
-#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
+#import "JSONKit.h"
 #import "UtilityMethods.h"
 #import "TexLegeReachability.h"
 #import "TexLegeCoreDataUtils.h"
@@ -45,12 +45,6 @@ enum TXL_QueryTypes {
 
 - (NSString *)localDataTimestampForModel:(NSString *)classString;
 
-// Someday we may opt to handle updating for this aggregate partisanship file.  Right now it's manually updated.
-// In the future, we might use a method like the following to get timestamps and update accordingly.
-#define WNOMAGGREGATES_UPDATING 0
-#if WNOMAGGREGATES_UPDATING
-- (NSString *) localDataTimestampForArray:(NSArray *)entityArray;
-#endif	
 @end
 
 @implementation DataModelUpdateManager
@@ -66,14 +60,12 @@ enum TXL_QueryTypes {
 		activeUpdates = [[NSCountedSet alloc] init];
 		statusBlurbsAndModels = [[NSDictionary alloc] initWithObjectsAndKeys: 
 									  NSLocalizedStringFromTable(@"Legislators", @"DataTableUI", @"Status indicator for updates"), @"LegislatorObj",
-									  NSLocalizedStringFromTable(@"Partisanship Scores", @"DataTableUI", @"Status indicator for updates"), @"WnomObj",
 									  NSLocalizedStringFromTable(@"Staffers", @"DataTableUI", @"Status indicator for updates"), @"StafferObj",
 									  NSLocalizedStringFromTable(@"Committees", @"DataTableUI", @"Status indicator for updates"), @"CommitteeObj",
 									  NSLocalizedStringFromTable(@"Committee Positions", @"DataTableUI", @"Status indicator for updates"), @"CommitteePositionObj",
 									  NSLocalizedStringFromTable(@"District Offices", @"DataTableUI", @"Status indicator for updates"), @"DistrictOfficeObj",
 									  NSLocalizedStringFromTable(@"Resources", @"DataTableUI", @"Status indicator for updates"), @"LinkObj",
 									  NSLocalizedStringFromTable(@"District Maps", @"DataTableUI", @"Status indicator for updates"), @"DistrictMapObj",
-									  NSLocalizedStringFromTable(@"Party Scores", @"DataTableUI", @"Status indicator for updates"), @"WnomAggregateObj",
 									  nil];		
 	}
 	return self;
@@ -121,7 +113,7 @@ enum TXL_QueryTypes {
 			
 			Class entityClass = NSClassFromString(entityName);
 			if (entityClass) {							
-				[self.activeUpdates addObject:entityName];		// we don't add WnomAggregateObj because we don't get it loaded the same way.
+				[self.activeUpdates addObject:entityName];
 				
 				RKObjectLoader *loader = [objectManager objectLoaderWithResourcePath:resourcePathWithQuery delegate:self];
 				loader.method = RKRequestMethodGET;
@@ -156,7 +148,7 @@ enum TXL_QueryTypes {
 	Class entityClass = NSClassFromString(className);
 
 	if (!entityClass || ![[TexLegeCoreDataUtils registeredDataModels] containsObject:className])
-		return;			// What do we do for WnomAggregateObj ???
+		return;
 
 	RKObjectManager* objectManager = [RKObjectManager sharedManager];
 
@@ -309,50 +301,8 @@ enum TXL_QueryTypes {
 		
 		return [[NSClassFromString(classString) objectWithFetchRequest:request] valueForKey:TXLUPDMGR_UPDATEDPROP];	// this relies on objectWithFetchRequest returning the object at index 0
 	}
-	else if ([classString isEqualToString:@"WnomAggregateObj"]) {
-#if WNOMAGGREGATES_UPDATING
-		NSError *error = nil;
-		NSString *path = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:@"WnomAggregateObj.json"];
-		NSString *json = [NSString stringWithContentsOfFile:path encoding:JSONDATA_ENCODING error:&error];
-		if (!error && json) {
-			NSArray *aggregates = [json objectFromJSONString];
-			NSString *timestamp = [self localDataTimestampForArray:aggregates];
-		}
-		else {
-			NSLog(@"DataModelUpdateManager:timestampForModel - error loading aggregates json - %@", path);
-		}
-#endif
-	}
 	
 	return nil;
 }
-
-#if WNOMAGGREGATES_UPDATING
-- (NSString *) localDataTimestampForArray:(NSArray *)entityArray {
-	if (!entityArray || ![entityArray count])
-		return [[NSDate date] timestampString];
-	
-	NSMutableArray *tempSorted = [[NSMutableArray alloc] initWithArray:entityArray];
-	NSSortDescriptor *desc = [[NSSortDescriptor alloc] initWithKey:JSONDATA_TIMESTAMPKEY ascending:NO];	// the most recent update will be the first item in the array (descending)
-	[tempSorted sortUsingDescriptors:desc];
-	[desc release];
-
-	NSString *timestamp = nil;
-	id object = [[tempSorted objectAtIndex:0] objectForKey:JSONDATA_TIMESTAMPKEY];
-	if (!object) {
-		NSLog(@"DataModelUpdateManager:timestampForArray - no 'updated' timestamp key found.");
-	}
-	else if ([object isKindOfClass:[NSString class]])
-		timestamp = object;
-	else if ([object isKindOfClass:[NSDate class]])
-		timestamp = [object timestampString];
-	else {
-		NSLog(@"DataModelUpdateManager:timestampForArray - Unexpected type in dictionary, wanted timestamp string, %@", [object description]);
-	}
-
-	[tempSorted release];
-	return timestamp;
-}
-#endif
 
 @end

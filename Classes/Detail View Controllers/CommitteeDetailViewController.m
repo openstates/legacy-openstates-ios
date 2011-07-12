@@ -16,17 +16,14 @@
 #import "TexLegeCoreDataUtils.h"
 
 #import "UtilityMethods.h"
-#import "CapitolMapsDetailViewController.h"
 #import "LegislatorDetailViewController.h"
 #import "SVWebViewController.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 #import "LegislatorMasterCell.h"
 #import "CommitteeMemberCell.h"
 #import "CommitteeMemberCellView.h"
 #import "TexLegeStandardGroupCell.h"
-#import "PartisanScaleView.h"
-#import "PartisanIndexStats.h"
 #import "TexLegeEmailComposer.h"
 #import "LocalyticsSession.h"
 #import "LegislatorObj+RestKit.h"
@@ -41,7 +38,7 @@
 @implementation CommitteeDetailViewController
 
 @synthesize dataObjectID, masterPopover;
-@synthesize partisanSlider, membershipLab, infoSectionArray;
+@synthesize membershipLab, infoSectionArray;
 
 enum Sections {
     //kHeaderSection = 0,
@@ -77,7 +74,6 @@ CGFloat quartzRowHeight = 73.f;
 
 	self.dataObjectID = nil;
 	self.membershipLab = nil;
-	self.partisanSlider = nil;
 	self.masterPopover = nil;
 	self.infoSectionArray = nil;
     [super dealloc];
@@ -117,7 +113,7 @@ CGFloat quartzRowHeight = 73.f;
 	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
 	if (self.committee == nil && ![UtilityMethods isLandscapeOrientation])  {
 		
-		self.committee = [[[TexLegeAppDelegate appDelegate] committeeMasterVC] selectObjectOnAppear];		
+		self.committee = [[[StatesLegeAppDelegate appDelegate] committeeMasterVC] selectObjectOnAppear];		
 	}
 }
 
@@ -142,7 +138,7 @@ CGFloat quartzRowHeight = 73.f;
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	//[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
-	//[[TexLegeAppDelegate appDelegate] resetPopoverMenus];
+	//[[StatesLegeAppDelegate appDelegate] resetPopoverMenus];
 	
 	NSArray *visibleCells = self.tableView.visibleCells;
 	for (id cell in visibleCells) {
@@ -295,18 +291,14 @@ CGFloat quartzRowHeight = 73.f;
 	
 	//case kInfoSectionOffice: // open the office map
 	text = self.committee.office;
-	clickable = (text && [text length]);
 	if (!text)
 		text = @"";
-	if (clickable)
-		val = [CapitolMap mapFromOfficeString:self.committee.office];
-	else
-		val = @"";
+	val = @"";
 	
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 				NSLocalizedStringFromTable(@"Location", @"DataTableUI", @"Cell title listing an office location (office number or stree address)"), @"subtitle",
 				text, @"title",
-				[NSNumber numberWithBool:clickable], @"isClickable",
+				[NSNumber numberWithBool:NO], @"isClickable",
 				val, @"entryValue",
 				nil];
 	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
@@ -342,20 +334,6 @@ CGFloat quartzRowHeight = 73.f;
 	if (!positions && [positions count])
 		return;
 	
-	CGFloat avg = 0.0f;
-	CGFloat totalNum = 0.0f;
-	NSInteger totalLege = 0;
-	for (CommitteePositionObj *position in positions) {
-		CGFloat legePart = position.legislator.latestWnomFloat;
-		if (legePart != 0.0f) {
-			totalNum += legePart;
-			totalLege++;
-		}
-	}
-	if (totalLege) {
-		avg = totalNum / totalLege;
-	}
-	
 	NSInteger democCount = 0, repubCount = 0;
 	NSArray *repubs = [positions findAllWhereKeyPath:@"legislator.party_id" equals:[NSNumber numberWithInteger:REPUBLICAN]];	
 	if (repubs)
@@ -372,23 +350,7 @@ CGFloat quartzRowHeight = 73.f;
 	
 	self.membershipLab.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%d %@ and %d %@", @"DataTableUI", @"As in, 43 Republicans and 1 Democrat"), 
 							   repubCount, repubString, democCount, democString];
-	
-	if (!IsEmpty(positions)) {
-		// This will give inacurate results in joint committees, at least until we're in a common dimensional space
-		LegislatorObj *anyMember = [[positions objectAtIndex:0] legislator];
 		
-		if (anyMember) {
-			PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
-			
-			CGFloat minSlider = [indexStats minPartisanIndexUsingChamber:[anyMember.legtype integerValue]];
-			CGFloat maxSlider = [indexStats maxPartisanIndexUsingChamber:[anyMember.legtype integerValue]];
-			
-			self.partisanSlider.sliderMin = minSlider;
-			self.partisanSlider.sliderMax = maxSlider;
-		}
-	}
-	
-	self.partisanSlider.sliderValue = avg;	
 }
 
 #pragma mark -
@@ -566,13 +528,6 @@ CGFloat quartzRowHeight = 73.f;
 	return 44.0f;
 }
 
-- (void) pushMapViewWithMap:(CapitolMap *)capMap {
-	CapitolMapsDetailViewController *detailController = [[CapitolMapsDetailViewController alloc] initWithNibName:@"CapitolMapsDetailViewController" bundle:nil];
-	detailController.map = capMap;
-	[[self navigationController] pushViewController:detailController animated:YES];
-	[detailController release];
-}
-
 - (void) pushInternalBrowserWithURL:(NSURL *)url {
 	if ([TexLegeReachability canReachHostWithURL:url]) { // do we have a good URL/connection?
 		NSString *urlString = [url absoluteString];
@@ -606,11 +561,6 @@ CGFloat quartzRowHeight = 73.f;
 					NSURL *myURL = cellInfo.entryValue;
 					[UtilityMethods openURLWithoutTrepidation:myURL];
 				}
-			}
-				break;
-			case kInfoSectionOffice: {// open the office map
-				CapitolMap *capMap = cellInfo.entryValue;
-				[self pushMapViewWithMap:capMap];
 			}
 				break;
 			case kInfoSectionWeb: {	 // open the web page

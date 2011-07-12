@@ -17,9 +17,8 @@
 #import "DistrictMapObj+RestKit.h"
 #import "DistrictOfficeObj.h"
 #import "StafferObj.h"
-#import "WnomObj+RestKit.h"
 #import "LinkObj+RestKit.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 #import "NSDate+Helper.h"
 #import "LocalyticsSession.h"
 #import "TexLegeObjectCache.h"
@@ -87,43 +86,6 @@
 {
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.district == %@ AND self.legtype == %@", district, chamber];
 	return [LegislatorObj objectWithPredicate:predicate];
-}
-
-+ (NSArray *) allLegislatorsSortedByPartisanshipFromChamber:(NSInteger)chamber andPartyID:(NSInteger)party
-{
-	if (chamber == BOTH_CHAMBERS) {
-		debug_NSLog(@"allMembersByChamber: ... cannot be BOTH chambers");
-		return nil;
-	}
-	
-	NSFetchRequest *fetchRequest = [LegislatorObj fetchRequest];
-	NSString *predicateString = nil;
-	if (party > kUnknownParty)
-		predicateString = [NSString stringWithFormat:@"legtype == %d AND party_id == %d", chamber, party];
-	else
-		predicateString = [NSString stringWithFormat:@"legtype == %d", chamber];
-	
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateString]; 
-	[fetchRequest setPredicate:predicate];
-
-	NSMutableArray *results = [[NSMutableArray alloc] initWithArray:[LegislatorObj objectsWithFetchRequest:fetchRequest]];
-	BOOL ascending = (party != REPUBLICAN);
-	
-	if (ascending) {
-		[results sortUsingComparator:^(LegislatorObj *item1, LegislatorObj *item2) {
-			NSNumber *latestWnomFloat1 = [NSNumber numberWithFloat:item1.latestWnomFloat];
-			NSNumber *latestWnomFloat2 = [NSNumber numberWithFloat:item2.latestWnomFloat];
-			return [latestWnomFloat1 compare:latestWnomFloat2];
-		}];
-	}
-	else {
-		[results sortUsingComparator:^(LegislatorObj *item1, LegislatorObj *item2) {
-			NSNumber *latestWnomFloat1 = [NSNumber numberWithFloat:item1.latestWnomFloat];
-			NSNumber *latestWnomFloat2 = [NSNumber numberWithFloat:item2.latestWnomFloat];
-			return [latestWnomFloat2 compare:latestWnomFloat1];
-		}];
-	}
-	return [results autorelease];	
 }
 
 + (id)dataObjectWithPredicate:(NSPredicate *)predicate entityName:(NSString*)entityName {
@@ -246,7 +208,6 @@
 	[mapper registerClass:[DistrictOfficeObj class] forElementNamed:@"districtOffices"];
 	[mapper registerClass:[LinkObj class] forElementNamed:@"links"];
 	[mapper registerClass:[StafferObj class] forElementNamed:@"staffers"];
-	[mapper registerClass:[WnomObj class] forElementNamed:@"wnomScores"];
 	
 	// Update date format so that we can parse twitter dates properly
 	// Wed Sep 29 15:31:08 +0000 2010
@@ -277,7 +238,6 @@
     [seeder seedObjectsFromFile:@"CommitteePositionObj.json" toClass:[CommitteePositionObj class] keyPath:nil];
     [seeder seedObjectsFromFile:@"DistrictOfficeObj.json" toClass:[DistrictOfficeObj class] keyPath:nil];
     [seeder seedObjectsFromFile:@"StafferObj.json" toClass:[StafferObj class] keyPath:nil];
-    [seeder seedObjectsFromFile:@"WnomObj.json" toClass:[WnomObj class] keyPath:nil];
     [seeder seedObjectsFromFile:@"LinkObj.json" toClass:[LinkObj class] keyPath:nil];
     
 	for (DistrictMapObj *map in [DistrictMapObj allObjects])

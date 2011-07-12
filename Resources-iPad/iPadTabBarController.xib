@@ -2,9 +2,9 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1024</int>
-		<string key="IBDocument.SystemVersion">10J869</string>
+		<string key="IBDocument.SystemVersion">10K540</string>
 		<string key="IBDocument.InterfaceBuilderVersion">851</string>
-		<string key="IBDocument.AppKitVersion">1038.35</string>
+		<string key="IBDocument.AppKitVersion">1038.36</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -527,101 +527,6 @@
 					</array>
 				</object>
 			</object>
-			<object class="IBUISplitViewController" id="234665345">
-				<bool key="IBUIAutoresizesArchivedViewToFullSize">NO</bool>
-				<string key="IBUITitle">Maps</string>
-				<reference key="IBUIToolbarItems" ref="0"/>
-				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
-					<int key="IBUIStatusBarStyle">2</int>
-				</object>
-				<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-					<int key="interfaceOrientation">3</int>
-				</object>
-				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-				<bool key="IBUIHorizontal">YES</bool>
-				<object class="IBUINavigationController" key="IBUIMasterViewController" id="619576865">
-					<bool key="IBUIAutoresizesArchivedViewToFullSize">NO</bool>
-					<reference key="IBUIParentViewController" ref="234665345"/>
-					<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
-						<int key="IBUIStatusBarStyle">2</int>
-					</object>
-					<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-						<int key="interfaceOrientation">1</int>
-					</object>
-					<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-					<bool key="IBUIHorizontal">NO</bool>
-					<object class="IBUINavigationBar" key="IBUINavigationBar" id="1008630455">
-						<nil key="NSNextResponder"/>
-						<int key="NSvFlags">256</int>
-						<string key="NSFrameSize">{0, 0}</string>
-						<bool key="IBUIClipsSubviews">YES</bool>
-						<bool key="IBUIMultipleTouchEnabled">YES</bool>
-						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<object class="NSColor" key="IBUITintColor" id="1072622046">
-							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MC4zMDU4ODIzNTI5IDAuMzYwNzg0MzEzNyAwLjM4ODIzNTI5NDEAA</bytes>
-						</object>
-					</object>
-					<array class="NSMutableArray" key="IBUIViewControllers">
-						<object class="IBUITableViewController" id="680014216">
-							<bool key="IBUIAutoresizesArchivedViewToFullSize">NO</bool>
-							<string key="IBUITitle">Capitol Maps</string>
-							<object class="IBUINavigationItem" key="IBUINavigationItem" id="537396742">
-								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-							</object>
-							<reference key="IBUIParentViewController" ref="619576865"/>
-							<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
-								<int key="IBUIStatusBarStyle">2</int>
-							</object>
-							<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-								<int key="interfaceOrientation">1</int>
-							</object>
-							<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-							<bool key="IBUIHorizontal">NO</bool>
-							<bool key="IBUIClearsSelectionOnViewWillAppear">NO</bool>
-						</object>
-					</array>
-				</object>
-				<object class="IBUINavigationController" key="IBUIDetailViewController" id="320180549">
-					<bool key="IBUIAutoresizesArchivedViewToFullSize">NO</bool>
-					<reference key="IBUIParentViewController" ref="234665345"/>
-					<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
-						<int key="IBUIStatusBarStyle">2</int>
-					</object>
-					<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-						<int key="interfaceOrientation">1</int>
-					</object>
-					<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-					<bool key="IBUIHorizontal">NO</bool>
-					<object class="IBUINavigationBar" key="IBUINavigationBar" id="308101517">
-						<nil key="NSNextResponder"/>
-						<int key="NSvFlags">256</int>
-						<string key="NSFrameSize">{0, 0}</string>
-						<reference key="IBUIBackgroundColor" ref="764088680"/>
-						<bool key="IBUIClipsSubviews">YES</bool>
-						<bool key="IBUIMultipleTouchEnabled">YES</bool>
-						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<reference key="IBUITintColor" ref="1072622046"/>
-					</object>
-					<array class="NSMutableArray" key="IBUIViewControllers">
-						<object class="IBUIViewController" id="442036212">
-							<object class="IBUINavigationItem" key="IBUINavigationItem" id="477562532">
-								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-							</object>
-							<reference key="IBUIParentViewController" ref="320180549"/>
-							<string key="IBUINibName">CapitolMapsDetailViewController</string>
-							<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
-								<int key="IBUIStatusBarStyle">2</int>
-							</object>
-							<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-								<int key="interfaceOrientation">1</int>
-							</object>
-							<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-							<bool key="IBUIHorizontal">NO</bool>
-						</object>
-					</array>
-				</object>
-			</object>
 			<object class="IBUISplitViewController" id="837005336">
 				<bool key="IBUIAutoresizesArchivedViewToFullSize">NO</bool>
 				<string key="IBUITitle">Resources</string>
@@ -731,14 +636,6 @@
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">delegate</string>
-						<reference key="source" ref="234665345"/>
-						<reference key="destination" ref="442036212"/>
-					</object>
-					<int key="connectionID">65</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">delegate</string>
 						<reference key="source" ref="497467946"/>
 						<reference key="destination" ref="596106840"/>
 					</object>
@@ -795,14 +692,6 @@
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">detailViewController</string>
-						<reference key="source" ref="680014216"/>
-						<reference key="destination" ref="442036212"/>
-					</object>
-					<int key="connectionID">73</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">detailViewController</string>
 						<reference key="source" ref="1000850374"/>
 						<reference key="destination" ref="463174589"/>
 					</object>
@@ -831,14 +720,6 @@
 						<reference key="destination" ref="315260269"/>
 					</object>
 					<int key="connectionID">77</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">capitolMapsMasterVC</string>
-						<reference key="source" ref="841351856"/>
-						<reference key="destination" ref="680014216"/>
-					</object>
-					<int key="connectionID">78</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -1130,70 +1011,6 @@
 						<reference key="parent" ref="596106840"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">46</int>
-						<reference key="object" ref="234665345"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="619576865"/>
-							<reference ref="320180549"/>
-						</array>
-						<reference key="parent" ref="0"/>
-						<string key="objectName">CapitolMapsSplitView</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">47</int>
-						<reference key="object" ref="619576865"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="680014216"/>
-							<reference ref="1008630455"/>
-						</array>
-						<reference key="parent" ref="234665345"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">48</int>
-						<reference key="object" ref="320180549"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="442036212"/>
-							<reference ref="308101517"/>
-						</array>
-						<reference key="parent" ref="234665345"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">49</int>
-						<reference key="object" ref="442036212"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="477562532"/>
-						</array>
-						<reference key="parent" ref="320180549"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">50</int>
-						<reference key="object" ref="308101517"/>
-						<reference key="parent" ref="320180549"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">51</int>
-						<reference key="object" ref="477562532"/>
-						<reference key="parent" ref="442036212"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">52</int>
-						<reference key="object" ref="680014216"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="537396742"/>
-						</array>
-						<reference key="parent" ref="619576865"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">53</int>
-						<reference key="object" ref="1008630455"/>
-						<reference key="parent" ref="619576865"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">54</int>
-						<reference key="object" ref="537396742"/>
-						<reference key="parent" ref="680014216"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">55</int>
 						<reference key="object" ref="837005336"/>
 						<array class="NSMutableArray" key="children">
@@ -1392,7 +1209,7 @@
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
-				<string key="-1.CustomClassName">TexLegeAppDelegate</string>
+				<string key="-1.CustomClassName">StatesLegeAppDelegate</string>
 				<string key="-2.CustomClassName">UIResponder</string>
 				<string key="10.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="109.CustomClassName">IntelligentSplitViewController</string>
@@ -1457,19 +1274,6 @@
 				<string key="41.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="44.CustomClassName">CalendarDetailViewController</string>
 				<string key="44.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="46.CustomClassName">IntelligentSplitViewController</string>
-				<string key="46.IBEditorWindowLastContentRect">{{374, 62}, {1024, 768}}</string>
-				<string key="46.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="47.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="48.IBEditorWindowLastContentRect">{{312, 4}, {783, 1002}}</string>
-				<string key="48.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="49.CustomClassName">CapitolMapsDetailViewController</string>
-				<string key="49.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="50.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="52.CustomClassName">CapitolMapsMasterViewController</string>
-				<string key="52.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="53.CustomClassName">TexLegeNavBar</string>
-				<string key="53.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="55.CustomClassName">IntelligentSplitViewController</string>
 				<string key="55.IBEditorWindowLastContentRect">{{74, 62}, {1024, 768}}</string>
 				<string key="55.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -1502,7 +1306,7 @@
 					<string key="superclassName">UIView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">../../GitHub/AppendingFlowView/Classes/AppendingFlowView.h</string>
+						<string key="minorKey">Vendor/AppendingFlowView/Classes/AppendingFlowView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1651,33 +1455,6 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">CapitolMapsDetailViewController</string>
-					<string key="superclassName">UIViewController</string>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">webView</string>
-						<string key="NS.object.0">UIWebView</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">webView</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">webView</string>
-							<string key="candidateClassName">UIWebView</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/Detail View Controllers/CapitolMapsDetailViewController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">CapitolMapsDetailViewController</string>
-					<string key="superclassName">UIViewController</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBUserSource</string>
-						<string key="minorKey"/>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
 					<string key="className">CapitolMapsMasterViewController</string>
 					<string key="superclassName">GeneralTableViewController</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -1747,7 +1524,7 @@
 					<string key="superclassName">UIView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/Custom Cells and Views/DDActionHeaderView/DDActionHeaderView.h</string>
+						<string key="minorKey">Vendor/DDActionHeaderView/DDActionHeaderView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1834,7 +1611,7 @@
 					<string key="superclassName">UISplitViewController</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/Master View Controllers/IntelligentSplitViewController.h</string>
+						<string key="minorKey">Vendor/IntelligentSplitViewController/IntelligentSplitViewController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1853,6 +1630,7 @@
 					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="allSlider">PartisanScaleView</string>
+						<string key="chartView">S7GraphView</string>
 						<string key="freshmanPlotLab">UILabel</string>
 						<string key="headerView">UIView</string>
 						<string key="indivSlider">PartisanScaleView</string>
@@ -1867,13 +1645,16 @@
 						<string key="leg_reelection">UILabel</string>
 						<string key="leg_tenureLab">UILabel</string>
 						<string key="miniBackgroundView">UIView</string>
-						<string key="newChartView">S7GraphView</string>
 						<string key="partySlider">PartisanScaleView</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="allSlider">
 							<string key="name">allSlider</string>
 							<string key="candidateClassName">PartisanScaleView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="chartView">
+							<string key="name">chartView</string>
+							<string key="candidateClassName">S7GraphView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="freshmanPlotLab">
 							<string key="name">freshmanPlotLab</string>
@@ -1930,10 +1711,6 @@
 						<object class="IBToOneOutletInfo" key="miniBackgroundView">
 							<string key="name">miniBackgroundView</string>
 							<string key="candidateClassName">UIView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="newChartView">
-							<string key="name">newChartView</string>
-							<string key="candidateClassName">S7GraphView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="partySlider">
 							<string key="name">partySlider</string>
@@ -2096,48 +1873,19 @@
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/Custom Cells and Views/VotingRecordView/s7graphview/S7GraphView.h</string>
+						<string key="minorKey">Vendor/S7GraphView/s7graphview/S7GraphView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">SVWebViewController</string>
 					<string key="superclassName">UIViewController</string>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="actionBarButton">UIBarButtonItem</string>
-						<string key="backBarButton">UIBarButtonItem</string>
-						<string key="forwardBarButton">UIBarButtonItem</string>
-						<string key="toolbar">UIToolbar</string>
-						<string key="webView">UIWebView</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="actionBarButton">
-							<string key="name">actionBarButton</string>
-							<string key="candidateClassName">UIBarButtonItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="backBarButton">
-							<string key="name">backBarButton</string>
-							<string key="candidateClassName">UIBarButtonItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="forwardBarButton">
-							<string key="name">forwardBarButton</string>
-							<string key="candidateClassName">UIBarButtonItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="toolbar">
-							<string key="name">toolbar</string>
-							<string key="candidateClassName">UIToolbar</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="webView">
-							<string key="name">webView</string>
-							<string key="candidateClassName">UIWebView</string>
-						</object>
-					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">../../GitHub/SVWebViewController/SVWebViewController/SVWebViewController.h</string>
+						<string key="minorKey">Vendor/SVWebViewController/SVWebViewController/SVWebViewController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">TexLegeAppDelegate</string>
+					<string key="className">StatesLegeAppDelegate</string>
 					<string key="superclassName">NSObject</string>
 					<object class="NSMutableDictionary" key="actions">
 						<string key="NS.key.0">changingReachability:</string>
@@ -2195,8 +1943,8 @@
 						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/Application Support/TexLegeAppDelegate.h</string>
+						<string key="majorKey">IBUserSource</string>
+						<string key="minorKey"/>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -2205,13 +1953,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Classes/Utility Classes/TexLegeNavBar.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">UIView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/Custom Cells and Views/JMNoise/UIView+JMNoise.h</string>
 					</object>
 				</object>
 			</array>

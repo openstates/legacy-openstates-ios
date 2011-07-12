@@ -21,18 +21,15 @@
 #import "DistrictOfficeObj+MapKit.h"
 #import "CommitteeObj+RestKit.h"
 #import "CommitteePositionObj+RestKit.h"
-#import "WnomObj+RestKit.h"
 
 #import "UtilityMethods.h"
 #import "TableCellDataObject.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 
-#import "PartisanIndexStats.h"
 #import "UIImage+ResolutionIndependent.h"
 
 #import "TexLegeStandardGroupCell.h"
 #import "TexLegeGroupCellProtocol.h"
-#import "CapitolMap.h"
 #import "NotesViewController.h"
 
 @interface LegislatorDetailDataSource (Private)
@@ -285,10 +282,10 @@
 	if (self.legislator && self.legislator.cap_office && [self.legislator.cap_office length]) {
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 					 NSLocalizedStringFromTable(@"Office", @"DataTableUI", @"The person's office number, indicating the location inside the building"), @"subtitle",
-					 [CapitolMap mapFromOfficeString:self.legislator.cap_office], @"entryValue",
+					 self.legislator.cap_office, @"entryValue",
 					 self.legislator.cap_office, @"title",
-					 [NSNumber numberWithBool:YES], @"isClickable",
-					 [NSNumber numberWithInteger:DirectoryTypeOfficeMap], @"entryType",
+					 [NSNumber numberWithBool:NO], @"isClickable",
+					 [NSNumber numberWithInteger:DirectoryTypeNone], @"entryType",
 					 nil];
 		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
 		[entryDict release];
@@ -481,25 +478,6 @@
 	
 	return [NSString stringWithFormat:@"%@ %@ %@", [self.legislator chamberName], partyName, 
 			 NSLocalizedStringFromTable(@"Avg.", @"DataTableUI", @"Abbreviation for the word average.")];
-}
-
-#pragma mark -
-#pragma mark Custom Slider
-
-/* This determines the appropriate size for the custom slider view, given its superview */
-- (CGRect) preshrinkSliderViewFromView:(UIView *)aView {
-	CGFloat sliderHeight = 24.0f;
-	CGFloat sliderInset = 18.0f;
-	
-	CGRect rect = aView.bounds;
-	CGFloat sliderWidth = aView.bounds.size.width - (sliderInset * 2);
-	
-	rect.origin.y = aView.center.y - (sliderHeight / 2);
-	rect.size.height = sliderHeight;
-	rect.origin.x = sliderInset; //aView.center.x - (sliderWidth / 2);
-	rect.size.width = sliderWidth;
-	
-	return rect;
 }
 
 #pragma mark -

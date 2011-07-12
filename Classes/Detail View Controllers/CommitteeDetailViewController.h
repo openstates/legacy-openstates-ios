@@ -13,12 +13,11 @@
 #import <UIKit/UIKit.h>
 
 @class CommitteeObj;
-@class PartisanScaleView;
+
 @interface CommitteeDetailViewController : UITableViewController <UISplitViewControllerDelegate>  {
 	id dataObject;
 	UIPopoverController *masterPopover;
 	IBOutlet UILabel *membershipLab;
-	IBOutlet PartisanScaleView *partisanSlider;
 	NSMutableArray *infoSectionArray;
 }
 
@@ -28,6 +27,5 @@
 @property (nonatomic, retain) CommitteeObj *committee;
 @property (nonatomic, retain) UIPopoverController *masterPopover;
 @property (nonatomic, retain) IBOutlet UILabel *membershipLab;
-@property (nonatomic, retain) IBOutlet PartisanScaleView *partisanSlider;
 @property (nonatomic, retain) NSMutableArray *infoSectionArray;
 @end

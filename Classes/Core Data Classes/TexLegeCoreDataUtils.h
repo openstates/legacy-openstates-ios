@@ -28,7 +28,6 @@
 + (DistrictMapObj*)districtMapForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber;
 + (DistrictMapObj*)districtMapForDistrict:(NSNumber*)district andChamber:(NSNumber*)chamber lightProperties:(BOOL)light;
 
-+ (NSArray *) allLegislatorsSortedByPartisanshipFromChamber:(NSInteger)chamber andPartyID:(NSInteger)party;
 + (NSArray *) allDistrictMapsLight;
 + (NSArray *) allDistrictMapIDsWithBoundingBoxesContaining:(CLLocationCoordinate2D)coordinate;
 + (NSArray*) allPrimaryKeyIDsInEntityNamed:(NSString*)entityName;

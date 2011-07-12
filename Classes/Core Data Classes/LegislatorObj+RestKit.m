@@ -12,7 +12,6 @@
 
 #import "LegislatorObj+RestKit.h"
 #import "CommitteePositionObj.h"
-#import "WnomObj.h"
 #import "UtilityMethods.h"
 
 @implementation LegislatorObj (RestKit)
@@ -255,20 +254,4 @@
 	return  stringForChamber([self.legtype integerValue], TLReturnFull);
 }
 
-- (WnomObj *)latestWnomScore {
-	NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"session"ascending:NO];
-	NSArray *wnoms = [[self.wnomScores allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-	
-	if (!IsEmpty(wnoms))
-		return [wnoms objectAtIndex:0];
-	return nil;
-}
-
-- (CGFloat)latestWnomFloat {
-	CGFloat retVal = 0.0f;
-	WnomObj *latest = self.latestWnomScore;
-	if (latest)
-		retVal = [latest.wnomAdj floatValue];
-	return retVal;
-}
 @end

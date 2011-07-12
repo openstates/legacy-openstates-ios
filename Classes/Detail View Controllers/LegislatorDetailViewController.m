@@ -22,13 +22,13 @@
 #import "DistrictMapObj+MapKit.h"
 #import "CommitteeObj.h"
 #import "CommitteePositionObj.h"
-#import "WnomObj+RestKit.h"
+
 #import "TexLegeCoreDataUtils.h"
 #import "UtilityMethods.h"
 #import "TableDataSourceProtocol.h"
 #import "TableCellDataObject.h"
 #import "NotesViewController.h"
-#import "TexLegeAppDelegate.h"
+#import "StatesLegeAppDelegate.h"
 
 #import "BillSearchDataSource.h"
 #import "BillsListViewController.h"
@@ -37,16 +37,12 @@
 
 #import "MapMiniDetailViewController.h"
 #import "SVWebViewController.h"
-#import "CapitolMapsDetailViewController.h"
 
-#import "PartisanIndexStats.h"
 #import "UIImage+ResolutionIndependent.h"
 
 #import "TexLegeEmailComposer.h"
-#import "PartisanScaleView.h"
-#import "LocalyticsSession.h"
 
-#import "VotingRecordDataSource.h"
+#import "LocalyticsSession.h"
 
 #import "OpenLegislativeAPIs.h"
 #import "TexLegeTheme.h"
@@ -61,11 +57,9 @@
 @synthesize dataSource;
 @synthesize headerView, miniBackgroundView;
 
-@synthesize leg_indexTitleLab, leg_rankLab, leg_chamberPartyLab, leg_chamberLab, leg_reelection;
-@synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab, freshmanPlotLab;
-@synthesize indivSlider, partySlider, allSlider;
+@synthesize leg_reelection;
+@synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab;
 @synthesize notesPopover, masterPopover;
-@synthesize chartView, votingDataSource;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -92,10 +86,6 @@
 											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_COMMITTEEOBJ" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_COMMITTEEPOSITIONOBJ" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_WNOMOBJ" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(resetTableData:) name:kPartisanIndexNotifyLoaded object:nil];
 	
 	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
 	UIColor *sealColor = [[UIColor colorWithPatternImage:sealImage] colorWithAlphaComponent:0.5f];	
@@ -103,18 +93,12 @@
 	//self.headerView.backgroundColor = sealColor;
 	
 	self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-	self.clearsSelectionOnViewWillAppear = NO;
-				
-	VotingRecordDataSource *votingDS = [[VotingRecordDataSource alloc] init];
-	[votingDS prepareVotingRecordView:self.chartView];
-	self.votingDataSource = votingDS;
-	[votingDS release];
+	self.clearsSelectionOnViewWillAppear = NO;				
 }
 
 - (void)viewDidUnload {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
-	self.votingDataSource = nil;
 	[super viewDidUnload];
 }
 
@@ -133,20 +117,18 @@
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
-	self.indivSlider = nil;
-	self.partySlider = nil;
-	self.allSlider = nil;
 	self.dataSource = nil;
 	self.headerView = nil;
 	self.leg_photoView = nil;
 	self.leg_reelection = nil;
 	self.miniBackgroundView = nil;
-	self.leg_partyLab = self.leg_districtLab = self.leg_tenureLab = self.leg_nameLab = self.freshmanPlotLab = nil;
+	self.leg_partyLab = nil;
+	self.leg_districtLab = nil;
+	self.leg_tenureLab = nil;
+	self.leg_nameLab = nil;
 	self.notesPopover = nil;
 	self.masterPopover = nil;
 	self.dataObjectID = nil;
-	self.chartView = nil;
-	self.votingDataSource = nil;
 
 	[super dealloc];
 }
@@ -159,34 +141,6 @@
 	[self setLegislator:newObj];
 }
 
-- (NSString *)chamberPartyAbbrev {
-	LegislatorObj *member = self.legislator;
-	NSString *partyName = stringForParty([member.party_id integerValue], TLReturnAbbrevPlural);
-	
-	return [NSString stringWithFormat:@"%@ %@", [member chamberName], partyName];
-}
-
-- (NSString *) partisanRankStringForLegislator {
-	LegislatorObj *member = self.legislator;
-	if (IsEmpty(member.wnomScores))
-		return @"";
-
-	NSArray *legislators = [TexLegeCoreDataUtils allLegislatorsSortedByPartisanshipFromChamber:[member.legtype integerValue] 
-																					andPartyID:[member.party_id integerValue]];
-	if (legislators) {
-		NSInteger rankIndex = [legislators indexOfObject:member] + 1;
-		NSInteger count = [legislators count];
-		NSString *partyShortName = stringForParty([member.party_id integerValue], TLReturnAbbrevPlural);
-		
-		NSString *ordinalRank = [UtilityMethods ordinalNumberFormat:rankIndex];
-		return [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ most partisan (out of %d %@)", @"DataTableUI", @"Partisan ranking, ie. 32nd most partisan out of 55 Democrats"), 
-				ordinalRank, count, partyShortName];	
-	}
-	else {
-		return @"";
-	}
-}
-
 - (void)setupHeader {
 	LegislatorObj *member = self.legislator;
 	
@@ -194,7 +148,6 @@
 	self.leg_nameLab.text = legName;
 	self.navigationItem.title = legName;
 
-	//[[ImageCache sharedImageCache] loadImageView:self.leg_photoView fromPath:[UIImage highResImagePathWithPath:member.photo_name]];
 	self.leg_photoView.image = [UIImage imageNamed:[UIImage highResImagePathWithPath:member.photo_name]];
 	self.leg_partyLab.text = [member party_name];
 	self.leg_districtLab.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"District %@", @"DataTableUI", @"District number"), 
@@ -205,43 +158,6 @@
 		self.leg_reelection.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"Reelection: %@", @"DataTableUI", @"Year of person's next reelection"), 
 									member.nextElection];
 	}
-	
-	PartisanIndexStats *indexStats = [PartisanIndexStats sharedPartisanIndexStats];
-
-	if (self.leg_indexTitleLab)
-		self.leg_indexTitleLab.text = [NSString stringWithFormat:@"%@ %@", 
-									   [member legTypeShortName], [member lastname]];
-
-	if (self.leg_rankLab)
-		self.leg_rankLab.text = [self partisanRankStringForLegislator];
-	
-	if (self.leg_chamberPartyLab) {
-		self.leg_chamberPartyLab.text = [self chamberPartyAbbrev];
-		self.leg_chamberLab.text = [[member chamberName] stringByAppendingFormat:@" %@", NSLocalizedStringFromTable(@"Avg.", @"DataTableUI", @"Abbreviation for 'average'")];				
-	}
-	
-	CGFloat minSlider = [indexStats minPartisanIndexUsingChamber:[member.legtype integerValue]];
-	CGFloat maxSlider = [indexStats maxPartisanIndexUsingChamber:[member.legtype integerValue]];
-	
-	if (self.indivSlider) {
-		self.indivSlider.sliderMin = minSlider;
-		self.indivSlider.sliderMax = maxSlider;
-		self.indivSlider.sliderValue = member.latestWnomFloat;
-	}	
-	if (self.partySlider) {
-		self.partySlider.sliderMin = minSlider;
-		self.partySlider.sliderMax = maxSlider;
-		self.partySlider.sliderValue = [indexStats partyPartisanIndexUsingChamber:[member.legtype integerValue] andPartyID:[member.party_id integerValue]];
-	}	
-	if (self.allSlider) {
-		self.allSlider.sliderMin = minSlider;
-		self.allSlider.sliderMax = maxSlider;
-		self.allSlider.sliderValue = [indexStats overallPartisanIndexUsingChamber:[member.legtype integerValue]];
-	}	
-	
-	BOOL hasScores = !IsEmpty(member.wnomScores);
-	self.freshmanPlotLab.hidden = hasScores;
-	self.chartView.hidden = !hasScores;
 
 }
 
@@ -289,13 +205,12 @@
 		self.tableView.dataSource = self.dataSource;
 
 		[self setupHeader];
-		self.votingDataSource.legislatorID = [anObject legislatorID];
 
 		if (masterPopover != nil) {
 			[masterPopover dismissPopoverAnimated:YES];
 		}		
 		[self.tableView reloadData];
-		[self.chartView reloadData];
+
 		[self.view setNeedsDisplay];
 	}
 }
@@ -306,7 +221,6 @@
 	// this will force our datasource to renew everything
 	self.dataSource.legislator = self.legislator;
 	[self.tableView reloadData];	
-	[self.chartView reloadData];
 }
 
 // Called on the delegate when the user has taken action to dismiss the popover. This is not called when -dismissPopoverAnimated: is called directly.
@@ -324,7 +238,7 @@
 	BOOL portrait = (![UtilityMethods isLandscapeOrientation]);
 
 	if (portrait && ipad && !self.legislator)
-		self.legislator = [[[TexLegeAppDelegate appDelegate] legislatorMasterVC] selectObjectOnAppear];		
+		self.legislator = [[[StatesLegeAppDelegate appDelegate] legislatorMasterVC] selectObjectOnAppear];		
 	
 	if (self.legislator)
 		[self setupHeader];
@@ -369,11 +283,6 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Override to allow orientations other than the default portrait orientation.
     return YES;
-}
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration 
-{
-	[self.chartView reloadData];	
 }
 
 #pragma mark -
@@ -439,14 +348,6 @@
 				[self.navigationController pushViewController:subDetailController animated:YES];
 				[subDetailController release];
 			}
-		}
-		else if (cellInfo.entryType == DirectoryTypeOfficeMap) {
-			CapitolMap *capMap = cellInfo.entryValue;			
-			CapitolMapsDetailViewController *detailController = [[CapitolMapsDetailViewController alloc] initWithNibName:@"CapitolMapsDetailViewController" bundle:nil];
-			detailController.map = capMap;
-			
-			[self.navigationController pushViewController:detailController animated:YES];
-			[detailController release];
 		}
 		else if (cellInfo.entryType == DirectoryTypeMail) {
 			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:cellInfo.entryValue 
