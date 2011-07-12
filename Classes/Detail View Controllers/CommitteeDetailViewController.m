@@ -386,6 +386,14 @@ CGFloat quartzRowHeight = 73.f;
 	return rows;
 }
 
+- (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (indexPath.section > kInfoSection) {
+		BOOL useDark = (indexPath.row % 2 != 0);
+	
+		cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
+	}
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSInteger row = [indexPath row];
@@ -397,8 +405,19 @@ CGFloat quartzRowHeight = 73.f;
 	
 	NSInteger InfoSectionEnd = ([UtilityMethods canMakePhoneCalls]) ? kInfoSectionClerk : kInfoSectionPhone;
 	
-	if (section > kInfoSection)
-		CellIdentifier = @"CommitteeMember";
+	BOOL useDark = NO;
+	
+	BOOL isMember = (section > kInfoSection);
+		
+	if (isMember) {
+		
+		useDark = (indexPath.row % 2 != 0);
+		
+		if (useDark)
+			CellIdentifier = @"CommitteeMemberDark";
+		else
+			CellIdentifier = @"CommitteeMemberLight";
+	}
 	else if (row > InfoSectionEnd)
 		CellIdentifier = @"CommitteeInfo";
 	else // the non-clickable / no disclosure items
@@ -406,45 +425,46 @@ CGFloat quartzRowHeight = 73.f;
 	
 	UITableViewCellStyle style = section > kInfoSection ? UITableViewCellStyleSubtitle : UITableViewCellStyleValue2;
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	CommitteeMemberCell *newcell = nil;
 	
 	if (cell == nil) {
-		
-		if (CellIdentifier == @"CommitteeMember") {
-			if (![UtilityMethods isIPadDevice]) {
-				LegislatorMasterCell *newcell = [[[LegislatorMasterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-				newcell.frame = CGRectMake(0.0, 0.0, 234.0, quartzRowHeight);		
-				newcell.cellView.useDarkBackground = NO;
-				newcell.accessoryView.hidden = NO;
-				cell = newcell;
-			}
-			else {
-				CommitteeMemberCell *newcell = [[[CommitteeMemberCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-				newcell.frame = CGRectMake(0.0, 0.0, kCommitteeMemberCellViewWidth, quartzRowHeight);		
-				newcell.accessoryView.hidden = NO;
-				cell = newcell;
-			}
+		if (isMember) {
+			newcell = [[[CommitteeMemberCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+			newcell.frame = CGRectMake(0.0, 0.0, newcell.cellSize.width, quartzRowHeight);		
+			newcell.accessoryView.hidden = NO;
+			cell = newcell;
 		}
 		else {
 			cell = (UITableViewCell *)[[[TexLegeStandardGroupCell alloc] initWithStyle:style reuseIdentifier:CellIdentifier] autorelease];			
 		}
-
-		cell.backgroundColor = [TexLegeTheme backgroundLight];
-		
 	}    
-	
+
 	LegislatorObj *legislator = nil;
-	
+	NSString *role = nil;
+
 	switch (section) {
 		case kChairSection:
 			legislator = [self.committee chair];
+			if ([self.committee.committeeType integerValue] == JOINT)
+				role = NSLocalizedStringFromTable(@"Co-Chair", @"DataTableUI", @"For joint committees, House and Senate leaders are co-chair persons");
+			else
+				role = NSLocalizedStringFromTable(@"Chair", @"DataTableUI", @"Cell title for a person who leads a given committee, an abbreviation for Chairperson");
+
 			break;
 		case kViceChairSection:
 			legislator = [self.committee vicechair];
+			if ([self.committee.committeeType integerValue] == JOINT)
+				role = NSLocalizedStringFromTable(@"Co-Chair", @"DataTableUI", @"For joint committees, House and Senate leaders are co-chair persons");
+			else
+				role = NSLocalizedStringFromTable(@"Vice Chair", @"DataTableUI", @"Cell title for a person who is second in command of a given committee, behind the Chairperson");
+			
 			break;
 		case kMembersSection: {
 			NSArray * memberList = [self.committee sortedMembers];
-			if ([memberList count] >= row)
+			if ([memberList count] >= row) {
 				legislator = [memberList objectAtIndex:row];
+				role = NSLocalizedStringFromTable(@"Member", @"DataTableUI", @"Title for a person who is a regular member of a committe (not chair/vice-chair)");
+			}
 		}
 			break;
 		case kInfoSection: {
@@ -468,10 +488,18 @@ CGFloat quartzRowHeight = 73.f;
 	}
 	
 	if (legislator) {
-		if ([cell respondsToSelector:@selector(setLegislator:)])
-			[cell performSelector:@selector(setLegislator:) withObject:legislator];
+		if ([cell respondsToSelector:@selector(setLegislator:role:)])
+			[cell performSelector:@selector(setLegislator:role:) withObject:legislator withObject:role];
 		
 	}	
+	
+	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
+	
+	if (isMember) {
+		CommitteeMemberCellView *cellView = [cell performSelector:@selector(cellView)];
+		if (cellView)
+			cellView.useDarkBackground = useDark;
+	}
 	
 	return cell;
 }
@@ -506,7 +534,7 @@ CGFloat quartzRowHeight = 73.f;
 		}
 			break;
 		case kMembersSection:
-			sectionName = @"Members";
+			sectionName = NSLocalizedStringFromTable(@"Members", @"DataTableUI", @"Cell title for a list of committee members");
 			break;
 		case kInfoSection:
 		default:

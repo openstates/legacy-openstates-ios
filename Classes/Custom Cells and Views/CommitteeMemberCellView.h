@@ -1,6 +1,6 @@
 //
 //	CommitteeMemberCellView.h
-//  Created by Gregory Combs on 8/29/10.
+//  Created by Gregory Combs on 7/12/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
 //
@@ -12,9 +12,6 @@
 
 #import <UIKit/UIKit.h>
 
-extern const CGFloat kCommitteeMemberCellViewWidth;
-extern const CGFloat kCommitteeMemberCellViewHeight;
-
 @class LegislatorObj;
 @interface CommitteeMemberCellView : UIView
 {
@@ -23,14 +20,16 @@ extern const CGFloat kCommitteeMemberCellViewHeight;
 @property (copy, nonatomic) NSString *title;
 @property (copy, nonatomic) NSString *name;
 @property (copy, nonatomic) NSString *tenure;
-
 @property (copy, nonatomic) NSString *party;
 @property (copy, nonatomic) NSString *district;
+@property (copy, nonatomic) NSString *role;
 
 @property (nonatomic) NSInteger party_id;
-
 @property (nonatomic) BOOL highlighted;
+@property (nonatomic) BOOL useDarkBackground;
 
-- (void)setLegislator:(LegislatorObj *)value;
+@property (nonatomic,readonly) CGSize cellSize; 
+
+- (void)setLegislator:(LegislatorObj *)value role:(NSString *)legRole;
 
 @end

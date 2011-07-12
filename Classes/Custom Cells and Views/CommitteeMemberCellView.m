@@ -1,6 +1,6 @@
 //
 //	CommitteeMemberCellView.m
-//  Created by Gregory Combs on 8/29/10.
+//  Created by Gregory Combs on 7/12/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
 //
@@ -21,21 +21,28 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 
 @implementation CommitteeMemberCellView
 
-@synthesize title, name, tenure, party, party_id, district;
-@synthesize highlighted;
+@synthesize title;
+@synthesize name;
+@synthesize tenure;
+@synthesize party;
+@synthesize district;
+@synthesize role;
+@synthesize party_id, highlighted;
+@synthesize useDarkBackground;
 
 - (id)initWithFrame:(CGRect)frame
 {
 	self = [super initWithFrame:frame];
 	if (self) {
 		title = [@"Rep." retain];
-		name = [@"Warren Chisum" retain];
-		tenure = [@"4 Years" retain];
+		name = [@"Genevieve McGillicuddy" retain];
+		tenure = [@"(Freshman)" retain];
 		party = [@"Republican" retain];
 		district = [@"District 21" retain];
+		role = [@"Vice-Chair" retain];
 		party_id = 2;
-		[self setOpaque:YES];
 		self.backgroundColor = [TexLegeTheme backgroundLight];
+		[self setOpaque:YES];
 	}
 	return self;
 }
@@ -45,27 +52,16 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 	self = [super initWithCoder:coder];
 	if (self) {
 		title = [@"Rep." retain];
-		name = [@"Warren Chisum" retain];
-		tenure = [@"4 Years" retain];
+		name = [@"Genevieve McGillicuddy" retain];
+		tenure = [@"(Freshman)" retain];
 		party = [@"Republican" retain];
 		district = [@"District 21" retain];
+		role = [@"Vice-Chair" retain];
 		party_id = 2;
-		[self setOpaque:YES];
 		self.backgroundColor = [TexLegeTheme backgroundLight];
+		[self setOpaque:YES];
 	}
 	return self;
-}
-
-- (void) awakeFromNib {
-	[super awakeFromNib];
-	title = [@"Rep." retain];
-	name = [@"Warren Chisum" retain];
-	tenure = [@"4 Years" retain];
-	party = [@"Republican" retain];
-	district = [@"District 21" retain];
-	party_id = 2;
-	[self setOpaque:YES];
-	self.backgroundColor = [TexLegeTheme backgroundLight];
 }
 
 - (void)dealloc
@@ -75,13 +71,28 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 	nice_release(tenure);
 	nice_release(party);
 	nice_release(district);
-	
+	nice_release(role);
+
 	[super dealloc];
 }
 
-- (CGSize)sizeThatFits:(CGSize)size
+- (CGSize)cellSize {
+	if ([UtilityMethods isIPadDevice])
+		return CGSizeMake(531.f, 73.f);
+	else
+		return CGSizeMake(234.f, 73.f);
+}
+
+- (void)setUseDarkBackground:(BOOL)flag
 {
-	return CGSizeMake(kCommitteeMemberCellViewWidth, kCommitteeMemberCellViewHeight);
+	if (self.highlighted)
+		return;
+	
+	useDarkBackground = flag;
+	
+	UIColor *labelBGColor = (useDarkBackground) ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
+	self.backgroundColor = labelBGColor;
+	[self setNeedsDisplay];
 }
 
 - (BOOL)highlighted{
@@ -92,19 +103,14 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 {
 	if (highlighted == flag)
 		return;
-	
+
 	highlighted = flag;
-	/*
-	 if (flag)
-	 self.backgroundColor = [TexLegeTheme accent];
-	 else
-	 self.backgroundColor = (useDarkBackground) ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
-	 */
+
 	[self setNeedsDisplay];
-	
+
 }
 
-- (void)setLegislator:(LegislatorObj *)value {	
+- (void)setLegislator:(LegislatorObj *)value role:(NSString *)legRole {	
 	if (value) {
 		self.title = [value legTypeShortName];
 		self.district = [NSString stringWithFormat:NSLocalizedStringFromTable(@"District %@", @"DataTableUI", @"District number"),
@@ -112,21 +118,29 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 		self.party = value.party_name;
 		self.name = [value legProperName];
 		self.tenure = [value tenureString];
-		self.party_id = [[value party_id] integerValue];		
+		self.role = legRole;
+		self.party_id = [[value party_id] integerValue];
 	}
 	[self setNeedsDisplay];	
 }
 
+- (CGSize)sizeThatFits:(CGSize)size
+{
+	return [self cellSize];
+}
+
 - (void)drawRect:(CGRect)dirtyRect
 {
-	CGRect imageBounds = CGRectMake(0.0f, 0.0f, kCommitteeMemberCellViewWidth, kCommitteeMemberCellViewHeight);
+	BOOL isIPad = [UtilityMethods isIPadDevice];
+	
+	CGRect imageBounds = CGRectMake(0.0f, 0.0f, self.cellSize.width, self.cellSize.height);
 	CGRect bounds = [self bounds];
 	CGContextRef context = UIGraphicsGetCurrentContext();
-	CGFloat resolution;
 	CGRect drawRect;
+	CGFloat resolution;
 	UIFont *font;
-	CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
 	resolution = 0.5f * (bounds.size.width / imageBounds.size.width + bounds.size.height / imageBounds.size.height);
+	CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
 	
 	UIColor *nameColor = nil;
 	UIColor *tenureColor = nil;
@@ -142,68 +156,107 @@ const CGFloat kCommitteeMemberCellViewHeight = 73.0f;
 		nameColor = [TexLegeTheme textDark];
 		tenureColor = districtColor = [TexLegeTheme textLight];
 		titleColor = [TexLegeTheme accent];
-		partyColor = party_id == REPUBLICAN ? [TexLegeTheme texasRed] : [TexLegeTheme texasBlue];
+		
+		if (party_id == REPUBLICAN)
+			partyColor = [TexLegeTheme texasRed];
+		else if (party_id == DEMOCRAT)
+			partyColor = [TexLegeTheme texasBlue];
+		else // INDEPENDENT ?
+			partyColor = [TexLegeTheme textLight];
 	}
+
+	CGFloat fontSize = ([UtilityMethods isIPadDevice]) ? 17.f : 11.f;
+	font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:fontSize];
+	UIFont *biggerFont = [font fontWithSize:fontSize+2.f];
 	
 	CGContextSaveGState(context);
 	CGContextTranslateCTM(context, bounds.origin.x, bounds.origin.y);
 	CGContextScaleCTM(context, (bounds.size.width / imageBounds.size.width), (bounds.size.height / imageBounds.size.height));
 	
 	// Tenure
+
+	if (isIPad) 
+		drawRect = CGRectMake(212.0f, 33.0f, 96.f, 30.f);
+	else 
+		drawRect = CGRectMake(11.f, 47.f, 67.f, 20.f);
 	
-	drawRect = CGRectMake(418.0f, 3.0f, 85.0f, 15.0f);
 	drawRect.origin.x = roundf(resolution * drawRect.origin.x) / resolution;
 	drawRect.origin.y = roundf(resolution * drawRect.origin.y) / resolution;
 	drawRect.size.width = roundf(resolution * drawRect.size.width) / resolution;
 	drawRect.size.height = roundf(resolution * drawRect.size.height) / resolution;
-	font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:11.0f];
 	[tenureColor set];
-	[[self tenure] drawInRect:drawRect withFont:font lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentRight];
+	[[self tenure] drawInRect:drawRect withFont:font lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentLeft];
 	
 	// District
 	
-	drawRect = CGRectMake(96.5f, 33.0f, 100.0f, 30.0f);
+	if (isIPad) 
+		drawRect = CGRectMake(120.0f, 33.0f, 92.f, 30.f);
+	else 
+		drawRect = CGRectMake(90.f, 27.f, 67.f, 20.f);
+	
 	drawRect.origin.x = roundf(resolution * drawRect.origin.x) / resolution;
 	drawRect.origin.y = roundf(resolution * drawRect.origin.y) / resolution;
 	drawRect.size.width = roundf(resolution * drawRect.size.width) / resolution;
 	drawRect.size.height = roundf(resolution * drawRect.size.height) / resolution;
-	font = [TexLegeTheme boldFifteen];
 	[districtColor set];
 	[[self district] drawInRect:drawRect withFont:font];
 	
 	// Party
 	
-	drawRect = CGRectMake(8.5f, 33.0f, 88.0f, 30.0f);
+	if (isIPad) 
+		drawRect = CGRectMake(11.0f, 33.0f, 104.f, 30.f);
+	else 
+		drawRect = CGRectMake(11.f, 27.f, 77.f, 20.f);
+		
 	drawRect.origin.x = roundf(resolution * drawRect.origin.x) / resolution;
 	drawRect.origin.y = roundf(resolution * drawRect.origin.y) / resolution;
 	drawRect.size.width = roundf(resolution * drawRect.size.width) / resolution;
 	drawRect.size.height = roundf(resolution * drawRect.size.height) / resolution;
-	font = [TexLegeTheme boldFifteen];
 	[partyColor set];
-	[[self party] drawInRect:drawRect withFont:font];
+	[[self party] drawInRect:drawRect withFont:font lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentLeft];
 	
-	// Title
+	// Role
 	
-	drawRect = CGRectMake(8.5f, 3.0f, 40.0f, 30.0f);
+	if (isIPad) 
+		drawRect = CGRectMake(350.0f, 18.0f, 156.f, 30.f);
+	else 
+		drawRect = CGRectMake(140, 47.f, 95.f, 20.f);
+	
 	drawRect.origin.x = roundf(resolution * drawRect.origin.x) / resolution;
 	drawRect.origin.y = roundf(resolution * drawRect.origin.y) / resolution;
 	drawRect.size.width = roundf(resolution * drawRect.size.width) / resolution;
 	drawRect.size.height = roundf(resolution * drawRect.size.height) / resolution;
-	font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:17.0f];
 	[titleColor set];
-	[[self title] drawInRect:drawRect withFont:font];
+	[[self role] drawInRect:drawRect withFont:biggerFont lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentCenter];
 	
 	// Name
 	
-	drawRect = CGRectMake(48.5f, 3.0f, 240.0f, 30.0f);
+	if (isIPad) 
+		drawRect = CGRectMake(70.f, 3.f, 263.f, 30.f);
+	else 
+		drawRect = CGRectMake(45.f, 3.f, 164.f, 20.f);
+		
 	drawRect.origin.x = roundf(resolution * drawRect.origin.x) / resolution;
 	drawRect.origin.y = roundf(resolution * drawRect.origin.y) / resolution;
 	drawRect.size.width = roundf(resolution * drawRect.size.width) / resolution;
 	drawRect.size.height = roundf(resolution * drawRect.size.height) / resolution;
-	font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:17.0f];
 	[nameColor set];
-	[[self name] drawInRect:drawRect withFont:font];
+	[[self name] drawInRect:drawRect withFont:biggerFont];
 	
+	// Title
+	
+	if (isIPad) 
+		drawRect = CGRectMake(11.f, 3.f, 52.f, 30.f);
+	else 
+		drawRect = CGRectMake(11.f, 3.f, 35.f, 20.f);
+	
+	drawRect.origin.x = roundf(resolution * drawRect.origin.x) / resolution;
+	drawRect.origin.y = roundf(resolution * drawRect.origin.y) / resolution;
+	drawRect.size.width = roundf(resolution * drawRect.size.width) / resolution;
+	drawRect.size.height = roundf(resolution * drawRect.size.height) / resolution;
+	[titleColor set];
+	[[self title] drawInRect:drawRect withFont:biggerFont lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentLeft];
+
 	CGContextRestoreGState(context);
 	CGColorSpaceRelease(space);
 }

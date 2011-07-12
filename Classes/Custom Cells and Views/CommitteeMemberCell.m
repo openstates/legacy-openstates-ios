@@ -43,8 +43,11 @@
 	return self;
 }
 
+- (CGSize)cellSize {
+	return cellView.cellSize;
+}
 
- - (void)setHighlighted:(BOOL)val animated:(BOOL)animated {               // animate between regular and highlighted state
+- (void)setHighlighted:(BOOL)val animated:(BOOL)animated {               // animate between regular and highlighted state
 	[super setHighlighted:val animated:animated];
 
 	self.cellView.highlighted = val;
@@ -57,9 +60,9 @@
 }
 
 
-- (void)setLegislator:(LegislatorObj *)value {
+- (void)setLegislator:(LegislatorObj *)value role:(NSString *)legRole {	
 	self.imageView.image = [UIImage imageNamed:value.photo_name];
-	[self.cellView setLegislator:value];
+	[self.cellView setLegislator:value role:legRole];
 }
 
 - (void)redisplay {

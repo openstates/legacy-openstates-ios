@@ -18,6 +18,8 @@
 	
 }
 @property (nonatomic,retain) IBOutlet CommitteeMemberCellView *cellView;
-- (void)setLegislator:(LegislatorObj *)value;
+@property (nonatomic,readonly) CGSize cellSize;
+
+- (void)setLegislator:(LegislatorObj *)value role:(NSString *)legRole;
 
 @end
