@@ -17,7 +17,6 @@
 BOOL IsEmpty(id thing);
 
 
-@class CapitolMap;
 @interface UtilityMethods : NSObject {
 }
 

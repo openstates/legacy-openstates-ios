@@ -12,7 +12,6 @@
 
 #import "LegislatorObj.h"
 #import "CommitteeObj.h"
-#import "CapitolMap.h"
 #import "LinkObj.h"
 #import "ChamberCalendarObj.h"
 

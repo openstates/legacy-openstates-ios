@@ -21,7 +21,6 @@ enum {
 	DirectoryTypeBills,
 	// URL types go below here
 	kDirectoryTypeIsURLHandler,
-	DirectoryTypeOfficeMap,
 	DirectoryTypeWeb,
 	DirectoryTypeTwitter,
 	kDirectoryTypeIsExternalHandler,
