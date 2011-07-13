@@ -51,7 +51,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 }
 
 @interface CalendarEventsLoader (Private)
-- (NSMutableDictionary *)parseEvent:(NSDictionary *)inEvent;
+- (NSMutableDictionary *)standardizeEvent:(NSDictionary *)inEvent;
 @end
 
 @implementation CalendarEventsLoader
@@ -72,6 +72,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		isFresh = NO;
 		_events = nil;
 		updated = nil;
+		eventState = nil;
 		loadingStatus = LOADING_IDLE;
 
 		[[TexLegeReachability sharedTexLegeReachability] addObserver:self 
@@ -81,35 +82,42 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 
 		[OpenLegislativeAPIs sharedOpenLegislativeAPIs];
 		
-			eventStore = [[EKEventStore alloc] init];
-			[eventStore defaultCalendarForNewEvents];
+		[[StateMetaLoader sharedStateMeta] addObserver:self 
+													  forKeyPath:@"selectedState" 
+														 options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) 
+														 context:nil];
+		
+		eventStore = [[EKEventStore alloc] init];
+		[eventStore defaultCalendarForNewEvents];
 
-			/*
-			#warning danger
-			NSDate *past = [NSDate dateFromString:@"December 1, 2009" withFormat:@"MMM d, yyyy"];
-			NSDate *future = [NSDate dateFromString:@"December 1, 2011" withFormat:@"MMM d, yyyy"];
-			NSPredicate *pred = [eventStore predicateForEventsWithStartDate:past endDate:future calendars:nil];
-			NSArray *allEvents = [eventStore eventsMatchingPredicate:pred];
-			for (EKEvent *event in allEvents) {
-				NSError *error = nil;
-				if (![eventStore removeEvent:event span:EKSpanThisEvent error:&error])
-					NSLog(@"%@", [error localizedDescription]);
-			}
-			
+		/*
+		#warning danger
+		NSDate *past = [NSDate dateFromString:@"December 1, 2009" withFormat:@"MMM d, yyyy"];
+		NSDate *future = [NSDate dateFromString:@"December 1, 2011" withFormat:@"MMM d, yyyy"];
+		NSPredicate *pred = [eventStore predicateForEventsWithStartDate:past endDate:future calendars:nil];
+		NSArray *allEvents = [eventStore eventsMatchingPredicate:pred];
+		for (EKEvent *event in allEvents) {
+			NSError *error = nil;
+			if (![eventStore removeEvent:event span:EKSpanThisEvent error:&error])
+				NSLog(@"%@", [error localizedDescription]);
+		}
+		
+		[[NSUserDefaults standardUserDefaults] synchronize];
+		if (IsEmpty([[NSUserDefaults standardUserDefaults] objectForKey:kTLEventKitKey])) {
+			[[NSUserDefaults standardUserDefaults] setObject:[NSMutableArray array] forKey:kTLEventKitKey];
 			[[NSUserDefaults standardUserDefaults] synchronize];
-			if (IsEmpty([[NSUserDefaults standardUserDefaults] objectForKey:kTLEventKitKey])) {
-				[[NSUserDefaults standardUserDefaults] setObject:[NSMutableArray array] forKey:kTLEventKitKey];
-				[[NSUserDefaults standardUserDefaults] synchronize];
-			}
-			*/
+		}
+		*/
 
 	}
 	return self;
 }
 
 - (void)dealloc {
+	[[StateMetaLoader sharedStateMeta] removeObserver:self forKeyPath:@"selectedState"];
 	[[TexLegeReachability sharedTexLegeReachability] removeObserver:self forKeyPath:@"openstatesConnectionStatus"];
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
+	
 	if (updated)
 		[updated release], updated = nil;
 	if (_events)
@@ -120,18 +128,24 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	if (!IsEmpty(keyPath) && [keyPath isEqualToString:@"openstatesConnectionStatus"]) {
-		/*
-		if ([change valueForKey:NSKeyValueChangeKindKey] == NSKeyValueChangeSetting) {
-			id newVal = [change valueForKey:NSKeyValueChangeNewKey];
-		}*/
-		if ([TexLegeReachability openstatesReachable])
-			[self loadEvents:nil];
-		else if (self.loadingStatus != LOADING_NO_NET) {
-			self.loadingStatus = LOADING_NO_NET;
-			[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyError object:nil];	
+	
+	if (!IsEmpty(keyPath)) {
+		if ([keyPath isEqualToString:@"openstatesConnectionStatus"] ||
+			[keyPath isEqualToString:@"selectedState"]) {
+			
+			/*
+			if ([change valueForKey:NSKeyValueChangeKindKey] == NSKeyValueChangeSetting) {
+				id newVal = [change valueForKey:NSKeyValueChangeNewKey];
+			}*/
+			
+			if ([TexLegeReachability openstatesReachable])
+				[self loadEvents:nil];
+			else if (self.loadingStatus != LOADING_NO_NET) {
+				self.loadingStatus = LOADING_NO_NET;
+				[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyError object:nil];	
+			}
 		}
-	}
+	}	
 }
 
 - (void)loadEvents:(id)sender {
@@ -141,14 +155,21 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		if (IsEmpty(meta.selectedState))
 			return;
 		
+		nice_release(eventState);
+		eventState = [meta.selectedState copy]; // testing [@"ut" copy];
+		
 		//	http://openstates.sunlightlabs.com/api/v1/events/?state=tx&apikey=xxxxxxxxxxxxxxxx
 
 		self.loadingStatus = LOADING_ACTIVE;
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-									 meta.selectedState, @"state",
+									 eventState, @"state",
+									 kCalendarEventsTypeCommitteeValue, kCalendarEventsTypeKey,	// right now, lets just do committee meetings
 									 SUNLIGHT_APIKEY, @"apikey",
 									 nil];
-		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/events" queryParams:queryParams delegate:self];
+		RKRequest *request = [[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/events" queryParams:queryParams delegate:self];
+		if (request) {
+			request.userData = eventState;
+		}
 	}
 	else if (self.loadingStatus != LOADING_NO_NET) {
 		self.loadingStatus = LOADING_NO_NET;
@@ -157,13 +178,30 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 }
 
 - (NSArray*)events {
-	if (self.loadingStatus > LOADING_NO_NET || !_events || !isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > 1800)) {	// if we're over a half-hour old, let's refresh
+	if (!eventState || self.loadingStatus > LOADING_NO_NET || !_events || !isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > 1800)) {	// if we're over a half-hour old, let's refresh
 		isFresh = NO;
 		debug_NSLog(@"CalendarEventsLoader is stale, need to refresh");
 		
 		[self loadEvents:nil];
 	}
 	return _events;
+}
+
+- (NSString *)pathToEventCacheWithRequest:(RKRequest *)request {
+	NSString *loadedState = eventState; // default to what we stored at the time of our last request
+	
+	if (request && request.userData && [request.userData isKindOfClass:[NSString class]]) {
+		if (!IsEmpty(request.userData)) {
+			loadedState = request.userData;	// if we received a valid request object, find the state we stored...
+		}
+	}
+	
+	// We had trouble loading the events online, so pull up the cache from the one in the documents folder, if possible
+	
+	NSString *stateEventsCache = [NSString stringWithFormat:@"%@-%@", loadedState, kCalendarEventsCacheFile];
+	NSString *thePath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:stateEventsCache];
+	
+	return thePath;
 }
 
 #pragma mark -
@@ -176,19 +214,20 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	
 	isFresh = NO;
 
-	if (_events)
-		[_events release];
-
+	nice_release(_events);
+	
 	// We had trouble loading the events online, so pull up the cache from the one in the documents folder, if possible
-	NSString *thePath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
+	
+	NSString *thePath = [self pathToEventCacheWithRequest:request];
+	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	if ([fileManager fileExistsAtPath:thePath]) {
 		debug_NSLog(@"EventsLoader: using cached events in the documents folder.");
 		_events = [[NSMutableArray arrayWithContentsOfFile:thePath] retain];
 	}
-	if (!_events)
-		_events = [[NSMutableArray array] retain];
-
+	if (!_events) {
+		_events = [[NSMutableArray array] retain];	// at least create an empty array
+	}
 	if (self.loadingStatus != LOADING_NO_NET) {
 		self.loadingStatus = LOADING_NO_NET;
 		[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyError object:nil];
@@ -201,55 +240,41 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		// Success! Let's take a look at the data
 		self.loadingStatus = LOADING_IDLE;
 
-		if (_events)
-			[_events release], _events = nil;	
+		nice_release(_events);
 		
 		NSArray *allEvents = [response.body objectFromJSONData];
-		if (IsEmpty(allEvents))
-			return;
-		
-		allEvents = [allEvents findAllWhereKeyPath:kCalendarEventsTypeKey equals:kCalendarEventsTypeCommitteeValue];		
-		if (allEvents) {
-			_events = [[NSMutableArray alloc] init];
-			for (NSDictionary *event in allEvents) {
-				NSString *when = [event objectForKey:kCalendarEventsWhenKey];
-				NSInteger daysAgo = [[NSDate dateFromTimestampString:when] daysAgo];
-				if (daysAgo < 5) {
-					NSMutableDictionary *newEvent = [self parseEvent:event];
-					NSArray *tempKeys = [newEvent allKeys];
-					for (NSString *key in tempKeys) {
-						id value = [newEvent objectForKey:key];
-						if ([[NSNull null] isEqual:value]) {
-							[newEvent removeObjectForKey:key];
-						}
-					}
-					[_events addObject:newEvent];
-				}
-					
-			}
-			[_events sortUsingFunction:sortByDate context:nil];
+		//allEvents = [allEvents findAllWhereKeyPath:kCalendarEventsTypeKey equals:kCalendarEventsTypeCommitteeValue];		
 
-			NSString *thePath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
-			if (![_events writeToFile:thePath atomically:YES]) {
-				NSLog(@"CalendarEventsLoader: Error writing event cache to file: %@", thePath);
-			}
-			
-			isFresh = YES;
-			if (updated)
-				[updated release];
-			updated = [[NSDate date] retain];
-						
-			[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyLoaded object:nil];
-			debug_NSLog(@"EventsLoader network download successful, archiving for others.");
-		}		
-		else {
+		_events = [[NSMutableArray alloc] init];
+		for (NSDictionary *event in allEvents) {
+			NSMutableDictionary *newEvent = [self standardizeEvent:event];	// clean up events, parsing for our needs
+
+			[_events addObject:newEvent];
+		}
+				
+		if (IsEmpty(_events)) {
 			[self request:request didFailLoadWithError:nil];
 			return;
 		}
+		
+		[_events sortUsingFunction:sortByDate context:nil];
+
+		NSString *thePath = [self pathToEventCacheWithRequest:request];		
+		if (![_events writeToFile:thePath atomically:YES]) {
+			NSLog(@"CalendarEventsLoader: Error writing event cache to file: %@", thePath);
+		}
+		
+		isFresh = YES;
+		nice_release(updated);
+		updated = [[NSDate date] retain];
+					
+		[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyLoaded object:nil];
+		debug_NSLog(@"EventsLoader network download successful, archiving for others.");
+
 	}
 }
 
-- (NSMutableDictionary *)parseEvent:(NSDictionary *)inEvent {
+- (NSMutableDictionary *)standardizeEvent:(NSDictionary *)inEvent {
 	NSMutableDictionary *loadedEvent = [NSMutableDictionary dictionaryWithDictionary:inEvent];
 	
 				
@@ -278,7 +303,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	}
 	
 	NSArray *participants = [loadedEvent objectForKey:kCalendarEventsParticipantsKey];
-	if (participants) {
+	if (!IsEmpty(participants)) {
 		NSDictionary *participant = [participants findWhereKeyPath:kCalendarEventsParticipantTypeKey equals:@"committee"];
 		if (participant) {
 			[loadedEvent setObject:[participant objectForKey:kCalendarEventsParticipantNameKey] forKey:kCalendarEventsCommitteeNameKey];
@@ -292,6 +317,79 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	BOOL canceled = ([[loadedEvent objectForKey:kCalendarEventsStatusKey] isEqualToString:kCalendarEventsCanceledKey]);
 	[loadedEvent setObject:[NSNumber numberWithBool:canceled] forKey:kCalendarEventsCanceledKey];
 	
+	NSString *announceUrl = [loadedEvent objectForKey:kCalendarEventsAnnouncementURLKey]; // "link"
+	if (IsEmpty(announceUrl)) {
+		NSArray *sources = [loadedEvent valueForKey:@"sources"];
+		NSDictionary *sourceDict = [sources objectAtIndex:0];
+		announceUrl = [sourceDict valueForKey:@"url"];		// "sources.url"
+		
+		if (!IsEmpty(announceUrl)) {
+			[loadedEvent setObject:announceUrl forKey:kCalendarEventsAnnouncementURLKey];  // set a link if we have one
+		}
+	}
+	
+	#warning Build a shortened event title, if at all possible
+	
+	//////////// Build a summary string to use for table cells //////////////
+
+	@try {
+	
+		NSString *time = [loadedEvent objectForKey:kCalendarEventsLocalizedTimeStringKey];
+		if (IsEmpty(time) || [[loadedEvent objectForKey:kCalendarEventsAllDayKey] boolValue]) {
+			NSRange loc = [[loadedEvent objectForKey:kCalendarEventsNotesKey] rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]];
+			if (loc.location != NSNotFound && loc.length > 0) {
+				time = [[loadedEvent objectForKey:kCalendarEventsNotesKey] substringToIndex:loc.location];
+			}
+			else {
+				time = [loadedEvent objectForKey:kCalendarEventsNotesKey];
+			}
+		}
+		
+		
+		BOOL isCancelled = ([[loadedEvent objectForKey:kCalendarEventsCanceledKey] boolValue] == YES);		
+		
+		NSString *eventDesc = [loadedEvent objectForKey:kCalendarEventsDescriptionKey];
+		
+		NSString *chamberName = nil;
+		NSNumber *chamberValue = [loadedEvent objectForKey:kCalendarEventsTypeChamberValue];
+		if (chamberValue) {
+			chamberName = stringForChamber([chamberValue integerValue], TLReturnInitial);		
+		}
+		
+		NSString *committeeName = [loadedEvent objectForKey:kCalendarEventsCommitteeNameKey];
+		if (!IsEmpty(committeeName)) {
+			if (!IsEmpty(chamberName)) {
+				eventDesc = [NSString stringWithFormat:@"%@ %@", chamberName, committeeName];
+			}
+			else {
+				eventDesc = committeeName;
+			}
+		}
+		
+		NSMutableString *summaryText = [[NSMutableString alloc] initWithString:eventDesc];
+		
+		if (!IsEmpty(summaryText))
+			[summaryText appendString:@"\n   "];
+			
+		[summaryText appendFormat:NSLocalizedStringFromTable(@"When: %@ - %@", @"DataTableUI", @"The date and time for an event"), 
+		 [loadedEvent objectForKey:kCalendarEventsLocalizedDateStringKey], time];
+		
+		if (isCancelled)
+			[summaryText appendString:NSLocalizedStringFromTable(@" - CANCELED", @"DataTableUI", @"an event was cancelled")];
+		else
+			[summaryText appendFormat:NSLocalizedStringFromTable(@"\n   Where: %@", @"DataTableUI", @"the location of an event"), 
+			 [loadedEvent objectForKey:kCalendarEventsLocationKey]];
+		
+		
+		[loadedEvent setObject:summaryText forKey:kCalendarEventsSummaryTextKey];
+		
+		[summaryText release];
+	
+	}
+	@catch (NSException * e) {
+		NSLog(@"Error parsing event dictionary: %@", loadedEvent);
+	}
+	
 	return loadedEvent;
 }
 
@@ -299,17 +397,22 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	if (IsEmpty(self.events))
 		return nil;
 	
-	if (chamber == BOTH_CHAMBERS)
-		return _events;
-	else
-		return [_events findAllWhereKeyPath:kCalendarEventsTypeChamberValue equals:[NSNumber numberWithInteger:chamber]];
+	NSArray *foundEvents = nil;
+	
+	if (chamber != BOTH_CHAMBERS)
+		foundEvents = [_events findAllWhereKeyPath:kCalendarEventsTypeChamberValue equals:[NSNumber numberWithInteger:chamber]];
+
+	if (IsEmpty(foundEvents))  // just give them what we've got.
+		foundEvents = _events;
+
+	return foundEvents;
 }
 
 
 #pragma mark -
 #pragma mark EventKit
 - (void)addAllEventsToiCal:(id)sender {
-#warning see about asking what calendar they want to put these in
+#warning see about asking what calendar they want use (iOS 5)
 
 	if (![UtilityMethods supportsEventKit] || !eventStore) {
 		debug_NSLog(@"EventKit not available on this device");
@@ -324,6 +427,8 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		[self addEventToiCal:meeting delegate:nil];
 	}
 }
+
+#warning specific to committee meetings ... particular to texas too
 
 - (void)addEventToiCal:(NSDictionary *)eventDict delegate:(id)delegate {
 	if (!eventDict || !eventStore)
@@ -389,7 +494,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 			event.startDate = [eventDict objectForKey:kCalendarEventsLocalizedDateKey];
 			event.endDate = [eventDict objectForKey:kCalendarEventsLocalizedDateKey];
 		}
-		event.location = [eventDict objectForKey:kCalendarEventsDescriptionKey];
+		event.location = [eventDict objectForKey:kCalendarEventsLocationKey];
 	}
 	else {
 		event.startDate = meetingDate;

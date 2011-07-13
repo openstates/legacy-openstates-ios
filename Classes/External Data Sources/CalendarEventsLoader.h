@@ -19,7 +19,7 @@
 #define kCalendarEventsNotifyLoaded	KalDataSourceChangedNotification 
 //@"CALENDAR_EVENTS_LOADED"
 
-#define kCalendarEventsCacheFile		@"TexLegeEventsCache.plist"
+#define kCalendarEventsCacheFile		@"EventsCache.plist"
 #define kTLEventKitKey					@"TLEventKit"
 #define kTLEventKitEKIDKey				@"TLEventEKID"
 #define kTLEventKitTLIDKey				@"TLEventTLID"
@@ -27,6 +27,8 @@
 
 @interface CalendarEventsLoader : NSObject <RKRequestDelegate> {
 	NSMutableArray *_events;
+	NSString *eventState;
+	
 	BOOL isFresh;
 	NSDate *updated;
 	
@@ -54,9 +56,6 @@
 #define kCalendarEventsAnnouncementURLKey	@"link"
 #define kCalendarEventsNotesKey				@"notes"		// holdes the ascii text of the announcement
 
-#define kCalendarEventsLocalizedDateKey				@"date"			// NSDate in local time zone
-#define kCalendarEventsLocalizedDateStringKey		@"dateString"	// 12/31/11
-#define kCalendarEventsLocalizedTimeStringKey		@"timeString"	// 12:31pm
 #define kCalendarEventsAllDayKey					@"all_day"		// BOOL = true if we can't parse a time from the header
 #define kCalendarEventsCanceledKey					@"canceled"		// BOOL = true if the event has been cancelled
 #define kCalendarEventsStatusKey					@"status"		// BOOL = true if the event has been cancelled
@@ -71,6 +70,11 @@
 #define kCalendarEventsTypeCommitteeValue		@"committee:meeting"
 #define kCalendarEventsTypeChamberValue			@"chamber"				// NSNumber of chamber
 
+// CUSTOM
+#define kCalendarEventsLocalizedDateKey				@"date"			// NSDate in local time zone
+#define kCalendarEventsLocalizedDateStringKey		@"dateString"	// 12/31/11
+#define kCalendarEventsLocalizedTimeStringKey		@"timeString"	// 12:31pm
+#define kCalendarEventsSummaryTextKey				@"summaryText"
 @end
 
 NSComparisonResult sortByDate(id firstItem, id secondItem, void *context);

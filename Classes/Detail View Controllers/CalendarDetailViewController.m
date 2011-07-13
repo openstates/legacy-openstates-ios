@@ -50,6 +50,9 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(reloadEvents:) name:kCalendarEventsNotifyError object:nil];	
 
+	self.calendarView.tableView.rowHeight = 73;
+	self.calendarView.tableView.backgroundColor = [TexLegeTheme backgroundLight];
+	
 	self.selectedRowRect = CGRectZero;
 	
 	if ([UtilityMethods isIPadDevice]) {
@@ -147,7 +150,8 @@
 			[self.webView loadHTMLString:@"<html></html>" baseURL:nil];
 	}
 	
-	if (chamberCalendar) [chamberCalendar release], chamberCalendar = nil;
+	nice_release(chamberCalendar);
+
 	if (newObj) {
 		if (masterPopover)
 			[masterPopover dismissPopoverAnimated:YES];
@@ -214,14 +218,22 @@
 
 	NSDictionary *eventDict = [self.chamberCalendar eventForIndexPath:indexPath];
 	
+	// They've picked some results from the search table, load them up...
 	if (tv == self.searchDisplayController.searchResultsTableView) {
 		[self.searchDisplayController setActive:NO animated:YES];
 		[self showAndSelectDate:[eventDict objectForKey:kCalendarEventsLocalizedDateKey]];
 	}
 		
-	NSURL *url = [NSURL URLWithString:[eventDict objectForKey:kCalendarEventsAnnouncementURLKey]];
+	NSString *urlString = [eventDict objectForKey:kCalendarEventsAnnouncementURLKey];
+	if (IsEmpty(urlString)) {
+		// Can't go further if we don't have a usable URL string
+		return;
+	}
+	
+	NSURL *url = [NSURL URLWithString:urlString];
 	
 	if ([TexLegeReachability canReachHostWithURL:url]) { // do we have a good URL/connection?
+		
 		if ([UtilityMethods isIPadDevice]) {	
 			NSURLRequest *urlReq = [NSURLRequest requestWithURL:url 
 													cachePolicy:NSURLRequestUseProtocolCachePolicy 
@@ -229,10 +241,9 @@
 			if (urlReq) {
 				[self.webView loadRequest:urlReq];	
 			}
-		}
-		else {
-			NSString *urlString = [url absoluteString];
 			
+		}
+		else {			
 			SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:urlString];
 			webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
 			[self presentModalViewController:webViewController animated:YES];	
@@ -271,13 +282,16 @@
 	controller.event = event;
 	controller.allowsEditing = YES;
 	
+	// Wish we had popovers for iPhones?
 	if (NO == [UtilityMethods isIPadDevice]) {
+		
 		//	Push eventViewController onto the navigation controller stack
 		//	If the underlying event gets deleted, detailViewController will remove itself from
 		//	the stack and clear its event property.
 		[self.navigationController pushViewController:controller animated:YES];
 	}
 	else  {	
+		
 		/* This is a hacky way to do this, but since we aren't using a navigationController
 		 we create a popover, but first we have to wrap the content in a new navigationController
 		 in order to get the necessary button in a nav bar to edit the event.

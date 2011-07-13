@@ -15,6 +15,7 @@
 #import "NSDate+Helper.h"
 #import "LoadingCell.h"
 #import "CalendarEventsLoader.h"
+#import "TexLegeTheme.h"
 
 static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 {
@@ -81,49 +82,18 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
 	if (!cell) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier] autorelease];
-		cell.textLabel.numberOfLines = 3;
+		cell.textLabel.numberOfLines = 4;
 		cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
-		cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
+		cell.textLabel.font = [TexLegeTheme boldTwelve];
+		cell.textLabel.textColor = [TexLegeTheme textDark];
+		
 	}
 	
 	NSDictionary *event = [self eventForIndexPath:indexPath];
-	
-	NSString *chamberString = stringForChamber([[event objectForKey:kCalendarEventsTypeChamberValue] integerValue], TLReturnInitial);
-	NSString *committeeString = [NSString stringWithFormat:@"%@ %@", chamberString, [event objectForKey:kCalendarEventsCommitteeNameKey]];
-	
-	NSString *time = [event objectForKey:kCalendarEventsLocalizedTimeStringKey];
-	if (IsEmpty(time) || [[event objectForKey:kCalendarEventsAllDayKey] boolValue]) {
-		NSRange loc = [[event objectForKey:kCalendarEventsNotesKey] rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]];
-		if (loc.location != NSNotFound && loc.length > 0) {
-			time = [[event objectForKey:kCalendarEventsNotesKey] substringToIndex:loc.location];
-		}
-		else {
-			time = [event objectForKey:kCalendarEventsNotesKey];
-		}
-	}
 		
-	BOOL isCancelled = ([[event objectForKey:kCalendarEventsCanceledKey] boolValue] == YES);		
-	BOOL isSearching = NO;
-	NSMutableString *cellText = [NSMutableString stringWithFormat:@"%@\n   ", committeeString];
-	
-	if (tableView.delegate && [tableView.delegate respondsToSelector:@selector(searchDisplayController)]) {
-		UISearchDisplayController *sdc = [tableView.delegate performSelector:@selector(searchDisplayController)];
-		if (sdc && sdc.searchResultsTableView && [tableView isEqual:sdc.searchResultsTableView]) {
-			isSearching = YES;			
-		}
-	}
-	[cellText appendFormat:NSLocalizedStringFromTable(@"When: %@ - %@", @"DataTableUI", @"The date and time for an event"), 
-			[event objectForKey:kCalendarEventsLocalizedDateStringKey], time];
-	
-	if (isCancelled)
-		[cellText appendString:NSLocalizedStringFromTable(@" - CANCELED", @"DataTableUI", @"an event was cancelled")];
-	else if (!isSearching)
-		[cellText appendFormat:NSLocalizedStringFromTable(@"\n   Where: %@", @"DataTableUI", @"the location of an event"), 
-			[event objectForKey:kCalendarEventsLocationKey]];
-
-	cell.textLabel.text = cellText;
+	cell.textLabel.text = [event objectForKey:kCalendarEventsSummaryTextKey];
 	cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-	
+		
 	return cell;
 }
 
