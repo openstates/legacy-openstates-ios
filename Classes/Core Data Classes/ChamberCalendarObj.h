@@ -17,10 +17,12 @@
 	BOOL hasPostedAlert;
 }
 
-@property (nonatomic,retain) NSString *title;
-@property (nonatomic,retain) NSNumber *chamber;
+@property (nonatomic,copy) NSString *title;
+@property (nonatomic,copy) NSString *eventsType;
 
 - (NSDictionary *)eventForIndexPath:(NSIndexPath*)indexPath;
+- (NSIndexPath *) indexPathForEvent:(NSDictionary *)event;
+
 - (NSArray *)filterEventsByString:(NSString *)filterString;
 - (id)initWithDictionary:(NSDictionary *)calendarDict;
 

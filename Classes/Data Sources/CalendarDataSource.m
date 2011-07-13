@@ -13,7 +13,7 @@
 #import "CalendarEventsLoader.h"
 
 @interface CalendarDataSource (Private)
-- (void) loadChamberCalendars;
+- (void) loadCalendarMenuItems;
 @end
 
 
@@ -22,10 +22,10 @@
 
 
 - (NSString *)name 
-{ return NSLocalizedStringFromTable(@"Meetings", @"StandardUI", @"The short title for buttons and tabs related to committee meetings (or calendar events)"); }
+{ return NSLocalizedStringFromTable(@"Events", @"StandardUI", @"The short title for buttons and tabs related to committee meetings (or calendar events)"); }
 
 - (NSString *)navigationBarName 
-{ return NSLocalizedStringFromTable(@"Upcoming Meetings", @"StandardUI", @"The long title for buttons and tabs related to committee meetings (or calendar events)"); }
+{ return NSLocalizedStringFromTable(@"Upcoming Events", @"StandardUI", @"The long title for buttons and tabs related to committee meetings (or calendar events)"); }
 
 - (UIImage *)tabBarImage 
 { return [UIImage imageNamed:@"83-calendar-inv.png"]; }
@@ -48,7 +48,7 @@
 - (id)init {
 	if ((self = [super init])) {
 		
-		[self loadChamberCalendars];
+		[self loadCalendarMenuItems];
 		
 	}
 	return self;
@@ -60,40 +60,27 @@
 }
 
 
-- (void) loadChamberCalendars {
+- (void) loadCalendarMenuItems {
 	[[CalendarEventsLoader sharedCalendarEventsLoader] loadEvents:self];
 	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	self.calendarList = [NSMutableArray arrayWithCapacity:4];
+	self.calendarList = [NSMutableArray array];
 	
-	/* ALL OR BOTH LEGISLATIVE CHAMBERS */
-	NSInteger numberOfChambers = 4;	// All chambers, House only, Senate only, Joint committees
-	NSInteger chamberIndex = BOTH_CHAMBERS;
-	NSString *chamberName = stringForChamber(chamberIndex, TLReturnFull);
+	// Right now we're only doing committee meetings
 	
-	NSString *localizedString = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ Upcoming Meetings", @"DataTableUI", @"Menu item to display upcoming calendar events in a legislative chamber"), 
-					   chamberName];
-
-	NSMutableDictionary *calendarDict = [[NSMutableDictionary alloc] initWithCapacity:10];
-	ChamberCalendarObj *calendar = nil;
-	[calendarDict setObject:localizedString forKey:@"title"];
-	[calendarDict setObject:[NSNumber numberWithInteger:chamberIndex] forKey:@"chamber"];
-	calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
+	NSString *localizedString = NSLocalizedStringFromTable(@"Upcoming Committee Meetings", @"DataTableUI", @"Menu item to display upcoming calendar events");
+	NSMutableDictionary *calendarDict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+										 localizedString, @"title",
+										 kCalendarEventsTypeCommitteeValue, kCalendarEventsTypeKey,
+										 nil];
+	ChamberCalendarObj *calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
 	[self.calendarList addObject:calendar];
 	[calendar release];
 	[calendarDict removeAllObjects];
-
-	for (chamberIndex=HOUSE; chamberIndex < numberOfChambers; chamberIndex++) {
-		chamberName = stringForChamber(chamberIndex, TLReturnFull);
-		localizedString = [NSString stringWithFormat:NSLocalizedStringFromTable(@"Upcoming %@ Meetings", @"DataTableUI", @"Menu item to display upcoming calendar events in a legislative chamber"), 
-						   chamberName];
-		[calendarDict setObject:localizedString forKey:@"title"];
-		[calendarDict setObject:[NSNumber numberWithInteger:chamberIndex] forKey:@"chamber"];
-		calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
-		[self.calendarList addObject:calendar];
-		[calendar release];
-		[calendarDict removeAllObjects];
-	}
+	
+	// Any other event types will go here
+	// .....
+	
 	[calendarDict release];
 	[pool drain];
 	
@@ -127,10 +114,8 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.textLabel.textColor =	[TexLegeTheme textDark];
-		cell.textLabel.textAlignment = UITextAlignmentLeft;
-		cell.textLabel.font = [UIFont boldSystemFontOfSize:15];
+		cell.textLabel.font = [TexLegeTheme boldFifteen];
 		
-		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
 		cell.textLabel.adjustsFontSizeToFitWidth = YES;
 		cell.textLabel.minimumFontSize = 12.0f;
 

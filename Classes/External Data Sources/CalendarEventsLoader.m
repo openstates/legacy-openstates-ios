@@ -163,7 +163,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		self.loadingStatus = LOADING_ACTIVE;
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
 									 eventState, @"state",
-									 kCalendarEventsTypeCommitteeValue, kCalendarEventsTypeKey,	// right now, lets just do committee meetings
+//									 kCalendarEventsTypeCommitteeValue, kCalendarEventsTypeKey,	// right now, lets just do committee meetings
 									 SUNLIGHT_APIKEY, @"apikey",
 									 nil];
 		RKRequest *request = [[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/events" queryParams:queryParams delegate:self];
@@ -393,18 +393,16 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	return loadedEvent;
 }
 
-- (NSArray *)commiteeeMeetingsForChamber:(NSInteger)chamber {
+- (NSArray *)calendarEventsForType:(NSString *)eventType {
 	if (IsEmpty(self.events))
 		return nil;
 	
 	NSArray *foundEvents = nil;
 	
-	if (chamber != BOTH_CHAMBERS)
-		foundEvents = [_events findAllWhereKeyPath:kCalendarEventsTypeChamberValue equals:[NSNumber numberWithInteger:chamber]];
+	if (!IsEmpty(eventType)) {
+		foundEvents = [_events findAllWhereKeyPath:kCalendarEventsTypeKey equals:eventType];
 
-	if (IsEmpty(foundEvents))  // just give them what we've got.
-		foundEvents = _events;
-
+	}
 	return foundEvents;
 }
 
@@ -422,13 +420,13 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	NSLog(@"CalendarEventsLoader == ADDING ALL MEETINGS TO ICAL == (MESSY)");
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"iCAL_ALL_MEETINGS"];
 
-	NSArray *meetings = [self commiteeeMeetingsForChamber:BOTH_CHAMBERS];
+	NSArray *meetings = [self calendarEventsForType:BOTH_CHAMBERS];
 	for (NSDictionary *meeting in meetings) {
 		[self addEventToiCal:meeting delegate:nil];
 	}
 }
 
-#warning specific to committee meetings ... particular to texas too
+#warning specific to committee meetings in texas
 
 - (void)addEventToiCal:(NSDictionary *)eventDict delegate:(id)delegate {
 	if (!eventDict || !eventStore)

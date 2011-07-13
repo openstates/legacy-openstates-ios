@@ -41,6 +41,17 @@
 	[super viewDidLoad];
 	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
 		self.selectObjectOnAppear = [self firstDataObject];
+	
+	UILabel *typeWarning = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), 44.f)];
+	typeWarning.text = NSLocalizedStringFromTable(@"Only committee meetings are available at this time", @"DataTableUI", @"Disclaimer for event types");
+	typeWarning.font = [TexLegeTheme boldTen];
+	typeWarning.textColor = [TexLegeTheme textLight];
+	typeWarning.textAlignment = UITextAlignmentCenter;
+	typeWarning.lineBreakMode = UILineBreakModeWordWrap;
+	typeWarning.backgroundColor = self.tableView.backgroundColor;
+	self.tableView.tableFooterView = typeWarning;
+	[typeWarning release];
+	
 }
 
 - (void)viewDidUnload {
@@ -73,7 +84,6 @@
 	if ([UtilityMethods isIPadDevice]) {
 		if (self.navigationController)
 			self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
-		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
 	}
 }
 

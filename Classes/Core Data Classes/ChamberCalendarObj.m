@@ -28,12 +28,12 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 
 @implementation ChamberCalendarObj
 
-@synthesize title, chamber;
+@synthesize title, eventsType;
 
 - (id)initWithDictionary:(NSDictionary *)calendarDict {
 	if ((self = [super init])) {
 		self.title = [calendarDict valueForKey:@"title"];
-		self.chamber = [calendarDict valueForKey:@"chamber"];
+		self.eventsType = [calendarDict valueForKey:kCalendarEventsTypeKey];
 		rows = [[NSMutableArray alloc] init];
 		hasPostedAlert = NO;		
 	}
@@ -42,15 +42,31 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 
 - (void)dealloc {	
 	self.title = nil;
-	self.chamber = nil;
+	self.eventsType = nil;
 	[rows release];
 
     [super dealloc];
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"title: %@ - chamber: %@", 
-			self.title, self.chamber];
+	return [NSString stringWithFormat:@"title: %@ - type: %@", 
+			self.title, self.eventsType];
+}
+
+- (NSIndexPath *) indexPathForEvent:(NSDictionary *)event {
+	NSIndexPath *indexPath = nil;
+	
+	@try {
+		NSInteger row = NSNotFound;
+		row = [rows indexOfObject:event];
+		if (row != NSNotFound) {
+			indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+		}
+	}
+	@catch (NSException * e) {
+	}
+
+	return indexPath;
 }
 
 - (NSDictionary *) eventForIndexPath:(NSIndexPath *)indexPath {
@@ -113,7 +129,7 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 - (NSArray *)eventsFrom:(NSDate *)fromDate to:(NSDate *)toDate
 {
 	NSMutableArray *matches = [NSMutableArray array];
-	NSArray *events = [[CalendarEventsLoader sharedCalendarEventsLoader] commiteeeMeetingsForChamber:[self.chamber integerValue]];
+	NSArray *events = [[CalendarEventsLoader sharedCalendarEventsLoader] calendarEventsForType:self.eventsType];
 	for (NSDictionary *event in events) {
 		
 		if (IsDateBetweenInclusive([event objectForKey:kCalendarEventsLocalizedDateKey], fromDate, toDate))
@@ -188,7 +204,7 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 		[self fetchEvents];
 	}*/
 	
-	NSArray *newEvents = [[CalendarEventsLoader sharedCalendarEventsLoader] commiteeeMeetingsForChamber:[self.chamber integerValue]];
+	NSArray *newEvents = [[CalendarEventsLoader sharedCalendarEventsLoader] calendarEventsForType:self.eventsType];
 	if (!IsEmpty(newEvents)){
 		[rows removeAllObjects];
 		

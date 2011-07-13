@@ -38,7 +38,8 @@
 }
 + (CalendarEventsLoader *)sharedCalendarEventsLoader;
 - (void)loadEvents:(id)sender;
-- (NSArray *)commiteeeMeetingsForChamber:(NSInteger)chamber;
+
+- (NSArray *)calendarEventsForType:(NSString *)eventType;
 - (void)addEventToiCal:(NSDictionary *)eventDict delegate:(id)delegate;
 - (void)addAllEventsToiCal:(id)sender;
 

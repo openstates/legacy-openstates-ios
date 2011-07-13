@@ -20,6 +20,7 @@
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
 #import "CalendarEventsLoader.h"
+#import "TexLegeNavBar.h"
 
 @interface CalendarDetailViewController (Private) 
 	
@@ -51,7 +52,7 @@
 											 selector:@selector(reloadEvents:) name:kCalendarEventsNotifyError object:nil];	
 
 	self.calendarView.tableView.rowHeight = 73;
-	self.calendarView.tableView.backgroundColor = [TexLegeTheme backgroundLight];
+	self.calendarView.tableView.backgroundColor = [TexLegeTheme backgroundDark];
 	
 	self.selectedRowRect = CGRectZero;
 	
@@ -211,9 +212,7 @@
 
 
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
-	[tv deselectRowAtIndexPath:indexPath animated:YES];
-	
+		
 	self.selectedRowRect = [tv rectForRowAtIndexPath:indexPath];
 
 	NSDictionary *eventDict = [self.chamberCalendar eventForIndexPath:indexPath];
@@ -221,9 +220,18 @@
 	// They've picked some results from the search table, load them up...
 	if (tv == self.searchDisplayController.searchResultsTableView) {
 		[self.searchDisplayController setActive:NO animated:YES];
-		[self showAndSelectDate:[eventDict objectForKey:kCalendarEventsLocalizedDateKey]];
-	}
 		
+		[self showAndSelectDate:[eventDict objectForKey:kCalendarEventsLocalizedDateKey]];
+		
+		if ([UtilityMethods isIPadDevice]) {
+			NSIndexPath *newPath = [self.dataSource performSelector:@selector(indexPathForEvent:) withObject:eventDict];
+			[self.calendarView.tableView selectRowAtIndexPath:newPath animated:YES scrollPosition:UITableViewScrollPositionTop];		 
+			[self.calendarView.tableView deselectRowAtIndexPath:newPath animated:YES ];		 
+		}
+	}
+	
+	[tv deselectRowAtIndexPath:indexPath animated:YES];
+
 	NSString *urlString = [eventDict objectForKey:kCalendarEventsAnnouncementURLKey];
 	if (IsEmpty(urlString)) {
 		// Can't go further if we don't have a usable URL string
