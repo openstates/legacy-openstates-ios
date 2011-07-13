@@ -13,9 +13,12 @@
 #import "TableDataSourceProtocol.h"
 
 @interface LinksDataSource : NSObject <TableDataSource>  {
+	NSMutableArray *_items;
 }
 
-@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic,retain) NSArray *items;
+
++ (NSURL *) actualURLForURLString:(NSString *)urlString;
 
 @end
  

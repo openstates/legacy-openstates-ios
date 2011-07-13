@@ -64,7 +64,6 @@ enum TXL_QueryTypes {
 									  NSLocalizedStringFromTable(@"Committees", @"DataTableUI", @"Status indicator for updates"), @"CommitteeObj",
 									  NSLocalizedStringFromTable(@"Committee Positions", @"DataTableUI", @"Status indicator for updates"), @"CommitteePositionObj",
 									  NSLocalizedStringFromTable(@"District Offices", @"DataTableUI", @"Status indicator for updates"), @"DistrictOfficeObj",
-									  NSLocalizedStringFromTable(@"Resources", @"DataTableUI", @"Status indicator for updates"), @"LinkObj",
 									  NSLocalizedStringFromTable(@"District Maps", @"DataTableUI", @"Status indicator for updates"), @"DistrictMapObj",
 									  nil];		
 	}

@@ -12,10 +12,10 @@
 
 #import "LinksDataSource.h"
 #import "StatesLegeAppDelegate.h"
-#import "LinkObj.h"
 #import "UtilityMethods.h"
 #import "TexLegeStandardGroupCell.h"
 #import "TexLegeTheme.h"
+#import "JSONKit.h"
 
 @implementation LinksDataSource
 
@@ -25,7 +25,7 @@ enum Sections {
     NUM_SECTIONS
 };
 
-@synthesize fetchedResultsController;
+@synthesize items = _items;
 
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
@@ -44,7 +44,7 @@ enum Sections {
 { return YES; }
 
 - (BOOL)usesCoreData
-{ return YES; }
+{ return NO; }
 
 - (BOOL)canEdit
 { return YES; }
@@ -53,59 +53,50 @@ enum Sections {
 	return UITableViewStylePlain;
 } 
 
-- (Class)dataClass {
-	return [LinkObj class];
-}
-
 - (id)init {
 	if ((self = [super init])) {
 	
-		//NSError *error = nil;
-		/*if (![self.fetchedResultsController performFetch:&error])
-		{
-			debug_NSLog(@"LinksMenuDataSource-init: Unresolved error %@, %@", error, [error userInfo]);
-		}*/		
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(dataSourceReceivedMemoryWarning:)
 													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];	
-		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(resetCoreData:) name:@"RESTKIT_LOADED_LINKOBJ" object:nil];	
+
+		NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"LinkObj" ofType:@"json"];
+		NSData *jsonData = [NSData dataWithContentsOfFile:thePath];
+		_items = [[jsonData mutableObjectFromJSONData] retain];
+		NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"sortOrder" ascending:YES];
+		[_items sortUsingDescriptors:[NSArray arrayWithObject:sortDesc]];
+		
 	}
 	return self;
 }
 
-- (void)resetCoreData:(NSNotification *)notification {
-	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
-	self.fetchedResultsController = nil;
-	NSError *error = nil;
-	[self.fetchedResultsController performFetch:&error];
-}
-
-
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
-	self.fetchedResultsController = nil;
+	self.items = nil;
     [super dealloc];
 }
 
 -(void)dataSourceReceivedMemoryWarning:(id)sender {
 	// let's give this a swinging shot....	
-	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
-		[[LinkObj managedObjectContext] refreshObject:object mergeChanges:NO];
-	}
 }
 
 #pragma mark -
 #pragma mark UITableViewDataSource methods
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return [self.fetchedResultsController.sections count];
+	return NUM_SECTIONS;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController.sections objectAtIndex:section];
-	return [sectionInfo numberOfObjects];
+	NSInteger rows = 0;
+	if (!IsEmpty(_items)) {
+		NSArray *sub = [_items findAllWhereKeyPath:@"section" equals:[NSNumber numberWithInt:section]];
+		if (sub) {
+			rows = [sub count];
+		}
+	}
+	return rows;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -116,14 +107,32 @@ enum Sections {
 		return NSLocalizedStringFromTable(@"Web Resources", @"DataTableUI", @"Table section listing resources on the web");		
 }
 
-- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {		
-	return [self.fetchedResultsController objectAtIndexPath:indexPath];;	
+- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
+	NSDictionary *object = nil;
+	if (!IsEmpty(_items)) {
+		NSInteger row = indexPath.row;
+		NSInteger section = indexPath.section;
+		
+		NSArray *sub = [_items findAllWhereKeyPath:@"section" equals:[NSNumber numberWithInt:section]];
+		if (sub && [sub count] > row)
+			object = [sub objectAtIndex:row];
+	}
+	return object;	
 }
 
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject {
 	NSIndexPath *tempIndex = nil;
 	@try {
-		tempIndex = [self.fetchedResultsController indexPathForObject:dataObject];
+		NSInteger row = NSNotFound;
+		NSInteger section = [[dataObject valueForKey:@"section"] integerValue];
+		NSArray *sub = [_items findAllWhereKeyPath:@"section" equals:[NSNumber numberWithInt:section]];
+		if (!IsEmpty(sub)) {
+			row = [sub indexOfObject:dataObject];
+			
+			if (row != NSNotFound) {
+				tempIndex = [NSIndexPath indexPathForRow:row inSection:section]; 
+			}
+		}
 	}
 	@catch (NSException * e) {
 	}
@@ -157,49 +166,38 @@ enum Sections {
 		cell.detailTextLabel.textColor = [TexLegeTheme indexText];
 	}
 	
-	LinkObj *link = [self dataObjectForIndexPath:indexPath];
+	NSDictionary *link = [self dataObjectForIndexPath:indexPath];
 	if (link) {
-		cell.textLabel.text = link.label;
+		cell.textLabel.text = [link valueForKey:@"label"];
 		
 		if (indexPath.section == kBodySection)
-			cell.detailTextLabel.text = link.url;
+			cell.detailTextLabel.text = [link valueForKey:@"url"];
 	}
 	return cell;
 }
 	
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_START" object:self];
-	//    [self.tableView beginUpdates];
++ (NSURL *) actualURLForURLString:(NSString *)urlString {	
+	NSURL * actualURL = nil;
+	
+	if ([urlString isEqualToString:@"aboutView"]) {
+		NSString *file = nil;
+		
+		if ([UtilityMethods isIPadDevice])
+			file = @"TexLegeInfo~ipad.htm";
+		else
+			file = @"TexLegeInfo~iphone.htm";
+		
+		NSURL *baseURL = [UtilityMethods urlToMainBundle];
+		actualURL = [NSURL URLWithString:file relativeToURL:baseURL];
+	}
+	else if ([urlString hasPrefix:@"mailto:"]) {
+		actualURL = nil;
+	}
+	else if (urlString) {
+		actualURL = [NSURL URLWithString:urlString];
+	}
+	
+	return actualURL;	
 }
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_END" object:self];
-	//    [self.tableView endUpdates];
-}
-
-
-#pragma mark -
-#pragma mark Fetched results controller
-- (NSFetchedResultsController *)fetchedResultsController
-{  
-	if (fetchedResultsController != nil) return fetchedResultsController;
-	
-	NSFetchRequest *fetchRequest = [LinkObj fetchRequest];
-	
-	NSSortDescriptor *sortSection = [[NSSortDescriptor alloc] initWithKey:@"section" ascending:YES];
-	NSSortDescriptor *sortOrder = [[NSSortDescriptor alloc] initWithKey:@"sortOrder" ascending:YES];
-	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortSection, sortOrder, nil];  
-	[fetchRequest setSortDescriptors:sortDescriptors];
-	
-	fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
-																   managedObjectContext:[LinkObj managedObjectContext]
-																	 sectionNameKeyPath:@"section" cacheName:@"Links"];
-	fetchedResultsController.delegate = self;
-	
-	[sortSection release];
-	[sortOrder release];
-	[sortDescriptors release];
-	
-	return fetchedResultsController;
-}    
 
 @end

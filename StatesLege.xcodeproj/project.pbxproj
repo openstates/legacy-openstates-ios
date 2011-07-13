@@ -932,8 +932,6 @@
 		37735B5D1323104A0033F343 /* TableCellDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 373AB3B80FD3389F0065740E /* TableCellDataObject.m */; };
 		37735B5E1323104A0033F343 /* TexLege.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 37C9B67D11EDB28E001F0010 /* TexLege.xcdatamodeld */; };
 		37735B5F1323104A0033F343 /* CommitteePositionObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A1CD71007FF4600BEC4ED /* CommitteePositionObj+RestKit.m */; };
-		37735B601323104A0033F343 /* LegislatorObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A1CD91007FF4600BEC4ED /* LegislatorObj+RestKit.m */; };
-		37735B611323104A0033F343 /* LinkObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A1CDB1007FF4600BEC4ED /* LinkObj+RestKit.m */; };
 		37735B621323104A0033F343 /* CommitteeObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 37155727100859E700FA57DB /* CommitteeObj+RestKit.m */; };
 		37735B631323104A0033F343 /* CommitteesDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 378AFC7F100BDD640040706A /* CommitteesDataSource.m */; };
 		37735B641323104A0033F343 /* LegislatorsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 378AFC82100BDD940040706A /* LegislatorsDataSource.m */; };
@@ -1056,9 +1054,10 @@
 		377ACE4811FFA30E002C7E49 /* CalendarDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 377ACE4711FFA30E002C7E49 /* CalendarDataSource.m */; };
 		377DC4A91344D475000068E1 /* BillVotesDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 377DC4A81344D475000068E1 /* BillVotesDataSource.m */; };
 		377DC4AA1344D475000068E1 /* BillVotesDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 377DC4A81344D475000068E1 /* BillVotesDataSource.m */; };
+		3789F8EA13CD79FD0069DB1C /* LinkObj.json in Resources */ = {isa = PBXBuildFile; fileRef = 37735C28132310E90033F343 /* LinkObj.json */; };
+		3789F91B13CD7E830069DB1C /* LegislatorObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 3789F91A13CD7E830069DB1C /* LegislatorObj+RestKit.m */; };
+		3789F91C13CD7E830069DB1C /* LegislatorObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 3789F91A13CD7E830069DB1C /* LegislatorObj+RestKit.m */; };
 		378A1CDD1007FF4600BEC4ED /* CommitteePositionObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A1CD71007FF4600BEC4ED /* CommitteePositionObj+RestKit.m */; };
-		378A1CDE1007FF4600BEC4ED /* LegislatorObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A1CD91007FF4600BEC4ED /* LegislatorObj+RestKit.m */; };
-		378A1CDF1007FF4600BEC4ED /* LinkObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A1CDB1007FF4600BEC4ED /* LinkObj+RestKit.m */; };
 		378ABD31139F0BCA00928FBF /* AppAlerts.strings in Resources */ = {isa = PBXBuildFile; fileRef = 378ABD29139F0BCA00928FBF /* AppAlerts.strings */; };
 		378ABD32139F0BCA00928FBF /* AppAlerts.strings in Resources */ = {isa = PBXBuildFile; fileRef = 378ABD29139F0BCA00928FBF /* AppAlerts.strings */; };
 		378ABD33139F0BCA00928FBF /* DataTableUI.strings in Resources */ = {isa = PBXBuildFile; fileRef = 378ABD2B139F0BCA00928FBF /* DataTableUI.strings */; };
@@ -1137,7 +1136,6 @@
 		37CF6BB91226597500456D29 /* UIColor-Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CF6BB81226597500456D29 /* UIColor-Expanded.m */; };
 		37D0A8EF123ED55A00232B2C /* DistrictPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0A8EE123ED55A00232B2C /* DistrictPinAnnotationView.m */; };
 		37D0D1E81357A198003DA1BB /* CommitteeObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1D91357A198003DA1BB /* CommitteeObj.m */; };
-		37D0D1E91357A198003DA1BB /* LinkObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DB1357A198003DA1BB /* LinkObj.m */; };
 		37D0D1EA1357A198003DA1BB /* LegislatorObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DD1357A198003DA1BB /* LegislatorObj.m */; };
 		37D0D1EB1357A198003DA1BB /* CommitteePositionObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DF1357A198003DA1BB /* CommitteePositionObj.m */; };
 		37D0D1EC1357A198003DA1BB /* StafferObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1E11357A198003DA1BB /* StafferObj.m */; };
@@ -1220,7 +1218,6 @@
 		37FE1F1513CB8EFE00655550 /* IntelligentSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1ED813CB8EFE00655550 /* IntelligentSplitViewController.m */; };
 		37FE1F3E13CB8EFE00655550 /* IntelligentSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1ED813CB8EFE00655550 /* IntelligentSplitViewController.m */; };
 		37FE46301357BF1600E8C038 /* CommitteePositionObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DF1357A198003DA1BB /* CommitteePositionObj.m */; };
-		37FE46311357BF1900E8C038 /* LinkObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DB1357A198003DA1BB /* LinkObj.m */; };
 		37FE46321357BF2100E8C038 /* LegislatorObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0D1DD1357A198003DA1BB /* LegislatorObj.m */; };
 /* End PBXBuildFile section */
 
@@ -1949,12 +1946,10 @@
 		377DC4A71344D475000068E1 /* BillVotesDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillVotesDataSource.h; sourceTree = "<group>"; };
 		377DC4A81344D475000068E1 /* BillVotesDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillVotesDataSource.m; sourceTree = "<group>"; };
 		377E8CF0100C39F300686B23 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = "Classes/Application Support/Constants.h"; sourceTree = SOURCE_ROOT; };
+		3789F91913CD7E830069DB1C /* LegislatorObj+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LegislatorObj+RestKit.h"; sourceTree = "<group>"; };
+		3789F91A13CD7E830069DB1C /* LegislatorObj+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LegislatorObj+RestKit.m"; sourceTree = "<group>"; };
 		378A1CD61007FF4600BEC4ED /* CommitteePositionObj+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CommitteePositionObj+RestKit.h"; sourceTree = "<group>"; };
 		378A1CD71007FF4600BEC4ED /* CommitteePositionObj+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CommitteePositionObj+RestKit.m"; sourceTree = "<group>"; };
-		378A1CD81007FF4600BEC4ED /* LegislatorObj+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LegislatorObj+RestKit.h"; sourceTree = "<group>"; };
-		378A1CD91007FF4600BEC4ED /* LegislatorObj+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LegislatorObj+RestKit.m"; sourceTree = "<group>"; };
-		378A1CDA1007FF4600BEC4ED /* LinkObj+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LinkObj+RestKit.h"; sourceTree = "<group>"; };
-		378A1CDB1007FF4600BEC4ED /* LinkObj+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LinkObj+RestKit.m"; sourceTree = "<group>"; };
 		378ABD2A139F0BCA00928FBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/AppAlerts.strings; sourceTree = "<group>"; };
 		378ABD2C139F0BCA00928FBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/DataTableUI.strings; sourceTree = "<group>"; };
 		378ABD2E139F0BCA00928FBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/StandardUI.strings; sourceTree = "<group>"; };
@@ -2045,8 +2040,6 @@
 		37D0A8EE123ED55A00232B2C /* DistrictPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictPinAnnotationView.m; sourceTree = "<group>"; };
 		37D0D1D81357A198003DA1BB /* CommitteeObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeObj.h; sourceTree = "<group>"; };
 		37D0D1D91357A198003DA1BB /* CommitteeObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteeObj.m; sourceTree = "<group>"; };
-		37D0D1DA1357A198003DA1BB /* LinkObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinkObj.h; sourceTree = "<group>"; };
-		37D0D1DB1357A198003DA1BB /* LinkObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinkObj.m; sourceTree = "<group>"; };
 		37D0D1DC1357A198003DA1BB /* LegislatorObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorObj.h; sourceTree = "<group>"; };
 		37D0D1DD1357A198003DA1BB /* LegislatorObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorObj.m; sourceTree = "<group>"; };
 		37D0D1DE1357A198003DA1BB /* CommitteePositionObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteePositionObj.h; sourceTree = "<group>"; };
@@ -2768,10 +2761,8 @@
 				37155727100859E700FA57DB /* CommitteeObj+RestKit.m */,
 				378A1CD61007FF4600BEC4ED /* CommitteePositionObj+RestKit.h */,
 				378A1CD71007FF4600BEC4ED /* CommitteePositionObj+RestKit.m */,
-				378A1CD81007FF4600BEC4ED /* LegislatorObj+RestKit.h */,
-				378A1CD91007FF4600BEC4ED /* LegislatorObj+RestKit.m */,
-				378A1CDA1007FF4600BEC4ED /* LinkObj+RestKit.h */,
-				378A1CDB1007FF4600BEC4ED /* LinkObj+RestKit.m */,
+				3789F91913CD7E830069DB1C /* LegislatorObj+RestKit.h */,
+				3789F91A13CD7E830069DB1C /* LegislatorObj+RestKit.m */,
 				379D0CC1122D49000021969C /* TexLegeCoreDataUtils.h */,
 				379D0CC2122D49000021969C /* TexLegeCoreDataUtils.m */,
 				372FAB5812147B2000AEF237 /* ChamberCalendarObj.h */,
@@ -3353,8 +3344,6 @@
 			children = (
 				37D0D1D81357A198003DA1BB /* CommitteeObj.h */,
 				37D0D1D91357A198003DA1BB /* CommitteeObj.m */,
-				37D0D1DA1357A198003DA1BB /* LinkObj.h */,
-				37D0D1DB1357A198003DA1BB /* LinkObj.m */,
 				37D0D1DC1357A198003DA1BB /* LegislatorObj.h */,
 				37D0D1DD1357A198003DA1BB /* LegislatorObj.m */,
 				37D0D1DE1357A198003DA1BB /* CommitteePositionObj.h */,
@@ -4314,6 +4303,7 @@
 				37F3579813CA684200C1EE29 /* gavel@2x.png in Resources */,
 				37F357B113CA684200C1EE29 /* multipins.png in Resources */,
 				37F357B213CA684200C1EE29 /* multipins@2x.png in Resources */,
+				3789F8EA13CD79FD0069DB1C /* LinkObj.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4863,8 +4853,6 @@
 				373AB3B90FD3389F0065740E /* TableCellDataObject.m in Sources */,
 				37C9B67E11EDB28E001F0010 /* TexLege.xcdatamodeld in Sources */,
 				378A1CDD1007FF4600BEC4ED /* CommitteePositionObj+RestKit.m in Sources */,
-				378A1CDE1007FF4600BEC4ED /* LegislatorObj+RestKit.m in Sources */,
-				378A1CDF1007FF4600BEC4ED /* LinkObj+RestKit.m in Sources */,
 				37155728100859E700FA57DB /* CommitteeObj+RestKit.m in Sources */,
 				378AFC81100BDD640040706A /* CommitteesDataSource.m in Sources */,
 				378AFC84100BDD940040706A /* LegislatorsDataSource.m in Sources */,
@@ -4943,7 +4931,6 @@
 				37D0D20B1357A534003DA1BB /* DistrictOfficeObj+RestKit.m in Sources */,
 				37D0D2111357A685003DA1BB /* DistrictMapObj+RestKit.m in Sources */,
 				37FE46301357BF1600E8C038 /* CommitteePositionObj.m in Sources */,
-				37FE46311357BF1900E8C038 /* LinkObj.m in Sources */,
 				37FE46321357BF2100E8C038 /* LegislatorObj.m in Sources */,
 				371D54481365F60E00A61BD4 /* Base64Transcoder.c in Sources */,
 				371D54491365F60E00A61BD4 /* NSData_Base64Extensions.m in Sources */,
@@ -4960,6 +4947,7 @@
 				37FE1CDE13CB75FD00655550 /* UploaderThread.m in Sources */,
 				37FE1E0C13CB8E3300655550 /* AppendingFlowView.m in Sources */,
 				37FE1F1513CB8EFE00655550 /* IntelligentSplitViewController.m in Sources */,
+				3789F91B13CD7E830069DB1C /* LegislatorObj+RestKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4974,8 +4962,6 @@
 				37735B5D1323104A0033F343 /* TableCellDataObject.m in Sources */,
 				37735B5E1323104A0033F343 /* TexLege.xcdatamodeld in Sources */,
 				37735B5F1323104A0033F343 /* CommitteePositionObj+RestKit.m in Sources */,
-				37735B601323104A0033F343 /* LegislatorObj+RestKit.m in Sources */,
-				37735B611323104A0033F343 /* LinkObj+RestKit.m in Sources */,
 				37735B621323104A0033F343 /* CommitteeObj+RestKit.m in Sources */,
 				37735B631323104A0033F343 /* CommitteesDataSource.m in Sources */,
 				37735B641323104A0033F343 /* LegislatorsDataSource.m in Sources */,
@@ -5047,7 +5033,6 @@
 				376DFEB713492FF800360BF4 /* LoadingCell.m in Sources */,
 				3763ED6F1354E0F4000E524C /* UIImage+ResolutionIndependent.m in Sources */,
 				37D0D1E81357A198003DA1BB /* CommitteeObj.m in Sources */,
-				37D0D1E91357A198003DA1BB /* LinkObj.m in Sources */,
 				37D0D1EA1357A198003DA1BB /* LegislatorObj.m in Sources */,
 				37D0D1EB1357A198003DA1BB /* CommitteePositionObj.m in Sources */,
 				37D0D1EC1357A198003DA1BB /* StafferObj.m in Sources */,
@@ -5073,6 +5058,7 @@
 				37FE1CE013CB75FD00655550 /* UploaderThread.m in Sources */,
 				37FE1E5613CB8E3300655550 /* AppendingFlowView.m in Sources */,
 				37FE1F3E13CB8EFE00655550 /* IntelligentSplitViewController.m in Sources */,
+				3789F91C13CD7E830069DB1C /* LegislatorObj+RestKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,7 +17,6 @@
 #import "DistrictMapObj+RestKit.h"
 #import "DistrictOfficeObj.h"
 #import "StafferObj.h"
-#import "LinkObj+RestKit.h"
 #import "StatesLegeAppDelegate.h"
 #import "NSDate+Helper.h"
 #import "LocalyticsSession.h"
@@ -206,7 +205,6 @@
 	[mapper registerClass:[CommitteePositionObj class] forElementNamed:@"committeePositions"];
 	[mapper registerClass:[DistrictMapObj class] forElementNamed:@"districtMaps"];
 	[mapper registerClass:[DistrictOfficeObj class] forElementNamed:@"districtOffices"];
-	[mapper registerClass:[LinkObj class] forElementNamed:@"links"];
 	[mapper registerClass:[StafferObj class] forElementNamed:@"staffers"];
 	
 	// Update date format so that we can parse twitter dates properly
@@ -238,7 +236,6 @@
     [seeder seedObjectsFromFile:@"CommitteePositionObj.json" toClass:[CommitteePositionObj class] keyPath:nil];
     [seeder seedObjectsFromFile:@"DistrictOfficeObj.json" toClass:[DistrictOfficeObj class] keyPath:nil];
     [seeder seedObjectsFromFile:@"StafferObj.json" toClass:[StafferObj class] keyPath:nil];
-    [seeder seedObjectsFromFile:@"LinkObj.json" toClass:[LinkObj class] keyPath:nil];
     
 	for (DistrictMapObj *map in [DistrictMapObj allObjects])
 		[map resetRelationship:self];

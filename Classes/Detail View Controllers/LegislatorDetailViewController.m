@@ -16,12 +16,12 @@
 #import "LegislatorContributionsViewController.h"
 
 #import "LegislatorMasterViewController.h"
-#import "LegislatorObj+RestKit.h"
 #import "DistrictOfficeObj+MapKit.h"
 #import "DistrictMapObj+RestKit.h"
 #import "DistrictMapObj+MapKit.h"
 #import "CommitteeObj.h"
 #import "CommitteePositionObj.h"
+#import "LegislatorObj+RestKit.h"
 
 #import "TexLegeCoreDataUtils.h"
 #import "UtilityMethods.h"

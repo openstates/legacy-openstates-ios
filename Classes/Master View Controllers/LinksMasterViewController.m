@@ -21,7 +21,6 @@
 #import "TexLegeTheme.h"
 #import "TexLegeEmailComposer.h"
 #import "TexLegeReachability.h"
-#import "LinkObj+RestKit.h"
 
 @implementation LinksMasterViewController
 
@@ -31,9 +30,7 @@
 
 - (void)configure {
 	[super configure];				
-//	if (self.selectObjectOnAppear && [self.selectObjectOnAppear isKindOfClass:[LinkObj class]]) {
-		self.selectObjectOnAppear = nil; // let's not go hitting up websites on startup (Resources) 
-//	}
+	self.selectObjectOnAppear = nil; // let's not go hitting up websites on startup (Resources) 
 	
 }
 
@@ -105,10 +102,12 @@
 	if (!isSplitViewDetail)
 		self.navigationController.toolbarHidden = YES;
 	
-	LinkObj *link = [self.dataSource dataObjectForIndexPath:newIndexPath];
+	NSDictionary *link = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	if (link) {
 		NSString *supportEmail = [[NSUserDefaults standardUserDefaults] stringForKey:kSupportEmailKey];
-		if ([link.url hasSuffix:supportEmail]) {
+		NSString *url = [link valueForKey:@"url"];
+		
+		if ([url hasSuffix:supportEmail]) {
 			NSString *appVer = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 
 			NSMutableString *body = [NSMutableString string];
@@ -122,8 +121,8 @@
 			return;
 		}
 
-		if ([link.url hasPrefix:@"http://realvideo"]) {
-			NSURL *interAppURL = [NSURL URLWithString:link.url];
+		if ([url hasPrefix:@"http://realvideo"]) {
+			NSURL *interAppURL = [NSURL URLWithString:url];
 			if ([[UIApplication sharedApplication] canOpenURL:interAppURL]) {
 				if ([TexLegeReachability canReachHostWithURL:interAppURL alert:YES])
 					[[UIApplication sharedApplication] openURL:interAppURL];
@@ -148,7 +147,7 @@
 		[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 		//self.selectObjectOnAppear= link;
 
-		NSString *urlString = [[link actualURL] absoluteString];
+		NSString *urlString = [[LinksDataSource actualURLForURLString:url] absoluteString];
 		
 		if (isSplitViewDetail == NO) {
 			SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:urlString];
