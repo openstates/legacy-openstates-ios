@@ -20,9 +20,8 @@
 #import "SVWebViewController.h"
 #import "StatesLegeAppDelegate.h"
 #import "TexLegeTheme.h"
-#import "LegislatorMasterCell.h"
-#import "CommitteeMemberCell.h"
-#import "CommitteeMemberCellView.h"
+#import "LegislatorCell.h"
+#import "LegislatorCellView.h"
 #import "TexLegeStandardGroupCell.h"
 #import "TexLegeEmailComposer.h"
 #import "LocalyticsSession.h"
@@ -238,6 +237,7 @@ CGFloat quartzRowHeight = 73.f;
 	NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:12]; // arbitrary
 	NSDictionary *infoDict = nil;
 	TableCellDataObject *cellInfo = nil;
+	
 //case kInfoSectionName:
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 				NSLocalizedStringFromTable(@"Committee", @"DataTableUI", @"Cell title listing a legislative committee"), @"subtitle",
@@ -306,7 +306,7 @@ CGFloat quartzRowHeight = 73.f;
 	[infoDict release];
 	[cellInfo release];
 	
-//case kInfoSectionWeb:	 // open the web page
+	//case kInfoSectionWeb:	 // open the web page
 	clickable = (text && [text length]);
 	if (clickable)
 		val = [UtilityMethods safeWebUrlFromString:self.committee.url];
@@ -398,19 +398,15 @@ CGFloat quartzRowHeight = 73.f;
 {
 	NSInteger row = [indexPath row];
 	NSInteger section = [indexPath section];
-
-	// We use the Leigislator Directory Cell identifier on purpose, since it's the same style as here..
 	
 	NSString *CellIdentifier;
 	
 	NSInteger InfoSectionEnd = ([UtilityMethods canMakePhoneCalls]) ? kInfoSectionClerk : kInfoSectionPhone;
 	
 	BOOL useDark = NO;
-	
 	BOOL isMember = (section > kInfoSection);
 		
 	if (isMember) {
-		
 		useDark = (indexPath.row % 2 != 0);
 		
 		if (useDark)
@@ -420,17 +416,20 @@ CGFloat quartzRowHeight = 73.f;
 	}
 	else if (row > InfoSectionEnd)
 		CellIdentifier = @"CommitteeInfo";
-	else // the non-clickable / no disclosure items
+	else
 		CellIdentifier = @"Committee-NoDisclosure";
 	
 	UITableViewCellStyle style = section > kInfoSection ? UITableViewCellStyleSubtitle : UITableViewCellStyleValue2;
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	CommitteeMemberCell *newcell = nil;
 	
 	if (cell == nil) {
 		if (isMember) {
-			newcell = [[[CommitteeMemberCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+			LegislatorCell *newcell = [[[LegislatorCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+			if ([UtilityMethods isIPadDevice]) {
+				newcell.cellView.wideSize = YES;
+			}
 			newcell.frame = CGRectMake(0.0, 0.0, newcell.cellSize.width, quartzRowHeight);		
+
 			newcell.accessoryView.hidden = NO;
 			cell = newcell;
 		}
@@ -486,19 +485,14 @@ CGFloat quartzRowHeight = 73.f;
 			return cell;
 			break;
 	}
-	
-	if (legislator) {
-		if ([cell respondsToSelector:@selector(setLegislator:role:)])
-			[cell performSelector:@selector(setLegislator:role:) withObject:legislator withObject:role];
 		
-	}	
-	
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	
 	if (isMember) {
-		CommitteeMemberCellView *cellView = [cell performSelector:@selector(cellView)];
-		if (cellView)
-			cellView.useDarkBackground = useDark;
+		LegislatorCell *newcell = (LegislatorCell *)cell;
+		[newcell setLegislator:legislator];
+		newcell.role = role;
+		newcell.cellView.useDarkBackground = useDark;
 	}
 	
 	return cell;
@@ -510,8 +504,6 @@ CGFloat quartzRowHeight = 73.f;
     // Return NO if you do not want the item to be re-orderable.
     return NO;
 }
-
-
 
 #pragma mark -
 #pragma mark Table view delegate
@@ -526,6 +518,7 @@ CGFloat quartzRowHeight = 73.f;
 				sectionName = NSLocalizedStringFromTable(@"Chair", @"DataTableUI", @"Cell title for a person who leads a given committee, an abbreviation for Chairperson");
 		}
 			break;
+			
 		case kViceChairSection: {
 			if ([self.committee.committeeType integerValue] == JOINT)
 				sectionName = NSLocalizedStringFromTable(@"Co-Chair", @"DataTableUI", @"For joint committees, House and Senate leaders are co-chair persons");
@@ -533,17 +526,20 @@ CGFloat quartzRowHeight = 73.f;
 				sectionName = NSLocalizedStringFromTable(@"Vice Chair", @"DataTableUI", @"Cell title for a person who is second in command of a given committee, behind the Chairperson");
 		}
 			break;
+			
 		case kMembersSection:
 			sectionName = NSLocalizedStringFromTable(@"Members", @"DataTableUI", @"Cell title for a list of committee members");
 			break;
+			
 		case kInfoSection:
-		default:
+		default: {
 			if (self.committee.parentId.integerValue == -1) 
 				sectionName = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ Committee Info",@"DataTableUI", @"Information for a given legislative committee"),
 							   [self.committee typeString]];
 			else
 				sectionName = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ Subcommittee Info",@"DataTableUI", @"Information for a given legislative subcommittee"),
-							   [self.committee typeString]];			
+							   [self.committee typeString]];
+		}
 			break;
 	}
 	return sectionName;

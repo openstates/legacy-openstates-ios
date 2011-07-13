@@ -13,7 +13,7 @@
 #import <UIKit/UIKit.h>
 
 @class LegislatorObj;
-@interface CommitteeMemberCellView : UIView
+@interface LegislatorCellView : UIView
 {
 }
 
@@ -28,8 +28,9 @@
 @property (nonatomic) BOOL highlighted;
 @property (nonatomic) BOOL useDarkBackground;
 
+@property (nonatomic) BOOL wideSize;
 @property (nonatomic,readonly) CGSize cellSize; 
 
-- (void)setLegislator:(LegislatorObj *)value role:(NSString *)legRole;
+- (void)setLegislator:(LegislatorObj *)value;
 
 @end

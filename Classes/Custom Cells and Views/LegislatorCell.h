@@ -1,6 +1,6 @@
 //
-//	LegislatorMasterCellView.h
-//  Created by Gregory Combs on 8/29/10.
+//  LegislatorMasterCell.h
+//  Created by Gregory Combs on 8/9/10.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
 //
@@ -11,19 +11,16 @@
 //
 
 #import <UIKit/UIKit.h>
-
-extern const CGFloat kLegislatorMasterCellViewWidth;
-extern const CGFloat kLegislatorMasterCellViewHeight;
+#import "LegislatorCellView.h"
 
 @class LegislatorObj;
-@interface LegislatorMasterCellView : UIView
-
-@property (copy, nonatomic) NSString *title;
-@property (copy, nonatomic) NSString *name;
-@property (copy, nonatomic) NSString *tenure;
-@property (nonatomic) BOOL useDarkBackground;
-@property (nonatomic) BOOL highlighted;
+@class LegislatorCellView;
+@interface LegislatorCell : UITableViewCell {
+	
+}
+@property (nonatomic,retain) IBOutlet LegislatorCellView *cellView;
+@property (nonatomic,assign) NSString *role;
+@property (nonatomic,readonly) CGSize cellSize;
 
 - (void)setLegislator:(LegislatorObj *)value;
-
 @end

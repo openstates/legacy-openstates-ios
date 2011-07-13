@@ -15,7 +15,7 @@
 #import "LegislatorObj.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
-#import "LegislatorMasterCell.h"
+#import "LegislatorCell.h"
 #import "UIDevice-Hardware.h"
 #import "StatesLegeAppDelegate.h"
 
@@ -143,11 +143,10 @@
 	}
 	static NSString *leg_cell_ID = @"LegislatorQuartz";		
 		
-	LegislatorMasterCell *cell = (LegislatorMasterCell *)[tableView dequeueReusableCellWithIdentifier:leg_cell_ID];
+	LegislatorCell *cell = (LegislatorCell *)[tableView dequeueReusableCellWithIdentifier:leg_cell_ID];
 	
 	if (cell == nil) {
-		cell = [[[LegislatorMasterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:leg_cell_ID] autorelease];
-		//cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
+		cell = [[[LegislatorCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:leg_cell_ID] autorelease];
 		cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
 	}
 	

@@ -17,7 +17,7 @@
 #import "StatesLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 #import "UIDevice-Hardware.h"
-#import "LegislatorMasterCell.h"
+#import "LegislatorCell.h"
 
 @interface LegislatorMasterViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;

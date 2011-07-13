@@ -10,13 +10,12 @@
 //
 //
 
-#import "LegislatorMasterCell.h"
-#import "LegislatorMasterCellView.h"
+#import "LegislatorCell.h"
 #import "LegislatorObj.h"
 #import "DisclosureQuartzView.h"
 
 
-@implementation LegislatorMasterCell
+@implementation LegislatorCell
 @synthesize cellView;
 
 
@@ -24,27 +23,32 @@
 	
 	if ((self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier])) {
 		
-		// Create a time zone view and add it as a subview of self's contentView.
-
-		//UIImage *tempImage = [UIImage imageNamed:@"anchia.png"];
-		//self.imageView.image = tempImage;
-		
 		DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 28.f, 28.f)];
 		self.accessoryView = qv;
 		[qv release];
 		
-		//debug_NSLog(@"content view = %@", self.contentView);
 		CGFloat endX = self.contentView.bounds.size.width - 53.f;
 		CGRect tzvFrame = CGRectMake(53.f, 0.0, endX, self.contentView.bounds.size.height);
-		cellView = [[LegislatorMasterCellView alloc] initWithFrame:tzvFrame];
+		cellView = [[LegislatorCellView alloc] initWithFrame:tzvFrame];
 		cellView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		[self.contentView addSubview:cellView];
 	}
 	return self;
 }
 
+- (CGSize)cellSize {
+	return cellView.cellSize;
+}
 
- - (void)setHighlighted:(BOOL)val animated:(BOOL)animated {               // animate between regular and highlighted state
+- (NSString*)role {
+	return self.cellView.role;
+}
+
+- (void)setRole:(NSString *)value {
+	self.cellView.role = value;
+}
+
+- (void)setHighlighted:(BOOL)val animated:(BOOL)animated {               // animate between regular and highlighted state
 	[super setHighlighted:val animated:animated];
 
 	self.cellView.highlighted = val;
@@ -65,8 +69,6 @@
 - (void)redisplay {
 	[cellView setNeedsDisplay];
 }
-
-
 
 - (void)dealloc {
 	nice_release(cellView);
