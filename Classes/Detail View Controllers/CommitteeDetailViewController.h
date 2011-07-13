@@ -17,7 +17,6 @@
 @interface CommitteeDetailViewController : UITableViewController <UISplitViewControllerDelegate>  {
 	id dataObject;
 	UIPopoverController *masterPopover;
-	IBOutlet UILabel *membershipLab;
 	NSMutableArray *infoSectionArray;
 }
 
@@ -27,5 +26,6 @@
 @property (nonatomic, retain) CommitteeObj *committee;
 @property (nonatomic, retain) UIPopoverController *masterPopover;
 @property (nonatomic, retain) IBOutlet UILabel *membershipLab;
+@property (nonatomic, retain) IBOutlet UILabel *nameLab;
 @property (nonatomic, retain) NSMutableArray *infoSectionArray;
 @end

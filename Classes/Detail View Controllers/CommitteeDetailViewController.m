@@ -37,7 +37,7 @@
 @implementation CommitteeDetailViewController
 
 @synthesize dataObjectID, masterPopover;
-@synthesize membershipLab, infoSectionArray;
+@synthesize membershipLab, nameLab, infoSectionArray;
 
 enum Sections {
     //kHeaderSection = 0,
@@ -73,6 +73,7 @@ CGFloat quartzRowHeight = 73.f;
 
 	self.dataObjectID = nil;
 	self.membershipLab = nil;
+	self.nameLab = nil;
 	self.masterPopover = nil;
 	self.infoSectionArray = nil;
     [super dealloc];
@@ -193,7 +194,8 @@ CGFloat quartzRowHeight = 73.f;
 		
 		[self buildInfoSectionArray];
 		self.navigationItem.title = newObj.committeeName;
-		
+		self.nameLab.text = newObj.committeeName;
+
 		[self calcCommitteePartisanship];
 		
 		[self.tableView reloadData];
@@ -340,13 +342,12 @@ CGFloat quartzRowHeight = 73.f;
 		repubCount = [repubs count];
 	democCount = [positions count] - repubCount;
 	
-	NSString *repubString = stringForParty(REPUBLICAN, TLReturnAbbrevPlural);
-	NSString *democString = stringForParty(DEMOCRAT, TLReturnAbbrevPlural);
-	if (repubCount == 1)
-		repubString = stringForParty(REPUBLICAN, TLReturnAbbrev);
-	if (democCount == 1)
-		democString = stringForParty(DEMOCRAT, TLReturnAbbrev);
-	
+	NSString *repubString = stringForParty(REPUBLICAN, TLReturnFull);
+	NSString *democString = stringForParty(DEMOCRAT, TLReturnFull);
+	if (repubCount != 1)
+		repubString = [repubString stringByAppendingString:@"s"];
+	if (democCount != 1)
+		democString = [democString stringByAppendingString:@"s"];
 	
 	self.membershipLab.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%d %@ and %d %@", @"DataTableUI", @"As in, 43 Republicans and 1 Democrat"), 
 							   repubCount, repubString, democCount, democString];
