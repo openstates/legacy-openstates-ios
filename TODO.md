@@ -1,17 +1,17 @@
 Development Milestones
 =======================
  1. **(done)** Move project development to GitHub.  
-- **(done)** Clean up code a little, including removal of any swearing in comments.  
-- **(done)** Upload sources.  
-- **(done)** Point repository to any existing GitHub submodules, where possible.   
-- **(done)** Move to Creative Commons licensing.  
-- **(done)** Create a TexLege branch/fork of the public repository.  
+- Clean up code a little, including removal of any swearing in comments.  
+- Upload sources.  
+- Point repository to any existing GitHub submodules, where possible.   
+- Move to Creative Commons licensing.  
+- Create a TexLege branch/fork of the public repository.  
   
  
- 2. Remove TexLege specific application features:  
+ 2. **(done)** Remove TexLege specific application features:  
 - Partisanship scores, scales, and historical charts.  
 - Capitol Building Maps.  
-- Web Resources / Web Links.  
+- Web Resources / Web Links (specific to Texas). Keeping stubs around for future use.  
 
 
  3. Remove State Specific Data Assumptions.  
