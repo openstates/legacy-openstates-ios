@@ -56,7 +56,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 
 @implementation CalendarEventsLoader
 
-@synthesize isFresh, loadingStatus;
+@synthesize loadingStatus;
 
 + (id)sharedCalendarEventsLoader
 {
@@ -69,7 +69,6 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 
 - (id)init {
 	if ((self=[super init])) {
-		isFresh = NO;
 		_events = nil;
 		updated = nil;
 		eventState = nil;
@@ -171,27 +170,45 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 //									 kCalendarEventsTypeCommitteeValue, kCalendarEventsTypeKey,	// right now, lets just do committee meetings
 									 SUNLIGHT_APIKEY, @"apikey",
 									 nil];
-		RKRequest *request = [[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/events" queryParams:queryParams delegate:self];
+		RKRequest *request = [[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient] get:@"/events" 
+																					queryParams:queryParams 
+																					   delegate:self];
 		if (request) {
 			request.userData = eventState;
 		}
 	}
-	else if (self.loadingStatus != LOADING_NO_NET) {
+	else if (loadingStatus != LOADING_NO_NET) {
 		self.loadingStatus = LOADING_NO_NET;
 		[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyError object:nil];	
 	}	
 }
 
-- (NSArray*)events {
-	if (isLoading && (updated && ([[NSDate date] timeIntervalSinceDate:updated] < 1800))) // if we're over a half-hour old, let's refresh
-		return _events;	// we're already working on it
+- (BOOL)isFresh {
+	// if we're over a half-hour old, it's time to refresh
+	return (updated && ([[NSDate date] timeIntervalSinceDate:updated] < 1800));
+}
 
-	if (!eventState || self.loadingStatus > LOADING_NO_NET || !_events || !isFresh) {
-		isFresh = NO;
-		debug_NSLog(@"CalendarEventsLoader is stale, need to refresh");
+- (NSArray*)events {
+	
+	BOOL doLoad = YES;
+	
+	if ( (self.isFresh) &&			// IF we've updated recently AND
+			((isLoading)	||			// we're already loading
+			 (eventState && _events))	// OR we have valid info for the state and our list of events
+		)
+	{	
+		doLoad = NO;			// THEN we don't need to reload yet.
+	
+		// Do we want to do something about loadingStatus == LOADING_NO_NET ???
+	}
 		
+	if (doLoad) {
+		
+		debug_NSLog(@"CalendarEventsLoader is stale, need to refresh");
+
 		[self loadEvents:nil];
 	}
+	
 	return _events;
 }
 
@@ -221,7 +238,6 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	}
 	
 	isLoading = NO;
-	isFresh = NO;
 
 	nice_release(_events);
 	
@@ -229,14 +245,16 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	
 	NSString *thePath = [self pathToEventCacheWithRequest:request];
 	
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	if ([fileManager fileExistsAtPath:thePath]) {
+	if ([[NSFileManager defaultManager] fileExistsAtPath:thePath]) {
+		
 		debug_NSLog(@"EventsLoader: using cached events in the documents folder.");
-		_events = [[NSMutableArray arrayWithContentsOfFile:thePath] retain];
+		
+		_events = [[NSMutableArray alloc] initWithContentsOfFile:thePath];
 	}
 	if (!_events) {
-		_events = [[NSMutableArray array] retain];	// at least create an empty array
+		_events = [[NSMutableArray alloc] init];	// at least create an empty array
 	}
+	
 	if (self.loadingStatus != LOADING_NO_NET) {
 		self.loadingStatus = LOADING_NO_NET;
 		[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyError object:nil];
@@ -279,7 +297,6 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 			[self request:request didFailLoadWithError:nil];
 		}*/
 
-		isFresh = YES;
 		nice_release(updated);
 		updated = [[NSDate date] retain];
 					
@@ -333,9 +350,9 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	
 	NSString *announceUrl = [loadedEvent objectForKey:kCalendarEventsAnnouncementURLKey]; // "link"
 	if (IsEmpty(announceUrl)) {
-		NSArray *sources = [loadedEvent valueForKey:@"sources"];
+		NSArray *sources = [loadedEvent valueForKey:kCalendarEventsSourcesKey];
 		NSDictionary *sourceDict = [sources objectAtIndex:0];
-		announceUrl = [sourceDict valueForKey:@"url"];		// "sources.url"
+		announceUrl = [sourceDict valueForKey:kCalendarEventsURLKey];		// "sources.url"
 		
 		if (!IsEmpty(announceUrl)) {
 			[loadedEvent setObject:announceUrl forKey:kCalendarEventsAnnouncementURLKey];  // set a link if we have one

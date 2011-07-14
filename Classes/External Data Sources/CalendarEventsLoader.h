@@ -17,7 +17,7 @@
 
 #define kCalendarEventsNotifyError	@"CALENDAR_EVENTS_ERROR"
 #define kCalendarEventsNotifyLoaded	KalDataSourceChangedNotification 
-//@"CALENDAR_EVENTS_LOADED"
+									// @"CALENDAR_EVENTS_LOADED"
 
 #define kCalendarEventsCacheFile		@"EventsCache.plist"
 #define kTLEventKitKey					@"TLEventKit"
@@ -28,54 +28,60 @@
 @interface CalendarEventsLoader : NSObject <RKRequestDelegate> {
 	NSMutableArray *_events;
 	NSString *eventState;
-	
-	BOOL isFresh, isLoading;
 	NSDate *updated;
-	
+	BOOL isLoading;
 	NSInteger loadingStatus;
 
 	EKEventStore *eventStore;
 }
+
 + (CalendarEventsLoader *)sharedCalendarEventsLoader;
 - (void)loadEvents:(id)sender;
 
 - (NSArray *)calendarEventsForType:(NSString *)eventType;
+
 - (void)addEventToiCal:(NSDictionary *)eventDict delegate:(id)delegate;
 - (void)addAllEventsToiCal:(id)sender;
 
 @property (nonatomic,readonly) NSArray *events;
-@property (nonatomic) BOOL isFresh;
-@property (nonatomic) NSInteger loadingStatus;
+@property (nonatomic,readonly) BOOL isFresh;		// have we updated recently?
+@property (nonatomic) NSInteger loadingStatus;		// used to trigger UI elements indicating "loading" or "error"
 
-#define kCalendarEventsIDKey				@"id"
-#define kCalendarEventsWhenKey				@"when"			// In UTC ... so subtract for local time zone
-#define kCalendarEventsEndKey				@"end"			// In UTC ... so subtract for local time zone
-#define kCalendarEventsDescriptionKey		@"description"
-#define kCalendarEventsLocationKey			@"location"
-#define kCalendarEventsTypeKey				@"type"			// we want to limit this to "committee:meeting"
-#define kCalendarEventsSourceURLKeyPath		@"sources.url"
-#define kCalendarEventsAnnouncementURLKey	@"link"
-#define kCalendarEventsNotesKey				@"notes"		// holdes the ascii text of the announcement
-
-#define kCalendarEventsAllDayKey					@"all_day"		// BOOL = true if we can't parse a time from the header
-#define kCalendarEventsCanceledKey					@"canceled"		// BOOL = true if the event has been cancelled
-#define kCalendarEventsStatusKey					@"status"		// BOOL = true if the event has been cancelled
-
-#define kCalendarEventsParticipantsKey			@"participants"			//Array of participant dictionaries
-#define kCalendarEventsParticipantNameKey		@"participant"			//name of the participant
-#define kCalendarEventsParticipantTypeKey		@"type"					//name of the participant
-#define kCalendarEventsParticipantNameKeyPath	@"participants.participant"	// assuming type = "committee:meeting"
-#define kCalendarEventsParticipantChamberKeyPath @"participants.chamber"	// assuming type = "committee:meeting"
-#define kCalendarEventsParticipantTypeKeyPath	@"participants.type"	// assuming type = "committee:meeting"
-#define kCalendarEventsCommitteeNameKey			@"committee"			//simplified access to participants name in case of committees
-#define kCalendarEventsTypeCommitteeValue		@"committee:meeting"
-#define kCalendarEventsTypeChamberValue			@"chamber"				// NSNumber of chamber
-
-// CUSTOM
-#define kCalendarEventsLocalizedDateKey				@"date"			// NSDate in local time zone
-#define kCalendarEventsLocalizedDateStringKey		@"dateString"	// 12/31/11
-#define kCalendarEventsLocalizedTimeStringKey		@"timeString"	// 12:31pm
-#define kCalendarEventsSummaryTextKey				@"summaryText"
 @end
+
+/***** Event Dictionary Keys : most of these are native to the Open States API *****/
+
+#define kCalendarEventsIDKey					@"id"				// Event ID from open states
+#define kCalendarEventsWhenKey					@"when"				// In UTC ... so subtract for local time zone
+#define kCalendarEventsEndKey					@"end"				// In UTC ... so subtract for local time zone
+#define kCalendarEventsDescriptionKey			@"description"
+#define kCalendarEventsLocationKey				@"location"
+#define kCalendarEventsTypeKey					@"type"				// as in "committee:meeting"
+#define kCalendarEventsSourcesKey				@"sources"
+#define kCalendarEventsURLKey					@"url"
+#define kCalendarEventsAnnouncementURLKey		@"link"
+#define kCalendarEventsNotesKey					@"notes"			// holdes the ascii text of the announcement
+
+#define kCalendarEventsAllDayKey				@"all_day"			// BOOL = true if we can't parse a time from the header
+#define kCalendarEventsCanceledKey				@"canceled"			// BOOL = true if the event has been cancelled
+#define kCalendarEventsStatusKey				@"status"			// BOOL = true if the event has been cancelled
+
+#define kCalendarEventsParticipantsKey			@"participants"		//Array of participant dictionaries
+#define kCalendarEventsParticipantNameKey		@"participant"		//name of the participant
+#define kCalendarEventsParticipantTypeKey		@"type"				//name of the participant
+#define kCalendarEventsTypeCommitteeValue		@"committee:meeting"
+
+// Convenience definitions to expedite retrieving values of interest, assuming type = "committee:meeting"
+#define kCalendarEventsParticipantNameKeyPath		@"participants.participant"
+#define kCalendarEventsParticipantChamberKeyPath	@"participants.chamber"
+#define kCalendarEventsParticipantTypeKeyPath		@"participants.type"
+
+// Custom keys that are specific to our own event standardization process
+#define kCalendarEventsCommitteeNameKey				@"committee"		// Direct access to participants name in case of committees
+#define kCalendarEventsTypeChamberValue				@"chamber"			// NSNumber of chamber
+#define kCalendarEventsLocalizedDateKey				@"date"				// NSDate in local time zone
+#define kCalendarEventsLocalizedDateStringKey		@"dateString"		// 12/31/11
+#define kCalendarEventsLocalizedTimeStringKey		@"timeString"		// 12:31pm
+#define kCalendarEventsSummaryTextKey				@"summaryText"		// A "Who, What, When, Where" summary for display
 
 NSComparisonResult sortByDate(id firstItem, id secondItem, void *context);
