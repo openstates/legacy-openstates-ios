@@ -28,7 +28,6 @@
 #import "LegislatorObj.h"
 #import "DistrictMapObj.h"
 #import "DataModelUpdateManager.h"
-#import "BillMetadataLoader.h"
 #import "CalendarEventsLoader.h"
 
 #import "TVOutManager.h"
@@ -413,10 +412,8 @@ NSInteger kNoSelection = -1;
 - (void)runOnEveryAppStart {
 	self.appIsQuitting = NO;
 	
-	[[StateMetaLoader sharedStateMeta] setSelectedState:@"tx"];	//ca
+	[[StateMetaLoader sharedStateMeta] setSelectedState:@"ut"];	//ca
 	//[[StateMetaLoader sharedStateMeta] setSelectedSession:@"20112012"];
-
-	[[BillMetadataLoader sharedBillMetadataLoader] loadMetadata:self];
 	
 	if (![self isDatabaseResetNeeded]) {
 		analyticsOptInController = [[AnalyticsOptInAlertController alloc] init];
