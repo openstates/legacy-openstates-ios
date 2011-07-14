@@ -18,7 +18,6 @@
 #import "BillsListViewController.h"
 #import "BillSearchDataSource.h"
 #import "TexLegeBadgeGroupCell.h"
-#import "BillMetadataLoader.h"
 #import "OpenLegislativeAPIs.h"
 #import "JSONKit.h"
 #import "LoadingCell.h"
@@ -274,11 +273,11 @@
 
 - (void)createChamberControl {	
 	UISegmentedControl *ctl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:
-																		 stringForChamber(BOTH_CHAMBERS, TLReturnFull), 
-																		stringForChamber(HOUSE, TLReturnFull), 
-																		 stringForChamber(SENATE, TLReturnFull), 
+																		 stringForChamber(BOTH_CHAMBERS, TLReturnAbbrev), 
+																		stringForChamber(HOUSE, TLReturnAbbrev), 
+																		 stringForChamber(SENATE, TLReturnAbbrev), 
 																		 nil]];
-	ctl.frame = CGRectMake(0.0, 0.0, 163.0, 30.0);
+	ctl.frame = CGRectMake(0.0, 0.0, 220, 30.0);
 	ctl.autoresizesSubviews = YES;
 	ctl.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
 	ctl.clipsToBounds = NO;

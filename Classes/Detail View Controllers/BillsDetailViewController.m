@@ -24,7 +24,6 @@
 #import "LocalyticsSession.h"
 #import "NSDate+Helper.h"
 #import "JSONKit.h"
-#import "BillMetadataLoader.h"
 #import "DDActionHeaderView.h"
 #import "TexLegeTheme.h"
 #import "TexLegeStandardGroupCell.h"
@@ -238,19 +237,6 @@ enum _billSections {
 	NSString *session = [bill objectForKey:@"session"];
 	NSString *billTitle = [NSString stringWithFormat:@"(%@) %@", session, [bill objectForKey:@"bill_id"]];
 	self.navigationItem.title = billTitle;
-	
-	@try {
-		NSArray *idComponents = [[bill objectForKey:@"bill_id"] componentsSeparatedByString:@" "];
-		
-		NSString *longTitle = [[[[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:@"types"] 
-							   findWhereKeyPath:@"title" 
-							   equals:[idComponents objectAtIndex:0]] objectForKey:@"titleLong"];
-		billTitle = [NSString stringWithFormat:@"(%@) %@ %@", 
-					 session, longTitle, [idComponents lastObject]];
-		
-	}
-	@catch (NSException * e) {
-	}
 	self.actionHeader.titleLabel.text = billTitle;
 	[self.actionHeader setNeedsDisplay];
 	

@@ -13,15 +13,18 @@
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
 
+#define USE_BILLTYPES_AS_SECTIONS 0
+
 #define kBillSearchNotifyDataError	@"BILLSEARCH_DATA_ERROR"
 #define kBillSearchNotifyDataLoaded	@"BILLSEARCH_DATA_LOADED"
 
 @interface BillSearchDataSource : NSObject <UITableViewDataSource, RKRequestDelegate> {
+	NSMutableDictionary* _sections;	
 	NSMutableArray* _rows;
-	NSMutableDictionary* _sections;
 	IBOutlet UISearchDisplayController *searchDisplayController;
 	IBOutlet UITableViewController *delegateTVC;
 	NSInteger loadingStatus;
+
 }
 @property (nonatomic, retain) IBOutlet UISearchDisplayController *searchDisplayController;
 @property (nonatomic, retain) IBOutlet UITableViewController *delegateTVC;

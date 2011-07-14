@@ -191,7 +191,7 @@
 }
 
 - (NSString *)latestSession {
-	return [_sessions lastObject];
+	return [self.sessions lastObject];
 }
 
 - (NSString *)selectedSession {

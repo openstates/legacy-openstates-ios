@@ -14,7 +14,6 @@
 #import "TexLegeReachability.h"
 #import "TexLegeTheme.h"
 #import "TexLegeStandardGroupCell.h"
-#import "BillMetadataLoader.h"
 #import "OpenLegislativeAPIs.h"
 #import "TexLegeLibrary.h"
 #import "UtilityMethods.h"
@@ -23,6 +22,21 @@
 #import "LocalyticsSession.h"
 #import "LoadingCell.h"
 #import "StateMetaLoader.h"
+
+#if USE_BILLTYPES_AS_SECTIONS
+#import "BillMetadataLoader.h"
+
+#warning state specific (Bill IDs)
+
+NSString *billTypeStringFromBillID(NSString *billID) {
+	NSArray *words = [billID componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+	if (!IsEmpty(words))
+		return [words objectAtIndex:0];
+	else
+		return nil;
+}
+
+#endif
 
 @implementation BillSearchDataSource
 @synthesize searchDisplayController, delegateTVC;
@@ -73,22 +87,33 @@
  	[super dealloc];
 }
 
+#if USE_BILLTYPES_AS_SECTIONS
 // This is just a short cut, we wind up using this array several times.  Perhaps we should remember it instead of recreating?
 - (NSArray *) billTypes {
 	return [[_sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];	
 }
+#endif
 
 // return the map at the index in the array
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
+	
+#if USE_BILLTYPES_AS_SECTIONS
 	NSMutableDictionary *bill = [[_sections valueForKey:[[self billTypes] objectAtIndex:indexPath.section]] 
 								 objectAtIndex:indexPath.row];
 	return bill;
+#else
+	return [_rows objectAtIndex:indexPath.row];
+#endif
+
 }
 
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject {
 	if (dataObject && [dataObject isKindOfClass:[NSDictionary class]] && [dataObject objectForKey:@"bill_id"]) {
+
+#if USE_BILLTYPES_AS_SECTIONS
 		NSString *typeString = billTypeStringFromBillID([dataObject objectForKey:@"bill_id"]);
 		if (!IsEmpty(typeString)) {
+
 			NSMutableArray *sectionRow = [_sections objectForKey:typeString];
 			if (!IsEmpty(sectionRow)) {
 				NSArray *sortedSections = [self billTypes];
@@ -96,15 +121,22 @@
 				NSInteger row = [sectionRow indexOfObject:dataObject];
 				return [NSIndexPath indexPathForRow:row inSection:section];
 			}
+			
 		}
+#else
+		NSInteger row = [_rows indexOfObject:dataObject];
+		return [NSIndexPath indexPathForRow:row inSection:0];
+#endif
 	}
 	return nil;
 }
 
+#if USE_BILLTYPES_AS_SECTIONS
 - (void) generateSections {
 	BOOL found = NO;
 	[_sections removeAllObjects];
 	
+
     // Loop through the bills and create our keys
     for (NSDictionary *bill in _rows)
     {				
@@ -131,7 +163,6 @@
 		if (!IsEmpty(typeString))
 			[[_sections objectForKey:typeString] addObject:bill];
     }
-	
 	// Sort each section array
     for (NSString *key in [_sections allKeys])
     {
@@ -142,17 +173,24 @@
 		}];		
     }
 }
+#endif
 
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+#if USE_BILLTYPES_AS_SECTIONS
 	if (IsEmpty(_sections))
 		return 1;
 	return [[_sections allKeys] count];
+#else
+	return 1;
+#endif
 }
 
+
+#if USE_BILLTYPES_AS_SECTIONS
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{	
+{		
 	if (IsEmpty(_sections) || IsEmpty([self billTypes]))
 		return @"";
 	
@@ -167,11 +205,18 @@
 		return nil;
     return [self billTypes];
 }
+#endif
 
 - (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section 
 {		
+#if USE_BILLTYPES_AS_SECTIONS
+
 	if (NO == IsEmpty(_sections))
 		return [[_sections valueForKey:[[self billTypes] objectAtIndex:section]] count];
+#else
+	if (NO == IsEmpty(_rows))
+		return [_rows count];
+#endif
 	else if (useLoadingDataCell && loadingStatus > LOADING_IDLE)
 		return 1;
 	else
@@ -184,7 +229,7 @@
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 		
 	// Configure the cell.
-	//NSDictionary *bill = [_rows objectAtIndex:indexPath.row];
+
 	NSDictionary *bill = [self dataObjectForIndexPath:indexPath];
 	if (!bill || [[NSNull null] isEqual:bill])
 		return;  // ?????
@@ -263,32 +308,10 @@
 	searchString = [searchString uppercaseString];
 	NSMutableString *queryString = [NSMutableString stringWithString:@"/bills"];
 	
-	BOOL isBillID = NO;
 	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
 	if (IsEmpty(meta.selectedState) || IsEmpty(meta.selectedSession))
 		return;
-	
-	for (NSDictionary *type in [[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:kBillMetadataTypesKey]) {
-		NSString *billType = [type objectForKey:kBillMetadataTitleKey];
-	 
-		if (billType && [searchString hasPrefix:billType]) {
-			NSString *tail = [searchString substringFromIndex:[billType length]];
-			if (tail) {
-				tail = [tail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-				
-				if ([tail integerValue] > 0) {
-					isBillID = YES;
-
-#warning state specific (Bill IDs)
-					NSNumber *billNumber = [NSNumber numberWithInteger:[tail integerValue]];		// we specifically convolute this to ensure we're grabbing only the numerical of the string
-					[queryString appendFormat:@"/%@/%@/%@%%20%@", meta.selectedState, meta.selectedSession, billType, billNumber];
-					
-					break;
-				}
-			}			
-		}
-	}
-	
+		
 	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 										@"session", @"search_window",
 										meta.selectedState, @"state",
@@ -302,9 +325,7 @@
 	if (IsEmpty(searchString))
 		searchString = @"";
 	
-	if (!isBillID){
-		[queryParams setObject:searchString forKey:@"q"];
-	}
+	[queryParams setObject:searchString forKey:@"q"];
 	
 	[self startSearchWithQueryString:queryString params:queryParams];
 		
@@ -455,7 +476,9 @@
 			}
 		}
 				
+#if USE_BILLTYPES_AS_SECTIONS
 		[self generateSections];
+#endif
 		
 		if (searchDisplayController)
 			[self.searchDisplayController.searchResultsTableView reloadData];

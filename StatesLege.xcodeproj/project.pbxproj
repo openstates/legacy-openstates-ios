@@ -477,8 +477,6 @@
 		376DFEB613492FF700360BF4 /* LoadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 376DFEB513492FF700360BF4 /* LoadingCell.m */; };
 		376DFEB713492FF800360BF4 /* LoadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 376DFEB513492FF700360BF4 /* LoadingCell.m */; };
 		376F62D1132972E200F2B3DA /* BillsCategoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376F62D0132972E200F2B3DA /* BillsCategoriesViewController.m */; };
-		376F62D4132973D800F2B3DA /* BillMetadata.json in Resources */ = {isa = PBXBuildFile; fileRef = 376F62D3132973D800F2B3DA /* BillMetadata.json */; };
-		376F62D5132973D800F2B3DA /* BillMetadata.json in Resources */ = {isa = PBXBuildFile; fileRef = 376F62D3132973D800F2B3DA /* BillMetadata.json */; };
 		376F632D13298DE000F2B3DA /* BillsCategoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376F62D0132972E200F2B3DA /* BillsCategoriesViewController.m */; };
 		377074DB1397B2B400E82CA8 /* SVGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 377074D51397B2B400E82CA8 /* SVGeocoder.m */; };
 		377074DC1397B2B400E82CA8 /* SVPlacemark.m in Sources */ = {isa = PBXBuildFile; fileRef = 377074D71397B2B400E82CA8 /* SVPlacemark.m */; };
@@ -1093,8 +1091,6 @@
 		37A72064122EB9A30015AAE0 /* TexLegeInfoImage~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 37A72062122EB9A30015AAE0 /* TexLegeInfoImage~ipad.png */; };
 		37A720AE122ECBBD0015AAE0 /* IconWood_80.png in Resources */ = {isa = PBXBuildFile; fileRef = 37A720AC122ECBBD0015AAE0 /* IconWood_80.png */; };
 		37A720B4122ECD3B0015AAE0 /* TexLegeInfo~iphone.htm in Resources */ = {isa = PBXBuildFile; fileRef = 37A720B3122ECD3B0015AAE0 /* TexLegeInfo~iphone.htm */; };
-		37A8F14513315D4D00085AAF /* BillMetadataLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A8F14413315D4D00085AAF /* BillMetadataLoader.m */; };
-		37A8F14613315D4D00085AAF /* BillMetadataLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A8F14413315D4D00085AAF /* BillMetadataLoader.m */; };
 		37AD57BB11DA651700D68934 /* CommitteeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37AD57B911DA651500D68934 /* CommitteeDetailViewController.m */; };
 		37AD57BC11DA651700D68934 /* CommitteeDetailViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37AD57BA11DA651700D68934 /* CommitteeDetailViewController~iphone.xib */; };
 		37B253E512EBF681000B6EE2 /* StafferObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B253E412EBF681000B6EE2 /* StafferObj+RestKit.m */; };
@@ -1892,7 +1888,6 @@
 		376DFEB513492FF700360BF4 /* LoadingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingCell.m; sourceTree = "<group>"; };
 		376F62CF132972E200F2B3DA /* BillsCategoriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsCategoriesViewController.h; sourceTree = "<group>"; };
 		376F62D0132972E200F2B3DA /* BillsCategoriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsCategoriesViewController.m; sourceTree = "<group>"; };
-		376F62D3132973D800F2B3DA /* BillMetadata.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = BillMetadata.json; path = SeedDB/BillMetadata.json; sourceTree = "<group>"; };
 		377074D41397B2B400E82CA8 /* SVGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVGeocoder.h; sourceTree = "<group>"; };
 		377074D51397B2B400E82CA8 /* SVGeocoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVGeocoder.m; sourceTree = "<group>"; };
 		377074D61397B2B400E82CA8 /* SVPlacemark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVPlacemark.h; sourceTree = "<group>"; };
@@ -1994,8 +1989,6 @@
 		37A72062122EB9A30015AAE0 /* TexLegeInfoImage~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TexLegeInfoImage~ipad.png"; path = "Resources-iPad/TexLegeInfoImage~ipad.png"; sourceTree = SOURCE_ROOT; };
 		37A720AC122ECBBD0015AAE0 /* IconWood_80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconWood_80.png; path = "Resources/Default and Icon/IconWood_80.png"; sourceTree = SOURCE_ROOT; };
 		37A720B3122ECD3B0015AAE0 /* TexLegeInfo~iphone.htm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "TexLegeInfo~iphone.htm"; path = "Data/TexLegeInfo~iphone.htm"; sourceTree = SOURCE_ROOT; };
-		37A8F14313315D4D00085AAF /* BillMetadataLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillMetadataLoader.h; sourceTree = "<group>"; };
-		37A8F14413315D4D00085AAF /* BillMetadataLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillMetadataLoader.m; sourceTree = "<group>"; };
 		37AD57B811DA651300D68934 /* CommitteeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommitteeDetailViewController.h; path = "Classes/Detail View Controllers/CommitteeDetailViewController.h"; sourceTree = SOURCE_ROOT; };
 		37AD57B911DA651500D68934 /* CommitteeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommitteeDetailViewController.m; path = "Classes/Detail View Controllers/CommitteeDetailViewController.m"; sourceTree = SOURCE_ROOT; };
 		37AD57BA11DA651700D68934 /* CommitteeDetailViewController~iphone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "CommitteeDetailViewController~iphone.xib"; path = "Resources/CommitteeDetailViewController~iphone.xib"; sourceTree = "<group>"; };
@@ -2434,8 +2427,6 @@
 				3770C66713A49BE800906021 /* BillActionParser.m */,
 				370EAD2D1338028C007788BC /* OpenLegislativeAPIs.h */,
 				370EAD301338029E007788BC /* OpenLegislativeAPIs.m */,
-				37A8F14313315D4D00085AAF /* BillMetadataLoader.h */,
-				37A8F14413315D4D00085AAF /* BillMetadataLoader.m */,
 				37CD09AF13A2A6F100F4C68B /* StateMetaLoader.h */,
 				37CD09B013A2A6F100F4C68B /* StateMetaLoader.m */,
 				370EAC351337E3CF007788BC /* TexLegeObjectCache.h */,
@@ -2825,7 +2816,6 @@
 		37A0E4870FD2DFB1009B65F7 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				376F62D3132973D800F2B3DA /* BillMetadata.json */,
 				37735C22132310E90033F343 /* SeedDB */,
 				37CF6A7412262B4600456D29 /* planH01369.kml */,
 				37CF6A7512262B4600456D29 /* planS01188.kml */,
@@ -4256,7 +4246,6 @@
 				37F4926F1311C556005D5DE1 /* BillsDetailViewController~iphone.xib in Resources */,
 				371E96F6131211E50035439E /* BillsDetailViewController~ipad.xib in Resources */,
 				37735E23132363930033F343 /* TexLegeSeed.sqlite in Resources */,
-				376F62D5132973D800F2B3DA /* BillMetadata.json in Resources */,
 				37F2C9F21343AD45001D9D7B /* starButtonLargeOff.png in Resources */,
 				37F2C9F31343AD45001D9D7B /* starButtonLargeOff@2x.png in Resources */,
 				37F2C9F41343AD45001D9D7B /* starButtonLargeOn.png in Resources */,
@@ -4757,7 +4746,6 @@
 				37735C2F132310E90033F343 /* LegislatorObj.json in Resources */,
 				37735C30132310E90033F343 /* LinkObj.json in Resources */,
 				37735C31132310E90033F343 /* StafferObj.json in Resources */,
-				376F62D4132973D800F2B3DA /* BillMetadata.json in Resources */,
 				37F2C9EE1343AD45001D9D7B /* starButtonLargeOff.png in Resources */,
 				37F2C9EF1343AD45001D9D7B /* starButtonLargeOff@2x.png in Resources */,
 				37F2C9F01343AD45001D9D7B /* starButtonLargeOn.png in Resources */,
@@ -4910,7 +4898,6 @@
 				3794A781131CD7FA00D0B648 /* TexLege 4.xcdatamodel in Sources */,
 				376F632D13298DE000F2B3DA /* BillsCategoriesViewController.m in Sources */,
 				37D38B10132ECFFB002F1730 /* BillsListViewController.m in Sources */,
-				37A8F14613315D4D00085AAF /* BillMetadataLoader.m in Sources */,
 				371FB1D91333B43C0003740A /* CalendarEventsLoader.m in Sources */,
 				370EAC381337E3CF007788BC /* TexLegeObjectCache.m in Sources */,
 				370EAD321338029E007788BC /* OpenLegislativeAPIs.m in Sources */,
@@ -5020,7 +5007,6 @@
 				37735BF41323104A0033F343 /* TexLege 4.xcdatamodel in Sources */,
 				376F62D1132972E200F2B3DA /* BillsCategoriesViewController.m in Sources */,
 				37D38B0F132ECFFA002F1730 /* BillsListViewController.m in Sources */,
-				37A8F14513315D4D00085AAF /* BillMetadataLoader.m in Sources */,
 				371FB1D81333B43C0003740A /* CalendarEventsLoader.m in Sources */,
 				370EAC371337E3CF007788BC /* TexLegeObjectCache.m in Sources */,
 				370EAD311338029E007788BC /* OpenLegislativeAPIs.m in Sources */,

@@ -40,18 +40,10 @@ NSString *abbreviateString(NSString *inString) {
 	return outString;
 }
 
-NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {	
+NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
 	NSDictionary *stateMeta = [[StateMetaLoader sharedStateMeta] stateMetadata];
 	
-	NSString *chamberName = nil;
-	if (NO == IsEmpty(stateMeta)) {
-		if (chamber == SENATE)
-			chamberName = [stateMeta objectForKey:kMetaUpperChamberNameKey];
-		else if (chamber == HOUSE) {
-			chamberName = [stateMeta objectForKey:kMetaLowerChamberNameKey];
-		}
-	}
-	
+	NSString *chamberName = [StateMetaLoader nameForChamber:chamber];	
 	
 	if (IsEmpty(chamberName)) {	// in case we didn't get it already
 		switch (chamber) {
@@ -180,15 +172,6 @@ NSString *stringForParty(NSInteger party, TLStringReturnType type) {
 	return partyString;
 }
 
-#warning state specific (Bill IDs)
-
-NSString *billTypeStringFromBillID(NSString *billID) {
-	NSArray *words = [billID componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-	if (!IsEmpty(words))
-		return [words objectAtIndex:0];
-	else
-		return nil;
-}
 
 NSString * watchIDForBill(NSDictionary *aBill) {
 	if (aBill && [aBill objectForKey:@"session"] && [aBill objectForKey:@"bill_id"])
