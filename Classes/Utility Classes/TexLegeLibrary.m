@@ -50,16 +50,6 @@ NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
 		else if (chamber == HOUSE) {
 			chamberName = [stateMeta objectForKey:kMetaLowerChamberNameKey];
 		}
-		if (NO == IsEmpty(chamberName)) {	// shorten the thing if its a couple of sentences long
-			chamberName = abbreviateString(chamberName);	
-			// Just shortens it to the first word (at least that's how we set it up in the file
-			
-			/*
-			NSArray *words = [chamberName componentsSeparatedByString:@" "];
-			if ([words count] > 1 && [[words objectAtIndex:0] length] > 4) { // just to make sure we have a decent, single name
-				chamberName = [words objectAtIndex:0];
-			}*/
-		}
 	}
 	
 	
@@ -80,13 +70,16 @@ NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
 		}
 	}
 	
+	if (type == TLReturnAbbrev)
+		return abbreviateString(chamberName);
+	
 	if (type == TLReturnFull)
 		return chamberName;
 	
 	if (type == TLReturnInitial)
 		return stringInitial(chamberName, YES);
 	
-	if (type == TLReturnAbbrev || type == TLReturnTitle ) {
+	if (type == TLReturnTitle ) {
 		NSString *title = nil;
 		
 		if (chamber == HOUSE || chamber == SENATE) {
@@ -105,15 +98,11 @@ NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
 				case HOUSE:
 					title = NSLocalizedStringFromTable(@"Representative", @"DataTableUI", @"");
 					break;
-				case BOTH_CHAMBERS:
 				case JOINT:
 					title = NSLocalizedStringFromTable(@"Joint", @"DataTableUI", @"As in a joint committee");
 					break;
 			}
 		}
-		
-		if (type == TLReturnAbbrev && NO == IsEmpty(title))
-			title = abbreviateString(title);			
 		
 		return title;
 	

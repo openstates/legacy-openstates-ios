@@ -10,8 +10,6 @@
 //
 //
 
-#define OPENAPIS_DEFAULT_SESSION		@"82"
-
 // Legislative Chamber / Legislator Type
 enum kChambers {
     BOTH_CHAMBERS = 0,
