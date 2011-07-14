@@ -265,7 +265,7 @@
 	
 	BOOL isBillID = NO;
 	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
-	if (IsEmpty(meta.selectedState) || IsEmpty(meta.currentSession))
+	if (IsEmpty(meta.selectedState) || IsEmpty(meta.selectedSession))
 		return;
 	
 	for (NSDictionary *type in [[[BillMetadataLoader sharedBillMetadataLoader] metadata] objectForKey:kBillMetadataTypesKey]) {
@@ -281,7 +281,7 @@
 
 #warning state specific (Bill IDs)
 					NSNumber *billNumber = [NSNumber numberWithInteger:[tail integerValue]];		// we specifically convolute this to ensure we're grabbing only the numerical of the string
-					[queryString appendFormat:@"/%@/%@/%@%%20%@", meta.selectedState, meta.currentSession, billType, billNumber];
+					[queryString appendFormat:@"/%@/%@/%@%%20%@", meta.selectedState, meta.selectedSession, billType, billNumber];
 					
 					break;
 				}

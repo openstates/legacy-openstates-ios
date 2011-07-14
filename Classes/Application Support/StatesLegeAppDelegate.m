@@ -413,10 +413,10 @@ NSInteger kNoSelection = -1;
 - (void)runOnEveryAppStart {
 	self.appIsQuitting = NO;
 	
-	[[StateMetaLoader sharedStateMeta] setSelectedState:@"tx"];
+	[[StateMetaLoader sharedStateMeta] setSelectedState:@"tx"];	//ca
+	//[[StateMetaLoader sharedStateMeta] setSelectedSession:@"20112012"];
 
 	[[BillMetadataLoader sharedBillMetadataLoader] loadMetadata:self];
-	//[[CalendarEventsLoader sharedCalendarEventsLoader] loadEvents:self];
 	
 	if (![self isDatabaseResetNeeded]) {
 		analyticsOptInController = [[AnalyticsOptInAlertController alloc] init];
@@ -453,7 +453,6 @@ NSInteger kNoSelection = -1;
 
 	// save the drill-down hierarchy of selections to preferences
 	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
-	
 	[[NSUserDefaults standardUserDefaults] synchronize];	
 	
 	[[LocalyticsSession sharedLocalyticsSession] close];

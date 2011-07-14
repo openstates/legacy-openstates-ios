@@ -26,7 +26,8 @@
 	NSDate *updated;
 	
 	NSString *_selectedState;
-	NSString *_currentSession;
+	NSString *_selectedSession;
+	NSMutableArray *_sessions;
 }
 
 + (id)sharedStateMeta;	// Singleton
@@ -40,18 +41,24 @@
 @property (nonatomic) BOOL isFresh;
 
 @property (nonatomic,copy) NSString *selectedState;
-@property (nonatomic,readonly) NSString *currentSession;
+
+@property (nonatomic,copy) NSString *selectedSession;
+@property (nonatomic,readonly) NSArray *sessions;
+@property (nonatomic,readonly) NSString *latestSession;
+
 @property (nonatomic,readonly) NSDictionary *stateMetadata;
 
 @end
 #define kMetaSelectedStateKey		@"selected_state"
+#define kMetaSelectedSessionKey		@"selected_session"
 
 #define kMetaLowerChamberNameKey @"lower_chamber_name"			// House of Representatives
 #define kMetaUpperChamberNameKey @"upper_chamber_name"			// Senate
 #define kMetaLowerChamberTitleKey @"lower_chamber_title"		// Representative
 #define kMetaUpperChamberTitleKey @"upper_chamber_title"		// Senator
-#define kMetaSessionsKey @"session_details"						// "811":{"type": "special","start_date": "2009-07-01 00:00:00", "end_date": "2009-07-10 00:00:00"}
-#define kMetaSessionsAltKey @"terms"		
+#define kMetaSessionsDetailsKey @"session_details"				// "811":{"type": "special","start_date": "2009-07-01 00:00:00", "end_date": "2009-07-10 00:00:00"}
+#define kMetaSessionsKey @"sessions"		
+#define kMetaSessionTermsKey @"terms"		
 #define kMetaStateAbbrevKey @"abbreviation"						// tx
 #define kMetaStateNameKey @"name"								// Texas
 #define kMetaLowerChamberElectionTermKey @"lower_chamber_term"	// 2	[years/integer]

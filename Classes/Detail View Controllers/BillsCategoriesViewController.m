@@ -240,11 +240,11 @@
 		loadingStatus = LOADING_ACTIVE;
 		OpenLegislativeAPIs *api = [OpenLegislativeAPIs sharedOpenLegislativeAPIs];
 		StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
-		if (IsEmpty(meta.selectedState) || IsEmpty(meta.currentSession))
+		if (IsEmpty(meta.selectedState) || IsEmpty(meta.selectedSession))
 			return;
 		
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
-		NSMutableString *resourcePath = [NSMutableString stringWithFormat:@"/subject_counts/%@/%@/", meta.selectedState, meta.currentSession];
+		NSMutableString *resourcePath = [NSMutableString stringWithFormat:@"/subject_counts/%@/%@/", meta.selectedState, meta.selectedSession];
 		if (newChamber > BOTH_CHAMBERS)
 			[resourcePath appendFormat:@"%@/", stringForChamber(newChamber, TLReturnOpenStates)];
 			

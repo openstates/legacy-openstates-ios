@@ -25,6 +25,7 @@
 @implementation StateMetaLoader
 @synthesize isFresh;
 @synthesize selectedState = _selectedState;
+@synthesize selectedSession = _selectedSession;
 
 + (id)sharedStateMeta
 {
@@ -61,7 +62,8 @@
 	if ((self=[super init])) {
 		updated = nil;
 		isFresh = NO;
-		_currentSession = nil;
+		_sessions = nil;
+		_selectedSession = nil;
 		_selectedState = nil;
 		_loadingStates = [[NSMutableArray alloc] init];
 		
@@ -69,6 +71,11 @@
 		NSString *tempState = [[NSUserDefaults standardUserDefaults] objectForKey:kMetaSelectedStateKey];
 		if (tempState) {
 			_selectedState = [tempState copy];
+		}
+
+		NSString *tempSession = [[NSUserDefaults standardUserDefaults] objectForKey:kMetaSelectedSessionKey];
+		if (tempSession) {
+			_selectedSession = [tempSession copy];
 		}
 		
 		[self metadataFromCache];
@@ -80,7 +87,8 @@
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 	nice_release(updated);
 	nice_release(_metadata);
-	nice_release(_currentSession);
+	nice_release(_selectedSession);
+	nice_release(_sessions);
 	nice_release(_selectedState);
 	nice_release(_loadingStates);
 	[super dealloc];
@@ -88,7 +96,8 @@
 
 - (void)setSelectedState:(NSString *)stateID {
 	nice_release(_selectedState);
-	nice_release(_currentSession);	// we reset this too, because chances are it's not applicable to this state
+	nice_release(_selectedSession);
+	nice_release(_sessions);
 	
 	if (NO == IsEmpty(stateID)) {
 		_selectedState= [stateID copy];
@@ -154,12 +163,68 @@
 	return stateMeta;
 }
 
+- (NSArray *)sessions {
+	
+	if (NO == IsEmpty(_sessions))
+		return _sessions;
+	
+	nice_release(_sessions);
+	_sessions = [[NSMutableArray alloc] init];
+	
+	NSDictionary *stateMeta = [_metadata objectForKey:_selectedState];
+	
+	// WE'RE ASSUMING THAT THE SESSIONS ARE ALREADY SORTED!
+	//
+	// NSMutableArray *terms = [[NSMutableArray alloc] initWithArray:[stateMeta objectForKey:kMetaSessionTermsKey]];	
+	// NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"start_year" ascending:NO];
+	// [terms sortUsingDescriptors:[NSArray arrayWithObject:sortDesc]];
+	
+	for (NSDictionary *term in [stateMeta objectForKey:kMetaSessionTermsKey]) {
+		for (NSString *session in [term objectForKey:kMetaSessionsKey]) {
+			if (!IsEmpty(session))
+				[_sessions addObject:session];
+		}
+	}
+		
+	return _sessions;
+	
+}
+
+- (NSString *)latestSession {
+	return [_sessions lastObject];
+}
+
+- (NSString *)selectedSession {
+	
+	if (IsEmpty(_selectedSession)) {
+		// default to returning the latest session, if no one has picked something yet.
+		_selectedSession = [[self latestSession] copy];
+	}
+	
+	return _selectedSession;
+}
+
+- (void)setSelectedSession:(NSString *)sessionID {
+	
+	// sanity check to make sure we're setting it to something sensible
+	if (!IsEmpty(sessionID) && [self.sessions containsObject:sessionID]) {
+		
+		nice_release(_selectedSession);
+		_selectedSession = [sessionID copy];
+		
+		[[NSUserDefaults standardUserDefaults] setObject:sessionID forKey:kMetaSelectedSessionKey];
+		[[NSUserDefaults standardUserDefaults] synchronize];		
+	}
+}
+
+/*
 - (NSString *)currentSession {
 	if (NO == IsEmpty(_currentSession))
 		return _currentSession;
+	
 	NSDictionary *stateMeta = [_metadata objectForKey:_selectedState];
 	
-	NSMutableArray *terms = [[NSMutableArray alloc] initWithArray:[stateMeta objectForKey:kMetaSessionsAltKey]];
+	NSMutableArray *terms = [[NSMutableArray alloc] initWithArray:[stateMeta objectForKey:kMetaSessionTermsKey]];
 	NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"start_year" ascending:NO];
 	[terms sortUsingDescriptors:[NSArray arrayWithObject:sortDesc]];
 			
@@ -177,7 +242,7 @@
 			}
 			else if (startInt > maxyear) {
 				maxyear = startInt;
-				NSArray *sessions = [term objectForKey:@"sessions"];
+				NSArray *sessions = [term objectForKey:kMetaSessionsKey];
 				if (!IsEmpty(sessions)) {
 					id latest = [sessions lastObject]; 
 					if ([latest isKindOfClass:[NSString class]])
@@ -192,10 +257,11 @@
 	if (!IsEmpty(foundSession)) {
 		_currentSession = [foundSession copy];	
 	}
-	nice_release(terms);
+	[terms release];
 
 	return _currentSession;	
 }
+*/
 
 #pragma mark -
 #pragma mark RestKit:RKObjectLoaderDelegate

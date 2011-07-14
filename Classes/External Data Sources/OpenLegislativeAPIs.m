@@ -58,8 +58,8 @@
 - (void)queryOpenStatesBillWithID:(NSString *)billID session:(NSString *)session delegate:(id)sender {
 	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
 
-	if (!session && !IsEmpty(meta.currentSession)) {
-		session = meta.currentSession;
+	if (!session && !IsEmpty(meta.selectedSession)) {
+		session = meta.selectedSession;
 	}
 	
 	if (IsEmpty(billID) || IsEmpty(session) || !sender || !osApiClient)
