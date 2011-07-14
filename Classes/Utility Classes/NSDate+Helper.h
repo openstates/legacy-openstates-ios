@@ -129,5 +129,6 @@ To use it in your Cocoa project, import the header and implementation files, and
 + (NSDate *)dateFromTimestampString:(NSString *)timestamp;
 
 + (NSDate *)dateFromDate:(NSDate *)sourceDate fromTimeZone:(NSString *)tzAbbrev;
++ (NSDate *)localDateFromUTCString:(NSString *)utcString;
 
 @end

@@ -221,7 +221,7 @@
 	if (tv == self.searchDisplayController.searchResultsTableView) {
 		[self.searchDisplayController setActive:NO animated:YES];
 		
-		[self showAndSelectDate:[eventDict objectForKey:kCalendarEventsLocalizedDateKey]];
+		[self showAndSelectDate:[eventDict objectForKey:kCalendarEventsLocalizedStartDateKey]];
 		
 		if ([UtilityMethods isIPadDevice]) {
 			NSIndexPath *newPath = [self.dataSource performSelector:@selector(indexPathForEvent:) withObject:eventDict];
@@ -234,8 +234,16 @@
 
 	NSString *urlString = [eventDict objectForKey:kCalendarEventsAnnouncementURLKey];
 	if (IsEmpty(urlString)) {
-		// Can't go further if we don't have a usable URL string
-		return;
+		
+		// Find another web link in the event source list
+		
+		NSArray *sources = [eventDict valueForKey:kCalendarEventsSourcesKey];
+		NSDictionary *sourceDict = [sources objectAtIndex:0];
+		urlString = [sourceDict valueForKey:kCalendarEventsURLKey];
+		
+		if (IsEmpty(urlString)) { // Can't go further if we don't have a usable URL string
+			return;
+		}
 	}
 	
 	NSURL *url = [NSURL URLWithString:urlString];

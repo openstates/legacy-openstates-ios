@@ -32,10 +32,11 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 
 - (id)initWithDictionary:(NSDictionary *)calendarDict {
 	if ((self = [super init])) {
-		self.title = [calendarDict valueForKey:@"title"];
-		self.eventsType = [calendarDict valueForKey:kCalendarEventsTypeKey];
-		rows = [[NSMutableArray alloc] init];
 		hasPostedAlert = NO;		
+		rows = [[NSMutableArray alloc] init];
+
+		self.title = [calendarDict valueForKey:@"title"];						// as in "Committee Meetings"
+		self.eventsType = [calendarDict valueForKey:kCalendarEventsTypeKey];	// as in "committee:meetings"
 	}
 	return self;
 }
@@ -132,7 +133,7 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 	NSArray *events = [[CalendarEventsLoader sharedCalendarEventsLoader] calendarEventsForType:self.eventsType];
 	for (NSDictionary *event in events) {
 		
-		if (IsDateBetweenInclusive([event objectForKey:kCalendarEventsLocalizedDateKey], fromDate, toDate))
+		if (IsDateBetweenInclusive([event objectForKey:kCalendarEventsLocalizedStartDateKey], fromDate, toDate))
 			[matches addObject:event];
 	}
 	
@@ -175,7 +176,7 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 
 - (NSArray *)markedDatesFrom:(NSDate *)fromDate to:(NSDate *)toDate
 {	
-	NSArray *temp = [[self eventsFrom:fromDate to:toDate] valueForKeyPath:kCalendarEventsLocalizedDateKey];
+	NSArray *temp = [[self eventsFrom:fromDate to:toDate] valueForKeyPath:kCalendarEventsLocalizedStartDateKey];
 	if (!temp)
 		temp = [NSArray array];
 	return temp;
@@ -200,22 +201,17 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
 	if (!filterString)
 		filterString = @"";
 	
-	/*if ([filterString isEqualToString:@""]) {
-		[self fetchEvents];
-	}*/
+	// Look through our events of interest to see if the filtered text appears in event summaries
 	
 	NSArray *newEvents = [[CalendarEventsLoader sharedCalendarEventsLoader] calendarEventsForType:self.eventsType];
 	if (!IsEmpty(newEvents)){
 		[rows removeAllObjects];
 		
 		for (NSDictionary *event in newEvents) {
-			NSRange committeeRange = [[event objectForKey:kCalendarEventsCommitteeNameKey] 
+			NSRange summaryRange = [[event objectForKey:kCalendarEventsSummaryTextKey] 
 									  rangeOfString:filterString options:(NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch)];
 			
-			NSRange locationRange = [[event objectForKey:kCalendarEventsLocationKey] 
-									 rangeOfString:filterString options:(NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch)];
-			
-			if (committeeRange.location != NSNotFound || locationRange.location != NSNotFound) {
+			if (summaryRange.location != NSNotFound) {
 				[rows addObject:event];
 			}
 		}

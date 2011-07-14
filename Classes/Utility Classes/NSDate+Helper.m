@@ -7,6 +7,7 @@
 //
 
 #import "NSDate+Helper.h"
+#import "UtilityMethods.h"
 
 @implementation TexLegeDateHelper
 @synthesize formatter = t_formatter, calendar = t_calendar, modFormatter = t_modFormatter;
@@ -350,6 +351,17 @@
 	NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
 	
 	return [sourceDate dateByAddingTimeInterval:interval];	
+}
+
++ (NSDate *)localDateFromUTCString:(NSString *)utcString {
+	NSDate *localDate = nil;
+	
+	if (!IsEmpty(utcString)) {
+		NSDate *utcDate = [NSDate dateFromTimestampString:utcString];
+		localDate = [NSDate dateFromDate:utcDate fromTimeZone:@"UTC"];
+	}
+	
+	return localDate;
 }
 
 @end

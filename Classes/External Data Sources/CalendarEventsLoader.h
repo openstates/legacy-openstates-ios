@@ -79,9 +79,11 @@
 // Custom keys that are specific to our own event standardization process
 #define kCalendarEventsCommitteeNameKey				@"committee"		// Direct access to participants name in case of committees
 #define kCalendarEventsTypeChamberValue				@"chamber"			// NSNumber of chamber
-#define kCalendarEventsLocalizedDateKey				@"date"				// NSDate in local time zone
+#define kCalendarEventsLocalizedStartDateKey		@"date"				// NSDate for event start in local time zone
+#define kCalendarEventsLocalizedEndDateKey			@"date_end"			// NSDate for event end in local time zone
 #define kCalendarEventsLocalizedDateStringKey		@"dateString"		// 12/31/11
 #define kCalendarEventsLocalizedTimeStringKey		@"timeString"		// 12:31pm
 #define kCalendarEventsSummaryTextKey				@"summaryText"		// A "Who, What, When, Where" summary for display
+#define kCalendarEventsTitleKey						@"title"			// A short description of the event
 
 NSComparisonResult sortByDate(id firstItem, id secondItem, void *context);
