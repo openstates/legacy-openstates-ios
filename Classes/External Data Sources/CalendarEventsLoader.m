@@ -73,6 +73,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		_events = nil;
 		updated = nil;
 		eventState = nil;
+		isLoading = NO;
 		loadingStatus = LOADING_IDLE;
 
 		[[TexLegeReachability sharedTexLegeReachability] addObserver:self 
@@ -149,6 +150,9 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 }
 
 - (void)loadEvents:(id)sender {
+	if (isLoading)
+		return;	// we're already working on it
+	
 	if ([TexLegeReachability openstatesReachable]) {
 		StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
 		
@@ -160,6 +164,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		
 		//	http://openstates.sunlightlabs.com/api/v1/events/?state=tx&apikey=xxxxxxxxxxxxxxxx
 
+		isLoading = YES;
 		self.loadingStatus = LOADING_ACTIVE;
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
 									 eventState, @"state",
@@ -178,7 +183,10 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 }
 
 - (NSArray*)events {
-	if (!eventState || self.loadingStatus > LOADING_NO_NET || !_events || !isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > 1800)) {	// if we're over a half-hour old, let's refresh
+	if (isLoading && (updated && ([[NSDate date] timeIntervalSinceDate:updated] < 1800))) // if we're over a half-hour old, let's refresh
+		return _events;	// we're already working on it
+
+	if (!eventState || self.loadingStatus > LOADING_NO_NET || !_events || !isFresh) {
 		isFresh = NO;
 		debug_NSLog(@"CalendarEventsLoader is stale, need to refresh");
 		
@@ -212,6 +220,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		debug_NSLog(@"Error loading events from %@: %@", [request description], [error localizedDescription]);
 	}
 	
+	isLoading = NO;
 	isFresh = NO;
 
 	nice_release(_events);
@@ -236,6 +245,9 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 
 
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
+	
+	isLoading = NO;
+	
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data
 		self.loadingStatus = LOADING_IDLE;
@@ -252,24 +264,26 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 			[_events addObject:newEvent];
 		}
 				
-		if (IsEmpty(_events)) {
-			[self request:request didFailLoadWithError:nil];
-			return;
-		}
-		
-		[_events sortUsingFunction:sortByDate context:nil];
+		if (NO == IsEmpty(_events)) {
+			debug_NSLog(@"EventsLoader network download successful, archiving for others.");
 
-		NSString *thePath = [self pathToEventCacheWithRequest:request];		
-		if (![_events writeToFile:thePath atomically:YES]) {
-			NSLog(@"CalendarEventsLoader: Error writing event cache to file: %@", thePath);
-		}
+			[_events sortUsingFunction:sortByDate context:nil];
+
+			NSString *thePath = [self pathToEventCacheWithRequest:request];		
+			if (![_events writeToFile:thePath atomically:YES]) {
+				NSLog(@"CalendarEventsLoader: Error writing event cache to file: %@", thePath);
+			}
 		
+		}
+		/*else {	// we might just have a state that doesn't have events yet!
+			[self request:request didFailLoadWithError:nil];
+		}*/
+
 		isFresh = YES;
 		nice_release(updated);
 		updated = [[NSDate date] retain];
 					
 		[[NSNotificationCenter defaultCenter] postNotificationName:kCalendarEventsNotifyLoaded object:nil];
-		debug_NSLog(@"EventsLoader network download successful, archiving for others.");
 
 	}
 }
@@ -394,13 +408,13 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 }
 
 - (NSArray *)calendarEventsForType:(NSString *)eventType {
-	if (IsEmpty(self.events))
+	if (IsEmpty(_events))
 		return nil;
 	
 	NSArray *foundEvents = nil;
 	
 	if (!IsEmpty(eventType)) {
-		foundEvents = [_events findAllWhereKeyPath:kCalendarEventsTypeKey equals:eventType];
+		foundEvents = [self.events findAllWhereKeyPath:kCalendarEventsTypeKey equals:eventType];
 
 	}
 	return foundEvents;

@@ -29,7 +29,7 @@
 	NSMutableArray *_events;
 	NSString *eventState;
 	
-	BOOL isFresh;
+	BOOL isFresh, isLoading;
 	NSDate *updated;
 	
 	NSInteger loadingStatus;
