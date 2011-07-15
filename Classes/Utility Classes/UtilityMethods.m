@@ -13,6 +13,7 @@
 #import "UtilityMethods.h"
 #import <MapKit/MapKit.h>
 #import "TTTOrdinalNumberFormatter.h"
+#import "SLFAlertView.h"
 
 BOOL IsEmpty(id thing) {
     return thing == nil
@@ -398,14 +399,10 @@ BOOL IsEmpty(id thing) {
 }
 
 + (void)alertNotAPhone {
-	UIAlertView *noPhoneAlert = [[[ UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"Not an iPhone", @"AppAlerts", @"iPhone features are unavailable on other devices.")
-								  message:NSLocalizedStringFromTable(@"You attempted to dial a phone number.  However, unfortunately you cannot make phone calls without an iPhone.",
-																	 @"AppAlerts", @"iPhone features are unavailable on other devices.")
-								  delegate:nil // we're static, so don't do "self"
-								  cancelButtonTitle: NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button to cancel some activity")
-								  otherButtonTitles:nil, nil] autorelease];
 	
-	[ noPhoneAlert show ];		
+	[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Not an iPhone", @"AppAlerts", @"iPhone features are unavailable on other devices.")
+						message:NSLocalizedStringFromTable(@"You attempted to dial a phone number.  However, unfortunately you cannot make phone calls without an iPhone.", @"AppAlerts", @"")
+					buttonTitle: NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button to cancel some activity")];	
 }
 
 

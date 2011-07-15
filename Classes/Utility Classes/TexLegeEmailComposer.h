@@ -13,17 +13,20 @@
 #import <Foundation/Foundation.h>
 #import <MessageUI/MessageUI.h>
 
-@interface TexLegeEmailComposer : NSObject <MFMailComposeViewControllerDelegate,UIAlertViewDelegate>
+@interface TexLegeEmailComposer : NSObject <MFMailComposeViewControllerDelegate>
 {
 
 }
-@property (nonatomic, retain) IBOutlet UIViewController *currentCommander;
-@property (nonatomic, retain) IBOutlet MFMailComposeViewController *mailComposerVC;
-@property (nonatomic, retain) IBOutlet UIAlertView *currentAlert;
+@property (nonatomic, assign) UIViewController *currentCommander;
+@property (nonatomic, retain) MFMailComposeViewController *mailComposerVC;
 @property (nonatomic) BOOL isComposingMail;
 
 + (TexLegeEmailComposer *)sharedTexLegeEmailComposer;
-- (void)presentMailComposerTo:(NSString*)recipient subject:(NSString*)subject body:(NSString*)body commander:(UIViewController *)commander;
+
+- (void)presentMailComposerTo:(NSString*)recipient 
+					  subject:(NSString*)subject 
+						 body:(NSString*)body 
+					commander:(UIViewController *)commander;
 
 
 @end

@@ -22,6 +22,7 @@
 #import "LocalyticsSession.h"
 #import "LoadingCell.h"
 #import "StateMetaLoader.h"
+#import "SLFAlertView.h"
 
 #if USE_BILLTYPES_AS_SECTIONS
 #import "BillMetadataLoader.h"
@@ -429,14 +430,11 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:self];
 
 	if (!useLoadingDataCell) {	// if we don't have some visual cue (loading cell) already, send up an alert
-		UIAlertView *alert = [[ UIAlertView alloc ] 
-							   initWithTitle:NSLocalizedStringFromTable(@"Network Error", @"AppAlerts", @"Title for alert stating there's been an error when connecting to a server")
-							   message:NSLocalizedStringFromTable(@"There was an error while contacting the server for bill information.  Please check your network connectivity or try again.", @"AppAlerts", @"")
-							   delegate:nil // we're static, so don't do "self"
-							   cancelButtonTitle: NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")
-							   otherButtonTitles:nil];
-		[ alert show ];	
-		[ alert release];
+
+		[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Network Error", @"AppAlerts", @"Title for alert stating there's been an error when connecting to a server")
+							message:NSLocalizedStringFromTable(@"There was an error while contacting the server for bill information.  Please check your network connectivity or try again.", @"AppAlerts", @"")
+						buttonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")];
+		
 	}
 	
 }

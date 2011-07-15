@@ -306,18 +306,9 @@
 			cellInfo.parameter = self.queryCycle;
 			cellInfo.action = [NSNumber numberWithInteger:kContributionQueryRecipient];
 
-#warning state specific (Bob Perry Contributions)
-
 			if (!dataID || [[NSNull null] isEqual:dataID] || ![dataID isKindOfClass:[NSString class]]) {
 				NSLog(@"ERROR - Contribution results have an empty entity ID for: %@", name);								
-				if ([[name uppercaseString] isEqualToString:@"BOB PERRY HOMES"])	// ala Bob Perry Homes
-					name = @"Perry Homes";
-				else if ([[name uppercaseString] hasPrefix:@"BOB PERRY"])	// ala Bob Perry Homes
-					name = @"Bob Perry";
-				else if ([[name uppercaseString] hasPrefix:@"HUMAN RIGHTS CAMPAIGN TEXAS FAMILIES"])
-					name = @"HRC TEXAS FAMILIES PAC";
-				else if ([[name uppercaseString] hasPrefix:@"TEXANS FOR RICK PERRY"])
-					name = @"RICK PERRY";
+
 				NSString *nameSearch = [name stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 				cellInfo.entryValue = nameSearch;
 				cellInfo.action = [NSNumber numberWithInteger:kContributionQueryEntitySearch];
@@ -361,14 +352,6 @@
 			
 			if (!dataID || [[NSNull null] isEqual:dataID] || ![dataID isKindOfClass:[NSString class]]) {
 				NSLog(@"ERROR - Contribution results have an empty entity ID for: %@", name);								
-				if ([[name uppercaseString] isEqualToString:@"BOB PERRY HOMES"])	// ala Bob Perry Homes
-					name = @"Perry Homes";
-				else if ([[name uppercaseString] hasPrefix:@"BOB PERRY"])	// ala Bob Perry Homes
-					name = @"Bob Perry";
-				else if ([[name uppercaseString] hasPrefix:@"HUMAN RIGHTS CAMPAIGN TEXAS FAMILIES"])
-					name = @"HRC TEXAS FAMILIES PAC";
-				else if ([[name uppercaseString] hasPrefix:@"TEXANS FOR RICK PERRY"])
-					name = @"RICK PERRY";
 				
 				NSString *nameSearch = [name stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 				cellInfo.entryValue = nameSearch;

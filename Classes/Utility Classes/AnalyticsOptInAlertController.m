@@ -13,9 +13,15 @@
 #import "AnalyticsOptInAlertController.h"
 #import "LocalyticsSession.h"
 #import "UtilityMethods.h"
+#import "SLFAlertView.h"
+
+@interface AnalyticsOptInAlertController ()
+
+- (void)doOptIn:(BOOL)didOptIn;
+
+@end
 
 @implementation AnalyticsOptInAlertController
-@synthesize currentAlert;
 
 - (id)init {
 	if ((self=[super init])) {
@@ -26,71 +32,64 @@
 - (void)updateOptInFromSettings {
 	if ([self shouldPresentAnalyticsOptInAlert])	// we don't have a valid setting yet, wait till they get asked first
 		return;
+	
 	[[NSUserDefaults standardUserDefaults] synchronize];	
 	NSNumber *optInUserSetting = [[NSUserDefaults standardUserDefaults] objectForKey:kAnalyticsSettingsSwitch];
+	
 	if (!optInUserSetting)	// we didn't find a switch setting in the bundle??? shouldn't happen...
 		optInUserSetting = [NSNumber numberWithBool:YES];
+	
 	BOOL didOptIn = [optInUserSetting boolValue];
 	[[LocalyticsSession sharedLocalyticsSession] setOptIn:didOptIn];	
 }
 
+- (void)doOptIn:(BOOL)didOptIn {
+	
+	if (NO == didOptIn)
+		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"OPTED_OUT_OF_LOCALYTICS"];
+	
+	[[LocalyticsSession sharedLocalyticsSession] setOptIn:didOptIn];
+	
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	
+	[defaults setBool:YES forKey:kAnalyticsAskedForOptInKey];
+	[defaults setBool:didOptIn forKey:kAnalyticsSettingsSwitch];
+	[defaults synchronize];
+}
+
 
 - (BOOL) shouldPresentAnalyticsOptInAlert {
-	[[NSUserDefaults standardUserDefaults] synchronize];	
-	BOOL hasAsked = [[NSUserDefaults standardUserDefaults] boolForKey:kAnalyticsAskedForOptInKey];
-	if (!hasAsked)
-		return YES;
-	return NO;
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+	[defaults synchronize];	
+	BOOL hasAsked = [defaults boolForKey:kAnalyticsAskedForOptInKey];
+	
+	return (hasAsked == NO);
 }
 
 - (BOOL) presentAnalyticsOptInAlertIfNecessary {
+	
 	if ([self shouldPresentAnalyticsOptInAlert]) {
-		[self presentAnalyticsOptInAlert];
+
+		[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Permission To Use Analytics", @"AppAlerts", @"Title for alert asking for permission.") 
+							message:NSLocalizedStringFromTable(@"This app can unobtrusively submit anonymous usage data (like launch time and features used) to the developer.  This is solely intended to improve app development, and will NEVER be used for advertising or marketing.  It submits no geographic or identifying information. Please consider enabling this service.  You may change this later in the Settings app.", @"AppAlerts", @"") 
+						cancelTitle:NSLocalizedStringFromTable(@"Deny", @"StandardUI", @"Button label for the user to deny an app action.") 
+						cancelBlock:^(void) {
+							[self doOptIn:NO];
+						}
+						 otherTitle:NSLocalizedStringFromTable(@"Permit",@"StandardUI", @"Button label for the user to permit an app action.")
+						 otherBlock:^(void) {
+							 [self doOptIn:YES];
+						 }];
+		
+		
 		return YES;
 	}
 	return NO;
 }
 
-- (void)presentAnalyticsOptInAlert {
-	self.currentAlert = [[[UIAlertView alloc] 
-						  initWithTitle:NSLocalizedStringFromTable(@"Permission To Use Analytics", @"AppAlerts", @"Title for alert asking for permission.")
-						  message:NSLocalizedStringFromTable(@"TexLege can unobtrusively submit anonymous usage data (like launch time and features used) to the developer.  This is solely intended to improve app development, and will NEVER be used for advertising or marketing.  It submits no geographic or identifying information. Please consider enabling this service.  You may change this later in the Settings app.", @"AppAlerts", @"")
-						  delegate:self 
-						  cancelButtonTitle:NSLocalizedStringFromTable(@"Deny", @"StandardUI", @"Button label for the user to deny an app action.")
-						  otherButtonTitles:NSLocalizedStringFromTable(@"Permit",@"StandardUI", @"Button label for the user to permit an app action."),nil] 
-						 autorelease];
-	self.currentAlert.tag = 6134;
-	[self.currentAlert show];
-	
-}
-
 - (void)dealloc {
-	self.currentAlert = nil;
     [super dealloc];
 }
-
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	if (alertView.tag == 6134) {
-		self.currentAlert = nil;
-		
-		NSInteger didOptIn = buttonIndex;
-		if (didOptIn != 1 && didOptIn != 0) {
-			if (didOptIn > 1)
-				didOptIn = 1;
-			else if (didOptIn < -1)
-				didOptIn = -1;
-		}
-		if (didOptIn == 0) {
-			[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"OPTED_OUT_OF_LOCALYTICS"];
-		}
-		[[LocalyticsSession sharedLocalyticsSession] setOptIn:didOptIn];
-
-		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:kAnalyticsAskedForOptInKey];
-		[[NSUserDefaults standardUserDefaults] setBool:(didOptIn == 1) forKey:kAnalyticsSettingsSwitch];
-		[[NSUserDefaults standardUserDefaults] synchronize];
-	}
-}
-
 
 @end

@@ -13,14 +13,11 @@
 #import <UIKit/UIKit.h>
 
 
-@interface AnalyticsOptInAlertController : NSObject <UIAlertViewDelegate> {
+@interface AnalyticsOptInAlertController : NSObject {
 
 }
 
-@property (nonatomic, retain) IBOutlet UIAlertView *currentAlert;
-
 - (BOOL) presentAnalyticsOptInAlertIfNecessary;
-- (void) presentAnalyticsOptInAlert;
 - (BOOL) shouldPresentAnalyticsOptInAlert;
 - (void) updateOptInFromSettings;
 

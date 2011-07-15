@@ -21,6 +21,7 @@
 #import "XMLReader.h"
 #import "JSONKit.h"
 #import "LoadingCell.h"
+#import "SLFAlertView.h"
 
 @interface BillsTodayViewController (Private)
 - (void)configureCell:(TexLegeStandardGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -228,15 +229,10 @@
 	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:self];
 	
-	UIAlertView *alert = [[ UIAlertView alloc ] 
-						  initWithTitle:NSLocalizedStringFromTable(@"Network Error", @"AppAlerts", @"Title for alert stating there's been an error when connecting to a server")
-						  message:NSLocalizedStringFromTable(@"There was an error while contacting the server for bill information.  Please check your network connectivity or try again.", @"AppAlerts", @"")
-						  delegate:nil // we're static, so don't do "self"
-						  cancelButtonTitle: NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")
-						  otherButtonTitles:nil];
-	[ alert show ];	
-	[ alert release];
-
+	[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Network Error", @"AppAlerts", @"Title for alert stating there's been an error when connecting to a server")
+						message:NSLocalizedStringFromTable(@"There was an error while contacting the server for bill information.  Please check your network connectivity or try again.", @"AppAlerts", @"") 
+					buttonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button title cancelling some action")];
+	
 	loadingStatus = LOADING_NO_NET;
 }
 
@@ -310,14 +306,11 @@
 				if ([issue isKindOfClass:[NSString class]] && !IsEmpty(issue))
 					if ([issue hasPrefix:@"No bills have been passed today"]) {
 						loadingStatus = LOADING_IDLE;
-						UIAlertView *alert = [[ UIAlertView alloc ] 
-											   initWithTitle:NSLocalizedStringFromTable(@"No Bills Passed Today (Yet)", @"AppAlerts", @"Title for alert box")
-											  message:NSLocalizedStringFromTable(@"There are no bills passed today.  Either it is (very) early in the day, or the legislature is in recess.", @"AppAlerts", @"")
-											   delegate:nil // we're static, so don't do "self"
-											   cancelButtonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some action")
-											   otherButtonTitles:nil];
-						[ alert show ];	
-						[ alert release ];
+
+						[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"No Bills Passed Today (Yet)", @"AppAlerts", @"Title for alert box")
+											message:NSLocalizedStringFromTable(@"There are no bills passed today.  Either it is (very) early in the day, or the legislature is in recess.", @"AppAlerts", @"") 
+										buttonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button title cancelling some action")];
+						
 					}
 			}
 			@catch (NSException * eOther) {

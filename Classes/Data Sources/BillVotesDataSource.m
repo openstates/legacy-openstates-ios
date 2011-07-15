@@ -193,17 +193,19 @@
 		NSString *votesString = [type stringByAppendingString:@"_votes"];
 		NSNumber *voteCode = [NSNumber numberWithInteger:codeIndex];
 		
-#warning state specific (Speaker's Legislator ID)
 		if ([billVotes_ objectForKey:countString] && [[billVotes_ objectForKey:countString] integerValue]) {
+			
 			for (NSMutableDictionary *voter in [billVotes_ objectForKey:votesString]) {
-				/* We sometimes (all the time?) have to hard code in the Speaker ... let's just hope 
-				 they don't get rid of Joe Straus any time soon. */
-				if ((![voter objectForKey:@"leg_id"] || [[voter objectForKey:@"leg_id"] isEqual:[NSNull null]]) &&
-					([[voter objectForKey:@"name"] hasSubstring:@"Speaker" caseInsensitive:NO]))
-					[voter setObject:@"TXL000347" forKey:@"leg_id"];
-					
+									
+				// Rather than hard code special cases like the Texas Speaker, who never has a leg_id in vote records 
+				//		(because he appears as "Speaker") we skip troublesome voters.
+				
+				if (IsEmpty([voter objectForKey:@"leg_id"]))
+					continue;
+				
 				LegislatorObj *member = [memberLookup objectForKey:[voter objectForKey:@"leg_id"]];
 				if (member) {
+					
 					NSMutableDictionary *voter = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
 												  [member shortNameForButtons], @"name",
 												  [member fullNameLastFirst], @"nameReverse",

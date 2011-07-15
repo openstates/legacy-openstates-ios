@@ -19,7 +19,7 @@
 @class DataModelUpdateManager;
 @class AnalyticsOptInAlertController;
 
-@interface StatesLegeAppDelegate : NSObject  <UIApplicationDelegate, UIAlertViewDelegate, UINavigationControllerDelegate> 
+@interface StatesLegeAppDelegate : NSObject  <UIApplicationDelegate, UINavigationControllerDelegate> 
 {
 	DataModelUpdateManager *dataUpdater;
 	UIWindow			*mainWindow;

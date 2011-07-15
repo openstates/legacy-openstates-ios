@@ -13,7 +13,7 @@
 #import <UIKit/UIKit.h>
 #import "LegislatorContributionsDataSource.h"
 
-@interface LegislatorContributionsViewController : UITableViewController <UIAlertViewDelegate> {
+@interface LegislatorContributionsViewController : UITableViewController {
 
 }
 @property (nonatomic,retain) LegislatorContributionsDataSource *dataSource;

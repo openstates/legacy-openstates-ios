@@ -466,8 +466,6 @@
 		3768E93B13B156F600BA5A67 /* SVWebViewController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3768E93813B156F600BA5A67 /* SVWebViewController.bundle */; };
 		3768E93C13B156F600BA5A67 /* SVWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3768E93613B156F600BA5A67 /* SVWebViewController.m */; };
 		3768E93E13B156F600BA5A67 /* SVWebViewController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3768E93813B156F600BA5A67 /* SVWebViewController.bundle */; };
-		376AE79D13445CA400825C4D /* BillsKeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376AE79C13445CA400825C4D /* BillsKeyViewController.m */; };
-		376AE79E13445CA400825C4D /* BillsKeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376AE79C13445CA400825C4D /* BillsKeyViewController.m */; };
 		376B59F60FC1BDCF0094D80B /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 376B59F50FC1BDCF0094D80B /* Default.png */; };
 		376C1CC31345A7EB009436B5 /* XMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 376C1CC21345A7EB009436B5 /* XMLReader.m */; };
 		376DFE9513492C1400360BF4 /* error.png in Resources */ = {isa = PBXBuildFile; fileRef = 376DFE9213492C1400360BF4 /* error.png */; };
@@ -1176,6 +1174,8 @@
 		37E36CFC139E69F800917F40 /* 138-scales@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37E36CF8139E69F800917F40 /* 138-scales@2x.png */; };
 		37E36D03139E6D0A00917F40 /* VTPGAdvancedLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E36D02139E6D0A00917F40 /* VTPGAdvancedLog.m */; };
 		37E36D04139E6D0A00917F40 /* VTPGAdvancedLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E36D02139E6D0A00917F40 /* VTPGAdvancedLog.m */; };
+		37E4313513CFFA4500E9320E /* SLFAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E4313413CFFA4500E9320E /* SLFAlertView.m */; };
+		37E4313613CFFA4500E9320E /* SLFAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E4313413CFFA4500E9320E /* SLFAlertView.m */; };
 		37E635FC139B4B3200A9CC27 /* TTTOrdinalNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E635FA139B4B3200A9CC27 /* TTTOrdinalNumberFormatter.m */; };
 		37E635FE139B4B3200A9CC27 /* TTTOrdinalNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E635FA139B4B3200A9CC27 /* TTTOrdinalNumberFormatter.m */; };
 		37E9848A12217C8600950298 /* silverstar.png in Resources */ = {isa = PBXBuildFile; fileRef = 37E9848812217C8600950298 /* silverstar.png */; };
@@ -1877,8 +1877,6 @@
 		3768E93513B156F600BA5A67 /* SVWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVWebViewController.h; sourceTree = "<group>"; };
 		3768E93613B156F600BA5A67 /* SVWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVWebViewController.m; sourceTree = "<group>"; };
 		3768E93813B156F600BA5A67 /* SVWebViewController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVWebViewController.bundle; sourceTree = "<group>"; };
-		376AE79B13445CA400825C4D /* BillsKeyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsKeyViewController.h; sourceTree = "<group>"; };
-		376AE79C13445CA400825C4D /* BillsKeyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsKeyViewController.m; sourceTree = "<group>"; };
 		376B59F50FC1BDCF0094D80B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		376C1CC11345A7EB009436B5 /* XMLReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLReader.h; sourceTree = "<group>"; };
 		376C1CC21345A7EB009436B5 /* XMLReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMLReader.m; sourceTree = "<group>"; };
@@ -2209,6 +2207,8 @@
 		37E36CF8139E69F800917F40 /* 138-scales@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "138-scales@2x.png"; sourceTree = "<group>"; };
 		37E36D01139E6D0A00917F40 /* VTPGAdvancedLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTPGAdvancedLog.h; sourceTree = "<group>"; };
 		37E36D02139E6D0A00917F40 /* VTPGAdvancedLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTPGAdvancedLog.m; sourceTree = "<group>"; };
+		37E4313313CFFA4500E9320E /* SLFAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFAlertView.h; sourceTree = "<group>"; };
+		37E4313413CFFA4500E9320E /* SLFAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFAlertView.m; sourceTree = "<group>"; };
 		37E635F9139B4B3200A9CC27 /* TTTOrdinalNumberFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTOrdinalNumberFormatter.h; sourceTree = "<group>"; };
 		37E635FA139B4B3200A9CC27 /* TTTOrdinalNumberFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTOrdinalNumberFormatter.m; sourceTree = "<group>"; };
 		37E9848812217C8600950298 /* silverstar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = silverstar.png; sourceTree = "<group>"; };
@@ -2707,8 +2707,6 @@
 				37F492751311C640005D5DE1 /* BillsDetailViewController.m */,
 				37D38B0D132ECFFA002F1730 /* BillsListViewController.h */,
 				37D38B0E132ECFFA002F1730 /* BillsListViewController.m */,
-				376AE79B13445CA400825C4D /* BillsKeyViewController.h */,
-				376AE79C13445CA400825C4D /* BillsKeyViewController.m */,
 				37E36CEF139E695C00917F40 /* BillsRecentViewController.h */,
 				37E36CF0139E695C00917F40 /* BillsRecentViewController.m */,
 				371A447113467C8C00DFDBB8 /* BillsTodayViewController.h */,
@@ -2787,6 +2785,8 @@
 				374F70A512FD45D600AD7EEC /* TexLegeNavBar.m */,
 				37A0C6011211DB810067F7AF /* TexLegeEmailComposer.h */,
 				37A0C6021211DB810067F7AF /* TexLegeEmailComposer.m */,
+				37E4313313CFFA4500E9320E /* SLFAlertView.h */,
+				37E4313413CFFA4500E9320E /* SLFAlertView.m */,
 				3718895A12EE917B00E3300D /* NSDate+Helper.h */,
 				3718895B12EE917B00E3300D /* NSDate+Helper.m */,
 				37E36D01139E6D0A00917F40 /* VTPGAdvancedLog.h */,
@@ -4904,7 +4904,6 @@
 				37094D97133B162E00B9693C /* TexLegeBadgeGroupCell.m in Sources */,
 				37F2CA121343AE40001D9D7B /* DDActionHeaderView.m in Sources */,
 				37F2CA961343BF1A001D9D7B /* TVOutManager.m in Sources */,
-				376AE79E13445CA400825C4D /* BillsKeyViewController.m in Sources */,
 				377DC4AA1344D475000068E1 /* BillVotesDataSource.m in Sources */,
 				371A447413467C8C00DFDBB8 /* BillsTodayViewController.m in Sources */,
 				371A449D134682E100DFDBB8 /* XMLReader.m in Sources */,
@@ -4935,6 +4934,7 @@
 				37FE1E0C13CB8E3300655550 /* AppendingFlowView.m in Sources */,
 				37FE1F1513CB8EFE00655550 /* IntelligentSplitViewController.m in Sources */,
 				3789F91B13CD7E830069DB1C /* LegislatorObj+RestKit.m in Sources */,
+				37E4313513CFFA4500E9320E /* SLFAlertView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5012,7 +5012,6 @@
 				370EAD311338029E007788BC /* OpenLegislativeAPIs.m in Sources */,
 				37094D96133B162E00B9693C /* TexLegeBadgeGroupCell.m in Sources */,
 				37F2CA111343AE40001D9D7B /* DDActionHeaderView.m in Sources */,
-				376AE79D13445CA400825C4D /* BillsKeyViewController.m in Sources */,
 				377DC4A91344D475000068E1 /* BillVotesDataSource.m in Sources */,
 				376C1CC31345A7EB009436B5 /* XMLReader.m in Sources */,
 				371A447313467C8C00DFDBB8 /* BillsTodayViewController.m in Sources */,
@@ -5045,6 +5044,7 @@
 				37FE1E5613CB8E3300655550 /* AppendingFlowView.m in Sources */,
 				37FE1F3E13CB8EFE00655550 /* IntelligentSplitViewController.m in Sources */,
 				3789F91C13CD7E830069DB1C /* LegislatorObj+RestKit.m in Sources */,
+				37E4313613CFFA4500E9320E /* SLFAlertView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

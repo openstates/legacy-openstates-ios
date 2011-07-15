@@ -102,11 +102,6 @@
 
 - (NSString *)legTypeShortName {
 	return abbreviateString(self.legtype_name);
-/*	if ([self.legtype_name isEqualToString:NSLocalizedStringFromTable(@"Speaker", @"DataTableUI", @"The speaker of the house")])
-		return NSLocalizedStringFromTable(@"Spk.", @"DataTableUI", @"Abbreviation for the Speaker");
-	else
-		return [[self.legtype_name substringToIndex:3] stringByAppendingString:@"."];
-*/
 }
 
 - (NSString *)legProperName {
@@ -173,6 +168,8 @@
 			self.legtype_name, [self.district integerValue]];
 	return string;
 }
+
+#warning State Specific (but this goes away with live data from Open States)
 
 - (NSString *)website {
 	NSString *formatString = nil;

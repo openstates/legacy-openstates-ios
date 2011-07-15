@@ -32,6 +32,7 @@
 #import "LocalyticsSession.h"
 #import "AppendingFlowView.h"
 #import "BillActionParser.h"
+#import "SLFAlertView.h"
 
 @interface BillsDetailViewController (Private)
 - (void)setupHeader;
@@ -108,11 +109,9 @@ enum _billSections {
 	self.headerView.backgroundColor = sealColor;
 	self.actionHeader.backgroundColor = sealColor;
 	
-	//self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 	self.clearsSelectionOnViewWillAppear = NO;
 
 	self.starButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//	[starButton addTarget:self action:@selector(itemAction:) forControlEvents:UIControlEventTouchUpInside];
     [starButton addTarget:self action:@selector(starButtonToggle:) forControlEvents:UIControlEventTouchDown];
 	[self starButtonSetState:NO];
     starButton.frame = CGRectMake(0.0f, 0.0f, 66.0f, 66.0f);
@@ -220,6 +219,7 @@ enum _billSections {
 {
 	if (!legeID)
 		return;
+	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.openstatesID == %@", legeID];
 	LegislatorObj *legislator = [LegislatorObj objectWithPredicate:predicate];
 	if (legislator) {
@@ -248,6 +248,8 @@ enum _billSections {
 	[descText appendFormat:@"%@ (%@)\r", [currentAction objectForKey:@"action"], actionDateString];
 	[descText appendString:[bill objectForKey:@"title"]];	// the summary of the bill
 	self.lab_description.text = descText;
+	
+	// Set up the bill status graphical view
 	
 	AppendingFlowView *statV = self.statusView;
 	statV.uniformWidth = NO;
@@ -300,6 +302,7 @@ enum _billSections {
 #pragma mark Managing the popover
 
 - (IBAction)resetTableData:(id)sender {
+	
 	// this will force our datasource to renew everything
 	[self.tableView reloadData];	
 }
@@ -339,7 +342,7 @@ enum _billSections {
 - (void)splitViewController: (UISplitViewController*)svc 
 	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
 	   forPopoverController: (UIPopoverController*)pc {
-	//debug_NSLog(@"Entering portrait, showing the button: %@", [aViewController class]);
+
 	barButtonItem.title = @"Bills";
 	[self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
 	self.masterPopover = pc;
@@ -349,7 +352,7 @@ enum _billSections {
 - (void)splitViewController: (UISplitViewController*)svc 
 	 willShowViewController:(UIViewController *)aViewController 
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-	//debug_NSLog(@"Entering landscape, hiding the button: %@", [aViewController class]);
+
 	[self.navigationItem setRightBarButtonItem:nil animated:YES];
 	self.masterPopover = nil;
 }
@@ -459,6 +462,9 @@ enum _billSections {
 				cell.textLabel.text = [[sponsor objectForKey:@"type"] capitalizedString];
 			}
 				break;
+				
+#warning State Specific (bill version texts)
+				
 			case kBillVersions: 
 			{				
 				NSDictionary *version = [[bill objectForKey:@"versions"] objectAtIndex:indexPath.row];
@@ -482,10 +488,12 @@ enum _billSections {
 					textName = NSLocalizedStringFromTable(@"Enrolled", @"DataTableUI", @"A bill activity stating that the bill has been enrolled (like a law)");
 				else
 					textName = name;
+				
 				cell.textLabel.text = @"";
 				cell.detailTextLabel.text = textName;
 			}
 				break;
+				
 			case kBillVotes: 
 			{				
 				NSDictionary *vote = [[bill objectForKey:@"votes"] objectAtIndex:indexPath.row];
@@ -496,38 +504,52 @@ enum _billSections {
 				NSString *passedString = passed ? NSLocalizedStringFromTable(@"Passed", @"DataTableUI", @"Whether a bill passed/failed") : NSLocalizedStringFromTable(@"Failed", @"DataTableUI", @"Whether a bill passed/failed");
 				NSInteger chamber = chamberFromOpenStatesString([vote objectForKey:@"chamber"]);
 				NSString *chamberString = stringForChamber(chamber, TLReturnFull);
+				
 				cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@ (%@)",
 											 [[vote objectForKey:@"motion"] capitalizedString],
 											 chamberString, voteDateString];
+				
 				cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@ - %@ - %@)", passedString,
 									   [vote objectForKey:@"yes_count"], [vote objectForKey:@"no_count"],
 									   [vote objectForKey:@"other_count"]];
 			}
 				break;
+				
 			case kBillActions: 
 			{
 				NSDictionary *currentAction = [[bill objectForKey:@"actions"] objectAtIndex:indexPath.row];
+				
 				if (!IsEmpty([currentAction objectForKey:@"date"])) {
+					
 					NSDate *currentActionDate = [NSDate dateFromString:[currentAction objectForKey:@"date"]];
 					NSString *actionDateString = [NSDate stringForDisplayFromDate:currentActionDate];
 					cell.textLabel.text = actionDateString;
+					
 				}
+				
 				if (!IsEmpty([currentAction objectForKey:@"action"])) {
+					
 					NSString *desc = nil;
 					if (!IsEmpty([currentAction objectForKey:@"actor"])) {
+						
 						NSInteger chamberCode = chamberFromOpenStatesString([currentAction objectForKey:@"actor"]);
+						
 						if (chamberCode == HOUSE || chamberCode == SENATE) {
+							
 							desc = [NSString stringWithFormat:@"(%@) %@", 
 									stringForChamber(chamberCode, TLReturnFull), 
 									[currentAction objectForKey:@"action"]];
 						}
 					}
+					
 					if (!desc)
 						desc = [currentAction objectForKey:@"action"];
+					
 					cell.detailTextLabel.text = desc;
 				}
 			}
 				break;
+				
 			default:
 				break;
 		}
@@ -619,14 +641,9 @@ enum _billSections {
 		debug_NSLog(@"BillDetail - Error loading bill results from %@: %@", [request description], [error localizedDescription]);
 	}
 	
-	UIAlertView *alert = [[ UIAlertView alloc ] 
-						  initWithTitle:NSLocalizedStringFromTable(@"Network Error", @"AppAlerts", @"Title for alert stating there's been an error when connecting to a server")
+	[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Network Error", @"AppAlerts", @"Title for alert stating there's been an error when connecting to a server")
 						  message:NSLocalizedStringFromTable(@"There was an error while contacting the server for bill information.  Please check your network connectivity or try again.", @"AppAlerts", @"")
-						  delegate:nil // we're static, so don't do "self"
-						  cancelButtonTitle: NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")
-						  otherButtonTitles:nil];
-	[ alert show ];	
-	[ alert release];
+						  buttonTitle: NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")];
 }
 
 

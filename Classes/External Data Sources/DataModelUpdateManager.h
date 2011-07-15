@@ -15,7 +15,7 @@
 #import <RestKit/CoreData/CoreData.h>
 #import "TexLegeCoreDataUtils.h"
 
-@interface DataModelUpdateManager : NSObject <RKObjectLoaderDelegate, UIAlertViewDelegate, RKRequestQueueDelegate> {
+@interface DataModelUpdateManager : NSObject <RKObjectLoaderDelegate, RKRequestQueueDelegate> {
 	NSDictionary *statusBlurbsAndModels;
 	NSCountedSet *activeUpdates;
 	RKRequestQueue *_queue;

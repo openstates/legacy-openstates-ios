@@ -16,6 +16,7 @@
 #import "UtilityMethods.h"
 #import "LocalyticsSession.h"
 #import "TexLegeTheme.h"
+#import "SLFAlertView.h"
 
 @interface LegislatorContributionsViewController (Private)
 @end
@@ -28,10 +29,10 @@
 
 
 - (id)initWithStyle:(UITableViewStyle)style {
-    // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
+	
     if ((self = [super initWithStyle:style])) {
-		if (!self.dataSource)
-			self.dataSource = [[[LegislatorContributionsDataSource alloc] init] autorelease];
+		
+		dataSource = [[LegislatorContributionsDataSource alloc] init];
     }
     return self;
 }
@@ -47,11 +48,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	if (!self.dataSource)
-		self.dataSource = [[[LegislatorContributionsDataSource alloc] init] autorelease];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contributionDataChanged:) name:kContributionsDataNotifyLoaded object:self.dataSource];
-	self.tableView.dataSource = self.dataSource;
+	if (!dataSource)
+		dataSource = [[LegislatorContributionsDataSource alloc] init];
+
+	self.tableView.dataSource = dataSource;
+
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contributionDataChanged:) name:kContributionsDataNotifyLoaded object:dataSource];
 	
 	UILabel *nimsp = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 66)] autorelease];
 	nimsp.backgroundColor = [UIColor clearColor];
@@ -72,9 +75,9 @@
 }
 
 - (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
+
     [super didReceiveMemoryWarning];
-    // Relinquish ownership any cached data, images, etc that aren't in use.
+
 }
 
 - (void)dealloc {
@@ -93,7 +96,8 @@
 #pragma mark -
 #pragma mark Data Objects
 
-- (void)setQueryEntityID:(NSString *)newObj type:(NSNumber *)newType cycle:(NSString *)newCycle {	
+- (void)setQueryEntityID:(NSString *)newObj type:(NSNumber *)newType cycle:(NSString *)newCycle {
+	
 	NSString *typeString = @"";
 	switch ([newType integerValue]) {
 		case kContributionQueryDonor:
@@ -114,12 +118,16 @@
 		default:
 			break;
 	}
+	
 	NSDictionary *logDict = [[NSDictionary alloc] initWithObjectsAndKeys:typeString, @"queryType", nil];
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"CONTRIBUTIONS_QUERY" attributes:logDict];
 	[logDict release];
 
-	[self.dataSource initiateQueryWithQueryID:newObj type:newType cycle:newCycle];
-	self.navigationItem.title = [self.dataSource title];
+	[self.dataSource initiateQueryWithQueryID:newObj 
+										 type:newType 
+										cycle:newCycle];
+	
+	self.navigationItem.title = [dataSource title];
 
 }
 
@@ -128,12 +136,15 @@
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	
 	TableCellDataObject *dataObject = [self.dataSource dataObjectForIndexPath:indexPath];
 	
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	
 	if (dataObject && dataObject.isClickable) {
-		if (!dataObject.entryValue || ![dataObject.entryValue length]) {
+		
+		if (IsEmpty(dataObject.entryValue)) {
+			
 			NSString *queryName = @"";
 			if (dataObject.title)
 				queryName = dataObject.title;
@@ -142,34 +153,34 @@
 			[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"CONTRIBUTION_QUERY_ERROR" attributes:logDict];
 			[logDict release];
 			
-			UIAlertView *dataAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"Incomplete Records", @"AppAlerts", @"Title for alert indicating insufficient record data for the requested campaign contributor.")
-																 message:NSLocalizedStringFromTable(@"The campaign finance data provider has incomplete information for this request.  You may visit followthemoney.org to perform a manual search.", @"AppAlerts", @"")
-																delegate:self 
-													   cancelButtonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button title cancelling some action")
-													   otherButtonTitles:NSLocalizedStringFromTable(@"Open Website", @"StandardUI", @"Button title"), nil];
-			[dataAlert show];
-			[dataAlert release];
-			
+			[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Incomplete Records", @"AppAlerts", @"Title for alert.") 
+								message:NSLocalizedStringFromTable(@"The campaign finance data provider has incomplete information for this request.  You may visit followthemoney.org to perform a manual search.", @"AppAlerts", @"") 
+							cancelTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button title cancelling some action") 
+							cancelBlock:^(void) {
+								
+							}
+							 otherTitle:NSLocalizedStringFromTable(@"Open Website", @"StandardUI", @"Button title")
+							 otherBlock:^(void) {
+								 NSURL *url = [NSURL URLWithString:[UtilityMethods texLegeStringWithKeyPath:@"ExternalURLs.nimspWeb"]];
+								 [UtilityMethods openURLWithTrepidation:url];
+							 }];
+						
 			return;
 		}
 		
 		
 		LegislatorContributionsViewController *detail = [[LegislatorContributionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
-		[detail setQueryEntityID:dataObject.entryValue type:dataObject.action cycle:dataObject.parameter];		
+		[detail setQueryEntityID:dataObject.entryValue 
+							type:dataObject.action 
+						   cycle:dataObject.parameter];		
+		
 		[self.navigationController pushViewController:detail animated:YES];
+		
 		[detail release];
 		
 	}
 }
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	if (buttonIndex == [alertView firstOtherButtonIndex]) {
-		NSURL *url = [NSURL URLWithString:[UtilityMethods texLegeStringWithKeyPath:@"ExternalURLs.nimspWeb"]];
-		[UtilityMethods openURLWithTrepidation:url];
-	}
-}
-
 
 @end
 

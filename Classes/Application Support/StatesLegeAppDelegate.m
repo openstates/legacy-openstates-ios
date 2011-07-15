@@ -34,6 +34,7 @@
 #import "MTStatusBarOverlay.h"
 
 #import "StateMetaLoader.h"
+#import "SLFAlertView.h"
 
 @interface StatesLegeAppDelegate (Private)
 - (void)runOnEveryAppStart;
@@ -523,32 +524,35 @@ NSInteger kNoSelection = -1;
 	return data;
 }
 
+- (void)doDataReset:(BOOL)doReset {
+	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kResetSavedDatabaseKey];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+	
+	if (doReset) {
+		[self resetSavedTableSelection:nil];
+		[TexLegeCoreDataUtils resetSavedDatabase:nil]; 
+	}
+}
+
 - (BOOL) isDatabaseResetNeeded {
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	BOOL needsReset = [[NSUserDefaults standardUserDefaults] boolForKey:kResetSavedDatabaseKey];
 		
 	if (needsReset) {
-		UIAlertView *resetDB = [[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"Settings: Reset Data to Factory?", @"AppAlerts", @"Confirmation to delete and reset the app's database.")
-														  message:NSLocalizedStringFromTable(@"Are you sure you want to restore the factory database?  NOTE: The application may quit after this reset.  Data updates will be applied automatically via the Internet during the next app launch.", @"AppAlerts",@"") 
-														 delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"Cancel",@"StandardUI",@"Cancelling some activity")
-												otherButtonTitles:NSLocalizedStringFromTable(@"Reset", @"StandardUI", @"Reset application settings to defaults"),nil];
-		resetDB.tag = 23452;
-		[resetDB show];
-		[resetDB release];
+				
+		[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Settings: Reset Data to Factory?", @"AppAlerts", @"Confirmation to delete and reset the app's database.")
+							message:NSLocalizedStringFromTable(@"Are you sure you want to restore the factory database?  NOTE: The application may quit after this reset.  Data updates will be applied automatically via the Internet during the next app launch.", @"AppAlerts",@"") 
+						cancelTitle:NSLocalizedStringFromTable(@"Cancel",@"StandardUI",@"Cancelling some activity")
+						cancelBlock:^(void) {
+							[self doDataReset:NO];
+						}
+						 otherTitle:NSLocalizedStringFromTable(@"Reset", @"StandardUI", @"Reset application settings to defaults")
+						 otherBlock:^(void) {
+							 [self doDataReset:YES];
+						 }];
+		
 	}
 	return needsReset;
-}
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	if (alertView.tag == 23452) {
-		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kResetSavedDatabaseKey];
-		[[NSUserDefaults standardUserDefaults] synchronize];
-
-		if (buttonIndex == alertView.firstOtherButtonIndex) {
-			[self resetSavedTableSelection:nil];
-			[TexLegeCoreDataUtils resetSavedDatabase:nil]; 
-		}
-	}
 }
 
 @end

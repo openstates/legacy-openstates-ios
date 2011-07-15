@@ -19,6 +19,7 @@
 #import "DisclosureQuartzView.h"
 #import "OpenLegislativeAPIs.h"
 #import "TexLegeStandardGroupCell.h"
+#import "SLFAlertView.h"
 
 @interface BillsFavoritesViewController (Private)
 - (void)configureCell:(TexLegeStandardGroupCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -104,14 +105,10 @@
 	[sortDescriptor release];	
 	
 	if (![_watchList count]) {
-		UIAlertView *noWatchedBills = [[ UIAlertView alloc ] 
-										 initWithTitle:NSLocalizedStringFromTable(@"No Watched Bills, Yet", @"AppAlerts", @"Alert box title")
-										 message:NSLocalizedStringFromTable(@"To add a bill to this watch list, first search for one, open it, and then tap the star button in it's header.", @"AppAlerts", @"") 
-										 delegate:nil // we're static, so don't do "self"
-										 cancelButtonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button to cancel something") 
-										 otherButtonTitles:nil];
-		[ noWatchedBills show ];	
-		[ noWatchedBills release ];
+		
+		[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"No Watched Bills, Yet", @"AppAlerts", @"Alert box title")
+							message:NSLocalizedStringFromTable(@"To add a bill to this watch list, first search for one, open it, and then tap the star button in it's header.", @"AppAlerts", @"")
+						buttonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button to cancel something")];
 		
 	}
 	[self.tableView reloadData];

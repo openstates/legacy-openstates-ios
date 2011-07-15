@@ -25,16 +25,6 @@
 		</dict>
 		<dict>
 			<key>icon</key>
-			<string>30-key.png</string>
-			<key>class</key>
-			<string>BillsKeyViewController</string>
-			<key>title</key>
-			<string>Key Bills</string>
-			<key>dataObject</key>
-			<string>BillsMenuItem</string>
-		</dict>
-		<dict>
-			<key>icon</key>
 			<string>138-scales.png</string>
 			<key>class</key>
 			<string>BillsTodayViewController</string>

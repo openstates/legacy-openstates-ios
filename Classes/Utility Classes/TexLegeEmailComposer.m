@@ -14,14 +14,11 @@
 #import "StatesLegeAppDelegate.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
-
-@interface TexLegeEmailComposer (Private)
-- (void)presentMailFailureAlertViewWithTitle:(NSString*)failTitle message:(NSString *)failMessage;
-@end
+#import "SLFAlertView.h"
 
 @implementation TexLegeEmailComposer
 
-@synthesize mailComposerVC, isComposingMail, currentAlert, currentCommander;
+@synthesize mailComposerVC, isComposingMail, currentCommander;
 
 + (id)sharedTexLegeEmailComposer
 {
@@ -36,17 +33,15 @@
 {
     if ((self = [super init]))
     {
-		self.isComposingMail = NO;
-		self.mailComposerVC = nil;
-		self.currentAlert = nil;
-		self.currentCommander = nil;
+		isComposingMail = NO;
+		mailComposerVC = nil;
+		currentCommander = nil;
     }
     return self;
 }
 
 - (void)dealloc {
 	self.mailComposerVC = nil;
-	self.currentAlert = nil;
 	self.currentCommander = nil;
     [super dealloc];
 }
@@ -64,31 +59,42 @@
 		body = @"";
 	
 	if ([MFMailComposeViewController canSendMail]) {
+		
+		self.isComposingMail = YES;
+
 		MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
 		self.mailComposerVC = mc;
-		[mc release];
-		self.mailComposerVC.mailComposeDelegate = self;
-		[self.mailComposerVC setSubject:subject];
-		[self.mailComposerVC setToRecipients:[NSArray arrayWithObject:recipient]];
-		[self.mailComposerVC setMessageBody:body isHTML:NO];
-		[[self.mailComposerVC navigationBar] setTintColor:[TexLegeTheme navbar]];
-		self.isComposingMail = YES;
+		
+		mc.mailComposeDelegate = self;
+		[mc setSubject:subject];
+		[mc setToRecipients:[NSArray arrayWithObject:recipient]];
+		[mc setMessageBody:body isHTML:NO];
+		[[mc navigationBar] setTintColor:[TexLegeTheme navbar]];
 				
-		[self.currentCommander presentModalViewController:self.mailComposerVC animated:YES];
+		[self.currentCommander presentModalViewController:mc animated:YES];
+		
+		[mc release];
 
 	}
 	else {   // Mail functions are unavailable
+		
 		NSMutableString *message = [NSMutableString stringWithFormat:@"mailto:%@", recipient];
-		if (subject && [subject length])
+		
+		if (!IsEmpty(subject))
 			[message appendFormat:@"&subject=%@", subject];
-		if (body && [body length])
+		
+		if (!IsEmpty(body))
 			[message appendFormat:@"&body=%@", body];
+		
 		NSURL *mailto = [NSURL URLWithString:[message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 		
-		if (![UtilityMethods openURLWithTrepidation:mailto])
-			[self presentMailFailureAlertViewWithTitle:NSLocalizedStringFromTable(@"Cannot Open Mail Composer", @"AppAlerts", @"Error on email attempt")
-											   message:NSLocalizedStringFromTable(@"There was an error while attempting to open an email composer.  Please check your network settings and try again",
-																				  @"AppAlerts", @"Error on email attempt")];
+		if ( NO == [UtilityMethods openURLWithTrepidation:mailto] ) {
+			
+			[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Cannot Open Mail Composer", @"AppAlerts", @"Error on email attempt")
+								message:NSLocalizedStringFromTable(@"There was an error while attempting to open an email composer.  Please check your network settings and try again", @"AppAlerts", @"Error on email attempt")
+							buttonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")];
+		}			
+
 	}
 }
 
@@ -100,34 +106,18 @@
 						error:(NSError*)error {
 	
 	if (result == MFMailComposeResultFailed) {
-		[self presentMailFailureAlertViewWithTitle:NSLocalizedStringFromTable(@"Failure, Message Not Sent", @"AppAlerts", @"Error on email attempt.")
-										   message:NSLocalizedStringFromTable(@"An error prevented successful transmission of your message. Check your email and network settings or try emailing manually.", @"AppAlerts", @"Error on email attempt")];
+		
+		[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Failure, Message Not Sent", @"AppAlerts", @"Error on email attempt.")
+							message:NSLocalizedStringFromTable(@"An error prevented successful transmission of your message. Check your email and network settings or try emailing manually.", @"AppAlerts", @"Error on email attempt")
+						buttonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")];
+		
 	}
 	
-	self.isComposingMail = NO;
 	[self.currentCommander dismissModalViewControllerAnimated:YES];
 	self.mailComposerVC = nil;
 	self.currentCommander = nil;
-}
+	self.isComposingMail = NO;
 
-#pragma mark -
-#pragma mark Alert View
-
-- (void)presentMailFailureAlertViewWithTitle:(NSString*)failTitle message:(NSString *)failMessage {
-	self.currentAlert = [[[UIAlertView alloc] 
-						 initWithTitle:failTitle
-						 message:failMessage 
-						 delegate:self 
-						  cancelButtonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Cancelling some activity") 
-						  otherButtonTitles:nil] autorelease];
-	[self.currentAlert show];
-	
-}
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	if ([alertView isEqual:self.currentAlert]) {
-		self.currentAlert = nil;		
-	}
 }
 
 

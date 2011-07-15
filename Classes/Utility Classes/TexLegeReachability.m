@@ -13,6 +13,7 @@
 #import "TexLegeReachability.h"
 #import "UtilityMethods.h"
 #import "OpenLegislativeAPIs.h"
+#import "SLFAlertView.h"
 
 #define ALLOW_SLOW_DNS_LOOKUPS	0
 
@@ -154,25 +155,17 @@
 }
 
 + (void)noInternetAlert {
-	UIAlertView *noInternetAlert = [[ UIAlertView alloc ] 
-									 initWithTitle:NSLocalizedStringFromTable(@"Internet Unavailable", @"AppAlerts", @"Alert title, network access is unavailable.")
-									 message:NSLocalizedStringFromTable(@"This feature requires an Internet connection, and a connection is unavailable.  Your device may be in 'Airplane' mode or is suffering poor network coverage.", @"AppAlerts", @"") 
-									 delegate:nil // we're static, so don't do "self"
-									 cancelButtonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Cancelling some activity")
-									 otherButtonTitles:nil];
-	[ noInternetAlert show ];	
-	[ noInternetAlert release ];
+		
+	[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Internet Unavailable", @"AppAlerts", @"Alert title, network access is unavailable.")
+						message:NSLocalizedStringFromTable(@"This feature requires an Internet connection, and a connection is unavailable.  Your device may be in 'Airplane' mode or is suffering poor network coverage.", @"AppAlerts", @"") 
+					buttonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Cancelling some activity")];
 }
 
 + (void)noHostAlert {
-	UIAlertView *alert = [[ UIAlertView alloc ] 
-			 initWithTitle:NSLocalizedStringFromTable(@"Host Unreachable", @"AppAlerts", @"Internet host is down")
-			 message:NSLocalizedStringFromTable(@"There was a problem contacting the specified host, the URL may have changed or may contain typographical errors. Perhaps try the connection again later.", @"AppAlerts", @"")
-			 delegate:nil // we're static, so don't do "self"
-			 cancelButtonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Cancelling some activity") 
-			 otherButtonTitles:nil];
-	[ alert show ];	
-	[ alert release ];
+		
+	[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Host Unreachable", @"AppAlerts", @"Internet host is down")
+						message:NSLocalizedStringFromTable(@"There was a problem contacting the specified host, the URL may have changed or may contain typographical errors. Perhaps try the connection again later.", @"AppAlerts", @"")
+					buttonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Cancelling some activity")]; 
 }
 
 - (BOOL) isNetworkReachable {

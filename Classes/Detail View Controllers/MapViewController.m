@@ -29,7 +29,7 @@
 
 #import "TexLegeMapPins.h"
 #import "DistrictPinAnnotationView.h"
-
+#import "SLFAlertView.h"
 
 @interface MapViewController (Private)
 - (void) animateToState;
@@ -552,13 +552,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 						 NSLocalizedStringFromTable(@"Failed to determine your geographic location due to the following: %@", @"AppAlerts", @""), 
 						 [error localizedDescription]];
 	
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"Geolocation Error", @"AppAlerts", @"Alert box title for an error")
-													message:message
-												   delegate:nil 
-										  cancelButtonTitle:NSLocalizedStringFromTable(@"OK", @"StandardUI", @"Confirming a selection")
-										  otherButtonTitles: nil];
-	[alert show];
-	[alert release];
+	[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Geolocation Error", @"AppAlerts", @"Alert box title for an error")
+						message:message
+					buttonTitle:NSLocalizedStringFromTable(@"OK", @"StandardUI", @"Confirming a selection")];
+	
 	self.mapView.showsUserLocation = NO;
 	[self showLocateUserButton];
 
