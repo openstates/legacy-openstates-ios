@@ -12,23 +12,27 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import <RestKit/RestKit.h>
+
+	
 typedef enum {
     DistrictMapSearchOperationFailOptionLog,
     DistrictMapSearchOperationShowAlert,
     
-   DistrictMapSearchOperationFailOptionCount
+	DistrictMapSearchOperationFailOptionCount
 } DistrictMapSearchOperationFailOption;
 
 @class DistrictMapSearchOperation;
 
 @protocol DistrictMapSearchOperationDelegate
 - (void)districtMapSearchOperationDidFinishSuccessfully:(DistrictMapSearchOperation *)op;
+
 - (void)districtMapSearchOperationDidFail:(DistrictMapSearchOperation *)op 
 							 errorMessage:(NSString *)errorMessage 
 								   option:(DistrictMapSearchOperationFailOption)failOption;
 @end
 
-@interface DistrictMapSearchOperation : NSOperation 
+@interface DistrictMapSearchOperation : NSObject <RKRequestDelegate>
 {
     __weak  NSObject <DistrictMapSearchOperationDelegate> *delegate;
 	CLLocationCoordinate2D searchCoordinate;
@@ -37,10 +41,10 @@ typedef enum {
 }
 @property (assign) NSObject <DistrictMapSearchOperationDelegate> *delegate;
 @property (assign) CLLocationCoordinate2D searchCoordinate;
-@property (retain) NSArray *searchIDs;
+
 @property (retain) NSMutableArray *foundIDs;
 
-- (id) initWithDelegate:(NSObject <DistrictMapSearchOperationDelegate> *)newDelegate 
-			 coordinate:(CLLocationCoordinate2D)aCoordinate searchDistricts:(NSArray *)districtIDs;
-	
+- (void)searchForCoordinate:(CLLocationCoordinate2D)aCoordinate 
+				   delegate:(NSObject <DistrictMapSearchOperationDelegate>*)aDelegate;
+
 @end

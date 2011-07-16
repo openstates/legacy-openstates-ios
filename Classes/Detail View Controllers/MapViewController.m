@@ -55,7 +55,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 @synthesize texasRegion;
 @synthesize senateDistrictView, houseDistrictView;
 @synthesize masterPopover;
-@synthesize genericOperationQueue;
+
+@synthesize geoLegeSearch;
 
 #pragma mark -
 #pragma mark Initialization and Memory Management
@@ -68,27 +69,20 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void) dealloc {
-	//[self invalidateDistrictView:BOTH_CHAMBERS];
 	
-	/*if (self.mapView) {
-		[self.mapView removeAnnotations:self.mapView.annotations];
-		[self.mapView removeOverlays:self.mapView.overlays];
-	}*/
-	self.mapView = nil;
-
-	if (self.genericOperationQueue)
-		[self.genericOperationQueue cancelAllOperations];
-	self.genericOperationQueue = nil;
-	
-	self.mapTypeControl = nil;
+	self.geoLegeSearch = nil;
+	self.geocoder = nil;
+	self.searchLocation = nil;
 	self.searchBarButton = nil;
+	self.searchBar = nil;
+
+	self.mapTypeControl = nil;
 	self.mapTypeControlButton = nil;
 	self.userLocationButton = nil;
-	self.geocoder = nil;
 	self.districtOfficesButton = nil;
-	self.searchBar = nil;
 	self.masterPopover = nil;
-	self.searchLocation = nil;
+	self.mapView = nil;
+
 	[super dealloc];
 }
 
@@ -130,11 +124,9 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void) viewDidUnload {	
-	
-	if (self.genericOperationQueue)
-		[self.genericOperationQueue cancelAllOperations];
-	self.genericOperationQueue = nil;
-	
+	self.geoLegeSearch = nil;
+	self.geocoder = nil;
+
 	[super viewDidUnload];
 }
 
@@ -230,8 +222,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 #pragma mark -
 #pragma mark Gesture Recognizer
 
-#pragma mark Handling long presses
-
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
 	id theView = gestureRecognizer.view;
 
@@ -314,25 +304,25 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 #pragma mark -
-#pragma DistrictMapSearchOperationDelegate
+#pragma mark District Map Searching
 
 - (void) searchDistrictMapsForCoordinate:(CLLocationCoordinate2D)aCoordinate {	
 
-	NSArray *list = [TexLegeCoreDataUtils allDistrictMapIDsWithBoundingBoxesContaining:aCoordinate];
+	nice_release(geoLegeSearch);
+	geoLegeSearch = [[DistrictMapSearchOperation alloc] init];
 	
-	DistrictMapSearchOperation *op = [[DistrictMapSearchOperation alloc] initWithDelegate:self 
-																			   coordinate:aCoordinate 
-																				searchDistricts:list];
-	if (op) {
-		if (!self.genericOperationQueue)
-			self.genericOperationQueue = [[[NSOperationQueue alloc] init] autorelease];
-		[self.genericOperationQueue addOperation:op];
-		[op release];
-	}
+	if (geoLegeSearch) {
+		[geoLegeSearch searchForCoordinate:aCoordinate 
+								  delegate:self];
+	
+	}	
+	
 }
 
-- (void)districtMapSearchOperationDidFinishSuccessfully:(DistrictMapSearchOperation *)op {	
+- (void)districtMapSearchOperationDidFinishSuccessfully:(DistrictMapSearchOperation *)op {
+	
 	//debug_NSLog(@"Found some search results in %d districts", [op.foundDistricts count]);
+	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
 	for (NSNumber *districtID in op.foundIDs) {
@@ -340,16 +330,11 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		if (district) {
 			[self.mapView addAnnotation:district];
 			[self.mapView performSelector:@selector(addOverlay:) withObject:[district polygon] afterDelay:0.5f];
-			//for (DistrictOfficeObj *office in district.legislator.districtOffices)
-			//	[self.mapView addAnnotation:office];
-			
+
 			[[DistrictMapObj managedObjectContext] refreshObject:district mergeChanges:NO];	// re-fault it to free memory
 		}
 	}	
 	
-	if (self.genericOperationQueue)
-		[self.genericOperationQueue cancelAllOperations];
-	self.genericOperationQueue = nil;
 	
 	[pool drain];
 }
@@ -361,10 +346,13 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	if (failOption == DistrictMapSearchOperationFailOptionLog) {
 		NSLog(@"%@", errorMessage);
 	}
+	else {
+		[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Geolocation Error", @"AppAlerts", @"Alert box title for an error")
+							message:errorMessage
+						buttonTitle:NSLocalizedStringFromTable(@"OK", @"StandardUI", @"Confirming a selection")];
+	}
 	
-	if (self.genericOperationQueue)
-		[self.genericOperationQueue cancelAllOperations];
-	self.genericOperationQueue = nil;
+	self.geoLegeSearch = nil;
 }
 
 #pragma mark -
@@ -442,20 +430,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	[pool drain];
 }
 
-/*
-- (IBAction) showAllDistrictOffices:(id)sender {
-	
-	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"SHOWING_ALL_DISTRICT_OFFICES"];
-	
-	NSArray *districtOffices = [TexLegeCoreDataUtils allObjectsInEntityNamed:@"DistrictOfficeObj" context:self.managedObjectContext];
-	if (districtOffices) {
-		[self resetMapViewWithAnimation:YES];
-		[self.mapView addAnnotations:districtOffices];
-	}
-}
-*/
-
-
 - (void)showLegislatorDetails:(LegislatorObj *)legislator
 {
 	if (!legislator)
@@ -507,7 +481,9 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	annotation.coordinateChangedDelegate = self;
 	
 	[self.mapView addAnnotation:annotation];
+	
 	[self searchDistrictMapsForCoordinate:annotation.coordinate];
+	
 	[self moveMapToAnnotation:annotation];
 	
 	self.searchLocation = annotation;
@@ -545,7 +521,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 #pragma mark -
 #pragma mark MapViewDelegate
 
-// Only in 4.0+
 - (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error {
 	
 	NSString *message = [NSString stringWithFormat:
@@ -561,7 +536,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 }
 
-// Only in 4.0+
+
 - (void)mapView:(MKMapView *)theMapView didUpdateUserLocation:(MKUserLocation *)userLocation {
 	if (userLocation) {
 		[self searchDistrictMapsForCoordinate:userLocation.coordinate];

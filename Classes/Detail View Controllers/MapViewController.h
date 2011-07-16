@@ -35,7 +35,8 @@
 @property (nonatomic,readonly) MKCoordinateRegion texasRegion;
 @property (nonatomic,retain) UserPinAnnotation *searchLocation;
 @property (nonatomic,assign) MKPolygonView *senateDistrictView, *houseDistrictView;
-@property (nonatomic,retain) NSOperationQueue *genericOperationQueue;
+
+@property (nonatomic,retain) DistrictMapSearchOperation *geoLegeSearch;
 
 - (IBAction) showAllDistricts:(id)sender;
 //- (IBAction) showAllDistrictOffices:(id)sender;

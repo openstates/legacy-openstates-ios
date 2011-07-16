@@ -12,9 +12,12 @@
 
 #import "DistrictMapSearchOperation.h"
 #import "NSInvocation+CWVariableArguments.h"
-#import "StatesLegeAppDelegate.h"
 #import "DistrictMapObj+MapKit.h"
-#import "TexLegeCoreDataUtils.h"
+#import "OpenLegislativeAPIs.h"
+#import "TexLegeReachability.h"
+#import "LegislatorObj.h"
+#import "JSONKit.h"
+#import "UtilityMethods.h"
 
 @interface DistrictMapSearchOperation()
 - (void)informDelegateOfFailureWithMessage:(NSString *)message failOption:(DistrictMapSearchOperationFailOption)failOption;
@@ -23,35 +26,54 @@
 
 @implementation DistrictMapSearchOperation
 @synthesize delegate;
-@synthesize searchCoordinate, searchIDs, foundIDs;
+@synthesize searchCoordinate, foundIDs;
 
-- (id) initWithDelegate:(NSObject <DistrictMapSearchOperationDelegate> *)newDelegate 
-			 coordinate:(CLLocationCoordinate2D)aCoordinate searchDistricts:(NSArray *)districtIDs {
+- (id) init {
 	if ((self = [super init])) {
-		
-		if (newDelegate)
-			delegate = newDelegate;
-		searchCoordinate = aCoordinate;
-		
-		if (districtIDs)
-			searchIDs = [districtIDs retain];
+		delegate = nil;
 	}
 	return self;
 }
 
+- (void)searchForCoordinate:(CLLocationCoordinate2D)aCoordinate 
+				   delegate:(NSObject <DistrictMapSearchOperationDelegate>*)aDelegate {
+	
+	delegate = aDelegate;
+	searchCoordinate = aCoordinate;
+	
+	if ([TexLegeReachability openstatesReachable]) {
+		
+		NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
+									 SUNLIGHT_APIKEY, @"apikey",
+									 [NSNumber numberWithDouble:aCoordinate.longitude], @"long",
+									 [NSNumber numberWithDouble:aCoordinate.latitude], @"lat",
+									 nil];
+		
+		RKClient *osApiClient = [[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient];
+		[osApiClient get:@"/legislators/geo/" queryParams:queryParams delegate:self];	
+	}
+	else {
+		[self informDelegateOfFailureWithMessage:@"Cannot geolocate legislative districts because Internet service is unavailable." 
+									  failOption:DistrictMapSearchOperationShowAlert];
+	}
+	
+
+}
+
 - (void) dealloc {
+	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
+
 	self.foundIDs = nil;
-	self.searchIDs = nil;
 	delegate = nil;
 	[super dealloc];
 }
 
 - (void)informDelegateOfFailureWithMessage:(NSString *)message failOption:(DistrictMapSearchOperationFailOption)failOption;
 {
-    if ([delegate respondsToSelector:@selector(DistrictMapSearchOperationDidFail:errorMessage:option:)])
+    if ([delegate respondsToSelector:@selector(districtMapSearchOperationDidFail:errorMessage:option:)])
     {
         NSInvocation *invocation = [NSInvocation invocationWithTarget:delegate 
-                                                             selector:@selector(DistrictMapSearchOperationDidFail:errorMessage:option:) 
+                                                             selector:@selector(districtMapSearchOperationDidFail:errorMessage:option:) 
                                                       retainArguments:YES, self, message, failOption];
         [invocation invokeOnMainThreadWaitUntilDone:YES];
     } 
@@ -67,55 +89,68 @@
     }
 }
 
+
 #pragma mark -
-- (void)main 
-{	
-	BOOL success = NO;
+#pragma mark RestKit:RKObjectLoaderDelegate
+
+- (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
+	if (error && request) {
+		debug_NSLog(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
+	}	
 	
-    @try 
-    {		
-        // Operation task here
+	self.foundIDs = nil;
+
+	[self informDelegateOfFailureWithMessage:@"Could not find a district map with those coordinates." 
+								  failOption:DistrictMapSearchOperationFailOptionLog];
+	
+}
+
+// Handling GET /BillMetadata.json  
+- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
+	
+	if ([request isGET] && [response isOK]) {  
+		// Success! Let's take a look at the data  
 		
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 		
-		if (foundIDs)
-			[foundIDs release];
+		id results = [response.body mutableObjectFromJSONData];
+		NSMutableArray *memberList = nil;
+		
+		if ([results isKindOfClass:[NSMutableArray class]])
+			memberList = results;
+		
+		else if ([results isKindOfClass:[NSMutableDictionary class]])
+			memberList = [NSMutableArray arrayWithObject:results];
+						
+								
+		nice_release(foundIDs);
 		foundIDs = [[NSMutableArray alloc] init];
-					
-		for (NSNumber *distID in searchIDs) {
+		
+		BOOL success = NO;
+		
+		for (NSMutableDictionary *member in memberList) {
+			
+			NSString *legeID = [member objectForKey:@"leg_id"];
+			
+			if (IsEmpty(legeID))
+				continue;
+			
+			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.openstatesID == %@", legeID];
+			LegislatorObj *legislator = [LegislatorObj objectWithPredicate:predicate];
+			if (legislator) {
+				[foundIDs addObject:legislator.districtMap.districtMapID];
+				success = YES;
 
-			DistrictMapObj * map = [DistrictMapObj objectWithPrimaryKeyValue:distID];
-			if ([map districtContainsCoordinate:[self searchCoordinate]]) {
-
-#warning state specific (Hole in District 83 Map)
-				if ([map.districtMapID integerValue] == 41 || [map.district integerValue] == 83) {
-					DistrictMapObj * holeDist = [DistrictMapObj objectWithPrimaryKeyValue:[NSNumber numberWithInt:40]];	// dist 84
-					if (NO == [holeDist districtContainsCoordinate:[self searchCoordinate]]) {
-						[foundIDs addObject:distID];
-						success = YES;
-					}
-					[[holeDist managedObjectContext] refreshObject:map mergeChanges:NO];
-				}
-				else {
-					[foundIDs addObject:distID];
-					success = YES;
-				}
 			}
-			// this frees up memory and re-faults the unneeded objects
-			[[map managedObjectContext] refreshObject:map mergeChanges:NO];
+				
 		}
-		[pool drain];
-    }
-    @catch (NSException * e) 
-    {
-        debug_NSLog(@"Exception: %@", e);
-    }
+		
+		if (success) {
+			[self informDelegateOfSuccess];
+		}
+	}
 	
-	if (success)
-		[self informDelegateOfSuccess];
-	else
-		[self informDelegateOfFailureWithMessage:@"Could not find a district map with those coordinates." failOption:DistrictMapSearchOperationFailOptionLog];
-	
+	[self informDelegateOfFailureWithMessage:@"Could not find a district map with those coordinates." failOption:DistrictMapSearchOperationFailOptionLog];
+
 }
 	
 
