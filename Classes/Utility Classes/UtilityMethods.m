@@ -77,6 +77,11 @@ BOOL IsEmpty(id thing) {
 @end
 
 @implementation NSString  (MoreStringUtils)
+
+- (NSString *)urlSafeString {
+	return [self stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];	
+}
+
 - (BOOL) hasSubstring:(NSString*)substring caseInsensitive:(BOOL)insensitive
 {
 	if(IsEmpty(substring))
@@ -95,7 +100,7 @@ BOOL IsEmpty(id thing) {
 	return substringRange.location != NSNotFound && substringRange.length > 0;
 }
 
-- (NSString*)firstLetterCaptialized {
+- (NSString*)firstLetterCapitalized {
 //#ifdef __APPLE__
 	NSRange startRange = NSMakeRange(0, 1);
 	return [self stringByReplacingCharactersInRange:startRange withString:[[self substringWithRange:startRange] uppercaseString]];
@@ -121,7 +126,7 @@ BOOL IsEmpty(id thing) {
 																range:NSMakeRange(0, [prefix length])];
 		
 		if (capitalize)
-			strVal = [strVal firstLetterCaptialized];
+			strVal = [strVal firstLetterCapitalized];
 	}	
 	return strVal;
 }
@@ -288,11 +293,6 @@ BOOL IsEmpty(id thing) {
 	return title;
 }
 
-+ (NSURL *) safeWebUrlFromString:(NSString *)urlString {
-	//NSString * tempString = [[NSString alloc] initWithString:urlString];
-	return [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-}
-
 // Determine if we have network access, if not then throw up an alert.
 + (BOOL) openURLWithTrepidation:(NSURL *)url {
 	BOOL canOpenURL = NO;
@@ -365,7 +365,7 @@ BOOL IsEmpty(id thing) {
 	NSString *temp2 = [temp1 stringByReplacingOccurrencesOfString:@"\n" withString:@", "];
 	
 	
-	return [UtilityMethods safeWebUrlFromString:temp2];
+	return [NSURL URLWithString:[temp2 urlSafeString]];
 }
 
 #pragma mark -

@@ -64,6 +64,8 @@
 	
 	if (IsEmpty(billID) || IsEmpty(session) || !sender || !osApiClient)
 		return;
+	
+	session = [session urlSafeString];
 	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY, @"apikey",nil];
 	NSString *queryString = [NSString stringWithFormat:@"/bills/%@/%@/%@", meta.selectedState, session, [billID stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	[osApiClient get:queryString queryParams:queryParams delegate:sender];	

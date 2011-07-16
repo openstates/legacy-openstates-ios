@@ -413,8 +413,7 @@ NSInteger kNoSelection = -1;
 - (void)runOnEveryAppStart {
 	self.appIsQuitting = NO;
 	
-	[[StateMetaLoader sharedStateMeta] setSelectedState:@"ut"];	//ca
-	//[[StateMetaLoader sharedStateMeta] setSelectedSession:@"20112012"];
+	[[StateMetaLoader sharedStateMeta] setSelectedState:@"ca"];
 	
 	if (![self isDatabaseResetNeeded]) {
 		analyticsOptInController = [[AnalyticsOptInAlertController alloc] init];

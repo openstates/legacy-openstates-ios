@@ -68,7 +68,7 @@
 				tempURL = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",entryValue]];
 				break;
 			case DirectoryTypeWeb:
-				tempURL = [UtilityMethods safeWebUrlFromString:entryValue];
+				tempURL = [NSURL URLWithString:[entryValue urlSafeString]];
 				break;
 			case DirectoryTypeMail:
 				tempURL = [NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@",entryValue]];

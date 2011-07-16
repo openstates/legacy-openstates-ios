@@ -311,7 +311,7 @@ CGFloat quartzRowHeight = 73.f;
 	//case kInfoSectionWeb:	 // open the web page
 	clickable = (text && [text length]);
 	if (clickable)
-		val = [UtilityMethods safeWebUrlFromString:self.committee.url];
+		val = [self.committee.url urlSafeString];
 	else
 		val = @"";
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:

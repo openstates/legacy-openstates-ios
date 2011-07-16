@@ -38,7 +38,6 @@ BOOL IsEmpty(id thing);
 + (NSString *) titleFromURL:(NSURL *)url;
 + (NSDictionary *)parametersOfQuery:(NSString *)queryString;
 
-+ (NSURL *) safeWebUrlFromString:(NSString *)urlString;
 + (NSURL *) googleMapUrlFromStreetAddress:(NSString *)address;
 + (NSString *)applicationDocumentsDirectory;
 + (NSString *)applicationCachesDirectory;
@@ -65,8 +64,9 @@ BOOL IsEmpty(id thing);
 @end
 
 @interface NSString  (MoreStringUtils)
+- (NSString *)urlSafeString;
 - (BOOL) hasSubstring:(NSString*)substring caseInsensitive:(BOOL)insensitive;
-- (NSString*)firstLetterCaptialized;
+- (NSString*)firstLetterCapitalized;
 - (NSString *)chopPrefix:(NSString *)prefix capitalizingFirst:(BOOL)capitalize;
 @end
 

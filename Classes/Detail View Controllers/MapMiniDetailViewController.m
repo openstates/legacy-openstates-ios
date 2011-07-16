@@ -225,7 +225,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 								[UtilityMethods texLegeStringWithKeyPath:@"ExternalURLs.googleMapsWeb"],
 							self.annotationActionCoord.latitude, self.annotationActionCoord.longitude];	
 		
-		NSURL *url = [UtilityMethods safeWebUrlFromString:urlString];
+		NSURL *url = [NSURL URLWithString:[urlString urlSafeString]];
 		[UtilityMethods openURLWithTrepidation:url];
 	}
 }

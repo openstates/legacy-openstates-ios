@@ -14,7 +14,7 @@ Development Milestones
 - Web Resources / Web Links (specific to Texas). Keeping stubs around for future use.  
 
 
- 3. Remove State Specific Data Assumptions.  
+ 3. **(done)** Remove State Specific Data Assumptions.  
 - Seek out alternatives from Open States data for flagging Speaker & Lt. Gov. / Senate Pres.  
 - Adapt to Open States metadata for chamber names and legislator titles.  
 - Adapt to generic events from Events API, no more Texas specific event parsing.  
