@@ -15,7 +15,6 @@
 
 #define kBillCategoriesNotifyError	@"BILL_CATEGORIES_ERROR"
 #define kBillCategoriesNotifyLoaded	@"BILL_CATEGORIES_LOADED"
-#define kBillCategoriesCacheFile	@"BillCategoriesCache.plist"
 
 // "categories" returns an array of categories and counts, keyed by chamber type (NSNumber)
 #define kBillCategoriesTitleKey		@"title"

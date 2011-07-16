@@ -36,28 +36,6 @@
 	return foo;
 }
 
-+ (NSString *)nameForChamber:(NSInteger)chamber {
-	NSString *name = nil;
-	// prepare to make some assumptions
-	if (chamber == HOUSE || chamber == SENATE) {
-		NSDictionary *stateMeta = [[StateMetaLoader sharedStateMeta] stateMetadata];
-		if (NO == IsEmpty(stateMeta)) {
-			if (chamber == SENATE)
-				name = [stateMeta objectForKey:kMetaUpperChamberNameKey];
-			else {
-				name = [stateMeta objectForKey:kMetaLowerChamberNameKey];
-			}
-			if (NO == IsEmpty(name)) {
-				NSArray *words = [name componentsSeparatedByString:@" "];
-				if ([words count] > 1 && [[words objectAtIndex:0] length] > 4) { // just to make sure we have a decent, single name
-					name = [words objectAtIndex:0];
-				}
-			}
-		}
-	}
-	return name;
-}
-
 - (id)init {
 	if ((self=[super init])) {
 		updated = nil;
@@ -69,14 +47,19 @@
 		
 		[[NSUserDefaults standardUserDefaults] synchronize];
 		NSString *tempState = [[NSUserDefaults standardUserDefaults] objectForKey:kMetaSelectedStateKey];
-		if (tempState) {
+		if (!IsEmpty(tempState)) {
 			_selectedState = [tempState copy];
-		}
+			
+			NSDictionary *tempSessionDict = [[NSUserDefaults standardUserDefaults] objectForKey:kMetaSelectedStateSessionKey];
+			if (tempSessionDict) {
+				NSString *tempSession = [tempSessionDict objectForKey:tempState];
+				
+				if (!IsEmpty(tempSession)) {
+					_selectedSession = [tempSession copy];
+				}
+			}
+		}	
 
-		NSString *tempSession = [[NSUserDefaults standardUserDefaults] objectForKey:kMetaSelectedSessionKey];
-		if (tempSession) {
-			_selectedSession = [tempSession copy];
-		}
 		
 		[self metadataFromCache];
 	}
@@ -94,13 +77,12 @@
 	[super dealloc];
 }
 
+
 - (void)setSelectedState:(NSString *)stateID {
-	nice_release(_selectedState);
-	nice_release(_selectedSession);
-	nice_release(_sessions);
 	
 	if (NO == IsEmpty(stateID)) {
-		_selectedState= [stateID copy];
+		
+		NSLog(@"State Metadata: Changing state to %@", stateID);
 
 		[[NSUserDefaults standardUserDefaults] setObject:stateID forKey:kMetaSelectedStateKey];
 		[[NSUserDefaults standardUserDefaults] synchronize];
@@ -112,6 +94,8 @@
 - (NSMutableDictionary *)metadataFromCache {
 	
 	nice_release(_metadata);
+	nice_release(_sessions);
+	nice_release(_selectedSession);
 	
 	NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kStateMetaFile];
 	NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -197,6 +181,7 @@
 - (NSString *)selectedSession {
 	
 	if (IsEmpty(_selectedSession)) {
+				
 		// default to returning the latest session, if no one has picked something yet.
 		_selectedSession = [[self latestSession] copy];
 	}
@@ -209,11 +194,21 @@
 	// sanity check to make sure we're setting it to something sensible
 	if (!IsEmpty(sessionID) && [self.sessions containsObject:sessionID]) {
 		
+		NSDictionary *stateSession = [NSDictionary dictionaryWithObject:sessionID forKey:self.selectedState];
+		[[NSUserDefaults standardUserDefaults] setObject:stateSession forKey:kMetaSelectedStateSessionKey];
+		[[NSUserDefaults standardUserDefaults] synchronize];	
+		
+		
+		if ([sessionID isEqual:_selectedSession])
+			return; // it's no different, we're done.
+		
 		nice_release(_selectedSession);
 		_selectedSession = [sessionID copy];
 		
-		[[NSUserDefaults standardUserDefaults] setObject:sessionID forKey:kMetaSelectedSessionKey];
-		[[NSUserDefaults standardUserDefaults] synchronize];		
+		NSLog(@"State Metadata: Changing selected session to %@", sessionID);
+		
+		[[NSNotificationCenter defaultCenter] postNotificationName:kStateMetaNotifySessionChange object:nil];
+
 	}
 }
 
@@ -263,6 +258,31 @@
 }
 */
 
++ (NSString *)nameForChamber:(NSInteger)chamber {
+	NSString *name = nil;
+	
+	// prepare to make some assumptions
+	if (chamber == HOUSE || chamber == SENATE) {
+		NSDictionary *stateMeta = [[StateMetaLoader sharedStateMeta] stateMetadata];
+		if (NO == IsEmpty(stateMeta)) {
+			if (chamber == SENATE)
+				name = [stateMeta objectForKey:kMetaUpperChamberNameKey];
+			else {
+				name = [stateMeta objectForKey:kMetaLowerChamberNameKey];
+			}
+			if (NO == IsEmpty(name)) {
+				NSArray *words = [name componentsSeparatedByString:@" "];
+				if ([words count] > 1 && [[words objectAtIndex:0] length] > 4) { // just to make sure we have a decent, single name
+					name = [words objectAtIndex:0];
+				}
+			}
+		}
+	}
+	return name;
+}
+
+
+
 #pragma mark -
 #pragma mark RestKit:RKObjectLoaderDelegate
 
@@ -276,8 +296,48 @@
 
 	// We had trouble loading the metadata online, so pull it up from the one in the documents folder
 	if (NO == IsEmpty([self metadataFromCache])) {
-		[[NSNotificationCenter defaultCenter] postNotificationName:kStateMetaNotifyLoaded object:nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kStateMetaNotifyStateLoaded object:nil];
 	}
+}
+
+- (void)reloadMetaPropertiesForStateID:(id)gotStateID {
+	
+	NSCParameterAssert((gotStateID != NULL));
+	[[NSUserDefaults standardUserDefaults] synchronize];
+
+	//////////// Set the selected state to the one we've just loaded  //////////////
+	
+	nice_release(_selectedState);
+	_selectedState = [gotStateID copy];
+	nice_release(_sessions);
+	[self sessions];
+	
+	//////////// Now set the selected session ///////////
+	
+	BOOL sessionChanged = YES;
+
+	NSString *previousSession = _selectedSession;
+	NSString *sessionToSave = [self latestSession];	// default to the latest session available
+	
+	// Look to see if the user has previously selected this state, and picked a session too
+	NSDictionary *tempSessionDict = [[NSUserDefaults standardUserDefaults] objectForKey:kMetaSelectedStateSessionKey];
+	if (tempSessionDict) {
+		NSString *savedSession = [tempSessionDict objectForKey:gotStateID];
+		if (!IsEmpty(savedSession)) {
+	
+			if ([savedSession isEqual:previousSession])
+				sessionChanged = NO;
+			else 
+				sessionToSave = savedSession;
+		}
+	}			
+	
+	if (sessionChanged) {
+		self.selectedSession = sessionToSave;	// this does a notification for us, and saves the new setting.
+	}
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:kStateMetaNotifyStateLoaded object:nil];
+	
 }
 
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
@@ -321,8 +381,11 @@
 			NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kStateMetaFile];
 			if (![[_metadata JSONData] writeToFile:localPath atomically:YES])
 				NSLog(@"StateMetadataLoader: error writing cache to file: %@", localPath);
+
 			isFresh = YES;
-			[[NSNotificationCenter defaultCenter] postNotificationName:kStateMetaNotifyLoaded object:nil];
+			
+			[self reloadMetaPropertiesForStateID:gotStateID];
+			
 			debug_NSLog(@"StateMetadata network download successful, archiving for prosperity.");
 		}		
 		else {

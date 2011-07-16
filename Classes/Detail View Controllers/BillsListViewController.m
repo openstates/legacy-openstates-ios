@@ -36,10 +36,6 @@
 		// This will tell the data source to produce a "loading" cell for the table whenever it's searching.
 		dataSource.useLoadingDataCell = YES;
 		
-		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(reloadData:) name:kBillSearchNotifyDataError object:dataSource];	
-		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(reloadData:) name:kBillSearchNotifyDataLoaded object:dataSource];	
 	}
 	return self;
 }
@@ -74,6 +70,11 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(reloadData:) name:kBillSearchNotifyDataError object:dataSource];	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(reloadData:) name:kBillSearchNotifyDataLoaded object:dataSource];	
+	
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self.dataSource;
 	self.tableView.separatorColor = [TexLegeTheme separator];
@@ -94,6 +95,8 @@
  }*/
 
 - (void)viewDidUnload {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
 	[super viewDidUnload];
 }
 

@@ -20,7 +20,6 @@ typedef enum BillType {
 } BillType;
 
 @interface BillActionParser : NSObject {
-	BOOL texasCentricParser;
 }
 
 - (NSMutableDictionary *)parseStagesForBill:(NSMutableDictionary *)bill;

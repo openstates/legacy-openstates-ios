@@ -447,6 +447,8 @@ enum _billSections {
     
 	if (bill) {
 		switch ([indexPath section]) {
+				
+				
 			case kBillSubjects:
 			{
 				NSString *subject = [[bill objectForKey:@"subjects"] objectAtIndex:indexPath.row];
@@ -455,6 +457,8 @@ enum _billSections {
 				cell.textLabel.text = @"";
 			}
 				break;
+				
+				
 			case kBillSponsors: 
 			{
 				NSDictionary *sponsor = [[bill objectForKey:@"sponsors"] objectAtIndex:indexPath.row];
@@ -463,30 +467,33 @@ enum _billSections {
 			}
 				break;
 				
-#warning State Specific (bill version texts)
 				
 			case kBillVersions: 
 			{				
 				NSDictionary *version = [[bill objectForKey:@"versions"] objectAtIndex:indexPath.row];
-				NSString *textName = nil;
 				NSString *senateString = stringForChamber(SENATE, TLReturnFull);
 				NSString *houseString = stringForChamber(HOUSE, TLReturnFull);
 				NSString *comRep = NSLocalizedStringFromTable(@"%@ Committee Report", @"DataTableUI", @"Preceded by the legislative chamber");
 				
 				NSString *name = [version objectForKey:@"name"];
-				if ([name hasSuffix:@"I"])
-					textName = NSLocalizedStringFromTable(@"Introduced", @"DataTableUI", @"A bill activity stating the bill has been introduced");
-				else if ([name hasSuffix:@"E"])
-					textName = NSLocalizedStringFromTable(@"Engrossed", @"DataTableUI", @"A bill activity stating the bill has been engrossed (passed and sent to the other chamber)");
-				else if ([name hasSuffix:@"S"])
-					textName = [NSString stringWithFormat:comRep, senateString];
-				else if ([name hasSuffix:@"H"])
-					textName = [NSString stringWithFormat:comRep, houseString];
-				else if ([name hasSuffix:@"A"])
-					textName = NSLocalizedStringFromTable(@"Amendments Printing", @"DataTableUI", @"A bill activity saying that they legislature is printing amendments");
-				else if ([name hasSuffix:@"F"])
-					textName = NSLocalizedStringFromTable(@"Enrolled", @"DataTableUI", @"A bill activity stating that the bill has been enrolled (like a law)");
-				else
+				NSString *textName = nil;
+				
+				if ([@"tx" isEqual:[bill objectForKey:@"state"]]) { // Texas sometimes screws this up.
+					if ([name hasSuffix:@"I"])
+						textName = NSLocalizedStringFromTable(@"Introduced", @"DataTableUI", @"A bill activity stating the bill has been introduced");
+					else if ([name hasSuffix:@"E"])
+						textName = NSLocalizedStringFromTable(@"Engrossed", @"DataTableUI", @"A bill activity stating the bill has been engrossed (passed and sent to the other chamber)");
+					else if ([name hasSuffix:@"S"])
+						textName = [NSString stringWithFormat:comRep, senateString];
+					else if ([name hasSuffix:@"H"])
+						textName = [NSString stringWithFormat:comRep, houseString];
+					else if ([name hasSuffix:@"A"])
+						textName = NSLocalizedStringFromTable(@"Amendments Printing", @"DataTableUI", @"A bill activity saying that they legislature is printing amendments");
+					else if ([name hasSuffix:@"F"])
+						textName = NSLocalizedStringFromTable(@"Enrolled", @"DataTableUI", @"A bill activity stating that the bill has been enrolled (like a law)");
+				}
+				
+				if (!textName)
 					textName = name;
 				
 				cell.textLabel.text = @"";
@@ -506,7 +513,7 @@ enum _billSections {
 				NSString *chamberString = stringForChamber(chamber, TLReturnFull);
 				
 				cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@ (%@)",
-											 [[vote objectForKey:@"motion"] capitalizedString],
+											 [[vote objectForKey:@"motion"] firstLetterCapitalized],
 											 chamberString, voteDateString];
 				
 				cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@ - %@ - %@)", passedString,
@@ -514,6 +521,7 @@ enum _billSections {
 									   [vote objectForKey:@"other_count"]];
 			}
 				break;
+				
 				
 			case kBillActions: 
 			{
@@ -581,7 +589,11 @@ enum _billSections {
 			}
 			[catResultsView setTitle:subject];
 			BillSearchDataSource *dataSource = [catResultsView valueForKey:@"dataSource"];
-			[dataSource startSearchForSubject:subject chamber:[[bill objectForKey:@"chamber"] integerValue]];
+			
+			[dataSource startSearchForSubject:subject 
+										state:[bill objectForKey:@"state"]
+									  session:[bill objectForKey:@"session"]
+									  chamber:[[bill objectForKey:@"chamber"] integerValue]];
 			if (!preexisting) {
 				if ([UtilityMethods isIPadDevice] && [UtilityMethods isLandscapeOrientation])
 					[[[StatesLegeAppDelegate appDelegate] masterNavigationController] pushViewController:catResultsView animated:YES];
@@ -617,7 +629,7 @@ enum _billSections {
 					voteDS = [[BillVotesDataSource alloc] initWithBillVotes:vote];
 				}
 				NSString *titleString = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ %@ Vote", @"DataTableUI", @"As in HB 323 Final Passage Vote"), 
-										 [bill objectForKey:@"bill_id"], [[vote objectForKey:@"motion"] capitalizedString]];
+										 [bill objectForKey:@"bill_id"], [[vote objectForKey:@"motion"] firstLetterCapitalized]];
 				BillVotesViewController *voteViewController = [[BillVotesViewController alloc] initWithStyle:UITableViewStyleGrouped];
 				voteViewController.tableView.dataSource = voteDS;
 				voteViewController.tableView.delegate = voteDS;

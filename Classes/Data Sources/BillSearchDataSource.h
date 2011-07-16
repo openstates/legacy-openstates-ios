@@ -35,15 +35,42 @@
 - (id)initWithSearchDisplayController:(UISearchDisplayController *)newController;
 - (id)initWithTableViewController:(UITableViewController *)newDelegate;
 
-- (RKRequest*)startSearchWithQueryString:(NSString *)queryString params:(NSDictionary *)queryParams;
-
-// Convenience methods to fill out search parameters automatically
-- (void)startSearchForText:(NSString *)searchString chamber:(NSInteger)chamber;
-- (void)startSearchForSubject:(NSString *)searchSubject chamber:(NSInteger)chamber;
-- (void)startSearchForBillsAuthoredBy:(NSString *)searchSponsorID;
-
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject;
 	
+- (RKRequest*)startSearchWithQueryString:(NSString *)queryString params:(NSDictionary *)queryParams;
+
+
+/////////// FULL-TEXT SEARCH
+
+- (void)startSearchForText:(NSString *)searchString
+					 state:(NSString *)inState 
+				   session:(NSString *)inSession 
+				   chamber:(NSInteger)inChamber;
+
+- (void)startSearchForText:(NSString *)searchString 
+				   chamber:(NSInteger)chamber;
+
+
+
+/////////// SUBJECTS
+
+- (void)startSearchForSubject:(NSString *)searchSubject 
+						state:(NSString *)inState 
+					  session:(NSString *)inSession 
+					  chamber:(NSInteger)inChamber;
+
+- (void)startSearchForSubject:(NSString *)searchSubject 
+					  chamber:(NSInteger)chamber;
+
+
+/////////// AUTHORS
+
+- (void)startSearchForBillsAuthoredBy:(NSString *)searchSponsorID 
+								state:(NSString *)inState 
+							  session:(NSString *)inSession;
+
+- (void)startSearchForBillsAuthoredBy:(NSString *)searchSponsorID;
+
 @end
 

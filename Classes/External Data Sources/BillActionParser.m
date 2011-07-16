@@ -53,12 +53,7 @@ STAGE7:Bill becomes law / Bill does not become law
 
 - (id)init {
 	if ((self = [super init])) {
-		texasCentricParser = NO;
-		
-		StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
-		if (NO == IsEmpty(meta.selectedState) && [meta.selectedState isEqualToString:@"tx"]) {
-			texasCentricParser = YES;
-		}
+
 	}
 	return self;
 }
@@ -71,6 +66,7 @@ STAGE7:Bill becomes law / Bill does not become law
 	 Concur. Resolutions	= 1-5, 6&7 optional/unknown
 	 Joint Resolutions	= 1-5, 6 (sec of state), 7 (after voter approval)
 	 */
+
 	
 	NSString *origChamberStr = [bill objectForKey:@"chamber"];
 	NSInteger origChamber = chamberFromOpenStatesString(origChamberStr);
@@ -177,10 +173,15 @@ STAGE7:Bill becomes law / Bill does not become law
 	if (!bill)
 		return nil;
 	
+	// We add a little extra "umph" for Texas bills to get better parsing results
+	BOOL texasCentricParser = [@"tx" isEqual:[bill objectForKey:@"state"]];
+	
+	// What chamber first introduced the bill?
 	NSInteger origChamber = chamberFromOpenStatesString([bill objectForKey:@"chamber"]);
 	NSInteger oppChamber = (origChamber == HOUSE) ? SENATE : HOUSE;
 	
 	NSMutableDictionary *results = [self prepStagesForBill:bill];
+	
 	NSMutableDictionary *stages = [results objectForKey:@"stages"];
 	NSMutableArray *stageKeys = [results objectForKey:@"keys"];
 	//BillType billType = [[results objectForKey:@"billType"] integerValue];

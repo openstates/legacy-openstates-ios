@@ -18,6 +18,13 @@
 #import "StateMetaLoader.h"
 #import "TexLegeTheme.h"
 
+@interface BillsRecentViewController()
+
+- (void)runDataQuery:(id)sender;
+
+@end
+
+
 @implementation BillsRecentViewController
 
 #pragma mark -
@@ -31,12 +38,18 @@
 }
 
 - (void)dealloc {		
+	[[NSNotificationCenter defaultCenter] removeObserver:self];	
+
 	[super dealloc];
 }
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(runDataQuery:) 
+												 name:kStateMetaNotifyStateLoaded object:nil];
+
 	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"TexLegeStrings" ofType:@"plist"];
 	NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
 	NSString *myClass = NSStringFromClass([self class]);
@@ -47,6 +60,8 @@
 }
 
 - (void)viewDidUnload {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];	
+	
 	[super viewDidUnload];
 }
 
@@ -54,6 +69,10 @@
 	[super viewWillAppear:animated];
 	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 
+	[self runDataQuery:nil];
+}
+
+- (void)runDataQuery:(id)sender {
 	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
 	if (IsEmpty(meta.selectedState))
 		return;
@@ -72,6 +91,7 @@
 								 nil];
 	
 	[self.dataSource startSearchWithQueryString:@"/bills" params:queryParams];
+	
 }
 
 @end

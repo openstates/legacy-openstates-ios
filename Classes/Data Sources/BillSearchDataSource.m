@@ -176,6 +176,9 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 }
 #endif
 
+
+
+#pragma mark -
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -280,10 +283,15 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 	return cell;
 }
 
-#pragma mark - Searching
+
+
+#pragma mark -
+#pragma mark Search By Raw Parameters
 
 // This is the standard search method ... fill in the search parameters and it'll handle the rest.
-- (RKRequest *)startSearchWithQueryString:(NSString *)queryString params:(NSDictionary *)queryParams {
+- (RKRequest *)startSearchWithQueryString:(NSString *)queryString 
+								   params:(NSDictionary *)queryParams
+{
 	if (IsEmpty(queryParams) || IsEmpty(queryString))
 		return nil;
 		
@@ -304,46 +312,81 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 	return request;
 }
 
-- (void)startSearchForText:(NSString *)searchString chamber:(NSInteger)chamber
+#pragma mark -
+#pragma mark Search By Full-Text String
+
+- (void)startSearchForText:(NSString *)searchString
+					 state:(NSString *)inState 
+				   session:(NSString *)inSession 
+				   chamber:(NSInteger)inChamber 
 {
-	searchString = [searchString uppercaseString];
-	NSMutableString *queryString = [NSMutableString stringWithString:@"/bills"];
 	
-	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
-	if (IsEmpty(meta.selectedState) || IsEmpty(meta.selectedSession))
-		return;
-		
+	NSCParameterAssert((inState != NULL) && (inSession != NULL));
+
+	NSMutableString *queryString = [NSMutableString stringWithString:@"/bills"];
+
+	
 	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-										@"session", @"search_window",
-										meta.selectedState, @"state",
+										[inSession urlSafeString], @"search_window",
+										inState, @"state",
 										SUNLIGHT_APIKEY, @"apikey",
 										nil];
 	
-	NSString *chamberString = stringForChamber(chamber, TLReturnOpenStates);
+	NSString *chamberString = stringForChamber(inChamber, TLReturnOpenStates);
 	if (!IsEmpty(chamberString)) {
 		[queryParams setObject:chamberString forKey:@"chamber"];
 	}
+	
 	if (IsEmpty(searchString))
 		searchString = @"";
-	
+	else
+		searchString = [searchString uppercaseString];
+
 	[queryParams setObject:searchString forKey:@"q"];
 	
 	[self startSearchWithQueryString:queryString params:queryParams];
-		
 }
 
-- (void)startSearchForSubject:(NSString *)searchSubject chamber:(NSInteger)chamber {
+
+
+- (void)startSearchForText:(NSString *)searchString 
+				   chamber:(NSInteger)chamber
+
+{
+	
 	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
 	if (IsEmpty(meta.selectedState))
 		return;
+		
+	NSString *session = @"session";
+	if (!IsEmpty(meta.selectedSession))
+		session = [NSString stringWithFormat:@"session:%@", meta.selectedSession];
+	
+	
+	[self startSearchForText:searchString 
+					   state:meta.selectedState
+					 session:session
+					 chamber:chamber];
+}
+
+#pragma mark -
+#pragma mark Search By Subject
+
+- (void)startSearchForSubject:(NSString *)searchSubject 
+						state:(NSString *)inState 
+					  session:(NSString *)inSession 
+					  chamber:(NSInteger)inChamber 
+{
+	NSCParameterAssert((inState != NULL) && (inSession != NULL));
+	
 	
 	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-								 @"session", @"search_window",
-								 meta.selectedState, @"state",
-								 SUNLIGHT_APIKEY, @"apikey",
-								 nil];
+										[inSession urlSafeString], @"search_window",
+										inState, @"state",
+										SUNLIGHT_APIKEY, @"apikey",
+										nil];
 	
-	NSString *chamberString = stringForChamber(chamber, TLReturnOpenStates);
+	NSString *chamberString = stringForChamber(inChamber, TLReturnOpenStates);
 	if (!IsEmpty(chamberString)) {
 		[queryParams setObject:chamberString forKey:@"chamber"];
 	}
@@ -354,31 +397,70 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"BILL_SUBJECTS" attributes:tagSubject];	
 	}
 	[queryParams setObject:searchSubject forKey:@"subject"];
-				
+	
 	[self startSearchWithQueryString:@"/bills" params:queryParams];
+	
 }
+
+
+- (void)startSearchForSubject:(NSString *)searchSubject chamber:(NSInteger)chamber {
+	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
+	if (IsEmpty(meta.selectedState))
+		return;
+	
+	NSString *session = @"session";
+	if (!IsEmpty(meta.selectedSession))
+		session = [NSString stringWithFormat:@"session:%@", meta.selectedSession];
+	
+	[self startSearchForSubject:searchSubject 
+						  state:meta.selectedState 
+						session:session 
+						chamber:chamber];
+
+}
+
+
+#pragma mark -
+#pragma mark Search By Author
+
+- (void)startSearchForBillsAuthoredBy:(NSString *)searchSponsorID 
+								state:(NSString *)inState 
+							  session:(NSString *)inSession 
+{
+	NSCParameterAssert( (searchSponsorID != NULL) && (inState != NULL) && (inSession != NULL) );
+	
+	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
+								 searchSponsorID, @"sponsor_id",
+								 inState, @"state",
+								 [inSession urlSafeString], @"search_window",
+								 SUNLIGHT_APIKEY, @"apikey",
+								 // now for the fun part
+								 @"sponsors,bill_id,title,session,state,type,update_at,subjects", @"fields",
+								 nil];
+	
+	RKRequest *request = [self startSearchWithQueryString:@"/bills" params:queryParams];
+	if (request) {
+		request.userData = [NSDictionary dictionaryWithObjectsAndKeys:
+							searchSponsorID, @"sponsor_id", nil];
+	}
+	
+}
+
 
 - (void)startSearchForBillsAuthoredBy:(NSString *)searchSponsorID {
 	if (NO == IsEmpty(searchSponsorID)) {
+		
 		StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
 		if (IsEmpty(meta.selectedState))
 			return;
 		
-		NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-									 searchSponsorID, @"sponsor_id",
-									 meta.selectedState, @"state",
-									 @"session", @"search_window",
-									 SUNLIGHT_APIKEY, @"apikey",
-									 // now for the fun part
-									 @"sponsors,bill_id,title,session,state,type,update_at,subjects", @"fields",
-									 nil];
-
-		RKRequest *request = [self startSearchWithQueryString:@"/bills" params:queryParams];
-		if (request) {
-			request.userData = [NSDictionary dictionaryWithObjectsAndKeys:
-								searchSponsorID, @"sponsor_id", nil];
-		}
+		NSString *session = @"session";
+		if (!IsEmpty(meta.selectedSession))
+			session = [NSString stringWithFormat:@"session:%@", meta.selectedSession];
 		
+		[self startSearchForBillsAuthoredBy:searchSponsorID 
+									  state:meta.selectedState 
+									session:session];
 	}
 }
 

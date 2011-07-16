@@ -16,7 +16,8 @@
 #define kStateMetaFile				@"StateMetadata.json"
 #define kStateMetaPath				@"StateMetadata"
 #define kStateMetaNotifyError		@"STATE_METADATA_ERROR"
-#define kStateMetaNotifyLoaded		@"STATE_METADATA_LOADED"
+#define kStateMetaNotifyStateLoaded		@"STATE_METADATA_STATE_LOADED"
+#define kStateMetaNotifySessionChange	@"STATE_METADATA_SESSION_CHANGE"
 
 
 @interface StateMetaLoader : NSObject <RKRequestDelegate> {
@@ -51,6 +52,7 @@
 @end
 #define kMetaSelectedStateKey		@"selected_state"
 #define kMetaSelectedSessionKey		@"selected_session"
+#define kMetaSelectedStateSessionKey		@"selected_state_session"
 
 #define kMetaLowerChamberNameKey @"lower_chamber_name"			// House of Representatives
 #define kMetaUpperChamberNameKey @"upper_chamber_name"			// Senate

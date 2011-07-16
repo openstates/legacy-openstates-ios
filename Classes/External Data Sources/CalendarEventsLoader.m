@@ -80,18 +80,20 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 															 options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) 
 															 context:nil];
 
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(loadEvents:) 
+													 name:kStateMetaNotifyStateLoaded 
+												   object:nil];
+		
+		
 		[OpenLegislativeAPIs sharedOpenLegislativeAPIs];
 		
-		[[StateMetaLoader sharedStateMeta] addObserver:self 
-													  forKeyPath:@"selectedState" 
-														 options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) 
-														 context:nil];
 		
 		eventStore = [[EKEventStore alloc] init];
 		[eventStore defaultCalendarForNewEvents];
 
 		/*
-		#warning danger
+		#error testing/warning - danger!  this deletes every event in the calendar that falls within the time frame
 		NSDate *past = [NSDate dateFromString:@"December 1, 2009" withFormat:@"MMM d, yyyy"];
 		NSDate *future = [NSDate dateFromString:@"December 1, 2011" withFormat:@"MMM d, yyyy"];
 		NSPredicate *pred = [eventStore predicateForEventsWithStartDate:past endDate:future calendars:nil];
@@ -116,22 +118,21 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 - (void)dealloc {
 	[[StateMetaLoader sharedStateMeta] removeObserver:self forKeyPath:@"selectedState"];
 	[[TexLegeReachability sharedTexLegeReachability] removeObserver:self forKeyPath:@"openstatesConnectionStatus"];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 	
-	if (updated)
-		[updated release], updated = nil;
-	if (_events)
-		[_events release], _events = nil;
-	if (eventStore)
-		[eventStore release], eventStore = nil;
+	nice_release(updated);
+	nice_release(_events);
+	nice_release(eventStore);
+
 	[super dealloc];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	
 	if (!IsEmpty(keyPath)) {
-		if ([keyPath isEqualToString:@"openstatesConnectionStatus"] ||
-			[keyPath isEqualToString:@"selectedState"]) {
+		if ([keyPath isEqualToString:@"openstatesConnectionStatus"]) {
 			
 			/*
 			if ([change valueForKey:NSKeyValueChangeKindKey] == NSKeyValueChangeSetting) {
@@ -295,7 +296,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 			}
 		
 		}
-		/*else {	// we might just have a state that doesn't have events yet!
+		/*else {	// we might just have a state that doesn't have events yet, so do go throwing up errors!
 			[self request:request didFailLoadWithError:nil];
 		}*/
 

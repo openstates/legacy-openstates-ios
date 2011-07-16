@@ -28,6 +28,7 @@
 - (void)createChamberControl;
 - (IBAction)filterChamber:(id)sender;
 - (IBAction)loadCategoriesForChamber:(NSInteger)newChamber;
+- (void)runDataQuery:(id)sender;
 @end
 
 @implementation BillsCategoriesViewController
@@ -48,6 +49,8 @@
 
 - (void)dealloc {	
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+
 	self.chamberControl = nil;
 	nice_release(updated);
 	nice_release(categories_);
@@ -67,6 +70,10 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(runDataQuery:) 
+												 name:kStateMetaNotifySessionChange object:nil];	
 	
 	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"TexLegeStrings" ofType:@"plist"];
 	NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
@@ -137,6 +144,7 @@
 
 - (void)viewDidUnload {
 	self.chamberControl = nil;
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[super viewDidUnload];
 }
 
@@ -222,7 +230,11 @@
 			BillsListViewController *catResultsView = [[[BillsListViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
 			BillSearchDataSource *dataSource = [catResultsView valueForKey:@"dataSource"];
 			catResultsView.title = cat;
-			[dataSource startSearchForSubject:cat chamber:[self.chamber integerValue]];
+			
+			[dataSource startSearchForSubject:cat 
+									  chamber:[self.chamber integerValue]];
+			
+			catResultsView.toolbarItems = self.toolbarItems;
 			
 			[self.navigationController pushViewController:catResultsView animated:YES];
 		}			
@@ -230,6 +242,11 @@
 }
 
 #pragma mark Properties
+
+- (void)runDataQuery:(id)sender {
+	isFresh = NO;
+	[self loadCategoriesForChamber:BOTH_CHAMBERS];
+}
 
 //http://openstates.sunlightlabs.com/api/v1/subject_counts/tx/82/upper/?apikey=xxxxxxxxxxxxxxxx
 //We now get subject frequency counts, filtered by state, session and originating chamber.
@@ -242,8 +259,10 @@
 		if (IsEmpty(meta.selectedState) || IsEmpty(meta.selectedSession))
 			return;
 		
+		NSString *session = [meta.selectedSession urlSafeString];
+
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
-		NSMutableString *resourcePath = [NSMutableString stringWithFormat:@"/subject_counts/%@/%@/", meta.selectedState, meta.selectedSession];
+		NSMutableString *resourcePath = [NSMutableString stringWithFormat:@"/subject_counts/%@/%@/", meta.selectedState, session];
 		if (newChamber > BOTH_CHAMBERS)
 			[resourcePath appendFormat:@"%@/", stringForChamber(newChamber, TLReturnOpenStates)];
 			
@@ -259,10 +278,10 @@
 		(!isFresh && ![categories_ objectForKey:self.chamber]) || 
 		!updated || 
 		([[NSDate date] timeIntervalSinceDate:updated] > 3600*24)) {	// if we're over a day old, let's refresh
-		isFresh = NO;
+		
 		debug_NSLog(@"BillCategories is stale, need to refresh");
 		
-		[self loadCategoriesForChamber:BOTH_CHAMBERS];	// let's get everything
+		[self runDataQuery:nil];
 	}
 	return categories_;
 }
@@ -301,30 +320,14 @@
 	if (error && request) {
 		debug_NSLog(@"Error loading categories from %@: %@", [request description], [error localizedDescription]);
 	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:kBillCategoriesNotifyError object:nil];
-	loadingStatus = LOADING_IDLE;
 
 	isFresh = NO;
+	loadingStatus = LOADING_NO_NET;
 	
 	nice_release(categories_);
+	categories_ = [[NSMutableDictionary alloc] init];
 	
-	// We had trouble loading the events online, so pull up the cache from the one in the documents folder, if possible
-	NSString *thePath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:kBillCategoriesCacheFile];
-	//NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kCalendarEventsCacheFile];
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	if ([fileManager fileExistsAtPath:thePath]) {
-		debug_NSLog(@"BillCategories: using cached categories in the documents folder.");
-		//categories_ = [[NSMutableDictionary dictionaryWithContentsOfFile:thePath] retain];
-		NSData *json = [NSData dataWithContentsOfFile:thePath];
-		if (json)
-			categories_ = [[json mutableObjectFromJSONData] retain];
-	}
-	if (!categories_) {
-		categories_ = [[NSMutableDictionary dictionary] retain];
-		loadingStatus = LOADING_NO_NET;
-	}
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:kBillCategoriesNotifyLoaded object:nil];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kBillCategoriesNotifyError object:nil];
 	
 	[self.tableView reloadData];
 
@@ -363,16 +366,7 @@
 		
 		if (inChamber < SENATE)
 			[self loadCategoriesForChamber:inChamber+1];	// let's load the next chamber too
-		
-		if ([[categories_ allKeys] count] == 3) { // once we have all three arrays ready to go, let's save it
-			NSString *thePath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:kBillCategoriesCacheFile];
-			NSError *error = nil;
-			NSData *json = [categories_ JSONDataWithOptions:JKSerializeOptionEscapeUnicode error:&error];
-			if (![json writeToFile:thePath atomically:YES]) {
-				NSLog(@"BillCategories: Error writing categories cache to file: %@ = %@", [error localizedDescription], thePath);
-			}
-		}
-		
+				
 		isFresh = YES;
 		if (updated)
 			[updated release];
