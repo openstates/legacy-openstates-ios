@@ -16,9 +16,9 @@
 @class BillSearchDataSource;
 
 @interface BillsMasterViewController : GeneralTableViewController <UISearchDisplayDelegate, UISearchBarDelegate> {
-	IBOutlet BillSearchDataSource *billSearchDS;
+	BillSearchDataSource *billSearchDS;
 	NSString *_searchString;
 }
 @property (nonatomic,retain) BillSearchDataSource *billSearchDS;
-
+	
 @end

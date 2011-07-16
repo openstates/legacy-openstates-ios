@@ -31,3 +31,6 @@
 [submodule "Vendor/DDActionHeaderView"]
 	path = Vendor/DDActionHeaderView
 	url = git://github.com/grgcombs/DDActionHeaderView.git
+[submodule "Vendor/ActionSheetPicker"]
+	path = Vendor/ActionSheetPicker
+	url = git://github.com/grgcombs/ActionSheetPicker.git

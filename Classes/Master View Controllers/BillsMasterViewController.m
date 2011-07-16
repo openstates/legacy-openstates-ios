@@ -24,17 +24,28 @@
 #import "BillSearchDataSource.h"
 #import "OpenLegislativeAPIs.h"
 #import "LocalyticsSession.h"
+#import "StateMetaLoader.h"
+#import "ActionSheetPicker.h"
 
 #import <objc/message.h>
 
 #define LIVE_SEARCHING 1
 
-@interface BillsMasterViewController (Private)
+@interface BillsMasterViewController()
+
+@property (nonatomic,retain) IBOutlet UILabel *activeSessionLabel;
+- (NSString *)sessionLabelText;
+- (IBAction)showSessionControl:(id)sender;
+- (IBAction)sessonControlChanged:(NSNumber *)selectedIndex:(id)element;
+- (void)createSessionPicker;
+- (void)destroySessionPicker;
+
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
 @end
 
 @implementation BillsMasterViewController
 @synthesize billSearchDS;
+@synthesize activeSessionLabel;
 
 // Set this to non-nil whenever you want to automatically enable/disable the view controller based on network/host reachability
 - (NSString *)reachabilityStatusKey {
@@ -44,7 +55,7 @@
 - (void) dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	self.billSearchDS = nil;
-
+	self.activeSessionLabel = nil;
 	[super dealloc];
 }
 
@@ -56,9 +67,12 @@
 	[super runLoadView];
 }*/
 
+
 - (void)viewDidLoad {
 	[super viewDidLoad];
-		
+				
+	[self createSessionPicker];
+	
 	if (!self.billSearchDS)
 		self.billSearchDS = [[[BillSearchDataSource alloc] initWithSearchDisplayController:self.searchDisplayController] autorelease];
 	
@@ -98,6 +112,7 @@
 - (void)viewDidUnload {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	self.billSearchDS = nil;
+	self.toolbarItems = nil;
 	
 	[super viewDidUnload];
 }
@@ -124,6 +139,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {	
 	[super viewWillAppear:animated];
+		
 	
 	// this has to be here because GeneralTVC will overwrite it once anyone calls self.dataSource,
 	//		if we remove this, it will wind up setting our searchResultsDataSource to the BillsMenuDataSource
@@ -133,7 +149,7 @@
 #if LIVE_SEARCHING == 0
 	self.searchDisplayController.searchBar.delegate = self;
 #endif
-	
+		
 	if ([UtilityMethods isIPadDevice])
 		[self.tableView reloadData];
 }
@@ -182,6 +198,7 @@
 				[[[StatesLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.detailViewController] animated:NO];
 		}			
 	}
+	
 //	WE'RE CLICKING ON ONE OF OUR STANDARD MENU ITEMS
 	else {
 		dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
@@ -207,6 +224,8 @@
 		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"BILL_MENU" attributes:tagMenu];
 		[tagMenu release];
 		
+		tempVC.toolbarItems = self.toolbarItems;
+		
 		// push the detail view controller onto the navigation stack to display it				
 		[self.navigationController pushViewController:tempVC animated:YES];
 	}
@@ -223,7 +242,8 @@
 	if (searchString && [searchString length]) {
 		_searchString = [searchString copy];
 		if (_searchString && [_searchString length] >= 3) {
-			[self.billSearchDS startSearchForText:_searchString chamber:self.searchDisplayController.searchBar.selectedScopeButtonIndex];
+			[self.billSearchDS startSearchForText:_searchString 
+										  chamber:self.searchDisplayController.searchBar.selectedScopeButtonIndex];
 		}		
 	}
 #endif
@@ -278,4 +298,96 @@
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
 	////////self.dataSource.hideTableIndex = NO;
 }
+
+#pragma mark -
+#pragma mark Legislative Session Picker
+
+- (void)createSessionPicker {
+	[self.navigationController setToolbarHidden:NO animated:YES];
+	self.navigationController.toolbar.tintColor = [TexLegeTheme accent];
+	self.hidesBottomBarWhenPushed = NO;
+	
+	UILabel *sessionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds)-60.f, 23.f)];
+	sessionLabel.font = [UIFont boldSystemFontOfSize:15];
+	sessionLabel.textColor = [TexLegeTheme backgroundLight];
+	sessionLabel.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
+	sessionLabel.textAlignment = UITextAlignmentRight;
+	sessionLabel.text = [self sessionLabelText];
+	sessionLabel.opaque = NO;
+	sessionLabel.backgroundColor = [UIColor clearColor];
+	
+	self.activeSessionLabel = sessionLabel;
+	
+	UIBarButtonItem *labelButton = [[UIBarButtonItem alloc] initWithCustomView:sessionLabel];
+	UIBarButtonItem *iconButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"138-scales-inv"] 
+																   style:UIBarButtonItemStylePlain 
+																  target:self 
+																  action:@selector(showSessionControl:)];
+	
+	[self setToolbarItems:[NSArray arrayWithObjects:labelButton, iconButton, nil] animated:YES];
+	[sessionLabel release];
+	[labelButton release];
+	[iconButton release];	
+}
+
+- (void)destroySessionPicker {
+	[self setToolbarItems:nil animated:YES];
+	self.activeSessionLabel = nil;
+	[self.navigationController setToolbarHidden:YES animated:YES];
+}
+
+- (NSString *)sessionLabelText {
+	NSString *sessionText = [NSString stringWithFormat:@"%@ %@",
+							 NSLocalizedStringFromTable(@"Active Session:", @"StandardUI", @"Legislative session control label"),
+							 [[StateMetaLoader sharedStateMeta] selectedSession]];
+	return sessionText;
+}
+
+- (IBAction)sessonControlChanged:(NSNumber *)selectedIndex:(id)element {	
+	//Session selection was made
+	NSInteger sessionIndex = [selectedIndex intValue];
+	
+	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
+	NSArray *sessions = [meta sessions];
+	
+	if (sessions && sessionIndex < [sessions count]) {
+		NSString *selectedSession = [sessions objectAtIndex:sessionIndex];
+		if (!IsEmpty(selectedSession)) {
+			meta.selectedSession = selectedSession;
+			if (self.activeSessionLabel) {
+				self.activeSessionLabel.text = [self sessionLabelText];
+			}
+		}
+	}
+	
+}
+
+- (IBAction)showSessionControl:(id)sender {
+	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
+	
+	NSString *selectedSession = [meta selectedSession];
+	NSArray *sessions = [meta sessions];
+	
+	if (IsEmpty(sessions) || IsEmpty(selectedSession)) {
+		NSLog(@"Error when attempting to display legislative sessions control:  state=%@ meta=%@", 
+			  meta.selectedState,
+			  meta.stateMetadata);
+		return;
+	}
+	
+	NSInteger selectedItem = [sessions indexOfObject:selectedSession];
+	if (selectedItem==NSNotFound)
+		selectedItem = 0;
+	
+	
+	[ActionSheetPicker displayActionPickerFrom:sender 
+											  data:sessions 
+									 selectedIndex:selectedItem 
+											target:self 
+											action:@selector(sessonControlChanged::) 
+											 title:NSLocalizedStringFromTable(@"Select a Session", @"StandardUI", @"Legislative session control label")];
+	
+}
+
+
 @end
