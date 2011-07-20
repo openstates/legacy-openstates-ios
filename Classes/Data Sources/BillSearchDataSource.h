@@ -21,8 +21,6 @@
 @interface BillSearchDataSource : NSObject <UITableViewDataSource, RKRequestDelegate> {
 	NSMutableDictionary* _sections;	
 	NSMutableArray* _rows;
-	IBOutlet UISearchDisplayController *searchDisplayController;
-	IBOutlet UITableViewController *delegateTVC;
 	NSInteger loadingStatus;
 
 }

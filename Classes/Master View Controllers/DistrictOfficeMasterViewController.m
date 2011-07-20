@@ -65,12 +65,6 @@
 	
 	self.searchDisplayController.delegate = self;
 	self.searchDisplayController.searchResultsDelegate = self;
-	//self.dataSource.searchDisplayController = self.searchDisplayController;
-	//self.searchDisplayController.searchResultsDataSource = self.dataSource;
-	
-	[self.chamberControl setTitle:stringForChamber(BOTH_CHAMBERS, TLReturnAbbrev) forSegmentAtIndex:0];
-	[self.chamberControl setTitle:stringForChamber(HOUSE, TLReturnAbbrev) forSegmentAtIndex:1];
-	[self.chamberControl setTitle:stringForChamber(SENATE, TLReturnAbbrev) forSegmentAtIndex:2];
 		
 	self.chamberControl.tintColor = [TexLegeTheme accent];
 	self.sortControl.tintColor = [TexLegeTheme accent];
@@ -78,10 +72,7 @@
 	self.navigationItem.titleView = self.filterControls;
 	
 	self.selectObjectOnAppear = nil;
-/*
- if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
-		self.selectObjectOnAppear = [self firstDataObject];
-*/
+
 }
 
 - (void)viewDidUnload {
@@ -93,6 +84,10 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    [self.chamberControl setTitle:stringForChamber(BOTH_CHAMBERS, TLReturnAbbrev) forSegmentAtIndex:0];
+	[self.chamberControl setTitle:stringForChamber(HOUSE, TLReturnAbbrev) forSegmentAtIndex:1];
+	[self.chamberControl setTitle:stringForChamber(SENATE, TLReturnAbbrev) forSegmentAtIndex:2];
+        
 	/*
 	//// ALL OF THE FOLLOWING MUST NOT RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER	
 	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {

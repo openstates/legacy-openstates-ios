@@ -30,7 +30,6 @@
 	NSString *eventState;
 	NSDate *updated;
 	BOOL isLoading;
-	NSInteger loadingStatus;
 
 	EKEventStore *eventStore;
 }

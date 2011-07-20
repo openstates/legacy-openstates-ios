@@ -17,10 +17,6 @@ static NSString *tloApiHost =		@"www.legis.state.tx.us";
 static NSString *tloApiBaseURL =	@"http://www.legis.state.tx.us";
 
 @interface OpenLegislativeAPIs : NSObject <RKRequestDelegate> {
-	RKClient *osApiClient;	
-	RKClient *transApiClient;
-	RKClient *vsApiClient;
-	RKClient *tloApiClient;
 }
 + (OpenLegislativeAPIs *)sharedOpenLegislativeAPIs;
 @property (nonatomic, retain) RKClient *osApiClient;

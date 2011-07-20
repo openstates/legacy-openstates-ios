@@ -22,14 +22,9 @@
 		UIGestureRecognizerDelegate, DistrictMapSearchOperationDelegate> {
 }
 
-@property (nonatomic,retain) IBOutlet UIPopoverController *masterPopover;
+@property (nonatomic,retain) UIPopoverController *masterPopover;
 @property (nonatomic,retain) IBOutlet MKMapView *mapView;
 @property (nonatomic,retain) IBOutlet UIToolbar *toolbar;
-@property (nonatomic,retain) IBOutlet UISegmentedControl *mapTypeControl;
-@property (nonatomic,retain) IBOutlet UIBarButtonItem *mapTypeControlButton;
-@property (nonatomic,retain) IBOutlet UIBarButtonItem *userLocationButton;
-@property (nonatomic,retain) IBOutlet UIBarButtonItem *districtOfficesButton;
-@property (nonatomic,retain) IBOutlet UIBarButtonItem *searchBarButton;
 @property (nonatomic,retain) IBOutlet UISearchBar *searchBar;
 @property (nonatomic,retain) SVGeocoder *geocoder;
 @property (nonatomic,readonly) MKCoordinateRegion texasRegion;

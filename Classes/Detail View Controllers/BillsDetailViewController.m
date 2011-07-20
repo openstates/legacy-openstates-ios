@@ -101,7 +101,7 @@ enum _billSections {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+	
 	voteDS = nil;
 	
 	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];

@@ -17,7 +17,6 @@
 
 @interface DataModelUpdateManager : NSObject <RKObjectLoaderDelegate, RKRequestQueueDelegate> {
 	NSDictionary *statusBlurbsAndModels;
-	NSCountedSet *activeUpdates;
 	RKRequestQueue *_queue;
 }
 

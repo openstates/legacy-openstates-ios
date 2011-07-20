@@ -60,9 +60,7 @@
 	[super dealloc];
 }
 
-- (void)startCheckingReachability:(id)delegate {
-	if (delegate)
-		appDelegate = delegate;
+- (void)startCheckingReachability {
 	
 	// Observe the kNetworkReachabilityChangedNotification. When that notification is posted, the
     // method "reachabilityChanged" will be called. 
@@ -137,8 +135,9 @@
 		if(curReach == tloReach)
 			self.tloConnectionStatus = currentStatus;
 		
-		if (appDelegate && [appDelegate respondsToSelector:@selector(changingReachability:)])
-			[appDelegate performSelector:@selector(changingReachability:) withObject:curReach];
+		id delegate = [[UIApplication sharedApplication] delegate];
+		if (delegate && [delegate respondsToSelector:@selector(changingReachability:)])
+			[delegate performSelector:@selector(changingReachability:) withObject:curReach];
 				
 	}
 }

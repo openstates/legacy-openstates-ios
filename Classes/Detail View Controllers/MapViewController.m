@@ -49,9 +49,8 @@ NSInteger colorIndex;
 static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 @implementation MapViewController
-@synthesize mapTypeControl, mapTypeControlButton;
-@synthesize mapView, userLocationButton, geocoder, searchLocation;
-@synthesize toolbar, searchBar, searchBarButton, districtOfficesButton;
+@synthesize mapView, geocoder, searchLocation;
+@synthesize toolbar, searchBar;
 @synthesize texasRegion;
 @synthesize senateDistrictView, houseDistrictView;
 @synthesize masterPopover;
@@ -73,14 +72,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	self.geoLegeSearch = nil;
 	self.geocoder = nil;
 	self.searchLocation = nil;
-	self.searchBarButton = nil;
-	self.searchBar = nil;
 
-	self.mapTypeControl = nil;
-	self.mapTypeControlButton = nil;
-	self.userLocationButton = nil;
-	self.districtOfficesButton = nil;
 	self.masterPopover = nil;
+	
+	self.searchBar = nil;
 	self.mapView = nil;
 
 	[super dealloc];
@@ -126,6 +121,9 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 - (void) viewDidUnload {	
 	self.geoLegeSearch = nil;
 	self.geocoder = nil;
+	
+	self.searchBar = nil;
+	self.mapView = nil;	
 
 	[super viewDidUnload];
 }
@@ -359,8 +357,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 #pragma mark Control Element Actions
 
 - (IBAction)changeMapType:(id)sender {
-	NSInteger index = self.mapTypeControl.selectedSegmentIndex;
-	self.mapView.mapType = index;
+	if (sender && [sender respondsToSelector:@selector(selectedSegmentIndex)]) {
+		NSInteger index = [sender selectedSegmentIndex];
+		self.mapView.mapType = index;
+	}
 }
 
 - (void)showLocateUserButton {
@@ -382,7 +382,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	if (otherButton.tag == 998 || otherButton.tag == 999)
 		[items removeObjectAtIndex:buttonIndex];
 	[items insertObject:locateItem atIndex:buttonIndex];
-	self.userLocationButton = locateItem;
 	[self.toolbar setItems:items animated:YES];
 	[locateItem release];
 	[items release];

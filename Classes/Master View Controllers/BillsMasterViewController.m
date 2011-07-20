@@ -82,9 +82,9 @@
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];	
 	
 	self.searchDisplayController.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:
-																stringForChamber(BOTH_CHAMBERS, TLReturnFull),
-																stringForChamber(HOUSE, TLReturnFull),
-																stringForChamber(SENATE, TLReturnFull),
+																stringForChamber(BOTH_CHAMBERS, TLReturnAbbrev),
+																stringForChamber(HOUSE, TLReturnAbbrev),
+																stringForChamber(SENATE, TLReturnAbbrev),
 																nil];
 	
 	if ([UtilityMethods isIPadDevice]) {	
@@ -140,7 +140,13 @@
 {	
 	[super viewWillAppear:animated];
 		
+    self.searchDisplayController.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:
+																stringForChamber(BOTH_CHAMBERS, TLReturnAbbrev),
+																stringForChamber(HOUSE, TLReturnAbbrev),
+																stringForChamber(SENATE, TLReturnAbbrev),
+																nil];
 	
+    
 	// this has to be here because GeneralTVC will overwrite it once anyone calls self.dataSource,
 	//		if we remove this, it will wind up setting our searchResultsDataSource to the BillsMenuDataSource
 	self.searchDisplayController.searchResultsDataSource = self.billSearchDS;	

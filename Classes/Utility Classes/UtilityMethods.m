@@ -15,7 +15,7 @@
 #import "TTTOrdinalNumberFormatter.h"
 #import "SLFAlertView.h"
 
-BOOL IsEmpty(id thing) {
+BOOL IsEmpty(NSObject * thing) {
     return thing == nil
 	|| ([[NSNull null] isEqual:thing])
 	|| ([thing respondsToSelector:@selector(length)] && [(NSData *)thing length] == 0)
@@ -101,14 +101,8 @@ BOOL IsEmpty(id thing) {
 }
 
 - (NSString*)firstLetterCapitalized {
-//#ifdef __APPLE__
 	NSRange startRange = NSMakeRange(0, 1);
 	return [self stringByReplacingCharactersInRange:startRange withString:[[self substringWithRange:startRange] uppercaseString]];
-/* #else		// I think this was a nasty hack to deal with a bug in Foundation classes.
-	NSString* firstCharCapital = [[self substringWithRange:NSMakeRange(0, 1)] uppercaseString];
-	NSString* lastPartOfString = [self substringWithRange:NSMakeRange(1, self.length-1)];
-	return [firstCharCapital stringByAppendingString:lastPartOfString];
-#endif */
 }
 
 - (NSString *)chopPrefix:(NSString *)prefix capitalizingFirst:(BOOL)capitalize {

@@ -14,7 +14,7 @@
 #import <Foundation/Foundation.h>
 #import "TexLegeReachability.h"
 
-BOOL IsEmpty(id thing);
+BOOL IsEmpty(NSObject * thing);
 
 
 @interface UtilityMethods : NSObject {

@@ -31,7 +31,7 @@
 
 - (id)initWithStyle:(UITableViewStyle)style {
 	if ((self = [super initWithStyle:style])) {
-		dataSource = [[[BillSearchDataSource alloc] initWithTableViewController:self] retain];
+		dataSource = [[BillSearchDataSource alloc] initWithTableViewController:self];
 		
 		// This will tell the data source to produce a "loading" cell for the table whenever it's searching.
 		dataSource.useLoadingDataCell = YES;

@@ -34,13 +34,13 @@ enum {
 @interface TableCellDataObject : NSObject {
 	
 }
-@property (nonatomic, retain)id entryValue;
-@property (nonatomic)BOOL isClickable;
-@property (nonatomic)NSInteger entryType;
+@property (nonatomic) BOOL isClickable;
+@property (nonatomic) NSInteger entryType;
+@property (nonatomic, retain) id entryValue;
 @property (nonatomic, retain) id action;
 @property (nonatomic, retain) id parameter;
-@property (nonatomic, retain) NSString *title;
-@property (nonatomic, retain) NSString *subtitle;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *subtitle;
 
 
 - (NSURL *)generateURL;

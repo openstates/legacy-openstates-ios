@@ -111,6 +111,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    [self.chamberControl setTitle:stringForChamber(BOTH_CHAMBERS, TLReturnAbbrev) forSegmentAtIndex:0];
+	[self.chamberControl setTitle:stringForChamber(HOUSE, TLReturnAbbrev) forSegmentAtIndex:1];
+	[self.chamberControl setTitle:stringForChamber(SENATE, TLReturnAbbrev) forSegmentAtIndex:2];
+        
 	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 
 	NSDictionary *segPrefs = [[NSUserDefaults standardUserDefaults] objectForKey:kSegmentControlPrefKey];
@@ -293,7 +298,7 @@
 - (void)createChamberControl {	
 	UISegmentedControl *ctl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:
 																		 stringForChamber(BOTH_CHAMBERS, TLReturnAbbrev), 
-																		stringForChamber(HOUSE, TLReturnAbbrev), 
+                                                                         stringForChamber(HOUSE, TLReturnAbbrev), 
 																		 stringForChamber(SENATE, TLReturnAbbrev), 
 																		 nil]];
 	ctl.frame = CGRectMake(0.0, 0.0, 220, 30.0);

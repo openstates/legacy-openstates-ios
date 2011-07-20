@@ -151,7 +151,7 @@
 	
 	
 	if (self.legislator && self.legislator.twitter && [self.legislator.twitter length]) {
-		tempString = ([self.legislator.twitter hasPrefix:@"@"]) ? self.legislator.twitter : [[[NSString alloc] initWithFormat:@"@%@", self.legislator.twitter] autorelease];
+		tempString = ([self.legislator.twitter hasPrefix:@"@"]) ? self.legislator.twitter : [NSString stringWithFormat:@"@%@", self.legislator.twitter];
 		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 					 NSLocalizedStringFromTable(@"Twitter", @"DataTableUI", @"Title for Cell"), @"subtitle",
 					 tempString, @"entryValue",

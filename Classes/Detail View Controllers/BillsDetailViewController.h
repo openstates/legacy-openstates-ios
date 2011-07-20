@@ -18,25 +18,18 @@
 @class BillVotesDataSource;
 @class AppendingFlowView;
 @interface BillsDetailViewController : UITableViewController <RKRequestDelegate, UISplitViewControllerDelegate, UIPopoverControllerDelegate> {
-	IBOutlet NSMutableDictionary *bill;
-	IBOutlet UIView *headerView, *descriptionView;
-	IBOutlet AppendingFlowView *statusView;
-	IBOutlet UITextView *lab_description;
-	IBOutlet UIButton *starButton;
-	IBOutlet DDActionHeaderView *actionHeader;
-	id dataObject;
 	BillVotesDataSource *voteDS;
 }
 @property (nonatomic,assign) id dataObject;
+@property (nonatomic,retain) UIButton *starButton;
 
 @property (nonatomic,retain) IBOutlet UIView *headerView, *descriptionView;
 @property (nonatomic,retain) IBOutlet AppendingFlowView *statusView;
 @property (nonatomic,retain) IBOutlet UITextView *lab_description;
-@property (nonatomic,retain) IBOutlet UIButton *starButton;
 @property (nonatomic,retain) IBOutlet DDActionHeaderView *actionHeader;
 
 @property (nonatomic,retain) UIPopoverController *masterPopover;
-@property (nonatomic,retain) IBOutlet NSMutableDictionary *bill;
+@property (nonatomic,retain) NSMutableDictionary *bill;
 
 - (IBAction)resetTableData:(id)sender;
 

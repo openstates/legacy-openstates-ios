@@ -31,8 +31,8 @@
 
 @property (nonatomic,retain) UIPopoverController *notesPopover;
 @property (nonatomic,retain) UIPopoverController *masterPopover;
-@property (nonatomic, assign) LegislatorObj *legislator;
-@property (nonatomic, retain) LegislatorDetailDataSource *dataSource;
+@property (nonatomic,assign) LegislatorObj *legislator;
+@property (nonatomic,retain) LegislatorDetailDataSource *dataSource;
 
 - (IBAction)resetTableData:(id)sender;
 

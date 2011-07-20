@@ -1045,6 +1045,8 @@
 		377ACE4811FFA30E002C7E49 /* CalendarDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 377ACE4711FFA30E002C7E49 /* CalendarDataSource.m */; };
 		377DC4A91344D475000068E1 /* BillVotesDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 377DC4A81344D475000068E1 /* BillVotesDataSource.m */; };
 		377DC4AA1344D475000068E1 /* BillVotesDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 377DC4A81344D475000068E1 /* BillVotesDataSource.m */; };
+		3787269E13D6360700D030CC /* StatesListMetaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3787269D13D6360700D030CC /* StatesListMetaLoader.m */; };
+		3787269F13D6360700D030CC /* StatesListMetaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3787269D13D6360700D030CC /* StatesListMetaLoader.m */; };
 		3789F8EA13CD79FD0069DB1C /* LinkObj.json in Resources */ = {isa = PBXBuildFile; fileRef = 37735C28132310E90033F343 /* LinkObj.json */; };
 		3789F91B13CD7E830069DB1C /* LegislatorObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 3789F91A13CD7E830069DB1C /* LegislatorObj+RestKit.m */; };
 		3789F91C13CD7E830069DB1C /* LegislatorObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 3789F91A13CD7E830069DB1C /* LegislatorObj+RestKit.m */; };
@@ -1938,6 +1940,8 @@
 		377DC4A71344D475000068E1 /* BillVotesDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillVotesDataSource.h; sourceTree = "<group>"; };
 		377DC4A81344D475000068E1 /* BillVotesDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillVotesDataSource.m; sourceTree = "<group>"; };
 		377E8CF0100C39F300686B23 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = "Classes/Application Support/Constants.h"; sourceTree = SOURCE_ROOT; };
+		3787269C13D6360700D030CC /* StatesListMetaLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesListMetaLoader.h; sourceTree = "<group>"; };
+		3787269D13D6360700D030CC /* StatesListMetaLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatesListMetaLoader.m; sourceTree = "<group>"; };
 		3789F91913CD7E830069DB1C /* LegislatorObj+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LegislatorObj+RestKit.h"; sourceTree = "<group>"; };
 		3789F91A13CD7E830069DB1C /* LegislatorObj+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LegislatorObj+RestKit.m"; sourceTree = "<group>"; };
 		378A1CD61007FF4600BEC4ED /* CommitteePositionObj+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CommitteePositionObj+RestKit.h"; sourceTree = "<group>"; };
@@ -2432,6 +2436,8 @@
 				370EAD301338029E007788BC /* OpenLegislativeAPIs.m */,
 				37CD09AF13A2A6F100F4C68B /* StateMetaLoader.h */,
 				37CD09B013A2A6F100F4C68B /* StateMetaLoader.m */,
+				3787269C13D6360700D030CC /* StatesListMetaLoader.h */,
+				3787269D13D6360700D030CC /* StatesListMetaLoader.m */,
 				370EAC351337E3CF007788BC /* TexLegeObjectCache.h */,
 				370EAC361337E3CF007788BC /* TexLegeObjectCache.m */,
 				371FB1D61333B43C0003740A /* CalendarEventsLoader.h */,
@@ -4957,6 +4963,7 @@
 				37E4339B13D0A66C00E9320E /* SLFAlertView.m in Sources */,
 				37E4339C13D0A66C00E9320E /* TexLegeEmailComposer.m in Sources */,
 				37E4360613D0C0FA00E9320E /* ActionSheetPicker.m in Sources */,
+				3787269F13D6360700D030CC /* StatesListMetaLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5068,6 +5075,7 @@
 				37E4339E13D0A66C00E9320E /* SLFAlertView.m in Sources */,
 				37E4339F13D0A66C00E9320E /* TexLegeEmailComposer.m in Sources */,
 				37E435DB13D0C0FA00E9320E /* ActionSheetPicker.m in Sources */,
+				3787269E13D6360700D030CC /* StatesListMetaLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

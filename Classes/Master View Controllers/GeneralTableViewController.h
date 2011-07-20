@@ -14,16 +14,12 @@
 #import "TableDataSourceProtocol.h"
 
 @interface GeneralTableViewController : UITableViewController <UITableViewDelegate> {
-	IBOutlet id detailViewController;
-	IBOutlet id<TableDataSource> dataSource;
-			 id	selectObjectOnAppear;
-	NSNumber *controllerEnabled;
 }
 
-@property (nonatomic,retain) IBOutlet id<TableDataSource> dataSource;
-@property (nonatomic,retain) IBOutlet id detailViewController;
-@property (nonatomic,retain)		  id selectObjectOnAppear;
+@property (nonatomic,retain) id<TableDataSource> dataSource;
+@property (nonatomic,retain) id selectObjectOnAppear;
 @property (nonatomic,retain) NSNumber *controllerEnabled;
+@property (nonatomic,retain) IBOutlet id detailViewController;
 
 - (NSString *)reachabilityStatusKey;
 

@@ -32,7 +32,6 @@
 
 - (id)initWithStyle:(UITableViewStyle)style {
 	if ((self = [super initWithStyle:style])) {
-		dataSource.useLoadingDataCell = YES;
 	}
 	return self;
 }

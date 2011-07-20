@@ -16,14 +16,6 @@
 @class TexLegeNavBar;
 
 @interface CalendarDetailViewController : KalViewController <UISplitViewControllerDelegate,UISearchDisplayDelegate,UITableViewDelegate, UIPopoverControllerDelegate> {
-	id dataObject;
-	UIPopoverController *masterPopover;
-	UIPopoverController *eventPopover;
-	
-	IBOutlet UIWebView *webView;
-	ChamberCalendarObj *chamberCalendar;
-	
-	CGRect selectedRowRect;
 }
 @property (nonatomic, assign) id dataObject;
 @property (nonatomic, retain) UIPopoverController *masterPopover;

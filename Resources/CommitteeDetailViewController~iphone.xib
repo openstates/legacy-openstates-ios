@@ -4654,15 +4654,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string key="className">CommitteeDetailViewController</string>
 					<string key="superclassName">UITableViewController</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="dataObject">id</string>
 						<string key="membershipLab">UILabel</string>
 						<string key="nameLab">UILabel</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="dataObject">
-							<string key="name">dataObject</string>
-							<string key="candidateClassName">id</string>
-						</object>
 						<object class="IBToOneOutletInfo" key="membershipLab">
 							<string key="name">membershipLab</string>
 							<string key="candidateClassName">UILabel</string>

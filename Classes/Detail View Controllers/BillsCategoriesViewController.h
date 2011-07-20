@@ -22,7 +22,6 @@
 
 @interface BillsCategoriesViewController : UITableViewController <RKRequestDelegate, UITableViewDelegate> {
 	NSMutableDictionary *categories_;
-	IBOutlet UISegmentedControl *chamberControl;
 	BOOL isFresh;
 	NSDate *updated;
 	NSInteger loadingStatus;

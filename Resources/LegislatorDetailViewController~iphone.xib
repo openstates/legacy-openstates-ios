@@ -10,9 +10,7 @@
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">141</string>
 		</object>
-		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="13"/>
-		</array>
+		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs"/>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 		</array>
@@ -43,6 +41,7 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{81, 75}, {95, 18}}</string>
 										<reference key="NSSuperview" ref="1044557839"/>
+										<reference key="NSWindow"/>
 										<object class="NSColor" key="IBUIBackgroundColor" id="87948966">
 											<int key="NSColorSpace">3</int>
 											<bytes key="NSWhite">MCAwAA</bytes>
@@ -75,6 +74,7 @@
 										<int key="NSvFlags">290</int>
 										<string key="NSFrame">{{81, 5}, {239, 18}}</string>
 										<reference key="NSSuperview" ref="1044557839"/>
+										<reference key="NSWindow"/>
 										<reference key="IBUIBackgroundColor" ref="87948966"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClipsSubviews">YES</bool>
@@ -98,6 +98,7 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{81, 27}, {230, 18}}</string>
 										<reference key="NSSuperview" ref="1044557839"/>
+										<reference key="NSWindow"/>
 										<reference key="IBUIBackgroundColor" ref="87948966"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClipsSubviews">YES</bool>
@@ -117,6 +118,7 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{81, 50}, {95, 18}}</string>
 										<reference key="NSSuperview" ref="1044557839"/>
+										<reference key="NSWindow"/>
 										<reference key="IBUIBackgroundColor" ref="87948966"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClipsSubviews">YES</bool>
@@ -136,6 +138,7 @@
 										<int key="NSvFlags">289</int>
 										<string key="NSFrame">{{184, 75}, {127, 18}}</string>
 										<reference key="NSSuperview" ref="1044557839"/>
+										<reference key="NSWindow"/>
 										<reference key="IBUIBackgroundColor" ref="87948966"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClipsSubviews">YES</bool>
@@ -159,6 +162,7 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{9, 8}, {64, 85}}</string>
 										<reference key="NSSuperview" ref="1044557839"/>
+										<reference key="NSWindow"/>
 										<reference key="IBUIBackgroundColor" ref="87948966"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<int key="IBUIContentMode">1</int>
@@ -168,6 +172,7 @@
 								</array>
 								<string key="NSFrameSize">{320, 101}</string>
 								<reference key="NSSuperview" ref="304484639"/>
+								<reference key="NSWindow"/>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MQA</bytes>
@@ -180,6 +185,7 @@
 						</array>
 						<string key="NSFrameSize">{320, 101}</string>
 						<reference key="NSSuperview" ref="729910629"/>
+						<reference key="NSWindow"/>
 						<object class="NSColor" key="IBUIBackgroundColor" id="585006431">
 							<int key="NSColorSpace">10</int>
 							<object class="NSImage" key="NSImage">
@@ -219,6 +225,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</array>
 				<string key="NSFrameSize">{320, 367}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="IBUIBackgroundColor" ref="585006431"/>
 				<bool key="IBUIClipsSubviews">YES</bool>
 				<bool key="IBUIMultipleTouchEnabled">YES</bool>
@@ -478,59 +485,22 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="allSlider">PartisanScaleView</string>
-						<string key="chartView">S7GraphView</string>
-						<string key="freshmanPlotLab">UILabel</string>
 						<string key="headerView">UIView</string>
-						<string key="indivSlider">PartisanScaleView</string>
-						<string key="leg_chamberLab">UILabel</string>
-						<string key="leg_chamberPartyLab">UILabel</string>
 						<string key="leg_districtLab">UILabel</string>
-						<string key="leg_indexTitleLab">UILabel</string>
 						<string key="leg_nameLab">UILabel</string>
 						<string key="leg_partyLab">UILabel</string>
 						<string key="leg_photoView">UIImageView</string>
-						<string key="leg_rankLab">UILabel</string>
 						<string key="leg_reelection">UILabel</string>
 						<string key="leg_tenureLab">UILabel</string>
 						<string key="miniBackgroundView">UIView</string>
-						<string key="partySlider">PartisanScaleView</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="allSlider">
-							<string key="name">allSlider</string>
-							<string key="candidateClassName">PartisanScaleView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="chartView">
-							<string key="name">chartView</string>
-							<string key="candidateClassName">S7GraphView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="freshmanPlotLab">
-							<string key="name">freshmanPlotLab</string>
-							<string key="candidateClassName">UILabel</string>
-						</object>
 						<object class="IBToOneOutletInfo" key="headerView">
 							<string key="name">headerView</string>
 							<string key="candidateClassName">UIView</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="indivSlider">
-							<string key="name">indivSlider</string>
-							<string key="candidateClassName">PartisanScaleView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="leg_chamberLab">
-							<string key="name">leg_chamberLab</string>
-							<string key="candidateClassName">UILabel</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="leg_chamberPartyLab">
-							<string key="name">leg_chamberPartyLab</string>
-							<string key="candidateClassName">UILabel</string>
-						</object>
 						<object class="IBToOneOutletInfo" key="leg_districtLab">
 							<string key="name">leg_districtLab</string>
-							<string key="candidateClassName">UILabel</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="leg_indexTitleLab">
-							<string key="name">leg_indexTitleLab</string>
 							<string key="candidateClassName">UILabel</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="leg_nameLab">
@@ -545,10 +515,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string key="name">leg_photoView</string>
 							<string key="candidateClassName">UIImageView</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="leg_rankLab">
-							<string key="name">leg_rankLab</string>
-							<string key="candidateClassName">UILabel</string>
-						</object>
 						<object class="IBToOneOutletInfo" key="leg_reelection">
 							<string key="name">leg_reelection</string>
 							<string key="candidateClassName">UILabel</string>
@@ -561,66 +527,14 @@ AAMAAAABAAEAAAFTAAMAAAAEAAACAgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string key="name">miniBackgroundView</string>
 							<string key="candidateClassName">UIView</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="partySlider">
-							<string key="name">partySlider</string>
-							<string key="candidateClassName">PartisanScaleView</string>
-						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Classes/Detail View Controllers/LegislatorDetailViewController.h</string>
 					</object>
 				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">PartisanScaleView</string>
-					<string key="superclassName">UIView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/Custom Cells and Views/PartisanScaleView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">S7GraphView</string>
-					<string key="superclassName">UIView</string>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="dataSource">id</string>
-						<string key="delegate">id</string>
-						<string key="xValuesFormatter">NSFormatter</string>
-						<string key="yValuesFormatter">NSFormatter</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="dataSource">
-							<string key="name">dataSource</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="delegate">
-							<string key="name">delegate</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="xValuesFormatter">
-							<string key="name">xValuesFormatter</string>
-							<string key="candidateClassName">NSFormatter</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="yValuesFormatter">
-							<string key="name">yValuesFormatter</string>
-							<string key="candidateClassName">NSFormatter</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Vendor/S7GraphView/s7graphview/S7GraphView.h</string>
-					</object>
-				</object>
 			</array>
 			<array class="NSMutableArray" key="referencedPartialClassDescriptionsV3.2+">
-				<object class="IBPartialClassDescription">
-					<string key="className">NSFormatter</string>
-					<string key="superclassName">NSObject</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBFrameworkSource</string>
-						<string key="minorKey">Foundation.framework/Headers/NSFormatter.h</string>
-					</object>
-				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

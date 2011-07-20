@@ -15,9 +15,6 @@
 @class CommitteeObj;
 
 @interface CommitteeDetailViewController : UITableViewController <UISplitViewControllerDelegate>  {
-	id dataObject;
-	UIPopoverController *masterPopover;
-	NSMutableArray *infoSectionArray;
 }
 
 @property (nonatomic, assign) id dataObject;

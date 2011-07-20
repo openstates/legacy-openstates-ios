@@ -18,7 +18,7 @@
 @interface LegislatorCell : UITableViewCell {
 	
 }
-@property (nonatomic,retain) IBOutlet LegislatorCellView *cellView;
+@property (nonatomic,retain) LegislatorCellView *cellView;
 @property (nonatomic,assign) NSString *role;
 @property (nonatomic,readonly) CGSize cellSize;
 
