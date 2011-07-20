@@ -24,8 +24,9 @@
 
 @implementation StateMetaLoader
 @synthesize isFresh;
-@synthesize selectedState = _selectedState;
+@synthesize needsStateSelection;
 @synthesize selectedSession = _selectedSession;
+@synthesize selectedState = _selectedState;
 
 + (id)sharedStateMeta
 {
@@ -47,8 +48,12 @@
 		
 		[[NSUserDefaults standardUserDefaults] synchronize];
 		NSString *tempState = [[NSUserDefaults standardUserDefaults] objectForKey:kMetaSelectedStateKey];
+        
 		if (!IsEmpty(tempState)) {
+            
 			_selectedState = [tempState copy];
+            
+            needsStateSelection = NO;
 			
 			NSDictionary *tempSessionDict = [[NSUserDefaults standardUserDefaults] objectForKey:kMetaSelectedStateSessionKey];
 			if (tempSessionDict) {
@@ -58,8 +63,12 @@
 					_selectedSession = [tempSession copy];
 				}
 			}
-		}	
+		}
+        else {
+            //TODO: we need to show a list of available states when there's no preexisting state selection
 
+            needsStateSelection = YES;
+        }
 		
 		[self metadataFromCache];
 	}
@@ -78,18 +87,6 @@
 }
 
 
-- (void)setSelectedState:(NSString *)stateID {
-	
-	if (NO == IsEmpty(stateID)) {
-		
-		NSLog(@"State Metadata: Changing state to %@", stateID);
-
-		[[NSUserDefaults standardUserDefaults] setObject:stateID forKey:kMetaSelectedStateKey];
-		[[NSUserDefaults standardUserDefaults] synchronize];
-		
-		[self loadMetadataForState:stateID];
-	}
-}
 
 - (NSMutableDictionary *)metadataFromCache {
 	
@@ -145,6 +142,19 @@
 		}
 	}
 	return stateMeta;
+}
+
+- (void)setSelectedState:(NSString *)stateID {
+	
+	if (NO == IsEmpty(stateID)) {
+		
+		NSLog(@"State Metadata: Changing state to %@", stateID);
+        
+		[[NSUserDefaults standardUserDefaults] setObject:stateID forKey:kMetaSelectedStateKey];
+		[[NSUserDefaults standardUserDefaults] synchronize];
+		
+		[self loadMetadataForState:stateID];
+	}
 }
 
 - (NSArray *)sessions {
@@ -212,51 +222,6 @@
 	}
 }
 
-/*
-- (NSString *)currentSession {
-	if (NO == IsEmpty(_currentSession))
-		return _currentSession;
-	
-	NSDictionary *stateMeta = [_metadata objectForKey:_selectedState];
-	
-	NSMutableArray *terms = [[NSMutableArray alloc] initWithArray:[stateMeta objectForKey:kMetaSessionTermsKey]];
-	NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"start_year" ascending:NO];
-	[terms sortUsingDescriptors:[NSArray arrayWithObject:sortDesc]];
-			
-	NSInteger maxyear = -1;
-	NSString *foundSession = nil;
-	
-	for (NSDictionary *term in terms) {
-		NSNumber *startYear = [term objectForKey:@"start_year"];
-		//NSNumber *endYear = [term objectForKey:@"end_year"];
-		NSInteger thisYear = [[NSDate date] year];
-		if (startYear) {
-			NSInteger startInt = [startYear integerValue];
-			if (startInt > thisYear) {
-				continue;
-			}
-			else if (startInt > maxyear) {
-				maxyear = startInt;
-				NSArray *sessions = [term objectForKey:kMetaSessionsKey];
-				if (!IsEmpty(sessions)) {
-					id latest = [sessions lastObject]; 
-					if ([latest isKindOfClass:[NSString class]])
-						foundSession = latest;
-					else if ([latest isKindOfClass:[NSNumber class]])
-						foundSession = [latest stringValue];
-				}
-			}
-		}
-	}
-
-	if (!IsEmpty(foundSession)) {
-		_currentSession = [foundSession copy];	
-	}
-	[terms release];
-
-	return _currentSession;	
-}
-*/
 
 + (NSString *)nameForChamber:(NSInteger)chamber {
 	NSString *name = nil;
@@ -300,6 +265,7 @@
 	}
 }
 
+// Gets called whenever we've new data for a given state ... we need to parse it's sessions
 - (void)reloadMetaPropertiesForStateID:(id)gotStateID {
 	
 	NSCParameterAssert((gotStateID != NULL));
@@ -340,18 +306,20 @@
 	
 }
 
+
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
 	if ([request isGET] && [response isOK]) {  
 		// Success! Let's take a look at the data  
 
 		if (NO == [request.resourcePath hasPrefix:@"/metadata"]) 
 			return;
-		
+
 		NSMutableDictionary *stateMeta = [response.body mutableObjectFromJSONData];
 		if (IsEmpty(stateMeta)) {
 			[self request:request didFailLoadWithError:nil];
 			return;
 		}
+		
 		
 		NSString *wantedStateID = nil;
 		if (request.userData) {	// try getting our new state id from our initial query info
@@ -363,6 +331,7 @@
 		
 		NSString *gotStateID = [stateMeta objectForKey:kMetaStateAbbrevKey];
 				
+		
 		if (IsEmpty(wantedStateID) || IsEmpty(gotStateID) || NO == [wantedStateID isEqualToString:gotStateID]) {
 			NSLog(@"StateMetaDataLoader: requested metadata for %@, but incoming data is for %@", wantedStateID, gotStateID);
 			[self request:request didFailLoadWithError:nil];
@@ -378,6 +347,9 @@
 				[_loadingStates removeObject:gotStateID];
 			}
 			
+			
+			///// Write the metadata dictionary to a cache file
+
 			NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kStateMetaFile];
 			if (![[_metadata JSONData] writeToFile:localPath atomically:YES])
 				NSLog(@"StateMetadataLoader: error writing cache to file: %@", localPath);

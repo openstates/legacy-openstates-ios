@@ -34,6 +34,7 @@
 #import "MTStatusBarOverlay.h"
 
 #import "StateMetaLoader.h"
+#import "StatesListMetaLoader.h"
 #import "SLFAlertView.h"
 
 @interface StatesLegeAppDelegate (Private)
@@ -373,7 +374,7 @@ NSInteger kNoSelection = -1;
 {		
 	NSLog(@"iOS Version: %@", [[UIDevice currentDevice] systemVersion]);
 	
-	[[TexLegeReachability sharedTexLegeReachability] startCheckingReachability:self];
+	[[TexLegeReachability sharedTexLegeReachability] startCheckingReachability];
 	
 	// initialize RestKit to handle our seed database and user database
 	[TexLegeCoreDataUtils initRestKitObjects:self];	
@@ -413,7 +414,15 @@ NSInteger kNoSelection = -1;
 - (void)runOnEveryAppStart {
 	self.appIsQuitting = NO;
 	
-	[[StateMetaLoader sharedStateMeta] setSelectedState:@"ca"];
+    if ([[StateMetaLoader sharedStateMeta] needsStateSelection])
+    {
+#warning TESTING, so this will leak for now...
+        StatesListMetaLoader *stateList = [[StatesListMetaLoader alloc] init];
+        
+        [[StateMetaLoader sharedStateMeta] setSelectedState:@"ca"];
+        
+        
+    }
 	
 	if (![self isDatabaseResetNeeded]) {
 		analyticsOptInController = [[AnalyticsOptInAlertController alloc] init];
