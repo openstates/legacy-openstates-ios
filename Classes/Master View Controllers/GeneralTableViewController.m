@@ -129,7 +129,7 @@
 
 - (void)runLoadView {	
 	[super loadView];
-	
+	/*
 	// create a new table using the full application frame
 	// we'll ask the datasource which type of table to use (plain or grouped)
 	CGRect tempFrame = [[UIScreen mainScreen] applicationFrame];
@@ -147,8 +147,8 @@
 	self.tableView.sectionIndexMinimumDisplayRowCount=15;
 	
 	// set the tableview as the controller view
-	self.view = self.tableView;
-	
+	//self.view = self.tableView;
+	*/
 }
 
 -(void)viewDidLoad {

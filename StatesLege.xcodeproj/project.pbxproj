@@ -19,6 +19,8 @@
 		37094D97133B162E00B9693C /* TexLegeBadgeGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37094D95133B162E00B9693C /* TexLegeBadgeGroupCell.m */; };
 		3709AEAE101FBE7900C1061B /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 3709AEAD101FBE7900C1061B /* Reachability.m */; };
 		3709AF0D101FBF5100C1061B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3709AF0C101FBF5100C1061B /* SystemConfiguration.framework */; };
+		370A804813D6BE3000390ADC /* GCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 370A804713D6BE3000390ADC /* GCTableViewController.m */; };
+		370A804913D6BE3000390ADC /* GCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 370A804713D6BE3000390ADC /* GCTableViewController.m */; };
 		370B9DC1122AC5DF00AC9CC8 /* LegislatorDetailDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 370B9DC0122AC5DF00AC9CC8 /* LegislatorDetailDataSource.m */; };
 		370B9DD0122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 370B9DCF122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m */; };
 		370C270C1225BF7E004273E3 /* DistrictMapDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */; };
@@ -62,6 +64,8 @@
 		372FDB23139F1CFB00D39374 /* LegislatorDetailViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3739DBE4123355EF00D4F7D2 /* LegislatorDetailViewController~iphone.xib */; };
 		372FDB24139F1CFB00D39374 /* LegislatorDetailViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3739DBE4123355EF00D4F7D2 /* LegislatorDetailViewController~iphone.xib */; };
 		3730B43311DD4B4D00BA10D0 /* Icon_512.png in Resources */ = {isa = PBXBuildFile; fileRef = 3730B43211DD4B4D00BA10D0 /* Icon_512.png */; };
+		37328C5313D6B4050089E39F /* StateMetaReadyList.json in Resources */ = {isa = PBXBuildFile; fileRef = 37328C5213D6B4050089E39F /* StateMetaReadyList.json */; };
+		37328C5413D6B4050089E39F /* StateMetaReadyList.json in Resources */ = {isa = PBXBuildFile; fileRef = 37328C5213D6B4050089E39F /* StateMetaReadyList.json */; };
 		3732A0F811DB203F009E8957 /* iPhoneTabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3732A0F711DB203F009E8957 /* iPhoneTabBarController.xib */; };
 		3735DD3D12087CEF0000AF5A /* CalendarDetailViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3735DD3C12087CEF0000AF5A /* CalendarDetailViewController~iphone.xib */; };
 		3735DDAF120899980000AF5A /* UISearchDisplayController+NoHideNav.m in Sources */ = {isa = PBXBuildFile; fileRef = 3735DDAE120899980000AF5A /* UISearchDisplayController+NoHideNav.m */; };
@@ -1411,6 +1415,8 @@
 		3709AEAC101FBE7900C1061B /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = "Classes/Utility Classes/Reachability.h"; sourceTree = SOURCE_ROOT; };
 		3709AEAD101FBE7900C1061B /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = "Classes/Utility Classes/Reachability.m"; sourceTree = SOURCE_ROOT; };
 		3709AF0C101FBF5100C1061B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		370A804613D6BE3000390ADC /* GCTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTableViewController.h; path = ../GCTableViewController/GCTableViewController/GCTableViewController.h; sourceTree = SOURCE_ROOT; };
+		370A804713D6BE3000390ADC /* GCTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTableViewController.m; path = ../GCTableViewController/GCTableViewController/GCTableViewController.m; sourceTree = SOURCE_ROOT; };
 		370B9DBF122AC5DF00AC9CC8 /* LegislatorDetailDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorDetailDataSource.h; sourceTree = "<group>"; };
 		370B9DC0122AC5DF00AC9CC8 /* LegislatorDetailDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorDetailDataSource.m; sourceTree = "<group>"; };
 		370B9DCE122AD22C00AC9CC8 /* TexLegeStandardGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeStandardGroupCell.h; sourceTree = "<group>"; };
@@ -1468,6 +1474,7 @@
 		372FAB5812147B2000AEF237 /* ChamberCalendarObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChamberCalendarObj.h; sourceTree = "<group>"; };
 		372FAB5912147B2000AEF237 /* ChamberCalendarObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChamberCalendarObj.m; sourceTree = "<group>"; };
 		3730B43211DD4B4D00BA10D0 /* Icon_512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon_512.png; sourceTree = "<group>"; };
+		37328C5213D6B4050089E39F /* StateMetaReadyList.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = StateMetaReadyList.json; sourceTree = "<group>"; };
 		3732A0F711DB203F009E8957 /* iPhoneTabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = iPhoneTabBarController.xib; path = Resources/iPhoneTabBarController.xib; sourceTree = "<group>"; };
 		3735DD3C12087CEF0000AF5A /* CalendarDetailViewController~iphone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "CalendarDetailViewController~iphone.xib"; path = "Resources/CalendarDetailViewController~iphone.xib"; sourceTree = "<group>"; };
 		3735DDAD120899980000AF5A /* UISearchDisplayController+NoHideNav.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UISearchDisplayController+NoHideNav.h"; path = "Classes/Utility Classes/UISearchDisplayController+NoHideNav.h"; sourceTree = SOURCE_ROOT; };
@@ -2512,6 +2519,8 @@
 		3735DFF8120916A00000AF5A /* Master View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				370A804613D6BE3000390ADC /* GCTableViewController.h */,
+				370A804713D6BE3000390ADC /* GCTableViewController.m */,
 				37A0E4490FD2DEAA009B65F7 /* GeneralTableViewController.h */,
 				37A0E44A0FD2DEAA009B65F7 /* GeneralTableViewController.m */,
 				3702412512198C11002D169E /* LegislatorMasterViewController.h */,
@@ -2821,6 +2830,7 @@
 			isa = PBXGroup;
 			children = (
 				37735C22132310E90033F343 /* SeedDB */,
+				37328C5213D6B4050089E39F /* StateMetaReadyList.json */,
 				37CF6A7412262B4600456D29 /* planH01369.kml */,
 				37CF6A7512262B4600456D29 /* planS01188.kml */,
 				37C9B67D11EDB28E001F0010 /* TexLege.xcdatamodeld */,
@@ -4321,6 +4331,7 @@
 				3789F8EA13CD79FD0069DB1C /* LinkObj.json in Resources */,
 				37E436D513D10AD000E9320E /* 138-scales-inv.png in Resources */,
 				37E436D613D10AD300E9320E /* 138-scales-inv@2x.png in Resources */,
+				37328C5413D6B4050089E39F /* StateMetaReadyList.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4821,6 +4832,7 @@
 				37F3577C13CA684200C1EE29 /* gavel@2x.png in Resources */,
 				37F3579513CA684200C1EE29 /* multipins.png in Resources */,
 				37F3579613CA684200C1EE29 /* multipins@2x.png in Resources */,
+				37328C5313D6B4050089E39F /* StateMetaReadyList.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4964,6 +4976,7 @@
 				37E4339C13D0A66C00E9320E /* TexLegeEmailComposer.m in Sources */,
 				37E4360613D0C0FA00E9320E /* ActionSheetPicker.m in Sources */,
 				3787269F13D6360700D030CC /* StatesListMetaLoader.m in Sources */,
+				370A804913D6BE3000390ADC /* GCTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5076,6 +5089,7 @@
 				37E4339F13D0A66C00E9320E /* TexLegeEmailComposer.m in Sources */,
 				37E435DB13D0C0FA00E9320E /* ActionSheetPicker.m in Sources */,
 				3787269E13D6360700D030CC /* StatesListMetaLoader.m in Sources */,
+				370A804813D6BE3000390ADC /* GCTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -18,6 +18,7 @@
 @interface BillsMasterViewController : GeneralTableViewController <UISearchDisplayDelegate, UISearchBarDelegate> {
 	NSString *_searchString;
 }
-@property (nonatomic,retain) BillSearchDataSource *billSearchDS;
+@property (nonatomic,retain)            UILabel *activeSessionLabel;
+@property (nonatomic,retain)            BillSearchDataSource *billSearchDS;
 	
 @end

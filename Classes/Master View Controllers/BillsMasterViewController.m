@@ -33,7 +33,6 @@
 
 @interface BillsMasterViewController()
 
-@property (nonatomic,retain) IBOutlet UILabel *activeSessionLabel;
 - (NSString *)sessionLabelText;
 - (IBAction)showSessionControl:(id)sender;
 - (IBAction)sessonControlChanged:(NSNumber *)selectedIndex:(id)element;
@@ -63,22 +62,20 @@
 	return NSStringFromClass([self class]);
 }
 
-/*- (void)loadView {	
-	[super runLoadView];
-}*/
-
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-				
-	[self createSessionPicker];
-	
+					
 	if (!self.billSearchDS)
 		self.billSearchDS = [[[BillSearchDataSource alloc] initWithSearchDisplayController:self.searchDisplayController] autorelease];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(reloadData:) name:kBillSearchNotifyDataLoaded object:billSearchDS];	
 	
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeSessionLabel:) name:kStateMetaNotifySessionChange object:nil];
+    
+    [self createSessionPicker];
+
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];	
 	
 	self.searchDisplayController.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:
@@ -88,7 +85,7 @@
 																nil];
 	
 	if ([UtilityMethods isIPadDevice]) {	
-		self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
+		self.contentSizeForViewInPopover = CGSizeMake(320.0, 400.0);
 	    	
 		/* This "avoids" a bug on iPads where the scope bar get's crammed into the top line in landscape. */
 		if ([self.searchDisplayController.searchBar respondsToSelector:@selector(setCombinesLandscapeBars:)]) 
@@ -111,9 +108,12 @@
 
 - (void)viewDidUnload {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	self.billSearchDS = nil;
+    [self destroySessionPicker];
+    
+	self.activeSessionLabel = nil;
 	self.toolbarItems = nil;
-	
+	self.billSearchDS = nil;
+    
 	[super viewDidUnload];
 }
 
@@ -139,14 +139,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {	
 	[super viewWillAppear:animated];
-		
-    self.searchDisplayController.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:
-																stringForChamber(BOTH_CHAMBERS, TLReturnAbbrev),
-																stringForChamber(HOUSE, TLReturnAbbrev),
-																stringForChamber(SENATE, TLReturnAbbrev),
-																nil];
-	
-    
+		    
 	// this has to be here because GeneralTVC will overwrite it once anyone calls self.dataSource,
 	//		if we remove this, it will wind up setting our searchResultsDataSource to the BillsMenuDataSource
 	self.searchDisplayController.searchResultsDataSource = self.billSearchDS;	
@@ -155,7 +148,14 @@
 #if LIVE_SEARCHING == 0
 	self.searchDisplayController.searchBar.delegate = self;
 #endif
-		
+    
+    self.searchDisplayController.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:
+																stringForChamber(BOTH_CHAMBERS, TLReturnAbbrev),
+																stringForChamber(HOUSE, TLReturnAbbrev),
+																stringForChamber(SENATE, TLReturnAbbrev),
+																nil];
+	
+    
 	if ([UtilityMethods isIPadDevice])
 		[self.tableView reloadData];
 }
@@ -318,9 +318,12 @@
 	sessionLabel.textColor = [TexLegeTheme backgroundLight];
 	sessionLabel.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
 	sessionLabel.textAlignment = UITextAlignmentRight;
+    sessionLabel.lineBreakMode = UILineBreakModeTailTruncation;
 	sessionLabel.text = [self sessionLabelText];
 	sessionLabel.opaque = NO;
 	sessionLabel.backgroundColor = [UIColor clearColor];
+    sessionLabel.adjustsFontSizeToFitWidth = YES;
+    sessionLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	
 	self.activeSessionLabel = sessionLabel;
 	
@@ -342,11 +345,14 @@
 	[self.navigationController setToolbarHidden:YES animated:YES];
 }
 
+- (void)changeSessionLabel:(id)sender {
+    self.activeSessionLabel.text = [self sessionLabelText];
+}
+
 - (NSString *)sessionLabelText {
-	NSString *sessionText = [NSString stringWithFormat:@"%@ %@",
-							 NSLocalizedStringFromTable(@"Active Session:", @"StandardUI", @"Legislative session control label"),
-							 [[StateMetaLoader sharedStateMeta] selectedSession]];
-	return sessionText;
+    StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
+        
+	return [meta displayNameForSession:meta.selectedSession]; //meta.selectedSession;
 }
 
 - (IBAction)sessonControlChanged:(NSNumber *)selectedIndex:(id)element {	
@@ -354,16 +360,29 @@
 	NSInteger sessionIndex = [selectedIndex intValue];
 	
 	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
-	NSArray *sessions = [meta sessions];
-	
-	if (sessions && sessionIndex < [sessions count]) {
-		NSString *selectedSession = [sessions objectAtIndex:sessionIndex];
-		if (!IsEmpty(selectedSession)) {
-			meta.selectedSession = selectedSession;
-			if (self.activeSessionLabel) {
-				self.activeSessionLabel.text = [self sessionLabelText];
-			}
-		}
+    
+    NSArray *displayNames = [[meta sessionDisplayNames] keysSortedByValueUsingSelector:@selector(compare:)];
+        	
+	if (displayNames && sessionIndex < [displayNames count]) {
+        
+        
+		NSString *selectedDisplay = [displayNames objectAtIndex:sessionIndex];
+        
+        NSNumber *numValue = [[meta sessionDisplayNames] objectForKey:selectedDisplay];
+        
+        if (numValue) {
+            
+            NSString *selectedSession = [meta.sessions objectAtIndex:[numValue integerValue]];
+        
+            if (!IsEmpty(selectedSession)) {
+                
+                meta.selectedSession = selectedSession;
+                
+                if (self.activeSessionLabel) {
+                    self.activeSessionLabel.text = selectedDisplay;
+                }
+            }
+        }
 	}
 	
 }
@@ -380,14 +399,15 @@
 			  meta.stateMetadata);
 		return;
 	}
+    
+    NSArray *displayNames = [[meta sessionDisplayNames] keysSortedByValueUsingSelector:@selector(compare:)];
 	
 	NSInteger selectedItem = [sessions indexOfObject:selectedSession];
 	if (selectedItem==NSNotFound)
 		selectedItem = 0;
 	
-	
 	[ActionSheetPicker displayActionPickerFrom:sender 
-											  data:sessions 
+											  data:displayNames
 									 selectedIndex:selectedItem 
 											target:self 
 											action:@selector(sessonControlChanged::) 

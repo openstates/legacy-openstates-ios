@@ -10,10 +10,10 @@
 //
 //
 
-
+#import "GCTableViewController.h"
 #import "TableDataSourceProtocol.h"
 
-@interface GeneralTableViewController : UITableViewController <UITableViewDelegate> {
+@interface GeneralTableViewController : GCTableViewController <UITableViewDelegate> {
 }
 
 @property (nonatomic,retain) id<TableDataSource> dataSource;

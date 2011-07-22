@@ -19,6 +19,7 @@
 	NSMutableArray      * _loadingStates;
 	NSString            * _selectedSession;
 	NSMutableArray      * _sessions;
+	NSMutableDictionary * _sessionDisplayNames;
     NSString            * _selectedState;
 }
 
@@ -28,10 +29,13 @@
 
 - (void)loadMetadataForState:(NSString *)stateID;
 
+- (NSString *)displayNameForSession:(NSString *)aSession;
+
 @property (nonatomic)           BOOL          needsStateSelection;          // will be TRUE if the user hasn't selected a state before
 @property (nonatomic)           BOOL          isFresh;
 @property (nonatomic,copy)      NSString    * selectedSession;
 @property (nonatomic,readonly)  NSArray     * sessions;
+@property (nonatomic,readonly)  NSDictionary* sessionDisplayNames;
 @property (nonatomic,readonly)  NSString    * latestSession;
 @property (nonatomic,copy)      NSString    * selectedState;
 @property (nonatomic,readonly)  NSDictionary* stateMetadata;
@@ -60,6 +64,7 @@
 #define kMetaLowerChamberTitleKey       @"lower_chamber_title"	// Representative
 #define kMetaUpperChamberTitleKey       @"upper_chamber_title"	// Senator
 #define kMetaSessionsDetailsKey         @"session_details"		// "811":{"type": "special","start_date": "2009-07-01 00:00:00", "end_date": "2009-07-10 00:00:00"}
+#define kMetaSessionsDisplayNameKey     @"display_name"         // "82nd Regular Session"
 #define kMetaSessionsKey                @"sessions"		
 #define kMetaSessionTermsKey            @"terms"		
 #define kMetaStateAbbrevKey             @"abbreviation"			// tx, ut, ca, hi

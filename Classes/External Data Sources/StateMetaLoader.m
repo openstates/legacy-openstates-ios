@@ -42,6 +42,7 @@
 		updated = nil;
 		isFresh = NO;
 		_sessions = nil;
+        _sessionDisplayNames = nil;
 		_selectedSession = nil;
 		_selectedState = nil;
 		_loadingStates = [[NSMutableArray alloc] init];
@@ -81,6 +82,7 @@
 	nice_release(_metadata);
 	nice_release(_selectedSession);
 	nice_release(_sessions);
+    nice_release(_sessionDisplayNames);
 	nice_release(_selectedState);
 	nice_release(_loadingStates);
 	[super dealloc];
@@ -92,6 +94,7 @@
 	
 	nice_release(_metadata);
 	nice_release(_sessions);
+    nice_release(_sessionDisplayNames);
 	nice_release(_selectedSession);
 	
 	NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kStateMetaFile];
@@ -188,6 +191,79 @@
 	return [self.sessions lastObject];
 }
 
+- (NSInteger)sessionIndexForDisplayName:(NSString *)displayName {
+    NSInteger index = [self.sessions count];
+    
+    if (!IsEmpty(displayName) && self.sessionDisplayNames) {
+
+        NSNumber *value = [self.sessionDisplayNames objectForKey:displayName];
+        if (value) {
+            index = [value integerValue];
+        }            
+    }
+    
+    return index;
+    
+}
+
+- (NSString *)displayNameForSession:(NSString *)aSession {
+    NSString *display = aSession;
+    
+    if (!IsEmpty(aSession)) {
+        
+        NSDictionary * details = [self.stateMetadata objectForKey:kMetaSessionsDetailsKey];
+        if (details) {
+            
+            NSDictionary * sessionDetail = [details objectForKey:aSession];
+            if (sessionDetail) {
+    
+                NSString * tempName = [sessionDetail objectForKey:kMetaSessionsDisplayNameKey];
+                if (!IsEmpty(tempName)) {
+                    
+                    display = tempName;
+                }
+            }
+        }
+    }
+    
+    return display;
+}
+
+
+- (NSDictionary *)findSessionDisplayNames {
+    
+    if (IsEmpty(self.sessions))
+        return nil;
+    
+    nice_release(_sessionDisplayNames);
+    _sessionDisplayNames = [[NSMutableDictionary alloc] init];
+    
+    NSInteger index = 0;
+    
+    for (NSString *aSession in self.sessions) {
+        
+        NSString *temp = [self displayNameForSession:aSession];
+        
+        if (!IsEmpty(temp)) {
+            [_sessionDisplayNames setObject:[NSNumber numberWithInt:index] forKey:temp];            
+        }
+        
+        index++;
+    }
+    
+    return _sessionDisplayNames;
+}
+
+
+- (NSDictionary *)sessionDisplayNames {
+ 
+    if (!IsEmpty(_sessionDisplayNames))
+        return _sessionDisplayNames;
+    
+    return [self findSessionDisplayNames];
+}
+
+
 - (NSString *)selectedSession {
 	
 	if (IsEmpty(_selectedSession)) {
@@ -277,6 +353,8 @@
 	_selectedState = [gotStateID copy];
 	nice_release(_sessions);
 	[self sessions];
+    
+    nice_release(_sessionDisplayNames);
 	
 	//////////// Now set the selected session ///////////
 	
