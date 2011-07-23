@@ -35,6 +35,8 @@
 
 #import "StateMetaLoader.h"
 #import "StatesListMetaLoader.h"
+#import "StatesListViewController.h"
+
 #import "SLFAlertView.h"
 
 @interface StatesLegeAppDelegate (Private)
@@ -416,10 +418,13 @@ NSInteger kNoSelection = -1;
 	
     if ([[StateMetaLoader sharedStateMeta] needsStateSelection])
     {
-#warning TESTING, so this will leak for now...
-        StatesListMetaLoader *stateList = [[StatesListMetaLoader alloc] init];
+        StatesListViewController *stateVC = [[StatesListViewController alloc] initWithStyle:UITableViewStylePlain];
         
-        [[StateMetaLoader sharedStateMeta] setSelectedState:@"ca"];
+        [self.tabBarController presentModalViewController:stateVC animated:YES];
+        
+        [stateVC release];
+        
+        //[[StateMetaLoader sharedStateMeta] setSelectedState:@"ca"];
         
         
     }

@@ -13,6 +13,8 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		3701DA1913DA28890005A855 /* StatesListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3701DA1813DA28890005A855 /* StatesListViewController.m */; };
+		3701DA1A13DA28890005A855 /* StatesListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3701DA1813DA28890005A855 /* StatesListViewController.m */; };
 		370298CE11F97C7A00D65FCB /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 370298CD11F97C7A00D65FCB /* MapKit.framework */; };
 		370813E6122C537800D8CA69 /* DisclosureQuartzView.m in Sources */ = {isa = PBXBuildFile; fileRef = 370813E5122C536B00D8CA69 /* DisclosureQuartzView.m */; };
 		37094D96133B162E00B9693C /* TexLegeBadgeGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37094D95133B162E00B9693C /* TexLegeBadgeGroupCell.m */; };
@@ -1406,6 +1408,8 @@
 		2883B6A00D944613003F08B5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "Classes/Application Support/main.m"; sourceTree = SOURCE_ROOT; };
 		32CA4F630368D1EE00C91783 /* StatesLege_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesLege_Prefix.pch; sourceTree = SOURCE_ROOT; };
+		3701DA1713DA28890005A855 /* StatesListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesListViewController.h; sourceTree = "<group>"; };
+		3701DA1813DA28890005A855 /* StatesListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatesListViewController.m; sourceTree = "<group>"; };
 		3702412512198C11002D169E /* LegislatorMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorMasterViewController.h; path = "Classes/Master View Controllers/LegislatorMasterViewController.h"; sourceTree = SOURCE_ROOT; };
 		370298CD11F97C7A00D65FCB /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		370813E4122C536700D8CA69 /* DisclosureQuartzView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisclosureQuartzView.h; sourceTree = "<group>"; };
@@ -2523,6 +2527,8 @@
 				370A804713D6BE3000390ADC /* GCTableViewController.m */,
 				37A0E4490FD2DEAA009B65F7 /* GeneralTableViewController.h */,
 				37A0E44A0FD2DEAA009B65F7 /* GeneralTableViewController.m */,
+				3701DA1713DA28890005A855 /* StatesListViewController.h */,
+				3701DA1813DA28890005A855 /* StatesListViewController.m */,
 				3702412512198C11002D169E /* LegislatorMasterViewController.h */,
 				3775FA4B11D8701B00D69AC5 /* LegislatorMasterViewController.m */,
 				3735DFFB120917490000AF5A /* CommitteeMasterViewController.h */,
@@ -4977,6 +4983,7 @@
 				37E4360613D0C0FA00E9320E /* ActionSheetPicker.m in Sources */,
 				3787269F13D6360700D030CC /* StatesListMetaLoader.m in Sources */,
 				370A804913D6BE3000390ADC /* GCTableViewController.m in Sources */,
+				3701DA1A13DA28890005A855 /* StatesListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5090,6 +5097,7 @@
 				37E435DB13D0C0FA00E9320E /* ActionSheetPicker.m in Sources */,
 				3787269E13D6360700D030CC /* StatesListMetaLoader.m in Sources */,
 				370A804813D6BE3000390ADC /* GCTableViewController.m in Sources */,
+				3701DA1913DA28890005A855 /* StatesListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
