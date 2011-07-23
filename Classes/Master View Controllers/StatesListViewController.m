@@ -32,7 +32,10 @@
     if (self) {
         statesMeta = [[StatesListMetaLoader alloc] init];
         
-        self.modalPresentationStyle = UIModalPresentationPageSheet;
+        [statesMeta downloadStatesList];
+
+        self.modalPresentationStyle = UIModalPresentationFormSheet;
+        
     }
     return self;
 }
@@ -70,6 +73,25 @@
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    UINavigationBar *navBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, 
+                                                                                CGRectGetWidth(self.view.frame), 
+                                                                                44.f)];
+    navBar.tintColor = [TexLegeTheme accent];
+    navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    
+    UINavigationItem *item = [[UINavigationItem alloc] initWithTitle:NSLocalizedStringFromTable(@"Select a State", @"StandardUI", @"State legislature control label")];
+    [navBar setItems:[NSArray arrayWithObject:item]];
+    [item release];
+    
+    [self.view addSubview:navBar];
+    [navBar release];
+
+    CGRect tFrame = self.tableView.frame;
+    tFrame.origin.y  = 44.f;
+    tFrame.size.height -= 44.f;
+    self.tableView.frame = tFrame;
+    
 }
 
 

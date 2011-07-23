@@ -22,6 +22,12 @@ BOOL IsEmpty(NSObject * thing) {
 	|| ([thing respondsToSelector:@selector(count)] && [(NSArray *)thing count] == 0);
 }
 
+void RunBlockAfterDelay(NSTimeInterval delay, void (^block)(void))
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*delay),
+                   dispatch_get_current_queue(), block);
+}
+
 #pragma mark -
 #pragma mark NSArray Categories
 

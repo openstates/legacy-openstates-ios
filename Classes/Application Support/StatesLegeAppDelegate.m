@@ -334,7 +334,7 @@ NSInteger kNoSelection = -1;
 	if(
 	   getenv("NSZombieEnabled") || getenv("NSAutoreleaseFreedObjectCheckEnabled")
 	   ) {
-		for (int loop=0;loop < 15;loop++) {
+		for (int loop=0;loop < 6;loop++) {
 			NSLog(@"**************** NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!*************");
 		}
 	}
@@ -416,17 +416,15 @@ NSInteger kNoSelection = -1;
 - (void)runOnEveryAppStart {
 	self.appIsQuitting = NO;
 	
-    if ([[StateMetaLoader sharedStateMeta] needsStateSelection])
+    if (1)//if ([[StateMetaLoader sharedStateMeta] needsStateSelection])
     {
-        StatesListViewController *stateVC = [[StatesListViewController alloc] initWithStyle:UITableViewStylePlain];
-        
-        [self.tabBarController presentModalViewController:stateVC animated:YES];
-        
-        [stateVC release];
-        
-        //[[StateMetaLoader sharedStateMeta] setSelectedState:@"ca"];
-        
-        
+        /* There surely is a better way to handle this, but without this delay
+            the table view orientation is incorrect when runnin on iPads that start up in landscape. */
+        RunBlockAfterDelay(0.1, ^{
+            StatesListViewController *stateVC = [[StatesListViewController alloc] initWithStyle:UITableViewStylePlain];
+            [self.masterNavigationController presentModalViewController:stateVC animated:YES];
+            [stateVC release];        
+        });
     }
 	
 	if (![self isDatabaseResetNeeded]) {
@@ -435,7 +433,8 @@ NSInteger kNoSelection = -1;
 			[analyticsOptInController updateOptInFromSettings];
 		
 		if (self.dataUpdater) {
-			[self.dataUpdater performSelector:@selector(performDataUpdatesIfAvailable:) withObject:self afterDelay:10.f];
+			[self.dataUpdater performSelector:@selector(performDataUpdatesIfAvailable:) 
+                                   withObject:self afterDelay:10.f];
 		}
 	}
 	[[LocalyticsSession sharedLocalyticsSession] resume];

@@ -15,6 +15,7 @@
 #import "TexLegeReachability.h"
 
 BOOL IsEmpty(NSObject * thing);
+void RunBlockAfterDelay(NSTimeInterval delay, void (^block)(void));
 
 
 @interface UtilityMethods : NSObject {
