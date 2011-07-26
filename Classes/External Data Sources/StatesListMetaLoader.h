@@ -19,6 +19,8 @@
 
 
 - (void)downloadStatesList;
+- (BOOL)isFeatureEnabled:(NSString *)feature forStateID:(NSString *)stateID;
+
 
 @end
 

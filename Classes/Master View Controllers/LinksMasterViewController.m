@@ -13,7 +13,7 @@
 #import "LinksMasterViewController.h"
 #import "UtilityMethods.h"
 
-#import "StatesLegeAppDelegate.h"
+#import "SLFPersistenceManager.h"
 #import "TableDataSourceProtocol.h"
 #import "LinksDataSource.h"
 
@@ -93,7 +93,6 @@
 
 // the user selected a row in the table.
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
-	StatesLegeAppDelegate *appDelegate = [StatesLegeAppDelegate appDelegate];
 	
 	[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
 	
@@ -143,8 +142,8 @@
 		 }
 		 */				
 		
-		// save off this item's selection to our AppDelegate
-		[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
+		// save off this item's selection to our persistence manager
+		[[SLFPersistenceManager sharedPersistence] setTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 		//self.selectObjectOnAppear= link;
 
 		NSString *urlString = [[LinksDataSource actualURLForURLString:url] absoluteString];

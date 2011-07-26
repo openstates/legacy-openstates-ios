@@ -13,6 +13,8 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		37019B8113DF338B00CE8E36 /* SLFPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37019B8013DF338B00CE8E36 /* SLFPersistenceManager.m */; };
+		37019B8213DF338B00CE8E36 /* SLFPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37019B8013DF338B00CE8E36 /* SLFPersistenceManager.m */; };
 		370298CE11F97C7A00D65FCB /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 370298CD11F97C7A00D65FCB /* MapKit.framework */; };
 		370813E6122C537800D8CA69 /* DisclosureQuartzView.m in Sources */ = {isa = PBXBuildFile; fileRef = 370813E5122C536B00D8CA69 /* DisclosureQuartzView.m */; };
 		37094D96133B162E00B9693C /* TexLegeBadgeGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37094D95133B162E00B9693C /* TexLegeBadgeGroupCell.m */; };
@@ -1420,6 +1422,8 @@
 		2883B6A00D944613003F08B5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "Classes/Application Support/main.m"; sourceTree = SOURCE_ROOT; };
 		32CA4F630368D1EE00C91783 /* StatesLege_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesLege_Prefix.pch; sourceTree = SOURCE_ROOT; };
+		37019B7F13DF338B00CE8E36 /* SLFPersistenceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFPersistenceManager.h; sourceTree = "<group>"; };
+		37019B8013DF338B00CE8E36 /* SLFPersistenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFPersistenceManager.m; sourceTree = "<group>"; };
 		3702412512198C11002D169E /* LegislatorMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegislatorMasterViewController.h; path = "Classes/Master View Controllers/LegislatorMasterViewController.h"; sourceTree = SOURCE_ROOT; };
 		370298CD11F97C7A00D65FCB /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		370813E4122C536700D8CA69 /* DisclosureQuartzView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisclosureQuartzView.h; sourceTree = "<group>"; };
@@ -2823,6 +2827,8 @@
 			isa = PBXGroup;
 			children = (
 				371D543E1365F60E00A61BD4 /* TouchCode_Base64 */,
+				37019B7F13DF338B00CE8E36 /* SLFPersistenceManager.h */,
+				37019B8013DF338B00CE8E36 /* SLFPersistenceManager.m */,
 				372D066512FC901C00E63696 /* TexLegeLibrary.h */,
 				372D066612FC901C00E63696 /* TexLegeLibrary.m */,
 				379B9CCF1250FE7E0032E616 /* TexLegeReachability.h */,
@@ -5032,6 +5038,7 @@
 				37CFAC4A13DE52CE0075D3D4 /* MultiSelectCellController.m in Sources */,
 				37CFAC4B13DE52CE0075D3D4 /* MultiSelectTableViewCell.m in Sources */,
 				37CFAC4C13DE52CE0075D3D4 /* StatesListViewController.m in Sources */,
+				37019B8213DF338B00CE8E36 /* SLFPersistenceManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5148,6 +5155,7 @@
 				37CFAC4613DE52CE0075D3D4 /* MultiSelectCellController.m in Sources */,
 				37CFAC4713DE52CE0075D3D4 /* MultiSelectTableViewCell.m in Sources */,
 				37CFAC4813DE52CE0075D3D4 /* StatesListViewController.m in Sources */,
+				37019B8113DF338B00CE8E36 /* SLFPersistenceManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

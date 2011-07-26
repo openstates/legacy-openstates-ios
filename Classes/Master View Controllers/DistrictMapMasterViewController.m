@@ -15,7 +15,7 @@
 #import "DistrictMapObj+MapKit.h"
 #import "MapViewController.h"
 #import "UtilityMethods.h"
-#import "StatesLegeAppDelegate.h"
+#import "SLFPersistenceManager.h"
 #import "TexLegeTheme.h"
 #import "DistrictMapObj.h"
 #import "TexLegeCoreDataUtils.h"
@@ -105,7 +105,6 @@
 
 //START:code.split.delegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
-	StatesLegeAppDelegate *appDelegate = [StatesLegeAppDelegate appDelegate];
 	
 	//if (![UtilityMethods isIPadDevice])
 		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
@@ -113,12 +112,7 @@
 	
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	
-/*	if ([dataObject isKindOfClass:[NSManagedObject class]])
-		[appDelegate setSavedTableSelection:[dataObject objectID] forKey:NSStringFromClass([self class])];
-	else
-		[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
-*/
-	[appDelegate setSavedTableSelection:nil forKey:NSStringFromClass([self class])];
+	[[SLFPersistenceManager sharedPersistence] setTableSelection:nil forKey:NSStringFromClass([self class])];
 	
 	DistrictMapObj *map = dataObject;
 

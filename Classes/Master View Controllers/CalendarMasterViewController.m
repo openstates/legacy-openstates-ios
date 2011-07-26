@@ -13,7 +13,7 @@
 #import "CalendarMasterViewController.h"
 #import "UtilityMethods.h"
 
-#import "StatesLegeAppDelegate.h"
+#import "SLFPersistenceManager.h"
 #import "TableDataSourceProtocol.h"
 
 #import "CalendarDataSource.h"
@@ -92,7 +92,6 @@
 
 // the user selected a row in the table.
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
-	StatesLegeAppDelegate *appDelegate = [StatesLegeAppDelegate appDelegate];
 	
 	if (![UtilityMethods isIPadDevice])
 		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
@@ -100,7 +99,7 @@
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	// save off this item's selection to our AppDelegate
 
-	[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
+	[[SLFPersistenceManager sharedPersistence] setTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 	
 	if (!self.detailViewController) {
 		CalendarDetailViewController *temp = [[CalendarDetailViewController alloc] initWithNibName:[CalendarDetailViewController nibName] 

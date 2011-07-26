@@ -15,6 +15,8 @@
 #import "UtilityMethods.h"
 
 #import "StatesLegeAppDelegate.h"
+#import "SLFPersistenceManager.h"
+
 #import "TableDataSourceProtocol.h"
 
 #import "TexLegeTheme.h"
@@ -164,9 +166,7 @@
 #pragma UITableViewDelegate
 
 // the user selected a row in the table.
-- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
-	StatesLegeAppDelegate *appDelegate = [StatesLegeAppDelegate appDelegate];
-	
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {	
 	if (![UtilityMethods isIPadDevice])
 		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
 	
@@ -210,7 +210,7 @@
 		dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	
 		// save off this item's selection to our AppDelegate
-		[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
+		[[SLFPersistenceManager sharedPersistence] setTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 	
 		if (!dataObject || ![dataObject isKindOfClass:[NSDictionary class]])
 			return;

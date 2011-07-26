@@ -37,20 +37,16 @@
 #import "StatesListMetaLoader.h"
 #import "StatesListViewController.h"
 
+#import "SLFPersistenceManager.h"
 #import "SLFAlertView.h"
 
 @interface StatesLegeAppDelegate (Private)
 - (void)runOnEveryAppStart;
 - (void)runOnAppQuit;
-- (void)restoreArchivableSavedTableSelection;
-- (NSData *)archivableSavedTableSelection;
-- (void)resetSavedTableSelection:(id)sender;
 - (BOOL)isDatabaseResetNeeded;
 @end
 
 // user default dictionary keys
-NSString * const kSavedTabOrderKey = @"SavedTabOrderVersion2";
-NSString * const kRestoreSelectionKey = @"RestoreSelection";
 NSString * const kAnalyticsAskedForOptInKey = @"HasAskedForOptIn";
 NSString * const kAnalyticsSettingsSwitch = @"PermitUseOfAnalytics";
 NSString * const kShowedSplashScreenKey = @"HasShownSplashScreen";
@@ -64,7 +60,7 @@ NSInteger kNoSelection = -1;
 @implementation StatesLegeAppDelegate
 
 @synthesize tabBarController;
-@synthesize savedTableSelection, appIsQuitting;
+@synthesize appIsQuitting;
 
 @synthesize mainWindow;
 @synthesize dataUpdater;
@@ -81,7 +77,6 @@ NSInteger kNoSelection = -1;
 		// initialize  to nil
 		mainWindow = nil;
 		self.appIsQuitting = NO;
-		self.savedTableSelection = [NSMutableDictionary dictionary];
 		self.dataUpdater = [[[DataModelUpdateManager alloc] init] autorelease];
 		analyticsOptInController = nil;
 	}
@@ -91,7 +86,6 @@ NSInteger kNoSelection = -1;
 - (void)dealloc {
 	nice_release(analyticsOptInController);
 	
-	self.savedTableSelection = nil;
 	self.tabBarController = nil;
 	self.mainWindow = nil;    
 	
@@ -213,8 +207,7 @@ NSInteger kNoSelection = -1;
 		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"SELECTTAB" attributes:tabSelectionDict];		
 	}
 
-	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
-	[[NSUserDefaults standardUserDefaults] synchronize];
+    [[SLFPersistenceManager sharedPersistence] savePersistence];
 }
 
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
@@ -229,28 +222,6 @@ NSInteger kNoSelection = -1;
     }
 }
 
-- (void)setTabOrderIfSaved {
-	[[NSUserDefaults standardUserDefaults] synchronize];	
-
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSArray *savedOrder = [defaults arrayForKey:kSavedTabOrderKey];
-	NSMutableArray *orderedTabs = [NSMutableArray arrayWithCapacity:[self.tabBarController.viewControllers count]];
-	NSInteger foundVCs = 0;
-	if (savedOrder && [savedOrder count] > 0 ) {
-		for (NSInteger i = 0; i < [savedOrder count]; i++){
-			for (UIViewController *aController in self.tabBarController.viewControllers) {
-				if ([aController.tabBarItem.title isEqualToString:[savedOrder objectAtIndex:i]]) {
-					[orderedTabs addObject:aController];
-					foundVCs++;
-				}
-			}
-		}
-		if (foundVCs < [self.tabBarController.viewControllers count]) // we've got more now than we used to
-			[defaults removeObjectForKey:kSavedTabOrderKey];
-		else
-			tabBarController.viewControllers = orderedTabs;
-	}
-}
 
 - (void) setupViewControllerHierarchy {
 		
@@ -268,17 +239,20 @@ NSInteger kNoSelection = -1;
 	NSArray *VCs = [[NSArray alloc] initWithObjects:self.legislatorMasterVC, self.committeeMasterVC, self.districtMapMasterVC,
 					self.calendarMasterVC, self.billsMasterVC, self.linksMasterVC, nil];
 	
-	NSString * tempVCKey = [self.savedTableSelection objectForKey:@"viewController"];
+	NSString * recentVCKey = [[SLFPersistenceManager sharedPersistence] persistentViewControllerKey];
+    
 	NSInteger savedTabSelectionIndex = -1;
+    
 	NSInteger loopIndex = 0;
 	for (GeneralTableViewController *masterVC in VCs) {
 		[masterVC configure];
 		
 		// If we have a preferred VC and we've found it in our array, save it
-		if (savedTabSelectionIndex < 0 && tempVCKey && [tempVCKey isEqualToString:NSStringFromClass([masterVC class])]) // we have a saved view controller in mind
+		if (savedTabSelectionIndex < 0 && recentVCKey && [recentVCKey isEqualToString:NSStringFromClass([masterVC class])]) // we have a saved view controller in mind
 			savedTabSelectionIndex = loopIndex;
 		loopIndex++;
 	}
+    
 	if (savedTabSelectionIndex < 0 || savedTabSelectionIndex > [VCs count])
 		savedTabSelectionIndex = 0;
 	
@@ -300,18 +274,27 @@ NSInteger kNoSelection = -1;
 		[splitViewControllers release];
 	} 
 	
-	UIViewController * savedTabController = [self.tabBarController.viewControllers objectAtIndex:savedTabSelectionIndex];
-	if (!savedTabController || !savedTabController.tabBarItem.enabled) {
-		debug_NSLog (@"Couldn't find a view/navigation controller at index: %d", savedTabSelectionIndex);
-		savedTabController = [self.tabBarController.viewControllers objectAtIndex:0];
-	}
-	else if (self.tabBarController.moreNavigationController) {
-		self.tabBarController.moreNavigationController.navigationBar.tintColor = [TexLegeTheme navbar];
-	}
-	[self setTabOrderIfSaved];
-	
-	[self.tabBarController setSelectedViewController:savedTabController];
-	self.mainWindow.rootViewController = self.tabBarController;
+    if (self.tabBarController) {
+        
+        UIViewController * savedTabController = [self.tabBarController.viewControllers objectAtIndex:savedTabSelectionIndex];
+        if (!savedTabController || !savedTabController.tabBarItem.enabled) {
+            debug_NSLog (@"Couldn't find a view/navigation controller at index: %d", savedTabSelectionIndex);
+            savedTabController = [self.tabBarController.viewControllers objectAtIndex:0];
+        }
+        else if (self.tabBarController.moreNavigationController) {
+            self.tabBarController.moreNavigationController.navigationBar.tintColor = [TexLegeTheme navbar];
+        }
+        
+        // If we have a preexisting saved order for these tabs, let's reorder them
+        NSArray *orderedVCs = [[SLFPersistenceManager sharedPersistence] orderedTabsFromPersistence:self.tabBarController.viewControllers];
+        if (orderedVCs) {
+            self.tabBarController.viewControllers = orderedVCs;
+        }
+        [self.tabBarController setSelectedViewController:savedTabController];
+        
+        self.mainWindow.rootViewController = self.tabBarController;
+        
+    }
 	
 	nice_release(VCs);
 }
@@ -343,7 +326,7 @@ NSInteger kNoSelection = -1;
 
 	NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 	
-	[self restoreArchivableSavedTableSelection];
+	[[SLFPersistenceManager sharedPersistence] loadPersistence];
 	
 	[self setupViewControllerHierarchy];
 
@@ -351,8 +334,12 @@ NSInteger kNoSelection = -1;
 	[MTStatusBarOverlay sharedMTStatusBarOverlay];
 
 	// register our preference selection data to be archived
+    // TODO: really, we need to get this working with the defaults we've already put into Root.strings
+    
+    NSData *savedTableSelectionData = [[SLFPersistenceManager sharedPersistence] archivableTableSelection];
+    
 	NSDictionary *savedPrefsDict = [NSDictionary dictionaryWithObjectsAndKeys: 
-									[self archivableSavedTableSelection],kRestoreSelectionKey,
+									savedTableSelectionData,kPersistentSelectionKey,
 									[NSNumber numberWithBool:NO], kAnalyticsAskedForOptInKey,
 									[NSNumber numberWithBool:YES], kAnalyticsSettingsSwitch,
 									[NSNumber numberWithBool:NO], kShowedSplashScreenKey,
@@ -445,103 +432,31 @@ NSInteger kNoSelection = -1;
 	//[[CalendarEventsLoader sharedCalendarEventsLoader] addAllEventsToiCal:self];		//testing
 	
 	if (self.appIsQuitting)
-		return;
+		return;                 // We're already quitting, don't go further.
+    
 	self.appIsQuitting = YES;
 		
 	if (self.tabBarController) {
-		// Smarten this up later for Core Data tab saving
-		NSMutableArray *savedOrder = [NSMutableArray arrayWithCapacity:[self.tabBarController.viewControllers count]];
-		NSArray *tabOrderToSave = self.tabBarController.viewControllers;
-		
-		for (UIViewController *aViewController in tabOrderToSave)
-			[savedOrder addObject:aViewController.tabBarItem.title];
-		
-		[[NSUserDefaults standardUserDefaults] setObject:savedOrder forKey:kSavedTabOrderKey];
+        [[SLFPersistenceManager sharedPersistence] saveOrderedTabsToPersistence:self.tabBarController.viewControllers];
 	}
 	
-	nice_release(analyticsOptInController);
-
 	// save the drill-down hierarchy of selections to preferences
-	[[NSUserDefaults standardUserDefaults] setObject:[self archivableSavedTableSelection] forKey:kRestoreSelectionKey];
-	[[NSUserDefaults standardUserDefaults] synchronize];	
+    [[SLFPersistenceManager sharedPersistence] savePersistence];
 	
 	[[LocalyticsSession sharedLocalyticsSession] close];
 	[[LocalyticsSession sharedLocalyticsSession] upload];	
+    
+    nice_release(analyticsOptInController);
+
 }
 
 #pragma mark -
-#pragma mark Saving
-
-- (id) savedTableSelectionForKey:(NSString *)vcKey {
-	id object = nil;
-	@try {
-		id savedVC = [self.savedTableSelection objectForKey:@"viewController"];
-		if (vcKey && savedVC && [vcKey isEqualToString:savedVC])
-			object = [self.savedTableSelection objectForKey:@"object"];
-		
-	}
-	@catch (NSException * e) {
-		[self resetSavedTableSelection:nil];
-	}
-	
-	return object;
-}
-
-- (void)setSavedTableSelection:(id)object forKey:(NSString *)vcKey {
-	if (!vcKey) {
-		[self.savedTableSelection removeAllObjects];
-		return;
-	}
-	[self.savedTableSelection setObject:vcKey forKey:@"viewController"];
-	if (object)
-		[self.savedTableSelection setObject:object forKey:@"object"];
-	else
-		[self.savedTableSelection removeObjectForKey:@"object"];
-}
-
-- (void)resetSavedTableSelection:(id)sender {
-	self.savedTableSelection = [NSMutableDictionary dictionary];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kRestoreSelectionKey];
-	[[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (void)restoreArchivableSavedTableSelection {
-	@try {
-		NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:kRestoreSelectionKey];
-		if (data) {
-			NSMutableDictionary *tempDict = [[NSKeyedUnarchiver unarchiveObjectWithData:data] mutableCopy];	
-			if (tempDict) {
-				self.savedTableSelection = tempDict;
-				[tempDict release];
-			}	
-		}		
-	}
-	@catch (NSException * e) {
-		[self resetSavedTableSelection:nil];
-	}
-
-}
-
-- (NSData *)archivableSavedTableSelection {
-	NSData *data = nil;
-	
-	@try {
-		NSMutableDictionary *tempDict = [self.savedTableSelection mutableCopy];
-		data = [NSKeyedArchiver archivedDataWithRootObject:tempDict];
-		[tempDict release];		
-	}
-	@catch (NSException * e) {
-		[self resetSavedTableSelection:nil];
-	}
-	return data;
-}
-
 - (void)doDataReset:(BOOL)doReset {
 	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kResetSavedDatabaseKey];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
 	if (doReset) {
-		[self resetSavedTableSelection:nil];
+		[[SLFPersistenceManager sharedPersistence] resetPersistence];
 		[TexLegeCoreDataUtils resetSavedDatabase:nil]; 
 	}
 }

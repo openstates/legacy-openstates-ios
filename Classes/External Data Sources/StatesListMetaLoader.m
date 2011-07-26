@@ -85,6 +85,31 @@
 	}	
 }
 
+- (BOOL)isFeatureEnabled:(NSString *)feature {
+    
+    NSString *currentStateID = [[StateMetaLoader sharedStateMeta] selectedState];
+    
+    return [self isFeatureEnabled:feature forStateID:currentStateID];
+}
+
+- (BOOL)isFeatureEnabled:(NSString *)feature forStateID:(NSString *)stateID {
+    
+    BOOL isEnabled = NO;
+    
+    NSCParameterAssert( (NO == IsEmpty(states)) && (NO == IsEmpty(stateID)) && (NO == IsEmpty(feature)) );
+        
+    NSDictionary *stateInfo = [self.states findWhereKeyPath:@"abbreviation" equals:stateID];
+    if (stateInfo) {
+        
+        NSArray *features = [stateInfo objectForKey:@"feature_flags"];
+        if (features && [features containsObject:feature]) {
+            isEnabled = YES;
+        }
+    }
+        
+    return isEnabled;
+}
+
 - (BOOL)isFresh {
 	// if we're over a half-hour old, it's time to refresh
 	return (self.updated && ([[NSDate date] timeIntervalSinceDate:updated] < (3600*24)));    // under a day old

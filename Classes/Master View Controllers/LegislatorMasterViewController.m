@@ -14,10 +14,11 @@
 #import "LegislatorMasterViewController.h"
 #import "LegislatorDetailViewController.h"
 #import "UtilityMethods.h"
-#import "StatesLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 #import "UIDevice-Hardware.h"
 #import "LegislatorCell.h"
+
+#import "SLFPersistenceManager.h"
 
 @interface LegislatorMasterViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
@@ -136,7 +137,6 @@
 
 //START:code.split.delegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
-	StatesLegeAppDelegate *appDelegate = [StatesLegeAppDelegate appDelegate];
 	
 	if (![UtilityMethods isIPadDevice])
 		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
@@ -147,10 +147,12 @@
 	if (!dataObject)
 		return;
 	
+    SLFPersistenceManager *persistence = [SLFPersistenceManager sharedPersistence];
+    
 	if ([dataObject isKindOfClass:[RKManagedObject class]])
-		[appDelegate setSavedTableSelection:[dataObject primaryKeyValue] forKey:NSStringFromClass([self class])];
+		[persistence setTableSelection:[dataObject primaryKeyValue] forKey:NSStringFromClass([self class])];
 	else
-		[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
+		[persistence setTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 	
 	// create a LegislatorDetailViewController. This controller will display the full size tile for the element
 	if (self.detailViewController == nil) {

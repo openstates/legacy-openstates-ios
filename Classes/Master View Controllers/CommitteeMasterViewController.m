@@ -17,7 +17,7 @@
 #import "CommitteeObj.h"
 
 #import "UtilityMethods.h"
-#import "StatesLegeAppDelegate.h"
+#import "SLFPersistenceManager.h"
 #import "TexLegeTheme.h"
 
 @interface CommitteeMasterViewController (Private)
@@ -106,7 +106,7 @@
 
 //START:code.split.delegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
-	StatesLegeAppDelegate *appDelegate = [StatesLegeAppDelegate appDelegate];
+	SLFPersistenceManager *persistence = [SLFPersistenceManager sharedPersistence];
 
 	if (![UtilityMethods isIPadDevice])
 		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
@@ -115,9 +115,9 @@
 	
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	if ([dataObject isKindOfClass:[RKManagedObject class]])
-		[appDelegate setSavedTableSelection:[dataObject primaryKeyValue] forKey:NSStringFromClass([self class])];
+		[persistence setTableSelection:[dataObject primaryKeyValue] forKey:NSStringFromClass([self class])];
 	else
-		[appDelegate setSavedTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
+		[persistence setTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 		
 	// create a CommitteeDetailViewController. This controller will display the full size tile for the element
 	if (self.detailViewController == nil) {

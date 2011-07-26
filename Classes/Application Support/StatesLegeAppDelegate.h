@@ -23,9 +23,9 @@
 {
 	AnalyticsOptInAlertController *analyticsOptInController;
 }
+
 @property (nonatomic, retain) DataModelUpdateManager *dataUpdater;
 @property (nonatomic, retain) UIWindow			*mainWindow;
-@property (nonatomic, retain) NSMutableDictionary	*savedTableSelection;
 @property (nonatomic)		  BOOL				appIsQuitting;
 
 // For Functional View Controllers
@@ -45,8 +45,6 @@
 
 //- (void)setTabOrderIfSaved;
 
-- (id) savedTableSelectionForKey:(NSString *)vcKey;
-- (void)setSavedTableSelection:(id)object forKey:(NSString *)vcKey;
 - (void)changingReachability:(id)sender;
 
 + (StatesLegeAppDelegate *)appDelegate;
