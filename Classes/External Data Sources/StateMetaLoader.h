@@ -24,6 +24,9 @@
 
 + (id)sharedStateMeta;	// Singleton
 
+- (BOOL)isFeatureEnabled:(NSString *)feature;
+
+
 + (NSString *)nameForChamber:(NSInteger)chamber;        // Quick and dirty answer from the singleton
 
 - (void)loadMetadataForState:(NSString *)stateID;

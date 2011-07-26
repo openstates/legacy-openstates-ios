@@ -13,7 +13,6 @@
 #import <UIKit/UIKit.h>
 #import "GCTableViewController.h"
 
-@class StatesListMetaLoader;
 @interface StatesListViewController : GCTableViewController {
 }
 
@@ -24,7 +23,6 @@
 
 @property (nonatomic,retain) NSMutableSet *favorites;
 @property (nonatomic,retain) NSMutableArray *tableCells;
-@property (nonatomic,retain) StatesListMetaLoader *statesMeta;
 @property (nonatomic,retain) UINavigationItem *statesNavItem;
 
 @end

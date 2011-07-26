@@ -26,7 +26,6 @@
 
 
 @implementation StatesListViewController
-@synthesize statesMeta;
 @synthesize tableCells;
 @synthesize statesNavItem;
 @synthesize favorites;
@@ -49,7 +48,7 @@
             favorites = [[NSMutableSet alloc] init];
         
         
-        statesMeta = [[StatesListMetaLoader alloc] init];
+        StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesListMeta];
         
         [statesMeta downloadStatesList];
 
@@ -71,9 +70,10 @@
 }
 
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     self.statesNavItem = nil;
     self.favorites = nil;
-    self.statesMeta = nil;
     self.tableCells = nil;
     
     [super dealloc];
@@ -89,10 +89,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(reloadData:) name:kStatesListLoadedKey object:nil];	
- 
-    //[[NSNotificationCenter defaultCenter] addObserver:self
-    //                                         selector:@selector(reloadData:) name:kStateMetaNotifyError object:nil];	
-
 
     self.tableView.rowHeight = 55.f;
     self.tableView.backgroundColor = [TexLegeTheme tableBackground];
@@ -118,7 +114,7 @@
     self.tableView.frame = tFrame;
     
     [self.tableView setAllowsSelectionDuringEditing:YES];
-	[self finishEditing:self];    // we're not editing right now
+	//[self finishEditing:self];    // we're not editing right now
     
 }
 
@@ -189,12 +185,14 @@
 - (void)constructTableGroups
 {	
     
+    StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesListMeta];
+    
 	self.tableCells = [NSMutableArray array];
     
 	NSInteger i;
-	for (i = 0; i < [self.statesMeta.states count]; i++)
+	for (i = 0; i < [statesMeta.states count]; i++)
 	{
-        NSDictionary *dataObject = [self.statesMeta.states objectAtIndex:i];
+        NSDictionary *dataObject = [statesMeta.states objectAtIndex:i];
         
         NSCAssert(dataObject != NULL, @"Received bad data dictionary in StatesListViewController");
         
@@ -227,7 +225,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     
-	if (NO == IsEmpty(self.statesMeta.states)) {
+    StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesListMeta];
+
+	if (NO == IsEmpty(statesMeta.states)) {
         if (!self.tableCells)
         {
             [self constructTableGroups];
@@ -235,7 +235,7 @@
         
 		return [self.tableCells count];      // or return [self.statesMeta.states count], should be equal
     }
-	else if (self.statesMeta.loadingStatus > LOADING_IDLE)
+	else if (statesMeta.loadingStatus > LOADING_IDLE)
 		return 1;
 	else
 		return 0;
@@ -249,9 +249,11 @@
 //
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.statesMeta.loadingStatus > LOADING_IDLE) {
+    StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesListMeta];
+
+    if (statesMeta.loadingStatus > LOADING_IDLE) {
 		if (indexPath.row == 0) {
-			return [LoadingCell loadingCellWithStatus:self.statesMeta.loadingStatus tableView:tableView];
+			return [LoadingCell loadingCellWithStatus:statesMeta.loadingStatus tableView:tableView];
 		}
 		else {	// to make things work with our upcoming configureCell:, we need to trick this a little
 			indexPath = [NSIndexPath indexPathForRow:(indexPath.row-1) inSection:indexPath.section];
@@ -280,7 +282,17 @@
 //
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesListMeta];
+
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (statesMeta.loadingStatus > LOADING_IDLE) {
+		if (indexPath.row > 0) {
+            // to make things work with our upcoming configureCell:, we need to trick this a little
+			indexPath = [NSIndexPath indexPathForRow:(indexPath.row-1) inSection:indexPath.section];
+		}
+	}
+    
     
 	if (!self.tableCells)
 	{
@@ -377,16 +389,19 @@
 		row++;
 	}
     
-	[self.tableView setEditing:NO animated:YES];
     
     [self constructTableGroups];
     
-    [self.tableView beginUpdates];
-    NSArray *visible = [self.tableView indexPathsForVisibleRows];
-    if (visible && [visible count]) {
-        [self.tableView reloadRowsAtIndexPaths:visible withRowAnimation:UITableViewRowAnimationMiddle];
+    if ([self isViewLoaded] && self.tableView) {
+        [self.tableView setEditing:NO animated:YES];
+
+        [self.tableView beginUpdates];
+        NSArray *visible = [self.tableView indexPathsForVisibleRows];
+        if (visible && [visible count]) {
+            [self.tableView reloadRowsAtIndexPaths:visible withRowAnimation:UITableViewRowAnimationMiddle];
+        }
+        [self.tableView endUpdates];
     }
-    [self.tableView endUpdates];
     
     [self saveFavorites];
 }

@@ -14,14 +14,17 @@
 #import "TableDataSourceProtocol.h"
 
 @interface GeneralTableViewController : GCTableViewController <UITableViewDelegate> {
+    BOOL isFeatureEnabled;
+    BOOL isServerReachable;
 }
 
 @property (nonatomic,retain) id<TableDataSource> dataSource;
 @property (nonatomic,retain) id selectObjectOnAppear;
-@property (nonatomic,retain) NSNumber *controllerEnabled;
 @property (nonatomic,retain) IBOutlet id detailViewController;
 
+@property (nonatomic) BOOL controllerEnabled;
 - (NSString *)reachabilityStatusKey;
+- (NSString *)apiFeatureFlag;
 
 - (void)configure;
 - (void)runLoadView;

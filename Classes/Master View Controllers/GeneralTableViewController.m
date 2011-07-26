@@ -20,44 +20,117 @@
 #import "TexLegeReachability.h"
 
 #import "SLFPersistenceManager.h"
+#import "StateMetaLoader.h"
 
 @implementation GeneralTableViewController
 @synthesize dataSource, detailViewController, controllerEnabled;
 @synthesize selectObjectOnAppear;
 
-- (NSString *)reachabilityStatusKey {
-	return nil;
+- (void)configObserver {
+    isFeatureEnabled = YES;
+    isServerReachable = YES;
+    controllerEnabled = YES;
+    
+    NSString *statusKey = [self reachabilityStatusKey];
+    if (!IsEmpty(statusKey)) {
+        [[TexLegeReachability sharedTexLegeReachability] addObserver:self 
+                                                          forKeyPath:statusKey 
+                                                             options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) 
+                                                             context:nil];			
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(resetControllerEnabled:) 
+                                                 name:kStateMetaNotifyStateLoaded // We've changed the current state, reconfigure
+                                               object:nil];
+        
 }
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if ((self=[super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-		controllerEnabled = [[NSNumber numberWithBool:YES] retain];
-		
-		NSString *statusKey = [self reachabilityStatusKey];
-		if (!IsEmpty(statusKey)) {
-			[[TexLegeReachability sharedTexLegeReachability] addObserver:self 
-															  forKeyPath:statusKey 
-																 options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) 
-																 context:nil];			
-		}
+        
+        [self configObserver];
 	}
 	return self;
 }
 
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    
+    [self configObserver];
+}
+
+- (void)dealloc {
+	[[TexLegeReachability sharedTexLegeReachability] removeObserver:self forKeyPath:[self reachabilityStatusKey]];
+    
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+	//self.tableView = nil;
+	self.dataSource = nil; 
+	self.selectObjectOnAppear = nil;
+	self.detailViewController = nil;
+	[super dealloc];
+}
+
+- (void)didReceiveMemoryWarning {
+    
+    [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
+}
+
+
+///////////////////////////////////////////////////////
+
+- (NSString *)reachabilityStatusKey {
+	return nil;
+}
+
+- (NSString *)apiFeatureFlag {
+    return nil;   // override this to test for availability of a feature for the active state in the open states api
+}
+
+- (void)resetControllerEnabled:(NSNotification *)notification {
+    
+    if ([self apiFeatureFlag]) {
+        isFeatureEnabled = [[StateMetaLoader sharedStateMeta] isFeatureEnabled:[self apiFeatureFlag]];
+    }
+    
+    [self setControllerEnabled:(isFeatureEnabled == YES && isServerReachable == YES)];
+    
+}
+
+- (void)setControllerEnabled:(BOOL)enabled {
+    
+    controllerEnabled = enabled;
+    
+    if (self.splitViewController)
+        self.splitViewController.tabBarItem.enabled = controllerEnabled;
+    
+    if (self.navigationController)
+        self.navigationController.tabBarItem.enabled = controllerEnabled;
+    
+    if (self.tabBarItem)
+        self.tabBarItem.enabled = controllerEnabled;
+}
+
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if (!IsEmpty(keyPath) && [self reachabilityStatusKey] && [keyPath isEqualToString:[self reachabilityStatusKey]]) {
-		BOOL enbl = [self.controllerEnabled boolValue];
 		
 		id newVal = [change valueForKey:NSKeyValueChangeNewKey];
 		if (newVal && [newVal isKindOfClass:[NSNumber class]]) {
-			enbl = [newVal intValue] > NotReachable;
+			isServerReachable = [newVal intValue] > NotReachable;
 		}
-		self.controllerEnabled = [NSNumber numberWithBool:enbl];
+                
+        [self resetControllerEnabled:nil];        
 	}
 	/*if (!IsEmpty(keyPath) && [keyPath isEqualToString:@"frame"]) {
 		NSLog(@"Class=%@ w=%f h=%f", NSStringFromClass([self class]), self.tableView.frame.size.width, self.tableView.frame.size.height);
 	}*/	
 }
+
+
+///////////////////////////////////////////////////////
+
 
 - (Class)dataSourceClass {
 	return [NSObject class];
@@ -112,26 +185,11 @@
 	
 }
 
-- (void)dealloc {
-	[[TexLegeReachability sharedTexLegeReachability] removeObserver:self forKeyPath:[self reachabilityStatusKey]];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"TABLEUPDATE_START" object:self.dataSource];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"TABLEUPDATE_END" object:self.dataSource];
-
-	//self.tableView = nil;
-	self.dataSource = nil; 
-	self.selectObjectOnAppear = nil;
-	self.detailViewController = nil;
-	self.controllerEnabled = nil;
-	[super dealloc];
-}
-
-- (void)didReceiveMemoryWarning {
-			
-    [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
-}
-
 - (void)runLoadView {	
 	[super loadView];
+    
+    [self configObserver];
+
 	/*
 	// create a new table using the full application frame
 	// we'll ask the datasource which type of table to use (plain or grouped)

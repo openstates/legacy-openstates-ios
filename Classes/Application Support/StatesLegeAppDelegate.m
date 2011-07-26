@@ -34,7 +34,6 @@
 #import "MTStatusBarOverlay.h"
 
 #import "StateMetaLoader.h"
-#import "StatesListMetaLoader.h"
 #import "StatesListViewController.h"
 
 #import "SLFPersistenceManager.h"
@@ -53,9 +52,6 @@ NSString * const kShowedSplashScreenKey = @"HasShownSplashScreen";
 NSString * const kSegmentControlPrefKey = @"SegmentControlPrefs";
 NSString * const kResetSavedDatabaseKey = @"ResetSavedDatabase";
 NSString * const kSupportEmailKey = @"supportEmail";
-
-NSUInteger kNumMaxTabs = 11;
-NSInteger kNoSelection = -1;
 
 @implementation StatesLegeAppDelegate
 
@@ -178,14 +174,12 @@ NSInteger kNoSelection = -1;
 	if (!viewController.tabBarItem.enabled)
 		return NO;
 	
-	if (/*![UtilityMethods isIPadDevice]*/1) {
-		if (![viewController isEqual:tbc.selectedViewController]) {
-			//debug_NSLog(@"About to switch tabs, popping to root view controller.");
-			UINavigationController *nav = [self detailNavigationController];
-			if (nav && [nav.viewControllers count]>1)
-				[nav popToRootViewControllerAnimated:YES];
-		}
-	}
+    if (![viewController isEqual:tbc.selectedViewController]) {
+        //debug_NSLog(@"About to switch tabs, popping to root view controller.");
+        UINavigationController *nav = [self detailNavigationController];
+        if (nav && [nav.viewControllers count]>1)
+            [nav popToRootViewControllerAnimated:YES];
+    }
 	
 	return YES;
 }

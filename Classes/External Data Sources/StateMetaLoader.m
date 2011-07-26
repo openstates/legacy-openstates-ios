@@ -11,6 +11,8 @@
 //
 
 #import "StateMetaLoader.h"
+#import "StatesListMetaLoader.h"
+
 #import "JSONKit.h"
 #import "UtilityMethods.h"
 #import "TexLegeReachability.h"
@@ -313,6 +315,23 @@
 
 	}
 }
+
+/////////////////////////////////////////////////////
+
+- (BOOL)isFeatureEnabled:(NSString *)feature {
+        
+    /// just use what's in the cache, since we probably just loaded this
+    StatesListMetaLoader *statesList = [StatesListMetaLoader sharedStatesListMeta];
+
+    BOOL isEnabled = NO;
+    
+    if (self.selectedState && feature)
+        isEnabled = [statesList isFeatureEnabled:feature forStateID:self.selectedState];
+    
+    
+    return isEnabled;
+}
+
 
 
 + (NSString *)nameForChamber:(NSInteger)chamber {

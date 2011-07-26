@@ -29,6 +29,11 @@
 	return @"openstatesConnectionStatus";
 }
 
+- (NSString *)apiFeatureFlag {
+    return @"events";
+}
+
+
 - (void)loadView {
 	[super runLoadView];
 }

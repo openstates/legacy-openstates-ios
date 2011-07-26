@@ -33,6 +33,8 @@
 
 #define LIVE_SEARCHING 1
 
+#warning use the feature flag to remove unavailable items (like subjects/categories)
+
 @interface BillsMasterViewController()
 
 - (NSString *)sessionLabelText;
