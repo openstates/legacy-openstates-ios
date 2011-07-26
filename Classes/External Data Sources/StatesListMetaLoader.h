@@ -18,6 +18,7 @@
 @property (nonatomic)           NSInteger            loadingStatus;		// trigger "loading" or "error"  UI element
 
 
++ (id)sharedStatesListMeta;
 - (void)downloadStatesList;
 - (BOOL)isFeatureEnabled:(NSString *)feature forStateID:(NSString *)stateID;
 

@@ -34,6 +34,16 @@
 @synthesize updated;
 @synthesize loadingStatus;
 
++ (id)sharedStatesListMeta
+{
+	static dispatch_once_t pred;
+	static StatesListMetaLoader *foo = nil;
+	
+	dispatch_once(&pred, ^{ foo = [[self alloc] init]; });
+	return foo;
+}
+
+
 
 - (id)init {
 	if ((self=[super init])) {
@@ -83,13 +93,6 @@
 			}
 		}
 	}	
-}
-
-- (BOOL)isFeatureEnabled:(NSString *)feature {
-    
-    NSString *currentStateID = [[StateMetaLoader sharedStateMeta] selectedState];
-    
-    return [self isFeatureEnabled:feature forStateID:currentStateID];
 }
 
 - (BOOL)isFeatureEnabled:(NSString *)feature forStateID:(NSString *)stateID {
@@ -171,7 +174,7 @@
 
 - (void)downloadStatesList {
     
-	if (isLoading)	// we're already working on it
+	if (isLoading == YES)	// we're already working on it
 		return;
 	
 	if ([TexLegeReachability openstatesReachable]) {
@@ -184,7 +187,10 @@
         RKRequest *request = [osApiClient get:@"/metadata/" queryParams:queryParams delegate:self];	
         if (request) {
             request.userData = kStatesListDefaultsKey;
+            [request send];
         }
+        
+        
     }
     else if (self.loadingStatus != LOADING_NO_NET) {
 		self.loadingStatus = LOADING_NO_NET;
@@ -248,11 +254,8 @@
         NSString *localPath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:kStatesListCacheFile];
         if (![response.body writeToFile:localPath atomically:YES]) {
             NSLog(@"StateListLoader: error writing cache to file: %@", localPath);
-            return;
         }
-		
-        [[NSNotificationCenter defaultCenter] postNotificationName:kStatesListLoadedKey object:nil];
-        
+		        
     }        
     else {
         NSLog(@"Errors retrieving data from Open States API");
@@ -261,6 +264,8 @@
         LOG_EXPR([response.body mutableObjectFromJSONData]);
         LOG_EXPR(response.body);        
     }
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:kStatesListLoadedKey object:nil];
 
 }
 
