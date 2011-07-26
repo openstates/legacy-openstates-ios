@@ -15,9 +15,16 @@
 
 @class StatesListMetaLoader;
 @interface StatesListViewController : GCTableViewController {
-
 }
 
+- (NSIndexPath *)indexPathForCellController:(id)cellController;
+- (void)constructTableGroups;
+- (void)edit:(id)sender;
+- (void)finishEditing:(id)sender;
+
+@property (nonatomic,retain) NSMutableSet *favorites;
+@property (nonatomic,retain) NSMutableArray *tableCells;
 @property (nonatomic,retain) StatesListMetaLoader *statesMeta;
+@property (nonatomic,retain) UINavigationItem *statesNavItem;
 
 @end

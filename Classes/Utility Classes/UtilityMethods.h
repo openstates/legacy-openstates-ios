@@ -15,7 +15,10 @@
 #import "TexLegeReachability.h"
 
 BOOL IsEmpty(NSObject * thing);
+
 void RunBlockAfterDelay(NSTimeInterval delay, void (^block)(void));
+
+#define RunBlockOnNextLoop(aBlock) [[NSOperationQueue mainQueue] addOperationWithBlock:aBlock]
 
 
 @interface UtilityMethods : NSObject {

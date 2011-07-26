@@ -93,7 +93,7 @@
 
 - (NSMutableArray *)states    {
     
-    BOOL doLoad = YES;
+    BOOL doLoad = [TexLegeReachability openstatesReachable];
     
     if ( (self.isFresh) &&			// IF we've updated recently **AND**
         (isLoading || states)       // we're already loading OR we have valid info for the list of states
@@ -195,7 +195,7 @@
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
     
     isLoading = NO;
-
+    
 	if ([request isGET] && [response isOK]) {  
         
         self.loadingStatus = LOADING_IDLE;
@@ -229,6 +229,14 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:kStatesListLoadedKey object:nil];
         
     }        
+    else {
+        NSLog(@"Errors retrieving data from Open States API");
+        LOG_EXPR([request isGET]);
+        LOG_EXPR([response isOK]);
+        LOG_EXPR([response.body mutableObjectFromJSONData]);
+        LOG_EXPR(response.body);        
+    }
+
 }
 
 @end

@@ -14,7 +14,6 @@
 #import <RestKit/RestKit.h>
 
 @interface StateMetaLoader : NSObject <RKRequestDelegate> {
-	NSDate              *  updated;
 	NSMutableDictionary * _metadata;
 	NSMutableArray      * _loadingStates;
 	NSString            * _selectedSession;
@@ -33,6 +32,7 @@
 
 @property (nonatomic)           BOOL          needsStateSelection;          // will be TRUE if the user hasn't selected a state before
 @property (nonatomic)           BOOL          isFresh;
+@property (nonatomic,retain)    NSDate      * updated;
 @property (nonatomic,copy)      NSString    * selectedSession;
 @property (nonatomic,readonly)  NSArray     * sessions;
 @property (nonatomic,readonly)  NSDictionary* sessionDisplayNames;

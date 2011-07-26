@@ -24,6 +24,7 @@
 
 @implementation StateMetaLoader
 @synthesize isFresh;
+@synthesize updated;
 @synthesize needsStateSelection;
 @synthesize selectedSession = _selectedSession;
 @synthesize selectedState = _selectedState;
@@ -39,8 +40,6 @@
 
 - (id)init {
 	if ((self=[super init])) {
-		updated = nil;
-		isFresh = NO;
 		_sessions = nil;
         _sessionDisplayNames = nil;
 		_selectedSession = nil;
@@ -78,7 +77,7 @@
 
 - (void)dealloc {
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
-	nice_release(updated);
+	self.updated = nil;
 	nice_release(_metadata);
 	nice_release(_selectedSession);
 	nice_release(_sessions);
@@ -114,7 +113,6 @@
 	if (IsEmpty(stateID) || [_loadingStates containsObject:stateID])	// we're already working on it
 		return;
 	
-	isFresh = NO;
 	[_loadingStates addObject:stateID];	// add it to our list of active loads
 	
 	RKClient *osApiClient = [[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient];
@@ -130,21 +128,39 @@
 	}
 }
 
-- (NSDictionary *)stateMetadata {
-	NSDictionary *stateMeta = nil;
-	if (NO == IsEmpty(_selectedState)) {
-		stateMeta = [_metadata objectForKey:_selectedState];
+- (BOOL)isFresh {
+	// if we're over a half-hour old, it's time to refresh
+	return (self.updated && ([[NSDate date] timeIntervalSinceDate:updated] < (3600*24)));    // under a day old
+}
 
-		if (IsEmpty(stateMeta) || !isFresh || !updated || ([[NSDate date] timeIntervalSinceDate:updated] > (3600*24))) {	// if we're over a day old, let's refresh
-			isFresh = NO;
-			debug_NSLog(@"StateMetadata is stale, need to refresh");
-			
-			if (NO == IsEmpty(_selectedState)) {
-				[self loadMetadataForState:_selectedState];
-			}
-		}
-	}
-	return stateMeta;
+- (NSDictionary *)stateMetadata {    
+    NSDictionary *stateMeta = nil;
+	if (NO == IsEmpty(_selectedState)) {
+
+        stateMeta = [_metadata objectForKey:_selectedState];
+
+        BOOL doLoad = [TexLegeReachability openstatesReachable];
+        
+        BOOL isLoading = [ _loadingStates containsObject:_selectedState];
+        
+        if ( (self.isFresh) &&			// IF we've updated recently **AND**
+            (isLoading || stateMeta)    // we're already loading OR we have valid info for the list of state
+            )
+        {
+            doLoad = NO;
+        }
+        
+        if (doLoad) { 
+            
+            debug_NSLog(@"StateMeta is stale, need to refresh");
+            
+            [self loadMetadataForState:_selectedState];
+            
+        }
+        
+    }    
+    return stateMeta;
+    
 }
 
 - (void)setSelectedState:(NSString *)stateID {
@@ -328,8 +344,6 @@
 #pragma mark RestKit:RKObjectLoaderDelegate
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
-	isFresh = NO;
-
 	if (error && request) {
 		debug_NSLog(@"Error loading state metadata from %@: %@", [request description], [error localizedDescription]);
 		[[NSNotificationCenter defaultCenter] postNotificationName:kStateMetaNotifyError object:nil];
@@ -415,8 +429,7 @@
 			[self request:request didFailLoadWithError:nil];
 		}
 		
-		nice_release(updated);
-		updated = [[NSDate date] retain];
+        self.updated = [NSDate date];
 		
 		if (NO == IsEmpty(gotStateID)) {
 			[_metadata setObject:stateMeta forKey:gotStateID];
@@ -431,8 +444,6 @@
 			NSString *localPath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kStateMetaFile];
 			if (![[_metadata JSONData] writeToFile:localPath atomically:YES])
 				NSLog(@"StateMetadataLoader: error writing cache to file: %@", localPath);
-
-			isFresh = YES;
 			
 			[self reloadMetaPropertiesForStateID:gotStateID];
 			
@@ -443,6 +454,15 @@
 			return;
 		}
 	}
+    else {
+        NSLog(@"Errors retrieving data from Open States API");
+#if DEBUG
+        LOG_EXPR([request isGET]);
+        LOG_EXPR([response isOK]);
+        LOG_EXPR([response.body mutableObjectFromJSONData]);
+        LOG_EXPR(response.body);        
+#endif
+    }
 }
 
 @end

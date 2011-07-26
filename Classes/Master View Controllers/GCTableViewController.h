@@ -13,7 +13,7 @@
 
 @interface GCTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, readonly) UITableView *tableView;
+@property (nonatomic, readonly) IBOutlet UITableView *tableView;
 @property(nonatomic) BOOL clearsSelectionOnViewWillAppear;
 
 - (id) initWithStyle:(UITableViewStyle)style;

@@ -420,7 +420,7 @@ NSInteger kNoSelection = -1;
     {
         /* There surely is a better way to handle this, but without this delay
             the table view orientation is incorrect when runnin on iPads that start up in landscape. */
-        RunBlockAfterDelay(0.1, ^{
+        RunBlockOnNextLoop(^{
             StatesListViewController *stateVC = [[StatesListViewController alloc] initWithStyle:UITableViewStylePlain];
             [self.masterNavigationController presentModalViewController:stateVC animated:YES];
             [stateVC release];        
