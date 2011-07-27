@@ -13,7 +13,7 @@
 #import "GCTableViewController.h"
 #import "TableDataSourceProtocol.h"
 
-@interface GeneralTableViewController : GCTableViewController <UITableViewDelegate> {
+@interface GeneralTableViewController : GCTableViewController {
     BOOL isFeatureEnabled;
     BOOL isServerReachable;
 }

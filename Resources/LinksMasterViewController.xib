@@ -33,32 +33,6 @@
           <object class="IBUITableView" id="28282396">
             <reference key="NSNextResponder" ref="473824765"/>
             <int key="NSvFlags">274</int>
-            <array class="NSMutableArray" key="NSSubviews">
-              <object class="IBUISearchBar" id="981040110">
-                <reference key="NSNextResponder" ref="28282396"/>
-                <int key="NSvFlags">290</int>
-                <string key="NSFrameSize">{320, 44}</string>
-                <reference key="NSSuperview" ref="28282396"/>
-                <int key="IBUIContentMode">3</int>
-                <string key="targetRuntimeIdentifier">IBIPadFramework</string>
-                <string key="IBText"/>
-                <string key="IBPlaceholder">Search bills</string>
-                <object class="NSColor" key="IBTintColor">
-                  <int key="NSColorSpace">1</int>
-                  <bytes key="NSRGB">MC42IDAuNzQ1MDk4MDM5MiAwLjM1Mjk0MTE3NjUAA</bytes>
-                </object>
-                <object class="IBUITextInputTraits" key="IBTextInputTraits">
-                  <int key="IBUIAutocapitalizationType">1</int>
-                  <int key="IBUIAutocorrectionType">2</int>
-                  <string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-                </object>
-                <array key="IBScopeButtonTitles">
-                  <string>All</string>
-                  <string>House</string>
-                  <string>Senate</string>
-                </array>
-              </object>
-            </array>
             <string key="NSFrameSize">{320, 744}</string>
             <reference key="NSSuperview" ref="473824765"/>
             <object class="NSColor" key="IBUIBackgroundColor">
@@ -75,7 +49,6 @@
             <float key="IBUIRowHeight">44</float>
             <float key="IBUISectionHeaderHeight">22</float>
             <float key="IBUISectionFooterHeight">22</float>
-            <reference key="IBUITableHeaderView" ref="981040110"/>
           </object>
         </array>
         <string key="NSFrameSize">{320, 744}</string>
@@ -106,20 +79,9 @@
         </object>
         <string key="targetRuntimeIdentifier">IBIPadFramework</string>
       </object>
-      <object class="IBUISearchDisplayController" id="848442540">
-        <string key="targetRuntimeIdentifier">IBIPadFramework</string>
-      </object>
     </array>
     <object class="IBObjectContainer" key="IBDocument.Objects">
       <array class="NSMutableArray" key="connectionRecords">
-        <object class="IBConnectionRecord">
-          <object class="IBCocoaTouchOutletConnection" key="connection">
-            <string key="label">searchBar</string>
-            <reference key="source" ref="848442540"/>
-            <reference key="destination" ref="981040110"/>
-          </object>
-          <int key="connectionID">14</int>
-        </object>
         <object class="IBConnectionRecord">
           <object class="IBCocoaTouchOutletConnection" key="connection">
             <string key="label">delegate</string>
@@ -127,46 +89,6 @@
             <reference key="destination" ref="841351856"/>
           </object>
           <int key="connectionID">18</int>
-        </object>
-        <object class="IBConnectionRecord">
-          <object class="IBCocoaTouchOutletConnection" key="connection">
-            <string key="label">searchDisplayController</string>
-            <reference key="source" ref="841351856"/>
-            <reference key="destination" ref="848442540"/>
-          </object>
-          <int key="connectionID">31</int>
-        </object>
-        <object class="IBConnectionRecord">
-          <object class="IBCocoaTouchOutletConnection" key="connection">
-            <string key="label">delegate</string>
-            <reference key="source" ref="848442540"/>
-            <reference key="destination" ref="841351856"/>
-          </object>
-          <int key="connectionID">33</int>
-        </object>
-        <object class="IBConnectionRecord">
-          <object class="IBCocoaTouchOutletConnection" key="connection">
-            <string key="label">searchContentsController</string>
-            <reference key="source" ref="848442540"/>
-            <reference key="destination" ref="841351856"/>
-          </object>
-          <int key="connectionID">34</int>
-        </object>
-        <object class="IBConnectionRecord">
-          <object class="IBCocoaTouchOutletConnection" key="connection">
-            <string key="label">searchResultsDelegate</string>
-            <reference key="source" ref="848442540"/>
-            <reference key="destination" ref="841351856"/>
-          </object>
-          <int key="connectionID">35</int>
-        </object>
-        <object class="IBConnectionRecord">
-          <object class="IBCocoaTouchOutletConnection" key="connection">
-            <string key="label">delegate</string>
-            <reference key="source" ref="981040110"/>
-            <reference key="destination" ref="841351856"/>
-          </object>
-          <int key="connectionID">36</int>
         </object>
         <object class="IBConnectionRecord">
           <object class="IBCocoaTouchOutletConnection" key="connection">
@@ -205,11 +127,6 @@
             <reference key="parent" ref="0"/>
           </object>
           <object class="IBObjectRecord">
-            <int key="objectID">10</int>
-            <reference key="object" ref="848442540"/>
-            <reference key="parent" ref="0"/>
-          </object>
-          <object class="IBObjectRecord">
             <int key="objectID">52</int>
             <reference key="object" ref="473824765"/>
             <array class="NSMutableArray" key="children">
@@ -220,23 +137,14 @@
           <object class="IBObjectRecord">
             <int key="objectID">8</int>
             <reference key="object" ref="28282396"/>
-            <array class="NSMutableArray" key="children">
-              <reference ref="981040110"/>
-            </array>
+            <array class="NSMutableArray" key="children"/>
             <reference key="parent" ref="473824765"/>
-          </object>
-          <object class="IBObjectRecord">
-            <int key="objectID">13</int>
-            <reference key="object" ref="981040110"/>
-            <reference key="parent" ref="28282396"/>
           </object>
         </array>
       </object>
       <dictionary class="NSMutableDictionary" key="flattenedProperties">
-        <string key="-1.CustomClassName">BillsMasterViewController</string>
+        <string key="-1.CustomClassName">LinksMasterViewController</string>
         <string key="-2.CustomClassName">UIResponder</string>
-        <string key="13.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-        <object class="NSAffineTransform" key="13.IBViewBoundsToFrameTransform"/>
         <string key="52.IBEditorWindowLastContentRect">{{675, 182}, {320, 852}}</string>
         <string key="52.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
         <string key="8.IBEditorWindowLastContentRect">{{767, 270}, {320, 724}}</string>
@@ -253,14 +161,6 @@
     </object>
     <object class="IBClassDescriber" key="IBDocument.Classes">
       <array class="NSMutableArray" key="referencedPartialClassDescriptions">
-        <object class="IBPartialClassDescription">
-          <string key="className">BillsMasterViewController</string>
-          <string key="superclassName">GeneralTableViewController</string>
-          <object class="IBClassDescriptionSource" key="sourceIdentifier">
-            <string key="majorKey">IBProjectSource</string>
-            <string key="minorKey">Classes/Master View Controllers/BillsMasterViewController.h</string>
-          </object>
-        </object>
         <object class="IBPartialClassDescription">
           <string key="className">GCTableViewController</string>
           <string key="superclassName">UIViewController</string>
@@ -308,6 +208,14 @@
           <object class="IBClassDescriptionSource" key="sourceIdentifier">
             <string key="majorKey">IBProjectSource</string>
             <string key="minorKey">Classes/Master View Controllers/GeneralTableViewController.h</string>
+          </object>
+        </object>
+        <object class="IBPartialClassDescription">
+          <string key="className">LinksMasterViewController</string>
+          <string key="superclassName">GeneralTableViewController</string>
+          <object class="IBClassDescriptionSource" key="sourceIdentifier">
+            <string key="majorKey">IBProjectSource</string>
+            <string key="minorKey">Classes/Master View Controllers/LinksMasterViewController.h</string>
           </object>
         </object>
       </array>

@@ -78,6 +78,7 @@
                 <string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
               </object>
               <reference key="IBUIParentViewController" ref="431203068"/>
+              <string key="IBUINibName">LinksMasterViewController</string>
               <object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
                 <int key="interfaceOrientation">1</int>
               </object>

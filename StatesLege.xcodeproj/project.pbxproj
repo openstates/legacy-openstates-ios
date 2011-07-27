@@ -31,6 +31,10 @@
 		370EAD311338029E007788BC /* OpenLegislativeAPIs.m in Sources */ = {isa = PBXBuildFile; fileRef = 370EAD301338029E007788BC /* OpenLegislativeAPIs.m */; };
 		370EAD321338029E007788BC /* OpenLegislativeAPIs.m in Sources */ = {isa = PBXBuildFile; fileRef = 370EAD301338029E007788BC /* OpenLegislativeAPIs.m */; };
 		370F7AA911FEAF730004AC50 /* PolygonMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 370F7AA811FEAF730004AC50 /* PolygonMath.m */; };
+		3712AF2D13DFC41C0073E35A /* 190-bank-inv.png in Resources */ = {isa = PBXBuildFile; fileRef = 37A58AA5139DF6A2003DE299 /* 190-bank-inv.png */; };
+		3712AF2E13DFC4200073E35A /* 190-bank-inv@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37A58AA6139DF6A2003DE299 /* 190-bank-inv@2x.png */; };
+		3712B06613DFDAEB0073E35A /* LinksMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3712B06513DFDAEB0073E35A /* LinksMasterViewController.xib */; };
+		3712B06713DFDAEB0073E35A /* LinksMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3712B06513DFDAEB0073E35A /* LinksMasterViewController.xib */; };
 		37155728100859E700FA57DB /* CommitteeObj+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 37155727100859E700FA57DB /* CommitteeObj+RestKit.m */; };
 		3718895C12EE917B00E3300D /* NSDate+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718895B12EE917B00E3300D /* NSDate+Helper.m */; };
 		371A442E1346597000DFDBB8 /* VoteNay.png in Resources */ = {isa = PBXBuildFile; fileRef = 371A44281346597000DFDBB8 /* VoteNay.png */; };
@@ -1448,6 +1452,7 @@
 		370EAD301338029E007788BC /* OpenLegislativeAPIs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenLegislativeAPIs.m; sourceTree = "<group>"; };
 		370F7AA711FEAF730004AC50 /* PolygonMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PolygonMath.h; path = Classes/MapKit/PolygonMath.h; sourceTree = SOURCE_ROOT; };
 		370F7AA811FEAF730004AC50 /* PolygonMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PolygonMath.m; path = Classes/MapKit/PolygonMath.m; sourceTree = SOURCE_ROOT; };
+		3712B06513DFDAEB0073E35A /* LinksMasterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = LinksMasterViewController.xib; path = Resources/LinksMasterViewController.xib; sourceTree = "<group>"; };
 		37155726100859E700FA57DB /* CommitteeObj+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CommitteeObj+RestKit.h"; sourceTree = "<group>"; };
 		37155727100859E700FA57DB /* CommitteeObj+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CommitteeObj+RestKit.m"; sourceTree = "<group>"; };
 		3718895A12EE917B00E3300D /* NSDate+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Helper.h"; sourceTree = "<group>"; };
@@ -2402,6 +2407,7 @@
 				8D1107310486CEB800E47090 /* Info.plist */,
 				37735C121323104A0033F343 /* Info (Seed).plist */,
 				37B2D28A10224B2800B493C8 /* Entitlements.plist */,
+				3712B06513DFDAEB0073E35A /* LinksMasterViewController.xib */,
 				37B2C1FA130BCEFC00140212 /* BillsMasterViewController.xib */,
 				373B820511E378CD00A81142 /* LegislatorMasterViewController.xib */,
 				3735DFFD120917490000AF5A /* CommitteeMasterViewController.xib */,
@@ -4386,6 +4392,9 @@
 				37CFACBC13DE722E0075D3D4 /* StarButtonGreen@2x.png in Resources */,
 				37CFACBD13DE722E0075D3D4 /* StarButtonRim.png in Resources */,
 				37CFACBE13DE722E0075D3D4 /* StarButtonRim@2x.png in Resources */,
+				3712AF2D13DFC41C0073E35A /* 190-bank-inv.png in Resources */,
+				3712AF2E13DFC4200073E35A /* 190-bank-inv@2x.png in Resources */,
+				3712B06713DFDAEB0073E35A /* LinksMasterViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4891,6 +4900,7 @@
 				37CFACB813DE722E0075D3D4 /* StarButtonGreen@2x.png in Resources */,
 				37CFACB913DE722E0075D3D4 /* StarButtonRim.png in Resources */,
 				37CFACBA13DE722E0075D3D4 /* StarButtonRim@2x.png in Resources */,
+				3712B06613DFDAEB0073E35A /* LinksMasterViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

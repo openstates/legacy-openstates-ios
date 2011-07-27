@@ -110,11 +110,26 @@
 
     CGRect tFrame = self.tableView.frame;
     tFrame.origin.y  = 44.f;
-    tFrame.size.height -= 44.f;
+    tFrame.size.height -= 88.f;
     self.tableView.frame = tFrame;
     
+    
+    UILabel *whereToChange = [[UILabel alloc] initWithFrame:CGRectMake(0.f, CGRectGetHeight(self.view.bounds)-44.f,
+                                                                       CGRectGetWidth(self.view.frame),
+                                                                       44.f)];
+    whereToChange.text = NSLocalizedStringFromTable(@"You can change this in the 'Resources' tab", @"StandardUI", @"");
+    whereToChange.font = [TexLegeTheme boldTwelve];
+    whereToChange.textColor = [TexLegeTheme textDark];
+    whereToChange.textAlignment = UITextAlignmentCenter;
+    whereToChange.lineBreakMode = UILineBreakModeWordWrap;
+    whereToChange.numberOfLines = 1;
+    whereToChange.backgroundColor = [TexLegeTheme tableBackground];
+    whereToChange.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+    [self.view addSubview:whereToChange];
+    [whereToChange release];
+                                                                       
     [self.tableView setAllowsSelectionDuringEditing:YES];
-	//[self finishEditing:self];    // we're not editing right now
+	[self finishEditing:self];    // we're not editing right now
     
 }
 

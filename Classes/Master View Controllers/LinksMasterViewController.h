@@ -18,4 +18,6 @@
 @interface LinksMasterViewController : GeneralTableViewController {
 }
 
+@property (nonatomic,retain)            UILabel *activeStateLabel;
+
 @end

@@ -21,12 +21,28 @@
 #import "TexLegeTheme.h"
 #import "TexLegeEmailComposer.h"
 #import "TexLegeReachability.h"
+#import "StatesListViewController.h"
+#import "StateMetaLoader.h"
+
+@interface LinksMasterViewController()
+
+- (NSString *)stateLabelText;
+- (IBAction)showStateList:(id)sender;
+- (void)createStatePicker;
+- (void)destroyStatePicker;
+@end
 
 @implementation LinksMasterViewController
+@synthesize activeStateLabel;
 
 - (Class)dataSourceClass {
 	return [LinksDataSource class];
 }
+
+- (NSString *)nibName {
+	return NSStringFromClass([self class]);
+}
+
 
 - (void)configure {
 	[super configure];				
@@ -35,6 +51,10 @@
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+    self.activeStateLabel = nil;
+    
 	[super dealloc];
 }
 
@@ -43,18 +63,30 @@
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
     // Release anything that's not essential, such as cached data
 }
-
+/*
 - (void)loadView {	
 	[super runLoadView];	
 }
-
+*/
 - (void)viewDidLoad {
 	[super viewDidLoad];	
+    
 	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
 		self.selectObjectOnAppear = [self firstDataObject];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self 
+                                             selector:@selector(changeStateLabel:) 
+                                                 name:kStateMetaNotifyStateLoaded 
+                                               object:nil];
+    
 }
 
 - (void)viewDidUnload {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+    self.activeStateLabel = nil;
+    self.toolbarItems = nil;
+    
 	[super viewDidUnload];
 }
 
@@ -63,6 +95,8 @@
 {	
 	[super viewWillAppear:animated];
 	
+    [self createStatePicker];
+
 	//// ALL OF THE FOLLOWING MUST *NOT* RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER
 	
 	/*if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
@@ -82,6 +116,11 @@
 		[self.tableView reloadData]; 
 	
 	// END: IPAD ONLY
+}
+
+- (void) viewDidDisappear:(BOOL)animated {
+    [self destroyStatePicker];
+    [super viewDidDisappear:animated];
 }
 
 #pragma -
@@ -106,6 +145,7 @@
 		NSString *supportEmail = [[NSUserDefaults standardUserDefaults] stringForKey:kSupportEmailKey];
 		NSString *url = [link valueForKey:@"url"];
 		
+        
 		if ([url hasSuffix:supportEmail]) {
 			NSString *appVer = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 
@@ -159,6 +199,70 @@
 			webViewController.address = urlString;
 		}
 	}
+}
+
+
+#pragma mark -
+#pragma mark State Legislature Picker
+
+- (void)createStatePicker {
+	[self.navigationController setToolbarHidden:NO animated:YES];
+	self.navigationController.toolbar.tintColor = [TexLegeTheme accent];
+    [self.navigationController.view setNeedsDisplay];
+    [self.view setNeedsDisplay];
+
+	
+	UILabel *stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds)-60.f, 23.f)];
+	stateLabel.font = [UIFont boldSystemFontOfSize:15];
+	stateLabel.textColor = [TexLegeTheme backgroundLight];
+	stateLabel.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
+	stateLabel.textAlignment = UITextAlignmentRight;
+    stateLabel.lineBreakMode = UILineBreakModeTailTruncation;
+	stateLabel.text = [self stateLabelText];
+	stateLabel.opaque = NO;
+	stateLabel.backgroundColor = [UIColor clearColor];
+    stateLabel.adjustsFontSizeToFitWidth = YES;
+    stateLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	
+	self.activeStateLabel = stateLabel;
+	
+	UIBarButtonItem *labelButton = [[UIBarButtonItem alloc] initWithCustomView:stateLabel];
+	UIBarButtonItem *iconButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"190-bank-inv"] 
+																   style:UIBarButtonItemStylePlain 
+																  target:self 
+																  action:@selector(showStateList:)];
+	
+	[self setToolbarItems:[NSArray arrayWithObjects:labelButton, iconButton, nil] animated:YES];
+	[stateLabel release];
+	[labelButton release];
+	[iconButton release];	
+}
+
+- (void)destroyStatePicker {
+	[self setToolbarItems:nil animated:YES];
+	self.activeStateLabel = nil;
+	[self.navigationController setToolbarHidden:YES animated:YES];
+}
+
+- (void)changeStateLabel:(NSNotification *)notification {
+    self.activeStateLabel.text = [self stateLabelText];
+}
+
+- (NSString *)stateLabelText {
+    
+    StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
+    
+	return [NSString stringWithFormat:@"%@: %@", 
+            NSLocalizedStringFromTable(@"Active State",@"StandardUI",@"Current state legislature"), 
+            [meta.selectedState uppercaseString]];
+}
+
+
+- (IBAction)showStateList:(id)sender {
+    
+    StatesListViewController *listVC = [[StatesListViewController alloc] initWithStyle:UITableViewStylePlain];
+    [self.tabBarController presentModalViewController:listVC animated:YES];
+    [listVC release];
 }
 
 @end

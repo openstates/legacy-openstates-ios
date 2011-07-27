@@ -10,7 +10,6 @@
 //
 //
 
-#import "UtilityMethods.h"
 
 #import "GeneralTableViewController.h"
 
@@ -21,6 +20,7 @@
 
 #import "SLFPersistenceManager.h"
 #import "StateMetaLoader.h"
+#import "UtilityMethods.h"
 
 @implementation GeneralTableViewController
 @synthesize dataSource, detailViewController, controllerEnabled;
@@ -99,7 +99,6 @@
 }
 
 - (void)setControllerEnabled:(BOOL)enabled {
-    
     controllerEnabled = enabled;
     
     if (self.splitViewController)
@@ -189,7 +188,7 @@
 	[super loadView];
     
     [self configObserver];
-
+    
 	/*
 	// create a new table using the full application frame
 	// we'll ask the datasource which type of table to use (plain or grouped)
@@ -214,13 +213,9 @@
 
 -(void)viewDidLoad {
 	[super viewDidLoad];
-	//NSLog(@"--------------Loading %@", NSStringFromClass([self class]));
-
+        
 	//[self.navigationController.view addObserver:self forKeyPath:@"frame" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
-	
-	self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
-	self.tableView.autoresizesSubviews = YES;
-
+	    
 	self.title = [self.dataSource name];	
 	// set the long name shown in the navigation bar
 	//self.navigationItem.title=[dataSource navigationBarName];
@@ -236,6 +231,7 @@
 			// Handle the error...
 		}					
 	}
+
 	self.tableView.dataSource = dataSource;
 	if (self.searchDisplayController) {
 		self.searchDisplayController.searchResultsDataSource = dataSource;
@@ -245,7 +241,6 @@
 	
 	// set the tableview delegate to this object and the datasource to the datasource which has already been set
 	self.tableView.delegate = self;
-	//self.tableView.dataSource = self.dataSource;
 	
 	self.clearsSelectionOnViewWillAppear = NO;
 	self.tableView.separatorColor = [TexLegeTheme separator];
@@ -253,7 +248,6 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 	//self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
-	//self.navigationItem.titleView = self.chamberControl;
 	
 	if ([UtilityMethods isIPadDevice]) {
 		NSUInteger sectionCount = [self.tableView numberOfSections];

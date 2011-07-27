@@ -397,7 +397,7 @@ NSString * const kSupportEmailKey = @"supportEmail";
 - (void)runOnEveryAppStart {
 	self.appIsQuitting = NO;
 	
-    if (1)//if ([[StateMetaLoader sharedStateMeta] needsStateSelection])
+    if ([[StateMetaLoader sharedStateMeta] needsStateSelection])
     {
         /* There surely is a better way to handle this, but without this delay
             the table view orientation is incorrect when runnin on iPads that start up in landscape. */

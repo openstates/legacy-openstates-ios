@@ -78,8 +78,6 @@
 	
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeSessionLabel:) name:kStateMetaNotifySessionChange object:nil];
     
-    [self createSessionPicker];
-
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];	
 	
 	self.searchDisplayController.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:
@@ -160,8 +158,15 @@
 																nil];
 	
     
+    [self createSessionPicker];
+    
 	if ([UtilityMethods isIPadDevice])
 		[self.tableView reloadData];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    //[self destroySessionPicker];
+    [super viewDidDisappear:animated];
 }
 
 #pragma -
