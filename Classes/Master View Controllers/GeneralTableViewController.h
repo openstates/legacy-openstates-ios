@@ -18,6 +18,13 @@
     BOOL isServerReachable;
 }
 
+// these properties are used by the view controller
+// for the navigation and tab bar
++ (UIImage *)tabBarImage;
++ (NSString *)name;
+@property (readonly) NSString *name;
+@property (readonly) NSString *navigationBarName;
+
 @property (nonatomic,retain) id<TableDataSource> dataSource;
 @property (nonatomic,retain) id selectObjectOnAppear;
 @property (nonatomic,retain) IBOutlet id detailViewController;

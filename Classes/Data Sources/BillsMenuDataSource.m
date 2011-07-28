@@ -28,16 +28,6 @@ enum _menuOrder {
 
 // TableDataSourceProtocol methods
 
-// return the data used by the navigation controller and tab bar item
-- (NSString *)name
-{ return NSLocalizedStringFromTable(@"Bills", @"StandardUI", @"Short name for bills (legislative documents, pre-law) tab"); }
-
-- (NSString *)navigationBarName 
-{ return [self name]; }
-
-- (UIImage *)tabBarImage 
-{ return [UIImage imageNamed:@"gavel-inv.png"]; }
-
 - (BOOL)showDisclosureIcon
 { return YES; }
 

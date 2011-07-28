@@ -20,15 +20,6 @@
 @synthesize calendarList;
 
 
-- (NSString *)name 
-{ return NSLocalizedStringFromTable(@"Events", @"StandardUI", @"The short title for buttons and tabs related to committee meetings (or calendar events)"); }
-
-- (NSString *)navigationBarName 
-{ return NSLocalizedStringFromTable(@"Upcoming Events", @"StandardUI", @"The long title for buttons and tabs related to committee meetings (or calendar events)"); }
-
-- (UIImage *)tabBarImage 
-{ return [UIImage imageNamed:@"83-calendar-inv.png"]; }
-
 - (BOOL)showDisclosureIcon
 { return YES; }
 

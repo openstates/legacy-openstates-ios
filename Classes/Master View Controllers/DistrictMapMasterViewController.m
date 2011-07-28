@@ -28,6 +28,21 @@
 @implementation DistrictMapMasterViewController
 @synthesize chamberControl, sortControl, filterControls;
 
+#pragma mark -
+#pragma mark Main Menu Info
+
++ (NSString *)name
+{ return NSLocalizedStringFromTable(@"District Maps", @"StandardUI", @"Short name for district maps tab"); }
+
+- (NSString *)navigationBarName 
+{ return [self name]; }
+
++ (UIImage *)tabBarImage 
+{ return [UIImage imageNamed:@"73-radar-inv"]; }
+
+///////////////////////////////////////////////
+
+
 // Set this to non-nil whenever you want to automatically enable/disable the view controller based on network/host reachability
 - (NSString *)reachabilityStatusKey {
 	return @"googleConnectionStatus";

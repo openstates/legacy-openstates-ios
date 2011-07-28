@@ -75,16 +75,6 @@
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
 
-// return the data used by the navigation controller and tab bar item
-- (NSString *)name
-{ return NSLocalizedStringFromTable(@"District Maps", @"StandardUI", @"Short name for district maps tab"); }
-
-- (NSString *)navigationBarName 
-{ return [self name]; }
-
-- (UIImage *)tabBarImage
-{ return [UIImage imageNamed:@"73-radar-inv.png"]; }
-
 - (BOOL)showDisclosureIcon
 { return YES; }
 

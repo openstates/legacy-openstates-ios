@@ -31,6 +31,19 @@
 @synthesize chamberControl;
 
 #pragma mark -
+#pragma mark Main Menu Info
+
++ (NSString *)name
+{ return NSLocalizedStringFromTable(@"Legislators", @"StandardUI", @"The short title for buttons and tabs related to legislators"); }
+
+- (NSString *)navigationBarName 
+{ return NSLocalizedStringFromTable(@"Legislator Directory", @"StandardUI", @"The long title for buttons and tabs related to legislators"); }
+
++ (UIImage *)tabBarImage 
+{ return [UIImage imageNamed:@"123-id-card-inv"]; }
+
+
+#pragma mark -
 #pragma mark Initialization
 
 - (NSString *)nibName {

@@ -26,6 +26,23 @@
 @synthesize dataSource, detailViewController, controllerEnabled;
 @synthesize selectObjectOnAppear;
 
+#pragma mark -
+#pragma mark Main Menu Info
+
++ (NSString *)name
+{ return @""; }
+
+- (NSString *)name 
+{ return [[self class] name]; }
+
+- (NSString *)navigationBarName 
+{ return @""; }
+
++ (UIImage *)tabBarImage 
+{ return [UIImage imageNamed:@"error"]; }
+
+
+///////////////////////////////////////////////////////
 - (void)configObserver {
     isFeatureEnabled = YES;
     isServerReachable = YES;
@@ -216,7 +233,7 @@
         
 	//[self.navigationController.view addObserver:self forKeyPath:@"frame" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
 	    
-	self.title = [self.dataSource name];	
+	self.title = [self name];	
 	// set the long name shown in the navigation bar
 	//self.navigationItem.title=[dataSource navigationBarName];
 	

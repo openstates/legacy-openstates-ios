@@ -20,7 +20,6 @@
 #import "TexLegeTheme.h"
 
 #import "GeneralTableViewController.h"
-#import "TableDataSourceProtocol.h"
 
 #import "AnalyticsOptInAlertController.h"
 #import "LocalyticsSession.h"
@@ -257,9 +256,9 @@ NSString * const kSupportEmailKey = @"supportEmail";
 			UISplitViewController * split = [controller splitViewController];
 			if (split) {
 				// THIS SETS UP THE TAB BAR ITEMS/IMAGES AND SET THE TAG FOR TABBAR_ITEM_TAGS
-				split.title = [[controller dataSource] name];
+				split.title = [controller name];
 				split.tabBarItem = [[[UITabBarItem alloc] initWithTitle:
-									[[controller dataSource] name] image:[[controller dataSource] tabBarImage] tag:index] autorelease];
+									[[controller class] name] image:[[controller class] tabBarImage] tag:index] autorelease];
 				[splitViewControllers addObject:split];
 			}
 			index++;

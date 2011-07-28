@@ -24,6 +24,21 @@
 
 @implementation CalendarMasterViewController
 
+#pragma mark -
+#pragma mark Main Menu Info
+
++ (NSString *)name
+{ return NSLocalizedStringFromTable(@"Events", @"StandardUI", @"The short title for buttons and tabs related to committee meetings (or calendar events)"); }
+
+- (NSString *)navigationBarName 
+{ return NSLocalizedStringFromTable(@"Upcoming Events", @"StandardUI", @"The long title for buttons and tabs related to committee meetings (or calendar events)"); }
+
++ (UIImage *)tabBarImage 
+{ return [UIImage imageNamed:@"83-calendar-inv"]; }
+
+
+////////////////////////////////////////
+
 // Set this to non-nil whenever you want to automatically enable/disable the view controller based on network/host reachability
 - (NSString *)reachabilityStatusKey {
 	return @"openstatesConnectionStatus";

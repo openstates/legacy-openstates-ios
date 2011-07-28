@@ -50,6 +50,21 @@
 @synthesize billSearchDS;
 @synthesize activeSessionLabel;
 
+#pragma mark -
+#pragma mark Main Menu Info
+
++ (NSString *)name
+{ return NSLocalizedStringFromTable(@"Bills", @"StandardUI", @"Short name for bills (legislative documents, pre-law) tab"); }
+
+- (NSString *)navigationBarName 
+{ return [self name]; }
+
++ (UIImage *)tabBarImage 
+{ return [UIImage imageNamed:@"gavel-inv"]; }
+
+
+////////////////////////////////////////
+
 // Set this to non-nil whenever you want to automatically enable/disable the view controller based on network/host reachability
 - (NSString *)reachabilityStatusKey {
 	return @"openstatesConnectionStatus";

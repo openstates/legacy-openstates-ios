@@ -28,6 +28,19 @@
 @synthesize chamberControl;
 
 #pragma mark -
+#pragma mark Main Menu Info
+
++ (NSString *)name
+{ return NSLocalizedStringFromTable(@"Committees", @"StandardUI", @"The short title for buttons and tabs related to legislative committees"); }
+
+- (NSString *)navigationBarName 
+{ return NSLocalizedStringFromTable(@"Committee Information", @"StandardUI", @"The long title for buttons and tabs related to legislative committees"); }
+
++ (UIImage *)tabBarImage 
+{ return [UIImage imageNamed:@"60-signpost-inv"]; }
+
+
+#pragma mark -
 #pragma mark Initialization
 
 - (NSString *)nibName {
