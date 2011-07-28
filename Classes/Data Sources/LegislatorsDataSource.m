@@ -16,8 +16,6 @@
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "LegislatorCell.h"
-#import "UIDevice-Hardware.h"
-#import "StatesLegeAppDelegate.h"
 
 @interface LegislatorsDataSource (Private)
 - (void)dataSourceReceivedMemoryWarning:(id)sender;

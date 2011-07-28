@@ -19,7 +19,7 @@
 #import "TexLegeCoreDataUtils.h"
 #import "UtilityMethods.h"
 #import "TableCellDataObject.h"
-#import "StatesLegeAppDelegate.h"
+#import "AppDelegate.h"
 #import "SVWebViewController.h"
 #import "LocalyticsSession.h"
 #import "NSDate+Helper.h"
@@ -463,7 +463,9 @@ enum _billSections {
 			{
 				NSDictionary *sponsor = [[bill objectForKey:@"sponsors"] objectAtIndex:indexPath.row];
 				cell.detailTextLabel.text = [sponsor objectForKey:@"name"];
-				cell.textLabel.text = [[sponsor objectForKey:@"type"] capitalizedString];
+                
+                NSString *sponsorType = [[sponsor objectForKey:@"type"] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+				cell.textLabel.text = [sponsorType capitalizedString];
 			}
 				break;
 				
@@ -578,7 +580,7 @@ enum _billSections {
 			BillsListViewController *catResultsView = nil;
 			BOOL preexisting = NO;
 			if ([UtilityMethods isIPadDevice] && [UtilityMethods isLandscapeOrientation]) {
-				id tempView = [[[StatesLegeAppDelegate appDelegate] masterNavigationController] visibleViewController];
+				id tempView = [[[AppDelegate appDelegate] masterNavigationController] visibleViewController];
 				if ([tempView isKindOfClass:[BillsListViewController class]]) {
 					catResultsView = (BillsListViewController *)[tempView retain];
 					preexisting = YES;
@@ -596,7 +598,7 @@ enum _billSections {
 									  chamber:[[bill objectForKey:@"chamber"] integerValue]];
 			if (!preexisting) {
 				if ([UtilityMethods isIPadDevice] && [UtilityMethods isLandscapeOrientation])
-					[[[StatesLegeAppDelegate appDelegate] masterNavigationController] pushViewController:catResultsView animated:YES];
+					[[[AppDelegate appDelegate] masterNavigationController] pushViewController:catResultsView animated:YES];
 				else
 					[self.navigationController pushViewController:catResultsView animated:YES];
 			}

@@ -11,7 +11,7 @@
 //
 
 #import "BillsListViewController.h"
-#import "StatesLegeAppDelegate.h"
+#import "AppDelegate.h"
 #import "BillsDetailViewController.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
@@ -46,8 +46,8 @@
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	if ([UtilityMethods isIPadDevice] && UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
-		if ([[[[StatesLegeAppDelegate appDelegate] masterNavigationController] topViewController] isKindOfClass:[BillsListViewController class]])
-			if ([self.navigationController isEqual:[[StatesLegeAppDelegate appDelegate] detailNavigationController]])
+		if ([[[[AppDelegate appDelegate] masterNavigationController] topViewController] isKindOfClass:[BillsListViewController class]])
+			if ([self.navigationController isEqual:[[AppDelegate appDelegate] detailNavigationController]])
 				[self.navigationController popToRootViewControllerAnimated:YES];
 		
 	}	
@@ -126,7 +126,7 @@
 			
 			BillsDetailViewController *detailView = nil;
 			if ([UtilityMethods isIPadDevice]) {
-				id aDetail = [[[StatesLegeAppDelegate appDelegate] detailNavigationController] visibleViewController];
+				id aDetail = [[[AppDelegate appDelegate] detailNavigationController] visibleViewController];
 				if ([aDetail isKindOfClass:[BillsDetailViewController class]])
 					detailView = aDetail;
 				else if ([aDetail isKindOfClass:[BillsListViewController class]]) {
@@ -147,8 +147,8 @@
 			if (needsPushVC)
 				[self.navigationController pushViewController:detailView animated:YES];
 			else if (changingViews)
-				//[[[StatesLegeAppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:YES];
-				[[[StatesLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
+				//[[[AppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:YES];
+				[[[AppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
 		}			
 	}
 }

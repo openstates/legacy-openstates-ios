@@ -7,8 +7,6 @@
  *
  */
 
-#define NEEDS_TO_PARSE_KMLMAPS 0
-
 extern NSString * const kAnalyticsAskedForOptInKey;
 extern NSString * const kAnalyticsSettingsSwitch;
 extern NSString * const kSegmentControlPrefKey;

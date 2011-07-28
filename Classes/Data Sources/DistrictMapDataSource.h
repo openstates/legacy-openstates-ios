@@ -12,15 +12,7 @@
 
 #import "TableDataSourceProtocol.h"
 
-#if NEEDS_TO_PARSE_KMLMAPS == 1
-@class DistrictMapImporter;
-#endif
-
-@interface DistrictMapDataSource : NSObject <TableDataSource> {
-#if NEEDS_TO_PARSE_KMLMAPS == 1
-	NSInteger mapCount;
-#endif
-}
+@interface DistrictMapDataSource : NSObject <TableDataSource>
 
 @property (nonatomic, retain)	NSFetchedResultsController *fetchedResultsController;
 
@@ -32,10 +24,5 @@
 - (void) setFilterByString:(NSString *)filter;
 - (void) removeFilter;
 - (IBAction) sortByType:(id)sender;
-
-#if NEEDS_TO_PARSE_KMLMAPS == 1
-- (void)insertDistrictMaps:(NSArray *)districtMaps;
-@property (nonatomic, retain) DistrictMapImporter *importer;
-#endif
 
 @end

@@ -11,7 +11,7 @@
 //
 
 #import "BillsTodayViewController.h"
-#import "StatesLegeAppDelegate.h"
+#import "AppDelegate.h"
 #import "BillsDetailViewController.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
@@ -181,7 +181,7 @@
 		
 		BillsDetailViewController *detailView = nil;
 		if ([UtilityMethods isIPadDevice]) {
-			id aDetail = [[[StatesLegeAppDelegate appDelegate] detailNavigationController] visibleViewController];
+			id aDetail = [[[AppDelegate appDelegate] detailNavigationController] visibleViewController];
 			if ([aDetail isKindOfClass:[BillsDetailViewController class]])
 				detailView = aDetail;
 		}
@@ -199,8 +199,8 @@
 		if (![UtilityMethods isIPadDevice])
 			[self.navigationController pushViewController:detailView animated:YES];
 		else if (changingViews)
-			//[[[StatesLegeAppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:YES];
-			[[[StatesLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
+			//[[[AppDelegate appDelegate] detailNavigationController] pushViewController:detailView animated:YES];
+			[[[AppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:detailView] animated:NO];
 	}			
 }
 

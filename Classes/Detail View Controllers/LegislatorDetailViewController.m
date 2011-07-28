@@ -28,19 +28,18 @@
 #import "TableDataSourceProtocol.h"
 #import "TableCellDataObject.h"
 #import "NotesViewController.h"
-#import "StatesLegeAppDelegate.h"
+#import "AppDelegate.h"
 
 #import "BillSearchDataSource.h"
 #import "BillsListViewController.h"
 #import "CommitteeDetailViewController.h"
-#import "DistrictOfficeMasterViewController.h"
 
 #import "MapMiniDetailViewController.h"
 #import "SVWebViewController.h"
 
 #import "UIImage+ResolutionIndependent.h"
 
-#import "TexLegeEmailComposer.h"
+#import "SLFEmailComposer.h"
 
 #import "LocalyticsSession.h"
 
@@ -238,7 +237,7 @@
 	BOOL portrait = (![UtilityMethods isLandscapeOrientation]);
 
 	if (portrait && ipad && !self.legislator)
-		self.legislator = [[[StatesLegeAppDelegate appDelegate] legislatorMasterVC] selectObjectOnAppear];		
+		self.legislator = [[[AppDelegate appDelegate] legislatorMasterVC] selectObjectOnAppear];		
 	
 	if (self.legislator)
 		[self setupHeader];
@@ -350,7 +349,7 @@
 			}
 		}
 		else if (cellInfo.entryType == DirectoryTypeMail) {
-			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:cellInfo.entryValue 
+			[[SLFEmailComposer sharedSLFEmailComposer] presentMailComposerTo:cellInfo.entryValue 
 																			 subject:@"" body:@"" commander:self];			
 		}
 		// Switch to the appropriate application for this url...

@@ -16,7 +16,6 @@
 #import "TexLegeTheme.h"
 #import "LocalyticsSession.h"
 #import "TexLegeCoreDataUtils.h"
-#import "StatesLegeAppDelegate.h"
 
 @implementation NotesViewController
 

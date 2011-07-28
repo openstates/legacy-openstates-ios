@@ -20,7 +20,7 @@
 #import "CalendarDetailViewController.h"
 
 #import "TexLegeTheme.h"
-#import "TexLegeEmailComposer.h"
+#import "SLFEmailComposer.h"
 
 @implementation CalendarMasterViewController
 
@@ -102,7 +102,6 @@
 		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
 		
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
-	// save off this item's selection to our AppDelegate
 
 	[[SLFPersistenceManager sharedPersistence] setTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 	

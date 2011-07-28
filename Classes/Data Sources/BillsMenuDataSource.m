@@ -13,7 +13,6 @@
 #import "BillsMenuDataSource.h"
 #import "TexLegeTheme.h"
 #import "TexLegeStandardGroupCell.h"
-#import "StatesLegeAppDelegate.h"
 
 @implementation BillsMenuDataSource
 

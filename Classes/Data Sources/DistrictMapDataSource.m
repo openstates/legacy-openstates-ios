@@ -15,16 +15,7 @@
 #import "DistrictMapDataSource.h"
 #import "DisclosureQuartzView.h"
 #import "TexLegeCoreDataUtils.h"
-#import "StatesLegeAppDelegate.h"
 #import "LegislatorObj+RestKit.h"
-
-#if NEEDS_TO_PARSE_KMLMAPS == 1
-#import "DistrictOfficeObj.h"
-#import "DistrictOfficeDataSource.h"
-#import "DistrictMap.h"
-#import "DistrictMapImporter.h"
-#import "TexLegeMapPins.h"
-#endif
 
 @interface DistrictMapDataSource (Private)
 - (NSArray *)sortDescriptors;
@@ -36,10 +27,6 @@
 @synthesize hideTableIndex, byDistrict;
 @synthesize filterChamber, filterString, searchDisplayController;
 
-#if NEEDS_TO_PARSE_KMLMAPS == 1
-@synthesize importer;
-#endif
-
 - (Class)dataClass {
 	return [DistrictMapObj class];
 }
@@ -50,16 +37,6 @@
 		self.filterString = [NSMutableString stringWithString:@""];
 		fetchedResultsController = nil;
 		
-#if NEEDS_TO_PARSE_KMLMAPS == 1
-
-		DistrictOfficeDataSource *tempDistOff = [[[DistrictOfficeDataSource alloc] init] autorelease];
-///#warning hacky place to put this, but we need to initialize district offices i guess? ....
-		
-		mapCount = 0;
-		self.importer = [[[DistrictMapImporter alloc] initWithChamber:SENATE dataSource:self] autorelease];
-		
-		self.byDistrict = NO;
-#endif
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(dataSourceReceivedMemoryWarning:)
 													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];				
@@ -89,9 +66,6 @@
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 
-#if NEEDS_TO_PARSE_KMLMAPS == 1
-	self.importer = nil;
-#endif
 	self.fetchedResultsController = nil;
 	self.filterString = nil;
 	self.searchDisplayController = nil;
@@ -335,118 +309,6 @@
         debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }           
 }
-
-#if NEEDS_TO_PARSE_KMLMAPS == 1
-#warning PARSE KML IS TURNED ON!!! MAKE SURE TO INCLUDE KMLs
-
-
-- (void)checkDistrictMaps {
-	
-	for (DistrictMapObj *map in [TexLegeCoreDataUtils allDistrictMapsLight]) {
-		if (!map.legislator) {
-			debug_NSLog(@"district without a legislator!");
-			assert(map.legislator);
-			return;
-		}
-		
-		if (![map boundingBoxContainsCoordinate:map.coordinate] || ![map districtContainsCoordinate:map.coordinate]) {
-			//debug_NSLog(@"District %@ center is outside the district, finding appropriate district office...", map.district);
-			
-			BOOL foundOne = NO;
-			for (DistrictOfficeObj *office in map.legislator.districtOffices) {
-				if ([map boundingBoxContainsCoordinate:office.coordinate] && [map districtContainsCoordinate:office.coordinate]) {
-					//debug_NSLog(@"Found one at %@", office.address);
-					map.centerLat = office.latitude;
-					map.centerLon = office.longitude;
-					foundOne = YES;
-					break;
-				}
-			}
-			if (!foundOne)
-				debug_NSLog(@"District had no suitable offices inside the boundaries, district=%@ chamber=%@ legislator=%@", 
-							map.district, map.chamber, map.legislator.lastname);
-		}
-		
-	}	 
- 	// Save the context.
-	NSError *error;
-	if (![[DistrictMapObj managedObjectContext] save:&error]) {
-		// Handle the error...
-	}
-	
-}
-
-
-- (void)insertDistrictMaps:(NSArray *)districtMaps
-{	
-	NSManagedObjectContext *moc = [DistrictMapObj managedObjectContext];
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictMapObj" 
-											  inManagedObjectContext:moc];
-	
-	
-	// iterate over the values in the raw  dictionary
-	for (DistrictMap * map in districtMaps)
-	{
-		// create an legislator instance for each
-		DistrictMapObj *newObject = [NSEntityDescription insertNewObjectForEntityForName:
-										 [entity name] inManagedObjectContext:moc];
-		
-//		CLLocationCoordinate2D *coordinatesCArray;
-//		UIColor					*lineColor;
-
-//		@property (nonatomic, retain) id lineColor;
-		
-		newObject.district = map.district;
-		newObject.chamber = map.chamber;
-		newObject.lineWidth = map.lineWidth;
-				
-		
-		// regionDict
-		newObject.centerLat = [NSNumber numberWithDouble:map.region.center.latitude];
-		newObject.centerLon = [NSNumber numberWithDouble:map.region.center.longitude];
-		newObject.spanLat = [NSNumber numberWithDouble:map.region.span.latitudeDelta];
-		newObject.spanLon = [NSNumber numberWithDouble:map.region.span.longitudeDelta];
-		
-		// bounding box
-		newObject.maxLat = [map.boundingBox valueForKey:@"maxLat"];
-		newObject.minLat = [map.boundingBox valueForKey:@"minLat"];
-		newObject.maxLon = [map.boundingBox valueForKey:@"maxLon"];
-		newObject.minLon = [map.boundingBox valueForKey:@"minLon"];
-		
-		newObject.numberOfCoords = map.numberOfCoords;
-		newObject.coordinatesData = [map.coordinatesData copy];
-		
-		LegislatorObj *legislatorObject = [TexLegeCoreDataUtils legislatorForDistrict:map.district andChamber:map.chamber withContext:context];
-		if (legislatorObject) {
-			newObject.legislator = legislatorObject;
-			newObject.pinColorIndex = ([legislatorObject.party_id integerValue] == REPUBLICAN) ? [NSNumber numberWithInteger:TexLegePinAnnotationColorRed] : [NSNumber numberWithInteger:TexLegePinAnnotationColorBlue];
-		}
-		else {
-			newObject.pinColorIndex = [NSNumber numberWithInteger:TexLegePinAnnotationColorGreen];
-			debug_NSLog(@"No Legislator Found for chamber=%@ district=%@", map.chamber, map.district); 
-		}
-
-		
-		mapCount++;
-		
-	}
-	// Save the context.
-	NSError *error;
-	if (![moc save:&error]) {
-		// Handle the error...
-	}
-	
-	if (mapCount ==31) {
-		self.importer = nil;
-		self.importer = [[[DistrictMapImporter alloc] initWithChamber:HOUSE dataSource:self] autorelease];
-	}
-	
-	if (mapCount == 181) {
-		[self checkDistrictMaps];
-	}
-}
-
-#endif
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_START" object:self];

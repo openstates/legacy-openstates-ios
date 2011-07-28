@@ -9,7 +9,6 @@
 #import "TexLegeTheme.h"
 #import "ChamberCalendarObj.h"
 #import "DisclosureQuartzView.h"
-#import "StatesLegeAppDelegate.h"
 #import "CalendarEventsLoader.h"
 
 @interface CalendarDataSource (Private)

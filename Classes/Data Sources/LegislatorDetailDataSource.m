@@ -24,9 +24,6 @@
 
 #import "UtilityMethods.h"
 #import "TableCellDataObject.h"
-#import "StatesLegeAppDelegate.h"
-
-#import "UIImage+ResolutionIndependent.h"
 
 #import "TexLegeStandardGroupCell.h"
 #import "TexLegeGroupCellProtocol.h"

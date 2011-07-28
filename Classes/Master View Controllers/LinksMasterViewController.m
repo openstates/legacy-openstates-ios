@@ -1,4 +1,4 @@
-    //
+//
 //  LinksMasterViewController.m
 //  Created by Gregory Combs on 8/13/10.
 //
@@ -19,7 +19,7 @@
 
 #import "SVWebViewController.h"
 #import "TexLegeTheme.h"
-#import "TexLegeEmailComposer.h"
+#import "SLFEmailComposer.h"
 #import "TexLegeReachability.h"
 #import "StatesListViewController.h"
 #import "StateMetaLoader.h"
@@ -150,12 +150,12 @@
 			NSString *appVer = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 
 			NSMutableString *body = [NSMutableString string];
-			[body appendFormat:NSLocalizedStringFromTable(@"TexLege Version: %@\n", @"StandardUI", @"Text to be included in TexLege support emails."), appVer];
-			[body appendFormat:NSLocalizedStringFromTable(@"iOS Version: %@\n", @"StandardUI", @"Text to be included in TexLege support emails."), [[UIDevice currentDevice] systemVersion]];
-			[body appendFormat:NSLocalizedStringFromTable(@"iOS Device: %@\n", @"StandardUI", @"Text to be included in TexLege support emails."), [[UIDevice currentDevice] model]];
-			[body appendString:NSLocalizedStringFromTable(@"\nDescription of Problem, Concern, or Question:\n", @"StandardUI", @"Text to be included in TexLege support emails.")];
-			[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:supportEmail 
-																			 subject:NSLocalizedStringFromTable(@"TexLege Support Question / Concern", @"StandardUI", @"Subject to be included in TexLege support emails.") 
+			[body appendFormat:NSLocalizedStringFromTable(@"App Version: %@\n", @"StandardUI", @"Text to be included in support emails."), appVer];
+			[body appendFormat:NSLocalizedStringFromTable(@"iOS Version: %@\n", @"StandardUI", @"Text to be included in support emails."), [[UIDevice currentDevice] systemVersion]];
+			[body appendFormat:NSLocalizedStringFromTable(@"iOS Device: %@\n", @"StandardUI", @"Text to be included in support emails."), [[UIDevice currentDevice] model]];
+			[body appendString:NSLocalizedStringFromTable(@"\nDescription of Problem, Concern, or Question:\n", @"StandardUI", @"Text to be included in support emails.")];
+			[[SLFEmailComposer sharedSLFEmailComposer] presentMailComposerTo:supportEmail 
+																			 subject:NSLocalizedStringFromTable(@"Technical Support Question / Concern", @"StandardUI", @"Subject to be included in support emails.") 
 																				body:body commander:self];
 			return;
 		}

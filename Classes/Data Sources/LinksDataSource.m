@@ -11,7 +11,6 @@
 //
 
 #import "LinksDataSource.h"
-#import "StatesLegeAppDelegate.h"
 #import "UtilityMethods.h"
 #import "TexLegeStandardGroupCell.h"
 #import "TexLegeTheme.h"

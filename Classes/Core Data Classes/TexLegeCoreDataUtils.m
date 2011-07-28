@@ -17,7 +17,6 @@
 #import "DistrictMapObj+RestKit.h"
 #import "DistrictOfficeObj.h"
 #import "StafferObj.h"
-#import "StatesLegeAppDelegate.h"
 #import "NSDate+Helper.h"
 #import "LocalyticsSession.h"
 #import "TexLegeObjectCache.h"

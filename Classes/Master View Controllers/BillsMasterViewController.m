@@ -14,7 +14,7 @@
 #import "BillsDetailViewController.h"
 #import "UtilityMethods.h"
 
-#import "StatesLegeAppDelegate.h"
+#import "AppDelegate.h"
 #import "SLFPersistenceManager.h"
 
 #import "TableDataSourceProtocol.h"
@@ -208,7 +208,7 @@
 				self.detailViewController = nil;
 			}
 			else if (changingDetails)
-				[[[StatesLegeAppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.detailViewController] animated:NO];
+				[[[AppDelegate appDelegate] detailNavigationController] setViewControllers:[NSArray arrayWithObject:self.detailViewController] animated:NO];
 		}			
 	}
 	
@@ -216,7 +216,6 @@
 	else {
 		dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
 	
-		// save off this item's selection to our AppDelegate
 		[[SLFPersistenceManager sharedPersistence] setTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 	
 		if (!dataObject || ![dataObject isKindOfClass:[NSDictionary class]])

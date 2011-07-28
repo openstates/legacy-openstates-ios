@@ -11,7 +11,6 @@
 //
 
 #import "LegislatorContributionsDataSource.h"
-#import "StatesLegeAppDelegate.h"
 #import "TexLegeTheme.h"
 #import "OpenLegislativeAPIs.h"
 #import "TexLegeStandardGroupCell.h"

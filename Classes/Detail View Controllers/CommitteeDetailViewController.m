@@ -18,12 +18,12 @@
 #import "UtilityMethods.h"
 #import "LegislatorDetailViewController.h"
 #import "SVWebViewController.h"
-#import "StatesLegeAppDelegate.h"
+#import "AppDelegate.h"
 #import "TexLegeTheme.h"
 #import "LegislatorCell.h"
 #import "LegislatorCellView.h"
 #import "TexLegeStandardGroupCell.h"
-#import "TexLegeEmailComposer.h"
+#import "SLFEmailComposer.h"
 #import "LocalyticsSession.h"
 #import "LegislatorObj+RestKit.h"
 #import "CommitteePositionObj+RestKit.h"
@@ -113,7 +113,7 @@ CGFloat quartzRowHeight = 73.f;
 	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
 	if (self.committee == nil && ![UtilityMethods isLandscapeOrientation])  {
 		
-		self.committee = [[[StatesLegeAppDelegate appDelegate] committeeMasterVC] selectObjectOnAppear];		
+		self.committee = [[[AppDelegate appDelegate] committeeMasterVC] selectObjectOnAppear];		
 	}
 }
 
@@ -137,8 +137,6 @@ CGFloat quartzRowHeight = 73.f;
  */
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-	//[self showPopoverMenus:UIDeviceOrientationIsPortrait(toInterfaceOrientation)];
-	//[[StatesLegeAppDelegate appDelegate] resetPopoverMenus];
 	
 	NSArray *visibleCells = self.tableView.visibleCells;
 	for (id cell in visibleCells) {
@@ -578,7 +576,7 @@ CGFloat quartzRowHeight = 73.f;
 		
 		switch (row) {
 			case kInfoSectionClerk:	
-				[[TexLegeEmailComposer sharedTexLegeEmailComposer] presentMailComposerTo:cellInfo.entryValue 
+				[[SLFEmailComposer sharedSLFEmailComposer] presentMailComposerTo:cellInfo.entryValue 
 																				 subject:@"" body:@"" commander:self];
 				break;
 			case kInfoSectionPhone:	{// dial the number
