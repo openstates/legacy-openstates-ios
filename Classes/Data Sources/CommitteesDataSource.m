@@ -11,88 +11,145 @@
 //
 
 #import "CommitteesDataSource.h"
+#import "SLFDataModels.h"
+#import "StateMetaLoader.h"
+
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
-#import "TexLegeCoreDataUtils.h"
-#import "CommitteePositionObj+RestKit.h"
-#import "CommitteeObj+RestKit.h"
-
-@interface CommitteesDataSource (Private)
-@end
 
 @implementation CommitteesDataSource
+@synthesize resourcePath;
+@synthesize resourceClass;
+@synthesize stateID;
+@synthesize committees;
 
 @synthesize fetchedResultsController;
-
 @synthesize hideTableIndex;
 @synthesize filterChamber, filterString, searchDisplayController;
 
-- (Class)dataClass {
-	return [CommitteeObj class];
-}
-
 - (id)init {
 	if ((self = [super init])) {
+        
+        self.resourceClass = [SLFCommittee class];
+        self.resourcePath = @"/committees/";        
+
+        
 		self.filterChamber = 0;
 		self.filterString = [NSMutableString stringWithString:@""];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(dataSourceReceivedMemoryWarning:)
 													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+
 		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(resetCoreData:) name:@"RESTKIT_LOADED_COMMITTEEOBJ" object:nil];	
-		
-	}
+												 selector:@selector(stateChanged:) 
+                                                     name:kStateMetaNotifyStateLoaded 
+                                                   object:nil];
+        
+    }
 	return self;
 }
 
-- (void)resetCoreData:(NSNotification *)notification {
-	[NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
-	self.fetchedResultsController = nil;
-	NSError *error = nil;
-	[self.fetchedResultsController performFetch:&error];
-}
+
+
 
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-
+    
 	self.fetchedResultsController = nil;
 	self.searchDisplayController = nil;
 	self.filterString = nil;
-	
+	self.resourcePath = nil;
+    self.committees = nil;
+    self.stateID = nil;
     [super dealloc];
 }
+
+
+
 
 -(void)dataSourceReceivedMemoryWarning:(id)sender {
 	// let's give this a swinging shot....	
 	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
-		[[CommitteeObj managedObjectContext] refreshObject:object mergeChanges:NO];
+		[[SLFCommittee managedObjectContext] refreshObject:object mergeChanges:NO];
 	}
 }
+
+
+
+- (void)loadDataFromDataStore {
+    self.committees = nil;
+	NSFetchRequest* fetchRequest = [SLFCommittee fetchRequest];
+    
+    NSSortDescriptor *nameInitialSortOrder = [[NSSortDescriptor alloc] initWithKey:@"committeeName" ascending:YES] ;
+	[fetchRequest setSortDescriptors:[NSArray arrayWithObjects:nameInitialSortOrder, nil]];
+    
+	self.committees = [SLFCommittee objectsWithFetchRequest:fetchRequest];
+}
+
+- (void)stateChanged:(NSNotification *)notification {
+    self.stateID = [[[StateMetaLoader sharedStateMeta] selectedState] abbreviation];
+}
+
+- (void)resetCoreData:(NSNotification *)notification {
+    /*
+     [NSFetchedResultsController deleteCacheWithName:[self.fetchedResultsController cacheName]];
+     self.fetchedResultsController = nil;
+     NSError *error = nil;
+     [self.fetchedResultsController performFetch:&error];*/
+    [self loadDataFromDataStore];
+}
+
+
+- (void)setStateID:(NSString *)newID {
+    [stateID release];
+    stateID = [newID copy];
+    if (newID) {
+        //self.title = [NSString stringWithFormat:@"%@ Legislators", [newID uppercaseString]];
+        //[self loadDataFromDataStore];
+        [self loadData];
+    }
+}
+
+- (void)loadData {
+    
+    if (!self.stateID || [[NSNull null] isEqual:self.stateID])
+        return;
+    
+    // Load the object model via RestKit	
+    RKObjectManager* objectManager = [RKObjectManager sharedManager];
+    
+    RKObjectMapping* objMapping = [objectManager.mappingProvider objectMappingForClass:self.resourceClass];
+    
+	
+	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
+								 self.stateID, @"state",
+								 SUNLIGHT_APIKEY, @"apikey",
+								 nil];
+	NSString *newPath = [self.resourcePath appendQueryParams:queryParams];
+    
+    [objectManager loadObjectsAtResourcePath:newPath objectMapping:objMapping delegate:self];
+}
+
+- (void)reloadButtonWasPressed:(id)sender {
+	// Load the object model via RestKit
+	[self loadData];
+}
+
 
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
 
-- (BOOL)showDisclosureIcon
-{ return YES; }
-
 - (BOOL)usesCoreData
 { return YES; }
 
-- (BOOL)canEdit
-{ return NO; }
-
-
-// atomic number is displayed in a plain style tableview
-- (UITableViewStyle)tableViewStyle {
-	return UITableViewStylePlain;
-}
-
-
 // return the committee at the index in the sorted by symbol array
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
-	CommitteeObj *tempEntry = nil;
+    return [self.committees objectAtIndex:indexPath.row];
+
+	/*
+    SLFCommittee *tempEntry = nil;
 	@try {
 		tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	}
@@ -102,18 +159,22 @@
 		[self removeFilter];
 		tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	}
-	return tempEntry;
+	return tempEntry;*/
 }
 
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject {
-	NSIndexPath *tempIndex = nil;
+    
+    NSIndexPath *tempIndex = nil;
 	@try {
-		tempIndex = [self.fetchedResultsController indexPathForObject:dataObject];
+        NSInteger row = [self.committees indexOfObject:dataObject];
+        tempIndex = [NSIndexPath indexPathForRow:row inSection:0];
+		//tempIndex = [self.fetchedResultsController indexPathForObject:dataObject];
 	}
 	@catch (NSException * e) {
 	}
 	
 	return tempIndex;
+    
 }
 
 // UITableViewDataSource methods
@@ -142,7 +203,7 @@
 		
 	}
     
-	CommitteeObj *tempEntry = [self dataObjectForIndexPath:indexPath];
+	SLFCommittee *tempEntry = [self dataObjectForIndexPath:indexPath];
 	
 	if (tempEntry == nil) {
 		debug_NSLog(@"Busted in CommitteeDataSource.m: cellForRowAtIndexPath -> Couldn't get committee data for row.");
@@ -153,7 +214,7 @@
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 	
 	cell.detailTextLabel.text = tempEntry.committeeName;
-	cell.textLabel.text = [tempEntry typeString];
+	cell.textLabel.text = chamberStringFromOpenStates(tempEntry.chamber);
 
 	/*
 	 if (tableView == self.searchDisplayController.searchResultsTableView) {
@@ -172,13 +233,13 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {	
-	NSInteger count = [[fetchedResultsController sections] count];		
-	if (count > 1 /*&! self.hasFilter*/)  {
+	/*NSInteger count = [[fetchedResultsController sections] count];		
+	if (count > 1 )  {
 		return count; 
-	}
+	}*/
 	return 1;	
 }
-
+/*
 // This is for the little index along the right side of the table ... use nil if you don't want it.
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
 	return  hideTableIndex ? nil : [fetchedResultsController sectionIndexTitles] ;
@@ -188,29 +249,31 @@
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
 	return index; // index ..........
 }
-
+*/
 - (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section {
-	// eventually (soon) we'll need to create a new fetchedResultsController to filter for chamber selection
+/*	// eventually (soon) we'll need to create a new fetchedResultsController to filter for chamber selection
 	NSInteger count = [[fetchedResultsController sections] count];		
 	if (count > 1) {
 		id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:section];
 		count = [sectionInfo numberOfObjects];
 	}
-	return count;
+	return count;*/
+    return [self.committees count];
 }
 
+/*
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	// this table has multiple sections. One for each unique character that an element begins with
 	// [A,B,C,D,E,F,G,H,I,K,L,M,N,O,P,R,S,T,U,V,X,Y,Z]
 	// return the letter that represents the requested section
 	
 	NSInteger count = [[fetchedResultsController sections] count];		
-	if (count > 1 /*&! self.hasFilter*/)  {
+	if (count > 1 )  {
 		id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:section];
 		return [sectionInfo indexTitle]; // or [sectionInfo name];
 	}
 	return @"";
-}
+}*/
 
 #pragma mark -
 #pragma mark Filtering Functions
@@ -239,15 +302,26 @@
 - (void) updateFilterPredicate {
 	NSMutableString * predString = [NSMutableString stringWithString:@""];
 	
-	if (self.filterString.length > 0)	// do some string filtering
-			[predString appendFormat:@"(committeeName contains[cd] '%@')", self.filterString];
-		if (self.filterChamber > 0) {		// do some chamber filtering
-			if (predString.length > 0)	// we already have some predicate action, insert "AND"
-				[predString appendString:@" AND "];
-			[predString appendFormat:@"((committeeType == %@) OR (committeeType == 3))", [NSNumber numberWithInteger:self.filterChamber]];
-			
-		}
-		
+    if (self.filterChamber > 0)	// do some chamber filtering
+		[predString appendFormat:@"(chamber LIKE[cd] '%@')", stringForChamber(self.filterChamber, TLReturnOpenStates)];
+	if (self.filterString.length > 0) {		// do some string filtering
+		if (predString.length > 0)	// we already have some predicate action, insert "AND"
+			[predString appendString:@" AND "];
+		[predString appendFormat:@"(committeeName CONTAINS[cd] '%@')", self.filterString];
+	}
+    if (predString.length > 0 && self.stateID) {
+        [predString appendFormat:@" AND (stateID LIKE[cd] '%@')", self.stateID];
+    }
+    
+	NSPredicate *predicate = (predString.length > 0) ? [NSPredicate predicateWithFormat:predString] : nil;
+	if (predicate) {
+        self.committees = [SLFCommittee findAllWithPredicate:predicate];
+    }
+    else {
+        [self loadDataFromDataStore];
+    }
+/*
+    		
 	NSPredicate *predicate = (predString.length > 0) ? [NSPredicate predicateWithFormat:predString] : nil;
 
 	// You've got to delete the cache, or disable caching before you modify the predicate...
@@ -258,7 +332,7 @@
 	if (![[self fetchedResultsController] performFetch:&error]) {
         // Handle error
         debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-    }           
+    }           */
 }
 
 // probably unnecessary, but we might as well validate the new info with our expectations...
@@ -282,14 +356,37 @@
 #pragma mark -
 #pragma mark Core Data Methods
 
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_START" object:self];
-	//    [self.tableView beginUpdates];
-}
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_END" object:self];
-	//    [self.tableView endUpdates];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataUpdated object:self];
 }
+
+
+#pragma mark RKObjectLoaderDelegate methods
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {
+	[[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"LastUpdatedAt"];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+    
+    NSSortDescriptor* first = [NSSortDescriptor sortDescriptorWithKey:@"committeeName" ascending:YES];
+	self.committees = [objects sortedArrayUsingDescriptors:[NSArray arrayWithObjects:first, nil]];
+    
+	[[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataUpdated object:self];
+    
+    
+}
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
+	UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Error" 
+                                                     message:[error localizedDescription] 
+                                                    delegate:nil 
+                                           cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+	[alert show];
+	NSLog(@"Hit error: %@", error);
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataError object:self];
+}
+
+
 
 /*
  Set up the fetched results controller.
@@ -301,7 +398,7 @@
     }
     
 	// Create the fetch request for the entity.
-	NSFetchRequest *fetchRequest = [CommitteeObj fetchRequest];
+	NSFetchRequest *fetchRequest = [SLFCommittee fetchRequest];
 			
 	// Sort by committeeName.
 	NSSortDescriptor *nameInitialSortOrder = [[NSSortDescriptor alloc] initWithKey:@"committeeName" ascending:YES];
@@ -317,7 +414,7 @@
 	
 	fetchedResultsController = [[NSFetchedResultsController alloc] 
 															 initWithFetchRequest:fetchRequest 
-															 managedObjectContext:[CommitteeObj managedObjectContext] 
+															 managedObjectContext:[SLFCommittee managedObjectContext] 
 															 sectionNameKeyPath:sectionString cacheName:@"Committees"];
 
     fetchedResultsController.delegate = self;

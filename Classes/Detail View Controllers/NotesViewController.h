@@ -13,17 +13,17 @@
 
 #define kStaticNotes NSLocalizedStringFromTable(@"Notes", @"DataTableUI", @"Default entry for a custom notes field.")
 
-@class LegislatorObj;
+@class SLFLegislator;
 
 @interface NotesViewController : UIViewController {
 }
-@property (nonatomic, retain) NSNumber *dataObjectID;
-@property (nonatomic, assign) LegislatorObj *legislator;
+@property (nonatomic, retain) NSString *dataObjectID;
+@property (nonatomic, assign) SLFLegislator *legislator;
 @property (nonatomic, retain) IBOutlet UITextView *notesText;
 @property (nonatomic, retain) IBOutlet UILabel *nameLabel;
 @property (nonatomic, retain) IBOutlet UINavigationItem *navTitle;
 @property (nonatomic, retain) IBOutlet UINavigationBar *navBar;
 
-@property (nonatomic, assign) UITableViewController *backViewController;
+@property (nonatomic, assign) UIViewController *backViewController;
 
 @end

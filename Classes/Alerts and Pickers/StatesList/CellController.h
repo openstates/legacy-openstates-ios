@@ -16,7 +16,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 
-@property (nonatomic,retain) NSDictionary *dataObject;
+@property (nonatomic,retain) NSObject *dataObject;
 
 @optional
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;

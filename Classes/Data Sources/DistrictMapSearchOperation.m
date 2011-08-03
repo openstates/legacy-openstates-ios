@@ -12,10 +12,10 @@
 
 #import "DistrictMapSearchOperation.h"
 #import "NSInvocation+CWVariableArguments.h"
-#import "DistrictMapObj+MapKit.h"
+#import "SLFDataModels.h"
+
 #import "OpenLegislativeAPIs.h"
 #import "TexLegeReachability.h"
-#import "LegislatorObj.h"
 #import "JSONKit.h"
 #import "UtilityMethods.h"
 
@@ -129,17 +129,15 @@
 		
 		for (NSMutableDictionary *member in memberList) {
 			
-			NSString *legeID = [member objectForKey:@"leg_id"];
+			NSString *legID = [member objectForKey:@"leg_id"];
 			
-			if (IsEmpty(legeID))
+			if (IsEmpty(legID))
 				continue;
 			
-			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.openstatesID == %@", legeID];
-			LegislatorObj *legislator = [LegislatorObj objectWithPredicate:predicate];
+			SLFLegislator *legislator = [SLFLegislator findFirstByAttribute:@"legID" withValue:legID];
 			if (legislator) {
-				[foundIDs addObject:legislator.districtMap.districtMapID];
+				[foundIDs addObject:legislator.districtMap.slug];
 				success = YES;
-
 			}
 				
 		}

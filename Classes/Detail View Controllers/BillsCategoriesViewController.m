@@ -11,6 +11,8 @@
 //
 
 #import "BillsCategoriesViewController.h"
+#import "SLFDataModels.h"
+
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
@@ -261,13 +263,13 @@
 		loadingStatus = LOADING_ACTIVE;
 		OpenLegislativeAPIs *api = [OpenLegislativeAPIs sharedOpenLegislativeAPIs];
 		StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
-		if (IsEmpty(meta.selectedState) || IsEmpty(meta.selectedSession))
+		if (!meta.selectedState || IsEmpty(meta.selectedSession))
 			return;
 		
 		NSString *session = [meta.selectedSession urlSafeString];
 
 		NSDictionary *queryParams = [NSDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
-		NSMutableString *resourcePath = [NSMutableString stringWithFormat:@"/subject_counts/%@/%@/", meta.selectedState, session];
+		NSMutableString *resourcePath = [NSMutableString stringWithFormat:@"/subject_counts/%@/%@/", meta.selectedState.abbreviation, session];
 		if (newChamber > BOTH_CHAMBERS)
 			[resourcePath appendFormat:@"%@/", stringForChamber(newChamber, TLReturnOpenStates)];
 			

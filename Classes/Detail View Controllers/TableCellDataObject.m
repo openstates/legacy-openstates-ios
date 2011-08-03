@@ -15,6 +15,7 @@
 
 @implementation TableCellDataObject
 @synthesize entryValue, isClickable, entryType, title, subtitle, action, parameter;
+@synthesize indexPath;
 
 - (id)initWithDictionary:(NSDictionary *)aDictionary {
 	if ((self = [super init])) {
@@ -42,22 +43,22 @@
 	self.entryValue = self.subtitle = self.title = nil;
 	self.parameter = nil;
 	self.action = nil;
-	
+	self.indexPath = nil;
+    
     [super dealloc];
 }
 
 - (NSString *)description {
-	NSString *string = [NSString stringWithFormat:@"CellDataObject properties: \
-						title = %@ \
-						subtitle = %@ \
-						entryValue = %@ \
-						entryType = %d \
-						isClickable = %d \
-						action = %@ \
-						parameter = %@", 
-						self.title, self.subtitle, self.entryValue, self.entryType, 
-						self.isClickable, self.action, self.parameter];
-	return string;
+    return [[self dictionaryWithValuesForKeys:[NSArray arrayWithObjects:
+                                              @"title",
+                                              @"subtitle",
+                                              @"entryValue",
+                                              @"entryType",
+                                              @"isClickable",
+                                              @"action",
+                                              @"parameter",
+                                              @"indexPath",
+                                               nil]] description];
 }
 
 - (NSURL *)generateURL {

@@ -12,7 +12,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class LegislatorObj;
+@class SLFLegislator;
 @interface LegislatorCellView : UIView
 {
 }
@@ -24,13 +24,12 @@
 @property (copy, nonatomic) NSString *district;
 @property (copy, nonatomic) NSString *role;
 
-@property (nonatomic) NSInteger party_id;
 @property (nonatomic) BOOL highlighted;
 @property (nonatomic) BOOL useDarkBackground;
 
 @property (nonatomic) BOOL wideSize;
 @property (nonatomic,readonly) CGSize cellSize; 
 
-- (void)setLegislator:(LegislatorObj *)value;
+- (void)setLegislator:(SLFLegislator *)value;
 
 @end

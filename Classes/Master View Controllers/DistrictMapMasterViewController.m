@@ -12,13 +12,12 @@
 
 #import "DistrictMapMasterViewController.h"
 #import "DistrictMapDataSource.h"
-#import "DistrictMapObj+MapKit.h"
+#import "SLFDataModels.h"
+
 #import "MapViewController.h"
 #import "UtilityMethods.h"
 #import "SLFPersistenceManager.h"
 #import "TexLegeTheme.h"
-#import "DistrictMapObj.h"
-#import "TexLegeCoreDataUtils.h"
 
 @interface DistrictMapMasterViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
@@ -129,7 +128,7 @@
 	
 	[[SLFPersistenceManager sharedPersistence] setTableSelection:nil forKey:NSStringFromClass([self class])];
 	
-	DistrictMapObj *map = dataObject;
+	SLFDistrictMap *map = dataObject;
 
 	if (!self.detailViewController) {
 		MapViewController *tempVC = [[MapViewController alloc] init];
@@ -147,7 +146,7 @@
 
 			[mapView addAnnotation:map];
 			[mapVC moveMapToAnnotation:map];	
-			[mapView performSelector:@selector(addOverlay:) withObject:[map polygon] afterDelay:1.0f];
+			[mapView performSelector:@selector(addOverlay:) withObject:map.districtPolygon afterDelay:1.0f];
 		}
 		if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
 			[self searchBarCancelButtonClicked:nil];
@@ -158,7 +157,7 @@
 			[self.navigationController pushViewController:self.detailViewController animated:YES];
 			self.detailViewController = nil;
 		}
-		[[DistrictMapObj managedObjectContext] refreshObject:map mergeChanges:YES];
+		[[SLFDistrictMap managedObjectContext] refreshObject:map mergeChanges:YES];
 	}
 	
 }

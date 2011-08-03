@@ -10,12 +10,12 @@
 //
 //
 
-#import "TexLegeTheme.h"
-#import "DistrictMapObj+RestKit.h"
 #import "DistrictMapDataSource.h"
+#import "SLFDataModels.h"
+
+#import "TexLegeTheme.h"
+
 #import "DisclosureQuartzView.h"
-#import "TexLegeCoreDataUtils.h"
-#import "LegislatorObj+RestKit.h"
 
 @interface DistrictMapDataSource (Private)
 - (NSArray *)sortDescriptors;
@@ -23,13 +23,11 @@
 
 
 @implementation DistrictMapDataSource
+@synthesize resourcePath;
+@synthesize resourceClass;
 @synthesize fetchedResultsController;
 @synthesize hideTableIndex, byDistrict;
 @synthesize filterChamber, filterString, searchDisplayController;
-
-- (Class)dataClass {
-	return [DistrictMapObj class];
-}
 
 - (id)init {
 	if ((self = [super init])) {
@@ -59,13 +57,13 @@
 -(void)dataSourceReceivedMemoryWarning:(id)sender {
 	// let's give this a swinging shot....	
 	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
-		[[DistrictMapObj managedObjectContext] refreshObject:object mergeChanges:NO];
+		[[SLFDistrictMap managedObjectContext] refreshObject:object mergeChanges:NO];
 	}
 }
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-
+    self.resourcePath = nil;
 	self.fetchedResultsController = nil;
 	self.filterString = nil;
 	self.searchDisplayController = nil;
@@ -75,20 +73,8 @@
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
 
-- (BOOL)showDisclosureIcon
-{ return YES; }
-
 - (BOOL)usesCoreData
 { return YES; }
-
-- (BOOL)canEdit
-{ return NO; }
-
-
-// atomic number is displayed in a plain style tableview
-- (UITableViewStyle)tableViewStyle {
-	return UITableViewStylePlain;
-}
 
 #pragma mark -
 #pragma mark Data Object Methods
@@ -148,7 +134,7 @@
 		//[iv release];
 	}
     
-	DistrictMapObj *tempEntry = [self dataObjectForIndexPath:indexPath];
+	SLFDistrictMap *tempEntry = [self dataObjectForIndexPath:indexPath];
 	
 	if (tempEntry == nil) {
 		debug_NSLog(@"Busted in DistrictMapDataSource.m: cellForRowAtIndexPath -> Couldn't get object data for row.");
@@ -163,13 +149,13 @@
 	if (self.byDistrict)
 		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@ (%@)", localDist, 
 									 [tempEntry valueForKey:@"district"], 
-									 [tempEntry valueForKeyPath:@"legislator.lastname"]];
+									 [tempEntry valueForKeyPath:@"legislator.lastName"]];
 	else
 		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%@ %@)", 
-									 [[tempEntry valueForKey:@"legislator"] legProperName], localAbbrev,
+									 [tempEntry valueForKeyPath:@"legislator.fullName"], localAbbrev,
 									 [tempEntry valueForKey:@"district"]];
 	
-	cell.textLabel.text = stringForChamber([[tempEntry valueForKey:@"chamber"] integerValue], TLReturnFull);
+	cell.textLabel.text = chamberStringFromOpenStates([tempEntry valueForKey:@"chamber"]);
 	
 	
 	cell.accessoryView.hidden = (tableView == self.searchDisplayController.searchResultsTableView);
@@ -252,13 +238,12 @@
 	NSMutableString * predString = [NSMutableString stringWithString:@""];
 	
 	if (self.filterChamber > 0)	// do some chamber filtering
-		[predString appendFormat:@"(chamber = %@)", [NSNumber numberWithInteger:self.filterChamber]];
+		[predString appendFormat:@"(chamber LIKE[cd] '%@')", stringForChamber(self.filterChamber, TLReturnOpenStates)];
 	if (self.filterString.length > 0) {		// do some string filtering
 		if (predString.length > 0)	// we already have some predicate action, insert "AND"
 			[predString appendString:@" AND "];
-		[predString appendFormat:@"((legislator.lastname CONTAINS[cd] '%@') OR (legislator.firstname CONTAINS[cd] '%@')", self.filterString, self.filterString];
-		[predString appendFormat:@" OR (legislator.middlename CONTAINS[cd] '%@') OR (legislator.nickname CONTAINS[cd] '%@')", self.filterString, self.filterString];
-		[predString appendFormat:@" OR (district CONTAINS[cd] '%@') OR (ANY legislator.districtOffices.formattedAddress CONTAINS [cd] '%@'))", self.filterString, self.filterString];
+		[predString appendFormat:@"((legislator.fullName CONTAINS[cd] '%@')", self.filterString];
+		[predString appendFormat:@" OR (district CONTAINS[cd] '%@'))", self.filterString];
 	}
 	NSPredicate *predicate = (predString.length > 0) ? [NSPredicate predicateWithFormat:predString] : nil;
 	
@@ -300,12 +285,8 @@
     }           
 }
 
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_START" object:self];
-	//    [self.tableView beginUpdates];
-}
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"TABLEUPDATE_END" object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataUpdated object:self];
 	//    [self.tableView endUpdates];
 }
 
@@ -322,8 +303,8 @@
 		[sort2 release];
 	}
 	else {
-		NSSortDescriptor *sort1 = [[NSSortDescriptor alloc] initWithKey:@"legislator.lastname" ascending:YES] ;
-		NSSortDescriptor *sort2 = [[NSSortDescriptor alloc] initWithKey:@"legislator.firstname" ascending:YES] ;
+		NSSortDescriptor *sort1 = [[NSSortDescriptor alloc] initWithKey:@"legislator.lastName" ascending:YES] ;
+		NSSortDescriptor *sort2 = [[NSSortDescriptor alloc] initWithKey:@"legislator.firstName" ascending:YES] ;
 		descriptors = [NSArray arrayWithObjects:sort1, sort2, nil];
 		[sort1 release];
 		[sort2 release];
@@ -335,20 +316,13 @@
     if (fetchedResultsController != nil) {
         return fetchedResultsController;
     }
-	NSFetchRequest *fetchRequest = [DistrictMapObj fetchRequest];
+	NSFetchRequest *fetchRequest = [SLFDistrictMap fetchRequest];
 	
-	/* In reality, the light properties thing doesn't actually work without a DictionaryResultType
-		However, you can't use a dictionary result in conjunction with change notification in the FRC.
-		and we need change notification in order to make updating work ... so now we just have to rely
-		on some judicious use of refreshObject: to clear the memory footprint
-	 */
-	[fetchRequest setPropertiesToFetch:[DistrictMapObj lightPropertiesToFetch]];
-//	[fetchRequest setResultType:NSDictionaryResultType];
 	[fetchRequest setSortDescriptors:[self sortDescriptors]];
 	
 	fetchedResultsController = [[NSFetchedResultsController alloc] 
 															 initWithFetchRequest:fetchRequest 
-															 managedObjectContext:[DistrictMapObj managedObjectContext] 
+															 managedObjectContext:[SLFDistrictMap managedObjectContext] 
 															 sectionNameKeyPath:nil cacheName:@"DistrictMaps"];
 	
     fetchedResultsController.delegate = self;

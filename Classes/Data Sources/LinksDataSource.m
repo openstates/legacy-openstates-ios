@@ -17,6 +17,9 @@
 #import "JSONKit.h"
 
 @implementation LinksDataSource
+@synthesize resourcePath;
+@synthesize resourceClass;
+@synthesize items = _items;
 
 enum Sections {
     kHeaderSection = 0,
@@ -24,23 +27,12 @@ enum Sections {
     NUM_SECTIONS
 };
 
-@synthesize items = _items;
 
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
 
-- (BOOL)showDisclosureIcon
-{ return YES; }
-
 - (BOOL)usesCoreData
 { return NO; }
-
-- (BOOL)canEdit
-{ return YES; }
-
-- (UITableViewStyle)tableViewStyle {
-	return UITableViewStylePlain;
-} 
 
 - (id)init {
 	if ((self = [super init])) {
@@ -61,7 +53,7 @@ enum Sections {
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	
+	self.resourcePath = nil;
 	self.items = nil;
     [super dealloc];
 }

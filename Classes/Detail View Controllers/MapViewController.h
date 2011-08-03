@@ -27,7 +27,6 @@
 @property (nonatomic,retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic,retain) IBOutlet UISearchBar *searchBar;
 @property (nonatomic,retain) SVGeocoder *geocoder;
-@property (nonatomic,readonly) MKCoordinateRegion texasRegion;
 @property (nonatomic,retain) UserPinAnnotation *searchLocation;
 @property (nonatomic,assign) MKPolygonView *senateDistrictView, *houseDistrictView;
 

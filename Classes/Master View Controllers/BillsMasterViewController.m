@@ -12,6 +12,8 @@
 
 #import "BillsMasterViewController.h"
 #import "BillsDetailViewController.h"
+#import "SLFDataModels.h"
+
 #import "UtilityMethods.h"
 
 #import "AppDelegate.h"
@@ -89,7 +91,7 @@
 		self.billSearchDS = [[[BillSearchDataSource alloc] initWithSearchDisplayController:self.searchDisplayController] autorelease];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(reloadData:) name:kBillSearchNotifyDataLoaded object:billSearchDS];	
+											 selector:@selector(tableDataChanged:) name:kBillSearchNotifyDataLoaded object:billSearchDS];	
 	
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeSessionLabel:) name:kStateMetaNotifySessionChange object:nil];
     
@@ -143,7 +145,7 @@
 	[super didReceiveMemoryWarning];
 }
 
-- (void)reloadData:(NSNotification *)notification {
+- (void)tableDataChanged:(NSNotification *)notification {
 	[self.tableView reloadData];
 	if (self.searchDisplayController.searchResultsTableView)
 		[self.searchDisplayController.searchResultsTableView reloadData];
@@ -371,9 +373,14 @@
 }
 
 - (NSString *)sessionLabelText {
+    
     StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
-        
-	return [meta displayNameForSession:meta.selectedSession]; //meta.selectedSession;
+    SLFState *aState = meta.selectedState;
+    NSString *tempLabel = [aState displayNameForSession:meta.selectedSession];
+    if (!tempLabel)
+        tempLabel = @"";
+    
+    return tempLabel;
 }
 
 - (IBAction)sessonControlChanged:(NSNumber *)selectedIndex:(id)element {	
@@ -415,9 +422,7 @@
 	NSArray *sessions = [meta sessions];
 	
 	if (IsEmpty(sessions) || IsEmpty(selectedSession)) {
-		NSLog(@"Error when attempting to display legislative sessions control:  state=%@ meta=%@", 
-			  meta.selectedState,
-			  meta.stateMetadata);
+		NSLog(@"Error when attempting to display legislative sessions control:  state=%@", meta.selectedState);
 		return;
 	}
     

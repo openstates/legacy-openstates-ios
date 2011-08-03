@@ -19,12 +19,12 @@ enum {
 	DirectoryTypeCommittee,
 	DirectoryTypeContributions,
 	DirectoryTypeBills,
+	DirectoryTypeMap,
 	// URL types go below here
 	kDirectoryTypeIsURLHandler,
 	DirectoryTypeWeb,
 	DirectoryTypeTwitter,
 	kDirectoryTypeIsExternalHandler,
-	DirectoryTypeMap,
 	DirectoryTypeMail,
 	DirectoryTypePhone,
 	DirectoryTypeSMS,
@@ -34,13 +34,14 @@ enum {
 @interface TableCellDataObject : NSObject {
 	
 }
-@property (nonatomic) BOOL isClickable;
-@property (nonatomic) NSInteger entryType;
+@property (nonatomic, assign) BOOL isClickable;
+@property (nonatomic, assign) NSInteger entryType;
 @property (nonatomic, retain) id entryValue;
 @property (nonatomic, retain) id action;
 @property (nonatomic, retain) id parameter;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;
+@property (nonatomic, retain) NSIndexPath *indexPath;
 
 
 - (NSURL *)generateURL;

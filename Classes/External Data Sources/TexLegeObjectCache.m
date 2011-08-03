@@ -12,12 +12,7 @@
 
 #import "TexLegeObjectCache.h"
 
-#import "LegislatorObj.h"
-#import "CommitteeObj.h"
-#import "CommitteePositionObj.h"
-#import "DistrictMapObj.h"
-#import "DistrictOfficeObj.h"
-#import "StafferObj.h"
+#import "SLFDataModels.h"
 #import "NSDate+Helper.h"
 #import "UtilityMethods.h"
 

@@ -20,3 +20,7 @@ enum TABBAR_ITEM_TAGS {
 	TAB_BILL,
 	TAB_LINK
 };
+
+#define kStateMetaNotifyError           @"STATE_METADATA_ERROR"
+#define kStateMetaNotifyStateLoaded		@"STATE_METADATA_STATE_LOADED"
+#define kStateMetaNotifySessionChange	@"STATE_METADATA_SESSION_CHANGE"

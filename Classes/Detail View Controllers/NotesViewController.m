@@ -11,11 +11,11 @@
 //
 
 #import "NotesViewController.h"
-#import "LegislatorObj+RestKit.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "LocalyticsSession.h"
-#import "TexLegeCoreDataUtils.h"
+
+#import "SLFDataModels.h"
 
 @implementation NotesViewController
 
@@ -62,12 +62,10 @@
 	[[NSUserDefaults standardUserDefaults] synchronize];	
 	NSDictionary *storedNotesDict = [[NSUserDefaults standardUserDefaults] valueForKey:@"LEGE_NOTES"];
 	if (storedNotesDict) {
-		NSString *temp = [storedNotesDict valueForKey:[self.legislator.legislatorID stringValue]];
+		NSString *temp = [storedNotesDict valueForKey:self.legislator.legID];
 		if (temp && [temp length])
 			notesString = temp;
 	}
-	if (!notesString)
-		notesString = self.legislator.notes;
 	
     // Update the views appropriately
     self.nameLabel.text = [self.legislator shortNameForButtons];    
@@ -87,18 +85,18 @@
 #pragma mark -
 #pragma mark Data Objects
 
-- (LegislatorObj *)legislator {
-	LegislatorObj *anObject = nil;
+- (SLFLegislator *)legislator {
+	SLFLegislator *anObject = nil;
 	if (self.dataObjectID) {
-		anObject = [LegislatorObj objectWithPrimaryKeyValue:self.dataObjectID];
+		anObject = [SLFLegislator findFirstByAttribute:@"legID" withValue:self.dataObjectID];
 	}
 	return anObject;
 }
 
-- (void)setLegislator:(LegislatorObj *)anObject {	
+- (void)setLegislator:(SLFLegislator *)anObject {	
 	self.dataObjectID = nil;
 	if (anObject) {
-		self.dataObjectID = [anObject legislatorID];
+		self.dataObjectID = anObject.legID;
 	}
 }
 
@@ -127,11 +125,9 @@
 				newDictionary = [NSMutableDictionary dictionaryWithDictionary:storedNotesDict];
 			}
 			
-			[newDictionary setObject:self.notesText.text forKey:[self.legislator.legislatorID stringValue]];
+			[newDictionary setObject:self.notesText.text forKey:self.legislator.legID];
 			[[NSUserDefaults standardUserDefaults] setObject:newDictionary forKey:@"LEGE_NOTES"];
 			[[NSUserDefaults standardUserDefaults] synchronize];
-
-			self.legislator.notes = self.notesText.text;
 		}
 		
 		NSError *error = nil;

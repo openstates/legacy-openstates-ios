@@ -69,7 +69,7 @@ STAGE7:Bill becomes law / Bill does not become law
 
 	
 	NSString *origChamberStr = [bill objectForKey:@"chamber"];
-	NSInteger origChamber = chamberFromOpenStatesString(origChamberStr);
+	NSInteger origChamber = chamberIntFromOpenStates(origChamberStr);
 	NSInteger oppChamber = (origChamber == HOUSE) ? SENATE : HOUSE;
 	
 	BillType billType = -1;
@@ -177,7 +177,7 @@ STAGE7:Bill becomes law / Bill does not become law
 	BOOL texasCentricParser = [@"tx" isEqual:[bill objectForKey:@"state"]];
 	
 	// What chamber first introduced the bill?
-	NSInteger origChamber = chamberFromOpenStatesString([bill objectForKey:@"chamber"]);
+	NSInteger origChamber = chamberIntFromOpenStates([bill objectForKey:@"chamber"]);
 	NSInteger oppChamber = (origChamber == HOUSE) ? SENATE : HOUSE;
 	
 	NSMutableDictionary *results = [self prepStagesForBill:bill];
@@ -192,7 +192,7 @@ STAGE7:Bill becomes law / Bill does not become law
 		for (NSMutableDictionary *action in [bill objectForKey:@"actions"]) {
 			NSString *actionStr = [action objectForKey:@"action"];
 			NSString *actor = [action objectForKey:@"actor"];
-			NSInteger actChamber = chamberFromOpenStatesString(actor);
+			NSInteger actChamber = chamberIntFromOpenStates(actor);
 			NSArray *types = [action objectForKey:@"type"];
 			
 			// BILL IS IN ORIGINAL CHAMBER

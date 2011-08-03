@@ -66,9 +66,13 @@ enum  {
 NSString *stringInitial(NSString *inString, BOOL parens);
 NSString *abbreviateString(NSString *inString);
 
-NSInteger chamberFromOpenStatesString(NSString *chamberString);
+NSString * chamberStringFromOpenStates(NSString *chamberString);
+NSInteger chamberIntFromOpenStates(NSString *chamberString);
+
 NSString *stringForChamber(NSInteger chamber, TLStringReturnType type);
 NSString *stringForParty(NSInteger party, TLStringReturnType type);
+
+
 BOOL billTypeRequiresGovernor(NSString *billType);
 BOOL billTypeRequiresOpposingChamber(NSString *billType);
 NSString * watchIDForBill(NSDictionary *aBill);

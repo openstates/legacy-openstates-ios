@@ -15,8 +15,9 @@
 #import "TexLegeStandardGroupCell.h"
 
 @implementation BillsMenuDataSource
-
-@synthesize menuItems = _menuItems/*, searchDisplayController*/;
+@synthesize resourcePath;
+@synthesize resourceClass;
+@synthesize menuItems = _menuItems;
 
 enum _menuOrder {
 	kMenuFavorites = 0,
@@ -28,29 +29,13 @@ enum _menuOrder {
 
 // TableDataSourceProtocol methods
 
-- (BOOL)showDisclosureIcon
-{ return YES; }
-
 - (BOOL)usesCoreData
 { return NO; }
 
-- (BOOL)canEdit
-{ return NO; }
-
-// displayed in a plain style tableview
-- (UITableViewStyle)tableViewStyle {
-	return UITableViewStylePlain;
-}
-
-- (id)init {
-	if ((self = [super init])) {
-	}
-	return self;
-}
 
 - (void)dealloc {
 	[_menuItems release];
-	//self.searchDisplayController = nil;
+    self.resourcePath = nil;
 	[super dealloc];
 }
 

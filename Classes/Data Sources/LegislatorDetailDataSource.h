@@ -10,18 +10,23 @@
 //
 //
 
-#import <Foundation/Foundation.h>
-#import "LegislatorObj.h"
+#import <UIKit/UIKit.h>
+#import <RestKit/RestKit.h>
 
-@interface LegislatorDetailDataSource : NSObject <UITableViewDataSource> {
+@class SLFLegislator;
+@interface LegislatorDetailDataSource : NSObject <UITableViewDataSource, RKObjectLoaderDelegate> {
 }
 
-- (id)initWithLegislator:(LegislatorObj *)newObject;
+- (id)initWithLegislatorID:(NSString *)legislatorID;
+- (void)loadData;
+
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject;
 	
-@property (nonatomic,retain) NSNumber *dataObjectID;
-@property (nonatomic,retain) LegislatorObj *legislator;
-@property (nonatomic,retain) NSMutableArray *sectionArray;
+@property (nonatomic,copy)      NSString        *resourcePath;
+@property (nonatomic,assign)    Class            resourceClass;
+
+@property (nonatomic,copy)      NSString        *dataObjectID;
+@property (nonatomic,retain)    SLFLegislator   *legislator;
 
 @end

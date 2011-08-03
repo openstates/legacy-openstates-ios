@@ -24,6 +24,6 @@
 
 @property (nonatomic,copy)      NSString *label;
 @property (nonatomic)           BOOL selected;
-@property (nonatomic,retain)    NSDictionary *dataObject;
+@property (nonatomic,retain)    NSObject *dataObject;
 
 @end

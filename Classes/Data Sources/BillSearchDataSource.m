@@ -11,6 +11,8 @@
 //
 
 #import "BillSearchDataSource.h"
+#import "SLFDataModels.h"
+
 #import "TexLegeReachability.h"
 #import "TexLegeTheme.h"
 #import "TexLegeStandardGroupCell.h"
@@ -355,7 +357,7 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 {
 	
 	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
-	if (IsEmpty(meta.selectedState))
+	if (!meta.selectedState)
 		return;
 		
 	NSString *session = @"session";
@@ -364,7 +366,7 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 	
 	
 	[self startSearchForText:searchString 
-					   state:meta.selectedState
+					   state:meta.selectedState.abbreviation
 					 session:session
 					 chamber:chamber];
 }
@@ -405,7 +407,7 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 
 - (void)startSearchForSubject:(NSString *)searchSubject chamber:(NSInteger)chamber {
 	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
-	if (IsEmpty(meta.selectedState))
+	if (!meta.selectedState)
 		return;
 	
 	NSString *session = @"session";
@@ -413,7 +415,7 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 		session = [NSString stringWithFormat:@"session:%@", meta.selectedSession];
 	
 	[self startSearchForSubject:searchSubject 
-						  state:meta.selectedState 
+						  state:meta.selectedState.abbreviation 
 						session:session 
 						chamber:chamber];
 
@@ -451,7 +453,7 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 	if (NO == IsEmpty(searchSponsorID)) {
 		
 		StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
-		if (IsEmpty(meta.selectedState))
+		if (!meta.selectedState)
 			return;
 		
 		NSString *session = @"session";
@@ -459,7 +461,7 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 			session = [NSString stringWithFormat:@"session:%@", meta.selectedSession];
 		
 		[self startSearchForBillsAuthoredBy:searchSponsorID 
-									  state:meta.selectedState 
+									  state:meta.selectedState.abbreviation 
 									session:session];
 	}
 }

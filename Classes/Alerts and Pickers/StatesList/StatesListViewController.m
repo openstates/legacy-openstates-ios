@@ -11,7 +11,10 @@
 //
 
 #import "StatesListViewController.h"
+#import "SLFDataModels.h"
 #import "StatesListMetaLoader.h"
+
+
 #import "StateMetaLoader.h"
 
 #import "UtilityMethods.h"
@@ -48,10 +51,8 @@
             favorites = [[NSMutableSet alloc] init];
         
         
-        StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesListMeta];
+        [StatesListMetaLoader sharedStatesLoader];
         
-        [statesMeta downloadStatesList];
-
         self.modalPresentationStyle = UIModalPresentationFormSheet;
         
     }
@@ -88,7 +89,7 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(reloadData:) name:kStatesListLoadedKey object:nil];	
+											 selector:@selector(tableDataChanged:) name:kStatesListLoadedKey object:nil];	
 
     self.tableView.rowHeight = 55.f;
     self.tableView.backgroundColor = [TexLegeTheme tableBackground];
@@ -166,7 +167,7 @@
 
 #pragma mark MultiSelect
 
-- (void)reloadData:(NSNotification *)notification {
+- (void)tableDataChanged:(NSNotification *)notification {
     [self constructTableGroups];
     
     [self.tableView reloadData];
@@ -200,22 +201,22 @@
 - (void)constructTableGroups
 {	
     
-    StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesListMeta];
+    StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesLoader];
     
 	self.tableCells = [NSMutableArray array];
     
 	NSInteger i;
 	for (i = 0; i < [statesMeta.states count]; i++)
 	{
-        NSDictionary *dataObject = [statesMeta.states objectAtIndex:i];
+        SLFState *state = [statesMeta.states objectAtIndex:i];
         
-        NSCAssert(dataObject != NULL, @"Received bad data dictionary in StatesListViewController");
+        NSCAssert(state != NULL, @"Received bad data dictionary in StatesListViewController");
         
-        NSString *labelText = [dataObject valueForKey:@"name"];
+        NSString *labelText = state.name;
         
         MultiSelectCellController *cellCtl = [[MultiSelectCellController alloc] initWithLabel:labelText];
         
-        cellCtl.dataObject = dataObject;
+        cellCtl.dataObject = state;
         
         if ([favorites containsObject:labelText])
             cellCtl.selected = YES;
@@ -240,7 +241,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     
-    StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesListMeta];
+    StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesLoader];
 
 	if (NO == IsEmpty(statesMeta.states)) {
         if (!self.tableCells)
@@ -264,7 +265,7 @@
 //
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesListMeta];
+    StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesLoader];
 
     if (statesMeta.loadingStatus > LOADING_IDLE) {
 		if (indexPath.row == 0) {
@@ -297,7 +298,7 @@
 //
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesListMeta];
+    StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesLoader];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -320,15 +321,16 @@
 		[ctl tableView:tableView didSelectRowAtIndexPath:indexPath];
 	}
     
-    if (ctl && NO == [tableView isEditing]) {
-        NSDictionary *dataObject = ctl.dataObject;
-        if (dataObject) {
-            
-            NSString *stateID = [dataObject valueForKey:@"abbreviation"];
+    if (ctl && NO == [tableView isEditing] && [ctl.dataObject isKindOfClass:[SLFState class]]) {
+        SLFState *state = (SLFState *)ctl.dataObject;
+        if (state) {
+            [[StateMetaLoader sharedStateMeta] setSelectedState:state];
+
+/*            NSString *stateID = state.abbreviation;
             if (NO == IsEmpty(stateID)) {
                 [[StateMetaLoader sharedStateMeta] setSelectedState:stateID];
             }
-        }
+*/        }
         
         if (self.parentViewController) {
             [self.parentViewController dismissModalViewControllerAnimated:YES];

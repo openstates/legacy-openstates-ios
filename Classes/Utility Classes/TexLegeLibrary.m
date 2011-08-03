@@ -13,6 +13,7 @@
 #import "TexLegeLibrary.h"
 #import "UtilityMethods.h"
 #import "StateMetaLoader.h"
+#import "SLFState.h"
 
 NSString *stringInitial(NSString *inString, BOOL parens) {
 	if (IsEmpty(inString))
@@ -41,9 +42,9 @@ NSString *abbreviateString(NSString *inString) {
 }
 
 NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
-	NSDictionary *stateMeta = [[StateMetaLoader sharedStateMeta] stateMetadata];
+    SLFState *aState = [[StateMetaLoader sharedStateMeta] selectedState];
 	
-	NSString *chamberName = [StateMetaLoader nameForChamber:chamber];	
+	NSString *chamberName = [aState nameForChamber:chamber];	
 	
 	if (IsEmpty(chamberName)) {	// in case we didn't get it already
 		switch (chamber) {
@@ -75,11 +76,11 @@ NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
 		NSString *title = nil;
 		
 		if (chamber == HOUSE || chamber == SENATE) {
-			if (NO == IsEmpty(stateMeta)) {
+			if (aState) {
 				if (chamber == HOUSE)
-					title = [stateMeta objectForKey:kMetaLowerChamberTitleKey];
+					title = aState.lowerChamberTitle;
 				else if (chamber == SENATE)
-					title = [stateMeta objectForKey:kMetaUpperChamberTitleKey];
+					title = aState.upperChamberTitle;
 			}
 		}			
 		if (IsEmpty(title)) {
@@ -123,7 +124,12 @@ NSString *stringForChamber(NSInteger chamber, TLStringReturnType type) {
 	return chamberName;
 }
 
-NSInteger chamberFromOpenStatesString(NSString *chamberString) {	// upper, lower, joint ...	
+NSString * chamberStringFromOpenStates(NSString *chamberString) {
+    NSInteger chamber = chamberIntFromOpenStates(chamberString);
+    return stringForChamber(chamber, TLReturnFull);
+}
+
+NSInteger chamberIntFromOpenStates(NSString *chamberString) {	// upper, lower, joint ...	
 	NSInteger chamber = BOTH_CHAMBERS;
 	
 	if (NO == IsEmpty(chamberString)) {

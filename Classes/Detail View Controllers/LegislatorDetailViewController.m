@@ -13,17 +13,12 @@
 #import "TableDataSourceProtocol.h"
 #import "LegislatorDetailViewController.h"
 #import "LegislatorDetailDataSource.h"
+#import "SLFDataModels.h"
+#import "SLFLegislator.h"
+
 #import "LegislatorContributionsViewController.h"
-
 #import "LegislatorMasterViewController.h"
-#import "DistrictOfficeObj+MapKit.h"
-#import "DistrictMapObj+RestKit.h"
-#import "DistrictMapObj+MapKit.h"
-#import "CommitteeObj.h"
-#import "CommitteePositionObj.h"
-#import "LegislatorObj+RestKit.h"
 
-#import "TexLegeCoreDataUtils.h"
 #import "UtilityMethods.h"
 #import "TableDataSourceProtocol.h"
 #import "TableCellDataObject.h"
@@ -54,10 +49,10 @@
 @implementation LegislatorDetailViewController
 @synthesize dataObjectID;
 @synthesize dataSource;
-@synthesize headerView, miniBackgroundView;
-
+@synthesize headerView;
+@synthesize legislator;
 @synthesize leg_reelection;
-@synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_tenureLab, leg_nameLab;
+@synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_nameLab;
 @synthesize notesPopover, masterPopover;
 
 #pragma mark -
@@ -72,32 +67,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-		
+    
 	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_LEGISLATOROBJ" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_STAFFEROBJ" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_DISTRICTOFFICEOBJ" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_DISTRICTMAPOBJ" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_COMMITTEEOBJ" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_COMMITTEEPOSITIONOBJ" object:nil];
-	
-	UIImage *sealImage = [UIImage imageNamed:@"seal.png"];
-	UIColor *sealColor = [[UIColor colorWithPatternImage:sealImage] colorWithAlphaComponent:0.5f];	
-	self.miniBackgroundView.backgroundColor = sealColor;
-	//self.headerView.backgroundColor = sealColor;
-	
-	self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+											 selector:@selector(stateChanged:) name:kStateMetaNotifyStateLoaded object:nil];
+    
+    self.headerView.backgroundColor = [self.headerView.backgroundColor colorWithAlphaComponent:0.5f];
+
 	self.clearsSelectionOnViewWillAppear = NO;				
 }
 
 - (void)viewDidUnload {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
+    self.headerView = nil;
+    self.leg_photoView = nil;
+    self.leg_partyLab = self.leg_districtLab = self.leg_nameLab = self.leg_reelection = nil;
+    
 	[super viewDidUnload];
 }
 
@@ -120,14 +105,13 @@
 	self.headerView = nil;
 	self.leg_photoView = nil;
 	self.leg_reelection = nil;
-	self.miniBackgroundView = nil;
 	self.leg_partyLab = nil;
 	self.leg_districtLab = nil;
-	self.leg_tenureLab = nil;
 	self.leg_nameLab = nil;
 	self.notesPopover = nil;
 	self.masterPopover = nil;
 	self.dataObjectID = nil;
+    self.legislator = nil;
 
 	[super dealloc];
 }
@@ -141,86 +125,68 @@
 }
 
 - (void)setupHeader {
-	LegislatorObj *member = self.legislator;
+	SLFLegislator *member = self.legislator;
 	
-	NSString *legName = [NSString stringWithFormat:@"%@ %@",  [member legTypeShortName], [member legProperName]];
+	NSString *legName = [NSString stringWithFormat:@"%@ %@",  abbreviateString([member title]), [member fullName]];
 	self.leg_nameLab.text = legName;
 	self.navigationItem.title = legName;
 
-	self.leg_photoView.image = [UIImage imageNamed:[UIImage highResImagePathWithPath:member.photo_name]];
-	self.leg_partyLab.text = [member party_name];
+	//self.leg_photoView.image = [UIImage imageNamed:[UIImage highResImagePathWithPath:member.photo_name]];
+	self.leg_partyLab.text = member.party;
 	self.leg_districtLab.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"District %@", @"DataTableUI", @"District number"), 
 								 member.district];
-	self.leg_tenureLab.text = [member tenureString];
-	if (member.nextElection) {
-		
-		self.leg_reelection.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"Reelection: %@", @"DataTableUI", @"Year of person's next reelection"), 
-									member.nextElection];
-	}
+	self.leg_reelection.text = member.term;
 
 }
 
 
 - (LegislatorDetailDataSource *)dataSource {
-	LegislatorObj *member = self.legislator;
+	SLFLegislator *member = self.legislator;
+    if (!member && self.dataObjectID) {
+        member = [SLFLegislator findFirstByAttribute:@"legID" withValue:self.dataObjectID];
+    }
 	if (!dataSource && member) {
-		dataSource = [[LegislatorDetailDataSource alloc] initWithLegislator:member];
+		dataSource = [[LegislatorDetailDataSource alloc] initWithLegislatorID:member.legID];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tableDataChanged:) name:kNotifyTableDataUpdated object:dataSource];
+
 	}
 	return dataSource;
 }
 
-- (void)setDataSource:(LegislatorDetailDataSource *)newObj {	
-	if (newObj == dataSource)
-		return;
-	if (dataSource)
-		[dataSource release], dataSource = nil;
-	if (newObj)
-		dataSource = [newObj retain];
+- (void)tableDataChanged:(id)sender {
+    [self setupHeader];
+	[self.tableView reloadData];	
+}
+
+- (void)stateChanged:(NSNotification *)notification {
+    [self tableDataChanged:notification];
 }
 
 
-- (LegislatorObj *)legislator {
-	LegislatorObj *anObject = nil;
-	if (self.dataObjectID) {
-		@try {
-			anObject = [LegislatorObj objectWithPrimaryKeyValue:self.dataObjectID];
-		}
-		@catch (NSException * e) {
-		}
-	}
-	return anObject;
-}
+- (void)setLegislator:(SLFLegislator *)anObject {
 
-- (void)setLegislator:(LegislatorObj *)anObject {
-	if (self.dataSource && anObject && self.dataObjectID && [[anObject legislatorID] isEqual:self.dataObjectID])
+	if (dataSource && anObject && legislator && [legislator isEqual:anObject] && [dataSource.legislator isEqual:anObject])
 		return;
-	
-	self.dataSource = nil;
-	self.dataObjectID = nil;
-	
+    
+    [legislator release];
+    legislator = [anObject retain];
+    self.dataObjectID = anObject.legID;
+
 	if (anObject) {
-		self.dataObjectID = [anObject legislatorID];
-
-		self.tableView.dataSource = self.dataSource;
-
-		[self setupHeader];
+		self.dataObjectID = anObject.legID;
+        
+        self.dataSource.legislator = anObject;
+		self.tableView.dataSource = dataSource;
 
 		if (masterPopover != nil) {
 			[masterPopover dismissPopoverAnimated:YES];
 		}		
-		[self.tableView reloadData];
-
-		[self.view setNeedsDisplay];
+        
+        [self tableDataChanged:nil];
 	}
 }
 #pragma mark -
 #pragma mark Managing the popover
-
-- (IBAction)resetTableData:(id)sender {
-	// this will force our datasource to renew everything
-	self.dataSource.legislator = self.legislator;
-	[self.tableView reloadData];	
-}
 
 // Called on the delegate when the user has taken action to dismiss the popover. This is not called when -dismissPopoverAnimated: is called directly.
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
@@ -232,12 +198,6 @@
 	
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-	BOOL ipad = [UtilityMethods isIPadDevice];
-	BOOL portrait = (![UtilityMethods isLandscapeOrientation]);
-
-	if (portrait && ipad && !self.legislator)
-		self.legislator = [[[AppDelegate appDelegate] legislatorMasterVC] selectObjectOnAppear];		
 	
 	if (self.legislator)
 		[self setupHeader];
@@ -293,12 +253,14 @@
 	[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];	
 	
 	TableCellDataObject *cellInfo = [self.dataSource dataObjectForIndexPath:newIndexPath];
-	LegislatorObj *member = self.legislator;
+	SLFLegislator *member = self.legislator;
 
 	if (!cellInfo.isClickable)
 		return;
 	
-		if (cellInfo.entryType == DirectoryTypeNotes) { // We need to edit the notes thing...
+    switch (cellInfo.entryType) {
+        case DirectoryTypeNotes:
+        { // We need to edit the notes thing...
 			
 			NotesViewController *nextViewController = nil;
 			if ([UtilityMethods isIPadDevice])
@@ -324,21 +286,32 @@
 				[nextViewController release];
 			}
 		}
-		else if (cellInfo.entryType == DirectoryTypeCommittee) {
-			CommitteeDetailViewController *subDetailController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
-			subDetailController.committee = cellInfo.entryValue;
+            break;
+            
+            
+        case DirectoryTypeCommittee:
+        { 
+			CommitteeDetailViewController *subDetailController = [[CommitteeDetailViewController alloc] initWithCommitteeID:cellInfo.entryValue];
 			[self.navigationController pushViewController:subDetailController animated:YES];
 			[subDetailController release];
-		}
-		else if (cellInfo.entryType == DirectoryTypeContributions) {
+        }
+            break;
+            
+            
+        case DirectoryTypeContributions:
+        {
 			if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:transApiBaseURL]]) { 
 				LegislatorContributionsViewController *subDetailController = [[LegislatorContributionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
 				[subDetailController setQueryEntityID:cellInfo.entryValue type:[NSNumber numberWithInteger:kContributionQueryRecipient] cycle:@"-1"];
 				[self.navigationController pushViewController:subDetailController animated:YES];
 				[subDetailController release];
 			}
-		}
-		else if (cellInfo.entryType == DirectoryTypeBills) {
+        }
+            break; 
+            
+            
+        case DirectoryTypeBills:
+        {
 			if ([TexLegeReachability openstatesReachable]) { 
 				BillsListViewController *subDetailController = [[BillsListViewController alloc] initWithStyle:UITableViewStylePlain];
 				subDetailController.title = [NSString stringWithFormat:NSLocalizedStringFromTable(@"Bills Authored by %@", @"DataTableUI", @"Title for cell, the legislative bills authored by someone."), 
@@ -347,56 +320,34 @@
 				[self.navigationController pushViewController:subDetailController animated:YES];
 				[subDetailController release];
 			}
-		}
-		else if (cellInfo.entryType == DirectoryTypeMail) {
+        }
+            break;
+            
+            
+        case DirectoryTypeMail:
+        {
 			[[SLFEmailComposer sharedSLFEmailComposer] presentMailComposerTo:cellInfo.entryValue 
-																			 subject:@"" body:@"" commander:self];			
-		}
-		// Switch to the appropriate application for this url...
-		else if (cellInfo.entryType == DirectoryTypeMap) {
-			if ([cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]] || [cellInfo.entryValue isKindOfClass:[DistrictMapObj class]])
-			{		
-				MapMiniDetailViewController *mapViewController = [[MapMiniDetailViewController alloc] init];
-				[mapViewController view];
-				
-				DistrictOfficeObj *districtOffice = nil;
-				if ([cellInfo.entryValue isKindOfClass:[DistrictOfficeObj class]])
-					districtOffice = cellInfo.entryValue;
-				
-				[mapViewController resetMapViewWithAnimation:NO];
-				BOOL isDistMap = NO;
-				id<MKAnnotation> theAnnotation = nil;
-				if (districtOffice) {
-					theAnnotation = districtOffice;
-					[mapViewController.mapView addAnnotation:theAnnotation];
-					[mapViewController moveMapToAnnotation:theAnnotation];
-				}
-				else {
-					theAnnotation = member.districtMap;
-					[mapViewController.mapView addAnnotation:theAnnotation];
-					[mapViewController moveMapToAnnotation:theAnnotation];
-					[mapViewController.mapView performSelector:@selector(addOverlay:) 
-													withObject:[member.districtMap polygon] afterDelay:0.5f];
-					isDistMap = YES;
-				}
-				if (theAnnotation) {
-					mapViewController.navigationItem.title = [theAnnotation title];
-				}
-
-				[self.navigationController pushViewController:mapViewController animated:YES];
-				[mapViewController release];
-				
-				if (isDistMap) {
-					[[DistrictMapObj managedObjectContext] refreshObject:member.districtMap mergeChanges:NO];
-				}
-			}
-		}
-		else if (cellInfo.entryType > kDirectoryTypeIsURLHandler &&
-				 cellInfo.entryType < kDirectoryTypeIsExternalHandler) {	// handle the URL ourselves in a webView
+                                                                     subject:@"" body:@"" commander:self];			
+        }
+            break;
+            
+            
+        case DirectoryTypeMap:
+        {
+            MapMiniDetailViewController *mapViewController = [[MapMiniDetailViewController alloc] initWithMapID:cellInfo.entryValue];            
+            [self.navigationController pushViewController:mapViewController animated:YES];
+            [mapViewController release];
+        }
+            break;
+            
+            
+        case DirectoryTypeWeb:
+        case DirectoryTypeTwitter:
+        {
 			NSURL *url = [cellInfo generateURL];
 			
 			if ([TexLegeReachability canReachHostWithURL:url]) { // do we have a good URL/connection?
-
+                
 				if ([[url scheme] isEqualToString:@"twitter"])
 					[[UIApplication sharedApplication] openURL:url];
 				else {
@@ -408,42 +359,27 @@
 					[webViewController release];
 				}
 			}
-		}
-		else if (cellInfo.entryType > kDirectoryTypeIsExternalHandler)		// tell the device to open the url externally
-		{
-			NSURL *myURL = [cellInfo generateURL];			
+        }
+            break;
+            
+            
+        case DirectoryTypePhone:
+        case DirectoryTypeSMS:
+        {
+            NSURL *url = [cellInfo generateURL];			
 			BOOL isPhone = ([UtilityMethods canMakePhoneCalls]);
 			
-			if ((cellInfo.entryType == DirectoryTypePhone) && (!isPhone)) {
-				debug_NSLog(@"Tried to make a phone call, but this isn't a phone: %@", myURL.description);
-				[UtilityMethods alertNotAPhone];
-				return;
-			}
-			
-			[UtilityMethods openURLWithoutTrepidation:myURL];
-		}
+            if (cellInfo.entryType == DirectoryTypeSMS || isPhone) {
+                [UtilityMethods openURLWithoutTrepidation:url];
+            }
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
-- (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	CGFloat height = 44.0f;
-	TableCellDataObject *cellInfo = [self.dataSource dataObjectForIndexPath:indexPath];
-	
-	if (cellInfo == nil) {
-		debug_NSLog(@"LegislatorDetailViewController:heightForRow: error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);
-		return height;
-	}
-	if (cellInfo.subtitle && [cellInfo.subtitle hasSubstring:NSLocalizedStringFromTable(@"Address", @"DataTableUI", @"Cell title listing a street address")
-											 caseInsensitive:YES]) {
-		height = 98.0f;
-	}
-	else if ([cellInfo.entryValue isKindOfClass:[NSString string]]) {
-		NSString *tempStr = cellInfo.entryValue;
-		if (!tempStr || [tempStr length] <= 0) {
-			height = 0.0f;
-		}
-	}
-	return height;
-}
 
 @end
 

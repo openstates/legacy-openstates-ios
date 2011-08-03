@@ -10,50 +10,33 @@
 //
 //
 
-#import "LegislatorObj.h"
-#import "CommitteeObj.h"
-#import "ChamberCalendarObj.h"
+#define kNotifyTableDataUpdated     @"TABLE_DATA_UPDATED"
+#define kNotifyTableDataError       @"TABLE_DATA_ERROR"
 
 @protocol TableDataSource <UITableViewDataSource, NSFetchedResultsControllerDelegate>
  
 @required
 
-// this property determines the style of table view displayed
-@property (readonly) UITableViewStyle tableViewStyle;
-@property (readonly) BOOL usesCoreData;
-@property (readonly) BOOL canEdit;
+    @property (nonatomic,copy)      NSString        *resourcePath;
+    @property (nonatomic,assign)    Class            resourceClass;
 
-- (BOOL)showDisclosureIcon;
+    @property (readonly) BOOL usesCoreData;
 
 @optional
-- (Class)dataClass;
 
+// set this on when you don't want to see the index, ala keyboard active
+@property (nonatomic, assign)   BOOL hideTableIndex;
 @property (nonatomic, readonly) BOOL hasFilter;
-- (void) setFilterByString:(NSString *)filter;
-- (void) removeFilter;
+@property (nonatomic, assign)   NSInteger filterChamber;		// 0 means don't filter
+@property (nonatomic, retain)   UISearchDisplayController *searchDisplayController;
+@property (nonatomic, retain)   NSFetchedResultsController *fetchedResultsController;
 
-@property (nonatomic) NSInteger filterChamber;		// 0 means don't filter
-@property (nonatomic, retain) UISearchDisplayController *searchDisplayController;
-@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
-
-- (void)initializeDatabase;
-
-// this optional protocol allows us to send the datasource this message, since it has the 
-// required information
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
 
 - (id)dataObjectForIndexPath:(NSIndexPath*)indexPath;
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject;
 
-// implement these for editing...
-- (void)setEditing:(BOOL)isEditing animated:(BOOL)animated;
-- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath;
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath;
-
-// set this on when you don't want to see the index, ala keyboard active
-@property (nonatomic) BOOL hideTableIndex;
-
-- (void)resetData:(NSNotification *)notification;
+- (void) setFilterByString:(NSString *)filter;
+- (void) removeFilter;
 
 
 @end

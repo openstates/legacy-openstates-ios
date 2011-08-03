@@ -38,7 +38,7 @@
 }
 
 
-- (IBAction)contributionDataChanged:(id)sender {
+- (void)tableDataChanged:(NSNotification*)notification {
 	[self.tableView reloadData];
 }
 
@@ -54,7 +54,7 @@
 
 	self.tableView.dataSource = dataSource;
 
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contributionDataChanged:) name:kContributionsDataNotifyLoaded object:dataSource];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tableDataChanged:) name:kContributionsDataNotifyLoaded object:dataSource];
 	
 	UILabel *nimsp = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 66)] autorelease];
 	nimsp.backgroundColor = [UIColor clearColor];
@@ -70,7 +70,7 @@
 
 
 - (void)viewDidUnload {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:kContributionsDataNotifyLoaded object:self.dataSource];	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];	
 	self.dataSource = nil;
 }
 
@@ -81,7 +81,7 @@
 }
 
 - (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:kContributionsDataNotifyLoaded object:self.dataSource];	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];	
 
 	self.dataSource = nil;
     [super dealloc];

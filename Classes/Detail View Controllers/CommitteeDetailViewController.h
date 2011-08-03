@@ -11,16 +11,25 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <RestKit/RestKit.h>
+#import "GCTableViewController.h"
 
-@class CommitteeObj;
+@class SLFCommittee;
 
-@interface CommitteeDetailViewController : UITableViewController <UISplitViewControllerDelegate>  {
+@interface CommitteeDetailViewController : GCTableViewController <UISplitViewControllerDelegate, RKObjectLoaderDelegate>  {
 }
 
-@property (nonatomic, assign) id dataObject;
-@property (nonatomic, retain) NSNumber *dataObjectID;
+@property (nonatomic,retain)    SLFCommittee    *committee;
+@property (nonatomic,copy)      NSArray         *positions;
+@property (nonatomic,copy)      NSString        *resourcePath;
+@property (nonatomic,assign)    Class            resourceClass;
 
-@property (nonatomic, retain) CommitteeObj *committee;
+- (void)loadData;
+- (id)initWithCommitteeID:(NSString *)committeeID;
+
+@property (nonatomic, assign) id dataObject;
+@property (nonatomic, retain) NSString *dataObjectID;
+
 @property (nonatomic, retain) UIPopoverController *masterPopover;
 @property (nonatomic, retain) IBOutlet UILabel *membershipLab;
 @property (nonatomic, retain) IBOutlet UILabel *nameLab;

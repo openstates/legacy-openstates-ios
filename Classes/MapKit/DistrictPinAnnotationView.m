@@ -11,8 +11,7 @@
 //
 
 #import "DistrictPinAnnotationView.h"
-#import "DistrictMapObj.h"
-#import "DistrictOfficeObj.h"
+#import "SLFDistrictMap.h"
 #import "TexLegeMapPins.h"
 
 @interface DistrictPinAnnotationView (Private)
@@ -38,8 +37,7 @@
 }
 
 - (void)resetPinColorWithAnnotation:(id <MKAnnotation>)anAnnotation {
-	if (!anAnnotation || 
-		(![anAnnotation isKindOfClass:[DistrictMapObj class]] && ![anAnnotation isKindOfClass:[DistrictOfficeObj class]]))  
+	if (!anAnnotation || (![anAnnotation isKindOfClass:[SLFDistrictMap class]]))  
 		return;
 		
 	UIView *foundPinImage = nil;

@@ -11,6 +11,8 @@
 //
 
 #import "CalendarEventsLoader.h"
+#import "SLFDataModels.h"
+
 #import "NSDate+Helper.h"
 #import "JSONKit.h"
 #import "UtilityMethods.h"
@@ -81,7 +83,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 															 context:nil];
 
 		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(loadEvents:) 
+												 selector:@selector(stateChanged:) 
 													 name:kStateMetaNotifyStateLoaded 
 												   object:nil];
 		
@@ -149,6 +151,10 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	}	
 }
 
+- (void)stateChanged:(NSNotification *)notification {
+    [self loadEvents:notification];
+}
+
 - (void)loadEvents:(id)sender {
 	if (isLoading)
 		return;	// we're already working on it
@@ -156,11 +162,11 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	if ([TexLegeReachability openstatesReachable]) {
 		StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
 		
-		if (IsEmpty(meta.selectedState))
+		if (!meta.selectedState)
 			return;
 		
 		nice_release(eventState);
-		eventState = [meta.selectedState copy]; // testing use [@"ut" copy] or ["ky" copy];
+		eventState = [meta.selectedState.abbreviation copy]; // testing use [@"ut" copy] or ["ky" copy];
 		
 		//	http://openstates.sunlightlabs.com/api/v1/events/?state=tx&apikey=xxxxxxxxxxxxxxxx
 
@@ -376,7 +382,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 				
 				NSString * chamberString = [participant objectForKey:kCalendarEventsTypeChamberValue];
 				if (!IsEmpty(chamberString))
-					[loadedEvent setObject:[NSNumber numberWithInteger:chamberFromOpenStatesString(chamberString)] forKey:kCalendarEventsTypeChamberValue];
+					[loadedEvent setObject:[NSNumber numberWithInteger:chamberIntFromOpenStates(chamberString)] forKey:kCalendarEventsTypeChamberValue];
 			}
 		}
 		
@@ -502,7 +508,8 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 			}
 		}
 	}
-	
+	[eventIDs release];
+    
 	return event;
 	
 }

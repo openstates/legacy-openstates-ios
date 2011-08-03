@@ -11,28 +11,28 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GCTableViewController.h"
 
-@class LegislatorObj;
+@class SLFLegislator;
 @class TableCellDataObject;
 @class LegislatorDetailDataSource;
 
-@interface LegislatorDetailViewController : UITableViewController <UISplitViewControllerDelegate, 
+@interface LegislatorDetailViewController : GCTableViewController <UISplitViewControllerDelegate, 
 													UIPopoverControllerDelegate>
 {	
 }
-@property (nonatomic,assign) id dataObject;
-@property (nonatomic,retain) NSNumber *dataObjectID;
-
-@property (nonatomic,retain) IBOutlet UIView *miniBackgroundView;
-@property (nonatomic,retain) IBOutlet UIView *headerView;
-@property (nonatomic,retain) IBOutlet UIImageView *leg_photoView;
-@property (nonatomic,retain) IBOutlet UILabel *leg_partyLab, *leg_districtLab, *leg_tenureLab, *leg_nameLab;
-@property (nonatomic,retain) IBOutlet UILabel *leg_reelection;
-
-@property (nonatomic,retain) UIPopoverController *notesPopover;
-@property (nonatomic,retain) UIPopoverController *masterPopover;
-@property (nonatomic,assign) LegislatorObj *legislator;
+@property (nonatomic,assign) id                          dataObject;
+@property (nonatomic,retain) NSString                   *dataObjectID;
+@property (nonatomic,retain) SLFLegislator              *legislator;
 @property (nonatomic,retain) LegislatorDetailDataSource *dataSource;
+
+@property (nonatomic,retain) IBOutlet UIView            *headerView;
+@property (nonatomic,retain) IBOutlet UIImageView       *leg_photoView;
+@property (nonatomic,retain) IBOutlet UILabel           *leg_partyLab, *leg_districtLab, *leg_nameLab;
+@property (nonatomic,retain) IBOutlet UILabel           *leg_reelection;
+
+@property (nonatomic,retain) UIPopoverController        *notesPopover;
+@property (nonatomic,retain) UIPopoverController        *masterPopover;
 
 - (IBAction)resetTableData:(id)sender;
 

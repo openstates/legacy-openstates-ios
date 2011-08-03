@@ -71,9 +71,9 @@
 	[super viewDidLoad];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(reloadData:) name:kBillSearchNotifyDataError object:dataSource];	
+											 selector:@selector(tableDataChanged:) name:kBillSearchNotifyDataError object:dataSource];	
 	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(reloadData:) name:kBillSearchNotifyDataLoaded object:dataSource];	
+											 selector:@selector(tableDataChanged:) name:kBillSearchNotifyDataLoaded object:dataSource];	
 	
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self.dataSource;
@@ -100,7 +100,7 @@
 	[super viewDidUnload];
 }
 
-- (void)reloadData:(NSNotification *)notification {
+- (void)tableDataChanged:(NSNotification *)notification {
 	[self.tableView reloadData];
 }
 

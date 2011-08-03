@@ -13,7 +13,7 @@
 #import <UIKit/UIKit.h>
 #import "LegislatorCellView.h"
 
-@class LegislatorObj;
+@class SLFLegislator;
 @class LegislatorCellView;
 @interface LegislatorCell : UITableViewCell {
 	
@@ -22,5 +22,5 @@
 @property (nonatomic,assign) NSString *role;
 @property (nonatomic,readonly) CGSize cellSize;
 
-- (void)setLegislator:(LegislatorObj *)value;
+- (void)setLegislator:(SLFLegislator *)value;
 @end

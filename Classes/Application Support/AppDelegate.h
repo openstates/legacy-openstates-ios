@@ -16,7 +16,6 @@
 @class CalendarMasterViewController;
 @class DistrictMapMasterViewController;
 @class BillsMasterViewController;
-@class DataModelUpdateManager;
 @class AnalyticsOptInAlertController;
 
 @interface AppDelegate : NSObject  <UIApplicationDelegate, UINavigationControllerDelegate> 
@@ -24,7 +23,6 @@
 	AnalyticsOptInAlertController *analyticsOptInController;
 }
 
-@property (nonatomic, retain) DataModelUpdateManager *dataUpdater;
 @property (nonatomic, retain) UIWindow			*mainWindow;
 @property (nonatomic)		  BOOL				appIsQuitting;
 

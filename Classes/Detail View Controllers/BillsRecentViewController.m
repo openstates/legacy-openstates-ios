@@ -11,6 +11,8 @@
 //
 
 #import "BillsRecentViewController.h"
+#import "SLFDataModels.h"
+
 #import "OpenLegislativeAPIs.h"
 #import "UtilityMethods.h"
 #import "BillSearchDataSource.h"
@@ -46,8 +48,9 @@
 	[super viewDidLoad];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(runDataQuery:) 
-												 name:kStateMetaNotifyStateLoaded object:nil];
+											 selector:@selector(stateChanged:) 
+												 name:kStateMetaNotifyStateLoaded 
+                                               object:nil];
 
 	NSString *thePath = [[NSBundle mainBundle]  pathForResource:@"TexLegeStrings" ofType:@"plist"];
 	NSDictionary *textDict = [NSDictionary dictionaryWithContentsOfFile:thePath];
@@ -71,9 +74,13 @@
 	[self runDataQuery:nil];
 }
 
+- (void)stateChanged:(NSNotification *)notification {
+    [self runDataQuery:notification];
+}
+
 - (void)runDataQuery:(id)sender {
 	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
-	if (IsEmpty(meta.selectedState))
+	if (!meta.selectedState)
 		return;
 	
 	NSDate *daysAgo = [[NSDate date] dateByAddingDays:-5];
@@ -85,7 +92,7 @@
 	
 	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
 								 dateString, @"updated_since",
-								 meta.selectedState, @"state",
+								 meta.selectedState.abbreviation, @"state",
 								 SUNLIGHT_APIKEY, @"apikey",
 								 nil];
 	

@@ -31,8 +31,6 @@
 @property (nonatomic,retain) UIPopoverController *masterPopover;
 @property (nonatomic,retain) NSMutableDictionary *bill;
 
-- (IBAction)resetTableData:(id)sender;
-
 - (IBAction)starButtonToggle:(id)sender;
 
 @end

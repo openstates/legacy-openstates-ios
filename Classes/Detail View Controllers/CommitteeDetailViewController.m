@@ -10,13 +10,14 @@
 //
 //
 
-#import "TableDataSourceProtocol.h"
 #import "CommitteeDetailViewController.h"
-#import "CommitteeMasterViewController.h"
-#import "TexLegeCoreDataUtils.h"
+#import "SLFDataModels.h"
+#import "SLFMappingsManager.h"
+
+#import "TableDataSourceProtocol.h"
+#import "LegislatorDetailViewController.h"
 
 #import "UtilityMethods.h"
-#import "LegislatorDetailViewController.h"
 #import "SVWebViewController.h"
 #import "AppDelegate.h"
 #import "TexLegeTheme.h"
@@ -25,13 +26,12 @@
 #import "TexLegeStandardGroupCell.h"
 #import "SLFEmailComposer.h"
 #import "LocalyticsSession.h"
-#import "LegislatorObj+RestKit.h"
-#import "CommitteePositionObj+RestKit.h"
-#import "CommitteeObj+RestKit.h"
 
 @interface CommitteeDetailViewController (Private)
 - (void) buildInfoSectionArray;
 - (void) calcCommitteePartisanship;
+- (void)loadDataFromDataStoreWithID:(NSString *)objID;
+
 @end
 
 @implementation CommitteeDetailViewController
@@ -39,19 +39,19 @@
 @synthesize dataObjectID, masterPopover;
 @synthesize membershipLab, nameLab, infoSectionArray;
 
+@synthesize resourcePath;
+@synthesize resourceClass;
+@synthesize committee;
+@synthesize positions;
+
 enum Sections {
     //kHeaderSection = 0,
 	kInfoSection = 0,
-    kChairSection,
-    kViceChairSection,
 	kMembersSection,
     NUM_SECTIONS
 };
 enum InfoSectionRows {
 	kInfoSectionName = 0,
-    kInfoSectionClerk,
-    kInfoSectionPhone,
-	kInfoSectionOffice,
 	kInfoSectionWeb,
     NUM_INFO_SECTION_ROWS
 };
@@ -68,6 +68,19 @@ CGFloat quartzRowHeight = 73.f;
 #pragma mark -
 #pragma mark View lifecycle
 
+- (id)initWithCommitteeID:(NSString *)committeeID {
+    if ((self = [super init])) {
+        
+        self.resourceClass = [SLFCommittee class];
+        self.resourcePath = [NSString stringWithFormat:@"/committees/%@/", committeeID];
+        
+        [self loadDataFromDataStoreWithID:committeeID];
+        [self loadData];
+        
+    }
+    return self;
+}
+
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 
@@ -76,12 +89,24 @@ CGFloat quartzRowHeight = 73.f;
 	self.nameLab = nil;
 	self.masterPopover = nil;
 	self.infoSectionArray = nil;
+    self.committee = nil;
+    self.resourcePath = nil;
+    self.positions = nil;
     [super dealloc];
+}
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    
+    self.resourceClass = [SLFCommittee class];
+
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
+    
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(resetTableData:) name:@"RESTKIT_LOADED_LEGISLATOROBJ" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self
@@ -98,7 +123,8 @@ CGFloat quartzRowHeight = 73.f;
 
 - (void)viewDidUnload {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	
+	self.membershipLab = nil;
+    self.nameLab = nil;
 	[super viewDidUnload];
 }
 
@@ -107,15 +133,94 @@ CGFloat quartzRowHeight = 73.f;
 {
     [super viewWillAppear:animated];
 	
-	if ([UtilityMethods isIPadDevice] == NO)
+}
+
+- (void)reloadButtonWasPressed:(id)sender {
+    // Load the object model via RestKit
+	[self loadData];
+}
+
+- (void)loadDataFromDataStoreWithID:(NSString *)objID {
+	self.committee = [SLFCommittee findFirstByAttribute:@"committeeID" withValue:objID];
+}
+
+- (void)loadData {
+	if (!self.resourcePath)
 		return;
 	
-	// we don't have a legislator selected and yet we're appearing in portrait view ... got to have something here !!! 
-	if (self.committee == nil && ![UtilityMethods isLandscapeOrientation])  {
-		
-		self.committee = [[[AppDelegate appDelegate] committeeMasterVC] selectObjectOnAppear];		
+    // Load the object model via RestKit	
+    RKObjectManager* objectManager = [RKObjectManager sharedManager];
+    
+    RKObjectMapping* objMapping = [objectManager.mappingProvider objectMappingForClass:self.resourceClass];
+    
+	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
+								 SUNLIGHT_APIKEY, @"apikey",
+								 nil];
+    
+	NSString *newPath = [self.resourcePath appendQueryParams:queryParams];
+	
+    [objectManager loadObjectsAtResourcePath:newPath objectMapping:objMapping delegate:self];
+}
+
+- (void)setCommittee:(SLFCommittee *)newObj {
+	[committee release];
+	committee = [newObj retain];
+	
+    self.positions = nil;
+    self.dataObjectID = newObj.committeeID;
+
+	if (newObj) {
+		self.navigationItem.title = newObj.committeeName;
+		self.nameLab.text = newObj.committeeName;
+
+        self.resourcePath = RKMakePathWithObject(@"/committees/(committeeID)/", newObj);
+		[self loadData];
+        
+        if (self.masterPopover)
+			[self.masterPopover dismissPopoverAnimated:YES];
+
 	}
 }
+
+#pragma mark RKObjectLoaderDelegate methods
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
+	[[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"LastUpdatedAt"];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+    
+	[committee release];
+	committee = [object retain];
+	
+	self.positions = [committee sortedMembers];
+	
+    self.navigationItem.title = committee.committeeName;
+    self.nameLab.text = committee.committeeName;
+
+    [self buildInfoSectionArray];
+    [self calcCommitteePartisanship];
+    [self.tableView reloadData];    
+}
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
+	UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Error" 
+                                                     message:[error localizedDescription] 
+                                                    delegate:nil 
+                                           cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+	[alert show];
+	NSLog(@"Hit error: %@", error);
+}
+
+
+- (void)objectLoader:(RKObjectLoader*)loader willMapData:(inout id *)mappableData {
+	
+	if (loader.objectMapping.objectClass == self.resourceClass) {
+		
+        [SLFMappingsManager premapCommittee:self.committee toLegislatorsWithData:mappableData];
+        
+	}
+}
+
+
 
 #pragma mark -
 #pragma mark Memory management
@@ -167,11 +272,11 @@ CGFloat quartzRowHeight = 73.f;
 	}
 }
 
-- (CommitteeObj *)committee {
-	CommitteeObj *anObject = nil;
+- (SLFCommittee *)committee {
+	SLFCommittee *anObject = nil;
 	if (self.dataObjectID) {
 		@try {
-			anObject = [CommitteeObj objectWithPrimaryKeyValue:self.dataObjectID];
+			anObject = [SLFCommittee findFirstByAttribute:@"committeeID" withValue:self.dataObjectID];
 		}
 		@catch (NSException * e) {
 		}
@@ -179,28 +284,6 @@ CGFloat quartzRowHeight = 73.f;
 	return anObject;
 }
 
-
-- (void)setCommittee:(CommitteeObj *)newObj {
-	self.dataObjectID = nil;
-	if (newObj) {
-		[self view];
-
-		if (self.masterPopover)
-			[self.masterPopover dismissPopoverAnimated:YES];
-
-		self.dataObjectID = newObj.committeeId;
-		
-		[self buildInfoSectionArray];
-		self.navigationItem.title = newObj.committeeName;
-		self.nameLab.text = newObj.committeeName;
-
-		[self calcCommitteePartisanship];
-		
-		[self.tableView reloadData];
-		[self.view setNeedsDisplay];
-	}
-
-}
 
 #pragma mark -
 #pragma mark Popover Support
@@ -250,68 +333,13 @@ CGFloat quartzRowHeight = 73.f;
 	[infoDict release];
 	[cellInfo release];
 
-//case kInfoSectionClerk:
-	NSString *text = self.committee.clerk;
-	id val = self.committee.clerk_email;
-	clickable = (text && [text length] && val && [val length]);
-	if (!text)
-		text = @"";
-	if (!val)
-		val = @"";
-	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				NSLocalizedStringFromTable(@"Clerk", @"DataTableUI", @"Cell title listing a committee's assigned clerk"), @"subtitle",
-				text, @"title",
-				[NSNumber numberWithBool:clickable], @"isClickable",
-				val, @"entryValue",
-				nil];
-	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
-	[tempArray addObject:cellInfo];
-	[infoDict release];
-	[cellInfo release];
-	
-//case kInfoSectionPhone:	// dial the number
-	text = self.committee.phone;
-	clickable = (text && [text length] && [UtilityMethods canMakePhoneCalls]);
-	if (!text)
-		text = @"";
-	if (clickable)
-		val = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",text]];
-	else
-		val = @"";
-	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				NSLocalizedStringFromTable(@"Phone", @"DataTableUI", @"Cell title listing a phone number"), @"subtitle",
-				text, @"title",
-				[NSNumber numberWithBool:clickable], @"isClickable",
-				val, @"entryValue",
-				nil];
-	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
-	[tempArray addObject:cellInfo];
-	[infoDict release];
-	[cellInfo release];
-	
-	//case kInfoSectionOffice: // open the office map
-	text = self.committee.office;
-	if (!text)
-		text = @"";
-	val = @"";
-	
-	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				NSLocalizedStringFromTable(@"Location", @"DataTableUI", @"Cell title listing an office location (office number or stree address)"), @"subtitle",
-				text, @"title",
-				[NSNumber numberWithBool:NO], @"isClickable",
-				val, @"entryValue",
-				nil];
-	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
-	[tempArray addObject:cellInfo];
-	[infoDict release];
-	[cellInfo release];
-	
 	//case kInfoSectionWeb:	 // open the web page
+    NSString *val = @"";
+    NSString *text = [self.committee.sources objectAtIndex:0];
 	clickable = (text && [text length]);
 	if (clickable)
-		val = [self.committee.url urlSafeString];
-	else
-		val = @"";
+		val = [text urlSafeString];
+
 	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 				NSLocalizedStringFromTable(@"Web", @"DataTableUI", @"Cell title listing a web address"), @"subtitle",
 				NSLocalizedStringFromTable(@"Website & Meetings", @"DataTableUI", @"Cell title for a website link detailing committee meetings"), @"title",
@@ -330,18 +358,21 @@ CGFloat quartzRowHeight = 73.f;
 }
 
 - (void) calcCommitteePartisanship {
-	NSArray *positions = [self.committee.committeePositions allObjects];
-	if (!positions && [positions count])
+	NSArray *newPos = self.positions;
+	if (!newPos && [newPos count])
 		return;
 	
-	NSInteger democCount = 0, repubCount = 0;
-	NSArray *repubs = [positions findAllWhereKeyPath:@"legislator.party_id" equals:[NSNumber numberWithInteger:REPUBLICAN]];	
-	if (repubs)
-		repubCount = [repubs count];
-	democCount = [positions count] - repubCount;
-	
-	NSString *repubString = stringForParty(REPUBLICAN, TLReturnFull);
+    NSString *repubString = stringForParty(REPUBLICAN, TLReturnFull);
 	NSString *democString = stringForParty(DEMOCRAT, TLReturnFull);
+
+	NSInteger democCount = 0, repubCount = 0;
+    
+	NSArray *repubs = [newPos findAllWhereKeyPath:@"legislator.chamber" equals:repubString];	
+	repubCount = [repubs count];
+    
+    NSArray *dems = [newPos findAllWhereKeyPath:@"legislator.chamber" equals:democString];	
+	democCount = [dems count];
+	
 	if (repubCount != 1)
 		repubString = [repubString stringByAppendingString:@"s"];
 	if (democCount != 1)
@@ -363,16 +394,8 @@ CGFloat quartzRowHeight = 73.f;
 	
 	NSInteger rows = 0;	
 	switch (section) {
-		case kChairSection:
-			if ([self.committee chair] != nil)
-				rows = 1;
-			break;
-		case kViceChairSection:
-			if ([self.committee vicechair] != nil)
-				rows = 1;
-			break;
 		case kMembersSection:
-			rows = [[self.committee sortedMembers] count];
+			rows = [self.positions count];
 			break;
 		case kInfoSection:
 			rows = NUM_INFO_SECTION_ROWS;
@@ -399,9 +422,7 @@ CGFloat quartzRowHeight = 73.f;
 	NSInteger section = [indexPath section];
 	
 	NSString *CellIdentifier;
-	
-	NSInteger InfoSectionEnd = ([UtilityMethods canMakePhoneCalls]) ? kInfoSectionClerk : kInfoSectionPhone;
-	
+		
 	BOOL useDark = NO;
 	BOOL isMember = (section > kInfoSection);
 		
@@ -413,8 +434,6 @@ CGFloat quartzRowHeight = 73.f;
 		else
 			CellIdentifier = @"CommitteeMemberLight";
 	}
-	else if (row > InfoSectionEnd)
-		CellIdentifier = @"CommitteeInfo";
 	else
 		CellIdentifier = @"Committee-NoDisclosure";
 	
@@ -437,31 +456,19 @@ CGFloat quartzRowHeight = 73.f;
 		}
 	}    
 
-	LegislatorObj *legislator = nil;
+	SLFLegislator *legislator = nil;
 	NSString *role = nil;
+    
 
 	switch (section) {
-		case kChairSection:
-			legislator = [self.committee chair];
-			if ([self.committee.committeeType integerValue] == JOINT)
-				role = NSLocalizedStringFromTable(@"Co-Chair", @"DataTableUI", @"For joint committees, House and Senate leaders are co-chair persons");
-			else
-				role = NSLocalizedStringFromTable(@"Chair", @"DataTableUI", @"Cell title for a person who leads a given committee, an abbreviation for Chairperson");
-
-			break;
-		case kViceChairSection:
-			legislator = [self.committee vicechair];
-			if ([self.committee.committeeType integerValue] == JOINT)
-				role = NSLocalizedStringFromTable(@"Co-Chair", @"DataTableUI", @"For joint committees, House and Senate leaders are co-chair persons");
-			else
-				role = NSLocalizedStringFromTable(@"Vice Chair", @"DataTableUI", @"Cell title for a person who is second in command of a given committee, behind the Chairperson");
-			
-			break;
 		case kMembersSection: {
-			NSArray * memberList = [self.committee sortedMembers];
+            
+            NSArray *memberList = [self.committee sortedMembers];
+
 			if ([memberList count] >= row) {
-				legislator = [memberList objectAtIndex:row];
-				role = NSLocalizedStringFromTable(@"Member", @"DataTableUI", @"Title for a person who is a regular member of a committe (not chair/vice-chair)");
+                SLFCommitteePosition* pos = [memberList objectAtIndex:indexPath.row];
+                legislator = pos.legislator;
+                role = pos.positionType;
 			}
 		}
 			break;
@@ -510,35 +517,14 @@ CGFloat quartzRowHeight = 73.f;
 	NSString * sectionName;
 	
 	switch (section) {
-		case kChairSection: {
-			if ([self.committee.committeeType integerValue] == JOINT)
-				sectionName = NSLocalizedStringFromTable(@"Co-Chair", @"DataTableUI", @"For joint committees, House and Senate leaders are co-chair persons");
-			else
-				sectionName = NSLocalizedStringFromTable(@"Chair", @"DataTableUI", @"Cell title for a person who leads a given committee, an abbreviation for Chairperson");
-		}
-			break;
-			
-		case kViceChairSection: {
-			if ([self.committee.committeeType integerValue] == JOINT)
-				sectionName = NSLocalizedStringFromTable(@"Co-Chair", @"DataTableUI", @"For joint committees, House and Senate leaders are co-chair persons");
-			else
-				sectionName = NSLocalizedStringFromTable(@"Vice Chair", @"DataTableUI", @"Cell title for a person who is second in command of a given committee, behind the Chairperson");
-		}
-			break;
-			
 		case kMembersSection:
 			sectionName = NSLocalizedStringFromTable(@"Members", @"DataTableUI", @"Cell title for a list of committee members");
 			break;
 			
 		case kInfoSection:
-		default: {
-			if (self.committee.parentId.integerValue == -1) 
-				sectionName = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ Committee Info",@"DataTableUI", @"Information for a given legislative committee"),
-							   [self.committee typeString]];
-			else
-				sectionName = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ Subcommittee Info",@"DataTableUI", @"Information for a given legislative subcommittee"),
-							   [self.committee typeString]];
-		}
+		default:
+            sectionName = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ Committee Info",@"DataTableUI", @"Information for a given legislative committee"),
+                            chamberStringFromOpenStates(self.committee.chamber)];
 			break;
 	}
 	return sectionName;
@@ -575,17 +561,6 @@ CGFloat quartzRowHeight = 73.f;
 			return;
 		
 		switch (row) {
-			case kInfoSectionClerk:	
-				[[SLFEmailComposer sharedSLFEmailComposer] presentMailComposerTo:cellInfo.entryValue 
-																				 subject:@"" body:@"" commander:self];
-				break;
-			case kInfoSectionPhone:	{// dial the number
-				if ([UtilityMethods canMakePhoneCalls]) {
-					NSURL *myURL = cellInfo.entryValue;
-					[UtilityMethods openURLWithoutTrepidation:myURL];
-				}
-			}
-				break;
 			case kInfoSectionWeb: {	 // open the web page
 				NSURL *myURL = cellInfo.entryValue;
 				[self pushInternalBrowserWithURL:myURL];
@@ -600,12 +575,6 @@ CGFloat quartzRowHeight = 73.f;
 		LegislatorDetailViewController *subDetailController = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
 		
 		switch (section) {
-			case kChairSection:
-				subDetailController.legislator = [self.committee chair];
-				break;
-			case kViceChairSection:
-				subDetailController.legislator = [self.committee vicechair];
-				break;
 			case kMembersSection: { // Committee Members
 				subDetailController.legislator = [[self.committee sortedMembers] objectAtIndex:row];
 			}			

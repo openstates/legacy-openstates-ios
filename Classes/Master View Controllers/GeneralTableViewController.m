@@ -57,7 +57,7 @@
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(resetControllerEnabled:) 
+                                             selector:@selector(stateChanged:) 
                                                  name:kStateMetaNotifyStateLoaded // We've changed the current state, reconfigure
                                                object:nil];
         
@@ -84,7 +84,6 @@
     
 	//self.tableView = nil;
 	self.dataSource = nil; 
-	self.selectObjectOnAppear = nil;
 	self.detailViewController = nil;
 	[super dealloc];
 }
@@ -103,6 +102,10 @@
 
 - (NSString *)apiFeatureFlag {
     return nil;   // override this to test for availability of a feature for the active state in the open states api
+}
+
+- (void)stateChanged:(NSNotification *)notification {
+    [self resetControllerEnabled:notification];
 }
 
 - (void)resetControllerEnabled:(NSNotification *)notification {
@@ -165,26 +168,13 @@
     
 	[self dataSource];
 	
-	if ([self.dataSource usesCoreData]) {
-		id objectID = [persistence tableSelectionForKey:NSStringFromClass([self class])];
-		if (objectID && [objectID isKindOfClass:[NSNumber class]]) {
-			@try {
-				if ([self.dataSource respondsToSelector:@selector(dataClass)])
-					self.selectObjectOnAppear = [[self.dataSource dataClass] objectWithPrimaryKeyValue:objectID];	
-			}
-			@catch (NSException * e) {
-			}
-		}			
-	}
-	else { // Let's just do this for maps, and meetings, ... we'll handle them like integer row selections
-		id object = [persistence tableSelectionForKey:NSStringFromClass([self class])];
-		if (!object)
-			return;
-		
-		if ([object isKindOfClass:[NSIndexPath class]] && NO == [self.dataSource isKindOfClass:[BillsMenuDataSource class]]) {
-			self.selectObjectOnAppear = [self.dataSource dataObjectForIndexPath:object];
-		}
-	}
+    id object = [persistence tableSelectionForKey:NSStringFromClass([self class])];
+    if (!object)
+        return;
+    
+    if ([object isKindOfClass:[NSIndexPath class]] && NO == [self.dataSource isKindOfClass:[BillsMenuDataSource class]]) {
+        self.selectObjectOnAppear = [self.dataSource dataObjectForIndexPath:object];
+    }
 	
 	if (self.selectObjectOnAppear && self.detailViewController && [UtilityMethods isIPadDevice]) {
 		NSLog(@"Presetting a detail view's dataObject in %@!", [self description]);
@@ -275,18 +265,16 @@
 		}
 		self.contentSizeForViewInPopover = CGSizeMake(320.0, tableHeight);
 	}
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(beginUpdates:) name:@"TABLEUPDATE_START" object:self.dataSource];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endUpdates:) name:@"TABLEUPDATE_END" object:self.dataSource];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tableDataChanged:) name:kNotifyTableDataUpdated object:self.dataSource];
 }
 	
 - (void)viewDidUnload {
 	//NSLog(@"--------------Unloading %@", NSStringFromClass([self class]));
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"TABLEUPDATE_START" object:self.dataSource];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"TABLEUPDATE_END" object:self.dataSource];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:kNotifyTableDataUpdated object:self.dataSource];
 
 	self.dataSource = nil;				//GREG
-	self.selectObjectOnAppear = nil;
+
 	self.detailViewController = nil;	// GREG
 	[super viewDidUnload];
 }
@@ -306,27 +294,6 @@
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
-	if (self.selectObjectOnAppear)  {	
-		NSIndexPath *selectedPath = nil;
-		
-		//if (![self.dataSource.name isEqualToString:@"Resources"])
-		@try {
-			selectedPath = [self.dataSource indexPathForDataObject:self.selectObjectOnAppear];
-		}
-		@catch (NSException * e) {
-		}
-		@finally {
-			//if (!selectedPath)
-			//	selectedPath = [NSIndexPath indexPathForRow:0 inSection:0];
-		}
-				
-		if (selectedPath) {
-			[self.tableView selectRowAtIndexPath:selectedPath animated:animated scrollPosition:UITableViewScrollPositionNone];
-			[self tableView:self.tableView didSelectRowAtIndexPath:selectedPath];
-		}
-		self.selectObjectOnAppear = nil;
-	}
-
 	// We're on an iphone, without a splitview or popovers, so if we get here, let's stop traversing our replay breadcrumbs
 	if (![UtilityMethods isIPadDevice]) {
         
@@ -338,12 +305,8 @@
 #pragma -
 #pragma UITableViewDelegate
 
-- (void)beginUpdates:(NSNotification *)aNotification {
-//	[self.tableView beginUpdates];
-}
 
-- (void)endUpdates:(NSNotification *)aNotification {
-//	[self.tableView endUpdates];
+- (void)tableDataChanged:(NSNotification *)aNotification {
 	[self.tableView reloadData];
 }
 

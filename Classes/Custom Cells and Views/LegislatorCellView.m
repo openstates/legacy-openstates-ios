@@ -10,10 +10,10 @@
 //
 //
 
+#import "SLFDataModels.h"
+
 #import "LegislatorCellView.h"
-#import "LegislatorObj+RestKit.h"
 #import "TexLegeTheme.h"
-#import "TexLegeCoreDataUtils.h"
 #import "UtilityMethods.h"
 
 @implementation LegislatorCellView
@@ -24,7 +24,7 @@
 @synthesize party;
 @synthesize district;
 @synthesize role;
-@synthesize party_id, highlighted;
+@synthesize highlighted;
 @synthesize useDarkBackground;
 @synthesize wideSize;
 
@@ -38,7 +38,6 @@
 		party = [@"Republican" retain];
 		district = [@"District 21" retain];
 		role = nil;
-		party_id = REPUBLICAN;
 		self.backgroundColor = [TexLegeTheme backgroundLight];
 		[self setOpaque:YES];
 	}
@@ -55,7 +54,6 @@
 		party = [@"Republican" retain];
 		district = [@"District 21" retain];
 		role = nil;
-		party_id = REPUBLICAN;
 		self.backgroundColor = [TexLegeTheme backgroundLight];
 		[self setOpaque:YES];
 	}
@@ -107,15 +105,17 @@
 
 }
 
-- (void)setLegislator:(LegislatorObj *)value {	
+- (void)setLegislator:(SLFLegislator *)value {	
 	if (value) {
-		self.title = [value legtype_name];
-		self.district = [NSString stringWithFormat:NSLocalizedStringFromTable(@"District %@", @"DataTableUI", @"District number"),
+
+		self.title = value.title;
+		self.district = [NSString stringWithFormat:@"%@ %@ %@",
+                         [value.stateID uppercaseString],
+                         NSLocalizedStringFromTable(@"District", @"DataTableUI", @""),
 						 value.district];
-		self.party = value.party_name;
-		self.name = [value legProperName];
-		self.tenure = [NSString stringWithFormat:@"(%@)", [value tenureString]];
-		self.party_id = [[value party_id] integerValue];
+		self.party = value.party;
+		self.name = value.fullName;
+		self.tenure = value.term;
 		self.role = nil;
 	}
 	[self setNeedsDisplay];	
@@ -167,9 +167,9 @@
 		districtColor = [TexLegeTheme textLight];
 		titleColor = [TexLegeTheme accent];
 		
-		if (party_id == REPUBLICAN)
+		if ([party isEqualToString:stringForParty(REPUBLICAN, TLReturnFull)])
 			partyColor = [TexLegeTheme texasRed];
-		else if (party_id == DEMOCRAT)
+		else if ([party isEqualToString:stringForParty(DEMOCRAT, TLReturnFull)])
 			partyColor = [TexLegeTheme texasBlue];
 		else // INDEPENDENT ?
 			partyColor = [TexLegeTheme textLight];

@@ -11,7 +11,7 @@
 //
 
 #import "LegislatorCell.h"
-#import "LegislatorObj.h"
+#import "SLFLegislator.h"
 #import "DisclosureQuartzView.h"
 
 
@@ -61,8 +61,8 @@
 }
 
 
-- (void)setLegislator:(LegislatorObj *)value {
-	self.imageView.image = [UIImage imageNamed:value.photo_name];
+- (void)setLegislator:(SLFLegislator *)value {
+//	self.imageView.image = [UIImage imageNamed:value.photo_name];
 	[self.cellView setLegislator:value];
 }
 

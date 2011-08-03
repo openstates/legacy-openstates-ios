@@ -10,11 +10,10 @@
 //
 //
 
-#import "TexLegeCoreDataUtils.h"
 #import "CommitteesDataSource.h"
 #import "CommitteeMasterViewController.h"
 #import "CommitteeDetailViewController.h"
-#import "CommitteeObj.h"
+#import "SLFCommittee.h"
 
 #import "UtilityMethods.h"
 #import "SLFPersistenceManager.h"
@@ -70,9 +69,6 @@
 	self.searchDisplayController.searchBar.tintColor = [TexLegeTheme accent];
 	self.navigationItem.titleView = self.chamberControl;
 	
-	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
-			self.selectObjectOnAppear = [self firstDataObject];
-
 }
 
 - (void)viewDidUnload {
@@ -94,23 +90,9 @@
 			self.chamberControl.selectedSegmentIndex = [segIndex integerValue];
 	}
 			
-	//// ALL OF THE FOLLOWING MUST *NOT* RUN ON IPHONE (I.E. WHEN THERE'S NO SPLITVIEWCONTROLLER
-	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
-		id detailObject = self.detailViewController ? [self.detailViewController valueForKey:@"committee"] : nil;
-		if (!detailObject) {
-			NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
-			if (!currentIndexPath) {			
-				NSUInteger ints[2] = {0,0};	// just pick the first one then
-				currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
-			}
-			detailObject = [self.dataSource dataObjectForIndexPath:currentIndexPath];				
-		}
-		self.selectObjectOnAppear = detailObject;
-	}	
 	if ([UtilityMethods isIPadDevice])
 		[self.tableView reloadData]; // this "fixes" an issue where it's using cached (bogus) values for our vote index sliders
 	
-	// END: IPAD ONLY
 }
 
 
@@ -127,17 +109,15 @@
 	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]) && (self.splitViewController != nil);
 	
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
-	if ([dataObject isKindOfClass:[RKManagedObject class]])
-		[persistence setTableSelection:[dataObject primaryKeyValue] forKey:NSStringFromClass([self class])];
-	else
 		[persistence setTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 		
+    SLFCommittee *committee = dataObject;
+
 	// create a CommitteeDetailViewController. This controller will display the full size tile for the element
 	if (self.detailViewController == nil) {
-		self.detailViewController = [[[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil] autorelease];
+		self.detailViewController = [[[CommitteeDetailViewController alloc] initWithCommitteeID:committee.committeeID] autorelease];
 	}
 	
-	CommitteeObj *committee = dataObject;
 	if (committee) {
 		[self.detailViewController setCommittee:committee];
 		if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table

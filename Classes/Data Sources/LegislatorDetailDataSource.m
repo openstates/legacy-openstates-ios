@@ -11,52 +11,105 @@
 //
 
 #import "LegislatorDetailDataSource.h"
-#import "TexLegeCoreDataUtils.h"
+#import "SLFMappingsManager.h"
+#import "SLFDataModels.h"
 
-#import "LegislatorObj+RestKit.h"
+#import "TableDataSourceProtocol.h"
 #import "TexLegeTheme.h"
-#import "DistrictMapObj+RestKit.h"
-
-#import "StafferObj.h"
-#import "DistrictOfficeObj+MapKit.h"
-#import "CommitteeObj+RestKit.h"
-#import "CommitteePositionObj+RestKit.h"
-
 #import "UtilityMethods.h"
 #import "TableCellDataObject.h"
-
 #import "TexLegeStandardGroupCell.h"
-#import "TexLegeGroupCellProtocol.h"
 #import "NotesViewController.h"
 
-@interface LegislatorDetailDataSource (Private)
-- (void) createSectionList;
+enum SECTIONS {
+    kMemberInfo = 0,
+    kDistrictMap,
+    kCommittees,
+    kBills,
+    kNumSections
+};
+
+@interface LegislatorDetailDataSource()
+
+- (void)loadDataFromDataStoreWithID:(NSString *)objID;
+
 @end
 
 
 @implementation LegislatorDetailDataSource
-@synthesize dataObjectID, sectionArray;
+@synthesize resourcePath;
+@synthesize resourceClass;
+@synthesize legislator;
+@synthesize dataObjectID;
 
-- (id)initWithLegislator:(LegislatorObj *)newObject {
-	if ((self = [super init])) {
-		if (newObject) 
-			[self setLegislator:newObject];
-	}
-	return self;
+- (id)initWithLegislatorID:(NSString *)legislatorID {
+    if ((self = [super init])) {
+        
+        self.dataObjectID = legislatorID;
+
+        self.resourceClass = [SLFLegislator class];
+        self.resourcePath = [NSString stringWithFormat:@"/legislators/%@/", legislatorID];
+        
+        [self loadDataFromDataStoreWithID:legislatorID];
+        [self loadData];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(stateChanged:) 
+                                                     name:kStateMetaNotifyStateLoaded 
+                                                   object:nil];        
+        
+    }
+    return self;
 }
 
 - (void)dealloc {
-	self.sectionArray = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    self.legislator = nil;
+    self.resourcePath = nil;
 	self.dataObjectID = nil;
 	
     [super dealloc];
 }
 
-- (LegislatorObj *)legislator {
-	LegislatorObj *anObject = nil;
+#pragma mark -
+#pragma mark Load Data
+
+- (void)loadDataFromDataStoreWithID:(NSString *)objID {
+	self.legislator = [SLFLegislator findFirstByAttribute:@"legID" withValue:objID];
+}
+
+- (void)loadData {
+	if (!self.resourcePath)
+		return;
+	
+    // Load the object model via RestKit	
+    RKObjectManager* objectManager = [RKObjectManager sharedManager];
+    RKObjectMapping* legMapping = [objectManager.mappingProvider objectMappingForClass:self.resourceClass];
+    
+	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
+								 SUNLIGHT_APIKEY, @"apikey",
+								 nil];
+	NSString *newPath = [self.resourcePath appendQueryParams:queryParams];
+    [objectManager loadObjectsAtResourcePath:newPath objectMapping:legMapping delegate:self];
+}
+
+#pragma mark -
+#pragma mark Data Object
+
+- (void)stateChanged:(NSNotification *)notification {
+    SLFLegislator *leg = [self legislator];
+    if (leg) {
+        [self setLegislator:leg];
+    }
+}
+
+
+- (SLFLegislator *)legislator {
+	SLFLegislator *anObject = nil;
 	if (self.dataObjectID) {
 		@try {
-			anObject = [LegislatorObj objectWithPrimaryKeyValue:self.dataObjectID];
+			anObject = [SLFLegislator findFirstByAttribute:@"legID" withValue:self.dataObjectID];
 		}
 		@catch (NSException * e) {
 		}
@@ -64,320 +117,50 @@
 	return anObject;
 }
 
-- (void)setLegislator:(LegislatorObj *)newLegislator {
-	self.dataObjectID = nil;
-	if (newLegislator) {
-		self.dataObjectID = newLegislator.legislatorID;
-		
-		[self createSectionList];		
+- (void)setLegislator:(SLFLegislator *)newObj {
+	[legislator release];
+	legislator = [newObj retain];
+	
+	if (newObj) {
+        self.resourcePath = RKMakePathWithObject(@"/legislators/(legID)/", newObj);
+		[self loadData];
 	}
 }
 
-- (void) createSectionList {	
-	NSInteger numberOfSections = 4 + [self.legislator numberOfDistrictOffices];
+#pragma mark -
+#pragma mark RKObjectLoaderDelegate methods
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
+	[[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"LastUpdatedAt"];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+    
+	[legislator release];
+	legislator = [object retain];
+        
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataUpdated object:self];
+    
+}
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
+	UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Error" 
+                                                     message:[error localizedDescription] 
+                                                    delegate:nil 
+                                           cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+	[alert show];
+	NSLog(@"Hit error: %@", error);
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataError object:self];
+
+}
+
+- (void)objectLoader:(RKObjectLoader*)loader willMapData:(inout id *)mappableData {
 	
-	NSString *tempString = nil;
-	BOOL isPhone = [UtilityMethods canMakePhoneCalls];
-	TableCellDataObject *cellInfo = nil;
-	
-	// create an array of sections, with arrays of DirectoryDetailInfo entries as contents
-	self.sectionArray = nil;	// this calls removeAllObjects and release automatically
-	self.sectionArray = [NSMutableArray arrayWithCapacity:numberOfSections];
-	
-	NSInteger i;
-	for (i=0; i < numberOfSections; i++) {
-		[self.sectionArray addObject:[NSMutableArray arrayWithCapacity:30]]; // just an arbitrary maximum
-	}
-	
-	/*	Section 0: Personal Information */		
-	NSInteger sectionIndex = 0;	
-	
-	NSDictionary *entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-							   NSLocalizedStringFromTable(@"Name", @"DataTableUI", @"Title for cell"), @"subtitle",
-							   [self.legislator fullName], @"entryValue",
-							   [self.legislator fullName], @"title",
-							   [NSNumber numberWithBool:NO], @"isClickable",
-							   [NSNumber numberWithInteger:DirectoryTypeNone], @"entryType",
-							   nil];
-	cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-	[entryDict release];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
-	
-	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 NSLocalizedStringFromTable(@"Map", @"DataTableUI", @"Title for cell"), @"subtitle",
-				 self.legislator.districtMap, @"entryValue",
-				 NSLocalizedStringFromTable(@"District Map", @"DataTableUI", @"Title for cell"), @"title",
-				 [NSNumber numberWithBool:YES], @"isClickable",
-				 [NSNumber numberWithInteger:DirectoryTypeMap], @"entryType",
-				 nil];
-	cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-	[entryDict release];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
-	
-	if (self.legislator && self.legislator.transDataContributorID) {
-		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 NSLocalizedStringFromTable(@"Finances", @"DataTableUI", @"Title for Cell"), @"subtitle",
-					 self.legislator.transDataContributorID, @"entryValue",
-					 NSLocalizedStringFromTable(@"Campaign Contributions", @"DataTableUI", @"title for cell"), @"title",
-					 [NSNumber numberWithBool:YES], @"isClickable",
-					 [NSNumber numberWithInteger:DirectoryTypeContributions], @"entryType",
-					 nil];
-		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-		[entryDict release];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;
+	if (loader.objectMapping.objectClass == self.resourceClass) {
 		
+        [SLFMappingsManager premapLegislator:self.legislator toComitteesWithData:mappableData];
+        
 	}
-	
-	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 NSLocalizedStringFromTable(@"Email", @"DataTableUI", @"Title for Cell"), @"subtitle",
-				 self.legislator.email, @"entryValue",
-				 self.legislator.email, @"title",
-				 [NSNumber numberWithBool:YES], @"isClickable",
-				 [NSNumber numberWithInteger:DirectoryTypeMail], @"entryType",
-				 nil];
-	cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-	[entryDict release];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
-	
-	
-	if (self.legislator && self.legislator.twitter && [self.legislator.twitter length]) {
-		tempString = ([self.legislator.twitter hasPrefix:@"@"]) ? self.legislator.twitter : [NSString stringWithFormat:@"@%@", self.legislator.twitter];
-		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 NSLocalizedStringFromTable(@"Twitter", @"DataTableUI", @"Title for Cell"), @"subtitle",
-					 tempString, @"entryValue",
-					 tempString, @"title",
-					 [NSNumber numberWithBool:YES], @"isClickable",
-					 [NSNumber numberWithInteger:DirectoryTypeTwitter], @"entryType",
-					 nil];
-		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-		[entryDict release];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;
-		
-	}
-	
-	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 NSLocalizedStringFromTable(@"Web", @"DataTableUI", @"Title for Cell, As in, a web address"), @"subtitle",
-				 self.legislator.website, @"entryValue",
-				 NSLocalizedStringFromTable(@"Official Website", @"DataTableUI", @"Title for Cell"), @"title",
-				 [NSNumber numberWithBool:YES], @"isClickable",
-				 [NSNumber numberWithInteger:DirectoryTypeWeb], @"entryType",
-				 nil];
-	cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-	[entryDict release];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
-		
-		
-	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 NSLocalizedStringFromTable(@"Web", @"DataTableUI", @"Title for cell, As in, a web adress"), @"subtitle",
-				 self.legislator.bio_url, @"entryValue",
-				 NSLocalizedStringFromTable(@"Votesmart Bio", @"DataTableUI", @"Title for cell, Biographical information available at VoteSmart.org"), @"title",
-				 [NSNumber numberWithBool:YES], @"isClickable",
-				 [NSNumber numberWithInteger:DirectoryTypeWeb], @"entryType",
-				 nil];
-	cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-	[entryDict release];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
-	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 NSLocalizedStringFromTable(@"Legislation", @"DataTableUI", @"Title for cell, Bills and resolutions this person has authored"), @"subtitle",
-				 self.legislator.openstatesID, @"entryValue",
-				 NSLocalizedStringFromTable(@"Authored Bills", @"DataTableUI", @"Title for cell, Bills and resolutions this person has authored"), @"title",
-				 [NSNumber numberWithBool:YES], @"isClickable",
-				 [NSNumber numberWithInteger:DirectoryTypeBills], @"entryType",
-				 nil];
-	cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-	[entryDict release];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
-	tempString = nil;
-	[[NSUserDefaults standardUserDefaults] synchronize];	
-	NSDictionary *storedNotesDict = [[NSUserDefaults standardUserDefaults] valueForKey:@"LEGE_NOTES"];
-	if (storedNotesDict) {
-		tempString = [storedNotesDict valueForKey:[self.legislator.legislatorID stringValue]];
-	}
-	if (IsEmpty(tempString)) {
-		tempString = kStaticNotes;
-	}
-	entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 NSLocalizedStringFromTable(@"Notes", @"DataTableUI", @"Title for the cell indicating custom notes option"), @"subtitle",
-				 tempString, @"entryValue",
-				 tempString, @"title",
-				 [NSNumber numberWithBool:YES], @"isClickable",
-				 [NSNumber numberWithInteger:DirectoryTypeNotes], @"entryType",
-				 nil];
-	cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-	[entryDict release];
-	[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-	[cellInfo release], cellInfo = nil;
-	
-	
-	/* after that section's done... DO COMMITTEES */
-	sectionIndex++;
-	for (CommitteePositionObj *position in [self.legislator sortedCommitteePositions]) {
-		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 [position positionString], @"subtitle",
-					 [position committee], @"entryValue",
-					 [position.committee committeeName], @"title",
-					 [NSNumber numberWithBool:YES], @"isClickable",
-					 [NSNumber numberWithInteger:DirectoryTypeCommittee], @"entryType",
-					 nil];
-		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-		[entryDict release];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;
-	}
-	
-	/* Now we handle all the office locations ... */
-	sectionIndex++;
-	/*	Section 1: Staffers */
-	
-	if ([self.legislator numberOfStaffers] > 0) {
-		for (StafferObj *staffer in [self.legislator sortedStaffers]) {
-			entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-						 staffer.title, @"subtitle",
-						 staffer.email, @"entryValue",
-						 staffer.name, @"title",
-						 [NSNumber numberWithBool:YES], @"isClickable",
-						 [NSNumber numberWithInteger:DirectoryTypeMail], @"entryType",
-						 nil];
-			cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-			[entryDict release];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;
-		}
-	}
-	else {
-		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 NSLocalizedStringFromTable(@"Staff", @"DataTableUI", @"Office employees"), @"subtitle",
-					 @"NoneListed", @"entryValue",
-					 NSLocalizedStringFromTable(@"No Staff Listed", @"DataTableUI", @"Title for cell indicating this person hasn't publish a list of office employees"), 
-							@"title", [NSNumber numberWithBool:NO], @"isClickable",
-					 [NSNumber numberWithInteger:DirectoryTypeNone], @"entryType",
-					 nil];
-		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-		[entryDict release];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;
-	}
-		
-	/* Now we handle all the office locations ... */
-	sectionIndex++;
-	/*	Section 2: Capitol Office */		
-		
-	if (self.legislator && self.legislator.cap_office && [self.legislator.cap_office length]) {
-		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 NSLocalizedStringFromTable(@"Office", @"DataTableUI", @"The person's office number, indicating the location inside the building"), @"subtitle",
-					 self.legislator.cap_office, @"entryValue",
-					 self.legislator.cap_office, @"title",
-					 [NSNumber numberWithBool:NO], @"isClickable",
-					 [NSNumber numberWithInteger:DirectoryTypeNone], @"entryType",
-					 nil];
-		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-		[entryDict release];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;
-	} 
-	if (self.legislator && self.legislator.cap_phone && [self.legislator.cap_phone length]) {
-		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 NSLocalizedStringFromTable(@"Phone", @"DataTableUI", @"Cell title listing a phone number"), @"subtitle",
-					 self.legislator.cap_phone, @"entryValue",
-					 self.legislator.cap_phone, @"title",
-					 [NSNumber numberWithBool:isPhone], @"isClickable",
-					 [NSNumber numberWithInteger:DirectoryTypePhone], @"entryType",
-					 nil];
-		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-		[entryDict release];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;
-	} 
-	if (self.legislator && self.legislator.cap_fax && [self.legislator.cap_fax length]) {
-		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 NSLocalizedStringFromTable(@"Fax", @"DataTableUI", @"Cell title listing a fax number"), @"subtitle",
-					 self.legislator.cap_fax, @"entryValue",
-					 self.legislator.cap_fax, @"title",
-					 [NSNumber numberWithBool:NO], @"isClickable",
-					 [NSNumber numberWithInteger:DirectoryTypeNone], @"entryType",
-					 nil];
-		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-		[entryDict release];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;
-	}
-	if (self.legislator && self.legislator.cap_phone2 && [self.legislator.cap_phone2 length]) {
-		tempString = (self.legislator.cap_phone2_name.length > 0) ? self.legislator.cap_phone2_name : NSLocalizedStringFromTable(@"Phone #2", @"DataTableUI", @"Second phone number");
-		entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-					 tempString, @"subtitle",
-					 self.legislator.cap_phone2, @"entryValue",
-					 self.legislator.cap_phone2, @"title",
-					 [NSNumber numberWithBool:isPhone], @"isClickable",
-					 [NSNumber numberWithInteger:DirectoryTypePhone], @"entryType",
-					 nil];
-		cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-		[entryDict release];
-		[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-		[cellInfo release], cellInfo = nil;
-	} 
-	
-	/* after that section's done... */
-	/*	Section 3+: District Offices */		
-	
-	for (DistrictOfficeObj *office in self.legislator.districtOffices) {
-		sectionIndex++;
-		if (office.phone && [office.phone length]) {
-			entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-						 NSLocalizedStringFromTable(@"Phone", @"DataTableUI", @"Cell title listing a phone number"), @"subtitle",
-						 office.phone, @"entryValue",
-						 office.phone, @"title",
-						 [NSNumber numberWithBool:isPhone], @"isClickable",
-						 [NSNumber numberWithInteger:DirectoryTypePhone], @"entryType",
-						 nil];
-			cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-			[entryDict release];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;
-		}			
-		if (office.fax && [office.fax length]) {
-			entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-						 NSLocalizedStringFromTable(@"Fax", @"DataTableUI", @"Cell title listing a fax number"), @"subtitle",
-						 office.fax, @"entryValue",
-						 office.fax, @"title",
-						 [NSNumber numberWithBool:NO], @"isClickable",
-						 [NSNumber numberWithInteger:DirectoryTypeNone], @"entryType",
-						 nil];
-			cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-			[entryDict release];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;
-		}			
-		if (office.address && [office.address length]) {
-			
-			entryDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-						 NSLocalizedStringFromTable(@"Address", @"DataTableUI", @"Cell title listing a street address"), @"subtitle",
-						 office, @"entryValue",
-						 [office cellAddress], @"title",
-						 [NSNumber numberWithBool:YES], @"isClickable",
-						 [NSNumber numberWithInteger:DirectoryTypeMap], @"entryType",
-						 nil];
-			cellInfo = [[TableCellDataObject alloc] initWithDictionary:entryDict];
-			[entryDict release];
-			[[self.sectionArray objectAtIndex:sectionIndex] addObject:cellInfo];
-			[cellInfo release], cellInfo = nil;
-		} 
-		
-	}
-}	
+}
 
 #pragma mark -
 #pragma mark Data Object Methods
@@ -385,27 +168,135 @@
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
 	if (!indexPath)
 		return nil;
-	
-	id tempEntry = nil;
-	NSArray *group = [self.sectionArray objectAtIndex:indexPath.section];
-	if (group && [group count] > indexPath.row)
-		tempEntry = [group objectAtIndex:indexPath.row];
-	return tempEntry;
+    
+    TableCellDataObject *obj = [[TableCellDataObject alloc] init];
+    obj.indexPath = indexPath;
+
+    switch (indexPath.section) {
+        case kCommittees:
+        {
+            NSArray *sortedPos = self.legislator.sortedPositions;
+            if (indexPath.row < [sortedPos count]) {
+                SLFCommitteePosition *position = [sortedPos objectAtIndex:indexPath.row];
+                if (position) {
+                    obj.title       = position.committeeName;
+                    obj.subtitle    = position.positionType;
+                    obj.entryValue  = position.committeeID;
+                    obj.isClickable = YES;
+                    obj.entryType   = DirectoryTypeCommittee;
+                }
+            }
+        }
+            break;
+            
+        case kDistrictMap:
+        {
+            SLFDistrictMap *map = self.legislator.hydratedDistrictMap;
+            NSString *mapID = nil;
+            
+            if (map)
+                mapID = map.slug;
+            else
+                mapID = self.legislator.districtMapSlug;
+
+            obj.subtitle    = NSLocalizedStringFromTable(@"Map", @"DataTableUI", @"Title for cell");
+            obj.title       = NSLocalizedStringFromTable(@"District Map", @"DataTableUI", @"Title for cell");
+            obj.entryValue  = mapID;
+            obj.isClickable = YES;
+            obj.entryType   = DirectoryTypeMap;            
+        }
+            break;
+            
+        case kBills: 
+        {
+            obj.subtitle    = NSLocalizedStringFromTable(@"Legislation", @"DataTableUI", @"Title for cell");
+            obj.title       = NSLocalizedStringFromTable(@"Authored Bills", @"DataTableUI", @"Title for cell");
+            obj.entryValue  = self.legislator.legID;
+            obj.isClickable = YES;
+            obj.entryType   = DirectoryTypeBills;            
+        }
+            break;
+            
+        case kMemberInfo:   // The Legislator's Info (contact, bio, etc)
+        default:
+        {
+            switch (indexPath.row) 
+            {
+                case 0: 
+                {
+                    obj.title       = self.legislator.fullName;
+                    obj.subtitle    = NSLocalizedStringFromTable(@"Name", @"DataTableUI", @"Title for cell");
+                    obj.entryValue  = self.legislator.fullName;
+                    obj.isClickable = NO;
+                    obj.entryType   = DirectoryTypeNone;            
+                }
+                    break;
+                    
+                case 1: 
+                {
+                    obj.title       = NSLocalizedStringFromTable(@"Campaign Contributions", @"DataTableUI", @"title for cell");
+                    obj.subtitle    = NSLocalizedStringFromTable(@"Finances", @"DataTableUI", @"Title for Cell");
+                    obj.entryValue  = self.legislator.transparencyID;
+                    obj.isClickable = YES;
+                    obj.entryType   = DirectoryTypeContributions;
+                }
+                    break;
+                    
+                case 2:
+                {
+                    NSString *url = [self.legislator.sources count] ? [self.legislator.sources objectAtIndex:0] : nil;
+                    
+                    obj.title       = NSLocalizedStringFromTable(@"Official Website", @"DataTableUI", @"Title for Cell");
+                    obj.subtitle    = NSLocalizedStringFromTable(@"Web", @"DataTableUI", @"Title for Cell");
+                    obj.entryValue  = url;
+                    obj.isClickable = YES;
+                    obj.entryType   = DirectoryTypeWeb;
+                }
+                    break;
+
+                case 3:
+                {
+                    obj.title       = NSLocalizedStringFromTable(@"Votesmart Bio", @"DataTableUI", @"Title for Cell");
+                    obj.subtitle    = NSLocalizedStringFromTable(@"Web", @"DataTableUI", @"Title for Cell");
+                    obj.entryValue  = [NSString stringWithFormat:@"http://votesmart.org/bio.php?can_id=%@",self.legislator.votesmartID];
+                    obj.isClickable = YES;
+                    obj.entryType   = DirectoryTypeWeb;
+                }
+                    break;
+                    
+                case 4:
+                default:
+                {
+                    [[NSUserDefaults standardUserDefaults] synchronize];	
+                    NSDictionary *storedNotesDict = [[NSUserDefaults standardUserDefaults] valueForKey:@"LEGE_NOTES"];
+                    NSString *storedNotes = nil;
+                    
+                    if (storedNotesDict) 
+                        storedNotes = [storedNotesDict valueForKey:self.legislator.legID];
+
+                    if (IsEmpty(storedNotes))
+                        storedNotes = kStaticNotes;
+
+                    obj.title       = storedNotes;
+                    obj.subtitle    = NSLocalizedStringFromTable(@"Notes", @"DataTableUI", @"Title for the cell indicating custom notes option");
+                    obj.entryValue  = storedNotes;
+                    obj.isClickable = YES;
+                    obj.entryType   = DirectoryTypeNotes;
+                }
+                    break;
+            }
+        }
+            break;
+    }    
+
+    return [obj autorelease];
 }
 
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject {
-	if (!dataObject)
-		return nil;
 	
-	NSInteger section = 0, row = 0;
-	for (NSArray *group in self.sectionArray) {
-		for (id object in group) {
-			if ([object isEqual:dataObject])
-				return [NSIndexPath indexPathForRow:row inSection:section];
-			row++;
-		}
-		section++;
-	}
+    if (dataObject && [dataObject respondsToSelector:@selector(indexPath)])
+        return [dataObject performSelector:@selector(indexPath)];
+
 	return nil;
 }
 
@@ -416,7 +307,7 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {	
-	return [self.sectionArray count];	
+	return kNumSections;	
 }
 
 // This is for the little index along the right side of the table ... use nil if you don't want it.
@@ -429,53 +320,48 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section {
-	NSArray *group = [self.sectionArray objectAtIndex:section];
-	if (group)
-		return [group count];
-
-	return 0;
+    NSInteger rows = 0;
+    
+    switch (section) {
+        case kCommittees:
+            rows = [self.legislator.positions count];
+            break;
+        case kDistrictMap:
+            rows = 1;
+            break;
+        case kBills:
+            rows = 1;
+            break;
+        case kMemberInfo:
+        default:
+            rows = 5;
+            break;
+    }
+    
+	return rows;
 }
 
 - (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {	
 	NSString *title = nil;
 	
 	switch (section) {
-		case 0:
-			title = NSLocalizedStringFromTable(@"Legislator Information", @"DataTableUI", @"Cell title");
-			break;
-		case 1:
+        case kDistrictMap:
+			title = NSLocalizedStringFromTable(@"District", @"DataTableUI", @"Cell title");;
+            break;
+		case kCommittees:
 			title = NSLocalizedStringFromTable(@"Committee Assignments", @"DataTableUI", @"Cell title");;
 			break;
-		case 2:
-			title = NSLocalizedStringFromTable(@"Staff Members", @"DataTableUI", @"Cell title");
+		case kBills:
+			title = NSLocalizedStringFromTable(@"Bills", @"DataTableUI", @"Cell title");;
 			break;
-		case 3:
-			title = NSLocalizedStringFromTable(@"Capitol Office", @"DataTableUI", @"Cell title");
-			break;
-		case 4:
-			title = NSLocalizedStringFromTable(@"District Office #1", @"DataTableUI", @"Cell title");
-			break;
-		case 5:
-			title = NSLocalizedStringFromTable(@"District Office #2", @"DataTableUI", @"Cell title");
-			break;
-		case 6:
-			title = NSLocalizedStringFromTable(@"District Office #3", @"DataTableUI", @"Cell title");
-			break;
-		case 7:
-		default:
-			title = NSLocalizedStringFromTable(@"District Office #4", @"DataTableUI", @"Cell title");
+		case kMemberInfo:
+        default:
+			title = NSLocalizedStringFromTable(@"Legislator Information", @"DataTableUI", @"Cell title");
 			break;
 	}
 	return title;
 }
 
-
-- (NSString *)chamberPartyAbbrev {
-	NSString *partyName = stringForParty([self.legislator.party_id integerValue], TLReturnAbbrev);
-	
-	return [NSString stringWithFormat:@"%@ %@ %@", [self.legislator chamberName], partyName, 
-			 NSLocalizedStringFromTable(@"Avg.", @"DataTableUI", @"Abbreviation for the word average.")];
-}
 
 #pragma mark -
 #pragma mark UITableViewDataSource methods
@@ -498,15 +384,14 @@
 	NSString *cellIdentifier = [NSString stringWithFormat:@"%@-%d", stdCellID, cellInfo.isClickable];
 	
 	/* Look up cell in the table queue */
-	UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	
 	/* Not found in queue, create a new cell object */
     if (cell == nil) {
 		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:[TexLegeStandardGroupCell cellStyle] reuseIdentifier:cellIdentifier] autorelease];
     }
     
-	if ([cell conformsToProtocol:@protocol(TexLegeGroupCellProtocol)])
-		 [cell performSelector:@selector(setCellInfo:) withObject:cellInfo];
+    cell.cellInfo = cellInfo;
 		
 	if (cellInfo.entryType == DirectoryTypeNotes) {
 		if (![cellInfo.entryValue isEqualToString:kStaticNotes])

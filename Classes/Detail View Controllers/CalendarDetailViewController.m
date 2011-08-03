@@ -46,10 +46,10 @@
 
 - (void)finalizeUI {
 	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(reloadEvents:) name:kCalendarEventsNotifyLoaded object:nil];	
+											 selector:@selector(tableDataChanged:) name:kCalendarEventsNotifyLoaded object:nil];	
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(reloadEvents:) name:kCalendarEventsNotifyError object:nil];	
+											 selector:@selector(tableDataChanged:) name:kCalendarEventsNotifyError object:nil];	
 
 	self.calendarView.tableView.rowHeight = 73;
 	self.calendarView.tableView.backgroundColor = [TexLegeTheme backgroundDark];
@@ -133,8 +133,8 @@
 #pragma mark -
 #pragma mark Data Objects
 
-- (void)reloadEvents:(NSNotification*)notification {
-	[self reloadData];
+- (void)tableDataChanged:(NSNotification*)notification {
+	[self reloadData];  // for our kal view data controller "super"
 }
 
 - (id)dataObject {

@@ -11,30 +11,21 @@
 //
 
 #import "StatesListMetaLoader.h"
+#import "SLFState.h"
 
-#import "StateMetaLoader.h"
-#import "JSONKit.h"
 #import "UtilityMethods.h"
 #import "TexLegeReachability.h"
-#import "OpenLegislativeAPIs.h"
-#import "TexLegeLibrary.h"
-#import "NSDate+Helper.h"
 #import "LoadingCell.h"
-
-#define kStatesListCacheFile            @"StateMetaReadyList.json"
-#define kStatesListDefaultsKey          @"all_ready_states"
-
-@interface StatesListMetaLoader()
-- (void)loadStatesListFromCache;
-@end
 
 
 @implementation StatesListMetaLoader
+@synthesize resourcePath;
+@synthesize resourceClass;
 @synthesize states;
 @synthesize updated;
 @synthesize loadingStatus;
 
-+ (id)sharedStatesListMeta
++ (id)sharedStatesLoader
 {
 	static dispatch_once_t pred;
 	static StatesListMetaLoader *foo = nil;
@@ -49,16 +40,18 @@
 	if ((self=[super init])) {
         isLoading = NO;
 
+        self.resourceClass = [SLFState class];
+        self.resourcePath = @"/metadata/";
+
         [[TexLegeReachability sharedTexLegeReachability] addObserver:self 
 														  forKeyPath:@"openstatesConnectionStatus" 
 															 options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) 
 															 context:nil];
         
-        [OpenLegislativeAPIs sharedOpenLegislativeAPIs];
-
-            //Pull our cached list or from the app bundle
-        [self loadStatesListFromCache];
-
+        // Load statuses from core data
+        [self loadDataFromDataStore];
+        [self loadData];
+        
 	}
 	return self;
 }
@@ -70,10 +63,14 @@
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
     
     self.updated = nil;
-    nice_release(states);   // "self.states = nil;"  might try and do a load again...
+    self.resourcePath = nil;
+    
+    nice_release(states);
     
 	[super dealloc];
 }
+
+
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	
@@ -86,10 +83,10 @@
              }*/
 			
 			if ([TexLegeReachability openstatesReachable])
-                [self downloadStatesList];
+                [self loadData];
 			else if (self.loadingStatus != LOADING_NO_NET) {
 				self.loadingStatus = LOADING_NO_NET;
-				[[NSNotificationCenter defaultCenter] postNotificationName:kStateMetaNotifyError object:nil];	
+				[[NSNotificationCenter defaultCenter] postNotificationName:kStatesListErrorKey object:nil];	
 			}
 		}
 	}	
@@ -101,11 +98,9 @@
     
     NSCParameterAssert( (NO == IsEmpty(states)) && (NO == IsEmpty(stateID)) && (NO == IsEmpty(feature)) );
         
-    NSDictionary *stateInfo = [self.states findWhereKeyPath:@"abbreviation" equals:stateID];
+    SLFState *stateInfo = [SLFState findFirstByAttribute:@"abbreviation" withValue:stateID];
     if (stateInfo) {
-        
-        NSArray *features = [stateInfo objectForKey:@"feature_flags"];
-        if (features && [features containsObject:feature]) {
+        if (stateInfo.featureFlags && [stateInfo.featureFlags containsObject:feature]) {
             isEnabled = YES;
         }
     }
@@ -119,7 +114,7 @@
 }
 
 
-- (NSMutableArray *)states    {
+- (NSArray *)states    {
     
     BOOL doLoad = [TexLegeReachability openstatesReachable];
     
@@ -134,13 +129,13 @@
         
         debug_NSLog(@"StatesListMeta is stale, need to refresh");
         
-        [self downloadStatesList];
+        [self loadData];
         
     }
     
 	if (IsEmpty(states)) { // while we download, let's grab what we need from cache, temporarily
         
-        [self loadStatesListFromCache];
+        [self loadDataFromDataStore];
         
     }
     
@@ -148,125 +143,80 @@
 }
 
 
-
-- (void)loadStatesListFromCache {
-	
-	NSString *localPath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:kStatesListCacheFile];
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-	if (NO == [fileManager fileExistsAtPath:localPath]) {
-        
-        // no cache yet, ... we need to get it from our app's bundle
-        localPath = [[NSBundle mainBundle] pathForResource:@"StateMetaReadyList" ofType:@"json"];    
-        
-        // If we wanted to copy our default file to the cache location, we'd do this...
-        // [fileManager copyItemAtPath:defaultStorePath toPath:storePath error:&error];
-	}    
-    
-    NSData *jsonFile = [NSData dataWithContentsOfFile:localPath];
-    
-    if (jsonFile) {
-        self.states = [jsonFile mutableObjectFromJSONData];  
-    }
-    
+- (void)loadDataFromDataStore {
+    self.states = nil;
+	NSFetchRequest* request = [SLFState fetchRequest];
+	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
+	self.states = [SLFState objectsWithFetchRequest:request];
 }
 
 
-- (void)downloadStatesList {
+- (void)loadData {
     
-	if (isLoading == YES)	// we're already working on it
+    if (isLoading == YES)	// we're already working on it
 		return;
-	
-	if ([TexLegeReachability openstatesReachable]) {
+
+    if ([TexLegeReachability openstatesReachable]) {
         isLoading = YES;
 		self.loadingStatus = LOADING_ACTIVE;
         
-        RKClient *osApiClient = [[OpenLegislativeAPIs sharedOpenLegislativeAPIs] osApiClient];
-        NSDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY, @"apikey",nil];
+        // Load the object model via RestKit	
+        RKObjectManager* objectManager = [RKObjectManager sharedManager];
         
-        RKRequest *request = [osApiClient get:@"/metadata/" queryParams:queryParams delegate:self];	
-        if (request) {
-            request.userData = kStatesListDefaultsKey;
-            [request send];
-        }
+        RKObjectMapping* stateMapping = [objectManager.mappingProvider objectMappingForClass:self.resourceClass];
         
         
+        NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     SUNLIGHT_APIKEY, @"apikey",
+                                     nil];
+        NSString *newPath = [self.resourcePath appendQueryParams:queryParams];
+        
+        [objectManager loadObjectsAtResourcePath:newPath objectMapping:stateMapping delegate:self];
     }
     else if (self.loadingStatus != LOADING_NO_NET) {
 		self.loadingStatus = LOADING_NO_NET;
 		[[NSNotificationCenter defaultCenter] postNotificationName:kStatesListErrorKey object:nil];	
-	}	
-    
+	}	    
 }
+
 
 
 #pragma mark -
 #pragma mark RestKit:RKObjectLoaderDelegate
 
-- (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
+- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     
-	if (error && request) {
-		debug_NSLog(@"Error loading state metadata from %@: %@", [request description], [error localizedDescription]);
+    if (error && objectLoader) {
+		NSLog(@"Error loading state metadata from %@: %@", [objectLoader description], [error localizedDescription]);
 	}
     
     isLoading = NO;
-
-        // We had trouble loading the metadata online, so pull it up from the one in the documents folder
     
-    [self loadStatesListFromCache];
+    // We had trouble loading the metadata online, so pull it up from the one in the documents folder
+    
+    [self loadDataFromDataStore];
     
     if (self.loadingStatus != LOADING_NO_NET) {
 		self.loadingStatus = LOADING_NO_NET;
-		[[NSNotificationCenter defaultCenter] postNotificationName:kStateMetaNotifyError object:nil];
-	}    
-
+		[[NSNotificationCenter defaultCenter] postNotificationName:kStatesListErrorKey object:nil];
+	}      
 }
 
 
-- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
-    
+- (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {
     isLoading = NO;
+    self.loadingStatus = LOADING_IDLE;
+    self.updated = [NSDate date];
+
+    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+	self.states = [objects sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
     
-	if ([request isGET] && [response isOK]) {  
-        
-        self.loadingStatus = LOADING_IDLE;
-
-		if (NO == [request.resourcePath hasPrefix:@"/metadata"]) 
-			return;
-		
-        if (!request.userData || NO == [request.userData isEqual:kStatesListDefaultsKey]) {
-            return;
-        }
-        
-        ////// we've requested and received a list of all the available states, do something. //////
-                
-        id tempList = [response.body mutableObjectFromJSONData];
-        
-        if (!tempList || NO == [tempList isKindOfClass:[NSMutableArray class]] || IsEmpty(tempList))
-            return;        
-                
-        self.updated = [NSDate date];
-        
-        LOG_EXPR(tempList);
-
-        [self setStates:tempList];
-        
-        NSString *localPath = [[UtilityMethods applicationCachesDirectory] stringByAppendingPathComponent:kStatesListCacheFile];
-        if (![response.body writeToFile:localPath atomically:YES]) {
-            NSLog(@"StateListLoader: error writing cache to file: %@", localPath);
-        }
-		        
-    }        
-    else {
-        NSLog(@"Errors retrieving data from Open States API");
-        LOG_EXPR([request isGET]);
-        LOG_EXPR([response isOK]);
-        LOG_EXPR([response.body mutableObjectFromJSONData]);
-        LOG_EXPR(response.body);        
-    }
-
+    debug_NSLog(@"%d States", [objects count]);
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:kStatesListLoadedKey object:nil];
 
 }
+
 
 @end

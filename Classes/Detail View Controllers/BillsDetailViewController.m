@@ -11,12 +11,13 @@
 //
 
 #import "BillsDetailViewController.h"
+#import "SLFDataModels.h"
+
 #import "BillsFavoritesViewController.h"
 #import "BillSearchDataSource.h"
 #import "BillsListViewController.h"
 #import "LegislatorDetailViewController.h"
 #import "TableDataSourceProtocol.h"
-#import "TexLegeCoreDataUtils.h"
 #import "UtilityMethods.h"
 #import "TableCellDataObject.h"
 #import "AppDelegate.h"
@@ -33,6 +34,8 @@
 #import "AppendingFlowView.h"
 #import "BillActionParser.h"
 #import "SLFAlertView.h"
+
+#import "TexLegeLibrary.h"
 
 @interface BillsDetailViewController (Private)
 - (void)setupHeader;
@@ -221,7 +224,7 @@ enum _billSections {
 		return;
 	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.openstatesID == %@", legeID];
-	LegislatorObj *legislator = [LegislatorObj objectWithPredicate:predicate];
+	SLFLegislator *legislator = [SLFLegislator objectWithPredicate:predicate];
 	if (legislator) {
 		LegislatorDetailViewController *legVC = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
 		legVC.legislator = legislator;	
@@ -275,6 +278,16 @@ enum _billSections {
 	}		
 }
 
+- (void)tableDataChanged:(NSNotification *)notification {
+    [self setupHeader];
+    
+    if (self.starButton)
+        [self starButtonSetState:[self isFavorite]];
+    
+	// this will force our datasource to renew everything
+	[self.tableView reloadData];	
+}
+
 - (void)setBill:(NSMutableDictionary *)newBill {
 	if (self.starButton)
 		self.starButton.enabled = (newBill != nil);		
@@ -286,26 +299,16 @@ enum _billSections {
 		
 		self.tableView.dataSource = self;
 				
-		[self setupHeader];
-		
-		if (self.starButton)
-			[self starButtonSetState:[self isFavorite]];
-		
+		[self tableDataChanged:nil];
+        
 		if (masterPopover != nil) {
 			[masterPopover dismissPopoverAnimated:YES];
 		}		
 		
-		[self.tableView reloadData];
 	}
 }
 #pragma mark -
 #pragma mark Managing the popover
-
-- (IBAction)resetTableData:(id)sender {
-	
-	// this will force our datasource to renew everything
-	[self.tableView reloadData];	
-}
 
 // Called on the delegate when the user has taken action to dismiss the popover. This is not called when -dismissPopoverAnimated: is called directly.
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
@@ -511,8 +514,7 @@ enum _billSections {
 				
 				BOOL passed = [[vote objectForKey:@"passed"] boolValue];
 				NSString *passedString = passed ? NSLocalizedStringFromTable(@"Passed", @"DataTableUI", @"Whether a bill passed/failed") : NSLocalizedStringFromTable(@"Failed", @"DataTableUI", @"Whether a bill passed/failed");
-				NSInteger chamber = chamberFromOpenStatesString([vote objectForKey:@"chamber"]);
-				NSString *chamberString = stringForChamber(chamber, TLReturnFull);
+				NSString * chamberString = chamberStringFromOpenStates([vote objectForKey:@"chamber"]);
 				
 				cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@ (%@)",
 											 [[vote objectForKey:@"motion"] firstLetterCapitalized],
@@ -542,7 +544,7 @@ enum _billSections {
 					NSString *desc = nil;
 					if (!IsEmpty([currentAction objectForKey:@"actor"])) {
 						
-						NSInteger chamberCode = chamberFromOpenStatesString([currentAction objectForKey:@"actor"]);
+						NSInteger chamberCode = chamberIntFromOpenStates([currentAction objectForKey:@"actor"]);
 						
 						if (chamberCode == HOUSE || chamberCode == SENATE) {
 							

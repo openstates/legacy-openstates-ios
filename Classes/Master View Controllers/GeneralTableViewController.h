@@ -39,7 +39,9 @@
 - (IBAction)selectDefaultObject:(id)sender;
 - (id)firstDataObject;
 
-- (void)beginUpdates:(NSNotification *)aNotification;
-- (void)endUpdates:(NSNotification *)aNotification;
+- (void)tableDataChanged:(NSNotification *)aNotification;
+
+- (void)stateChanged:(NSNotification *)notification;
+
 
 @end

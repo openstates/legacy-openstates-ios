@@ -16,7 +16,6 @@
 }
 
 @property (nonatomic,retain) IBOutlet MKMapView *mapView;
-@property (nonatomic,readonly) MKCoordinateRegion texasRegion;
 @property (nonatomic,assign) MKPolygonView *districtView;
 @property (nonatomic) CLLocationCoordinate2D annotationActionCoord;
 

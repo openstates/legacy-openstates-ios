@@ -11,12 +11,12 @@
 //
 
 #import "BillVotesDataSource.h"
-#import "TexLegeCoreDataUtils.h"
+#import "SLFDataModels.h"
+
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "TexLegeStandardGroupCell.h"
 #import "LegislatorDetailViewController.h"
-#import "LegislatorObj+RestKit.h"
 
 @interface BillVotesDataSource (Private)
 - (void) loadVotesAndVoters;
@@ -47,10 +47,6 @@
 
 @synthesize billVotes = billVotes_, voters = voters_, voteID, viewController;
 
-- (Class)dataClass {
-	return nil;
-}
-
 - (id)initWithBillVotes:(NSMutableDictionary *)newVotes {
 	if ((self = [super init])) {
 		voters_ = nil;
@@ -74,11 +70,6 @@
 #pragma mark UITableViewDataSource methods
 
 // legislator name is displayed in a plain style tableview
-
-- (UITableViewStyle)tableViewStyle {
-	return UITableViewStylePlain;
-};
-
 
 // return the legislator at the index in the sorted by symbol array
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
@@ -105,7 +96,7 @@
 	
 	NSDictionary *voter = [self dataObjectForIndexPath:newIndexPath];
 
-	LegislatorObj *legislator = [LegislatorObj objectWithPrimaryKeyValue:[voter objectForKey:@"legislatorID"]];
+	SLFLegislator *legislator = [SLFLegislator findFirstByAttribute:@"legID" withValue:[voter objectForKey:@"legID"]];
 	if (legislator) {
 		LegislatorDetailViewController *legVC = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
 		legVC.legislator = legislator;	
@@ -178,12 +169,9 @@
 	voters_ = [[NSMutableArray alloc] init];
 	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	NSInteger chamber = chamberFromOpenStatesString([billVotes_ objectForKey:@"chamber"]);
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.legtype == %d", chamber];
-	
-	NSArray *allMembers = [LegislatorObj objectsWithPredicate:predicate];
-	NSDictionary *memberLookup = [allMembers indexKeyedDictionaryWithKey:@"openstatesID"];
+		
+	NSArray *allMembers = [SLFLegislator findByAttribute:@"chamber" withValue:[billVotes_ objectForKey:@"chamber"]];
+	NSDictionary *memberLookup = [allMembers indexKeyedDictionaryWithKey:@"legID"];
 	
 	NSArray *voteTypes = [NSArray arrayWithObjects:@"other", @"no", @"yes", nil];
 
@@ -203,17 +191,17 @@
 				if (IsEmpty([voter objectForKey:@"leg_id"]))
 					continue;
 				
-				LegislatorObj *member = [memberLookup objectForKey:[voter objectForKey:@"leg_id"]];
+				SLFLegislator *member = [memberLookup objectForKey:[voter objectForKey:@"leg_id"]];
 				if (member) {
 					
 					NSMutableDictionary *voter = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
 												  [member shortNameForButtons], @"name",
 												  [member fullNameLastFirst], @"nameReverse",
 												  member.lastnameInitial, @"initial",
-												  member.legislatorID, @"legislatorID",
+												  member.legID, @"legID",
 												  voteCode, @"vote",
 												  [member labelSubText], @"subtitle",
-												  member.photo_name, @"photo",
+												  member.photoURL, @"photo",
 												  nil];
 					[voters_ addObject:voter];
 					[voter release];

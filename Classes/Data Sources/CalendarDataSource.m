@@ -17,23 +17,14 @@
 
 
 @implementation CalendarDataSource
+@synthesize resourcePath;
+@synthesize resourceClass;
 @synthesize calendarList;
 
-
-- (BOOL)showDisclosureIcon
-{ return YES; }
 
 - (BOOL)usesCoreData
 { return NO; }
 
-- (BOOL)canEdit
-{ return NO; }
-
-
-// displayed in a plain style tableview
-- (UITableViewStyle)tableViewStyle {
-	return UITableViewStylePlain;
-}
 
 - (id)init {
 	if ((self = [super init])) {
@@ -45,6 +36,7 @@
 }
 
 - (void)dealloc {
+    self.resourcePath = nil;
 	self.calendarList = nil;
 	[super dealloc];
 }

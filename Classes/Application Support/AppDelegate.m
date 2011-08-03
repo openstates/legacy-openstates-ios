@@ -13,7 +13,9 @@
 #import <RestKit/RestKit.h>
 
 #import "AppDelegate.h"
-#import "TexLegeCoreDataUtils.h"
+#import "SLFRestKitManager.h"
+
+
 #import "UtilityMethods.h"
 
 #import "TexLegeReachability.h"
@@ -24,9 +26,8 @@
 #import "AnalyticsOptInAlertController.h"
 #import "LocalyticsSession.h"
 
-#import "LegislatorObj.h"
-#import "DistrictMapObj.h"
-#import "DataModelUpdateManager.h"
+#import "SLFLegislator.h"
+#import "SLFDistrictMap.h"
 #import "CalendarEventsLoader.h"
 
 #import "TVOutManager.h"
@@ -58,7 +59,6 @@ NSString * const kSupportEmailKey = @"supportEmail";
 @synthesize appIsQuitting;
 
 @synthesize mainWindow;
-@synthesize dataUpdater;
 
 @synthesize legislatorMasterVC, committeeMasterVC, linksMasterVC, calendarMasterVC, districtMapMasterVC;
 @synthesize billsMasterVC;
@@ -72,7 +72,6 @@ NSString * const kSupportEmailKey = @"supportEmail";
 		// initialize  to nil
 		mainWindow = nil;
 		self.appIsQuitting = NO;
-		self.dataUpdater = [[[DataModelUpdateManager alloc] init] autorelease];
 		analyticsOptInController = nil;
 	}
 	return self;
@@ -91,7 +90,6 @@ NSString * const kSupportEmailKey = @"supportEmail";
 	self.districtMapMasterVC = nil;
 	self.billsMasterVC = nil;
 
-	self.dataUpdater = nil;
     [super dealloc];
 }
 
@@ -358,8 +356,8 @@ NSString * const kSupportEmailKey = @"supportEmail";
 	
 	[[TexLegeReachability sharedTexLegeReachability] startCheckingReachability];
 	
-	// initialize RestKit to handle our seed database and user database
-	[TexLegeCoreDataUtils initRestKitObjects:self];	
+	// initialize RestKit
+	[SLFRestKitManager sharedRestKit];	
 	
     // Set up the mainWindow and content view
 	UIWindow *localMainWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -412,10 +410,6 @@ NSString * const kSupportEmailKey = @"supportEmail";
 		if (![analyticsOptInController presentAnalyticsOptInAlertIfNecessary])
 			[analyticsOptInController updateOptInFromSettings];
 		
-		if (self.dataUpdater) {
-			[self.dataUpdater performSelector:@selector(performDataUpdatesIfAvailable:) 
-                                   withObject:self afterDelay:10.f];
-		}
 	}
 	[[LocalyticsSession sharedLocalyticsSession] resume];
  	[[LocalyticsSession sharedLocalyticsSession] upload];
@@ -450,7 +444,7 @@ NSString * const kSupportEmailKey = @"supportEmail";
 	
 	if (doReset) {
 		[[SLFPersistenceManager sharedPersistence] resetPersistence];
-		[TexLegeCoreDataUtils resetSavedDatabase:nil]; 
+		[[SLFRestKitManager sharedRestKit] resetSavedDatabase:nil]; 
 	}
 }
 
@@ -461,7 +455,7 @@ NSString * const kSupportEmailKey = @"supportEmail";
 	if (needsReset) {
 				
 		[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Settings: Reset Data to Factory?", @"AppAlerts", @"Confirmation to delete and reset the app's database.")
-							message:NSLocalizedStringFromTable(@"Are you sure you want to restore the factory database?  NOTE: The application may quit after this reset.  Data updates will be applied automatically via the Internet during the next app launch.", @"AppAlerts",@"") 
+							message:NSLocalizedStringFromTable(@"Are you sure you want to reset the legislative database?  NOTE: The application may quit after this reset.  New data will be downloaded automatically via the Internet during the next app launch.", @"AppAlerts",@"") 
 						cancelTitle:NSLocalizedStringFromTable(@"Cancel",@"StandardUI",@"Cancelling some activity")
 						cancelBlock:^(void) {
 							[self doDataReset:NO];

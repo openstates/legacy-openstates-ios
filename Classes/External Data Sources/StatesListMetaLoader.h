@@ -9,19 +9,22 @@
 #import <RestKit/RestKit.h>
 
 
-@interface StatesListMetaLoader : NSObject <RKRequestDelegate> {
+@interface StatesListMetaLoader : NSObject <RKObjectLoaderDelegate> {
     BOOL    isLoading;
 }
 
-@property (nonatomic,retain)    NSMutableArray     * states;
-@property (nonatomic,retain)    NSDate             * updated;
-@property (nonatomic)           NSInteger            loadingStatus;		// trigger "loading" or "error"  UI element
+@property (nonatomic,assign)    Class            resourceClass;
+@property (nonatomic,copy)      NSString       * resourcePath;
+@property (nonatomic,copy)      NSArray        * states;
+@property (nonatomic,retain)    NSDate         * updated;
+@property (nonatomic)           NSInteger        loadingStatus;		// trigger "loading" or "error"  UI element
 
 
-+ (id)sharedStatesListMeta;
-- (void)downloadStatesList;
++ (id)sharedStatesLoader;
 - (BOOL)isFeatureEnabled:(NSString *)feature forStateID:(NSString *)stateID;
 
+- (void)loadData;
+- (void)loadDataFromDataStore;
 
 @end
 

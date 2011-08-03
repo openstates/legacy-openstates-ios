@@ -10,68 +10,46 @@
 //
 //
 
-#import <Foundation/Foundation.h>
 #import <RestKit/RestKit.h>
 
-@interface StateMetaLoader : NSObject <RKRequestDelegate> {
-	NSMutableDictionary * _metadata;
-	NSMutableArray      * _loadingStates;
+@class SLFState;
+@interface StateMetaLoader : NSObject <RKObjectLoaderDelegate> {
 	NSString            * _selectedSession;
 	NSMutableArray      * _sessions;
 	NSMutableDictionary * _sessionDisplayNames;
-    NSString            * _selectedState;
+    BOOL                  isLoading;
 }
 
-+ (id)sharedStateMeta;	// Singleton
 
-- (BOOL)isFeatureEnabled:(NSString *)feature;
-
-
-+ (NSString *)nameForChamber:(NSInteger)chamber;        // Quick and dirty answer from the singleton
-
-- (void)loadMetadataForState:(NSString *)stateID;
-
-- (NSString *)displayNameForSession:(NSString *)aSession;
 
 @property (nonatomic)           BOOL          needsStateSelection;          // will be TRUE if the user hasn't selected a state before
 @property (nonatomic)           BOOL          isFresh;
 @property (nonatomic,retain)    NSDate      * updated;
+
 @property (nonatomic,copy)      NSString    * selectedSession;
 @property (nonatomic,readonly)  NSArray     * sessions;
 @property (nonatomic,readonly)  NSDictionary* sessionDisplayNames;
 @property (nonatomic,readonly)  NSString    * latestSession;
-@property (nonatomic,copy)      NSString    * selectedState;
-@property (nonatomic,readonly)  NSDictionary* stateMetadata;
+
+@property (nonatomic,copy)    NSArray         *defaultFeatures;
+@property (nonatomic,copy)    NSArray         *features;
+@property (nonatomic,retain)  SLFState        *selectedState;
+@property (nonatomic,copy)    NSString        *resourcePath;
+@property (nonatomic,assign)  Class            resourceClass;
+
+
++ (id)sharedStateMeta;	// Singleton
+- (void)loadData;
+
+- (id)initWithStateID:(NSString *)objID;
+- (void)setSelectedStateWithID:(NSString *)stateID;
+
+- (BOOL)isFeatureEnabled:(NSString *)feature;
 
 @end
 
-
-
-    /////// CUSTOM KEYS (App Specific)
-
-#define kStateMetaFile                  @"StateMetadata.json"
-#define kStateMetaPath                  @"StateMetadata"
-#define kStateMetaNotifyError           @"STATE_METADATA_ERROR"
-#define kStateMetaNotifyStateLoaded		@"STATE_METADATA_STATE_LOADED"
-#define kStateMetaNotifySessionChange	@"STATE_METADATA_SESSION_CHANGE"
 
 #define kMetaSelectedStateKey           @"selected_state"
 #define kMetaSelectedSessionKey         @"selected_session"
 #define kMetaSelectedStateSessionKey    @"selected_state_session"
 
-
-    /////// STANDARD KEYS (Open States API)
-
-#define kMetaLowerChamberNameKey        @"lower_chamber_name"	// House of Representatives
-#define kMetaUpperChamberNameKey        @"upper_chamber_name"	// Senate
-#define kMetaLowerChamberTitleKey       @"lower_chamber_title"	// Representative
-#define kMetaUpperChamberTitleKey       @"upper_chamber_title"	// Senator
-#define kMetaSessionsDetailsKey         @"session_details"		// "811":{"type": "special","start_date": "2009-07-01 00:00:00", "end_date": "2009-07-10 00:00:00"}
-#define kMetaSessionsDisplayNameKey     @"display_name"         // "82nd Regular Session"
-#define kMetaSessionsKey                @"sessions"		
-#define kMetaSessionTermsKey            @"terms"		
-#define kMetaStateAbbrevKey             @"abbreviation"			// tx, ut, ca, hi
-#define kMetaStateNameKey               @"name"                 // Texas
-#define kMetaLegeLevelKey               @"level"				// "state" or "federal"?
-#define kMetaLowerChamberElectionKey    @"lower_chamber_term"	// 2	[years/integer]
-#define kMetaUpperChamberElectionKey    @"upper_chamber_term"	// 4	[years/integer] 

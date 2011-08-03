@@ -10,21 +10,17 @@
 //
 //
 
-
+#import <RestKit/RestKit.h>
 #import "TableDataSourceProtocol.h"
-#import "LegislatorObj.h"
 
 
-@interface LegislatorsDataSource : NSObject <TableDataSource>  {
+@interface LegislatorsDataSource : NSObject <TableDataSource, RKObjectLoaderDelegate>  {
 }
 
-@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+- (void)loadData;
 
-@property (nonatomic) NSInteger filterChamber;		// 0 means don't filter
-@property (nonatomic, retain) NSMutableString *filterString;	// @"" means don't filter
-@property (nonatomic, readonly) BOOL hasFilter;
-
-- (void) setFilterByString:(NSString *)filter;
-- (void) removeFilter;
+@property (nonatomic,copy)      NSString        *stateID;    
+@property (nonatomic, retain)   NSFetchedResultsController *fetchedResultsController;
 
 @end
+

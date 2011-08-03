@@ -11,12 +11,10 @@
 //
 
 #import "MapMiniDetailViewController.h"
+#import "SLFDataModels.h"
+
 #import "TexLegeTheme.h"
 #import "UtilityMethods.h"
-#import "DistrictOfficeObj.h"
-#import "DistrictMapObj+MapKit.h"
-
-#import "TexLegeCoreDataUtils.h"
 
 #import "LocalyticsSession.h"
 #import "UIColor-Expanded.h"
@@ -37,7 +35,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 @implementation MapMiniDetailViewController
 @synthesize mapView;
-@synthesize texasRegion;
 @synthesize districtView;
 @synthesize annotationActionCoord;
 
@@ -72,10 +69,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 	[self.view setBackgroundColor:[TexLegeTheme backgroundLight]];
 	self.mapView.showsUserLocation = NO;
-	
-	// Set up the map's region to frame the state of Texas.
-	// Zoom = 6
-	self.mapView.region = self.texasRegion;
 	
 	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 	//self.navigationItem.title = @"District Location";
@@ -135,17 +128,12 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void) resetMapViewWithAnimation:(BOOL)animated {
-	[self clearAnnotationsAndOverlays];
-	if (animated)
-		[self.mapView setRegion:self.texasRegion animated:YES];
-	else
-		[self.mapView setRegion:self.texasRegion animated:NO];
-	
+	[self clearAnnotationsAndOverlays];	
 }
 
 - (void)animateToState
 {    
-    [self.mapView setRegion:self.texasRegion animated:YES];
+//    [self.mapView setRegion:self.texasRegion animated:YES];
 }
 
 - (void)animateToAnnotation:(id<MKAnnotation>)annotation
@@ -158,27 +146,12 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void)moveMapToAnnotation:(id<MKAnnotation>)annotation {	
-	if (![self region:self.mapView.region isEqualTo:self.texasRegion]) { // it's another region, let's zoom out/in
-		[self performSelector:@selector(animateToState) withObject:nil afterDelay:0.3];
-		[self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:1.7];        
-	}
-	else
-		[self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:0.7];	
+    [self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:0.7];	
 }
 
 #pragma mark -
 #pragma mark Properties
 
-#warning state specific (Map Region)
-
-- (MKCoordinateRegion) texasRegion {
-	// Set up the map's region to frame the state of Texas.
-	// Zoom = 6	
-	static CLLocationCoordinate2D texasCenter = {31.709476f, -99.997559f};
-	static MKCoordinateSpan texasSpan = {10.f, 10.f};
-	const MKCoordinateRegion txreg = MKCoordinateRegionMake(texasCenter, texasSpan);
-	return txreg;
-}
 
 - (BOOL) region:(MKCoordinateRegion)region1 isEqualTo:(MKCoordinateRegion)region2 {
 	MKMapPoint coord1 = MKMapPointForCoordinate(region1.center);
@@ -233,6 +206,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 #pragma mark -
 #pragma mark MapViewDelegate
 
+/*
 - (void)mapView:(MKMapView *)theMapView annotationView:(MKAnnotationView *)annotationView 
 									calloutAccessoryControlTapped:(UIControl *)control {
 	id <MKAnnotation> annotation = annotationView.annotation;
@@ -242,7 +216,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		[self annotationActionSheet:control];		
 	}		
 }
-
+*/
 
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
@@ -250,7 +224,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
     if ([annotation isKindOfClass:[MKUserLocation class]])
         return nil;
     
-    if ([annotation isKindOfClass:[DistrictOfficeObj class]] || [annotation isKindOfClass:[DistrictMapObj class]]) 
+    if ([annotation isKindOfClass:[SLFDistrictMap class]]) 
     {
         static NSString* districtAnnotationID = @"districtObjectAnnotationID";
         MKPinAnnotationView* pinView = (MKPinAnnotationView *)[theMapView dequeueReusableAnnotationViewWithIdentifier:districtAnnotationID];
@@ -333,9 +307,9 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 	[self.mapView setCenterCoordinate:annotation.coordinate animated:YES];
 	
-	if ([annotation isKindOfClass:[DistrictMapObj class]]) {
+	if ([annotation isKindOfClass:[SLFDistrictMap class]]) {
 		MKCoordinateRegion region;
-		region = [(DistrictMapObj *)annotation region];
+		region = [(SLFDistrictMap *)annotation region];
 		
 		NSMutableArray *toRemove = [[NSMutableArray alloc] initWithArray:self.mapView.overlays];
 		BOOL foundOne = NO;
@@ -357,7 +331,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		[toRemove release];
 		
 		if (!foundOne) {
-			MKPolygon *mapPoly = [(DistrictMapObj*)annotation polygon];
+			MKPolygon *mapPoly = [(SLFDistrictMap*)annotation districtPolygon];
 			[self.mapView performSelector:@selector(addOverlay:) withObject:mapPoly afterDelay:0.2f];
 		}
 		[self.mapView setRegion:region animated:TRUE];
