@@ -95,15 +95,15 @@
 	[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];	
 	
 	NSDictionary *voter = [self dataObjectForIndexPath:newIndexPath];
-
-	SLFLegislator *legislator = [SLFLegislator findFirstByAttribute:@"legID" withValue:[voter objectForKey:@"legID"]];
-	if (legislator) {
-		LegislatorDetailViewController *legVC = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
-		legVC.legislator = legislator;	
-		if (self.viewController)
-			[self.viewController.navigationController pushViewController:legVC animated:YES];
-		[legVC release];
-	}	
+    NSString *legID = [voter objectForKey:@"legID"];
+    if (IsEmpty(legID))
+        return;
+    
+    LegislatorDetailViewController *legVC = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
+    legVC.detailObjectID = legID;	
+    if (self.viewController)
+        [self.viewController.navigationController pushViewController:legVC animated:YES];
+    [legVC release];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

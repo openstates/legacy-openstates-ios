@@ -1,5 +1,5 @@
 //
-//  LegislatorDetailDataSource.h
+//  SLFDetailDataSource.h
 //  Created by Gregory S. Combs on 8/3/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -10,9 +10,14 @@
 //
 //
 
-#import "SLFDetailDataSource.h"
+#import <RestKit/RestKit.h>
+#import "SLFDataSource.h"
 
-@interface LegislatorDetailDataSource : SLFDetailDataSource
+@interface SLFDetailDataSource : SLFDataSource
 
+- (id)initWithDetailObjectID:(NSString *)newID;
+- (NSString *)buildResourcePathWithObjectID:(NSString *)newID;
 
+@property (nonatomic,copy)      NSString        *detailObjectID;
+@property (nonatomic,retain)    id               detailObject;
 @end

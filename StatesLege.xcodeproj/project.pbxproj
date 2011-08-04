@@ -23,7 +23,6 @@
 		3709AF0D101FBF5100C1061B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3709AF0C101FBF5100C1061B /* SystemConfiguration.framework */; };
 		370A804813D6BE3000390ADC /* GCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 370A804713D6BE3000390ADC /* GCTableViewController.m */; };
 		370A804913D6BE3000390ADC /* GCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 370A804713D6BE3000390ADC /* GCTableViewController.m */; };
-		370B9DC1122AC5DF00AC9CC8 /* LegislatorDetailDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 370B9DC0122AC5DF00AC9CC8 /* LegislatorDetailDataSource.m */; };
 		370B9DD0122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 370B9DCF122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m */; };
 		370C270C1225BF7E004273E3 /* DistrictMapDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */; };
 		370EAC371337E3CF007788BC /* TexLegeObjectCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 370EAC361337E3CF007788BC /* TexLegeObjectCache.m */; };
@@ -118,6 +117,10 @@
 		374D2EBC13E7E33300630B97 /* _SLFEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9A13E7E33300630B97 /* _SLFEvent.m */; };
 		374D2EBD13E7E33300630B97 /* _SLFLegislator.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9C13E7E33300630B97 /* _SLFLegislator.m */; };
 		374D2EBE13E7E33300630B97 /* _SLFState.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9E13E7E33300630B97 /* _SLFState.m */; };
+		374DF8B813EB2D5C00B0856B /* SLFDetailDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 374DF8B713EB2D5C00B0856B /* SLFDetailDataSource.m */; };
+		374DF8B913EB2D5C00B0856B /* SLFDetailDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 374DF8B713EB2D5C00B0856B /* SLFDetailDataSource.m */; };
+		374DF8C613EB307B00B0856B /* LegislatorDetailDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 374DF8C513EB307B00B0856B /* LegislatorDetailDataSource.m */; };
+		374DF8C713EB307B00B0856B /* LegislatorDetailDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 374DF8C513EB307B00B0856B /* LegislatorDetailDataSource.m */; };
 		374E2A6B12360C6E0005E245 /* TexLegeMapPins.m in Sources */ = {isa = PBXBuildFile; fileRef = 374E2A6A12360C6E0005E245 /* TexLegeMapPins.m */; };
 		374F70A612FD45D600AD7EEC /* TexLegeNavBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 374F70A512FD45D600AD7EEC /* TexLegeNavBar.m */; };
 		37507ED5130F64BF00A925F5 /* 11-clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 37D1C81A120344D000507757 /* 11-clock.png */; };
@@ -986,7 +989,7 @@
 		37735B841323104A0033F343 /* UserPinAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EAE54E121A6D9A00BF4277 /* UserPinAnnotation.m */; };
 		37735B8A1323104A0033F343 /* DistrictMapDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */; };
 		37735B8B1323104A0033F343 /* UIColor-Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CF6BB81226597500456D29 /* UIColor-Expanded.m */; };
-		37735BCE1323104A0033F343 /* LegislatorDetailDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 370B9DC0122AC5DF00AC9CC8 /* LegislatorDetailDataSource.m */; };
+		37735BCE1323104A0033F343 /* LegislatorDetailDataSourceOld.m in Sources */ = {isa = PBXBuildFile; fileRef = 370B9DC0122AC5DF00AC9CC8 /* LegislatorDetailDataSourceOld.m */; };
 		37735BCF1323104A0033F343 /* TexLegeStandardGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 370B9DCF122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m */; };
 		37735BD01323104A0033F343 /* DisclosureQuartzView.m in Sources */ = {isa = PBXBuildFile; fileRef = 370813E5122C536B00D8CA69 /* DisclosureQuartzView.m */; };
 		37735BD21323104A0033F343 /* DistrictMapSearchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3742D6EE122E18D100698483 /* DistrictMapSearchOperation.m */; };
@@ -1383,8 +1386,8 @@
 		3709AF0C101FBF5100C1061B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		370A804613D6BE3000390ADC /* GCTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTableViewController.h; path = ../GCTableViewController/GCTableViewController/GCTableViewController.h; sourceTree = SOURCE_ROOT; };
 		370A804713D6BE3000390ADC /* GCTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTableViewController.m; path = ../GCTableViewController/GCTableViewController/GCTableViewController.m; sourceTree = SOURCE_ROOT; };
-		370B9DBF122AC5DF00AC9CC8 /* LegislatorDetailDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorDetailDataSource.h; sourceTree = "<group>"; };
-		370B9DC0122AC5DF00AC9CC8 /* LegislatorDetailDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorDetailDataSource.m; sourceTree = "<group>"; };
+		370B9DBF122AC5DF00AC9CC8 /* LegislatorDetailDataSourceOld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorDetailDataSourceOld.h; sourceTree = "<group>"; };
+		370B9DC0122AC5DF00AC9CC8 /* LegislatorDetailDataSourceOld.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorDetailDataSourceOld.m; sourceTree = "<group>"; };
 		370B9DCE122AD22C00AC9CC8 /* TexLegeStandardGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeStandardGroupCell.h; sourceTree = "<group>"; };
 		370B9DCF122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeStandardGroupCell.m; sourceTree = "<group>"; };
 		370B9DDB122AD91600AC9CC8 /* TexLegeGroupCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeGroupCellProtocol.h; sourceTree = "<group>"; };
@@ -1501,6 +1504,10 @@
 		374D2E9C13E7E33300630B97 /* _SLFLegislator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFLegislator.m; sourceTree = "<group>"; };
 		374D2E9D13E7E33300630B97 /* _SLFState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SLFState.h; sourceTree = "<group>"; };
 		374D2E9E13E7E33300630B97 /* _SLFState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFState.m; sourceTree = "<group>"; };
+		374DF8B613EB2D5C00B0856B /* SLFDetailDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFDetailDataSource.h; sourceTree = "<group>"; };
+		374DF8B713EB2D5C00B0856B /* SLFDetailDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFDetailDataSource.m; sourceTree = "<group>"; };
+		374DF8C413EB307B00B0856B /* LegislatorDetailDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorDetailDataSource.h; sourceTree = "<group>"; };
+		374DF8C513EB307B00B0856B /* LegislatorDetailDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorDetailDataSource.m; sourceTree = "<group>"; };
 		374E2A6912360C6E0005E245 /* TexLegeMapPins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeMapPins.h; sourceTree = "<group>"; };
 		374E2A6A12360C6E0005E245 /* TexLegeMapPins.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeMapPins.m; sourceTree = "<group>"; };
 		374F70A412FD45D600AD7EEC /* TexLegeNavBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeNavBar.h; sourceTree = "<group>"; };
@@ -2542,6 +2549,8 @@
 				374D2E8F13E7E33300630B97 /* SLFMappingsManager.m */,
 				376FD44613EA3D6C00DE76E4 /* SLFDataSource.h */,
 				376FD44713EA3D6C00DE76E4 /* SLFDataSource.m */,
+				374DF8B613EB2D5C00B0856B /* SLFDetailDataSource.h */,
+				374DF8B713EB2D5C00B0856B /* SLFDetailDataSource.m */,
 				374D2E7D13E7E33300630B97 /* CustomModels */,
 				374D2E9013E7E33300630B97 /* StockModels */,
 			);
@@ -2886,8 +2895,10 @@
 				37A0E44B0FD2DEAA009B65F7 /* TableDataSourceProtocol.h */,
 				378AFC83100BDD940040706A /* LegislatorsDataSource.h */,
 				378AFC82100BDD940040706A /* LegislatorsDataSource.m */,
-				370B9DBF122AC5DF00AC9CC8 /* LegislatorDetailDataSource.h */,
-				370B9DC0122AC5DF00AC9CC8 /* LegislatorDetailDataSource.m */,
+				374DF8C413EB307B00B0856B /* LegislatorDetailDataSource.h */,
+				374DF8C513EB307B00B0856B /* LegislatorDetailDataSource.m */,
+				370B9DBF122AC5DF00AC9CC8 /* LegislatorDetailDataSourceOld.h */,
+				370B9DC0122AC5DF00AC9CC8 /* LegislatorDetailDataSourceOld.m */,
 				37412A37124322C400807502 /* LegislatorContributionsDataSource.h */,
 				37412A38124322C400807502 /* LegislatorContributionsDataSource.m */,
 				378AFC7E100BDD640040706A /* CommitteesDataSource.h */,
@@ -4925,7 +4936,6 @@
 				37EAE54F121A6D9A00BF4277 /* UserPinAnnotation.m in Sources */,
 				370C270C1225BF7E004273E3 /* DistrictMapDataSource.m in Sources */,
 				37CF6BB91226597500456D29 /* UIColor-Expanded.m in Sources */,
-				370B9DC1122AC5DF00AC9CC8 /* LegislatorDetailDataSource.m in Sources */,
 				370B9DD0122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m in Sources */,
 				370813E6122C537800D8CA69 /* DisclosureQuartzView.m in Sources */,
 				3742D6EF122E18D100698483 /* DistrictMapSearchOperation.m in Sources */,
@@ -5002,6 +5012,8 @@
 				374D2EAE13E7E33300630B97 /* _SLFState.m in Sources */,
 				37FC6F3913E872A600C982FF /* SLFRestKitManager.m in Sources */,
 				376FD44913EA3D6C00DE76E4 /* SLFDataSource.m in Sources */,
+				374DF8B913EB2D5C00B0856B /* SLFDetailDataSource.m in Sources */,
+				374DF8C713EB307B00B0856B /* LegislatorDetailDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5038,7 +5050,7 @@
 				37735B841323104A0033F343 /* UserPinAnnotation.m in Sources */,
 				37735B8A1323104A0033F343 /* DistrictMapDataSource.m in Sources */,
 				37735B8B1323104A0033F343 /* UIColor-Expanded.m in Sources */,
-				37735BCE1323104A0033F343 /* LegislatorDetailDataSource.m in Sources */,
+				37735BCE1323104A0033F343 /* LegislatorDetailDataSourceOld.m in Sources */,
 				37735BCF1323104A0033F343 /* TexLegeStandardGroupCell.m in Sources */,
 				37735BD01323104A0033F343 /* DisclosureQuartzView.m in Sources */,
 				37735BD21323104A0033F343 /* DistrictMapSearchOperation.m in Sources */,
@@ -5119,6 +5131,8 @@
 				374D2EBE13E7E33300630B97 /* _SLFState.m in Sources */,
 				37FC6F3813E872A600C982FF /* SLFRestKitManager.m in Sources */,
 				376FD44813EA3D6C00DE76E4 /* SLFDataSource.m in Sources */,
+				374DF8B813EB2D5C00B0856B /* SLFDetailDataSource.m in Sources */,
+				374DF8C613EB307B00B0856B /* LegislatorDetailDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

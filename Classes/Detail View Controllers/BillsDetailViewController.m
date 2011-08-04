@@ -218,19 +218,15 @@ enum _billSections {
 	}
 }
 
-- (void)showLegislatorDetailsWithOpenStatesID:(id)legeID
+- (void)showLegislatorDetailsWithOpenStatesID:(id)legID
 {
-	if (!legeID)
+	if (!legID)
 		return;
 	
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.openstatesID == %@", legeID];
-	SLFLegislator *legislator = [SLFLegislator objectWithPredicate:predicate];
-	if (legislator) {
-		LegislatorDetailViewController *legVC = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
-		legVC.legislator = legislator;	
-		[self.navigationController pushViewController:legVC animated:YES];
-		[legVC release];
-	}
+    LegislatorDetailViewController *legVC = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
+    legVC.detailObjectID = legID;	
+    [self.navigationController pushViewController:legVC animated:YES];
+    [legVC release];
 }
 
 - (void)setupHeader {	

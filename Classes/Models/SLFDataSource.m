@@ -75,9 +75,11 @@
 { return YES; }
 
 -(void)dataSourceReceivedMemoryWarning:(id)sender {
-	for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
-		[[self.resourceClass managedObjectContext] refreshObject:object mergeChanges:NO];
-	}
+    if (self.fetchedResultsController) {
+        for (NSManagedObject *object in self.fetchedResultsController.fetchedObjects) {
+            [[self.resourceClass managedObjectContext] refreshObject:object mergeChanges:NO];
+        }
+    }
 }
 
 #pragma mark -
@@ -96,9 +98,13 @@
     return nil;
 }
 
+- (NSString *)primaryKeyProperty {
+    return self.stateID;
+}
+
 - (void)loadData {
     
-    if (!self.stateID || [[NSNull null] isEqual:self.stateID]) {
+    if (!self.primaryKeyProperty || [[NSNull null] isEqual:self.primaryKeyProperty]) {
         return;
     }
     

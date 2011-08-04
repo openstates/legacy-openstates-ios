@@ -79,44 +79,4 @@
 	return cell;	
 }
 
-#warning drop this
-#if 0
-
-- (void) updateFilterPredicate {
-	NSMutableString * predString = [NSMutableString stringWithString:@""];
-	
-    if (self.filterChamber > 0)	// do some chamber filtering
-		[predString appendFormat:@"(chamber LIKE[cd] '%@')", stringForChamber(self.filterChamber, TLReturnOpenStates)];
-	if (self.filterString.length > 0) {		// do some string filtering
-		if (predString.length > 0)	// we already have some predicate action, insert "AND"
-			[predString appendString:@" AND "];
-		[predString appendFormat:@"(committeeName CONTAINS[cd] '%@')", self.filterString];
-	}
-    if (predString.length > 0 && self.stateID) {
-        [predString appendFormat:@" AND (stateID LIKE[cd] '%@')", self.stateID];
-    }
-    
-	NSPredicate *predicate = (predString.length > 0) ? [NSPredicate predicateWithFormat:predString] : nil;
-	if (predicate) {
-        self.committees = [SLFCommittee findAllWithPredicate:predicate];
-    }
-    else {
-        [self loadDataFromDataStore];
-    }
-/*
-    		
-	NSPredicate *predicate = (predString.length > 0) ? [NSPredicate predicateWithFormat:predString] : nil;
-
-	// You've got to delete the cache, or disable caching before you modify the predicate...
-	[NSFetchedResultsController deleteCacheWithName:[fetchedResultsController cacheName]];
-	[fetchedResultsController.fetchRequest setPredicate:predicate];
-	
-	NSError *error = nil;
-	if (![[self fetchedResultsController] performFetch:&error]) {
-        // Handle error
-        RKLogError(@"Unresolved error %@, %@", [error localizedDescription], [error userInfo]);
-    }           */
-}
-#endif
-
 @end

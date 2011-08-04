@@ -12,6 +12,7 @@
 
 #import "SLFMappingsManager.h"
 #import "SLFDataModels.h"
+#import "UtilityMethods.h"
 
 @interface SLFMappingsManager()
 
@@ -244,11 +245,63 @@
 }
 
 
-+ (inout id *)premapLegislator:(SLFLegislator *)legislator toComitteesWithData:(inout id *)mappableData {
+
+
++ (SLFCommitteePosition *)findOrCreatePositionWithStateID:(NSString *)stateID
+                                            committeeName:(NSString *)comName
+                                              committeeID:(NSString *)comID
+                                           legislatorName:(NSString *)legName
+                                             legislatorID:(NSString *)legID
+                                                 roleType:(NSString *)roleType
+{
+    // we use these to create a unique position object id 
+    if ( IsEmpty(comID) || IsEmpty(legID) ) {
+        return nil;
+    }
+    
+    //  This seems like a klunky way to generate a unique primary key ID, but the
+    //  aggregation of these three attributes *should* be unique across everything.
+    NSString *posID = [NSString stringWithFormat:@"%@|%@|%@", stateID, comID, legID];
+    NSString *predString = [NSString stringWithFormat:@"(posID LIKE[cd] '%@') OR (committeeID LIKE[cd] '%@' AND legID LIKE[cd] '%@')", posID, comID, legID];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:predString];
+    //SLFCommitteePosition *position = [SLFCommitteePosition objectWithPredicate:predicate];
+    SLFCommitteePosition *position = [SLFCommitteePosition findFirstWithPredicate:predicate];
+    
+    BOOL found = (position != NULL);
+    
+    RKLogTrace(@"-----------------------------");
+    
+    // we didn't find one already in core data, create one.
+    if (found) {
+        RKLogTrace(@"FOUND = %@", posID);
+    } else {
+        position = [SLFCommitteePosition object];
+        position.committeeID = comID;
+        position.legID = legID;
+    }
+
+    // It doesn't hurt to just update these properties we know about anyway, I guess.
+    position.posID = posID;
+    position.legislatorName = legName;
+    position.committeeName = comName;
+    position.positionType =	roleType;		
+    
+    if (!found) {
+        RKLogDebug(@"NOT FOUND: %@", position);
+        //RKLogTrace(@"Predicate = %@", predicate);
+    }
+    RKLogTrace(@"-----------------------------");
+    
+    return position;
+}
+
+
++ (inout id *)premapLegislator:(SLFLegislator *)legislator withMappableData:(inout id *)mappableData {
 
     NSArray* origRolesArray = [*mappableData valueForKeyPath:@"roles"];	// array of dictionaries
     NSString *legID = [*mappableData objectForKey:@"leg_id"];			// this legislator's id
     NSString *legName = [*mappableData objectForKey:@"full_name"];		// ... etc.
+    NSString *stateID = [*mappableData objectForKey:@"state"];			// this state id
     
     if (!legID)
         legID = legislator.legID;
@@ -256,47 +309,30 @@
     if (!legName)
         legName = legislator.fullName;
     
+    if (!stateID)
+        stateID = legislator.stateID;
+
     NSMutableArray* newRolesArray = [[NSMutableArray alloc] 
 									 initWithCapacity:[origRolesArray count]];
     
-    int roleIndex = 0;
     for (NSDictionary* origRole in origRolesArray) {
         
-        //NSString *term = [origRole objectForKey:@"term"];			// our legislative session/year
         NSString *comID = [origRole objectForKey:@"committee_id"];
-        
-        // we use these to create a unique committee position object id 
-        if (!comID || !legID) // include term ??
-            continue;
-        
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@ AND %K == %@", @"committeeID", comID, @"legID", legID];
-        SLFCommitteePosition *position = [SLFCommitteePosition objectWithPredicate:predicate];
-        
-        if (!position) {		// we didn't find one already in core data, create one.
-            position = [SLFCommitteePosition object];
-            position.committeeID = comID;
-            position.legID = legID;
+        NSString *comName = [origRole objectForKey:@"committee"];
+        NSString *roleType = [origRole objectForKey:@"type"];
+
+        SLFCommitteePosition *pos = [SLFMappingsManager findOrCreatePositionWithStateID:stateID
+                                                                          committeeName:comName
+                                                                            committeeID:comID
+                                                                         legislatorName:legName
+                                                                           legislatorID:legID
+                                                                               roleType:roleType];
+        if (pos) {
+            [newRolesArray addObject:pos];
+        } else {
+            RKLogDebug(@"Unable to create or find committee position with role: %@", origRole);
         }
-        
-        // It doesn't hurt to just update these properties we know about anyway, I guess.
-        position.legislatorName = legName;
-        position.committeeName = [origRole objectForKey:@"committee"];	// committee's name
-        position.positionType =	[origRole objectForKey:@"type"];		// member, or chairperson, etc.			
-        
-        //  This seems like a klunky way to generate a unique primary key ID, but the
-        //  aggregation of these three attributes *should* be unique across everything.
-        
-        position.posID = [NSString stringWithFormat:@"%@|%@", comID, legID];	// include term?
-        
-        //  If it doesn't need to be unique across *everything*, then this could work?
-        ////  position.posID = [NSString stringWithFormat:@"%i", roleIndex];
-        
-        // does this stuff even really *need* a primary key id anymore?  
-        // I certainly dont use it on this particular committee position model/entity
-        
-        [newRolesArray addObject:position];
-        
-        roleIndex++;
+
     }
     
     [*mappableData removeObjectForKey:@"roles"];		//remove the old roles array from the legislator
@@ -306,11 +342,13 @@
     return mappableData;
 }
 
-+ (inout id *)premapCommittee:(SLFCommittee *)committee toLegislatorsWithData:(inout id *)mappableData {
+
++ (inout id *)premapCommittee:(SLFCommittee *)committee withMappableData:(inout id *)mappableData {
     
     NSArray* origRolesArray = [*mappableData valueForKeyPath:@"members"];	// array of dictionaries
-    NSString *comID = [*mappableData objectForKey:@"id"];                   // this legislator's id
-    NSString *comName = [*mappableData objectForKey:@"committee"];          // ... etc.
+    NSString *comID = [*mappableData objectForKey:@"id"];   
+    NSString *comName = [*mappableData objectForKey:@"committee"];
+    NSString *stateID = [*mappableData objectForKey:@"state"];
     
     if (!comID)
         comID = committee.committeeID;
@@ -318,52 +356,35 @@
     if (!comName)
         comName = committee.committeeName;
     
+    if (!stateID)
+        stateID = committee.stateID;
+
     NSMutableArray* newRolesArray = [[NSMutableArray alloc] 
                                      initWithCapacity:[origRolesArray count]];
     
-    int roleIndex = 0;
     for (NSDictionary* origRole in origRolesArray) {
         
-        //NSString *term = [origRole objectForKey:@"term"];			// our legislative session/year
         NSString *legID = [origRole objectForKey:@"leg_id"];
+        NSString *legName = [origRole objectForKey:@"name"];
+        NSString *roleType = [origRole objectForKey:@"role"];
         
-        // we use these to create a unique committee position object id 
-        if ([[NSNull null] isEqual:comID] || [[NSNull null] isEqual:legID]) // include term ??
-            continue;
-        
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@ AND %K == %@", @"committeeID", comID, @"legID", legID];
-        SLFCommitteePosition *position = [SLFCommitteePosition objectWithPredicate:predicate];
-        
-        if (!position) {		// we didn't find one already in core data, create one.
-            position = [SLFCommitteePosition object];
-            position.committeeID = comID;
-            position.legID = legID;
-        }
-        
-        // It doesn't hurt to just update these properties we know about anyway, I guess.
-        position.legislatorName = [origRole objectForKey:@"name"];
-        position.committeeName = comName;
-        position.positionType =	[origRole objectForKey:@"role"];				// member, or chairperson, etc.			
-        
-        //  This seems like a klunky way to generate a unique primary key ID, but the
-        //  aggregation of these three attributes *should* be unique across everything.
-        
-        position.posID = [NSString stringWithFormat:@"%@|%@", comID, legID];	// include term?
-        
-        //  If it doesn't need to be unique across *everything*, then this could work?
-        ////  position.posID = [NSString stringWithFormat:@"%i", roleIndex];
-        
-        // does this stuff even really *need* a primary key id anymore?  
-        // I certainly dont use it on this particular committee position model/entity
-        
-        [newRolesArray addObject:position];
-        
-        roleIndex++;
+        SLFCommitteePosition *pos = [SLFMappingsManager findOrCreatePositionWithStateID:stateID
+                                                                          committeeName:comName
+                                                                            committeeID:comID
+                                                                         legislatorName:legName
+                                                                           legislatorID:legID
+                                                                               roleType:roleType];
+        if (pos) {
+            [newRolesArray addObject:pos];
+        } else {
+            RKLogDebug(@"Unable to create or find committee position with role: %@", origRole);
+        }        
     }
     
     [*mappableData removeObjectForKey:@"members"];		//remove the old roles array from the legislator
     [*mappableData setObject:newRolesArray forKey:@"members"];	// inject our modified roles array.
     [newRolesArray release];
+    
     return mappableData;
 }
 

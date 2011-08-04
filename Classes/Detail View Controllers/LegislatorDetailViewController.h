@@ -21,9 +21,9 @@
 													UIPopoverControllerDelegate>
 {	
 }
-@property (nonatomic,assign) id                          dataObject;
-@property (nonatomic,retain) NSString                   *dataObjectID;
-@property (nonatomic,retain) SLFLegislator              *legislator;
+
+@property (nonatomic,assign)   NSString                 *detailObjectID;
+@property (nonatomic,readonly) SLFLegislator            *detailObject;
 @property (nonatomic,retain) LegislatorDetailDataSource *dataSource;
 
 @property (nonatomic,retain) IBOutlet UIView            *headerView;
@@ -33,7 +33,5 @@
 
 @property (nonatomic,retain) UIPopoverController        *notesPopover;
 @property (nonatomic,retain) UIPopoverController        *masterPopover;
-
-- (IBAction)resetTableData:(id)sender;
 
 @end

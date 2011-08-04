@@ -148,20 +148,23 @@
     SLFPersistenceManager *persistence = [SLFPersistenceManager sharedPersistence];
     [persistence setTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 	
-	if (self.detailViewController == nil) {
-		self.detailViewController = [[[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil] autorelease];
+    LegislatorDetailViewController *legVC = self.detailViewController;
+    
+	if (legVC == nil) {
+		legVC = [[[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil] autorelease];
 	}
-	
-    [self.detailViewController setLegislator:legislator];
+	legVC.detailObjectID = legislator.legID;
+
     if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
         //[self searchBarCancelButtonClicked:nil];
     }
     
     if (!isSplitViewDetail) {
         // push the detail view controller onto the navigation stack to display it				
-        [self.navigationController pushViewController:self.detailViewController animated:YES];
+        [self.navigationController pushViewController:legVC animated:YES];
         self.detailViewController = nil;
     }
+
 }
 //END:code.split.delegate
 

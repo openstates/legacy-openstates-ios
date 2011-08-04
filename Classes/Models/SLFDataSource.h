@@ -27,5 +27,8 @@
 @property (nonatomic, retain)   NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, copy)     NSString        *stateID;    
 @property (nonatomic, copy)     NSString        *sortBy;    
-@property (nonatomic, copy)     NSString        *groupBy;    
+@property (nonatomic, copy)     NSString        *groupBy;  
+
+// override and return a property that must not be null in order to loadData
+@property (nonatomic, readonly) NSString        *primaryKeyProperty;
 @end

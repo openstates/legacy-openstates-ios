@@ -43,14 +43,16 @@
 
 @interface LegislatorDetailViewController (Private)
 - (void) setupHeader;
+- (LegislatorDetailDataSource *)createOrReturnDataSourceForID:(NSString *)objID;
+- (void)tableDataChanged:(id)sender;
+
 @end
 
 
 @implementation LegislatorDetailViewController
-@synthesize dataObjectID;
+@synthesize detailObjectID;
 @synthesize dataSource;
 @synthesize headerView;
-@synthesize legislator;
 @synthesize leg_reelection;
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_nameLab;
 @synthesize notesPopover, masterPopover;
@@ -72,13 +74,16 @@
 											 selector:@selector(stateChanged:) name:kStateMetaNotifyStateLoaded object:nil];
     
     self.headerView.backgroundColor = [self.headerView.backgroundColor colorWithAlphaComponent:0.5f];
+    
+	self.clearsSelectionOnViewWillAppear = NO;			
+	
+    self.tableView.dataSource = [self createOrReturnDataSourceForID:nil];
 
-	self.clearsSelectionOnViewWillAppear = NO;				
 }
 
 - (void)viewDidUnload {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	
+    self.dataSource = nil;
     self.headerView = nil;
     self.leg_photoView = nil;
     self.leg_partyLab = self.leg_districtLab = self.leg_nameLab = self.leg_reelection = nil;
@@ -101,32 +106,42 @@
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
-	self.dataSource = nil;
-	self.headerView = nil;
-	self.leg_photoView = nil;
-	self.leg_reelection = nil;
-	self.leg_partyLab = nil;
-	self.leg_districtLab = nil;
-	self.leg_nameLab = nil;
 	self.notesPopover = nil;
 	self.masterPopover = nil;
-	self.dataObjectID = nil;
-    self.legislator = nil;
+
+    self.headerView = nil;
+    self.leg_photoView = nil;
+    self.leg_partyLab = self.leg_districtLab = self.leg_nameLab = self.leg_reelection = nil;
+    
+    self.dataSource = nil;
 
 	[super dealloc];
 }
 
-- (id)dataObject {
-	return self.legislator;
+- (SLFLegislator *)detailObject {
+    return self.dataSource.detailObject;
 }
 
-- (void)setDataObject:(id)newObj {
-	[self setLegislator:newObj];
+- (NSString *)detailObjectID {
+    return self.dataSource.detailObjectID;
+}
+
+- (void)setDetailObjectID:(NSString *)newID {  
+    LegislatorDetailDataSource *dsource = [self createOrReturnDataSourceForID:newID];
+    dsource.detailObjectID = newID;
+
+    if (masterPopover != nil) {
+        [masterPopover dismissPopoverAnimated:YES];
+    }
+    [self tableDataChanged:nil];
 }
 
 - (void)setupHeader {
-	SLFLegislator *member = self.legislator;
-	
+    
+	SLFLegislator *member = self.detailObject;
+    if (!member)
+        return;
+    
 	NSString *legName = [NSString stringWithFormat:@"%@ %@",  abbreviateString([member title]), [member fullName]];
 	self.leg_nameLab.text = legName;
 	self.navigationItem.title = legName;
@@ -139,19 +154,18 @@
 
 }
 
-
-- (LegislatorDetailDataSource *)dataSource {
-	SLFLegislator *member = self.legislator;
-    if (!member && self.dataObjectID) {
-        member = [SLFLegislator findFirstByAttribute:@"legID" withValue:self.dataObjectID];
-    }
-	if (!dataSource && member) {
-		dataSource = [[LegislatorDetailDataSource alloc] initWithLegislatorID:member.legID];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tableDataChanged:) name:kNotifyTableDataUpdated object:dataSource];
-
-	}
-	return dataSource;
+- (LegislatorDetailDataSource *)createOrReturnDataSourceForID:(NSString *)objID {
+    if (!dataSource) {
+		dataSource = [[LegislatorDetailDataSource alloc] initWithDetailObjectID:objID];
+        [[NSNotificationCenter defaultCenter] addObserver:self 
+                                                 selector:@selector(tableDataChanged:) 
+                                                     name:kNotifyTableDataUpdated 
+                                                   object:dataSource];     
+    }        
+    self.tableView.dataSource = dataSource;
+    return dataSource;
 }
+
 
 - (void)tableDataChanged:(id)sender {
     [self setupHeader];
@@ -163,28 +177,6 @@
 }
 
 
-- (void)setLegislator:(SLFLegislator *)anObject {
-
-	if (dataSource && anObject && legislator && [legislator isEqual:anObject] && [dataSource.legislator isEqual:anObject])
-		return;
-    
-    [legislator release];
-    legislator = [anObject retain];
-    self.dataObjectID = anObject.legID;
-
-	if (anObject) {
-		self.dataObjectID = anObject.legID;
-        
-        self.dataSource.legislator = anObject;
-		self.tableView.dataSource = dataSource;
-
-		if (masterPopover != nil) {
-			[masterPopover dismissPopoverAnimated:YES];
-		}		
-        
-        [self tableDataChanged:nil];
-	}
-}
 #pragma mark -
 #pragma mark Managing the popover
 
@@ -199,8 +191,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 	
-	if (self.legislator)
-		[self setupHeader];
+    [self setupHeader];
 }
 
 #pragma mark -
@@ -254,8 +245,11 @@
 	// deselect the new row using animation
 	[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];	
 	
+    SLFLegislator *member = self.detailObject;
+    if (!member)
+        return;
+
 	TableCellDataObject *cellInfo = [self.dataSource dataObjectForIndexPath:newIndexPath];
-	SLFLegislator *member = self.legislator;
 
 	if (!cellInfo.isClickable)
 		return;

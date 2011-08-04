@@ -404,7 +404,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		return;
 	
 	LegislatorDetailViewController *legVC = [[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil];
-	legVC.legislator = legislator;
+    legVC.detailObjectID = legislator.legID;
 	[self.navigationController pushViewController:legVC animated:YES];
 	[legVC release];
 }

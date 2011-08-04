@@ -216,7 +216,7 @@ CGFloat quartzRowHeight = 73.f;
 	
 	if (loader.objectMapping.objectClass == self.resourceClass) {
 		
-        [SLFMappingsManager premapCommittee:self.committee toLegislatorsWithData:mappableData];
+        mappableData = [SLFMappingsManager premapCommittee:self.committee withMappableData:mappableData];
         
 	}
 }
@@ -314,44 +314,41 @@ CGFloat quartzRowHeight = 73.f;
 #pragma mark View Setup
 
 - (void)buildInfoSectionArray {	
-	BOOL clickable = NO;
 	
 	NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:12]; // arbitrary
 	NSDictionary *infoDict = nil;
 	TableCellDataObject *cellInfo = nil;
 	
 //case kInfoSectionName:
-	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				NSLocalizedStringFromTable(@"Committee", @"DataTableUI", @"Cell title listing a legislative committee"), @"subtitle",
-				self.committee.committeeName, @"title",
-				[NSNumber numberWithBool:NO], @"isClickable",
-				nil, @"entryValue",
-				nil];
-	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
+    cellInfo = [[TableCellDataObject alloc] init];
+    cellInfo.subtitle = NSLocalizedStringFromTable(@"Committee", @"DataTableUI", @"");
+    cellInfo.title = self.committee.committeeName;
+    cellInfo.isClickable = NO;
+    cellInfo.entryValue = nil;
+    cellInfo.entryType = DirectoryTypeNone;
 	[tempArray addObject:cellInfo];
-	[infoDict release];
-	[cellInfo release];
+	[cellInfo release], cellInfo = nil;
 
-	//case kInfoSectionWeb:	 // open the web page
-    NSString *val = @"";
-    NSString *text = [self.committee.sources objectAtIndex:0];
-	clickable = (text && [text length]);
-	if (clickable)
-		val = [text urlSafeString];
-
-	infoDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-				NSLocalizedStringFromTable(@"Web", @"DataTableUI", @"Cell title listing a web address"), @"subtitle",
-				NSLocalizedStringFromTable(@"Website & Meetings", @"DataTableUI", @"Cell title for a website link detailing committee meetings"), @"title",
-				[NSNumber numberWithBool:clickable], @"isClickable",
-				val, @"entryValue",
-				nil];
-	cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
-	[tempArray addObject:cellInfo];
-	[infoDict release];
-	[cellInfo release];
+//case kInfoSectionWeb:	 // open the web page
+    
+    cellInfo = [[TableCellDataObject alloc] initWithDictionary:infoDict];
+    cellInfo.title = NSLocalizedStringFromTable(@"Website & Meetings", @"DataTableUI", @"");
+    cellInfo.subtitle = NSLocalizedStringFromTable(@"Web", @"DataTableUI", @"Cell title listing a web address");
+    cellInfo.isClickable = NO;
+    cellInfo.entryValue = @"";
+    cellInfo.entryType = DirectoryTypeWeb;
+    
+    if (NO == IsEmpty(self.committee.sources)) {
+        NSString *text = [self.committee.sources objectAtIndex:0];
+        cellInfo.isClickable = (NO == IsEmpty(text));
+        if (cellInfo.isClickable) {
+            cellInfo.entryValue = [text urlSafeString];
+        }
+    }
+    
+    [tempArray addObject:cellInfo];
+	[cellInfo release], cellInfo = nil;
 	
-	if (self.infoSectionArray)
-		self.infoSectionArray = nil;
 	self.infoSectionArray = tempArray;
 	[tempArray release];
 }
@@ -366,10 +363,10 @@ CGFloat quartzRowHeight = 73.f;
 
 	NSInteger democCount = 0, repubCount = 0;
     
-	NSArray *repubs = [newPos findAllWhereKeyPath:@"legislator.chamber" equals:repubString];	
+	NSArray *repubs = [newPos findAllWhereKeyPath:@"legislator.party" equals:repubString];	
 	repubCount = [repubs count];
     
-    NSArray *dems = [newPos findAllWhereKeyPath:@"legislator.chamber" equals:democString];	
+    NSArray *dems = [newPos findAllWhereKeyPath:@"legislator.party" equals:democString];	
 	democCount = [dems count];
 	
 	if (repubCount != 1)
@@ -504,12 +501,6 @@ CGFloat quartzRowHeight = 73.f;
 }
 
 
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return NO;
-}
-
 #pragma mark -
 #pragma mark Table view delegate
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -561,8 +552,8 @@ CGFloat quartzRowHeight = 73.f;
 		
 		switch (row) {
 			case kInfoSectionWeb: {	 // open the web page
-				NSURL *myURL = cellInfo.entryValue;
-				[self pushInternalBrowserWithURL:myURL];
+                NSURL *url = [cellInfo generateURL];;
+				[self pushInternalBrowserWithURL:url];
 			}
 				break;
 			default:
@@ -575,7 +566,8 @@ CGFloat quartzRowHeight = 73.f;
 		
 		switch (section) {
 			case kMembersSection: { // Committee Members
-				subDetailController.legislator = [[self.committee sortedMembers] objectAtIndex:row];
+                SLFCommitteePosition *pos = [[self.committee sortedMembers] objectAtIndex:row];
+                subDetailController.detailObjectID = pos.legID;
 			}			
 				break;
 		}

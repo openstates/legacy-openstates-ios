@@ -30,7 +30,7 @@
 
 - (RKObjectMappingProvider *)registerMappingsWithProvider:(RKObjectMappingProvider *)provider;
 
-+ (inout id *)premapCommittee:(SLFCommittee *)committee toLegislatorsWithData:(inout id *)mappableData;
-+ (inout id *)premapLegislator:(SLFLegislator *)legislator toComitteesWithData:(inout id *)mappableData;
++ (inout id *)premapCommittee:(SLFCommittee *)committee withMappableData:(inout id *)mappableData;
++ (inout id *)premapLegislator:(SLFLegislator *)legislator withMappableData:(inout id *)mappableData;
 
 @end

@@ -4620,14 +4620,6 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
         </object>
         <object class="IBConnectionRecord">
           <object class="IBCocoaTouchOutletConnection" key="connection">
-            <string key="label">dataSource</string>
-            <reference key="source" ref="729910629"/>
-            <reference key="destination" ref="372490531"/>
-          </object>
-          <int key="connectionID">172</int>
-        </object>
-        <object class="IBConnectionRecord">
-          <object class="IBCocoaTouchOutletConnection" key="connection">
             <string key="label">headerView</string>
             <reference key="source" ref="372490531"/>
             <reference key="destination" ref="705775946"/>
@@ -4827,17 +4819,6 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
         <object class="IBPartialClassDescription">
           <string key="className">LegislatorDetailViewController</string>
           <string key="superclassName">GCTableViewController</string>
-          <object class="NSMutableDictionary" key="actions">
-            <string key="NS.key.0">resetTableData:</string>
-            <string key="NS.object.0">id</string>
-          </object>
-          <object class="NSMutableDictionary" key="actionInfosByName">
-            <string key="NS.key.0">resetTableData:</string>
-            <object class="IBActionInfo" key="NS.object.0">
-              <string key="name">resetTableData:</string>
-              <string key="candidateClassName">id</string>
-            </object>
-          </object>
           <dictionary class="NSMutableDictionary" key="outlets">
             <string key="headerView">UIView</string>
             <string key="leg_districtLab">UILabel</string>

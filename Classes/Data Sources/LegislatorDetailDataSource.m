@@ -1,6 +1,6 @@
 //
 //  LegislatorDetailDataSource.m
-//  Created by Gregory Combs on 8/29/10.
+//  Created by Gregory S. Combs on 8/3/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
 //
@@ -29,102 +29,40 @@ enum SECTIONS {
     kNumSections
 };
 
-@interface LegislatorDetailDataSource()
-
-- (void)loadDataFromDataStoreWithID:(NSString *)objID;
-
-@end
-
-
 @implementation LegislatorDetailDataSource
-@synthesize resourcePath;
-@synthesize resourceClass;
-@synthesize legislator;
-@synthesize dataObjectID;
 
-- (id)initWithLegislatorID:(NSString *)legislatorID {
-    if ((self = [super init])) {
-        
-        self.dataObjectID = legislatorID;
-
-        self.resourceClass = [SLFLegislator class];
-        self.resourcePath = [NSString stringWithFormat:@"/legislators/%@/", legislatorID];
-        
-        [self loadDataFromDataStoreWithID:legislatorID];
-        [self loadData];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(stateChanged:) 
-                                                     name:kStateMetaNotifyStateLoaded 
-                                                   object:nil];        
-        
+- (id)initWithDetailObjectID:(NSString *)newID {
+    NSString *newPath = @"/legislators/";
+    if (newID) {
+        newPath = [newPath stringByAppendingFormat:@"%@/", newID];
     }
-    return self;
+        
+    if ((self = [super initWithResourcePath:newPath
+                                   objClass:[SLFLegislator class]
+                                     sortBy:nil
+                                    groupBy:nil])) {
+        self.detailObjectID = newID;
+        self.hideTableIndex = YES;
+    }
+	return self;    
 }
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    self.legislator = nil;
-    self.resourcePath = nil;
-	self.dataObjectID = nil;
-	
+- (void) dealloc {
     [super dealloc];
 }
 
-#pragma mark -
-#pragma mark Load Data
-
-- (void)loadDataFromDataStoreWithID:(NSString *)objID {
-	self.legislator = [SLFLegislator findFirstByAttribute:@"legID" withValue:objID];
+- (NSDictionary *)queryParameters {
+    return [[NSDictionary alloc] initWithObjectsAndKeys:
+            SUNLIGHT_APIKEY, @"apikey",
+            nil];
 }
 
-- (void)loadData {
-	if (!self.resourcePath)
-		return;
-	
-    // Load the object model via RestKit	
-    RKObjectManager* objectManager = [RKObjectManager sharedManager];
-    RKObjectMapping* legMapping = [objectManager.mappingProvider objectMappingForClass:self.resourceClass];
-    
-	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-								 SUNLIGHT_APIKEY, @"apikey",
-								 nil];
-	NSString *newPath = [self.resourcePath appendQueryParams:queryParams];
-    [objectManager loadObjectsAtResourcePath:newPath objectMapping:legMapping delegate:self];
-}
+- (NSString *)buildResourcePathWithObjectID:(NSString *)newID {
+    NSString *newPath = @"/legislators/";
+    if (newID)
+        newPath = [newPath stringByAppendingFormat:@"%@/", newID];
 
-#pragma mark -
-#pragma mark Data Object
-
-- (void)stateChanged:(NSNotification *)notification {
-    SLFLegislator *leg = [self legislator];
-    if (leg) {
-        [self setLegislator:leg];
-    }
-}
-
-
-- (SLFLegislator *)legislator {
-	SLFLegislator *anObject = nil;
-	if (self.dataObjectID) {
-		@try {
-			anObject = [SLFLegislator findFirstByAttribute:@"legID" withValue:self.dataObjectID];
-		}
-		@catch (NSException * e) {
-		}
-	}
-	return anObject;
-}
-
-- (void)setLegislator:(SLFLegislator *)newObj {
-	[legislator release];
-	legislator = [newObj retain];
-	
-	if (newObj) {
-        self.resourcePath = RKMakePathWithObject(@"/legislators/(legID)/", newObj);
-		[self loadData];
-	}
+    return newPath;
 }
 
 #pragma mark -
@@ -134,31 +72,28 @@ enum SECTIONS {
 	[[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"LastUpdatedAt"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
     
-	[legislator release];
-	legislator = [object retain];
-        
+    if (![object isKindOfClass:self.resourceClass]) {
+        RKLogError(@"Received incorrect data object! ... %@", object);
+        return;
+    }
+    
+    self.detailObject = object;
+    
+    //[self willChangeValueForKey:"detailObject"];
+	//[detailObject release];
+	//detailObject = [object retain];
+    //[self didChangeValueForKey:@"detailObject"];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataUpdated object:self];
     
 }
 
-- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
-#warning revise this
-	UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Error" 
-                                                     message:[error localizedDescription] 
-                                                    delegate:nil 
-                                           cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
-	[alert show];
-	RKLogError(@"Hit error: %@", [error localizedDescription]);
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataError object:self];
-
-}
 
 - (void)objectLoader:(RKObjectLoader*)loader willMapData:(inout id *)mappableData {
 	
 	if (loader.objectMapping.objectClass == self.resourceClass) {
 		
-        [SLFMappingsManager premapLegislator:self.legislator toComitteesWithData:mappableData];
+        mappableData = [SLFMappingsManager premapLegislator:self.detailObject withMappableData:mappableData];
         
 	}
 }
@@ -167,16 +102,18 @@ enum SECTIONS {
 #pragma mark Data Object Methods
 
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
-	if (!indexPath)
+	if (!indexPath || !self.detailObject || ![self.detailObject isKindOfClass:self.resourceClass])
 		return nil;
+    
+    SLFLegislator *legislator = self.detailObject;
     
     TableCellDataObject *obj = [[TableCellDataObject alloc] init];
     obj.indexPath = indexPath;
-
+    
     switch (indexPath.section) {
         case kCommittees:
         {
-            NSArray *sortedPos = self.legislator.sortedPositions;
+            NSArray *sortedPos = legislator.sortedPositions;
             if (indexPath.row < [sortedPos count]) {
                 SLFCommitteePosition *position = [sortedPos objectAtIndex:indexPath.row];
                 if (position) {
@@ -192,14 +129,14 @@ enum SECTIONS {
             
         case kDistrictMap:
         {
-            SLFDistrictMap *map = self.legislator.hydratedDistrictMap;
+            SLFDistrictMap *map = legislator.hydratedDistrictMap;
             NSString *mapID = nil;
             
             if (map)
                 mapID = map.slug;
             else
-                mapID = self.legislator.districtMapSlug;
-
+                mapID = legislator.districtMapSlug;
+            
             obj.subtitle    = NSLocalizedStringFromTable(@"Map", @"DataTableUI", @"Title for cell");
             obj.title       = NSLocalizedStringFromTable(@"District Map", @"DataTableUI", @"Title for cell");
             obj.entryValue  = mapID;
@@ -212,7 +149,7 @@ enum SECTIONS {
         {
             obj.subtitle    = NSLocalizedStringFromTable(@"Legislation", @"DataTableUI", @"Title for cell");
             obj.title       = NSLocalizedStringFromTable(@"Authored Bills", @"DataTableUI", @"Title for cell");
-            obj.entryValue  = self.legislator.legID;
+            obj.entryValue  = legislator.legID;
             obj.isClickable = YES;
             obj.entryType   = DirectoryTypeBills;            
         }
@@ -225,9 +162,9 @@ enum SECTIONS {
             {
                 case 0: 
                 {
-                    obj.title       = self.legislator.fullName;
+                    obj.title       = legislator.fullName;
                     obj.subtitle    = NSLocalizedStringFromTable(@"Name", @"DataTableUI", @"Title for cell");
-                    obj.entryValue  = self.legislator.fullName;
+                    obj.entryValue  = legislator.fullName;
                     obj.isClickable = NO;
                     obj.entryType   = DirectoryTypeNone;            
                 }
@@ -237,7 +174,7 @@ enum SECTIONS {
                 {
                     obj.title       = NSLocalizedStringFromTable(@"Campaign Contributions", @"DataTableUI", @"title for cell");
                     obj.subtitle    = NSLocalizedStringFromTable(@"Finances", @"DataTableUI", @"Title for Cell");
-                    obj.entryValue  = self.legislator.transparencyID;
+                    obj.entryValue  = legislator.transparencyID;
                     obj.isClickable = YES;
                     obj.entryType   = DirectoryTypeContributions;
                 }
@@ -245,7 +182,7 @@ enum SECTIONS {
                     
                 case 2:
                 {
-                    NSString *url = [self.legislator.sources count] ? [self.legislator.sources objectAtIndex:0] : nil;
+                    NSString *url   = [legislator.sources count] ? [legislator.sources objectAtIndex:0] : nil;
                     
                     obj.title       = NSLocalizedStringFromTable(@"Official Website", @"DataTableUI", @"Title for Cell");
                     obj.subtitle    = NSLocalizedStringFromTable(@"Web", @"DataTableUI", @"Title for Cell");
@@ -254,12 +191,12 @@ enum SECTIONS {
                     obj.entryType   = DirectoryTypeWeb;
                 }
                     break;
-
+                    
                 case 3:
                 {
                     obj.title       = NSLocalizedStringFromTable(@"Votesmart Bio", @"DataTableUI", @"Title for Cell");
                     obj.subtitle    = NSLocalizedStringFromTable(@"Web", @"DataTableUI", @"Title for Cell");
-                    obj.entryValue  = [NSString stringWithFormat:@"http://votesmart.org/bio.php?can_id=%@",self.legislator.votesmartID];
+                    obj.entryValue  = [NSString stringWithFormat:@"http://votesmart.org/bio.php?can_id=%@",legislator.votesmartID];
                     obj.isClickable = YES;
                     obj.entryType   = DirectoryTypeWeb;
                 }
@@ -273,11 +210,11 @@ enum SECTIONS {
                     NSString *storedNotes = nil;
                     
                     if (storedNotesDict) 
-                        storedNotes = [storedNotesDict valueForKey:self.legislator.legID];
-
+                        storedNotes = [storedNotesDict valueForKey:legislator.legID];
+                    
                     if (IsEmpty(storedNotes))
                         storedNotes = kStaticNotes;
-
+                    
                     obj.title       = storedNotes;
                     obj.subtitle    = NSLocalizedStringFromTable(@"Notes", @"DataTableUI", @"Title for the cell indicating custom notes option");
                     obj.entryValue  = storedNotes;
@@ -289,15 +226,15 @@ enum SECTIONS {
         }
             break;
     }    
-
+    
     return [obj autorelease];
 }
 
-- (NSIndexPath *)indexPathForDataObject:(id)dataObject {
+- (NSIndexPath *)indexPathForDataObject:(id)inObject {
 	
-    if (dataObject && [dataObject respondsToSelector:@selector(indexPath)])
-        return [dataObject performSelector:@selector(indexPath)];
-
+    if (inObject && [inObject respondsToSelector:@selector(indexPath)])
+        return [inObject performSelector:@selector(indexPath)];
+    
 	return nil;
 }
 
@@ -321,11 +258,17 @@ enum SECTIONS {
 }
 
 - (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section {
+    
+    if (!self.detailObject || ![self.detailObject isKindOfClass:self.resourceClass])
+        return 0;
+    
     NSInteger rows = 0;
+    
+    SLFLegislator *legislator = self.detailObject;
     
     switch (section) {
         case kCommittees:
-            rows = [self.legislator.positions count];
+            rows = [legislator.positions count];
             break;
         case kDistrictMap:
             rows = 1;
@@ -364,24 +307,20 @@ enum SECTIONS {
 }
 
 
-#pragma mark -
-#pragma mark UITableViewDataSource methods
-
-
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {		
-		
+    
 	TableCellDataObject *cellInfo = [self dataObjectForIndexPath:indexPath];
-		
-	if (cellInfo == nil) {
-		RKLogError(@"Error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);
+    
+    if (cellInfo == nil) {
+		RKLogError(@"cellForRowAtIndexPath -> Couldn't get legislator detail for index path: %@", indexPath);
 		return nil;
 	}
-	
+    
 	NSString *stdCellID = [TexLegeStandardGroupCell cellIdentifier];
 	if (cellInfo.entryType == DirectoryTypeNotes)
 		stdCellID = @"TexLegeNotesGroupCell";
-		
+    
 	NSString *cellIdentifier = [NSString stringWithFormat:@"%@-%d", stdCellID, cellInfo.isClickable];
 	
 	/* Look up cell in the table queue */
@@ -393,21 +332,19 @@ enum SECTIONS {
     }
     
     cell.cellInfo = cellInfo;
-		
+    
 	if (cellInfo.entryType == DirectoryTypeNotes) {
 		if (![cellInfo.entryValue isEqualToString:kStaticNotes])
 			cell.detailTextLabel.textColor = [UIColor blackColor];
 		else
 			cell.detailTextLabel.textColor = [UIColor grayColor];
 	}
-	else if (cellInfo.entryType == DirectoryTypeMap) {
-			cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
-			cell.detailTextLabel.numberOfLines = 4;
-	}			
 	
 	[cell sizeToFit];
 	[cell setNeedsDisplay];
 	
+    //cell.cellView.useDarkBackground = (indexPath.row % 2 == 0);
+
 	return cell;
 	
 }
