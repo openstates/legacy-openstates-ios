@@ -195,7 +195,7 @@ void RunBlockAfterDelay(NSTimeInterval delay, void (^block)(void))
 	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
 	UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
 	if (UIDeviceOrientationIsValidInterfaceOrientation(orientation) && UIDeviceOrientationIsLandscape(orientation) && !UIInterfaceOrientationIsLandscape(statusBarOrientation)) {
-/*		NSLog(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
+/*		RKLogCritical(@"ORIENTATION WAS WRONG ... WE'RE RESETTING ... IS THIS OKAY???");
 		[[UIApplication sharedApplication] setStatusBarOrientation:orientation animated:NO];
 */
 		return UIInterfaceOrientationIsLandscape(orientation);	
@@ -274,7 +274,7 @@ void RunBlockAfterDelay(NSTimeInterval delay, void (^block)(void))
 }
 
 + (NSString *) titleFromURL:(NSURL *)url {
-	debug_NSLog(@"%@", [url absoluteString]);
+	RKLogDebug(@"%@", [url absoluteString]);
 	NSArray *urlComponents = [[url absoluteString] componentsSeparatedByString:@"/"];
 	NSString * title = nil;
 	
@@ -305,24 +305,25 @@ void RunBlockAfterDelay(NSTimeInterval delay, void (^block)(void))
 		canOpenURL = YES;
 	}
 	else {
-		debug_NSLog(@"Can't open this URL: %@", url.description);			
+		RKLogError(@"Can't open this URL: %@", url.description);			
 	}
 	return canOpenURL;
 }
 
 // just open the url, don't bother checking for network access
 + (BOOL) openURLWithoutTrepidation:(NSURL *)url {
-	BOOL canOpenURL = NO;
-	
-	if ([[UIApplication sharedApplication] canOpenURL:url]) {
-		[[UIApplication sharedApplication] openURL:url];
-		canOpenURL = YES;
-	}
-	else {
-		debug_NSLog(@"Can't open this URL: %@", url.description);			
-	}
-	return canOpenURL;
-}
+    BOOL canOpenURL = NO;
+    
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [[UIApplication sharedApplication] openURL:url];
+        canOpenURL = YES;
+    }
+    else {
+        RKLogError(@"Can't open this URL: %@", url.description);	
+    }
+    
+    return canOpenURL;
+}			
 
 + (NSDictionary *)parametersOfQuery:(NSString *)queryString
 {

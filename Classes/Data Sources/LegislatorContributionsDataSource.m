@@ -135,7 +135,7 @@
 	TableCellDataObject *cellInfo = [self dataObjectForIndexPath:indexPath];
 	
 	if (cellInfo == nil) {
-		debug_NSLog(@"ContributionsDataSource: error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);
+		RKLogError(@"Error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);
 		return nil;
 	}
 	
@@ -201,7 +201,7 @@
 			break;
 	}
 	
-	debug_NSLog(@"Contributions resource path: %@", resourcePath);
+	RKLogDebug(@"Contributions resource path: %@", resourcePath);
 	if ([TexLegeReachability canReachHostWithURL:[NSURL URLWithString:transApiBaseURL] alert:YES]) {
 		[[[OpenLegislativeAPIs sharedOpenLegislativeAPIs] transApiClient] get:resourcePath queryParams:queryParams delegate:self];
 	}
@@ -306,7 +306,7 @@
 			cellInfo.action = [NSNumber numberWithInteger:kContributionQueryRecipient];
 
 			if (!dataID || [[NSNull null] isEqual:dataID] || ![dataID isKindOfClass:[NSString class]]) {
-				NSLog(@"ERROR - Contribution results have an empty entity ID for: %@", name);								
+				RKLogError(@"ERROR - Contribution results have an empty entity ID for: %@", name);								
 
 				NSString *nameSearch = [name stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 				cellInfo.entryValue = nameSearch;
@@ -350,7 +350,7 @@
 				cellInfo.action = [NSNumber numberWithInteger:kContributionQueryRecipient];
 			
 			if (!dataID || [[NSNull null] isEqual:dataID] || ![dataID isKindOfClass:[NSString class]]) {
-				NSLog(@"ERROR - Contribution results have an empty entity ID for: %@", name);								
+				RKLogError(@"ERROR - Contribution results have an empty entity ID for: %@", name);								
 				
 				NSString *nameSearch = [name stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 				cellInfo.entryValue = nameSearch;
@@ -469,7 +469,7 @@
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
 	if (error && request) {
-		debug_NSLog(@"ContributionsDataSource - Error loading from %@: %@", [request description], [error localizedDescription]);
+		RKLogError(@"Error loading from %@: %@", [request description], [error localizedDescription]);
 		[[NSNotificationCenter defaultCenter] postNotificationName:kContributionsDataNotifyError object:nil];
 	}
 }

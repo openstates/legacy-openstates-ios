@@ -142,12 +142,13 @@ enum SECTIONS {
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
+#warning revise this
 	UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Error" 
                                                      message:[error localizedDescription] 
                                                     delegate:nil 
                                            cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
 	[alert show];
-	NSLog(@"Hit error: %@", error);
+	RKLogError(@"Hit error: %@", [error localizedDescription]);
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataError object:self];
 
@@ -373,7 +374,7 @@ enum SECTIONS {
 	TableCellDataObject *cellInfo = [self dataObjectForIndexPath:indexPath];
 		
 	if (cellInfo == nil) {
-		debug_NSLog(@"LegislatorDetailDataSource:cellForRow: error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);
+		RKLogError(@"Error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);
 		return nil;
 	}
 	

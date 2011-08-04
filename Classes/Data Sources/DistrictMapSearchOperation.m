@@ -95,7 +95,7 @@
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
 	if (error && request) {
-		debug_NSLog(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
+		RKLogError(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
 	}	
 	
 	self.foundIDs = nil;

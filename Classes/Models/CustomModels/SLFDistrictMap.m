@@ -79,8 +79,9 @@
     NSNumber *lat = [self.centroidCoords objectAtIndex:1];
     if (lon && lat) {
         centroid = CLLocationCoordinate2DMake([lat doubleValue], [lon doubleValue]);
-        if (NO == CLLocationCoordinate2DIsValid(centroid))
-            NSLog(@"Invalid Centroid: lon=%@ lat=%@", lon, lat);
+        if (NO == CLLocationCoordinate2DIsValid(centroid)) {
+            RKLogDebug(@"Invalid Centroid: lon=%@ lat=%@", lon, lat);
+        }
     }
     return centroid;
 }

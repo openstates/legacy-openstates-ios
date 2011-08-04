@@ -14,17 +14,13 @@
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
 	#import <CoreData/CoreData.h>
+    
+    #import <RestKit/RestKit.h>
 
 	#import "VTPGAdvancedLog.h"
 	#import "Constants.h"
 	#import "TexLegeLibrary.h"
 	#import "PrivateStrings.h"
-
-	#ifdef DEBUG
-		#define debug_NSLog(format, ...) NSLog(format, ## __VA_ARGS__)
-	#else
-		#define debug_NSLog(format, ...)
-	#endif
 
 	#define nice_release(var) if (var) [var release], var = nil
 

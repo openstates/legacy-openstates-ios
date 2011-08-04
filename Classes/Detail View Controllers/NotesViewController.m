@@ -133,7 +133,7 @@
 		NSError *error = nil;
 		if (![self.legislator.managedObjectContext save:&error]) {
 			// Handle error
-			debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+			RKLogError(@"Unresolved error %@, %@", error, [error userInfo]);
 		}
 		if ([self.backViewController respondsToSelector:@selector(resetTableData:)])
 			[self.backViewController performSelector:@selector(resetTableData:) withObject:self];

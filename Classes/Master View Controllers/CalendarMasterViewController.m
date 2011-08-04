@@ -61,8 +61,6 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	if (!self.selectObjectOnAppear && [UtilityMethods isIPadDevice])
-		self.selectObjectOnAppear = [self firstDataObject];
 	
 	UILabel *typeWarning = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), 44.f)];
 	typeWarning.text = NSLocalizedStringFromTable(@"Only committee meetings are available at this time", @"DataTableUI", @"Disclaimer for event types");
@@ -90,19 +88,6 @@
 {	
 	[super viewWillAppear:animated];
 		
-	if ([UtilityMethods isIPadDevice] && self.selectObjectOnAppear == nil) {
-		id detailObject = self.detailViewController ? [self.detailViewController valueForKey:@"chamberCalendar"] : nil;
-		
-		if (!detailObject) {
-			NSIndexPath *currentIndexPath = [self.tableView indexPathForSelectedRow];
-			if (!currentIndexPath) {			
-				NSUInteger ints[2] = {0,0};	// just pick the first one then
-				currentIndexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
-			}
-			detailObject = [self.dataSource dataObjectForIndexPath:currentIndexPath];			
-		}
-		self.selectObjectOnAppear = detailObject;
-	}	
 	if ([UtilityMethods isIPadDevice]) {
 		if (self.navigationController)
 			self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];

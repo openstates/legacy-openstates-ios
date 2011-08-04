@@ -207,9 +207,10 @@
 #pragma mark Split view support
 
 - (void)splitViewController: (UISplitViewController*)svc 
-	 willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem 
-	   forPopoverController: (UIPopoverController*)pc {
-	//debug_NSLog(@"Entering portrait, showing the button: %@", [aViewController class]);
+	 willHideViewController:(UIViewController *)aViewController 
+          withBarButtonItem:(UIBarButtonItem*)barButtonItem 
+	   forPopoverController: (UIPopoverController*)pc
+{
 	barButtonItem.title = NSLocalizedStringFromTable(@"Legislators", @"StandardUI", @"The short title for buttons and tabs related to legislators");
 	[self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
 	self.masterPopover = pc;
@@ -218,13 +219,14 @@
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
 - (void)splitViewController: (UISplitViewController*)svc 
 	 willShowViewController:(UIViewController *)aViewController 
-  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-	//debug_NSLog(@"Entering landscape, hiding the button: %@", [aViewController class]);
+  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
+{
 	[self.navigationItem setRightBarButtonItem:nil animated:YES];
 	self.masterPopover = nil;
 }
 
-- (void) splitViewController:(UISplitViewController *)svc popoverController: (UIPopoverController *)pc
+- (void) splitViewController:(UISplitViewController *)svc 
+           popoverController: (UIPopoverController *)pc
    willPresentViewController: (UIViewController *)aViewController
 {
 	if ([UtilityMethods isLandscapeOrientation]) {

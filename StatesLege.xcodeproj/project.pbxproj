@@ -511,6 +511,8 @@
 		376DFEB713492FF800360BF4 /* LoadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 376DFEB513492FF700360BF4 /* LoadingCell.m */; };
 		376F62D1132972E200F2B3DA /* BillsCategoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376F62D0132972E200F2B3DA /* BillsCategoriesViewController.m */; };
 		376F632D13298DE000F2B3DA /* BillsCategoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376F62D0132972E200F2B3DA /* BillsCategoriesViewController.m */; };
+		376FD44813EA3D6C00DE76E4 /* SLFDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 376FD44713EA3D6C00DE76E4 /* SLFDataSource.m */; };
+		376FD44913EA3D6C00DE76E4 /* SLFDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 376FD44713EA3D6C00DE76E4 /* SLFDataSource.m */; };
 		377074DB1397B2B400E82CA8 /* SVGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 377074D51397B2B400E82CA8 /* SVGeocoder.m */; };
 		377074DC1397B2B400E82CA8 /* SVPlacemark.m in Sources */ = {isa = PBXBuildFile; fileRef = 377074D71397B2B400E82CA8 /* SVPlacemark.m */; };
 		377074E01397B2B400E82CA8 /* SVGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 377074D51397B2B400E82CA8 /* SVGeocoder.m */; };
@@ -1886,6 +1888,8 @@
 		376DFEB513492FF700360BF4 /* LoadingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingCell.m; sourceTree = "<group>"; };
 		376F62CF132972E200F2B3DA /* BillsCategoriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsCategoriesViewController.h; sourceTree = "<group>"; };
 		376F62D0132972E200F2B3DA /* BillsCategoriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsCategoriesViewController.m; sourceTree = "<group>"; };
+		376FD44613EA3D6C00DE76E4 /* SLFDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFDataSource.h; sourceTree = "<group>"; };
+		376FD44713EA3D6C00DE76E4 /* SLFDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFDataSource.m; sourceTree = "<group>"; };
 		377074D41397B2B400E82CA8 /* SVGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVGeocoder.h; sourceTree = "<group>"; };
 		377074D51397B2B400E82CA8 /* SVGeocoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVGeocoder.m; sourceTree = "<group>"; };
 		377074D61397B2B400E82CA8 /* SVPlacemark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVPlacemark.h; sourceTree = "<group>"; };
@@ -2536,6 +2540,8 @@
 				374D2E8D13E7E33300630B97 /* SLFDataModels.h */,
 				374D2E8E13E7E33300630B97 /* SLFMappingsManager.h */,
 				374D2E8F13E7E33300630B97 /* SLFMappingsManager.m */,
+				376FD44613EA3D6C00DE76E4 /* SLFDataSource.h */,
+				376FD44713EA3D6C00DE76E4 /* SLFDataSource.m */,
 				374D2E7D13E7E33300630B97 /* CustomModels */,
 				374D2E9013E7E33300630B97 /* StockModels */,
 			);
@@ -4995,6 +5001,7 @@
 				374D2EAD13E7E33300630B97 /* _SLFLegislator.m in Sources */,
 				374D2EAE13E7E33300630B97 /* _SLFState.m in Sources */,
 				37FC6F3913E872A600C982FF /* SLFRestKitManager.m in Sources */,
+				376FD44913EA3D6C00DE76E4 /* SLFDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5111,6 +5118,7 @@
 				374D2EBD13E7E33300630B97 /* _SLFLegislator.m in Sources */,
 				374D2EBE13E7E33300630B97 /* _SLFState.m in Sources */,
 				37FC6F3813E872A600C982FF /* SLFRestKitManager.m in Sources */,
+				376FD44813EA3D6C00DE76E4 /* SLFDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

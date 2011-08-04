@@ -127,7 +127,7 @@
         
     if (doLoad) { 
         
-        debug_NSLog(@"StatesListMeta is stale, need to refresh");
+        RKLogDebug(@"StatesListMeta is stale, need to refresh");
         
         [self loadData];
         
@@ -188,7 +188,7 @@
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     
     if (error && objectLoader) {
-		NSLog(@"Error loading state metadata from %@: %@", [objectLoader description], [error localizedDescription]);
+		RKLogError(@"Error loading state metadata from %@: %@", [objectLoader description], [error localizedDescription]);
 	}
     
     isLoading = NO;
@@ -212,7 +212,7 @@
     NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
 	self.states = [objects sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
     
-    debug_NSLog(@"%d States", [objects count]);
+    RKLogDebug(@"%d States", [objects count]);
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kStatesListLoadedKey object:nil];
 

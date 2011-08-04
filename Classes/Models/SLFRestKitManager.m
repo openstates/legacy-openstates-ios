@@ -83,12 +83,12 @@
     if (!errorDesc)
         errorDesc = @"";
     
-    NSLog(@"RestKit Error -");
-    NSLog(@"    request: %@", request);
-    NSLog(@"    loadData: %@", errorDesc);
+    RKLogError(@"RestKit Error -");
+    RKLogError(@"    request: %@", request);
+    RKLogError(@"    loadData: %@", errorDesc);
 
     [SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Error During Update", @"AppAlerts", @"") 
-                        message:[NSString stringWithFormat:@"%@  \n\n%@",
+                        message:[NSString stringWithFormat:@"%@\n\n%@",
                                  NSLocalizedStringFromTable(@"A network or server data error occurred.", @"AppAlerts", @""),
                                  errorDesc]  
                     buttonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"")];

@@ -472,7 +472,7 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 	if (IsEmpty(_rows))
 		return;
 
-	debug_NSLog(@"Pruning the list of sought-after bills for a given sponsor...");
+	RKLogDebug(@"Pruning the list of sought-after bills for a given sponsor...");
 	
 	NSArray *tempRows = [[NSArray alloc] initWithArray:_rows];
 	
@@ -492,7 +492,6 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 			}
 		}
 		if (YES == hasSponsors && NO == found) {
-			//debug_NSLog(@"Pruning bill %@ for %@", [bill valueForKey:@"bill_id"], sponsorID);
 			[_rows removeObject:bill];
 		}
 	}
@@ -505,7 +504,7 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
 	if (error && request) {
-		debug_NSLog(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
+		RKLogError(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
 	}	
 	
 	if (useLoadingDataCell)

@@ -225,7 +225,7 @@
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
 	if (error && request) {
-		debug_NSLog(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
+		RKLogError(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
 	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:kBillSearchNotifyDataError object:self];
 	
@@ -317,8 +317,8 @@
 				error = [NSError errorWithDomain:@"com.texlege.texlege" code:-9999 userInfo:[NSDictionary dictionaryWithObject:e forKey:@"Exception"]];
 			}
 			//NSString *json = [results JSONString];
-			//NSLog(@"%@", json);
-			//NSLog(@"%@", [results valueForKeyPath:@"rss.channel.item.title.text"]);
+			//RKLogDebug(@"%@", json);
+			//RKLogDebug(@"%@", [results valueForKeyPath:@"rss.channel.item.title.text"]);
 		}
 		
 	}

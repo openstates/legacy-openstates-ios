@@ -24,7 +24,6 @@
 
 @implementation GeneralTableViewController
 @synthesize dataSource, detailViewController, controllerEnabled;
-@synthesize selectObjectOnAppear;
 
 #pragma mark -
 #pragma mark Main Menu Info
@@ -104,10 +103,6 @@
     return nil;   // override this to test for availability of a feature for the active state in the open states api
 }
 
-- (void)stateChanged:(NSNotification *)notification {
-    [self resetControllerEnabled:notification];
-}
-
 - (void)resetControllerEnabled:(NSNotification *)notification {
     
     if ([self apiFeatureFlag]) {
@@ -117,6 +112,11 @@
     [self setControllerEnabled:(isFeatureEnabled == YES && isServerReachable == YES)];
     
 }
+
+- (void)stateChanged:(NSNotification *)notification {
+    [self resetControllerEnabled:notification];
+}
+
 
 - (void)setControllerEnabled:(BOOL)enabled {
     controllerEnabled = enabled;
@@ -143,7 +143,7 @@
         [self resetControllerEnabled:nil];        
 	}
 	/*if (!IsEmpty(keyPath) && [keyPath isEqualToString:@"frame"]) {
-		NSLog(@"Class=%@ w=%f h=%f", NSStringFromClass([self class]), self.tableView.frame.size.width, self.tableView.frame.size.height);
+		RKLogTrace(@"Class=%@ w=%f h=%f", NSStringFromClass([self class]), self.tableView.frame.size.width, self.tableView.frame.size.height);
 	}*/	
 }
 
@@ -164,31 +164,12 @@
 
 - (void)configure {	
 	
-	SLFPersistenceManager *persistence = [SLFPersistenceManager sharedPersistence];
+	//SLFPersistenceManager *persistence = [SLFPersistenceManager sharedPersistence];
     
 	[self dataSource];
 	
-    id object = [persistence tableSelectionForKey:NSStringFromClass([self class])];
-    if (!object)
-        return;
-    
-    if ([object isKindOfClass:[NSIndexPath class]] && NO == [self.dataSource isKindOfClass:[BillsMenuDataSource class]]) {
-        self.selectObjectOnAppear = [self.dataSource dataObjectForIndexPath:object];
-    }
-	
-	if (self.selectObjectOnAppear && self.detailViewController && [UtilityMethods isIPadDevice]) {
-		NSLog(@"Presetting a detail view's dataObject in %@!", [self description]);
-		if ([self.detailViewController respondsToSelector:@selector(setDataObject:)]) {
-			@try {
-				[self.detailViewController performSelector:@selector(setDataObject:) withObject:self.selectObjectOnAppear];
-			}
-			@catch (NSException * e) {
-				self.selectObjectOnAppear = nil;
-				//self.selectObjectOnAppear = [self.dataSource dataObjectForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-			}
-		}
-	}
-	
+    //id object = [persistence tableSelectionForKey:NSStringFromClass([self class])];
+    	
 }
 
 - (void)runLoadView {	
@@ -269,7 +250,7 @@
 }
 	
 - (void)viewDidUnload {
-	//NSLog(@"--------------Unloading %@", NSStringFromClass([self class]));
+	RKLogDebug(@"--------------Unloading %@", NSStringFromClass([self class]));
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:kNotifyTableDataUpdated object:self.dataSource];
 
@@ -333,19 +314,18 @@
 		if ([self.detailViewController respondsToSelector:@selector(navigationController)])
 			detailNav = [self.detailViewController performSelector:@selector(navigationController)];
 		
-		if (!self.selectObjectOnAppear) {	// otherwise we pop whenever we're automatically selecting stuff ... right?
-			if (detailNav && detailNav.viewControllers && [detailNav.viewControllers count] > 1) { 
-				[detailNav popToRootViewControllerAnimated:YES];
-				
-				if ([self.detailViewController respondsToSelector:@selector(tableView)]) {
-					UITableView *detailTable = [self.detailViewController performSelector:@selector(tableView)];
-					if (detailTable) {
-						CGRect guessTop = CGRectMake(0, 0, 10.0f, 10.0f);
-						[detailTable scrollRectToVisible:guessTop animated:YES];
-					}
-				}
-			}
-		}
+		// otherwise we pop whenever we're automatically selecting stuff ... right?
+        if (detailNav && detailNav.viewControllers && [detailNav.viewControllers count] > 1) { 
+            [detailNav popToRootViewControllerAnimated:YES];
+            
+            if ([self.detailViewController respondsToSelector:@selector(tableView)]) {
+                UITableView *detailTable = [self.detailViewController performSelector:@selector(tableView)];
+                if (detailTable) {
+                    CGRect guessTop = CGRectMake(0, 0, 10.0f, 10.0f);
+                    [detailTable scrollRectToVisible:guessTop animated:YES];
+                }
+            }
+        }
 	}
 }
 

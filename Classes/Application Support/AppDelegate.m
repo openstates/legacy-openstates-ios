@@ -106,7 +106,7 @@ NSString * const kSupportEmailKey = @"supportEmail";
 - (UISplitViewController *) splitViewController {
 	if ([UtilityMethods isIPadDevice]) {
 		if (![self.tabBarController.selectedViewController isKindOfClass:[UISplitViewController class]]) {
-			debug_NSLog(@"Unexpected navigation controller class in tab bar controller hierarchy, check nib.");
+			RKLogCritical(@"Unexpected navigation controller class in tab bar controller hierarchy, check nib.");
 			return nil;
 		}
 		return (UISplitViewController *)self.tabBarController.selectedViewController;
@@ -123,7 +123,7 @@ NSString * const kSupportEmailKey = @"supportEmail";
 	}
 	else {
 		if (![self.tabBarController.selectedViewController isKindOfClass:[UINavigationController class]]) {
-			debug_NSLog(@"Unexpected view/navigation controller class in tab bar controller hierarchy, check nib.");
+			RKLogCritical(@"Unexpected view/navigation controller class in tab bar controller hierarchy, check nib.");
 		}
 		
 		UINavigationController *nav = (UINavigationController *)self.tabBarController.selectedViewController;
@@ -172,7 +172,7 @@ NSString * const kSupportEmailKey = @"supportEmail";
 		return NO;
 	
     if (![viewController isEqual:tbc.selectedViewController]) {
-        //debug_NSLog(@"About to switch tabs, popping to root view controller.");
+        RKLogTrace(@"About to switch tabs, popping to root view controller.");
         UINavigationController *nav = [self detailNavigationController];
         if (nav && [nav.viewControllers count]>1)
             [nav popToRootViewControllerAnimated:YES];
@@ -223,7 +223,7 @@ NSString * const kSupportEmailKey = @"supportEmail";
 		nibObjects = [[NSBundle mainBundle] loadNibNamed:@"iPhoneTabBarController" owner:self options:nil];
 	
 	if (IsEmpty(nibObjects)) {
-		debug_NSLog(@"Error loading user interface NIB components! Can't find the nib file and can't continue this charade.");
+		RKLogCritical(@"Error loading user interface NIB components! Can't find the nib file and can't continue this charade.");
 		exit(0);
 	}
 	
@@ -269,7 +269,7 @@ NSString * const kSupportEmailKey = @"supportEmail";
         
         UIViewController * savedTabController = [self.tabBarController.viewControllers objectAtIndex:savedTabSelectionIndex];
         if (!savedTabController || !savedTabController.tabBarItem.enabled) {
-            debug_NSLog (@"Couldn't find a view/navigation controller at index: %d", savedTabSelectionIndex);
+            RKLogError(@"Couldn't find a view/navigation controller at index: %d", savedTabSelectionIndex);
             savedTabController = [self.tabBarController.viewControllers objectAtIndex:0];
         }
         else if (self.tabBarController.moreNavigationController) {
@@ -305,14 +305,22 @@ NSString * const kSupportEmailKey = @"supportEmail";
 
 - (void)runOnInitialAppStart:(id)sender {	
 	
+#ifdef DEBUG
+    RKLogSetAppLoggingLevel(RKLogLevelDebug);
+#else
+    RKLogSetAppLoggingLevel(RKLogLevelWarning);
+#endif
+    
+    RKLogDebug(@"Application is starting up");
+    
 	if(
 	   getenv("NSZombieEnabled") || getenv("NSAutoreleaseFreedObjectCheckEnabled")
 	   ) {
 		for (int loop=0;loop < 6;loop++) {
-			NSLog(@"**************** NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!*************");
+			RKLogCritical(@"**************** NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!*************");
 		}
 	}
-	
+    	
 	[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 
 	NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
@@ -352,7 +360,7 @@ NSString * const kSupportEmailKey = @"supportEmail";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {		
-	NSLog(@"iOS Version: %@", [[UIDevice currentDevice] systemVersion]);
+	RKLogWarning(@"iOS Version: %@", [[UIDevice currentDevice] systemVersion]);
 	
 	[[TexLegeReachability sharedTexLegeReachability] startCheckingReachability];
 	
@@ -392,6 +400,7 @@ NSString * const kSupportEmailKey = @"supportEmail";
 }
 
 - (void)runOnEveryAppStart {
+        
 	self.appIsQuitting = NO;
 	
     if ([[StateMetaLoader sharedStateMeta] needsStateSelection])

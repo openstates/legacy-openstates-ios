@@ -202,12 +202,13 @@ CGFloat quartzRowHeight = 73.f;
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
+#warning revise this
 	UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Error" 
                                                      message:[error localizedDescription] 
                                                     delegate:nil 
                                            cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
 	[alert show];
-	NSLog(@"Hit error: %@", error);
+	RKLogError(@"Hit error: %@", [error localizedDescription]);
 }
 
 
@@ -289,7 +290,6 @@ CGFloat quartzRowHeight = 73.f;
 #pragma mark Popover Support
 
 - (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
-	//debug_NSLog(@"Entering portrait, showing the button: %@", [aViewController class]);
     barButtonItem.title = @"Committees";
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     self.masterPopover = pc;
@@ -298,7 +298,6 @@ CGFloat quartzRowHeight = 73.f;
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
 - (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-	//debug_NSLog(@"Entering landscape, hiding the button: %@", [aViewController class]);
     [self.navigationItem setRightBarButtonItem:nil animated:YES];
     self.masterPopover = nil;
 }

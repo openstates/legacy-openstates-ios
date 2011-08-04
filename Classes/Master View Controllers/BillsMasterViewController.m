@@ -422,7 +422,7 @@
 	NSArray *sessions = [meta sessions];
 	
 	if (IsEmpty(sessions) || IsEmpty(selectedSession)) {
-		NSLog(@"Error when attempting to display legislative sessions control:  state=%@", meta.selectedState);
+		RKLogCritical(@"Error when attempting to display legislative sessions control:  state=%@", meta.selectedState);
 		return;
 	}
     

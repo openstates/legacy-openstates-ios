@@ -26,10 +26,10 @@
 @property (readonly) NSString *navigationBarName;
 
 @property (nonatomic,retain) id<TableDataSource> dataSource;
-@property (nonatomic,retain) id selectObjectOnAppear;
 @property (nonatomic,retain) IBOutlet id detailViewController;
 
 @property (nonatomic) BOOL controllerEnabled;
+
 - (NSString *)reachabilityStatusKey;
 - (NSString *)apiFeatureFlag;
 

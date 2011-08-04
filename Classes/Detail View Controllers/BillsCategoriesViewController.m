@@ -286,7 +286,7 @@
 		!updated || 
 		([[NSDate date] timeIntervalSinceDate:updated] > 3600*24)) {	// if we're over a day old, let's refresh
 		
-		debug_NSLog(@"BillCategories is stale, need to refresh");
+		RKLogDebug(@"BillCategories is stale, need to refresh");
 		
 		[self runDataQuery:nil];
 	}
@@ -325,7 +325,7 @@
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
 	if (error && request) {
-		debug_NSLog(@"Error loading categories from %@: %@", [request description], [error localizedDescription]);
+		RKLogError(@"Error loading categories from %@: %@", [request description], [error localizedDescription]);
 	}
 
 	isFresh = NO;

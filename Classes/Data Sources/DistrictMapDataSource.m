@@ -86,7 +86,7 @@
 	}
 	@catch (NSException * e) {
 		// Perhaps we're returning from a search and we've got a wacked out indexPath.  Let's reset the search and see what happens.
-		debug_NSLog(@"DistrictMapDataSource.m -- dataObjectForIndexPath must be out of bounds.  %@", [indexPath description]); 
+		RKLogError(@"dataObjectForIndexPath must be out of bounds.  %@", [indexPath description]); 
 		[self removeFilter];
 		tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	}
@@ -137,7 +137,7 @@
 	SLFDistrictMap *tempEntry = [self dataObjectForIndexPath:indexPath];
 	
 	if (tempEntry == nil) {
-		debug_NSLog(@"Busted in DistrictMapDataSource.m: cellForRowAtIndexPath -> Couldn't get object data for row.");
+		RKLogError(@"cellForRowAtIndexPath -> Couldn't get object data for row.");
 		return nil;
 	}
 	
@@ -169,7 +169,6 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {	
-	//debug_NSLog(@"%@", [self.fetchedResultsController.fetchRequest description]);
 	NSInteger count = [[self.fetchedResultsController sections] count];		
 	if (count > 1 && !self.hasFilter && !self.byDistrict)  {
 		return count; 
@@ -254,7 +253,7 @@
 	NSError *error = nil;
 	if (![self.fetchedResultsController performFetch:&error]) {
         // Handle error
-        debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        RKLogError(@"Unresolved error %@, %@", [error localizedDescription], [error userInfo]);
     }           
 }
 
@@ -281,13 +280,12 @@
 	NSError *error = nil;
 	if (![self.fetchedResultsController performFetch:&error]) {
         // Handle error
-        debug_NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        RKLogError(@"Unresolved error %@, %@", [error localizedDescription], [error userInfo]);
     }           
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataUpdated object:self];
-	//    [self.tableView endUpdates];
 }
 
 /*

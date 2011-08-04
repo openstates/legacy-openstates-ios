@@ -103,7 +103,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		for (EKEvent *event in allEvents) {
 			NSError *error = nil;
 			if (![eventStore removeEvent:event span:EKSpanThisEvent error:&error])
-				NSLog(@"%@", [error localizedDescription]);
+				RKLogError(@"%@", [error localizedDescription]);
 		}
 		
 		[[NSUserDefaults standardUserDefaults] synchronize];
@@ -212,7 +212,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		
 	if (doLoad) {
 		
-		debug_NSLog(@"CalendarEventsLoader is stale, need to refresh");
+		RKLogDebug(@"CalendarEventsLoader is stale, need to refresh");
 
 		[self loadEvents:nil];
 	}
@@ -242,7 +242,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
 	if (error && request) {
-		debug_NSLog(@"Error loading events from %@: %@", [request description], [error localizedDescription]);
+		RKLogError(@"Error loading events from %@: %@", [request description], [error localizedDescription]);
 	}
 	
 	isLoading = NO;
@@ -255,7 +255,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	
 	if ([[NSFileManager defaultManager] fileExistsAtPath:thePath]) {
 		
-		debug_NSLog(@"EventsLoader: using cached events in the documents folder.");
+		RKLogDebug(@"Using cached events in the documents folder.");
 		
 		_events = [[NSMutableArray alloc] initWithContentsOfFile:thePath];
 	}
@@ -292,13 +292,13 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		}
 				
 		if (NO == IsEmpty(_events)) {
-			debug_NSLog(@"EventsLoader network download successful, archiving for others.");
+			RKLogDebug(@"EventsLoader network download successful, archiving for others.");
 
 			[_events sortUsingFunction:sortByDate context:nil];
 
 			NSString *thePath = [self pathToEventCacheWithRequest:request];		
 			if (![_events writeToFile:thePath atomically:YES]) {
-				NSLog(@"CalendarEventsLoader: Error writing event cache to file: %@", thePath);
+				RKLogError(@"Error writing event cache to file: %@", thePath);
 			}
 		
 		}
@@ -338,7 +338,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 		
 		if (!localStartDate) {	// If we can't find a start date/time, we have to skip this event.
 			
-			NSLog(@"--- Cannot find a date/time for this event: %@", inEvent);
+			RKLogDebug(@"--- Cannot find a date/time for this event: %@", inEvent);
 			
 			return nil;
 		}
@@ -439,7 +439,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 	
 	}
 	@catch (NSException * e) {
-		NSLog(@"Error parsing event dictionary: %@", inEvent);		
+		RKLogError(@"Error parsing event dictionary: %@", inEvent);		
 	}
 	
 	return nil;
@@ -467,7 +467,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
 
 	// TODO: ask what calendar they want use (iOS 5)
 
-	NSLog(@"CalendarEventsLoader == ADDING ALL MEETINGS TO ICAL == (MESSY)");
+	RKLogDebug(@"ADDING ALL MEETINGS TO ICAL == (MESSY)");
 	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"iCAL_ALL_MEETINGS"];
 	
 	for (NSDictionary *event in _events) {
@@ -527,7 +527,7 @@ NSComparisonResult sortByDate(id firstItem, id secondItem, void *context)
     [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
 	
 	if (err) {
-		NSLog(@"CalendarEventsLoader: error saving event %@: %@", [event description], [err localizedDescription]);
+		RKLogError(@"CalendarEventsLoader: error saving event %@: %@", [event description], [err localizedDescription]);
 	}
 	
 	

@@ -654,7 +654,7 @@ enum _billSections {
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
 	if (error && request) {
-		debug_NSLog(@"BillDetail - Error loading bill results from %@: %@", [request description], [error localizedDescription]);
+		RKLogError(@"Error loading bill results from %@: %@", [request description], [error localizedDescription]);
 	}
 	
 	[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Network Error", @"AppAlerts", @"Title for alert stating there's been an error when connecting to a server")

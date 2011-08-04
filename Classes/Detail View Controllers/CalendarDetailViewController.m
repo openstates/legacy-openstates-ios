@@ -111,13 +111,7 @@
 	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 
 	[[CalendarEventsLoader sharedCalendarEventsLoader] events];
-	
-	if ([UtilityMethods isIPadDevice] && !self.chamberCalendar && ![UtilityMethods isLandscapeOrientation])  {
-		AppDelegate *appDelegate = [AppDelegate appDelegate];
 		
-		self.chamberCalendar = [[appDelegate calendarMasterVC] selectObjectOnAppear];		
-	}
-	
 	if (self.chamberCalendar)
 		self.searchDisplayController.searchBar.placeholder = self.chamberCalendar.title;
 }
@@ -174,7 +168,6 @@
 
 
 - (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
-	//debug_NSLog(@"Entering portrait, showing the button: %@", [aViewController class]);
     barButtonItem.title =  NSLocalizedStringFromTable(@"Meetings", @"StandardUI", @"The short title for buttons and tabs related to committee meetings (or calendar events)");
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     self.masterPopover = pc;
@@ -183,7 +176,6 @@
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
 - (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-	//debug_NSLog(@"Entering landscape, hiding the button: %@", [aViewController class]);
     [self.navigationItem setRightBarButtonItem:nil animated:YES];
     self.masterPopover = nil;
 }

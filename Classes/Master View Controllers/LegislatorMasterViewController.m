@@ -17,12 +17,11 @@
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "LegislatorCell.h"
-
 #import "StateMetaLoader.h"
 #import "SLFPersistenceManager.h"
 
 @interface LegislatorMasterViewController (Private)
-- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
+//- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
 - (IBAction)redisplayVisibleCells:(id)sender;
 
 @end
@@ -54,11 +53,6 @@
 
 - (Class)dataSourceClass {
 	return [LegislatorsDataSource class];
-}
-
-
-- (void)configure {
-	[super configure];	
 }
 
 
@@ -121,7 +115,6 @@
 		[self.tableView reloadData]; // popovers look bad without this
 	
 	[self redisplayVisibleCells:nil];	
-	// END: IPAD ONLY
 }
 
 - (IBAction)redisplayVisibleCells:(id)sender {
@@ -147,30 +140,28 @@
 	BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]);
 	
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
-	if (!dataObject || NO == [dataObject isKindOfClass:[SLFLegislator class]])
+	if (!dataObject || NO == [dataObject isKindOfClass:[SLFLegislator class]]) {
 		return;
-	
+    }
+    SLFLegislator *legislator = dataObject;
+
     SLFPersistenceManager *persistence = [SLFPersistenceManager sharedPersistence];
-		[persistence setTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
+    [persistence setTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 	
-	// create a LegislatorDetailViewController. This controller will display the full size tile for the element
 	if (self.detailViewController == nil) {
 		self.detailViewController = [[[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil] autorelease];
 	}
 	
-	SLFLegislator *legislator = dataObject;
-	if (legislator) {
-		[self.detailViewController setLegislator:legislator];
-		if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
-			[self searchBarCancelButtonClicked:nil];
-		}
-		
-		if (!isSplitViewDetail) {
-			// push the detail view controller onto the navigation stack to display it				
-			[self.navigationController pushViewController:self.detailViewController animated:YES];
-			self.detailViewController = nil;
-		}
-	}
+    [self.detailViewController setLegislator:legislator];
+    if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
+        //[self searchBarCancelButtonClicked:nil];
+    }
+    
+    if (!isSplitViewDetail) {
+        // push the detail view controller onto the navigation stack to display it				
+        [self.navigationController pushViewController:self.detailViewController animated:YES];
+        self.detailViewController = nil;
+    }
 }
 //END:code.split.delegate
 
@@ -204,26 +195,30 @@
         NSString *searchScope = stringForChamber(searchOption, TLReturnOpenStates);
         [predicateString appendFormat:@"(chamber LIKE[cd] '%@')", searchScope];
         
-        if (!IsEmpty(searchString) || !IsEmpty(dsource.stateID))
+        if (!IsEmpty(searchString) || !IsEmpty(dsource.stateID)) {
             [predicateString appendString:@" AND "];
+        }
     }
     
     // we have some search terms typed in
     if (!IsEmpty(searchString)) {
         [predicateString appendFormat:@"(fullName CONTAINS[cd] '%@')", searchString];
         
-        if (!IsEmpty(dsource.stateID))
+        if (!IsEmpty(dsource.stateID)) {
             [predicateString appendString:@" AND "];
+        }
     }
     
     // we have a solid state ID
-    if (!IsEmpty(dsource.stateID))
+    if (!IsEmpty(dsource.stateID)) {
         [predicateString appendFormat:@"(stateID LIKE[cd] '%@')", dsource.stateID];
+    }
 
     
     // we have some filters, set up the predicate
-    if ([predicateString length])
+    if ([predicateString length]) {
         predicate = [NSPredicate predicateWithFormat:predicateString];
+    }
     [predicateString release];
     
     
@@ -237,7 +232,7 @@
     
     NSError *error = nil;
     if (![frc performFetch:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        RKLogError(@"Unresolved error %@, %@", [error localizedDescription], [error userInfo]);
     }           
     
     return YES;
@@ -267,32 +262,32 @@
 }
 
 - (IBAction) filterChamber:(id)sender {
-	if (self.chamberControl) {
-                
-        NSInteger searchScope = self.chamberControl.selectedSegmentIndex;
-        searchScope = MAX(searchScope, BOTH_CHAMBERS);
-        searchScope = MIN(searchScope, SENATE);
-        
-        NSString *searchText = self.searchDisplayController.searchBar.text;
-        if (IsEmpty(searchText))
-            searchText = @"";
+    if (!self.chamberControl)
+        return;
+                    
+    NSInteger searchScope = self.chamberControl.selectedSegmentIndex;
+    searchScope = MAX(searchScope, BOTH_CHAMBERS);
+    searchScope = MIN(searchScope, SENATE);
+    
+    NSString *searchText = self.searchDisplayController.searchBar.text;
+    if (IsEmpty(searchText))
+        searchText = @"";
 
-        [self searchDisplayController:self.searchDisplayController 
-     shouldReloadTableForSearchString:searchText
-                          searchScope:searchScope];
-                
-		NSDictionary *segPrefs = [[NSUserDefaults standardUserDefaults] objectForKey:kSegmentControlPrefKey];
-		if (segPrefs) {
-			NSNumber *segIndex = [NSNumber numberWithInteger:self.chamberControl.selectedSegmentIndex];
-			NSMutableDictionary *newDict = [segPrefs mutableCopy];
-			[newDict setObject:segIndex forKey:NSStringFromClass([self class])];
-			[[NSUserDefaults standardUserDefaults] setObject:newDict forKey:kSegmentControlPrefKey];
-			[[NSUserDefaults standardUserDefaults] synchronize];
-			[newDict release];
-		}
-		
-		[self.tableView reloadData];
-	}
+    [self searchDisplayController:self.searchDisplayController 
+                        shouldReloadTableForSearchString:searchText
+                                             searchScope:searchScope];
+            
+    NSDictionary *segPrefs = [[NSUserDefaults standardUserDefaults] objectForKey:kSegmentControlPrefKey];
+    if (segPrefs) {
+        NSNumber *segIndex = [NSNumber numberWithInteger:self.chamberControl.selectedSegmentIndex];
+        NSMutableDictionary *newDict = [segPrefs mutableCopy];
+        [newDict setObject:segIndex forKey:NSStringFromClass([self class])];
+        [[NSUserDefaults standardUserDefaults] setObject:newDict forKey:kSegmentControlPrefKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [newDict release];
+    }
+    
+    [self.tableView reloadData];
 }
 
 @end

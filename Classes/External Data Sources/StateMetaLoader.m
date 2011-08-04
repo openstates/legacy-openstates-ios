@@ -127,7 +127,7 @@
 	
 	if (NO == IsEmpty(stateID)) {
 		
-		NSLog(@"State Metadata: Changing state to %@", stateID);
+		RKLogWarning(@"State Metadata: Changing state to %@", stateID);
         
 		[[NSUserDefaults standardUserDefaults] setObject:stateID forKey:kMetaSelectedStateKey];
 		[[NSUserDefaults standardUserDefaults] synchronize];
@@ -237,7 +237,7 @@
 		nice_release(_selectedSession);
 		_selectedSession = [sessionID copy];
 		
-		NSLog(@"State Metadata: Changing selected session to %@", sessionID);
+		RKLogWarning(@"State Metadata: Changing selected session to %@", sessionID);
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:kStateMetaNotifySessionChange object:nil];
         
@@ -285,7 +285,7 @@
     isLoading = NO;
     
     if (error && objectLoader) {
-        debug_NSLog(@"Error loading state metadata from %@: %@", [objectLoader description], [error localizedDescription]);
+        RKLogError(@"Error loading state metadata from %@: %@", [objectLoader description], [error localizedDescription]);
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kStateMetaNotifyError object:nil];

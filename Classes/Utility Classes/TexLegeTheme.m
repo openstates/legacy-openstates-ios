@@ -54,8 +54,9 @@
 
 + (void) logFontNames {	
 	for (NSString *family in [UIFont familyNames]) {
-		for (NSString *font in [UIFont fontNamesForFamilyName:family]) 
-			debug_NSLog(@"Font: %@", font);
+		for (NSString *font in [UIFont fontNamesForFamilyName:family]) {
+			RKLogInfo(@"Font: %@", font);
+        }
 	}
 }
 + (UIColor *)segmentCtl {return [UIColor colorWithRed:0.592157f green:0.631373f blue:0.65098f alpha:1.0];}

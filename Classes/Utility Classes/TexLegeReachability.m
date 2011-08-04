@@ -111,10 +111,12 @@
         self.remoteHostStatus = currentStatus;
         BOOL connectionRequired= [curReach connectionRequired];
 		if (self.remoteHostStatus != ReachableViaWWAN) {
-			if(connectionRequired)
-				NSLog(@"Cellular data network is available.\n  Internet traffic will be routed through it after a connection is established.");
-			else
-				NSLog(@"Cellular data network is active.\n  Internet traffic will be routed through it.");
+			if(connectionRequired) {
+				RKLogWarning(@"Cellular data network is available.\n  Internet traffic will be routed through it after a connection is established.");
+            }
+			else {
+				RKLogTrace(@"Cellular data network is active.\n  Internet traffic will be routed through it.");
+            }
 		}
 	}
 	else if(curReach == internetReach)

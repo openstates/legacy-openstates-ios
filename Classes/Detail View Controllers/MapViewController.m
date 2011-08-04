@@ -238,7 +238,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 
 - (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
-	//debug_NSLog(@"Entering portrait, showing the button: %@", [aViewController class]);
     barButtonItem.title = NSLocalizedStringFromTable(@"District Maps", @"StandardUI", @"Short name for district maps tab");
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     self.masterPopover = pc;
@@ -247,7 +246,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
 - (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-	//debug_NSLog(@"Entering landscape, hiding the button: %@", [aViewController class]);
     [self.navigationItem setRightBarButtonItem:nil animated:YES];
     self.masterPopover = nil;
 }
@@ -290,9 +288,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void)districtMapSearchOperationDidFinishSuccessfully:(DistrictMapSearchOperation *)op {
-	
-	//debug_NSLog(@"Found some search results in %d districts", [op.foundDistricts count]);
-	
+		
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
 	for (NSNumber *districtID in op.foundIDs) {
@@ -314,7 +310,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 								   option:(DistrictMapSearchOperationFailOption)failOption {	
 	
 	if (failOption == DistrictMapSearchOperationFailOptionLog) {
-		NSLog(@"%@", errorMessage);
+		RKLogError(@"%@", errorMessage);
 	}
 	else {
 		[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Geolocation Error", @"AppAlerts", @"Alert box title for an error")
@@ -441,7 +437,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 - (void)geocoder:(SVGeocoder *)geocoder didFindPlacemark:(SVPlacemark *)placemark
 {
-	NSLog(@"Geocoder found placemark: %@ (was %@)", placemark, self.searchLocation);
+	RKLogDebug(@"Geocoder found placemark: %@ (was %@)", placemark, self.searchLocation);
 	[self showLocateUserButton];
 
 ///	[self clearAnnotationsAndOverlays];			??????
@@ -471,7 +467,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 - (void)geocoder:(SVGeocoder *)geocoder didFailWithError:(NSError *)error
 {
-    NSLog(@"SVGeocoder has failed: %@", error);
+    RKLogError(@"SVGeocoder has failed: %@", error);
 	
 	self.geocoder = nil;
 	[self showLocateUserButton];
@@ -538,7 +534,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 				self.searchLocation.coordinateChangedDelegate = nil;		// it'll handle it once, then we'll do it.
 			}
 			else {
-				debug_NSLog(@"MapView:didChangeDrag - when does this condition happen???");
+				RKLogDebug(@"When does this condition happen???");
 				[self annotationCoordinateChanged:self.searchLocation];	
 			}
 		}

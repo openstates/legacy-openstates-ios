@@ -42,7 +42,7 @@
 
 + (BOOL) insidePolygon:(CLLocationCoordinate2D *)polygon count:(NSInteger)N point:(CLLocationCoordinate2D) p
 {
-	//debug_NSLog(@"Starting insidePolygon: %@", [NSDate date]);
+	//RKLogTrace(@"Starting insidePolygon: %@", [NSDate date]);
 	
 	NSInteger counter = 0;
 	NSInteger i = 0;
@@ -66,7 +66,7 @@
 		p1 = p2;
 	}
 	
-	//debug_NSLog(@"Ending insidePolygon: %@", [NSDate date]);
+	//RKLogTrace(@"Ending insidePolygon: %@", [NSDate date]);
 
 	if (counter % 2 == 0)
 		return(OUTSIDE);
@@ -77,7 +77,7 @@
 //The following code is by Randolph Franklin, it returns 1 for interior points and 0 for exterior points.
 + (BOOL) pnpoly:(double *)xp yp:(double *)yp count:(NSInteger)npol x:(double)x y:(double)y
 {
-	//debug_NSLog(@"Starting pnpoly: %@", [NSDate date]);
+	//RKLogTrace(@"Starting pnpoly: %@", [NSDate date]);
 
 	NSInteger i = 0, j = 0;
 	BOOL foundInside = NO;
@@ -88,7 +88,7 @@
 			foundInside = !foundInside;
 	}
 	
-	//debug_NSLog(@"Ending pnpoly: %@", [NSDate date]);
+	//RKLogTrace(@"Ending pnpoly: %@", [NSDate date]);
 
 	return foundInside;
 }
