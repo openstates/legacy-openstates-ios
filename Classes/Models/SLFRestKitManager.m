@@ -57,21 +57,21 @@
 #pragma mark -
 
 - (NSArray *)registeredDataModels {
-	return [[[[[RKObjectManager sharedManager] objectStore] managedObjectModel] entitiesByName] allKeys];
+    return [[[[[RKObjectManager sharedManager] objectStore] managedObjectModel] entitiesByName] allKeys];
 }
 
 - (void) resetSavedDatabase:(id)sender {
-	[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_RESET"];
-        
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:@"DATABASE_RESET"];
+    
     RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
     //[objectStore deletePersistantStoreUsingSeedDatabaseName:SEED_DB_NAME];
-	[objectStore deletePersistantStore];
-	[objectStore save];
+    [objectStore deletePersistantStore];
+    [objectStore save];
     
-	for (NSString *className in [self registeredDataModels]) {
-		NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
-		[[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
-	}
+    for (NSString *className in [self registeredDataModels]) {
+        NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
+    }
 }
 
 #pragma mark -

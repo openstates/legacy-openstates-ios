@@ -447,35 +447,36 @@ NSString * const kSupportEmailKey = @"supportEmail";
 }
 
 #pragma mark -
+
 - (void)doDataReset:(BOOL)doReset {
-	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kResetSavedDatabaseKey];
-	[[NSUserDefaults standardUserDefaults] synchronize];
-	
-	if (doReset) {
-		[[SLFPersistenceManager sharedPersistence] resetPersistence];
-		[[SLFRestKitManager sharedRestKit] resetSavedDatabase:nil]; 
-	}
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kResetSavedDatabaseKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    if (doReset) {
+        [[SLFPersistenceManager sharedPersistence] resetPersistence];
+        [[SLFRestKitManager sharedRestKit] resetSavedDatabase:nil]; 
+    }
 }
 
 - (BOOL) isDatabaseResetNeeded {
-	[[NSUserDefaults standardUserDefaults] synchronize];
-	BOOL needsReset = [[NSUserDefaults standardUserDefaults] boolForKey:kResetSavedDatabaseKey];
-		
-	if (needsReset) {
-				
-		[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Settings: Reset Data to Factory?", @"AppAlerts", @"Confirmation to delete and reset the app's database.")
-							message:NSLocalizedStringFromTable(@"Are you sure you want to reset the legislative database?  NOTE: The application may quit after this reset.  New data will be downloaded automatically via the Internet during the next app launch.", @"AppAlerts",@"") 
-						cancelTitle:NSLocalizedStringFromTable(@"Cancel",@"StandardUI",@"Cancelling some activity")
-						cancelBlock:^(void) {
-							[self doDataReset:NO];
-						}
-						 otherTitle:NSLocalizedStringFromTable(@"Reset", @"StandardUI", @"Reset application settings to defaults")
-						 otherBlock:^(void) {
-							 [self doDataReset:YES];
-						 }];
-		
-	}
-	return needsReset;
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    BOOL needsReset = [[NSUserDefaults standardUserDefaults] boolForKey:kResetSavedDatabaseKey];
+    
+    if (needsReset) {
+        
+        [SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Settings: Reset Data to Factory?", @"AppAlerts", @"Confirmation to delete and reset the app's database.")
+                            message:NSLocalizedStringFromTable(@"Are you sure you want to reset the legislative database?  NOTE: The application may quit after this reset.  New data will be downloaded automatically via the Internet during the next app launch.", @"AppAlerts",@"") 
+                        cancelTitle:NSLocalizedStringFromTable(@"Cancel",@"StandardUI",@"Cancelling some activity")
+                        cancelBlock:^(void) {
+                            [self doDataReset:NO];
+                        }
+                         otherTitle:NSLocalizedStringFromTable(@"Reset", @"StandardUI", @"Reset application settings to defaults")
+                         otherBlock:^(void) {
+                             [self doDataReset:YES];
+                         }];
+        
+    }
+    return needsReset;
 }
 
 @end
