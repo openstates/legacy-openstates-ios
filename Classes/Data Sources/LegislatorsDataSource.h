@@ -10,17 +10,10 @@
 //
 //
 
-#import <RestKit/RestKit.h>
-#import "TableDataSourceProtocol.h"
+#import "SLFDataSource.h"
 
 
-@interface LegislatorsDataSource : NSObject <TableDataSource, RKObjectLoaderDelegate>  {
-}
-
-- (void)loadData;
-
-@property (nonatomic,copy)      NSString        *stateID;    
-@property (nonatomic, retain)   NSFetchedResultsController *fetchedResultsController;
+@interface LegislatorsDataSource : SLFDataSource  
 
 @end
 

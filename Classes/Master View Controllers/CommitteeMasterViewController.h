@@ -20,6 +20,6 @@
 }
 
 @property (nonatomic, retain) IBOutlet	UISegmentedControl	*chamberControl;
-
 - (IBAction) filterChamber:(id)sender;
+
 @end
