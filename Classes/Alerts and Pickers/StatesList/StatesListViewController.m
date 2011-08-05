@@ -332,9 +332,15 @@
             }
 */        }
         
-        if (self.parentViewController) {
+        UIViewController *parent = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+        if (parent) {
+            [parent dismissModalViewControllerAnimated:YES];
+        }
+        else if (self.parentViewController) {
             [self.parentViewController dismissModalViewControllerAnimated:YES];
-        }            
+        } else {
+            RKLogCritical(@"Can't close a simple modal view controller??? Parent = %@", self.parentViewController);
+        }
     }
 }
 

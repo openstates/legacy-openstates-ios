@@ -43,11 +43,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	SLFLegislator *dataObj = [self dataObjectForIndexPath:indexPath];
-	if (dataObj == nil) {
-		RKLogError(@"cellForRowAtIndexPath -> Couldn't get legislator data for row.");
-		return nil;
-	}
 	static NSString *leg_cell_ID = @"LegislatorQuartz";		
 		
 	LegislatorCell *cell = (LegislatorCell *)[tableView dequeueReusableCellWithIdentifier:leg_cell_ID];
@@ -56,10 +51,16 @@
 		cell = [[[LegislatorCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:leg_cell_ID] autorelease];
 		cell.frame = CGRectMake(0.0, 0.0, 320.0, 73.0);
 	}
-	
-	[cell setLegislator:dataObj];
-	cell.cellView.useDarkBackground = (indexPath.row % 2 == 0);
+    cell.cellView.useDarkBackground = (indexPath.row % 2 == 0);
 	cell.accessoryView.hidden = (tableView == self.searchDisplayController.searchResultsTableView);
+
+    SLFLegislator *dataObj = [self dataObjectForIndexPath:indexPath];
+	if (dataObj == nil) {
+		RKLogError(@"cellForRowAtIndexPath -> Couldn't get legislator data for row.");
+        return cell;
+	}
+    
+	[cell setLegislator:dataObj];
 	
 	return cell;	
 }

@@ -21,7 +21,6 @@
 #import "SLFPersistenceManager.h"
 
 @interface LegislatorMasterViewController (Private)
-//- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
 - (IBAction)redisplayVisibleCells:(id)sender;
 
 @end
@@ -154,10 +153,6 @@
 		legVC = [[[LegislatorDetailViewController alloc] initWithNibName:@"LegislatorDetailViewController" bundle:nil] autorelease];
 	}
 	legVC.detailObjectID = legislator.legID;
-
-    if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
-        //[self searchBarCancelButtonClicked:nil];
-    }
     
     if (!isSplitViewDetail) {
         // push the detail view controller onto the navigation stack to display it				
@@ -165,6 +160,10 @@
         self.detailViewController = nil;
     }
 
+    if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
+        [self searchBarCancelButtonClicked:self.searchDisplayController.searchBar];
+    }
+    
 }
 //END:code.split.delegate
 
@@ -239,6 +238,17 @@
     }           
     
     return YES;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    if ([self.searchDisplayController respondsToSelector:@selector(searchBarCancelButtonClicked:)])
+        [self.searchDisplayController performSelector:@selector(searchBarCancelButtonClicked:) withObject:searchBar];
+    
+    self.dataSource.fetchedResultsController = nil;
+    [self.dataSource fetchedResultsController];
+    //[self filterChamber:self.chamberControl];
+    
+    
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {

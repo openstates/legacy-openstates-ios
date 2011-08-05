@@ -409,7 +409,7 @@ NSString * const kSupportEmailKey = @"supportEmail";
             the table view orientation is incorrect when runnin on iPads that start up in landscape. */
         RunBlockOnNextLoop(^{
             StatesListViewController *stateVC = [[StatesListViewController alloc] initWithStyle:UITableViewStylePlain];
-            [self.masterNavigationController presentModalViewController:stateVC animated:YES];
+            [self.mainWindow.rootViewController presentModalViewController:stateVC animated:YES];
             [stateVC release];        
         });
     }

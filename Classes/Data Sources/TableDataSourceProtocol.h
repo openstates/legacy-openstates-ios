@@ -13,30 +13,23 @@
 #define kNotifyTableDataUpdated     @"TABLE_DATA_UPDATED"
 #define kNotifyTableDataError       @"TABLE_DATA_ERROR"
 
-@protocol TableDataSource <UITableViewDataSource, NSFetchedResultsControllerDelegate>
+@protocol TableDataSource <UITableViewDataSource>
  
 @required
 
     @property (nonatomic,copy)      NSString        *resourcePath;
     @property (nonatomic,assign)    Class            resourceClass;
-
-    @property (readonly) BOOL usesCoreData;
-
-@optional
-
-// set this on when you don't want to see the index, ala keyboard active
-@property (nonatomic, assign)   BOOL hideTableIndex;
-@property (nonatomic, readonly) BOOL hasFilter;
-@property (nonatomic, assign)   NSInteger filterChamber;		// 0 means don't filter
-@property (nonatomic, retain)   UISearchDisplayController *searchDisplayController;
-@property (nonatomic, retain)   NSFetchedResultsController *fetchedResultsController;
-
+    @property (nonatomic,copy)      NSString        *stateID;    
+    @property (nonatomic,readonly)  BOOL             usesCoreData;
 
 - (id)dataObjectForIndexPath:(NSIndexPath*)indexPath;
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject;
 
-- (void) setFilterByString:(NSString *)filter;
-- (void) removeFilter;
+@optional
 
+// set this on when you don't want to see the index, ala keyboard active
+@property (nonatomic, assign)   BOOL                        hideTableIndex;
+@property (nonatomic, retain)   UISearchDisplayController  *searchDisplayController;
+@property (nonatomic, retain)   NSFetchedResultsController *fetchedResultsController;
 
 @end

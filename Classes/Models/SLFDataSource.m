@@ -25,7 +25,7 @@
 @synthesize resourceClass;
 @synthesize sortBy;
 @synthesize groupBy;
-
+@synthesize loading;
 @synthesize fetchedResultsController;
 @synthesize hideTableIndex;
 @synthesize searchDisplayController;
@@ -45,7 +45,7 @@
         self.resourcePath = newPath; 
         self.sortBy = newSort;
         self.groupBy = newGroup;
-        
+        self.loading = NO;
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(dataSourceReceivedMemoryWarning:)
 													 name:UIApplicationDidReceiveMemoryWarningNotification 
@@ -108,6 +108,12 @@
         return;
     }
     
+    if (self.loading) {
+        RKLogDebug(@"Multiple loadData attempts.");
+        return; // we're already working on it!
+    }
+    self.loading = YES;
+    
     RKObjectManager* objectManager = [RKObjectManager sharedManager];
     RKObjectMapping* objMapping = [objectManager.mappingProvider objectMappingForClass:self.resourceClass];
 
@@ -155,15 +161,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {	
 	NSInteger count = [[self.fetchedResultsController sections] count];		
-	if (count > 1)  {
-		return count; 
-	}
-    return 0;
+    return count; 
 }
 
 // This is for the little index along the right side of the table ... use nil if you don't want it.
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-	return  self.hideTableIndex ? nil : [self.fetchedResultsController sectionIndexTitles] ;
+	return  (self.hideTableIndex) ? nil : [self.fetchedResultsController sectionIndexTitles];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
@@ -231,8 +234,13 @@
 #pragma mark -
 #pragma mark RKObjectLoaderDelegate methods
 
+- (void)objectLoaderDidFinishLoading:(RKObjectLoader*)objectLoader {
+    self.loading = NO;
+    //[[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataUpdated object:self];
+}
+
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
-    
+    self.loading = NO;
     [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataError object:self];
 }

@@ -16,7 +16,7 @@
 
 @class LegislatorDetailViewController;
 
-@interface LegislatorMasterViewController : GeneralTableViewController <UISearchDisplayDelegate> {
+@interface LegislatorMasterViewController : GeneralTableViewController <UISearchDisplayDelegate, UISearchBarDelegate> {
 }
 
 
