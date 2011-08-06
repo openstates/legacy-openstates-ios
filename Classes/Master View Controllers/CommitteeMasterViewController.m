@@ -20,7 +20,7 @@
 #import "StateMetaLoader.h"
 
 @interface CommitteeMasterViewController (Private)
-//- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
 @end
 
 @implementation CommitteeMasterViewController
@@ -118,6 +118,7 @@
 #pragma mark -
 #pragma mark Table view delegate
 
+
 //START:code.split.delegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
 
@@ -129,26 +130,28 @@
     if (!dataObject || NO == [dataObject isKindOfClass:[SLFCommittee class]]) {
 		return;
     }
+    
     SLFCommittee *committee = dataObject;
 
 	SLFPersistenceManager *persistence = [SLFPersistenceManager sharedPersistence];
     [persistence setTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
 		
-	if (self.detailViewController == nil) {
-		self.detailViewController = [[[CommitteeDetailViewController alloc] initWithCommitteeID:committee.committeeID] autorelease];
+    CommitteeDetailViewController *comVC = self.detailViewController;
+    
+	if (comVC == nil) {
+		comVC = [[[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil] autorelease];
 	}
-	
-    [self.detailViewController setCommittee:committee];
-    if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
-        //[self searchBarCancelButtonClicked:nil];
-    }
+	comVC.detailObjectID = committee.committeeID;
     
     if (!isSplitViewDetail) {
-        // push the detail view controller onto the navigation stack to display it				
-        [self.navigationController pushViewController:self.detailViewController animated:YES];
+            // push the detail view controller onto the navigation stack to display it				
+        [self.navigationController pushViewController:comVC animated:YES];
         self.detailViewController = nil;
     }
-	
+    
+    if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
+        [self searchBarCancelButtonClicked:self.searchDisplayController.searchBar];
+    }	
 }
 //END:code.split.delegate
 
@@ -226,6 +229,15 @@
     return YES;
 }
 
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    if ([self.searchDisplayController respondsToSelector:@selector(searchBarCancelButtonClicked:)])
+        [self.searchDisplayController performSelector:@selector(searchBarCancelButtonClicked:) withObject:searchBar];
+    
+    self.dataSource.fetchedResultsController = nil;
+    [self.dataSource fetchedResultsController];
+        //[self filterChamber:self.chamberControl];
+}
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
     NSInteger searchOption = controller.searchBar.selectedScopeButtonIndex;
