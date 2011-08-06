@@ -14,32 +14,24 @@
 #import "LegislatorDetailViewController.h"
 #import "LegislatorDetailDataSource.h"
 #import "SLFDataModels.h"
-#import "SLFLegislator.h"
 
+#import "CommitteeDetailViewController.h"
 #import "LegislatorContributionsViewController.h"
-#import "LegislatorMasterViewController.h"
-
-#import "UtilityMethods.h"
-#import "TableDataSourceProtocol.h"
-#import "TableCellDataObject.h"
-#import "NotesViewController.h"
-#import "AppDelegate.h"
-
+#import "MapMiniDetailViewController.h"
 #import "BillSearchDataSource.h"
 #import "BillsListViewController.h"
-#import "CommitteeDetailViewController.h"
 
-#import "MapMiniDetailViewController.h"
-#import "SVWebViewController.h"
-
-#import "UIImage+ResolutionIndependent.h"
-
-#import "SLFEmailComposer.h"
-
-#import "LocalyticsSession.h"
-
-#import "OpenLegislativeAPIs.h"
+#import "UtilityMethods.h"
 #import "TexLegeTheme.h"
+#import "TableCellDataObject.h"
+#import "NotesViewController.h"
+#import "SVWebViewController.h"
+#import "SLFEmailComposer.h"
+#import "UIImage+ResolutionIndependent.h"
+#import "LocalyticsSession.h"
+#import "OpenLegislativeAPIs.h"
+    //#import "LegislatorMasterViewController.h"
+    //#import "AppDelegate.h"
 
 @interface LegislatorDetailViewController (Private)
 - (void) setupHeader;
@@ -57,15 +49,44 @@
 @synthesize leg_photoView, leg_partyLab, leg_districtLab, leg_nameLab;
 @synthesize notesPopover, masterPopover;
 
-#pragma mark -
-#pragma mark View lifecycle
-
 - (NSString *)nibName {
 	if ([UtilityMethods isIPadDevice])
 		return @"LegislatorDetailViewController~ipad";
 	else
 		return @"LegislatorDetailViewController~iphone";
 }
+
+#pragma mark -
+#pragma mark Memory management
+
+- (void)didReceiveMemoryWarning {
+        // Releases the view if it doesn't have a superview.
+	UINavigationController *nav = [self navigationController];
+	if (nav && [nav.viewControllers count]>3)
+		[nav popToRootViewControllerAnimated:YES];
+    
+    [super didReceiveMemoryWarning];
+}
+
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
+	self.notesPopover = nil;
+	self.masterPopover = nil;
+    
+    self.headerView = nil;
+    self.leg_photoView = nil;
+    self.leg_partyLab = self.leg_districtLab = self.leg_nameLab = self.leg_reelection = nil;
+    
+    self.dataSource = nil;
+    
+	[super dealloc];
+}
+
+
+
+#pragma mark -
+#pragma mark View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -91,32 +112,16 @@
 	[super viewDidUnload];
 }
 
-#pragma mark -
-#pragma mark Memory management
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-	UINavigationController *nav = [self navigationController];
-	if (nav && [nav.viewControllers count]>3)
-		[nav popToRootViewControllerAnimated:YES];
-		
-    [super didReceiveMemoryWarning];
-}
-
-- (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 	
-	self.notesPopover = nil;
-	self.masterPopover = nil;
-
-    self.headerView = nil;
-    self.leg_photoView = nil;
-    self.leg_partyLab = self.leg_districtLab = self.leg_nameLab = self.leg_reelection = nil;
-    
-    self.dataSource = nil;
-
-	[super dealloc];
+    [self setupHeader];
 }
+
+
+#pragma -
+#pragma Data Object Accessors
+
 
 - (SLFLegislator *)detailObject {
     return self.dataSource.detailObject;
@@ -188,12 +193,6 @@
 	}
 }
 	
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-	
-    [self setupHeader];
-}
-
 #pragma mark -
 #pragma mark Split view support
 
@@ -287,7 +286,8 @@
             
         case DirectoryTypeCommittee:
         { 
-			CommitteeDetailViewController *subDetailController = [[CommitteeDetailViewController alloc] initWithCommitteeID:cellInfo.entryValue];
+			CommitteeDetailViewController *subDetailController = [[CommitteeDetailViewController alloc] initWithNibName:@"CommitteeDetailViewController" bundle:nil];
+            subDetailController.detailObjectID = cellInfo.entryValue;
 			[self.navigationController pushViewController:subDetailController animated:YES];
 			[subDetailController release];
         }

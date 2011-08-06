@@ -11,27 +11,24 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <RestKit/RestKit.h>
 #import "GCTableViewController.h"
 
 @class SLFCommittee;
+@class TableCellDataObject;
+@class CommitteeDetailDataSource;
 
-@interface CommitteeDetailViewController : GCTableViewController <UISplitViewControllerDelegate, RKObjectLoaderDelegate>  {
+@interface CommitteeDetailViewController : GCTableViewController <UISplitViewControllerDelegate, 
+                                                                  UIPopoverControllerDelegate>  
+{
 }
 
-@property (nonatomic,retain)    SLFCommittee    *committee;
-@property (nonatomic,copy)      NSArray         *positions;
-@property (nonatomic,copy)      NSString        *resourcePath;
-@property (nonatomic,assign)    Class            resourceClass;
+@property (nonatomic,assign)   NSString                 *detailObjectID;
+@property (nonatomic,readonly) SLFCommittee             *detailObject;
+@property (nonatomic,retain) CommitteeDetailDataSource  *dataSource;
 
-- (void)loadData;
-- (id)initWithCommitteeID:(NSString *)committeeID;
+@property (nonatomic,retain) IBOutlet UIView            *headerView;
+@property (nonatomic,retain) IBOutlet UILabel           *membershipLab;
+@property (nonatomic,retain) IBOutlet UILabel           *nameLab;
 
-@property (nonatomic, assign) id dataObject;
-@property (nonatomic, retain) NSString *dataObjectID;
-
-@property (nonatomic, retain) UIPopoverController *masterPopover;
-@property (nonatomic, retain) IBOutlet UILabel *membershipLab;
-@property (nonatomic, retain) IBOutlet UILabel *nameLab;
-@property (nonatomic, retain) NSMutableArray *infoSectionArray;
+@property (nonatomic,retain) UIPopoverController        *masterPopover;
 @end

@@ -15,7 +15,7 @@
 enum {
 	DirectoryTypeNone = 0,
 	DirectoryTypeNotes,
-	DirectoryTypeIndex,
+	DirectoryTypeLegislator,
 	DirectoryTypeCommittee,
 	DirectoryTypeContributions,
 	DirectoryTypeBills,
