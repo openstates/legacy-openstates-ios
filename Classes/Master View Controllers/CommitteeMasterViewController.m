@@ -167,8 +167,8 @@
 #pragma mark Filtering and Searching
 
 - (void)stateChanged:(NSNotification *)notification {
-    CommitteesDataSource *dsource = self.dataSource;
-    dsource.stateID = [[[StateMetaLoader sharedStateMeta] selectedState] abbreviation];
+    [super stateChanged:notification];
+    
     [self filterChamber:notification];
 }
 

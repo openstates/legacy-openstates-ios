@@ -32,6 +32,7 @@
 @synthesize masterPopover;
 @synthesize selectedRowRect;
 @synthesize eventPopover;
+@synthesize eventType;
 
 + (NSString *)nibName {
 	if ([UtilityMethods isIPadDevice])
@@ -103,6 +104,7 @@
 	self.webView = nil;
 	self.masterPopover = nil;
 	self.eventPopover = nil;
+    self.eventType = nil;
     [super dealloc];
 }
 

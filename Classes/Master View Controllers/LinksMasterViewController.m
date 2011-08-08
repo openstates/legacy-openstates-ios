@@ -76,11 +76,6 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];	
-        
-    [[NSNotificationCenter defaultCenter] addObserver:self 
-                                             selector:@selector(stateChanged:) 
-                                                 name:kStateMetaNotifyStateLoaded 
-                                               object:nil];
     
 }
 
@@ -227,6 +222,8 @@
 }
 
 - (void)stateChanged:(NSNotification *)notification {
+    [super stateChanged:notification];
+    
     [self changeStateLabel:notification];
 }
 

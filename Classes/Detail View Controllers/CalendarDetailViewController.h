@@ -21,6 +21,7 @@
 @property (nonatomic, retain) UIPopoverController *masterPopover;
 @property (nonatomic, retain) UIPopoverController *eventPopover;
 
+@property (nonatomic, retain) NSString *eventType;
 @property (nonatomic, retain) UIWebView *webView;
 @property (nonatomic, retain) ChamberCalendarObj *chamberCalendar;
 @property (nonatomic) CGRect selectedRowRect;

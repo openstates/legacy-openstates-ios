@@ -7,19 +7,22 @@
 #import "CalendarDataSource.h"
 #import "UtilityMethods.h"
 #import "TexLegeTheme.h"
-#import "ChamberCalendarObj.h"
-#import "DisclosureQuartzView.h"
-#import "CalendarEventsLoader.h"
+#import "SLFDataModels.h"
+#import "TexLegeStandardGroupCell.h"
 
-@interface CalendarDataSource (Private)
-- (void) loadCalendarMenuItems;
+enum EventTypes {
+    kCommitteeMeetingType = 0,
+    NUM_ROWS
+};
+
+@interface CalendarDataSource()
 @end
 
 
 @implementation CalendarDataSource
 @synthesize resourcePath;
 @synthesize resourceClass;
-@synthesize calendarList;
+@synthesize stateID;    
 
 
 - (BOOL)usesCoreData
@@ -28,57 +31,68 @@
 
 - (id)init {
 	if ((self = [super init])) {
-		
-		[self loadCalendarMenuItems];
-		
+        self.resourcePath = @"/events/";
+        self.resourceClass = [SLFEvent class];
 	}
 	return self;
 }
 
 - (void)dealloc {
     self.resourcePath = nil;
-	self.calendarList = nil;
+    self.stateID = nil;
 	[super dealloc];
 }
 
-
-- (void) loadCalendarMenuItems {
-	[[CalendarEventsLoader sharedCalendarEventsLoader] loadEvents:self];
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	self.calendarList = [NSMutableArray array];
-	
-	// Right now we're only doing committee meetings
-	
-	NSString *localizedString = NSLocalizedStringFromTable(@"Upcoming Committee Meetings", @"DataTableUI", @"Menu item to display upcoming calendar events");
-	NSMutableDictionary *calendarDict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-										 localizedString, @"title",
-										 kCalendarEventsTypeCommitteeValue, kCalendarEventsTypeKey,
-										 nil];
-	ChamberCalendarObj *calendar = [[ChamberCalendarObj alloc] initWithDictionary:calendarDict];
-	[self.calendarList addObject:calendar];
-	[calendar release];
-	[calendarDict removeAllObjects];
-	
-	// Any other event types will go here
-	// .....
-	
-	[calendarDict release];
-	[pool drain];
-	
+- (void)setStateID:(NSString *)newID {
+    [stateID release];
+    stateID = [newID copy];
+    if (newID) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataUpdated object:self];
+    }
 }
 
+
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
-	return [self.calendarList objectAtIndex:indexPath.row];
+    if (!indexPath)
+		return nil;
+       
+    // One way or another, there's only one type of event right now.
+    
+    TableCellDataObject *obj = [[TableCellDataObject alloc] init];
+    obj.indexPath = indexPath;
+    
+    if (!self.stateID) {   // should never happen
+        obj.indexPath = indexPath;
+
+        obj.title = NSLocalizedStringFromTable(@"No State is Selected", @"StandardUI", @"");
+        obj.entryType = DirectoryTypeNone;
+        obj.isClickable = NO;
+        return [obj autorelease];
+    }
+    
+    SLFState *state = [SLFState findFirstByAttribute:@"abbreviation" withValue:self.stateID];
+
+    if (!state || NO == [state isFeatureEnabled:@"events"]) {
+        obj.title = NSLocalizedStringFromTable(@"Events aren't available for this state", @"StandardUI", @"");
+        obj.entryType = DirectoryTypeNone;
+        obj.isClickable = NO;
+    }
+    else {
+        obj.title = NSLocalizedStringFromTable(@"Committee Meetings", @"DataTableUI", @"Menu item to display upcoming calendar events in a legislative chamber");
+        obj.subtitle = NSLocalizedStringFromTable(@"Events", @"StandardUI", @"");
+        obj.entryType = DirectoryTypeEvents;
+        obj.entryValue = @"committee:meeting";    // we'll use it in our filter query to pick only committe meetings
+        obj.isClickable = YES;
+    }
+    
+	return [obj autorelease];
 }
 
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject {
-	
-	NSInteger row = [self.calendarList indexOfObject:dataObject];
-	if (row == NSNotFound)
-		row = 0;
-		
-	return [NSIndexPath indexPathForRow:row inSection:0];
+    if (dataObject && [dataObject respondsToSelector:@selector(indexPath)])
+        return [dataObject performSelector:@selector(indexPath)];
+    
+	return nil;
 }
 
 
@@ -86,34 +100,24 @@
 #pragma mark UITableViewDataSource methods
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{		
-	static NSString *CellIdentifier = @"Cell";
-	
-	/* Look up cell in the table queue */
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	
-	/* Not found in queue, create a new cell object */
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-		cell.textLabel.textColor =	[TexLegeTheme textDark];
-		cell.textLabel.font = [TexLegeTheme boldFifteen];
-		
-		cell.textLabel.adjustsFontSizeToFitWidth = YES;
-		cell.textLabel.minimumFontSize = 12.0f;
+{			
+    TableCellDataObject *cellData = [self dataObjectForIndexPath:indexPath];
 
-		DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 28.f, 28.f)];
-		cell.accessoryView = qv;
-		[qv release];
-		
+    NSString *cellID = [TexLegeStandardGroupCell cellIdentifier];
+    if (!cellData.isClickable)
+        cellID = [cellID stringByAppendingString:@"-OFF"];
+    
+	/* Look up cell in the table queue */
+    TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
+	
+    if (cell == nil) {
+        cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:[TexLegeStandardGroupCell cellStyle] reuseIdentifier:cellID] autorelease];		
     }
-	// configure cell contents
 
 	BOOL useDark = (indexPath.row % 2 == 0);
 	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
 		
-	ChamberCalendarObj *calendar = [self dataObjectForIndexPath:indexPath];
-	
-	cell.textLabel.text = calendar.title;
+    cell.cellInfo = cellData;
 		
 	return cell;
 }
@@ -121,7 +125,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section 
 {		
-	return [self.calendarList count];
+	return NUM_ROWS;
 }
 
 

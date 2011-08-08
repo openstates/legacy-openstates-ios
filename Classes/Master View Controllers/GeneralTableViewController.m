@@ -115,6 +115,9 @@
 
 - (void)stateChanged:(NSNotification *)notification {
     [self resetControllerEnabled:notification];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(setStateID:)]) {
+        self.dataSource.stateID = [[[StateMetaLoader sharedStateMeta] selectedState] abbreviation];
+    }
 }
 
 

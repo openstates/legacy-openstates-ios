@@ -17,7 +17,7 @@
 #import "UtilityMethods.h"
 
 #import "SLFPersistenceManager.h"
-#import "TableDataSourceProtocol.h"
+#import "TableCellDataObject.h"
 
 #import "CalendarDetailViewController.h"
 
@@ -88,45 +88,48 @@
 {	
 	[super viewWillAppear:animated];
 		
-	if ([UtilityMethods isIPadDevice]) {
-		if (self.navigationController)
-			self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
+	if ([UtilityMethods isIPadDevice] && self.navigationController) {
+        self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 	}
 }
 
 #pragma -
 #pragma UITableViewDelegate
 
+- (void)stateChanged:(NSNotification *)notification {
+    [super stateChanged:notification];
+    
+    [self.tableView reloadData];
+}
+
+
 // the user selected a row in the table.
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
 	
-	if (![UtilityMethods isIPadDevice])
-		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
+    [aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
 		
-	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
-
-	[[SLFPersistenceManager sharedPersistence] setTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
-	
-	if (!self.detailViewController) {
-		CalendarDetailViewController *temp = [[CalendarDetailViewController alloc] initWithNibName:[CalendarDetailViewController nibName] 
-																							bundle:nil];
-		self.detailViewController = temp;
-		[temp release];
-	}
-	
-	if (!dataObject || ![dataObject isKindOfClass:[ChamberCalendarObj class]])
+    TableCellDataObject *dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
+	if (!dataObject || ![dataObject isKindOfClass:[TableCellDataObject class]])
 		return;
 	
-	ChamberCalendarObj *calendar = dataObject;
-	
-	if ([self.detailViewController respondsToSelector:@selector(setChamberCalendar:)])
-		[self.detailViewController setValue:calendar forKey:@"chamberCalendar"];
-	
+    if (!dataObject.isClickable || dataObject.entryType != DirectoryTypeEvents)
+        return;
+    
+    [[SLFPersistenceManager sharedPersistence] setTableSelection:newIndexPath forKey:NSStringFromClass([self class])];
+    
+    CalendarDetailViewController *calVC = self.detailViewController;
+	if (!calVC) {
+		calVC = [[[CalendarDetailViewController alloc] initWithNibName:[CalendarDetailViewController nibName] 
+																							bundle:nil] autorelease];
+	}
+			
+    calVC.eventType = dataObject.entryValue;
+    	
 	if (![UtilityMethods isIPadDevice]) {
 		// push the detail view controller onto the navigation stack to display it
-		((UIViewController *)self.detailViewController).hidesBottomBarWhenPushed = YES;
+		calVC.hidesBottomBarWhenPushed = YES;
 		
-		[self.navigationController pushViewController:self.detailViewController animated:YES];
+		[self.navigationController pushViewController:calVC animated:YES];
 		self.detailViewController = nil;
 	}		
 }

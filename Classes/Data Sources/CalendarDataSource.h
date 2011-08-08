@@ -8,6 +8,5 @@
 
 @interface CalendarDataSource : NSObject <TableDataSource> {
 }
-@property (nonatomic,retain) NSMutableArray *calendarList;
 
 @end
