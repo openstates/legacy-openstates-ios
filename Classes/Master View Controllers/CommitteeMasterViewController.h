@@ -16,7 +16,7 @@
 
 @class CommitteeDetailViewController;
 
-@interface CommitteeMasterViewController : GeneralTableViewController <UISearchDisplayDelegate> {
+@interface CommitteeMasterViewController : GeneralTableViewController <UISearchDisplayDelegate, UISearchBarDelegate> {
 }
 
 @property (nonatomic, retain) IBOutlet	UISegmentedControl	*chamberControl;

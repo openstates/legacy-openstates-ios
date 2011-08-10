@@ -142,7 +142,7 @@
 	NSString *cellIdentifier = [NSString stringWithFormat:@"%@-%d", [TexLegeStandardGroupCell cellIdentifier], cellInfo.isClickable];
 	
 	/* Look up cell in the table queue */
-	UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	
 	/* Not found in queue, create a new cell object */
     if (cell == nil) {
@@ -158,8 +158,7 @@
 		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:style reuseIdentifier:cellIdentifier] autorelease];
     }
     
-	if ([cell conformsToProtocol:@protocol(TexLegeGroupCellProtocol)])
-		[cell performSelector:@selector(setCellInfo:) withObject:cellInfo];
+    cell.cellInfo = cellInfo;
 	
 	[cell sizeToFit];
 	[cell setNeedsDisplay];

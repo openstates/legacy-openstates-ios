@@ -1,5 +1,5 @@
 //
-//  TexLegeGroupCellProtocol.h
+//  SLFTableCellProtocol.h
 //  Created by Gregory Combs on 8/29/10.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -13,7 +13,7 @@
 #import <UIKit/UIKit.h>
 #import "TableCellDataObject.h"
 
-@protocol TexLegeGroupCellProtocol
+@protocol SLFTableCellProtocol
 
 @required
 + (UITableViewCellStyle)cellStyle;

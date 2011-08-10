@@ -11,11 +11,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TexLegeGroupCellProtocol.h"
+#import "SLFTableCellProtocol.h"
 
 @class DDBadgeView;
 @class TableCellDataObject;
-@interface TexLegeBadgeGroupCell : UITableViewCell <TexLegeGroupCellProtocol> {
+@interface TexLegeBadgeGroupCell : UITableViewCell <SLFTableCellProtocol> {
 	DDBadgeView *	badgeView_;
 	
 	NSString *		summary_;

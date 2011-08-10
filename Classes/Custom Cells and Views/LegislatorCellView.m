@@ -215,7 +215,7 @@
 	if (wideSize) 
 		drawRect = [self scaleRect:CGRectMake(131.0f, 46.0f, 92.f, labHeight) resolution:resolution];
 	else 
-		drawRect = [self scaleRect:CGRectMake(86.f, 46.f, 73.f, labHeight) resolution:resolution];
+		drawRect = [self scaleRect:CGRectMake(86.f, 46.f, 92.f, labHeight) resolution:resolution];
 	[districtColor set];
 	[[self district] drawInRect:drawRect withFont:font];
 	

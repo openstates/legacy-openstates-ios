@@ -11,10 +11,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TexLegeGroupCellProtocol.h"
+#import "SLFTableCellProtocol.h"
 
 @class TableCellDataObject;
-@interface TexLegeStandardGroupCell : UITableViewCell <TexLegeGroupCellProtocol> {
+@interface TexLegeStandardGroupCell : UITableViewCell <SLFTableCellProtocol> {
 
 }
 @end
