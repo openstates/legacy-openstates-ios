@@ -12,15 +12,23 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import <RestKit/RestKit.h>
+
 #import "SVGeocoder.h"
 #import "SVPlacemark.h"
 #import "DistrictMapSearchOperation.h"
 
+@class SLFDistrictMap;
 @class DistrictMapDataSource, UserPinAnnotation;
 @interface MapViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate, UIPopoverControllerDelegate,
 		SVGeocoderDelegate, UISplitViewControllerDelegate, UIActionSheetDelegate,
-		UIGestureRecognizerDelegate, DistrictMapSearchOperationDelegate> {
+		UIGestureRecognizerDelegate, DistrictMapSearchOperationDelegate, RKObjectLoaderDelegate> {
 }
+@property (nonatomic,copy)   NSString               * detailObjectID;
+@property (nonatomic,copy)   NSString               * resourcePath;
+@property (nonatomic,assign) Class                    resourceClass;
+
+- (void) setDistrictMap:(SLFDistrictMap *)newMap;
 
 @property (nonatomic,retain) UIPopoverController *masterPopover;
 @property (nonatomic,retain) IBOutlet MKMapView *mapView;

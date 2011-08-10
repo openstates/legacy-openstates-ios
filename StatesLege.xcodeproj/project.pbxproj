@@ -1384,7 +1384,7 @@
 		370A804713D6BE3000390ADC /* GCTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTableViewController.m; path = ../GCTableViewController/GCTableViewController/GCTableViewController.m; sourceTree = SOURCE_ROOT; };
 		370B9DCE122AD22C00AC9CC8 /* TexLegeStandardGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeStandardGroupCell.h; sourceTree = "<group>"; };
 		370B9DCF122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeStandardGroupCell.m; sourceTree = "<group>"; };
-		370B9DDB122AD91600AC9CC8 /* TexLegeGroupCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeGroupCellProtocol.h; sourceTree = "<group>"; };
+		370B9DDB122AD91600AC9CC8 /* SLFTableCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFTableCellProtocol.h; sourceTree = "<group>"; };
 		370C270A1225BF7E004273E3 /* DistrictMapDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictMapDataSource.h; sourceTree = "<group>"; };
 		370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictMapDataSource.m; sourceTree = "<group>"; };
 		370EAC351337E3CF007788BC /* TexLegeObjectCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeObjectCache.h; sourceTree = "<group>"; };
@@ -2909,7 +2909,7 @@
 		37AD57B511DA644900D68934 /* Custom Cells and Views */ = {
 			isa = PBXGroup;
 			children = (
-				370B9DDB122AD91600AC9CC8 /* TexLegeGroupCellProtocol.h */,
+				370B9DDB122AD91600AC9CC8 /* SLFTableCellProtocol.h */,
 				37094D94133B162E00B9693C /* TexLegeBadgeGroupCell.h */,
 				37094D95133B162E00B9693C /* TexLegeBadgeGroupCell.m */,
 				370B9DCE122AD22C00AC9CC8 /* TexLegeStandardGroupCell.h */,

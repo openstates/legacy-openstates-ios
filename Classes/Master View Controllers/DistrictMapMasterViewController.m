@@ -11,8 +11,10 @@
 //
 
 #import "DistrictMapMasterViewController.h"
-#import "DistrictMapDataSource.h"
+#import "LegislatorsDataSource.h"
+//#import "DistrictMapDataSource.h"
 #import "SLFDataModels.h"
+#import "LegislatorCell.h"
 
 #import "MapViewController.h"
 #import "UtilityMethods.h"
@@ -21,6 +23,7 @@
 
 @interface DistrictMapMasterViewController (Private)
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar;
+- (IBAction)redisplayVisibleCells:(id)sender;
 @end
 
 
@@ -48,6 +51,18 @@
 }
 
 #pragma mark -
+#pragma mark Initialization
+
+- (NSString *)nibName {
+	return NSStringFromClass([self class]);
+}
+
+- (Class)dataSourceClass {
+	return [LegislatorsDataSource class];
+//	return [DistrictMapDataSource class];
+}
+
+#pragma mark -
 #pragma mark Memory management
 
 - (void)didReceiveMemoryWarning {
@@ -56,16 +71,14 @@
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-#pragma mark -
-#pragma mark Initialization
 
-- (NSString *)nibName {
-	return NSStringFromClass([self class]);
+- (void)dealloc {
+	self.chamberControl = nil;
+	self.sortControl = nil;
+	self.filterControls = nil;
+    [super dealloc];
 }
 
-- (Class)dataSourceClass {
-	return [DistrictMapDataSource class];
-}
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -73,7 +86,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	self.tableView.rowHeight = 44.0f;
+	self.tableView.rowHeight = 73.f;
+    
+    LegislatorsDataSource *dsource = self.dataSource;
+    [dsource loadData];
 	
 	if ([UtilityMethods isIPadDevice])
 	    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
@@ -89,6 +105,9 @@
 }
 
 - (void)viewDidUnload {
+    self.chamberControl = nil;
+    self.sortControl = nil;
+    self.filterControls = nil;
 	[super viewDidUnload];
 }
 
@@ -109,9 +128,26 @@
 		segIndex = [segPrefs objectForKey:@"DistrictMapSortTypeKey"];
 		if (segIndex)
 			self.sortControl.selectedSegmentIndex = [segIndex integerValue];
-		
+	}
+    
+    if ([UtilityMethods isIPadDevice])
+		[self.tableView reloadData]; // popovers look bad without this
+
+    [self redisplayVisibleCells:nil];	
+}
+
+- (IBAction)redisplayVisibleCells:(id)sender {
+	NSArray *visibleCells = self.tableView.visibleCells;
+	for (id cell in visibleCells) {
+		if ([cell respondsToSelector:@selector(redisplay)])
+			[cell performSelector:@selector(redisplay)];
 	}
 }
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {	
+	[self redisplayVisibleCells:nil];	
+}
+
 
 
 #pragma mark -
@@ -120,22 +156,36 @@
 //START:code.split.delegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath withAnimation:(BOOL)animated {
 	
-	//if (![UtilityMethods isIPadDevice])
-		[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
+    [aTableView deselectRowAtIndexPath:newIndexPath animated:YES];
 		
-	
+    BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]);
+
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
-	
-	[[SLFPersistenceManager sharedPersistence] setTableSelection:nil forKey:NSStringFromClass([self class])];
-	
-	SLFDistrictMap *map = dataObject;
+	if (!dataObject || NO == [dataObject isKindOfClass:[SLFLegislator class]]) {
+		return;
+    }
+    SLFLegislator *legislator = dataObject;
 
-	if (!self.detailViewController) {
-		MapViewController *tempVC = [[MapViewController alloc] init];
-		self.detailViewController = tempVC;
-		[tempVC release];
+    [[SLFPersistenceManager sharedPersistence] setTableSelection:nil forKey:NSStringFromClass([self class])];
+
+	//SLFDistrictMap *map = dataObject;
+
+    MapViewController *mapVC = self.detailViewController;
+	if (mapVC == nil) {
+		mapVC = [[[MapViewController alloc] init] autorelease];
 	}
+	mapVC.detailObjectID = legislator.districtMapSlug;
 
+    if (!isSplitViewDetail) {
+        // push the detail view controller onto the navigation stack to display it				
+        [self.navigationController pushViewController:mapVC animated:YES];
+        self.detailViewController = nil;
+    }
+    
+    if (aTableView == self.searchDisplayController.searchResultsTableView) { // we've clicked in a search table
+        [self searchBarCancelButtonClicked:self.searchDisplayController.searchBar];
+    }
+/*    
 	if (map) {
 		MapViewController *mapVC = (MapViewController *)self.detailViewController;
 		[mapVC view];
@@ -159,67 +209,151 @@
 		}
 		[[SLFDistrictMap managedObjectContext] refreshObject:map mergeChanges:YES];
 	}
-	
+	*/
 }
 //END:code.split.delegate
 
-
-#pragma mark -
-#pragma mark Memory management
-
-- (void)dealloc {
-	self.chamberControl = nil;
-	self.sortControl = nil;
-	self.filterControls = nil;
-    [super dealloc];
+- (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+	BOOL useDark = (indexPath.row % 2 == 0);
+    
+	cell.backgroundColor = useDark ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
+    
 }
-
 
 #pragma mark -
 #pragma mark Filtering and Searching
 
-- (void)filterContentForSearchText:(NSString*)searchText scope:(NSInteger)scope
-{
-	/*
-	 Update the filtered array based on the search text and scope.
-	 */
-	if ([self.dataSource respondsToSelector:@selector(setFilterChamber:)])
-		[self.dataSource setFilterChamber:scope];
-	
-	// start filtering names...
-	if (searchText.length > 0) {
-		if ([self.dataSource respondsToSelector:@selector(setFilterByString:)])
-			[self.dataSource performSelector:@selector(setFilterByString:) withObject:searchText];
-	}	
-	else {
-		if ([self.dataSource respondsToSelector:@selector(removeFilter)])
-			[self.dataSource performSelector:@selector(removeFilter)];
-	}
+#pragma mark -
+#pragma mark Filtering and Searching
+
+- (void)stateChanged:(NSNotification *)notification {
+    [super stateChanged:notification];
+    
+    [self filterChamber:notification];
+}
+
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString*)searchString searchScope:(NSInteger)searchOption {
+    
+    NSPredicate *predicate = nil;
+    LegislatorsDataSource *dsource = self.dataSource;
+    
+    NSMutableString *predicateString = [[NSMutableString alloc] init];
+    
+    
+    // A chamber/scope has been selected
+    if (searchOption > 0) {
+        NSString *searchScope = stringForChamber(searchOption, TLReturnOpenStates);
+        [predicateString appendFormat:@"(chamber LIKE[cd] '%@')", searchScope];
+        
+        if (!IsEmpty(searchString) || !IsEmpty(dsource.stateID)) {
+            [predicateString appendString:@" AND "];
+        }
+    }
+    
+    // we have some search terms typed in
+    if (!IsEmpty(searchString)) {
+        [predicateString appendFormat:@"(fullName CONTAINS[cd] '%@' OR district CONTAINS[cd] '%@')", searchString, searchString];
+        
+        if (!IsEmpty(dsource.stateID)) {
+            [predicateString appendString:@" AND "];
+        }
+    }
+    
+    // we have a solid state ID
+    if (!IsEmpty(dsource.stateID)) {
+        [predicateString appendFormat:@"(stateID LIKE[cd] '%@')", dsource.stateID];
+    }
+    
+    
+    // we have some filters, set up the predicate
+    if ([predicateString length]) {
+        predicate = [NSPredicate predicateWithFormat:predicateString];
+    }
+    [predicateString release];
+    
+    
+    NSFetchedResultsController *frc = dsource.fetchedResultsController;
+    
+    if (frc.cacheName) {
+        [NSFetchedResultsController deleteCacheWithName:frc.cacheName];
+    }
+    
+    [frc.fetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    if (![frc performFetch:&error]) {
+        RKLogError(@"Unresolved error %@, %@", [error localizedDescription], [error userInfo]);
+    }           
+    
+    return YES;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    if ([self.searchDisplayController respondsToSelector:@selector(searchBarCancelButtonClicked:)])
+        [self.searchDisplayController performSelector:@selector(searchBarCancelButtonClicked:) withObject:searchBar];
+    
+    self.dataSource.fetchedResultsController = nil;
+    [self.dataSource fetchedResultsController];
+    //[self filterChamber:self.chamberControl];
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
+    NSInteger searchOption = controller.searchBar.selectedScopeButtonIndex;
+    return [self searchDisplayController:controller shouldReloadTableForSearchString:searchString searchScope:searchOption];
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
+    NSString* searchString = controller.searchBar.text;
+    return [self searchDisplayController:controller shouldReloadTableForSearchString:searchString searchScope:searchOption];
+}
+
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
+	self.dataSource.hideTableIndex = YES;
+	// for some reason, these get zeroed out after we restart searching.
+	self.searchDisplayController.searchResultsTableView.rowHeight = self.tableView.rowHeight;
+	self.searchDisplayController.searchResultsTableView.backgroundColor = self.tableView.backgroundColor;
+	self.searchDisplayController.searchResultsTableView.sectionIndexMinimumDisplayRowCount = self.tableView.sectionIndexMinimumDisplayRowCount;
 	
 }
 
-- (IBAction) filterChamber:(id)sender {
-	if (sender == chamberControl) {
-		[self filterContentForSearchText:self.searchDisplayController.searchBar.text 
-								   scope:self.chamberControl.selectedSegmentIndex];
+- (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
+	self.dataSource.hideTableIndex = NO;
+}
 
-		NSDictionary *segPrefs = [[NSUserDefaults standardUserDefaults] objectForKey:kSegmentControlPrefKey];
-		if (segPrefs) {
-			NSNumber *segIndex = [NSNumber numberWithInteger:self.chamberControl.selectedSegmentIndex];
-			NSMutableDictionary *newDict = [segPrefs mutableCopy];
-			[newDict setObject:segIndex forKey:@"DistrictMapChamberKey"];
-			[[NSUserDefaults standardUserDefaults] setObject:newDict forKey:kSegmentControlPrefKey];
-			[[NSUserDefaults standardUserDefaults] synchronize];
-			[newDict release];
-		}
-		
-		[self.tableView reloadData];
-	}
+- (IBAction) filterChamber:(id)sender {
+    if (!self.chamberControl)
+        return;
+    
+    NSInteger searchScope = self.chamberControl.selectedSegmentIndex;
+    searchScope = MAX(searchScope, BOTH_CHAMBERS);
+    searchScope = MIN(searchScope, SENATE);
+    
+    NSString *searchText = self.searchDisplayController.searchBar.text;
+    if (IsEmpty(searchText))
+        searchText = @"";
+    
+    [self searchDisplayController:self.searchDisplayController 
+ shouldReloadTableForSearchString:searchText
+                      searchScope:searchScope];
+    
+    NSDictionary *segPrefs = [[NSUserDefaults standardUserDefaults] objectForKey:kSegmentControlPrefKey];
+    if (segPrefs) {
+        NSNumber *segIndex = [NSNumber numberWithInteger:self.chamberControl.selectedSegmentIndex];
+        NSMutableDictionary *newDict = [segPrefs mutableCopy];
+        [newDict setObject:segIndex forKey:NSStringFromClass([self class])];
+        [[NSUserDefaults standardUserDefaults] setObject:newDict forKey:kSegmentControlPrefKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [newDict release];
+    }
+    
+    [self.tableView reloadData];
 }
 
 - (IBAction) sortType:(id)sender {
 	if (sender == self.sortControl) {
-		BOOL byDistrict = (self.sortControl.selectedSegmentIndex == 1);
+/*
+ BOOL byDistrict = (self.sortControl.selectedSegmentIndex == 1);
 		
 		[(DistrictMapDataSource *) self.dataSource setByDistrict:byDistrict];
 		[(DistrictMapDataSource *) self.dataSource sortByType:sender];
@@ -235,38 +369,9 @@
 		}
 				
 		[self.tableView reloadData];
+ */
 	}
 }
-
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
-{
-    [self filterContentForSearchText:searchString scope:self.chamberControl.selectedSegmentIndex];
-    
-	// Return YES to cause the search result table view to be reloaded.
-    return YES;
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
-	self.searchDisplayController.searchBar.text = @"";
-	[self.dataSource removeFilter];
-	
-	[self.searchDisplayController setActive:NO animated:YES];
-}
-
-- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
-	[self.dataSource setHideTableIndex:YES];	
-	// for some reason, these get zeroed out after we restart searching.
-	self.searchDisplayController.searchResultsTableView.rowHeight = self.tableView.rowHeight;
-	self.searchDisplayController.searchResultsTableView.backgroundColor = self.tableView.backgroundColor;
-	self.searchDisplayController.searchResultsTableView.sectionIndexMinimumDisplayRowCount = self.tableView.sectionIndexMinimumDisplayRowCount;
-	
-}
-
-- (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
-	[self.dataSource setHideTableIndex:NO];	
-}
-
-
 
 @end
 

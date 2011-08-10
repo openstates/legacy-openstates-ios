@@ -330,9 +330,10 @@
             
         case DirectoryTypeMap:
         {
-            MapMiniDetailViewController *mapViewController = [[MapMiniDetailViewController alloc] initWithMapID:cellInfo.entryValue];            
-            [self.navigationController pushViewController:mapViewController animated:YES];
-            [mapViewController release];
+            MapMiniDetailViewController *mapVC = [[MapMiniDetailViewController alloc] init]; 
+            mapVC.detailObjectID = cellInfo.entryValue;
+            [self.navigationController pushViewController:mapVC animated:YES];
+            [mapVC release];
         }
             break;
             

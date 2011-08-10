@@ -34,6 +34,7 @@ NSInteger colorIndex;
 static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 @implementation MapMiniDetailViewController
+@synthesize detailObjectID;
 @synthesize mapView;
 @synthesize districtView;
 @synthesize annotationActionCoord;
@@ -50,6 +51,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 - (void) dealloc {
 	self.mapView = nil;
+    self.detailObjectID = nil;
 	[super dealloc];
 }
 
@@ -75,6 +77,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 }
 
 - (void) viewDidUnload {
+    self.mapView = nil;
 	[super viewDidUnload];
 }
 

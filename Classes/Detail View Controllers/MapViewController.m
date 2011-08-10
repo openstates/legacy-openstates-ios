@@ -12,6 +12,7 @@
 
 #import "MapViewController.h"
 #import "SLFDataModels.h"
+#import "SLFRestKitManager.h"
 
 #import "TexLegeTheme.h"
 #import "UtilityMethods.h"
@@ -30,6 +31,8 @@
 #import "SLFAlertView.h"
 
 @interface MapViewController (Private)
+- (void)loadData;
+
 - (void) animateToState;
 - (void) animateToAnnotation:(id<MKAnnotation>)annotation;
 - (void) clearAnnotationsAndOverlays;
@@ -47,6 +50,10 @@ NSInteger colorIndex;
 static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 @implementation MapViewController
+@synthesize detailObjectID;
+@synthesize resourceClass;
+@synthesize resourcePath;
+
 @synthesize mapView, geocoder, searchLocation;
 @synthesize toolbar, searchBar;
 @synthesize senateDistrictView, houseDistrictView;
@@ -64,14 +71,21 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		return @"MapViewController~iphone";
 }
 
+- (void) awakeFromNib {
+    [super awakeFromNib];
+    self.resourceClass = [SLFDistrictMap class];
+}
+
 - (void) dealloc {
-	
+	self.detailObjectID = nil;
+    self.resourcePath = nil;
+    
 	self.geoLegeSearch = nil;
 	self.geocoder = nil;
 	self.searchLocation = nil;
 
 	self.masterPopover = nil;
-	
+	self.toolbar = nil;
 	self.searchBar = nil;
 	self.mapView = nil;
 
@@ -117,7 +131,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 	self.searchBar = nil;
 	self.mapView = nil;	
-
+    self.toolbar = nil;
+    
 	[super viewDidUnload];
 }
 
@@ -134,6 +149,81 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	[self.mapView removeOverlays:self.mapView.overlays];	// frees up memory
 	
 	[super viewDidDisappear:animated];
+}
+
+#pragma mark -
+#pragma mark RestKit
+
+- (void)setDetailObjectID:(NSString *)newID {
+	[detailObjectID release];
+	detailObjectID = [newID copy];
+	
+	if (!IsEmpty(newID)) {
+        self.resourcePath = [NSString stringWithFormat:@"/shape/%@/", newID];
+        
+        SLFDistrictMap *newMap = [SLFDistrictMap findFirstByAttribute:@"slug" withValue:newID];
+        if (newMap) {
+            [self setDistrictMap:newMap];
+        }
+        else {
+            [self loadData];
+        }
+	}
+}
+
+- (void)loadData {
+    if (!self.resourcePath)
+        return;
+    
+    RKObjectManager *objectManager = [[SLFRestKitManager sharedRestKit] boundaryManager];
+    
+    // Load the object model via RestKit	
+    RKObjectMapping* objMapping = [objectManager.mappingProvider objectMappingForClass:self.resourceClass];
+    
+    [objectManager loadObjectsAtResourcePath:self.resourcePath objectMapping:objMapping delegate:self];
+}
+
+- (void)setDistrictMap:(SLFDistrictMap *)newMap {
+    
+    [self clearAnnotationsAndOverlays];
+    
+    if (!newMap) {
+        return;
+    }
+        
+    ////////////////////////////////////////////////////////
+    
+    [self.mapView addAnnotation:newMap];
+    
+    MKCoordinateRegion region;
+    MKPolygon *polygon = [newMap polygonAndRegion:&region];
+    
+    if (polygon) {
+        [self.mapView addOverlay:polygon];
+        [self.mapView setRegion:region animated:YES];
+    }    
+}
+
+#pragma mark RKObjectLoaderDelegate methods
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {    
+    
+    if (!object || NO == [object isKindOfClass:self.resourceClass])
+        return;
+    
+    [self setDistrictMap:object];    
+}
+
+
+- (void)objectLoaderDidFinishLoading:(RKObjectLoader*)objectLoader {
+    //self.loading = NO;
+    //[[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataUpdated object:self];
+}
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
+    //self.loading = NO;
+    [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
+    //[[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataError object:self];
 }
 
 #pragma mark -
@@ -294,10 +384,9 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	for (NSNumber *districtID in op.foundIDs) {
 		SLFDistrictMap *district = [SLFDistrictMap findFirstByAttribute:@"slug" withValue:districtID];
 		if (district) {
-			[self.mapView addAnnotation:district];
-			[self.mapView performSelector:@selector(addOverlay:) withObject:district.districtPolygon afterDelay:0.5f];
+            [self setDistrictMap:district];
 
-			[[SLFDistrictMap managedObjectContext] refreshObject:district mergeChanges:NO];	// re-fault it to free memory
+			//[[SLFDistrictMap managedObjectContext] refreshObject:district mergeChanges:NO];	// re-fault it to free memory
 		}
 	}	
 	

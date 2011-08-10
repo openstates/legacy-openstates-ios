@@ -15,7 +15,7 @@
 #import "GeneralTableViewController.h"
 
 @class MapViewController;
-@interface DistrictMapMasterViewController : GeneralTableViewController <UISearchDisplayDelegate>  {
+@interface DistrictMapMasterViewController : GeneralTableViewController <UISearchDisplayDelegate, UISearchBarDelegate>  {
 
 }
 @property (nonatomic, retain) IBOutlet	UISegmentedControl	*chamberControl;
