@@ -29,14 +29,8 @@ enum SECTIONS {
 
 @implementation CommitteeDetailDataSource
 
-- (id)initWithDetailObjectID:(NSString *)newID {
-    NSString *newPath = @"/committees/";
-    if (newID) {
-        newPath = [newPath stringByAppendingFormat:@"%@/", newID];
-    }
-    
-    if ((self = [super initWithResourcePath:newPath
-                                   objClass:[SLFCommittee class]
+- (id)initWithDetailObjectID:(NSString *)newID {    
+    if ((self = [super initWithObjClass:[SLFCommittee class]
                                      sortBy:nil
                                     groupBy:nil])) {
         self.detailObjectID = newID;
@@ -49,19 +43,10 @@ enum SECTIONS {
     [super dealloc];
 }
 
-- (NSDictionary *)queryParameters {
-    return [[NSDictionary alloc] initWithObjectsAndKeys:
-            SUNLIGHT_APIKEY, @"apikey",
-            nil];
+- (NSString *)resourcePath {
+    return @"/committees/";
 }
 
-- (NSString *)buildResourcePathWithObjectID:(NSString *)newID {
-    NSString *newPath = @"/committees/";
-    if (newID)
-        newPath = [newPath stringByAppendingFormat:@"%@/", newID];
-    
-    return newPath;
-}
 
 #pragma mark -
 #pragma mark RKObjectLoaderDelegate methods

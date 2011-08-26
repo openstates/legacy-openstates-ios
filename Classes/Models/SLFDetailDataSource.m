@@ -17,7 +17,7 @@
 - (id)initWithDetailObjectID:(NSString *)newID {
     NSCAssert( NO, @"Subclasses must override this method."); 
     
-    return ([self initWithResourcePath:nil objClass:nil sortBy:nil groupBy:nil]);
+    return ([self initWithObjClass:nil sortBy:nil groupBy:nil]);
 }
 
 - (void)dealloc {
@@ -26,9 +26,11 @@
     [super dealloc];
 }
 
+    //TODO: Consider using our RKRouter to do this with a real object ???
 - (NSString *)buildResourcePathWithObjectID:(NSString *)newID {
-    NSCAssert( NO, @"Subclasses must override this method."); 
-    return nil;
+    if (newID)
+        return [self.resourcePath stringByAppendingFormat:@"%@/", newID]; // default behavior ala @"/legislators/TXL23423/"
+    return self.resourcePath;
 }
 
 - (void)setDetailObjectID:(NSString *)newID {
@@ -37,8 +39,7 @@
     detailObjectID = [newID retain];
     
     if (!IsEmpty(newID)) {
-        self.resourcePath = [self buildResourcePathWithObjectID:newID];
-        [self loadData];
+        [self loadDataWithResourcePath:[self buildResourcePathWithObjectID:newID]];
     }
 }
 

@@ -29,12 +29,8 @@
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
-	if ([key isEqualToString:@"districtNumberValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"districtNumber"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-	}
-	if ([key isEqualToString:@"externalIDValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"externalID"];
+	if ([key isEqualToString:@"numSeatsValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"numSeats"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 	}
 
@@ -44,21 +40,14 @@
 
 
 
-@dynamic boundaryKind;
+@dynamic boundaryID;
 
 
 
 
 
 
-@dynamic boundarySet;
-
-
-
-
-
-
-@dynamic centroidCoords;
+@dynamic regionDictionary;
 
 
 
@@ -72,58 +61,6 @@
 
 
 
-@dynamic districtNumber;
-
-
-
-- (short)districtNumberValue {
-	NSNumber *result = [self districtNumber];
-	return [result shortValue];
-}
-
-- (void)setDistrictNumberValue:(short)value_ {
-	[self setDistrictNumber:[NSNumber numberWithShort:value_]];
-}
-
-- (short)primitiveDistrictNumberValue {
-	NSNumber *result = [self primitiveDistrictNumber];
-	return [result shortValue];
-}
-
-- (void)setPrimitiveDistrictNumberValue:(short)value_ {
-	[self setPrimitiveDistrictNumber:[NSNumber numberWithShort:value_]];
-}
-
-
-
-
-
-@dynamic externalID;
-
-
-
-- (int)externalIDValue {
-	NSNumber *result = [self externalID];
-	return [result intValue];
-}
-
-- (void)setExternalIDValue:(int)value_ {
-	[self setExternalID:[NSNumber numberWithInt:value_]];
-}
-
-- (int)primitiveExternalIDValue {
-	NSNumber *result = [self primitiveExternalID];
-	return [result intValue];
-}
-
-- (void)setPrimitiveExternalIDValue:(int)value_ {
-	[self setPrimitiveExternalID:[NSNumber numberWithInt:value_]];
-}
-
-
-
-
-
 @dynamic name;
 
 
@@ -131,21 +68,33 @@
 
 
 
-@dynamic resourceURL;
+@dynamic numSeats;
 
+
+
+- (short)numSeatsValue {
+	NSNumber *result = [self numSeats];
+	return [result shortValue];
+}
+
+- (void)setNumSeatsValue:(short)value_ {
+	[self setNumSeats:[NSNumber numberWithShort:value_]];
+}
+
+- (short)primitiveNumSeatsValue {
+	NSNumber *result = [self primitiveNumSeats];
+	return [result shortValue];
+}
+
+- (void)setPrimitiveNumSeatsValue:(short)value_ {
+	[self setPrimitiveNumSeats:[NSNumber numberWithShort:value_]];
+}
 
 
 
 
 
 @dynamic shape;
-
-
-
-
-
-
-@dynamic slug;
 
 
 

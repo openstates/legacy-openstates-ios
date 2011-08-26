@@ -13,17 +13,16 @@
 #import "CommitteesDataSource.h"
 #import "SLFCommittee.h"
 #import "LegislatorCell.h"
-
+#import "UtilityMethods.h"
 #import "TexLegeTheme.h"
 #import "DisclosureQuartzView.h"
 
 @implementation CommitteesDataSource
 
 - (id)init {
-	if ((self = [super initWithResourcePath:@"/committees/" 
-                                   objClass:[SLFCommittee class]
-                                     sortBy:@"committeeName"
-                                    groupBy:@"committeeNameInitial"])) {
+    self = [super initWithObjClass:[SLFCommittee class] sortBy:@"committeeName" groupBy:@"committeeNameInitial"];
+	if (self) {
+        
     }
 	return self;
 }
@@ -33,12 +32,19 @@
     [super dealloc];
 }
 
+- (NSString *)resourcePath {
+    return @"/committees/";
+}
 
-- (NSDictionary *)queryParameters {
-    return [[NSDictionary alloc] initWithObjectsAndKeys:
-            self.stateID, @"state",
-            SUNLIGHT_APIKEY, @"apikey",
-            nil];
+- (void)setStateID:(NSString *)newID {
+    [super setStateID:newID];
+    
+    if (!self.queryParameters)
+        return;
+    if (!IsEmpty(newID))
+        [self.queryParameters setObject:newID forKey:@"state"];
+    else
+        [self.queryParameters removeObjectForKey:@"state"];
 }
 
 

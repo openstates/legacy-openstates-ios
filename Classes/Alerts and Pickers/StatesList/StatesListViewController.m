@@ -38,7 +38,6 @@
 
 
 - (id)initWithStyle:(UITableViewStyle)style {
-    // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
     self = [super initWithStyle:style];
     if (self) {
         
@@ -64,10 +63,7 @@
 #pragma mark Memory management
 
 - (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Relinquish ownership any cached data, images, etc. that aren't in use.
 }
 
 - (void)dealloc {
@@ -130,7 +126,7 @@
     [whereToChange release];
                                                                        
     [self.tableView setAllowsSelectionDuringEditing:YES];
-	[self finishEditing:self];    // we're not editing right now
+	[self finishEditing:self];
     
 }
 
@@ -144,7 +140,6 @@
 
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Override to allow orientations other than the default portrait orientation.
     return YES;
 }
 
@@ -173,11 +168,6 @@
     [self.tableView reloadData];
 }
 
-//
-// indexPathForCellController:
-//
-// Returns the indexPath for the specified CellController object
-//
 - (NSIndexPath *)indexPathForCellController:(id)cellController
 {
     NSInteger rowIndex;
@@ -193,11 +183,6 @@
 	return nil;
 }
 
-//
-// constructTableGroups
-//
-// Creates cell data.
-//
 - (void)constructTableGroups
 {	
     
@@ -233,14 +218,11 @@
 #pragma mark UITableViewDataSource 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
     return 1;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // Return the number of rows in the section.
-    
     StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesLoader];
 
 	if (NO == IsEmpty(statesMeta.states)) {
@@ -258,11 +240,6 @@
     
 }
 
-//
-// tableView:cellForRowAtIndexPath:
-//
-// Returns the cell for a given indexPath.
-//
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesLoader];
@@ -291,11 +268,6 @@
 
 #pragma mark UITableViewDelegate
 
-//
-// tableView:didSelectRowAtIndexPath:
-//
-// Handle row selection
-//
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     StatesListMetaLoader *statesMeta = [StatesListMetaLoader sharedStatesLoader];
@@ -307,6 +279,9 @@
             // to make things work with our upcoming configureCell:, we need to trick this a little
 			indexPath = [NSIndexPath indexPathForRow:(indexPath.row-1) inSection:indexPath.section];
 		}
+        else {
+            return; // they're clicking on a network error or loading cell ... don't do anything.
+        }
 	}
     
     
@@ -325,12 +300,7 @@
         SLFState *state = (SLFState *)ctl.dataObject;
         if (state) {
             [[StateMetaLoader sharedStateMeta] setSelectedState:state];
-
-/*            NSString *stateID = state.abbreviation;
-            if (NO == IsEmpty(stateID)) {
-                [[StateMetaLoader sharedStateMeta] setSelectedState:stateID];
-            }
-*/        }
+        }
         
         UIViewController *parent = [[[UIApplication sharedApplication] keyWindow] rootViewController];
         if (parent) {
@@ -351,22 +321,14 @@
 
 #pragma mark Editing Cells
 
-//
-// tableView:canEditRowAtIndexPath:
-//
-// Specifies editing enabled for all rows.
-//
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ([[StatesListMetaLoader sharedStatesLoader] loadingStatus] > LOADING_IDLE)
+        return NO;
 	return YES;
 }
 
 
-//
-// edit:
-//
-// Toggles edit mode.
-//
 - (void)edit:(id)sender
 {
 	
@@ -386,11 +348,6 @@
     
 }
 
-//
-// finish:
-//
-// Remove the editing
-//
 - (void)finishEditing:(id)sender
 {
     

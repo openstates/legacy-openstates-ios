@@ -1,5 +1,5 @@
 //
-//  TexLegeObjectCache.h
+//  SLFObjectCache.h
 //  Created by Gregory Combs on 3/21/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -13,7 +13,7 @@
 #import <RestKit/CoreData/RKManagedObjectCache.h>
 
 
-@interface TexLegeObjectCache : NSObject <RKManagedObjectCache>{
+@interface SLFObjectCache : NSObject <RKManagedObjectCache>{
 
 }
 

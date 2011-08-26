@@ -41,6 +41,9 @@
 	
 }
 
+/*- (NSString *)districtMapResourcePath {
+    return [NSString stringWithFormat:@"/districts/%@/%@/%@/", self.stateID, self.chamber, self.district];
+}*/
 
 - (SLFDistrictMap *)hydratedDistrictMap {
     SLFDistrictMap *tempMap = self.districtMap;
@@ -52,7 +55,8 @@
     if (!slug || [slug length] == 0)
         return nil;
     
-    tempMap = [SLFDistrictMap findFirstByAttribute:@"slug" withValue:slug];
+    
+    tempMap = [SLFDistrictMap findFirstByAttribute:@"boundaryID" withValue:slug];
     if (!tempMap)
         return nil;
     
@@ -64,6 +68,9 @@
 
 
 - (NSString *)districtMapSlug {
+    if (self.districtMap)
+        return self.districtMap.boundaryID;
+    
     NSString *districtMapID = nil;
     if ([self.chamber isEqualToString:@"upper"]) {
         districtMapID = [NSString stringWithFormat:@"sldu-%@-state-%@-district-%@", 
@@ -103,7 +110,7 @@
 }
 
 - (NSString *)chamberShortName {
-	return abbreviateString(self.chamber);
+    return abbreviateString(chamberStringFromOpenStates(self.chamber));
 }
 
 - (NSString *)districtPartyString {
@@ -135,15 +142,11 @@
 - (NSString *)labelSubText {
 	NSString *string;
 	string = [NSString stringWithFormat: NSLocalizedStringFromTable(@"%@ - District %@", @"DataTableUI", @"The person and their district number"),
-              self.chamber, self.district];
+              [self chamberShortName], self.district];
 	return string;
 }
 
 - (NSString *)title {
-#warning why do we have to cheat?
-    if (!self.state) {
-        self.state = [SLFState findFirstByAttribute:@"abbreviation" withValue:self.stateID];
-    }
     NSString *aTitle = self.state.lowerChamberTitle;
     if ([self.chamber isEqualToString:@"upper"])
         aTitle = self.state.upperChamberTitle;
@@ -151,14 +154,9 @@
 }
 
 - (NSString *)term {
-#warning why do we have to cheat?
-    if (!self.state) {
-        self.state = [SLFState findFirstByAttribute:@"abbreviation" withValue:self.stateID];
-    }
     NSNumber *years = self.state.lowerChamberTerm;
     if ([self.chamber isEqualToString:@"upper"])
         years = self.state.upperChamberTerm;
-
     return [NSString stringWithFormat:@"Term: %@ Years", years];
 }
 

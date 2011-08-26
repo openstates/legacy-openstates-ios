@@ -29,23 +29,24 @@
 @synthesize fetchedResultsController;
 @synthesize hideTableIndex;
 @synthesize searchDisplayController;
+@synthesize queryParameters;
 
-
-- (id)initWithResourcePath:(NSString *)newPath 
-                  objClass:(Class)newClass 
+- (id)initWithObjClass:(Class)newClass 
                     sortBy:(NSString *)newSort
                    groupBy:(NSString *)newGroup
 {
 	if ((self = [super init])) {
         
-        NSCParameterAssert( (newClass != NULL) && (newPath != NULL) );
+        NSCParameterAssert( (newClass != NULL) );
         NSCParameterAssert( [newClass isSubclassOfClass:[NSManagedObject class]] );
                    
         self.resourceClass = newClass;
-        self.resourcePath = newPath; 
         self.sortBy = newSort;
         self.groupBy = newGroup;
         self.loading = NO;
+        self.queryParameters = [NSMutableDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
+
+        
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(dataSourceReceivedMemoryWarning:)
 													 name:UIApplicationDidReceiveMemoryWarningNotification 
@@ -61,9 +62,9 @@
     self.stateID = nil;    
 	self.fetchedResultsController = nil;
 	self.searchDisplayController = nil;	
-    self.resourcePath = nil;
     self.sortBy = nil;
     self.groupBy = nil;
+    self.queryParameters = nil;
     [super dealloc];
 }
 
@@ -93,8 +94,8 @@
     }
 }
 
-// subclasses should override this, when appropriate
-- (NSDictionary *)queryParameters {
+- (NSString *)resourcePath {
+    NSCParameterAssert(NO); // they must override this
     return nil;
 }
 
@@ -103,6 +104,11 @@
 }
 
 - (void)loadData {
+    [self loadDataWithResourcePath:self.resourcePath];
+}
+
+- (void)loadDataWithResourcePath:(NSString *)newPath {
+    NSCParameterAssert(newPath != NULL);
     
     if (!self.primaryKeyProperty || [[NSNull null] isEqual:self.primaryKeyProperty]) {
         return;
@@ -117,14 +123,13 @@
     RKObjectManager* objectManager = [RKObjectManager sharedManager];
     RKObjectMapping* objMapping = [objectManager.mappingProvider objectMappingForClass:self.resourceClass];
 
-	NSString *newPath = [self.resourcePath appendQueryParams:[self queryParameters]];
+	NSString *pathToLoad = [newPath appendQueryParams:self.queryParameters];
     
-    RKLogDebug(@"Loading data at path: %@", newPath);
-    [objectManager loadObjectsAtResourcePath:newPath objectMapping:objMapping delegate:self];
+    RKLogDebug(@"Loading data at path: %@", pathToLoad);
+    [objectManager loadObjectsAtResourcePath:pathToLoad objectMapping:objMapping delegate:self];
 }
 
 
-// return the legislator at the index in the sorted by symbol array
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
     
 	id tempEntry = nil;

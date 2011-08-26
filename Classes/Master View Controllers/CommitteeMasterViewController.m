@@ -76,7 +76,7 @@
 	if ([UtilityMethods isIPadDevice])
 		self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 
-    CommitteesDataSource *dsource = self.dataSource;
+    CommitteesDataSource *dsource = (CommitteesDataSource *)self.dataSource;
     [dsource loadData];
 
 	self.chamberControl.tintColor = [TexLegeTheme accent];
@@ -177,7 +177,7 @@
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString*)searchString searchScope:(NSInteger)searchOption {
     
     NSPredicate *predicate = nil;
-    CommitteesDataSource *dsource = self.dataSource;
+    CommitteesDataSource *dsource = (CommitteesDataSource *)self.dataSource;
     
     NSMutableString *predicateString = [[NSMutableString alloc] init];
     

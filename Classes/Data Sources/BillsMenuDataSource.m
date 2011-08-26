@@ -15,8 +15,6 @@
 #import "TexLegeStandardGroupCell.h"
 
 @implementation BillsMenuDataSource
-@synthesize resourcePath;
-@synthesize resourceClass;
 @synthesize menuItems = _menuItems;
 
 enum _menuOrder {
@@ -35,7 +33,6 @@ enum _menuOrder {
 
 - (void)dealloc {
 	[_menuItems release];
-    self.resourcePath = nil;
 	[super dealloc];
 }
 

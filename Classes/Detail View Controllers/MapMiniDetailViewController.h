@@ -12,10 +12,13 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-@interface MapMiniDetailViewController : UIViewController <MKMapViewDelegate, UIActionSheetDelegate> {
+#import <RestKit/RestKit.h>
+
+@class SLFDistrictMap;
+@interface MapMiniDetailViewController : UIViewController <MKMapViewDelegate, UIActionSheetDelegate, RKObjectLoaderDelegate> {
 }
 
-@property (nonatomic,copy)   NSString               * detailObjectID;
+@property (nonatomic,assign) MKCoordinateRegion region;
 @property (nonatomic,retain) IBOutlet MKMapView *mapView;
 @property (nonatomic,assign) MKPolygonView *districtView;
 @property (nonatomic) CLLocationCoordinate2D annotationActionCoord;
@@ -23,5 +26,10 @@
 - (void) clearAnnotationsAndOverlays;
 - (void) resetMapViewWithAnimation:(BOOL)animated;
 - (void) moveMapToAnnotation:(id<MKAnnotation>)annotation;
+
+@property (nonatomic,copy)   NSString               * resourcePath;
+@property (nonatomic,assign) Class                    resourceClass;
+- (void) setDistrictMap:(SLFDistrictMap *)newMap;
+- (void) setMapDetailObject:(id)detailObj;
 
 @end

@@ -6,6 +6,7 @@
 
 @property (nonatomic, readonly) NSArray *sortedPositions;
 @property (nonatomic, readonly) NSString *districtMapSlug;
+    //@property (nonatomic, readonly) NSString *districtMapResourcePath;
 @property (nonatomic, readonly) SLFDistrictMap *hydratedDistrictMap;
 
 @property (nonatomic, readonly) NSString *term;
@@ -19,5 +20,4 @@
 - (NSString *)shortNameForButtons;
 - (NSString *)labelSubText;
 - (NSString *)title;
-
 @end

@@ -12,7 +12,7 @@
 
 #import "MapMiniDetailViewController.h"
 #import "SLFDataModels.h"
-
+#import "SLFRestKitManager.h"
 #import "TexLegeTheme.h"
 #import "UtilityMethods.h"
 
@@ -23,7 +23,7 @@
 #import "DistrictPinAnnotationView.h"
 
 @interface MapMiniDetailViewController (Private)
-- (void) animateToState;
+- (MKCoordinateRegion) unitedStatesRegion;
 - (void) animateToAnnotation:(id<MKAnnotation>)annotation;
 - (void) clearOverlaysExceptRecent;
 - (void) resetMapViewWithAnimation:(BOOL)animated;
@@ -34,10 +34,12 @@ NSInteger colorIndex;
 static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 @implementation MapMiniDetailViewController
-@synthesize detailObjectID;
 @synthesize mapView;
 @synthesize districtView;
 @synthesize annotationActionCoord;
+@synthesize resourcePath;
+@synthesize resourceClass;
+@synthesize region;
 
 #pragma mark -
 #pragma mark Initialization and Memory Management
@@ -49,16 +51,23 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 		return @"MapMiniDetailViewController~iphone";
 }
 
+- (id)init {
+    self = [super init];
+    if (self) {
+        self.resourceClass = [SLFDistrictMap class];
+        self.region = [self unitedStatesRegion];
+    }
+    return self;
+}
+
 - (void) dealloc {
 	self.mapView = nil;
-    self.detailObjectID = nil;
+    self.resourcePath = nil;
 	[super dealloc];
 }
 
 - (void) didReceiveMemoryWarning {	
-
 	[self clearOverlaysExceptRecent];
-
 	[super didReceiveMemoryWarning];
 }
 
@@ -71,13 +80,19 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 	[self.view setBackgroundColor:[TexLegeTheme backgroundLight]];
 	self.mapView.showsUserLocation = NO;
-	
+    self.mapView.region = self.region;
 	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 	//self.navigationItem.title = @"District Location";
+    
+   /* if (!IsEmpty(self.mapView.annotations))
+        [self.mapView setCenterCoordinate:[[self.mapView.annotations objectAtIndex:0] coordinate] animated:NO];
+    else
+        [self.mapView setCenterCoordinate:[self unitedStatesRegion].center animated:NO];*/
 }
 
 - (void) viewDidUnload {
     self.mapView = nil;
+    self.region = [self unitedStatesRegion];
 	[super viewDidUnload];
 }
 
@@ -90,24 +105,86 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 }
 
-/*
- - (void) viewWillDisappear:(BOOL)animated {
-	[super viewWillDisappear:animated];	
-}
- */
-
 - (void) viewDidDisappear:(BOOL)animated {
 	self.mapView.showsUserLocation = NO;
-		
-	//if (![self isEqual:[self.navigationController.viewControllers objectAtIndex:0]])
 	[self.mapView removeOverlays:self.mapView.overlays];
-	
 	[super viewDidDisappear:animated];
+}
+
+- (void)loadDataWithResourcePath:(NSString *)newPath {
+    if (!newPath)
+        return;
+    
+    self.resourcePath = newPath;
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
+    NSString *queryString = [newPath appendQueryParams:queryParams];
+    
+    RKObjectMapping* objMapping = [objectManager.mappingProvider objectMappingForClass:self.resourceClass];
+    RKLogDebug(@"loading map at: %@", queryString);
+    [objectManager loadObjectsAtResourcePath:queryString objectMapping:objMapping delegate:self];
+}
+
+- (void)setMapDetailObject:(id)detailObj {
+    if (!detailObj)
+        return;
+    if ([detailObj isKindOfClass:[SLFDistrictMap class]]) {
+        SLFDistrictMap *map = detailObj;
+        if (!IsEmpty(map.shape)) {
+            [self setDistrictMap:map];
+            return;
+        }
+        detailObj = map.boundaryID;
+    }
+    
+    if ([detailObj isKindOfClass:[NSString class]]) {
+        [self loadDataWithResourcePath:[NSString stringWithFormat:@"/districts/boundary/%@/", detailObj]];
+    }
+}
+
+- (void)setDistrictMap:(SLFDistrictMap *)newMap {
+    
+    [self clearAnnotationsAndOverlays];
+    
+    if (!newMap) {
+        return;
+    }
+        
+    [self.mapView addAnnotation:newMap];
+    self.region = newMap.region;
+
+    MKPolygon *polygon = [newMap polygonFactory];    
+    if (polygon) {
+        [self.mapView addOverlay:polygon];
+    }    
+}
+
+#pragma mark RKObjectLoaderDelegate methods
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {    
+    if (!object || NO == [object isKindOfClass:self.resourceClass])
+        return;
+    [self setDistrictMap:object];    
+}
+
+
+- (void)objectLoaderDidFinishLoading:(RKObjectLoader*)objectLoader {
+        //[[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataUpdated object:self];
+}
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
+    [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
 }
 
 #pragma mark -
 #pragma mark Animation and Zoom
 
+- (void) setRegion:(MKCoordinateRegion)newRegion {
+    region = newRegion;
+    if (self.isViewLoaded)
+        [self.mapView setRegion:newRegion animated:YES];
+}
 
 - (void) clearAnnotationsAndOverlays {
 	self.mapView.showsUserLocation = NO;
@@ -134,21 +211,26 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	[self clearAnnotationsAndOverlays];	
 }
 
-- (void)animateToState
-{    
-//    [self.mapView setRegion:self.texasRegion animated:YES];
+- (MKCoordinateRegion) unitedStatesRegion {
+    CLLocationCoordinate2D center = CLLocationCoordinate2DMake(37.250556, -96.358333); 
+    MKCoordinateSpan span = MKCoordinateSpanMake((1.04*(126.766667 - 66.95)), (1.04*(49.384472 - 24.520833))); 
+    return MKCoordinateRegionMake(center, span); 
 }
+
 
 - (void)animateToAnnotation:(id<MKAnnotation>)annotation
 {
 	if (!annotation)
 		return;
-	
-    MKCoordinateRegion region = MKCoordinateRegionMake(annotation.coordinate, kStandardZoomSpan);
-    [self.mapView setRegion:region animated:YES];	
+    self.region = MKCoordinateRegionMake(annotation.coordinate, kStandardZoomSpan);
 }
 
 - (void)moveMapToAnnotation:(id<MKAnnotation>)annotation {	
+    /*if (![self region:self.mapView.region isEqualTo:[self unitedStatesRegion]]) { 
+		[self performSelector:@selector(animateToUnitedStates) withObject:nil afterDelay:0.3];
+		[self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:1.7];   
+        return;
+	}*/
     [self performSelector:@selector(animateToAnnotation:) withObject:annotation afterDelay:0.7];	
 }
 
@@ -160,9 +242,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	MKMapPoint coord1 = MKMapPointForCoordinate(region1.center);
 	MKMapPoint coord2 = MKMapPointForCoordinate(region2.center);
 	BOOL coordsEqual = MKMapPointEqualToPoint(coord1, coord2);
-	
-	BOOL spanEqual = region1.span.latitudeDelta == region2.span.latitudeDelta; // let's just only do one, okay?
-	return (coordsEqual && spanEqual);
+    return coordsEqual;
 }
 
 #pragma mark -
@@ -223,7 +303,6 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
-    // if it's the user location, just return nil.
     if ([annotation isKindOfClass:[MKUserLocation class]])
         return nil;
     
@@ -271,11 +350,10 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 				myColor = [TexLegeTheme texasGreen];
 		}
 
-		//MKPolygonView*    aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
 		MKPolygonView *aView = nil;
 
 		aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];		
-		aView.fillColor = [/*[UIColor cyanColor]*/myColor colorWithAlphaComponent:0.2];
+		aView.fillColor = [myColor colorWithAlphaComponent:0.2];
         aView.strokeColor = [myColor colorWithAlphaComponent:0.7];
         aView.lineWidth = 3;
 		
@@ -287,10 +365,8 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	else if ([overlay isKindOfClass:[MKPolyline class]])
     {
         MKPolylineView*    aView = [[[MKPolylineView alloc] initWithPolyline:(MKPolyline*)overlay] autorelease];
-				
-        aView.strokeColor = myColor;// colorWithAlphaComponent:0.7];
+        aView.strokeColor = myColor;
         aView.lineWidth = 3;
-		
         return aView;
     }
 	
@@ -302,43 +378,18 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)aView {
 	
 	id<MKAnnotation> annotation = aView.annotation;
-	if (!annotation)
+	if (!annotation || ![aView isSelected])
 		return;
 	
-	if (![aView isSelected])
-		return;
-	
-	[self.mapView setCenterCoordinate:annotation.coordinate animated:YES];
 	
 	if ([annotation isKindOfClass:[SLFDistrictMap class]]) {
-		MKCoordinateRegion region;
-		region = [(SLFDistrictMap *)annotation region];
-		
-		NSMutableArray *toRemove = [[NSMutableArray alloc] initWithArray:self.mapView.overlays];
-		BOOL foundOne = NO;
-		
-		for (id<MKOverlay>item in self.mapView.overlays) {
-			if ([[item title] isEqualToString:[annotation title]]) {	// we clicked on an existing overlay
-				if (self.districtView && [[item title] isEqualToString:[self.districtView.polygon title]]) { // it's the senate
-					foundOne = YES;
-					[toRemove removeObject:item];
-					break;
-				}
-			}
-		}
-		
-		//[self.mapView removeOverlays:self.mapView.overlays];
-		if (toRemove && [toRemove count])
-			[self.mapView performSelector:@selector(removeOverlays:) withObject:toRemove];
-
-		[toRemove release];
-		
-		if (!foundOne) {
-			MKPolygon *mapPoly = [(SLFDistrictMap*)annotation districtPolygon];
-			[self.mapView performSelector:@selector(addOverlay:) withObject:mapPoly afterDelay:0.2f];
-		}
-		[self.mapView setRegion:region animated:TRUE];
-	}			
+        SLFDistrictMap *map = (SLFDistrictMap *)annotation;
+        self.region = map.region;
+        return;
+    }
+    [self animateToAnnotation:annotation];
+        //[self.mapView setCenterCoordinate:annotation.coordinate animated:YES];
+    
 }
 
 

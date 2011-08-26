@@ -17,6 +17,7 @@
 
 #import "CommitteeDetailViewController.h"
 #import "LegislatorContributionsViewController.h"
+    //#import "MapViewController.h"
 #import "MapMiniDetailViewController.h"
 #import "BillSearchDataSource.h"
 #import "BillsListViewController.h"
@@ -30,8 +31,6 @@
 #import "UIImage+ResolutionIndependent.h"
 #import "LocalyticsSession.h"
 #import "OpenLegislativeAPIs.h"
-    //#import "LegislatorMasterViewController.h"
-    //#import "AppDelegate.h"
 
 @interface LegislatorDetailViewController (Private)
 - (void) setupHeader;
@@ -206,7 +205,6 @@
 	self.masterPopover = pc;
 }
 
-// Called when the view is shown again in the split view, invalidating the button and popover controller.
 - (void)splitViewController: (UISplitViewController*)svc 
 	 willShowViewController:(UIViewController *)aViewController 
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
@@ -232,16 +230,13 @@
 #pragma mark orientations
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Override to allow orientations other than the default portrait orientation.
     return YES;
 }
 
 #pragma mark -
 #pragma mark Table View Delegate
-// the user selected a row in the table.
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)newIndexPath {
 	
-	// deselect the new row using animation
 	[aTableView deselectRowAtIndexPath:newIndexPath animated:YES];	
 	
     SLFLegislator *member = self.detailObject;
@@ -263,7 +258,6 @@
 			else
 				nextViewController = [[NotesViewController alloc] initWithNibName:@"NotesView" bundle:nil];
 			
-			// If we got a new view controller, push it .
 			if (nextViewController) {
 				nextViewController.legislator = member;
 				nextViewController.backViewController = self;
@@ -331,7 +325,8 @@
         case DirectoryTypeMap:
         {
             MapMiniDetailViewController *mapVC = [[MapMiniDetailViewController alloc] init]; 
-            mapVC.detailObjectID = cellInfo.entryValue;
+                //MapViewController *mapVC = [[MapViewController alloc] init];
+            [mapVC setMapDetailObject:cellInfo.entryValue];
             [self.navigationController pushViewController:mapVC animated:YES];
             [mapVC release];
         }

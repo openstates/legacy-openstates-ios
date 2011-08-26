@@ -78,7 +78,7 @@
 	    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 	
 	
-    LegislatorsDataSource *dsource = self.dataSource;
+    LegislatorsDataSource *dsource = (LegislatorsDataSource *)self.dataSource;
     [dsource loadData];
 
 	self.chamberControl.tintColor = [TexLegeTheme accent];
@@ -188,7 +188,7 @@
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString*)searchString searchScope:(NSInteger)searchOption {
     
     NSPredicate *predicate = nil;
-    LegislatorsDataSource *dsource = self.dataSource;
+    LegislatorsDataSource *dsource = (LegislatorsDataSource *)self.dataSource;
 
     NSMutableString *predicateString = [[NSMutableString alloc] init];
     

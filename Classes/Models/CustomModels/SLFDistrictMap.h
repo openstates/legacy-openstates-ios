@@ -5,14 +5,14 @@
 
 @interface SLFDistrictMap : _SLFDistrictMap <MKAnnotation> {}
 
-- (CLLocationCoordinate2D)centroid;
-- (CLLocationCoordinate2D)coordinate;
+@property (nonatomic,assign) MKCoordinateRegion region;
+@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
+
 - (NSString *)title;
 - (NSString *)subtitle;
 - (UIImage *)image;
 
-- (MKPolygon *)polygonAndRegion:(MKCoordinateRegion *)regionRef;
-
+- (MKPolygon *)polygonFactory;
 @property (nonatomic,retain) MKPolygon *districtPolygon;
-@property (nonatomic,assign) MKCoordinateRegion region;
+
 @end

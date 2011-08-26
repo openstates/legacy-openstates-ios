@@ -27,7 +27,7 @@
 		370A804913D6BE3000390ADC /* GCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 370A804713D6BE3000390ADC /* GCTableViewController.m */; };
 		370B9DD0122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 370B9DCF122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m */; };
 		370C270C1225BF7E004273E3 /* DistrictMapDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */; };
-		370EAC371337E3CF007788BC /* TexLegeObjectCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 370EAC361337E3CF007788BC /* TexLegeObjectCache.m */; };
+		370EAC371337E3CF007788BC /* SLFObjectCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 370EAC361337E3CF007788BC /* SLFObjectCache.m */; };
 		370EAD311338029E007788BC /* OpenLegislativeAPIs.m in Sources */ = {isa = PBXBuildFile; fileRef = 370EAD301338029E007788BC /* OpenLegislativeAPIs.m */; };
 		370EAD321338029E007788BC /* OpenLegislativeAPIs.m in Sources */ = {isa = PBXBuildFile; fileRef = 370EAD301338029E007788BC /* OpenLegislativeAPIs.m */; };
 		370F7AA911FEAF730004AC50 /* PolygonMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 370F7AA811FEAF730004AC50 /* PolygonMath.m */; };
@@ -1387,8 +1387,8 @@
 		370B9DDB122AD91600AC9CC8 /* SLFTableCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFTableCellProtocol.h; sourceTree = "<group>"; };
 		370C270A1225BF7E004273E3 /* DistrictMapDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictMapDataSource.h; sourceTree = "<group>"; };
 		370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictMapDataSource.m; sourceTree = "<group>"; };
-		370EAC351337E3CF007788BC /* TexLegeObjectCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeObjectCache.h; sourceTree = "<group>"; };
-		370EAC361337E3CF007788BC /* TexLegeObjectCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeObjectCache.m; sourceTree = "<group>"; };
+		370EAC351337E3CF007788BC /* SLFObjectCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFObjectCache.h; sourceTree = "<group>"; };
+		370EAC361337E3CF007788BC /* SLFObjectCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFObjectCache.m; sourceTree = "<group>"; };
 		370EAD2D1338028C007788BC /* OpenLegislativeAPIs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenLegislativeAPIs.h; sourceTree = "<group>"; };
 		370EAD301338029E007788BC /* OpenLegislativeAPIs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenLegislativeAPIs.m; sourceTree = "<group>"; };
 		370F7AA711FEAF730004AC50 /* PolygonMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PolygonMath.h; path = Classes/MapKit/PolygonMath.h; sourceTree = SOURCE_ROOT; };
@@ -2327,7 +2327,7 @@
 			isa = PBXGroup;
 			children = (
 				37ECDA771065358800E43497 /* Release Notes.rtf */,
-				3721EA4F11D6E6EA00CA33DA /* Vendor Modules */,
+				3721EA4F11D6E6EA00CA33DA /* Vendor */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -2421,13 +2421,13 @@
 				3787269D13D6360700D030CC /* StatesListMetaLoader.m */,
 				371FB1D61333B43C0003740A /* CalendarEventsLoader.h */,
 				371FB1D71333B43C0003740A /* CalendarEventsLoader.m */,
-				370EAC351337E3CF007788BC /* TexLegeObjectCache.h */,
-				370EAC361337E3CF007788BC /* TexLegeObjectCache.m */,
+				370EAC351337E3CF007788BC /* SLFObjectCache.h */,
+				370EAC361337E3CF007788BC /* SLFObjectCache.m */,
 			);
 			path = "External Data Sources";
 			sourceTree = "<group>";
 		};
-		3721EA4F11D6E6EA00CA33DA /* Vendor Modules */ = {
+		3721EA4F11D6E6EA00CA33DA /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
 				3775C7C8131C44C600638ED4 /* RestKit.xcodeproj */,
@@ -2445,8 +2445,7 @@
 				377074CE1397B2B400E82CA8 /* SVGeocoder */,
 				37F2CA0A1343ADFC001D9D7B /* DDActionHeaderView */,
 			);
-			name = "Vendor Modules";
-			path = ../../Frameworks;
+			path = Vendor;
 			sourceTree = "<group>";
 		};
 		372D061712FC799200E63696 /* Kal */ = {
@@ -5057,7 +5056,7 @@
 				376F62D1132972E200F2B3DA /* BillsCategoriesViewController.m in Sources */,
 				37D38B0F132ECFFA002F1730 /* BillsListViewController.m in Sources */,
 				371FB1D81333B43C0003740A /* CalendarEventsLoader.m in Sources */,
-				370EAC371337E3CF007788BC /* TexLegeObjectCache.m in Sources */,
+				370EAC371337E3CF007788BC /* SLFObjectCache.m in Sources */,
 				370EAD311338029E007788BC /* OpenLegislativeAPIs.m in Sources */,
 				37094D96133B162E00B9693C /* TexLegeBadgeGroupCell.m in Sources */,
 				37F2CA111343AE40001D9D7B /* DDActionHeaderView.m in Sources */,
@@ -5406,7 +5405,7 @@
 				CURRENT_PROJECT_VERSION = 2.5;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DEBUGGING_SYMBOLS = full;
-				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";

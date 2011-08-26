@@ -1,6 +1,11 @@
 #import "SLFDataModels.h"
 #import "TexLegeMapPins.h"
-//#import "NSData_Base64Extensions.h"
+#import "NSData_Base64Extensions.h"
+#import "UtilityMethods.h"
+
+@interface SLFDistrictMap()
+- (MKPolygon *)polygonRingWithCoordinates:(NSArray *)ringCoords interiorRings:(NSArray *)interiorRings;
+@end
 
 @implementation SLFDistrictMap
 @synthesize districtPolygon;
@@ -13,7 +18,6 @@
     [self willChangeValueForKey:@"stateID"];
     [self setPrimitiveStateID:newID];
     [self didChangeValueForKey:@"stateID"];
-    
     if (!newID)
         return;
     
@@ -21,80 +25,38 @@
     self.state = tempState;
 }
 
-- (void)setBoundaryKind:(NSString *)newChamber {
-    [self willChangeValueForKey:@"boundaryKind"];
-    [self setPrimitiveBoundaryKind:newChamber];
-    [self didChangeValueForKey:@"boundaryKind"];
-    
-    if (!newChamber)
-        return;
-    
-    if ([newChamber isEqualToString:@"SLDU"])
-        self.chamber = @"upper";
-    else if ([newChamber isEqualToString:@"SLDL"])
-        self.chamber = @"lower";    
-}
-
-- (void)setSlug:(NSString *)newSlug {
-    
-    [self willChangeValueForKey:@"slug"];
-    [self setPrimitiveSlug:newSlug];
-    [self didChangeValueForKey:@"slug"];
-    
-
-    NSString *newID = newSlug;
-    if (!newID || ([newID length]<7))
-        return;
-    
-    NSArray *words = [newID componentsSeparatedByString:@"-"];
-    if (!words || ([words count]<2))
-        return;
-        
-    NSString *newStateID = [words objectAtIndex:1];
-    if (newStateID) {
-        self.stateID = newStateID;
-    }    
-    
-    if ([words containsObject:@"district"]) {
-        NSInteger index = [words indexOfObject:@"district"];
-        index++;
-        
-        if ([words count] >= index) {
-            NSInteger num = [[words objectAtIndex:index] integerValue];
-            if (num > 0) {
-                self.districtNumber = [NSNumber numberWithInteger:num];
-            }
-        }
-    }
-}
-
-//////////////////////////////////
-#pragma mark -
-#pragma mark MKAnnotation and MKOverlay
-
-- (CLLocationCoordinate2D)centroid {
-    CLLocationCoordinate2D centroid;
-    
-    NSNumber *lon = [self.centroidCoords objectAtIndex:0];
-    NSNumber *lat = [self.centroidCoords objectAtIndex:1];
-    if (lon && lat) {
-        centroid = CLLocationCoordinate2DMake([lat doubleValue], [lon doubleValue]);
-        if (NO == CLLocationCoordinate2DIsValid(centroid)) {
-            RKLogDebug(@"Invalid Centroid: lon=%@ lat=%@", lon, lat);
-        }
-    }
-    return centroid;
-}
 
 #pragma mark -
 #pragma mark MKAnnotation Protocol
 
 - (CLLocationCoordinate2D)coordinate {
-    return [self centroid];
+    return self.region.center;
+}
+
+- (MKCoordinateRegion) region {
+    CLLocationDegrees latDelta = [[self.regionDictionary objectForKey:@"lat_delta"] doubleValue];
+    CLLocationDegrees lonDelta = [[self.regionDictionary objectForKey:@"lon_delta"] doubleValue];
+    MKCoordinateSpan distanceToCenter = MKCoordinateSpanMake(latDelta,lonDelta);
+
+    CLLocationDegrees latitude = [[self.regionDictionary objectForKey:@"center_lat"] doubleValue];
+    CLLocationDegrees longitude = [[self.regionDictionary objectForKey:@"center_lon"] doubleValue];
+    CLLocationCoordinate2D center = CLLocationCoordinate2DMake(latitude, longitude);
+    
+    if (NO == CLLocationCoordinate2DIsValid(center)) {
+        RKLogDebug(@"Invalid Centroid: lat=%lf lon=%lf", latitude, longitude);
+    }
+
+    RKLogDebug(@"Region = {lat=%lf, lon=%lf} {latD=%lf, lonD=%lf}", latitude, longitude, latDelta, lonDelta);
+    
+    return MKCoordinateRegionMake(center, distanceToCenter);
 }
 
 - (NSString *)title {
-    return self.name;
+    return [NSString stringWithFormat:@"%@ %@ %@ %@", 
+            self.state.name, 
+            chamberStringFromOpenStates(self.chamber),
+            abbreviateString(@"District"),
+            self.name];
 }
 
 - (NSString *)subtitle {
@@ -135,68 +97,88 @@
 #pragma mark -
 #pragma mark Polygons
 
-- (MKPolygon *)polygonWithRingCoordinates:(NSArray *)inRing span:(MKCoordinateSpan *)spanRef interiorRings:(NSArray *)interiorRings {    
+- (MKPolygon *)polygonFactory {
     
-    NSUInteger pointsCount = [inRing count];
+        // If we've already cached a polygon in memory, return it rather than recalculate it.
+    if (self.districtPolygon) {
+        return self.districtPolygon;
+    }
     
-    if (pointsCount == 0)
+    NSArray *rings = [self shape];
+    
+    if(IsEmpty(rings)) {
+        RKLogError(@"District %@ shape is empty or has no rings.", self.boundaryID);
+        return nil;
+    }
+    
+    NSUInteger ringCount = [rings count];
+    MKPolygon *tempPolygon = nil;
+    NSInteger index = ringCount - 1;
+    NSMutableArray *interiorRings = (ringCount > 1 ? [[NSMutableArray alloc] initWithCapacity:index] : nil);
+    for (NSArray *ring in [rings reverseObjectEnumerator]) {
+        
+        BOOL isInnerRing = (index > 0);
+        
+        if (!ring || [[NSNull null] isEqual:ring]) {
+            RKLogError(@"District %@ shape has null or malformed content.", self.boundaryID);
+            break;
+        }
+        
+        if (isInnerRing) {
+            tempPolygon = [self polygonRingWithCoordinates:ring interiorRings:nil];
+            if (!tempPolygon)
+                continue;
+            [interiorRings addObject:tempPolygon];                
+        }
+        else {
+            tempPolygon = [self polygonRingWithCoordinates:ring interiorRings:interiorRings];
+        }
+        
+        index--;
+    }
+    
+    if (interiorRings) {
+        [interiorRings release];
+        interiorRings = nil;
+    }
+    
+    if (!tempPolygon)
         return nil;
     
-    CLLocationCoordinate2D *cArray = calloc(pointsCount, sizeof(CLLocationCoordinate2D));
+    tempPolygon.title = self.name;        
+    
+    self.districtPolygon = tempPolygon;
+    return tempPolygon;
+}
+
+
+- (MKPolygon *)polygonRingWithCoordinates:(NSArray *)ringCoords interiorRings:(NSArray *)interiorRings {    
+
+    NSUInteger numberOfCoordinates = [ringCoords count];
+    RKLogDebug(@"number of coordinates: %d", numberOfCoordinates);
+    if (numberOfCoordinates == 0)
+        return nil;
+
+    CLLocationCoordinate2D *cArray = calloc(numberOfCoordinates, sizeof(CLLocationCoordinate2D));
     NSUInteger index = 0;
-    
-    double minLat = 0.f;
-    double minLon = 0.f;
-    double maxLat = 0.f;
-    double maxLon = 0.f;
-    
-    for (NSArray *coords in inRing) {
         
+    for (NSArray *coords in ringCoords) {
         NSNumber *lon = [coords objectAtIndex:0];
         NSNumber *lat = [coords objectAtIndex:1];
-        if (lat && lon) {
-            double latFloat = [lat doubleValue];
-            double lonFloat = [lon doubleValue];
-            CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latFloat, lonFloat);
+        if (!IsEmpty(lat) && !IsEmpty(lon)) {
+            CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([lat doubleValue], [lon doubleValue]);
             if (CLLocationCoordinate2DIsValid(coord)) {
-                
-                if (index == 0) {
-                    maxLat = latFloat;
-                    minLat = latFloat;
-                    
-                    maxLon = lonFloat;
-                    minLon = lonFloat;
-                }
-                else {
-                    maxLat = fmax(maxLat,latFloat);
-                    minLat = fmin(minLat,latFloat);
-                    
-                    maxLon = fmax(maxLon,lonFloat);
-                    minLon = fmin(minLon,lonFloat);
-                }
-                
-                
                 cArray[index++] = coord;
-                
             }
         }
     }
-    
-    if (spanRef) {
-        CLLocationDegrees lonDelta = fabs(maxLon - minLon);
-        CLLocationDegrees latDelta = fabs(maxLat - minLat);
-        *spanRef = MKCoordinateSpanMake(latDelta, lonDelta);
-    }
-    
+        
     MKPolygon *outRing = nil;
     if (index > 0) {
-        
-        if (!interiorRings) {
+        if (!interiorRings)
             outRing = [MKPolygon polygonWithCoordinates:cArray count:index];
-        }
-        else {
+        else
             outRing = [MKPolygon polygonWithCoordinates:cArray count:index interiorPolygons:interiorRings];
-        }
     }
     
     free(cArray);
@@ -205,83 +187,5 @@
     return outRing;
 }
 
-- (MKPolygon *)polygonAndRegion:(MKCoordinateRegion *)regionRef {
-    
-    // If we've already cached a polygon in memory, return it rather than recalculate it.
-    if (self.districtPolygon) {
-        if (regionRef) {
-            *regionRef = self.region;
-        }
-        return self.districtPolygon;
-    }
-    
-    NSString *shapeType = [self.shape objectForKey:@"type"];
-    if ( !shapeType || [shapeType isEqual:[NSNull null]] || NO == [shapeType isEqualToString:@"MultiPolygon"] )
-        return nil;
-    
-    NSArray * rings = [[self.shape objectForKey:@"coordinates"] objectAtIndex:0];
-    NSUInteger ringCount = [rings count];
-    
-    if (NO == (ringCount > 0))
-        return nil;
-    
-    // Build the array of interior rings/holes/cutouts (if any)
-    NSMutableArray *interiorRings = nil;
-    if (ringCount > 1) {
-        
-        interiorRings = [[NSMutableArray alloc] initWithCapacity:ringCount-1];
-        NSInteger index;
-        
-        for (index=1; index < ringCount; index++) {
-            
-            NSArray *ring = [rings objectAtIndex:index];
-            if (!ring || [[NSNull null] isEqual:ring] || ![ring count])
-                continue;
-            
-            MKPolygon *newPolygon = [self polygonWithRingCoordinates:ring span:nil interiorRings:nil];
-            if (!newPolygon)
-                continue;
-            
-            [interiorRings addObject:newPolygon];
-        }
-    }
-    
-    // now build the big polygon, adding in the cutouts/holes
-    MKCoordinateSpan span;
-    MKPolygon *mainPolygon = [self polygonWithRingCoordinates:[rings objectAtIndex:0] span:&span interiorRings:interiorRings];
-    
-    if (interiorRings) {
-        [interiorRings release];
-        interiorRings = nil;
-    }
-    
-    if (mainPolygon) {
-        mainPolygon.title = self.name;
-        
-        if (regionRef) {
-            self.region = MKCoordinateRegionMake([self centroid], span);
-            *regionRef = self.region;
-        }
-    }
-    
-    // We're caching the polygon to memory...
-    self.districtPolygon = mainPolygon;
-    return mainPolygon;
-}
-
-#pragma mark -
-#pragma mark Base64
-
-/*
-- (void) setCoordinatesBase64:(NSString *)newCoords {
-	NSString *key = @"coordinatesBase64";
-	
-	self.coordinatesData = [NSData dataWithBase64EncodedString:newCoords];
-	
-	[self willChangeValueForKey:key];
-	[self setPrimitiveValue:nil forKey:key];
-	[self didChangeValueForKey:key];
-}
-*/
 
 @end

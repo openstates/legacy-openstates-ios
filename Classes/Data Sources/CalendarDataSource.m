@@ -31,18 +31,19 @@ enum EventTypes {
 
 - (id)init {
 	if ((self = [super init])) {
-        self.resourcePath = @"/events/";
         self.resourceClass = [SLFEvent class];
 	}
 	return self;
 }
 
 - (void)dealloc {
-    self.resourcePath = nil;
     self.stateID = nil;
 	[super dealloc];
 }
 
+- (NSString *)resourcePath {
+    return @"/events/";
+}
 - (void)setStateID:(NSString *)newID {
     [stateID release];
     stateID = [newID copy];
@@ -58,7 +59,7 @@ enum EventTypes {
        
     // One way or another, there's only one type of event right now.
     
-    TableCellDataObject *obj = [[TableCellDataObject alloc] init];
+    TableCellDataObject *obj = [[[TableCellDataObject alloc] init] autorelease];
     obj.indexPath = indexPath;
     
     if (!self.stateID) {   // should never happen
@@ -67,7 +68,7 @@ enum EventTypes {
         obj.title = NSLocalizedStringFromTable(@"No State is Selected", @"StandardUI", @"");
         obj.entryType = DirectoryTypeNone;
         obj.isClickable = NO;
-        return [obj autorelease];
+        return obj;
     }
     
     SLFState *state = [SLFState findFirstByAttribute:@"abbreviation" withValue:self.stateID];
@@ -85,7 +86,7 @@ enum EventTypes {
         obj.isClickable = YES;
     }
     
-	return [obj autorelease];
+	return obj;
 }
 
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject {

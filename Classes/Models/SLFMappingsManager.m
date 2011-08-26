@@ -15,49 +15,43 @@
 #import "UtilityMethods.h"
 
 @interface SLFMappingsManager()
-
-- (RKManagedObjectMapping *)mapStates;
-
-- (RKManagedObjectMapping *)mapBills;
-
-- (RKManagedObjectMapping *)mapDistricts;
-
-- (RKManagedObjectMapping *)mapEvents;
-
-- (RKManagedObjectMapping *)mapLegislators;
-
-- (RKManagedObjectMapping *)mapCommittees;
-
-- (RKManagedObjectMapping *)mapPositionsFromLegislatorsAndCommittees;
-
+- (RKManagedObjectMapping *)generateStateMapping;
+- (RKManagedObjectMapping *)generateDistrictMapping;
+- (RKManagedObjectMapping *)generateBillMapping;
+- (RKManagedObjectMapping *)generateEventMapping;
+- (RKManagedObjectMapping *)generateLegislatorMapping;
+- (RKManagedObjectMapping *)generateCommitteeMapping;
+- (RKManagedObjectMapping *)generatePositionMapping;
++ (SLFCommitteePosition *)findOrCreatePositionWithStateID:(NSString *)stateID
+                                            committeeName:(NSString *)comName
+                                              committeeID:(NSString *)comID
+                                           legislatorName:(NSString *)legName
+                                             legislatorID:(NSString *)legID
+                                                 roleType:(NSString *)roleType;
 
 @end
 
-
 @implementation SLFMappingsManager
+@synthesize stateMapping;
+@synthesize districtMapping;
+@synthesize billMapping;
+@synthesize eventMapping;
 @synthesize legislatorMapping;
 @synthesize committeeMapping;
 @synthesize positionMapping;
-@synthesize eventMapping;
-@synthesize billMapping;
-@synthesize districtMapping;
-@synthesize stateMapping;
 
 - (id)init {
     if ((self = [super init])) {
-        // Setup our object mappings    
-        
-        [self mapStates];
-        [self mapDistricts];
-        [self mapBills];
-        [self mapEvents];
-        [self mapLegislators];
-        [self mapCommittees];
-        [self mapPositionsFromLegislatorsAndCommittees];
+        [self generateStateMapping];
+        [self generateBillMapping];
+        [self generateEventMapping];
+        [self generateLegislatorMapping];
+        [self generateCommitteeMapping];
+        [self generatePositionMapping];
+        [self generateDistrictMapping];
     }
     return self;
 }
-
 
 - (void)dealloc {
     self.legislatorMapping = nil;
@@ -70,8 +64,7 @@
     [super dealloc];
 }
 
-
-- (RKManagedObjectMapping *)mapStates {
+- (RKManagedObjectMapping *)generateStateMapping {
     self.stateMapping = [RKManagedObjectMapping mappingForClass:[SLFState class]];
     [stateMapping.dateFormatStrings addObject:@"yyyy-MM-dd HH:mm:ss"];
     [stateMapping mapKeyPath:@"lower_chamber_name" toAttribute:@"lowerChamberName"];
@@ -86,38 +79,24 @@
     [stateMapping mapKeyPath:@"latest_update" toAttribute:@"dateUpdated"];
     [stateMapping mapAttributes:@"abbreviation", @"name", @"terms", @"level", nil];
     stateMapping.primaryKeyAttribute = @"abbreviation";
-
     return stateMapping;
 }
 
-
-
-
-
-
-- (RKManagedObjectMapping *)mapDistricts {
+- (RKManagedObjectMapping *)generateDistrictMapping {
     self.districtMapping = [RKManagedObjectMapping mappingForClass:[SLFDistrictMap class]];
     [districtMapping.dateFormatStrings addObject:@"yyyy-MM-dd HH:mm:ss"];
-    [districtMapping mapKeyPath:@"external_id" toAttribute:@"externalID"];
-    [districtMapping mapKeyPath:@"updated_at" toAttribute:@"dateUpdated"];
-    [districtMapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
-    [districtMapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
-    [districtMapping mapKeyPath:@"set" toAttribute:@"boundarySet"];
-    [districtMapping mapKeyPath:@"kind" toAttribute:@"boundaryKind"];
-    [districtMapping mapKeyPath:@"resource_uri" toAttribute:@"resourceURL"];
-    [districtMapping mapKeyPath:@"centroid.coordinates" toAttribute:@"centroidCoords"];
-    [districtMapping mapAttributes:@"slug", @"name", @"shape", nil];
-    districtMapping.primaryKeyAttribute = @"slug";
-
+    [districtMapping mapKeyPath:@"abbr" toAttribute:@"stateID"];
+    [districtMapping mapKeyPath:@"num_seats" toAttribute:@"numSeats"];
+    [districtMapping mapKeyPath:@"region" toAttribute:@"regionDictionary"];
+    [districtMapping mapKeyPath:@"boundary_id" toAttribute:@"boundaryID"];
+    [districtMapping mapAttributes:@"name", @"chamber", @"shape", nil];
+    districtMapping.primaryKeyAttribute = @"boundaryID";
+    districtMapping.setNilForMissingRelationships = NO; // some queries omit legislators array, don't clear our stored info.
+    [districtMapping hasMany:@"legislators" withMapping:self.legislatorMapping];
     return districtMapping;
 }
 
-
-
-
-
-
-- (RKManagedObjectMapping *)mapBills {
+- (RKManagedObjectMapping *)generateBillMapping {
     self.billMapping = [RKManagedObjectMapping mappingForClass:[SLFBill class]];
     [billMapping.dateFormatStrings addObject:@"yyyy-MM-dd HH:mm:ss"];
     [billMapping mapKeyPath:@"bill_id" toAttribute:@"billID"];
@@ -128,18 +107,10 @@
     [billMapping mapAttributes:@"session", @"subjects", @"votes", @"versions", 
                                      @"type", @"chamber", @"sponsors", @"actions",@"documents", @"title",  nil];
     billMapping.primaryKeyAttribute = @"billID";
-
     return billMapping;
 }
 
-
-
-
-
-
-
-
-- (RKManagedObjectMapping *)mapEvents {
+- (RKManagedObjectMapping *)generateEventMapping {
     self.eventMapping = [RKManagedObjectMapping mappingForClass:[SLFEvent class]];
     [eventMapping.dateFormatStrings addObject:@"yyyy-MM-dd HH:mm:ss"];
     [eventMapping mapKeyPath:@"id" toAttribute:@"eventID"];
@@ -153,14 +124,10 @@
     [eventMapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
     [eventMapping mapAttributes:@"session", @"participants", @"type", @"location",  nil];
     eventMapping.primaryKeyAttribute = @"eventID";
-
     return eventMapping;
 }
 
-
-
-
-- (RKManagedObjectMapping *)mapLegislators {
+- (RKManagedObjectMapping *)generateLegislatorMapping {
     self.legislatorMapping = [RKManagedObjectMapping mappingForClass:[SLFLegislator class]];
     [legislatorMapping.dateFormatStrings addObject:@"yyyy-MM-dd HH:mm:ss"];
     [legislatorMapping mapKeyPath:@"leg_id" toAttribute:@"legID"];
@@ -179,21 +146,11 @@
     [legislatorMapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
     [legislatorMapping mapAttributes:@"suffixes", @"party", @"level", @"district", @"country", @"chamber", @"active", nil];
     legislatorMapping.primaryKeyAttribute = @"legID";
-
-    /*RKObjectRelationshipMapping *stateRelation = [RKObjectRelationshipMapping mappingFromKeyPath:@"legislators" 
-                                                                                       toKeyPath:@"theState" 
-                                                                                     withMapping:legislatorMapping];
-    [self.stateMapping addRelationshipMapping:stateRelation];
-    
-    [legislatorMapping connectRelationship:@"theState" withObjectForPrimaryKeyAttribute:@"stateID"];
-    */
+#warning Can we directly map/hydrate relationships with stateIDs?
     return legislatorMapping;
 }
 
-
-
-
-- (RKManagedObjectMapping *)mapCommittees {
+- (RKManagedObjectMapping *)generateCommitteeMapping {
     self.committeeMapping = [RKManagedObjectMapping mappingForClass:[SLFCommittee class]];
     [committeeMapping.dateFormatStrings addObject:@"yyyy-MM-dd HH:mm:ss"]; 
     [committeeMapping mapKeyPath:@"id" toAttribute:@"committeeID"];
@@ -206,32 +163,17 @@
     [committeeMapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
     [committeeMapping mapAttributes:@"chamber", @"subcommittee", nil];
     committeeMapping.primaryKeyAttribute = @"committeeID";
-
     return committeeMapping;
 }
 
-
-
-
-- (RKManagedObjectMapping *)mapPositionsFromLegislatorsAndCommittees {
+- (RKManagedObjectMapping *)generatePositionMapping {
     self.positionMapping = [RKManagedObjectMapping mappingForClass:[SLFCommitteePosition class]];
     [positionMapping mapAttributes:@"posID", @"positionType",@"legID",@"legislatorName",@"committeeID",@"committeeName",nil];
-    positionMapping.primaryKeyAttribute = @"posID";//necessary????
-
-    RKObjectRelationshipMapping *comRelation = [RKObjectRelationshipMapping mappingFromKeyPath:@"members" 
-                                                                                     toKeyPath:@"positions" 
-                                                                                   withMapping:positionMapping];
-    [self.committeeMapping addRelationshipMapping:comRelation];
-
-    RKObjectRelationshipMapping *legRelation = [RKObjectRelationshipMapping mappingFromKeyPath:@"roles" 
-                                                                                     toKeyPath:@"positions" 
-                                                                                   withMapping:positionMapping];
-    [self.legislatorMapping addRelationshipMapping:legRelation];
-
+    positionMapping.primaryKeyAttribute = @"posID";
+    [self.committeeMapping addRelationshipMapping:[RKObjectRelationshipMapping mappingFromKeyPath:@"members" toKeyPath:@"positions" withMapping:positionMapping]];
+    [self.legislatorMapping addRelationshipMapping:[RKObjectRelationshipMapping mappingFromKeyPath:@"roles" toKeyPath:@"positions" withMapping:positionMapping]];
     return positionMapping;
 }
-
-
 
 - (RKObjectMappingProvider *)registerMappingsWithProvider:(RKObjectMappingProvider *)provider {
     [provider setMapping:stateMapping forKeyPath:@"state"];
@@ -244,64 +186,12 @@
     return provider;
 }
 
-
-
-
-+ (SLFCommitteePosition *)findOrCreatePositionWithStateID:(NSString *)stateID
-                                            committeeName:(NSString *)comName
-                                              committeeID:(NSString *)comID
-                                           legislatorName:(NSString *)legName
-                                             legislatorID:(NSString *)legID
-                                                 roleType:(NSString *)roleType
-{
-    // we use these to create a unique position object id 
-    if ( IsEmpty(comID) || IsEmpty(legID) ) {
-        return nil;
-    }
-    
-    //  This seems like a klunky way to generate a unique primary key ID, but the
-    //  aggregation of these three attributes *should* be unique across everything.
-    NSString *posID = [NSString stringWithFormat:@"%@|%@|%@", stateID, comID, legID];
-    NSString *predString = [NSString stringWithFormat:@"(posID LIKE[cd] '%@') OR (committeeID LIKE[cd] '%@' AND legID LIKE[cd] '%@')", posID, comID, legID];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:predString];
-    //SLFCommitteePosition *position = [SLFCommitteePosition objectWithPredicate:predicate];
-    SLFCommitteePosition *position = [SLFCommitteePosition findFirstWithPredicate:predicate];
-    
-    BOOL found = (position != NULL);
-    
-    RKLogTrace(@"-----------------------------");
-    
-    // we didn't find one already in core data, create one.
-    if (found) {
-        RKLogTrace(@"FOUND = %@", posID);
-    } else {
-        position = [SLFCommitteePosition object];
-        position.committeeID = comID;
-        position.legID = legID;
-    }
-
-    // It doesn't hurt to just update these properties we know about anyway, I guess.
-    position.posID = posID;
-    position.legislatorName = legName;
-    position.committeeName = comName;
-    position.positionType =	roleType;		
-    
-    if (!found) {
-        RKLogDebug(@"NOT FOUND: %@", position);
-        //RKLogTrace(@"Predicate = %@", predicate);
-    }
-    RKLogTrace(@"-----------------------------");
-    
-    return position;
-}
-
-
 + (inout id *)premapLegislator:(SLFLegislator *)legislator withMappableData:(inout id *)mappableData {
 
-    NSArray* origRolesArray = [*mappableData valueForKeyPath:@"roles"];	// array of dictionaries
-    NSString *legID = [*mappableData objectForKey:@"leg_id"];			// this legislator's id
-    NSString *legName = [*mappableData objectForKey:@"full_name"];		// ... etc.
-    NSString *stateID = [*mappableData objectForKey:@"state"];			// this state id
+    NSArray* origRolesArray = [*mappableData valueForKeyPath:@"roles"];
+    NSString *legID = [*mappableData objectForKey:@"leg_id"];
+    NSString *legName = [*mappableData objectForKey:@"full_name"];
+    NSString *stateID = [*mappableData objectForKey:@"state"];
     
     if (!legID)
         legID = legislator.legID;
@@ -320,7 +210,7 @@
         NSString *comID = [origRole objectForKey:@"committee_id"];
         NSString *comName = [origRole objectForKey:@"committee"];
         NSString *roleType = [origRole objectForKey:@"type"];
-
+        
         SLFCommitteePosition *pos = [SLFMappingsManager findOrCreatePositionWithStateID:stateID
                                                                           committeeName:comName
                                                                             committeeID:comID
@@ -335,8 +225,9 @@
 
     }
     
-    [*mappableData removeObjectForKey:@"roles"];		//remove the old roles array from the legislator
-    [*mappableData setObject:newRolesArray forKey:@"roles"];	// inject our modified roles array.
+    // remove old array, and inject our modified array.
+    [*mappableData removeObjectForKey:@"roles"];
+    [*mappableData setObject:newRolesArray forKey:@"roles"];	
     [newRolesArray release];
     
     return mappableData;
@@ -345,7 +236,7 @@
 
 + (inout id *)premapCommittee:(SLFCommittee *)committee withMappableData:(inout id *)mappableData {
     
-    NSArray* origRolesArray = [*mappableData valueForKeyPath:@"members"];	// array of dictionaries
+    NSArray* origRolesArray = [*mappableData valueForKeyPath:@"members"];
     NSString *comID = [*mappableData objectForKey:@"id"];   
     NSString *comName = [*mappableData objectForKey:@"committee"];
     NSString *stateID = [*mappableData objectForKey:@"state"];
@@ -381,69 +272,57 @@
         }        
     }
     
-    [*mappableData removeObjectForKey:@"members"];		//remove the old roles array from the legislator
-    [*mappableData setObject:newRolesArray forKey:@"members"];	// inject our modified roles array.
+    // remove old array, and inject our modified array.
+    [*mappableData removeObjectForKey:@"members"];
+    [*mappableData setObject:newRolesArray forKey:@"members"];
     [newRolesArray release];
     
     return mappableData;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-#if 0
-- (void)exampleMappings {
++ (SLFCommitteePosition *)findOrCreatePositionWithStateID:(NSString *)stateID
+                                            committeeName:(NSString *)comName
+                                              committeeID:(NSString *)comID
+                                           legislatorName:(NSString *)legName
+                                             legislatorID:(NSString *)legID
+                                                 roleType:(NSString *)roleType
+{
+    if ( IsEmpty(comID) || IsEmpty(legID) ) {
+        return nil;
+    }
     
-    /*!
-     Mapping by entity. Here we are configuring a mapping by targetting a Core Data entity with a specific
-     name. This allows us to map back Twitter user objects directly onto NSManagedObject instances --
-     there is no backing model class!
-     */
+    //  To generate a unique primary key ID, the aggregated value of these attributes must be unique across everything.
+    NSString *posID = [NSString stringWithFormat:@"%@|%@|%@", stateID, comID, legID];
+    NSString *predString = [NSString stringWithFormat:@"(posID LIKE[cd] '%@') OR (committeeID LIKE[cd] '%@' AND legID LIKE[cd] '%@')", posID, comID, legID];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:predString];
+    SLFCommitteePosition *position = [SLFCommitteePosition findFirstWithPredicate:predicate];
     
-     RKManagedObjectMapping* userMapping = [RKManagedObjectMapping mappingForEntityWithName:@"RKTUser"];
-     userMapping.primaryKeyAttribute = @"userID";
-     [userMapping mapKeyPath:@"id" toAttribute:@"userID"];
-     [userMapping mapKeyPath:@"screen_name" toAttribute:@"screenName"];
-     [userMapping mapAttributes:@"name", nil];
-     
+    BOOL foundExistingPosition = (position != NULL);
     
-    /*!
-     Map to a target object class -- just as you would for a non-persistent class. The entity is resolved
-     for you using the Active Record pattern where the class name corresponds to the entity name within Core Data.
-     Twitter status objects will be mapped onto RKTStatus instances.
-     */
-    RKManagedObjectMapping* statusMapping = [RKManagedObjectMapping mappingForClass:[RKTStatus class]];
-    statusMapping.primaryKeyAttribute = @"statusID";
-    [statusMapping mapKeyPathsToAttributes:@"id", @"statusID",
-     @"created_at", @"createdAt",
-     @"text", @"text",
-     @"url", @"urlString",
-     @"in_reply_to_screen_name", @"inReplyToScreenName",
-     @"favorited", @"isFavorited", 
-     nil];
-    [statusMapping mapRelationship:@"user" withObjectMapping:userMapping];
+    RKLogTrace(@"-----------------------------");
     
-    // Update date format so that we can parse Twitter dates properly
-    // Wed Sep 29 15:31:08 +0000 2010
-    [statusMapping.dateFormatStrings addObject:@"E MMM d HH:mm:ss Z y"];
-    //											 2011-07-17 02:31:42
-    [statusMapping.dateFormatStrings addObject:@"yyyy-MM-dd HH:mm:ss"];
+    if (foundExistingPosition) {
+        RKLogTrace(@"FOUND = %@", posID);
+    } else {
+        position = [SLFCommitteePosition object];
+        position.committeeID = comID;
+        position.legID = legID;
+    }
     
-    // Register our mappings with the provider
-    [objectManager.mappingProvider setObjectMapping:statusMapping forKeyPath:@"status"];
+    // Found or not, we can update these properties we know about anyway.
+    position.posID = posID;
+    position.legislatorName = legName;
+    position.committeeName = comName;
+    position.positionType =	roleType;		
     
+    if (!foundExistingPosition) {
+        RKLogDebug(@"NOT FOUND: %@", position);
+    }
+    RKLogTrace(@"-----------------------------");
     
+    return position;
 }
 
-#endif
+
 
 @end

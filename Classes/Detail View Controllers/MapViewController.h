@@ -24,13 +24,14 @@
 		SVGeocoderDelegate, UISplitViewControllerDelegate, UIActionSheetDelegate,
 		UIGestureRecognizerDelegate, DistrictMapSearchOperationDelegate, RKObjectLoaderDelegate> {
 }
-@property (nonatomic,copy)   NSString               * detailObjectID;
 @property (nonatomic,copy)   NSString               * resourcePath;
 @property (nonatomic,assign) Class                    resourceClass;
 
 - (void) setDistrictMap:(SLFDistrictMap *)newMap;
+- (void) setMapDetailObject:(id)detailObj;
 
 @property (nonatomic,retain) UIPopoverController *masterPopover;
+@property (nonatomic,assign) MKCoordinateRegion region;
 @property (nonatomic,retain) IBOutlet MKMapView *mapView;
 @property (nonatomic,retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic,retain) IBOutlet UISearchBar *searchBar;
@@ -41,7 +42,6 @@
 @property (nonatomic,retain) DistrictMapSearchOperation *geoLegeSearch;
 
 - (IBAction) showAllDistricts:(id)sender;
-//- (IBAction) showAllDistrictOffices:(id)sender;
 - (IBAction) changeMapType:(id)sender;
 - (IBAction) locateUser:(id)sender;
 - (void) clearAnnotationsAndOverlays;

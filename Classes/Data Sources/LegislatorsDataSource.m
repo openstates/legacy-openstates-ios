@@ -13,15 +13,16 @@
 #import "LegislatorsDataSource.h"
 #import "SLFLegislator.h"
 #import "LegislatorCell.h"
-
+#import "UtilityMethods.h"
 
 @implementation LegislatorsDataSource
 
 - (id)init {
-	if ((self = [super initWithResourcePath:@"/legislators/" 
-                                   objClass:[SLFLegislator class]
+	if ((self = [super initWithObjClass:[SLFLegislator class]
                                      sortBy:@"lastName"
                                     groupBy:@"lastnameInitial"])) {
+        
+        [self.queryParameters setObject:@"true" forKey:@"active"];
     }
 	return self;
 }
@@ -31,13 +32,19 @@
     [super dealloc];
 }
 
+- (NSString *)resourcePath {
+    return @"/legislators/";
+}
 
-- (NSDictionary *)queryParameters {
-    return [[NSDictionary alloc] initWithObjectsAndKeys:
-            self.stateID, @"state",
-            @"true", @"active",
-            SUNLIGHT_APIKEY, @"apikey",
-            nil];
+- (void)setStateID:(NSString *)newID {
+    [super setStateID:newID];
+    
+    if (!self.queryParameters)
+        return;
+    if (!IsEmpty(newID))
+        [self.queryParameters setObject:newID forKey:@"state"];
+    else
+        [self.queryParameters removeObjectForKey:@"state"];
 }
 
 

@@ -17,9 +17,6 @@
  
 @required
 
-    @property (nonatomic,copy)      NSString        *resourcePath;
-    @property (nonatomic,assign)    Class            resourceClass;
-    @property (nonatomic,copy)      NSString        *stateID;    
     @property (nonatomic,readonly)  BOOL             usesCoreData;
 
 - (id)dataObjectForIndexPath:(NSIndexPath*)indexPath;

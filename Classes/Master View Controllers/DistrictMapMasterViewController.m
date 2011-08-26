@@ -11,8 +11,7 @@
 //
 
 #import "DistrictMapMasterViewController.h"
-#import "LegislatorsDataSource.h"
-//#import "DistrictMapDataSource.h"
+#import "DistrictMapDataSource.h"
 #import "SLFDataModels.h"
 #import "LegislatorCell.h"
 
@@ -58,8 +57,7 @@
 }
 
 - (Class)dataSourceClass {
-	return [LegislatorsDataSource class];
-//	return [DistrictMapDataSource class];
+	return [DistrictMapDataSource class];
 }
 
 #pragma mark -
@@ -88,7 +86,7 @@
 	
 	self.tableView.rowHeight = 73.f;
     
-    LegislatorsDataSource *dsource = self.dataSource;
+    DistrictMapDataSource *dsource = (DistrictMapDataSource *)self.dataSource;
     [dsource loadData];
 	
 	if ([UtilityMethods isIPadDevice])
@@ -161,20 +159,18 @@
     BOOL isSplitViewDetail = ([UtilityMethods isIPadDevice]);
 
 	id dataObject = [self.dataSource dataObjectForIndexPath:newIndexPath];
-	if (!dataObject || NO == [dataObject isKindOfClass:[SLFLegislator class]]) {
+	if (!dataObject || NO == [dataObject isKindOfClass:[SLFDistrictMap class]]) {
 		return;
     }
-    SLFLegislator *legislator = dataObject;
 
     [[SLFPersistenceManager sharedPersistence] setTableSelection:nil forKey:NSStringFromClass([self class])];
-
-	//SLFDistrictMap *map = dataObject;
 
     MapViewController *mapVC = self.detailViewController;
 	if (mapVC == nil) {
 		mapVC = [[[MapViewController alloc] init] autorelease];
 	}
-	mapVC.detailObjectID = legislator.districtMapSlug;
+        
+    [mapVC setMapDetailObject:dataObject];
 
     if (!isSplitViewDetail) {
         // push the detail view controller onto the navigation stack to display it				
@@ -236,7 +232,7 @@
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString*)searchString searchScope:(NSInteger)searchOption {
     
     NSPredicate *predicate = nil;
-    LegislatorsDataSource *dsource = self.dataSource;
+    DistrictMapDataSource *dsource = (DistrictMapDataSource *)self.dataSource;
     
     NSMutableString *predicateString = [[NSMutableString alloc] init];
     
@@ -253,7 +249,7 @@
     
     // we have some search terms typed in
     if (!IsEmpty(searchString)) {
-        [predicateString appendFormat:@"(fullName CONTAINS[cd] '%@' OR district CONTAINS[cd] '%@')", searchString, searchString];
+        [predicateString appendFormat:@"(ANY legislators.fullName CONTAINS[cd] '%@' OR name CONTAINS[cd] '%@')", searchString, searchString];
         
         if (!IsEmpty(dsource.stateID)) {
             [predicateString appendString:@" AND "];

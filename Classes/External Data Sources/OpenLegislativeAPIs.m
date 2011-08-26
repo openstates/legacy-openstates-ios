@@ -36,6 +36,11 @@
 		transApiClient = [[RKClient clientWithBaseURL:transApiBaseURL] retain];
 		vsApiClient = [[RKClient clientWithBaseURL:vsApiBaseURL] retain];
 		tloApiClient = [[RKClient clientWithBaseURL:tloApiBaseURL] retain];
+        osApiClient.requestQueue.suspended = NO;
+        transApiClient.requestQueue.suspended = NO;
+        vsApiClient.requestQueue.suspended = NO;
+        tloApiClient.requestQueue.suspended = NO;
+        
 	}
 	return self;
 }

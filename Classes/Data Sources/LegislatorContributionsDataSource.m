@@ -8,7 +8,7 @@
 //  To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/
 //  or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
 //
-//
+// TODO: Consider moving this whole class to Core Data
 
 #import "LegislatorContributionsDataSource.h"
 #import "TexLegeTheme.h"
@@ -17,6 +17,7 @@
 #import "TexLegeTheme.h"
 #import "UtilityMethods.h"
 #import "JSONKit.h"
+
 
 @interface LegislatorContributionsDataSource(Private)
 - (void)parseJSONObject:(id)jsonDeserialized;

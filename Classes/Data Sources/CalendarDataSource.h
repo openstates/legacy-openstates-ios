@@ -9,4 +9,7 @@
 @interface CalendarDataSource : NSObject <TableDataSource> {
 }
 
+@property (nonatomic,readonly) NSString *resourcePath;
+@property (nonatomic,assign)   Class resourceClass;
+@property (nonatomic,copy)     NSString *stateID;
 @end

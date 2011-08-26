@@ -136,7 +136,7 @@
 			
 			SLFLegislator *legislator = [SLFLegislator findFirstByAttribute:@"legID" withValue:legID];
 			if (legislator) {
-				[foundIDs addObject:legislator.districtMap.slug];
+				[foundIDs addObject:[legislator districtMapSlug]];
 				success = YES;
 			}
 				

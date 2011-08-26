@@ -8,6 +8,7 @@
 
 #import "SLFRestKitManager.h"
 #import "SLFMappingsManager.h"
+#import "SLFObjectCache.h"
 #import "LocalyticsSession.h"
 #import "SLFAlertView.h"
 
@@ -29,13 +30,23 @@
     if (self) {
         // Initialize RestKit
         RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:OPENSTATES_BASE_URL];
+        objectManager.client.requestQueue.suspended = NO;
+
         self.boundaryManager = [RKObjectManager objectManagerWithBaseURL:BOUNDARY_SERVICE_URL];
+        self.boundaryManager.client.requestQueue.suspended = NO;
         
         // Enable automatic network activity indicator management
         [RKRequestQueue sharedQueue].showsNetworkActivityIndicatorWhenBusy = YES;
         
         // Initialize object store    
         RKManagedObjectStore *objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:APP_DB_NAME];
+       
+        /*
+        SLFObjectCache *cache = [[SLFObjectCache alloc] init];
+        objectStore.managedObjectCache = cache;
+        [cache release];
+         */
+        
         objectManager.objectStore = objectStore;
         self.boundaryManager.objectStore = objectStore;
         

@@ -8,15 +8,11 @@
 @class SLFState;
 
 
-
 @class NSArray;
 
 
 
-
-
 @class NSDictionary;
-
 
 
 @interface SLFDistrictMapID : NSManagedObjectID {}
@@ -31,26 +27,18 @@
 
 
 
-@property (nonatomic, retain) NSString *boundaryKind;
+@property (nonatomic, retain) NSString *boundaryID;
 
 
-//- (BOOL)validateBoundaryKind:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, retain) NSString *boundarySet;
-
-
-//- (BOOL)validateBoundarySet:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateBoundaryID:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) NSArray *centroidCoords;
+@property (nonatomic, retain) NSDictionary *regionDictionary;
 
 
-//- (BOOL)validateCentroidCoords:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateRegionDictionary:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -63,30 +51,6 @@
 
 
 
-@property (nonatomic, retain) NSNumber *districtNumber;
-
-
-@property short districtNumberValue;
-- (short)districtNumberValue;
-- (void)setDistrictNumberValue:(short)value_;
-
-//- (BOOL)validateDistrictNumber:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, retain) NSNumber *externalID;
-
-
-@property int externalIDValue;
-- (int)externalIDValue;
-- (void)setExternalIDValue:(int)value_;
-
-//- (BOOL)validateExternalID:(id*)value_ error:(NSError**)error_;
-
-
-
-
 @property (nonatomic, retain) NSString *name;
 
 
@@ -95,26 +59,22 @@
 
 
 
-@property (nonatomic, retain) NSString *resourceURL;
+@property (nonatomic, retain) NSNumber *numSeats;
 
 
-//- (BOOL)validateResourceURL:(id*)value_ error:(NSError**)error_;
+@property short numSeatsValue;
+- (short)numSeatsValue;
+- (void)setNumSeatsValue:(short)value_;
+
+//- (BOOL)validateNumSeats:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) NSDictionary *shape;
+@property (nonatomic, retain) NSArray *shape;
 
 
 //- (BOOL)validateShape:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, retain) NSString *slug;
-
-
-//- (BOOL)validateSlug:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -156,20 +116,14 @@
 @interface _SLFDistrictMap (CoreDataGeneratedPrimitiveAccessors)
 
 
-- (NSString*)primitiveBoundaryKind;
-- (void)setPrimitiveBoundaryKind:(NSString*)value;
+- (NSString*)primitiveBoundaryID;
+- (void)setPrimitiveBoundaryID:(NSString*)value;
 
 
 
 
-- (NSString*)primitiveBoundarySet;
-- (void)setPrimitiveBoundarySet:(NSString*)value;
-
-
-
-
-- (NSArray*)primitiveCentroidCoords;
-- (void)setPrimitiveCentroidCoords:(NSArray*)value;
+- (NSDictionary*)primitiveRegionDictionary;
+- (void)setPrimitiveRegionDictionary:(NSDictionary*)value;
 
 
 
@@ -180,44 +134,23 @@
 
 
 
-- (NSNumber*)primitiveDistrictNumber;
-- (void)setPrimitiveDistrictNumber:(NSNumber*)value;
-
-- (short)primitiveDistrictNumberValue;
-- (void)setPrimitiveDistrictNumberValue:(short)value_;
-
-
-
-
-- (NSNumber*)primitiveExternalID;
-- (void)setPrimitiveExternalID:(NSNumber*)value;
-
-- (int)primitiveExternalIDValue;
-- (void)setPrimitiveExternalIDValue:(int)value_;
-
-
-
-
 - (NSString*)primitiveName;
 - (void)setPrimitiveName:(NSString*)value;
 
 
 
 
-- (NSString*)primitiveResourceURL;
-- (void)setPrimitiveResourceURL:(NSString*)value;
+- (NSNumber*)primitiveNumSeats;
+- (void)setPrimitiveNumSeats:(NSNumber*)value;
+
+- (short)primitiveNumSeatsValue;
+- (void)setPrimitiveNumSeatsValue:(short)value_;
 
 
 
 
 - (NSDictionary*)primitiveShape;
 - (void)setPrimitiveShape:(NSDictionary*)value;
-
-
-
-
-- (NSString*)primitiveSlug;
-- (void)setPrimitiveSlug:(NSString*)value;
 
 
 

@@ -76,12 +76,6 @@
 	
 	if (!IsEmpty(keyPath)) {
 		if ([keyPath isEqualToString:@"openstatesConnectionStatus"]) {
-			
-			/*
-             if ([change valueForKey:NSKeyValueChangeKindKey] == NSKeyValueChangeSetting) {
-             id newVal = [change valueForKey:NSKeyValueChangeNewKey];
-             }*/
-			
 			if ([TexLegeReachability openstatesReachable])
                 [self loadData];
 			else if (self.loadingStatus != LOADING_NO_NET) {
@@ -161,18 +155,16 @@
         isLoading = YES;
 		self.loadingStatus = LOADING_ACTIVE;
         
-        // Load the object model via RestKit	
         RKObjectManager* objectManager = [RKObjectManager sharedManager];
         
-        RKObjectMapping* stateMapping = [objectManager.mappingProvider objectMappingForClass:self.resourceClass];
-        
-        
-        NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     SUNLIGHT_APIKEY, @"apikey",
-                                     nil];
+        NSDictionary *queryParams = [NSDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
         NSString *newPath = [self.resourcePath appendQueryParams:queryParams];
-        
-        [objectManager loadObjectsAtResourcePath:newPath objectMapping:stateMapping delegate:self];
+                
+        [objectManager loadObjectsAtResourcePath:newPath delegate:self block:^(RKObjectLoader* loader) {
+            loader.objectMapping = [objectManager.mappingProvider objectMappingForClass:self.resourceClass];
+            RKLogDebug(@"Loading URL: %@", loader.URL);
+            RKLogDebug(@"Loader queue suspension state: %d", loader.queue.suspended);
+        }];        
     }
     else if (self.loadingStatus != LOADING_NO_NET) {
 		self.loadingStatus = LOADING_NO_NET;

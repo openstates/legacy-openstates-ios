@@ -31,14 +31,8 @@ enum SECTIONS {
 
 @implementation LegislatorDetailDataSource
 
-- (id)initWithDetailObjectID:(NSString *)newID {
-    NSString *newPath = @"/legislators/";
-    if (newID) {
-        newPath = [newPath stringByAppendingFormat:@"%@/", newID];
-    }
-        
-    if ((self = [super initWithResourcePath:newPath
-                                   objClass:[SLFLegislator class]
+- (id)initWithDetailObjectID:(NSString *)newID {        
+    if ((self = [super initWithObjClass:[SLFLegislator class]
                                      sortBy:nil
                                     groupBy:nil])) {
         self.detailObjectID = newID;
@@ -51,18 +45,8 @@ enum SECTIONS {
     [super dealloc];
 }
 
-- (NSDictionary *)queryParameters {
-    return [[NSDictionary alloc] initWithObjectsAndKeys:
-            SUNLIGHT_APIKEY, @"apikey",
-            nil];
-}
-
-- (NSString *)buildResourcePathWithObjectID:(NSString *)newID {
-    NSString *newPath = @"/legislators/";
-    if (newID)
-        newPath = [newPath stringByAppendingFormat:@"%@/", newID];
-
-    return newPath;
+- (NSString *)resourcePath {
+    return @"/legislators/";
 }
 
 #pragma mark -
@@ -130,16 +114,14 @@ enum SECTIONS {
         case kDistrictMap:
         {
             SLFDistrictMap *map = legislator.hydratedDistrictMap;
-            NSString *mapID = nil;
             
             if (map)
-                mapID = map.slug;
+                obj.entryValue = map;
             else
-                mapID = legislator.districtMapSlug;
+                obj.entryValue = legislator.districtMapSlug;
             
             obj.subtitle    = NSLocalizedStringFromTable(@"Map", @"DataTableUI", @"Title for cell");
             obj.title       = NSLocalizedStringFromTable(@"District Map", @"DataTableUI", @"Title for cell");
-            obj.entryValue  = mapID;
             obj.isClickable = YES;
             obj.entryType   = DirectoryTypeMap;            
         }
@@ -323,10 +305,8 @@ enum SECTIONS {
     
 	NSString *cellIdentifier = [NSString stringWithFormat:@"%@-%d", stdCellID, cellInfo.isClickable];
 	
-	/* Look up cell in the table queue */
 	TexLegeStandardGroupCell *cell = (TexLegeStandardGroupCell *)[aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	
-	/* Not found in queue, create a new cell object */
     if (cell == nil) {
 		cell = [[[TexLegeStandardGroupCell alloc] initWithStyle:[TexLegeStandardGroupCell cellStyle] reuseIdentifier:cellIdentifier] autorelease];
     }

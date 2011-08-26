@@ -17,8 +17,6 @@
 #import "JSONKit.h"
 
 @implementation LinksDataSource
-@synthesize resourcePath;
-@synthesize resourceClass;
 @synthesize items = _items;
 
 enum Sections {
@@ -53,7 +51,6 @@ enum Sections {
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	self.resourcePath = nil;
 	self.items = nil;
     [super dealloc];
 }

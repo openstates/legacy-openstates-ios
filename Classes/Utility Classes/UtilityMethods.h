@@ -72,6 +72,7 @@ void RunBlockAfterDelay(NSTimeInterval delay, void (^block)(void));
 - (BOOL) hasSubstring:(NSString*)substring caseInsensitive:(BOOL)insensitive;
 - (NSString*)firstLetterCapitalized;
 - (NSString *)chopPrefix:(NSString *)prefix capitalizingFirst:(BOOL)capitalize;
+- (BOOL)isNumerical;
 @end
 
 @interface NSArray (indexKeyedDictionaryExtension)

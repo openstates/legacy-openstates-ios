@@ -131,6 +131,13 @@ void RunBlockAfterDelay(NSTimeInterval delay, void (^block)(void))
 	return strVal;
 }
 
+- (BOOL)isNumerical {
+    NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init]; 
+    NSNumber * number = [formatter numberFromString:self]; 
+    [formatter release];
+    return (number != nil);
+}
+
 @end
 
 @implementation NSArray (Find)
