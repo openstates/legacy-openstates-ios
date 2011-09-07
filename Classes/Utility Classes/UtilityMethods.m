@@ -15,13 +15,6 @@
 #import "TTTOrdinalNumberFormatter.h"
 #import "SLFAlertView.h"
 
-BOOL IsEmpty(NSObject * thing) {
-    return thing == nil
-	|| ([[NSNull null] isEqual:thing])
-	|| ([thing respondsToSelector:@selector(length)] && [(NSData *)thing length] == 0)
-	|| ([thing respondsToSelector:@selector(count)] && [(NSArray *)thing count] == 0);
-}
-
 void RunBlockAfterDelay(NSTimeInterval delay, void (^block)(void))
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*delay),
