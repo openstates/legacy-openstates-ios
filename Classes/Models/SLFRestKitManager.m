@@ -11,9 +11,10 @@
 #import "SLFObjectCache.h"
 #import "LocalyticsSession.h"
 #import "SLFAlertView.h"
+#import "SLFDataModels.h"
+#import "StateMetaLoader.h"
 
 @implementation SLFRestKitManager
-@synthesize boundaryManager;
 
 + (id)sharedRestKit
 {
@@ -32,9 +33,6 @@
         RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:OPENSTATES_BASE_URL];
         objectManager.client.requestQueue.suspended = NO;
 
-        self.boundaryManager = [RKObjectManager objectManagerWithBaseURL:BOUNDARY_SERVICE_URL];
-        self.boundaryManager.client.requestQueue.suspended = NO;
-        
         // Enable automatic network activity indicator management
         [RKRequestQueue sharedQueue].showsNetworkActivityIndicatorWhenBusy = YES;
         
@@ -47,21 +45,22 @@
         [cache release];
          */
         
-        objectManager.objectStore = objectStore;
-        self.boundaryManager.objectStore = objectStore;
-        
+        objectManager.objectStore = objectStore;        
         [RKObjectManager setSharedManager:objectManager];
         
         SLFMappingsManager *mapper = [[SLFMappingsManager alloc] init];
         [mapper registerMappingsWithProvider:objectManager.mappingProvider];
-        [mapper registerMappingsWithProvider:self.boundaryManager.mappingProvider];
         [mapper release];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(stateChanged:) name:kStateMetaNotifyStateLoaded object:nil];
+
     }
     return self;
 }
 
 - (void)dealloc {
-    self.boundaryManager = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
 
@@ -83,6 +82,63 @@
         NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
         [[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
     }
+}
+
+- (void)loadObjectsAtResourcePath:(NSString *)resourcePath withClass:(Class)resourceClass {
+    RKLogDebug(@"Loading data at path: %@", resourcePath);
+    RKObjectManager* objectManager = [RKObjectManager sharedManager];
+    RKObjectMapping* objMapping = [objectManager.mappingProvider objectMappingForClass:resourceClass];
+    [objectManager loadObjectsAtResourcePath:resourcePath objectMapping:objMapping delegate:self];
+}
+
+- (void)preloadObjectsForStateID:(NSString *)stateID {
+    if (!stateID)
+        return;
+    
+    NSString *rootPath = @"/legislators/";
+    NSMutableDictionary *queryParameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                            @"true", @"active",
+                                            SUNLIGHT_APIKEY, @"apikey",
+                                            stateID, @"state",
+                                            nil];
+    NSString *resourcePath = [rootPath appendQueryParams:queryParameters];
+    [self loadObjectsAtResourcePath:resourcePath withClass:[SLFLegislator class]];
+    
+    rootPath = @"/committees/";
+    [queryParameters removeObjectForKey:@"active"];
+    resourcePath = [rootPath appendQueryParams:queryParameters];
+    [self loadObjectsAtResourcePath:resourcePath withClass:[SLFCommittee class]];
+    
+    rootPath = @"/districts/";
+    [queryParameters removeObjectForKey:@"state"];
+    resourcePath = [[rootPath stringByAppendingFormat:@"%@/", stateID] appendQueryParams:queryParameters];
+    [self loadObjectsAtResourcePath:resourcePath withClass:[SLFDistrictMap class]];
+    
+    rootPath = @"/metadata/";
+    resourcePath = [[rootPath stringByAppendingFormat:@"%@/", stateID] appendQueryParams:queryParameters];
+    [self loadObjectsAtResourcePath:resourcePath withClass:[SLFState class]];
+    
+    [queryParameters release];
+}
+
+- (void)stateChanged:(NSNotification *)notification {
+    SLFState *state = [[StateMetaLoader sharedStateMeta] selectedState];
+    if (!state)
+        return;
+    [self preloadObjectsForStateID:state.abbreviation];
+}
+
+#pragma mark -
+#pragma mark RKObjectLoaderDelegate methods
+
+- (void)objectLoaderDidFinishLoading:(RKObjectLoader*)objectLoader {
+        //[[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataUpdated object:self];
+    RKLogDebug(@"Object Loader Finished: %@", objectLoader.resourcePath);
+}
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
+    [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"TABLE_DATA_ERROR" object:self];
 }
 
 #pragma mark -

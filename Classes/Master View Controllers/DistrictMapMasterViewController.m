@@ -236,9 +236,11 @@
     
     NSMutableString *predicateString = [[NSMutableString alloc] init];
     
-    
+    searchOption = MAX(searchOption, BOTH_CHAMBERS);
+    searchOption = MIN(searchOption, SENATE);
+   
     // A chamber/scope has been selected
-    if (searchOption > 0) {
+    if (searchOption > BOTH_CHAMBERS) {
         NSString *searchScope = stringForChamber(searchOption, TLReturnOpenStates);
         [predicateString appendFormat:@"(chamber LIKE[cd] '%@')", searchScope];
         
@@ -249,7 +251,7 @@
     
     // we have some search terms typed in
     if (!IsEmpty(searchString)) {
-        [predicateString appendFormat:@"(ANY legislators.fullName CONTAINS[cd] '%@' OR name CONTAINS[cd] '%@')", searchString, searchString];
+        [predicateString appendFormat:@"(legislators.fullName CONTAINS[cd] '%@' OR name CONTAINS[cd] '%@')", searchString, searchString];
         
         if (!IsEmpty(dsource.stateID)) {
             [predicateString appendString:@" AND "];
@@ -267,13 +269,11 @@
         predicate = [NSPredicate predicateWithFormat:predicateString];
     }
     [predicateString release];
-    
-    
-    NSFetchedResultsController *frc = dsource.fetchedResultsController;
-    
-    if (frc.cacheName) {
-        [NSFetchedResultsController deleteCacheWithName:frc.cacheName];
-    }
+        
+    dsource.fetchedResultsController = nil;
+    NSFetchedResultsController *frc = [dsource fetchedResultsController];
+        //NSFetchedResultsController *frc = dsource.fetchedResultsController;    
+        //[NSFetchedResultsController deleteCacheWithName:frc.cacheName];
     
     [frc.fetchRequest setPredicate:predicate];
     
@@ -295,13 +295,11 @@
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
-    NSInteger searchOption = controller.searchBar.selectedScopeButtonIndex;
-    return [self searchDisplayController:controller shouldReloadTableForSearchString:searchString searchScope:searchOption];
+    return [self searchDisplayController:controller shouldReloadTableForSearchString:searchString searchScope:self.chamberControl.selectedSegmentIndex];
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
-    NSString* searchString = controller.searchBar.text;
-    return [self searchDisplayController:controller shouldReloadTableForSearchString:searchString searchScope:searchOption];
+    return [self searchDisplayController:controller shouldReloadTableForSearchString:controller.searchBar.text searchScope:searchOption];
 }
 
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
@@ -317,21 +315,12 @@
 	self.dataSource.hideTableIndex = NO;
 }
 
-- (IBAction) filterChamber:(id)sender {
-    if (!self.chamberControl)
-        return;
-    
-    NSInteger searchScope = self.chamberControl.selectedSegmentIndex;
-    searchScope = MAX(searchScope, BOTH_CHAMBERS);
-    searchScope = MIN(searchScope, SENATE);
-    
+- (IBAction) filterChamber:(id)sender {    
     NSString *searchText = self.searchDisplayController.searchBar.text;
     if (IsEmpty(searchText))
         searchText = @"";
     
-    [self searchDisplayController:self.searchDisplayController 
- shouldReloadTableForSearchString:searchText
-                      searchScope:searchScope];
+    [self searchDisplayController:self.searchDisplayController shouldReloadTableForSearchString:searchText];
     
     NSDictionary *segPrefs = [[NSUserDefaults standardUserDefaults] objectForKey:kSegmentControlPrefKey];
     if (segPrefs) {

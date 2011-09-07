@@ -75,15 +75,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(stateChanged:) name:kStateMetaNotifyStateLoaded object:nil];
-    
+        //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stateChanged:) name:kStateMetaNotifyStateLoaded object:nil];
+        
     self.headerView.backgroundColor = [self.headerView.backgroundColor colorWithAlphaComponent:0.5f];
     
 	self.clearsSelectionOnViewWillAppear = NO;			
 	
     self.tableView.dataSource = [self createOrReturnDataSourceForID:nil];
-    
 }
 
 - (void)viewDidUnload {
@@ -186,9 +184,9 @@
 
 
 - (void)tableDataChanged:(id)sender {
+	[self.tableView reloadData];	
     [self setupHeader];
     [self redisplayVisibleCells:nil];	
-	[self.tableView reloadData];	
 }
 
 - (void)stateChanged:(NSNotification *)notification {

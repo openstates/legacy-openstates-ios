@@ -218,6 +218,7 @@
                                                                            legislatorID:legID
                                                                                roleType:roleType];
         if (pos) {
+                //pos.legislator = legislator;
             [newRolesArray addObject:pos];
         } else {
             RKLogDebug(@"Unable to create or find committee position with role: %@", origRole);
@@ -266,6 +267,7 @@
                                                                            legislatorID:legID
                                                                                roleType:roleType];
         if (pos) {
+                //pos.committee = committee;
             [newRolesArray addObject:pos];
         } else {
             RKLogDebug(@"Unable to create or find committee position with role: %@", origRole);
@@ -314,6 +316,18 @@
     position.legislatorName = legName;
     position.committeeName = comName;
     position.positionType =	roleType;		
+    
+    if (!position.legislator) {
+        SLFLegislator *legislator = [SLFLegislator findFirstByAttribute:@"legID" withValue:legID];
+        if (legislator)
+            position.legislator = legislator;
+    }
+
+    if (!position.committee) {
+        SLFCommittee *committee = [SLFCommittee findFirstByAttribute:@"committeeID" withValue:comID];
+        if (committee)
+            position.committee = committee;
+    }
     
     if (!foundExistingPosition) {
         RKLogDebug(@"NOT FOUND: %@", position);

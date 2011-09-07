@@ -13,9 +13,7 @@
 #import <RestKit/RestKit.h>
 #import <RestKit/CoreData/CoreData.h>
 
-@interface SLFRestKitManager : NSObject {}
-
-@property (nonatomic,retain) RKObjectManager *boundaryManager;
+@interface SLFRestKitManager : NSObject <RKObjectLoaderDelegate> {}
 
 + (id)sharedRestKit;
 + (void) showFailureAlertWithRequest:(RKRequest *)request error:(NSError *)error;
