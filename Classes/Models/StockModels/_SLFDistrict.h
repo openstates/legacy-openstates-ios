@@ -15,14 +15,14 @@
 @class NSDictionary;
 
 
-@interface SLFDistrictMapID : NSManagedObjectID {}
+@interface SLFDistrictID : NSManagedObjectID {}
 @end
 
-@interface _SLFDistrictMap : NSManagedObject {}
+@interface _SLFDistrict : NSManagedObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
-- (SLFDistrictMapID*)objectID;
+- (SLFDistrictID*)objectID;
 
 
 
@@ -104,7 +104,7 @@
 
 @end
 
-@interface _SLFDistrictMap (CoreDataGeneratedAccessors)
+@interface _SLFDistrict (CoreDataGeneratedAccessors)
 
 - (void)addLegislators:(NSSet*)value_;
 - (void)removeLegislators:(NSSet*)value_;
@@ -113,7 +113,7 @@
 
 @end
 
-@interface _SLFDistrictMap (CoreDataGeneratedPrimitiveAccessors)
+@interface _SLFDistrict (CoreDataGeneratedPrimitiveAccessors)
 
 
 - (NSString*)primitiveBoundaryID;

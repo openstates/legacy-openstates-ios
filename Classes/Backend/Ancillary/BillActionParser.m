@@ -70,7 +70,7 @@ STAGE7:Bill becomes law / Bill does not become law
 	
 	NSString *origChamberStr = [bill objectForKey:@"chamber"];
 	NSInteger origChamber = chamberIntFromOpenStates(origChamberStr);
-	NSInteger oppChamber = (origChamber == HOUSE) ? SENATE : HOUSE;
+	NSInteger oppChamber = (origChamber == CHAMBER_LOWER) ? CHAMBER_UPPER : CHAMBER_LOWER;
 	
 	BillType billType = -1;
 	
@@ -178,7 +178,7 @@ STAGE7:Bill becomes law / Bill does not become law
 	
 	// What chamber first introduced the bill?
 	NSInteger origChamber = chamberIntFromOpenStates([bill objectForKey:@"chamber"]);
-	NSInteger oppChamber = (origChamber == HOUSE) ? SENATE : HOUSE;
+	NSInteger oppChamber = (origChamber == CHAMBER_LOWER) ? CHAMBER_UPPER : CHAMBER_LOWER;
 	
 	NSMutableDictionary *results = [self prepStagesForBill:bill];
 	
@@ -323,7 +323,7 @@ STAGE7:Bill becomes law / Bill does not become law
 				}
 				
 			//STAGE6: Sent to Governor / Secretary of State
-			if (stage.stageNumber == 6 && actChamber == EXECUTIVE) {
+			if (stage.stageNumber == 6 && actChamber == CHAMBER_EXEC) {
 				
 				if ([types containsObject:@"governor:received"]) {
 						
@@ -358,7 +358,7 @@ STAGE7:Bill becomes law / Bill does not become law
 			}
 			
 			//STAGE7: Bill Becomes Law / Doesn't
-			if (stage.stageNumber == 7 && actChamber == EXECUTIVE) {
+			if (stage.stageNumber == 7 && actChamber == CHAMBER_EXEC) {
 				
 				if (texasCentricParser && 
 					[actionStr isEqualToString:@"Filed with the Secretary of State"]){

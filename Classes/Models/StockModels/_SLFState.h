@@ -6,7 +6,7 @@
 
 @class SLFBill;
 @class SLFCommittee;
-@class SLFDistrictMap;
+@class SLFDistrict;
 @class SLFEvent;
 @class SLFLegislator;
 
@@ -37,10 +37,10 @@
 
 
 
-@property (nonatomic, retain) NSString *abbreviation;
+@property (nonatomic, retain) NSString *stateID;
 
 
-//- (BOOL)validateAbbreviation:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateStateID:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -172,9 +172,9 @@
 
 
 
-@property (nonatomic, retain) NSSet* districtMaps;
+@property (nonatomic, retain) NSSet* districts;
 
-- (NSMutableSet*)districtMapsSet;
+- (NSMutableSet*)districtsSet;
 
 
 
@@ -207,10 +207,10 @@
 - (void)addCommitteesObject:(SLFCommittee*)value_;
 - (void)removeCommitteesObject:(SLFCommittee*)value_;
 
-- (void)addDistrictMaps:(NSSet*)value_;
-- (void)removeDistrictMaps:(NSSet*)value_;
-- (void)addDistrictMapsObject:(SLFDistrictMap*)value_;
-- (void)removeDistrictMapsObject:(SLFDistrictMap*)value_;
+- (void)addDistricts:(NSSet*)value_;
+- (void)removeDistricts:(NSSet*)value_;
+- (void)addDistrictsObject:(SLFDistrict*)value_;
+- (void)removeDistrictsObject:(SLFDistrict*)value_;
 
 - (void)addEvents:(NSSet*)value_;
 - (void)removeEvents:(NSSet*)value_;
@@ -227,8 +227,8 @@
 @interface _SLFState (CoreDataGeneratedPrimitiveAccessors)
 
 
-- (NSString*)primitiveAbbreviation;
-- (void)setPrimitiveAbbreviation:(NSString*)value;
+- (NSString*)primitiveStateID;
+- (void)setPrimitiveStateID:(NSString*)value;
 
 
 

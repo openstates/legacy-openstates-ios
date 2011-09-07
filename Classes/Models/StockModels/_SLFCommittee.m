@@ -117,7 +117,7 @@
 }
 	
 
-@dynamic state;
+@dynamic stateObj;
 
 	
 

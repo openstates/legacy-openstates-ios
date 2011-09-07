@@ -15,9 +15,8 @@
 
 @interface SLFDetailDataSource : SLFDataSource
 
-- (id)initWithDetailObjectID:(NSString *)newID;
-- (NSString *)buildResourcePathWithObjectID:(NSString *)newID;
+- (id)initWithDetailObject:(id)newObject;
+- (NSString *)interpolatedResourcePath;
 
-@property (nonatomic,copy)      NSString        *detailObjectID;
 @property (nonatomic,retain)    id               detailObject;
 @end

@@ -14,14 +14,12 @@
 #import <RestKit/CoreData/CoreData.h>
 
 @interface SLFRestKitManager : NSObject <RKObjectLoaderDelegate> {}
-
-+ (id)sharedRestKit;
++ (SLFRestKitManager *)sharedRestKit;
 + (void) showFailureAlertWithRequest:(RKRequest *)request error:(NSError *)error;
-
+- (void)loadObjectsAtResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate;
+- (void)preloadObjectsForState:(SLFState *)state;
 - (NSArray *)registeredDataModels;
 - (void) resetSavedDatabase:(id)sender;
-    
-
 @end
 
 

@@ -2,6 +2,7 @@
 #import <RestKit/CoreData/CoreData.h>
 #import "_SLFEvent.h"
 
+@class SLFState;
 @interface SLFEvent : _SLFEvent {}
-// Custom logic goes here.
+@property (nonatomic,readonly) SLFState *state;
 @end

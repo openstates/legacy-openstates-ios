@@ -11,28 +11,24 @@
 //
 
 #import <RestKit/RestKit.h>
+#import <RestKit/CoreData/CoreData.h>
 #import "TableDataSourceProtocol.h"
 
-@interface SLFDataSource : NSObject <TableDataSource, RKObjectLoaderDelegate>
+@interface SLFDataSource : NSObject <TableDataSource, NSFetchedResultsControllerDelegate, RKObjectLoaderDelegate>
 
 - (void)loadData;
 - (void)loadDataWithResourcePath:(NSString *)newPath;
 
 - (id)initWithObjClass:(Class)newClass 
-                    sortBy:(NSString *)newSort
                    groupBy:(NSString *)newGroup;
 
 
 @property (nonatomic, retain)   NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, copy)     NSString        *stateID;    
-@property (nonatomic, copy)     NSString        *sortBy;    
 @property (nonatomic, copy)     NSString        *groupBy;  
 @property (nonatomic, assign)   BOOL             loading;  
-
 @property (nonatomic,readonly)  NSString        *resourcePath;
 @property (nonatomic,assign)    Class            resourceClass;
 @property (nonatomic,retain)    NSMutableDictionary *queryParameters;
 
-// override and return a property that must not be null in order to loadData
-@property (nonatomic, readonly) NSString        *primaryKeyProperty;
 @end

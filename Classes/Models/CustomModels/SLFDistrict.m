@@ -1,30 +1,20 @@
 #import "SLFDataModels.h"
-#import "TexLegeMapPins.h"
-#import "NSData_Base64Extensions.h"
-#import "UtilityMethods.h"
 
-@interface SLFDistrictMap()
+@interface SLFDistrict()
 - (MKPolygon *)polygonRingWithCoordinates:(NSArray *)ringCoords interiorRings:(NSArray *)interiorRings;
 @end
 
-@implementation SLFDistrictMap
+@implementation SLFDistrict
 @synthesize districtPolygon;
 @synthesize region;
 
-#pragma mark -
-#pragma mark Manual Relationship Mapping
-
-- (void)setStateID:(NSString *)newID {
-    [self willChangeValueForKey:@"stateID"];
-    [self setPrimitiveStateID:newID];
-    [self didChangeValueForKey:@"stateID"];
-    if (!newID)
-        return;
-    
-    SLFState *tempState = [SLFState findFirstByAttribute:@"abbreviation" withValue:newID];
-    self.state = tempState;
+- (NSNumber *)districtNumber {
+    return [NSNumber numberWithInt:[self.name integerValue]];
 }
 
+- (SLFChamber *)chamberObj {
+    return [SLFChamber chamberWithType:self.chamber forState:self.state];
+}
 
 #pragma mark -
 #pragma mark MKAnnotation Protocol
@@ -37,35 +27,32 @@
     CLLocationDegrees latDelta = [[self.regionDictionary objectForKey:@"lat_delta"] doubleValue];
     CLLocationDegrees lonDelta = [[self.regionDictionary objectForKey:@"lon_delta"] doubleValue];
     MKCoordinateSpan distanceToCenter = MKCoordinateSpanMake(latDelta,lonDelta);
-
     CLLocationDegrees latitude = [[self.regionDictionary objectForKey:@"center_lat"] doubleValue];
     CLLocationDegrees longitude = [[self.regionDictionary objectForKey:@"center_lon"] doubleValue];
     CLLocationCoordinate2D center = CLLocationCoordinate2DMake(latitude, longitude);
-    
     if (NO == CLLocationCoordinate2DIsValid(center)) {
         RKLogDebug(@"Invalid Centroid: lat=%lf lon=%lf", latitude, longitude);
     }
-
     RKLogDebug(@"Region = {lat=%lf, lon=%lf} {latD=%lf, lonD=%lf}", latitude, longitude, latDelta, lonDelta);
-    
     return MKCoordinateRegionMake(center, distanceToCenter);
 }
 
 - (NSString *)title {
     return [NSString stringWithFormat:@"%@ %@ %@ %@", 
             self.state.name, 
-            chamberStringFromOpenStates(self.chamber),
+            self.chamberObj.shortName,
             abbreviateString(@"District"),
             self.name];
 }
 
 - (NSString *)subtitle {
     NSMutableString * memberNames = [NSMutableString string];
+    NSString *chamberName = self.chamberObj.shortName;
     
     NSInteger index = 0;
     for (SLFLegislator *leg in self.legislators) {
         NSString *legName = [NSString stringWithFormat:@"%@ %@ (%@)", 
-                             [leg chamberShortName], 
+                             chamberName, 
                              leg.fullName, 
                              [leg partyShortName]];        
         
@@ -105,7 +92,6 @@
     }
     
     NSArray *rings = [self shape];
-    
     if(IsEmpty(rings)) {
         RKLogError(@"District %@ shape is empty or has no rings.", self.boundaryID);
         return nil;
@@ -144,16 +130,13 @@
     
     if (!tempPolygon)
         return nil;
-    
     tempPolygon.title = self.name;        
-    
     self.districtPolygon = tempPolygon;
     return tempPolygon;
 }
 
 
 - (MKPolygon *)polygonRingWithCoordinates:(NSArray *)ringCoords interiorRings:(NSArray *)interiorRings {    
-
     NSUInteger numberOfCoordinates = [ringCoords count];
     RKLogDebug(@"number of coordinates: %d", numberOfCoordinates);
     if (numberOfCoordinates == 0)
@@ -165,7 +148,7 @@
     for (NSArray *coords in ringCoords) {
         NSNumber *lon = [coords objectAtIndex:0];
         NSNumber *lat = [coords objectAtIndex:1];
-        if (!IsEmpty(lat) && !IsEmpty(lon)) {
+        if (lat && lon) {
             CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([lat doubleValue], [lon doubleValue]);
             if (CLLocationCoordinate2DIsValid(coord)) {
                 cArray[index++] = coord;
@@ -186,6 +169,5 @@
     
     return outRing;
 }
-
 
 @end

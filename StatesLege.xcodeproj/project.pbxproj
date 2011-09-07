@@ -27,9 +27,6 @@
 		370A804913D6BE3000390ADC /* GCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 370A804713D6BE3000390ADC /* GCTableViewController.m */; };
 		370B9DD0122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 370B9DCF122AD22C00AC9CC8 /* TexLegeStandardGroupCell.m */; };
 		370C270C1225BF7E004273E3 /* DistrictMapDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */; };
-		370EAC371337E3CF007788BC /* SLFObjectCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 370EAC361337E3CF007788BC /* SLFObjectCache.m */; };
-		370EAD311338029E007788BC /* OpenLegislativeAPIs.m in Sources */ = {isa = PBXBuildFile; fileRef = 370EAD301338029E007788BC /* OpenLegislativeAPIs.m */; };
-		370EAD321338029E007788BC /* OpenLegislativeAPIs.m in Sources */ = {isa = PBXBuildFile; fileRef = 370EAD301338029E007788BC /* OpenLegislativeAPIs.m */; };
 		370F7AA911FEAF730004AC50 /* PolygonMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 370F7AA811FEAF730004AC50 /* PolygonMath.m */; };
 		3712AF2D13DFC41C0073E35A /* 190-bank-inv.png in Resources */ = {isa = PBXBuildFile; fileRef = 37A58AA5139DF6A2003DE299 /* 190-bank-inv.png */; };
 		3712AF2E13DFC4200073E35A /* 190-bank-inv@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37A58AA6139DF6A2003DE299 /* 190-bank-inv@2x.png */; };
@@ -57,15 +54,12 @@
 		371D54491365F60E00A61BD4 /* NSData_Base64Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 371D54421365F60E00A61BD4 /* NSData_Base64Extensions.m */; };
 		371D544A1365F60E00A61BD4 /* NSData_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 371D54441365F60E00A61BD4 /* NSData_Extensions.m */; };
 		371E96F6131211E50035439E /* BillsDetailViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37B2C206130BCF9800140212 /* BillsDetailViewController~ipad.xib */; };
-		371FB1D81333B43C0003740A /* CalendarEventsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 371FB1D71333B43C0003740A /* CalendarEventsLoader.m */; };
-		371FB1D91333B43C0003740A /* CalendarEventsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 371FB1D71333B43C0003740A /* CalendarEventsLoader.m */; };
 		37242D3612415CC4005C43D3 /* LegislatorContributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37242D3512415CC4005C43D3 /* LegislatorContributionsViewController.m */; };
 		3726FC3F120A99800043D6B9 /* 01-refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3726FC34120A99800043D6B9 /* 01-refresh@2x.png */; };
 		3729EC2910077F83000AD804 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3729EC2810077F83000AD804 /* CoreData.framework */; };
 		372C280F13B06C7500836162 /* iPadTabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 372C280E13B06C7500836162 /* iPadTabBarController.xib */; };
 		372D061C12FC799200E63696 /* Kal.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 372D061812FC799200E63696 /* Kal.bundle */; };
 		372D066712FC901C00E63696 /* TexLegeLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 372D066612FC901C00E63696 /* TexLegeLibrary.m */; };
-		372FAB5A12147B2000AEF237 /* ChamberCalendarObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 372FAB5912147B2000AEF237 /* ChamberCalendarObj.m */; };
 		372FDB23139F1CFB00D39374 /* LegislatorDetailViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3739DBE4123355EF00D4F7D2 /* LegislatorDetailViewController~iphone.xib */; };
 		372FDB24139F1CFB00D39374 /* LegislatorDetailViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3739DBE4123355EF00D4F7D2 /* LegislatorDetailViewController~iphone.xib */; };
 		3730B43311DD4B4D00BA10D0 /* Icon_512.png in Resources */ = {isa = PBXBuildFile; fileRef = 3730B43211DD4B4D00BA10D0 /* Icon_512.png */; };
@@ -85,6 +79,56 @@
 		37413B1712114D09003CA7E8 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37413B1612114D09003CA7E8 /* MessageUI.framework */; };
 		3742D6EF122E18D100698483 /* DistrictMapSearchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3742D6EE122E18D100698483 /* DistrictMapSearchOperation.m */; };
 		3742D723122E1FDF00698483 /* NSInvocation+CWVariableArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 3742D722122E1FDF00698483 /* NSInvocation+CWVariableArguments.m */; };
+		3746090B1418123C00C1AE45 /* APIKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746090A1418123C00C1AE45 /* APIKeys.m */; };
+		3746090C1418123C00C1AE45 /* APIKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746090A1418123C00C1AE45 /* APIKeys.m */; };
+		374609231418125800C1AE45 /* BillActionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609101418125800C1AE45 /* BillActionParser.m */; };
+		374609241418125800C1AE45 /* BillActionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609101418125800C1AE45 /* BillActionParser.m */; };
+		374609251418125800C1AE45 /* CalendarEventsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609121418125800C1AE45 /* CalendarEventsLoader.m */; };
+		374609261418125800C1AE45 /* CalendarEventsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609121418125800C1AE45 /* CalendarEventsLoader.m */; };
+		374609271418125800C1AE45 /* OpenLegislativeAPIs.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609141418125800C1AE45 /* OpenLegislativeAPIs.m */; };
+		374609281418125800C1AE45 /* OpenLegislativeAPIs.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609141418125800C1AE45 /* OpenLegislativeAPIs.m */; };
+		374609291418125800C1AE45 /* StateMetaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609161418125800C1AE45 /* StateMetaLoader.m */; };
+		3746092A1418125800C1AE45 /* StateMetaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609161418125800C1AE45 /* StateMetaLoader.m */; };
+		3746092B1418125800C1AE45 /* StatesListMetaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609181418125800C1AE45 /* StatesListMetaLoader.m */; };
+		3746092C1418125800C1AE45 /* StatesListMetaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609181418125800C1AE45 /* StatesListMetaLoader.m */; };
+		3746092D1418125800C1AE45 /* SLFDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746091A1418125800C1AE45 /* SLFDataSource.m */; };
+		3746092E1418125800C1AE45 /* SLFDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746091A1418125800C1AE45 /* SLFDataSource.m */; };
+		3746092F1418125800C1AE45 /* SLFDetailDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746091C1418125800C1AE45 /* SLFDetailDataSource.m */; };
+		374609301418125800C1AE45 /* SLFDetailDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746091C1418125800C1AE45 /* SLFDetailDataSource.m */; };
+		374609311418125800C1AE45 /* SLFMappingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746091E1418125800C1AE45 /* SLFMappingsManager.m */; };
+		374609321418125800C1AE45 /* SLFMappingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746091E1418125800C1AE45 /* SLFMappingsManager.m */; };
+		374609331418125800C1AE45 /* SLFObjectCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609201418125800C1AE45 /* SLFObjectCache.m */; };
+		374609341418125800C1AE45 /* SLFObjectCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609201418125800C1AE45 /* SLFObjectCache.m */; };
+		374609351418125800C1AE45 /* SLFRestKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609221418125800C1AE45 /* SLFRestKitManager.m */; };
+		374609361418125800C1AE45 /* SLFRestKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609221418125800C1AE45 /* SLFRestKitManager.m */; };
+		3746094C1418126200C1AE45 /* CommitteeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609391418126200C1AE45 /* CommitteeDetailViewController.m */; };
+		3746094D1418126200C1AE45 /* CommitteeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609391418126200C1AE45 /* CommitteeDetailViewController.m */; };
+		3746094E1418126200C1AE45 /* CommitteesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746093B1418126200C1AE45 /* CommitteesViewController.m */; };
+		3746094F1418126200C1AE45 /* CommitteesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746093B1418126200C1AE45 /* CommitteesViewController.m */; };
+		374609501418126200C1AE45 /* DistrictDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746093D1418126200C1AE45 /* DistrictDetailViewController.m */; };
+		374609511418126200C1AE45 /* DistrictDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746093D1418126200C1AE45 /* DistrictDetailViewController.m */; };
+		374609521418126200C1AE45 /* DistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746093F1418126200C1AE45 /* DistrictsViewController.m */; };
+		374609531418126200C1AE45 /* DistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746093F1418126200C1AE45 /* DistrictsViewController.m */; };
+		374609541418126200C1AE45 /* EventDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609411418126200C1AE45 /* EventDetailViewController.m */; };
+		374609551418126200C1AE45 /* EventDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609411418126200C1AE45 /* EventDetailViewController.m */; };
+		374609561418126200C1AE45 /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609431418126200C1AE45 /* EventsViewController.m */; };
+		374609571418126200C1AE45 /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609431418126200C1AE45 /* EventsViewController.m */; };
+		374609581418126200C1AE45 /* LegislatorDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609451418126200C1AE45 /* LegislatorDetailViewController.m */; };
+		374609591418126200C1AE45 /* LegislatorDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609451418126200C1AE45 /* LegislatorDetailViewController.m */; };
+		3746095A1418126200C1AE45 /* LegislatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609471418126200C1AE45 /* LegislatorsViewController.m */; };
+		3746095B1418126200C1AE45 /* LegislatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609471418126200C1AE45 /* LegislatorsViewController.m */; };
+		3746095C1418126200C1AE45 /* StateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609491418126200C1AE45 /* StateDetailViewController.m */; };
+		3746095D1418126200C1AE45 /* StateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609491418126200C1AE45 /* StateDetailViewController.m */; };
+		3746095E1418126200C1AE45 /* StatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746094B1418126200C1AE45 /* StatesViewController.m */; };
+		3746095F1418126200C1AE45 /* StatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746094B1418126200C1AE45 /* StatesViewController.m */; };
+		374609621418128A00C1AE45 /* ChamberCalendarObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609611418128A00C1AE45 /* ChamberCalendarObj.m */; };
+		374609631418128A00C1AE45 /* ChamberCalendarObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 374609611418128A00C1AE45 /* ChamberCalendarObj.m */; };
+		37460966141812AF00C1AE45 /* SLFChamber.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460965141812AF00C1AE45 /* SLFChamber.m */; };
+		37460967141812AF00C1AE45 /* SLFChamber.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460965141812AF00C1AE45 /* SLFChamber.m */; };
+		3746096A141812B800C1AE45 /* SLFDistrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460969141812B800C1AE45 /* SLFDistrict.m */; };
+		3746096B141812B800C1AE45 /* SLFDistrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460969141812B800C1AE45 /* SLFDistrict.m */; };
+		3746096E141812E500C1AE45 /* _SLFDistrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746096D141812E500C1AE45 /* _SLFDistrict.m */; };
+		3746096F141812E500C1AE45 /* _SLFDistrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746096D141812E500C1AE45 /* _SLFDistrict.m */; };
 		3747BFA811E6890600A6D8C6 /* seal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3747BFA611E6890600A6D8C6 /* seal@2x.png */; };
 		3747BFA911E6890600A6D8C6 /* seal.png in Resources */ = {isa = PBXBuildFile; fileRef = 3747BFA711E6890600A6D8C6 /* seal.png */; };
 		374C36BA1215E55F006B6ADA /* CalendarMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374C36B91215E55F006B6ADA /* CalendarMasterViewController.m */; };
@@ -92,35 +136,27 @@
 		374D2E9F13E7E33300630B97 /* SLFBill.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E7F13E7E33300630B97 /* SLFBill.m */; };
 		374D2EA013E7E33300630B97 /* SLFCommittee.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E8113E7E33300630B97 /* SLFCommittee.m */; };
 		374D2EA113E7E33300630B97 /* SLFCommitteePosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E8313E7E33300630B97 /* SLFCommitteePosition.m */; };
-		374D2EA213E7E33300630B97 /* SLFDistrictMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E8513E7E33300630B97 /* SLFDistrictMap.m */; };
 		374D2EA313E7E33300630B97 /* SLFEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E8713E7E33300630B97 /* SLFEvent.m */; };
 		374D2EA413E7E33300630B97 /* SLFLegislator.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E8913E7E33300630B97 /* SLFLegislator.m */; };
 		374D2EA513E7E33300630B97 /* SLFState.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E8B13E7E33300630B97 /* SLFState.m */; };
-		374D2EA713E7E33300630B97 /* SLFMappingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E8F13E7E33300630B97 /* SLFMappingsManager.m */; };
 		374D2EA813E7E33300630B97 /* _SLFBill.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9213E7E33300630B97 /* _SLFBill.m */; };
 		374D2EA913E7E33300630B97 /* _SLFCommittee.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9413E7E33300630B97 /* _SLFCommittee.m */; };
 		374D2EAA13E7E33300630B97 /* _SLFCommitteePosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9613E7E33300630B97 /* _SLFCommitteePosition.m */; };
-		374D2EAB13E7E33300630B97 /* _SLFDistrictMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9813E7E33300630B97 /* _SLFDistrictMap.m */; };
 		374D2EAC13E7E33300630B97 /* _SLFEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9A13E7E33300630B97 /* _SLFEvent.m */; };
 		374D2EAD13E7E33300630B97 /* _SLFLegislator.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9C13E7E33300630B97 /* _SLFLegislator.m */; };
 		374D2EAE13E7E33300630B97 /* _SLFState.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9E13E7E33300630B97 /* _SLFState.m */; };
 		374D2EAF13E7E33300630B97 /* SLFBill.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E7F13E7E33300630B97 /* SLFBill.m */; };
 		374D2EB013E7E33300630B97 /* SLFCommittee.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E8113E7E33300630B97 /* SLFCommittee.m */; };
 		374D2EB113E7E33300630B97 /* SLFCommitteePosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E8313E7E33300630B97 /* SLFCommitteePosition.m */; };
-		374D2EB213E7E33300630B97 /* SLFDistrictMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E8513E7E33300630B97 /* SLFDistrictMap.m */; };
 		374D2EB313E7E33300630B97 /* SLFEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E8713E7E33300630B97 /* SLFEvent.m */; };
 		374D2EB413E7E33300630B97 /* SLFLegislator.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E8913E7E33300630B97 /* SLFLegislator.m */; };
 		374D2EB513E7E33300630B97 /* SLFState.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E8B13E7E33300630B97 /* SLFState.m */; };
-		374D2EB713E7E33300630B97 /* SLFMappingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E8F13E7E33300630B97 /* SLFMappingsManager.m */; };
 		374D2EB813E7E33300630B97 /* _SLFBill.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9213E7E33300630B97 /* _SLFBill.m */; };
 		374D2EB913E7E33300630B97 /* _SLFCommittee.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9413E7E33300630B97 /* _SLFCommittee.m */; };
 		374D2EBA13E7E33300630B97 /* _SLFCommitteePosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9613E7E33300630B97 /* _SLFCommitteePosition.m */; };
-		374D2EBB13E7E33300630B97 /* _SLFDistrictMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9813E7E33300630B97 /* _SLFDistrictMap.m */; };
 		374D2EBC13E7E33300630B97 /* _SLFEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9A13E7E33300630B97 /* _SLFEvent.m */; };
 		374D2EBD13E7E33300630B97 /* _SLFLegislator.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9C13E7E33300630B97 /* _SLFLegislator.m */; };
 		374D2EBE13E7E33300630B97 /* _SLFState.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D2E9E13E7E33300630B97 /* _SLFState.m */; };
-		374DF8B813EB2D5C00B0856B /* SLFDetailDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 374DF8B713EB2D5C00B0856B /* SLFDetailDataSource.m */; };
-		374DF8B913EB2D5C00B0856B /* SLFDetailDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 374DF8B713EB2D5C00B0856B /* SLFDetailDataSource.m */; };
 		374DF8C613EB307B00B0856B /* LegislatorDetailDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 374DF8C513EB307B00B0856B /* LegislatorDetailDataSource.m */; };
 		374DF8C713EB307B00B0856B /* LegislatorDetailDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 374DF8C513EB307B00B0856B /* LegislatorDetailDataSource.m */; };
 		374E2A6B12360C6E0005E245 /* TexLegeMapPins.m in Sources */ = {isa = PBXBuildFile; fileRef = 374E2A6A12360C6E0005E245 /* TexLegeMapPins.m */; };
@@ -516,14 +552,11 @@
 		376DFEB713492FF800360BF4 /* LoadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 376DFEB513492FF700360BF4 /* LoadingCell.m */; };
 		376F62D1132972E200F2B3DA /* BillsCategoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376F62D0132972E200F2B3DA /* BillsCategoriesViewController.m */; };
 		376F632D13298DE000F2B3DA /* BillsCategoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376F62D0132972E200F2B3DA /* BillsCategoriesViewController.m */; };
-		376FD44813EA3D6C00DE76E4 /* SLFDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 376FD44713EA3D6C00DE76E4 /* SLFDataSource.m */; };
-		376FD44913EA3D6C00DE76E4 /* SLFDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 376FD44713EA3D6C00DE76E4 /* SLFDataSource.m */; };
 		377074DB1397B2B400E82CA8 /* SVGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 377074D51397B2B400E82CA8 /* SVGeocoder.m */; };
 		377074DC1397B2B400E82CA8 /* SVPlacemark.m in Sources */ = {isa = PBXBuildFile; fileRef = 377074D71397B2B400E82CA8 /* SVPlacemark.m */; };
 		377074E01397B2B400E82CA8 /* SVGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 377074D51397B2B400E82CA8 /* SVGeocoder.m */; };
 		377074E11397B2B400E82CA8 /* SVPlacemark.m in Sources */ = {isa = PBXBuildFile; fileRef = 377074D71397B2B400E82CA8 /* SVPlacemark.m */; };
 		377075431397E4C300E82CA8 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 377075421397E4C300E82CA8 /* AddressBook.framework */; };
-		3770C66813A49BE800906021 /* BillActionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3770C66713A49BE800906021 /* BillActionParser.m */; };
 		3770F57513182BF500686DE3 /* BillsFavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3770F57413182BF500686DE3 /* BillsFavoritesViewController.m */; };
 		377359781323104A0033F343 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D30AB170D05D02000671497 /* Icon.png */; };
 		377359791323104A0033F343 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 376B59F50FC1BDCF0094D80B /* Default.png */; };
@@ -982,7 +1015,6 @@
 		37735B751323104A0033F343 /* CommitteeMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3735DFFC120917490000AF5A /* CommitteeMasterViewController.m */; };
 		37735B761323104A0033F343 /* TexLegeTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 3735E1CD1209B09F0000AF5A /* TexLegeTheme.m */; };
 		37735B781323104A0033F343 /* LegislatorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B64233120FE9FF0076B196 /* LegislatorCell.m */; };
-		37735B7A1323104A0033F343 /* ChamberCalendarObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 372FAB5912147B2000AEF237 /* ChamberCalendarObj.m */; };
 		37735B7B1323104A0033F343 /* CalendarMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374C36B91215E55F006B6ADA /* CalendarMasterViewController.m */; };
 		37735B7D1323104A0033F343 /* LinksMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374C37041215EB2D006B6ADA /* LinksMasterViewController.m */; };
 		37735B7E1323104A0033F343 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 378B57A91219913400F7ED0B /* MapViewController.m */; };
@@ -1075,8 +1107,6 @@
 		377ACE4811FFA30E002C7E49 /* CalendarDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 377ACE4711FFA30E002C7E49 /* CalendarDataSource.m */; };
 		377DC4A91344D475000068E1 /* BillVotesDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 377DC4A81344D475000068E1 /* BillVotesDataSource.m */; };
 		377DC4AA1344D475000068E1 /* BillVotesDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 377DC4A81344D475000068E1 /* BillVotesDataSource.m */; };
-		3787269E13D6360700D030CC /* StatesListMetaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3787269D13D6360700D030CC /* StatesListMetaLoader.m */; };
-		3787269F13D6360700D030CC /* StatesListMetaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3787269D13D6360700D030CC /* StatesListMetaLoader.m */; };
 		3789F8EA13CD79FD0069DB1C /* LinkObj.json in Resources */ = {isa = PBXBuildFile; fileRef = 37735C28132310E90033F343 /* LinkObj.json */; };
 		378ABD31139F0BCA00928FBF /* AppAlerts.strings in Resources */ = {isa = PBXBuildFile; fileRef = 378ABD29139F0BCA00928FBF /* AppAlerts.strings */; };
 		378ABD32139F0BCA00928FBF /* AppAlerts.strings in Resources */ = {isa = PBXBuildFile; fileRef = 378ABD29139F0BCA00928FBF /* AppAlerts.strings */; };
@@ -1131,8 +1161,6 @@
 		37C945DC1237DDC000D2D582 /* PinHeadBlue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37C945DA1237DDC000D2D582 /* PinHeadBlue@2x.png */; };
 		37C94A2712387ABA00D2D582 /* DistrictMapMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C94A2612387ABA00D2D582 /* DistrictMapMasterViewController.m */; };
 		37C94A3A12387D6500D2D582 /* DistrictMapMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37C94A3912387D6500D2D582 /* DistrictMapMasterViewController.xib */; };
-		37CD09B113A2A6F100F4C68B /* StateMetaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD09B013A2A6F100F4C68B /* StateMetaLoader.m */; };
-		37CD09B213A2A6F100F4C68B /* StateMetaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD09B013A2A6F100F4C68B /* StateMetaLoader.m */; };
 		37CD0A6B13A340E100F4C68B /* NSString+DKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD0A6A13A340E100F4C68B /* NSString+DKAdditions.m */; };
 		37CD0A9313A3567900F4C68B /* Abbreviations.strings in Resources */ = {isa = PBXBuildFile; fileRef = 37CD0A9113A3567900F4C68B /* Abbreviations.strings */; };
 		37CD0A9413A3567900F4C68B /* Abbreviations.strings in Resources */ = {isa = PBXBuildFile; fileRef = 37CD0A9113A3567900F4C68B /* Abbreviations.strings */; };
@@ -1177,7 +1205,6 @@
 		37E36CFC139E69F800917F40 /* 138-scales@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37E36CF8139E69F800917F40 /* 138-scales@2x.png */; };
 		37E36D03139E6D0A00917F40 /* VTPGAdvancedLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E36D02139E6D0A00917F40 /* VTPGAdvancedLog.m */; };
 		37E36D04139E6D0A00917F40 /* VTPGAdvancedLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E36D02139E6D0A00917F40 /* VTPGAdvancedLog.m */; };
-		37E4327413D08D8800E9320E /* BillActionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3770C66713A49BE800906021 /* BillActionParser.m */; };
 		37E4339A13D0A66C00E9320E /* AnalyticsOptInAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E4339513D0A66C00E9320E /* AnalyticsOptInAlertController.m */; };
 		37E4339B13D0A66C00E9320E /* SLFAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E4339713D0A66C00E9320E /* SLFAlertView.m */; };
 		37E4339C13D0A66C00E9320E /* SLFEmailComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E4339913D0A66C00E9320E /* SLFEmailComposer.m */; };
@@ -1229,8 +1256,6 @@
 		37FC6E6113E8580C00C982FF /* libRestKitObjectMapping.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37FC6E0813E8579500C982FF /* libRestKitObjectMapping.a */; };
 		37FC6E6213E8580D00C982FF /* libRestKitSupport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37FC6E0A13E8579500C982FF /* libRestKitSupport.a */; };
 		37FC6E6313E8581600C982FF /* libKal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E6A9701362909A0095D9AE /* libKal.a */; };
-		37FC6F3813E872A600C982FF /* SLFRestKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC6F3713E872A600C982FF /* SLFRestKitManager.m */; };
-		37FC6F3913E872A600C982FF /* SLFRestKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC6F3713E872A600C982FF /* SLFRestKitManager.m */; };
 		37FE1CA713CB677100655550 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1C7513CB677100655550 /* JSONKit.m */; };
 		37FE1CDD13CB75FD00655550 /* LocalyticsSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1CD913CB75FD00655550 /* LocalyticsSession.m */; };
 		37FE1CDE13CB75FD00655550 /* UploaderThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FE1CDB13CB75FD00655550 /* UploaderThread.m */; };
@@ -1387,10 +1412,6 @@
 		370B9DDB122AD91600AC9CC8 /* SLFTableCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFTableCellProtocol.h; sourceTree = "<group>"; };
 		370C270A1225BF7E004273E3 /* DistrictMapDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictMapDataSource.h; sourceTree = "<group>"; };
 		370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictMapDataSource.m; sourceTree = "<group>"; };
-		370EAC351337E3CF007788BC /* SLFObjectCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFObjectCache.h; sourceTree = "<group>"; };
-		370EAC361337E3CF007788BC /* SLFObjectCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFObjectCache.m; sourceTree = "<group>"; };
-		370EAD2D1338028C007788BC /* OpenLegislativeAPIs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenLegislativeAPIs.h; sourceTree = "<group>"; };
-		370EAD301338029E007788BC /* OpenLegislativeAPIs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenLegislativeAPIs.m; sourceTree = "<group>"; };
 		370F7AA711FEAF730004AC50 /* PolygonMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PolygonMath.h; path = Classes/MapKit/PolygonMath.h; sourceTree = SOURCE_ROOT; };
 		370F7AA811FEAF730004AC50 /* PolygonMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PolygonMath.m; path = Classes/MapKit/PolygonMath.m; sourceTree = SOURCE_ROOT; };
 		3712B06513DFDAEB0073E35A /* LinksMasterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = LinksMasterViewController.xib; path = Resources/LinksMasterViewController.xib; sourceTree = "<group>"; };
@@ -1410,8 +1431,6 @@
 		371D54421365F60E00A61BD4 /* NSData_Base64Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSData_Base64Extensions.m; sourceTree = "<group>"; };
 		371D54431365F60E00A61BD4 /* NSData_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSData_Extensions.h; sourceTree = "<group>"; };
 		371D54441365F60E00A61BD4 /* NSData_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSData_Extensions.m; sourceTree = "<group>"; };
-		371FB1D61333B43C0003740A /* CalendarEventsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarEventsLoader.h; sourceTree = "<group>"; };
-		371FB1D71333B43C0003740A /* CalendarEventsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarEventsLoader.m; sourceTree = "<group>"; };
 		37242D3412415CC4005C43D3 /* LegislatorContributionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorContributionsViewController.h; sourceTree = "<group>"; };
 		37242D3512415CC4005C43D3 /* LegislatorContributionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorContributionsViewController.m; sourceTree = "<group>"; };
 		3726FC34120A99800043D6B9 /* 01-refresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "01-refresh@2x.png"; sourceTree = "<group>"; };
@@ -1433,8 +1452,6 @@
 		372D061912FC799200E63696 /* Kal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Kal.xcodeproj; path = src/Kal.xcodeproj; sourceTree = "<group>"; };
 		372D066512FC901C00E63696 /* TexLegeLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeLibrary.h; sourceTree = "<group>"; };
 		372D066612FC901C00E63696 /* TexLegeLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TexLegeLibrary.m; sourceTree = "<group>"; };
-		372FAB5812147B2000AEF237 /* ChamberCalendarObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChamberCalendarObj.h; sourceTree = "<group>"; };
-		372FAB5912147B2000AEF237 /* ChamberCalendarObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChamberCalendarObj.m; sourceTree = "<group>"; };
 		3730B43211DD4B4D00BA10D0 /* Icon_512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon_512.png; sourceTree = "<group>"; };
 		37328C5213D6B4050089E39F /* StateMetaReadyList.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = StateMetaReadyList.json; sourceTree = "<group>"; };
 		3732A0F711DB203F009E8957 /* iPhoneTabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = iPhoneTabBarController.xib; path = Resources/iPhoneTabBarController.xib; sourceTree = "<group>"; };
@@ -1460,6 +1477,56 @@
 		3742D6EE122E18D100698483 /* DistrictMapSearchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictMapSearchOperation.m; sourceTree = "<group>"; };
 		3742D721122E1FDF00698483 /* NSInvocation+CWVariableArguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSInvocation+CWVariableArguments.h"; path = "Classes/Utility Classes/NSInvocation+CWVariableArguments.h"; sourceTree = SOURCE_ROOT; };
 		3742D722122E1FDF00698483 /* NSInvocation+CWVariableArguments.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSInvocation+CWVariableArguments.m"; path = "Classes/Utility Classes/NSInvocation+CWVariableArguments.m"; sourceTree = SOURCE_ROOT; };
+		374609091418123C00C1AE45 /* APIKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIKeys.h; sourceTree = SOURCE_ROOT; };
+		3746090A1418123C00C1AE45 /* APIKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIKeys.m; sourceTree = SOURCE_ROOT; };
+		3746090F1418125800C1AE45 /* BillActionParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillActionParser.h; sourceTree = "<group>"; };
+		374609101418125800C1AE45 /* BillActionParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillActionParser.m; sourceTree = "<group>"; };
+		374609111418125800C1AE45 /* CalendarEventsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarEventsLoader.h; sourceTree = "<group>"; };
+		374609121418125800C1AE45 /* CalendarEventsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarEventsLoader.m; sourceTree = "<group>"; };
+		374609131418125800C1AE45 /* OpenLegislativeAPIs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenLegislativeAPIs.h; sourceTree = "<group>"; };
+		374609141418125800C1AE45 /* OpenLegislativeAPIs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenLegislativeAPIs.m; sourceTree = "<group>"; };
+		374609151418125800C1AE45 /* StateMetaLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateMetaLoader.h; sourceTree = "<group>"; };
+		374609161418125800C1AE45 /* StateMetaLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StateMetaLoader.m; sourceTree = "<group>"; };
+		374609171418125800C1AE45 /* StatesListMetaLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesListMetaLoader.h; sourceTree = "<group>"; };
+		374609181418125800C1AE45 /* StatesListMetaLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatesListMetaLoader.m; sourceTree = "<group>"; };
+		374609191418125800C1AE45 /* SLFDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFDataSource.h; sourceTree = "<group>"; };
+		3746091A1418125800C1AE45 /* SLFDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFDataSource.m; sourceTree = "<group>"; };
+		3746091B1418125800C1AE45 /* SLFDetailDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFDetailDataSource.h; sourceTree = "<group>"; };
+		3746091C1418125800C1AE45 /* SLFDetailDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFDetailDataSource.m; sourceTree = "<group>"; };
+		3746091D1418125800C1AE45 /* SLFMappingsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFMappingsManager.h; sourceTree = "<group>"; };
+		3746091E1418125800C1AE45 /* SLFMappingsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFMappingsManager.m; sourceTree = "<group>"; };
+		3746091F1418125800C1AE45 /* SLFObjectCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFObjectCache.h; sourceTree = "<group>"; };
+		374609201418125800C1AE45 /* SLFObjectCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFObjectCache.m; sourceTree = "<group>"; };
+		374609211418125800C1AE45 /* SLFRestKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFRestKitManager.h; sourceTree = "<group>"; };
+		374609221418125800C1AE45 /* SLFRestKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFRestKitManager.m; sourceTree = "<group>"; };
+		374609381418126200C1AE45 /* CommitteeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeDetailViewController.h; sourceTree = "<group>"; };
+		374609391418126200C1AE45 /* CommitteeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteeDetailViewController.m; sourceTree = "<group>"; };
+		3746093A1418126200C1AE45 /* CommitteesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteesViewController.h; sourceTree = "<group>"; };
+		3746093B1418126200C1AE45 /* CommitteesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteesViewController.m; sourceTree = "<group>"; };
+		3746093C1418126200C1AE45 /* DistrictDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictDetailViewController.h; sourceTree = "<group>"; };
+		3746093D1418126200C1AE45 /* DistrictDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictDetailViewController.m; sourceTree = "<group>"; };
+		3746093E1418126200C1AE45 /* DistrictsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictsViewController.h; sourceTree = "<group>"; };
+		3746093F1418126200C1AE45 /* DistrictsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictsViewController.m; sourceTree = "<group>"; };
+		374609401418126200C1AE45 /* EventDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDetailViewController.h; sourceTree = "<group>"; };
+		374609411418126200C1AE45 /* EventDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventDetailViewController.m; sourceTree = "<group>"; };
+		374609421418126200C1AE45 /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
+		374609431418126200C1AE45 /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsViewController.m; sourceTree = "<group>"; };
+		374609441418126200C1AE45 /* LegislatorDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorDetailViewController.h; sourceTree = "<group>"; };
+		374609451418126200C1AE45 /* LegislatorDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorDetailViewController.m; sourceTree = "<group>"; };
+		374609461418126200C1AE45 /* LegislatorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorsViewController.h; sourceTree = "<group>"; };
+		374609471418126200C1AE45 /* LegislatorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorsViewController.m; sourceTree = "<group>"; };
+		374609481418126200C1AE45 /* StateDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateDetailViewController.h; sourceTree = "<group>"; };
+		374609491418126200C1AE45 /* StateDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StateDetailViewController.m; sourceTree = "<group>"; };
+		3746094A1418126200C1AE45 /* StatesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesViewController.h; sourceTree = "<group>"; };
+		3746094B1418126200C1AE45 /* StatesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatesViewController.m; sourceTree = "<group>"; };
+		374609601418128A00C1AE45 /* ChamberCalendarObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChamberCalendarObj.h; sourceTree = "<group>"; };
+		374609611418128A00C1AE45 /* ChamberCalendarObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChamberCalendarObj.m; sourceTree = "<group>"; };
+		37460964141812AF00C1AE45 /* SLFChamber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFChamber.h; sourceTree = "<group>"; };
+		37460965141812AF00C1AE45 /* SLFChamber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFChamber.m; sourceTree = "<group>"; };
+		37460968141812B800C1AE45 /* SLFDistrict.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFDistrict.h; sourceTree = "<group>"; };
+		37460969141812B800C1AE45 /* SLFDistrict.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFDistrict.m; sourceTree = "<group>"; };
+		3746096C141812E500C1AE45 /* _SLFDistrict.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SLFDistrict.h; sourceTree = "<group>"; };
+		3746096D141812E500C1AE45 /* _SLFDistrict.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFDistrict.m; sourceTree = "<group>"; };
 		3747BFA611E6890600A6D8C6 /* seal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "seal@2x.png"; path = "../seal@2x.png"; sourceTree = "<group>"; };
 		3747BFA711E6890600A6D8C6 /* seal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = seal.png; path = ../seal.png; sourceTree = "<group>"; };
 		374C36B81215E55F006B6ADA /* CalendarMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalendarMasterViewController.h; path = "Classes/Master View Controllers/CalendarMasterViewController.h"; sourceTree = SOURCE_ROOT; };
@@ -1472,8 +1539,6 @@
 		374D2E8113E7E33300630B97 /* SLFCommittee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFCommittee.m; sourceTree = "<group>"; };
 		374D2E8213E7E33300630B97 /* SLFCommitteePosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFCommitteePosition.h; sourceTree = "<group>"; };
 		374D2E8313E7E33300630B97 /* SLFCommitteePosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFCommitteePosition.m; sourceTree = "<group>"; };
-		374D2E8413E7E33300630B97 /* SLFDistrictMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFDistrictMap.h; sourceTree = "<group>"; };
-		374D2E8513E7E33300630B97 /* SLFDistrictMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFDistrictMap.m; sourceTree = "<group>"; };
 		374D2E8613E7E33300630B97 /* SLFEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFEvent.h; sourceTree = "<group>"; };
 		374D2E8713E7E33300630B97 /* SLFEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFEvent.m; sourceTree = "<group>"; };
 		374D2E8813E7E33300630B97 /* SLFLegislator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFLegislator.h; sourceTree = "<group>"; };
@@ -1481,24 +1546,18 @@
 		374D2E8A13E7E33300630B97 /* SLFState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFState.h; sourceTree = "<group>"; };
 		374D2E8B13E7E33300630B97 /* SLFState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFState.m; sourceTree = "<group>"; };
 		374D2E8D13E7E33300630B97 /* SLFDataModels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFDataModels.h; sourceTree = "<group>"; };
-		374D2E8E13E7E33300630B97 /* SLFMappingsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFMappingsManager.h; sourceTree = "<group>"; };
-		374D2E8F13E7E33300630B97 /* SLFMappingsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFMappingsManager.m; sourceTree = "<group>"; };
 		374D2E9113E7E33300630B97 /* _SLFBill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SLFBill.h; sourceTree = "<group>"; };
 		374D2E9213E7E33300630B97 /* _SLFBill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFBill.m; sourceTree = "<group>"; };
 		374D2E9313E7E33300630B97 /* _SLFCommittee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SLFCommittee.h; sourceTree = "<group>"; };
 		374D2E9413E7E33300630B97 /* _SLFCommittee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFCommittee.m; sourceTree = "<group>"; };
 		374D2E9513E7E33300630B97 /* _SLFCommitteePosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SLFCommitteePosition.h; sourceTree = "<group>"; };
 		374D2E9613E7E33300630B97 /* _SLFCommitteePosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFCommitteePosition.m; sourceTree = "<group>"; };
-		374D2E9713E7E33300630B97 /* _SLFDistrictMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SLFDistrictMap.h; sourceTree = "<group>"; };
-		374D2E9813E7E33300630B97 /* _SLFDistrictMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFDistrictMap.m; sourceTree = "<group>"; };
 		374D2E9913E7E33300630B97 /* _SLFEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SLFEvent.h; sourceTree = "<group>"; };
 		374D2E9A13E7E33300630B97 /* _SLFEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFEvent.m; sourceTree = "<group>"; };
 		374D2E9B13E7E33300630B97 /* _SLFLegislator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SLFLegislator.h; sourceTree = "<group>"; };
 		374D2E9C13E7E33300630B97 /* _SLFLegislator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFLegislator.m; sourceTree = "<group>"; };
 		374D2E9D13E7E33300630B97 /* _SLFState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SLFState.h; sourceTree = "<group>"; };
 		374D2E9E13E7E33300630B97 /* _SLFState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFState.m; sourceTree = "<group>"; };
-		374DF8B613EB2D5C00B0856B /* SLFDetailDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFDetailDataSource.h; sourceTree = "<group>"; };
-		374DF8B713EB2D5C00B0856B /* SLFDetailDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFDetailDataSource.m; sourceTree = "<group>"; };
 		374DF8C413EB307B00B0856B /* LegislatorDetailDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorDetailDataSource.h; sourceTree = "<group>"; };
 		374DF8C513EB307B00B0856B /* LegislatorDetailDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorDetailDataSource.m; sourceTree = "<group>"; };
 		374E2A6912360C6E0005E245 /* TexLegeMapPins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TexLegeMapPins.h; sourceTree = "<group>"; };
@@ -1888,15 +1947,11 @@
 		376DFEB513492FF700360BF4 /* LoadingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingCell.m; sourceTree = "<group>"; };
 		376F62CF132972E200F2B3DA /* BillsCategoriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsCategoriesViewController.h; sourceTree = "<group>"; };
 		376F62D0132972E200F2B3DA /* BillsCategoriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsCategoriesViewController.m; sourceTree = "<group>"; };
-		376FD44613EA3D6C00DE76E4 /* SLFDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFDataSource.h; sourceTree = "<group>"; };
-		376FD44713EA3D6C00DE76E4 /* SLFDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFDataSource.m; sourceTree = "<group>"; };
 		377074D41397B2B400E82CA8 /* SVGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVGeocoder.h; sourceTree = "<group>"; };
 		377074D51397B2B400E82CA8 /* SVGeocoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVGeocoder.m; sourceTree = "<group>"; };
 		377074D61397B2B400E82CA8 /* SVPlacemark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVPlacemark.h; sourceTree = "<group>"; };
 		377074D71397B2B400E82CA8 /* SVPlacemark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVPlacemark.m; sourceTree = "<group>"; };
 		377075421397E4C300E82CA8 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
-		3770C66613A49BE800906021 /* BillActionParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillActionParser.h; sourceTree = "<group>"; };
-		3770C66713A49BE800906021 /* BillActionParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillActionParser.m; sourceTree = "<group>"; };
 		3770F57313182BF500686DE3 /* BillsFavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsFavoritesViewController.h; sourceTree = "<group>"; };
 		3770F57413182BF500686DE3 /* BillsFavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsFavoritesViewController.m; sourceTree = "<group>"; };
 		3771333B12523025000D7207 /* TVOutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVOutManager.h; sourceTree = "<group>"; };
@@ -1939,8 +1994,6 @@
 		377DC4A71344D475000068E1 /* BillVotesDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillVotesDataSource.h; sourceTree = "<group>"; };
 		377DC4A81344D475000068E1 /* BillVotesDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillVotesDataSource.m; sourceTree = "<group>"; };
 		377E8CF0100C39F300686B23 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = "Classes/Application Support/Constants.h"; sourceTree = SOURCE_ROOT; };
-		3787269C13D6360700D030CC /* StatesListMetaLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesListMetaLoader.h; sourceTree = "<group>"; };
-		3787269D13D6360700D030CC /* StatesListMetaLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatesListMetaLoader.m; sourceTree = "<group>"; };
 		378ABD2A139F0BCA00928FBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/AppAlerts.strings; sourceTree = "<group>"; };
 		378ABD2C139F0BCA00928FBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/DataTableUI.strings; sourceTree = "<group>"; };
 		378ABD2E139F0BCA00928FBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/StandardUI.strings; sourceTree = "<group>"; };
@@ -2006,8 +2059,6 @@
 		37C94A2512387ABA00D2D582 /* DistrictMapMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DistrictMapMasterViewController.h; path = "Classes/Master View Controllers/DistrictMapMasterViewController.h"; sourceTree = SOURCE_ROOT; };
 		37C94A2612387ABA00D2D582 /* DistrictMapMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DistrictMapMasterViewController.m; path = "Classes/Master View Controllers/DistrictMapMasterViewController.m"; sourceTree = SOURCE_ROOT; };
 		37C94A3912387D6500D2D582 /* DistrictMapMasterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = DistrictMapMasterViewController.xib; path = Resources/DistrictMapMasterViewController.xib; sourceTree = SOURCE_ROOT; };
-		37CD09AF13A2A6F100F4C68B /* StateMetaLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateMetaLoader.h; sourceTree = "<group>"; };
-		37CD09B013A2A6F100F4C68B /* StateMetaLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StateMetaLoader.m; sourceTree = "<group>"; };
 		37CD0A6913A340E100F4C68B /* NSString+DKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DKAdditions.h"; sourceTree = "<group>"; };
 		37CD0A6A13A340E100F4C68B /* NSString+DKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DKAdditions.m"; sourceTree = "<group>"; };
 		37CD0A9213A3567900F4C68B /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/Abbreviations.strings; sourceTree = "<group>"; };
@@ -2209,7 +2260,6 @@
 		37F2C9ED1343AD45001D9D7B /* starButtonLargeOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "starButtonLargeOn@2x.png"; sourceTree = "<group>"; };
 		37F2CA0F1343AE40001D9D7B /* DDActionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDActionHeaderView.h; sourceTree = "<group>"; };
 		37F2CA101343AE40001D9D7B /* DDActionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDActionHeaderView.m; sourceTree = "<group>"; };
-		37F3571313CA5B2500C1EE29 /* PrivateStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivateStrings.h; sourceTree = "<group>"; };
 		37F3575E13CA684200C1EE29 /* gavel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gavel.png; sourceTree = "<group>"; };
 		37F3575F13CA684200C1EE29 /* gavel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gavel@2x.png"; sourceTree = "<group>"; };
 		37F3577913CA684200C1EE29 /* multipins.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = multipins.png; sourceTree = "<group>"; };
@@ -2222,8 +2272,6 @@
 		37F510A90FF1ADEF0020A13B /* Icon_80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon_80.png; sourceTree = "<group>"; };
 		37F9523F1211409300206241 /* 110-bug@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "110-bug@2x.png"; sourceTree = "<group>"; };
 		37FC486F13110A9E00A4C0B2 /* BillSearchDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillSearchDataSource.m; sourceTree = "<group>"; };
-		37FC6F3613E872A600C982FF /* SLFRestKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFRestKitManager.h; sourceTree = "<group>"; };
-		37FC6F3713E872A600C982FF /* SLFRestKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFRestKitManager.m; sourceTree = "<group>"; };
 		37FE1C7413CB677100655550 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		37FE1C7513CB677100655550 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		37FE1CD813CB75FD00655550 /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
@@ -2300,16 +2348,17 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				37F3570813CA5B2500C1EE29 /* PrivateData */,
+				374609091418123C00C1AE45 /* APIKeys.h */,
+				3746090A1418123C00C1AE45 /* APIKeys.m */,
 				C83CD92C0D5822C30066AE4B /* Application Support */,
+				3746090D1418125800C1AE45 /* Backend */,
+				374609371418126200C1AE45 /* Controllers */,
 				37A0E4460FD2DEAA009B65F7 /* Utility Classes */,
 				372D5DDB11E9C0B5005A21E2 /* MapKit */,
 				37AD577C11DA577C00D68934 /* Data Sources */,
 				37AD577911DA573D00D68934 /* View Controllers */,
 				37AD57B511DA644900D68934 /* Custom Cells and Views */,
 				374D2E7C13E7E33300630B97 /* Models */,
-				378A1C851007FA9700BEC4ED /* Data Model Classes */,
-				371FB1991333B0FF0003740A /* External Data Sources */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -2406,25 +2455,6 @@
 				371D54441365F60E00A61BD4 /* NSData_Extensions.m */,
 			);
 			path = TouchCode_Base64;
-			sourceTree = "<group>";
-		};
-		371FB1991333B0FF0003740A /* External Data Sources */ = {
-			isa = PBXGroup;
-			children = (
-				3770C66613A49BE800906021 /* BillActionParser.h */,
-				3770C66713A49BE800906021 /* BillActionParser.m */,
-				370EAD2D1338028C007788BC /* OpenLegislativeAPIs.h */,
-				370EAD301338029E007788BC /* OpenLegislativeAPIs.m */,
-				37CD09AF13A2A6F100F4C68B /* StateMetaLoader.h */,
-				37CD09B013A2A6F100F4C68B /* StateMetaLoader.m */,
-				3787269C13D6360700D030CC /* StatesListMetaLoader.h */,
-				3787269D13D6360700D030CC /* StatesListMetaLoader.m */,
-				371FB1D61333B43C0003740A /* CalendarEventsLoader.h */,
-				371FB1D71333B43C0003740A /* CalendarEventsLoader.m */,
-				370EAC351337E3CF007788BC /* SLFObjectCache.h */,
-				370EAC361337E3CF007788BC /* SLFObjectCache.m */,
-			);
-			path = "External Data Sources";
 			sourceTree = "<group>";
 		};
 		3721EA4F11D6E6EA00CA33DA /* Vendor */ = {
@@ -2527,18 +2557,74 @@
 			name = "Resources-iPad";
 			sourceTree = "<group>";
 		};
+		3746090D1418125800C1AE45 /* Backend */ = {
+			isa = PBXGroup;
+			children = (
+				3746090E1418125800C1AE45 /* Ancillary */,
+				374609191418125800C1AE45 /* SLFDataSource.h */,
+				3746091A1418125800C1AE45 /* SLFDataSource.m */,
+				3746091B1418125800C1AE45 /* SLFDetailDataSource.h */,
+				3746091C1418125800C1AE45 /* SLFDetailDataSource.m */,
+				3746091D1418125800C1AE45 /* SLFMappingsManager.h */,
+				3746091E1418125800C1AE45 /* SLFMappingsManager.m */,
+				3746091F1418125800C1AE45 /* SLFObjectCache.h */,
+				374609201418125800C1AE45 /* SLFObjectCache.m */,
+				374609211418125800C1AE45 /* SLFRestKitManager.h */,
+				374609221418125800C1AE45 /* SLFRestKitManager.m */,
+			);
+			path = Backend;
+			sourceTree = "<group>";
+		};
+		3746090E1418125800C1AE45 /* Ancillary */ = {
+			isa = PBXGroup;
+			children = (
+				3746090F1418125800C1AE45 /* BillActionParser.h */,
+				374609101418125800C1AE45 /* BillActionParser.m */,
+				374609111418125800C1AE45 /* CalendarEventsLoader.h */,
+				374609121418125800C1AE45 /* CalendarEventsLoader.m */,
+				374609131418125800C1AE45 /* OpenLegislativeAPIs.h */,
+				374609141418125800C1AE45 /* OpenLegislativeAPIs.m */,
+				374609151418125800C1AE45 /* StateMetaLoader.h */,
+				374609161418125800C1AE45 /* StateMetaLoader.m */,
+				374609171418125800C1AE45 /* StatesListMetaLoader.h */,
+				374609181418125800C1AE45 /* StatesListMetaLoader.m */,
+			);
+			path = Ancillary;
+			sourceTree = "<group>";
+		};
+		374609371418126200C1AE45 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				374609381418126200C1AE45 /* CommitteeDetailViewController.h */,
+				374609391418126200C1AE45 /* CommitteeDetailViewController.m */,
+				3746093A1418126200C1AE45 /* CommitteesViewController.h */,
+				3746093B1418126200C1AE45 /* CommitteesViewController.m */,
+				3746093C1418126200C1AE45 /* DistrictDetailViewController.h */,
+				3746093D1418126200C1AE45 /* DistrictDetailViewController.m */,
+				3746093E1418126200C1AE45 /* DistrictsViewController.h */,
+				3746093F1418126200C1AE45 /* DistrictsViewController.m */,
+				374609401418126200C1AE45 /* EventDetailViewController.h */,
+				374609411418126200C1AE45 /* EventDetailViewController.m */,
+				374609421418126200C1AE45 /* EventsViewController.h */,
+				374609431418126200C1AE45 /* EventsViewController.m */,
+				374609441418126200C1AE45 /* LegislatorDetailViewController.h */,
+				374609451418126200C1AE45 /* LegislatorDetailViewController.m */,
+				374609461418126200C1AE45 /* LegislatorsViewController.h */,
+				374609471418126200C1AE45 /* LegislatorsViewController.m */,
+				374609481418126200C1AE45 /* StateDetailViewController.h */,
+				374609491418126200C1AE45 /* StateDetailViewController.m */,
+				3746094A1418126200C1AE45 /* StatesViewController.h */,
+				3746094B1418126200C1AE45 /* StatesViewController.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		374D2E7C13E7E33300630B97 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				37FC6F3613E872A600C982FF /* SLFRestKitManager.h */,
-				37FC6F3713E872A600C982FF /* SLFRestKitManager.m */,
 				374D2E8D13E7E33300630B97 /* SLFDataModels.h */,
-				374D2E8E13E7E33300630B97 /* SLFMappingsManager.h */,
-				374D2E8F13E7E33300630B97 /* SLFMappingsManager.m */,
-				376FD44613EA3D6C00DE76E4 /* SLFDataSource.h */,
-				376FD44713EA3D6C00DE76E4 /* SLFDataSource.m */,
-				374DF8B613EB2D5C00B0856B /* SLFDetailDataSource.h */,
-				374DF8B713EB2D5C00B0856B /* SLFDetailDataSource.m */,
+				37460964141812AF00C1AE45 /* SLFChamber.h */,
+				37460965141812AF00C1AE45 /* SLFChamber.m */,
 				374D2E7D13E7E33300630B97 /* CustomModels */,
 				374D2E9013E7E33300630B97 /* StockModels */,
 			);
@@ -2554,8 +2640,8 @@
 				374D2E8113E7E33300630B97 /* SLFCommittee.m */,
 				374D2E8213E7E33300630B97 /* SLFCommitteePosition.h */,
 				374D2E8313E7E33300630B97 /* SLFCommitteePosition.m */,
-				374D2E8413E7E33300630B97 /* SLFDistrictMap.h */,
-				374D2E8513E7E33300630B97 /* SLFDistrictMap.m */,
+				37460968141812B800C1AE45 /* SLFDistrict.h */,
+				37460969141812B800C1AE45 /* SLFDistrict.m */,
 				374D2E8613E7E33300630B97 /* SLFEvent.h */,
 				374D2E8713E7E33300630B97 /* SLFEvent.m */,
 				374D2E8813E7E33300630B97 /* SLFLegislator.h */,
@@ -2575,8 +2661,8 @@
 				374D2E9413E7E33300630B97 /* _SLFCommittee.m */,
 				374D2E9513E7E33300630B97 /* _SLFCommitteePosition.h */,
 				374D2E9613E7E33300630B97 /* _SLFCommitteePosition.m */,
-				374D2E9713E7E33300630B97 /* _SLFDistrictMap.h */,
-				374D2E9813E7E33300630B97 /* _SLFDistrictMap.m */,
+				3746096C141812E500C1AE45 /* _SLFDistrict.h */,
+				3746096D141812E500C1AE45 /* _SLFDistrict.m */,
 				374D2E9913E7E33300630B97 /* _SLFEvent.h */,
 				374D2E9A13E7E33300630B97 /* _SLFEvent.m */,
 				374D2E9B13E7E33300630B97 /* _SLFLegislator.h */,
@@ -2782,16 +2868,6 @@
 			name = "Resources-iPhone";
 			sourceTree = "<group>";
 		};
-		378A1C851007FA9700BEC4ED /* Data Model Classes */ = {
-			isa = PBXGroup;
-			children = (
-				372FAB5812147B2000AEF237 /* ChamberCalendarObj.h */,
-				372FAB5912147B2000AEF237 /* ChamberCalendarObj.m */,
-			);
-			name = "Data Model Classes";
-			path = "Core Data Classes";
-			sourceTree = "<group>";
-		};
 		379C8C7C139A02F90035C321 /* GrabThumb */ = {
 			isa = PBXGroup;
 			children = (
@@ -2889,6 +2965,8 @@
 				37A0E4450FD2DEAA009B65F7 /* LinksDataSource.m */,
 				377ACE4611FFA30E002C7E49 /* CalendarDataSource.h */,
 				377ACE4711FFA30E002C7E49 /* CalendarDataSource.m */,
+				374609601418128A00C1AE45 /* ChamberCalendarObj.h */,
+				374609611418128A00C1AE45 /* ChamberCalendarObj.m */,
 				370C270A1225BF7E004273E3 /* DistrictMapDataSource.h */,
 				370C270B1225BF7E004273E3 /* DistrictMapDataSource.m */,
 				3742D6ED122E18D100698483 /* DistrictMapSearchOperation.h */,
@@ -3610,14 +3688,6 @@
 			path = Vendor/DDActionHeaderView;
 			sourceTree = SOURCE_ROOT;
 		};
-		37F3570813CA5B2500C1EE29 /* PrivateData */ = {
-			isa = PBXGroup;
-			children = (
-				37F3571313CA5B2500C1EE29 /* PrivateStrings.h */,
-			);
-			path = PrivateData;
-			sourceTree = SOURCE_ROOT;
-		};
 		37F3575D13CA684200C1EE29 /* custom */ = {
 			isa = PBXGroup;
 			children = (
@@ -3640,7 +3710,7 @@
 				37FC6E0613E8579500C982FF /* libRestKitNetwork.a */,
 				37FC6E0813E8579500C982FF /* libRestKitObjectMapping.a */,
 				37FC6E0A13E8579500C982FF /* libRestKitSupport.a */,
-				37FC6E0C13E8579500C982FF /* libRestKitJSONParser+NXJSON.a */,
+				37FC6E0C13E8579500C982FF /* libRestKitJSONParserNXJSON.a */,
 				37FC6E0E13E8579500C982FF /* libRestKitJSONParserYAJL.a */,
 				37FC6E1013E8579500C982FF /* libRestKitJSONParserSBJSON.a */,
 				37FC6E1213E8579500C982FF /* libRestKitJSONParserJSONKit.a */,
@@ -3803,10 +3873,9 @@
 			remoteRef = 37FC6E0913E8579500C982FF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		37FC6E0C13E8579500C982FF /* libRestKitJSONParser+NXJSON.a */ = {
+		37FC6E0C13E8579500C982FF /* libRestKitJSONParserNXJSON.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			name = "libRestKitJSONParser+NXJSON.a";
 			path = libRestKitJSONParserNXJSON.a;
 			remoteRef = 37FC6E0B13E8579500C982FF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -4909,7 +4978,6 @@
 				3735DFFE120917490000AF5A /* CommitteeMasterViewController.m in Sources */,
 				3735E1CE1209B09F0000AF5A /* TexLegeTheme.m in Sources */,
 				37B64234120FE9FF0076B196 /* LegislatorCell.m in Sources */,
-				372FAB5A12147B2000AEF237 /* ChamberCalendarObj.m in Sources */,
 				374C36BA1215E55F006B6ADA /* CalendarMasterViewController.m in Sources */,
 				374C37051215EB2D006B6ADA /* LinksMasterViewController.m in Sources */,
 				378B57AA1219913400F7ED0B /* MapViewController.m in Sources */,
@@ -4941,8 +5009,6 @@
 				3770F57513182BF500686DE3 /* BillsFavoritesViewController.m in Sources */,
 				376F632D13298DE000F2B3DA /* BillsCategoriesViewController.m in Sources */,
 				37D38B10132ECFFB002F1730 /* BillsListViewController.m in Sources */,
-				371FB1D91333B43C0003740A /* CalendarEventsLoader.m in Sources */,
-				370EAD321338029E007788BC /* OpenLegislativeAPIs.m in Sources */,
 				37094D97133B162E00B9693C /* TexLegeBadgeGroupCell.m in Sources */,
 				37F2CA121343AE40001D9D7B /* DDActionHeaderView.m in Sources */,
 				37F2CA961343BF1A001D9D7B /* TVOutManager.m in Sources */,
@@ -4958,18 +5024,15 @@
 				37E635FC139B4B3200A9CC27 /* TTTOrdinalNumberFormatter.m in Sources */,
 				37E36CF1139E695C00917F40 /* BillsRecentViewController.m in Sources */,
 				37E36D03139E6D0A00917F40 /* VTPGAdvancedLog.m in Sources */,
-				37CD09B213A2A6F100F4C68B /* StateMetaLoader.m in Sources */,
 				3768E93913B156F600BA5A67 /* SVWebViewController.m in Sources */,
 				37FE1CDD13CB75FD00655550 /* LocalyticsSession.m in Sources */,
 				37FE1CDE13CB75FD00655550 /* UploaderThread.m in Sources */,
 				37FE1E0C13CB8E3300655550 /* AppendingFlowView.m in Sources */,
 				37FE1F1513CB8EFE00655550 /* IntelligentSplitViewController.m in Sources */,
-				37E4327413D08D8800E9320E /* BillActionParser.m in Sources */,
 				37E4339A13D0A66C00E9320E /* AnalyticsOptInAlertController.m in Sources */,
 				37E4339B13D0A66C00E9320E /* SLFAlertView.m in Sources */,
 				37E4339C13D0A66C00E9320E /* SLFEmailComposer.m in Sources */,
 				37E4360613D0C0FA00E9320E /* ActionSheetPicker.m in Sources */,
-				3787269F13D6360700D030CC /* StatesListMetaLoader.m in Sources */,
 				370A804913D6BE3000390ADC /* GCTableViewController.m in Sources */,
 				37CFAC4A13DE52CE0075D3D4 /* MultiSelectCellController.m in Sources */,
 				37CFAC4B13DE52CE0075D3D4 /* MultiSelectTableViewCell.m in Sources */,
@@ -4978,24 +5041,43 @@
 				374D2E9F13E7E33300630B97 /* SLFBill.m in Sources */,
 				374D2EA013E7E33300630B97 /* SLFCommittee.m in Sources */,
 				374D2EA113E7E33300630B97 /* SLFCommitteePosition.m in Sources */,
-				374D2EA213E7E33300630B97 /* SLFDistrictMap.m in Sources */,
 				374D2EA313E7E33300630B97 /* SLFEvent.m in Sources */,
 				374D2EA413E7E33300630B97 /* SLFLegislator.m in Sources */,
 				374D2EA513E7E33300630B97 /* SLFState.m in Sources */,
-				374D2EA713E7E33300630B97 /* SLFMappingsManager.m in Sources */,
 				374D2EA813E7E33300630B97 /* _SLFBill.m in Sources */,
 				374D2EA913E7E33300630B97 /* _SLFCommittee.m in Sources */,
 				374D2EAA13E7E33300630B97 /* _SLFCommitteePosition.m in Sources */,
-				374D2EAB13E7E33300630B97 /* _SLFDistrictMap.m in Sources */,
 				374D2EAC13E7E33300630B97 /* _SLFEvent.m in Sources */,
 				374D2EAD13E7E33300630B97 /* _SLFLegislator.m in Sources */,
 				374D2EAE13E7E33300630B97 /* _SLFState.m in Sources */,
-				37FC6F3913E872A600C982FF /* SLFRestKitManager.m in Sources */,
-				376FD44913EA3D6C00DE76E4 /* SLFDataSource.m in Sources */,
-				374DF8B913EB2D5C00B0856B /* SLFDetailDataSource.m in Sources */,
 				374DF8C713EB307B00B0856B /* LegislatorDetailDataSource.m in Sources */,
 				37053B4513EBB92E00EF489A /* SLFData.xcdatamodel in Sources */,
 				37E75D6F13ED1370005F8775 /* CommitteeDetailDataSource.m in Sources */,
+				3746090B1418123C00C1AE45 /* APIKeys.m in Sources */,
+				374609231418125800C1AE45 /* BillActionParser.m in Sources */,
+				374609251418125800C1AE45 /* CalendarEventsLoader.m in Sources */,
+				374609271418125800C1AE45 /* OpenLegislativeAPIs.m in Sources */,
+				374609291418125800C1AE45 /* StateMetaLoader.m in Sources */,
+				3746092B1418125800C1AE45 /* StatesListMetaLoader.m in Sources */,
+				3746092D1418125800C1AE45 /* SLFDataSource.m in Sources */,
+				3746092F1418125800C1AE45 /* SLFDetailDataSource.m in Sources */,
+				374609311418125800C1AE45 /* SLFMappingsManager.m in Sources */,
+				374609331418125800C1AE45 /* SLFObjectCache.m in Sources */,
+				374609351418125800C1AE45 /* SLFRestKitManager.m in Sources */,
+				3746094C1418126200C1AE45 /* CommitteeDetailViewController.m in Sources */,
+				3746094E1418126200C1AE45 /* CommitteesViewController.m in Sources */,
+				374609501418126200C1AE45 /* DistrictDetailViewController.m in Sources */,
+				374609521418126200C1AE45 /* DistrictsViewController.m in Sources */,
+				374609541418126200C1AE45 /* EventDetailViewController.m in Sources */,
+				374609561418126200C1AE45 /* EventsViewController.m in Sources */,
+				374609581418126200C1AE45 /* LegislatorDetailViewController.m in Sources */,
+				3746095A1418126200C1AE45 /* LegislatorsViewController.m in Sources */,
+				3746095C1418126200C1AE45 /* StateDetailViewController.m in Sources */,
+				3746095E1418126200C1AE45 /* StatesViewController.m in Sources */,
+				374609621418128A00C1AE45 /* ChamberCalendarObj.m in Sources */,
+				37460966141812AF00C1AE45 /* SLFChamber.m in Sources */,
+				3746096A141812B800C1AE45 /* SLFDistrict.m in Sources */,
+				3746096E141812E500C1AE45 /* _SLFDistrict.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5023,7 +5105,6 @@
 				37735B751323104A0033F343 /* CommitteeMasterViewController.m in Sources */,
 				37735B761323104A0033F343 /* TexLegeTheme.m in Sources */,
 				37735B781323104A0033F343 /* LegislatorCell.m in Sources */,
-				37735B7A1323104A0033F343 /* ChamberCalendarObj.m in Sources */,
 				37735B7B1323104A0033F343 /* CalendarMasterViewController.m in Sources */,
 				37735B7D1323104A0033F343 /* LinksMasterViewController.m in Sources */,
 				37735B7E1323104A0033F343 /* MapViewController.m in Sources */,
@@ -5056,9 +5137,6 @@
 				37735BF31323104A0033F343 /* BillsFavoritesViewController.m in Sources */,
 				376F62D1132972E200F2B3DA /* BillsCategoriesViewController.m in Sources */,
 				37D38B0F132ECFFA002F1730 /* BillsListViewController.m in Sources */,
-				371FB1D81333B43C0003740A /* CalendarEventsLoader.m in Sources */,
-				370EAC371337E3CF007788BC /* SLFObjectCache.m in Sources */,
-				370EAD311338029E007788BC /* OpenLegislativeAPIs.m in Sources */,
 				37094D96133B162E00B9693C /* TexLegeBadgeGroupCell.m in Sources */,
 				37F2CA111343AE40001D9D7B /* DDActionHeaderView.m in Sources */,
 				377DC4A91344D475000068E1 /* BillVotesDataSource.m in Sources */,
@@ -5074,9 +5152,7 @@
 				37E635FE139B4B3200A9CC27 /* TTTOrdinalNumberFormatter.m in Sources */,
 				37E36CF2139E695C00917F40 /* BillsRecentViewController.m in Sources */,
 				37E36D04139E6D0A00917F40 /* VTPGAdvancedLog.m in Sources */,
-				37CD09B113A2A6F100F4C68B /* StateMetaLoader.m in Sources */,
 				37CD0A6B13A340E100F4C68B /* NSString+DKAdditions.m in Sources */,
-				3770C66813A49BE800906021 /* BillActionParser.m in Sources */,
 				3768E93C13B156F600BA5A67 /* SVWebViewController.m in Sources */,
 				37FE1CA713CB677100655550 /* JSONKit.m in Sources */,
 				37FE1CDF13CB75FD00655550 /* LocalyticsSession.m in Sources */,
@@ -5087,7 +5163,6 @@
 				37E4339E13D0A66C00E9320E /* SLFAlertView.m in Sources */,
 				37E4339F13D0A66C00E9320E /* SLFEmailComposer.m in Sources */,
 				37E435DB13D0C0FA00E9320E /* ActionSheetPicker.m in Sources */,
-				3787269E13D6360700D030CC /* StatesListMetaLoader.m in Sources */,
 				370A804813D6BE3000390ADC /* GCTableViewController.m in Sources */,
 				37CFAC4613DE52CE0075D3D4 /* MultiSelectCellController.m in Sources */,
 				37CFAC4713DE52CE0075D3D4 /* MultiSelectTableViewCell.m in Sources */,
@@ -5096,24 +5171,43 @@
 				374D2EAF13E7E33300630B97 /* SLFBill.m in Sources */,
 				374D2EB013E7E33300630B97 /* SLFCommittee.m in Sources */,
 				374D2EB113E7E33300630B97 /* SLFCommitteePosition.m in Sources */,
-				374D2EB213E7E33300630B97 /* SLFDistrictMap.m in Sources */,
 				374D2EB313E7E33300630B97 /* SLFEvent.m in Sources */,
 				374D2EB413E7E33300630B97 /* SLFLegislator.m in Sources */,
 				374D2EB513E7E33300630B97 /* SLFState.m in Sources */,
-				374D2EB713E7E33300630B97 /* SLFMappingsManager.m in Sources */,
 				374D2EB813E7E33300630B97 /* _SLFBill.m in Sources */,
 				374D2EB913E7E33300630B97 /* _SLFCommittee.m in Sources */,
 				374D2EBA13E7E33300630B97 /* _SLFCommitteePosition.m in Sources */,
-				374D2EBB13E7E33300630B97 /* _SLFDistrictMap.m in Sources */,
 				374D2EBC13E7E33300630B97 /* _SLFEvent.m in Sources */,
 				374D2EBD13E7E33300630B97 /* _SLFLegislator.m in Sources */,
 				374D2EBE13E7E33300630B97 /* _SLFState.m in Sources */,
-				37FC6F3813E872A600C982FF /* SLFRestKitManager.m in Sources */,
-				376FD44813EA3D6C00DE76E4 /* SLFDataSource.m in Sources */,
-				374DF8B813EB2D5C00B0856B /* SLFDetailDataSource.m in Sources */,
 				374DF8C613EB307B00B0856B /* LegislatorDetailDataSource.m in Sources */,
 				37053B4613EBB92E00EF489A /* SLFData.xcdatamodel in Sources */,
 				37E75D7013ED1370005F8775 /* CommitteeDetailDataSource.m in Sources */,
+				3746090C1418123C00C1AE45 /* APIKeys.m in Sources */,
+				374609241418125800C1AE45 /* BillActionParser.m in Sources */,
+				374609261418125800C1AE45 /* CalendarEventsLoader.m in Sources */,
+				374609281418125800C1AE45 /* OpenLegislativeAPIs.m in Sources */,
+				3746092A1418125800C1AE45 /* StateMetaLoader.m in Sources */,
+				3746092C1418125800C1AE45 /* StatesListMetaLoader.m in Sources */,
+				3746092E1418125800C1AE45 /* SLFDataSource.m in Sources */,
+				374609301418125800C1AE45 /* SLFDetailDataSource.m in Sources */,
+				374609321418125800C1AE45 /* SLFMappingsManager.m in Sources */,
+				374609341418125800C1AE45 /* SLFObjectCache.m in Sources */,
+				374609361418125800C1AE45 /* SLFRestKitManager.m in Sources */,
+				3746094D1418126200C1AE45 /* CommitteeDetailViewController.m in Sources */,
+				3746094F1418126200C1AE45 /* CommitteesViewController.m in Sources */,
+				374609511418126200C1AE45 /* DistrictDetailViewController.m in Sources */,
+				374609531418126200C1AE45 /* DistrictsViewController.m in Sources */,
+				374609551418126200C1AE45 /* EventDetailViewController.m in Sources */,
+				374609571418126200C1AE45 /* EventsViewController.m in Sources */,
+				374609591418126200C1AE45 /* LegislatorDetailViewController.m in Sources */,
+				3746095B1418126200C1AE45 /* LegislatorsViewController.m in Sources */,
+				3746095D1418126200C1AE45 /* StateDetailViewController.m in Sources */,
+				3746095F1418126200C1AE45 /* StatesViewController.m in Sources */,
+				374609631418128A00C1AE45 /* ChamberCalendarObj.m in Sources */,
+				37460967141812AF00C1AE45 /* SLFChamber.m in Sources */,
+				3746096B141812B800C1AE45 /* SLFDistrict.m in Sources */,
+				3746096F141812E500C1AE45 /* _SLFDistrict.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

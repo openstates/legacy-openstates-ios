@@ -155,9 +155,9 @@
 
 
 
-@property (nonatomic, retain) SLFState* state;
+@property (nonatomic, retain) SLFState* stateObj;
 
-//- (BOOL)validateState:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateStateObj:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -262,8 +262,8 @@
 
 
 
-- (SLFState*)primitiveState;
-- (void)setPrimitiveState:(SLFState*)value;
+- (SLFState*)primitiveStateObj;
+- (void)setPrimitiveStateObj:(SLFState*)value;
 
 
 @end

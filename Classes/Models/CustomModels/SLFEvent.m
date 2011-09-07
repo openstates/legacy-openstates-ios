@@ -3,17 +3,9 @@
 
 @implementation SLFEvent
 
-- (void)setStateID:(NSString *)newID {
-    [self willChangeValueForKey:@"stateID"];
-    [self setPrimitiveStateID:newID];
-    [self didChangeValueForKey:@"stateID"];
-    
-    if (!newID)
-        return;
-    
-    SLFState *tempState = [SLFState findFirstByAttribute:@"abbreviation" withValue:newID];
-    self.state = tempState;
+// This is here because the JSON data has a keyPath "state" that conflicts with our core data relationship.
+- (SLFState *)state {
+    return self.stateObj;
 }
-
 
 @end

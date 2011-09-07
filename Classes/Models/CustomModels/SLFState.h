@@ -3,10 +3,7 @@
 #import "_SLFState.h"
 
 @interface SLFState : _SLFState {}
-
-- (NSString *)nameForChamber:(NSInteger)chamber;
 - (BOOL)isFeatureEnabled:(NSString *)feature;
-
 - (NSString *)displayNameForSession:(NSString *)aSession;
-
 @end
+

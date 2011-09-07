@@ -8,3 +8,11 @@
 - (NSComparisonResult)compareCommitteeMembers:(SLFCommitteePosition *)p;
 
 @end
+
+    // Committe Position Roles
+enum kPositions {
+    POS_MEMBER = 0,
+    POS_VICE,
+    POS_CHAIR
+};
+

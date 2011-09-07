@@ -44,7 +44,7 @@
 
 
 
-@dynamic abbreviation;
+@dynamic stateID;
 
 
 
@@ -202,13 +202,13 @@
 }
 	
 
-@dynamic districtMaps;
+@dynamic districts;
 
 	
-- (NSMutableSet*)districtMapsSet {
-	[self willAccessValueForKey:@"districtMaps"];
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"districtMaps"];
-	[self didAccessValueForKey:@"districtMaps"];
+- (NSMutableSet*)districtsSet {
+	[self willAccessValueForKey:@"districts"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"districts"];
+	[self didAccessValueForKey:@"districts"];
 	return result;
 }
 	

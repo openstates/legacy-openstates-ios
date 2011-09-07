@@ -4,7 +4,7 @@
 #import <CoreData/CoreData.h>
 
 
-@class SLFDistrictMap;
+@class SLFDistrict;
 @class SLFCommitteePosition;
 @class SLFState;
 
@@ -215,7 +215,7 @@
 
 
 
-@property (nonatomic, retain) SLFDistrictMap* districtMap;
+@property (nonatomic, retain) SLFDistrict* districtMap;
 
 //- (BOOL)validateDistrictMap:(id*)value_ error:(NSError**)error_;
 
@@ -229,9 +229,9 @@
 
 
 
-@property (nonatomic, retain) SLFState* state;
+@property (nonatomic, retain) SLFState* stateObj;
 
-//- (BOOL)validateState:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateStateObj:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -380,8 +380,8 @@
 
 
 
-- (SLFDistrictMap*)primitiveDistrictMap;
-- (void)setPrimitiveDistrictMap:(SLFDistrictMap*)value;
+- (SLFDistrict*)primitiveDistrictMap;
+- (void)setPrimitiveDistrictMap:(SLFDistrict*)value;
 
 
 
@@ -390,8 +390,8 @@
 
 
 
-- (SLFState*)primitiveState;
-- (void)setPrimitiveState:(SLFState*)value;
+- (SLFState*)primitiveStateObj;
+- (void)setPrimitiveStateObj:(SLFState*)value;
 
 
 @end

@@ -12,16 +12,16 @@
 
 #import "SLFMappingsManager.h"
 #import "SLFDataModels.h"
-#import "UtilityMethods.h"
 
 @interface SLFMappingsManager()
 - (RKManagedObjectMapping *)generateStateMapping;
 - (RKManagedObjectMapping *)generateDistrictMapping;
-- (RKManagedObjectMapping *)generateBillMapping;
 - (RKManagedObjectMapping *)generateEventMapping;
+- (RKManagedObjectMapping *)generateBillMapping;
 - (RKManagedObjectMapping *)generateLegislatorMapping;
 - (RKManagedObjectMapping *)generateCommitteeMapping;
 - (RKManagedObjectMapping *)generatePositionMapping;
+- (void)connectRelationshipMappings;
 + (SLFCommitteePosition *)findOrCreatePositionWithStateID:(NSString *)stateID
                                             committeeName:(NSString *)comName
                                               committeeID:(NSString *)comID
@@ -43,12 +43,13 @@
 - (id)init {
     if ((self = [super init])) {
         [self generateStateMapping];
-        [self generateBillMapping];
+        [self generateDistrictMapping];
         [self generateEventMapping];
+        [self generateBillMapping];
         [self generateLegislatorMapping];
         [self generateCommitteeMapping];
         [self generatePositionMapping];
-        [self generateDistrictMapping];
+        [self connectRelationshipMappings];
     }
     return self;
 }
@@ -64,9 +65,63 @@
     [super dealloc];
 }
 
+- (void)registerMappingsWithProvider:(RKObjectMappingProvider *)provider {
+    [provider setMapping:stateMapping forKeyPath:@"metadata"];
+    [provider setMapping:districtMapping forKeyPath:@"districts"];
+    [provider setMapping:eventMapping forKeyPath:@"events"];
+    [provider setMapping:billMapping forKeyPath:@"bills"];
+    [provider setMapping:committeeMapping forKeyPath:@"committees"];
+    [provider setMapping:legislatorMapping forKeyPath:@"legislators"];
+    [provider setMapping:positionMapping forKeyPath:@"positions"];
+}
+
+
+- (void)connectRelationshipMappings {
+    [stateMapping hasMany:@"legislators" withMapping:legislatorMapping];
+    [stateMapping hasMany:@"committees" withMapping:committeeMapping];
+    [stateMapping hasMany:@"events" withMapping:eventMapping];
+    [stateMapping hasMany:@"districtMaps" withMapping:districtMapping];
+    [stateMapping hasMany:@"bills" withMapping:billMapping];
+
+    [districtMapping hasOne:@"state" withMapping:stateMapping];
+    [districtMapping connectRelationship:@"state" withObjectForPrimaryKeyAttribute:@"stateID"];
+
+    [eventMapping hasOne:@"stateObj" withMapping:stateMapping];
+    [eventMapping connectRelationship:@"stateObj" withObjectForPrimaryKeyAttribute:@"stateID"];
+
+    [billMapping hasOne:@"stateObj" withMapping:stateMapping];
+    [billMapping connectRelationship:@"stateObj" withObjectForPrimaryKeyAttribute:@"stateID"];
+    
+    [legislatorMapping hasOne:@"stateObj" withMapping:stateMapping];
+    [legislatorMapping connectRelationship:@"stateObj" withObjectForPrimaryKeyAttribute:@"stateID"];
+    
+    [committeeMapping hasOne:@"stateObj" withMapping:stateMapping];
+    [committeeMapping connectRelationship:@"stateObj" withObjectForPrimaryKeyAttribute:@"stateID"];
+    
+    [districtMapping hasMany:@"legislators" withMapping:legislatorMapping];
+        //TODO: [districtMapping connectRelationship:@"legislators" withObjectForPrimaryKeyAttribute:@"legID"];
+
+        // TODO: Investigate using custom mapping to ONLY create a unique primary key, then handle connecting relationships as outlined below.
+    [committeeMapping addRelationshipMapping:[RKObjectRelationshipMapping mappingFromKeyPath:@"members" toKeyPath:@"positions" withMapping:positionMapping]];
+    [legislatorMapping addRelationshipMapping:[RKObjectRelationshipMapping mappingFromKeyPath:@"roles" toKeyPath:@"positions" withMapping:positionMapping]];    
+
+    [positionMapping connectRelationship:@"legislator" withObjectForPrimaryKeyAttribute:@"legID"];
+    [positionMapping connectRelationship:@"committee" withObjectForPrimaryKeyAttribute:@"committeeID"];
+
+    
+    /*
+     // TODO: investigate alternative mappings
+    
+    [billMapping connectRelationship:@"legislators" withObjectForPrimaryKeyAttribute:@"legID"];
+    [legislatorMapping connectRelationship:@"roles" withObjectForPrimaryKeyAttribute:@"legID"];
+    [committeeMapping connectRelationship:@"members" withObjectForPrimaryKeyAttribute:@"legID"];
+     */
+
+}
+
 - (RKManagedObjectMapping *)generateStateMapping {
     self.stateMapping = [RKManagedObjectMapping mappingForClass:[SLFState class]];
-    [stateMapping.dateFormatStrings addObject:@"yyyy-MM-dd HH:mm:ss"];
+    stateMapping.primaryKeyAttribute = @"stateID";
     [stateMapping mapKeyPath:@"lower_chamber_name" toAttribute:@"lowerChamberName"];
     [stateMapping mapKeyPath:@"lower_chamber_title" toAttribute:@"lowerChamberTitle"];
     [stateMapping mapKeyPath:@"lower_chamber_term" toAttribute:@"lowerChamberTerm"];
@@ -77,42 +132,27 @@
     [stateMapping mapKeyPath:@"legislature_name" toAttribute:@"legislatureName"];
     [stateMapping mapKeyPath:@"feature_flags" toAttribute:@"featureFlags"];
     [stateMapping mapKeyPath:@"latest_update" toAttribute:@"dateUpdated"];
-    [stateMapping mapAttributes:@"abbreviation", @"name", @"terms", @"level", nil];
-    stateMapping.primaryKeyAttribute = @"abbreviation";
+    [stateMapping mapKeyPath:@"abbreviation" toAttribute:@"stateID"];
+    [stateMapping mapAttributes:@"name", @"terms", @"level", nil];
+    stateMapping.setNilForMissingRelationships = NO;
     return stateMapping;
 }
 
 - (RKManagedObjectMapping *)generateDistrictMapping {
-    self.districtMapping = [RKManagedObjectMapping mappingForClass:[SLFDistrictMap class]];
-    [districtMapping.dateFormatStrings addObject:@"yyyy-MM-dd HH:mm:ss"];
+    self.districtMapping = [RKManagedObjectMapping mappingForClass:[SLFDistrict class]];
+    districtMapping.primaryKeyAttribute = @"boundaryID";
     [districtMapping mapKeyPath:@"abbr" toAttribute:@"stateID"];
     [districtMapping mapKeyPath:@"num_seats" toAttribute:@"numSeats"];
     [districtMapping mapKeyPath:@"region" toAttribute:@"regionDictionary"];
     [districtMapping mapKeyPath:@"boundary_id" toAttribute:@"boundaryID"];
     [districtMapping mapAttributes:@"name", @"chamber", @"shape", nil];
-    districtMapping.primaryKeyAttribute = @"boundaryID";
-    districtMapping.setNilForMissingRelationships = NO; // some queries omit legislators array, don't clear our stored info.
-    [districtMapping hasMany:@"legislators" withMapping:self.legislatorMapping];
+    districtMapping.setNilForMissingRelationships = NO;
     return districtMapping;
-}
-
-- (RKManagedObjectMapping *)generateBillMapping {
-    self.billMapping = [RKManagedObjectMapping mappingForClass:[SLFBill class]];
-    [billMapping.dateFormatStrings addObject:@"yyyy-MM-dd HH:mm:ss"];
-    [billMapping mapKeyPath:@"bill_id" toAttribute:@"billID"];
-    [billMapping mapKeyPath:@"state" toAttribute:@"stateID"];
-    [billMapping mapKeyPath:@"updated_at" toAttribute:@"dateUpdated"];
-    [billMapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
-    [billMapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
-    [billMapping mapAttributes:@"session", @"subjects", @"votes", @"versions", 
-                                     @"type", @"chamber", @"sponsors", @"actions",@"documents", @"title",  nil];
-    billMapping.primaryKeyAttribute = @"billID";
-    return billMapping;
 }
 
 - (RKManagedObjectMapping *)generateEventMapping {
     self.eventMapping = [RKManagedObjectMapping mappingForClass:[SLFEvent class]];
-    [eventMapping.dateFormatStrings addObject:@"yyyy-MM-dd HH:mm:ss"];
+    eventMapping.primaryKeyAttribute = @"eventID";
     [eventMapping mapKeyPath:@"id" toAttribute:@"eventID"];
     [eventMapping mapKeyPath:@"state" toAttribute:@"stateID"];
     [eventMapping mapKeyPath:@"updated_at" toAttribute:@"dateUpdated"];
@@ -123,13 +163,25 @@
     [eventMapping mapKeyPath:@"+link" toAttribute:@"link"];
     [eventMapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
     [eventMapping mapAttributes:@"session", @"participants", @"type", @"location",  nil];
-    eventMapping.primaryKeyAttribute = @"eventID";
     return eventMapping;
+}
+
+- (RKManagedObjectMapping *)generateBillMapping {
+    self.billMapping = [RKManagedObjectMapping mappingForClass:[SLFBill class]];
+    billMapping.primaryKeyAttribute = @"billID";
+    [billMapping mapKeyPath:@"bill_id" toAttribute:@"billID"];
+    [billMapping mapKeyPath:@"state" toAttribute:@"stateID"];
+    [billMapping mapKeyPath:@"updated_at" toAttribute:@"dateUpdated"];
+    [billMapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
+    [billMapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
+    [billMapping mapAttributes:@"session", @"subjects", @"votes", @"versions", 
+            @"type", @"chamber", @"sponsors", @"actions",@"documents", @"title",  nil];
+    return billMapping;
 }
 
 - (RKManagedObjectMapping *)generateLegislatorMapping {
     self.legislatorMapping = [RKManagedObjectMapping mappingForClass:[SLFLegislator class]];
-    [legislatorMapping.dateFormatStrings addObject:@"yyyy-MM-dd HH:mm:ss"];
+    legislatorMapping.primaryKeyAttribute = @"legID";
     [legislatorMapping mapKeyPath:@"leg_id" toAttribute:@"legID"];
     [legislatorMapping mapKeyPath:@"state" toAttribute:@"stateID"];
     [legislatorMapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
@@ -145,14 +197,13 @@
     [legislatorMapping mapKeyPath:@"votesmart_id" toAttribute:@"votesmartID"];
     [legislatorMapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
     [legislatorMapping mapAttributes:@"suffixes", @"party", @"level", @"district", @"country", @"chamber", @"active", nil];
-    legislatorMapping.primaryKeyAttribute = @"legID";
-#warning Can we directly map/hydrate relationships with stateIDs?
+        //legislatorMapping.setNilForMissingRelationships = NO;
     return legislatorMapping;
 }
 
 - (RKManagedObjectMapping *)generateCommitteeMapping {
     self.committeeMapping = [RKManagedObjectMapping mappingForClass:[SLFCommittee class]];
-    [committeeMapping.dateFormatStrings addObject:@"yyyy-MM-dd HH:mm:ss"]; 
+    committeeMapping.primaryKeyAttribute = @"committeeID";
     [committeeMapping mapKeyPath:@"id" toAttribute:@"committeeID"];
     [committeeMapping mapKeyPath:@"state" toAttribute:@"stateID"];
     [committeeMapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
@@ -162,32 +213,22 @@
     [committeeMapping mapKeyPath:@"committee" toAttribute:@"committeeName"];
     [committeeMapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
     [committeeMapping mapAttributes:@"chamber", @"subcommittee", nil];
-    committeeMapping.primaryKeyAttribute = @"committeeID";
+        //committeeMapping.setNilForMissingRelationships = NO;
     return committeeMapping;
 }
 
 - (RKManagedObjectMapping *)generatePositionMapping {
     self.positionMapping = [RKManagedObjectMapping mappingForClass:[SLFCommitteePosition class]];
-    [positionMapping mapAttributes:@"posID", @"positionType",@"legID",@"legislatorName",@"committeeID",@"committeeName",nil];
     positionMapping.primaryKeyAttribute = @"posID";
-    [self.committeeMapping addRelationshipMapping:[RKObjectRelationshipMapping mappingFromKeyPath:@"members" toKeyPath:@"positions" withMapping:positionMapping]];
-    [self.legislatorMapping addRelationshipMapping:[RKObjectRelationshipMapping mappingFromKeyPath:@"roles" toKeyPath:@"positions" withMapping:positionMapping]];
+    [positionMapping mapAttributes:@"posID", @"positionType",@"legID",@"legislatorName",@"committeeID",@"committeeName",nil];
+        //positionMapping.setNilForMissingRelationships = NO;
     return positionMapping;
 }
 
-- (RKObjectMappingProvider *)registerMappingsWithProvider:(RKObjectMappingProvider *)provider {
-    [provider setMapping:stateMapping forKeyPath:@"state"];
-    [provider setMapping:committeeMapping forKeyPath:@"committee"];
-    [provider setMapping:legislatorMapping forKeyPath:@"legislator"];
-    [provider setMapping:positionMapping forKeyPath:@"position"];
-    [provider setMapping:billMapping forKeyPath:@"bill"];
-    [provider setMapping:eventMapping forKeyPath:@"event"];
-    [provider setMapping:districtMapping forKeyPath:@"districtMap"];
-    return provider;
-}
+////////////////////////////////////
+#pragma EXTREME UGLINESS BEGINS HERE
 
 + (inout id *)premapLegislator:(SLFLegislator *)legislator withMappableData:(inout id *)mappableData {
-
     NSArray* origRolesArray = [*mappableData valueForKeyPath:@"roles"];
     NSString *legID = [*mappableData objectForKey:@"leg_id"];
     NSString *legName = [*mappableData objectForKey:@"full_name"];
@@ -202,15 +243,11 @@
     if (!stateID)
         stateID = legislator.stateID;
 
-    NSMutableArray* newRolesArray = [[NSMutableArray alloc] 
-									 initWithCapacity:[origRolesArray count]];
-    
+    NSMutableArray* newRolesArray = [[NSMutableArray alloc] initWithCapacity:[origRolesArray count]];
     for (NSDictionary* origRole in origRolesArray) {
-        
         NSString *comID = [origRole objectForKey:@"committee_id"];
         NSString *comName = [origRole objectForKey:@"committee"];
         NSString *roleType = [origRole objectForKey:@"type"];
-        
         SLFCommitteePosition *pos = [SLFMappingsManager findOrCreatePositionWithStateID:stateID
                                                                           committeeName:comName
                                                                             committeeID:comID
@@ -218,25 +255,21 @@
                                                                            legislatorID:legID
                                                                                roleType:roleType];
         if (pos) {
-                //pos.legislator = legislator;
             [newRolesArray addObject:pos];
         } else {
             RKLogDebug(@"Unable to create or find committee position with role: %@", origRole);
         }
-
     }
     
     // remove old array, and inject our modified array.
     [*mappableData removeObjectForKey:@"roles"];
     [*mappableData setObject:newRolesArray forKey:@"roles"];	
     [newRolesArray release];
-    
     return mappableData;
 }
 
 
 + (inout id *)premapCommittee:(SLFCommittee *)committee withMappableData:(inout id *)mappableData {
-    
     NSArray* origRolesArray = [*mappableData valueForKeyPath:@"members"];
     NSString *comID = [*mappableData objectForKey:@"id"];   
     NSString *comName = [*mappableData objectForKey:@"committee"];
@@ -244,18 +277,13 @@
     
     if (!comID)
         comID = committee.committeeID;
-    
     if (!comName)
         comName = committee.committeeName;
-    
     if (!stateID)
         stateID = committee.stateID;
 
-    NSMutableArray* newRolesArray = [[NSMutableArray alloc] 
-                                     initWithCapacity:[origRolesArray count]];
-    
+    NSMutableArray* newRolesArray = [[NSMutableArray alloc] initWithCapacity:[origRolesArray count]];
     for (NSDictionary* origRole in origRolesArray) {
-        
         NSString *legID = [origRole objectForKey:@"leg_id"];
         NSString *legName = [origRole objectForKey:@"name"];
         NSString *roleType = [origRole objectForKey:@"role"];
@@ -267,7 +295,6 @@
                                                                            legislatorID:legID
                                                                                roleType:roleType];
         if (pos) {
-                //pos.committee = committee;
             [newRolesArray addObject:pos];
         } else {
             RKLogDebug(@"Unable to create or find committee position with role: %@", origRole);
@@ -278,7 +305,6 @@
     [*mappableData removeObjectForKey:@"members"];
     [*mappableData setObject:newRolesArray forKey:@"members"];
     [newRolesArray release];
-    
     return mappableData;
 }
 
@@ -293,10 +319,9 @@
         return nil;
     }
     
-    //  To generate a unique primary key ID, the aggregated value of these attributes must be unique across everything.
-    NSString *posID = [NSString stringWithFormat:@"%@|%@|%@", stateID, comID, legID];
-    NSString *predString = [NSString stringWithFormat:@"(posID LIKE[cd] '%@') OR (committeeID LIKE[cd] '%@' AND legID LIKE[cd] '%@')", posID, comID, legID];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:predString];
+    //  generate a unique ID, the aggregated value of these attributes must be unique across everything.
+    NSString *compositePrimaryKey = [NSString stringWithFormat:@"%@|%@|%@", stateID, comID, legID];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(posID LIKE[cd] %@) OR (committeeID LIKE[cd] %@ AND legID LIKE[cd] %@)", compositePrimaryKey, comID, legID];
     SLFCommitteePosition *position = [SLFCommitteePosition findFirstWithPredicate:predicate];
     
     BOOL foundExistingPosition = (position != NULL);
@@ -304,7 +329,7 @@
     RKLogTrace(@"-----------------------------");
     
     if (foundExistingPosition) {
-        RKLogTrace(@"FOUND = %@", posID);
+        RKLogTrace(@"FOUND = %@", compositePrimaryKey);
     } else {
         position = [SLFCommitteePosition object];
         position.committeeID = comID;
@@ -312,7 +337,7 @@
     }
     
     // Found or not, we can update these properties we know about anyway.
-    position.posID = posID;
+    position.posID = compositePrimaryKey;
     position.legislatorName = legName;
     position.committeeName = comName;
     position.positionType =	roleType;		
@@ -336,7 +361,6 @@
     
     return position;
 }
-
 
 
 @end

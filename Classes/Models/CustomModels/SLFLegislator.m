@@ -1,96 +1,51 @@
 #import "SLFLegislator.h"
-#import "SLFDistrictMap.h"
-#import "SLFState.h"
-#import "UtilityMethods.h"
+#import "SLFDataModels.h"
 
 @implementation SLFLegislator
 
-- (void)setStateID:(NSString *)newID {
-    [self willChangeValueForKey:@"stateID"];
-    [self setPrimitiveStateID:newID];
-    [self didChangeValueForKey:@"stateID"];
-    
-    if (!newID)
-        return;
-    
-    SLFState *tempState = [SLFState findFirstByAttribute:@"abbreviation" withValue:newID];
-    self.state = tempState;
+// This is here because the JSON data has a keyPath "state" that conflicts with our core data relationship.
+- (SLFState *)state {
+    return self.stateObj;
+}
+
+- (SLFChamber *)chamberObj {
+    return [SLFChamber chamberWithType:self.chamber forState:self.state];
 }
 
 - (void)setParty:(NSString *)newParty {
-    
-    if (newParty && [newParty hasSubstring:@"democrat" caseInsensitive:YES])
+    if (newParty && [newParty hasPrefix:@"Democrat"])
         newParty = @"Democrat";
-    
     [self willChangeValueForKey:@"party"];
     [self setPrimitiveParty:newParty];
     [self didChangeValueForKey:@"party"];    
 }
 
 - (NSArray *)sortedPositions {
-	
-	/* hacky way to get this without having a real set of "positions" */
-    //NSArray * results = [SLFCommitteePosition findByAttribute:@"legID" withValue:self.legID andOrderBy:@"committeeName" ascending:YES];	
-	
-    // alternatively, sort by "role"
-	NSSortDescriptor *desc = [NSSortDescriptor sortDescriptorWithKey:@"committeeName" ascending:YES];
-    
-	NSArray *results = [[self.positions allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
-	
-	return results;
-	
+    if (self.positions) {
+        NSSortDescriptor *desc = [NSSortDescriptor sortDescriptorWithKey:@"committeeName" ascending:YES];
+        return [self.positions sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+    }
+    return nil;
 }
 
-/*- (NSString *)districtMapResourcePath {
-    return [NSString stringWithFormat:@"/districts/%@/%@/%@/", self.stateID, self.chamber, self.district];
-}*/
-
-- (SLFDistrictMap *)hydratedDistrictMap {
-    SLFDistrictMap *tempMap = self.districtMap;
+- (SLFDistrict *)hydratedDistrict {
+    SLFDistrict *hydratedMap = self.districtMap;
     
-    if (tempMap)
-        return tempMap;
-    
-    NSString *slug = self.districtMapSlug;
-    if (!slug || [slug length] == 0)
-        return nil;
-    
-    
-    tempMap = [SLFDistrictMap findFirstByAttribute:@"boundaryID" withValue:slug];
-    if (!tempMap)
-        return nil;
-    
-    self.districtMap = tempMap;
-    
-    return tempMap;
+    if (!hydratedMap) {
+        hydratedMap = [SLFDistrict findFirstByAttribute:@"boundaryID" withValue:self.districtID];
+        if (hydratedMap)
+            self.districtMap = hydratedMap;
+    }
+    return hydratedMap;
 }
 
 
 
-- (NSString *)districtMapSlug {
+- (NSString *)districtID {
     if (self.districtMap)
         return self.districtMap.boundaryID;
-    
-    NSString *districtMapID = nil;
-    if ([self.chamber isEqualToString:@"upper"]) {
-        districtMapID = [NSString stringWithFormat:@"sldu-%@-state-%@-district-%@", 
-                         self.stateID, 
-                         [self.state.upperChamberName lowercaseString],
-                         self.district];
-    }
-    else {
-        NSString *chamberName = [self.state.lowerChamberName lowercaseString];
-        if ([chamberName hasPrefix:@"house"])
-            chamberName = @"state-house";
-        
-        districtMapID = [NSString stringWithFormat:@"sldl-%@-%@-district-%@", 
-                         self.stateID, 
-                         chamberName,
-                         self.district];
-    }
-    return districtMapID;
+    return [self.chamberObj boundaryCodeForDistrictName:self.district];
 }
-
 
 
 /////////////////////////////
@@ -100,7 +55,7 @@
 	return [[self fullNameLastFirst] compare: [p fullNameLastFirst]];	
 }
 
-- (NSString *) lastnameInitial {
+- (NSString *)lastnameInitial {
 	NSString * initial = [self.lastName substringToIndex:1];
 	return initial;
 }
@@ -110,7 +65,7 @@
 }
 
 - (NSString *)chamberShortName {
-    return abbreviateString(chamberStringFromOpenStates(self.chamber));
+    return self.chamberObj.shortName;
 }
 
 - (NSString *)districtPartyString {
@@ -147,17 +102,11 @@
 }
 
 - (NSString *)title {
-    NSString *aTitle = self.state.lowerChamberTitle;
-    if ([self.chamber isEqualToString:@"upper"])
-        aTitle = self.state.upperChamberTitle;
-    return aTitle;
+    return self.chamberObj.title;
 }
 
 - (NSString *)term {
-    NSNumber *years = self.state.lowerChamberTerm;
-    if ([self.chamber isEqualToString:@"upper"])
-        years = self.state.upperChamberTerm;
-    return [NSString stringWithFormat:@"Term: %@ Years", years];
+    return [NSString stringWithFormat:@"Term: %@ Years", self.chamberObj.term];
 }
 
 @end

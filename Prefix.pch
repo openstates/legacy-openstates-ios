@@ -13,15 +13,17 @@
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
-	#import <CoreData/CoreData.h>
-    
     #import <RestKit/RestKit.h>
+    #import <RestKit/CoreData/CoreData.h>
 
-	#import "VTPGAdvancedLog.h"
+	//#import "VTPGAdvancedLog.h"
 	#import "Constants.h"
 	#import "TexLegeLibrary.h"
-	#import "PrivateStrings.h"
+
+    #import "APIKeys.h"
 
 	#define nice_release(var) if (var) [var release], var = nil
+
+    BOOL IsEmpty(NSObject * thing);
 
 #endif

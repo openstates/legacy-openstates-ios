@@ -23,7 +23,6 @@
 @synthesize stateID;
 @synthesize resourcePath;
 @synthesize resourceClass;
-@synthesize sortBy;
 @synthesize groupBy;
 @synthesize loading;
 @synthesize fetchedResultsController;
@@ -31,38 +30,30 @@
 @synthesize searchDisplayController;
 @synthesize queryParameters;
 
-- (id)initWithObjClass:(Class)newClass 
-                    sortBy:(NSString *)newSort
-                   groupBy:(NSString *)newGroup
+- (id)initWithObjClass:(Class)newClass groupBy:(NSString *)newGroup
 {
 	if ((self = [super init])) {
-        
         NSCParameterAssert( (newClass != NULL) );
         NSCParameterAssert( [newClass isSubclassOfClass:[NSManagedObject class]] );
-                   
         self.resourceClass = newClass;
-        self.sortBy = newSort;
         self.groupBy = newGroup;
         self.loading = NO;
         self.queryParameters = [NSMutableDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
-
-        
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(dataSourceReceivedMemoryWarning:)
 													 name:UIApplicationDidReceiveMemoryWarningNotification 
-                                                   object:nil];
-		
+                                                   object:nil];		
 	}
 	return self;
 }
 
 
 - (void)dealloc {	
+    [[RKObjectManager sharedManager].client.requestQueue cancelRequestsWithDelegate:self];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
     self.stateID = nil;    
 	self.fetchedResultsController = nil;
 	self.searchDisplayController = nil;	
-    self.sortBy = nil;
     self.groupBy = nil;
     self.queryParameters = nil;
     [super dealloc];
@@ -70,7 +61,6 @@
 
 #pragma mark -
 #pragma mark TableDataSourceProtocol methods
-// return the data used by the navigation controller and tab bar item
 
 - (BOOL)usesCoreData
 { return YES; }
@@ -87,7 +77,8 @@
 #pragma mark Data Object Accessors
 
 - (void)setStateID:(NSString *)newID {
-    [stateID release];
+    if (stateID)
+        [stateID release];
     stateID = [newID copy];
     if (newID) {
         [self loadData];
@@ -99,41 +90,30 @@
     return nil;
 }
 
-- (NSString *)primaryKeyProperty {
-    return self.stateID;
-}
-
 - (void)loadData {
+    if (self.fetchedResultsController) {
+        NSError *error = nil;  
+        if (![fetchedResultsController performFetch:&error]) {
+            RKLogError(@"Unresolved error %@, %@", [error localizedDescription], [error userInfo]);
+        }  
+    }
     [self loadDataWithResourcePath:self.resourcePath];
 }
 
 - (void)loadDataWithResourcePath:(NSString *)newPath {
     NSCParameterAssert(newPath != NULL);
-    
-    if (!self.primaryKeyProperty || [[NSNull null] isEqual:self.primaryKeyProperty]) {
-        return;
-    }
-    
     if (self.loading) {
         RKLogDebug(@"Multiple loadData attempts.");
         return; // we're already working on it!
     }
     self.loading = YES;
-    
-    RKObjectManager* objectManager = [RKObjectManager sharedManager];
-    RKObjectMapping* objMapping = [objectManager.mappingProvider objectMappingForClass:self.resourceClass];
-
 	NSString *pathToLoad = [newPath appendQueryParams:self.queryParameters];
-    
-    RKLogDebug(@"Loading data at path: %@", pathToLoad);
-    [objectManager loadObjectsAtResourcePath:pathToLoad objectMapping:objMapping delegate:self];
+    [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:pathToLoad delegate:self];
 }
 
 
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
-    
 	id tempEntry = nil;
-    
 	@try {
 		tempEntry = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	}
@@ -165,11 +145,9 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {	
-	NSInteger count = [[self.fetchedResultsController sections] count];		
-    return count; 
+	return [[self.fetchedResultsController sections] count];		
 }
 
-// This is for the little index along the right side of the table ... use nil if you don't want it.
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
 	return  (self.hideTableIndex) ? nil : [self.fetchedResultsController sectionIndexTitles];
 }
@@ -178,26 +156,22 @@
 	return index;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section {
-    
-    NSInteger count = [[self.fetchedResultsController sections] count];		
-	if (count > 1) {
-		id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+- (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)sectionIndex {
+    NSInteger count = 0;
+    NSArray *sections = [self.fetchedResultsController sections];
+	if ([sections count] > sectionIndex) {
+		id <NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:sectionIndex];
+            //NSLog(@"%@", [sectionInfo objects]);
 		count = [sectionInfo numberOfObjects];
 	}
 	return count;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	// this table has multiple sections. One for each unique character that an element begins with
-	// [A,B,C,D,E,F,G,H,I,K,L,M,N,O,P,R,S,T,U,V,X,Y,Z]
-	// return the letter that represents the requested section
-	
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)sectionIndex {
 	NSString *headerTitle = nil;
-    
-	NSInteger count = [[self.fetchedResultsController sections] count];		
-	if (count > 1 )  {
-		id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+    NSArray *sections = [self.fetchedResultsController sections];
+	if ([sections count] > sectionIndex )  {
+		id <NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:sectionIndex];
 		headerTitle = [sectionInfo indexTitle];
 		if (!headerTitle) {
 			headerTitle = [sectionInfo name];
@@ -206,7 +180,6 @@
             return headerTitle;
         }
 	}
-    
 	return @"";
 }
 
@@ -214,34 +187,39 @@
 #pragma mark -
 #pragma mark NSFetchedResultsController
 
+- (NSFetchedResultsController *)fetchedResultsController {
+    if (fetchedResultsController)
+        return fetchedResultsController;
+    
+    id<RKManagedObjectCache> cache = [[[RKObjectManager sharedManager] objectStore] managedObjectCache];
+    NSCParameterAssert(cache != NULL);
+    NSString *pathToLoad = [self.resourcePath appendQueryParams:self.queryParameters];
+    NSArray *fetches = [cache fetchRequestsForResourcePath:pathToLoad];
+    NSCParameterAssert(!IsEmpty(fetches));
+    NSFetchRequest *request = [fetches objectAtIndex:0];
+    NSCParameterAssert(request != NULL);
+    
+    fetchedResultsController = [[self.resourceClass fetchRequest:request groupedBy:self.groupBy] retain];
+    fetchedResultsController.delegate = self;    
+    return fetchedResultsController;
+}    
+
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 	[[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataUpdated object:self];
 }
-
-- (NSFetchedResultsController *)fetchedResultsController {
-    
-    if (fetchedResultsController) {
-        return fetchedResultsController;
-    }        
-    
-    NSPredicate * predicate = nil;
-    if (self.stateID) {
-        predicate = [NSPredicate predicateWithFormat:@"(stateID LIKE[cd] '%@')", self.stateID];
-    }
-    
-    fetchedResultsController = [[self.resourceClass fetchAllSortedBy:self.sortBy
-                                                      ascending:YES 
-                                                  withPredicate:predicate 
-                                                        groupBy:self.groupBy] retain];
-    return fetchedResultsController;
-}    
 
 #pragma mark -
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoaderDidFinishLoading:(RKObjectLoader*)objectLoader {
     self.loading = NO;
-    //[[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataUpdated object:self];
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error]) {
+        [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
+        return;
+    }
+    RKLogDebug(@"Loaded %d objects into frc.", [self.fetchedResultsController.fetchedObjects count]);
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataUpdated object:self];
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {

@@ -7,16 +7,9 @@
 #pragma mark -
 #pragma mark Relationship Mapping
 
-- (void)setStateID:(NSString *)newID {
-    [self willChangeValueForKey:@"stateID"];
-    [self setPrimitiveStateID:newID];
-    [self didChangeValueForKey:@"stateID"];
-    
-    if (!newID)
-        return;
-    
-    SLFState *tempState = [SLFState findFirstByAttribute:@"abbreviation" withValue:newID];
-    self.state = tempState;
+// This is here because the JSON data has a keyPath "state" that conflicts with our core data relationship.
+- (SLFState *)state {
+    return self.stateObj;
 }
 
 #pragma mark -
@@ -29,12 +22,11 @@
 
 - (NSArray *)sortedMembers
 {    
-    NSArray *pos = [self.positions allObjects];
-    if (pos) {
-        NSSortDescriptor *desc = [NSSortDescriptor sortDescriptorWithKey:@"legislator.lastName" ascending:YES];
-        [pos sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+    if (self.positions) {
+        NSSortDescriptor *desc = [NSSortDescriptor sortDescriptorWithKey:@"legislator.fullNameLastFirst" ascending:YES];
+        return [self.positions sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
     }
-    return pos;
+    return nil;
 }
 
 @end

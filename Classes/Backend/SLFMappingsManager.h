@@ -28,7 +28,7 @@
 @property (nonatomic,retain) RKManagedObjectMapping * districtMapping;
 @property (nonatomic,retain) RKManagedObjectMapping * stateMapping;
 
-- (RKObjectMappingProvider *)registerMappingsWithProvider:(RKObjectMappingProvider *)provider;
+- (void)registerMappingsWithProvider:(RKObjectMappingProvider *)provider;
 
 + (inout id *)premapCommittee:(SLFCommittee *)committee withMappableData:(inout id *)mappableData;
 + (inout id *)premapLegislator:(SLFLegislator *)legislator withMappableData:(inout id *)mappableData;

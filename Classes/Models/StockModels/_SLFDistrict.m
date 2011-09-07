@@ -1,29 +1,29 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
 // Make changes to SLFDistrictMap.m instead.
 
-#import "_SLFDistrictMap.h"
+#import "_SLFDistrict.h"
 
-@implementation SLFDistrictMapID
+@implementation SLFDistrictID
 @end
 
-@implementation _SLFDistrictMap
+@implementation _SLFDistrict
 
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_ {
 	NSParameterAssert(moc_);
-	return [NSEntityDescription insertNewObjectForEntityForName:@"SLFDistrictMap" inManagedObjectContext:moc_];
+	return [NSEntityDescription insertNewObjectForEntityForName:@"SLFDistrict" inManagedObjectContext:moc_];
 }
 
 + (NSString*)entityName {
-	return @"SLFDistrictMap";
+	return @"SLFDistrict";
 }
 
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_ {
 	NSParameterAssert(moc_);
-	return [NSEntityDescription entityForName:@"SLFDistrictMap" inManagedObjectContext:moc_];
+	return [NSEntityDescription entityForName:@"SLFDistrict" inManagedObjectContext:moc_];
 }
 
-- (SLFDistrictMapID*)objectID {
-	return (SLFDistrictMapID*)[super objectID];
+- (SLFDistrictID*)objectID {
+	return (SLFDistrictID*)[super objectID];
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
