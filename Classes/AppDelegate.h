@@ -1,5 +1,5 @@
 //
-//  RKTwitterAppDelegate.h
+//  AppDelegate.h
 //  Created by Gregory Combs on 7/31/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
