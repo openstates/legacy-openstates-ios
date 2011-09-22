@@ -3,6 +3,7 @@
 
 #import <CoreData/CoreData.h>
 
+@class BillSponsor;
 
 @class SLFState;
 
@@ -20,7 +21,7 @@
 
 @class NSArray;
 @class NSArray;
-@class NSArray;
+@class NSObject;
 
 @interface SLFBillID : NSManagedObjectID {}
 @end
@@ -98,10 +99,9 @@
 
 
 
-@property (nonatomic, retain) NSArray *sponsors;
+@property (nonatomic, retain) NSSet* sponsors;
 
-
-//- (BOOL)validateSponsors:(id*)value_ error:(NSError**)error_;
+- (NSMutableSet*)sponsorsSet;
 
 
 
@@ -166,6 +166,11 @@
 
 @interface _SLFBill (CoreDataGeneratedAccessors)
 
+- (void)addSponsors:(NSSet*)value_;
+- (void)removeSponsors:(NSSet*)value_;
+- (void)addSponsorsObject:(BillSponsor*)value_;
+- (void)removeSponsorsObject:(BillSponsor*)value_;
+
 @end
 
 @interface _SLFBill (CoreDataGeneratedPrimitiveAccessors)
@@ -219,8 +224,8 @@
 
 
 
-- (NSArray*)primitiveSponsors;
-- (void)setPrimitiveSponsors:(NSArray*)value;
+- (NSMutableSet*)primitiveSponsors;
+- (void)setPrimitiveSponsors:(NSMutableSet*)value;
 
 
 

@@ -41,7 +41,7 @@
     return [NSString stringWithFormat:@"%@ %@ %@ %@", 
             self.state.name, 
             self.chamberObj.shortName,
-            abbreviateString(@"District"),
+            @"District",
             self.name];
 }
 
@@ -66,7 +66,7 @@
     
     return memberNames;
 }
-
+/*
 - (UIImage *)image {
     if ([self.legislators count] == 1) {
         SLFLegislator *leg = [self.legislators anyObject];
@@ -79,6 +79,7 @@
     }
     return [UIImage imageNamed:@"silverstar.png"];
 }
+*/
 
 
 #pragma mark -
@@ -92,7 +93,7 @@
     }
     
     NSArray *rings = [self shape];
-    if(IsEmpty(rings)) {
+    if(!rings || ![rings count]) {
         RKLogError(@"District %@ shape is empty or has no rings.", self.boundaryID);
         return nil;
     }

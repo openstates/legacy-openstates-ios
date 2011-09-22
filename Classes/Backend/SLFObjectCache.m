@@ -14,36 +14,36 @@
 #import "SLFDataModels.h"
 
 @interface SLFObjectCache()
-- (NSArray*)fetchRequestsStatesForResourcePath:(NSString*)resourcePath;
-- (NSArray*)fetchRequestsLegislatorsForResourcePath:(NSString*)resourcePath;
-- (NSArray*)fetchRequestsCommitteesForResourcePath:(NSString*)resourcePath;
-- (NSArray*)fetchRequestsDistrictsForResourcePath:(NSString*)resourcePath;
-- (NSArray*)fetchRequestsEventsForResourcePath:(NSString*)resourcePath;
-- (NSArray*)fetchRequestsBillsForResourcePath:(NSString*)resourcePath;
+- (NSFetchRequest*)fetchRequestStatesForResourcePath:(NSString*)resourcePath;
+- (NSFetchRequest*)fetchRequestLegislatorsForResourcePath:(NSString*)resourcePath;
+- (NSFetchRequest*)fetchRequestCommitteesForResourcePath:(NSString*)resourcePath;
+- (NSFetchRequest*)fetchRequestDistrictsForResourcePath:(NSString*)resourcePath;
+- (NSFetchRequest*)fetchRequestEventsForResourcePath:(NSString*)resourcePath;
+- (NSFetchRequest*)fetchRequestBillsForResourcePath:(NSString*)resourcePath;
 @end
 
 @implementation SLFObjectCache
 
-- (NSArray*)fetchRequestsForResourcePath:(NSString*)resourcePath {
+- (NSFetchRequest*)fetchRequestForResourcePath:(NSString*)resourcePath {
     NSCParameterAssert(resourcePath != NULL);    
 	if ([resourcePath hasPrefix:@"/metadata"])
-		return [self fetchRequestsStatesForResourcePath:resourcePath];
+		return [self fetchRequestStatesForResourcePath:resourcePath];
 	if ([resourcePath hasPrefix:@"/legislators"])
-		return [self fetchRequestsLegislatorsForResourcePath:resourcePath];
+		return [self fetchRequestLegislatorsForResourcePath:resourcePath];
 	if ([resourcePath hasPrefix:@"/committees"])
-		return [self fetchRequestsCommitteesForResourcePath:resourcePath];
+		return [self fetchRequestCommitteesForResourcePath:resourcePath];
 	if ([resourcePath hasPrefix:@"/districts"])
-		return [self fetchRequestsDistrictsForResourcePath:resourcePath];
+		return [self fetchRequestDistrictsForResourcePath:resourcePath];
 	if ([resourcePath hasPrefix:@"/events"])
-		return [self fetchRequestsEventsForResourcePath:resourcePath];
+		return [self fetchRequestEventsForResourcePath:resourcePath];
 	if ([resourcePath hasPrefix:@"/bills"])
-		return [self fetchRequestsBillsForResourcePath:resourcePath];
+		return [self fetchRequestBillsForResourcePath:resourcePath];
     return nil;
 }
 
 
 // FOR STATES ============================
-- (NSArray*)fetchRequestsStatesForResourcePath:(NSString*)resourcePath {
+- (NSFetchRequest*)fetchRequestStatesForResourcePath:(NSString*)resourcePath {
 	NSDictionary *arguments = nil;
 	NSFetchRequest *request = [SLFState fetchRequest];
 	RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
@@ -56,11 +56,11 @@
     // Even without a match, just do it anyway, since we know it's a state/metadata resource
     NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
     [request setSortDescriptors:[NSArray arrayWithObject:byName]];
-    return [NSArray arrayWithObject:request];
+    return request;
 }
 
 // FOR LEGISLATORS ============================
-- (NSArray*)fetchRequestsLegislatorsForResourcePath:(NSString*)resourcePath {
+- (NSFetchRequest*)fetchRequestLegislatorsForResourcePath:(NSString*)resourcePath {
 	NSDictionary *arguments = nil;
 	NSFetchRequest *request = [SLFLegislator fetchRequest];
 	RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
@@ -75,11 +75,11 @@
     NSSortDescriptor *byLastName = [NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES];
     NSSortDescriptor *byFirstName = [NSSortDescriptor sortDescriptorWithKey:@"firstName" ascending:YES];
     [request setSortDescriptors:[NSArray arrayWithObjects:byLastName, byFirstName, nil]];
-    return [NSArray arrayWithObject:request];
+    return request;
 }
 
 // FOR COMMITTEES ============================
-- (NSArray*)fetchRequestsCommitteesForResourcePath:(NSString*)resourcePath {
+- (NSFetchRequest*)fetchRequestCommitteesForResourcePath:(NSString*)resourcePath {
 	NSDictionary *arguments = nil;
 	NSFetchRequest *request = [SLFCommittee fetchRequest];
 	RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
@@ -93,11 +93,11 @@
     
     NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey:@"committeeName" ascending:YES];
     [request setSortDescriptors:[NSArray arrayWithObject:byName]];
-    return [NSArray arrayWithObject:request];
+    return request;
 }
 
 // FOR DISTRICTS ============================
-- (NSArray*)fetchRequestsDistrictsForResourcePath:(NSString*)resourcePath {
+- (NSFetchRequest*)fetchRequestDistrictsForResourcePath:(NSString*)resourcePath {
 	NSDictionary *args = nil;
 	NSFetchRequest *request = [SLFDistrict fetchRequest];
 	RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
@@ -114,13 +114,13 @@
                      [args objectForKey:@"stateID"]];
     [request setPredicate:predicate];
     
-    NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-    [request setSortDescriptors:[NSArray arrayWithObject:byName]];
-    return [NSArray arrayWithObject:request];
+    NSSortDescriptor *byNumeric = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
+    [request setSortDescriptors:[NSArray arrayWithObject:byNumeric]];
+    return request;
 }
 
 // FOR EVENTS ============================
-- (NSArray*)fetchRequestsEventsForResourcePath:(NSString*)resourcePath {
+- (NSFetchRequest*)fetchRequestEventsForResourcePath:(NSString*)resourcePath {
 	NSDictionary *args = nil;
 	NSFetchRequest *request = [SLFEvent fetchRequest];
 	RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
@@ -132,9 +132,9 @@
 		predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", [args objectForKey:@"state"]];
     [request setPredicate:predicate];
 
-    NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey:@"dateStart" ascending:YES];
-    [request setSortDescriptors:[NSArray arrayWithObject:byName]];
-    return [NSArray arrayWithObject:request];
+    NSSortDescriptor *byNumeric = [NSSortDescriptor sortDescriptorWithKey:@"dateStart" ascending:YES selector:@selector(localizedStandardCompare:)];
+    [request setSortDescriptors:[NSArray arrayWithObject:byNumeric]];
+    return request;
 }
 
 // FOR BILLS ============================
@@ -144,7 +144,7 @@
 // TODO: Need a way to search for "updated_since"
     // /bills?updated_since=2011-04-27&state=tx&apikey=REDACTED
 
-- (NSArray*)fetchRequestsBillsForResourcePath:(NSString*)resourcePath {
+- (NSFetchRequest*)fetchRequestBillsForResourcePath:(NSString*)resourcePath {
 
 	NSDictionary *args = nil;
 	NSFetchRequest *request = [SLFBill fetchRequest];
@@ -183,10 +183,10 @@
 	}
     [request setPredicate:predicate];
     
-    NSSortDescriptor *bySession = [NSSortDescriptor sortDescriptorWithKey:@"session" ascending:YES];
-    NSSortDescriptor *byBillID = [NSSortDescriptor sortDescriptorWithKey:@"billID" ascending:YES];
+    NSSortDescriptor *bySession = [NSSortDescriptor sortDescriptorWithKey:@"session" ascending:YES selector:@selector(localizedStandardCompare:)];
+    NSSortDescriptor *byBillID = [NSSortDescriptor sortDescriptorWithKey:@"billID" ascending:YES selector:@selector(localizedStandardCompare:)];
     [request setSortDescriptors:[NSArray arrayWithObjects:bySession, byBillID, nil]];
-    return [NSArray arrayWithObject:request];
+    return request;
 }
 
 

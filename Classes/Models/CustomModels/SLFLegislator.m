@@ -20,12 +20,18 @@
     [self didChangeValueForKey:@"party"];    
 }
 
-- (NSArray *)sortedPositions {
-    if (self.positions) {
-        NSSortDescriptor *desc = [NSSortDescriptor sortDescriptorWithKey:@"committeeName" ascending:YES];
-        return [self.positions sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+- (NSArray *)sortedRoles {
+    if (IsEmpty(self.roles))
+        return nil;
+    NSSortDescriptor *desc = [NSSortDescriptor sortDescriptorWithKey:@"committeeName" ascending:YES];    
+    NSMutableArray * roles = [NSMutableArray arrayWithArray:[self.roles sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]]];
+    CommitteeRole *dirtyObject = [roles objectAtIndex:0];
+    if (IsEmpty(dirtyObject.committeeName)) {
+        [roles removeObject:dirtyObject];
+        [dirtyObject deleteEntity];
+        [[[RKObjectManager sharedManager] objectStore] save];
     }
-    return nil;
+    return roles;
 }
 
 - (SLFDistrict *)hydratedDistrict {
@@ -44,11 +50,32 @@
 - (NSString *)districtID {
     if (self.districtMap)
         return self.districtMap.boundaryID;
-    return [self.chamberObj boundaryCodeForDistrictName:self.district];
+    
+    NSString *boundaryCode = ([self.chamber isEqualToString:@"upper"]) ? @"sldu" : @"sldl";
+    NSString *chamberName = [self.chamberShortName lowercaseString];
+    if ([chamberName isEqualToString:@"senate"] || [chamberName isEqualToString:@"house"])
+        chamberName = [NSString stringWithFormat:@"state-%@", chamberName];
+    
+    NSDictionary *boundaryIDComponents = [NSDictionary dictionaryWithObjectsAndKeys:
+                                          boundaryCode, @"boundaryCode",
+                                          self.stateID, @"stateID",
+                                          chamberName, @"chamberName",
+                                          self.district, @"districtID", nil];
+    
+    return RKMakePathWithObject(@":boundaryCode-:stateID-:chamberName-district-:districtID", boundaryIDComponents);    
 }
 
 
+
 /////////////////////////////
+
+- (NSString *)demoLongName {
+    return [NSString stringWithFormat:@"%@ (%@-%@)", self.fullName, [self.party substringToIndex:1], self.district];
+}
+
+- (NSString *)districtMapLabel {
+    return [NSString stringWithFormat:@"%@ %@ District %@", self.state.name, self.chamberShortName, self.district];
+}
 
 - (NSComparisonResult)compareMembersByName:(SLFLegislator *)p
 {	
@@ -97,7 +124,7 @@
 - (NSString *)labelSubText {
 	NSString *string;
 	string = [NSString stringWithFormat: NSLocalizedStringFromTable(@"%@ - District %@", @"DataTableUI", @"The person and their district number"),
-              [self chamberShortName], self.district];
+              self.chamberShortName, self.district];
 	return string;
 }
 

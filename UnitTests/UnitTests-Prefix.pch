@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'UnitTests' target in the 'UnitTests' project
+//
+
+#ifdef __OBJC__
+    //#define KIWI_DISABLE_MACRO_API 1
+    #import "Prefix.pch"
+#endif

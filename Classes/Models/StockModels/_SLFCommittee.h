@@ -3,10 +3,8 @@
 
 #import <CoreData/CoreData.h>
 
-
-@class SLFCommitteePosition;
+@class CommitteeMember;
 @class SLFState;
-
 
 
 
@@ -70,6 +68,14 @@
 
 
 
+@property (nonatomic, retain) NSSet* members;
+
+
+- (NSMutableSet*)membersSet;
+
+
+
+
 @property (nonatomic, retain) NSString *parentID;
 
 
@@ -111,13 +117,6 @@
 
 
 
-@property (nonatomic, retain) NSSet* positions;
-
-- (NSMutableSet*)positionsSet;
-
-
-
-
 @property (nonatomic, retain) SLFState* stateObj;
 
 //- (BOOL)validateStateObj:(id*)value_ error:(NSError**)error_;
@@ -129,10 +128,10 @@
 
 @interface _SLFCommittee (CoreDataGeneratedAccessors)
 
-- (void)addPositions:(NSSet*)value_;
-- (void)removePositions:(NSSet*)value_;
-- (void)addPositionsObject:(SLFCommitteePosition*)value_;
-- (void)removePositionsObject:(SLFCommitteePosition*)value_;
+- (void)addMembers:(NSSet*)value_;
+- (void)removeMembers:(NSSet*)value_;
+- (void)addMembersObject:(CommitteeMember*)value_;
+- (void)removeMembersObject:(CommitteeMember*)value_;
 
 @end
 
@@ -169,6 +168,12 @@
 
 
 
+- (NSMutableSet*)primitiveMembers;
+- (void)setPrimitiveMembers:(NSMutableSet*)value;
+
+
+
+
 - (NSString*)primitiveParentID;
 - (void)setPrimitiveParentID:(NSString*)value;
 
@@ -197,11 +202,6 @@
 - (void)setPrimitiveVotesmartID:(NSString*)value;
 
 
-
-
-
-- (NSMutableSet*)primitivePositions;
-- (void)setPrimitivePositions:(NSMutableSet*)value;
 
 
 

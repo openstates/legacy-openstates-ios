@@ -1,5 +1,5 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
-// Make changes to SLFDistrictMap.h instead.
+// Make changes to SLFDistrict.h instead.
 
 #import <CoreData/CoreData.h>
 
@@ -8,11 +8,11 @@
 @class SLFState;
 
 
-@class NSArray;
 
 
 
 @class NSDictionary;
+@class NSArray;
 
 
 @interface SLFDistrictID : NSManagedObjectID {}
@@ -31,14 +31,6 @@
 
 
 //- (BOOL)validateBoundaryID:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, retain) NSDictionary *regionDictionary;
-
-
-//- (BOOL)validateRegionDictionary:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -67,6 +59,14 @@
 - (void)setNumSeatsValue:(short)value_;
 
 //- (BOOL)validateNumSeats:(id*)value_ error:(NSError**)error_;
+
+
+
+
+@property (nonatomic, retain) NSDictionary *regionDictionary;
+
+
+//- (BOOL)validateRegionDictionary:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -122,12 +122,6 @@
 
 
 
-- (NSDictionary*)primitiveRegionDictionary;
-- (void)setPrimitiveRegionDictionary:(NSDictionary*)value;
-
-
-
-
 - (NSString*)primitiveChamber;
 - (void)setPrimitiveChamber:(NSString*)value;
 
@@ -149,8 +143,14 @@
 
 
 
-- (NSDictionary*)primitiveShape;
-- (void)setPrimitiveShape:(NSDictionary*)value;
+- (NSDictionary*)primitiveRegionDictionary;
+- (void)setPrimitiveRegionDictionary:(NSDictionary*)value;
+
+
+
+
+- (NSArray*)primitiveShape;
+- (void)setPrimitiveShape:(NSArray*)value;
 
 
 

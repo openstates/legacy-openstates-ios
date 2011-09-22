@@ -71,6 +71,19 @@
 
 
 
+@dynamic members;
+
+- (NSMutableSet*)membersSet {
+	[self willAccessValueForKey:@"members"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"members"];
+	[self didAccessValueForKey:@"members"];
+	return result;
+}
+
+
+
+
+
 @dynamic parentID;
 
 
@@ -105,17 +118,6 @@
 
 
 
-
-@dynamic positions;
-
-	
-- (NSMutableSet*)positionsSet {
-	[self willAccessValueForKey:@"positions"];
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"positions"];
-	[self didAccessValueForKey:@"positions"];
-	return result;
-}
-	
 
 @dynamic stateObj;
 

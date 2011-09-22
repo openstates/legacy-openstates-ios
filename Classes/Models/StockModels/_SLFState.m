@@ -44,13 +44,6 @@
 
 
 
-@dynamic stateID;
-
-
-
-
-
-
 @dynamic dateUpdated;
 
 
@@ -127,6 +120,13 @@
 
 
 @dynamic sessionDetails;
+
+
+
+
+
+
+@dynamic stateID;
 
 
 

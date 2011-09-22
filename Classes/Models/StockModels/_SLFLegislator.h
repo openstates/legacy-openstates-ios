@@ -3,9 +3,8 @@
 
 #import <CoreData/CoreData.h>
 
-
+@class CommitteeRole;
 @class SLFDistrict;
-@class SLFCommitteePosition;
 @class SLFState;
 
 
@@ -24,6 +23,7 @@
 
 
 
+@class NSArray;
 @class NSArray;
 
 
@@ -174,6 +174,15 @@
 
 
 
+@property (nonatomic, retain) NSSet* roles;
+
+
+- (NSMutableSet*)rolesSet;
+
+
+
+
+
 @property (nonatomic, retain) NSArray *sources;
 
 
@@ -222,13 +231,6 @@
 
 
 
-@property (nonatomic, retain) NSSet* positions;
-
-- (NSMutableSet*)positionsSet;
-
-
-
-
 @property (nonatomic, retain) SLFState* stateObj;
 
 //- (BOOL)validateStateObj:(id*)value_ error:(NSError**)error_;
@@ -240,10 +242,11 @@
 
 @interface _SLFLegislator (CoreDataGeneratedAccessors)
 
-- (void)addPositions:(NSSet*)value_;
-- (void)removePositions:(NSSet*)value_;
-- (void)addPositionsObject:(SLFCommitteePosition*)value_;
-- (void)removePositionsObject:(SLFCommitteePosition*)value_;
+
+- (void)addRoles:(NSSet*)value_;
+- (void)removeRoles:(NSSet*)value_;
+- (void)addRolesObject:(CommitteeRole*)value_;
+- (void)removeRolesObject:(CommitteeRole*)value_;
 
 @end
 
@@ -349,6 +352,12 @@
 
 
 
+- (NSMutableSet*)primitiveRoles;
+- (void)setPrimitiveRoles:(NSMutableSet*)value;
+
+
+
+
 - (NSArray*)primitiveSources;
 - (void)setPrimitiveSources:(NSArray*)value;
 
@@ -382,11 +391,6 @@
 
 - (SLFDistrict*)primitiveDistrictMap;
 - (void)setPrimitiveDistrictMap:(SLFDistrict*)value;
-
-
-
-- (NSMutableSet*)primitivePositions;
-- (void)setPrimitivePositions:(NSMutableSet*)value;
 
 
 

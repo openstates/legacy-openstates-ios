@@ -171,6 +171,19 @@
 
 
 
+@dynamic roles;
+
+- (NSMutableSet*)rolesSet {
+	[self willAccessValueForKey:@"roles"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"roles"];
+	[self didAccessValueForKey:@"roles"];
+	return result;
+}
+
+
+
+
+
 @dynamic sources;
 
 
@@ -208,17 +221,6 @@
 
 @dynamic districtMap;
 
-	
-
-@dynamic positions;
-
-	
-- (NSMutableSet*)positionsSet {
-	[self willAccessValueForKey:@"positions"];
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"positions"];
-	[self didAccessValueForKey:@"positions"];
-	return result;
-}
 	
 
 @dynamic stateObj;

@@ -12,11 +12,8 @@
 #import "SLFMappingsManager.h"
 #import "SLFDataModels.h"
 #import "SLFObjectCache.h"
-#import "SLFAlertView.h"
-#import "StateMetaLoader.h"
-#import "TableDataSourceProtocol.h"
 
-#define OPENSTATES_BASE_URL		@"http://openstates.sunlightlabs.com/api/v1"
+#define OPENSTATES_BASE_URL		@"http://openstates.org/api/v1"
 
 @implementation SLFRestKitManager
 
@@ -37,7 +34,7 @@
         RKLogConfigureByName("RestKit/CoreData", RKLogLevelDebug);
 
         RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:OPENSTATES_BASE_URL];
-        objectManager.client.requestQueue.showsNetworkActivityIndicatorWhenBusy = YES;
+        objectManager.requestQueue.showsNetworkActivityIndicatorWhenBusy = YES;
         
         RKManagedObjectStore *objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:APP_DB_NAME];
         objectManager.objectStore = objectStore;        
@@ -48,96 +45,104 @@
         [cache release];
         
         SLFMappingsManager *mapper = [[SLFMappingsManager alloc] init];
-        [mapper registerMappingsWithProvider:objectManager.mappingProvider];
+        [mapper registerMappings];
         [mapper release];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(stateChanged:) name:kStateMetaNotifyStateLoaded object:nil];
-
     }
     return self;
 }
 
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
+    if (__preloadQueue) {
+        [__preloadQueue cancelAllRequests];
+        [__preloadQueue release];
+        __preloadQueue = nil;
+    }
     [super dealloc];
 }
 
 
 #pragma mark -
 
-- (NSString *)rootKeyPathOfResourcePath:(NSString *)resourcePath {
+- (Class)modelClassFromResourcePath:(NSString *)resourcePath {
     NSAssert(resourcePath != NULL, @"Resource path must not be NULL");
     NSCharacterSet *delimiters = [NSCharacterSet characterSetWithCharactersInString:@"/?"];
     NSArray *pathComponents = [resourcePath componentsSeparatedByCharactersInSet:delimiters];
     NSCParameterAssert(pathComponents && [pathComponents count]>1);
     NSString *keyPath = [pathComponents objectAtIndex:1];
-    return keyPath;
+    Class theClass = nil;
+    if ([keyPath isEqualToString:@"metadata"])
+        theClass = [SLFState class];
+    else if ([keyPath isEqualToString:@"legislators"])
+        theClass = [SLFLegislator class];
+    else if ([keyPath isEqualToString:@"districts"])
+        theClass = [SLFDistrict class];
+    else if ([keyPath isEqualToString:@"committees"])
+        theClass = [SLFCommittee class];
+    else if ([keyPath isEqualToString:@"events"])
+        theClass = [SLFEvent class];
+    else if ([keyPath isEqualToString:@"bills"])
+        theClass = [SLFBill class];
+    NSAssert(theClass != NULL, @"Something went wrong ... couldn't find the right class.");
+    return theClass;
 }
 
 
-- (void)loadObjectsAtResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate {
+- (RKObjectLoader *)objectLoaderForResourcePath:(NSString *)pathToLoad {
     NSCParameterAssert(pathToLoad != NULL);
     RKLogDebug(@"Loading data at path: %@", pathToLoad);
     RKObjectManager* objectManager = [RKObjectManager sharedManager];
-    [objectManager loadObjectsAtResourcePath:pathToLoad delegate:delegate block:^(RKObjectLoader* loader) {
-        NSString *mappedKeyPath = [self rootKeyPathOfResourcePath:pathToLoad];
-        loader.objectMapping = [objectManager.mappingProvider mappingForKeyPath:mappedKeyPath];
-      //loader.objectMapping = [objectManager.mappingProvider objectMappingForClass:self.resourceClass];
-    }];
+    RKObjectLoader * loader = [objectManager objectLoaderWithResourcePath:pathToLoad delegate:self];
+    Class theClass = [self modelClassFromResourcePath:pathToLoad];
+    loader.objectMapping = (RKObjectMapping *)[objectManager.mappingProvider objectMappingForClass:theClass];
+    loader.method = RKRequestMethodGET;
+    return loader;
+}
+
+- (void)loadObjectsAtResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate {
+    RKObjectLoader *loader = [self objectLoaderForResourcePath:pathToLoad];
+    loader.delegate = delegate;
+    [loader send];
 }
 
 
 - (void)preloadObjectsForState:(SLFState *)state {
     if (!state)
         return;
+
+    if (__preloadQueue == NULL) {
+        __preloadQueue = [RKRequestQueue newRequestQueueWithName:@"PreLoadData"];
+        __preloadQueue.delegate = self;
+        __preloadQueue.concurrentRequestsLimit = 2;
+        __preloadQueue.showsNetworkActivityIndicatorWhenBusy = YES;
+    }
+
     NSString *resourcePath = nil;
     NSMutableDictionary *queryParameters = [NSMutableDictionary dictionaryWithObjectsAndKeys: SUNLIGHT_APIKEY, @"apikey", state.stateID, @"stateID", nil];
     RKPathMatcher *matcher = [RKPathMatcher matcherWithPattern:@"/:entity/:stateID?apikey=:apikey"];
     
     [queryParameters setObject:@"metadata" forKey:@"entity"];
     resourcePath = [matcher pathFromObject:queryParameters];
-    [self loadObjectsAtResourcePath:resourcePath delegate:self];
+    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath]];
 
     [queryParameters setObject:@"districts" forKey:@"entity"];
     resourcePath = [matcher pathFromObject:queryParameters];
-    [self loadObjectsAtResourcePath:resourcePath delegate:self];
+    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath]];
     
     matcher = [RKPathMatcher matcherWithPattern:@"/:entity?state=:stateID&apikey=:apikey"];
 
     [queryParameters setObject:@"committees" forKey:@"entity"];
     resourcePath = [matcher pathFromObject:queryParameters];
-    [self loadObjectsAtResourcePath:resourcePath delegate:self];
+    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath]];
 
     [queryParameters setObject:@"legislators" forKey:@"entity"];
     resourcePath = [[matcher pathFromObject:queryParameters] stringByAppendingString:@"&active=true"];
-    [self loadObjectsAtResourcePath:resourcePath delegate:self];
-}
-
-
-- (void)stateChanged:(NSNotification *)notification {
-    SLFState *state = [[StateMetaLoader sharedStateMeta] selectedState];
-    if (!state)
-        return;
-    [self preloadObjectsForStateID:state.abbreviation];
-}
-
-
-- (NSArray *)registeredDataModels {
-    return [[[[[RKObjectManager sharedManager] objectStore] managedObjectModel] entitiesByName] allKeys];
-}
-
-
-- (void) resetSavedDatabase:(id)sender {
-    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
-  //[objectStore deletePersistantStoreUsingSeedDatabaseName:SEED_DB_NAME];
-    [objectStore deletePersistantStore];
-    [objectStore save];
-    for (NSString *className in [self registeredDataModels]) {
-        NSString *notification = [NSString stringWithFormat:@"RESTKIT_LOADED_%@", [className uppercaseString]];
-        [[NSNotificationCenter defaultCenter] postNotificationName:notification object:nil];
-    }
+    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath]];
+    
+    [__preloadQueue start];
+    
 }
 
 
@@ -151,7 +156,6 @@
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyTableDataError object:self];
 }
 
 
@@ -165,13 +169,6 @@
     RKLogError(@"RestKit Error -");
     RKLogError(@"    request: %@", request);
     RKLogError(@"    loadData: %@", errorDesc);
-
-    [SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Error During Update", @"AppAlerts", @"") 
-                        message:[NSString stringWithFormat:@"%@\n\n%@",
-                                 NSLocalizedStringFromTable(@"A network or server data error occurred.", @"AppAlerts", @""),
-                                 errorDesc]  
-                    buttonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"")];
-    
 }
 
 

@@ -11,7 +11,6 @@
 @class SLFLegislator;
 
 
-
 @class NSArray;
 
 
@@ -20,6 +19,7 @@
 
 
 @class NSDictionary;
+
 @class NSArray;
 
 
@@ -33,14 +33,6 @@
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (SLFStateID*)objectID;
-
-
-
-
-@property (nonatomic, retain) NSString *stateID;
-
-
-//- (BOOL)validateStateID:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -117,6 +109,14 @@
 
 
 //- (BOOL)validateSessionDetails:(id*)value_ error:(NSError**)error_;
+
+
+
+
+@property (nonatomic, retain) NSString *stateID;
+
+
+//- (BOOL)validateStateID:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -227,12 +227,6 @@
 @interface _SLFState (CoreDataGeneratedPrimitiveAccessors)
 
 
-- (NSString*)primitiveStateID;
-- (void)setPrimitiveStateID:(NSString*)value;
-
-
-
-
 - (NSDate*)primitiveDateUpdated;
 - (void)setPrimitiveDateUpdated:(NSDate*)value;
 
@@ -290,6 +284,12 @@
 
 
 
+- (NSString*)primitiveStateID;
+- (void)setPrimitiveStateID:(NSString*)value;
+
+
+
+
 - (NSArray*)primitiveTerms;
 - (void)setPrimitiveTerms:(NSArray*)value;
 
@@ -328,8 +328,8 @@
 
 
 
-- (NSMutableSet*)primitiveDistrictMaps;
-- (void)setPrimitiveDistrictMaps:(NSMutableSet*)value;
+- (NSMutableSet*)primitiveDistricts;
+- (void)setPrimitiveDistricts:(NSMutableSet*)value;
 
 
 

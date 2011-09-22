@@ -10,27 +10,8 @@
 //
 //
 
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
-
-@class SLFCommittee;
-@class SLFLegislator;
-
 @interface SLFMappingsManager : NSObject {
-
 }
-
-@property (nonatomic,retain) RKManagedObjectMapping * legislatorMapping;
-@property (nonatomic,retain) RKManagedObjectMapping * committeeMapping;
-@property (nonatomic,retain) RKManagedObjectMapping * positionMapping;
-@property (nonatomic,retain) RKManagedObjectMapping * eventMapping;
-@property (nonatomic,retain) RKManagedObjectMapping * billMapping;
-@property (nonatomic,retain) RKManagedObjectMapping * districtMapping;
-@property (nonatomic,retain) RKManagedObjectMapping * stateMapping;
-
-- (void)registerMappingsWithProvider:(RKObjectMappingProvider *)provider;
-
-+ (inout id *)premapCommittee:(SLFCommittee *)committee withMappableData:(inout id *)mappableData;
-+ (inout id *)premapLegislator:(SLFLegislator *)legislator withMappableData:(inout id *)mappableData;
+- (void)registerMappings;
 
 @end

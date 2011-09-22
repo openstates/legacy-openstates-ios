@@ -16,10 +16,7 @@
     #import <RestKit/RestKit.h>
     #import <RestKit/CoreData/CoreData.h>
 
-	//#import "VTPGAdvancedLog.h"
 	#import "Constants.h"
-	#import "TexLegeLibrary.h"
-
     #import "APIKeys.h"
 
 	#define nice_release(var) if (var) [var release], var = nil

@@ -1,5 +1,5 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
-// Make changes to SLFDistrictMap.m instead.
+// Make changes to SLFDistrict.m instead.
 
 #import "_SLFDistrict.h"
 
@@ -47,13 +47,6 @@
 
 
 
-@dynamic regionDictionary;
-
-
-
-
-
-
 @dynamic chamber;
 
 
@@ -89,6 +82,13 @@
 - (void)setPrimitiveNumSeatsValue:(short)value_ {
 	[self setPrimitiveNumSeats:[NSNumber numberWithShort:value_]];
 }
+
+
+
+
+
+@dynamic regionDictionary;
+
 
 
 

@@ -1,6 +1,4 @@
-#import "SLFCommittee.h"
-#import "SLFCommitteePosition.h"
-#import "SLFState.h"
+#import "SLFDataModels.h"
 
 @implementation SLFCommittee
 
@@ -15,6 +13,14 @@
 #pragma mark -
 #pragma mark Display Convenience
 
+- (SLFChamber *)chamberObj {
+    return [SLFChamber chamberWithType:self.chamber forState:self.state];
+}
+
+- (NSString *)chamberShortName {
+    return self.chamberObj.shortName;
+}
+
 - (NSString *) committeeNameInitial {
 	NSString * initial = [self.committeeName substringToIndex:1];
 	return initial;
@@ -22,9 +28,10 @@
 
 - (NSArray *)sortedMembers
 {    
-    if (self.positions) {
-        NSSortDescriptor *desc = [NSSortDescriptor sortDescriptorWithKey:@"legislator.fullNameLastFirst" ascending:YES];
-        return [self.positions sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+    if (self.members) {
+        NSSortDescriptor *role = [NSSortDescriptor sortDescriptorWithKey:@"role" ascending:YES];
+        NSSortDescriptor *name = [NSSortDescriptor sortDescriptorWithKey:@"foundLegislator.lastName" ascending:YES];
+        return [self.members sortedArrayUsingDescriptors:[NSArray arrayWithObjects:role, name, nil]];
     }
     return nil;
 }

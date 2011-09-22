@@ -8,8 +8,4 @@
     return self.stateObj;
 }
 
-- (NSString *)watchID {
-    return [NSString stringWithFormat:@"%@:%@", self.session, self.billID];
-}
-
 @end

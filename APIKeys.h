@@ -18,6 +18,5 @@
 //   http://services.sunlightlabs.com/
 
 extern NSString* const SUNLIGHT_APIKEY;
-extern NSString* const LOCALITICS_APIKEY;
 extern NSString* const VOTESMART_APIKEY;
 

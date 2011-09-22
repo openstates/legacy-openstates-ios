@@ -11,9 +11,10 @@
 
 - (NSString *)title;
 - (NSString *)subtitle;
-- (UIImage *)image;
+    //- (UIImage *)image;
 
 - (MKPolygon *)polygonFactory;
+
 @property (nonatomic,retain) MKPolygon *districtPolygon;
 
 @end

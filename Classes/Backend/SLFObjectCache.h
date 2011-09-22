@@ -10,7 +10,7 @@
 //
 //
 
-#import <RestKit/CoreData/RKManagedObjectCache.h>
+#import <RestKit/CoreData/CoreData.h>
 
 
 @interface SLFObjectCache : NSObject <RKManagedObjectCache>{

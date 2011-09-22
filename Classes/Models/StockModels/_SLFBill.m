@@ -95,6 +95,14 @@
 @dynamic sponsors;
 
 
+- (NSMutableSet*)sponsorsSet {
+	[self willAccessValueForKey:@"sponsors"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"sponsors"];
+	[self didAccessValueForKey:@"sponsors"];
+	return result;
+}
+
+
 
 
 

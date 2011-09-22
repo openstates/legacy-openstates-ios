@@ -21,17 +21,15 @@
 @property (nonatomic,copy) NSString *name;
 @property (nonatomic,readonly) NSString *shortName;
 @property (nonatomic,copy) NSString *stateID;
-@property (nonatomic,copy) NSArray *knownTypes;
 
 + (SLFChamber *)chamberWithType:(NSString *)aType forState:(SLFState *)aState;
-- (NSString *)boundaryCodeForDistrictName:(NSString *)districtName;
 @end
 
 
-enum kChamberTypeIndex {
-    CHAMBER_ALL = 0,      // all
-    CHAMBER_LOWER,                  // lower
-    CHAMBER_UPPER,                 // upper
-	CHAMBER_JOINT,                  // joint
-	CHAMBER_EXEC               // executive
+enum kChambers {
+    BOTH_CHAMBERS = 0,
+    HOUSE,
+    SENATE,
+	JOINT,
+	EXECUTIVE	// Used in open states / bill actions	
 };
