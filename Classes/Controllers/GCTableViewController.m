@@ -7,6 +7,7 @@
 //
 
 #import "GCTableViewController.h"
+#import "SLFAppearance.h"
 
 @implementation GCTableViewController
 
@@ -18,6 +19,8 @@
         tableView = [[self tableViewWithStyle:style] retain];
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
+        self.tableView.backgroundColor = [SLFAppearance loblolly];
+        self.tableView.separatorColor = [SLFAppearance loblollyLight];
         
         self.clearsSelectionOnViewWillAppear = YES;
     }
@@ -66,5 +69,7 @@
     [super dealloc];
 }
 
-
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+    return YES;
+}
 @end

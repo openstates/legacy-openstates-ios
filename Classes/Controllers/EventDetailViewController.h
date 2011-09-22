@@ -16,7 +16,6 @@
 @class SLFEvent;
 @interface EventDetailViewController : GCTableViewController <RKObjectLoaderDelegate>
 {
-	UITableView* _tableView;
 }
 
 @property (nonatomic,retain)    SLFEvent        *event;

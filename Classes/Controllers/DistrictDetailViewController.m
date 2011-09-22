@@ -14,6 +14,7 @@
 #import "LegislatorDetailViewController.h"
 #import "SLFDataModels.h"
 #import "SLFRestKitManager.h"
+#import "SLFAppearance.h"
 
 @interface DistrictDetailViewController()
 - (void)loadDataFromDataStoreWithID:(NSString *)objID;
@@ -38,9 +39,7 @@
 
 - (void)loadView {
     [super loadView];
-	self.title = @"Loading...";
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
-    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+	self.title = NSLocalizedString(@"Loading...",@"");
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadButtonWasPressed:)] autorelease];
 	MKMapView *tempView = [[MKMapView alloc] initWithFrame:self.view.bounds];
 	tempView.delegate = self;		
@@ -126,12 +125,12 @@
     if ([overlay isKindOfClass:[MKPolygon class]])
     {
         MKPolygonView*    aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
-        UIColor *partyColor = [UIColor greenColor];
+        UIColor *partyColor = [SLFAppearance partyGreen];
         if ([self.districtMap.legislators count] == 1) {
             SLFLegislator *leg = [self.districtMap.legislators anyObject];
             NSString *party = leg.party;
             if (party && NO == [party isEqual:[NSNull null]]) {
-                partyColor = [[party lowercaseString] isEqualToString:@"republican"] ? [UIColor redColor] : [UIColor blueColor];
+                partyColor = [[party lowercaseString] isEqualToString:@"republican"] ? [SLFAppearance partyRed] : [SLFAppearance partyBlue];
             }
         }
         aView.fillColor = [partyColor colorWithAlphaComponent:0.2];

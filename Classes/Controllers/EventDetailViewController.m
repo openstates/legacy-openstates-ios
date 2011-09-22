@@ -36,37 +36,18 @@
 
 - (void)loadView {
     [super loadView];
-	self.title = @"Loading...";
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
-    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+	self.title = NSLocalizedString(@"Loading...", @"");
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadButtonWasPressed:)] autorelease];
-	UIImageView* imageView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BG.png"]] autorelease];
-	imageView.frame = CGRectOffset(imageView.frame, 0, -64);
-	[self.view insertSubview:imageView atIndex:0];
-	_tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 480-64) style:UITableViewStylePlain];
-	_tableView.dataSource = self;
-	_tableView.delegate = self;		
-	_tableView.backgroundColor = [UIColor clearColor];
-	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.view addSubview:_tableView];
 }
 
 - (void)dealloc {
-    [[RKObjectManager sharedManager].client.requestQueue cancelRequestsWithDelegate:self];
-    if (_tableView) {
-        [_tableView release];
-        _tableView = nil;
-    }
+    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.event = nil;
     self.resourcePath = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
-    if (_tableView) {
-        [_tableView release];
-        _tableView = nil;
-    }
     [super viewDidUnload];
 }
 
@@ -107,7 +88,7 @@
 	event = [object retain];
     self.title = [NSString stringWithFormat:@"%@", event.dateStart];
     if ([self isViewLoaded])
-        [_tableView reloadData];
+        [self.tableView reloadData];
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
@@ -142,9 +123,7 @@
 	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
 	if (nil == cell) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier] autorelease];
-		cell.textLabel.font = [UIFont systemFontOfSize:14];
 		cell.textLabel.numberOfLines = 0;
-		cell.textLabel.backgroundColor = [UIColor clearColor];
 	}
 	if (self.event) {
         cell.textLabel.text = self.event.eventDescription;

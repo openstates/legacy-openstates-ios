@@ -40,7 +40,6 @@
 		375DC7E414279C6B00253969 /* libRestKitUI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 379747DF1427956000304FD1 /* libRestKitUI.a */; };
 		375DC7E614279C9300253969 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 375DC7E514279C9300253969 /* QuartzCore.framework */; };
 		37775500140F3F1200ABE16F /* DistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 377754FF140F3F1200ABE16F /* DistrictsViewController.m */; };
-		3791F4D8142AFFBC00322E7D /* SubtitleTableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3791F4D7142AFFBC00322E7D /* SubtitleTableItem.m */; };
 		37953BDC14272D9500A0CD86 /* DataModelsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 37953BDB14272D9500A0CD86 /* DataModelsTestCase.m */; };
 		37A3258313E49D4700138ADE /* StatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258213E49D4700138ADE /* StatesViewController.m */; };
 		37A3258F13E49F2200138ADE /* StateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258E13E49F2200138ADE /* StateDetailViewController.m */; };
@@ -83,6 +82,8 @@
 		37E961F113E544FE0064B1D3 /* libRestKitSupport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E961B813E544380064B1D3 /* libRestKitSupport.a */; };
 		37EDEAA313D3D81900F8FCA1 /* LegislatorDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EDEAA113D3D81900F8FCA1 /* LegislatorDetailViewController.m */; };
 		37EDEAAC13D3FAF800F8FCA1 /* CommitteeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EDEAAB13D3FAF700F8FCA1 /* CommitteeDetailViewController.m */; };
+		37F25BA1142BAB0A009D8FCF /* TableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F25BA0142BAB0A009D8FCF /* TableItem.m */; };
+		37F25BA4142BAC0E009D8FCF /* SLFAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F25BA3142BAC0E009D8FCF /* SLFAppearance.m */; };
 		37F2990B140FCD2300B96572 /* SLFData.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 37F2990A140FCD2200B96572 /* SLFData.xcdatamodel */; };
 		37F29917140FCD5200B96572 /* SLFMappingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F29912140FCD5200B96572 /* SLFMappingsManager.m */; };
 		37F29918140FCD5200B96572 /* SLFRestKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F29914140FCD5200B96572 /* SLFRestKitManager.m */; };
@@ -262,8 +263,6 @@
 		375DC7E514279C9300253969 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		377754FE140F3F1100ABE16F /* DistrictsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictsViewController.h; sourceTree = "<group>"; };
 		377754FF140F3F1200ABE16F /* DistrictsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictsViewController.m; sourceTree = "<group>"; };
-		3791F4D6142AFFBC00322E7D /* SubtitleTableItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubtitleTableItem.h; sourceTree = "<group>"; };
-		3791F4D7142AFFBC00322E7D /* SubtitleTableItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubtitleTableItem.m; sourceTree = "<group>"; };
 		37953BDB14272D9500A0CD86 /* DataModelsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataModelsTestCase.m; sourceTree = "<group>"; };
 		37A3258113E49D4700138ADE /* StatesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesViewController.h; sourceTree = "<group>"; };
 		37A3258213E49D4700138ADE /* StatesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatesViewController.m; sourceTree = "<group>"; };
@@ -321,6 +320,10 @@
 		37EDEAA113D3D81900F8FCA1 /* LegislatorDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorDetailViewController.m; sourceTree = "<group>"; };
 		37EDEAAA13D3FAF700F8FCA1 /* CommitteeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeDetailViewController.h; sourceTree = "<group>"; };
 		37EDEAAB13D3FAF700F8FCA1 /* CommitteeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteeDetailViewController.m; sourceTree = "<group>"; };
+		37F25B9F142BAB0A009D8FCF /* TableItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableItem.h; sourceTree = "<group>"; };
+		37F25BA0142BAB0A009D8FCF /* TableItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableItem.m; sourceTree = "<group>"; };
+		37F25BA2142BAC0E009D8FCF /* SLFAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFAppearance.h; sourceTree = "<group>"; };
+		37F25BA3142BAC0E009D8FCF /* SLFAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFAppearance.m; sourceTree = "<group>"; };
 		37F2990A140FCD2200B96572 /* SLFData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SLFData.xcdatamodel; sourceTree = "<group>"; };
 		37F29911140FCD5200B96572 /* SLFMappingsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFMappingsManager.h; sourceTree = "<group>"; };
 		37F29912140FCD5200B96572 /* SLFMappingsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFMappingsManager.m; sourceTree = "<group>"; };
@@ -388,6 +391,7 @@
 				1D3623240D0F684500981E51 /* AppDelegate.h */,
 				1D3623250D0F684500981E51 /* AppDelegate.m */,
 				37F2990C140FCD5200B96572 /* Backend */,
+				37F25B9E142BAB0A009D8FCF /* Themes */,
 				37D7670A13E67D5200A77F89 /* Models */,
 				377E94CD13E45B89007A42DF /* Controllers */,
 				3791F4D5142AFEF500322E7D /* Views */,
@@ -530,8 +534,6 @@
 		3791F4D5142AFEF500322E7D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				3791F4D6142AFFBC00322E7D /* SubtitleTableItem.h */,
-				3791F4D7142AFFBC00322E7D /* SubtitleTableItem.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -639,6 +641,17 @@
 				37E961C613E544380064B1D3 /* RestKitSpecs.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		37F25B9E142BAB0A009D8FCF /* Themes */ = {
+			isa = PBXGroup;
+			children = (
+				37F25B9F142BAB0A009D8FCF /* TableItem.h */,
+				37F25BA0142BAB0A009D8FCF /* TableItem.m */,
+				37F25BA2142BAC0E009D8FCF /* SLFAppearance.h */,
+				37F25BA3142BAC0E009D8FCF /* SLFAppearance.m */,
+			);
+			path = Themes;
 			sourceTree = "<group>";
 		};
 		37F29909140FCD2200B96572 /* Data */ = {
@@ -925,8 +938,9 @@
 				372D2AF714285FDD00ADE84E /* CommitteeRole.m in Sources */,
 				372D2AFA14285FDF00ADE84E /* CommitteeMember.m in Sources */,
 				372D2B1E1428DEA400ADE84E /* BillSponsor.m in Sources */,
-				3791F4D8142AFFBC00322E7D /* SubtitleTableItem.m in Sources */,
 				37BAC14A142B972D0021A3C6 /* main.m in Sources */,
+				37F25BA1142BAB0A009D8FCF /* TableItem.m in Sources */,
+				37F25BA4142BAC0E009D8FCF /* SLFAppearance.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -988,7 +1002,6 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				KEEP_PRIVATE_EXTERNS = NO;
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -1009,7 +1022,6 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				KEEP_PRIVATE_EXTERNS = NO;
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -1083,7 +1095,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = Vendor/RestKit/Build;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1102,7 +1114,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = Vendor/RestKit/Build;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 			};

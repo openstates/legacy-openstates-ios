@@ -33,7 +33,7 @@
 
 - (void)loadView {
     [super loadView];
-    self.title = @"Loading...";
+    self.title = NSLocalizedString(@"Loading...",@"");
     self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
@@ -59,12 +59,6 @@
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFEvent class] toTableCellsWithMapping:objCellMap];    
     
-    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
-	UIImageView* imageView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BG.png"]] autorelease];
-	imageView.frame = CGRectOffset(imageView.frame, 0, -32.f);
-    [self.view insertSubview:imageView belowSubview:self.tableView];
-    self.tableView.backgroundColor = [UIColor clearColor];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 - (void)viewDidLoad {

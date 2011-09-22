@@ -15,7 +15,7 @@
 #import "AppDelegate.h"
 #import "StatesViewController.h"
 #import "SLFRestKitManager.h"
-
+#import "SLFAppearance.h"
 @implementation AppDelegate
 @synthesize window;
 
@@ -23,10 +23,10 @@
 #pragma mark Application lifecycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    application.statusBarStyle = UIStatusBarStyleBlackTranslucent;
+    RKLogSetAppLoggingLevel(RKLogLevelDebug);
+    [SLFAppearance setupTheme];
 
     [SLFRestKitManager sharedRestKit];
-    RKLogSetAppLoggingLevel(RKLogLevelDebug);
 
 	StatesViewController* viewController = [[StatesViewController alloc] initWithStyle:UITableViewStylePlain];
 	UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:viewController];

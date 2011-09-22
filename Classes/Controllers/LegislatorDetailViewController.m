@@ -16,7 +16,7 @@
 #import "SLFDataModels.h"
 #import "SLFMappingsManager.h"
 #import "SLFRestKitManager.h"
-#import "SubtitleTableItem.h"
+#import "TableItem.h"
 
 #define SectionHeaderMemberInfo NSLocalizedString(@"Member Details", @"")
 #define SectionHeaderDistrict NSLocalizedString(@"District Map", @"")
@@ -68,13 +68,6 @@ enum SECTIONS {
             section.headerHeight = 22;
         }];
     }         
-
-    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
-	UIImageView* imageView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BG.png"]] autorelease];
-	imageView.frame = CGRectOffset(imageView.frame, 0, -32.f);
-    [self.view insertSubview:imageView belowSubview:self.tableView];
-    self.tableView.backgroundColor = [UIColor clearColor];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	self.title = NSLocalizedString(@"Loading...", @"");
 }
 
