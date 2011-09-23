@@ -41,20 +41,29 @@
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             SLFState *state = object;
             [[SLFRestKitManager sharedRestKit] preloadObjectsForState:state];
+            [[NSUserDefaults standardUserDefaults] setObject:state.stateID forKey:@"selectedState"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
             StateDetailViewController *vc = [[StateDetailViewController alloc] initWithState:state];
             [self.navigationController pushViewController:vc animated:YES];
             [vc release];
-
         };
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFState class] toTableCellsWithMapping:stateCellMap];    
-    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.tableViewModel loadTable];    
-    self.title = [NSString stringWithFormat:@"%d States",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
+    NSInteger count = [[self.tableViewModel.fetchedResultsController fetchedObjects] count];
+    self.title = [NSString stringWithFormat:@"%d States",count];
+    if (count == 0) {
+        @try {
+            [self.tableViewModel loadTableFromNetwork];
+        }
+        @catch (NSException *exception) {
+            RKLogWarning(@"Exception while attempting to load list of available states from network (already in progress?) ... %@", exception);
+        }
+    }
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
@@ -62,7 +71,7 @@
 }
 
 - (void)tableViewModel:(RKAbstractTableViewModel*)tableViewModel didFailLoadWithError:(NSError*)error {
-    self.title = @"Load Error";
+    self.title = NSLocalizedString(@"Load Error",@"");
     RKLogError(@"Error loading table from resource path: %@", self.tableViewModel.resourcePath);
 }
 

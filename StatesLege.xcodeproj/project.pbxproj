@@ -39,11 +39,16 @@
 		375DC7E314279BE600253969 /* GCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 375DC7E214279BE600253969 /* GCTableViewController.m */; };
 		375DC7E414279C6B00253969 /* libRestKitUI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 379747DF1427956000304FD1 /* libRestKitUI.a */; };
 		375DC7E614279C9300253969 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 375DC7E514279C9300253969 /* QuartzCore.framework */; };
+		37632037142C5DD500A6185F /* SLFAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37632034142C5DD500A6185F /* SLFAlertView.m */; };
+		37632038142C5DD500A6185F /* SLFEmailComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = 37632036142C5DD500A6185F /* SLFEmailComposer.m */; };
+		3763203B142C643E00A6185F /* SLFRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3763203A142C643E00A6185F /* SLFRouter.m */; };
+		3763203D142C6C5400A6185F /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 372E58E314157BB0000652B1 /* MessageUI.framework */; };
 		37775500140F3F1200ABE16F /* DistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 377754FF140F3F1200ABE16F /* DistrictsViewController.m */; };
 		37953BDC14272D9500A0CD86 /* DataModelsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 37953BDB14272D9500A0CD86 /* DataModelsTestCase.m */; };
 		37A3258313E49D4700138ADE /* StatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258213E49D4700138ADE /* StatesViewController.m */; };
 		37A3258F13E49F2200138ADE /* StateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258E13E49F2200138ADE /* StateDetailViewController.m */; };
 		37A325B213E4A55800138ADE /* CommitteesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A325B113E4A55800138ADE /* CommitteesViewController.m */; };
+		37AC5FD6142C42680061414F /* StackedMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37AC5FD5142C42680061414F /* StackedMenuViewController.m */; };
 		37BAC14A142B972D0021A3C6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BAC149142B972D0021A3C6 /* main.m */; };
 		37BAC157142B97620021A3C6 /* Icon-Settings@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BAC14C142B97620021A3C6 /* Icon-Settings@2x~iphone.png */; };
 		37BAC158142B97620021A3C6 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BAC14D142B97620021A3C6 /* Icon-Small-50.png */; };
@@ -88,10 +93,6 @@
 		37F29917140FCD5200B96572 /* SLFMappingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F29912140FCD5200B96572 /* SLFMappingsManager.m */; };
 		37F29918140FCD5200B96572 /* SLFRestKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F29914140FCD5200B96572 /* SLFRestKitManager.m */; };
 		37F2991B140FCD9000B96572 /* SLFObjectCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2991A140FCD9000B96572 /* SLFObjectCache.m */; };
-		3F3CE3FC125B9A6E0083FDCB /* listbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F3CE3FA125B9A6E0083FDCB /* listbg.png */; };
-		3F3CE3FD125B9A6E0083FDCB /* listbg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F3CE3FB125B9A6E0083FDCB /* listbg@2x.png */; };
-		3F3CE40E125B9B450083FDCB /* BG.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F3CE40A125B9B450083FDCB /* BG.png */; };
-		3F3CE40F125B9B450083FDCB /* BG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F3CE40B125B9B450083FDCB /* BG@2x.png */; };
 		8452D3F9128244D90069F4A9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452D3F8128244D90069F4A9 /* CFNetwork.framework */; };
 		8452D3FD128244E60069F4A9 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452D3FC128244E60069F4A9 /* MobileCoreServices.framework */; };
 /* End PBXBuildFile section */
@@ -261,6 +262,12 @@
 		375DC7E114279BE600253969 /* GCTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCTableViewController.h; sourceTree = "<group>"; };
 		375DC7E214279BE600253969 /* GCTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTableViewController.m; sourceTree = "<group>"; };
 		375DC7E514279C9300253969 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		37632033142C5DD500A6185F /* SLFAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFAlertView.h; sourceTree = "<group>"; };
+		37632034142C5DD500A6185F /* SLFAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFAlertView.m; sourceTree = "<group>"; };
+		37632035142C5DD500A6185F /* SLFEmailComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFEmailComposer.h; sourceTree = "<group>"; };
+		37632036142C5DD500A6185F /* SLFEmailComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFEmailComposer.m; sourceTree = "<group>"; };
+		37632039142C643E00A6185F /* SLFRouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFRouter.h; sourceTree = "<group>"; };
+		3763203A142C643E00A6185F /* SLFRouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFRouter.m; sourceTree = "<group>"; };
 		377754FE140F3F1100ABE16F /* DistrictsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictsViewController.h; sourceTree = "<group>"; };
 		377754FF140F3F1200ABE16F /* DistrictsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictsViewController.m; sourceTree = "<group>"; };
 		37953BDB14272D9500A0CD86 /* DataModelsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataModelsTestCase.m; sourceTree = "<group>"; };
@@ -270,6 +277,8 @@
 		37A3258E13E49F2200138ADE /* StateDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StateDetailViewController.m; sourceTree = "<group>"; };
 		37A325B013E4A55800138ADE /* CommitteesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteesViewController.h; sourceTree = "<group>"; };
 		37A325B113E4A55800138ADE /* CommitteesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteesViewController.m; sourceTree = "<group>"; };
+		37AC5FD4142C42680061414F /* StackedMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackedMenuViewController.h; sourceTree = "<group>"; };
+		37AC5FD5142C42680061414F /* StackedMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StackedMenuViewController.m; sourceTree = "<group>"; };
 		37BAC148142B972D0021A3C6 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Classes/Main/Constants.h; sourceTree = "<group>"; };
 		37BAC149142B972D0021A3C6 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Classes/Main/main.m; sourceTree = "<group>"; };
 		37BAC14C142B97620021A3C6 /* Icon-Settings@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Settings@2x~iphone.png"; sourceTree = "<group>"; };
@@ -331,10 +340,6 @@
 		37F29914140FCD5200B96572 /* SLFRestKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFRestKitManager.m; sourceTree = "<group>"; };
 		37F29919140FCD9000B96572 /* SLFObjectCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFObjectCache.h; sourceTree = "<group>"; };
 		37F2991A140FCD9000B96572 /* SLFObjectCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFObjectCache.m; sourceTree = "<group>"; };
-		3F3CE3FA125B9A6E0083FDCB /* listbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = listbg.png; sourceTree = "<group>"; };
-		3F3CE3FB125B9A6E0083FDCB /* listbg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "listbg@2x.png"; sourceTree = "<group>"; };
-		3F3CE40A125B9B450083FDCB /* BG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BG.png; sourceTree = "<group>"; };
-		3F3CE40B125B9B450083FDCB /* BG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "BG@2x.png"; sourceTree = "<group>"; };
 		8452D3F8128244D90069F4A9 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		8452D3FC128244E60069F4A9 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
@@ -345,6 +350,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3763203D142C6C5400A6185F /* MessageUI.framework in Frameworks */,
 				375DC7E614279C9300253969 /* QuartzCore.framework in Frameworks */,
 				37E95F9713E4E4990064B1D3 /* MapKit.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
@@ -391,6 +397,7 @@
 				1D3623240D0F684500981E51 /* AppDelegate.h */,
 				1D3623250D0F684500981E51 /* AppDelegate.m */,
 				37F2990C140FCD5200B96572 /* Backend */,
+				37632032142C5DD500A6185F /* Helpers */,
 				37F25B9E142BAB0A009D8FCF /* Themes */,
 				37D7670A13E67D5200A77F89 /* Models */,
 				377E94CD13E45B89007A42DF /* Controllers */,
@@ -440,10 +447,6 @@
 				37336A66142B98A000F635EB /* Interfaces */,
 				37BAC162142B97AD0021A3C6 /* SplashScreen */,
 				37BAC14B142B97620021A3C6 /* Icon */,
-				3F3CE40A125B9B450083FDCB /* BG.png */,
-				3F3CE40B125B9B450083FDCB /* BG@2x.png */,
-				3F3CE3FA125B9A6E0083FDCB /* listbg.png */,
-				3F3CE3FB125B9A6E0083FDCB /* listbg@2x.png */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 			);
 			path = Resources;
@@ -474,9 +477,9 @@
 		372E57C914153D07000652B1 /* UnitTests */ = {
 			isa = PBXGroup;
 			children = (
+				372E58C5141575F3000652B1 /* SLFSpecEnvironment.h */,
 				375683AD14268C830027F268 /* ObjMappingsTestCase.m */,
 				37953BDB14272D9500A0CD86 /* DataModelsTestCase.m */,
-				372E58C5141575F3000652B1 /* SLFSpecEnvironment.h */,
 				372E58C6141575F3000652B1 /* SLFSpecEnvironment.m */,
 				372E57CA14153D07000652B1 /* Supporting Files */,
 			);
@@ -500,6 +503,19 @@
 				37336A6B142B991200F635EB /* MainWindow-iPad.xib */,
 			);
 			path = Interfaces;
+			sourceTree = "<group>";
+		};
+		37632032142C5DD500A6185F /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				37632033142C5DD500A6185F /* SLFAlertView.h */,
+				37632034142C5DD500A6185F /* SLFAlertView.m */,
+				37632035142C5DD500A6185F /* SLFEmailComposer.h */,
+				37632036142C5DD500A6185F /* SLFEmailComposer.m */,
+				37632039142C643E00A6185F /* SLFRouter.h */,
+				3763203A142C643E00A6185F /* SLFRouter.m */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		377E94CD13E45B89007A42DF /* Controllers */ = {
@@ -527,6 +543,8 @@
 				37588E2313E4B456005FB5AB /* EventsViewController.m */,
 				37588E2A13E4B5FE005FB5AB /* EventDetailViewController.h */,
 				37588E2B13E4B5FE005FB5AB /* EventDetailViewController.m */,
+				37AC5FD4142C42680061414F /* StackedMenuViewController.h */,
+				37AC5FD5142C42680061414F /* StackedMenuViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -851,10 +869,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F3CE3FC125B9A6E0083FDCB /* listbg.png in Resources */,
-				3F3CE3FD125B9A6E0083FDCB /* listbg@2x.png in Resources */,
-				3F3CE40E125B9B450083FDCB /* BG.png in Resources */,
-				3F3CE40F125B9B450083FDCB /* BG@2x.png in Resources */,
 				37BAC157142B97620021A3C6 /* Icon-Settings@2x~iphone.png in Resources */,
 				37BAC158142B97620021A3C6 /* Icon-Small-50.png in Resources */,
 				37BAC159142B97620021A3C6 /* Icon-Small.png in Resources */,
@@ -941,6 +955,10 @@
 				37BAC14A142B972D0021A3C6 /* main.m in Sources */,
 				37F25BA1142BAB0A009D8FCF /* TableItem.m in Sources */,
 				37F25BA4142BAC0E009D8FCF /* SLFAppearance.m in Sources */,
+				37AC5FD6142C42680061414F /* StackedMenuViewController.m in Sources */,
+				37632037142C5DD500A6185F /* SLFAlertView.m in Sources */,
+				37632038142C5DD500A6185F /* SLFEmailComposer.m in Sources */,
+				3763203B142C643E00A6185F /* SLFRouter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

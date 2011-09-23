@@ -1,4 +1,4 @@
-    // The following is practically verbatim of RestKit's RKSpecEnvironment.
+// The following is practically verbatim of RestKit's RKSpecEnvironment.
 
 #import <Foundation/Foundation.h>
 #import <RestKit/RestKit.h>

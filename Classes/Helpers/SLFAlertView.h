@@ -10,8 +10,6 @@
 //
 //
 
-#import <UIKit/UIKit.h>
-
 typedef void(^SLFAlertBlock)(void);
 
 @interface SLFAlertView : UIAlertView {}

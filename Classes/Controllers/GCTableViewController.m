@@ -21,7 +21,6 @@
         self.tableView.dataSource = self;
         self.tableView.backgroundColor = [SLFAppearance loblolly];
         self.tableView.separatorColor = [SLFAppearance loblollyLight];
-        
         self.clearsSelectionOnViewWillAppear = YES;
     }
     return self;
@@ -29,17 +28,15 @@
 
 - (void) loadView {
     [super loadView];
-    
     [self.view addSubview:self.tableView];
-    
     self.tableView.frame = self.view.bounds;
     self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 }
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    if (self.clearsSelectionOnViewWillAppear) [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+    if (self.clearsSelectionOnViewWillAppear) 
+        [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
 }
 
 #pragma mark TableView methods
@@ -62,10 +59,14 @@
     return [[[UITableView alloc] initWithFrame:CGRectZero style:style] autorelease];
 }
 
+- (void)viewDidUnload {
+    [tableView release];
+    tableView = nil;
+    [super viewDidUnload];
+}
 - (void)dealloc {
     [tableView release];
     tableView = nil;
-    
     [super dealloc];
 }
 

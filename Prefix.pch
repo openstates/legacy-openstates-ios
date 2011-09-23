@@ -1,6 +1,6 @@
 //
 //  Prefix.pch
-//  Created by Gregory Combs on 7/22/09.
+//  Created by Gregory Combs on 7/31/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
 //
@@ -13,14 +13,13 @@
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
+    #import <CoreData/CoreData.h>
     #import <RestKit/RestKit.h>
     #import <RestKit/CoreData/CoreData.h>
 
 	#import "Constants.h"
     #import "APIKeys.h"
-
 	#define nice_release(var) if (var) [var release], var = nil
-
     BOOL IsEmpty(NSObject * thing);
 
 #endif

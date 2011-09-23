@@ -41,6 +41,83 @@
     STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
 }
 
+- (void)testItShouldFindALegislatorObjectMapping {
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[SLFLegislator class]];
+    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+}
+
+- (void)testItShouldFindACommitteeObjectMapping {
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[SLFCommittee class]];
+    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+}
+
+- (void)testItShouldFindABillObjectMapping {
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[SLFBill class]];
+    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+}
+
+- (void)testItShouldFindAEventObjectMapping {
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[SLFEvent class]];
+    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+}
+
+- (void)testItShouldFindADistrictObjectMapping {
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[SLFDistrict class]];
+    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+}
+
+- (void)testItShouldFindABillSponsorObjectMapping {
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[BillSponsor class]];
+    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+}
+
+- (void)testItShouldFindABillSponsorObjectMappingByKeyPath {
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider mappingForKeyPath:@"sponsors"];
+    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+}
+
+- (void)testItShouldFindACommitteeMemberObjectMapping {
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[CommitteeMember class]];
+    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+}
+
+- (void)testItShouldFindACommitteeMemberObjectMappingByKeyPath {
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider mappingForKeyPath:@"members"];
+    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+}
+
+- (void)testItShouldFindACommitteeRoleObjectMapping {
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[CommitteeRole class]];
+    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+}
+
+- (void)testItShouldFindACommitteeRoleObjectMappingByKeyPath {
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider mappingForKeyPath:@"roles"];
+    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+}
+
 /*
  #pragma mark - RKObjectMapper Specs
  

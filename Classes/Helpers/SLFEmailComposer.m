@@ -11,8 +11,6 @@
 //
 
 #import "SLFEmailComposer.h"
-#import "UtilityMethods.h"
-#import "TexLegeTheme.h"
 #import "SLFAlertView.h"
 
 @implementation SLFEmailComposer
@@ -23,7 +21,6 @@
 {
 	static dispatch_once_t pred;
 	static SLFEmailComposer *foo = nil;
-	
 	dispatch_once(&pred, ^{ foo = [[self alloc] init]; });
 	return foo;
 }
@@ -43,6 +40,14 @@
 	self.mailComposerVC = nil;
 	self.currentCommander = nil;
     [super dealloc];
+}
+
+- (BOOL)isNetworkAvailableForURL:(NSURL *)url {
+    if (![RKObjectManager sharedManager].isOnline)
+        return NO;
+    if (![[UIApplication sharedApplication] canOpenURL:url])
+        return NO;
+    return YES;
 }
 
 - (void)presentMailComposerTo:(NSString*)recipient 
@@ -68,7 +73,6 @@
 		[mc setSubject:subject];
 		[mc setToRecipients:[NSArray arrayWithObject:recipient]];
 		[mc setMessageBody:body isHTML:NO];
-		[[mc navigationBar] setTintColor:[TexLegeTheme navbar]];
 				
 		[self.currentCommander presentModalViewController:mc animated:YES];
 		
@@ -76,9 +80,7 @@
 
 	}
 	else {   // Mail functions are unavailable
-		
 		NSMutableString *message = [NSMutableString stringWithFormat:@"mailto:%@", recipient];
-		
 		if (!IsEmpty(subject))
 			[message appendFormat:@"&subject=%@", subject];
 		
@@ -87,13 +89,13 @@
 		
 		NSURL *mailto = [NSURL URLWithString:[message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 		
-		if ( NO == [UtilityMethods openURLWithTrepidation:mailto] ) {
-			
+		if ( ![self isNetworkAvailableForURL:mailto] ) {
 			[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Cannot Open Mail Composer", @"AppAlerts", @"Error on email attempt")
 								message:NSLocalizedStringFromTable(@"There was an error while attempting to open an email composer.  Please check your network settings and try again", @"AppAlerts", @"Error on email attempt")
 							buttonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")];
+            return;
 		}			
-
+        [[UIApplication sharedApplication] openURL:mailto];
 	}
 }
 
