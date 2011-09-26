@@ -46,12 +46,10 @@
         
         SLFMappingsManager *mapper = [[SLFMappingsManager alloc] init];
         [mapper registerMappings];
-        [mapper release];
-        
+        [mapper release];        
     }
     return self;
 }
-
 
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];

@@ -13,9 +13,11 @@
 #import <RestKit/RestKit.h>
 #import <RestKit/UI/UI.h>
 #import "GCTableViewController.h"
+@class StateDetailViewController;
 @interface StatesViewController : GCTableViewController <RKTableViewModelDelegate> {
 }
 
 @property (nonatomic, retain) RKFetchedResultsTableViewModel *tableViewModel;
+@property (nonatomic, assign) StateDetailViewController *stateMenuDelegate;
 
 @end

@@ -15,9 +15,13 @@
 #import "SLFState.h"
 #import "SLFRestKitManager.h"
 
+@interface StatesViewController()
+- (void)pushOrSendViewControllerWithState:(SLFState *)newState;
+@end
+
 @implementation StatesViewController
 @synthesize tableViewModel = __tableViewModel;
-
+@synthesize stateMenuDelegate;
 
 - (void)loadView {
     [super loadView];
@@ -40,12 +44,9 @@
         
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             SLFState *state = object;
-            [[SLFRestKitManager sharedRestKit] preloadObjectsForState:state];
-            [[NSUserDefaults standardUserDefaults] setObject:state.stateID forKey:@"selectedState"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            StateDetailViewController *vc = [[StateDetailViewController alloc] initWithState:state];
-            [self.navigationController pushViewController:vc animated:YES];
-            [vc release];
+            SLFSaveSelectedState(state);
+//          [[SLFRestKitManager sharedRestKit] preloadObjectsForState:state];
+            [self pushOrSendViewControllerWithState:state];
         };
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFState class] toTableCellsWithMapping:stateCellMap];    
@@ -76,8 +77,22 @@
 }
 
 - (void)dealloc {
+    self.stateMenuDelegate = nil;
     self.tableViewModel = nil;
      [super dealloc];
+}
+
+- (void)pushOrSendViewControllerWithState:(SLFState *)state {
+    NSParameterAssert(state != NULL);
+    if (self.stateMenuDelegate) {
+        [self.stateMenuDelegate reconfigureForState:state];
+        [self dismissModalViewControllerAnimated:YES];
+    }
+    else {
+        StateDetailViewController *vc = [[StateDetailViewController alloc] initWithState:state];
+        [self.navigationController pushViewController:vc animated:YES];
+        [vc release];
+    }
 }
 
 @end

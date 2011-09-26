@@ -10,15 +10,17 @@
 //
 //
 
-#import <RestKit/RestKit.h>
-
 #import "AppDelegate.h"
 #import "StatesViewController.h"
+#import "StateDetailViewController.h"
 #import "SLFRestKitManager.h"
 #import "SLFAppearance.h"
+
 @interface AppDelegate()
 - (void)setUpOnce;
-- (void)setupAlways;
+- (void)setUpViewControllers;
+- (void)setUpIpadViewControllers;
+- (void)setUpIphoneViewControllers;
 - (void)saveApplicationState;
 @end
 
@@ -30,12 +32,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self setUpOnce];
-	StatesViewController* viewController = [[StatesViewController alloc] initWithStyle:UITableViewStylePlain];
-	UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:viewController];    
-    window.rootViewController = navController;
-    [window makeKeyAndVisible];
-    [viewController release];
-    [navController release];
     return YES;
 }
 
@@ -43,32 +39,62 @@
     RKLogSetAppLoggingLevel(RKLogLevelDebug);
     [SLFAppearance setupTheme];
     [SLFRestKitManager sharedRestKit];
+    [self setUpViewControllers];
 }
 
+- (void)setUpViewControllers {
+    if (PSIsIpad())
+        [self setUpIpadViewControllers];
+    else
+        [self setUpIphoneViewControllers];
+}
+
+- (void)setUpIpadViewControllers {
+    SLFState *selectedState = SLFSelectedState();
+    StateDetailViewController* stateMenuVC = [[StateDetailViewController alloc] initWithState:selectedState];
+    UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:stateMenuVC];    
+    window.rootViewController = navController;
+    [window makeKeyAndVisible];
+    if (!selectedState) {
+        StatesViewController* stateListVC = [[StatesViewController alloc] init];
+        UINavigationController* tempNavController = [[UINavigationController alloc] initWithRootViewController:stateListVC];    
+        stateListVC.stateMenuDelegate = stateMenuVC;
+        [stateMenuVC presentModalViewController:tempNavController animated:YES];
+        [stateListVC release];
+        [tempNavController release];
+    }
+    [stateMenuVC release];
+    [navController release];    
+}
+
+- (void)setUpIphoneViewControllers {
+    SLFState *selectedState = SLFSelectedState();
+    StatesViewController* stateListVC = [[StatesViewController alloc] init];
+    UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:stateListVC];    
+    window.rootViewController = navController;
+    if (selectedState) {
+        StateDetailViewController* stateMenuVC = [[StateDetailViewController alloc] initWithState:selectedState];
+        [navController pushViewController:stateMenuVC animated:NO];
+        [stateMenuVC release];
+    }
+    [window makeKeyAndVisible];
+    [stateListVC release];
+    [navController release];    
+}
+
+/*
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    [self setupAlways];
 }
-
-/*- (void)applicationDidBecomeActive:(UIApplication *)application {
-    [self setupAlways];
-}*/
-
-- (void)setupAlways {
+- (void)applicationDidBecomeActive:(UIApplication *)application {
 }
-
 + (void)initialize {
-    /*
     if ([self class] == [AppDelegate class]) {
         NSDictionary *settings = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"selectedState"];
         [[NSUserDefaults standardUserDefaults] registerDefaults:settings];
     }
-    */
 }
-
-- (void)saveApplicationState {
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
+*/
+    
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     [self saveApplicationState];
 }
@@ -84,5 +110,12 @@
     self.window = nil;
     [super dealloc];
 }
+
+#pragma - Private Convenience Methods
+
+- (void)saveApplicationState {
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+    
 
 @end

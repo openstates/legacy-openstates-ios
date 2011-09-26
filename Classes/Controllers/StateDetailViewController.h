@@ -10,15 +10,15 @@
 //
 //
 
-#import <RestKit/RestKit.h>
 #import <RestKit/UI/UI.h>
 #import "GCTableViewController.h"
-@class SLFState;
+#import "SLFState.h"
+
 @interface StateDetailViewController : GCTableViewController <RKTableViewModelDelegate, RKObjectLoaderDelegate> {
 }
 
 @property (nonatomic, retain) RKTableViewModel *tableViewModel;
 @property (nonatomic,retain) SLFState *state;
 - (id)initWithState:(SLFState *)newState;
-
+- (void)reconfigureForState:(SLFState *)newState;
 @end

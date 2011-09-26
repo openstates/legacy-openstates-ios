@@ -35,13 +35,22 @@
 @synthesize state;
 @synthesize tableViewModel;
 
-- (id)initWithState:(SLFState *)newState {
+- (id)init {
     self = [super initWithStyle:UITableViewStylePlain];
-    if (self) {
-        self.state = newState;
-        [self loadDataFromNetworkWithID:newState.stateID];
-    }
     return self;
+}
+
+- (id)initWithState:(SLFState *)newState {
+    self = [self init];
+    if (self)
+        [self reconfigureForState:newState];
+    return self;
+}
+
+- (void)reconfigureForState:(SLFState *)newState {
+    self.state = newState;
+    if (newState)
+        [self loadDataFromNetworkWithID:newState.stateID];
 }
 
 - (void)loadView {
@@ -50,7 +59,8 @@
     self.tableViewModel.delegate = self;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
     self.tableViewModel.pullToRefreshEnabled = NO;
-    self.title = self.state.name;    
+    if (self.state)
+        self.title = self.state.name; 
 }
 
 - (void)dealloc {

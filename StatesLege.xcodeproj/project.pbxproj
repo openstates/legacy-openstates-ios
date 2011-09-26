@@ -44,6 +44,11 @@
 		3763203B142C643E00A6185F /* SLFRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3763203A142C643E00A6185F /* SLFRouter.m */; };
 		3763203D142C6C5400A6185F /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 372E58E314157BB0000652B1 /* MessageUI.framework */; };
 		37775500140F3F1200ABE16F /* DistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 377754FF140F3F1200ABE16F /* DistrictsViewController.m */; };
+		377C617A143000AA00EE626E /* PSStackedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6170143000AA00EE626E /* PSStackedViewController.m */; };
+		377C617B143000AA00EE626E /* PSStackedViewGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6173143000AA00EE626E /* PSStackedViewGlobal.m */; };
+		377C617C143000AA00EE626E /* PSSVContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6175143000AA00EE626E /* PSSVContainerView.m */; };
+		377C617D143000AA00EE626E /* UIView+PSSizes.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6177143000AA00EE626E /* UIView+PSSizes.m */; };
+		377C617E143000AA00EE626E /* UIViewController+PSStackedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6179143000AA00EE626E /* UIViewController+PSStackedView.m */; };
 		37953BDC14272D9500A0CD86 /* DataModelsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 37953BDB14272D9500A0CD86 /* DataModelsTestCase.m */; };
 		37A3258313E49D4700138ADE /* StatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258213E49D4700138ADE /* StatesViewController.m */; };
 		37A3258F13E49F2200138ADE /* StateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258E13E49F2200138ADE /* StateDetailViewController.m */; };
@@ -270,6 +275,18 @@
 		3763203A142C643E00A6185F /* SLFRouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFRouter.m; sourceTree = "<group>"; };
 		377754FE140F3F1100ABE16F /* DistrictsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictsViewController.h; sourceTree = "<group>"; };
 		377754FF140F3F1200ABE16F /* DistrictsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictsViewController.m; sourceTree = "<group>"; };
+		377C616E143000AA00EE626E /* PSStackedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSStackedView.h; sourceTree = "<group>"; };
+		377C616F143000AA00EE626E /* PSStackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSStackedViewController.h; sourceTree = "<group>"; };
+		377C6170143000AA00EE626E /* PSStackedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSStackedViewController.m; sourceTree = "<group>"; };
+		377C6171143000AA00EE626E /* PSStackedViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSStackedViewDelegate.h; sourceTree = "<group>"; };
+		377C6172143000AA00EE626E /* PSStackedViewGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSStackedViewGlobal.h; sourceTree = "<group>"; };
+		377C6173143000AA00EE626E /* PSStackedViewGlobal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSStackedViewGlobal.m; sourceTree = "<group>"; };
+		377C6174143000AA00EE626E /* PSSVContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSSVContainerView.h; sourceTree = "<group>"; };
+		377C6175143000AA00EE626E /* PSSVContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSSVContainerView.m; sourceTree = "<group>"; };
+		377C6176143000AA00EE626E /* UIView+PSSizes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+PSSizes.h"; sourceTree = "<group>"; };
+		377C6177143000AA00EE626E /* UIView+PSSizes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+PSSizes.m"; sourceTree = "<group>"; };
+		377C6178143000AA00EE626E /* UIViewController+PSStackedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+PSStackedView.h"; sourceTree = "<group>"; };
+		377C6179143000AA00EE626E /* UIViewController+PSStackedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PSStackedView.m"; sourceTree = "<group>"; };
 		37953BDB14272D9500A0CD86 /* DataModelsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataModelsTestCase.m; sourceTree = "<group>"; };
 		37A3258113E49D4700138ADE /* StatesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesViewController.h; sourceTree = "<group>"; };
 		37A3258213E49D4700138ADE /* StatesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatesViewController.m; sourceTree = "<group>"; };
@@ -423,6 +440,7 @@
 				37F29909140FCD2200B96572 /* Data */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				372E57C914153D07000652B1 /* UnitTests */,
+				377CB425142EFD4600AFF4BC /* Vendor */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -455,7 +473,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2538E7FF123417E500ACB5D7 /* RestKit.xcodeproj */,
 				372E58E314157BB0000652B1 /* MessageUI.framework */,
 				372E58DE14157B78000652B1 /* EventKit.framework */,
 				375DC7E514279C9300253969 /* QuartzCore.framework */,
@@ -516,6 +533,35 @@
 				3763203A142C643E00A6185F /* SLFRouter.m */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		377C616D143000AA00EE626E /* PSStackedView */ = {
+			isa = PBXGroup;
+			children = (
+				377C616E143000AA00EE626E /* PSStackedView.h */,
+				377C616F143000AA00EE626E /* PSStackedViewController.h */,
+				377C6170143000AA00EE626E /* PSStackedViewController.m */,
+				377C6171143000AA00EE626E /* PSStackedViewDelegate.h */,
+				377C6172143000AA00EE626E /* PSStackedViewGlobal.h */,
+				377C6173143000AA00EE626E /* PSStackedViewGlobal.m */,
+				377C6174143000AA00EE626E /* PSSVContainerView.h */,
+				377C6175143000AA00EE626E /* PSSVContainerView.m */,
+				377C6176143000AA00EE626E /* UIView+PSSizes.h */,
+				377C6177143000AA00EE626E /* UIView+PSSizes.m */,
+				377C6178143000AA00EE626E /* UIViewController+PSStackedView.h */,
+				377C6179143000AA00EE626E /* UIViewController+PSStackedView.m */,
+			);
+			name = PSStackedView;
+			path = Vendor/PSStackedView/PSStackedView;
+			sourceTree = "<group>";
+		};
+		377CB425142EFD4600AFF4BC /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				377C616D143000AA00EE626E /* PSStackedView */,
+				2538E7FF123417E500ACB5D7 /* RestKit.xcodeproj */,
+			);
+			name = Vendor;
 			sourceTree = "<group>";
 		};
 		377E94CD13E45B89007A42DF /* Controllers */ = {
@@ -959,6 +1005,11 @@
 				37632037142C5DD500A6185F /* SLFAlertView.m in Sources */,
 				37632038142C5DD500A6185F /* SLFEmailComposer.m in Sources */,
 				3763203B142C643E00A6185F /* SLFRouter.m in Sources */,
+				377C617A143000AA00EE626E /* PSStackedViewController.m in Sources */,
+				377C617B143000AA00EE626E /* PSStackedViewGlobal.m in Sources */,
+				377C617C143000AA00EE626E /* PSSVContainerView.m in Sources */,
+				377C617D143000AA00EE626E /* UIView+PSSizes.m in Sources */,
+				377C617E143000AA00EE626E /* UIViewController+PSStackedView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

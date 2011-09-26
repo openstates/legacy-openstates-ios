@@ -15,7 +15,8 @@
 @synthesize clearsSelectionOnViewWillAppear;
 
 - (id) initWithStyle:(UITableViewStyle) style {
-    if ((self = [super initWithNibName:nil bundle:nil])) {
+    self = [super initWithNibName:nil bundle:nil];
+    if (self) {
         tableView = [[self tableViewWithStyle:style] retain];
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
@@ -23,6 +24,11 @@
         self.tableView.separatorColor = [SLFAppearance loblollyLight];
         self.clearsSelectionOnViewWillAppear = YES;
     }
+    return self;
+}
+
+- (id) init {
+    self = [self initWithStyle:UITableViewStylePlain];
     return self;
 }
 
