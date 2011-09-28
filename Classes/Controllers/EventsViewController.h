@@ -10,14 +10,10 @@
 //
 //
 
-#import <UIKit/UIKit.h>
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
-#import <RestKit/UI/UI.h>
-#import "GCTableViewController.h"
+#import "SLFTableViewController.h"
 
 @class SLFState;
-@interface EventsViewController : GCTableViewController <RKTableViewModelDelegate> {
+@interface EventsViewController : SLFTableViewController {
 }
 @property (nonatomic, retain) RKFetchedResultsTableViewModel *tableViewModel;
 @property (nonatomic, retain) SLFState *state;

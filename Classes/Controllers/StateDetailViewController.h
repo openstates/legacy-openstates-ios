@@ -10,15 +10,17 @@
 //
 //
 
-#import <RestKit/UI/UI.h>
-#import "GCTableViewController.h"
+#import "SLFTableViewController.h"
 #import "SLFState.h"
 
-@interface StateDetailViewController : GCTableViewController <RKTableViewModelDelegate, RKObjectLoaderDelegate> {
+@interface StateDetailViewController : SLFTableViewController <RKObjectLoaderDelegate> {
 }
 
 @property (nonatomic, retain) RKTableViewModel *tableViewModel;
 @property (nonatomic,retain) SLFState *state;
 - (id)initWithState:(SLFState *)newState;
 - (void)reconfigureForState:(SLFState *)newState;
+- (RKTableViewCellMapping *)menuCellMapping;   // override this to customize appearance
+- (void)selectMenuItem:(NSString *)menuItem;   // override this to customize behavior
+
 @end

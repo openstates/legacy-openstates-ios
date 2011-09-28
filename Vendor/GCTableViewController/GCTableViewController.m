@@ -7,29 +7,27 @@
 //
 
 #import "GCTableViewController.h"
-#import "SLFAppearance.h"
 
 @implementation GCTableViewController
-
 @synthesize tableView;
 @synthesize clearsSelectionOnViewWillAppear;
 
+- (id) init {
+    self = [self initWithStyle:UITableViewStylePlain];
+    return self;
+}
+
 - (id) initWithStyle:(UITableViewStyle) style {
-    self = [super initWithNibName:nil bundle:nil];
-    if (self) {
+    if ((self = [super initWithNibName:nil bundle:nil])) {
         tableView = [[self tableViewWithStyle:style] retain];
-        self.tableView.delegate = self;
-        self.tableView.dataSource = self;
-        self.tableView.backgroundColor = [SLFAppearance loblolly];
-        self.tableView.separatorColor = [SLFAppearance loblollyLight];
         self.clearsSelectionOnViewWillAppear = YES;
     }
     return self;
 }
 
-- (id) init {
-    self = [self initWithStyle:UITableViewStylePlain];
-    return self;
+- (void)dealloc {
+    self.tableView = nil;
+    [super dealloc];
 }
 
 - (void) loadView {
@@ -39,10 +37,14 @@
     self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 }
 
+- (void) viewDidUnload {
+    [super viewDidUnload];
+    self.tableView = nil;
+}
+
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (self.clearsSelectionOnViewWillAppear) 
-        [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+    if (self.clearsSelectionOnViewWillAppear) [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
 }
 
 #pragma mark TableView methods
@@ -62,21 +64,10 @@
 #pragma mark Getter
 
 - (UITableView *) tableViewWithStyle:(UITableViewStyle)style {
-    return [[[UITableView alloc] initWithFrame:CGRectZero style:style] autorelease];
+    UITableView *aTableView = [[[UITableView alloc] initWithFrame:CGRectZero style:style] autorelease];
+    aTableView.delegate = self;
+    aTableView.dataSource = self;
+    return aTableView;
 }
 
-- (void)viewDidUnload {
-    [tableView release];
-    tableView = nil;
-    [super viewDidUnload];
-}
-- (void)dealloc {
-    [tableView release];
-    tableView = nil;
-    [super dealloc];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-    return YES;
-}
 @end

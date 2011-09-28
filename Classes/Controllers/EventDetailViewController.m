@@ -24,7 +24,7 @@
 @synthesize event;
 
 - (id)initWithEventID:(NSString *)objID {
-    self = [super initWithStyle:UITableViewStylePlain];
+    self = [super init];
     if (self) {
         self.resourceClass = [SLFEvent class];
         self.resourcePath = [NSString stringWithFormat:@"/events/%@", objID];

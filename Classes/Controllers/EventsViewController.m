@@ -20,7 +20,7 @@
 @synthesize resourcePath;
 
 - (id)initWithState:(SLFState *)newState {
-    self = [super initWithStyle:UITableViewStylePlain];
+    self = [super init];
     if (self) {
         self.state = newState;
         NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -31,8 +31,8 @@
     return self;
 }
 
-- (void)loadView {
-    [super loadView];
+- (void)viewDidLoad {
+    [super viewDidLoad];
     self.title = NSLocalizedString(@"Loading...",@"");
     self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
@@ -43,37 +43,23 @@
     self.tableViewModel.autoRefreshRate = 240;
     self.tableViewModel.pullToRefreshEnabled = YES;
     
-    RKTableViewCellMapping *objCellMap = [RKTableViewCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
-        cellMapping.style = UITableViewCellStyleSubtitle;
-        cellMapping.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"eventDescription" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"dateStart" toAttribute:@"detailTextLabel.text"];
-        
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             SLFEvent *event = object;
             EventDetailViewController *vc = [[EventDetailViewController alloc] initWithEventID:event.eventID];
-            [self.navigationController pushViewController:vc animated:YES];
+            [self stackOrPushViewController:vc];
             [vc release];
-            
         };
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFEvent class] toTableCellsWithMapping:objCellMap];    
-    
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
     [self.tableViewModel loadTable];
     self.title = [NSString stringWithFormat:@"%d %@ Events",[[self.tableViewModel.fetchedResultsController fetchedObjects] count], self.state.name];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
     self.title = [NSString stringWithFormat:@"%d %@ Events",[[self.tableViewModel.fetchedResultsController fetchedObjects] count], self.state.name];
-}
-
-- (void)tableViewModel:(RKAbstractTableViewModel*)tableViewModel didFailLoadWithError:(NSError*)error {
-    self.title = @"Load Error";
-    RKLogError(@"Error loading table from resource path: %@", self.tableViewModel.resourcePath);
 }
 
 - (void)dealloc {

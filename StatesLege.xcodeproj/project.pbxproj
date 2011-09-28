@@ -14,6 +14,11 @@
 		2538E8671234250100ACB5D7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2538E8661234250100ACB5D7 /* SystemConfiguration.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		28D7ACF80DDB3853001CB0EB /* LegislatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* LegislatorsViewController.m */; };
+		37147FF3143257F400170716 /* StateFlags.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 37147FF2143257F400170716 /* StateFlags.bundle */; };
+		3714804A1432756800170716 /* AlternatingCellMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 371480491432756800170716 /* AlternatingCellMapping.m */; };
+		3714804E1432845E00170716 /* SubtitleCellMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 3714804D1432845E00170716 /* SubtitleCellMapping.m */; };
+		371480521432D27800170716 /* MenuPattern.png in Resources */ = {isa = PBXBuildFile; fileRef = 371480501432D27800170716 /* MenuPattern.png */; };
+		371480531432D27800170716 /* MenuPattern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 371480511432D27800170716 /* MenuPattern@2x.png */; };
 		372D2AF714285FDD00ADE84E /* CommitteeRole.m in Sources */ = {isa = PBXBuildFile; fileRef = 372D2AF614285FDD00ADE84E /* CommitteeRole.m */; };
 		372D2AFA14285FDF00ADE84E /* CommitteeMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 372D2AF914285FDE00ADE84E /* CommitteeMember.m */; };
 		372D2B1E1428DEA400ADE84E /* BillSponsor.m in Sources */ = {isa = PBXBuildFile; fileRef = 372D2B1D1428DEA300ADE84E /* BillSponsor.m */; };
@@ -43,6 +48,7 @@
 		37632038142C5DD500A6185F /* SLFEmailComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = 37632036142C5DD500A6185F /* SLFEmailComposer.m */; };
 		3763203B142C643E00A6185F /* SLFRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3763203A142C643E00A6185F /* SLFRouter.m */; };
 		3763203D142C6C5400A6185F /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 372E58E314157BB0000652B1 /* MessageUI.framework */; };
+		376B88FF143186B300AA96D4 /* SLFTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376B88FE143186B300AA96D4 /* SLFTableViewController.m */; };
 		37775500140F3F1200ABE16F /* DistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 377754FF140F3F1200ABE16F /* DistrictsViewController.m */; };
 		377C617A143000AA00EE626E /* PSStackedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6170143000AA00EE626E /* PSStackedViewController.m */; };
 		377C617B143000AA00EE626E /* PSStackedViewGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6173143000AA00EE626E /* PSStackedViewGlobal.m */; };
@@ -92,7 +98,6 @@
 		37E961F113E544FE0064B1D3 /* libRestKitSupport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E961B813E544380064B1D3 /* libRestKitSupport.a */; };
 		37EDEAA313D3D81900F8FCA1 /* LegislatorDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EDEAA113D3D81900F8FCA1 /* LegislatorDetailViewController.m */; };
 		37EDEAAC13D3FAF800F8FCA1 /* CommitteeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EDEAAB13D3FAF700F8FCA1 /* CommitteeDetailViewController.m */; };
-		37F25BA1142BAB0A009D8FCF /* TableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F25BA0142BAB0A009D8FCF /* TableItem.m */; };
 		37F25BA4142BAC0E009D8FCF /* SLFAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F25BA3142BAC0E009D8FCF /* SLFAppearance.m */; };
 		37F2990B140FCD2300B96572 /* SLFData.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 37F2990A140FCD2200B96572 /* SLFData.xcdatamodel */; };
 		37F29917140FCD5200B96572 /* SLFMappingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F29912140FCD5200B96572 /* SLFMappingsManager.m */; };
@@ -237,6 +242,14 @@
 		28D7ACF60DDB3853001CB0EB /* LegislatorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorsViewController.h; sourceTree = "<group>"; };
 		28D7ACF70DDB3853001CB0EB /* LegislatorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorsViewController.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
+		37147FF2143257F400170716 /* StateFlags.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = StateFlags.bundle; sourceTree = "<group>"; };
+		371480481432756800170716 /* AlternatingCellMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlternatingCellMapping.h; sourceTree = "<group>"; };
+		371480491432756800170716 /* AlternatingCellMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlternatingCellMapping.m; sourceTree = "<group>"; };
+		3714804B143283A200170716 /* SLFTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFTheme.h; sourceTree = "<group>"; };
+		3714804C1432845E00170716 /* SubtitleCellMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubtitleCellMapping.h; sourceTree = "<group>"; };
+		3714804D1432845E00170716 /* SubtitleCellMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubtitleCellMapping.m; sourceTree = "<group>"; };
+		371480501432D27800170716 /* MenuPattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuPattern.png; sourceTree = "<group>"; };
+		371480511432D27800170716 /* MenuPattern@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MenuPattern@2x.png"; sourceTree = "<group>"; };
 		372D2AF514285FDC00ADE84E /* CommitteeRole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeRole.h; sourceTree = "<group>"; };
 		372D2AF614285FDD00ADE84E /* CommitteeRole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteeRole.m; sourceTree = "<group>"; };
 		372D2AF814285FDE00ADE84E /* CommitteeMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeMember.h; sourceTree = "<group>"; };
@@ -273,6 +286,8 @@
 		37632036142C5DD500A6185F /* SLFEmailComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFEmailComposer.m; sourceTree = "<group>"; };
 		37632039142C643E00A6185F /* SLFRouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFRouter.h; sourceTree = "<group>"; };
 		3763203A142C643E00A6185F /* SLFRouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFRouter.m; sourceTree = "<group>"; };
+		376B88FD143186B300AA96D4 /* SLFTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLFTableViewController.h; path = ../Themes/SLFTableViewController.h; sourceTree = "<group>"; };
+		376B88FE143186B300AA96D4 /* SLFTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLFTableViewController.m; path = ../Themes/SLFTableViewController.m; sourceTree = "<group>"; };
 		377754FE140F3F1100ABE16F /* DistrictsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictsViewController.h; sourceTree = "<group>"; };
 		377754FF140F3F1200ABE16F /* DistrictsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictsViewController.m; sourceTree = "<group>"; };
 		377C616E143000AA00EE626E /* PSStackedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSStackedView.h; sourceTree = "<group>"; };
@@ -346,8 +361,6 @@
 		37EDEAA113D3D81900F8FCA1 /* LegislatorDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorDetailViewController.m; sourceTree = "<group>"; };
 		37EDEAAA13D3FAF700F8FCA1 /* CommitteeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeDetailViewController.h; sourceTree = "<group>"; };
 		37EDEAAB13D3FAF700F8FCA1 /* CommitteeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteeDetailViewController.m; sourceTree = "<group>"; };
-		37F25B9F142BAB0A009D8FCF /* TableItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableItem.h; sourceTree = "<group>"; };
-		37F25BA0142BAB0A009D8FCF /* TableItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableItem.m; sourceTree = "<group>"; };
 		37F25BA2142BAC0E009D8FCF /* SLFAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFAppearance.h; sourceTree = "<group>"; };
 		37F25BA3142BAC0E009D8FCF /* SLFAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFAppearance.m; sourceTree = "<group>"; };
 		37F2990A140FCD2200B96572 /* SLFData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SLFData.xcdatamodel; sourceTree = "<group>"; };
@@ -462,6 +475,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3714804F1432D27800170716 /* Assets */,
+				37147FF2143257F400170716 /* StateFlags.bundle */,
 				37336A66142B98A000F635EB /* Interfaces */,
 				37BAC162142B97AD0021A3C6 /* SplashScreen */,
 				37BAC14B142B97620021A3C6 /* Icon */,
@@ -489,6 +504,25 @@
 				372E57C514153D07000652B1 /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		37147FEF1432107000170716 /* GCTableViewController */ = {
+			isa = PBXGroup;
+			children = (
+				375DC7E114279BE600253969 /* GCTableViewController.h */,
+				375DC7E214279BE600253969 /* GCTableViewController.m */,
+			);
+			name = GCTableViewController;
+			path = Vendor/GCTableViewController;
+			sourceTree = "<group>";
+		};
+		3714804F1432D27800170716 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				371480501432D27800170716 /* MenuPattern.png */,
+				371480511432D27800170716 /* MenuPattern@2x.png */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 		372E57C914153D07000652B1 /* UnitTests */ = {
@@ -558,6 +592,7 @@
 		377CB425142EFD4600AFF4BC /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				37147FEF1432107000170716 /* GCTableViewController */,
 				377C616D143000AA00EE626E /* PSStackedView */,
 				2538E7FF123417E500ACB5D7 /* RestKit.xcodeproj */,
 			);
@@ -567,8 +602,10 @@
 		377E94CD13E45B89007A42DF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				375DC7E114279BE600253969 /* GCTableViewController.h */,
-				375DC7E214279BE600253969 /* GCTableViewController.m */,
+				376B88FD143186B300AA96D4 /* SLFTableViewController.h */,
+				376B88FE143186B300AA96D4 /* SLFTableViewController.m */,
+				37AC5FD4142C42680061414F /* StackedMenuViewController.h */,
+				37AC5FD5142C42680061414F /* StackedMenuViewController.m */,
 				37A3258113E49D4700138ADE /* StatesViewController.h */,
 				37A3258213E49D4700138ADE /* StatesViewController.m */,
 				37A3258D13E49F2200138ADE /* StateDetailViewController.h */,
@@ -589,8 +626,6 @@
 				37588E2313E4B456005FB5AB /* EventsViewController.m */,
 				37588E2A13E4B5FE005FB5AB /* EventDetailViewController.h */,
 				37588E2B13E4B5FE005FB5AB /* EventDetailViewController.m */,
-				37AC5FD4142C42680061414F /* StackedMenuViewController.h */,
-				37AC5FD5142C42680061414F /* StackedMenuViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -710,10 +745,13 @@
 		37F25B9E142BAB0A009D8FCF /* Themes */ = {
 			isa = PBXGroup;
 			children = (
-				37F25B9F142BAB0A009D8FCF /* TableItem.h */,
-				37F25BA0142BAB0A009D8FCF /* TableItem.m */,
+				3714804B143283A200170716 /* SLFTheme.h */,
 				37F25BA2142BAC0E009D8FCF /* SLFAppearance.h */,
 				37F25BA3142BAC0E009D8FCF /* SLFAppearance.m */,
+				371480481432756800170716 /* AlternatingCellMapping.h */,
+				371480491432756800170716 /* AlternatingCellMapping.m */,
+				3714804C1432845E00170716 /* SubtitleCellMapping.h */,
+				3714804D1432845E00170716 /* SubtitleCellMapping.m */,
 			);
 			path = Themes;
 			sourceTree = "<group>";
@@ -932,6 +970,9 @@
 				37BAC16C142B97AD0021A3C6 /* Default@2x.png in Resources */,
 				37336A68142B98A000F635EB /* MainWindow.xib in Resources */,
 				37336A6C142B991200F635EB /* MainWindow-iPad.xib in Resources */,
+				37147FF3143257F400170716 /* StateFlags.bundle in Resources */,
+				371480521432D27800170716 /* MenuPattern.png in Resources */,
+				371480531432D27800170716 /* MenuPattern@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -999,7 +1040,6 @@
 				372D2AFA14285FDF00ADE84E /* CommitteeMember.m in Sources */,
 				372D2B1E1428DEA400ADE84E /* BillSponsor.m in Sources */,
 				37BAC14A142B972D0021A3C6 /* main.m in Sources */,
-				37F25BA1142BAB0A009D8FCF /* TableItem.m in Sources */,
 				37F25BA4142BAC0E009D8FCF /* SLFAppearance.m in Sources */,
 				37AC5FD6142C42680061414F /* StackedMenuViewController.m in Sources */,
 				37632037142C5DD500A6185F /* SLFAlertView.m in Sources */,
@@ -1010,6 +1050,9 @@
 				377C617C143000AA00EE626E /* PSSVContainerView.m in Sources */,
 				377C617D143000AA00EE626E /* UIView+PSSizes.m in Sources */,
 				377C617E143000AA00EE626E /* UIViewController+PSStackedView.m in Sources */,
+				376B88FF143186B300AA96D4 /* SLFTableViewController.m in Sources */,
+				3714804A1432756800170716 /* AlternatingCellMapping.m in Sources */,
+				3714804E1432845E00170716 /* SubtitleCellMapping.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

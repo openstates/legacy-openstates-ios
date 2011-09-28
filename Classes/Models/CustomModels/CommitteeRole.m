@@ -12,4 +12,13 @@
         return nil;
     return [SLFCommittee findFirstByAttribute:@"committeeID" withValue:self.committeeID];
 }
+
+- (NSString *)role {
+    [self willAccessValueForKey:@"role"];
+    NSString *aRole = [self primitiveValueForKey:@"role"];
+    [self didAccessValueForKey:@"role"];
+    if (aRole)
+        aRole = [aRole capitalizedString];
+    return aRole;
+}
 @end

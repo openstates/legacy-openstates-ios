@@ -20,7 +20,7 @@
 @synthesize resourcePath;
 
 - (id)initWithState:(SLFState *)newState {
-    self = [super initWithStyle:UITableViewStylePlain];
+    self = [super init];
     if (self) {
         self.state = newState;
         NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -32,9 +32,9 @@
     return self;
 }
 
-- (void)loadView {
-    [super loadView];
-    self.title = @"Loading...";
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.title = NSLocalizedString(@"Loading...",@"");
     self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
@@ -46,36 +46,25 @@
     self.tableViewModel.sectionNameKeyPath = @"lastnameInitial";
     self.tableViewModel.pullToRefreshEnabled = YES;
     
-    RKTableViewCellMapping *objCellMap = [RKTableViewCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
-        cellMapping.style = UITableViewCellStyleSubtitle;
-        cellMapping.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"fullName" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"chamberShortName" toAttribute:@"detailTextLabel.text"];
         
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             SLFLegislator *legislator = object;
             LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:legislator.legID];
-            [self.navigationController pushViewController:vc animated:YES];
+            [self stackOrPushViewController:vc];
             [vc release];
             
         };
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFLegislator class] toTableCellsWithMapping:objCellMap];    
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
     [self.tableViewModel loadTable];
     self.title = [NSString stringWithFormat:@"%d %@ Members",[[self.tableViewModel.fetchedResultsController fetchedObjects] count], self.state.name];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
     self.title = [NSString stringWithFormat:@"%d %@ Members",[[self.tableViewModel.fetchedResultsController fetchedObjects] count], self.state.name];
-}
-
-- (void)tableViewModel:(RKAbstractTableViewModel*)tableViewModel didFailLoadWithError:(NSError*)error {
-    self.title = @"Load Error";
-    RKLogError(@"Error loading table from resource path: %@", self.tableViewModel.resourcePath);
 }
 
 - (void)dealloc {

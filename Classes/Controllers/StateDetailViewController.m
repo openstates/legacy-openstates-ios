@@ -10,14 +10,12 @@
 //
 //
 
-#import "StatesViewController.h"
 #import "StateDetailViewController.h"
 #import "LegislatorsViewController.h"
 #import "CommitteesViewController.h"
 #import "DistrictsViewController.h"
 #import "EventsViewController.h"
 #import "SLFDataModels.h"
-#import "SLFRestKitManager.h"
 
 #define MenuLegislators NSLocalizedString(@"Legislators", @"")
 #define MenuCommittees NSLocalizedString(@"Committees", @"")
@@ -26,7 +24,6 @@
 #define MenuEvents NSLocalizedString(@"Events", @"")
 
 @interface StateDetailViewController()
-- (void)selectMenuItem:(NSString *)menuItem;
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
 @end
@@ -35,13 +32,8 @@
 @synthesize state;
 @synthesize tableViewModel;
 
-- (id)init {
-    self = [super initWithStyle:UITableViewStylePlain];
-    return self;
-}
-
 - (id)initWithState:(SLFState *)newState {
-    self = [self init];
+    self = [super init];
     if (self)
         [self reconfigureForState:newState];
     return self;
@@ -53,15 +45,6 @@
         [self loadDataFromNetworkWithID:newState.stateID];
 }
 
-- (void)loadView {
-    [super loadView];
-    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.pullToRefreshEnabled = NO;
-    if (self.state)
-        self.title = self.state.name; 
-}
 
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
@@ -70,37 +53,15 @@
     [super dealloc];
 }
 
-- (void)selectMenuItem:(NSString *)menuItem {
-	if (menuItem == NULL)
-        return;
-
-    if ([menuItem isEqualToString:MenuLegislators]) {
-        LegislatorsViewController *vc = [[LegislatorsViewController alloc] initWithState:self.state];
-        [self.navigationController pushViewController:vc animated:YES];
-        [vc release];
-    }
-    else if ([menuItem isEqualToString:MenuCommittees]) {
-        CommitteesViewController *vc = [[CommitteesViewController alloc] initWithState:self.state];
-        [self.navigationController pushViewController:vc animated:YES];
-        [vc release];
-    }
-    else if ([menuItem isEqualToString:MenuDistricts]) {
-        DistrictsViewController *vc = [[DistrictsViewController alloc] initWithState:self.state];
-        [self.navigationController pushViewController:vc animated:YES];
-        [vc release];
-    }
-    else if ([menuItem isEqualToString:MenuEvents]) {
-        EventsViewController *vc = [[EventsViewController alloc] initWithState:self.state];
-        [self.navigationController pushViewController:vc animated:YES];
-        [vc release];
-    }
-/*
-    else if ([menuItem isEqualToString:MenuBills]) {
-        BillsViewController *vc = [[BillsViewController alloc] initWithState:self.state];
-        [self.navigationController pushViewController:vc animated:YES];
-        [vc release];
-    }
-*/
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
+    self.tableViewModel.delegate = self;
+    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
+    self.tableViewModel.pullToRefreshEnabled = NO;
+    if (self.state)
+        self.title = self.state.name; 
+    
 }
 
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {
@@ -112,21 +73,45 @@
     }];
 }
 
+- (RKTableViewCellMapping *)menuCellMapping {
+    SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
+    cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
+        RKTableItem* tableItem = (RKTableItem*) object;
+        [self selectMenuItem:tableItem.text];
+    };
+    return cellMap;
+}
+
+
 - (void)configureTableItems {
     NSMutableArray* tableItems = [NSMutableArray arrayWithArray:[RKTableItem tableItemsFromStrings:MenuLegislators, MenuCommittees, MenuDistricts, /*MenuBills,*/ nil]];
     if (self.state && self.state.featureFlags && [self.state.featureFlags containsObject:@"events"])
         [tableItems addObject:[RKTableItem tableItemWithText:MenuEvents]];
-    [self.tableViewModel loadTableItems:tableItems withMappingBlock:^(RKTableViewCellMapping* cellMapping) {
-        cellMapping.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-            RKTableItem* tableItem = (RKTableItem*) object;
-            [self selectMenuItem:tableItem.text];
-        };
-    }];
+    [self.tableViewModel loadTableItems:tableItems withMapping:[self menuCellMapping]];
 }
 
+- (void)selectMenuItem:(NSString *)menuItem {
+	if (menuItem == NULL)
+        return;
+    UIViewController *vc = nil;
+    if ([menuItem isEqualToString:MenuLegislators])
+        vc = [[LegislatorsViewController alloc] initWithState:self.state];
+    else if ([menuItem isEqualToString:MenuCommittees])
+        vc = [[CommitteesViewController alloc] initWithState:self.state];
+    else if ([menuItem isEqualToString:MenuDistricts])
+        vc = [[DistrictsViewController alloc] initWithState:self.state];
+    else if ([menuItem isEqualToString:MenuEvents])
+        vc = [[EventsViewController alloc] initWithState:self.state];
+        //  else if ([menuItem isEqualToString:MenuBills])
+        //      vc = [[BillsViewController alloc] initWithState:self.state];
+    if (vc) {
+        [self stackOrPushViewController:vc];
+        [vc release];
+    }
+}
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
-    self.title = @"Load Error";
+    self.title = NSLocalizedString(@"Load Error",@"");
+    RKLogError(@"Error while loading state detail menu: %@, %@", objectLoader.resourcePath, error);
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {

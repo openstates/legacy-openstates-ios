@@ -23,9 +23,9 @@
 @synthesize tableViewModel = __tableViewModel;
 @synthesize stateMenuDelegate;
 
-- (void)loadView {
-    [super loadView];
-    self.title = @"Loading...";
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.title = NSLocalizedString(@"Loading...",@"");
     self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
@@ -36,24 +36,19 @@
     self.tableViewModel.autoRefreshRate = 360;
     self.tableViewModel.pullToRefreshEnabled = YES;
     
-    RKTableViewCellMapping *stateCellMap = [RKTableViewCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
-        cellMapping.style = UITableViewCellStyleSubtitle;
-        cellMapping.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    SubtitleCellMapping *stateCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"name" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"stateID" toAttribute:@"detailTextLabel.text"];
         
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             SLFState *state = object;
             SLFSaveSelectedState(state);
-//          [[SLFRestKitManager sharedRestKit] preloadObjectsForState:state];
+                //          [[SLFRestKitManager sharedRestKit] preloadObjectsForState:state];
             [self pushOrSendViewControllerWithState:state];
         };
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFState class] toTableCellsWithMapping:stateCellMap];    
-}
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
     [self.tableViewModel loadTable];    
     NSInteger count = [[self.tableViewModel.fetchedResultsController fetchedObjects] count];
     self.title = [NSString stringWithFormat:@"%d States",count];
@@ -71,11 +66,6 @@
     self.title = [NSString stringWithFormat:@"%d States",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }
 
-- (void)tableViewModel:(RKAbstractTableViewModel*)tableViewModel didFailLoadWithError:(NSError*)error {
-    self.title = NSLocalizedString(@"Load Error",@"");
-    RKLogError(@"Error loading table from resource path: %@", self.tableViewModel.resourcePath);
-}
-
 - (void)dealloc {
     self.stateMenuDelegate = nil;
     self.tableViewModel = nil;
@@ -90,7 +80,7 @@
     }
     else {
         StateDetailViewController *vc = [[StateDetailViewController alloc] initWithState:state];
-        [self.navigationController pushViewController:vc animated:YES];
+        [self stackOrPushViewController:vc];
         [vc release];
     }
 }

@@ -16,7 +16,6 @@
 #import "SLFDataModels.h"
 #import "SLFMappingsManager.h"
 #import "SLFRestKitManager.h"
-#import "TableItem.h"
 
 #define SectionHeaderMemberInfo NSLocalizedString(@"Member Details", @"")
 #define SectionHeaderDistrict NSLocalizedString(@"District Map", @"")
@@ -37,7 +36,7 @@ enum SECTIONS {
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
-- (RKTableViewCellMapping *)committeeRoleCellMap;
+- (SubtitleCellMapping *)committeeRoleCellMap;
 @end
 
 @implementation LegislatorDetailViewController
@@ -45,32 +44,48 @@ enum SECTIONS {
 @synthesize tableViewModel;
 
 - (id)initWithLegislatorID:(NSString *)legislatorID {
-    self = [super initWithStyle:UITableViewStylePlain];
+    self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
         [self loadDataFromNetworkWithID:legislatorID];
     }
     return self;
 }
 
-- (void)loadView {
-    [super loadView];
+- (void)viewDidLoad {
+    [super viewDidLoad];
     self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
     self.tableViewModel.variableHeightRows = YES;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
     self.tableViewModel.pullToRefreshEnabled = NO;
     [self.tableViewModel mapObjectsWithClass:[CommitteeRole class] toTableCellsWithMapping:[self committeeRoleCellMap]];
-
+    
     NSInteger sectionIndex;
     for (sectionIndex = SectionMemberInfoIndex;sectionIndex < kNumSections; sectionIndex++) {
         [self.tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
             section.headerTitle = [self headerForSectionIndex:sectionIndex];
             section.headerHeight = 22;
+            /*
+            UILabel *label = [[UILabel alloc] init];
+            label.frame = CGRectMake(10, 6, self.tableView.width - 10, section.headerHeight-10);
+            label.backgroundColor = [UIColor clearColor];
+            label.textColor = [SLFAppearance tableSectionColor];
+            label.shadowColor = [SLFAppearance tableSeparatorColor];
+            label.shadowOffset = CGSizeMake(0.0, 1.0);
+            label.font = [SLFAppearance boldEighteen];
+            label.text = section.headerTitle;
+           
+                // Create header view and add label as a subview
+            UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.width, section.headerHeight)];
+            sectionView.backgroundColor = [UIColor clearColor];
+            [sectionView addSubview:label];
+            [label release];
+            section.headerView =sectionView;
+            [sectionView release];*/
         }];
     }         
 	self.title = NSLocalizedString(@"Loading...", @"");
 }
-
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.legislator = nil;
@@ -97,29 +112,40 @@ enum SECTIONS {
         imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:self.legislator.photoURL] options:NSDataReadingMappedIfSafe error:&error];
     if (!error && imageData)
         image = [[UIImage alloc] initWithData:imageData];
-    RKTableItem *firstItemCell = [StaticSubtitleTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
-        tableItem.text = self.legislator.demoLongName;
+    RKTableItem *firstItemCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
+        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.cellMapping.style = UITableViewCellStyleValue1;
+        tableItem.text = self.legislator.demoLongName;
         if (image) {
             tableItem.cellMapping.rowHeight = 88;
             tableItem.image = image;
         }
     }];
     [tableItems addObject:firstItemCell];
-    [tableItems addObject:[StaticSubtitleTableItem tableItemWithText:self.legislator.title detailText:self.legislator.term]];
+    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
+        tableItem.text = self.legislator.title;
+        tableItem.detailText = self.legislator.term;
+    }]];
     for (NSString *website in self.legislator.sources)
-        [tableItems addObject:[SubtitleTableItem tableItemWithText:NSLocalizedString(@"Web Site", @"") URL:website]];  
+        [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+            tableItem.cellMapping = [SubtitleCellMapping cellMapping];
+            tableItem.text = NSLocalizedString(@"Web Site", @"");
+            tableItem.detailText = website;
+            tableItem.URL = website;
+        }]];  
     [self.tableViewModel loadTableItems:tableItems inSection:SectionMemberInfoIndex];
 
     [self.tableViewModel loadObjects:self.legislator.sortedRoles inSection:SectionCommitteesIndex];
 
     [tableItems removeAllObjects];
-    [tableItems addObject:[SubtitleTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+        tableItem.cellMapping = [SubtitleCellMapping cellMapping];
         tableItem.text = self.legislator.districtMapLabel;
         tableItem.detailText = NSLocalizedString(@"Map", @"");
         tableItem.cellMapping.onSelectCell = ^(void) {
             DistrictDetailViewController *vc = [[DistrictDetailViewController alloc] initWithDistrictMapID:self.legislator.districtID];
-            [self.navigationController pushViewController:vc animated:YES];
+            [self stackOrPushViewController:vc];
             [vc release];
         };
     }]];
@@ -131,16 +157,14 @@ enum SECTIONS {
     [tableItems release];
 }
 
-- (RKTableViewCellMapping *)committeeRoleCellMap {
-    RKTableViewCellMapping *roleCellMap = [RKTableViewCellMapping cellMapping];
-    roleCellMap.style = UITableViewCellStyleSubtitle;
-    roleCellMap.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+- (SubtitleCellMapping *)committeeRoleCellMap {
+    SubtitleCellMapping *roleCellMap = [SubtitleCellMapping cellMapping];
     [roleCellMap mapKeyPath:@"committeeName" toAttribute:@"textLabel.text"];
     [roleCellMap mapKeyPath:@"role" toAttribute:@"detailTextLabel.text"];
     roleCellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         CommitteeRole *role = object;
         CommitteeDetailViewController *vc = [[CommitteeDetailViewController alloc] initWithCommitteeID:role.committeeID];
-        [self.navigationController pushViewController:vc animated:YES];
+        [self stackOrPushViewController:vc];
         [vc release];
     };
     return roleCellMap;
@@ -148,7 +172,7 @@ enum SECTIONS {
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     self.title = NSLocalizedString(@"Load Error", @"");
-    RKLogError(@"Error loading %@, %@", objectLoader.resourcePath, error);
+    RKLogError(@"Error loading resource path %@, %@", objectLoader.resourcePath, error);
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {

@@ -10,12 +10,10 @@
 //
 //
 
-#import <RestKit/RestKit.h>
-#import <RestKit/UI/UI.h>
-#import "GCTableViewController.h"
+#import "SLFTableViewController.h"
 
 @class SLFLegislator;
-@interface LegislatorDetailViewController : GCTableViewController <RKTableViewModelDelegate, RKObjectLoaderDelegate>
+@interface LegislatorDetailViewController : SLFTableViewController <RKObjectLoaderDelegate>
 
 @property (nonatomic, retain) SLFLegislator *legislator;
 - (id)initWithLegislatorID:(NSString *)legislatorID;

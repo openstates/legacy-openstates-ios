@@ -1,6 +1,6 @@
 //
-//  TableItem.h
-//  Created by Greg Combs on 9/22/11.
+//  SLFTableViewController.h
+//  Created by Greg Combs on 9/26/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
 //
@@ -10,13 +10,14 @@
 //
 //
 
-#import <RestKit/RestKit.h>
+#import <RestKit/CoreData/CoreData.h>
 #import <RestKit/UI/UI.h>
+#import "GCTableViewController.h"
+#import "PSStackedViewDelegate.h"
+#import "SLFTheme.h"
 
-@interface SubtitleTableItem : RKTableItem
+@interface SLFTableViewController : GCTableViewController <PSStackedViewDelegate, RKTableViewModelDelegate>
 
-@end
-
-@interface StaticSubtitleTableItem : SubtitleTableItem
+- (void)stackOrPushViewController:(UIViewController *)viewController;
 
 @end

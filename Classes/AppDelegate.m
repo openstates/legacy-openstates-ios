@@ -12,11 +12,13 @@
 
 #import "AppDelegate.h"
 #import "StatesViewController.h"
+#import "StackedMenuViewController.h"
 #import "StateDetailViewController.h"
 #import "SLFRestKitManager.h"
 #import "SLFAppearance.h"
 
 @interface AppDelegate()
+@property (nonatomic, retain) PSStackedViewController *stackController;
 - (void)setUpOnce;
 - (void)setUpViewControllers;
 - (void)setUpIpadViewControllers;
@@ -26,6 +28,7 @@
 
 @implementation AppDelegate
 @synthesize window;
+@synthesize stackController = stackController_;
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -51,9 +54,11 @@
 
 - (void)setUpIpadViewControllers {
     SLFState *selectedState = SLFSelectedState();
-    StateDetailViewController* stateMenuVC = [[StateDetailViewController alloc] initWithState:selectedState];
-    UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:stateMenuVC];    
-    window.rootViewController = navController;
+    StackedMenuViewController* stateMenuVC = [[StackedMenuViewController alloc] initWithState:selectedState];
+    self.stackController = [[[PSStackedViewController alloc] initWithRootViewController:stateMenuVC] autorelease];
+    self.stackController.leftInset = STACKED_MENU_INSET;
+    self.stackController.largeLeftInset = STACKED_MENU_WIDTH;
+    window.rootViewController = self.stackController;
     [window makeKeyAndVisible];
     if (!selectedState) {
         StatesViewController* stateListVC = [[StatesViewController alloc] init];
@@ -64,7 +69,6 @@
         [tempNavController release];
     }
     [stateMenuVC release];
-    [navController release];    
 }
 
 - (void)setUpIphoneViewControllers {

@@ -13,20 +13,15 @@
 @interface SLFAppearance : NSObject
 
 +(void)setupTheme;
-+ (UIColor *)riverBed;
-+ (UIColor *)loblolly;
-+ (UIColor *)loblollyLight;
-+ (UIColor *)celery;
-+ (UIColor *)christi;
-+ (UIColor *)doveGray;
-+ (UIColor *)fiord;
-+ (UIColor *)battleshipGray;
-+ (UIColor *)iron;
-+ (UIColor *)blackHaze;
-+ (UIColor *)chambray;
-+ (UIColor *)monza;
-+ (UIColor *)sycamore;
-+ (UIColor *)burntOrange;
+
++ (UIColor *)menuTextColor;
++ (UIColor *)menuBackgroundColor;
++ (UIColor *)cellBackgroundDarkColor;
++ (UIColor *)cellBackgroundLightColor;
++ (UIColor *)cellTextColor;
++ (UIColor *)tableBackgroundColor;
++ (UIColor *)tableSeparatorColor;
++ (UIColor *)tableSectionColor;
 + (UIColor *)partyRed;
 + (UIColor *)partyBlue;
 + (UIColor *)partyGreen;

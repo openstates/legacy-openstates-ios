@@ -10,12 +10,10 @@
 //
 //
 
-#import <RestKit/RestKit.h>
-#import <RestKit/UI/UI.h>
-#import "GCTableViewController.h"
+#import "SLFTableViewController.h"
 
 @class SLFCommittee;
-@interface CommitteeDetailViewController : GCTableViewController <RKTableViewModelDelegate, RKObjectLoaderDelegate> {
+@interface CommitteeDetailViewController : SLFTableViewController <RKObjectLoaderDelegate> {
 }
 
 @property (nonatomic,retain) SLFCommittee *committee;

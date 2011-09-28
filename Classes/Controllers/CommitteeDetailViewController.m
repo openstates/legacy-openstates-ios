@@ -15,7 +15,6 @@
 #import "SLFDataModels.h"
 #import "SLFMappingsManager.h"
 #import "SLFRestKitManager.h"
-#import "TableItem.h"
 
 #define SectionHeaderCommitteeInfo NSLocalizedString(@"Committee Details", @"")
 #define SectionHeaderMembers NSLocalizedString(@"Members", @"")
@@ -32,7 +31,7 @@ enum SECTIONS {
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
-- (RKTableViewCellMapping *)committeeMemberCellMap;
+- (AlternatingCellMapping *)committeeMemberCellMap;
 @end
 
 @implementation CommitteeDetailViewController
@@ -40,15 +39,15 @@ enum SECTIONS {
 @synthesize tableViewModel;
 
 - (id)initWithCommitteeID:(NSString *)committeeID {
-    self = [super initWithStyle:UITableViewStylePlain];
+    self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
         [self loadDataFromNetworkWithID:committeeID];
     }
     return self;
 }
 
-- (void)loadView {
-    [super loadView];
+- (void)viewDidLoad {
+    [super viewDidLoad];
     self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
@@ -84,38 +83,41 @@ enum SECTIONS {
 - (void)configureTableItems {
     
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    RKTableItem *firstItemCell = [StaticSubtitleTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
-        tableItem.text = self.committee.committeeName;
+    RKTableItem *firstItemCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
+        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.cellMapping.style = UITableViewCellStyleValue1;
+        tableItem.text = self.committee.committeeName;
     }];
     [tableItems addObject:firstItemCell];
-    [tableItems addObject:[StaticSubtitleTableItem tableItemWithText:self.committee.chamberShortName detailText:self.committee.subcommittee]];
-    for (NSString *website in self.committee.sources)
-        [tableItems addObject:[SubtitleTableItem tableItemWithText:NSLocalizedString(@"Web Site", @"") URL:website]];  
+    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
+        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
+        tableItem.text = self.committee.chamberShortName;
+        tableItem.detailText = self.committee.subcommittee;
+    }]];
+     for (NSString *website in self.committee.sources)
+     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+        tableItem.cellMapping = [SubtitleCellMapping cellMapping];
+        tableItem.text = NSLocalizedString(@"Web Site", @"");
+        tableItem.detailText = website;
+        tableItem.URL = website;
+    }]];  
     [self.tableViewModel loadTableItems:tableItems inSection:SectionCommitteeInfoIndex];
     [tableItems release];
     
     [self.tableViewModel loadObjects:self.committee.sortedMembers inSection:SectionMembersIndex];    
 }
 
-- (RKTableViewCellMapping *)committeeMemberCellMap {
-    RKTableViewCellMapping *cellMap = [RKTableViewCellMapping cellMapping];
-    cellMap.style = UITableViewCellStyleSubtitle;
-    cellMap.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+- (SubtitleCellMapping *)committeeMemberCellMap {
+    SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
     [cellMap mapKeyPath:@"legislatorName" toAttribute:@"textLabel.text"];
     [cellMap mapKeyPath:@"role" toAttribute:@"detailTextLabel.text"];
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         CommitteeMember *leg = object;
         LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:leg.legID];
-        [self.navigationController pushViewController:vc animated:YES];
+        [self stackOrPushViewController:vc];
         [vc release];
     };
     return cellMap;
-}
-
-- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
-    self.title = NSLocalizedString(@"Load Error", @"");
-    RKLogError(@"Error loading %@, %@", objectLoader.resourcePath, error);
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
@@ -128,6 +130,11 @@ enum SECTIONS {
         return;
     }
     [self configureTableItems];
+}
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
+    self.title = NSLocalizedString(@"Load Error",@"");
+    RKLogError(@"Error while loading committee detail table: %@, %@", objectLoader.resourcePath, error);
 }
 
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex {

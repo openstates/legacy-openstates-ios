@@ -14,7 +14,9 @@
 #import "LegislatorDetailViewController.h"
 #import "SLFDataModels.h"
 #import "SLFRestKitManager.h"
-#import "SLFAppearance.h"
+#import "SLFTheme.h"
+#import "AppDelegate.h"
+#import "SLFAlertView.h"
 
 @interface DistrictDetailViewController()
 - (void)loadDataFromDataStoreWithID:(NSString *)objID;
@@ -27,7 +29,8 @@
 @synthesize mapView;
 
 - (id)initWithDistrictMapID:(NSString *)objID {
-    if ((self = [super init])) {
+    self = [super init];
+    if (self) {
         self.resourceClass = [SLFDistrict class];
         self.resourcePath = [NSString stringWithFormat:@"/districts/boundary/%@", objID];
         [self loadDataFromDataStoreWithID:objID];
@@ -40,16 +43,14 @@
 - (void)loadView {
     [super loadView];
 	self.title = NSLocalizedString(@"Loading...",@"");
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadButtonWasPressed:)] autorelease];
-	MKMapView *tempView = [[MKMapView alloc] initWithFrame:self.view.bounds];
-	tempView.delegate = self;		
-    self.mapView = tempView;
-    [self.view addSubview:tempView];
-    [tempView release];
+    self.mapView = [[[MKMapView alloc] initWithFrame:self.view.bounds] autorelease];
+	self.mapView.delegate = self;		
+    [self.view addSubview:self.mapView];
 }
 
 - (void)dealloc {
-    [[RKObjectManager sharedManager].client.requestQueue cancelRequestsWithDelegate:self];
+    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
+    self.mapView.delegate = nil;
     self.mapView = nil;
 	self.districtMap = nil;
     self.resourcePath = nil;
@@ -59,10 +60,6 @@
 - (void)viewDidUnload {
     self.mapView = nil;
     [super viewDidUnload];
-}
-
-- (void)reloadButtonWasPressed:(id)sender {
-	[self loadData];
 }
 
 - (void)loadDataFromDataStoreWithID:(NSString *)objID {
@@ -91,8 +88,6 @@
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {    
-	[[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"LastUpdatedAt"];
-	[[NSUserDefaults standardUserDefaults] synchronize];
 	if (districtMap)
         [districtMap release];
 	districtMap = [object retain];
@@ -108,13 +103,14 @@
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
-    
-	UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Error" 
-                                                     message:[error localizedDescription] 
-                                                    delegate:nil 
-                                           cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
-	[alert show];
-	NSLog(@"Hit error: %@", error);
+    NSString *message = nil;
+    @try {
+        message = [error localizedDescription];
+    } @catch (NSException *exception) {
+        message = NSLocalizedString(@"Unknown Error",@"");
+	}
+    [SLFAlertView showWithTitle:NSLocalizedString(@"Error",@"") message:message buttonTitle:NSLocalizedString(@"Cancel",@"")];
+	RKLogError(@"Error loading object: %@ %@", objectLoader.resourcePath, error);
 }
 
 #pragma mark -
@@ -171,12 +167,20 @@
     return nil;
 }
 
+- (void)stackOrPushViewController:(UIViewController *)viewController {
+    if (!PSIsIpad()) {
+        [self.navigationController pushViewController:viewController animated:YES];
+        return;
+    }
+    [XAppDelegate.stackController pushViewController:viewController fromViewController:self animated:YES];
+}
+
 - (void)showLegislatorDetail:(id)sender {
     if ([self.districtMap.legislators count] == 1) {
         SLFLegislator *leg = [self.districtMap.legislators anyObject];
         if (leg && leg.legID) {
             LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:leg.legID];
-            [self.navigationController pushViewController:vc animated:YES];
+            [self stackOrPushViewController:vc];
             [vc release];
         }    
     }

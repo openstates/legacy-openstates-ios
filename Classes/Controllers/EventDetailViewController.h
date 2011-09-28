@@ -11,10 +11,10 @@
 //
 
 #import <RestKit/RestKit.h>
-#import "GCTableViewController.h"
+#import "SLFTableViewController.h"
 
 @class SLFEvent;
-@interface EventDetailViewController : GCTableViewController <RKObjectLoaderDelegate>
+@interface EventDetailViewController : SLFTableViewController <RKObjectLoaderDelegate>
 {
 }
 
