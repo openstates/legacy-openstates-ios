@@ -16,6 +16,8 @@
 #import "DistrictsViewController.h"
 #import "EventsViewController.h"
 #import "SLFDataModels.h"
+#import "SLFTheme.h"
+#import "UIImage+OverlayColor.h"
 
 #define MenuLegislators NSLocalizedString(@"Legislators", @"")
 #define MenuCommittees NSLocalizedString(@"Committees", @"")
@@ -154,9 +156,12 @@
 
 - (UIImage *)invertIconIfNeeded:(NSString *)aFileName {
     NSParameterAssert(aFileName != NULL);
+    return [[UIImage imageNamed:aFileName] imageWithOverlayColor:[SLFAppearance tableSectionColor]];
+/*
     if (PSIsIpad())
         aFileName = [aFileName stringByAppendingString:@"-inv"];
     return [UIImage imageNamed:aFileName];
+*/
 }
 
 

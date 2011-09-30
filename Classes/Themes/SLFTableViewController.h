@@ -17,6 +17,7 @@
 #import "SLFTheme.h"
 
 @interface SLFTableViewController : GCTableViewController <PSStackedViewDelegate, RKTableViewModelDelegate>
+@property (nonatomic,assign) BOOL useGradientBackground;
 
 - (void)stackOrPushViewController:(UIViewController *)viewController;
 

@@ -22,7 +22,6 @@
 
 - (void)loadLayerAndGradientColors {
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    //self.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
     [(CAGradientLayer *)[self layer] setColors:[NSArray arrayWithObjects:(id)[SLFAppearance tableBackgroundDarkColor].CGColor,(id)[SLFAppearance tableBackgroundLightColor].CGColor, nil]];
 }
 @end

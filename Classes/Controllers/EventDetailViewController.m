@@ -47,8 +47,9 @@
     [super dealloc];
 }
 
-- (void)viewDidUnload {
-    [super viewDidUnload];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.tableView.rowHeight = 65;
 }
 
 - (void)reloadButtonWasPressed:(id)sender {
@@ -119,11 +120,17 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSString* reuseIdentifier = @"Cell";
+	NSString* reuseIdentifier = @"EventCell";
 	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
 	if (nil == cell) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier] autorelease];
 		cell.textLabel.numberOfLines = 0;
+        cell.detailTextLabel.numberOfLines = 0;
+        cell.textLabel.textColor = [SLFAppearance cellTextColor];
+        cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+        UIFont *labelFont = [[SLFAppearance boldTen] fontWithSize:8];
+        cell.detailTextLabel.font = labelFont;
+        cell.textLabel.font = labelFont;
 	}
 	if (self.event) {
         cell.textLabel.text = self.event.eventDescription;
@@ -134,6 +141,31 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];	
+}
+
+- (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section {
+    return 26;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSString *aTitle = [self tableView:tableView titleForHeaderInSection:section];
+    if (!aTitle)
+        return nil;
+    CGFloat headerHeight = [self tableView:tableView heightForHeaderInSection:section];
+    CGRect sectionFrame = CGRectMake(10, 6, tableView.width - 10, headerHeight-10);
+    UILabel *label = [[UILabel alloc] initWithFrame:sectionFrame];
+    label.textColor = [SLFAppearance tableSectionColor];
+    label.shadowOffset = CGSizeMake(0, 1);
+    label.shadowColor = [[UIColor whiteColor] colorWithAlphaComponent:.7];
+    label.backgroundColor = [UIColor clearColor];
+    label.font = [SLFAppearance boldFifteen];
+    label.text = aTitle;
+    
+    UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.width, headerHeight)];
+    sectionView.backgroundColor = [UIColor clearColor];
+    [sectionView addSubview:label];
+    [label release];
+    return [sectionView autorelease];
 }
 
 @end

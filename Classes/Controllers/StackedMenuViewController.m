@@ -34,6 +34,7 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     NSAssert(PSIsIpad(), @"This class is only available for iPads (for now)");
     self = [super initWithState:newState];
     if (self) {
+        self.useGradientBackground = NO;
         UIImage *backgroundImage = [UIImage imageNamed:@"MenuPattern"];
         self.backgroundPatternColor = [UIColor colorWithPatternImage:backgroundImage];
         UIImage *headerImage = [UIImage imageNamed:@"HeaderPattern"];

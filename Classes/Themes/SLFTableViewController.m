@@ -12,14 +12,34 @@
 
 #import "SLFTableViewController.h"
 #import "SLFAppearance.h"
+#import "GradientBackgroundView.h"
 #import "AppDelegate.h"
 
 @implementation SLFTableViewController
+@synthesize useGradientBackground;
+
+- (id)initWithStyle:(UITableViewStyle)style {
+    self = [super initWithStyle:style];
+    if (self) {
+        self.useGradientBackground = YES;
+    }
+    return self;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    if (self.useGradientBackground) {
+        GradientBackgroundView *gradient = [[GradientBackgroundView alloc] initWithFrame:self.tableView.bounds];
+        [gradient loadLayerAndGradientColors];
+        self.tableView.backgroundView = gradient;
+        [gradient release];
+    }
+}
 
 - (UITableView *) tableViewWithStyle:(UITableViewStyle)style {
     UITableView *aTableView = [super tableViewWithStyle:style];
-    aTableView.backgroundColor = [SLFAppearance tableBackgroundLightColor];
-    aTableView.separatorColor = [SLFAppearance tableSeparatorColor];
+    aTableView.backgroundColor = [UIColor clearColor];
+    aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     return aTableView;
 }
 

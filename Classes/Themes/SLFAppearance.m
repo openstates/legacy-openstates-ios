@@ -49,7 +49,7 @@
     + (id)loafer            {vendColor(242,245,226);}     //  vendColorHex(0xF2F5E2)
     + (id)spanishWhite      {vendColor(232,210,188);}     //  vendColorHex(0xE8D2BC)
     + (id)flamingPea        {vendColor(225,90,42);}       //  vendColorHex(0xE15A2A)
-    + (id)gimblet           {vendColor(165,180,99);}      //  vendColorHex(0xA5B463)
+    + (id)gimblet           {vendColor(148,168,75);}      //  vendColorHex(0x94A84B)
     + (id)acapulco          {vendColor(116,174,165);}     //  vendColorHex(0x74AEA5)
     + (id)moonMist          {vendColor(218,220,201);}     //  vendColorHex(0xDADCC9)
     + (id)whiteRock         {vendColor(233,234,214);}     //  vendColorHex(0xE9EAD6)
@@ -57,13 +57,13 @@
     + (id)graniteGreen      {vendColor(145,144,130);}     //  vendColorHex(0x919082)
     + (id)kangaroo          {vendColor(204,206,191);}     //  vendColorHex(0xCCCEBF)
 
-    + (UIColor *)menuTextColor {return [[self class] burntOrange];}
+    + (UIColor *)menuTextColor {return [[self class] flamingPea];}
     + (UIColor *)menuBackgroundColor {return [[self class] kangaroo];}
     + (UIColor *)cellBackgroundDarkColor {return [[self class] moonMist];}
     + (UIColor *)cellBackgroundLightColor {return [[self class] whiteRock];}
     + (UIColor *)cellTextColor {return [[self class] armadillo];}
     + (UIColor *)tableSeparatorColor {return [[self class] spanishWhite];}
-    + (UIColor *)tableSectionColor {return [[self class] acapulco];}
+    + (UIColor *)tableSectionColor {return [[self class] flamingPea];}
     + (UIColor *)tableBackgroundDarkColor {return [[self class] eagle];}
     + (UIColor *)tableBackgroundLightColor {return [[self class] loafer];}
 
@@ -74,11 +74,12 @@
             RKLogError(@"Application themes use iOS 5 methods.  This device has iOS %@.", [[UIDevice currentDevice] systemVersion]);
             return;
         }
-        [[UINavigationBar appearance] setTintColor:[[self class] flamingPea]];
-        [[UIToolbar appearance] setTintColor:[[self class] flamingPea]];
-        [[UISearchBar appearance] setTintColor:[[self class] acapulco]];
+        [[UINavigationBar appearance] setTintColor:[[self class] graniteGreen]];
+        [[UIToolbar appearance] setTintColor:[[self class] acapulco]];
+        [[UISearchBar appearance] setTintColor:[[self class] gimblet]];
         [[UISegmentedControl appearance] setTintColor:[[self class] gimblet]];
         [[UITableViewCell appearance] setFont:[[self class] boldFifteen]];
+        [[UIImageView appearance] set
     }
 #endif
 

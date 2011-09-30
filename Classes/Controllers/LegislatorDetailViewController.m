@@ -77,24 +77,22 @@ enum SECTIONS {
     for (sectionIndex = SectionMemberInfoIndex;sectionIndex < kNumSections; sectionIndex++) {
         [self.tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
             section.headerTitle = [self headerForSectionIndex:sectionIndex];
-            section.headerHeight = 22;
-            /*
-            UILabel *label = [[UILabel alloc] init];
-            label.frame = CGRectMake(10, 6, self.tableView.width - 10, section.headerHeight-10);
-            label.backgroundColor = [UIColor clearColor];
+            section.headerHeight = 26;
+            
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 6, self.tableView.width - 10, section.headerHeight-10)];
             label.textColor = [SLFAppearance tableSectionColor];
-            label.shadowColor = [SLFAppearance tableSeparatorColor];
-            label.shadowOffset = CGSizeMake(0.0, 1.0);
-            label.font = [SLFAppearance boldEighteen];
+            label.shadowOffset = CGSizeMake(0, 1);
+            label.shadowColor = [[UIColor whiteColor] colorWithAlphaComponent:.7];
+            label.backgroundColor = [UIColor clearColor];
+            label.font = [SLFAppearance boldFifteen];
             label.text = section.headerTitle;
-           
-                // Create header view and add label as a subview
+
             UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.width, section.headerHeight)];
             sectionView.backgroundColor = [UIColor clearColor];
             [sectionView addSubview:label];
             [label release];
             section.headerView =sectionView;
-            [sectionView release];*/
+            [sectionView release];
         }];
     }         
 	self.title = NSLocalizedString(@"Loading...", @"");

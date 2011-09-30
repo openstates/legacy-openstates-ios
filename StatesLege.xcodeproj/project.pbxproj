@@ -110,6 +110,7 @@
 		377C617C143000AA00EE626E /* PSSVContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6175143000AA00EE626E /* PSSVContainerView.m */; };
 		377C617D143000AA00EE626E /* UIView+PSSizes.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6177143000AA00EE626E /* UIView+PSSizes.m */; };
 		377C617E143000AA00EE626E /* UIViewController+PSStackedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6179143000AA00EE626E /* UIViewController+PSStackedView.m */; };
+		377E4B1714360B500063E854 /* UIImage+OverlayColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 377E4B1614360B500063E854 /* UIImage+OverlayColor.m */; };
 		37953BDC14272D9500A0CD86 /* DataModelsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 37953BDB14272D9500A0CD86 /* DataModelsTestCase.m */; };
 		37A3258313E49D4700138ADE /* StatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258213E49D4700138ADE /* StatesViewController.m */; };
 		37A3258F13E49F2200138ADE /* StateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258E13E49F2200138ADE /* StateDetailViewController.m */; };
@@ -414,6 +415,8 @@
 		377C6177143000AA00EE626E /* UIView+PSSizes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+PSSizes.m"; sourceTree = "<group>"; };
 		377C6178143000AA00EE626E /* UIViewController+PSStackedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+PSStackedView.h"; sourceTree = "<group>"; };
 		377C6179143000AA00EE626E /* UIViewController+PSStackedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PSStackedView.m"; sourceTree = "<group>"; };
+		377E4B1514360B500063E854 /* UIImage+OverlayColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+OverlayColor.h"; path = "Vendor/PSStackedView/Example/StackedViewKitExample/UIImage+OverlayColor.h"; sourceTree = SOURCE_ROOT; };
+		377E4B1614360B500063E854 /* UIImage+OverlayColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+OverlayColor.m"; path = "Vendor/PSStackedView/Example/StackedViewKitExample/UIImage+OverlayColor.m"; sourceTree = SOURCE_ROOT; };
 		37953BDB14272D9500A0CD86 /* DataModelsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataModelsTestCase.m; sourceTree = "<group>"; };
 		37A3258113E49D4700138ADE /* StatesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesViewController.h; sourceTree = "<group>"; };
 		37A3258213E49D4700138ADE /* StatesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatesViewController.m; sourceTree = "<group>"; };
@@ -769,6 +772,8 @@
 		377C616D143000AA00EE626E /* PSStackedView */ = {
 			isa = PBXGroup;
 			children = (
+				377E4B1514360B500063E854 /* UIImage+OverlayColor.h */,
+				377E4B1614360B500063E854 /* UIImage+OverlayColor.m */,
 				377C616E143000AA00EE626E /* PSStackedView.h */,
 				377C616F143000AA00EE626E /* PSStackedViewController.h */,
 				377C6170143000AA00EE626E /* PSStackedViewController.m */,
@@ -1309,6 +1314,7 @@
 				3714804E1432845E00170716 /* SubtitleCellMapping.m in Sources */,
 				37442F09143431940027F422 /* StackedMenuCell.m in Sources */,
 				371AE697143581D500592811 /* GradientBackgroundView.m in Sources */,
+				377E4B1714360B500063E854 /* UIImage+OverlayColor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
