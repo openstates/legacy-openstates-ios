@@ -6,6 +6,8 @@
 @interface SLFState : _SLFState {}
 - (BOOL)isFeatureEnabled:(NSString *)feature;
 - (NSString *)displayNameForSession:(NSString *)aSession;
+@property (nonatomic, readonly) NSString *stateInitial;
+@property (nonatomic, readonly) UIImage *stateFlag;
 @end
 
 extern NSString * const SLFSelectedStateDidChangeNotification;

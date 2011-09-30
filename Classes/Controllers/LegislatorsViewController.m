@@ -41,10 +41,10 @@
     self.tableViewModel.resourcePath = self.resourcePath;
     [self.tableViewModel setObjectMappingForClass:[SLFLegislator class]];
     self.tableViewModel.autoRefreshFromNetwork = YES;
-    self.tableViewModel.showsSectionIndexTitles = YES;
     self.tableViewModel.autoRefreshRate = 360;
-    self.tableViewModel.sectionNameKeyPath = @"lastnameInitial";
     self.tableViewModel.pullToRefreshEnabled = YES;
+    self.tableViewModel.showsSectionIndexTitles = YES;
+    self.tableViewModel.sectionNameKeyPath = @"lastnameInitial";
     
     SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"fullName" toAttribute:@"textLabel.text"];

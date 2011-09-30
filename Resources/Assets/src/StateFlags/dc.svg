@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" height="400" width="800" viewBox="0 0 20 10">
+<desc>Flag of Washington, D.C. (USA)</desc>
+<defs>
+   <g id="star">
+     <g id="cone">
+	<path id="triangle" d="M0,0 v1 h0.5 z" transform="translate(0,-1) rotate(18)"/>
+	<use xlink:href="#triangle" transform="scale(-1,1)"/>
+     </g>
+	<use xlink:href="#cone" transform="rotate(72)"/>
+	<use xlink:href="#cone" transform="rotate(144)"/>
+	<use xlink:href="#cone" transform="rotate(216)"/>
+	<use xlink:href="#cone" transform="rotate(288)"/>
+   </g>
+</defs>
+	<rect fill="#ffffff" height="10" width="20"/>
+   <g fill="#bf0000">
+	<use xlink:href="#star" x="5"  y="1.5"/>
+	<use xlink:href="#star" x="10" y="1.5"/>
+	<use xlink:href="#star" x="15" y="1.5"/>
+	<rect height="2" width="20" y="3"/>
+	<rect height="2" width="20" y="6"/>
+   </g>
+</svg>

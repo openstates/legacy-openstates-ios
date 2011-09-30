@@ -2,6 +2,16 @@
 
 @implementation SLFState
 
+- (NSString *)stateInitial {
+	NSString * initial = [self.stateID substringToIndex:1];
+	return initial;
+}
+
+- (UIImage *)stateFlag {
+    NSString *iconPath = [NSString stringWithFormat:@"StateFlags.bundle/%@", self.stateID];
+    return [UIImage imageNamed:iconPath];
+}
+
 - (BOOL)isFeatureEnabled:(NSString *)feature {
     if ( feature && [feature length] && 
         (self.featureFlags && [self.featureFlags containsObject:feature]) ) {

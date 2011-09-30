@@ -40,12 +40,18 @@
 
 - (void)setUpOnce {
     RKLogSetAppLoggingLevel(RKLogLevelDebug);
-    [SLFAppearance setupTheme];
+    if( getenv("NSZombieEnabled") || getenv("NSAutoreleaseFreedObjectCheckEnabled") ) {
+        for (int loop=0;loop < 6;loop++) {
+            RKLogCritical(@"**************** NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!*************");
+        }
+    }
+    [SLFAppearance setupAppearance];
     [SLFRestKitManager sharedRestKit];
     [self setUpViewControllers];
 }
 
 - (void)setUpViewControllers {
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     if (PSIsIpad())
         [self setUpIpadViewControllers];
     else
@@ -55,20 +61,27 @@
 - (void)setUpIpadViewControllers {
     SLFState *selectedState = SLFSelectedState();
     StackedMenuViewController* stateMenuVC = [[StackedMenuViewController alloc] initWithState:selectedState];
-    self.stackController = [[[PSStackedViewController alloc] initWithRootViewController:stateMenuVC] autorelease];
-    self.stackController.leftInset = STACKED_MENU_INSET;
-    self.stackController.largeLeftInset = STACKED_MENU_WIDTH;
-    window.rootViewController = self.stackController;
+    PSStackedViewController *stackedController = [[PSStackedViewController alloc] initWithRootViewController:stateMenuVC];
+    stackedController.leftInset = STACKED_MENU_INSET;
+    stackedController.largeLeftInset = STACKED_MENU_WIDTH;
+    self.stackController = stackedController;
+    window.rootViewController = stackedController;
     [window makeKeyAndVisible];
     if (!selectedState) {
-        StatesViewController* stateListVC = [[StatesViewController alloc] init];
-        UINavigationController* tempNavController = [[UINavigationController alloc] initWithRootViewController:stateListVC];    
-        stateListVC.stateMenuDelegate = stateMenuVC;
-        [stateMenuVC presentModalViewController:tempNavController animated:YES];
-        [stateListVC release];
-        [tempNavController release];
+        /* There surely is a better way to handle this, but without this brief run loop delay
+         the table view orientation is incorrect when running on iPads that start up in landscape orientation. */
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            StatesViewController* stateListVC = [[StatesViewController alloc] init];
+            UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:stateListVC];    
+            stateListVC.stateMenuDelegate = stateMenuVC;
+            [self.window.rootViewController presentModalViewController:navController animated:YES];
+            [stateListVC release];
+            [navController release];
+       }];
+
     }
     [stateMenuVC release];
+    [stackedController release];
 }
 
 - (void)setUpIphoneViewControllers {
@@ -108,6 +121,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     [self saveApplicationState];
+	[[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
 }
 
 - (void)dealloc {

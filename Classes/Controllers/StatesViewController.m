@@ -35,15 +35,20 @@
     self.tableViewModel.autoRefreshFromNetwork = YES;
     self.tableViewModel.autoRefreshRate = 360;
     self.tableViewModel.pullToRefreshEnabled = YES;
-    
+    self.tableViewModel.showsSectionIndexTitles = YES;
+    self.tableViewModel.sectionNameKeyPath = @"stateInitial";
+
     SubtitleCellMapping *stateCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"name" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"stateID" toAttribute:@"detailTextLabel.text"];
+        [cellMapping mapKeyPath:@"stateFlag" toAttribute:@"imageView.image"];
+        cellMapping.rowHeight = 48;
+        
         
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             SLFState *state = object;
             SLFSaveSelectedState(state);
-                //          [[SLFRestKitManager sharedRestKit] preloadObjectsForState:state];
+//          [[SLFRestKitManager sharedRestKit] preloadObjectsForState:state];
             [self pushOrSendViewControllerWithState:state];
         };
     }];
@@ -83,6 +88,12 @@
         [self stackOrPushViewController:vc];
         [vc release];
     }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    return cell;
 }
 
 @end

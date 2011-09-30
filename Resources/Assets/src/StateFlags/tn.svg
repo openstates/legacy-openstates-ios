@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   height="300"
+   width="500"
+   viewBox="0 0 240 144"
+   id="svg2"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="Flag_of_Tennessee.svg">
+  <metadata
+     id="metadata41">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="1004"
+     id="namedview39"
+     showgrid="false"
+     inkscape:zoom="1.5733333"
+     inkscape:cx="280.43084"
+     inkscape:cy="140.81783"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g27" />
+  <desc
+     id="desc4">Flag of Tenessee, United States</desc>
+  <defs
+     id="defs6">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 150 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="500 : 150 : 1"
+       inkscape:persp3d-origin="250 : 100 : 1"
+       id="perspective43" />
+    <g
+       id="star"
+       transform="translate(0,18.5) scale(17)"
+       fill="#fff">
+      <g
+         id="cone">
+        <path
+           id="triangle"
+           d="M0,0 v1 h0.5 z"
+           transform="translate(0,-1) rotate(18)" />
+        <use
+           xlink:href="#triangle"
+           transform="scale(-1,1)"
+           id="use11" />
+      </g>
+      <use
+         xlink:href="#cone"
+         transform="rotate(72)"
+         id="use13" />
+      <use
+         xlink:href="#cone"
+         transform="rotate(144)"
+         id="use15" />
+      <use
+         xlink:href="#cone"
+         transform="rotate(216)"
+         id="use17" />
+      <use
+         xlink:href="#cone"
+         transform="rotate(288)"
+         id="use19" />
+    </g>
+  </defs>
+  <rect
+     fill="#e72121"
+     height="144"
+     width="222"
+     x="0"
+     id="rect21"
+     style="fill:#cc0001;fill-opacity:1" />
+  <rect
+     fill="#003c7c"
+     height="144"
+     width="15"
+     x="225"
+     id="rect23"
+     style="fill:#002d65;fill-opacity:1" />
+  <rect
+     fill="#fff"
+     height="144"
+     width="3"
+     x="222"
+     id="rect25" />
+  <g
+     transform="translate(111,72)"
+     id="g27">
+    <circle
+       fill="#fff"
+       r="39"
+       id="circle29" />
+    <circle
+       fill="#003c7c"
+       r="36"
+       id="circle31"
+       style="fill:#002d65;fill-opacity:1" />
+    <use
+       xlink:href="#star"
+       transform="rotate(18)"
+       id="use33" />
+    <use
+       xlink:href="#star"
+       transform="rotate(138)"
+       id="use35" />
+    <use
+       xlink:href="#star"
+       transform="rotate(258)"
+       id="use37" />
+  </g>
+</svg>

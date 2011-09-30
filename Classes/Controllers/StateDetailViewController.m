@@ -26,16 +26,34 @@
 @interface StateDetailViewController()
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
+- (UIImage *)invertIconIfNeeded:(NSString *)aFileName;
+@property (nonatomic,retain) UIImage *legislatorsIcon;
+@property (nonatomic,retain) UIImage *committeesIcon;
+@property (nonatomic,retain) UIImage *districtsIcon;
+@property (nonatomic,retain) UIImage *eventsIcon;
+@property (nonatomic,retain) UIImage *billsIcon;
 @end
 
 @implementation StateDetailViewController
 @synthesize state;
 @synthesize tableViewModel;
+@synthesize legislatorsIcon;
+@synthesize committeesIcon;
+@synthesize districtsIcon;
+@synthesize eventsIcon;
+@synthesize billsIcon;
 
 - (id)initWithState:(SLFState *)newState {
     self = [super init];
-    if (self)
+    if (self) {
+        self.legislatorsIcon = [self invertIconIfNeeded:@"123-id-card"];
+        self.committeesIcon = [self invertIconIfNeeded:@"60-signpost"];                                
+        self.districtsIcon = [self invertIconIfNeeded:@"73-radar"];
+        self.billsIcon = [self invertIconIfNeeded:@"gavel"];
+        self.eventsIcon = [self invertIconIfNeeded:@"83-calendar"];
+        
         [self reconfigureForState:newState];
+    }
     return self;
 }
 
@@ -45,11 +63,15 @@
         [self loadDataFromNetworkWithID:newState.stateID];
 }
 
-
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.state = nil;
     self.tableViewModel = nil;
+    self.legislatorsIcon = nil;
+    self.committeesIcon = nil;
+    self.districtsIcon = nil;
+    self.eventsIcon = nil;
+    self.billsIcon = nil;
     [super dealloc];
 }
 
@@ -84,10 +106,15 @@
 
 
 - (void)configureTableItems {
-    NSMutableArray* tableItems = [NSMutableArray arrayWithArray:[RKTableItem tableItemsFromStrings:MenuLegislators, MenuCommittees, MenuDistricts, /*MenuBills,*/ nil]];
+    NSMutableArray* tableItems = [[NSMutableArray alloc] initWithCapacity:15];
+    [tableItems addObject:[RKTableItem tableItemWithText:MenuLegislators detailText:nil image:self.legislatorsIcon]];
+    [tableItems addObject:[RKTableItem tableItemWithText:MenuCommittees detailText:nil image:self.committeesIcon]];
+    [tableItems addObject:[RKTableItem tableItemWithText:MenuDistricts detailText:nil image:self.districtsIcon]];
+        //[tableItems addObject:[RKTableItem tableItemWithText:MenuBills detailText:nil image:self.billsIcon]];
     if (self.state && self.state.featureFlags && [self.state.featureFlags containsObject:@"events"])
-        [tableItems addObject:[RKTableItem tableItemWithText:MenuEvents]];
+        [tableItems addObject:[RKTableItem tableItemWithText:MenuEvents detailText:nil image:self.eventsIcon]];
     [self.tableViewModel loadTableItems:tableItems withMapping:[self menuCellMapping]];
+    [tableItems release];
 }
 
 - (void)selectMenuItem:(NSString *)menuItem {
@@ -124,5 +151,13 @@
     }
     [self configureTableItems];
 }
+
+- (UIImage *)invertIconIfNeeded:(NSString *)aFileName {
+    NSParameterAssert(aFileName != NULL);
+    if (PSIsIpad())
+        aFileName = [aFileName stringByAppendingString:@"-inv"];
+    return [UIImage imageNamed:aFileName];
+}
+
 
 @end

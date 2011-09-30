@@ -12,14 +12,15 @@
 
 @interface SLFAppearance : NSObject
 
-+(void)setupTheme;
++(void)setupAppearance;
 
 + (UIColor *)menuTextColor;
 + (UIColor *)menuBackgroundColor;
 + (UIColor *)cellBackgroundDarkColor;
 + (UIColor *)cellBackgroundLightColor;
 + (UIColor *)cellTextColor;
-+ (UIColor *)tableBackgroundColor;
++ (UIColor *)tableBackgroundLightColor;
++ (UIColor *)tableBackgroundDarkColor;
 + (UIColor *)tableSeparatorColor;
 + (UIColor *)tableSectionColor;
 + (UIColor *)partyRed;

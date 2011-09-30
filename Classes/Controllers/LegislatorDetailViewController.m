@@ -59,7 +59,20 @@ enum SECTIONS {
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
     self.tableViewModel.pullToRefreshEnabled = NO;
     [self.tableViewModel mapObjectsWithClass:[CommitteeRole class] toTableCellsWithMapping:[self committeeRoleCellMap]];
-    
+    /*
+    self.tableController.heightForHeaderInSection = 22;
+    self.tableController.onViewForHeaderInSection = ^UIView*(NSUInteger sectionIndex, NSString* sectionTitle) {
+        UIView* headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, 22)] autorelease];
+        headerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"sectionheader_bg.png"]];
+        UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, self.tableView.bounds.size.width, 22)];
+        label.text = sectionTitle;
+        label.textColor = [UIColor whiteColor];
+        label.backgroundColor = [UIColor clearColor];
+        label.font = [UIFont boldSystemFontOfSize:12];        
+        [headerView addSubview:label];
+        [label release];
+        return headerView;
+    };*/
     NSInteger sectionIndex;
     for (sectionIndex = SectionMemberInfoIndex;sectionIndex < kNumSections; sectionIndex++) {
         [self.tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {

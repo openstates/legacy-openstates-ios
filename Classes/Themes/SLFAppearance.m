@@ -12,70 +12,116 @@
 
 #import "SLFAppearance.h"
 
+#define APP_OPEN_STATES_THEME 1
+#define APP_BLUISH_THEME 2 
+#define APP_APPEARANCE_THEME APP_OPEN_STATES_THEME
+
+#define vendColor(r, g, b) static UIColor *ret; if (ret == nil) ret = [[UIColor colorWithRed:(CGFloat)r/255.0 green:(CGFloat)g/255.0 blue:(CGFloat)b/255.0 alpha:1.0] retain]; return ret
+
+#define vendColorHex(v) vendColor(((v&0xFF0000)>>16),((v&0x00FF00)>>8),(v&0x0000FF))
+
 @implementation SLFAppearance
 
-// http://chir.ag/projects/name-that-color                                                              Formerly known as...
-+ (UIColor *)riverBed {return [UIColor colorWithRed:0.301f green:0.353f blue:0.384f alpha:1.0];}        // "Navbar"
-+ (UIColor *)loblolly {return [UIColor colorWithRed:0.769f green:0.796f blue:0.82f alpha:1.0];}         // "TableView Background"
-+ (UIColor *)loblollyLight {return [UIColor colorWithRed:0.852f green:0.852 blue:0.852f alpha:1.0];}    // "Table separator"
-+ (UIColor *)celery {return [UIColor colorWithRed:0.6f green:0.745f blue:0.353f alpha:1.0];}            // "Accent"
-+ (UIColor *)christi {return [UIColor colorWithRed:0.431f green:0.643f blue:0.063f alpha:1.0];}         // "Accent Greener"
-+ (UIColor *)doveGray {return [UIColor colorWithRed:0.416f green:0.451f blue:0.49f alpha:1.0];}         // "Index Text Font"
-+ (UIColor *)fiord {return [UIColor colorWithRed:0.263f green:0.337f blue:0.384f alpha:1.0];}           // "Text Dark"
-+ (UIColor *)battleshipGray {return [UIColor colorWithRed:0.553f green:0.592f blue:0.49f alpha:1.0];}   // "Text Light"
-+ (UIColor *)iron {return [UIColor colorWithRed:0.855f green:0.875f blue:0.886f alpha:1.0];}            // "Table Cell Dark"
-+ (UIColor *)blackHaze {return [UIColor colorWithRed:0.980f green:0.984f blue:0.984f alpha:1.0];}       // "Table Cell Light"
+#if ( APP_APPEARANCE_THEME == APP_OPEN_STATES_THEME ) || ( APP_APPEARANCE_THEME == APP_BLUISH_THEME )
 
-+ (UIColor *)chambray {return [UIColor colorWithRed:0.196f green:0.310f blue:0.522f alpha:1.0];}
-+ (UIColor *)monza {return [UIColor colorWithRed:0.776f green:0.0f blue:0.184f alpha:1.0];}
-+ (UIColor *)sycamore {return [UIColor colorWithRed:0.494f green:0.569f blue:0.263f alpha:1.0];}
+    // http://chir.ag/projects/name-that-color 
+    + (id)chambray          {vendColor(50,79,133);}       //  vendColorHex(0x324F85)
+    + (id)monza             {vendColor(198,0,47);}        //  vendColorHex(0xC6002F)
+    + (id)sycamore          {vendColor(126,145,67);}      //  vendColorHex(0x7E9143)
+    + (id)burntOrange       {vendColor(201,72,2);}        //  vendColorHex(0xC94802)
 
-+ (UIColor *)burntOrange {return [UIColor colorWithRed:0.788 green:0.282 blue:0.008 alpha:1.000];}
-+ (UIColor *)loafer {return [UIColor colorWithRed:0.949 green:0.961 blue:0.886 alpha:1.000];}
-+ (UIColor *)spanishWhite {return [UIColor colorWithRed:0.910 green:0.824 blue:0.737 alpha:1.000];}
-+ (UIColor *)flamingPea {return [UIColor colorWithRed:0.882 green:0.353 blue:0.165 alpha:1.000];}
-+ (UIColor *)gimblet {return [UIColor colorWithRed:0.647 green:0.706 blue:0.388 alpha:1.000];}
-+ (UIColor *)acapulco {return [UIColor colorWithRed:0.455 green:0.682 blue:0.647 alpha:1.000];}
-+ (UIColor *)moonMist {return [UIColor colorWithRed:0.855 green:0.863 blue:0.788 alpha:1.000];}         // "Table Cell Dark"
-+ (UIColor *)whiteRock {return [UIColor colorWithRed:0.914 green:0.918 blue:0.839 alpha:1.000];}        // "Table Cell Light"
-+ (UIColor *)armadillo {return [UIColor colorWithRed:0.310 green:0.282 blue:0.263 alpha:1.000];}        // "Text Dark"
-+ (UIColor *)graniteGreen {return [UIColor colorWithRed:0.569 green:0.565 blue:0.510 alpha:1.000];}
-+ (UIColor *)kangaroo {return [UIColor colorWithRed:0.800 green:0.808 blue:0.749 alpha:1.000];}
+    + (UIColor *)partyRed {return [[self class] monza];}
+    + (UIColor *)partyBlue {return [[self class] chambray];}
+    + (UIColor *)partyGreen {return [[self class] sycamore];}
 
-+ (UIColor *)menuTextColor {return [[self class] burntOrange];}
-+ (UIColor *)tableTextColor {return [[self class] armadillo];}
-+ (UIColor *)menuBackgroundColor {return [[self class] kangaroo];}
-+ (UIColor *)cellBackgroundDarkColor {return [[self class] moonMist];}
-+ (UIColor *)cellBackgroundLightColor {return [[self class] whiteRock];}
-+ (UIColor *)cellTextColor {return [[self class] armadillo];}
-+ (UIColor *)tableSeparatorColor {return [[self class] spanishWhite];}
-+ (UIColor *)tableSectionColor {return [[self class] acapulco];}
-+ (UIColor *)tableBackgroundColor {return [[self class] loafer];}
-+ (UIColor *)partyRed {return [[self class] monza];}
-+ (UIColor *)partyBlue {return [[self class] chambray];}
-+ (UIColor *)partyGreen {return [[self class] sycamore];}
+    static NSString *SLFAppearanceFontName = @"HelveticaNeue-Bold";
+    + (UIFont *)boldTen {return [UIFont fontWithName:SLFAppearanceFontName size:10.f];}
+    + (UIFont *)boldTwelve {return [UIFont fontWithName:SLFAppearanceFontName size:12.f];}
+    + (UIFont *)boldFourteen {return [UIFont fontWithName:SLFAppearanceFontName size:14.f];}
+    + (UIFont *)boldFifteen {return [UIFont fontWithName:SLFAppearanceFontName size:15.f];}
+    + (UIFont *)boldEighteen {return [UIFont fontWithName:SLFAppearanceFontName size:18.f];}
 
+    #endif
 
-#define FONTNAME @"HelveticaNeue-Bold"
-+ (UIFont *)boldTen {return [UIFont fontWithName:FONTNAME size:10.f];}
-+ (UIFont *)boldTwelve {return [UIFont fontWithName:FONTNAME size:12.f];}
-+ (UIFont *)boldFourteen {return [UIFont fontWithName:FONTNAME size:14.f];}
-+ (UIFont *)boldFifteen {return [UIFont fontWithName:FONTNAME size:15.f];}
-+ (UIFont *)boldEighteen {return [UIFont fontWithName:FONTNAME size:18.f];}
+#if APP_APPEARANCE_THEME == APP_OPEN_STATES_THEME
 
-+ (void)setupTheme {
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
-    [[[UIApplication sharedApplication] keyWindow] setBackgroundColor:[UIColor blackColor]];
-    if (![UINavigationBar respondsToSelector:@selector(appearance)]) {
-        RKLogError(@"Application themes use iOS 5 methods.  This device has iOS %@.", [[UIDevice currentDevice] systemVersion]);
-        return;
+    + (id)eagle             {vendColor(179,182,161);}     //  vendColorHex(0xB3B6A1)
+    + (id)loafer            {vendColor(242,245,226);}     //  vendColorHex(0xF2F5E2)
+    + (id)spanishWhite      {vendColor(232,210,188);}     //  vendColorHex(0xE8D2BC)
+    + (id)flamingPea        {vendColor(225,90,42);}       //  vendColorHex(0xE15A2A)
+    + (id)gimblet           {vendColor(165,180,99);}      //  vendColorHex(0xA5B463)
+    + (id)acapulco          {vendColor(116,174,165);}     //  vendColorHex(0x74AEA5)
+    + (id)moonMist          {vendColor(218,220,201);}     //  vendColorHex(0xDADCC9)
+    + (id)whiteRock         {vendColor(233,234,214);}     //  vendColorHex(0xE9EAD6)
+    + (id)armadillo         {vendColor(79,72,67);}        //  vendColorHex(0x4F4843)
+    + (id)graniteGreen      {vendColor(145,144,130);}     //  vendColorHex(0x919082)
+    + (id)kangaroo          {vendColor(204,206,191);}     //  vendColorHex(0xCCCEBF)
+
+    + (UIColor *)menuTextColor {return [[self class] burntOrange];}
+    + (UIColor *)menuBackgroundColor {return [[self class] kangaroo];}
+    + (UIColor *)cellBackgroundDarkColor {return [[self class] moonMist];}
+    + (UIColor *)cellBackgroundLightColor {return [[self class] whiteRock];}
+    + (UIColor *)cellTextColor {return [[self class] armadillo];}
+    + (UIColor *)tableSeparatorColor {return [[self class] spanishWhite];}
+    + (UIColor *)tableSectionColor {return [[self class] acapulco];}
+    + (UIColor *)tableBackgroundDarkColor {return [[self class] eagle];}
+    + (UIColor *)tableBackgroundLightColor {return [[self class] loafer];}
+
+    + (void)setupAppearance {
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
+        [[[UIApplication sharedApplication] keyWindow] setBackgroundColor:[UIColor blackColor]];
+        if (![UINavigationBar respondsToSelector:@selector(appearance)]) {
+            RKLogError(@"Application themes use iOS 5 methods.  This device has iOS %@.", [[UIDevice currentDevice] systemVersion]);
+            return;
+        }
+        [[UINavigationBar appearance] setTintColor:[[self class] flamingPea]];
+        [[UIToolbar appearance] setTintColor:[[self class] flamingPea]];
+        [[UISearchBar appearance] setTintColor:[[self class] acapulco]];
+        [[UISegmentedControl appearance] setTintColor:[[self class] gimblet]];
+        [[UITableViewCell appearance] setFont:[[self class] boldFifteen]];
     }
-    [[UINavigationBar appearance] setTintColor:[[self class] flamingPea]];
-    [[UIToolbar appearance] setTintColor:[[self class] flamingPea]];
-    [[UISearchBar appearance] setTintColor:[[self class] acapulco]];
-    [[UISegmentedControl appearance] setTintColor:[[self class] gimblet]];
-    
-    [[UITableViewCell appearance] setFont:[[self class] boldFifteen]];
-}
+#endif
+
+
+#if APP_APPEARANCE_THEME == APP_BLUISH_THEME
+    // Bluish Theme mimics Jonno Riekwei's interface at http://365psd.com/day/70/
+    + (id)plum              {vendColor(113,40,105);}      //  vendColorHex(0x712869)
+    + (id)riverBed          {vendColor(77,90,98);}        //  vendColorHex(0x4D5A62)
+    + (id)loblolly          {vendColor(196,203,209);}     //  vendColorHex(0xC4CBD1)
+    + (id)loblollyLight     {vendColor(217,217,217);}     //  vendColorHex(0xD9D9D9)
+    + (id)celery            {vendColor(153,190,90);}      //  vendColorHex(0x99BE5A)
+    + (id)towerGray         {vendColor(173,183,191);}     //  vendColorHex(0xADB7BF)
+    + (id)fiord             {vendColor(67,86,98);}        //  vendColorHex(0x435662)
+    + (id)battleshipGray    {vendColor(141,151,125);}     //  vendColorHex(0x8D977D)
+    + (id)iron              {vendColor(218,223,226);}     //  vendColorHex(0xDADFE2)
+    + (id)blackHaze         {vendColor(250,251,251);}     //  vendColorHex(0xFAFBFB)
+    + (id)outerSpace        {vendColor(50,60,67);}        //  vendColorHex(0x323C43)
+    + (id)nevada            {vendColor(95,108,117);}      //  vendColorHex(0x5F6C75)
+
+    + (UIColor *)menuTextColor {return [[self class] loblollyLight];}
+    + (UIColor *)menuBackgroundColor {return [[self class] plum];}
+    + (UIColor *)cellBackgroundDarkColor {return [[self class] iron];}
+    + (UIColor *)cellBackgroundLightColor {return [[self class] blackHaze];}
+    + (UIColor *)cellTextColor {return [[self class] fiord];}
+    + (UIColor *)tableSeparatorColor {return [[self class] loblollyLight];}
+    + (UIColor *)tableSectionColor {return [[self class] towerGray];}
+    + (UIColor *)tableBackgroundDarkColor {return [[self class] outerSpace];}
+    + (UIColor *)tableBackgroundLightColor {return [[self class] nevada];}
+
+    + (void)setupAppearance {
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
+        [[[UIApplication sharedApplication] keyWindow] setBackgroundColor:[UIColor blackColor]];
+        if (![UINavigationBar respondsToSelector:@selector(appearance)]) {
+            RKLogError(@"Application themes use iOS 5 methods.  This device has iOS %@.", [[UIDevice currentDevice] systemVersion]);
+            return;
+        }
+        [[UINavigationBar appearance] setTintColor:[[self class] riverBed]];
+        [[UIToolbar appearance] setTintColor:[[self class] riverBed]];
+        [[UISearchBar appearance] setTintColor:[[self class] celery]];
+        [[UISegmentedControl appearance] setTintColor:[[self class] celery]];
+        [[UITableViewCell appearance] setFont:[[self class] boldFifteen]];
+    }
+
+#endif
 
 @end

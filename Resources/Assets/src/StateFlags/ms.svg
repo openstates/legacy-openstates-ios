@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg>
+<svg width="800" height="480" viewBox="-42 -42 215 129" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+   <rect fill="white" x="-42" y="-42" width="100%" height="100%"/>
+   <rect fill="#002868" x="44" y="-42" width="129" height="43"/>
+   <rect fill="#bf0a30" x="-42" y="44" width="100%" height="43"/>
+   <path fill="#002868" d="M -42,-32 v -10 h 10 l 32,32 l 32,-32 h 10 v 10 l -32,32 l 32,32 v 10 h -10 l -32,-32 l -32,32 h -10 v -10 l 32,-32"/>
+   <path fill="#bf0a30" d="M -28,-42 l 28,28 l 28,-28 z M 42,-28 l -28,28 l 28,28 z M 28,42 l -28,-28 l -28,28 z M -42,28 l 28,-28 l -28,-28 z"/>
+   <g id="star" fill="white" transform="scale(5.5)">
+      <g id="cone">
+        <polygon id="triangle" points="0,0 0,1 .5,1" transform="translate(0,-1) rotate(18)"/>
+        <use xlink:href="#triangle" transform="scale(-1,1)" />
+      </g>
+      <use xlink:href="#cone" transform="rotate(72)" />
+      <use xlink:href="#cone" transform="rotate(-72)" />
+      <use xlink:href="#cone" transform="rotate(144)" />
+      <use xlink:href="#cone" transform="rotate(-144)" />
+   </g>
+   <g id="rhs">
+      <use xlink:href="#star" transform="translate(11,11)"/>
+      <use xlink:href="#star" transform="translate(22,22)"/>
+      <use xlink:href="#star" transform="translate(33,33)"/>
+      <use xlink:href="#star" transform="translate(11,-11)"/>
+      <use xlink:href="#star" transform="translate(22,-22)"/>
+      <use xlink:href="#star" transform="translate(33,-33)"/>
+   </g>
+   <use xlink:href="#rhs" transform="scale(-1,1)"/>
+</svg>

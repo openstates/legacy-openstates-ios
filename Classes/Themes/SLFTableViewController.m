@@ -18,7 +18,7 @@
 
 - (UITableView *) tableViewWithStyle:(UITableViewStyle)style {
     UITableView *aTableView = [super tableViewWithStyle:style];
-    aTableView.backgroundColor = [SLFAppearance tableBackgroundColor];
+    aTableView.backgroundColor = [SLFAppearance tableBackgroundLightColor];
     aTableView.separatorColor = [SLFAppearance tableSeparatorColor];
     return aTableView;
 }
@@ -27,11 +27,6 @@
     return YES;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    if (PSIsIpad()) 
-        self.clearsSelectionOnViewWillAppear = NO;
-}
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {
     if (!PSIsIpad()) {
