@@ -14,8 +14,6 @@
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
     #import <CoreData/CoreData.h>
-    #import <RestKit/RestKit.h>
-    #import <RestKit/CoreData/CoreData.h>
     #import "PSStackedViewGlobal.h"
 	#import "Constants.h"
     #import "APIKeys.h"

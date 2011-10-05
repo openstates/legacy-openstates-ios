@@ -10,6 +10,7 @@
 //
 //
 
+#import <RestKit/RestKit.h>
 #import "SLFEmailComposer.h"
 #import "SLFAlertView.h"
 

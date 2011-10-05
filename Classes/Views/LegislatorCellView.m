@@ -1,5 +1,5 @@
 //
-//	CommitteeMemberCellView.m
+//	LegislatorCellView.m
 //  Created by Gregory Combs on 7/12/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -11,35 +11,34 @@
 //
 
 #import "SLFDataModels.h"
-
 #import "LegislatorCellView.h"
-#import "TexLegeTheme.h"
-#import "UtilityMethods.h"
+#import "SLFTheme.h"
 
 @implementation LegislatorCellView
 
 @synthesize title;
 @synthesize name;
-@synthesize tenure;
 @synthesize party;
 @synthesize district;
 @synthesize role;
 @synthesize highlighted;
 @synthesize useDarkBackground;
-@synthesize wideSize;
+
+- (void)configureDefaults {
+    title = [[NSString alloc] init];
+    name = [[NSString alloc] init];
+    party = [[NSString alloc] init];
+    district = [[NSString alloc] init];
+    role = nil;
+    self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
+    [self setOpaque:YES];
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
 	self = [super initWithFrame:frame];
 	if (self) {
-		title = [@"Representative" retain];
-		name = [@"Genevieve McGillicuddy" retain];
-		tenure = [@"(Freshman)" retain];
-		party = [@"Republican" retain];
-		district = [@"District 21" retain];
-		role = nil;
-		self.backgroundColor = [TexLegeTheme backgroundLight];
-		[self setOpaque:YES];
+        [self configureDefaults];
 	}
 	return self;
 }
@@ -48,14 +47,7 @@
 {
 	self = [super initWithCoder:coder];
 	if (self) {
-		title = [@"Representative" retain];
-		name = [@"Genevieve McGillicuddy" retain];
-		tenure = [@"(Freshman)" retain];
-		party = [@"Republican" retain];
-		district = [@"District 21" retain];
-		role = nil;
-		self.backgroundColor = [TexLegeTheme backgroundLight];
-		[self setOpaque:YES];
+        [self configureDefaults];
 	}
 	return self;
 }
@@ -64,7 +56,6 @@
 {
 	nice_release(title);
 	nice_release(name);
-	nice_release(tenure);
 	nice_release(party);
 	nice_release(district);
 	nice_release(role);
@@ -73,20 +64,15 @@
 }
 
 - (CGSize)cellSize {
-	if (wideSize)
-		return CGSizeMake(531.f, 73.f);
-	else
-		return CGSizeMake(234.f, 73.f);
+    return CGSizeMake(234, 73);
 }
 
 - (void)setUseDarkBackground:(BOOL)flag
 {
 	if (self.highlighted)
 		return;
-	
 	useDarkBackground = flag;
-	self.backgroundColor =  flag ? [TexLegeTheme backgroundDark] : [TexLegeTheme backgroundLight];
-	
+	self.backgroundColor =  flag ? [SLFAppearance cellBackgroundDarkColor] : [SLFAppearance cellBackgroundLightColor];
 	[self setNeedsDisplay];
 }
 
@@ -98,24 +84,19 @@
 {
 	if (highlighted == flag)
 		return;
-
 	highlighted = flag;
-
 	[self setNeedsDisplay];
-
 }
 
 - (void)setLegislator:(SLFLegislator *)value {	
 	if (value) {
-
 		self.title = value.title;
 		self.district = [NSString stringWithFormat:@"%@ %@ %@",
                          [value.stateID uppercaseString],
-                         NSLocalizedStringFromTable(@"District", @"DataTableUI", @""),
+                         NSLocalizedString(@"District", @""),
 						 value.district];
 		self.party = value.party;
 		self.name = value.fullName;
-		self.tenure = value.term;
 		self.role = nil;
 	}
 	[self setNeedsDisplay];	
@@ -123,10 +104,8 @@
 
 - (void)setRole:(NSString *)value {
 	nice_release(role);
-	
 	if (value)
 		role = [value copy];
-	
 	[self setNeedsDisplay];
 }
 
@@ -150,29 +129,29 @@
 	CGRect aBounds = [self bounds];
 	CGRect drawRect;
 	
-	CGFloat fontSize = wideSize ? 16.f : 13.f;
-	UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:fontSize];
+	CGFloat fontSize = 13.f;
+    UIFont *font = [[SLFAppearance boldFifteen] fontWithSize:fontSize];
 		
-	UIColor *nameColor = nil;
-	UIColor *titleColor = nil;
+	UIColor *darkColor = nil;
+	UIColor *lightColor = nil;
 	UIColor *partyColor = nil;
-	UIColor *districtColor = nil;
+	UIColor *accentColor = nil;
 	
 	// Choose font color based on highlighted state.
 	if (self.highlighted) {
-		nameColor = titleColor = partyColor = districtColor = [TexLegeTheme backgroundLight];
+		darkColor = lightColor = partyColor = accentColor = [UIColor whiteColor];
 	}
 	else {
-		nameColor = [TexLegeTheme textDark];
-		districtColor = [TexLegeTheme textLight];
-		titleColor = [TexLegeTheme accent];
-		
-		if ([party isEqualToString:stringForParty(REPUBLICAN, TLReturnFull)])
-			partyColor = [TexLegeTheme texasRed];
-		else if ([party isEqualToString:stringForParty(DEMOCRAT, TLReturnFull)])
-			partyColor = [TexLegeTheme texasBlue];
-		else // INDEPENDENT ?
-			partyColor = [TexLegeTheme textLight];
+		darkColor = [SLFAppearance cellTextColor];
+		lightColor = [SLFAppearance cellSecondaryTextColor];
+        accentColor = [SLFAppearance tableSectionColor];
+
+		if ([party isEqualToString:@"Republican"])
+			partyColor = [SLFAppearance partyRed];
+		else if ([party isEqualToString:@"Democrat"])
+			partyColor = [SLFAppearance partyBlue];
+		else
+			partyColor = [SLFAppearance partyGreen];
 	}
 	
 	CGFloat resolution = 0.5f * (aBounds.size.width / imageBounds.size.width + 
@@ -184,60 +163,32 @@
 	CGContextTranslateCTM(context, aBounds.origin.x, aBounds.origin.y);
 	CGContextScaleCTM(context, (aBounds.size.width / imageBounds.size.width), 
 					  (aBounds.size.height / imageBounds.size.height));
-	
-	CGFloat labHeight = wideSize ? 23.f : 20.f; // 18.f
-	
+		
 	// Title	
-	if (wideSize) 
-		drawRect = [self scaleRect:CGRectMake(9.f, 0.f, 121.f, labHeight) resolution:resolution];
-	else 
-		drawRect = [self scaleRect:CGRectMake(9.f, 0.f, 94.f, labHeight) resolution:resolution];
-	[titleColor set];
+    drawRect = [self scaleRect:CGRectMake(9.f, 1.f, 94.f, 20.f) resolution:resolution];
+	[lightColor set];
 	[[self title] drawInRect:drawRect withFont:font];
 	
 	// Name
-	if (wideSize) 
-		drawRect = [self scaleRect:CGRectMake(9.f, 21.f, 266.f, 25.f) resolution:resolution];
-	else 
-		drawRect = [self scaleRect:CGRectMake(9.f, 21.f, 218.f, 25.f) resolution:resolution];
-	[nameColor set];
+    drawRect = [self scaleRect:CGRectMake(9.f, 21.f, 218.f, 25.f) resolution:resolution];
+	[darkColor set];
 	[[self name] drawInRect:drawRect withFont:[font fontWithSize:fontSize+4.f]];
 	
 	// Party	
-	if (wideSize) 
-		drawRect = [self scaleRect:CGRectMake(9.f, 46.f, 103.f, labHeight) resolution:resolution];
-	else 
-		drawRect = [self scaleRect:CGRectMake(9.f, 46.f, 73.f, labHeight) resolution:resolution];
+    drawRect = [self scaleRect:CGRectMake(9.f, 46.f, 73.f, 20.f) resolution:resolution];
 	[partyColor set];
 	[[self party] drawInRect:drawRect withFont:font];
 		
 	// District
-	if (wideSize) 
-		drawRect = [self scaleRect:CGRectMake(131.0f, 46.0f, 92.f, labHeight) resolution:resolution];
-	else 
-		drawRect = [self scaleRect:CGRectMake(86.f, 46.f, 92.f, labHeight) resolution:resolution];
-	[districtColor set];
+    drawRect = [self scaleRect:CGRectMake(86.f, 46.f, 92.f, 20.f) resolution:resolution];
+	[lightColor set];
 	[[self district] drawInRect:drawRect withFont:font];
-	
-	// Tenure	
-	if (wideSize) 
-		drawRect = [self scaleRect:CGRectMake(131.f, 0.f, 96.f, labHeight) resolution:resolution];
-	else 
-		drawRect = [self scaleRect:CGRectMake(109.f, 0.f, 75.f, labHeight) resolution:resolution];
-	[districtColor set];
-	[[self tenure] drawInRect:drawRect withFont:font];
 	
 	// Role
 	if (!IsEmpty(role)) {
-		if (wideSize) 
-			drawRect = [self scaleRect:CGRectMake(361.0f, 45.0f, 156.f, labHeight) resolution:resolution];
-		else 
-			drawRect = [self scaleRect:CGRectMake(153, 45.f, 74.f, labHeight) resolution:resolution];
-		[titleColor set];
-		[[self role] drawInRect:drawRect 
-					   withFont:[font fontWithSize:fontSize+1.f] 
-				  lineBreakMode:UILineBreakModeWordWrap
-					  alignment:UITextAlignmentRight];
+        drawRect = [self scaleRect:CGRectMake(153, 45.f, 74.f, 20.f) resolution:resolution];
+		[accentColor set];
+		[[self role] drawInRect:drawRect withFont:[font fontWithSize:fontSize+1.f] lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentRight];
 	}
 	
 	CGContextRestoreGState(context);

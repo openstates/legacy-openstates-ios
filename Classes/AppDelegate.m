@@ -16,6 +16,7 @@
 #import "StateDetailViewController.h"
 #import "SLFRestKitManager.h"
 #import "SLFAppearance.h"
+#import "AFURLCache.h"
 
 @interface AppDelegate()
 @property (nonatomic, retain) PSStackedViewController *stackController;
@@ -47,6 +48,9 @@
     }
     [SLFAppearance setupAppearance];
     [SLFRestKitManager sharedRestKit];
+    [NSURLCache setSharedURLCache:[[[AFURLCache alloc] initWithMemoryCapacity:1024*1024   // 1MB mem cache
+                                                          diskCapacity:1024*1024*5 // 5MB disk cache
+                                                              diskPath:[AFURLCache defaultCachePath]] autorelease]];    
     [self setUpViewControllers];
 }
 

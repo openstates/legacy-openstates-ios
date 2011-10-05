@@ -58,11 +58,11 @@
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFDistrict class] toTableCellsWithMapping:objCellMap];        
     [self.tableViewModel loadTable];
-    self.title = [NSString stringWithFormat:@"%d %@ Districts",[[self.tableViewModel.fetchedResultsController fetchedObjects] count], self.state.name];
+    self.title = [NSString stringWithFormat:@"%d Districts",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
-    self.title = [NSString stringWithFormat:@"%d %@ Districts",[[self.tableViewModel.fetchedResultsController fetchedObjects] count], self.state.name];
+    self.title = [NSString stringWithFormat:@"%d Districts",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }
 
 - (void)dealloc {

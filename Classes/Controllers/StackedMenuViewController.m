@@ -54,7 +54,6 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     [super viewDidLoad];
     self.tableView.backgroundColor = self.backgroundPatternColor;
     self.tableView.separatorColor = [UIColor colorWithRed:0.173 green:0.188 blue:0.192 alpha:0.400];
-        //self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.width = STACKED_MENU_WIDTH;
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     self.tableViewModel.cellSelectionType = RKTableViewCellSelectionFixed;
@@ -74,6 +73,7 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {
+    viewController.view.width = 320;
     [XAppDelegate.stackController popToRootViewControllerAnimated:YES];
     [XAppDelegate.stackController pushViewController:viewController fromViewController:nil animated:YES];
 }
@@ -87,11 +87,7 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
         RKTableItem* tableItem = (RKTableItem*) object;
         [self selectMenuItem:tableItem.text];
     };
-/*    cellMap.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-        cell.backgroundColor = [SLFAppearance menuBackgroundColor];
-        cell.textLabel.textColor = [SLFAppearance menuTextColor];
-    };
-*/    return cellMap;
+    return cellMap;
 }
 
 @end

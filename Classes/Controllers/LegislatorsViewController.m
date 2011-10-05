@@ -13,6 +13,7 @@
 #import "LegislatorsViewController.h"
 #import "LegislatorDetailViewController.h"
 #import "SLFDataModels.h"
+#import "LegislatorCell.h"
 
 @implementation LegislatorsViewController
 @synthesize state;
@@ -41,14 +42,14 @@
     self.tableViewModel.resourcePath = self.resourcePath;
     [self.tableViewModel setObjectMappingForClass:[SLFLegislator class]];
     self.tableViewModel.autoRefreshFromNetwork = YES;
+    self.tableViewModel.variableHeightRows = YES;
     self.tableViewModel.autoRefreshRate = 360;
     self.tableViewModel.pullToRefreshEnabled = YES;
     self.tableViewModel.showsSectionIndexTitles = YES;
     self.tableViewModel.sectionNameKeyPath = @"lastnameInitial";
     
-    SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
-        [cellMapping mapKeyPath:@"fullName" toAttribute:@"textLabel.text"];
-        [cellMapping mapKeyPath:@"chamberShortName" toAttribute:@"detailTextLabel.text"];
+    LegislatorCellMapping *objCellMap = [LegislatorCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
+        [cellMapping mapKeyPath:@"self" toAttribute:@"legislator"];
         
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             SLFLegislator *legislator = object;
@@ -60,11 +61,11 @@
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFLegislator class] toTableCellsWithMapping:objCellMap];    
     [self.tableViewModel loadTable];
-    self.title = [NSString stringWithFormat:@"%d %@ Members",[[self.tableViewModel.fetchedResultsController fetchedObjects] count], self.state.name];
+    self.title = [NSString stringWithFormat:@"%d Members",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
-    self.title = [NSString stringWithFormat:@"%d %@ Members",[[self.tableViewModel.fetchedResultsController fetchedObjects] count], self.state.name];
+    self.title = [NSString stringWithFormat:@"%d Members",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }
 
 - (void)dealloc {

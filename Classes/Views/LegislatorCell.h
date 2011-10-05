@@ -1,5 +1,5 @@
 //
-//  LegislatorMasterCell.h
+//  LegislatorCell.h
 //  Created by Gregory Combs on 8/9/10.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -10,17 +10,17 @@
 //
 //
 
-#import <UIKit/UIKit.h>
-#import "LegislatorCellView.h"
+#import <RestKit/UI/UI.h>
 
 @class SLFLegislator;
 @class LegislatorCellView;
 @interface LegislatorCell : UITableViewCell {
 	
 }
-@property (nonatomic,retain) LegislatorCellView *cellView;
-@property (nonatomic,assign) NSString *role;
-@property (nonatomic,readonly) CGSize cellSize;
+@property (readonly, nonatomic) CGSize cellSize;
+@property (assign, nonatomic) SLFLegislator *legislator;
+@property (retain, nonatomic) LegislatorCellView *cellContentView;
+@end
 
-- (void)setLegislator:(SLFLegislator *)value;
+@interface LegislatorCellMapping : RKTableViewCellMapping
 @end

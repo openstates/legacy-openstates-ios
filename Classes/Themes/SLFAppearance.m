@@ -11,6 +11,7 @@
 //
 
 #import "SLFAppearance.h"
+#import <RestKit/RestKit.h>
 
 #define APP_OPEN_STATES_THEME 1
 #define APP_BLUISH_THEME 2 
@@ -62,6 +63,7 @@
     + (UIColor *)cellBackgroundDarkColor {return [[self class] moonMist];}
     + (UIColor *)cellBackgroundLightColor {return [[self class] whiteRock];}
     + (UIColor *)cellTextColor {return [[self class] armadillo];}
+    + (UIColor *)cellSecondaryTextColor {return [[self class] graniteGreen];}
     + (UIColor *)tableSeparatorColor {return [[self class] spanishWhite];}
     + (UIColor *)tableSectionColor {return [[self class] flamingPea];}
     + (UIColor *)tableBackgroundDarkColor {return [[self class] eagle];}
@@ -79,7 +81,6 @@
         [[UISearchBar appearance] setTintColor:[[self class] gimblet]];
         [[UISegmentedControl appearance] setTintColor:[[self class] gimblet]];
         [[UITableViewCell appearance] setFont:[[self class] boldFifteen]];
-        [[UIImageView appearance] set
     }
 #endif
 
@@ -104,6 +105,7 @@
     + (UIColor *)cellBackgroundDarkColor {return [[self class] iron];}
     + (UIColor *)cellBackgroundLightColor {return [[self class] blackHaze];}
     + (UIColor *)cellTextColor {return [[self class] fiord];}
+    + (UIColor *)cellSecondaryTextColor {return [[self class] battleshipGray];}
     + (UIColor *)tableSeparatorColor {return [[self class] loblollyLight];}
     + (UIColor *)tableSectionColor {return [[self class] towerGray];}
     + (UIColor *)tableBackgroundDarkColor {return [[self class] outerSpace];}

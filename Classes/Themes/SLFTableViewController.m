@@ -53,6 +53,7 @@
         [self.navigationController pushViewController:viewController animated:YES];
         return;
     }
+    viewController.view.width = 500;
     [XAppDelegate.stackController pushViewController:viewController fromViewController:self animated:YES];
 }
 

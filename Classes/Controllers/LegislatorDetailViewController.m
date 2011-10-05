@@ -16,6 +16,9 @@
 #import "SLFDataModels.h"
 #import "SLFMappingsManager.h"
 #import "SLFRestKitManager.h"
+#import <QuartzCore/QuartzCore.h>
+#import "UIImageView+AFNetworking.h"
+#import "UIImageView+RoundedCorners.h"
 
 #define SectionHeaderMemberInfo NSLocalizedString(@"Member Details", @"")
 #define SectionHeaderDistrict NSLocalizedString(@"District Map", @"")
@@ -116,21 +119,19 @@ enum SECTIONS {
 - (void)configureTableItems {
     
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    NSError *error = nil;
-    NSData *imageData = nil;
-    UIImage *image = nil;
-    if (!IsEmpty(self.legislator.photoURL))
-        imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:self.legislator.photoURL] options:NSDataReadingMappedIfSafe error:&error];
-    if (!error && imageData)
-        image = [[UIImage alloc] initWithData:imageData];
     RKTableItem *firstItemCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
+        if (!IsEmpty(self.legislator.photoURL)) {
+            tableItem.cellMapping.rowHeight = 88;
+            tableItem.cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
+                cell.textLabel.textColor = [SLFAppearance cellTextColor];
+                cell.backgroundColor = [SLFAppearance cellBackgroundDarkColor];
+                [cell.imageView setImageWithURL:[NSURL URLWithString:self.legislator.photoURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
+                [cell.imageView roundTopLeftCorner];
+            };
+        }
         tableItem.cellMapping.style = UITableViewCellStyleValue1;
         tableItem.text = self.legislator.demoLongName;
-        if (image) {
-            tableItem.cellMapping.rowHeight = 88;
-            tableItem.image = image;
-        }
     }];
     [tableItems addObject:firstItemCell];
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
@@ -161,10 +162,6 @@ enum SECTIONS {
         };
     }]];
     [self.tableViewModel loadTableItems:tableItems inSection:SectionDistrictIndex];
-    if (image)
-        [image release];
-    if (imageData)
-        [imageData release];
     [tableItems release];
 }
 

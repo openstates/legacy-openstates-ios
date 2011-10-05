@@ -19,7 +19,6 @@
 
 @property (copy, nonatomic) NSString *title;
 @property (copy, nonatomic) NSString *name;
-@property (copy, nonatomic) NSString *tenure;
 @property (copy, nonatomic) NSString *party;
 @property (copy, nonatomic) NSString *district;
 @property (copy, nonatomic) NSString *role;
@@ -27,7 +26,6 @@
 @property (nonatomic) BOOL highlighted;
 @property (nonatomic) BOOL useDarkBackground;
 
-@property (nonatomic) BOOL wideSize;
 @property (nonatomic,readonly) CGSize cellSize; 
 
 - (void)setLegislator:(SLFLegislator *)value;

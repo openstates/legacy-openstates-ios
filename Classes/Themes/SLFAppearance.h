@@ -19,6 +19,7 @@
 + (UIColor *)cellBackgroundDarkColor;
 + (UIColor *)cellBackgroundLightColor;
 + (UIColor *)cellTextColor;
++ (UIColor *)cellSecondaryTextColor;
 + (UIColor *)tableBackgroundLightColor;
 + (UIColor *)tableBackgroundDarkColor;
 + (UIColor *)tableSeparatorColor;

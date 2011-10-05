@@ -12,23 +12,26 @@
 
 #import "DisclosureQuartzView.h"
 #import <QuartzCore/QuartzCore.h>
-#import "TexLegeTheme.h"
+
 
 const CGFloat kDisclosureQuartzViewWidth = 32.0f;
 const CGFloat kDisclosureQuartzViewHeight = 32.0f;
+static CGFloat scaleMod = 0;
 
 @implementation DisclosureQuartzView
 
-
 - (id)initWithFrame:(CGRect)frame
-{
+{        
 	self = [super initWithFrame:frame];
 	if (self) {
 		[self setOpaque:NO];
 		
-		scaleMod = 1;
-		if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
-			scaleMod =  [[UIScreen mainScreen] scale];
+        if (scaleMod < 1) {    // so that we only do this once, it's expensive...
+            if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+                scaleMod =  [[UIScreen mainScreen] scale];
+            else
+                scaleMod = 1;
+        }
 	}
 	return self;
 }
@@ -142,7 +145,7 @@ const CGFloat kDisclosureQuartzViewHeight = 32.0f;
 	drawRect.size.height = roundf(resolution * drawRect.size.height) / resolution;
 	string = @">";
 	font = [UIFont fontWithName:@"HiraKakuProN-W6" size:28.0f];
-	color = [TexLegeTheme accent];
+	color = [UIColor colorWithRed:116/255.0 green:174/255.0 blue:165/255.0 alpha:1.0];
 	[color set];
 	[string drawInRect:drawRect withFont:font lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentCenter];
 	CGContextRestoreGState(context);

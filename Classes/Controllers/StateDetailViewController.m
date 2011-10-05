@@ -28,7 +28,6 @@
 @interface StateDetailViewController()
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
-- (UIImage *)invertIconIfNeeded:(NSString *)aFileName;
 @property (nonatomic,retain) UIImage *legislatorsIcon;
 @property (nonatomic,retain) UIImage *committeesIcon;
 @property (nonatomic,retain) UIImage *districtsIcon;
@@ -48,12 +47,12 @@
 - (id)initWithState:(SLFState *)newState {
     self = [super init];
     if (self) {
-        self.legislatorsIcon = [self invertIconIfNeeded:@"123-id-card"];
-        self.committeesIcon = [self invertIconIfNeeded:@"60-signpost"];                                
-        self.districtsIcon = [self invertIconIfNeeded:@"73-radar"];
-        self.billsIcon = [self invertIconIfNeeded:@"gavel"];
-        self.eventsIcon = [self invertIconIfNeeded:@"83-calendar"];
-        
+        UIColor *iconColor = [SLFAppearance tableSectionColor];
+        self.legislatorsIcon = [[UIImage imageNamed:@"123-id-card"] imageWithOverlayColor:iconColor];
+        self.committeesIcon = [[UIImage imageNamed:@"60-signpost"] imageWithOverlayColor:iconColor];                               
+        self.districtsIcon = [[UIImage imageNamed:@"73-radar"] imageWithOverlayColor:iconColor];
+        self.billsIcon = [[UIImage imageNamed:@"gavel"] imageWithOverlayColor:iconColor];
+        self.eventsIcon = [[UIImage imageNamed:@"83-calendar"] imageWithOverlayColor:iconColor];
         [self reconfigureForState:newState];
     }
     return self;
@@ -153,16 +152,5 @@
     }
     [self configureTableItems];
 }
-
-- (UIImage *)invertIconIfNeeded:(NSString *)aFileName {
-    NSParameterAssert(aFileName != NULL);
-    return [[UIImage imageNamed:aFileName] imageWithOverlayColor:[SLFAppearance tableSectionColor]];
-/*
-    if (PSIsIpad())
-        aFileName = [aFileName stringByAppendingString:@"-inv"];
-    return [UIImage imageNamed:aFileName];
-*/
-}
-
 
 @end
