@@ -19,6 +19,9 @@
 		371480521432D27800170716 /* MenuPattern.png in Resources */ = {isa = PBXBuildFile; fileRef = 371480501432D27800170716 /* MenuPattern.png */; };
 		371480531432D27800170716 /* MenuPattern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 371480511432D27800170716 /* MenuPattern@2x.png */; };
 		371AE697143581D500592811 /* GradientBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 371AE696143581D500592811 /* GradientBackgroundView.m */; };
+		371B5C4E143E2E3500AF317E /* StretchedTitleLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 371B5C4D143E2E3500AF317E /* StretchedTitleLabel.m */; };
+		371B5C51143E50C000AF317E /* 59-flag.png in Resources */ = {isa = PBXBuildFile; fileRef = 371B5C4F143E50C000AF317E /* 59-flag.png */; };
+		371B5C52143E50C000AF317E /* 59-flag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 371B5C50143E50C000AF317E /* 59-flag@2x.png */; };
 		372D2AF714285FDD00ADE84E /* CommitteeRole.m in Sources */ = {isa = PBXBuildFile; fileRef = 372D2AF614285FDD00ADE84E /* CommitteeRole.m */; };
 		372D2AFA14285FDF00ADE84E /* CommitteeMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 372D2AF914285FDE00ADE84E /* CommitteeMember.m */; };
 		372D2B1E1428DEA400ADE84E /* BillSponsor.m in Sources */ = {isa = PBXBuildFile; fileRef = 372D2B1D1428DEA300ADE84E /* BillSponsor.m */; };
@@ -101,6 +104,7 @@
 		37A3258F13E49F2200138ADE /* StateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258E13E49F2200138ADE /* StateDetailViewController.m */; };
 		37A325B213E4A55800138ADE /* CommitteesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A325B113E4A55800138ADE /* CommitteesViewController.m */; };
 		37AC5FD6142C42680061414F /* StackedMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37AC5FD5142C42680061414F /* StackedMenuViewController.m */; };
+		37B9CC08143D0654006C56E0 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37B9CC07143D0654006C56E0 /* CoreText.framework */; };
 		37BAC14A142B972D0021A3C6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BAC149142B972D0021A3C6 /* main.m */; };
 		37BAC157142B97620021A3C6 /* Icon-Settings@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BAC14C142B97620021A3C6 /* Icon-Settings@2x~iphone.png */; };
 		37BAC158142B97620021A3C6 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BAC14D142B97620021A3C6 /* Icon-Small-50.png */; };
@@ -310,6 +314,10 @@
 		371480511432D27800170716 /* MenuPattern@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MenuPattern@2x.png"; sourceTree = "<group>"; };
 		371AE695143581D500592811 /* GradientBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GradientBackgroundView.h; sourceTree = "<group>"; };
 		371AE696143581D500592811 /* GradientBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GradientBackgroundView.m; sourceTree = "<group>"; };
+		371B5C4C143E2E3500AF317E /* StretchedTitleLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StretchedTitleLabel.h; sourceTree = "<group>"; };
+		371B5C4D143E2E3500AF317E /* StretchedTitleLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StretchedTitleLabel.m; sourceTree = "<group>"; };
+		371B5C4F143E50C000AF317E /* 59-flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "59-flag.png"; sourceTree = "<group>"; };
+		371B5C50143E50C000AF317E /* 59-flag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "59-flag@2x.png"; sourceTree = "<group>"; };
 		372D2AF514285FDC00ADE84E /* CommitteeRole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeRole.h; sourceTree = "<group>"; };
 		372D2AF614285FDD00ADE84E /* CommitteeRole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteeRole.m; sourceTree = "<group>"; };
 		372D2AF814285FDE00ADE84E /* CommitteeMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeMember.h; sourceTree = "<group>"; };
@@ -415,6 +423,7 @@
 		37A325B113E4A55800138ADE /* CommitteesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteesViewController.m; sourceTree = "<group>"; };
 		37AC5FD4142C42680061414F /* StackedMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackedMenuViewController.h; sourceTree = "<group>"; };
 		37AC5FD5142C42680061414F /* StackedMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StackedMenuViewController.m; sourceTree = "<group>"; };
+		37B9CC07143D0654006C56E0 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		37BAC148142B972D0021A3C6 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Classes/Main/Constants.h; sourceTree = "<group>"; };
 		37BAC149142B972D0021A3C6 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Classes/Main/main.m; sourceTree = "<group>"; };
 		37BAC14C142B97620021A3C6 /* Icon-Settings@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Settings@2x~iphone.png"; sourceTree = "<group>"; };
@@ -517,6 +526,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37B9CC08143D0654006C56E0 /* CoreText.framework in Frameworks */,
 				3763203D142C6C5400A6185F /* MessageUI.framework in Frameworks */,
 				375DC7E614279C9300253969 /* QuartzCore.framework in Frameworks */,
 				37E95F9713E4E4990064B1D3 /* MapKit.framework in Frameworks */,
@@ -586,7 +596,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				37BB3BBC143A5FCB00DCB1FB /* libz.dylib */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				37F29909140FCD2200B96572 /* Data */,
@@ -626,6 +635,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				37B9CC07143D0654006C56E0 /* CoreText.framework */,
 				372E58E314157BB0000652B1 /* MessageUI.framework */,
 				372E58DE14157B78000652B1 /* EventKit.framework */,
 				375DC7E514279C9300253969 /* QuartzCore.framework */,
@@ -640,6 +650,7 @@
 				37E95F9413E4E4990064B1D3 /* CoreLocation.framework */,
 				37E95F9613E4E4990064B1D3 /* MapKit.framework */,
 				372E57C514153D07000652B1 /* SenTestingKit.framework */,
+				37BB3BBC143A5FCB00DCB1FB /* libz.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -727,6 +738,8 @@
 				37442FA014344D230027F422 /* 28-star@2x.png */,
 				37442FA214344D230027F422 /* 30-key.png */,
 				37442FA314344D230027F422 /* 30-key@2x.png */,
+				371B5C4F143E50C000AF317E /* 59-flag.png */,
+				371B5C50143E50C000AF317E /* 59-flag@2x.png */,
 				37442FD414344D230027F422 /* 74-location.png */,
 				37442FD514344D230027F422 /* 74-location@2x.png */,
 				37442FEC14344D230027F422 /* 96-book.png */,
@@ -850,6 +863,8 @@
 				371AE696143581D500592811 /* GradientBackgroundView.m */,
 				379F750A14396BD80000B3ED /* UIImageView+RoundedCorners.h */,
 				379F750B14396BD80000B3ED /* UIImageView+RoundedCorners.m */,
+				371B5C4C143E2E3500AF317E /* StretchedTitleLabel.h */,
+				371B5C4D143E2E3500AF317E /* StretchedTitleLabel.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1261,6 +1276,8 @@
 				3749F257143BA5EA006F717B /* 83-calendar@2x.png in Resources */,
 				3749F258143BA5EA006F717B /* 123-id-card.png in Resources */,
 				3749F259143BA5EA006F717B /* 123-id-card@2x.png in Resources */,
+				371B5C51143E50C000AF317E /* 59-flag.png in Resources */,
+				371B5C52143E50C000AF317E /* 59-flag@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1360,6 +1377,7 @@
 				37BB3BAE143A397900DCB1FB /* NSString+AFNetworking.m in Sources */,
 				37BB3BAF143A397900DCB1FB /* UIImage+AFNetworking.m in Sources */,
 				37BB3BB0143A397900DCB1FB /* UIImageView+AFNetworking.m in Sources */,
+				371B5C4E143E2E3500AF317E /* StretchedTitleLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

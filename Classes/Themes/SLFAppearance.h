@@ -14,6 +14,7 @@
 
 +(void)setupAppearance;
 
++ (UIColor *)menuSelectedTextColor;
 + (UIColor *)menuTextColor;
 + (UIColor *)menuBackgroundColor;
 + (UIColor *)cellBackgroundDarkColor;

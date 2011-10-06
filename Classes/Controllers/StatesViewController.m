@@ -14,9 +14,11 @@
 #import "StateDetailViewController.h"
 #import "SLFState.h"
 #import "SLFRestKitManager.h"
+#import "StretchedTitleLabel.h"
 
 @interface StatesViewController()
 - (void)pushOrSendViewControllerWithState:(SLFState *)newState;
+- (void)configureTableHeader;
 @end
 
 @implementation StatesViewController
@@ -36,6 +38,7 @@
     self.tableViewModel.autoRefreshRate = 360;
     self.tableViewModel.pullToRefreshEnabled = YES;
     self.tableViewModel.showsSectionIndexTitles = YES;
+    self.tableViewModel.variableHeightRows = YES;
     self.tableViewModel.sectionNameKeyPath = @"stateInitial";
 
     SubtitleCellMapping *stateCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
@@ -43,7 +46,6 @@
         [cellMapping mapKeyPath:@"stateID" toAttribute:@"detailTextLabel.text"];
         [cellMapping mapKeyPath:@"stateFlag" toAttribute:@"imageView.image"];
         cellMapping.rowHeight = 48;
-        
         
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             SLFState *state = object;
@@ -55,6 +57,10 @@
     [self.tableViewModel mapObjectsWithClass:[SLFState class] toTableCellsWithMapping:stateCellMap];    
 
     [self.tableViewModel loadTable];    
+    
+    if (!PSIsIpad())
+        [self configureTableHeader];
+    
     NSInteger count = [[self.tableViewModel.fetchedResultsController fetchedObjects] count];
     self.title = [NSString stringWithFormat:@"%d States",count];
     if (count == 0) {
@@ -65,6 +71,25 @@
             RKLogWarning(@"Exception while attempting to load list of available states from network (already in progress?) ... %@", exception);
         }
     }
+}
+
+- (void)configureTableHeader {
+    RKTableViewCellMapping *headerCellMap = [RKTableViewCellMapping cellMapping];
+    headerCellMap.style = UITableViewCellStyleDefault;
+    headerCellMap.selectionStyle = UITableViewCellSelectionStyleNone;
+    headerCellMap.accessoryType = UITableViewCellAccessoryNone;
+    headerCellMap.rowHeight = 44;
+    headerCellMap.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+        CGRect contentRect = cell.contentView.frame;
+        UIColor *background = [SLFAppearance cellBackgroundLightColor];
+        cell.backgroundColor = background;
+        StretchedTitleLabel *stretchedTitle = CreateOpenStatesTitleLabelForFrame(contentRect);
+        stretchedTitle.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        stretchedTitle.backgroundColor = background;
+        [cell.contentView addSubview:stretchedTitle];
+        [stretchedTitle release];
+    };
+    [self.tableViewModel addHeaderRowWithMapping:headerCellMap];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {

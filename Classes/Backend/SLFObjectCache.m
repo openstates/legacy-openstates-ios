@@ -92,7 +92,8 @@
     [request setPredicate:predicate];
     
     NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey:@"committeeName" ascending:YES];
-    [request setSortDescriptors:[NSArray arrayWithObject:byName]];
+    NSSortDescriptor *byChamber = [NSSortDescriptor sortDescriptorWithKey:@"chamber" ascending:YES];
+    [request setSortDescriptors:[NSArray arrayWithObjects:byName, byChamber, nil]];
     return request;
 }
 

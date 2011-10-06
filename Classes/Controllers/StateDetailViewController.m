@@ -96,16 +96,6 @@
     }];
 }
 
-- (RKTableViewCellMapping *)menuCellMapping {
-    SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
-    cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-        RKTableItem* tableItem = (RKTableItem*) object;
-        [self selectMenuItem:tableItem.text];
-    };
-    return cellMap;
-}
-
-
 - (void)configureTableItems {
     NSMutableArray* tableItems = [[NSMutableArray alloc] initWithCapacity:15];
     [tableItems addObject:[RKTableItem tableItemWithText:MenuLegislators detailText:nil image:self.legislatorsIcon]];
@@ -116,6 +106,15 @@
         [tableItems addObject:[RKTableItem tableItemWithText:MenuEvents detailText:nil image:self.eventsIcon]];
     [self.tableViewModel loadTableItems:tableItems withMapping:[self menuCellMapping]];
     [tableItems release];
+}
+
+- (RKTableViewCellMapping *)menuCellMapping {
+    SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
+    cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
+        RKTableItem* tableItem = (RKTableItem*) object;
+        [self selectMenuItem:tableItem.text];
+    };
+    return cellMap;
 }
 
 - (void)selectMenuItem:(NSString *)menuItem {

@@ -43,6 +43,8 @@
         
         self.backgroundColor = [SLFAppearance menuBackgroundColor];
         self.textLabel.textColor = [SLFAppearance menuTextColor];
+        self.textLabel.highlightedTextColor = [SLFAppearance menuSelectedTextColor];
+
         self.textLabel.font = [SLFAppearance boldEighteen];
         self.textLabel.shadowOffset = CGSizeMake(0, 2);
         self.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
@@ -79,8 +81,7 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    
-    /* Why can't we do these in viewDidLoad?  For some reason they get reset? */
+        /* Why can't we do these in viewDidLoad?  For some reason they get reset? */
     CGRect frm = self.imageView.frame;
     self.imageView.frame = CGRectMake(30.f, frm.origin.y, frm.size.width, frm.size.height);
     frm = self.textLabel.frame;
@@ -92,7 +93,7 @@
     
     if (enabled) {
         if (self.disabledView) {
-                // Remove the "dimmed" view, if there is one. (see below)
+            // Remove the "dimmed" view, if there is one. (see below)
             [self.disabledView removeFromSuperview];
             self.disabledView = nil;
         }
@@ -102,7 +103,7 @@
         self.userInteractionEnabled = YES;
     }
     else {
-        /* Create the appearance of a "dimmed" table cell, with a standard error icon */
+            /* Create the appearance of a "dimmed" table cell, with a standard error icon */
         UIView *newView = [[UIView alloc] initWithFrame:self.bounds];
         newView.backgroundColor = [UIColor colorWithWhite:.5f alpha:.5f];
         
@@ -135,22 +136,14 @@
 
 - (void)setHighlighted:(BOOL)hil animated:(BOOL)animated {
     [super setHighlighted:hil animated:animated];
+    self.textLabel.highlighted = hil;
 }
 
 - (void)setSelected:(BOOL)sel animated:(BOOL)animated
 {
     [super setSelected:sel animated:animated];
-    
-    if (sel)
-    {
-        self.textLabel.textColor = [UIColor whiteColor];
-        self.glowView.hidden = NO;
-    }
-    else
-    {
-        self.textLabel.textColor = [SLFAppearance menuTextColor];
-        self.glowView.hidden = YES;
-    }
+    self.textLabel.highlighted = sel;
+    self.glowView.hidden = !sel;
 }
 
 - (void)dealloc

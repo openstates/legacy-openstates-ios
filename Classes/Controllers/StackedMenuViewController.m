@@ -14,12 +14,18 @@
 #import "AppDelegate.h"
 #import "StackedMenuCell.h"
 #import "GradientBackgroundView.h"
+#import "StretchedTitleLabel.h"
+#import "StatesViewController.h"
+#import "UIImage+OverlayColor.h"
 
 @interface StackedMenuViewController()
 @property (nonatomic,retain) UIColor *backgroundPatternColor;
 @property (nonatomic,retain) UIColor *headerPatternColor;
 @property (nonatomic,assign) CGFloat headerPatternHeight;
-
+- (void)configureMenuHeader;
+- (void)configureMenuFooter;
+- (void)configureBackgrounds;
+- (IBAction)selectStateFromTable:(id)sender;
 @end
 
 const NSUInteger STACKED_MENU_INSET = 75;
@@ -52,24 +58,16 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.bounces = NO;
     self.tableView.backgroundColor = self.backgroundPatternColor;
     self.tableView.separatorColor = [UIColor colorWithRed:0.173 green:0.188 blue:0.192 alpha:0.400];
     self.tableView.width = STACKED_MENU_WIDTH;
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     self.tableViewModel.cellSelectionType = RKTableViewCellSelectionFixed;
 
-    CGRect otherFrame = CGRectMake(STACKED_MENU_WIDTH, 0, self.view.width - STACKED_MENU_WIDTH, self.view.height);
-    GradientBackgroundView *gradient = [[GradientBackgroundView alloc] initWithFrame:otherFrame];
-    [gradient loadLayerAndGradientColors];
-    [self.view addSubview:gradient];
-    [gradient release];
-    
-    otherFrame.size.height = self.headerPatternHeight;
-    UIView *headerTopper = [[UIView alloc] initWithFrame:otherFrame];
-    headerTopper.backgroundColor = self.headerPatternColor;
-    headerTopper.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [self.view addSubview:headerTopper];
-    [headerTopper release];
+    [self configureBackgrounds];    
+    [self configureMenuHeader];
+    [self configureMenuFooter];
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {
@@ -90,5 +88,73 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     return cellMap;
 }
 
+- (void)configureMenuHeader {
+ /*   
+    UIImage *headerIcon = [UIImage imageNamed:@"Icon"];
+    UIView *menuHeader = [[UIView alloc] initWithFrame:CGRectMake(0,0,STACKED_MENU_WIDTH,80.f)];    
+    CGFloat iconWidth = 40;
+    CGFloat iconInset = 11;
+    UIImageView* imageView = [[UIImageView alloc] initWithFrame:CGRectMake(iconInset, iconInset*1.5, iconWidth, iconWidth)];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    imageView.layer.cornerRadius = 3.f;
+    imageView.layer.masksToBounds = NO;
+    imageView.layer.shadowColor = [[UIColor blackColor] CGColor];
+    imageView.layer.shadowOffset = CGSizeMake(0, 3);
+    imageView.layer.shadowOpacity = 0.5f;
+    imageView.layer.shadowRadius = 3.0f;
+    imageView.layer.shouldRasterize = YES;
+    imageView.image = headerIcon;
+    [menuHeader addSubview:imageView];
+    [imageView release];
+   */ 
+    
+    StretchedTitleLabel *titleLabel = CreateOpenStatesTitleLabelForFrame(CGRectMake(0, 0, STACKED_MENU_WIDTH, 44));
+    titleLabel.backgroundColor = self.backgroundPatternColor;
+    self.tableView.tableHeaderView = titleLabel;
+    [titleLabel release];
+}
+
+
+- (void)configureMenuFooter {
+    UIImage *image = [UIImage imageNamed:@"59-flag"];
+    UIImage *normalImage = [image imageWithOverlayColor:[SLFAppearance tableBackgroundLightColor]];
+    UIImage *selectedImage = [image imageWithOverlayColor:[SLFAppearance menuTextColor]];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.bounds = CGRectMake( 0, 0, image.size.width, image.size.height );    
+    [button setImage:normalImage forState:UIControlStateNormal];
+    [button setImage:selectedImage forState:UIControlStateHighlighted];
+    [button addTarget:self action:@selector(selectStateFromTable:) forControlEvents:UIControlEventTouchUpInside];    
+    UIBarButtonItem *selectedStateItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    UIToolbar *settingsBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.height-44, STACKED_MENU_WIDTH, 44)];
+    settingsBar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    [settingsBar setItems:[NSArray arrayWithObject:selectedStateItem] animated:YES];
+    [selectedStateItem release];
+    [self.view addSubview:settingsBar];
+    [settingsBar release];
+}
+
+- (void)configureBackgrounds {
+    CGRect otherFrame = CGRectMake(STACKED_MENU_WIDTH, 0, self.view.width - STACKED_MENU_WIDTH, self.view.height);
+    GradientBackgroundView *gradient = [[GradientBackgroundView alloc] initWithFrame:otherFrame];
+    [gradient loadLayerAndGradientColors];
+    [self.view addSubview:gradient];
+    [gradient release];
+    
+    otherFrame.size.height = self.headerPatternHeight;
+    UIView *headerTopper = [[UIView alloc] initWithFrame:otherFrame];
+    headerTopper.backgroundColor = self.headerPatternColor;
+    headerTopper.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [self.view addSubview:headerTopper];
+    [headerTopper release];
+}
+
+- (IBAction)selectStateFromTable:(id)sender {
+    StatesViewController* stateListVC = [[StatesViewController alloc] init];
+    UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:stateListVC];    
+    stateListVC.stateMenuDelegate = self;
+    [[[[UIApplication sharedApplication] keyWindow] rootViewController] presentModalViewController:navController animated:YES];
+    [stateListVC release];
+    [navController release];
+}
 @end
 

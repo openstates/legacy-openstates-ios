@@ -58,6 +58,7 @@
     + (id)graniteGreen      {vendColor(145,144,130);}     //  vendColorHex(0x919082)
     + (id)kangaroo          {vendColor(204,206,191);}     //  vendColorHex(0xCCCEBF)
 
+    + (UIColor *)menuSelectedTextColor {return [[self class] acapulco];}
     + (UIColor *)menuTextColor {return [[self class] flamingPea];}
     + (UIColor *)menuBackgroundColor {return [[self class] kangaroo];}
     + (UIColor *)cellBackgroundDarkColor {return [[self class] moonMist];}
@@ -100,6 +101,7 @@
     + (id)outerSpace        {vendColor(50,60,67);}        //  vendColorHex(0x323C43)
     + (id)nevada            {vendColor(95,108,117);}      //  vendColorHex(0x5F6C75)
 
+    + (UIColor *)menuSelectedTextColor {return [UIColor whiteColor];}
     + (UIColor *)menuTextColor {return [[self class] loblollyLight];}
     + (UIColor *)menuBackgroundColor {return [[self class] plum];}
     + (UIColor *)cellBackgroundDarkColor {return [[self class] iron];}

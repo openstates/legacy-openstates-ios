@@ -75,12 +75,7 @@
         /* There surely is a better way to handle this, but without this brief run loop delay
          the table view orientation is incorrect when running on iPads that start up in landscape orientation. */
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            StatesViewController* stateListVC = [[StatesViewController alloc] init];
-            UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:stateListVC];    
-            stateListVC.stateMenuDelegate = stateMenuVC;
-            [self.window.rootViewController presentModalViewController:navController animated:YES];
-            [stateListVC release];
-            [navController release];
+            [stateMenuVC selectStateFromTable:nil];
        }];
 
     }

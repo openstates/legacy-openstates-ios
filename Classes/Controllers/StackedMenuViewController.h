@@ -13,7 +13,7 @@
 #import "StateDetailViewController.h"
 
 @interface StackedMenuViewController : StateDetailViewController
-
+- (IBAction)selectStateFromTable:(id)sender;
 @end
 
 extern const NSUInteger STACKED_MENU_INSET;
