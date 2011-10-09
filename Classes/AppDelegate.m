@@ -17,10 +17,12 @@
 #import "SLFRestKitManager.h"
 #import "SLFAppearance.h"
 #import "AFURLCache.h"
+#import "SLFReachable.h"
 
 @interface AppDelegate()
 @property (nonatomic, retain) PSStackedViewController *stackController;
 - (void)setUpOnce;
+- (void)setUpReachability;
 - (void)setUpViewControllers;
 - (void)setUpIpadViewControllers;
 - (void)setUpIphoneViewControllers;
@@ -46,12 +48,19 @@
             RKLogCritical(@"**************** NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!*************");
         }
     }
+    [self setUpReachability];
     [SLFAppearance setupAppearance];
     [SLFRestKitManager sharedRestKit];
     [NSURLCache setSharedURLCache:[[[AFURLCache alloc] initWithMemoryCapacity:1024*1024   // 1MB mem cache
                                                           diskCapacity:1024*1024*5 // 5MB disk cache
                                                               diskPath:[AFURLCache defaultCachePath]] autorelease]];    
     [self setUpViewControllers];
+}
+
+- (void)setUpReachability {
+    SLFReachable *reachable = [SLFReachable sharedReachable];
+    NSSet *hosts = [NSSet setWithObjects:@"openstates.org", @"www.stateline.org", @"transparencydata.com", @"www.followthemoney.org", @"votesmart.org", nil];
+    [reachable watchHostsInSet:hosts];
 }
 
 - (void)setUpViewControllers {

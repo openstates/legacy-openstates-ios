@@ -17,11 +17,11 @@
 @interface SLFRestKitManager : NSObject <RKObjectLoaderDelegate, RKRequestQueueDelegate> {
     RKRequestQueue *__preloadQueue;
 }
-
 + (SLFRestKitManager *)sharedRestKit;
 + (void)showFailureAlertWithRequest:(RKRequest *)request error:(NSError *)error;
 - (void)loadObjectsAtResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate;
 - (void)preloadObjectsForState:(SLFState *)state;
+@property (nonatomic,retain) RKClient *transClient;
 @end
 
 

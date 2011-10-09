@@ -1,5 +1,5 @@
 //
-//  TexLegeStandardGroupCell.h
+//  SLFStandardGroupCell.h
 //  Created by Gregory Combs on 8/29/10.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -10,11 +10,11 @@
 //
 //
 
-#import <UIKit/UIKit.h>
 #import "SLFTableCellProtocol.h"
 
 @class TableCellDataObject;
-@interface TexLegeStandardGroupCell : UITableViewCell <SLFTableCellProtocol> {
-
+@interface SLFStandardGroupCell : UITableViewCell <SLFTableCellProtocol> {
 }
++ (SLFStandardGroupCell *)standardCellWithIdentifier:(NSString *)cellIdentifier;
+
 @end

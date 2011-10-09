@@ -11,6 +11,7 @@
 //
 
 #import "AlternatingCellMapping.h"
+#import "SLFTheme.h"
 #import "SLFAppearance.h"
 
 @implementation AlternatingCellMapping
@@ -20,9 +21,7 @@
     if (self) {
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             cell.textLabel.textColor = [SLFAppearance cellTextColor];
-            cell.backgroundColor = [SLFAppearance cellBackgroundLightColor];
-            if (indexPath.row % 2 == 0)
-                cell.backgroundColor = [SLFAppearance cellBackgroundDarkColor];
+            SLFAlternateCellForIndexPath(cell, indexPath);
         };
     }
     return self;

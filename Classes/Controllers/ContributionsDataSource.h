@@ -1,5 +1,5 @@
 //
-//  LegislatorContributionsDataSource.h
+//  ContributionsDataSource.h
 //  Created by Gregory Combs on 9/16/10.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -10,7 +10,6 @@
 //
 //
 
-#import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
 
 enum ContributionQueryType {
@@ -26,7 +25,7 @@ enum ContributionQueryType {
 #define kContributionsDataNotifyLoaded	@"ContributionsDataChangedKey"
 #define kContributionsDataNotifyError	@"ContributionsDataErrorKey"
 
-@interface LegislatorContributionsDataSource : NSObject <RKRequestDelegate, UITableViewDataSource> {
+@interface ContributionsDataSource : NSObject <RKRequestDelegate, UITableViewDataSource> {
 
 }
 @property (nonatomic,copy) NSString *queryCycle;
@@ -34,8 +33,8 @@ enum ContributionQueryType {
 @property (nonatomic,copy) NSNumber * queryType;
 @property (nonatomic,retain) NSMutableArray *sectionList;
 
-- (id) dataObjectForIndexPath:(NSIndexPath *)indexPath;
-- (NSIndexPath *) indexPathForDataObject:(id)dataObject;
+- (id)dataObjectForIndexPath:(NSIndexPath *)indexPath;
+- (NSIndexPath *)indexPathForDataObject:(id)dataObject;
 - (NSString *)title;
 
 - (void)initiateQueryWithQueryID:(NSString *)aQuery type:(NSNumber *)type cycle:(NSString *)cycle;

@@ -1,5 +1,5 @@
 //
-//  LegislatorContributionsViewController.h
+//  ContributionsViewController.h
 //  Created by Gregory Combs on 9/15/10.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -10,13 +10,12 @@
 //
 //
 
-#import <UIKit/UIKit.h>
-#import "LegislatorContributionsDataSource.h"
-
-@interface LegislatorContributionsViewController : UITableViewController {
+#import "ContributionsDataSource.h"
+#import "GCTableViewController.h"
+@interface ContributionsViewController : GCTableViewController {
 
 }
-@property (nonatomic,retain) LegislatorContributionsDataSource *dataSource;
+@property (nonatomic,retain) ContributionsDataSource *dataSource;
 
 - (void)setQueryEntityID:(NSString *)newObj type:(NSNumber *)newType cycle:(NSString *)newCycle;
 

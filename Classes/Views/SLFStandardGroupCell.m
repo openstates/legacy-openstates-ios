@@ -1,5 +1,5 @@
 //
-//  TexLegeStandardGroupCell.m
+//  SLFStandardGroupCell.m
 //  Created by Gregory Combs on 8/29/10.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -10,47 +10,46 @@
 //
 //
 
-#import "TexLegeStandardGroupCell.h"
+#import "SLFStandardGroupCell.h"
 #import "TableCellDataObject.h"
-#import "TexLegeTheme.h"
+#import "SLFAppearance.h"
 #import "DisclosureQuartzView.h"
 
-@implementation TexLegeStandardGroupCell
+@implementation SLFStandardGroupCell
 @synthesize cellInfo;
 
 + (NSString *)cellIdentifier {
-	return @"TexLegeStandardGroupCell";
+	return @"SLFStandardGroupCell";
 }
 
 + (UITableViewCellStyle)cellStyle {
 	return UITableViewCellStyleValue2;
-	//return UITableViewCellStyleSubtitle;
+}
+
+
++ (SLFStandardGroupCell *)standardCellWithIdentifier:(NSString *)cellIdentifier {
+    UITableViewCellStyle style = [SLFStandardGroupCell cellStyle];
+    SLFStandardGroupCell *cell = [[[SLFStandardGroupCell alloc] initWithStyle:style reuseIdentifier:cellIdentifier] autorelease];
+    return cell;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
-        // Initialization code
 		self.selectionStyle = UITableViewCellSelectionStyleBlue;
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;	
-
-		self.detailTextLabel.font =			[TexLegeTheme boldTwelve];
-		self.textLabel.font =				[TexLegeTheme boldTen];
-		self.detailTextLabel.textColor = 	[TexLegeTheme textDark];
-		self.textLabel.textColor =			[TexLegeTheme accent];
-
+		self.detailTextLabel.font =			[SLFAppearance boldTwelve];
+		self.textLabel.font =				[SLFAppearance boldTen];
+		self.detailTextLabel.textColor = 	[SLFAppearance cellTextColor];
+		self.textLabel.textColor =			[SLFAppearance cellSecondaryTextColor];
 		self.textLabel.adjustsFontSizeToFitWidth =	YES;
-
 		self.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
 		self.detailTextLabel.adjustsFontSizeToFitWidth = YES;
 		self.detailTextLabel.minimumFontSize = 12.0f;
-		
 		DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 28.f, 28.f)];
 		self.accessoryView = qv;
 		[qv release];
-		
-		self.backgroundColor = [TexLegeTheme backgroundLight];
-		
+		self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
     }
     return self;
 }

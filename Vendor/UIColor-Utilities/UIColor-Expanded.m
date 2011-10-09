@@ -738,7 +738,7 @@ static const char *crayolaNameDB = ","
 
 
 + (void)populateColorNameCache {
-	NSAssert(colorNameCache == nil, @"+pouplateColorNameCache was called when colorNameCache was not nil");
+	NSAssert(colorNameCache == nil, @"+populateColorNameCache was called when colorNameCache was not nil");
 	NSMutableDictionary *cache = [NSMutableDictionary dictionary];
 	for (const char* entry = colorNameDB; (entry = strchr(entry, ',')); ) {
 		
@@ -765,7 +765,7 @@ static const char *crayolaNameDB = ","
 }
 
 + (void)populateCrayolaNameCache {
-	NSAssert(crayolaNameCache == nil, @"+pouplateCrayolaNameCache was called when crayolaNameCache was not nil");
+	NSAssert(crayolaNameCache == nil, @"+populateCrayolaNameCache was called when crayolaNameCache was not nil");
 	NSMutableDictionary *cache = [NSMutableDictionary dictionary];
 	for (const char* entry = crayolaNameDB; (entry = strchr(entry, ',')); ) {
 		

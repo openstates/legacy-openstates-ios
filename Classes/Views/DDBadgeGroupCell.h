@@ -1,5 +1,5 @@
 //
-//  TexLegeStandardGroupCell.h
+//  SLFStandardGroupCell.h
 //  Created by Gregory Combs on 3/24/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -15,7 +15,7 @@
 
 @class DDBadgeView;
 @class TableCellDataObject;
-@interface TexLegeBadgeGroupCell : UITableViewCell <SLFTableCellProtocol> {
+@interface DDBadgeGroupCell : UITableViewCell <SLFTableCellProtocol> {
 	DDBadgeView *	badgeView_;
 	
 	NSString *		summary_;

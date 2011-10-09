@@ -123,7 +123,7 @@
 
 - (NSString *)labelSubText {
 	NSString *string;
-	string = [NSString stringWithFormat: NSLocalizedStringFromTable(@"%@ - District %@", @"DataTableUI", @"The person and their district number"),
+	string = [NSString stringWithFormat: NSLocalizedString(@"%@ - District %@", @""),
               self.chamberShortName, self.district];
 	return string;
 }
@@ -134,6 +134,14 @@
 
 - (NSString *)term {
     return [NSString stringWithFormat:@"Term: %@ Years", self.chamberObj.term];
+}
+
+    /////////////////////////////
+
+- (NSString *)votesmartBio {
+    if (IsEmpty(self.votesmartID))
+        return nil;
+    return [NSString stringWithFormat:@"http://votesmart.org/bio.php?can_id=%@", self.votesmartID];
 }
 
 @end

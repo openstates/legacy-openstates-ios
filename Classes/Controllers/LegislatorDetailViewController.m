@@ -19,6 +19,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIImageView+AFNetworking.h"
 #import "UIImageView+RoundedCorners.h"
+#import "SVWebViewController.h"
+#import "SLFReachable.h"
+#import "ContributionsViewController.h"
 
 #define SectionHeaderMemberInfo NSLocalizedString(@"Member Details", @"")
 #define SectionHeaderDistrict NSLocalizedString(@"District Map", @"")
@@ -145,7 +148,29 @@ enum SECTIONS {
             tableItem.text = NSLocalizedString(@"Web Site", @"");
             tableItem.detailText = website;
             tableItem.URL = website;
-        }]];  
+            tableItem.cellMapping.onSelectCell = ^(void) {
+                if (SLFIsReachableAddress(tableItem.URL)) {
+                    SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:tableItem.URL];
+                    webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+                    [self presentModalViewController:webViewController animated:YES];	
+                    [webViewController release];
+                }
+            };
+        }]];
+    if (!IsEmpty(legislator.transparencyID)) {
+        [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+            tableItem.cellMapping = [SubtitleCellMapping cellMapping];
+            tableItem.text = NSLocalizedString(@"Contributions", @"");
+            tableItem.detailText = @"";
+            tableItem.URL = @"";
+            tableItem.cellMapping.onSelectCell = ^(void) {
+                ContributionsViewController *controller = [[ContributionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                [controller setQueryEntityID:legislator.transparencyID type:[NSNumber numberWithInteger:kContributionQueryRecipient] cycle:@"-1"];
+                [self stackOrPushViewController:controller];
+                [controller release];
+            };
+        }]];
+    }
     [self.tableViewModel loadTableItems:tableItems inSection:SectionMemberInfoIndex];
 
     [self.tableViewModel loadObjects:self.legislator.sortedRoles inSection:SectionCommitteesIndex];

@@ -14,8 +14,10 @@
 #import "SLFObjectCache.h"
 
 #define OPENSTATES_BASE_URL		@"http://openstates.org/api/v1"
+#define TRANSPARENCY_BASE_URL   @"http://transparencydata.com/api/1.0"
 
 @implementation SLFRestKitManager
+@synthesize transClient;
 
 + (SLFRestKitManager *)sharedRestKit
 {
@@ -47,11 +49,15 @@
         SLFMappingsManager *mapper = [[SLFMappingsManager alloc] init];
         [mapper registerMappings];
         [mapper release];        
+        
+        self.transClient = [RKClient clientWithBaseURL:TRANSPARENCY_BASE_URL];
     }
     return self;
 }
 
 - (void)dealloc {
+    [self.transClient.requestQueue cancelAllRequests];
+    self.transClient = nil;
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
     if (__preloadQueue) {
         [__preloadQueue cancelAllRequests];

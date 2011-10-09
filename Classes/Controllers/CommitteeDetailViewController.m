@@ -15,6 +15,8 @@
 #import "SLFDataModels.h"
 #import "SLFMappingsManager.h"
 #import "SLFRestKitManager.h"
+#import "SLFReachable.h"
+#import "SVWebViewController.h"
 
 #define SectionHeaderCommitteeInfo NSLocalizedString(@"Committee Details", @"")
 #define SectionHeaderMembers NSLocalizedString(@"Members", @"")
@@ -115,10 +117,17 @@ enum SECTIONS {
         tableItem.text = NSLocalizedString(@"Web Site", @"");
         tableItem.detailText = website;
         tableItem.URL = website;
+        tableItem.cellMapping.onSelectCell = ^(void) {
+            if (SLFIsReachableAddress(tableItem.URL)) {
+                SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:tableItem.URL];
+                webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+                [self presentModalViewController:webViewController animated:YES];	
+                [webViewController release];
+            }
+        };
     }]];  
     [self.tableViewModel loadTableItems:tableItems inSection:SectionCommitteeInfoIndex];
     [tableItems release];
-    
     [self.tableViewModel loadObjects:self.committee.sortedMembers inSection:SectionMembersIndex];    
 }
 

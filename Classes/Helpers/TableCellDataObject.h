@@ -1,5 +1,5 @@
 //
-//  DirectoryDetailCell.h
+//  TableCellDataObject.h
 //  Created by Gregory S. Combs on 5/31/09.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -9,8 +9,6 @@
 //  or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
 //
 //
-
-#import <UIKit/UIKit.h>
 
 enum {
 	DirectoryTypeNone = 0,
@@ -33,7 +31,6 @@ enum {
 
 
 @interface TableCellDataObject : NSObject {
-	
 }
 @property (nonatomic, assign) BOOL isClickable;
 @property (nonatomic, assign) NSInteger entryType;
@@ -43,11 +40,5 @@ enum {
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;
 @property (nonatomic, retain) NSIndexPath *indexPath;
-
-
-- (NSURL *)generateURL;
-
 - (id)initWithDictionary:(NSDictionary *)aDictionary;
-
-
 @end

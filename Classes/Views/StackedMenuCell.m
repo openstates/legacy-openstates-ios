@@ -15,9 +15,9 @@
 #import "StackedMenuCell.h"
 #import "StackedMenuViewController.h"
 #import "SLFTheme.h"
-
+#import "SLFReachable.h"
 @interface StackedMenuCell()
-- (void)setReachability:(NSNotification *)notification;
+- (void)reachableDidChange:(NSNotification *)notification;
 @end
 
 #define DEFAULT_ITEM_HEIGHT 43.f
@@ -64,17 +64,20 @@
         glowView.hidden = YES;
         [self addSubview:glowView];
         
-        RKObjectManager *manager = [RKObjectManager sharedManager];
-        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-        [center addObserver:self selector:@selector(setReachability:) name:RKObjectManagerDidBecomeOnlineNotification object:manager];
-        [center addObserver:self selector:@selector(setReachability:) name:RKObjectManagerDidBecomeOfflineNotification object:manager];
+        
+        [[SLFReachable sharedReachable].localNotification addObserver:self selector:@selector(reachableDidChange:) name:SLFReachableStatusChangedForHostKey object:SLFReachableAnyNetworkHost];
+            //        RKObjectManager *manager = [RKObjectManager sharedManager];
+            //       NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+            //        [center addObserver:self selector:@selector(reachableDidChange:) name:RKObjectManagerDidBecomeOnlineNotification object:manager];
+            //        [center addObserver:self selector:@selector(reachableDidChange:) name:RKObjectManagerDidBecomeOfflineNotification object:manager];
     }
     return self;
 }
 
-- (void)setReachability:(NSNotification *)notification {
-    RKObjectManager *manager = [RKObjectManager sharedManager];
-    self.enabled = [manager isOnline];
+- (void)reachableDidChange:(NSNotification *)notification {
+    self.enabled = [[SLFReachable sharedReachable] isNetworkReachable];
+        //    RKObjectManager *manager = [RKObjectManager sharedManager];
+        //   self.enabled = [manager isOnline];
 }
 
 
@@ -148,7 +151,8 @@
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[SLFReachable sharedReachable].localNotification removeObserver:self];
+        // [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.disabledView = nil;
     nice_release(glowView);
     [super dealloc];

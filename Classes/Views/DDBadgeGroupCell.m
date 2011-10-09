@@ -26,9 +26,9 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
-#import "TexLegeBadgeGroupCell.h"
+#import "DDBadgeGroupCell.h"
 #import "TableCellDataObject.h"
-#import "TexLegeTheme.h"
+#import "SLFAppearance.h"
 
 #pragma mark -
 #pragma mark DDBadgeView declaration
@@ -36,12 +36,12 @@
 @interface DDBadgeView : UIView {
 	
 @private
-	TexLegeBadgeGroupCell *cell_;
+	DDBadgeGroupCell *cell_;
 }
 
-@property (nonatomic, assign) TexLegeBadgeGroupCell *cell;
+@property (nonatomic, assign) DDBadgeGroupCell *cell;
 
-- (id)initWithFrame:(CGRect)frame cell:(TexLegeBadgeGroupCell *)newCell;
+- (id)initWithFrame:(CGRect)frame cell:(DDBadgeGroupCell *)newCell;
 @end
 
 #pragma mark -
@@ -54,7 +54,7 @@
 #pragma mark -
 #pragma mark init
 
-- (id)initWithFrame:(CGRect)frame cell:(TexLegeBadgeGroupCell *)newCell {
+- (id)initWithFrame:(CGRect)frame cell:(DDBadgeGroupCell *)newCell {
 	
 	if ((self = [super initWithFrame:frame])) {
 		cell_ = newCell;
@@ -71,11 +71,10 @@
 - (void)drawRect:(CGRect)rect {	
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	
-    UIColor *currentSummaryColor = [TexLegeTheme textDark];
-    //UIColor *currentDetailColor = [UIColor grayColor];
+    UIColor *currentSummaryColor = [SLFAppearance cellTextColor];
     UIColor *currentBadgeColor = self.cell.badgeColor;
     if (!currentBadgeColor) {
-        currentBadgeColor = [TexLegeTheme accentGreener]; //[UIColor colorWithRed:0.53 green:0.6 blue:0.738 alpha:1.];
+        currentBadgeColor = [SLFAppearance menuTextColor]; //[UIColor colorWithRed:0.53 green:0.6 blue:0.738 alpha:1.];
     }
     
 	if (self.cell && self.cell.isClickable && (self.cell.isHighlighted || self.cell.isSelected)) {
@@ -89,12 +88,12 @@
 	
 	if (self.cell && self.cell.isEditing) {
 		[currentSummaryColor set];
-		[self.cell.summary drawAtPoint:CGPointMake(10, 10) forWidth:rect.size.width withFont:[TexLegeTheme boldFifteen] lineBreakMode:UILineBreakModeTailTruncation];
+		[self.cell.summary drawAtPoint:CGPointMake(10, 10) forWidth:rect.size.width withFont:[SLFAppearance boldFifteen] lineBreakMode:UILineBreakModeTailTruncation];
 		
 		//[currentDetailColor set];
-		//[self.cell.detail drawAtPoint:CGPointMake(10, 32) forWidth:rect.size.width withFont:[TexLegeTheme boldTwelve] lineBreakMode:UILineBreakModeTailTruncation];		
+		//[self.cell.detail drawAtPoint:CGPointMake(10, 32) forWidth:rect.size.width withFont:[SLFAppearance boldTwelve] lineBreakMode:UILineBreakModeTailTruncation];		
 	} else {
-		CGSize badgeTextSize = [self.cell.badgeText sizeWithFont:[TexLegeTheme boldTwelve]];
+		CGSize badgeTextSize = [self.cell.badgeText sizeWithFont:[SLFAppearance boldTwelve]];
 		CGRect badgeViewFrame = CGRectIntegral(CGRectMake(rect.size.width - badgeTextSize.width - 24, (rect.size.height - badgeTextSize.height - 4) / 2, badgeTextSize.width + 14, badgeTextSize.height + 4));
 		
 		CGContextSaveGState(context);	
@@ -109,30 +108,30 @@
 		
 		CGContextSaveGState(context);	
 		CGContextSetBlendMode(context, kCGBlendModeClear);
-		[self.cell.badgeText drawInRect:CGRectInset(badgeViewFrame, 7, 2) withFont:[TexLegeTheme boldTwelve]];
+		[self.cell.badgeText drawInRect:CGRectInset(badgeViewFrame, 7, 2) withFont:[SLFAppearance boldTwelve]];
 		CGContextRestoreGState(context);
 		
 		[currentSummaryColor set];
-		[self.cell.summary drawAtPoint:CGPointMake(10, 10) forWidth:(rect.size.width - badgeViewFrame.size.width - 24) withFont:[TexLegeTheme boldFifteen] lineBreakMode:UILineBreakModeTailTruncation];
+		[self.cell.summary drawAtPoint:CGPointMake(10, 10) forWidth:(rect.size.width - badgeViewFrame.size.width - 24) withFont:[SLFAppearance boldFifteen] lineBreakMode:UILineBreakModeTailTruncation];
 		
 		//[currentDetailColor set];
-		//[self.cell.detail drawAtPoint:CGPointMake(10, 32) forWidth:(rect.size.width - badgeViewFrame.size.width - 24) withFont:[TexLegeTheme boldTwelve] lineBreakMode:UILineBreakModeTailTruncation];		
+		//[self.cell.detail drawAtPoint:CGPointMake(10, 32) forWidth:(rect.size.width - badgeViewFrame.size.width - 24) withFont:[SLFAppearance boldTwelve] lineBreakMode:UILineBreakModeTailTruncation];		
 	}
 }
 
 @end
 
 #pragma mark -
-#pragma mark TexLegeBadgeGroupCell private
+#pragma mark DDBadgeGroupCell private
 
-@interface TexLegeBadgeGroupCell ()
+@interface DDBadgeGroupCell ()
 @property (nonatomic, retain) DDBadgeView *	badgeView;
 @end
 
 #pragma mark -
-#pragma mark TexLegeBadgeGroupCell implementation
+#pragma mark DDBadgeGroupCell implementation
 
-@implementation TexLegeBadgeGroupCell
+@implementation DDBadgeGroupCell
 
 @synthesize summary = summary_;
 //@synthesize detail = detail_;
@@ -143,7 +142,7 @@
 @synthesize cellInfo, isClickable;
 
 + (NSString *)cellIdentifier {
-	return @"TexLegeBadgeGroupCell";
+	return @"DDBadgeGroupCell";
 }
 
 + (UITableViewCellStyle)cellStyle {
@@ -160,7 +159,7 @@
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;		
 		*/
 		
-		self.backgroundColor = [TexLegeTheme backgroundLight];
+		self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
 		isClickable = YES;
 		badgeView_ = [[DDBadgeView alloc] initWithFrame:self.contentView.bounds cell:self];
         badgeView_.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -199,8 +198,7 @@
 		
 		self.summary = cellInfo.title;
 		//self.detail = cellInfo.subtitle;
-		self.badgeText = [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@ Bills", @"DataTableUI", @"Lists the number of bills for a givensubject"), 
-						  cellInfo.entryValue];
+		self.badgeText = [NSString stringWithFormat:NSLocalizedString(@"%@ Bills", @""), cellInfo.entryValue];
 		isClickable = cellInfo.isClickable;
 
 		if (!cellInfo.isClickable) {

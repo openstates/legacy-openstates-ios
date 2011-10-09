@@ -17,7 +17,7 @@
 #import "DisclosureQuartzView.h"
 #import "UIImageView+AFNetworking.h"
 #import "UIImageView+RoundedCorners.h"
-
+#import "SLFTheme.h"
 @implementation LegislatorCell
 @synthesize legislator;
 @synthesize cellContentView;
@@ -102,6 +102,7 @@
         self.rowHeight = 73; 
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             cell.textLabel.textColor = [SLFAppearance cellTextColor];
+                //SLFAlternateCellForIndexPath(cell, indexPath);
             BOOL useDarkBG = (indexPath.row % 2 == 0);
             cell.backgroundColor = [SLFAppearance cellBackgroundLightColor];
             if (useDarkBG)

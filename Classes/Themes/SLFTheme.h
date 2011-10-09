@@ -14,3 +14,9 @@
 #import "SLFAppearance.h"
 #import "AlternatingCellMapping.h"
 #import "SubtitleCellMapping.h"
+
+static inline void SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath) {
+    cell.backgroundColor = [SLFAppearance cellBackgroundLightColor];
+    if (indexPath.row % 2 == 0)
+        cell.backgroundColor = [SLFAppearance cellBackgroundDarkColor];
+}
