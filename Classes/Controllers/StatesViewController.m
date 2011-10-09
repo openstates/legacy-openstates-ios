@@ -74,22 +74,15 @@
 }
 
 - (void)configureTableHeader {
-    RKTableViewCellMapping *headerCellMap = [RKTableViewCellMapping cellMapping];
-    headerCellMap.style = UITableViewCellStyleDefault;
-    headerCellMap.selectionStyle = UITableViewCellSelectionStyleNone;
-    headerCellMap.accessoryType = UITableViewCellAccessoryNone;
-    headerCellMap.rowHeight = 44;
-    headerCellMap.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
-        CGRect contentRect = cell.contentView.frame;
-        UIColor *background = [SLFAppearance cellBackgroundLightColor];
-        cell.backgroundColor = background;
-        StretchedTitleLabel *stretchedTitle = CreateOpenStatesTitleLabelForFrame(contentRect);
-        stretchedTitle.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        stretchedTitle.backgroundColor = background;
-        [cell.contentView addSubview:stretchedTitle];
-        [stretchedTitle release];
-    };
-    [self.tableViewModel addHeaderRowWithMapping:headerCellMap];
+    CGRect contentRect = CGRectMake(0, 0, self.view.width, 40);
+    StretchedTitleLabel *stretchedTitle = CreateOpenStatesTitleLabelForFrame(contentRect);
+    UIColor *background = [SLFAppearance cellBackgroundLightColor];
+    stretchedTitle.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    stretchedTitle.backgroundColor = background;
+    self.tableView.top += 40;
+    self.tableView.height -= 40;
+    [self.view addSubview:stretchedTitle];
+    [stretchedTitle release];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {

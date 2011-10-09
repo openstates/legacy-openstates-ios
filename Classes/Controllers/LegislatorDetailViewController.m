@@ -160,7 +160,7 @@ enum SECTIONS {
     if (!IsEmpty(legislator.transparencyID)) {
         [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
             tableItem.cellMapping = [SubtitleCellMapping cellMapping];
-            tableItem.text = NSLocalizedString(@"Contributions", @"");
+            tableItem.text = NSLocalizedString(@"Campaign Contributions", @"");
             tableItem.detailText = @"";
             tableItem.URL = @"";
             tableItem.cellMapping.onSelectCell = ^(void) {
