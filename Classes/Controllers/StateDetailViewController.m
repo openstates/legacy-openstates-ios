@@ -18,12 +18,15 @@
 #import "SLFDataModels.h"
 #import "SLFTheme.h"
 #import "UIImage+OverlayColor.h"
+#import "SVWebViewController.h"
+#import "SLFReachable.h"
 
 #define MenuLegislators NSLocalizedString(@"Legislators", @"")
 #define MenuCommittees NSLocalizedString(@"Committees", @"")
 #define MenuDistricts NSLocalizedString(@"District Maps", @"")
 #define MenuBills NSLocalizedString(@"Bills", @"")
 #define MenuEvents NSLocalizedString(@"Events", @"")
+#define MenuNews NSLocalizedString(@"News", @"")
 
 @interface StateDetailViewController()
 - (void)configureTableItems;
@@ -33,6 +36,7 @@
 @property (nonatomic,retain) UIImage *districtsIcon;
 @property (nonatomic,retain) UIImage *eventsIcon;
 @property (nonatomic,retain) UIImage *billsIcon;
+@property (nonatomic,retain) UIImage *newsIcon;
 @end
 
 @implementation StateDetailViewController
@@ -43,6 +47,7 @@
 @synthesize districtsIcon;
 @synthesize eventsIcon;
 @synthesize billsIcon;
+@synthesize newsIcon;
 
 - (id)initWithState:(SLFState *)newState {
     self = [super init];
@@ -53,6 +58,7 @@
         self.districtsIcon = [[UIImage imageNamed:@"73-radar"] imageWithOverlayColor:iconColor];
         self.billsIcon = [[UIImage imageNamed:@"gavel"] imageWithOverlayColor:iconColor];
         self.eventsIcon = [[UIImage imageNamed:@"83-calendar"] imageWithOverlayColor:iconColor];
+        self.newsIcon = [[UIImage imageNamed:@"166-newspaper"] imageWithOverlayColor:iconColor];
         [self reconfigureForState:newState];
     }
     return self;
@@ -73,6 +79,7 @@
     self.districtsIcon = nil;
     self.eventsIcon = nil;
     self.billsIcon = nil;
+    self.newsIcon = nil;
     [super dealloc];
 }
 
@@ -104,6 +111,7 @@
         //[tableItems addObject:[RKTableItem tableItemWithText:MenuBills detailText:nil image:self.billsIcon]];
     if (self.state && self.state.featureFlags && [self.state.featureFlags containsObject:@"events"])
         [tableItems addObject:[RKTableItem tableItemWithText:MenuEvents detailText:nil image:self.eventsIcon]];
+    [tableItems addObject:[RKTableItem tableItemWithText:MenuNews detailText:nil image:self.newsIcon]];
     [self.tableViewModel loadTableItems:tableItems withMapping:[self menuCellMapping]];
     [tableItems release];
 }
@@ -129,8 +137,17 @@
         vc = [[DistrictsViewController alloc] initWithState:self.state];
     else if ([menuItem isEqualToString:MenuEvents])
         vc = [[EventsViewController alloc] initWithState:self.state];
-        //  else if ([menuItem isEqualToString:MenuBills])
-        //      vc = [[BillsViewController alloc] initWithState:self.state];
+    else if ([menuItem isEqualToString:MenuNews]) {
+        if (SLFIsReachableAddress(self.state.newsAddress)) {
+            SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:self.state.newsAddress];
+            webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+            [self presentModalViewController:webViewController animated:YES];	
+            [webViewController release];
+        }
+    }
+//  else if ([menuItem isEqualToString:MenuBills])
+//      vc = [[BillsViewController alloc] initWithState:self.state];
+    
     if (vc) {
         [self stackOrPushViewController:vc];
         [vc release];

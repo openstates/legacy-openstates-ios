@@ -45,10 +45,10 @@ BOOL SLFIsReachableAddress(NSString * urlString) {
 @synthesize localNotification;
 + (SLFReachable *)sharedReachable
 {
-	static dispatch_once_t pred;
-	static SLFReachable *foo = nil;
-	dispatch_once(&pred, ^{ foo = [[self alloc] init]; });
-	return foo;
+    static dispatch_once_t pred;
+    static SLFReachable *foo = nil;
+    dispatch_once(&pred, ^{ foo = [[self alloc] init]; });
+    return foo;
 }
 
 - (SLFReachable *)init {
@@ -93,27 +93,17 @@ BOOL SLFIsReachableAddress(NSString * urlString) {
 
 - (void)beginCheckingHostReachability:(SCNetworkReachability *)hostReach {
     NSParameterAssert(hostReach);
-        // You do not automatically receive an initial notification. Use the
-        // synchronous API at first. These messages can block and, if they block for
-        // too long a time, can trigger the watchdog to kill the application. Better
-        // to respond after this initial assessment by taking reachability flags
-        // from notifications.
     SCNetworkReachabilityFlags flags;
-    if ([hostReach getFlags:&flags])
+    if ([hostReach getFlags:&flags]) // must use synchronous for initial messages only
         [self changeReachability:hostReach forFlags:flags];
     [hostReach startNotifier];
 }
 
 - (void)notifyReachabilityChanged:(NSNotification *)notification
 {
-        // Important not to send -[SCNetworkReachability getFlags:] at this
-        // point. No need. Just extract the reachability object and the
-        // notification's reachability flags. Together they provide sufficient
-        // information for handling the notification, after determining current
-        // reachability status.
-	SCNetworkReachability *netReach = [notification object];
-	SCNetworkReachabilityFlags flags = [[[notification userInfo] objectForKey:kSCNetworkReachabilityFlagsKey] unsignedIntValue];
-	[self changeReachability:netReach forFlags:flags];
+    SCNetworkReachability *netReach = [notification object];
+    SCNetworkReachabilityFlags flags = [[[notification userInfo] objectForKey:kSCNetworkReachabilityFlagsKey] unsignedIntValue];
+    [self changeReachability:netReach forFlags:flags];
 }
 
 - (void)changeReachability:(SCNetworkReachability *)netReach forFlags:(SCNetworkReachabilityFlags)flags
@@ -126,7 +116,7 @@ BOOL SLFIsReachableAddress(NSString * urlString) {
             *stop = YES;
         }            
     }];
-	SCNetworkReachable reach = [netReach networkReachableForFlags:flags];
+    SCNetworkReachable reach = [netReach networkReachableForFlags:flags];
     NSNumber *status = [NSNumber numberWithInt:reach];
     if (foundKey) {
         [self.statusByHostKeys setObject:status forKey:foundKey];
@@ -150,7 +140,7 @@ BOOL SLFIsReachableAddress(NSString * urlString) {
         return NO;
     NSNumber *status = [self statusForHostNamed:hostName];
     if (!status) {
-        RKLogError(@"Precise host reachability for %@ is unknown because it is not presently monitored.", hostName);
+        RKLogError(@"Specific host reachability for %@ is unknown because it is not presently monitored.", hostName);
         return YES;
     }
     return ([status intValue] > kSCNetworkNotReachable);

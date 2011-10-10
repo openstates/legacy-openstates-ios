@@ -1,4 +1,5 @@
 #import "SLFState.h"
+#import <RestKit/Network/NSObject+URLEncoding.h>
 
 @implementation SLFState
 
@@ -20,7 +21,6 @@
     return NO;
 }
 
-
 - (NSString *)displayNameForSession:(NSString *)aSession {
     NSString *display = aSession;
     
@@ -38,6 +38,9 @@
     return display;
 }
 
+- (NSString *)newsAddress {
+    return [NSString stringWithFormat:@"http://stateline.org/live/states/%@", [self.name URLEncodedString]];
+}
 @end
 
 NSString * const SLFSelectedStateDidChangeNotification = @"SLFSelectedStateDidChange";

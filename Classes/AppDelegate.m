@@ -33,9 +33,6 @@
 @synthesize window;
 @synthesize stackController = stackController_;
 
-#pragma mark -
-#pragma mark Application lifecycle
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self setUpOnce];
     return YES;
@@ -81,8 +78,7 @@
     window.rootViewController = stackedController;
     [window makeKeyAndVisible];
     if (!selectedState) {
-        /* There surely is a better way to handle this, but without this brief run loop delay
-         the table view orientation is incorrect when running on iPads that start up in landscape orientation. */
+            // Ugly yes, but this brief delay fixes issues with view orientation on iPads when starting up in landscape.
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [stateMenuVC selectStateFromTable:nil];
        }];

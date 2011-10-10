@@ -149,6 +149,8 @@
 		37BB3BB7143A44DC00DCB1FB /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BB3BB5143A44DC00DCB1FB /* placeholder.png */; };
 		37BB3BB8143A44DC00DCB1FB /* placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BB3BB6143A44DC00DCB1FB /* placeholder@2x.png */; };
 		37BB3BBD143A5FCC00DCB1FB /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 37BB3BBC143A5FCB00DCB1FB /* libz.dylib */; };
+		37CC42F3144346F0001510A5 /* 166-newspaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 37CC42F1144346F0001510A5 /* 166-newspaper.png */; };
+		37CC42F4144346F0001510A5 /* 166-newspaper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37CC42F2144346F0001510A5 /* 166-newspaper@2x.png */; };
 		37D7672B13E67D5200A77F89 /* SLFBill.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D7670D13E67D5200A77F89 /* SLFBill.m */; };
 		37D7672C13E67D5200A77F89 /* SLFCommittee.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D7670F13E67D5200A77F89 /* SLFCommittee.m */; };
 		37D7672E13E67D5200A77F89 /* SLFDistrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D7671313E67D5200A77F89 /* SLFDistrict.m */; };
@@ -507,6 +509,8 @@
 		37BB3BB5143A44DC00DCB1FB /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		37BB3BB6143A44DC00DCB1FB /* placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "placeholder@2x.png"; sourceTree = "<group>"; };
 		37BB3BBC143A5FCB00DCB1FB /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		37CC42F1144346F0001510A5 /* 166-newspaper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "166-newspaper.png"; sourceTree = "<group>"; };
+		37CC42F2144346F0001510A5 /* 166-newspaper@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "166-newspaper@2x.png"; sourceTree = "<group>"; };
 		37D7670C13E67D5200A77F89 /* SLFBill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFBill.h; sourceTree = "<group>"; };
 		37D7670D13E67D5200A77F89 /* SLFBill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFBill.m; sourceTree = "<group>"; };
 		37D7670E13E67D5200A77F89 /* SLFCommittee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFCommittee.h; sourceTree = "<group>"; };
@@ -834,6 +838,8 @@
 				3749F24F143BA5EA006F717B /* 83-calendar@2x.png */,
 				3749F250143BA5EA006F717B /* 123-id-card.png */,
 				3749F251143BA5EA006F717B /* 123-id-card@2x.png */,
+				37CC42F1144346F0001510A5 /* 166-newspaper.png */,
+				37CC42F2144346F0001510A5 /* 166-newspaper@2x.png */,
 			);
 			path = stock;
 			sourceTree = "<group>";
@@ -1387,6 +1393,8 @@
 				371B5C51143E50C000AF317E /* 59-flag.png in Resources */,
 				371B5C52143E50C000AF317E /* 59-flag@2x.png in Resources */,
 				371B5C6E143E7B2800AF317E /* SVWebViewController.bundle in Resources */,
+				37CC42F3144346F0001510A5 /* 166-newspaper.png in Resources */,
+				37CC42F4144346F0001510A5 /* 166-newspaper@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

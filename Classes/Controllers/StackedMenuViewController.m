@@ -83,6 +83,8 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     cellMap.cellClass = [StackedMenuCell class];
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
         RKTableItem* tableItem = (RKTableItem*) object;
+        if ([tableItem.text hasSuffix:@"News"]) // cheating...
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self selectMenuItem:tableItem.text];
     };
     return cellMap;

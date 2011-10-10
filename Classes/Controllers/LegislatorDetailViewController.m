@@ -142,21 +142,20 @@ enum SECTIONS {
         tableItem.text = self.legislator.title;
         tableItem.detailText = self.legislator.term;
     }]];
-    for (NSString *website in self.legislator.sources)
+    if (!IsEmpty(legislator.votesmartBio)) {
         [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
             tableItem.cellMapping = [SubtitleCellMapping cellMapping];
-            tableItem.text = NSLocalizedString(@"Web Site", @"");
-            tableItem.detailText = website;
-            tableItem.URL = website;
+            tableItem.text = NSLocalizedString(@"Vote Smart Bio", @"");
+            tableItem.detailText = @"";
+            tableItem.URL = legislator.votesmartBio;
             tableItem.cellMapping.onSelectCell = ^(void) {
-                if (SLFIsReachableAddress(tableItem.URL)) {
-                    SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:tableItem.URL];
-                    webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-                    [self presentModalViewController:webViewController animated:YES];	
-                    [webViewController release];
-                }
+                SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:tableItem.URL];
+                webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+                [self presentModalViewController:webViewController animated:YES];	
+                [webViewController release];
             };
         }]];
+    }
     if (!IsEmpty(legislator.transparencyID)) {
         [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
             tableItem.cellMapping = [SubtitleCellMapping cellMapping];
@@ -171,6 +170,21 @@ enum SECTIONS {
             };
         }]];
     }
+    for (NSString *website in self.legislator.sources)
+        [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+            tableItem.cellMapping = [SubtitleCellMapping cellMapping];
+            tableItem.text = NSLocalizedString(@"Web Source", @"");
+            tableItem.detailText = website;
+            tableItem.URL = website;
+            tableItem.cellMapping.onSelectCell = ^(void) {
+                if (SLFIsReachableAddress(tableItem.URL)) {
+                    SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:tableItem.URL];
+                    webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+                    [self presentModalViewController:webViewController animated:YES];	
+                    [webViewController release];
+                }
+            };
+        }]];
     [self.tableViewModel loadTableItems:tableItems inSection:SectionMemberInfoIndex];
 
     [self.tableViewModel loadObjects:self.legislator.sortedRoles inSection:SectionCommitteesIndex];

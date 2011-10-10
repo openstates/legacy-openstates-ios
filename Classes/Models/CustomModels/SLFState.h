@@ -8,6 +8,7 @@
 - (NSString *)displayNameForSession:(NSString *)aSession;
 @property (nonatomic, readonly) NSString *stateInitial;
 @property (nonatomic, readonly) UIImage *stateFlag;
+@property (nonatomic, readonly) NSString *newsAddress;
 @end
 
 extern NSString * const SLFSelectedStateDidChangeNotification;

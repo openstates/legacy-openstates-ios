@@ -62,10 +62,10 @@
 }
 
 - (void)setLegislator:(SLFLegislator *)value {
-    if (!IsEmpty(value.photoURL)) {
+    if (value && value.photoURL)
         [self.imageView setImageWithURL:[NSURL URLWithString:value.photoURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
-            //[self.imageView roundTopLeftCorner];
-    }
+    else
+        [self.imageView setImage:[UIImage imageNamed:@"placeholder"]];
 	[self.cellContentView setLegislator:value];
 }
 
@@ -100,6 +100,7 @@
     if (self) {
         self.cellClass = [LegislatorCell class];
         self.rowHeight = 73; 
+        self.reuseIdentifier = nil; // turns off caching, sucky but we don't want to reuse facial photos
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             cell.textLabel.textColor = [SLFAppearance cellTextColor];
                 //SLFAlternateCellForIndexPath(cell, indexPath);
