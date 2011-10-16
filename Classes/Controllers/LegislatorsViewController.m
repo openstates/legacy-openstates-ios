@@ -23,6 +23,7 @@
 - (id)initWithState:(SLFState *)newState {
     self = [super init];
     if (self) {
+        [self setStackWidth:320];
         self.state = newState;
         NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                      SUNLIGHT_APIKEY,@"apikey", 

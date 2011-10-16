@@ -21,6 +21,7 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
+        [self setStackWidth:450];
         self.useGradientBackground = YES;
     }
     return self;
@@ -53,7 +54,6 @@
         [self.navigationController pushViewController:viewController animated:YES];
         return;
     }
-    viewController.view.width = 500;
     [XAppDelegate.stackController pushViewController:viewController fromViewController:self animated:YES];
 }
 

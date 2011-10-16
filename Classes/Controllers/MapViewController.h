@@ -1,6 +1,6 @@
 //
-//  UserPinAnnotationView.h
-//  Created by Gregory Combs on 9/7/10.
+//  MapViewController.h
+//  Created by Greg Combs on 10/12/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
 //
@@ -10,11 +10,8 @@
 //
 //
 
-#import <Foundation/Foundation.h>
-#import <MapKit/MapKit.h>
+#import <UIKit/UIKit.h>
 
-@interface UserPinAnnotationView : MKPinAnnotationView {
-
-}
+@interface MapViewController : UIViewController
 
 @end

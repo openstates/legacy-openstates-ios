@@ -376,7 +376,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 - (void) searchDistrictMapsForCoordinate:(CLLocationCoordinate2D)aCoordinate {	
 
 	nice_release(geoLegeSearch);
-	geoLegeSearch = [[DistrictMapSearchOperation alloc] init];
+	geoLegeSearch = [[DistrictSearchOperation alloc] init];
 	
 	if (geoLegeSearch) {
 		[geoLegeSearch searchForCoordinate:aCoordinate 
@@ -386,7 +386,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	
 }
 
-- (void)districtMapSearchOperationDidFinishSuccessfully:(DistrictMapSearchOperation *)op {
+- (void)districtSearchOperationDidFinishSuccessfully:(DistrictSearchOperation *)op {
 		
 	for (NSNumber *districtID in op.foundIDs) {
 		SLFDistrict *district = [SLFDistrict findFirstByAttribute:@"boundaryID" withValue:districtID];
@@ -397,11 +397,11 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
 	}	
 }
 
-- (void)districtMapSearchOperationDidFail:(DistrictMapSearchOperation *)op 
+- (void)districtSearchOperationDidFail:(DistrictSearchOperation *)op 
 							 errorMessage:(NSString *)errorMessage 
-								   option:(DistrictMapSearchOperationFailOption)failOption {	
+								   option:(DistrictSearchOperationFailOption)failOption {	
 	
-	if (failOption == DistrictMapSearchOperationFailOptionLog) {
+	if (failOption == DistrictSearchOperationFailOptionLog) {
 		RKLogError(@"%@", errorMessage);
 	}
 	else {

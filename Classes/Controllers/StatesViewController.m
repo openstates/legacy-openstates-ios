@@ -25,6 +25,14 @@
 @synthesize tableViewModel = __tableViewModel;
 @synthesize stateMenuDelegate;
 
+- (id)initWithStyle:(UITableViewStyle)style {
+    self = [super initWithStyle:style];
+    if (self) {
+        [self setStackWidth:320];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = NSLocalizedString(@"Loading...",@"");

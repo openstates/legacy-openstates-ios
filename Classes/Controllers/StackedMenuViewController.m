@@ -119,18 +119,10 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 
 - (void)configureMenuFooter {
     UIImage *image = [UIImage imageNamed:@"59-flag"];
-    UIImage *normalImage = [image imageWithOverlayColor:[SLFAppearance tableBackgroundLightColor]];
-    UIImage *selectedImage = [image imageWithOverlayColor:[SLFAppearance menuTextColor]];
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.bounds = CGRectMake( 0, 0, image.size.width, image.size.height );    
-    [button setImage:normalImage forState:UIControlStateNormal];
-    [button setImage:selectedImage forState:UIControlStateHighlighted];
-    [button addTarget:self action:@selector(selectStateFromTable:) forControlEvents:UIControlEventTouchUpInside];    
-    UIBarButtonItem *selectedStateItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    UIBarButtonItem *selectedStateItem = SLFToolbarButton(image, self, @selector(selectStateFromTable:));
     UIToolbar *settingsBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.height-44, STACKED_MENU_WIDTH, 44)];
     settingsBar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [settingsBar setItems:[NSArray arrayWithObject:selectedStateItem] animated:YES];
-    [selectedStateItem release];
     [self.view addSubview:settingsBar];
     [settingsBar release];
 }

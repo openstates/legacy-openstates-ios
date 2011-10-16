@@ -14,9 +14,21 @@
 #import "SLFAppearance.h"
 #import "AlternatingCellMapping.h"
 #import "SubtitleCellMapping.h"
+#import "UIImage+OverlayColor.h"
 
 static inline void SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath) {
     cell.backgroundColor = [SLFAppearance cellBackgroundLightColor];
     if (indexPath.row % 2 == 0)
         cell.backgroundColor = [SLFAppearance cellBackgroundDarkColor];
+}
+
+static inline UIBarButtonItem* SLFToolbarButton(UIImage *image, id target, SEL selector) {
+    UIImage *normalImage = [image imageWithOverlayColor:[SLFAppearance tableBackgroundLightColor]];
+    UIImage *selectedImage = [image imageWithOverlayColor:[SLFAppearance menuTextColor]];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.bounds = CGRectMake( 0, 0, image.size.width, image.size.height );    
+    [button setImage:normalImage forState:UIControlStateNormal];
+    [button setImage:selectedImage forState:UIControlStateHighlighted];
+    [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];    
+    return [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
 }

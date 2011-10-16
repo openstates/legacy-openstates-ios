@@ -16,13 +16,13 @@
 
 #import "SVGeocoder.h"
 #import "SVPlacemark.h"
-#import "DistrictMapSearchOperation.h"
+#import "DistrictSearchOperation.h"
 
 @class SLFDistrict;
 @class DistrictMapDataSource, UserPinAnnotation;
 @interface MapViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate, UIPopoverControllerDelegate,
 		SVGeocoderDelegate, UISplitViewControllerDelegate, UIActionSheetDelegate,
-		UIGestureRecognizerDelegate, DistrictMapSearchOperationDelegate, RKObjectLoaderDelegate> {
+		UIGestureRecognizerDelegate, DistrictSearchOperationDelegate, RKObjectLoaderDelegate> {
 }
 @property (nonatomic,copy)   NSString               * resourcePath;
 @property (nonatomic,assign) Class                    resourceClass;
@@ -39,7 +39,7 @@
 @property (nonatomic,retain) UserPinAnnotation *searchLocation;
 @property (nonatomic,assign) MKPolygonView *senateDistrictView, *houseDistrictView;
 
-@property (nonatomic,retain) DistrictMapSearchOperation *geoLegeSearch;
+@property (nonatomic,retain) DistrictSearchOperation *geoLegeSearch;
 
 - (IBAction) showAllDistricts:(id)sender;
 - (IBAction) changeMapType:(id)sender;

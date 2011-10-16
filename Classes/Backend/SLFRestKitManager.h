@@ -22,6 +22,7 @@
 - (void)loadObjectsAtResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate;
 - (void)preloadObjectsForState:(SLFState *)state;
 @property (nonatomic,retain) RKClient *transClient;
+@property (nonatomic,retain) RKClient *openStatesClient;
 @end
 
 

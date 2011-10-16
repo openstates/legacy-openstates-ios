@@ -50,7 +50,7 @@
     + (id)loafer            {vendColor(242,245,226);}     //  vendColorHex(0xF2F5E2)
     + (id)spanishWhite      {vendColor(232,210,188);}     //  vendColorHex(0xE8D2BC)
     + (id)flamingPea        {vendColor(225,90,42);}       //  vendColorHex(0xE15A2A)
-    + (id)gimblet           {vendColor(148,168,75);}      //  vendColorHex(0x94A84B)
+    + (id)gimblet           {vendColor(165,183,100);}     //  vendColorHex(0xA5B764)
     + (id)acapulco          {vendColor(116,174,165);}     //  vendColorHex(0x74AEA5)
     + (id)moonMist          {vendColor(218,220,201);}     //  vendColorHex(0xDADCC9)
     + (id)whiteRock         {vendColor(233,234,214);}     //  vendColorHex(0xE9EAD6)
@@ -79,8 +79,8 @@
         }
         [[UINavigationBar appearance] setTintColor:[[self class] graniteGreen]];
         [[UIToolbar appearance] setTintColor:[[self class] acapulco]];
-        [[UISearchBar appearance] setTintColor:[[self class] gimblet]];
-        [[UISegmentedControl appearance] setTintColor:[[self class] gimblet]];
+        [[UISearchBar appearance] setTintColor:[[self class] graniteGreen]];
+        [[UISegmentedControl appearance] setTintColor:[[self class] graniteGreen]];
         [[UITableViewCell appearance] setFont:[[self class] boldFifteen]];
     }
 #endif

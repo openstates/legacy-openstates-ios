@@ -18,6 +18,7 @@
 
 @implementation SLFRestKitManager
 @synthesize transClient;
+@synthesize openStatesClient;
 
 + (SLFRestKitManager *)sharedRestKit
 {
@@ -51,6 +52,7 @@
         [mapper release];        
         
         self.transClient = [RKClient clientWithBaseURL:TRANSPARENCY_BASE_URL];
+        self.openStatesClient = [RKClient clientWithBaseURL:OPENSTATES_BASE_URL];
     }
     return self;
 }
@@ -58,6 +60,8 @@
 - (void)dealloc {
     [self.transClient.requestQueue cancelAllRequests];
     self.transClient = nil;
+    [self.openStatesClient.requestQueue cancelAllRequests];
+    self.openStatesClient = nil;
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
     if (__preloadQueue) {
         [__preloadQueue cancelAllRequests];

@@ -19,6 +19,10 @@
 		370004C3143F55C400F55165 /* SCNetworkReachabilityKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 370004A5143F546600F55165 /* SCNetworkReachabilityKitTests.m */; };
 		370004C7143F5A6700F55165 /* SLFReachable.m in Sources */ = {isa = PBXBuildFile; fileRef = 370004C6143F5A6700F55165 /* SLFReachable.m */; };
 		37031604143FA2F300E1CF4D /* SLFReachableTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37031602143FA1E400E1CF4D /* SLFReachableTests.m */; };
+		3711870F144619A700A12B8B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3711870E144619A700A12B8B /* MapViewController.m */; };
+		3711871114462D1900A12B8B /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3711871014462D1800A12B8B /* AddressBook.framework */; };
+		3711871414463E1C00A12B8B /* 193-location-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3711871214463E1C00A12B8B /* 193-location-arrow.png */; };
+		3711871514463E1C00A12B8B /* 193-location-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3711871314463E1C00A12B8B /* 193-location-arrow@2x.png */; };
 		3714804A1432756800170716 /* AlternatingCellMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 371480491432756800170716 /* AlternatingCellMapping.m */; };
 		3714804E1432845E00170716 /* SubtitleCellMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 3714804D1432845E00170716 /* SubtitleCellMapping.m */; };
 		371480521432D27800170716 /* MenuPattern.png in Resources */ = {isa = PBXBuildFile; fileRef = 371480501432D27800170716 /* MenuPattern.png */; };
@@ -47,6 +51,8 @@
 		37336A68142B98A000F635EB /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37336A67142B98A000F635EB /* MainWindow.xib */; };
 		37336A6C142B991200F635EB /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37336A6B142B991200F635EB /* MainWindow-iPad.xib */; };
 		373AC88D14171F9C00720F40 /* APIKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 373AC88C14171F9C00720F40 /* APIKeys.m */; };
+		373E51501445E6C70044D478 /* DistrictSearchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 373E514D1445E6C70044D478 /* DistrictSearchOperation.m */; };
+		373E51511445E6C70044D478 /* NSInvocation+CWVariableArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 373E514F1445E6C70044D478 /* NSInvocation+CWVariableArguments.m */; };
 		37442F0214342F780027F422 /* StateFlags.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 37442F0114342F780027F422 /* StateFlags.bundle */; };
 		37442F0514342F880027F422 /* HeaderPattern.png in Resources */ = {isa = PBXBuildFile; fileRef = 37442F0314342F880027F422 /* HeaderPattern.png */; };
 		37442F0614342F880027F422 /* HeaderPattern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37442F0414342F880027F422 /* HeaderPattern@2x.png */; };
@@ -114,6 +120,8 @@
 		37A3258F13E49F2200138ADE /* StateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258E13E49F2200138ADE /* StateDetailViewController.m */; };
 		37A325B213E4A55800138ADE /* CommitteesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A325B113E4A55800138ADE /* CommitteesViewController.m */; };
 		37AC5FD6142C42680061414F /* StackedMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37AC5FD5142C42680061414F /* StackedMenuViewController.m */; };
+		37B43D1014448E7400A8020D /* SVGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B43D0D14448E7400A8020D /* SVGeocoder.m */; };
+		37B43D1114448E7400A8020D /* SVPlacemark.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B43D0F14448E7400A8020D /* SVPlacemark.m */; };
 		37B9CC08143D0654006C56E0 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37B9CC07143D0654006C56E0 /* CoreText.framework */; };
 		37BAC14A142B972D0021A3C6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BAC149142B972D0021A3C6 /* main.m */; };
 		37BAC157142B97620021A3C6 /* Icon-Settings@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BAC14C142B97620021A3C6 /* Icon-Settings@2x~iphone.png */; };
@@ -329,6 +337,11 @@
 		370004C5143F5A6700F55165 /* SLFReachable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFReachable.h; sourceTree = "<group>"; };
 		370004C6143F5A6700F55165 /* SLFReachable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFReachable.m; sourceTree = "<group>"; };
 		37031602143FA1E400E1CF4D /* SLFReachableTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFReachableTests.m; sourceTree = "<group>"; };
+		3711870D144619A700A12B8B /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		3711870E144619A700A12B8B /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		3711871014462D1800A12B8B /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		3711871214463E1C00A12B8B /* 193-location-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "193-location-arrow.png"; sourceTree = "<group>"; };
+		3711871314463E1C00A12B8B /* 193-location-arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "193-location-arrow@2x.png"; sourceTree = "<group>"; };
 		371480481432756800170716 /* AlternatingCellMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlternatingCellMapping.h; sourceTree = "<group>"; };
 		371480491432756800170716 /* AlternatingCellMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlternatingCellMapping.m; sourceTree = "<group>"; };
 		3714804B143283A200170716 /* SLFTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFTheme.h; sourceTree = "<group>"; };
@@ -365,6 +378,10 @@
 		37336A6B142B991200F635EB /* MainWindow-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		373AC88B14171F5200720F40 /* APIKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIKeys.h; sourceTree = "<group>"; };
 		373AC88C14171F9C00720F40 /* APIKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIKeys.m; sourceTree = "<group>"; };
+		373E514C1445E6C70044D478 /* DistrictSearchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictSearchOperation.h; sourceTree = "<group>"; };
+		373E514D1445E6C70044D478 /* DistrictSearchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictSearchOperation.m; sourceTree = "<group>"; };
+		373E514E1445E6C70044D478 /* NSInvocation+CWVariableArguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+CWVariableArguments.h"; sourceTree = "<group>"; };
+		373E514F1445E6C70044D478 /* NSInvocation+CWVariableArguments.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInvocation+CWVariableArguments.m"; sourceTree = "<group>"; };
 		37442F0114342F780027F422 /* StateFlags.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = StateFlags.bundle; sourceTree = "<group>"; };
 		37442F0314342F880027F422 /* HeaderPattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HeaderPattern.png; sourceTree = "<group>"; };
 		37442F0414342F880027F422 /* HeaderPattern@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HeaderPattern@2x.png"; sourceTree = "<group>"; };
@@ -458,6 +475,10 @@
 		37A325B113E4A55800138ADE /* CommitteesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteesViewController.m; sourceTree = "<group>"; };
 		37AC5FD4142C42680061414F /* StackedMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackedMenuViewController.h; sourceTree = "<group>"; };
 		37AC5FD5142C42680061414F /* StackedMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StackedMenuViewController.m; sourceTree = "<group>"; };
+		37B43D0C14448E7400A8020D /* SVGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVGeocoder.h; sourceTree = "<group>"; };
+		37B43D0D14448E7400A8020D /* SVGeocoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVGeocoder.m; sourceTree = "<group>"; };
+		37B43D0E14448E7400A8020D /* SVPlacemark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVPlacemark.h; sourceTree = "<group>"; };
+		37B43D0F14448E7400A8020D /* SVPlacemark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVPlacemark.m; sourceTree = "<group>"; };
 		37B9CC07143D0654006C56E0 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		37BAC148142B972D0021A3C6 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Classes/Main/Constants.h; sourceTree = "<group>"; };
 		37BAC149142B972D0021A3C6 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Classes/Main/main.m; sourceTree = "<group>"; };
@@ -568,6 +589,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3711871114462D1900A12B8B /* AddressBook.framework in Frameworks */,
 				37B9CC08143D0654006C56E0 /* CoreText.framework in Frameworks */,
 				3763203D142C6C5400A6185F /* MessageUI.framework in Frameworks */,
 				375DC7E614279C9300253969 /* QuartzCore.framework in Frameworks */,
@@ -677,6 +699,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3711871014462D1800A12B8B /* AddressBook.framework */,
 				37B9CC07143D0654006C56E0 /* CoreText.framework */,
 				372E58E314157BB0000652B1 /* MessageUI.framework */,
 				372E58DE14157B78000652B1 /* EventKit.framework */,
@@ -840,6 +863,8 @@
 				3749F251143BA5EA006F717B /* 123-id-card@2x.png */,
 				37CC42F1144346F0001510A5 /* 166-newspaper.png */,
 				37CC42F2144346F0001510A5 /* 166-newspaper@2x.png */,
+				3711871214463E1C00A12B8B /* 193-location-arrow.png */,
+				3711871314463E1C00A12B8B /* 193-location-arrow@2x.png */,
 			);
 			path = stock;
 			sourceTree = "<group>";
@@ -872,6 +897,10 @@
 				370004C6143F5A6700F55165 /* SLFReachable.m */,
 				3794022614418D4000D18889 /* TableCellDataObject.h */,
 				3794022714418D4000D18889 /* TableCellDataObject.m */,
+				373E514C1445E6C70044D478 /* DistrictSearchOperation.h */,
+				373E514D1445E6C70044D478 /* DistrictSearchOperation.m */,
+				373E514E1445E6C70044D478 /* NSInvocation+CWVariableArguments.h */,
+				373E514F1445E6C70044D478 /* NSInvocation+CWVariableArguments.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -905,6 +934,7 @@
 				3700048F143F546600F55165 /* SCNetworkReachabilityKit */,
 				37BB3B8C143A397900DCB1FB /* AFNetworking */,
 				37147FEF1432107000170716 /* GCTableViewController */,
+				37B43D0A14448E7400A8020D /* SVGeocoder */,
 				371B5C6A143E7B2800AF317E /* SVWebViewController */,
 				377C616D143000AA00EE626E /* PSStackedView */,
 				2538E7FF123417E500ACB5D7 /* RestKit.xcodeproj */,
@@ -943,6 +973,8 @@
 				37588E2313E4B456005FB5AB /* EventsViewController.m */,
 				37588E2A13E4B5FE005FB5AB /* EventDetailViewController.h */,
 				37588E2B13E4B5FE005FB5AB /* EventDetailViewController.m */,
+				3711870D144619A700A12B8B /* MapViewController.h */,
+				3711870E144619A700A12B8B /* MapViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -981,6 +1013,18 @@
 			);
 			name = JSONKit;
 			path = Vendor/JSONKit;
+			sourceTree = "<group>";
+		};
+		37B43D0A14448E7400A8020D /* SVGeocoder */ = {
+			isa = PBXGroup;
+			children = (
+				37B43D0C14448E7400A8020D /* SVGeocoder.h */,
+				37B43D0D14448E7400A8020D /* SVGeocoder.m */,
+				37B43D0E14448E7400A8020D /* SVPlacemark.h */,
+				37B43D0F14448E7400A8020D /* SVPlacemark.m */,
+			);
+			name = SVGeocoder;
+			path = Vendor/SVGeocoder/SVGeocoder;
 			sourceTree = "<group>";
 		};
 		37BAC14B142B97620021A3C6 /* Icon */ = {
@@ -1395,6 +1439,8 @@
 				371B5C6E143E7B2800AF317E /* SVWebViewController.bundle in Resources */,
 				37CC42F3144346F0001510A5 /* 166-newspaper.png in Resources */,
 				37CC42F4144346F0001510A5 /* 166-newspaper@2x.png in Resources */,
+				3711871414463E1C00A12B8B /* 193-location-arrow.png in Resources */,
+				3711871514463E1C00A12B8B /* 193-location-arrow@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1504,6 +1550,11 @@
 				3794022814418D4000D18889 /* TableCellDataObject.m in Sources */,
 				37F32829144198750059FACE /* DDBadgeGroupCell.m in Sources */,
 				37F3282A144198750059FACE /* SLFStandardGroupCell.m in Sources */,
+				37B43D1014448E7400A8020D /* SVGeocoder.m in Sources */,
+				37B43D1114448E7400A8020D /* SVPlacemark.m in Sources */,
+				373E51501445E6C70044D478 /* DistrictSearchOperation.m in Sources */,
+				373E51511445E6C70044D478 /* NSInvocation+CWVariableArguments.m in Sources */,
+				3711870F144619A700A12B8B /* MapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

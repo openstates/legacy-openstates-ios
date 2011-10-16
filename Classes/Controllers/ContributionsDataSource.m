@@ -62,6 +62,8 @@
 
 
 - (void)dealloc {
+    RKClient *transClient = [[SLFRestKitManager sharedRestKit] transClient];
+    [transClient.requestQueue cancelRequestsWithDelegate:self];
     self.queryCycle = nil;
     self.sectionList = nil;
     self.queryEntityID = nil;

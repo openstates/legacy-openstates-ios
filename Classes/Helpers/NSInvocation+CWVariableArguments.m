@@ -52,10 +52,6 @@
 
 -(void)invokeInBackground;
 {
-	/*[someTextField performSelectorOnMainThread:@selector(setText:)
-									withObject:@"A new text"
-								 waitUntilDone:YES];
-	*/
 	[self performSelectorInBackground:@selector(invoke) withObject:nil];
 }
 

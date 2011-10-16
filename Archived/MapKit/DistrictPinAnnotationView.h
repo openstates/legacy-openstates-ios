@@ -1,5 +1,5 @@
 //
-//  TexLegePinAnnotationView.h
+//  DistrictPinAnnotationView.h
 //  Created by Gregory Combs on 9/13/10.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -12,9 +12,7 @@
 
 #import <MapKit/MapKit.h>
 
-
 @interface DistrictPinAnnotationView : MKPinAnnotationView {
-
 }
 
 @end
