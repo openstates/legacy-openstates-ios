@@ -158,7 +158,7 @@ enum SECTIONS {
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     self.title = NSLocalizedString(@"Load Error",@"");
-    RKLogError(@"Error while loading committee detail table: %@, %@", objectLoader.resourcePath, error);
+    [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
 }
 
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex {

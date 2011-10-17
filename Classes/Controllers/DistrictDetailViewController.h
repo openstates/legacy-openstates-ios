@@ -10,18 +10,16 @@
 //
 //
 
-#import <MapKit/MapKit.h>
 #import <RestKit/RestKit.h>
-#import "StackableControllerProtocol.h"
+#import "MapViewController.h"
 
 @class SLFDistrict;
-@interface DistrictDetailViewController : UIViewController <MKMapViewDelegate, RKObjectLoaderDelegate, StackableController> {
+@interface DistrictDetailViewController : MapViewController <RKObjectLoaderDelegate> {
 }
 
-@property (nonatomic,copy) SLFDistrict *districtMap;
+@property (nonatomic,retain) SLFDistrict *districtMap;
 @property (nonatomic,copy) NSString *resourcePath;
 @property (nonatomic,assign) Class resourceClass;
-@property (nonatomic,retain) IBOutlet MKMapView *mapView;
 
 - (void)loadData;
 - (id)initWithDistrictMapID:(NSString *)objID;

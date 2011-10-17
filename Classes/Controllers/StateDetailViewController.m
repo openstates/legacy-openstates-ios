@@ -20,6 +20,7 @@
 #import "UIImage+OverlayColor.h"
 #import "SVWebViewController.h"
 #import "SLFReachable.h"
+#import "SLFRestKitManager.h"
 
 #define MenuLegislators NSLocalizedString(@"Legislators", @"")
 #define MenuCommittees NSLocalizedString(@"Committees", @"")
@@ -155,7 +156,7 @@
 }
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     self.title = NSLocalizedString(@"Load Error",@"");
-    RKLogError(@"Error while loading state detail menu: %@, %@", objectLoader.resourcePath, error);
+    [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {

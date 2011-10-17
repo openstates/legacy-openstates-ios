@@ -16,6 +16,7 @@
 #import "SLFRestKitManager.h"
 #import "SLFTheme.h"
 #import "SLFAlertView.h"
+#import "DistrictPinAnnotationView.h"
 
 @interface DistrictDetailViewController()
 - (void)loadDataFromDataStoreWithID:(NSString *)objID;
@@ -28,9 +29,8 @@
 @synthesize mapView;
 
 - (id)initWithDistrictMapID:(NSString *)objID {
-    self = [super init];
+    self = [super initWithNibName:nil bundle:nil];
     if (self) {
-        self.stackWidth = 650;
         self.resourceClass = [SLFDistrict class];
         self.resourcePath = [NSString stringWithFormat:@"/districts/boundary/%@", objID];
         [self loadDataFromDataStoreWithID:objID];
@@ -40,25 +40,14 @@
     return self;
 }
 
-- (void)loadView {
-    [super loadView];
-	self.title = NSLocalizedString(@"Loading...",@"");
-    self.mapView = [[[MKMapView alloc] initWithFrame:self.view.bounds] autorelease];
-	self.mapView.delegate = self;		
-    [self.view addSubview:self.mapView];
-}
-
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-    self.mapView.delegate = nil;
-    self.mapView = nil;
 	self.districtMap = nil;
     self.resourcePath = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
-    self.mapView = nil;
     [super viewDidUnload];
 }
 
@@ -79,7 +68,7 @@
         [districtMap release];
 	districtMap = [newObj retain];
 	if (districtMap) {
-		self.title = newObj.title;
+            //self.title = newObj.title;
         self.resourcePath = RKMakePathWithObject(@"/districts/boundary/:boundaryID", newObj);
 		[self loadData];
 	}
@@ -88,29 +77,23 @@
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {    
+    if (!object || ![object isKindOfClass:self.resourceClass])
+        return;
 	if (districtMap)
         [districtMap release];
 	districtMap = [object retain];
-    self.title = districtMap.title;
+        //self.title = districtMap.title;
     if (!districtMap || ![self isViewLoaded])
         return;
     [self.mapView addAnnotation:districtMap];
+    [self moveMapToRegion:districtMap.region];
     MKPolygon *polygon = [districtMap polygonFactory];
-    if (polygon) {
+    if (polygon)
         [self.mapView addOverlay:polygon];
-        [self.mapView setRegion:districtMap.region animated:YES];
-    }
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
-    NSString *message = nil;
-    @try {
-        message = [error localizedDescription];
-    } @catch (NSException *exception) {
-        message = NSLocalizedString(@"Unknown Error",@"");
-	}
-    [SLFAlertView showWithTitle:NSLocalizedString(@"Error",@"") message:message buttonTitle:NSLocalizedString(@"Cancel",@"")];
-	RKLogError(@"Error loading object: %@ %@", objectLoader.resourcePath, error);
+    [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
 }
 
 #pragma mark -
@@ -137,42 +120,24 @@
     return nil;
 }
 
-- (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)annotation {
-    if ([annotation isKindOfClass:[MKUserLocation class]])
-        return nil;
-    
+- (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)annotation {    
     if ([annotation isKindOfClass:self.resourceClass])
     {
-        static NSString *pinID = @"DistrictCentroid";
-        MKPinAnnotationView*    pinView = (MKPinAnnotationView*)[aMapView
-                                                                 dequeueReusableAnnotationViewWithIdentifier:pinID];
+        DistrictPinAnnotationView *pinView = (DistrictPinAnnotationView*)[aMapView dequeueReusableAnnotationViewWithIdentifier:DistrictPinAnnotationViewReuseIdentifier];
         if (!pinView)
-        {
-            pinView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation
-                                                       reuseIdentifier:pinID] autorelease];
-            pinView.pinColor = MKPinAnnotationColorPurple;
-            pinView.animatesDrop = YES;
-            pinView.canShowCallout = YES;
-            if ([self.districtMap.legislators count] == 1) {                
-                UIButton* rightButton = [UIButton buttonWithType: UIButtonTypeDetailDisclosure];
-                [rightButton addTarget:self action:@selector(showLegislatorDetail:)
-                      forControlEvents:UIControlEventTouchUpInside];
-                pinView.rightCalloutAccessoryView = rightButton;
-            }
-        }
+            pinView = [DistrictPinAnnotationView districtPinViewWithAnnotation:annotation identifier:DistrictPinAnnotationViewReuseIdentifier];
         else
             pinView.annotation = annotation;
+        
+        if ([self.districtMap.legislators count] == 1) {                
+            UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            [rightButton addTarget:self action:@selector(showLegislatorDetail:) forControlEvents:UIControlEventTouchUpInside];
+            pinView.rightCalloutAccessoryView = rightButton;
+        }
+
         return pinView;
     }
-    return nil;
-}
-
-- (void)stackOrPushViewController:(UIViewController *)viewController {
-    if (!PSIsIpad()) {
-        [self.navigationController pushViewController:viewController animated:YES];
-        return;
-    }
-    [self.stackController pushViewController:viewController fromViewController:self animated:YES];
+    return [super mapView:aMapView viewForAnnotation:annotation];
 }
 
 - (void)showLegislatorDetail:(id)sender {
@@ -185,5 +150,10 @@
         }    
     }
 }
+
+- (void)beginBoundarySearchForCoordininate:(CLLocationCoordinate2D)coordinate {
+    RKLogCritical(@"Does Nothing Yet");
+}
+
 
 @end

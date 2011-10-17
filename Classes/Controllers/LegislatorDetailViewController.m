@@ -219,7 +219,7 @@ enum SECTIONS {
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     self.title = NSLocalizedString(@"Load Error", @"");
-    RKLogError(@"Error loading resource path %@, %@", objectLoader.resourcePath, error);
+    [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {

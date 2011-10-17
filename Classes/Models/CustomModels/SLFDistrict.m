@@ -66,20 +66,24 @@
     
     return memberNames;
 }
-/*
-- (UIImage *)image {
-    if ([self.legislators count] == 1) {
+
+- (SLFParty *)party {
+    SLFParty *aParty = [SLFParty partyWithType:SLFPartyIndependent];
+    if (self.legislators && [self.legislators count] == 1) {
         SLFLegislator *leg = [self.legislators anyObject];
-        if (leg && NO == [[NSNull null] isEqual:leg]) {
-            if ([leg.party isEqualToString:stringForParty(DEMOCRAT, TLReturnFull)])
-                return [UIImage imageNamed:@"bluestar.png"];
-            else if ([leg.party isEqualToString:stringForParty(REPUBLICAN, TLReturnFull)])
-                return [UIImage imageNamed:@"redstar.png"];
-        }
+        if (leg && ![[NSNull null] isEqual:leg])
+            aParty = leg.partyObj;
     }
-    return [UIImage imageNamed:@"silverstar.png"];
+    return aParty;
 }
-*/
+
+- (UIImage *)image {
+    return self.party.image;
+}
+
+- (NSNumber *)pinColorIndex {
+    return self.party.pinColorIndex;
+}
 
 
 #pragma mark -

@@ -14,12 +14,17 @@
 #import "SLFDistrict.h"
 #import "SLFMapPin.h"
 
+NSString* const DistrictPinAnnotationViewReuseIdentifier = @"DistrictPinAnnotationViewID";
+
 @interface DistrictPinAnnotationView (Private)
 - (void)resetPinColorWithAnnotation:(id <MKAnnotation>)anAnnotation;
 @end
     
 @implementation DistrictPinAnnotationView
 
++ (DistrictPinAnnotationView*)districtPinViewWithAnnotation:(id<MKAnnotation>)annotation identifier:(NSString *)reuseIdentifier {
+    return [[[DistrictPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseIdentifier] autorelease];            
+}
 
 - (id)initWithAnnotation:(id <MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier])) {
@@ -30,7 +35,7 @@
                 
         UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];        // UIButtonTypeInfoLight
         self.rightCalloutAccessoryView = rightButton;
-        
+
         [self resetPinColorWithAnnotation:annotation];
     }
     return self;
@@ -69,6 +74,8 @@
             [pinHead release];
         }
     }
+    if (![self.annotation respondsToSelector:@selector(image)])
+        return;
     UIImage *anImage = [self.annotation performSelector:@selector(image)];
     if (anImage) {
         UIImageView *iconView = [[UIImageView alloc] initWithImage:anImage];

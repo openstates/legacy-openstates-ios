@@ -13,7 +13,6 @@
 #import "EventDetailViewController.h"
 #import "SLFDataModels.h"
 #import "SLFRestKitManager.h"
-#import "MapViewController.h"
 
 @interface EventDetailViewController()
 - (void)loadDataFromDataStoreWithID:(NSString *)objID;
@@ -95,12 +94,7 @@
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
-	UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Error" 
-                                                     message:[error localizedDescription] 
-                                                    delegate:nil 
-                                           cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
-	[alert show];
-	NSLog(@"Hit error: %@", error);
+    [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
 }
 
 
@@ -143,9 +137,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];	
-    MapViewController *vc = [[MapViewController alloc] initWithNibName:nil bundle:nil];
-    [self stackOrPushViewController:vc];
-    [vc release];
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section {

@@ -12,6 +12,7 @@
 #import "SLFMappingsManager.h"
 #import "SLFDataModels.h"
 #import "SLFObjectCache.h"
+#import "SLFAlertView.h"
 
 #define OPENSTATES_BASE_URL		@"http://openstates.org/api/v1"
 #define TRANSPARENCY_BASE_URL   @"http://transparencydata.com/api/1.0"
@@ -171,13 +172,16 @@
 #pragma mark Common Alerts
 
 + (void) showFailureAlertWithRequest:(RKRequest *)request error:(NSError *)error {
-    NSString *errorDesc = [error localizedDescription];
-    if (!errorDesc)
-        errorDesc = @"";
+    NSString *message = NSLocalizedString(@"Unknown Error",@"");
+    NSString *errorText = [error localizedDescription];
+    if (!IsEmpty(errorText))
+        message = [errorText stringByReplacingOccurrencesOfString:SUNLIGHT_APIKEY withString:@"<APIKEY>"];
+    [SLFAlertView showWithTitle:NSLocalizedString(@"Error",@"") message:message buttonTitle:NSLocalizedString(@"Cancel",@"")];
     RKLogError(@"RestKit Error -");
+    if (request && [request respondsToSelector:@selector(resourcePath)])
+        RKLogError(@"    resourcePath: %@", [request performSelector:@selector(resourcePath)]);
     RKLogError(@"    request: %@", request);
-    RKLogError(@"    loadData: %@", errorDesc);
+    RKLogError(@"    error: %@", message);
 }
-
 
 @end

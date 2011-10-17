@@ -8,3 +8,4 @@
 #import "CommitteeRole.h"
 #import "CommitteeMember.h"
 #import "BillSponsor.h"
+#import "SLFParty.h"

@@ -16,7 +16,6 @@
 #import "JSONKit.h"
 #import "SLFStandardGroupCell.h"
 
-
 @interface ContributionsDataSource()
 - (void)parseJSONObject:(id)jsonDeserialized;
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath;
@@ -454,6 +453,7 @@
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
     if (error && request) {
         RKLogError(@"Error loading from %@: %@", [request description], [error localizedDescription]);
+        [SLFRestKitManager showFailureAlertWithRequest:request error:error];
         [[NSNotificationCenter defaultCenter] postNotificationName:kContributionsDataNotifyError object:nil];
     }
 }

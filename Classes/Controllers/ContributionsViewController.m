@@ -18,7 +18,6 @@
 #import "GradientBackgroundView.h"
 
 @interface ContributionsViewController()
-- (void)stackOrPushViewController:(UIViewController *)viewController;
 @end
 
 @implementation ContributionsViewController

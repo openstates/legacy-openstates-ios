@@ -30,7 +30,6 @@
 - (void)showLocateActivityButton;
 - (void)showLocateUserButton;
 - (NSUInteger)indexOfToolbarItemWithTag:(NSInteger)searchTag;
-- (void)moveMapToRegion:(MKCoordinateRegion)newRegion;
 @property (nonatomic,retain) SVGeocoder *geocoder;
 @property (nonatomic,retain) UserPinAnnotation *searchLocation;
 @end;

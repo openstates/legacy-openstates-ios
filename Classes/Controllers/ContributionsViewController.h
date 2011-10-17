@@ -12,7 +12,8 @@
 
 #import "ContributionsDataSource.h"
 #import "GCTableViewController.h"
-@interface ContributionsViewController : GCTableViewController {
+#import "StackableControllerProtocol.h"
+@interface ContributionsViewController : GCTableViewController <StackableController> {
 
 }
 @property (nonatomic,retain) ContributionsDataSource *dataSource;

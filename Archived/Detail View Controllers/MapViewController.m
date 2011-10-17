@@ -576,8 +576,7 @@ static MKCoordinateSpan kStandardZoomSpan = {2.f, 2.f};
     [self searchDistrictMapsForCoordinate:self.searchLocation.coordinate];
 }
 
-#pragma mark -
-#pragma mark MapViewDelegate
+#pragma mark - MapViewDelegate
 
 - (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error {
     

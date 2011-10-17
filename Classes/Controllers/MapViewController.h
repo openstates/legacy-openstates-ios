@@ -24,4 +24,5 @@
 - (IBAction)locateUser:(id)sender;
 - (IBAction)resetMap:(id)sender;
 - (void)beginBoundarySearchForCoordininate:(CLLocationCoordinate2D)coordinate; // override as needed
+- (void)moveMapToRegion:(MKCoordinateRegion)newRegion;
 @end

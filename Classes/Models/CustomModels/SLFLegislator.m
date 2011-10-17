@@ -12,6 +12,10 @@
     return [SLFChamber chamberWithType:self.chamber forState:self.state];
 }
 
+- (SLFParty *)partyObj {
+    return [SLFParty partyWithName:self.party];
+}
+
 - (void)setParty:(NSString *)newParty {
     if (newParty && [newParty hasPrefix:@"Democrat"])
         newParty = @"Democrat";
@@ -70,7 +74,7 @@
 /////////////////////////////
 
 - (NSString *)demoLongName {
-    return [NSString stringWithFormat:@"%@ (%@-%@)", self.fullName, [self.party substringToIndex:1], self.district];
+    return [NSString stringWithFormat:@"%@ (%@-%@)", self.fullName, self.partyShortName, self.district];
 }
 
 - (NSString *)districtMapLabel {
@@ -88,7 +92,7 @@
 }
 
 - (NSString *)partyShortName {
-    return [self.party substringToIndex:1];
+    return self.partyObj.initial;
 }
 
 - (NSString *)chamberShortName {
@@ -96,7 +100,7 @@
 }
 
 - (NSString *)districtPartyString {
-	NSString *string = [NSString stringWithFormat: @"(%@-%@)", [self partyShortName], self.district];
+	NSString *string = [NSString stringWithFormat: @"(%@-%@)", self.partyShortName, self.district];
 	return string;
 }
 
@@ -117,7 +121,7 @@
 
 - (NSString *)shortNameForButtons {
 	NSString *string;
-	string = [NSString stringWithFormat:@"%@ (%@)", self.fullName, [self partyShortName]];
+	string = [NSString stringWithFormat:@"%@ (%@)", self.fullName, self.partyShortName];
 	return string;
 }
 
