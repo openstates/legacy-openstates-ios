@@ -15,7 +15,6 @@
 #import "TableCellDataObject.h"
 #import "SLFTheme.h"
 #import "SLFAlertView.h"
-#import "AppDelegate.h"
 #import "GradientBackgroundView.h"
 
 @interface ContributionsViewController()
@@ -31,6 +30,7 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     if ((self = [super initWithStyle:style])) {
         dataSource = [[ContributionsDataSource alloc] init];
+        self.stackWidth = 500;
     }
     return self;
 }
@@ -150,8 +150,7 @@
         [self.navigationController pushViewController:viewController animated:YES];
         return;
     }
-    viewController.view.width = 500;
-    [XAppDelegate.stackController pushViewController:viewController fromViewController:self animated:YES];
+    [self.stackController pushViewController:viewController fromViewController:self animated:YES];
 }
 
 @end

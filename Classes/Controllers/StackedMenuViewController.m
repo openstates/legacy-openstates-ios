@@ -11,12 +11,12 @@
 //
 
 #import "StackedMenuViewController.h"
-#import "AppDelegate.h"
 #import "StackedMenuCell.h"
 #import "GradientBackgroundView.h"
 #import "StretchedTitleLabel.h"
 #import "StatesViewController.h"
 #import "UIImage+OverlayColor.h"
+#import "AppDelegate.h"
 
 @interface StackedMenuViewController()
 @property (nonatomic,retain) UIColor *backgroundPatternColor;
@@ -71,7 +71,6 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {
-    viewController.view.width = 320;
     [XAppDelegate.stackController popToRootViewControllerAnimated:YES];
     [XAppDelegate.stackController pushViewController:viewController fromViewController:nil animated:YES];
 }

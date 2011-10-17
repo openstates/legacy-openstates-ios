@@ -1,6 +1,6 @@
 //
-//  Prefix.pch
-//  Created by Gregory Combs on 7/31/11.
+//  StackableController.h
+//  Created by Greg Combs on 10/16/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
 //
@@ -10,15 +10,7 @@
 //
 //
 
-#ifdef __OBJC__
-    #import <Foundation/Foundation.h>
-    #import <UIKit/UIKit.h>
-    #import <CoreData/CoreData.h>
-    #import "PSStackedViewGlobal.h"
-    #import "PSStackedView.h"
-    #import "StackableControllerProtocol.h"
-    #import "APIKeys.h"
-	#define nice_release(var) if (var) [var release], var = nil
-    BOOL IsEmpty(NSObject * thing);
-
-#endif
+@protocol StackableController <NSObject>
+@required
+- (void)stackOrPushViewController:(UIViewController *)viewController;
+@end

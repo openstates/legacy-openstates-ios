@@ -28,7 +28,7 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
-        [self setStackWidth:320];
+        self.stackWidth = 320;
     }
     return self;
 }

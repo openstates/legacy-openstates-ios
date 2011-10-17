@@ -13,6 +13,8 @@
 #import "EventDetailViewController.h"
 #import "SLFDataModels.h"
 #import "SLFRestKitManager.h"
+#import "MapViewController.h"
+#import "AppDelegate.h"
 
 @interface EventDetailViewController()
 - (void)loadDataFromDataStoreWithID:(NSString *)objID;
@@ -26,6 +28,7 @@
 - (id)initWithEventID:(NSString *)objID {
     self = [super init];
     if (self) {
+        self.stackWidth = 500;
         self.resourceClass = [SLFEvent class];
         self.resourcePath = [NSString stringWithFormat:@"/events/%@", objID];
         [self loadDataFromDataStoreWithID:objID];
@@ -141,6 +144,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];	
+    MapViewController *vc = [[MapViewController alloc] initWithNibName:nil bundle:nil];
+    [self stackOrPushViewController:vc];
+    [vc release];
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section {

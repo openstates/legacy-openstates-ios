@@ -15,7 +15,6 @@
 #import "SLFDataModels.h"
 #import "SLFRestKitManager.h"
 #import "SLFTheme.h"
-#import "AppDelegate.h"
 #import "SLFAlertView.h"
 
 @interface DistrictDetailViewController()
@@ -31,6 +30,7 @@
 - (id)initWithDistrictMapID:(NSString *)objID {
     self = [super init];
     if (self) {
+        self.stackWidth = 650;
         self.resourceClass = [SLFDistrict class];
         self.resourcePath = [NSString stringWithFormat:@"/districts/boundary/%@", objID];
         [self loadDataFromDataStoreWithID:objID];
@@ -172,7 +172,7 @@
         [self.navigationController pushViewController:viewController animated:YES];
         return;
     }
-    [XAppDelegate.stackController pushViewController:viewController fromViewController:self animated:YES];
+    [self.stackController pushViewController:viewController fromViewController:self animated:YES];
 }
 
 - (void)showLegislatorDetail:(id)sender {

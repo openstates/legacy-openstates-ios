@@ -13,7 +13,6 @@
 #import "SLFTableViewController.h"
 #import "SLFAppearance.h"
 #import "GradientBackgroundView.h"
-#import "AppDelegate.h"
 
 @implementation SLFTableViewController
 @synthesize useGradientBackground;
@@ -21,7 +20,7 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
-        [self setStackWidth:450];
+        self.stackWidth = 450;
         self.useGradientBackground = YES;
     }
     return self;
@@ -48,19 +47,19 @@
     return YES;
 }
 
-
-- (void)stackOrPushViewController:(UIViewController *)viewController {
-    if (!PSIsIpad()) {
-        [self.navigationController pushViewController:viewController animated:YES];
-        return;
-    }
-    [XAppDelegate.stackController pushViewController:viewController fromViewController:self animated:YES];
-}
-
 - (void)tableViewModel:(RKAbstractTableViewModel*)tableViewModel didFailLoadWithError:(NSError*)error {
     self.title = NSLocalizedString(@"Load Error",@"");
     RKLogError(@"Error loading table: %@", error);
     if ([tableViewModel respondsToSelector:@selector(resourcePath)])
         RKLogError(@"-------- from resource path: %@", [tableViewModel performSelector:@selector(resourcePath)]);
 }
+
+- (void)stackOrPushViewController:(UIViewController *)viewController {
+    if (!PSIsIpad()) {
+        [self.navigationController pushViewController:viewController animated:YES];
+        return;
+    }
+    [self.stackController pushViewController:viewController fromViewController:self animated:YES];
+}
+
 @end

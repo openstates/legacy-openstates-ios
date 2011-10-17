@@ -14,11 +14,9 @@
 #import <RestKit/UI/UI.h>
 #import "GCTableViewController.h"
 #import "PSStackedViewDelegate.h"
+#import "StackableControllerProtocol.h"
 #import "SLFTheme.h"
 
-@interface SLFTableViewController : GCTableViewController <PSStackedViewDelegate, RKTableViewModelDelegate>
+@interface SLFTableViewController : GCTableViewController <PSStackedViewDelegate, RKTableViewModelDelegate, StackableController>
 @property (nonatomic,assign) BOOL useGradientBackground;
-
-- (void)stackOrPushViewController:(UIViewController *)viewController;
-
 @end
