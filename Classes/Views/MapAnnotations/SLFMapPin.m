@@ -1,5 +1,5 @@
 //
-//  SLFMapPins.m
+//  SLFMapPin.m
 //  Created by Gregory Combs on 9/7/10.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -10,24 +10,24 @@
 //
 //
 
-#import "SLFMapPins.h"
+#import "SLFMapPin.h"
 
-@implementation SLFMapPins
+@implementation SLFMapPin
 
 + (NSString *)imageFileForPinColorIndex:(NSInteger)index status:(NSInteger)status {
     
     NSString *pinColor = nil;    
     switch (index) {
-        case SLFPinAnnotationColorGreen:
+        case SLFMapPinColorGreen:
             pinColor = @"Green";
             break;
-        case SLFPinAnnotationColorPurple:
+        case SLFMapPinColorPurple:
             pinColor = @"Purple";
             break;
-        case SLFPinAnnotationColorBlue:
+        case SLFMapPinColorBlue:
             pinColor = @"Blue";
             break;
-        case SLFPinAnnotationColorRed:
+        case SLFMapPinColorRed:
         default:
             pinColor = @"";
             break;
@@ -35,25 +35,25 @@
     
     NSString *pinStatus = nil;
     switch (status) {
-        case SLFPinAnnotationStatusDown1:
+        case SLFMapPinStatusDown1:
             pinStatus = @"PinDown1";
             break;
-        case SLFPinAnnotationStatusDown2:
+        case SLFMapPinStatusDown2:
             pinStatus = @"PinDown2";
             break;
-        case SLFPinAnnotationStatusDown3:
+        case SLFMapPinStatusDown3:
             pinStatus = @"PinDown3";
             break;
-        case SLFPinAnnotationStatusFloating:
+        case SLFMapPinStatusFloating:
             pinStatus = @"PinFloating";
             break;
-        case SLFPinAnnotationStatusPressed:
+        case SLFMapPinStatusPressed:
             pinStatus = @"PinPressed";
             break;
-        case SLFPinAnnotationStatusHead:
+        case SLFMapPinStatusHead:
             pinStatus = @"PinHead";
             break;
-        case SLFPinAnnotationStatusNormal:
+        case SLFMapPinStatusNormal:
         default:
             pinStatus = @"Pin";
             break;
@@ -64,7 +64,7 @@
 + (UIImage *)imageForPinColorIndex:(NSInteger)index status:(NSInteger)status {
     UIImage *pinImage = nil;
     
-    NSString *file = [SLFMapPins imageFileForPinColorIndex:index status:status];
+    NSString *file = [SLFMapPin imageFileForPinColorIndex:index status:status];
     if (file)
         pinImage = [UIImage imageNamed:file];
     
@@ -74,14 +74,14 @@
 + (UIImage *)imageForMapAnnotation:(id <MKAnnotation>)annotation status:(NSInteger)status {
     UIImage *image = nil;
     
-    NSInteger pinColor = SLFPinAnnotationColorGreen;
+    NSInteger pinColor = SLFMapPinColorGreen;
     if ([annotation respondsToSelector:@selector(pinColorIndex)]) {
         NSNumber *pinNumber = [annotation performSelector:@selector(pinColorIndex)];
         if (pinNumber)
             pinColor = [pinNumber integerValue];
     }
     
-    image = [SLFMapPins imageForPinColorIndex:pinColor status:status];
+    image = [SLFMapPin imageForPinColorIndex:pinColor status:status];
     return image;
 }
 

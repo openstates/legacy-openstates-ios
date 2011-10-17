@@ -12,7 +12,7 @@
 
 #import "DistrictPinAnnotationView.h"
 #import "SLFDistrict.h"
-#import "SLFMapPins.h"
+#import "SLFMapPin.h"
 
 @interface DistrictPinAnnotationView (Private)
 - (void)resetPinColorWithAnnotation:(id <MKAnnotation>)anAnnotation;
@@ -58,10 +58,10 @@
             pinColorIndex = [pinColorNumber integerValue];
     }
         
-    if (pinColorIndex < SLFPinAnnotationBlue && pinColorIndex >= 0)
+    if (pinColorIndex < SLFMapPinColorBlue && pinColorIndex >= 0)
         [self setPinColor:pinColorIndex];
     else {
-        UIImage *pinImage = [SLFMapPins imageForPinColorIndex:pinColorIndex status:SLFPinAnnotationStatusHead];
+        UIImage *pinImage = [SLFMapPin imageForPinColorIndex:pinColorIndex status:SLFMapPinStatusHead];
         if (pinImage) {
             UIImageView *pinHead = [[UIImageView alloc] initWithImage:pinImage];
             pinHead.tag = 999;

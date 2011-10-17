@@ -83,6 +83,10 @@
 		3744310D14344FAC0027F422 /* locationarrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 374430ED14344FAC0027F422 /* locationarrow@2x.png */; };
 		3744310E14344FAC0027F422 /* multipins.png in Resources */ = {isa = PBXBuildFile; fileRef = 374430EE14344FAC0027F422 /* multipins.png */; };
 		3744310F14344FAC0027F422 /* multipins@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 374430EF14344FAC0027F422 /* multipins@2x.png */; };
+		37485D47144BC43600D99BBD /* DistrictPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D40144BC43600D99BBD /* DistrictPinAnnotationView.m */; };
+		37485D48144BC43600D99BBD /* SLFMapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D42144BC43600D99BBD /* SLFMapPin.m */; };
+		37485D49144BC43600D99BBD /* UserPinAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D44144BC43600D99BBD /* UserPinAnnotation.m */; };
+		37485D4A144BC43600D99BBD /* UserPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D46144BC43600D99BBD /* UserPinAnnotationView.m */; };
 		3749F252143BA5EA006F717B /* 60-signpost.png in Resources */ = {isa = PBXBuildFile; fileRef = 3749F24A143BA5E9006F717B /* 60-signpost.png */; };
 		3749F253143BA5EA006F717B /* 60-signpost@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3749F24B143BA5E9006F717B /* 60-signpost@2x.png */; };
 		3749F254143BA5EA006F717B /* 73-radar.png in Resources */ = {isa = PBXBuildFile; fileRef = 3749F24C143BA5E9006F717B /* 73-radar.png */; };
@@ -412,6 +416,14 @@
 		374430ED14344FAC0027F422 /* locationarrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "locationarrow@2x.png"; sourceTree = "<group>"; };
 		374430EE14344FAC0027F422 /* multipins.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = multipins.png; sourceTree = "<group>"; };
 		374430EF14344FAC0027F422 /* multipins@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "multipins@2x.png"; sourceTree = "<group>"; };
+		37485D3F144BC43600D99BBD /* DistrictPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictPinAnnotationView.h; sourceTree = "<group>"; };
+		37485D40144BC43600D99BBD /* DistrictPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictPinAnnotationView.m; sourceTree = "<group>"; };
+		37485D41144BC43600D99BBD /* SLFMapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFMapPin.h; sourceTree = "<group>"; };
+		37485D42144BC43600D99BBD /* SLFMapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFMapPin.m; sourceTree = "<group>"; };
+		37485D43144BC43600D99BBD /* UserPinAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserPinAnnotation.h; sourceTree = "<group>"; };
+		37485D44144BC43600D99BBD /* UserPinAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserPinAnnotation.m; sourceTree = "<group>"; };
+		37485D45144BC43600D99BBD /* UserPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserPinAnnotationView.h; sourceTree = "<group>"; };
+		37485D46144BC43600D99BBD /* UserPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserPinAnnotationView.m; sourceTree = "<group>"; };
 		3749F24A143BA5E9006F717B /* 60-signpost.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "60-signpost.png"; sourceTree = "<group>"; };
 		3749F24B143BA5E9006F717B /* 60-signpost@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "60-signpost@2x.png"; sourceTree = "<group>"; };
 		3749F24C143BA5E9006F717B /* 73-radar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "73-radar.png"; sourceTree = "<group>"; };
@@ -884,6 +896,21 @@
 			path = glyphs;
 			sourceTree = "<group>";
 		};
+		37485D3E144BC43600D99BBD /* MapAnnotations */ = {
+			isa = PBXGroup;
+			children = (
+				37485D3F144BC43600D99BBD /* DistrictPinAnnotationView.h */,
+				37485D40144BC43600D99BBD /* DistrictPinAnnotationView.m */,
+				37485D41144BC43600D99BBD /* SLFMapPin.h */,
+				37485D42144BC43600D99BBD /* SLFMapPin.m */,
+				37485D43144BC43600D99BBD /* UserPinAnnotation.h */,
+				37485D44144BC43600D99BBD /* UserPinAnnotation.m */,
+				37485D45144BC43600D99BBD /* UserPinAnnotationView.h */,
+				37485D46144BC43600D99BBD /* UserPinAnnotationView.m */,
+			);
+			path = MapAnnotations;
+			sourceTree = "<group>";
+		};
 		37632032142C5DD500A6185F /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -997,6 +1024,7 @@
 				371AE696143581D500592811 /* GradientBackgroundView.m */,
 				371B5C4C143E2E3500AF317E /* StretchedTitleLabel.h */,
 				371B5C4D143E2E3500AF317E /* StretchedTitleLabel.m */,
+				37485D3E144BC43600D99BBD /* MapAnnotations */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1563,6 +1591,10 @@
 				3711870F144619A700A12B8B /* MapViewController.m in Sources */,
 				37CFB4D2144B980F00E8120D /* NSInvocation+CWVariableArguments.m in Sources */,
 				37CFB4D3144B980F00E8120D /* UIImageView+RoundedCorners.m in Sources */,
+				37485D47144BC43600D99BBD /* DistrictPinAnnotationView.m in Sources */,
+				37485D48144BC43600D99BBD /* SLFMapPin.m in Sources */,
+				37485D49144BC43600D99BBD /* UserPinAnnotation.m in Sources */,
+				37485D4A144BC43600D99BBD /* UserPinAnnotationView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

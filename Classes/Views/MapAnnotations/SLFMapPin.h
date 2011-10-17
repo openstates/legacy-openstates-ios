@@ -1,5 +1,5 @@
 //
-//  SLFMapPins.h
+//  SLFMapPin.h
 //  Created by Gregory Combs on 9/7/10.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -13,29 +13,29 @@
 #import <MapKit/MapKit.h>
 
 enum {
-    SLFPinAnnotationRed = 0,
-    SLFPinAnnotationGreen,
-    SLFPinAnnotationPurple,
+    SLFMapPinColorRed = 0,
+    SLFMapPinColorGreen,
+    SLFMapPinColorPurple,
     // end compatibility with MKPinAnnotation colors
-    SLFPinAnnotationBlue = 99
+    SLFMapPinColorBlue = 99
 };
-typedef NSUInteger SLFPinAnnotationColor;
+typedef NSUInteger SLFMapPinColor;
 
 
 enum {
-    SLFPinAnnotationStatusNormal = 0,
-    SLFPinAnnotationStatusDown1,
-    SLFPinAnnotationStatusDown2,
-    SLFPinAnnotationStatusDown3,
-    SLFPinAnnotationStatusFloating,
-    SLFPinAnnotationStatusPressed,
+    SLFMapPinStatusNormal = 0,
+    SLFMapPinStatusDown1,
+    SLFMapPinStatusDown2,
+    SLFMapPinStatusDown3,
+    SLFMapPinStatusFloating,
+    SLFMapPinStatusPressed,
     //
-    SLFPinAnnotationStatusHead = 99
+    SLFMapPinStatusHead = 99
     
 };
-typedef NSUInteger SLFPinAnnotationStatus;
+typedef NSUInteger SLFMapPinStatus;
 
-@interface SLFMapPins : NSObject {
+@interface SLFMapPin : NSObject {
 }
 
 + (UIImage *)imageForMapAnnotation:(id <MKAnnotation>)annotation status:(NSInteger)status;

@@ -12,7 +12,7 @@
 
 #import "UserPinAnnotationView.h"
 #import "UserPinAnnotation.h"
-#import "TexLegeMapPins.h"
+#import "SLFMapPin.h"
 
 @interface UserPinAnnotationView (Private)
 
@@ -31,8 +31,6 @@
 
 - (id)initWithAnnotation:(id <MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier])) {
-        
-        
         self.animatesDrop = YES;
         self.opaque = NO;
         self.draggable = YES;
@@ -41,12 +39,11 @@
             return self;
         
         UserPinAnnotation *customAnnotation = (UserPinAnnotation *)annotation;
-
         self.canShowCallout = YES;
-
+        
         NSInteger pinColorIndex = [[customAnnotation pinColorIndex] integerValue];
-        if (pinColorIndex >= TexLegePinAnnotationColorBlue) {
-            UIImage *pinImage = [TexLegeMapPins imageForPinColorIndex:pinColorIndex status:TexLegePinAnnotationStatusHead];
+        if (pinColorIndex >= SLFMapPinColorBlue) {
+            UIImage *pinImage = [SLFMapPin imageForPinColorIndex:pinColorIndex status:SLFMapPinStatusHead];
             UIImageView *pinHead = [[UIImageView alloc] initWithImage:pinImage];
             [self addSubview:pinHead];
             [pinHead release];
