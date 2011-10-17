@@ -17,4 +17,7 @@
 
 }
 
++ (UserPinAnnotationView*)userPinViewWithAnnotation:(id<MKAnnotation>)annotation identifier:(NSString *)reuseIdentifier;
 @end
+
+extern NSString* const UserPinAnnotationViewReuseIdentifier;

@@ -14,23 +14,21 @@
 #import "UserPinAnnotation.h"
 #import "SLFMapPin.h"
 
-@interface UserPinAnnotationView (Private)
+NSString* const UserPinAnnotationViewReuseIdentifier = @"UserPinAnnotationViewID";
 
+@interface UserPinAnnotationView()
 - (void)annotationChanged_:(NSNotification *)notification;
-
 @end
 
 @implementation UserPinAnnotationView
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];    
-
-    [super dealloc];
++ (UserPinAnnotationView*)userPinViewWithAnnotation:(id<MKAnnotation>)annotation identifier:(NSString *)reuseIdentifier  {
+    return [[[UserPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseIdentifier] autorelease];            
 }
 
-
 - (id)initWithAnnotation:(id <MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
-    if ((self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier])) {
+    self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
+    if (self) {
         self.animatesDrop = YES;
         self.opaque = NO;
         self.draggable = YES;
@@ -62,6 +60,11 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(annotationChanged_:) name:kUserPinAnnotationAddressChangeKey object:annotation];
     }
     return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [super dealloc];
 }
 
 - (void)annotationChanged_:(NSNotification *)notification {

@@ -14,6 +14,10 @@
 #import "SVPlacemark.h"
 
 #define kUserPinAnnotationAddressChangeKey @"UserPinAnnotationAddressChangeNotification"
+@protocol UserPinAnnotationDelegate <NSObject>
+@required
+- (void)annotationCoordinateChanged:(id)sender;
+@end
 
 @interface UserPinAnnotation : SVPlacemark <MKAnnotation> {
 }
@@ -22,7 +26,7 @@
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;
 @property (nonatomic, copy) NSString *imageName;
-@property (nonatomic, retain) id coordinateChangedDelegate;
+@property (nonatomic, assign) id<UserPinAnnotationDelegate> delegate;
 -(id)initWithSVPlacemark:(SVPlacemark*)placemark;
 - (UIImage *)image;
 @end

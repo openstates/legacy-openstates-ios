@@ -14,7 +14,6 @@
 #import "SLFDataModels.h"
 #import "SLFRestKitManager.h"
 #import "MapViewController.h"
-#import "AppDelegate.h"
 
 @interface EventDetailViewController()
 - (void)loadDataFromDataStoreWithID:(NSString *)objID;

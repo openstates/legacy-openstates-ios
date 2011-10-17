@@ -1,0 +1,3 @@
+[submodule "SVGeocoder/JSONKit"]
+	path = SVGeocoder/JSONKit
+	url = git://github.com/johnezang/JSONKit.git

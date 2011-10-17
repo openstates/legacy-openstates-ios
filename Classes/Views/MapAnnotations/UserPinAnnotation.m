@@ -20,11 +20,11 @@
 @implementation UserPinAnnotation
 
 @synthesize pinColorIndex;
-@synthesize title, subtitle, imageName, coordinateChangedDelegate;
+@synthesize title, subtitle, imageName, delegate;
 
 -(id)initWithSVPlacemark:(SVPlacemark*) placemark {
     self = [super initWithCoordinate:placemark.coordinate addressDictionary:placemark.addressDictionary];
-    if (self != nil) {
+    if (self) {
         pinColorIndex = [NSNumber numberWithInteger:MKPinAnnotationColorPurple]; 
         [self reloadTitle];
     }
@@ -34,7 +34,7 @@
 - (void)dealloc {    
     self.imageName = nil;
     self.pinColorIndex = nil;
-    self.coordinateChangedDelegate = nil;
+    self.delegate = nil;
     self.title = nil;
     self.subtitle = nil;
     [super dealloc];
@@ -69,27 +69,21 @@
     if (IsEmpty(self.imageName)) {
         return [UIImage imageNamed:@"silverstar.png"];
     }
-    else {
-        return [UIImage imageNamed:self.imageName];
-    }
+    return [UIImage imageNamed:self.imageName];
 }
 
 - (NSString *)subtitle {
-    if (!IsEmpty(subtitle)) {
-        return subtitle;
-    }
-    else {
+    if (IsEmpty(subtitle)) {
         return NSLocalizedString(@"Tap & hold to move pin", @"");
     }
+    return subtitle;
 }
 
-- (void) setCoordinate:(CLLocationCoordinate2D)newCoordinate {
+- (void)setCoordinate:(CLLocationCoordinate2D)newCoordinate {
     [super setCoordinate:newCoordinate];
-    
     self.title = [NSString    stringWithFormat:@"%f %f", newCoordinate.latitude, newCoordinate.longitude];
-    
-    if (self.coordinateChangedDelegate && [self.coordinateChangedDelegate respondsToSelector:@selector(annotationCoordinateChanged:)]) {
-        [self.coordinateChangedDelegate performSelector:@selector(annotationCoordinateChanged:) withObject:self];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(annotationCoordinateChanged:)]) {
+        [self.delegate performSelector:@selector(annotationCoordinateChanged:) withObject:self];
     }
 }
 @end

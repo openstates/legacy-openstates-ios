@@ -10,8 +10,18 @@
 //
 //
 
-#import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
+#import "SVGeocoder.h"
+#import "StackableControllerProtocol.h"
+#import "UserPinAnnotation.h"
 
-@interface MapViewController : UIViewController
-
+@interface MapViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate, UIGestureRecognizerDelegate, SVGeocoderDelegate, StackableController, UserPinAnnotationDelegate>
+@property (nonatomic,retain) IBOutlet MKMapView *mapView;
+@property (nonatomic,retain) IBOutlet UIToolbar *toolbar;
+@property (nonatomic,retain) IBOutlet UISearchBar *searchBar;
+@property (nonatomic,readonly) MKCoordinateRegion defaultRegion;
+- (IBAction)changeMapType:(id)sender;
+- (IBAction)locateUser:(id)sender;
+- (IBAction)resetMap:(id)sender;
+- (void)beginBoundarySearchForCoordininate:(CLLocationCoordinate2D)coordinate; // override as needed
 @end
