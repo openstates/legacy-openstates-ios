@@ -35,10 +35,13 @@ NSString* const DistrictPinAnnotationViewReuseIdentifier = @"DistrictPinAnnotati
                 
         UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];        // UIButtonTypeInfoLight
         self.rightCalloutAccessoryView = rightButton;
-
-        [self resetPinColorWithAnnotation:annotation];
     }
     return self;
+}
+
+- (void)setAnnotation:(id<MKAnnotation>)annotation {
+    [super setAnnotation:annotation];
+    [self resetPinColorWithAnnotation:annotation];
 }
 
 - (void)resetPinColorWithAnnotation:(id <MKAnnotation>)anAnnotation {

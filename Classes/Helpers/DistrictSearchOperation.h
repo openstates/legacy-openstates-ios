@@ -13,43 +13,24 @@
 #import <MapKit/MapKit.h>
 #import <RestKit/RestKit.h>
 
-
 typedef enum {
     DistrictSearchOperationFailOptionLog,
     DistrictSearchOperationShowAlert,
     DistrictSearchOperationFailOptionCount
 } DistrictSearchOperationFailOption;
 
-@class DistrictSearchOperation;
+typedef void(^DistrictSearchSuccessWithResultsBlock)(NSArray *results);
+typedef void(^DistrictSearchFailureWithMessageAndFailOptionBlock)(NSString *message, DistrictSearchOperationFailOption failOption);
 
-@protocol DistrictSearchOperationDelegate
-- (void)districtSearchOperationDidFinishSuccessfully:(DistrictSearchOperation *)op;
-
-- (void)districtSearchOperationDidFail:(DistrictSearchOperation *)op 
-                             errorMessage:(NSString *)errorMessage 
-                                   option:(DistrictSearchOperationFailOption)failOption;
-@end
-
-typedef void(^DistrictSearchBlock)(void);
-
-@interface DistrictSearchOperation : NSObject <RKRequestDelegate>
-{
-    __weak  NSObject <DistrictSearchOperationDelegate> *delegate;
-    CLLocationCoordinate2D searchCoordinate;
-    NSArray *searchIDs;
-    NSMutableArray *foundIDs;
+@interface DistrictSearchOperation : NSObject <RKRequestDelegate> {
 }
-@property (assign) NSObject <DistrictSearchOperationDelegate> *delegate;
-@property (assign) CLLocationCoordinate2D searchCoordinate;
-@property (retain) NSMutableArray *foundIDs;
 
-- (void)searchForCoordinate:(CLLocationCoordinate2D)aCoordinate 
-                   delegate:(NSObject <DistrictSearchOperationDelegate>*)aDelegate;
+- (void)searchForCoordinate:(CLLocationCoordinate2D)coordinate
+               successBlock:(DistrictSearchSuccessWithResultsBlock)successBlock
+               failureBlock:(DistrictSearchFailureWithMessageAndFailOptionBlock)failureBlock;
 
-/* Future Development
- + (void)searchForCoordinate:(CLLocationCoordinate2D)coordinate
-               successBlock:(DistrictSearchBlock)successBlock
-               failureBlock:(DistrictSearchBlock)failureBlock;
++ (DistrictSearchOperation *)searchOperationForCoordinate:(CLLocationCoordinate2D)coordinate
+               successBlock:(DistrictSearchSuccessWithResultsBlock)successBlock
+               failureBlock:(DistrictSearchFailureWithMessageAndFailOptionBlock)failureBlock;
 
-*/
 @end

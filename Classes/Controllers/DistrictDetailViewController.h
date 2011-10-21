@@ -18,9 +18,7 @@
 }
 
 @property (nonatomic,retain) SLFDistrict *districtMap;
-@property (nonatomic,copy) NSString *resourcePath;
 @property (nonatomic,assign) Class resourceClass;
 
-- (void)loadData;
 - (id)initWithDistrictMapID:(NSString *)objID;
 @end

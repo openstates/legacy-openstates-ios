@@ -17,25 +17,27 @@
 #import "SLFTheme.h"
 #import "SLFAlertView.h"
 #import "DistrictPinAnnotationView.h"
+#import "DistrictSearchOperation.h"
 
 @interface DistrictDetailViewController()
 - (void)loadDataFromDataStoreWithID:(NSString *)objID;
+- (void)loadDataWithResourcePath:(NSString *)path;
+@property (nonatomic,retain) DistrictSearchOperation *searchOperation;
 @end
 
 @implementation DistrictDetailViewController
-@synthesize resourcePath;
 @synthesize resourceClass;
 @synthesize districtMap;
 @synthesize mapView;
+@synthesize searchOperation;
 
 - (id)initWithDistrictMapID:(NSString *)objID {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
         self.resourceClass = [SLFDistrict class];
-        self.resourcePath = [NSString stringWithFormat:@"/districts/boundary/%@", objID];
         [self loadDataFromDataStoreWithID:objID];
         if (!self.districtMap)
-            [self loadData];    // DON'T REALLY LOAD UNLESS WE HAVE TO
+            [self loadDataWithResourcePath:[NSString stringWithFormat:@"/districts/boundary/%@", objID]];    // DON'T REALLY LOAD UNLESS WE HAVE TO
     }
     return self;
 }
@@ -43,7 +45,7 @@
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.districtMap = nil;
-    self.resourcePath = nil;
+    self.searchOperation = nil;
     [super dealloc];
 }
 
@@ -55,11 +57,11 @@
 	self.districtMap = [SLFDistrict findFirstByAttribute:@"boundaryID" withValue:objID];
 }
 
-- (void)loadData {
-	if (self.resourcePath == NULL)
+- (void)loadDataWithResourcePath:(NSString *)path {
+	if (IsEmpty(path))
 		return;	
 	NSDictionary *queryParameters = [NSDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
-	NSString *pathToLoad = [self.resourcePath appendQueryParams:queryParameters];
+	NSString *pathToLoad = [path appendQueryParams:queryParameters];
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:pathToLoad delegate:self];
 }
 
@@ -69,8 +71,7 @@
 	districtMap = [newObj retain];
 	if (districtMap) {
             //self.title = newObj.title;
-        self.resourcePath = RKMakePathWithObject(@"/districts/boundary/:boundaryID", newObj);
-		[self loadData];
+		[self loadDataWithResourcePath:RKMakePathWithObject(@"/districts/boundary/:boundaryID", newObj)];
 	}
 }
 
@@ -152,8 +153,20 @@
 }
 
 - (void)beginBoundarySearchForCoordininate:(CLLocationCoordinate2D)coordinate {
-    RKLogCritical(@"Does Nothing Yet");
+    self.searchOperation = [DistrictSearchOperation searchOperationForCoordinate:coordinate 
+                                             successBlock:^(NSArray *results) {
+                                                 if (!IsEmpty(results)) {
+                                                     NSString *districtID = [results objectAtIndex:0]; // only do the first
+                                                     [self loadDataFromDataStoreWithID:districtID];
+                                                 }
+                                                 self.searchOperation = nil;
+                                             }
+                                             failureBlock:^(NSString *message, DistrictSearchOperationFailOption failOption) {
+                                                 if (failOption == DistrictSearchOperationFailOptionLog)
+                                                     RKLogError(@"%@", message);
+                                                 else
+                                                     [SLFAlertView showWithTitle:NSLocalizedString(@"Geolocation Error", @"") message:message buttonTitle:NSLocalizedString(@"OK", @"")];
+                                                 self.searchOperation = nil;
+                                             }];
 }
-
-
 @end

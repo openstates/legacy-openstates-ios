@@ -17,72 +17,61 @@
 #import "JSONKit.h"
 
 @interface DistrictSearchOperation()
-- (void)informDelegateOfFailureWithMessage:(NSString *)message failOption:(DistrictSearchOperationFailOption)failOption;
-- (void)informDelegateOfSuccess;
+@property (assign) CLLocationCoordinate2D searchCoordinate;
+@property (nonatomic,copy) DistrictSearchSuccessWithResultsBlock onSuccessWithResults;
+@property (nonatomic,copy) DistrictSearchFailureWithMessageAndFailOptionBlock onFailureWithMessageAndFailOption;
 @end
 
 @implementation DistrictSearchOperation
-@synthesize delegate;
-@synthesize searchCoordinate, foundIDs;
+@synthesize searchCoordinate;
+@synthesize onSuccessWithResults = _onSuccessWithResults;
+@synthesize onFailureWithMessageAndFailOption = _onFailureWithMessageAndFailOption;
 
-- (id) init {
-    if ((self = [super init])) {
-        delegate = nil;
-    }
-    return self;
-}
-
-- (void)searchForCoordinate:(CLLocationCoordinate2D)aCoordinate 
-                   delegate:(NSObject <DistrictSearchOperationDelegate>*)aDelegate {
-    
-    delegate = aDelegate;
+- (void)searchForCoordinate:(CLLocationCoordinate2D)aCoordinate successBlock:(DistrictSearchSuccessWithResultsBlock)successBlock failureBlock:(DistrictSearchFailureWithMessageAndFailOptionBlock)failureBlock {
+    self.onSuccessWithResults = successBlock;
+    self.onFailureWithMessageAndFailOption = failureBlock;
     searchCoordinate = aCoordinate;
     RKClient * osClient = [[SLFRestKitManager sharedRestKit] openStatesClient];
-    
-    if ([osClient isNetworkAvailable]) {
-        
-        NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys: SUNLIGHT_APIKEY, @"apikey",
-                                     [NSNumber numberWithDouble:aCoordinate.longitude], @"long",
-                                     [NSNumber numberWithDouble:aCoordinate.latitude], @"lat", nil];
-        [osClient get:@"/legislators/geo/" queryParams:queryParams delegate:self];    
+    if (NO == [osClient isNetworkAvailable]) {
+        if (failureBlock)
+            failureBlock(NSLocalizedString(@"Cannot geolocate legislative districts because Internet service is unavailable.", @""), DistrictSearchOperationShowAlert);
+        return;
     }
-    else {
-        [self informDelegateOfFailureWithMessage:@"Cannot geolocate legislative districts because Internet service is unavailable." 
-                                      failOption:DistrictSearchOperationShowAlert];
-    }
-    
-
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys: SUNLIGHT_APIKEY, @"apikey",
+                                 [NSNumber numberWithDouble:aCoordinate.longitude], @"long", [NSNumber numberWithDouble:aCoordinate.latitude], @"lat", nil];
+    [osClient get:@"/legislators/geo" queryParams:queryParams delegate:self];    
 }
+
++ (DistrictSearchOperation *)searchOperationForCoordinate:(CLLocationCoordinate2D)aCoordinate successBlock:(DistrictSearchSuccessWithResultsBlock)successBlock failureBlock:(DistrictSearchFailureWithMessageAndFailOptionBlock)failureBlock {
+    DistrictSearchOperation *op = [[[DistrictSearchOperation alloc] init] autorelease];
+    [op searchForCoordinate:aCoordinate successBlock:successBlock failureBlock:failureBlock];
+    return op;
+}
+
 
 - (void) dealloc {
     RKClient * osClient = [[SLFRestKitManager sharedRestKit] openStatesClient];
     [osClient.requestQueue cancelRequestsWithDelegate:self];
-    self.foundIDs = nil;
-    delegate = nil;
+    Block_release(_onSuccessWithResults);
+    Block_release(_onFailureWithMessageAndFailOption);
     [super dealloc];
 }
 
-- (void)informDelegateOfFailureWithMessage:(NSString *)message failOption:(DistrictSearchOperationFailOption)failOption;
-{
-    if ([delegate respondsToSelector:@selector(districtSearchOperationDidFail:errorMessage:option:)])
-    {
-        NSInvocation *invocation = [NSInvocation invocationWithTarget:delegate 
-                                                             selector:@selector(districtSearchOperationDidFail:errorMessage:option:) 
-                                                      retainArguments:YES, self, message, failOption];
-        [invocation invokeOnMainThreadWaitUntilDone:YES];
-    } 
-}
-
-- (void)informDelegateOfSuccess
-{
-    if ([delegate respondsToSelector:@selector(districtSearchOperationDidFinishSuccessfully:)])
-    {
-        [delegate performSelectorOnMainThread:@selector(districtSearchOperationDidFinishSuccessfully:) 
-                                   withObject:self 
-                                waitUntilDone:NO];
+- (void)setOnSuccessWithResults:(DistrictSearchSuccessWithResultsBlock)onSuccessWithResults {
+    if (_onSuccessWithResults) {
+        Block_release(_onSuccessWithResults);
+        _onSuccessWithResults = nil;
     }
+    _onSuccessWithResults = Block_copy(onSuccessWithResults);
 }
 
+- (void)setOnFailureWithMessageAndFailOption:(DistrictSearchFailureWithMessageAndFailOptionBlock)onFailureWithMessageAndFailOption {
+    if (_onFailureWithMessageAndFailOption) {
+        Block_release(_onFailureWithMessageAndFailOption);
+        _onFailureWithMessageAndFailOption = nil;
+    }
+    _onFailureWithMessageAndFailOption = Block_copy(onFailureWithMessageAndFailOption);
+}
 
 #pragma mark -
 #pragma mark RestKit:RKObjectLoaderDelegate
@@ -91,48 +80,45 @@
     if (error && request) {
         RKLogError(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
     }    
-    
-    self.foundIDs = nil;
-    [self informDelegateOfFailureWithMessage:@"Could not find a district map with those coordinates." 
-                                  failOption:DistrictSearchOperationFailOptionLog];
-    
+    if (_onFailureWithMessageAndFailOption)
+        _onFailureWithMessageAndFailOption(@"Could not find a district map with those coordinates.", DistrictSearchOperationFailOptionLog);
 }
 
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
+    BOOL success = NO;
+    NSMutableArray *foundIDs = [NSMutableArray array];
+    
     if ([request isGET] && [response isOK]) {  
         id results = [response.body mutableObjectFromJSONData];
         NSMutableArray *memberList = nil;
         
         if ([results isKindOfClass:[NSMutableArray class]])
             memberList = results;
-        
         else if ([results isKindOfClass:[NSMutableDictionary class]])
             memberList = [NSMutableArray arrayWithObject:results];
-
-        nice_release(foundIDs);
-        foundIDs = [[NSMutableArray alloc] init];
         
-        BOOL success = NO;
         for (NSMutableDictionary *member in memberList) {
             NSString *legID = [member objectForKey:@"leg_id"];
-            
             if (IsEmpty(legID))
                 continue;
-            
+
             SLFLegislator *legislator = [SLFLegislator findFirstByAttribute:@"legID" withValue:legID];
             if (legislator) {
                 [foundIDs addObject:[legislator districtID]];
                 success = YES;
             }
         }
-        
-        if (success) {
-            [self informDelegateOfSuccess];
-        }
     }
     
-    [self informDelegateOfFailureWithMessage:@"Could not find a district map with those coordinates." failOption:DistrictSearchOperationFailOptionLog];
-
+    if (!success) {
+        RKLogError(@"Request = %@", request);
+        RKLogError(@"Response = %@", response);
+        if (_onFailureWithMessageAndFailOption)
+            _onFailureWithMessageAndFailOption(@"Could not find a district map with those coordinates.", DistrictSearchOperationFailOptionLog);
+        return;
+    }
+    if (_onSuccessWithResults)
+        _onSuccessWithResults(foundIDs);
 }
 
 @end
