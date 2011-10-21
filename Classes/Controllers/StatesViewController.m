@@ -63,7 +63,6 @@
         };
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFState class] toTableCellsWithMapping:stateCellMap];    
-
     [self.tableViewModel loadTable];    
     
     if (!PSIsIpad())

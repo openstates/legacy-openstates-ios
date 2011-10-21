@@ -131,7 +131,6 @@
     return title;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {        
     TableCellDataObject *cellInfo = [self dataObjectForIndexPath:indexPath];

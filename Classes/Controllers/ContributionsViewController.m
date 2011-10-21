@@ -16,6 +16,7 @@
 #import "SLFTheme.h"
 #import "SLFAlertView.h"
 #import "GradientBackgroundView.h"
+#import "TableSectionHeaderView.h"
 
 @interface ContributionsViewController()
 @end
@@ -47,7 +48,7 @@
     self.tableView.dataSource = dataSource;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tableDataChanged:) name:kContributionsDataNotifyLoaded object:dataSource];
     
-    UILabel *nimsp = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 66)];
+    UILabel *nimsp = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.size.width, 66)];
     nimsp.backgroundColor = [UIColor clearColor];
     nimsp.font = [SLFAppearance boldFourteen];
     nimsp.shadowColor = [UIColor colorWithWhite:1.0 alpha:0.5];
@@ -114,6 +115,19 @@
 
 #pragma mark -
 #pragma mark Table view delegate
+
+- (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section {
+    return TableSectionHeaderViewDefaultHeight;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section > [tableView numberOfSections])
+        return nil;
+    NSString *headerTitle = [self.dataSource tableView:tableView titleForHeaderInSection:section];
+    if (IsEmpty(headerTitle))
+        return nil;
+    return [[[TableSectionHeaderView alloc] initWithTitle:headerTitle width:tableView.frame.size.width] autorelease];
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     TableCellDataObject *dataObject = [self.dataSource dataObjectForIndexPath:indexPath];

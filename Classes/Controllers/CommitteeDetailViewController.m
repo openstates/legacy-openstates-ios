@@ -17,6 +17,7 @@
 #import "SLFRestKitManager.h"
 #import "SLFReachable.h"
 #import "SVWebViewController.h"
+#import "TableSectionHeaderView.h"
 
 #define SectionHeaderCommitteeInfo NSLocalizedString(@"Committee Details", @"")
 #define SectionHeaderMembers NSLocalizedString(@"Members", @"")
@@ -59,22 +60,11 @@ enum SECTIONS {
     NSInteger sectionIndex;
     for (sectionIndex = SectionCommitteeInfoIndex;sectionIndex < kNumSections; sectionIndex++) {
         [self.tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
-            section.headerTitle = [self headerForSectionIndex:sectionIndex];
-            section.headerHeight = 26;
-            
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 6, self.tableView.width - 10, section.headerHeight-10)];
-            label.textColor = [SLFAppearance tableSectionColor];
-            label.shadowOffset = CGSizeMake(0, 1);
-            label.shadowColor = [[UIColor whiteColor] colorWithAlphaComponent:.7];
-            label.backgroundColor = [UIColor clearColor];
-            label.font = [SLFAppearance boldFifteen];
-            label.text = section.headerTitle;
-            
-            UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.width, section.headerHeight)];
-            sectionView.backgroundColor = [UIColor clearColor];
-            [sectionView addSubview:label];
-            [label release];
-            section.headerView =sectionView;
+            NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
+            TableSectionHeaderView *sectionView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
+            section.headerTitle = headerTitle;
+            section.headerHeight = TableSectionHeaderViewDefaultHeight;
+            section.headerView = sectionView;
             [sectionView release];
         }];
     }         

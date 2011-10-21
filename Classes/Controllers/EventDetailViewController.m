@@ -13,6 +13,7 @@
 #import "EventDetailViewController.h"
 #import "SLFDataModels.h"
 #import "SLFRestKitManager.h"
+#import "TableSectionHeaderView.h"
 
 @interface EventDetailViewController()
 - (void)loadDataFromDataStoreWithID:(NSString *)objID;
@@ -140,28 +141,16 @@
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section {
-    return 26;
+    return TableSectionHeaderViewDefaultHeight;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section > [tableView numberOfSections])
+        return nil;
     NSString *aTitle = [self tableView:tableView titleForHeaderInSection:section];
     if (!aTitle)
         return nil;
-    CGFloat headerHeight = [self tableView:tableView heightForHeaderInSection:section];
-    CGRect sectionFrame = CGRectMake(10, 6, tableView.width - 10, headerHeight-10);
-    UILabel *label = [[UILabel alloc] initWithFrame:sectionFrame];
-    label.textColor = [SLFAppearance tableSectionColor];
-    label.shadowOffset = CGSizeMake(0, 1);
-    label.shadowColor = [[UIColor whiteColor] colorWithAlphaComponent:.7];
-    label.backgroundColor = [UIColor clearColor];
-    label.font = [SLFAppearance boldFifteen];
-    label.text = aTitle;
-    
-    UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.width, headerHeight)];
-    sectionView.backgroundColor = [UIColor clearColor];
-    [sectionView addSubview:label];
-    [label release];
-    return [sectionView autorelease];
+    return [[[TableSectionHeaderView alloc] initWithTitle:aTitle width:tableView.frame.size.width] autorelease];
 }
 
 @end

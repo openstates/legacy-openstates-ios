@@ -183,6 +183,7 @@
 		37D7673813E67D5200A77F89 /* _SLFLegislator.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D7672813E67D5200A77F89 /* _SLFLegislator.m */; };
 		37D7673913E67D5200A77F89 /* _SLFState.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D7672A13E67D5200A77F89 /* _SLFState.m */; };
 		37D953CE1412FB0F00F9C8AE /* SLFChamber.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D953CD1412FB0E00F9C8AE /* SLFChamber.m */; };
+		37DB6C471451AF9B007E0B53 /* TableSectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37DB6C451451ABC6007E0B53 /* TableSectionHeaderView.m */; };
 		37E95F9513E4E4990064B1D3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E95F9413E4E4990064B1D3 /* CoreLocation.framework */; };
 		37E95F9713E4E4990064B1D3 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E95F9613E4E4990064B1D3 /* MapKit.framework */; };
 		37E961ED13E544F80064B1D3 /* libRestKitCoreData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E961C213E544380064B1D3 /* libRestKitCoreData.a */; };
@@ -586,6 +587,8 @@
 		37D7672A13E67D5200A77F89 /* _SLFState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFState.m; sourceTree = "<group>"; };
 		37D953CC1412FB0E00F9C8AE /* SLFChamber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFChamber.h; sourceTree = "<group>"; };
 		37D953CD1412FB0E00F9C8AE /* SLFChamber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFChamber.m; sourceTree = "<group>"; };
+		37DB6C441451ABC6007E0B53 /* TableSectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableSectionHeaderView.h; sourceTree = "<group>"; };
+		37DB6C451451ABC6007E0B53 /* TableSectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableSectionHeaderView.m; sourceTree = "<group>"; };
 		37E95F9413E4E4990064B1D3 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		37E95F9613E4E4990064B1D3 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		37EDEAA013D3D81800F8FCA1 /* LegislatorDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorDetailViewController.h; sourceTree = "<group>"; };
@@ -1053,6 +1056,8 @@
 				371AE696143581D500592811 /* GradientBackgroundView.m */,
 				371B5C4C143E2E3500AF317E /* StretchedTitleLabel.h */,
 				371B5C4D143E2E3500AF317E /* StretchedTitleLabel.m */,
+				37DB6C441451ABC6007E0B53 /* TableSectionHeaderView.h */,
+				37DB6C451451ABC6007E0B53 /* TableSectionHeaderView.m */,
 				37485D3E144BC43600D99BBD /* MapAnnotations */,
 			);
 			path = Views;
@@ -1157,8 +1162,8 @@
 			isa = PBXGroup;
 			children = (
 				37D7671B13E67D5200A77F89 /* SLFDataModels.h */,
-				376357F4144CCE7500122377 /* SLFParty.h */,
 				376357F5144CCE7500122377 /* SLFParty.m */,
+				376357F4144CCE7500122377 /* SLFParty.h */,
 				37D953CC1412FB0E00F9C8AE /* SLFChamber.h */,
 				37D953CD1412FB0E00F9C8AE /* SLFChamber.m */,
 				37D7670B13E67D5200A77F89 /* CustomModels */,
@@ -1633,6 +1638,7 @@
 				37485D49144BC43600D99BBD /* UserPinAnnotation.m in Sources */,
 				37485D4A144BC43600D99BBD /* UserPinAnnotationView.m in Sources */,
 				376357F6144CCE7500122377 /* SLFParty.m in Sources */,
+				37DB6C471451AF9B007E0B53 /* TableSectionHeaderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
