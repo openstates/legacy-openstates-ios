@@ -15,6 +15,7 @@
 @interface DistrictPinAnnotationView : MKPinAnnotationView {
 }
 + (DistrictPinAnnotationView*)districtPinViewWithAnnotation:(id<MKAnnotation>)annotation identifier:(NSString *)reuseIdentifier;
+- (void)setPinColorWithAnnotation:(id <MKAnnotation>)anAnnotation;
 @end
     
 extern NSString* const DistrictPinAnnotationViewReuseIdentifier;

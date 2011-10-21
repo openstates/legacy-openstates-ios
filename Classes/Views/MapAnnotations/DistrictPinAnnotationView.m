@@ -17,7 +17,7 @@
 NSString* const DistrictPinAnnotationViewReuseIdentifier = @"DistrictPinAnnotationViewID";
 
 @interface DistrictPinAnnotationView (Private)
-- (void)resetPinColorWithAnnotation:(id <MKAnnotation>)anAnnotation;
+- (void)setPinColorWithAnnotation:(id <MKAnnotation>)anAnnotation;
 @end
     
 @implementation DistrictPinAnnotationView
@@ -32,19 +32,14 @@ NSString* const DistrictPinAnnotationViewReuseIdentifier = @"DistrictPinAnnotati
         self.opaque = NO;
         self.draggable = NO;
         self.canShowCallout = YES;
-                
+        [self setPinColorWithAnnotation:annotation];
         UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];        // UIButtonTypeInfoLight
         self.rightCalloutAccessoryView = rightButton;
     }
     return self;
 }
 
-- (void)setAnnotation:(id<MKAnnotation>)annotation {
-    [super setAnnotation:annotation];
-    [self resetPinColorWithAnnotation:annotation];
-}
-
-- (void)resetPinColorWithAnnotation:(id <MKAnnotation>)anAnnotation {
+- (void)setPinColorWithAnnotation:(id <MKAnnotation>)anAnnotation {
     if (!anAnnotation || (![anAnnotation isKindOfClass:[SLFDistrict class]]))  
         return;
         

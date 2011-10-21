@@ -129,6 +129,7 @@
             pinView = [DistrictPinAnnotationView districtPinViewWithAnnotation:annotation identifier:DistrictPinAnnotationViewReuseIdentifier];
         else
             pinView.annotation = annotation;
+        [pinView setPinColorWithAnnotation:annotation];
         
         if ([self.districtMap.legislators count] == 1) {                
             UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
