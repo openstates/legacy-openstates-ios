@@ -20,13 +20,13 @@ Development Milestones
 - Adapt to generic events from Events API, no more Texas specific event parsing.  
   
 
- 4. New interface elements and framework for multi-state selection.
+ 4. **(done)** New interface elements and framework for multi-state selection.
 - Initial table view with list of available states.
 - Store memory of user’s state selection, allow re-selection via UI element or settings panel.
 - Reformulate view controller hierarchy to load after state selection.  
   
 
- 5. Move data to the cloud.
+ 5. **(done)** Move data to the cloud.
 - Move to latest redesigned RestKit library (JSON->Object mapping framework).  
 - Test and consider using RestKit’s static data caching/updating instead of 100% live online data,  
 to improve performance.  
@@ -37,7 +37,7 @@ performance.
 - New iOS Core Data model with live RestKit->OpenStates object modeling.  
   
 
- 6. Move iPad version to new “Twitter-like” sliding view panel user experience.  
+ 6. **(done)** Move iPad version to new “Twitter-like” sliding view panel user experience.  
 - If successful, it will greatly improve logical UI flow and codeability, and moves away from some
 questionable mangling of Apple’s UISplitViewController.  
 - Also opens pathway to easier view persistence for users when stopping and starting the application.  
