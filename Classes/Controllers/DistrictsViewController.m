@@ -33,9 +33,7 @@
     return self;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.title = NSLocalizedString(@"Loading...",@"");
+- (void)configureTableViewModel {
     self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
@@ -44,20 +42,23 @@
     self.tableViewModel.autoRefreshFromNetwork = YES;
     self.tableViewModel.autoRefreshRate = 36000;
     self.tableViewModel.pullToRefreshEnabled = YES;
-    
     SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"title" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"subtitle" toAttribute:@"detailTextLabel.text"];
-        
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             SLFDistrict *district = object;
             DistrictDetailViewController *vc = [[DistrictDetailViewController alloc] initWithDistrictMapID:district.boundaryID];
             [self stackOrPushViewController:vc];
             [vc release];
-            
         };
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFDistrict class] toTableCellsWithMapping:objCellMap];        
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.title = NSLocalizedString(@"Loading...",@"");
+    [self configureTableViewModel];
     [self.tableViewModel loadTable];
     self.title = [NSString stringWithFormat:@"%d Districts",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }

@@ -49,8 +49,6 @@
     return hydratedMap;
 }
 
-
-
 - (NSString *)districtID {
     if (self.districtMap)
         return self.districtMap.boundaryID;
@@ -68,8 +66,6 @@
     
     return RKMakePathWithObject(@":boundaryCode-:stateID-:chamberName-district-:districtID", boundaryIDComponents);    
 }
-
-
 
 /////////////////////////////
 

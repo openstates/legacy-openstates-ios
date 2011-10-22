@@ -84,15 +84,18 @@
     [super dealloc];
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)configureTableViewModel {
     self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
     self.tableViewModel.pullToRefreshEnabled = NO;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self configureTableViewModel];
     if (self.state)
         self.title = self.state.name; 
-    
 }
 
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {

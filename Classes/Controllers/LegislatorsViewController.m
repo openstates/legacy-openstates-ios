@@ -34,9 +34,7 @@
     return self;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.title = NSLocalizedString(@"Loading...",@"");
+- (void)configureTableViewModel {
     self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
@@ -48,19 +46,22 @@
     self.tableViewModel.pullToRefreshEnabled = YES;
     self.tableViewModel.showsSectionIndexTitles = YES;
     self.tableViewModel.sectionNameKeyPath = @"lastnameInitial";
-    
     LegislatorCellMapping *objCellMap = [LegislatorCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"self" toAttribute:@"legislator"];
-        
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             SLFLegislator *legislator = object;
             LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:legislator.legID];
             [self stackOrPushViewController:vc];
             [vc release];
-            
         };
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFLegislator class] toTableCellsWithMapping:objCellMap];    
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.title = NSLocalizedString(@"Loading...",@"");
+    [self configureTableViewModel];
     [self.tableViewModel loadTable];
     self.title = [NSString stringWithFormat:@"%d Members",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }

@@ -42,7 +42,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     if (!dataSource)
         dataSource = [[ContributionsDataSource alloc] init];
     self.tableView.dataSource = dataSource;
@@ -87,7 +86,6 @@
 #pragma mark Data Objects
 
 - (void)setQueryEntityID:(NSString *)newObj type:(NSNumber *)newType cycle:(NSString *)newCycle {
-    
     NSString *typeString = @"";
     switch ([newType integerValue]) {
         case kContributionQueryDonor:
@@ -108,7 +106,6 @@
         default:
             break;
     }
-
     [self.dataSource initiateQueryWithQueryID:newObj type:newType cycle:newCycle];
     self.navigationItem.title = [dataSource title];
 }
@@ -134,7 +131,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (!dataObject || !dataObject.isClickable)
         return;
-        
     if (IsEmpty(dataObject.entryValue)) {
         NSString *queryName = @"";
         if (dataObject.title)

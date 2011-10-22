@@ -23,10 +23,23 @@ typedef enum {
 + (SLFParty *)partyWithType:(SLFPartyType)aType;
 @property (nonatomic,copy) NSString *name;
 @property (nonatomic,assign) SLFPartyType type;
+@property (nonatomic,retain) UIImage *image;
+@property (nonatomic,copy) NSNumber *pinColorIndex;
+@property (nonatomic,retain) UIColor *color;
 @property (nonatomic,readonly) NSString *initial;
 @property (nonatomic,readonly) NSString *abbreviation;
 @property (nonatomic,readonly) NSString *plural;
-@property (nonatomic,readonly) UIImage *image;
-@property (nonatomic,readonly) NSNumber *pinColorIndex;
+@end
+
+@interface Democrat : SLFParty
++ (Democrat*)democrat;
+@end
+
+@interface Republican : SLFParty
++ (Republican*)republican;
+@end
+
+@interface Independent : SLFParty
++ (Independent*)independent;
 @end
 

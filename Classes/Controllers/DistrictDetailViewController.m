@@ -57,6 +57,15 @@
 	self.districtMap = [SLFDistrict findFirstByAttribute:@"boundaryID" withValue:objID];
 }
 
+- (void)setDistrictMap:(SLFDistrict *)newObj {
+    nice_release(districtMap);
+	districtMap = [newObj retain];
+	if (newObj) {
+        //self.title = newObj.title;
+		[self loadDataWithResourcePath:RKMakePathWithObject(@"/districts/boundary/:boundaryID", newObj)];
+	}
+}
+
 - (void)loadDataWithResourcePath:(NSString *)path {
 	if (IsEmpty(path))
 		return;	
@@ -65,36 +74,35 @@
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:pathToLoad delegate:self];
 }
 
-- (void)setDistrictMap:(SLFDistrict *)newObj {
-	if (districtMap)
-        [districtMap release];
-	districtMap = [newObj retain];
-	if (districtMap) {
-            //self.title = newObj.title;
-		[self loadDataWithResourcePath:RKMakePathWithObject(@"/districts/boundary/:boundaryID", newObj)];
-	}
-}
-
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {    
     if (!object || ![object isKindOfClass:self.resourceClass])
         return;
-	if (districtMap)
-        [districtMap release];
-	districtMap = [object retain];
+    SLFDistrict *district = object;
+    nice_release(districtMap);
+	districtMap = [district retain];
         //self.title = districtMap.title;
-    if (!districtMap || ![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
-    [self.mapView addAnnotation:districtMap];
-    [self moveMapToRegion:districtMap.region];
-    MKPolygon *polygon = [districtMap polygonFactory];
+    [self.mapView addAnnotation:district];
+    [self moveMapToRegion:district.region];
+    MKPolygon *polygon = [district polygonFactory];
     if (polygon)
         [self.mapView addOverlay:polygon];
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
+}
+
+- (SLFDistrict *)districtMapForPolygon:(MKPolygon *)polygon {
+    if (!polygon)
+        return nil;
+    NSString *boundaryID = [polygon subtitle];
+    if (IsEmpty(boundaryID))
+        return self.districtMap;
+    return [SLFDistrict findFirstByAttribute:@"boundaryID" withValue:boundaryID];
 }
 
 #pragma mark -
@@ -104,14 +112,12 @@
 {
     if ([overlay isKindOfClass:[MKPolygon class]])
     {
-        MKPolygonView*    aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
+        SLFDistrict *district = [self districtMapForPolygon:(MKPolygon*)overlay];
+        MKPolygonView *aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
         UIColor *partyColor = [SLFAppearance partyGreen];
-        if ([self.districtMap.legislators count] == 1) {
-            SLFLegislator *leg = [self.districtMap.legislators anyObject];
-            NSString *party = leg.party;
-            if (party && NO == [party isEqual:[NSNull null]]) {
-                partyColor = [[party lowercaseString] isEqualToString:@"republican"] ? [SLFAppearance partyRed] : [SLFAppearance partyBlue];
-            }
+        if (district && [district.legislators count] == 1) {
+            SLFLegislator *leg = [district.legislators anyObject];
+            partyColor = leg.partyObj.color;
         }
         aView.fillColor = [partyColor colorWithAlphaComponent:0.2];
         aView.strokeColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.7];
@@ -130,13 +136,11 @@
         else
             pinView.annotation = annotation;
         [pinView setPinColorWithAnnotation:annotation];
-        
         if ([self.districtMap.legislators count] == 1) {                
             UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
             [rightButton addTarget:self action:@selector(showLegislatorDetail:) forControlEvents:UIControlEventTouchUpInside];
             pinView.rightCalloutAccessoryView = rightButton;
         }
-
         return pinView;
     }
     return [super mapView:aMapView viewForAnnotation:annotation];

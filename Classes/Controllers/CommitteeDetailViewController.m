@@ -49,14 +49,12 @@ enum SECTIONS {
     return self;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)configureTableViewModel {
     self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
     self.tableViewModel.pullToRefreshEnabled = NO;
     [self.tableViewModel mapObjectsWithClass:[CommitteeMember class] toTableCellsWithMapping:[self committeeMemberCellMap]];
-    
     NSInteger sectionIndex;
     for (sectionIndex = SectionCommitteeInfoIndex;sectionIndex < kNumSections; sectionIndex++) {
         [self.tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
@@ -68,6 +66,11 @@ enum SECTIONS {
             [sectionView release];
         }];
     }         
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self configureTableViewModel];
 	self.title = NSLocalizedString(@"Loading...", @"");
 }
 
@@ -88,7 +91,6 @@ enum SECTIONS {
 }
 
 - (void)configureTableItems {
-    
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     RKTableItem *firstItemCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];

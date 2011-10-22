@@ -33,9 +33,7 @@
     return self;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.title = NSLocalizedString(@"Loading...",@"");
+- (void)configureTableViewModel {
     self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
@@ -48,13 +46,11 @@
     self.tableViewModel.showsSectionIndexTitles = YES;
     self.tableViewModel.variableHeightRows = YES;
     self.tableViewModel.sectionNameKeyPath = @"stateInitial";
-
     SubtitleCellMapping *stateCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"name" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"stateID" toAttribute:@"detailTextLabel.text"];
         [cellMapping mapKeyPath:@"stateFlag" toAttribute:@"imageView.image"];
         cellMapping.rowHeight = 48;
-        
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             SLFState *state = object;
             SLFSaveSelectedState(state);
@@ -63,13 +59,10 @@
         };
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFState class] toTableCellsWithMapping:stateCellMap];    
-    [self.tableViewModel loadTable];    
-    
-    if (!PSIsIpad())
-        [self configureTableHeader];
-    
+}
+
+- (void)loadFromNetworkIfEmpty {
     NSInteger count = [[self.tableViewModel.fetchedResultsController fetchedObjects] count];
-    self.title = [NSString stringWithFormat:@"%d States",count];
     if (count == 0) {
         @try {
             [self.tableViewModel loadTableFromNetwork];
@@ -78,6 +71,18 @@
             RKLogWarning(@"Exception while attempting to load list of available states from network (already in progress?) ... %@", exception);
         }
     }
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.title = NSLocalizedString(@"Loading...",@"");
+    [self configureTableViewModel];
+    [self.tableViewModel loadTable];    
+    if (!PSIsIpad())
+        [self configureTableHeader];
+    [self loadFromNetworkIfEmpty];
+    NSInteger count = [[self.tableViewModel.fetchedResultsController fetchedObjects] count];
+    self.title = [NSString stringWithFormat:@"%d States",count];
 }
 
 - (void)configureTableHeader {

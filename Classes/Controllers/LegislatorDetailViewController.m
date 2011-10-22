@@ -79,6 +79,7 @@ enum SECTIONS {
     }         
 	self.title = NSLocalizedString(@"Loading...", @"");
 }
+
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.legislator = nil;
@@ -96,7 +97,6 @@ enum SECTIONS {
 }
 
 - (void)configureTableItems {
-    
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     RKTableItem *firstItemCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];

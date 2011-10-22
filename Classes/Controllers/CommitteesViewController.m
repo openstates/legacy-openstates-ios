@@ -32,9 +32,7 @@
     return self;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.title = NSLocalizedString(@"Loading...",@"");
+- (void)configureTableViewModel {
     self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
@@ -43,7 +41,6 @@
     self.tableViewModel.autoRefreshFromNetwork = YES;
     self.tableViewModel.autoRefreshRate = 360;
     self.tableViewModel.pullToRefreshEnabled = YES;
-    
     SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"committeeName" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"chamberShortName" toAttribute:@"detailTextLabel.text"];
@@ -57,6 +54,12 @@
         };
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFCommittee class] toTableCellsWithMapping:objCellMap];    
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.title = NSLocalizedString(@"Loading...",@"");
+    [self configureTableViewModel];
     [self.tableViewModel loadTable];
     self.title = [NSString stringWithFormat:@"%d Committees",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }

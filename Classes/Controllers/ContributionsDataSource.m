@@ -81,13 +81,12 @@
         return 0;
 }
 
-// This is for the little index along the right side of the table ... use nil if you don't want it.
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
     return  nil ;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
-    return index; // index ..........
+    return index;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section {
@@ -134,12 +133,10 @@
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {        
     TableCellDataObject *cellInfo = [self dataObjectForIndexPath:indexPath];
-    
     if (cellInfo == nil) {
         RKLogError(@"Error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);
         return nil;
     }
-    
     NSString *cellIdentifier = [NSString stringWithFormat:@"%@-%d", [SLFStandardGroupCell cellIdentifier], cellInfo.isClickable];
     SLFStandardGroupCell *cell = (SLFStandardGroupCell *)[aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
@@ -192,7 +189,6 @@
 
 - (void)parseJSONObject:(id)jsonDeserialized {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
     [numberFormatter setMaximumFractionDigits:0];
@@ -377,10 +373,8 @@
 
         for (NSString *yearKey in [yearKeys reverseObjectEnumerator]) {            
             NSDictionary *dict = [totals objectForKey:yearKey];
-            
             double tempDouble = [[dict objectForKey:amountKey] doubleValue];
             NSNumber *amount = [NSNumber numberWithDouble:tempDouble];
-            
             cellInfo = [[TableCellDataObject alloc] init];
             cellInfo.subtitle = yearKey;
             cellInfo.title = [numberFormatter stringFromNumber:amount];
@@ -401,7 +395,6 @@
                 //cellInfo.entryType = kContributionTotal;
                 //cellInfo.isClickable = NO;
             }
-
             [thisSection addObject:cellInfo];
             [cellInfo release];
         }

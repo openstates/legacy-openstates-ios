@@ -24,17 +24,13 @@
     if (self) {
         self.stackWidth = 320;
         self.state = newState;
-        NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     SUNLIGHT_APIKEY,@"apikey", 
-                                     newState.stateID,@"state", nil];
+        NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", newState.stateID,@"state", nil];
         self.resourcePath = RKMakePathWithObject(@"/events/?state=:state&apikey=:apikey", queryParams);
     }
     return self;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.title = NSLocalizedString(@"Loading...",@"");
+- (void)configureTableViewModel {
     self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
@@ -43,7 +39,6 @@
     self.tableViewModel.autoRefreshFromNetwork = YES;
     self.tableViewModel.autoRefreshRate = 240;
     self.tableViewModel.pullToRefreshEnabled = YES;
-    
     SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"eventDescription" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"dateStart" toAttribute:@"detailTextLabel.text"];
@@ -55,6 +50,12 @@
         };
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFEvent class] toTableCellsWithMapping:objCellMap];    
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.title = NSLocalizedString(@"Loading...",@"");
+    [self configureTableViewModel];
     [self.tableViewModel loadTable];
     self.title = [NSString stringWithFormat:@"%d Events",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }
