@@ -91,48 +91,62 @@
     self.textLabel.frame = CGRectMake(75.f, frm.origin.y, frm.size.width, frm.size.height);    
 }
 
+- (void)showDisabledView {
+    /* Create the appearance of a "dimmed" table cell, with a standard error icon */
+    UIView *newView = [[UIView alloc] initWithFrame:self.bounds];
+    newView.backgroundColor = [UIColor colorWithWhite:.5f alpha:.5f];
+    
+    UIImageView *error = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"error.png"]];
+    CGFloat imgDim = 24.f;
+        // set the error image's frame origin to be on the far right side of the table view cell
+    CGRect frm = CGRectMake((STACKED_MENU_WIDTH - 3.f) - imgDim , roundf((DEFAULT_ITEM_HEIGHT/2) - (imgDim/2)), imgDim, imgDim);
+    error.frame = frm;
+    [newView addSubview:error];        
+    [error release];
+    [self addSubview:newView];
+    [self bringSubviewToFront:newView];
+    self.disabledView = newView;
+    [newView release];
+}
+
+- (void)hideDisabledView {
+    if (!self.disabledView)
+        return;
+        // Remove the "dimmed" view, if there is one. (see below)
+    [self.disabledView removeFromSuperview];
+    self.disabledView = nil;
+}
+
+- (void)enableCell {
+        // Reenable user interaction and selection ability
+    self.selectionStyle = UITableViewCellSelectionStyleBlue;
+    self.userInteractionEnabled = YES;
+}
+
+- (void)disableCell {
+        // Disable future user interaction and selections
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.userInteractionEnabled = NO;
+        // Turn off any current selections/highlights
+    if (self.selected) {
+        self.selected = NO;
+    }
+    if (self.highlighted) {
+        self.highlighted = NO;
+    }
+}
+
 - (void)setEnabled:(BOOL)newValue {
     enabled = newValue;
-    
     if (enabled) {
-        if (self.disabledView) {
-            // Remove the "dimmed" view, if there is one. (see below)
-            [self.disabledView removeFromSuperview];
-            self.disabledView = nil;
-        }
-        
-            // Reenable user interaction and selection ability
-        self.selectionStyle = UITableViewCellSelectionStyleBlue;
-        self.userInteractionEnabled = YES;
+        [self hideDisabledView];
+#warning turn on?
+            //[self enableCell];
     }
     else {
-            /* Create the appearance of a "dimmed" table cell, with a standard error icon */
-        UIView *newView = [[UIView alloc] initWithFrame:self.bounds];
-        newView.backgroundColor = [UIColor colorWithWhite:.5f alpha:.5f];
-        
-        UIImageView *error = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"error.png"]];
-        CGFloat imgDim = 24.f;
-            // set the error image's frame origin to be on the far right side of the table view cell
-        CGRect frm = CGRectMake((STACKED_MENU_WIDTH - 3.f) - imgDim , roundf((DEFAULT_ITEM_HEIGHT/2) - (imgDim/2)), imgDim, imgDim);
-        error.frame = frm;
-        [newView addSubview:error];        
-        [error release];
-         [self addSubview:newView];
-        [self bringSubviewToFront:newView];
-        self.disabledView = newView;
-        [newView release];
-        
-            // Disable future user interaction and selections
-        self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.userInteractionEnabled = NO;
-        
-            // Turn off any current selections/highlights
-        if (self.selected) {
-            self.selected = NO;
-        }
-        if (self.highlighted) {
-            self.highlighted = NO;
-        }
+        [self showDisabledView];
+#warning turn on?
+            //[self disableCell];
     }    
     [self setNeedsDisplay];
 }

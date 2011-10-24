@@ -20,4 +20,11 @@
         aRole = [aRole capitalizedString];
     return aRole;
 }
+
++ (NSArray *)sortDescriptors {
+    NSSortDescriptor *roleDesc = [NSSortDescriptor sortDescriptorWithKey:@"role" ascending:YES];
+    NSSortDescriptor *nameDesc = [NSSortDescriptor sortDescriptorWithKey:@"foundLegislator.lastName" ascending:YES];
+    return [NSArray arrayWithObjects:roleDesc, nameDesc, nil];
+}
+
 @end

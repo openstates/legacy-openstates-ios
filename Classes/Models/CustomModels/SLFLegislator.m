@@ -24,23 +24,26 @@
     [self didChangeValueForKey:@"party"];    
 }
 
+- (NSArray *)pruneJunkFromRoles:(NSArray*)sortedRoles {
+    CommitteeRole *junkRole = [sortedRoles objectAtIndex:0];
+    if (!IsEmpty(junkRole.committeeName))
+        return sortedRoles;
+    NSMutableArray *prunedRoles = [NSMutableArray arrayWithArray:sortedRoles];
+    [prunedRoles removeObject:junkRole];
+    [junkRole deleteEntity];
+    [[[RKObjectManager sharedManager] objectStore] save];
+    return prunedRoles;
+}
+
 - (NSArray *)sortedRoles {
     if (IsEmpty(self.roles))
         return nil;
-    NSSortDescriptor *desc = [NSSortDescriptor sortDescriptorWithKey:@"committeeName" ascending:YES];    
-    NSMutableArray * roles = [NSMutableArray arrayWithArray:[self.roles sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]]];
-    CommitteeRole *dirtyObject = [roles objectAtIndex:0];
-    if (IsEmpty(dirtyObject.committeeName)) {
-        [roles removeObject:dirtyObject];
-        [dirtyObject deleteEntity];
-        [[[RKObjectManager sharedManager] objectStore] save];
-    }
-    return roles;
+    NSArray *sortedRoles = [self.roles sortedArrayUsingDescriptors:[SLFCommittee sortDescriptors]];
+    return [self pruneJunkFromRoles:sortedRoles];
 }
 
 - (SLFDistrict *)hydratedDistrict {
     SLFDistrict *hydratedMap = self.districtMap;
-    
     if (!hydratedMap) {
         hydratedMap = [SLFDistrict findFirstByAttribute:@"boundaryID" withValue:self.districtID];
         if (hydratedMap)
@@ -69,8 +72,12 @@
 
 /////////////////////////////
 
+- (NSString *)formalName {
+    return [NSString stringWithFormat:@"%@ %@", self.chamberObj.titleAbbreviation, self.fullName];
+}
+
 - (NSString *)demoLongName {
-    return [NSString stringWithFormat:@"%@ (%@-%@)", self.fullName, self.partyShortName, self.district];
+    return [NSString stringWithFormat:@"%@ (%@-%@)", self.fullName, self.partyObj.initial, self.district];
 }
 
 - (NSString *)districtMapLabel {
@@ -83,12 +90,7 @@
 }
 
 - (NSString *)lastnameInitial {
-	NSString * initial = [self.lastName substringToIndex:1];
-	return initial;
-}
-
-- (NSString *)partyShortName {
-    return self.partyObj.initial;
+	return [self.lastName substringToIndex:1];
 }
 
 - (NSString *)chamberShortName {
@@ -96,13 +98,11 @@
 }
 
 - (NSString *)districtPartyString {
-	NSString *string = [NSString stringWithFormat: @"(%@-%@)", self.partyShortName, self.district];
-	return string;
+	return [NSString stringWithFormat: @"(%@-%@)", self.partyObj.initial, self.district];
 }
 
 - (NSString *)fullNameLastFirst {
 	NSMutableString *name = [NSMutableString stringWithCapacity:128];
-	
 	if ([self.lastName length] > 0)
 		[name appendFormat:@"%@, ", self.lastName];
 	if ([self.firstName length] > 0)
@@ -111,21 +111,11 @@
 		[name appendFormat:@" %@", self.middleName];
 	if ([self.suffixes length] > 0)
 		[name appendFormat:@" %@", self.suffixes];
-	
 	return name;
 }
 
-- (NSString *)shortNameForButtons {
-	NSString *string;
-	string = [NSString stringWithFormat:@"%@ (%@)", self.fullName, self.partyShortName];
-	return string;
-}
-
 - (NSString *)labelSubText {
-	NSString *string;
-	string = [NSString stringWithFormat: NSLocalizedString(@"%@ - District %@", @""),
-              self.chamberShortName, self.district];
-	return string;
+	return [NSString stringWithFormat:NSLocalizedString(@"%@ - District %@", @""), self.chamberShortName, self.district];
 }
 
 - (NSString *)title {
@@ -133,15 +123,7 @@
 }
 
 - (NSString *)term {
-    return [NSString stringWithFormat:@"Term: %@ Years", self.chamberObj.term];
-}
-
-    /////////////////////////////
-
-- (NSString *)votesmartBio {
-    if (IsEmpty(self.votesmartID))
-        return nil;
-    return [NSString stringWithFormat:@"http://votesmart.org/bio.php?can_id=%@", self.votesmartID];
+    return [NSString stringWithFormat:@"%@ Years", self.chamberObj.term];
 }
 
 @end

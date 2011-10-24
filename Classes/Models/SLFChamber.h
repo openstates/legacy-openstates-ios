@@ -19,10 +19,21 @@
 @property (nonatomic,copy) NSNumber *term;
 @property (nonatomic,copy) NSString *title;
 @property (nonatomic,copy) NSString *name;
+@property (nonatomic,readonly) NSString *formalName;
 @property (nonatomic,readonly) NSString *shortName;
 @property (nonatomic,copy) NSString *stateID;
+@property (nonatomic,copy) NSString *titleAbbreviation;
+@property (nonatomic,copy) NSString *initial;
 
 + (SLFChamber *)chamberWithType:(NSString *)aType forState:(SLFState *)aState;
+@end
+
+@interface UpperChamber : SLFChamber
++ (UpperChamber*)upperForState:(SLFState *)aState;
+@end
+
+@interface LowerChamber : SLFChamber
++ (LowerChamber*)lowerForState:(SLFState *)aState;
 @end
 
 

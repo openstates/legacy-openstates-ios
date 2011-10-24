@@ -75,10 +75,9 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {    
-    if (!IsEmpty(self.sectionList))
-        return [self.sectionList count];
-    else
+    if (IsEmpty(self.sectionList))
         return 0;
+    return [self.sectionList count];
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
@@ -181,7 +180,6 @@
             resourcePath = [NSString stringWithFormat:@"/entities/%@.json", aQuery];;
             break;
     }
-    
     RKLogDebug(@"Contributions resource path: %@", resourcePath);
     [[[SLFRestKitManager sharedRestKit] transClient] get:resourcePath queryParams:queryParams delegate:self];
 }
@@ -206,22 +204,17 @@
         
         for (NSDictionary *dict in jsonArray) {
             NSString *localizedString = NSLocalizedString(@"Unknown", @"");
-            
             NSString *entityType = [[dict objectForKey:@"type"] capitalizedString];
-            //NSString *valueKey = @"";
             NSNumber *action = nil;
             if ([entityType isEqualToString:@"Politician"]) {
-                //valueKey = @"total_received";
                 localizedString = NSLocalizedString(@"Politician", @"");
                 action = [NSNumber numberWithInteger:kContributionQueryRecipient];
             }
             else if ([entityType isEqualToString:@"Organization"]) {
-                //valueKey = @"total_given";
                 localizedString = NSLocalizedString(@"Organization", @"");
                 action = [NSNumber numberWithInteger:kContributionQueryDonor];
             }
             else if ([entityType isEqualToString:@"Individual"]) {
-                //valueKey = @"total_given";
                 localizedString = NSLocalizedString(@"Individual", @"");
                 action = [NSNumber numberWithInteger:kContributionQueryIndividual];
             }
@@ -234,14 +227,12 @@
             cellInfo.isClickable = YES;
             cellInfo.action = action;
             cellInfo.parameter = @"-1";
-            
             [thisSection addObject:cellInfo];
             [cellInfo release];
         }
         
         if (![jsonArray count]) {    // no search results!
             NSString *name = [self.queryEntityID stringByReplacingOccurrencesOfString:@"+" withString:@" "];
-            
             TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
             cellInfo.title = name;
             cellInfo.subtitle = NSLocalizedString(@"Nothing for", @"");
@@ -250,7 +241,6 @@
             cellInfo.isClickable = NO;
             cellInfo.action = nil;
             cellInfo.parameter = nil;
-            
             [thisSection addObject:cellInfo];
             [cellInfo release];
         }
@@ -269,10 +259,8 @@
         for (NSDictionary *dict in jsonArray) {
             double tempDouble = [[dict objectForKey:@"amount"] doubleValue];
             NSNumber *amount = [NSNumber numberWithDouble:tempDouble];
-            
             TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
             NSString *name = [[dict objectForKey:@"recipient_name"] capitalizedString];
-            
             id dataID = [dict objectForKey:@"recipient_entity"];
 
             cellInfo.title = name;
@@ -392,8 +380,6 @@
             
             if ([yearKey isEqualToString:@"-1"]) {
                 cellInfo.subtitle = NSLocalizedString(@"Total", @"");
-                //cellInfo.entryType = kContributionTotal;
-                //cellInfo.isClickable = NO;
             }
             [thisSection addObject:cellInfo];
             [cellInfo release];

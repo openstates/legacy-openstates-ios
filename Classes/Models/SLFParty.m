@@ -88,7 +88,7 @@ static Independent * cachedIndependent;
     if (!cachedRepublican) {
         cachedRepublican = [[Republican alloc] init];
         cachedRepublican.type = SLFPartyRepublican;
-        cachedDemocrat.name = REPUBLICAN_STRING;
+        cachedRepublican.name = REPUBLICAN_STRING;
         cachedRepublican.color = [SLFAppearance partyRed];
         cachedRepublican.image = [UIImage imageNamed:@"redstar"];
         cachedRepublican.pinColorIndex = [NSNumber numberWithInteger:SLFMapPinColorRed];

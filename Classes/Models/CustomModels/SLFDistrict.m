@@ -45,7 +45,7 @@
     NSString *chamberName = self.chamberObj.shortName;
     NSInteger index = 0;
     for (SLFLegislator *leg in self.legislators) {
-        NSString *legName = [NSString stringWithFormat:@"%@ %@ (%@)", chamberName, leg.fullName, [leg partyShortName]];        
+        NSString *legName = [NSString stringWithFormat:@"%@ %@ (%@)", chamberName, leg.fullName, leg.partyObj.initial];        
         if (index > 0)
             [memberNames appendFormat:@", %@", legName];
         else

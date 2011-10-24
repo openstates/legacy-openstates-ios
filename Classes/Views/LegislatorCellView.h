@@ -13,13 +13,14 @@
 #import <UIKit/UIKit.h>
 
 @class SLFLegislator;
+@class SLFParty;
 @interface LegislatorCellView : UIView
 {
 }
 
 @property (copy, nonatomic) NSString *title;
 @property (copy, nonatomic) NSString *name;
-@property (copy, nonatomic) NSString *party;
+@property (retain, nonatomic) SLFParty *party;
 @property (copy, nonatomic) NSString *district;
 @property (copy, nonatomic) NSString *role;
 

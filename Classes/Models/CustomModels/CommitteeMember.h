@@ -9,4 +9,5 @@
 @property (nonatomic, retain) NSString * role;
 @property (nonatomic, retain) SLFCommittee *committeeInverse;
 @property (nonatomic, readonly) SLFLegislator *foundLegislator;
++ (NSArray *)sortDescriptors;
 @end

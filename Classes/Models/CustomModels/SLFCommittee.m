@@ -21,19 +21,20 @@
     return self.chamberObj.shortName;
 }
 
-- (NSString *) committeeNameInitial {
-	NSString * initial = [self.committeeName substringToIndex:1];
-	return initial;
+- (NSString *) initial {
+	return [self.committeeName substringToIndex:1];
 }
 
 - (NSArray *)sortedMembers
 {    
-    if (self.members) {
-        NSSortDescriptor *role = [NSSortDescriptor sortDescriptorWithKey:@"role" ascending:YES];
-        NSSortDescriptor *name = [NSSortDescriptor sortDescriptorWithKey:@"foundLegislator.lastName" ascending:YES];
-        return [self.members sortedArrayUsingDescriptors:[NSArray arrayWithObjects:role, name, nil]];
-    }
-    return nil;
+    if (!self.members)
+        return nil;
+    return [self.members sortedArrayUsingDescriptors:[CommitteeMember sortDescriptors]];
 }
 
++ (NSArray *)sortDescriptors {
+    NSSortDescriptor *nameDesc = [NSSortDescriptor sortDescriptorWithKey:@"committeeName" ascending:YES];
+    NSSortDescriptor *chamberDesc = [NSSortDescriptor sortDescriptorWithKey:@"chamber" ascending:YES];
+    return [NSArray arrayWithObjects:nameDesc, chamberDesc, nil];
+}
 @end

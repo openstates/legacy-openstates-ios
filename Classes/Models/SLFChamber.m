@@ -13,6 +13,10 @@
 #import "SLFChamber.h"
 #import "SLFState.h"
 
+@interface SLFChamber()
+- (NSString *)getTitleAbbreviation;
+@end
+
 @implementation SLFChamber
 @synthesize stateID;
 @synthesize state;
@@ -21,22 +25,13 @@
 @synthesize title;
 @synthesize name;
 @synthesize shortName;
+@synthesize titleAbbreviation;
+@synthesize initial;
 
 + (SLFChamber *)chamberWithType:(NSString *)aType forState:(SLFState *)aState {
-    SLFChamber *chamber = [[SLFChamber alloc] init];
-    chamber.state = aState;  
-    chamber.type = aType;
-    if ([aType isEqualToString:@"lower"]) {
-        chamber.term = aState.lowerChamberTerm;
-        chamber.title = aState.lowerChamberTitle;
-        chamber.name = aState.lowerChamberName;
-    }
-    else {
-        chamber.term = aState.upperChamberTerm;
-        chamber.title = aState.upperChamberTitle;
-        chamber.name = aState.upperChamberName;
-    }
-    return chamber;
+    if ([aType isEqualToString:@"lower"])
+        return [LowerChamber lowerForState:aState];
+    return [UpperChamber upperForState:aState];
 }
 
 - (void)dealloc {
@@ -46,7 +41,13 @@
     self.term = nil;
     self.title = nil;
     self.name = nil;
+    self.initial = nil;
+    self.titleAbbreviation = nil;
     [super dealloc];
+}
+
+- (NSString *)formalName {
+    return [NSString stringWithFormat:@"%@ %@", self.state.name, self.name];
 }
 
 - (NSString *)shortName {
@@ -55,5 +56,56 @@
         return [words objectAtIndex:0];
     }
     return self.name;
+}
+
+- (NSString *)initial {
+    if (IsEmpty(initial))
+        initial = [[self.name substringToIndex:1] copy];
+	return initial;
+}
+
+- (NSString *)getTitleAbbreviation {
+    if (!self.title)
+        return nil;
+    return [NSString stringWithFormat:@"%@.", [self.title substringToIndex:3]];
+}
+
+@end
+
+@implementation UpperChamber
++ (UpperChamber *)upperForState:(SLFState *)aState {
+    UpperChamber *chamber = [[[UpperChamber alloc] init] autorelease];
+    chamber.type = @"upper";
+    chamber.state = aState;
+    chamber.term = aState.upperChamberTerm;
+    chamber.title = aState.upperChamberTitle;
+    chamber.name = aState.upperChamberName;
+    chamber.titleAbbreviation = [chamber getTitleAbbreviation];
+    return chamber;
+}
+
+- (NSString *)getTitleAbbreviation {
+    if (self.title && [[self.title lowercaseString] hasPrefix:@"council"])
+        return NSLocalizedString(@"Cncl.", @"Abbreviation for Councilmember");
+    return [super getTitleAbbreviation];
+}
+@end
+
+@implementation LowerChamber
++ (LowerChamber *)lowerForState:(SLFState *)aState {
+    LowerChamber *chamber = [[[LowerChamber alloc] init] autorelease];
+    chamber.type = @"lower";
+    chamber.state = aState;
+    chamber.term = aState.lowerChamberTerm;
+    chamber.title = aState.lowerChamberTitle;
+    chamber.name = aState.lowerChamberName;
+    chamber.titleAbbreviation = [chamber getTitleAbbreviation];
+   return chamber;
+}
+
+- (NSString *)getTitleAbbreviation {
+    if (self.title && [[self.title lowercaseString] hasPrefix:@"assembly"])
+        return NSLocalizedString(@"Asm.", @"Abbreviation for Assembly");
+    return [super getTitleAbbreviation];
 }
 @end

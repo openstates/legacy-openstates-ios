@@ -16,14 +16,12 @@
 @property (nonatomic, readonly) NSString *fullNameLastFirst;
 @property (nonatomic, readonly) NSString *lastnameInitial;
 @property (nonatomic, readonly) NSString *chamberShortName;
-@property (nonatomic, readonly) NSString *partyShortName;
+@property (nonatomic, readonly) NSString *formalName;
 @property (nonatomic, readonly) NSString *demoLongName;
 @property (nonatomic, readonly) NSString *districtMapLabel;
-@property (nonatomic, readonly) NSString *votesmartBio;
 
 - (NSComparisonResult)compareMembersByName:(SLFLegislator *)p;
 - (NSString *)districtPartyString;
-- (NSString *)shortNameForButtons;
 - (NSString *)labelSubText;
 - (NSString *)title;
 @end

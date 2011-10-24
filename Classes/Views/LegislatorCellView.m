@@ -15,7 +15,6 @@
 #import "SLFTheme.h"
 
 @implementation LegislatorCellView
-
 @synthesize title;
 @synthesize name;
 @synthesize party;
@@ -27,7 +26,7 @@
 - (void)configureDefaults {
     title = [[NSString alloc] init];
     name = [[NSString alloc] init];
-    party = [[NSString alloc] init];
+    party = [Independent retain];
     district = [[NSString alloc] init];
     role = nil;
     self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
@@ -59,7 +58,6 @@
 	nice_release(party);
 	nice_release(district);
 	nice_release(role);
-
 	[super dealloc];
 }
 
@@ -91,11 +89,8 @@
 - (void)setLegislator:(SLFLegislator *)value {	
 	if (value) {
 		self.title = value.title;
-		self.district = [NSString stringWithFormat:@"%@ %@ %@",
-                         [value.stateID uppercaseString],
-                         NSLocalizedString(@"District", @""),
-						 value.district];
-		self.party = value.party;
+		self.district = [NSString stringWithFormat:@"%@ %@ %@", [value.stateID uppercaseString], NSLocalizedString(@"District", @""), value.district];
+		self.party = value.partyObj;
 		self.name = value.fullName;
 		self.role = nil;
 	}
@@ -116,10 +111,10 @@
 
 - (CGRect)scaleRect:(CGRect)inRect resolution:(CGFloat)resolution {
 	CGRect outRect;
-	outRect.origin.x = roundf(resolution * inRect.origin.x) / resolution;
-	outRect.origin.y = roundf(resolution * inRect.origin.y) / resolution;
-	outRect.size.width = roundf(resolution * inRect.size.width) / resolution;
-	outRect.size.height = roundf(resolution * inRect.size.height) / resolution;
+	outRect.origin.x = roundf((resolution * inRect.origin.x) / resolution);
+	outRect.origin.y = roundf((resolution * inRect.origin.y) / resolution);
+	outRect.size.width = roundf((resolution * inRect.size.width) / resolution);
+	outRect.size.height = roundf((resolution * inRect.size.height) / resolution);
 	return outRect;
 }
 
@@ -131,64 +126,48 @@
 	
 	CGFloat fontSize = 13.f;
     UIFont *font = [[SLFAppearance boldFifteen] fontWithSize:fontSize];
-		
-	UIColor *darkColor = nil;
-	UIColor *lightColor = nil;
-	UIColor *partyColor = nil;
-	UIColor *accentColor = nil;
+    UIColor *whiteColor = [UIColor whiteColor];
+	UIColor *darkColor = [SLFAppearance cellTextColor];
+	UIColor *lightColor = [SLFAppearance cellSecondaryTextColor];
+	UIColor *partyColor = party.color;
+	UIColor *accentColor = [SLFAppearance tableSectionColor];	
+	if (self.highlighted)
+		darkColor = lightColor = partyColor = accentColor = whiteColor;
 	
-	// Choose font color based on highlighted state.
-	if (self.highlighted) {
-		darkColor = lightColor = partyColor = accentColor = [UIColor whiteColor];
-	}
-	else {
-		darkColor = [SLFAppearance cellTextColor];
-		lightColor = [SLFAppearance cellSecondaryTextColor];
-        accentColor = [SLFAppearance tableSectionColor];
-
-		if ([party isEqualToString:@"Republican"])
-			partyColor = [SLFAppearance partyRed];
-		else if ([party isEqualToString:@"Democrat"])
-			partyColor = [SLFAppearance partyBlue];
-		else
-			partyColor = [SLFAppearance partyGreen];
-	}
-	
-	CGFloat resolution = 0.5f * (aBounds.size.width / imageBounds.size.width + 
-								 aBounds.size.height / imageBounds.size.height);
-
+    CGFloat scaleWidth = aBounds.size.width / imageBounds.size.width;
+    CGFloat scaleHeight = aBounds.size.height / imageBounds.size.height;
+	CGFloat resolution = 0.5f * (scaleWidth + scaleHeight);
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
 	CGContextSaveGState(context);
 	CGContextTranslateCTM(context, aBounds.origin.x, aBounds.origin.y);
-	CGContextScaleCTM(context, (aBounds.size.width / imageBounds.size.width), 
-					  (aBounds.size.height / imageBounds.size.height));
+	CGContextScaleCTM(context, scaleWidth, scaleHeight);
 		
 	// Title	
     drawRect = [self scaleRect:CGRectMake(9.f, 1.f, 94.f, 20.f) resolution:resolution];
 	[lightColor set];
-	[[self title] drawInRect:drawRect withFont:font];
+	[self.title drawInRect:drawRect withFont:font];
 	
 	// Name
     drawRect = [self scaleRect:CGRectMake(9.f, 21.f, 218.f, 25.f) resolution:resolution];
 	[darkColor set];
-	[[self name] drawInRect:drawRect withFont:[font fontWithSize:fontSize+4.f]];
+	[self.name drawInRect:drawRect withFont:[font fontWithSize:fontSize+4.f]];
 	
 	// Party	
     drawRect = [self scaleRect:CGRectMake(9.f, 46.f, 73.f, 20.f) resolution:resolution];
 	[partyColor set];
-	[[self party] drawInRect:drawRect withFont:font];
+	[party.name drawInRect:drawRect withFont:font];
 		
 	// District
     drawRect = [self scaleRect:CGRectMake(86.f, 46.f, 92.f, 20.f) resolution:resolution];
 	[lightColor set];
-	[[self district] drawInRect:drawRect withFont:font];
+	[self.district drawInRect:drawRect withFont:font];
 	
 	// Role
 	if (!IsEmpty(role)) {
         drawRect = [self scaleRect:CGRectMake(153, 45.f, 74.f, 20.f) resolution:resolution];
 		[accentColor set];
-		[[self role] drawInRect:drawRect withFont:[font fontWithSize:fontSize+1.f] lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentRight];
+		[self.role drawInRect:drawRect withFont:[font fontWithSize:fontSize+1.f] lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentRight];
 	}
 	
 	CGContextRestoreGState(context);
