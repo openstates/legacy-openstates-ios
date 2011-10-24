@@ -30,7 +30,7 @@ enum SECTIONS {
 
 @interface CommitteeDetailViewController()
 @property (nonatomic, retain) RKTableViewModel *tableViewModel;
-
+- (void)configureTableViewModel;
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
@@ -47,25 +47,6 @@ enum SECTIONS {
         [self loadDataFromNetworkWithID:committeeID];
     }
     return self;
-}
-
-- (void)configureTableViewModel {
-    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.pullToRefreshEnabled = NO;
-    [self.tableViewModel mapObjectsWithClass:[CommitteeMember class] toTableCellsWithMapping:[self committeeMemberCellMap]];
-    NSInteger sectionIndex;
-    for (sectionIndex = SectionCommitteeInfoIndex;sectionIndex < kNumSections; sectionIndex++) {
-        [self.tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
-            NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
-            TableSectionHeaderView *sectionView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
-            section.headerTitle = headerTitle;
-            section.headerHeight = TableSectionHeaderViewDefaultHeight;
-            section.headerView = sectionView;
-            [sectionView release];
-        }];
-    }         
 }
 
 - (void)viewDidLoad {
@@ -87,7 +68,27 @@ enum SECTIONS {
     RKObjectManager* objectManager = [RKObjectManager sharedManager];
     [objectManager loadObjectsAtResourcePath:resourcePath delegate:self block:^(RKObjectLoader* loader) {
         loader.objectMapping = [objectManager.mappingProvider objectMappingForClass:[SLFCommittee class]];
+        loader.cacheTimeoutInterval = 24 * 60 * 60;
     }];
+}
+
+- (void)configureTableViewModel {
+    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
+    self.tableViewModel.delegate = self;
+    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
+    self.tableViewModel.pullToRefreshEnabled = NO;
+    [self.tableViewModel mapObjectsWithClass:[CommitteeMember class] toTableCellsWithMapping:[self committeeMemberCellMap]];
+    NSInteger sectionIndex;
+    for (sectionIndex = SectionCommitteeInfoIndex;sectionIndex < kNumSections; sectionIndex++) {
+        [self.tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
+            NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
+            TableSectionHeaderView *sectionView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
+            section.headerTitle = headerTitle;
+            section.headerHeight = TableSectionHeaderViewDefaultHeight;
+            section.headerView = sectionView;
+            [sectionView release];
+        }];
+    }         
 }
 
 - (void)configureTableItems {
@@ -100,7 +101,7 @@ enum SECTIONS {
     [tableItems addObject:firstItemCell];
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.text = self.committee.chamberShortName;
+        tableItem.text = self.committee.chamberObj.shortName;
         tableItem.detailText = self.committee.subcommittee;
     }]];
      for (NSString *website in self.committee.sources)

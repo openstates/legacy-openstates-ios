@@ -53,6 +53,7 @@
         [mapper release];        
         
         self.transClient = [RKClient clientWithBaseURL:TRANSPARENCY_BASE_URL];
+
         self.openStatesClient = [RKClient clientWithBaseURL:OPENSTATES_BASE_URL];
     }
     return self;
@@ -107,6 +108,7 @@
     Class theClass = [self modelClassFromResourcePath:pathToLoad];
     loader.objectMapping = (RKObjectMapping *)[objectManager.mappingProvider objectMappingForClass:theClass];
     loader.method = RKRequestMethodGET;
+    loader.cacheTimeoutInterval = 45 * 60 * 60;
     return loader;
 }
 

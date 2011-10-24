@@ -104,6 +104,7 @@
     RKObjectManager* objectManager = [RKObjectManager sharedManager];
     [objectManager loadObjectsAtResourcePath:resourcePath delegate:self block:^(RKObjectLoader* loader) {
         loader.objectMapping = [objectManager.mappingProvider objectMappingForClass:[SLFState class]];
+        loader.cacheTimeoutInterval = 24 * 60 * 60;
     }];
 }
 
