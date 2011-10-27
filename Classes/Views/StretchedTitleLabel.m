@@ -49,7 +49,7 @@
     CGFloat width = imageBounds.size.width;
     CGFloat height = imageBounds.size.height;
     
-    CGFloat horizPadding = 15;
+    CGFloat horizPadding = 30;
     CGFloat vertPadding = 30;
     width += horizPadding;
     height += vertPadding;
@@ -67,7 +67,7 @@
 }
 
 - (NSAttributedString *)illuminatedString:(NSString *)text atLocation:(NSInteger)location {
-    UIFont *font = [UIFont fontWithName:@"HelveticaNeue" size:30];
+    UIFont *font = [UIFont fontWithName:@"BlairMdITC TT" size:28];
     int len = [text length];
 
     NSString *colorNameKey = (NSString*)(kCTForegroundColorAttributeName);
@@ -76,7 +76,7 @@
     [mutaString addAttribute:colorNameKey value:(id)[SLFAppearance menuSelectedTextColor].CGColor range:NSMakeRange(0, len)];
     [mutaString addAttribute:colorNameKey value:(id)[SLFAppearance menuTextColor].CGColor range:NSMakeRange(location-1, 1)];
     CTFontRef ctFont = CTFontCreateWithName((CFStringRef)font.fontName, font.pointSize, NULL);
-    CTFontRef ctFont2 = CTFontCreateWithName((CFStringRef)font.fontName, font.pointSize*1.4, NULL);
+    CTFontRef ctFont2 = CTFontCreateWithName((CFStringRef)font.fontName, font.pointSize*1.5, NULL);
     [mutaString addAttribute:fontNameKey value:(id)ctFont range:NSMakeRange(0, len)];
     [mutaString addAttribute:fontNameKey value:(id)ctFont2 range:NSMakeRange(location-1, 1)];
     CFRelease(ctFont);
@@ -87,6 +87,7 @@
 
 StretchedTitleLabel *CreateOpenStatesTitleLabelForFrame(CGRect rect) {
     StretchedTitleLabel *titleLabel = [[StretchedTitleLabel alloc] initWithFrame:rect];
-    [titleLabel setAttributedTextWithString:@"O P E N : S T A T E S" illuminatedAtLocation:9];
+        //    [titleLabel setAttributedTextWithString:@"O P E N : S T A T E S" illuminatedAtLocation:9];
+    [titleLabel setAttributedTextWithString:@"OPEN:STATES" illuminatedAtLocation:5];
     return titleLabel;
 }

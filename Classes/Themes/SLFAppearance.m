@@ -42,6 +42,10 @@
     + (UIFont *)boldFifteen {return [UIFont fontWithName:SLFAppearanceFontName size:15.f];}
     + (UIFont *)boldEighteen {return [UIFont fontWithName:SLFAppearanceFontName size:18.f];}
 
+    static NSString *menuFontName = @"BlairMdITC TT";
+    //+ (UIFont *)menuTextFont {return [UIFont fontWithName:menuFontName size:12.f];}
+    + (UIFont *)menuTextFont {return [[self class] boldFifteen];}
+
     #endif
 
 #if APP_APPEARANCE_THEME == APP_OPEN_STATES_THEME
@@ -54,19 +58,23 @@
     + (id)acapulco          {vendColor(116,174,165);}     //  vendColorHex(0x74AEA5)
     + (id)moonMist          {vendColor(218,220,201);}     //  vendColorHex(0xDADCC9)
     + (id)whiteRock         {vendColor(233,234,214);}     //  vendColorHex(0xE9EAD6)
-    + (id)armadillo         {vendColor(79,72,67);}        //  vendColorHex(0x4F4843)
     + (id)graniteGreen      {vendColor(145,144,130);}     //  vendColorHex(0x919082)
     + (id)kangaroo          {vendColor(204,206,191);}     //  vendColorHex(0xCCCEBF)
+    + (id)masala            {vendColor(70,69,68);}        //  vendColorHex(0x464544)
+    + (id)flint             {vendColor(111,106,102);}     //  vendColorHex(0x6F6A66)
+
+    + (id)tuscany           {vendColor(191,82,41);}       //  vendColorHex(0xBF5229)
+    + (id)ochre             {vendColor(211,110,40);}      //  vendColorHex(0xD36E28)
 
     + (UIColor *)menuSelectedTextColor {return [[self class] acapulco];}
     + (UIColor *)menuTextColor {return [[self class] flamingPea];}
+    + (UIColor *)tableSectionColor {return [[self class] flamingPea];}
     + (UIColor *)menuBackgroundColor {return [[self class] kangaroo];}
     + (UIColor *)cellBackgroundDarkColor {return [[self class] moonMist];}
     + (UIColor *)cellBackgroundLightColor {return [[self class] whiteRock];}
-    + (UIColor *)cellTextColor {return [[self class] armadillo];}
-    + (UIColor *)cellSecondaryTextColor {return [[self class] graniteGreen];}
+    + (UIColor *)cellTextColor {return [[self class] masala];}
+    + (UIColor *)cellSecondaryTextColor {return [[self class] flint];}
     + (UIColor *)tableSeparatorColor {return [[self class] spanishWhite];}
-    + (UIColor *)tableSectionColor {return [[self class] flamingPea];}
     + (UIColor *)tableBackgroundDarkColor {return [[self class] eagle];}
     + (UIColor *)tableBackgroundLightColor {return [[self class] loafer];}
 
@@ -78,10 +86,10 @@
             return;
         }
         [[UINavigationBar appearance] setTintColor:[[self class] graniteGreen]];
-        [[UIToolbar appearance] setTintColor:[[self class] acapulco]];
-        [[UISearchBar appearance] setTintColor:[[self class] graniteGreen]];
         [[UISegmentedControl appearance] setTintColor:[[self class] graniteGreen]];
-        [[UITableViewCell appearance] setFont:[[self class] boldFifteen]];
+        [[UISearchBar appearance] setTintColor:[[self class] graniteGreen]];
+        [[UIToolbar appearance] setTintColor:[[self class] acapulco]];
+            //[[UITableViewCell appearance] setFont:[[self class] boldFifteen]];
     }
 #endif
 

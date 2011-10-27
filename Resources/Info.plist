@@ -10,8 +10,6 @@
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>StatesLege</string>
-	<key>CFBundleDocumentTypes</key>
-	<array/>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
@@ -19,9 +17,9 @@
 	<key>CFBundleIconFiles</key>
 	<array>
 		<string>Icon.png</string>
-		<string>Icon~ipad.png</string>
-		<string>Icon@2x~iphone.png</string>
-		<string>Icon-Settings@2x~iphone.png</string>
+		<string>Icon-72.png</string>
+		<string>Icon@2x.png</string>
+		<string>Icon-Small@2x.png</string>
 		<string>Icon-Small-50.png</string>
 		<string>Icon-Small.png</string>
 	</array>
@@ -45,10 +43,16 @@
 	<string>MainWindow</string>
 	<key>NSMainNibFile~ipad</key>
 	<string>MainWindow-iPad</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>BlairMdITC TT Medium.ttf</string>
+	</array>
 	<key>UIInterfaceOrientation~ipad</key>
 	<string>UIInterfaceOrientationLandscapeLeft</string>
 	<key>UIInterfaceOrientation~iphone</key>
 	<string>UIInterfaceOrientationPortrait</string>
+	<key>UIPrerenderedIcon</key>
+	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

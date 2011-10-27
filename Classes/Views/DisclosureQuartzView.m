@@ -12,10 +12,9 @@
 
 #import "DisclosureQuartzView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "SLFAppearance.h"
 
-
-const CGFloat kDisclosureQuartzViewWidth = 32.0f;
-const CGFloat kDisclosureQuartzViewHeight = 32.0f;
+const CGFloat kDisclosureDiameter = 28.0f;
 static CGFloat scaleMod = 0;
 
 @implementation DisclosureQuartzView
@@ -47,41 +46,34 @@ static CGFloat scaleMod = 0;
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-	return CGSizeMake(kDisclosureQuartzViewWidth, kDisclosureQuartzViewHeight);
+	return CGSizeMake(kDisclosureDiameter, kDisclosureDiameter);
 }
 
 - (void)drawRect:(CGRect)dirtyRect
 {
-	CGRect imageBounds = CGRectMake(0.0f, 0.0f, kDisclosureQuartzViewWidth, kDisclosureQuartzViewHeight);
+	CGRect imageBounds = CGRectMake(0.0f, 0.0f, kDisclosureDiameter, kDisclosureDiameter);
 	CGRect bounds = [self bounds];
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	size_t bytesPerRow;
 	CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
-	CGFloat alignStroke;
-	CGFloat resolution;
 	CGFloat stroke;
 	CGMutablePathRef path = nil;
 	CGRect drawRect;
 	UIColor *color;
-	CGAffineTransform transform;
+        //	CGAffineTransform transform;
 	NSString *string;
 	UIFont *font;
 	CGImageRef contextImage = nil;
 	CGRect effectBounds;
 	unsigned char *pixels = nil;
-	CGFloat minX, maxX, minY, maxY;
-	NSUInteger width, height;
 	CGContextRef maskContext = nil;
 	CGImageRef maskImage = nil;
 	CGDataProviderRef provider = nil;
 	NSData *data = nil;
 	void *bitmapData = nil;
-	
-	resolution = 0.5f * (bounds.size.width / imageBounds.size.width + bounds.size.height / imageBounds.size.height);
-	
+		
 	CGContextSaveGState(context);
 	CGContextTranslateCTM(context, bounds.origin.x, bounds.origin.y);
-	CGContextScaleCTM(context, (bounds.size.width / imageBounds.size.width), (bounds.size.height / imageBounds.size.height));
 	
 	// DisclosureGroup
 	
@@ -92,33 +84,19 @@ static CGFloat scaleMod = 0;
 	context = CGBitmapContextCreate(bitmapData, scaleMod*round(bounds.size.width), scaleMod*round(bounds.size.height), 8, bytesPerRow, space, kCGImageAlphaPremultipliedLast);
 
 	UIGraphicsPushContext(context);
-	CGContextScaleCTM(context, scaleMod*(bounds.size.width / imageBounds.size.width), scaleMod*(bounds.size.height / imageBounds.size.height));
+	CGContextScaleCTM(context, scaleMod, scaleMod);
 	
 	// Disclosure
 	
-	stroke = 1.5f;
-	stroke *= resolution;
-	if (stroke < 1.0f) {
-		stroke = ceilf(stroke);
-	} else {
-		stroke = roundf(stroke);
-	}
-	stroke /= resolution;
-	alignStroke = fmodf(0.5f * stroke * resolution, 1.0f);
+	stroke = 2.f;
 	path = CGPathCreateMutable();
 	
-	drawRect = CGRectMake(1.0f, 1.0f, 30.0f, 30.0f);
-
-	drawRect.origin.x = (roundf(resolution * drawRect.origin.x + alignStroke) - alignStroke) / resolution;
-	drawRect.origin.y = (roundf(resolution * drawRect.origin.y + alignStroke) - alignStroke) / resolution;
-	drawRect.size.width = roundf(resolution * drawRect.size.width) / resolution;
-	drawRect.size.height = roundf(resolution * drawRect.size.height) / resolution;
+	drawRect = CGRectMake(1.0f, 1.0f, kDisclosureDiameter-2, kDisclosureDiameter-2);
 	CGPathAddEllipseInRect(path, NULL, drawRect);
-	color = [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f];
-	[color setFill];
+	[[UIColor whiteColor] setFill];
 	CGContextAddPath(context, path);
 	CGContextFillPath(context);
-	color = [UIColor colorWithRed:0.814f green:0.821f blue:0.843f alpha:1.0f];
+	color = [UIColor colorWithRed:0.811f green:0.82f blue:0.845f alpha:1.0f];
 	[color setStroke];
 	CGContextSetLineWidth(context, stroke);
 	CGContextSetLineCap(context, kCGLineCapRound);
@@ -127,49 +105,18 @@ static CGFloat scaleMod = 0;
 	CGContextStrokePath(context);
 	CGPathRelease(path);
 	
-	CGContextSaveGState(context);
-	transform = CGAffineTransformMakeTranslation(CGRectGetMidX(drawRect), CGRectGetMidY(drawRect));
+	drawRect = CGRectMake(8.0f, 0.0f, 20.0f, 30.0f);
 
-	transform = CGAffineTransformScale(transform, 0.882f, 0.882f);
-	drawRect.size.width /= 0.882f;
-	drawRect.size.height /= 0.882f;
-
-	transform = CGAffineTransformTranslate(transform, -CGRectGetMidX(drawRect), -CGRectGetMidY(drawRect));
-	CGContextConcatCTM(context, transform);
-
-	drawRect = CGRectMake(5.0f, 3.0f, 30.0f, 30.0f);
-
-	drawRect.origin.x = roundf(resolution * drawRect.origin.x) / resolution;
-	drawRect.origin.y = roundf(resolution * drawRect.origin.y) / resolution;
-	drawRect.size.width = roundf(resolution * drawRect.size.width) / resolution;
-	drawRect.size.height = roundf(resolution * drawRect.size.height) / resolution;
 	string = @">";
-	font = [UIFont fontWithName:@"HiraKakuProN-W6" size:28.0f];
+	font = [UIFont fontWithName:@"HiraKakuProN-W6" size:26.0f];
 	color = [UIColor colorWithRed:116/255.0 green:174/255.0 blue:165/255.0 alpha:1.0];
 	[color set];
-	[string drawInRect:drawRect withFont:font lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentCenter];
-	CGContextRestoreGState(context);
+	[string drawInRect:drawRect withFont:font lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentLeft];
 	
 	// Inner Shadow Effect
 	bitmapData = (unsigned char *)CGBitmapContextGetData(context);
 	pixels = (unsigned char *)bitmapData;
 
-	width = roundf(bounds.size.width);
-	height = roundf(bounds.size.height);
-	minX = width;
-	maxX = -1.0f;
-	minY = height;
-	maxY = -1.0f;
-	for (NSInteger row = 0; row < height; row++) {
-		for (NSInteger column = 0; column < width; column++) {
-			if (pixels[4 * (width * row + column) + 3] > 0) {
-				minX = MIN(minX, (CGFloat)column);
-				maxX = MAX(maxX, (CGFloat)column);
-				minY = MIN(minY, (CGFloat)(height - row));
-				maxY = MAX(maxY, (CGFloat)(height - row));
-			}
-		}
-	}
 	contextImage = CGBitmapContextCreateImage(context);
 	CGContextRelease(context);
 	free(bitmapData);
@@ -177,35 +124,38 @@ static CGFloat scaleMod = 0;
 	UIGraphicsPopContext();
 	context = UIGraphicsGetCurrentContext();
 	CGContextDrawImage(context, imageBounds, contextImage);
-	if ((minX <= maxX) && (minY <= maxY)) {
-		CGContextSaveGState(context);
-		effectBounds = CGRectMake(minX, minY - 1.0f, maxX - minX + 1.0f, maxY - minY + 1.0f);
-		effectBounds = CGRectInset(effectBounds, -(ABS(3.172f * cosf(1.571f) * resolution) + 4.291f), -(ABS(3.172f * sinf(1.571f) * resolution) + 4.291f));
-		effectBounds = CGRectIntegral(effectBounds);
-		color = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f];
-		CGContextSetShadowWithColor(context, CGSizeMake(3.172f * cosf(1.571f) * resolution, 3.172f * sinf(1.571f) * resolution - effectBounds.size.height), 4.291f, [color CGColor]);
-		bytesPerRow = roundf(effectBounds.size.width);
-		bitmapData = calloc(bytesPerRow * round(effectBounds.size.height), 8);
-		maskContext = CGBitmapContextCreate(bitmapData, round(effectBounds.size.width), round(effectBounds.size.height), 8, bytesPerRow, NULL, kCGImageAlphaOnly);
+    
+    CGContextSaveGState(context);
+    effectBounds = bounds;
+    CGFloat effectOffset = 3.f;
+    CGFloat effectBlur = 4.f;
+    CGFloat effectInsetX = -effectBlur;
+    CGFloat effectInsetY = -(effectOffset + effectBlur);
+    effectBounds = CGRectInset(effectBounds, effectInsetX, effectInsetY);
+    effectBounds = CGRectIntegral(effectBounds);
+    color = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f];
+    CGSize shadowOffset = CGSizeMake(0, -(effectBounds.size.height-effectOffset));
+    CGContextSetShadowWithColor(context, shadowOffset, effectBlur, [color CGColor]);
+    bytesPerRow = effectBounds.size.width;
+    bitmapData = calloc(bytesPerRow * effectBounds.size.height, 8);
+    maskContext = CGBitmapContextCreate(bitmapData, effectBounds.size.width, effectBounds.size.height, 8, bytesPerRow, NULL, kCGImageAlphaOnly);
+    CGContextDrawImage(maskContext, CGRectMake(-effectBounds.origin.x, -effectBounds.origin.y, bounds.size.width, bounds.size.height), contextImage);
+    maskImage = CGBitmapContextCreateImage(maskContext);
+    data = [NSData dataWithBytes:bitmapData length:bytesPerRow * effectBounds.size.height];
+    provider = CGDataProviderCreateWithCFData((CFDataRef)data);
+    CGImageRelease(contextImage);
+    contextImage = CGImageMaskCreate(effectBounds.size.width, effectBounds.size.height, 8, 8, bytesPerRow, provider, NULL, 0);
+    CGDataProviderRelease(provider);
+    CGContextRelease(maskContext);
+    CGContextClipToMask(context, effectBounds, maskImage);
+    CGImageRelease(maskImage);
+    effectBounds.origin.y += effectBounds.size.height;
+    [[UIColor blackColor] setFill];
+    CGContextDrawImage(context, effectBounds, contextImage);
+    free(bitmapData);
 
-		CGContextDrawImage(maskContext, CGRectMake(-effectBounds.origin.x, -effectBounds.origin.y, bounds.size.width, bounds.size.height), contextImage);
-		maskImage = CGBitmapContextCreateImage(maskContext);
-		data = [NSData dataWithBytes:bitmapData length:bytesPerRow * round(effectBounds.size.height)];
-		provider = CGDataProviderCreateWithCFData((CFDataRef)data);
-		CGImageRelease(contextImage);
-		contextImage = CGImageMaskCreate(roundf(effectBounds.size.width), roundf(effectBounds.size.height), 8, 8, bytesPerRow, provider, NULL, 0);
-		CGDataProviderRelease(provider);
-		CGContextRelease(maskContext);
-		CGContextScaleCTM(context, (imageBounds.size.width / bounds.size.width), (imageBounds.size.height / bounds.size.height));
-		CGContextClipToMask(context, effectBounds, maskImage);
-		CGImageRelease(maskImage);
-		effectBounds.origin.y += effectBounds.size.height;
-		[[UIColor blackColor] setFill];
-		CGContextDrawImage(context, effectBounds, contextImage);
-		free(bitmapData);
+    CGContextRestoreGState(context);
 
-		CGContextRestoreGState(context);
-	}
 	CGImageRelease(contextImage);
 	
 	CGContextRestoreGState(context);

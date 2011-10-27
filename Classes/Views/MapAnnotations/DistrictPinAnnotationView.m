@@ -16,11 +16,15 @@
 
 NSString* const DistrictPinAnnotationViewReuseIdentifier = @"DistrictPinAnnotationViewID";
 
-@interface DistrictPinAnnotationView (Private)
+@interface DistrictPinAnnotationView()
 - (void)setPinColorWithAnnotation:(id <MKAnnotation>)anAnnotation;
+- (void)accessoryTapped:(id)sender;
+@property (nonatomic,copy) AnnotationOnAccessoryTappedBlock onAccessoryTapped;
 @end
     
 @implementation DistrictPinAnnotationView
+@synthesize accessory;
+@synthesize onAccessoryTapped = _onAccessoryTapped;
 
 + (DistrictPinAnnotationView*)districtPinViewWithAnnotation:(id<MKAnnotation>)annotation identifier:(NSString *)reuseIdentifier {
     return [[[DistrictPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseIdentifier] autorelease];            
@@ -33,10 +37,43 @@ NSString* const DistrictPinAnnotationViewReuseIdentifier = @"DistrictPinAnnotati
         self.draggable = NO;
         self.canShowCallout = YES;
         [self setPinColorWithAnnotation:annotation];
-        UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];        // UIButtonTypeInfoLight
-        self.rightCalloutAccessoryView = rightButton;
+        self.accessory = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        self.accessory.enabled = NO;
+        self.accessory.exclusiveTouch = YES;
+        [self.accessory addTarget:self action:@selector(accessoryTapped:) forControlEvents: UIControlEventTouchUpInside | UIControlEventTouchCancel];
+        self.rightCalloutAccessoryView = self.accessory;
     }
     return self;
+}
+
+- (void)dealloc {
+    self.accessory = nil;
+    Block_release(_onAccessoryTapped);
+    [super dealloc];
+}
+
+- (void)enableAccessoryWithOnAccessoryTappedBlock:(AnnotationOnAccessoryTappedBlock)block {
+    self.accessory.enabled = YES;
+    if (block)
+        self.onAccessoryTapped = block;
+}
+
+- (void)disableAccessory {
+    self.accessory.enabled = NO;
+//  self.onAccessoryTapped = nil;
+}
+
+- (void)setOnAccessoryTapped:(AnnotationOnAccessoryTappedBlock)onAccessoryTapped {
+    if (_onAccessoryTapped) {
+        Block_release(_onAccessoryTapped);
+        _onAccessoryTapped = nil;
+    }
+    _onAccessoryTapped = Block_copy(onAccessoryTapped);
+}
+
+- (void)accessoryTapped:(id)sender {
+    if (_onAccessoryTapped)
+        _onAccessoryTapped(self, self.accessory);
 }
 
 - (void)setPinColorWithAnnotation:(id <MKAnnotation>)anAnnotation {

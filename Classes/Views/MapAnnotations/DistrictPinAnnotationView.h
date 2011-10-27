@@ -12,10 +12,15 @@
 
 #import <MapKit/MapKit.h>
 
+typedef void(^AnnotationOnAccessoryTappedBlock)(MKAnnotationView *annotationView, UIControl *accessoryControl);
+
 @interface DistrictPinAnnotationView : MKPinAnnotationView {
 }
 + (DistrictPinAnnotationView*)districtPinViewWithAnnotation:(id<MKAnnotation>)annotation identifier:(NSString *)reuseIdentifier;
 - (void)setPinColorWithAnnotation:(id <MKAnnotation>)anAnnotation;
+- (void)enableAccessoryWithOnAccessoryTappedBlock:(AnnotationOnAccessoryTappedBlock)block;
+- (void)disableAccessory;
+@property (nonatomic,retain) UIButton *accessory;
 @end
     
 extern NSString* const DistrictPinAnnotationViewReuseIdentifier;

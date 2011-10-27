@@ -29,6 +29,7 @@
 + (UIColor *)partyBlue;
 + (UIColor *)partyGreen;
 
++ (UIFont *)menuTextFont;
 + (UIFont *)boldTen;
 + (UIFont *)boldTwelve;
 + (UIFont *)boldFourteen;

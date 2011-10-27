@@ -21,6 +21,9 @@
     if (self) {
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             cell.textLabel.textColor = [SLFAppearance cellTextColor];
+            cell.textLabel.font = [SLFAppearance boldFourteen];
+            cell.detailTextLabel.textColor = [SLFAppearance cellSecondaryTextColor];
+            cell.detailTextLabel.font = [SLFAppearance boldTwelve];
             SLFAlternateCellForIndexPath(cell, indexPath);
         };
     }

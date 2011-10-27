@@ -38,10 +38,10 @@
 		self.selectionStyle = UITableViewCellSelectionStyleBlue;
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;	
-		self.detailTextLabel.font =			[SLFAppearance boldTwelve];
-		self.textLabel.font =				[SLFAppearance boldTen];
+		self.detailTextLabel.font =			[SLFAppearance boldFourteen];
+		self.textLabel.font =				[SLFAppearance boldTwelve];
 		self.detailTextLabel.textColor = 	[SLFAppearance cellTextColor];
-		self.textLabel.textColor =			[SLFAppearance cellSecondaryTextColor];
+		self.textLabel.textColor =			[SLFAppearance tableSectionColor];
 		self.textLabel.adjustsFontSizeToFitWidth =	YES;
 		self.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
 		self.detailTextLabel.adjustsFontSizeToFitWidth = YES;

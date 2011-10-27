@@ -13,9 +13,6 @@
 
 #import <UIKit/UIKit.h>
 
-extern const CGFloat kDisclosureQuartzViewWidth;
-extern const CGFloat kDisclosureQuartzViewHeight;
-
 @interface DisclosureQuartzView : UIView {
 }
 

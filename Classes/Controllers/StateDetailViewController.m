@@ -53,7 +53,7 @@
 - (id)initWithState:(SLFState *)newState {
     self = [super init];
     if (self) {
-        UIColor *iconColor = [SLFAppearance tableSectionColor];
+        UIColor *iconColor = [SLFAppearance menuTextColor];
         self.legislatorsIcon = [[UIImage imageNamed:@"123-id-card"] imageWithOverlayColor:iconColor];
         self.committeesIcon = [[UIImage imageNamed:@"60-signpost"] imageWithOverlayColor:iconColor];                               
         self.districtsIcon = [[UIImage imageNamed:@"73-radar"] imageWithOverlayColor:iconColor];

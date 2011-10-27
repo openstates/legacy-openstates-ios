@@ -39,7 +39,8 @@
 - (UITableView *) tableViewWithStyle:(UITableViewStyle)style {
     UITableView *aTableView = [super tableViewWithStyle:style];
     aTableView.backgroundColor = [UIColor clearColor];
-    aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    if (style == UITableViewStylePlain)
+        aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     return aTableView;
 }
 
