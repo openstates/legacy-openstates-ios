@@ -19,6 +19,7 @@ typedef void(^AnnotationOnAccessoryTappedBlock)(MKAnnotationView *annotationView
 + (DistrictPinAnnotationView*)districtPinViewWithAnnotation:(id<MKAnnotation>)annotation identifier:(NSString *)reuseIdentifier;
 - (void)setPinColorWithAnnotation:(id <MKAnnotation>)anAnnotation;
 - (void)enableAccessoryWithOnAccessoryTappedBlock:(AnnotationOnAccessoryTappedBlock)block;
+- (void)enableAccessory;
 - (void)disableAccessory;
 @property (nonatomic,retain) UIButton *accessory;
 @end

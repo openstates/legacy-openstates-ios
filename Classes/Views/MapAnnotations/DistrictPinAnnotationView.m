@@ -38,10 +38,10 @@ NSString* const DistrictPinAnnotationViewReuseIdentifier = @"DistrictPinAnnotati
         self.canShowCallout = YES;
         [self setPinColorWithAnnotation:annotation];
         self.accessory = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-        self.accessory.enabled = NO;
         self.accessory.exclusiveTouch = YES;
         [self.accessory addTarget:self action:@selector(accessoryTapped:) forControlEvents: UIControlEventTouchUpInside | UIControlEventTouchCancel];
         self.rightCalloutAccessoryView = self.accessory;
+        [self disableAccessory];
     }
     return self;
 }
@@ -52,15 +52,21 @@ NSString* const DistrictPinAnnotationViewReuseIdentifier = @"DistrictPinAnnotati
     [super dealloc];
 }
 
-- (void)enableAccessoryWithOnAccessoryTappedBlock:(AnnotationOnAccessoryTappedBlock)block {
+- (void)enableAccessory {
     self.accessory.enabled = YES;
-    if (block)
-        self.onAccessoryTapped = block;
+    self.accessory.hidden = NO;
 }
 
 - (void)disableAccessory {
     self.accessory.enabled = NO;
-//  self.onAccessoryTapped = nil;
+    self.accessory.hidden = YES;
+        //  self.onAccessoryTapped = nil;
+}
+
+- (void)enableAccessoryWithOnAccessoryTappedBlock:(AnnotationOnAccessoryTappedBlock)block {
+    [self enableAccessory];
+    if (block)
+        self.onAccessoryTapped = block;
 }
 
 - (void)setOnAccessoryTapped:(AnnotationOnAccessoryTappedBlock)onAccessoryTapped {

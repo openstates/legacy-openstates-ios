@@ -16,10 +16,12 @@
 
 #define OPENSTATES_BASE_URL		@"http://openstates.org/api/v1"
 #define TRANSPARENCY_BASE_URL   @"http://transparencydata.com/api/1.0"
+#define BOUNDARY_BASE_URL       @"http://pentagon.sunlightlabs.net/1.0"
 
 @implementation SLFRestKitManager
 @synthesize transClient;
 @synthesize openStatesClient;
+@synthesize boundaryClient;
 
 + (SLFRestKitManager *)sharedRestKit
 {
@@ -53,8 +55,8 @@
         [mapper release];        
         
         self.transClient = [RKClient clientWithBaseURL:TRANSPARENCY_BASE_URL];
-
         self.openStatesClient = [RKClient clientWithBaseURL:OPENSTATES_BASE_URL];
+        self.boundaryClient = [RKClient clientWithBaseURL:BOUNDARY_BASE_URL];
     }
     return self;
 }
@@ -64,6 +66,8 @@
     self.transClient = nil;
     [self.openStatesClient.requestQueue cancelAllRequests];
     self.openStatesClient = nil;
+    [self.boundaryClient.requestQueue cancelAllRequests];
+    self.boundaryClient = nil;
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
     if (__preloadQueue) {
         [__preloadQueue cancelAllRequests];

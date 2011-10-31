@@ -23,6 +23,7 @@
 - (void)preloadObjectsForState:(SLFState *)state;
 @property (nonatomic,retain) RKClient *transClient;
 @property (nonatomic,retain) RKClient *openStatesClient;
+@property (nonatomic,retain) RKClient *boundaryClient;
 @end
 
 

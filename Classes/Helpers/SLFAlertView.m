@@ -35,39 +35,19 @@
 @synthesize cancelButtonTitle;
 @synthesize otherButtonTitle;
 
-+ (void)showWithTitle:(NSString *)title
-              message:(NSString *)message
-          buttonTitle:(NSString *)buttonTitle {
-    [self showWithTitle:title message:message
-            cancelTitle:buttonTitle cancelBlock:nil
-             otherTitle:nil otherBlock:nil];
++ (void)showWithTitle:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)buttonTitle {
+    [self showWithTitle:title message:message cancelTitle:buttonTitle cancelBlock:nil otherTitle:nil otherBlock:nil];
 }
 
-+ (void)showWithTitle:(NSString *)title 
-              message:(NSString *)message 
-          cancelTitle:(NSString *)cancelTitle 
-          cancelBlock:(SLFAlertBlock)cancelBlk
-           otherTitle:(NSString *)otherTitle
-           otherBlock:(SLFAlertBlock)otherBlk {
-    [[[[self alloc] initWithTitle:title message:message
-                      cancelTitle:cancelTitle cancelBlock:cancelBlk
-                       otherTitle:otherTitle otherBlock:otherBlk]
-      autorelease] show];                           
++ (void)showWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle cancelBlock:(SLFAlertBlock)cancelBlk otherTitle:(NSString *)otherTitle otherBlock:(SLFAlertBlock)otherBlk {
+    SLFAlertView *alert = [[SLFAlertView alloc] initWithTitle:title message:message cancelTitle:cancelTitle cancelBlock:cancelBlk otherTitle:otherTitle otherBlock:otherBlk];
+    [alert show];
+    [alert autorelease];
 }
 
-- (id)initWithTitle:(NSString *)title 
-            message:(NSString *)message 
-        cancelTitle:(NSString *)cancelTitle 
-        cancelBlock:(SLFAlertBlock)cancelBlk
-         otherTitle:(NSString *)otherTitle
-         otherBlock:(SLFAlertBlock)otherBlk {
-		 
-    if ((self = [super initWithTitle:title 
-                             message:message
-                            delegate:self
-                   cancelButtonTitle:cancelTitle 
-                   otherButtonTitles:otherTitle, nil])) {
-				   
+- (id)initWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle cancelBlock:(SLFAlertBlock)cancelBlk otherTitle:(NSString *)otherTitle otherBlock:(SLFAlertBlock)otherBlk {
+    self = [super initWithTitle:title message:message delegate:self cancelButtonTitle:cancelTitle otherButtonTitles:otherTitle, nil];
+    if (self) {
         if (cancelBlk == nil && otherBlk == nil) {
             self.delegate = nil;
         }

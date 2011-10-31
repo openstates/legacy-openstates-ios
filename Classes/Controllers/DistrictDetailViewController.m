@@ -17,35 +17,37 @@
 #import "SLFTheme.h"
 #import "SLFAlertView.h"
 #import "DistrictPinAnnotationView.h"
-#import "DistrictSearchOperation.h"
+#import "DistrictSearch.h"
 
 @interface DistrictDetailViewController()
-- (void)loadDataFromDataStoreWithID:(NSString *)objID;
+- (void)loadMapWithID:(NSString *)objID;
 - (void)loadDataWithResourcePath:(NSString *)path;
-@property (nonatomic,retain) DistrictSearchOperation *searchOperation;
+- (BOOL)isUpperDistrictWithID:(NSString *)objID;
+- (BOOL)isUpperDistrict:(SLFDistrict *)obj;
+- (void)setUpperOrLowerDistrict:(SLFDistrict *)districtMap;
+@property (nonatomic,retain) DistrictSearch *districtSearch;
 @end
 
 @implementation DistrictDetailViewController
 @synthesize resourceClass;
-@synthesize districtMap;
-@synthesize mapView;
-@synthesize searchOperation;
+@synthesize upperDistrict;
+@synthesize lowerDistrict;
+@synthesize districtSearch;
 
 - (id)initWithDistrictMapID:(NSString *)objID {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
         self.resourceClass = [SLFDistrict class];
-        [self loadDataFromDataStoreWithID:objID];
-        if (!self.districtMap)
-            [self loadDataWithResourcePath:[NSString stringWithFormat:@"/districts/boundary/%@", objID]];    // DON'T REALLY LOAD UNLESS WE HAVE TO
+        [self loadMapWithID:objID];
     }
     return self;
 }
 
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-	self.districtMap = nil;
-    self.searchOperation = nil;
+    self.upperDistrict = nil;
+    self.lowerDistrict = nil;
+    self.districtSearch = nil;
     [super dealloc];
 }
 
@@ -53,24 +55,29 @@
     [super viewDidUnload];
 }
 
-- (void)loadDataFromDataStoreWithID:(NSString *)objID {
-	self.districtMap = [SLFDistrict findFirstByAttribute:@"boundaryID" withValue:objID];
+- (void)loadMapWithID:(NSString *)objID {
+    if (IsEmpty(objID))
+        return;
+    SLFDistrict *district = [SLFDistrict findFirstByAttribute:@"boundaryID" withValue:objID];
+    if (district)
+        [self setUpperOrLowerDistrict:district];
+    [self loadDataWithResourcePath:[NSString stringWithFormat:@"/districts/boundary/%@", objID]];    // DON'T REALLY LOAD UNLESS WE HAVE TO
 }
 
-- (void)setDistrictMap:(SLFDistrict *)newObj {
-    nice_release(districtMap);
-	districtMap = [newObj retain];
-	if (newObj) {
-        //self.title = newObj.title;
-		[self loadDataWithResourcePath:RKMakePathWithObject(@"/districts/boundary/:boundaryID", newObj)];
-	}
+- (void)setUpperOrLowerDistrict:(SLFDistrict *)newObj {
+    if (!newObj)
+        return;
+    if ([self isUpperDistrict:newObj])
+        self.upperDistrict = newObj;
+    else
+        self.lowerDistrict = newObj;
 }
 
 - (void)loadDataWithResourcePath:(NSString *)path {
-	if (IsEmpty(path))
-		return;	
-	NSDictionary *queryParameters = [NSDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
-	NSString *pathToLoad = [path appendQueryParams:queryParameters];
+    if (IsEmpty(path))
+        return;    
+    NSDictionary *queryParameters = [NSDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
+    NSString *pathToLoad = [path appendQueryParams:queryParameters];
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:pathToLoad delegate:self];
 }
 
@@ -80,9 +87,8 @@
     if (!object || ![object isKindOfClass:self.resourceClass])
         return;
     SLFDistrict *district = object;
-    nice_release(districtMap);
-	districtMap = [district retain];
-        //self.title = districtMap.title;
+    [self setUpperOrLowerDistrict:district];
+
     if (![self isViewLoaded])
         return;
     [self.mapView addAnnotation:district];
@@ -100,26 +106,27 @@
     if (!polygon)
         return nil;
     NSString *boundaryID = [polygon subtitle];
-    if (IsEmpty(boundaryID))
-        return self.districtMap;
+    if (IsEmpty(boundaryID)) {
+        if (self.upperDistrict && polygon.pointCount == self.upperDistrict.polygonFactory.pointCount)
+            return self.upperDistrict;
+        return self.lowerDistrict;
+    }
     return [SLFDistrict findFirstByAttribute:@"boundaryID" withValue:boundaryID];
 }
 
 #pragma mark -
 #pragma mark MKMapViewDelegate
 
-- (MKOverlayView *)mapView:(MKMapView *)aMapView viewForOverlay:(id <MKOverlay>)overlay
+- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
 {
     if ([overlay isKindOfClass:[MKPolygon class]])
     {
         SLFDistrict *district = [self districtMapForPolygon:(MKPolygon*)overlay];
         MKPolygonView *aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
-        UIColor *partyColor = [SLFAppearance partyGreen];
-        if (district && [district.legislators count] == 1) {
-            SLFLegislator *leg = [district.legislators anyObject];
-            partyColor = leg.partyObj.color;
-        }
-        aView.fillColor = [partyColor colorWithAlphaComponent:0.2];
+        if (district && [self isUpperDistrict:district])
+            aView.fillColor = [[UIColor orangeColor] colorWithAlphaComponent:0.2];
+        else 
+            aView.fillColor = [[UIColor greenColor] colorWithAlphaComponent:0.2];
         aView.strokeColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.7];
         aView.lineWidth = 2;
         return aView;
@@ -130,48 +137,69 @@
 - (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)annotation {    
     if ([annotation isKindOfClass:self.resourceClass])
     {
+        SLFDistrict *district = annotation;
         DistrictPinAnnotationView *pinView = (DistrictPinAnnotationView*)[aMapView dequeueReusableAnnotationViewWithIdentifier:DistrictPinAnnotationViewReuseIdentifier];
         if (!pinView)
-            pinView = [DistrictPinAnnotationView districtPinViewWithAnnotation:annotation identifier:DistrictPinAnnotationViewReuseIdentifier];
+            pinView = [DistrictPinAnnotationView districtPinViewWithAnnotation:district identifier:DistrictPinAnnotationViewReuseIdentifier];
         else
-            pinView.annotation = annotation;
+            pinView.annotation = district;
         [pinView setPinColorWithAnnotation:annotation];
-        if ([self.districtMap.legislators count] == 1) {                
-            UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-            [rightButton addTarget:self action:@selector(showLegislatorDetail:) forControlEvents:UIControlEventTouchUpInside];
-            pinView.rightCalloutAccessoryView = rightButton;
+        if ([district.legislators count] == 1) { 
+            [pinView enableAccessory];
         }
         return pinView;
     }
     return [super mapView:aMapView viewForAnnotation:annotation];
 }
 
-- (void)showLegislatorDetail:(id)sender {
-    if ([self.districtMap.legislators count] == 1) {
-        SLFLegislator *leg = [self.districtMap.legislators anyObject];
-        if (leg && leg.legID) {
-            LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:leg.legID];
-            [self stackOrPushViewController:vc];
-            [vc release];
-        }    
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)aView {
+    if (aView && [aView isSelected] && [aView isKindOfClass:[DistrictPinAnnotationView class]])
+        self.selectedAnnotationView = aView;
+    [super mapView:mapView didSelectAnnotationView:aView];
+}
+
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView calloutAccessoryControlTapped:(UIControl *)control {
+    if (annotationView && [annotationView isKindOfClass:[DistrictPinAnnotationView class]]) {
+        SLFDistrict *district = annotationView.annotation;
+        if (!district)
+            return;
+        if (district.legislators && [district.legislators count] == 1) {
+            SLFLegislator *leg = [district.legislators anyObject];
+            if (leg && leg.legID) {
+                LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:leg.legID];
+                [self stackOrPushViewController:vc];
+                [vc release];
+            }    
+        }
+        return;
     }
 }
 
 - (void)beginBoundarySearchForCoordininate:(CLLocationCoordinate2D)coordinate {
-    self.searchOperation = [DistrictSearchOperation searchOperationForCoordinate:coordinate 
+    self.districtSearch = [DistrictSearch districtSearchForCoordinate:coordinate 
                                              successBlock:^(NSArray *results) {
-                                                 if (!IsEmpty(results)) {
-                                                     NSString *districtID = [results objectAtIndex:0]; // only do the first
-                                                     [self loadDataFromDataStoreWithID:districtID];
-                                                 }
-                                                 self.searchOperation = nil;
+                                                 for (NSString *districtID in results)
+                                                     [self loadMapWithID:districtID];
+                                                 self.districtSearch = nil;
                                              }
-                                             failureBlock:^(NSString *message, DistrictSearchOperationFailOption failOption) {
-                                                 if (failOption == DistrictSearchOperationFailOptionLog)
+                                             failureBlock:^(NSString *message, DistrictSearchFailOption failOption) {
+                                                 if (failOption == DistrictSearchFailOptionLog)
                                                      RKLogError(@"%@", message);
                                                  else
                                                      [SLFAlertView showWithTitle:NSLocalizedString(@"Geolocation Error", @"") message:message buttonTitle:NSLocalizedString(@"OK", @"")];
-                                                 self.searchOperation = nil;
+                                                 self.districtSearch = nil;
                                              }];
+}
+
+- (BOOL)isUpperDistrictWithID:(NSString *)objID {
+    if (!IsEmpty(objID) && [objID hasPrefix:@"sldu"])
+        return YES;
+    return NO;
+}
+
+- (BOOL)isUpperDistrict:(SLFDistrict *)obj {
+    if ([self isUpperDistrictWithID:obj.boundaryID] || [obj.chamberObj.type isEqualToString:@"upper"])
+        return YES;
+    return NO;
 }
 @end

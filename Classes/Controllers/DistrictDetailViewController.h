@@ -17,7 +17,8 @@
 @interface DistrictDetailViewController : MapViewController <RKObjectLoaderDelegate> {
 }
 
-@property (nonatomic,retain) SLFDistrict *districtMap;
+@property (nonatomic,retain) SLFDistrict *upperDistrict;
+@property (nonatomic,retain) SLFDistrict *lowerDistrict;
 @property (nonatomic,assign) Class resourceClass;
 
 - (id)initWithDistrictMapID:(NSString *)objID;
