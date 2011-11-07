@@ -1,5 +1,5 @@
 //
-//  BillSearchViewController.m
+//  BillSearchManager.m
 //  Created by Gregory Combs on 2/20/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -10,7 +10,7 @@
 //
 //
 
-#import "BillSearchDataSource.h"
+#import "BillSearchManager.h"
 #import "SLFDataModels.h"
 
 #import "TexLegeReachability.h"
@@ -41,7 +41,7 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 
 #endif
 
-@implementation BillSearchDataSource
+@implementation BillSearchManager
 @synthesize searchDisplayController, delegateTVC;
 @synthesize useLoadingDataCell;
 
@@ -286,8 +286,6 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 	return cell;
 }
 
-
-
 #pragma mark -
 #pragma mark Search By Raw Parameters
 
@@ -313,160 +311,6 @@ NSString *billTypeStringFromBillID(NSString *billID) {
 	}
 	
 	return request;
-}
-
-#pragma mark -
-#pragma mark Search By Full-Text String
-
-- (void)startSearchForText:(NSString *)searchString
-					 state:(SLFState *)state 
-				   session:(NSString *)inSession 
-				   chamber:(SLFChamber *)chamber 
-{
-	
-	NSCParameterAssert((state != NULL) && (inSession != NULL));
-
-	NSMutableString *queryString = [NSMutableString stringWithString:@"/bills"];
-
-	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-										[inSession urlSafeString], @"search_window",
-										state.stateID, @"state",
-										SUNLIGHT_APIKEY, @"apikey",
-										nil];
-	
-	NSString *chamberString = chamber.type;
-	if (chamberString && ![chamberString isEqualToString:@"all"]) {
-		[queryParams setObject:chamberString forKey:@"chamber"];
-	}
-	
-	if (IsEmpty(searchString))
-		searchString = @"";
-	else
-		searchString = [searchString uppercaseString];
-
-	[queryParams setObject:searchString forKey:@"q"];
-	
-	[self startSearchWithQueryString:queryString params:queryParams];
-}
-
-
-
-- (void)startSearchForText:(NSString *)searchString 
-				   chamber:(NSInteger)chamberIndex
-
-{
-	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
-	SLFState *state = meta.selectedState;
-	if (!state)
-		return;
-		
-	NSString *session = @"session";
-	if (!IsEmpty(meta.selectedSession))
-		session = [NSString stringWithFormat:@"session:%@", meta.selectedSession];
-    SLFChamber *chamber = [state.chambers objectAtIndex:chamberIndex];
-	
-	[self startSearchForText:searchString 
-					   state:state
-					 session:session
-					 chamber:chamber];
-}
-
-#pragma mark -
-#pragma mark Search By Subject
-
-- (void)startSearchForSubject:(NSString *)searchSubject 
-						state:(SLFState *)inState 
-					  session:(NSString *)inSession 
-					  chamber:(SLFChamber *)inChamber 
-{
-	NSCParameterAssert((inState != NULL) && (inSession != NULL));
-	
-	
-	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-										[inSession urlSafeString], @"search_window",
-										inState.stateID, @"state",
-										SUNLIGHT_APIKEY, @"apikey",
-										nil];
-	
-	NSString *chamberString = inChamber.type;
-	if (![chamberString isEqualToString:@"all"]) {
-		[queryParams setObject:chamberString forKey:@"chamber"];
-	}
-	if (IsEmpty(searchSubject))
-		searchSubject = @"";
-	else {
-		NSDictionary *tagSubject = [NSDictionary dictionaryWithObject:searchSubject forKey:@"subject"];
-		[[LocalyticsSession sharedLocalyticsSession] tagEvent:@"BILL_SUBJECTS" attributes:tagSubject];	
-	}
-	[queryParams setObject:searchSubject forKey:@"subject"];
-	
-	[self startSearchWithQueryString:@"/bills" params:queryParams];
-	
-}
-
-
-- (void)startSearchForSubject:(NSString *)searchSubject chamber:(NSInteger)chamberIndex {
-	StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
-    SLFState *state = meta.selectedState;
-	if (!state)
-		return;
-	
-	NSString *session = @"session";
-	if (!IsEmpty(meta.selectedSession))
-		session = [NSString stringWithFormat:@"session:%@", meta.selectedSession];
-	
-    SLFChamber *chamber = [state.chambers objectAtIndex:chamberIndex];
-	[self startSearchForSubject:searchSubject 
-						  state:state 
-						session:session 
-						chamber:chamber];
-
-}
-
-
-#pragma mark -
-#pragma mark Search By Author
-
-- (void)startSearchForBillsAuthoredBy:(NSString *)searchSponsorID 
-								state:(SLFState *)inState 
-							  session:(NSString *)inSession 
-{
-	NSCParameterAssert( (searchSponsorID != NULL) && (inState != NULL) && (inSession != NULL) );
-	
-	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-								 searchSponsorID, @"sponsor_id",
-								 inState.stateID, @"state",
-								 [inSession urlSafeString], @"search_window",
-								 SUNLIGHT_APIKEY, @"apikey",
-								 // now for the fun part
-								 @"sponsors,bill_id,title,session,state,type,update_at,subjects", @"fields",
-								 nil];
-	
-	RKRequest *request = [self startSearchWithQueryString:@"/bills" params:queryParams];
-	if (request) {
-		request.userData = [NSDictionary dictionaryWithObjectsAndKeys:
-							searchSponsorID, @"sponsor_id", nil];
-	}
-	
-}
-
-
-- (void)startSearchForBillsAuthoredBy:(NSString *)searchSponsorID {
-	if (NO == IsEmpty(searchSponsorID)) {
-		
-		StateMetaLoader *meta = [StateMetaLoader sharedStateMeta];
-        SLFState *state = meta.selectedState;
-		if (!state)
-			return;
-		
-		NSString *session = @"session";
-		if (!IsEmpty(meta.selectedSession))
-			session = [NSString stringWithFormat:@"session:%@", meta.selectedSession];
-		
-		[self startSearchForBillsAuthoredBy:searchSponsorID 
-									  state:state 
-									session:session];
-	}
 }
 
 - (void)pruneBillsForAuthor:(NSString *)sponsorID {

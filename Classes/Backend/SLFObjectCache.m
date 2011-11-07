@@ -36,8 +36,8 @@
 		return [self fetchRequestDistrictsForResourcePath:resourcePath];
 	if ([resourcePath hasPrefix:@"/events"])
 		return [self fetchRequestEventsForResourcePath:resourcePath];
-	if ([resourcePath hasPrefix:@"/bills"])
-		return [self fetchRequestBillsForResourcePath:resourcePath];
+    if ([resourcePath hasPrefix:@"/bills"])
+        return [self fetchRequestBillsForResourcePath:resourcePath];
     return nil;
 }
 
@@ -164,15 +164,19 @@
 			if ([key isEqualToString:@"sponsor_id"])
 				subpredicate = [NSPredicate predicateWithFormat:@"(ANY sponsors.leg_id LIKE[cd] %@)", value];
 			else if ([key isEqualToString:@"q"])
-				subpredicate = [NSPredicate predicateWithFormat:@"(title CONTAINS[cd] %@ OR subjects CONTAINS[cd] %@)", value, value];
+				subpredicate = [NSPredicate predicateWithFormat:@"(title CONTAINS[cd] %@)", value];
+#error transformables cannot be used in predicates
+ //				subpredicate = [NSPredicate predicateWithFormat:@"(title CONTAINS[cd] %@ OR subjects CONTAINS[cd] %@)", value, value];
             else if ([key isEqualToString:@"subject"])
-				subpredicate = [NSPredicate predicateWithFormat:@"(subjects CONTAINS[cd] %@)", value, value];
+//				subpredicate = [NSPredicate predicateWithFormat:@"(subjects CONTAINS[cd] %@)", value];
+                subpredicate = [NSPredicate predicateWithFormat:@"(%@ IN subjects)", value];
+
 			else if ([key isEqualToString:@"chamber"])
 				subpredicate = [NSPredicate predicateWithFormat:@"(chamber LIKE[cd] %@)", value];
 			else if ([key isEqualToString:@"state"] || [key isEqualToString:@"stateID"])
 				subpredicate = [NSPredicate predicateWithFormat:@"(stateID LIKE[cd] %@)", value];
 			else if ([key isEqualToString:@"search_window"]) {
-				NSArray *sessionComponents = [value componentsSeparatedByString:@"session"];
+				NSArray *sessionComponents = [value componentsSeparatedByString:@"session:"];
 				if ([sessionComponents count] > 1)
 					subpredicate = [NSPredicate predicateWithFormat:@"(session LIKE[cd] %@)", [sessionComponents objectAtIndex:1]];
 			}	

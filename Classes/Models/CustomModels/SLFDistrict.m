@@ -32,7 +32,6 @@
     CLLocationCoordinate2D center = CLLocationCoordinate2DMake(latitude, longitude);
     if (NO == CLLocationCoordinate2DIsValid(center))
         RKLogDebug(@"Invalid Centroid: lat=%lf lon=%lf", latitude, longitude);
-    RKLogDebug(@"Region = {lat=%lf, lon=%lf} {latD=%lf, lonD=%lf}", latitude, longitude, latDelta, lonDelta);
     return MKCoordinateRegionMake(center, distanceToCenter);
 }
 

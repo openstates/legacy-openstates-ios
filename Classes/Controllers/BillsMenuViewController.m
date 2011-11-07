@@ -1,6 +1,6 @@
 //
-//  StateDetailViewController.m
-//  Created by Gregory Combs on 7/31/11.
+//  BillsMenuViewController.m
+//  Created by Gregory Combs on 11/6/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
 //
@@ -10,57 +10,44 @@
 //
 //
 
-#import "StateDetailViewController.h"
-#import "LegislatorsViewController.h"
-#import "CommitteesViewController.h"
-#import "DistrictsViewController.h"
-#import "EventsViewController.h"
 #import "BillsMenuViewController.h"
 #import "SLFDataModels.h"
 #import "SLFTheme.h"
 #import "UIImage+OverlayColor.h"
-#import "SVWebViewController.h"
-#import "SLFReachable.h"
 #import "SLFRestKitManager.h"
+#import "BillsViewController.h"
 
-#define MenuLegislators NSLocalizedString(@"Legislators", @"")
-#define MenuCommittees NSLocalizedString(@"Committees", @"")
-#define MenuDistricts NSLocalizedString(@"District Maps", @"")
-#define MenuBills NSLocalizedString(@"Bills", @"")
-#define MenuEvents NSLocalizedString(@"Events", @"")
-#define MenuNews NSLocalizedString(@"News", @"")
+#define MenuFavorites NSLocalizedString(@"Watch List", @"")
+#define MenuSearch NSLocalizedString(@"Search Bills", @"")
+#define MenuRecents NSLocalizedString(@"Recently Active Bills", @"")
+#define MenuSubjects NSLocalizedString(@"Bills By Subject", @"")
 
-@interface StateDetailViewController()
+@interface BillsMenuViewController()
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
-@property (nonatomic,retain) UIImage *legislatorsIcon;
-@property (nonatomic,retain) UIImage *committeesIcon;
-@property (nonatomic,retain) UIImage *districtsIcon;
-@property (nonatomic,retain) UIImage *eventsIcon;
-@property (nonatomic,retain) UIImage *billsIcon;
-@property (nonatomic,retain) UIImage *newsIcon;
+@property (nonatomic,retain) UIImage *searchIcon;
+@property (nonatomic,retain) UIImage *favoritesIcon;
+@property (nonatomic,retain) UIImage *recentsIcon;
+@property (nonatomic,retain) UIImage *subjectsIcon;
 @end
 
-@implementation StateDetailViewController
+@implementation BillsMenuViewController
 @synthesize state;
 @synthesize tableViewModel;
-@synthesize legislatorsIcon;
-@synthesize committeesIcon;
-@synthesize districtsIcon;
-@synthesize eventsIcon;
-@synthesize billsIcon;
-@synthesize newsIcon;
+@synthesize searchIcon;
+@synthesize favoritesIcon;
+@synthesize subjectsIcon;
+@synthesize recentsIcon;
 
 - (id)initWithState:(SLFState *)newState {
     self = [super init];
     if (self) {
+        self.title = NSLocalizedString(@"Bills", @"");
         UIColor *iconColor = [SLFAppearance menuTextColor];
-        self.legislatorsIcon = [[UIImage imageNamed:@"123-id-card"] imageWithOverlayColor:iconColor];
-        self.committeesIcon = [[UIImage imageNamed:@"60-signpost"] imageWithOverlayColor:iconColor];                               
-        self.districtsIcon = [[UIImage imageNamed:@"73-radar"] imageWithOverlayColor:iconColor];
-        self.billsIcon = [[UIImage imageNamed:@"gavel"] imageWithOverlayColor:iconColor];
-        self.eventsIcon = [[UIImage imageNamed:@"83-calendar"] imageWithOverlayColor:iconColor];
-        self.newsIcon = [[UIImage imageNamed:@"166-newspaper"] imageWithOverlayColor:iconColor];
+        self.searchIcon = [[UIImage imageNamed:@"06-magnify"] imageWithOverlayColor:iconColor];
+        self.favoritesIcon = [[UIImage imageNamed:@"28-star"] imageWithOverlayColor:iconColor];
+        self.recentsIcon = [[UIImage imageNamed:@"11-clock"] imageWithOverlayColor:iconColor];                               
+        self.subjectsIcon = [[UIImage imageNamed:@"191-collection"] imageWithOverlayColor:iconColor];
         [self reconfigureForState:newState];
     }
     return self;
@@ -76,12 +63,10 @@
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.state = nil;
     self.tableViewModel = nil;
-    self.legislatorsIcon = nil;
-    self.committeesIcon = nil;
-    self.districtsIcon = nil;
-    self.eventsIcon = nil;
-    self.billsIcon = nil;
-    self.newsIcon = nil;
+    self.searchIcon = nil;
+    self.favoritesIcon = nil;
+    self.recentsIcon = nil;
+    self.subjectsIcon = nil;
     [super dealloc];
 }
 
@@ -111,13 +96,11 @@
 
 - (void)configureTableItems {
     NSMutableArray* tableItems = [[NSMutableArray alloc] initWithCapacity:15];
-    [tableItems addObject:[RKTableItem tableItemWithText:MenuLegislators detailText:nil image:self.legislatorsIcon]];
-    [tableItems addObject:[RKTableItem tableItemWithText:MenuCommittees detailText:nil image:self.committeesIcon]];
-    [tableItems addObject:[RKTableItem tableItemWithText:MenuDistricts detailText:nil image:self.districtsIcon]];
-    [tableItems addObject:[RKTableItem tableItemWithText:MenuBills detailText:nil image:self.billsIcon]];
-    if (self.state && self.state.featureFlags && [self.state.featureFlags containsObject:@"events"])
-        [tableItems addObject:[RKTableItem tableItemWithText:MenuEvents detailText:nil image:self.eventsIcon]];
-    [tableItems addObject:[RKTableItem tableItemWithText:MenuNews detailText:nil image:self.newsIcon]];
+    [tableItems addObject:[RKTableItem tableItemWithText:MenuSearch detailText:nil image:self.searchIcon]];
+    [tableItems addObject:[RKTableItem tableItemWithText:MenuFavorites detailText:nil image:self.favoritesIcon]];
+    [tableItems addObject:[RKTableItem tableItemWithText:MenuRecents detailText:nil image:self.recentsIcon]];
+    if (self.state && self.state.featureFlags && [self.state.featureFlags containsObject:@"subjects"])
+	    [tableItems addObject:[RKTableItem tableItemWithText:MenuSubjects detailText:nil image:self.subjectsIcon]];
     [self.tableViewModel loadTableItems:tableItems withMapping:[self menuCellMapping]];
     [tableItems release];
 }
@@ -134,7 +117,10 @@
 - (void)selectMenuItem:(NSString *)menuItem {
 	if (menuItem == NULL)
         return;
-    UIViewController *vc = nil;
+    UIViewController *vc = nil;    
+    if ([menuItem isEqualToString:MenuRecents])
+        vc = [[BillsViewController alloc] initWithState:self.state];
+        /*
     if ([menuItem isEqualToString:MenuLegislators])
         vc = [[LegislatorsViewController alloc] initWithState:self.state];
     else if ([menuItem isEqualToString:MenuCommittees])
@@ -143,17 +129,10 @@
         vc = [[DistrictsViewController alloc] initWithState:self.state];
     else if ([menuItem isEqualToString:MenuEvents])
         vc = [[EventsViewController alloc] initWithState:self.state];
-    else if ([menuItem isEqualToString:MenuBills])
-        vc = [[BillsMenuViewController alloc] initWithState:self.state];
-    else if ([menuItem isEqualToString:MenuNews]) {
-        if (SLFIsReachableAddress(self.state.newsAddress)) {
-            SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:self.state.newsAddress];
-            webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-            [self presentModalViewController:webViewController animated:YES];	
-            [webViewController release];
-        }
     }
-    
+//  else if ([menuItem isEqualToString:MenuBills])
+//      vc = [[BillsViewController alloc] initWithState:self.state];
+   */ 
     if (vc) {
         [self stackOrPushViewController:vc];
         [vc release];
@@ -166,12 +145,8 @@
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
     self.state = object;
-    if (self.state)
-        self.title = self.state.name;
-    if (![self isViewLoaded]) { // finished loading too soon?  Would this ever happen?
-        [self performSelector:@selector(objectLoader:didLoadObject:) withObject:object afterDelay:2];
-        return;
-    }
+    if (object)
+        self.title = [NSString stringWithFormat:@"%@ %@", self.state.name, NSLocalizedString(@"Bills", @"")];
     [self configureTableItems];
 }
 

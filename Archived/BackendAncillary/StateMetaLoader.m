@@ -12,7 +12,6 @@
 
 #import "StateMetaLoader.h"
 #import "SLFState.h"
-
 #import "UtilityMethods.h"
 
 
@@ -30,11 +29,11 @@
 
 + (id)sharedStateMeta
 {
-	static dispatch_once_t pred;
-	static StateMetaLoader *foo = nil;
-	
-	dispatch_once(&pred, ^{ foo = [[self alloc] init]; });
-	return foo;
+    static dispatch_once_t pred;
+    static StateMetaLoader *foo = nil;
+    
+    dispatch_once(&pred, ^{ foo = [[self alloc] init]; });
+    return foo;
 }
 
 
@@ -43,7 +42,7 @@
         
         _sessions = nil;
         _sessionDisplayNames = nil;
-		_selectedSession = nil;
+        _selectedSession = nil;
         isLoading = NO;
         needsStateSelection = YES;
         
@@ -90,89 +89,84 @@
 }
 
 - (void)dealloc {
-	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
-	self.updated = nil;
+    [[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
+    self.updated = nil;
     
-	nice_release(_selectedSession);
-	nice_release(_sessions);
+    nice_release(_selectedSession);
+    nice_release(_sessions);
     nice_release(_sessionDisplayNames);
     
     self.defaultFeatures = nil;
     self.features = nil;
-	self.selectedState = nil;
+    self.selectedState = nil;
     self.resourcePath = nil;
-	[super dealloc];
+    [super dealloc];
 }
 
 
 
 - (BOOL)isFresh {
-	// if we're over a half-hour old, it's time to refresh
-	return (self.updated && ([[NSDate date] timeIntervalSinceDate:updated] < (3600*24)));    // under a day old
+    // if we're over a half-hour old, it's time to refresh
+    return (self.updated && ([[NSDate date] timeIntervalSinceDate:updated] < (3600*24)));    // under a day old
 }
 
 
 - (void)setSelectedState:(SLFState *)newObj {
-	[selectedState release];
-	selectedState = [newObj retain];
-	
-	if (selectedState) {
-		//self.title = newObj.name;
+    [selectedState release];
+    selectedState = [newObj retain];
+    
+    if (selectedState) {
+        //self.title = newObj.name;
         self.resourcePath = RKMakePathWithObject(@"/metadata/:stateID", newObj);
-		[self loadData];
-	}
+        [self loadData];
+    }
 }
 
 - (void)setSelectedStateWithID:(NSString *)stateID {
-	
-	if (NO == IsEmpty(stateID)) {
-		
-		RKLogWarning(@"State Metadata: Changing state to %@", stateID);
+    
+    if (NO == IsEmpty(stateID)) {
         
-		[[NSUserDefaults standardUserDefaults] setObject:stateID forKey:kMetaSelectedStateKey];
-		[[NSUserDefaults standardUserDefaults] synchronize];
-		
+        RKLogWarning(@"State Metadata: Changing state to %@", stateID);
+        
+        [[NSUserDefaults standardUserDefaults] setObject:stateID forKey:kMetaSelectedStateKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
         self.selectedState = [SLFState findFirstByAttribute:@"stateID" withValue:stateID];
-	}
+    }
 }
 
 - (NSArray *)sessions {
-	
-	if (NO == IsEmpty(_sessions))
-		return _sessions;
-	
-	nice_release(_sessions);
-	_sessions = [[NSMutableArray alloc] init];
-    	
-	for (NSDictionary *term in self.selectedState.terms) {
-		for (NSString *session in [term objectForKey:@"sessions"]) {
-			if (!IsEmpty(session)) {
-				[_sessions addObject:session];
-            }
-		}
-	}
     
-	return _sessions;
-	
+    if (NO == IsEmpty(_sessions))
+        return _sessions;
+    
+    nice_release(_sessions);
+    _sessions = [[NSMutableArray alloc] init];
+        
+    for (NSDictionary *term in self.selectedState.terms) {
+        for (NSString *session in [term objectForKey:@"sessions"]) {
+            if (!IsEmpty(session))
+                [_sessions addObject:session];
+        }
+    }
+    
+    return _sessions;
+    
 }
 
 - (NSString *)latestSession {
-	return [self.sessions lastObject];
+    return [self.sessions lastObject];
 }
 
 - (NSInteger)sessionIndexForDisplayName:(NSString *)displayName {
     NSInteger index = [self.sessions count];
     
     if (!IsEmpty(displayName) && self.sessionDisplayNames) {
-        
         NSNumber *value = [self.sessionDisplayNames objectForKey:displayName];
-        if (value) {
+        if (value)
             index = [value integerValue];
-        }            
     }
-    
     return index;
-    
 }
 
 
@@ -190,89 +184,77 @@
         
         NSString *temp = [self.selectedState displayNameForSession:aSession];
         
-        if (!IsEmpty(temp)) {
+        if (!IsEmpty(temp))
             [_sessionDisplayNames setObject:[NSNumber numberWithInt:index] forKey:temp];            
-        }
-        
         index++;
     }
-    
     return _sessionDisplayNames;
 }
 
-
 - (NSDictionary *)sessionDisplayNames {
-    
     if (!IsEmpty(_sessionDisplayNames))
         return _sessionDisplayNames;
-    
     return [self findSessionDisplayNames];
 }
 
 
 - (NSString *)selectedSession {
-	
-	if (IsEmpty(_selectedSession)) {
-        
-		// default to returning the latest session, if no one has picked something yet.
-		_selectedSession = [[self latestSession] copy];
-	}
-	
-	return _selectedSession;
+    if (IsEmpty(_selectedSession)) {
+        // default to returning the latest session, if no one has picked something yet.
+        _selectedSession = [[self latestSession] copy];
+    }
+    return _selectedSession;
 }
 
 - (void)setSelectedSession:(NSString *)sessionID {
-	
-	// sanity check to make sure we're setting it to something sensible
-	if (!IsEmpty(sessionID) && [self.sessions containsObject:sessionID]) {
-		
-		NSDictionary *stateSession = [NSDictionary dictionaryWithObject:sessionID forKey:self.selectedState.stateID];
-		[[NSUserDefaults standardUserDefaults] setObject:stateSession forKey:kMetaSelectedStateSessionKey];
-		[[NSUserDefaults standardUserDefaults] synchronize];	
-		
-		
-		if ([sessionID isEqual:_selectedSession])
-			return; // it's no different, we're done.
-		
-		nice_release(_selectedSession);
-		_selectedSession = [sessionID copy];
-		
-		RKLogWarning(@"State Metadata: Changing selected session to %@", sessionID);
-		
-		[[NSNotificationCenter defaultCenter] postNotificationName:kStateMetaNotifySessionChange object:nil];
+    
+    // sanity check to make sure we're setting it to something sensible
+    if (!IsEmpty(sessionID) && [self.sessions containsObject:sessionID]) {
         
-	}
+        NSDictionary *stateSession = [NSDictionary dictionaryWithObject:sessionID forKey:self.selectedState.stateID];
+        [[NSUserDefaults standardUserDefaults] setObject:stateSession forKey:kMetaSelectedStateSessionKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];    
+        
+        if ([sessionID isEqual:_selectedSession])
+            return; // it's no different, we're done.
+        
+        nice_release(_selectedSession);
+        _selectedSession = [sessionID copy];
+        
+        RKLogWarning(@"State Metadata: Changing selected session to %@", sessionID);
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:kStateMetaNotifySessionChange object:nil];
+        
+    }
 }
 
 /////////////////////////////////////////////////////
 
 - (BOOL)isFeatureEnabled:(NSString *)feature {
-    
     return [self.selectedState isFeatureEnabled:feature];
-    
 }
 
 
 
 - (void)loadData {
-	if (!self.resourcePath)
-		return;
-	
+    if (!self.resourcePath)
+        return;
+    
     NSString *stateID = self.selectedState.stateID;
-    if (IsEmpty(stateID) || isLoading)	// we're already working on it
-		return;
+    if (IsEmpty(stateID) || isLoading)    // we're already working on it
+        return;
     
     isLoading = YES;
     
-    // Load the object model via RestKit	
+    // Load the object model via RestKit    
     RKObjectManager* objectManager = [RKObjectManager sharedManager];
     RKObjectMapping* objMapping = [objectManager.mappingProvider objectMappingForClass:self.resourceClass];
     
-	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-								 SUNLIGHT_APIKEY, @"apikey",
-								 nil];
-	NSString *newPath = [self.resourcePath appendQueryParams:queryParams];
-	
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 SUNLIGHT_APIKEY, @"apikey",
+                                 nil];
+    NSString *newPath = [self.resourcePath appendQueryParams:queryParams];
+    
     [objectManager loadObjectsAtResourcePath:newPath objectMapping:objMapping delegate:self];
 
 }
@@ -298,8 +280,8 @@
     
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-	[selectedState release];
-	selectedState = [object retain];
+    [selectedState release];
+    selectedState = [object retain];
     
     self.updated = [NSDate date];
         
@@ -315,34 +297,34 @@
     }
     
     nice_release(_sessions);
-	[self sessions];
+    [self sessions];
     nice_release(_sessionDisplayNames);
     
-	//////////// Now set the selected session ///////////
-	
-	BOOL sessionChanged = YES;
+    //////////// Now set the selected session ///////////
     
-	NSString *previousSession = _selectedSession;
-	NSString *sessionToSave = [self latestSession];	// default to the latest session available
-	
-	// Look to see if the user has previously selected this state, and picked a session too
-	NSDictionary *tempSessionDict = [[NSUserDefaults standardUserDefaults] objectForKey:kMetaSelectedStateSessionKey];
-	if (tempSessionDict) {
-		NSString *savedSession = [tempSessionDict objectForKey:selectedState.stateID];
-		if (!IsEmpty(savedSession)) {
+    BOOL sessionChanged = YES;
+    
+    NSString *previousSession = _selectedSession;
+    NSString *sessionToSave = [self latestSession];    // default to the latest session available
+    
+    // Look to see if the user has previously selected this state, and picked a session too
+    NSDictionary *tempSessionDict = [[NSUserDefaults standardUserDefaults] objectForKey:kMetaSelectedStateSessionKey];
+    if (tempSessionDict) {
+        NSString *savedSession = [tempSessionDict objectForKey:selectedState.stateID];
+        if (!IsEmpty(savedSession)) {
             
-			if ([savedSession isEqual:previousSession])
-				sessionChanged = NO;
-			else 
-				sessionToSave = savedSession;
-		}
-	}			
-	
-	if (sessionChanged) {
-		self.selectedSession = sessionToSave;	// this does a notification for us, and saves the new setting.
-	}
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:kStateMetaNotifyStateLoaded object:nil];
+            if ([savedSession isEqual:previousSession])
+                sessionChanged = NO;
+            else 
+                sessionToSave = savedSession;
+        }
+    }            
+    
+    if (sessionChanged) {
+        self.selectedSession = sessionToSave;    // this does a notification for us, and saves the new setting.
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kStateMetaNotifyStateLoaded object:nil];
     
 }
 

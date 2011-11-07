@@ -1,5 +1,5 @@
 //
-//  BillSearchViewController.h
+//  BillSearchManager.h
 //  Created by Gregory Combs on 2/20/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -20,7 +20,7 @@
 
 @class SLFState;
 @class SLFChamber;
-@interface BillSearchDataSource : NSObject <UITableViewDataSource, RKRequestDelegate> {
+@interface BillSearchManager : NSObject <UITableViewDataSource, RKRequestDelegate> {
 	NSMutableDictionary* _sections;	
 	NSMutableArray* _rows;
 	NSInteger loadingStatus;
@@ -39,38 +39,6 @@
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject;
 	
 - (RKRequest*)startSearchWithQueryString:(NSString *)queryString params:(NSDictionary *)queryParams;
-
-
-/////////// FULL-TEXT SEARCH
-
-- (void)startSearchForText:(NSString *)searchString
-					 state:(SLFState *)inState 
-				   session:(NSString *)inSession 
-				   chamber:(SLFChamber *)inChamber;
-
-- (void)startSearchForText:(NSString *)searchString 
-				   chamber:(NSInteger)chamber;
-
-
-
-/////////// SUBJECTS
-
-- (void)startSearchForSubject:(NSString *)searchSubject 
-						state:(SLFState *)inState 
-					  session:(NSString *)inSession 
-					  chamber:(SLFChamber *)inChamber;
-
-- (void)startSearchForSubject:(NSString *)searchSubject 
-					  chamber:(NSInteger)chamber;
-
-
-/////////// AUTHORS
-
-- (void)startSearchForBillsAuthoredBy:(NSString *)searchSponsorID 
-								state:(SLFState *)inState 
-							  session:(NSString *)inSession;
-
-- (void)startSearchForBillsAuthoredBy:(NSString *)searchSponsorID;
 
 @end
 
