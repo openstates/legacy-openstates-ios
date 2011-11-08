@@ -18,6 +18,12 @@
 #import <RestKit/RestKit.h>
 #import "SLFAlertView.h"
 
+#import "CalloutMapAnnotation.h"
+#import "CalloutMapAnnotationView.h"
+#import "BasicMapAnnotation.h"
+#import "BasicMapAnnotationView.h"
+#import "AccessorizedCalloutMapAnnotationView.h"
+
 #define LOCATE_USER_BUTTON_TAG 18887
 
 @interface MapViewController()
@@ -32,14 +38,19 @@
 - (NSUInteger)indexOfToolbarItemWithTag:(NSInteger)searchTag;
 @property (nonatomic,retain) SVGeocoder *geocoder;
 @property (nonatomic,retain) UserPinAnnotation *searchLocation;
+@property (nonatomic, retain) CalloutMapAnnotation *calloutAnnotation;
+@property (nonatomic, retain) BasicMapAnnotation *customAnnotation;
 @end;
 
 @implementation MapViewController
 @synthesize toolbar;
 @synthesize searchBar;
-@synthesize mapView;
+@synthesize mapView = _mapView;
 @synthesize searchLocation;
 @synthesize geocoder;
+@synthesize selectedAnnotationView = _selectedAnnotationView;
+@synthesize calloutAnnotation = _calloutAnnotation;
+@synthesize customAnnotation = _customAnnotation;
 
 #pragma mark - Initialization
 
@@ -83,6 +94,10 @@
     self.searchBar = [self setUpSearchBarWithFrame:searchRect];
     self.toolbar = [self setUpToolBarWithFrame:toolbarRect];
     self.mapView = [self setUpMapViewWithFrame:mapViewRect];
+
+
+    self.customAnnotation = [[[BasicMapAnnotation alloc] initWithLatitude:38.6335 andLongitude:-90.2045] autorelease];
+    [self.mapView addAnnotation:self.customAnnotation];
 }
 
 - (void)viewDidUnload {
@@ -260,9 +275,7 @@
 }
 
 - (MKCoordinateRegion)defaultRegion { // Defaults to United States
-    CLLocationCoordinate2D center = CLLocationCoordinate2DMake(37.250556, -96.358333); 
-    MKCoordinateSpan span = MKCoordinateSpanMake((1.04*(126.766667 - 66.95)), (1.04*(49.384472 - 24.520833))); 
-    return MKCoordinateRegionMake(center, span); 
+    return MKCoordinateRegionMake(CLLocationCoordinate2DMake(37.250556, -96.358333), MKCoordinateSpanMake(62.20933368, 25.85818456)); 
 }
 
 - (void)moveMapToRegion:(MKCoordinateRegion)newRegion {
@@ -286,18 +299,18 @@
 - (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error {
     NSString *message = [NSString stringWithFormat:NSLocalizedString(@"Failed to determine your geographic location due to the following: %@", @""), [error localizedDescription]];
     [SLFAlertView showWithTitle:NSLocalizedString(@"Geolocation Error", @"") message:message buttonTitle:NSLocalizedString(@"OK", @"")];
-    self.mapView.showsUserLocation = NO;
+    mapView.showsUserLocation = NO;
     [self showLocateUserButton];
 }
 
-- (void)mapView:(MKMapView *)theMapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     if (!userLocation)
         return;
     [self showLocateUserButton];
     [self beginBoundarySearchForCoordininate:userLocation.coordinate];
-    if (theMapView.userLocationVisible)
+    if (mapView.userLocationVisible)
         return;
-    for (id annotation in theMapView.annotations) {
+    for (id annotation in mapView.annotations) {
         if ([annotation isKindOfClass:[MKUserLocation class]]) {
             [self performSelector:@selector(moveMapToAnnotation:) withObject:annotation afterDelay:.5f];
             break;
@@ -312,12 +325,12 @@
         self.searchLocation.delegate = nil;
 }
 
-- (void)mapView:(MKMapView *)theMapView didAddAnnotationViews:(NSArray *)views
+- (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views
 {
     for (MKAnnotationView *aView in views) {
         if ([aView.annotation class] == [MKUserLocation class])
         {            
-            if (!theMapView.userLocationVisible)
+            if (!mapView.userLocationVisible)
                 [self performSelector:@selector(moveMapToAnnotation:) withObject:aView.annotation afterDelay:.5f];
             [self showLocateUserButton];
             return;
@@ -325,18 +338,45 @@
     }
 }
 
-- (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
     if ([annotation isKindOfClass:[MKUserLocation class]])
         return nil;
 
+    NSString *identifier = nil;
     if ([annotation isKindOfClass:[UserPinAnnotation class]])  
     {
-        UserPinAnnotationView* pinView = (UserPinAnnotationView *)[theMapView dequeueReusableAnnotationViewWithIdentifier:UserPinAnnotationViewReuseIdentifier];
+        identifier = UserPinAnnotationViewReuseIdentifier;
+        UserPinAnnotationView* pinView = (UserPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
         if (!pinView)
-            return [UserPinAnnotationView userPinViewWithAnnotation:annotation identifier:UserPinAnnotationViewReuseIdentifier];
+            return [UserPinAnnotationView userPinViewWithAnnotation:annotation identifier:identifier];
         pinView.annotation = annotation;
         return pinView;
+    }
+    else if (annotation == self.calloutAnnotation) {
+        identifier = @"CalloutAnnotation";
+        CalloutMapAnnotationView *annotationView = (CalloutMapAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        if (!annotationView) {
+            annotationView = [[[AccessorizedCalloutMapAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier] autorelease];
+            annotationView.contentHeight = 34.0f;
+            UIImageView *logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"silverstar"]];
+            logoView.frame = CGRectMake(5, 2, logoView.frame.size.width, logoView.frame.size.height);
+            [annotationView.contentView addSubview:logoView];
+            [logoView release];
+        }
+        annotationView.parentAnnotationView = self.selectedAnnotationView;
+        annotationView.mapView = mapView;
+        return annotationView;
+    } else if (annotation == self.customAnnotation) {
+        identifier = @"CustomAnnotation";
+        MKPinAnnotationView* annotationView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        if (!annotationView) {
+            annotationView = [[[BasicMapAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier] autorelease];
+            annotationView.canShowCallout = NO;
+            annotationView.pinColor = MKPinAnnotationColorGreen;
+        }
+        annotationView.annotation = annotation;
+        return annotationView;
     }
     return nil;
 }
@@ -345,10 +385,31 @@
     id<MKAnnotation> annotation = aView.annotation;
     if (!annotation || ![aView isSelected])
         return;
-    [self.mapView setCenterCoordinate:annotation.coordinate animated:YES];
+    [mapView setCenterCoordinate:annotation.coordinate animated:YES];
     if ([annotation isKindOfClass:[UserPinAnnotation class]]) {
         self.searchLocation = (UserPinAnnotation *)annotation;
+        self.selectedAnnotationView = aView;
     }    
+    else if (aView.annotation == self.customAnnotation) {
+        if (self.calloutAnnotation == nil) {
+            _calloutAnnotation = [[CalloutMapAnnotation alloc] initWithLatitude:aView.annotation.coordinate.latitude andLongitude:aView.annotation.coordinate.longitude];
+        } else {
+            _calloutAnnotation.latitude = aView.annotation.coordinate.latitude;
+            _calloutAnnotation.longitude = aView.annotation.coordinate.longitude;
+        }
+        [mapView addAnnotation:_calloutAnnotation];
+        self.selectedAnnotationView = aView;
+    }
+}
+
+- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)aView {
+    if (self.calloutAnnotation && aView.annotation == self.customAnnotation && !((BasicMapAnnotationView *)aView).preventSelectionChange) {
+        [mapView removeAnnotation:self.calloutAnnotation];
+    }
+}
+
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)aView calloutAccessoryControlTapped:(UIControl *)control {
+    RKLogInfo(@"Annotation accessory tapped, does nothing by default %@", control);
 }
 
 - (void)annotationCoordinateChanged:(id)sender {

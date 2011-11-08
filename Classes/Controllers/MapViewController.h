@@ -20,6 +20,7 @@
 @property (nonatomic,retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic,retain) IBOutlet UISearchBar *searchBar;
 @property (nonatomic,readonly) MKCoordinateRegion defaultRegion;
+@property (nonatomic, retain) MKAnnotationView *selectedAnnotationView;
 - (IBAction)changeMapType:(id)sender;
 - (IBAction)locateUser:(id)sender;
 - (IBAction)resetMap:(id)sender;
