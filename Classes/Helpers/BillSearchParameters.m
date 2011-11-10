@@ -26,6 +26,21 @@ NSString* validSessionParameter(NSString *session);
     return [[[BillSearchParameters alloc] init] autorelease];
 }
 
+- (NSString *)pathForBill:(NSString *)billID state:(SLFState *)state session:(NSString *)session {
+	NSParameterAssert((state != NULL) && (billID != NULL) && (session != NULL));
+	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
+										state.stateID, @"state",
+										session, @"session",
+										SUNLIGHT_APIKEY, @"apikey", 
+                                        billID, @"bill", nil];
+    return RKMakePathWithObject(@"/bills/:state/:session/:bill?:apikey", queryParams);
+}
+
+- (NSString *)pathForBill:(SLFBill *)bill {
+	NSParameterAssert((bill != NULL) && (bill.state != NULL) && (bill.billID != NULL) && (bill.session != NULL));
+    return [RKMakePathWithObject(@"/bills/:stateID/:session/:billID?apikey=", bill) stringByAppendingString:SUNLIGHT_APIKEY];
+}
+
 - (NSString *)pathForText:(NSString *)text state:(SLFState *)state session:(NSString *)session chamber:(NSString *)chamber {
 	NSParameterAssert((state != NULL));
     text = [validOrEmptyParameter(text) uppercaseString];

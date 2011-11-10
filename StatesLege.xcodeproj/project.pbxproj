@@ -97,6 +97,17 @@
 		3749F258143BA5EA006F717B /* 123-id-card.png in Resources */ = {isa = PBXBuildFile; fileRef = 3749F250143BA5EA006F717B /* 123-id-card.png */; };
 		3749F259143BA5EA006F717B /* 123-id-card@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3749F251143BA5EA006F717B /* 123-id-card@2x.png */; };
 		375683AE14268C830027F268 /* ObjMappingsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 375683AD14268C830027F268 /* ObjMappingsTestCase.m */; };
+		3757CE86146A6D9900471CB7 /* _BillAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE79146A6D9900471CB7 /* _BillAction.m */; };
+		3757CE87146A6D9900471CB7 /* _BillRecordVote.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE7B146A6D9900471CB7 /* _BillRecordVote.m */; };
+		3757CE88146A6D9900471CB7 /* _BillSponsor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE7D146A6D9900471CB7 /* _BillSponsor.m */; };
+		3757CE89146A6D9900471CB7 /* _BillVoter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE7F146A6D9900471CB7 /* _BillVoter.m */; };
+		3757CE8A146A6D9900471CB7 /* _CommitteeMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE81146A6D9900471CB7 /* _CommitteeMember.m */; };
+		3757CE8B146A6D9900471CB7 /* _CommitteeRole.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE83146A6D9900471CB7 /* _CommitteeRole.m */; };
+		3757CE8C146A6D9900471CB7 /* _SLFWord.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE85146A6D9900471CB7 /* _SLFWord.m */; };
+		3757CE95146A6DC900471CB7 /* BillAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE8E146A6DC900471CB7 /* BillAction.m */; };
+		3757CE96146A6DC900471CB7 /* BillRecordVote.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE90146A6DC900471CB7 /* BillRecordVote.m */; };
+		3757CE97146A6DC900471CB7 /* BillVoter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE92146A6DC900471CB7 /* BillVoter.m */; };
+		3757CE98146A6DC900471CB7 /* SLFWord.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE94146A6DC900471CB7 /* SLFWord.m */; };
 		37588E2413E4B456005FB5AB /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37588E2313E4B456005FB5AB /* EventsViewController.m */; };
 		37588E2C13E4B5FE005FB5AB /* EventDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37588E2B13E4B5FE005FB5AB /* EventDetailViewController.m */; };
 		37588E9913E4C62B005FB5AB /* DistrictDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37588E9813E4C62B005FB5AB /* DistrictDetailViewController.m */; };
@@ -450,6 +461,28 @@
 		3749F250143BA5EA006F717B /* 123-id-card.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "123-id-card.png"; sourceTree = "<group>"; };
 		3749F251143BA5EA006F717B /* 123-id-card@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "123-id-card@2x.png"; sourceTree = "<group>"; };
 		375683AD14268C830027F268 /* ObjMappingsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjMappingsTestCase.m; sourceTree = "<group>"; };
+		3757CE78146A6D9900471CB7 /* _BillAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _BillAction.h; sourceTree = "<group>"; };
+		3757CE79146A6D9900471CB7 /* _BillAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _BillAction.m; sourceTree = "<group>"; };
+		3757CE7A146A6D9900471CB7 /* _BillRecordVote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _BillRecordVote.h; sourceTree = "<group>"; };
+		3757CE7B146A6D9900471CB7 /* _BillRecordVote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _BillRecordVote.m; sourceTree = "<group>"; };
+		3757CE7C146A6D9900471CB7 /* _BillSponsor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _BillSponsor.h; sourceTree = "<group>"; };
+		3757CE7D146A6D9900471CB7 /* _BillSponsor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _BillSponsor.m; sourceTree = "<group>"; };
+		3757CE7E146A6D9900471CB7 /* _BillVoter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _BillVoter.h; sourceTree = "<group>"; };
+		3757CE7F146A6D9900471CB7 /* _BillVoter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _BillVoter.m; sourceTree = "<group>"; };
+		3757CE80146A6D9900471CB7 /* _CommitteeMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _CommitteeMember.h; sourceTree = "<group>"; };
+		3757CE81146A6D9900471CB7 /* _CommitteeMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _CommitteeMember.m; sourceTree = "<group>"; };
+		3757CE82146A6D9900471CB7 /* _CommitteeRole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _CommitteeRole.h; sourceTree = "<group>"; };
+		3757CE83146A6D9900471CB7 /* _CommitteeRole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _CommitteeRole.m; sourceTree = "<group>"; };
+		3757CE84146A6D9900471CB7 /* _SLFWord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SLFWord.h; sourceTree = "<group>"; };
+		3757CE85146A6D9900471CB7 /* _SLFWord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFWord.m; sourceTree = "<group>"; };
+		3757CE8D146A6DC800471CB7 /* BillAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillAction.h; sourceTree = "<group>"; };
+		3757CE8E146A6DC900471CB7 /* BillAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillAction.m; sourceTree = "<group>"; };
+		3757CE8F146A6DC900471CB7 /* BillRecordVote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillRecordVote.h; sourceTree = "<group>"; };
+		3757CE90146A6DC900471CB7 /* BillRecordVote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillRecordVote.m; sourceTree = "<group>"; };
+		3757CE91146A6DC900471CB7 /* BillVoter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillVoter.h; sourceTree = "<group>"; };
+		3757CE92146A6DC900471CB7 /* BillVoter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillVoter.m; sourceTree = "<group>"; };
+		3757CE93146A6DC900471CB7 /* SLFWord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFWord.h; sourceTree = "<group>"; };
+		3757CE94146A6DC900471CB7 /* SLFWord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFWord.m; sourceTree = "<group>"; };
 		37588E2213E4B456005FB5AB /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
 		37588E2313E4B456005FB5AB /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsViewController.m; sourceTree = "<group>"; };
 		37588E2A13E4B5FE005FB5AB /* EventDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDetailViewController.h; sourceTree = "<group>"; };
@@ -1247,6 +1280,14 @@
 				372D2AF614285FDD00ADE84E /* CommitteeRole.m */,
 				372D2B1C1428DEA300ADE84E /* BillSponsor.h */,
 				372D2B1D1428DEA300ADE84E /* BillSponsor.m */,
+				3757CE8D146A6DC800471CB7 /* BillAction.h */,
+				3757CE8E146A6DC900471CB7 /* BillAction.m */,
+				3757CE8F146A6DC900471CB7 /* BillRecordVote.h */,
+				3757CE90146A6DC900471CB7 /* BillRecordVote.m */,
+				3757CE91146A6DC900471CB7 /* BillVoter.h */,
+				3757CE92146A6DC900471CB7 /* BillVoter.m */,
+				3757CE93146A6DC900471CB7 /* SLFWord.h */,
+				3757CE94146A6DC900471CB7 /* SLFWord.m */,
 			);
 			path = CustomModels;
 			sourceTree = "<group>";
@@ -1254,6 +1295,20 @@
 		37D7671C13E67D5200A77F89 /* StockModels */ = {
 			isa = PBXGroup;
 			children = (
+				3757CE78146A6D9900471CB7 /* _BillAction.h */,
+				3757CE79146A6D9900471CB7 /* _BillAction.m */,
+				3757CE7A146A6D9900471CB7 /* _BillRecordVote.h */,
+				3757CE7B146A6D9900471CB7 /* _BillRecordVote.m */,
+				3757CE7C146A6D9900471CB7 /* _BillSponsor.h */,
+				3757CE7D146A6D9900471CB7 /* _BillSponsor.m */,
+				3757CE7E146A6D9900471CB7 /* _BillVoter.h */,
+				3757CE7F146A6D9900471CB7 /* _BillVoter.m */,
+				3757CE80146A6D9900471CB7 /* _CommitteeMember.h */,
+				3757CE81146A6D9900471CB7 /* _CommitteeMember.m */,
+				3757CE82146A6D9900471CB7 /* _CommitteeRole.h */,
+				3757CE83146A6D9900471CB7 /* _CommitteeRole.m */,
+				3757CE84146A6D9900471CB7 /* _SLFWord.h */,
+				3757CE85146A6D9900471CB7 /* _SLFWord.m */,
 				37D7671D13E67D5200A77F89 /* _SLFBill.h */,
 				37D7671E13E67D5200A77F89 /* _SLFBill.m */,
 				37D7671F13E67D5200A77F89 /* _SLFCommittee.h */,
@@ -1701,6 +1756,17 @@
 				37F6FCF514672167003AA80D /* BillsMenuViewController.m in Sources */,
 				37F6FCF81467611F003AA80D /* BillsViewController.m in Sources */,
 				37F6FD0A14676565003AA80D /* BillSearchParameters.m in Sources */,
+				3757CE86146A6D9900471CB7 /* _BillAction.m in Sources */,
+				3757CE87146A6D9900471CB7 /* _BillRecordVote.m in Sources */,
+				3757CE88146A6D9900471CB7 /* _BillSponsor.m in Sources */,
+				3757CE89146A6D9900471CB7 /* _BillVoter.m in Sources */,
+				3757CE8A146A6D9900471CB7 /* _CommitteeMember.m in Sources */,
+				3757CE8B146A6D9900471CB7 /* _CommitteeRole.m in Sources */,
+				3757CE8C146A6D9900471CB7 /* _SLFWord.m in Sources */,
+				3757CE95146A6DC900471CB7 /* BillAction.m in Sources */,
+				3757CE96146A6DC900471CB7 /* BillRecordVote.m in Sources */,
+				3757CE97146A6DC900471CB7 /* BillVoter.m in Sources */,
+				3757CE98146A6DC900471CB7 /* SLFWord.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

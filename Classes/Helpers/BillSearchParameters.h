@@ -14,9 +14,13 @@
 
 @class SLFState;
 @class SLFChamber;
+@class SLFBill;
 @interface BillSearchParameters : NSObject
 
 + (BillSearchParameters *)billSearchParameters;
+
+- (NSString *)pathForBill:(SLFBill *)bill;
+- (NSString *)pathForBill:(NSString *)billID state:(SLFState *)state session:(NSString *)session;
 
 - (NSString *)pathForText:(NSString *)text state:(SLFState *)state session:(NSString *)session chamber:(NSString *)chamber;
 - (NSString *)pathForText:(NSString *)text chamber:(NSString *)chamber;

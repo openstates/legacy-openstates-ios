@@ -23,13 +23,16 @@
 - (RKManagedObjectMapping *)generateMemberMapping;
 - (RKManagedObjectMapping *)generateRoleMapping;
 - (RKManagedObjectMapping *)generateSponsorMapping;
+- (RKManagedObjectMapping *)generateWordMapping;
+- (RKManagedObjectMapping *)generateBillActionMapping;
+- (RKManagedObjectMapping *)generateVoterMapping;
+- (RKManagedObjectMapping *)generateRecordVoteMapping;
 @end
 
 @implementation SLFMappingsManager
 
 - (void)registerMappings {
     RKObjectMappingProvider *provider = [[RKObjectManager sharedManager] mappingProvider];
-    
     RKManagedObjectMapping *stateMapping = [self generateStateMapping];
     RKManagedObjectMapping *districtMapping = [self generateDistrictMapping];
     RKManagedObjectMapping *eventMapping = [self generateEventMapping];
@@ -39,8 +42,12 @@
     RKManagedObjectMapping *memberMapping = [self generateMemberMapping];
     RKManagedObjectMapping *roleMapping = [self generateRoleMapping];
     RKManagedObjectMapping *sponsorMapping = [self generateSponsorMapping];
+    RKManagedObjectMapping *actionMapping = [self generateBillActionMapping];
+    RKManagedObjectMapping *voterMapping = [self generateVoterMapping];
+    RKManagedObjectMapping *recordVoteMapping = [self generateRecordVoteMapping];
+    RKManagedObjectMapping *wordMapping = [self generateWordMapping];
 
-        // Configuring Relationships
+    // Configuring Relationships
     [districtMapping hasOne:@"state" withMapping:stateMapping];
     [districtMapping connectRelationship:@"state" withObjectForPrimaryKeyAttribute:@"stateID"];
     [eventMapping hasOne:@"stateObj" withMapping:stateMapping];
@@ -55,6 +62,15 @@
     [legislatorMapping hasMany:@"roles" withMapping:roleMapping];
     [committeeMapping hasMany:@"members" withMapping:memberMapping];
     [billMapping hasMany:@"sponsors" withMapping:sponsorMapping];
+    [billMapping hasMany:@"actions" withMapping:actionMapping];
+    [billMapping hasMany:@"alternateTitles" withMapping:wordMapping];
+    [billMapping hasMany:@"subjects" withMapping:wordMapping];
+    [billMapping hasMany:@"type" withMapping:wordMapping];
+    [billMapping hasMany:@"votes" withMapping:recordVoteMapping];
+    [recordVoteMapping mapKeyPath:@"no_votes" toRelationship:@"noVotes" withMapping:voterMapping];
+    [recordVoteMapping mapKeyPath:@"yes_votes" toRelationship:@"yesVotes" withMapping:voterMapping];
+    [recordVoteMapping mapKeyPath:@"other_votes" toRelationship:@"otherVotes" withMapping:voterMapping];
+    [actionMapping hasMany:@"type" withMapping:wordMapping];
     
     [provider addObjectMapping:stateMapping];
     [provider addObjectMapping:districtMapping];
@@ -62,128 +78,178 @@
     [provider addObjectMapping:billMapping];
     [provider addObjectMapping:committeeMapping];
     [provider addObjectMapping:legislatorMapping];
+    [provider addObjectMapping:wordMapping];
+    [provider addObjectMapping:actionMapping];
+    [provider addObjectMapping:voterMapping];
+    [provider addObjectMapping:recordVoteMapping];
+    
     [provider setMapping:roleMapping forKeyPath:@"roles"];
     [provider setMapping:memberMapping forKeyPath:@"members"];
     [provider setMapping:sponsorMapping forKeyPath:@"sponsors"];
+    [provider setMapping:actionMapping forKeyPath:@"actions"];
+    [provider setMapping:wordMapping forKeyPath:@"actions.type"]; // as opposed to votes.type
+    [provider setMapping:wordMapping forKeyPath:@"alternate_titles"];
+    [provider setMapping:wordMapping forKeyPath:@"subjects"];
+    [provider setMapping:recordVoteMapping forKeyPath:@"votes"];
+    [provider setMapping:voterMapping forKeyPath:@"votes.no_votes"];
+    [provider setMapping:voterMapping forKeyPath:@"votes.yes_votes"];
+    [provider setMapping:voterMapping forKeyPath:@"votes.other_votes"];
 }
 
 
 - (RKManagedObjectMapping *)generateStateMapping {
-    RKManagedObjectMapping *stateMapping = [RKManagedObjectMapping mappingForClass:[SLFState class]];
-    stateMapping.primaryKeyAttribute = @"stateID";
-    [stateMapping mapKeyPath:@"lower_chamber_name" toAttribute:@"lowerChamberName"];
-    [stateMapping mapKeyPath:@"lower_chamber_title" toAttribute:@"lowerChamberTitle"];
-    [stateMapping mapKeyPath:@"lower_chamber_term" toAttribute:@"lowerChamberTerm"];
-    [stateMapping mapKeyPath:@"upper_chamber_name" toAttribute:@"upperChamberName"];
-    [stateMapping mapKeyPath:@"upper_chamber_title" toAttribute:@"upperChamberTitle"];
-    [stateMapping mapKeyPath:@"upper_chamber_term" toAttribute:@"upperChamberTerm"];
-    [stateMapping mapKeyPath:@"session_details" toAttribute:@"sessionDetails"];
-    [stateMapping mapKeyPath:@"legislature_name" toAttribute:@"legislatureName"];
-    [stateMapping mapKeyPath:@"feature_flags" toAttribute:@"featureFlags"];
-    [stateMapping mapKeyPath:@"latest_update" toAttribute:@"dateUpdated"];
-    [stateMapping mapKeyPath:@"abbreviation" toAttribute:@"stateID"];
-    [stateMapping mapAttributes:@"name", @"terms", @"level", nil];
-    return stateMapping;
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[SLFState class]];
+    mapping.primaryKeyAttribute = @"stateID";
+    [mapping mapKeyPath:@"lower_chamber_name" toAttribute:@"lowerChamberName"];
+    [mapping mapKeyPath:@"lower_chamber_title" toAttribute:@"lowerChamberTitle"];
+    [mapping mapKeyPath:@"lower_chamber_term" toAttribute:@"lowerChamberTerm"];
+    [mapping mapKeyPath:@"upper_chamber_name" toAttribute:@"upperChamberName"];
+    [mapping mapKeyPath:@"upper_chamber_title" toAttribute:@"upperChamberTitle"];
+    [mapping mapKeyPath:@"upper_chamber_term" toAttribute:@"upperChamberTerm"];
+    [mapping mapKeyPath:@"session_details" toAttribute:@"sessionDetails"];
+    [mapping mapKeyPath:@"legislature_name" toAttribute:@"legislatureName"];
+    [mapping mapKeyPath:@"feature_flags" toAttribute:@"featureFlags"];
+    [mapping mapKeyPath:@"latest_update" toAttribute:@"dateUpdated"];
+    [mapping mapKeyPath:@"abbreviation" toAttribute:@"stateID"];
+    [mapping mapAttributes:@"name", @"terms", @"level", nil];
+    return mapping;
 }
 
 - (RKManagedObjectMapping *)generateDistrictMapping {
-    RKManagedObjectMapping *districtMapping = [RKManagedObjectMapping mappingForClass:[SLFDistrict class]];
-    districtMapping.primaryKeyAttribute = @"boundaryID";
-    [districtMapping mapKeyPath:@"abbr" toAttribute:@"stateID"];
-    [districtMapping mapKeyPath:@"num_seats" toAttribute:@"numSeats"];
-    [districtMapping mapKeyPath:@"region" toAttribute:@"regionDictionary"];
-    [districtMapping mapKeyPath:@"boundary_id" toAttribute:@"boundaryID"];
-    [districtMapping mapAttributes:@"name", @"chamber", @"shape", nil];
-    return districtMapping;
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[SLFDistrict class]];
+    mapping.primaryKeyAttribute = @"boundaryID";
+    [mapping mapKeyPath:@"abbr" toAttribute:@"stateID"];
+    [mapping mapKeyPath:@"num_seats" toAttribute:@"numSeats"];
+    [mapping mapKeyPath:@"region" toAttribute:@"regionDictionary"];
+    [mapping mapKeyPath:@"boundary_id" toAttribute:@"boundaryID"];
+    [mapping mapAttributes:@"name", @"chamber", @"shape", nil];
+    return mapping;
 }
 
 - (RKManagedObjectMapping *)generateEventMapping {
-    RKManagedObjectMapping *eventMapping = [RKManagedObjectMapping mappingForClass:[SLFEvent class]];
-    eventMapping.primaryKeyAttribute = @"eventID";
-    [eventMapping mapKeyPath:@"id" toAttribute:@"eventID"];
-    [eventMapping mapKeyPath:@"state" toAttribute:@"stateID"];
-    [eventMapping mapKeyPath:@"updated_at" toAttribute:@"dateUpdated"];
-    [eventMapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
-    [eventMapping mapKeyPath:@"when" toAttribute:@"dateStart"];
-    [eventMapping mapKeyPath:@"end" toAttribute:@"dateEnd"];
-    [eventMapping mapKeyPath:@"description" toAttribute:@"eventDescription"];
-    [eventMapping mapKeyPath:@"+link" toAttribute:@"link"];
-    [eventMapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
-    [eventMapping mapAttributes:@"session", @"participants", @"type", @"location",  nil];
-    return eventMapping;
-}
-
-- (RKManagedObjectMapping *)generateBillMapping {
-    RKManagedObjectMapping *billMapping = [RKManagedObjectMapping mappingForClass:[SLFBill class]];
-    billMapping.primaryKeyAttribute = @"billID";
-    [billMapping mapKeyPath:@"bill_id" toAttribute:@"billID"];
-    [billMapping mapKeyPath:@"state" toAttribute:@"stateID"];
-    [billMapping mapKeyPath:@"updated_at" toAttribute:@"dateUpdated"];
-    [billMapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
-    [billMapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
-    [billMapping mapAttributes:@"session", @"subjects", @"votes", @"versions", 
-            @"type", @"chamber", @"actions",@"documents", @"title",  nil];
-    return billMapping;
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[SLFEvent class]];
+    mapping.primaryKeyAttribute = @"eventID";
+    [mapping mapKeyPath:@"id" toAttribute:@"eventID"];
+    [mapping mapKeyPath:@"state" toAttribute:@"stateID"];
+    [mapping mapKeyPath:@"updated_at" toAttribute:@"dateUpdated"];
+    [mapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
+    [mapping mapKeyPath:@"when" toAttribute:@"dateStart"];
+    [mapping mapKeyPath:@"end" toAttribute:@"dateEnd"];
+    [mapping mapKeyPath:@"description" toAttribute:@"eventDescription"];
+    [mapping mapKeyPath:@"+link" toAttribute:@"link"];
+    [mapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
+    [mapping mapAttributes:@"session", @"participants", @"type", @"location",  nil];
+    return mapping;
 }
 
 - (RKManagedObjectMapping *)generateLegislatorMapping {
-    RKManagedObjectMapping *legislatorMapping = [RKManagedObjectMapping mappingForClass:[SLFLegislator class]];
-    legislatorMapping.primaryKeyAttribute = @"legID";
-    [legislatorMapping mapKeyPath:@"leg_id" toAttribute:@"legID"];
-    [legislatorMapping mapKeyPath:@"state" toAttribute:@"stateID"];
-    [legislatorMapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
-    [legislatorMapping mapKeyPath:@"updated_at" toAttribute:@"dateUpdated"];
-    [legislatorMapping mapKeyPath:@"first_name" toAttribute:@"firstName"];
-    [legislatorMapping mapKeyPath:@"full_name" toAttribute:@"fullName"];
-    [legislatorMapping mapKeyPath:@"last_name" toAttribute:@"lastName"];
-    [legislatorMapping mapKeyPath:@"middle_name" toAttribute:@"middleName"];
-    [legislatorMapping mapKeyPath:@"nimsp_candidate_id" toAttribute:@"nimspCandidateID"];
-    [legislatorMapping mapKeyPath:@"nimsp_id" toAttribute:@"nimspID"];
-    [legislatorMapping mapKeyPath:@"photo_url" toAttribute:@"photoURL"];
-    [legislatorMapping mapKeyPath:@"transparencydata_id" toAttribute:@"transparencyID"];
-    [legislatorMapping mapKeyPath:@"votesmart_id" toAttribute:@"votesmartID"];
-    [legislatorMapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
-    [legislatorMapping mapAttributes:@"suffixes", @"party", @"level", @"district", @"country", @"chamber", @"active",nil];    
-    return legislatorMapping;
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[SLFLegislator class]];
+    mapping.primaryKeyAttribute = @"legID";
+    [mapping mapKeyPath:@"leg_id" toAttribute:@"legID"];
+    [mapping mapKeyPath:@"state" toAttribute:@"stateID"];
+    [mapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
+    [mapping mapKeyPath:@"updated_at" toAttribute:@"dateUpdated"];
+    [mapping mapKeyPath:@"first_name" toAttribute:@"firstName"];
+    [mapping mapKeyPath:@"full_name" toAttribute:@"fullName"];
+    [mapping mapKeyPath:@"last_name" toAttribute:@"lastName"];
+    [mapping mapKeyPath:@"middle_name" toAttribute:@"middleName"];
+    [mapping mapKeyPath:@"nimsp_candidate_id" toAttribute:@"nimspCandidateID"];
+    [mapping mapKeyPath:@"nimsp_id" toAttribute:@"nimspID"];
+    [mapping mapKeyPath:@"photo_url" toAttribute:@"photoURL"];
+    [mapping mapKeyPath:@"transparencydata_id" toAttribute:@"transparencyID"];
+    [mapping mapKeyPath:@"votesmart_id" toAttribute:@"votesmartID"];
+    [mapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
+    [mapping mapAttributes:@"suffixes", @"party", @"level", @"district", @"country", @"chamber", @"active",nil];    
+    return mapping;
 }
 
 - (RKManagedObjectMapping *)generateCommitteeMapping {
-    RKManagedObjectMapping *committeeMapping = [RKManagedObjectMapping mappingForClass:[SLFCommittee class]];
-    committeeMapping.primaryKeyAttribute = @"committeeID";
-    [committeeMapping mapKeyPath:@"id" toAttribute:@"committeeID"];
-    [committeeMapping mapKeyPath:@"state" toAttribute:@"stateID"];
-    [committeeMapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
-    [committeeMapping mapKeyPath:@"updated_at" toAttribute:@"dateUpdated"];
-    [committeeMapping mapKeyPath:@"parent_id" toAttribute:@"parentID"];
-    [committeeMapping mapKeyPath:@"votesmart_id" toAttribute:@"votesmartID"];
-    [committeeMapping mapKeyPath:@"committee" toAttribute:@"committeeName"];
-    [committeeMapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
-    [committeeMapping mapAttributes:@"chamber", @"subcommittee", nil];
-    return committeeMapping;
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[SLFCommittee class]];
+    mapping.primaryKeyAttribute = @"committeeID";
+    [mapping mapKeyPath:@"id" toAttribute:@"committeeID"];
+    [mapping mapKeyPath:@"state" toAttribute:@"stateID"];
+    [mapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
+    [mapping mapKeyPath:@"updated_at" toAttribute:@"dateUpdated"];
+    [mapping mapKeyPath:@"parent_id" toAttribute:@"parentID"];
+    [mapping mapKeyPath:@"votesmart_id" toAttribute:@"votesmartID"];
+    [mapping mapKeyPath:@"committee" toAttribute:@"committeeName"];
+    [mapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
+    [mapping mapAttributes:@"chamber", @"subcommittee", nil];
+    return mapping;
 }
 
 - (RKManagedObjectMapping *)generateMemberMapping {
-    RKManagedObjectMapping* memberMapping = [RKManagedObjectMapping mappingForClass:[CommitteeMember class]];
-    [memberMapping mapKeyPath:@"leg_id" toAttribute:@"legID"];
-    [memberMapping mapKeyPath:@"role" toAttribute:@"role"];
-    [memberMapping mapKeyPath:@"name" toAttribute:@"legislatorName"];
-    return memberMapping;
+    RKManagedObjectMapping* mapping = [RKManagedObjectMapping mappingForClass:[CommitteeMember class]];
+    [mapping mapKeyPath:@"leg_id" toAttribute:@"legID"];
+    [mapping mapKeyPath:@"role" toAttribute:@"role"];
+    [mapping mapKeyPath:@"name" toAttribute:@"legislatorName"];
+    return mapping;
 }
 
 - (RKManagedObjectMapping *)generateRoleMapping {
-    RKManagedObjectMapping* roleMapping = [RKManagedObjectMapping mappingForClass:[CommitteeRole class]];
-    [roleMapping mapKeyPath:@"committee_id" toAttribute:@"committeeID"];
-    [roleMapping mapKeyPath:@"type" toAttribute:@"role"];
-    [roleMapping mapKeyPath:@"committee" toAttribute:@"committeeName"];
-    return roleMapping;
+    RKManagedObjectMapping* mapping = [RKManagedObjectMapping mappingForClass:[CommitteeRole class]];
+    [mapping mapKeyPath:@"committee_id" toAttribute:@"committeeID"];
+    [mapping mapKeyPath:@"type" toAttribute:@"role"];
+    [mapping mapKeyPath:@"committee" toAttribute:@"committeeName"];
+    return mapping;
+}
+
+- (RKManagedObjectMapping *)generateBillMapping {
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[SLFBill class]];
+    mapping.primaryKeyAttribute = @"billID";
+    [mapping mapKeyPath:@"bill_id" toAttribute:@"billID"];
+    [mapping mapKeyPath:@"state" toAttribute:@"stateID"];
+    [mapping mapKeyPath:@"updated_at" toAttribute:@"dateUpdated"];
+    [mapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
+    [mapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
+    [mapping mapAttributes:@"session", @"versions", @"chamber",@"documents", @"title",  nil];
+    return mapping;
+}
+
+- (RKManagedObjectMapping *)generateRecordVoteMapping {
+    RKManagedObjectMapping* mapping = [RKManagedObjectMapping mappingForClass:[BillRecordVote class]];
+    mapping.primaryKeyAttribute = @"voteID";
+    [mapping mapAttributes:@"date", /*@"type",*/ @"chamber", @"passed", @"session", @"motion", nil];
+    [mapping mapKeyPath:@"vote_id" toAttribute:@"voteID"];
+    [mapping mapKeyPath:@"+state" toAttribute:@"stateID"];
+    [mapping mapKeyPath:@"+record" toAttribute:@"record"];
+    [mapping mapKeyPath:@"+method" toAttribute:@"method"];
+    [mapping mapKeyPath:@"yes_count" toAttribute:@"yesCount"];
+    [mapping mapKeyPath:@"no_count" toAttribute:@"noCount"];
+    [mapping mapKeyPath:@"other_count" toAttribute:@"otherCount"];
+    [mapping mapKeyPath:@"bill_chamber" toAttribute:@"billChamber"];
+    [mapping mapKeyPath:@"sources.url" toAttribute:@"sources"];
+    mapping.setNilForMissingRelationships = NO;
+    return mapping;
+}
+
+- (RKManagedObjectMapping *)generateVoterMapping {
+    RKManagedObjectMapping* mapping = [RKManagedObjectMapping mappingForClass:[BillVoter class]];
+    [mapping mapKeyPath:@"leg_id" toAttribute:@"legID"];
+    [mapping mapKeyPath:@"name" toAttribute:@"legislatorName"];
+    return mapping;
+}
+
+- (RKManagedObjectMapping *)generateBillActionMapping {
+    RKManagedObjectMapping* mapping = [RKManagedObjectMapping mappingForClass:[BillAction class]];
+    [mapping mapAttributes:@"date", @"action", @"actor", nil];
+    [mapping mapKeyPath:@"+action_number" toAttribute:@"actionID"];
+    [mapping mapKeyPath:@"+comment" toAttribute:@"comment"];
+    return mapping;
 }
 
 - (RKManagedObjectMapping *)generateSponsorMapping {
-    RKManagedObjectMapping* sponsorMapping = [RKManagedObjectMapping mappingForClass:[BillSponsor class]];
-    [sponsorMapping mapKeyPath:@"leg_id" toAttribute:@"legID"];
-    [sponsorMapping mapKeyPath:@"type" toAttribute:@"role"];
-    [sponsorMapping mapKeyPath:@"name" toAttribute:@"legislatorName"];
-    return sponsorMapping;
+    RKManagedObjectMapping* mapping = [RKManagedObjectMapping mappingForClass:[BillSponsor class]];
+    [mapping mapKeyPath:@"leg_id" toAttribute:@"legID"];
+    [mapping mapKeyPath:@"type" toAttribute:@"role"];
+    [mapping mapKeyPath:@"name" toAttribute:@"legislatorName"];
+    return mapping;
+}
+
+- (RKManagedObjectMapping *)generateWordMapping {
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[SLFWord class]];
+    [mapping mapKeyPath:@"" toAttribute:@"word"];
+    return mapping;
 }
 
 @end

@@ -14,6 +14,7 @@
 #import "BillsDetailViewController.h"
 #import "SLFDataModels.h"
 #import "BillSearchParameters.h"
+#import "SLFRestKitManager.h"
 
 @implementation BillsViewController
 @synthesize state;
@@ -26,7 +27,8 @@
         self.stackWidth = 320;
         self.state = newState;
         BillSearchParameters *parameters = [BillSearchParameters billSearchParameters];
-        self.resourcePath = [parameters pathForSubject:@"Education" state:newState session:newState.latestSession chamber:@"all"];
+            //self.resourcePath = [parameters pathForSubject:@"Education" state:newState session:newState.latestSession chamber:@"all"];
+        self.resourcePath = [parameters pathForSubject:@"State Agencies" state:newState session:@"82" chamber:@"all"];
     }
     return self;
 }
@@ -45,8 +47,11 @@
         [cellMapping mapKeyPath:@"title" toAttribute:@"detailTextLabel.text"];
         
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
-/*
             SLFBill *bill = object;
+            NSString *billPath = [[BillSearchParameters billSearchParameters] pathForBill:bill];
+            SLFRestKitManager *mgr = [SLFRestKitManager sharedRestKit];
+            [mgr loadObjectsAtResourcePath:billPath delegate:self];
+            /*
             BillsDetailViewController *vc = [[BillsDetailViewController alloc] initWithBillID:bill.billID];
             [self stackOrPushViewController:vc];
             [vc release];
@@ -75,5 +80,41 @@
     self.resourcePath = nil;
     [super dealloc];
 }
+
+#pragma mark -
+#pragma mark RKObjectLoaderDelegate methods
+
+#warning remove this later after testing bill mappings
+
+- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObject:(id)object {
+    RKLogDebug(@"Object Loader Finished: %@", objectLoader.resourcePath);
+    SLFBill *bill = object;
+    SLFWord *type = [bill.type anyObject];
+    if (type) {
+        NSLog(@"bill type: %@", type.word);
+    }
+    NSLog(@"bill votes: %d", [bill.votes count]);
+    for (BillRecordVote *vote in bill.votes) {
+        NSSet *yes = vote.yesVotes;
+        NSSet *no = vote.noVotes;
+        NSSet *other = vote.otherVotes;
+        NSLog(@"bill vote: %@", vote.voteID);
+        for (BillVoter *voter in yes) {
+            NSLog(@"yes = (%@) %@", voter.legID, voter.legislatorName);
+        }
+        for (BillVoter *voter in other) {
+            NSLog(@"other = (%@) %@", voter.legID, voter.legislatorName);
+        }
+        for (BillVoter *voter in no) {
+            NSLog(@"no = (%@) %@", voter.legID, voter.legislatorName);
+        }
+    }
+}
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
+    [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
+}
+
+
 
 @end

@@ -36,13 +36,6 @@
 
 
 
-@dynamic actions;
-
-
-
-
-
-
 @dynamic billID;
 
 
@@ -92,29 +85,7 @@
 
 
 
-@dynamic sponsors;
-
-
-- (NSMutableSet*)sponsorsSet {
-	[self willAccessValueForKey:@"sponsors"];
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"sponsors"];
-	[self didAccessValueForKey:@"sponsors"];
-	return result;
-}
-
-
-
-
-
-
 @dynamic stateID;
-
-
-
-
-
-
-@dynamic subjects;
 
 
 
@@ -128,13 +99,6 @@
 
 
 
-@dynamic type;
-
-
-
-
-
-
 @dynamic versions;
 
 
@@ -142,15 +106,74 @@
 
 
 
-@dynamic votes;
+@dynamic actions;
 
+	
+- (NSMutableSet*)actionsSet {
+	[self willAccessValueForKey:@"actions"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"actions"];
+	[self didAccessValueForKey:@"actions"];
+	return result;
+}
+	
 
+@dynamic alternateTitles;
 
+	
+- (NSMutableSet*)alternateTitlesSet {
+	[self willAccessValueForKey:@"alternateTitles"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"alternateTitles"];
+	[self didAccessValueForKey:@"alternateTitles"];
+	return result;
+}
+	
 
+@dynamic sponsors;
 
+	
+- (NSMutableSet*)sponsorsSet {
+	[self willAccessValueForKey:@"sponsors"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"sponsors"];
+	[self didAccessValueForKey:@"sponsors"];
+	return result;
+}
+	
 
 @dynamic stateObj;
 
+	
+
+@dynamic subjects;
+
+	
+- (NSMutableSet*)subjectsSet {
+	[self willAccessValueForKey:@"subjects"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"subjects"];
+	[self didAccessValueForKey:@"subjects"];
+	return result;
+}
+	
+
+@dynamic type;
+
+	
+- (NSMutableSet*)typeSet {
+	[self willAccessValueForKey:@"type"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"type"];
+	[self didAccessValueForKey:@"type"];
+	return result;
+}
+	
+
+@dynamic votes;
+
+	
+- (NSMutableSet*)votesSet {
+	[self willAccessValueForKey:@"votes"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"votes"];
+	[self didAccessValueForKey:@"votes"];
+	return result;
+}
 	
 
 

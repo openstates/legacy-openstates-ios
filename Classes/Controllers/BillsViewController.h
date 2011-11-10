@@ -13,7 +13,7 @@
 #import "SLFTableViewController.h"
 
 @class SLFState;
-@interface BillsViewController : SLFTableViewController {
+@interface BillsViewController : SLFTableViewController <RKObjectLoaderDelegate> {
 }
 @property (nonatomic, retain) RKFetchedResultsTableViewModel *tableViewModel;
 @property (nonatomic, retain) SLFState *state;

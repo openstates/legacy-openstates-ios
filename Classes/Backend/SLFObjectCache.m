@@ -26,16 +26,16 @@
 
 - (NSFetchRequest*)fetchRequestForResourcePath:(NSString*)resourcePath {
     NSCParameterAssert(resourcePath != NULL);    
-	if ([resourcePath hasPrefix:@"/metadata"])
-		return [self fetchRequestStatesForResourcePath:resourcePath];
-	if ([resourcePath hasPrefix:@"/legislators"])
-		return [self fetchRequestLegislatorsForResourcePath:resourcePath];
-	if ([resourcePath hasPrefix:@"/committees"])
-		return [self fetchRequestCommitteesForResourcePath:resourcePath];
-	if ([resourcePath hasPrefix:@"/districts"])
-		return [self fetchRequestDistrictsForResourcePath:resourcePath];
-	if ([resourcePath hasPrefix:@"/events"])
-		return [self fetchRequestEventsForResourcePath:resourcePath];
+    if ([resourcePath hasPrefix:@"/metadata"])
+        return [self fetchRequestStatesForResourcePath:resourcePath];
+    if ([resourcePath hasPrefix:@"/legislators"])
+        return [self fetchRequestLegislatorsForResourcePath:resourcePath];
+    if ([resourcePath hasPrefix:@"/committees"])
+        return [self fetchRequestCommitteesForResourcePath:resourcePath];
+    if ([resourcePath hasPrefix:@"/districts"])
+        return [self fetchRequestDistrictsForResourcePath:resourcePath];
+    if ([resourcePath hasPrefix:@"/events"])
+        return [self fetchRequestEventsForResourcePath:resourcePath];
     if ([resourcePath hasPrefix:@"/bills"])
         return [self fetchRequestBillsForResourcePath:resourcePath];
     return nil;
@@ -44,13 +44,13 @@
 
 // FOR STATES ============================
 - (NSFetchRequest*)fetchRequestStatesForResourcePath:(NSString*)resourcePath {
-	NSDictionary *arguments = nil;
-	NSFetchRequest *request = [SLFState fetchRequest];
-	RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
+    NSDictionary *arguments = nil;
+    NSFetchRequest *request = [SLFState fetchRequest];
+    RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
 
-	NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
-	if ([pathMatcher matchesPattern:@"/metadata/:stateID" tokenizeQueryStrings:YES parsedArguments:&arguments])
-		predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", [arguments objectForKey:@"stateID"]];
+    NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
+    if ([pathMatcher matchesPattern:@"/metadata/:stateID" tokenizeQueryStrings:YES parsedArguments:&arguments])
+        predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", [arguments objectForKey:@"stateID"]];
     [request setPredicate:predicate];
 
     // Even without a match, just do it anyway, since we know it's a state/metadata resource
@@ -61,15 +61,15 @@
 
 // FOR LEGISLATORS ============================
 - (NSFetchRequest*)fetchRequestLegislatorsForResourcePath:(NSString*)resourcePath {
-	NSDictionary *arguments = nil;
-	NSFetchRequest *request = [SLFLegislator fetchRequest];
-	RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
+    NSDictionary *arguments = nil;
+    NSFetchRequest *request = [SLFLegislator fetchRequest];
+    RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
     
-	NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
-	if ([pathMatcher matchesPattern:@"/legislators/:legID" tokenizeQueryStrings:YES parsedArguments:&arguments])
-		predicate = [NSPredicate predicateWithFormat:@"legID LIKE[cd] %@", [arguments objectForKey:@"legID"]];
-	else if ([pathMatcher matchesPattern:@"/legislators" tokenizeQueryStrings:YES parsedArguments:&arguments])
-		predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", [arguments objectForKey:@"state"]];
+    NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
+    if ([pathMatcher matchesPattern:@"/legislators/:legID" tokenizeQueryStrings:YES parsedArguments:&arguments])
+        predicate = [NSPredicate predicateWithFormat:@"legID LIKE[cd] %@", [arguments objectForKey:@"legID"]];
+    else if ([pathMatcher matchesPattern:@"/legislators" tokenizeQueryStrings:YES parsedArguments:&arguments])
+        predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", [arguments objectForKey:@"state"]];
     [request setPredicate:predicate];
 
     NSSortDescriptor *byLastName = [NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES];
@@ -80,15 +80,15 @@
 
 // FOR COMMITTEES ============================
 - (NSFetchRequest*)fetchRequestCommitteesForResourcePath:(NSString*)resourcePath {
-	NSDictionary *arguments = nil;
-	NSFetchRequest *request = [SLFCommittee fetchRequest];
-	RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
+    NSDictionary *arguments = nil;
+    NSFetchRequest *request = [SLFCommittee fetchRequest];
+    RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
     
-	NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
-	if ([pathMatcher matchesPattern:@"/committees/:committeeID" tokenizeQueryStrings:YES parsedArguments:&arguments])
-		predicate = [NSPredicate predicateWithFormat:@"committeeID LIKE[cd] %@", [arguments objectForKey:@"committeeID"]];
-	else if ([pathMatcher matchesPattern:@"/committees" tokenizeQueryStrings:YES parsedArguments:&arguments])
-		predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", [arguments objectForKey:@"state"]];
+    NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
+    if ([pathMatcher matchesPattern:@"/committees/:committeeID" tokenizeQueryStrings:YES parsedArguments:&arguments])
+        predicate = [NSPredicate predicateWithFormat:@"committeeID LIKE[cd] %@", [arguments objectForKey:@"committeeID"]];
+    else if ([pathMatcher matchesPattern:@"/committees" tokenizeQueryStrings:YES parsedArguments:&arguments])
+        predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", [arguments objectForKey:@"state"]];
     [request setPredicate:predicate];
     
     NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey:@"committeeName" ascending:YES];
@@ -99,19 +99,19 @@
 
 // FOR DISTRICTS ============================
 - (NSFetchRequest*)fetchRequestDistrictsForResourcePath:(NSString*)resourcePath {
-	NSDictionary *args = nil;
-	NSFetchRequest *request = [SLFDistrict fetchRequest];
-	RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
+    NSDictionary *args = nil;
+    NSFetchRequest *request = [SLFDistrict fetchRequest];
+    RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
     
-	NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
-	if ([pathMatcher matchesPattern:@"/districts/boundary/:boundaryID" tokenizeQueryStrings:YES parsedArguments:&args])
-		predicate = [NSPredicate predicateWithFormat:@"boundaryID LIKE[cd] %@", 
+    NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
+    if ([pathMatcher matchesPattern:@"/districts/boundary/:boundaryID" tokenizeQueryStrings:YES parsedArguments:&args])
+        predicate = [NSPredicate predicateWithFormat:@"boundaryID LIKE[cd] %@", 
                      [args objectForKey:@"boundaryID"]];
-	else if ([pathMatcher matchesPattern:@"/districts/:stateID/:chamber" tokenizeQueryStrings:YES parsedArguments:&args])
-		predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@ AND chamber LIKE[cd] %@", 
+    else if ([pathMatcher matchesPattern:@"/districts/:stateID/:chamber" tokenizeQueryStrings:YES parsedArguments:&args])
+        predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@ AND chamber LIKE[cd] %@", 
                      [args objectForKey:@"stateID"], [args objectForKey:@"chamber"]];
-	else if ([pathMatcher matchesPattern:@"/districts/:stateID" tokenizeQueryStrings:YES parsedArguments:&args])
-		predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", 
+    else if ([pathMatcher matchesPattern:@"/districts/:stateID" tokenizeQueryStrings:YES parsedArguments:&args])
+        predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", 
                      [args objectForKey:@"stateID"]];
     [request setPredicate:predicate];
     
@@ -122,15 +122,15 @@
 
 // FOR EVENTS ============================
 - (NSFetchRequest*)fetchRequestEventsForResourcePath:(NSString*)resourcePath {
-	NSDictionary *args = nil;
-	NSFetchRequest *request = [SLFEvent fetchRequest];
-	RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
+    NSDictionary *args = nil;
+    NSFetchRequest *request = [SLFEvent fetchRequest];
+    RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
     
-	NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
-	if ([pathMatcher matchesPattern:@"/events/:eventID" tokenizeQueryStrings:YES parsedArguments:&args])
-		predicate = [NSPredicate predicateWithFormat:@"eventID LIKE[cd] %@", [args objectForKey:@"eventID"]];
-	else if ([pathMatcher matchesPattern:@"/events" tokenizeQueryStrings:YES parsedArguments:&args])
-		predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", [args objectForKey:@"state"]];
+    NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
+    if ([pathMatcher matchesPattern:@"/events/:eventID" tokenizeQueryStrings:YES parsedArguments:&args])
+        predicate = [NSPredicate predicateWithFormat:@"eventID LIKE[cd] %@", [args objectForKey:@"eventID"]];
+    else if ([pathMatcher matchesPattern:@"/events" tokenizeQueryStrings:YES parsedArguments:&args])
+        predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", [args objectForKey:@"state"]];
     [request setPredicate:predicate];
 
     NSSortDescriptor *byNumeric = [NSSortDescriptor sortDescriptorWithKey:@"dateStart" ascending:YES selector:@selector(localizedStandardCompare:)];
@@ -147,45 +147,44 @@
 
 - (NSFetchRequest*)fetchRequestBillsForResourcePath:(NSString*)resourcePath {
 
-	NSDictionary *args = nil;
-	NSFetchRequest *request = [SLFBill fetchRequest];
-	RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
+    NSDictionary *args = nil;
+    NSFetchRequest *request = [SLFBill fetchRequest];
+    RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
 
-	NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
-	if ([pathMatcher matchesPattern:@"/bills/:stateID/:billID" tokenizeQueryStrings:YES parsedArguments:&args])
-		predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@ AND billID LIKE[cd] %@", 
-                     [args objectForKey:@"stateID"], [args objectForKey:@"billID"]];
-	else if ([pathMatcher matchesPattern:@"/bills" tokenizeQueryStrings:YES parsedArguments:&args]) {
-		NSMutableArray *subpredicates = [NSMutableArray array];
-		
-		[args enumerateKeysAndObjectsUsingBlock: ^ (id key, id value, BOOL *stop)
+    NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
+    if ([pathMatcher matchesPattern:@"/bills/:stateID/:session/:billID" tokenizeQueryStrings:YES parsedArguments:&args]) {
+        predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@ AND billID LIKE[cd] %@ AND session LIKE[cd] %@", 
+                     [args objectForKey:@"stateID"], [args objectForKey:@"billID"], [args objectForKey:@"session"]];
+        [request setReturnsObjectsAsFaults:NO];;
+        [request setRelationshipKeyPathsForPrefetching:[NSArray arrayWithObjects:@"yesVotes", @"noVotes", @"otherVotes", nil]];
+    }
+    else if ([pathMatcher matchesPattern:@"/bills" tokenizeQueryStrings:YES parsedArguments:&args]) {
+        NSMutableArray *subpredicates = [NSMutableArray array];
+        
+        [args enumerateKeysAndObjectsUsingBlock: ^ (id key, id value, BOOL *stop)
         {
             NSPredicate *subpredicate = nil;
-			if ([key isEqualToString:@"sponsor_id"])
-				subpredicate = [NSPredicate predicateWithFormat:@"(ANY sponsors.leg_id LIKE[cd] %@)", value];
-			else if ([key isEqualToString:@"q"])
-				subpredicate = [NSPredicate predicateWithFormat:@"(title CONTAINS[cd] %@)", value];
-#error transformables cannot be used in predicates
- //				subpredicate = [NSPredicate predicateWithFormat:@"(title CONTAINS[cd] %@ OR subjects CONTAINS[cd] %@)", value, value];
+            if ([key isEqualToString:@"sponsor_id"])
+                subpredicate = [NSPredicate predicateWithFormat:@"(ANY sponsors.leg_id LIKE[cd] %@)", value];
+            else if ([key isEqualToString:@"q"])
+                subpredicate = [NSPredicate predicateWithFormat:@"(title CONTAINS[cd] %@ OR ANY subjects.word LIKE[cd] %@)", value, value];
             else if ([key isEqualToString:@"subject"])
-//				subpredicate = [NSPredicate predicateWithFormat:@"(subjects CONTAINS[cd] %@)", value];
-                subpredicate = [NSPredicate predicateWithFormat:@"(%@ IN subjects)", value];
-
-			else if ([key isEqualToString:@"chamber"])
-				subpredicate = [NSPredicate predicateWithFormat:@"(chamber LIKE[cd] %@)", value];
-			else if ([key isEqualToString:@"state"] || [key isEqualToString:@"stateID"])
-				subpredicate = [NSPredicate predicateWithFormat:@"(stateID LIKE[cd] %@)", value];
-			else if ([key isEqualToString:@"search_window"]) {
-				NSArray *sessionComponents = [value componentsSeparatedByString:@"session:"];
-				if ([sessionComponents count] > 1)
-					subpredicate = [NSPredicate predicateWithFormat:@"(session LIKE[cd] %@)", [sessionComponents objectAtIndex:1]];
-			}	
+                subpredicate = [NSPredicate predicateWithFormat:@"(ANY subjects.word LIKE[cd] %@)", value];
+            else if ([key isEqualToString:@"chamber"])
+                subpredicate = [NSPredicate predicateWithFormat:@"(chamber LIKE[cd] %@)", value];
+            else if ([key isEqualToString:@"state"] || [key isEqualToString:@"stateID"])
+                subpredicate = [NSPredicate predicateWithFormat:@"(stateID LIKE[cd] %@)", value];
+            else if ([key isEqualToString:@"search_window"]) {
+                NSArray *sessionComponents = [value componentsSeparatedByString:@"session:"];
+                if ([sessionComponents count] > 1)
+                    subpredicate = [NSPredicate predicateWithFormat:@"(session LIKE[cd] %@)", [sessionComponents objectAtIndex:1]];
+            }    
             if (subpredicate != NULL)
                 [subpredicates addObject:subpredicate];
-		}];
-		if ([subpredicates count])
-			predicate = [NSCompoundPredicate andPredicateWithSubpredicates:subpredicates];
-	}
+        }];
+        if ([subpredicates count])
+            predicate = [NSCompoundPredicate andPredicateWithSubpredicates:subpredicates];
+    }
     [request setPredicate:predicate];
     
     NSSortDescriptor *bySession = [NSSortDescriptor sortDescriptorWithKey:@"session" ascending:YES selector:@selector(localizedStandardCompare:)];

@@ -3,8 +3,10 @@
 
 #import <CoreData/CoreData.h>
 
+
 @class CommitteeMember;
 @class SLFState;
+
 
 
 
@@ -68,14 +70,6 @@
 
 
 
-@property (nonatomic, retain) NSSet* members;
-
-
-- (NSMutableSet*)membersSet;
-
-
-
-
 @property (nonatomic, retain) NSString *parentID;
 
 
@@ -113,6 +107,13 @@
 
 //- (BOOL)validateVotesmartID:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
+@property (nonatomic, retain) NSSet* members;
+
+- (NSMutableSet*)membersSet;
 
 
 
@@ -168,12 +169,6 @@
 
 
 
-- (NSMutableSet*)primitiveMembers;
-- (void)setPrimitiveMembers:(NSMutableSet*)value;
-
-
-
-
 - (NSString*)primitiveParentID;
 - (void)setPrimitiveParentID:(NSString*)value;
 
@@ -202,6 +197,11 @@
 - (void)setPrimitiveVotesmartID:(NSString*)value;
 
 
+
+
+
+- (NSMutableSet*)primitiveMembers;
+- (void)setPrimitiveMembers:(NSMutableSet*)value;
 
 
 

@@ -3,25 +3,25 @@
 
 #import <CoreData/CoreData.h>
 
+
+@class BillAction;
+@class SLFWord;
 @class BillSponsor;
-
 @class SLFState;
+@class SLFWord;
+@class SLFWord;
+@class BillRecordVote;
+
+
+
+
+
+@class NSArray;
 
 @class NSArray;
 
 
-
-
 @class NSArray;
-
-@class NSArray;
-@class NSArray;
-
-@class NSArray;
-
-@class NSArray;
-@class NSArray;
-@class NSObject;
 
 @interface SLFBillID : NSManagedObjectID {}
 @end
@@ -31,14 +31,6 @@
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (SLFBillID*)objectID;
-
-
-
-
-@property (nonatomic, retain) NSArray *actions;
-
-
-//- (BOOL)validateActions:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -99,25 +91,10 @@
 
 
 
-@property (nonatomic, retain) NSSet* sponsors;
-
-- (NSMutableSet*)sponsorsSet;
-
-
-
-
 @property (nonatomic, retain) NSString *stateID;
 
 
 //- (BOOL)validateStateID:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, retain) NSArray *subjects;
-
-
-//- (BOOL)validateSubjects:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -130,14 +107,6 @@
 
 
 
-@property (nonatomic, retain) NSArray *type;
-
-
-//- (BOOL)validateType:(id*)value_ error:(NSError**)error_;
-
-
-
-
 @property (nonatomic, retain) NSArray *versions;
 
 
@@ -146,11 +115,24 @@
 
 
 
-@property (nonatomic, retain) NSArray *votes;
+
+@property (nonatomic, retain) NSSet* actions;
+
+- (NSMutableSet*)actionsSet;
 
 
-//- (BOOL)validateVotes:(id*)value_ error:(NSError**)error_;
 
+
+@property (nonatomic, retain) NSSet* alternateTitles;
+
+- (NSMutableSet*)alternateTitlesSet;
+
+
+
+
+@property (nonatomic, retain) NSSet* sponsors;
+
+- (NSMutableSet*)sponsorsSet;
 
 
 
@@ -162,24 +144,64 @@
 
 
 
+@property (nonatomic, retain) NSSet* subjects;
+
+- (NSMutableSet*)subjectsSet;
+
+
+
+
+@property (nonatomic, retain) NSSet* type;
+
+- (NSMutableSet*)typeSet;
+
+
+
+
+@property (nonatomic, retain) NSSet* votes;
+
+- (NSMutableSet*)votesSet;
+
+
+
+
 @end
 
 @interface _SLFBill (CoreDataGeneratedAccessors)
+
+- (void)addActions:(NSSet*)value_;
+- (void)removeActions:(NSSet*)value_;
+- (void)addActionsObject:(BillAction*)value_;
+- (void)removeActionsObject:(BillAction*)value_;
+
+- (void)addAlternateTitles:(NSSet*)value_;
+- (void)removeAlternateTitles:(NSSet*)value_;
+- (void)addAlternateTitlesObject:(SLFWord*)value_;
+- (void)removeAlternateTitlesObject:(SLFWord*)value_;
 
 - (void)addSponsors:(NSSet*)value_;
 - (void)removeSponsors:(NSSet*)value_;
 - (void)addSponsorsObject:(BillSponsor*)value_;
 - (void)removeSponsorsObject:(BillSponsor*)value_;
 
+- (void)addSubjects:(NSSet*)value_;
+- (void)removeSubjects:(NSSet*)value_;
+- (void)addSubjectsObject:(SLFWord*)value_;
+- (void)removeSubjectsObject:(SLFWord*)value_;
+
+- (void)addType:(NSSet*)value_;
+- (void)removeType:(NSSet*)value_;
+- (void)addTypeObject:(SLFWord*)value_;
+- (void)removeTypeObject:(SLFWord*)value_;
+
+- (void)addVotes:(NSSet*)value_;
+- (void)removeVotes:(NSSet*)value_;
+- (void)addVotesObject:(BillRecordVote*)value_;
+- (void)removeVotesObject:(BillRecordVote*)value_;
+
 @end
 
 @interface _SLFBill (CoreDataGeneratedPrimitiveAccessors)
-
-
-- (NSArray*)primitiveActions;
-- (void)setPrimitiveActions:(NSArray*)value;
-
-
 
 
 - (NSString*)primitiveBillID;
@@ -224,20 +246,8 @@
 
 
 
-- (NSMutableSet*)primitiveSponsors;
-- (void)setPrimitiveSponsors:(NSMutableSet*)value;
-
-
-
-
 - (NSString*)primitiveStateID;
 - (void)setPrimitiveStateID:(NSString*)value;
-
-
-
-
-- (NSArray*)primitiveSubjects;
-- (void)setPrimitiveSubjects:(NSArray*)value;
 
 
 
@@ -248,27 +258,45 @@
 
 
 
-- (NSArray*)primitiveType;
-- (void)setPrimitiveType:(NSArray*)value;
-
-
-
-
 - (NSArray*)primitiveVersions;
 - (void)setPrimitiveVersions:(NSArray*)value;
 
 
 
 
-- (NSArray*)primitiveVotes;
-- (void)setPrimitiveVotes:(NSArray*)value;
+
+- (NSMutableSet*)primitiveActions;
+- (void)setPrimitiveActions:(NSMutableSet*)value;
 
 
+
+- (NSMutableSet*)primitiveAlternateTitles;
+- (void)setPrimitiveAlternateTitles:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveSponsors;
+- (void)setPrimitiveSponsors:(NSMutableSet*)value;
 
 
 
 - (SLFState*)primitiveStateObj;
 - (void)setPrimitiveStateObj:(SLFState*)value;
+
+
+
+- (NSMutableSet*)primitiveSubjects;
+- (void)setPrimitiveSubjects:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveType;
+- (void)setPrimitiveType:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveVotes;
+- (void)setPrimitiveVotes:(NSMutableSet*)value;
 
 
 @end
