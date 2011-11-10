@@ -104,21 +104,12 @@ enum SECTIONS {
         tableItem.text = self.committee.chamberObj.shortName;
         tableItem.detailText = self.committee.subcommittee;
     }]];
-     for (NSString *website in self.committee.sources)
-     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [SubtitleCellMapping cellMapping];
-        tableItem.text = NSLocalizedString(@"Web Site", @"");
-        tableItem.detailText = website;
-        tableItem.URL = website;
-        tableItem.cellMapping.onSelectCell = ^(void) {
-            if (SLFIsReachableAddress(tableItem.URL)) {
-                SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:tableItem.URL];
-                webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-                [self presentModalViewController:webViewController animated:YES];	
-                [webViewController release];
-            }
-        };
-    }]];  
+    for (GenericAsset *source in self.committee.sources) {
+        NSString *subtitle = source.name;
+        if (IsEmpty(subtitle))
+            subtitle = source.url;
+        [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Site", @"") subtitle:subtitle url:source.url]];
+    }
     [self.tableViewModel loadTableItems:tableItems inSection:SectionCommitteeInfoIndex];
     [tableItems release];
     [self.tableViewModel loadObjects:self.committee.sortedMembers inSection:SectionMembersIndex];    
@@ -126,8 +117,8 @@ enum SECTIONS {
 
 - (SubtitleCellMapping *)committeeMemberCellMap {
     SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
-    [cellMap mapKeyPath:@"legislatorName" toAttribute:@"textLabel.text"];
-    [cellMap mapKeyPath:@"role" toAttribute:@"detailTextLabel.text"];
+    [cellMap mapKeyPath:@"name" toAttribute:@"textLabel.text"];
+    [cellMap mapKeyPath:@"type" toAttribute:@"detailTextLabel.text"];
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         CommitteeMember *leg = object;
         LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:leg.legID];

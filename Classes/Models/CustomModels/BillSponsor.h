@@ -1,8 +1,6 @@
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
-#import "CommitteeMember.h"
+#import "_BillSponsor.h"
 
-@class SLFBill;
-@interface BillSponsor : CommitteeMember
-@property (nonatomic, retain) SLFBill *billInverse;
+@class RKManagedObjectMapping;
+@interface BillSponsor : _BillSponsor {}
++ (RKManagedObjectMapping *)mapping;
 @end

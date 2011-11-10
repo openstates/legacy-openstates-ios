@@ -92,21 +92,7 @@
 
 
 
-@dynamic participants;
-
-
-
-
-
-
 @dynamic session;
-
-
-
-
-
-
-@dynamic sources;
 
 
 
@@ -126,6 +112,28 @@
 
 
 
+
+@dynamic participants;
+
+	
+- (NSMutableSet*)participantsSet {
+	[self willAccessValueForKey:@"participants"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"participants"];
+	[self didAccessValueForKey:@"participants"];
+	return result;
+}
+	
+
+@dynamic sources;
+
+	
+- (NSMutableSet*)sourcesSet {
+	[self willAccessValueForKey:@"sources"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"sources"];
+	[self didAccessValueForKey:@"sources"];
+	return result;
+}
+	
 
 @dynamic stateObj;
 

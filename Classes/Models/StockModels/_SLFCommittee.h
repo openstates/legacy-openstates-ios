@@ -5,6 +5,7 @@
 
 
 @class CommitteeMember;
+@class GenericAsset;
 @class SLFState;
 
 
@@ -13,7 +14,6 @@
 
 
 
-@class NSArray;
 
 
 
@@ -78,14 +78,6 @@
 
 
 
-@property (nonatomic, retain) NSArray *sources;
-
-
-//- (BOOL)validateSources:(id*)value_ error:(NSError**)error_;
-
-
-
-
 @property (nonatomic, retain) NSString *stateID;
 
 
@@ -118,6 +110,13 @@
 
 
 
+@property (nonatomic, retain) NSSet* sources;
+
+- (NSMutableSet*)sourcesSet;
+
+
+
+
 @property (nonatomic, retain) SLFState* stateObj;
 
 //- (BOOL)validateStateObj:(id*)value_ error:(NSError**)error_;
@@ -133,6 +132,11 @@
 - (void)removeMembers:(NSSet*)value_;
 - (void)addMembersObject:(CommitteeMember*)value_;
 - (void)removeMembersObject:(CommitteeMember*)value_;
+
+- (void)addSources:(NSSet*)value_;
+- (void)removeSources:(NSSet*)value_;
+- (void)addSourcesObject:(GenericAsset*)value_;
+- (void)removeSourcesObject:(GenericAsset*)value_;
 
 @end
 
@@ -175,12 +179,6 @@
 
 
 
-- (NSArray*)primitiveSources;
-- (void)setPrimitiveSources:(NSArray*)value;
-
-
-
-
 - (NSString*)primitiveStateID;
 - (void)setPrimitiveStateID:(NSString*)value;
 
@@ -202,6 +200,11 @@
 
 - (NSMutableSet*)primitiveMembers;
 - (void)setPrimitiveMembers:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveSources;
+- (void)setPrimitiveSources:(NSMutableSet*)value;
 
 
 

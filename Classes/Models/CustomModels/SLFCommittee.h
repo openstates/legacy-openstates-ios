@@ -10,4 +10,5 @@
 @property (nonatomic,readonly) NSString *chamberShortName;
 - (NSArray *)sortedMembers;
 + (NSArray *)sortDescriptors;
++ (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
 @end

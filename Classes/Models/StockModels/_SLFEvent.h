@@ -4,6 +4,8 @@
 #import <CoreData/CoreData.h>
 
 
+@class EventParticipant;
+@class GenericAsset;
 @class SLFState;
 
 
@@ -14,9 +16,7 @@
 
 
 
-@class NSArray;
 
-@class NSArray;
 
 
 
@@ -96,26 +96,10 @@
 
 
 
-@property (nonatomic, retain) NSArray *participants;
-
-
-//- (BOOL)validateParticipants:(id*)value_ error:(NSError**)error_;
-
-
-
-
 @property (nonatomic, retain) NSString *session;
 
 
 //- (BOOL)validateSession:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, retain) NSArray *sources;
-
-
-//- (BOOL)validateSources:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -137,6 +121,20 @@
 
 
 
+@property (nonatomic, retain) NSSet* participants;
+
+- (NSMutableSet*)participantsSet;
+
+
+
+
+@property (nonatomic, retain) NSSet* sources;
+
+- (NSMutableSet*)sourcesSet;
+
+
+
+
 @property (nonatomic, retain) SLFState* stateObj;
 
 //- (BOOL)validateStateObj:(id*)value_ error:(NSError**)error_;
@@ -147,6 +145,16 @@
 @end
 
 @interface _SLFEvent (CoreDataGeneratedAccessors)
+
+- (void)addParticipants:(NSSet*)value_;
+- (void)removeParticipants:(NSSet*)value_;
+- (void)addParticipantsObject:(EventParticipant*)value_;
+- (void)removeParticipantsObject:(EventParticipant*)value_;
+
+- (void)addSources:(NSSet*)value_;
+- (void)removeSources:(NSSet*)value_;
+- (void)addSourcesObject:(GenericAsset*)value_;
+- (void)removeSourcesObject:(GenericAsset*)value_;
 
 @end
 
@@ -201,20 +209,8 @@
 
 
 
-- (NSArray*)primitiveParticipants;
-- (void)setPrimitiveParticipants:(NSArray*)value;
-
-
-
-
 - (NSString*)primitiveSession;
 - (void)setPrimitiveSession:(NSString*)value;
-
-
-
-
-- (NSArray*)primitiveSources;
-- (void)setPrimitiveSources:(NSArray*)value;
 
 
 
@@ -229,6 +225,16 @@
 - (void)setPrimitiveType:(NSString*)value;
 
 
+
+
+
+- (NSMutableSet*)primitiveParticipants;
+- (void)setPrimitiveParticipants:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveSources;
+- (void)setPrimitiveSources:(NSMutableSet*)value;
 
 
 

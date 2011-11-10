@@ -4,14 +4,15 @@
 
 
 @interface SLFState : _SLFState {}
-- (BOOL)isFeatureEnabled:(NSString *)feature;
-- (NSString *)displayNameForSession:(NSString *)aSession;
 @property (nonatomic, readonly) NSString *stateInitial;
 @property (nonatomic, readonly) UIImage *stateFlag;
 @property (nonatomic, readonly) NSString *newsAddress;
 @property (nonatomic, readonly) NSArray *sessions;
 @property (nonatomic, readonly) NSString *latestSession;
 @property (nonatomic, readonly) NSDictionary *sessionIndexesByDisplayName;
+- (BOOL)isFeatureEnabled:(NSString *)feature;
+- (NSString *)displayNameForSession:(NSString *)aSession;
++ (RKManagedObjectMapping *)mapping;
 @end
 
 extern NSString * const SLFSelectedStateDidChangeNotification;
@@ -27,3 +28,7 @@ NSString* SLFSelectedSession(void);
 void SLFSaveSelectedSessionForState(NSString *session, SLFState *state);
 void SLFSaveSelectedSession(NSString *session);
 NSString* FindOrCreateSelectedSessionForState(SLFState *state);
+
+@interface RKManagedObjectMapping(SLFState)
+- (void)connectStateToKeyPath:(NSString *)keyPath withStateMapping:(RKManagedObjectMapping *)stateMapping;
+@end

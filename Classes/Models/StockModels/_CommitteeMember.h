@@ -2,18 +2,16 @@
 // Make changes to CommitteeMember.h instead.
 
 #import <CoreData/CoreData.h>
-
+#import "GenericNamedItem.h"
 
 @class SLFCommittee;
-
-
 
 
 
 @interface CommitteeMemberID : NSManagedObjectID {}
 @end
 
-@interface _CommitteeMember : NSManagedObject {}
+@interface _CommitteeMember : GenericNamedItem {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
@@ -26,22 +24,6 @@
 
 
 //- (BOOL)validateLegID:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, retain) NSString *legislatorName;
-
-
-//- (BOOL)validateLegislatorName:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, retain) NSString *role;
-
-
-//- (BOOL)validateRole:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -65,18 +47,6 @@
 
 - (NSString*)primitiveLegID;
 - (void)setPrimitiveLegID:(NSString*)value;
-
-
-
-
-- (NSString*)primitiveLegislatorName;
-- (void)setPrimitiveLegislatorName:(NSString*)value;
-
-
-
-
-- (NSString*)primitiveRole;
-- (void)setPrimitiveRole:(NSString*)value;
 
 
 

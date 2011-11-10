@@ -13,6 +13,8 @@
 #import "SLFTableViewController.h"
 #import "SLFAppearance.h"
 #import "GradientBackgroundView.h"
+#import "SVWebViewController.h"
+#import "SLFReachable.h"
 
 @implementation SLFTableViewController
 @synthesize useGradientBackground;
@@ -61,6 +63,24 @@
         return;
     }
     [self.stackController pushViewController:viewController fromViewController:self animated:YES];
+}
+
+- (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url {
+    NSParameterAssert(!IsEmpty(url));
+    return [RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+        tableItem.cellMapping = [SubtitleCellMapping cellMapping];
+        tableItem.text = itemTitle;
+        tableItem.detailText = itemSubtitle;
+        tableItem.URL = url;
+        tableItem.cellMapping.onSelectCell = ^(void) {
+            if (SLFIsReachableAddress(tableItem.URL)) {
+                SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:tableItem.URL];
+                webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+                [self presentModalViewController:webViewController animated:YES];	
+                [webViewController release];
+            }
+        };
+    }];
 }
 
 @end

@@ -1,11 +1,16 @@
-#import "SLFDataModels.h"
+#import "CommitteeRole.h"
+#import "SLFCommittee.h"
+#import <RestKit/CoreData/CoreData.h>
 
 @implementation CommitteeRole
-@dynamic committeeID;
-@dynamic committeeName;
-@dynamic chamber;
-@dynamic role;
-@dynamic legislatorInverse;
+
++ (RKManagedObjectMapping *)mapping {
+    RKManagedObjectMapping* mapping = [RKManagedObjectMapping mappingForClass:[self class]];
+    [mapping mapKeyPath:@"committee_id" toAttribute:@"committeeID"];
+    [mapping mapKeyPath:@"committee" toAttribute:@"name"];
+    [mapping mapAttributes:@"type", @"chamber", nil];
+    return mapping;
+}
 
 - (SLFCommittee *)foundCommittee {
     if (!self.committeeID)
@@ -13,12 +18,19 @@
     return [SLFCommittee findFirstByAttribute:@"committeeID" withValue:self.committeeID];
 }
 
-- (NSString *)role {
-    [self willAccessValueForKey:@"role"];
-    NSString *aRole = [self primitiveValueForKey:@"role"];
-    [self didAccessValueForKey:@"role"];
+- (NSString *)type {
+    [self willAccessValueForKey:@"type"];
+    NSString *aRole = [self primitiveValueForKey:@"type"];
+    [self didAccessValueForKey:@"type"];
     if (aRole)
         aRole = [aRole capitalizedString];
     return aRole;
 }
+
++ (NSArray *)sortDescriptors {
+    NSSortDescriptor *nameDesc = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+    NSSortDescriptor *chamberDesc = [NSSortDescriptor sortDescriptorWithKey:@"chamber" ascending:YES];
+    return [NSArray arrayWithObjects:nameDesc, chamberDesc, nil];
+}
+
 @end

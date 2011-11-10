@@ -1,12 +1,11 @@
-#import "BillSponsor.h"
+#import "EventParticipant.h"
 #import <RestKit/CoreData/CoreData.h>
 
-@implementation BillSponsor
+@implementation EventParticipant
 
 + (RKManagedObjectMapping *)mapping {
     RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
-    [mapping mapKeyPath:@"leg_id" toAttribute:@"legID"];
-    [mapping mapAttributes:@"type", @"name", nil];
+    [mapping mapAttributes:@"name", @"type", nil];
     return mapping;
 }
 

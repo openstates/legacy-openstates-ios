@@ -1,29 +1,29 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
-// Make changes to CommitteeRole.m instead.
+// Make changes to GenericNamedItem.m instead.
 
-#import "_CommitteeRole.h"
+#import "_GenericNamedItem.h"
 
-@implementation CommitteeRoleID
+@implementation GenericNamedItemID
 @end
 
-@implementation _CommitteeRole
+@implementation _GenericNamedItem
 
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_ {
 	NSParameterAssert(moc_);
-	return [NSEntityDescription insertNewObjectForEntityForName:@"CommitteeRole" inManagedObjectContext:moc_];
+	return [NSEntityDescription insertNewObjectForEntityForName:@"GenericNamedItem" inManagedObjectContext:moc_];
 }
 
 + (NSString*)entityName {
-	return @"CommitteeRole";
+	return @"GenericNamedItem";
 }
 
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_ {
 	NSParameterAssert(moc_);
-	return [NSEntityDescription entityForName:@"CommitteeRole" inManagedObjectContext:moc_];
+	return [NSEntityDescription entityForName:@"GenericNamedItem" inManagedObjectContext:moc_];
 }
 
-- (CommitteeRoleID*)objectID {
-	return (CommitteeRoleID*)[super objectID];
+- (GenericNamedItemID*)objectID {
+	return (GenericNamedItemID*)[super objectID];
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
@@ -36,23 +36,19 @@
 
 
 
-@dynamic chamber;
+@dynamic name;
 
 
 
 
 
 
-@dynamic committeeID;
+@dynamic type;
 
 
 
 
 
-
-@dynamic legislatorInverse;
-
-	
 
 
 

@@ -7,6 +7,7 @@
 @class SLFBill;
 @class BillVoter;
 @class BillVoter;
+@class GenericAsset;
 @class BillVoter;
 
 
@@ -19,7 +20,6 @@
 
 
 
-@class NSArray;
 
 
 
@@ -129,14 +129,6 @@
 
 
 
-@property (nonatomic, retain) NSArray *sources;
-
-
-//- (BOOL)validateSources:(id*)value_ error:(NSError**)error_;
-
-
-
-
 @property (nonatomic, retain) NSString *stateID;
 
 
@@ -195,6 +187,13 @@
 
 
 
+@property (nonatomic, retain) NSSet* sources;
+
+- (NSMutableSet*)sourcesSet;
+
+
+
+
 @property (nonatomic, retain) NSSet* yesVotes;
 
 - (NSMutableSet*)yesVotesSet;
@@ -215,6 +214,11 @@
 - (void)removeOtherVotes:(NSSet*)value_;
 - (void)addOtherVotesObject:(BillVoter*)value_;
 - (void)removeOtherVotesObject:(BillVoter*)value_;
+
+- (void)addSources:(NSSet*)value_;
+- (void)removeSources:(NSSet*)value_;
+- (void)addSourcesObject:(GenericAsset*)value_;
+- (void)removeSourcesObject:(GenericAsset*)value_;
 
 - (void)addYesVotes:(NSSet*)value_;
 - (void)removeYesVotes:(NSSet*)value_;
@@ -295,12 +299,6 @@
 
 
 
-- (NSArray*)primitiveSources;
-- (void)setPrimitiveSources:(NSArray*)value;
-
-
-
-
 - (NSString*)primitiveStateID;
 - (void)setPrimitiveStateID:(NSString*)value;
 
@@ -341,6 +339,11 @@
 
 - (NSMutableSet*)primitiveOtherVotes;
 - (void)setPrimitiveOtherVotes:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveSources;
+- (void)setPrimitiveSources:(NSMutableSet*)value;
 
 
 

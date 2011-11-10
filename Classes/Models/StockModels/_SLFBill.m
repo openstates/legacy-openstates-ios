@@ -64,21 +64,7 @@
 
 
 
-@dynamic documents;
-
-
-
-
-
-
 @dynamic session;
-
-
-
-
-
-
-@dynamic sources;
 
 
 
@@ -93,13 +79,6 @@
 
 
 @dynamic title;
-
-
-
-
-
-
-@dynamic versions;
 
 
 
@@ -124,6 +103,28 @@
 	[self willAccessValueForKey:@"alternateTitles"];
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"alternateTitles"];
 	[self didAccessValueForKey:@"alternateTitles"];
+	return result;
+}
+	
+
+@dynamic documents;
+
+	
+- (NSMutableSet*)documentsSet {
+	[self willAccessValueForKey:@"documents"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"documents"];
+	[self didAccessValueForKey:@"documents"];
+	return result;
+}
+	
+
+@dynamic sources;
+
+	
+- (NSMutableSet*)sourcesSet {
+	[self willAccessValueForKey:@"sources"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"sources"];
+	[self didAccessValueForKey:@"sources"];
 	return result;
 }
 	
@@ -154,13 +155,24 @@
 }
 	
 
-@dynamic type;
+@dynamic types;
 
 	
-- (NSMutableSet*)typeSet {
-	[self willAccessValueForKey:@"type"];
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"type"];
-	[self didAccessValueForKey:@"type"];
+- (NSMutableSet*)typesSet {
+	[self willAccessValueForKey:@"types"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"types"];
+	[self didAccessValueForKey:@"types"];
+	return result;
+}
+	
+
+@dynamic versions;
+
+	
+- (NSMutableSet*)versionsSet {
+	[self willAccessValueForKey:@"versions"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"versions"];
+	[self didAccessValueForKey:@"versions"];
 	return result;
 }
 	

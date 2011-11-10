@@ -1,7 +1,32 @@
 #import "SLFState.h"
 #import <RestKit/Network/NSObject+URLEncoding.h>
 
+@implementation RKManagedObjectMapping(SLFState)
+- (void)connectStateToKeyPath:(NSString *)keyPath withStateMapping:(RKManagedObjectMapping *)stateMapping {
+    [self hasOne:keyPath withMapping:stateMapping];
+    [self connectRelationship:keyPath withObjectForPrimaryKeyAttribute:@"stateID"];
+}
+@end
+
 @implementation SLFState
+
++ (RKManagedObjectMapping *)mapping {
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
+    mapping.primaryKeyAttribute = @"stateID";
+    [mapping mapKeyPath:@"lower_chamber_name" toAttribute:@"lowerChamberName"];
+    [mapping mapKeyPath:@"lower_chamber_title" toAttribute:@"lowerChamberTitle"];
+    [mapping mapKeyPath:@"lower_chamber_term" toAttribute:@"lowerChamberTerm"];
+    [mapping mapKeyPath:@"upper_chamber_name" toAttribute:@"upperChamberName"];
+    [mapping mapKeyPath:@"upper_chamber_title" toAttribute:@"upperChamberTitle"];
+    [mapping mapKeyPath:@"upper_chamber_term" toAttribute:@"upperChamberTerm"];
+    [mapping mapKeyPath:@"session_details" toAttribute:@"sessionDetails"];
+    [mapping mapKeyPath:@"legislature_name" toAttribute:@"legislatureName"];
+    [mapping mapKeyPath:@"feature_flags" toAttribute:@"featureFlags"];
+    [mapping mapKeyPath:@"latest_update" toAttribute:@"dateUpdated"];
+    [mapping mapKeyPath:@"abbreviation" toAttribute:@"stateID"];
+    [mapping mapAttributes:@"name", @"terms", @"level", nil];
+    return mapping;
+}
 
 - (NSString *)stateInitial {
 	NSString * initial = [self.stateID substringToIndex:1];

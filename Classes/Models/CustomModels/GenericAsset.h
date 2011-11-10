@@ -1,6 +1,6 @@
-#import "_BillAction.h"
+#import "_GenericAsset.h"
 
 @class RKManagedObjectMapping;
-@interface BillAction : _BillAction {}
+@interface GenericAsset : _GenericAsset {}
 + (RKManagedObjectMapping *)mapping;
 @end

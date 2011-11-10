@@ -103,11 +103,9 @@
 		3757CE89146A6D9900471CB7 /* _BillVoter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE7F146A6D9900471CB7 /* _BillVoter.m */; };
 		3757CE8A146A6D9900471CB7 /* _CommitteeMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE81146A6D9900471CB7 /* _CommitteeMember.m */; };
 		3757CE8B146A6D9900471CB7 /* _CommitteeRole.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE83146A6D9900471CB7 /* _CommitteeRole.m */; };
-		3757CE8C146A6D9900471CB7 /* _SLFWord.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE85146A6D9900471CB7 /* _SLFWord.m */; };
 		3757CE95146A6DC900471CB7 /* BillAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE8E146A6DC900471CB7 /* BillAction.m */; };
 		3757CE96146A6DC900471CB7 /* BillRecordVote.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE90146A6DC900471CB7 /* BillRecordVote.m */; };
 		3757CE97146A6DC900471CB7 /* BillVoter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE92146A6DC900471CB7 /* BillVoter.m */; };
-		3757CE98146A6DC900471CB7 /* SLFWord.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE94146A6DC900471CB7 /* SLFWord.m */; };
 		37588E2413E4B456005FB5AB /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37588E2313E4B456005FB5AB /* EventsViewController.m */; };
 		37588E2C13E4B5FE005FB5AB /* EventDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37588E2B13E4B5FE005FB5AB /* EventDetailViewController.m */; };
 		37588E9913E4C62B005FB5AB /* DistrictDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37588E9813E4C62B005FB5AB /* DistrictDetailViewController.m */; };
@@ -180,6 +178,14 @@
 		37D6BE101455B99F00520352 /* BasicMapAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6BE091455B99F00520352 /* BasicMapAnnotationView.m */; };
 		37D6BE111455B99F00520352 /* CalloutMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6BE0B1455B99F00520352 /* CalloutMapAnnotation.m */; };
 		37D6BE121455B99F00520352 /* CalloutMapAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6BE0D1455B99F00520352 /* CalloutMapAnnotationView.m */; };
+		37D7540A146C57FD00DCD742 /* _EventParticipant.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75403146C57FD00DCD742 /* _EventParticipant.m */; };
+		37D7540B146C57FD00DCD742 /* _GenericAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75405146C57FD00DCD742 /* _GenericAsset.m */; };
+		37D7540C146C57FD00DCD742 /* _GenericNamedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75407146C57FD00DCD742 /* _GenericNamedItem.m */; };
+		37D7540D146C57FD00DCD742 /* _GenericWord.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75409146C57FD00DCD742 /* _GenericWord.m */; };
+		37D75416146C59C500DCD742 /* EventParticipant.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D7540F146C59C500DCD742 /* EventParticipant.m */; };
+		37D75417146C59C600DCD742 /* GenericAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75411146C59C500DCD742 /* GenericAsset.m */; };
+		37D75418146C59C600DCD742 /* GenericNamedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75413146C59C500DCD742 /* GenericNamedItem.m */; };
+		37D75419146C59C600DCD742 /* GenericWord.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75415146C59C500DCD742 /* GenericWord.m */; };
 		37D7672B13E67D5200A77F89 /* SLFBill.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D7670D13E67D5200A77F89 /* SLFBill.m */; };
 		37D7672C13E67D5200A77F89 /* SLFCommittee.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D7670F13E67D5200A77F89 /* SLFCommittee.m */; };
 		37D7672E13E67D5200A77F89 /* SLFDistrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D7671313E67D5200A77F89 /* SLFDistrict.m */; };
@@ -473,16 +479,12 @@
 		3757CE81146A6D9900471CB7 /* _CommitteeMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _CommitteeMember.m; sourceTree = "<group>"; };
 		3757CE82146A6D9900471CB7 /* _CommitteeRole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _CommitteeRole.h; sourceTree = "<group>"; };
 		3757CE83146A6D9900471CB7 /* _CommitteeRole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _CommitteeRole.m; sourceTree = "<group>"; };
-		3757CE84146A6D9900471CB7 /* _SLFWord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SLFWord.h; sourceTree = "<group>"; };
-		3757CE85146A6D9900471CB7 /* _SLFWord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFWord.m; sourceTree = "<group>"; };
 		3757CE8D146A6DC800471CB7 /* BillAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillAction.h; sourceTree = "<group>"; };
 		3757CE8E146A6DC900471CB7 /* BillAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillAction.m; sourceTree = "<group>"; };
 		3757CE8F146A6DC900471CB7 /* BillRecordVote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillRecordVote.h; sourceTree = "<group>"; };
 		3757CE90146A6DC900471CB7 /* BillRecordVote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillRecordVote.m; sourceTree = "<group>"; };
 		3757CE91146A6DC900471CB7 /* BillVoter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillVoter.h; sourceTree = "<group>"; };
 		3757CE92146A6DC900471CB7 /* BillVoter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillVoter.m; sourceTree = "<group>"; };
-		3757CE93146A6DC900471CB7 /* SLFWord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFWord.h; sourceTree = "<group>"; };
-		3757CE94146A6DC900471CB7 /* SLFWord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFWord.m; sourceTree = "<group>"; };
 		37588E2213E4B456005FB5AB /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
 		37588E2313E4B456005FB5AB /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsViewController.m; sourceTree = "<group>"; };
 		37588E2A13E4B5FE005FB5AB /* EventDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDetailViewController.h; sourceTree = "<group>"; };
@@ -604,6 +606,22 @@
 		37D6BE0B1455B99F00520352 /* CalloutMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalloutMapAnnotation.m; sourceTree = "<group>"; };
 		37D6BE0C1455B99F00520352 /* CalloutMapAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalloutMapAnnotationView.h; sourceTree = "<group>"; };
 		37D6BE0D1455B99F00520352 /* CalloutMapAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalloutMapAnnotationView.m; sourceTree = "<group>"; };
+		37D75402146C57FD00DCD742 /* _EventParticipant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _EventParticipant.h; sourceTree = "<group>"; };
+		37D75403146C57FD00DCD742 /* _EventParticipant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _EventParticipant.m; sourceTree = "<group>"; };
+		37D75404146C57FD00DCD742 /* _GenericAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _GenericAsset.h; sourceTree = "<group>"; };
+		37D75405146C57FD00DCD742 /* _GenericAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _GenericAsset.m; sourceTree = "<group>"; };
+		37D75406146C57FD00DCD742 /* _GenericNamedItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _GenericNamedItem.h; sourceTree = "<group>"; };
+		37D75407146C57FD00DCD742 /* _GenericNamedItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _GenericNamedItem.m; sourceTree = "<group>"; };
+		37D75408146C57FD00DCD742 /* _GenericWord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _GenericWord.h; sourceTree = "<group>"; };
+		37D75409146C57FD00DCD742 /* _GenericWord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _GenericWord.m; sourceTree = "<group>"; };
+		37D7540E146C59C500DCD742 /* EventParticipant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventParticipant.h; sourceTree = "<group>"; };
+		37D7540F146C59C500DCD742 /* EventParticipant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventParticipant.m; sourceTree = "<group>"; };
+		37D75410146C59C500DCD742 /* GenericAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericAsset.h; sourceTree = "<group>"; };
+		37D75411146C59C500DCD742 /* GenericAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericAsset.m; sourceTree = "<group>"; };
+		37D75412146C59C500DCD742 /* GenericNamedItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericNamedItem.h; sourceTree = "<group>"; };
+		37D75413146C59C500DCD742 /* GenericNamedItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericNamedItem.m; sourceTree = "<group>"; };
+		37D75414146C59C500DCD742 /* GenericWord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericWord.h; sourceTree = "<group>"; };
+		37D75415146C59C500DCD742 /* GenericWord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericWord.m; sourceTree = "<group>"; };
 		37D7670C13E67D5200A77F89 /* SLFBill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFBill.h; sourceTree = "<group>"; };
 		37D7670D13E67D5200A77F89 /* SLFBill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFBill.m; sourceTree = "<group>"; };
 		37D7670E13E67D5200A77F89 /* SLFCommittee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFCommittee.h; sourceTree = "<group>"; };
@@ -1286,8 +1304,14 @@
 				3757CE90146A6DC900471CB7 /* BillRecordVote.m */,
 				3757CE91146A6DC900471CB7 /* BillVoter.h */,
 				3757CE92146A6DC900471CB7 /* BillVoter.m */,
-				3757CE93146A6DC900471CB7 /* SLFWord.h */,
-				3757CE94146A6DC900471CB7 /* SLFWord.m */,
+				37D7540E146C59C500DCD742 /* EventParticipant.h */,
+				37D7540F146C59C500DCD742 /* EventParticipant.m */,
+				37D75410146C59C500DCD742 /* GenericAsset.h */,
+				37D75411146C59C500DCD742 /* GenericAsset.m */,
+				37D75412146C59C500DCD742 /* GenericNamedItem.h */,
+				37D75413146C59C500DCD742 /* GenericNamedItem.m */,
+				37D75414146C59C500DCD742 /* GenericWord.h */,
+				37D75415146C59C500DCD742 /* GenericWord.m */,
 			);
 			path = CustomModels;
 			sourceTree = "<group>";
@@ -1295,6 +1319,14 @@
 		37D7671C13E67D5200A77F89 /* StockModels */ = {
 			isa = PBXGroup;
 			children = (
+				37D75402146C57FD00DCD742 /* _EventParticipant.h */,
+				37D75403146C57FD00DCD742 /* _EventParticipant.m */,
+				37D75404146C57FD00DCD742 /* _GenericAsset.h */,
+				37D75405146C57FD00DCD742 /* _GenericAsset.m */,
+				37D75406146C57FD00DCD742 /* _GenericNamedItem.h */,
+				37D75407146C57FD00DCD742 /* _GenericNamedItem.m */,
+				37D75408146C57FD00DCD742 /* _GenericWord.h */,
+				37D75409146C57FD00DCD742 /* _GenericWord.m */,
 				3757CE78146A6D9900471CB7 /* _BillAction.h */,
 				3757CE79146A6D9900471CB7 /* _BillAction.m */,
 				3757CE7A146A6D9900471CB7 /* _BillRecordVote.h */,
@@ -1307,8 +1339,6 @@
 				3757CE81146A6D9900471CB7 /* _CommitteeMember.m */,
 				3757CE82146A6D9900471CB7 /* _CommitteeRole.h */,
 				3757CE83146A6D9900471CB7 /* _CommitteeRole.m */,
-				3757CE84146A6D9900471CB7 /* _SLFWord.h */,
-				3757CE85146A6D9900471CB7 /* _SLFWord.m */,
 				37D7671D13E67D5200A77F89 /* _SLFBill.h */,
 				37D7671E13E67D5200A77F89 /* _SLFBill.m */,
 				37D7671F13E67D5200A77F89 /* _SLFCommittee.h */,
@@ -1762,11 +1792,17 @@
 				3757CE89146A6D9900471CB7 /* _BillVoter.m in Sources */,
 				3757CE8A146A6D9900471CB7 /* _CommitteeMember.m in Sources */,
 				3757CE8B146A6D9900471CB7 /* _CommitteeRole.m in Sources */,
-				3757CE8C146A6D9900471CB7 /* _SLFWord.m in Sources */,
 				3757CE95146A6DC900471CB7 /* BillAction.m in Sources */,
 				3757CE96146A6DC900471CB7 /* BillRecordVote.m in Sources */,
 				3757CE97146A6DC900471CB7 /* BillVoter.m in Sources */,
-				3757CE98146A6DC900471CB7 /* SLFWord.m in Sources */,
+				37D7540A146C57FD00DCD742 /* _EventParticipant.m in Sources */,
+				37D7540B146C57FD00DCD742 /* _GenericAsset.m in Sources */,
+				37D7540C146C57FD00DCD742 /* _GenericNamedItem.m in Sources */,
+				37D7540D146C57FD00DCD742 /* _GenericWord.m in Sources */,
+				37D75416146C59C500DCD742 /* EventParticipant.m in Sources */,
+				37D75417146C59C600DCD742 /* GenericAsset.m in Sources */,
+				37D75418146C59C600DCD742 /* GenericNamedItem.m in Sources */,
+				37D75419146C59C600DCD742 /* GenericWord.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

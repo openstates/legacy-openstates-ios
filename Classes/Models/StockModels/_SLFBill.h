@@ -5,23 +5,23 @@
 
 
 @class BillAction;
-@class SLFWord;
+@class GenericWord;
+@class GenericAsset;
+@class GenericAsset;
 @class BillSponsor;
 @class SLFState;
-@class SLFWord;
-@class SLFWord;
+@class GenericWord;
+@class GenericWord;
+@class GenericAsset;
 @class BillRecordVote;
 
 
 
 
 
-@class NSArray;
-
-@class NSArray;
 
 
-@class NSArray;
+
 
 @interface SLFBillID : NSManagedObjectID {}
 @end
@@ -67,26 +67,10 @@
 
 
 
-@property (nonatomic, retain) NSArray *documents;
-
-
-//- (BOOL)validateDocuments:(id*)value_ error:(NSError**)error_;
-
-
-
-
 @property (nonatomic, retain) NSString *session;
 
 
 //- (BOOL)validateSession:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, retain) NSArray *sources;
-
-
-//- (BOOL)validateSources:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -107,14 +91,6 @@
 
 
 
-@property (nonatomic, retain) NSArray *versions;
-
-
-//- (BOOL)validateVersions:(id*)value_ error:(NSError**)error_;
-
-
-
-
 
 @property (nonatomic, retain) NSSet* actions;
 
@@ -126,6 +102,20 @@
 @property (nonatomic, retain) NSSet* alternateTitles;
 
 - (NSMutableSet*)alternateTitlesSet;
+
+
+
+
+@property (nonatomic, retain) NSSet* documents;
+
+- (NSMutableSet*)documentsSet;
+
+
+
+
+@property (nonatomic, retain) NSSet* sources;
+
+- (NSMutableSet*)sourcesSet;
 
 
 
@@ -151,9 +141,16 @@
 
 
 
-@property (nonatomic, retain) NSSet* type;
+@property (nonatomic, retain) NSSet* types;
 
-- (NSMutableSet*)typeSet;
+- (NSMutableSet*)typesSet;
+
+
+
+
+@property (nonatomic, retain) NSSet* versions;
+
+- (NSMutableSet*)versionsSet;
 
 
 
@@ -176,8 +173,18 @@
 
 - (void)addAlternateTitles:(NSSet*)value_;
 - (void)removeAlternateTitles:(NSSet*)value_;
-- (void)addAlternateTitlesObject:(SLFWord*)value_;
-- (void)removeAlternateTitlesObject:(SLFWord*)value_;
+- (void)addAlternateTitlesObject:(GenericWord*)value_;
+- (void)removeAlternateTitlesObject:(GenericWord*)value_;
+
+- (void)addDocuments:(NSSet*)value_;
+- (void)removeDocuments:(NSSet*)value_;
+- (void)addDocumentsObject:(GenericAsset*)value_;
+- (void)removeDocumentsObject:(GenericAsset*)value_;
+
+- (void)addSources:(NSSet*)value_;
+- (void)removeSources:(NSSet*)value_;
+- (void)addSourcesObject:(GenericAsset*)value_;
+- (void)removeSourcesObject:(GenericAsset*)value_;
 
 - (void)addSponsors:(NSSet*)value_;
 - (void)removeSponsors:(NSSet*)value_;
@@ -186,13 +193,18 @@
 
 - (void)addSubjects:(NSSet*)value_;
 - (void)removeSubjects:(NSSet*)value_;
-- (void)addSubjectsObject:(SLFWord*)value_;
-- (void)removeSubjectsObject:(SLFWord*)value_;
+- (void)addSubjectsObject:(GenericWord*)value_;
+- (void)removeSubjectsObject:(GenericWord*)value_;
 
-- (void)addType:(NSSet*)value_;
-- (void)removeType:(NSSet*)value_;
-- (void)addTypeObject:(SLFWord*)value_;
-- (void)removeTypeObject:(SLFWord*)value_;
+- (void)addTypes:(NSSet*)value_;
+- (void)removeTypes:(NSSet*)value_;
+- (void)addTypesObject:(GenericWord*)value_;
+- (void)removeTypesObject:(GenericWord*)value_;
+
+- (void)addVersions:(NSSet*)value_;
+- (void)removeVersions:(NSSet*)value_;
+- (void)addVersionsObject:(GenericAsset*)value_;
+- (void)removeVersionsObject:(GenericAsset*)value_;
 
 - (void)addVotes:(NSSet*)value_;
 - (void)removeVotes:(NSSet*)value_;
@@ -228,20 +240,8 @@
 
 
 
-- (NSArray*)primitiveDocuments;
-- (void)setPrimitiveDocuments:(NSArray*)value;
-
-
-
-
 - (NSString*)primitiveSession;
 - (void)setPrimitiveSession:(NSString*)value;
-
-
-
-
-- (NSArray*)primitiveSources;
-- (void)setPrimitiveSources:(NSArray*)value;
 
 
 
@@ -258,12 +258,6 @@
 
 
 
-- (NSArray*)primitiveVersions;
-- (void)setPrimitiveVersions:(NSArray*)value;
-
-
-
-
 
 - (NSMutableSet*)primitiveActions;
 - (void)setPrimitiveActions:(NSMutableSet*)value;
@@ -272,6 +266,16 @@
 
 - (NSMutableSet*)primitiveAlternateTitles;
 - (void)setPrimitiveAlternateTitles:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveDocuments;
+- (void)setPrimitiveDocuments:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveSources;
+- (void)setPrimitiveSources:(NSMutableSet*)value;
 
 
 
@@ -290,8 +294,13 @@
 
 
 
-- (NSMutableSet*)primitiveType;
-- (void)setPrimitiveType:(NSMutableSet*)value;
+- (NSMutableSet*)primitiveTypes;
+- (void)setPrimitiveTypes:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveVersions;
+- (void)setPrimitiveVersions:(NSMutableSet*)value;
 
 
 

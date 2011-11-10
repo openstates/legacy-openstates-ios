@@ -10,14 +10,13 @@
 @property (nonatomic,assign) MKCoordinateRegion region;
 @property (nonatomic,readonly) CLLocationCoordinate2D coordinate;
 @property (nonatomic,readonly) SLFParty *party;
+@property (nonatomic,retain) MKPolygon *districtPolygon;
 
 - (NSString *)title;
 - (NSString *)subtitle;
 - (UIImage *)image;
 - (NSNumber *)pinColorIndex;
-
 - (MKPolygon *)polygonFactory;
-
-@property (nonatomic,retain) MKPolygon *districtPolygon;
++ (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
 
 @end

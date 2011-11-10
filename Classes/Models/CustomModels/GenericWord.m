@@ -1,12 +1,11 @@
-#import "BillSponsor.h"
+#import "GenericWord.h"
 #import <RestKit/CoreData/CoreData.h>
 
-@implementation BillSponsor
+@implementation GenericWord
 
 + (RKManagedObjectMapping *)mapping {
     RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
-    [mapping mapKeyPath:@"leg_id" toAttribute:@"legID"];
-    [mapping mapAttributes:@"type", @"name", nil];
+    [mapping mapKeyPath:@"" toAttribute:@"word"];
     return mapping;
 }
 

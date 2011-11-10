@@ -1,5 +1,5 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
-// Make changes to SLFWord.h instead.
+// Make changes to GenericWord.h instead.
 
 #import <CoreData/CoreData.h>
 
@@ -11,14 +11,14 @@
 
 
 
-@interface SLFWordID : NSManagedObjectID {}
+@interface GenericWordID : NSManagedObjectID {}
 @end
 
-@interface _SLFWord : NSManagedObject {}
+@interface _GenericWord : NSManagedObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
-- (SLFWordID*)objectID;
+- (GenericWordID*)objectID;
 
 
 
@@ -32,9 +32,9 @@
 
 
 
-@property (nonatomic, retain) BillAction* actionTypeInverse;
+@property (nonatomic, retain) BillAction* actionInverse;
 
-//- (BOOL)validateActionTypeInverse:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateActionInverse:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -62,11 +62,11 @@
 
 @end
 
-@interface _SLFWord (CoreDataGeneratedAccessors)
+@interface _GenericWord (CoreDataGeneratedAccessors)
 
 @end
 
-@interface _SLFWord (CoreDataGeneratedPrimitiveAccessors)
+@interface _GenericWord (CoreDataGeneratedPrimitiveAccessors)
 
 
 - (NSString*)primitiveWord;
@@ -76,8 +76,8 @@
 
 
 
-- (BillAction*)primitiveActionTypeInverse;
-- (void)setPrimitiveActionTypeInverse:(BillAction*)value;
+- (BillAction*)primitiveActionInverse;
+- (void)setPrimitiveActionInverse:(BillAction*)value;
 
 
 

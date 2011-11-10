@@ -24,4 +24,5 @@
 - (NSString *)districtPartyString;
 - (NSString *)labelSubText;
 - (NSString *)title;
++ (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
 @end

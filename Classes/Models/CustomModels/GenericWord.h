@@ -1,6 +1,6 @@
-#import "_BillAction.h"
+#import "_GenericWord.h"
 
 @class RKManagedObjectMapping;
-@interface BillAction : _BillAction {}
+@interface GenericWord : _GenericWord {}
 + (RKManagedObjectMapping *)mapping;
 @end

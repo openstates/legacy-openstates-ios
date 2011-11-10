@@ -1,29 +1,29 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
-// Make changes to SLFWord.m instead.
+// Make changes to GenericWord.m instead.
 
-#import "_SLFWord.h"
+#import "_GenericWord.h"
 
-@implementation SLFWordID
+@implementation GenericWordID
 @end
 
-@implementation _SLFWord
+@implementation _GenericWord
 
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_ {
 	NSParameterAssert(moc_);
-	return [NSEntityDescription insertNewObjectForEntityForName:@"SLFWord" inManagedObjectContext:moc_];
+	return [NSEntityDescription insertNewObjectForEntityForName:@"GenericWord" inManagedObjectContext:moc_];
 }
 
 + (NSString*)entityName {
-	return @"SLFWord";
+	return @"GenericWord";
 }
 
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_ {
 	NSParameterAssert(moc_);
-	return [NSEntityDescription entityForName:@"SLFWord" inManagedObjectContext:moc_];
+	return [NSEntityDescription entityForName:@"GenericWord" inManagedObjectContext:moc_];
 }
 
-- (SLFWordID*)objectID {
-	return (SLFWordID*)[super objectID];
+- (GenericWordID*)objectID {
+	return (GenericWordID*)[super objectID];
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
@@ -43,7 +43,7 @@
 
 
 
-@dynamic actionTypeInverse;
+@dynamic actionInverse;
 
 	
 

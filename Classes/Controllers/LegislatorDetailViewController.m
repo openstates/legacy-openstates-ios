@@ -43,7 +43,6 @@ enum SECTIONS {
 - (void)configureDistrictMapItems;
 - (void)configureResourceItems;
 - (void)configureCommitteeItems;
-- (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url;
 @end
 
 @implementation LegislatorDetailViewController
@@ -185,8 +184,11 @@ enum SECTIONS {
         NSString *url = [NSString stringWithFormat:@"http://www.followthemoney.org/database/uniquecandidate.phtml?uc=%@", legislator.nimspID];
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Follow The Money Summary", @"") subtitle:@"" url:url]];
     }
-    for (NSString *website in self.legislator.sources) {
-        [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Resource", @"") subtitle:website url:website]];
+    for (GenericAsset *source in self.legislator.sources) {
+        NSString *subtitle = source.name;
+        if (IsEmpty(subtitle))
+            subtitle = source.url;
+        [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Resource", @"") subtitle:subtitle url:source.url]];
     }
     [self.tableViewModel loadTableItems:tableItems inSection:SectionResources];
     [tableItems release];
@@ -196,26 +198,10 @@ enum SECTIONS {
     [self.tableViewModel loadObjects:self.legislator.sortedRoles inSection:SectionCommittees];    
 }
 
-- (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url {
-    NSParameterAssert(!IsEmpty(url));
-    return [RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [SubtitleCellMapping cellMapping];
-        tableItem.text = itemTitle;
-        tableItem.detailText = itemSubtitle;
-        tableItem.URL = url;
-        tableItem.cellMapping.onSelectCell = ^(void) {
-            SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:tableItem.URL];
-            webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-            [self presentModalViewController:webViewController animated:YES];	
-            [webViewController release];
-        };
-    }];
-}
-
 - (SubtitleCellMapping *)committeeRoleCellMap {
     SubtitleCellMapping *roleCellMap = [SubtitleCellMapping cellMapping];
-    [roleCellMap mapKeyPath:@"committeeName" toAttribute:@"textLabel.text"];
-    [roleCellMap mapKeyPath:@"role" toAttribute:@"detailTextLabel.text"];
+    [roleCellMap mapKeyPath:@"name" toAttribute:@"textLabel.text"];
+    [roleCellMap mapKeyPath:@"type" toAttribute:@"detailTextLabel.text"];
     roleCellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         CommitteeRole *role = object;
         CommitteeDetailViewController *vc = [[CommitteeDetailViewController alloc] initWithCommitteeID:role.committeeID];

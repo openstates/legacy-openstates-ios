@@ -171,13 +171,6 @@
 
 
 
-@dynamic sources;
-
-
-
-
-
-
 @dynamic stateID;
 
 
@@ -217,6 +210,17 @@
 	[self willAccessValueForKey:@"roles"];
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"roles"];
 	[self didAccessValueForKey:@"roles"];
+	return result;
+}
+	
+
+@dynamic sources;
+
+	
+- (NSMutableSet*)sourcesSet {
+	[self willAccessValueForKey:@"sources"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"sources"];
+	[self didAccessValueForKey:@"sources"];
 	return result;
 }
 	

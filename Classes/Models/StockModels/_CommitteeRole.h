@@ -2,11 +2,9 @@
 // Make changes to CommitteeRole.h instead.
 
 #import <CoreData/CoreData.h>
-
+#import "GenericNamedItem.h"
 
 @class SLFLegislator;
-
-
 
 
 
@@ -14,7 +12,7 @@
 @interface CommitteeRoleID : NSManagedObjectID {}
 @end
 
-@interface _CommitteeRole : NSManagedObject {}
+@interface _CommitteeRole : GenericNamedItem {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
@@ -35,22 +33,6 @@
 
 
 //- (BOOL)validateCommitteeID:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, retain) NSString *committeeName;
-
-
-//- (BOOL)validateCommitteeName:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, retain) NSString *role;
-
-
-//- (BOOL)validateRole:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -80,18 +62,6 @@
 
 - (NSString*)primitiveCommitteeID;
 - (void)setPrimitiveCommitteeID:(NSString*)value;
-
-
-
-
-- (NSString*)primitiveCommitteeName;
-- (void)setPrimitiveCommitteeName:(NSString*)value;
-
-
-
-
-- (NSString*)primitiveRole;
-- (void)setPrimitiveRole:(NSString*)value;
 
 
 

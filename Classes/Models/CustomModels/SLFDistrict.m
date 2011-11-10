@@ -8,6 +8,23 @@
 @synthesize districtPolygon;
 @synthesize region;
 
++ (RKManagedObjectMapping *)mapping {
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
+    mapping.primaryKeyAttribute = @"boundaryID";
+    [mapping mapKeyPath:@"abbr" toAttribute:@"stateID"];
+    [mapping mapKeyPath:@"num_seats" toAttribute:@"numSeats"];
+    [mapping mapKeyPath:@"region" toAttribute:@"regionDictionary"];
+    [mapping mapKeyPath:@"boundary_id" toAttribute:@"boundaryID"];
+    [mapping mapAttributes:@"name", @"chamber", @"shape", nil];
+    return mapping;
+}
+
++ (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping {
+    RKManagedObjectMapping *mapping = [[self class] mapping];
+    [mapping connectStateToKeyPath:@"state" withStateMapping:stateMapping];
+    return mapping;
+}
+
 - (NSNumber *)districtNumber {
     return [NSNumber numberWithInt:[self.name integerValue]];
 }

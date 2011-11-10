@@ -5,7 +5,7 @@
 
 
 @class SLFBill;
-@class SLFWord;
+@class GenericWord;
 
 
 
@@ -73,9 +73,9 @@
 
 
 
-@property (nonatomic, retain) NSSet* type;
+@property (nonatomic, retain) NSSet* types;
 
-- (NSMutableSet*)typeSet;
+- (NSMutableSet*)typesSet;
 
 
 
@@ -84,10 +84,10 @@
 
 @interface _BillAction (CoreDataGeneratedAccessors)
 
-- (void)addType:(NSSet*)value_;
-- (void)removeType:(NSSet*)value_;
-- (void)addTypeObject:(SLFWord*)value_;
-- (void)removeTypeObject:(SLFWord*)value_;
+- (void)addTypes:(NSSet*)value_;
+- (void)removeTypes:(NSSet*)value_;
+- (void)addTypesObject:(GenericWord*)value_;
+- (void)removeTypesObject:(GenericWord*)value_;
 
 @end
 
@@ -130,8 +130,8 @@
 
 
 
-- (NSMutableSet*)primitiveType;
-- (void)setPrimitiveType:(NSMutableSet*)value;
+- (NSMutableSet*)primitiveTypes;
+- (void)setPrimitiveTypes:(NSMutableSet*)value;
 
 
 @end

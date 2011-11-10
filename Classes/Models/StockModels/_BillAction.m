@@ -75,13 +75,13 @@
 
 	
 
-@dynamic type;
+@dynamic types;
 
 	
-- (NSMutableSet*)typeSet {
-	[self willAccessValueForKey:@"type"];
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"type"];
-	[self didAccessValueForKey:@"type"];
+- (NSMutableSet*)typesSet {
+	[self willAccessValueForKey:@"types"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"types"];
+	[self didAccessValueForKey:@"types"];
 	return result;
 }
 	

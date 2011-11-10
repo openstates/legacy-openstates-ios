@@ -19,4 +19,5 @@
 
 @interface SLFTableViewController : GCTableViewController <PSStackedViewDelegate, RKTableViewModelDelegate, StackableController>
 @property (nonatomic,assign) BOOL useGradientBackground;
+- (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url;
 @end

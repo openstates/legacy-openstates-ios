@@ -71,7 +71,6 @@
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
     self.title = [NSString stringWithFormat:@"%d Bills",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
-    NSLog(@"stuff = %@", [self.tableViewModel.fetchedResultsController fetchedObjects]);
 }
 
 - (void)dealloc {
@@ -89,7 +88,7 @@
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObject:(id)object {
     RKLogDebug(@"Object Loader Finished: %@", objectLoader.resourcePath);
     SLFBill *bill = object;
-    SLFWord *type = [bill.type anyObject];
+    GenericWord *type = [bill.types anyObject];
     if (type) {
         NSLog(@"bill type: %@", type.word);
     }
@@ -100,13 +99,13 @@
         NSSet *other = vote.otherVotes;
         NSLog(@"bill vote: %@", vote.voteID);
         for (BillVoter *voter in yes) {
-            NSLog(@"yes = (%@) %@", voter.legID, voter.legislatorName);
+            NSLog(@"yes = (%@) %@", voter.legID, voter.name);
         }
         for (BillVoter *voter in other) {
-            NSLog(@"other = (%@) %@", voter.legID, voter.legislatorName);
+            NSLog(@"other = (%@) %@", voter.legID, voter.name);
         }
         for (BillVoter *voter in no) {
-            NSLog(@"no = (%@) %@", voter.legID, voter.legislatorName);
+            NSLog(@"no = (%@) %@", voter.legID, voter.name);
         }
     }
 }

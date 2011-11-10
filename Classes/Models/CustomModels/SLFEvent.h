@@ -5,4 +5,5 @@
 @class SLFState;
 @interface SLFEvent : _SLFEvent {}
 @property (nonatomic,readonly) SLFState *state;
++ (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
 @end

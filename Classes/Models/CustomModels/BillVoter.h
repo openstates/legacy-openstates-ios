@@ -1,5 +1,6 @@
 #import "_BillVoter.h"
 
+@class RKManagedObjectMapping;
 @interface BillVoter : _BillVoter {}
-// Custom logic goes here.
++ (RKManagedObjectMapping *)mapping;
 @end

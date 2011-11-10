@@ -3,7 +3,33 @@
 
 @implementation SLFLegislator
 
-// This is here because the JSON data has a keyPath "state" that conflicts with our core data relationship.
++ (RKManagedObjectMapping *)mapping {
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
+    mapping.primaryKeyAttribute = @"legID";
+    [mapping mapKeyPath:@"leg_id" toAttribute:@"legID"];
+    [mapping mapKeyPath:@"state" toAttribute:@"stateID"];
+    [mapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
+    [mapping mapKeyPath:@"updated_at" toAttribute:@"dateUpdated"];
+    [mapping mapKeyPath:@"first_name" toAttribute:@"firstName"];
+    [mapping mapKeyPath:@"full_name" toAttribute:@"fullName"];
+    [mapping mapKeyPath:@"last_name" toAttribute:@"lastName"];
+    [mapping mapKeyPath:@"middle_name" toAttribute:@"middleName"];
+    [mapping mapKeyPath:@"nimsp_candidate_id" toAttribute:@"nimspCandidateID"];
+    [mapping mapKeyPath:@"nimsp_id" toAttribute:@"nimspID"];
+    [mapping mapKeyPath:@"photo_url" toAttribute:@"photoURL"];
+    [mapping mapKeyPath:@"transparencydata_id" toAttribute:@"transparencyID"];
+    [mapping mapKeyPath:@"votesmart_id" toAttribute:@"votesmartID"];
+    [mapping mapAttributes:@"suffixes", @"party", @"level", @"district", @"country", @"chamber", @"active",nil];    
+    return mapping;
+}
+
++ (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping {
+    RKManagedObjectMapping *mapping = [[self class] mapping];
+    [mapping connectStateToKeyPath:@"stateObj" withStateMapping:stateMapping];
+    return mapping;
+}
+
+    // This is here because the JSON data has a keyPath "state" that conflicts with our core data relationship.
 - (SLFState *)state {
     return self.stateObj;
 }
@@ -26,7 +52,7 @@
 
 - (NSArray *)pruneJunkFromRoles:(NSArray*)sortedRoles {
     CommitteeRole *junkRole = [sortedRoles objectAtIndex:0];
-    if (!IsEmpty(junkRole.committeeName))
+    if (!IsEmpty(junkRole.name))
         return sortedRoles;
     NSMutableArray *prunedRoles = [NSMutableArray arrayWithArray:sortedRoles];
     [prunedRoles removeObject:junkRole];
@@ -38,7 +64,7 @@
 - (NSArray *)sortedRoles {
     if (IsEmpty(self.roles))
         return nil;
-    NSArray *sortedRoles = [self.roles sortedArrayUsingDescriptors:[SLFCommittee sortDescriptors]];
+    NSArray *sortedRoles = [self.roles sortedArrayUsingDescriptors:[CommitteeRole sortDescriptors]];
     return [self pruneJunkFromRoles:sortedRoles];
 }
 
