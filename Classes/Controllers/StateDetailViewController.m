@@ -61,12 +61,12 @@
         self.billsIcon = [[UIImage imageNamed:@"gavel"] imageWithOverlayColor:iconColor];
         self.eventsIcon = [[UIImage imageNamed:@"83-calendar"] imageWithOverlayColor:iconColor];
         self.newsIcon = [[UIImage imageNamed:@"166-newspaper"] imageWithOverlayColor:iconColor];
-        [self reconfigureForState:newState];
+        [self stateMenuSelectionDidChangeWithState:newState];
     }
     return self;
 }
 
-- (void)reconfigureForState:(SLFState *)newState {
+- (void)stateMenuSelectionDidChangeWithState:(SLFState *)newState {
     self.state = newState;
     if (newState)
         [self loadDataFromNetworkWithID:newState.stateID];

@@ -12,14 +12,14 @@
 
 #import "SLFTableViewController.h"
 #import "SLFState.h"
+#import "StatesViewController.h"
 
-@interface StateDetailViewController : SLFTableViewController <RKObjectLoaderDelegate> {
+@interface StateDetailViewController : SLFTableViewController <StateMenuSelectionDelegate, RKObjectLoaderDelegate> {
 }
 
 @property (nonatomic, retain) RKTableViewModel *tableViewModel;
 @property (nonatomic,retain) SLFState *state;
 - (id)initWithState:(SLFState *)newState;
-- (void)reconfigureForState:(SLFState *)newState;
 - (RKTableViewCellMapping *)menuCellMapping;   // override this to customize appearance
 - (void)selectMenuItem:(NSString *)menuItem;   // override this to customize behavior
 

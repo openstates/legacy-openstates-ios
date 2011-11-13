@@ -11,8 +11,9 @@
 //
 
 #import "StateDetailViewController.h"
+#import "StatesPopoverManager.h"
 
-@interface StackedMenuViewController : StateDetailViewController
+@interface StackedMenuViewController : StateDetailViewController <StatesPopoverDelegate>
 - (IBAction)selectStateFromTable:(id)sender;
 @end
 

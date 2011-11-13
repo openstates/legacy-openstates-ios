@@ -22,10 +22,14 @@
 @property (nonatomic,retain) UIColor *backgroundPatternColor;
 @property (nonatomic,retain) UIColor *headerPatternColor;
 @property (nonatomic,assign) CGFloat headerPatternHeight;
+@property (nonatomic,assign) IBOutlet UIBarButtonItem *selectStateButton;
+@property (nonatomic,retain) UILabel *selectedStateLabel;
+@property (nonatomic,retain) StatesPopoverManager *statesPopover;
 - (void)configureMenuHeader;
 - (void)configureMenuFooter;
 - (void)configureBackgrounds;
 - (IBAction)selectStateFromTable:(id)sender;
+- (UIBarButtonItem *)createSelectedStateLabel;
 @end
 
 const NSUInteger STACKED_MENU_INSET = 75;
@@ -35,6 +39,9 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 @synthesize backgroundPatternColor;
 @synthesize headerPatternColor;
 @synthesize headerPatternHeight;
+@synthesize selectStateButton = _selectStateButton;
+@synthesize selectedStateLabel = _selectedStateLabel;
+@synthesize statesPopover = _statesPopover;
 
 - (id)initWithState:(SLFState *)newState {
     NSAssert(PSIsIpad(), @"This class is only available for iPads (for now)");
@@ -53,6 +60,8 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 - (void)dealloc {
     self.backgroundPatternColor = nil;
     self.headerPatternColor = nil;
+    self.selectStateButton = nil;
+    self.statesPopover = nil;
     [super dealloc];
 }
 
@@ -68,6 +77,11 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     [self configureBackgrounds];    
     [self configureMenuHeader];
     [self configureMenuFooter];
+}
+
+- (void)viewDidUnload {
+    self.selectStateButton = nil;
+    [super viewDidUnload];
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {
@@ -107,7 +121,7 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     imageView.image = headerIcon;
     [menuHeader addSubview:imageView];
     [imageView release];
-   */ 
+   */
     
     StretchedTitleLabel *titleLabel = CreateOpenStatesTitleLabelForFrame(CGRectMake(0, 0, STACKED_MENU_WIDTH, 44));
     titleLabel.backgroundColor = self.backgroundPatternColor;
@@ -117,11 +131,12 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 
 
 - (void)configureMenuFooter {
-    UIImage *image = [UIImage imageNamed:@"59-flag"];
-    UIBarButtonItem *selectedStateItem = SLFToolbarButton(image, self, @selector(selectStateFromTable:));
+    self.selectStateButton = SLFToolbarButton([UIImage imageNamed:@"59-flag"], self, @selector(selectStateFromTable:));
+    UIBarButtonItem *stateLabel = [self createSelectedStateLabel];
     UIToolbar *settingsBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.height-44, STACKED_MENU_WIDTH, 44)];
     settingsBar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    [settingsBar setItems:[NSArray arrayWithObject:selectedStateItem] animated:YES];
+    [settingsBar setItems:[NSArray arrayWithObjects:_selectStateButton, stateLabel, nil] animated:YES];
+    [stateLabel release];
     [self.view addSubview:settingsBar];
     [settingsBar release];
 }
@@ -142,12 +157,37 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 }
 
 - (IBAction)selectStateFromTable:(id)sender {
-    StatesViewController* stateListVC = [[StatesViewController alloc] init];
-    UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:stateListVC];    
-    stateListVC.stateMenuDelegate = self;
-    [[[[UIApplication sharedApplication] keyWindow] rootViewController] presentModalViewController:navController animated:YES];
-    [stateListVC release];
-    [navController release];
+    if (!self.selectStateButton) // should never happen
+        return;
+    self.statesPopover = [StatesPopoverManager showFromBarButtonItem:self.selectStateButton delegate:self];
 }
+
+- (void)statePopover:(StatesPopoverManager *)statePopover didSelectState:(SLFState *)newState {
+    self.statesPopover = nil;
+    if (newState && self.selectedStateLabel)
+        self.selectedStateLabel.text = [newState.stateID uppercaseString];
+    [XAppDelegate.stackController popToRootViewControllerAnimated:YES];
+    [super stateMenuSelectionDidChangeWithState:newState];
+}
+
+- (void)statePopoverDidCancel:(StatesPopoverManager *)statePopover {
+    self.statesPopover = nil;
+}
+
+- (UIBarButtonItem *)createSelectedStateLabel {
+    UILabel *itemLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0,30,25)];
+    itemLabel.textAlignment = UITextAlignmentLeft;
+    itemLabel.textColor = [SLFAppearance menuTextColor];
+    itemLabel.font = [SLFAppearance menuTextFont];
+    itemLabel.backgroundColor = [UIColor clearColor];
+    itemLabel.shadowColor = [UIColor darkGrayColor];
+    if (self.state)
+        itemLabel.text = [self.state.stateID uppercaseString];    
+    UIBarButtonItem *buttonLabel =[[UIBarButtonItem alloc]initWithCustomView:itemLabel];
+    self.selectedStateLabel = itemLabel;
+    [itemLabel release];    
+    return buttonLabel;
+}
+
 @end
 

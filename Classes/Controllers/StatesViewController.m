@@ -109,10 +109,8 @@
 
 - (void)pushOrSendViewControllerWithState:(SLFState *)state {
     NSParameterAssert(state != NULL);
-    if (self.stateMenuDelegate) {
-        [self.stateMenuDelegate reconfigureForState:state];
-        [self dismissModalViewControllerAnimated:YES];
-    }
+    if (self.stateMenuDelegate)
+        [self.stateMenuDelegate stateMenuSelectionDidChangeWithState:state];
     else {
         StateDetailViewController *vc = [[StateDetailViewController alloc] initWithState:state];
         [self stackOrPushViewController:vc];

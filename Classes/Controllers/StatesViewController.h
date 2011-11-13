@@ -12,11 +12,14 @@
 
 #import "SLFTableViewController.h"
 
+@class SLFState;
+@protocol StateMenuSelectionDelegate <NSObject>
+@required
+- (void)stateMenuSelectionDidChangeWithState:(SLFState *)aState;
+@end
+
 @class StateDetailViewController;
-@interface StatesViewController : SLFTableViewController {
-}
-
+@interface StatesViewController : SLFTableViewController
 @property (nonatomic, retain) RKFetchedResultsTableViewModel *tableViewModel;
-@property (nonatomic, assign) StateDetailViewController *stateMenuDelegate;
-
+@property (nonatomic, assign) id<StateMenuSelectionDelegate> stateMenuDelegate;
 @end
