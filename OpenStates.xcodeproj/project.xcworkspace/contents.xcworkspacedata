@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:StatesLegeRestTest.xcodeproj">
+      location = "self:OpenStates.xcodeproj">
    </FileRef>
 </Workspace>

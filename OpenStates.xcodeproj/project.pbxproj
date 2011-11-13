@@ -96,6 +96,7 @@
 		3749F257143BA5EA006F717B /* 83-calendar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3749F24F143BA5EA006F717B /* 83-calendar@2x.png */; };
 		3749F258143BA5EA006F717B /* 123-id-card.png in Resources */ = {isa = PBXBuildFile; fileRef = 3749F250143BA5EA006F717B /* 123-id-card.png */; };
 		3749F259143BA5EA006F717B /* 123-id-card@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3749F251143BA5EA006F717B /* 123-id-card@2x.png */; };
+		374A320D146F9CB500C94AF8 /* StatesPopoverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 374A320C146F9CB500C94AF8 /* StatesPopoverManager.m */; };
 		375683AE14268C830027F268 /* ObjMappingsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 375683AD14268C830027F268 /* ObjMappingsTestCase.m */; };
 		3757CE86146A6D9900471CB7 /* _BillAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE79146A6D9900471CB7 /* _BillAction.m */; };
 		3757CE87146A6D9900471CB7 /* _BillRecordVote.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE7B146A6D9900471CB7 /* _BillRecordVote.m */; };
@@ -355,7 +356,7 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		1D6058910D05DD3D006BFB54 /* StatesLege.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StatesLege.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* OpenStates.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenStates.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2538E7FF123417E500ACB5D7 /* RestKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RestKit.xcodeproj; path = Vendor/RestKit/RestKit.xcodeproj; sourceTree = "<group>"; };
 		2538E864123424F000ACB5D7 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -400,7 +401,7 @@
 		372D2AF914285FDE00ADE84E /* CommitteeMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteeMember.m; sourceTree = "<group>"; };
 		372D2B1C1428DEA300ADE84E /* BillSponsor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillSponsor.h; sourceTree = "<group>"; };
 		372D2B1D1428DEA300ADE84E /* BillSponsor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillSponsor.m; sourceTree = "<group>"; };
-		372E57C414153D07000652B1 /* StatesLegeSpecs.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StatesLegeSpecs.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		372E57C414153D07000652B1 /* OpenStatesSpecs.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OpenStatesSpecs.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		372E57C514153D07000652B1 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		372E57CB14153D07000652B1 /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
 		372E57CD14153D07000652B1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -466,6 +467,8 @@
 		3749F24F143BA5EA006F717B /* 83-calendar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "83-calendar@2x.png"; sourceTree = "<group>"; };
 		3749F250143BA5EA006F717B /* 123-id-card.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "123-id-card.png"; sourceTree = "<group>"; };
 		3749F251143BA5EA006F717B /* 123-id-card@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "123-id-card@2x.png"; sourceTree = "<group>"; };
+		374A320B146F9CB500C94AF8 /* StatesPopoverManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesPopoverManager.h; sourceTree = "<group>"; };
+		374A320C146F9CB500C94AF8 /* StatesPopoverManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatesPopoverManager.m; sourceTree = "<group>"; };
 		375683AD14268C830027F268 /* ObjMappingsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjMappingsTestCase.m; sourceTree = "<group>"; };
 		3757CE78146A6D9900471CB7 /* _BillAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _BillAction.h; sourceTree = "<group>"; };
 		3757CE79146A6D9900471CB7 /* _BillAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _BillAction.m; sourceTree = "<group>"; };
@@ -764,8 +767,8 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* StatesLege.app */,
-				372E57C414153D07000652B1 /* StatesLegeSpecs.octest */,
+				1D6058910D05DD3D006BFB54 /* OpenStates.app */,
+				372E57C414153D07000652B1 /* OpenStatesSpecs.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1040,6 +1043,8 @@
 				373E514D1445E6C70044D478 /* DistrictSearch.m */,
 				37F6FD0814676565003AA80D /* BillSearchParameters.h */,
 				37F6FD0914676565003AA80D /* BillSearchParameters.m */,
+				374A320B146F9CB500C94AF8 /* StatesPopoverManager.h */,
+				374A320C146F9CB500C94AF8 /* StatesPopoverManager.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1413,9 +1418,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* StatesLege */ = {
+		1D6058900D05DD3D006BFB54 /* OpenStates */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "StatesLege" */;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "OpenStates" */;
 			buildPhases = (
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
@@ -1427,14 +1432,14 @@
 				37E961E513E5448F0064B1D3 /* PBXTargetDependency */,
 				372D2B0014286D4100ADE84E /* PBXTargetDependency */,
 			);
-			name = StatesLege;
+			name = OpenStates;
 			productName = StatesLege;
-			productReference = 1D6058910D05DD3D006BFB54 /* StatesLege.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* OpenStates.app */;
 			productType = "com.apple.product-type.application";
 		};
-		372E57C314153D07000652B1 /* StatesLegeSpecs */ = {
+		372E57C314153D07000652B1 /* OpenStatesSpecs */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 372E57D314153D07000652B1 /* Build configuration list for PBXNativeTarget "StatesLegeSpecs" */;
+			buildConfigurationList = 372E57D314153D07000652B1 /* Build configuration list for PBXNativeTarget "OpenStatesSpecs" */;
 			buildPhases = (
 				372E57BF14153D07000652B1 /* Sources */,
 				372E57C014153D07000652B1 /* Frameworks */,
@@ -1447,9 +1452,9 @@
 				370D793F1425D4C30049FB2E /* PBXTargetDependency */,
 				372E58C914157A64000652B1 /* PBXTargetDependency */,
 			);
-			name = StatesLegeSpecs;
+			name = OpenStatesSpecs;
 			productName = UnitTests;
-			productReference = 372E57C414153D07000652B1 /* StatesLegeSpecs.octest */;
+			productReference = 372E57C414153D07000652B1 /* OpenStatesSpecs.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -1460,7 +1465,7 @@
 			attributes = {
 				LastUpgradeCheck = 0420;
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "StatesLege" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "OpenStates" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -1481,8 +1486,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* StatesLege */,
-				372E57C314153D07000652B1 /* StatesLegeSpecs */,
+				1D6058900D05DD3D006BFB54 /* OpenStates */,
+				372E57C314153D07000652B1 /* OpenStatesSpecs */,
 			);
 		};
 /* End PBXProject section */
@@ -1803,6 +1808,7 @@
 				37D75417146C59C600DCD742 /* GenericAsset.m in Sources */,
 				37D75418146C59C600DCD742 /* GenericNamedItem.m in Sources */,
 				37D75419146C59C600DCD742 /* GenericWord.m in Sources */,
+				374A320D146F9CB500C94AF8 /* StatesPopoverManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1823,7 +1829,7 @@
 /* Begin PBXTargetDependency section */
 		370D793F1425D4C30049FB2E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1D6058900D05DD3D006BFB54 /* StatesLege */;
+			target = 1D6058900D05DD3D006BFB54 /* OpenStates */;
 			targetProxy = 370D793E1425D4C30049FB2E /* PBXContainerItemProxy */;
 		};
 		372D2B0014286D4100ADE84E /* PBXTargetDependency */ = {
@@ -1871,7 +1877,7 @@
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_NAME = StatesLege;
+				PRODUCT_NAME = OpenStates;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1891,7 +1897,7 @@
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_NAME = StatesLege;
+				PRODUCT_NAME = OpenStates;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1900,7 +1906,7 @@
 		372E57D414153D07000652B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/StatesLege.app/StatesLege";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/OpenStates.app/OpenStates";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -1918,7 +1924,7 @@
 					Vendor/Kiwi,
 					Vendor/RestKit/Build,
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = OpenStatesSpecs;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -1927,7 +1933,7 @@
 		372E57D514153D07000652B1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/StatesLege.app/StatesLege";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/OpenStates.app/OpenStates";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -1939,7 +1945,7 @@
 					Vendor/Kiwi,
 					Vendor/RestKit/Build,
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = OpenStatesSpecs;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -1959,7 +1965,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = Vendor/RestKit/Build;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1978,7 +1984,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = Vendor/RestKit/Build;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 			};
@@ -1987,7 +1993,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "StatesLege" */ = {
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "OpenStates" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
@@ -1996,7 +2002,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		372E57D314153D07000652B1 /* Build configuration list for PBXNativeTarget "StatesLegeSpecs" */ = {
+		372E57D314153D07000652B1 /* Build configuration list for PBXNativeTarget "OpenStatesSpecs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				372E57D414153D07000652B1 /* Debug */,
@@ -2005,7 +2011,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "StatesLege" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "OpenStates" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,

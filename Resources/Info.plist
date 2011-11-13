@@ -9,7 +9,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>StatesLege</string>
+	<string>OpenStates</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
@@ -24,7 +24,7 @@
 		<string>Icon-Small.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>5EMVYB9KRX.com.texlege.${PRODUCT_NAME:identifier}</string>
+	<string>5EMVYB9KRX.org.openstates.${PRODUCT_NAME:identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
