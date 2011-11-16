@@ -38,3 +38,5 @@
 
 @end
 
+UIColor *SLFColorWithRGB(int red,  int green, int blue);
+UIColor *SLFColorWithHex(char hex);

@@ -15,13 +15,17 @@
 const CGFloat kOpenStatesTitleViewWidth = 395.0f;
 const CGFloat kOpenStatesTitleViewHeight = 42.0f;
 
+@interface OpenStatesTitleView()
+- (void)configure;
+@end
+
 @implementation OpenStatesTitleView
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setOpaque:NO];
+        [self configure];
     }
     return self;
 }
@@ -30,9 +34,22 @@ const CGFloat kOpenStatesTitleViewHeight = 42.0f;
 {
     self = [super initWithCoder:coder];
     if (self) {
-        [self setOpaque:NO];
+        [self configure];
     }
     return self;
+}
+
+- (void)configure {
+    self.contentMode = UIViewContentModeRedraw;
+    self.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
+    self.opaque = NO;
+    self.layer.shouldRasterize = YES;
+    /*
+    self.layer.shadowColor = [[UIColor colorWithRed:0 green:0 blue:0 alpha:0.375] CGColor];
+    self.layer.shadowOffset = CGSizeMake(0, 2);
+    self.layer.shadowOpacity = 1.f;
+    self.layer.shadowRadius = 2.0f;
+     */
 }
 
 - (CGSize)sizeThatFits:(CGSize)size
@@ -56,6 +73,7 @@ const CGFloat kOpenStatesTitleViewHeight = 42.0f;
 
 - (void)drawRect:(CGRect)viewBounds
 {
+    viewBounds = CGRectIntegral(viewBounds);
     CGRect imageBounds = CGRectMake(0.0f, 0.0f, kOpenStatesTitleViewWidth, kOpenStatesTitleViewHeight);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGMutablePathRef path;
@@ -69,9 +87,13 @@ const CGFloat kOpenStatesTitleViewHeight = 42.0f;
     
     // Text
     
-    UIFont *font = [UIFont fontWithName:@"BlairMdITC TT" size:39.0f];
-    UIColor *fontColor = [UIColor colorWithRed:0.215f green:0.209f blue:0.205f alpha:1.0f];
-    [fontColor set];
+    static UIFont *textFont;
+    if (!textFont)
+        textFont = [[UIFont fontWithName:@"BlairMdITC TT" size:39.0f] retain];
+    static UIColor *textColor;
+    if (!textColor)
+        textColor = [[UIColor colorWithRed:0.215f green:0.209f blue:0.205f alpha:1.0f] retain];
+    [textColor set];
     CGFloat y = -4.0f;
 	CGFloat height = 60.0f;
 	
@@ -79,17 +101,19 @@ const CGFloat kOpenStatesTitleViewHeight = 42.0f;
     
     CGRect drawRect = [self scaleRect:CGRectMake(182.0f, y, 216.0f, height) withScale:scale];
     NSString *string = @"STATES";
-    [string drawInRect:drawRect withFont:font];
+    [string drawInRect:drawRect withFont:textFont];
     
     // OpenText
     
     drawRect = [self scaleRect:CGRectMake(1.0f, y, 166.0f, height) withScale:scale];
     string = @"OPEN";
-    [string drawInRect:drawRect withFont:font];
+    [string drawInRect:drawRect withFont:textFont];
     
     // Colon
 
-    UIColor *colonColor = [UIColor colorWithRed:0.827f green:0.435f blue:0.161f alpha:1.0f];
+    static UIColor *colonColor;
+    if (!colonColor)
+        colonColor = [[UIColor colorWithRed:0.827f green:0.435f blue:0.161f alpha:1.0f] retain];
 	height = 8.0f;
 	CGFloat width = height;
 	CGFloat x = 166.0f;

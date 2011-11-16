@@ -17,9 +17,16 @@
 #define APP_BLUISH_THEME 2 
 #define APP_APPEARANCE_THEME APP_OPEN_STATES_THEME
 
-#define vendColor(r, g, b) static UIColor *ret; if (ret == nil) ret = [[UIColor colorWithRed:(CGFloat)r/255.0 green:(CGFloat)g/255.0 blue:(CGFloat)b/255.0 alpha:1.0] retain]; return ret
+UIColor *SLFColorWithRGB(int r, int g, int b) {
+    return [UIColor colorWithRed:(CGFloat)r/255.0 green:(CGFloat)g/255.0 blue:(CGFloat)b/255.0 alpha:1.0];
+}
+UIColor *SLFColorWithHex(char hex) {
+    return SLFColorWithRGB(((hex&0xFF0000)>>16),((hex&0x00FF00)>>8),(hex&0x0000FF));
+}
 
+#define vendColor(r, g, b) static UIColor *ret; if (ret == nil) ret = [SLFColorWithRGB(r,g,b) retain]; return ret
 #define vendColorHex(v) vendColor(((v&0xFF0000)>>16),((v&0x00FF00)>>8),(v&0x0000FF))
+
 
 @implementation SLFAppearance
 

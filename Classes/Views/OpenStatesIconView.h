@@ -11,4 +11,9 @@
 //
 
 @interface OpenStatesIconView : UIView
+@property (nonatomic,assign) BOOL useGradientOverlay;
 @end
+
+extern const CGFloat kOpenStatesIconViewWidth;
+extern const CGFloat kOpenStatesIconViewHeight;
+

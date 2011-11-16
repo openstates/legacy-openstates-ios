@@ -17,17 +17,16 @@
 #import "StatesViewController.h"
 #import "UIImage+OverlayColor.h"
 #import "AppDelegate.h"
+#import "StackedBackgroundView.h"
 
 @interface StackedMenuViewController()
 @property (nonatomic,retain) UIColor *backgroundPatternColor;
-@property (nonatomic,retain) UIColor *headerPatternColor;
-@property (nonatomic,assign) CGFloat headerPatternHeight;
 @property (nonatomic,assign) IBOutlet UIBarButtonItem *selectStateButton;
 @property (nonatomic,retain) UILabel *selectedStateLabel;
 @property (nonatomic,retain) StatesPopoverManager *statesPopover;
 - (void)configureMenuHeader;
 - (void)configureMenuFooter;
-- (void)configureBackgrounds;
+- (void)configureStackedBackgroundView;
 - (IBAction)selectStateFromTable:(id)sender;
 - (UIBarButtonItem *)createSelectedStateLabel;
 @end
@@ -37,8 +36,6 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 
 @implementation StackedMenuViewController
 @synthesize backgroundPatternColor;
-@synthesize headerPatternColor;
-@synthesize headerPatternHeight;
 @synthesize selectStateButton = _selectStateButton;
 @synthesize selectedStateLabel = _selectedStateLabel;
 @synthesize statesPopover = _statesPopover;
@@ -50,16 +47,12 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
         self.useGradientBackground = NO;
         UIImage *backgroundImage = [UIImage imageNamed:@"MenuPattern"];
         self.backgroundPatternColor = [UIColor colorWithPatternImage:backgroundImage];
-        UIImage *headerImage = [UIImage imageNamed:@"HeaderPattern"];
-        self.headerPatternHeight = headerImage.size.height;
-        self.headerPatternColor = [UIColor colorWithPatternImage:headerImage];
     }
     return self;
 }
 
 - (void)dealloc {
     self.backgroundPatternColor = nil;
-    self.headerPatternColor = nil;
     self.selectStateButton = nil;
     self.statesPopover = nil;
     [super dealloc];
@@ -74,7 +67,7 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     self.tableViewModel.cellSelectionType = RKTableViewCellSelectionFixed;
 
-    [self configureBackgrounds];    
+    [self configureStackedBackgroundView];    
     [self configureMenuHeader];
     [self configureMenuFooter];
 }
@@ -141,19 +134,15 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     [settingsBar release];
 }
 
-- (void)configureBackgrounds {
-    CGRect otherFrame = CGRectMake(STACKED_MENU_WIDTH, 0, self.view.width - STACKED_MENU_WIDTH, self.view.height);
-    GradientBackgroundView *gradient = [[GradientBackgroundView alloc] initWithFrame:otherFrame];
-    [gradient loadLayerAndGradientColors];
-    [self.view addSubview:gradient];
-    [gradient release];
-    
-    otherFrame.size.height = self.headerPatternHeight;
-    UIView *headerTopper = [[UIView alloc] initWithFrame:otherFrame];
-    headerTopper.backgroundColor = self.headerPatternColor;
-    headerTopper.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [self.view addSubview:headerTopper];
-    [headerTopper release];
+- (void)configureStackedBackgroundView {
+    /*UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    CGSize size = CGSizeMake(1024, 748);
+    if (UIInterfaceOrientationIsPortrait(orientation))
+        size = CGSizeMake(768,1004);*/
+    CGRect viewFrame = CGRectMake(STACKED_MENU_WIDTH, 0, self.view.size.width - STACKED_MENU_WIDTH, self.view.size.height);
+    StackedBackgroundView *background = [[StackedBackgroundView alloc] initWithFrame:viewFrame];
+    [self.view addSubview:background];
+    [background release];
 }
 
 - (IBAction)selectStateFromTable:(id)sender {
