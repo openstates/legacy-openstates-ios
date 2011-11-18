@@ -18,18 +18,38 @@
 
 @implementation SLFTableViewController
 @synthesize useGradientBackground;
+@synthesize useTitleBar;
+@synthesize titleBarView = _titleBarView;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
         self.stackWidth = 450;
         self.useGradientBackground = YES;
+        self.useTitleBar = PSIsIpad();
     }
     return self;
 }
 
+- (void)dealloc {
+    self.titleBarView = nil;
+    [super dealloc];
+}
+
+- (void)viewDidUnload {
+    [super viewDidUnload];
+    self.titleBarView = nil;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if (self.useTitleBar) {
+        _titleBarView = [[TitleBarView alloc] initWithFrame:self.view.bounds title:self.title];
+        CGRect tableRect = self.tableView.frame;
+        tableRect.size.height -= _titleBarView.opticalHeight;
+        self.tableView.frame = CGRectOffset(tableRect, 0, _titleBarView.opticalHeight);
+        [self.view addSubview:_titleBarView];
+    }
     if (self.useGradientBackground) {
         GradientBackgroundView *gradient = [[GradientBackgroundView alloc] initWithFrame:self.tableView.bounds];
         [gradient loadLayerAndGradientColors];
@@ -38,7 +58,7 @@
     }
 }
 
-- (UITableView *) tableViewWithStyle:(UITableViewStyle)style {
+- (UITableView *)tableViewWithStyle:(UITableViewStyle)style {
     UITableView *aTableView = [super tableViewWithStyle:style];
     aTableView.backgroundColor = [UIColor clearColor];
     if (style == UITableViewStylePlain)
@@ -46,15 +66,25 @@
     return aTableView;
 }
 
+- (void)setTitle:(NSString *)title {
+    [super setTitle:title];
+    if (self.useTitleBar && self.isViewLoaded)
+        self.titleBarView.title = title;
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
     return YES;
 }
 
 - (void)tableViewModel:(RKAbstractTableViewModel*)tableViewModel didFailLoadWithError:(NSError*)error {
-    self.title = NSLocalizedString(@"Load Error",@"");
+    self.title = NSLocalizedString(@"Server Error",@"");
     RKLogError(@"Error loading table: %@", error);
     if ([tableViewModel respondsToSelector:@selector(resourcePath)])
         RKLogError(@"-------- from resource path: %@", [tableViewModel performSelector:@selector(resourcePath)]);
+}
+
+- (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
+    RKLogTrace(@"%@: Table model finished loading.", NSStringFromClass([self class]));
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {

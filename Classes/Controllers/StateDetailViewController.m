@@ -43,7 +43,7 @@
 
 @implementation StateDetailViewController
 @synthesize state;
-@synthesize tableViewModel;
+@synthesize tableViewModel = __tableViewModel;
 @synthesize legislatorsIcon;
 @synthesize committeesIcon;
 @synthesize districtsIcon;

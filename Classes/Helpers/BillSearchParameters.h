@@ -17,18 +17,16 @@
 @class SLFBill;
 @interface BillSearchParameters : NSObject
 
-+ (BillSearchParameters *)billSearchParameters;
++ (NSString *)pathForBill:(SLFBill *)bill;
++ (NSString *)pathForBill:(NSString *)billID state:(NSString *)stateID session:(NSString *)session;
 
-- (NSString *)pathForBill:(SLFBill *)bill;
-- (NSString *)pathForBill:(NSString *)billID state:(SLFState *)state session:(NSString *)session;
++ (NSString *)pathForText:(NSString *)text state:(NSString *)stateID session:(NSString *)session chamber:(NSString *)chamber;
++ (NSString *)pathForText:(NSString *)text chamber:(NSString *)chamber;
 
-- (NSString *)pathForText:(NSString *)text state:(SLFState *)state session:(NSString *)session chamber:(NSString *)chamber;
-- (NSString *)pathForText:(NSString *)text chamber:(NSString *)chamber;
++ (NSString *)pathForSubject:(NSString *)subject state:(NSString *)stateID session:(NSString *)session chamber:(NSString *)chamber;
++ (NSString *)pathForSubject:(NSString *)subject chamber:(NSString *)chamber;
 
-- (NSString *)pathForSubject:(NSString *)subject state:(SLFState *)state session:(NSString *)session chamber:(NSString *)chamber;
-- (NSString *)pathForSubject:(NSString *)subject chamber:(NSString *)chamber;
-
-- (NSString *)pathForSponsor:(NSString *)sponsorID state:(SLFState *)state session:(NSString *)session;
-- (NSString *)pathForSponsor:(NSString *)sponsorID;
++ (NSString *)pathForSponsor:(NSString *)sponsorID state:(NSString *)stateID session:(NSString *)session;
++ (NSString *)pathForSponsor:(NSString *)sponsorID;
 
 @end

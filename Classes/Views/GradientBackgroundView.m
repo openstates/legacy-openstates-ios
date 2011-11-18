@@ -22,6 +22,9 @@
 
 - (void)loadLayerAndGradientColors {
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [(CAGradientLayer *)[self layer] setColors:[NSArray arrayWithObjects:(id)[SLFAppearance tableBackgroundDarkColor].CGColor,(id)[SLFAppearance tableBackgroundLightColor].CGColor, nil]];
+    UIColor *dark = [SLFAppearance tableBackgroundDarkColor];
+    UIColor *light = [SLFAppearance tableBackgroundLightColor];
+    NSArray *colors = [NSArray arrayWithObjects:(id)dark.CGColor, (id)light.CGColor, nil];
+    [(CAGradientLayer *)self.layer setColors:colors];
 }
 @end

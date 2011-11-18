@@ -1,4 +1,5 @@
 #import "SLFState.h"
+#import "SLFSortDescriptor.h"
 #import <RestKit/Network/NSObject+URLEncoding.h>
 
 @implementation RKManagedObjectMapping(SLFState)
@@ -26,6 +27,12 @@
     [mapping mapKeyPath:@"abbreviation" toAttribute:@"stateID"];
     [mapping mapAttributes:@"name", @"terms", @"level", nil];
     return mapping;
+}
+
++ (NSArray *)sortDescriptors {
+    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
+    NSSortDescriptor *nameDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"name" ascending:YES options:options];
+    return [NSArray arrayWithObjects:nameDesc, nil];
 }
 
 - (NSString *)stateInitial {

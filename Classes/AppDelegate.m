@@ -80,7 +80,7 @@
     if (!selectedState) {
             // Ugly yes, but this brief delay fixes issues with view orientation on iPads when starting up in landscape.
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [stateMenuVC selectStateFromTable:nil];
+            [stateMenuVC changeSelectedState:nil];
        }];
 
     }

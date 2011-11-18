@@ -17,6 +17,8 @@
 
 - (void)registerMappings {
     RKObjectMappingProvider *provider = [[RKObjectManager sharedManager] mappingProvider];
+    [RKManagedObjectMapping addDefaultDateFormatterForString:@"yyyy-MM-dd HH:mm:ss" inTimeZone:nil];
+
     RKManagedObjectMapping *stateMapping = [SLFState mapping];
     RKManagedObjectMapping *districtMapping = [SLFDistrict mappingWithStateMapping:stateMapping];
     RKManagedObjectMapping *eventMapping = [SLFEvent mappingWithStateMapping:stateMapping];

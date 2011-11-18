@@ -18,5 +18,5 @@
 - (NSNumber *)pinColorIndex;
 - (MKPolygon *)polygonFactory;
 + (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
-
++ (NSArray *)sortDescriptors;
 @end

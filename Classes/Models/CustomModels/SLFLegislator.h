@@ -20,7 +20,7 @@
 @property (nonatomic, readonly) NSString *demoLongName;
 @property (nonatomic, readonly) NSString *districtMapLabel;
 
-- (NSComparisonResult)compareMembersByName:(SLFLegislator *)p;
++ (NSArray *)sortDescriptors;
 - (NSString *)districtPartyString;
 - (NSString *)labelSubText;
 - (NSString *)title;

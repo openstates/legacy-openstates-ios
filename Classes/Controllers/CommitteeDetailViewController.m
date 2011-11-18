@@ -39,7 +39,7 @@ enum SECTIONS {
 
 @implementation CommitteeDetailViewController
 @synthesize committee;
-@synthesize tableViewModel;
+@synthesize tableViewModel = __tableViewModel;
 
 - (id)initWithCommitteeID:(NSString *)committeeID {
     self = [super initWithStyle:UITableViewStyleGrouped];

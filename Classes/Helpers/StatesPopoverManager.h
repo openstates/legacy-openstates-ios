@@ -22,7 +22,7 @@
 @end
 
 @interface StatesPopoverManager : NSObject <StateMenuSelectionDelegate, UIPopoverControllerDelegate>
-+ (StatesPopoverManager *)showFromBarButtonItem:(UIBarButtonItem *)button delegate:(id<StatesPopoverDelegate>)delegate;
++ (StatesPopoverManager *)showFromOrigin:(id)origin delegate:(id<StatesPopoverDelegate>)delegate;
 - (void)dismissPopover:(BOOL)animated;
 @end
                                 

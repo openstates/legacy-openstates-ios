@@ -1,4 +1,5 @@
 #import "SLFDataModels.h"
+#import "SLFSortDescriptor.h"
 
 @interface SLFDistrict()
 - (MKPolygon *)polygonRingWithCoordinates:(NSArray *)ringCoords interiorRings:(NSArray *)interiorRings;
@@ -33,6 +34,14 @@
     return [SLFChamber chamberWithType:self.chamber forState:self.state];
 }
 
++ (NSArray *)sortDescriptors {
+    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
+//  NSSortDescriptor *byNumeric = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
+    NSSortDescriptor *nameDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"name" ascending:YES options:options];
+    NSSortDescriptor *chamberDesc = [NSSortDescriptor sortDescriptorWithKey:@"chamber" ascending:YES];
+    return [NSArray arrayWithObjects:nameDesc, chamberDesc, nil];
+}
+    
 #pragma mark -
 #pragma mark MKAnnotation Protocol
 

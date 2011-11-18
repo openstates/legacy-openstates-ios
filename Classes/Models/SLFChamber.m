@@ -29,9 +29,11 @@
 @synthesize initial;
 
 + (SLFChamber *)chamberWithType:(NSString *)aType forState:(SLFState *)aState {
-    if ([aType isEqualToString:@"lower"])
+    if (aType && [aType isEqualToString:@"lower"])
         return [LowerChamber lowerForState:aState];
-    return [UpperChamber upperForState:aState];
+    else if (aType && [aType isEqualToString:@"upper"])
+        return [UpperChamber upperForState:aState];
+    return nil;
 }
 
 - (void)dealloc {

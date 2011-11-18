@@ -6,4 +6,5 @@
 @interface SLFEvent : _SLFEvent {}
 @property (nonatomic,readonly) SLFState *state;
 + (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
++ (NSArray *)sortDescriptors;
 @end

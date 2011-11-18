@@ -1,5 +1,5 @@
-#import "SLFBill.h"
-#import "SLFState.h"
+#import "SLFDataModels.h"
+#import "SLFSortDescriptor.h"
 
 @implementation SLFBill
 
@@ -14,8 +14,7 @@
     return mapping;
 }
 
-#pragma mark -
-#pragma mark Relationship Mapping
+#pragma mark - Relationship Mapping
 
 + (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping {
     RKManagedObjectMapping *mapping = [[self class] mapping];
@@ -27,5 +26,54 @@
 - (SLFState *)state {
     return self.stateObj;
 }
+
+#pragma mark - Convenience Methods
+
++ (NSArray *)sortDescriptors {
+    NSSortDescriptor *stateDesc = [NSSortDescriptor sortDescriptorWithKey:@"stateID" ascending:YES];
+    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
+    NSSortDescriptor *sessionDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"session" ascending:NO options:options];
+//  NSSortDescriptor *chamberDesc = [NSSortDescriptor sortDescriptorWithKey:@"chamber" ascending:YES];
+    NSSortDescriptor *billIDDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"billID" ascending:YES options:options];
+    return [NSArray arrayWithObjects:stateDesc, sessionDesc, billIDDesc, nil];
+}
+
+- (NSString *)name {
+    return [NSString stringWithFormat:@"%@ (%@)", self.billID, [self.stateID uppercaseString]];
+}
+
+- (NSString *)title {
+    [self willAccessValueForKey:@"title"];
+    NSString *value = [self primitiveTitle];
+    [self didAccessValueForKey:@"title"];
+    if (value)
+        value = [value capitalizedString];
+    return value;
+}
+
+- (NSArray *)sortedActions {
+    if (IsEmpty(self.actions))
+        return nil;
+   return [self.actions sortedArrayUsingDescriptors:[BillAction sortDescriptors]];
+}
+
+- (NSArray *)sortedVotes {
+    if (IsEmpty(self.votes))
+        return nil;
+    return [self.votes sortedArrayUsingDescriptors:[BillRecordVote sortDescriptors]];
+}
+
+- (NSArray *)sortedSponsors {
+    if (IsEmpty(self.sponsors))
+        return nil;
+    return [self.sponsors sortedArrayUsingDescriptors:[BillSponsor sortDescriptors]];
+}
+
+- (NSArray *)sortedSubjects {
+    if (IsEmpty(self.subjects))
+        return nil;
+    return [self.subjects sortedArrayUsingDescriptors:[GenericWord sortDescriptors]];
+}
+
 
 @end

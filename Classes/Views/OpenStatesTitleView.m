@@ -44,12 +44,6 @@ const CGFloat kOpenStatesTitleViewHeight = 42.0f;
     self.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
     self.opaque = NO;
     self.layer.shouldRasterize = YES;
-    /*
-    self.layer.shadowColor = [[UIColor colorWithRed:0 green:0 blue:0 alpha:0.375] CGColor];
-    self.layer.shadowOffset = CGSizeMake(0, 2);
-    self.layer.shadowOpacity = 1.f;
-    self.layer.shadowRadius = 2.0f;
-     */
 }
 
 - (CGSize)sizeThatFits:(CGSize)size

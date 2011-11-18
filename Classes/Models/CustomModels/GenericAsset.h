@@ -3,4 +3,5 @@
 @class RKManagedObjectMapping;
 @interface GenericAsset : _GenericAsset {}
 + (RKManagedObjectMapping *)mapping;
++ (NSArray *)sortDescriptors;
 @end

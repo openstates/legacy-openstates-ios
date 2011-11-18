@@ -1,5 +1,6 @@
 #import "CommitteeRole.h"
 #import "SLFCommittee.h"
+#import "SLFSortDescriptor.h"
 #import <RestKit/CoreData/CoreData.h>
 
 @implementation CommitteeRole
@@ -28,9 +29,10 @@
 }
 
 + (NSArray *)sortDescriptors {
-    NSSortDescriptor *nameDesc = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-    NSSortDescriptor *chamberDesc = [NSSortDescriptor sortDescriptorWithKey:@"chamber" ascending:YES];
-    return [NSArray arrayWithObjects:nameDesc, chamberDesc, nil];
+    NSArray *existing = [[self superclass] sortDescriptors];
+    NSMutableArray *descriptors = [NSMutableArray arrayWithArray:existing];
+    [descriptors addObject:[NSSortDescriptor sortDescriptorWithKey:@"chamber" ascending:YES]];
+    return descriptors;
 }
 
 @end

@@ -9,4 +9,8 @@
     return mapping;
 }
 
++ (NSArray *)sortDescriptors {
+    return [[self superclass] sortDescriptors];
+}
+
 @end

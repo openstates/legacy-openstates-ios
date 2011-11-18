@@ -87,7 +87,6 @@
 
 StretchedTitleLabel *CreateOpenStatesTitleLabelForFrame(CGRect rect) {
     StretchedTitleLabel *titleLabel = [[StretchedTitleLabel alloc] initWithFrame:rect];
-        //    [titleLabel setAttributedTextWithString:@"O P E N : S T A T E S" illuminatedAtLocation:9];
     [titleLabel setAttributedTextWithString:@"OPEN:STATES" illuminatedAtLocation:5];
     return titleLabel;
 }

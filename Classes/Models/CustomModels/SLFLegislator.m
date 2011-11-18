@@ -1,5 +1,10 @@
 #import "SLFLegislator.h"
 #import "SLFDataModels.h"
+#import "SLFSortDescriptor.h"
+
+@interface SLFLegislator()
+- (NSArray *)pruneJunkFromRoles:(NSArray*)sortedRoles;
+@end
 
 @implementation SLFLegislator
 
@@ -50,15 +55,12 @@
     [self didChangeValueForKey:@"party"];    
 }
 
-- (NSArray *)pruneJunkFromRoles:(NSArray*)sortedRoles {
-    CommitteeRole *junkRole = [sortedRoles objectAtIndex:0];
-    if (!IsEmpty(junkRole.name))
-        return sortedRoles;
-    NSMutableArray *prunedRoles = [NSMutableArray arrayWithArray:sortedRoles];
-    [prunedRoles removeObject:junkRole];
-    [junkRole deleteEntity];
-    [[[RKObjectManager sharedManager] objectStore] save];
-    return prunedRoles;
++ (NSArray *)sortDescriptors {
+    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
+    NSSortDescriptor *lastDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"lastName" ascending:YES options:options];
+    NSSortDescriptor *firstDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"firstName" ascending:YES options:options];
+    NSSortDescriptor *stateDesc = [NSSortDescriptor sortDescriptorWithKey:@"stateID" ascending:YES];
+    return [NSArray arrayWithObjects:lastDesc, firstDesc, stateDesc, nil];
 }
 
 - (NSArray *)sortedRoles {
@@ -66,6 +68,24 @@
         return nil;
     NSArray *sortedRoles = [self.roles sortedArrayUsingDescriptors:[CommitteeRole sortDescriptors]];
     return [self pruneJunkFromRoles:sortedRoles];
+}
+
+- (NSArray *)pruneJunkFromRoles:(NSArray *)sortedRoles {
+    NSMutableArray *prunedRoles = [NSMutableArray arrayWithArray:sortedRoles];
+    NSMutableArray *junkRoles = [NSMutableArray array];
+    for (CommitteeRole *role in sortedRoles) {
+        if (!IsEmpty(role.name))
+            continue;
+        [junkRoles addObject:role];
+    }
+    [prunedRoles removeObjectsInArray:junkRoles];
+    while ([junkRoles count]) {
+        CommitteeRole *junkRole = [junkRoles objectAtIndex:0];
+        [junkRoles removeObject:junkRole];
+        [junkRole deleteEntity];
+    }
+    [[[RKObjectManager sharedManager] objectStore] save];
+    return prunedRoles;
 }
 
 - (SLFDistrict *)hydratedDistrict {
@@ -108,11 +128,6 @@
 
 - (NSString *)districtMapLabel {
     return [NSString stringWithFormat:@"%@ %@ District %@", self.state.name, self.chamberShortName, self.district];
-}
-
-- (NSComparisonResult)compareMembersByName:(SLFLegislator *)p
-{	
-	return [[self fullNameLastFirst] compare: [p fullNameLastFirst]];	
 }
 
 - (NSString *)lastnameInitial {

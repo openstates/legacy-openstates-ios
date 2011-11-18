@@ -14,7 +14,7 @@
 
 @protocol SVGeocoderDelegate;
 
-@interface SVGeocoder : NSObject
+@interface SVGeocoder : NSObject <NSURLConnectionDelegate>
 
 @property (nonatomic, assign) id<SVGeocoderDelegate> delegate;
 

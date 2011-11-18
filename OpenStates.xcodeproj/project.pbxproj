@@ -49,6 +49,8 @@
 		372E58E514157BD0000652B1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2538E8661234250100ACB5D7 /* SystemConfiguration.framework */; };
 		37336A68142B98A000F635EB /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37336A67142B98A000F635EB /* MainWindow.xib */; };
 		37336A6C142B991200F635EB /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37336A6B142B991200F635EB /* MainWindow-iPad.xib */; };
+		3738364814744C2400AEEC34 /* SLFSortDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3738364714744C2400AEEC34 /* SLFSortDescriptor.m */; };
+		3738364B147480CF00AEEC34 /* NSDate+SLFDateHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3738364A147480CF00AEEC34 /* NSDate+SLFDateHelper.m */; };
 		373AC88D14171F9C00720F40 /* APIKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 373AC88C14171F9C00720F40 /* APIKeys.m */; };
 		373E51501445E6C70044D478 /* DistrictSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 373E514D1445E6C70044D478 /* DistrictSearch.m */; };
 		37442F0214342F780027F422 /* StateFlags.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 37442F0114342F780027F422 /* StateFlags.bundle */; };
@@ -137,10 +139,12 @@
 		377C617D143000AA00EE626E /* UIView+PSSizes.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6177143000AA00EE626E /* UIView+PSSizes.m */; };
 		377C617E143000AA00EE626E /* UIViewController+PSStackedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6179143000AA00EE626E /* UIViewController+PSStackedView.m */; };
 		377E4B1714360B500063E854 /* UIImage+OverlayColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 377E4B1614360B500063E854 /* UIImage+OverlayColor.m */; };
+		378A23161476438700D82721 /* SLFDrawingExtenions.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A23151476438700D82721 /* SLFDrawingExtenions.m */; };
 		3794021C144161A600D18889 /* ContributionsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37940219144161A600D18889 /* ContributionsDataSource.m */; };
 		3794021D144161A600D18889 /* ContributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3794021B144161A600D18889 /* ContributionsViewController.m */; };
 		3794022814418D4000D18889 /* TableCellDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3794022714418D4000D18889 /* TableCellDataObject.m */; };
 		37953BDC14272D9500A0CD86 /* DataModelsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 37953BDB14272D9500A0CD86 /* DataModelsTestCase.m */; };
+		379BB596147409EC00DDBD3D /* BillDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F6FCFC14676214003AA80D /* BillDetailViewController.m */; };
 		37A3258313E49D4700138ADE /* StatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258213E49D4700138ADE /* StatesViewController.m */; };
 		37A3258F13E49F2200138ADE /* StateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258E13E49F2200138ADE /* StateDetailViewController.m */; };
 		37A325B213E4A55800138ADE /* CommitteesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A325B113E4A55800138ADE /* CommitteesViewController.m */; };
@@ -212,6 +216,8 @@
 		37E961EF13E544FB0064B1D3 /* libRestKitNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E961B413E544380064B1D3 /* libRestKitNetwork.a */; };
 		37E961F013E544FD0064B1D3 /* libRestKitObjectMapping.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E961B613E544380064B1D3 /* libRestKitObjectMapping.a */; };
 		37E961F113E544FE0064B1D3 /* libRestKitSupport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E961B813E544380064B1D3 /* libRestKitSupport.a */; };
+		37ECC0471475AD9A0088B959 /* DDActionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37ECC0291475AD9A0088B959 /* DDActionHeaderView.m */; };
+		37ECC05C1475B79E0088B959 /* TitleBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37ECC05B1475B79E0088B959 /* TitleBarView.m */; };
 		37EDEAA313D3D81900F8FCA1 /* LegislatorDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EDEAA113D3D81900F8FCA1 /* LegislatorDetailViewController.m */; };
 		37EDEAAC13D3FAF800F8FCA1 /* CommitteeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EDEAAB13D3FAF700F8FCA1 /* CommitteeDetailViewController.m */; };
 		37F25BA4142BAC0E009D8FCF /* SLFAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F25BA3142BAC0E009D8FCF /* SLFAppearance.m */; };
@@ -417,6 +423,10 @@
 		372E58E314157BB0000652B1 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		37336A67142B98A000F635EB /* MainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		37336A6B142B991200F635EB /* MainWindow-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		3738364614744C2400AEEC34 /* SLFSortDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFSortDescriptor.h; sourceTree = "<group>"; };
+		3738364714744C2400AEEC34 /* SLFSortDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFSortDescriptor.m; sourceTree = "<group>"; };
+		37383649147480CF00AEEC34 /* NSDate+SLFDateHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+SLFDateHelper.h"; sourceTree = "<group>"; };
+		3738364A147480CF00AEEC34 /* NSDate+SLFDateHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+SLFDateHelper.m"; sourceTree = "<group>"; };
 		373AC88B14171F5200720F40 /* APIKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIKeys.h; sourceTree = "<group>"; };
 		373AC88C14171F9C00720F40 /* APIKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIKeys.m; sourceTree = "<group>"; };
 		373E514C1445E6C70044D478 /* DistrictSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictSearch.h; sourceTree = "<group>"; };
@@ -541,6 +551,8 @@
 		377C6179143000AA00EE626E /* UIViewController+PSStackedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PSStackedView.m"; sourceTree = "<group>"; };
 		377E4B1514360B500063E854 /* UIImage+OverlayColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+OverlayColor.h"; path = "Vendor/PSStackedView/Example/StackedViewKitExample/UIImage+OverlayColor.h"; sourceTree = SOURCE_ROOT; };
 		377E4B1614360B500063E854 /* UIImage+OverlayColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+OverlayColor.m"; path = "Vendor/PSStackedView/Example/StackedViewKitExample/UIImage+OverlayColor.m"; sourceTree = SOURCE_ROOT; };
+		378A23141476438700D82721 /* SLFDrawingExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; path = SLFDrawingExtensions.h; sourceTree = "<group>"; };
+		378A23151476438700D82721 /* SLFDrawingExtenions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFDrawingExtenions.m; sourceTree = "<group>"; };
 		37940218144161A600D18889 /* ContributionsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContributionsDataSource.h; sourceTree = "<group>"; };
 		37940219144161A600D18889 /* ContributionsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContributionsDataSource.m; sourceTree = "<group>"; };
 		3794021A144161A600D18889 /* ContributionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContributionsViewController.h; sourceTree = "<group>"; };
@@ -668,6 +680,10 @@
 		37DB6C451451ABC6007E0B53 /* TableSectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableSectionHeaderView.m; sourceTree = "<group>"; };
 		37E95F9413E4E4990064B1D3 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		37E95F9613E4E4990064B1D3 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		37ECC0281475AD9A0088B959 /* DDActionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDActionHeaderView.h; sourceTree = "<group>"; };
+		37ECC0291475AD9A0088B959 /* DDActionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDActionHeaderView.m; sourceTree = "<group>"; };
+		37ECC05A1475B79E0088B959 /* TitleBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleBarView.h; sourceTree = "<group>"; };
+		37ECC05B1475B79E0088B959 /* TitleBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleBarView.m; sourceTree = "<group>"; };
 		37EDEAA013D3D81800F8FCA1 /* LegislatorDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorDetailViewController.h; sourceTree = "<group>"; };
 		37EDEAA113D3D81900F8FCA1 /* LegislatorDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorDetailViewController.m; sourceTree = "<group>"; };
 		37EDEAAA13D3FAF700F8FCA1 /* CommitteeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeDetailViewController.h; sourceTree = "<group>"; };
@@ -698,8 +714,8 @@
 		37F6FCF71467611F003AA80D /* BillsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsViewController.m; sourceTree = "<group>"; };
 		37F6FCF914676214003AA80D /* BillsCategoriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsCategoriesViewController.h; sourceTree = "<group>"; };
 		37F6FCFA14676214003AA80D /* BillsCategoriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsCategoriesViewController.m; sourceTree = "<group>"; };
-		37F6FCFB14676214003AA80D /* BillsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsDetailViewController.h; sourceTree = "<group>"; };
-		37F6FCFC14676214003AA80D /* BillsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsDetailViewController.m; sourceTree = "<group>"; };
+		37F6FCFB14676214003AA80D /* BillDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillDetailViewController.h; sourceTree = "<group>"; };
+		37F6FCFC14676214003AA80D /* BillDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillDetailViewController.m; sourceTree = "<group>"; };
 		37F6FCFD14676214003AA80D /* BillsFavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsFavoritesViewController.h; sourceTree = "<group>"; };
 		37F6FCFE14676214003AA80D /* BillsFavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsFavoritesViewController.m; sourceTree = "<group>"; };
 		37F6FCFF14676214003AA80D /* BillsRecentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsRecentViewController.h; sourceTree = "<group>"; };
@@ -1099,6 +1115,7 @@
 		377CB425142EFD4600AFF4BC /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				37ECC0261475AD9A0088B959 /* DDActionHeaderView */,
 				3794021E14418B1A00D18889 /* JSONKit */,
 				3700048F143F546600F55165 /* SCNetworkReachabilityKit */,
 				37BB3B8C143A397900DCB1FB /* AFNetworking */,
@@ -1150,8 +1167,8 @@
 				37F6FCF71467611F003AA80D /* BillsViewController.m */,
 				37F6FCF914676214003AA80D /* BillsCategoriesViewController.h */,
 				37F6FCFA14676214003AA80D /* BillsCategoriesViewController.m */,
-				37F6FCFB14676214003AA80D /* BillsDetailViewController.h */,
-				37F6FCFC14676214003AA80D /* BillsDetailViewController.m */,
+				37F6FCFB14676214003AA80D /* BillDetailViewController.h */,
+				37F6FCFC14676214003AA80D /* BillDetailViewController.m */,
 				37F6FCFD14676214003AA80D /* BillsFavoritesViewController.h */,
 				37F6FCFE14676214003AA80D /* BillsFavoritesViewController.m */,
 				37F6FCFF14676214003AA80D /* BillsRecentViewController.h */,
@@ -1279,11 +1296,17 @@
 		37CFB4CD144B980F00E8120D /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				37383649147480CF00AEEC34 /* NSDate+SLFDateHelper.h */,
+				3738364A147480CF00AEEC34 /* NSDate+SLFDateHelper.m */,
 				37CFB4CE144B980F00E8120D /* NSInvocation+CWVariableArguments.h */,
 				37CFB4CF144B980F00E8120D /* NSInvocation+CWVariableArguments.m */,
 				37CFB4D0144B980F00E8120D /* UIImageView+RoundedCorners.h */,
 				37CFB4D1144B980F00E8120D /* UIImageView+RoundedCorners.m */,
 				37CFB4D7144B9C8200E8120D /* StackableControllerProtocol.h */,
+				3738364614744C2400AEEC34 /* SLFSortDescriptor.h */,
+				3738364714744C2400AEEC34 /* SLFSortDescriptor.m */,
+				378A23141476438700D82721 /* SLFDrawingExtensions.h */,
+				378A23151476438700D82721 /* SLFDrawingExtenions.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1321,12 +1344,12 @@
 				372D2AF914285FDE00ADE84E /* CommitteeMember.m */,
 				372D2AF514285FDC00ADE84E /* CommitteeRole.h */,
 				372D2AF614285FDD00ADE84E /* CommitteeRole.m */,
-				372D2B1C1428DEA300ADE84E /* BillSponsor.h */,
-				372D2B1D1428DEA300ADE84E /* BillSponsor.m */,
 				3757CE8D146A6DC800471CB7 /* BillAction.h */,
 				3757CE8E146A6DC900471CB7 /* BillAction.m */,
 				3757CE8F146A6DC900471CB7 /* BillRecordVote.h */,
 				3757CE90146A6DC900471CB7 /* BillRecordVote.m */,
+				372D2B1C1428DEA300ADE84E /* BillSponsor.h */,
+				372D2B1D1428DEA300ADE84E /* BillSponsor.m */,
 				3757CE91146A6DC900471CB7 /* BillVoter.h */,
 				3757CE92146A6DC900471CB7 /* BillVoter.m */,
 				37D7540E146C59C500DCD742 /* EventParticipant.h */,
@@ -1398,6 +1421,18 @@
 				37E961C613E544380064B1D3 /* RestKitSpecs.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		37ECC0261475AD9A0088B959 /* DDActionHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				37ECC0281475AD9A0088B959 /* DDActionHeaderView.h */,
+				37ECC0291475AD9A0088B959 /* DDActionHeaderView.m */,
+				37ECC05A1475B79E0088B959 /* TitleBarView.h */,
+				37ECC05B1475B79E0088B959 /* TitleBarView.m */,
+			);
+			name = DDActionHeaderView;
+			path = Vendor/DDActionHeaderView;
 			sourceTree = "<group>";
 		};
 		37F25B9E142BAB0A009D8FCF /* Themes */ = {
@@ -1833,6 +1868,12 @@
 				374D39D31471B52C00DDF2EE /* OpenStatesIconView.m in Sources */,
 				374D39D61471C47F00DDF2EE /* OpenStatesTitleView.m in Sources */,
 				374D3A1714735F8C00DDF2EE /* StackedBackgroundView.m in Sources */,
+				379BB596147409EC00DDBD3D /* BillDetailViewController.m in Sources */,
+				3738364814744C2400AEEC34 /* SLFSortDescriptor.m in Sources */,
+				3738364B147480CF00AEEC34 /* NSDate+SLFDateHelper.m in Sources */,
+				37ECC0471475AD9A0088B959 /* DDActionHeaderView.m in Sources */,
+				37ECC05C1475B79E0088B959 /* TitleBarView.m in Sources */,
+				378A23161476438700D82721 /* SLFDrawingExtenions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

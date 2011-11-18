@@ -22,8 +22,8 @@
 @synthesize popover = _popover;
 @synthesize statePopoverDelegate = _statePopoverDelegate;
 
-- (StatesPopoverManager *)initWithBarButtonItem:(UIBarButtonItem *)button delegate:(id<StatesPopoverDelegate>)delegate {
-    NSParameterAssert(button != NULL && delegate != NULL);
+- (StatesPopoverManager *)initWithOrigin:(id)origin delegate:(id<StatesPopoverDelegate>)delegate {
+    NSParameterAssert(origin != NULL && delegate != NULL);
     self = [super init];
     if (self) {
         self.statePopoverDelegate = delegate;
@@ -35,13 +35,18 @@
         _popover = [[UIPopoverController alloc] initWithContentViewController:navController];
         _popover.delegate = self;
         [navController release];
-        [_popover presentPopoverFromBarButtonItem:button permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        if ([origin isKindOfClass:[UIBarButtonItem class]])
+            [_popover presentPopoverFromBarButtonItem:origin permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        else if ([origin isKindOfClass:[UIView class]]) {
+            UIView *originView = origin;
+            [_popover presentPopoverFromRect:originView.bounds inView:originView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        }
     }
     return self;
 }
 
-+ (StatesPopoverManager *)showFromBarButtonItem:(UIBarButtonItem *)button delegate:(id<StatesPopoverDelegate>)delegate {
-    return [[[StatesPopoverManager alloc] initWithBarButtonItem:button delegate:delegate] autorelease];
++ (StatesPopoverManager *)showFromOrigin:(id)origin delegate:(id<StatesPopoverDelegate>)delegate {
+    return [[[StatesPopoverManager alloc] initWithOrigin:origin delegate:delegate] autorelease];
 }
 
 

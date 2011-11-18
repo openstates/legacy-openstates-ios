@@ -1,5 +1,5 @@
 //
-//  BillsDetailViewController.h
+//  BillDetailViewController.h
 //  Created by Gregory Combs on 2/20/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -10,28 +10,23 @@
 //
 //
 
-#import <UIKit/UIKit.h>
-#import <RestKit/RestKit.h>
+#import "SLFTableViewController.h"
 
-@class TableCellDataObject;
-@class DDActionHeaderView;
-@class BillVotesDataSource;
-@class AppendingFlowView;
 @class SLFBill;
-@interface BillsDetailViewController : UITableViewController <RKRequestDelegate, UISplitViewControllerDelegate, UIPopoverControllerDelegate> {
-	BillVotesDataSource *voteDS;
-}
-@property (nonatomic,assign) id dataObject;
-@property (nonatomic,retain) UIButton *starButton;
+@class SLFState;
+    //@class DDActionHeaderView;
+    //@class AppendingFlowView;
 
+@interface BillDetailViewController : SLFTableViewController <RKObjectLoaderDelegate>
+@property (nonatomic, retain) SLFBill *bill;
+/*
+@property (nonatomic,retain) UIButton *starButton;
 @property (nonatomic,retain) IBOutlet UIView *headerView, *descriptionView;
 @property (nonatomic,retain) IBOutlet AppendingFlowView *statusView;
 @property (nonatomic,retain) IBOutlet UITextView *lab_description;
 @property (nonatomic,retain) IBOutlet DDActionHeaderView *actionHeader;
-
-@property (nonatomic,retain) UIPopoverController *masterPopover;
-@property (nonatomic,retain) SLFBill *bill;
-
-- (IBAction)starButtonToggle:(id)sender;
-
+ - (IBAction)starButtonToggle:(id)sender;
+ */
+- (id)initWithBillID:(NSString *)billID state:(SLFState *)aState session:(NSString *)aSession;
+- (id)initWithBill:(SLFBill *)aBill;
 @end

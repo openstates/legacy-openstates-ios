@@ -47,7 +47,7 @@ enum SECTIONS {
 
 @implementation LegislatorDetailViewController
 @synthesize legislator;
-@synthesize tableViewModel;
+@synthesize tableViewModel = __tableViewModel;
 
 - (id)initWithLegislatorID:(NSString *)legislatorID {
     self = [super initWithStyle:UITableViewStyleGrouped];

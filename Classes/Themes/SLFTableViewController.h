@@ -16,8 +16,11 @@
 #import "PSStackedViewDelegate.h"
 #import "StackableControllerProtocol.h"
 #import "SLFTheme.h"
+#import "TitleBarView.h"
 
 @interface SLFTableViewController : GCTableViewController <PSStackedViewDelegate, RKTableViewModelDelegate, StackableController>
 @property (nonatomic,assign) BOOL useGradientBackground;
+@property (nonatomic,assign) BOOL useTitleBar;
+@property (nonatomic,retain) TitleBarView *titleBarView;
 - (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url;
 @end

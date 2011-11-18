@@ -1,4 +1,5 @@
 #import "SLFDataModels.h"
+#import "SLFSortDescriptor.h"
 
 @implementation SLFCommittee
 
@@ -14,6 +15,13 @@
     [mapping mapKeyPath:@"committee" toAttribute:@"committeeName"];
     [mapping mapAttributes:@"chamber", @"subcommittee", nil];
     return mapping;
+}
+
++ (NSArray *)sortDescriptors {
+    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
+    NSSortDescriptor *nameDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"committeeName" ascending:YES options:options];
+    NSSortDescriptor *chamberDesc = [NSSortDescriptor sortDescriptorWithKey:@"chamber" ascending:YES];
+    return [NSArray arrayWithObjects:nameDesc, chamberDesc, nil];
 }
 
 #pragma mark -
@@ -52,9 +60,4 @@
     return [self.members sortedArrayUsingDescriptors:[CommitteeMember sortDescriptors]];
 }
 
-+ (NSArray *)sortDescriptors {
-    NSSortDescriptor *nameDesc = [NSSortDescriptor sortDescriptorWithKey:@"committeeName" ascending:YES];
-    NSSortDescriptor *chamberDesc = [NSSortDescriptor sortDescriptorWithKey:@"chamber" ascending:YES];
-    return [NSArray arrayWithObjects:nameDesc, chamberDesc, nil];
-}
 @end

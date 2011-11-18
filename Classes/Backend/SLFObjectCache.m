@@ -54,8 +54,7 @@
     [request setPredicate:predicate];
 
     // Even without a match, just do it anyway, since we know it's a state/metadata resource
-    NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-    [request setSortDescriptors:[NSArray arrayWithObject:byName]];
+    [request setSortDescriptors:[SLFState sortDescriptors]];
     return request;
 }
 
@@ -72,9 +71,7 @@
         predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", [arguments objectForKey:@"state"]];
     [request setPredicate:predicate];
 
-    NSSortDescriptor *byLastName = [NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES];
-    NSSortDescriptor *byFirstName = [NSSortDescriptor sortDescriptorWithKey:@"firstName" ascending:YES];
-    [request setSortDescriptors:[NSArray arrayWithObjects:byLastName, byFirstName, nil]];
+    [request setSortDescriptors:[SLFLegislator sortDescriptors]];
     return request;
 }
 
@@ -90,10 +87,7 @@
     else if ([pathMatcher matchesPattern:@"/committees" tokenizeQueryStrings:YES parsedArguments:&arguments])
         predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", [arguments objectForKey:@"state"]];
     [request setPredicate:predicate];
-    
-    NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey:@"committeeName" ascending:YES];
-    NSSortDescriptor *byChamber = [NSSortDescriptor sortDescriptorWithKey:@"chamber" ascending:YES];
-    [request setSortDescriptors:[NSArray arrayWithObjects:byName, byChamber, nil]];
+    [request setSortDescriptors:[SLFCommittee sortDescriptors]];
     return request;
 }
 
@@ -114,9 +108,7 @@
         predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", 
                      [args objectForKey:@"stateID"]];
     [request setPredicate:predicate];
-    
-    NSSortDescriptor *byNumeric = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
-    [request setSortDescriptors:[NSArray arrayWithObject:byNumeric]];
+    [request setSortDescriptors:[SLFDistrict sortDescriptors]];
     return request;
 }
 
@@ -132,9 +124,7 @@
     else if ([pathMatcher matchesPattern:@"/events" tokenizeQueryStrings:YES parsedArguments:&args])
         predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", [args objectForKey:@"state"]];
     [request setPredicate:predicate];
-
-    NSSortDescriptor *byNumeric = [NSSortDescriptor sortDescriptorWithKey:@"dateStart" ascending:YES selector:@selector(localizedStandardCompare:)];
-    [request setSortDescriptors:[NSArray arrayWithObject:byNumeric]];
+    [request setSortDescriptors:[SLFEvent sortDescriptors]];
     return request;
 }
 
@@ -186,10 +176,7 @@
             predicate = [NSCompoundPredicate andPredicateWithSubpredicates:subpredicates];
     }
     [request setPredicate:predicate];
-    
-    NSSortDescriptor *bySession = [NSSortDescriptor sortDescriptorWithKey:@"session" ascending:YES selector:@selector(localizedStandardCompare:)];
-    NSSortDescriptor *byBillID = [NSSortDescriptor sortDescriptorWithKey:@"billID" ascending:YES selector:@selector(localizedStandardCompare:)];
-    [request setSortDescriptors:[NSArray arrayWithObjects:bySession, byBillID, nil]];
+    [request setSortDescriptors:[SLFBill sortDescriptors]];
     return request;
 }
 

@@ -13,6 +13,7 @@
 - (BOOL)isFeatureEnabled:(NSString *)feature;
 - (NSString *)displayNameForSession:(NSString *)aSession;
 + (RKManagedObjectMapping *)mapping;
++ (NSArray *)sortDescriptors;
 @end
 
 extern NSString * const SLFSelectedStateDidChangeNotification;

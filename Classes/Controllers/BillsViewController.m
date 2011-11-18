@@ -11,25 +11,28 @@
 //
 
 #import "BillsViewController.h"
-#import "BillsDetailViewController.h"
+#import "BillDetailViewController.h"
 #import "SLFDataModels.h"
 #import "BillSearchParameters.h"
 #import "SLFRestKitManager.h"
 
 @implementation BillsViewController
 @synthesize state;
-@synthesize tableViewModel;
+@synthesize tableViewModel = __tableViewModel;
 @synthesize resourcePath;
 
-- (id)initWithState:(SLFState *)newState {
+- (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path {
     self = [super init];
     if (self) {
         self.stackWidth = 320;
         self.state = newState;
-        BillSearchParameters *parameters = [BillSearchParameters billSearchParameters];
-            //self.resourcePath = [parameters pathForSubject:@"Education" state:newState session:newState.latestSession chamber:@"all"];
-        self.resourcePath = [parameters pathForSubject:@"State Agencies" state:newState session:@"82" chamber:@"all"];
+        self.resourcePath = path;
     }
+    return self;
+}
+
+- (id)initWithState:(SLFState *)newState {
+    self = [self initWithState:newState resourcePath:nil];
     return self;
 }
 
@@ -47,15 +50,12 @@
         [cellMapping mapKeyPath:@"title" toAttribute:@"detailTextLabel.text"];
         
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+            if (!object || ![object isKindOfClass:[SLFBill class]])
+                return;
             SLFBill *bill = object;
-            NSString *billPath = [[BillSearchParameters billSearchParameters] pathForBill:bill];
-            SLFRestKitManager *mgr = [SLFRestKitManager sharedRestKit];
-            [mgr loadObjectsAtResourcePath:billPath delegate:self];
-            /*
-            BillsDetailViewController *vc = [[BillsDetailViewController alloc] initWithBillID:bill.billID];
+            BillDetailViewController *vc = [[BillDetailViewController alloc] initWithBill:bill];
             [self stackOrPushViewController:vc];
             [vc release];
-  */          
         };
     }];
     [self.tableViewModel mapObjectsWithClass:[SLFBill class] toTableCellsWithMapping:objCellMap];    
@@ -63,14 +63,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = NSLocalizedString(@"Loading...",@"");
+    NSAssert(self.resourcePath != NULL, @"Must set a resource path before attempting to download table data.");
     [self configureTableViewModel];
     [self.tableViewModel loadTable];
-    self.title = [NSString stringWithFormat:@"%d Bills",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
+        //self.title = [NSString stringWithFormat:@"%d Bills",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
-    self.title = [NSString stringWithFormat:@"%d Bills",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
+    [super tableViewModelDidFinishLoad:tableViewModel];
+        //self.title = [NSString stringWithFormat:@"%d Bills",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }
 
 - (void)dealloc {
@@ -79,41 +80,5 @@
     self.resourcePath = nil;
     [super dealloc];
 }
-
-#pragma mark -
-#pragma mark RKObjectLoaderDelegate methods
-
-#warning remove this later after testing bill mappings
-
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObject:(id)object {
-    RKLogDebug(@"Object Loader Finished: %@", objectLoader.resourcePath);
-    SLFBill *bill = object;
-    GenericWord *type = [bill.types anyObject];
-    if (type) {
-        NSLog(@"bill type: %@", type.word);
-    }
-    NSLog(@"bill votes: %d", [bill.votes count]);
-    for (BillRecordVote *vote in bill.votes) {
-        NSSet *yes = vote.yesVotes;
-        NSSet *no = vote.noVotes;
-        NSSet *other = vote.otherVotes;
-        NSLog(@"bill vote: %@", vote.voteID);
-        for (BillVoter *voter in yes) {
-            NSLog(@"yes = (%@) %@", voter.legID, voter.name);
-        }
-        for (BillVoter *voter in other) {
-            NSLog(@"other = (%@) %@", voter.legID, voter.name);
-        }
-        for (BillVoter *voter in no) {
-            NSLog(@"no = (%@) %@", voter.legID, voter.name);
-        }
-    }
-}
-
-- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
-    [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
-}
-
-
 
 @end

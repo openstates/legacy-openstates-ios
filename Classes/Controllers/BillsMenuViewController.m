@@ -16,6 +16,7 @@
 #import "UIImage+OverlayColor.h"
 #import "SLFRestKitManager.h"
 #import "BillsViewController.h"
+#import "BillSearchParameters.h"
 
 #define MenuFavorites NSLocalizedString(@"Watch List", @"")
 #define MenuSearch NSLocalizedString(@"Search Bills", @"")
@@ -33,7 +34,7 @@
 
 @implementation BillsMenuViewController
 @synthesize state;
-@synthesize tableViewModel;
+@synthesize tableViewModel = __tableViewModel;
 @synthesize searchIcon;
 @synthesize favoritesIcon;
 @synthesize subjectsIcon;
@@ -81,7 +82,7 @@
     [super viewDidLoad];
     [self configureTableViewModel];
     if (self.state)
-        self.title = self.state.name; 
+        self.title = [NSString stringWithFormat:@"%@ %@", self.state.name, NSLocalizedString(@"Bills",@"")]; 
 }
 
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {
@@ -117,9 +118,13 @@
 - (void)selectMenuItem:(NSString *)menuItem {
 	if (menuItem == NULL)
         return;
-    UIViewController *vc = nil;    
-    if ([menuItem isEqualToString:MenuRecents])
-        vc = [[BillsViewController alloc] initWithState:self.state];
+    UIViewController *vc = nil;
+    NSString *resourcePath = nil;
+    if ([menuItem isEqualToString:MenuRecents]) {
+        resourcePath = [BillSearchParameters pathForSubject:@"Education" chamber:@"upper"];
+        vc = [[BillsViewController alloc] initWithState:self.state resourcePath:resourcePath];
+        vc.title = [NSString stringWithFormat:@"%@: %@", [self.state.stateID uppercaseString], @"Education"];
+    }
         /*
     if ([menuItem isEqualToString:MenuLegislators])
         vc = [[LegislatorsViewController alloc] initWithState:self.state];
@@ -146,7 +151,7 @@
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
     self.state = object;
     if (object)
-        self.title = [NSString stringWithFormat:@"%@ %@", self.state.name, NSLocalizedString(@"Bills", @"")];
+        self.title = [NSString stringWithFormat:@"%@ %@", self.state.name, NSLocalizedString(@"Bills",@"")]; 
     [self configureTableItems];
 }
 

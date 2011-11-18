@@ -3,4 +3,5 @@
 @class RKManagedObjectMapping;
 @interface EventParticipant : _EventParticipant {}
 + (RKManagedObjectMapping *)mapping;
++ (NSArray *)sortDescriptors;
 @end

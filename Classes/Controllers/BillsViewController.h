@@ -13,12 +13,12 @@
 #import "SLFTableViewController.h"
 
 @class SLFState;
-@interface BillsViewController : SLFTableViewController <RKObjectLoaderDelegate> {
+@interface BillsViewController : SLFTableViewController {
 }
 @property (nonatomic, retain) RKFetchedResultsTableViewModel *tableViewModel;
 @property (nonatomic, retain) SLFState *state;
 @property (nonatomic, copy) NSString *resourcePath;
 
-- (id)initWithState:(SLFState *)newState;
-
+- (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path;
+- (id)initWithState:(SLFState *)newState; // set resource path before loading
 @end

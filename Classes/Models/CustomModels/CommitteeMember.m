@@ -1,6 +1,7 @@
 #import "CommitteeMember.h"
 #import "SLFLegislator.h"
 #import <RestKit/CoreData/CoreData.h>
+#import "SLFSortDescriptor.h"
 
 @implementation CommitteeMember
 
@@ -27,9 +28,11 @@
 }
 
 + (NSArray *)sortDescriptors {
-    NSSortDescriptor *roleDesc = [NSSortDescriptor sortDescriptorWithKey:@"type" ascending:YES];
-    NSSortDescriptor *nameDesc = [NSSortDescriptor sortDescriptorWithKey:@"foundLegislator.lastName" ascending:YES];
-    return [NSArray arrayWithObjects:roleDesc, nameDesc, nil];
+    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
+    NSArray *existing = [[self superclass] sortDescriptors];
+    NSMutableArray *descriptors = [NSMutableArray arrayWithArray:existing];
+    [descriptors insertObject:[SLFSortDescriptor stringSortDescriptorWithKey:@"foundLegislator.lastName" ascending:YES options:options] atIndex:1];
+    return descriptors;
 }
 
 @end

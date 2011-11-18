@@ -1,6 +1,6 @@
 //
-//  StackedMenuViewController.h
-//  Created by Gregory Combs on 9/21/11.
+//  SLFSortDescriptor.h
+//  Created by Greg Combs on 11/16/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
 //
@@ -10,12 +10,8 @@
 //
 //
 
-#import "StateDetailViewController.h"
-#import "StatesPopoverManager.h"
+#import <Foundation/Foundation.h>
 
-@interface StackedMenuViewController : StateDetailViewController <StatesPopoverDelegate>
-- (IBAction)changeSelectedState:(id)sender;
+@interface SLFSortDescriptor : NSSortDescriptor
++ (NSSortDescriptor *)stringSortDescriptorWithKey:(NSString *)key ascending:(BOOL)ascending options:(NSStringCompareOptions)options;
 @end
-
-extern const NSUInteger STACKED_MENU_INSET;
-extern const NSUInteger STACKED_MENU_WIDTH;

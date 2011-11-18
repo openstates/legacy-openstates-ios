@@ -16,7 +16,7 @@
 
 @implementation CommitteesViewController
 @synthesize state;
-@synthesize tableViewModel;
+@synthesize tableViewModel = __tableViewModel;
 @synthesize resourcePath;
 
 - (id)initWithState:(SLFState *)newState {
@@ -65,6 +65,7 @@
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
+    [super tableViewModelDidFinishLoad:tableViewModel];
     self.title = [NSString stringWithFormat:@"%d Committees",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }
 

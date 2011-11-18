@@ -38,9 +38,9 @@
 - (NSUInteger)indexOfToolbarItemWithTag:(NSInteger)searchTag;
 @property (nonatomic,retain) SVGeocoder *geocoder;
 @property (nonatomic,retain) UserPinAnnotation *searchLocation;
-@property (nonatomic, retain) CalloutMapAnnotation *calloutAnnotation;
-@property (nonatomic, retain) BasicMapAnnotation *customAnnotation;
-@end;
+@property (nonatomic,retain) CalloutMapAnnotation *calloutAnnotation;
+@property (nonatomic,retain) BasicMapAnnotation *customAnnotation;
+@end
 
 @implementation MapViewController
 @synthesize toolbar;

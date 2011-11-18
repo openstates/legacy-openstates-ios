@@ -18,17 +18,19 @@
 #import "UIImage+OverlayColor.h"
 #import "AppDelegate.h"
 #import "StackedBackgroundView.h"
+#import "DDActionHeaderView.h"
+#import "OpenStatesIconView.h"
+#import "UIImageView+RoundedCorners.h"
+#import "SLFDrawingExtensions.h"
 
 @interface StackedMenuViewController()
 @property (nonatomic,retain) UIColor *backgroundPatternColor;
-@property (nonatomic,assign) IBOutlet UIBarButtonItem *selectStateButton;
-@property (nonatomic,retain) UILabel *selectedStateLabel;
+@property (nonatomic,assign) IBOutlet UIButton *selectStateButton;
 @property (nonatomic,retain) StatesPopoverManager *statesPopover;
 - (void)configureMenuHeader;
 - (void)configureMenuFooter;
 - (void)configureStackedBackgroundView;
-- (IBAction)selectStateFromTable:(id)sender;
-- (UIBarButtonItem *)createSelectedStateLabel;
+- (void)configureActionBarForState:(SLFState *)newState;
 @end
 
 const NSUInteger STACKED_MENU_INSET = 75;
@@ -37,7 +39,6 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 @implementation StackedMenuViewController
 @synthesize backgroundPatternColor;
 @synthesize selectStateButton = _selectStateButton;
-@synthesize selectedStateLabel = _selectedStateLabel;
 @synthesize statesPopover = _statesPopover;
 
 - (id)initWithState:(SLFState *)newState {
@@ -97,64 +98,46 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 }
 
 - (void)configureMenuHeader {
- /*   
-    UIImage *headerIcon = [UIImage imageNamed:@"Icon"];
-    UIView *menuHeader = [[UIView alloc] initWithFrame:CGRectMake(0,0,STACKED_MENU_WIDTH,80.f)];    
-    CGFloat iconWidth = 40;
-    CGFloat iconInset = 11;
-    UIImageView* imageView = [[UIImageView alloc] initWithFrame:CGRectMake(iconInset, iconInset*1.5, iconWidth, iconWidth)];
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    imageView.layer.cornerRadius = 3.f;
-    imageView.layer.masksToBounds = NO;
-    imageView.layer.shadowColor = [[UIColor blackColor] CGColor];
-    imageView.layer.shadowOffset = CGSizeMake(0, 3);
-    imageView.layer.shadowOpacity = 0.5f;
-    imageView.layer.shadowRadius = 3.0f;
-    imageView.layer.shouldRasterize = YES;
-    imageView.image = headerIcon;
-    [menuHeader addSubview:imageView];
-    [imageView release];
-   */
-    
-    StretchedTitleLabel *titleLabel = CreateOpenStatesTitleLabelForFrame(CGRectMake(0, 0, STACKED_MENU_WIDTH, 44));
-    titleLabel.backgroundColor = self.backgroundPatternColor;
-    self.tableView.tableHeaderView = titleLabel;
-    [titleLabel release];
+    [self.titleBarView removeFromSuperview];    
+    DDActionHeaderView *actionBar = [[DDActionHeaderView alloc] initWithFrame:self.view.bounds];
+    actionBar.autoresizingMask = UIViewAutoresizingNone;
+    actionBar.width = STACKED_MENU_WIDTH;
+    actionBar.useGradientBorder = NO;
+    self.titleBarView = actionBar;
+    [self.view addSubview:actionBar];
+    [actionBar release];
+    [self configureActionBarForState:self.state];
+    if (!self.state)
+        self.title = NSLocalizedString(@"Pick a State …", @"");
 }
 
-
 - (void)configureMenuFooter {
-    self.selectStateButton = SLFToolbarButton([UIImage imageNamed:@"59-flag"], self, @selector(selectStateFromTable:));
+    /*
+    self.selectStateButton = SLFToolbarButton([UIImage imageNamed:@"59-flag"], self, @selector(changeSelectedState:));
     UIBarButtonItem *stateLabel = [self createSelectedStateLabel];
     UIToolbar *settingsBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.height-44, STACKED_MENU_WIDTH, 44)];
     settingsBar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [settingsBar setItems:[NSArray arrayWithObjects:_selectStateButton, stateLabel, nil] animated:YES];
     [stateLabel release];
     [self.view addSubview:settingsBar];
-    [settingsBar release];
+    [settingsBar release];*/
 }
 
 - (void)configureStackedBackgroundView {
-    /*UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    CGSize size = CGSizeMake(1024, 748);
-    if (UIInterfaceOrientationIsPortrait(orientation))
-        size = CGSizeMake(768,1004);*/
     CGRect viewFrame = CGRectMake(STACKED_MENU_WIDTH, 0, self.view.size.width - STACKED_MENU_WIDTH, self.view.size.height);
     StackedBackgroundView *background = [[StackedBackgroundView alloc] initWithFrame:viewFrame];
     [self.view addSubview:background];
     [background release];
 }
 
-- (IBAction)selectStateFromTable:(id)sender {
-    if (!self.selectStateButton) // should never happen
-        return;
-    self.statesPopover = [StatesPopoverManager showFromBarButtonItem:self.selectStateButton delegate:self];
+- (IBAction)changeSelectedState:(id)sender {
+    if (!sender || ![sender isKindOfClass:[UIView class]])
+        sender = self.selectStateButton;
+    self.statesPopover = [StatesPopoverManager showFromOrigin:sender delegate:self];
 }
 
 - (void)statePopover:(StatesPopoverManager *)statePopover didSelectState:(SLFState *)newState {
-    self.statesPopover = nil;
-    if (newState && self.selectedStateLabel)
-        self.selectedStateLabel.text = [newState.stateID uppercaseString];
+    [self configureActionBarForState:newState];
     [XAppDelegate.stackController popToRootViewControllerAnimated:YES];
     [super stateMenuSelectionDidChangeWithState:newState];
 }
@@ -163,20 +146,47 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     self.statesPopover = nil;
 }
 
-- (UIBarButtonItem *)createSelectedStateLabel {
-    UILabel *itemLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0,30,25)];
-    itemLabel.textAlignment = UITextAlignmentLeft;
-    itemLabel.textColor = [SLFAppearance menuTextColor];
-    itemLabel.font = [SLFAppearance menuTextFont];
-    itemLabel.backgroundColor = [UIColor clearColor];
-    itemLabel.shadowColor = [UIColor darkGrayColor];
-    if (self.state)
-        itemLabel.text = [self.state.stateID uppercaseString];    
-    UIBarButtonItem *buttonLabel =[[UIBarButtonItem alloc]initWithCustomView:itemLabel];
-    self.selectedStateLabel = itemLabel;
-    [itemLabel release];    
-    return buttonLabel;
+- (UIButton *)barButtonForState:(SLFState *)aState {
+    UIButton *button;
+    if (aState)
+        button = [UIButton buttonForImage:aState.stateFlag withFrame:CGRectMake( 6, 8, 48, 32 ) glossy:YES];
+    else {
+        OpenStatesIconView *iconView = [[OpenStatesIconView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+        iconView.useDropShadow = NO;
+        button = [UIButton buttonForImage:[UIImage imageFromView:iconView] withFrame:CGRectMake( 11, 6, 40, 40 ) glossy:NO];
+        [iconView release];
+    }
+    [button addTarget:self action:@selector(changeSelectedState:) forControlEvents:UIControlEventTouchUpInside]; 
+    return button;
 }
+
+- (void)configureActionBarForState:(SLFState *)newState {
+    DDActionHeaderView *actionBar = (DDActionHeaderView *)self.titleBarView;
+    if (actionBar && [actionBar isActionPickerExpanded])
+        [actionBar shrinkActionPicker];
+    self.selectStateButton = [self barButtonForState:newState];
+    static NSString *blairFont = @"BlairMdITC TT";
+    static UIFont *labelTextFont;
+    if (!labelTextFont)
+        labelTextFont = [UIFont fontWithName:blairFont size:13.f];
+
+    UILabel *picker = [[UILabel alloc] initWithFrame:CGRectZero];
+    picker.text = NSLocalizedString(@"Pick a State", @"");
+    picker.textAlignment = UITextAlignmentRight;
+    picker.font = labelTextFont;//[SLFAppearance boldEighteen];
+    picker.numberOfLines = 2;
+    picker.textColor = [UIColor darkTextColor];
+    picker.shadowColor = [UIColor lightTextColor];
+    picker.shadowOffset = CGSizeMake(-1, 1);
+    picker.alpha = .9;
+    picker.opaque = NO;
+    picker.backgroundColor = [UIColor clearColor];
+    [picker sizeToFit];
+    picker.frame = CGRectMake(CGRectGetWidth(_selectStateButton.bounds) + 12, 16, CGRectGetWidth(picker.frame), CGRectGetHeight(picker.frame));
+    actionBar.items = [NSArray arrayWithObjects:_selectStateButton, picker, nil];
+    [picker release];
+}
+
 
 @end
 

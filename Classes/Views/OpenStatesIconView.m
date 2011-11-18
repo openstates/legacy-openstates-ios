@@ -13,6 +13,7 @@
 #import "OpenStatesIconView.h"
 #import "EPSBezierPath.h"
 #import "SLFAppearance.h"
+#import "SLFDrawingExtensions.h"
 
 const CGFloat kOpenStatesIconViewWidth = 512.f;
 const CGFloat kOpenStatesIconViewHeight = 512.f;
@@ -36,7 +37,6 @@ const CGFloat kOpenStatesIconViewHeight = 512.f;
 - (EPSBezierPath *)chartFactory;
 - (void)createGradient;
 - (void)destroyGradient;
-- (void)drawGradient:(CGGradientRef)aGradient inBezierPath:(UIBezierPath *)path angle:(CGFloat)angle;
 @end
 
 @implementation OpenStatesIconView
@@ -47,6 +47,7 @@ const CGFloat kOpenStatesIconViewHeight = 512.f;
 @synthesize upperPath=_upperPath;
 @synthesize chartPath=_chartPath;
 @synthesize useGradientOverlay;
+@synthesize useDropShadow = _useDropShadow;
 
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -80,18 +81,18 @@ const CGFloat kOpenStatesIconViewHeight = 512.f;
     self.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
     self.opaque = NO;
     self.layer.shouldRasterize = YES;
-    self.layer.shadowColor = [[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.375f] CGColor];
+    self.layer.shadowColor = [[UIColor colorWithWhite:0 alpha:0.375f] CGColor];
     self.layer.shadowOffset = CGSizeMake(0, 5);
-    self.layer.shadowOpacity = 1.f;
     self.layer.shadowRadius = 5.0f;
-    [self createGradient];
-    self.useGradientOverlay = YES;
+    self.useDropShadow = YES;
     self.outerPath = [self outerFactory];    
     self.lowerPath = [self lowerFactory];
     self.lowerShinePath = [self lowerShineFactory];
     self.upperShinePath = [self upperShineFactory];
     self.upperPath = [self upperFactory];
     self.chartPath = [self chartFactory];
+    [self createGradient];
+    self.useGradientOverlay = YES;
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
@@ -116,8 +117,24 @@ const CGFloat kOpenStatesIconViewHeight = 512.f;
     [_upperShinePath fillIfNeeded];
     [_chartPath fillIfNeeded];
     
-    if (useGradientOverlay)
-        [self drawGradient:_gradient inBezierPath:_outerPath angle:105.f];
+    if (useGradientOverlay) {
+        CGPoint startPoint;
+        CGPoint endPoint;
+#if 0 
+            // use this if you ever need to calculate the points again, otherwise it's expensive cpu time
+        [SLFDrawing getStartPoint:&startPoint endPoint:&endPoint withAngle:105.f inRect:_outerPath.bounds];
+#else
+        startPoint = CGPointMake(343, 67);
+        endPoint = CGPointMake(170, 579);
+#endif
+            //CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSaveGState(context);
+        CGContextAddPath(context, _outerPath.CGPath);
+        CGContextClip(context);
+        CGContextSetBlendMode(context, kCGBlendModeDifference);
+        CGContextDrawLinearGradient(context, _gradient, startPoint, endPoint, 0);
+        CGContextRestoreGState(context);
+    }
 
     CGContextRestoreGState(context);
 }
@@ -241,72 +258,13 @@ const CGFloat kOpenStatesIconViewHeight = 512.f;
     [self setNeedsDisplay];
 }
 
-#if !defined(DegreesToRadians)
-#define DegreesToRadians(x) (x * (CGFloat)M_PI / 180.0f)
-#endif
-
-#if !defined(RadiansToDegrees)
-#define RadiansToDegrees(x) (x * 180.0f / (CGFloat)M_PI)
-#endif
-
-- (void)drawGradient:(CGGradientRef)aGradient inBezierPath:(UIBezierPath *)path angle:(CGFloat)angle
-{
-	CGRect rect = path.bounds;
-	CGPoint startPoint = rect.origin;
-    CGPoint endPoint = CGPointMake(0.0f, CGRectGetHeight(rect));
-	if(angle == 0)
-  	{
-		startPoint = CGPointMake(CGRectGetMinX(rect), CGRectGetMinY(rect));
-		endPoint   = CGPointMake(CGRectGetMaxX(rect), CGRectGetMinY(rect));
-  	} else if(angle == 90) {
-		startPoint = CGPointMake(CGRectGetMinX(rect), CGRectGetMinY(rect));
-		endPoint   = CGPointMake(CGRectGetMinX(rect), CGRectGetMaxY(rect));
-  	} else {
-		double_t x, y;
-		double_t sina, cosa, tana;
-		double_t length;
-		double_t deltax, deltay;
-        
-		double_t radians = DegreesToRadians(angle);
-        
-		if(fabs(tan(radians)) <= 1.0f)
-		{
-			x = CGRectGetWidth(rect);
-			y = CGRectGetHeight(rect);
-            
-			sina = sin(radians);
-			cosa = cos(radians);
-			tana = tan(radians);
-            
-			length = x/fabs(cosa) + (y - x * fabs(tana)) * fabs(sina);
-            
-			deltax = length * cosa/2;
-			deltay = length * sina/2;
-		} else	{
-			x = CGRectGetHeight(rect);
-			y = CGRectGetWidth(rect);
-            
-			sina = sin(radians - DegreesToRadians(90));
-			cosa = cos(radians - DegreesToRadians(90));
-			tana = tan(radians - DegreesToRadians(90));
-            
-			length = x/fabs(cosa) + (y - x * fabs(tana)) * fabs(sina);
-            
-			deltax = -length * sina/2;
-			deltay = length * cosa/2;
-		}
-        
-		startPoint = CGPointMake(CGRectGetMidX(rect) - (CGFloat)deltax, CGRectGetMidY(rect) - (CGFloat)deltay);
-		endPoint   = CGPointMake(CGRectGetMidX(rect) + (CGFloat)deltax, CGRectGetMidY(rect) + (CGFloat)deltay);
-	}
-    
-	CGContextRef context = UIGraphicsGetCurrentContext();
-	CGContextSaveGState(context);
-	CGContextAddPath(context, path.CGPath);
-	CGContextClip(context);
-    CGContextSetBlendMode(context, kCGBlendModeDifference);
-	CGContextDrawLinearGradient(context, aGradient, startPoint, endPoint, 0);
-	CGContextRestoreGState(context);
+- (void)setUseDropShadow:(BOOL)useDropShadow {
+    _useDropShadow = useDropShadow;
+    if (_useDropShadow)
+        self.layer.shadowOpacity = 1;
+    else
+        self.layer.shadowOpacity = 0;
+    [self.layer setNeedsDisplay];
 }
 
 @end

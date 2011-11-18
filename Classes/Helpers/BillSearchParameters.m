@@ -17,36 +17,29 @@
 NSString* validOrEmptyParameter(NSString *parameter);
 NSString* validSessionParameter(NSString *session);
 
-@interface BillSearchParameters()
-@end
-
 @implementation BillSearchParameters
 
-+ (BillSearchParameters *)billSearchParameters {
-    return [[[BillSearchParameters alloc] init] autorelease];
-}
-
-- (NSString *)pathForBill:(NSString *)billID state:(SLFState *)state session:(NSString *)session {
-	NSParameterAssert((state != NULL) && (billID != NULL) && (session != NULL));
++ (NSString *)pathForBill:(NSString *)billID state:(NSString *)stateID session:(NSString *)session {
+	NSParameterAssert((stateID != NULL) && (billID != NULL) && (session != NULL));
 	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-										state.stateID, @"state",
+										stateID, @"state",
 										session, @"session",
 										SUNLIGHT_APIKEY, @"apikey", 
                                         billID, @"bill", nil];
     return RKMakePathWithObject(@"/bills/:state/:session/:bill?:apikey", queryParams);
 }
 
-- (NSString *)pathForBill:(SLFBill *)bill {
++ (NSString *)pathForBill:(SLFBill *)bill {
 	NSParameterAssert((bill != NULL) && (bill.state != NULL) && (bill.billID != NULL) && (bill.session != NULL));
     return [RKMakePathWithObject(@"/bills/:stateID/:session/:billID?apikey=", bill) stringByAppendingString:SUNLIGHT_APIKEY];
 }
 
-- (NSString *)pathForText:(NSString *)text state:(SLFState *)state session:(NSString *)session chamber:(NSString *)chamber {
-	NSParameterAssert((state != NULL));
++ (NSString *)pathForText:(NSString *)text state:(NSString *)stateID session:(NSString *)session chamber:(NSString *)chamber {
+	NSParameterAssert((stateID != NULL));
     text = [validOrEmptyParameter(text) uppercaseString];
 	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 										validSessionParameter(session), @"search_window",
-										state.stateID, @"state",
+										stateID, @"state",
 										SUNLIGHT_APIKEY, @"apikey", 
                                         text, @"q", nil];
 	if (chamber && ![chamber isEqualToString:@"all"])
@@ -54,20 +47,20 @@ NSString* validSessionParameter(NSString *session);
     return RKPathAppendQueryParams(@"/bills", queryParams);
 }
 
-- (NSString *)pathForText:(NSString *)text chamber:(NSString *)chamber {
++ (NSString *)pathForText:(NSString *)text chamber:(NSString *)chamber {
     SLFState *state = SLFSelectedState();
 	if (!state)
 		return nil;
     NSString *session = SLFSelectedSessionForState(state);
-	return [self pathForText:text state:state session:session chamber:chamber];
+	return [[self class] pathForText:text state:state.stateID session:session chamber:chamber];
 }
 
-- (NSString *)pathForSubject:(NSString *)subject state:(SLFState *)state session:(NSString *)session chamber:(NSString *)chamber {
-	NSCParameterAssert((state != NULL));
++ (NSString *)pathForSubject:(NSString *)subject state:(NSString *)stateID session:(NSString *)session chamber:(NSString *)chamber {
+	NSCParameterAssert((stateID != NULL));
     subject = validOrEmptyParameter(subject);
 	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 										validSessionParameter(session), @"search_window",
-										state.stateID, @"state",
+										stateID, @"state",
 										SUNLIGHT_APIKEY, @"apikey",
                                         subject, @"subject", nil];
 	if (chamber && ![chamber isEqualToString:@"all"])
@@ -75,18 +68,18 @@ NSString* validSessionParameter(NSString *session);
     return RKPathAppendQueryParams(@"/bills", queryParams);
 }
 
-- (NSString *)pathForSubject:(NSString *)subject chamber:(NSString *)chamber {
++ (NSString *)pathForSubject:(NSString *)subject chamber:(NSString *)chamber {
     SLFState *state = SLFSelectedState();
 	if (!state)
 		return nil;
 	NSString *session = SLFSelectedSessionForState(state);
-	return [self pathForSubject:subject state:state session:session chamber:chamber];
+	return [[self class] pathForSubject:subject state:state.stateID session:session chamber:chamber];
 }
 
-- (NSString *)pathForSponsor:(NSString *)sponsorID state:(SLFState *)state session:(NSString *)session {
-	NSCParameterAssert( (sponsorID != NULL) && (state != NULL) );
++ (NSString *)pathForSponsor:(NSString *)sponsorID state:(NSString *)stateID session:(NSString *)session {
+	NSCParameterAssert( (sponsorID != NULL) && (stateID != NULL) );
 	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-								 state.stateID, @"state",
+								 stateID, @"state",
 								 validSessionParameter(session), @"search_window",
 								 SUNLIGHT_APIKEY, @"apikey",
 								 sponsorID, @"sponsor_id",
@@ -94,12 +87,12 @@ NSString* validSessionParameter(NSString *session);
 	return RKPathAppendQueryParams(@"/bills", queryParams);
 }
 
-- (NSString *)pathForSponsor:(NSString *)sponsorID {
++ (NSString *)pathForSponsor:(NSString *)sponsorID {
     SLFState *state = SLFSelectedState();
 	if (!state || IsEmpty(sponsorID))
 		return nil;
 	NSString *session = SLFSelectedSessionForState(state);
-    return [self pathForSponsor:sponsorID state:state session:session];
+    return [[self class] pathForSponsor:sponsorID state:state.stateID session:session];
 }
 
 @end

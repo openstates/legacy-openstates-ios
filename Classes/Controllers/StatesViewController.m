@@ -29,6 +29,7 @@
     self = [super initWithStyle:style];
     if (self) {
         self.stackWidth = 320;
+        self.useTitleBar = NO;
     }
     return self;
 }
@@ -98,6 +99,7 @@
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
+    [super tableViewModelDidFinishLoad:tableViewModel];
     self.title = [NSString stringWithFormat:@"%d States",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }
 

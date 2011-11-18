@@ -1,5 +1,5 @@
-#import "SLFEvent.h"
-#import "SLFState.h"
+#import "SLFDataModels.h"
+#import "SLFSortDescriptor.h"
 
 @implementation SLFEvent
 
@@ -28,5 +28,14 @@
 - (SLFState *)state {
     return self.stateObj;
 }
+
++ (NSArray *)sortDescriptors {
+    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
+    NSSortDescriptor *dateDesc = [NSSortDescriptor sortDescriptorWithKey:@"dateStart" ascending:YES];
+    NSSortDescriptor *stateDesc = [NSSortDescriptor sortDescriptorWithKey:@"stateID" ascending:YES];
+    NSSortDescriptor *nameDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"description" ascending:YES options:options];
+    return [NSArray arrayWithObjects:dateDesc, stateDesc, nameDesc, nil];
+}
+
 
 @end
