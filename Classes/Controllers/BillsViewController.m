@@ -24,7 +24,7 @@
 - (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path {
     self = [super init];
     if (self) {
-        self.stackWidth = 320;
+        self.stackWidth = 380;
         self.state = newState;
         self.resourcePath = path;
     }
@@ -66,12 +66,12 @@
     NSAssert(self.resourcePath != NULL, @"Must set a resource path before attempting to download table data.");
     [self configureTableViewModel];
     [self.tableViewModel loadTable];
-        //self.title = [NSString stringWithFormat:@"%d Bills",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
     [super tableViewModelDidFinishLoad:tableViewModel];
-        //self.title = [NSString stringWithFormat:@"%d Bills",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
+    if (!self.title)
+        self.title = [NSString stringWithFormat:@"Found %d Bills",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
 }
 
 - (void)dealloc {

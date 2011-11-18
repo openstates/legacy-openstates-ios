@@ -116,6 +116,7 @@
 		37588E2413E4B456005FB5AB /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37588E2313E4B456005FB5AB /* EventsViewController.m */; };
 		37588E2C13E4B5FE005FB5AB /* EventDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37588E2B13E4B5FE005FB5AB /* EventDetailViewController.m */; };
 		37588E9913E4C62B005FB5AB /* DistrictDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37588E9813E4C62B005FB5AB /* DistrictDetailViewController.m */; };
+		375B9BCA1477051300810B40 /* SLFTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 375B9BC91477051300810B40 /* SLFTheme.m */; };
 		375DC7E314279BE600253969 /* GCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 375DC7E214279BE600253969 /* GCTableViewController.m */; };
 		375DC7E414279C6B00253969 /* libRestKitUI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 379747DF1427956000304FD1 /* libRestKitUI.a */; };
 		375DC7E614279C9300253969 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 375DC7E514279C9300253969 /* QuartzCore.framework */; };
@@ -516,6 +517,7 @@
 		37588E2B13E4B5FE005FB5AB /* EventDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventDetailViewController.m; sourceTree = "<group>"; };
 		37588E9713E4C62B005FB5AB /* DistrictDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictDetailViewController.h; sourceTree = "<group>"; };
 		37588E9813E4C62B005FB5AB /* DistrictDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictDetailViewController.m; sourceTree = "<group>"; };
+		375B9BC91477051300810B40 /* SLFTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFTheme.m; sourceTree = "<group>"; };
 		375DC7E114279BE600253969 /* GCTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCTableViewController.h; sourceTree = "<group>"; };
 		375DC7E214279BE600253969 /* GCTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTableViewController.m; sourceTree = "<group>"; };
 		375DC7E514279C9300253969 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -551,7 +553,7 @@
 		377C6179143000AA00EE626E /* UIViewController+PSStackedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PSStackedView.m"; sourceTree = "<group>"; };
 		377E4B1514360B500063E854 /* UIImage+OverlayColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+OverlayColor.h"; path = "Vendor/PSStackedView/Example/StackedViewKitExample/UIImage+OverlayColor.h"; sourceTree = SOURCE_ROOT; };
 		377E4B1614360B500063E854 /* UIImage+OverlayColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+OverlayColor.m"; path = "Vendor/PSStackedView/Example/StackedViewKitExample/UIImage+OverlayColor.m"; sourceTree = SOURCE_ROOT; };
-		378A23141476438700D82721 /* SLFDrawingExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; path = SLFDrawingExtensions.h; sourceTree = "<group>"; };
+		378A23141476438700D82721 /* SLFDrawingExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFDrawingExtensions.h; sourceTree = "<group>"; };
 		378A23151476438700D82721 /* SLFDrawingExtenions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFDrawingExtenions.m; sourceTree = "<group>"; };
 		37940218144161A600D18889 /* ContributionsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContributionsDataSource.h; sourceTree = "<group>"; };
 		37940219144161A600D18889 /* ContributionsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContributionsDataSource.m; sourceTree = "<group>"; };
@@ -1439,6 +1441,7 @@
 			isa = PBXGroup;
 			children = (
 				3714804B143283A200170716 /* SLFTheme.h */,
+				375B9BC91477051300810B40 /* SLFTheme.m */,
 				37F25BA2142BAC0E009D8FCF /* SLFAppearance.h */,
 				37F25BA3142BAC0E009D8FCF /* SLFAppearance.m */,
 				371480481432756800170716 /* AlternatingCellMapping.h */,
@@ -1874,6 +1877,7 @@
 				37ECC0471475AD9A0088B959 /* DDActionHeaderView.m in Sources */,
 				37ECC05C1475B79E0088B959 /* TitleBarView.m in Sources */,
 				378A23161476438700D82721 /* SLFDrawingExtenions.m in Sources */,
+				375B9BCA1477051300810B40 /* SLFTheme.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

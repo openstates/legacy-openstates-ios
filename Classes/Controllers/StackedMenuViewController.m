@@ -98,17 +98,18 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 }
 
 - (void)configureMenuHeader {
-    [self.titleBarView removeFromSuperview];    
-    DDActionHeaderView *actionBar = [[DDActionHeaderView alloc] initWithFrame:self.view.bounds];
+    [self.titleBarView removeFromSuperview];
+    DDActionHeaderView *actionBar = [[DDActionHeaderView alloc] initWithFrame:CGRectMake(0, 0, STACKED_MENU_WIDTH, 70)];
     actionBar.autoresizingMask = UIViewAutoresizingNone;
-    actionBar.width = STACKED_MENU_WIDTH;
     actionBar.useGradientBorder = NO;
+    actionBar.strokeBottomColor = [UIColor colorWithWhite:0.5 alpha:0.25];
     self.titleBarView = actionBar;
     [self.view addSubview:actionBar];
     [actionBar release];
     [self configureActionBarForState:self.state];
     if (!self.state)
         self.title = NSLocalizedString(@"Pick a State …", @"");
+    [self.view setNeedsDisplayInRect:actionBar.frame];
 }
 
 - (void)configureMenuFooter {
@@ -165,26 +166,9 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     if (actionBar && [actionBar isActionPickerExpanded])
         [actionBar shrinkActionPicker];
     self.selectStateButton = [self barButtonForState:newState];
-    static NSString *blairFont = @"BlairMdITC TT";
-    static UIFont *labelTextFont;
-    if (!labelTextFont)
-        labelTextFont = [UIFont fontWithName:blairFont size:13.f];
-
-    UILabel *picker = [[UILabel alloc] initWithFrame:CGRectZero];
-    picker.text = NSLocalizedString(@"Pick a State", @"");
-    picker.textAlignment = UITextAlignmentRight;
-    picker.font = labelTextFont;//[SLFAppearance boldEighteen];
-    picker.numberOfLines = 2;
-    picker.textColor = [UIColor darkTextColor];
-    picker.shadowColor = [UIColor lightTextColor];
-    picker.shadowOffset = CGSizeMake(-1, 1);
-    picker.alpha = .9;
-    picker.opaque = NO;
-    picker.backgroundColor = [UIColor clearColor];
-    [picker sizeToFit];
-    picker.frame = CGRectMake(CGRectGetWidth(_selectStateButton.bounds) + 12, 16, CGRectGetWidth(picker.frame), CGRectGetHeight(picker.frame));
-    actionBar.items = [NSArray arrayWithObjects:_selectStateButton, picker, nil];
-    [picker release];
+    CGPoint origin = CGPointMake(_selectStateButton.bounds.size.width + 12, 16);
+    UILabel *innerLabel = SLFStyledHeaderLabelWithTextAtOrigin(NSLocalizedString(@"Pick a State", @""), origin);
+    actionBar.items = [NSArray arrayWithObjects:_selectStateButton, innerLabel, nil];
 }
 
 
