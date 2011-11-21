@@ -16,4 +16,7 @@
     return [NSArray arrayWithObjects:nameDesc, nil];
 }
 
+- (NSString *)description {
+    return self.word;
+}
 @end

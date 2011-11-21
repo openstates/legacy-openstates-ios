@@ -20,7 +20,7 @@
 - (NSString *)stringDaysAgo;
 - (NSString *)stringDaysAgoAgainstMidnight:(BOOL)flag;
 - (NSString *)stringForDisplay;
-- (NSString *)stringForDisplayWithPrefix:(NSString *)prefixed;
+- (NSString *)stringForDisplayWithPrefix:(BOOL)prefixed;
 
 #pragma mark Date<->String Conversion
 + (NSString *)dateFormatString;

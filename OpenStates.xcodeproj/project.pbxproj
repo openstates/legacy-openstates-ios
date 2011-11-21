@@ -161,6 +161,9 @@
 		37BAC16A142B97AD0021A3C6 /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BAC164142B97AD0021A3C6 /* Default-Portrait~ipad.png */; };
 		37BAC16B142B97AD0021A3C6 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BAC165142B97AD0021A3C6 /* Default.png */; };
 		37BAC16C142B97AD0021A3C6 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BAC166142B97AD0021A3C6 /* Default@2x.png */; };
+		37BAE30D1478636100CD5704 /* AppendingFlowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BAE30A1478636100CD5704 /* AppendingFlowView.m */; };
+		37BAE310147865DA00CD5704 /* BillActionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BAE30F147865DA00CD5704 /* BillActionParser.m */; };
+		37BAE3131479606600CD5704 /* NSString+SLFExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BAE3121479606600CD5704 /* NSString+SLFExtensions.m */; };
 		37BB3B72143A12AB00DCB1FB /* DisclosureQuartzView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BB3B6D143A12AB00DCB1FB /* DisclosureQuartzView.m */; };
 		37BB3B73143A12AB00DCB1FB /* LegislatorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BB3B6F143A12AB00DCB1FB /* LegislatorCell.m */; };
 		37BB3B74143A12AB00DCB1FB /* LegislatorCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BB3B71143A12AB00DCB1FB /* LegislatorCellView.m */; };
@@ -585,6 +588,12 @@
 		37BAC164142B97AD0021A3C6 /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait~ipad.png"; sourceTree = "<group>"; };
 		37BAC165142B97AD0021A3C6 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		37BAC166142B97AD0021A3C6 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		37BAE3091478636100CD5704 /* AppendingFlowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppendingFlowView.h; sourceTree = "<group>"; };
+		37BAE30A1478636100CD5704 /* AppendingFlowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppendingFlowView.m; sourceTree = "<group>"; };
+		37BAE30E147865DA00CD5704 /* BillActionParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillActionParser.h; sourceTree = "<group>"; };
+		37BAE30F147865DA00CD5704 /* BillActionParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillActionParser.m; sourceTree = "<group>"; };
+		37BAE3111479606600CD5704 /* NSString+SLFExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+SLFExtensions.h"; sourceTree = "<group>"; };
+		37BAE3121479606600CD5704 /* NSString+SLFExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+SLFExtensions.m"; sourceTree = "<group>"; };
 		37BB3B6C143A12AB00DCB1FB /* DisclosureQuartzView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisclosureQuartzView.h; sourceTree = "<group>"; };
 		37BB3B6D143A12AB00DCB1FB /* DisclosureQuartzView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisclosureQuartzView.m; sourceTree = "<group>"; };
 		37BB3B6E143A12AB00DCB1FB /* LegislatorCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorCell.h; sourceTree = "<group>"; };
@@ -1075,6 +1084,8 @@
 				37F6FD0914676565003AA80D /* BillSearchParameters.m */,
 				374A320B146F9CB500C94AF8 /* StatesPopoverManager.h */,
 				374A320C146F9CB500C94AF8 /* StatesPopoverManager.m */,
+				37BAE30E147865DA00CD5704 /* BillActionParser.h */,
+				37BAE30F147865DA00CD5704 /* BillActionParser.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1117,6 +1128,7 @@
 		377CB425142EFD4600AFF4BC /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				37BAE3041478636100CD5704 /* AppendingFlowView */,
 				37ECC0261475AD9A0088B959 /* DDActionHeaderView */,
 				3794021E14418B1A00D18889 /* JSONKit */,
 				3700048F143F546600F55165 /* SCNetworkReachabilityKit */,
@@ -1263,6 +1275,16 @@
 			path = SplashScreen;
 			sourceTree = "<group>";
 		};
+		37BAE3041478636100CD5704 /* AppendingFlowView */ = {
+			isa = PBXGroup;
+			children = (
+				37BAE3091478636100CD5704 /* AppendingFlowView.h */,
+				37BAE30A1478636100CD5704 /* AppendingFlowView.m */,
+			);
+			name = AppendingFlowView;
+			path = Vendor/AppendingFlowView/Classes;
+			sourceTree = "<group>";
+		};
 		37BB3B8C143A397900DCB1FB /* AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
@@ -1309,6 +1331,8 @@
 				3738364714744C2400AEEC34 /* SLFSortDescriptor.m */,
 				378A23141476438700D82721 /* SLFDrawingExtensions.h */,
 				378A23151476438700D82721 /* SLFDrawingExtenions.m */,
+				37BAE3111479606600CD5704 /* NSString+SLFExtensions.h */,
+				37BAE3121479606600CD5704 /* NSString+SLFExtensions.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1878,6 +1902,9 @@
 				37ECC05C1475B79E0088B959 /* TitleBarView.m in Sources */,
 				378A23161476438700D82721 /* SLFDrawingExtenions.m in Sources */,
 				375B9BCA1477051300810B40 /* SLFTheme.m in Sources */,
+				37BAE30D1478636100CD5704 /* AppendingFlowView.m in Sources */,
+				37BAE310147865DA00CD5704 /* BillActionParser.m in Sources */,
+				37BAE3131479606600CD5704 /* NSString+SLFExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

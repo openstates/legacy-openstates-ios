@@ -48,6 +48,16 @@
     [super dealloc];
 }
 
+- (SLFChamber *)opposingChamber {
+    if ([self.stateID isEqualToString:@"ne"]) // unicameral
+        return nil;
+    if ([self isKindOfClass:[UpperChamber class]])
+        return [LowerChamber lowerForState:self.state];
+    else if ([self isKindOfClass:[LowerChamber class]])
+        return [UpperChamber upperForState:self.state];
+    return nil;
+}
+
 - (NSString *)formalName {
     return [NSString stringWithFormat:@"%@ %@", self.state.name, self.name];
 }

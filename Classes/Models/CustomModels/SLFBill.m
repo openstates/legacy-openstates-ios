@@ -1,5 +1,6 @@
 #import "SLFDataModels.h"
 #import "SLFSortDescriptor.h"
+#import "BillActionParser.h"
 
 @implementation SLFBill
 
@@ -25,6 +26,10 @@
 // This is here because the JSON data has a keyPath "state" that conflicts with our core data relationship.
 - (SLFState *)state {
     return self.stateObj;
+}
+
+- (SLFChamber *)chamberObj {
+    return [SLFChamber chamberWithType:self.chamber forState:self.state];
 }
 
 #pragma mark - Convenience Methods
@@ -75,5 +80,38 @@
     return [self.subjects sortedArrayUsingDescriptors:[GenericWord sortDescriptors]];
 }
 
+#pragma mark - Bill Stages and Bill Types
 
+- (BillType)billType {
+    __block BillType billType = BillTypeInvalid;
+    if (!IsEmpty(self.types)) {
+        [self.types enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+            if ([obj isKindOfClass:[GenericWord class]]) {
+                NSString *word = [[obj word] lowercaseString];
+                if ([@"bill" isEqual:word])
+                    billType = BillTypeBill;
+                else if ([@"concurrent resolution" isEqual:word])
+                    billType = BillTypeConcurrentResolution;
+                else if ([@"joint resolution" isEqual:word])
+                    billType = BillTypeJointResolution;
+                else if ([@"resolution" isEqual:word])
+                    billType = BillTypeJointResolution;
+                if (billType != BillTypeInvalid)
+                    *stop = YES;
+            }
+        }];
+    }
+    if (billType == BillTypeInvalid) 
+        billType = BillTypeSimpleResolution; // default
+    return billType;
+}
+
+- (NSArray *)stages {
+    if (IsEmpty(self.actions))
+        return nil;
+    BillActionParser *parser = [[BillActionParser alloc] init];
+    NSArray *stages = [parser stagesForBill:self];
+    [parser release];
+    return stages;
+}
 @end

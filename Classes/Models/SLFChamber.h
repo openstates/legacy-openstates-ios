@@ -24,6 +24,7 @@
 @property (nonatomic,copy) NSString *stateID;
 @property (nonatomic,copy) NSString *titleAbbreviation;
 @property (nonatomic,copy) NSString *initial;
+@property (nonatomic,readonly) SLFChamber *opposingChamber;
 
 + (SLFChamber *)chamberWithType:(NSString *)aType forState:(SLFState *)aState;
 @end

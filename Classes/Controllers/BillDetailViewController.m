@@ -14,8 +14,7 @@
 #import "SLFDataModels.h"
 #import "BillsViewController.h"
 #import "BillSearchParameters.h"
-    //#import "BillActionParser.h"
-    //#import "AppendingFlowView.h"
+#import "AppendingFlowView.h"
 #import "LegislatorDetailViewController.h"
     //#import "BillVotesViewController.h"
     //#import "DDActionHeaderView.h"
@@ -24,9 +23,11 @@
 #import "SVWebViewController.h"
 #import "SLFReachable.h"
 #import "TableSectionHeaderView.h"
+#import "NSDate+SLFDateHelper.h"
 
 enum SECTIONS {
     SectionBillInfo = 1,
+    SectionStages,
     SectionResources,
     SectionSubjects,
     SectionVotes,
@@ -45,6 +46,7 @@ enum SECTIONS {
 - (SubtitleCellMapping *)votesCellMap;
 - (void)configureTableItems;
 - (void)configureBillInfoItems;
+- (void)configureStages;
 - (void)configureResources;
 - (void)configureSubjects;
 - (void)configureVotes;
@@ -61,6 +63,7 @@ enum SECTIONS {
 - (id)initWithResourcePath:(NSString *)resourcePath {
     self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
+        self.stackWidth = 500;
         RKLogDebug(@"Loading resource path for bill: %@", resourcePath);
         [self loadDataFromNetworkWithResourcePath:resourcePath];
     }
@@ -120,6 +123,7 @@ enum SECTIONS {
 
 - (void)configureTableItems {
     [self configureBillInfoItems];     
+    [self configureStages];
     [self configureResources];
     [self configureSubjects];
     [self configureVotes];
@@ -130,40 +134,78 @@ enum SECTIONS {
 #pragma mark - Table Item Creation and Mapping
 
 - (void)configureBillInfoItems {
-/*    NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    RKTableItem *firstItemCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        if (!IsEmpty(self.legislator.photoURL)) {
-            tableItem.cellMapping.rowHeight = 88;
-            tableItem.cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-                cell.textLabel.textColor = [SLFAppearance cellTextColor];
-                cell.backgroundColor = [SLFAppearance cellBackgroundDarkColor];
-                [cell.imageView setImageWithURL:[NSURL URLWithString:self.legislator.photoURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
-                [cell.imageView roundTopLeftCorner];
-            };
-        }
-        tableItem.cellMapping.style = UITableViewCellStyleValue1;
-        tableItem.text = self.legislator.formalName;
-    }];
-    [tableItems addObject:firstItemCell];
+    NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.text = NSLocalizedString(@"Chamber", @"");
-        tableItem.detailText = self.legislator.chamberObj.formalName;
+        tableItem.cellMapping.rowHeight = 90;
+        tableItem.text = bill.billID;
+        tableItem.detailText = bill.title;
+        tableItem.cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
+            cell.textLabel.textColor = [SLFAppearance cellTextColor];
+            cell.textLabel.font = [SLFAppearance boldFifteen];
+            cell.detailTextLabel.textColor = [SLFAppearance cellSecondaryTextColor];
+            cell.detailTextLabel.font = [SLFAppearance boldTwelve];
+            SLFAlternateCellForIndexPath(cell, indexPath);
+            cell.detailTextLabel.numberOfLines = 4;
+            cell.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
+        };
     }]];
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.text = [NSString stringWithFormat:@"%@ %@", legislator.title, NSLocalizedString(@"Term", @"")];
-        tableItem.detailText = self.legislator.term;
+        tableItem.text = NSLocalizedString(@"Originating Chamber", @"");
+        tableItem.detailText = self.bill.chamberObj.formalName;
     }]];
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.text = NSLocalizedString(@"Party", @"");
-        tableItem.detailText = self.legislator.partyObj.name;
+        tableItem.text = NSLocalizedString(@"Last Updated", @"");
+        tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Bill info was updated %@",@""), [bill.dateUpdated stringForDisplayWithPrefix:YES]];
     }]];
-    [self.tableViewModel loadTableItems:tableItems inSection:SectionMemberInfo];     
+    NSArray *sortedActions = bill.sortedActions;
+    if (!IsEmpty(sortedActions)) {
+        [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+            tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
+            tableItem.text = NSLocalizedString(@"Latest Activity",@"");
+            BillAction *latest = [sortedActions objectAtIndex:0];
+            tableItem.detailText = [NSString stringWithFormat:@"%@ - %@", latest.title, latest.subtitle];
+        }]];
+    }
+    [self.tableViewModel loadTableItems:tableItems inSection:SectionBillInfo];     
     [tableItems release];
- */
+ 
+}
+
+- (void)configureStages {
+    NSArray *stages = bill.stages;
+    if (IsEmpty(stages))
+        return;
+    RKTableItem *stageItemCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
+        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
+        CGFloat rowHeight = PSIsIpad() ? 45 : 95;
+        tableItem.cellMapping.rowHeight = rowHeight;
+        tableItem.cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
+            AppendingFlowView *appendingFlow = [[AppendingFlowView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), rowHeight)];
+            appendingFlow.uniformWidth = NO;
+            appendingFlow.preferredBoxSize = CGSizeMake(78.f, 40.f);    
+            appendingFlow.connectorSize = CGSizeMake(7.f, 6.f); 
+            appendingFlow.font = [SLFAppearance boldTwelve];
+            appendingFlow.insetMargin = CGSizeMake(1.f, 10.f);
+            appendingFlow.stages = stages;
+            cell.backgroundView = appendingFlow;
+            [appendingFlow release];
+        };
+    }];
+    RKTableItem *emptyCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
+        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
+        tableItem.cellMapping.rowHeight = 5;
+        tableItem.cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
+            UIView *empty = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, 5)];
+            empty.backgroundColor = [UIColor clearColor];
+            cell.backgroundView = empty;
+            [empty release];
+        };
+    }];
+
+    [self.tableViewModel loadTableItems:[NSArray arrayWithObjects:stageItemCell, emptyCell, nil] inSection:SectionStages];     
 }
 
 - (void)configureSubjects {
@@ -295,6 +337,8 @@ enum SECTIONS {
     switch (sectionIndex) {
         case SectionBillInfo:
             return NSLocalizedString(@"Bill Details", @"");
+        case SectionStages:
+            return NSLocalizedString(@"Legislative Status",@"");
         case SectionResources:
             return NSLocalizedString(@"Resources",@"");
         case SectionSubjects:

@@ -101,7 +101,7 @@
     return text;
 }
 
-- (NSString *)stringForDisplayWithPrefix:(NSString *)prefixed {
+- (NSString *)stringForDisplayWithPrefix:(BOOL)prefixed {
     /* 
      * if the date is today, display 12-hour time with meridian,
      * if it is within the last 7 days, display weekday name (Friday)

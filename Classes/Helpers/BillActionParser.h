@@ -12,18 +12,11 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum BillType {
-	BillTypeSimpleResolution = 0,	// Stages 1-3 (2 is optional)
-	BillTypeConcurrentResolution,	// Stages 1-5, 6&7 optional/unknown
-	BillTypeJointResolution,		// Stages 1-5, 6 (sec of state), 7 (after voter approval)
-	BillTypeBill,					// Stages 1-7
-} BillType;
-
 @class SLFBill;
 @interface BillActionParser : NSObject {
 }
 
-- (NSMutableDictionary *)parseStagesForBill:(SLFBill *)bill;
+- (NSArray *)stagesForBill:(SLFBill *)bill;
 
 @end
 
