@@ -48,4 +48,26 @@
         passage = NSLocalizedString(@"Passed",@"");
     return [NSString stringWithFormat:@"%@ (%@-%@-%@)", passage, self.yesCount, self.noCount, self.otherCount];
 }
+
+- (NSArray *)sortedYesVotes
+{    
+    if (!self.yesVotes)
+        return nil;
+    return [self.yesVotes sortedArrayUsingDescriptors:[BillVoter sortDescriptors]];
+}
+
+- (NSArray *)sortedNoVotes
+{    
+    if (!self.noVotes)
+        return nil;
+    return [self.noVotes sortedArrayUsingDescriptors:[BillVoter sortDescriptors]];
+}
+
+- (NSArray *)sortedOtherVotes
+{    
+    if (!self.otherVotes)
+        return nil;
+    return [self.otherVotes sortedArrayUsingDescriptors:[BillVoter sortDescriptors]];
+}
+
 @end

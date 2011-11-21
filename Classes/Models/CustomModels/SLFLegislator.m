@@ -155,6 +155,10 @@
 	return name;
 }
 
+- (NSString *)subtitle {
+    return [NSString stringWithFormat:@"%@ - %@ %@", self.partyObj.name, self.chamberShortName, self.district];
+}
+
 - (NSString *)labelSubText {
 	return [NSString stringWithFormat:NSLocalizedString(@"%@ - District %@", @""), self.chamberShortName, self.district];
 }

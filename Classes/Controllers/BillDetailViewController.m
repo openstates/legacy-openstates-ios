@@ -16,7 +16,7 @@
 #import "BillSearchParameters.h"
 #import "AppendingFlowView.h"
 #import "LegislatorDetailViewController.h"
-    //#import "BillVotesViewController.h"
+#import "BillVotesViewController.h"
     //#import "DDActionHeaderView.h"
 #import "SLFMappingsManager.h"
 #import "SLFRestKitManager.h"
@@ -58,7 +58,7 @@ enum SECTIONS {
 
 @implementation BillDetailViewController
 @synthesize bill;
-@synthesize tableViewModel;
+@synthesize tableViewModel = _tableViewModel;
 
 - (id)initWithResourcePath:(NSString *)resourcePath {
     self = [super initWithStyle:UITableViewStyleGrouped];
@@ -171,7 +171,6 @@ enum SECTIONS {
     }
     [self.tableViewModel loadTableItems:tableItems inSection:SectionBillInfo];     
     [tableItems release];
- 
 }
 
 - (void)configureStages {
@@ -204,7 +203,6 @@ enum SECTIONS {
             [empty release];
         };
     }];
-
     [self.tableViewModel loadTableItems:[NSArray arrayWithObjects:stageItemCell, emptyCell, nil] inSection:SectionStages];     
 }
 
@@ -274,11 +272,10 @@ enum SECTIONS {
     [cellMap mapKeyPath:@"title" toAttribute:@"textLabel.text"];
     [cellMap mapKeyPath:@"subtitle" toAttribute:@"detailTextLabel.text"];
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
- #warning broke for now
-       /*BillRecordVote *vote = object;
+        BillRecordVote *vote = object;
         BillVotesViewController *vc = [[BillVotesViewController alloc] initWithVote:vote];
         [self stackOrPushViewController:vc];
-        [vc release];*/
+        [vc release];
     };
     return cellMap;
 }
@@ -338,7 +335,7 @@ enum SECTIONS {
         case SectionBillInfo:
             return NSLocalizedString(@"Bill Details", @"");
         case SectionStages:
-            return NSLocalizedString(@"Legislative Status",@"");
+            return NSLocalizedString(@"Legislative Status (Beta)",@"");
         case SectionResources:
             return NSLocalizedString(@"Resources",@"");
         case SectionSubjects:

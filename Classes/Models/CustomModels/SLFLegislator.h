@@ -19,10 +19,10 @@
 @property (nonatomic, readonly) NSString *formalName;
 @property (nonatomic, readonly) NSString *demoLongName;
 @property (nonatomic, readonly) NSString *districtMapLabel;
-
+@property (nonatomic, readonly) NSString *subtitle;
+@property (nonatomic, readonly) NSString *labelSubText;
 + (NSArray *)sortDescriptors;
 - (NSString *)districtPartyString;
-- (NSString *)labelSubText;
 - (NSString *)title;
 + (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
 @end

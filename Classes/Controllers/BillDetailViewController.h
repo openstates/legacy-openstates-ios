@@ -14,19 +14,9 @@
 
 @class SLFBill;
 @class SLFState;
-    //@class DDActionHeaderView;
-    //@class AppendingFlowView;
 
 @interface BillDetailViewController : SLFTableViewController <RKObjectLoaderDelegate>
 @property (nonatomic, retain) SLFBill *bill;
-/*
-@property (nonatomic,retain) UIButton *starButton;
-@property (nonatomic,retain) IBOutlet UIView *headerView, *descriptionView;
-@property (nonatomic,retain) IBOutlet AppendingFlowView *statusView;
-@property (nonatomic,retain) IBOutlet UITextView *lab_description;
-@property (nonatomic,retain) IBOutlet DDActionHeaderView *actionHeader;
- - (IBAction)starButtonToggle:(id)sender;
- */
 - (id)initWithBillID:(NSString *)billID state:(SLFState *)aState session:(NSString *)aSession;
 - (id)initWithBill:(SLFBill *)aBill;
 @end

@@ -133,6 +133,13 @@
 		376357F3144CCD0700122377 /* silverstar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 376357EB144CCD0700122377 /* silverstar@2x.png */; };
 		376357F6144CCE7500122377 /* SLFParty.m in Sources */ = {isa = PBXBuildFile; fileRef = 376357F5144CCE7500122377 /* SLFParty.m */; };
 		376B88FF143186B300AA96D4 /* SLFTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376B88FE143186B300AA96D4 /* SLFTableViewController.m */; };
+		3771B97B147A2BE000E9CE39 /* BillVotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3771B97A147A2BE000E9CE39 /* BillVotesViewController.m */; };
+		3771B983147A3FA300E9CE39 /* VoteNay.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B97D147A3FA300E9CE39 /* VoteNay.png */; };
+		3771B984147A3FA300E9CE39 /* VoteNay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B97E147A3FA300E9CE39 /* VoteNay@2x.png */; };
+		3771B985147A3FA300E9CE39 /* VotePNV.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B97F147A3FA300E9CE39 /* VotePNV.png */; };
+		3771B986147A3FA300E9CE39 /* VotePNV@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B980147A3FA300E9CE39 /* VotePNV@2x.png */; };
+		3771B987147A3FA300E9CE39 /* VoteYea.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B981147A3FA300E9CE39 /* VoteYea.png */; };
+		3771B988147A3FA300E9CE39 /* VoteYea@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B982147A3FA300E9CE39 /* VoteYea@2x.png */; };
 		37775500140F3F1200ABE16F /* DistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 377754FF140F3F1200ABE16F /* DistrictsViewController.m */; };
 		377C617A143000AA00EE626E /* PSStackedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6170143000AA00EE626E /* PSStackedViewController.m */; };
 		377C617B143000AA00EE626E /* PSStackedViewGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6173143000AA00EE626E /* PSStackedViewGlobal.m */; };
@@ -540,6 +547,14 @@
 		376357F5144CCE7500122377 /* SLFParty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFParty.m; sourceTree = "<group>"; };
 		376B88FD143186B300AA96D4 /* SLFTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLFTableViewController.h; path = ../Themes/SLFTableViewController.h; sourceTree = "<group>"; };
 		376B88FE143186B300AA96D4 /* SLFTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLFTableViewController.m; path = ../Themes/SLFTableViewController.m; sourceTree = "<group>"; };
+		3771B979147A2BE000E9CE39 /* BillVotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillVotesViewController.h; sourceTree = "<group>"; };
+		3771B97A147A2BE000E9CE39 /* BillVotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillVotesViewController.m; sourceTree = "<group>"; };
+		3771B97D147A3FA300E9CE39 /* VoteNay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VoteNay.png; sourceTree = "<group>"; };
+		3771B97E147A3FA300E9CE39 /* VoteNay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "VoteNay@2x.png"; sourceTree = "<group>"; };
+		3771B97F147A3FA300E9CE39 /* VotePNV.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VotePNV.png; sourceTree = "<group>"; };
+		3771B980147A3FA300E9CE39 /* VotePNV@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "VotePNV@2x.png"; sourceTree = "<group>"; };
+		3771B981147A3FA300E9CE39 /* VoteYea.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VoteYea.png; sourceTree = "<group>"; };
+		3771B982147A3FA300E9CE39 /* VoteYea@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "VoteYea@2x.png"; sourceTree = "<group>"; };
 		377754FE140F3F1100ABE16F /* DistrictsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictsViewController.h; sourceTree = "<group>"; };
 		377754FF140F3F1200ABE16F /* DistrictsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictsViewController.m; sourceTree = "<group>"; };
 		377C616E143000AA00EE626E /* PSStackedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSStackedView.h; sourceTree = "<group>"; };
@@ -1037,6 +1052,7 @@
 				37485D4E144C10F800D99BBD /* PinHeadBlue@2x.png */,
 				376357E3144CCD0700122377 /* error.png */,
 				376357E4144CCD0700122377 /* error@2x.png */,
+				3771B97C147A3FA300E9CE39 /* Votes */,
 				376357E5144CCD0700122377 /* Parties */,
 			);
 			path = glyphs;
@@ -1101,6 +1117,19 @@
 				376357EB144CCD0700122377 /* silverstar@2x.png */,
 			);
 			path = Parties;
+			sourceTree = "<group>";
+		};
+		3771B97C147A3FA300E9CE39 /* Votes */ = {
+			isa = PBXGroup;
+			children = (
+				3771B97D147A3FA300E9CE39 /* VoteNay.png */,
+				3771B97E147A3FA300E9CE39 /* VoteNay@2x.png */,
+				3771B97F147A3FA300E9CE39 /* VotePNV.png */,
+				3771B980147A3FA300E9CE39 /* VotePNV@2x.png */,
+				3771B981147A3FA300E9CE39 /* VoteYea.png */,
+				3771B982147A3FA300E9CE39 /* VoteYea@2x.png */,
+			);
+			path = Votes;
 			sourceTree = "<group>";
 		};
 		377C616D143000AA00EE626E /* PSStackedView */ = {
@@ -1183,6 +1212,8 @@
 				37F6FCFA14676214003AA80D /* BillsCategoriesViewController.m */,
 				37F6FCFB14676214003AA80D /* BillDetailViewController.h */,
 				37F6FCFC14676214003AA80D /* BillDetailViewController.m */,
+				3771B979147A2BE000E9CE39 /* BillVotesViewController.h */,
+				3771B97A147A2BE000E9CE39 /* BillVotesViewController.m */,
 				37F6FCFD14676214003AA80D /* BillsFavoritesViewController.h */,
 				37F6FCFE14676214003AA80D /* BillsFavoritesViewController.m */,
 				37F6FCFF14676214003AA80D /* BillsRecentViewController.h */,
@@ -1746,6 +1777,12 @@
 				37F6FCEE14671D96003AA80D /* 191-collection@2x.png in Resources */,
 				37F6FCF114671E34003AA80D /* 06-magnify.png in Resources */,
 				37F6FCF214671E34003AA80D /* 06-magnify@2x.png in Resources */,
+				3771B983147A3FA300E9CE39 /* VoteNay.png in Resources */,
+				3771B984147A3FA300E9CE39 /* VoteNay@2x.png in Resources */,
+				3771B985147A3FA300E9CE39 /* VotePNV.png in Resources */,
+				3771B986147A3FA300E9CE39 /* VotePNV@2x.png in Resources */,
+				3771B987147A3FA300E9CE39 /* VoteYea.png in Resources */,
+				3771B988147A3FA300E9CE39 /* VoteYea@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1905,6 +1942,7 @@
 				37BAE30D1478636100CD5704 /* AppendingFlowView.m in Sources */,
 				37BAE310147865DA00CD5704 /* BillActionParser.m in Sources */,
 				37BAE3131479606600CD5704 /* NSString+SLFExtensions.m in Sources */,
+				3771B97B147A2BE000E9CE39 /* BillVotesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
