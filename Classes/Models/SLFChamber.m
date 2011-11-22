@@ -105,6 +105,8 @@
 
 @implementation LowerChamber
 + (LowerChamber *)lowerForState:(SLFState *)aState {
+    if (IsEmpty(aState.lowerChamberName))
+        return nil;
     LowerChamber *chamber = [[[LowerChamber alloc] init] autorelease];
     chamber.type = @"lower";
     chamber.state = aState;

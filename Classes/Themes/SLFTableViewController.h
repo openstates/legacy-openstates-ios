@@ -18,9 +18,15 @@
 #import "SLFTheme.h"
 #import "TitleBarView.h"
 
-@interface SLFTableViewController : GCTableViewController <PSStackedViewDelegate, RKTableViewModelDelegate, StackableController>
+typedef void(^SearchBarConfigurationBlock)(UISearchBar *searchBar);
+
+@class SLFState;
+@interface SLFTableViewController : GCTableViewController <PSStackedViewDelegate, RKTableViewModelDelegate, StackableController, UISearchBarDelegate>
 @property (nonatomic,assign) BOOL useGradientBackground;
 @property (nonatomic,assign) BOOL useTitleBar;
 @property (nonatomic,retain) TitleBarView *titleBarView;
 - (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url;
+- (void)configureSearchBarWithPlaceholder:(NSString *)placeholder withConfigurationBlock:(SearchBarConfigurationBlock)block;
+- (void)configureChamberScopeTitlesForSearchBar:(UISearchBar *)searchBar withState:(SLFState *)state;
 @end
+

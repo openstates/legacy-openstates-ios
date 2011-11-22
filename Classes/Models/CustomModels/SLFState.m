@@ -1,6 +1,8 @@
 #import "SLFState.h"
 #import "SLFSortDescriptor.h"
 #import <RestKit/Network/NSObject+URLEncoding.h>
+#import "SLFChamber.h"
+#import "SLFPersistenceManager.h"
 
 @implementation RKManagedObjectMapping(SLFState)
 - (void)connectStateToKeyPath:(NSString *)keyPath withStateMapping:(RKManagedObjectMapping *)stateMapping {
@@ -100,91 +102,32 @@
     return indexesByName;
 }
 
-/*
+- (NSArray *)sessionDisplayNames {
+    NSDictionary *sessionIndexesByName = self.sessionIndexesByDisplayName;
+    if (IsEmpty(sessionIndexesByName))
+        return nil;
+    return [sessionIndexesByName keysSortedByValueUsingSelector:@selector(compare:)];
+}
+
+
 - (NSInteger)sessionIndexForDisplayName:(NSString *)displayName {
     NSInteger index = [self.sessions count];
-    if (!IsEmpty(displayName) && self.sessionIndexesByDisplayName) {
-        NSNumber *value = [self.sessionIndexesByDisplayName objectForKey:displayName];
+    NSDictionary *sessionIndexesByDisplayName = self.sessionIndexesByDisplayName;
+    if (!IsEmpty(displayName) && sessionIndexesByDisplayName) {
+        NSNumber *value = [sessionIndexesByDisplayName objectForKey:displayName];
         if (value)
             index = [value integerValue];
     }
     return index;
 }
-*/
+
+
+- (NSArray *)chambers {
+    NSMutableArray *chambers = [NSMutableArray arrayWithObject:[UpperChamber upperForState:self]];
+    LowerChamber *lower = [LowerChamber lowerForState:self];
+    if (lower)
+        [chambers addObject:lower];
+    return chambers;
+}
 
 @end
-
-NSString * const SLFSelectedStateDidChangeNotification = @"SLFSelectedStateDidChange";
-
-#pragma mark - Selected State
-
-NSString* SLFSelectedStateID(void) {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"selectedState"];
-}
-
-SLFState* SLFSelectedState(void) {
-    if (IsEmpty(SLFSelectedStateID()))
-        return nil;
-    return [SLFState findFirstByAttribute:@"stateID" withValue:SLFSelectedStateID()]; 
-}
-
-void SLFSaveSelectedState(SLFState *state) {
-    NSCParameterAssert(state != NULL && state.stateID != NULL);
-    SLFSaveSelectedStateID(state.stateID);
-}
-
-void SLFSaveSelectedStateID(NSString *stateID) {
-    NSCParameterAssert(stateID != NULL);
-    [[NSUserDefaults standardUserDefaults] setObject:stateID forKey:@"selectedState"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    [[NSNotificationCenter defaultCenter] postNotificationName:SLFSelectedStateDidChangeNotification object:stateID];
-}
-
-#pragma mark - Selected Session
-
-NSString * const SLFSelectedSessioneDidChangeNotification = @"SLFSelectedSessioneDidChange";
-
-NSDictionary* SLFSelectedSessionsByStateID(void) {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"selectedSessionsByStateID"];
-}
-
-NSString* SLFSelectedSessionForState(SLFState *state) {
-    NSDictionary *selectedSessionsByStateID = SLFSelectedSessionsByStateID();
-    if (!state || IsEmpty(selectedSessionsByStateID))
-        return nil;
-    return [selectedSessionsByStateID objectForKey:state.stateID];
-}
-
-NSString* SLFSelectedSession(void) {
-    return SLFSelectedSessionForState(SLFSelectedState());
-}
-
-void SLFSaveSelectedSessionForState(NSString *session, SLFState *state) {
-    NSCParameterAssert(state != NULL && state.stateID != NULL);
-    NSMutableDictionary *selectedSessions = [NSMutableDictionary dictionaryWithDictionary:SLFSelectedSessionsByStateID()];
-    NSString *oldSelectedSession = SLFSelectedSessionForState(state);
-    if (IsEmpty(session) && !IsEmpty(oldSelectedSession))
-        [selectedSessions removeObjectForKey:state.stateID];
-    else
-        [selectedSessions setObject:session forKey:state.stateID];
-    [[NSUserDefaults standardUserDefaults] setObject:selectedSessions forKey:@"selectedSessionsByStateID"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    [[NSNotificationCenter defaultCenter] postNotificationName:SLFSelectedSessioneDidChangeNotification object:state.stateID];
-}
-
-void SLFSaveSelectedSession(NSString *session) {
-    SLFState *state = SLFSelectedState();
-    if (!state)
-        return;
-    SLFSaveSelectedSessionForState(session, state);
-}
-
-NSString* FindOrCreateSelectedSessionForState(SLFState *state) {
-    NSString *selected = SLFSelectedSessionForState(state);
-    if (!state || !IsEmpty(selected))
-        return selected;
-    selected = state.latestSession;
-    SLFSaveSelectedSessionForState(selected, state);
-    return selected;
-}
-

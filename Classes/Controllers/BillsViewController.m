@@ -20,14 +20,21 @@
 @synthesize state;
 @synthesize tableViewModel = __tableViewModel;
 @synthesize resourcePath;
+@synthesize filterResults = _filterResults;
 
-- (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path {
+- (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path filterResults:(NSPredicate *)filter {
     self = [super init];
     if (self) {
         self.stackWidth = 380;
         self.state = newState;
         self.resourcePath = path;
+        self.filterResults = filter;
     }
+    return self;
+}
+
+- (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path {
+    self = [self initWithState:newState resourcePath:path filterResults:nil];
     return self;
 }
 
@@ -45,10 +52,11 @@
     self.tableViewModel.autoRefreshFromNetwork = YES;
     self.tableViewModel.autoRefreshRate = 360;
     self.tableViewModel.pullToRefreshEnabled = YES;
+    if (self.filterResults)
+        self.tableViewModel.predicate = self.filterResults;
     SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
-        [cellMapping mapKeyPath:@"billID" toAttribute:@"textLabel.text"];
+        [cellMapping mapKeyPath:@"name" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"title" toAttribute:@"detailTextLabel.text"];
-        
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             if (!object || ![object isKindOfClass:[SLFBill class]])
                 return;
@@ -66,19 +74,40 @@
     NSAssert(self.resourcePath != NULL, @"Must set a resource path before attempting to download table data.");
     [self configureTableViewModel];
     [self.tableViewModel loadTable];
+    [self configureSearchBarWithPlaceholder:NSLocalizedString(@"Search results", @"") withConfigurationBlock:nil];
+    if (self.tableViewModel.rowCount && !self.title)
+        self.title = [NSString stringWithFormat:@"%d Bills", self.tableViewModel.rowCount];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
     [super tableViewModelDidFinishLoad:tableViewModel];
     if (!self.title)
-        self.title = [NSString stringWithFormat:@"Found %d Bills",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
+        self.title = [NSString stringWithFormat:@"Found %d Bills", self.tableViewModel.rowCount];
 }
 
 - (void)dealloc {
     self.tableViewModel = nil;
     self.state = nil;
     self.resourcePath = nil;
+    self.filterResults = nil;
     [super dealloc];
 }
 
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    [super searchBar:searchBar textDidChange:searchText];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    if (IsEmpty(searchBar.text))
+        return;
+    NSPredicate *predicate = [SLFBill predicateForSearchWithText:searchBar.text searchMode:RKSearchModeOr];
+    self.tableViewModel.predicate = predicate;
+    [self.tableViewModel loadTable];
+    
+}
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [super searchBarCancelButtonClicked:searchBar];
+    self.tableViewModel.predicate = nil;
+    [self.tableViewModel loadTable];
+}
 @end

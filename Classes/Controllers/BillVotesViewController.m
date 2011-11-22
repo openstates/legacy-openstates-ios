@@ -18,6 +18,7 @@
 #import "LegislatorDetailViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import "UIImageView+RoundedCorners.h"
+#import "LegislatorCell.h"
 
 enum SECTIONS {
     SectionVoteInfo = 1,
@@ -29,7 +30,7 @@ enum SECTIONS {
 
 @interface BillVotesViewController()
 @property (nonatomic, retain) RKTableViewModel *tableViewModel;
-- (SubtitleCellMapping *)voterCellMap;
+- (RKTableViewCellMapping *)voterCellMap;
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
 - (void)configureTableItems;
 - (void)configureVoteInfo;
@@ -127,26 +128,23 @@ enum SECTIONS {
     [self.tableViewModel loadObjects:_vote.sortedOtherVotes inSection:SectionOther];    
 }
 
-- (SubtitleCellMapping *)voterCellMap {
-    SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
-    [cellMap mapKeyPath:@"foundLegislator.formalName" toAttribute:@"textLabel.text"];
-    [cellMap mapKeyPath:@"foundLegislator.subtitle" toAttribute:@"detailTextLabel.text"];
-    cellMap.rowHeight = 73;
-    cellMap.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-        BillVoter *voter = object;
+- (RKTableViewCellMapping *)voterCellMap {
+    FoundLegislatorCellMapping *cellMapping = [FoundLegislatorCellMapping cellMapping];
+    [cellMapping mapKeyPath:@"foundLegislator" toAttribute:@"legislator"];
+    [cellMapping mapKeyPath:@"type" toAttribute:@"role"];
+    cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
+        if (cellMapping.roundImageCorners) {
+            NSInteger numRows = [self.tableViewModel tableView:self.tableView numberOfRowsInSection:indexPath.section];
+            if (numRows == 1)
+                [cell.imageView roundTopAndBottomLeftCorners];
+            else if (indexPath.row == 0)
+                [cell.imageView roundTopLeftCorner];
+            else if (indexPath.row == (numRows-1))
+                [cell.imageView roundBottomLeftCorner];
+        }
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.f, 0.f, 50.f, 50.f)];
 		cell.accessoryView = imageView;
-        cell.textLabel.textColor = [SLFAppearance cellTextColor];
-        cell.textLabel.font = [SLFAppearance boldFifteen];
-        cell.detailTextLabel.textColor = [SLFAppearance cellSecondaryTextColor];
-        cell.detailTextLabel.font = [SLFAppearance boldFourteen];
-        SLFAlternateCellForIndexPath(cell, indexPath);
-        SLFLegislator *legislator = voter.foundLegislator;
-        if (legislator && !IsEmpty(legislator.photoURL))
-            [cell.imageView setImageWithURL:[NSURL URLWithString:legislator.photoURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
-        else
-            cell.imageView.image = [UIImage imageNamed:@"placeholder"];
-        
+        BillVoter *voter = object;
         if (!IsEmpty([voter yesVoteInverse]))
             imageView.image = [UIImage imageNamed:@"VoteYea"];
         else if (!IsEmpty([voter noVoteInverse]))
@@ -154,14 +152,16 @@ enum SECTIONS {
         else if (!IsEmpty([voter otherVoteInverse]))
             imageView.image = [UIImage imageNamed:@"VotePNV"];
         [imageView release];
+        BOOL useDarkBG = SLFAlternateCellForIndexPath(cell, indexPath);
+        [(LegislatorCell *)cell setUseDarkBackground:useDarkBG];
     };
-    cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
-        BillVoter *voter = object;
-        LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:voter.legID];
+    cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+        NSString *legID = [object valueForKey:@"legID"];
+        LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:legID];
         [self stackOrPushViewController:vc];
         [vc release];
     };
-    return cellMap;
+    return cellMapping;
 }
 
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex {

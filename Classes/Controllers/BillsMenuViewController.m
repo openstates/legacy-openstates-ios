@@ -17,6 +17,7 @@
 #import "SLFRestKitManager.h"
 #import "BillsViewController.h"
 #import "BillSearchParameters.h"
+#import "BillsSearchViewController.h"
 
 #define MenuFavorites NSLocalizedString(@"Watch List", @"")
 #define MenuSearch NSLocalizedString(@"Search Bills", @"")
@@ -121,10 +122,12 @@
     UIViewController *vc = nil;
     NSString *resourcePath = nil;
     if ([menuItem isEqualToString:MenuRecents]) {
-        resourcePath = [BillSearchParameters pathForSubject:@"Education" chamber:@"upper"];
+        resourcePath = [BillSearchParameters pathForSubject:@"Education" chamber:@"lower"];
         vc = [[BillsViewController alloc] initWithState:self.state resourcePath:resourcePath];
         vc.title = [NSString stringWithFormat:@"%@: %@", [self.state.stateID uppercaseString], @"Education"];
     }
+    else if ([menuItem isEqualToString:MenuSearch])
+        vc = [[BillsSearchViewController alloc] initWithState:self.state];
         /*
     if ([menuItem isEqualToString:MenuLegislators])
         vc = [[LegislatorsViewController alloc] initWithState:self.state];

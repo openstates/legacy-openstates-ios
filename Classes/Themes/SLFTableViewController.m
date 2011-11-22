@@ -15,6 +15,7 @@
 #import "GradientBackgroundView.h"
 #import "SVWebViewController.h"
 #import "SLFReachable.h"
+#import "SLFDataModels.h"
 
 @implementation SLFTableViewController
 @synthesize useGradientBackground;
@@ -111,6 +112,51 @@
             }
         };
     }];
+}
+
+#pragma mark - Search Bar Scope
+
+- (void)configureSearchBarWithPlaceholder:(NSString *)placeholder withConfigurationBlock:(SearchBarConfigurationBlock)block {
+    CGRect searchRect = self.titleBarView.frame;
+    searchRect.origin.y = self.titleBarView.opticalHeight;
+    searchRect.size.height = 44;
+    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:searchRect];
+    searchBar.delegate = self;
+    searchBar.placeholder = placeholder;
+    searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
+    if (block)
+        block(searchBar);
+    [searchBar sizeToFit];
+    CGRect tableRect = self.tableView.frame;
+    tableRect.size.height -= searchBar.height;
+    self.tableView.frame = CGRectOffset(tableRect, 0, searchBar.height);
+    [self.view addSubview:searchBar];
+    [searchBar release];
+}
+
+- (void)configureChamberScopeTitlesForSearchBar:(UISearchBar *)searchBar withState:(SLFState *)state {
+    NSParameterAssert(searchBar != NULL && state != NULL);
+    NSArray *chambers = state.chambers;
+    if (IsEmpty(chambers) || [chambers count] < 2)
+        return;
+    searchBar.showsScopeBar = YES;
+    searchBar.scopeButtonTitles = [NSArray arrayWithObjects:NSLocalizedString(@"Both",@""), [[chambers objectAtIndex:0] shortName], [[chambers objectAtIndex:1] shortName], nil];
+    searchBar.selectedScopeButtonIndex = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
+}
+
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
+    SLFSaveSelectedScopeIndexForKey(selectedScope, NSStringFromClass([self class]));
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    if (IsEmpty(searchBar.text))
+        return;
+    searchBar.showsCancelButton = YES;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+    searchBar.showsCancelButton = NO;
 }
 
 @end

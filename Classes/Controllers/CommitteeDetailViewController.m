@@ -18,6 +18,7 @@
 #import "SLFReachable.h"
 #import "SVWebViewController.h"
 #import "TableSectionHeaderView.h"
+#import "LegislatorCell.h"
 
 #define SectionHeaderCommitteeInfo NSLocalizedString(@"Committee Details", @"")
 #define SectionHeaderMembers NSLocalizedString(@"Members", @"")
@@ -34,7 +35,7 @@ enum SECTIONS {
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
-- (AlternatingCellMapping *)committeeMemberCellMap;
+- (RKTableViewCellMapping *)committeeMemberCellMap;
 @end
 
 @implementation CommitteeDetailViewController
@@ -77,6 +78,7 @@ enum SECTIONS {
     self.tableViewModel.delegate = self;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
     self.tableViewModel.pullToRefreshEnabled = NO;
+    self.tableViewModel.variableHeightRows = YES;
     [self.tableViewModel mapObjectsWithClass:[CommitteeMember class] toTableCellsWithMapping:[self committeeMemberCellMap]];
     NSInteger sectionIndex;
     for (sectionIndex = SectionCommitteeInfoIndex;sectionIndex < kNumSections; sectionIndex++) {
@@ -115,16 +117,17 @@ enum SECTIONS {
     [self.tableViewModel loadObjects:self.committee.sortedMembers inSection:SectionMembersIndex];    
 }
 
-- (SubtitleCellMapping *)committeeMemberCellMap {
-    SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
-    [cellMap mapKeyPath:@"name" toAttribute:@"textLabel.text"];
-    [cellMap mapKeyPath:@"type" toAttribute:@"detailTextLabel.text"];
-    cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
-        CommitteeMember *leg = object;
-        LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:leg.legID];
-        [self stackOrPushViewController:vc];
-        [vc release];
-    };
+- (RKTableViewCellMapping *)committeeMemberCellMap {
+    FoundLegislatorCellMapping *cellMap = [FoundLegislatorCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
+        [cellMapping mapKeyPath:@"foundLegislator" toAttribute:@"legislator"];
+        [cellMapping mapKeyPath:@"type" toAttribute:@"role"];
+        cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+            NSString *legID = [object valueForKey:@"legID"];
+            LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:legID];
+            [self stackOrPushViewController:vc];
+            [vc release];
+        };
+    }];
     return cellMap;
 }
 

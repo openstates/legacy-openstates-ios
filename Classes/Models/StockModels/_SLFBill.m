@@ -8,6 +8,10 @@
 
 @implementation _SLFBill
 
++ (NSArray*)searchableAttributes {
+    return [NSArray arrayWithObjects:@"title", @"billID", nil];
+}
+
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_ {
 	NSParameterAssert(moc_);
 	return [NSEntityDescription insertNewObjectForEntityForName:@"SLFBill" inManagedObjectContext:moc_];

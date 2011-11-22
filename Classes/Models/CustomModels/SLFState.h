@@ -10,25 +10,14 @@
 @property (nonatomic, readonly) NSArray *sessions;
 @property (nonatomic, readonly) NSString *latestSession;
 @property (nonatomic, readonly) NSDictionary *sessionIndexesByDisplayName;
+@property (nonatomic, readonly) NSArray *sessionDisplayNames;
+@property (nonatomic, readonly) NSArray *chambers;
 - (BOOL)isFeatureEnabled:(NSString *)feature;
 - (NSString *)displayNameForSession:(NSString *)aSession;
+- (NSInteger)sessionIndexForDisplayName:(NSString *)displayName;
 + (RKManagedObjectMapping *)mapping;
 + (NSArray *)sortDescriptors;
 @end
-
-extern NSString * const SLFSelectedStateDidChangeNotification;
-NSString* SLFSelectedStateID(void);
-SLFState* SLFSelectedState(void);
-void SLFSaveSelectedState(SLFState *);
-void SLFSaveSelectedStateID(NSString *);
-
-extern NSString * const SLFSelectedSessioneDidChangeNotification;
-NSDictionary* SLFSelectedSessionsByStateID(void);
-NSString* SLFSelectedSessionForState(SLFState *state);
-NSString* SLFSelectedSession(void);
-void SLFSaveSelectedSessionForState(NSString *session, SLFState *state);
-void SLFSaveSelectedSession(NSString *session);
-NSString* FindOrCreateSelectedSessionForState(SLFState *state);
 
 @interface RKManagedObjectMapping(SLFState)
 - (void)connectStateToKeyPath:(NSString *)keyPath withStateMapping:(RKManagedObjectMapping *)stateMapping;

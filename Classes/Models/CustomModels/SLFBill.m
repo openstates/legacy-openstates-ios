@@ -35,16 +35,14 @@
 #pragma mark - Convenience Methods
 
 + (NSArray *)sortDescriptors {
-    NSSortDescriptor *stateDesc = [NSSortDescriptor sortDescriptorWithKey:@"stateID" ascending:YES];
-    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
+    NSStringCompareOptions options = NSNumericSearch;
     NSSortDescriptor *sessionDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"session" ascending:NO options:options];
-//  NSSortDescriptor *chamberDesc = [NSSortDescriptor sortDescriptorWithKey:@"chamber" ascending:YES];
     NSSortDescriptor *billIDDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"billID" ascending:YES options:options];
-    return [NSArray arrayWithObjects:stateDesc, sessionDesc, billIDDesc, nil];
+    return [NSArray arrayWithObjects:sessionDesc, billIDDesc, nil];
 }
 
 - (NSString *)name {
-    return [NSString stringWithFormat:@"%@ (%@)", self.billID, [self.stateID uppercaseString]];
+    return [NSString stringWithFormat:@"%@ (%@)", self.billID, [self.state displayNameForSession:self.session]];
 }
 
 - (NSString *)title {

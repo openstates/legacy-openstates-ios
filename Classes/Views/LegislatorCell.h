@@ -14,13 +14,17 @@
 
 @class SLFLegislator;
 @class LegislatorCellView;
-@interface LegislatorCell : UITableViewCell {
-	
-}
-@property (readonly, nonatomic) CGSize cellSize;
-@property (assign, nonatomic) SLFLegislator *legislator;
-@property (retain, nonatomic) LegislatorCellView *cellContentView;
+@interface LegislatorCell : UITableViewCell
+@property (nonatomic,readonly) CGSize cellSize;
+@property (nonatomic,assign) SLFLegislator *legislator;
+@property (nonatomic,retain) LegislatorCellView *cellContentView;
+@property (nonatomic,copy) NSString *role;
+@property (nonatomic,assign) BOOL useDarkBackground;
 @end
 
 @interface LegislatorCellMapping : RKTableViewCellMapping
+@property (nonatomic,assign) BOOL roundImageCorners;
+@end
+
+@interface FoundLegislatorCellMapping : LegislatorCellMapping
 @end

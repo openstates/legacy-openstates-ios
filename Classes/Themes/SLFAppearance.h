@@ -28,15 +28,11 @@
 + (UIColor *)partyRed;
 + (UIColor *)partyBlue;
 + (UIColor *)partyGreen;
-
-+ (UIFont *)menuTextFont;
-+ (UIFont *)boldTen;
-+ (UIFont *)boldTwelve;
-+ (UIFont *)boldFourteen;
-+ (UIFont *)boldFifteen;
-+ (UIFont *)boldEighteen;
-
 @end
 
 UIColor *SLFColorWithRGB(int red,  int green, int blue);
 UIColor *SLFColorWithHex(char hex);
+UIFont *SLFFont(CGFloat size);
+UIFont *SLFTitleFont(CGFloat size);
+extern NSString * const SLFAppearanceFontName;
+extern NSString * const SLFAppearanceTitleFontName;

@@ -74,7 +74,7 @@
     UIColor *currentSummaryColor = [SLFAppearance cellTextColor];
     UIColor *currentBadgeColor = self.cell.badgeColor;
     if (!currentBadgeColor) {
-        currentBadgeColor = [SLFAppearance menuTextColor]; //[UIColor colorWithRed:0.53 green:0.6 blue:0.738 alpha:1.];
+        currentBadgeColor = [SLFAppearance menuTextColor]; 
     }
     
 	if (self.cell && self.cell.isClickable && (self.cell.isHighlighted || self.cell.isSelected)) {
@@ -88,12 +88,12 @@
 	
 	if (self.cell && self.cell.isEditing) {
 		[currentSummaryColor set];
-		[self.cell.summary drawAtPoint:CGPointMake(10, 10) forWidth:rect.size.width withFont:[SLFAppearance boldFifteen] lineBreakMode:UILineBreakModeTailTruncation];
+		[self.cell.summary drawAtPoint:CGPointMake(10, 10) forWidth:rect.size.width withFont:SLFFont(15) lineBreakMode:UILineBreakModeTailTruncation];
 		
 		//[currentDetailColor set];
-		//[self.cell.detail drawAtPoint:CGPointMake(10, 32) forWidth:rect.size.width withFont:[SLFAppearance boldTwelve] lineBreakMode:UILineBreakModeTailTruncation];		
+		//[self.cell.detail drawAtPoint:CGPointMake(10, 32) forWidth:rect.size.width withFont:SLFFont(12) lineBreakMode:UILineBreakModeTailTruncation];		
 	} else {
-		CGSize badgeTextSize = [self.cell.badgeText sizeWithFont:[SLFAppearance boldTwelve]];
+		CGSize badgeTextSize = [self.cell.badgeText sizeWithFont:SLFFont(12)];
 		CGRect badgeViewFrame = CGRectIntegral(CGRectMake(rect.size.width - badgeTextSize.width - 24, (rect.size.height - badgeTextSize.height - 4) / 2, badgeTextSize.width + 14, badgeTextSize.height + 4));
 		
 		CGContextSaveGState(context);	
@@ -108,14 +108,14 @@
 		
 		CGContextSaveGState(context);	
 		CGContextSetBlendMode(context, kCGBlendModeClear);
-		[self.cell.badgeText drawInRect:CGRectInset(badgeViewFrame, 7, 2) withFont:[SLFAppearance boldTwelve]];
+		[self.cell.badgeText drawInRect:CGRectInset(badgeViewFrame, 7, 2) withFont:SLFFont(12)];
 		CGContextRestoreGState(context);
 		
 		[currentSummaryColor set];
-		[self.cell.summary drawAtPoint:CGPointMake(10, 10) forWidth:(rect.size.width - badgeViewFrame.size.width - 24) withFont:[SLFAppearance boldFifteen] lineBreakMode:UILineBreakModeTailTruncation];
+		[self.cell.summary drawAtPoint:CGPointMake(10, 10) forWidth:(rect.size.width - badgeViewFrame.size.width - 24) withFont:SLFFont(15) lineBreakMode:UILineBreakModeTailTruncation];
 		
 		//[currentDetailColor set];
-		//[self.cell.detail drawAtPoint:CGPointMake(10, 32) forWidth:(rect.size.width - badgeViewFrame.size.width - 24) withFont:[SLFAppearance boldTwelve] lineBreakMode:UILineBreakModeTailTruncation];		
+		//[self.cell.detail drawAtPoint:CGPointMake(10, 32) forWidth:(rect.size.width - badgeViewFrame.size.width - 24) withFont:SLFFont(12) lineBreakMode:UILineBreakModeTailTruncation];		
 	}
 }
 

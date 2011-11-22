@@ -38,23 +38,6 @@
 	return self;	
 }
 
-/*
-- (void)didReceiveMemoryWarning {
-	[_cachedBills release];
-	_cachedBills = nil;	
-}*/
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return YES;
-}
-
-- (void)didReceiveMemoryWarning {	
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    // Release any cached data, images, etc that aren't in use.
-}
-
-
 - (void)dealloc {	
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 	nice_release(_watchList);

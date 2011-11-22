@@ -18,6 +18,7 @@
     #import "PSStackedView.h"
     #import "StackableControllerProtocol.h"
     #import "APIKeys.h"
+    #import "SLFPersistenceManager.h"
 	#define nice_release(var) if (var) [var release], var = nil
     BOOL IsEmpty(NSObject * thing);
 

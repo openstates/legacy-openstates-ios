@@ -125,7 +125,7 @@
         cell.detailTextLabel.numberOfLines = 0;
         cell.textLabel.textColor = [SLFAppearance cellTextColor];
         cell.detailTextLabel.textColor = [UIColor lightGrayColor];
-        UIFont *labelFont = [[SLFAppearance boldTen] fontWithSize:8];
+        UIFont *labelFont = SLFFont(8);
         cell.detailTextLabel.font = labelFont;
         cell.textLabel.font = labelFont;
 	}

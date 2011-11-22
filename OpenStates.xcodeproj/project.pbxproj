@@ -19,6 +19,7 @@
 		370004C3143F55C400F55165 /* SCNetworkReachabilityKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 370004A5143F546600F55165 /* SCNetworkReachabilityKitTests.m */; };
 		370004C7143F5A6700F55165 /* SLFReachable.m in Sources */ = {isa = PBXBuildFile; fileRef = 370004C6143F5A6700F55165 /* SLFReachable.m */; };
 		37031604143FA2F300E1CF4D /* SLFReachableTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37031602143FA1E400E1CF4D /* SLFReachableTests.m */; };
+		37037548147AF51000B59AA2 /* SLFPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37037547147AF51000B59AA2 /* SLFPersistenceManager.m */; };
 		3711870F144619A700A12B8B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3711870E144619A700A12B8B /* MapViewController.m */; };
 		3711871114462D1900A12B8B /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3711871014462D1800A12B8B /* AddressBook.framework */; };
 		3711871414463E1C00A12B8B /* 193-location-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3711871214463E1C00A12B8B /* 193-location-arrow.png */; };
@@ -140,6 +141,9 @@
 		3771B986147A3FA300E9CE39 /* VotePNV@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B980147A3FA300E9CE39 /* VotePNV@2x.png */; };
 		3771B987147A3FA300E9CE39 /* VoteYea.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B981147A3FA300E9CE39 /* VoteYea.png */; };
 		3771B988147A3FA300E9CE39 /* VoteYea@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B982147A3FA300E9CE39 /* VoteYea@2x.png */; };
+		3771B9A2147ABCA200E9CE39 /* BillsSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3771B9A1147ABCA200E9CE39 /* BillsSearchViewController.m */; };
+		37738A10147B9616002AC526 /* AbstractActionSheetPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 37738A0D147B9616002AC526 /* AbstractActionSheetPicker.m */; };
+		37738A11147B9616002AC526 /* ActionSheetStringPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 37738A0F147B9616002AC526 /* ActionSheetStringPicker.m */; };
 		37775500140F3F1200ABE16F /* DistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 377754FF140F3F1200ABE16F /* DistrictsViewController.m */; };
 		377C617A143000AA00EE626E /* PSStackedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6170143000AA00EE626E /* PSStackedViewController.m */; };
 		377C617B143000AA00EE626E /* PSStackedViewGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6173143000AA00EE626E /* PSStackedViewGlobal.m */; };
@@ -396,6 +400,8 @@
 		370004C5143F5A6700F55165 /* SLFReachable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFReachable.h; sourceTree = "<group>"; };
 		370004C6143F5A6700F55165 /* SLFReachable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFReachable.m; sourceTree = "<group>"; };
 		37031602143FA1E400E1CF4D /* SLFReachableTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFReachableTests.m; sourceTree = "<group>"; };
+		37037546147AF51000B59AA2 /* SLFPersistenceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFPersistenceManager.h; sourceTree = "<group>"; };
+		37037547147AF51000B59AA2 /* SLFPersistenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFPersistenceManager.m; sourceTree = "<group>"; };
 		3711870D144619A700A12B8B /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		3711870E144619A700A12B8B /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		3711871014462D1800A12B8B /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
@@ -555,6 +561,12 @@
 		3771B980147A3FA300E9CE39 /* VotePNV@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "VotePNV@2x.png"; sourceTree = "<group>"; };
 		3771B981147A3FA300E9CE39 /* VoteYea.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VoteYea.png; sourceTree = "<group>"; };
 		3771B982147A3FA300E9CE39 /* VoteYea@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "VoteYea@2x.png"; sourceTree = "<group>"; };
+		3771B9A0147ABCA200E9CE39 /* BillsSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsSearchViewController.h; sourceTree = "<group>"; };
+		3771B9A1147ABCA200E9CE39 /* BillsSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsSearchViewController.m; sourceTree = "<group>"; };
+		37738A0C147B9616002AC526 /* AbstractActionSheetPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AbstractActionSheetPicker.h; path = Vendor/ActionSheetPicker/Pickers/AbstractActionSheetPicker.h; sourceTree = "<group>"; };
+		37738A0D147B9616002AC526 /* AbstractActionSheetPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AbstractActionSheetPicker.m; path = Vendor/ActionSheetPicker/Pickers/AbstractActionSheetPicker.m; sourceTree = "<group>"; };
+		37738A0E147B9616002AC526 /* ActionSheetStringPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActionSheetStringPicker.h; path = Vendor/ActionSheetPicker/Pickers/ActionSheetStringPicker.h; sourceTree = "<group>"; };
+		37738A0F147B9616002AC526 /* ActionSheetStringPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActionSheetStringPicker.m; path = Vendor/ActionSheetPicker/Pickers/ActionSheetStringPicker.m; sourceTree = "<group>"; };
 		377754FE140F3F1100ABE16F /* DistrictsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictsViewController.h; sourceTree = "<group>"; };
 		377754FF140F3F1200ABE16F /* DistrictsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictsViewController.m; sourceTree = "<group>"; };
 		377C616E143000AA00EE626E /* PSStackedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSStackedView.h; sourceTree = "<group>"; };
@@ -920,6 +932,17 @@
 			path = SCNetworkReachabilityKitTests;
 			sourceTree = "<group>";
 		};
+		37037549147B331B00B59AA2 /* ActionSheetPicker */ = {
+			isa = PBXGroup;
+			children = (
+				37738A0C147B9616002AC526 /* AbstractActionSheetPicker.h */,
+				37738A0D147B9616002AC526 /* AbstractActionSheetPicker.m */,
+				37738A0E147B9616002AC526 /* ActionSheetStringPicker.h */,
+				37738A0F147B9616002AC526 /* ActionSheetStringPicker.m */,
+			);
+			name = ActionSheetPicker;
+			sourceTree = "<group>";
+		};
 		37147FEF1432107000170716 /* GCTableViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1102,6 +1125,8 @@
 				374A320C146F9CB500C94AF8 /* StatesPopoverManager.m */,
 				37BAE30E147865DA00CD5704 /* BillActionParser.h */,
 				37BAE30F147865DA00CD5704 /* BillActionParser.m */,
+				37037546147AF51000B59AA2 /* SLFPersistenceManager.h */,
+				37037547147AF51000B59AA2 /* SLFPersistenceManager.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1157,6 +1182,7 @@
 		377CB425142EFD4600AFF4BC /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				37037549147B331B00B59AA2 /* ActionSheetPicker */,
 				37BAE3041478636100CD5704 /* AppendingFlowView */,
 				37ECC0261475AD9A0088B959 /* DDActionHeaderView */,
 				3794021E14418B1A00D18889 /* JSONKit */,
@@ -1214,6 +1240,8 @@
 				37F6FCFC14676214003AA80D /* BillDetailViewController.m */,
 				3771B979147A2BE000E9CE39 /* BillVotesViewController.h */,
 				3771B97A147A2BE000E9CE39 /* BillVotesViewController.m */,
+				3771B9A0147ABCA200E9CE39 /* BillsSearchViewController.h */,
+				3771B9A1147ABCA200E9CE39 /* BillsSearchViewController.m */,
 				37F6FCFD14676214003AA80D /* BillsFavoritesViewController.h */,
 				37F6FCFE14676214003AA80D /* BillsFavoritesViewController.m */,
 				37F6FCFF14676214003AA80D /* BillsRecentViewController.h */,
@@ -1943,6 +1971,10 @@
 				37BAE310147865DA00CD5704 /* BillActionParser.m in Sources */,
 				37BAE3131479606600CD5704 /* NSString+SLFExtensions.m in Sources */,
 				3771B97B147A2BE000E9CE39 /* BillVotesViewController.m in Sources */,
+				3771B9A2147ABCA200E9CE39 /* BillsSearchViewController.m in Sources */,
+				37037548147AF51000B59AA2 /* SLFPersistenceManager.m in Sources */,
+				37738A10147B9616002AC526 /* AbstractActionSheetPicker.m in Sources */,
+				37738A11147B9616002AC526 /* ActionSheetStringPicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -24,6 +24,7 @@
 #import "SLFReachable.h"
 #import "TableSectionHeaderView.h"
 #import "NSDate+SLFDateHelper.h"
+#import "LegislatorCell.h"
 
 enum SECTIONS {
     SectionBillInfo = 1,
@@ -41,9 +42,9 @@ enum SECTIONS {
 - (id)initWithResourcePath:(NSString *)resourcePath;
 - (void)loadDataFromNetworkWithResourcePath:(NSString *)resourcePath;
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
-- (SubtitleCellMapping *)actionCellMap;
-- (SubtitleCellMapping *)sponsorCellMap;
-- (SubtitleCellMapping *)votesCellMap;
+- (RKTableViewCellMapping *)actionCellMap;
+- (RKTableViewCellMapping *)sponsorCellMap;
+- (RKTableViewCellMapping *)votesCellMap;
 - (void)configureTableItems;
 - (void)configureBillInfoItems;
 - (void)configureStages;
@@ -89,9 +90,9 @@ enum SECTIONS {
     self.tableViewModel.variableHeightRows = YES;
     self.tableViewModel.objectManager = [RKObjectManager sharedManager];
     self.tableViewModel.pullToRefreshEnabled = NO;
-    [self.tableViewModel mapObjectsWithClass:[BillSponsor class] toTableCellsWithMapping:[self sponsorCellMap]];
     [self.tableViewModel mapObjectsWithClass:[BillRecordVote class] toTableCellsWithMapping:[self votesCellMap]];
     [self.tableViewModel mapObjectsWithClass:[BillAction class] toTableCellsWithMapping:[self actionCellMap]];
+    [self.tableViewModel mapObjectsWithClass:[BillSponsor class] toTableCellsWithMapping:[self sponsorCellMap]];    
     NSInteger sectionIndex;
     for (sectionIndex = SectionBillInfo;sectionIndex < kNumSections; sectionIndex++) {
         [self.tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
@@ -142,9 +143,9 @@ enum SECTIONS {
         tableItem.detailText = bill.title;
         tableItem.cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             cell.textLabel.textColor = [SLFAppearance cellTextColor];
-            cell.textLabel.font = [SLFAppearance boldFifteen];
+            cell.textLabel.font = SLFFont(15);
             cell.detailTextLabel.textColor = [SLFAppearance cellSecondaryTextColor];
-            cell.detailTextLabel.font = [SLFAppearance boldTwelve];
+            cell.detailTextLabel.font = SLFFont(12);
             SLFAlternateCellForIndexPath(cell, indexPath);
             cell.detailTextLabel.numberOfLines = 4;
             cell.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
@@ -186,7 +187,7 @@ enum SECTIONS {
             appendingFlow.uniformWidth = NO;
             appendingFlow.preferredBoxSize = CGSizeMake(78.f, 40.f);    
             appendingFlow.connectorSize = CGSizeMake(7.f, 6.f); 
-            appendingFlow.font = [SLFAppearance boldTwelve];
+            appendingFlow.font = SLFFont(12);
             appendingFlow.insetMargin = CGSizeMake(1.f, 10.f);
             appendingFlow.stages = stages;
             cell.backgroundView = appendingFlow;
@@ -247,27 +248,28 @@ enum SECTIONS {
     [self.tableViewModel loadObjects:self.bill.sortedActions inSection:SectionActions];    
 }
 
-- (SubtitleCellMapping *)actionCellMap {
+- (RKTableViewCellMapping *)actionCellMap {
     StaticSubtitleCellMapping *cellMap = [StaticSubtitleCellMapping cellMapping];
     [cellMap mapKeyPath:@"title" toAttribute:@"textLabel.text"];
     [cellMap mapKeyPath:@"subtitle" toAttribute:@"detailTextLabel.text"];
     return cellMap;
 }
 
-- (SubtitleCellMapping *)sponsorCellMap {
-    SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
-    [cellMap mapKeyPath:@"name" toAttribute:@"textLabel.text"];
-    [cellMap mapKeyPath:@"type" toAttribute:@"detailTextLabel.text"];
-    cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
-        BillSponsor *sponsor = object;
-        LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:sponsor.legID];
-        [self stackOrPushViewController:vc];
-        [vc release];
-    };
+- (RKTableViewCellMapping *)sponsorCellMap {
+    FoundLegislatorCellMapping *cellMap = [FoundLegislatorCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
+        [cellMapping mapKeyPath:@"foundLegislator" toAttribute:@"legislator"];
+        [cellMapping mapKeyPath:@"type" toAttribute:@"role"];
+        cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+            NSString *legID = [object valueForKey:@"legID"];
+            LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:legID];
+            [self stackOrPushViewController:vc];
+            [vc release];
+        };
+    }];
     return cellMap;
 }
 
-- (SubtitleCellMapping *)votesCellMap {
+- (RKTableViewCellMapping *)votesCellMap {
     SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
     [cellMap mapKeyPath:@"title" toAttribute:@"textLabel.text"];
     [cellMap mapKeyPath:@"subtitle" toAttribute:@"detailTextLabel.text"];

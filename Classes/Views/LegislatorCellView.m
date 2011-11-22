@@ -26,7 +26,7 @@
 - (void)configureDefaults {
     title = [[NSString alloc] init];
     name = [[NSString alloc] init];
-    party = [Independent retain];
+    party = [[Independent independent] retain];
     district = [[NSString alloc] init];
     role = nil;
     self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
@@ -109,23 +109,26 @@
 	return [self cellSize];
 }
 
+#define allowImageScaling 0
+
 - (CGRect)scaleRect:(CGRect)inRect resolution:(CGFloat)resolution {
-	CGRect outRect;
+	CGRect outRect = inRect;
+#if allowImageScaling
 	outRect.origin.x = roundf((resolution * inRect.origin.x) / resolution);
 	outRect.origin.y = roundf((resolution * inRect.origin.y) / resolution);
 	outRect.size.width = roundf((resolution * inRect.size.width) / resolution);
 	outRect.size.height = roundf((resolution * inRect.size.height) / resolution);
+#endif
 	return outRect;
 }
 
 - (void)drawRect:(CGRect)dirtyRect
 {
-	CGRect imageBounds = CGRectMake(0.0f, 0.0f, self.cellSize.width, self.cellSize.height);
 	CGRect aBounds = [self bounds];
-	CGRect drawRect;
-	
-	CGFloat fontSize = 13.f;
-    UIFont *font = [[SLFAppearance boldFifteen] fontWithSize:fontSize];
+
+    static UIFont *font;
+    if (!font)
+        font = [SLFFont(13) retain];
     UIColor *whiteColor = [UIColor whiteColor];
 	UIColor *darkColor = [SLFAppearance cellTextColor];
 	UIColor *lightColor = [SLFAppearance cellSecondaryTextColor];
@@ -134,16 +137,24 @@
 	if (self.highlighted)
 		darkColor = lightColor = partyColor = accentColor = whiteColor;
 	
-    CGFloat scaleWidth = aBounds.size.width / imageBounds.size.width;
-    CGFloat scaleHeight = aBounds.size.height / imageBounds.size.height;
-	CGFloat resolution = 0.5f * (scaleWidth + scaleHeight);
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
 	CGContextSaveGState(context);
 	CGContextTranslateCTM(context, aBounds.origin.x, aBounds.origin.y);
-	CGContextScaleCTM(context, scaleWidth, scaleHeight);
+    
+#if allowImageScaling
+    CGRect imageBounds = CGRectMake(0.0f, 0.0f, self.cellSize.width, self.cellSize.height);
+    CGFloat scaleWidth = aBounds.size.width / imageBounds.size.width;
+    CGFloat scaleHeight = aBounds.size.height / imageBounds.size.height;
+    CGFloat resolution = 0.5f * (scaleWidth + scaleHeight);
+    CGContextScaleCTM(context, scaleWidth, scaleHeight);
+#else
+    CGFloat resolution = 1;
+#endif
 		
-	// Title	
+	CGRect drawRect;
+
+    // Title	
     drawRect = [self scaleRect:CGRectMake(9.f, 1.f, 94.f, 20.f) resolution:resolution];
 	[lightColor set];
 	[self.title drawInRect:drawRect withFont:font];
@@ -151,7 +162,7 @@
 	// Name
     drawRect = [self scaleRect:CGRectMake(9.f, 21.f, 218.f, 25.f) resolution:resolution];
 	[darkColor set];
-	[self.name drawInRect:drawRect withFont:[font fontWithSize:fontSize+4.f]];
+	[self.name drawInRect:drawRect withFont:SLFFont(17)];
 	
 	// Party	
     drawRect = [self scaleRect:CGRectMake(9.f, 46.f, 73.f, 20.f) resolution:resolution];
@@ -165,9 +176,9 @@
 	
 	// Role
 	if (!IsEmpty(role)) {
-        drawRect = [self scaleRect:CGRectMake(153, 45.f, 74.f, 20.f) resolution:resolution];
+        drawRect = [self scaleRect:CGRectMake(aBounds.size.width - 90.f, 1.f, 74.f, 20.f) resolution:resolution];
 		[accentColor set];
-		[self.role drawInRect:drawRect withFont:[font fontWithSize:fontSize+1.f] lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentRight];
+		[self.role drawInRect:drawRect withFont:SLFFont(14) lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentRight];
 	}
 	
 	CGContextRestoreGState(context);

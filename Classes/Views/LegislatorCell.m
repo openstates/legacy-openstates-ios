@@ -34,6 +34,7 @@
         cellContentView = [[LegislatorCellView alloc] initWithFrame:CGRectInset(tzvFrame, 0, 1.0)];
         cellContentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         cellContentView.contentMode = UIViewContentModeRedraw;
+        //cellContentView.contentMode = UIViewContentModeScaleAspectFit;
         [self.contentView addSubview:cellContentView];
     }
     return self;
@@ -82,6 +83,14 @@
     [cellContentView setNeedsDisplay];
 }
 
+- (void)setUseDarkBackground:(BOOL)useDarkBackground {
+    self.cellContentView.useDarkBackground = useDarkBackground;
+}
+
+- (BOOL)useDarkBackground {
+    return self.cellContentView.useDarkBackground;
+}
+
 - (void)dealloc
 {
     nice_release(cellContentView);    
@@ -90,6 +99,7 @@
 @end
 
 @implementation LegislatorCellMapping
+@synthesize roundImageCorners = _roundCorners;
 
 + (id)cellMapping {
     return [self mappingForClass:[LegislatorCell class]];
@@ -100,18 +110,13 @@
     if (self) {
         self.cellClass = [LegislatorCell class];
         self.rowHeight = 73; 
+        self.roundImageCorners = NO;
         self.reuseIdentifier = nil; // turns off caching, sucky but we don't want to reuse facial photos
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-            cell.textLabel.textColor = [SLFAppearance cellTextColor];
-                //SLFAlternateCellForIndexPath(cell, indexPath);
-            BOOL useDarkBG = (indexPath.row % 2 == 0);
-            cell.backgroundColor = [SLFAppearance cellBackgroundLightColor];
-            if (useDarkBG)
-                cell.backgroundColor = [SLFAppearance cellBackgroundDarkColor];
-            if ([cell isKindOfClass:[LegislatorCell class]]) {
-                LegislatorCell *legCell = (LegislatorCell *)cell;
-                legCell.cellContentView.useDarkBackground = useDarkBG;
-            }
+            if (_roundCorners && indexPath.row == 0)
+                [cell.imageView roundTopLeftCorner];
+            BOOL useDarkBG = SLFAlternateCellForIndexPath(cell, indexPath);
+            [(LegislatorCell *)cell setUseDarkBackground:useDarkBG];
         };
     }
     return self;
@@ -123,3 +128,19 @@
 
 @end
 
+@implementation FoundLegislatorCellMapping
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        self.roundImageCorners = YES;
+    }
+    return self;
+}
+
+- (void)addDefaultMappings {
+    [self mapKeyPath:@"foundLegislator" toAttribute:@"legislator"];
+    [self mapKeyPath:@"type" toAttribute:@"role"];
+}
+
+@end

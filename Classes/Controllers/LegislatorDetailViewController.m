@@ -11,12 +11,13 @@
 //
 
 #import "LegislatorDetailViewController.h"
-#import "CommitteeDetailViewController.h"
-#import "DistrictDetailViewController.h"
 #import "SLFDataModels.h"
 #import "SLFMappingsManager.h"
 #import "SLFRestKitManager.h"
-#import <QuartzCore/QuartzCore.h>
+#import "CommitteeDetailViewController.h"
+#import "DistrictDetailViewController.h"
+#import "BillSearchParameters.h"
+#import "BillsViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import "UIImageView+RoundedCorners.h"
 #import "SVWebViewController.h"
@@ -43,6 +44,7 @@ enum SECTIONS {
 - (void)configureDistrictMapItems;
 - (void)configureResourceItems;
 - (void)configureCommitteeItems;
+- (void)configureBillItems;
 @end
 
 @implementation LegislatorDetailViewController
@@ -101,6 +103,7 @@ enum SECTIONS {
     [self configureDistrictMapItems];
     [self configureResourceItems];
     [self configureCommitteeItems];
+    [self configureBillItems];
 }
 
 - (void)configureMemberInfoItems {
@@ -193,6 +196,25 @@ enum SECTIONS {
     [self.tableViewModel loadTableItems:tableItems inSection:SectionResources];
     [tableItems release];
 }
+
+- (void)configureBillItems {
+    NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
+    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+        tableItem.cellMapping = [SubtitleCellMapping cellMapping];
+        tableItem.text = NSLocalizedString(@"Authored/Sponsored Bills", @"");
+        NSString *selectedSession = SLFSelectedSessionForState(self.legislator.state);
+        tableItem.detailText = [self.legislator.state displayNameForSession:selectedSession];
+        tableItem.cellMapping.onSelectCell = ^(void) {
+            NSString *resourcePath = [BillSearchParameters pathForSponsor:self.legislator.legID state:self.legislator.stateID session:selectedSession];
+            BillsViewController *vc = [[BillsViewController alloc] initWithState:self.legislator.state resourcePath:resourcePath filterResults:nil];
+            [self stackOrPushViewController:vc];
+            [vc release];
+        };
+    }]];
+    [self.tableViewModel loadTableItems:tableItems inSection:SectionBills];
+    [tableItems release];
+}
+
 
 - (void)configureCommitteeItems {
     [self.tableViewModel loadObjects:self.legislator.sortedRoles inSection:SectionCommittees];    

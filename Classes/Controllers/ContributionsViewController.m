@@ -49,7 +49,7 @@
     
     UILabel *nimsp = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.size.width, 66)];
     nimsp.backgroundColor = [UIColor clearColor];
-    nimsp.font = [SLFAppearance boldFourteen];
+    nimsp.font = SLFFont(14);
     nimsp.shadowColor = [UIColor colorWithWhite:1.0 alpha:0.5];
     nimsp.textAlignment = UITextAlignmentCenter;
     nimsp.textColor = [SLFAppearance cellTextColor];

@@ -12,10 +12,13 @@
 
 #import "SLFTheme.h"
 
-void SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath) {
+BOOL SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath) {
     cell.backgroundColor = [SLFAppearance cellBackgroundLightColor];
-    if (indexPath.row % 2 == 0)
+    if (indexPath.row % 2 == 0) {
         cell.backgroundColor = [SLFAppearance cellBackgroundDarkColor];
+        return YES;
+    }
+    return NO;
 }
 
 UIBarButtonItem* SLFToolbarButton(UIImage *image, id target, SEL selector) {
@@ -33,7 +36,7 @@ UILabel *SLFStyledHeaderLabelWithTextAtOrigin(NSString *text, CGPoint origin){
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
     static UIFont *defaultTextFont;
     if (!defaultTextFont)
-        defaultTextFont = [[UIFont fontWithName:@"BlairMdITC TT" size:13.f] retain];
+        defaultTextFont = [SLFTitleFont(13) retain];
     label.font = defaultTextFont;
     label.text = NSLocalizedString(@"Pick a State", @"");
     label.textAlignment = UITextAlignmentRight;

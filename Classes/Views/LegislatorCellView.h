@@ -18,15 +18,13 @@
 {
 }
 
-@property (copy, nonatomic) NSString *title;
-@property (copy, nonatomic) NSString *name;
-@property (retain, nonatomic) SLFParty *party;
-@property (copy, nonatomic) NSString *district;
-@property (copy, nonatomic) NSString *role;
-
-@property (nonatomic) BOOL highlighted;
-@property (nonatomic) BOOL useDarkBackground;
-
+@property (nonatomic,copy) NSString *title;
+@property (nonatomic,copy) NSString *name;
+@property (nonatomic,retain) SLFParty *party;
+@property (nonatomic,copy) NSString *district;
+@property (nonatomic,assign) NSString *role;
+@property (nonatomic,assign) BOOL highlighted;
+@property (nonatomic,assign) BOOL useDarkBackground;
 @property (nonatomic,readonly) CGSize cellSize; 
 
 - (void)setLegislator:(SLFLegislator *)value;

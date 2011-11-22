@@ -48,6 +48,7 @@
     [self setUpReachability];
     [SLFAppearance setupAppearance];
     [SLFRestKitManager sharedRestKit];
+    [[SLFPersistenceManager sharedPersistence] loadPersistence];
     [NSURLCache setSharedURLCache:[[[AFURLCache alloc] initWithMemoryCapacity:1024*1024   // 1MB mem cache
                                                           diskCapacity:1024*1024*5 // 5MB disk cache
                                                               diskPath:[AFURLCache defaultCachePath]] autorelease]];    
@@ -136,7 +137,7 @@
 #pragma - Private Convenience Methods
 
 - (void)saveApplicationState {
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[SLFPersistenceManager sharedPersistence] savePersistence];
 }
     
 

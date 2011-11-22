@@ -2,7 +2,7 @@
 // Make changes to SLFBill.h instead.
 
 #import <CoreData/CoreData.h>
-
+#import <RestKit/CoreData/CoreData.h>
 
 @class BillAction;
 @class GenericWord;
@@ -26,7 +26,8 @@
 @interface SLFBillID : NSManagedObjectID {}
 @end
 
-@interface _SLFBill : NSManagedObject {}
+//@interface _SLFBill : NSManagedObject {}
+@interface _SLFBill : RKSearchableManagedObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;

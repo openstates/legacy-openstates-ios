@@ -13,6 +13,9 @@
 #import "SLFAppearance.h"
 #import <RestKit/RestKit.h>
 
+NSString * const SLFAppearanceFontName = @"HelveticaNeue-Bold";
+NSString * const SLFAppearanceTitleFontName = @"BlairMdITC TT";
+
 #define APP_OPEN_STATES_THEME 1
 #define APP_BLUISH_THEME 2 
 #define APP_APPEARANCE_THEME APP_OPEN_STATES_THEME
@@ -27,6 +30,13 @@ UIColor *SLFColorWithHex(char hex) {
 #define vendColor(r, g, b) static UIColor *ret; if (ret == nil) ret = [SLFColorWithRGB(r,g,b) retain]; return ret
 #define vendColorHex(v) vendColor(((v&0xFF0000)>>16),((v&0x00FF00)>>8),(v&0x0000FF))
 
+UIFont *SLFFont(CGFloat size) {
+    return [UIFont fontWithName:SLFAppearanceFontName size:size];
+}
+
+UIFont *SLFTitleFont(CGFloat size) {
+    return [UIFont fontWithName:SLFAppearanceTitleFontName size:size];
+}
 
 @implementation SLFAppearance
 
@@ -41,17 +51,6 @@ UIColor *SLFColorWithHex(char hex) {
     + (UIColor *)partyRed {return [[self class] monza];}
     + (UIColor *)partyBlue {return [[self class] chambray];}
     + (UIColor *)partyGreen {return [[self class] sycamore];}
-
-    static NSString *SLFAppearanceFontName = @"HelveticaNeue-Bold";
-    + (UIFont *)boldTen {return [UIFont fontWithName:SLFAppearanceFontName size:10.f];}
-    + (UIFont *)boldTwelve {return [UIFont fontWithName:SLFAppearanceFontName size:12.f];}
-    + (UIFont *)boldFourteen {return [UIFont fontWithName:SLFAppearanceFontName size:14.f];}
-    + (UIFont *)boldFifteen {return [UIFont fontWithName:SLFAppearanceFontName size:15.f];}
-    + (UIFont *)boldEighteen {return [UIFont fontWithName:SLFAppearanceFontName size:18.f];}
-
-    static NSString *menuFontName = @"BlairMdITC TT";
-    //+ (UIFont *)menuTextFont {return [UIFont fontWithName:menuFontName size:12.f];}
-    + (UIFont *)menuTextFont {return [[self class] boldFifteen];}
 
     #endif
 
@@ -96,7 +95,6 @@ UIColor *SLFColorWithHex(char hex) {
         [[UISegmentedControl appearance] setTintColor:[[self class] graniteGreen]];
         [[UISearchBar appearance] setTintColor:[[self class] graniteGreen]];
         [[UIToolbar appearance] setTintColor:[[self class] acapulco]];
-            //[[UITableViewCell appearance] setFont:[[self class] boldFifteen]];
     }
 #endif
 
@@ -139,7 +137,6 @@ UIColor *SLFColorWithHex(char hex) {
         [[UIToolbar appearance] setTintColor:[[self class] riverBed]];
         [[UISearchBar appearance] setTintColor:[[self class] celery]];
         [[UISegmentedControl appearance] setTintColor:[[self class] celery]];
-        [[UITableViewCell appearance] setFont:[[self class] boldFifteen]];
     }
 
 #endif

@@ -16,6 +16,6 @@
 #import "AlternatingCellMapping.h"
 #import "UIImage+OverlayColor.h"
 
-void SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath);
+BOOL SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath); // Returns YES if resulting in dark background
 UIBarButtonItem* SLFToolbarButton(UIImage *image, id target, SEL selector);
 UILabel *SLFStyledHeaderLabelWithTextAtOrigin(NSString *text, CGPoint origin);
