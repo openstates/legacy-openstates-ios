@@ -2,6 +2,7 @@
 // Make changes to SLFLegislator.h instead.
 
 #import <CoreData/CoreData.h>
+#import <RestKit/CoreData/CoreData.h>
 
 
 @class SLFDistrict;
@@ -33,7 +34,7 @@
 @interface SLFLegislatorID : NSManagedObjectID {}
 @end
 
-@interface _SLFLegislator : NSManagedObject {}
+@interface _SLFLegislator : RKSearchableManagedObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;

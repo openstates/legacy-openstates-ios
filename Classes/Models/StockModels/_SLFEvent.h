@@ -2,7 +2,7 @@
 // Make changes to SLFEvent.h instead.
 
 #import <CoreData/CoreData.h>
-
+#import <RestKit/CoreData/CoreData.h>
 
 @class EventParticipant;
 @class GenericAsset;
@@ -23,7 +23,7 @@
 @interface SLFEventID : NSManagedObjectID {}
 @end
 
-@interface _SLFEvent : NSManagedObject {}
+@interface _SLFEvent : RKSearchableManagedObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;

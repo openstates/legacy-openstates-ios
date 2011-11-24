@@ -26,7 +26,7 @@
 @property (nonatomic,assign) BOOL highlighted;
 @property (nonatomic,assign) BOOL useDarkBackground;
 @property (nonatomic,readonly) CGSize cellSize; 
-
+@property (nonatomic,copy) NSString *genericName;
 - (void)setLegislator:(SLFLegislator *)value;
 
 @end

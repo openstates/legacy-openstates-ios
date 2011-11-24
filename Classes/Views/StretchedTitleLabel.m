@@ -67,7 +67,7 @@
 }
 
 - (NSAttributedString *)illuminatedString:(NSString *)text atLocation:(NSInteger)location {
-    UIFont *font = [UIFont fontWithName:@"BlairMdITC TT" size:28];
+    UIFont *font = SLFTitleFont(28);
     int len = [text length];
 
     NSString *colorNameKey = (NSString*)(kCTForegroundColorAttributeName);

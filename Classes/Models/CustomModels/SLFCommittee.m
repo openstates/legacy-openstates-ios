@@ -38,6 +38,10 @@
     return self.stateObj;
 }
 
++ (NSArray*)searchableAttributes {
+    return [NSArray arrayWithObjects:@"committeeName", nil];
+}
+
 #pragma mark -
 #pragma mark Display Convenience
 

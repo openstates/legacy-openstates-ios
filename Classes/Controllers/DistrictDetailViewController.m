@@ -198,7 +198,7 @@
 }
 
 - (BOOL)isUpperDistrict:(SLFDistrict *)obj {
-    if ([self isUpperDistrictWithID:obj.boundaryID] || [obj.chamberObj.type isEqualToString:@"upper"])
+    if ([self isUpperDistrictWithID:obj.boundaryID] || [obj.chamberObj.type isEqualToString:SLFChamberUpperType])
         return YES;
     return NO;
 }

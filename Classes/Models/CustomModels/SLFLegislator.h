@@ -20,7 +20,8 @@
 @property (nonatomic, readonly) NSString *demoLongName;
 @property (nonatomic, readonly) NSString *districtMapLabel;
 @property (nonatomic, readonly) NSString *subtitle;
-@property (nonatomic, readonly) NSString *labelSubText;
+@property (nonatomic, readonly) NSString *districtLongName;
+@property (nonatomic, readonly) NSString *districtShortName;
 + (NSArray *)sortDescriptors;
 - (NSString *)districtPartyString;
 - (NSString *)title;

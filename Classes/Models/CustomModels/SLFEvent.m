@@ -29,6 +29,10 @@
     return self.stateObj;
 }
 
++ (NSArray*)searchableAttributes {
+    return [NSArray arrayWithObjects:@"eventDescription", @"location", nil];
+}
+
 + (NSArray *)sortDescriptors {
     NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
     NSSortDescriptor *dateDesc = [NSSortDescriptor sortDescriptorWithKey:@"dateStart" ascending:YES];

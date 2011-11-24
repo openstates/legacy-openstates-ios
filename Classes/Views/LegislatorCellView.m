@@ -22,13 +22,14 @@
 @synthesize role;
 @synthesize highlighted;
 @synthesize useDarkBackground;
-
+@synthesize genericName = _genericName;
 - (void)configureDefaults {
     title = [[NSString alloc] init];
     name = [[NSString alloc] init];
     party = [[Independent independent] retain];
     district = [[NSString alloc] init];
     role = nil;
+    _genericName = @"";
     self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
     [self setOpaque:YES];
 }
@@ -58,6 +59,7 @@
 	nice_release(party);
 	nice_release(district);
 	nice_release(role);
+    nice_release(_genericName);
 	[super dealloc];
 }
 
@@ -89,12 +91,21 @@
 - (void)setLegislator:(SLFLegislator *)value {	
 	if (value) {
 		self.title = value.title;
-		self.district = [NSString stringWithFormat:@"%@ %@ %@", [value.stateID uppercaseString], NSLocalizedString(@"District", @""), value.district];
+		self.district = value.districtShortName;
 		self.party = value.partyObj;
 		self.name = value.fullName;
 		self.role = nil;
+        self.genericName = @"";
 	}
 	[self setNeedsDisplay];	
+}
+
+- (void)setGenericName:(NSString *)genericName {
+    nice_release(_genericName);
+    if (genericName) {
+        _genericName = [genericName copy];
+    }
+    [self setNeedsDisplay];
 }
 
 - (void)setRole:(NSString *)value {
@@ -162,7 +173,10 @@
 	// Name
     drawRect = [self scaleRect:CGRectMake(9.f, 21.f, 218.f, 25.f) resolution:resolution];
 	[darkColor set];
-	[self.name drawInRect:drawRect withFont:SLFFont(17)];
+    NSString *nameString = self.name;
+    if (IsEmpty(nameString))
+        nameString = _genericName;
+	[nameString drawInRect:drawRect withFont:SLFFont(17)];
 	
 	// Party	
     drawRect = [self scaleRect:CGRectMake(9.f, 46.f, 73.f, 20.f) resolution:resolution];

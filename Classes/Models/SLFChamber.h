@@ -12,6 +12,9 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const SLFChamberUpperType;
+extern NSString * const SLFChamberLowerType;
+
 @class SLFState;
 @interface SLFChamber : NSObject
 @property (nonatomic,retain) SLFState *state;
@@ -25,8 +28,11 @@
 @property (nonatomic,copy) NSString *titleAbbreviation;
 @property (nonatomic,copy) NSString *initial;
 @property (nonatomic,readonly) SLFChamber *opposingChamber;
+@property (nonatomic,readonly) BOOL isUpperChamber;
 
 + (SLFChamber *)chamberWithType:(NSString *)aType forState:(SLFState *)aState;
++ (NSString *)chamberTypeForSearchScopeIndex:(NSInteger)scopeIndex;
++ (NSArray *)chamberSearchScopeTitlesWithState:(SLFState *)state;
 @end
 
 @interface UpperChamber : SLFChamber
@@ -36,12 +42,3 @@
 @interface LowerChamber : SLFChamber
 + (LowerChamber*)lowerForState:(SLFState *)aState;
 @end
-
-
-enum kChambers {
-    BOTH_CHAMBERS = 0,
-    HOUSE,
-    SENATE,
-	JOINT,
-	EXECUTIVE	// Used in open states / bill actions	
-};

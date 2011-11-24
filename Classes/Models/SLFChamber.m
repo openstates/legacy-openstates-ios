@@ -13,6 +13,9 @@
 #import "SLFChamber.h"
 #import "SLFState.h"
 
+NSString * const SLFChamberUpperType = @"upper";
+NSString * const SLFChamberLowerType = @"lower";
+
 @interface SLFChamber()
 - (NSString *)getTitleAbbreviation;
 @end
@@ -29,9 +32,9 @@
 @synthesize initial;
 
 + (SLFChamber *)chamberWithType:(NSString *)aType forState:(SLFState *)aState {
-    if (aType && [aType isEqualToString:@"lower"])
+    if (aType && [aType isEqualToString:SLFChamberLowerType])
         return [LowerChamber lowerForState:aState];
-    else if (aType && [aType isEqualToString:@"upper"])
+    else if (aType && [aType isEqualToString:SLFChamberUpperType])
         return [UpperChamber upperForState:aState];
     return nil;
 }
@@ -82,12 +85,32 @@
     return [NSString stringWithFormat:@"%@.", [self.title substringToIndex:3]];
 }
 
++ (NSString *)chamberTypeForSearchScopeIndex:(NSInteger)scopeIndex {
+    if (scopeIndex == 1)
+        return SLFChamberUpperType;
+    else if (scopeIndex == 2)
+        return SLFChamberLowerType;
+    return nil;
+}
+
++ (NSArray *)chamberSearchScopeTitlesWithState:(SLFState *)state {
+    NSParameterAssert(state != NULL);
+    NSArray *chambers = state.chambers;
+    if (IsEmpty(chambers) || [chambers count] < 2)
+        return nil; // No point in creating a scope bar if there's only one chamber.
+    return [NSArray arrayWithObjects:NSLocalizedString(@"Both",@""), [[chambers objectAtIndex:0] shortName], [[chambers objectAtIndex:1] shortName], nil];
+}
+
+- (BOOL)isUpperChamber {
+    return NO; // see UpperChamber subclass
+}
+
 @end
 
 @implementation UpperChamber
 + (UpperChamber *)upperForState:(SLFState *)aState {
     UpperChamber *chamber = [[[UpperChamber alloc] init] autorelease];
-    chamber.type = @"upper";
+    chamber.type = SLFChamberUpperType;
     chamber.state = aState;
     chamber.term = aState.upperChamberTerm;
     chamber.title = aState.upperChamberTitle;
@@ -101,6 +124,11 @@
         return NSLocalizedString(@"Cncl.", @"Abbreviation for Councilmember");
     return [super getTitleAbbreviation];
 }
+
+- (BOOL)isUpperChamber {
+    return YES;
+}
+
 @end
 
 @implementation LowerChamber
@@ -108,7 +136,7 @@
     if (IsEmpty(aState.lowerChamberName))
         return nil;
     LowerChamber *chamber = [[[LowerChamber alloc] init] autorelease];
-    chamber.type = @"lower";
+    chamber.type = SLFChamberLowerType;
     chamber.state = aState;
     chamber.term = aState.lowerChamberTerm;
     chamber.title = aState.lowerChamberTitle;

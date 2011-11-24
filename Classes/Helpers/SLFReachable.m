@@ -87,7 +87,8 @@ BOOL SLFIsReachableAddress(NSString * urlString) {
     SCNetworkReachability *hostReach = [SCNetworkReachability networkReachabilityForName:hostName];
     [self.networkReachByKeys setObject:hostReach forKey:hostName];
     [self.statusByHostKeys setObject:[NSNumber numberWithInt:kSCNetworkNotReachable] forKey:hostName];
-    [self beginCheckingHostReachability:hostReach];
+    [self performSelectorInBackground:@selector(beginCheckingHostReachability:) withObject:hostReach];
+    //[self beginCheckingHostReachability:hostReach];
     return YES;
 }
 

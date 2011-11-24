@@ -10,16 +10,8 @@
 //
 //
 
-#import "SLFTableViewController.h"
+#import "SLFFetchedTableViewController.h"
 
 @class SLFState;
-@interface BillsViewController : SLFTableViewController
-@property (nonatomic, retain) RKFetchedResultsTableViewModel *tableViewModel;
-@property (nonatomic, retain) SLFState *state;
-@property (nonatomic, copy) NSString *resourcePath;
-@property (nonatomic, retain) NSPredicate *filterResults;
-
-- (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path filterResults:(NSPredicate *)filter;
-- (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path;
-- (id)initWithState:(SLFState *)newState; // set resource path before loading
+@interface BillsViewController : SLFFetchedTableViewController
 @end

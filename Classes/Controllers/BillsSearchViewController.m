@@ -75,6 +75,15 @@ enum SECTIONS {
     [self configureTableItems];
 }
 
+- (NSString *)headerForSectionIndex:(NSInteger)sectionIndex {
+    switch (sectionIndex) {
+        case SectionSearchInfo:
+            return NSLocalizedString(@"Settings",@"");
+        default:
+            return @"";
+    }
+}
+
 - (void)configureTableItems {
     if (!self.state)
         return;
@@ -122,28 +131,9 @@ enum SECTIONS {
     [tableItems release];
 }
 
-- (NSString *)headerForSectionIndex:(NSInteger)sectionIndex {
-    switch (sectionIndex) {
-        case SectionSearchInfo:
-            return NSLocalizedString(@"Settings",@"");
-        default:
-            return @"";
-    }
-}
-
 #pragma mark - Search Bar Delegate
 
 /*
- - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-    NSLog(@"stuff1");
-}
-- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
-    NSLog(@"stuff2");
-    return YES;
-}
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    NSLog(@"stuff3");
-}
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     NSLog(@"stuff4");
 }
@@ -152,15 +142,11 @@ enum SECTIONS {
 }*/
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     NSInteger scopeIndex = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
-    NSString *chamber = nil;
-    if (scopeIndex == 1)
-        chamber = @"upper";
-    else if (scopeIndex == 2)
-        chamber = @"lower";
-    NSString *searchTerm = searchBar.text;
-    NSString *resourcePath = [BillSearchParameters pathForText:searchTerm state:self.state.stateID session:self.selectedSession chamber:chamber];
+    NSString *chamber = [SLFChamber chamberTypeForSearchScopeIndex:scopeIndex];;
+    NSString *resourcePath = [BillSearchParameters pathForText:searchBar.text state:self.state.stateID session:self.selectedSession chamber:chamber];
     BillsViewController *vc = [[BillsViewController alloc] initWithState:self.state resourcePath:resourcePath];
     [self stackOrPushViewController:vc];
     [vc release];
+    [searchBar resignFirstResponder];
 }
 @end

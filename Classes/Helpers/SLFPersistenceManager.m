@@ -12,6 +12,7 @@
 
 #import "SLFPersistenceManager.h"
 #import "SLFDataModels.h"
+#import "MKiCloudSync.h"
 
 NSString * const kPersistentSelectedStateKey = @"SelectedStateKey";
 NSString * const kPersistentSelectedSessionKey = @"SelectedSessionByStateID";
@@ -23,10 +24,15 @@ NSString * const SLFSelectedSessioneDidChangeNotification = @"SLFSelectedSession
 NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
 
 @interface SLFPersistenceManager()
+- (void)notifySettingsWereUpdated:(NSNotification *)notification;
+@property (nonatomic,retain) NSString *currentStateID;
+@property (nonatomic,retain) NSString *currentSession;
 @end
 
 @implementation SLFPersistenceManager
 @synthesize savedActivityPath = _savedActivityPath;
+@synthesize currentStateID = _currentStateID;
+@synthesize currentSession = _currentSession;
 
 + (id)sharedPersistence
 {
@@ -36,9 +42,20 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
     return foo;
 }
 
+- (id)init {
+    self = [super init];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPersistence:) name:kMKiCloudSyncNotification object:nil];
+        [MKiCloudSync start];
+    }
+    return self;
+}
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.savedActivityPath = nil;
+    self.currentSession = nil;
+    self.currentStateID = nil;
     [super dealloc];
 }
 
@@ -48,15 +65,34 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
     [[NSUserDefaults standardUserDefaults] synchronize];        
 }
 
-- (void)loadPersistence {
+- (void)loadPersistence:(NSNotification *)notification {
     self.savedActivityPath = [[NSUserDefaults standardUserDefaults] objectForKey:kPersistentActivityPathKey];
+    if (notification) {
+        [self notifySettingsWereUpdated:notification];
+    }
 }
 
 - (void)resetPersistence {
     self.savedActivityPath = nil;
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kPersistentSelectedStateKey];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kPersistentSelectedSessionKey];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kPersistentActivityPathKey];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kPersistentScopeIndexKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)notifySettingsWereUpdated:(NSNotification *)notification {
+    NSString *stateID = SLFSelectedStateID();
+    if (stateID && ![stateID isEqualToString:self.currentStateID]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:SLFSelectedStateDidChangeNotification object:stateID];
+        self.currentStateID = stateID;
+    }
+    SLFState *state = SLFSelectedState();
+    NSString* session = SLFSelectedSessionForState(state);
+    if (session && ![session isEqualToString:self.currentSession]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:SLFSelectedSessioneDidChangeNotification object:session];
+        self.currentSession = session;
+    }
 }
 
 #pragma mark - Selected Search Bar Scope Index
@@ -105,6 +141,7 @@ void SLFSaveSelectedStateID(NSString *stateID) {
     NSCParameterAssert(stateID != NULL);
     [[NSUserDefaults standardUserDefaults] setObject:stateID forKey:kPersistentSelectedStateKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    [[SLFPersistenceManager sharedPersistence] setCurrentStateID:stateID];
     [[NSNotificationCenter defaultCenter] postNotificationName:SLFSelectedStateDidChangeNotification object:stateID];
 }
 
@@ -136,7 +173,8 @@ void SLFSaveSelectedSessionForState(NSString *session, SLFState *state) {
     RKLogDebug(@"Selected Session has changed for %@: %@", state.stateID, session);
     [[NSUserDefaults standardUserDefaults] setObject:selectedSessions forKey:kPersistentSelectedSessionKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [[NSNotificationCenter defaultCenter] postNotificationName:SLFSelectedSessioneDidChangeNotification object:state.stateID];
+    [[SLFPersistenceManager sharedPersistence] setCurrentSession:session];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SLFSelectedSessioneDidChangeNotification object:session];
 }
 
 void SLFSaveSelectedSession(NSString *session) {
@@ -154,7 +192,5 @@ NSString* FindOrCreateSelectedSessionForState(SLFState *state) {
     SLFSaveSelectedSessionForState(selected, state);
     return selected;
 }
-
-
 
 @end

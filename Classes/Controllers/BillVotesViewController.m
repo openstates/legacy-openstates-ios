@@ -132,6 +132,7 @@ enum SECTIONS {
     FoundLegislatorCellMapping *cellMapping = [FoundLegislatorCellMapping cellMapping];
     [cellMapping mapKeyPath:@"foundLegislator" toAttribute:@"legislator"];
     [cellMapping mapKeyPath:@"type" toAttribute:@"role"];
+    [cellMapping mapKeyPath:@"name" toAttribute:@"genericName"];
     cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
         if (cellMapping.roundImageCorners) {
             NSInteger numRows = [self.tableViewModel tableView:self.tableView numberOfRowsInSection:indexPath.section];

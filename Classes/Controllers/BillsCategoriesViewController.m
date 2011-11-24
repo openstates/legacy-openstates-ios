@@ -380,9 +380,9 @@
         SLFState *state = meta.selectedState;
         SLFChamber *loadedChamber = nil;
         if ([[request resourcePath] hasSubstring:@"/upper" caseInsensitive:NO])
-            loadedChamber = [SLFChamber chamberWithType:@"upper" forState:state];
+            loadedChamber = [SLFChamber chamberWithType:SLFChamberUpperType forState:state];
         else if ([[request resourcePath] hasSubstring:@"/lower" caseInsensitive:NO])
-            loadedChamber = [SLFChamber chamberWithType:@"lower" forState:state];
+            loadedChamber = [SLFChamber chamberWithType:SLFChamberLowerType forState:state];
         else
             loadedChamber = [SLFChamber chamberWithType:@"all" forState:state];
             

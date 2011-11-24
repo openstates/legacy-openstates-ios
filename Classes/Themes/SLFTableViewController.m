@@ -136,11 +136,11 @@
 
 - (void)configureChamberScopeTitlesForSearchBar:(UISearchBar *)searchBar withState:(SLFState *)state {
     NSParameterAssert(searchBar != NULL && state != NULL);
-    NSArray *chambers = state.chambers;
-    if (IsEmpty(chambers) || [chambers count] < 2)
+    NSArray *buttonTitles = [SLFChamber chamberSearchScopeTitlesWithState:state];
+    if (IsEmpty(buttonTitles))
         return;
     searchBar.showsScopeBar = YES;
-    searchBar.scopeButtonTitles = [NSArray arrayWithObjects:NSLocalizedString(@"Both",@""), [[chambers objectAtIndex:0] shortName], [[chambers objectAtIndex:1] shortName], nil];
+    searchBar.scopeButtonTitles = buttonTitles;
     searchBar.selectedScopeButtonIndex = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
 }
 
@@ -148,15 +148,31 @@
     SLFSaveSelectedScopeIndexForKey(selectedScope, NSStringFromClass([self class]));
 }
 
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    searchBar.showsCancelButton = YES;
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+}
+
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    if (IsEmpty(searchBar.text))
+    if (IsEmpty(searchBar.text)) {
+        searchBar.showsCancelButton = NO;
+        [searchBar resignFirstResponder];
         return;
+    }
     searchBar.showsCancelButton = YES;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    [searchBar resignFirstResponder];
+    searchBar.text = nil;
     searchBar.showsCancelButton = NO;
+    [searchBar resignFirstResponder];
 }
 
 @end

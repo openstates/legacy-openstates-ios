@@ -2,7 +2,7 @@
 // Make changes to SLFCommittee.h instead.
 
 #import <CoreData/CoreData.h>
-
+#import <RestKit/CoreData/CoreData.h>
 
 @class CommitteeMember;
 @class GenericAsset;
@@ -21,7 +21,7 @@
 @interface SLFCommitteeID : NSManagedObjectID {}
 @end
 
-@interface _SLFCommittee : NSManagedObject {}
+@interface _SLFCommittee : RKSearchableManagedObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;

@@ -52,6 +52,14 @@
 	self.cellContentView.role = value;
 }
 
+- (void)setGenericName:(NSString *)genericName {
+    self.cellContentView.genericName = genericName;
+}
+
+- (NSString *)genericName {
+    return self.cellContentView.genericName;
+}
+
 - (void)setHighlighted:(BOOL)val animated:(BOOL)animated {
 	[super setHighlighted:val animated:animated];
 	self.cellContentView.highlighted = val;
@@ -141,6 +149,7 @@
 - (void)addDefaultMappings {
     [self mapKeyPath:@"foundLegislator" toAttribute:@"legislator"];
     [self mapKeyPath:@"type" toAttribute:@"role"];
+    [self mapKeyPath:@"name" toAttribute:@"genericName"];
 }
 
 @end

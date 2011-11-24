@@ -206,7 +206,7 @@ enum SECTIONS {
         tableItem.detailText = [self.legislator.state displayNameForSession:selectedSession];
         tableItem.cellMapping.onSelectCell = ^(void) {
             NSString *resourcePath = [BillSearchParameters pathForSponsor:self.legislator.legID state:self.legislator.stateID session:selectedSession];
-            BillsViewController *vc = [[BillsViewController alloc] initWithState:self.legislator.state resourcePath:resourcePath filterResults:nil];
+            BillsViewController *vc = [[BillsViewController alloc] initWithState:self.legislator.state resourcePath:resourcePath];
             [self stackOrPushViewController:vc];
             [vc release];
         };

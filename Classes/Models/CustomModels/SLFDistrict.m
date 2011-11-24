@@ -26,6 +26,10 @@
     return mapping;
 }
 
++ (NSArray*)searchableAttributes {
+    return [NSArray arrayWithObjects:@"name", nil];
+}
+
 - (NSNumber *)districtNumber {
     return [NSNumber numberWithInt:[self.name integerValue]];
 }
@@ -98,6 +102,21 @@
     return self.party.pinColorIndex;
 }
 
++ (NSString *)estimatedBoundaryIDForDistrict:(NSString *)district chamber:(SLFChamber *)chamber {
+    NSString *stateID = chamber.stateID;
+    NSString *chamberName = [chamber.shortName lowercaseString];
+    NSString *boundaryCode = chamber.isUpperChamber ? @"sldu" : @"sldl";
+    if ([chamberName hasPrefix:@"senate"] || [chamberName hasPrefix:@"house"])
+        chamberName = [NSString stringWithFormat:@"state-%@", chamberName];
+    
+    NSDictionary *boundaryIDComponents = [NSDictionary dictionaryWithObjectsAndKeys:
+                                          boundaryCode, @"boundaryCode",
+                                          stateID, @"stateID",
+                                          chamberName, @"chamberName",
+                                          district, @"districtID", nil];
+    
+    return RKMakePathWithObject(@":boundaryCode-:stateID-:chamberName-district-:districtID", boundaryIDComponents);    
+}
 
 #pragma mark -
 #pragma mark Polygons

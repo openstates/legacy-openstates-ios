@@ -34,6 +34,10 @@
     return mapping;
 }
 
++ (NSArray*)searchableAttributes {
+    return [NSArray arrayWithObjects:@"lastName", @"firstName", @"fullName", @"district", nil];
+}
+
     // This is here because the JSON data has a keyPath "state" that conflicts with our core data relationship.
 - (SLFState *)state {
     return self.stateObj;
@@ -47,6 +51,7 @@
     return [SLFParty partyWithName:self.party];
 }
 
+// Necessary to normalize as "Democrat" from "Democratic"
 - (void)setParty:(NSString *)newParty {
     if (newParty && [newParty hasPrefix:@"Democrat"])
         newParty = @"Democrat";
@@ -101,19 +106,7 @@
 - (NSString *)districtID {
     if (self.districtMap)
         return self.districtMap.boundaryID;
-    
-    NSString *boundaryCode = ([self.chamber isEqualToString:@"upper"]) ? @"sldu" : @"sldl";
-    NSString *chamberName = [self.chamberShortName lowercaseString];
-    if ([chamberName isEqualToString:@"senate"] || [chamberName isEqualToString:@"house"])
-        chamberName = [NSString stringWithFormat:@"state-%@", chamberName];
-    
-    NSDictionary *boundaryIDComponents = [NSDictionary dictionaryWithObjectsAndKeys:
-                                          boundaryCode, @"boundaryCode",
-                                          self.stateID, @"stateID",
-                                          chamberName, @"chamberName",
-                                          self.district, @"districtID", nil];
-    
-    return RKMakePathWithObject(@":boundaryCode-:stateID-:chamberName-district-:districtID", boundaryIDComponents);    
+    return [SLFDistrict estimatedBoundaryIDForDistrict:self.district chamber:self.chamberObj];
 }
 
 /////////////////////////////
@@ -123,11 +116,7 @@
 }
 
 - (NSString *)demoLongName {
-    return [NSString stringWithFormat:@"%@ (%@-%@)", self.fullName, self.partyObj.initial, self.district];
-}
-
-- (NSString *)districtMapLabel {
-    return [NSString stringWithFormat:@"%@ %@ District %@", self.state.name, self.chamberShortName, self.district];
+    return [NSString stringWithFormat:@"%@ %@", self.fullName, [self districtPartyString]];
 }
 
 - (NSString *)lastnameInitial {
@@ -159,8 +148,16 @@
     return [NSString stringWithFormat:@"%@ - %@ %@", self.partyObj.name, self.chamberShortName, self.district];
 }
 
-- (NSString *)labelSubText {
+- (NSString *)districtMapLabel {
+    return [NSString stringWithFormat:@"%@ %@", self.state.name, self.districtLongName];
+}
+
+- (NSString *)districtLongName {
 	return [NSString stringWithFormat:NSLocalizedString(@"%@ - District %@", @""), self.chamberShortName, self.district];
+}
+
+- (NSString *)districtShortName {
+	return [NSString stringWithFormat:@"%@ - %@", [self.stateID uppercaseString], self.district];
 }
 
 - (NSString *)title {

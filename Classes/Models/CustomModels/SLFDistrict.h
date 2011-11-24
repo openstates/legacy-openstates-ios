@@ -19,4 +19,5 @@
 - (MKPolygon *)polygonFactory;
 + (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
 + (NSArray *)sortDescriptors;
++ (NSString *)estimatedBoundaryIDForDistrict:(NSString *)district chamber:(SLFChamber *)chamber;
 @end

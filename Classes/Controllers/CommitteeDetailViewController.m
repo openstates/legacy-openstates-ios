@@ -121,6 +121,7 @@ enum SECTIONS {
     FoundLegislatorCellMapping *cellMap = [FoundLegislatorCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"foundLegislator" toAttribute:@"legislator"];
         [cellMapping mapKeyPath:@"type" toAttribute:@"role"];
+        [cellMapping mapKeyPath:@"name" toAttribute:@"genericName"];
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             NSString *legID = [object valueForKey:@"legID"];
             LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:legID];

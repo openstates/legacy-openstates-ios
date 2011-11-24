@@ -102,7 +102,7 @@
         predicate = [NSPredicate predicateWithFormat:@"boundaryID LIKE[cd] %@", 
                      [args objectForKey:@"boundaryID"]];
     else if ([pathMatcher matchesPattern:@"/districts/:stateID/:chamber" tokenizeQueryStrings:YES parsedArguments:&args])
-        predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@ AND chamber LIKE[cd] %@", 
+        predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@ AND chamber = %@", 
                      [args objectForKey:@"stateID"], [args objectForKey:@"chamber"]];
     else if ([pathMatcher matchesPattern:@"/districts/:stateID" tokenizeQueryStrings:YES parsedArguments:&args])
         predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", 
@@ -162,7 +162,7 @@
             else if ([key isEqualToString:@"subject"])
                 subpredicate = [NSPredicate predicateWithFormat:@"(ANY subjects.word LIKE[cd] %@)", value];
             else if ([key isEqualToString:@"chamber"])
-                subpredicate = [NSPredicate predicateWithFormat:@"(chamber LIKE[cd] %@)", value];
+                subpredicate = [NSPredicate predicateWithFormat:@"(chamber = %@)", value];
             else if ([key isEqualToString:@"state"] || [key isEqualToString:@"stateID"])
                 subpredicate = [NSPredicate predicateWithFormat:@"(stateID LIKE[cd] %@)", value];
             else if ([key isEqualToString:@"search_window"]) {

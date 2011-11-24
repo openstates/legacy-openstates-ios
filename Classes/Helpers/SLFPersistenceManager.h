@@ -17,7 +17,7 @@
 
 // Common methods for persistence manager
 + (id)sharedPersistence;
-- (void)loadPersistence;
+- (void)loadPersistence:(NSNotification *)notification;
 - (void)savePersistence;
 - (void)resetPersistence;
 @end
