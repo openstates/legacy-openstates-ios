@@ -22,11 +22,10 @@
 }
 
 + (NSArray *)sortDescriptors {
-    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
     NSSortDescriptor *dateDesc = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES];
-    NSSortDescriptor *billIDDesc = [NSSortDescriptor sortDescriptorWithKey:@"bill.billID" ascending:YES];
-    NSSortDescriptor *voteIDDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"voteID" ascending:YES options:options];
-    NSSortDescriptor *chamberDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"chamber" ascending:YES options:options];
+    NSSortDescriptor *billIDDesc = [SLFSortDescriptor sortDescriptorWithKey:@"bill.billID" ascending:YES];
+    NSSortDescriptor *voteIDDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"voteID" ascending:YES];
+    NSSortDescriptor *chamberDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"chamber" ascending:YES];
     return [NSArray arrayWithObjects:dateDesc, billIDDesc, voteIDDesc, chamberDesc, nil];
 }
 

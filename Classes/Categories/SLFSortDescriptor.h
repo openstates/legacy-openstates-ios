@@ -13,5 +13,5 @@
 #import <Foundation/Foundation.h>
 
 @interface SLFSortDescriptor : NSSortDescriptor
-+ (NSSortDescriptor *)stringSortDescriptorWithKey:(NSString *)key ascending:(BOOL)ascending options:(NSStringCompareOptions)options;
++ (NSSortDescriptor *)stringSortDescriptorWithKey:(NSString *)key ascending:(BOOL)ascending;
 @end

@@ -16,7 +16,9 @@
 @property (nonatomic, retain) RKFetchedResultsTableViewModel *tableViewModel;
 @property (nonatomic, retain) SLFState *state;
 @property (nonatomic, copy) NSString *resourcePath;
+@property (nonatomic, assign) Class dataClass;
 
+- (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path dataClass:(Class)dataClass;
 - (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path;
 - (id)initWithState:(SLFState *)newState; // set resource path before loading
 
@@ -24,4 +26,6 @@
 - (BOOL)filterDefaultFetchRequestWithChamberFilter:(NSString *)newChamberFilter;
 - (BOOL)filterCustomPredicateWithChamberFilter:(NSString *)newChamberFilter;
 - (void)configureTableViewModel;
+- (BOOL)hasSearchableDataClass;
+- (BOOL)shouldShowChamberScopeBar;
 @end

@@ -61,9 +61,8 @@
 }
 
 + (NSArray *)sortDescriptors {
-    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
-    NSSortDescriptor *lastDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"lastName" ascending:YES options:options];
-    NSSortDescriptor *firstDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"firstName" ascending:YES options:options];
+    NSSortDescriptor *lastDesc = [SLFSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES];
+    NSSortDescriptor *firstDesc = [SLFSortDescriptor sortDescriptorWithKey:@"firstName" ascending:YES];
     NSSortDescriptor *stateDesc = [NSSortDescriptor sortDescriptorWithKey:@"stateID" ascending:YES];
     return [NSArray arrayWithObjects:lastDesc, firstDesc, stateDesc, nil];
 }

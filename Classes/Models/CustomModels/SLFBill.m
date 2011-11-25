@@ -39,9 +39,8 @@
 #pragma mark - Convenience Methods
 
 + (NSArray *)sortDescriptors {
-    NSStringCompareOptions options = NSNumericSearch;
-    NSSortDescriptor *sessionDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"session" ascending:NO options:options];
-    NSSortDescriptor *billIDDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"billID" ascending:YES options:options];
+    NSSortDescriptor *sessionDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"session" ascending:NO];
+    NSSortDescriptor *billIDDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"billID" ascending:YES];
     return [NSArray arrayWithObjects:sessionDesc, billIDDesc, nil];
 }
 

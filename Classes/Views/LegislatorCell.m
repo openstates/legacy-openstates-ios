@@ -34,6 +34,10 @@
         cellContentView = [[LegislatorCellView alloc] initWithFrame:CGRectInset(tzvFrame, 0, 1.0)];
         cellContentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         cellContentView.contentMode = UIViewContentModeRedraw;
+        self.layer.shadowColor = [SLFAppearance tableSeparatorColor].CGColor;
+        self.layer.shadowOffset = CGSizeMake(0, 1);
+        self.layer.shadowOpacity = 1;
+        self.layer.shadowRadius = 1;
         //cellContentView.contentMode = UIViewContentModeScaleAspectFit;
         [self.contentView addSubview:cellContentView];
     }

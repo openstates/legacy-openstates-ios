@@ -14,34 +14,28 @@
 #import "EventDetailViewController.h"
 #import "SLFDataModels.h"
 
+@interface EventsViewController()
+@end
+
 @implementation EventsViewController
-@synthesize state;
-@synthesize tableViewModel = __tableViewModel;
-@synthesize resourcePath;
 
 - (id)initWithState:(SLFState *)newState {
-    self = [super init];
-    if (self) {
-        self.stackWidth = 320;
-        self.state = newState;
-        NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", newState.stateID,@"state", nil];
-        self.resourcePath = RKMakePathWithObject(@"/events/?state=:state&apikey=:apikey", queryParams);
-    }
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", newState.stateID,@"state", nil];
+    NSString *resourcePath = RKMakePathWithObject(@"/events/?state=:state&apikey=:apikey", queryParams);
+    self = [super initWithState:newState resourcePath:resourcePath dataClass:[SLFEvent class]];
     return self;
 }
 
+- (void)dealloc {
+    [super dealloc];
+}
+
 - (void)configureTableViewModel {
-    self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.resourcePath = self.resourcePath;
-    [self.tableViewModel setObjectMappingForClass:[SLFEvent class]]; 
-    self.tableViewModel.autoRefreshFromNetwork = YES;
+    [super configureTableViewModel];
     self.tableViewModel.autoRefreshRate = 240;
-    self.tableViewModel.pullToRefreshEnabled = YES;
     SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"eventDescription" toAttribute:@"textLabel.text"];
-        [cellMapping mapKeyPath:@"dateStart" toAttribute:@"detailTextLabel.text"];
+        [cellMapping mapKeyPath:@"dateStartForDisplay" toAttribute:@"detailTextLabel.text"];
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             SLFEvent *event = object;
             EventDetailViewController *vc = [[EventDetailViewController alloc] initWithEventID:event.eventID];
@@ -49,27 +43,23 @@
             [vc release];
         };
     }];
-    [self.tableViewModel mapObjectsWithClass:[SLFEvent class] toTableCellsWithMapping:objCellMap];    
+    [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = NSLocalizedString(@"Loading...",@"");
-    [self configureTableViewModel];
-    [self.tableViewModel loadTable];
-    self.title = [NSString stringWithFormat:@"%d Events",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
+    if (self.tableViewModel.rowCount && !self.title)
+        self.title = [NSString stringWithFormat:@"%d Events", self.tableViewModel.rowCount];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
     [super tableViewModelDidFinishLoad:tableViewModel];
-    self.title = [NSString stringWithFormat:@"%d Events",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
+    if (!self.title)
+        self.title = [NSString stringWithFormat:@"%d Events", self.tableViewModel.rowCount];
 }
 
-- (void)dealloc {
-    self.tableViewModel = nil;
-    self.state = nil;
-    self.resourcePath = nil;
-    [super dealloc];
+- (BOOL)shouldShowChamberScopeBar {
+    return NO;
 }
 
 @end

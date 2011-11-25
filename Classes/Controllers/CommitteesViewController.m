@@ -14,66 +14,47 @@
 #import "CommitteeDetailViewController.h"
 #import "SLFDataModels.h"
 
+@interface CommitteesViewController()
+@end
+
 @implementation CommitteesViewController
-@synthesize state;
-@synthesize tableViewModel = __tableViewModel;
-@synthesize resourcePath;
 
 - (id)initWithState:(SLFState *)newState {
-    self = [super init];
-    if (self) {
-        self.stackWidth = 320;
-        self.state = newState;
-        NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     SUNLIGHT_APIKEY,@"apikey", 
-                                     newState.stateID,@"state", nil];
-        self.resourcePath = RKMakePathWithObject(@"/committees?state=:state&apikey=:apikey", queryParams);
-    }
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", newState.stateID,@"state", nil];
+    NSString *resourcePath = RKMakePathWithObject(@"/committees?state=:state&apikey=:apikey", queryParams);
+    self = [super initWithState:newState resourcePath:resourcePath dataClass:[SLFCommittee class]];
     return self;
 }
 
+- (void)dealloc {
+    [super dealloc];
+}
+
 - (void)configureTableViewModel {
-    self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.resourcePath = self.resourcePath;
-    [self.tableViewModel setObjectMappingForClass:[SLFCommittee class]]; 
-    self.tableViewModel.autoRefreshFromNetwork = YES;
-    self.tableViewModel.autoRefreshRate = 360;
-    self.tableViewModel.pullToRefreshEnabled = YES;
+    [super configureTableViewModel];
     SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"committeeName" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"chamberShortName" toAttribute:@"detailTextLabel.text"];
-        
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             SLFCommittee *committee = object;
             CommitteeDetailViewController *vc = [[CommitteeDetailViewController alloc] initWithCommitteeID:committee.committeeID];
             [self stackOrPushViewController:vc];
             [vc release];
-            
         };
     }];
-    [self.tableViewModel mapObjectsWithClass:[SLFCommittee class] toTableCellsWithMapping:objCellMap];    
+    [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = NSLocalizedString(@"Loading...",@"");
-    [self configureTableViewModel];
-    [self.tableViewModel loadTable];
-    self.title = [NSString stringWithFormat:@"%d Committees",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
+    if (self.tableViewModel.rowCount && !self.title)
+        self.title = [NSString stringWithFormat:@"%d Committees", self.tableViewModel.rowCount];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
     [super tableViewModelDidFinishLoad:tableViewModel];
-    self.title = [NSString stringWithFormat:@"%d Committees",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
-}
-
-- (void)dealloc {
-    self.tableViewModel = nil;
-    self.state = nil;
-    self.resourcePath = nil;
-    [super dealloc];
+    if (!self.title)
+        self.title = [NSString stringWithFormat:@"%d Committees", self.tableViewModel.rowCount];
 }
 
 @end

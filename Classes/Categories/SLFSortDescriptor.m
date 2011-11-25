@@ -13,10 +13,8 @@
 #import "SLFSortDescriptor.h"
 
 @implementation SLFSortDescriptor
-+ (NSSortDescriptor *)stringSortDescriptorWithKey:(NSString *)key ascending:(BOOL)ascending options:(NSStringCompareOptions)options {
-    return [NSSortDescriptor sortDescriptorWithKey:key ascending:ascending comparator:^(id obj1, id obj2) { 
-        return [obj1 compare:obj2 options:options]; 
-    }];
++ (NSSortDescriptor *)stringSortDescriptorWithKey:(NSString *)key ascending:(BOOL)ascending {
+    return [NSSortDescriptor sortDescriptorWithKey:key ascending:ascending selector:@selector(localizedStandardCompare:)];
 }
 
 @end

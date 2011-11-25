@@ -18,8 +18,7 @@
 }
 
 + (NSArray *)sortDescriptors {
-    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
-    NSSortDescriptor *nameDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"committeeName" ascending:YES options:options];
+    NSSortDescriptor *nameDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"committeeName" ascending:YES];
     NSSortDescriptor *chamberDesc = [NSSortDescriptor sortDescriptorWithKey:@"chamber" ascending:YES];
     return [NSArray arrayWithObjects:nameDesc, chamberDesc, nil];
 }

@@ -10,15 +10,8 @@
 //
 //
 
-#import "SLFTableViewController.h"
+#import "SLFFetchedTableViewController.h"
 
-@class SLFState;
-@interface LegislatorsViewController : SLFTableViewController {
-}
-@property (nonatomic, retain) RKFetchedResultsTableViewModel *tableViewModel;
-@property (nonatomic, retain) SLFState *state;
-@property (nonatomic, copy) NSString *resourcePath;
-
-- (id)initWithState:(SLFState *)newState;
+@interface LegislatorsViewController : SLFFetchedTableViewController
 
 @end

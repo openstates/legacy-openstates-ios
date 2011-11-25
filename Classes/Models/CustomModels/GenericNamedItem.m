@@ -4,9 +4,8 @@
 @implementation GenericNamedItem
 
 + (NSArray *)sortDescriptors {
-    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
-    NSSortDescriptor *typeDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"type" ascending:YES options:options];
-    NSSortDescriptor *nameDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"name" ascending:YES options:options];
+    NSSortDescriptor *typeDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"type" ascending:YES];
+    NSSortDescriptor *nameDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"name" ascending:YES];
     return [NSArray arrayWithObjects:typeDesc, nameDesc, nil];
 }
 

@@ -28,10 +28,9 @@
 }
 
 + (NSArray *)sortDescriptors {
-    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
     NSArray *existing = [[self superclass] sortDescriptors];
     NSMutableArray *descriptors = [NSMutableArray arrayWithArray:existing];
-    [descriptors insertObject:[SLFSortDescriptor stringSortDescriptorWithKey:@"foundLegislator.lastName" ascending:YES options:options] atIndex:1];
+    [descriptors insertObject:[SLFSortDescriptor stringSortDescriptorWithKey:@"foundLegislator.lastName" ascending:YES] atIndex:1];
     return descriptors;
 }
 

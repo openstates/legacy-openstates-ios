@@ -15,33 +15,25 @@
 #import "DistrictDetailViewController.h"
 #import "SLFDataModels.h"
 
+@interface DistrictsViewController()
+@end
+
 @implementation DistrictsViewController
-@synthesize state;
-@synthesize tableViewModel = __tableViewModel;
-@synthesize resourcePath;
 
 - (id)initWithState:(SLFState *)newState {
-    self = [super init];
-    if (self) {
-        self.stackWidth = 320;
-        self.state = newState;
-        NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     SUNLIGHT_APIKEY,@"apikey", 
-                                     newState.stateID,@"state", nil];
-        self.resourcePath = RKMakePathWithObject(@"/districts/:state?apikey=:apikey", queryParams);
-    }
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", newState.stateID,@"state", nil];
+    NSString *resourcePath = RKMakePathWithObject(@"/districts/:state?apikey=:apikey", queryParams);
+    self = [super initWithState:newState resourcePath:resourcePath dataClass:[SLFDistrict class]];
     return self;
 }
 
+- (void)dealloc {
+    [super dealloc];
+}
+
 - (void)configureTableViewModel {
-    self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.resourcePath = self.resourcePath;
-    [self.tableViewModel setObjectMappingForClass:[SLFDistrict class]]; 
-    self.tableViewModel.autoRefreshFromNetwork = YES;
+    [super configureTableViewModel];
     self.tableViewModel.autoRefreshRate = 36000;
-    self.tableViewModel.pullToRefreshEnabled = YES;
     SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"title" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"subtitle" toAttribute:@"detailTextLabel.text"];
@@ -52,28 +44,19 @@
             [vc release];
         };
     }];
-    [self.tableViewModel mapObjectsWithClass:[SLFDistrict class] toTableCellsWithMapping:objCellMap];        
+    [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];        
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = NSLocalizedString(@"Loading...",@"");
-    [self configureTableViewModel];
-    [self.tableViewModel loadTable];
-    self.title = [NSString stringWithFormat:@"%d Districts",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
+    if (self.tableViewModel.rowCount && !self.title)
+        self.title = [NSString stringWithFormat:@"%d Districts", self.tableViewModel.rowCount];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
     [super tableViewModelDidFinishLoad:tableViewModel];
-    self.title = [NSString stringWithFormat:@"%d Districts",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
-}
-
-- (void)dealloc {
-    self.tableViewModel = nil;
-    self.state = nil;
-    self.resourcePath = nil;
-    [super dealloc];
+    if (!self.title)
+        self.title = [NSString stringWithFormat:@"%d Districts", self.tableViewModel.rowCount];
 }
 
 @end
-

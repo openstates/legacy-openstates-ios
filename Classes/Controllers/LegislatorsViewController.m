@@ -15,36 +15,27 @@
 #import "SLFDataModels.h"
 #import "LegislatorCell.h"
 
+@interface LegislatorsViewController()
+@end
+
 @implementation LegislatorsViewController
-@synthesize state;
-@synthesize tableViewModel = __tableViewModel;
-@synthesize resourcePath;
 
 - (id)initWithState:(SLFState *)newState {
-    self = [super init];
-    if (self) {
-        self.stackWidth = 320;
-        self.state = newState;
-        NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     SUNLIGHT_APIKEY,@"apikey", 
-                                     @"true", @"active", 
-                                     newState.stateID,@"state", nil];
-        self.resourcePath = RKMakePathWithObject(@"/legislators?state=:state&active=:active&apikey=:apikey", queryParams);
-    }
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 SUNLIGHT_APIKEY,@"apikey", newState.stateID,@"state", nil];
+    NSString *resourcePath = RKMakePathWithObject(@"/legislators?state=:state&active=true&apikey=:apikey", queryParams);
+    self = [super initWithState:newState resourcePath:resourcePath dataClass:[SLFLegislator class]];
     return self;
 }
 
+- (void)dealloc {
+    [super dealloc];
+}
+
 - (void)configureTableViewModel {
-    self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.resourcePath = self.resourcePath;
-    [self.tableViewModel setObjectMappingForClass:[SLFLegislator class]];
-    self.tableViewModel.autoRefreshFromNetwork = YES;
-    self.tableViewModel.variableHeightRows = YES;
-    self.tableViewModel.autoRefreshRate = 360;
-    self.tableViewModel.pullToRefreshEnabled = YES;
+    [super configureTableViewModel];
     self.tableViewModel.showsSectionIndexTitles = YES;
+    self.tableViewModel.tableView.rowHeight = 73;
     self.tableViewModel.sectionNameKeyPath = @"lastnameInitial";
     LegislatorCellMapping *objCellMap = [LegislatorCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"self" toAttribute:@"legislator"];
@@ -55,27 +46,20 @@
             [vc release];
         };
     }];
-    [self.tableViewModel mapObjectsWithClass:[SLFLegislator class] toTableCellsWithMapping:objCellMap];    
+    [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = NSLocalizedString(@"Loading...",@"");
-    [self configureTableViewModel];
-    [self.tableViewModel loadTable];
-    self.title = [NSString stringWithFormat:@"%d Members",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
+    if (self.tableViewModel.rowCount && !self.title)
+        self.title = [NSString stringWithFormat:@"%d Members", self.tableViewModel.rowCount];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
     [super tableViewModelDidFinishLoad:tableViewModel];
-    self.title = [NSString stringWithFormat:@"%d Members",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
-}
-
-- (void)dealloc {
-    self.tableViewModel = nil;
-    self.state = nil;
-    self.resourcePath = nil;
-    [super dealloc];
+    if (!self.title)
+        self.title = [NSString stringWithFormat:@"%d Members", self.tableViewModel.rowCount];
 }
 
 @end
+

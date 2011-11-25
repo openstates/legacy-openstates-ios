@@ -1,5 +1,6 @@
 #import "SLFDataModels.h"
 #import "SLFSortDescriptor.h"
+#import "NSDate+SLFDateHelper.h"
 
 @implementation SLFEvent
 
@@ -34,12 +35,13 @@
 }
 
 + (NSArray *)sortDescriptors {
-    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
     NSSortDescriptor *dateDesc = [NSSortDescriptor sortDescriptorWithKey:@"dateStart" ascending:YES];
-    NSSortDescriptor *stateDesc = [NSSortDescriptor sortDescriptorWithKey:@"stateID" ascending:YES];
-    NSSortDescriptor *nameDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"description" ascending:YES options:options];
-    return [NSArray arrayWithObjects:dateDesc, stateDesc, nameDesc, nil];
+    NSSortDescriptor *nameDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"eventDescription" ascending:YES];
+    NSSortDescriptor *locationDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"location" ascending:YES];
+    return [NSArray arrayWithObjects:dateDesc, nameDesc, locationDesc, nil];
 }
 
-
+- (NSString *)dateStartForDisplay {
+    return [self.dateStart stringWithDateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
+}
 @end

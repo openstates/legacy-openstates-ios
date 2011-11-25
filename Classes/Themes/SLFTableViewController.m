@@ -134,8 +134,8 @@
     [searchBar release];
 }
 
-- (void)configureChamberScopeTitlesForSearchBar:(UISearchBar *)searchBar withState:(SLFState *)state {
-    NSParameterAssert(searchBar != NULL && state != NULL);
+- (void)configureChamberScopeTitlesForSearchBar:(UISearchBar *)searchBar withState:(SLFState *)state{
+    NSParameterAssert(searchBar != NULL);
     NSArray *buttonTitles = [SLFChamber chamberSearchScopeTitlesWithState:state];
     if (IsEmpty(buttonTitles))
         return;

@@ -14,12 +14,11 @@
 }
 
 + (NSArray *)sortDescriptors {
-    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
     NSSortDescriptor *dateDesc = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
-    NSSortDescriptor *billIDDesc = [NSSortDescriptor sortDescriptorWithKey:@"bill.billID" ascending:YES];
-    NSSortDescriptor *actionIDDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"actionID" ascending:NO options:options];
-    NSSortDescriptor *actionDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"action" ascending:YES options:options];
-    NSSortDescriptor *actorDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"actor" ascending:YES options:options];
+    NSSortDescriptor *billIDDesc = [SLFSortDescriptor sortDescriptorWithKey:@"bill.billID" ascending:YES];
+    NSSortDescriptor *actionIDDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"actionID" ascending:NO];
+    NSSortDescriptor *actionDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"action" ascending:YES];
+    NSSortDescriptor *actorDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"actor" ascending:YES];
     return [NSArray arrayWithObjects:dateDesc, billIDDesc, actionIDDesc, actionDesc, actorDesc, nil];
 }
 

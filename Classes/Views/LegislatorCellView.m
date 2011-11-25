@@ -194,9 +194,10 @@
 		[accentColor set];
 		[self.role drawInRect:drawRect withFont:SLFFont(14) lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentRight];
 	}
-	
+
 	CGContextRestoreGState(context);
 	CGColorSpaceRelease(space);
+    
 }
 
 @end

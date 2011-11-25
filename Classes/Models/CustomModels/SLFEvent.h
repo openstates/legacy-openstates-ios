@@ -5,6 +5,7 @@
 @class SLFState;
 @interface SLFEvent : _SLFEvent {}
 @property (nonatomic,readonly) SLFState *state;
+@property (nonatomic,readonly) NSString *dateStartForDisplay;
 + (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
 + (NSArray *)sortDescriptors;
 @end

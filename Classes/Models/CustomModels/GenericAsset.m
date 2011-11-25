@@ -11,9 +11,8 @@
 }
 
 + (NSArray *)sortDescriptors {
-    NSStringCompareOptions options = NSNumericSearch | NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
-    NSSortDescriptor *nameDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"name" ascending:YES options:options];
-    NSSortDescriptor *urlDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"url" ascending:YES options:options];
+    NSSortDescriptor *nameDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"name" ascending:YES];
+    NSSortDescriptor *urlDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"url" ascending:YES];
     return [NSArray arrayWithObjects:nameDesc, urlDesc, nil];
 }
 
