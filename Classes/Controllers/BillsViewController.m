@@ -54,8 +54,7 @@
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
     [super tableViewModelDidFinishLoad:tableViewModel];
-    if (!self.title)
-        self.title = [NSString stringWithFormat:@"Found %d Bills", self.tableViewModel.rowCount];
+    self.title = [NSString stringWithFormat:@"Found %d Bills", self.tableViewModel.rowCount];
 }
 
 @end

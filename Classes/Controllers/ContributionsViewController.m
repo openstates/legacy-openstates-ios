@@ -86,26 +86,6 @@
 #pragma mark Data Objects
 
 - (void)setQueryEntityID:(NSString *)newObj type:(NSNumber *)newType cycle:(NSString *)newCycle {
-    NSString *typeString = @"";
-    switch ([newType integerValue]) {
-        case kContributionQueryDonor:
-            typeString = @"DonorSummaryQuery";
-            break;
-        case kContributionQueryRecipient:
-            typeString = @"RecipientSummaryQuery";
-            break;
-        case kContributionQueryTop10Donors:
-            typeString = @"Top10DonorsQuery";
-            break;
-        case kContributionQueryTop10Recipients:
-            typeString = @"Top10RecipientsQuery";
-            break;
-        case kContributionQueryEntitySearch:
-            typeString = @"EntitySearchQuery";
-            break;
-        default:
-            break;
-    }
     [self.dataSource initiateQueryWithQueryID:newObj type:newType cycle:newCycle];
     self.navigationItem.title = [dataSource title];
 }
@@ -132,9 +112,6 @@
     if (!dataObject || !dataObject.isClickable)
         return;
     if (IsEmpty(dataObject.entryValue)) {
-        NSString *queryName = @"";
-        if (dataObject.title)
-            queryName = dataObject.title;
         [SLFAlertView showWithTitle:NSLocalizedString(@"Incomplete Records", @"") 
                             message:NSLocalizedString(@"The campaign finance data provider has incomplete information for this request.  You may visit followthemoney.org to perform a manual search.", @"") 
                         cancelTitle:NSLocalizedString(@"Cancel", @"") 

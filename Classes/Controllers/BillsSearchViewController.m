@@ -107,9 +107,8 @@ enum SECTIONS {
         tableItem.cellMapping.style = UITableViewCellStyleValue1;
         tableItem.text = NSLocalizedString(@"Selected Session", @"");
         if (IsEmpty(self.selectedSession))
-            tableItem.detailText = NSLocalizedString(@"Any Session", @"");
-        else
-            tableItem.detailText = [self.state displayNameForSession:self.selectedSession];
+            self.selectedSession = [self.state latestSession];
+        tableItem.detailText = [self.state displayNameForSession:self.selectedSession];
         tableItem.cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell *cell, id obj, NSIndexPath *indexPath) {
             NSArray *displayNames = self.state.sessionDisplayNames;
             if (IsEmpty(displayNames))

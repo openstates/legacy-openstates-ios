@@ -23,6 +23,7 @@
 @end
 
 @class SLFState;
+@class SLFBill;
 
 NSInteger SLFSelectedScopeIndexForKey(NSString *viewControllerKey);
 void SLFSaveSelectedScopeIndexForKey(NSInteger index, NSString *viewControllerKey);
@@ -40,3 +41,8 @@ NSString* SLFSelectedSession(void);
 void SLFSaveSelectedSessionForState(NSString *session, SLFState *state);
 void SLFSaveSelectedSession(NSString *session);
 NSString* FindOrCreateSelectedSessionForState(SLFState *state);
+
+extern NSString * const SLFWatchedBillsDidChangeNotification;
+NSDictionary* SLFWatchedBillsCatalog(void);
+BOOL SLFBillIsWatched(SLFBill *bill);
+void SLFSaveBillWatchedStatus(SLFBill *bill, BOOL isWatched);

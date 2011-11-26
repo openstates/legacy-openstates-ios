@@ -38,7 +38,7 @@ UILabel *SLFStyledHeaderLabelWithTextAtOrigin(NSString *text, CGPoint origin){
     if (!defaultTextFont)
         defaultTextFont = [SLFTitleFont(13) retain];
     label.font = defaultTextFont;
-    label.text = NSLocalizedString(@"Pick a State", @"");
+    label.text = text;
     label.textAlignment = UITextAlignmentRight;
     label.numberOfLines = 2;
     label.textColor = [[UIColor darkTextColor] colorWithAlphaComponent:0.9];

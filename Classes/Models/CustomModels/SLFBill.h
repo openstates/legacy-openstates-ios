@@ -16,12 +16,15 @@ typedef enum BillType {
 @property (nonatomic,readonly) SLFState *state;
 @property (nonatomic,readonly) SLFChamber *chamberObj;
 @property (nonatomic,readonly) NSString *name;
-+ (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
-+ (NSArray *)sortDescriptors;
 @property (nonatomic,readonly) NSArray *sortedActions;
 @property (nonatomic,readonly) NSArray *sortedVotes;
 @property (nonatomic,readonly) NSArray *sortedSponsors;
 @property (nonatomic,readonly) NSArray *sortedSubjects;
-@property (nonatomic,readonly) BillType billType;
 @property (nonatomic,readonly) NSArray *stages;
+@property (nonatomic,readonly) BillType billType;
+@property (nonatomic,readonly) NSString *watchID;
++ (SLFBill *)billForWatchID:(NSString *)watchID;
++ (NSString *)resourcePathForWatchID:(NSString *)watchID;
++ (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
++ (NSArray *)sortDescriptors;
 @end

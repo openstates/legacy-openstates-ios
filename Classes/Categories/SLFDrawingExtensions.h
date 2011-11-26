@@ -17,6 +17,7 @@
 
 @interface UIImage (SLFExtensions)
 + (UIImage *)imageFromView:(UIView *)view;
+- (UIImage *)glossyImageOverlay;
 @end
 
 @interface UIButton (SLFExtensions)

@@ -17,7 +17,7 @@
 #import "AppendingFlowView.h"
 #import "LegislatorDetailViewController.h"
 #import "BillVotesViewController.h"
-    //#import "DDActionHeaderView.h"
+#import "DDActionHeaderView.h"
 #import "SLFMappingsManager.h"
 #import "SLFRestKitManager.h"
 #import "SVWebViewController.h"
@@ -25,6 +25,8 @@
 #import "TableSectionHeaderView.h"
 #import "NSDate+SLFDateHelper.h"
 #import "LegislatorCell.h"
+#import "SLFDrawingExtensions.h"
+#import "SLFPersistenceManager.h"
 
 enum SECTIONS {
     SectionBillInfo = 1,
@@ -45,6 +47,7 @@ enum SECTIONS {
 - (RKTableViewCellMapping *)actionCellMap;
 - (RKTableViewCellMapping *)sponsorCellMap;
 - (RKTableViewCellMapping *)votesCellMap;
+- (void)configureActionBarForBill:(SLFBill *)bill;
 - (void)configureTableItems;
 - (void)configureBillInfoItems;
 - (void)configureStages;
@@ -58,7 +61,7 @@ enum SECTIONS {
 @end
 
 @implementation BillDetailViewController
-@synthesize bill;
+@synthesize bill = _bill;
 @synthesize tableViewModel = _tableViewModel;
 
 - (id)initWithResourcePath:(NSString *)resourcePath {
@@ -80,22 +83,25 @@ enum SECTIONS {
 - (id)initWithBill:(SLFBill *)aBill {
     NSString *resourcePath = [BillSearchParameters pathForBill:aBill];
     self = [self initWithResourcePath:resourcePath];
+    if (self) {
+        self.bill = aBill;
+    }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.variableHeightRows = YES;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.pullToRefreshEnabled = NO;
-    [self.tableViewModel mapObjectsWithClass:[BillRecordVote class] toTableCellsWithMapping:[self votesCellMap]];
-    [self.tableViewModel mapObjectsWithClass:[BillAction class] toTableCellsWithMapping:[self actionCellMap]];
-    [self.tableViewModel mapObjectsWithClass:[BillSponsor class] toTableCellsWithMapping:[self sponsorCellMap]];    
+    _tableViewModel.delegate = self;
+    _tableViewModel.variableHeightRows = YES;
+    _tableViewModel.objectManager = [RKObjectManager sharedManager];
+    _tableViewModel.pullToRefreshEnabled = NO;
+    [_tableViewModel mapObjectsWithClass:[BillRecordVote class] toTableCellsWithMapping:[self votesCellMap]];
+    [_tableViewModel mapObjectsWithClass:[BillAction class] toTableCellsWithMapping:[self actionCellMap]];
+    [_tableViewModel mapObjectsWithClass:[BillSponsor class] toTableCellsWithMapping:[self sponsorCellMap]];    
     NSInteger sectionIndex;
     for (sectionIndex = SectionBillInfo;sectionIndex < kNumSections; sectionIndex++) {
-        [self.tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
+        [_tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
             NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
             TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
             section.headerTitle = headerTitle;
@@ -103,7 +109,8 @@ enum SECTIONS {
             section.headerView = headerView;
             [headerView release];
         }];
-    }         
+    }
+    [self configureActionBarForBill:self.bill];
 	self.title = NSLocalizedString(@"Loading...", @"");
 }
 
@@ -114,13 +121,68 @@ enum SECTIONS {
     [super dealloc];
 }
 
-- (void)loadDataFromNetworkWithResourcePath:(NSString *)resourcePath {
-    RKObjectManager* objectManager = [RKObjectManager sharedManager];
-    [objectManager loadObjectsAtResourcePath:resourcePath delegate:self block:^(RKObjectLoader* loader) {
-        loader.objectMapping = [objectManager.mappingProvider objectMappingForClass:[SLFBill class]];
-        loader.cacheTimeoutInterval = 1 * 60 * 60;
-    }];
+- (NSString *)headerForSectionIndex:(NSInteger)sectionIndex {
+    switch (sectionIndex) {
+        case SectionBillInfo:
+            return NSLocalizedString(@"Bill Details", @"");
+        case SectionStages:
+            return NSLocalizedString(@"Legislative Status (Beta)",@"");
+        case SectionResources:
+            return NSLocalizedString(@"Resources",@"");
+        case SectionSubjects:
+            return NSLocalizedString(@"Subjects", @"");
+        case SectionVotes:
+            return NSLocalizedString(@"Votes", @"");
+        case SectionSponsors:
+            return NSLocalizedString(@"Sponsors", @"");
+        case SectionActions:
+            return NSLocalizedString(@"Actions", @"");
+        default:
+            return @"";
+    }
 }
+
+#pragma mark - Action Bar Header
+
+- (void)setState:(BOOL)isOn forWatchButton:(UIButton *)button {
+    static UIImage *buttonOff;
+    if (!buttonOff)
+        buttonOff = [[UIImage imageNamed:@"StarButtonOff"] retain];
+    static UIImage *buttonOn;
+    if (!buttonOn)
+        buttonOn = [[UIImage imageNamed:@"StarButtonOn"] retain];
+    button.tag = isOn;
+    UIImage *normal = isOn ? buttonOn : buttonOff;
+    [button setImage:normal forState:UIControlStateNormal];
+    UIImage *highlighted = isOn ? buttonOff : buttonOn;;
+    [button setImage:highlighted forState:UIControlStateHighlighted];
+    [button setNeedsDisplay];
+}
+
+- (IBAction)toggleWatchButton:(id)sender {
+    NSParameterAssert(sender != NULL && [sender isKindOfClass:[UIButton class]]);
+    BOOL isFavorite = SLFBillIsWatched(_bill);
+    [self setState:!isFavorite forWatchButton:sender];
+    SLFSaveBillWatchedStatus(_bill, !isFavorite);
+}
+
+- (UIButton *)watchButtonForBill:(SLFBill *)bill {
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self setState:SLFBillIsWatched(bill) forWatchButton:button];
+    button.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    button.frame = CGRectMake(self.titleBarView.size.width - 50, 12, 43, 43);
+#warning fix this with a callback on billDidLoad or something
+        //button.enabled = (bill != NULL);
+    [button addTarget:self action:@selector(toggleWatchButton:) forControlEvents:/*UIControlEventTouchUpInside*/UIControlEventTouchDown]; 
+    return button;
+}
+
+- (void)configureActionBarForBill:(SLFBill *)bill {
+    UIButton *button = [self watchButtonForBill:bill];
+    [self.titleBarView addSubview:button];
+}
+
+#pragma mark - Table Item Creation and Mapping
 
 - (void)configureTableItems {
     [self configureBillInfoItems];     
@@ -132,36 +194,24 @@ enum SECTIONS {
     [self configureActions];
 }
 
-#pragma mark - Table Item Creation and Mapping
-
 - (void)configureBillInfoItems {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.cellMapping.rowHeight = 90;
-        tableItem.text = bill.billID;
-        tableItem.detailText = bill.title;
-        tableItem.cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-            cell.textLabel.textColor = [SLFAppearance cellTextColor];
-            cell.textLabel.font = SLFFont(15);
-            cell.detailTextLabel.textColor = [SLFAppearance cellSecondaryTextColor];
-            cell.detailTextLabel.font = SLFFont(12);
-            SLFAlternateCellForIndexPath(cell, indexPath);
-            cell.detailTextLabel.numberOfLines = 4;
-            cell.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
-        };
+        tableItem.cellMapping = [LargeStaticSubtitleCellMapping cellMapping];
+        tableItem.text = _bill.billID;
+        tableItem.detailText = _bill.title;
     }]];
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Originating Chamber", @"");
-        tableItem.detailText = self.bill.chamberObj.formalName;
+        tableItem.detailText = _bill.chamberObj.formalName;
     }]];
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Last Updated", @"");
-        tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Bill info was updated %@",@""), [bill.dateUpdated stringForDisplayWithPrefix:YES]];
+        tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Bill info was updated %@",@""), [_bill.dateUpdated stringForDisplayWithPrefix:YES]];
     }]];
-    NSArray *sortedActions = bill.sortedActions;
+    NSArray *sortedActions = _bill.sortedActions;
     if (!IsEmpty(sortedActions)) {
         [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
             tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
@@ -170,12 +220,12 @@ enum SECTIONS {
             tableItem.detailText = [NSString stringWithFormat:@"%@ - %@", latest.title, latest.subtitle];
         }]];
     }
-    [self.tableViewModel loadTableItems:tableItems inSection:SectionBillInfo];     
+    [_tableViewModel loadTableItems:tableItems inSection:SectionBillInfo];     
     [tableItems release];
 }
 
 - (void)configureStages {
-    NSArray *stages = bill.stages;
+    NSArray *stages = _bill.stages;
     if (IsEmpty(stages))
         return;
     RKTableItem *stageItemCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
@@ -204,7 +254,7 @@ enum SECTIONS {
             [empty release];
         };
     }];
-    [self.tableViewModel loadTableItems:[NSArray arrayWithObjects:stageItemCell, emptyCell, nil] inSection:SectionStages];     
+    [_tableViewModel loadTableItems:[NSArray arrayWithObjects:stageItemCell, emptyCell, nil] inSection:SectionStages];     
 }
 
 - (void)configureSubjects {
@@ -216,36 +266,36 @@ enum SECTIONS {
         NSString *word = item.text;
         if (IsEmpty(word))
             return;
-        NSString *subjectPath = [BillSearchParameters pathForSubject:word state:self.bill.stateID session:self.bill.session chamber:nil];
-        BillsViewController *vc = [[BillsViewController alloc] initWithState:self.bill.stateObj resourcePath:subjectPath];
-        vc.title = [NSString stringWithFormat:@"%@: %@", [self.bill.stateID uppercaseString], word];
+        NSString *subjectPath = [BillSearchParameters pathForSubject:word state:_bill.stateID session:_bill.session chamber:nil];
+        BillsViewController *vc = [[BillsViewController alloc] initWithState:_bill.stateObj resourcePath:subjectPath];
+        vc.title = [NSString stringWithFormat:@"%@: %@", [_bill.stateID uppercaseString], word];
         [self stackOrPushViewController:vc];
         [vc release];
     };
-    [self addTableItems:tableItems fromWords:self.bill.subjects withType:nil onSelectCell:onSelectBlock];
-    [self.tableViewModel loadTableItems:tableItems inSection:SectionSubjects];
+    [self addTableItems:tableItems fromWords:_bill.subjects withType:nil onSelectCell:onSelectBlock];
+    [_tableViewModel loadTableItems:tableItems inSection:SectionSubjects];
     [tableItems release];
 }
 
 - (void)configureResources {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    [self addTableItems:tableItems fromWebAssets:self.bill.versions withType:NSLocalizedString(@"Version",@"")];
-    [self addTableItems:tableItems fromWebAssets:self.bill.documents withType:NSLocalizedString(@"Document",@"")];
-    [self addTableItems:tableItems fromWebAssets:self.bill.sources withType:NSLocalizedString(@"Resource",@"")];
-    [self.tableViewModel loadTableItems:tableItems inSection:SectionResources];
+    [self addTableItems:tableItems fromWebAssets:_bill.versions withType:NSLocalizedString(@"Version",@"")];
+    [self addTableItems:tableItems fromWebAssets:_bill.documents withType:NSLocalizedString(@"Document",@"")];
+    [self addTableItems:tableItems fromWebAssets:_bill.sources withType:NSLocalizedString(@"Resource",@"")];
+    [_tableViewModel loadTableItems:tableItems inSection:SectionResources];
     [tableItems release];
 }
 
 - (void)configureSponsors {
-    [self.tableViewModel loadObjects:self.bill.sortedSponsors inSection:SectionSponsors];    
+    [_tableViewModel loadObjects:_bill.sortedSponsors inSection:SectionSponsors];    
 }
 
 - (void)configureVotes {
-    [self.tableViewModel loadObjects:self.bill.sortedVotes inSection:SectionVotes];    
+    [_tableViewModel loadObjects:_bill.sortedVotes inSection:SectionVotes];    
 }
 
 - (void)configureActions {
-    [self.tableViewModel loadObjects:self.bill.sortedActions inSection:SectionActions];    
+    [_tableViewModel loadObjects:_bill.sortedActions inSection:SectionActions];    
 }
 
 - (RKTableViewCellMapping *)actionCellMap {
@@ -320,6 +370,14 @@ enum SECTIONS {
 
 #pragma mark - Object Loader
 
+- (void)loadDataFromNetworkWithResourcePath:(NSString *)resourcePath {
+    RKObjectManager* objectManager = [RKObjectManager sharedManager];
+    [objectManager loadObjectsAtResourcePath:resourcePath delegate:self block:^(RKObjectLoader* loader) {
+        loader.objectMapping = [objectManager.mappingProvider objectMappingForClass:[SLFBill class]];
+        loader.cacheTimeoutInterval = 1 * 60 * 60;
+    }];
+}
+
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     self.title = NSLocalizedString(@"Load Error", @"");
     [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
@@ -328,30 +386,9 @@ enum SECTIONS {
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
     if (object && [object isKindOfClass:[SLFBill class]]) {
         self.bill = object;
-        self.title = self.bill.name;
+        self.title = _bill.name;
     }
     [self configureTableItems];
-}
-
-- (NSString *)headerForSectionIndex:(NSInteger)sectionIndex {
-    switch (sectionIndex) {
-        case SectionBillInfo:
-            return NSLocalizedString(@"Bill Details", @"");
-        case SectionStages:
-            return NSLocalizedString(@"Legislative Status (Beta)",@"");
-        case SectionResources:
-            return NSLocalizedString(@"Resources",@"");
-        case SectionSubjects:
-            return NSLocalizedString(@"Subjects", @"");
-        case SectionVotes:
-            return NSLocalizedString(@"Votes", @"");
-        case SectionSponsors:
-            return NSLocalizedString(@"Sponsors", @"");
-        case SectionActions:
-            return NSLocalizedString(@"Actions", @"");
-        default:
-            return @"";
-    }
 }
 
 @end

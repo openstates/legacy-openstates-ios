@@ -139,6 +139,7 @@
 
     NSDictionary *args = nil;
     NSFetchRequest *request = [SLFBill fetchRequest];
+    
     RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
 
     NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
@@ -149,16 +150,16 @@
         [request setRelationshipKeyPathsForPrefetching:[NSArray arrayWithObjects:@"yesVotes", @"noVotes", @"otherVotes", nil]];
     }
     else if ([pathMatcher matchesPattern:@"/bills" tokenizeQueryStrings:YES parsedArguments:&args]) {
+        args = [args removePercentEscapesFromKeysAndObjects];
         NSMutableArray *subpredicates = [NSMutableArray array];
         
         [args enumerateKeysAndObjectsUsingBlock: ^(id key, id value, BOOL *stop)
         {
             NSPredicate *subpredicate = nil;
             if ([key isEqualToString:@"sponsor_id"])
-//              subpredicate = [NSPredicate predicateWithFormat:@"(ANY sponsors.legID LIKE[cd] %@)", value];
-                subpredicate = [NSPredicate predicateWithFormat:@"(0!=SUBQUERY(sponsors,$eachSponsor,$eachSponsor.legID=%@ AND ($eachSponsor.type LIKE[cd] 'sponsor' OR $eachSponsor.type LIKE[cd] 'author')).@count)", value];
+                subpredicate = [NSPredicate predicateWithFormat:@"(0!=SUBQUERY(sponsors,$eachSponsor,$eachSponsor.legID=%@ AND ($eachSponsor.type LIKE[cd] 'sponsor' OR $eachSponsor.type LIKE[cd] 'author' OR $eachSponsor.type LIKE[cd] 'primary')).@count)", value];
             else if ([key isEqualToString:@"q"])
-                subpredicate = [NSPredicate predicateWithFormat:@"(title CONTAINS[cd] %@ OR ANY subjects.word LIKE[cd] %@)", value, value];
+                subpredicate = [NSPredicate predicateWithFormat:@"(billID LIKE[cd] %@ OR title CONTAINS[cd] %@ OR ANY subjects.word LIKE[cd] %@)", value, value, value];
             else if ([key isEqualToString:@"subject"])
                 subpredicate = [NSPredicate predicateWithFormat:@"(ANY subjects.word LIKE[cd] %@)", value];
             else if ([key isEqualToString:@"chamber"])

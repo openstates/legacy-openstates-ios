@@ -95,8 +95,8 @@ static void addGlossPath(CGContextRef context, CGRect rect);
 
 + (void)getStartPoint:(CGPoint*)startRef endPoint:(CGPoint *)endRef withAngle:(CGFloat)angle inRect:(CGRect)rect {
     NSParameterAssert(startRef != NULL && endRef != NULL);
-	CGPoint startPoint = rect.origin;
-    CGPoint endPoint = CGPointMake(0.0f, CGRectGetHeight(rect));
+	CGPoint startPoint;
+    CGPoint endPoint;
 	if(angle == 0)
   	{
 		startPoint = CGPointMake(CGRectGetMinX(rect), CGRectGetMinY(rect));

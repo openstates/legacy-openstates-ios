@@ -65,7 +65,6 @@ static CGFloat scaleMod = 0;
 	UIFont *font;
 	CGImageRef contextImage = nil;
 	CGRect effectBounds;
-	unsigned char *pixels = nil;
 	CGContextRef maskContext = nil;
 	CGImageRef maskImage = nil;
 	CGDataProviderRef provider = nil;
@@ -115,7 +114,6 @@ static CGFloat scaleMod = 0;
 	
 	// Inner Shadow Effect
 	bitmapData = (unsigned char *)CGBitmapContextGetData(context);
-	pixels = (unsigned char *)bitmapData;
 
 	contextImage = CGBitmapContextCreateImage(context);
 	CGContextRelease(context);

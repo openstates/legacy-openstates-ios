@@ -255,6 +255,11 @@
 		37F6FCF514672167003AA80D /* BillsMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F6FCF414672167003AA80D /* BillsMenuViewController.m */; };
 		37F6FCF81467611F003AA80D /* BillsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F6FCF71467611F003AA80D /* BillsViewController.m */; };
 		37F6FD0A14676565003AA80D /* BillSearchParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F6FD0914676565003AA80D /* BillSearchParameters.m */; };
+		37FA2562148029930026EFB1 /* StarButtonOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 37FA255E148029930026EFB1 /* StarButtonOff.png */; };
+		37FA2563148029930026EFB1 /* StarButtonOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37FA255F148029930026EFB1 /* StarButtonOff@2x.png */; };
+		37FA2564148029930026EFB1 /* StarButtonOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 37FA2560148029930026EFB1 /* StarButtonOn.png */; };
+		37FA2565148029930026EFB1 /* starButtonOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37FA2561148029930026EFB1 /* starButtonOn@2x.png */; };
+		37FA2568148043BE0026EFB1 /* BillsWatchedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FA2567148043BE0026EFB1 /* BillsWatchedViewController.m */; };
 		8452D3F9128244D90069F4A9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452D3F8128244D90069F4A9 /* CFNetwork.framework */; };
 		8452D3FD128244E60069F4A9 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452D3FC128244E60069F4A9 /* MobileCoreServices.framework */; };
 /* End PBXBuildFile section */
@@ -771,6 +776,12 @@
 		37F6FD0014676214003AA80D /* BillsRecentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsRecentViewController.m; sourceTree = "<group>"; };
 		37F6FD0814676565003AA80D /* BillSearchParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillSearchParameters.h; sourceTree = "<group>"; };
 		37F6FD0914676565003AA80D /* BillSearchParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillSearchParameters.m; sourceTree = "<group>"; };
+		37FA255E148029930026EFB1 /* StarButtonOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StarButtonOff.png; sourceTree = "<group>"; };
+		37FA255F148029930026EFB1 /* StarButtonOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "StarButtonOff@2x.png"; sourceTree = "<group>"; };
+		37FA2560148029930026EFB1 /* StarButtonOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StarButtonOn.png; sourceTree = "<group>"; };
+		37FA2561148029930026EFB1 /* starButtonOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "starButtonOn@2x.png"; sourceTree = "<group>"; };
+		37FA2566148043BD0026EFB1 /* BillsWatchedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsWatchedViewController.h; sourceTree = "<group>"; };
+		37FA2567148043BE0026EFB1 /* BillsWatchedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsWatchedViewController.m; sourceTree = "<group>"; };
 		8452D3F8128244D90069F4A9 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		8452D3FC128244E60069F4A9 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
@@ -1091,6 +1102,7 @@
 				37F568DB147CC1CE00318856 /* offline@2x.png */,
 				3771B97C147A3FA300E9CE39 /* Votes */,
 				376357E5144CCD0700122377 /* Parties */,
+				37FA255D148029930026EFB1 /* StarButton */,
 			);
 			path = glyphs;
 			sourceTree = "<group>";
@@ -1259,6 +1271,8 @@
 				3771B97A147A2BE000E9CE39 /* BillVotesViewController.m */,
 				3771B9A0147ABCA200E9CE39 /* BillsSearchViewController.h */,
 				3771B9A1147ABCA200E9CE39 /* BillsSearchViewController.m */,
+				37FA2566148043BD0026EFB1 /* BillsWatchedViewController.h */,
+				37FA2567148043BE0026EFB1 /* BillsWatchedViewController.m */,
 				37F6FCFD14676214003AA80D /* BillsFavoritesViewController.h */,
 				37F6FCFE14676214003AA80D /* BillsFavoritesViewController.m */,
 				37F6FCFF14676214003AA80D /* BillsRecentViewController.h */,
@@ -1583,6 +1597,17 @@
 			path = Vendor/MKiCloudSync;
 			sourceTree = "<group>";
 		};
+		37FA255D148029930026EFB1 /* StarButton */ = {
+			isa = PBXGroup;
+			children = (
+				37FA255E148029930026EFB1 /* StarButtonOff.png */,
+				37FA255F148029930026EFB1 /* StarButtonOff@2x.png */,
+				37FA2560148029930026EFB1 /* StarButtonOn.png */,
+				37FA2561148029930026EFB1 /* starButtonOn@2x.png */,
+			);
+			path = StarButton;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1840,6 +1865,10 @@
 				3771B988147A3FA300E9CE39 /* VoteYea@2x.png in Resources */,
 				37F568DC147CC1CE00318856 /* offline.png in Resources */,
 				37F568DD147CC1CE00318856 /* offline@2x.png in Resources */,
+				37FA2562148029930026EFB1 /* StarButtonOff.png in Resources */,
+				37FA2563148029930026EFB1 /* StarButtonOff@2x.png in Resources */,
+				37FA2564148029930026EFB1 /* StarButtonOn.png in Resources */,
+				37FA2565148029930026EFB1 /* starButtonOn@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2006,6 +2035,7 @@
 				37738A11147B9616002AC526 /* ActionSheetStringPicker.m in Sources */,
 				37F568E7147D5E7300318856 /* MKiCloudSync.m in Sources */,
 				37798CF6147E3A810098361A /* SLFFetchedTableViewController.m in Sources */,
+				37FA2568148043BE0026EFB1 /* BillsWatchedViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

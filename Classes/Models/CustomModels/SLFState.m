@@ -110,7 +110,7 @@
 
 
 - (NSInteger)sessionIndexForDisplayName:(NSString *)displayName {
-    NSInteger index = [self.sessions count];
+    NSInteger index = 0;
     NSDictionary *sessionIndexesByDisplayName = self.sessionIndexesByDisplayName;
     if (!IsEmpty(displayName) && sessionIndexesByDisplayName) {
         NSNumber *value = [sessionIndexesByDisplayName objectForKey:displayName];

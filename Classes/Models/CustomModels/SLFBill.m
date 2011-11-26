@@ -1,6 +1,7 @@
 #import "SLFDataModels.h"
 #import "SLFSortDescriptor.h"
 #import "BillActionParser.h"
+#import "BillSearchParameters.h"
 
 @implementation SLFBill
 
@@ -56,6 +57,39 @@
         value = [value capitalizedString];
     return value;
 }
+
+#pragma mark - Bill Watch
+
+- (NSString *)watchID {
+    return RKMakePathWithObjectAddingEscapes(@":stateID||:session||:billID", self, NO);
+}
+
++ (NSArray *)billComponentsForWatchID:(NSString *)watchID {
+    if (IsEmpty(watchID))
+        return nil;
+    NSArray *parts = [watchID componentsSeparatedByString:@"||"];
+    if (IsEmpty(parts) || parts.count < 3)
+        return nil;
+    return parts;
+}
+
++ (SLFBill *)billForWatchID:(NSString *)watchID {
+    NSArray *parts = [SLFBill billComponentsForWatchID:watchID];
+    if (!parts)
+        return nil;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"stateID = %@ AND session = %@ AND billID = %@", [parts objectAtIndex:0], [parts objectAtIndex:1], [parts objectAtIndex:2]];
+    SLFBill *bill = [SLFBill findFirstWithPredicate:predicate];
+    return bill;
+}
+
++ (NSString *)resourcePathForWatchID:(NSString *)watchID {
+    NSArray *parts = [SLFBill billComponentsForWatchID:watchID];
+    if (!parts)
+        return nil;
+    return [BillSearchParameters pathForBill:[parts objectAtIndex:2] state:[parts objectAtIndex:0] session:[parts objectAtIndex:1]];
+}
+
+#pragma mark - Sorted Collections
 
 - (NSArray *)sortedActions {
     if (IsEmpty(self.actions))

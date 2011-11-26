@@ -18,6 +18,7 @@
 #import "BillsViewController.h"
 #import "BillSearchParameters.h"
 #import "BillsSearchViewController.h"
+#import "BillsWatchedViewController.h"
 
 #define MenuFavorites NSLocalizedString(@"Watch List", @"")
 #define MenuSearch NSLocalizedString(@"Search Bills", @"")
@@ -128,6 +129,8 @@
     }
     else if ([menuItem isEqualToString:MenuSearch])
         vc = [[BillsSearchViewController alloc] initWithState:self.state];
+    else if ([menuItem isEqualToString:MenuFavorites])
+        vc = [[BillsWatchedViewController alloc] init];
         /*
     if ([menuItem isEqualToString:MenuLegislators])
         vc = [[LegislatorsViewController alloc] initWithState:self.state];

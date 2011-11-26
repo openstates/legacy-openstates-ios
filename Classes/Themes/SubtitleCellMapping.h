@@ -13,3 +13,9 @@
 
 @interface StaticSubtitleCellMapping : SubtitleCellMapping
 @end
+
+@interface LargeSubtitleCellMapping : SubtitleCellMapping
+@end
+
+@interface LargeStaticSubtitleCellMapping : LargeSubtitleCellMapping
+@end
