@@ -100,20 +100,13 @@
     return self.party.pinColorIndex;
 }
 
-+ (NSString *)estimatedBoundaryIDForDistrict:(NSString *)district chamber:(SLFChamber *)chamber {
-    NSString *stateID = chamber.stateID;
-    NSString *chamberName = [chamber.shortName lowercaseString];
-    NSString *boundaryCode = chamber.isUpperChamber ? @"sldu" : @"sldl";
++ (NSString *)estimatedBoundaryIDForDistrict:(NSString *)district chamber:(SLFChamber *)chamberObj {
+    NSParameterAssert(chamberObj != NULL);
+    NSString *chamberName = [chamberObj.shortName lowercaseString];
+    NSString *boundaryCode = chamberObj.isUpperChamber ? @"sldu" : @"sldl";
     if ([chamberName hasPrefix:@"senate"] || [chamberName hasPrefix:@"house"])
         chamberName = [NSString stringWithFormat:@"state-%@", chamberName];
-    
-    NSDictionary *boundaryIDComponents = [NSDictionary dictionaryWithObjectsAndKeys:
-                                          boundaryCode, @"boundaryCode",
-                                          stateID, @"stateID",
-                                          chamberName, @"chamberName",
-                                          district, @"districtID", nil];
-    
-    return RKMakePathWithObject(@":boundaryCode-:stateID-:chamberName-district-:districtID", boundaryIDComponents);    
+    return [NSString stringWithFormat:@"%@-%@-%@-district-%@", boundaryCode, chamberObj.stateID, chamberName, district];    
 }
 
 #pragma mark -

@@ -184,9 +184,9 @@
         message = [errorText stringByReplacingOccurrencesOfString:SUNLIGHT_APIKEY withString:@"<APIKEY>"];
     [SLFAlertView showWithTitle:NSLocalizedString(@"Error",@"") message:message buttonTitle:NSLocalizedString(@"Cancel",@"")];
     RKLogError(@"RestKit Error -");
-    if (request && [request respondsToSelector:@selector(resourcePath)])
-        RKLogError(@"    resourcePath: %@", [request performSelector:@selector(resourcePath)]);
-    RKLogError(@"    request: %@", request);
+    if (request)
+        RKLogError(@"    resourcePath: %@", request.resourcePath);
+    RKLogError(@"    request URL: %@", request.URL);
     RKLogError(@"    error: %@", message);
 }
 

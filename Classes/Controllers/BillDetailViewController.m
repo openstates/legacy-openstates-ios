@@ -67,6 +67,7 @@ enum SECTIONS {
 - (id)initWithResourcePath:(NSString *)resourcePath {
     self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
+        self.useTitleBar = YES;
         self.stackWidth = 500;
         RKLogDebug(@"Loading resource path for bill: %@", resourcePath);
         [self loadDataFromNetworkWithResourcePath:resourcePath];

@@ -44,7 +44,7 @@
 }
 
 - (SLFChamber *)chamberObj {
-    return [SLFChamber chamberWithType:self.chamber forState:self.state];
+    return [SLFChamber chamberWithType:self.chamber forState:self.stateObj];
 }
 
 - (SLFParty *)partyObj {
