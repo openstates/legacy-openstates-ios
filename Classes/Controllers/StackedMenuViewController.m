@@ -16,7 +16,6 @@
 #import "StretchedTitleLabel.h"
 #import "StatesViewController.h"
 #import "UIImage+OverlayColor.h"
-#import "AppDelegate.h"
 #import "StackedBackgroundView.h"
 #import "DDActionHeaderView.h"
 #import "OpenStatesIconView.h"
@@ -31,6 +30,7 @@
 - (void)configureMenuFooter;
 - (void)configureStackedBackgroundView;
 - (void)configureActionBarForState:(SLFState *)newState;
+- (void)handleStatePickerBarTap:(UIGestureRecognizer *)gestureRecognizer;
 @end
 
 const NSUInteger STACKED_MENU_INSET = 75;
@@ -42,7 +42,7 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 @synthesize statesPopover = _statesPopover;
 
 - (id)initWithState:(SLFState *)newState {
-    NSAssert(PSIsIpad(), @"This class is only available for iPads (for now)");
+    NSAssert(SLFIsIpad(), @"This class is only available for iPads (for now)");
     self = [super initWithState:newState];
     if (self) {
         self.useGradientBackground = NO;
@@ -79,8 +79,8 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {
-    [XAppDelegate.stackController popToRootViewControllerAnimated:YES];
-    [XAppDelegate.stackController pushViewController:viewController fromViewController:nil animated:YES];
+    [SLFAppDelegate.stackController popToRootViewControllerAnimated:YES];
+    [SLFAppDelegate.stackController pushViewController:viewController fromViewController:nil animated:YES];
 }
 
 - (RKTableViewCellMapping *)menuCellMapping {
@@ -103,13 +103,16 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     actionBar.autoresizingMask = UIViewAutoresizingNone;
     actionBar.useGradientBorder = NO;
     actionBar.strokeBottomColor = [UIColor colorWithWhite:0.5 alpha:0.25];
+
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleStatePickerBarTap:)];
+	tapGesture.delegate = self;
+	[actionBar addGestureRecognizer:tapGesture];
+	[tapGesture release];	
+
     self.titleBarView = actionBar;
     [self.view addSubview:actionBar];
     [actionBar release];
     [self configureActionBarForState:self.state];
-    if (!self.state)
-        self.title = NSLocalizedString(@"Pick a State …", @"");
-    [self.view setNeedsDisplayInRect:actionBar.frame];
 }
 
 - (void)configureMenuFooter {
@@ -139,7 +142,7 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 
 - (void)statePopover:(StatesPopoverManager *)statePopover didSelectState:(SLFState *)newState {
     [self configureActionBarForState:newState];
-    [XAppDelegate.stackController popToRootViewControllerAnimated:YES];
+    [SLFAppDelegate.stackController popToRootViewControllerAnimated:YES];
     [super stateMenuSelectionDidChangeWithState:newState];
 }
 
@@ -166,11 +169,24 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     if (actionBar && [actionBar isActionPickerExpanded])
         [actionBar shrinkActionPicker];
     self.selectStateButton = [self barButtonForState:newState];
-    CGPoint origin = CGPointMake(_selectStateButton.bounds.size.width + 12, 16);
+    CGPoint origin = CGPointMake(_selectStateButton.bounds.size.width + 16, 16);
     UILabel *innerLabel = SLFStyledHeaderLabelWithTextAtOrigin(NSLocalizedString(@"Pick a State", @""), origin);
     actionBar.items = [NSArray arrayWithObjects:_selectStateButton, innerLabel, nil];
+    if (!newState)
+        self.title = NSLocalizedString(@"Pick a State: ", @"");
+    [self.view setNeedsDisplayInRect:actionBar.frame];
 }
 
+- (void)handleStatePickerBarTap:(UIGestureRecognizer *)gestureRecognizer {
+    NSUInteger stackSize = [SLFAppDelegate.stackController canExpandStack];
+    if (stackSize) {
+        [SLFAppDelegate.stackController displayViewControllerIndexOnRightMost:-stackSize animated:YES];
+    }
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    return [SLFAppDelegate.stackController canExpandStack];
+}
 
 @end
 

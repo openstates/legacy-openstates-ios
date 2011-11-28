@@ -13,7 +13,7 @@
 #import "StateDetailViewController.h"
 #import "StatesPopoverManager.h"
 
-@interface StackedMenuViewController : StateDetailViewController <StatesPopoverDelegate>
+@interface StackedMenuViewController : StateDetailViewController <StatesPopoverDelegate, UIGestureRecognizerDelegate>
 - (IBAction)changeSelectedState:(id)sender;
 @end
 
