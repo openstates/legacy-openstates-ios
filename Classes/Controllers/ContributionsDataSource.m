@@ -20,6 +20,7 @@
 - (void)parseJSONObject:(id)jsonDeserialized;
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject;
+- (BOOL)hasSearchResults;
 @end
 
 @implementation ContributionsDataSource
@@ -70,13 +71,21 @@
     [super dealloc];
 }
 
+- (BOOL)hasSearchResults {
+    NSInteger totalRows = 0;
+    for (NSArray *rows in self.sectionList) {
+        totalRows+= [rows count];
+    }
+    return totalRows > 0;
+}
+
 #pragma mark -
 #pragma mark UITableViewDataSource methods
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {    
-    if (IsEmpty(self.sectionList))
-        return 0;
+    if ([self hasSearchResults] == NO)
+        return 1;
     return [self.sectionList count];
 }
 
@@ -88,14 +97,12 @@
     return index;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section {
-    NSInteger count = 0;
-    if (self.sectionList) {
-        NSArray *group = [self.sectionList objectAtIndex:section];
-        if (group)
-            count = [group count];
-    }
-    return count;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == 0 && [self hasSearchResults] == NO)
+        return 1;
+    if (section >= [self.sectionList count])
+        return 0;
+    return [[self.sectionList objectAtIndex:section] count];
 }
 
 - (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
@@ -130,7 +137,18 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{        
+{
+    if ([self hasSearchResults] == NO) {
+        SLFStandardGroupCell *cell = [SLFStandardGroupCell standardCellWithIdentifier:nil];
+        TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
+        cellInfo.subtitle = NSLocalizedString(@"Nothing",@"");
+        cellInfo.title = NSLocalizedString(@"Found no results for this selection.", @"");
+        cell.cellInfo = cellInfo;
+        [cellInfo release];
+        SLFAlternateCellForIndexPath(cell, indexPath);    
+        return cell;
+    }
+
     TableCellDataObject *cellInfo = [self dataObjectForIndexPath:indexPath];
     if (cellInfo == nil) {
         RKLogError(@"Error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);
