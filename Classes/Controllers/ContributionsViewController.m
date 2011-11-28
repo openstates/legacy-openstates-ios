@@ -132,7 +132,7 @@
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {
-    if (!PSIsIpad()) {
+    if (!SLFIsIpad()) {
         [self.navigationController pushViewController:viewController animated:YES];
         return;
     }

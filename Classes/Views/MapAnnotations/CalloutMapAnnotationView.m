@@ -290,7 +290,7 @@
 - (void)dealloc {
     self.parentAnnotationView = nil;
     self.mapView = nil;
-    nice_release(_contentView);
+    SLFRelease(_contentView);
     [super dealloc];
 }
 

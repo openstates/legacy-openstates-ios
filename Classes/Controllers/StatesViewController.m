@@ -18,40 +18,35 @@
 
 @interface StatesViewController()
 - (void)pushOrSendViewControllerWithState:(SLFState *)newState;
+- (void)loadFromNetworkIfEmpty;
 - (void)configureTableHeader;
 @end
 
 @implementation StatesViewController
-@synthesize tableViewModel = __tableViewModel;
 @synthesize stateMenuDelegate;
 
-- (id)initWithStyle:(UITableViewStyle)style {
-    self = [super initWithStyle:style];
+- (id)init {
+    self = [super initWithState:nil resourcePath:[NSString stringWithFormat:@"/metadata?apikey=%@", SUNLIGHT_APIKEY] dataClass:[SLFState class]];
     if (self) {
-        self.stackWidth = 320;
         self.useTitleBar = NO;
     }
     return self;
 }
 
+- (void)dealloc {
+    self.stateMenuDelegate = nil;
+    [super dealloc];
+}
+
 - (void)configureTableViewModel {
-    self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    NSDictionary *queryParams = [NSDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
-    self.tableViewModel.resourcePath = [@"/metadata" appendQueryParams:queryParams];
-    [self.tableViewModel setObjectMappingForClass:[SLFState class]]; 
-    self.tableViewModel.autoRefreshFromNetwork = YES;
-    self.tableViewModel.autoRefreshRate = 360;
-    self.tableViewModel.pullToRefreshEnabled = YES;
+    [super configureTableViewModel];
     self.tableViewModel.showsSectionIndexTitles = YES;
-    self.tableViewModel.variableHeightRows = YES;
     self.tableViewModel.sectionNameKeyPath = @"stateInitial";
-    SubtitleCellMapping *stateCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
+    self.tableView.rowHeight = 48;
+    SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"name" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"stateID" toAttribute:@"detailTextLabel.text"];
         [cellMapping mapKeyPath:@"stateFlag" toAttribute:@"imageView.image"];
-        cellMapping.rowHeight = 48;
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             SLFState *state = object;
             SLFSaveSelectedState(state);
@@ -59,11 +54,31 @@
             [self pushOrSendViewControllerWithState:state];
         };
     }];
-    [self.tableViewModel mapObjectsWithClass:[SLFState class] toTableCellsWithMapping:stateCellMap];    
+    [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    if (!SLFIsIpad())
+        [self configureTableHeader];
+    [self loadFromNetworkIfEmpty];
+    if (self.tableViewModel.rowCount && !self.title)
+        self.title = [NSString stringWithFormat:@"%d States", self.tableViewModel.rowCount];
+}
+
+- (void)viewDidUnload {
+    [super viewDidUnload];
+    self.stateMenuDelegate = nil;
+}
+
+- (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
+    [super tableViewModelDidFinishLoad:tableViewModel];
+    if (!self.title)
+        self.title = [NSString stringWithFormat:@"%d States", self.tableViewModel.rowCount];
 }
 
 - (void)loadFromNetworkIfEmpty {
-    NSInteger count = [[self.tableViewModel.fetchedResultsController fetchedObjects] count];
+    NSInteger count = self.tableViewModel.rowCount;
     if (count == 0) {
         @try {
             [self.tableViewModel loadTableFromNetwork];
@@ -72,18 +87,6 @@
             RKLogWarning(@"Exception while attempting to load list of available states from network (already in progress?) ... %@", exception);
         }
     }
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.title = NSLocalizedString(@"Loading...",@"");
-    [self configureTableViewModel];
-    [self.tableViewModel loadTable];    
-    if (!PSIsIpad())
-        [self configureTableHeader];
-    [self loadFromNetworkIfEmpty];
-    NSInteger count = [[self.tableViewModel.fetchedResultsController fetchedObjects] count];
-    self.title = [NSString stringWithFormat:@"%d States",count];
 }
 
 - (void)configureTableHeader {
@@ -96,17 +99,6 @@
     self.tableView.height -= 40;
     [self.view addSubview:stretchedTitle];
     [stretchedTitle release];
-}
-
-- (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
-    [super tableViewModelDidFinishLoad:tableViewModel];
-    self.title = [NSString stringWithFormat:@"%d States",[[self.tableViewModel.fetchedResultsController fetchedObjects] count]];
-}
-
-- (void)dealloc {
-    self.stateMenuDelegate = nil;
-    self.tableViewModel = nil;
-     [super dealloc];
 }
 
 - (void)pushOrSendViewControllerWithState:(SLFState *)state {

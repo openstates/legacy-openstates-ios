@@ -71,7 +71,7 @@
     loadingLabel.shadowOffset = CGSizeMake(0, 2);
     loadingLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     [loadingLabel sizeToFit];
-    loadingLabel.center = CGPointMake(PSIsIpad() ? 190 : 160, 100);
+    loadingLabel.center = CGPointMake(SLFIsIpad() ? 190 : 160, 100);
     __tableViewModel.loadingView = loadingLabel;
     __tableViewModel.predicate = nil;
     NSAssert(self.dataClass != NULL, @"Must set a data class before loading the view");
@@ -109,7 +109,7 @@
 
 - (void)setResourcePath:(NSString *)resourcePath {
     self.tableViewModel.predicate = nil;
-    nice_release(__resourcePath);
+    SLFRelease(__resourcePath);
     __resourcePath = [resourcePath copy];
 }
 

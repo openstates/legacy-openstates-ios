@@ -141,7 +141,7 @@
             tempPolygon = [self polygonRingWithCoordinates:ring interiorRings:interiorRings];
         index--;
     }
-    nice_release(interiorRings);
+    SLFRelease(interiorRings);
     if (!tempPolygon)
         return nil;
     tempPolygon.title = self.name;    

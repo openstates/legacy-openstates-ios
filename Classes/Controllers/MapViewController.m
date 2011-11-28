@@ -87,7 +87,7 @@
     CGRect mapViewRect;
     CGRect toolbarRect;
     CGRect searchRect = CGRectMake(0, 0, CGRectGetWidth(viewRect), 44);
-    if (PSIsIpad())
+    if (SLFIsIpad())
         CGRectDivide(viewRect, &toolbarRect, &mapViewRect, 44, CGRectMinYEdge);
     else
         CGRectDivide(viewRect, &mapViewRect, &toolbarRect, CGRectGetHeight(viewRect)-44, CGRectMinYEdge);
@@ -117,7 +117,7 @@
     UISearchBar *aBar = [[[UISearchBar alloc] initWithFrame:rect] autorelease];
     aBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
     aBar.delegate = self;
-    if (!PSIsIpad())
+    if (!SLFIsIpad())
         self.navigationItem.titleView = aBar;
     else {
         aBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -126,7 +126,7 @@
 }
 
 - (MKMapView *)setUpMapViewWithFrame:(CGRect)rect {
-    if (PSIsIpad())
+    if (SLFIsIpad())
         rect = CGRectInset(rect, 20, 0);
     MKMapView *aView = [[[MKMapView alloc] initWithFrame:rect] autorelease];
     [self.view addSubview:aView];
@@ -155,13 +155,13 @@
     UIBarButtonItem *mapType = [[UIBarButtonItem alloc] initWithCustomView:mapTypeSwitch];
     NSMutableArray *barItems = [[NSMutableArray alloc] initWithObjects:flex, locate, flex, mapType, flex, nil];
 
-    if (PSIsIpad()) {
+    if (SLFIsIpad()) {
         UIBarButtonItem *search = [[UIBarButtonItem alloc] initWithCustomView:self.searchBar];
         self.searchBar.width = 235;
         search.width = 235;
         [barItems addObject:search];
         [barItems addObject:flex];
-        nice_release(search);
+        SLFRelease(search);
         aToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
     }
     else {
@@ -169,10 +169,10 @@
         self.hidesBottomBarWhenPushed = YES;
     }
     [aToolbar setItems:barItems animated:YES];
-    nice_release(flex);
-    nice_release(mapType);
-    nice_release(mapTypeSwitch);
-    nice_release(barItems);
+    SLFRelease(flex);
+    SLFRelease(mapType);
+    SLFRelease(mapTypeSwitch);
+    SLFRelease(barItems);
     return aToolbar;
 }
 
@@ -221,7 +221,7 @@
 #pragma mark - Actions
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {
-    if (!PSIsIpad()) {
+    if (!SLFIsIpad()) {
         [self.navigationController pushViewController:viewController animated:YES];
         return;
     }

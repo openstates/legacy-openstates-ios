@@ -24,7 +24,7 @@
 		<string>Icon-Small.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>5EMVYB9KRX.org.openstates.${PRODUCT_NAME:identifier}</string>
+	<string>5EMVYB9KRX.org.openstates.openstates</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

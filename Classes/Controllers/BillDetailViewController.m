@@ -231,7 +231,7 @@ enum SECTIONS {
         return;
     RKTableItem *stageItemCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        CGFloat rowHeight = PSIsIpad() ? 45 : 95;
+        CGFloat rowHeight = SLFIsIpad() ? 45 : 95;
         tableItem.cellMapping.rowHeight = rowHeight;
         tableItem.cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             AppendingFlowView *appendingFlow = [[AppendingFlowView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), rowHeight)];

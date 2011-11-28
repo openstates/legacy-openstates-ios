@@ -23,16 +23,16 @@
 #define DEFAULT_ITEM_HEIGHT 43.f
 
 @implementation StackedMenuCell
-@synthesize glowView;
-@synthesize enabled;
-@synthesize disabledView;
+@synthesize glowView = _glowView;
+@synthesize enabled = _enabled;
+@synthesize disabledView = _disabledView;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self)
     {
-        enabled = YES;
+        _enabled = YES;
         self.clipsToBounds = YES;
         self.imageView.contentMode = UIViewContentModeCenter;
         
@@ -58,32 +58,31 @@
         [self.textLabel.superview addSubview:bottomLine];
         [bottomLine release];
         
-        glowView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, DEFAULT_ITEM_HEIGHT)];
-        glowView.image = [UIImage imageNamed:@"MenuGlow"];
-        glowView.hidden = YES;
-        [self addSubview:glowView];
+        _glowView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, DEFAULT_ITEM_HEIGHT)];
+        _glowView.image = [UIImage imageNamed:@"MenuGlow"];
+        _glowView.hidden = YES;
+        [self addSubview:_glowView];
         
         
         [[SLFReachable sharedReachable].localNotification addObserver:self selector:@selector(reachableDidChange:) name:SLFReachableStatusChangedForHostKey object:SLFReachableAnyNetworkHost];
-            //        RKObjectManager *manager = [RKObjectManager sharedManager];
-            //       NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-            //        [center addObserver:self selector:@selector(reachableDidChange:) name:RKObjectManagerDidBecomeOnlineNotification object:manager];
-            //        [center addObserver:self selector:@selector(reachableDidChange:) name:RKObjectManagerDidBecomeOfflineNotification object:manager];
+//          RKObjectManager *manager = [RKObjectManager sharedManager];
+//          NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+//          [center addObserver:self selector:@selector(reachableDidChange:) name:RKObjectManagerDidBecomeOnlineNotification object:manager];
+//          [center addObserver:self selector:@selector(reachableDidChange:) name:RKObjectManagerDidBecomeOfflineNotification object:manager];
     }
     return self;
 }
 
 - (void)reachableDidChange:(NSNotification *)notification {
     self.enabled = [[SLFReachable sharedReachable] isNetworkReachable];
-        //    RKObjectManager *manager = [RKObjectManager sharedManager];
-        //   self.enabled = [manager isOnline];
+//  self.enabled = [[RKObjectManager sharedManager] isOnline];
 }
 
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-        /* Why can't we do these in viewDidLoad?  For some reason they get reset? */
+    /* Why can't we do these in viewDidLoad?  For some reason they get reset? */
     CGRect frm = self.imageView.frame;
     self.imageView.frame = CGRectMake(30.f, frm.origin.y, frm.size.width, frm.size.height);
     frm = self.textLabel.frame;
@@ -97,7 +96,7 @@
     
     UIImageView *error = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"error.png"]];
     CGFloat imgDim = 24.f;
-        // set the error image's frame origin to be on the far right side of the table view cell
+    /* set the error image origin is on the far right side of the table view cell */
     CGRect frm = CGRectMake((STACKED_MENU_WIDTH - 3.f) - imgDim , roundf((DEFAULT_ITEM_HEIGHT/2) - (imgDim/2)), imgDim, imgDim);
     error.frame = frm;
     [newView addSubview:error];        
@@ -111,22 +110,18 @@
 - (void)hideDisabledView {
     if (!self.disabledView)
         return;
-        // Remove the "dimmed" view, if there is one. (see below)
-    [self.disabledView removeFromSuperview];
+    [_disabledView removeFromSuperview];
     self.disabledView = nil;
 }
 
 - (void)enableCell {
-        // Reenable user interaction and selection ability
     self.selectionStyle = UITableViewCellSelectionStyleBlue;
     self.userInteractionEnabled = YES;
 }
 
 - (void)disableCell {
-        // Disable future user interaction and selections
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.userInteractionEnabled = NO;
-        // Turn off any current selections/highlights
     if (self.selected) {
         self.selected = NO;
     }
@@ -136,16 +131,16 @@
 }
 
 - (void)setEnabled:(BOOL)newValue {
-    enabled = newValue;
-    if (enabled) {
+    _enabled = newValue;
+    if (newValue) {
         [self hideDisabledView];
 #warning turn on?
-            //[self enableCell];
+        //[self enableCell];
     }
     else {
         [self showDisabledView];
 #warning turn on?
-            //[self disableCell];
+        //[self disableCell];
     }    
     [self setNeedsDisplay];
 }
@@ -165,9 +160,9 @@
 - (void)dealloc
 {
     [[SLFReachable sharedReachable].localNotification removeObserver:self];
-        // [[NSNotificationCenter defaultCenter] removeObserver:self];
+//  [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.disabledView = nil;
-    nice_release(glowView);
+    self.glowView = nil;
     [super dealloc];
 }
 @end

@@ -49,8 +49,8 @@
     [SLFAppearance setupAppearance];
     [SLFRestKitManager sharedRestKit];
     [[SLFPersistenceManager sharedPersistence] loadPersistence:nil];
-    [NSURLCache setSharedURLCache:[[[AFURLCache alloc] initWithMemoryCapacity:1024*1024   // 1MB mem cache
-                                                          diskCapacity:1024*1024*5 // 5MB disk cache
+    [NSURLCache setSharedURLCache:[[[AFURLCache alloc] initWithMemoryCapacity:1024*1024*4   // 4MB mem cache
+                                                          diskCapacity:1024*1024*15 // 15MB disk cache
                                                               diskPath:[AFURLCache defaultCachePath]] autorelease]];    
     [self setUpViewControllers];
 }
@@ -63,7 +63,7 @@
 
 - (void)setUpViewControllers {
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    if (PSIsIpad())
+    if (SLFIsIpad())
         [self setUpIpadViewControllers];
     else
         [self setUpIphoneViewControllers];

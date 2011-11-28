@@ -54,8 +54,8 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 
 	self.chamberControl = nil;
-	nice_release(updated);
-	nice_release(categories_);
+	SLFRelease(updated);
+	SLFRelease(categories_);
 	[super dealloc];
 }
 
@@ -342,7 +342,7 @@
 	isFresh = NO;
 	loadingStatus = LOADING_NO_NET;
 	
-	nice_release(categories_);
+	SLFRelease(categories_);
 	categories_ = [[NSMutableDictionary alloc] init];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:kBillCategoriesNotifyError object:nil];

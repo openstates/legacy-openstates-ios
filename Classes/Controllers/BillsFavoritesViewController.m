@@ -10,7 +10,6 @@
 //
 //
 
-#import "AppDelegate.h"
 #import "BillsFavoritesViewController.h"
 #import "BillsDetailViewController.h"
 #import "JSONKit.h"
@@ -40,8 +39,8 @@
 
 - (void)dealloc {	
 	[[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
-	nice_release(_watchList);
-	nice_release(_cachedBills);
+	SLFRelease(_watchList);
+	SLFRelease(_cachedBills);
 	
 	[super dealloc];
 }
@@ -75,7 +74,7 @@
 	[super viewWillAppear:animated];
 	self.navigationController.navigationBar.tintColor = [TexLegeTheme navbar];
 
-	nice_release(_watchList);
+	SLFRelease(_watchList);
 
 	NSString *thePath = [[UtilityMethods applicationDocumentsDirectory] stringByAppendingPathComponent:kBillFavoritesStorageFile];
 	_watchList = [[NSMutableArray alloc] initWithContentsOfFile:thePath];

@@ -13,13 +13,6 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
-BOOL IsEmpty(NSObject * thing) {
-    return thing == nil
-	|| ([[NSNull null] isEqual:thing])
-	|| ([thing respondsToSelector:@selector(length)] && [(NSData *)thing length] == 0)
-	|| ([thing respondsToSelector:@selector(count)] && [(NSArray *)thing count] == 0);
-}
-
 int main(int argc, char *argv[])
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];

@@ -27,7 +27,7 @@
     if (self) {
         self.stackWidth = 450;
         self.useGradientBackground = YES;
-        self.useTitleBar = PSIsIpad();
+        self.useTitleBar = SLFIsIpad();
     }
     return self;
 }
@@ -89,7 +89,7 @@
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {
-    if (!PSIsIpad()) {
+    if (!SLFIsIpad()) {
         [self.navigationController pushViewController:viewController animated:YES];
         return;
     }
@@ -117,9 +117,8 @@
 #pragma mark - Search Bar Scope
 
 - (void)configureSearchBarWithPlaceholder:(NSString *)placeholder withConfigurationBlock:(SearchBarConfigurationBlock)block {
-    CGRect searchRect = self.titleBarView.frame;
-    searchRect.origin.y = self.titleBarView.opticalHeight;
-    searchRect.size.height = 44;
+    CGFloat tableWidth = self.tableView.bounds.size.width;
+    CGRect searchRect = CGRectMake(0, self.titleBarView.opticalHeight, tableWidth, 44);
     UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:searchRect];
     searchBar.delegate = self;
     searchBar.placeholder = placeholder;
@@ -127,6 +126,7 @@
     if (block)
         block(searchBar);
     [searchBar sizeToFit];
+    searchBar.width = tableWidth;
     CGRect tableRect = self.tableView.frame;
     tableRect.size.height -= searchBar.height;
     self.tableView.frame = CGRectOffset(tableRect, 0, searchBar.height);

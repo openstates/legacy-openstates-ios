@@ -14,8 +14,6 @@
 #import <RestKit/CoreData/CoreData.h>
 #import "PSStackedView.h"
 
-#define XAppDelegate ((AppDelegate *)[[UIApplication sharedApplication] delegate])
-
 @interface AppDelegate : NSObject <UIApplicationDelegate> {
 }
 

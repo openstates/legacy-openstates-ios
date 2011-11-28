@@ -105,7 +105,7 @@
 
 - (void)dealloc
 {
-    nice_release(cellContentView);    
+    SLFRelease(cellContentView);    
     [super dealloc];
 }
 @end

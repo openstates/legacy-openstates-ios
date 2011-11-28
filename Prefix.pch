@@ -14,12 +14,5 @@
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
     #import <CoreData/CoreData.h>
-    #import "PSStackedViewGlobal.h"
-    #import "PSStackedView.h"
-    #import "StackableControllerProtocol.h"
-    #import "APIKeys.h"
-    #import "SLFPersistenceManager.h"
-	#define nice_release(var) if (var) [var release], var = nil
-    BOOL IsEmpty(NSObject * thing);
-
+    #import "SLFGlobal.h"
 #endif

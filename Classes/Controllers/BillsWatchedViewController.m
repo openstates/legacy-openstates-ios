@@ -108,7 +108,7 @@
 }
 
 - (void)configureEditingButtons {
-    if (PSIsIpad())
+    if (SLFIsIpad())
         [self configureEditingButtonsIpad];
     else
         [self configureEditingButtonsIphone];
@@ -121,7 +121,7 @@
     [self.tableViewModel.tableView setEditing:wantToEdit animated:YES];
     id nextButton = wantToEdit ? self.doneButton : self.editButton;
     id previousButton = wantToEdit ? self.editButton : self.doneButton;
-    if (PSIsIpad()) {
+    if (SLFIsIpad()) {
         [previousButton setHidden:YES];
         [nextButton setHidden:NO];
     }
