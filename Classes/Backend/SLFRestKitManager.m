@@ -104,24 +104,22 @@
 }
 
 
-- (RKObjectLoader *)objectLoaderForResourcePath:(NSString *)pathToLoad {
+- (RKObjectLoader *)objectLoaderForResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate withTimeout:(NSTimeInterval)timeoutSeconds {
     NSCParameterAssert(pathToLoad != NULL);
     RKLogDebug(@"Loading data at path: %@", pathToLoad);
     RKObjectManager* objectManager = [RKObjectManager sharedManager];
-    RKObjectLoader * loader = [objectManager objectLoaderWithResourcePath:pathToLoad delegate:self];
+    RKObjectLoader * loader = [objectManager objectLoaderWithResourcePath:pathToLoad delegate:delegate];
     Class theClass = [self modelClassFromResourcePath:pathToLoad];
     loader.objectMapping = (RKObjectMapping *)[objectManager.mappingProvider objectMappingForClass:theClass];
     loader.method = RKRequestMethodGET;
-    loader.cacheTimeoutInterval = 45 * 60 * 60;
+    loader.cacheTimeoutInterval = timeoutSeconds;
     return loader;
 }
 
-- (void)loadObjectsAtResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate {
-    RKObjectLoader *loader = [self objectLoaderForResourcePath:pathToLoad];
-    loader.delegate = delegate;
+- (void)loadObjectsAtResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate withTimeout:(NSTimeInterval)timeoutSeconds {
+    RKObjectLoader *loader = [self objectLoaderForResourcePath:pathToLoad delegate:delegate withTimeout:timeoutSeconds];
     [loader send];
 }
-
 
 - (void)preloadObjectsForState:(SLFState *)state {
     if (!state)
@@ -134,27 +132,32 @@
         __preloadQueue.showsNetworkActivityIndicatorWhenBusy = YES;
     }
 
+    NSTimeInterval timeout = SLF_HOURS_TO_SECONDS(48);
     NSString *resourcePath = nil;
     NSMutableDictionary *queryParameters = [NSMutableDictionary dictionaryWithObjectsAndKeys: SUNLIGHT_APIKEY, @"apikey", state.stateID, @"stateID", nil];
     RKPathMatcher *matcher = [RKPathMatcher matcherWithPattern:@"/:entity/:stateID?apikey=:apikey"];
     
     [queryParameters setObject:@"metadata" forKey:@"entity"];
     resourcePath = [matcher pathFromObject:queryParameters];
-    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath]];
+    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:timeout]];
 
     [queryParameters setObject:@"districts" forKey:@"entity"];
     resourcePath = [matcher pathFromObject:queryParameters];
-    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath]];
+    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:timeout]];
     
     matcher = [RKPathMatcher matcherWithPattern:@"/:entity?state=:stateID&apikey=:apikey"];
 
+    [queryParameters setObject:@"events" forKey:@"entity"];
+    resourcePath = [matcher pathFromObject:queryParameters];
+    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)]];
+    
     [queryParameters setObject:@"committees" forKey:@"entity"];
     resourcePath = [matcher pathFromObject:queryParameters];
-    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath]];
+    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:timeout]];
 
     [queryParameters setObject:@"legislators" forKey:@"entity"];
     resourcePath = [[matcher pathFromObject:queryParameters] stringByAppendingString:@"&active=true"];
-    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath]];
+    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:timeout]];
     
     [__preloadQueue start];
     

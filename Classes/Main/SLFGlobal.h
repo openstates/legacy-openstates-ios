@@ -18,9 +18,11 @@
 
 BOOL IsEmpty(NSObject * thing);
 
+@class AppDelegate;
 #define SLFIsIpad() ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
 #define SLFAppStatusBarOrientation ([[UIApplication sharedApplication] statusBarOrientation])
 #define SLFIsPortrait()  UIInterfaceOrientationIsPortrait(SLFAppStatusBarOrientation)
 #define SLFIsLandscape() UIInterfaceOrientationIsLandscape(SLFAppStatusBarOrientation)
-#define SLFAppDelegate ((AppDelegate *)[[UIApplication sharedApplication] delegate])
+#define SLFAppDelegateStack (((PSStackedViewController *)[(AppDelegate *)[[UIApplication sharedApplication] delegate] valueForKey:@"stackController"]))
 #define SLFRelease(var) if (var) [var release], var = nil
+#define SLF_HOURS_TO_SECONDS(var) (var * 60 * 60)

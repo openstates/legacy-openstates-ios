@@ -1,0 +1,18 @@
+slfos://states   -> StatesViewController
+slfos://states/detail/tx -> StateDetailViewController:initWithState:
+
+slfos://legislators/tx -> LegislatorsViewController:initWithState:
+slfos://legislators/detail/TXL234232 -> LegislatorDetailViewController:initWithLegislatorID:
+
+slfos://committees/tx -> CommitteesViewController:initWithState:
+slfos://committees/detail/TXC34234 -> CommitteeDetailViewController:initWithCommitteeID:
+
+slfos://districts/tx -> DistrictsViewController:initWithState:
+slfos://districts/detail/sldl-tx-house-23 -> DistrictDetailViewController:initWithDistrictMapID:
+
+slfos://events/tx -> EventsViewController:initWithState:
+slfos://events/detail/TXE34234 -> EventDetailViewController:initWithEventID:
+
+slfos://bills/tx -> BillsMenuViewController:initWithState:
+slfos://bills/tx/search -> BillsSeachViewController:initWithState:
+slfos://bills/detail/tx/821/HB 41  -> BillDetailViewController:initWithState:session:billID:

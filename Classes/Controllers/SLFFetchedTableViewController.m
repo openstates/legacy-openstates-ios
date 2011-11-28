@@ -111,6 +111,8 @@
     self.tableViewModel.predicate = nil;
     SLFRelease(__resourcePath);
     __resourcePath = [resourcePath copy];
+    if (!IsEmpty(resourcePath))
+        SLFSaveCurrentActivityPath(resourcePath);
 }
 
 - (BOOL)hasSearchableDataClass {

@@ -240,7 +240,7 @@
     if (!IsEmpty(watchIDPaths))
         return;
     for (NSString *resourcePath in watchIDPaths)
-        [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self];
+        [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)];
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {

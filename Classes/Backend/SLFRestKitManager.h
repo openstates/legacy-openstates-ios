@@ -19,13 +19,12 @@
 }
 + (SLFRestKitManager *)sharedRestKit;
 + (void)showFailureAlertWithRequest:(RKRequest *)request error:(NSError *)error;
-- (void)loadObjectsAtResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate;
+- (void)loadObjectsAtResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate withTimeout:(NSTimeInterval)timeoutSeconds;
 - (void)preloadObjectsForState:(SLFState *)state;
 @property (nonatomic,retain) RKClient *transClient;
 @property (nonatomic,retain) RKClient *openStatesClient;
 @property (nonatomic,retain) RKClient *boundaryClient;
 @end
-
 
 #define SEED_DB_NAME @"SLFDataSeed.sqlite"
 #define APP_DB_NAME @"SLFData.sqlite"

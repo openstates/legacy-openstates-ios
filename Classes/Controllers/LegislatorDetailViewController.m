@@ -91,11 +91,8 @@ enum SECTIONS {
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {
     NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", resourceID, @"legislatorID", nil];
     NSString *resourcePath = RKMakePathWithObject(@"/legislators/:legislatorID?apikey=:apikey", queryParams);
-    RKObjectManager* objectManager = [RKObjectManager sharedManager];
-    [objectManager loadObjectsAtResourcePath:resourcePath delegate:self block:^(RKObjectLoader* loader) {
-        loader.objectMapping = [objectManager.mappingProvider objectMappingForClass:[SLFLegislator class]];
-        loader.cacheTimeoutInterval = 24 * 60 * 60;
-    }];
+    SLFSaveCurrentActivityPath(resourcePath);
+    [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(24)];
 }
 
 - (void)configureTableItems {

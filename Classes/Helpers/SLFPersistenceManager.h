@@ -25,6 +25,9 @@
 @class SLFState;
 @class SLFBill;
 
+NSString* SLFCurrentActivityPath(void);
+void SLFSaveCurrentActivityPath(NSString *path);
+
 NSInteger SLFSelectedScopeIndexForKey(NSString *viewControllerKey);
 void SLFSaveSelectedScopeIndexForKey(NSInteger index, NSString *viewControllerKey);
 

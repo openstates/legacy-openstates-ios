@@ -49,7 +49,7 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
     self = [super init];
     if (self) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPersistence:) name:kMKiCloudSyncNotification object:nil];
-        [MKiCloudSync start];
+            //[MKiCloudSync start];
     }
     return self;
 }
@@ -95,6 +95,16 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
         [[NSNotificationCenter defaultCenter] postNotificationName:SLFSelectedSessioneDidChangeNotification object:session];
         self.currentSession = session;
     }
+}
+
+#pragma mark - Application Activity/Resource Path
+NSString* SLFCurrentActivityPath(void) {
+    return [[SLFPersistenceManager sharedPersistence] savedActivityPath];
+}
+
+void SLFSaveCurrentActivityPath(NSString *path) {
+    NSCParameterAssert(path != NULL);
+    [[SLFPersistenceManager sharedPersistence] setSavedActivityPath:path];
 }
 
 #pragma mark - Selected Search Bar Scope

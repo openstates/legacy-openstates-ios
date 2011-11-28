@@ -42,7 +42,6 @@ enum SECTIONS {
 @interface BillDetailViewController()
 @property (nonatomic, retain) RKTableViewModel *tableViewModel;
 - (id)initWithResourcePath:(NSString *)resourcePath;
-- (void)loadDataFromNetworkWithResourcePath:(NSString *)resourcePath;
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
 - (RKTableViewCellMapping *)actionCellMap;
 - (RKTableViewCellMapping *)sponsorCellMap;
@@ -70,12 +69,13 @@ enum SECTIONS {
         self.useTitleBar = YES;
         self.stackWidth = 500;
         RKLogDebug(@"Loading resource path for bill: %@", resourcePath);
-        [self loadDataFromNetworkWithResourcePath:resourcePath];
+        SLFSaveCurrentActivityPath(resourcePath);
+        [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)];
     }
     return self;
 }
 
-- (id)initWithBillID:(NSString *)billID state:(SLFState *)aState session:(NSString *)aSession {
+- (id)initWithState:(SLFState *)aState session:(NSString *)aSession billID:(NSString *)billID {
     NSString *resourcePath = [BillSearchParameters pathForBill:billID state:aState.stateID session:aSession];
     self = [self initWithResourcePath:resourcePath];
     return self;
@@ -370,14 +370,6 @@ enum SECTIONS {
 }
 
 #pragma mark - Object Loader
-
-- (void)loadDataFromNetworkWithResourcePath:(NSString *)resourcePath {
-    RKObjectManager* objectManager = [RKObjectManager sharedManager];
-    [objectManager loadObjectsAtResourcePath:resourcePath delegate:self block:^(RKObjectLoader* loader) {
-        loader.objectMapping = [objectManager.mappingProvider objectMappingForClass:[SLFBill class]];
-        loader.cacheTimeoutInterval = 1 * 60 * 60;
-    }];
-}
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     self.title = NSLocalizedString(@"Load Error", @"");

@@ -67,7 +67,8 @@
 		return;	
 	NSDictionary *queryParameters = [NSDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
 	NSString *pathToLoad = [self.resourcePath appendQueryParams:queryParameters];
-    [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:pathToLoad delegate:self];
+    SLFSaveCurrentActivityPath(pathToLoad);
+    [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:pathToLoad delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)];
 }
 
 - (void)setEvent:(SLFEvent *)newObj {

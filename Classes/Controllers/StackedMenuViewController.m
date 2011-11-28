@@ -79,8 +79,8 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {
-    [SLFAppDelegate.stackController popToRootViewControllerAnimated:YES];
-    [SLFAppDelegate.stackController pushViewController:viewController fromViewController:nil animated:YES];
+    [SLFAppDelegateStack popToRootViewControllerAnimated:YES];
+    [SLFAppDelegateStack pushViewController:viewController fromViewController:nil animated:YES];
 }
 
 - (RKTableViewCellMapping *)menuCellMapping {
@@ -142,7 +142,7 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 
 - (void)statePopover:(StatesPopoverManager *)statePopover didSelectState:(SLFState *)newState {
     [self configureActionBarForState:newState];
-    [SLFAppDelegate.stackController popToRootViewControllerAnimated:YES];
+    [SLFAppDelegateStack popToRootViewControllerAnimated:YES];
     [super stateMenuSelectionDidChangeWithState:newState];
 }
 
@@ -178,14 +178,14 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 }
 
 - (void)handleStatePickerBarTap:(UIGestureRecognizer *)gestureRecognizer {
-    NSUInteger stackSize = [SLFAppDelegate.stackController canExpandStack];
+    NSUInteger stackSize = [SLFAppDelegateStack canExpandStack];
     if (stackSize) {
-        [SLFAppDelegate.stackController displayViewControllerIndexOnRightMost:-stackSize animated:YES];
+        [SLFAppDelegateStack displayViewControllerIndexOnRightMost:-stackSize animated:YES];
     }
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    return [SLFAppDelegate.stackController canExpandStack];
+    return [SLFAppDelegateStack canExpandStack];
 }
 
 @end
