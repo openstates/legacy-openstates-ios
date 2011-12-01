@@ -59,10 +59,13 @@
     return op;
 }
 
-
 - (void) dealloc {
-    RKClient * osClient = [[SLFRestKitManager sharedRestKit] openStatesClient];
-    [osClient.requestQueue cancelRequestsWithDelegate:self];
+#if USE_OPENSTATES_GEOSEARCH
+    RKClient *client = [[SLFRestKitManager sharedRestKit] openStatesClient];
+#else
+    RKClient *client = [[SLFRestKitManager sharedRestKit] boundaryClient];
+#endif
+    [client.requestQueue cancelRequestsWithDelegate:self];
     Block_release(_onSuccessWithResults);
     Block_release(_onFailureWithMessageAndFailOption);
     [super dealloc];
@@ -90,7 +93,7 @@
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
     BOOL success = NO;
     NSArray *foundIDs = nil;
-    if ([response isOK]) {  
+    if (response && [response isOK]) {  
         id results = [response.body objectFromJSONData];
         @try {
             foundIDs = [self boundaryIDsFromSearchResults:results];
