@@ -10,14 +10,10 @@
 //
 //
 
-#import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-@interface UserPinAnnotationView : MKPinAnnotationView {
-
-}
-
-+ (UserPinAnnotationView*)userPinViewWithAnnotation:(id<MKAnnotation>)annotation identifier:(NSString *)reuseIdentifier;
+@interface UserPinAnnotationView : MKPinAnnotationView
++ (UserPinAnnotationView*)pinViewWithAnnotation:(id<MKAnnotation>)annotation;
 @end
 
-extern NSString* const UserPinAnnotationViewReuseIdentifier;
+extern NSString* const UserPinReuseIdentifier;

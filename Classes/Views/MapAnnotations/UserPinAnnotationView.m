@@ -14,7 +14,7 @@
 #import "UserPinAnnotation.h"
 #import "SLFMapPin.h"
 
-NSString* const UserPinAnnotationViewReuseIdentifier = @"UserPinAnnotationViewID";
+NSString* const UserPinReuseIdentifier = @"UserPinReuse";
 
 @interface UserPinAnnotationView()
 - (void)annotationChanged_:(NSNotification *)notification;
@@ -22,8 +22,8 @@ NSString* const UserPinAnnotationViewReuseIdentifier = @"UserPinAnnotationViewID
 
 @implementation UserPinAnnotationView
 
-+ (UserPinAnnotationView*)userPinViewWithAnnotation:(id<MKAnnotation>)annotation identifier:(NSString *)reuseIdentifier  {
-    return [[[UserPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseIdentifier] autorelease];            
++ (UserPinAnnotationView*)pinViewWithAnnotation:(id<MKAnnotation>)annotation  {
+    return [[[UserPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:UserPinReuseIdentifier] autorelease];            
 }
 
 - (id)initWithAnnotation:(id <MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
@@ -39,7 +39,7 @@ NSString* const UserPinAnnotationViewReuseIdentifier = @"UserPinAnnotationViewID
         UserPinAnnotation *customAnnotation = (UserPinAnnotation *)annotation;
         self.canShowCallout = YES;
         
-        NSInteger pinColorIndex = [[customAnnotation pinColorIndex] integerValue];
+        NSUInteger pinColorIndex = customAnnotation.pinColorIndex;
         if (pinColorIndex >= SLFMapPinColorBlue) {
             UIImage *pinImage = [SLFMapPin imageForPinColorIndex:pinColorIndex status:SLFMapPinStatusHead];
             UIImageView *pinHead = [[UIImageView alloc] initWithImage:pinImage];

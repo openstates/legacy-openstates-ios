@@ -22,7 +22,7 @@
 @interface UserPinAnnotation : SVPlacemark <MKAnnotation> {
 }
 
-@property (nonatomic, copy) NSNumber *pinColorIndex;
+@property (nonatomic, assign) NSUInteger pinColorIndex;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;
 @property (nonatomic, copy) NSString *imageName;

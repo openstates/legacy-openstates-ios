@@ -16,8 +16,8 @@
 #import "SLFRestKitManager.h"
 #import "SLFTheme.h"
 #import "SLFAlertView.h"
-#import "DistrictPinAnnotationView.h"
 #import "DistrictSearch.h"
+#import "MultiRowCalloutAnnotationView.h"
 
 @interface DistrictDetailViewController()
 - (void)loadMapWithID:(NSString *)objID;
@@ -135,45 +135,21 @@
     return nil;
 }
 
-- (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)annotation {    
-    if ([annotation isKindOfClass:self.resourceClass])
-    {
-        SLFDistrict *district = annotation;
-        DistrictPinAnnotationView *pinView = (DistrictPinAnnotationView*)[aMapView dequeueReusableAnnotationViewWithIdentifier:DistrictPinAnnotationViewReuseIdentifier];
-        if (!pinView)
-            pinView = [DistrictPinAnnotationView districtPinViewWithAnnotation:district identifier:DistrictPinAnnotationViewReuseIdentifier];
-        else
-            pinView.annotation = district;
-        [pinView setPinColorWithAnnotation:annotation];
-        if ([district.legislators count] == 1) { 
-            [pinView enableAccessory];
-        }
-        return pinView;
+- (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)annotation { 
+    MKAnnotationView *annotationView = [super mapView:aMapView viewForAnnotation:annotation];
+    if (annotationView && [annotationView isKindOfClass:[MultiRowCalloutAnnotationView class]]) {
+        MultiRowCalloutAnnotationView *multiView = (MultiRowCalloutAnnotationView *)annotationView;
+        multiView.onCalloutAccessoryTapped = ^(MultiRowCalloutCell *cell, UIControl *control, NSDictionary *userData) {
+            if (!userData || IsEmpty([userData valueForKey:@"legID"]))
+                return;
+            NSString *legID = [userData valueForKey:@"legID"];
+            LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:legID];
+            [self stackOrPushViewController:vc];
+            [vc release];
+        };
+        return multiView;
     }
-    return [super mapView:aMapView viewForAnnotation:annotation];
-}
-
-- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)aView {
-    if (aView && [aView isSelected] && [aView isKindOfClass:[DistrictPinAnnotationView class]])
-        self.selectedAnnotationView = aView;
-    [super mapView:mapView didSelectAnnotationView:aView];
-}
-
-- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView calloutAccessoryControlTapped:(UIControl *)control {
-    if (annotationView && [annotationView isKindOfClass:[DistrictPinAnnotationView class]]) {
-        SLFDistrict *district = annotationView.annotation;
-        if (!district)
-            return;
-        if (district.legislators && [district.legislators count] == 1) {
-            SLFLegislator *leg = [district.legislators anyObject];
-            if (leg && leg.legID) {
-                LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:leg.legID];
-                [self stackOrPushViewController:vc];
-                [vc release];
-            }    
-        }
-        return;
-    }
+    return annotationView;
 }
 
 - (void)beginBoundarySearchForCoordininate:(CLLocationCoordinate2D)coordinate {

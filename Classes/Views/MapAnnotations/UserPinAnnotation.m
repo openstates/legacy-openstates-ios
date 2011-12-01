@@ -25,7 +25,7 @@
 -(id)initWithSVPlacemark:(SVPlacemark*) placemark {
     self = [super initWithCoordinate:placemark.coordinate addressDictionary:placemark.addressDictionary];
     if (self) {
-        pinColorIndex = [NSNumber numberWithInteger:MKPinAnnotationColorPurple]; 
+        pinColorIndex = MKPinAnnotationColorPurple; 
         [self reloadTitle];
     }
     return self;
@@ -33,7 +33,6 @@
 
 - (void)dealloc {    
     self.imageName = nil;
-    self.pinColorIndex = nil;
     self.delegate = nil;
     self.title = nil;
     self.subtitle = nil;

@@ -63,6 +63,12 @@
     return MKCoordinateRegionMake(center, distanceToCenter);
 }
 
+- (NSArray *)calloutCells {
+    if (IsEmpty(self.legislators))
+        return nil;
+    return [self valueForKeyPath:@"legislators.calloutCell"];
+}
+
 - (NSString *)title {
     return [NSString stringWithFormat:@"%@ %@ %@ %@", self.state.name, self.chamberObj.shortName, @"District", self.name];
 }
@@ -96,7 +102,7 @@
     return self.party.image;
 }
 
-- (NSNumber *)pinColorIndex {
+- (NSUInteger)pinColorIndex {
     return self.party.pinColorIndex;
 }
 

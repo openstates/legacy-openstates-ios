@@ -167,4 +167,8 @@
     return [NSString stringWithFormat:@"%@ Years", self.chamberObj.term];
 }
 
+- (MultiRowCalloutCell *)calloutCell {
+    return [MultiRowCalloutCell cellWithImage:self.partyObj.image title:self.title subtitle:self.fullName userData:[NSDictionary dictionaryWithObject:self.legID forKey:@"legID"]];
+}
+
 @end

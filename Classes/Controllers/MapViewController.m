@@ -17,12 +17,9 @@
 #import "UserPinAnnotationView.h"
 #import <RestKit/RestKit.h>
 #import "SLFAlertView.h"
-
-#import "CalloutMapAnnotation.h"
-#import "CalloutMapAnnotationView.h"
-#import "BasicMapAnnotation.h"
-#import "BasicMapAnnotationView.h"
-#import "AccessorizedCalloutMapAnnotationView.h"
+#import "ColorPinAnnotationView.h"
+#import "MultiRowCalloutAnnotationView.h"
+#import "MultiRowAnnotation.h"
 
 #define LOCATE_USER_BUTTON_TAG 18887
 
@@ -38,8 +35,7 @@
 - (NSUInteger)indexOfToolbarItemWithTag:(NSInteger)searchTag;
 @property (nonatomic,retain) SVGeocoder *geocoder;
 @property (nonatomic,retain) UserPinAnnotation *searchLocation;
-@property (nonatomic,retain) CalloutMapAnnotation *calloutAnnotation;
-@property (nonatomic,retain) BasicMapAnnotation *customAnnotation;
+@property (nonatomic,retain) MultiRowAnnotation *calloutAnnotation;
 @end
 
 @implementation MapViewController
@@ -50,7 +46,6 @@
 @synthesize geocoder;
 @synthesize selectedAnnotationView = _selectedAnnotationView;
 @synthesize calloutAnnotation = _calloutAnnotation;
-@synthesize customAnnotation = _customAnnotation;
 
 #pragma mark - Initialization
 
@@ -69,6 +64,8 @@
     self.mapView = nil;
     self.searchLocation = nil;
     self.geocoder = nil;
+    self.calloutAnnotation = nil;
+    self.selectedAnnotationView = nil;
     [super dealloc];
 }
 
@@ -93,17 +90,15 @@
         CGRectDivide(viewRect, &mapViewRect, &toolbarRect, CGRectGetHeight(viewRect)-44, CGRectMinYEdge);
     self.searchBar = [self setUpSearchBarWithFrame:searchRect];
     self.toolbar = [self setUpToolBarWithFrame:toolbarRect];
-    self.mapView = [self setUpMapViewWithFrame:mapViewRect];
-
-
-    self.customAnnotation = [[[BasicMapAnnotation alloc] initWithLatitude:38.6335 andLongitude:-90.2045] autorelease];
-    [self.mapView addAnnotation:self.customAnnotation];
+    self.mapView = [self setUpMapViewWithFrame:mapViewRect];    
 }
 
 - (void)viewDidUnload {
     self.toolbar = nil;
     self.searchBar = nil;
     self.mapView = nil;
+    self.calloutAnnotation = nil;
+    self.selectedAnnotationView = nil;
     [super viewDidUnload];
 }
 
@@ -343,68 +338,69 @@
     if ([annotation isKindOfClass:[MKUserLocation class]])
         return nil;
 
-    NSString *identifier = nil;
     if ([annotation isKindOfClass:[UserPinAnnotation class]])  
     {
-        identifier = UserPinAnnotationViewReuseIdentifier;
-        UserPinAnnotationView* pinView = (UserPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        UserPinAnnotationView* pinView = (UserPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:UserPinReuseIdentifier];
         if (!pinView)
-            return [UserPinAnnotationView userPinViewWithAnnotation:annotation identifier:identifier];
+            return [UserPinAnnotationView pinViewWithAnnotation:annotation];
         pinView.annotation = annotation;
         return pinView;
     }
-    else if (annotation == self.calloutAnnotation) {
-        identifier = @"CalloutAnnotation";
-        CalloutMapAnnotationView *annotationView = (CalloutMapAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+    if (![annotation conformsToProtocol:@protocol(MultiRowAnnotationProtocol)])
+        return nil;
+    NSObject <MultiRowAnnotationProtocol> *newAnnotation = (NSObject <MultiRowAnnotationProtocol> *)annotation;
+    if (newAnnotation == self.calloutAnnotation) {
+        MultiRowCalloutAnnotationView *annotationView = (MultiRowCalloutAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:MultiRowCalloutReuseIdentifier];
         if (!annotationView) {
-            annotationView = [[[AccessorizedCalloutMapAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier] autorelease];
-            annotationView.contentHeight = 34.0f;
-            UIImageView *logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"silverstar"]];
-            logoView.frame = CGRectMake(5, 2, logoView.frame.size.width, logoView.frame.size.height);
-            [annotationView.contentView addSubview:logoView];
-            [logoView release];
+            annotationView = [MultiRowCalloutAnnotationView calloutWithAnnotation:newAnnotation onCalloutAccessoryTapped:nil];
         }
+        else
+            annotationView.annotation = newAnnotation;
         annotationView.parentAnnotationView = self.selectedAnnotationView;
         annotationView.mapView = mapView;
         return annotationView;
-    } else if (annotation == self.customAnnotation) {
-        identifier = @"CustomAnnotation";
-        MKPinAnnotationView* annotationView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
-        if (!annotationView) {
-            annotationView = [[[BasicMapAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier] autorelease];
-            annotationView.canShowCallout = NO;
-            annotationView.pinColor = MKPinAnnotationColorGreen;
-        }
-        annotationView.annotation = annotation;
-        return annotationView;
     }
-    return nil;
+    ColorPinAnnotationView *annotationView = (ColorPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:ColorPinReuseIdentifier];
+    if (!annotationView) {
+        annotationView = [ColorPinAnnotationView pinViewWithAnnotation:newAnnotation];
+    }
+    [annotationView setPinColorWithAnnotation:newAnnotation];
+    annotationView.annotation = newAnnotation;
+    return annotationView;
 }
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)aView {
     id<MKAnnotation> annotation = aView.annotation;
     if (!annotation || ![aView isSelected])
         return;
+    if ( NO == [annotation isKindOfClass:[MultiRowCalloutCell class]] &&
+        [annotation conformsToProtocol:@protocol(MultiRowAnnotationProtocol)] )
+    {
+        NSObject <MultiRowAnnotationProtocol> *pinAnnotation = (NSObject <MultiRowAnnotationProtocol> *)annotation;
+        if (!self.calloutAnnotation) {
+            _calloutAnnotation = [[MultiRowAnnotation alloc] init];
+            [_calloutAnnotation copyAttributesFromAnnotation:pinAnnotation];
+            [mapView addAnnotation:_calloutAnnotation];
+        }
+        self.selectedAnnotationView = aView;
+        return;
+    }
     [mapView setCenterCoordinate:annotation.coordinate animated:YES];
     if ([annotation isKindOfClass:[UserPinAnnotation class]]) {
         self.searchLocation = (UserPinAnnotation *)annotation;
-        self.selectedAnnotationView = aView;
-    }    
-    else if (aView.annotation == self.customAnnotation) {
-        if (self.calloutAnnotation == nil) {
-            _calloutAnnotation = [[CalloutMapAnnotation alloc] initWithLatitude:aView.annotation.coordinate.latitude andLongitude:aView.annotation.coordinate.longitude];
-        } else {
-            _calloutAnnotation.latitude = aView.annotation.coordinate.latitude;
-            _calloutAnnotation.longitude = aView.annotation.coordinate.longitude;
-        }
-        [mapView addAnnotation:_calloutAnnotation];
-        self.selectedAnnotationView = aView;
-    }
+    } 
+    self.selectedAnnotationView = aView;
 }
 
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)aView {
-    if (self.calloutAnnotation && aView.annotation == self.customAnnotation && !((BasicMapAnnotationView *)aView).preventSelectionChange) {
-        [mapView removeAnnotation:self.calloutAnnotation];
+    if ( NO == [aView.annotation conformsToProtocol:@protocol(MultiRowAnnotationProtocol)] )
+        return;
+    if ([aView.annotation isKindOfClass:[MultiRowAnnotation class]])
+        return;
+    GenericPinAnnotationView *pinView = (GenericPinAnnotationView *)aView;
+    if (self.calloutAnnotation && !pinView.preventSelectionChange) {
+        [mapView removeAnnotation:_calloutAnnotation];
+        self.calloutAnnotation = nil;
     }
 }
 

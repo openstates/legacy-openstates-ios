@@ -46,7 +46,6 @@ static Independent * cachedIndependent;
 - (void)dealloc {
     self.name = nil;
     self.image = nil;
-    self.pinColorIndex = nil;
     self.color = nil;
     [super dealloc];
 }
@@ -75,7 +74,7 @@ static Independent * cachedIndependent;
         cachedDemocrat.name = DEMOCRAT_STRING;
         cachedDemocrat.color = [SLFAppearance partyBlue];
         cachedDemocrat.image = [UIImage imageNamed:@"bluestar"];
-        cachedDemocrat.pinColorIndex = [NSNumber numberWithInteger:SLFMapPinColorBlue];
+        cachedDemocrat.pinColorIndex = SLFMapPinColorBlue;
     }
     return cachedDemocrat;
 }
@@ -91,7 +90,7 @@ static Independent * cachedIndependent;
         cachedRepublican.name = REPUBLICAN_STRING;
         cachedRepublican.color = [SLFAppearance partyRed];
         cachedRepublican.image = [UIImage imageNamed:@"redstar"];
-        cachedRepublican.pinColorIndex = [NSNumber numberWithInteger:SLFMapPinColorRed];
+        cachedRepublican.pinColorIndex = SLFMapPinColorRed;
     }
     return cachedRepublican;
 }
@@ -107,7 +106,7 @@ static Independent * cachedIndependent;
         cachedIndependent.name = INDEPENDENT_STRING;
         cachedIndependent.color = [SLFAppearance partyGreen];
         cachedIndependent.image = [UIImage imageNamed:@"silverstar"];
-        cachedIndependent.pinColorIndex = [NSNumber numberWithInteger:SLFMapPinColorGreen];
+        cachedIndependent.pinColorIndex = SLFMapPinColorGreen;
     }
     return cachedIndependent;
 }

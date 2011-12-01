@@ -1,6 +1,7 @@
 #import <RestKit/RestKit.h>
 #import <RestKit/CoreData/CoreData.h>
 #import "_SLFLegislator.h"
+#import "MultiRowCalloutCell.h"
 
 @class SLFState;
 @class SLFChamber;
@@ -22,6 +23,8 @@
 @property (nonatomic, readonly) NSString *subtitle;
 @property (nonatomic, readonly) NSString *districtLongName;
 @property (nonatomic, readonly) NSString *districtShortName;
+@property (nonatomic,readonly) MultiRowCalloutCell *calloutCell;
+
 + (NSArray *)sortDescriptors;
 - (NSString *)districtPartyString;
 - (NSString *)title;
