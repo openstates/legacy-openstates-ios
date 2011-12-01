@@ -78,13 +78,10 @@
 		374430F314344FAC0027F422 /* gavel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 374430D214344FAC0027F422 /* gavel@2x.png */; };
 		3744310E14344FAC0027F422 /* multipins.png in Resources */ = {isa = PBXBuildFile; fileRef = 374430EE14344FAC0027F422 /* multipins.png */; };
 		3744310F14344FAC0027F422 /* multipins@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 374430EF14344FAC0027F422 /* multipins@2x.png */; };
-		37485D47144BC43600D99BBD /* DistrictPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D40144BC43600D99BBD /* DistrictPinAnnotationView.m */; };
 		37485D48144BC43600D99BBD /* SLFMapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D42144BC43600D99BBD /* SLFMapPin.m */; };
 		37485D49144BC43600D99BBD /* UserPinAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D44144BC43600D99BBD /* UserPinAnnotation.m */; };
 		37485D4A144BC43600D99BBD /* UserPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D46144BC43600D99BBD /* UserPinAnnotationView.m */; };
 		37485D4C144C0ABA00D99BBD /* SVWebViewController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 37485D4B144C0ABA00D99BBD /* SVWebViewController.bundle */; };
-		37485D4F144C10F800D99BBD /* PinHeadBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 37485D4D144C10F800D99BBD /* PinHeadBlue.png */; };
-		37485D50144C10F800D99BBD /* PinHeadBlue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37485D4E144C10F800D99BBD /* PinHeadBlue@2x.png */; };
 		3748E4051459823A005D84CF /* BlairMdITC TT Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3748E4041459823A005D84CF /* BlairMdITC TT Medium.ttf */; };
 		3748E40C1459846F005D84CF /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 3748E4061459846F005D84CF /* Icon-72.png */; };
 		3748E40D1459846F005D84CF /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3748E4071459846F005D84CF /* Icon-Small@2x.png */; };
@@ -135,6 +132,13 @@
 		376357F3144CCD0700122377 /* silverstar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 376357EB144CCD0700122377 /* silverstar@2x.png */; };
 		376357F6144CCE7500122377 /* SLFParty.m in Sources */ = {isa = PBXBuildFile; fileRef = 376357F5144CCE7500122377 /* SLFParty.m */; };
 		376B88FF143186B300AA96D4 /* SLFTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376B88FE143186B300AA96D4 /* SLFTableViewController.m */; };
+		3770F12A148712A500FD854B /* GenericPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3770F125148712A500FD854B /* GenericPinAnnotationView.m */; };
+		3770F12B148712A500FD854B /* MultiRowCalloutAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3770F127148712A500FD854B /* MultiRowCalloutAnnotationView.m */; };
+		3770F12C148712A500FD854B /* MultiRowCalloutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3770F129148712A500FD854B /* MultiRowCalloutCell.m */; };
+		3770F12F148715AF00FD854B /* ColorPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3770F12E148715AF00FD854B /* ColorPinAnnotationView.m */; };
+		3770F13314872B8E00FD854B /* MultiRowAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3770F13214872B8E00FD854B /* MultiRowAnnotation.m */; };
+		3770F1371487513400FD854B /* PinHeadBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 3770F1351487513400FD854B /* PinHeadBlue.png */; };
+		3770F1381487513400FD854B /* PinHeadBlue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3770F1361487513400FD854B /* PinHeadBlue@2x.png */; };
 		3771B97B147A2BE000E9CE39 /* BillVotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3771B97A147A2BE000E9CE39 /* BillVotesViewController.m */; };
 		3771B983147A3FA300E9CE39 /* VoteNay.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B97D147A3FA300E9CE39 /* VoteNay.png */; };
 		3771B984147A3FA300E9CE39 /* VoteNay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B97E147A3FA300E9CE39 /* VoteNay@2x.png */; };
@@ -207,11 +211,6 @@
 		37CC42F4144346F0001510A5 /* 166-newspaper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37CC42F2144346F0001510A5 /* 166-newspaper@2x.png */; };
 		37CFB4D2144B980F00E8120D /* NSInvocation+CWVariableArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4CF144B980F00E8120D /* NSInvocation+CWVariableArguments.m */; };
 		37CFB4D3144B980F00E8120D /* UIImageView+RoundedCorners.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4D1144B980F00E8120D /* UIImageView+RoundedCorners.m */; };
-		37D6BE0E1455B99F00520352 /* AccessorizedCalloutMapAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6BE051455B99F00520352 /* AccessorizedCalloutMapAnnotationView.m */; };
-		37D6BE0F1455B99F00520352 /* BasicMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6BE071455B99F00520352 /* BasicMapAnnotation.m */; };
-		37D6BE101455B99F00520352 /* BasicMapAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6BE091455B99F00520352 /* BasicMapAnnotationView.m */; };
-		37D6BE111455B99F00520352 /* CalloutMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6BE0B1455B99F00520352 /* CalloutMapAnnotation.m */; };
-		37D6BE121455B99F00520352 /* CalloutMapAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6BE0D1455B99F00520352 /* CalloutMapAnnotationView.m */; };
 		37D7540A146C57FD00DCD742 /* _EventParticipant.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75403146C57FD00DCD742 /* _EventParticipant.m */; };
 		37D7540B146C57FD00DCD742 /* _GenericAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75405146C57FD00DCD742 /* _GenericAsset.m */; };
 		37D7540C146C57FD00DCD742 /* _GenericNamedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75407146C57FD00DCD742 /* _GenericNamedItem.m */; };
@@ -492,8 +491,6 @@
 		374430D214344FAC0027F422 /* gavel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gavel@2x.png"; sourceTree = "<group>"; };
 		374430EE14344FAC0027F422 /* multipins.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = multipins.png; sourceTree = "<group>"; };
 		374430EF14344FAC0027F422 /* multipins@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "multipins@2x.png"; sourceTree = "<group>"; };
-		37485D3F144BC43600D99BBD /* DistrictPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictPinAnnotationView.h; sourceTree = "<group>"; };
-		37485D40144BC43600D99BBD /* DistrictPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictPinAnnotationView.m; sourceTree = "<group>"; };
 		37485D41144BC43600D99BBD /* SLFMapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFMapPin.h; sourceTree = "<group>"; };
 		37485D42144BC43600D99BBD /* SLFMapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFMapPin.m; sourceTree = "<group>"; };
 		37485D43144BC43600D99BBD /* UserPinAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserPinAnnotation.h; sourceTree = "<group>"; };
@@ -501,8 +498,6 @@
 		37485D45144BC43600D99BBD /* UserPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserPinAnnotationView.h; sourceTree = "<group>"; };
 		37485D46144BC43600D99BBD /* UserPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserPinAnnotationView.m; sourceTree = "<group>"; };
 		37485D4B144C0ABA00D99BBD /* SVWebViewController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVWebViewController.bundle; sourceTree = "<group>"; };
-		37485D4D144C10F800D99BBD /* PinHeadBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinHeadBlue.png; sourceTree = "<group>"; };
-		37485D4E144C10F800D99BBD /* PinHeadBlue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinHeadBlue@2x.png"; sourceTree = "<group>"; };
 		3748E4041459823A005D84CF /* BlairMdITC TT Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BlairMdITC TT Medium.ttf"; sourceTree = "<group>"; };
 		3748E4061459846F005D84CF /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		3748E4071459846F005D84CF /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
@@ -573,6 +568,19 @@
 		376357F5144CCE7500122377 /* SLFParty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFParty.m; sourceTree = "<group>"; };
 		376B88FD143186B300AA96D4 /* SLFTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLFTableViewController.h; path = ../Themes/SLFTableViewController.h; sourceTree = "<group>"; };
 		376B88FE143186B300AA96D4 /* SLFTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLFTableViewController.m; path = ../Themes/SLFTableViewController.m; sourceTree = "<group>"; };
+		3770F124148712A500FD854B /* GenericPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericPinAnnotationView.h; sourceTree = "<group>"; };
+		3770F125148712A500FD854B /* GenericPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericPinAnnotationView.m; sourceTree = "<group>"; };
+		3770F126148712A500FD854B /* MultiRowCalloutAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiRowCalloutAnnotationView.h; sourceTree = "<group>"; };
+		3770F127148712A500FD854B /* MultiRowCalloutAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiRowCalloutAnnotationView.m; sourceTree = "<group>"; };
+		3770F128148712A500FD854B /* MultiRowCalloutCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiRowCalloutCell.h; sourceTree = "<group>"; };
+		3770F129148712A500FD854B /* MultiRowCalloutCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiRowCalloutCell.m; sourceTree = "<group>"; };
+		3770F12D148715AF00FD854B /* ColorPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPinAnnotationView.h; sourceTree = "<group>"; };
+		3770F12E148715AF00FD854B /* ColorPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorPinAnnotationView.m; sourceTree = "<group>"; };
+		3770F130148723CA00FD854B /* MultiRowAnnotationProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiRowAnnotationProtocol.h; sourceTree = "<group>"; };
+		3770F13114872B8E00FD854B /* MultiRowAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiRowAnnotation.h; sourceTree = "<group>"; };
+		3770F13214872B8E00FD854B /* MultiRowAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiRowAnnotation.m; sourceTree = "<group>"; };
+		3770F1351487513400FD854B /* PinHeadBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinHeadBlue.png; sourceTree = "<group>"; };
+		3770F1361487513400FD854B /* PinHeadBlue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinHeadBlue@2x.png"; sourceTree = "<group>"; };
 		3771B979147A2BE000E9CE39 /* BillVotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillVotesViewController.h; sourceTree = "<group>"; };
 		3771B97A147A2BE000E9CE39 /* BillVotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillVotesViewController.m; sourceTree = "<group>"; };
 		3771B97D147A3FA300E9CE39 /* VoteNay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VoteNay.png; sourceTree = "<group>"; };
@@ -691,16 +699,6 @@
 		37CFB4D0144B980F00E8120D /* UIImageView+RoundedCorners.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+RoundedCorners.h"; sourceTree = "<group>"; };
 		37CFB4D1144B980F00E8120D /* UIImageView+RoundedCorners.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+RoundedCorners.m"; sourceTree = "<group>"; };
 		37CFB4D7144B9C8200E8120D /* StackableControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackableControllerProtocol.h; sourceTree = "<group>"; };
-		37D6BE041455B99F00520352 /* AccessorizedCalloutMapAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccessorizedCalloutMapAnnotationView.h; sourceTree = "<group>"; };
-		37D6BE051455B99F00520352 /* AccessorizedCalloutMapAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccessorizedCalloutMapAnnotationView.m; sourceTree = "<group>"; };
-		37D6BE061455B99F00520352 /* BasicMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicMapAnnotation.h; sourceTree = "<group>"; };
-		37D6BE071455B99F00520352 /* BasicMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicMapAnnotation.m; sourceTree = "<group>"; };
-		37D6BE081455B99F00520352 /* BasicMapAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicMapAnnotationView.h; sourceTree = "<group>"; };
-		37D6BE091455B99F00520352 /* BasicMapAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicMapAnnotationView.m; sourceTree = "<group>"; };
-		37D6BE0A1455B99F00520352 /* CalloutMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalloutMapAnnotation.h; sourceTree = "<group>"; };
-		37D6BE0B1455B99F00520352 /* CalloutMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalloutMapAnnotation.m; sourceTree = "<group>"; };
-		37D6BE0C1455B99F00520352 /* CalloutMapAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalloutMapAnnotationView.h; sourceTree = "<group>"; };
-		37D6BE0D1455B99F00520352 /* CalloutMapAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalloutMapAnnotationView.m; sourceTree = "<group>"; };
 		37D75402146C57FD00DCD742 /* _EventParticipant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _EventParticipant.h; sourceTree = "<group>"; };
 		37D75403146C57FD00DCD742 /* _EventParticipant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _EventParticipant.m; sourceTree = "<group>"; };
 		37D75404146C57FD00DCD742 /* _GenericAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _GenericAsset.h; sourceTree = "<group>"; };
@@ -1116,12 +1114,11 @@
 				374430D214344FAC0027F422 /* gavel@2x.png */,
 				374430EE14344FAC0027F422 /* multipins.png */,
 				374430EF14344FAC0027F422 /* multipins@2x.png */,
-				37485D4D144C10F800D99BBD /* PinHeadBlue.png */,
-				37485D4E144C10F800D99BBD /* PinHeadBlue@2x.png */,
 				376357E3144CCD0700122377 /* error.png */,
 				376357E4144CCD0700122377 /* error@2x.png */,
 				37F568DA147CC1CE00318856 /* offline.png */,
 				37F568DB147CC1CE00318856 /* offline@2x.png */,
+				3770F1341487513400FD854B /* MapPins */,
 				3771B97C147A3FA300E9CE39 /* Votes */,
 				376357E5144CCD0700122377 /* Parties */,
 				37FA255D148029930026EFB1 /* StarButton */,
@@ -1132,24 +1129,14 @@
 		37485D3E144BC43600D99BBD /* MapAnnotations */ = {
 			isa = PBXGroup;
 			children = (
-				37485D3F144BC43600D99BBD /* DistrictPinAnnotationView.h */,
-				37485D40144BC43600D99BBD /* DistrictPinAnnotationView.m */,
 				37485D41144BC43600D99BBD /* SLFMapPin.h */,
 				37485D42144BC43600D99BBD /* SLFMapPin.m */,
 				37485D43144BC43600D99BBD /* UserPinAnnotation.h */,
 				37485D44144BC43600D99BBD /* UserPinAnnotation.m */,
 				37485D45144BC43600D99BBD /* UserPinAnnotationView.h */,
 				37485D46144BC43600D99BBD /* UserPinAnnotationView.m */,
-				37D6BE041455B99F00520352 /* AccessorizedCalloutMapAnnotationView.h */,
-				37D6BE051455B99F00520352 /* AccessorizedCalloutMapAnnotationView.m */,
-				37D6BE061455B99F00520352 /* BasicMapAnnotation.h */,
-				37D6BE071455B99F00520352 /* BasicMapAnnotation.m */,
-				37D6BE081455B99F00520352 /* BasicMapAnnotationView.h */,
-				37D6BE091455B99F00520352 /* BasicMapAnnotationView.m */,
-				37D6BE0A1455B99F00520352 /* CalloutMapAnnotation.h */,
-				37D6BE0B1455B99F00520352 /* CalloutMapAnnotation.m */,
-				37D6BE0C1455B99F00520352 /* CalloutMapAnnotationView.h */,
-				37D6BE0D1455B99F00520352 /* CalloutMapAnnotationView.m */,
+				3770F12D148715AF00FD854B /* ColorPinAnnotationView.h */,
+				3770F12E148715AF00FD854B /* ColorPinAnnotationView.m */,
 			);
 			path = MapAnnotations;
 			sourceTree = "<group>";
@@ -1192,6 +1179,32 @@
 			path = Parties;
 			sourceTree = "<group>";
 		};
+		3770F123148712A500FD854B /* MultiRowCalloutAnnotationView */ = {
+			isa = PBXGroup;
+			children = (
+				3770F124148712A500FD854B /* GenericPinAnnotationView.h */,
+				3770F125148712A500FD854B /* GenericPinAnnotationView.m */,
+				3770F126148712A500FD854B /* MultiRowCalloutAnnotationView.h */,
+				3770F127148712A500FD854B /* MultiRowCalloutAnnotationView.m */,
+				3770F128148712A500FD854B /* MultiRowCalloutCell.h */,
+				3770F129148712A500FD854B /* MultiRowCalloutCell.m */,
+				3770F130148723CA00FD854B /* MultiRowAnnotationProtocol.h */,
+				3770F13114872B8E00FD854B /* MultiRowAnnotation.h */,
+				3770F13214872B8E00FD854B /* MultiRowAnnotation.m */,
+			);
+			name = MultiRowCalloutAnnotationView;
+			path = Vendor/MultiRowCalloutAnnotationView/MultiRowCalloutAnnotationView;
+			sourceTree = "<group>";
+		};
+		3770F1341487513400FD854B /* MapPins */ = {
+			isa = PBXGroup;
+			children = (
+				3770F1351487513400FD854B /* PinHeadBlue.png */,
+				3770F1361487513400FD854B /* PinHeadBlue@2x.png */,
+			);
+			path = MapPins;
+			sourceTree = "<group>";
+		};
 		3771B97C147A3FA300E9CE39 /* Votes */ = {
 			isa = PBXGroup;
 			children = (
@@ -1230,6 +1243,7 @@
 		377CB425142EFD4600AFF4BC /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				3770F123148712A500FD854B /* MultiRowCalloutAnnotationView */,
 				37037549147B331B00B59AA2 /* ActionSheetPicker */,
 				37BAE3041478636100CD5704 /* AppendingFlowView */,
 				37ECC0261475AD9A0088B959 /* DDActionHeaderView */,
@@ -1871,8 +1885,6 @@
 				3711871414463E1C00A12B8B /* 193-location-arrow.png in Resources */,
 				3711871514463E1C00A12B8B /* 193-location-arrow@2x.png in Resources */,
 				37485D4C144C0ABA00D99BBD /* SVWebViewController.bundle in Resources */,
-				37485D4F144C10F800D99BBD /* PinHeadBlue.png in Resources */,
-				37485D50144C10F800D99BBD /* PinHeadBlue@2x.png in Resources */,
 				376357EC144CCD0700122377 /* error.png in Resources */,
 				376357ED144CCD0700122377 /* error@2x.png in Resources */,
 				376357EE144CCD0700122377 /* bluestar.png in Resources */,
@@ -1914,6 +1926,8 @@
 				3795CDD81480E5A800E152EA /* BarButtonHighlight@2x.png in Resources */,
 				3795CDD91480E5A800E152EA /* BarButtonNormal.png in Resources */,
 				3795CDDA1480E5A800E152EA /* BarButtonNormal@2x.png in Resources */,
+				3770F1371487513400FD854B /* PinHeadBlue.png in Resources */,
+				3770F1381487513400FD854B /* PinHeadBlue@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2027,17 +2041,11 @@
 				3711870F144619A700A12B8B /* MapViewController.m in Sources */,
 				37CFB4D2144B980F00E8120D /* NSInvocation+CWVariableArguments.m in Sources */,
 				37CFB4D3144B980F00E8120D /* UIImageView+RoundedCorners.m in Sources */,
-				37485D47144BC43600D99BBD /* DistrictPinAnnotationView.m in Sources */,
 				37485D48144BC43600D99BBD /* SLFMapPin.m in Sources */,
 				37485D49144BC43600D99BBD /* UserPinAnnotation.m in Sources */,
 				37485D4A144BC43600D99BBD /* UserPinAnnotationView.m in Sources */,
 				376357F6144CCE7500122377 /* SLFParty.m in Sources */,
 				37DB6C471451AF9B007E0B53 /* TableSectionHeaderView.m in Sources */,
-				37D6BE0E1455B99F00520352 /* AccessorizedCalloutMapAnnotationView.m in Sources */,
-				37D6BE0F1455B99F00520352 /* BasicMapAnnotation.m in Sources */,
-				37D6BE101455B99F00520352 /* BasicMapAnnotationView.m in Sources */,
-				37D6BE111455B99F00520352 /* CalloutMapAnnotation.m in Sources */,
-				37D6BE121455B99F00520352 /* CalloutMapAnnotationView.m in Sources */,
 				37F6FCF514672167003AA80D /* BillsMenuViewController.m in Sources */,
 				37F6FCF81467611F003AA80D /* BillsViewController.m in Sources */,
 				37F6FD0A14676565003AA80D /* BillSearchParameters.m in Sources */,
@@ -2082,6 +2090,11 @@
 				37798CF6147E3A810098361A /* SLFFetchedTableViewController.m in Sources */,
 				37FA2568148043BE0026EFB1 /* BillsWatchedViewController.m in Sources */,
 				37089C6614843439002239A9 /* SLFGlobal.m in Sources */,
+				3770F12A148712A500FD854B /* GenericPinAnnotationView.m in Sources */,
+				3770F12B148712A500FD854B /* MultiRowCalloutAnnotationView.m in Sources */,
+				3770F12C148712A500FD854B /* MultiRowCalloutCell.m in Sources */,
+				3770F12F148715AF00FD854B /* ColorPinAnnotationView.m in Sources */,
+				3770F13314872B8E00FD854B /* MultiRowAnnotation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
