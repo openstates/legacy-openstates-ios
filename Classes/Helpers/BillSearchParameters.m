@@ -13,6 +13,7 @@
 #import "BillSearchParameters.h"
 #import "SLFDataModels.h"
 #import <RestKit/Network/NSObject+URLEncoding.h>
+#import "NSDate+SLFDateHelper.h"
 
 NSString* validOrEmptyParameter(NSString *parameter);
 NSString* validSessionParameter(NSString *session);
@@ -56,7 +57,7 @@ NSString* validSessionParameter(NSString *session);
 }
 
 + (NSString *)pathForSubject:(NSString *)subject state:(NSString *)stateID session:(NSString *)session chamber:(NSString *)chamber {
-	NSCParameterAssert((stateID != NULL));
+	NSParameterAssert((stateID != NULL));
     subject = validOrEmptyParameter(subject);
 	NSMutableDictionary *queryParams = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 										validSessionParameter(session), @"search_window",
@@ -76,8 +77,18 @@ NSString* validSessionParameter(NSString *session);
 	return [[self class] pathForSubject:subject state:state.stateID session:session chamber:chamber];
 }
 
++ (NSString *)pathForSubjectsWithState:(SLFState *)state chamber:(NSString *)chamber {
+    NSParameterAssert(state != NULL);
+  	NSString *session = [FindOrCreateSelectedSessionForState(state) URLEncodedString];
+    NSMutableString *path = [NSMutableString stringWithFormat:@"/subject_counts/%@/%@/", state.stateID, session];
+    if (chamber && ![chamber isEqualToString:@"all"])
+        [path appendFormat:@"%@/",  chamber];
+    [path appendFormat:@"?apikey=%@", SUNLIGHT_APIKEY]; 
+    return path;
+}
+
 + (NSString *)pathForSponsor:(NSString *)sponsorID state:(NSString *)stateID session:(NSString *)session {
-	NSCParameterAssert( (sponsorID != NULL) && (stateID != NULL) );
+	NSParameterAssert( (sponsorID != NULL) && (stateID != NULL) );
 	NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
 								 stateID, @"state",
 								 validSessionParameter(session), @"search_window",
@@ -93,6 +104,14 @@ NSString* validSessionParameter(NSString *session);
 		return nil;
 	NSString *session = SLFSelectedSessionForState(state);
     return [[self class] pathForSponsor:sponsorID state:state.stateID session:session];
+}
+
++ (NSString *)pathForUpdatedSinceDaysAgo:(NSInteger)daysAgo state:(NSString *)stateID {
+    NSDate *dateSince = [[NSDate date] dateByAddingDays:(-daysAgo)];
+    NSString *updatedSince = [dateSince stringWithFormat:[NSDate dateFormatString]];
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 updatedSince, @"updated_since", stateID, @"state", SUNLIGHT_APIKEY, @"apikey", nil];
+    return RKPathAppendQueryParams(@"/bills", queryParams);
 }
 
 @end

@@ -19,15 +19,17 @@
 #import "BillSearchParameters.h"
 #import "BillsSearchViewController.h"
 #import "BillsWatchedViewController.h"
+#import "BillsSubjectsViewController.h"
 
 #define MenuFavorites NSLocalizedString(@"Watch List", @"")
 #define MenuSearch NSLocalizedString(@"Search Bills", @"")
-#define MenuRecents NSLocalizedString(@"Recently Active Bills", @"")
+#define MenuRecents NSLocalizedString(@"Recently Updated (5 Days)", @"")
 #define MenuSubjects NSLocalizedString(@"Bills By Subject", @"")
 
 @interface BillsMenuViewController()
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
+- (void)configureTableViewModel;
 @property (nonatomic,retain) UIImage *searchIcon;
 @property (nonatomic,retain) UIImage *favoritesIcon;
 @property (nonatomic,retain) UIImage *recentsIcon;
@@ -56,11 +58,6 @@
     return self;
 }
 
-- (void)reconfigureForState:(SLFState *)newState {
-    self.state = newState;
-    if (newState)
-        [self loadDataFromNetworkWithID:newState.stateID];
-}
 
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
@@ -73,11 +70,10 @@
     [super dealloc];
 }
 
-- (void)configureTableViewModel {
-    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.pullToRefreshEnabled = NO;
+- (void)viewDidUnload {
+    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
+    self.tableViewModel = nil;
+    [super viewDidUnload];
 }
 
 - (void)viewDidLoad {
@@ -85,6 +81,19 @@
     [self configureTableViewModel];
     if (self.state)
         self.title = [NSString stringWithFormat:@"%@ %@", self.state.name, NSLocalizedString(@"Bills",@"")]; 
+}
+
+- (void)reconfigureForState:(SLFState *)newState {
+    self.state = newState;
+    if (newState)
+        [self loadDataFromNetworkWithID:newState.stateID];
+}
+
+- (void)configureTableViewModel {
+    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
+    self.tableViewModel.delegate = self;
+    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
+    self.tableViewModel.pullToRefreshEnabled = NO;
 }
 
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {
@@ -120,27 +129,17 @@
     UIViewController *vc = nil;
     NSString *resourcePath = nil;
     if ([menuItem isEqualToString:MenuRecents]) {
-        resourcePath = [BillSearchParameters pathForSubject:@"Education" chamber:@"lower"];
+        resourcePath = [BillSearchParameters pathForUpdatedSinceDaysAgo:5 state:self.state.stateID];
         vc = [[BillsViewController alloc] initWithState:self.state resourcePath:resourcePath];
-        vc.title = [NSString stringWithFormat:@"%@: %@", [self.state.stateID uppercaseString], @"Education"];
+        vc.title = [NSString stringWithFormat:@"%@: %@", [self.state.stateID uppercaseString], @"Recent Updates (5 days)"];
     }
     else if ([menuItem isEqualToString:MenuSearch])
         vc = [[BillsSearchViewController alloc] initWithState:self.state];
     else if ([menuItem isEqualToString:MenuFavorites])
         vc = [[BillsWatchedViewController alloc] init];
-        /*
-    if ([menuItem isEqualToString:MenuLegislators])
-        vc = [[LegislatorsViewController alloc] initWithState:self.state];
-    else if ([menuItem isEqualToString:MenuCommittees])
-        vc = [[CommitteesViewController alloc] initWithState:self.state];
-    else if ([menuItem isEqualToString:MenuDistricts])
-        vc = [[DistrictsViewController alloc] initWithState:self.state];
-    else if ([menuItem isEqualToString:MenuEvents])
-        vc = [[EventsViewController alloc] initWithState:self.state];
+    else if ([menuItem isEqualToString:MenuSubjects]) {
+        vc = [[BillsSubjectsViewController alloc] initWithState:self.state];
     }
-//  else if ([menuItem isEqualToString:MenuBills])
-//      vc = [[BillsViewController alloc] initWithState:self.state];
-   */ 
     if (vc) {
         [self stackOrPushViewController:vc];
         [vc release];

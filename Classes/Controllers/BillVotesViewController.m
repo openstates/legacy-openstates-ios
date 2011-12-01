@@ -39,7 +39,7 @@ enum SECTIONS {
 
 @implementation BillVotesViewController
 @synthesize vote = _vote;
-@synthesize tableViewModel = _tableViewModel;
+@synthesize tableViewModel = __tableViewModel;
 
 - (id)initWithVote:(BillRecordVote *)vote {
     self = [super initWithStyle:UITableViewStyleGrouped];
@@ -56,17 +56,22 @@ enum SECTIONS {
     [super dealloc];
 }
 
+- (void)viewDidUnload {
+    self.tableViewModel = nil;
+    [super viewDidUnload];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.variableHeightRows = YES;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.pullToRefreshEnabled = NO;
-    [self.tableViewModel mapObjectsWithClass:[BillVoter class] toTableCellsWithMapping:[self voterCellMap]];
+    __tableViewModel.delegate = self;
+    __tableViewModel.variableHeightRows = YES;
+    __tableViewModel.objectManager = [RKObjectManager sharedManager];
+    __tableViewModel.pullToRefreshEnabled = NO;
+    [__tableViewModel mapObjectsWithClass:[BillVoter class] toTableCellsWithMapping:[self voterCellMap]];
     NSInteger sectionIndex;
     for (sectionIndex = SectionVoteInfo;sectionIndex < kNumSections; sectionIndex++) {
-        [self.tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
+        [__tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
             NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
             TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
             section.headerTitle = headerTitle;
@@ -123,9 +128,9 @@ enum SECTIONS {
 }
 
 - (void)configureVoters {
-    [self.tableViewModel loadObjects:_vote.sortedYesVotes inSection:SectionYes];    
-    [self.tableViewModel loadObjects:_vote.sortedNoVotes inSection:SectionNo];    
-    [self.tableViewModel loadObjects:_vote.sortedOtherVotes inSection:SectionOther];    
+    [__tableViewModel loadObjects:_vote.sortedYesVotes inSection:SectionYes];    
+    [__tableViewModel loadObjects:_vote.sortedNoVotes inSection:SectionNo];    
+    [__tableViewModel loadObjects:_vote.sortedOtherVotes inSection:SectionOther];    
 }
 
 - (RKTableViewCellMapping *)voterCellMap {

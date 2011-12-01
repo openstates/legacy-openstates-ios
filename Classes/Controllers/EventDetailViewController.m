@@ -36,12 +36,6 @@
     return self;
 }
 
-- (void)loadView {
-    [super loadView];
-	self.title = NSLocalizedString(@"Loading...", @"");
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadButtonWasPressed:)] autorelease];
-}
-
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.event = nil;
@@ -49,9 +43,20 @@
     [super dealloc];
 }
 
+- (void)viewDidUnload {
+    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
+    [super viewDidUnload];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.rowHeight = 65;
+}
+
+- (void)loadView {
+    [super loadView];
+	self.title = NSLocalizedString(@"Loading...", @"");
+	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadButtonWasPressed:)] autorelease];
 }
 
 - (void)reloadButtonWasPressed:(id)sender {

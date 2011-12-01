@@ -32,6 +32,12 @@
     [super dealloc];
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    if (self.tableViewModel.rowCount && !self.title)
+        self.title = [NSString stringWithFormat:@"%d Members", self.tableViewModel.rowCount];
+}
+
 - (void)configureTableViewModel {
     [super configureTableViewModel];
     self.tableViewModel.showsSectionIndexTitles = YES;
@@ -47,12 +53,6 @@
         };
     }];
     [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    if (self.tableViewModel.rowCount && !self.title)
-        self.title = [NSString stringWithFormat:@"%d Members", self.tableViewModel.rowCount];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {

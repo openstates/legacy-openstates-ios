@@ -69,12 +69,13 @@
     [super dealloc];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-- (void)loadView {
-    [super loadView];
+- (void)viewDidUnload {
+    self.toolbar = nil;
+    self.searchBar = nil;
+    self.mapView = nil;
+    self.calloutAnnotation = nil;
+    self.selectedAnnotationView = nil;
+    [super viewDidUnload];
 }
 
 - (void)viewDidLoad {
@@ -93,13 +94,12 @@
     self.mapView = [self setUpMapViewWithFrame:mapViewRect];    
 }
 
-- (void)viewDidUnload {
-    self.toolbar = nil;
-    self.searchBar = nil;
-    self.mapView = nil;
-    self.calloutAnnotation = nil;
-    self.selectedAnnotationView = nil;
-    [super viewDidUnload];
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
+
+- (void)loadView {
+    [super loadView];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

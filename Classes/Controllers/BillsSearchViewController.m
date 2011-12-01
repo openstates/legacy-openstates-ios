@@ -33,7 +33,7 @@ enum SECTIONS {
 
 @implementation BillsSearchViewController
 @synthesize state = _state;
-@synthesize tableViewModel = _tableViewModel;
+@synthesize tableViewModel = __tableViewModel;
 @synthesize selectedSession = _selectedSession;
 
 - (id)initWithState:(SLFState *)state {
@@ -54,16 +54,21 @@ enum SECTIONS {
     [super dealloc];
 }
 
+- (void)viewDidUnload {
+    self.tableViewModel = nil;
+    [super viewDidUnload];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.variableHeightRows = YES;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.pullToRefreshEnabled = NO;
+    __tableViewModel.delegate = self;
+    __tableViewModel.variableHeightRows = YES;
+    __tableViewModel.objectManager = [RKObjectManager sharedManager];
+    __tableViewModel.pullToRefreshEnabled = NO;
     NSInteger sectionIndex;
     for (sectionIndex = SectionSearchInfo;sectionIndex < kNumSections; sectionIndex++) {
-        [self.tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
+        [__tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
             NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
             TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
             section.headerTitle = headerTitle;
@@ -126,7 +131,7 @@ enum SECTIONS {
             [picker autorelease];
         };
     }]];
-    [self.tableViewModel loadTableItems:tableItems inSection:SectionSearchInfo];
+    [__tableViewModel loadTableItems:tableItems inSection:SectionSearchInfo];
     [tableItems release];
 }
 

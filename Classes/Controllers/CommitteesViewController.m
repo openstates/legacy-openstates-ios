@@ -30,6 +30,12 @@
     [super dealloc];
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    if (self.tableViewModel.rowCount && !self.title)
+        self.title = [NSString stringWithFormat:@"%d Committees", self.tableViewModel.rowCount];
+}
+
 - (void)configureTableViewModel {
     [super configureTableViewModel];
     SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
@@ -43,12 +49,6 @@
         };
     }];
     [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    if (self.tableViewModel.rowCount && !self.title)
-        self.title = [NSString stringWithFormat:@"%d Committees", self.tableViewModel.rowCount];
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {

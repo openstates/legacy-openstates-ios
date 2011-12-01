@@ -59,17 +59,30 @@ enum SECTIONS {
     return self;
 }
 
+- (void)dealloc {
+    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
+	self.legislator = nil;
+    self.tableViewModel = nil;
+    [super dealloc];
+}
+
+- (void)viewDidUnload {
+    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
+    self.tableViewModel = nil;
+    [super viewDidUnload];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.variableHeightRows = YES;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.pullToRefreshEnabled = NO;
-    [self.tableViewModel mapObjectsWithClass:[CommitteeRole class] toTableCellsWithMapping:[self committeeRoleCellMap]];
+    __tableViewModel.delegate = self;
+    __tableViewModel.variableHeightRows = YES;
+    __tableViewModel.objectManager = [RKObjectManager sharedManager];
+    __tableViewModel.pullToRefreshEnabled = NO;
+    [__tableViewModel mapObjectsWithClass:[CommitteeRole class] toTableCellsWithMapping:[self committeeRoleCellMap]];
     NSInteger sectionIndex;
     for (sectionIndex = SectionMemberInfo;sectionIndex < kNumSections; sectionIndex++) {
-        [self.tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
+        [__tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
             NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
             TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
             section.headerTitle = headerTitle;
@@ -81,14 +94,9 @@ enum SECTIONS {
 	self.title = NSLocalizedString(@"Loading...", @"");
 }
 
-- (void)dealloc {
-    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-	self.legislator = nil;
-    self.tableViewModel = nil;
-    [super dealloc];
-}
-
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {
+    if (IsEmpty(resourceID))
+        return;
     NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", resourceID, @"legislatorID", nil];
     NSString *resourcePath = RKMakePathWithObject(@"/legislators/:legislatorID?apikey=:apikey", queryParams);
     SLFSaveCurrentActivityPath(resourcePath);

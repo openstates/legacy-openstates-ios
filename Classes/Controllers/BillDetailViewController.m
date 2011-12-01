@@ -90,6 +90,19 @@ enum SECTIONS {
     return self;
 }
 
+- (void)dealloc {
+    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
+	self.bill = nil;
+    self.tableViewModel = nil;
+    [super dealloc];
+}
+
+- (void)viewDidUnload {
+    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
+    self.tableViewModel = nil;
+    [super viewDidUnload];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
@@ -113,13 +126,6 @@ enum SECTIONS {
     }
     [self configureActionBarForBill:self.bill];
 	self.title = NSLocalizedString(@"Loading...", @"");
-}
-
-- (void)dealloc {
-    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-	self.bill = nil;
-    self.tableViewModel = nil;
-    [super dealloc];
 }
 
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex {

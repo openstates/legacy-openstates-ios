@@ -73,7 +73,7 @@
     [provider addObjectMapping:roleMapping];
     [provider addObjectMapping:sponsorMapping];
     [provider addObjectMapping:wordMapping];
-    
+        
     [provider setMapping:roleMapping forKeyPath:@"roles"];
     [provider setMapping:memberMapping forKeyPath:@"members"];
     [provider setMapping:sponsorMapping forKeyPath:@"sponsors"];

@@ -13,19 +13,14 @@
 #import <UIKit/UIKit.h>
 #import "SLFTableCellProtocol.h"
 
+@class BillsSubjectsEntry;
 @class DDBadgeView;
 @class TableCellDataObject;
-@interface DDBadgeGroupCell : UITableViewCell <SLFTableCellProtocol> {
-	DDBadgeView *	badgeView_;
-	
-	NSString *		summary_;
-	NSString *		badgeText_;
-	UIColor *		badgeColor_;
-	UIColor *		badgeHighlightedColor_;
-}
-@property (nonatomic, copy) NSString *      summary;
-@property (nonatomic, copy) NSString *		badgeText;
-@property (nonatomic, retain) UIColor *		badgeColor;
-@property (nonatomic, retain) UIColor *		badgeHighlightedColor;
-@property (nonatomic)		BOOL			isClickable;
+@interface DDBadgeGroupCell : UITableViewCell <SLFTableCellProtocol>
+@property (nonatomic,copy) NSString *summary;
+@property (nonatomic,copy) NSString *badgeText;
+@property (nonatomic,retain) UIColor *badgeColor;
+@property (nonatomic,retain) UIColor *badgeHighlightedColor;
+@property (nonatomic,assign) BOOL isClickable;
+@property (nonatomic,retain) BillsSubjectsEntry *subjectEntry;
 @end

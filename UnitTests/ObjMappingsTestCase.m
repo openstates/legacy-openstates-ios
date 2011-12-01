@@ -118,6 +118,32 @@
     STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
 }
 
+- (void)testItShouldMapSubjectCounts {
+    NSObject <RKObjectMappingDefinition> *mapping = [BillsSubjectsEntry mapping];
+    RKObjectMappingProvider* provider = [[RKObjectMappingProvider new] autorelease];
+    [provider setMapping:mapping forKeyPath:@""];
+    id subjectInfo = SLFSpecParseFixture(@"SubjectCounts.json");
+    RKObjectMapper* mapper = [RKObjectMapper mapperWithObject:subjectInfo mappingProvider:provider];
+    RKObjectMappingResult* result = [mapper performMapping];
+    NSArray* subjects = [result asCollection];
+    STAssertTrue([subjects isKindOfClass:[NSArray class]], @"SubjectCounts result wasn't a collection (array)");
+    STAssertTrue([subjects count] == 45, @"SubjectCounts collection didn't have the correct number of objects");
+    BillsSubjectsEntry* subject = [subjects objectAtIndex:0];
+    STAssertTrue([subject isKindOfClass:[BillsSubjectsEntry class]], @"First subject object didn't map to the correct class (BillsSubjects)");
+    __block BOOL foundEntry = NO;
+    __block NSInteger foundCount = NSNotFound;
+    [subjects enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        BillsSubjectsEntry *candidate = obj;
+        if (candidate && [candidate.name isEqualToString:@"Legislative Affairs"]) {
+            foundEntry = YES;
+            foundCount = [candidate.billCount integerValue];
+            *stop = YES;
+        }
+    }];
+    STAssertTrue(foundEntry, @"Didn't find 'Legislative Affairs' in SubjectCounts");
+    STAssertTrue(foundCount == 16, @"Didn't find an expected subject, or the billCount was incorrect");
+}
+
 /*
  #pragma mark - RKObjectMapper Specs
  

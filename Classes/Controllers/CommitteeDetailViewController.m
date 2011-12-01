@@ -50,17 +50,23 @@ enum SECTIONS {
     return self;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [self configureTableViewModel];
-	self.title = NSLocalizedString(@"Loading...", @"");
-}
-
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.committee = nil;
     self.tableViewModel = nil;
     [super dealloc];
+}
+
+- (void)viewDidUnload {
+    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
+    self.tableViewModel = nil;
+    [super viewDidUnload];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self configureTableViewModel];
+	self.title = NSLocalizedString(@"Loading...", @"");
 }
 
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {
@@ -72,14 +78,14 @@ enum SECTIONS {
 
 - (void)configureTableViewModel {
     self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.pullToRefreshEnabled = NO;
-    self.tableViewModel.variableHeightRows = YES;
-    [self.tableViewModel mapObjectsWithClass:[CommitteeMember class] toTableCellsWithMapping:[self committeeMemberCellMap]];
+    __tableViewModel.delegate = self;
+    __tableViewModel.objectManager = [RKObjectManager sharedManager];
+    __tableViewModel.pullToRefreshEnabled = NO;
+    __tableViewModel.variableHeightRows = YES;
+    [__tableViewModel mapObjectsWithClass:[CommitteeMember class] toTableCellsWithMapping:[self committeeMemberCellMap]];
     NSInteger sectionIndex;
     for (sectionIndex = SectionCommitteeInfoIndex;sectionIndex < kNumSections; sectionIndex++) {
-        [self.tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
+        [__tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
             NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
             TableSectionHeaderView *sectionView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
             section.headerTitle = headerTitle;
@@ -109,9 +115,9 @@ enum SECTIONS {
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Site", @"") subtitle:subtitle url:source.url]];
     }
-    [self.tableViewModel loadTableItems:tableItems inSection:SectionCommitteeInfoIndex];
+    [__tableViewModel loadTableItems:tableItems inSection:SectionCommitteeInfoIndex];
     [tableItems release];
-    [self.tableViewModel loadObjects:self.committee.sortedMembers inSection:SectionMembersIndex];    
+    [__tableViewModel loadObjects:self.committee.sortedMembers inSection:SectionMembersIndex];    
 }
 
 - (RKTableViewCellMapping *)committeeMemberCellMap {

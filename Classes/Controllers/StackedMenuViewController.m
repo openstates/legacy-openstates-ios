@@ -59,6 +59,11 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     [super dealloc];
 }
 
+- (void)viewDidUnload {
+    self.selectStateButton = nil;
+    [super viewDidUnload];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.bounces = NO;
@@ -71,11 +76,6 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     [self configureStackedBackgroundView];    
     [self configureMenuHeader];
     [self configureMenuFooter];
-}
-
-- (void)viewDidUnload {
-    self.selectStateButton = nil;
-    [super viewDidUnload];
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {

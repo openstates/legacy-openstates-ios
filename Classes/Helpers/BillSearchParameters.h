@@ -25,8 +25,10 @@
 
 + (NSString *)pathForSubject:(NSString *)subject state:(NSString *)stateID session:(NSString *)session chamber:(NSString *)chamber;
 + (NSString *)pathForSubject:(NSString *)subject chamber:(NSString *)chamber;
++ (NSString *)pathForSubjectsWithState:(SLFState *)state chamber:(NSString *)chamber;
 
 + (NSString *)pathForSponsor:(NSString *)sponsorID state:(NSString *)stateID session:(NSString *)session;
 + (NSString *)pathForSponsor:(NSString *)sponsorID;
 
++ (NSString *)pathForUpdatedSinceDaysAgo:(NSInteger)daysAgo state:(NSString *)stateID;
 @end

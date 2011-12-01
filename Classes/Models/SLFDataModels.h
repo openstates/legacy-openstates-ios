@@ -16,3 +16,4 @@
 #import "SLFState.h"
 #import "SLFParty.h"
 #import "SLFChamber.h"
+#import "BillsSubjectsEntry.h"

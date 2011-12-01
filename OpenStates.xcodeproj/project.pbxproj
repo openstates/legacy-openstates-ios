@@ -170,6 +170,9 @@
 		3795CDD81480E5A800E152EA /* BarButtonHighlight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795CDD01480E5A800E152EA /* BarButtonHighlight@2x.png */; };
 		3795CDD91480E5A800E152EA /* BarButtonNormal.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795CDD11480E5A800E152EA /* BarButtonNormal.png */; };
 		3795CDDA1480E5A800E152EA /* BarButtonNormal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3795CDD21480E5A800E152EA /* BarButtonNormal@2x.png */; };
+		379A44EE1487ED2700D47B88 /* BillsSubjectsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 379A44ED1487ED2700D47B88 /* BillsSubjectsViewController.m */; };
+		379A44F21488020200D47B88 /* SubjectCounts.json in Resources */ = {isa = PBXBuildFile; fileRef = 379A44EF1487F89E00D47B88 /* SubjectCounts.json */; };
+		379A44F61488167B00D47B88 /* BillsSubjectsEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 379A44F41488038400D47B88 /* BillsSubjectsEntry.m */; };
 		379BB596147409EC00DDBD3D /* BillDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F6FCFC14676214003AA80D /* BillDetailViewController.m */; };
 		37A3258313E49D4700138ADE /* StatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258213E49D4700138ADE /* StatesViewController.m */; };
 		37A3258F13E49F2200138ADE /* StateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258E13E49F2200138ADE /* StateDetailViewController.m */; };
@@ -421,6 +424,7 @@
 		37037547147AF51000B59AA2 /* SLFPersistenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFPersistenceManager.m; sourceTree = "<group>"; };
 		37089C6414843439002239A9 /* SLFGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLFGlobal.h; path = Classes/Main/SLFGlobal.h; sourceTree = "<group>"; };
 		37089C6514843439002239A9 /* SLFGlobal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLFGlobal.m; path = Classes/Main/SLFGlobal.m; sourceTree = "<group>"; };
+		370D58D01487E59400CE8F93 /* OpenStates.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OpenStates.entitlements; sourceTree = "<group>"; };
 		3711870D144619A700A12B8B /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		3711870E144619A700A12B8B /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		3711871014462D1800A12B8B /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
@@ -632,6 +636,11 @@
 		3795CDD01480E5A800E152EA /* BarButtonHighlight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "BarButtonHighlight@2x.png"; sourceTree = "<group>"; };
 		3795CDD11480E5A800E152EA /* BarButtonNormal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BarButtonNormal.png; sourceTree = "<group>"; };
 		3795CDD21480E5A800E152EA /* BarButtonNormal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "BarButtonNormal@2x.png"; sourceTree = "<group>"; };
+		379A44EC1487ED2700D47B88 /* BillsSubjectsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsSubjectsViewController.h; sourceTree = "<group>"; };
+		379A44ED1487ED2700D47B88 /* BillsSubjectsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsSubjectsViewController.m; sourceTree = "<group>"; };
+		379A44EF1487F89E00D47B88 /* SubjectCounts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = SubjectCounts.json; sourceTree = "<group>"; };
+		379A44F31488038400D47B88 /* BillsSubjectsEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsSubjectsEntry.h; sourceTree = "<group>"; };
+		379A44F41488038400D47B88 /* BillsSubjectsEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsSubjectsEntry.m; sourceTree = "<group>"; };
 		37A3258113E49D4700138ADE /* StatesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesViewController.h; sourceTree = "<group>"; };
 		37A3258213E49D4700138ADE /* StatesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatesViewController.m; sourceTree = "<group>"; };
 		37A3258D13E49F2200138ADE /* StateDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateDetailViewController.h; sourceTree = "<group>"; };
@@ -754,7 +763,6 @@
 		37EDEAA113D3D81900F8FCA1 /* LegislatorDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorDetailViewController.m; sourceTree = "<group>"; };
 		37EDEAAA13D3FAF700F8FCA1 /* CommitteeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeDetailViewController.h; sourceTree = "<group>"; };
 		37EDEAAB13D3FAF700F8FCA1 /* CommitteeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteeDetailViewController.m; sourceTree = "<group>"; };
-		37F254DE1482F1DE006CEFBA /* OpenStates.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OpenStates.entitlements; sourceTree = "<group>"; };
 		37F25BA2142BAC0E009D8FCF /* SLFAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFAppearance.h; sourceTree = "<group>"; };
 		37F25BA3142BAC0E009D8FCF /* SLFAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFAppearance.m; sourceTree = "<group>"; };
 		37F2990A140FCD2200B96572 /* SLFData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SLFData.xcdatamodel; sourceTree = "<group>"; };
@@ -783,14 +791,8 @@
 		37F6FCF414672167003AA80D /* BillsMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsMenuViewController.m; sourceTree = "<group>"; };
 		37F6FCF61467611F003AA80D /* BillsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsViewController.h; sourceTree = "<group>"; };
 		37F6FCF71467611F003AA80D /* BillsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsViewController.m; sourceTree = "<group>"; };
-		37F6FCF914676214003AA80D /* BillsCategoriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsCategoriesViewController.h; sourceTree = "<group>"; };
-		37F6FCFA14676214003AA80D /* BillsCategoriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BillsCategoriesViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37F6FCFB14676214003AA80D /* BillDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillDetailViewController.h; sourceTree = "<group>"; };
 		37F6FCFC14676214003AA80D /* BillDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillDetailViewController.m; sourceTree = "<group>"; };
-		37F6FCFD14676214003AA80D /* BillsFavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsFavoritesViewController.h; sourceTree = "<group>"; };
-		37F6FCFE14676214003AA80D /* BillsFavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BillsFavoritesViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		37F6FCFF14676214003AA80D /* BillsRecentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsRecentViewController.h; sourceTree = "<group>"; };
-		37F6FD0014676214003AA80D /* BillsRecentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsRecentViewController.m; sourceTree = "<group>"; };
 		37F6FD0814676565003AA80D /* BillSearchParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillSearchParameters.h; sourceTree = "<group>"; };
 		37F6FD0914676565003AA80D /* BillSearchParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillSearchParameters.m; sourceTree = "<group>"; };
 		37FA255E148029930026EFB1 /* StarButtonOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StarButtonOff.png; sourceTree = "<group>"; };
@@ -881,7 +883,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				37F254DE1482F1DE006CEFBA /* OpenStates.entitlements */,
+				370D58D01487E59400CE8F93 /* OpenStates.entitlements */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				37F29909140FCD2200B96572 /* Data */,
@@ -1034,6 +1036,7 @@
 				37953BDB14272D9500A0CD86 /* DataModelsTestCase.m */,
 				372E58C6141575F3000652B1 /* SLFSpecEnvironment.m */,
 				37031602143FA1E400E1CF4D /* SLFReachableTests.m */,
+				379A44EF1487F89E00D47B88 /* SubjectCounts.json */,
 				372E57CA14153D07000652B1 /* Supporting Files */,
 			);
 			name = UnitTests;
@@ -1299,8 +1302,8 @@
 				37F6FCF414672167003AA80D /* BillsMenuViewController.m */,
 				37F6FCF61467611F003AA80D /* BillsViewController.h */,
 				37F6FCF71467611F003AA80D /* BillsViewController.m */,
-				37F6FCF914676214003AA80D /* BillsCategoriesViewController.h */,
-				37F6FCFA14676214003AA80D /* BillsCategoriesViewController.m */,
+				379A44EC1487ED2700D47B88 /* BillsSubjectsViewController.h */,
+				379A44ED1487ED2700D47B88 /* BillsSubjectsViewController.m */,
 				37F6FCFB14676214003AA80D /* BillDetailViewController.h */,
 				37F6FCFC14676214003AA80D /* BillDetailViewController.m */,
 				3771B979147A2BE000E9CE39 /* BillVotesViewController.h */,
@@ -1309,10 +1312,6 @@
 				3771B9A1147ABCA200E9CE39 /* BillsSearchViewController.m */,
 				37FA2566148043BD0026EFB1 /* BillsWatchedViewController.h */,
 				37FA2567148043BE0026EFB1 /* BillsWatchedViewController.m */,
-				37F6FCFD14676214003AA80D /* BillsFavoritesViewController.h */,
-				37F6FCFE14676214003AA80D /* BillsFavoritesViewController.m */,
-				37F6FCFF14676214003AA80D /* BillsRecentViewController.h */,
-				37F6FD0014676214003AA80D /* BillsRecentViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1461,9 +1460,9 @@
 		37CFB4CD144B980F00E8120D /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				37CFB4CE144B980F00E8120D /* NSInvocation+CWVariableArguments.h */,
 				37383649147480CF00AEEC34 /* NSDate+SLFDateHelper.h */,
 				3738364A147480CF00AEEC34 /* NSDate+SLFDateHelper.m */,
-				37CFB4CE144B980F00E8120D /* NSInvocation+CWVariableArguments.h */,
 				37CFB4CF144B980F00E8120D /* NSInvocation+CWVariableArguments.m */,
 				37CFB4D0144B980F00E8120D /* UIImageView+RoundedCorners.h */,
 				37CFB4D1144B980F00E8120D /* UIImageView+RoundedCorners.m */,
@@ -1486,6 +1485,8 @@
 				376357F5144CCE7500122377 /* SLFParty.m */,
 				37D953CC1412FB0E00F9C8AE /* SLFChamber.h */,
 				37D953CD1412FB0E00F9C8AE /* SLFChamber.m */,
+				379A44F31488038400D47B88 /* BillsSubjectsEntry.h */,
+				379A44F41488038400D47B88 /* BillsSubjectsEntry.m */,
 				37D7670B13E67D5200A77F89 /* CustomModels */,
 				37D7671C13E67D5200A77F89 /* StockModels */,
 			);
@@ -1935,6 +1936,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				379A44F21488020200D47B88 /* SubjectCounts.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2095,6 +2097,8 @@
 				3770F12C148712A500FD854B /* MultiRowCalloutCell.m in Sources */,
 				3770F12F148715AF00FD854B /* ColorPinAnnotationView.m in Sources */,
 				3770F13314872B8E00FD854B /* MultiRowAnnotation.m in Sources */,
+				379A44EE1487ED2700D47B88 /* BillsSubjectsViewController.m in Sources */,
+				379A44F61488167B00D47B88 /* BillsSubjectsEntry.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

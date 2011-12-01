@@ -12,6 +12,7 @@
 
 #import "SLFObjectCache.h"
 #import "SLFDataModels.h"
+#import "NSDate+SLFDateHelper.h"
 
 @interface SLFObjectCache()
 - (NSFetchRequest*)fetchRequestStatesForResourcePath:(NSString*)resourcePath;
@@ -129,11 +130,9 @@
 }
 
 // FOR BILLS ============================
-// TODO: Subject Counts Cache?
-    // /subject_counts/tx/821/upper/?apikey=REDACTED
 // TODO: Need a way to accurately search current session when search_window is just "session"
-// TODO: Need a way to search for "updated_since"
-    // /bills?updated_since=2011-04-27&state=tx&apikey=REDACTED
+// TODO: Subject Counts Cache?
+//     /subject_counts/tx/821/upper/?apikey=REDACTED
 
 - (NSFetchRequest*)fetchRequestBillsForResourcePath:(NSString*)resourcePath {
 
@@ -170,7 +169,13 @@
                 NSArray *sessionComponents = [value componentsSeparatedByString:@"session:"];
                 if ([sessionComponents count] > 1)
                     subpredicate = [NSPredicate predicateWithFormat:@"(session LIKE[cd] %@)", [sessionComponents objectAtIndex:1]];
-            }    
+            }
+            else if ([key isEqualToString:@"updated_since"]) {
+                NSDate *updatedSince = [NSDate dateFromString:value withFormat:[NSDate dateFormatString]];
+                if (updatedSince) {
+                    subpredicate = [NSPredicate predicateWithFormat:@"(dateUpdated >= %@)", updatedSince];
+                }
+            }
             if (subpredicate != NULL)
                 [subpredicates addObject:subpredicate];
         }];

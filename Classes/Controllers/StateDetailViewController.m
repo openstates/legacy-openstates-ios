@@ -31,6 +31,7 @@
 #define MenuNews NSLocalizedString(@"News", @"")
 
 @interface StateDetailViewController()
+- (void)configureTableViewModel;
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
 @property (nonatomic,retain) UIImage *legislatorsIcon;
@@ -66,12 +67,6 @@
     return self;
 }
 
-- (void)stateMenuSelectionDidChangeWithState:(SLFState *)newState {
-    self.state = newState;
-    if (newState)
-        [self loadDataFromNetworkWithID:newState.stateID];
-}
-
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.state = nil;
@@ -85,18 +80,29 @@
     [super dealloc];
 }
 
-- (void)configureTableViewModel {
-    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.pullToRefreshEnabled = NO;
+- (void)viewDidUnload {
+    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
+    self.tableViewModel = nil;
+    [super viewDidUnload];
 }
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configureTableViewModel];
     if (self.state)
         self.title = self.state.name; 
+}
+
+- (void)stateMenuSelectionDidChangeWithState:(SLFState *)newState {
+    self.state = newState;
+    if (newState)
+        [self loadDataFromNetworkWithID:newState.stateID];
+}
+
+- (void)configureTableViewModel {
+    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
+    self.tableViewModel.delegate = self;
+    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
+    self.tableViewModel.pullToRefreshEnabled = NO;
 }
 
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {

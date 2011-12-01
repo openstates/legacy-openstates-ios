@@ -38,6 +38,20 @@
     [super dealloc];
 }
 
+- (void)viewDidUnload {
+    [super viewDidUnload];
+    self.stateMenuDelegate = nil;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    if (!SLFIsIpad())
+        [self configureTableHeader];
+    [self loadFromNetworkIfEmpty];
+    if (self.tableViewModel.rowCount && !self.title)
+        self.title = [NSString stringWithFormat:@"%d States", self.tableViewModel.rowCount];
+}
+
 - (void)configureTableViewModel {
     [super configureTableViewModel];
     self.tableViewModel.showsSectionIndexTitles = YES;
@@ -55,20 +69,6 @@
         };
     }];
     [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    if (!SLFIsIpad())
-        [self configureTableHeader];
-    [self loadFromNetworkIfEmpty];
-    if (self.tableViewModel.rowCount && !self.title)
-        self.title = [NSString stringWithFormat:@"%d States", self.tableViewModel.rowCount];
-}
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    self.stateMenuDelegate = nil;
 }
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {

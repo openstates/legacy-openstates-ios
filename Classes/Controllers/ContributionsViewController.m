@@ -35,9 +35,15 @@
     return self;
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];    
+    self.dataSource = nil;
+    [super dealloc];
+}
 
-- (void)tableDataChanged:(NSNotification*)notification {
-    [self.tableView reloadData];
+- (void)viewDidUnload {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];    
+    self.dataSource = nil;
 }
 
 - (void)viewDidLoad {
@@ -65,18 +71,9 @@
     [gradient release];
 }
 
-
-- (void)viewDidUnload {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];    
-    self.dataSource = nil;
+- (void)tableDataChanged:(NSNotification*)notification {
+    [self.tableView reloadData];
 }
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];    
-    self.dataSource = nil;
-    [super dealloc];
-}
-
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
