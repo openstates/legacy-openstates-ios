@@ -92,6 +92,8 @@ enum SECTIONS {
         }];
     }         
 	self.title = NSLocalizedString(@"Loading...", @"");
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+
 }
 
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {

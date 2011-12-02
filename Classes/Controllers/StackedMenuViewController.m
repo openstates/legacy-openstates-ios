@@ -13,7 +13,6 @@
 #import "StackedMenuViewController.h"
 #import "StackedMenuCell.h"
 #import "GradientBackgroundView.h"
-#import "StretchedTitleLabel.h"
 #import "StatesViewController.h"
 #import "UIImage+OverlayColor.h"
 #import "StackedBackgroundView.h"
@@ -61,6 +60,7 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 
 - (void)viewDidUnload {
     self.selectStateButton = nil;
+    self.statesPopover = nil;
     [super viewDidUnload];
 }
 
@@ -147,7 +147,7 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 }
 
 - (void)statePopoverDidCancel:(StatesPopoverManager *)statePopover {
-    self.statesPopover = nil;
+        //self.statesPopover = nil;
 }
 
 - (UIButton *)barButtonForState:(SLFState *)aState {

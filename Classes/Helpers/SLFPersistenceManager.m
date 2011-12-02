@@ -104,6 +104,20 @@ NSString* SLFCurrentActivityPath(void) {
 
 void SLFSaveCurrentActivityPath(NSString *path) {
     NSCParameterAssert(path != NULL);
+    if (IsEmpty(path))
+        return;
+    NSMutableString *activityKeywords = [NSMutableString stringWithString:@"Activity: "];
+    if (!IsEmpty(SLFSelectedStateID()))
+        [activityKeywords appendFormat:@"%@-",[SLFSelectedStateID() uppercaseString]];
+    NSArray *words = [path componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"?/"]];
+    if ([words count] >= 2)
+        [activityKeywords appendString:[[words objectAtIndex:1] capitalizedString]];
+    @try {
+        [TestFlight passCheckpoint:activityKeywords];
+        [TestFlight addCustomEnvironmentInformation:path forKey:@"ActivityPath"];
+    }
+    @catch (NSException *exception) {
+    }
     [[SLFPersistenceManager sharedPersistence] setSavedActivityPath:path];
 }
 

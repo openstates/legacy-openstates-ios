@@ -21,7 +21,7 @@ NSString * const kMKiCloudSyncNotification = @"MKiCloudSyncDidUpdateToLatest";
 
 @implementation MKiCloudSync
 
-+(void) updateToiCloud:(NSNotification*) notificationObject {
++(void)updateToiCloud:(NSNotification*) notificationObject {
     NSLog(@"Updating to iCloud");
     NSDictionary *dict = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
     [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -30,7 +30,7 @@ NSString * const kMKiCloudSyncNotification = @"MKiCloudSyncDidUpdateToLatest";
     [[NSUbiquitousKeyValueStore defaultStore] synchronize];
 }
 
-+(void) updateFromiCloud:(NSNotification*) notificationObject {
++(void)updateFromiCloud:(NSNotification*) notificationObject {
     
     NSLog(@"Updating from iCloud");
     NSUbiquitousKeyValueStore *iCloudStore = [NSUbiquitousKeyValueStore defaultStore];
@@ -50,7 +50,7 @@ NSString * const kMKiCloudSyncNotification = @"MKiCloudSyncDidUpdateToLatest";
     [defaultCenter postNotificationName:kMKiCloudSyncNotification object:nil];
 }
 
-+(void) start {
++(void)start {
     if(NO == NSClassFromString(@"NSUbiquitousKeyValueStore")) { // is iOS 5?
         NSLog(@"Not an iOS 5 device");  
         return;
@@ -63,7 +63,7 @@ NSString * const kMKiCloudSyncNotification = @"MKiCloudSyncDidUpdateToLatest";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateToiCloud:) name:NSUserDefaultsDidChangeNotification object:nil];
 }
 
-+ (void) dealloc {
++ (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUserDefaultsDidChangeNotification object:nil];
 }

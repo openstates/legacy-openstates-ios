@@ -134,6 +134,7 @@
 @synthesize badgeHighlightedColor = _badgeHighlightedColor;
 @synthesize isClickable = _isClickable;
 @synthesize subjectEntry = _subjectEntry;
+@synthesize cellInfo = _cellInfo;
 
 + (NSString *)cellIdentifier {
     return @"DDBadgeGroupCell";
@@ -166,6 +167,7 @@
     self.badgeText = nil;
     self.badgeColor = nil;
     self.badgeHighlightedColor = nil;
+    self.cellInfo = nil;
     self.subjectEntry = nil;
     [super dealloc];
 }
@@ -182,8 +184,10 @@
 }
 
 - (void)setCellInfo:(TableCellDataObject *)cellInfo {    
+    SLFRelease(_cellInfo);
     if (!cellInfo)
         return;
+    _cellInfo = [cellInfo retain];
     self.summary = cellInfo.title;
     self.badgeText = [NSString stringWithFormat:NSLocalizedString(@"%@ Bills", @""), cellInfo.entryValue];
     self.isClickable = cellInfo.isClickable;

@@ -11,15 +11,31 @@
 //
 
 #import "SLFTheme.h"
+#import "GradientBackgroundView.h"
+#import "SLFDrawingExtensions.h"
 
+#if 0
 BOOL SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath) {
     cell.backgroundColor = [SLFAppearance cellBackgroundLightColor];
-    if (indexPath.row % 2 == 0) {
+    if (indexPath.row == 0 || indexPath.row % 2 == 0) {
         cell.backgroundColor = [SLFAppearance cellBackgroundDarkColor];
         return YES;
     }
     return NO;
 }
+#endif
+
+BOOL SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath) {
+    BOOL useDark;
+    BOOL inverse = (indexPath.section % 2 == 0);
+    if (indexPath.row == 0 || indexPath.row % 2 == 0)
+        useDark = inverse ? NO : YES;
+    else
+        useDark = inverse ? YES : NO;
+    cell.backgroundColor = useDark ? [SLFAppearance cellBackgroundDarkColor] : [SLFAppearance cellBackgroundLightColor];
+    return useDark;
+}
+
 
 UIBarButtonItem* SLFToolbarButton(UIImage *image, id target, SEL selector) {
     UIImage *normalImage = [image imageWithOverlayColor:[SLFAppearance tableBackgroundLightColor]];
@@ -50,6 +66,31 @@ UILabel *SLFStyledHeaderLabelWithTextAtOrigin(NSString *text, CGPoint origin){
     CGSize labelSize = label.frame.size;
     label.frame = CGRectMake(origin.x, origin.y, labelSize.width, labelSize.height);
     return [label autorelease];
+}
+
+// ex: red = 145, blue = 144, green = 130
+NSArray* SLFBarStyleButtonImageGradientsWithSizeAndBaseColorRGB(CGSize imageSize, int red, int blue, int green) { 
+    CGRect rect = CGRectMake(0,0,imageSize.width,imageSize.height);
+    GradientBackgroundView *view = [[GradientBackgroundView alloc] initWithFrame:rect];
+    [view loadLayerAndGradientColors];
+    CAGradientLayer *grad = (CAGradientLayer *)view.layer;
+    UIColor *light = SLFColorWithRGB(red+45,blue+45,green+45);
+    UIColor *mid = SLFColorWithRGB(red, blue, green);
+    UIColor *dark = SLFColorWithRGB(red-20,blue-20,green-20);
+    grad.colors = [NSArray arrayWithObjects:(id)light.CGColor, (id)mid.CGColor, (id)dark.CGColor, nil];
+    view.layer.frame = rect;
+    UIImage *gradNormal = [UIImage imageFromView:view];
+    
+    red-=50, green-=50, blue-=50;
+    light = SLFColorWithRGB(red+45,blue+45,green+45);
+    mid = SLFColorWithRGB(red, blue, green);
+    dark = SLFColorWithRGB(red-20,blue-20,green-20);
+    grad.colors = [NSArray arrayWithObjects:(id)light.CGColor, (id)mid.CGColor, (id)dark.CGColor, nil];
+    UIImage *gradSelected = [UIImage imageFromView:view];
+    
+    NSArray *gradientImages = [NSArray arrayWithObjects:gradNormal, gradSelected, nil];
+    [view release];
+    return gradientImages;
 }
 
 @implementation UIButton (SLFTintedButtons)

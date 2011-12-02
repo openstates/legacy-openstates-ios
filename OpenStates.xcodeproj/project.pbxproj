@@ -55,6 +55,7 @@
 		3738364B147480CF00AEEC34 /* NSDate+SLFDateHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3738364A147480CF00AEEC34 /* NSDate+SLFDateHelper.m */; };
 		373AC88D14171F9C00720F40 /* APIKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 373AC88C14171F9C00720F40 /* APIKeys.m */; };
 		373E51501445E6C70044D478 /* DistrictSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 373E514D1445E6C70044D478 /* DistrictSearch.m */; };
+		373ECB6914888C9F000BD16D /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 373ECB6514888C9F000BD16D /* libTestFlight.a */; };
 		37442F0214342F780027F422 /* StateFlags.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 37442F0114342F780027F422 /* StateFlags.bundle */; };
 		37442F0514342F880027F422 /* HeaderPattern.png in Resources */ = {isa = PBXBuildFile; fileRef = 37442F0314342F880027F422 /* HeaderPattern.png */; };
 		37442F0614342F880027F422 /* HeaderPattern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37442F0414342F880027F422 /* HeaderPattern@2x.png */; };
@@ -424,7 +425,6 @@
 		37037547147AF51000B59AA2 /* SLFPersistenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFPersistenceManager.m; sourceTree = "<group>"; };
 		37089C6414843439002239A9 /* SLFGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLFGlobal.h; path = Classes/Main/SLFGlobal.h; sourceTree = "<group>"; };
 		37089C6514843439002239A9 /* SLFGlobal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLFGlobal.m; path = Classes/Main/SLFGlobal.m; sourceTree = "<group>"; };
-		370D58D01487E59400CE8F93 /* OpenStates.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OpenStates.entitlements; sourceTree = "<group>"; };
 		3711870D144619A700A12B8B /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		3711870E144619A700A12B8B /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		3711871014462D1800A12B8B /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
@@ -471,6 +471,9 @@
 		373AC88C14171F9C00720F40 /* APIKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIKeys.m; sourceTree = "<group>"; };
 		373E514C1445E6C70044D478 /* DistrictSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictSearch.h; sourceTree = "<group>"; };
 		373E514D1445E6C70044D478 /* DistrictSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictSearch.m; sourceTree = "<group>"; };
+		373ECB6114887724000BD16D /* OpenStates.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OpenStates.entitlements; sourceTree = "<group>"; };
+		373ECB6514888C9F000BD16D /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		373ECB6814888C9F000BD16D /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		37442F0114342F780027F422 /* StateFlags.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = StateFlags.bundle; sourceTree = "<group>"; };
 		37442F0314342F880027F422 /* HeaderPattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HeaderPattern.png; sourceTree = "<group>"; };
 		37442F0414342F880027F422 /* HeaderPattern@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HeaderPattern@2x.png"; sourceTree = "<group>"; };
@@ -831,6 +834,7 @@
 				37E961EF13E544FB0064B1D3 /* libRestKitNetwork.a in Frameworks */,
 				37E961F013E544FD0064B1D3 /* libRestKitObjectMapping.a in Frameworks */,
 				37E961F113E544FE0064B1D3 /* libRestKitSupport.a in Frameworks */,
+				373ECB6914888C9F000BD16D /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -883,7 +887,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				370D58D01487E59400CE8F93 /* OpenStates.entitlements */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				37F29909140FCD2200B96572 /* Data */,
@@ -1060,6 +1063,16 @@
 				37336A6B142B991200F635EB /* MainWindow-iPad.xib */,
 			);
 			path = Interfaces;
+			sourceTree = "<group>";
+		};
+		373ECB6414888C9F000BD16D /* TestFlight */ = {
+			isa = PBXGroup;
+			children = (
+				373ECB6814888C9F000BD16D /* TestFlight.h */,
+				373ECB6514888C9F000BD16D /* libTestFlight.a */,
+			);
+			name = TestFlight;
+			path = Vendor/TestFlight;
 			sourceTree = "<group>";
 		};
 		37442F1214344D230027F422 /* glyphish */ = {
@@ -1246,6 +1259,7 @@
 		377CB425142EFD4600AFF4BC /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				373ECB6414888C9F000BD16D /* TestFlight */,
 				3770F123148712A500FD854B /* MultiRowCalloutAnnotationView */,
 				37037549147B331B00B59AA2 /* ActionSheetPicker */,
 				37BAE3041478636100CD5704 /* AppendingFlowView */,
@@ -1621,6 +1635,7 @@
 		37F29909140FCD2200B96572 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				373ECB6114887724000BD16D /* OpenStates.entitlements */,
 				37F2990A140FCD2200B96572 /* SLFData.xcdatamodel */,
 			);
 			path = Data;
@@ -2155,7 +2170,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_STYLE = Debug;
+				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2163,12 +2180,18 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Resources/Info.plist;
 				KEEP_PRIVATE_EXTERNS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/TestFlight\"",
+				);
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenStates;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = SLF;
 			};
 			name = Debug;
 		};
@@ -2176,13 +2199,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_STYLE = Release;
+				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Resources/Info.plist;
 				KEEP_PRIVATE_EXTERNS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/TestFlight\"",
+				);
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
@@ -2190,6 +2219,8 @@
 				PRODUCT_NAME = OpenStates;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = SLF;
 			};
 			name = Release;
 		};
@@ -2241,15 +2272,15 @@
 			};
 			name = Release;
 		};
-		C01FCF4F08A954540054247B /* Debug */ = {
+		373ECB5E1488747F000BD16D /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
 					armv6,
 					armv7,
 				);
-				BUILD_STYLE = Debug;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				BUILD_STYLE = Release;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Gregory Combs";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2259,7 +2290,81 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = Vendor/RestKit/Build;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5887768E-6592-485C-B278-6096F5B2A38C";
+				SDKROOT = iphoneos;
+			};
+			name = Distribution;
+		};
+		373ECB5F1488747F000BD16D /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_STYLE = Release;
+				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2;
+				DEAD_CODE_STRIPPING = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = Resources/Info.plist;
+				KEEP_PRIVATE_EXTERNS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/TestFlight\"",
+				);
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
+				PRODUCT_NAME = OpenStates;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = SLF;
+			};
+			name = Distribution;
+		};
+		373ECB601488747F000BD16D /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/OpenStates.app/OpenStates";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "UnitTests/UnitTests-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					Vendor/Kiwi,
+					Vendor/RestKit/Build,
+				);
+				PRODUCT_NAME = OpenStatesSpecs;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Distribution;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					armv6,
+					armv7,
+				);
+				BUILD_STYLE = Debug;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gregory Combs (MJMLU3U99Y)";
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Prefix.pch;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = Vendor/RestKit/Build;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9DCAEB38-D98A-4402-B628-E1AE362BC6A4";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2272,7 +2377,7 @@
 					armv7,
 				);
 				BUILD_STYLE = Release;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gregory Combs (MJMLU3U99Y)";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2283,7 +2388,7 @@
 				HEADER_SEARCH_PATHS = Vendor/RestKit/Build;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9DCAEB38-D98A-4402-B628-E1AE362BC6A4";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -2296,6 +2401,7 @@
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
+				373ECB5F1488747F000BD16D /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2305,6 +2411,7 @@
 			buildConfigurations = (
 				372E57D414153D07000652B1 /* Debug */,
 				372E57D514153D07000652B1 /* Release */,
+				373ECB601488747F000BD16D /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2314,6 +2421,7 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
+				373ECB5E1488747F000BD16D /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

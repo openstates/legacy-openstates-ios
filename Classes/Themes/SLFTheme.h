@@ -19,6 +19,7 @@
 BOOL SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath); // Returns YES if resulting in dark background
 UIBarButtonItem* SLFToolbarButton(UIImage *image, id target, SEL selector);
 UILabel *SLFStyledHeaderLabelWithTextAtOrigin(NSString *text, CGPoint origin);
+NSArray* SLFBarStyleButtonImageGradientsWithSizeAndBaseColorRGB(CGSize imageSize, int red, int blue, int green);
 
 @interface UIButton (SLFTintedButtons)
 + (UIButton *)buttonWithTitle:(NSString *)title orange:(BOOL)isOrange width:(CGFloat)width target:(id)target action:(SEL)action;

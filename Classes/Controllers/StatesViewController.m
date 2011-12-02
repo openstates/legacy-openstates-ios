@@ -14,7 +14,7 @@
 #import "StateDetailViewController.h"
 #import "SLFState.h"
 #import "SLFRestKitManager.h"
-#import "StretchedTitleLabel.h"
+#import "OpenStatesTitleView.h"
 
 @interface StatesViewController()
 - (void)pushOrSendViewControllerWithState:(SLFState *)newState;
@@ -45,8 +45,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (!SLFIsIpad())
-        [self configureTableHeader];
+    [self configureTableHeader];
     [self loadFromNetworkIfEmpty];
     if (self.tableViewModel.rowCount && !self.title)
         self.title = [NSString stringWithFormat:@"%d States", self.tableViewModel.rowCount];
@@ -89,15 +88,22 @@
     }
 }
 
+CGFloat const kTitleHeight = 30;
+
 - (void)configureTableHeader {
-    CGRect contentRect = CGRectMake(0, 0, self.view.width, 40);
-    StretchedTitleLabel *stretchedTitle = CreateOpenStatesTitleLabelForFrame(contentRect);
-    UIColor *background = [SLFAppearance cellBackgroundLightColor];
+    if (SLFIsIpad())
+        return;
+    CGRect contentRect = CGRectMake(15, 0, self.view.width-30, kTitleHeight);
+    OpenStatesTitleView *stretchedTitle = [[OpenStatesTitleView alloc] initWithFrame:contentRect];
     stretchedTitle.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    stretchedTitle.backgroundColor = background;
-    self.tableView.top += 40;
-    self.tableView.height -= 40;
-    [self.view addSubview:stretchedTitle];
+    /*
+        UIColor *background = [SLFAppearance cellBackgroundLightColor];
+        stretchedTitle.backgroundColor = background;
+        self.tableView.top += kTitleHeight;
+        self.tableView.height -= kTitleHeight;
+        [self.view addSubview:stretchedTitle];
+    */
+    self.navigationItem.titleView = stretchedTitle;
     [stretchedTitle release];
 }
 

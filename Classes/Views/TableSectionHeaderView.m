@@ -34,6 +34,8 @@ CGFloat const TableSectionHeaderViewDefaultOffset = 20;
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+
         CGRect labelRect = CGRectMake(offset, 0, frame.size.width-offset, frame.size.height);
         __titleLabel = [[UILabel alloc] initWithFrame:labelRect];
         __titleLabel.textColor = [SLFAppearance tableSectionColor];

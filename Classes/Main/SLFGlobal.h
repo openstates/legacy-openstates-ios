@@ -15,6 +15,11 @@
 #import "StackableControllerProtocol.h"
 #import "APIKeys.h"
 #import "SLFPersistenceManager.h"
+#import "TestFlight.h"
+
+#define NSLog(__FORMAT__, ...) TFLog((@"%s [Line %d] " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#define RKLogDebug(__FORMAT__, ...) TFLog((@"RKLogDebug - %s [Line %d] " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#define RKLogError(__FORMAT__, ...) TFLog((@"RKLogError - %s [Line %d] " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 
 BOOL IsEmpty(NSObject * thing);
 

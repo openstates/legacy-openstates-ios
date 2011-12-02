@@ -37,20 +37,6 @@
     return self;
 }
 
-- (void)reconfigureForState:(SLFState *)newState {
-    self.state = newState;
-    if (!newState || !self.tableViewModel)
-        return;
-    NSInteger chamberScope = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
-    NSString *chamber = [SLFChamber chamberTypeForSearchScopeIndex:chamberScope];
-    NSString *resourcePath = [BillSearchParameters pathForSubjectsWithState:newState chamber:chamber];
-    SLFSaveCurrentActivityPath(resourcePath);
-    [__tableViewModel loadTableFromResourcePath:resourcePath withBlock:^(RKObjectLoader* objectLoader) {
-        objectLoader.cacheTimeoutInterval = SLF_HOURS_TO_SECONDS(12);
-        objectLoader.objectMapping = [BillsSubjectsEntry mapping];
-    }];
-}
-
 - (void)dealloc {
 	self.state = nil;
     self.tableViewModel = nil;
@@ -71,6 +57,20 @@
     }
 }
 
+- (void)reconfigureForState:(SLFState *)newState {
+    self.state = newState;
+    if (!newState || !self.tableViewModel)
+        return;
+    NSInteger chamberScope = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
+    NSString *chamber = [SLFChamber chamberTypeForSearchScopeIndex:chamberScope];
+    NSString *resourcePath = [BillSearchParameters pathForSubjectsWithState:newState chamber:chamber];
+    SLFSaveCurrentActivityPath(resourcePath);
+    [__tableViewModel loadTableFromResourcePath:resourcePath withBlock:^(RKObjectLoader* objectLoader) {
+        objectLoader.cacheTimeoutInterval = SLF_HOURS_TO_SECONDS(12);
+        objectLoader.objectMapping = [BillsSubjectsEntry mapping];
+    }];
+}
+
 - (void)configureTableViewModel {
     self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     __tableViewModel.delegate = self;
@@ -80,8 +80,6 @@
     RKTableViewCellMapping *objCellMap = [RKTableViewCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
         cellMapping.cellClass = [DDBadgeGroupCell class];
         [cellMapping mapKeyPath:@"self" toAttribute:@"subjectEntry"];
-            //[cellMapping mapKeyPath:@"name" toAttribute:@"textLabel.text"];
-            //[cellMapping mapKeyPath:@"billCount.description" toAttribute:@"detailTextLabel.text"];
         cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             SLFAlternateCellForIndexPath(cell, indexPath);
         };
@@ -115,17 +113,18 @@
     NSArray *buttonTitles = [SLFChamber chamberSearchScopeTitlesWithState:state];
     if (IsEmpty(buttonTitles))
         return;
-    CGFloat tableWidth = self.tableView.bounds.size.width;
     UISegmentedControl *scopeBar = [[UISegmentedControl alloc] initWithItems:buttonTitles];
-    scopeBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-    scopeBar.segmentedControlStyle = UISegmentedControlStyleBar;
-    scopeBar.origin = CGPointMake(0, self.titleBarView.opticalHeight);
-    scopeBar.width = tableWidth;
-    scopeBar.height = 40;
     scopeBar.selectedSegmentIndex = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
     [scopeBar addTarget:self action:@selector(chamberScopeSelectedIndexDidChange:) forControlEvents:UIControlEventValueChanged];
+    scopeBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
+    scopeBar.segmentedControlStyle = 7; // magic number (it's cheating)
+    CGFloat barOriginY = self.titleBarView.opticalHeight;
+    CGFloat barHeight = scopeBar.height;
+    CGFloat barWidth = self.tableView.bounds.size.width;
+    scopeBar.origin = CGPointMake(0,barOriginY);
+    scopeBar.size = CGSizeMake(barWidth, barHeight);
     CGRect tableRect = self.tableView.frame;
-    tableRect.size.height -= scopeBar.height;
+    tableRect.size.height -= (scopeBar.height);
     self.tableView.frame = CGRectOffset(tableRect, 0, scopeBar.height);
     [self.view addSubview:scopeBar];
     [scopeBar release];

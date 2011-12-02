@@ -46,6 +46,7 @@
         }
     }
     [self setUpReachability];
+    [TestFlight takeOff:@"4ad90c59aacf03cd3e58cc7c595ff348_NDI4OTcyMDExLTExLTIzIDAwOjI0OjI1LjcxNTMwOQ"];
     [SLFAppearance setupAppearance];
     [SLFRestKitManager sharedRestKit];
     [[SLFPersistenceManager sharedPersistence] loadPersistence:nil];

@@ -23,4 +23,5 @@
 @property (nonatomic,retain) UIColor *badgeHighlightedColor;
 @property (nonatomic,assign) BOOL isClickable;
 @property (nonatomic,retain) BillsSubjectsEntry *subjectEntry;
+@property (nonatomic,retain) TableCellDataObject *cellInfo; 
 @end
