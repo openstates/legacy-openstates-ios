@@ -35,5 +35,4 @@
 - (void)tagEnvironmentVariables:(NSDictionary *)variables;
 - (void)setOptIn:(BOOL)optedIn;
 - (BOOL)isOptedIn;
-@property (nonatomic,retain) id<SLFAnalyticsAdapter> adapter;
 @end

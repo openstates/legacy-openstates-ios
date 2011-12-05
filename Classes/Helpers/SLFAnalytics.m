@@ -11,14 +11,29 @@
 //
 
 #import "SLFAnalytics.h"
-#ifdef DEBUG
+
+#define USE_TESTFLIGHT 1
+#define USE_GOOGLEANALYTICS 0
+#define USE_LOCALYTICS 1
+
+#if USE_TESTFLIGHT
 #import "SLFTestFlight.h"
-#else
+#endif
+
+#if USE_GOOGLEANALYTICS
 #import "SLFGANTracker.h"
 #endif
 
+#if USE_LOCALYTICS
+#import "SLFLocalytics.h"
+#endif
+
+@interface SLFAnalytics()
+@property (nonatomic,retain) NSMutableSet *adapters;
+@end
+
 @implementation SLFAnalytics
-@synthesize adapter = _adapter;
+@synthesize adapters = _adapters;
 
 + (id)sharedAnalytics
 {
@@ -31,52 +46,62 @@
 - (id)init {
     self = [super init];
     if (self) {
-#ifdef DEBUG
-        _adapter = [[SLFTestFlight alloc] init];
-#else
-        _adapter = [[SLFGANTracker alloc] init];
+        self.adapters = [NSMutableSet set];
+        
+#if USE_TESTFLIGHT
+        [self.adapters addObject:[[[SLFTestFlight alloc] init] autorelease]];
+#endif
+        
+#if USE_GOOGLEANALYTICS
+        [self.adapters addObject:[[[SLFGANTracker alloc] init] autorelease]];
+#endif 
+
+#if USE_LOCALYTICS
+        [self.adapters addObject:[[[SLFLocalytics alloc] init] autorelease]];
 #endif
     }
     return self;
 }
 
 - (void)dealloc {
-    self.adapter = nil;
+    self.adapters = nil;
     [super dealloc];
 }
 
 - (void)beginTracking {
-    if(_adapter != NULL)
-        [_adapter beginTracking];
+    for (id<SLFAnalyticsAdapter> adapter in _adapters)
+        [adapter beginTracking];
 }
 
 - (void)endTracking {
-    if(_adapter != NULL)
-        [_adapter endTracking];
+    for (id<SLFAnalyticsAdapter> adapter in _adapters)
+        [adapter endTracking];
 }
 
 - (void)pauseTracking {
-    if (_adapter != NULL)
-        [_adapter pauseTracking];
+    for (id<SLFAnalyticsAdapter> adapter in _adapters)
+        [adapter pauseTracking];
 }
 
 - (void)resumeTracking {
-    if(_adapter != NULL)
-        [_adapter resumeTracking];
+    for (id<SLFAnalyticsAdapter> adapter in _adapters)
+        [adapter resumeTracking];
 }
 
 - (void)tagEnvironmentVariables:(NSDictionary *)variables {
-    if (![self isOptedIn])
-        return;
-    if(_adapter == NULL && variables == NULL)
-        [_adapter tagEnvironmentVariables:variables];
+    for (id<SLFAnalyticsAdapter> adapter in _adapters) {
+        if (![adapter isOptedIn] || IsEmpty(variables))
+            continue;
+        [adapter tagEnvironmentVariables:variables];
+    }
 }
 
 - (void)tagEvent:(NSString *)event attributes:(NSDictionary *)attributes {
-    if (![self isOptedIn])
-        return;
-    if(_adapter == NULL && event == NULL)
-        [_adapter tagEvent:event attributes:attributes];
+    for (id<SLFAnalyticsAdapter> adapter in _adapters) {
+        if (![adapter isOptedIn] || IsEmpty(event))
+            continue;
+        [adapter tagEvent:event attributes:attributes];
+    }
 }
 
 - (void)tagEvent:(NSString *)event {
@@ -84,14 +109,15 @@
 }
 
 - (void)setOptIn:(BOOL)optedIn {
-    if(_adapter != NULL)
-        [_adapter setOptIn:optedIn];
+    for (id<SLFAnalyticsAdapter> adapter in _adapters)
+        [adapter setOptIn:optedIn];
 }
 
 - (BOOL)isOptedIn {
-    if(_adapter != NULL)
-        return [_adapter isOptedIn];
-    return NO;
+    for (id<SLFAnalyticsAdapter> adapter in _adapters)
+        if (![adapter isOptedIn])
+            return NO;
+    return YES;
 }
 
 @end

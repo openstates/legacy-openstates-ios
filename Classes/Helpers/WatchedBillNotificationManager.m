@@ -87,7 +87,7 @@
     NSDate *currentUpdated = foundBill.dateUpdated;
     if (!currentUpdated || [[NSNull null] isEqual:currentUpdated])
         return NO;
-    return YES;    //return [previousUpdated isEarlierThanDate:currentUpdated];
+    return [previousUpdated isEarlierThanDate:currentUpdated];
 }
 
 - (NSString *)alertMessageForUpdatedBill:(SLFBill *)updatedBill {
