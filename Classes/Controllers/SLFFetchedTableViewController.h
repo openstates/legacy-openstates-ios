@@ -21,6 +21,7 @@
 - (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path dataClass:(Class)dataClass;
 - (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path;
 - (id)initWithState:(SLFState *)newState; // set resource path before loading
++ (NSString *)actionPathForState:(SLFState *)state;
 
 - (BOOL)hasExistingChamberPredicate;
 - (BOOL)filterDefaultFetchRequestWithChamberFilter:(NSString *)newChamberFilter;

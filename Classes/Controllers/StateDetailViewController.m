@@ -22,6 +22,9 @@
 #import "SVWebViewController.h"
 #import "SLFReachable.h"
 #import "SLFRestKitManager.h"
+#ifdef DEBUG
+#import "TestFlight.h"
+#endif
 
 #define MenuLegislators NSLocalizedString(@"Legislators", @"")
 #define MenuCommittees NSLocalizedString(@"Committees", @"")
@@ -29,8 +32,10 @@
 #define MenuBills NSLocalizedString(@"Bills", @"")
 #define MenuEvents NSLocalizedString(@"Events", @"")
 #define MenuNews NSLocalizedString(@"News", @"")
+#define MenuFeedback NSLocalizedString(@"Beta Feedback", @"")
 
 @interface StateDetailViewController()
+- (void)reconfigureForState:(SLFState *)state;
 - (void)configureTableViewModel;
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
@@ -40,10 +45,11 @@
 @property (nonatomic,retain) UIImage *eventsIcon;
 @property (nonatomic,retain) UIImage *billsIcon;
 @property (nonatomic,retain) UIImage *newsIcon;
+@property (nonatomic,retain) UIImage *feedbackIcon;
 @end
 
 @implementation StateDetailViewController
-@synthesize state;
+@synthesize state = _state;
 @synthesize tableViewModel = __tableViewModel;
 @synthesize legislatorsIcon;
 @synthesize committeesIcon;
@@ -51,6 +57,7 @@
 @synthesize eventsIcon;
 @synthesize billsIcon;
 @synthesize newsIcon;
+@synthesize feedbackIcon;
 
 - (id)initWithState:(SLFState *)newState {
     self = [super init];
@@ -62,6 +69,7 @@
         self.billsIcon = [[UIImage imageNamed:@"gavel"] imageWithOverlayColor:iconColor];
         self.eventsIcon = [[UIImage imageNamed:@"83-calendar"] imageWithOverlayColor:iconColor];
         self.newsIcon = [[UIImage imageNamed:@"166-newspaper"] imageWithOverlayColor:iconColor];
+        self.feedbackIcon = [[UIImage imageNamed:@"110-bug"] imageWithOverlayColor:iconColor];
         [self stateMenuSelectionDidChangeWithState:newState];
     }
     return self;
@@ -77,6 +85,7 @@
     self.eventsIcon = nil;
     self.billsIcon = nil;
     self.newsIcon = nil;
+    self.feedbackIcon = nil;
     [super dealloc];
 }
 
@@ -98,6 +107,24 @@
         [self loadDataFromNetworkWithID:newState.stateID];
 }
 
++ (NSString *)actionPathForState:(SLFState *)state {
+    if (!state)
+        return nil;
+    return RKMakePathWithObjectAddingEscapes(@"slfos://states/detail/:stateID", state, NO);
+}
+
+- (NSString *)actionPath {
+    return [[self class] actionPathForState:self.state];
+}
+
+- (void)reconfigureForState:(SLFState *)state {
+    if (state) {
+        self.state = state;
+        self.title = state.name;
+    }
+    [self configureTableItems];
+}
+
 - (void)configureTableViewModel {
     self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
@@ -108,7 +135,6 @@
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {
     NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", resourceID, @"stateID", nil];
     NSString *resourcePath = RKMakePathWithObject(@"/metadata/:stateID?apikey=:apikey", queryParams);
-    SLFSaveCurrentActivityPath(resourcePath);
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(48)];
 }
 
@@ -121,6 +147,9 @@
     if (self.state && self.state.featureFlags && [self.state.featureFlags containsObject:@"events"])
         [tableItems addObject:[RKTableItem tableItemWithText:MenuEvents detailText:nil image:self.eventsIcon]];
     [tableItems addObject:[RKTableItem tableItemWithText:MenuNews detailText:nil image:self.newsIcon]];
+#ifdef DEBUG
+    [tableItems addObject:[RKTableItem tableItemWithText:MenuFeedback detailText:nil image:self.feedbackIcon]];
+#endif
     [self.tableViewModel loadTableItems:tableItems withMapping:[self menuCellMapping]];
     [tableItems release];
 }
@@ -156,6 +185,11 @@
             [webViewController release];
         }
     }
+#ifdef DEBUG
+    else if ([menuItem isEqualToString:MenuFeedback]) {
+        [TestFlight openFeedbackView];
+    }
+#endif
     
     if (vc) {
         [self stackOrPushViewController:vc];
@@ -168,14 +202,10 @@
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
-    self.state = object;
-    if (self.state)
-        self.title = self.state.name;
-    if (![self isViewLoaded]) { // finished loading too soon?  Would this ever happen?
-        [self performSelector:@selector(objectLoader:didLoadObject:) withObject:object afterDelay:2];
-        return;
-    }
-    [self configureTableItems];
+    SLFState *state = nil;
+    if (object && [object isKindOfClass:[SLFState class]])
+        state = object;
+    [self reconfigureForState:state];
 }
 
 @end

@@ -73,12 +73,35 @@
         self.lowerDistrict = newObj;
 }
 
++ (NSString *)actionPathForDistrict:(SLFDistrict *)district {
+    if (!district)
+        return nil;
+    return RKMakePathWithObjectAddingEscapes(@"slfos://districts/detail/:boundaryID", district, NO);
+}
+
+- (NSString *)actionPath {
+    SLFDistrict *district = self.lowerDistrict;
+    if (!district)
+        district = self.upperDistrict;
+    return [[self class] actionPathForDistrict:district];
+}
+
+- (void)reconfigureForDistrict:(SLFDistrict *)district {
+    [self setUpperOrLowerDistrict:district];
+    if (![self isViewLoaded])
+        return;
+    [self.mapView addAnnotation:district];
+    [self moveMapToRegion:district.region];
+    MKPolygon *polygon = [district polygonFactory];
+    if (polygon)
+        [self.mapView addOverlay:polygon];
+}
+
 - (void)loadDataWithResourcePath:(NSString *)path {
     if (IsEmpty(path))
         return;    
     NSDictionary *queryParameters = [NSDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
     NSString *pathToLoad = [path appendQueryParams:queryParameters];
-    SLFSaveCurrentActivityPath(pathToLoad);
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:pathToLoad delegate:self withTimeout:SLF_HOURS_TO_SECONDS(7*24)];
 }
 
@@ -88,15 +111,7 @@
     if (!object || ![object isKindOfClass:self.resourceClass])
         return;
     SLFDistrict *district = object;
-    [self setUpperOrLowerDistrict:district];
-
-    if (![self isViewLoaded])
-        return;
-    [self.mapView addAnnotation:district];
-    [self moveMapToRegion:district.region];
-    MKPolygon *polygon = [district polygonFactory];
-    if (polygon)
-        [self.mapView addOverlay:polygon];
+    [self reconfigureForDistrict:district];
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {

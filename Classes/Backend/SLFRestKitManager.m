@@ -84,7 +84,7 @@
     NSAssert(resourcePath != NULL, @"Resource path must not be NULL");
     NSCharacterSet *delimiters = [NSCharacterSet characterSetWithCharactersInString:@"/?"];
     NSArray *pathComponents = [resourcePath componentsSeparatedByCharactersInSet:delimiters];
-    NSCParameterAssert(pathComponents && [pathComponents count]>1);
+    NSParameterAssert(pathComponents && [pathComponents count]>1);
     NSString *keyPath = [pathComponents objectAtIndex:1];
     Class theClass = nil;
     if ([keyPath isEqualToString:@"metadata"])
@@ -105,7 +105,7 @@
 
 
 - (RKObjectLoader *)objectLoaderForResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate withTimeout:(NSTimeInterval)timeoutSeconds {
-    NSCParameterAssert(pathToLoad != NULL);
+    NSParameterAssert(pathToLoad != NULL);
     RKLogDebug(@"Loading data at path: %@", pathToLoad);
     RKObjectManager* objectManager = [RKObjectManager sharedManager];
     RKObjectLoader * loader = [objectManager objectLoaderWithResourcePath:pathToLoad delegate:delegate];

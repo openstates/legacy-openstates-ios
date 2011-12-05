@@ -48,7 +48,7 @@ enum SECTIONS {
 @end
 
 @implementation LegislatorDetailViewController
-@synthesize legislator;
+@synthesize legislator = _legislator;
 @synthesize tableViewModel = __tableViewModel;
 
 - (id)initWithLegislatorID:(NSString *)legislatorID {
@@ -93,7 +93,25 @@ enum SECTIONS {
     }         
 	self.title = NSLocalizedString(@"Loading...", @"");
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+}
 
+
++ (NSString *)actionPathForLegislator:(SLFLegislator *)legislator {
+    if (!legislator)
+        return nil;
+    return RKMakePathWithObjectAddingEscapes(@"slfos://legislators/detail/:legID", legislator, NO);
+}
+
+- (NSString *)actionPath {
+    return [[self class] actionPathForLegislator:self.legislator];
+}
+
+- (void)reconfigureForLegislator:(SLFLegislator *)legislator {
+    if (legislator) {
+        self.legislator = legislator;
+        self.title = self.legislator.formalName;
+    }
+    [self configureTableItems];
 }
 
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {
@@ -101,7 +119,6 @@ enum SECTIONS {
         return;
     NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", resourceID, @"legislatorID", nil];
     NSString *resourcePath = RKMakePathWithObject(@"/legislators/:legislatorID?apikey=:apikey", queryParams);
-    SLFSaveCurrentActivityPath(resourcePath);
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(24)];
 }
 
@@ -117,35 +134,35 @@ enum SECTIONS {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     RKTableItem *firstItemCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        if (!IsEmpty(self.legislator.photoURL)) {
+        if (!IsEmpty(_legislator.photoURL)) {
             tableItem.cellMapping.rowHeight = 88;
             tableItem.cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
                 cell.textLabel.textColor = [SLFAppearance cellTextColor];
                 cell.backgroundColor = [SLFAppearance cellBackgroundDarkColor];
-                [cell.imageView setImageWithURL:[NSURL URLWithString:self.legislator.photoURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
+                [cell.imageView setImageWithURL:[NSURL URLWithString:_legislator.photoURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
                 [cell.imageView roundTopLeftCorner];
             };
         }
         tableItem.cellMapping.style = UITableViewCellStyleValue1;
-        tableItem.text = self.legislator.formalName;
+        tableItem.text = _legislator.formalName;
     }];
     [tableItems addObject:firstItemCell];
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Chamber", @"");
-        tableItem.detailText = self.legislator.chamberObj.formalName;
+        tableItem.detailText = _legislator.chamberObj.formalName;
     }]];
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.text = [NSString stringWithFormat:@"%@ %@", legislator.title, NSLocalizedString(@"Term", @"")];
-        tableItem.detailText = self.legislator.term;
+        tableItem.text = [NSString stringWithFormat:@"%@ %@", _legislator.title, NSLocalizedString(@"Term", @"")];
+        tableItem.detailText = _legislator.term;
     }]];
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Party", @"");
-        tableItem.detailText = self.legislator.partyObj.name;
+        tableItem.detailText = _legislator.partyObj.name;
     }]];
-    [self.tableViewModel loadTableItems:tableItems inSection:SectionMemberInfo];     
+    [__tableViewModel loadTableItems:tableItems inSection:SectionMemberInfo];     
     [tableItems release];
 }
 
@@ -154,29 +171,29 @@ enum SECTIONS {
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"District", @"");
-        tableItem.detailText = self.legislator.district;
+        tableItem.detailText = _legislator.district;
     }]];
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [SubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Map", @"");
-        tableItem.detailText = self.legislator.districtMapLabel;
+        tableItem.detailText = _legislator.districtMapLabel;
         tableItem.cellMapping.onSelectCell = ^(void) {
-            DistrictDetailViewController *vc = [[DistrictDetailViewController alloc] initWithDistrictMapID:self.legislator.districtID];
+            DistrictDetailViewController *vc = [[DistrictDetailViewController alloc] initWithDistrictMapID:_legislator.districtID];
             [self stackOrPushViewController:vc];
             [vc release];
         };
     }]];
-    [self.tableViewModel loadTableItems:tableItems inSection:SectionDistrict];
+    [__tableViewModel loadTableItems:tableItems inSection:SectionDistrict];
     [tableItems release];
 }
 
 - (void)configureResourceItems {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    if (!IsEmpty(legislator.votesmartID)) {
-        NSString *url = [NSString stringWithFormat:@"http://votesmart.org/bio.php?can_id=%@", legislator.votesmartID];
+    if (!IsEmpty(_legislator.votesmartID)) {
+        NSString *url = [NSString stringWithFormat:@"http://votesmart.org/bio.php?can_id=%@", _legislator.votesmartID];
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Vote Smart Bio", @"") subtitle:@"" url:url]];
     }
-    if (!IsEmpty(legislator.transparencyID)) {
+    if (!IsEmpty(_legislator.transparencyID)) {
         [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
             tableItem.cellMapping = [SubtitleCellMapping cellMapping];
             tableItem.text = NSLocalizedString(@"Campaign Contributions", @"");
@@ -184,23 +201,23 @@ enum SECTIONS {
             tableItem.URL = @"";
             tableItem.cellMapping.onSelectCell = ^(void) {
                 ContributionsViewController *controller = [[ContributionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                [controller setQueryEntityID:legislator.transparencyID type:[NSNumber numberWithInteger:kContributionQueryRecipient] cycle:@"-1"];
+                [controller setQueryEntityID:_legislator.transparencyID type:[NSNumber numberWithInteger:kContributionQueryRecipient] cycle:@"-1"];
                 [self stackOrPushViewController:controller];
                 [controller release];
             };
         }]];
     }
-    if (!IsEmpty(legislator.nimspID)) {
-        NSString *url = [NSString stringWithFormat:@"http://www.followthemoney.org/database/uniquecandidate.phtml?uc=%@", legislator.nimspID];
+    if (!IsEmpty(_legislator.nimspID)) {
+        NSString *url = [NSString stringWithFormat:@"http://www.followthemoney.org/database/uniquecandidate.phtml?uc=%@", _legislator.nimspID];
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Follow The Money Summary", @"") subtitle:@"" url:url]];
     }
-    for (GenericAsset *source in self.legislator.sources) {
+    for (GenericAsset *source in _legislator.sources) {
         NSString *subtitle = source.name;
         if (IsEmpty(subtitle))
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Resource", @"") subtitle:subtitle url:source.url]];
     }
-    [self.tableViewModel loadTableItems:tableItems inSection:SectionResources];
+    [__tableViewModel loadTableItems:tableItems inSection:SectionResources];
     [tableItems release];
 }
 
@@ -209,22 +226,22 @@ enum SECTIONS {
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [SubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Authored/Sponsored Bills", @"");
-        NSString *selectedSession = SLFSelectedSessionForState(self.legislator.state);
-        tableItem.detailText = [self.legislator.state displayNameForSession:selectedSession];
+        NSString *selectedSession = SLFSelectedSessionForState(_legislator.state);
+        tableItem.detailText = [_legislator.state displayNameForSession:selectedSession];
         tableItem.cellMapping.onSelectCell = ^(void) {
-            NSString *resourcePath = [BillSearchParameters pathForSponsor:self.legislator.legID state:self.legislator.stateID session:selectedSession];
-            BillsViewController *vc = [[BillsViewController alloc] initWithState:self.legislator.state resourcePath:resourcePath];
+            NSString *resourcePath = [BillSearchParameters pathForSponsor:_legislator.legID state:_legislator.stateID session:selectedSession];
+            BillsViewController *vc = [[BillsViewController alloc] initWithState:_legislator.state resourcePath:resourcePath];
             [self stackOrPushViewController:vc];
             [vc release];
         };
     }]];
-    [self.tableViewModel loadTableItems:tableItems inSection:SectionBills];
+    [__tableViewModel loadTableItems:tableItems inSection:SectionBills];
     [tableItems release];
 }
 
 
 - (void)configureCommitteeItems {
-    [self.tableViewModel loadObjects:self.legislator.sortedRoles inSection:SectionCommittees];    
+    [__tableViewModel loadObjects:_legislator.sortedRoles inSection:SectionCommittees];    
 }
 
 - (SubtitleCellMapping *)committeeRoleCellMap {
@@ -246,15 +263,10 @@ enum SECTIONS {
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
+    SLFLegislator *legislator = nil;
     if (object && [object isKindOfClass:[SLFLegislator class]])
-        self.legislator = object;
-    if (self.legislator)
-        self.title = self.legislator.formalName;
-    if (![self isViewLoaded]) { // finished loading too soon?  Would this ever happen?
-        [self performSelector:@selector(objectLoader:didLoadObject:) withObject:object afterDelay:2];
-        return;
-    }
-    [self configureTableItems];
+        legislator = object;
+    [self reconfigureForLegislator:legislator];
 }
 
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex {

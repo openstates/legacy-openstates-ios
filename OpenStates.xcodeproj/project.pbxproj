@@ -29,6 +29,7 @@
 		3714804E1432845E00170716 /* SubtitleCellMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 3714804D1432845E00170716 /* SubtitleCellMapping.m */; };
 		371480521432D27800170716 /* MenuPattern.png in Resources */ = {isa = PBXBuildFile; fileRef = 371480501432D27800170716 /* MenuPattern.png */; };
 		371480531432D27800170716 /* MenuPattern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 371480511432D27800170716 /* MenuPattern@2x.png */; };
+		371591BF148AC5BA0039ECED /* WatchedBillNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 371591BE148AC5BA0039ECED /* WatchedBillNotificationManager.m */; };
 		371AE697143581D500592811 /* GradientBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 371AE696143581D500592811 /* GradientBackgroundView.m */; };
 		371B5C4E143E2E3500AF317E /* StretchedTitleLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 371B5C4D143E2E3500AF317E /* StretchedTitleLabel.m */; };
 		371B5C51143E50C000AF317E /* 59-flag.png in Resources */ = {isa = PBXBuildFile; fileRef = 371B5C4F143E50C000AF317E /* 59-flag.png */; };
@@ -159,6 +160,8 @@
 		377C617E143000AA00EE626E /* UIViewController+PSStackedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6179143000AA00EE626E /* UIViewController+PSStackedView.m */; };
 		377E4B1714360B500063E854 /* UIImage+OverlayColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 377E4B1614360B500063E854 /* UIImage+OverlayColor.m */; };
 		378A23161476438700D82721 /* SLFDrawingExtenions.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A23151476438700D82721 /* SLFDrawingExtenions.m */; };
+		3791A77B1489899400D8C6FD /* 110-bug.png in Resources */ = {isa = PBXBuildFile; fileRef = 3791A7791489899400D8C6FD /* 110-bug.png */; };
+		3791A77C1489899400D8C6FD /* 110-bug@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3791A77A1489899400D8C6FD /* 110-bug@2x.png */; };
 		3794021C144161A600D18889 /* ContributionsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37940219144161A600D18889 /* ContributionsDataSource.m */; };
 		3794021D144161A600D18889 /* ContributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3794021B144161A600D18889 /* ContributionsViewController.m */; };
 		3794022814418D4000D18889 /* TableCellDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3794022714418D4000D18889 /* TableCellDataObject.m */; };
@@ -175,6 +178,12 @@
 		379A44F21488020200D47B88 /* SubjectCounts.json in Resources */ = {isa = PBXBuildFile; fileRef = 379A44EF1487F89E00D47B88 /* SubjectCounts.json */; };
 		379A44F61488167B00D47B88 /* BillsSubjectsEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 379A44F41488038400D47B88 /* BillsSubjectsEntry.m */; };
 		379BB596147409EC00DDBD3D /* BillDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F6FCFC14676214003AA80D /* BillDetailViewController.m */; };
+		37A16CF3148C0D53000A3C91 /* SLFAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A16CF2148C0D53000A3C91 /* SLFAnalytics.m */; };
+		37A16CFB148C128B000A3C91 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37A16CF9148C128B000A3C91 /* libGoogleAnalytics.a */; };
+		37A16CFF148C1C93000A3C91 /* SLFTestFlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A16CFE148C1C93000A3C91 /* SLFTestFlight.m */; };
+		37A16D02148C1FE6000A3C91 /* SLFGANTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A16D01148C1FE6000A3C91 /* SLFGANTracker.m */; };
+		37A16D08148C355B000A3C91 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 37A16D07148C355B000A3C91 /* libsqlite3.0.dylib */; };
+		37A16D16148C93BA000A3C91 /* SLFActionPathNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A16D15148C93BA000A3C91 /* SLFActionPathNavigator.m */; };
 		37A3258313E49D4700138ADE /* StatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258213E49D4700138ADE /* StatesViewController.m */; };
 		37A3258F13E49F2200138ADE /* StateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258E13E49F2200138ADE /* StateDetailViewController.m */; };
 		37A325B213E4A55800138ADE /* CommitteesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A325B113E4A55800138ADE /* CommitteesViewController.m */; };
@@ -437,6 +446,8 @@
 		3714804D1432845E00170716 /* SubtitleCellMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubtitleCellMapping.m; sourceTree = "<group>"; };
 		371480501432D27800170716 /* MenuPattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuPattern.png; sourceTree = "<group>"; };
 		371480511432D27800170716 /* MenuPattern@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MenuPattern@2x.png"; sourceTree = "<group>"; };
+		371591BD148AC5BA0039ECED /* WatchedBillNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WatchedBillNotificationManager.h; sourceTree = "<group>"; };
+		371591BE148AC5BA0039ECED /* WatchedBillNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchedBillNotificationManager.m; sourceTree = "<group>"; };
 		371AE695143581D500592811 /* GradientBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GradientBackgroundView.h; sourceTree = "<group>"; };
 		371AE696143581D500592811 /* GradientBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GradientBackgroundView.m; sourceTree = "<group>"; };
 		371B5C4C143E2E3500AF317E /* StretchedTitleLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StretchedTitleLabel.h; sourceTree = "<group>"; };
@@ -622,6 +633,8 @@
 		377E4B1614360B500063E854 /* UIImage+OverlayColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+OverlayColor.m"; path = "Vendor/PSStackedView/Example/StackedViewKitExample/UIImage+OverlayColor.m"; sourceTree = SOURCE_ROOT; };
 		378A23141476438700D82721 /* SLFDrawingExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFDrawingExtensions.h; sourceTree = "<group>"; };
 		378A23151476438700D82721 /* SLFDrawingExtenions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFDrawingExtenions.m; sourceTree = "<group>"; };
+		3791A7791489899400D8C6FD /* 110-bug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "110-bug.png"; sourceTree = "<group>"; };
+		3791A77A1489899400D8C6FD /* 110-bug@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "110-bug@2x.png"; sourceTree = "<group>"; };
 		37940218144161A600D18889 /* ContributionsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContributionsDataSource.h; sourceTree = "<group>"; };
 		37940219144161A600D18889 /* ContributionsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContributionsDataSource.m; sourceTree = "<group>"; };
 		3794021A144161A600D18889 /* ContributionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContributionsViewController.h; sourceTree = "<group>"; };
@@ -644,6 +657,17 @@
 		379A44EF1487F89E00D47B88 /* SubjectCounts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = SubjectCounts.json; sourceTree = "<group>"; };
 		379A44F31488038400D47B88 /* BillsSubjectsEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsSubjectsEntry.h; sourceTree = "<group>"; };
 		379A44F41488038400D47B88 /* BillsSubjectsEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsSubjectsEntry.m; sourceTree = "<group>"; };
+		37A16CF1148C0D53000A3C91 /* SLFAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFAnalytics.h; sourceTree = "<group>"; };
+		37A16CF2148C0D53000A3C91 /* SLFAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFAnalytics.m; sourceTree = "<group>"; };
+		37A16CF8148C128B000A3C91 /* GANTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GANTracker.h; sourceTree = "<group>"; };
+		37A16CF9148C128B000A3C91 /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalytics.a; sourceTree = "<group>"; };
+		37A16CFD148C1C93000A3C91 /* SLFTestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFTestFlight.h; sourceTree = "<group>"; };
+		37A16CFE148C1C93000A3C91 /* SLFTestFlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFTestFlight.m; sourceTree = "<group>"; };
+		37A16D00148C1FE6000A3C91 /* SLFGANTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFGANTracker.h; sourceTree = "<group>"; };
+		37A16D01148C1FE6000A3C91 /* SLFGANTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFGANTracker.m; sourceTree = "<group>"; };
+		37A16D07148C355B000A3C91 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		37A16D14148C93B9000A3C91 /* SLFActionPathNavigator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFActionPathNavigator.h; sourceTree = "<group>"; };
+		37A16D15148C93BA000A3C91 /* SLFActionPathNavigator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFActionPathNavigator.m; sourceTree = "<group>"; };
 		37A3258113E49D4700138ADE /* StatesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatesViewController.h; sourceTree = "<group>"; };
 		37A3258213E49D4700138ADE /* StatesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatesViewController.m; sourceTree = "<group>"; };
 		37A3258D13E49F2200138ADE /* StateDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateDetailViewController.h; sourceTree = "<group>"; };
@@ -828,6 +852,7 @@
 				8452D3FD128244E60069F4A9 /* MobileCoreServices.framework in Frameworks */,
 				37E95F9513E4E4990064B1D3 /* CoreLocation.framework in Frameworks */,
 				37BB3BBD143A5FCC00DCB1FB /* libz.dylib in Frameworks */,
+				37A16D08148C355B000A3C91 /* libsqlite3.0.dylib in Frameworks */,
 				375DC7E414279C6B00253969 /* libRestKitUI.a in Frameworks */,
 				37E961ED13E544F80064B1D3 /* libRestKitCoreData.a in Frameworks */,
 				37E961EE13E544F90064B1D3 /* libRestKitJSONParserJSONKit.a in Frameworks */,
@@ -835,6 +860,7 @@
 				37E961F013E544FD0064B1D3 /* libRestKitObjectMapping.a in Frameworks */,
 				37E961F113E544FE0064B1D3 /* libRestKitSupport.a in Frameworks */,
 				373ECB6914888C9F000BD16D /* libTestFlight.a in Frameworks */,
+				37A16CFB148C128B000A3C91 /* libGoogleAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1070,6 +1096,8 @@
 			children = (
 				373ECB6814888C9F000BD16D /* TestFlight.h */,
 				373ECB6514888C9F000BD16D /* libTestFlight.a */,
+				37A16CFD148C1C93000A3C91 /* SLFTestFlight.h */,
+				37A16CFE148C1C93000A3C91 /* SLFTestFlight.m */,
 			);
 			name = TestFlight;
 			path = Vendor/TestFlight;
@@ -1109,6 +1137,8 @@
 				3749F24D143BA5EA006F717B /* 73-radar@2x.png */,
 				3749F24E143BA5EA006F717B /* 83-calendar.png */,
 				3749F24F143BA5EA006F717B /* 83-calendar@2x.png */,
+				3791A7791489899400D8C6FD /* 110-bug.png */,
+				3791A77A1489899400D8C6FD /* 110-bug@2x.png */,
 				3749F250143BA5EA006F717B /* 123-id-card.png */,
 				3749F251143BA5EA006F717B /* 123-id-card@2x.png */,
 				37CC42F1144346F0001510A5 /* 166-newspaper.png */,
@@ -1178,6 +1208,12 @@
 				37BAE30F147865DA00CD5704 /* BillActionParser.m */,
 				37037546147AF51000B59AA2 /* SLFPersistenceManager.h */,
 				37037547147AF51000B59AA2 /* SLFPersistenceManager.m */,
+				371591BD148AC5BA0039ECED /* WatchedBillNotificationManager.h */,
+				371591BE148AC5BA0039ECED /* WatchedBillNotificationManager.m */,
+				37A16CF1148C0D53000A3C91 /* SLFAnalytics.h */,
+				37A16CF2148C0D53000A3C91 /* SLFAnalytics.m */,
+				37A16D14148C93B9000A3C91 /* SLFActionPathNavigator.h */,
+				37A16D15148C93BA000A3C91 /* SLFActionPathNavigator.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1259,6 +1295,7 @@
 		377CB425142EFD4600AFF4BC /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				37A16CF7148C128B000A3C91 /* GoogleAnalytics */,
 				373ECB6414888C9F000BD16D /* TestFlight */,
 				3770F123148712A500FD854B /* MultiRowCalloutAnnotationView */,
 				37037549147B331B00B59AA2 /* ActionSheetPicker */,
@@ -1388,6 +1425,19 @@
 				3795CDD21480E5A800E152EA /* BarButtonNormal@2x.png */,
 			);
 			path = BarButtons;
+			sourceTree = "<group>";
+		};
+		37A16CF7148C128B000A3C91 /* GoogleAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				37A16D07148C355B000A3C91 /* libsqlite3.0.dylib */,
+				37A16CF8148C128B000A3C91 /* GANTracker.h */,
+				37A16CF9148C128B000A3C91 /* libGoogleAnalytics.a */,
+				37A16D00148C1FE6000A3C91 /* SLFGANTracker.h */,
+				37A16D01148C1FE6000A3C91 /* SLFGANTracker.m */,
+			);
+			name = GoogleAnalytics;
+			path = Vendor/GoogleAnalytics;
 			sourceTree = "<group>";
 		};
 		37B43D0A14448E7400A8020D /* SVGeocoder */ = {
@@ -1944,6 +1994,8 @@
 				3795CDDA1480E5A800E152EA /* BarButtonNormal@2x.png in Resources */,
 				3770F1371487513400FD854B /* PinHeadBlue.png in Resources */,
 				3770F1381487513400FD854B /* PinHeadBlue@2x.png in Resources */,
+				3791A77B1489899400D8C6FD /* 110-bug.png in Resources */,
+				3791A77C1489899400D8C6FD /* 110-bug@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2114,6 +2166,11 @@
 				3770F13314872B8E00FD854B /* MultiRowAnnotation.m in Sources */,
 				379A44EE1487ED2700D47B88 /* BillsSubjectsViewController.m in Sources */,
 				379A44F61488167B00D47B88 /* BillsSubjectsEntry.m in Sources */,
+				371591BF148AC5BA0039ECED /* WatchedBillNotificationManager.m in Sources */,
+				37A16CF3148C0D53000A3C91 /* SLFAnalytics.m in Sources */,
+				37A16CFF148C1C93000A3C91 /* SLFTestFlight.m in Sources */,
+				37A16D02148C1FE6000A3C91 /* SLFGANTracker.m in Sources */,
+				37A16D16148C93BA000A3C91 /* SLFActionPathNavigator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2172,7 +2229,7 @@
 				BUILD_STYLE = Debug;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2183,6 +2240,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/TestFlight\"",
+					"\"$(SRCROOT)/Vendor/GoogleAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -2201,7 +2259,7 @@
 				BUILD_STYLE = Release;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -2211,6 +2269,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/TestFlight\"",
+					"\"$(SRCROOT)/Vendor/GoogleAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -2272,7 +2331,83 @@
 			};
 			name = Release;
 		};
-		373ECB5E1488747F000BD16D /* Distribution */ = {
+		373ECB5E1488747F000BD16D /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					armv6,
+					armv7,
+				);
+				BUILD_STYLE = Release;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Gregory Combs";
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = Vendor/RestKit/Build;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5887768E-6592-485C-B278-6096F5B2A38C";
+				SDKROOT = iphoneos;
+			};
+			name = AdHoc;
+		};
+		373ECB5F1488747F000BD16D /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_STYLE = Release;
+				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 3;
+				DEAD_CODE_STRIPPING = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = Resources/Info.plist;
+				KEEP_PRIVATE_EXTERNS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/TestFlight\"",
+					"\"$(SRCROOT)/Vendor/GoogleAnalytics\"",
+				);
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
+				PRODUCT_NAME = OpenStates;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = SLF;
+			};
+			name = AdHoc;
+		};
+		373ECB601488747F000BD16D /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/OpenStates.app/OpenStates";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "UnitTests/UnitTests-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					Vendor/Kiwi,
+					Vendor/RestKit/Build,
+				);
+				PRODUCT_NAME = OpenStatesSpecs;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = AdHoc;
+		};
+		37A16D11148C41F0000A3C91 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
@@ -2296,13 +2431,13 @@
 			};
 			name = Distribution;
 		};
-		373ECB5F1488747F000BD16D /* Distribution */ = {
+		37A16D12148C41F0000A3C91 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_STYLE = Release;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -2312,6 +2447,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/TestFlight\"",
+					"\"$(SRCROOT)/Vendor/GoogleAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -2325,7 +2461,7 @@
 			};
 			name = Distribution;
 		};
-		373ECB601488747F000BD16D /* Distribution */ = {
+		37A16D13148C41F0000A3C91 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/OpenStates.app/OpenStates";
@@ -2359,6 +2495,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -2401,7 +2538,8 @@
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
-				373ECB5F1488747F000BD16D /* Distribution */,
+				373ECB5F1488747F000BD16D /* AdHoc */,
+				37A16D12148C41F0000A3C91 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2411,7 +2549,8 @@
 			buildConfigurations = (
 				372E57D414153D07000652B1 /* Debug */,
 				372E57D514153D07000652B1 /* Release */,
-				373ECB601488747F000BD16D /* Distribution */,
+				373ECB601488747F000BD16D /* AdHoc */,
+				37A16D13148C41F0000A3C91 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2421,7 +2560,8 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
-				373ECB5E1488747F000BD16D /* Distribution */,
+				373ECB5E1488747F000BD16D /* AdHoc */,
+				37A16D11148C41F0000A3C91 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

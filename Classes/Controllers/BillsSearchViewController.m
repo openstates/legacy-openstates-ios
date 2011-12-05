@@ -80,6 +80,16 @@ enum SECTIONS {
     [self configureTableItems];
 }
 
++ (NSString *)actionPathForState:(SLFState *)state {
+    if (!state)
+        return nil;
+    return RKMakePathWithObjectAddingEscapes(@"slfos://bills/search/:stateID", state, NO);
+}
+
+- (NSString *)actionPath {
+    return [[self class] actionPathForState:self.state];
+}
+
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex {
     switch (sectionIndex) {
         case SectionSearchInfo:

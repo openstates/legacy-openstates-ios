@@ -81,6 +81,14 @@
     [self configureEditingButtons];
 }
 
++ (NSString *)actionPathForState:(SLFState *)state {
+    return @"slfos://bills/watched";
+}
+
+- (NSString *)actionPath {
+    return [[self class] actionPathForState:nil];
+}
+
 - (void)configureEditingButtonsIphone {
     self.editButton = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit", @"") orange:NO width:45 target:self action:@selector(toggleEditing:)] autorelease];
     self.doneButton = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"") orange:YES width:45 target:self action:@selector(toggleEditing:)] autorelease];

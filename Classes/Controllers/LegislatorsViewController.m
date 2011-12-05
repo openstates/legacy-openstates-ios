@@ -38,6 +38,12 @@
         self.title = [NSString stringWithFormat:@"%d Members", self.tableViewModel.rowCount];
 }
 
++ (NSString *)actionPathForState:(SLFState *)state {
+    if (!state)
+        return nil;
+    return RKMakePathWithObjectAddingEscapes(@"slfos://legislators/:stateID", state, NO);
+}
+
 - (void)configureTableViewModel {
     [super configureTableViewModel];
     self.tableViewModel.showsSectionIndexTitles = YES;

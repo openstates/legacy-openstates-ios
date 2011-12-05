@@ -67,6 +67,10 @@
     return aTableView;
 }
 
+- (NSString *)actionPath {
+    return nil;
+}
+
 - (void)setTitle:(NSString *)title {
     [super setTitle:title];
     if (self.useTitleBar && self.isViewLoaded)
@@ -86,6 +90,8 @@
 
 - (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
     RKLogTrace(@"%@: Table model finished loading.", NSStringFromClass([self class]));
+    if (!IsEmpty(self.actionPath))
+        SLFSaveCurrentActivityPath(self.actionPath);
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {

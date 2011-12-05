@@ -51,6 +51,10 @@
         self.title = [NSString stringWithFormat:@"%d States", self.tableViewModel.rowCount];
 }
 
++ (NSString *)actionPathForState:(SLFState *)state {
+    return @"slfos://states";
+}
+
 - (void)configureTableViewModel {
     [super configureTableViewModel];
     self.tableViewModel.showsSectionIndexTitles = YES;

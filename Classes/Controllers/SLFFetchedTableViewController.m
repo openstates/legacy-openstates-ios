@@ -51,6 +51,14 @@
     return self;
 }
 
++ (NSString *)actionPathForState:(SLFState *)state {
+    return nil; // none set yet
+}
+
+- (NSString *)actionPath {
+    return [[self class] actionPathForState:self.state];
+}
+
 - (void)configureTableViewModel {
     self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     __tableViewModel.delegate = self;
@@ -111,8 +119,6 @@
     self.tableViewModel.predicate = nil;
     SLFRelease(__resourcePath);
     __resourcePath = [resourcePath copy];
-    if (!IsEmpty(resourcePath))
-        SLFSaveCurrentActivityPath(resourcePath);
 }
 
 - (BOOL)hasSearchableDataClass {

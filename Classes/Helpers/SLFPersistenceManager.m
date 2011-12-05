@@ -106,18 +106,7 @@ void SLFSaveCurrentActivityPath(NSString *path) {
     NSCParameterAssert(path != NULL);
     if (IsEmpty(path))
         return;
-    NSMutableString *activityKeywords = [NSMutableString stringWithString:@"Activity: "];
-    if (!IsEmpty(SLFSelectedStateID()))
-        [activityKeywords appendFormat:@"%@-",[SLFSelectedStateID() uppercaseString]];
-    NSArray *words = [path componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"?/"]];
-    if ([words count] >= 2)
-        [activityKeywords appendString:[[words objectAtIndex:1] capitalizedString]];
-    @try {
-        [TestFlight passCheckpoint:activityKeywords];
-        [TestFlight addCustomEnvironmentInformation:path forKey:@"ActivityPath"];
-    }
-    @catch (NSException *exception) {
-    }
+    [[SLFAnalytics sharedAnalytics] tagEvent:path attributes:nil];
     [[SLFPersistenceManager sharedPersistence] setSavedActivityPath:path];
 }
 
@@ -228,15 +217,14 @@ NSDictionary* SLFWatchedBillsCatalog(void) {
 }
 
 BOOL SLFBillIsWatched(SLFBill *bill) {
-    NSDictionary *watchedBills = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kPersistentWatchedBillsKey];
+    NSDictionary *watchedBills = SLFWatchedBillsCatalog();
     if (!bill || IsEmpty(watchedBills))
         return NO;
     return [[watchedBills allKeys] containsObject:bill.watchID];
 }
 
 void SLFSaveBillWatchedStatus(SLFBill *bill, BOOL isWatched) {
-    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    NSDictionary *watchedBills = [settings dictionaryForKey:kPersistentWatchedBillsKey];
+    NSDictionary *watchedBills = SLFWatchedBillsCatalog();
     if (!bill || IsEmpty(bill.watchID))
         return;
     NSMutableDictionary *watchedBillsToWrite = [NSMutableDictionary dictionaryWithDictionary:watchedBills];
@@ -244,6 +232,7 @@ void SLFSaveBillWatchedStatus(SLFBill *bill, BOOL isWatched) {
         [watchedBillsToWrite setObject:bill.dateUpdated forKey:bill.watchID];
     else
         [watchedBillsToWrite removeObjectForKey:bill.watchID];
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     [settings setObject:watchedBillsToWrite forKey:kPersistentWatchedBillsKey];
     [settings synchronize];
     [[NSNotificationCenter defaultCenter] postNotificationName:SLFWatchedBillsDidChangeNotification object:bill];

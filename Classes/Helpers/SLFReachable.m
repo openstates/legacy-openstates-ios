@@ -14,8 +14,8 @@
 #import <RestKit/RestKit.h>
 #import "SLFAlertView.h"
 
-static NSString * const SLFReachableStatusChangedForHostKey = @"SLFReachableStatusChangedForHost";
-static NSString * const SLFReachableAnyNetworkHost = @"ANY_INTERNET_HOST";
+NSString * const SLFReachableStatusChangedForHostKey = @"SLFReachableStatusChangedForHost";
+NSString * const SLFReachableAnyNetworkHost = @"ANY_INTERNET_HOST";
 
 BOOL SLFIsReachableAddressNoAlert(NSString * urlString) {
     return [[SLFReachable sharedReachable] isURLStringReachable:urlString];

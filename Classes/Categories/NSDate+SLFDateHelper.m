@@ -57,7 +57,11 @@
 #pragma mark - Comparison
 
 - (BOOL)isEarlierThanDate:(NSDate *)laterDate {
-    return ([self compare:laterDate] != NSOrderedDescending); // sooner is before later
+    return ([self compare:laterDate] == NSOrderedAscending); // increasing between now and later
+}
+
+- (BOOL)isLaterThanDate:(NSDate *)earlierDate {
+    return ([self compare:earlierDate] == NSOrderedDescending); // decreasing between now and earlier
 }
 
  - (BOOL)equalsDefaultDate {

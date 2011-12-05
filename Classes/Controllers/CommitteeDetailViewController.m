@@ -39,7 +39,7 @@ enum SECTIONS {
 @end
 
 @implementation CommitteeDetailViewController
-@synthesize committee;
+@synthesize committee = _committee;
 @synthesize tableViewModel = __tableViewModel;
 
 - (id)initWithCommitteeID:(NSString *)committeeID {
@@ -69,10 +69,27 @@ enum SECTIONS {
 	self.title = NSLocalizedString(@"Loading...", @"");
 }
 
++ (NSString *)actionPathForCommittee:(SLFCommittee *)committee {
+    if (!committee)
+        return nil;
+    return RKMakePathWithObjectAddingEscapes(@"slfos://committees/detail/:committeID", committee, NO);
+}
+
+- (NSString *)actionPath {
+    return [[self class] actionPathForCommittee:self.committee];
+}
+
+- (void)reconfigureForCommittee:(SLFCommittee *)committee {
+    if (committee) {
+        self.committee = committee;
+        self.title = committee.committeeName;
+    }
+    [self configureTableItems];
+}
+
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {
     NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", resourceID, @"committeeID", nil];
     NSString *resourcePath = RKMakePathWithObject(@"/committees/:committeeID?apikey=:apikey", queryParams);
-    SLFSaveCurrentActivityPath(resourcePath);
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(24)];
 }
 
@@ -101,15 +118,15 @@ enum SECTIONS {
     RKTableItem *firstItemCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.cellMapping.style = UITableViewCellStyleValue1;
-        tableItem.text = self.committee.committeeName;
+        tableItem.text = _committee.committeeName;
     }];
     [tableItems addObject:firstItemCell];
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.text = self.committee.chamberObj.shortName;
-        tableItem.detailText = self.committee.subcommittee;
+        tableItem.text = _committee.chamberObj.shortName;
+        tableItem.detailText = _committee.subcommittee;
     }]];
-    for (GenericAsset *source in self.committee.sources) {
+    for (GenericAsset *source in _committee.sources) {
         NSString *subtitle = source.name;
         if (IsEmpty(subtitle))
             subtitle = source.url;
@@ -117,7 +134,7 @@ enum SECTIONS {
     }
     [__tableViewModel loadTableItems:tableItems inSection:SectionCommitteeInfoIndex];
     [tableItems release];
-    [__tableViewModel loadObjects:self.committee.sortedMembers inSection:SectionMembersIndex];    
+    [__tableViewModel loadObjects:_committee.sortedMembers inSection:SectionMembersIndex];    
 }
 
 - (RKTableViewCellMapping *)committeeMemberCellMap {
@@ -136,15 +153,10 @@ enum SECTIONS {
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
+    SLFCommittee *committee = nil;
     if (object && [object isKindOfClass:[SLFCommittee class]])
-        self.committee = object;
-    if (self.committee)
-        self.title = self.committee.committeeName;
-    if (![self isViewLoaded]) { // finished loading too soon?  Would this ever happen?
-        [self performSelector:@selector(objectLoader:didLoadObject:) withObject:object afterDelay:2];
-        return;
-    }
-    [self configureTableItems];
+        committee = object;
+    [self reconfigureForCommittee:committee];
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {

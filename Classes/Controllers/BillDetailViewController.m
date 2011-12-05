@@ -40,13 +40,17 @@ enum SECTIONS {
 };
 
 @interface BillDetailViewController()
-@property (nonatomic, retain) RKTableViewModel *tableViewModel;
+@property (nonatomic,retain) RKTableViewModel *tableViewModel;
+@property (nonatomic,retain) IBOutlet UIButton *watchButton; 
 - (id)initWithResourcePath:(NSString *)resourcePath;
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
 - (RKTableViewCellMapping *)actionCellMap;
 - (RKTableViewCellMapping *)sponsorCellMap;
 - (RKTableViewCellMapping *)votesCellMap;
+- (void)reconfigureForBill:(SLFBill *)bill;
 - (void)configureActionBarForBill:(SLFBill *)bill;
+- (UIButton *)configureWatchButton;
+- (void)reconfigureWatchButtonForBill:(SLFBill *)bill;
 - (void)configureTableItems;
 - (void)configureBillInfoItems;
 - (void)configureStages;
@@ -62,6 +66,7 @@ enum SECTIONS {
 @implementation BillDetailViewController
 @synthesize bill = _bill;
 @synthesize tableViewModel = _tableViewModel;
+@synthesize watchButton = _watchButton;
 
 - (id)initWithResourcePath:(NSString *)resourcePath {
     self = [super initWithStyle:UITableViewStyleGrouped];
@@ -69,7 +74,6 @@ enum SECTIONS {
         self.useTitleBar = YES;
         self.stackWidth = 500;
         RKLogDebug(@"Loading resource path for bill: %@", resourcePath);
-        SLFSaveCurrentActivityPath(resourcePath);
         [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)];
     }
     return self;
@@ -94,12 +98,14 @@ enum SECTIONS {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.bill = nil;
     self.tableViewModel = nil;
+    self.watchButton = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
     self.tableViewModel = nil;
+    self.watchButton = nil;
     [super viewDidUnload];
 }
 
@@ -149,6 +155,25 @@ enum SECTIONS {
     }
 }
 
++ (NSString *)actionPathForBill:(SLFBill *)bill {
+    if (!bill)
+        return nil;
+    return RKMakePathWithObjectAddingEscapes(@"slfos://bills/detail/:stateID/:session/:billID", bill, NO);
+}
+
+- (NSString *)actionPath {
+    return [[self class] actionPathForBill:self.bill];
+}
+
+- (void)reconfigureForBill:(SLFBill *)bill {
+    if (bill) {
+        self.bill = bill;
+        self.title = bill.name;
+    }
+    [self reconfigureWatchButtonForBill:bill];
+    [self configureTableItems];
+}
+
 #pragma mark - Action Bar Header
 
 - (void)setState:(BOOL)isOn forWatchButton:(UIButton *)button {
@@ -173,20 +198,28 @@ enum SECTIONS {
     SLFSaveBillWatchedStatus(_bill, !isFavorite);
 }
 
-- (UIButton *)watchButtonForBill:(SLFBill *)bill {
+- (UIButton *)configureWatchButton {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self setState:SLFBillIsWatched(bill) forWatchButton:button];
     button.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     button.frame = CGRectMake(self.titleBarView.size.width - 50, 12, 43, 43);
-#warning fix this with a callback on billDidLoad or something
         //button.enabled = (bill != NULL);
-    [button addTarget:self action:@selector(toggleWatchButton:) forControlEvents:/*UIControlEventTouchUpInside*/UIControlEventTouchDown]; 
+    [button addTarget:self action:@selector(toggleWatchButton:) forControlEvents:UIControlEventTouchDown]; 
     return button;
 }
 
+- (void)reconfigureWatchButtonForBill:(SLFBill *)bill {
+    _watchButton.enabled = (bill != NULL);
+    [self setState:SLFBillIsWatched(bill) forWatchButton:_watchButton];
+    if (!bill)
+        return;
+    BOOL isWatched = SLFBillIsWatched(_bill);
+    SLFSaveBillWatchedStatus(_bill, isWatched); // to reset the "last updated" date
+}
+
 - (void)configureActionBarForBill:(SLFBill *)bill {
-    UIButton *button = [self watchButtonForBill:bill];
-    [self.titleBarView addSubview:button];
+    self.watchButton = [self configureWatchButton];
+    [self reconfigureWatchButtonForBill:bill];
+    [self.titleBarView addSubview:_watchButton];
 }
 
 #pragma mark - Table Item Creation and Mapping
@@ -383,11 +416,11 @@ enum SECTIONS {
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
+    SLFBill *bill = nil;
     if (object && [object isKindOfClass:[SLFBill class]]) {
-        self.bill = object;
-        self.title = _bill.name;
+        bill = object;
     }
-    [self configureTableItems];
+    [self reconfigureForBill:bill];
 }
 
 @end

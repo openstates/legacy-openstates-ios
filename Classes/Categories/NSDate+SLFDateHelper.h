@@ -14,6 +14,7 @@
 #pragma mark - Comparison
 - (BOOL)equalsDefaultDate;
 - (BOOL)isEarlierThanDate:(NSDate *)laterDate;
+- (BOOL)isLaterThanDate:(NSDate *)earlierDate;
 
 #pragma mark - User Friendly Presentation
 - (NSString *)localWeekdayString;

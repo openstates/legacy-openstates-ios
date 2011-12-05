@@ -22,4 +22,6 @@
 @property (nonatomic,assign) Class resourceClass;
 
 - (id)initWithDistrictMapID:(NSString *)objID;
+- (NSString *)actionPath;
++ (NSString *)actionPathForDistrict:(SLFDistrict *)district;
 @end

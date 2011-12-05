@@ -27,7 +27,7 @@ NSString* validSessionParameter(NSString *session);
 										session, @"session",
 										SUNLIGHT_APIKEY, @"apikey", 
                                         billID, @"bill", nil];
-    return RKMakePathWithObject(@"/bills/:state/:session/:bill?:apikey", queryParams);
+    return RKMakePathWithObject(@"/bills/:state/:session/:bill?apikey=:apikey", queryParams);
 }
 
 + (NSString *)pathForBill:(SLFBill *)bill {

@@ -36,6 +36,12 @@
         self.title = [NSString stringWithFormat:@"%d Events", self.tableViewModel.rowCount];
 }
 
++ (NSString *)actionPathForState:(SLFState *)state {
+    if (!state)
+        return nil;
+    return RKMakePathWithObjectAddingEscapes(@"slfos://events/:stateID", state, NO);
+}
+
 - (void)configureTableViewModel {
     [super configureTableViewModel];
     self.tableViewModel.autoRefreshRate = 240;

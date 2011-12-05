@@ -27,7 +27,7 @@
 @property (nonatomic,retain) NSNotificationCenter *localNotification;
 @end
 
-static NSString * const SLFReachableStatusChangedForHostKey;
-static NSString * const SLFReachableAnyNetworkHost;
+extern NSString * const SLFReachableStatusChangedForHostKey;
+extern NSString * const SLFReachableAnyNetworkHost;
 BOOL SLFIsReachableAddressNoAlert(NSString *);
 BOOL SLFIsReachableAddress(NSString *);

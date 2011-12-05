@@ -18,9 +18,13 @@
 #import "SLFAppearance.h"
 #import "AFURLCache.h"
 #import "SLFReachable.h"
+#import "WatchedBillNotificationManager.h"
+#import "SLFActionPathNavigator.h"
 
 @interface AppDelegate()
-@property (nonatomic, retain) PSStackedViewController *stackController;
+@property (nonatomic,retain) PSStackedViewController *stackController;
+@property (nonatomic,retain) WatchedBillNotificationManager *billNotifier;
+@property (nonatomic,assign) UIBackgroundTaskIdentifier backgroundTaskID;
 - (void)setUpOnce;
 - (void)setUpReachability;
 - (void)setUpViewControllers;
@@ -32,6 +36,14 @@
 @implementation AppDelegate
 @synthesize window;
 @synthesize stackController = stackController_;
+@synthesize billNotifier = _billNotifier;
+@synthesize backgroundTaskID = _backgroundTaskID;
+
+- (void)dealloc {
+    self.window = nil;
+    self.billNotifier = nil;
+    [super dealloc];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self setUpOnce];
@@ -46,10 +58,11 @@
         }
     }
     [self setUpReachability];
-    [TestFlight takeOff:@"4ad90c59aacf03cd3e58cc7c595ff348_NDI4OTcyMDExLTExLTIzIDAwOjI0OjI1LjcxNTMwOQ"];
+    [[SLFAnalytics sharedAnalytics] beginTracking];
     [SLFAppearance setupAppearance];
     [SLFRestKitManager sharedRestKit];
     [[SLFPersistenceManager sharedPersistence] loadPersistence:nil];
+    self.billNotifier = [WatchedBillNotificationManager manager];
     [NSURLCache setSharedURLCache:[[[AFURLCache alloc] initWithMemoryCapacity:1024*1024*4   // 4MB mem cache
                                                           diskCapacity:1024*1024*15 // 15MB disk cache
                                                               diskPath:[AFURLCache defaultCachePath]] autorelease]];    
@@ -106,8 +119,6 @@
 }
 
 /*
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-}
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 }
 + (void)initialize {
@@ -118,8 +129,36 @@
 }
 */
     
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    [[SLFAnalytics sharedAnalytics] resumeTracking];
+}
+
 - (void)applicationDidEnterBackground:(UIApplication *)application {
+    [[SLFAnalytics sharedAnalytics] pauseTracking];
     [self saveApplicationState];
+    
+    _backgroundTaskID = [application beginBackgroundTaskWithExpirationHandler: ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [application endBackgroundTask:self.backgroundTaskID];
+            self.backgroundTaskID = UIBackgroundTaskInvalid;
+        });
+    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSTimeInterval now = [application backgroundTimeRemaining];
+        NSCondition *waiter = [[NSCondition alloc] init];
+        [waiter lock];
+        while (now > 10.0) {
+            [waiter waitUntilDate:[NSDate dateWithTimeInterval:SLF_HOURS_TO_SECONDS(.5) sinceDate:[NSDate date]]];
+            now = [application backgroundTimeRemaining];
+            [self.billNotifier checkBillsStatus:self];
+            NSLog(@"Something happening, time remaining = %f seconds", now);
+        }
+        [waiter unlock];
+        [waiter release];
+
+        [application endBackgroundTask:self.backgroundTaskID];
+        self.backgroundTaskID = UIBackgroundTaskInvalid;
+    });
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
@@ -127,12 +166,17 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     [self saveApplicationState];
+    [[SLFAnalytics sharedAnalytics] endTracking];
 	[[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
 }
 
-- (void)dealloc {
-    self.window = nil;
-    [super dealloc];
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    BOOL foreground = (application.applicationState == UIApplicationStateActive);
+    if (!foreground)
+        return;
+    NSString *actionPath = [notification.userInfo valueForKey:@"ActionPath"];
+    if (!IsEmpty(actionPath))
+        [SLFActionPathNavigator navigateToPath:actionPath];
 }
 
 #pragma - Private Convenience Methods

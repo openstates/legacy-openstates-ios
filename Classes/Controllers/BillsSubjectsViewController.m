@@ -64,11 +64,20 @@
     NSInteger chamberScope = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
     NSString *chamber = [SLFChamber chamberTypeForSearchScopeIndex:chamberScope];
     NSString *resourcePath = [BillSearchParameters pathForSubjectsWithState:newState chamber:chamber];
-    SLFSaveCurrentActivityPath(resourcePath);
     [__tableViewModel loadTableFromResourcePath:resourcePath withBlock:^(RKObjectLoader* objectLoader) {
         objectLoader.cacheTimeoutInterval = SLF_HOURS_TO_SECONDS(12);
         objectLoader.objectMapping = [BillsSubjectsEntry mapping];
     }];
+}
+
++ (NSString *)actionPathForState:(SLFState *)state {
+    if (!state)
+        return nil;
+    return RKMakePathWithObjectAddingEscapes(@"slfos://bills/subjects/:stateID", state, NO);
+}
+
+- (NSString *)actionPath {
+    return [[self class] actionPathForState:self.state];
 }
 
 - (void)configureTableViewModel {

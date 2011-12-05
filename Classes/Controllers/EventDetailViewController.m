@@ -22,7 +22,7 @@
 @implementation EventDetailViewController
 @synthesize resourcePath;
 @synthesize resourceClass;
-@synthesize event;
+@synthesize event = _event;
 
 - (id)initWithEventID:(NSString *)objID {
     self = [super init];
@@ -59,6 +59,26 @@
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadButtonWasPressed:)] autorelease];
 }
 
++ (NSString *)actionPathForEvent:(SLFEvent *)event {
+    if (!event)
+        return nil;
+    return RKMakePathWithObjectAddingEscapes(@"slfos://events/detail/:eventID", event, NO);
+}
+
+- (NSString *)actionPath {
+    return [[self class] actionPathForEvent:self.event];
+}
+
+- (void)reconfigureForEvent:(SLFEvent *)event {
+	if (_event)
+        [_event release];
+	_event = [event retain];
+    if (event)
+        self.title = [NSString stringWithFormat:@"%@", event.dateStart];
+    if ([self isViewLoaded])
+        [self.tableView reloadData];
+}
+
 - (void)reloadButtonWasPressed:(id)sender {
 	[self loadData];
 }
@@ -72,14 +92,13 @@
 		return;	
 	NSDictionary *queryParameters = [NSDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
 	NSString *pathToLoad = [self.resourcePath appendQueryParams:queryParameters];
-    SLFSaveCurrentActivityPath(pathToLoad);
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:pathToLoad delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)];
 }
 
 - (void)setEvent:(SLFEvent *)newObj {
-	if (event)
-        [event release];
-	event = [newObj retain];
+	if (_event)
+        [_event release];
+	_event = [newObj retain];
 	if (newObj) {
 		self.title = [NSString stringWithFormat:@"%@", newObj.dateStart];
         self.resourcePath = RKMakePathWithObject(@"/events/:eventID", newObj);
@@ -92,12 +111,10 @@
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
 	[[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"LastUpdatedAt"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
-	if (event)
-        [event release];
-	event = [object retain];
-    self.title = [NSString stringWithFormat:@"%@", event.dateStart];
-    if ([self isViewLoaded])
-        [self.tableView reloadData];
+    SLFEvent *event = nil;
+    if (object && [object isKindOfClass:[SLFEvent class]])
+        event = object;
+    [self reconfigureForEvent:event];
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {

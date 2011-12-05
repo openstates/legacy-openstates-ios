@@ -37,7 +37,7 @@
 @end
 
 @implementation BillsMenuViewController
-@synthesize state;
+@synthesize state = _state;
 @synthesize tableViewModel = __tableViewModel;
 @synthesize searchIcon;
 @synthesize favoritesIcon;
@@ -89,6 +89,16 @@
         [self loadDataFromNetworkWithID:newState.stateID];
 }
 
++ (NSString *)actionPathForState:(SLFState *)state {
+    if (!state)
+        return nil;
+    return RKMakePathWithObjectAddingEscapes(@"slfos://bills/:stateID", state, NO);
+}
+
+- (NSString *)actionPath {
+    return [[self class] actionPathForState:self.state];
+}
+
 - (void)configureTableViewModel {
     self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
     self.tableViewModel.delegate = self;
@@ -99,7 +109,6 @@
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {
     NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", resourceID, @"stateID", nil];
     NSString *resourcePath = RKMakePathWithObject(@"/metadata/:stateID?apikey=:apikey", queryParams);
-    SLFSaveCurrentActivityPath(resourcePath);
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(24)];
 }
 
@@ -110,7 +119,7 @@
     [tableItems addObject:[RKTableItem tableItemWithText:MenuRecents detailText:nil image:self.recentsIcon]];
     if (self.state && self.state.featureFlags && [self.state.featureFlags containsObject:@"subjects"])
 	    [tableItems addObject:[RKTableItem tableItemWithText:MenuSubjects detailText:nil image:self.subjectsIcon]];
-    [self.tableViewModel loadTableItems:tableItems withMapping:[self menuCellMapping]];
+    [__tableViewModel loadTableItems:tableItems withMapping:[self menuCellMapping]];
     [tableItems release];
 }
 
@@ -129,16 +138,16 @@
     UIViewController *vc = nil;
     NSString *resourcePath = nil;
     if ([menuItem isEqualToString:MenuRecents]) {
-        resourcePath = [BillSearchParameters pathForUpdatedSinceDaysAgo:5 state:self.state.stateID];
-        vc = [[BillsViewController alloc] initWithState:self.state resourcePath:resourcePath];
-        vc.title = [NSString stringWithFormat:@"%@: %@", [self.state.stateID uppercaseString], @"Recent Updates (5 days)"];
+        resourcePath = [BillSearchParameters pathForUpdatedSinceDaysAgo:5 state:_state.stateID];
+        vc = [[BillsViewController alloc] initWithState:_state resourcePath:resourcePath];
+        vc.title = [NSString stringWithFormat:@"%@: %@", [_state.stateID uppercaseString], @"Recent Updates (5 days)"];
     }
     else if ([menuItem isEqualToString:MenuSearch])
-        vc = [[BillsSearchViewController alloc] initWithState:self.state];
+        vc = [[BillsSearchViewController alloc] initWithState:_state];
     else if ([menuItem isEqualToString:MenuFavorites])
         vc = [[BillsWatchedViewController alloc] init];
     else if ([menuItem isEqualToString:MenuSubjects]) {
-        vc = [[BillsSubjectsViewController alloc] initWithState:self.state];
+        vc = [[BillsSubjectsViewController alloc] initWithState:_state];
     }
     if (vc) {
         [self stackOrPushViewController:vc];
@@ -153,7 +162,7 @@
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
     self.state = object;
     if (object)
-        self.title = [NSString stringWithFormat:@"%@ %@", self.state.name, NSLocalizedString(@"Bills",@"")]; 
+        self.title = [NSString stringWithFormat:@"%@ %@", _state.name, NSLocalizedString(@"Bills",@"")]; 
     [self configureTableItems];
 }
 

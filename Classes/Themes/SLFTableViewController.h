@@ -25,6 +25,7 @@ typedef void(^SearchBarConfigurationBlock)(UISearchBar *searchBar);
 @property (nonatomic,assign) BOOL useGradientBackground;
 @property (nonatomic,assign) BOOL useTitleBar;
 @property (nonatomic,retain) TitleBarView *titleBarView;
+@property (nonatomic,readonly) NSString *actionPath;
 - (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url;
 - (void)configureSearchBarWithPlaceholder:(NSString *)placeholder withConfigurationBlock:(SearchBarConfigurationBlock)block;
 - (void)configureChamberScopeTitlesForSearchBar:(UISearchBar *)searchBar withState:(SLFState *)state;

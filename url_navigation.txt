@@ -14,5 +14,5 @@ slfos://events/tx -> EventsViewController:initWithState:
 slfos://events/detail/TXE34234 -> EventDetailViewController:initWithEventID:
 
 slfos://bills/tx -> BillsMenuViewController:initWithState:
-slfos://bills/tx/search -> BillsSeachViewController:initWithState:
+slfos://bills/search/tx -> BillsSeachViewController:initWithState:
 slfos://bills/detail/tx/821/HB 41  -> BillDetailViewController:initWithState:session:billID:
