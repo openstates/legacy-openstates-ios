@@ -36,12 +36,6 @@
         self.title = [NSString stringWithFormat:@"%d Committees", self.tableViewModel.rowCount];
 }
 
-+ (NSString *)actionPathForState:(SLFState *)state {
-    if (!state)
-        return nil;
-    return RKMakePathWithObjectAddingEscapes(@"slfos://committees/:stateID", state, NO);
-}
-
 - (void)configureTableViewModel {
     [super configureTableViewModel];
     SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
@@ -57,8 +51,8 @@
     [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
 }
 
-- (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
-    [super tableViewModelDidFinishLoad:tableViewModel];
+- (void)tableViewModelDidFinishLoading:(RKAbstractTableViewModel*)tableViewModel {
+    [super tableViewModelDidFinishLoading:tableViewModel];
     if (!self.title)
         self.title = [NSString stringWithFormat:@"%d Committees", self.tableViewModel.rowCount];
 }

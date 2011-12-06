@@ -51,12 +51,8 @@
     return self;
 }
 
-+ (NSString *)actionPathForState:(SLFState *)state {
-    return nil; // none set yet
-}
-
 - (NSString *)actionPath {
-    return [[self class] actionPathForState:self.state];
+    return [[self class] actionPathForObject:self.state];
 }
 
 - (void)configureTableViewModel {

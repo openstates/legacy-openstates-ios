@@ -155,14 +155,8 @@ enum SECTIONS {
     }
 }
 
-+ (NSString *)actionPathForBill:(SLFBill *)bill {
-    if (!bill)
-        return nil;
-    return RKMakePathWithObjectAddingEscapes(@"slfos://bills/detail/:stateID/:session/:billID", bill, NO);
-}
-
 - (NSString *)actionPath {
-    return [[self class] actionPathForBill:self.bill];
+    return [[self class] actionPathForObject:self.bill];
 }
 
 - (void)reconfigureForBill:(SLFBill *)bill {
@@ -212,8 +206,7 @@ enum SECTIONS {
     [self setState:SLFBillIsWatched(bill) forWatchButton:_watchButton];
     if (!bill)
         return;
-    BOOL isWatched = SLFBillIsWatched(_bill);
-    SLFSaveBillWatchedStatus(_bill, isWatched); // to reset the "last updated" date
+    SLFTouchBillWatchedStatus(_bill);
 }
 
 - (void)configureActionBarForBill:(SLFBill *)bill {

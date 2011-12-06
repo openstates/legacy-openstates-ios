@@ -13,7 +13,7 @@
 #import "SLFGANTracker.h"
 #include "GANTracker.h"
 
-static NSString *const AccountIdentifier = @"UA-00000000-1";
+static NSString *const AccountIdentifier = @"UA-22821126-11";
 static const NSInteger kDefaultDispatchPeriod = 60;
 static const BOOL kDefaultDebugEnabled = NO;
 static const BOOL kDefaultAnalyticsDisabled = NO;
@@ -56,20 +56,23 @@ static const NSInteger kDefaultSampleRate = 100;
 
 - (void)tagEvent:(NSString *)event attributes:(NSDictionary *)attributes {
     NSError *error = nil;
-    NSString *category = @"";
-    if (attributes && [attributes valueForKey:@"category"])
-        category = [attributes valueForKey:@"category"];
     NSString *activityPath = nil;
-    if (attributes && [attributes valueForKey:@"ActivityPath"])
-        activityPath = [attributes valueForKey:@"ActivityPath"];
     if (event && [event hasPrefix:@"slfos://"]) {
-        activityPath = event;
+        //activityPath = [event stringByReplacingOccurrencesOfString:@"slfos://" withString:@"http;//ios.openstates.org/"];
+        activityPath = [event stringByReplacingOccurrencesOfString:@"slfos://" withString:@"/"];
         event = nil;
     }
-    if (activityPath)
-        [[GANTracker sharedTracker] trackPageview:activityPath withError:&error];
-    if (event)
-        [[GANTracker sharedTracker] trackEvent:category action:event label:nil value:0 withError:&error];
+    if (activityPath) {
+        if (![[GANTracker sharedTracker] trackPageview:activityPath withError:&error])
+            NSLog(@"Error sending page tracking (%@) to Google Analytics: %@", activityPath, error);
+    }
+    if (event) {
+        NSString *category = @"";
+        if (attributes && [attributes valueForKey:@"category"])
+            category = [attributes valueForKey:@"category"];
+        if (![[GANTracker sharedTracker] trackEvent:category action:event label:nil value:0 withError:&error])
+            NSLog(@"Error sending event tracking (%@) to Google Analytics: %@", event, error);
+    }
     return;
 }
 

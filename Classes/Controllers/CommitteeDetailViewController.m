@@ -69,14 +69,8 @@ enum SECTIONS {
 	self.title = NSLocalizedString(@"Loading...", @"");
 }
 
-+ (NSString *)actionPathForCommittee:(SLFCommittee *)committee {
-    if (!committee)
-        return nil;
-    return RKMakePathWithObjectAddingEscapes(@"slfos://committees/detail/:committeID", committee, NO);
-}
-
 - (NSString *)actionPath {
-    return [[self class] actionPathForCommittee:self.committee];
+    return [[self class] actionPathForObject:self.committee];
 }
 
 - (void)reconfigureForCommittee:(SLFCommittee *)committee {

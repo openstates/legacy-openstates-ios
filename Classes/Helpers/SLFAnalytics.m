@@ -13,8 +13,8 @@
 #import "SLFAnalytics.h"
 
 #define USE_TESTFLIGHT 1
-#define USE_GOOGLEANALYTICS 0
-#define USE_LOCALYTICS 1
+#define USE_GOOGLEANALYTICS 1
+#define USE_LOCALYTICS 0
 
 #if USE_TESTFLIGHT
 #import "SLFTestFlight.h"

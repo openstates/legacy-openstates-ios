@@ -51,10 +51,6 @@
         self.title = [NSString stringWithFormat:@"%d States", self.tableViewModel.rowCount];
 }
 
-+ (NSString *)actionPathForState:(SLFState *)state {
-    return @"slfos://states";
-}
-
 - (void)configureTableViewModel {
     [super configureTableViewModel];
     self.tableViewModel.showsSectionIndexTitles = YES;
@@ -74,8 +70,8 @@
     [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
 }
 
-- (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
-    [super tableViewModelDidFinishLoad:tableViewModel];
+- (void)tableViewModelDidFinishLoading:(RKAbstractTableViewModel*)tableViewModel {
+    [super tableViewModelDidFinishLoading:tableViewModel];
     if (!self.title)
         self.title = [NSString stringWithFormat:@"%d States", self.tableViewModel.rowCount];
 }

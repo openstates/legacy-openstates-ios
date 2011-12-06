@@ -96,14 +96,8 @@ enum SECTIONS {
 }
 
 
-+ (NSString *)actionPathForLegislator:(SLFLegislator *)legislator {
-    if (!legislator)
-        return nil;
-    return RKMakePathWithObjectAddingEscapes(@"slfos://legislators/detail/:legID", legislator, NO);
-}
-
 - (NSString *)actionPath {
-    return [[self class] actionPathForLegislator:self.legislator];
+    return [[self class] actionPathForObject:self.legislator];
 }
 
 - (void)reconfigureForLegislator:(SLFLegislator *)legislator {

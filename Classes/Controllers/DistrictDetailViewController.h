@@ -23,5 +23,5 @@
 
 - (id)initWithDistrictMapID:(NSString *)objID;
 - (NSString *)actionPath;
-+ (NSString *)actionPathForDistrict:(SLFDistrict *)district;
++ (NSString *)actionPathForObject:(id)object;
 @end

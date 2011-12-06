@@ -43,8 +43,8 @@
         _billRequestQueue.concurrentRequestsLimit = 2;
         _billRequestQueue.showsNetworkActivityIndicatorWhenBusy = NO;
         _updatedBills = [[NSMutableSet alloc] init];
-            //[self performSelectorInBackground:@selector(checkBillsStatus:) withObject:self]; // check now
-            //self.scheduleTimer = [NSTimer scheduledTimerWithTimeInterval:16/*SLF_HOURS_TO_SECONDS(12)*/ target:self selector:@selector(checkBillsStatus:) userInfo:nil repeats:YES]; // check on a schedule, later
+        [self performSelectorInBackground:@selector(checkBillsStatus:) withObject:self]; // check now
+        self.scheduleTimer = [NSTimer scheduledTimerWithTimeInterval:SLF_HOURS_TO_SECONDS(2) target:self selector:@selector(checkBillsStatus:) userInfo:nil repeats:YES]; 
     }
     return self;
 }
@@ -102,7 +102,7 @@
     notification.applicationIconBadgeNumber = [self.updatedBills count];
     notification.alertAction = NSLocalizedString(@"View Bill", @"");
     notification.alertBody = [self alertMessageForUpdatedBill:updatedBill];
-    NSString *actionPath = [BillDetailViewController actionPathForBill:updatedBill];
+    NSString *actionPath = [BillDetailViewController actionPathForObject:updatedBill];
     notification.userInfo = [NSDictionary dictionaryWithObject:actionPath forKey:@"ActionPath"];
     [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
     [notification release];
@@ -119,6 +119,7 @@
     SLFBill *foundBill = object;
     if ([self isBillStatusUpdated:foundBill]) {
         [self.updatedBills addObject:foundBill];
+        SLFTouchBillWatchedStatus(foundBill);
         [self issueNotificationForBill:foundBill];
     }
 }

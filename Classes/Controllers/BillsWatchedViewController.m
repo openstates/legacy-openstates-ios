@@ -81,12 +81,8 @@
     [self configureEditingButtons];
 }
 
-+ (NSString *)actionPathForState:(SLFState *)state {
-    return @"slfos://bills/watched";
-}
-
 - (NSString *)actionPath {
-    return [[self class] actionPathForState:nil];
+    return [[self class] actionPathForObject:nil];
 }
 
 - (void)configureEditingButtonsIphone {

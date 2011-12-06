@@ -16,6 +16,7 @@
 #import "APIKeys.h"
 #import "SLFPersistenceManager.h"
 #import "SLFAnalytics.h"
+#import "SLFActionPathNavigator.h"
 
 BOOL IsEmpty(NSObject * thing);
 

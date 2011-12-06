@@ -18,6 +18,7 @@
 #import "SLFAlertView.h"
 #import "DistrictSearch.h"
 #import "MultiRowCalloutAnnotationView.h"
+#import "SLFActionPathRegistry.h"
 
 @interface DistrictDetailViewController()
 - (void)loadMapWithID:(NSString *)objID;
@@ -71,19 +72,23 @@
         self.upperDistrict = newObj;
     else
         self.lowerDistrict = newObj;
-}
-
-+ (NSString *)actionPathForDistrict:(SLFDistrict *)district {
-    if (!district)
-        return nil;
-    return RKMakePathWithObjectAddingEscapes(@"slfos://districts/detail/:boundaryID", district, NO);
+    SLFSaveCurrentActivityPath([[self class] actionPathForObject:newObj]);
 }
 
 - (NSString *)actionPath {
     SLFDistrict *district = self.lowerDistrict;
     if (!district)
         district = self.upperDistrict;
-    return [[self class] actionPathForDistrict:district];
+    return [[self class] actionPathForObject:district];
+}
+
++ (NSString *)actionPathForObject:(id)object {
+    NSString *pattern = [SLFActionPathRegistry patternForClass:[self class]];
+    if (!pattern)
+        return nil;
+    if (!object)
+        return pattern;
+    return RKMakePathWithObjectAddingEscapes(pattern, object, NO);
 }
 
 - (void)reconfigureForDistrict:(SLFDistrict *)district {

@@ -10,8 +10,20 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import "SLFActionPathRegistry.h"
+
+// given parsed arguments from a pattern, return a retained (not autoreleased) view controller to push onto the stack
+typedef UIViewController* (^SLFActionArgumentHandlerBlock)(NSDictionary *arguments);
 
 @interface SLFActionPathNavigator : NSObject
 + (void)navigateToPath:(NSString *)actionPath;
++ (void)registerPattern:(NSString *)pattern withArgumentHandler:(SLFActionArgumentHandlerBlock)block;
++ (SLFActionPathNavigator *)sharedNavigator;
 @end
+
+@interface SLFActionPathHandler : NSObject
++ (SLFActionPathHandler *)handlerWithPattern:(NSString *)pattern onViewControllerForArgumentsBlock:(SLFActionArgumentHandlerBlock)block;
+@property (nonatomic,copy) NSString *pattern;
+@property (nonatomic,copy) SLFActionArgumentHandlerBlock onViewControllerForArguments;
+@end
+

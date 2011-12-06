@@ -12,7 +12,7 @@
 
 #import "SLFPersistenceManager.h"
 #import "SLFDataModels.h"
-#import "MKiCloudSync.h"
+#import "SLFiCloudSync.h"
 
 NSString * const kPersistentSelectedStateKey = @"SelectedStateKey";
 NSString * const kPersistentSelectedSessionKey = @"SelectedSessionByStateID";
@@ -48,8 +48,8 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
 - (id)init {
     self = [super init];
     if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPersistence:) name:kMKiCloudSyncNotification object:nil];
-            //[MKiCloudSync start];
+        [SLFiCloudSync start];
+        [self loadPersistence:nil];
     }
     return self;
 }
@@ -82,6 +82,46 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
     self.currentStateID = nil;
     [NSUserDefaults resetStandardUserDefaults];
 }
+
+- (NSDictionary *)exportSettings {
+    NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+    if (!IsEmpty(SLFCurrentActivityPath()))
+        [settings setObject:SLFCurrentActivityPath() forKey:kPersistentActivityPathKey];
+    if (!IsEmpty(SLFSelectedScopeIndexByKeyCatalog()))
+        [settings setObject:SLFSelectedScopeIndexByKeyCatalog() forKey:kPersistentScopeIndexKey];
+    if (!IsEmpty(SLFSelectedStateID()))
+        [settings setObject:SLFSelectedStateID() forKey:kPersistentSelectedStateKey];
+    if (!IsEmpty(SLFSelectedSessionsByStateID()))
+        [settings setObject:SLFSelectedSessionsByStateID() forKey:kPersistentSelectedSessionKey];
+    if (!IsEmpty(SLFWatchedBillsCatalog()))
+        [settings setObject:SLFWatchedBillsCatalog() forKey:kPersistentWatchedBillsKey];
+    return settings;
+}
+
+- (void)importSettings:(NSDictionary *)settings {
+    if (IsEmpty(settings))
+        return;
+    if ([[self exportSettings] isEqualToDictionary:settings])
+        return; // no changes
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *activityPath = [settings valueForKey:kPersistentActivityPathKey];
+    if (!IsEmpty(activityPath))
+        [defaults setObject:activityPath forKey:kPersistentActivityPathKey];
+    NSDictionary *selectedScopes = [settings valueForKey:kPersistentScopeIndexKey];
+    if (!IsEmpty(selectedScopes))
+        [defaults setObject:selectedScopes forKey:kPersistentScopeIndexKey];
+    NSString *stateID = [settings valueForKey:kPersistentSelectedStateKey];
+    if (!IsEmpty(stateID))
+        [defaults setObject:stateID forKey:kPersistentSelectedStateKey];
+    NSDictionary *selectedSessions = [settings valueForKey:kPersistentSelectedSessionKey];
+    if (!IsEmpty(selectedSessions))
+        [defaults setObject:selectedSessions forKey:kPersistentSelectedSessionKey];
+    NSDictionary *watchedBills = [settings valueForKey:kPersistentWatchedBillsKey];
+    if (!IsEmpty(watchedBills))
+        [defaults setObject:watchedBills forKey:kPersistentWatchedBillsKey];
+    [self loadPersistence:nil];
+}
+
 
 - (void)notifySettingsWereUpdated:(NSNotification *)notification {
     NSString *stateID = SLFSelectedStateID();
@@ -236,5 +276,12 @@ void SLFSaveBillWatchedStatus(SLFBill *bill, BOOL isWatched) {
     [settings setObject:watchedBillsToWrite forKey:kPersistentWatchedBillsKey];
     [settings synchronize];
     [[NSNotificationCenter defaultCenter] postNotificationName:SLFWatchedBillsDidChangeNotification object:bill];
+}
+
+void SLFTouchBillWatchedStatus(SLFBill *bill) {
+    if (!bill)
+        return;
+    BOOL isWatched = SLFBillIsWatched(bill);
+    SLFSaveBillWatchedStatus(bill, isWatched); // to reset the "last updated" date
 }
 @end

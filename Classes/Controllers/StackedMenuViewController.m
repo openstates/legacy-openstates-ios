@@ -166,7 +166,9 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 
 - (void)configureActionBarForState:(SLFState *)newState {
     DDActionHeaderView *actionBar = (DDActionHeaderView *)self.titleBarView;
-    if (actionBar && [actionBar isActionPickerExpanded])
+    if (!actionBar)
+        return;
+    if ([actionBar isActionPickerExpanded])
         [actionBar shrinkActionPicker];
     self.selectStateButton = [self barButtonForState:newState];
     CGPoint origin = CGPointMake(_selectStateButton.bounds.size.width + 16, 16);

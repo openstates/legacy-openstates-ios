@@ -101,20 +101,14 @@
         self.title = self.state.name; 
 }
 
+- (NSString *)actionPath {
+    return [[self class] actionPathForObject:self.state];
+}
+
 - (void)stateMenuSelectionDidChangeWithState:(SLFState *)newState {
     self.state = newState;
     if (newState)
         [self loadDataFromNetworkWithID:newState.stateID];
-}
-
-+ (NSString *)actionPathForState:(SLFState *)state {
-    if (!state)
-        return nil;
-    return RKMakePathWithObjectAddingEscapes(@"slfos://states/detail/:stateID", state, NO);
-}
-
-- (NSString *)actionPath {
-    return [[self class] actionPathForState:self.state];
 }
 
 - (void)reconfigureForState:(SLFState *)state {

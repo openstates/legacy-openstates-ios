@@ -35,6 +35,21 @@
 	<string>0.8</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLIconFile</key>
+			<string>Icon-Solo</string>
+			<key>CFBundleURLName</key>
+			<string>org.openstates.openstates</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>slfos</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>3</string>
 	<key>LSRequiresIPhoneOS</key>

@@ -19,7 +19,7 @@
 #import "AFURLCache.h"
 #import "SLFReachable.h"
 #import "WatchedBillNotificationManager.h"
-#import "SLFActionPathNavigator.h"
+#import "SLFAlertView.h"
 
 @interface AppDelegate()
 @property (nonatomic,retain) PSStackedViewController *stackController;
@@ -31,6 +31,7 @@
 - (void)setUpIpadViewControllers;
 - (void)setUpIphoneViewControllers;
 - (void)saveApplicationState;
+- (void)setUpURLCache;
 @end
 
 @implementation AppDelegate
@@ -61,12 +62,11 @@
     [[SLFAnalytics sharedAnalytics] beginTracking];
     [SLFAppearance setupAppearance];
     [SLFRestKitManager sharedRestKit];
-    [[SLFPersistenceManager sharedPersistence] loadPersistence:nil];
+    [SLFPersistenceManager sharedPersistence];
+    [self setUpURLCache];
     self.billNotifier = [WatchedBillNotificationManager manager];
-    [NSURLCache setSharedURLCache:[[[AFURLCache alloc] initWithMemoryCapacity:1024*1024*4   // 4MB mem cache
-                                                          diskCapacity:1024*1024*15 // 15MB disk cache
-                                                              diskPath:[AFURLCache defaultCachePath]] autorelease]];    
     [self setUpViewControllers];
+    [SLFActionPathRegistry sharedRegistry];
 }
 
 - (void)setUpReachability {
@@ -81,6 +81,9 @@
         [self setUpIpadViewControllers];
     else
         [self setUpIphoneViewControllers];
+    if (SLFCurrentActivityPath()) {
+        [SLFActionPathNavigator performSelector:@selector(navigateToPath:) withObject:SLFCurrentActivityPath() afterDelay:2];
+    }
 }
 
 - (void)setUpIpadViewControllers {
@@ -118,17 +121,41 @@
     [navController release];    
 }
 
-/*
-- (void)applicationDidBecomeActive:(UIApplication *)application {
+- (void)setUpURLCache {
+    const NSUInteger memoryCacheSize = 1024*1024*4;   // 4MB mem cache
+    const NSUInteger diskCacheSize = 1024*1024*15;    // 15MB disk cache
+    NSString *cachePath = [AFURLCache defaultCachePath];
+    AFURLCache *cache = [[AFURLCache alloc] initWithMemoryCapacity:memoryCacheSize diskCapacity:diskCacheSize diskPath:cachePath];
+    [NSURLCache setSharedURLCache:cache];
+    [cache release];
 }
-+ (void)initialize {
-    if ([self class] == [AppDelegate class]) {
-        NSDictionary *settings = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"selectedState"];
-        [[NSUserDefaults standardUserDefaults] registerDefaults:settings];
-    }
+
+- (void)saveApplicationState {
+    [[SLFPersistenceManager sharedPersistence] savePersistence];
 }
-*/
     
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+    [self saveApplicationState];
+    [[SLFAnalytics sharedAnalytics] endTracking];
+	[[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    if (!url)
+        return NO;
+    NSString *path = [[url absoluteString] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    if ( NO == [path hasPrefix:@"slfos:"] )
+        return NO;
+    [SLFActionPathNavigator cancelPreviousPerformRequestsWithTarget:[SLFActionPathNavigator class]];
+    SLFSaveCurrentActivityPath(path);
+    [SLFActionPathNavigator navigateToPath:path];
+    return YES;
+}
+
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     [[SLFAnalytics sharedAnalytics] resumeTracking];
 }
@@ -137,6 +164,7 @@
     [[SLFAnalytics sharedAnalytics] pauseTracking];
     [self saveApplicationState];
     
+#ifdef TEST_LOCAL_NOTIFICATIONS
     _backgroundTaskID = [application beginBackgroundTaskWithExpirationHandler: ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [application endBackgroundTask:self.backgroundTaskID];
@@ -155,34 +183,25 @@
         }
         [waiter unlock];
         [waiter release];
-
         [application endBackgroundTask:self.backgroundTaskID];
         self.backgroundTaskID = UIBackgroundTaskInvalid;
     });
-}
-
-- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-    [self saveApplicationState];
-    [[SLFAnalytics sharedAnalytics] endTracking];
-	[[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+#endif
+    
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     BOOL foreground = (application.applicationState == UIApplicationStateActive);
     if (!foreground)
         return;
-    NSString *actionPath = [notification.userInfo valueForKey:@"ActionPath"];
-    if (!IsEmpty(actionPath))
-        [SLFActionPathNavigator navigateToPath:actionPath];
-}
-
-#pragma - Private Convenience Methods
-
-- (void)saveApplicationState {
-    [[SLFPersistenceManager sharedPersistence] savePersistence];
+    if (!notification)
+        return;
+    [SLFAlertView showWithTitle:NSLocalizedString(@"Notification",@"") message:notification.alertBody cancelTitle:NSLocalizedString(@"Dismiss",@"") cancelBlock:nil otherTitle:notification.alertAction otherBlock:^{
+        NSString *actionPath = [notification.userInfo valueForKey:@"ActionPath"];
+        if (!IsEmpty(actionPath))
+            [SLFActionPathNavigator cancelPreviousPerformRequestsWithTarget:[SLFActionPathNavigator class]];
+            [SLFActionPathNavigator navigateToPath:actionPath];
+    }];
 }
     
 

@@ -16,3 +16,24 @@ slfos://events/detail/TXE34234 -> EventDetailViewController:initWithEventID:
 slfos://bills/tx -> BillsMenuViewController:initWithState:
 slfos://bills/search/tx -> BillsSeachViewController:initWithState:
 slfos://bills/detail/tx/821/HB 41  -> BillDetailViewController:initWithState:session:billID:
+slfos://bills/watch --- BillsWatchedViewController:init
+slfos://bills/subjects/tx --- BillsSubjectsViewController:initWithState:
+
+
+As registered at http://handleopenurl.com ....
+
+slfos://states --- Open a table to select a state legislature from a list of available legislatures.
+slfos://states/detail/tx --- Open a menu of available features for the selected state legislature (2 character state abbreviation).
+slfos://legislators/tx --- Lists all the Texas legislators
+slfos://legislators/detail/TXL234232 --- shows details of a particular legislator, using the (published) Open States legislator identifier.
+slfos://committees/tx --- List all the Texas committees
+slfos://committees/detail/TXC34234 --- committee details, Open States ID
+slfos://districts/tx --- Texas legislative districts
+slfos://districts/detail/sldl-tx-house-23 --- district details using the Boundary Service identifier.
+slfos://events/tx --- Texas events
+slfos://events/detail/TXE34234 --- event details, Open States ID
+slfos://bills/tx --- open a menu related to features for bills
+slfos://bills/search/tx --- open a view to search Texas bills
+slfos://bills/detail/tx/82/HB 41 --- bill details, in Texas, in the 82nd legislative session, House Bill 41. Open States state ID, session name, and bill ID.
+slfos://bills/watch --- Open a list of the user's watched (or favorite) bills
+slfos://bills/subjects/tx --- open a list of available bill subjects, with their current count

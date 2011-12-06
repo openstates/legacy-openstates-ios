@@ -19,5 +19,4 @@
 @property (nonatomic, retain) SLFBill *bill;
 - (id)initWithState:(SLFState *)aState session:(NSString *)aSession billID:(NSString *)billID;
 - (id)initWithBill:(SLFBill *)aBill;
-+ (NSString *)actionPathForBill:(SLFBill *)bill; 
 @end

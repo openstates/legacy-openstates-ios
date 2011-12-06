@@ -16,6 +16,7 @@
 #import "SVWebViewController.h"
 #import "SLFReachable.h"
 #import "SLFDataModels.h"
+#import "SLFActionPathRegistry.h"
 
 @implementation SLFTableViewController
 @synthesize useGradientBackground;
@@ -68,7 +69,16 @@
 }
 
 - (NSString *)actionPath {
-    return nil;
+    return [[self class] actionPathForObject:nil];
+}
+
++ (NSString *)actionPathForObject:(id)object {
+    NSString *pattern = [SLFActionPathRegistry patternForClass:[self class]];
+    if (!pattern)
+        return nil;
+    if (!object)
+        return pattern;
+    return RKMakePathWithObjectAddingEscapes(pattern, object, NO);
 }
 
 - (void)setTitle:(NSString *)title {
@@ -88,10 +98,10 @@
         RKLogError(@"-------- from resource path: %@", [tableViewModel performSelector:@selector(resourcePath)]);
 }
 
-- (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
+- (void)tableViewModelDidFinishLoading:(RKAbstractTableViewModel*)tableViewModel {
     RKLogTrace(@"%@: Table model finished loading.", NSStringFromClass([self class]));
     if (!IsEmpty(self.actionPath))
-        SLFSaveCurrentActivityPath(self.actionPath);
+        SLFSaveCurrentActivityPath(self.actionPath);    
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {

@@ -52,8 +52,8 @@
     [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];
 }
 
-- (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel*)tableViewModel {
-    [super tableViewModelDidFinishLoad:tableViewModel];
+- (void)tableViewModelDidFinishLoading:(RKAbstractTableViewModel*)tableViewModel {
+    [super tableViewModelDidFinishLoading:tableViewModel];
     self.title = [NSString stringWithFormat:@"Found %d Bills", self.tableViewModel.rowCount];
 }
 

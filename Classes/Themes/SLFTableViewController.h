@@ -22,10 +22,13 @@ typedef void(^SearchBarConfigurationBlock)(UISearchBar *searchBar);
 
 @class SLFState;
 @interface SLFTableViewController : GCTableViewController <PSStackedViewDelegate, RKTableViewModelDelegate, StackableController, UISearchBarDelegate>
+
+@property (nonatomic,readonly) NSString *actionPath;
++ (NSString *)actionPathForObject:(id)object;
+
 @property (nonatomic,assign) BOOL useGradientBackground;
 @property (nonatomic,assign) BOOL useTitleBar;
 @property (nonatomic,retain) TitleBarView *titleBarView;
-@property (nonatomic,readonly) NSString *actionPath;
 - (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url;
 - (void)configureSearchBarWithPlaceholder:(NSString *)placeholder withConfigurationBlock:(SearchBarConfigurationBlock)block;
 - (void)configureChamberScopeTitlesForSearchBar:(UISearchBar *)searchBar withState:(SLFState *)state;

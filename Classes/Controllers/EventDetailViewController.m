@@ -59,14 +59,8 @@
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadButtonWasPressed:)] autorelease];
 }
 
-+ (NSString *)actionPathForEvent:(SLFEvent *)event {
-    if (!event)
-        return nil;
-    return RKMakePathWithObjectAddingEscapes(@"slfos://events/detail/:eventID", event, NO);
-}
-
 - (NSString *)actionPath {
-    return [[self class] actionPathForEvent:self.event];
+    return [[self class] actionPathForObject:self.event];
 }
 
 - (void)reconfigureForEvent:(SLFEvent *)event {

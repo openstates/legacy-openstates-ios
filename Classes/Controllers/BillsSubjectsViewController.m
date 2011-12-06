@@ -70,14 +70,8 @@
     }];
 }
 
-+ (NSString *)actionPathForState:(SLFState *)state {
-    if (!state)
-        return nil;
-    return RKMakePathWithObjectAddingEscapes(@"slfos://bills/subjects/:stateID", state, NO);
-}
-
 - (NSString *)actionPath {
-    return [[self class] actionPathForState:self.state];
+    return [[self class] actionPathForObject:self.state];
 }
 
 - (void)configureTableViewModel {
@@ -147,15 +141,15 @@
     [self reconfigureForState:self.state];
 }
 
-- (void)tableViewModelDidFinishLoad:(RKTableViewModel*)tableViewModel {
-    [super tableViewModelDidFinishLoad:tableViewModel];
+- (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel *)tableViewModel {
+    // since we reload our table items, we can't use our usual finishLoading or risk an infinite loop.
     if (IsEmpty(tableViewModel.sections))
         return;
     RKTableViewSection *section = [tableViewModel sectionAtIndex:0];
     if (!section)
         return;
     NSArray *sortedObjects = [section.objects sortedArrayUsingDescriptors:[BillsSubjectsEntry sortDescriptors]];
-    [tableViewModel loadObjects:sortedObjects];
+    [__tableViewModel loadObjects:sortedObjects];
 }
 
 @end

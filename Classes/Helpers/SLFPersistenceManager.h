@@ -20,6 +20,8 @@
 - (void)loadPersistence:(NSNotification *)notification;
 - (void)savePersistence;
 - (void)resetPersistence;
+- (NSDictionary *)exportSettings;
+- (void)importSettings:(NSDictionary *)settings;
 @end
 
 @class SLFState;
@@ -49,3 +51,4 @@ extern NSString * const SLFWatchedBillsDidChangeNotification;
 NSDictionary* SLFWatchedBillsCatalog(void);
 BOOL SLFBillIsWatched(SLFBill *bill);
 void SLFSaveBillWatchedStatus(SLFBill *bill, BOOL isWatched);
+void SLFTouchBillWatchedStatus(SLFBill *bill);

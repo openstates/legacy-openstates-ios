@@ -22,5 +22,4 @@
 - (id)initWithState:(SLFState *)newState;
 - (RKTableViewCellMapping *)menuCellMapping;   // override this to customize appearance
 - (void)selectMenuItem:(NSString *)menuItem;   // override this to customize behavior
-+ (NSString *)actionPathForState:(SLFState *)state;
 @end

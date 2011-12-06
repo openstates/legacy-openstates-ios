@@ -149,6 +149,8 @@
 		3771B987147A3FA300E9CE39 /* VoteYea.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B981147A3FA300E9CE39 /* VoteYea.png */; };
 		3771B988147A3FA300E9CE39 /* VoteYea@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B982147A3FA300E9CE39 /* VoteYea@2x.png */; };
 		3771B9A2147ABCA200E9CE39 /* BillsSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3771B9A1147ABCA200E9CE39 /* BillsSearchViewController.m */; };
+		37726AF7148D6AB3009BCE46 /* SLFActionPathRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 37726AF6148D6AB3009BCE46 /* SLFActionPathRegistry.m */; };
+		37726AFA148DCCE3009BCE46 /* SLFiCloudSync.m in Sources */ = {isa = PBXBuildFile; fileRef = 37726AF9148DCCE2009BCE46 /* SLFiCloudSync.m */; };
 		37738A10147B9616002AC526 /* AbstractActionSheetPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 37738A0D147B9616002AC526 /* AbstractActionSheetPicker.m */; };
 		37738A11147B9616002AC526 /* ActionSheetStringPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 37738A0F147B9616002AC526 /* ActionSheetStringPicker.m */; };
 		37775500140F3F1200ABE16F /* DistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 377754FF140F3F1200ABE16F /* DistrictsViewController.m */; };
@@ -190,10 +192,6 @@
 		37AC5FD6142C42680061414F /* StackedMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37AC5FD5142C42680061414F /* StackedMenuViewController.m */; };
 		37B43D1014448E7400A8020D /* SVGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B43D0D14448E7400A8020D /* SVGeocoder.m */; };
 		37B43D1114448E7400A8020D /* SVPlacemark.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B43D0F14448E7400A8020D /* SVPlacemark.m */; };
-		37B9866A148CC3630093CF69 /* SLFLocalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B98669148CC3630093CF69 /* SLFLocalytics.m */; };
-		37B98671148CC4700093CF69 /* LocalyticsDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B9866B148CC4700093CF69 /* LocalyticsDatabase.m */; };
-		37B98672148CC4700093CF69 /* LocalyticsSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B9866D148CC4700093CF69 /* LocalyticsSession.m */; };
-		37B98673148CC4700093CF69 /* UploaderThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B9866F148CC4700093CF69 /* UploaderThread.m */; };
 		37B9CC08143D0654006C56E0 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37B9CC07143D0654006C56E0 /* CoreText.framework */; };
 		37BAC14A142B972D0021A3C6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BAC149142B972D0021A3C6 /* main.m */; };
 		37BAC158142B97620021A3C6 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BAC14D142B97620021A3C6 /* Icon-Small-50.png */; };
@@ -270,7 +268,6 @@
 		37F3282A144198750059FACE /* SLFStandardGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F32827144198750059FACE /* SLFStandardGroupCell.m */; };
 		37F568DC147CC1CE00318856 /* offline.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F568DA147CC1CE00318856 /* offline.png */; };
 		37F568DD147CC1CE00318856 /* offline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F568DB147CC1CE00318856 /* offline@2x.png */; };
-		37F568E7147D5E7300318856 /* MKiCloudSync.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F568E5147D5E7300318856 /* MKiCloudSync.m */; };
 		37F6FCE9146715D1003AA80D /* 11-clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F6FCE7146715D1003AA80D /* 11-clock.png */; };
 		37F6FCEA146715D1003AA80D /* 11-clock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F6FCE8146715D1003AA80D /* 11-clock@2x.png */; };
 		37F6FCED14671D96003AA80D /* 191-collection.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F6FCEB14671D95003AA80D /* 191-collection.png */; };
@@ -613,6 +610,10 @@
 		3771B982147A3FA300E9CE39 /* VoteYea@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "VoteYea@2x.png"; sourceTree = "<group>"; };
 		3771B9A0147ABCA200E9CE39 /* BillsSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsSearchViewController.h; sourceTree = "<group>"; };
 		3771B9A1147ABCA200E9CE39 /* BillsSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsSearchViewController.m; sourceTree = "<group>"; };
+		37726AF5148D6AB3009BCE46 /* SLFActionPathRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFActionPathRegistry.h; sourceTree = "<group>"; };
+		37726AF6148D6AB3009BCE46 /* SLFActionPathRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFActionPathRegistry.m; sourceTree = "<group>"; };
+		37726AF8148DCCE2009BCE46 /* SLFiCloudSync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFiCloudSync.h; sourceTree = "<group>"; };
+		37726AF9148DCCE2009BCE46 /* SLFiCloudSync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFiCloudSync.m; sourceTree = "<group>"; };
 		37738A0C147B9616002AC526 /* AbstractActionSheetPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AbstractActionSheetPicker.h; path = Vendor/ActionSheetPicker/Pickers/AbstractActionSheetPicker.h; sourceTree = "<group>"; };
 		37738A0D147B9616002AC526 /* AbstractActionSheetPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AbstractActionSheetPicker.m; path = Vendor/ActionSheetPicker/Pickers/AbstractActionSheetPicker.m; sourceTree = "<group>"; };
 		37738A0E147B9616002AC526 /* ActionSheetStringPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActionSheetStringPicker.h; path = Vendor/ActionSheetPicker/Pickers/ActionSheetStringPicker.h; sourceTree = "<group>"; };
@@ -818,8 +819,6 @@
 		37F32828144198750059FACE /* SLFTableCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFTableCellProtocol.h; sourceTree = "<group>"; };
 		37F568DA147CC1CE00318856 /* offline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = offline.png; sourceTree = "<group>"; };
 		37F568DB147CC1CE00318856 /* offline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "offline@2x.png"; sourceTree = "<group>"; };
-		37F568E4147D5E7300318856 /* MKiCloudSync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKiCloudSync.h; sourceTree = "<group>"; };
-		37F568E5147D5E7300318856 /* MKiCloudSync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKiCloudSync.m; sourceTree = "<group>"; };
 		37F6FCE7146715D1003AA80D /* 11-clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "11-clock.png"; sourceTree = "<group>"; };
 		37F6FCE8146715D1003AA80D /* 11-clock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "11-clock@2x.png"; sourceTree = "<group>"; };
 		37F6FCEB14671D95003AA80D /* 191-collection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "191-collection.png"; sourceTree = "<group>"; };
@@ -1220,12 +1219,16 @@
 				37BAE30F147865DA00CD5704 /* BillActionParser.m */,
 				37037546147AF51000B59AA2 /* SLFPersistenceManager.h */,
 				37037547147AF51000B59AA2 /* SLFPersistenceManager.m */,
+				37726AF8148DCCE2009BCE46 /* SLFiCloudSync.h */,
+				37726AF9148DCCE2009BCE46 /* SLFiCloudSync.m */,
 				371591BD148AC5BA0039ECED /* WatchedBillNotificationManager.h */,
 				371591BE148AC5BA0039ECED /* WatchedBillNotificationManager.m */,
 				37A16CF1148C0D53000A3C91 /* SLFAnalytics.h */,
 				37A16CF2148C0D53000A3C91 /* SLFAnalytics.m */,
 				37A16D14148C93B9000A3C91 /* SLFActionPathNavigator.h */,
 				37A16D15148C93BA000A3C91 /* SLFActionPathNavigator.m */,
+				37726AF5148D6AB3009BCE46 /* SLFActionPathRegistry.h */,
+				37726AF6148D6AB3009BCE46 /* SLFActionPathRegistry.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1321,7 +1324,6 @@
 				37B43D0A14448E7400A8020D /* SVGeocoder */,
 				371B5C6A143E7B2800AF317E /* SVWebViewController */,
 				377C616D143000AA00EE626E /* PSStackedView */,
-				37F568E3147D5E7300318856 /* MKiCloudSync */,
 				2538E7FF123417E500ACB5D7 /* RestKit.xcodeproj */,
 			);
 			name = Vendor;
@@ -1730,16 +1732,6 @@
 				37F2991A140FCD9000B96572 /* SLFObjectCache.m */,
 			);
 			path = Backend;
-			sourceTree = "<group>";
-		};
-		37F568E3147D5E7300318856 /* MKiCloudSync */ = {
-			isa = PBXGroup;
-			children = (
-				37F568E4147D5E7300318856 /* MKiCloudSync.h */,
-				37F568E5147D5E7300318856 /* MKiCloudSync.m */,
-			);
-			name = MKiCloudSync;
-			path = Vendor/MKiCloudSync;
 			sourceTree = "<group>";
 		};
 		37FA255D148029930026EFB1 /* StarButton */ = {
@@ -2183,7 +2175,6 @@
 				37037548147AF51000B59AA2 /* SLFPersistenceManager.m in Sources */,
 				37738A10147B9616002AC526 /* AbstractActionSheetPicker.m in Sources */,
 				37738A11147B9616002AC526 /* ActionSheetStringPicker.m in Sources */,
-				37F568E7147D5E7300318856 /* MKiCloudSync.m in Sources */,
 				37798CF6147E3A810098361A /* SLFFetchedTableViewController.m in Sources */,
 				37FA2568148043BE0026EFB1 /* BillsWatchedViewController.m in Sources */,
 				37089C6614843439002239A9 /* SLFGlobal.m in Sources */,
@@ -2199,10 +2190,8 @@
 				37A16CFF148C1C93000A3C91 /* SLFTestFlight.m in Sources */,
 				37A16D02148C1FE6000A3C91 /* SLFGANTracker.m in Sources */,
 				37A16D16148C93BA000A3C91 /* SLFActionPathNavigator.m in Sources */,
-				37B9866A148CC3630093CF69 /* SLFLocalytics.m in Sources */,
-				37B98671148CC4700093CF69 /* LocalyticsDatabase.m in Sources */,
-				37B98672148CC4700093CF69 /* LocalyticsSession.m in Sources */,
-				37B98673148CC4700093CF69 /* UploaderThread.m in Sources */,
+				37726AF7148D6AB3009BCE46 /* SLFActionPathRegistry.m in Sources */,
+				37726AFA148DCCE3009BCE46 /* SLFiCloudSync.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
