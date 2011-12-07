@@ -14,7 +14,7 @@
 
 +(void)setupAppearance;
 
-+ (UIColor *)menuSelectedTextColor;
++ (UIColor *)menuSelectedCellColor;
 + (UIColor *)menuTextColor;
 + (UIColor *)menuBackgroundColor;
 + (UIColor *)cellBackgroundDarkColor;
@@ -25,6 +25,8 @@
 + (UIColor *)tableBackgroundDarkColor;
 + (UIColor *)tableSeparatorColor;
 + (UIColor *)tableSectionColor;
++ (UIColor *)accentGreenColor;
++ (UIColor *)accentBlueColor;
 + (UIColor *)partyRed;
 + (UIColor *)partyBlue;
 + (UIColor *)partyGreen;
@@ -34,5 +36,6 @@ UIColor *SLFColorWithRGB(int red,  int green, int blue);
 UIColor *SLFColorWithHex(char hex);
 UIFont *SLFFont(CGFloat size);
 UIFont *SLFTitleFont(CGFloat size);
+UIFont *SLFItalicFont(CGFloat size);
 extern NSString * const SLFAppearanceFontName;
 extern NSString * const SLFAppearanceTitleFontName;

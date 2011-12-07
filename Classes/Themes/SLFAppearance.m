@@ -8,7 +8,8 @@
 //  To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/
 //  or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
 //
-//
+//  Color names by:
+//  http://chir.ag/projects/name-that-color 
 
 #import "SLFAppearance.h"
 #import <RestKit/RestKit.h>
@@ -17,7 +18,8 @@ NSString * const SLFAppearanceFontName = @"HelveticaNeue-Bold";
 NSString * const SLFAppearanceTitleFontName = @"BlairMdITC TT";
 
 #define APP_OPEN_STATES_THEME 1
-#define APP_BLUISH_THEME 2 
+#define APP_OLD_SUNLIGHT_THEME 2
+#define APP_BLUISH_THEME 3 
 #define APP_APPEARANCE_THEME APP_OPEN_STATES_THEME
 
 UIColor *SLFColorWithRGB(int r, int g, int b) {
@@ -38,23 +40,81 @@ UIFont *SLFTitleFont(CGFloat size) {
     return [UIFont fontWithName:SLFAppearanceTitleFontName size:size];
 }
 
+UIFont *SLFItalicFont(CGFloat size) {
+    return [UIFont fontWithName:@"Georgia-Italic" size:size];
+}
+
 @implementation SLFAppearance
 
-#if ( APP_APPEARANCE_THEME == APP_OPEN_STATES_THEME ) || ( APP_APPEARANCE_THEME == APP_BLUISH_THEME )
-
     // http://chir.ag/projects/name-that-color 
-    + (id)chambray          {vendColor(50,79,133);}       //  vendColorHex(0x324F85)
-    + (id)monza             {vendColor(198,0,47);}        //  vendColorHex(0xC6002F)
-    + (id)sycamore          {vendColor(126,145,67);}      //  vendColorHex(0x7E9143)
-    + (id)burntOrange       {vendColor(201,72,2);}        //  vendColorHex(0xC94802)
 
-    + (UIColor *)partyRed {return [[self class] monza];}
-    + (UIColor *)partyBlue {return [[self class] chambray];}
-    + (UIColor *)partyGreen {return [[self class] sycamore];}
-
-    #endif
 
 #if APP_APPEARANCE_THEME == APP_OPEN_STATES_THEME
+
++ (id)crail             {vendColor(186,87,67);}       //  vendColorHex(0xBA5743)
++ (id)tarawera          {vendColor(10,63,76);}        //  vendColorHex(0x0A3F4C)
++ (id)gimlet            {vendColor(166,183,101);}     //  vendColorHex(0xA6B765)
+
++ (UIColor *)partyRed {return [[self class] crail];}
++ (UIColor *)partyBlue {return [[self class] tarawera];}
++ (UIColor *)partyGreen {return [[self class] gimlet];}
+
++ (id)moonMist          {vendColor(227,227,215);}     //  vendColorHex(0xE3E3D7)  ...
++ (id)whiteRock         {vendColor(240,240,226);}     //  vendColorHex(0xF0F0E2)  ...
++ (id)westar            {vendColor(227,227,219);}     //  vendColorHex(0xE3E3DB)  ...
++ (id)acapulco          {vendColor(117,177,165);}     //  vendColorHex(0x75AFA5)  ...
++ (id)greenWhite        {vendColor(238,238,229);}     //  vendColorHex(0xEEEEE5)  ...
++ (id)springWood        {vendColor(245,245,237);}     //  vendColorHex(0xF5F5ED)  ...
++ (id)bitter            {vendColor(126,128,116);}     //  vendColorHex(0x7E8074)  ...
++ (id)zambezi           {vendColor(95,88,88);}        //  vendColorHex(0x5F5858)  ...
++ (id)bandicoot         {vendColor(116,117,107);}     //  vendColorHex(0x74756B)  ...
++ (id)kangaroo          {vendColor(197,199,190);}     //  vendColorHex(0xC5C7BE)  ...
++ (id)chicago           {vendColor(92,94,85);}        //  vendColorHex(0x5C5E55)
+
++ (UIFont *)accentGreenColor {return [[self class] gimlet];}
++ (UIFont *)accendBlueColor {return [[self class] acapulco];}
+
++ (UIFont *)navBarTextColor {return [[self class] springWood];}
++ (UIColor *)menuSelectedCellColor {return [[self class] chicago];}
++ (UIColor *)menuTextColor {return [[self class] kangaroo];}
++ (UIColor *)tableSectionColor {return [[self class] zambezi];}
++ (UIColor *)menuBackgroundColor {return [[self class] bitter];}
++ (UIColor *)cellBackgroundDarkColor {return [[self class] greenWhite];}
++ (UIColor *)cellBackgroundLightColor {return [[self class] springWood];}
++ (UIColor *)cellTextColor {return [[self class] zambezi];}
++ (UIColor *)cellSecondaryTextColor {return [[self class] bandicoot];}
++ (UIColor *)tableSeparatorColor {return [[self class] westar];}
++ (UIColor *)tableBackgroundDarkColor {return [[self class] moonMist];}
++ (UIColor *)tableBackgroundLightColor {return [[self class] whiteRock];}
+
++ (void)setupAppearance {
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
+    [[[UIApplication sharedApplication] keyWindow] setBackgroundColor:[UIColor blackColor]];
+    if (![UINavigationBar respondsToSelector:@selector(appearance)]) {
+        RKLogError(@"Application themes use iOS 5 methods.  This device has iOS %@.", [[UIDevice currentDevice] systemVersion]);
+        return;
+    }
+    [[UINavigationBar appearance] setTintColor:[[self class] bandicoot]];
+    [[UISegmentedControl appearance] setTintColor:[[self class] bandicoot]];
+    [[UISearchBar appearance] setTintColor:[[self class] bandicoot]];
+    [[UIToolbar appearance] setTintColor:[[self class] acapulco]];
+}
+
+#else
+
++ (id)chambray          {vendColor(50,79,133);}       //  vendColorHex(0x324F85)
++ (id)monza             {vendColor(198,0,47);}        //  vendColorHex(0xC6002F)
++ (id)sycamore          {vendColor(126,145,67);}      //  vendColorHex(0x7E9143)
++ (id)burntOrange       {vendColor(201,72,2);}        //  vendColorHex(0xC94802)
+
++ (UIColor *)partyRed {return [[self class] monza];}
++ (UIColor *)partyBlue {return [[self class] chambray];}
++ (UIColor *)partyGreen {return [[self class] sycamore];}
+
+#endif
+
+
+#if APP_APPEARANCE_THEME == APP_OLD_SUNLIGHT_THEME
 
     + (id)eagle             {vendColor(179,182,161);}     //  vendColorHex(0xB3B6A1)
     + (id)loafer            {vendColor(242,245,226);}     //  vendColorHex(0xF2F5E2)

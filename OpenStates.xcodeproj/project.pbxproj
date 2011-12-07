@@ -31,7 +31,6 @@
 		371480531432D27800170716 /* MenuPattern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 371480511432D27800170716 /* MenuPattern@2x.png */; };
 		371591BF148AC5BA0039ECED /* WatchedBillNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 371591BE148AC5BA0039ECED /* WatchedBillNotificationManager.m */; };
 		371AE697143581D500592811 /* GradientBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 371AE696143581D500592811 /* GradientBackgroundView.m */; };
-		371B5C4E143E2E3500AF317E /* StretchedTitleLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 371B5C4D143E2E3500AF317E /* StretchedTitleLabel.m */; };
 		371B5C51143E50C000AF317E /* 59-flag.png in Resources */ = {isa = PBXBuildFile; fileRef = 371B5C4F143E50C000AF317E /* 59-flag.png */; };
 		371B5C52143E50C000AF317E /* 59-flag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 371B5C50143E50C000AF317E /* 59-flag@2x.png */; };
 		371B5C6F143E7B2800AF317E /* SVWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 371B5C6D143E7B2800AF317E /* SVWebViewController.m */; };
@@ -2114,7 +2113,6 @@
 				37BB3BAE143A397900DCB1FB /* NSString+AFNetworking.m in Sources */,
 				37BB3BAF143A397900DCB1FB /* UIImage+AFNetworking.m in Sources */,
 				37BB3BB0143A397900DCB1FB /* UIImageView+AFNetworking.m in Sources */,
-				371B5C4E143E2E3500AF317E /* StretchedTitleLabel.m in Sources */,
 				371B5C6F143E7B2800AF317E /* SVWebViewController.m in Sources */,
 				370004AF143F546600F55165 /* SCNetworkReachability.m in Sources */,
 				370004B0143F546600F55165 /* SCNetworkReachabilityFlags.c in Sources */,

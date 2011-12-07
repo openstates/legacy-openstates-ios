@@ -82,8 +82,9 @@
 	[self.cellContentView setLegislator:value];
 }
 
-- (void)redisplay {
-	[cellContentView setNeedsDisplay];
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [cellContentView setNeedsDisplay];
 }
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor

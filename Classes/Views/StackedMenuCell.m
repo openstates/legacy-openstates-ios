@@ -44,7 +44,7 @@
         self.backgroundColor = [SLFAppearance menuBackgroundColor];
         self.textLabel.textColor = [SLFAppearance menuTextColor];
         self.textLabel.font = SLFFont(15);
-        self.textLabel.highlightedTextColor = [SLFAppearance menuSelectedTextColor];
+        self.textLabel.highlightedTextColor = [SLFAppearance menuSelectedCellColor];
         self.textLabel.shadowOffset = CGSizeMake(0, 2);
         self.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
         

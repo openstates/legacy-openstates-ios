@@ -75,7 +75,7 @@
     UIColor *currentSummaryColor = [SLFAppearance cellTextColor];
     UIColor *currentBadgeColor = self.cell.badgeColor;
     if (!currentBadgeColor) {
-        currentBadgeColor = [SLFAppearance menuSelectedTextColor]; 
+        currentBadgeColor = [SLFAppearance accentBlueColor]; 
     }
     
     if (self.cell && self.cell.isClickable && (self.cell.isHighlighted || self.cell.isSelected)) {
@@ -199,12 +199,12 @@
     if (isClickable) {
         self.selectionStyle = UITableViewCellSelectionStyleBlue;
         _badgeView.alpha = 1;
-        self.badgeColor = [SLFAppearance menuSelectedTextColor];
+        self.badgeColor = [SLFAppearance  accentBlueColor];
     }
     else {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         _badgeView.alpha = .3;
-        self.badgeColor = [SLFAppearance menuTextColor];
+        self.badgeColor = [SLFAppearance accentGreenColor];
     }
     [self.badgeView setNeedsDisplay];
 }

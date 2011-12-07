@@ -23,6 +23,7 @@
 @synthesize highlighted;
 @synthesize useDarkBackground;
 @synthesize genericName = _genericName;
+
 - (void)configureDefaults {
     title = [[NSString alloc] init];
     name = [[NSString alloc] init];
