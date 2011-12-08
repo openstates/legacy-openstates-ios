@@ -83,7 +83,6 @@
 		37485D49144BC43600D99BBD /* UserPinAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D44144BC43600D99BBD /* UserPinAnnotation.m */; };
 		37485D4A144BC43600D99BBD /* UserPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D46144BC43600D99BBD /* UserPinAnnotationView.m */; };
 		37485D4C144C0ABA00D99BBD /* SVWebViewController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 37485D4B144C0ABA00D99BBD /* SVWebViewController.bundle */; };
-		3748E4051459823A005D84CF /* BlairMdITC TT Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3748E4041459823A005D84CF /* BlairMdITC TT Medium.ttf */; };
 		3748E40C1459846F005D84CF /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 3748E4061459846F005D84CF /* Icon-72.png */; };
 		3748E40D1459846F005D84CF /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3748E4071459846F005D84CF /* Icon-Small@2x.png */; };
 		3748E40E1459846F005D84CF /* Icon-Solo.png in Resources */ = {isa = PBXBuildFile; fileRef = 3748E4081459846F005D84CF /* Icon-Solo.png */; };
@@ -247,6 +246,8 @@
 		37D7673913E67D5200A77F89 /* _SLFState.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D7672A13E67D5200A77F89 /* _SLFState.m */; };
 		37D953CE1412FB0F00F9C8AE /* SLFChamber.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D953CD1412FB0E00F9C8AE /* SLFChamber.m */; };
 		37DB6C471451AF9B007E0B53 /* TableSectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37DB6C451451ABC6007E0B53 /* TableSectionHeaderView.m */; };
+		37E01EFD14903D890079EBB1 /* MuseoSlab-500.otf in Resources */ = {isa = PBXBuildFile; fileRef = 37E01EFC14903D890079EBB1 /* MuseoSlab-500.otf */; };
+		37E01EFF14917A890079EBB1 /* BlairMdITC TT Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37E01EFE14917A890079EBB1 /* BlairMdITC TT Medium.ttf */; };
 		37E95F9513E4E4990064B1D3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E95F9413E4E4990064B1D3 /* CoreLocation.framework */; };
 		37E95F9713E4E4990064B1D3 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E95F9613E4E4990064B1D3 /* MapKit.framework */; };
 		37E961ED13E544F80064B1D3 /* libRestKitCoreData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E961C213E544380064B1D3 /* libRestKitCoreData.a */; };
@@ -263,7 +264,7 @@
 		37F29917140FCD5200B96572 /* SLFMappingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F29912140FCD5200B96572 /* SLFMappingsManager.m */; };
 		37F29918140FCD5200B96572 /* SLFRestKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F29914140FCD5200B96572 /* SLFRestKitManager.m */; };
 		37F2991B140FCD9000B96572 /* SLFObjectCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2991A140FCD9000B96572 /* SLFObjectCache.m */; };
-		37F32829144198750059FACE /* DDBadgeGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F32825144198750059FACE /* DDBadgeGroupCell.m */; };
+		37F32829144198750059FACE /* SLFBadgeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F32825144198750059FACE /* SLFBadgeCell.m */; };
 		37F3282A144198750059FACE /* SLFStandardGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F32827144198750059FACE /* SLFStandardGroupCell.m */; };
 		37F568DC147CC1CE00318856 /* offline.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F568DA147CC1CE00318856 /* offline.png */; };
 		37F568DD147CC1CE00318856 /* offline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F568DB147CC1CE00318856 /* offline@2x.png */; };
@@ -450,8 +451,6 @@
 		371591BE148AC5BA0039ECED /* WatchedBillNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchedBillNotificationManager.m; sourceTree = "<group>"; };
 		371AE695143581D500592811 /* GradientBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GradientBackgroundView.h; sourceTree = "<group>"; };
 		371AE696143581D500592811 /* GradientBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GradientBackgroundView.m; sourceTree = "<group>"; };
-		371B5C4C143E2E3500AF317E /* StretchedTitleLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StretchedTitleLabel.h; sourceTree = "<group>"; };
-		371B5C4D143E2E3500AF317E /* StretchedTitleLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StretchedTitleLabel.m; sourceTree = "<group>"; };
 		371B5C4F143E50C000AF317E /* 59-flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "59-flag.png"; sourceTree = "<group>"; };
 		371B5C50143E50C000AF317E /* 59-flag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "59-flag@2x.png"; sourceTree = "<group>"; };
 		371B5C6C143E7B2800AF317E /* SVWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVWebViewController.h; sourceTree = "<group>"; };
@@ -516,7 +515,6 @@
 		37485D45144BC43600D99BBD /* UserPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserPinAnnotationView.h; sourceTree = "<group>"; };
 		37485D46144BC43600D99BBD /* UserPinAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserPinAnnotationView.m; sourceTree = "<group>"; };
 		37485D4B144C0ABA00D99BBD /* SVWebViewController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVWebViewController.bundle; sourceTree = "<group>"; };
-		3748E4041459823A005D84CF /* BlairMdITC TT Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BlairMdITC TT Medium.ttf"; sourceTree = "<group>"; };
 		3748E4061459846F005D84CF /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		3748E4071459846F005D84CF /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
 		3748E4081459846F005D84CF /* Icon-Solo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Solo.png"; sourceTree = "<group>"; };
@@ -792,6 +790,8 @@
 		37D953CD1412FB0E00F9C8AE /* SLFChamber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFChamber.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37DB6C441451ABC6007E0B53 /* TableSectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableSectionHeaderView.h; sourceTree = "<group>"; };
 		37DB6C451451ABC6007E0B53 /* TableSectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableSectionHeaderView.m; sourceTree = "<group>"; };
+		37E01EFC14903D890079EBB1 /* MuseoSlab-500.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSlab-500.otf"; sourceTree = "<group>"; };
+		37E01EFE14917A890079EBB1 /* BlairMdITC TT Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "BlairMdITC TT Medium.ttf"; path = "Resources/Assets/BlairMdITC TT Medium.ttf"; sourceTree = SOURCE_ROOT; };
 		37E95F9413E4E4990064B1D3 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		37E95F9613E4E4990064B1D3 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		37ECC0281475AD9A0088B959 /* DDActionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDActionHeaderView.h; sourceTree = "<group>"; };
@@ -811,8 +811,8 @@
 		37F29914140FCD5200B96572 /* SLFRestKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFRestKitManager.m; sourceTree = "<group>"; };
 		37F29919140FCD9000B96572 /* SLFObjectCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFObjectCache.h; sourceTree = "<group>"; };
 		37F2991A140FCD9000B96572 /* SLFObjectCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFObjectCache.m; sourceTree = "<group>"; };
-		37F32824144198750059FACE /* DDBadgeGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDBadgeGroupCell.h; sourceTree = "<group>"; };
-		37F32825144198750059FACE /* DDBadgeGroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDBadgeGroupCell.m; sourceTree = "<group>"; };
+		37F32824144198750059FACE /* SLFBadgeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFBadgeCell.h; sourceTree = "<group>"; };
+		37F32825144198750059FACE /* SLFBadgeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFBadgeCell.m; sourceTree = "<group>"; };
 		37F32826144198750059FACE /* SLFStandardGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFStandardGroupCell.h; sourceTree = "<group>"; };
 		37F32827144198750059FACE /* SLFStandardGroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFStandardGroupCell.m; sourceTree = "<group>"; };
 		37F32828144198750059FACE /* SLFTableCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFTableCellProtocol.h; sourceTree = "<group>"; };
@@ -1051,7 +1051,8 @@
 				37442F0D143436DE0027F422 /* MenuGlow@2x.png */,
 				37BB3BB5143A44DC00DCB1FB /* placeholder.png */,
 				37BB3BB6143A44DC00DCB1FB /* placeholder@2x.png */,
-				3748E4041459823A005D84CF /* BlairMdITC TT Medium.ttf */,
+				37E01EFE14917A890079EBB1 /* BlairMdITC TT Medium.ttf */,
+				37E01EFC14903D890079EBB1 /* MuseoSlab-500.otf */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -1386,8 +1387,8 @@
 			children = (
 				37BB3B6C143A12AB00DCB1FB /* DisclosureQuartzView.h */,
 				37BB3B6D143A12AB00DCB1FB /* DisclosureQuartzView.m */,
-				37F32824144198750059FACE /* DDBadgeGroupCell.h */,
-				37F32825144198750059FACE /* DDBadgeGroupCell.m */,
+				37F32824144198750059FACE /* SLFBadgeCell.h */,
+				37F32825144198750059FACE /* SLFBadgeCell.m */,
 				37F32826144198750059FACE /* SLFStandardGroupCell.h */,
 				37F32827144198750059FACE /* SLFStandardGroupCell.m */,
 				37F32828144198750059FACE /* SLFTableCellProtocol.h */,
@@ -1399,8 +1400,6 @@
 				37442F08143431940027F422 /* StackedMenuCell.m */,
 				371AE695143581D500592811 /* GradientBackgroundView.h */,
 				371AE696143581D500592811 /* GradientBackgroundView.m */,
-				371B5C4C143E2E3500AF317E /* StretchedTitleLabel.h */,
-				371B5C4D143E2E3500AF317E /* StretchedTitleLabel.m */,
 				37DB6C441451ABC6007E0B53 /* TableSectionHeaderView.h */,
 				37DB6C451451ABC6007E0B53 /* TableSectionHeaderView.m */,
 				374D39CE1471B52C00DDF2EE /* EPSBezierPath.h */,
@@ -1978,7 +1977,6 @@
 				376357F1144CCD0700122377 /* redstar@2x.png in Resources */,
 				376357F2144CCD0700122377 /* silverstar.png in Resources */,
 				376357F3144CCD0700122377 /* silverstar@2x.png in Resources */,
-				3748E4051459823A005D84CF /* BlairMdITC TT Medium.ttf in Resources */,
 				3748E40C1459846F005D84CF /* Icon-72.png in Resources */,
 				3748E40D1459846F005D84CF /* Icon-Small@2x.png in Resources */,
 				3748E40E1459846F005D84CF /* Icon-Solo.png in Resources */,
@@ -2015,6 +2013,8 @@
 				3770F1381487513400FD854B /* PinHeadBlue@2x.png in Resources */,
 				3791A77B1489899400D8C6FD /* 110-bug.png in Resources */,
 				3791A77C1489899400D8C6FD /* 110-bug@2x.png in Resources */,
+				37E01EFD14903D890079EBB1 /* MuseoSlab-500.otf in Resources */,
+				37E01EFF14917A890079EBB1 /* BlairMdITC TT Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2120,7 +2120,7 @@
 				3794021C144161A600D18889 /* ContributionsDataSource.m in Sources */,
 				3794021D144161A600D18889 /* ContributionsViewController.m in Sources */,
 				3794022814418D4000D18889 /* TableCellDataObject.m in Sources */,
-				37F32829144198750059FACE /* DDBadgeGroupCell.m in Sources */,
+				37F32829144198750059FACE /* SLFBadgeCell.m in Sources */,
 				37F3282A144198750059FACE /* SLFStandardGroupCell.m in Sources */,
 				37B43D1014448E7400A8020D /* SVGeocoder.m in Sources */,
 				37B43D1114448E7400A8020D /* SVPlacemark.m in Sources */,

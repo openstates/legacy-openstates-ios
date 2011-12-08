@@ -13,5 +13,6 @@
 @interface GradientBackgroundView : UIView
 
 - (void)loadLayerAndGradientColors;
+- (void)loadLayerAndGradientWithColors:(NSArray *)colors;
 
 @end

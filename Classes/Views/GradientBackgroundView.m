@@ -27,4 +27,17 @@
     NSArray *colors = [NSArray arrayWithObjects:(id)dark.CGColor, (id)light.CGColor, nil];
     [(CAGradientLayer *)self.layer setColors:colors];
 }
+
+- (void)loadLayerAndGradientWithColors:(NSArray *)colors {
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    if (IsEmpty(colors))
+        return;
+    NSMutableArray *cgColors = [[NSMutableArray alloc] initWithCapacity:colors.count];
+    [colors enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[UIColor class]])
+            [cgColors addObject:(id)[obj CGColor]];
+    }];
+    [(CAGradientLayer *)self.layer setColors:cgColors];
+    [cgColors release];
+}
 @end

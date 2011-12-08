@@ -60,6 +60,7 @@
 	<string>MainWindow-iPad</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>MuseoSlab-500.otf</string>
 		<string>BlairMdITC TT Medium.ttf</string>
 	</array>
 	<key>UIInterfaceOrientation~ipad</key>
