@@ -91,7 +91,7 @@
         CGRectDivide(viewRect, &mapViewRect, &toolbarRect, CGRectGetHeight(viewRect)-44, CGRectMinYEdge);
     self.searchBar = [self setUpSearchBarWithFrame:searchRect];
     self.toolbar = [self setUpToolBarWithFrame:toolbarRect];
-    self.mapView = [self setUpMapViewWithFrame:mapViewRect];    
+    self.mapView = [self setUpMapViewWithFrame:mapViewRect];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -126,7 +126,8 @@
     MKMapView *aView = [[[MKMapView alloc] initWithFrame:rect] autorelease];
     [self.view addSubview:aView];
     aView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    aView.delegate = self;        
+    aView.delegate = self;
+    aView.opaque = YES;
     aView.showsUserLocation = NO;
     aView.region = self.defaultRegion;
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];

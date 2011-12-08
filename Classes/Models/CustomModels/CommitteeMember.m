@@ -8,7 +8,8 @@
 + (RKManagedObjectMapping *)mapping {
     RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
     [mapping mapKeyPath:@"leg_id" toAttribute:@"legID"];
-    [mapping mapAttributes:@"type", @"name", nil];
+    [mapping mapKeyPath:@"role" toAttribute:@"type"];
+    [mapping mapAttributes:@"name", nil];
     return mapping;
 }
 

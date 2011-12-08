@@ -33,6 +33,7 @@ BOOL SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath
     else
         useDark = inverse ? YES : NO;
     cell.backgroundColor = useDark ? [SLFAppearance cellBackgroundDarkColor] : [SLFAppearance cellBackgroundLightColor];
+    cell.opaque = YES;
     return useDark;
 }
 
@@ -74,17 +75,17 @@ NSArray* SLFBarStyleButtonImageGradientsWithSizeAndBaseColorRGB(CGSize imageSize
     GradientBackgroundView *view = [[GradientBackgroundView alloc] initWithFrame:rect];
     [view loadLayerAndGradientColors];
     CAGradientLayer *grad = (CAGradientLayer *)view.layer;
-    UIColor *light = SLFColorWithRGB(red+45,blue+45,green+45);
     UIColor *mid = SLFColorWithRGB(red, blue, green);
-    UIColor *dark = SLFColorWithRGB(red-20,blue-20,green-20);
+    UIColor *light = SLFColorWithRGBShift(mid, +45);
+    UIColor *dark = SLFColorWithRGBShift(mid, -20);
     grad.colors = [NSArray arrayWithObjects:(id)light.CGColor, (id)mid.CGColor, (id)dark.CGColor, nil];
     view.layer.frame = rect;
     UIImage *gradNormal = [UIImage imageFromView:view];
     
     red-=50, green-=50, blue-=50;
-    light = SLFColorWithRGB(red+45,blue+45,green+45);
     mid = SLFColorWithRGB(red, blue, green);
-    dark = SLFColorWithRGB(red-20,blue-20,green-20);
+    light = SLFColorWithRGBShift(mid, +45);
+    dark = SLFColorWithRGBShift(mid, -20);
     grad.colors = [NSArray arrayWithObjects:(id)light.CGColor, (id)mid.CGColor, (id)dark.CGColor, nil];
     UIImage *gradSelected = [UIImage imageFromView:view];
     

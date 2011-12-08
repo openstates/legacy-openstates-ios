@@ -15,21 +15,21 @@
 #import "SLFTheme.h"
 
 @implementation LegislatorCellView
-@synthesize title;
-@synthesize name;
-@synthesize party;
-@synthesize district;
-@synthesize role;
-@synthesize highlighted;
-@synthesize useDarkBackground;
+@synthesize title = _title;
+@synthesize name = _name;
+@synthesize party = _party;
+@synthesize district = _district;
+@synthesize role = _role;
+@synthesize highlighted = _highlighted;
+@synthesize useDarkBackground = _useDarkBackground;
 @synthesize genericName = _genericName;
 
 - (void)configureDefaults {
-    title = [[NSString alloc] init];
-    name = [[NSString alloc] init];
-    party = [[Independent independent] retain];
-    district = [[NSString alloc] init];
-    role = nil;
+    _title = [[NSString alloc] init];
+    _name = [[NSString alloc] init];
+    _party = [[Independent independent] retain];
+    _district = [[NSString alloc] init];
+    _role = nil;
     _genericName = @"";
     self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
     [self setOpaque:YES];
@@ -55,11 +55,11 @@
 
 - (void)dealloc
 {
-    SLFRelease(title);
-    SLFRelease(name);
-    SLFRelease(party);
-    SLFRelease(district);
-    SLFRelease(role);
+    SLFRelease(_title);
+    SLFRelease(_name);
+    SLFRelease(_party);
+    SLFRelease(_district);
+    SLFRelease(_role);
     SLFRelease(_genericName);
     [super dealloc];
 }
@@ -72,20 +72,16 @@
 {
     if (self.highlighted)
         return;
-    useDarkBackground = flag;
+    _useDarkBackground = flag;
     self.backgroundColor =  flag ? [SLFAppearance cellBackgroundDarkColor] : [SLFAppearance cellBackgroundLightColor];
     [self setNeedsDisplay];
 }
 
-- (BOOL)highlighted{
-    return highlighted;
-}
-
 - (void)setHighlighted:(BOOL)flag
 {
-    if (highlighted == flag)
+    if (_highlighted == flag)
         return;
-    highlighted = flag;
+    _highlighted = flag;
     [self setNeedsDisplay];
 }
 
@@ -110,9 +106,9 @@
 }
 
 - (void)setRole:(NSString *)value {
-    SLFRelease(role);
+    SLFRelease(_role);
     if (value)
-        role = [value copy];
+        _role = [value copy];
     [self setNeedsDisplay];
 }
 
@@ -121,17 +117,9 @@
     return [self cellSize];
 }
 
-#define allowImageScaling 0
-
-- (CGRect)scaleRect:(CGRect)inRect resolution:(CGFloat)resolution {
-    CGRect outRect = inRect;
-#if allowImageScaling
-    outRect.origin.x = roundf((resolution * inRect.origin.x) / resolution);
-    outRect.origin.y = roundf((resolution * inRect.origin.y) / resolution);
-    outRect.size.width = roundf((resolution * inRect.size.width) / resolution);
-    outRect.size.height = roundf((resolution * inRect.size.height) / resolution);
-#endif
-    return outRect;
+- (CGRect)rectOfString:(NSString *)string atOrigin:(CGPoint)origin withFont:(UIFont *)font {
+    CGSize textSize = [string sizeWithFont:font];
+    return CGRectMake(origin.x, origin.y, textSize.width, textSize.height);
 }
 
 - (void)drawRect:(CGRect)dirtyRect
@@ -140,12 +128,12 @@
 
     static UIFont *font;
     if (!font)
-        font = [SLFFont(13) retain];
+        font = [UIFont fontWithName:@"HelveticaNeue" size:13];
     UIColor *whiteColor = [UIColor whiteColor];
     UIColor *darkColor = [SLFAppearance cellTextColor];
     UIColor *lightColor = [SLFAppearance cellSecondaryTextColor];
-    UIColor *partyColor = party.color;
-    UIColor *accentColor = [SLFAppearance tableSectionColor];    
+    UIColor *partyColor = _party.color;
+    UIColor *accentColor = [SLFAppearance accentGreenColor];    
     if (self.highlighted)
         darkColor = lightColor = partyColor = accentColor = whiteColor;
     
@@ -154,45 +142,39 @@
     CGContextSaveGState(context);
     CGContextTranslateCTM(context, aBounds.origin.x, aBounds.origin.y);
     
-#if allowImageScaling
-    CGRect imageBounds = CGRectMake(0.0f, 0.0f, self.cellSize.width, self.cellSize.height);
-    CGFloat scaleWidth = aBounds.size.width / imageBounds.size.width;
-    CGFloat scaleHeight = aBounds.size.height / imageBounds.size.height;
-    CGFloat resolution = 0.5f * (scaleWidth + scaleHeight);
-    CGContextScaleCTM(context, scaleWidth, scaleHeight);
-#else
-    CGFloat resolution = 1;
-#endif
     CGRect drawRect;
 
-    // Title    
-    drawRect = [self scaleRect:CGRectMake(9.f, 1.f, 94.f, 20.f) resolution:resolution];
+    // Title
     [lightColor set];
-    [self.title drawInRect:drawRect withFont:font];
+    UIFont *titleFont = SLFItalicFont(13);
+    drawRect = [self rectOfString:_title atOrigin:CGPointMake(9,9) withFont:titleFont];
+    [_title drawInRect:drawRect withFont:SLFItalicFont(13)];
     
     // Name
-    drawRect = [self scaleRect:CGRectMake(9.f, 21.f, 218.f, 25.f) resolution:resolution];
     [darkColor set];
-    NSString *nameString = self.name;
+    UIFont *nameFont = SLFFont(18);
+    drawRect = [self rectOfString:_name atOrigin:CGPointMake(9,25) withFont:nameFont];
+    NSString *nameString = _name;
     if (IsEmpty(nameString))
         nameString = _genericName;
-    [nameString drawInRect:drawRect withFont:SLFFont(17)];
+    [nameString drawInRect:drawRect withFont:SLFFont(18)];
     
-    // Party    
-    drawRect = [self scaleRect:CGRectMake(9.f, 46.f, 73.f, 20.f) resolution:resolution];
+    // Party
     [partyColor set];
-    [party.name drawInRect:drawRect withFont:font];
+    drawRect = [self rectOfString:_party.name atOrigin:CGPointMake(9,48) withFont:font];
+    [_party.name drawInRect:drawRect withFont:font];
         
     // District
-    drawRect = [self scaleRect:CGRectMake(86.f, 46.f, 92.f, 20.f) resolution:resolution];
     [lightColor set];
-    [self.district drawInRect:drawRect withFont:font];
+    drawRect = [self rectOfString:_district atOrigin:CGPointMake(drawRect.origin.x+drawRect.size.width+6, 48.f) withFont:font];
+    [_district drawInRect:drawRect withFont:font];
     
     // Role
-    if (!IsEmpty(role)) {
-        drawRect = [self scaleRect:CGRectMake(aBounds.size.width - 90.f, 1.f, 74.f, 20.f) resolution:resolution];
+    if (!IsEmpty(_role)) {
         [accentColor set];
-        [self.role drawInRect:drawRect withFont:SLFFont(14) lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentRight];
+        UIFont *roleFont = SLFFont(14);
+        drawRect = [self rectOfString:_party.name atOrigin:CGPointMake(aBounds.size.width - 90.f, 9.f) withFont:roleFont];
+        [_role drawInRect:drawRect withFont:roleFont lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentRight];
     }
 
     CGContextRestoreGState(context);

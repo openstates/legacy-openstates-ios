@@ -14,7 +14,6 @@
 #import "LegislatorCellView.h"
 #import "SLFAppearance.h"
 #import "SLFLegislator.h"
-#import "DisclosureQuartzView.h"
 #import "UIImageView+AFNetworking.h"
 #import "UIImageView+RoundedCorners.h"
 #import "SLFTheme.h"
@@ -27,18 +26,11 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self)
     {
-        DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 28.f, 28.f)];
-		self.accessoryView = qv;
-		[qv release];
+        self.opaque = YES;
         CGRect tzvFrame = CGRectMake(53.f, 0, self.contentView.bounds.size.width - 53.f, self.contentView.bounds.size.height);
         cellContentView = [[LegislatorCellView alloc] initWithFrame:CGRectInset(tzvFrame, 0, 1.0)];
         cellContentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         cellContentView.contentMode = UIViewContentModeRedraw;
-        self.layer.shadowColor = [SLFAppearance tableSeparatorColor].CGColor;
-        self.layer.shadowOffset = CGSizeMake(0, 1);
-        self.layer.shadowOpacity = 1;
-        self.layer.shadowRadius = 1;
-        //cellContentView.contentMode = UIViewContentModeScaleAspectFit;
         [self.contentView addSubview:cellContentView];
     }
     return self;
@@ -123,6 +115,7 @@
     if (self) {
         self.cellClass = [LegislatorCell class];
         self.rowHeight = 73; 
+        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         self.roundImageCorners = NO;
         self.reuseIdentifier = nil; // turns off caching, sucky but we don't want to reuse facial photos
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {

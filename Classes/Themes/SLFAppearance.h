@@ -32,10 +32,13 @@
 + (UIColor *)partyGreen;
 @end
 
+UIColor *SLFColorWithRGBShift(UIColor *color, int offset);
+UIColor *SLFColorWithRGBA(int r, int g, int b, CGFloat a);
 UIColor *SLFColorWithRGB(int red,  int green, int blue);
 UIColor *SLFColorWithHex(char hex);
 UIFont *SLFFont(CGFloat size);
 UIFont *SLFTitleFont(CGFloat size);
 UIFont *SLFItalicFont(CGFloat size);
 extern NSString * const SLFAppearanceFontName;
+extern NSString * const SLFAppearanceItalicsFontName;
 extern NSString * const SLFAppearanceTitleFontName;

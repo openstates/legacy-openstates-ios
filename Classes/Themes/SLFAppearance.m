@@ -13,52 +13,26 @@
 
 #import "SLFAppearance.h"
 #import <RestKit/RestKit.h>
-
-NSString * const SLFAppearanceFontName = @"HelveticaNeue-Bold";
-NSString * const SLFAppearanceTitleFontName = @"BlairMdITC TT";
+#import "TitleBarView.h"
 
 #define APP_OPEN_STATES_THEME 1
 #define APP_OLD_SUNLIGHT_THEME 2
 #define APP_BLUISH_THEME 3 
 #define APP_APPEARANCE_THEME APP_OPEN_STATES_THEME
 
-UIColor *SLFColorWithRGB(int r, int g, int b) {
-    return [UIColor colorWithRed:(CGFloat)r/255.0 green:(CGFloat)g/255.0 blue:(CGFloat)b/255.0 alpha:1.0];
-}
-UIColor *SLFColorWithHex(char hex) {
-    return SLFColorWithRGB(((hex&0xFF0000)>>16),((hex&0x00FF00)>>8),(hex&0x0000FF));
-}
-
 #define vendColor(r, g, b) static UIColor *ret; if (ret == nil) ret = [SLFColorWithRGB(r,g,b) retain]; return ret
 #define vendColorHex(v) vendColor(((v&0xFF0000)>>16),((v&0x00FF00)>>8),(v&0x0000FF))
 
-UIFont *SLFFont(CGFloat size) {
-    return [UIFont fontWithName:SLFAppearanceFontName size:size];
-}
-
-UIFont *SLFTitleFont(CGFloat size) {
-    return [UIFont fontWithName:SLFAppearanceTitleFontName size:size];
-}
-
-UIFont *SLFItalicFont(CGFloat size) {
-    return [UIFont fontWithName:@"Georgia-Italic" size:size];
-}
-
 @implementation SLFAppearance
 
-    // http://chir.ag/projects/name-that-color 
-
-
 #if APP_APPEARANCE_THEME == APP_OPEN_STATES_THEME
+NSString * const SLFAppearanceFontName = @"HelveticaNeue-Bold";
+NSString * const SLFAppearanceTitleFontName = @"Museo Slab";
+NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 
-+ (id)crail             {vendColor(186,87,67);}       //  vendColorHex(0xBA5743)
-+ (id)tarawera          {vendColor(10,63,76);}        //  vendColorHex(0x0A3F4C)
-+ (id)gimlet            {vendColor(166,183,101);}     //  vendColorHex(0xA6B765)
-
-+ (UIColor *)partyRed {return [[self class] crail];}
-+ (UIColor *)partyBlue {return [[self class] tarawera];}
-+ (UIColor *)partyGreen {return [[self class] gimlet];}
-
++ (id)crail             {vendColor(186,87,67);}       //  vendColorHex(0xBA5743)  ...
++ (id)tarawera          {vendColor(10,63,76);}        //  vendColorHex(0x0A3F4C)  ...
++ (id)gimlet            {vendColor(166,183,101);}     //  vendColorHex(0xA6B765)  ...
 + (id)moonMist          {vendColor(227,227,215);}     //  vendColorHex(0xE3E3D7)  ...
 + (id)whiteRock         {vendColor(240,240,226);}     //  vendColorHex(0xF0F0E2)  ...
 + (id)westar            {vendColor(227,227,219);}     //  vendColorHex(0xE3E3DB)  ...
@@ -71,21 +45,26 @@ UIFont *SLFItalicFont(CGFloat size) {
 + (id)kangaroo          {vendColor(197,199,190);}     //  vendColorHex(0xC5C7BE)  ...
 + (id)chicago           {vendColor(92,94,85);}        //  vendColorHex(0x5C5E55)
 
-+ (UIFont *)accentGreenColor {return [[self class] gimlet];}
-+ (UIFont *)accendBlueColor {return [[self class] acapulco];}
++ (UIColor *)partyRed {return [self crail];}
++ (UIColor *)partyBlue {return [self tarawera];}
++ (UIColor *)partyGreen {return [self gimlet];}
++ (UIColor *)accentGreenColor {return [self gimlet];}
++ (UIColor *)accentBlueColor {return [self acapulco];}
 
-+ (UIFont *)navBarTextColor {return [[self class] springWood];}
-+ (UIColor *)menuSelectedCellColor {return [[self class] chicago];}
-+ (UIColor *)menuTextColor {return [[self class] kangaroo];}
-+ (UIColor *)tableSectionColor {return [[self class] zambezi];}
-+ (UIColor *)menuBackgroundColor {return [[self class] bitter];}
-+ (UIColor *)cellBackgroundDarkColor {return [[self class] greenWhite];}
-+ (UIColor *)cellBackgroundLightColor {return [[self class] springWood];}
-+ (UIColor *)cellTextColor {return [[self class] zambezi];}
-+ (UIColor *)cellSecondaryTextColor {return [[self class] bandicoot];}
-+ (UIColor *)tableSeparatorColor {return [[self class] westar];}
-+ (UIColor *)tableBackgroundDarkColor {return [[self class] moonMist];}
-+ (UIColor *)tableBackgroundLightColor {return [[self class] whiteRock];}
++ (UIColor *)navBarTextColor {return [self springWood];}
++ (UIColor *)menuTextColor {return [self kangaroo];}
++ (UIColor *)cellTextColor {return [self zambezi];}
++ (UIColor *)cellSecondaryTextColor {return [self bandicoot];}
++ (UIColor *)tableSectionColor {return [self zambezi];}
+
++ (UIColor *)cellBackgroundDarkColor {return [self greenWhite];}
++ (UIColor *)cellBackgroundLightColor {return [self springWood];}
++ (UIColor *)menuSelectedCellColor {return [self chicago];}
+
++ (UIColor *)menuBackgroundColor {return [self bitter];}
++ (UIColor *)tableSeparatorColor {return [self westar];}
++ (UIColor *)tableBackgroundDarkColor {return [self moonMist];}
++ (UIColor *)tableBackgroundLightColor {return [self whiteRock];}
 
 + (void)setupAppearance {
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
@@ -94,10 +73,17 @@ UIFont *SLFItalicFont(CGFloat size) {
         RKLogError(@"Application themes use iOS 5 methods.  This device has iOS %@.", [[UIDevice currentDevice] systemVersion]);
         return;
     }
-    [[UINavigationBar appearance] setTintColor:[[self class] bandicoot]];
-    [[UISegmentedControl appearance] setTintColor:[[self class] bandicoot]];
-    [[UISearchBar appearance] setTintColor:[[self class] bandicoot]];
-    [[UIToolbar appearance] setTintColor:[[self class] acapulco]];
+    [[UINavigationBar appearance] setTintColor:[self bandicoot]];
+    [[UISegmentedControl appearance] setTintColor:[self bandicoot]];
+    [[UISearchBar appearance] setTintColor:[self bandicoot]];
+    [[UIToolbar appearance] setTintColor:[self acapulco]];
+    
+    UIColor *gradientTop = SLFColorWithRGBShift([self menuBackgroundColor], +20);
+    UIColor *gradientBottom = SLFColorWithRGBShift([self menuBackgroundColor], -20);
+    [[TitleBarView appearance] setGradientTopColor:gradientTop];
+    [[TitleBarView appearance] setGradientBottomColor:gradientBottom];
+    [[TitleBarView appearance] setTitleFont:SLFTitleFont(14)];
+    [[TitleBarView appearance] setTitleColor:[self navBarTextColor]];
 }
 
 #else
@@ -110,6 +96,10 @@ UIFont *SLFItalicFont(CGFloat size) {
 + (UIColor *)partyRed {return [[self class] monza];}
 + (UIColor *)partyBlue {return [[self class] chambray];}
 + (UIColor *)partyGreen {return [[self class] sycamore];}
+
+NSString * const SLFAppearanceFontName = @"HelveticaNeue-Bold";
+NSString * const SLFAppearanceTitleFontName = @"BlairMdITC TT";
+NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 
 #endif
 
@@ -202,3 +192,36 @@ UIFont *SLFItalicFont(CGFloat size) {
 #endif
 
 @end
+
+UIColor *SLFColorWithRGBShift(UIColor *color, int offset) {
+	CGFloat r,g,b,a;
+    CGFloat shift = offset / 255.f;
+    if (![color getRed:&r green:&g blue:&b alpha:&a])
+        return color;
+    return [UIColor colorWithRed:MAX(0.0, MIN(1.0, r + shift))
+                           green:MAX(0.0, MIN(1.0, g + shift)) 
+                            blue:MAX(0.0, MIN(1.0, b + shift)) alpha:a];
+}
+
+UIColor *SLFColorWithRGBA(int r, int g, int b, CGFloat a) {
+    return [UIColor colorWithRed:(CGFloat)r/255.0 green:(CGFloat)g/255.0 blue:(CGFloat)b/255.0 alpha:a];
+}
+
+UIColor *SLFColorWithRGB(int r, int g, int b) {
+    return SLFColorWithRGBA(r,g,b,1.0);
+}
+UIColor *SLFColorWithHex(char hex) {
+    return SLFColorWithRGB(((hex&0xFF0000)>>16),((hex&0x00FF00)>>8),(hex&0x0000FF));
+}
+
+UIFont *SLFFont(CGFloat size) {
+    return [UIFont fontWithName:SLFAppearanceFontName size:size];
+}
+
+UIFont *SLFTitleFont(CGFloat size) {
+    return [UIFont fontWithName:SLFAppearanceTitleFontName size:size];
+}
+
+UIFont *SLFItalicFont(CGFloat size) {
+    return [UIFont fontWithName:SLFAppearanceItalicsFontName size:size];
+}
