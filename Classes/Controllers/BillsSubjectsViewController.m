@@ -16,7 +16,7 @@
 #import "SLFRestKitManager.h"
 #import "BillsViewController.h"
 #import "BillSearchParameters.h"
-#import "DDBadgeGroupCell.h"
+#import "SLFBadgeCell.h"
 
 @interface BillsSubjectsViewController()
 - (void)configureTableViewModel;
@@ -49,6 +49,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.opaque = YES;
     [self configureStandaloneChamberScopeBar];
     [self configureTableViewModel];
     if (self.state) {
@@ -81,7 +82,7 @@
     __tableViewModel.pullToRefreshEnabled = YES;
     
     RKTableViewCellMapping *objCellMap = [RKTableViewCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
-        cellMapping.cellClass = [DDBadgeGroupCell class];
+        cellMapping.cellClass = [SLFBadgeCell class];
         [cellMapping mapKeyPath:@"self" toAttribute:@"subjectEntry"];
         cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             SLFAlternateCellForIndexPath(cell, indexPath);
@@ -121,6 +122,7 @@
     [scopeBar addTarget:self action:@selector(chamberScopeSelectedIndexDidChange:) forControlEvents:UIControlEventValueChanged];
     scopeBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
     scopeBar.segmentedControlStyle = 7; // magic number (it's cheating)
+    scopeBar.opaque = YES;
     CGFloat barOriginY = self.titleBarView.opticalHeight;
     CGFloat barHeight = scopeBar.height;
     CGFloat barWidth = self.tableView.bounds.size.width;
