@@ -36,7 +36,7 @@ CGFloat const TableSectionHeaderViewDefaultOffset = 20;
     if (self) {
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 
-        CGRect labelRect = CGRectMake(offset, 0, frame.size.width-offset, frame.size.height);
+        CGRect labelRect = CGRectMake(offset, 0, frame.size.width-(offset*.5), frame.size.height);
         __titleLabel = [[UILabel alloc] initWithFrame:labelRect];
         __titleLabel.textColor = [SLFAppearance tableSectionColor];
         __titleLabel.shadowOffset = CGSizeMake(0, 1);
@@ -48,7 +48,7 @@ CGFloat const TableSectionHeaderViewDefaultOffset = 20;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.autoresizesSubviews = YES;
         [self addSubview:__titleLabel];
-        
+        [self setNeedsLayout];
         /*
          self.tableController.heightForHeaderInSection = 22;
          self.tableController.onViewForHeaderInSection = ^UIView*(NSUInteger sectionIndex, NSString* sectionTitle) {
@@ -68,6 +68,11 @@ CGFloat const TableSectionHeaderViewDefaultOffset = 20;
     return self;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.titleLabel.origin = CGPointMake(TableSectionHeaderViewDefaultOffset, 0);
+}
+
 - (void)dealloc {
     self.titleLabel = nil;
     [super dealloc];
@@ -75,7 +80,8 @@ CGFloat const TableSectionHeaderViewDefaultOffset = 20;
 
 - (void)setTitle:(NSString *)title {
     self.titleLabel.text = title;
-    [self setNeedsDisplay];
+    [self.titleLabel sizeToFit];
+    [self setNeedsLayout];
 }
 
 @end

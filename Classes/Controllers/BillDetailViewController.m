@@ -268,9 +268,9 @@ enum SECTIONS {
         tableItem.cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             AppendingFlowView *appendingFlow = [[AppendingFlowView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), rowHeight)];
             appendingFlow.uniformWidth = NO;
-            appendingFlow.preferredBoxSize = CGSizeMake(78.f, 40.f);    
+            appendingFlow.preferredBoxSize = CGSizeMake(74.f, 38.f);    
             appendingFlow.connectorSize = CGSizeMake(7.f, 6.f); 
-            appendingFlow.font = SLFFont(12);
+                //appendingFlow.font = SLFFont(12);
             appendingFlow.insetMargin = CGSizeMake(1.f, 10.f);
             appendingFlow.stages = stages;
             cell.backgroundView = appendingFlow;

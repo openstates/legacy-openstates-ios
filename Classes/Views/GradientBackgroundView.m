@@ -41,3 +41,35 @@
     [cgColors release];
 }
 @end
+
+@implementation GradientInnerShadowView
+@synthesize gradient = _gradient;
+
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.opaque = NO;;
+        _gradient = [[CAGradientLayer alloc] initWithLayer:self.layer];
+        CGColorRef innerColor = SLFColorWithRGBA(84,86,77,.69).CGColor;
+        CGColorRef darkColor = [UIColor colorWithWhite:0.0f alpha:.75].CGColor;
+        _gradient.frame = frame;
+        _gradient.colors = [NSArray arrayWithObjects:(id)darkColor, (id)innerColor, (id)innerColor, (id)darkColor, nil];
+        _gradient.startPoint = CGPointMake(.5, -0.45);
+        _gradient.endPoint = CGPointMake(.5, 1.45);
+        [self.layer insertSublayer:_gradient atIndex:0];
+    }
+    return self;
+}
+
+- (void)dealloc {
+    self.gradient = nil;
+    [super dealloc];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    _gradient.frame = self.frame;
+}
+
+@end

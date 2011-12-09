@@ -12,12 +12,12 @@
 
 #import <RestKit/RestKit.h>
 #import <RestKit/CoreData/CoreData.h>
-#import "PSStackedView.h"
+#import "SLFStackedViewController.h"
 
 @interface AppDelegate : NSObject <UIApplicationDelegate> {
 }
 
 @property (nonatomic,retain) IBOutlet UIWindow *window;
-@property (nonatomic,retain, readonly) PSStackedViewController *stackController;
+@property (nonatomic,retain, readonly) SLFStackedViewController *stackController;
 @end
 

@@ -17,9 +17,13 @@
 #import "UIImageView+AFNetworking.h"
 #import "UIImageView+RoundedCorners.h"
 #import "SLFTheme.h"
+
+@interface LegislatorCell()
+@end
+
 @implementation LegislatorCell
 @synthesize legislator;
-@synthesize cellContentView;
+@synthesize cellContentView = _cellContentView;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -28,42 +32,48 @@
     {
         self.opaque = YES;
         CGRect tzvFrame = CGRectMake(53.f, 0, self.contentView.bounds.size.width - 53.f, self.contentView.bounds.size.height);
-        cellContentView = [[LegislatorCellView alloc] initWithFrame:CGRectInset(tzvFrame, 0, 1.0)];
-        cellContentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        cellContentView.contentMode = UIViewContentModeRedraw;
-        [self.contentView addSubview:cellContentView];
+        _cellContentView = [[LegislatorCellView alloc] initWithFrame:CGRectInset(tzvFrame, 0, 1.0)];
+        _cellContentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _cellContentView.contentMode = UIViewContentModeRedraw;
+        [self.contentView addSubview:_cellContentView];
     }
     return self;
 }
 
+- (void)dealloc
+{
+    self.cellContentView = nil;    
+    [super dealloc];
+}
+
 - (CGSize)cellSize {
-	return cellContentView.cellSize;
+	return _cellContentView.cellSize;
 }
 
 - (NSString*)role {
-	return self.cellContentView.role;
+	return _cellContentView.role;
 }
 
 - (void)setRole:(NSString *)value {
-	self.cellContentView.role = value;
+	_cellContentView.role = value;
 }
 
 - (void)setGenericName:(NSString *)genericName {
-    self.cellContentView.genericName = genericName;
+    _cellContentView.genericName = genericName;
 }
 
 - (NSString *)genericName {
-    return self.cellContentView.genericName;
+    return _cellContentView.genericName;
 }
 
 - (void)setHighlighted:(BOOL)val animated:(BOOL)animated {
 	[super setHighlighted:val animated:animated];
-	self.cellContentView.highlighted = val;
+	_cellContentView.highlighted = val;
 }
 
 - (void)setSelected:(BOOL)val animated:(BOOL)animated {
 	[super setHighlighted:val animated:animated];
-	self.cellContentView.highlighted = val;
+	_cellContentView.highlighted = val;
 }
 
 - (void)setLegislator:(SLFLegislator *)value {
@@ -71,36 +81,31 @@
         [self.imageView setImageWithURL:[NSURL URLWithString:value.photoURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
     else
         [self.imageView setImage:[UIImage imageNamed:@"placeholder"]];
-	[self.cellContentView setLegislator:value];
+	[_cellContentView setLegislator:value];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [cellContentView setNeedsDisplay];
+    [_cellContentView setNeedsDisplay];
 }
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor
 {
     [super setBackgroundColor:backgroundColor];
-    if (cellContentView.highlighted)
+    if (_cellContentView.highlighted)
         return;
-    cellContentView.backgroundColor = backgroundColor;
-    [cellContentView setNeedsDisplay];
+    _cellContentView.backgroundColor = backgroundColor;
+    [_cellContentView setNeedsDisplay];
 }
 
 - (void)setUseDarkBackground:(BOOL)useDarkBackground {
-    self.cellContentView.useDarkBackground = useDarkBackground;
+    _cellContentView.useDarkBackground = useDarkBackground;
 }
 
 - (BOOL)useDarkBackground {
-    return self.cellContentView.useDarkBackground;
+    return _cellContentView.useDarkBackground;
 }
 
-- (void)dealloc
-{
-    SLFRelease(cellContentView);    
-    [super dealloc];
-}
 @end
 
 @implementation LegislatorCellMapping
@@ -119,10 +124,11 @@
         self.roundImageCorners = NO;
         self.reuseIdentifier = nil; // turns off caching, sucky but we don't want to reuse facial photos
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
+            LegislatorCell *legCell = (LegislatorCell *)cell;
             if (_roundCorners && indexPath.row == 0)
                 [cell.imageView roundTopLeftCorner];
             BOOL useDarkBG = SLFAlternateCellForIndexPath(cell, indexPath);
-            [(LegislatorCell *)cell setUseDarkBackground:useDarkBG];
+            [legCell setUseDarkBackground:useDarkBG];
         };
     }
     return self;

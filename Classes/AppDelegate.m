@@ -89,7 +89,7 @@
 - (void)setUpIpadViewControllers {
     SLFState *selectedState = SLFSelectedState();
     StackedMenuViewController* stateMenuVC = [[StackedMenuViewController alloc] initWithState:selectedState];
-    PSStackedViewController *stackedController = [[PSStackedViewController alloc] initWithRootViewController:stateMenuVC];
+    SLFStackedViewController *stackedController = [[SLFStackedViewController alloc] initWithRootViewController:stateMenuVC];
     stackedController.leftInset = STACKED_MENU_INSET;
     stackedController.largeLeftInset = STACKED_MENU_WIDTH;
     self.stackController = stackedController;

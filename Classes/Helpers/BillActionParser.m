@@ -75,7 +75,6 @@ STAGE7:Bill becomes law / Bill does not become law
     SLFChamber *billOppChamber = billChamber.opposingChamber;
 	NSString *committeeString = NSLocalizedString(@"Committee", @"");
 	NSString *votedString = NSLocalizedString(@"Passed", @"");
-    //NSString *failedString = NSLocalizedString(@"Failed", @"");
 	NSString *caption = nil;
 	NSMutableArray *stages = [NSMutableArray array];
     [stages addObject:[AppendingFlowStage stageWithNumber:1 caption:NSLocalizedString(@"Filed", @"")]];
@@ -162,6 +161,7 @@ STAGE7:Bill becomes law / Bill does not become law
         else if ([self actionTypes:types containWord:@"bill:failed"] || [self actionTypes:types containWord:@"bill:withdrawn"] ) {
             if ([stage shouldPromoteTypeTo:FlowStageFailed]) {
                 stage.stageType = FlowStageFailed;
+                stage.caption = [NSString stringWithFormat:@"%@ %@", billChamber.shortName, NSLocalizedString(@"Failed", @"")];
                 return stage;
             }
         }
@@ -209,6 +209,7 @@ STAGE7:Bill becomes law / Bill does not become law
         else if ([self actionTypes:types containWord:@"bill:failed"] || [self actionTypes:types containWord:@"bill:withdrawn"]) {
             if ([stage shouldPromoteTypeTo:FlowStageFailed]) {						
                 stage.stageType = FlowStageFailed;
+                stage.caption = [NSString stringWithFormat:@"%@ %@", billOppChamber.shortName, NSLocalizedString(@"Failed", @"")];
                 return stage;
             }						
             

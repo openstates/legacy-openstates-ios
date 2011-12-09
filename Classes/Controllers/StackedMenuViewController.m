@@ -20,11 +20,13 @@
 #import "OpenStatesIconView.h"
 #import "UIImageView+RoundedCorners.h"
 #import "SLFDrawingExtensions.h"
+#import "GradientBackgroundView.h"
 
 @interface StackedMenuViewController()
 @property (nonatomic,retain) UIColor *backgroundPatternColor;
 @property (nonatomic,assign) IBOutlet UIButton *selectStateButton;
 @property (nonatomic,retain) StatesPopoverManager *statesPopover;
+- (void)configureMenuBackground;
 - (void)configureMenuHeader;
 - (void)configureMenuFooter;
 - (void)configureStackedBackgroundView;
@@ -67,12 +69,10 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.bounces = NO;
-    self.tableView.backgroundColor = self.backgroundPatternColor;
-    self.tableView.separatorColor = [UIColor colorWithRed:0.173 green:0.188 blue:0.192 alpha:0.400];
     self.tableView.width = STACKED_MENU_WIDTH;
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     self.tableViewModel.cellSelectionType = RKTableViewCellSelectionFixed;
-
+    [self configureMenuBackground];
     [self configureStackedBackgroundView];    
     [self configureMenuHeader];
     [self configureMenuFooter];
@@ -90,19 +90,33 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     cellMap.cellClass = [StackedMenuCell class];
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
         RKTableItem* tableItem = (RKTableItem*) object;
-        if ([tableItem.text hasSuffix:@"News"]) // cheating...
+        if ([tableItem.text hasSuffix:@"News"] || [tableItem.text hasSuffix:@"Feedback"]) // cheating...
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self selectMenuItem:tableItem.text];
     };
     return cellMap;
 }
 
+- (void)configureMenuBackground {
+    self.tableView.separatorColor = [UIColor colorWithRed:0.173 green:0.188 blue:0.192 alpha:0.400];
+    GradientBackgroundView *tableBackground = [[GradientBackgroundView alloc] initWithFrame:self.tableView.bounds];
+    UIColor *topColor = [SLFAppearance menuBackgroundColor];
+    UIColor *stopColor = SLFColorWithRGBShift(topColor, -13);
+    UIColor *bottomColor = SLFColorWithRGBShift(topColor, -25);
+    [tableBackground loadLayerAndGradientWithColors:[NSArray arrayWithObjects:topColor,stopColor,bottomColor, nil]];
+    NSArray *gradientStops = [[NSArray alloc] initWithObjects:[NSNumber numberWithFloat:0.0], [NSNumber numberWithFloat:.84], [NSNumber numberWithFloat:1.0], nil];
+    [(CAGradientLayer *)tableBackground.layer setLocations:gradientStops];
+    [gradientStops release];
+    self.tableView.backgroundView = tableBackground;
+    [tableBackground release];
+}
+
 - (void)configureMenuHeader {
     [self.titleBarView removeFromSuperview];
     DDActionHeaderView *actionBar = [[DDActionHeaderView alloc] initWithFrame:CGRectMake(0, 0, STACKED_MENU_WIDTH, 70)];
     actionBar.autoresizingMask = UIViewAutoresizingNone;
-    actionBar.useGradientBorder = NO;
-    actionBar.strokeBottomColor = [UIColor colorWithWhite:0.5 alpha:0.25];
+        //    actionBar.useGradientBorder = NO;
+        //    actionBar.strokeBottomColor = [UIColor colorWithWhite:0.5 alpha:0.25];
 
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleStatePickerBarTap:)];
 	tapGesture.delegate = self;

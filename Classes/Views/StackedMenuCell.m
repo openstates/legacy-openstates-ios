@@ -16,8 +16,12 @@
 #import "StackedMenuViewController.h"
 #import "SLFTheme.h"
 #import "SLFReachable.h"
+#import "GradientBackgroundView.h"
+
 @interface StackedMenuCell()
 - (void)reachableDidChange:(NSNotification *)notification;
+@property(nonatomic,retain) UIImageView *glowView;
+@property(nonatomic,retain) UIView *disabledView;
 @end
 
 #define DEFAULT_ITEM_HEIGHT 43.f
@@ -36,32 +40,32 @@
         self.clipsToBounds = YES;
         self.imageView.contentMode = UIViewContentModeCenter;
         
-        UIView* bgView = [[UIView alloc] init];
-        bgView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.25f];
-        self.selectedBackgroundView = bgView;
-        [bgView release];
+        GradientInnerShadowView *selectedGradient = [[GradientInnerShadowView alloc] initWithFrame:CGRectMake(0, 0, STACKED_MENU_WIDTH, DEFAULT_ITEM_HEIGHT)];
+        self.selectedBackgroundView = selectedGradient;
+        [selectedGradient release];
         
         self.backgroundColor = [SLFAppearance menuBackgroundColor];
         self.textLabel.textColor = [SLFAppearance menuTextColor];
-        self.textLabel.font = SLFFont(15);
-        self.textLabel.highlightedTextColor = [SLFAppearance menuSelectedCellColor];
-        self.textLabel.shadowOffset = CGSizeMake(0, 2);
+        self.textLabel.font = SLFTitleFont(16);
+        self.textLabel.shadowOffset = CGSizeMake(0, 1);
         self.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
         
         UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, STACKED_MENU_WIDTH, 1)];
         topLine.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.25];
-        [self.textLabel.superview addSubview:topLine];
+        [self addSubview:topLine];
         [topLine release];
         
         UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, DEFAULT_ITEM_HEIGHT, STACKED_MENU_WIDTH, 1)];
         bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.25];
-        [self.textLabel.superview addSubview:bottomLine];
+        [self addSubview:bottomLine];
         [bottomLine release];
         
-        _glowView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, DEFAULT_ITEM_HEIGHT)];
+        /*
+         _glowView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, DEFAULT_ITEM_HEIGHT)];
         _glowView.image = [UIImage imageNamed:@"MenuGlow"];
         _glowView.hidden = YES;
         [self addSubview:_glowView];
+         */
         
         
         [[SLFReachable sharedReachable].localNotification addObserver:self selector:@selector(reachableDidChange:) name:SLFReachableStatusChangedForHostKey object:SLFReachableAnyNetworkHost];

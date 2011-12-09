@@ -16,3 +16,8 @@
 - (void)loadLayerAndGradientWithColors:(NSArray *)colors;
 
 @end
+
+@interface GradientInnerShadowView : UIView 
+@property (nonatomic,retain) CAGradientLayer *gradient;
+@end
+

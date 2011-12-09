@@ -190,6 +190,7 @@
 		37AC5FD6142C42680061414F /* StackedMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37AC5FD5142C42680061414F /* StackedMenuViewController.m */; };
 		37B43D1014448E7400A8020D /* SVGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B43D0D14448E7400A8020D /* SVGeocoder.m */; };
 		37B43D1114448E7400A8020D /* SVPlacemark.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B43D0F14448E7400A8020D /* SVPlacemark.m */; };
+		37B6FF96149207C8007CB068 /* SLFStackedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B6FF95149207C8007CB068 /* SLFStackedViewController.m */; };
 		37B9CC08143D0654006C56E0 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37B9CC07143D0654006C56E0 /* CoreText.framework */; };
 		37BAC14A142B972D0021A3C6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BAC149142B972D0021A3C6 /* main.m */; };
 		37BAC158142B97620021A3C6 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BAC14D142B97620021A3C6 /* Icon-Small-50.png */; };
@@ -682,6 +683,8 @@
 		37B43D0D14448E7400A8020D /* SVGeocoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVGeocoder.m; sourceTree = "<group>"; };
 		37B43D0E14448E7400A8020D /* SVPlacemark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVPlacemark.h; sourceTree = "<group>"; };
 		37B43D0F14448E7400A8020D /* SVPlacemark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVPlacemark.m; sourceTree = "<group>"; };
+		37B6FF94149207C8007CB068 /* SLFStackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFStackedViewController.h; sourceTree = "<group>"; };
+		37B6FF95149207C8007CB068 /* SLFStackedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFStackedViewController.m; sourceTree = "<group>"; };
 		37B98668148CC3630093CF69 /* SLFLocalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLFLocalytics.h; path = Localytics/SLFLocalytics.h; sourceTree = "<group>"; };
 		37B98669148CC3630093CF69 /* SLFLocalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLFLocalytics.m; path = Localytics/SLFLocalytics.m; sourceTree = "<group>"; };
 		37B9866B148CC4700093CF69 /* LocalyticsDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocalyticsDatabase.m; path = Localytics/LocalyticsDatabase.m; sourceTree = "<group>"; };
@@ -1378,6 +1381,8 @@
 				3771B9A1147ABCA200E9CE39 /* BillsSearchViewController.m */,
 				37FA2566148043BD0026EFB1 /* BillsWatchedViewController.h */,
 				37FA2567148043BE0026EFB1 /* BillsWatchedViewController.m */,
+				37B6FF94149207C8007CB068 /* SLFStackedViewController.h */,
+				37B6FF95149207C8007CB068 /* SLFStackedViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -2190,6 +2195,7 @@
 				37A16D16148C93BA000A3C91 /* SLFActionPathNavigator.m in Sources */,
 				37726AF7148D6AB3009BCE46 /* SLFActionPathRegistry.m in Sources */,
 				37726AFA148DCCE3009BCE46 /* SLFiCloudSync.m in Sources */,
+				37B6FF96149207C8007CB068 /* SLFStackedViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

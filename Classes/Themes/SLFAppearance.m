@@ -43,7 +43,7 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 + (id)zambezi           {vendColor(95,88,88);}        //  vendColorHex(0x5F5858)  ...
 + (id)bandicoot         {vendColor(116,117,107);}     //  vendColorHex(0x74756B)  ...
 + (id)kangaroo          {vendColor(197,199,190);}     //  vendColorHex(0xC5C7BE)  ...
-+ (id)chicago           {vendColor(92,94,85);}        //  vendColorHex(0x5C5E55)
++ (id)punch             {vendColor(213,73,39);}       //  vendColorHex(0xD54927)  ...
 
 + (UIColor *)partyRed {return [self crail];}
 + (UIColor *)partyBlue {return [self tarawera];}
@@ -59,7 +59,7 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 
 + (UIColor *)cellBackgroundDarkColor {return [self greenWhite];}
 + (UIColor *)cellBackgroundLightColor {return [self springWood];}
-+ (UIColor *)menuSelectedCellColor {return [self chicago];}
++ (UIColor *)cellSelectedMarkerColor {return [self punch];}
 
 + (UIColor *)menuBackgroundColor {return [self bitter];}
 + (UIColor *)tableSeparatorColor {return [self westar];}

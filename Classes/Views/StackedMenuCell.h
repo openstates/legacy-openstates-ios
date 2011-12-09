@@ -15,7 +15,5 @@
 #import <UIKit/UIKit.h>
 
 @interface StackedMenuCell : UITableViewCell
-@property(nonatomic,retain) UIImageView *glowView;
-@property(nonatomic,retain) UIView *disabledView;
 @property(nonatomic) BOOL enabled;
 @end
