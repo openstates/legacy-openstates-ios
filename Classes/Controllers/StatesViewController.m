@@ -66,7 +66,20 @@
             [self pushOrSendViewControllerWithState:state];
         };
     }];
-    [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
+    [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];
+    RKTableItem *headerItem = [RKTableItem tableItemWithBlock:^(RKTableItem *tableItem){
+        tableItem.text = NSLocalizedString(@"choose a state to get started.", @"");
+        tableItem.cellMapping = [StaticSubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
+            [cellMapping addDefaultMappings];
+            cellMapping.style = UITableViewCellStyleDefault;
+            cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
+                cell.textLabel.textColor = [SLFAppearance cellSecondaryTextColor];
+                cell.textLabel.font = SLFItalicFont(14);
+                SLFAlternateCellForIndexPath(cell, indexPath);
+            };
+        }];
+    }];
+    [self.tableViewModel addHeaderRowForItem:headerItem];
 }
 
 - (void)tableViewModelDidFinishLoading:(RKAbstractTableViewModel*)tableViewModel {

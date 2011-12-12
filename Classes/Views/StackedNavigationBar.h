@@ -1,5 +1,5 @@
 //
-//  SLFStackedViewController.h
+//  StackedNavigationBar.h
 //  Created by Greg Combs on 12/9/11.
 //
 //  OpenStates by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
@@ -10,9 +10,6 @@
 //
 //
 
-#import "PSStackedViewController.h"
-#import "StatesPopoverManager.h"
-
-@interface SLFStackedViewController : PSStackedViewController <StatesPopoverDelegate/*,StateMenuSelectionDelegate*/>
-- (IBAction)changeSelectedState:(id)sender;
+@class SLFState;
+@interface StackedNavigationBar : UIView
 @end

@@ -81,6 +81,22 @@
     [super viewDidLoad];
     NSAssert(self.resourcePath != NULL, @"Must set a resource path before attempting to download table data.");
     [self configureTableViewModel];
+    if (__tableViewModel.sectionNameKeyPath) {
+        __tableViewModel.heightForHeaderInSection = 18;
+        __tableViewModel.onViewForHeaderInSection = ^UIView*(NSUInteger sectionIndex, NSString* sectionTitle) {
+            UIColor *sectionColor =  SLFColorWithRGB(207,208,194);
+            UIView *sectionView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, 18)] autorelease];
+            sectionView.backgroundColor = sectionColor;
+            UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, self.tableView.bounds.size.width-10, 18)];
+            label.backgroundColor = sectionColor;
+            label.text = [sectionTitle capitalizedString];
+            label.textColor = [UIColor whiteColor];
+            label.font = SLFFont(12);
+            [sectionView addSubview:label];
+            [label release];
+            return sectionView;
+        };   
+    }
     [self.tableViewModel loadTable];
     if ([self hasSearchableDataClass]) {
         [self configureSearchBarWithPlaceholder:NSLocalizedString(@"Filter results", @"") withConfigurationBlock:^(UISearchBar *searchBar) {

@@ -14,17 +14,6 @@
 #import "GradientBackgroundView.h"
 #import "SLFDrawingExtensions.h"
 
-#if 0
-BOOL SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath) {
-    cell.backgroundColor = [SLFAppearance cellBackgroundLightColor];
-    if (indexPath.row == 0 || indexPath.row % 2 == 0) {
-        cell.backgroundColor = [SLFAppearance cellBackgroundDarkColor];
-        return YES;
-    }
-    return NO;
-}
-#endif
-
 BOOL SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath) {
     BOOL useDark;
     BOOL inverse = (indexPath.section % 2 == 0);
