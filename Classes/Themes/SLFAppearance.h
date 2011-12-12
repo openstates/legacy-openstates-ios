@@ -14,7 +14,7 @@
 
 +(void)setupAppearance;
 
-+ (UIColor *)cellSelectedMarkerColor;
++ (UIColor *)navBarTextColor;
 + (UIColor *)menuTextColor;
 + (UIColor *)menuBackgroundColor;
 + (UIColor *)cellBackgroundDarkColor;

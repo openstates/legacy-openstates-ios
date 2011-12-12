@@ -47,8 +47,7 @@
     [super viewDidLoad];
     [self configureTableHeader];
     [self loadFromNetworkIfEmpty];
-    if (self.tableViewModel.rowCount && !self.title)
-        self.title = [NSString stringWithFormat:@"%d States", self.tableViewModel.rowCount];
+    self.title = [NSString stringWithFormat:@"%d States", self.tableViewModel.rowCount];
 }
 
 - (void)configureTableViewModel {
@@ -72,8 +71,7 @@
 
 - (void)tableViewModelDidFinishLoading:(RKAbstractTableViewModel*)tableViewModel {
     [super tableViewModelDidFinishLoading:tableViewModel];
-    if (!self.title)
-        self.title = [NSString stringWithFormat:@"%d States", self.tableViewModel.rowCount];
+    self.title = [NSString stringWithFormat:@"%d States", self.tableViewModel.rowCount];
 }
 
 - (void)loadFromNetworkIfEmpty {

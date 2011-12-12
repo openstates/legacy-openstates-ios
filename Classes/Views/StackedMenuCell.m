@@ -20,14 +20,12 @@
 
 @interface StackedMenuCell()
 - (void)reachableDidChange:(NSNotification *)notification;
-@property(nonatomic,retain) UIImageView *glowView;
 @property(nonatomic,retain) UIView *disabledView;
 @end
 
 #define DEFAULT_ITEM_HEIGHT 43.f
 
 @implementation StackedMenuCell
-@synthesize glowView = _glowView;
 @synthesize enabled = _enabled;
 @synthesize disabledView = _disabledView;
 
@@ -59,27 +57,14 @@
         bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.25];
         [self addSubview:bottomLine];
         [bottomLine release];
-        
-        /*
-         _glowView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, DEFAULT_ITEM_HEIGHT)];
-        _glowView.image = [UIImage imageNamed:@"MenuGlow"];
-        _glowView.hidden = YES;
-        [self addSubview:_glowView];
-         */
-        
-        
+                
         [[SLFReachable sharedReachable].localNotification addObserver:self selector:@selector(reachableDidChange:) name:SLFReachableStatusChangedForHostKey object:SLFReachableAnyNetworkHost];
-//          RKObjectManager *manager = [RKObjectManager sharedManager];
-//          NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-//          [center addObserver:self selector:@selector(reachableDidChange:) name:RKObjectManagerDidBecomeOnlineNotification object:manager];
-//          [center addObserver:self selector:@selector(reachableDidChange:) name:RKObjectManagerDidBecomeOfflineNotification object:manager];
     }
     return self;
 }
 
 - (void)reachableDidChange:(NSNotification *)notification {
     self.enabled = [[SLFReachable sharedReachable] isNetworkReachable];
-//  self.enabled = [[RKObjectManager sharedManager] isOnline];
 }
 
 
@@ -96,15 +81,15 @@
 - (void)showDisabledView {
     /* Create the appearance of a "dimmed" table cell, with a standard error icon */
     UIView *newView = [[UIView alloc] initWithFrame:self.bounds];
-    newView.backgroundColor = [UIColor colorWithWhite:.5f alpha:.5f];
-    
-    UIImageView *error = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"error.png"]];
-    CGFloat imgDim = 24.f;
-    /* set the error image origin is on the far right side of the table view cell */
-    CGRect frm = CGRectMake((STACKED_MENU_WIDTH - 3.f) - imgDim , roundf((DEFAULT_ITEM_HEIGHT/2) - (imgDim/2)), imgDim, imgDim);
-    error.frame = frm;
-    [newView addSubview:error];        
-    [error release];
+    newView.backgroundColor = [UIColor colorWithWhite:.5f alpha:.5f];    
+    UIImage *offlineImage = [[UIImage imageNamed:@"offline"] imageWithOverlayColor:[SLFAppearance navBarTextColor]];
+    UIImageView *offlineView = [[UIImageView alloc] initWithImage:offlineImage];
+    CGFloat imgWidth = offlineImage.size.width;
+    CGFloat imgHeight = offlineImage.size.height;
+    CGRect frm = CGRectIntegral(CGRectMake(15, (DEFAULT_ITEM_HEIGHT/2) - (imgHeight/2), imgWidth, imgHeight));
+    offlineView.frame = frm;
+    [newView addSubview:offlineView];        
+    [offlineView release];
     [self addSubview:newView];
     [self bringSubviewToFront:newView];
     self.disabledView = newView;
@@ -138,12 +123,10 @@
     _enabled = newValue;
     if (newValue) {
         [self hideDisabledView];
-#warning turn on?
         //[self enableCell];
     }
     else {
         [self showDisabledView];
-#warning turn on?
         //[self disableCell];
     }    
     [self setNeedsDisplay];
@@ -158,15 +141,12 @@
 {
     [super setSelected:sel animated:animated];
     self.textLabel.highlighted = sel;
-    self.glowView.hidden = !sel;
 }
 
 - (void)dealloc
 {
     [[SLFReachable sharedReachable].localNotification removeObserver:self];
-//  [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.disabledView = nil;
-    self.glowView = nil;
     [super dealloc];
 }
 @end

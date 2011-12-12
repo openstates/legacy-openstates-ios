@@ -14,6 +14,8 @@
 #import "SLFDataModels.h"
 #import "SLFRestKitManager.h"
 #import "NSString+SLFExtensions.h"
+#import "MKInfoPanel.h"
+#import "SLFDrawingExtensions.h"
 
 @interface SLFFetchedTableViewController()
 - (NSString *)chamberFilterForScopeIndex:(NSInteger )scopeIndex;
@@ -64,19 +66,11 @@
     __tableViewModel.autoRefreshRate = 360;
     __tableViewModel.pullToRefreshEnabled = YES;
     __tableViewModel.imageForError = [UIImage imageNamed:@"error"];
-        //__tableViewModel.imageForOffline = [UIImage imageNamed:@"offline"];
-    UILabel *loadingLabel = [[[UILabel alloc] init] autorelease];
-    loadingLabel.text = @"Updating";
-    loadingLabel.font = SLFTitleFont(28);
-    loadingLabel.backgroundColor = [UIColor colorWithWhite:.5 alpha:.7];
-    loadingLabel.textColor = [SLFAppearance menuTextColor];
-    loadingLabel.layer.cornerRadius = 15;
-    loadingLabel.shadowColor = [UIColor colorWithWhite:0 alpha:.75];
-    loadingLabel.shadowOffset = CGSizeMake(0, 2);
-    loadingLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-    [loadingLabel sizeToFit];
-    loadingLabel.center = CGPointMake(SLFIsIpad() ? 190 : 160, 100);
-    __tableViewModel.loadingView = loadingLabel;
+    MKInfoPanel *offlinePanel = [MKInfoPanel staticPanelWithFrame:CGRectMake(0,0,self.stackWidth,60) type:MKInfoPanelTypeError title:NSLocalizedString(@"Offline", @"") detail:NSLocalizedString(@"The server is unavailable.",@"")];
+    __tableViewModel.imageForOffline = [UIImage imageFromView:offlinePanel];
+    //__tableViewModel.imageForOffline = [UIImage imageNamed:@"offline"];
+    MKInfoPanel *panel = [MKInfoPanel staticPanelWithFrame:CGRectMake(0,0,self.stackWidth,60) type:MKInfoPanelTypeInfo title:NSLocalizedString(@"Updating", @"") detail:NSLocalizedString(@"Downloading new data",@"")];
+    __tableViewModel.loadingView = panel;
     __tableViewModel.predicate = nil;
     NSAssert(self.dataClass != NULL, @"Must set a data class before loading the view");
     [__tableViewModel setObjectMappingForClass:__dataClass];

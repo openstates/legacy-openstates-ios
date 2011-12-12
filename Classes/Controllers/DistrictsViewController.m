@@ -33,8 +33,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (self.tableViewModel.rowCount && !self.title)
-        self.title = [NSString stringWithFormat:@"%d Districts", self.tableViewModel.rowCount];
+    self.title = [NSString stringWithFormat:@"%d Districts", self.tableViewModel.rowCount];
 }
 
 - (void)configureTableViewModel {
@@ -55,8 +54,7 @@
 
 - (void)tableViewModelDidFinishLoading:(RKAbstractTableViewModel*)tableViewModel {
     [super tableViewModelDidFinishLoading:tableViewModel];
-    if (!self.title)
-        self.title = [NSString stringWithFormat:@"%d Districts", self.tableViewModel.rowCount];
+    self.title = [NSString stringWithFormat:@"%d Districts", self.tableViewModel.rowCount];
 }
 
 @end

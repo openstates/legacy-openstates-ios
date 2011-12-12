@@ -20,6 +20,7 @@
 #import "SLFReachable.h"
 #import "WatchedBillNotificationManager.h"
 #import "SLFAlertView.h"
+#import "MKInfoPanel.h"
 
 @interface AppDelegate()
 @property (nonatomic,retain) PSStackedViewController *stackController;
@@ -32,6 +33,7 @@
 - (void)setUpIphoneViewControllers;
 - (void)saveApplicationState;
 - (void)setUpURLCache;
+- (void)networkReachabilityChanged:(NSNotification *)notification;
 @end
 
 @implementation AppDelegate
@@ -73,6 +75,9 @@
     SLFReachable *reachable = [SLFReachable sharedReachable];
     NSSet *hosts = [NSSet setWithObjects:@"openstates.org", @"stateline.org", @"transparencydata.com", @"www.followthemoney.org", @"votesmart.org", nil];
     [reachable watchHostsInSet:hosts];
+    SLFRunBlockAfterDelay(^{
+        [reachable.localNotification addObserver:self selector:@selector(networkReachabilityChanged:) name:SLFReachableStatusChangedForHostKey object:nil];
+    }, 1);
 }
 
 - (void)setUpViewControllers {
@@ -82,7 +87,9 @@
     else
         [self setUpIphoneViewControllers];
     if (SLFCurrentActivityPath()) {
-        [SLFActionPathNavigator performSelector:@selector(navigateToPath:) withObject:SLFCurrentActivityPath() afterDelay:2];
+        SLFRunBlockAfterDelay(^{
+            [SLFActionPathNavigator navigateToPath:SLFCurrentActivityPath()];
+        }, 0.3);
     }
 }
 
@@ -96,11 +103,10 @@
     window.rootViewController = stackedController;
     [window makeKeyAndVisible];
     if (!selectedState) {
+        SLFRunBlockInNextRunLoop(^{
             // Ugly yes, but this brief delay fixes issues with view orientation on iPads when starting up in landscape.
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [stateMenuVC changeSelectedState:nil];
-       }];
-
+            [stackedController changeSelectedState:nil];
+        });
     }
     [stateMenuVC release];
     [stackedController release];
@@ -204,5 +210,14 @@
     }];
 }
     
+- (void)networkReachabilityChanged:(NSNotification *)notification {
+    SLFRunBlockInNextRunLoop(^{
+        if (!SLFIsReachableAddressNoAlert(@"http://openstates.org"))
+            [MKInfoPanel showPanelInWindow:[UIApplication sharedApplication].keyWindow 
+                                      type:MKInfoPanelTypeError 
+                                     title:NSLocalizedString(@"Network Failure!",@"") 
+                                  subtitle:NSLocalizedString(@"This application requires Internet access to operate.",@"") hideAfter:4];
+    });
+}
 
 @end

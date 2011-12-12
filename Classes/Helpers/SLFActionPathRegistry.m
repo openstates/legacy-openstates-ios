@@ -130,9 +130,7 @@
         SLFState *state = [SLFState findFirstByAttribute:@"stateID" withValue:[arguments valueForKey:@"stateID"]];
         if (!state)
             return nil;
-        StackedMenuViewController *vc = (StackedMenuViewController *)[SLFAppDelegateStack rootViewController];
-        if (vc)
-            [vc statePopover:nil didSelectState:state];
+        [SLFAppDelegateStack statePopover:nil didSelectState:state];
         return nil;
     }];
 }
@@ -144,8 +142,7 @@
         return;
     [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments) {
         if (SLFIsIpad()) {
-            StackedMenuViewController *vc = (StackedMenuViewController *)[SLFAppDelegateStack rootViewController];
-            [vc changeSelectedState:nil];
+            [SLFAppDelegateStack changeSelectedState:nil];
             return nil;
         }
         UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;

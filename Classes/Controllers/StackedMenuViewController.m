@@ -23,46 +23,30 @@
 #import "GradientBackgroundView.h"
 
 @interface StackedMenuViewController()
-@property (nonatomic,retain) UIColor *backgroundPatternColor;
-@property (nonatomic,assign) IBOutlet UIButton *selectStateButton;
-@property (nonatomic,retain) StatesPopoverManager *statesPopover;
 - (void)configureMenuBackground;
-- (void)configureMenuHeader;
-- (void)configureMenuFooter;
 - (void)configureStackedBackgroundView;
-- (void)configureActionBarForState:(SLFState *)newState;
-- (void)handleStatePickerBarTap:(UIGestureRecognizer *)gestureRecognizer;
 @end
 
 const NSUInteger STACKED_MENU_INSET = 75;
 const NSUInteger STACKED_MENU_WIDTH = 200;
 
 @implementation StackedMenuViewController
-@synthesize backgroundPatternColor;
-@synthesize selectStateButton = _selectStateButton;
-@synthesize statesPopover = _statesPopover;
 
 - (id)initWithState:(SLFState *)newState {
     NSAssert(SLFIsIpad(), @"This class is only available for iPads (for now)");
     self = [super initWithState:newState];
     if (self) {
         self.useGradientBackground = NO;
-        UIImage *backgroundImage = [UIImage imageNamed:@"MenuPattern"];
-        self.backgroundPatternColor = [UIColor colorWithPatternImage:backgroundImage];
+        self.useTitleBar = NO;
     }
     return self;
 }
 
 - (void)dealloc {
-    self.backgroundPatternColor = nil;
-    self.selectStateButton = nil;
-    self.statesPopover = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
-    self.selectStateButton = nil;
-    self.statesPopover = nil;
     [super viewDidUnload];
 }
 
@@ -74,8 +58,6 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     self.tableViewModel.cellSelectionType = RKTableViewCellSelectionFixed;
     [self configureMenuBackground];
     [self configureStackedBackgroundView];    
-    [self configureMenuHeader];
-    [self configureMenuFooter];
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {
@@ -108,100 +90,22 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     [(CAGradientLayer *)tableBackground.layer setLocations:gradientStops];
     [gradientStops release];
     self.tableView.backgroundView = tableBackground;
+    
+    CGRect shadowRect = CGRectMake(self.tableView.width-5,0,10,self.tableView.height);
+    CGPathRef shadowPath = CGPathCreateWithRect(shadowRect, NULL);
+    self.tableView.layer.shadowPath = shadowPath;
+    CGPathRelease(shadowPath);
+    self.tableView.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.tableView.layer.shadowOpacity = .4;
+    self.tableView.clipsToBounds = NO;
     [tableBackground release];
-}
-
-- (void)configureMenuHeader {
-    [self.titleBarView removeFromSuperview];
-    DDActionHeaderView *actionBar = [[DDActionHeaderView alloc] initWithFrame:CGRectMake(0, 0, STACKED_MENU_WIDTH, 70)];
-    actionBar.autoresizingMask = UIViewAutoresizingNone;
-        //    actionBar.useGradientBorder = NO;
-        //    actionBar.strokeBottomColor = [UIColor colorWithWhite:0.5 alpha:0.25];
-
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleStatePickerBarTap:)];
-	tapGesture.delegate = self;
-	[actionBar addGestureRecognizer:tapGesture];
-	[tapGesture release];	
-
-    self.titleBarView = actionBar;
-    [self.view addSubview:actionBar];
-    [actionBar release];
-    [self configureActionBarForState:self.state];
-}
-
-- (void)configureMenuFooter {
-    /*
-    self.selectStateButton = SLFToolbarButton([UIImage imageNamed:@"59-flag"], self, @selector(changeSelectedState:));
-    UIBarButtonItem *stateLabel = [self createSelectedStateLabel];
-    UIToolbar *settingsBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.height-44, STACKED_MENU_WIDTH, 44)];
-    settingsBar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    [settingsBar setItems:[NSArray arrayWithObjects:_selectStateButton, stateLabel, nil] animated:YES];
-    [stateLabel release];
-    [self.view addSubview:settingsBar];
-    [settingsBar release];*/
 }
 
 - (void)configureStackedBackgroundView {
     CGRect viewFrame = CGRectMake(STACKED_MENU_WIDTH, 0, self.view.size.width - STACKED_MENU_WIDTH, self.view.size.height);
     StackedBackgroundView *background = [[StackedBackgroundView alloc] initWithFrame:viewFrame];
-    [self.view addSubview:background];
+    [self.view insertSubview:background belowSubview:self.tableView];
     [background release];
-}
-
-- (IBAction)changeSelectedState:(id)sender {
-    if (!sender || ![sender isKindOfClass:[UIView class]])
-        sender = self.selectStateButton;
-    self.statesPopover = [StatesPopoverManager showFromOrigin:sender delegate:self];
-}
-
-- (void)statePopover:(StatesPopoverManager *)statePopover didSelectState:(SLFState *)newState {
-    [self configureActionBarForState:newState];
-    [SLFAppDelegateStack popToRootViewControllerAnimated:YES];
-    [super stateMenuSelectionDidChangeWithState:newState];
-}
-
-- (void)statePopoverDidCancel:(StatesPopoverManager *)statePopover {
-        //self.statesPopover = nil;
-}
-
-- (UIButton *)barButtonForState:(SLFState *)aState {
-    UIButton *button;
-    if (aState)
-        button = [UIButton buttonForImage:aState.stateFlag withFrame:CGRectMake( 6, 8, 48, 32 ) glossy:YES];
-    else {
-        OpenStatesIconView *iconView = [[OpenStatesIconView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-        iconView.useDropShadow = NO;
-        button = [UIButton buttonForImage:[UIImage imageFromView:iconView] withFrame:CGRectMake( 11, 6, 40, 40 ) glossy:NO];
-        [iconView release];
-    }
-    [button addTarget:self action:@selector(changeSelectedState:) forControlEvents:UIControlEventTouchUpInside]; 
-    return button;
-}
-
-- (void)configureActionBarForState:(SLFState *)newState {
-    DDActionHeaderView *actionBar = (DDActionHeaderView *)self.titleBarView;
-    if (!actionBar)
-        return;
-    if ([actionBar isActionPickerExpanded])
-        [actionBar shrinkActionPicker];
-    self.selectStateButton = [self barButtonForState:newState];
-    CGPoint origin = CGPointMake(_selectStateButton.bounds.size.width + 16, 16);
-    UILabel *innerLabel = SLFStyledHeaderLabelWithTextAtOrigin(NSLocalizedString(@"Pick a State", @""), origin);
-    actionBar.items = [NSArray arrayWithObjects:_selectStateButton, innerLabel, nil];
-    if (!newState)
-        self.title = NSLocalizedString(@"Pick a State: ", @"");
-    [self.view setNeedsDisplayInRect:actionBar.frame];
-}
-
-- (void)handleStatePickerBarTap:(UIGestureRecognizer *)gestureRecognizer {
-    NSUInteger stackSize = [SLFAppDelegateStack canExpandStack];
-    if (stackSize) {
-        [SLFAppDelegateStack displayViewControllerIndexOnRightMost:-stackSize animated:YES];
-    }
-}
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    return [SLFAppDelegateStack canExpandStack];
 }
 
 @end

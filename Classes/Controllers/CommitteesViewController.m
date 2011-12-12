@@ -53,8 +53,7 @@
 
 - (void)tableViewModelDidFinishLoading:(RKAbstractTableViewModel*)tableViewModel {
     [super tableViewModelDidFinishLoading:tableViewModel];
-    if (!self.title)
-        self.title = [NSString stringWithFormat:@"%d Committees", self.tableViewModel.rowCount];
+    self.title = [NSString stringWithFormat:@"%d Committees", self.tableViewModel.rowCount];
 }
 
 @end

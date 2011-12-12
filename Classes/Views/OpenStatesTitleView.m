@@ -11,6 +11,7 @@
 //
 
 #import "OpenStatesTitleView.h"
+#import "SLFTheme.h"
 
 const CGFloat kOpenStatesTitleViewWidth = 395.0f;
 const CGFloat kOpenStatesTitleViewHeight = 42.0f;
@@ -86,7 +87,7 @@ const CGFloat kOpenStatesTitleViewHeight = 42.0f;
         textFont = [[UIFont fontWithName:@"BlairMdITC TT" size:39.0f] retain];
     static UIColor *textColor;
     if (!textColor)
-        textColor = [[UIColor colorWithRed:0.215f green:0.209f blue:0.205f alpha:1.0f] retain];
+        textColor = [SLFColorWithRGB(70, 70, 70) retain];
     [textColor set];
     CGFloat y = -4.0f;
 	CGFloat height = 60.0f;
@@ -107,7 +108,7 @@ const CGFloat kOpenStatesTitleViewHeight = 42.0f;
 
     static UIColor *colonColor;
     if (!colonColor)
-        colonColor = [[UIColor colorWithRed:0.827f green:0.435f blue:0.161f alpha:1.0f] retain];
+        colonColor = [SLFColorWithRGB(211,110,40) retain];
 	height = 8.0f;
 	CGFloat width = height;
 	CGFloat x = 166.0f;

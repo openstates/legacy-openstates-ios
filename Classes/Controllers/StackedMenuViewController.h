@@ -11,10 +11,8 @@
 //
 
 #import "StateDetailViewController.h"
-#import "StatesPopoverManager.h"
 
-@interface StackedMenuViewController : StateDetailViewController <StatesPopoverDelegate, UIGestureRecognizerDelegate>
-- (IBAction)changeSelectedState:(id)sender;
+@interface StackedMenuViewController : StateDetailViewController
 @end
 
 extern const NSUInteger STACKED_MENU_INSET;

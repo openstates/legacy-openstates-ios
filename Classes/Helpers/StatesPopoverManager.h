@@ -14,7 +14,7 @@
 #import "StatesViewController.h"
 
 @class StatesPopoverManager;
-@protocol StatesPopoverDelegate <StateMenuSelectionDelegate>
+@protocol StatesPopoverDelegate <NSObject>
 @required
 - (void)statePopover:(StatesPopoverManager *)statePopover didSelectState:(SLFState *)newState;
 @optional

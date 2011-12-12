@@ -59,7 +59,7 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 
 + (UIColor *)cellBackgroundDarkColor {return [self greenWhite];}
 + (UIColor *)cellBackgroundLightColor {return [self springWood];}
-+ (UIColor *)cellSelectedMarkerColor {return [self punch];}
+//+ (UIColor *)cellSelectedMarkerColor {return [self punch];}
 
 + (UIColor *)menuBackgroundColor {return [self bitter];}
 + (UIColor *)tableSeparatorColor {return [self westar];}
@@ -84,6 +84,7 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
     [[TitleBarView appearance] setGradientBottomColor:gradientBottom];
     [[TitleBarView appearance] setTitleFont:SLFTitleFont(14)];
     [[TitleBarView appearance] setTitleColor:[self navBarTextColor]];
+    [[TitleBarView appearance] setStrokeTopColor:gradientTop];
 }
 
 #else
