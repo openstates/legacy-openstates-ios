@@ -22,13 +22,15 @@
 @synthesize useGradientBackground;
 @synthesize useTitleBar;
 @synthesize titleBarView = _titleBarView;
+@synthesize useGearViewBackground = _useGearViewBackground;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
         self.stackWidth = 450;
+        _useGearViewBackground = style == UITableViewStyleGrouped;
         self.useGradientBackground = YES;
-        self.useTitleBar = SLFIsIpad();
+        self.useTitleBar = NO;
     }
     return self;
 }
@@ -54,6 +56,7 @@
     }
     if (self.useGradientBackground) {
         GradientBackgroundView *gradient = [[GradientBackgroundView alloc] initWithFrame:self.tableView.bounds];
+        gradient.useGearView = _useGearViewBackground;
         [gradient loadLayerAndGradientColors];
         self.tableView.backgroundView = gradient;
         [gradient release];

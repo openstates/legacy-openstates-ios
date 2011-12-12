@@ -77,4 +77,9 @@
     [_strokeColor setStroke];
     [self stroke];
 }
+
+- (void)fillAndStrokeIfNeeded {
+    [self fillIfNeeded];
+    [self strokeIfNeeded];
+}
 @end

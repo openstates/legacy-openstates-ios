@@ -1,6 +1,6 @@
 //
-//  GradientBackgroundView.h
-//  Created by Greg Combs on 9/29/11.
+//  OpenStatesGearView.h
+//  Created by Greg Combs on 12/12/11.
 //
 //  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
 //
@@ -10,14 +10,11 @@
 //
 //
 
-@interface GradientBackgroundView : UIView
-
-- (void)loadLayerAndGradientColors;
-- (void)loadLayerAndGradientWithColors:(NSArray *)colors;
-@property (nonatomic,assign) BOOL useGearView;
+@interface OpenStatesGearView : UIView
+@property (nonatomic,assign) BOOL useGradientOverlay;
+@property (nonatomic,assign) BOOL useDropShadow;
 @end
 
-@interface GradientInnerShadowView : UIView 
-@property (nonatomic,retain) CAGradientLayer *gradient;
-@end
+extern const CGFloat kOpenStatesGearViewWidth;
+extern const CGFloat kOpenStatesGearViewHeight;
 

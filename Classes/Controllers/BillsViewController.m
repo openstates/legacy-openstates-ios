@@ -22,6 +22,9 @@
 
 - (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path {
     self = [super initWithState:newState resourcePath:path dataClass:[SLFBill class]];
+    if (self) {
+        self.useTitleBar = SLFIsIpad();
+    }
     return self;
 }
 

@@ -13,11 +13,49 @@
 #import "GradientBackgroundView.h"
 #import "SLFTheme.h"
 #import <QuartzCore/QuartzCore.h>
+#import "OpenStatesGearView.h"
+
+@interface GradientBackgroundView()
+@property (nonatomic,retain) OpenStatesGearView *gearView;
+@end
 
 @implementation GradientBackgroundView
+@synthesize gearView = _gearView;
+@synthesize useGearView = _useGearView;
 
 +(Class) layerClass {
     return [CAGradientLayer class];
+}
+
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        CGRect gearRect = CGRectMake((frame.size.width-163), (frame.size.height-116), 244, 244);
+        _gearView = [[OpenStatesGearView alloc] initWithFrame:gearRect];
+        [self addSubview:_gearView];
+        _useGearView = NO;
+        _gearView.hidden = YES;
+    }
+    return self;
+}
+
+- (void)dealloc {
+    self.gearView = nil;
+    [super dealloc];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    if (_useGearView) {
+        CGRect gearRect = CGRectMake(0,0, 163, 116);
+        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRect:gearRect];
+        CAShapeLayer *maskLayer = [CAShapeLayer layer];
+        maskLayer.path = maskPath.CGPath;
+        maskLayer.frame = gearRect;
+        self.gearView.layer.mask = maskLayer;
+        self.gearView.origin = CGPointMake(self.width-163, self.height-116);
+        [self.gearView setNeedsDisplay];
+    }
 }
 
 - (void)loadLayerAndGradientColors {
@@ -39,6 +77,12 @@
     }];
     [(CAGradientLayer *)self.layer setColors:cgColors];
     [cgColors release];
+}
+
+- (void)setUseGearView:(BOOL)useGearView {
+    _useGearView = useGearView;
+    _gearView.hidden = !useGearView;
+    [self setNeedsDisplay];
 }
 @end
 

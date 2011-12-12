@@ -256,6 +256,7 @@
 		37D7673713E67D5200A77F89 /* _SLFEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D7672613E67D5200A77F89 /* _SLFEvent.m */; };
 		37D7673813E67D5200A77F89 /* _SLFLegislator.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D7672813E67D5200A77F89 /* _SLFLegislator.m */; };
 		37D7673913E67D5200A77F89 /* _SLFState.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D7672A13E67D5200A77F89 /* _SLFState.m */; };
+		37D7E15414967C0900358E00 /* OpenStatesGearView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D7E15314967C0900358E00 /* OpenStatesGearView.m */; };
 		37D953CE1412FB0F00F9C8AE /* SLFChamber.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D953CD1412FB0E00F9C8AE /* SLFChamber.m */; };
 		37DB6C471451AF9B007E0B53 /* TableSectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37DB6C451451ABC6007E0B53 /* TableSectionHeaderView.m */; };
 		37E01EFD14903D890079EBB1 /* MuseoSlab-500.otf in Resources */ = {isa = PBXBuildFile; fileRef = 37E01EFC14903D890079EBB1 /* MuseoSlab-500.otf */; };
@@ -813,6 +814,8 @@
 		37D7672813E67D5200A77F89 /* _SLFLegislator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFLegislator.m; sourceTree = "<group>"; };
 		37D7672913E67D5200A77F89 /* _SLFState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SLFState.h; sourceTree = "<group>"; };
 		37D7672A13E67D5200A77F89 /* _SLFState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SLFState.m; sourceTree = "<group>"; };
+		37D7E15214967C0900358E00 /* OpenStatesGearView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenStatesGearView.h; sourceTree = "<group>"; };
+		37D7E15314967C0900358E00 /* OpenStatesGearView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenStatesGearView.m; sourceTree = "<group>"; };
 		37D953CC1412FB0E00F9C8AE /* SLFChamber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SLFChamber.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		37D953CD1412FB0E00F9C8AE /* SLFChamber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFChamber.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37DB6C441451ABC6007E0B53 /* TableSectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableSectionHeaderView.h; sourceTree = "<group>"; };
@@ -1456,6 +1459,8 @@
 				374D39D11471B52C00DDF2EE /* OpenStatesIconView.m */,
 				374D39D41471C47F00DDF2EE /* OpenStatesTitleView.h */,
 				374D39D51471C47F00DDF2EE /* OpenStatesTitleView.m */,
+				37D7E15214967C0900358E00 /* OpenStatesGearView.h */,
+				37D7E15314967C0900358E00 /* OpenStatesGearView.m */,
 				374D3A1514735F8C00DDF2EE /* StackedBackgroundView.h */,
 				374D3A1614735F8C00DDF2EE /* StackedBackgroundView.m */,
 				37915375149273A500F55015 /* StackedNavigationBar.h */,
@@ -2252,6 +2257,7 @@
 				37B6FF96149207C8007CB068 /* SLFStackedViewController.m in Sources */,
 				37915377149273A500F55015 /* StackedNavigationBar.m in Sources */,
 				3744D6FB149586EC00507D21 /* MKInfoPanel.m in Sources */,
+				37D7E15414967C0900358E00 /* OpenStatesGearView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

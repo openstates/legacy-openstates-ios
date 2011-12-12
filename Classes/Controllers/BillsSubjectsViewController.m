@@ -32,6 +32,7 @@
     self = [super init];
     if (self) {
         self.title = NSLocalizedString(@"Subjects", @"");
+        self.useTitleBar = SLFIsIpad();
         [self reconfigureForState:newState];
     }
     return self;

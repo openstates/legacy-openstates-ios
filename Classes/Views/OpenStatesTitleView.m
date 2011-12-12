@@ -55,7 +55,7 @@ const CGFloat kOpenStatesTitleViewHeight = 42.0f;
 - (CGFloat)scaleDimension:(CGFloat)dimension withScale:(CGFloat)scale {
     if (scale <= 0)
         return 0;
-    return roundf((scale * dimension) / scale);
+    return (scale * dimension) / scale;
 }
 
 - (CGRect)scaleRect:(CGRect)drawRect withScale:(CGFloat)scale {
@@ -63,7 +63,7 @@ const CGFloat kOpenStatesTitleViewHeight = 42.0f;
     drawRect.origin.y = [self scaleDimension:CGRectGetMinY(drawRect) withScale:scale];
     drawRect.size.width = [self scaleDimension:CGRectGetWidth(drawRect) withScale:scale];
     drawRect.size.height = [self scaleDimension:CGRectGetHeight(drawRect) withScale:scale];
-    return drawRect;
+    return CGRectIntegral(drawRect);
 }
 
 - (void)drawRect:(CGRect)viewBounds

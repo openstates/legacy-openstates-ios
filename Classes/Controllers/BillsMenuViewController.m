@@ -47,7 +47,9 @@
 - (id)initWithState:(SLFState *)newState {
     self = [super init];
     if (self) {
+        self.useGearViewBackground = YES;
         self.title = NSLocalizedString(@"Bills", @"");
+        self.useTitleBar = SLFIsIpad();
         UIColor *iconColor = [SLFAppearance menuTextColor];
         self.searchIcon = [[UIImage imageNamed:@"06-magnify"] imageWithOverlayColor:iconColor];
         self.favoritesIcon = [[UIImage imageNamed:@"28-star"] imageWithOverlayColor:iconColor];
