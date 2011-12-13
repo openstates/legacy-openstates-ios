@@ -160,18 +160,24 @@
 - (void)selectMenuItem:(NSString *)menuItem {
 	if (menuItem == NULL)
         return;
-    UIViewController *vc = nil;
+    Class controllerClass = nil;
     if ([menuItem isEqualToString:MenuLegislators])
-        vc = [[LegislatorsViewController alloc] initWithState:self.state];
+        controllerClass = [LegislatorsViewController class];
     else if ([menuItem isEqualToString:MenuCommittees])
-        vc = [[CommitteesViewController alloc] initWithState:self.state];
+        controllerClass = [CommitteesViewController class];
     else if ([menuItem isEqualToString:MenuDistricts])
-        vc = [[DistrictsViewController alloc] initWithState:self.state];
+        controllerClass = [DistrictsViewController class];
     else if ([menuItem isEqualToString:MenuEvents])
-        vc = [[EventsViewController alloc] initWithState:self.state];
+        controllerClass = [EventsViewController class];
     else if ([menuItem isEqualToString:MenuBills])
-        vc = [[BillsMenuViewController alloc] initWithState:self.state];
-    else if ([menuItem isEqualToString:MenuNews]) {
+        controllerClass = [BillsMenuViewController class];
+    if (controllerClass) {
+        NSString *path = [SLFActionPathNavigator navigationPathForController:controllerClass withResource:self.state];
+        if (!IsEmpty(path))
+            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:SLFIsIpad()];
+        return;
+    }
+    if ([menuItem isEqualToString:MenuNews]) {
         if (SLFIsReachableAddress(self.state.newsAddress)) {
             SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:self.state.newsAddress];
             webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
@@ -184,11 +190,6 @@
         [TestFlight openFeedbackView];
     }
 #endif
-    
-    if (vc) {
-        [self stackOrPushViewController:vc];
-        [vc release];
-    }
 }
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     self.title = NSLocalizedString(@"Load Error",@"");

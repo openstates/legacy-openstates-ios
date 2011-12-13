@@ -445,8 +445,8 @@
 		370004C5143F5A6700F55165 /* SLFReachable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFReachable.h; sourceTree = "<group>"; };
 		370004C6143F5A6700F55165 /* SLFReachable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFReachable.m; sourceTree = "<group>"; };
 		37031602143FA1E400E1CF4D /* SLFReachableTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFReachableTests.m; sourceTree = "<group>"; };
-		37037546147AF51000B59AA2 /* SLFPersistenceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFPersistenceManager.h; sourceTree = "<group>"; };
-		37037547147AF51000B59AA2 /* SLFPersistenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFPersistenceManager.m; sourceTree = "<group>"; };
+		37037546147AF51000B59AA2 /* SLFPersistenceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SLFPersistenceManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		37037547147AF51000B59AA2 /* SLFPersistenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFPersistenceManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37089C6414843439002239A9 /* SLFGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLFGlobal.h; path = Classes/Main/SLFGlobal.h; sourceTree = "<group>"; };
 		37089C6514843439002239A9 /* SLFGlobal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLFGlobal.m; path = Classes/Main/SLFGlobal.m; sourceTree = "<group>"; };
 		370A205214941A21004AC5A4 /* MapUSA.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MapUSA.png; sourceTree = "<group>"; };
@@ -633,7 +633,7 @@
 		3771B9A0147ABCA200E9CE39 /* BillsSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsSearchViewController.h; sourceTree = "<group>"; };
 		3771B9A1147ABCA200E9CE39 /* BillsSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsSearchViewController.m; sourceTree = "<group>"; };
 		37726AF5148D6AB3009BCE46 /* SLFActionPathRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFActionPathRegistry.h; sourceTree = "<group>"; };
-		37726AF6148D6AB3009BCE46 /* SLFActionPathRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFActionPathRegistry.m; sourceTree = "<group>"; };
+		37726AF6148D6AB3009BCE46 /* SLFActionPathRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFActionPathRegistry.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37726AF8148DCCE2009BCE46 /* SLFiCloudSync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFiCloudSync.h; sourceTree = "<group>"; };
 		37726AF9148DCCE2009BCE46 /* SLFiCloudSync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFiCloudSync.m; sourceTree = "<group>"; };
 		37738A0C147B9616002AC526 /* AbstractActionSheetPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AbstractActionSheetPicker.h; path = Vendor/ActionSheetPicker/Pickers/AbstractActionSheetPicker.h; sourceTree = "<group>"; };
@@ -693,7 +693,7 @@
 		37A16CFD148C1C93000A3C91 /* SLFTestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFTestFlight.h; sourceTree = "<group>"; };
 		37A16CFE148C1C93000A3C91 /* SLFTestFlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFTestFlight.m; sourceTree = "<group>"; };
 		37A16D00148C1FE6000A3C91 /* SLFGANTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFGANTracker.h; sourceTree = "<group>"; };
-		37A16D01148C1FE6000A3C91 /* SLFGANTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFGANTracker.m; sourceTree = "<group>"; };
+		37A16D01148C1FE6000A3C91 /* SLFGANTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFGANTracker.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37A16D07148C355B000A3C91 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		37A16D14148C93B9000A3C91 /* SLFActionPathNavigator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFActionPathNavigator.h; sourceTree = "<group>"; };
 		37A16D15148C93BA000A3C91 /* SLFActionPathNavigator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFActionPathNavigator.m; sourceTree = "<group>"; };

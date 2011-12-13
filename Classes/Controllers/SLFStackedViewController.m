@@ -32,6 +32,8 @@
     self = [super initWithRootViewController:rootViewController];
     if (self) {
         self.topOffset = 60;
+        self.leftInset = STACKED_MENU_INSET;
+        self.largeLeftInset = STACKED_MENU_WIDTH;
     }
     return self;
 }
@@ -72,7 +74,7 @@
 }
 
 - (void)statePopoverDidCancel:(StatesPopoverManager *)statePopover {
-        //self.statesPopover = nil;
+    //self.statesPopover = nil;
 }
 
 /*

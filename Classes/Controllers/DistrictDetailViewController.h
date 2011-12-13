@@ -14,14 +14,11 @@
 #import "MapViewController.h"
 
 @class SLFDistrict;
-@interface DistrictDetailViewController : MapViewController <RKObjectLoaderDelegate> {
-}
+@interface DistrictDetailViewController : MapViewController <RKObjectLoaderDelegate, SLFPerstentActionsProtocol>
 
 @property (nonatomic,retain) SLFDistrict *upperDistrict;
 @property (nonatomic,retain) SLFDistrict *lowerDistrict;
 @property (nonatomic,assign) Class resourceClass;
 
 - (id)initWithDistrictMapID:(NSString *)objID;
-- (NSString *)actionPath;
-+ (NSString *)actionPathForObject:(id)object;
 @end

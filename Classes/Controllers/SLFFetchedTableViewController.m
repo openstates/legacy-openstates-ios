@@ -66,10 +66,11 @@
     __tableViewModel.autoRefreshRate = 360;
     __tableViewModel.pullToRefreshEnabled = YES;
     __tableViewModel.imageForError = [UIImage imageNamed:@"error"];
-    MKInfoPanel *offlinePanel = [MKInfoPanel staticPanelWithFrame:CGRectMake(0,0,self.stackWidth,60) type:MKInfoPanelTypeError title:NSLocalizedString(@"Offline", @"") detail:NSLocalizedString(@"The server is unavailable.",@"")];
+    CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
+    MKInfoPanel *offlinePanel = [MKInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MKInfoPanelTypeError title:NSLocalizedString(@"Offline", @"") detail:NSLocalizedString(@"The server is unavailable.",@"")];
     __tableViewModel.imageForOffline = [UIImage imageFromView:offlinePanel];
     //__tableViewModel.imageForOffline = [UIImage imageNamed:@"offline"];
-    MKInfoPanel *panel = [MKInfoPanel staticPanelWithFrame:CGRectMake(0,0,self.stackWidth,60) type:MKInfoPanelTypeInfo title:NSLocalizedString(@"Updating", @"") detail:NSLocalizedString(@"Downloading new data",@"")];
+    MKInfoPanel *panel = [MKInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MKInfoPanelTypeInfo title:NSLocalizedString(@"Updating", @"") detail:NSLocalizedString(@"Downloading new data",@"")];
     __tableViewModel.loadingView = panel;
     __tableViewModel.predicate = nil;
     NSAssert(self.dataClass != NULL, @"Must set a data class before loading the view");

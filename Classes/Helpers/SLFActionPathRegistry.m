@@ -103,34 +103,61 @@
     NSAssert([controllerClass respondsToSelector:@selector(registerActionPathWithPattern:)], @"Class doesn't answer to registration methods");
     [controllerClass registerActionPathWithPattern:pattern];
 }
+
++ (NSString *)interpolatePathForClass:(Class)controllerClass withResourceID:(NSString *)resourceID {
+    NSParameterAssert(controllerClass != NULL);
+    NSString *pattern = [self patternForClass:controllerClass];
+    if (IsEmpty(resourceID))
+        return pattern;
+    NSParameterAssert([pattern hasPrefix:@"slfos://"]);
+    NSString *patternContents = [pattern substringFromIndex:8];
+    NSArray *components = [patternContents componentsSeparatedByString:@":"];
+    if (IsEmpty(components))
+        return pattern;
+    // some initializers require multiple arguments, so assume they've concatenated the resource ID, i.e. @"stateID/session/billID"
+    NSString *path = [NSString stringWithFormat:@"slfos://%@%@", [components objectAtIndex:0], resourceID];
+    return path; 
+}
 @end
+
 
 @implementation SLFTableViewController(SLFActionPath)
 + (void)registerActionPathWithPattern:(NSString *)pattern {
     if (!pattern)
         return;
     Class controllerClass = [self class];
-    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments) {
+    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments, BOOL skipSaving) {
         if (NO == [controllerClass instancesRespondToSelector:@selector(initWithState:)])
             return nil;
         SLFState *state = [SLFState findFirstByAttribute:@"stateID" withValue:[arguments valueForKey:@"stateID"]];
         if (!state)
             return nil;
-        return [[controllerClass alloc] initWithState:state];
+        SLFTableViewController *vc = [[controllerClass alloc] initWithState:state];
+        if (!skipSaving) {
+            vc.onSavePersistentActionPath = ^(NSString *actionPath) {
+                SLFSaveCurrentActionPath(actionPath);
+            };
+        }
+        return vc;
     }];
 }
-@end
 
+@end
 
 @implementation StackedMenuViewController(SLFActionPath)
 + (void)registerActionPathWithPattern:(NSString *)pattern {
     if (!pattern)
         return;    
-    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments) {
+    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments, BOOL skipSaving) {
         SLFState *state = [SLFState findFirstByAttribute:@"stateID" withValue:[arguments valueForKey:@"stateID"]];
         if (!state)
             return nil;
         [SLFAppDelegateStack statePopover:nil didSelectState:state];
+        StackedMenuViewController *vc = (StackedMenuViewController *)SLFAppDelegateStack.rootViewController;
+        if (!skipSaving && vc && [vc conformsToProtocol:@protocol(SLFPerstentActionsProtocol)])
+            vc.onSavePersistentActionPath = ^(NSString *actionPath) {
+                SLFSaveCurrentActionPath(actionPath);
+            };
         return nil;
     }];
 }
@@ -140,13 +167,18 @@
 + (void)registerActionPathWithPattern:(NSString *)pattern {
     if (!pattern)
         return;
-    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments) {
+    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments, BOOL skipSaving) {
         if (SLFIsIpad()) {
             [SLFAppDelegateStack changeSelectedState:nil];
             return nil;
         }
         UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
         [nav popToRootViewControllerAnimated:YES];
+        StatesViewController *vc = (StatesViewController *)[nav.viewControllers objectAtIndex:0];
+        if (!skipSaving && vc && [vc conformsToProtocol:@protocol(SLFPerstentActionsProtocol)])
+            vc.onSavePersistentActionPath = ^(NSString *actionPath) {
+                SLFSaveCurrentActionPath(actionPath);
+            };
         return nil;
     }];
 }
@@ -157,11 +189,17 @@
     if (!pattern)
         return;
     Class controllerClass = [self class];
-    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments) {
+    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments, BOOL skipSaving) {
         NSString *legID = [arguments valueForKey:@"legID"];
         if (!legID)
             return nil;
-        return [[controllerClass alloc] initWithLegislatorID:legID];
+        LegislatorDetailViewController *vc = [[controllerClass alloc] initWithLegislatorID:legID];
+        if (!skipSaving) {
+            vc.onSavePersistentActionPath = ^(NSString *actionPath) {
+                SLFSaveCurrentActionPath(actionPath);
+            };
+        }
+        return vc;
     }];
 }
 @end
@@ -171,11 +209,17 @@
     if (!pattern)
         return;
     Class controllerClass = [self class];
-    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments) {
+    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments, BOOL skipSaving) {
         NSString *committeeID = [arguments valueForKey:@"committeeID"];
         if (!committeeID)
             return nil;
-        return [[controllerClass alloc] initWithCommitteeID:committeeID];
+        CommitteeDetailViewController *vc = [[controllerClass alloc] initWithCommitteeID:committeeID];
+        if (!skipSaving) {
+            vc.onSavePersistentActionPath = ^(NSString *actionPath) {
+                SLFSaveCurrentActionPath(actionPath);
+            };
+        }
+        return vc;
     }];
 }
 @end
@@ -185,11 +229,17 @@
     if (!pattern)
         return;
     Class controllerClass = [self class];
-    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments) {
+    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments, BOOL skipSaving) {
         NSString *boundaryID = [arguments valueForKey:@"boundaryID"];
         if (!boundaryID)
             return nil;
-        return [[controllerClass alloc] initWithDistrictMapID:boundaryID];
+        DistrictDetailViewController *vc = [[controllerClass alloc] initWithDistrictMapID:boundaryID];
+        if (!skipSaving) {
+            vc.onSavePersistentActionPath = ^(NSString *actionPath) {
+                SLFSaveCurrentActionPath(actionPath);
+            };
+        }
+        return vc;
     }];
 }
 @end
@@ -199,11 +249,17 @@
     if (!pattern)
         return;
     Class controllerClass = [self class];
-    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments) {
+    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments, BOOL skipSaving) {
         NSString *eventID = [arguments valueForKey:@"eventID"];
         if (!eventID)
             return nil;
-        return [[controllerClass alloc] initWithEventID:eventID];
+        EventDetailViewController *vc = [[controllerClass alloc] initWithEventID:eventID];
+        if (!skipSaving) {
+            vc.onSavePersistentActionPath = ^(NSString *actionPath) {
+                SLFSaveCurrentActionPath(actionPath);
+            };
+        }
+        return vc;
     }];
 }
 @end
@@ -213,13 +269,19 @@
     if (!pattern)
         return;
     Class controllerClass = [self class];
-    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments) {
+    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments, BOOL skipSaving) {
         SLFState *state = [SLFState findFirstByAttribute:@"stateID" withValue:[arguments valueForKey:@"stateID"]];
         NSString *session = [arguments valueForKey:@"session"];
         NSString *billID = [arguments valueForKey:@"billID"];
         if (!state || IsEmpty(session) || IsEmpty(billID))
             return nil;
-        return [[controllerClass alloc] initWithState:state session:session billID:billID];
+        BillDetailViewController *vc = [[controllerClass alloc] initWithState:state session:session billID:billID];
+        if (!skipSaving) {
+            vc.onSavePersistentActionPath = ^(NSString *actionPath) {
+                SLFSaveCurrentActionPath(actionPath);
+            };
+        }
+        return vc;
     }];
 }
 @end
@@ -229,8 +291,14 @@
     if (!pattern)
         return;
     Class controllerClass = [self class];
-    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments) {
-        return [[controllerClass alloc] init];
+    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments, BOOL skipSaving) {
+        BillsWatchedViewController *vc = [[controllerClass alloc] init];
+        if (!skipSaving) {
+            vc.onSavePersistentActionPath = ^(NSString *actionPath) {
+                SLFSaveCurrentActionPath(actionPath);
+            };
+        }
+        return vc;
     }];
 }
 @end

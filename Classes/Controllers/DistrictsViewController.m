@@ -43,10 +43,9 @@
         [cellMapping mapKeyPath:@"title" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"subtitle" toAttribute:@"detailTextLabel.text"];
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
-            SLFDistrict *district = object;
-            DistrictDetailViewController *vc = [[DistrictDetailViewController alloc] initWithDistrictMapID:district.boundaryID];
-            [self stackOrPushViewController:vc];
-            [vc release];
+            NSString *path = [SLFActionPathNavigator navigationPathForController:[DistrictDetailViewController class] withResource:object];
+            if (!IsEmpty(path))
+                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
         };
     }];
     [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];        

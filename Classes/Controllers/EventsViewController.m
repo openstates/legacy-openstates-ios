@@ -42,10 +42,9 @@
         [cellMapping mapKeyPath:@"eventDescription" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"dateStartForDisplay" toAttribute:@"detailTextLabel.text"];
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
-            SLFEvent *event = object;
-            EventDetailViewController *vc = [[EventDetailViewController alloc] initWithEventID:event.eventID];
-            [self stackOrPushViewController:vc];
-            [vc release];
+            NSString *path = [SLFActionPathNavigator navigationPathForController:[EventDetailViewController class] withResource:object];
+            if (!IsEmpty(path))
+                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
         };
     }];
     [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    

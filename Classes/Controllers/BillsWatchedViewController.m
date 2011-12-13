@@ -154,9 +154,9 @@
         tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Updated %@ - %@",@""), [bill.dateUpdated stringForDisplayWithPrefix:YES], bill.title];
         [tableItem setValue:bill forKey:@"bill"]; // This works because of Blake's fancy user data footwork
         tableItem.cellMapping.onSelectCell = ^(void) {
-            BillDetailViewController *vc = [[BillDetailViewController alloc] initWithBill:bill];
-            [self stackOrPushViewController:vc];
-            [vc release];
+            NSString *path = [SLFActionPathNavigator navigationPathForController:[BillDetailViewController class] withResourceID:bill];
+            if (!IsEmpty(path))
+                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
         };
     }];
 }

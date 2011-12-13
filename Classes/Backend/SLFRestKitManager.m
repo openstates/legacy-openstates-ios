@@ -113,6 +113,7 @@
     loader.objectMapping = (RKObjectMapping *)[objectManager.mappingProvider objectMappingForClass:theClass];
     loader.method = RKRequestMethodGET;
     loader.cacheTimeoutInterval = timeoutSeconds;
+    loader.URLRequest.timeoutInterval = 30;
     return loader;
 }
 

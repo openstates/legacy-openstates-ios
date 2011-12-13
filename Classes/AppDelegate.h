@@ -19,5 +19,6 @@
 
 @property (nonatomic,retain) IBOutlet UIWindow *window;
 @property (nonatomic,retain, readonly) SLFStackedViewController *stackController;
+@property (nonatomic,retain, readonly) UINavigationController *navigationController;
 @end
 

@@ -16,7 +16,9 @@
 
 @interface SLFActionPathNavigator()
 + (void)stackOrPushViewController:(UIViewController *)viewController;
-
++ (void)stackOrPushViewController:(UIViewController *)viewController fromBase:(UIViewController *)baseController popToRoot:(BOOL)popToRoot;
++ (void)stackViewController:(UIViewController *)viewController fromBase:(UIViewController *)baseController popToRoot:(BOOL)popToRoot;
++ (void)pushViewController:(UIViewController *)viewController fromBase:(UIViewController *)baseController popToRoot:(BOOL)popToRoot;
 // we don't use a single NSDictionary for both of these because we need sorted keys, to force an order
 @property (nonatomic,retain) NSMutableArray *patternHandlers;
 @end
@@ -51,7 +53,33 @@
     [[SLFActionPathNavigator sharedNavigator].patternHandlers addObject:[SLFActionPathHandler handlerWithPattern:pattern onViewControllerForArgumentsBlock:block]];
 }
 
-+ (void)navigateToPath:(NSString *)actionPath {
+/*  We should eventually adopt SOCKit's built-in view performSelector" behavior...
+ *
+ *   pattern: github.com/:username/:repo
+ *   > [pattern performSelector:@selector(initWithUsername:repoName:) onObject:[GithubUser class] sourceString:@"github.com/jverkoey/sockit"];
+ *   returns: an allocated, initialized, and autoreleased GithubUser object with @"jverkoey" and @"sockit" passed to initWithUsername:repoName:
+ */
+
++ (NSString *)navigationPathForController:(Class)controller withResourceID:(NSString *)resourceID {
+    NSString *path = [SLFActionPathRegistry interpolatePathForClass:controller withResourceID:resourceID];
+    if (IsEmpty(path)) {
+        RKLogError(@"Attempted to navigate to an invalid action path, controller: %@, resourceID: %@", NSStringFromClass(controller), resourceID);
+        return nil;
+    }
+    return path;
+}
+
++ (NSString *)navigationPathForController:(Class)controller withResource:(id)resource {
+    NSParameterAssert([controller respondsToSelector:@selector(actionPathForObject:)]);
+    NSString *path = [controller performSelector:@selector(actionPathForObject:) withObject:resource];
+    if (IsEmpty(path)) {
+        RKLogError(@"Attempted to navigate to an invalid action path, controller: %@, resource: %@", NSStringFromClass(controller), resource);
+        return nil;
+    }
+    return path;
+}
+
++ (void)navigateToPath:(NSString *)actionPath skipSaving:(BOOL)skipSaving fromBase:(UIViewController *)baseController popToRoot:(BOOL)popToRoot {
     if (IsEmpty(actionPath))
         return;
     @try {
@@ -61,35 +89,53 @@
         for (SLFActionPathHandler *handler in navigator.patternHandlers) {
             NSDictionary *args = nil;
             if ([matcher matchesPattern:handler.pattern tokenizeQueryStrings:YES parsedArguments:&args]) {
-                vc = handler.onViewControllerForArguments(args);
+                vc = handler.onViewControllerForArguments(args, skipSaving);
                 break;
             }
         }
         if (vc) {
-            [self stackOrPushViewController:vc];
+            [self stackOrPushViewController:vc fromBase:baseController popToRoot:popToRoot];
             [vc release];
         }
     }
     @catch (NSException *exception) {
-       RKLogError(@"Trouble navigating to path: %@ -- Exception: %@", actionPath, exception);
+        RKLogError(@"Trouble navigating to path: %@ -- Exception: %@", actionPath, exception);
     }
 }
 
-+ (void)stackOrPushViewController:(UIViewController *)viewController {
++ (void)pushViewController:(UIViewController *)viewController fromBase:(UIViewController *)baseController popToRoot:(BOOL)popToRoot {
+    if (popToRoot)
+        [SLFAppDelegateNav popToRootViewControllerAnimated:YES];
+    else if (baseController)
+        [SLFAppDelegateNav popToViewController:baseController animated:YES];
+    [SLFAppDelegateNav pushViewController:viewController animated:YES];
+}
+
++ (void)stackViewController:(UIViewController *)viewController fromBase:(UIViewController *)baseController popToRoot:(BOOL)popToRoot {
+    if (baseController && !popToRoot) {
+        [SLFAppDelegateStack pushViewController:viewController fromViewController:baseController animated:YES];
+        return;
+    }
+    if (popToRoot)
+        [SLFAppDelegateStack popToRootViewControllerAnimated:YES];
+    [SLFAppDelegateStack pushViewController:viewController fromViewController:nil animated:YES];
+}
+
++ (void)stackOrPushViewController:(UIViewController *)viewController fromBase:(UIViewController *)baseController popToRoot:(BOOL)popToRoot {
     @try {
-        if (!SLFIsIpad()) {
-            UINavigationController *nav = (UINavigationController *)[[[UIApplication sharedApplication] keyWindow] rootViewController];
-            [nav pushViewController:viewController animated:YES];
-            return;
-        }
-            //[SLFAppDelegateStack popToRootViewControllerAnimated:YES];
-        [SLFAppDelegateStack pushViewController:viewController fromViewController:nil animated:YES];
+        if (SLFIsIpad())
+            [self stackViewController:viewController fromBase:baseController popToRoot:popToRoot];
+        else
+            [self pushViewController:viewController fromBase:baseController popToRoot:popToRoot];
     }
     @catch (NSException *exception) {
         RKLogError(@"Trouble pushing new view controller: %@ -- Exception: %@", viewController, exception);
     }
 }
 
++ (void)stackOrPushViewController:(UIViewController *)viewController {
+    [self stackOrPushViewController:viewController fromBase:nil popToRoot:NO];
+}
 @end
 
 #pragma mark - Action Path Handler

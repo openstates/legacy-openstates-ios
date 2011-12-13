@@ -138,9 +138,9 @@ enum SECTIONS {
         [cellMapping mapKeyPath:@"name" toAttribute:@"genericName"];
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             NSString *legID = [object valueForKey:@"legID"];
-            LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:legID];
-            [self stackOrPushViewController:vc];
-            [vc release];
+            NSString *path = [SLFActionPathNavigator navigationPathForController:[LegislatorDetailViewController class] withResourceID:legID];
+            if (!IsEmpty(path))
+                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
         };
     }];
     return cellMap;

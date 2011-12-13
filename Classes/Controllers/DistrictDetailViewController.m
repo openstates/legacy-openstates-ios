@@ -34,6 +34,7 @@
 @synthesize upperDistrict;
 @synthesize lowerDistrict;
 @synthesize districtSearch;
+@synthesize onSavePersistentActionPath = _onSavePersistentActionPath;
 
 - (id)initWithDistrictMapID:(NSString *)objID {
     self = [super initWithNibName:nil bundle:nil];
@@ -72,7 +73,10 @@
         self.upperDistrict = newObj;
     else
         self.lowerDistrict = newObj;
-    SLFSaveCurrentActivityPath([[self class] actionPathForObject:newObj]);
+    if (self.onSavePersistentActionPath) {
+        _onSavePersistentActionPath(self.actionPath);
+        self.onSavePersistentActionPath = nil;
+    }
 }
 
 - (NSString *)actionPath {
@@ -89,6 +93,14 @@
     if (!object)
         return pattern;
     return RKMakePathWithObjectAddingEscapes(pattern, object, NO);
+}
+
+- (void)setOnSavePersistentActionPath:(SLFPersistentActionsSaveBlock)onSavePersistentActionPath {
+    if (_onSavePersistentActionPath) {
+        Block_release(_onSavePersistentActionPath);
+        _onSavePersistentActionPath = nil;
+    }
+    _onSavePersistentActionPath = Block_copy(onSavePersistentActionPath);
 }
 
 - (void)reconfigureForDistrict:(SLFDistrict *)district {
@@ -120,6 +132,7 @@
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
+    self.onSavePersistentActionPath = nil;
     [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
 }
 
@@ -160,12 +173,10 @@
     if (annotationView && [annotationView isKindOfClass:[MultiRowCalloutAnnotationView class]]) {
         MultiRowCalloutAnnotationView *multiView = (MultiRowCalloutAnnotationView *)annotationView;
         multiView.onCalloutAccessoryTapped = ^(MultiRowCalloutCell *cell, UIControl *control, NSDictionary *userData) {
-            if (!userData || IsEmpty([userData valueForKey:@"legID"]))
-                return;
             NSString *legID = [userData valueForKey:@"legID"];
-            LegislatorDetailViewController *vc = [[LegislatorDetailViewController alloc] initWithLegislatorID:legID];
-            [self stackOrPushViewController:vc];
-            [vc release];
+            NSString *path = [SLFActionPathNavigator navigationPathForController:[LegislatorDetailViewController class] withResourceID:legID];
+            if (!IsEmpty(path))
+                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
         };
         return multiView;
     }

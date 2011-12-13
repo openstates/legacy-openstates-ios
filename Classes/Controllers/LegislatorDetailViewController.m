@@ -119,12 +119,12 @@ enum SECTIONS {
 }
 
 - (void)configureTableItems {
-    [self configureTableHeader];
     [self configureMemberInfoItems];     
     [self configureDistrictMapItems];
     [self configureResourceItems];
     [self configureCommitteeItems];
     [self configureBillItems];
+    [self configureTableHeader];
 }
 
 - (void)configureTableHeader {
@@ -133,6 +133,7 @@ enum SECTIONS {
         LegislatorDetailHeader *header = [[LegislatorDetailHeader alloc] initWithFrame:headerRect];
         section.headerHeight = headerRect.size.height;
         section.headerView = header;
+        section.headerTitle = @"";
         header.legislator = self.legislator;
         [header release];;
     }];
@@ -172,9 +173,9 @@ enum SECTIONS {
         tableItem.text = NSLocalizedString(@"Map", @"");
         tableItem.detailText = _legislator.districtMapLabel;
         tableItem.cellMapping.onSelectCell = ^(void) {
-            DistrictDetailViewController *vc = [[DistrictDetailViewController alloc] initWithDistrictMapID:_legislator.districtID];
-            [self stackOrPushViewController:vc];
-            [vc release];
+            NSString *path = [SLFActionPathNavigator navigationPathForController:[DistrictDetailViewController class] withResourceID:_legislator.districtID];
+            if (!IsEmpty(path))
+                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
         };
     }]];
     [__tableViewModel loadTableItems:tableItems inSection:SectionDistrict];
@@ -244,9 +245,9 @@ enum SECTIONS {
     [roleCellMap mapKeyPath:@"type" toAttribute:@"detailTextLabel.text"];
     roleCellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         CommitteeRole *role = object;
-        CommitteeDetailViewController *vc = [[CommitteeDetailViewController alloc] initWithCommitteeID:role.committeeID];
-        [self stackOrPushViewController:vc];
-        [vc release];
+        NSString *path = [SLFActionPathNavigator navigationPathForController:[CommitteeDetailViewController class] withResourceID:role.committeeID];
+        if (!IsEmpty(path))
+            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
     };
     return roleCellMap;
 }

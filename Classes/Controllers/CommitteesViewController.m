@@ -42,10 +42,9 @@
         [cellMapping mapKeyPath:@"committeeName" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"chamberShortName" toAttribute:@"detailTextLabel.text"];
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
-            SLFCommittee *committee = object;
-            CommitteeDetailViewController *vc = [[CommitteeDetailViewController alloc] initWithCommitteeID:committee.committeeID];
-            [self stackOrPushViewController:vc];
-            [vc release];
+            NSString *path = [SLFActionPathNavigator navigationPathForController:[CommitteeDetailViewController class] withResource:object];
+            if (!IsEmpty(path))
+                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
         };
     }];
     [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    

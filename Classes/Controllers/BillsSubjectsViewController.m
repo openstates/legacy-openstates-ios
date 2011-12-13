@@ -67,6 +67,7 @@
     NSString *chamber = [SLFChamber chamberTypeForSearchScopeIndex:chamberScope];
     NSString *resourcePath = [BillSearchParameters pathForSubjectsWithState:newState chamber:chamber];
     [__tableViewModel loadTableFromResourcePath:resourcePath withBlock:^(RKObjectLoader* objectLoader) {
+        objectLoader.URLRequest.timeoutInterval = 30;
         objectLoader.cacheTimeoutInterval = SLF_HOURS_TO_SECONDS(12);
         objectLoader.objectMapping = [BillsSubjectsEntry mapping];
     }];

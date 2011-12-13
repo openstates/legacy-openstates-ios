@@ -23,6 +23,7 @@
 @synthesize useTitleBar;
 @synthesize titleBarView = _titleBarView;
 @synthesize useGearViewBackground = _useGearViewBackground;
+@synthesize onSavePersistentActionPath = _onSavePersistentActionPath;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
@@ -37,6 +38,7 @@
 
 - (void)dealloc {
     self.titleBarView = nil;
+    self.onSavePersistentActionPath = nil;
     [super dealloc];
 }
 
@@ -84,6 +86,14 @@
     return RKMakePathWithObjectAddingEscapes(pattern, object, NO);
 }
 
+- (void)setOnSavePersistentActionPath:(SLFPersistentActionsSaveBlock)onSavePersistentActionPath {
+    if (_onSavePersistentActionPath) {
+        Block_release(_onSavePersistentActionPath);
+        _onSavePersistentActionPath = nil;
+    }
+    _onSavePersistentActionPath = Block_copy(onSavePersistentActionPath);
+}
+
 - (void)setTitle:(NSString *)title {
     [super setTitle:title];
     if (self.useTitleBar && self.isViewLoaded)
@@ -94,7 +104,12 @@
     return YES;
 }
 
+- (void)tableViewModel:(RKAbstractTableViewModel*)tableViewModel willLoadTableWithObjectLoader:(RKObjectLoader *)objectLoader {
+    objectLoader.URLRequest.timeoutInterval = 30; // something reasonable;
+}
+
 - (void)tableViewModel:(RKAbstractTableViewModel*)tableViewModel didFailLoadWithError:(NSError*)error {
+    self.onSavePersistentActionPath = nil;
     self.title = NSLocalizedString(@"Server Error",@"");
     RKLogError(@"Error loading table: %@", error);
     if ([tableViewModel respondsToSelector:@selector(resourcePath)])
@@ -103,8 +118,10 @@
 
 - (void)tableViewModelDidFinishLoading:(RKAbstractTableViewModel*)tableViewModel {
     RKLogTrace(@"%@: Table model finished loading.", NSStringFromClass([self class]));
-    if (!IsEmpty(self.actionPath))
-        SLFSaveCurrentActivityPath(self.actionPath);    
+    if (self.onSavePersistentActionPath) {
+        _onSavePersistentActionPath(self.actionPath);
+        self.onSavePersistentActionPath = nil;
+    }
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {

@@ -56,15 +56,15 @@ static const NSInteger kDefaultSampleRate = 100;
 
 - (void)tagEvent:(NSString *)event attributes:(NSDictionary *)attributes {
     NSError *error = nil;
-    NSString *activityPath = nil;
+    NSString *actionPath = nil;
     if (event && [event hasPrefix:@"slfos://"]) {
-        //activityPath = [event stringByReplacingOccurrencesOfString:@"slfos://" withString:@"http;//ios.openstates.org/"];
-        activityPath = [event stringByReplacingOccurrencesOfString:@"slfos://" withString:@"/"];
+        //actionPath = [event stringByReplacingOccurrencesOfString:@"slfos://" withString:@"http;//ios.openstates.org/"];
+        actionPath = [event stringByReplacingOccurrencesOfString:@"slfos://" withString:@"/"];
         event = nil;
     }
-    if (activityPath) {
-        if (![[GANTracker sharedTracker] trackPageview:activityPath withError:&error])
-            NSLog(@"Error sending page tracking (%@) to Google Analytics: %@", activityPath, error);
+    if (actionPath) {
+        if (![[GANTracker sharedTracker] trackPageview:actionPath withError:&error])
+            NSLog(@"Error sending page tracking (%@) to Google Analytics: %@", actionPath, error);
     }
     if (event) {
         NSString *category = @"";

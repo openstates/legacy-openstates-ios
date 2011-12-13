@@ -17,7 +17,7 @@
 NSString * const kPersistentSelectedStateKey = @"SelectedStateKey";
 NSString * const kPersistentSelectedSessionKey = @"SelectedSessionByStateID";
 NSString * const kPersistentScopeIndexKey = @"SelectedScopeIndexByKey";
-NSString * const kPersistentActivityPathKey = @"SavedActivityPathKey";
+NSString * const kPersistentActionPathKey = @"SavedActionPathKey";
 NSString * const kPersistentWatchedBillsKey = @"WatchedBillsKey";
 
 NSString * const SLFSelectedStateDidChangeNotification = @"SLFSelectedStateDidChange";
@@ -33,7 +33,7 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
 @end
 
 @implementation SLFPersistenceManager
-@synthesize savedActivityPath = _savedActivityPath;
+@synthesize savedActionPath = _savedActionPath;
 @synthesize currentStateID = _currentStateID;
 @synthesize currentSession = _currentSession;
 
@@ -56,7 +56,7 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    self.savedActivityPath = nil;
+    self.savedActionPath = nil;
     self.currentSession = nil;
     self.currentStateID = nil;
     [super dealloc];
@@ -64,20 +64,20 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
 
 - (void)savePersistence {
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    if (!IsEmpty(self.savedActivityPath))
-        [settings setObject:self.savedActivityPath forKey:kPersistentActivityPathKey];
+    if (!IsEmpty(self.savedActionPath))
+        [settings setObject:self.savedActionPath forKey:kPersistentActionPathKey];
     [settings synchronize];        
 }
 
 - (void)loadPersistence:(NSNotification *)notification {
-    self.savedActivityPath = [[NSUserDefaults standardUserDefaults] objectForKey:kPersistentActivityPathKey];
+    self.savedActionPath = [[NSUserDefaults standardUserDefaults] objectForKey:kPersistentActionPathKey];
     if (notification) {
         [self notifySettingsWereUpdated:notification];
     }
 }
 
 - (void)resetPersistence {
-    self.savedActivityPath = nil;
+    self.savedActionPath = nil;
     self.currentSession = nil;
     self.currentStateID = nil;
     [NSUserDefaults resetStandardUserDefaults];
@@ -85,8 +85,8 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
 
 - (NSDictionary *)exportSettings {
     NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-    if (!IsEmpty(SLFCurrentActivityPath()))
-        [settings setObject:SLFCurrentActivityPath() forKey:kPersistentActivityPathKey];
+    if (!IsEmpty(SLFCurrentActionPath()))
+        [settings setObject:SLFCurrentActionPath() forKey:kPersistentActionPathKey];
     if (!IsEmpty(SLFSelectedScopeIndexByKeyCatalog()))
         [settings setObject:SLFSelectedScopeIndexByKeyCatalog() forKey:kPersistentScopeIndexKey];
     if (!IsEmpty(SLFSelectedStateID()))
@@ -104,9 +104,9 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
     if ([[self exportSettings] isEqualToDictionary:settings])
         return; // no changes
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *activityPath = [settings valueForKey:kPersistentActivityPathKey];
-    if (!IsEmpty(activityPath))
-        [defaults setObject:activityPath forKey:kPersistentActivityPathKey];
+    NSString *actionPath = [settings valueForKey:kPersistentActionPathKey];
+    if (!IsEmpty(actionPath))
+        [defaults setObject:actionPath forKey:kPersistentActionPathKey];
     NSDictionary *selectedScopes = [settings valueForKey:kPersistentScopeIndexKey];
     if (!IsEmpty(selectedScopes))
         [defaults setObject:selectedScopes forKey:kPersistentScopeIndexKey];
@@ -138,16 +138,16 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
 }
 
 #pragma mark - Application Activity/Resource Path
-NSString* SLFCurrentActivityPath(void) {
-    return [[SLFPersistenceManager sharedPersistence] savedActivityPath];
+NSString* SLFCurrentActionPath(void) {
+    return [[SLFPersistenceManager sharedPersistence] savedActionPath];
 }
 
-void SLFSaveCurrentActivityPath(NSString *path) {
-    NSCParameterAssert(path != NULL);
+void SLFSaveCurrentActionPath(NSString *path) {
     if (IsEmpty(path))
         return;
+    RKLogDebug(@"---Persisting User Action: %@", path);
     [[SLFAnalytics sharedAnalytics] tagEvent:path attributes:nil];
-    [[SLFPersistenceManager sharedPersistence] setSavedActivityPath:path];
+    [[SLFPersistenceManager sharedPersistence] setSavedActionPath:path];
 }
 
 #pragma mark - Selected Search Bar Scope
@@ -199,6 +199,7 @@ void SLFSaveSelectedStateID(NSString *stateID) {
     [settings synchronize];
     [[SLFPersistenceManager sharedPersistence] setCurrentStateID:stateID];
     [[NSNotificationCenter defaultCenter] postNotificationName:SLFSelectedStateDidChangeNotification object:stateID];
+    RKLogDebug(@"---Saving selected state ID: %@", stateID);
 }
 
 #pragma mark - Selected Session

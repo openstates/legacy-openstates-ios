@@ -131,25 +131,29 @@
 - (void)selectMenuItem:(NSString *)menuItem {
 	if (menuItem == NULL)
         return;
-    UIViewController *vc = nil;
-    NSString *resourcePath = nil;
     if ([menuItem isEqualToString:MenuRecents]) {
-        resourcePath = [BillSearchParameters pathForUpdatedSinceDaysAgo:5 state:_state.stateID];
+        UIViewController *vc = nil;
+        NSString *resourcePath = [BillSearchParameters pathForUpdatedSinceDaysAgo:5 state:_state.stateID];
         vc = [[BillsViewController alloc] initWithState:_state resourcePath:resourcePath];
         vc.title = [NSString stringWithFormat:@"%@: %@", [_state.stateID uppercaseString], @"Recent Updates (5 days)"];
-    }
-    else if ([menuItem isEqualToString:MenuSearch])
-        vc = [[BillsSearchViewController alloc] initWithState:_state];
-    else if ([menuItem isEqualToString:MenuFavorites])
-        vc = [[BillsWatchedViewController alloc] init];
-    else if ([menuItem isEqualToString:MenuSubjects]) {
-        vc = [[BillsSubjectsViewController alloc] initWithState:_state];
-    }
-    if (vc) {
         [self stackOrPushViewController:vc];
         [vc release];
+        return;
+    }
+    Class controllerClass = nil;
+    if ([menuItem isEqualToString:MenuSearch])
+        controllerClass = [BillsSearchViewController class];
+    else if ([menuItem isEqualToString:MenuFavorites])
+        controllerClass = [BillsWatchedViewController class];
+    else if ([menuItem isEqualToString:MenuSubjects])
+        controllerClass = [BillsSubjectsViewController class];
+    if (controllerClass) {
+        NSString *path = [SLFActionPathNavigator navigationPathForController:controllerClass withResource:_state];
+        if (!IsEmpty(path))
+            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
     }
 }
+
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     self.title = NSLocalizedString(@"Load Error",@"");
     [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];

@@ -12,8 +12,17 @@
 
 #import <Foundation/Foundation.h>
 
+typedef void (^SLFPersistentActionsSaveBlock)(NSString *actionPath);
+
+@protocol SLFPerstentActionsProtocol <NSObject>
+@required
+@property (nonatomic,readonly) NSString *actionPath;
++ (NSString *)actionPathForObject:(id)object;
+@property (nonatomic,copy) SLFPersistentActionsSaveBlock onSavePersistentActionPath;
+@end
+
 @interface SLFPersistenceManager : NSObject
-@property (nonatomic, copy) NSString *savedActivityPath;
+@property (nonatomic, copy) NSString *savedActionPath;
 
 // Common methods for persistence manager
 + (id)sharedPersistence;
@@ -27,8 +36,8 @@
 @class SLFState;
 @class SLFBill;
 
-NSString* SLFCurrentActivityPath(void);
-void SLFSaveCurrentActivityPath(NSString *path);
+NSString* SLFCurrentActionPath(void);
+void SLFSaveCurrentActionPath(NSString *path);
 
 NSInteger SLFSelectedScopeIndexForKey(NSString *viewControllerKey);
 void SLFSaveSelectedScopeIndexForKey(NSInteger index, NSString *viewControllerKey);

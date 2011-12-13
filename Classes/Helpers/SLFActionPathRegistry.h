@@ -15,4 +15,5 @@
 @interface SLFActionPathRegistry : NSObject
 + (SLFActionPathRegistry *)sharedRegistry;
 + (NSString *)patternForClass:(Class)controllerClass;
++ (NSString *)interpolatePathForClass:(Class)controllerClass withResourceID:(NSString *)resourceID;
 @end

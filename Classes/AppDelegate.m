@@ -24,13 +24,15 @@
 
 @interface AppDelegate()
 @property (nonatomic,retain) PSStackedViewController *stackController;
+@property (nonatomic,retain) UINavigationController *navigationController;
 @property (nonatomic,retain) WatchedBillNotificationManager *billNotifier;
 @property (nonatomic,assign) UIBackgroundTaskIdentifier backgroundTaskID;
 - (void)setUpOnce;
 - (void)setUpReachability;
 - (void)setUpViewControllers;
-- (void)setUpIpadViewControllers;
-- (void)setUpIphoneViewControllers;
+- (void)setUpViewControllersIpad;
+- (void)setUpViewControllersIphone;
+- (void)restoreApplicationState;
 - (void)saveApplicationState;
 - (void)setUpURLCache;
 - (void)networkReachabilityChanged:(NSNotification *)notification;
@@ -38,13 +40,16 @@
 
 @implementation AppDelegate
 @synthesize window;
-@synthesize stackController = stackController_;
+@synthesize stackController = _stackController;
+@synthesize navigationController = _navigationController;
 @synthesize billNotifier = _billNotifier;
 @synthesize backgroundTaskID = _backgroundTaskID;
 
 - (void)dealloc {
     self.window = nil;
     self.billNotifier = nil;
+    self.navigationController = nil;
+    self.stackController = nil;
     [super dealloc];
 }
 
@@ -60,6 +65,7 @@
             RKLogCritical(@"**************** NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!*************");
         }
     }
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [self setUpReachability];
     [[SLFAnalytics sharedAnalytics] beginTracking];
     [SLFAppearance setupAppearance];
@@ -67,8 +73,11 @@
     [SLFPersistenceManager sharedPersistence];
     [self setUpURLCache];
     self.billNotifier = [WatchedBillNotificationManager manager];
-    [self setUpViewControllers];
     [SLFActionPathRegistry sharedRegistry];
+    [self setUpViewControllers];
+    SLFRunBlockAfterDelay(^{
+        [self restoreApplicationState];
+    }, .3);
 }
 
 - (void)setUpReachability {
@@ -81,50 +90,41 @@
 }
 
 - (void)setUpViewControllers {
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     if (SLFIsIpad())
-        [self setUpIpadViewControllers];
+        [self setUpViewControllersIpad];
     else
-        [self setUpIphoneViewControllers];
-    if (SLFCurrentActivityPath()) {
-        SLFRunBlockAfterDelay(^{
-            [SLFActionPathNavigator navigateToPath:SLFCurrentActivityPath()];
-        }, 0.3);
-    }
+        [self setUpViewControllersIphone];
 }
 
-- (void)setUpIpadViewControllers {
-    SLFState *selectedState = SLFSelectedState();
-    StackedMenuViewController* stateMenuVC = [[StackedMenuViewController alloc] initWithState:selectedState];
-    SLFStackedViewController *stackedController = [[SLFStackedViewController alloc] initWithRootViewController:stateMenuVC];
-    stackedController.leftInset = STACKED_MENU_INSET;
-    stackedController.largeLeftInset = STACKED_MENU_WIDTH;
-    self.stackController = stackedController;
-    window.rootViewController = stackedController;
+- (void)setUpViewControllersIpad {
+    SLFState *foundSavedState = SLFSelectedState();
+    StackedMenuViewController* stateMenuVC = [[StackedMenuViewController alloc] initWithState:foundSavedState];
+    _stackController = [[SLFStackedViewController alloc] initWithRootViewController:stateMenuVC];
+    window.rootViewController = _stackController;
     [window makeKeyAndVisible];
-    if (!selectedState) {
-        SLFRunBlockInNextRunLoop(^{
-            // Ugly yes, but this brief delay fixes issues with view orientation on iPads when starting up in landscape.
-            [stackedController changeSelectedState:nil];
-        });
-    }
+    SLFRunBlockAfterDelay(^{
+        // Give the persistent data a chance to materialize, and give time to instantiate the infrastructure.
+        if (IsEmpty(SLFSelectedStateID())) {
+            NSString *path = [SLFActionPathNavigator navigationPathForController:[StateDetailViewController class] withResource:nil];
+            [SLFActionPathNavigator navigateToPath:path skipSaving:YES fromBase:nil popToRoot:NO];
+        }
+    },.3);
     [stateMenuVC release];
-    [stackedController release];
 }
 
-- (void)setUpIphoneViewControllers {
-    SLFState *selectedState = SLFSelectedState();
+- (void)setUpViewControllersIphone {
     StatesViewController* stateListVC = [[StatesViewController alloc] init];
-    UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:stateListVC];    
-    window.rootViewController = navController;
-    if (selectedState) {
-        StateDetailViewController* stateMenuVC = [[StateDetailViewController alloc] initWithState:selectedState];
-        [navController pushViewController:stateMenuVC animated:NO];
-        [stateMenuVC release];
+    _navigationController = [[UINavigationController alloc] initWithRootViewController:stateListVC];    
+    window.rootViewController = _navigationController;
+    // We should give the persistent data a chance to materialize, and give time to instantiate the infrastructure.
+    SLFState *foundSavedState = SLFSelectedState();
+    if (foundSavedState) {
+        StateDetailViewController *menu = [[StateDetailViewController alloc] initWithState:foundSavedState];
+        [_navigationController pushViewController:menu animated:NO];
+        [menu release];
     }
     [window makeKeyAndVisible];
     [stateListVC release];
-    [navController release];    
 }
 
 - (void)setUpURLCache {
@@ -134,6 +134,13 @@
     AFURLCache *cache = [[AFURLCache alloc] initWithMemoryCapacity:memoryCacheSize diskCapacity:diskCacheSize diskPath:cachePath];
     [NSURLCache setSharedURLCache:cache];
     [cache release];
+}
+
+- (void)restoreApplicationState {
+    NSString *actionPath = SLFCurrentActionPath();
+    if (IsEmpty(actionPath))
+        return;
+    [SLFActionPathNavigator navigateToPath:actionPath skipSaving:YES fromBase:nil popToRoot:NO];
 }
 
 - (void)saveApplicationState {
@@ -157,8 +164,7 @@
     if ( NO == [path hasPrefix:@"slfos:"] )
         return NO;
     [SLFActionPathNavigator cancelPreviousPerformRequestsWithTarget:[SLFActionPathNavigator class]];
-    SLFSaveCurrentActivityPath(path);
-    [SLFActionPathNavigator navigateToPath:path];
+    [SLFActionPathNavigator navigateToPath:path skipSaving:YES fromBase:nil popToRoot:NO];
     return YES;
 }
 
@@ -204,9 +210,10 @@
         return;
     [SLFAlertView showWithTitle:NSLocalizedString(@"Notification",@"") message:notification.alertBody cancelTitle:NSLocalizedString(@"Dismiss",@"") cancelBlock:nil otherTitle:notification.alertAction otherBlock:^{
         NSString *actionPath = [notification.userInfo valueForKey:@"ActionPath"];
-        if (!IsEmpty(actionPath))
+        if (!IsEmpty(actionPath)) {
             [SLFActionPathNavigator cancelPreviousPerformRequestsWithTarget:[SLFActionPathNavigator class]];
-            [SLFActionPathNavigator navigateToPath:actionPath];
+            [SLFActionPathNavigator navigateToPath:actionPath skipSaving:YES fromBase:nil popToRoot:NO];
+        }
     }];
 }
     
