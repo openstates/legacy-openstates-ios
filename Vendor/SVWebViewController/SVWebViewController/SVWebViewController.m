@@ -6,6 +6,7 @@
 //
 
 #import "SVWebViewController.h"
+#import "SLFTheme.h"
 
 @interface SVWebViewController (private)
 
@@ -147,12 +148,12 @@
 		
 		titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
 		titleLabel.font = [UIFont boldSystemFontOfSize:20];
-		titleLabel.textColor = [UIColor colorWithRed:0.42353 green:0.45098 blue:0.48235 alpha:1.];
-		titleLabel.shadowColor = [UIColor colorWithWhite:1 alpha:0.7];
+		titleLabel.textColor = [SLFAppearance navBarTextColor];
+		titleLabel.shadowColor = [UIColor darkGrayColor];
 		titleLabel.backgroundColor = [UIColor clearColor];
 		titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
 		titleLabel.textAlignment = UITextAlignmentRight;
-		titleLabel.shadowOffset = CGSizeMake(0, 1);
+		titleLabel.shadowOffset = CGSizeMake(0, -1);
 
 		[navBar addSubview:titleLabel];	
 		[titleLabel release];

@@ -24,8 +24,10 @@
 #import "SLFReachable.h"
 #import "ContributionsViewController.h"
 #import "TableSectionHeaderView.h"
+#import "LegislatorDetailHeader.h"
 
 enum SECTIONS {
+    SectionHeader = 0,
     SectionMemberInfo = 1,
     SectionDistrict,
     SectionResources,
@@ -45,6 +47,7 @@ enum SECTIONS {
 - (void)configureResourceItems;
 - (void)configureCommitteeItems;
 - (void)configureBillItems;
+- (void)configureTableHeader;
 @end
 
 @implementation LegislatorDetailViewController
@@ -90,11 +93,10 @@ enum SECTIONS {
             section.headerView = headerView;
             [headerView release];
         }];
-    }         
+    }
 	self.title = NSLocalizedString(@"Loading...", @"");
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
 }
-
 
 - (NSString *)actionPath {
     return [[self class] actionPathForObject:self.legislator];
@@ -117,6 +119,7 @@ enum SECTIONS {
 }
 
 - (void)configureTableItems {
+    [self configureTableHeader];
     [self configureMemberInfoItems];     
     [self configureDistrictMapItems];
     [self configureResourceItems];
@@ -124,23 +127,20 @@ enum SECTIONS {
     [self configureBillItems];
 }
 
+- (void)configureTableHeader {
+    RKTableViewSection *headerSection = [RKTableViewSection sectionWithBlock:^(RKTableViewSection *section) {
+        CGRect headerRect = CGRectMake(0, 0, self.tableView.width, 120);
+        LegislatorDetailHeader *header = [[LegislatorDetailHeader alloc] initWithFrame:headerRect];
+        section.headerHeight = headerRect.size.height;
+        section.headerView = header;
+        header.legislator = self.legislator;
+        [header release];;
+    }];
+    [__tableViewModel insertSection:headerSection atIndex:SectionHeader];
+}
+
 - (void)configureMemberInfoItems {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    RKTableItem *firstItemCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        if (!IsEmpty(_legislator.photoURL)) {
-            tableItem.cellMapping.rowHeight = 88;
-            tableItem.cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-                cell.textLabel.textColor = [SLFAppearance cellTextColor];
-                cell.backgroundColor = [SLFAppearance cellBackgroundDarkColor];
-                [cell.imageView setImageWithURL:[NSURL URLWithString:_legislator.photoURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
-                [cell.imageView roundTopLeftCorner];
-            };
-        }
-        tableItem.cellMapping.style = UITableViewCellStyleValue1;
-        tableItem.text = _legislator.formalName;
-    }];
-    [tableItems addObject:firstItemCell];
     [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Chamber", @"");

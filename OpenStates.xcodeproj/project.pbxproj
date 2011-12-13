@@ -236,6 +236,7 @@
 		37CC42F4144346F0001510A5 /* 166-newspaper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37CC42F2144346F0001510A5 /* 166-newspaper@2x.png */; };
 		37CFB4D2144B980F00E8120D /* NSInvocation+CWVariableArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4CF144B980F00E8120D /* NSInvocation+CWVariableArguments.m */; };
 		37CFB4D3144B980F00E8120D /* UIImageView+RoundedCorners.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4D1144B980F00E8120D /* UIImageView+RoundedCorners.m */; };
+		37D6A7031496BE34009A76E8 /* LegislatorDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6A7021496BE34009A76E8 /* LegislatorDetailHeader.m */; };
 		37D7540A146C57FD00DCD742 /* _EventParticipant.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75403146C57FD00DCD742 /* _EventParticipant.m */; };
 		37D7540B146C57FD00DCD742 /* _GenericAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75405146C57FD00DCD742 /* _GenericAsset.m */; };
 		37D7540C146C57FD00DCD742 /* _GenericNamedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75407146C57FD00DCD742 /* _GenericNamedItem.m */; };
@@ -773,6 +774,8 @@
 		37CFB4D0144B980F00E8120D /* UIImageView+RoundedCorners.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+RoundedCorners.h"; sourceTree = "<group>"; };
 		37CFB4D1144B980F00E8120D /* UIImageView+RoundedCorners.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+RoundedCorners.m"; sourceTree = "<group>"; };
 		37CFB4D7144B9C8200E8120D /* StackableControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackableControllerProtocol.h; sourceTree = "<group>"; };
+		37D6A7011496BE34009A76E8 /* LegislatorDetailHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorDetailHeader.h; sourceTree = "<group>"; };
+		37D6A7021496BE34009A76E8 /* LegislatorDetailHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorDetailHeader.m; sourceTree = "<group>"; };
 		37D75402146C57FD00DCD742 /* _EventParticipant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _EventParticipant.h; sourceTree = "<group>"; };
 		37D75403146C57FD00DCD742 /* _EventParticipant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _EventParticipant.m; sourceTree = "<group>"; };
 		37D75404146C57FD00DCD742 /* _GenericAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _GenericAsset.h; sourceTree = "<group>"; };
@@ -1438,6 +1441,8 @@
 			children = (
 				37BB3B6C143A12AB00DCB1FB /* DisclosureQuartzView.h */,
 				37BB3B6D143A12AB00DCB1FB /* DisclosureQuartzView.m */,
+				37D6A7011496BE34009A76E8 /* LegislatorDetailHeader.h */,
+				37D6A7021496BE34009A76E8 /* LegislatorDetailHeader.m */,
 				37F32824144198750059FACE /* SLFBadgeCell.h */,
 				37F32825144198750059FACE /* SLFBadgeCell.m */,
 				37F32826144198750059FACE /* SLFStandardGroupCell.h */,
@@ -2258,6 +2263,7 @@
 				37915377149273A500F55015 /* StackedNavigationBar.m in Sources */,
 				3744D6FB149586EC00507D21 /* MKInfoPanel.m in Sources */,
 				37D7E15414967C0900358E00 /* OpenStatesGearView.m in Sources */,
+				37D6A7031496BE34009A76E8 /* LegislatorDetailHeader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

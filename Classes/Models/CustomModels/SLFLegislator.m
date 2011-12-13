@@ -164,7 +164,7 @@
 }
 
 - (NSString *)term {
-    return [NSString stringWithFormat:@"%@ Years", self.chamberObj.term];
+    return [NSString stringWithFormat:@"Term: %@ Years", self.chamberObj.term];
 }
 
 - (MultiRowCalloutCell *)calloutCell {
