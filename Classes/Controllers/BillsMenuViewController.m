@@ -30,19 +30,11 @@
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
 - (void)configureTableViewModel;
-@property (nonatomic,retain) UIImage *searchIcon;
-@property (nonatomic,retain) UIImage *favoritesIcon;
-@property (nonatomic,retain) UIImage *recentsIcon;
-@property (nonatomic,retain) UIImage *subjectsIcon;
 @end
 
 @implementation BillsMenuViewController
 @synthesize state = _state;
 @synthesize tableViewModel = __tableViewModel;
-@synthesize searchIcon;
-@synthesize favoritesIcon;
-@synthesize subjectsIcon;
-@synthesize recentsIcon;
 
 - (id)initWithState:(SLFState *)newState {
     self = [super init];
@@ -50,11 +42,6 @@
         self.useGearViewBackground = YES;
         self.title = NSLocalizedString(@"Bills", @"");
         self.useTitleBar = SLFIsIpad();
-        UIColor *iconColor = [SLFAppearance menuTextColor];
-        self.searchIcon = [[UIImage imageNamed:@"06-magnify"] imageWithOverlayColor:iconColor];
-        self.favoritesIcon = [[UIImage imageNamed:@"28-star"] imageWithOverlayColor:iconColor];
-        self.recentsIcon = [[UIImage imageNamed:@"11-clock"] imageWithOverlayColor:iconColor];                               
-        self.subjectsIcon = [[UIImage imageNamed:@"191-collection"] imageWithOverlayColor:iconColor];
         [self reconfigureForState:newState];
     }
     return self;
@@ -65,10 +52,6 @@
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.state = nil;
     self.tableViewModel = nil;
-    self.searchIcon = nil;
-    self.favoritesIcon = nil;
-    self.recentsIcon = nil;
-    self.subjectsIcon = nil;
     [super dealloc];
 }
 
@@ -108,14 +91,28 @@
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(24)];
 }
 
+- (RKTableItem *)menuItemWithText:(NSString *)text imagePrefix:(NSString *)imagePrefix {
+    NSParameterAssert(text != NULL && imagePrefix != NULL);
+    NSString *normalName = [imagePrefix stringByAppendingString:@"-Off"];
+    NSString *highlightedName = [imagePrefix stringByAppendingString:@"-On"];
+    RKTableItem *item = [RKTableItem tableItem];
+    [item setText:text];
+    [item setImage:[UIImage imageNamed:normalName]];
+    [item setValue:[UIImage imageNamed:highlightedName] forKey:@"highlightedImage"]; // key value magic.
+    return item;
+}
+
 - (void)configureTableItems {
     NSMutableArray* tableItems = [[NSMutableArray alloc] initWithCapacity:15];
-    [tableItems addObject:[RKTableItem tableItemWithText:MenuSearch detailText:nil image:self.searchIcon]];
-    [tableItems addObject:[RKTableItem tableItemWithText:MenuFavorites detailText:nil image:self.favoritesIcon]];
-    [tableItems addObject:[RKTableItem tableItemWithText:MenuRecents detailText:nil image:self.recentsIcon]];
+    [tableItems addObject:[self menuItemWithText:MenuSearch imagePrefix:@"Magnify"]];
+    [tableItems addObject:[self menuItemWithText:MenuFavorites imagePrefix:@"Star"]];
+    [tableItems addObject:[self menuItemWithText:MenuRecents imagePrefix:@"Clock"]];
     if (self.state && self.state.featureFlags && [self.state.featureFlags containsObject:@"subjects"])
-	    [tableItems addObject:[RKTableItem tableItemWithText:MenuSubjects detailText:nil image:self.subjectsIcon]];
-    [__tableViewModel loadTableItems:tableItems withMapping:[self menuCellMapping]];
+	    [tableItems addObject:[self menuItemWithText:MenuSubjects imagePrefix:@"Collection"]];
+    RKTableViewCellMapping *cellMap = [self menuCellMapping]; // subclass can override
+    [cellMap mapKeyPath:@"highlightedImage" toAttribute:@"imageView.highlightedImage"];
+    [cellMap addDefaultMappings];
+    [__tableViewModel loadTableItems:tableItems withMapping:cellMap];
     [tableItems release];
 }
 

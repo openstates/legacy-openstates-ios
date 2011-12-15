@@ -62,7 +62,7 @@
 
 - (IBAction)changeSelectedState:(id)sender {
     if (!sender || ![sender isKindOfClass:[UIView class]])
-        sender = _navigationBar;
+        sender = _navigationBar.mapButton;
     self.statesPopover = [StatesPopoverManager showFromOrigin:sender delegate:self];
     //[self showStatesPanel:sender];
 }

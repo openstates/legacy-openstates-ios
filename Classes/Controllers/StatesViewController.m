@@ -89,7 +89,7 @@
 
 - (void)loadFromNetworkIfEmpty {
     NSInteger count = self.tableViewModel.rowCount;
-    if (count == 0) {
+    if (count < 30) { // Sometimes we have 1 row, so 30 is an arbitrary but reasonable sanity check.
         @try {
             [self.tableViewModel loadTableFromNetwork];
         }
@@ -107,13 +107,6 @@ CGFloat const kTitleHeight = 30;
     CGRect contentRect = CGRectMake(15, 0, self.view.width-30, kTitleHeight);
     OpenStatesTitleView *stretchedTitle = [[OpenStatesTitleView alloc] initWithFrame:contentRect];
     stretchedTitle.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    /*
-        UIColor *background = [SLFAppearance cellBackgroundLightColor];
-        stretchedTitle.backgroundColor = background;
-        self.tableView.top += kTitleHeight;
-        self.tableView.height -= kTitleHeight;
-        [self.view addSubview:stretchedTitle];
-    */
     self.navigationItem.titleView = stretchedTitle;
     [stretchedTitle release];
 }

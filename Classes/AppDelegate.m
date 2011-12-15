@@ -105,7 +105,7 @@
     SLFRunBlockAfterDelay(^{
         // Give the persistent data a chance to materialize, and give time to instantiate the infrastructure.
         if (IsEmpty(SLFSelectedStateID())) {
-            NSString *path = [SLFActionPathNavigator navigationPathForController:[StateDetailViewController class] withResource:nil];
+            NSString *path = [SLFActionPathNavigator navigationPathForController:[StatesViewController class] withResource:nil];
             [SLFActionPathNavigator navigateToPath:path skipSaving:YES fromBase:nil popToRoot:NO];
         }
     },.3);
