@@ -13,6 +13,7 @@
 @interface SLFDrawing : NSObject
     // Used to determine gradient direction
 + (void)getStartPoint:(CGPoint*)startRef endPoint:(CGPoint *)endRef withAngle:(CGFloat)angle inRect:(CGRect)rect;
++ (UIBezierPath *)tableHeaderBorderPathWithFrame:(CGRect)frame;
 @end
 
 @interface UIImage (SLFExtensions)
@@ -22,4 +23,9 @@
 
 @interface UIButton (SLFExtensions)
 + (UIButton *)buttonForImage:(UIImage *)iconImage withFrame:(CGRect)rect glossy:(BOOL)glossy;
+@end
+
+@interface NSString (SLFDrawing)
+- (CGRect)rectWithFont:(UIFont *)font origin:(CGPoint)origin;
+- (CGSize)drawWithFont:(UIFont *)font origin:(CGPoint)origin;
 @end

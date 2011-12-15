@@ -83,6 +83,18 @@ static void addGlossPath(CGContextRef context, CGRect rect);
 }
 @end
 
+@implementation NSString (SLFDrawing)
+- (CGRect)rectWithFont:(UIFont *)font origin:(CGPoint)origin {
+    CGSize textSize = [self sizeWithFont:font];
+    return CGRectMake(origin.x, origin.y, textSize.width, textSize.height);
+}
+
+- (CGSize)drawWithFont:(UIFont *)font origin:(CGPoint)origin {
+    CGRect drawRect = [self rectWithFont:font origin:origin];
+    return [self drawInRect:drawRect withFont:font];
+}
+@end
+
 @implementation SLFDrawing
 
 #if !defined(DegreesToRadians)
@@ -144,6 +156,28 @@ static void addGlossPath(CGContextRef context, CGRect rect);
 	}
     *startRef = startPoint;
     *endRef = endPoint;
+}
+
++ (UIBezierPath *)tableHeaderBorderPathWithFrame:(CGRect)frame {
+    CGRect rect = frame;
+    rect.size.height -= 20;
+    rect.size.width -= 26;
+    rect.origin.x += (CGRectGetMidX(frame) - CGRectGetMidX(rect));
+    rect = CGRectIntegral(rect);
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:rect.origin];
+    [path addLineToPoint:CGPointMake(rect.origin.x+rect.size.width, rect.origin.y)];
+    [path addLineToPoint:CGPointMake(rect.origin.x+rect.size.width, rect.origin.y+rect.size.height)];
+    [path addLineToPoint:CGPointMake(rect.origin.x+52, rect.origin.y+rect.size.height)];
+    [path addLineToPoint:CGPointMake(rect.origin.x+38, rect.origin.y+rect.size.height + 15)];
+    [path addLineToPoint:CGPointMake(rect.origin.x+24, rect.origin.y+rect.size.height)];
+    [path addLineToPoint:CGPointMake(rect.origin.x, rect.origin.y+rect.size.height)];
+    [path addLineToPoint:CGPointMake(rect.origin.x, rect.origin.y)];
+    [path closePath];
+    path.lineWidth = 1;
+    path.lineJoinStyle = kCGLineJoinMiter;
+    path.lineCapStyle = kCGLineCapButt;
+    return path;
 }
 
 @end

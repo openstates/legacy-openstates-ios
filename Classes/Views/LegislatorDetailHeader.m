@@ -14,12 +14,12 @@
 #import <QuartzCore/QuartzCore.h>
 #import "SLFDataModels.h"
 #import "UIImageView+AFNetworking.h"
+#import "SLFDrawingExtensions.h"
 
 @interface LegislatorDetailHeader()
 @property (nonatomic,retain) UIBezierPath *borderOutlinePath;
 @property (nonatomic,retain) IBOutlet UIImageView *imageView;
 - (void)configure;
-- (UIBezierPath *)createBorderPathWithFrame:(CGRect)frame;
 @end
 
 @implementation LegislatorDetailHeader
@@ -53,45 +53,21 @@
     CGRect frame = self.frame;
     frame.size = [self sizeThatFits:frame.size];
     self.frame = frame;
-    self.backgroundColor = [UIColor clearColor];//[UIColor colorWithRed:240/255.f green:240/255.f blue:226/255.f alpha:1];
-    self.borderOutlinePath = [self createBorderPathWithFrame:frame];
+    self.backgroundColor = [UIColor clearColor];
+    self.borderOutlinePath = [SLFDrawing tableHeaderBorderPathWithFrame:frame];
     _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(28, 14, 52, 73)];
     [self addSubview:_imageView];
     [self setNeedsDisplay];
-}
-
-- (UIBezierPath *)createBorderPathWithFrame:(CGRect)frame {
-    CGRect rect = frame;
-    rect.size.height -= 20;
-    rect.size.width -= 26;
-    rect.origin.x += (CGRectGetMidX(frame) - CGRectGetMidX(rect));
-    rect = CGRectIntegral(rect);
-    UIBezierPath *path = [UIBezierPath bezierPath];
-    [path moveToPoint:rect.origin];
-    [path addLineToPoint:CGPointMake(rect.origin.x+rect.size.width, rect.origin.y)];
-    [path addLineToPoint:CGPointMake(rect.origin.x+rect.size.width, rect.origin.y+rect.size.height)];
-    [path addLineToPoint:CGPointMake(rect.origin.x+52, rect.origin.y+rect.size.height)];
-    [path addLineToPoint:CGPointMake(rect.origin.x+38, rect.origin.y+rect.size.height + 15)];
-    [path addLineToPoint:CGPointMake(rect.origin.x+24, rect.origin.y+rect.size.height)];
-    [path addLineToPoint:CGPointMake(rect.origin.x, rect.origin.y+rect.size.height)];
-    [path addLineToPoint:CGPointMake(rect.origin.x, rect.origin.y)];
-    [path closePath];
-    path.lineWidth = 1;
-    path.lineJoinStyle = kCGLineJoinMiter;
-    path.lineCapStyle = kCGLineCapButt;
-    return path;
-}
-
-- (CGRect)rectOfString:(NSString *)string atOrigin:(CGPoint)origin withFont:(UIFont *)font {
-    CGSize textSize = [string sizeWithFont:font];
-    return CGRectMake(origin.x, origin.y, textSize.width, textSize.height);
 }
 
 - (void)drawRect:(CGRect)rect
 {
     [[SLFAppearance cellBackgroundLightColor] setFill];
     [_borderOutlinePath fill];
-    [[UIColor colorWithRed:189/255.f green:189/255.f blue:176/255.f alpha:1] setStroke];
+    static UIColor *strokeColor;
+    if (!strokeColor)
+        strokeColor = [SLFColorWithRGB(189, 189, 176) retain];
+    [strokeColor setStroke];
     [_borderOutlinePath stroke];
     if (!_legislator)
         return;
@@ -112,28 +88,24 @@
 
         // Title
     [lightColor set];
-    drawRect = [self rectOfString:_legislator.title atOrigin:CGPointMake(offsetX,13) withFont:titleFont];
-    [_legislator.title drawInRect:drawRect withFont:titleFont];
+    [_legislator.title drawWithFont:titleFont origin:CGPointMake(offsetX,13)];
 
         // Name
     [darkColor set];
-    drawRect = [self rectOfString:_legislator.fullName atOrigin:CGPointMake(offsetX,30) withFont:nameFont];
-    [_legislator.fullName drawInRect:drawRect withFont:nameFont];
+    [_legislator.fullName drawWithFont:nameFont origin:CGPointMake(offsetX,30)];
 
         // Party
     [partyColor set];
-    drawRect = [self rectOfString:_legislator.partyObj.name atOrigin:CGPointMake(offsetX,54) withFont:plainFont];
+    drawRect = [_legislator.partyObj.name rectWithFont:plainFont origin:CGPointMake(offsetX,54)];
     [_legislator.partyObj.name drawInRect:drawRect withFont:plainFont];
     
         // District
     [lightColor set];
-    drawRect = [self rectOfString:_legislator.districtShortName atOrigin:CGPointMake(drawRect.origin.x+drawRect.size.width+6, 54) withFont:plainFont];
-    [_legislator.districtShortName drawInRect:drawRect withFont:plainFont];
+    [_legislator.districtShortName drawWithFont:plainFont origin:CGPointMake(drawRect.origin.x+drawRect.size.width+6, 54)];
 
         // Tenure
     [lightColor set];
-    drawRect = [self rectOfString:_legislator.term atOrigin:CGPointMake(offsetX, 74) withFont:titleFont];
-    [_legislator.term drawInRect:drawRect withFont:titleFont];
+    [_legislator.term drawWithFont:titleFont origin:CGPointMake(offsetX, 74)];
 }
 
 - (void)setLegislator:(SLFLegislator *)legislator {
