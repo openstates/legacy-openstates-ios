@@ -39,37 +39,15 @@
 - (void)configureTableViewModel;
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
-@property (nonatomic,retain) UIImage *legislatorsIcon;
-@property (nonatomic,retain) UIImage *committeesIcon;
-@property (nonatomic,retain) UIImage *districtsIcon;
-@property (nonatomic,retain) UIImage *eventsIcon;
-@property (nonatomic,retain) UIImage *billsIcon;
-@property (nonatomic,retain) UIImage *newsIcon;
-@property (nonatomic,retain) UIImage *feedbackIcon;
 @end
 
 @implementation StateDetailViewController
 @synthesize state = _state;
 @synthesize tableViewModel = __tableViewModel;
-@synthesize legislatorsIcon;
-@synthesize committeesIcon;
-@synthesize districtsIcon;
-@synthesize eventsIcon;
-@synthesize billsIcon;
-@synthesize newsIcon;
-@synthesize feedbackIcon;
 
 - (id)initWithState:(SLFState *)newState {
     self = [super init];
     if (self) {
-        UIColor *iconColor = [SLFAppearance menuTextColor];
-        self.legislatorsIcon = [[UIImage imageNamed:@"123-id-card"] imageWithOverlayColor:iconColor];
-        self.committeesIcon = [[UIImage imageNamed:@"60-signpost"] imageWithOverlayColor:iconColor];                               
-        self.districtsIcon = [[UIImage imageNamed:@"73-radar"] imageWithOverlayColor:iconColor];
-        self.billsIcon = [[UIImage imageNamed:@"gavel"] imageWithOverlayColor:iconColor];
-        self.eventsIcon = [[UIImage imageNamed:@"83-calendar"] imageWithOverlayColor:iconColor];
-        self.newsIcon = [[UIImage imageNamed:@"166-newspaper"] imageWithOverlayColor:iconColor];
-        self.feedbackIcon = [[UIImage imageNamed:@"110-bug"] imageWithOverlayColor:iconColor];
         [self stateMenuSelectionDidChangeWithState:newState];
     }
     return self;
@@ -79,13 +57,6 @@
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.state = nil;
     self.tableViewModel = nil;
-    self.legislatorsIcon = nil;
-    self.committeesIcon = nil;
-    self.districtsIcon = nil;
-    self.eventsIcon = nil;
-    self.billsIcon = nil;
-    self.newsIcon = nil;
-    self.feedbackIcon = nil;
     [super dealloc];
 }
 
@@ -132,19 +103,34 @@
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(48)];
 }
 
+- (RKTableItem *)menuItemWithText:(NSString *)text imagePrefix:(NSString *)imagePrefix {
+    NSParameterAssert(text != NULL && imagePrefix != NULL);
+    NSString *normalName = [imagePrefix stringByAppendingString:@"-Off"];
+    NSString *highlightedName = [imagePrefix stringByAppendingString:@"-On"];
+    RKTableItem *item = [RKTableItem tableItem];
+    [item setText:text];
+    [item setImage:[UIImage imageNamed:normalName]];
+    [item setValue:[UIImage imageNamed:highlightedName] forKey:@"highlightedImage"]; // key value magic.
+    return item;
+}
+
 - (void)configureTableItems {
     NSMutableArray* tableItems = [[NSMutableArray alloc] initWithCapacity:15];
-    [tableItems addObject:[RKTableItem tableItemWithText:MenuLegislators detailText:nil image:self.legislatorsIcon]];
-    [tableItems addObject:[RKTableItem tableItemWithText:MenuCommittees detailText:nil image:self.committeesIcon]];
-    [tableItems addObject:[RKTableItem tableItemWithText:MenuDistricts detailText:nil image:self.districtsIcon]];
-    [tableItems addObject:[RKTableItem tableItemWithText:MenuBills detailText:nil image:self.billsIcon]];
+    [tableItems addObject:[self menuItemWithText:MenuLegislators imagePrefix:@"IndexCard"]];
+    [tableItems addObject:[self menuItemWithText:MenuCommittees imagePrefix:@"Group"]];
+    [tableItems addObject:[self menuItemWithText:MenuDistricts imagePrefix:@"Map"]];
+    [tableItems addObject:[self menuItemWithText:MenuBills imagePrefix:@"Gavel"]];
+    
     if (self.state && self.state.featureFlags && [self.state.featureFlags containsObject:@"events"])
-        [tableItems addObject:[RKTableItem tableItemWithText:MenuEvents detailText:nil image:self.eventsIcon]];
-    [tableItems addObject:[RKTableItem tableItemWithText:MenuNews detailText:nil image:self.newsIcon]];
+        [tableItems addObject:[self menuItemWithText:MenuEvents imagePrefix:@"Calendar"]];
+    [tableItems addObject:[self menuItemWithText:MenuNews imagePrefix:@"Paper"]];
 #ifdef DEBUG
-    [tableItems addObject:[RKTableItem tableItemWithText:MenuFeedback detailText:nil image:self.feedbackIcon]];
+    [tableItems addObject:[self menuItemWithText:MenuFeedback imagePrefix:@"Bug"]];
 #endif
-    [self.tableViewModel loadTableItems:tableItems withMapping:[self menuCellMapping]];
+    RKTableViewCellMapping *cellMap = [self menuCellMapping]; // subclass can override
+    [cellMap mapKeyPath:@"highlightedImage" toAttribute:@"imageView.highlightedImage"];
+    [cellMap addDefaultMappings];
+    [self.tableViewModel loadTableItems:tableItems withMapping:cellMap];
     [tableItems release];
 }
 

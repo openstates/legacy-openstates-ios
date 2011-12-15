@@ -21,7 +21,7 @@
 #define kMapButtonOffsetX (self.width - (62 + 14)) // 62 is the image width
 #define kDividerOffsetX (kMapButtonOffsetX - 20)
 #define kAccessoryIndicatorOffsetX (kDividerOffsetX - 25)
-#define kStateLabelRect CGRectMake((kAccessoryIndicatorOffsetX - 250) - 20,23,250,22)
+#define kStateLabelRect CGRectMake((kAccessoryIndicatorOffsetX - 250) - 20,19,250,22)
 
 @interface AnimatedGradientLayer : CAGradientLayer
 @end
@@ -50,6 +50,7 @@
 @synthesize iconView = _iconView;
 @synthesize gradientBar = _gradientBar;
 @synthesize stateLabel = _stateLabel;
+@synthesize mapButton = _mapButton;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -77,6 +78,7 @@
     self.iconView = nil;
     self.gradientBar = nil;
     self.stateLabel = nil;
+    self.mapButton = nil;
     [super dealloc];
 }
 
@@ -120,14 +122,14 @@
 
 - (void)createMapButton {
     UIImage *image = [UIImage imageNamed:@"MapUSA"];    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.bounds = CGRectMake( 0, 0, image.size.width, image.size.height );    
-    button.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-    button.opaque = YES;
-    [button setImage:image forState:UIControlStateNormal];
-    [button addTarget:SLFAppDelegateStack action:@selector(changeSelectedState:) forControlEvents:UIControlEventTouchUpInside];
-    button.origin = CGPointMake(kMapButtonOffsetX, 10);
-    [self addSubview:button];
+    self.mapButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _mapButton.bounds = CGRectMake( 0, 0, image.size.width, image.size.height );    
+    _mapButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    _mapButton.opaque = YES;
+    [_mapButton setImage:image forState:UIControlStateNormal];
+    [_mapButton addTarget:SLFAppDelegateStack action:@selector(changeSelectedState:) forControlEvents:UIControlEventTouchUpInside];
+    _mapButton.origin = CGPointMake(kMapButtonOffsetX, 10);
+    [self addSubview:_mapButton];
 }
 
 - (void)createShadow {
@@ -156,7 +158,7 @@
 - (void)createAccessoryIndicator {
     ColoredAccessoryIndicator *indicator = [[ColoredAccessoryIndicator alloc] initWithFrame:CGRectMake(0, 0, 18, 18)];
     indicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-    indicator.center = CGPointMake(kAccessoryIndicatorOffsetX, self.center.y+4);
+    indicator.center = CGPointMake(kAccessoryIndicatorOffsetX, self.center.y);
     [self addSubview:indicator];
     [indicator release];
 }
