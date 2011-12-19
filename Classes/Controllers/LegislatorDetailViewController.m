@@ -25,6 +25,7 @@
 #import "ContributionsViewController.h"
 #import "TableSectionHeaderView.h"
 #import "LegislatorDetailHeader.h"
+#import "SLFEmailComposer.h"
 
 enum SECTIONS {
     SectionHeader = 0,
@@ -157,6 +158,19 @@ enum SECTIONS {
         tableItem.text = NSLocalizedString(@"Party", @"");
         tableItem.detailText = _legislator.partyObj.name;
     }]];
+    if (!IsEmpty(_legislator.email)) {
+        [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+            tableItem.cellMapping = [SubtitleCellMapping cellMapping];
+            tableItem.text = NSLocalizedString(@"Email", @"");
+            tableItem.detailText = _legislator.email;
+            tableItem.cellMapping.onSelectCell = ^(void) {
+                [[SLFEmailComposer sharedComposer] presentMailComposerTo:_legislator.email subject:@"" body:@"" parent:self];
+            };
+        }]];
+    }
+    if (!IsEmpty(_legislator.url)) {
+        [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Website", @"") subtitle:_legislator.url url:_legislator.url]];
+    }
     [__tableViewModel loadTableItems:tableItems inSection:SectionMemberInfo];     
     [tableItems release];
 }

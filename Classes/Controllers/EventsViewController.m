@@ -38,8 +38,10 @@
 - (void)configureTableViewModel {
     [super configureTableViewModel];
     self.tableViewModel.autoRefreshRate = 240;
+    self.tableViewModel.showsSectionIndexTitles = NO;
+    self.tableViewModel.sectionNameKeyPath = @"dayForDisplay";
     SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
-        [cellMapping mapKeyPath:@"eventDescription" toAttribute:@"textLabel.text"];
+        [cellMapping mapKeyPath:@"title" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"dateStartForDisplay" toAttribute:@"detailTextLabel.text"];
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             NSString *path = [SLFActionPathNavigator navigationPathForController:[EventDetailViewController class] withResource:object];

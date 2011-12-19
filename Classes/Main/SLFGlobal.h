@@ -33,3 +33,4 @@ BOOL IsEmpty(NSObject * thing);
 #define SLF_HOURS_TO_SECONDS(var) (var * 60 * 60)
 #define SLFRunBlockAfterDelay(block,delay) dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*delay), dispatch_get_current_queue(), block);
 #define SLFRunBlockInNextRunLoop(block) [[NSOperationQueue mainQueue] addOperationWithBlock: block ];
+#define SLFIsIOS5OrGreater() ( [[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0f )

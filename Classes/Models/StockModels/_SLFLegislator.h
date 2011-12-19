@@ -127,6 +127,22 @@
 
 
 
+@property (nonatomic, retain) NSString *url;
+
+
+//- (BOOL)validateUrl:(id*)value_ error:(NSError**)error_;
+
+
+
+
+@property (nonatomic, retain) NSString *email;
+
+
+//- (BOOL)validateEmail:(id*)value_ error:(NSError**)error_;
+
+
+
+
 @property (nonatomic, retain) NSString *level;
 
 
@@ -314,6 +330,18 @@
 
 - (NSString*)primitiveLegID;
 - (void)setPrimitiveLegID:(NSString*)value;
+
+
+
+
+- (NSString*)primitiveEmail;
+- (void)setPrimitiveEmail:(NSString*)value;
+
+
+
+
+- (NSString*)primitiveUrl;
+- (void)setPrimitiveUrl:(NSString*)value;
 
 
 

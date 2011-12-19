@@ -85,6 +85,27 @@
 
 
 
+@dynamic status;
+
+
+
+
+
+
+@dynamic notes;
+
+
+
+
+
+
+@dynamic ekEventIdentifier;
+
+
+
+
+
+
 @dynamic location;
 
 

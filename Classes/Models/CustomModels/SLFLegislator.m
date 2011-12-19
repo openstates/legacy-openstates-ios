@@ -24,7 +24,7 @@
     [mapping mapKeyPath:@"photo_url" toAttribute:@"photoURL"];
     [mapping mapKeyPath:@"transparencydata_id" toAttribute:@"transparencyID"];
     [mapping mapKeyPath:@"votesmart_id" toAttribute:@"votesmartID"];
-    [mapping mapAttributes:@"suffixes", @"party", @"level", @"district", @"country", @"chamber", @"active",nil];    
+    [mapping mapAttributes:@"email", @"url", @"suffixes", @"party", @"level", @"district", @"country", @"chamber", @"active",nil];    
     return mapping;
 }
 

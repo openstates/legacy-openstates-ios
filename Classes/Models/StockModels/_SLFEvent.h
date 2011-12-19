@@ -88,6 +88,30 @@
 
 
 
+@property (nonatomic, retain) NSString *status;
+
+
+//- (BOOL)validateStatus:(id*)value_ error:(NSError**)error_;
+
+
+
+
+@property (nonatomic, retain) NSString *notes;
+
+
+//- (BOOL)validateNotes:(id*)value_ error:(NSError**)error_;
+
+
+
+
+@property (nonatomic, retain) NSString *ekEventIdentifier;
+
+
+//- (BOOL)validateEkEventIdentifier:(id*)value_ error:(NSError**)error_;
+
+
+
+
 @property (nonatomic, retain) NSString *location;
 
 
@@ -199,6 +223,24 @@
 
 - (NSString*)primitiveLink;
 - (void)setPrimitiveLink:(NSString*)value;
+
+
+
+
+- (NSString*)primitiveStatus;
+- (void)setPrimitiveStatus:(NSString*)value;
+
+
+
+
+- (NSString*)primitiveNotes;
+- (void)setPrimitiveNotes:(NSString*)value;
+
+
+
+
+- (NSString*)primitiveEkEventIdentifier;
+- (void)setPrimitiveEkEventIdentifier:(NSString*)value;
 
 
 

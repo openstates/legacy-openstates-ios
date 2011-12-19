@@ -13,19 +13,7 @@
 #import <MessageUI/MessageUI.h>
 
 @interface SLFEmailComposer : NSObject <MFMailComposeViewControllerDelegate>
-{
-
-}
-@property (nonatomic, assign) UIViewController *currentCommander;
-@property (nonatomic, retain) MFMailComposeViewController *mailComposerVC;
 @property (nonatomic) BOOL isComposingMail;
-
-+ (SLFEmailComposer *)sharedSLFEmailComposer;
-
-- (void)presentMailComposerTo:(NSString*)recipient 
-					  subject:(NSString*)subject 
-						 body:(NSString*)body 
-					commander:(UIViewController *)commander;
-
-
++ (SLFEmailComposer *)sharedComposer;
+- (void)presentMailComposerTo:(NSString*)recipient subject:(NSString*)subject body:(NSString*)body parent:(UIViewController *)parent;
 @end

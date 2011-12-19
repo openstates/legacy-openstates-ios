@@ -129,6 +129,20 @@
 
 
 
+@dynamic email;
+
+
+
+
+
+
+@dynamic url;
+
+
+
+
+
+
 @dynamic level;
 
 

@@ -5,7 +5,8 @@
 
 + (RKManagedObjectMapping *)mapping {
     RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
-    [mapping mapAttributes:@"name", @"type", nil];
+    [mapping mapAttributes:@"type", nil];
+    [mapping mapKeyPath:@"participant" toAttribute:@"name"];
     return mapping;
 }
 
@@ -13,4 +14,11 @@
     return [[self superclass] sortDescriptors];
 }
 
+- (void)setType:(NSString *)type {
+    [self willChangeValueForKey:@"type"];
+    if (!IsEmpty(type))
+        type = [type capitalizedString];
+    [self setPrimitiveType:type];
+    [self didChangeValueForKey:@"type"];
+}
 @end

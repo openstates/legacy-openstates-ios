@@ -94,7 +94,6 @@ BOOL SLFIsReachableAddress(NSString * urlString) {
     [self.networkReachByKeys setObject:hostReach forKey:hostName];
     [self.statusByHostKeys setObject:[NSNumber numberWithInt:kSCNetworkNotReachable] forKey:hostName];
     [self performSelectorInBackground:@selector(beginCheckingHostReachability:) withObject:hostReach];
-    //[self beginCheckingHostReachability:hostReach];
     return YES;
 }
 

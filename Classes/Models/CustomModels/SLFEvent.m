@@ -1,6 +1,7 @@
 #import "SLFDataModels.h"
 #import "SLFSortDescriptor.h"
 #import "NSDate+SLFDateHelper.h"
+#import "SLFEventsManager.h"
 
 @implementation SLFEvent
 
@@ -15,6 +16,8 @@
     [mapping mapKeyPath:@"end" toAttribute:@"dateEnd"];
     [mapping mapKeyPath:@"description" toAttribute:@"eventDescription"];
     [mapping mapKeyPath:@"+link" toAttribute:@"link"];
+    [mapping mapKeyPath:@"status" toAttribute:@"status"];
+    [mapping mapKeyPath:@"notes" toAttribute:@"notes"];
     [mapping mapAttributes:@"session", @"type", @"location",  nil];
     return mapping;
 }
@@ -31,7 +34,7 @@
 }
 
 + (NSArray*)searchableAttributes {
-    return [NSArray arrayWithObjects:@"eventDescription", @"location", nil];
+    return [NSArray arrayWithObjects:@"eventDescription", @"location", @"notes", @"dayForDisplay", nil];
 }
 
 + (NSArray *)sortDescriptors {
@@ -43,5 +46,43 @@
 
 - (NSString *)dateStartForDisplay {
     return [self.dateStart stringWithDateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
+}
+
+- (NSString *)dayForDisplay {
+    return [self.dateStart stringWithDateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+}
+
+- (NSString *)title {
+    NSString *title = [self.eventDescription stringByReplacingOccurrencesOfString:@"Committee Meeting\n" withString:@""];
+    if (!IsEmpty(self.status))
+        title = [title stringByAppendingFormat:@" (%@)", [self.status capitalizedString]];
+    return title;
+}
+
+- (EKEvent *)ekEvent {
+    SLFEventsManager *eventManager = [SLFEventsManager sharedManager];
+    if (!self.dateStart || [self.dateStart equalsDefaultDate])
+        return nil;
+    EKEvent *event = nil;
+    @try {
+        event = [eventManager findOrCreateEventWithIdentifier:self.ekEventIdentifier];
+        event.title = self.title;
+        event.location = self.location;
+        if (!IsEmpty(self.notes))
+            event.notes = self.notes;
+        if (!IsEmpty(self.link) && [event respondsToSelector:@selector(setURL:)])
+            [event performSelector:@selector(setURL:) withObject:[NSURL URLWithString:self.link]];
+        event.startDate = self.dateStart;
+        if (!self.dateEnd) {
+            event.endDate = [NSDate dateWithTimeInterval:SLF_HOURS_TO_SECONDS(1) sinceDate:self.dateStart];
+            event.notes = NSLocalizedString(@"No end time was specified, so the default event duration is 1 hour.", @"");
+        }
+        self.ekEventIdentifier = event.eventIdentifier; // This may or may not be the appropriate time to do this.
+    }
+    @catch (NSException *exception) {
+        RKLogError(@"There was an error while attempting to create an EKEvent from %@", [self description]);
+    }
+
+    return event;
 }
 @end

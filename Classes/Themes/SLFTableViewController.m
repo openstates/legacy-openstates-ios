@@ -140,8 +140,8 @@
         tableItem.detailText = itemSubtitle;
         tableItem.URL = url;
         tableItem.cellMapping.onSelectCell = ^(void) {
-            if (SLFIsReachableAddress(tableItem.URL)) {
-                SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:tableItem.URL];
+            if (SLFIsReachableAddress(url)) {
+                SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:url];
                 webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
                 [self presentModalViewController:webViewController animated:YES];	
                 [webViewController release];

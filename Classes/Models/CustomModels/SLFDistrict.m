@@ -112,7 +112,7 @@
     NSString *boundaryCode = chamberObj.isUpperChamber ? @"sldu" : @"sldl";
     if ([chamberName hasPrefix:@"senate"] || [chamberName hasPrefix:@"house"])
         chamberName = [NSString stringWithFormat:@"state-%@", chamberName];
-    return [NSString stringWithFormat:@"%@-%@-%@-district-%@", boundaryCode, chamberObj.stateID, chamberName, district];    
+    return [[NSString stringWithFormat:@"%@-%@-%@-district-%@", boundaryCode, chamberObj.stateID, chamberName, district] lowercaseString];    
 }
 
 #pragma mark -

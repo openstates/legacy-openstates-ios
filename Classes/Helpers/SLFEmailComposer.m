@@ -10,15 +10,20 @@
 //
 //
 
-#import <RestKit/RestKit.h>
 #import "SLFEmailComposer.h"
+#import "SLFReachable.h"
 #import "SLFAlertView.h"
+
+@interface SLFEmailComposer()
+@property (nonatomic, retain) MFMailComposeViewController *composer;
+@end
 
 @implementation SLFEmailComposer
 
-@synthesize mailComposerVC, isComposingMail, currentCommander;
+@synthesize composer = _composer;
+@synthesize isComposingMail = _isComposingMail;
 
-+ (id)sharedSLFEmailComposer
++ (id)sharedComposer
 {
 	static dispatch_once_t pred;
 	static SLFEmailComposer *foo = nil;
@@ -30,70 +35,50 @@
 {
     if ((self = [super init]))
     {
-		isComposingMail = NO;
-		mailComposerVC = nil;
-		currentCommander = nil;
+		_isComposingMail = NO;
     }
     return self;
 }
 
 - (void)dealloc {
-	self.mailComposerVC = nil;
-	self.currentCommander = nil;
+	self.composer = nil;
     [super dealloc];
 }
 
 - (BOOL)isNetworkAvailableForURL:(NSURL *)url {
-    if (![RKObjectManager sharedManager].isOnline)
+    if (![[SLFReachable sharedReachable] isURLReachable:url])
         return NO;
     if (![[UIApplication sharedApplication] canOpenURL:url])
         return NO;
     return YES;
 }
 
-- (void)presentMailComposerTo:(NSString*)recipient 
-					  subject:(NSString*)subject 
-						 body:(NSString*)body 
-					commander:(UIViewController *)commander{
-	if (!commander)
+- (void)presentMailComposerTo:(NSString*)recipient subject:(NSString*)subject body:(NSString*)body parent:(UIViewController *)parent {
+	if (!parent)
 		return;
-	
-	self.currentCommander = commander;
-	
 	if (!body)
 		body = @"";
-	
 	if ([MFMailComposeViewController canSendMail]) {
-		
 		self.isComposingMail = YES;
-
-		MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-		self.mailComposerVC = mc;
-		
-		mc.mailComposeDelegate = self;
-		[mc setSubject:subject];
-		[mc setToRecipients:[NSArray arrayWithObject:recipient]];
-		[mc setMessageBody:body isHTML:NO];
-				
-		[self.currentCommander presentModalViewController:mc animated:YES];
-		
-		[mc release];
-
+        self.composer = nil;
+		_composer = [[MFMailComposeViewController alloc] init];
+		_composer.mailComposeDelegate = self;
+		[_composer setSubject:subject];
+		[_composer setToRecipients:[NSArray arrayWithObject:recipient]];
+		[_composer setMessageBody:body isHTML:NO];
+		[parent presentModalViewController:_composer animated:YES];
 	}
-	else {   // Mail functions are unavailable
+	else {
 		NSMutableString *message = [NSMutableString stringWithFormat:@"mailto:%@", recipient];
 		if (!IsEmpty(subject))
 			[message appendFormat:@"&subject=%@", subject];
-		
 		if (!IsEmpty(body))
 			[message appendFormat:@"&body=%@", body];
-		
 		NSURL *mailto = [NSURL URLWithString:[message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-		
 		if ( ![self isNetworkAvailableForURL:mailto] ) {
-			[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Cannot Open Mail Composer", @"AppAlerts", @"Error on email attempt")
-								message:NSLocalizedStringFromTable(@"There was an error while attempting to open an email composer.  Please check your network settings and try again", @"AppAlerts", @"Error on email attempt")
-							buttonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")];
+			[SLFAlertView showWithTitle:NSLocalizedString(@"Network Unavailable", @"")
+								message:NSLocalizedString(@"Cannot send an email at this time.  Please check your network settings and try again.", @"")
+							buttonTitle:NSLocalizedString(@"Cancel", @"")];
             return;
 		}			
         [[UIApplication sharedApplication] openURL:mailto];
@@ -103,23 +88,15 @@
 #pragma mark -
 #pragma mark Mail Composer Delegate
 
-- (void)mailComposeController:(MFMailComposeViewController*)mailController 
-		  didFinishWithResult:(MFMailComposeResult)result 
-						error:(NSError*)error {
-	
+- (void)mailComposeController:(MFMailComposeViewController*)mailController didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
 	if (result == MFMailComposeResultFailed) {
-		
-		[SLFAlertView showWithTitle:NSLocalizedStringFromTable(@"Failure, Message Not Sent", @"AppAlerts", @"Error on email attempt.")
-							message:NSLocalizedStringFromTable(@"An error prevented successful transmission of your message. Check your email and network settings or try emailing manually.", @"AppAlerts", @"Error on email attempt")
-						buttonTitle:NSLocalizedStringFromTable(@"Cancel", @"StandardUI", @"Button cancelling some activity")];
-		
+		[SLFAlertView showWithTitle:NSLocalizedString(@"Failure, Message Not Sent", @"")
+							message:NSLocalizedString(@"An error prevented successful transmission of your message. Check your email and network settings or try emailing manually.", @"")
+						buttonTitle:NSLocalizedString(@"Cancel", @"")];
 	}
-	
-	[self.currentCommander dismissModalViewControllerAnimated:YES];
-	self.mailComposerVC = nil;
-	self.currentCommander = nil;
+	[self.composer dismissModalViewControllerAnimated:YES];
 	self.isComposingMail = NO;
-
+	self.composer = nil;
 }
 
 

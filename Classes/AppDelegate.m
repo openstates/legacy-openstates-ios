@@ -21,6 +21,7 @@
 #import "WatchedBillNotificationManager.h"
 #import "SLFAlertView.h"
 #import "MKInfoPanel.h"
+#import "SLFEventsManager.h"
 
 @interface AppDelegate()
 @property (nonatomic,retain) PSStackedViewController *stackController;
@@ -28,6 +29,7 @@
 @property (nonatomic,retain) WatchedBillNotificationManager *billNotifier;
 @property (nonatomic,assign) UIBackgroundTaskIdentifier backgroundTaskID;
 - (void)setUpOnce;
+- (void)setUpBackgroundTasks;
 - (void)setUpReachability;
 - (void)setUpViewControllers;
 - (void)setUpViewControllersIpad;
@@ -66,18 +68,23 @@
         }
     }
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    [self setUpReachability];
-    [[SLFAnalytics sharedAnalytics] beginTracking];
+    [self performSelectorInBackground:@selector(setUpBackgroundTasks) withObject:nil];
     [SLFAppearance setupAppearance];
     [SLFRestKitManager sharedRestKit];
     [SLFPersistenceManager sharedPersistence];
-    [self setUpURLCache];
     self.billNotifier = [WatchedBillNotificationManager manager];
     [SLFActionPathRegistry sharedRegistry];
     [self setUpViewControllers];
     SLFRunBlockAfterDelay(^{
         [self restoreApplicationState];
     }, .3);
+}
+
+- (void)setUpBackgroundTasks {
+    [self setUpReachability];
+    [self setUpURLCache];
+    [SLFEventsManager sharedManager];
+    [[SLFAnalytics sharedAnalytics] beginTracking];
 }
 
 - (void)setUpReachability {

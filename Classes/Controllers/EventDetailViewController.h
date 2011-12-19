@@ -10,20 +10,13 @@
 //
 //
 
-#import <RestKit/RestKit.h>
 #import "SLFTableViewController.h"
+#import <EventKitUI/EventKitUI.h>
 
 @class SLFEvent;
-@interface EventDetailViewController : SLFTableViewController <RKObjectLoaderDelegate>
-{
-}
-
-@property (nonatomic,retain)    SLFEvent        *event;
-@property (nonatomic,copy)      NSString        *resourcePath;
-@property (nonatomic,assign)    Class            resourceClass;
-
-- (void)loadData;
-
+@interface EventDetailViewController : SLFTableViewController <RKObjectLoaderDelegate, EKEventEditViewDelegate>
+@property (nonatomic, retain) RKTableViewModel *tableViewModel;
+@property (nonatomic,retain) SLFEvent *event;
 - (id)initWithEventID:(NSString *)objID;
-
+- (id)initWithEvent:(SLFEvent *)event;
 @end
