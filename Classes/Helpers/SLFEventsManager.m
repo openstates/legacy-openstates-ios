@@ -11,12 +11,22 @@
 //
 
 #import "SLFEventsManager.h"
+#import "MKInfoPanel.h"
 
 NSString * const SLFEventsManagerNotifyCalendarDidChange = @"SLFEventsManagerNotifyCalendarDidChange";
+
+@interface SLFEventsManager()
+@property (nonatomic,retain) UIViewController <StackableController,SLFEventsManagerDelegate> *eventEditorParent;
+@property (nonatomic,retain) UIViewController <StackableController,SLFEventsManagerDelegate> *calendarChooserParent;
+- (EKEventEditViewController *)newEventEditorForEvent:(EKEvent *)event delegate:(id<EKEventEditViewDelegate>)delegate;
+- (EKCalendarChooser *)newEventCalendarChooser:(id)sender;
+@end
 
 @implementation SLFEventsManager
 @synthesize eventStore = _eventStore;
 @synthesize eventCalendar = _eventCalendar;
+@synthesize eventEditorParent = _eventEditorParent;
+@synthesize calendarChooserParent = _calendarChooserParent;
 
 + (id)sharedManager
 {
@@ -38,14 +48,16 @@ NSString * const SLFEventsManagerNotifyCalendarDidChange = @"SLFEventsManagerNot
 - (void)dealloc {
     self.eventStore = nil;
     self.eventCalendar = nil;
+    self.eventEditorParent = nil;
+    self.calendarChooserParent = nil;
     [super dealloc];
 }
 
 - (void)setEventCalendar:(EKCalendar *)eventCalendar {
     SLFRelease(_eventCalendar);
     _eventCalendar = [eventCalendar retain];
-    if (eventCalendar) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:SLFEventsManagerNotifyCalendarDidChange object:self userInfo:[NSDictionary dictionaryWithObject:eventCalendar forKey:@"calendar"]];
+    if (eventCalendar && self.calendarChooserParent) {
+        [_calendarChooserParent calendarDidChange:eventCalendar];
     }
 }
 
@@ -61,12 +73,64 @@ NSString * const SLFEventsManagerNotifyCalendarDidChange = @"SLFEventsManagerNot
     return event;
 }
 
+- (BOOL)saveEvent:(EKEvent *)event {
+    NSParameterAssert(event != NULL);
+    NSError *error = nil;
+    BOOL success = [_eventStore saveEvent:event span:EKSpanThisEvent error:&error];
+    if (error) {
+        RKLogError(@"Error while attempting to save a calendar event: %@ (%@)", event, [error localizedDescription]);
+    }
+    return success;
+}
+
 - (EKEventEditViewController *)newEventEditorForEvent:(EKEvent *)event delegate:(id<EKEventEditViewDelegate>)delegate {
     EKEventEditViewController * controller = [[EKEventEditViewController alloc] init];
     controller.eventStore       = _eventStore;
     controller.event            = event;
     controller.editViewDelegate = delegate;
     return controller;
+}
+
+- (void)presentEventEditorForEvent:(EKEvent *)event fromParent:(UIViewController <StackableController,SLFEventsManagerDelegate> *)parent {
+    if (!event)
+        return;
+    self.eventEditorParent = parent;
+    EKEventEditViewController *editor = [self newEventEditorForEvent:event delegate:self];
+    editor.view.width = parent.view.width;
+    [parent stackOrPushViewController:editor];
+}
+
+- (void)eventEditViewController:(EKEventEditViewController *)controller didCompleteWithAction:(EKEventEditViewAction)action {
+    EKEvent *event = controller.event;
+    if (action == EKEventEditViewActionSaved) {
+        if (!event || NO == [self saveEvent:event])
+            [MKInfoPanel showPanelInView:self.eventEditorParent.view type:MKInfoPanelTypeError title:NSLocalizedString(@"Error Saving Event",@"") subtitle:NSLocalizedString(@"Unable to save this event to your calendar.  Please double-check your calendar settings and permissions then try again.",@"") hideAfter:3];
+        else if (self.eventEditorParent)
+            [_eventEditorParent eventWasEdited:event];
+    }
+    [self.eventEditorParent popToThisViewController];
+    self.eventEditorParent = nil;
+}
+
+- (EKCalendar *)eventEditViewControllerDefaultCalendarForNewEvents:(EKEventEditViewController *)controller {
+    return [[SLFEventsManager sharedManager] eventCalendar];
+}
+
+- (void)presentCalendarChooserFromParent:(UIViewController <StackableController,SLFEventsManagerDelegate> *)parent {
+    if (!SLFIsIOS5OrGreater())
+        return;
+    self.calendarChooserParent = parent;
+    EKCalendarChooser *chooser = [self newEventCalendarChooser:parent];
+    UIViewController *viewControllerToPush = chooser;
+    if (SLFIsIpad()) {
+        chooser.title = NSLocalizedString(@"Select a Calendar", @"");
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:chooser];
+        nav.view.width = parent.view.width;
+        [chooser release];
+        viewControllerToPush = nav;
+    }
+    [parent stackOrPushViewController:viewControllerToPush];
+    [viewControllerToPush release];
 }
 
 - (EKCalendarChooser *)newEventCalendarChooser:(id)sender {
@@ -80,21 +144,18 @@ NSString * const SLFEventsManagerNotifyCalendarDidChange = @"SLFEventsManagerNot
 }
 
 - (void)calendarChooserSelectionDidChange:(EKCalendarChooser *)calendarChooser {
-    if (SLFIsIpad())
-        self.eventCalendar = [calendarChooser.selectedCalendars anyObject];
+    self.eventCalendar = [calendarChooser.selectedCalendars anyObject];
 }
 
 - (void)calendarChooserDidFinish:(EKCalendarChooser *)calendarChooser {
-    if (SLFIsIpad())
-        return;
     self.eventCalendar = [calendarChooser.selectedCalendars anyObject];
-    [calendarChooser dismissModalViewControllerAnimated:YES];
+    [self.calendarChooserParent popToThisViewController];
+    self.calendarChooserParent = nil;
 }
 
 - (void)calendarChooserDidCancel:(EKCalendarChooser *)calendarChooser {
-    if (SLFIsIpad())
-        return;
-    [calendarChooser dismissModalViewControllerAnimated:YES];
+    [self.calendarChooserParent popToThisViewController];
+    self.calendarChooserParent = nil;
 }
 
 @end

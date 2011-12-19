@@ -20,6 +20,7 @@
 #import "TableSectionHeaderView.h"
 #import "NSDate+SLFDateHelper.h"
 #import "SLFEventsManager.h"
+#import "MKInfoPanel.h"
 
 #define SectionHeaderEventInfo NSLocalizedString(@"Event Details", @"")
 #define SectionHeaderParticipants NSLocalizedString(@"Participants", @"")
@@ -42,7 +43,6 @@ enum SECTIONS {
 - (void)configureParticipants;
 - (void)configureAdditional;
 - (void)configureNotifications;
-- (void)calendarDidChange:(NSNotification *)notification;
 - (NSString *)headerForSectionIndex:(NSInteger)index;
 - (RKTableViewCellMapping *)participantCellMap;
 @end
@@ -78,7 +78,6 @@ return self;
 }
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.event = nil;
     self.tableViewModel = nil;
@@ -86,7 +85,6 @@ return self;
 }
 
 - (void)viewDidUnload {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
     self.tableViewModel = nil;
     [super viewDidUnload];
@@ -96,7 +94,6 @@ return self;
     [super viewDidLoad];
     [self configureTableViewModel];
 	self.title = NSLocalizedString(@"Loading...", @"");
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(calendarDidChange:) name:SLFEventsManagerNotifyCalendarDidChange object:nil];
 }
 
 - (void)configureTableViewModel {
@@ -216,9 +213,7 @@ return self;
             EKEvent *ekEvent = self.event.ekEvent;
             if (!ekEvent)
                 return;
-            EKEventEditViewController *editor = [[SLFEventsManager sharedManager] newEventEditorForEvent:ekEvent delegate:self];
-            editor.view.width = self.view.width;
-            [self stackOrPushViewController:editor];
+            [[SLFEventsManager sharedManager] presentEventEditorForEvent:ekEvent fromParent:self];
         };
     }]];
     if (SLFIsIOS5OrGreater()) {
@@ -233,9 +228,7 @@ return self;
             cellMapping.selectionStyle = UITableViewCellSelectionStyleBlue;
             cellMapping.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cellMapping.onSelectCell = ^(void) {
-                EKCalendarChooser *chooser = [eventManager newEventCalendarChooser:self];
-                chooser.view.width = self.view.width;
-               [self stackOrPushViewController:chooser];
+                [eventManager presentCalendarChooserFromParent:self];
             };
         }]];
     }
@@ -243,8 +236,13 @@ return self;
     [tableItems release];
 }
 
-- (void)calendarDidChange:(NSNotification *)notification {
+- (void)calendarDidChange:(EKCalendar *)calendar {
     [self configureNotifications];
+}
+
+- (void)eventWasEdited:(EKEvent *)event {
+    if (event)
+        self.event.ekEventIdentifier = event.eventIdentifier;
 }
 
 - (void)configureParticipants {
@@ -256,18 +254,6 @@ return self;
     [cellMapping mapKeyPath:@"type" toAttribute:@"textLabel.text"];
     [cellMapping mapKeyPath:@"name" toAttribute:@"detailTextLabel.text"];
     return cellMapping;
-}
-
-- (void)eventEditViewController:(EKEventEditViewController *)controller didCompleteWithAction:(EKEventEditViewAction)action {
-    self.event.ekEventIdentifier = controller.event.eventIdentifier;
-    if (SLFIsIpad())
-        [SLFAppDelegateStack popToViewController:self animated:YES];
-    else
-        [SLFAppDelegateNav popToViewController:self animated:YES];
-}
-
-- (EKCalendar *)eventEditViewControllerDefaultCalendarForNewEvents:(EKEventEditViewController *)controller {
-    return [[SLFEventsManager sharedManager] eventCalendar];
 }
 
 #pragma mark - Object Loader

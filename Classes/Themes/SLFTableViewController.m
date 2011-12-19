@@ -125,11 +125,17 @@
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {
-    if (!SLFIsIpad()) {
+    if (!SLFIsIpad())
         [self.navigationController pushViewController:viewController animated:YES];
-        return;
-    }
-    [self.stackController pushViewController:viewController fromViewController:self animated:YES];
+    else
+        [self.stackController pushViewController:viewController fromViewController:self animated:YES];
+}
+
+- (void)popToThisViewController {
+    if (!SLFIsIpad())
+        [SLFAppDelegateNav popToViewController:self animated:YES];
+    else
+        [SLFAppDelegateStack popToViewController:self animated:YES];
 }
 
 - (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url {

@@ -13,13 +13,20 @@
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
 
-@interface SLFEventsManager : NSObject <EKCalendarChooserDelegate>
+@protocol SLFEventsManagerDelegate <NSObject>
+@required
+- (void)calendarDidChange:(EKCalendar *)calendar;
+- (void)eventWasEdited:(EKEvent *)event;
+@end
+
+@interface SLFEventsManager : NSObject <EKCalendarChooserDelegate, EKEventEditViewDelegate>
 @property (nonatomic,retain) EKEventStore *eventStore;
 @property (nonatomic,retain) EKCalendar *eventCalendar;
 + (id)sharedManager;
 - (EKEvent *)findOrCreateEventWithIdentifier:(NSString *)eventIdentifier;
-- (EKEventEditViewController *)newEventEditorForEvent:(EKEvent *)event delegate:(id<EKEventEditViewDelegate>)delegate;
-- (EKCalendarChooser *)newEventCalendarChooser:(id)sender;
+- (BOOL)saveEvent:(EKEvent *)event;
+- (void)presentEventEditorForEvent:(EKEvent *)event fromParent:(UIViewController <StackableController,SLFEventsManagerDelegate> *)parent;
+- (void)presentCalendarChooserFromParent:(UIViewController <StackableController, SLFEventsManagerDelegate> *)parent;
 @end
 
 extern NSString * const SLFEventsManagerNotifyCalendarDidChange;

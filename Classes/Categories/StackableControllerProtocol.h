@@ -13,4 +13,6 @@
 @protocol StackableController <NSObject>
 @required
 - (void)stackOrPushViewController:(UIViewController *)viewController;
+@optional
+- (void)popToThisViewController;
 @end
