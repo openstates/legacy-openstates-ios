@@ -98,6 +98,7 @@ NSString * const SLFEventsManagerNotifyCalendarDidChange = @"SLFEventsManagerNot
     EKEventEditViewController *editor = [self newEventEditorForEvent:event delegate:self];
     editor.view.width = parent.view.width;
     [parent stackOrPushViewController:editor];
+    [editor release];
 }
 
 - (void)eventEditViewController:(EKEventEditViewController *)controller didCompleteWithAction:(EKEventEditViewAction)action {

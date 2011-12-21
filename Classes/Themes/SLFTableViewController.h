@@ -17,6 +17,7 @@
 #import "StackableControllerProtocol.h"
 #import "SLFTheme.h"
 #import "TitleBarView.h"
+#import "PSStackedView.h"
 
 typedef void(^SearchBarConfigurationBlock)(UISearchBar *searchBar);
 
