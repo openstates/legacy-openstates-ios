@@ -14,6 +14,7 @@
 #import "EPSBezierPath.h"
 #import "SLFAppearance.h"
 #import "SLFDrawingExtensions.h"
+#import <QuartzCore/QuartzCore.h>
 
 const CGFloat kOpenStatesIconViewWidth = 512.f;
 const CGFloat kOpenStatesIconViewHeight = 512.f;

@@ -12,8 +12,6 @@
 //
 //
 
-#import <UIKit/UIKit.h>
-
 @interface StackedMenuCell : UITableViewCell
 @property(nonatomic) BOOL enabled;
 @end

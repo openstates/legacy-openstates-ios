@@ -14,6 +14,7 @@
 #import "EPSBezierPath.h"
 #import "SLFAppearance.h"
 #import "SLFDrawingExtensions.h"
+#import <QuartzCore/QuartzCore.h>
 
 const CGFloat kOpenStatesGearViewWidth = 56.f;
 const CGFloat kOpenStatesGearViewHeight = 56.f;

@@ -12,6 +12,7 @@
 
 #import "OpenStatesTitleView.h"
 #import "SLFTheme.h"
+#import <QuartzCore/QuartzCore.h>
 
 const CGFloat kOpenStatesTitleViewWidth = 395.0f;
 const CGFloat kOpenStatesTitleViewHeight = 42.0f;

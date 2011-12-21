@@ -748,14 +748,6 @@
 		37B43D0F14448E7400A8020D /* SVPlacemark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVPlacemark.m; sourceTree = "<group>"; };
 		37B6FF94149207C8007CB068 /* SLFStackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFStackedViewController.h; sourceTree = "<group>"; };
 		37B6FF95149207C8007CB068 /* SLFStackedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFStackedViewController.m; sourceTree = "<group>"; };
-		37B98668148CC3630093CF69 /* SLFLocalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLFLocalytics.h; path = Localytics/SLFLocalytics.h; sourceTree = "<group>"; };
-		37B98669148CC3630093CF69 /* SLFLocalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLFLocalytics.m; path = Localytics/SLFLocalytics.m; sourceTree = "<group>"; };
-		37B9866B148CC4700093CF69 /* LocalyticsDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocalyticsDatabase.m; path = Localytics/LocalyticsDatabase.m; sourceTree = "<group>"; };
-		37B9866C148CC4700093CF69 /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocalyticsSession.h; path = Localytics/LocalyticsSession.h; sourceTree = "<group>"; };
-		37B9866D148CC4700093CF69 /* LocalyticsSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocalyticsSession.m; path = Localytics/LocalyticsSession.m; sourceTree = "<group>"; };
-		37B9866E148CC4700093CF69 /* UploaderThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UploaderThread.h; path = Localytics/UploaderThread.h; sourceTree = "<group>"; };
-		37B9866F148CC4700093CF69 /* UploaderThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UploaderThread.m; path = Localytics/UploaderThread.m; sourceTree = "<group>"; };
-		37B98670148CC4700093CF69 /* WebserviceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebserviceConstants.h; path = Localytics/WebserviceConstants.h; sourceTree = "<group>"; };
 		37B9CC07143D0654006C56E0 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		37BAC149142B972D0021A3C6 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = main.m; path = Classes/Main/main.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37BAC14D142B97620021A3C6 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
@@ -1425,7 +1417,6 @@
 			isa = PBXGroup;
 			children = (
 				3744D6ED149586D400507D21 /* MKInfoPanel */,
-				37B98667148CC3310093CF69 /* Localytics */,
 				37A16CF7148C128B000A3C91 /* GoogleAnalytics */,
 				373ECB6414888C9F000BD16D /* TestFlight */,
 				3770F123148712A500FD854B /* MultiRowCalloutAnnotationView */,
@@ -1586,21 +1577,6 @@
 			);
 			name = SVGeocoder;
 			path = Vendor/SVGeocoder/SVGeocoder;
-			sourceTree = "<group>";
-		};
-		37B98667148CC3310093CF69 /* Localytics */ = {
-			isa = PBXGroup;
-			children = (
-				37B98668148CC3630093CF69 /* SLFLocalytics.h */,
-				37B98669148CC3630093CF69 /* SLFLocalytics.m */,
-				37B9866B148CC4700093CF69 /* LocalyticsDatabase.m */,
-				37B9866C148CC4700093CF69 /* LocalyticsSession.h */,
-				37B9866D148CC4700093CF69 /* LocalyticsSession.m */,
-				37B9866E148CC4700093CF69 /* UploaderThread.h */,
-				37B9866F148CC4700093CF69 /* UploaderThread.m */,
-				37B98670148CC4700093CF69 /* WebserviceConstants.h */,
-			);
-			name = Localytics;
 			sourceTree = "<group>";
 		};
 		37BAC14B142B97620021A3C6 /* Icon */ = {

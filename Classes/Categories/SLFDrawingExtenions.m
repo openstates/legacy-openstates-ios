@@ -11,6 +11,7 @@
 //
 
 #import "SLFDrawingExtensions.h"
+#import <QuartzCore/QuartzCore.h>
 
 static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, float ovalHeight);
 static void addGlossPath(CGContextRef context, CGRect rect);

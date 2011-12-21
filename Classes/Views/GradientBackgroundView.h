@@ -11,12 +11,12 @@
 //
 
 @interface GradientBackgroundView : UIView
-
 - (void)loadLayerAndGradientColors;
 - (void)loadLayerAndGradientWithColors:(NSArray *)colors;
 @property (nonatomic,assign) BOOL useGearView;
 @end
 
+@class CAGradientLayer;
 @interface GradientInnerShadowView : UIView 
 @property (nonatomic,retain) CAGradientLayer *gradient;
 @end
