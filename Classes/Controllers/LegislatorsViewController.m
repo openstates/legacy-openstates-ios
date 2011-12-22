@@ -34,27 +34,27 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = [NSString stringWithFormat:@"%d Members", self.tableViewModel.rowCount];
+    self.title = [NSString stringWithFormat:@"%d Members", self.tableController.rowCount];
 }
 
-- (void)configureTableViewModel {
-    [super configureTableViewModel];
-    self.tableViewModel.showsSectionIndexTitles = YES;
-    self.tableViewModel.tableView.rowHeight = 73;
-    self.tableViewModel.sectionNameKeyPath = @"lastnameInitial";
-    LegislatorCellMapping *objCellMap = [LegislatorCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
+- (void)configureTableController {
+    [super configureTableController];
+    self.tableController.showsSectionIndexTitles = YES;
+    self.tableController.tableView.rowHeight = 73;
+    self.tableController.sectionNameKeyPath = @"lastnameInitial";
+    LegislatorCellMapping *objCellMap = [LegislatorCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"self" toAttribute:@"legislator"];
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             NSString *path = [SLFActionPathNavigator navigationPathForController:[LegislatorDetailViewController class] withResource:object];
             [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
         };
     }];
-    [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
+    [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
 }
 
-- (void)tableViewModelDidFinishLoading:(RKAbstractTableViewModel*)tableViewModel {
-    [super tableViewModelDidFinishLoading:tableViewModel];
-    self.title = [NSString stringWithFormat:@"%d Members", self.tableViewModel.rowCount];
+- (void)tableControllerDidFinishLoading:(RKAbstractTableController*)tableController {
+    [super tableControllerDidFinishLoading:tableController];
+    self.title = [NSString stringWithFormat:@"%d Members", self.tableController.rowCount];
 }
 
 @end

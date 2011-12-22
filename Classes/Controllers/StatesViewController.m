@@ -47,15 +47,15 @@
     [super viewDidLoad];
     [self configureTableHeader];
     [self loadFromNetworkIfEmpty];
-    self.title = [NSString stringWithFormat:@"%d States", self.tableViewModel.rowCount];
+    self.title = [NSString stringWithFormat:@"%d States", self.tableController.rowCount];
 }
 
-- (void)configureTableViewModel {
-    [super configureTableViewModel];
-    self.tableViewModel.showsSectionIndexTitles = YES;
-    self.tableViewModel.sectionNameKeyPath = @"stateInitial";
+- (void)configureTableController {
+    [super configureTableController];
+    self.tableController.showsSectionIndexTitles = YES;
+    self.tableController.sectionNameKeyPath = @"stateInitial";
     self.tableView.rowHeight = 48;
-    SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
+    SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"name" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"stateID" toAttribute:@"detailTextLabel.text"];
         [cellMapping mapKeyPath:@"stateFlag" toAttribute:@"imageView.image"];
@@ -66,10 +66,10 @@
             [self pushOrSendViewControllerWithState:state];
         };
     }];
-    [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];
-    RKTableItem *headerItem = [RKTableItem tableItemWithBlock:^(RKTableItem *tableItem){
+    [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];
+    RKTableItem *headerItem = [RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem){
         tableItem.text = NSLocalizedString(@"choose a state to get started.", @"");
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
+        tableItem.cellMapping = [StaticSubtitleCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
             [cellMapping addDefaultMappings];
             cellMapping.style = UITableViewCellStyleDefault;
             cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
@@ -79,19 +79,19 @@
             };
         }];
     }];
-    [self.tableViewModel addHeaderRowForItem:headerItem];
+    [self.tableController addHeaderRowForItem:headerItem];
 }
 
-- (void)tableViewModelDidFinishLoading:(RKAbstractTableViewModel*)tableViewModel {
-    [super tableViewModelDidFinishLoading:tableViewModel];
-    self.title = [NSString stringWithFormat:@"%d States", self.tableViewModel.rowCount];
+- (void)tableControllerDidFinishLoading:(RKAbstractTableController*)tableController {
+    [super tableControllerDidFinishLoading:tableController];
+    self.title = [NSString stringWithFormat:@"%d States", self.tableController.rowCount];
 }
 
 - (void)loadFromNetworkIfEmpty {
-    NSInteger count = self.tableViewModel.rowCount;
+    NSInteger count = self.tableController.rowCount;
     if (count < 30) { // Sometimes we have 1 row, so 30 is an arbitrary but reasonable sanity check.
         @try {
-            [self.tableViewModel loadTableFromNetwork];
+            [self.tableController loadTableFromNetwork];
         }
         @catch (NSException *exception) {
             RKLogWarning(@"Exception while attempting to load list of available states from network (already in progress?) ... %@", exception);

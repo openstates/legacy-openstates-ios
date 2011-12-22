@@ -5,7 +5,7 @@
 @implementation GenericAsset
 
 + (RKManagedObjectMapping *)mapping {
-    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class] inManagedObjectStore:[RKObjectManager sharedManager].objectStore];
     [mapping mapAttributes:@"name", @"url", nil];
     return mapping;
 }

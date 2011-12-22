@@ -6,7 +6,7 @@
 @implementation SLFEvent
 
 + (RKManagedObjectMapping *)mapping {
-    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class] inManagedObjectStore:[RKObjectManager sharedManager].objectStore];
     mapping.primaryKeyAttribute = @"eventID";
     [mapping mapKeyPath:@"id" toAttribute:@"eventID"];
     [mapping mapKeyPath:@"state" toAttribute:@"stateID"];

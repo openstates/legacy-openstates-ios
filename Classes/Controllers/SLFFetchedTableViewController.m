@@ -28,7 +28,7 @@
 @implementation SLFFetchedTableViewController
 
 @synthesize state;
-@synthesize tableViewModel = __tableViewModel;
+@synthesize tableController = _tableController;
 @synthesize resourcePath = __resourcePath;
 @synthesize dataClass = __dataClass;
 
@@ -57,34 +57,34 @@
     return [[self class] actionPathForObject:self.state];
 }
 
-- (void)configureTableViewModel {
-    self.tableViewModel = [RKFetchedResultsTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    __tableViewModel.delegate = self;
-    __tableViewModel.objectManager = [RKObjectManager sharedManager];
-    __tableViewModel.resourcePath = self.resourcePath;
-    __tableViewModel.autoRefreshFromNetwork = YES;
-    __tableViewModel.autoRefreshRate = 360;
-    __tableViewModel.pullToRefreshEnabled = YES;
-    __tableViewModel.imageForError = [UIImage imageNamed:@"error"];
+- (void)configureTableController {
+    self.tableController = [RKFetchedResultsTableController tableControllerForTableViewController:(UITableViewController*)self];
+    _tableController.delegate = self;
+    _tableController.objectManager = [RKObjectManager sharedManager];
+    _tableController.resourcePath = self.resourcePath;
+    _tableController.autoRefreshFromNetwork = YES;
+    _tableController.autoRefreshRate = 360;
+    _tableController.pullToRefreshEnabled = YES;
+    _tableController.imageForError = [UIImage imageNamed:@"error"];
     CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
     MKInfoPanel *offlinePanel = [MKInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MKInfoPanelTypeError title:NSLocalizedString(@"Offline", @"") detail:NSLocalizedString(@"The server is unavailable.",@"")];
-    __tableViewModel.imageForOffline = [UIImage imageFromView:offlinePanel];
-    //__tableViewModel.imageForOffline = [UIImage imageNamed:@"offline"];
+    _tableController.imageForOffline = [UIImage imageFromView:offlinePanel];
+    //_tableController.imageForOffline = [UIImage imageNamed:@"offline"];
     MKInfoPanel *panel = [MKInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MKInfoPanelTypeInfo title:NSLocalizedString(@"Updating", @"") detail:NSLocalizedString(@"Downloading new data",@"")];
-    __tableViewModel.loadingView = panel;
-    __tableViewModel.predicate = nil;
+    _tableController.loadingView = panel;
+    _tableController.predicate = nil;
     NSAssert(self.dataClass != NULL, @"Must set a data class before loading the view");
-    [__tableViewModel setObjectMappingForClass:__dataClass];
-    self.tableViewModel.sortDescriptors = [self.dataClass sortDescriptors];
+    [_tableController setObjectMappingForClass:__dataClass];
+    self.tableController.sortDescriptors = [self.dataClass sortDescriptors];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSAssert(self.resourcePath != NULL, @"Must set a resource path before attempting to download table data.");
-    [self configureTableViewModel];
-    if (__tableViewModel.sectionNameKeyPath) {
-        __tableViewModel.heightForHeaderInSection = 18;
-        __tableViewModel.onViewForHeaderInSection = ^UIView*(NSUInteger sectionIndex, NSString* sectionTitle) {
+    [self configureTableController];
+    if (_tableController.sectionNameKeyPath) {
+        _tableController.heightForHeaderInSection = 18;
+        _tableController.onViewForHeaderInSection = ^UIView*(NSUInteger sectionIndex, NSString* sectionTitle) {
             UIColor *sectionColor =  SLFColorWithRGB(207,208,194);
             UIView *sectionView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, 18)] autorelease];
             sectionView.backgroundColor = sectionColor;
@@ -98,7 +98,7 @@
             return sectionView;
         };   
     }
-    [self.tableViewModel loadTable];
+    [self.tableController loadTable];
     if ([self hasSearchableDataClass]) {
         [self configureSearchBarWithPlaceholder:NSLocalizedString(@"Filter results", @"") withConfigurationBlock:^(UISearchBar *searchBar) {
             if ([self shouldShowChamberScopeBar]) {
@@ -111,11 +111,11 @@
 
 - (void)viewDidUnload {
     [super viewDidUnload];
-    self.tableViewModel = nil;
+    self.tableController = nil;
 }
 
 - (void)dealloc {
-    self.tableViewModel = nil;
+    self.tableController = nil;
     self.state = nil;
     self.resourcePath = nil;
     self.dataClass = nil;
@@ -123,7 +123,7 @@
 }
 
 - (void)setResourcePath:(NSString *)resourcePath {
-    self.tableViewModel.predicate = nil;
+    self.tableController.predicate = nil;
     SLFRelease(__resourcePath);
     __resourcePath = [resourcePath copy];
 }
@@ -149,7 +149,7 @@
 }
 
 - (NSPredicate *)defaultPredicate {
-    id<RKManagedObjectCache> cache = self.tableViewModel.objectManager.objectStore.managedObjectCache;
+    id<RKManagedObjectCache> cache = self.tableController.objectManager.objectStore.managedObjectCache;
     NSAssert(cache != NULL, @"Must have a managed object cache");
     NSFetchRequest *fetchRequest = [cache fetchRequestForResourcePath:self.resourcePath];
     if (!fetchRequest)
@@ -164,12 +164,12 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     if (!IsEmpty(searchBar.text)) {
         NSPredicate *predicate = [self.dataClass predicateForSearchWithText:searchBar.text searchMode:RKSearchModeOr];
-        self.tableViewModel.predicate = [self compoundPredicate:[self defaultPredicate] withPredicate:predicate];
+        self.tableController.predicate = [self compoundPredicate:[self defaultPredicate] withPredicate:predicate];
         if ([self shouldShowChamberScopeBar]) {
             NSString *chamberFilter = [self chamberFilterForScopeIndex:searchBar.selectedScopeButtonIndex];
             [self filterCustomPredicateWithChamberFilter:chamberFilter];
         }
-        [self.tableViewModel loadTable];
+        [self.tableController loadTable];
     }
     [super searchBarSearchButtonClicked:searchBar];
 }
@@ -179,15 +179,15 @@
     NSString *chamberFilter = [self chamberFilterForScopeIndex:selectedScope];
     if (!IsEmpty(searchBar.text)) {
         [self applyCustomFilterWithScopeIndex:selectedScope withText:searchBar.text];
-        RKLogDebug(@"Built-In Predicate = %@", self.tableViewModel.fetchRequest.predicate.predicateFormat);
-        if (self.tableViewModel.predicate)
-            RKLogDebug(@"Custom Predicate = %@", self.tableViewModel.predicate.predicateFormat);
+        RKLogDebug(@"Built-In Predicate = %@", self.tableController.fetchRequest.predicate.predicateFormat);
+        if (self.tableController.predicate)
+            RKLogDebug(@"Custom Predicate = %@", self.tableController.predicate.predicateFormat);
         return;
     }
     [self filterDefaultFetchRequestWithChamberFilter:chamberFilter];
-    RKLogDebug(@"Built-In Predicate = %@", self.tableViewModel.fetchRequest.predicate.predicateFormat);
-    if (self.tableViewModel.predicate)
-        RKLogDebug(@"Custom Predicate = %@", self.tableViewModel.predicate.predicateFormat);
+    RKLogDebug(@"Built-In Predicate = %@", self.tableController.fetchRequest.predicate.predicateFormat);
+    if (self.tableController.predicate)
+        RKLogDebug(@"Custom Predicate = %@", self.tableController.predicate.predicateFormat);
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
@@ -196,22 +196,22 @@
 }
 
 - (void)resetToDefaultFilterPredicateWithScopeIndex:(NSInteger)scopeIndex {
-    self.tableViewModel.predicate = nil;
+    self.tableController.predicate = nil;
     if ([self shouldShowChamberScopeBar]) {
         NSString *chamberFilter = [self chamberFilterForScopeIndex:scopeIndex];
         [self filterDefaultFetchRequestWithChamberFilter:chamberFilter];
     }
-    [self.tableViewModel loadTable];
+    [self.tableController loadTable];
 }
 
 - (void)applyCustomFilterWithScopeIndex:(NSInteger)scopeIndex withText:(NSString *)searchText {
     NSPredicate *predicate = [self.dataClass predicateForSearchWithText:searchText searchMode:RKSearchModeOr];
-    self.tableViewModel.predicate = [self compoundPredicate:[self defaultPredicate] withPredicate:predicate];
+    self.tableController.predicate = [self compoundPredicate:[self defaultPredicate] withPredicate:predicate];
     if ([self shouldShowChamberScopeBar]) {
         NSString *chamberFilter = [self chamberFilterForScopeIndex:scopeIndex];
         [self filterCustomPredicateWithChamberFilter:chamberFilter];
     }
-    [self.tableViewModel loadTable];
+    [self.tableController loadTable];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
@@ -237,13 +237,13 @@
 - (BOOL)filterDefaultFetchRequestWithChamberFilter:(NSString *)newChamberFilter {
     NSString *newPredicateString = [[self defaultPredicate].predicateFormat stringByAppendingFormat:@" %@", newChamberFilter];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:newPredicateString];
-    self.tableViewModel.predicate = predicate;
-    [self.tableViewModel loadTable];
+    self.tableController.predicate = predicate;
+    [self.tableController loadTable];
     return YES;
 }
 
 - (BOOL)filterCustomPredicateWithChamberFilter:(NSString *)newChamberFilter {
-    NSPredicate *predicate = self.tableViewModel.predicate;
+    NSPredicate *predicate = self.tableController.predicate;
     if (!predicate)
         return NO;
     NSString *oldPredicateString = [predicate predicateFormat];
@@ -259,8 +259,8 @@
         newPredicateString = [oldPredicateString stringByAppendingFormat:@" %@", newChamberFilter];
     if (newPredicateString) {
         predicate = [NSPredicate predicateWithFormat:newPredicateString];
-        self.tableViewModel.predicate = predicate;
-        [self.tableViewModel loadTable];
+        self.tableController.predicate = predicate;
+        [self.tableController loadTable];
         return YES;
     }
     return NO;

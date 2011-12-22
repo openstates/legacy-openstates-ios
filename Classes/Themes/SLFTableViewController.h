@@ -22,7 +22,7 @@
 typedef void(^SearchBarConfigurationBlock)(UISearchBar *searchBar);
 
 @class SLFState;
-@interface SLFTableViewController : GCTableViewController <PSStackedViewDelegate, RKTableViewModelDelegate, StackableController, UISearchBarDelegate, SLFPerstentActionsProtocol>
+@interface SLFTableViewController : GCTableViewController <PSStackedViewDelegate, RKTableControllerDelegate, StackableController, UISearchBarDelegate, SLFPerstentActionsProtocol>
 
 @property (nonatomic,assign) BOOL useGradientBackground;
 @property (nonatomic,assign) BOOL useGearViewBackground;

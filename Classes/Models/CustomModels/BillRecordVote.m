@@ -6,7 +6,7 @@
 @implementation BillRecordVote
 
 + (RKManagedObjectMapping *)mapping {
-    RKManagedObjectMapping* mapping = [RKManagedObjectMapping mappingForClass:[BillRecordVote class]];
+    RKManagedObjectMapping* mapping = [RKManagedObjectMapping mappingForClass:[BillRecordVote class] inManagedObjectStore:[RKObjectManager sharedManager].objectStore];
     mapping.primaryKeyAttribute = @"voteID";
     [mapping mapAttributes:@"date", @"type", @"chamber", @"passed", @"session", @"motion", nil];
     [mapping mapKeyPath:@"vote_id" toAttribute:@"voteID"];

@@ -29,12 +29,12 @@
 @interface BillsMenuViewController()
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
-- (void)configureTableViewModel;
+- (void)configureTableController;
 @end
 
 @implementation BillsMenuViewController
 @synthesize state = _state;
-@synthesize tableViewModel = __tableViewModel;
+@synthesize tableController = _tableController;
 
 - (id)initWithState:(SLFState *)newState {
     self = [super init];
@@ -51,19 +51,19 @@
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.state = nil;
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super viewDidUnload];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self configureTableViewModel];
+    [self configureTableController];
     if (self.state)
         self.title = [NSString stringWithFormat:@"%@ %@", self.state.name, NSLocalizedString(@"Bills",@"")]; 
 }
@@ -78,11 +78,11 @@
     return [[self class] actionPathForObject:self.state];
 }
 
-- (void)configureTableViewModel {
-    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.pullToRefreshEnabled = NO;
+- (void)configureTableController {
+    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    self.tableController.delegate = self;
+    self.tableController.objectManager = [RKObjectManager sharedManager];
+    self.tableController.pullToRefreshEnabled = NO;
 }
 
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {
@@ -112,7 +112,7 @@
     RKTableViewCellMapping *cellMap = [self menuCellMapping]; // subclass can override
     [cellMap mapKeyPath:@"highlightedImage" toAttribute:@"imageView.highlightedImage"];
     [cellMap addDefaultMappings];
-    [__tableViewModel loadTableItems:tableItems withMapping:cellMap];
+    [_tableController loadTableItems:tableItems withMapping:cellMap];
     [tableItems release];
 }
 

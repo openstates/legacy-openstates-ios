@@ -6,7 +6,7 @@
 @implementation CommitteeRole
 
 + (RKManagedObjectMapping *)mapping {
-    RKManagedObjectMapping* mapping = [RKManagedObjectMapping mappingForClass:[self class]];
+    RKManagedObjectMapping* mapping = [RKManagedObjectMapping mappingForClass:[self class] inManagedObjectStore:[RKObjectManager sharedManager].objectStore];
     [mapping mapKeyPath:@"committee_id" toAttribute:@"committeeID"];
     [mapping mapKeyPath:@"committee" toAttribute:@"name"];
     [mapping mapAttributes:@"type", @"chamber", nil];

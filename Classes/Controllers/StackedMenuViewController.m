@@ -55,7 +55,6 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     self.tableView.bounces = NO;
     self.tableView.width = STACKED_MENU_WIDTH;
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    self.tableViewModel.cellSelectionType = RKTableViewCellSelectionFixed;
     [self configureMenuBackground];
     [self configureStackedBackgroundView];    
 }
@@ -66,16 +65,12 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 }
 
 - (RKTableViewCellMapping *)menuCellMapping {
-    RKTableViewCellMapping *cellMap = [RKTableViewCellMapping cellMapping];
+    RKTableViewCellMapping *cellMap = [super menuCellMapping];
     cellMap.accessoryType = UITableViewCellAccessoryNone;
     cellMap.style = UITableViewCellStyleDefault;
     cellMap.cellClass = [StackedMenuCell class];
-    cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-        RKTableItem* tableItem = (RKTableItem*) object;
-        if ([tableItem.text hasSuffix:@"News"] || [tableItem.text hasSuffix:@"Feedback"]) // cheating...
-            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-        [self selectMenuItem:tableItem.text];
-    };
+    cellMap.deselectsRowOnSelection = NO;
+    cellMap.onCellWillAppearForObjectAtIndexPath = nil;
     return cellMap;
 }
 

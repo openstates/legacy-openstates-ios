@@ -14,7 +14,7 @@
 @implementation SLFState
 
 + (RKManagedObjectMapping *)mapping {
-    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class] inManagedObjectStore:[RKObjectManager sharedManager].objectStore];
     mapping.primaryKeyAttribute = @"stateID";
     [mapping mapKeyPath:@"lower_chamber_name" toAttribute:@"lowerChamberName"];
     [mapping mapKeyPath:@"lower_chamber_title" toAttribute:@"lowerChamberTitle"];

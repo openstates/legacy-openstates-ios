@@ -4,7 +4,7 @@
 @implementation SLFCommittee
 
 + (RKManagedObjectMapping *)mapping {
-    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class] inManagedObjectStore:[RKObjectManager sharedManager].objectStore];
     mapping.primaryKeyAttribute = @"committeeID";
     [mapping mapKeyPath:@"id" toAttribute:@"committeeID"];
     [mapping mapKeyPath:@"state" toAttribute:@"stateID"];

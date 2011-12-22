@@ -40,7 +40,7 @@ enum SECTIONS {
 };
 
 @interface BillDetailViewController()
-@property (nonatomic,retain) RKTableViewModel *tableViewModel;
+@property (nonatomic,retain) RKTableController *tableController;
 @property (nonatomic,retain) IBOutlet UIButton *watchButton; 
 - (id)initWithResourcePath:(NSString *)resourcePath;
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
@@ -65,7 +65,7 @@ enum SECTIONS {
 
 @implementation BillDetailViewController
 @synthesize bill = _bill;
-@synthesize tableViewModel = _tableViewModel;
+@synthesize tableController = _tableController;
 @synthesize watchButton = _watchButton;
 
 - (id)initWithResourcePath:(NSString *)resourcePath {
@@ -97,31 +97,31 @@ enum SECTIONS {
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.bill = nil;
-    self.tableViewModel = nil;
+    self.tableController = nil;
     self.watchButton = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-    self.tableViewModel = nil;
+    self.tableController = nil;
     self.watchButton = nil;
     [super viewDidUnload];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    _tableViewModel.delegate = self;
-    _tableViewModel.variableHeightRows = YES;
-    _tableViewModel.objectManager = [RKObjectManager sharedManager];
-    _tableViewModel.pullToRefreshEnabled = NO;
-    [_tableViewModel mapObjectsWithClass:[BillRecordVote class] toTableCellsWithMapping:[self votesCellMap]];
-    [_tableViewModel mapObjectsWithClass:[BillAction class] toTableCellsWithMapping:[self actionCellMap]];
-    [_tableViewModel mapObjectsWithClass:[BillSponsor class] toTableCellsWithMapping:[self sponsorCellMap]];    
+    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    _tableController.delegate = self;
+    _tableController.variableHeightRows = YES;
+    _tableController.objectManager = [RKObjectManager sharedManager];
+    _tableController.pullToRefreshEnabled = NO;
+    [_tableController mapObjectsWithClass:[BillRecordVote class] toTableCellsWithMapping:[self votesCellMap]];
+    [_tableController mapObjectsWithClass:[BillAction class] toTableCellsWithMapping:[self actionCellMap]];
+    [_tableController mapObjectsWithClass:[BillSponsor class] toTableCellsWithMapping:[self sponsorCellMap]];    
     NSInteger sectionIndex;
     for (sectionIndex = SectionBillInfo;sectionIndex < kNumSections; sectionIndex++) {
-        [_tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
+        [_tableController addSectionUsingBlock:^(RKTableSection *section) {
             NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
             TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
             section.headerTitle = headerTitle;
@@ -229,31 +229,31 @@ enum SECTIONS {
 
 - (void)configureBillInfoItems {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [LargeStaticSubtitleCellMapping cellMapping];
         tableItem.text = _bill.billID;
         tableItem.detailText = _bill.title;
     }]];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Originating Chamber", @"");
         tableItem.detailText = _bill.chamberObj.formalName;
     }]];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Last Updated", @"");
         tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Bill info was updated %@",@""), [_bill.dateUpdated stringForDisplayWithPrefix:YES]];
     }]];
     NSArray *sortedActions = _bill.sortedActions;
     if (!IsEmpty(sortedActions)) {
-        [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+        [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
             tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
             tableItem.text = NSLocalizedString(@"Latest Activity",@"");
             BillAction *latest = [sortedActions objectAtIndex:0];
             tableItem.detailText = [NSString stringWithFormat:@"%@ - %@", latest.title, latest.subtitle];
         }]];
     }
-    [_tableViewModel loadTableItems:tableItems inSection:SectionBillInfo];     
+    [_tableController loadTableItems:tableItems inSection:SectionBillInfo];     
     [tableItems release];
 }
 
@@ -261,7 +261,7 @@ enum SECTIONS {
     NSArray *stages = _bill.stages;
     if (IsEmpty(stages))
         return;
-    RKTableItem *stageItemCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
+    RKTableItem *stageItemCell = [RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         CGFloat rowHeight = SLFIsIpad() ? 45 : 95;
         tableItem.cellMapping.rowHeight = rowHeight;
@@ -277,7 +277,7 @@ enum SECTIONS {
             [appendingFlow release];
         };
     }];
-    RKTableItem *emptyCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
+    RKTableItem *emptyCell = [RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.cellMapping.rowHeight = 5;
         tableItem.cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
@@ -287,7 +287,7 @@ enum SECTIONS {
             [empty release];
         };
     }];
-    [_tableViewModel loadTableItems:[NSArray arrayWithObjects:stageItemCell, emptyCell, nil] inSection:SectionStages];     
+    [_tableController loadTableItems:[NSArray arrayWithObjects:stageItemCell, emptyCell, nil] inSection:SectionStages];     
 }
 
 - (void)configureSubjects {
@@ -306,7 +306,7 @@ enum SECTIONS {
         [vc release];
     };
     [self addTableItems:tableItems fromWords:_bill.subjects withType:nil onSelectCell:onSelectBlock];
-    [_tableViewModel loadTableItems:tableItems inSection:SectionSubjects];
+    [_tableController loadTableItems:tableItems inSection:SectionSubjects];
     [tableItems release];
 }
 
@@ -315,20 +315,20 @@ enum SECTIONS {
     [self addTableItems:tableItems fromWebAssets:_bill.versions withType:NSLocalizedString(@"Version",@"")];
     [self addTableItems:tableItems fromWebAssets:_bill.documents withType:NSLocalizedString(@"Document",@"")];
     [self addTableItems:tableItems fromWebAssets:_bill.sources withType:NSLocalizedString(@"Resource",@"")];
-    [_tableViewModel loadTableItems:tableItems inSection:SectionResources];
+    [_tableController loadTableItems:tableItems inSection:SectionResources];
     [tableItems release];
 }
 
 - (void)configureSponsors {
-    [_tableViewModel loadObjects:_bill.sortedSponsors inSection:SectionSponsors];    
+    [_tableController loadObjects:_bill.sortedSponsors inSection:SectionSponsors];    
 }
 
 - (void)configureVotes {
-    [_tableViewModel loadObjects:_bill.sortedVotes inSection:SectionVotes];    
+    [_tableController loadObjects:_bill.sortedVotes inSection:SectionVotes];    
 }
 
 - (void)configureActions {
-    [_tableViewModel loadObjects:_bill.sortedActions inSection:SectionActions];    
+    [_tableController loadObjects:_bill.sortedActions inSection:SectionActions];    
 }
 
 - (RKTableViewCellMapping *)actionCellMap {
@@ -339,7 +339,7 @@ enum SECTIONS {
 }
 
 - (RKTableViewCellMapping *)sponsorCellMap {
-    FoundLegislatorCellMapping *cellMap = [FoundLegislatorCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
+    FoundLegislatorCellMapping *cellMap = [FoundLegislatorCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"foundLegislator" toAttribute:@"legislator"];
         [cellMapping mapKeyPath:@"type" toAttribute:@"role"];
         [cellMapping mapKeyPath:@"name" toAttribute:@"genericName"];
@@ -390,7 +390,7 @@ enum SECTIONS {
         RKTableViewCellMapping *cellMapping = [SubtitleCellMapping cellMapping];
         if (!onSelect)
             cellMapping = [StaticSubtitleCellMapping cellMapping];
-        [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+        [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
             tableItem.cellMapping = cellMapping;
             if (!IsEmpty(type))
                 tableItem.detailText = type;

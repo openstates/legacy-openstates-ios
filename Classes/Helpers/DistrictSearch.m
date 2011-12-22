@@ -14,6 +14,7 @@
 #import "SLFDataModels.h"
 #import "SLFRestKitManager.h"
 #import "JSONKit.h"
+#import "SLFReachable.h"
 
 @interface DistrictSearch()
 @property (assign) CLLocationCoordinate2D searchCoordinate;
@@ -38,7 +39,7 @@
 #else
     RKClient * client = [[SLFRestKitManager sharedRestKit] boundaryClient];
 #endif
-    if (NO == [client isNetworkAvailable]) {
+    if (NO == [client isNetworkReachable]) {
         if (failureBlock)
             failureBlock(NSLocalizedString(@"Cannot geolocate legislative districts because Internet service is unavailable.", @""), DistrictSearchShowAlert);
         return;

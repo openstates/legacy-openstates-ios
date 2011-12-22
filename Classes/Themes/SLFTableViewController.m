@@ -104,19 +104,19 @@
     return YES;
 }
 
-- (void)tableViewModel:(RKAbstractTableViewModel*)tableViewModel willLoadTableWithObjectLoader:(RKObjectLoader *)objectLoader {
+- (void)tableController:(RKAbstractTableController*)tableController willLoadTableWithObjectLoader:(RKObjectLoader *)objectLoader {
     objectLoader.URLRequest.timeoutInterval = 30; // something reasonable;
 }
 
-- (void)tableViewModel:(RKAbstractTableViewModel*)tableViewModel didFailLoadWithError:(NSError*)error {
+- (void)tableController:(RKAbstractTableController*)tableController didFailLoadWithError:(NSError*)error {
     self.onSavePersistentActionPath = nil;
     self.title = NSLocalizedString(@"Server Error",@"");
     RKLogError(@"Error loading table: %@", error);
-    if ([tableViewModel respondsToSelector:@selector(resourcePath)])
-        RKLogError(@"-------- from resource path: %@", [tableViewModel performSelector:@selector(resourcePath)]);
+    if ([tableController respondsToSelector:@selector(resourcePath)])
+        RKLogError(@"-------- from resource path: %@", [tableController performSelector:@selector(resourcePath)]);
 }
 
-- (void)tableViewModelDidFinishLoading:(RKAbstractTableViewModel*)tableViewModel {
+- (void)tableControllerDidFinishLoading:(RKAbstractTableController*)tableController {
     RKLogTrace(@"%@: Table model finished loading.", NSStringFromClass([self class]));
     if (self.onSavePersistentActionPath) {
         _onSavePersistentActionPath(self.actionPath);
@@ -140,7 +140,7 @@
 
 - (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url {
     NSParameterAssert(!IsEmpty(url));
-    return [RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    return [RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [SubtitleCellMapping cellMapping];
         tableItem.text = itemTitle;
         tableItem.detailText = itemSubtitle;

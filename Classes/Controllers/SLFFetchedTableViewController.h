@@ -13,7 +13,7 @@
 #import "SLFTableViewController.h"
 
 @interface SLFFetchedTableViewController : SLFTableViewController
-@property (nonatomic, retain) RKFetchedResultsTableViewModel *tableViewModel;
+@property (nonatomic, retain) RKFetchedResultsTableController *tableController;
 @property (nonatomic, retain) SLFState *state;
 @property (nonatomic, copy) NSString *resourcePath;
 @property (nonatomic, assign) Class dataClass;
@@ -25,7 +25,7 @@
 - (BOOL)hasExistingChamberPredicate;
 - (BOOL)filterDefaultFetchRequestWithChamberFilter:(NSString *)newChamberFilter;
 - (BOOL)filterCustomPredicateWithChamberFilter:(NSString *)newChamberFilter;
-- (void)configureTableViewModel;
+- (void)configureTableController;
 - (BOOL)hasSearchableDataClass;
 - (BOOL)shouldShowChamberScopeBar;
 @end

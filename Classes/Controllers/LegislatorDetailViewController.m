@@ -38,7 +38,7 @@ enum SECTIONS {
 };
 
 @interface LegislatorDetailViewController()
-@property (nonatomic, retain) RKTableViewModel *tableViewModel;
+@property (nonatomic, retain) RKTableController *tableController;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
 - (SubtitleCellMapping *)committeeRoleCellMap;
@@ -53,7 +53,7 @@ enum SECTIONS {
 
 @implementation LegislatorDetailViewController
 @synthesize legislator = _legislator;
-@synthesize tableViewModel = __tableViewModel;
+@synthesize tableController = _tableController;
 
 - (id)initWithLegislatorID:(NSString *)legislatorID {
     self = [super initWithStyle:UITableViewStyleGrouped];
@@ -66,27 +66,27 @@ enum SECTIONS {
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.legislator = nil;
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super viewDidUnload];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    __tableViewModel.delegate = self;
-    __tableViewModel.variableHeightRows = YES;
-    __tableViewModel.objectManager = [RKObjectManager sharedManager];
-    __tableViewModel.pullToRefreshEnabled = NO;
-    [__tableViewModel mapObjectsWithClass:[CommitteeRole class] toTableCellsWithMapping:[self committeeRoleCellMap]];
+    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    _tableController.delegate = self;
+    _tableController.variableHeightRows = YES;
+    _tableController.objectManager = [RKObjectManager sharedManager];
+    _tableController.pullToRefreshEnabled = NO;
+    [_tableController mapObjectsWithClass:[CommitteeRole class] toTableCellsWithMapping:[self committeeRoleCellMap]];
     NSInteger sectionIndex;
     for (sectionIndex = SectionMemberInfo;sectionIndex < kNumSections; sectionIndex++) {
-        [__tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
+        [_tableController addSectionUsingBlock:^(RKTableSection *section) {
             NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
             TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
             section.headerTitle = headerTitle;
@@ -129,7 +129,7 @@ enum SECTIONS {
 }
 
 - (void)configureTableHeader {
-    RKTableViewSection *headerSection = [RKTableViewSection sectionWithBlock:^(RKTableViewSection *section) {
+    RKTableSection *headerSection = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
         CGRect headerRect = CGRectMake(0, 0, self.tableView.width, 120);
         LegislatorDetailHeader *header = [[LegislatorDetailHeader alloc] initWithFrame:headerRect];
         section.headerHeight = headerRect.size.height;
@@ -138,28 +138,28 @@ enum SECTIONS {
         header.legislator = self.legislator;
         [header release];;
     }];
-    [__tableViewModel insertSection:headerSection atIndex:SectionHeader];
+    [_tableController insertSection:headerSection atIndex:SectionHeader];
 }
 
 - (void)configureMemberInfoItems {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Chamber", @"");
         tableItem.detailText = _legislator.chamberObj.formalName;
     }]];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = [NSString stringWithFormat:@"%@ %@", _legislator.title, NSLocalizedString(@"Term", @"")];
         tableItem.detailText = _legislator.term;
     }]];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Party", @"");
         tableItem.detailText = _legislator.partyObj.name;
     }]];
     if (!IsEmpty(_legislator.email)) {
-        [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+        [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
             tableItem.cellMapping = [SubtitleCellMapping cellMapping];
             tableItem.text = NSLocalizedString(@"Email", @"");
             tableItem.detailText = _legislator.email;
@@ -171,18 +171,18 @@ enum SECTIONS {
     if (!IsEmpty(_legislator.url)) {
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Website", @"") subtitle:_legislator.url url:_legislator.url]];
     }
-    [__tableViewModel loadTableItems:tableItems inSection:SectionMemberInfo];     
+    [_tableController loadTableItems:tableItems inSection:SectionMemberInfo];     
     [tableItems release];
 }
 
 - (void)configureDistrictMapItems {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"District", @"");
         tableItem.detailText = _legislator.district;
     }]];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [SubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Map", @"");
         tableItem.detailText = _legislator.districtMapLabel;
@@ -192,7 +192,7 @@ enum SECTIONS {
                 [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
         };
     }]];
-    [__tableViewModel loadTableItems:tableItems inSection:SectionDistrict];
+    [_tableController loadTableItems:tableItems inSection:SectionDistrict];
     [tableItems release];
 }
 
@@ -203,7 +203,7 @@ enum SECTIONS {
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Vote Smart Bio", @"") subtitle:@"" url:url]];
     }
     if (!IsEmpty(_legislator.transparencyID)) {
-        [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+        [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
             tableItem.cellMapping = [SubtitleCellMapping cellMapping];
             tableItem.text = NSLocalizedString(@"Campaign Contributions", @"");
             tableItem.detailText = @"";
@@ -226,13 +226,13 @@ enum SECTIONS {
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Resource", @"") subtitle:subtitle url:source.url]];
     }
-    [__tableViewModel loadTableItems:tableItems inSection:SectionResources];
+    [_tableController loadTableItems:tableItems inSection:SectionResources];
     [tableItems release];
 }
 
 - (void)configureBillItems {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [SubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Authored/Sponsored Bills", @"");
         NSString *selectedSession = SLFSelectedSessionForState(_legislator.state);
@@ -244,13 +244,13 @@ enum SECTIONS {
             [vc release];
         };
     }]];
-    [__tableViewModel loadTableItems:tableItems inSection:SectionBills];
+    [_tableController loadTableItems:tableItems inSection:SectionBills];
     [tableItems release];
 }
 
 
 - (void)configureCommitteeItems {
-    [__tableViewModel loadObjects:_legislator.sortedRoles inSection:SectionCommittees];    
+    [_tableController loadObjects:_legislator.sortedRoles inSection:SectionCommittees];    
 }
 
 - (SubtitleCellMapping *)committeeRoleCellMap {

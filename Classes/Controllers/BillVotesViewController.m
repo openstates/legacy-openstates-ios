@@ -29,7 +29,7 @@ enum SECTIONS {
 };
 
 @interface BillVotesViewController()
-@property (nonatomic, retain) RKTableViewModel *tableViewModel;
+@property (nonatomic, retain) RKTableController *tableController;
 - (RKTableViewCellMapping *)voterCellMap;
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
 - (void)configureTableItems;
@@ -39,7 +39,7 @@ enum SECTIONS {
 
 @implementation BillVotesViewController
 @synthesize vote = _vote;
-@synthesize tableViewModel = __tableViewModel;
+@synthesize tableController = _tableController;
 
 - (id)initWithVote:(BillRecordVote *)vote {
     self = [super initWithStyle:UITableViewStyleGrouped];
@@ -52,26 +52,26 @@ enum SECTIONS {
 
 - (void)dealloc {
     self.vote = nil;
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super viewDidUnload];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    __tableViewModel.delegate = self;
-    __tableViewModel.variableHeightRows = YES;
-    __tableViewModel.objectManager = [RKObjectManager sharedManager];
-    __tableViewModel.pullToRefreshEnabled = NO;
-    [__tableViewModel mapObjectsWithClass:[BillVoter class] toTableCellsWithMapping:[self voterCellMap]];
+    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    _tableController.delegate = self;
+    _tableController.variableHeightRows = YES;
+    _tableController.objectManager = [RKObjectManager sharedManager];
+    _tableController.pullToRefreshEnabled = NO;
+    [_tableController mapObjectsWithClass:[BillVoter class] toTableCellsWithMapping:[self voterCellMap]];
     NSInteger sectionIndex;
     for (sectionIndex = SectionVoteInfo;sectionIndex < kNumSections; sectionIndex++) {
-        [__tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
+        [_tableController addSectionUsingBlock:^(RKTableSection *section) {
             NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
             TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
             section.headerTitle = headerTitle;
@@ -95,12 +95,12 @@ enum SECTIONS {
 
 - (void)configureVoteInfo {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Chamber", @"");
         tableItem.detailText = _vote.chamberObj.formalName;
     }]];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         NSString *caption = [_vote.date stringForDisplay];
         if (!IsEmpty(_vote.session))
             caption = [NSString stringWithFormat:@"%@ (%@)", [_vote.date stringForDisplay], _vote.session];
@@ -109,7 +109,7 @@ enum SECTIONS {
         tableItem.detailText = caption;
     }]];
     if (!IsEmpty(_vote.motion)) {
-        [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+        [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
             NSString *caption = [_vote.motion capitalizedString];
             if (!IsEmpty(_vote.record))
                 caption = [NSString stringWithFormat:@"%@ (%@)", caption, _vote.record];
@@ -118,19 +118,19 @@ enum SECTIONS {
             tableItem.detailText = caption;
         }]];
     }
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Status", @"");
         tableItem.detailText = _vote.subtitle;
     }]];
-    [self.tableViewModel loadTableItems:tableItems inSection:SectionVoteInfo];     
+    [self.tableController loadTableItems:tableItems inSection:SectionVoteInfo];     
     [tableItems release];
 }
 
 - (void)configureVoters {
-    [__tableViewModel loadObjects:_vote.sortedYesVotes inSection:SectionYes];    
-    [__tableViewModel loadObjects:_vote.sortedNoVotes inSection:SectionNo];    
-    [__tableViewModel loadObjects:_vote.sortedOtherVotes inSection:SectionOther];    
+    [_tableController loadObjects:_vote.sortedYesVotes inSection:SectionYes];    
+    [_tableController loadObjects:_vote.sortedNoVotes inSection:SectionNo];    
+    [_tableController loadObjects:_vote.sortedOtherVotes inSection:SectionOther];    
 }
 
 - (RKTableViewCellMapping *)voterCellMap {
@@ -140,7 +140,7 @@ enum SECTIONS {
     [cellMapping mapKeyPath:@"name" toAttribute:@"genericName"];
     cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
         if (cellMapping.roundImageCorners) {
-            NSInteger numRows = [self.tableViewModel tableView:self.tableView numberOfRowsInSection:indexPath.section];
+            NSInteger numRows = [self.tableController tableView:self.tableView numberOfRowsInSection:indexPath.section];
             if (numRows == 1)
                 [cell.imageView roundTopAndBottomLeftCorners];
             else if (indexPath.row == 0)

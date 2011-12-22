@@ -4,7 +4,7 @@
 @implementation EventParticipant
 
 + (RKManagedObjectMapping *)mapping {
-    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class] inManagedObjectStore:[RKObjectManager sharedManager].objectStore];
     [mapping mapAttributes:@"type", nil];
     [mapping mapKeyPath:@"participant" toAttribute:@"name"];
     return mapping;

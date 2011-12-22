@@ -14,7 +14,7 @@
 #import "SLFState.h"
 
 @interface BillsSubjectsViewController : SLFTableViewController
-@property (nonatomic, retain) RKTableViewModel *tableViewModel;
+@property (nonatomic, retain) RKTableController *tableController;
 @property (nonatomic,retain) SLFState *state;
 - (id)initWithState:(SLFState *)newState;
 - (void)reconfigureForState:(SLFState *)newState;

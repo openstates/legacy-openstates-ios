@@ -6,7 +6,7 @@
 @implementation BillAction
 
 + (RKManagedObjectMapping *)mapping {
-    RKManagedObjectMapping* mapping = [RKManagedObjectMapping mappingForClass:[self class]];
+    RKManagedObjectMapping* mapping = [RKManagedObjectMapping mappingForClass:[self class] inManagedObjectStore:[RKObjectManager sharedManager].objectStore];
     [mapping mapAttributes:@"date", @"action", @"actor", nil];
     [mapping mapKeyPath:@"+action_number" toAttribute:@"actionID"];
     [mapping mapKeyPath:@"+comment" toAttribute:@"comment"];

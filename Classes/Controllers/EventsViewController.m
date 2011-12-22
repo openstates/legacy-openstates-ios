@@ -32,15 +32,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = [NSString stringWithFormat:@"%d Events", self.tableViewModel.rowCount];
+    self.title = [NSString stringWithFormat:@"%d Events", self.tableController.rowCount];
 }
 
-- (void)configureTableViewModel {
-    [super configureTableViewModel];
-    self.tableViewModel.autoRefreshRate = 240;
-    self.tableViewModel.showsSectionIndexTitles = NO;
-    self.tableViewModel.sectionNameKeyPath = @"dayForDisplay";
-    SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
+- (void)configureTableController {
+    [super configureTableController];
+    self.tableController.autoRefreshRate = 240;
+    self.tableController.showsSectionIndexTitles = NO;
+    self.tableController.sectionNameKeyPath = @"dayForDisplay";
+    SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"title" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"dateStartForDisplay" toAttribute:@"detailTextLabel.text"];
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
@@ -49,12 +49,12 @@
                 [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
         };
     }];
-    [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
+    [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
 }
 
-- (void)tableViewModelDidFinishLoading:(RKAbstractTableViewModel*)tableViewModel {
-    [super tableViewModelDidFinishLoading:tableViewModel];
-    self.title = [NSString stringWithFormat:@"%d Events", self.tableViewModel.rowCount];
+- (void)tableControllerDidFinishLoading:(RKAbstractTableController*)tableController {
+    [super tableControllerDidFinishLoading:tableController];
+    self.title = [NSString stringWithFormat:@"%d Events", self.tableController.rowCount];
 }
 
 - (BOOL)shouldShowChamberScopeBar {

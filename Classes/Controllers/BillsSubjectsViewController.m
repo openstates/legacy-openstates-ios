@@ -19,14 +19,14 @@
 #import "SLFBadgeCell.h"
 
 @interface BillsSubjectsViewController()
-- (void)configureTableViewModel;
+- (void)configureTableController;
 - (void)configureStandaloneChamberScopeBar;
 - (void)chamberScopeSelectedIndexDidChange:(UISegmentedControl *)scopeBar;
 @end
 
 @implementation BillsSubjectsViewController
 @synthesize state;
-@synthesize tableViewModel = __tableViewModel;
+@synthesize tableController = _tableController;
 
 - (id)initWithState:(SLFState *)newState {
     self = [super init];
@@ -40,19 +40,19 @@
 
 - (void)dealloc {
 	self.state = nil;
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
-    self.tableViewModel = nil;
+    self.tableController = nil;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.opaque = YES;
     [self configureStandaloneChamberScopeBar];
-    [self configureTableViewModel];
+    [self configureTableController];
     if (self.state) {
         self.title = [NSString stringWithFormat:@"%@ %@", self.state.name, NSLocalizedString(@"Subjects",@"")];
         [self reconfigureForState:self.state];
@@ -61,12 +61,12 @@
 
 - (void)reconfigureForState:(SLFState *)newState {
     self.state = newState;
-    if (!newState || !self.tableViewModel)
+    if (!newState || !self.tableController)
         return;
     NSInteger chamberScope = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
     NSString *chamber = [SLFChamber chamberTypeForSearchScopeIndex:chamberScope];
     NSString *resourcePath = [BillSearchParameters pathForSubjectsWithState:newState chamber:chamber];
-    [__tableViewModel loadTableFromResourcePath:resourcePath withBlock:^(RKObjectLoader* objectLoader) {
+    [_tableController loadTableFromResourcePath:resourcePath usingBlock:^(RKObjectLoader* objectLoader) {
         objectLoader.URLRequest.timeoutInterval = 30;
         objectLoader.cacheTimeoutInterval = SLF_HOURS_TO_SECONDS(12);
         objectLoader.objectMapping = [BillsSubjectsEntry mapping];
@@ -77,13 +77,13 @@
     return [[self class] actionPathForObject:self.state];
 }
 
-- (void)configureTableViewModel {
-    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    __tableViewModel.delegate = self;
-    __tableViewModel.objectManager = [RKObjectManager sharedManager];
-    __tableViewModel.pullToRefreshEnabled = YES;
+- (void)configureTableController {
+    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    _tableController.delegate = self;
+    _tableController.objectManager = [RKObjectManager sharedManager];
+    _tableController.pullToRefreshEnabled = YES;
     
-    RKTableViewCellMapping *objCellMap = [RKTableViewCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
+    RKTableViewCellMapping *objCellMap = [RKTableViewCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         cellMapping.cellClass = [SLFBadgeCell class];
         [cellMapping mapKeyPath:@"self" toAttribute:@"subjectEntry"];
         cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
@@ -112,7 +112,7 @@
             [vc release];
         };
     }];
-    [__tableViewModel mapObjectsWithClass:[BillsSubjectsEntry class] toTableCellsWithMapping:objCellMap];
+    [_tableController mapObjectsWithClass:[BillsSubjectsEntry class] toTableCellsWithMapping:objCellMap];
 }
 
 - (void)configureStandaloneChamberScopeBar {
@@ -145,15 +145,15 @@
     [self reconfigureForState:self.state];
 }
 
-- (void)tableViewModelDidFinishLoad:(RKAbstractTableViewModel *)tableViewModel {
+- (void)tableControllerDidFinishLoad:(RKAbstractTableController *)tableController {
     // since we reload our table items, we can't use our usual finishLoading or risk an infinite loop.
-    if (IsEmpty(tableViewModel.sections))
+    if (IsEmpty(tableController.sections))
         return;
-    RKTableViewSection *section = [tableViewModel sectionAtIndex:0];
+    RKTableSection *section = [tableController sectionAtIndex:0];
     if (!section)
         return;
     NSArray *sortedObjects = [section.objects sortedArrayUsingDescriptors:[BillsSubjectsEntry sortDescriptors]];
-    [__tableViewModel loadObjects:sortedObjects];
+    [_tableController loadObjects:sortedObjects];
 }
 
 @end

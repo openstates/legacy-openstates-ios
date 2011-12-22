@@ -9,7 +9,7 @@
 @implementation SLFLegislator
 
 + (RKManagedObjectMapping *)mapping {
-    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class] inManagedObjectStore:[RKObjectManager sharedManager].objectStore];
     mapping.primaryKeyAttribute = @"legID";
     [mapping mapKeyPath:@"leg_id" toAttribute:@"legID"];
     [mapping mapKeyPath:@"state" toAttribute:@"stateID"];

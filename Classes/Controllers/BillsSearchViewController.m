@@ -24,7 +24,7 @@ enum SECTIONS {
 
 
 @interface BillsSearchViewController()
-@property (nonatomic, retain) RKTableViewModel *tableViewModel;
+@property (nonatomic, retain) RKTableController *tableController;
 @property (nonatomic, copy) NSString *selectedSession;
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
 - (void)configureTableItems;
@@ -33,7 +33,7 @@ enum SECTIONS {
 
 @implementation BillsSearchViewController
 @synthesize state = _state;
-@synthesize tableViewModel = __tableViewModel;
+@synthesize tableController = _tableController;
 @synthesize selectedSession = _selectedSession;
 
 - (id)initWithState:(SLFState *)state {
@@ -50,25 +50,25 @@ enum SECTIONS {
 - (void)dealloc {
     self.state = nil;
     self.selectedSession = nil;
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super viewDidUnload];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    __tableViewModel.delegate = self;
-    __tableViewModel.variableHeightRows = YES;
-    __tableViewModel.objectManager = [RKObjectManager sharedManager];
-    __tableViewModel.pullToRefreshEnabled = NO;
+    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    _tableController.delegate = self;
+    _tableController.variableHeightRows = YES;
+    _tableController.objectManager = [RKObjectManager sharedManager];
+    _tableController.pullToRefreshEnabled = NO;
     NSInteger sectionIndex;
     for (sectionIndex = SectionSearchInfo;sectionIndex < kNumSections; sectionIndex++) {
-        [__tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
+        [_tableController addSectionUsingBlock:^(RKTableSection *section) {
             NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
             TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
             section.headerTitle = headerTitle;
@@ -105,13 +105,13 @@ enum SECTIONS {
 
 - (void)configureSearchInfo {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.cellMapping.style = UITableViewCellStyleValue1;
         tableItem.text = NSLocalizedString(@"State", @"");
         tableItem.detailText = self.state.name;
     }]];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [SubtitleCellMapping cellMapping];
         tableItem.cellMapping.style = UITableViewCellStyleValue1;
         tableItem.text = NSLocalizedString(@"Selected Session", @"");
@@ -135,7 +135,7 @@ enum SECTIONS {
             [picker autorelease];
         };
     }]];
-    [__tableViewModel loadTableItems:tableItems inSection:SectionSearchInfo];
+    [_tableController loadTableItems:tableItems inSection:SectionSearchInfo];
     [tableItems release];
 }
 

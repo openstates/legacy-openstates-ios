@@ -10,7 +10,7 @@
 @synthesize region;
 
 + (RKManagedObjectMapping *)mapping {
-    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class] inManagedObjectStore:[RKObjectManager sharedManager].objectStore];
     mapping.primaryKeyAttribute = @"boundaryID";
     [mapping mapKeyPath:@"abbr" toAttribute:@"stateID"];
     [mapping mapKeyPath:@"num_seats" toAttribute:@"numSeats"];

@@ -36,14 +36,15 @@
 
 @interface StateDetailViewController()
 - (void)reconfigureForState:(SLFState *)state;
-- (void)configureTableViewModel;
+- (void)configureTableController;
 - (void)configureTableItems;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
+- (RKTableItem *)menuItemWithText:(NSString *)text imagePrefix:(NSString *)imagePrefix cellMapping:(RKTableViewCellMapping *)cellMap;
 @end
 
 @implementation StateDetailViewController
 @synthesize state = _state;
-@synthesize tableViewModel = __tableViewModel;
+@synthesize tableController = _tableController;
 
 - (id)initWithState:(SLFState *)newState {
     self = [super init];
@@ -56,18 +57,18 @@
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.state = nil;
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super viewDidUnload];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self configureTableViewModel];
+    [self configureTableController];
     if (self.state)
         self.title = self.state.name; 
 }
@@ -90,11 +91,11 @@
     [self configureTableItems];
 }
 
-- (void)configureTableViewModel {
-    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    self.tableViewModel.delegate = self;
-    self.tableViewModel.objectManager = [RKObjectManager sharedManager];
-    self.tableViewModel.pullToRefreshEnabled = NO;
+- (void)configureTableController {
+    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    _tableController.delegate = self;
+    _tableController.objectManager = [RKObjectManager sharedManager];
+    _tableController.pullToRefreshEnabled = NO;
 }
 
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {
@@ -103,7 +104,7 @@
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(48)];
 }
 
-- (RKTableItem *)menuItemWithText:(NSString *)text imagePrefix:(NSString *)imagePrefix {
+- (RKTableItem *)menuItemWithText:(NSString *)text imagePrefix:(NSString *)imagePrefix cellMapping:(RKTableViewCellMapping *)cellMap {
     NSParameterAssert(text != NULL && imagePrefix != NULL);
     NSString *normalName = [imagePrefix stringByAppendingString:@"-Off"];
     NSString *highlightedName = [imagePrefix stringByAppendingString:@"-On"];
@@ -111,36 +112,39 @@
     [item setText:text];
     [item setImage:[UIImage imageNamed:normalName]];
     [item setValue:[UIImage imageNamed:highlightedName] forKey:@"highlightedImage"]; // key value magic.
+    item.cellMapping = cellMap;
     return item;
-}
-
-- (void)configureTableItems {
-    NSMutableArray* tableItems = [[NSMutableArray alloc] initWithCapacity:15];
-    [tableItems addObject:[self menuItemWithText:MenuLegislators imagePrefix:@"IndexCard"]];
-    [tableItems addObject:[self menuItemWithText:MenuCommittees imagePrefix:@"Group"]];
-    [tableItems addObject:[self menuItemWithText:MenuDistricts imagePrefix:@"Map"]];
-    [tableItems addObject:[self menuItemWithText:MenuBills imagePrefix:@"Gavel"]];
-    
-    if (self.state && self.state.featureFlags && [self.state.featureFlags containsObject:@"events"])
-        [tableItems addObject:[self menuItemWithText:MenuEvents imagePrefix:@"Calendar"]];
-    [tableItems addObject:[self menuItemWithText:MenuNews imagePrefix:@"Paper"]];
-#ifdef DEBUG
-    [tableItems addObject:[self menuItemWithText:MenuFeedback imagePrefix:@"Bug"]];
-#endif
-    RKTableViewCellMapping *cellMap = [self menuCellMapping]; // subclass can override
-    [cellMap mapKeyPath:@"highlightedImage" toAttribute:@"imageView.highlightedImage"];
-    [cellMap addDefaultMappings];
-    [self.tableViewModel loadTableItems:tableItems withMapping:cellMap];
-    [tableItems release];
 }
 
 - (RKTableViewCellMapping *)menuCellMapping {
     SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
+    [cellMap mapKeyPath:@"highlightedImage" toAttribute:@"imageView.highlightedImage"];
+    [cellMap addDefaultMappings];
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
         RKTableItem* tableItem = (RKTableItem*) object;
         [self selectMenuItem:tableItem.text];
     };
     return cellMap;
+}
+
+- (void)configureTableItems {
+    RKTableViewCellMapping *fixedMap = [self menuCellMapping];
+    fixedMap.deselectsRowOnSelection = (SLFIsIpad() == NO);
+    RKTableViewCellMapping *momentaryMap = [self menuCellMapping];
+    momentaryMap.deselectsRowOnSelection = YES;
+    NSMutableArray* tableItems = [[NSMutableArray alloc] initWithCapacity:15];
+    [tableItems addObject:[self menuItemWithText:MenuLegislators imagePrefix:@"IndexCard" cellMapping:fixedMap]];
+    [tableItems addObject:[self menuItemWithText:MenuCommittees imagePrefix:@"Group" cellMapping:fixedMap]];
+    [tableItems addObject:[self menuItemWithText:MenuDistricts imagePrefix:@"Map" cellMapping:fixedMap]];
+    [tableItems addObject:[self menuItemWithText:MenuBills imagePrefix:@"Gavel" cellMapping:fixedMap]];
+    if (self.state && self.state.featureFlags && [self.state.featureFlags containsObject:@"events"])
+        [tableItems addObject:[self menuItemWithText:MenuEvents imagePrefix:@"Calendar" cellMapping:fixedMap]];
+    [tableItems addObject:[self menuItemWithText:MenuNews imagePrefix:@"Paper" cellMapping:momentaryMap]];
+#ifdef DEBUG
+    [tableItems addObject:[self menuItemWithText:MenuFeedback imagePrefix:@"Bug" cellMapping:momentaryMap]];
+#endif
+    [_tableController loadTableItems:tableItems];
+    [tableItems release];
 }
 
 - (void)selectMenuItem:(NSString *)menuItem {

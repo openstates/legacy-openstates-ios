@@ -20,7 +20,7 @@
 #import "SLFDrawingExtensions.h"
 
 @interface BillsWatchedViewController()
-@property (nonatomic,retain) RKTableViewModel *tableViewModel;
+@property (nonatomic,retain) RKTableController *tableController;
 @property (nonatomic,retain) NSMutableArray *sectionNames;
 @property (nonatomic,retain) NSMutableDictionary *rowsForSections;
 @property (nonatomic,retain) IBOutlet id editButton;
@@ -34,7 +34,7 @@
 @end
 
 @implementation BillsWatchedViewController
-@synthesize tableViewModel = __tableViewModel;
+@synthesize tableController = _tableController;
 @synthesize sectionNames = _sectionNames;
 @synthesize rowsForSections = _rowsForSections;
 @synthesize editButton = __editButton;
@@ -52,7 +52,7 @@
 }
 
 - (void)dealloc {
-    self.tableViewModel = nil;
+    self.tableController = nil;
     self.sectionNames = nil;
     self.rowsForSections = nil;
     self.editButton = nil;
@@ -65,7 +65,7 @@
 - (void)viewDidUnload {
     self.editButton = nil;
     self.doneButton = nil;
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super viewDidUnload];
@@ -73,12 +73,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    __tableViewModel.delegate = self;
-    __tableViewModel.objectManager = [RKObjectManager sharedManager];
-    __tableViewModel.pullToRefreshEnabled = NO;
-    __tableViewModel.tableView.rowHeight = 90;
-    __tableViewModel.canEditRows = YES;
+    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    _tableController.delegate = self;
+    _tableController.objectManager = [RKObjectManager sharedManager];
+    _tableController.pullToRefreshEnabled = NO;
+    _tableController.tableView.rowHeight = 90;
+    _tableController.canEditRows = YES;
     [self configureTableItems];
     [self configureEditingButtons];
 }
@@ -92,7 +92,7 @@
     self.doneButton = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"") orange:YES width:45 target:self action:@selector(toggleEditing:)] autorelease];
     [self.navigationItem setRightBarButtonItem:__editButton animated:YES];
 
-    if (__tableViewModel.isEmpty)
+    if (_tableController.isEmpty)
         [__editButton setEnabled:NO];
 }
 
@@ -118,13 +118,13 @@
         [self configureEditingButtonsIpad];
     else
         [self configureEditingButtonsIphone];
-    if (__tableViewModel.isEmpty)
+    if (_tableController.isEmpty)
         [__editButton setEnabled:NO];
 }
 
 - (IBAction)toggleEditing:(id)sender {
-    BOOL wantToEdit = (NO == self.tableViewModel.tableView.editing);
-    [self.tableViewModel.tableView setEditing:wantToEdit animated:YES];
+    BOOL wantToEdit = (NO == self.tableController.tableView.editing);
+    [self.tableController.tableView setEditing:wantToEdit animated:YES];
     id nextButton = wantToEdit ? self.doneButton : self.editButton;
     id previousButton = wantToEdit ? self.editButton : self.doneButton;
     if (SLFIsIpad()) {
@@ -138,7 +138,7 @@
 #pragma mark - Section / Row Data
 
 - (void)addTableSectionWithTitle:(NSString *)sectionTitle {
-    [__tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
+    [_tableController addSectionUsingBlock:^(RKTableSection *section) {
         TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:sectionTitle width:self.tableView.width];
         section.headerTitle = sectionTitle;
         section.headerHeight = TableSectionHeaderViewDefaultHeight;
@@ -148,7 +148,7 @@
 }
 
 - (RKTableItem *)tableItemForBill:(SLFBill *)bill {
-    return [RKTableItem tableItemWithBlock:^(RKTableItem *tableItem) {
+    return [RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [LargeSubtitleCellMapping cellMapping];
         tableItem.text = bill.name;
         tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Updated %@ - %@",@""), [bill.dateUpdated stringForDisplayWithPrefix:YES], bill.title];
@@ -172,12 +172,12 @@
 - (void)configureTableItems {
     [_sectionNames removeAllObjects];
     [_rowsForSections removeAllObjects];
-    [__tableViewModel removeAllSections];
+    [_tableController removeAllSections];
     
     NSDictionary *watchedBills = SLFWatchedBillsCatalog();
     if (IsEmpty(watchedBills)) {
             // Do something like insert a static cell, to show how to add watched bills
-            // [__tableViewModel loadTableItems:[NSArray arrayWithObject:emptyTableItem]];
+            // [_tableController loadTableItems:[NSArray arrayWithObject:emptyTableItem]];
         return;
     }
     NSArray *watchIDs = [[watchedBills allKeys] sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
@@ -199,10 +199,10 @@
     for (NSInteger index = 0; index < _sectionNames.count; index++) {
         NSString *sectionKey = [_sectionNames objectAtIndex:index];
         NSMutableArray *rows = [_rowsForSections objectForKey:sectionKey];
-        [__tableViewModel loadTableItems:rows inSection:index + 1];
+        [_tableController loadTableItems:rows inSection:index + 1];
     }
     [self loadWatchedWatchIDPathsFromNetwork:billsToLoad];
-    self.title = [NSString stringWithFormat:NSLocalizedString(@"%d Watched Bills",@""), __tableViewModel.rowCount];
+    self.title = [NSString stringWithFormat:NSLocalizedString(@"%d Watched Bills",@""), _tableController.rowCount];
 }
 
 - (void)addSingleTableRowForBill:(SLFBill *)bill {
@@ -212,10 +212,10 @@
         rows = [self createEmptySectionWithName:state.name];
     [rows addObject:[self tableItemForBill:bill]];
     NSInteger sectionIndex = [_sectionNames indexOfObject:state.name];
-    [__tableViewModel loadTableItems:rows inSection:sectionIndex + 1];
+    [_tableController loadTableItems:rows inSection:sectionIndex + 1];
 }
 
-- (void)tableViewModel:(RKAbstractTableViewModel*)tableViewModel didDeleteObject:(id)object atIndexPath:(NSIndexPath*)indexPath {
+- (void)tableController:(RKAbstractTableController*)tableController didDeleteObject:(id)object atIndexPath:(NSIndexPath*)indexPath {
     SLFBill *bill = [[object valueForKey:@"bill"] retain];
     NSString *sectionName = [_sectionNames objectAtIndex:indexPath.section - 1];
     if (!IsEmpty(sectionName)) {

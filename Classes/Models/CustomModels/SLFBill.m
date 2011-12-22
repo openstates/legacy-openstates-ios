@@ -6,7 +6,7 @@
 @implementation SLFBill
 
 + (RKManagedObjectMapping *)mapping {
-    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class]];
+    RKManagedObjectMapping *mapping = [RKManagedObjectMapping mappingForClass:[self class] inManagedObjectStore:[RKObjectManager sharedManager].objectStore];
     mapping.primaryKeyAttribute = @"billID";
     [mapping mapKeyPath:@"bill_id" toAttribute:@"billID"];
     [mapping mapKeyPath:@"state" toAttribute:@"stateID"];
