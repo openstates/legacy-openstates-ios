@@ -19,20 +19,28 @@
 #import "SVWebViewController.h"
 #import "TableSectionHeaderView.h"
 #import "LegislatorCell.h"
+#import "GenericDetailHeader.h"
 
 #define SectionHeaderCommitteeInfo NSLocalizedString(@"Committee Details", @"")
 #define SectionHeaderMembers NSLocalizedString(@"Members", @"")
+#define SectionHeaderResources NSLocalizedString(@"Resources", @"")
 
 enum SECTIONS {
-    SectionCommitteeInfoIndex = 1,
-    SectionMembersIndex,
+    SectionHeader = 0,
+//  SectionCommitteeInfo = 1,
+    SectionResources,
+    SectionMembers,
     kNumSections
 };
 
 @interface CommitteeDetailViewController()
-@property (nonatomic, retain) RKTableViewModel *tableViewModel;
-- (void)configureTableViewModel;
+@property (nonatomic, retain) RKTableController *tableController;
+- (void)configureTableController;
 - (void)configureTableItems;
+- (void)configureCommitteeInfoItems;
+- (void)configureResourceItems;
+- (void)configureMemberItems;
+- (void)configureTableHeader;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
 - (RKTableViewCellMapping *)committeeMemberCellMap;
@@ -40,7 +48,7 @@ enum SECTIONS {
 
 @implementation CommitteeDetailViewController
 @synthesize committee = _committee;
-@synthesize tableViewModel = __tableViewModel;
+@synthesize tableController = _tableController;
 
 - (id)initWithCommitteeID:(NSString *)committeeID {
     self = [super initWithStyle:UITableViewStyleGrouped];
@@ -53,19 +61,19 @@ enum SECTIONS {
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.committee = nil;
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super viewDidUnload];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self configureTableViewModel];
+    [self configureTableController];
 	self.title = NSLocalizedString(@"Loading...", @"");
 }
 
@@ -87,16 +95,16 @@ enum SECTIONS {
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(24)];
 }
 
-- (void)configureTableViewModel {
-    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    __tableViewModel.delegate = self;
-    __tableViewModel.objectManager = [RKObjectManager sharedManager];
-    __tableViewModel.pullToRefreshEnabled = NO;
-    __tableViewModel.variableHeightRows = YES;
-    [__tableViewModel mapObjectsWithClass:[CommitteeMember class] toTableCellsWithMapping:[self committeeMemberCellMap]];
+- (void)configureTableController {
+    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    _tableController.delegate = self;
+    _tableController.objectManager = [RKObjectManager sharedManager];
+    _tableController.pullToRefreshEnabled = NO;
+    _tableController.variableHeightRows = YES;
+    [_tableController mapObjectsWithClass:[CommitteeMember class] toTableCellsWithMapping:[self committeeMemberCellMap]];
     NSInteger sectionIndex;
-    for (sectionIndex = SectionCommitteeInfoIndex;sectionIndex < kNumSections; sectionIndex++) {
-        [__tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
+    for (sectionIndex = 1;sectionIndex < kNumSections; sectionIndex++) {
+        [_tableController addSectionUsingBlock:^(RKTableSection *section) {
             NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
             TableSectionHeaderView *sectionView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
             section.headerTitle = headerTitle;
@@ -108,31 +116,48 @@ enum SECTIONS {
 }
 
 - (void)configureTableItems {
-    NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    RKTableItem *firstItemCell = [RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.cellMapping.style = UITableViewCellStyleValue1;
-        tableItem.text = _committee.committeeName;
+    [self configureCommitteeInfoItems];
+    [self configureResourceItems];
+    [self configureMemberItems];
+    [self configureTableHeader];
+}
+
+- (void)configureTableHeader {
+    RKTableSection *headerSection = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
+        GenericDetailHeader *header = [[GenericDetailHeader alloc] initWithFrame:CGRectMake(0, 0, self.tableView.width, 100)];
+        section.headerHeight = header.height;
+        section.headerView = header;
+        section.headerTitle = @"";
+        header.title = _committee.committeeName;
+        header.subtitle = _committee.chamberObj.name;
+        header.detail = _committee.subcommittee;
+        [header release];;
     }];
-    [tableItems addObject:firstItemCell];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.text = _committee.chamberObj.shortName;
-        tableItem.detailText = _committee.subcommittee;
-    }]];
+    [_tableController insertSection:headerSection atIndex:SectionHeader];
+}
+
+- (void)configureCommitteeInfoItems {
+    // Nothing at this time.    
+}
+
+- (void)configureResourceItems {
+    NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     for (GenericAsset *source in _committee.sources) {
         NSString *subtitle = source.name;
         if (IsEmpty(subtitle))
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Site", @"") subtitle:subtitle url:source.url]];
     }
-    [__tableViewModel loadTableItems:tableItems inSection:SectionCommitteeInfoIndex];
+    [_tableController loadTableItems:tableItems inSection:SectionResources];
     [tableItems release];
-    [__tableViewModel loadObjects:_committee.sortedMembers inSection:SectionMembersIndex];    
+}
+
+- (void)configureMemberItems {
+    [_tableController loadObjects:_committee.sortedMembers inSection:SectionMembers];    
 }
 
 - (RKTableViewCellMapping *)committeeMemberCellMap {
-    FoundLegislatorCellMapping *cellMap = [FoundLegislatorCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
+    FoundLegislatorCellMapping *cellMap = [FoundLegislatorCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"foundLegislator" toAttribute:@"legislator"];
         [cellMapping mapKeyPath:@"type" toAttribute:@"role"];
         [cellMapping mapKeyPath:@"name" toAttribute:@"genericName"];
@@ -160,9 +185,11 @@ enum SECTIONS {
 
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex {
     switch (sectionIndex) {
-        case SectionCommitteeInfoIndex:
-            return SectionHeaderCommitteeInfo;
-        case SectionMembersIndex:
+        case SectionHeader:
+            return @"";
+        case SectionResources:
+            return SectionHeaderResources;
+        case SectionMembers:
             return SectionHeaderMembers;
         default:
             return @"";

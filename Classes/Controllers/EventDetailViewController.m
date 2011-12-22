@@ -21,6 +21,7 @@
 #import "NSDate+SLFDateHelper.h"
 #import "SLFEventsManager.h"
 #import "MKInfoPanel.h"
+#import "GenericDetailHeader.h"
 
 #define SectionHeaderEventInfo NSLocalizedString(@"Event Details", @"")
 #define SectionHeaderParticipants NSLocalizedString(@"Participants", @"")
@@ -28,6 +29,7 @@
 #define SectionHeaderNotifications NSLocalizedString(@"Notifications", @"")
 
 enum SECTIONS {
+    SECTION_HEADER = 0,
     SECTION_EVENT_INFO = 1,
     SECTION_PARTICIPANTS,
     SECTION_ADDITIONAL,
@@ -37,8 +39,9 @@ enum SECTIONS {
 
 @interface EventDetailViewController()
 - (void)reconfigureForEvent:(SLFEvent *)event;
-- (void)configureTableViewModel;
+- (void)configureTableController;
 - (void)configureTableItems;
+- (void)configureTableHeader;
 - (void)configureEventInfo;
 - (void)configureParticipants;
 - (void)configureAdditional;
@@ -49,7 +52,7 @@ enum SECTIONS {
 
 @implementation EventDetailViewController
 @synthesize event = _event;
-@synthesize tableViewModel = __tableViewModel;
+@synthesize tableController = _tableController;
 
 - (id)initWithResourcePath:(NSString *)resourcePath {
 self = [super initWithStyle:UITableViewStyleGrouped];
@@ -80,31 +83,31 @@ return self;
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
 	self.event = nil;
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-    self.tableViewModel = nil;
+    self.tableController = nil;
     [super viewDidUnload];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self configureTableViewModel];
+    [self configureTableController];
 	self.title = NSLocalizedString(@"Loading...", @"");
 }
 
-- (void)configureTableViewModel {
-    self.tableViewModel = [RKTableViewModel tableViewModelForTableViewController:(UITableViewController*)self];
-    __tableViewModel.delegate = self;
-    __tableViewModel.variableHeightRows = YES;
-    __tableViewModel.objectManager = [RKObjectManager sharedManager];
-    __tableViewModel.pullToRefreshEnabled = NO;
+- (void)configureTableController {
+    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    _tableController.delegate = self;
+    _tableController.variableHeightRows = YES;
+    _tableController.objectManager = [RKObjectManager sharedManager];
+    _tableController.pullToRefreshEnabled = NO;
     NSInteger sectionIndex;
-    for (sectionIndex = SECTION_EVENT_INFO;sectionIndex < kNumSections; sectionIndex++) {
-        [__tableViewModel addSectionWithBlock:^(RKTableViewSection *section) {
+    for (sectionIndex = 1;sectionIndex < kNumSections; sectionIndex++) {
+        [_tableController addSectionUsingBlock:^(RKTableSection *section) {
             NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
             TableSectionHeaderView *sectionView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
             section.headerTitle = headerTitle;
@@ -113,7 +116,7 @@ return self;
             [sectionView release];
         }];
     }
-    [self.tableViewModel mapObjectsWithClass:[EventParticipant class] toTableCellsWithMapping:[self participantCellMap]];
+    [self.tableController mapObjectsWithClass:[EventParticipant class] toTableCellsWithMapping:[self participantCellMap]];
 }
 
 - (NSString *)actionPath {
@@ -122,7 +125,7 @@ return self;
 
 - (void)reconfigureForEvent:(SLFEvent *)event {
     self.event = event;
-    if (!event || !self.tableViewModel)
+    if (!event || !self.tableController)
         return;
     self.title = event.title;
     [self configureTableItems];
@@ -133,6 +136,7 @@ return self;
     [self configureParticipants];
     [self configureAdditional];
     [self configureNotifications];
+    [self configureTableHeader];
 }
 
 - (RKTableViewCellMapping *)eventTableCellMap {
@@ -149,40 +153,43 @@ return self;
     return cellMapping;
 }
 
+- (void)configureTableHeader {
+    RKTableSection *headerSection = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
+        GenericDetailHeader *header = [[GenericDetailHeader alloc] initWithFrame:CGRectMake(0, 0, self.tableView.width, 100)];
+        section.headerHeight = header.height;
+        section.headerView = header;
+        section.headerTitle = @"";
+        header.title = _event.title;
+        if (!IsEmpty(_event.type))
+            header.subtitle = [[_event.type stringByReplacingOccurrencesOfString:@":" withString:@" "] capitalizedString];
+        header.detail = _event.dateStartForDisplay;
+        [header release];;
+    }];
+    [_tableController insertSection:headerSection atIndex:SECTION_HEADER];
+}
+
 - (void)configureEventInfo {
     RKTableViewCellMapping *cellMapping = [self eventTableCellMap];
 
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    if (!IsEmpty(_event.type)) {
-        [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
-            tableItem.cellMapping = cellMapping;
-            tableItem.detailText = [[_event.type stringByReplacingOccurrencesOfString:@":" withString:@" "] capitalizedString];
-            tableItem.text = NSLocalizedString(@"Type",@"");
-        }]];
-    }
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
-        tableItem.cellMapping = cellMapping;
-        tableItem.detailText = _event.title;
-        tableItem.text = NSLocalizedString(@"Description",@"");
-    }]];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
         tableItem.cellMapping = cellMapping;
         tableItem.detailText = _event.location;
         tableItem.text = NSLocalizedString(@"Location",@"");
     }]];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
         tableItem.cellMapping = cellMapping;
         tableItem.detailText = _event.dateStartForDisplay;
         tableItem.text = NSLocalizedString(@"Starts At",@"");
     }]];
     if (_event.dateEnd) {
-        [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
+        [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
             tableItem.cellMapping = cellMapping;
             tableItem.detailText = [_event.dateEnd stringWithDateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
             tableItem.text = NSLocalizedString(@"Ends At",@"");
         }]];
     }
-    [__tableViewModel loadTableItems:tableItems inSection:SECTION_EVENT_INFO];
+    [_tableController loadTableItems:tableItems inSection:SECTION_EVENT_INFO];
     [tableItems release];
 }
 
@@ -196,13 +203,13 @@ return self;
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Resource", @"") subtitle:subtitle url:source.url]];
     }
-    [__tableViewModel loadTableItems:tableItems inSection:SECTION_ADDITIONAL];
+    [_tableController loadTableItems:tableItems inSection:SECTION_ADDITIONAL];
     [tableItems release];
 }
 
 - (void)configureNotifications {
     NSMutableArray *tableItems = [[NSMutableArray alloc] init];
-    [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
         tableItem.text = NSLocalizedString(@"iCal", @"");
         tableItem.detailText = NSLocalizedString(@"Schedule this event in Calendar",@"");
         RKTableViewCellMapping *cellMapping = [self eventTableCellMap];
@@ -217,7 +224,7 @@ return self;
         };
     }]];
     if (SLFIsIOS5OrGreater()) {
-        [tableItems addObject:[RKTableItem tableItemWithBlock:^(RKTableItem* tableItem) {
+        [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
             SLFEventsManager *eventManager = [SLFEventsManager sharedManager];
             tableItem.detailText = [eventManager eventCalendar].title;
             tableItem.text = NSLocalizedString(@"Calendar",@"");
@@ -232,12 +239,14 @@ return self;
             };
         }]];
     }
-    [__tableViewModel loadTableItems:tableItems inSection:SECTION_NOTIFICATIONS];
+    [_tableController loadTableItems:tableItems inSection:SECTION_NOTIFICATIONS];
     [tableItems release];
 }
 
 - (void)calendarDidChange:(EKCalendar *)calendar {
-    [self configureNotifications];
+    [_tableController removeSectionAtIndex:SECTION_HEADER];
+    [self configureTableItems];
+    [self.tableView reloadData];
 }
 
 - (void)eventWasEdited:(EKEvent *)event {
@@ -246,7 +255,7 @@ return self;
 }
 
 - (void)configureParticipants {
-    [__tableViewModel loadObjects:_event.participants.allObjects inSection:SECTION_PARTICIPANTS];    
+    [_tableController loadObjects:_event.participants.allObjects inSection:SECTION_PARTICIPANTS];    
 }
 
 - (RKTableViewCellMapping *)participantCellMap {

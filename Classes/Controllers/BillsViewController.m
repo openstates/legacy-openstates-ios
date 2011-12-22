@@ -34,13 +34,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (self.tableViewModel.rowCount && !self.title)
-        self.title = [NSString stringWithFormat:@"%d Bills", self.tableViewModel.rowCount];
+    if (self.tableController.rowCount && !self.title)
+        self.title = [NSString stringWithFormat:@"%d Bills", self.tableController.rowCount];
 }
 
-- (void)configureTableViewModel {
-    [super configureTableViewModel];
-    SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingWithBlock:^(RKTableViewCellMapping* cellMapping) {
+- (void)configureTableController {
+    [super configureTableController];
+    SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"name" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"title" toAttribute:@"detailTextLabel.text"];
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
@@ -49,12 +49,12 @@
                 [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
         };
     }];
-    [self.tableViewModel mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];
+    [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];
 }
 
-- (void)tableViewModelDidFinishLoading:(RKAbstractTableViewModel*)tableViewModel {
-    [super tableViewModelDidFinishLoading:tableViewModel];
-    self.title = [NSString stringWithFormat:@"Found %d Bills", self.tableViewModel.rowCount];
+- (void)tableControllerDidFinishLoading:(RKAbstractTableController*)tableController {
+    [super tableControllerDidFinishLoading:tableController];
+    self.title = [NSString stringWithFormat:@"Found %d Bills", self.tableController.rowCount];
 }
 
 @end

@@ -15,7 +15,7 @@
 
 @class SLFEvent;
 @interface EventDetailViewController : SLFTableViewController <RKObjectLoaderDelegate, SLFEventsManagerDelegate>
-@property (nonatomic, retain) RKTableViewModel *tableViewModel;
+@property (nonatomic, retain) RKTableController *tableController;
 @property (nonatomic,retain) SLFEvent *event;
 - (id)initWithEventID:(NSString *)objID;
 - (id)initWithEvent:(SLFEvent *)event;

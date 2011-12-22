@@ -84,6 +84,7 @@
 		374D39D31471B52C00DDF2EE /* OpenStatesIconView.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D39D11471B52C00DDF2EE /* OpenStatesIconView.m */; };
 		374D39D61471C47F00DDF2EE /* OpenStatesTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D39D51471C47F00DDF2EE /* OpenStatesTitleView.m */; };
 		374D3A1714735F8C00DDF2EE /* StackedBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D3A1614735F8C00DDF2EE /* StackedBackgroundView.m */; };
+		374E6AAF14A1A58900C85231 /* GenericDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 374E6AAE14A1A58900C85231 /* GenericDetailHeader.m */; };
 		375683AE14268C830027F268 /* ObjMappingsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 375683AD14268C830027F268 /* ObjMappingsTestCase.m */; };
 		3757CE86146A6D9900471CB7 /* _BillAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE79146A6D9900471CB7 /* _BillAction.m */; };
 		3757CE87146A6D9900471CB7 /* _BillRecordVote.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE7B146A6D9900471CB7 /* _BillRecordVote.m */; };
@@ -557,6 +558,8 @@
 		374D39D51471C47F00DDF2EE /* OpenStatesTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenStatesTitleView.m; sourceTree = "<group>"; };
 		374D3A1514735F8C00DDF2EE /* StackedBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackedBackgroundView.h; sourceTree = "<group>"; };
 		374D3A1614735F8C00DDF2EE /* StackedBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StackedBackgroundView.m; sourceTree = "<group>"; };
+		374E6AAD14A1A58900C85231 /* GenericDetailHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericDetailHeader.h; sourceTree = "<group>"; };
+		374E6AAE14A1A58900C85231 /* GenericDetailHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericDetailHeader.m; sourceTree = "<group>"; };
 		375683AD14268C830027F268 /* ObjMappingsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjMappingsTestCase.m; sourceTree = "<group>"; };
 		3757CE78146A6D9900471CB7 /* _BillAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _BillAction.h; sourceTree = "<group>"; };
 		3757CE79146A6D9900471CB7 /* _BillAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _BillAction.m; sourceTree = "<group>"; };
@@ -579,7 +582,7 @@
 		37588E2213E4B456005FB5AB /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
 		37588E2313E4B456005FB5AB /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsViewController.m; sourceTree = "<group>"; };
 		37588E2A13E4B5FE005FB5AB /* EventDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDetailViewController.h; sourceTree = "<group>"; };
-		37588E2B13E4B5FE005FB5AB /* EventDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventDetailViewController.m; sourceTree = "<group>"; };
+		37588E2B13E4B5FE005FB5AB /* EventDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EventDetailViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37588E9713E4C62B005FB5AB /* DistrictDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictDetailViewController.h; sourceTree = "<group>"; };
 		37588E9813E4C62B005FB5AB /* DistrictDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DistrictDetailViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		375B9BC91477051300810B40 /* SLFTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFTheme.m; sourceTree = "<group>"; };
@@ -616,7 +619,7 @@
 		3770F1351487513400FD854B /* PinHeadBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinHeadBlue.png; sourceTree = "<group>"; };
 		3770F1361487513400FD854B /* PinHeadBlue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinHeadBlue@2x.png"; sourceTree = "<group>"; };
 		3771B979147A2BE000E9CE39 /* BillVotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillVotesViewController.h; sourceTree = "<group>"; };
-		3771B97A147A2BE000E9CE39 /* BillVotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillVotesViewController.m; sourceTree = "<group>"; };
+		3771B97A147A2BE000E9CE39 /* BillVotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BillVotesViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		3771B97D147A3FA300E9CE39 /* VoteNay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VoteNay.png; sourceTree = "<group>"; };
 		3771B97E147A3FA300E9CE39 /* VoteNay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "VoteNay@2x.png"; sourceTree = "<group>"; };
 		3771B97F147A3FA300E9CE39 /* VotePNV.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VotePNV.png; sourceTree = "<group>"; };
@@ -624,7 +627,7 @@
 		3771B981147A3FA300E9CE39 /* VoteYea.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VoteYea.png; sourceTree = "<group>"; };
 		3771B982147A3FA300E9CE39 /* VoteYea@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "VoteYea@2x.png"; sourceTree = "<group>"; };
 		3771B9A0147ABCA200E9CE39 /* BillsSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsSearchViewController.h; sourceTree = "<group>"; };
-		3771B9A1147ABCA200E9CE39 /* BillsSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsSearchViewController.m; sourceTree = "<group>"; };
+		3771B9A1147ABCA200E9CE39 /* BillsSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BillsSearchViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37726AF5148D6AB3009BCE46 /* SLFActionPathRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFActionPathRegistry.h; sourceTree = "<group>"; };
 		37726AF6148D6AB3009BCE46 /* SLFActionPathRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFActionPathRegistry.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37726AF8148DCCE2009BCE46 /* SLFiCloudSync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFiCloudSync.h; sourceTree = "<group>"; };
@@ -859,9 +862,9 @@
 		37ECC05A1475B79E0088B959 /* TitleBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleBarView.h; sourceTree = "<group>"; };
 		37ECC05B1475B79E0088B959 /* TitleBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleBarView.m; sourceTree = "<group>"; };
 		37EDEAA013D3D81800F8FCA1 /* LegislatorDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorDetailViewController.h; sourceTree = "<group>"; };
-		37EDEAA113D3D81900F8FCA1 /* LegislatorDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorDetailViewController.m; sourceTree = "<group>"; };
+		37EDEAA113D3D81900F8FCA1 /* LegislatorDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = LegislatorDetailViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37EDEAAA13D3FAF700F8FCA1 /* CommitteeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeDetailViewController.h; sourceTree = "<group>"; };
-		37EDEAAB13D3FAF700F8FCA1 /* CommitteeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteeDetailViewController.m; sourceTree = "<group>"; };
+		37EDEAAB13D3FAF700F8FCA1 /* CommitteeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CommitteeDetailViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37EE7E0D149A780500214969 /* Magnify-Off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Magnify-Off.png"; sourceTree = "<group>"; };
 		37EE7E0E149A780600214969 /* Magnify-Off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Magnify-Off@2x.png"; sourceTree = "<group>"; };
 		37EE7E0F149A780600214969 /* Magnify-On.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Magnify-On.png"; sourceTree = "<group>"; };
@@ -895,7 +898,7 @@
 		37F6FCF61467611F003AA80D /* BillsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsViewController.h; sourceTree = "<group>"; };
 		37F6FCF71467611F003AA80D /* BillsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsViewController.m; sourceTree = "<group>"; };
 		37F6FCFB14676214003AA80D /* BillDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillDetailViewController.h; sourceTree = "<group>"; };
-		37F6FCFC14676214003AA80D /* BillDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillDetailViewController.m; sourceTree = "<group>"; };
+		37F6FCFC14676214003AA80D /* BillDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BillDetailViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37F6FD0814676565003AA80D /* BillSearchParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillSearchParameters.h; sourceTree = "<group>"; };
 		37F6FD0914676565003AA80D /* BillSearchParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillSearchParameters.m; sourceTree = "<group>"; };
 		37FA255E148029930026EFB1 /* StarButtonOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StarButtonOff.png; sourceTree = "<group>"; };
@@ -903,7 +906,7 @@
 		37FA2560148029930026EFB1 /* StarButtonOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StarButtonOn.png; sourceTree = "<group>"; };
 		37FA2561148029930026EFB1 /* starButtonOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "starButtonOn@2x.png"; sourceTree = "<group>"; };
 		37FA2566148043BD0026EFB1 /* BillsWatchedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsWatchedViewController.h; sourceTree = "<group>"; };
-		37FA2567148043BE0026EFB1 /* BillsWatchedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsWatchedViewController.m; sourceTree = "<group>"; };
+		37FA2567148043BE0026EFB1 /* BillsWatchedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BillsWatchedViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		8452D3F8128244D90069F4A9 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		8452D3FC128244E60069F4A9 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
@@ -1497,6 +1500,8 @@
 				37BB3B6D143A12AB00DCB1FB /* DisclosureQuartzView.m */,
 				37D6A7011496BE34009A76E8 /* LegislatorDetailHeader.h */,
 				37D6A7021496BE34009A76E8 /* LegislatorDetailHeader.m */,
+				374E6AAD14A1A58900C85231 /* GenericDetailHeader.h */,
+				374E6AAE14A1A58900C85231 /* GenericDetailHeader.m */,
 				37F32824144198750059FACE /* SLFBadgeCell.h */,
 				37F32825144198750059FACE /* SLFBadgeCell.m */,
 				37F32826144198750059FACE /* SLFStandardGroupCell.h */,
@@ -2322,6 +2327,7 @@
 				37D7E15414967C0900358E00 /* OpenStatesGearView.m in Sources */,
 				37D6A7031496BE34009A76E8 /* LegislatorDetailHeader.m in Sources */,
 				37A33E9E149D669800D821CD /* SLFEventsManager.m in Sources */,
+				374E6AAF14A1A58900C85231 /* GenericDetailHeader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
