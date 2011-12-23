@@ -3,6 +3,7 @@
 #import <RestKit/Network/NSObject+URLEncoding.h>
 #import "SLFChamber.h"
 #import "SLFPersistenceManager.h"
+#import "SLFRestKitManager.h"
 
 @implementation RKManagedObjectMapping(SLFState)
 - (void)connectStateToKeyPath:(NSString *)keyPath withStateMapping:(RKManagedObjectMapping *)stateMapping {
@@ -48,6 +49,17 @@
 
 - (NSString *)newsAddress {
     return [NSString stringWithFormat:@"http://stateline.org/live/states/%@", [self.name URLEncodedString]];
+}
+
+- (NSString *)eventsFeedAddress {
+    NSString *baseURL = [[[SLFRestKitManager sharedRestKit] openStatesClient] baseURL];
+    if (!baseURL)
+        baseURL = @"webcal://openstates.org/api/v1";
+    else
+        baseURL = [baseURL stringByReplacingOccurrencesOfString:@"http:" withString:@"webcal:"];
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", self.stateID,@"state", nil];
+    NSString *path = RKMakePathWithObject(@"/events/?state=:state&apikey=:apikey&format=ics", queryParams);
+    return [baseURL stringByAppendingString:path];
 }
 
 - (BOOL)isFeatureEnabled:(NSString *)feature {

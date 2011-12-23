@@ -7,6 +7,7 @@
 @property (nonatomic, readonly) NSString *stateInitial;
 @property (nonatomic, readonly) UIImage *stateFlag;
 @property (nonatomic, readonly) NSString *newsAddress;
+@property (nonatomic, readonly) NSString *eventsFeedAddress;
 @property (nonatomic, readonly) NSArray *sessions;
 @property (nonatomic, readonly) NSString *latestSession;
 @property (nonatomic, readonly) NSDictionary *sessionIndexesByDisplayName;

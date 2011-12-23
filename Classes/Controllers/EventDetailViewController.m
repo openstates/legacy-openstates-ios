@@ -26,7 +26,7 @@
 #define SectionHeaderEventInfo NSLocalizedString(@"Event Details", @"")
 #define SectionHeaderParticipants NSLocalizedString(@"Participants", @"")
 #define SectionHeaderAdditional NSLocalizedString(@"Additional Info", @"")
-#define SectionHeaderNotifications NSLocalizedString(@"Notifications", @"")
+#define SectionHeaderNotifications NSLocalizedString(@"Event Alerts", @"")
 
 enum SECTIONS {
     SECTION_HEADER = 0,
@@ -239,6 +239,20 @@ return self;
             };
         }]];
     }
+    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
+        tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Subscribe to all %@ events", @""), _event.stateObj.name];
+        tableItem.text = NSLocalizedString(@"ICS Feed", @"");
+        RKTableViewCellMapping *cellMapping = [self eventTableCellMap];
+        tableItem.cellMapping = cellMapping;
+        cellMapping.selectionStyle = UITableViewCellSelectionStyleBlue;
+        cellMapping.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cellMapping.onSelectCell = ^(void) {
+            NSString *feedAddress = _event.stateObj.eventsFeedAddress;
+            NSURL *subscriptionURL = [NSURL URLWithString:feedAddress];
+            if ([[SLFReachable sharedReachable] isURLReachable:subscriptionURL] && ([[UIApplication sharedApplication] canOpenURL:subscriptionURL]))
+                [[UIApplication sharedApplication] openURL:subscriptionURL];
+        };
+    }]];
     [_tableController loadTableItems:tableItems inSection:SECTION_NOTIFICATIONS];
     [tableItems release];
 }
