@@ -27,6 +27,5 @@
 - (BOOL)saveEvent:(EKEvent *)event;
 - (void)presentEventEditorForEvent:(EKEvent *)event fromParent:(UIViewController <StackableController,SLFEventsManagerDelegate> *)parent;
 - (void)presentCalendarChooserFromParent:(UIViewController <StackableController, SLFEventsManagerDelegate> *)parent;
+- (void)loadEventCalendarFromPersistence;
 @end
-
-extern NSString * const SLFEventsManagerNotifyCalendarDidChange;

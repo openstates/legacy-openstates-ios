@@ -61,3 +61,7 @@ NSDictionary* SLFWatchedBillsCatalog(void);
 BOOL SLFBillIsWatched(SLFBill *bill);
 void SLFSaveBillWatchedStatus(SLFBill *bill, BOOL isWatched);
 void SLFTouchBillWatchedStatus(SLFBill *bill);
+
+extern NSString * const SLFSelectedCalendarDidChangeNotification;
+NSString* SLFSelectedCalendar(void);
+void SLFSaveSelectedCalendar(NSString *calenderID);

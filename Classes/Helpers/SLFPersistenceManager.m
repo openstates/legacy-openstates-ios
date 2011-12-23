@@ -13,16 +13,19 @@
 #import "SLFPersistenceManager.h"
 #import "SLFDataModels.h"
 #import "SLFiCloudSync.h"
+#import "SLFEventsManager.h"
 
 NSString * const kPersistentSelectedStateKey = @"SelectedStateKey";
 NSString * const kPersistentSelectedSessionKey = @"SelectedSessionByStateID";
 NSString * const kPersistentScopeIndexKey = @"SelectedScopeIndexByKey";
 NSString * const kPersistentActionPathKey = @"SavedActionPathKey";
 NSString * const kPersistentWatchedBillsKey = @"WatchedBillsKey";
+NSString * const kPersistentCalendarKey = @"SelectedCalendarKey";
 
 NSString * const SLFSelectedStateDidChangeNotification = @"SLFSelectedStateDidChange";
 NSString * const SLFSelectedSessioneDidChangeNotification = @"SLFSelectedSessionDidChange";
 NSString * const SLFWatchedBillsDidChangeNotification = @"SLFWatchedBillsDidChange";
+NSString * const SLFSelectedCalendarDidChangeNotification = @"SLFSelectedCalendarDidChange";
 
 NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
 
@@ -95,6 +98,8 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
         [settings setObject:SLFSelectedSessionsByStateID() forKey:kPersistentSelectedSessionKey];
     if (!IsEmpty(SLFWatchedBillsCatalog()))
         [settings setObject:SLFWatchedBillsCatalog() forKey:kPersistentWatchedBillsKey];
+    if (!IsEmpty(SLFSelectedCalendar()))
+        [settings setObject:SLFSelectedCalendar() forKey:kPersistentCalendarKey];
     return settings;
 }
 
@@ -119,6 +124,10 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
     NSDictionary *watchedBills = [settings valueForKey:kPersistentWatchedBillsKey];
     if (!IsEmpty(watchedBills))
         [defaults setObject:watchedBills forKey:kPersistentWatchedBillsKey];
+    NSString *calendarID = [settings valueForKey:kPersistentCalendarKey];
+    if (!IsEmpty(calendarID))
+        [defaults setObject:calendarID forKey:kPersistentCalendarKey];
+    [[SLFEventsManager sharedManager] loadEventCalendarFromPersistence];
     [self loadPersistence:nil];
 }
 
@@ -137,7 +146,22 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
     }
 }
 
+#pragma mark - Calendar / Events
+
+NSString* SLFSelectedCalendar(void) {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kPersistentCalendarKey];
+}
+
+void SLFSaveSelectedCalendar(NSString *calenderID) {
+    if (IsEmpty(calenderID))
+        return;
+    [[NSUserDefaults standardUserDefaults] setObject:calenderID forKey:kPersistentCalendarKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SLFSelectedCalendarDidChangeNotification object:[SLFPersistenceManager sharedPersistence] userInfo:[NSDictionary dictionaryWithObject:calenderID forKey:@"calendarID"]];
+}
+
 #pragma mark - Application Activity/Resource Path
+
 NSString* SLFCurrentActionPath(void) {
     return [[SLFPersistenceManager sharedPersistence] savedActionPath];
 }

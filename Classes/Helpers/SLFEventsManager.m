@@ -13,8 +13,6 @@
 #import "SLFEventsManager.h"
 #import "MKInfoPanel.h"
 
-NSString * const SLFEventsManagerNotifyCalendarDidChange = @"SLFEventsManagerNotifyCalendarDidChange";
-
 @interface SLFEventsManager()
 @property (nonatomic,retain) UIViewController <StackableController,SLFEventsManagerDelegate> *eventEditorParent;
 @property (nonatomic,retain) UIViewController <StackableController,SLFEventsManagerDelegate> *calendarChooserParent;
@@ -40,7 +38,7 @@ NSString * const SLFEventsManagerNotifyCalendarDidChange = @"SLFEventsManagerNot
     self = [super init];
     if (self) {
         _eventStore = [[EKEventStore alloc] init];
-        self.eventCalendar = [_eventStore defaultCalendarForNewEvents];
+        _eventCalendar = [[_eventStore defaultCalendarForNewEvents] retain];
     }
     return self;
 }
@@ -53,12 +51,23 @@ NSString * const SLFEventsManagerNotifyCalendarDidChange = @"SLFEventsManagerNot
     [super dealloc];
 }
 
+- (void)loadEventCalendarFromPersistence {
+    if (SLFIsIOS5OrGreater()) {
+        if (!IsEmpty(SLFSelectedCalendar()))
+            self.eventCalendar = [_eventStore calendarWithIdentifier:SLFSelectedCalendar()];
+    }
+    if (!_eventCalendar)
+        _eventCalendar = [[_eventStore defaultCalendarForNewEvents] retain];
+}
+
 - (void)setEventCalendar:(EKCalendar *)eventCalendar {
     SLFRelease(_eventCalendar);
     _eventCalendar = [eventCalendar retain];
-    if (eventCalendar && self.calendarChooserParent) {
+    if (!eventCalendar)
+        return;
+    SLFSaveSelectedCalendar(eventCalendar.calendarIdentifier);
+    if (self.calendarChooserParent)
         [_calendarChooserParent calendarDidChange:eventCalendar];
-    }
 }
 
 - (EKEvent *)findOrCreateEventWithIdentifier:(NSString *)eventIdentifier {
@@ -141,6 +150,7 @@ NSString * const SLFEventsManagerNotifyCalendarDidChange = @"SLFEventsManagerNot
     chooser.delegate = self;
     chooser.showsDoneButton = YES;
     chooser.showsCancelButton = YES;
+    chooser.selectedCalendars = [NSSet setWithObject:_eventCalendar];
     return chooser;
 }
 
