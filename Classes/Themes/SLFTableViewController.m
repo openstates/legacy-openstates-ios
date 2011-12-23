@@ -116,8 +116,8 @@
         RKLogError(@"-------- from resource path: %@", [tableController performSelector:@selector(resourcePath)]);
 }
 
-- (void)tableControllerDidFinishLoading:(RKAbstractTableController*)tableController {
-    RKLogTrace(@"%@: Table model finished loading.", NSStringFromClass([self class]));
+- (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
+    RKLogTrace(@"%@: Table controller finished loading.", NSStringFromClass([self class]));
     if (self.onSavePersistentActionPath) {
         _onSavePersistentActionPath(self.actionPath);
         self.onSavePersistentActionPath = nil;

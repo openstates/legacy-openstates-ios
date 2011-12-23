@@ -27,7 +27,7 @@
 }
 
 + (NSArray*)searchableAttributes {
-    return [NSArray arrayWithObjects:@"name", nil];
+    return [NSArray arrayWithObjects:@"name", @"subtitle", nil];
 }
 
 - (NSNumber *)districtNumber {

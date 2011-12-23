@@ -52,8 +52,8 @@
     [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
 }
 
-- (void)tableControllerDidFinishLoading:(RKAbstractTableController*)tableController {
-    [super tableControllerDidFinishLoading:tableController];
+- (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
+    [super tableControllerDidFinishFinalLoad:tableController];
     self.title = [NSString stringWithFormat:@"%d Events", self.tableController.rowCount];
 }
 

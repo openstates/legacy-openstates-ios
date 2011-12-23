@@ -144,6 +144,8 @@
     [tableItems addObject:[self menuItemWithText:MenuFeedback imagePrefix:@"Bug" cellMapping:momentaryMap]];
 #endif
     [_tableController loadTableItems:tableItems];
+    [_tableController.tableView reloadData];
+    [_tableController.tableView setNeedsDisplay];
     [tableItems release];
 }
 
@@ -181,6 +183,7 @@
     }
 #endif
 }
+
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     self.title = NSLocalizedString(@"Load Error",@"");
     [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];

@@ -12,9 +12,9 @@
 @property (nonatomic,readonly) SLFParty *party;
 @property (nonatomic,retain) MKPolygon *districtPolygon;
 @property (nonatomic,readonly) NSUInteger pinColorIndex;
+@property (nonatomic, readonly, copy) NSString *title;
+@property (nonatomic, readonly, copy) NSString *subtitle;
 - (NSArray *)calloutCells;
-- (NSString *)title;
-- (NSString *)subtitle;
 - (UIImage *)image;
 - (MKPolygon *)polygonFactory;
 + (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;

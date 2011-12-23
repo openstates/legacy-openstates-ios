@@ -82,8 +82,8 @@
     [self.tableController addHeaderRowForItem:headerItem];
 }
 
-- (void)tableControllerDidFinishLoading:(RKAbstractTableController*)tableController {
-    [super tableControllerDidFinishLoading:tableController];
+- (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
+    [super tableControllerDidFinishFinalLoad:tableController];
     self.title = [NSString stringWithFormat:@"%d States", self.tableController.rowCount];
 }
 
