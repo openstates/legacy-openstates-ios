@@ -154,6 +154,7 @@
         return;
     NSArray *sortedObjects = [section.objects sortedArrayUsingDescriptors:[BillsSubjectsEntry sortDescriptors]];
     [_tableController loadObjects:sortedObjects];
+    [_tableController.tableView reloadData];
 }
 
 @end

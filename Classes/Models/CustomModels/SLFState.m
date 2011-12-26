@@ -38,13 +38,18 @@
 }
 
 - (NSString *)stateInitial {
-	NSString * initial = [self.stateID substringToIndex:1];
-	return initial;
+    NSString * initial = [self.stateID substringToIndex:1];
+    return initial;
 }
 
 - (UIImage *)stateFlag {
     NSString *iconPath = [NSString stringWithFormat:@"StateFlags.bundle/%@", self.stateID];
     return [UIImage imageNamed:iconPath];
+}
+
++ (NSString *)resourcePathForStateID:(NSString *)stateID {
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", [stateID lowercaseString], @"stateID", nil];
+    return RKMakePathWithObject(@"/metadata/:stateID?apikey=:apikey", queryParams);
 }
 
 - (NSString *)newsAddress {

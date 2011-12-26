@@ -50,7 +50,7 @@
 
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-	self.state = nil;
+    self.state = nil;
     self.tableController = nil;
     [super dealloc];
 }
@@ -86,8 +86,7 @@
 }
 
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {
-    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", resourceID, @"stateID", nil];
-    NSString *resourcePath = RKMakePathWithObject(@"/metadata/:stateID?apikey=:apikey", queryParams);
+    NSString *resourcePath = [SLFState resourcePathForStateID:resourceID];
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(24)];
 }
 
@@ -108,7 +107,7 @@
     [tableItems addObject:[self menuItemWithText:MenuFavorites imagePrefix:@"Star"]];
     [tableItems addObject:[self menuItemWithText:MenuRecents imagePrefix:@"Clock"]];
     if (self.state && self.state.featureFlags && [self.state.featureFlags containsObject:@"subjects"])
-	    [tableItems addObject:[self menuItemWithText:MenuSubjects imagePrefix:@"Collection"]];
+        [tableItems addObject:[self menuItemWithText:MenuSubjects imagePrefix:@"Collection"]];
     RKTableViewCellMapping *cellMap = [self menuCellMapping]; // subclass can override
     [cellMap mapKeyPath:@"highlightedImage" toAttribute:@"imageView.highlightedImage"];
     [cellMap addDefaultMappings];
@@ -126,7 +125,7 @@
 }
 
 - (void)selectMenuItem:(NSString *)menuItem {
-	if (menuItem == NULL)
+    if (menuItem == NULL)
         return;
     if ([menuItem isEqualToString:MenuRecents]) {
         UIViewController *vc = nil;

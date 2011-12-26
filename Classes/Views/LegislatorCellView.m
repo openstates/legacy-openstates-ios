@@ -126,6 +126,13 @@
 {
     CGRect aBounds = [self bounds];
 
+    NSString *partyString = _party.name;
+    NSString *nameString = _name;
+    if (IsEmpty(nameString)) {
+        nameString = _genericName;
+        partyString = NSLocalizedString(@"Unknown", @"");
+    }
+
     static UIFont *font;
     if (!font)
         font = [UIFont fontWithName:@"HelveticaNeue" size:13];
@@ -153,16 +160,13 @@
     // Name
     [darkColor set];
     UIFont *nameFont = SLFFont(18);
-    drawRect = [self rectOfString:_name atOrigin:CGPointMake(9,25) withFont:nameFont];
-    NSString *nameString = _name;
-    if (IsEmpty(nameString))
-        nameString = _genericName;
+    drawRect = [self rectOfString:nameString atOrigin:CGPointMake(9,25) withFont:nameFont];
     [nameString drawInRect:drawRect withFont:SLFFont(18)];
     
     // Party
     [partyColor set];
-    drawRect = [self rectOfString:_party.name atOrigin:CGPointMake(9,48) withFont:font];
-    [_party.name drawInRect:drawRect withFont:font];
+    drawRect = [self rectOfString:partyString atOrigin:CGPointMake(9,48) withFont:font];
+    [partyString drawInRect:drawRect withFont:font];
         
     // District
     [lightColor set];
@@ -173,7 +177,7 @@
     if (!IsEmpty(_role)) {
         [accentColor set];
         UIFont *roleFont = SLFFont(14);
-        drawRect = [self rectOfString:_party.name atOrigin:CGPointMake(aBounds.size.width - 90.f, 9.f) withFont:roleFont];
+        drawRect = [self rectOfString:_role atOrigin:CGPointMake(aBounds.size.width - 90.f, 9.f) withFont:roleFont];
         [_role drawInRect:drawRect withFont:roleFont lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentRight];
     }
 

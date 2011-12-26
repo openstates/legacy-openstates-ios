@@ -2,6 +2,7 @@
 #import "SLFSortDescriptor.h"
 #import "BillActionParser.h"
 #import "BillSearchParameters.h"
+#import "NSDate+SLFDateHelper.h"
 
 @implementation SLFBill
 
@@ -56,6 +57,10 @@
     if (value)
         value = [value capitalizedString];
     return value;
+}
+
+- (NSString *)watchSummaryForDisplay {
+    return [NSString stringWithFormat:NSLocalizedString(@"Updated %@ - %@",@""), [self.dateUpdated stringForDisplayWithPrefix:YES], self.title];
 }
 
 #pragma mark - Bill Watch

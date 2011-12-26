@@ -18,6 +18,7 @@
 - (NSInteger)sessionIndexForDisplayName:(NSString *)displayName;
 + (RKManagedObjectMapping *)mapping;
 + (NSArray *)sortDescriptors;
++ (NSString *)resourcePathForStateID:(NSString *)stateID;
 @end
 
 @interface RKManagedObjectMapping(SLFState)

@@ -23,6 +23,7 @@ typedef enum BillType {
 @property (nonatomic,readonly) NSArray *stages;
 @property (nonatomic,readonly) BillType billType;
 @property (nonatomic,readonly) NSString *watchID;
+@property (nonatomic,readonly) NSString *watchSummaryForDisplay;
 + (SLFBill *)billForWatchID:(NSString *)watchID;
 + (NSString *)resourcePathForWatchID:(NSString *)watchID;
 + (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;

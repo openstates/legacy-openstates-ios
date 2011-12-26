@@ -21,8 +21,6 @@
 
 @interface BillsWatchedViewController()
 @property (nonatomic,retain) RKTableController *tableController;
-@property (nonatomic,retain) NSMutableArray *sectionNames;
-@property (nonatomic,retain) NSMutableDictionary *rowsForSections;
 @property (nonatomic,retain) IBOutlet id editButton;
 @property (nonatomic,retain) IBOutlet id doneButton;
 - (void)watchedBillsChanged:(NSNotification *)notification;
@@ -30,13 +28,14 @@
 - (void)configureEditingButtons;
 - (void)configureEditingButtonsIphone;
 - (void)configureEditingButtonsIpad;
-- (void)loadWatchedWatchIDPathsFromNetwork:(NSSet *)watchIDPaths;
+- (void)loadStatesForStateIDsFromNetwork:(NSSet *)stateIDs;
+- (void)loadBillsForWatchIDsFromNetwork:(NSSet *)watchIDs;
+- (NSArray *)actualBillsFromWatchedBills;
+- (RKTableViewCellMapping *)billCellMapping;
 @end
 
 @implementation BillsWatchedViewController
 @synthesize tableController = _tableController;
-@synthesize sectionNames = _sectionNames;
-@synthesize rowsForSections = _rowsForSections;
 @synthesize editButton = __editButton;
 @synthesize doneButton = __doneButton;
 - (id)init {
@@ -45,16 +44,12 @@
         self.useTitleBar = SLFIsIpad();
         self.useGearViewBackground = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(watchedBillsChanged:) name:SLFWatchedBillsDidChangeNotification object:nil];
-        self.sectionNames = [NSMutableArray array];
-        self.rowsForSections = [NSMutableDictionary dictionary];
     }
     return self;
 }
 
 - (void)dealloc {
     self.tableController = nil;
-    self.sectionNames = nil;
-    self.rowsForSections = nil;
     self.editButton = nil;
     self.doneButton = nil;
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
@@ -79,6 +74,7 @@
     _tableController.pullToRefreshEnabled = NO;
     _tableController.tableView.rowHeight = 90;
     _tableController.canEditRows = YES;
+    [_tableController mapObjectsWithClass:[SLFBill class] toTableCellsWithMapping:[self billCellMapping]];
     [self configureTableItems];
     [self configureEditingButtons];
 }
@@ -137,94 +133,72 @@
 
 #pragma mark - Section / Row Data
 
-- (void)addTableSectionWithTitle:(NSString *)sectionTitle {
-    [_tableController addSectionUsingBlock:^(RKTableSection *section) {
-        TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:sectionTitle width:self.tableView.width];
-        section.headerTitle = sectionTitle;
-        section.headerHeight = TableSectionHeaderViewDefaultHeight;
-        section.headerView = headerView;
-        [headerView release];
-    }];
+- (NSArray *)filterBills:(NSArray *)bills withStateID:(NSString *)stateID {
+    NSParameterAssert(!IsEmpty(bills) && !IsEmpty(stateID));
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"stateID == %@", [stateID lowercaseString]];
+    return [bills filteredArrayUsingPredicate:pred];
 }
 
-- (RKTableItem *)tableItemForBill:(SLFBill *)bill {
-    return [RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [LargeSubtitleCellMapping cellMapping];
-        tableItem.text = bill.name;
-        tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Updated %@ - %@",@""), [bill.dateUpdated stringForDisplayWithPrefix:YES], bill.title];
-        [tableItem setValue:bill forKey:@"bill"]; // This works because of Blake's fancy user data footwork
-        tableItem.cellMapping.onSelectCell = ^(void) {
-            NSString *path = [SLFActionPathNavigator navigationPathForController:[BillDetailViewController class] withResource:bill];
-            if (!IsEmpty(path))
-                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
-        };
-    }];
-}
-
-- (NSMutableArray *)createEmptySectionWithName:(NSString *)sectionName {
-    [self addTableSectionWithTitle:sectionName];
-    NSMutableArray *rows = [NSMutableArray array];
-    [self.rowsForSections setObject:rows forKey:sectionName];
-    [self.sectionNames addObject:sectionName];
-    return rows;
+- (void)recreateSectionForStateID:(NSString *)stateID usingWatchedBillsOrNil:(NSArray *)bills {
+    if (!bills)
+        bills = [self actualBillsFromWatchedBills];
+    if (IsEmpty(bills))
+        return;
+    NSArray *stateBills = [self filterBills:bills withStateID:stateID];
+    NSString *headerTitle = [stateID uppercaseString];
+    RKTableSection *section = [_tableController sectionWithHeaderTitle:headerTitle];
+    if (IsEmpty(stateBills)) {
+        if (section)
+            [_tableController removeSection:section];
+        return;
+    }
+    if (!section) {
+        section = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
+            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:300.f];
+            section.headerTitle = headerTitle;
+            section.headerHeight = TableSectionHeaderViewDefaultHeight;
+            section.headerView = headerView;
+            [headerView release];
+        }];
+        [_tableController addSection:section];
+    }
+    [section setObjects:stateBills];
 }
 
 - (void)configureTableItems {
-    [_sectionNames removeAllObjects];
-    [_rowsForSections removeAllObjects];
     [_tableController removeAllSections];
-    
-    NSDictionary *watchedBills = SLFWatchedBillsCatalog();
-    if (IsEmpty(watchedBills)) {
+    NSArray *bills = [self actualBillsFromWatchedBills];
+    if (IsEmpty(bills)) {
             // Do something like insert a static cell, to show how to add watched bills
             // [_tableController loadTableItems:[NSArray arrayWithObject:emptyTableItem]];
         return;
     }
-    NSArray *watchIDs = [[watchedBills allKeys] sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
-    NSMutableSet *billsToLoad = [NSMutableSet set];
-    for (NSString *watchID in watchIDs) {
-        NSString *path = [SLFBill resourcePathForWatchID:watchID];
-        SLFBill *bill = [SLFBill billForWatchID:watchID];
-        if (!bill && !IsEmpty(path)) {
-            [billsToLoad addObject:path];
-            continue;
-        }
-        SLFState *state = bill.state;
-        NSMutableArray *rows = [_rowsForSections objectForKey:state.name];
-        if (IsEmpty(rows))
-            rows = [self createEmptySectionWithName:state.name];
-        [rows addObject:[self tableItemForBill:bill]];
-    }
-    
-    for (NSInteger index = 0; index < _sectionNames.count; index++) {
-        NSString *sectionKey = [_sectionNames objectAtIndex:index];
-        NSMutableArray *rows = [_rowsForSections objectForKey:sectionKey];
-        [_tableController loadTableItems:rows inSection:index + 1];
-    }
-    [self loadWatchedWatchIDPathsFromNetwork:billsToLoad];
+    NSArray *states = [bills valueForKeyPath:@"stateID"];
+    NSAssert(IsEmpty(states) == NO, @"Found watched bills but had an empty list of stateIDs??");
+    for (NSString *state in states)
+        [self recreateSectionForStateID:state usingWatchedBillsOrNil:bills];
     self.title = [NSString stringWithFormat:NSLocalizedString(@"%d Watched Bills",@""), _tableController.rowCount];
+    [self.tableView reloadData];
 }
 
-- (void)addSingleTableRowForBill:(SLFBill *)bill {
-    SLFState *state = bill.state;
-    NSMutableArray *rows = [self.rowsForSections objectForKey:state.name];
-    if (IsEmpty(rows))
-        rows = [self createEmptySectionWithName:state.name];
-    [rows addObject:[self tableItemForBill:bill]];
-    NSInteger sectionIndex = [_sectionNames indexOfObject:state.name];
-    [_tableController loadTableItems:rows inSection:sectionIndex + 1];
+- (RKTableViewCellMapping *)billCellMapping {
+    RKTableViewCellMapping *cellMap = [LargeSubtitleCellMapping cellMapping];
+    [cellMap mapKeyPath:@"name" toAttribute:@"textLabel.text"];
+    [cellMap mapKeyPath:@"watchSummaryForDisplay" toAttribute:@"detailTextLabel.text"];
+    cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+        SLFBill *bill = object;
+        NSString *path = [SLFActionPathNavigator navigationPathForController:[BillDetailViewController class] withResource:bill];
+        if (!IsEmpty(path))
+            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
+    };
+    return cellMap;
 }
 
 - (void)tableController:(RKAbstractTableController*)tableController didDeleteObject:(id)object atIndexPath:(NSIndexPath*)indexPath {
-    SLFBill *bill = [[object valueForKey:@"bill"] retain];
-    NSString *sectionName = [_sectionNames objectAtIndex:indexPath.section - 1];
-    if (!IsEmpty(sectionName)) {
-        NSMutableArray *rows = [_rowsForSections objectForKey:sectionName];
-        if (!IsEmpty(rows) && [rows containsObject:object])
-            [rows removeObject:object];
-    }
-    if (bill)
-        SLFSaveBillWatchedStatus(bill, NO);
+    if (!object || ![object isKindOfClass:[SLFBill class]])
+        return;
+    SLFBill *bill = [object retain];
+    SLFSaveBillWatchedStatus(bill, NO);
     [bill release];
 }
 
@@ -234,30 +208,66 @@
         return;
     }
     SLFBill *bill = (SLFBill *)notification.object;
-    BOOL isWatched = SLFBillIsWatched(bill);
-    if (!isWatched) {
-        [self configureTableItems];
-        return;
-    }
-    [self addSingleTableRowForBill:bill];
+    [self recreateSectionForStateID:bill.stateID usingWatchedBillsOrNil:nil];
+    [self.tableView reloadData];
 }
 
-- (void)loadWatchedWatchIDPathsFromNetwork:(NSSet *)watchIDPaths {
-    if (!IsEmpty(watchIDPaths))
+- (NSArray *)actualBillsFromWatchedBills {
+    NSMutableArray *foundBills = [NSMutableArray array];
+    NSDictionary *watchedBills = SLFWatchedBillsCatalog();
+    if (IsEmpty(watchedBills))
+        return foundBills;
+    NSArray *watchIDs = [[watchedBills allKeys] sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
+    NSMutableSet *billsToLoad = [NSMutableSet set];
+    NSMutableSet *statesToLoad = [NSMutableSet set];
+    for (NSString *watchID in watchIDs) {
+        SLFBill *bill = [SLFBill billForWatchID:watchID];
+        if (!bill) {
+            [billsToLoad addObject:watchID];
+            continue;
+        }
+        [foundBills addObject:bill];
+        SLFState *state = bill.stateObj;
+        if (!state)
+            [statesToLoad addObject:bill.stateID];
+    }
+    [self loadBillsForWatchIDsFromNetwork:billsToLoad];
+    [self loadStatesForStateIDsFromNetwork:statesToLoad];
+    return foundBills;
+}
+
+- (void)loadBillsForWatchIDsFromNetwork:(NSSet *)watchIDs {
+    if (IsEmpty(watchIDs))
         return;
-    for (NSString *resourcePath in watchIDPaths)
+    for (NSString *watchID in watchIDs) {
+        NSString *resourcePath = [SLFBill resourcePathForWatchID:watchID];
         [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)];
+    }
+}
+
+- (void)loadStatesForStateIDsFromNetwork:(NSSet *)stateIDs {
+     if (IsEmpty(stateIDs))
+         return;
+     for (NSString *stateID in stateIDs) {
+         NSString *resourcePath = [SLFState resourcePathForStateID:stateID];
+         [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)];
+     }
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
-    if (!object || NO == [object isKindOfClass:[SLFBill class]])
+    if (!object)
         return;
-    [self addSingleTableRowForBill:object];
+    NSString *stateID = nil;
+    if ([object isKindOfClass:[SLFBill class]] || [object isKindOfClass:[SLFState class]])
+        stateID = [object valueForKey:@"stateID"];
+    if (IsEmpty(stateID))
+        return;
+    [self recreateSectionForStateID:stateID usingWatchedBillsOrNil:nil];
+    [self.tableView reloadData];
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     self.title = NSLocalizedString(@"Load Error", @"");
     [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
 }
-
 @end
