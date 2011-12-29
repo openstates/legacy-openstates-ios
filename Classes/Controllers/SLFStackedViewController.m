@@ -13,20 +13,17 @@
 #import "SLFStackedViewController.h"
 #import "StackedNavigationBar.h"
 #import "StackedMenuViewController.h"
-    //#import "StatesViewController.h"
+#import "SVWebViewController.h"
+#import "SLFReachable.h"
 
 @interface SLFStackedViewController()
 @property (nonatomic,retain) IBOutlet StackedNavigationBar *navigationBar;
 @property (nonatomic,retain) StatesPopoverManager *statesPopover;
-    //@property (nonatomic,retain) StatesViewController *statesPanel;
-    //- (IBAction)hideStatesPanel:(id)sender;
-    //- (IBAction)showStatesPanel:(id)sender;
 @end
 
 @implementation SLFStackedViewController
 @synthesize navigationBar = _navigationBar;
 @synthesize statesPopover = _statesPopover;
-    //@synthesize statesPanel = _statesPanel;
 
 - (id)initWithRootViewController:(UIViewController *)rootViewController {
     self = [super initWithRootViewController:rootViewController];
@@ -39,14 +36,12 @@
 }
 
 - (void)dealloc {
-        //    self.statesPanel = nil;
     self.navigationBar = nil;
     self.statesPopover = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
-        //    self.statesPanel = nil;
     self.statesPopover = nil;
     self.navigationBar = nil;
     [super viewDidUnload];
@@ -60,11 +55,20 @@
     self.alwaysOnTopSubview = _navigationBar;
 }
 
+- (IBAction)browseToAppWebSite:(id)sender {
+    NSString *url = NSLocalizedString(@"http://openstates.org", @"App Website");
+    if (SLFIsReachableAddress(url)) {
+        SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:url];
+        webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+        [self presentModalViewController:webViewController animated:YES];	
+        [webViewController release];
+    }
+}
+
 - (IBAction)changeSelectedState:(id)sender {
     if (!sender || ![sender isKindOfClass:[UIView class]])
         sender = _navigationBar.mapButton;
     self.statesPopover = [StatesPopoverManager showFromOrigin:sender delegate:self];
-    //[self showStatesPanel:sender];
 }
 
 - (void)statePopover:(StatesPopoverManager *)statePopover didSelectState:(SLFState *)newState {
@@ -74,44 +78,6 @@
 }
 
 - (void)statePopoverDidCancel:(StatesPopoverManager *)statePopover {
-    //self.statesPopover = nil;
 }
 
-/*
-- (IBAction)hideStatesPanel:(id)sender {
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.25;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = kCATransitionPush;	
-    transition.subtype = kCATransitionFromTop;
-    [self.statesPanel.view.layer addAnimation:transition forKey:nil];
-    self.statesPanel.view.frame = CGRectMake(0, -self.statesPanel.view.frame.size.height, self.statesPanel.view.frame.size.width, self.statesPanel.view.frame.size.height); 
-    [self.statesPanel.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.25];
-}
-
-- (IBAction)showStatesPanel:(id)sender {
-    StatesViewController* stateListVC = [[StatesViewController alloc] init];
-    stateListVC.stateMenuDelegate = self;
-    stateListVC.view.width = stateListVC.stackWidth;
-    stateListVC.view.height = 500.f;
-    stateListVC.view.origin = CGPointMake(self.view.center.x - (stateListVC.stackWidth/2), 60);
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.25;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = kCATransitionPush;	
-    transition.subtype = kCATransitionFromBottom;
-    [stateListVC.view.layer addAnimation:transition forKey:nil];
-    [self.view addSubview:stateListVC.view];
-    self.statesPanel = stateListVC;
-    [stateListVC release];
-}
-
-- (void)stateMenuSelectionDidChangeWithState:(SLFState *)newState {
-    if (self.statesPanel)
-        [self hideStatesPanel:self.statesPanel];
-    StackedMenuViewController *vc = (StackedMenuViewController *)self.rootViewController;
-    [vc stateMenuSelectionDidChangeWithState:newState];
-}
-*/
 @end

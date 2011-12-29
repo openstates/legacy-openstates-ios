@@ -134,7 +134,8 @@ NSString * const SLFChamberLowerType = @"lower";
 
 @implementation LowerChamber
 + (LowerChamber *)lowerForState:(SLFState *)aState {
-    if (IsEmpty(aState.lowerChamberName))
+//  if (IsEmpty(aState.lowerChamberName))
+    if ([aState.stateID isEqualToString:@"ne"])
         return nil;
     LowerChamber *chamber = [[[LowerChamber alloc] init] autorelease];
     chamber.type = SLFChamberLowerType;

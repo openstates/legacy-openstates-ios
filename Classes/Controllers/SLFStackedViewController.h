@@ -15,4 +15,5 @@
 
 @interface SLFStackedViewController : PSStackedViewController <StatesPopoverDelegate/*,StateMenuSelectionDelegate*/>
 - (IBAction)changeSelectedState:(id)sender;
+- (IBAction)browseToAppWebSite:(id)sender;
 @end

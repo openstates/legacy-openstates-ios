@@ -17,6 +17,7 @@
 #import "GradientBackgroundView.h"
 #import "SLFTheme.h"
 #import "StackedMenuViewController.h"
+#import "SLFDrawingExtensions.h"
 
 #define kMapButtonOffsetX (self.width - (62 + 14)) // 62 is the image width
 #define kDividerOffsetX (kMapButtonOffsetX - 20)
@@ -39,6 +40,7 @@
 - (void)createMapButton;
 - (void)createAppNameView;
 - (void)createShadow;
+- (void)resetShadow;
 - (void)createDivider;
 - (void)createStateLabel;
 - (void)createAccessoryIndicator;
@@ -99,10 +101,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     _gradientBar.frame = self.frame;
-    CGRect shadowRect = CGRectMake(-3,self.height,self.width+6,10.0);
-    CGPathRef shadowPath = CGPathCreateWithRect(shadowRect, NULL);
-    self.layer.shadowPath = shadowPath;
-    CGPathRelease(shadowPath);
+    [self resetShadow];
 }
 
 - (void)createAppNameView {
@@ -111,8 +110,11 @@
     _iconView = [[OpenStatesIconView alloc] initWithFrame:CGRectMake(offsetX,offsetY,32,32)];
     _iconView.useDropShadow = NO;
     _iconView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
-    [self addSubview:_iconView];
-    offsetX += _iconView.width;
+    UIImage *iconImage = [UIImage imageFromView:_iconView];
+    UIButton *iconButton = [UIButton buttonForImage:iconImage withFrame:_iconView.frame glossy:NO shadow:NO];
+    [iconButton addTarget:SLFAppDelegateStack action:@selector(browseToAppWebSite:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:iconButton];
+    offsetX += _iconView.width + 4;
     offsetY += 4;
     CGRect titleRect = CGRectMake(offsetX, offsetY, kOpenStatesTitleViewWidth/1.8, kOpenStatesTitleViewHeight/1.8);
     _titleView = [[OpenStatesTitleView alloc] initWithFrame:CGRectIntegral(titleRect)];
@@ -122,13 +124,9 @@
 
 - (void)createMapButton {
     UIImage *image = [UIImage imageNamed:@"MapUSA"];    
-    self.mapButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _mapButton.bounds = CGRectMake( 0, 0, image.size.width, image.size.height );    
+    self.mapButton = [UIButton buttonForImage:image withFrame:CGRectMake(kMapButtonOffsetX,10,image.size.width,image.size.height) glossy:NO shadow:NO];
     _mapButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-    _mapButton.opaque = YES;
-    [_mapButton setImage:image forState:UIControlStateNormal];
     [_mapButton addTarget:SLFAppDelegateStack action:@selector(changeSelectedState:) forControlEvents:UIControlEventTouchUpInside];
-    _mapButton.origin = CGPointMake(kMapButtonOffsetX, 10);
     [self addSubview:_mapButton];
 }
 
@@ -137,6 +135,13 @@
     self.layer.shadowOpacity = .4;
     self.layer.borderColor = SLFColorWithRGB(102,103, 98).CGColor;
     self.layer.borderWidth = 1;
+}
+
+- (void)resetShadow {
+    CGRect shadowRect = CGRectMake(-3,self.height-2,self.width+6,10.0);
+    CGPathRef shadowPath = CGPathCreateWithRect(shadowRect, NULL);
+    self.layer.shadowPath = shadowPath;
+    CGPathRelease(shadowPath);
 }
 
 - (void)createDivider {
