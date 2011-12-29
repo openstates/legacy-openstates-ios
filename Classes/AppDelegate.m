@@ -11,12 +11,15 @@
 //
 
 #import "AppDelegate.h"
+#import <RestKit/RestKit.h>
+#import <RestKit/CoreData/CoreData.h>
+#import "SLFStackedViewController.h"
 #import "StatesViewController.h"
 #import "StackedMenuViewController.h"
 #import "StateDetailViewController.h"
 #import "SLFRestKitManager.h"
 #import "SLFAppearance.h"
-#import "AFURLCache.h"
+#import "SDURLCache.h"
 #import "SLFReachable.h"
 #import "WatchedBillNotificationManager.h"
 #import "SLFAlertView.h"
@@ -137,10 +140,10 @@
 - (void)setUpURLCache {
     const NSUInteger memoryCacheSize = 1024*1024*4;   // 4MB mem cache
     const NSUInteger diskCacheSize = 1024*1024*15;    // 15MB disk cache
-    NSString *cachePath = [AFURLCache defaultCachePath];
-    AFURLCache *cache = [[AFURLCache alloc] initWithMemoryCapacity:memoryCacheSize diskCapacity:diskCacheSize diskPath:cachePath];
-    [NSURLCache setSharedURLCache:cache];
-    [cache release];
+    NSString *cachePath = [SDURLCache defaultCachePath];
+    SDURLCache *urlCache = [[SDURLCache alloc] initWithMemoryCapacity:memoryCacheSize diskCapacity:diskCacheSize diskPath:cachePath];
+    [NSURLCache setSharedURLCache:urlCache];
+    [urlCache release];
 }
 
 - (void)restoreApplicationState {

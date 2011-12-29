@@ -22,16 +22,19 @@
 
 #import "AFImageCache.h"
 
-static inline NSString * AFImageCacheKey(NSURLRequest *urlRequest, CGSize imageSize, AFImageRequestOptions options) {
-    return [[[urlRequest URL] absoluteString] stringByAppendingFormat:@"#%fx%f:%d", imageSize.width, imageSize.height, options];
+static inline NSString * AFImageCacheKeyFromURLAndCacheName(NSURL *url, NSString *cacheName) {
+    return [[url absoluteString] stringByAppendingFormat:@"#%@", cacheName];
 }
 
 @implementation AFImageCache
 
-+ (id)sharedImageCache {
-    static NSCache *_sharedImageCache = nil;
-    static dispatch_once_t oncePredicate;
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+@synthesize imageScale = _imageScale;
+#endif
 
++ (AFImageCache *)sharedImageCache {
+    static AFImageCache *_sharedImageCache = nil;
+    static dispatch_once_t oncePredicate;
     dispatch_once(&oncePredicate, ^{
         _sharedImageCache = [[self alloc] init];
     });
@@ -39,23 +42,42 @@ static inline NSString * AFImageCacheKey(NSURLRequest *urlRequest, CGSize imageS
     return _sharedImageCache;
 }
 
-- (UIImage *)cachedImageForRequest:(NSURLRequest *)urlRequest
-                         imageSize:(CGSize)imageSize
-                           options:(AFImageRequestOptions)options
-{
-    return [self objectForKey:AFImageCacheKey(urlRequest, imageSize, options)];
+- (id)init {
+	self = [super init];
+	if (!self) {
+		return nil;
+	}
+    
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+    self.imageScale = [[UIScreen mainScreen] scale];
+#endif
+	
+	return self;
 }
 
-- (void)cacheImage:(UIImage *)image
-        forRequest:(NSURLRequest *)urlRequest
-         imageSize:(CGSize)imageSize
-           options:(AFImageRequestOptions)options
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+- (UIImage *)cachedImageForURL:(NSURL *)url
+                     cacheName:(NSString *)cacheName
 {
-    if (!image) {
-        return;
-    }
-    
-    [self setObject:image forKey:AFImageCacheKey(urlRequest, imageSize, options)];
+	UIImage *image = [UIImage imageWithData:[self objectForKey:AFImageCacheKeyFromURLAndCacheName(url, cacheName)]];
+	if (image) {
+		return [UIImage imageWithCGImage:[image CGImage] scale:self.imageScale orientation:image.imageOrientation];
+	}
+    return image;
+}
+#elif __MAC_OS_X_VERSION_MIN_REQUIRED
+- (NSImage *)cachedImageForURL:(NSURL *)url
+                     cacheName:(NSString *)cacheName
+{
+    return [[[NSImage alloc] initWithData:[self objectForKey:AFImageCacheKeyFromURLAndCacheName(url, cacheName)]] autorelease];
+}
+#endif
+
+- (void)cacheImageData:(NSData *)imageData
+                forURL:(NSURL *)url
+             cacheName:(NSString *)cacheName
+{
+    [self setObject:[NSPurgeableData dataWithData:imageData] forKey:AFImageCacheKeyFromURLAndCacheName(url, cacheName)];
 }
 
 @end

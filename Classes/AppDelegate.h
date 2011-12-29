@@ -10,10 +10,7 @@
 //
 //
 
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
-#import "SLFStackedViewController.h"
-
+@class SLFStackedViewController;
 @interface AppDelegate : NSObject <UIApplicationDelegate> {
 }
 

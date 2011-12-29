@@ -23,17 +23,54 @@
 #import <Foundation/Foundation.h>
 #import "AFImageRequestOperation.h"
 
+#import <Availability.h>
+
+/**
+ `AFImageCache` is an `NSCache` that stores and retrieves images from cache.
+ 
+ @discussion `AFImageCache` is used to cache images for successful `AFImageRequestOperations` with the proper cache policy.
+ */
 @interface AFImageCache : NSCache
 
-+ (id)sharedImageCache;
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+/**
+ The scale factor used when interpreting the cached image data. Specifying a scale factor of 1.0 results in an image whose size matches the pixel-based dimensions of the image. Applying a different scale factor changes the size of the image as reported by the size property. This is set to the value of `[[UIScreen mainScreen] scale]` by default, which automatically scales images for retina displays, for instance.
+ */
+@property (nonatomic, assign) CGFloat imageScale;
+#endif
 
-- (UIImage *)cachedImageForRequest:(NSURLRequest *)urlRequest
-                         imageSize:(CGSize)imageSize
-                           options:(AFImageRequestOptions)options;
+/**
+ Returns the shared image cache object for the system.
+ 
+ @return The systemwide image cache.
+ */
++ (AFImageCache *)sharedImageCache;
 
-- (void)cacheImage:(UIImage *)image
-        forRequest:(NSURLRequest *)urlRequest
-         imageSize:(CGSize)imageSize
-           options:(AFImageRequestOptions)options;
+/**
+ Returns the image associated with a given URL and cache name.
+ 
+ @param url The URL associated with the image in the cache.
+ @param cacheName The cache name associated with the image in the cache. This allows for multiple versions of an image to be associated for a single URL, such as image thumbnails, for instance.
+ 
+ @return The image associated with the URL and cache name, or `nil` if not image exists.
+ */
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+- (UIImage *)cachedImageForURL:(NSURL *)url
+                     cacheName:(NSString *)cacheName;
+#elif __MAC_OS_X_VERSION_MIN_REQUIRED
+- (NSImage *)cachedImageForURL:(NSURL *)url
+                     cacheName:(NSString *)cacheName;
+#endif
+
+/**
+ Stores image data into cache, associated with a given URL and cache name.
+ 
+ @param imageData The image data to be stored in cache.
+ @param url The URL to be associated with the image.
+ @param cacheName The cache name to be associated with the image in the cache. This allows for multiple versions of an image to be associated for a single URL, such as image thumbnails, for instance.
+ */
+- (void)cacheImageData:(NSData *)imageData
+                forURL:(NSURL *)url
+             cacheName:(NSString *)cacheName;
 
 @end
