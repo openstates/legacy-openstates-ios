@@ -11,9 +11,6 @@
 //
 
 #import "PSStackedViewController.h"
-#import "StatesPopoverManager.h"
 
-@interface SLFStackedViewController : PSStackedViewController <StatesPopoverDelegate/*,StateMenuSelectionDelegate*/>
-- (IBAction)changeSelectedState:(id)sender;
-- (IBAction)browseToAppWebSite:(id)sender;
+@interface SLFStackedViewController : PSStackedViewController
 @end

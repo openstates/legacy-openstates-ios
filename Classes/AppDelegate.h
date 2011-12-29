@@ -11,11 +11,11 @@
 //
 
 @class SLFStackedViewController;
-@interface AppDelegate : NSObject <UIApplicationDelegate> {
-}
-
+@class AppBarController;
+@interface AppDelegate : NSObject <UIApplicationDelegate>
 @property (nonatomic,retain) IBOutlet UIWindow *window;
-@property (nonatomic,retain, readonly) SLFStackedViewController *stackController;
+@property (nonatomic,/*retain,*/ readonly) SLFStackedViewController *stackedViewController;
+@property (nonatomic,retain, readonly) AppBarController *appBarController;
 @property (nonatomic,retain, readonly) UINavigationController *navigationController;
 @end
 

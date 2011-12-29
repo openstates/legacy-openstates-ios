@@ -13,18 +13,9 @@
 #import "StackedMenuViewController.h"
 #import "StackedMenuCell.h"
 #import "GradientBackgroundView.h"
-#import "StatesViewController.h"
-#import "UIImage+OverlayColor.h"
-#import "StackedBackgroundView.h"
-#import "DDActionHeaderView.h"
-#import "OpenStatesIconView.h"
-#import "UIImageView+RoundedCorners.h"
-#import "SLFDrawingExtensions.h"
-#import "GradientBackgroundView.h"
 
 @interface StackedMenuViewController()
 - (void)configureMenuBackground;
-- (void)configureStackedBackgroundView;
 @end
 
 const NSUInteger STACKED_MENU_INSET = 75;
@@ -56,7 +47,6 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     self.tableView.width = STACKED_MENU_WIDTH;
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     [self configureMenuBackground];
-    [self configureStackedBackgroundView];    
 }
 
 - (void)stackOrPushViewController:(UIViewController *)viewController {
@@ -75,7 +65,7 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 }
 
 - (void)configureMenuBackground {
-    self.tableView.separatorColor = [UIColor colorWithRed:0.173 green:0.188 blue:0.192 alpha:0.400];
+    self.tableView.separatorColor = SLFColorWithRGBA(44,48,49,0.4);
     GradientBackgroundView *tableBackground = [[GradientBackgroundView alloc] initWithFrame:self.tableView.bounds];
     UIColor *topColor = [SLFAppearance menuBackgroundColor];
     UIColor *stopColor = SLFColorWithRGBShift(topColor, -13);
@@ -85,22 +75,13 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
     [(CAGradientLayer *)tableBackground.layer setLocations:gradientStops];
     [gradientStops release];
     self.tableView.backgroundView = tableBackground;
-    
-    CGRect shadowRect = CGRectMake(self.tableView.width-5,0,10,self.tableView.height);
-    CGPathRef shadowPath = CGPathCreateWithRect(shadowRect, NULL);
+    CGPathRef shadowPath = CGPathCreateWithRect(CGRectMake(self.tableView.width-5,0,10,self.tableView.height), NULL);
     self.tableView.layer.shadowPath = shadowPath;
     CGPathRelease(shadowPath);
     self.tableView.layer.shadowColor = [UIColor blackColor].CGColor;
     self.tableView.layer.shadowOpacity = .4;
     self.tableView.clipsToBounds = NO;
     [tableBackground release];
-}
-
-- (void)configureStackedBackgroundView {
-    CGRect viewFrame = CGRectMake(STACKED_MENU_WIDTH, 0, self.view.size.width - STACKED_MENU_WIDTH, self.view.size.height);
-    StackedBackgroundView *background = [[StackedBackgroundView alloc] initWithFrame:viewFrame];
-    [self.view insertSubview:background belowSubview:self.tableView];
-    [background release];
 }
 
 @end

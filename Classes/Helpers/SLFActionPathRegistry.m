@@ -152,7 +152,7 @@
         SLFState *state = [SLFState findFirstByAttribute:@"stateID" withValue:[arguments valueForKey:@"stateID"]];
         if (!state)
             return nil;
-        [SLFAppDelegateStack statePopover:nil didSelectState:state];
+        [SLFAppBarController statePopover:nil didSelectState:state];
         StackedMenuViewController *vc = (StackedMenuViewController *)SLFAppDelegateStack.rootViewController;
         if (!skipSaving && vc && [vc conformsToProtocol:@protocol(SLFPerstentActionsProtocol)])
             vc.onSavePersistentActionPath = ^(NSString *actionPath) {
@@ -169,7 +169,7 @@
         return;
     [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments, BOOL skipSaving) {
         if (SLFIsIpad()) {
-            [SLFAppDelegateStack changeSelectedState:nil];
+            [SLFAppBarController changeSelectedState:nil];
             return nil;
         }
         UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;

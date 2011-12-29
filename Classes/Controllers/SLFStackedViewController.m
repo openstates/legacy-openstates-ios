@@ -11,24 +11,18 @@
 //
 
 #import "SLFStackedViewController.h"
-#import "StackedNavigationBar.h"
+#import "AppBarController.h"
 #import "StackedMenuViewController.h"
-#import "SVWebViewController.h"
 #import "SLFReachable.h"
 
 @interface SLFStackedViewController()
-@property (nonatomic,retain) IBOutlet StackedNavigationBar *navigationBar;
-@property (nonatomic,retain) StatesPopoverManager *statesPopover;
 @end
 
 @implementation SLFStackedViewController
-@synthesize navigationBar = _navigationBar;
-@synthesize statesPopover = _statesPopover;
 
 - (id)initWithRootViewController:(UIViewController *)rootViewController {
     self = [super initWithRootViewController:rootViewController];
     if (self) {
-        self.topOffset = 60;
         self.leftInset = STACKED_MENU_INSET;
         self.largeLeftInset = STACKED_MENU_WIDTH;
     }
@@ -36,48 +30,15 @@
 }
 
 - (void)dealloc {
-    self.navigationBar = nil;
-    self.statesPopover = nil;
     [super dealloc];
 }
 
-- (void)viewDidUnload {
-    self.statesPopover = nil;
-    self.navigationBar = nil;
-    [super viewDidUnload];
-}
-
 - (void)viewDidLoad {
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.view.autoresizesSubviews = YES;
     [super viewDidLoad];
-    self.navigationBar = nil;
-    _navigationBar = [[StackedNavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 60)];
-    [self.view addSubview:_navigationBar];
-    self.alwaysOnTopSubview = _navigationBar;
+    [self.view setNeedsLayout];
 }
 
-- (IBAction)browseToAppWebSite:(id)sender {
-    NSString *url = NSLocalizedString(@"http://openstates.org", @"App Website");
-    if (SLFIsReachableAddress(url)) {
-        SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:url];
-        webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-        [self presentModalViewController:webViewController animated:YES];	
-        [webViewController release];
-    }
-}
-
-- (IBAction)changeSelectedState:(id)sender {
-    if (!sender || ![sender isKindOfClass:[UIView class]])
-        sender = _navigationBar.mapButton;
-    self.statesPopover = [StatesPopoverManager showFromOrigin:sender delegate:self];
-}
-
-- (void)statePopover:(StatesPopoverManager *)statePopover didSelectState:(SLFState *)newState {
-    [self popToRootViewControllerAnimated:YES];
-    StackedMenuViewController *vc = (StackedMenuViewController *)self.rootViewController;
-    [vc stateMenuSelectionDidChangeWithState:newState];
-}
-
-- (void)statePopoverDidCancel:(StatesPopoverManager *)statePopover {
-}
 
 @end

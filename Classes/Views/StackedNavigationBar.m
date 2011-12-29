@@ -16,7 +16,8 @@
 #import "OpenStatesTitleView.h"
 #import "GradientBackgroundView.h"
 #import "SLFTheme.h"
-#import "StackedMenuViewController.h"
+    //#import "StackedMenuViewController.h"
+#import "SLFState.h"
 #import "SLFDrawingExtensions.h"
 
 #define kMapButtonOffsetX (self.width - (62 + 14)) // 62 is the image width
@@ -53,6 +54,7 @@
 @synthesize gradientBar = _gradientBar;
 @synthesize stateLabel = _stateLabel;
 @synthesize mapButton = _mapButton;
+@synthesize appIconButton = _appIconButton;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -81,6 +83,7 @@
     self.gradientBar = nil;
     self.stateLabel = nil;
     self.mapButton = nil;
+    self.appIconButton = nil;
     [super dealloc];
 }
 
@@ -111,9 +114,8 @@
     _iconView.useDropShadow = NO;
     _iconView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
     UIImage *iconImage = [UIImage imageFromView:_iconView];
-    UIButton *iconButton = [UIButton buttonForImage:iconImage withFrame:_iconView.frame glossy:NO shadow:NO];
-    [iconButton addTarget:SLFAppDelegateStack action:@selector(browseToAppWebSite:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:iconButton];
+    self.appIconButton = [UIButton buttonForImage:iconImage withFrame:_iconView.frame glossy:NO shadow:NO];
+    [self addSubview:_appIconButton];
     offsetX += _iconView.width + 4;
     offsetY += 4;
     CGRect titleRect = CGRectMake(offsetX, offsetY, kOpenStatesTitleViewWidth/1.8, kOpenStatesTitleViewHeight/1.8);
@@ -126,7 +128,6 @@
     UIImage *image = [UIImage imageNamed:@"MapUSA"];    
     self.mapButton = [UIButton buttonForImage:image withFrame:CGRectMake(kMapButtonOffsetX,10,image.size.width,image.size.height) glossy:NO shadow:NO];
     _mapButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-    [_mapButton addTarget:SLFAppDelegateStack action:@selector(changeSelectedState:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_mapButton];
 }
 

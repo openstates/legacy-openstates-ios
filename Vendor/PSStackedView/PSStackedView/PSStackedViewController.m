@@ -154,21 +154,20 @@ typedef void(^PSSVSimpleBlock)(void);
 }
 
 - (CGRect)viewRect {
-    // self.view.frame not used, it's wrong in viewWillAppear
-    CGRect viewRect = self.view.frame;//[[UIScreen mainScreen] applicationFrame];
+    CGRect viewRect = self.view.frame;
     return viewRect;
 }
 
 // return screen width
 - (CGFloat)screenWidth {
     CGRect viewRect = [self viewRect];
-    CGFloat screenWidth = PSIsLandscape() ? viewRect.size.height : viewRect.size.width;
+    CGFloat screenWidth = viewRect.size.width;
     return screenWidth;
 }
 
 - (CGFloat)screenHeight {
     CGRect viewRect = [self viewRect];
-    NSUInteger screenHeight = PSIsLandscape() ? viewRect.size.width : viewRect.size.height;
+    NSUInteger screenHeight = viewRect.size.height;
     screenHeight -= topOffset_;
     return screenHeight;
 }
@@ -1381,7 +1380,6 @@ enum {
 // event relay
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration; {
     //lastVisibleIndexBeforeRotation_ = self.lastVisibleIndex;
-    
     [rootViewController_ willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     
     for (UIViewController *controller in self.viewControllers) {

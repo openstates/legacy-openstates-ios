@@ -14,7 +14,6 @@
 #import "SLFDataModels.h"
 #import "BillsViewController.h"
 #import "BillSearchParameters.h"
-#import "AppendingFlowView.h"
 #import "LegislatorDetailViewController.h"
 #import "BillVotesViewController.h"
 #import "DDActionHeaderView.h"
@@ -27,23 +26,12 @@
 #import "LegislatorCell.h"
 #import "SLFDrawingExtensions.h"
 #import "SLFPersistenceManager.h"
-
-enum SECTIONS {
-    SectionBillInfo = 1,
-    SectionStages,
-    SectionResources,
-    SectionSubjects,
-    SectionVotes,
-    SectionSponsors,
-    SectionActions,
-    kNumSections
-};
+#import "AppendingFlowCell.h"
 
 @interface BillDetailViewController()
 @property (nonatomic,retain) RKTableController *tableController;
 @property (nonatomic,retain) IBOutlet UIButton *watchButton; 
 - (id)initWithResourcePath:(NSString *)resourcePath;
-- (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
 - (RKTableViewCellMapping *)actionCellMap;
 - (RKTableViewCellMapping *)sponsorCellMap;
 - (RKTableViewCellMapping *)votesCellMap;
@@ -119,40 +107,8 @@ enum SECTIONS {
     [_tableController mapObjectsWithClass:[BillRecordVote class] toTableCellsWithMapping:[self votesCellMap]];
     [_tableController mapObjectsWithClass:[BillAction class] toTableCellsWithMapping:[self actionCellMap]];
     [_tableController mapObjectsWithClass:[BillSponsor class] toTableCellsWithMapping:[self sponsorCellMap]];    
-    NSInteger sectionIndex;
-    for (sectionIndex = SectionBillInfo;sectionIndex < kNumSections; sectionIndex++) {
-        [_tableController addSectionUsingBlock:^(RKTableSection *section) {
-            NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
-            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
-            section.headerTitle = headerTitle;
-            section.headerHeight = TableSectionHeaderViewDefaultHeight;
-            section.headerView = headerView;
-            [headerView release];
-        }];
-    }
     [self configureActionBarForBill:self.bill];
 	self.title = NSLocalizedString(@"Loading...", @"");
-}
-
-- (NSString *)headerForSectionIndex:(NSInteger)sectionIndex {
-    switch (sectionIndex) {
-        case SectionBillInfo:
-            return NSLocalizedString(@"Bill Details", @"");
-        case SectionStages:
-            return NSLocalizedString(@"Legislative Status (Beta)",@"");
-        case SectionResources:
-            return NSLocalizedString(@"Resources",@"");
-        case SectionSubjects:
-            return NSLocalizedString(@"Subjects", @"");
-        case SectionVotes:
-            return NSLocalizedString(@"Votes", @"");
-        case SectionSponsors:
-            return NSLocalizedString(@"Sponsors", @"");
-        case SectionActions:
-            return NSLocalizedString(@"Actions", @"");
-        default:
-            return @"";
-    }
 }
 
 - (NSString *)actionPath {
@@ -164,6 +120,8 @@ enum SECTIONS {
         self.bill = bill;
         self.title = bill.name;
     }
+    if (!self.isViewLoaded)
+        return;
     [self reconfigureWatchButtonForBill:bill];
     [self configureTableItems];
 }
@@ -196,7 +154,6 @@ enum SECTIONS {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     button.frame = CGRectMake(self.titleBarView.size.width - 50, 12, 43, 43);
-        //button.enabled = (bill != NULL);
     [button addTarget:self action:@selector(toggleWatchButton:) forControlEvents:UIControlEventTouchDown]; 
     return button;
 }
@@ -217,7 +174,25 @@ enum SECTIONS {
 
 #pragma mark - Table Item Creation and Mapping
 
+- (RKTableSection *)createSectionWithTitle:(NSString *)title {
+    if (IsEmpty(title))
+        return nil;
+    RKTableSection *section = [_tableController sectionWithHeaderTitle:title];
+    if (!section) {
+        section = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
+            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:title width:300.f];
+            section.headerTitle = title;
+            section.headerHeight = TableSectionHeaderViewDefaultHeight;
+            section.headerView = headerView;
+            [headerView release];
+        }];
+        [_tableController addSection:section];
+    }
+    return section;
+}
+
 - (void)configureTableItems {
+    [_tableController removeAllSections:NO];
     [self configureBillInfoItems];     
     [self configureStages];
     [self configureResources];
@@ -253,7 +228,9 @@ enum SECTIONS {
             tableItem.detailText = [NSString stringWithFormat:@"%@ - %@", latest.title, latest.subtitle];
         }]];
     }
-    [_tableController loadTableItems:tableItems inSection:SectionBillInfo];     
+    [self createSectionWithTitle:NSLocalizedString(@"Bill Details",@"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
 }
 
@@ -262,32 +239,15 @@ enum SECTIONS {
     if (IsEmpty(stages))
         return;
     RKTableItem *stageItemCell = [RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        CGFloat rowHeight = SLFIsIpad() ? 45 : 95;
-        tableItem.cellMapping.rowHeight = rowHeight;
-        tableItem.cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-            AppendingFlowView *appendingFlow = [[AppendingFlowView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), rowHeight)];
-            appendingFlow.uniformWidth = NO;
-            appendingFlow.preferredBoxSize = CGSizeMake(74.f, 38.f);    
-            appendingFlow.connectorSize = CGSizeMake(7.f, 6.f); 
-                //appendingFlow.font = SLFFont(12);
-            appendingFlow.insetMargin = CGSizeMake(1.f, 10.f);
-            appendingFlow.stages = stages;
-            cell.backgroundView = appendingFlow;
-            [appendingFlow release];
-        };
+        AppendingFlowCellMapping *cellMap = [AppendingFlowCellMapping cellMapping];
+        cellMap.stages = stages;
+        tableItem.cellMapping = cellMap;
     }];
-    RKTableItem *emptyCell = [RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.cellMapping.rowHeight = 5;
-        tableItem.cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-            UIView *empty = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, 5)];
-            empty.backgroundColor = [UIColor clearColor];
-            cell.backgroundView = empty;
-            [empty release];
-        };
-    }];
-    [_tableController loadTableItems:[NSArray arrayWithObjects:stageItemCell, emptyCell, nil] inSection:SectionStages];     
+    NSArray *tableItems = [[NSArray alloc] initWithObjects:stageItemCell, nil];
+    [self createSectionWithTitle:NSLocalizedString(@"Legislative Status (Beta)",@"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadTableItems:tableItems inSection:sectionIndex];
+    [tableItems release];
 }
 
 - (void)configureSubjects {
@@ -306,7 +266,9 @@ enum SECTIONS {
         [vc release];
     };
     [self addTableItems:tableItems fromWords:_bill.subjects withType:nil onSelectCell:onSelectBlock];
-    [_tableController loadTableItems:tableItems inSection:SectionSubjects];
+    [self createSectionWithTitle:NSLocalizedString(@"Subjects", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
 }
 
@@ -315,20 +277,31 @@ enum SECTIONS {
     [self addTableItems:tableItems fromWebAssets:_bill.versions withType:NSLocalizedString(@"Version",@"")];
     [self addTableItems:tableItems fromWebAssets:_bill.documents withType:NSLocalizedString(@"Document",@"")];
     [self addTableItems:tableItems fromWebAssets:_bill.sources withType:NSLocalizedString(@"Resource",@"")];
-    [_tableController loadTableItems:tableItems inSection:SectionResources];
+    [self createSectionWithTitle:NSLocalizedString(@"Resources", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
 }
 
 - (void)configureSponsors {
-    [_tableController loadObjects:_bill.sortedSponsors inSection:SectionSponsors];    
+    NSArray *tableItems = _bill.sortedSponsors;
+    [self createSectionWithTitle:NSLocalizedString(@"Sponsors", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadObjects:tableItems inSection:sectionIndex];
 }
 
 - (void)configureVotes {
-    [_tableController loadObjects:_bill.sortedVotes inSection:SectionVotes];    
+    NSArray *tableItems = _bill.sortedVotes;
+    [self createSectionWithTitle:NSLocalizedString(@"Votes", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadObjects:tableItems inSection:sectionIndex];
 }
 
 - (void)configureActions {
-    [_tableController loadObjects:_bill.sortedActions inSection:SectionActions];    
+    NSArray *tableItems = _bill.sortedActions;
+    [self createSectionWithTitle:NSLocalizedString(@"Actions", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadObjects:tableItems inSection:sectionIndex];
 }
 
 - (RKTableViewCellMapping *)actionCellMap {
@@ -414,6 +387,7 @@ enum SECTIONS {
         bill = object;
     }
     [self reconfigureForBill:bill];
+    [self.tableView reloadData];
 }
 
 @end

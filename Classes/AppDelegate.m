@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import <RestKit/RestKit.h>
 #import <RestKit/CoreData/CoreData.h>
+#import "AppBarController.h"
 #import "SLFStackedViewController.h"
 #import "StatesViewController.h"
 #import "StackedMenuViewController.h"
@@ -27,7 +28,8 @@
 #import "SLFEventsManager.h"
 
 @interface AppDelegate()
-@property (nonatomic,retain) PSStackedViewController *stackController;
+    //@property (nonatomic,retain) SLFStackedViewController *stackController;
+@property (nonatomic,retain) AppBarController *appBarController;
 @property (nonatomic,retain) UINavigationController *navigationController;
 @property (nonatomic,retain) WatchedBillNotificationManager *billNotifier;
 @property (nonatomic,assign) UIBackgroundTaskIdentifier backgroundTaskID;
@@ -45,7 +47,8 @@
 
 @implementation AppDelegate
 @synthesize window;
-@synthesize stackController = _stackController;
+@synthesize appBarController = _appBarController;
+@synthesize stackedViewController = _stackedViewController;
 @synthesize navigationController = _navigationController;
 @synthesize billNotifier = _billNotifier;
 @synthesize backgroundTaskID = _backgroundTaskID;
@@ -54,7 +57,7 @@
     self.window = nil;
     self.billNotifier = nil;
     self.navigationController = nil;
-    self.stackController = nil;
+    self.appBarController = nil;
     [super dealloc];
 }
 
@@ -107,19 +110,15 @@
 }
 
 - (void)setUpViewControllersIpad {
-    SLFState *foundSavedState = SLFSelectedState();
-    StackedMenuViewController* stateMenuVC = [[StackedMenuViewController alloc] initWithState:foundSavedState];
-    _stackController = [[SLFStackedViewController alloc] initWithRootViewController:stateMenuVC];
-    window.rootViewController = _stackController;
+    _appBarController = [[AppBarController alloc] initWithNibName:nil bundle:nil];
+    window.rootViewController = _appBarController;
     [window makeKeyAndVisible];
-    SLFRunBlockAfterDelay(^{
-        // Give the persistent data a chance to materialize, and give time to instantiate the infrastructure.
-        if (IsEmpty(SLFSelectedStateID())) {
-            NSString *path = [SLFActionPathNavigator navigationPathForController:[StatesViewController class] withResource:nil];
-            [SLFActionPathNavigator navigateToPath:path skipSaving:YES fromBase:nil popToRoot:NO];
-        }
-    },.3);
-    [stateMenuVC release];
+}
+
+- (SLFStackedViewController *)stackedViewController {
+    if (_appBarController && _appBarController.stackedViewController)
+        return _appBarController.stackedViewController;
+    return nil;
 }
 
 - (void)setUpViewControllersIphone {

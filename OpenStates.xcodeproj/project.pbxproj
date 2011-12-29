@@ -100,6 +100,7 @@
 		3756945014ABD41E0014BA7F /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 3756944614ABD41E0014BA7F /* UIImageView+AFNetworking.m */; };
 		3756945114AC0AD80014BA7F /* SubjectCounts.json in Resources */ = {isa = PBXBuildFile; fileRef = 379A44EF1487F89E00D47B88 /* SubjectCounts.json */; };
 		3756945214AC0FA20014BA7F /* SubjectCounts.json in Resources */ = {isa = PBXBuildFile; fileRef = 379A44EF1487F89E00D47B88 /* SubjectCounts.json */; };
+		375694AF14ACEC4E0014BA7F /* AppBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 375694AE14ACEC4E0014BA7F /* AppBarController.m */; };
 		3757CE86146A6D9900471CB7 /* _BillAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE79146A6D9900471CB7 /* _BillAction.m */; };
 		3757CE87146A6D9900471CB7 /* _BillRecordVote.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE7B146A6D9900471CB7 /* _BillRecordVote.m */; };
 		3757CE88146A6D9900471CB7 /* _BillSponsor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3757CE7D146A6D9900471CB7 /* _BillSponsor.m */; };
@@ -156,6 +157,7 @@
 		377C617D143000AA00EE626E /* UIView+PSSizes.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6177143000AA00EE626E /* UIView+PSSizes.m */; };
 		377C617E143000AA00EE626E /* UIViewController+PSStackedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6179143000AA00EE626E /* UIViewController+PSStackedView.m */; };
 		377E4B1714360B500063E854 /* UIImage+OverlayColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 377E4B1614360B500063E854 /* UIImage+OverlayColor.m */; };
+		378337D414AD26A10077010E /* AppendingFlowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 378337D314AD26A10077010E /* AppendingFlowCell.m */; };
 		378A23161476438700D82721 /* SLFDrawingExtenions.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A23151476438700D82721 /* SLFDrawingExtenions.m */; };
 		37915377149273A500F55015 /* StackedNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 37915376149273A500F55015 /* StackedNavigationBar.m */; };
 		3794021C144161A600D18889 /* ContributionsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37940219144161A600D18889 /* ContributionsDataSource.m */; };
@@ -588,6 +590,8 @@
 		3756944414ABD41E0014BA7F /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMLRequestOperation.m; sourceTree = "<group>"; };
 		3756944514ABD41E0014BA7F /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		3756944614ABD41E0014BA7F /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
+		375694AD14ACEC4E0014BA7F /* AppBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppBarController.h; sourceTree = "<group>"; };
+		375694AE14ACEC4E0014BA7F /* AppBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppBarController.m; sourceTree = "<group>"; };
 		3757CE78146A6D9900471CB7 /* _BillAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _BillAction.h; sourceTree = "<group>"; };
 		3757CE79146A6D9900471CB7 /* _BillAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _BillAction.m; sourceTree = "<group>"; };
 		3757CE7A146A6D9900471CB7 /* _BillRecordVote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _BillRecordVote.h; sourceTree = "<group>"; };
@@ -681,6 +685,8 @@
 		377C6179143000AA00EE626E /* UIViewController+PSStackedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PSStackedView.m"; sourceTree = "<group>"; };
 		377E4B1514360B500063E854 /* UIImage+OverlayColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+OverlayColor.h"; path = "Vendor/PSStackedView/Example/StackedViewKitExample/UIImage+OverlayColor.h"; sourceTree = SOURCE_ROOT; };
 		377E4B1614360B500063E854 /* UIImage+OverlayColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+OverlayColor.m"; path = "Vendor/PSStackedView/Example/StackedViewKitExample/UIImage+OverlayColor.m"; sourceTree = SOURCE_ROOT; };
+		378337D214AD26A10077010E /* AppendingFlowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppendingFlowCell.h; sourceTree = "<group>"; };
+		378337D314AD26A10077010E /* AppendingFlowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppendingFlowCell.m; sourceTree = "<group>"; };
 		378A23141476438700D82721 /* SLFDrawingExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFDrawingExtensions.h; sourceTree = "<group>"; };
 		378A23151476438700D82721 /* SLFDrawingExtenions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFDrawingExtenions.m; sourceTree = "<group>"; };
 		37915375149273A500F55015 /* StackedNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackedNavigationBar.h; sourceTree = "<group>"; };
@@ -1469,6 +1475,8 @@
 				37798CF5147E3A810098361A /* SLFFetchedTableViewController.m */,
 				37B6FF94149207C8007CB068 /* SLFStackedViewController.h */,
 				37B6FF95149207C8007CB068 /* SLFStackedViewController.m */,
+				375694AD14ACEC4E0014BA7F /* AppBarController.h */,
+				375694AE14ACEC4E0014BA7F /* AppBarController.m */,
 				37A3258113E49D4700138ADE /* StatesViewController.h */,
 				37A3258213E49D4700138ADE /* StatesViewController.m */,
 				37A3258D13E49F2200138ADE /* StateDetailViewController.h */,
@@ -1551,6 +1559,8 @@
 				374D3A1614735F8C00DDF2EE /* StackedBackgroundView.m */,
 				37915375149273A500F55015 /* StackedNavigationBar.h */,
 				37915376149273A500F55015 /* StackedNavigationBar.m */,
+				378337D214AD26A10077010E /* AppendingFlowCell.h */,
+				378337D314AD26A10077010E /* AppendingFlowCell.m */,
 				37485D3E144BC43600D99BBD /* MapAnnotations */,
 			);
 			path = Views;
@@ -2348,6 +2358,8 @@
 				3756944E14ABD41E0014BA7F /* AFURLConnectionOperation.m in Sources */,
 				3756944F14ABD41E0014BA7F /* AFXMLRequestOperation.m in Sources */,
 				3756945014ABD41E0014BA7F /* UIImageView+AFNetworking.m in Sources */,
+				375694AF14ACEC4E0014BA7F /* AppBarController.m in Sources */,
+				378337D414AD26A10077010E /* AppendingFlowCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

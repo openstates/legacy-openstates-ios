@@ -16,8 +16,8 @@
 #import "SLFAnalytics.h"
 #import "SLFActionPathNavigator.h"
 #import "SLFStackedViewController.h"
+#import "AppBarController.h"
 #import "UIView+PSSizes.h"
-
 BOOL IsEmpty(NSObject * thing);
 
 @class AppDelegate;
@@ -27,7 +27,8 @@ BOOL IsEmpty(NSObject * thing);
 #define SLFIsLandscape() UIInterfaceOrientationIsLandscape(SLFAppStatusBarOrientation)
 #define SLFAppDelegate ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 #define SLFAppDelegateNav ((UINavigationController *)[SLFAppDelegate valueForKey:@"navigationController"])
-#define SLFAppDelegateStack ((SLFStackedViewController *)[SLFAppDelegate valueForKey:@"stackController"])
+#define SLFAppDelegateStack ((SLFStackedViewController *)[SLFAppDelegate valueForKey:@"stackedViewController"])
+#define SLFAppBarController ((AppBarController *)[SLFAppDelegate valueForKeyPath:@"appBarController"])
 #define SLFRelease(var) if (var) [var release], var = nil
 #define SLF_HOURS_TO_SECONDS(var) (var * 60 * 60)
 #define SLFRunBlockAfterDelay(block,delay) dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*delay), dispatch_get_current_queue(), block);

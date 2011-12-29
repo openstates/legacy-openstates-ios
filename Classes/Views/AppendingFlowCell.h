@@ -1,6 +1,6 @@
 //
-//  StackedNavigationBar.h
-//  Created by Greg Combs on 12/9/11.
+//  AppendingFlowCell.h
+//  Created by Greg Combs on 12/29/11.
 //
 //  OpenStates by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
 //
@@ -10,8 +10,11 @@
 //
 //
 
-@class SLFState;
-@interface StackedNavigationBar : UIView
-@property (nonatomic,retain) UIButton *mapButton;
-@property (nonatomic,retain) UIButton *appIconButton;
+@interface AppendingFlowCell : UITableViewCell
+@property (nonatomic,copy) NSArray *stages;
+@property (nonatomic,assign) BOOL useDarkBackground;
+@end
+
+@interface AppendingFlowCellMapping : RKTableViewCellMapping
+@property (nonatomic,copy) NSArray *stages;
 @end

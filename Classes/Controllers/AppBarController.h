@@ -1,6 +1,6 @@
 //
-//  StackedNavigationBar.h
-//  Created by Greg Combs on 12/9/11.
+//  AppBarController.h
+//  Created by Greg Combs on 12/19/11.
 //
 //  OpenStates by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
 //
@@ -10,8 +10,12 @@
 //
 //
 
-@class SLFState;
-@interface StackedNavigationBar : UIView
-@property (nonatomic,retain) UIButton *mapButton;
-@property (nonatomic,retain) UIButton *appIconButton;
+#import "StatesPopoverManager.h"
+@class SLFStackedViewController;
+@interface AppBarController : UIViewController <StatesPopoverDelegate>
+@property (nonatomic,retain,readonly) SLFStackedViewController *stackedViewController;
+- (IBAction)changeSelectedState:(id)sender;
+- (IBAction)browseToAppWebSite:(id)sender;
 @end
+
+extern const NSUInteger STACKED_NAVBAR_HEIGHT;
