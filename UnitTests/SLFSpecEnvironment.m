@@ -3,6 +3,7 @@
 #import "SLFSpecEnvironment.h"
 #import "APIKeys.h"
 #import <RestKit/CoreData/NSManagedObject+ActiveRecord.h>
+#import "SLFObjectCache.h"
 
 BOOL IsEmpty(NSObject * thing) {
     return thing == nil
@@ -35,7 +36,7 @@ RKObjectManager* SLFSpecNewObjectManager(void) {
     [RKClient setSharedClient:objectManager.client];
     
         // This allows the manager to determine state.
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];
+        //[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];
     
     return objectManager;
 }
@@ -48,6 +49,19 @@ RKManagedObjectStore* SLFSpecNewManagedObjectStore(void) {
     RKObjectManager* objectManager = SLFSpecNewObjectManager();
     objectManager.objectStore = store;
     return store;
+}
+
+void SLFSpecRestKitEnvironment(void) {
+    RKObjectManager* manager = SLFSpecNewObjectManager();
+    NSCAssert(manager, @"Failed to create an object manager.");
+    RKManagedObjectStore* store = SLFSpecNewManagedObjectStore();
+    NSCAssert(store, @"Failed to create a managed object store.");
+    manager.objectStore = store;
+    NSManagedObjectContext* context = [store managedObjectContext];
+    NSCAssert(context, @"Failed to find a shared managed object context.");
+    SLFObjectCache *cache = [[SLFObjectCache alloc] init];
+    store.managedObjectCache = cache;
+    [cache release];
 }
 
 void SLFSpecClearCacheDirectory(void) {

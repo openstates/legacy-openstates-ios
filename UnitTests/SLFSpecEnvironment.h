@@ -14,3 +14,4 @@ void SLFSpecSpinRunLoop();
 void SLFSpecSpinRunLoopWithDuration(NSTimeInterval timeInterval);
 NSString* SLFSpecReadFixture(NSString* fileName);
 id SLFSpecParseFixture(NSString* fileName);
+void SLFSpecRestKitEnvironment(void);

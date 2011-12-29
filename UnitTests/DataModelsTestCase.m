@@ -20,13 +20,7 @@
 - (void)setUp
 {    
     [super setUp];
-    RKManagedObjectStore* store = SLFSpecNewManagedObjectStore();
-    STAssertNotNil(store, @"Failed to create a managed object store.");
-    RKObjectManager* manager = SLFSpecNewObjectManager();
-    STAssertNotNil(manager, @"Failed to create an object manager.");
-    manager.objectStore = store;
-    NSManagedObjectContext* context = [store managedObjectContext];
-    STAssertNotNil(context, @"Failed to find a shared managed object context.");
+    SLFSpecRestKitEnvironment();
 }
 
 - (void)testItShouldCreateTwoStates {
