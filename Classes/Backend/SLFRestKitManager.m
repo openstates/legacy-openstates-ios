@@ -13,15 +13,21 @@
 #import "SLFDataModels.h"
 #import "SLFObjectCache.h"
 #import "SLFAlertView.h"
+#import <RestKit/CoreData/CoreData.h>
 
 #define OPENSTATES_BASE_URL		@"http://openstates.org/api/v1"
 #define TRANSPARENCY_BASE_URL   @"http://transparencydata.com/api/1.0"
 #define BOUNDARY_BASE_URL       @"http://pentagon.sunlightlabs.net/1.0"
 
+@interface SLFRestKitManager()
+@property (nonatomic,retain) RKRequestQueue *preloadQueue;
+@end
+
 @implementation SLFRestKitManager
 @synthesize transClient;
 @synthesize openStatesClient;
 @synthesize boundaryClient;
+@synthesize preloadQueue = __preloadQueue;
 
 + (SLFRestKitManager *)sharedRestKit
 {
@@ -71,9 +77,8 @@
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
     if (__preloadQueue) {
         [__preloadQueue cancelAllRequests];
-        [__preloadQueue release];
-        __preloadQueue = nil;
     }
+    self.preloadQueue = nil;
     [super dealloc];
 }
 

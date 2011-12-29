@@ -1,7 +1,6 @@
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
 #import "_SLFCommittee.h"
 
+@class RKManagedObjectMapping;
 @class SLFState;
 @class SLFChamber;
 @interface SLFCommittee : _SLFCommittee {}

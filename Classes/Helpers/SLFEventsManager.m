@@ -12,6 +12,7 @@
 
 #import "SLFEventsManager.h"
 #import "MKInfoPanel.h"
+#import <RestKit/RestKit.h>
 
 @interface SLFEventsManager()
 @property (nonatomic,retain) UIViewController <StackableController,SLFEventsManagerDelegate> *eventEditorParent;

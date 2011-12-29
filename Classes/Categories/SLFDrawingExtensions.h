@@ -22,6 +22,7 @@
 @end
 
 @interface UIButton (SLFExtensions)
++ (UIButton *)buttonForImage:(UIImage *)iconImage withFrame:(CGRect)rect glossy:(BOOL)glossy shadow:(BOOL)shadow;
 + (UIButton *)buttonForImage:(UIImage *)iconImage withFrame:(CGRect)rect glossy:(BOOL)glossy;
 @end
 

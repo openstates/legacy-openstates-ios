@@ -1,8 +1,7 @@
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
 #import "_SLFEvent.h"
-#import <EventKit/EventKit.h>
 
+@class EKEvent;
+@class RKManagedObjectMapping;
 @class SLFState;
 @interface SLFEvent : _SLFEvent {}
 @property (nonatomic,readonly) SLFState *state;

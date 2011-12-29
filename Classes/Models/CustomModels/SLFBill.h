@@ -1,5 +1,3 @@
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
 #import "_SLFBill.h"
 
 typedef enum BillType {
@@ -10,6 +8,7 @@ typedef enum BillType {
 	BillTypeBill,					// Stages 1-7
 } BillType;
 
+@class RKManagedObjectMapping;
 @class SLFState;
 @class SLFChamber;
 @interface SLFBill : _SLFBill {}

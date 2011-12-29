@@ -1,8 +1,7 @@
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
 #import "_SLFState.h"
+#import <RestKit/CoreData/CoreData.h>
 
-
+@class RKManagedObjectMapping;
 @interface SLFState : _SLFState {}
 @property (nonatomic, readonly) NSString *stateInitial;
 @property (nonatomic, readonly) UIImage *stateFlag;

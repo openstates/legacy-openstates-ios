@@ -1,5 +1,7 @@
 #import "SLFDataModels.h"
 #import "SLFSortDescriptor.h"
+#import <RestKit/RestKit.h>
+#import <RestKit/CoreData/CoreData.h>
 
 @interface SLFDistrict()
 - (MKPolygon *)polygonRingWithCoordinates:(NSArray *)ringCoords interiorRings:(NSArray *)interiorRings;

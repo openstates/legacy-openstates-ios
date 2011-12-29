@@ -10,8 +10,6 @@
 //
 //
 
-#import <RestKit/RestKit.h>
-
 @interface WatchedBillNotificationManager : NSObject <RKObjectLoaderDelegate,RKRequestQueueDelegate>
 + (WatchedBillNotificationManager *)manager;
 - (NSString *)alertMessageForUpdatedBill:(SLFBill *)updatedBill;

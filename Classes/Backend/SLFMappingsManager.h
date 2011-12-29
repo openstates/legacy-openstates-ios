@@ -10,8 +10,6 @@
 //
 //
 
-@interface SLFMappingsManager : NSObject {
-}
+@interface SLFMappingsManager : NSObject
 - (void)registerMappings;
-
 @end

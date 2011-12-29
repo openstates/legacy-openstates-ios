@@ -11,12 +11,9 @@
 //
 
 #import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
 
 @class SLFState;
-@interface SLFRestKitManager : NSObject <RKObjectLoaderDelegate, RKRequestQueueDelegate> {
-    RKRequestQueue *__preloadQueue;
-}
+@interface SLFRestKitManager : NSObject <RKObjectLoaderDelegate, RKRequestQueueDelegate>
 + (SLFRestKitManager *)sharedRestKit;
 + (void)showFailureAlertWithRequest:(RKRequest *)request error:(NSError *)error;
 - (void)loadObjectsAtResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate withTimeout:(NSTimeInterval)timeoutSeconds;

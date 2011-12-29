@@ -12,6 +12,7 @@
 
 #import "BillSearchParameters.h"
 #import "SLFDataModels.h"
+#import <RestKit/RestKit.h>
 #import <RestKit/Network/NSObject+URLEncoding.h>
 #import "NSDate+SLFDateHelper.h"
 

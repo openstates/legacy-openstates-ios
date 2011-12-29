@@ -1,8 +1,7 @@
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
 #import "MultiRowAnnotationProtocol.h"
 #import "_SLFDistrict.h"
 
+@class RKManagedObjectMapping;
 @class SLFChamber;
 @class SLFParty;
 @interface SLFDistrict : _SLFDistrict <MultiRowAnnotationProtocol> {}

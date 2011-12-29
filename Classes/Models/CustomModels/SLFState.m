@@ -4,6 +4,8 @@
 #import "SLFChamber.h"
 #import "SLFPersistenceManager.h"
 #import "SLFRestKitManager.h"
+#import <RestKit/RestKit.h>
+#import <RestKit/CoreData/CoreData.h>
 
 @implementation RKManagedObjectMapping(SLFState)
 - (void)connectStateToKeyPath:(NSString *)keyPath withStateMapping:(RKManagedObjectMapping *)stateMapping {

@@ -69,18 +69,24 @@ static void addGlossPath(CGContextRef context, CGRect rect);
 @end
 
 @implementation UIButton (SLFExtensions)
-+ (UIButton *)buttonForImage:(UIImage *)iconImage withFrame:(CGRect)rect glossy:(BOOL)glossy {
++ (UIButton *)buttonForImage:(UIImage *)iconImage withFrame:(CGRect)rect glossy:(BOOL)glossy shadow:(BOOL)shadow {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame = rect;
     if (glossy)
         iconImage = [iconImage glossyImageOverlay];
     [button setImage:iconImage forState:UIControlStateNormal];
     button.layer.shouldRasterize = YES;
-    button.layer.shadowColor = [[UIColor blackColor] CGColor];
-    button.layer.shadowOffset = CGSizeMake(0, 1);
-    button.layer.shadowRadius = 2.f;
-    button.layer.shadowOpacity = 1;
+    if (shadow) {
+        button.layer.shadowColor = [[UIColor blackColor] CGColor];
+        button.layer.shadowOffset = CGSizeMake(0, 1);
+        button.layer.shadowRadius = 2.f;
+        button.layer.shadowOpacity = 1;
+    }
     return button;
+}
+
++ (UIButton *)buttonForImage:(UIImage *)iconImage withFrame:(CGRect)rect glossy:(BOOL)glossy {
+    return [UIButton buttonForImage:iconImage withFrame:rect glossy:glossy shadow:YES];
 }
 @end
 

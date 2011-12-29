@@ -10,7 +10,6 @@
 //
 //
 
-#import <RestKit/CoreData/CoreData.h>
 #import <RestKit/UI/UI.h>
 #import "GCTableViewController.h"
 #import "PSStackedViewDelegate.h"
@@ -23,11 +22,11 @@ typedef void(^SearchBarConfigurationBlock)(UISearchBar *searchBar);
 
 @class SLFState;
 @interface SLFTableViewController : GCTableViewController <PSStackedViewDelegate, RKTableControllerDelegate, StackableController, UISearchBarDelegate, SLFPerstentActionsProtocol>
-
 @property (nonatomic,assign) BOOL useGradientBackground;
 @property (nonatomic,assign) BOOL useGearViewBackground;
 @property (nonatomic,assign) BOOL useTitleBar;
 @property (nonatomic,retain) TitleBarView *titleBarView;
+@property (nonatomic,retain) UISearchBar *searchBar;
 - (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url;
 - (void)configureSearchBarWithPlaceholder:(NSString *)placeholder withConfigurationBlock:(SearchBarConfigurationBlock)block;
 - (void)configureChamberScopeTitlesForSearchBar:(UISearchBar *)searchBar withState:(SLFState *)state;

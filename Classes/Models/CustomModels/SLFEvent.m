@@ -2,6 +2,9 @@
 #import "SLFSortDescriptor.h"
 #import "NSDate+SLFDateHelper.h"
 #import "SLFEventsManager.h"
+#import <RestKit/RestKit.h>
+#import <RestKit/CoreData/CoreData.h>
+#import <EventKit/EventKit.h>
 
 @implementation SLFEvent
 

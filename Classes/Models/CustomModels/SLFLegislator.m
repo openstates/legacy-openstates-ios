@@ -1,6 +1,9 @@
 #import "SLFLegislator.h"
 #import "SLFDataModels.h"
 #import "SLFSortDescriptor.h"
+#import <RestKit/RestKit.h>
+#import <RestKit/CoreData/CoreData.h>
+#import "MultiRowCalloutCell.h"
 
 @interface SLFLegislator()
 - (NSArray *)pruneJunkFromRoles:(NSArray*)sortedRoles;

@@ -3,6 +3,8 @@
 #import "BillActionParser.h"
 #import "BillSearchParameters.h"
 #import "NSDate+SLFDateHelper.h"
+#import <RestKit/RestKit.h>
+#import <RestKit/CoreData/CoreData.h>
 
 @implementation SLFBill
 

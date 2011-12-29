@@ -24,6 +24,7 @@
 @synthesize titleBarView = _titleBarView;
 @synthesize useGearViewBackground = _useGearViewBackground;
 @synthesize onSavePersistentActionPath = _onSavePersistentActionPath;
+@synthesize searchBar = _searchBar;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
@@ -39,12 +40,14 @@
 - (void)dealloc {
     self.titleBarView = nil;
     self.onSavePersistentActionPath = nil;
+    self.searchBar = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
     [super viewDidUnload];
     self.titleBarView = nil;
+    self.searchBar = nil;
 }
 
 - (void)viewDidLoad {
@@ -173,6 +176,7 @@
     tableRect.size.height -= searchBar.height;
     self.tableView.frame = CGRectOffset(tableRect, 0, searchBar.height);
     [self.view addSubview:searchBar];
+    self.searchBar = searchBar;
     [searchBar release];
 }
 
