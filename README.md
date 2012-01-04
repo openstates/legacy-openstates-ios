@@ -1,4 +1,4 @@
-StatesLege - The Open States Project for iOS 
+Open States for iOS (formerly StatesLege)
 =============
 Created by Gregory S. Combs, on behalf of the [Sunlight Foundation](http://www.sunlightfoundation.com).  
 Based on work at [GitHub](https://github.com/sunlightlabs/StatesLege).
@@ -6,9 +6,9 @@ Based on work at [GitHub](https://github.com/sunlightlabs/StatesLege).
 Description
 =============
 
-- This is an application that provides in-depth information on various state legislatures, using available public data from the Sunlight Foundation's [Open States Project](http://openstates.sunlightlabs.com).
+- This is an application that provides in-depth information on various state legislatures, using available public data from the Sunlight Foundation's [Open States Project](http://openstates.org).
 
-Compiling and Running the Project (The current state of StatesLege)
+Compiling and Running the Project
 =============
 This project accesses state legislative data available through the Open States API from the Sunlight Foundation.   In order to build and run the application, the project depends on one key assumption:
 
@@ -18,24 +18,26 @@ This project accesses state legislative data available through the Open States A
   
 Attributions and Thanks
 =============
-- National Institute on Money in State Politics (NIMSP) / [FollowTheMoney.org](http://www.followthemoney.org)  
-- [Transparency Data](http://transparencydata.org) /  [Sunlight Labs](http://sunlightlabs.com)  
 - [Open States Project](http://openstates.sunlightlabs.com) / [Sunlight Labs](http://sunlightlabs.com)  
-- [RestKit](http://restkit.org) / [TwoToasters](http://twotoasters.com)  
-- IntelligentSplitViewController by Gregory S. Combs / [github.com](https://github.com/grgcombs/IntelligentSplitViewController)  
-- AppendingFlowView by Gregory S. Combs / [github.com](https://github.com/grgcombs/AppendingFlowView)  
-- Kal by Keith Lazuka / [github.com](https://github.com/klazuka/Kal)  
+- [Transparency Data](http://transparencydata.org) /  [Sunlight Labs](http://sunlightlabs.com)  
+- National Institute on Money in State Politics (NIMSP) / [FollowTheMoney.org](http://www.followthemoney.org)  
+- [RestKit](http://restkit.org) by Blake Watters / [github.com](https://github.com/RestKit/RestKit) 
+- PSStackedView by Peter Steinberger / [github.com](https://github.com/steipete/PSStackedView)
+- ActionSheetPicker by Tim Cinel / [github.com](https://github.com/TimCinel/ActionSheetPicker)
+- AFNetworking by Gowalla / [github.com](https://github.com/AFNetworking/AFNetworking)
+- AppendingFlowView by Greg Combs / [github.com](https://github.com/grgcombs/AppendingFlowView)  
+- MultiRowCalloutAnnotationView by Greg Combs / [github.com](https://github.com/grgcombs/MultiRowCalloutAnnotationView)
+- DDActionHeaderView by Ching-Lan Huang / [github.com](https://github.com/digdog/DDActionHeaderView)  
+- DDBadgeViewCell by Ching-Lan Huang / [github.com](https://github.com/digdog/DDBadgeViewCell)
+- JSONKit by John E. Zang / [github.com](http://github.com/johnezang/JSONKit)
 - SVGeocoder by Sam Vermette / [samvermette.com](http://samvermette.com)  
 - SVWebViewController by Sam Vermette / [samvermette.com](http://samvermette.com)  
-- MTStatusBarOverlay by Matthias Tretter / [github.com](https://github.com/myell0w/MTStatusBarOverlay)  
-- DDBadgeViewCell by Ching-Lan Huang / [github.com](https://github.com/digdog/DDBadgeViewCell)  
 - Glyphish icons by Joseph Wain / [glyphish.com](http://glyphish.com)  
-- PHP/REST/MySQL by Michael Stricklin / Applied Research Laboratories  
   
 Additionally, Greg Combs would like to send special thanks to the following:  
 -  
-- For all the comments, suggestions, and material support, a huge thank you goes to from TexLege users around the Texas Capitol, including Rep. Jason Isaac, Rep. Van Taylor, Raul Espinoza, Steve Hazlewood, and more!  
-- Thanks to all the generous developers participating at [StackOverflow.com](http://stackoverflow.com)!  
+- Thanks to all the generous developers participating at [StackOverflow.com](http://stackoverflow.com) and [GitHub.com](https://github.com)!  
+- For all the comments, suggestions, and material support, a huge thank you goes to all the TexLege users around the Texas Capitol, including Rep. Jason Isaac, Rep. Van Taylor, Raul Espinoza, Steve Hazlewood, and more!  
 
 License
 =========================
@@ -47,6 +49,11 @@ License
 Screenshots
 =========================
 
-![Screenshot](https://github.com/sunlightlabs/StatesLege/raw/master/Screenshots/BillDetails.png "Bill Details")
+![](https://github.com/sunlightlabs/StatesLege/raw/master/Screenshots/BillDetails.png "Bill Details")
 
-![Screenshot](https://github.com/sunlightlabs/StatesLege/raw/master/Screenshots/DistrictDetail.png "District Map")
+![](https://github.com/sunlightlabs/StatesLege/raw/master/Screenshots/BillSubjects.png "Bill Subjects")
+
+![](https://github.com/sunlightlabs/StatesLege/raw/master/Screenshots/DistrictDetail.png "District Map")
+
+![](https://github.com/sunlightlabs/StatesLege/raw/master/Screenshots/Legislators.png "Legislators")
+

@@ -2,7 +2,7 @@
 //  BillsMenuViewController.m
 //  Created by Gregory Combs on 11/6/11.
 //
-//  StatesLege by Sunlight Foundation, based on work at https://github.com/sunlightlabs/StatesLege
+//  OpenStates (iOS) by Sunlight Foundation Foundation, based on work at https://github.com/sunlightlabs/StatesLege
 //
 //  This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License. 
 //  To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/
