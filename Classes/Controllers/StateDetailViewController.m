@@ -16,6 +16,7 @@
 #import "DistrictsViewController.h"
 #import "EventsViewController.h"
 #import "BillsMenuViewController.h"
+#import "AssetsViewController.h"
 #import "SLFDataModels.h"
 #import "SLFTheme.h"
 #import "UIImage+OverlayColor.h"
@@ -31,6 +32,7 @@
 #define MenuDistricts NSLocalizedString(@"District Maps", @"")
 #define MenuBills NSLocalizedString(@"Bills", @"")
 #define MenuEvents NSLocalizedString(@"Events", @"")
+#define MenuCapitolMaps NSLocalizedString(@"Capitol Maps", @"")
 #define MenuNews NSLocalizedString(@"News", @"")
 #define MenuFeedback NSLocalizedString(@"Beta Feedback", @"")
 
@@ -139,6 +141,8 @@
     [tableItems addObject:[self menuItemWithText:MenuBills imagePrefix:@"Gavel" cellMapping:fixedMap]];
     if (self.state && self.state.featureFlags && [self.state.featureFlags containsObject:@"events"])
         [tableItems addObject:[self menuItemWithText:MenuEvents imagePrefix:@"Calendar" cellMapping:fixedMap]];
+    if (!IsEmpty(self.state.capitolMaps))
+        [tableItems addObject:[self menuItemWithText:MenuCapitolMaps imagePrefix:@"Bank" cellMapping:fixedMap]];
     [tableItems addObject:[self menuItemWithText:MenuNews imagePrefix:@"Paper" cellMapping:momentaryMap]];
 #ifdef DEBUG
     [tableItems addObject:[self menuItemWithText:MenuFeedback imagePrefix:@"Bug" cellMapping:momentaryMap]];
@@ -153,6 +157,7 @@
     if (menuItem == NULL)
         return;
     Class controllerClass = nil;
+    id resource = self.state;
     if ([menuItem isEqualToString:MenuLegislators])
         controllerClass = [LegislatorsViewController class];
     else if ([menuItem isEqualToString:MenuCommittees])
@@ -163,8 +168,11 @@
         controllerClass = [EventsViewController class];
     else if ([menuItem isEqualToString:MenuBills])
         controllerClass = [BillsMenuViewController class];
+    else if ([menuItem isEqualToString:MenuCapitolMaps] && !IsEmpty(self.state.capitolMaps))
+        controllerClass = [AssetsViewController class];
+    
     if (controllerClass) {
-        NSString *path = [SLFActionPathNavigator navigationPathForController:controllerClass withResource:self.state];
+        NSString *path = [SLFActionPathNavigator navigationPathForController:controllerClass withResource:resource];
         if (!IsEmpty(path))
             [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:SLFIsIpad()];
         return;

@@ -33,6 +33,7 @@
 #import "BillDetailViewController.h"
 #import "BillsWatchedViewController.h"
 #import "BillsSubjectsViewController.h"
+#import "AssetsViewController.h"
 
 @interface SLFTableViewController(SLFActionPath)
 + (void)registerActionPathWithPattern:(NSString *)pattern;
@@ -88,6 +89,7 @@
     [self registerPattern:@"slfos://bills/subjects/:stateID" forClass:[BillsSubjectsViewController class]];
     [self registerPattern:@"slfos://bills/watch" forClass:[BillsWatchedViewController class]];
     [self registerPattern:@"slfos://bills/:stateID" forClass:[BillsMenuViewController class]];
+    [self registerPattern:@"slfos://capitolmaps/:stateID" forClass:[AssetsViewController class]];
 }
 
 + (NSString *)patternForClass:(Class)controllerClass {

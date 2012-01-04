@@ -1,5 +1,6 @@
 #import "SLFState.h"
 #import "SLFSortDescriptor.h"
+#import "GenericAsset.h"
 #import <RestKit/Network/NSObject+URLEncoding.h>
 #import "SLFChamber.h"
 #import "SLFPersistenceManager.h"
@@ -146,6 +147,12 @@
     if (lower)
         [chambers addObject:lower];
     return chambers;
+}
+
+- (NSArray *)sortedCapitolMaps {
+    if (IsEmpty(self.capitolMaps))
+        return nil;
+    return [self.capitolMaps sortedArrayUsingDescriptors:[GenericAsset sortDescriptors]];
 }
 
 @end

@@ -145,6 +145,7 @@
 		3771B987147A3FA300E9CE39 /* VoteYea.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B981147A3FA300E9CE39 /* VoteYea.png */; };
 		3771B988147A3FA300E9CE39 /* VoteYea@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3771B982147A3FA300E9CE39 /* VoteYea@2x.png */; };
 		3771B9A2147ABCA200E9CE39 /* BillsSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3771B9A1147ABCA200E9CE39 /* BillsSearchViewController.m */; };
+		3772624F14B507F500F8D3A6 /* AssetsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3772624E14B507F500F8D3A6 /* AssetsViewController.m */; };
 		37726AF7148D6AB3009BCE46 /* SLFActionPathRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 37726AF6148D6AB3009BCE46 /* SLFActionPathRegistry.m */; };
 		37726AFA148DCCE3009BCE46 /* SLFiCloudSync.m in Sources */ = {isa = PBXBuildFile; fileRef = 37726AF9148DCCE2009BCE46 /* SLFiCloudSync.m */; };
 		37738A10147B9616002AC526 /* AbstractActionSheetPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 37738A0D147B9616002AC526 /* AbstractActionSheetPicker.m */; };
@@ -659,6 +660,8 @@
 		3771B982147A3FA300E9CE39 /* VoteYea@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "VoteYea@2x.png"; sourceTree = "<group>"; };
 		3771B9A0147ABCA200E9CE39 /* BillsSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillsSearchViewController.h; sourceTree = "<group>"; };
 		3771B9A1147ABCA200E9CE39 /* BillsSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BillsSearchViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		3772624D14B507F500F8D3A6 /* AssetsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetsViewController.h; sourceTree = "<group>"; };
+		3772624E14B507F500F8D3A6 /* AssetsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetsViewController.m; sourceTree = "<group>"; };
 		37726AF5148D6AB3009BCE46 /* SLFActionPathRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFActionPathRegistry.h; sourceTree = "<group>"; };
 		37726AF6148D6AB3009BCE46 /* SLFActionPathRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFActionPathRegistry.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37726AF8148DCCE2009BCE46 /* SLFiCloudSync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFiCloudSync.h; sourceTree = "<group>"; };
@@ -1519,6 +1522,8 @@
 				3771B9A1147ABCA200E9CE39 /* BillsSearchViewController.m */,
 				37FA2566148043BD0026EFB1 /* BillsWatchedViewController.h */,
 				37FA2567148043BE0026EFB1 /* BillsWatchedViewController.m */,
+				3772624D14B507F500F8D3A6 /* AssetsViewController.h */,
+				3772624E14B507F500F8D3A6 /* AssetsViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -2360,6 +2365,7 @@
 				3756945014ABD41E0014BA7F /* UIImageView+AFNetworking.m in Sources */,
 				375694AF14ACEC4E0014BA7F /* AppBarController.m in Sources */,
 				378337D414AD26A10077010E /* AppendingFlowCell.m in Sources */,
+				3772624F14B507F500F8D3A6 /* AssetsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

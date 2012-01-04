@@ -191,6 +191,17 @@
 }
 	
 
+@dynamic capitolMaps;
+
+
+- (NSMutableSet*)capitolMapsSet {
+	[self willAccessValueForKey:@"capitolMaps"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"capitolMaps"];
+	[self didAccessValueForKey:@"capitolMaps"];
+	return result;
+}
+
+
 @dynamic committees;
 
 	

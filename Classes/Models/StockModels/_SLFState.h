@@ -4,6 +4,7 @@
 #import <CoreData/CoreData.h>
 
 
+@class GenericAsset;
 @class SLFBill;
 @class SLFCommittee;
 @class SLFDistrict;
@@ -165,6 +166,13 @@
 
 
 
+@property (nonatomic, retain) NSSet* capitolMaps;
+
+- (NSMutableSet*)capitolMapsSet;
+
+
+
+
 @property (nonatomic, retain) NSSet* committees;
 
 - (NSMutableSet*)committeesSet;
@@ -201,6 +209,11 @@
 - (void)removeBills:(NSSet*)value_;
 - (void)addBillsObject:(SLFBill*)value_;
 - (void)removeBillsObject:(SLFBill*)value_;
+
+- (void)addCapitolMaps:(NSSet*)value_;
+- (void)removeCapitolMaps:(NSSet*)value_;
+- (void)addCapitolMapsObject:(GenericAsset*)value_;
+- (void)removeCapitolMapsObject:(GenericAsset*)value_;
 
 - (void)addCommittees:(NSSet*)value_;
 - (void)removeCommittees:(NSSet*)value_;
@@ -320,6 +333,11 @@
 
 - (NSMutableSet*)primitiveBills;
 - (void)setPrimitiveBills:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveCapitolMaps;
+- (void)setPrimitiveCapitolMaps:(NSMutableSet*)value;
 
 
 

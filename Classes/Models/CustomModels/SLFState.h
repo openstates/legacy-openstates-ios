@@ -12,6 +12,7 @@
 @property (nonatomic, readonly) NSDictionary *sessionIndexesByDisplayName;
 @property (nonatomic, readonly) NSArray *sessionDisplayNames;
 @property (nonatomic, readonly) NSArray *chambers;
+@property (nonatomic, readonly) NSArray *sortedCapitolMaps;
 - (BOOL)isFeatureEnabled:(NSString *)feature;
 - (NSString *)displayNameForSession:(NSString *)aSession;
 - (NSInteger)sessionIndexForDisplayName:(NSString *)displayName;

@@ -35,6 +35,7 @@
     RKManagedObjectMapping *sourceMapping = [GenericAsset mapping];
     RKManagedObjectMapping *participantMapping = [EventParticipant mapping];
     
+    [stateMapping hasMany:@"capitolMaps" withMapping:sourceMapping];
     [recordVoteMapping hasMany:@"sources" withMapping:sourceMapping];
     [recordVoteMapping mapKeyPath:@"no_votes" toRelationship:@"noVotes" withMapping:voterMapping];
     [recordVoteMapping mapKeyPath:@"yes_votes" toRelationship:@"yesVotes" withMapping:voterMapping];
@@ -88,6 +89,7 @@
     [provider setMapping:sourceMapping forKeyPath:@"sources"];
     [provider setMapping:sourceMapping forKeyPath:@"versions"];
     [provider setMapping:sourceMapping forKeyPath:@"documents"];
+    [provider setMapping:sourceMapping forKeyPath:@"capitol_maps"];
     [provider setMapping:participantMapping forKeyPath:@"participants"];
 }
 

@@ -34,6 +34,8 @@ const NSUInteger STACKED_MENU_WIDTH = 200;
 }
 
 - (void)dealloc {
+    if (SLFIsIOS5OrGreater())
+        [self removeFromParentViewController];
     [super dealloc];
 }
 
