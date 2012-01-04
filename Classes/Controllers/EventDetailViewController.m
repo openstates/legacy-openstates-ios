@@ -23,20 +23,6 @@
 #import "MKInfoPanel.h"
 #import "GenericDetailHeader.h"
 
-#define SectionHeaderEventInfo NSLocalizedString(@"Event Details", @"")
-#define SectionHeaderParticipants NSLocalizedString(@"Participants", @"")
-#define SectionHeaderAdditional NSLocalizedString(@"Additional Info", @"")
-#define SectionHeaderNotifications NSLocalizedString(@"Event Alerts", @"")
-
-enum SECTIONS {
-    SECTION_HEADER = 0,
-    SECTION_EVENT_INFO = 1,
-    SECTION_PARTICIPANTS,
-    SECTION_ADDITIONAL,
-    SECTION_NOTIFICATIONS,
-    kNumSections
-};
-
 @interface EventDetailViewController()
 - (void)reconfigureForEvent:(SLFEvent *)event;
 - (void)configureTableController;
@@ -46,7 +32,6 @@ enum SECTIONS {
 - (void)configureParticipants;
 - (void)configureAdditional;
 - (void)configureNotifications;
-- (NSString *)headerForSectionIndex:(NSInteger)index;
 - (RKTableViewCellMapping *)participantCellMap;
 @end
 
@@ -57,9 +42,8 @@ enum SECTIONS {
 - (id)initWithResourcePath:(NSString *)resourcePath {
 self = [super initWithStyle:UITableViewStyleGrouped];
 if (self) {
-    self.useTitleBar = YES;
     self.stackWidth = 500;
-    RKLogDebug(@"Loading resource path for bill: %@", resourcePath);
+    RKLogDebug(@"Loading resource path for event: %@", resourcePath);
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)];
 }
 return self;
@@ -105,17 +89,6 @@ return self;
     _tableController.variableHeightRows = YES;
     _tableController.objectManager = [RKObjectManager sharedManager];
     _tableController.pullToRefreshEnabled = NO;
-    NSInteger sectionIndex;
-    for (sectionIndex = 1;sectionIndex < kNumSections; sectionIndex++) {
-        [_tableController addSectionUsingBlock:^(RKTableSection *section) {
-            NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
-            TableSectionHeaderView *sectionView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
-            section.headerTitle = headerTitle;
-            section.headerHeight = TableSectionHeaderViewDefaultHeight;
-            section.headerView = sectionView;
-            [sectionView release];
-        }];
-    }
     [self.tableController mapObjectsWithClass:[EventParticipant class] toTableCellsWithMapping:[self participantCellMap]];
 }
 
@@ -132,11 +105,45 @@ return self;
 }
 
 - (void)configureTableItems {
+    [_tableController removeAllSections:NO];
+    [self configureTableHeader];
     [self configureEventInfo];     
     [self configureParticipants];
     [self configureAdditional];
     [self configureNotifications];
-    [self configureTableHeader];
+}
+
+- (RKTableSection *)createSectionWithTitle:(NSString *)title {
+    if (IsEmpty(title))
+        return nil;
+    RKTableSection *section = [_tableController sectionWithHeaderTitle:title];
+    if (!section) {
+        section = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
+            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:title width:300.f];
+            section.headerTitle = title;
+            section.headerHeight = TableSectionHeaderViewDefaultHeight;
+            section.headerView = headerView;
+            [headerView release];
+        }];
+        [_tableController addSection:section];
+    }
+    return section;
+}
+
+- (void)configureTableHeader {
+    RKTableSection *headerSection = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
+        GenericDetailHeader *header = [[GenericDetailHeader alloc] initWithFrame:CGRectMake(0, 0, self.tableView.width, 100)];
+        section.headerTitle = @"";
+        header.title = _event.title;
+        if (!IsEmpty(_event.type))
+            header.subtitle = [[_event.type stringByReplacingOccurrencesOfString:@":" withString:@" "] capitalizedString];
+        header.detail = _event.dateStartForDisplay;
+        [header configure];
+        section.headerHeight = header.height;
+        section.headerView = header;
+        [header release];
+    }];
+    [_tableController insertSection:headerSection atIndex:0];
 }
 
 - (RKTableViewCellMapping *)eventTableCellMap {
@@ -151,21 +158,6 @@ return self;
         cell.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
     };
     return cellMapping;
-}
-
-- (void)configureTableHeader {
-    RKTableSection *headerSection = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
-        GenericDetailHeader *header = [[GenericDetailHeader alloc] initWithFrame:CGRectMake(0, 0, self.tableView.width, 100)];
-        section.headerHeight = header.height;
-        section.headerView = header;
-        section.headerTitle = @"";
-        header.title = _event.title;
-        if (!IsEmpty(_event.type))
-            header.subtitle = [[_event.type stringByReplacingOccurrencesOfString:@":" withString:@" "] capitalizedString];
-        header.detail = _event.dateStartForDisplay;
-        [header release];;
-    }];
-    [_tableController insertSection:headerSection atIndex:SECTION_HEADER];
 }
 
 - (void)configureEventInfo {
@@ -189,7 +181,9 @@ return self;
             tableItem.text = NSLocalizedString(@"Ends At",@"");
         }]];
     }
-    [_tableController loadTableItems:tableItems inSection:SECTION_EVENT_INFO];
+    [self createSectionWithTitle:NSLocalizedString(@"Event Details", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
 }
 
@@ -203,7 +197,9 @@ return self;
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Resource", @"") subtitle:subtitle url:source.url]];
     }
-    [_tableController loadTableItems:tableItems inSection:SECTION_ADDITIONAL];
+    [self createSectionWithTitle:NSLocalizedString(@"Additional Info", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
 }
 
@@ -253,12 +249,13 @@ return self;
                 [[UIApplication sharedApplication] openURL:subscriptionURL];
         };
     }]];
-    [_tableController loadTableItems:tableItems inSection:SECTION_NOTIFICATIONS];
+    [self createSectionWithTitle:NSLocalizedString(@"Event Alerts", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
 }
 
 - (void)calendarDidChange:(EKCalendar *)calendar {
-    [_tableController removeSectionAtIndex:SECTION_HEADER];
     [self configureTableItems];
     [self.tableView reloadData];
 }
@@ -269,7 +266,9 @@ return self;
 }
 
 - (void)configureParticipants {
-    [_tableController loadObjects:_event.participants.allObjects inSection:SECTION_PARTICIPANTS];    
+    [self createSectionWithTitle:NSLocalizedString(@"Participants", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadObjects:_event.participants.allObjects inSection:sectionIndex];    
 }
 
 - (RKTableViewCellMapping *)participantCellMap {
@@ -294,23 +293,4 @@ return self;
     [self reconfigureForEvent:event];
 }
 
-- (NSString *)headerForSectionIndex:(NSInteger)index {
-    switch (index) {
-        case SECTION_EVENT_INFO:
-            return SectionHeaderEventInfo;
-            break;
-        case SECTION_PARTICIPANTS:
-            return SectionHeaderParticipants;
-            break;
-        case SECTION_ADDITIONAL:
-            return SectionHeaderAdditional;
-            break;
-        case SECTION_NOTIFICATIONS:
-            return SectionHeaderNotifications;
-            break;
-        default:
-            return @"";
-            break;
-    }
-}
 @end

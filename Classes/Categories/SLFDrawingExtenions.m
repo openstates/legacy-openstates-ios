@@ -96,9 +96,19 @@ static void addGlossPath(CGContextRef context, CGRect rect);
     return CGRectMake(origin.x, origin.y, textSize.width, textSize.height);
 }
 
+- (CGRect)rectWithFont:(UIFont *)font origin:(CGPoint)origin constrainedToSize:(CGSize)constrainedSize lineBreakMode:(UILineBreakMode)lineBreakMode {
+    CGSize textSize = [self sizeWithFont:font constrainedToSize:constrainedSize lineBreakMode:lineBreakMode];
+    return CGRectMake(origin.x, origin.y, textSize.width, textSize.height);
+}
+
 - (CGSize)drawWithFont:(UIFont *)font origin:(CGPoint)origin {
     CGRect drawRect = [self rectWithFont:font origin:origin];
     return [self drawInRect:drawRect withFont:font];
+}
+
+- (CGSize)drawWithFont:(UIFont *)font origin:(CGPoint)origin constrainedToSize:(CGSize)constrainedSize lineBreakMode:(UILineBreakMode)lineBreakMode {
+    CGRect drawRect = [self rectWithFont:font origin:origin constrainedToSize:constrainedSize lineBreakMode:lineBreakMode];
+    return [self drawInRect:drawRect withFont:font lineBreakMode:lineBreakMode];
 }
 @end
 
@@ -167,7 +177,7 @@ static void addGlossPath(CGContextRef context, CGRect rect);
 
 + (UIBezierPath *)tableHeaderBorderPathWithFrame:(CGRect)frame {
     CGRect rect = frame;
-    rect.size.height -= 20;
+    rect.size.height -= 26;
     rect.size.width -= 26;
     rect.origin.x += (CGRectGetMidX(frame) - CGRectGetMidX(rect));
     rect = CGRectIntegral(rect);

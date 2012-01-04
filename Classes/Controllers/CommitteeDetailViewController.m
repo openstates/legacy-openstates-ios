@@ -23,26 +23,15 @@
 
 #define SectionHeaderCommitteeInfo NSLocalizedString(@"Committee Details", @"")
 #define SectionHeaderMembers NSLocalizedString(@"Members", @"")
-#define SectionHeaderResources NSLocalizedString(@"Resources", @"")
-
-enum SECTIONS {
-    SectionHeader = 0,
-//  SectionCommitteeInfo = 1,
-    SectionResources,
-    SectionMembers,
-    kNumSections
-};
 
 @interface CommitteeDetailViewController()
 @property (nonatomic, retain) RKTableController *tableController;
 - (void)configureTableController;
 - (void)configureTableItems;
-- (void)configureCommitteeInfoItems;
 - (void)configureResourceItems;
 - (void)configureMemberItems;
 - (void)configureTableHeader;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
-- (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
 - (RKTableViewCellMapping *)committeeMemberCellMap;
 @end
 
@@ -102,45 +91,51 @@ enum SECTIONS {
     _tableController.pullToRefreshEnabled = NO;
     _tableController.variableHeightRows = YES;
     [_tableController mapObjectsWithClass:[CommitteeMember class] toTableCellsWithMapping:[self committeeMemberCellMap]];
-    NSInteger sectionIndex;
-    for (sectionIndex = 1;sectionIndex < kNumSections; sectionIndex++) {
-        [_tableController addSectionUsingBlock:^(RKTableSection *section) {
-            NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
-            TableSectionHeaderView *sectionView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
-            section.headerTitle = headerTitle;
-            section.headerHeight = TableSectionHeaderViewDefaultHeight;
-            section.headerView = sectionView;
-            [sectionView release];
-        }];
-    }         
 }
 
 - (void)configureTableItems {
-    [self configureCommitteeInfoItems];
+    [_tableController removeAllSections:NO];
+    [self configureTableHeader];
     [self configureResourceItems];
     [self configureMemberItems];
-    [self configureTableHeader];
+}
+
+- (RKTableSection *)createSectionWithTitle:(NSString *)title {
+    if (IsEmpty(title))
+        return nil;
+    RKTableSection *section = [_tableController sectionWithHeaderTitle:title];
+    if (!section) {
+        section = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
+            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:title width:300.f];
+            section.headerTitle = title;
+            section.headerHeight = TableSectionHeaderViewDefaultHeight;
+            section.headerView = headerView;
+            [headerView release];
+        }];
+        [_tableController addSection:section];
+    }
+    return section;
 }
 
 - (void)configureTableHeader {
     RKTableSection *headerSection = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
         GenericDetailHeader *header = [[GenericDetailHeader alloc] initWithFrame:CGRectMake(0, 0, self.tableView.width, 100)];
-        section.headerHeight = header.height;
-        section.headerView = header;
+        header.defaultSize = CGSizeMake(self.tableView.width, 100);
         section.headerTitle = @"";
         header.title = _committee.committeeName;
         header.subtitle = _committee.chamberObj.name;
         header.detail = _committee.subcommittee;
-        [header release];;
+        [header configure];
+        section.headerHeight = header.height;
+        section.headerView = header;
+        [header release];
     }];
-    [_tableController insertSection:headerSection atIndex:SectionHeader];
-}
-
-- (void)configureCommitteeInfoItems {
-    // Nothing at this time.    
+    [_tableController insertSection:headerSection atIndex:0];
 }
 
 - (void)configureResourceItems {
+    if (IsEmpty(_committee.sources))
+        return;
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     for (GenericAsset *source in _committee.sources) {
         NSString *subtitle = source.name;
@@ -148,12 +143,18 @@ enum SECTIONS {
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Site", @"") subtitle:subtitle url:source.url]];
     }
-    [_tableController loadTableItems:tableItems inSection:SectionResources];
+    [self createSectionWithTitle:NSLocalizedString(@"Resources", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
 }
 
 - (void)configureMemberItems {
-    [_tableController loadObjects:_committee.sortedMembers inSection:SectionMembers];    
+    if (IsEmpty(_committee.members))
+        return;
+    [self createSectionWithTitle:NSLocalizedString(@"Members", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadObjects:_committee.sortedMembers inSection:sectionIndex];
 }
 
 - (RKTableViewCellMapping *)committeeMemberCellMap {
@@ -181,19 +182,6 @@ enum SECTIONS {
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     self.title = NSLocalizedString(@"Load Error",@"");
     [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
-}
-
-- (NSString *)headerForSectionIndex:(NSInteger)sectionIndex {
-    switch (sectionIndex) {
-        case SectionHeader:
-            return @"";
-        case SectionResources:
-            return SectionHeaderResources;
-        case SectionMembers:
-            return SectionHeaderMembers;
-        default:
-            return @"";
-    }
 }
 
 @end

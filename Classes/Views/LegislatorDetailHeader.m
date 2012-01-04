@@ -22,6 +22,11 @@
 - (void)configure;
 @end
 
+static UIFont *nameFont;
+static UIFont *plainFont;
+static UIFont *titleFont;
+static UIColor *strokeColor;
+
 @implementation LegislatorDetailHeader
 @synthesize borderOutlinePath = _borderOutlinePath;
 @synthesize imageView = _imageView;
@@ -31,6 +36,17 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor clearColor];
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(28, 10, 52, 73)];
+        [self addSubview:_imageView];
+        if (!nameFont)
+            nameFont = [SLFFont(18) retain];
+        if (!plainFont)
+            plainFont = [[UIFont fontWithName:@"HelveticaNeue" size:13] retain];
+        if (!titleFont)
+            titleFont = [SLFItalicFont(13) retain];
+        if (!strokeColor)
+            strokeColor = [SLFColorWithRGB(189, 189, 176) retain];
         [self configure];
     }
     return self;
@@ -44,73 +60,71 @@
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    size.width = MAX(size.width, 320);
-    size.height = MAX(size.height, 120);
+    size.width = roundf(MAX(size.width, 320));
+    size.height = roundf(MAX(size.height, 120));
     return size;
 }
 
 - (void)configure {
-    CGRect frame = self.frame;
-    frame.size = [self sizeThatFits:frame.size];
-    self.frame = frame;
-    self.backgroundColor = [UIColor clearColor];
-    self.borderOutlinePath = [SLFDrawing tableHeaderBorderPathWithFrame:frame];
-    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(28, 14, 52, 73)];
-    [self addSubview:_imageView];
+    [self sizeToFit];
     [self setNeedsDisplay];
+}
+
+- (NSString *)validString:(NSString *)string {
+    if (IsEmpty(string))
+        return @"";
+    return string;
 }
 
 - (void)drawRect:(CGRect)rect
 {
+    self.borderOutlinePath = [SLFDrawing tableHeaderBorderPathWithFrame:rect];
     [[SLFAppearance cellBackgroundLightColor] setFill];
     [_borderOutlinePath fill];
-    static UIColor *strokeColor;
-    if (!strokeColor)
-        strokeColor = [SLFColorWithRGB(189, 189, 176) retain];
     [strokeColor setStroke];
     [_borderOutlinePath stroke];
     if (!_legislator)
         return;
-    CGRect drawRect = CGRectZero;
     UIColor *darkColor = [SLFAppearance cellTextColor];
     UIColor *lightColor = [SLFAppearance cellSecondaryTextColor];
     UIColor *partyColor = [_legislator partyObj].color;
     CGFloat offsetX = _imageView.origin.x + _imageView.size.width + 15;
-    static UIFont *plainFont;
-    if (!plainFont)
-        plainFont = [[UIFont fontWithName:@"HelveticaNeue" size:13] retain];
-    static UIFont *nameFont;
-    if (!nameFont)
-        nameFont = [SLFFont(18) retain];
-    static UIFont *titleFont;
-    if (!titleFont)
-        titleFont = [SLFItalicFont(13) retain];
-
-        // Title
-    [lightColor set];
-    [_legislator.title drawWithFont:titleFont origin:CGPointMake(offsetX,13)];
-
-        // Name
-    [darkColor set];
-    [_legislator.fullName drawWithFont:nameFont origin:CGPointMake(offsetX,30)];
-
-        // Party
-    [partyColor set];
-    drawRect = [_legislator.partyObj.name rectWithFont:plainFont origin:CGPointMake(offsetX,54)];
-    [_legislator.partyObj.name drawInRect:drawRect withFont:plainFont];
+    CGFloat offsetY = _imageView.origin.y-2;
+    CGFloat maxWidth = _borderOutlinePath.bounds.size.width - offsetX;
+    CGFloat actualFontSize;
+    CGSize renderedSize;
     
-        // District
+    NSString *title = [self validString:_legislator.title];
+    NSString *name = [self validString:_legislator.fullName];
+    NSString *party = [self validString:_legislator.partyObj.name];
+    NSString *district = [self validString:_legislator.districtShortName];
+    NSString *term = [self validString:_legislator.term];
+    
     [lightColor set];
-    [_legislator.districtShortName drawWithFont:plainFont origin:CGPointMake(drawRect.origin.x+drawRect.size.width+6, 54)];
+    renderedSize = [title drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:titleFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+    offsetY += roundf(2+renderedSize.height);
 
-        // Tenure
+    [darkColor set];
+    renderedSize = [name drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:nameFont minFontSize:14 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+    offsetY += roundf(2+renderedSize.height);
+
+    [partyColor set];
+    renderedSize = [party drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:plainFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+    CGFloat shiftX = roundf(renderedSize.width + 6);
+    
     [lightColor set];
-    [_legislator.term drawWithFont:titleFont origin:CGPointMake(offsetX, 74)];
+    renderedSize = [district drawAtPoint:CGPointMake(offsetX+shiftX, offsetY) forWidth:maxWidth-shiftX withFont:plainFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+
+    offsetY += roundf(2+renderedSize.height);
+
+    [lightColor set];
+    renderedSize = [term drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:titleFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
 }
 
 - (void)setLegislator:(SLFLegislator *)legislator {
     SLFRelease(_legislator);
     _legislator = [legislator retain];
+    [self configure];
     if (!legislator)
         return;
     if (legislator.photoURL)

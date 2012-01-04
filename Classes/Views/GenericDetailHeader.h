@@ -14,4 +14,6 @@
 @property (nonatomic,copy) NSString *title;
 @property (nonatomic,copy) NSString *subtitle;
 @property (nonatomic,copy) NSString *detail;
+@property (nonatomic,assign) CGSize defaultSize;
+- (void)configure;
 @end

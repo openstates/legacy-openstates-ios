@@ -27,20 +27,9 @@
 #import "LegislatorDetailHeader.h"
 #import "SLFEmailComposer.h"
 
-enum SECTIONS {
-    SectionHeader = 0,
-    SectionMemberInfo = 1,
-    SectionDistrict,
-    SectionResources,
-    SectionCommittees,
-    SectionBills,
-    kNumSections
-};
-
 @interface LegislatorDetailViewController()
 @property (nonatomic, retain) RKTableController *tableController;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
-- (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
 - (SubtitleCellMapping *)committeeRoleCellMap;
 - (void)configureTableItems;
 - (void)configureMemberInfoItems;
@@ -84,19 +73,7 @@ enum SECTIONS {
     _tableController.objectManager = [RKObjectManager sharedManager];
     _tableController.pullToRefreshEnabled = NO;
     [_tableController mapObjectsWithClass:[CommitteeRole class] toTableCellsWithMapping:[self committeeRoleCellMap]];
-    NSInteger sectionIndex;
-    for (sectionIndex = SectionMemberInfo;sectionIndex < kNumSections; sectionIndex++) {
-        [_tableController addSectionUsingBlock:^(RKTableSection *section) {
-            NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
-            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
-            section.headerTitle = headerTitle;
-            section.headerHeight = TableSectionHeaderViewDefaultHeight;
-            section.headerView = headerView;
-            [headerView release];
-        }];
-    }
 	self.title = NSLocalizedString(@"Loading...", @"");
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (NSString *)actionPath {
@@ -119,26 +96,45 @@ enum SECTIONS {
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(24)];
 }
 
+- (RKTableSection *)createSectionWithTitle:(NSString *)title {
+    if (IsEmpty(title))
+        return nil;
+    RKTableSection *section = [_tableController sectionWithHeaderTitle:title];
+    if (!section) {
+        section = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
+            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:title width:300.f];
+            section.headerTitle = title;
+            section.headerHeight = TableSectionHeaderViewDefaultHeight;
+            section.headerView = headerView;
+            [headerView release];
+        }];
+        [_tableController addSection:section];
+    }
+    return section;
+}
+
+
 - (void)configureTableItems {
+    [_tableController removeAllSections:NO];
+    [self configureTableHeader];
     [self configureMemberInfoItems];     
     [self configureDistrictMapItems];
     [self configureResourceItems];
     [self configureCommitteeItems];
     [self configureBillItems];
-    [self configureTableHeader];
 }
 
 - (void)configureTableHeader {
     RKTableSection *headerSection = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
-        CGRect headerRect = CGRectMake(0, 0, self.tableView.width, 120);
+        CGRect headerRect = CGRectMake(0, 20, self.tableView.width, 120);
         LegislatorDetailHeader *header = [[LegislatorDetailHeader alloc] initWithFrame:headerRect];
-        section.headerHeight = headerRect.size.height;
         section.headerView = header;
+        section.headerHeight = 120;
         section.headerTitle = @"";
         header.legislator = self.legislator;
         [header release];;
     }];
-    [_tableController insertSection:headerSection atIndex:SectionHeader];
+    [_tableController insertSection:headerSection atIndex:0];
 }
 
 - (void)configureMemberInfoItems {
@@ -171,7 +167,9 @@ enum SECTIONS {
     if (!IsEmpty(_legislator.url)) {
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Website", @"") subtitle:_legislator.url url:_legislator.url]];
     }
-    [_tableController loadTableItems:tableItems inSection:SectionMemberInfo];     
+    [self createSectionWithTitle:NSLocalizedString(@"Member Details", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
 }
 
@@ -192,7 +190,9 @@ enum SECTIONS {
                 [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
         };
     }]];
-    [_tableController loadTableItems:tableItems inSection:SectionDistrict];
+    [self createSectionWithTitle:NSLocalizedString(@"District Map", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
 }
 
@@ -226,7 +226,9 @@ enum SECTIONS {
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Resource", @"") subtitle:subtitle url:source.url]];
     }
-    [_tableController loadTableItems:tableItems inSection:SectionResources];
+    [self createSectionWithTitle:NSLocalizedString(@"Resources", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
 }
 
@@ -244,13 +246,17 @@ enum SECTIONS {
             [vc release];
         };
     }]];
-    [_tableController loadTableItems:tableItems inSection:SectionBills];
+    [self createSectionWithTitle:NSLocalizedString(@"Legislation", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
 }
 
 
 - (void)configureCommitteeItems {
-    [_tableController loadObjects:_legislator.sortedRoles inSection:SectionCommittees];    
+    [self createSectionWithTitle:NSLocalizedString(@"Committees", @"")];
+    NSUInteger sectionIndex = _tableController.sectionCount-1;
+    [_tableController loadObjects:_legislator.sortedRoles inSection:sectionIndex];
 }
 
 - (SubtitleCellMapping *)committeeRoleCellMap {
@@ -276,23 +282,6 @@ enum SECTIONS {
     if (object && [object isKindOfClass:[SLFLegislator class]])
         legislator = object;
     [self reconfigureForLegislator:legislator];
-}
-
-- (NSString *)headerForSectionIndex:(NSInteger)sectionIndex {
-    switch (sectionIndex) {
-        case SectionMemberInfo:
-            return NSLocalizedString(@"Member Details", @"");
-        case SectionDistrict:
-            return NSLocalizedString(@"District Map", @"");
-        case SectionResources:
-            return NSLocalizedString(@"Resources",@"");
-        case SectionCommittees:
-            return NSLocalizedString(@"Committees", @"");
-        case SectionBills:
-            return NSLocalizedString(@"Legislation", @"");
-        default:
-            return @"";
-    }
 }
 
 @end

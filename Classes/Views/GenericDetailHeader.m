@@ -16,19 +16,34 @@
 
 @interface GenericDetailHeader()
 @property (nonatomic,retain) UIBezierPath *borderOutlinePath;
-- (void)configure;
 @end
+
+static UIFont *titleFont;
+static UIFont *subtitleFont;
+static UIFont *detailFont;
+static UIColor *strokeColor;
 
 @implementation GenericDetailHeader
 @synthesize borderOutlinePath = _borderOutlinePath;
 @synthesize title = _title;
 @synthesize subtitle = _subtitle;
 @synthesize detail = _detail;
+@synthesize defaultSize = _defaultSize;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor clearColor];
+        if (!titleFont)
+            titleFont = [SLFFont(18) retain];
+        if (!subtitleFont)
+            subtitleFont = [[UIFont fontWithName:@"HelveticaNeue" size:13] retain];
+        if (!detailFont)
+            detailFont = [SLFItalicFont(11) retain];
+        if (!strokeColor)
+            strokeColor = [SLFColorWithRGB(189, 189, 176) retain];
+        self.defaultSize = CGSizeMake(320, 100);
         [self configure];
     }
     return self;
@@ -42,63 +57,74 @@
     [super dealloc];
 }
 
+- (CGSize)preferredSizeOfOneLineString:(NSString *)string withFont:(UIFont *)font {
+    if (IsEmpty(string))
+        return CGSizeZero;
+    return [string sizeWithFont:font];
+}
+
+- (CGSize)preferredSizeOfDetail {
+    if (IsEmpty(_detail))
+        return CGSizeZero;
+    return [_detail sizeWithFont:detailFont constrainedToSize:CGSizeMake(_defaultSize.width-40, _defaultSize.height-60)];
+}
+
 - (CGSize)sizeThatFits:(CGSize)size {
-    size.width = MAX(size.width, 320);
-    size.height = MAX(size.height, 100);
+    CGFloat preferredWidth = 26;  // inset for header border box
+    CGFloat preferredHeight = 26; // ...
+    preferredWidth += 30; // text inset from inside the box
+    preferredHeight += 15;
+    
+    CGSize titleSize = [self preferredSizeOfOneLineString:_title withFont:titleFont];
+    CGSize subtitleSize = [self preferredSizeOfOneLineString:_subtitle withFont:subtitleFont];
+    CGSize detailSize = [self preferredSizeOfDetail];
+    CGFloat maxStringWidth = MAX(titleSize.width, subtitleSize.width);
+    maxStringWidth = MAX(maxStringWidth, detailSize.width);
+    preferredWidth += maxStringWidth;
+    preferredHeight += (titleSize.height+5 + subtitleSize.height+5 + detailSize.height+5);
+    size.width = roundf(MAX(size.width,preferredWidth));
+    size.height = roundf(preferredHeight);
     return size;
 }
 
 - (void)configure {
     [self sizeToFit];
-    /*CGRect frame = self.frame;
-    frame.size = [self sizeThatFits:frame.size];
-    self.frame = frame;*/
-    self.backgroundColor = [UIColor clearColor];
-    self.borderOutlinePath = [SLFDrawing tableHeaderBorderPathWithFrame:self.frame];
     [self setNeedsDisplay];
 }
 
 - (void)drawRect:(CGRect)rect
 {
+    self.borderOutlinePath = [SLFDrawing tableHeaderBorderPathWithFrame:rect];
     [[SLFAppearance cellBackgroundLightColor] setFill];
     [_borderOutlinePath fill];
-    static UIColor *strokeColor;
-    if (!strokeColor)
-        strokeColor = [SLFColorWithRGB(189, 189, 176) retain];
     [strokeColor setStroke];
     [_borderOutlinePath stroke];
     UIColor *darkColor = [SLFAppearance cellTextColor];
     UIColor *lightColor = [SLFAppearance cellSecondaryTextColor];
-    static UIFont *plainFont;
-    if (!plainFont)
-        plainFont = [[UIFont fontWithName:@"HelveticaNeue" size:13] retain];
-    static UIFont *nameFont;
-    if (!nameFont)
-        nameFont = [SLFFont(18) retain];
+    CGFloat offsetX = 30 + rect.origin.x;
+    CGFloat offsetY = 10 + rect.origin.y;
+    CGFloat maxWidth = _borderOutlinePath.bounds.size.width - offsetX;
 
-    CGFloat offsetX = 30;
-    CGFloat offsetY = 10;
-
-        // Title
     [darkColor set];
     if (!IsEmpty(_title)) {
-        [_title drawWithFont:nameFont origin:CGPointMake(offsetX,offsetY)];
-        offsetY += 25;
+        CGFloat actualFontSize;
+        CGSize renderedSize = [_title drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:titleFont minFontSize:14 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+        offsetY += roundf(5+renderedSize.height);
     }
 
-        // Subtitle
     [lightColor set];
     if (!IsEmpty(_subtitle)) {
-        [_subtitle drawWithFont:plainFont origin:CGPointMake(offsetX, offsetY)];
-        offsetY += 20;
+        CGFloat actualFontSize;
+        CGSize renderedSize = [_subtitle drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:subtitleFont minFontSize:10 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+        offsetY += roundf(5+renderedSize.height);
     }
 
-        // Detail
-    if (!IsEmpty(_subtitle)) {
-        static UIFont *italic;
-        if (!italic)
-            italic = [SLFItalicFont(13) retain];
-        [_detail drawWithFont:italic origin:CGPointMake(offsetX, offsetY)];
+    if (!IsEmpty(_detail)) {
+        CGFloat maxHeight = _borderOutlinePath.bounds.size.height - offsetY - 15;
+        CGSize constrainedSize = [_detail sizeWithFont:detailFont constrainedToSize:CGSizeMake(maxWidth, maxHeight)];
+        CGRect detailRect = CGRectMake(offsetX, offsetY, constrainedSize.width, constrainedSize.height);
+        CGSize renderedSize = [_detail drawInRect:detailRect withFont:detailFont];
+        offsetY += roundf(5+renderedSize.height);
     }
 }
 
@@ -107,7 +133,7 @@
     _title = [title copy];
     if (!title)
         return;
-    [self setNeedsDisplay];
+    [self configure];
 }
 
 - (void)setSubtitle:(NSString *)subtitle {
@@ -115,7 +141,7 @@
     _subtitle = [subtitle copy];
     if (!subtitle)
         return;
-    [self setNeedsDisplay];
+    [self configure];
 }
 
 - (void)setDetail:(NSString *)detail {
@@ -123,7 +149,7 @@
     _detail = [detail copy];
     if (!detail)
         return;
-    [self setNeedsDisplay];
+    [self configure];
 }
 
 @end
