@@ -204,20 +204,21 @@
 
 - (void)configureBillInfoItems {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
+    __block __typeof__(self) bself = self;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [LargeStaticSubtitleCellMapping cellMapping];
-        tableItem.text = _bill.billID;
-        tableItem.detailText = _bill.title;
+        tableItem.text = bself.bill.billID;
+        tableItem.detailText = bself.bill.title;
     }]];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Originating Chamber", @"");
-        tableItem.detailText = _bill.chamberObj.formalName;
+        tableItem.detailText = bself.bill.chamberObj.formalName;
     }]];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Last Updated", @"");
-        tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Bill info was updated %@",@""), [_bill.dateUpdated stringForDisplayWithPrefix:YES]];
+        tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Bill info was updated %@",@""), [bself.bill.dateUpdated stringForDisplayWithPrefix:YES]];
     }]];
     NSArray *sortedActions = _bill.sortedActions;
     if (!IsEmpty(sortedActions)) {
@@ -252,6 +253,7 @@
 
 - (void)configureSubjects {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
+    __block __typeof__(self) bself = self;
     RKTableViewCellForObjectAtIndexPathBlock onSelectBlock = ^(UITableViewCell *cell, id object, NSIndexPath *indexPath) {
         if (!object || ![object isKindOfClass:[RKTableItem class]])
             return;
@@ -259,10 +261,10 @@
         NSString *word = item.text;
         if (IsEmpty(word))
             return;
-        NSString *subjectPath = [BillSearchParameters pathForSubject:word state:_bill.stateID session:_bill.session chamber:nil];
-        BillsViewController *vc = [[BillsViewController alloc] initWithState:_bill.stateObj resourcePath:subjectPath];
-        vc.title = [NSString stringWithFormat:@"%@: %@", [_bill.stateID uppercaseString], word];
-        [self stackOrPushViewController:vc];
+        NSString *subjectPath = [BillSearchParameters pathForSubject:word state:bself.bill.stateID session:bself.bill.session chamber:nil];
+        BillsViewController *vc = [[BillsViewController alloc] initWithState:bself.bill.stateObj resourcePath:subjectPath];
+        vc.title = [NSString stringWithFormat:@"%@: %@", [bself.bill.stateID uppercaseString], word];
+        [bself stackOrPushViewController:vc];
         [vc release];
     };
     [self addTableItems:tableItems fromWords:_bill.subjects withType:nil onSelectCell:onSelectBlock];
@@ -312,6 +314,7 @@
 }
 
 - (RKTableViewCellMapping *)sponsorCellMap {
+    __block __typeof__(self) bself = self;
     FoundLegislatorCellMapping *cellMap = [FoundLegislatorCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"foundLegislator" toAttribute:@"legislator"];
         [cellMapping mapKeyPath:@"type" toAttribute:@"role"];
@@ -320,7 +323,7 @@
             NSString *legID = [object valueForKey:@"legID"];
             NSString *path = [SLFActionPathNavigator navigationPathForController:[LegislatorDetailViewController class] withResourceID:legID];
             if (!IsEmpty(path))
-                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
+                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
         };
     }];
     return cellMap;
@@ -330,10 +333,11 @@
     SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
     [cellMap mapKeyPath:@"title" toAttribute:@"textLabel.text"];
     [cellMap mapKeyPath:@"subtitle" toAttribute:@"detailTextLabel.text"];
+    __block __typeof__(self) bself = self;
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         BillRecordVote *vote = object;
         BillVotesViewController *vc = [[BillVotesViewController alloc] initWithVote:vote];
-        [self stackOrPushViewController:vc];
+        [bself stackOrPushViewController:vc];
         [vc release];
     };
     return cellMap;

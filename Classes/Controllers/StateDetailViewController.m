@@ -119,9 +119,10 @@
     SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
     [cellMap mapKeyPath:@"highlightedImage" toAttribute:@"imageView.highlightedImage"];
     [cellMap addDefaultMappings];
+    __block __typeof__(self) bself = self;
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
         RKTableItem* tableItem = (RKTableItem*) object;
-        [self selectMenuItem:tableItem.text];
+        [bself selectMenuItem:tableItem.text];
     };
     return cellMap;
 }

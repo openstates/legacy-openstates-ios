@@ -67,10 +67,11 @@ enum SECTIONS {
     _tableController.objectManager = [RKObjectManager sharedManager];
     _tableController.pullToRefreshEnabled = NO;
     NSInteger sectionIndex;
+    __block __typeof__(self) bself = self;
     for (sectionIndex = SectionSearchInfo;sectionIndex < kNumSections; sectionIndex++) {
         [_tableController addSectionUsingBlock:^(RKTableSection *section) {
-            NSString *headerTitle = [self headerForSectionIndex:sectionIndex];
-            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:self.tableView.width];
+            NSString *headerTitle = [bself headerForSectionIndex:sectionIndex];
+            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:bself.tableView.width];
             section.headerTitle = headerTitle;
             section.headerHeight = TableSectionHeaderViewDefaultHeight;
             section.headerView = headerView;
@@ -97,40 +98,42 @@ enum SECTIONS {
     if (!self.state)
         return;
     self.title = [NSString stringWithFormat:NSLocalizedString(@"Search %@ Bills",@""), _state.name];
+    __block __typeof__(self) bself = self;
     [self configureSearchBarWithPlaceholder:NSLocalizedString(@"HB 1, Budget, etc", @"") withConfigurationBlock:^(UISearchBar *searchBar) {
-        [self configureChamberScopeTitlesForSearchBar:searchBar withState:self.state];
+        [bself configureChamberScopeTitlesForSearchBar:searchBar withState:bself.state];
     }];
     [self configureSearchInfo];
 }
 
 - (void)configureSearchInfo {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
+    __block __typeof__(self) bself = self;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.cellMapping.style = UITableViewCellStyleValue1;
         tableItem.text = NSLocalizedString(@"State", @"");
-        tableItem.detailText = self.state.name;
+        tableItem.detailText = bself.state.name;
     }]];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [SubtitleCellMapping cellMapping];
         tableItem.cellMapping.style = UITableViewCellStyleValue1;
         tableItem.text = NSLocalizedString(@"Selected Session", @"");
-        if (IsEmpty(self.selectedSession))
-            self.selectedSession = [self.state latestSession];
-        tableItem.detailText = [self.state displayNameForSession:self.selectedSession];
+        if (IsEmpty(bself.selectedSession))
+            bself.selectedSession = [bself.state latestSession];
+        tableItem.detailText = [bself.state displayNameForSession:bself.selectedSession];
         tableItem.cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell *cell, id obj, NSIndexPath *indexPath) {
-            NSArray *displayNames = self.state.sessionDisplayNames;
+            NSArray *displayNames = bself.state.sessionDisplayNames;
             if (IsEmpty(displayNames))
                 return;
             NSString *currentDisplayName = cell.detailTextLabel.text;
-            NSInteger initialSelection = [self.state sessionIndexForDisplayName:currentDisplayName];
+            NSInteger initialSelection = [bself.state sessionIndexForDisplayName:currentDisplayName];
             ActionStringDoneBlock done = ^(ActionSheetStringPicker *picker, NSInteger selectedIndex, id selectedValue) {
-                self.selectedSession = [self.state.sessions objectAtIndex:selectedIndex];
-                SLFSaveSelectedSessionForState(self.selectedSession, self.state);
-                [self configureSearchInfo];
+                bself.selectedSession = [bself.state.sessions objectAtIndex:selectedIndex];
+                SLFSaveSelectedSessionForState(bself.selectedSession, bself.state);
+                [bself configureSearchInfo];
             };
-            ActionSheetStringPicker *picker = [[ActionSheetStringPicker alloc] initWithTitle:NSLocalizedString(@"Select a Session", @"") rows:displayNames initialSelection:initialSelection doneBlock:done cancelBlock:nil origin:self.tableView];
-            picker.presentFromRect = [self.tableView rectForRowAtIndexPath:indexPath];
+            ActionSheetStringPicker *picker = [[ActionSheetStringPicker alloc] initWithTitle:NSLocalizedString(@"Select a Session", @"") rows:displayNames initialSelection:initialSelection doneBlock:done cancelBlock:nil origin:bself.tableView];
+            picker.presentFromRect = [bself.tableView rectForRowAtIndexPath:indexPath];
             [picker showActionSheetPicker];
             [picker autorelease];
         };

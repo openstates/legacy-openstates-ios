@@ -40,13 +40,14 @@
     self.tableController.autoRefreshRate = 240;
     self.tableController.showsSectionIndexTitles = NO;
     self.tableController.sectionNameKeyPath = @"dayForDisplay";
+    __block __typeof__(self) bself = self;
     SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"title" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"dateStartForDisplay" toAttribute:@"detailTextLabel.text"];
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             NSString *path = [SLFActionPathNavigator navigationPathForController:[EventDetailViewController class] withResource:object];
             if (!IsEmpty(path))
-                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
+                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
         };
     }];
     [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    

@@ -40,13 +40,14 @@
 
 - (void)configureTableController {
     [super configureTableController];
+    __block __typeof__(self) bself = self;
     LargeSubtitleCellMapping *objCellMap = [LargeSubtitleCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"name" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"title" toAttribute:@"detailTextLabel.text"];
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             NSString *path = [SLFActionPathNavigator navigationPathForController:[BillDetailViewController class] withResource:object];
             if (!IsEmpty(path))
-                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
+                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
         };
     }];
     [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];

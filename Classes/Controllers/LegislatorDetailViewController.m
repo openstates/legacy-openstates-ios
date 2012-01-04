@@ -83,7 +83,7 @@
 - (void)reconfigureForLegislator:(SLFLegislator *)legislator {
     if (legislator) {
         self.legislator = legislator;
-        self.title = self.legislator.formalName;
+        self.title = legislator.formalName;
     }
     [self configureTableItems];
 }
@@ -125,13 +125,14 @@
 }
 
 - (void)configureTableHeader {
+    __block __typeof__(self) bself = self;
     RKTableSection *headerSection = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
-        CGRect headerRect = CGRectMake(0, 20, self.tableView.width, 120);
+        CGRect headerRect = CGRectMake(0, 20, bself.tableView.width, 120);
         LegislatorDetailHeader *header = [[LegislatorDetailHeader alloc] initWithFrame:headerRect];
         section.headerView = header;
         section.headerHeight = 120;
         section.headerTitle = @"";
-        header.legislator = self.legislator;
+        header.legislator = bself.legislator;
         [header release];;
     }];
     [_tableController insertSection:headerSection atIndex:0];
@@ -139,28 +140,29 @@
 
 - (void)configureMemberInfoItems {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
+    __block __typeof__(self) bself = self;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Chamber", @"");
-        tableItem.detailText = _legislator.chamberObj.formalName;
+        tableItem.detailText = bself.legislator.chamberObj.formalName;
     }]];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.text = [NSString stringWithFormat:@"%@ %@", _legislator.title, NSLocalizedString(@"Term", @"")];
-        tableItem.detailText = _legislator.term;
+        tableItem.text = [NSString stringWithFormat:@"%@ %@", bself.legislator.title, NSLocalizedString(@"Term", @"")];
+        tableItem.detailText = bself.legislator.term;
     }]];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Party", @"");
-        tableItem.detailText = _legislator.partyObj.name;
+        tableItem.detailText = bself.legislator.partyObj.name;
     }]];
     if (!IsEmpty(_legislator.email)) {
         [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
             tableItem.cellMapping = [SubtitleCellMapping cellMapping];
             tableItem.text = NSLocalizedString(@"Email", @"");
-            tableItem.detailText = _legislator.email;
+            tableItem.detailText = bself.legislator.email;
             tableItem.cellMapping.onSelectCell = ^(void) {
-                [[SLFEmailComposer sharedComposer] presentMailComposerTo:_legislator.email subject:@"" body:@"" parent:self];
+                [[SLFEmailComposer sharedComposer] presentMailComposerTo:bself.legislator.email subject:@"" body:@"" parent:bself];
             };
         }]];
     }
@@ -175,19 +177,20 @@
 
 - (void)configureDistrictMapItems {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
+    __block __typeof__(self) bself = self;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"District", @"");
-        tableItem.detailText = _legislator.district;
+        tableItem.detailText = bself.legislator.district;
     }]];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [SubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Map", @"");
-        tableItem.detailText = _legislator.districtMapLabel;
+        tableItem.detailText = bself.legislator.districtMapLabel;
         tableItem.cellMapping.onSelectCell = ^(void) {
-            NSString *path = [SLFActionPathNavigator navigationPathForController:[DistrictDetailViewController class] withResourceID:_legislator.districtID];
+            NSString *path = [SLFActionPathNavigator navigationPathForController:[DistrictDetailViewController class] withResourceID:bself.legislator.districtID];
             if (!IsEmpty(path))
-                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
+                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
         };
     }]];
     [self createSectionWithTitle:NSLocalizedString(@"District Map", @"")];
@@ -203,6 +206,7 @@
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Vote Smart Bio", @"") subtitle:@"" url:url]];
     }
     if (!IsEmpty(_legislator.transparencyID)) {
+		__block __typeof__(self) bself = self;
         [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
             tableItem.cellMapping = [SubtitleCellMapping cellMapping];
             tableItem.text = NSLocalizedString(@"Campaign Contributions", @"");
@@ -210,8 +214,8 @@
             tableItem.URL = @"";
             tableItem.cellMapping.onSelectCell = ^(void) {
                 ContributionsViewController *controller = [[ContributionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                [controller setQueryEntityID:_legislator.transparencyID type:[NSNumber numberWithInteger:kContributionQueryRecipient] cycle:@"-1"];
-                [self stackOrPushViewController:controller];
+                [controller setQueryEntityID:bself.legislator.transparencyID type:[NSNumber numberWithInteger:kContributionQueryRecipient] cycle:@"-1"];
+                [bself stackOrPushViewController:controller];
                 [controller release];
             };
         }]];
@@ -234,15 +238,16 @@
 
 - (void)configureBillItems {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
+    __block __typeof__(self) bself = self;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [SubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Authored/Sponsored Bills", @"");
-        NSString *selectedSession = SLFSelectedSessionForState(_legislator.state);
-        tableItem.detailText = [_legislator.state displayNameForSession:selectedSession];
+        NSString *selectedSession = SLFSelectedSessionForState(bself.legislator.state);
+        tableItem.detailText = [bself.legislator.state displayNameForSession:selectedSession];
         tableItem.cellMapping.onSelectCell = ^(void) {
-            NSString *resourcePath = [BillSearchParameters pathForSponsor:_legislator.legID state:_legislator.stateID session:selectedSession];
-            BillsViewController *vc = [[BillsViewController alloc] initWithState:_legislator.state resourcePath:resourcePath];
-            [self stackOrPushViewController:vc];
+            NSString *resourcePath = [BillSearchParameters pathForSponsor:bself.legislator.legID state:bself.legislator.stateID session:selectedSession];
+            BillsViewController *vc = [[BillsViewController alloc] initWithState:bself.legislator.state resourcePath:resourcePath];
+            [bself stackOrPushViewController:vc];
             [vc release];
         };
     }]];
@@ -263,11 +268,12 @@
     SubtitleCellMapping *roleCellMap = [SubtitleCellMapping cellMapping];
     [roleCellMap mapKeyPath:@"name" toAttribute:@"textLabel.text"];
     [roleCellMap mapKeyPath:@"type" toAttribute:@"detailTextLabel.text"];
+    __block __typeof__(self) bself = self;
     roleCellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         CommitteeRole *role = object;
         NSString *path = [SLFActionPathNavigator navigationPathForController:[CommitteeDetailViewController class] withResourceID:role.committeeID];
         if (!IsEmpty(path))
-            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
+            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
     };
     return roleCellMap;
 }

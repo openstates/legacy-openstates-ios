@@ -33,6 +33,7 @@
 - (void)showLocateActivityButton;
 - (void)showLocateUserButton;
 - (NSUInteger)indexOfToolbarItemWithTag:(NSInteger)searchTag;
+- (void)getControlFrameCalculationsWithBarHeight:(CGFloat)barHeight searchRect:(CGRect *)searchRef toolbarRect:(CGRect *)toolbarRef mapViewRect:(CGRect *)mapViewRef;
 @property (nonatomic,retain) SVGeocoder *geocoder;
 @property (nonatomic,retain) UserPinAnnotation *searchLocation;
 @property (nonatomic,retain) MultiRowAnnotation *calloutAnnotation;
@@ -81,14 +82,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [SLFAppearance tableBackgroundDarkColor];
-    CGRect viewRect = self.view.bounds;
-    CGRect mapViewRect;
-    CGRect toolbarRect;
-    CGRect searchRect = CGRectMake(0, 0, CGRectGetWidth(viewRect), 44);
-    if (SLFIsIpad())
-        CGRectDivide(viewRect, &toolbarRect, &mapViewRect, 44, CGRectMinYEdge);
-    else
-        CGRectDivide(viewRect, &mapViewRect, &toolbarRect, CGRectGetHeight(viewRect)-44, CGRectMinYEdge);
+    CGFloat barHeight = SLFIsIpad() ? 44 : self.navigationController.navigationBar.height;
+    CGRect mapViewRect, toolbarRect, searchRect;
+    [self getControlFrameCalculationsWithBarHeight:barHeight searchRect:&searchRect toolbarRect:&toolbarRect mapViewRect:&mapViewRect];
     self.searchBar = [self setUpSearchBarWithFrame:searchRect];
     self.toolbar = [self setUpToolBarWithFrame:toolbarRect];
     self.mapView = [self setUpMapViewWithFrame:mapViewRect];
@@ -108,7 +104,40 @@
     return YES;
 }
 
+- (void)getControlFrameCalculationsWithBarHeight:(CGFloat)barHeight searchRect:(CGRect *)searchRef toolbarRect:(CGRect *)toolbarRef mapViewRect:(CGRect *)mapViewRef {
+    NSParameterAssert(searchRef && toolbarRef && mapViewRef);
+    CGRect viewRect = self.view.bounds;
+    CGRect mapViewRect;
+    CGRect toolbarRect;
+    if (SLFIsIpad())
+        CGRectDivide(viewRect, &toolbarRect, &mapViewRect, barHeight, CGRectMinYEdge);
+    else {
+        CGRectDivide(viewRect, &mapViewRect, &toolbarRect, CGRectGetHeight(viewRect)-barHeight, CGRectMinYEdge);
+    }
+    *searchRef = CGRectMake(0, 0, CGRectGetWidth(viewRect), barHeight);
+    *toolbarRef = toolbarRect;
+    *mapViewRef = mapViewRect;
+}
+
 #pragma mark - View Configuration
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    if (SLFIsIpad())
+        return;
+    CGFloat barHeight = self.navigationController.navigationBar.height;
+    CGRect mapViewRect;
+    CGRect toolbarRect;
+    CGRect searchRect;
+    [self getControlFrameCalculationsWithBarHeight:barHeight searchRect:&searchRect toolbarRect:&toolbarRect mapViewRect:&mapViewRect];
+    __block __typeof__(self) bself = self;
+    [UIView animateWithDuration:duration animations:^{
+        bself.mapView.frame = mapViewRect;
+        bself.searchBar.frame = searchRect;
+        bself.toolbar.frame = toolbarRect;
+    }];
+}
 
 - (UISearchBar *)setUpSearchBarWithFrame:(CGRect)rect {
     UISearchBar *aBar = [[[UISearchBar alloc] initWithFrame:rect] autorelease];
@@ -446,7 +475,7 @@
 
 - (void)geocoder:(SVGeocoder *)geocoder didFindPlacemark:(SVPlacemark *)placemark
 {
-    RKLogDebug(@"Geocoder found placemark: %@ (was %@)", placemark, self.searchLocation);
+    RKLogInfo(@"Geocoder found placemark: %@ (was %@)", placemark, self.searchLocation);
     [self showLocateUserButton];
     if (self.searchLocation) {
         [self.mapView removeAnnotation:self.searchLocation];

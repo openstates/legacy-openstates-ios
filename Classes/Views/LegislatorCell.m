@@ -109,7 +109,7 @@
 @end
 
 @implementation LegislatorCellMapping
-@synthesize roundImageCorners = _roundCorners;
+@synthesize roundImageCorners = _roundImageCorners;
 
 + (id)cellMapping {
     return [self mappingForClass:[LegislatorCell class]];
@@ -123,9 +123,10 @@
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         self.roundImageCorners = NO;
         self.reuseIdentifier = nil; // turns off caching, sucky but we don't want to reuse facial photos
+		__block __typeof__(self) bself = self;
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             LegislatorCell *legCell = (LegislatorCell *)cell;
-            if (_roundCorners && indexPath.row == 0)
+            if (bself.roundImageCorners && indexPath.row == 0)
                 [cell.imageView roundTopLeftCorner];
             BOOL useDarkBG = SLFAlternateCellForIndexPath(cell, indexPath);
             [legCell setUseDarkBackground:useDarkBG];

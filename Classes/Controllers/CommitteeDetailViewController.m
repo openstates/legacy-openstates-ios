@@ -118,13 +118,14 @@
 }
 
 - (void)configureTableHeader {
+    __block __typeof__(self) bself = self;
     RKTableSection *headerSection = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
-        GenericDetailHeader *header = [[GenericDetailHeader alloc] initWithFrame:CGRectMake(0, 0, self.tableView.width, 100)];
-        header.defaultSize = CGSizeMake(self.tableView.width, 100);
+        GenericDetailHeader *header = [[GenericDetailHeader alloc] initWithFrame:CGRectMake(0, 0, bself.tableView.width, 100)];
+        header.defaultSize = CGSizeMake(bself.tableView.width, 100);
         section.headerTitle = @"";
-        header.title = _committee.committeeName;
-        header.subtitle = _committee.chamberObj.name;
-        header.detail = _committee.subcommittee;
+        header.title = bself.committee.committeeName;
+        header.subtitle = bself.committee.chamberObj.name;
+        header.detail = bself.committee.subcommittee;
         [header configure];
         section.headerHeight = header.height;
         section.headerView = header;
@@ -158,6 +159,7 @@
 }
 
 - (RKTableViewCellMapping *)committeeMemberCellMap {
+    __block __typeof__(self) bself = self;
     FoundLegislatorCellMapping *cellMap = [FoundLegislatorCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"foundLegislator" toAttribute:@"legislator"];
         [cellMapping mapKeyPath:@"type" toAttribute:@"role"];
@@ -166,7 +168,7 @@
             NSString *legID = [object valueForKey:@"legID"];
             NSString *path = [SLFActionPathNavigator navigationPathForController:[LegislatorDetailViewController class] withResourceID:legID];
             if (!IsEmpty(path))
-                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
+                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
         };
     }];
     return cellMap;

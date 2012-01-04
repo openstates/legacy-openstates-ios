@@ -172,11 +172,12 @@
     MKAnnotationView *annotationView = [super mapView:aMapView viewForAnnotation:annotation];
     if (annotationView && [annotationView isKindOfClass:[MultiRowCalloutAnnotationView class]]) {
         MultiRowCalloutAnnotationView *multiView = (MultiRowCalloutAnnotationView *)annotationView;
+		__block __typeof__(self) bself = self;
         multiView.onCalloutAccessoryTapped = ^(MultiRowCalloutCell *cell, UIControl *control, NSDictionary *userData) {
             NSString *legID = [userData valueForKey:@"legID"];
             NSString *path = [SLFActionPathNavigator navigationPathForController:[LegislatorDetailViewController class] withResourceID:legID];
             if (!IsEmpty(path))
-                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
+                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
         };
         return multiView;
     }
@@ -184,18 +185,19 @@
 }
 
 - (void)beginBoundarySearchForCoordininate:(CLLocationCoordinate2D)coordinate {
+    __block __typeof__(self) bself = self;
     self.districtSearch = [DistrictSearch districtSearchForCoordinate:coordinate 
                                              successBlock:^(NSArray *results) {
                                                  for (NSString *districtID in results)
-                                                     [self loadMapWithID:districtID];
-                                                 self.districtSearch = nil;
+                                                     [bself loadMapWithID:districtID];
+                                                 bself.districtSearch = nil;
                                              }
                                              failureBlock:^(NSString *message, DistrictSearchFailOption failOption) {
                                                  if (failOption == DistrictSearchFailOptionLog)
                                                      RKLogError(@"%@", message);
                                                  else
                                                      [SLFAlertView showWithTitle:NSLocalizedString(@"Geolocation Error", @"") message:message buttonTitle:NSLocalizedString(@"OK", @"")];
-                                                 self.districtSearch = nil;
+                                                 bself.districtSearch = nil;
                                              }];
 }
 

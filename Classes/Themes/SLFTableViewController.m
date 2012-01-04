@@ -33,6 +33,11 @@
         _useGearViewBackground = style == UITableViewStyleGrouped;
         self.useGradientBackground = YES;
         self.useTitleBar = NO;
+        self.onConfigureTableView = ^(UITableView *tableView, UITableViewStyle style){
+            tableView.backgroundColor = [UIColor clearColor];
+            if (style == UITableViewStylePlain)
+                tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        };
     }
     return self;
 }
@@ -66,14 +71,6 @@
         self.tableView.backgroundView = gradient;
         [gradient release];
     }
-}
-
-- (UITableView *)tableViewWithStyle:(UITableViewStyle)style {
-    UITableView *aTableView = [super tableViewWithStyle:style];
-    aTableView.backgroundColor = [UIColor clearColor];
-    if (style == UITableViewStylePlain)
-        aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    return aTableView;
 }
 
 - (NSString *)actionPath {
@@ -143,6 +140,7 @@
 
 - (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url {
     NSParameterAssert(!IsEmpty(url));
+    __block __typeof__(self) bself = self;
     return [RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [SubtitleCellMapping cellMapping];
         tableItem.text = itemTitle;
@@ -152,7 +150,7 @@
             if (SLFIsReachableAddress(url)) {
                 SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:url];
                 webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-                [self presentModalViewController:webViewController animated:YES];	
+                [bself presentModalViewController:webViewController animated:YES];	
                 [webViewController release];
             }
         };

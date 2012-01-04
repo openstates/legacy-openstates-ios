@@ -117,9 +117,10 @@
 
 - (RKTableViewCellMapping *)menuCellMapping {
     SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
+    __block __typeof__(self) bself = self;
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
         RKTableItem* tableItem = (RKTableItem*) object;
-        [self selectMenuItem:tableItem.text];
+        [bself selectMenuItem:tableItem.text];
     };
     return cellMap;
 }

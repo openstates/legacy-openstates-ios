@@ -55,6 +55,7 @@
     self.tableController.showsSectionIndexTitles = YES;
     self.tableController.sectionNameKeyPath = @"stateInitial";
     self.tableView.rowHeight = 48;
+    __block __typeof__(self) bself = self;
     SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"name" toAttribute:@"textLabel.text"];
         [cellMapping mapKeyPath:@"stateID" toAttribute:@"detailTextLabel.text"];
@@ -63,7 +64,7 @@
             SLFState *state = object;
             SLFSaveSelectedState(state);
 //          [[SLFRestKitManager sharedRestKit] preloadObjectsForState:state];
-            [self pushOrSendViewControllerWithState:state];
+            [bself pushOrSendViewControllerWithState:state];
         };
     }];
     [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];

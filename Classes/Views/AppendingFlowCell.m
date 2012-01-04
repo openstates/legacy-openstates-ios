@@ -86,12 +86,13 @@
         self.cellClass = [AppendingFlowCell class];
         self.rowHeight = (SLFIsIpad() || SLFIsLandscape()) ? 45 : 90; 
         self.reuseIdentifier = nil; // turns off caching, sucky but we don't want to reuse facial photos
+		__block __typeof__(self) bself = self;
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             AppendingFlowCell *flowCell = (AppendingFlowCell *)cell;
             BOOL useDarkBG = SLFAlternateCellForIndexPath(cell, indexPath);
             [flowCell setUseDarkBackground:useDarkBG];
-            if (!IsEmpty(self.stages))
-                flowCell.stages = self.stages;
+            if (!IsEmpty(bself.stages))
+                flowCell.stages = bself.stages;
         };
     }
     return self;

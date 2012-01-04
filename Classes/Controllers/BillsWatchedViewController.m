@@ -185,11 +185,12 @@
     RKTableViewCellMapping *cellMap = [LargeSubtitleCellMapping cellMapping];
     [cellMap mapKeyPath:@"name" toAttribute:@"textLabel.text"];
     [cellMap mapKeyPath:@"watchSummaryForDisplay" toAttribute:@"detailTextLabel.text"];
+    __block __typeof__(self) bself = self;
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         SLFBill *bill = object;
         NSString *path = [SLFActionPathNavigator navigationPathForController:[BillDetailViewController class] withResource:bill];
         if (!IsEmpty(path))
-            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
+            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
     };
     return cellMap;
 }

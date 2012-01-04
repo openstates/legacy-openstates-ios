@@ -1,6 +1,7 @@
 //
 //  GCTableViewController.m
 //  GCLibrary
+//  --- Heavily altered by Gregory S. Combs (https://github.com/grgcombs)
 //
 //  Created by Guillaume Campagna on 10-06-17.
 //  Copyright 2010 LittleKiwi. All rights reserved.
@@ -9,8 +10,10 @@
 #import "GCTableViewController.h"
 
 @implementation GCTableViewController
-@synthesize tableView;
-@synthesize clearsSelectionOnViewWillAppear;
+@synthesize tableView = _tableView;
+@synthesize tableViewStyle = _tableViewStyle;
+@synthesize onConfigureTableView = _onConfigureTableView;
+@synthesize clearsSelectionOnViewWillAppear =  _clearsSelectionOnViewWillAppear;
 
 - (id) init {
     self = [self initWithStyle:UITableViewStylePlain];
@@ -18,23 +21,36 @@
 }
 
 - (id) initWithStyle:(UITableViewStyle) style {
-    if ((self = [super initWithNibName:nil bundle:nil])) {
-        tableView = [[self tableViewWithStyle:style] retain];
+    return [self initWithStyle:style usingBlock:nil];
+}
+
+- (id) initWithStyle:(UITableViewStyle)style usingBlock:(GCTableViewConfigurationBlock)block {
+    self = [super initWithNibName:nil bundle:nil];
+    if (self) {
+        self.tableViewStyle = style;
         self.clearsSelectionOnViewWillAppear = YES;
+        self.onConfigureTableView = block;
     }
     return self;
 }
 
 - (void)dealloc {
     self.tableView = nil;
+    Block_release(_onConfigureTableView);
     [super dealloc];
 }
 
-- (void) loadView {
+- (void)loadView {
     [super loadView];
-    [self.view addSubview:self.tableView];
-    self.tableView.frame = self.view.bounds;
-    self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+    _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:self.tableViewStyle];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    _tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+    if (self.onConfigureTableView)
+        _onConfigureTableView(_tableView, self.tableViewStyle);
+    // we wait to set the frame until after we run the configuration, that way viewDidLoad doesn't run before the table is configured
+    _tableView.frame = self.view.bounds;
+    [self.view addSubview:_tableView];
 }
 
 - (void) viewDidUnload {
@@ -46,6 +62,15 @@
     [super viewWillAppear:animated];
     if (self.clearsSelectionOnViewWillAppear) [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
 }
+
+- (void)setOnConfigureTableView:(GCTableViewConfigurationBlock)onConfigureTableView {
+    if (_onConfigureTableView) {
+        Block_release(_onConfigureTableView);
+        _onConfigureTableView = nil;
+    }
+    _onConfigureTableView = Block_copy(onConfigureTableView);
+}
+
 
 #pragma mark TableView methods
 
@@ -59,15 +84,6 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     return nil;
-}
-
-#pragma mark Getter
-
-- (UITableView *) tableViewWithStyle:(UITableViewStyle)style {
-    UITableView *aTableView = [[[UITableView alloc] initWithFrame:CGRectZero style:style] autorelease];
-    aTableView.delegate = self;
-    aTableView.dataSource = self;
-    return aTableView;
 }
 
 @end

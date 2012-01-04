@@ -82,13 +82,14 @@
     [super viewDidLoad];
     NSAssert(self.resourcePath != NULL, @"Must set a resource path before attempting to download table data.");
     [self configureTableController];
-    if (_tableController.sectionNameKeyPath) {
+ 		__block __typeof__(self) bself = self;
+   if (_tableController.sectionNameKeyPath) {
         _tableController.heightForHeaderInSection = 18;
         _tableController.onViewForHeaderInSection = ^UIView*(NSUInteger sectionIndex, NSString* sectionTitle) {
             UIColor *sectionColor =  SLFColorWithRGB(207,208,194);
-            UIView *sectionView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, 18)] autorelease];
+            UIView *sectionView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, bself.tableView.bounds.size.width, 18)] autorelease];
             sectionView.backgroundColor = sectionColor;
-            UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, self.tableView.bounds.size.width-10, 18)];
+            UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, bself.tableView.bounds.size.width-10, 18)];
             label.backgroundColor = sectionColor;
             label.text = [sectionTitle capitalizedString];
             label.textColor = [UIColor whiteColor];
@@ -101,9 +102,9 @@
     [self.tableController loadTable];
     if ([self hasSearchableDataClass]) {
         [self configureSearchBarWithPlaceholder:NSLocalizedString(@"Filter results", @"") withConfigurationBlock:^(UISearchBar *searchBar) {
-            if ([self shouldShowChamberScopeBar]) {
-                [self configureChamberScopeTitlesForSearchBar:searchBar withState:self.state];
-                [self performSelector:@selector(resetChamberScopeForSearchBar:) withObject:searchBar afterDelay:.3];
+            if ([bself shouldShowChamberScopeBar]) {
+                [bself configureChamberScopeTitlesForSearchBar:searchBar withState:bself.state];
+                [bself performSelector:@selector(resetChamberScopeForSearchBar:) withObject:searchBar afterDelay:.3];
             }
         }];
     }

@@ -84,6 +84,7 @@
     _tableController.objectManager = [RKObjectManager sharedManager];
     _tableController.pullToRefreshEnabled = YES;
     
+    __block __typeof__(self) bself = self;
     RKTableViewCellMapping *objCellMap = [RKTableViewCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         cellMapping.cellClass = [SLFBadgeCell class];
         [cellMapping mapKeyPath:@"self" toAttribute:@"subjectEntry"];
@@ -99,17 +100,17 @@
                     return;
             }
             BillsSubjectsEntry *subject = object;
-            NSInteger chamberScope = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
+            NSInteger chamberScope = SLFSelectedScopeIndexForKey(NSStringFromClass([bself class]));
             NSString *chamber = [SLFChamber chamberTypeForSearchScopeIndex:chamberScope];
             NSString *resourcePath = [BillSearchParameters pathForSubject:subject.name chamber:chamber];
-            BillsViewController *vc = [[BillsViewController alloc] initWithState:self.state resourcePath:resourcePath];
+            BillsViewController *vc = [[BillsViewController alloc] initWithState:bself.state resourcePath:resourcePath];
             if (IsEmpty(chamber))
-                vc.title = [NSString stringWithFormat:@"%@ %@ Bills", self.state.name, subject.name];
+                vc.title = [NSString stringWithFormat:@"%@ %@ Bills", bself.state.name, subject.name];
             else {
-                NSString *chamberName = [SLFChamber chamberWithType:chamber forState:self.state].shortName;
-                vc.title = [NSString stringWithFormat:@"%@ %@ %@ Bills", [self.state.stateID uppercaseString], chamberName, subject.name];
+                NSString *chamberName = [SLFChamber chamberWithType:chamber forState:bself.state].shortName;
+                vc.title = [NSString stringWithFormat:@"%@ %@ %@ Bills", [bself.state.stateID uppercaseString], chamberName, subject.name];
             }
-            [self stackOrPushViewController:vc];
+            [bself stackOrPushViewController:vc];
             [vc release];
         };
     }];

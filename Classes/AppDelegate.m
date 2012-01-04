@@ -80,8 +80,9 @@
     self.billNotifier = [WatchedBillNotificationManager manager];
     [SLFActionPathRegistry sharedRegistry];
     [self setUpViewControllers];
+    __block __typeof__(self) bself = self;
     SLFRunBlockAfterDelay(^{
-        [self restoreApplicationState];
+        [bself restoreApplicationState];
     }, .3);
 }
 
@@ -96,8 +97,9 @@
     SLFReachable *reachable = [SLFReachable sharedReachable];
     NSSet *hosts = [NSSet setWithObjects:@"openstates.org", @"stateline.org", @"transparencydata.com", @"www.followthemoney.org", @"votesmart.org", nil];
     [reachable watchHostsInSet:hosts];
+    __block __typeof__(self) bself = self;
     SLFRunBlockAfterDelay(^{
-        [reachable.localNotification addObserver:self selector:@selector(networkReachabilityChanged:) name:SLFReachableStatusChangedForHostKey object:nil];
+        [reachable.localNotification addObserver:bself selector:@selector(networkReachabilityChanged:) name:SLFReachableStatusChangedForHostKey object:nil];
     }, 1);
 }
 
@@ -188,10 +190,11 @@
     [self saveApplicationState];
     
 #ifdef TEST_LOCAL_NOTIFICATIONS
+    __block __typeof__(self) bself = self;
     _backgroundTaskID = [application beginBackgroundTaskWithExpirationHandler: ^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            [application endBackgroundTask:self.backgroundTaskID];
-            self.backgroundTaskID = UIBackgroundTaskInvalid;
+            [application endBackgroundTask:bself.backgroundTaskID];
+            bself.backgroundTaskID = UIBackgroundTaskInvalid;
         });
     }];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -201,13 +204,13 @@
         while (now > 10.0) {
             [waiter waitUntilDate:[NSDate dateWithTimeInterval:SLF_HOURS_TO_SECONDS(.5) sinceDate:[NSDate date]]];
             now = [application backgroundTimeRemaining];
-            [self.billNotifier checkBillsStatus:self];
+            [bself.billNotifier checkBillsStatus:bself];
             NSLog(@"Something happening, time remaining = %f seconds", now);
         }
         [waiter unlock];
         [waiter release];
-        [application endBackgroundTask:self.backgroundTaskID];
-        self.backgroundTaskID = UIBackgroundTaskInvalid;
+        [application endBackgroundTask:bself.backgroundTaskID];
+        bself.backgroundTaskID = UIBackgroundTaskInvalid;
     });
 #endif
     

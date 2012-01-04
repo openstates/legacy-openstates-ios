@@ -1,10 +1,10 @@
 //
 //  GCTableViewController.h
 //  GCLibrary
+//  --- Heavily altered by Gregory S. Combs (https://github.com/grgcombs)
 //
 //  Created by Guillaume Campagna on 10-06-17.
 //  Copyright 2010 LittleKiwi. All rights reserved.
-//
 
 #import <UIKit/UIKit.h>
 
@@ -13,15 +13,16 @@
    and other subviews to self.view
  ***/
 
+typedef void (^GCTableViewConfigurationBlock)(UITableView* tableView, UITableViewStyle style);
+
 @interface GCTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
-@property(nonatomic) BOOL clearsSelectionOnViewWillAppear;
+@property (nonatomic,retain) IBOutlet UITableView *tableView;
+@property (nonatomic,assign) BOOL clearsSelectionOnViewWillAppear;
+@property (nonatomic,assign) UITableViewStyle tableViewStyle;
+@property (nonatomic,copy) GCTableViewConfigurationBlock onConfigureTableView;
 
-- (id) initWithStyle:(UITableViewStyle)style;
-
-//Subclass if you want to change the type of tableView. The tableView will be automatically placed later
-//(Useful if you have a subclass of UITableView that you want to use)
-- (UITableView*) tableViewWithStyle:(UITableViewStyle) style;
+- (id)initWithStyle:(UITableViewStyle)style usingBlock:(GCTableViewConfigurationBlock)block;
+- (id)initWithStyle:(UITableViewStyle)style;
 
 @end
