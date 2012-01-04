@@ -118,7 +118,7 @@ static UIColor *strokeColor;
     offsetY += roundf(2+renderedSize.height);
 
     [lightColor set];
-    renderedSize = [term drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:titleFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+    [term drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:titleFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
 }
 
 - (void)setLegislator:(SLFLegislator *)legislator {

@@ -95,6 +95,8 @@
 }
 
 - (void)didReceiveMemoryWarning {
+    if (self.isViewLoaded && self.mapView)
+        [self resetMap:nil]; // clean house!
     [super didReceiveMemoryWarning];
 }
 

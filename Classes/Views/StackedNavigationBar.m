@@ -112,6 +112,7 @@
     CGFloat offsetY = 16;
     _iconView = [[OpenStatesIconView alloc] initWithFrame:CGRectMake(offsetX,offsetY,32,32)];
     _iconView.useDropShadow = NO;
+    _iconView.useGradientOverlay = NO;
     _iconView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
     UIImage *iconImage = [UIImage imageFromView:_iconView];
     self.appIconButton = [UIButton buttonForImage:iconImage withFrame:_iconView.frame glossy:NO shadow:NO];

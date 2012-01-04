@@ -28,7 +28,6 @@
 #import "SLFEventsManager.h"
 
 @interface AppDelegate()
-    //@property (nonatomic,retain) SLFStackedViewController *stackController;
 @property (nonatomic,retain) AppBarController *appBarController;
 @property (nonatomic,retain) UINavigationController *navigationController;
 @property (nonatomic,retain) WatchedBillNotificationManager *billNotifier;
@@ -125,7 +124,6 @@
     StatesViewController* stateListVC = [[StatesViewController alloc] init];
     _navigationController = [[UINavigationController alloc] initWithRootViewController:stateListVC];    
     window.rootViewController = _navigationController;
-    // We should give the persistent data a chance to materialize, and give time to instantiate the infrastructure.
     SLFState *foundSavedState = SLFSelectedState();
     if (foundSavedState) {
         StateDetailViewController *menu = [[StateDetailViewController alloc] initWithState:foundSavedState];
@@ -157,6 +155,10 @@
 }
     
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
+    RKLogCritical(@"Received memory warning!");
+    [[SLFAnalytics sharedAnalytics] tagEvent:@"Memory Warning" attributes:[NSDictionary dictionaryWithObject:@"Errors" forKey:@"category"]];
+    [[SLFAnalytics sharedAnalytics] endTracking];
+    [[NSURLCache sharedURLCache] setMemoryCapacity:1024*1024]; // a more conservative value, 1MB
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

@@ -39,8 +39,8 @@
 }
 
 - (void)viewDidUnload {
-    [super viewDidUnload];
     self.stateMenuDelegate = nil;
+    [super viewDidUnload];
 }
 
 - (void)viewDidLoad {

@@ -412,7 +412,6 @@
             NSDictionary *dict = [totals objectForKey:yearKey];
             double tempDouble = [[dict objectForKey:amountKey] doubleValue];
             NSNumber *amount = [NSNumber numberWithDouble:tempDouble];
-            cellInfo = [[TableCellDataObject alloc] init];
             cellInfo.subtitle = yearKey;
             cellInfo.title = [numberFormatter stringFromNumber:amount];
             cellInfo.entryValue = [jsonDict objectForKey:@"id"];

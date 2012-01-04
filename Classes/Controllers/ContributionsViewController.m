@@ -50,6 +50,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.titleBarView = nil;
     self.dataSource = nil;
+    [super viewDidUnload];
 }
 
 - (void)viewDidLoad {

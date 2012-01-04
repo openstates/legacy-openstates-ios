@@ -24,6 +24,7 @@ const NSUInteger STACKED_NAVBAR_HEIGHT = 60;
 @property (nonatomic,retain) IBOutlet StackedNavigationBar *navigationBar;
 @property (nonatomic,retain) StatesPopoverManager *statesPopover;
 @property (nonatomic,retain) SLFStackedViewController *stackedViewController;
+@property (nonatomic,retain) StackedBackgroundView *backgroundView;
 - (void)configureBackgroundView;
 @end
 
@@ -32,12 +33,13 @@ const NSUInteger STACKED_NAVBAR_HEIGHT = 60;
 @synthesize navigationBar = _navigationBar;
 @synthesize statesPopover = _statesPopover;
 @synthesize stackedViewController = _stackedViewController;
-
+@synthesize backgroundView = _backgroundView;
 
 - (void)dealloc {
     self.navigationBar = nil;
     self.statesPopover = nil;
     self.stackedViewController = nil;
+    self.backgroundView = nil;
     [super dealloc];
 }
 
@@ -45,6 +47,7 @@ const NSUInteger STACKED_NAVBAR_HEIGHT = 60;
     self.statesPopover = nil;
     self.navigationBar = nil;
     self.stackedViewController = nil;
+    self.backgroundView = nil;
     [super viewDidUnload];
 }
 
@@ -81,9 +84,16 @@ const NSUInteger STACKED_NAVBAR_HEIGHT = 60;
 
 - (void)configureBackgroundView {
     CGRect viewFrame = CGRectMake(STACKED_MENU_WIDTH, STACKED_NAVBAR_HEIGHT, self.view.width - STACKED_MENU_WIDTH, self.view.height - STACKED_NAVBAR_HEIGHT);
-    StackedBackgroundView *background = [[StackedBackgroundView alloc] initWithFrame:viewFrame];
-    [self.view insertSubview:background atIndex:0];
-    [background release];
+    _backgroundView = [[StackedBackgroundView alloc] initWithFrame:viewFrame];
+    [self.view insertSubview:_backgroundView atIndex:0];
+}
+
+- (void)didReceiveMemoryWarning {
+    if (self.isViewLoaded && _backgroundView) {
+        [_backgroundView removeFromSuperview];
+        self.backgroundView = nil;
+    }
+    [super didReceiveMemoryWarning];
 }
 
 - (IBAction)changeSelectedState:(id)sender {

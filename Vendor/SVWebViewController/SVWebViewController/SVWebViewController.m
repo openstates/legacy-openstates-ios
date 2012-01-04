@@ -7,6 +7,7 @@
 
 #import "SVWebViewController.h"
 #import "SLFTheme.h"
+#import "AFNetworkActivityIndicatorManager.h"
 
 @interface SVWebViewController (private)
 
@@ -47,7 +48,6 @@
 }
 
 - (void)viewDidUnload {
-    [super viewDidUnload];
     if (rWebView) {
         rWebView.delegate = nil;
         [rWebView removeFromSuperview];
@@ -56,12 +56,15 @@
     SLFRelease(backBarButton);
     SLFRelease(forwardBarButton);
     SLFRelease(actionBarButton);
+    [super viewDidUnload];
 }
 
 - (void)viewDidLoad {
     
     [super viewDidLoad];
     
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
+
     CGRect deviceBounds = [[UIApplication sharedApplication] keyWindow].bounds;
     
     if(!deviceIsTablet) {
@@ -394,7 +397,7 @@
 - (void)webViewDidStartLoad:(UIWebView *)webView {
     
     stoppedLoading = NO;
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    [[AFNetworkActivityIndicatorManager sharedManager] incrementActivityCount];
 
     if(!deviceIsTablet)
         [self setupToolbar];
@@ -405,7 +408,7 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    [[AFNetworkActivityIndicatorManager sharedManager] decrementActivityCount];
 
     if(!deviceIsTablet)
         [self setupToolbar];
@@ -415,7 +418,7 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
     
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    [[AFNetworkActivityIndicatorManager sharedManager] decrementActivityCount];
 }
 
 
@@ -427,12 +430,18 @@
     stoppedLoading = YES;
     if (rWebView)
         [rWebView stopLoading];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    [[AFNetworkActivityIndicatorManager sharedManager] decrementActivityCount];
     
     if(!deviceIsTablet)
         [self setupToolbar];
     else
         [self setupTabletToolbar];
+}
+
+- (void)didReceiveMemoryWarning {
+    if (self.isViewLoaded)
+        [self stopLoading]; // clean house!
+    [super didReceiveMemoryWarning];
 }
 
 - (void)showActions {

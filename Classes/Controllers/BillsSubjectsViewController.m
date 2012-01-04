@@ -46,6 +46,7 @@
 
 - (void)viewDidUnload {
     self.tableController = nil;
+    [super viewDidUnload];
 }
 
 - (void)viewDidLoad {

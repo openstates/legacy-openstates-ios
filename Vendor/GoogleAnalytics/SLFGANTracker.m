@@ -55,25 +55,28 @@ static const NSInteger kDefaultSampleRate = 100;
 }
 
 - (void)tagEvent:(NSString *)event attributes:(NSDictionary *)attributes {
-    NSError *error = nil;
-    NSString *actionPath = nil;
-    if (event && [event hasPrefix:@"slfos://"]) {
-        //actionPath = [event stringByReplacingOccurrencesOfString:@"slfos://" withString:@"http;//ios.openstates.org/"];
-        actionPath = [event stringByReplacingOccurrencesOfString:@"slfos://" withString:@"/"];
-        event = nil;
+    @try {
+        NSError *error = nil;
+        NSString *actionPath = nil;
+        if (event && [event hasPrefix:@"slfos://"]) {
+            //actionPath = [event stringByReplacingOccurrencesOfString:@"slfos://" withString:@"http://ios.openstates.org/"];
+            actionPath = [event stringByReplacingOccurrencesOfString:@"slfos://" withString:@"/"];
+            event = nil;
+        }
+        if (actionPath) {
+            if (![[GANTracker sharedTracker] trackPageview:actionPath withError:&error])
+                NSLog(@"Error sending page tracking (%@) to Google Analytics: %@", actionPath, error);
+        }
+        if (event) {
+            NSString *category = @"";
+            if (attributes && [attributes valueForKey:@"category"])
+                category = [attributes valueForKey:@"category"];
+            if (![[GANTracker sharedTracker] trackEvent:category action:event label:nil value:0 withError:&error])
+                NSLog(@"Error sending event tracking (%@) to Google Analytics: %@", event, error);
+        }
     }
-    if (actionPath) {
-        if (![[GANTracker sharedTracker] trackPageview:actionPath withError:&error])
-            NSLog(@"Error sending page tracking (%@) to Google Analytics: %@", actionPath, error);
+    @catch (NSException *exception) {
     }
-    if (event) {
-        NSString *category = @"";
-        if (attributes && [attributes valueForKey:@"category"])
-            category = [attributes valueForKey:@"category"];
-        if (![[GANTracker sharedTracker] trackEvent:category action:event label:nil value:0 withError:&error])
-            NSLog(@"Error sending event tracking (%@) to Google Analytics: %@", event, error);
-    }
-    return;
 }
 
 - (void)setOptIn:(BOOL)optedIn {

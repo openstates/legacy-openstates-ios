@@ -38,8 +38,8 @@
 }
 
 - (void) viewDidUnload {
-    [super viewDidUnload];
     self.tableView = nil;
+    [super viewDidUnload];
 }
 
 - (void) viewWillAppear:(BOOL)animated {

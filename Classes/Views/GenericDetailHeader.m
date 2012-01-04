@@ -123,8 +123,7 @@ static UIColor *strokeColor;
         CGFloat maxHeight = _borderOutlinePath.bounds.size.height - offsetY - 15;
         CGSize constrainedSize = [_detail sizeWithFont:detailFont constrainedToSize:CGSizeMake(maxWidth, maxHeight)];
         CGRect detailRect = CGRectMake(offsetX, offsetY, constrainedSize.width, constrainedSize.height);
-        CGSize renderedSize = [_detail drawInRect:detailRect withFont:detailFont];
-        offsetY += roundf(5+renderedSize.height);
+        [_detail drawInRect:detailRect withFont:detailFont];
     }
 }
 

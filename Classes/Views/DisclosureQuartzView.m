@@ -108,7 +108,7 @@ static CGFloat scaleMod = 0;
 
 	string = @">";
 	font = [UIFont fontWithName:@"HiraKakuProN-W6" size:26.0f];
-	color = [UIColor colorWithRed:116/255.0 green:174/255.0 blue:165/255.0 alpha:1.0];
+	color = SLFColorWithRGB(116, 174, 165);
 	[color set];
 	[string drawInRect:drawRect withFont:font lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentLeft];
 	
@@ -131,7 +131,7 @@ static CGFloat scaleMod = 0;
     CGFloat effectInsetY = -(effectOffset + effectBlur);
     effectBounds = CGRectInset(effectBounds, effectInsetX, effectInsetY);
     effectBounds = CGRectIntegral(effectBounds);
-    color = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f];
+    color = [UIColor colorWithWhite:0 alpha:.5];
     CGSize shadowOffset = CGSizeMake(0, -(effectBounds.size.height-effectOffset));
     CGContextSetShadowWithColor(context, shadowOffset, effectBlur, [color CGColor]);
     bytesPerRow = effectBounds.size.width;

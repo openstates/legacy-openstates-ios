@@ -45,9 +45,9 @@
 }
 
 - (void)viewDidUnload {
-    [super viewDidUnload];
     self.titleBarView = nil;
     self.searchBar = nil;
+    [super viewDidUnload];
 }
 
 - (void)viewDidLoad {

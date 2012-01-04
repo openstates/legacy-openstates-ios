@@ -30,6 +30,7 @@
 
 @interface SLFAnalytics()
 @property (nonatomic,retain) NSMutableSet *adapters;
+- (void)configureAdapters;
 @end
 
 @implementation SLFAnalytics
@@ -46,19 +47,7 @@
 - (id)init {
     self = [super init];
     if (self) {
-        self.adapters = [NSMutableSet set];
-        
-#if USE_TESTFLIGHT
-        [self.adapters addObject:[[[SLFTestFlight alloc] init] autorelease]];
-#endif
-        
-#if USE_GOOGLEANALYTICS
-        [self.adapters addObject:[[[SLFGANTracker alloc] init] autorelease]];
-#endif 
-
-#if USE_LOCALYTICS
-        [self.adapters addObject:[[[SLFLocalytics alloc] init] autorelease]];
-#endif
+        [self configureAdapters];
     }
     return self;
 }
@@ -68,7 +57,26 @@
     [super dealloc];
 }
 
+- (void)configureAdapters {
+    self.adapters = [NSMutableSet set];
+    
+#if USE_TESTFLIGHT
+    [self.adapters addObject:[[[SLFTestFlight alloc] init] autorelease]];
+#endif
+    
+#if USE_GOOGLEANALYTICS
+    [self.adapters addObject:[[[SLFGANTracker alloc] init] autorelease]];
+#endif 
+    
+#if USE_LOCALYTICS
+    [self.adapters addObject:[[[SLFLocalytics alloc] init] autorelease]];
+#endif
+}
+
 - (void)beginTracking {
+    if (IsEmpty(_adapters))
+        [self configureAdapters];
+    
     for (id<SLFAnalyticsAdapter> adapter in _adapters)
         [adapter beginTracking];
 }
@@ -76,6 +84,7 @@
 - (void)endTracking {
     for (id<SLFAnalyticsAdapter> adapter in _adapters)
         [adapter endTracking];
+    self.adapters = nil;
 }
 
 - (void)pauseTracking {
@@ -83,7 +92,7 @@
         [adapter pauseTracking];
 }
 
-- (void)resumeTracking {
+- (void)resumeTracking {    
     for (id<SLFAnalyticsAdapter> adapter in _adapters)
         [adapter resumeTracking];
 }

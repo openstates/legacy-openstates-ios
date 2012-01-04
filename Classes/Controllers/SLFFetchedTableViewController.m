@@ -110,8 +110,8 @@
 }
 
 - (void)viewDidUnload {
-    [super viewDidUnload];
     self.tableController = nil;
+    [super viewDidUnload];
 }
 
 - (void)dealloc {
