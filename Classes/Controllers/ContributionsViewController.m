@@ -17,12 +17,16 @@
 #import "SLFAlertView.h"
 #import "GradientBackgroundView.h"
 #import "TableSectionHeaderView.h"
+#import "GenericDetailHeader.h"
+#import "TitleBarView.h"
 
 @interface ContributionsViewController()
+@property (nonatomic,retain) TitleBarView *titleBarView;
 @end
 
 @implementation ContributionsViewController
 @synthesize dataSource;
+@synthesize titleBarView = _titleBarView;
 
 #pragma mark -
 #pragma mark Initialization
@@ -30,7 +34,7 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     if ((self = [super initWithStyle:style])) {
         dataSource = [[ContributionsDataSource alloc] init];
-        self.stackWidth = 500;
+        self.stackWidth = 380;
     }
     return self;
 }
@@ -38,16 +42,28 @@
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];    
     self.dataSource = nil;
+    self.titleBarView = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    self.titleBarView = nil;
     self.dataSource = nil;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+#if 0 // not sure I like this
+    if (SLFIsIpad()) {
+        self.titleBarView = nil;
+        _titleBarView = [[TitleBarView alloc] initWithFrame:self.view.bounds title:self.title];
+        CGRect tableRect = self.tableView.frame;
+        tableRect.size.height -= _titleBarView.opticalHeight;
+        self.tableView.frame = CGRectOffset(tableRect, 0, _titleBarView.opticalHeight);
+        [self.view addSubview:_titleBarView];
+    }
+#endif
     if (!dataSource)
         dataSource = [[ContributionsDataSource alloc] init];
     self.tableView.dataSource = dataSource;
@@ -71,8 +87,46 @@
     [gradient release];
 }
 
+- (void)setTitle:(NSString *)title {
+    [super setTitle:title];
+    if (self.titleBarView && self.isViewLoaded)
+        _titleBarView.title = title;
+}
+
+- (void)updateTableHeader {
+    NSDictionary *headerData = self.dataSource.tableHeaderData;
+    if (IsEmpty(headerData)) {
+        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,1,10)];
+        headerView.backgroundColor = [UIColor clearColor];
+        self.tableView.tableHeaderView = headerView;
+        [headerView release];
+        return;
+    }
+    NSString *title = [headerData valueForKey:@"title"];
+    NSString *subtitle = [headerData valueForKey:@"subtitle"];
+    NSString *detail = [headerData valueForKey:@"detail"];
+    
+    CGSize boxSize = CGSizeMake(self.tableView.width, 160);
+    GenericDetailHeader *detailBox = [[GenericDetailHeader alloc] initWithFrame:CGRectMake(0,10,boxSize.width,boxSize.height-10)];
+    detailBox.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    detailBox.defaultSize = boxSize;
+    detailBox.title = title;
+    detailBox.subtitle = subtitle;
+    detailBox.detail = detail;
+    [detailBox configure];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,detailBox.width,detailBox.height+20)];
+    headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    headerView.backgroundColor = [UIColor clearColor];
+    [headerView addSubview:detailBox];
+    self.tableView.tableHeaderView = headerView;
+    [detailBox release];
+    [headerView release];
+}
+
 - (void)tableDataChanged:(NSNotification*)notification {
+    [self updateTableHeader];
     [self.tableView reloadData];
+    self.title = self.dataSource.title;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -110,7 +164,7 @@
         return;
     if (IsEmpty(dataObject.entryValue)) {
         [SLFAlertView showWithTitle:NSLocalizedString(@"Incomplete Records", @"") 
-                            message:NSLocalizedString(@"The campaign finance data provider has incomplete information for this request.  You may visit followthemoney.org to perform a manual search.", @"") 
+                            message:NSLocalizedString(@"The campaign finance data provider has incomplete information for this request.  You may choose to visit followthemoney.org to perform a manual search.", @"") 
                         cancelTitle:NSLocalizedString(@"Cancel", @"") 
                         cancelBlock:^(void) {}
                          otherTitle:NSLocalizedString(@"Open Website", @"")

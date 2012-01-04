@@ -25,13 +25,12 @@ enum ContributionQueryType {
 #define kContributionsDataNotifyLoaded	@"ContributionsDataChangedKey"
 #define kContributionsDataNotifyError	@"ContributionsDataErrorKey"
 
-@interface ContributionsDataSource : NSObject <RKRequestDelegate, UITableViewDataSource> {
-
-}
+@interface ContributionsDataSource : NSObject <RKRequestDelegate, UITableViewDataSource>
 @property (nonatomic,copy) NSString *queryCycle;
 @property (nonatomic,copy) NSString *queryEntityID;
 @property (nonatomic,copy) NSNumber * queryType;
 @property (nonatomic,retain) NSMutableArray *sectionList;
+@property (nonatomic,retain) NSDictionary *tableHeaderData;
 
 - (id)dataObjectForIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject;

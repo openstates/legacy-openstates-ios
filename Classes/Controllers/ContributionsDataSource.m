@@ -15,6 +15,7 @@
 #import "SLFRestKitManager.h"
 #import "JSONKit.h"
 #import "SLFStandardGroupCell.h"
+#import "SLFDataModels.h"
 
 @interface ContributionsDataSource()
 - (void)parseJSONObject:(id)jsonDeserialized;
@@ -25,6 +26,7 @@
 
 @implementation ContributionsDataSource
 @synthesize sectionList, queryEntityID, queryType, queryCycle;
+@synthesize tableHeaderData = _tableHeaderData;
 
 - (NSString *)title {
     NSString *title = nil;
@@ -68,6 +70,7 @@
     self.sectionList = nil;
     self.queryEntityID = nil;
     self.queryType = nil;
+    self.tableHeaderData = nil;
     [super dealloc];
 }
 
@@ -90,7 +93,7 @@
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return  nil ;
+    return nil;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
@@ -110,15 +113,11 @@
     
     switch ([self.queryType integerValue]) {
         case kContributionQueryRecipient:
-            title = (section == 0) ? 
-                NSLocalizedString(@"Recipient Information", @"")
-                    : NSLocalizedString(@"Aggregate Contributions", @"");
+            title = NSLocalizedString(@"Aggregate Contributions", @"");
             break;
         case kContributionQueryDonor: 
         case kContributionQueryIndividual:
-            title = (section == 0) ? 
-                NSLocalizedString(@"Contributor Information", @"")
-                    : NSLocalizedString(@"Contributions (to everyone)", @"");
+            title = NSLocalizedString(@"Contributions (to everyone)", @"");
             break;
         case kContributionQueryTop10Donors:
             title = NSLocalizedString(@"Biggest Contributors", @"");
@@ -202,8 +201,46 @@
     [[[SLFRestKitManager sharedRestKit] transClient] get:resourcePath queryParams:queryParams delegate:self];
 }
 
+- (NSString *)subtitleForEntity:(NSDictionary *)data {
+    NSString *type = [[data valueForKey:@"type"] capitalizedString];    // politician/organization/individual
+    NSString *state = [data valueForKeyPath:@"metadata.state"];         // TX
+    NSString *partyID = [data valueForKeyPath:@"metadata.party"];       // R
+    //NSString *seat = [data valueForKeyPath:@"metadata.seat"];         // state:lower
+    NSMutableString *subtitle = [NSMutableString string];
+    if (!IsEmpty(state)) {
+        [subtitle appendFormat:@"(%@",state];
+        if (!IsEmpty(partyID))
+            [subtitle appendFormat:@"-%@", partyID];
+        [subtitle appendString:@") "];
+    }
+    if (!IsEmpty(type))
+        [subtitle appendString:type];
+    return subtitle;
+}
+
+- (NSString *)bioForEntity:(NSDictionary *)data {
+    NSString *bio = [data valueForKeyPath:@"metadata.bio"];      // <p>Some bio text in html</p>
+    if (!IsEmpty(bio)) {
+        bio = [bio stringByReplacingOccurrencesOfString:@"<p>" withString:@""];
+        bio = [bio stringByReplacingOccurrencesOfString:@"</p>" withString:@"\n"];
+    }
+    else
+        bio = @"";
+    return bio;
+}
+
+- (void)createTableHeaderDataForEntity:(NSDictionary *)data {
+    self.tableHeaderData = nil;
+    NSString *name = [[data valueForKey:@"name"] capitalizedString];
+    _tableHeaderData = [[NSDictionary alloc] initWithObjectsAndKeys:
+                       name, @"title", 
+                       [self subtitleForEntity:data], @"subtitle", 
+                       [self bioForEntity:data], @"detail", nil];
+}
 
 - (void)parseJSONObject:(id)jsonDeserialized {
+    self.tableHeaderData = nil;
+    
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
@@ -235,6 +272,10 @@
             else if ([entityType isEqualToString:@"Individual"]) {
                 localizedString = NSLocalizedString(@"Individual", @"");
                 action = [NSNumber numberWithInteger:kContributionQueryIndividual];
+            }
+            NSString *state = [dict valueForKey:@"state"];
+            if (!IsEmpty(state)) {
+                localizedString = [NSString stringWithFormat:@"%@ %@", state, localizedString];
             }
             
             TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
@@ -361,23 +402,13 @@
         NSArray *yearKeys = [totals allKeys]; 
         yearKeys = [yearKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
         
-        TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
-        cellInfo.title = [[jsonDict objectForKey:@"name"] capitalizedString];
-        cellInfo.subtitle = [[jsonDict objectForKey:@"type"] capitalizedString];
-        cellInfo.entryValue = [jsonDict objectForKey:@"id"];
-        cellInfo.entryType = [self.queryType integerValue];
-         cellInfo.isClickable = NO;
-        cellInfo.action = nil;
-        cellInfo.parameter = self.queryCycle;
-        
-        thisSection = [NSMutableArray arrayWithObject:cellInfo];
-        [self.sectionList addObject:thisSection];
-        [cellInfo release];
-        
+        [self createTableHeaderDataForEntity:jsonDict];
+                
         thisSection = [[NSMutableArray alloc] init];
         NSString *amountKey = ([self.queryType integerValue] == kContributionQueryRecipient) ? @"recipient_amount" : @"contributor_amount";
 
         for (NSString *yearKey in [yearKeys reverseObjectEnumerator]) {            
+            TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
             NSDictionary *dict = [totals objectForKey:yearKey];
             double tempDouble = [[dict objectForKey:amountKey] doubleValue];
             NSNumber *amount = [NSNumber numberWithDouble:tempDouble];
@@ -463,9 +494,12 @@
         [self parseJSONObject:jsonDeserialized];
         [[NSNotificationCenter defaultCenter] postNotificationName:kContributionsDataNotifyLoaded object:self];
     }
-    else
+    else {
         RKLogWarning(@"Status Code is %d", [response statusCode]);
-  
+        NSString *errorDescription = [NSString stringWithFormat:NSLocalizedString(@"An error occurred while loading results from the server: (Status Code = %d)", @""), [response statusCode]];
+        NSError *error = [NSError errorWithDomain:@"Contributions Error" code:[response statusCode] userInfo:[NSDictionary dictionaryWithObject:errorDescription forKey:NSLocalizedDescriptionKey]];
+        [self request:request didFailLoadWithError:error];
+    }
 }
 
 
