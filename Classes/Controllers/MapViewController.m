@@ -61,21 +61,21 @@
 - (void)dealloc {
     self.toolbar = nil;
     self.searchBar = nil;
-    self.mapView.delegate = nil;
-    self.mapView = nil;
     self.searchLocation = nil;
     self.geocoder = nil;
     self.calloutAnnotation = nil;
     self.selectedAnnotationView = nil;
+    self.mapView.delegate = nil;
+    self.mapView = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
+    self.calloutAnnotation = nil;
+    self.selectedAnnotationView = nil;
     self.toolbar = nil;
     self.searchBar = nil;
     self.mapView = nil;
-    self.calloutAnnotation = nil;
-    self.selectedAnnotationView = nil;
     [super viewDidUnload];
 }
 
