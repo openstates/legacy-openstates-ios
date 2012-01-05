@@ -85,12 +85,13 @@
 - (RKTableViewCellMapping *)assetCellMap {
     SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
     [cellMap mapKeyPath:@"name" toAttribute:@"textLabel.text"];
-    [cellMap mapKeyPath:@"url" toAttribute:@"detailTextLabel.text"];
+    [cellMap mapKeyPath:@"fileName" toAttribute:@"detailTextLabel.text"];
     __block __typeof__(self) bself = self;
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         GenericAsset *asset = object;
         if (SLFIsReachableAddress(asset.url)) {
             SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:asset.url];
+            webViewController.title = asset.name;
             webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
             [bself presentModalViewController:webViewController animated:YES];	
             [webViewController release];

@@ -18,7 +18,7 @@
     [mapping mapKeyPath:@"when" toAttribute:@"dateStart"];
     [mapping mapKeyPath:@"end" toAttribute:@"dateEnd"];
     [mapping mapKeyPath:@"description" toAttribute:@"eventDescription"];
-    [mapping mapKeyPath:@"+link" toAttribute:@"link"];
+    [mapping mapKeyPath:@"link" toAttribute:@"link"];
     [mapping mapKeyPath:@"status" toAttribute:@"status"];
     [mapping mapKeyPath:@"notes" toAttribute:@"notes"];
     [mapping mapAttributes:@"session", @"type", @"location",  nil];

@@ -16,4 +16,10 @@
     return [NSArray arrayWithObjects:nameDesc, urlDesc, nil];
 }
 
+- (NSString *)fileName {
+    if (!IsEmpty(self.url)) {
+        return [self.url lastPathComponent];
+    }
+    return @"";
+}
 @end
