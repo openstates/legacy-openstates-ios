@@ -19,6 +19,7 @@
 
 @interface AssetsViewController()
 @property (nonatomic, retain) RKTableController *tableController;
+@property (nonatomic, retain) id assetResource;
 - (RKTableViewCellMapping *)assetCellMap;
 - (void)configureTableItems;
 @end
@@ -26,6 +27,7 @@
 @implementation AssetsViewController
 @synthesize assets = _assets;
 @synthesize tableController = _tableController;
+@synthesize assetResource = _assetResource;
 
 /* A silly assumption that we're pulling up capitol maps, but it solves a path navigator issue, 
    and it's unlikely we'll need to navigate to something else using the same initializer */
@@ -35,9 +37,11 @@
     if (state) {
         assets = state.sortedCapitolMaps;
         title = [NSString stringWithFormat:@"%@ %@", state.name, title];
+        self.assetResource = state;
     }
     self = [self initWithAssets:assets];
     if (self) {
+        self.useTitleBar = SLFIsIpad();
         self.title = title;
     }
     return self;
@@ -55,6 +59,7 @@
 - (void)dealloc {
     self.assets = nil;
     self.tableController = nil;
+    self.assetResource = nil;
     [super dealloc];
 }
 
@@ -72,6 +77,10 @@
     _tableController.pullToRefreshEnabled = NO;
     [_tableController mapObjectsWithClass:[GenericAsset class] toTableCellsWithMapping:[self assetCellMap]];
     [self configureTableItems];
+}
+
+- (NSString *)actionPath {
+    return [[self class] actionPathForObject:self.assetResource];
 }
 
 - (void)configureTableItems {

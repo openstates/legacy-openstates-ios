@@ -170,7 +170,7 @@
     [self.tableController removeAllSections];
     NSArray *bills = [self actualBillsFromWatchedBills];
     if (IsEmpty(bills)) {
-        [MKInfoPanel showPanelInView:self.view type:MKInfoPanelTypeInfo title:NSLocalizedString(@"No Watched Bills",@"") subtitle:NSLocalizedString(@"There are no watched bills, yet. To add one, find a bill and click it's star button.",@"")];
+        [MKInfoPanel showPanelInView:self.view type:MKInfoPanelTypeInfo title:NSLocalizedString(@"No Watched Bills",@"") subtitle:NSLocalizedString(@"There are no watched bills, yet. To add one, find a bill and click it's star button.",@"") hideAfter:5];
         self.title = NSLocalizedString(@"No Watched Bills", @"");
         return;
     }

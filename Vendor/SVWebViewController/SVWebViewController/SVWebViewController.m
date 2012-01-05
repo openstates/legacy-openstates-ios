@@ -114,7 +114,7 @@
             
             UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissController)];
             
-            navItem = [[UINavigationItem alloc] initWithTitle:nil];
+            navItem = [[UINavigationItem alloc] initWithTitle:self.title];
             navItem.leftBarButtonItem = doneButton;
             [doneButton release];
             
@@ -125,9 +125,7 @@
         }
         
         else {
-            self.hidesBottomBarWhenPushed = YES;
-            self.title = nil;
-            
+            self.hidesBottomBarWhenPushed = YES;            
             navBar = self.navigationController.navigationBar;
             navBar.autoresizesSubviews = YES;
             
