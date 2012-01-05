@@ -1889,6 +1889,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "OpenStates" */;
 			buildPhases = (
+				37A3654214B626C500CAAC8B /* ShellScript */,
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
@@ -2209,6 +2210,19 @@
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
+		37A3654214B626C500CAAC8B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n#\ngit=`sh /etc/profile; which git`\n## For the App Store, instead use: git describe –abbrev=0 –tags\nversion=`$git describe --tags --always`\ncount=`$git rev-list --all |wc -l`\necho -e \"#define GIT_VERSION $version\\n#define GIT_COMMIT_COUNT $count\" > Resources/InfoPlist.h";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -2432,6 +2446,8 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Resources/Info.plist;
+				INFOPLIST_PREFIX_HEADER = Resources/InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
 				KEEP_PRIVATE_EXTERNS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2461,6 +2477,8 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Resources/Info.plist;
+				INFOPLIST_PREFIX_HEADER = Resources/InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
 				KEEP_PRIVATE_EXTERNS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2564,6 +2582,8 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Resources/Info.plist;
+				INFOPLIST_PREFIX_HEADER = Resources/InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
 				KEEP_PRIVATE_EXTERNS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2639,6 +2659,8 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Resources/Info.plist;
+				INFOPLIST_PREFIX_HEADER = Resources/InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
 				KEEP_PRIVATE_EXTERNS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
