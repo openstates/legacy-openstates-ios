@@ -107,7 +107,14 @@
     self.eventEditorParent = parent;
     EKEventEditViewController *editor = [self newEventEditorForEvent:event delegate:self];
     editor.view.width = parent.view.width;
-    [parent stackOrPushViewController:editor];
+    if (!SLFIsIpad()) {
+        if (!SLFIsIOS5OrGreater())
+            [parent presentModalViewController:editor animated:YES];
+        else
+            [parent presentViewController:editor animated:YES completion:nil];
+    }
+    else
+        [parent stackOrPushViewController:editor];
     [editor release];
 }
 
@@ -119,7 +126,14 @@
         else if (self.eventEditorParent)
             [_eventEditorParent eventWasEdited:event];
     }
-    [self.eventEditorParent popToThisViewController];
+    if (!SLFIsIpad()) {
+        if (!SLFIsIOS5OrGreater())
+            [controller dismissModalViewControllerAnimated:YES];
+        else
+            [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+    else
+        [self.eventEditorParent popToThisViewController];
     self.eventEditorParent = nil;
 }
 

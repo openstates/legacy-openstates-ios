@@ -96,8 +96,6 @@ const CGFloat kDefaultGradientBorderHeight = 5;
 }
 
 - (void)dealloc {
-    self.titleColor = nil;
-    self.titleFont = nil;
     self.titleLabel = nil;
     self.borderShadowColors = nil;
     self.gradientColors = nil;

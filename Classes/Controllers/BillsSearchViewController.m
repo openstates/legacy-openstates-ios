@@ -97,7 +97,7 @@ enum SECTIONS {
 - (void)configureTableItems {
     if (!self.state)
         return;
-    self.title = [NSString stringWithFormat:NSLocalizedString(@"Search %@ Bills",@""), _state.name];
+    self.title = [NSString stringWithFormat:NSLocalizedString(@"Search %@ Bills",@""), self.state.name];
     __block __typeof__(self) bself = self;
     [self configureSearchBarWithPlaceholder:NSLocalizedString(@"HB 1, Budget, etc", @"") withConfigurationBlock:^(UISearchBar *searchBar) {
         [bself configureChamberScopeTitlesForSearchBar:searchBar withState:bself.state];

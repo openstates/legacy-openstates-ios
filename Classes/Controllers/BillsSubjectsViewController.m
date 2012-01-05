@@ -29,10 +29,11 @@
 @synthesize tableController = _tableController;
 
 - (id)initWithState:(SLFState *)newState {
-    self = [super init];
+    self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
         self.title = NSLocalizedString(@"Subjects", @"");
         self.useTitleBar = SLFIsIpad();
+        self.state = newState;
         [self reconfigureForState:newState];
     }
     return self;
