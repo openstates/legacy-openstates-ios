@@ -90,14 +90,14 @@
     self.mapView = [self setUpMapViewWithFrame:mapViewRect];
 }
 
+- (void)loadView {
+    [super loadView];
+}
+
 - (void)didReceiveMemoryWarning {
     if (self.isViewLoaded && self.mapView)
         [self resetMap:nil]; // clean house!
     [super didReceiveMemoryWarning];
-}
-
-- (void)loadView {
-    [super loadView];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

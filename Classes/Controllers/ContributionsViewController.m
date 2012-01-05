@@ -18,15 +18,12 @@
 #import "GradientBackgroundView.h"
 #import "TableSectionHeaderView.h"
 #import "GenericDetailHeader.h"
-#import "TitleBarView.h"
 
 @interface ContributionsViewController()
-@property (nonatomic,retain) TitleBarView *titleBarView;
 @end
 
 @implementation ContributionsViewController
 @synthesize dataSource;
-@synthesize titleBarView = _titleBarView;
 
 #pragma mark -
 #pragma mark Initialization
@@ -42,29 +39,17 @@
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];    
     self.dataSource = nil;
-    self.titleBarView = nil;
     [super dealloc];
 }
 
 - (void)viewDidUnload {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    self.titleBarView = nil;
     self.dataSource = nil;
     [super viewDidUnload];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-#if 0 // not sure I like this
-    if (SLFIsIpad()) {
-        self.titleBarView = nil;
-        _titleBarView = [[TitleBarView alloc] initWithFrame:self.view.bounds title:self.title];
-        CGRect tableRect = self.tableView.frame;
-        tableRect.size.height -= _titleBarView.opticalHeight;
-        self.tableView.frame = CGRectOffset(tableRect, 0, _titleBarView.opticalHeight);
-        [self.view addSubview:_titleBarView];
-    }
-#endif
     if (!dataSource)
         dataSource = [[ContributionsDataSource alloc] init];
     self.tableView.dataSource = dataSource;
@@ -86,12 +71,6 @@
     [gradient loadLayerAndGradientColors];
     self.tableView.backgroundView = gradient;
     [gradient release];
-}
-
-- (void)setTitle:(NSString *)title {
-    [super setTitle:title];
-    if (self.titleBarView && self.isViewLoaded)
-        _titleBarView.title = title;
 }
 
 - (void)updateTableHeader {

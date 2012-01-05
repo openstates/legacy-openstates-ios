@@ -69,9 +69,10 @@
 }
 
 - (void)reconfigureForState:(SLFState *)newState {
+    if (!newState)
+        return;
     self.state = newState;
-    if (newState)
-        [self loadDataFromNetworkWithID:newState.stateID];
+    [self loadDataFromNetworkWithID:newState.stateID];
 }
 
 - (NSString *)actionPath {
@@ -130,9 +131,9 @@
         return;
     if ([menuItem isEqualToString:MenuRecents]) {
         UIViewController *vc = nil;
-        NSString *resourcePath = [BillSearchParameters pathForUpdatedSinceDaysAgo:5 state:_state.stateID];
-        vc = [[BillsViewController alloc] initWithState:_state resourcePath:resourcePath];
-        vc.title = [NSString stringWithFormat:@"%@: %@", [_state.stateID uppercaseString], @"Recent Updates (5 days)"];
+        NSString *resourcePath = [BillSearchParameters pathForUpdatedSinceDaysAgo:5 state:self.state.stateID];
+        vc = [[BillsViewController alloc] initWithState:self.state resourcePath:resourcePath];
+        vc.title = [NSString stringWithFormat:@"%@: %@", [self.state.stateID uppercaseString], @"Recent Updates (5 days)"];
         [self stackOrPushViewController:vc];
         [vc release];
         return;
@@ -145,7 +146,7 @@
     else if ([menuItem isEqualToString:MenuSubjects])
         controllerClass = [BillsSubjectsViewController class];
     if (controllerClass) {
-        NSString *path = [SLFActionPathNavigator navigationPathForController:controllerClass withResource:_state];
+        NSString *path = [SLFActionPathNavigator navigationPathForController:controllerClass withResource:self.state];
         if (!IsEmpty(path))
             [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
     }
@@ -157,9 +158,10 @@
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
+    if (!object || ![object isKindOfClass:[SLFState class]])
+        return;
     self.state = object;
-    if (object)
-        self.title = [NSString stringWithFormat:@"%@ %@", _state.name, NSLocalizedString(@"Bills",@"")]; 
+    self.title = [NSString stringWithFormat:@"%@ %@", self.state.name, NSLocalizedString(@"Bills",@"")]; 
     [self configureTableItems];
 }
 

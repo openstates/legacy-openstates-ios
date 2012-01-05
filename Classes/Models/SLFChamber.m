@@ -94,7 +94,8 @@ NSString * const SLFChamberLowerType = @"lower";
 }
 
 + (NSArray *)chamberSearchScopeTitlesWithState:(SLFState *)state {
-    NSParameterAssert(state != NULL);
+    if (!state)
+        return nil;
     NSArray *chambers = state.chambers;
     if (IsEmpty(chambers) || [chambers count] < 2)
         return nil; // No point in creating a scope bar if there's only one chamber.

@@ -30,14 +30,9 @@
     self = [super initWithStyle:style];
     if (self) {
         self.stackWidth = 450;
-        _useGearViewBackground = style == UITableViewStyleGrouped;
+        _useGearViewBackground = (style == UITableViewStyleGrouped);
         self.useGradientBackground = YES;
         self.useTitleBar = NO;
-        self.onConfigureTableView = ^(UITableView *tableView, UITableViewStyle style){
-            tableView.backgroundColor = [UIColor clearColor];
-            if (style == UITableViewStylePlain)
-                tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        };
     }
     return self;
 }
@@ -57,6 +52,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.backgroundColor = [UIColor clearColor];
+    if (self.tableView.style == UITableViewStylePlain)
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     if (self.useTitleBar) {
         _titleBarView = [[TitleBarView alloc] initWithFrame:self.view.bounds title:self.title];
         CGRect tableRect = self.tableView.frame;
@@ -178,7 +176,7 @@
     [searchBar release];
 }
 
-- (void)configureChamberScopeTitlesForSearchBar:(UISearchBar *)searchBar withState:(SLFState *)state{
+- (void)configureChamberScopeTitlesForSearchBar:(UISearchBar *)searchBar withState:(SLFState *)state {
     NSParameterAssert(searchBar != NULL);
     NSArray *buttonTitles = [SLFChamber chamberSearchScopeTitlesWithState:state];
     if (IsEmpty(buttonTitles))

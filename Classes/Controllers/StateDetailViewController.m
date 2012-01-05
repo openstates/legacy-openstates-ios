@@ -80,9 +80,10 @@
 }
 
 - (void)stateMenuSelectionDidChangeWithState:(SLFState *)newState {
+    if (!newState)
+        return;
     self.state = newState;
-    if (newState)
-        [self loadDataFromNetworkWithID:newState.stateID];
+    [self loadDataFromNetworkWithID:newState.stateID];
 }
 
 - (void)reconfigureForState:(SLFState *)state {
@@ -198,9 +199,9 @@
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObject:(id)object {
-    SLFState *state = nil;
-    if (object && [object isKindOfClass:[SLFState class]])
-        state = object;
+    if (!object || ![object isKindOfClass:[SLFState class]])
+        return;
+    SLFState *state = object;
     [self reconfigureForState:state];
 }
 

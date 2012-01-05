@@ -82,9 +82,9 @@
     [super viewDidLoad];
     NSAssert(self.resourcePath != NULL, @"Must set a resource path before attempting to download table data.");
     [self configureTableController];
- 		__block __typeof__(self) bself = self;
-   if (_tableController.sectionNameKeyPath) {
+    if (_tableController.sectionNameKeyPath) {
         _tableController.heightForHeaderInSection = 18;
+        __block __typeof__(self) bself = self;
         _tableController.onViewForHeaderInSection = ^UIView*(NSUInteger sectionIndex, NSString* sectionTitle) {
             UIColor *sectionColor =  SLFColorWithRGB(207,208,194);
             UIView *sectionView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, bself.tableView.bounds.size.width, 18)] autorelease];
@@ -101,6 +101,7 @@
     }
     [self.tableController loadTable];
     if ([self hasSearchableDataClass]) {
+        __block __typeof__(self) bself = self;
         [self configureSearchBarWithPlaceholder:NSLocalizedString(@"Filter results", @"") withConfigurationBlock:^(UISearchBar *searchBar) {
             if ([bself shouldShowChamberScopeBar]) {
                 [bself configureChamberScopeTitlesForSearchBar:searchBar withState:bself.state];

@@ -61,9 +61,9 @@
 }
 
 - (void)reconfigureForState:(SLFState *)newState {
-    self.state = newState;
     if (!newState || !self.tableController)
         return;
+    self.state = newState;
     NSInteger chamberScope = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
     NSString *chamber = [SLFChamber chamberTypeForSearchScopeIndex:chamberScope];
     NSString *resourcePath = [BillSearchParameters pathForSubjectsWithState:newState chamber:chamber];

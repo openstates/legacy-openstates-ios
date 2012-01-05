@@ -139,6 +139,8 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
         self.currentStateID = stateID;
     }
     SLFState *state = SLFSelectedState();
+    if (!state)
+        return;
     NSString* session = SLFSelectedSessionForState(state);
     if (session && ![session isEqualToString:self.currentSession]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:SLFSelectedSessioneDidChangeNotification object:session];

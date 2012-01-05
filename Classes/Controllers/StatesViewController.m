@@ -61,6 +61,8 @@
         [cellMapping mapKeyPath:@"stateID" toAttribute:@"detailTextLabel.text"];
         [cellMapping mapKeyPath:@"stateFlag" toAttribute:@"imageView.image"];
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+            if (!object || ![object isKindOfClass:[SLFState class]])
+                return;
             SLFState *state = object;
             SLFSaveSelectedState(state);
 //          [[SLFRestKitManager sharedRestKit] preloadObjectsForState:state];

@@ -40,13 +40,13 @@
 @synthesize tableController = _tableController;
 
 - (id)initWithResourcePath:(NSString *)resourcePath {
-self = [super initWithStyle:UITableViewStyleGrouped];
-if (self) {
-    self.stackWidth = 500;
-    RKLogDebug(@"Loading resource path for event: %@", resourcePath);
-    [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)];
-}
-return self;
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    if (self) {
+        self.stackWidth = 500;
+        RKLogDebug(@"Loading resource path for event: %@", resourcePath);
+        [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)];
+    }
+    return self;
 }
 
 - (id)initWithEventID:(NSString *)eventID {
@@ -89,7 +89,7 @@ return self;
     _tableController.variableHeightRows = YES;
     _tableController.objectManager = [RKObjectManager sharedManager];
     _tableController.pullToRefreshEnabled = NO;
-    [self.tableController mapObjectsWithClass:[EventParticipant class] toTableCellsWithMapping:[self participantCellMap]];
+    [_tableController mapObjectsWithClass:[EventParticipant class] toTableCellsWithMapping:[self participantCellMap]];
 }
 
 - (NSString *)actionPath {

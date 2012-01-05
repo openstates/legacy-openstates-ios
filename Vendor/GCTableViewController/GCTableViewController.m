@@ -15,16 +15,17 @@
 @synthesize onConfigureTableView = _onConfigureTableView;
 @synthesize clearsSelectionOnViewWillAppear =  _clearsSelectionOnViewWillAppear;
 
-- (id) init {
+- (id)init {
     self = [self initWithStyle:UITableViewStylePlain];
     return self;
 }
 
-- (id) initWithStyle:(UITableViewStyle) style {
-    return [self initWithStyle:style usingBlock:nil];
+- (id)initWithStyle:(UITableViewStyle) style {
+    self = [self initWithStyle:style usingBlock:nil];
+    return self;
 }
 
-- (id) initWithStyle:(UITableViewStyle)style usingBlock:(GCTableViewConfigurationBlock)block {
+- (id)initWithStyle:(UITableViewStyle)style usingBlock:(GCTableViewConfigurationBlock)block {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
         self.tableViewStyle = style;
@@ -42,25 +43,29 @@
 
 - (void)loadView {
     [super loadView];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:self.tableViewStyle];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     if (self.onConfigureTableView)
         _onConfigureTableView(_tableView, self.tableViewStyle);
-    // we wait to set the frame until after we run the configuration, that way viewDidLoad doesn't run before the table is configured
     _tableView.frame = self.view.bounds;
     [self.view addSubview:_tableView];
 }
 
-- (void) viewDidUnload {
+- (void)viewDidUnload {
     self.tableView = nil;
     [super viewDidUnload];
 }
 
-- (void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (self.clearsSelectionOnViewWillAppear) [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+    if (self.clearsSelectionOnViewWillAppear)
+        [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
 }
 
 - (void)setOnConfigureTableView:(GCTableViewConfigurationBlock)onConfigureTableView {
@@ -74,15 +79,15 @@
 
 #pragma mark TableView methods
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSInteger) tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
     return 0;
 }
 
-- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     return nil;
 }
 
