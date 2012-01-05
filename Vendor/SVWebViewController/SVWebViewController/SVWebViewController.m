@@ -14,7 +14,8 @@
 - (void)layoutSubviews;
 - (void)setupToolbar;
 - (void)setupTabletToolbar;
-- (void)stopLoading;
+- (void)stopLoadingNetwork;
+- (void)stopLoadingAndResetToolbar;
 
 @end
 
@@ -25,14 +26,14 @@
 
 - (void)dealloc {
     navItem = nil;
+    SLFRelease(backBarButton);
+    SLFRelease(forwardBarButton);
+    SLFRelease(actionBarButton);
     if (rWebView) {
         rWebView.delegate = nil;
         [rWebView removeFromSuperview];
     }
     SLFRelease(rWebView);
-    SLFRelease(backBarButton);
-    SLFRelease(forwardBarButton);
-    SLFRelease(actionBarButton);
     [super dealloc];
 }
 
@@ -191,13 +192,12 @@
     [self setupToolbar];
     [self layoutSubviews];
     
-    
     if(self.modalViewController)
         return;
     
     if (self.urlString) {
         NSURL *searchURL = [NSURL URLWithString:self.urlString];
-        [self.webView loadRequest:[NSURLRequest requestWithURL:searchURL]];
+        [self.webView loadRequest:[NSURLRequest requestWithURL:searchURL]]; // actually creates a webview if needed
     }
     
     if(deviceIsTablet && self.navigationController) {
@@ -244,13 +244,7 @@
     
     if(self.modalViewController)
         return;
-    
-    [self stopLoading];
-    if (rWebView) {
-        rWebView.delegate = nil;
-        [rWebView removeFromSuperview];
-    }
-    SLFRelease(rWebView);
+    [self stopLoadingNetwork];
 }
 
 
@@ -293,10 +287,13 @@
         [doneButton release];
     }
     
-    if(self.navigationController != nil)
-        self.navigationItem.title = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
-    else
-        navItem.title = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    NSString *javaTitle = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    if (!IsEmpty(javaTitle)) {
+        if(self.navigationController != nil)
+            self.navigationItem.title = javaTitle;
+        else
+            navItem.title = javaTitle;
+    }
     
     if(![self.webView canGoBack])
         backBarButton.enabled = NO;
@@ -309,7 +306,7 @@
         forwardBarButton.enabled = YES;
     
     if(self.webView.loading && !stoppedLoading)
-        refreshStopBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(stopLoading)];
+        refreshStopBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(stopLoadingAndResetToolbar)];
     
     else
         refreshStopBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self.webView action:@selector(reload)];
@@ -338,7 +335,9 @@
 
 - (void)setupTabletToolbar {
     
-    titleLabel.text = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    NSString *javaTitle = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    if (!IsEmpty(javaTitle))
+        titleLabel.text = javaTitle;
     
     if(![self.webView canGoBack])
         backButton.enabled = NO;
@@ -352,12 +351,12 @@
     
     if(self.webView.loading && !stoppedLoading) {
         [refreshStopButton removeTarget:self.webView action:@selector(reload) forControlEvents:UIControlEventTouchUpInside];
-        [refreshStopButton addTarget:self action:@selector(stopLoading) forControlEvents:UIControlEventTouchUpInside];
+        [refreshStopButton addTarget:self action:@selector(stopLoadingAndResetToolbar) forControlEvents:UIControlEventTouchUpInside];
         [refreshStopButton setBackgroundImage:[UIImage imageNamed:@"SVWebViewController.bundle/iPad/stop"] forState:UIControlStateNormal];
     }
     
     else {
-        [refreshStopButton removeTarget:self action:@selector(stopLoading) forControlEvents:UIControlEventTouchUpInside];
+        [refreshStopButton removeTarget:self action:@selector(stopLoadingAndResetToolbar) forControlEvents:UIControlEventTouchUpInside];
         [refreshStopButton addTarget:self.webView action:@selector(reload) forControlEvents:UIControlEventTouchUpInside];
         [refreshStopButton setBackgroundImage:[UIImage imageNamed:@"SVWebViewController.bundle/iPad/refresh"] forState:UIControlStateNormal];
     }
@@ -380,7 +379,7 @@
 #pragma mark -
 #pragma mark UIWebViewDelegate
 
-- (UIWebView*) webView {
+- (UIWebView*)webView {
     
     if (!rWebView && self.isViewLoaded) {
         rWebView = [[UIWebView alloc] initWithFrame:self.view.bounds];
@@ -425,13 +424,17 @@
 #pragma mark -
 #pragma mark Action Methods
 
-- (void)stopLoading {
-    
+- (void)stopLoadingNetwork {
     stoppedLoading = YES;
     if (rWebView)
         [rWebView stopLoading];
     [[AFNetworkActivityIndicatorManager sharedManager] decrementActivityCount];
-    
+}
+
+- (void)stopLoadingAndResetToolbar {
+    [self stopLoadingNetwork];
+    if (!self.isViewLoaded)
+        return;
     if(!deviceIsTablet)
         [self setupToolbar];
     else
@@ -440,7 +443,7 @@
 
 - (void)didReceiveMemoryWarning {
     if (self.isViewLoaded)
-        [self stopLoading]; // clean house!
+        [self stopLoadingAndResetToolbar]; // clean house!
     [super didReceiveMemoryWarning];
 }
 
@@ -486,18 +489,13 @@
     else if([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString:NSLocalizedString(@"Mail Link to this Page", @"SVWebViewController")]) {
         
         MFMailComposeViewController *emailComposer = [[MFMailComposeViewController alloc] init]; 
-        
         [emailComposer setMailComposeDelegate: self]; 
         NSString *title = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
         [emailComposer setSubject:title];
-        
-          [emailComposer setMessageBody:self.webView.request.URL.absoluteString isHTML:NO];
-        
+        [emailComposer setMessageBody:self.webView.request.URL.absoluteString isHTML:NO];
         emailComposer.modalPresentationStyle = UIModalPresentationFormSheet;
-        
         UIViewController * rootVC = [[[UIApplication sharedApplication] keyWindow] rootViewController];
         [rootVC presentModalViewController:emailComposer animated:YES];
-
         [emailComposer release];
     }
     
