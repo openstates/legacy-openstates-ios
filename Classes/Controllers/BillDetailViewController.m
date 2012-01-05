@@ -373,7 +373,7 @@
                 tableItem.detailText = type;
             tableItem.text = [word.word capitalizedString];
             if (onSelect)
-                tableItem.cellMapping.onSelectCell = onSelect;
+                tableItem.cellMapping.onSelectCellForObjectAtIndexPath = onSelect;
         }]];
     }
 }
