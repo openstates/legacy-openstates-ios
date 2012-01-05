@@ -60,6 +60,15 @@
         CGRect tableRect = self.tableView.frame;
         tableRect.size.height -= _titleBarView.opticalHeight;
         self.tableView.frame = CGRectOffset(tableRect, 0, _titleBarView.opticalHeight);
+        if (!SLFIsIOS5OrGreater()) {
+            UIColor *gradientTop = SLFColorWithRGBShift([SLFAppearance menuBackgroundColor], +20);
+            UIColor *gradientBottom = SLFColorWithRGBShift([SLFAppearance menuBackgroundColor], -20);
+            [_titleBarView setGradientTopColor:gradientTop];
+            [_titleBarView setGradientBottomColor:gradientBottom];
+            _titleBarView.titleFont = SLFTitleFont(14);
+            _titleBarView.titleColor = [SLFAppearance navBarTextColor];
+            [_titleBarView setStrokeTopColor:gradientTop];
+        }
         [self.view addSubview:_titleBarView];
     }
     if (self.useGradientBackground) {
@@ -164,6 +173,8 @@
     searchBar.delegate = self;
     searchBar.placeholder = placeholder;
     searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
+    if (!SLFIsIOS5OrGreater())
+        searchBar.tintColor = [SLFAppearance cellSecondaryTextColor];
     if (block)
         block(searchBar);
     [searchBar sizeToFit];

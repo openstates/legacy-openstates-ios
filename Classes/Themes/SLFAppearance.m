@@ -194,14 +194,49 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 
 @end
 
-UIColor *SLFColorWithRGBShift(UIColor *color, int offset) {
+BOOL SLFColorGetRGBAComponents(UIColor *color, CGFloat *red, CGFloat *green, CGFloat *blue, CGFloat *alpha) {
+    if (SLFIsIOS5OrGreater())
+        return [color getRed:red green:green blue:blue alpha:alpha];
+    
+	const CGFloat *components = CGColorGetComponents(color.CGColor);
 	CGFloat r,g,b,a;
-    CGFloat shift = offset / 255.f;
-    if (![color getRed:&r green:&g blue:&b alpha:&a])
+	CGColorSpaceModel colorSpaceModel = CGColorSpaceGetModel(CGColorGetColorSpace(color.CGColor));
+	switch (colorSpaceModel) {
+		case kCGColorSpaceModelMonochrome:
+			r = g = b = components[0];
+			a = components[1];
+			break;
+		case kCGColorSpaceModelRGB:
+			r = components[0];
+			g = components[1];
+			b = components[2];
+			a = components[3];
+			break;
+		default:	// We don't know how to handle this model
+			return NO;
+	}
+	
+	if (red) *red = r;
+	if (green) *green = g;
+	if (blue) *blue = b;
+	if (alpha) *alpha = a;
+	
+	return YES;
+}
+
+UIColor *SLFColorWithRGBShift(UIColor *color, int offset) {
+    @try {
+        CGFloat r,g,b,a;
+        CGFloat shift = offset / 255.f;
+        if (!SLFColorGetRGBAComponents(color, &r, &g, &b, &a))
+            return color;
+        return [UIColor colorWithRed:MAX(0.0, MIN(1.0, r + shift))
+                               green:MAX(0.0, MIN(1.0, g + shift)) 
+                                blue:MAX(0.0, MIN(1.0, b + shift)) alpha:a];
+    }
+    @catch (NSException *exception) {
         return color;
-    return [UIColor colorWithRed:MAX(0.0, MIN(1.0, r + shift))
-                           green:MAX(0.0, MIN(1.0, g + shift)) 
-                            blue:MAX(0.0, MIN(1.0, b + shift)) alpha:a];
+    }
 }
 
 UIColor *SLFColorWithRGBA(int r, int g, int b, CGFloat a) {

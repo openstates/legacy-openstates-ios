@@ -124,8 +124,10 @@
 
 - (void)setUpViewControllersIphone {
     StatesViewController* stateListVC = [[StatesViewController alloc] init];
-    _navigationController = [[UINavigationController alloc] initWithRootViewController:stateListVC];    
+    _navigationController = [[UINavigationController alloc] initWithRootViewController:stateListVC]; 
     window.rootViewController = _navigationController;
+    if (!SLFIsIOS5OrGreater())
+        _navigationController.navigationBar.tintColor = [SLFAppearance cellSecondaryTextColor];
     SLFState *foundSavedState = SLFSelectedState();
     if (foundSavedState) {
         StateDetailViewController *menu = [[StateDetailViewController alloc] initWithState:foundSavedState];

@@ -32,6 +32,7 @@
 + (UIColor *)partyGreen;
 @end
 
+BOOL SLFColorGetRGBAComponents(UIColor *color, CGFloat *red, CGFloat *green, CGFloat *blue, CGFloat *alpha);
 UIColor *SLFColorWithRGBShift(UIColor *color, int offset);
 UIColor *SLFColorWithRGBA(int r, int g, int b, CGFloat a);
 UIColor *SLFColorWithRGB(int red,  int green, int blue);

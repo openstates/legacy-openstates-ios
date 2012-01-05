@@ -16,7 +16,6 @@
 #import "BillSearchParameters.h"
 #import "LegislatorDetailViewController.h"
 #import "BillVotesViewController.h"
-#import "DDActionHeaderView.h"
 #import "SLFMappingsManager.h"
 #import "SLFRestKitManager.h"
 #import "SVWebViewController.h"

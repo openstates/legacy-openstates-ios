@@ -182,6 +182,15 @@
     UIBarButtonItem *mapType = [[UIBarButtonItem alloc] initWithCustomView:mapTypeSwitch];
     NSMutableArray *barItems = [[NSMutableArray alloc] initWithObjects:flex, locate, flex, mapType, flex, nil];
 
+    if (!SLFIsIOS5OrGreater()) {
+        UIColor *blue = [SLFAppearance accentBlueColor];
+        UIColor *green = [SLFAppearance cellSecondaryTextColor];
+        aToolbar.tintColor = blue;
+        mapTypeSwitch.tintColor = green;
+        self.searchBar.tintColor = blue;
+        if (!SLFIsIpad())
+            self.searchBar.tintColor = green;
+    }
     if (SLFIsIpad()) {
         UIBarButtonItem *search = [[UIBarButtonItem alloc] initWithCustomView:self.searchBar];
         self.searchBar.width = 235;
