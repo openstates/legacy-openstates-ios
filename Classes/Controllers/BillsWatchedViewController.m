@@ -18,6 +18,7 @@
 #import "TableSectionHeaderView.h"
 #import "NSDate+SLFDateHelper.h"
 #import "SLFDrawingExtensions.h"
+#import "MKInfoPanel.h"
 
 @interface BillsWatchedViewController()
 @property (nonatomic,retain) RKTableController *tableController;
@@ -166,11 +167,11 @@
 }
 
 - (void)configureTableItems {
-    [_tableController removeAllSections];
+    [self.tableController removeAllSections];
     NSArray *bills = [self actualBillsFromWatchedBills];
     if (IsEmpty(bills)) {
-            // Do something like insert a static cell, to show how to add watched bills
-            // [_tableController loadTableItems:[NSArray arrayWithObject:emptyTableItem]];
+        [MKInfoPanel showPanelInView:self.view type:MKInfoPanelTypeInfo title:NSLocalizedString(@"No Watched Bills",@"") subtitle:NSLocalizedString(@"There are no watched bills, yet. To add one, find a bill and click it's star button.",@"")];
+        self.title = NSLocalizedString(@"No Watched Bills", @"");
         return;
     }
     NSArray *states = [bills valueForKeyPath:@"stateID"];
