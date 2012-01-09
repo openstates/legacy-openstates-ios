@@ -1,4 +1,4 @@
-Thanks for downloading the TestFlight SDK 0.8.1!
+Thanks for downloading the TestFlight SDK 0.8.3beta1!
 
 This document is also available on the web at https://www.testflightapp.com/sdk/doc
 
@@ -12,6 +12,7 @@ This document is also available on the web at https://www.testflightapp.com/sdk/
 8. View your results
 9. Advanced Exception Handling
 10. Remote Logging
+11. iOS 3
 
 START
 
@@ -78,7 +79,7 @@ This SDK can be run from both the iPhone Simulator and Device and has been teste
 
     4. To report crashes to you we install our own uncaught exception handler. If you are not currently using an exception handler of your own then all you need to do is go to the next step. If you currently use an Exception Handler, or you use another framework that does please go to the section on advanced exception handling.
 
-4. To enable the best crash reporting possible we recommend setting the following project build settings in Xcode to NO for all targets that you want to have live crash reporting for You can find build settings by opening the Project Navigator (default command+1 or command+shift+j) then clicking on the project you are configuring (usually the first selection in the list). From there you can choose to either change the global project settings or settings on an individual project basis. All settings below are in the Deployment Section.
+4. To enable the best crash reporting possible we recommend setting the following project build settings in Xcode to NO for all targets that you want to have live crash reporting for. You can find build settings by opening the Project Navigator (default command+1 or command+shift+j) then clicking on the project you are configuring (usually the first selection in the list). From there you can choose to either change the global project settings or settings on an individual project basis. All settings below are in the Deployment Section.
 
     1. Deployment Post Processing
     2. Strip Debug Symbols During Copy
@@ -183,11 +184,15 @@ We have implemented three different loggers.
 
 Each of the loggers log asynchronously and all TFLog calls are non blocking. The TestFlight logger writes its data to a file which is then sent to our servers on Session End events. The Apple System Logger sends its messages to the Apple System Log and are viewable using the Organizer in Xcode when the device is attached to your computer. The ASL logger can be disabled by turning it off in your TestFlight options
 
-    [TestFlight setOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"logsToConsole"]];
+    [TestFlight setOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"logToConsole"]];
 
 The default option is YES.
 
 The STDERR logger sends log messages to STDERR so that you can see your log statements while debugging. The STDERR logger is only active when a debugger is attached to your application.
+
+11. iOS3
+
+We now require that anyone who is writing an application that supports iOS3 add the System.framework as an optional link. In order to provide a better shutdown experience we send any large log files to our servers in the background. To add System.framework as an optional link you can follow
 
 END
 

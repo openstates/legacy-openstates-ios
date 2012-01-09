@@ -254,6 +254,8 @@
 		37BB3BB7143A44DC00DCB1FB /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BB3BB5143A44DC00DCB1FB /* placeholder.png */; };
 		37BB3BB8143A44DC00DCB1FB /* placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BB3BB6143A44DC00DCB1FB /* placeholder@2x.png */; };
 		37BB3BBD143A5FCC00DCB1FB /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 37BB3BBC143A5FCB00DCB1FB /* libz.dylib */; };
+		37CD82E714BB5539000CF857 /* MTInfoPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD82E614BB5539000CF857 /* MTInfoPanel.m */; };
+		37CD82E914BB5546000CF857 /* MTInfoPanel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 37CD82E814BB5546000CF857 /* MTInfoPanel.bundle */; };
 		37CFB4D2144B980F00E8120D /* NSInvocation+CWVariableArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4CF144B980F00E8120D /* NSInvocation+CWVariableArguments.m */; };
 		37CFB4D3144B980F00E8120D /* UIImageView+RoundedCorners.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4D1144B980F00E8120D /* UIImageView+RoundedCorners.m */; };
 		37D6A7031496BE34009A76E8 /* LegislatorDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6A7021496BE34009A76E8 /* LegislatorDetailHeader.m */; };
@@ -811,6 +813,9 @@
 		37BB3BB5143A44DC00DCB1FB /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		37BB3BB6143A44DC00DCB1FB /* placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "placeholder@2x.png"; sourceTree = "<group>"; };
 		37BB3BBC143A5FCB00DCB1FB /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		37CD82E514BB5539000CF857 /* MTInfoPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTInfoPanel.h; sourceTree = "<group>"; };
+		37CD82E614BB5539000CF857 /* MTInfoPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTInfoPanel.m; sourceTree = "<group>"; };
+		37CD82E814BB5546000CF857 /* MTInfoPanel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = MTInfoPanel.bundle; path = Vendor/MTInfoPanel/MTInfoPanel/Resources/MTInfoPanel.bundle; sourceTree = SOURCE_ROOT; };
 		37CFB4CE144B980F00E8120D /* NSInvocation+CWVariableArguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+CWVariableArguments.h"; sourceTree = "<group>"; };
 		37CFB4CF144B980F00E8120D /* NSInvocation+CWVariableArguments.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInvocation+CWVariableArguments.m"; sourceTree = "<group>"; };
 		37CFB4D0144B980F00E8120D /* UIImageView+RoundedCorners.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "UIImageView+RoundedCorners.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1451,6 +1456,7 @@
 			children = (
 				3756942914ABC3180014BA7F /* SDURLCache */,
 				3744D6ED149586D400507D21 /* MKInfoPanel */,
+				37CD82E314BB5539000CF857 /* MTInfoPanel */,
 				37A16CF7148C128B000A3C91 /* GoogleAnalytics */,
 				373ECB6414888C9F000BD16D /* TestFlight */,
 				3770F123148712A500FD854B /* MultiRowCalloutAnnotationView */,
@@ -1686,6 +1692,17 @@
 			);
 			name = AFNetworking;
 			path = Vendor/AFNetworking/AFNetworking;
+			sourceTree = "<group>";
+		};
+		37CD82E314BB5539000CF857 /* MTInfoPanel */ = {
+			isa = PBXGroup;
+			children = (
+				37CD82E514BB5539000CF857 /* MTInfoPanel.h */,
+				37CD82E614BB5539000CF857 /* MTInfoPanel.m */,
+				37CD82E814BB5546000CF857 /* MTInfoPanel.bundle */,
+			);
+			name = MTInfoPanel;
+			path = Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel;
 			sourceTree = "<group>";
 		};
 		37CFB4CD144B980F00E8120D /* Categories */ = {
@@ -2183,6 +2200,7 @@
 				37EE7E1B149A781300214969 /* Collection-On.png in Resources */,
 				37EE7E1C149A781300214969 /* Collection-On@2x.png in Resources */,
 				3756945214AC0FA20014BA7F /* SubjectCounts.json in Resources */,
+				37CD82E914BB5546000CF857 /* MTInfoPanel.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2380,6 +2398,7 @@
 				375694AF14ACEC4E0014BA7F /* AppBarController.m in Sources */,
 				378337D414AD26A10077010E /* AppendingFlowCell.m in Sources */,
 				3772624F14B507F500F8D3A6 /* AssetsViewController.m in Sources */,
+				37CD82E714BB5539000CF857 /* MTInfoPanel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2565,7 +2584,7 @@
 				HEADER_SEARCH_PATHS = Vendor/RestKit/Build;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "848D0D29-EAD1-40D9-B30B-A591FA7A07C3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EC8A6B63-76BF-4738-B179-2BC912A17A1E";
 				SDKROOT = iphoneos;
 			};
 			name = AdHoc;
@@ -2642,7 +2661,7 @@
 				HEADER_SEARCH_PATHS = Vendor/RestKit/Build;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "848D0D29-EAD1-40D9-B30B-A591FA7A07C3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EC8A6B63-76BF-4738-B179-2BC912A17A1E";
 				SDKROOT = iphoneos;
 			};
 			name = Distribution;
