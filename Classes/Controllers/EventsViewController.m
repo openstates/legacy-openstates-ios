@@ -30,11 +30,6 @@
     [super dealloc];
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.title = [NSString stringWithFormat:@"%d Events", self.tableController.rowCount];
-}
-
 - (void)configureTableController {
     [super configureTableController];
     self.tableController.autoRefreshRate = 240;

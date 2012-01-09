@@ -11,7 +11,7 @@
 //
 
 #import "SLFEventsManager.h"
-#import "MKInfoPanel.h"
+#import "MTInfoPanel.h"
 #import <RestKit/RestKit.h>
 
 @interface SLFEventsManager()
@@ -122,7 +122,7 @@
     EKEvent *event = controller.event;
     if (action == EKEventEditViewActionSaved) {
         if (!event || NO == [self saveEvent:event])
-            [MKInfoPanel showPanelInView:self.eventEditorParent.view type:MKInfoPanelTypeError title:NSLocalizedString(@"Error Saving Event",@"") subtitle:NSLocalizedString(@"Unable to save this event to your calendar.  Please double-check your calendar settings and permissions then try again.",@"") hideAfter:3];
+            [MTInfoPanel showPanelInView:self.eventEditorParent.view type:MTInfoPanelTypeError title:NSLocalizedString(@"Error Saving Event",@"") subtitle:NSLocalizedString(@"Unable to save this event to your calendar.  Please double-check your calendar settings and permissions then try again.",@"") hideAfter:3];
         else if (self.eventEditorParent)
             [_eventEditorParent eventWasEdited:event];
     }

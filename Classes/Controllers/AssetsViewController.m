@@ -37,12 +37,13 @@
     if (state) {
         assets = state.sortedCapitolMaps;
         title = [NSString stringWithFormat:@"%@ %@", state.name, title];
-        self.assetResource = state;
     }
     self = [self initWithAssets:assets];
     if (self) {
         self.useTitleBar = SLFIsIpad();
         self.title = title;
+        if (state)
+            self.assetResource = state;
     }
     return self;
 }

@@ -28,15 +28,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [super dealloc];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.title = [NSString stringWithFormat:@"%d Members", self.tableController.rowCount];
-}
-
 - (void)configureTableController {
     [super configureTableController];
     self.tableController.showsSectionIndexTitles = YES;

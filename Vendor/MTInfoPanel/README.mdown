@@ -1,0 +1,2 @@
+This is based on Mugunth Kumar's MKInfoPanel: 
+https://github.com/mugunthKumar/MKInfoPanelDemo

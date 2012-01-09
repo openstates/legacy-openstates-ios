@@ -28,16 +28,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [super dealloc];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    if (self.tableController.rowCount && !self.title)
-        self.title = [NSString stringWithFormat:@"%d Bills", self.tableController.rowCount];
-}
-
 - (void)configureTableController {
     [super configureTableController];
     __block __typeof__(self) bself = self;
@@ -56,7 +46,7 @@
 
 - (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
     [super tableControllerDidFinishFinalLoad:tableController];
-    self.title = [NSString stringWithFormat:@"Found %d Bills", self.tableController.rowCount];
+    self.title = [NSString stringWithFormat:NSLocalizedString(@"%@ Bills",@""), self.state.stateIDForDisplay];
 }
 
 @end

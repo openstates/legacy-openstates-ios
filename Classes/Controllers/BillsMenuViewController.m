@@ -133,7 +133,7 @@
         UIViewController *vc = nil;
         NSString *resourcePath = [BillSearchParameters pathForUpdatedSinceDaysAgo:5 state:self.state.stateID];
         vc = [[BillsViewController alloc] initWithState:self.state resourcePath:resourcePath];
-        vc.title = [NSString stringWithFormat:@"%@: %@", [self.state.stateID uppercaseString], @"Recent Updates (5 days)"];
+        vc.title = [NSString stringWithFormat:@"%@: %@", self.state.stateIDForDisplay, @"Recent Updates (5 days)"];
         [self stackOrPushViewController:vc];
         [vc release];
         return;

@@ -26,16 +26,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [super dealloc];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    if (self.tableController.rowCount && !self.title)
-        self.title = [NSString stringWithFormat:@"%d Committees", self.tableController.rowCount];
-}
-
 - (void)configureTableController {
     [super configureTableController];
     __block __typeof__(self) bself = self;

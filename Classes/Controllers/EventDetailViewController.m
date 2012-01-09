@@ -20,7 +20,6 @@
 #import "TableSectionHeaderView.h"
 #import "NSDate+SLFDateHelper.h"
 #import "SLFEventsManager.h"
-#import "MKInfoPanel.h"
 #import "GenericDetailHeader.h"
 
 @interface EventDetailViewController()

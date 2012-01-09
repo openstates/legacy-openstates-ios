@@ -32,6 +32,7 @@ Attributions and Thanks
 - JSONKit by John E. Zang / [github.com](http://github.com/johnezang/JSONKit)
 - SVGeocoder by Sam Vermette / [samvermette.com](http://samvermette.com)  
 - SVWebViewController by Sam Vermette / [samvermette.com](http://samvermette.com)  
+- MTInfoPanel by Tretter Matthias / [github.com](https://github.com/myell0w/MTInfoPanel)  
 - Glyphish icons by Joseph Wain / [glyphish.com](http://glyphish.com)  
   
 Additionally, Greg Combs would like to send special thanks to the following:  

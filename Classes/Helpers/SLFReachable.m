@@ -13,7 +13,7 @@
 #import "SLFReachable.h"
 #import <RestKit/RestKit.h>
 #import "SLFAlertView.h"
-#import "MKInfoPanel.h"
+#import "MTInfoPanel.h"
 
 NSString * const SLFReachableStatusChangedForHostKey = @"SLFReachableStatusChangedForHost";
 NSString * const SLFReachableAnyNetworkHost = @"ANY_INTERNET_HOST";
@@ -28,8 +28,8 @@ BOOL SLFIsReachableAddress(NSString * urlString) {
     /*[SLFAlertView showWithTitle:NSLocalizedString(@"Unreachable Host", @"")
                         message:NSLocalizedString(@"This feature requires an Internet connection, and a connection is unavailable.  Your device may be in 'Airplane' mode or is experiencing poor network coverage.",@"")
                     buttonTitle:NSLocalizedString(@"Cancel",@"")];*/
-    [MKInfoPanel showPanelInWindow:[UIApplication sharedApplication].keyWindow 
-                            type:MKInfoPanelTypeError 
+    [MTInfoPanel showPanelInWindow:[UIApplication sharedApplication].keyWindow 
+                            type:MTInfoPanelTypeError 
                            title:NSLocalizedString(@"Network Failure!",@"") 
                         subtitle:NSLocalizedString(@"Check your internet connection and try again later.",@"") 
                        hideAfter:2];

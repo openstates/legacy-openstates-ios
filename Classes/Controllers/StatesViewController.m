@@ -47,7 +47,6 @@
     [super viewDidLoad];
     [self configureTableHeader];
     [self loadFromNetworkIfEmpty];
-    self.title = [NSString stringWithFormat:@"%d States", self.tableController.rowCount];
 }
 
 - (void)configureTableController {

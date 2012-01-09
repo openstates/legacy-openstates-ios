@@ -18,7 +18,6 @@
 #import "TableSectionHeaderView.h"
 #import "NSDate+SLFDateHelper.h"
 #import "SLFDrawingExtensions.h"
-#import "MKInfoPanel.h"
 
 @interface BillsWatchedViewController()
 @property (nonatomic,retain) RKTableController *tableController;

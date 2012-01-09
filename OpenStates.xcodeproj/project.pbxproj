@@ -59,16 +59,6 @@
 		37442FF114344D240027F422 /* 00-Read me first - license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 37442F1314344D230027F422 /* 00-Read me first - license.txt */; };
 		374430F014344FAC0027F422 /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = 374430CF14344FAC0027F422 /* action.png */; };
 		374430F114344FAC0027F422 /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 374430D014344FAC0027F422 /* action@2x.png */; };
-		3744D6F9149586EC00507D21 /* Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 3744D6EE149586EC00507D21 /* Blue.png */; };
-		3744D6FA149586EC00507D21 /* Blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3744D6EF149586EC00507D21 /* Blue@2x.png */; };
-		3744D6FB149586EC00507D21 /* MKInfoPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3744D6F1149586EC00507D21 /* MKInfoPanel.m */; };
-		3744D6FC149586EC00507D21 /* MKInfoPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3744D6F2149586EC00507D21 /* MKInfoPanel.xib */; };
-		3744D6FD149586EC00507D21 /* Red.png in Resources */ = {isa = PBXBuildFile; fileRef = 3744D6F3149586EC00507D21 /* Red.png */; };
-		3744D6FE149586EC00507D21 /* Red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3744D6F4149586EC00507D21 /* Red@2x.png */; };
-		3744D6FF149586EC00507D21 /* Tick.png in Resources */ = {isa = PBXBuildFile; fileRef = 3744D6F5149586EC00507D21 /* Tick.png */; };
-		3744D700149586EC00507D21 /* Tick@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3744D6F6149586EC00507D21 /* Tick@2x.png */; };
-		3744D701149586EC00507D21 /* Warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 3744D6F7149586EC00507D21 /* Warning.png */; };
-		3744D702149586EC00507D21 /* Warning@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3744D6F8149586EC00507D21 /* Warning@2x.png */; };
 		37485D48144BC43600D99BBD /* SLFMapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D42144BC43600D99BBD /* SLFMapPin.m */; };
 		37485D49144BC43600D99BBD /* UserPinAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D44144BC43600D99BBD /* UserPinAnnotation.m */; };
 		37485D4A144BC43600D99BBD /* UserPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D46144BC43600D99BBD /* UserPinAnnotationView.m */; };
@@ -254,8 +244,9 @@
 		37BB3BB7143A44DC00DCB1FB /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BB3BB5143A44DC00DCB1FB /* placeholder.png */; };
 		37BB3BB8143A44DC00DCB1FB /* placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BB3BB6143A44DC00DCB1FB /* placeholder@2x.png */; };
 		37BB3BBD143A5FCC00DCB1FB /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 37BB3BBC143A5FCB00DCB1FB /* libz.dylib */; };
-		37CD82E714BB5539000CF857 /* MTInfoPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD82E614BB5539000CF857 /* MTInfoPanel.m */; };
-		37CD82E914BB5546000CF857 /* MTInfoPanel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 37CD82E814BB5546000CF857 /* MTInfoPanel.bundle */; };
+		37CD834B14BB6A21000CF857 /* libMTInfoPanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37CD834714BB6910000CF857 /* libMTInfoPanel.a */; };
+		37CD835014BB839A000CF857 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 37CD834E14BB839A000CF857 /* blueArrow.png */; };
+		37CD835114BB839A000CF857 /* blueArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37CD834F14BB839A000CF857 /* blueArrow@2x.png */; };
 		37CFB4D2144B980F00E8120D /* NSInvocation+CWVariableArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4CF144B980F00E8120D /* NSInvocation+CWVariableArguments.m */; };
 		37CFB4D3144B980F00E8120D /* UIImageView+RoundedCorners.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4D1144B980F00E8120D /* UIImageView+RoundedCorners.m */; };
 		37D6A7031496BE34009A76E8 /* LegislatorDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6A7021496BE34009A76E8 /* LegislatorDetailHeader.m */; };
@@ -370,6 +361,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = 20808DBD13DE8CDC000A156A;
 			remoteInfo = "RestKitJSONParser+NXJSON";
+		};
+		37CD834614BB6910000CF857 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 37CD833F14BB690F000CF857 /* MTInfoPanel.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9B96FBCB14994575003935F9;
+			remoteInfo = MTInfoPanel;
+		};
+		37CD834914BB69F8000CF857 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 37CD833F14BB690F000CF857 /* MTInfoPanel.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 9B96FBCA14994575003935F9;
+			remoteInfo = MTInfoPanel;
 		};
 		37E961B313E544380064B1D3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -530,17 +535,6 @@
 		37442F1314344D230027F422 /* 00-Read me first - license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "00-Read me first - license.txt"; sourceTree = "<group>"; };
 		374430CF14344FAC0027F422 /* action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = action.png; sourceTree = "<group>"; };
 		374430D014344FAC0027F422 /* action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action@2x.png"; sourceTree = "<group>"; };
-		3744D6EE149586EC00507D21 /* Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Blue.png; path = Vendor/MKInfoPanel/MKInfoBundle/Blue.png; sourceTree = "<group>"; };
-		3744D6EF149586EC00507D21 /* Blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Blue@2x.png"; path = "Vendor/MKInfoPanel/MKInfoBundle/Blue@2x.png"; sourceTree = "<group>"; };
-		3744D6F0149586EC00507D21 /* MKInfoPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MKInfoPanel.h; path = Vendor/MKInfoPanel/MKInfoBundle/MKInfoPanel.h; sourceTree = "<group>"; };
-		3744D6F1149586EC00507D21 /* MKInfoPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MKInfoPanel.m; path = Vendor/MKInfoPanel/MKInfoBundle/MKInfoPanel.m; sourceTree = "<group>"; };
-		3744D6F2149586EC00507D21 /* MKInfoPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MKInfoPanel.xib; path = Vendor/MKInfoPanel/MKInfoBundle/MKInfoPanel.xib; sourceTree = "<group>"; };
-		3744D6F3149586EC00507D21 /* Red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Red.png; path = Vendor/MKInfoPanel/MKInfoBundle/Red.png; sourceTree = "<group>"; };
-		3744D6F4149586EC00507D21 /* Red@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Red@2x.png"; path = "Vendor/MKInfoPanel/MKInfoBundle/Red@2x.png"; sourceTree = "<group>"; };
-		3744D6F5149586EC00507D21 /* Tick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Tick.png; path = Vendor/MKInfoPanel/MKInfoBundle/Tick.png; sourceTree = "<group>"; };
-		3744D6F6149586EC00507D21 /* Tick@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Tick@2x.png"; path = "Vendor/MKInfoPanel/MKInfoBundle/Tick@2x.png"; sourceTree = "<group>"; };
-		3744D6F7149586EC00507D21 /* Warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Warning.png; path = Vendor/MKInfoPanel/MKInfoBundle/Warning.png; sourceTree = "<group>"; };
-		3744D6F8149586EC00507D21 /* Warning@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Warning@2x.png"; path = "Vendor/MKInfoPanel/MKInfoBundle/Warning@2x.png"; sourceTree = "<group>"; };
 		37485D41144BC43600D99BBD /* SLFMapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFMapPin.h; sourceTree = "<group>"; };
 		37485D42144BC43600D99BBD /* SLFMapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFMapPin.m; sourceTree = "<group>"; };
 		37485D43144BC43600D99BBD /* UserPinAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = UserPinAnnotation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -813,9 +807,9 @@
 		37BB3BB5143A44DC00DCB1FB /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		37BB3BB6143A44DC00DCB1FB /* placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "placeholder@2x.png"; sourceTree = "<group>"; };
 		37BB3BBC143A5FCB00DCB1FB /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		37CD82E514BB5539000CF857 /* MTInfoPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTInfoPanel.h; sourceTree = "<group>"; };
-		37CD82E614BB5539000CF857 /* MTInfoPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTInfoPanel.m; sourceTree = "<group>"; };
-		37CD82E814BB5546000CF857 /* MTInfoPanel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = MTInfoPanel.bundle; path = Vendor/MTInfoPanel/MTInfoPanel/Resources/MTInfoPanel.bundle; sourceTree = SOURCE_ROOT; };
+		37CD833F14BB690F000CF857 /* MTInfoPanel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MTInfoPanel.xcodeproj; path = Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel.xcodeproj; sourceTree = SOURCE_ROOT; };
+		37CD834E14BB839A000CF857 /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blueArrow.png; path = Vendor/RestKit/Vendor/EGOTableViewPullRefresh/EGOTableViewPullRefresh/Resources/blueArrow.png; sourceTree = SOURCE_ROOT; };
+		37CD834F14BB839A000CF857 /* blueArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "blueArrow@2x.png"; path = "Vendor/RestKit/Vendor/EGOTableViewPullRefresh/EGOTableViewPullRefresh/Resources/blueArrow@2x.png"; sourceTree = SOURCE_ROOT; };
 		37CFB4CE144B980F00E8120D /* NSInvocation+CWVariableArguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+CWVariableArguments.h"; sourceTree = "<group>"; };
 		37CFB4CF144B980F00E8120D /* NSInvocation+CWVariableArguments.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInvocation+CWVariableArguments.m"; sourceTree = "<group>"; };
 		37CFB4D0144B980F00E8120D /* UIImageView+RoundedCorners.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "UIImageView+RoundedCorners.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -934,6 +928,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37CD834B14BB6A21000CF857 /* libMTInfoPanel.a in Frameworks */,
 				37A33E9F149D690000D821CD /* EventKit.framework in Frameworks */,
 				37A33EA0149D690000D821CD /* EventKitUI.framework in Frameworks */,
 				3711871114462D1900A12B8B /* AddressBook.framework in Frameworks */,
@@ -1135,6 +1130,8 @@
 				37BB3BB6143A44DC00DCB1FB /* placeholder@2x.png */,
 				37E01EFE14917A890079EBB1 /* BlairMdITC TT Medium.ttf */,
 				37E01EFC14903D890079EBB1 /* MuseoSlab-500.otf */,
+				37CD834E14BB839A000CF857 /* blueArrow.png */,
+				37CD834F14BB839A000CF857 /* blueArrow@2x.png */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -1288,24 +1285,6 @@
 			path = glyphs;
 			sourceTree = "<group>";
 		};
-		3744D6ED149586D400507D21 /* MKInfoPanel */ = {
-			isa = PBXGroup;
-			children = (
-				3744D6F2149586EC00507D21 /* MKInfoPanel.xib */,
-				3744D6EE149586EC00507D21 /* Blue.png */,
-				3744D6EF149586EC00507D21 /* Blue@2x.png */,
-				3744D6F0149586EC00507D21 /* MKInfoPanel.h */,
-				3744D6F1149586EC00507D21 /* MKInfoPanel.m */,
-				3744D6F3149586EC00507D21 /* Red.png */,
-				3744D6F4149586EC00507D21 /* Red@2x.png */,
-				3744D6F5149586EC00507D21 /* Tick.png */,
-				3744D6F6149586EC00507D21 /* Tick@2x.png */,
-				3744D6F7149586EC00507D21 /* Warning.png */,
-				3744D6F8149586EC00507D21 /* Warning@2x.png */,
-			);
-			name = MKInfoPanel;
-			sourceTree = "<group>";
-		};
 		37485D3E144BC43600D99BBD /* MapAnnotations */ = {
 			isa = PBXGroup;
 			children = (
@@ -1455,7 +1434,6 @@
 			isa = PBXGroup;
 			children = (
 				3756942914ABC3180014BA7F /* SDURLCache */,
-				3744D6ED149586D400507D21 /* MKInfoPanel */,
 				37CD82E314BB5539000CF857 /* MTInfoPanel */,
 				37A16CF7148C128B000A3C91 /* GoogleAnalytics */,
 				373ECB6414888C9F000BD16D /* TestFlight */,
@@ -1697,12 +1675,18 @@
 		37CD82E314BB5539000CF857 /* MTInfoPanel */ = {
 			isa = PBXGroup;
 			children = (
-				37CD82E514BB5539000CF857 /* MTInfoPanel.h */,
-				37CD82E614BB5539000CF857 /* MTInfoPanel.m */,
-				37CD82E814BB5546000CF857 /* MTInfoPanel.bundle */,
+				37CD833F14BB690F000CF857 /* MTInfoPanel.xcodeproj */,
 			);
 			name = MTInfoPanel;
 			path = Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel;
+			sourceTree = "<group>";
+		};
+		37CD834014BB690F000CF857 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				37CD834714BB6910000CF857 /* libMTInfoPanel.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		37CFB4CD144B980F00E8120D /* Categories */ = {
@@ -1916,6 +1900,7 @@
 			dependencies = (
 				37E961E513E5448F0064B1D3 /* PBXTargetDependency */,
 				372D2B0014286D4100ADE84E /* PBXTargetDependency */,
+				37CD834A14BB69F8000CF857 /* PBXTargetDependency */,
 			);
 			name = OpenStates;
 			productName = StatesLege;
@@ -1965,6 +1950,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 37CD834014BB690F000CF857 /* Products */;
+					ProjectRef = 37CD833F14BB690F000CF857 /* MTInfoPanel.xcodeproj */;
+				},
+				{
 					ProductGroup = 37E961A613E544380064B1D3 /* Products */;
 					ProjectRef = 2538E7FF123417E500ACB5D7 /* RestKit.xcodeproj */;
 				},
@@ -1997,6 +1986,13 @@
 			fileType = archive.ar;
 			path = libRestKitJSONParserNXJSON.a;
 			remoteRef = 37B4540113E659FD00083F5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		37CD834714BB6910000CF857 /* libMTInfoPanel.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libMTInfoPanel.a;
+			remoteRef = 37CD834614BB6910000CF857 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		37E961B413E544380064B1D3 /* libRestKitNetwork.a */ = {
@@ -2138,15 +2134,6 @@
 				37E01EFF14917A890079EBB1 /* BlairMdITC TT Medium.ttf in Resources */,
 				370A205414941A21004AC5A4 /* MapUSA.png in Resources */,
 				370A205514941A21004AC5A4 /* MapUSA@2x.png in Resources */,
-				3744D6F9149586EC00507D21 /* Blue.png in Resources */,
-				3744D6FA149586EC00507D21 /* Blue@2x.png in Resources */,
-				3744D6FC149586EC00507D21 /* MKInfoPanel.xib in Resources */,
-				3744D6FD149586EC00507D21 /* Red.png in Resources */,
-				3744D6FE149586EC00507D21 /* Red@2x.png in Resources */,
-				3744D6FF149586EC00507D21 /* Tick.png in Resources */,
-				3744D700149586EC00507D21 /* Tick@2x.png in Resources */,
-				3744D701149586EC00507D21 /* Warning.png in Resources */,
-				3744D702149586EC00507D21 /* Warning@2x.png in Resources */,
 				37A6453B1499B5260038C62F /* Bank-Off.png in Resources */,
 				37A6453C1499B5260038C62F /* Bank-Off@2x.png in Resources */,
 				37A6453D1499B5260038C62F /* Bank-On.png in Resources */,
@@ -2200,7 +2187,8 @@
 				37EE7E1B149A781300214969 /* Collection-On.png in Resources */,
 				37EE7E1C149A781300214969 /* Collection-On@2x.png in Resources */,
 				3756945214AC0FA20014BA7F /* SubjectCounts.json in Resources */,
-				37CD82E914BB5546000CF857 /* MTInfoPanel.bundle in Resources */,
+				37CD835014BB839A000CF857 /* blueArrow.png in Resources */,
+				37CD835114BB839A000CF857 /* blueArrow@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2379,7 +2367,6 @@
 				37726AFA148DCCE3009BCE46 /* SLFiCloudSync.m in Sources */,
 				37B6FF96149207C8007CB068 /* SLFStackedViewController.m in Sources */,
 				37915377149273A500F55015 /* StackedNavigationBar.m in Sources */,
-				3744D6FB149586EC00507D21 /* MKInfoPanel.m in Sources */,
 				37D7E15414967C0900358E00 /* OpenStatesGearView.m in Sources */,
 				37D6A7031496BE34009A76E8 /* LegislatorDetailHeader.m in Sources */,
 				37A33E9E149D669800D821CD /* SLFEventsManager.m in Sources */,
@@ -2398,7 +2385,6 @@
 				375694AF14ACEC4E0014BA7F /* AppBarController.m in Sources */,
 				378337D414AD26A10077010E /* AppendingFlowCell.m in Sources */,
 				3772624F14B507F500F8D3A6 /* AssetsViewController.m in Sources */,
-				37CD82E714BB5539000CF857 /* MTInfoPanel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2432,6 +2418,11 @@
 			isa = PBXTargetDependency;
 			name = RestKit;
 			targetProxy = 372E58C814157A64000652B1 /* PBXContainerItemProxy */;
+		};
+		37CD834A14BB69F8000CF857 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MTInfoPanel;
+			targetProxy = 37CD834914BB69F8000CF857 /* PBXContainerItemProxy */;
 		};
 		37E961E513E5448F0064B1D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2581,7 +2572,10 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = Vendor/RestKit/Build;
+				HEADER_SEARCH_PATHS = (
+					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
+					Vendor/RestKit/Build,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EC8A6B63-76BF-4738-B179-2BC912A17A1E";
@@ -2658,7 +2652,10 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = Vendor/RestKit/Build;
+				HEADER_SEARCH_PATHS = (
+					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
+					Vendor/RestKit/Build,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EC8A6B63-76BF-4738-B179-2BC912A17A1E";
@@ -2736,7 +2733,10 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = Vendor/RestKit/Build;
+				HEADER_SEARCH_PATHS = (
+					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
+					Vendor/RestKit/Build,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9DCAEB38-D98A-4402-B628-E1AE362BC6A4";
 				SDKROOT = iphoneos;
@@ -2759,7 +2759,10 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = Vendor/RestKit/Build;
+				HEADER_SEARCH_PATHS = (
+					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
+					Vendor/RestKit/Build,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9DCAEB38-D98A-4402-B628-E1AE362BC6A4";

@@ -24,7 +24,7 @@
 #import "SLFReachable.h"
 #import "WatchedBillNotificationManager.h"
 #import "SLFAlertView.h"
-#import "MKInfoPanel.h"
+#import "MTInfoPanel.h"
 #import "SLFEventsManager.h"
 
 @interface AppDelegate()
@@ -67,11 +67,6 @@
 
 - (void)setUpOnce {
     RKLogSetAppLoggingLevel(RKLogLevelDebug);
-    if( getenv("NSZombieEnabled") || getenv("NSAutoreleaseFreedObjectCheckEnabled") ) {
-        for (int loop=0;loop < 6;loop++) {
-            RKLogCritical(@"**************** NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!*************");
-        }
-    }
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [self performSelectorInBackground:@selector(setUpBackgroundTasks) withObject:nil];
     [SLFAppearance setupAppearance];
@@ -80,6 +75,12 @@
     self.billNotifier = [WatchedBillNotificationManager manager];
     [SLFActionPathRegistry sharedRegistry];
     [self setUpViewControllers];
+    
+    if( getenv("NSZombieEnabled") || getenv("NSAutoreleaseFreedObjectCheckEnabled") ) {
+        [MTInfoPanel showPanelInWindow:self.window type:MTInfoPanelTypeWarning title:@"Debug Features!" subtitle:@"NSZombieEnabled and/or NSAutoreleaseFreedObject debug features are turned on. Turn them off before delivery." hideAfter:5.f];
+        RKLogCritical(@"**************** NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!*************");
+    }
+         
     __block __typeof__(self) bself = self;
     SLFRunBlockAfterDelay(^{
         [bself restoreApplicationState];
@@ -236,10 +237,7 @@
 - (void)networkReachabilityChanged:(NSNotification *)notification {
     SLFRunBlockInNextRunLoop(^{
         if (!SLFIsReachableAddressNoAlert(@"http://openstates.org"))
-            [MKInfoPanel showPanelInWindow:[UIApplication sharedApplication].keyWindow 
-                                      type:MKInfoPanelTypeError 
-                                     title:NSLocalizedString(@"Network Failure!",@"") 
-                                  subtitle:NSLocalizedString(@"This application requires Internet access to operate.",@"") hideAfter:4];
+            [MTInfoPanel showPanelInWindow:self.window type:MTInfoPanelTypeError title:NSLocalizedString(@"Network Failure!",@"") subtitle:NSLocalizedString(@"This application requires Internet access to operate.",@"") hideAfter:4.f];
     });
 }
 

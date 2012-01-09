@@ -14,7 +14,7 @@
 #import "SLFDataModels.h"
 #import "SLFRestKitManager.h"
 #import "NSString+SLFExtensions.h"
-#import "MKInfoPanel.h"
+#import "MTInfoPanel.h"
 #import "SLFDrawingExtensions.h"
 
 @interface SLFFetchedTableViewController()
@@ -67,12 +67,15 @@
     _tableController.pullToRefreshEnabled = YES;
     _tableController.imageForError = [UIImage imageNamed:@"error"];
     CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
-    MKInfoPanel *offlinePanel = [MKInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MKInfoPanelTypeError title:NSLocalizedString(@"Offline", @"") detail:NSLocalizedString(@"The server is unavailable.",@"")];
-    _tableController.imageForOffline = [UIImage imageFromView:offlinePanel];
-    //_tableController.imageForOffline = [UIImage imageNamed:@"offline"];
-    MKInfoPanel *panel = [MKInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MKInfoPanelTypeInfo title:NSLocalizedString(@"Updating", @"") detail:NSLocalizedString(@"Downloading new data",@"")];
+    MTInfoPanel *offlinePanel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeError title:NSLocalizedString(@"Offline", @"") subtitle:NSLocalizedString(@"The server is unavailable.",@"") image:nil];
+    _tableController.imageForOffline = [UIImage imageFromView:offlinePanel];    
+    MTInfoPanel *panel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeActivity title:NSLocalizedString(@"Updating", @"") subtitle:NSLocalizedString(@"Downloading new data",@"") image:nil];
     _tableController.loadingView = panel;
     _tableController.predicate = nil;
+    RKTableItem *emptyItem = [RKTableItem tableItemWithText:NSLocalizedString(@"No Entries Found",@"") detailText:NSLocalizedString(@"There were no entries found. You may refresh the results by dragging down on the table.",@"")];
+    emptyItem.cellMapping = [LargeStaticSubtitleCellMapping cellMapping];
+    [emptyItem.cellMapping addDefaultMappings];
+    _tableController.emptyItem = emptyItem;
     NSAssert(self.dataClass != NULL, @"Must set a data class before loading the view");
     [_tableController setObjectMappingForClass:__dataClass];
     self.tableController.sortDescriptors = [self.dataClass sortDescriptors];
@@ -80,6 +83,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = NSLocalizedString(@"Loading ...",@"");
     NSAssert(self.resourcePath != NULL, @"Must set a resource path before attempting to download table data.");
     [self configureTableController];
     if (_tableController.sectionNameKeyPath) {

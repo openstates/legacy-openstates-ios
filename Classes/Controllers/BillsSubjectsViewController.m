@@ -17,6 +17,8 @@
 #import "BillsViewController.h"
 #import "BillSearchParameters.h"
 #import "SLFBadgeCell.h"
+#import "MTInfoPanel.h"
+#import "SLFDrawingExtensions.h"
 
 @interface BillsSubjectsViewController()
 - (void)configureTableController;
@@ -70,7 +72,7 @@
     NSString *resourcePath = [BillSearchParameters pathForSubjectsWithState:newState chamber:chamber];
     [_tableController loadTableFromResourcePath:resourcePath usingBlock:^(RKObjectLoader* objectLoader) {
         objectLoader.URLRequest.timeoutInterval = 30;
-        objectLoader.cacheTimeoutInterval = SLF_HOURS_TO_SECONDS(12);
+        objectLoader.cacheTimeoutInterval = SLF_HOURS_TO_SECONDS(6);
         objectLoader.objectMapping = [BillsSubjectsEntry mapping];
     }];
 }
@@ -84,7 +86,13 @@
     _tableController.delegate = self;
     _tableController.objectManager = [RKObjectManager sharedManager];
     _tableController.pullToRefreshEnabled = YES;
-    
+    _tableController.imageForError = [UIImage imageNamed:@"error"];
+    CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
+    MTInfoPanel *offlinePanel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeError title:NSLocalizedString(@"Offline", @"") subtitle:NSLocalizedString(@"The server is unavailable.",@"") image:nil];
+    _tableController.imageForOffline = [UIImage imageFromView:offlinePanel];    
+    MTInfoPanel *panel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeActivity title:NSLocalizedString(@"Updating", @"") subtitle:NSLocalizedString(@"Downloading new data",@"") image:nil];
+    _tableController.loadingView = panel;
+
     __block __typeof__(self) bself = self;
     RKTableViewCellMapping *objCellMap = [RKTableViewCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         cellMapping.cellClass = [SLFBadgeCell class];
@@ -109,7 +117,7 @@
                 vc.title = [NSString stringWithFormat:@"%@ %@ Bills", bself.state.name, subject.name];
             else {
                 NSString *chamberName = [SLFChamber chamberWithType:chamber forState:bself.state].shortName;
-                vc.title = [NSString stringWithFormat:@"%@ %@ %@ Bills", [bself.state.stateID uppercaseString], chamberName, subject.name];
+                vc.title = [NSString stringWithFormat:@"%@ %@ %@ Bills", bself.state.stateIDForDisplay, chamberName, subject.name];
             }
             [bself stackOrPushViewController:vc];
             [vc release];

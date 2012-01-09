@@ -31,11 +31,6 @@
     [super dealloc];
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.title = [NSString stringWithFormat:@"%d Districts", self.tableController.rowCount];
-}
-
 - (void)configureTableController {
     [super configureTableController];
     self.tableController.autoRefreshRate = 36000;
