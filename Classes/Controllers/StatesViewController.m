@@ -58,7 +58,7 @@
     __block __typeof__(self) bself = self;
     SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"name" toAttribute:@"textLabel.text"];
-        [cellMapping mapKeyPath:@"stateID" toAttribute:@"detailTextLabel.text"];
+        [cellMapping mapKeyPath:@"stateIDForDisplay" toAttribute:@"detailTextLabel.text"];
         [cellMapping mapKeyPath:@"stateFlag" toAttribute:@"imageView.image"];
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             if (!object || ![object isKindOfClass:[SLFState class]])
@@ -70,19 +70,20 @@
         };
     }];
     [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];
-    RKTableItem *headerItem = [RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem){
-        tableItem.text = NSLocalizedString(@"choose a state to get started.", @"");
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
-            [cellMapping addDefaultMappings];
-            cellMapping.style = UITableViewCellStyleDefault;
-            cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-                cell.textLabel.textColor = [SLFAppearance cellSecondaryTextColor];
-                cell.textLabel.font = SLFItalicFont(14);
-                SLFAlternateCellForIndexPath(cell, indexPath);
-            };
-        }];
+    RKTableItem *tableItem = [RKTableItem tableItemWithText:NSLocalizedString(@"choose a state to get started.", @"")];
+    tableItem.cellMapping = [RKTableViewCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
+        [cellMapping mapKeyPath:@"text" toAttribute:@"textLabel.text"];
+        cellMapping.style = UITableViewCellStyleDefault;
+        cellMapping.selectionStyle = UITableViewCellSelectionStyleNone;
+        cellMapping.accessoryType = UITableViewCellAccessoryNone;
+        cellMapping.reuseIdentifier = @"DONT_REUSE_ME!";
+        cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
+            cell.textLabel.textColor = [SLFAppearance cellSecondaryTextColor];
+            cell.textLabel.font = SLFItalicFont(14);
+            SLFAlternateCellForIndexPath(cell, indexPath);
+        };
     }];
-    [self.tableController addHeaderRowForItem:headerItem];
+    [self.tableController addHeaderRowForItem:tableItem];
 }
 
 - (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
@@ -127,7 +128,8 @@ CGFloat const kTitleHeight = 30;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
-    cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    if (cell.imageView.image)
+        cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
     return cell;
 }
 

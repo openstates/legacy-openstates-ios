@@ -113,23 +113,6 @@
     [self configureNotifications];
 }
 
-- (RKTableSection *)createSectionWithTitle:(NSString *)title {
-    if (IsEmpty(title))
-        return nil;
-    RKTableSection *section = [_tableController sectionWithHeaderTitle:title];
-    if (!section) {
-        section = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
-            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:title width:300.f];
-            section.headerTitle = title;
-            section.headerHeight = TableSectionHeaderViewDefaultHeight;
-            section.headerView = headerView;
-            [headerView release];
-        }];
-        [_tableController addSection:section];
-    }
-    return section;
-}
-
 - (void)configureTableHeader {
     __block __typeof__(self) bself = self;
     RKTableSection *headerSection = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
@@ -144,7 +127,7 @@
         section.headerView = header;
         [header release];
     }];
-    [_tableController insertSection:headerSection atIndex:0];
+    [_tableController addSection:headerSection];
 }
 
 - (RKTableViewCellMapping *)eventTableCellMap {
@@ -182,7 +165,7 @@
             tableItem.text = NSLocalizedString(@"Ends At",@"");
         }]];
     }
-    [self createSectionWithTitle:NSLocalizedString(@"Event Details", @"")];
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Event Details", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
@@ -198,7 +181,7 @@
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Resource", @"") subtitle:subtitle url:source.url]];
     }
-    [self createSectionWithTitle:NSLocalizedString(@"Additional Info", @"")];
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Additional Info", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
@@ -251,7 +234,7 @@
                 [[UIApplication sharedApplication] openURL:subscriptionURL];
         };
     }]];
-    [self createSectionWithTitle:NSLocalizedString(@"Event Alerts", @"")];
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Event Alerts", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
@@ -268,7 +251,7 @@
 }
 
 - (void)configureParticipants {
-    [self createSectionWithTitle:NSLocalizedString(@"Participants", @"")];
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Participants", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadObjects:_event.participants.allObjects inSection:sectionIndex];    
 }

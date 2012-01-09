@@ -96,24 +96,6 @@
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(24)];
 }
 
-- (RKTableSection *)createSectionWithTitle:(NSString *)title {
-    if (IsEmpty(title))
-        return nil;
-    RKTableSection *section = [_tableController sectionWithHeaderTitle:title];
-    if (!section) {
-        section = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
-            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:title width:300.f];
-            section.headerTitle = title;
-            section.headerHeight = TableSectionHeaderViewDefaultHeight;
-            section.headerView = headerView;
-            [headerView release];
-        }];
-        [_tableController addSection:section];
-    }
-    return section;
-}
-
-
 - (void)configureTableItems {
     [_tableController removeAllSections:NO];
     [self configureTableHeader];
@@ -135,27 +117,12 @@
         header.legislator = bself.legislator;
         [header release];;
     }];
-    [_tableController insertSection:headerSection atIndex:0];
+    [_tableController addSection:headerSection];
 }
 
 - (void)configureMemberInfoItems {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     __block __typeof__(self) bself = self;
-    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.text = NSLocalizedString(@"Chamber", @"");
-        tableItem.detailText = bself.legislator.chamberObj.formalName;
-    }]];
-    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.text = [NSString stringWithFormat:@"%@ %@", bself.legislator.title, NSLocalizedString(@"Term", @"")];
-        tableItem.detailText = bself.legislator.term;
-    }]];
-    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.text = NSLocalizedString(@"Party", @"");
-        tableItem.detailText = bself.legislator.partyObj.name;
-    }]];
     if (!IsEmpty(_legislator.email)) {
         [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
             tableItem.cellMapping = [SubtitleCellMapping cellMapping];
@@ -166,12 +133,13 @@
             };
         }]];
     }
-    if (!IsEmpty(_legislator.url)) {
+    if (!IsEmpty(_legislator.url))
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Website", @"") subtitle:_legislator.url url:_legislator.url]];
+    if (!IsEmpty(tableItems)) {
+        SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Contact Details", @""));
+        NSUInteger sectionIndex = _tableController.sectionCount-1;
+        [_tableController loadTableItems:tableItems inSection:sectionIndex];
     }
-    [self createSectionWithTitle:NSLocalizedString(@"Member Details", @"")];
-    NSUInteger sectionIndex = _tableController.sectionCount-1;
-    [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
 }
 
@@ -179,21 +147,16 @@
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     __block __typeof__(self) bself = self;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.text = NSLocalizedString(@"District", @"");
-        tableItem.detailText = bself.legislator.district;
-    }]];
-    [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [SubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Map", @"");
-        tableItem.detailText = bself.legislator.districtMapLabel;
+        tableItem.text = bself.legislator.districtMapLabel;
         tableItem.cellMapping.onSelectCell = ^(void) {
             NSString *path = [SLFActionPathNavigator navigationPathForController:[DistrictDetailViewController class] withResourceID:bself.legislator.districtID];
             if (!IsEmpty(path))
                 [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
         };
     }]];
-    [self createSectionWithTitle:NSLocalizedString(@"District Map", @"")];
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"District Map", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
@@ -230,7 +193,7 @@
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Resource", @"") subtitle:subtitle url:source.url]];
     }
-    [self createSectionWithTitle:NSLocalizedString(@"Resources", @"")];
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Resources", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
@@ -251,7 +214,7 @@
             [vc release];
         };
     }]];
-    [self createSectionWithTitle:NSLocalizedString(@"Legislation", @"")];
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Legislation", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
@@ -259,7 +222,7 @@
 
 
 - (void)configureCommitteeItems {
-    [self createSectionWithTitle:NSLocalizedString(@"Committees", @"")];
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Committees", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadObjects:_legislator.sortedRoles inSection:sectionIndex];
 }

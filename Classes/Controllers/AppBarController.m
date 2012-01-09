@@ -66,6 +66,8 @@ const NSUInteger STACKED_NAVBAR_HEIGHT = 60;
     if (SLFIsIOS5OrGreater())
         [self addChildViewController:_stackedViewController];
     [self.view addSubview:_stackedViewController.view];
+    if (SLFIsIOS5OrGreater())
+        [_stackedViewController didMoveToParentViewController:self];
     self.navigationBar = nil;
     _navigationBar = [[StackedNavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, STACKED_NAVBAR_HEIGHT)];
     [self.view addSubview:_navigationBar];

@@ -923,7 +923,8 @@ enum {
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated; {
     PSSVLog(@"popping controller: %@ (#%d total, animated:%d)", [self topViewController], [self.viewControllers count], animated);
     
-    UIViewController *lastController = [self topViewController];
+    /* MYell0w 9841f98: Fixed a crash when there is no reference left to lastController. lastController gets deallocated as soon as it gets removed from viewControllers_ and a dangling pointer gets returned.*/
+    UIViewController *lastController = [[[self topViewController] retain] autorelease];
     if (lastController) {        
         [self delegateWillRemoveViewController:lastController];
         

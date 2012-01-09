@@ -100,23 +100,6 @@
     [self configureMemberItems];
 }
 
-- (RKTableSection *)createSectionWithTitle:(NSString *)title {
-    if (IsEmpty(title))
-        return nil;
-    RKTableSection *section = [_tableController sectionWithHeaderTitle:title];
-    if (!section) {
-        section = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
-            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:title width:300.f];
-            section.headerTitle = title;
-            section.headerHeight = TableSectionHeaderViewDefaultHeight;
-            section.headerView = headerView;
-            [headerView release];
-        }];
-        [_tableController addSection:section];
-    }
-    return section;
-}
-
 - (void)configureTableHeader {
     __block __typeof__(self) bself = self;
     RKTableSection *headerSection = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
@@ -131,7 +114,7 @@
         section.headerView = header;
         [header release];
     }];
-    [_tableController insertSection:headerSection atIndex:0];
+    [_tableController addSection:headerSection];
 }
 
 - (void)configureResourceItems {
@@ -144,7 +127,7 @@
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Site", @"") subtitle:subtitle url:source.url]];
     }
-    [self createSectionWithTitle:NSLocalizedString(@"Resources", @"")];
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Resources", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
@@ -153,7 +136,7 @@
 - (void)configureMemberItems {
     if (IsEmpty(_committee.members))
         return;
-    [self createSectionWithTitle:NSLocalizedString(@"Members", @"")];
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Members", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadObjects:_committee.sortedMembers inSection:sectionIndex];
 }

@@ -34,6 +34,7 @@
 - (RKTableViewCellMapping *)actionCellMap;
 - (RKTableViewCellMapping *)sponsorCellMap;
 - (RKTableViewCellMapping *)votesCellMap;
+- (RKTableViewCellMapping *)subjectCellMap;
 - (void)reconfigureForBill:(SLFBill *)bill;
 - (void)configureActionBarForBill:(SLFBill *)bill;
 - (UIButton *)configureWatchButton;
@@ -46,7 +47,6 @@
 - (void)configureVotes;
 - (void)configureSponsors;
 - (void)configureActions;
-- (void)addTableItems:(NSMutableArray *)tableItems fromWords:(NSSet *)words withType:(NSString *)type onSelectCell:(RKTableViewCellForObjectAtIndexPathBlock)onSelect;
 - (void)addTableItems:(NSMutableArray *)tableItems fromWebAssets:(NSSet *)assets withType:(NSString *)type;
 @end
 
@@ -105,7 +105,8 @@
     _tableController.pullToRefreshEnabled = NO;
     [_tableController mapObjectsWithClass:[BillRecordVote class] toTableCellsWithMapping:[self votesCellMap]];
     [_tableController mapObjectsWithClass:[BillAction class] toTableCellsWithMapping:[self actionCellMap]];
-    [_tableController mapObjectsWithClass:[BillSponsor class] toTableCellsWithMapping:[self sponsorCellMap]];    
+    [_tableController mapObjectsWithClass:[BillSponsor class] toTableCellsWithMapping:[self sponsorCellMap]];
+    [_tableController mapObjectsWithClass:[GenericWord class] toTableCellsWithMapping:[self subjectCellMap]];
     [self configureActionBarForBill:self.bill];
 	self.title = NSLocalizedString(@"Loading...", @"");
 }
@@ -173,23 +174,6 @@
 
 #pragma mark - Table Item Creation and Mapping
 
-- (RKTableSection *)createSectionWithTitle:(NSString *)title {
-    if (IsEmpty(title))
-        return nil;
-    RKTableSection *section = [_tableController sectionWithHeaderTitle:title];
-    if (!section) {
-        section = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
-            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:title width:300.f];
-            section.headerTitle = title;
-            section.headerHeight = TableSectionHeaderViewDefaultHeight;
-            section.headerView = headerView;
-            [headerView release];
-        }];
-        [_tableController addSection:section];
-    }
-    return section;
-}
-
 - (void)configureTableItems {
     [_tableController removeAllSections:NO];
     [self configureBillInfoItems];     
@@ -203,23 +187,23 @@
 
 - (void)configureBillInfoItems {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    __block __typeof__(self) bself = self;
+    __block SLFBill * aBill = self.bill;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [LargeStaticSubtitleCellMapping cellMapping];
-        tableItem.text = bself.bill.billID;
-        tableItem.detailText = bself.bill.title;
+        tableItem.text = aBill.billID;
+        tableItem.detailText = aBill.title;
     }]];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Originating Chamber", @"");
-        tableItem.detailText = bself.bill.chamberObj.formalName;
+        tableItem.detailText = aBill.chamberObj.formalName;
     }]];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
         tableItem.text = NSLocalizedString(@"Last Updated", @"");
-        tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Bill info was updated %@",@""), [bself.bill.dateUpdated stringForDisplayWithPrefix:YES]];
+        tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Bill info was updated %@",@""), [aBill.dateUpdated stringForDisplayWithPrefix:YES]];
     }]];
-    NSArray *sortedActions = _bill.sortedActions;
+    NSArray *sortedActions = aBill.sortedActions;
     if (!IsEmpty(sortedActions)) {
         [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
             tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
@@ -228,9 +212,9 @@
             tableItem.detailText = [NSString stringWithFormat:@"%@ - %@", latest.title, latest.subtitle];
         }]];
     }
-    [self createSectionWithTitle:NSLocalizedString(@"Bill Details",@"")];
+    SLFAddTableControllerSectionWithTitle(self.tableController, NSLocalizedString(@"Bill Details", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
-    [_tableController loadTableItems:tableItems inSection:sectionIndex];
+    [self.tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
 }
 
@@ -244,33 +228,19 @@
         tableItem.cellMapping = cellMap;
     }];
     NSArray *tableItems = [[NSArray alloc] initWithObjects:stageItemCell, nil];
-    [self createSectionWithTitle:NSLocalizedString(@"Legislative Status (Beta)",@"")];
-    NSUInteger sectionIndex = _tableController.sectionCount-1;
-    [_tableController loadTableItems:tableItems inSection:sectionIndex];
+    SLFAddTableControllerSectionWithTitle(self.tableController, NSLocalizedString(@"Legislative Status (Beta)",@""));
+    NSUInteger sectionIndex = self.tableController.sectionCount-1;
+    [self.tableController loadTableItems:tableItems inSection:sectionIndex];
     [tableItems release];
 }
 
 - (void)configureSubjects {
-    NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    __block __typeof__(self) bself = self;
-    RKTableViewCellForObjectAtIndexPathBlock onSelectBlock = ^(UITableViewCell *cell, id object, NSIndexPath *indexPath) {
-        if (!object || ![object isKindOfClass:[RKTableItem class]])
-            return;
-        RKTableItem *item = object;
-        NSString *word = item.text;
-        if (IsEmpty(word))
-            return;
-        NSString *subjectPath = [BillSearchParameters pathForSubject:word state:bself.bill.stateID session:bself.bill.session chamber:nil];
-        BillsViewController *vc = [[BillsViewController alloc] initWithState:bself.bill.stateObj resourcePath:subjectPath];
-        vc.title = [NSString stringWithFormat:@"%@: %@", [bself.bill.stateID uppercaseString], word];
-        [bself stackOrPushViewController:vc];
-        [vc release];
-    };
-    [self addTableItems:tableItems fromWords:_bill.subjects withType:nil onSelectCell:onSelectBlock];
-    [self createSectionWithTitle:NSLocalizedString(@"Subjects", @"")];
-    NSUInteger sectionIndex = _tableController.sectionCount-1;
-    [_tableController loadTableItems:tableItems inSection:sectionIndex];
-    [tableItems release];
+    NSArray *tableItems = _bill.sortedSubjects;
+    if (IsEmpty(tableItems))
+        return;
+    SLFAddTableControllerSectionWithTitle(self.tableController, NSLocalizedString(@"Subjects", @""));
+    NSUInteger sectionIndex = self.tableController.sectionCount-1;
+    [self.tableController loadObjects:tableItems inSection:sectionIndex];
 }
 
 - (void)configureResources {
@@ -278,31 +248,58 @@
     [self addTableItems:tableItems fromWebAssets:_bill.versions withType:NSLocalizedString(@"Version",@"")];
     [self addTableItems:tableItems fromWebAssets:_bill.documents withType:NSLocalizedString(@"Document",@"")];
     [self addTableItems:tableItems fromWebAssets:_bill.sources withType:NSLocalizedString(@"Resource",@"")];
-    [self createSectionWithTitle:NSLocalizedString(@"Resources", @"")];
-    NSUInteger sectionIndex = _tableController.sectionCount-1;
-    [_tableController loadTableItems:tableItems inSection:sectionIndex];
+    if (!IsEmpty(tableItems)) {
+        SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Resources", @""));
+        NSUInteger sectionIndex = _tableController.sectionCount-1;
+        [_tableController loadTableItems:tableItems inSection:sectionIndex];
+    }
     [tableItems release];
 }
 
 - (void)configureSponsors {
     NSArray *tableItems = _bill.sortedSponsors;
-    [self createSectionWithTitle:NSLocalizedString(@"Sponsors", @"")];
+    if (IsEmpty(tableItems))
+        return;
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Sponsors", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadObjects:tableItems inSection:sectionIndex];
 }
 
 - (void)configureVotes {
     NSArray *tableItems = _bill.sortedVotes;
-    [self createSectionWithTitle:NSLocalizedString(@"Votes", @"")];
+    if (IsEmpty(tableItems))
+        return;
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Votes", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadObjects:tableItems inSection:sectionIndex];
 }
 
 - (void)configureActions {
     NSArray *tableItems = _bill.sortedActions;
-    [self createSectionWithTitle:NSLocalizedString(@"Actions", @"")];
+    if (IsEmpty(tableItems))
+        return;
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Actions", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadObjects:tableItems inSection:sectionIndex];
+}
+
+- (RKTableViewCellMapping *)subjectCellMap {
+    RKTableViewCellMapping *cellMap = [AlternatingCellMapping cellMapping];
+    [cellMap mapKeyPath:@"word" toAttribute:@"textLabel.text"];
+    cellMap.style = UITableViewCellStyleDefault;
+    cellMap.reuseIdentifier = @"SUBJECT_CELL";
+    __block __typeof__(self) bself = self;
+    cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell *cell, id object, NSIndexPath *indexPath) {
+        if (!object || ![object valueForKey:@"word"])
+            return;
+        NSString *word = [object valueForKey:@"word"];
+        NSString *subjectPath = [BillSearchParameters pathForSubject:word state:bself.bill.stateID session:bself.bill.session chamber:nil];
+        BillsViewController *vc = [[BillsViewController alloc] initWithState:bself.bill.stateObj resourcePath:subjectPath];
+        vc.title = [NSString stringWithFormat:@"%@: %@", [bself.bill.stateID uppercaseString], word];
+        [bself stackOrPushViewController:vc];
+        [vc release];
+    };
+    return cellMap;
 }
 
 - (RKTableViewCellMapping *)actionCellMap {
@@ -353,27 +350,6 @@
         if (IsEmpty(subtitle))
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:type subtitle:subtitle url:source.url]];
-    }
-}
-
-- (void)addTableItems:(NSMutableArray *)tableItems fromWords:(NSSet *)words withType:(NSString *)type onSelectCell:(RKTableViewCellForObjectAtIndexPathBlock)onSelect {
-    if (IsEmpty(words))
-        return;
-    NSArray *sorted = [words sortedArrayUsingDescriptors:[GenericWord sortDescriptors]];
-    for (GenericWord *word in sorted) {
-        if (IsEmpty(word.word))
-            continue;
-        RKTableViewCellMapping *cellMapping = [SubtitleCellMapping cellMapping];
-        if (!onSelect)
-            cellMapping = [StaticSubtitleCellMapping cellMapping];
-        [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-            tableItem.cellMapping = cellMapping;
-            if (!IsEmpty(type))
-                tableItem.detailText = type;
-            tableItem.text = [word.word capitalizedString];
-            if (onSelect)
-                tableItem.cellMapping.onSelectCellForObjectAtIndexPath = onSelect;
-        }]];
     }
 }
 

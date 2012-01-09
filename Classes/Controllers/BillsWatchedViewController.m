@@ -76,8 +76,12 @@
     _tableController.tableView.rowHeight = 90;
     _tableController.canEditRows = YES;
     [_tableController mapObjectsWithClass:[SLFBill class] toTableCellsWithMapping:[self billCellMapping]];
-    [self configureTableItems];
+    RKTableItem *emptyItem = [RKTableItem tableItemWithText:NSLocalizedString(@"No Watched Bills",@"") detailText:NSLocalizedString(@"There are no watched bills, yet. To add one, find a bill and click it's star button.",@"")];
+    emptyItem.cellMapping = [LargeStaticSubtitleCellMapping cellMapping];
+    [emptyItem.cellMapping addDefaultMappings];
+    _tableController.emptyItem = emptyItem;
     [self configureEditingButtons];
+    [self configureTableItems];
 }
 
 - (NSString *)actionPath {
@@ -88,9 +92,6 @@
     self.editButton = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit", @"") orange:NO width:45 target:self action:@selector(toggleEditing:)] autorelease];
     self.doneButton = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"") orange:YES width:45 target:self action:@selector(toggleEditing:)] autorelease];
     [self.navigationItem setRightBarButtonItem:__editButton animated:YES];
-
-    if (_tableController.isEmpty)
-        [__editButton setEnabled:NO];
 }
 
 - (void)configureEditingButtonsIpad {
@@ -115,8 +116,6 @@
         [self configureEditingButtonsIpad];
     else
         [self configureEditingButtonsIphone];
-    if (_tableController.isEmpty)
-        [__editButton setEnabled:NO];
 }
 
 - (IBAction)toggleEditing:(id)sender {
@@ -154,14 +153,7 @@
         return;
     }
     if (!section) {
-        section = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
-            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:300.f];
-            section.headerTitle = headerTitle;
-            section.headerHeight = TableSectionHeaderViewDefaultHeight;
-            section.headerView = headerView;
-            [headerView release];
-        }];
-        [_tableController addSection:section];
+        section = SLFAddTableControllerSectionWithTitle(self.tableController, headerTitle);
     }
     [section setObjects:stateBills];
 }
@@ -170,8 +162,10 @@
     [self.tableController removeAllSections];
     NSArray *bills = [self actualBillsFromWatchedBills];
     if (IsEmpty(bills)) {
-        [MKInfoPanel showPanelInView:self.view type:MKInfoPanelTypeInfo title:NSLocalizedString(@"No Watched Bills",@"") subtitle:NSLocalizedString(@"There are no watched bills, yet. To add one, find a bill and click it's star button.",@"") hideAfter:5];
+        [self.tableController loadEmpty];
+        [self.tableView reloadData];
         self.title = NSLocalizedString(@"No Watched Bills", @"");
+        [self.editButton setEnabled:NO];
         return;
     }
     NSArray *states = [bills valueForKeyPath:@"stateID"];
@@ -179,6 +173,7 @@
     for (NSString *state in states)
         [self recreateSectionForStateID:state usingWatchedBillsOrNil:bills];
     self.title = [NSString stringWithFormat:NSLocalizedString(@"%d Watched Bills",@""), _tableController.rowCount];
+    [self.editButton setEnabled:YES];
     [self.tableView reloadData];
 }
 

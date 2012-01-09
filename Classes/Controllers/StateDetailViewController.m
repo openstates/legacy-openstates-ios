@@ -94,6 +94,18 @@
     [self configureTableItems];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if (self.state)
+        self.title = self.state.name;
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    if (self.state)
+        self.title = self.state.stateIDForDisplay;
+}
+
 - (void)configureTableController {
     self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
     _tableController.delegate = self;

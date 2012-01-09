@@ -45,6 +45,10 @@
     return initial;
 }
 
+- (NSString *)stateIDForDisplay {
+    return [self.stateID uppercaseString];
+}
+
 - (UIImage *)stateFlag {
     NSString *iconPath = [NSString stringWithFormat:@"StateFlags.bundle/%@", self.stateID];
     return [UIImage imageNamed:iconPath];

@@ -18,6 +18,7 @@
 
 BOOL SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath); // Returns YES if resulting in dark background
 UIBarButtonItem* SLFToolbarButton(UIImage *image, id target, SEL selector);
+RKTableSection* SLFAddTableControllerSectionWithTitle(RKTableController *controller, NSString *title);
 UILabel *SLFStyledHeaderLabelWithTextAtOrigin(NSString *text, CGPoint origin);
 NSArray* SLFBarStyleButtonImageGradientsWithSizeAndBaseColorRGB(CGSize imageSize, int red, int blue, int green);
 

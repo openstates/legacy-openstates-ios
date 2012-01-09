@@ -13,6 +13,24 @@
 #import "SLFTheme.h"
 #import "GradientBackgroundView.h"
 #import "SLFDrawingExtensions.h"
+#import "TableSectionHeaderView.h"
+
+RKTableSection* SLFAddTableControllerSectionWithTitle(RKTableController *controller, NSString *title) {
+    if (IsEmpty(title))
+        return nil;
+    RKTableSection *section = [controller sectionWithHeaderTitle:title];
+    if (!section) {
+        section = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
+            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:title width:300.f];
+            section.headerTitle = title;
+            section.headerHeight = TableSectionHeaderViewDefaultHeight;
+            section.headerView = headerView;
+            [headerView release];
+        }];
+        [controller addSection:section];
+    }
+    return section;
+}
 
 BOOL SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath) {
     BOOL useDark;
@@ -25,7 +43,6 @@ BOOL SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath
     cell.opaque = YES;
     return useDark;
 }
-
 
 UIBarButtonItem* SLFToolbarButton(UIImage *image, id target, SEL selector) {
     UIImage *normalImage = [image imageWithOverlayColor:[SLFAppearance tableBackgroundLightColor]];
