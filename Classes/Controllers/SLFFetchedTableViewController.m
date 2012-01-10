@@ -74,14 +74,11 @@
     _tableController.predicate = nil;
     RKTableItem *emptyItem = [RKTableItem tableItemWithText:NSLocalizedString(@"No Entries Found",@"") detailText:NSLocalizedString(@"There were no entries found. You may refresh the results by dragging down on the table.",@"")];
     emptyItem.cellMapping = [LargeStaticSubtitleCellMapping cellMapping];
-    [emptyItem.cellMapping addDefaultMappings];
-    
-    SLF_FIXME("RKFetchedResultsController.emptyItem is broken for now (at least in iOS 4?) need to figure it out why")
+    [emptyItem.cellMapping addDefaultMappings];    
     _tableController.emptyItem = emptyItem;
-    
     NSAssert(self.dataClass != NULL, @"Must set a data class before loading the view");
     [_tableController setObjectMappingForClass:__dataClass];
-    self.tableController.sortDescriptors = [self.dataClass sortDescriptors];
+    _tableController.sortDescriptors = [self.dataClass sortDescriptors];
 }
 
 - (void)viewDidLoad {
@@ -90,6 +87,10 @@
     NSAssert(self.resourcePath != NULL, @"Must set a resource path before attempting to download table data.");
     [self configureTableController];
     if (_tableController.sectionNameKeyPath) {
+        
+        SLF_FIXME("RKFetchedResultsController.emptyItem breaks tableView updates when sections are involved")
+        _tableController.emptyItem = nil; // don't use emptyItem with sections like this ... kills FRC tableView updates
+        
         _tableController.heightForHeaderInSection = 18;
         __block __typeof__(self) bself = self;
         _tableController.onViewForHeaderInSection = ^UIView*(NSUInteger sectionIndex, NSString* sectionTitle) {
