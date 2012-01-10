@@ -16,13 +16,13 @@
 @interface MTInfoPanel ()
 
 @property (nonatomic, assign) MTInfoPanelType panelType;
-@property (nonatomic, strong) UIColor *gradientStartColor;
-@property (nonatomic, strong) UIColor *gradientEndColor;
-@property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UILabel *detailLabel;
-@property (nonatomic, strong) UIImageView *thumbImage;
-@property (nonatomic, strong) UIView *backgroundGradient;
-@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, retain) UIColor *gradientStartColor;
+@property (nonatomic, retain) UIColor *gradientEndColor;
+@property (nonatomic, retain) UILabel *titleLabel;
+@property (nonatomic, retain) UILabel *detailLabel;
+@property (nonatomic, retain) UIImageView *thumbImage;
+@property (nonatomic, retain) UIView *backgroundGradient;
+@property (nonatomic, retain) UIActivityIndicatorView *activityIndicator;
 
 + (MTInfoPanel *)infoPanel;
 
@@ -50,6 +50,17 @@
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
 ////////////////////////////////////////////////////////////////////////
+
+- (void)dealloc {
+    self.gradientStartColor = nil;
+    self.gradientEndColor = nil;
+    self.titleLabel = nil;
+    self.detailLabel = nil;
+    self.thumbImage = nil;
+    self.backgroundGradient = nil;
+    self.activityIndicator = nil;
+    [super dealloc];
+}
 
 + (MTInfoPanel *)showPanelInView:(UIView *)view 
                             type:(MTInfoPanelType)type 
@@ -380,7 +391,7 @@
 	transition.subtype = kCATransitionFromBottom;
 	[panel.layer addAnimation:transition forKey:nil];
     
-    return panel;
+    return [panel autorelease];
 }
 
 - (void)setup {

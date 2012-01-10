@@ -211,6 +211,7 @@
 		9B96FBD914994575003935F9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
 				DSTROOT = /tmp/MTInfoPanel.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MTInfoPanel/MTInfoPanel-Prefix.pch";
@@ -223,6 +224,7 @@
 		9B96FBDA14994575003935F9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
 				DSTROOT = /tmp/MTInfoPanel.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MTInfoPanel/MTInfoPanel-Prefix.pch";
