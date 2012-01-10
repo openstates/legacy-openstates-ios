@@ -30,6 +30,8 @@
 		3714804A1432756800170716 /* AlternatingCellMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 371480491432756800170716 /* AlternatingCellMapping.m */; };
 		3714804E1432845E00170716 /* SubtitleCellMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 3714804D1432845E00170716 /* SubtitleCellMapping.m */; };
 		371591BF148AC5BA0039ECED /* WatchedBillNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 371591BE148AC5BA0039ECED /* WatchedBillNotificationManager.m */; };
+		37193F5514BCEA9E00C78262 /* MTInfoPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 37193F5214BCEA9E00C78262 /* MTInfoPanel.m */; };
+		37193F5814BCEB3400C78262 /* MTInfoPanel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 37193F5614BCEAAF00C78262 /* MTInfoPanel.bundle */; };
 		371AE697143581D500592811 /* GradientBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 371AE696143581D500592811 /* GradientBackgroundView.m */; };
 		371B5C6F143E7B2800AF317E /* SVWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 371B5C6D143E7B2800AF317E /* SVWebViewController.m */; };
 		372D2AF714285FDD00ADE84E /* CommitteeRole.m in Sources */ = {isa = PBXBuildFile; fileRef = 372D2AF614285FDD00ADE84E /* CommitteeRole.m */; };
@@ -244,7 +246,6 @@
 		37BB3BB7143A44DC00DCB1FB /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BB3BB5143A44DC00DCB1FB /* placeholder.png */; };
 		37BB3BB8143A44DC00DCB1FB /* placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BB3BB6143A44DC00DCB1FB /* placeholder@2x.png */; };
 		37BB3BBD143A5FCC00DCB1FB /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 37BB3BBC143A5FCB00DCB1FB /* libz.dylib */; };
-		37CD834B14BB6A21000CF857 /* libMTInfoPanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37CD834714BB6910000CF857 /* libMTInfoPanel.a */; };
 		37CD835014BB839A000CF857 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 37CD834E14BB839A000CF857 /* blueArrow.png */; };
 		37CD835114BB839A000CF857 /* blueArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37CD834F14BB839A000CF857 /* blueArrow@2x.png */; };
 		37CFB4D2144B980F00E8120D /* NSInvocation+CWVariableArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4CF144B980F00E8120D /* NSInvocation+CWVariableArguments.m */; };
@@ -361,20 +362,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 20808DBD13DE8CDC000A156A;
 			remoteInfo = "RestKitJSONParser+NXJSON";
-		};
-		37CD834614BB6910000CF857 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 37CD833F14BB690F000CF857 /* MTInfoPanel.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 9B96FBCB14994575003935F9;
-			remoteInfo = MTInfoPanel;
-		};
-		37CD834914BB69F8000CF857 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 37CD833F14BB690F000CF857 /* MTInfoPanel.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 9B96FBCA14994575003935F9;
-			remoteInfo = MTInfoPanel;
 		};
 		37E961B313E544380064B1D3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -496,6 +483,9 @@
 		3714804D1432845E00170716 /* SubtitleCellMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubtitleCellMapping.m; sourceTree = "<group>"; };
 		371591BD148AC5BA0039ECED /* WatchedBillNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WatchedBillNotificationManager.h; sourceTree = "<group>"; };
 		371591BE148AC5BA0039ECED /* WatchedBillNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchedBillNotificationManager.m; sourceTree = "<group>"; };
+		37193F5114BCEA9E00C78262 /* MTInfoPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTInfoPanel.h; sourceTree = "<group>"; };
+		37193F5214BCEA9E00C78262 /* MTInfoPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTInfoPanel.m; sourceTree = "<group>"; };
+		37193F5614BCEAAF00C78262 /* MTInfoPanel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = MTInfoPanel.bundle; path = ../Resources/MTInfoPanel.bundle; sourceTree = "<group>"; };
 		371AE695143581D500592811 /* GradientBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GradientBackgroundView.h; sourceTree = "<group>"; };
 		371AE696143581D500592811 /* GradientBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GradientBackgroundView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		371B5C6C143E7B2800AF317E /* SVWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVWebViewController.h; sourceTree = "<group>"; };
@@ -807,7 +797,6 @@
 		37BB3BB5143A44DC00DCB1FB /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		37BB3BB6143A44DC00DCB1FB /* placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "placeholder@2x.png"; sourceTree = "<group>"; };
 		37BB3BBC143A5FCB00DCB1FB /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		37CD833F14BB690F000CF857 /* MTInfoPanel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MTInfoPanel.xcodeproj; path = Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel.xcodeproj; sourceTree = SOURCE_ROOT; };
 		37CD834E14BB839A000CF857 /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blueArrow.png; path = Vendor/RestKit/Vendor/EGOTableViewPullRefresh/EGOTableViewPullRefresh/Resources/blueArrow.png; sourceTree = SOURCE_ROOT; };
 		37CD834F14BB839A000CF857 /* blueArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "blueArrow@2x.png"; path = "Vendor/RestKit/Vendor/EGOTableViewPullRefresh/EGOTableViewPullRefresh/Resources/blueArrow@2x.png"; sourceTree = SOURCE_ROOT; };
 		37CFB4CE144B980F00E8120D /* NSInvocation+CWVariableArguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+CWVariableArguments.h"; sourceTree = "<group>"; };
@@ -928,7 +917,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				37CD834B14BB6A21000CF857 /* libMTInfoPanel.a in Frameworks */,
 				37A33E9F149D690000D821CD /* EventKit.framework in Frameworks */,
 				37A33EA0149D690000D821CD /* EventKitUI.framework in Frameworks */,
 				3711871114462D1900A12B8B /* AddressBook.framework in Frameworks */,
@@ -1134,6 +1122,17 @@
 				37CD834F14BB839A000CF857 /* blueArrow@2x.png */,
 			);
 			path = Assets;
+			sourceTree = "<group>";
+		};
+		37193F5014BCEA9E00C78262 /* MTInfoPanel */ = {
+			isa = PBXGroup;
+			children = (
+				37193F5114BCEA9E00C78262 /* MTInfoPanel.h */,
+				37193F5214BCEA9E00C78262 /* MTInfoPanel.m */,
+				37193F5614BCEAAF00C78262 /* MTInfoPanel.bundle */,
+			);
+			name = MTInfoPanel;
+			path = Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel;
 			sourceTree = "<group>";
 		};
 		371B5C6A143E7B2800AF317E /* SVWebViewController */ = {
@@ -1433,6 +1432,7 @@
 		377CB425142EFD4600AFF4BC /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				37193F5014BCEA9E00C78262 /* MTInfoPanel */,
 				3756942914ABC3180014BA7F /* SDURLCache */,
 				37CD82E314BB5539000CF857 /* MTInfoPanel */,
 				37A16CF7148C128B000A3C91 /* GoogleAnalytics */,
@@ -1675,18 +1675,9 @@
 		37CD82E314BB5539000CF857 /* MTInfoPanel */ = {
 			isa = PBXGroup;
 			children = (
-				37CD833F14BB690F000CF857 /* MTInfoPanel.xcodeproj */,
 			);
 			name = MTInfoPanel;
 			path = Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel;
-			sourceTree = "<group>";
-		};
-		37CD834014BB690F000CF857 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				37CD834714BB6910000CF857 /* libMTInfoPanel.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		37CFB4CD144B980F00E8120D /* Categories */ = {
@@ -1900,7 +1891,6 @@
 			dependencies = (
 				37E961E513E5448F0064B1D3 /* PBXTargetDependency */,
 				372D2B0014286D4100ADE84E /* PBXTargetDependency */,
-				37CD834A14BB69F8000CF857 /* PBXTargetDependency */,
 			);
 			name = OpenStates;
 			productName = StatesLege;
@@ -1950,10 +1940,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 37CD834014BB690F000CF857 /* Products */;
-					ProjectRef = 37CD833F14BB690F000CF857 /* MTInfoPanel.xcodeproj */;
-				},
-				{
 					ProductGroup = 37E961A613E544380064B1D3 /* Products */;
 					ProjectRef = 2538E7FF123417E500ACB5D7 /* RestKit.xcodeproj */;
 				},
@@ -1986,13 +1972,6 @@
 			fileType = archive.ar;
 			path = libRestKitJSONParserNXJSON.a;
 			remoteRef = 37B4540113E659FD00083F5F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		37CD834714BB6910000CF857 /* libMTInfoPanel.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libMTInfoPanel.a;
-			remoteRef = 37CD834614BB6910000CF857 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		37E961B413E544380064B1D3 /* libRestKitNetwork.a */ = {
@@ -2189,6 +2168,7 @@
 				3756945214AC0FA20014BA7F /* SubjectCounts.json in Resources */,
 				37CD835014BB839A000CF857 /* blueArrow.png in Resources */,
 				37CD835114BB839A000CF857 /* blueArrow@2x.png in Resources */,
+				37193F5814BCEB3400C78262 /* MTInfoPanel.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2385,6 +2365,7 @@
 				375694AF14ACEC4E0014BA7F /* AppBarController.m in Sources */,
 				378337D414AD26A10077010E /* AppendingFlowCell.m in Sources */,
 				3772624F14B507F500F8D3A6 /* AssetsViewController.m in Sources */,
+				37193F5514BCEA9E00C78262 /* MTInfoPanel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2418,11 +2399,6 @@
 			isa = PBXTargetDependency;
 			name = RestKit;
 			targetProxy = 372E58C814157A64000652B1 /* PBXContainerItemProxy */;
-		};
-		37CD834A14BB69F8000CF857 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = MTInfoPanel;
-			targetProxy = 37CD834914BB69F8000CF857 /* PBXContainerItemProxy */;
 		};
 		37E961E513E5448F0064B1D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2563,7 +2539,7 @@
 					armv7,
 				);
 				BUILD_STYLE = Release;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Gregory Combs";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2578,7 +2554,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EC8A6B63-76BF-4738-B179-2BC912A17A1E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 			};
 			name = AdHoc;
@@ -2644,7 +2620,7 @@
 					armv7,
 				);
 				BUILD_STYLE = Release;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Gregory Combs";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2658,7 +2634,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EC8A6B63-76BF-4738-B179-2BC912A17A1E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 			};
 			name = Distribution;
