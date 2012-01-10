@@ -34,3 +34,6 @@ BOOL IsEmpty(NSObject * thing);
 #define SLFRunBlockAfterDelay(block,delay) dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*delay), dispatch_get_current_queue(), block);
 #define SLFRunBlockInNextRunLoop(block) [[NSOperationQueue mainQueue] addOperationWithBlock: block ];
 #define SLFIsIOS5OrGreater() ( [[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0f )
+#define DO_PRAGMA(x) _Pragma (#x)
+#define SLF_TODO(x) DO_PRAGMA(message ("TODO - " #x))
+#define SLF_FIXME(x) DO_PRAGMA(message ("FIXME - " #x))

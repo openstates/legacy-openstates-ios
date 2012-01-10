@@ -130,9 +130,7 @@
 }
 
 // FOR BILLS ============================
-// TODO: Need a way to accurately search current session when search_window is just "session"
-// TODO: Subject Counts Cache?
-//     /subject_counts/tx/821/upper/?apikey=REDACTED
+SLF_TODO("Need a way to accurately search current session when search_window is just 'session'")
 
 - (NSFetchRequest*)fetchRequestBillsForResourcePath:(NSString*)resourcePath {
 
