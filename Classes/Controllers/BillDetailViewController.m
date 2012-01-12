@@ -20,7 +20,6 @@
 #import "SLFRestKitManager.h"
 #import "SVWebViewController.h"
 #import "SLFReachable.h"
-#import "TableSectionHeaderView.h"
 #import "NSDate+SLFDateHelper.h"
 #import "LegislatorCell.h"
 #import "SLFDrawingExtensions.h"

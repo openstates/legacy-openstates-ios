@@ -66,14 +66,15 @@ enum SECTIONS {
     _tableController.variableHeightRows = YES;
     _tableController.objectManager = [RKObjectManager sharedManager];
     _tableController.pullToRefreshEnabled = NO;
+    CGFloat headerHeight = [TableSectionHeaderView heightForTableViewStyle:self.tableViewStyle];
     NSInteger sectionIndex;
     __block __typeof__(self) bself = self;
-    for (sectionIndex = SectionSearchInfo;sectionIndex < kNumSections; sectionIndex++) {
+   for (sectionIndex = SectionSearchInfo;sectionIndex < kNumSections; sectionIndex++) {
         [_tableController addSectionUsingBlock:^(RKTableSection *section) {
             NSString *headerTitle = [bself headerForSectionIndex:sectionIndex];
-            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:bself.tableView.width];
+            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:bself.tableView.width style:bself.tableViewStyle];
             section.headerTitle = headerTitle;
-            section.headerHeight = TableSectionHeaderViewDefaultHeight;
+            section.headerHeight = headerHeight;
             section.headerView = headerView;
             [headerView release];
         }];

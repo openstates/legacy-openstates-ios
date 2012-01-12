@@ -20,13 +20,13 @@ RKTableSection* SLFAddTableControllerSectionWithTitle(RKTableController *control
         return nil;
     RKTableSection *section = [controller sectionWithHeaderTitle:title];
     if (!section) {
-        section = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
-            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:title width:300.f];
-            section.headerTitle = title;
-            section.headerHeight = TableSectionHeaderViewDefaultHeight;
-            section.headerView = headerView;
-            [headerView release];
-        }];
+        UITableViewStyle style = controller.tableView.style;
+        section = [RKTableSection section];
+        section.headerTitle = title;
+        section.headerHeight = [TableSectionHeaderView heightForTableViewStyle:style];
+        TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:title width:300.f style:style];
+        section.headerView = headerView;
+        [headerView release];
         [controller addSection:section];
     }
     return section;
@@ -53,26 +53,6 @@ UIBarButtonItem* SLFToolbarButton(UIImage *image, id target, SEL selector) {
     [button setImage:selectedImage forState:UIControlStateHighlighted];
     [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];    
     return [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
-}
-
-UILabel *SLFStyledHeaderLabelWithTextAtOrigin(NSString *text, CGPoint origin){
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-    static UIFont *defaultTextFont;
-    if (!defaultTextFont)
-        defaultTextFont = [SLFTitleFont(13) retain];
-    label.font = defaultTextFont;
-    label.text = text;
-    label.textAlignment = UITextAlignmentRight;
-    label.numberOfLines = 2;
-    label.textColor = [[UIColor darkTextColor] colorWithAlphaComponent:0.9];
-    label.shadowColor = [[UIColor lightTextColor] colorWithAlphaComponent:0.7];
-    label.shadowOffset = CGSizeMake(-1, 1);
-    label.opaque = NO;
-    label.backgroundColor = [UIColor clearColor];
-    [label sizeToFit];
-    CGSize labelSize = label.frame.size;
-    label.frame = CGRectMake(origin.x, origin.y, labelSize.width, labelSize.height);
-    return [label autorelease];
 }
 
 // ex: red = 145, blue = 144, green = 130

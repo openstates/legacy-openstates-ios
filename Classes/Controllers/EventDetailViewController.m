@@ -17,7 +17,6 @@
 #import "SLFRestKitManager.h"
 #import "SLFReachable.h"
 #import "SVWebViewController.h"
-#import "TableSectionHeaderView.h"
 #import "NSDate+SLFDateHelper.h"
 #import "SLFEventsManager.h"
 #import "GenericDetailHeader.h"

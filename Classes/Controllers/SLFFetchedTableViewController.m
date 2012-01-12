@@ -16,6 +16,7 @@
 #import "NSString+SLFExtensions.h"
 #import "MTInfoPanel.h"
 #import "SLFDrawingExtensions.h"
+#import "TableSectionHeaderView.h"
 
 @interface SLFFetchedTableViewController()
 - (NSString *)chamberFilterForScopeIndex:(NSInteger )scopeIndex;
@@ -65,7 +66,7 @@
     _tableController.autoRefreshFromNetwork = YES;
     _tableController.autoRefreshRate = 360;
     _tableController.pullToRefreshEnabled = YES;
-    _tableController.imageForError = [UIImage imageNamed:@"error"];
+        //_tableController.imageForError = [UIImage imageNamed:@"error"];
     CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
     MTInfoPanel *offlinePanel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeError title:NSLocalizedString(@"Offline", @"") subtitle:NSLocalizedString(@"The server is unavailable.",@"") image:nil];
     _tableController.imageForOffline = [UIImage imageFromView:offlinePanel];    
@@ -91,19 +92,11 @@
         SLF_FIXME("RKFetchedResultsController.emptyItem breaks tableView updates when sections are involved")
         _tableController.emptyItem = nil; // don't use emptyItem with sections like this ... kills FRC tableView updates
         
-        _tableController.heightForHeaderInSection = 18;
+        UITableViewStyle style = self.tableViewStyle;
+        _tableController.heightForHeaderInSection = [TableSectionHeaderView heightForTableViewStyle:style];
         __block __typeof__(self) bself = self;
         _tableController.onViewForHeaderInSection = ^UIView*(NSUInteger sectionIndex, NSString* sectionTitle) {
-            UIColor *sectionColor =  SLFColorWithRGB(207,208,194);
-            UIView *sectionView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, bself.tableView.bounds.size.width, 18)] autorelease];
-            sectionView.backgroundColor = sectionColor;
-            UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, bself.tableView.bounds.size.width-10, 18)];
-            label.backgroundColor = sectionColor;
-            label.text = [sectionTitle capitalizedString];
-            label.textColor = [UIColor whiteColor];
-            label.font = SLFFont(12);
-            [sectionView addSubview:label];
-            [label release];
+            TableSectionHeaderView *sectionView = [[[TableSectionHeaderView alloc] initWithTitle:[sectionTitle capitalizedString] width:CGRectGetWidth(bself.tableView.bounds) style:style] autorelease];
             return sectionView;
         };   
     }

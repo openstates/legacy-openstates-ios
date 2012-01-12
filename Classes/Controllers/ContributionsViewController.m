@@ -125,7 +125,7 @@
 #pragma mark Table view delegate
 
 - (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section {
-    return TableSectionHeaderViewDefaultHeight;
+    return [TableSectionHeaderView heightForTableViewStyle:self.tableViewStyle];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -134,7 +134,7 @@
     NSString *headerTitle = [self.dataSource tableView:tableView titleForHeaderInSection:section];
     if (IsEmpty(headerTitle))
         return nil;
-    return [[[TableSectionHeaderView alloc] initWithTitle:headerTitle width:tableView.frame.size.width] autorelease];
+    return [[[TableSectionHeaderView alloc] initWithTitle:headerTitle width:tableView.frame.size.width style:self.tableViewStyle] autorelease];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

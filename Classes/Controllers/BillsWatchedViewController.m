@@ -15,7 +15,6 @@
 #import "BillDetailViewController.h"
 #import "SLFPersistenceManager.h"
 #import "SLFRestKitManager.h"
-#import "TableSectionHeaderView.h"
 #import "NSDate+SLFDateHelper.h"
 #import "SLFDrawingExtensions.h"
 

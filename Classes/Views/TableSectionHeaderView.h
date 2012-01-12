@@ -12,10 +12,10 @@
 
 @interface TableSectionHeaderView : UIView
 @property (nonatomic,retain) IBOutlet UILabel *titleLabel;
-- (TableSectionHeaderView*)initWithTitle:(NSString *)title width:(CGFloat)width;
-- (id)initWithFrame:(CGRect)frame offset:(CGFloat)offset;
-- (void)setTitle:(NSString *)title;
-@end
+@property (nonatomic,assign) UITableViewStyle style;
 
-extern CGFloat const TableSectionHeaderViewDefaultHeight;
-extern CGFloat const TableSectionHeaderViewDefaultOffset;
+- (TableSectionHeaderView*)initWithTitle:(NSString *)title width:(CGFloat)width style:(UITableViewStyle)style;
+- (TableSectionHeaderView*)initWithFrame:(CGRect)frame style:(UITableViewStyle)style;
+- (void)setTitle:(NSString *)title;
++ (CGFloat)heightForTableViewStyle:(UITableViewStyle)style;
+@end

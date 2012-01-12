@@ -70,13 +70,14 @@ enum SECTIONS {
     _tableController.pullToRefreshEnabled = NO;
     [_tableController mapObjectsWithClass:[BillVoter class] toTableCellsWithMapping:[self voterCellMap]];
     NSInteger sectionIndex;
+    CGFloat headerHeight = [TableSectionHeaderView heightForTableViewStyle:self.tableViewStyle];
     __block __typeof__(self) bself = self;
     for (sectionIndex = SectionVoteInfo;sectionIndex < kNumSections; sectionIndex++) {
         [_tableController addSectionUsingBlock:^(RKTableSection *section) {
             NSString *headerTitle = [bself headerForSectionIndex:sectionIndex];
-            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:bself.tableView.width];
+            TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:bself.tableView.width style:bself.tableViewStyle];
             section.headerTitle = headerTitle;
-            section.headerHeight = TableSectionHeaderViewDefaultHeight;
+            section.headerHeight = headerHeight;
             section.headerView = headerView;
             [headerView release];
         }];

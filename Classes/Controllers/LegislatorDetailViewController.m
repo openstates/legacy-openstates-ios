@@ -23,7 +23,6 @@
 #import "SVWebViewController.h"
 #import "SLFReachable.h"
 #import "ContributionsViewController.h"
-#import "TableSectionHeaderView.h"
 #import "LegislatorDetailHeader.h"
 #import "SLFEmailComposer.h"
 

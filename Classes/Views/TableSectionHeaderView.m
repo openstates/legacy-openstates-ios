@@ -13,64 +13,51 @@
 #import "TableSectionHeaderView.h"
 #import "SLFTheme.h"
 
-CGFloat const TableSectionHeaderViewDefaultHeight = 26;
-CGFloat const TableSectionHeaderViewDefaultOffset = 20;
-
 @interface TableSectionHeaderView()
+@property (nonatomic,readonly) CGFloat offset;
 @end
 
 @implementation TableSectionHeaderView
 @synthesize titleLabel=__titleLabel;
+@synthesize style = _style;
 
-- (TableSectionHeaderView*)initWithTitle:(NSString *)title width:(CGFloat)width {
-    self = [self initWithFrame:CGRectMake(0, 0, width, TableSectionHeaderViewDefaultHeight) offset:TableSectionHeaderViewDefaultOffset];
+- (TableSectionHeaderView*)initWithFrame:(CGRect)frame style:(UITableViewStyle)style {
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.style = style;
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.autoresizesSubviews = YES;
+        __titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.offset, 0, frame.size.width-self.offset, frame.size.height)];
+        __titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        [self addSubview:__titleLabel];
+        
+        if (style == UITableViewStyleGrouped) {
+            self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+            self.backgroundColor = [UIColor clearColor];
+            __titleLabel.shadowOffset = CGSizeMake(0, 1);
+            __titleLabel.shadowColor = [[UIColor whiteColor] colorWithAlphaComponent:.7];
+            __titleLabel.backgroundColor = [UIColor clearColor];
+            __titleLabel.textColor = [SLFAppearance tableSectionColor];
+            __titleLabel.font = SLFFont(15);
+        }
+        else {
+            self.backgroundColor = SLFColorWithRGB(207,208,194);
+            __titleLabel.backgroundColor = self.backgroundColor;
+            __titleLabel.textColor = [UIColor whiteColor];
+            __titleLabel.font = SLFFont(12);
+        }
+        [self setNeedsLayout];
+    }
+    return self;
+}
+
+- (TableSectionHeaderView*)initWithTitle:(NSString *)title width:(CGFloat)width style:(UITableViewStyle)style {
+    CGFloat height = [TableSectionHeaderView heightForTableViewStyle:style];
+    self = [self initWithFrame:CGRectMake(0, 0, width, height) style:style];
     if (self) {
         [self setTitle:title];
     }
     return self;
-}
-
-- (id)initWithFrame:(CGRect)frame offset:(CGFloat)offset
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-
-        CGRect labelRect = CGRectMake(offset, 0, frame.size.width-(offset*.5), frame.size.height);
-        __titleLabel = [[UILabel alloc] initWithFrame:labelRect];
-        __titleLabel.textColor = [SLFAppearance tableSectionColor];
-        __titleLabel.shadowOffset = CGSizeMake(0, 1);
-        __titleLabel.shadowColor = [[UIColor whiteColor] colorWithAlphaComponent:.7];
-        __titleLabel.backgroundColor = [UIColor clearColor];
-        __titleLabel.font = SLFFont(15);
-        __titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        self.backgroundColor = [UIColor clearColor];
-        self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.autoresizesSubviews = YES;
-        [self addSubview:__titleLabel];
-        [self setNeedsLayout];
-        /*
-         self.tableController.heightForHeaderInSection = 22;
-         self.tableController.onViewForHeaderInSection = ^UIView*(NSUInteger sectionIndex, NSString* sectionTitle) {
-         UIView* headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, 22)] autorelease];
-         headerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"sectionheader_bg.png"]];
-         UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, self.tableView.bounds.size.width, 22)];
-         label.text = sectionTitle;
-         label.textColor = [UIColor whiteColor];
-         label.backgroundColor = [UIColor clearColor];
-         label.font = [UIFont boldSystemFontOfSize:12];        
-         [headerView addSubview:label];
-         [label release];
-         return headerView;
-         };*/
-
-    }
-    return self;
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    self.titleLabel.origin = CGPointMake(TableSectionHeaderViewDefaultOffset, 0);
 }
 
 - (void)dealloc {
@@ -78,10 +65,27 @@ CGFloat const TableSectionHeaderViewDefaultOffset = 20;
     [super dealloc];
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.titleLabel.origin = CGPointMake(self.offset, 0);
+}
+
 - (void)setTitle:(NSString *)title {
     self.titleLabel.text = title;
     [self.titleLabel sizeToFit];
     [self setNeedsLayout];
+}
+
++ (CGFloat)heightForTableViewStyle:(UITableViewStyle)style {
+    if (style == UITableViewStyleGrouped)
+        return 26.f;
+    return 18.f;
+}
+
+- (CGFloat)offset {
+    if (self.style == UITableViewStyleGrouped)
+        return 20.f;
+    return 10.f;
 }
 
 @end

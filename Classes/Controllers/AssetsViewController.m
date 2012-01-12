@@ -12,7 +12,6 @@
 
 #import "AssetsViewController.h"
 #import "SLFDataModels.h"
-#import "TableSectionHeaderView.h"
 #import "NSString+SLFExtensions.h"
 #import "SLFReachable.h"
 #import "SVWebViewController.h"
