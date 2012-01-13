@@ -338,6 +338,13 @@
 			remoteGlobalIDString = 255B7588133BABBF00ED76AD;
 			remoteInfo = RestKit;
 		};
+		373B842914C0E1B000ED7959 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2538E7FF123417E500ACB5D7 /* RestKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 258F877014117837007AABCD;
+			remoteInfo = RestKitResources;
+		};
 		379747DE1427956000304FD1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2538E7FF123417E500ACB5D7 /* RestKit.xcodeproj */;
@@ -1892,6 +1899,7 @@
 			);
 			dependencies = (
 				37E961E513E5448F0064B1D3 /* PBXTargetDependency */,
+				373B842A14C0E1B000ED7959 /* PBXTargetDependency */,
 			);
 			name = OpenStates;
 			productName = StatesLege;
@@ -2399,6 +2407,11 @@
 			name = RestKit;
 			targetProxy = 372E58C814157A64000652B1 /* PBXContainerItemProxy */;
 		};
+		373B842A14C0E1B000ED7959 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RestKitResources;
+			targetProxy = 373B842914C0E1B000ED7959 /* PBXContainerItemProxy */;
+		};
 		37E961E513E5448F0064B1D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = RestKit;
@@ -2713,7 +2726,7 @@
 					Vendor/RestKit/Build,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9DCAEB38-D98A-4402-B628-E1AE362BC6A4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4FBA2A05-4D25-4C07-A4F2-5EF2AE91453F";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
