@@ -72,12 +72,20 @@
 }
 
 - (NSString *)title {
-    return [NSString stringWithFormat:@"%@ %@ %@ %@", self.state.name, self.chamberObj.shortName, @"District", self.name];
+    NSString *chamberName = self.chamberObj.shortName;
+    if (!chamberName)
+        chamberName = [self.chamber capitalizedString];
+    NSString *stateName = self.state.name;
+    if (!stateName)
+        stateName = [self.stateID uppercaseString];
+    return [NSString stringWithFormat:@"%@ %@ %@ %@", self.state.name, chamberName, @"District", self.name];
 }
 
 - (NSString *)subtitle {
     NSMutableString * memberNames = [NSMutableString string];
     NSString *chamberName = self.chamberObj.shortName;
+    if (!chamberName)
+        chamberName = [self.chamber capitalizedString];
     NSInteger index = 0;
     for (SLFLegislator *leg in self.legislators) {
         NSString *legName = [NSString stringWithFormat:@"%@ %@ (%@)", chamberName, leg.fullName, leg.partyObj.initial];        
