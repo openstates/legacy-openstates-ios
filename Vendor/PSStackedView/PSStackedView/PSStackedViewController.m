@@ -1381,6 +1381,7 @@ enum {
 // event relay
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration; {
     //lastVisibleIndexBeforeRotation_ = self.lastVisibleIndex;
+    
     [rootViewController_ willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     
     for (UIViewController *controller in self.viewControllers) {

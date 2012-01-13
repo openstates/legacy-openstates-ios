@@ -85,6 +85,13 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
     [[TitleBarView appearance] setTitleFont:SLFTitleFont(14)];
     [[TitleBarView appearance] setTitleColor:[self navBarTextColor]];
     [[TitleBarView appearance] setStrokeTopColor:gradientTop];
+    [[RKRefreshTriggerView appearance] setTitleFont:SLFTitleFont(13)];
+    [[RKRefreshTriggerView appearance] setTitleColor:[self cellTextColor]];
+    [[RKRefreshTriggerView appearance] setLastUpdatedFont:SLFFont(11)];
+    [[RKRefreshTriggerView appearance] setLastUpdatedColor:[self cellSecondaryTextColor]];
+    [[RKRefreshTriggerView appearance] setArrowImage:[UIImage imageNamed:@"grayArrow"]];
+    [[RKRefreshTriggerView appearance] setRefreshBackgroundColor:[self tableBackgroundLightColor]];
+
 }
 
 #else

@@ -96,7 +96,7 @@ static NSString* const RKManagedObjectStoreThreadDictionaryEntityCacheKey = @"RK
             [allManagedObjectModels addObject:rkCoreDataLibraryMOM];
             [rkCoreDataLibraryMOM release];
         } else {
-            RKLogWarning(@"Unable to find RestKitCoreData.momd within the RestKitCoreDataBundle.bundle");
+            RKLogWarning(@"Unable to find RestKitCoreData.momd within the RestKitResources.bundle");
         }
 
 		_managedObjectModel = [[NSManagedObjectModel modelByMergingModels:allManagedObjectModels] retain];

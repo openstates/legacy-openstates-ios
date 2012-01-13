@@ -97,7 +97,7 @@ CGFloat const kMultiRowCalloutCellGap = 3;
 - (void)dealloc {
     self.calloutCells = nil;
     self.titleLabel = nil;
-    Block_release(_onCalloutAccessoryTapped);
+    self.onCalloutAccessoryTapped = nil;
     self.parentAnnotationView = nil;
     self.mapView = nil;
     if (_contentView) {
@@ -173,7 +173,8 @@ CGFloat const kMultiRowCalloutCellGap = 3;
         _onCalloutAccessoryTapped = nil;
     }
     _onCalloutAccessoryTapped = Block_copy(onCalloutAccessoryTapped);
-    [self copyAccessoryTappedBlockToCalloutCells];
+    if (onCalloutAccessoryTapped)
+        [self copyAccessoryTappedBlockToCalloutCells];
 }
 
 - (void)copyAccessoryTappedBlockToCalloutCells {

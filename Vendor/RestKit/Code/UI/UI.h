@@ -28,5 +28,5 @@
 #import "RKFetchedResultsTableController.h"
 #import "RKForm.h"
 #import "RKFormSection.h"
-
+#import "RKRefreshTriggerView.h"
 #endif

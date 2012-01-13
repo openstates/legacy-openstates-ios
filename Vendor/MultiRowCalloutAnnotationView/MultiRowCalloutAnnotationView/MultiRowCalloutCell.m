@@ -67,7 +67,7 @@ CGSize const kMultiRowCalloutCellSize = {245,44};
 }
 
 - (void)dealloc {
-    Block_release(_onCalloutAccessoryTapped);
+    self.onCalloutAccessoryTapped = nil;
     self.userData = nil;
     [super dealloc];
 }
