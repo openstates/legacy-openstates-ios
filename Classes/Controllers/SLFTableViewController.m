@@ -125,6 +125,7 @@
 
 - (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
     RKLogTrace(@"%@: Table controller finished loading.", NSStringFromClass([self class]));
+    [self.tableView reloadData];
     if (self.onSavePersistentActionPath) {
         self.onSavePersistentActionPath(self.actionPath);
         self.onSavePersistentActionPath = nil;
