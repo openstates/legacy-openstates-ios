@@ -12,6 +12,7 @@
 
 #import "AppendingFlowCell.h"
 #import "AppendingFlowView.h"
+#import "SLFDrawingExtensions.h"
 
 @interface AppendingFlowCell()
 @property (nonatomic,retain) AppendingFlowView *flowView;
@@ -26,16 +27,15 @@
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     if (self)
     {
-        self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.clipsToBounds = YES;        
-        self.backgroundColor = [SLFAppearance menuBackgroundColor];
-        _flowView = [[AppendingFlowView alloc] initWithFrame:self.frame];
+        _flowView = [[AppendingFlowView alloc] initWithFrame:self.bounds];
         _flowView.uniformWidth = NO;
         _flowView.preferredBoxSize = CGSizeMake(74.f, 38.f);    
         _flowView.connectorSize = CGSizeMake(7.f, 6.f); 
-        _flowView.insetMargin = CGSizeMake(1.f, 10.f);
+        _flowView.insetMargin = CGSizeMake(1.f, 7.f);
+        _flowView.backgroundColor = [UIColor clearColor];
         _flowView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        self.backgroundView = _flowView;
+        [self.contentView addSubview:_flowView];
     }
     return self;
 }
@@ -56,20 +56,14 @@
     if (_flowView && !IsEmpty(stages)) {
         [_flowView setStages:stages];
     }
-    [self setNeedsDisplay];
-}
-
-- (void)setBackgroundColor:(UIColor *)backgroundColor
-{
-    [super setBackgroundColor:backgroundColor];
-    _flowView.backgroundColor = backgroundColor;
-    [_flowView setNeedsDisplay];
+    [self setNeedsLayout];
 }
 
 - (void)setUseDarkBackground:(BOOL)useDarkBackground {
     _useDarkBackground = useDarkBackground;
     self.backgroundColor = useDarkBackground ? [SLFAppearance cellBackgroundDarkColor] : [SLFAppearance cellBackgroundLightColor];
 }
+
 
 @end
 
@@ -84,7 +78,8 @@
     self = [super init];
     if (self) {
         self.cellClass = [AppendingFlowCell class];
-        self.rowHeight = (SLFIsIpad() || SLFIsLandscape()) ? 45 : 90; 
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.rowHeight = 90; 
         self.reuseIdentifier = nil; // turns off caching, sucky but we don't want to reuse facial photos
 		__block __typeof__(self) bself = self;
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {

@@ -197,6 +197,57 @@ static void addGlossPath(CGContextRef context, CGRect rect);
     return path;
 }
 
++ (void)drawInsetBeveledRoundedRect:(CGRect)rect radius:(CGFloat)radius fillColor:(UIColor *)fillColor context:(CGContextRef)context {
+    CGRect drawRect = CGRectInset(rect, 1.0f, 1.0f);
+    drawRect.size.height -= 1.0f;
+	CGContextSaveGState(context);
+    CGPathRef boxPath = [[UIBezierPath bezierPathWithRoundedRect: drawRect cornerRadius: radius] CGPath];
+        //offset by half a pixel to ensure proper drawing
+    CGPathRef strokePath = [[UIBezierPath bezierPathWithRoundedRect: CGRectInset(drawRect, -0.5f, -0.5f) cornerRadius: radius] CGPath];
+    
+    /* Draw the bevel effect*/
+    CGContextSaveGState(context);
+    CGContextSetFillColorWithColor(context, [[UIColor colorWithWhite: 1.0f alpha: 0.8f] CGColor]);
+    CGContextClipToRect(context, CGRectMake(rect.origin.x, rect.origin.y+rect.size.height-radius, rect.size.width, radius));
+    CGRect corner = CGRectMake(rect.origin.x, (rect.origin.y+rect.size.height)-(2*radius)-1, (radius*2)+1, (radius*2)+1);
+    CGContextFillEllipseInRect(context, corner);
+    corner.origin.x = rect.origin.x + rect.size.width - (radius*2)-1;
+    CGContextFillEllipseInRect(context, corner);
+    CGContextSetBlendMode(context, kCGBlendModeCopy);
+    CGContextFillRect(context, CGRectMake(rect.origin.x+radius, rect.origin.y+rect.size.height-radius, rect.size.width-(2*radius),radius+1));
+    CGContextRestoreGState(context);
+    
+    /* Draw the main region */
+    CGContextSaveGState(context);
+    CGContextSetFillColorWithColor(context, [fillColor CGColor]);
+    CGContextAddPath(context, strokePath);
+    CGContextFillPath(context);
+    CGContextRestoreGState(context);
+    
+    /* Main fill region inner drop shadow
+     This is done by duplicating the path, offsetting the duplicate by 1 pixel, and using the EO winding fill rule to fill the gap between the two */
+    CGContextSaveGState(context);
+    CGContextSetFillColorWithColor(context, [[UIColor colorWithWhite: 0.0f alpha: 0.08f] CGColor]);
+    CGContextClipToRect(context, CGRectMake( drawRect.origin.x, drawRect.origin.y, drawRect.size.width, radius ));
+    CGContextAddPath(context, boxPath);
+    CGContextTranslateCTM(context, 0.0f, 1.0f);
+    CGContextAddPath(context, boxPath);
+    CGContextEOFillPath(context);
+    CGContextRestoreGState(context);
+    
+    /* Outer Stroke
+     This is drawn outside of the fill region to prevent the fill region bleeding over in some cases */
+    CGContextSaveGState(context);
+    CGContextSetLineWidth(context, 1.0f);
+    CGContextSetStrokeColorWithColor(context, [[UIColor colorWithWhite: 0.0f alpha: 0.18f] CGColor]);
+    CGContextAddPath(context, strokePath);
+    CGContextSetBlendMode(context, kCGBlendModeCopy);
+    CGContextStrokePath(context);
+    CGContextRestoreGState( 
+                           context );
+    
+	CGContextRestoreGState( context );
+}
 @end
 
 static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, float ovalHeight) {
@@ -232,3 +283,5 @@ static void addGlossPath(CGContextRef context, CGRect rect) {
     CGContextClosePath(context);
     CGContextRestoreGState(context);
 }
+
+

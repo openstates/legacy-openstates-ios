@@ -14,6 +14,7 @@
     // Used to determine gradient direction
 + (void)getStartPoint:(CGPoint*)startRef endPoint:(CGPoint *)endRef withAngle:(CGFloat)angle inRect:(CGRect)rect;
 + (UIBezierPath *)tableHeaderBorderPathWithFrame:(CGRect)frame;
++ (void)drawInsetBeveledRoundedRect:(CGRect)rect radius:(CGFloat)radius fillColor:(UIColor *)fillColor context:(CGContextRef)context;
 @end
 
 @interface UIImage (SLFExtensions)
@@ -32,3 +33,4 @@
 - (CGSize)drawWithFont:(UIFont *)font origin:(CGPoint)origin;
 - (CGSize)drawWithFont:(UIFont *)font origin:(CGPoint)origin constrainedToSize:(CGSize)constrainedSize lineBreakMode:(UILineBreakMode)lineBreakMode;
 @end
+
