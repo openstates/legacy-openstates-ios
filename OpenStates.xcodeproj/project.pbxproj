@@ -68,6 +68,11 @@
 		37442F09143431940027F422 /* StackedMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37442F08143431940027F422 /* StackedMenuCell.m */; };
 		374430F014344FAC0027F422 /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = 374430CF14344FAC0027F422 /* action.png */; };
 		374430F114344FAC0027F422 /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 374430D014344FAC0027F422 /* action@2x.png */; };
+		374811FD14C748F400A1AE30 /* PersonDot-Off.png in Resources */ = {isa = PBXBuildFile; fileRef = 374811F914C748F400A1AE30 /* PersonDot-Off.png */; };
+		374811FE14C748F400A1AE30 /* PersonDot-Off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 374811FA14C748F400A1AE30 /* PersonDot-Off@2x.png */; };
+		374811FF14C748F400A1AE30 /* PersonDot-On.png in Resources */ = {isa = PBXBuildFile; fileRef = 374811FB14C748F400A1AE30 /* PersonDot-On.png */; };
+		3748120014C748F400A1AE30 /* PersonDot-On@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 374811FC14C748F400A1AE30 /* PersonDot-On@2x.png */; };
+		3748120614C7ABAA00A1AE30 /* NoFetchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3748120514C7ABA900A1AE30 /* NoFetchViewController.m */; };
 		37485D48144BC43600D99BBD /* SLFMapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D42144BC43600D99BBD /* SLFMapPin.m */; };
 		37485D49144BC43600D99BBD /* UserPinAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D44144BC43600D99BBD /* UserPinAnnotation.m */; };
 		37485D4A144BC43600D99BBD /* UserPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D46144BC43600D99BBD /* UserPinAnnotationView.m */; };
@@ -253,6 +258,7 @@
 		37BB3BB7143A44DC00DCB1FB /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BB3BB5143A44DC00DCB1FB /* placeholder.png */; };
 		37BB3BB8143A44DC00DCB1FB /* placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37BB3BB6143A44DC00DCB1FB /* placeholder@2x.png */; };
 		37BB3BBD143A5FCC00DCB1FB /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 37BB3BBC143A5FCB00DCB1FB /* libz.dylib */; };
+		37C957ED14C7B92500A30BC4 /* LegislatorsNoFetchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C957EC14C7B92500A30BC4 /* LegislatorsNoFetchViewController.m */; };
 		37CFB4D2144B980F00E8120D /* NSInvocation+CWVariableArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4CF144B980F00E8120D /* NSInvocation+CWVariableArguments.m */; };
 		37CFB4D3144B980F00E8120D /* UIImageView+RoundedCorners.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4D1144B980F00E8120D /* UIImageView+RoundedCorners.m */; };
 		37D6A7031496BE34009A76E8 /* LegislatorDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6A7021496BE34009A76E8 /* LegislatorDetailHeader.m */; };
@@ -535,6 +541,12 @@
 		37442F08143431940027F422 /* StackedMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StackedMenuCell.m; sourceTree = "<group>"; };
 		374430CF14344FAC0027F422 /* action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = action.png; sourceTree = "<group>"; };
 		374430D014344FAC0027F422 /* action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action@2x.png"; sourceTree = "<group>"; };
+		374811F914C748F400A1AE30 /* PersonDot-Off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PersonDot-Off.png"; sourceTree = "<group>"; };
+		374811FA14C748F400A1AE30 /* PersonDot-Off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PersonDot-Off@2x.png"; sourceTree = "<group>"; };
+		374811FB14C748F400A1AE30 /* PersonDot-On.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PersonDot-On.png"; sourceTree = "<group>"; };
+		374811FC14C748F400A1AE30 /* PersonDot-On@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PersonDot-On@2x.png"; sourceTree = "<group>"; };
+		3748120414C7ABA800A1AE30 /* NoFetchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoFetchViewController.h; sourceTree = "<group>"; };
+		3748120514C7ABA900A1AE30 /* NoFetchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoFetchViewController.m; sourceTree = "<group>"; };
 		37485D41144BC43600D99BBD /* SLFMapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFMapPin.h; sourceTree = "<group>"; };
 		37485D42144BC43600D99BBD /* SLFMapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFMapPin.m; sourceTree = "<group>"; };
 		37485D43144BC43600D99BBD /* UserPinAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = UserPinAnnotation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -807,6 +819,8 @@
 		37BB3BB5143A44DC00DCB1FB /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		37BB3BB6143A44DC00DCB1FB /* placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "placeholder@2x.png"; sourceTree = "<group>"; };
 		37BB3BBC143A5FCB00DCB1FB /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		37C957EB14C7B92500A30BC4 /* LegislatorsNoFetchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorsNoFetchViewController.h; sourceTree = "<group>"; };
+		37C957EC14C7B92500A30BC4 /* LegislatorsNoFetchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorsNoFetchViewController.m; sourceTree = "<group>"; };
 		37CFB4CE144B980F00E8120D /* NSInvocation+CWVariableArguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+CWVariableArguments.h"; sourceTree = "<group>"; };
 		37CFB4CF144B980F00E8120D /* NSInvocation+CWVariableArguments.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInvocation+CWVariableArguments.m"; sourceTree = "<group>"; };
 		37CFB4D0144B980F00E8120D /* UIImageView+RoundedCorners.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "UIImageView+RoundedCorners.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1286,6 +1300,10 @@
 				37A645301499B5260038C62F /* Paper-Off@2x.png */,
 				37A645311499B5260038C62F /* Paper-On.png */,
 				37A645321499B5260038C62F /* Paper-On@2x.png */,
+				374811F914C748F400A1AE30 /* PersonDot-Off.png */,
+				374811FA14C748F400A1AE30 /* PersonDot-Off@2x.png */,
+				374811FB14C748F400A1AE30 /* PersonDot-On.png */,
+				374811FC14C748F400A1AE30 /* PersonDot-On@2x.png */,
 				37A645331499B5260038C62F /* Route-Off.png */,
 				37A645341499B5260038C62F /* Route-Off@2x.png */,
 				37A645351499B5260038C62F /* Route-On.png */,
@@ -1477,6 +1495,8 @@
 				376B88FE143186B300AA96D4 /* SLFTableViewController.m */,
 				37798CF4147E3A810098361A /* SLFFetchedTableViewController.h */,
 				37798CF5147E3A810098361A /* SLFFetchedTableViewController.m */,
+				3748120414C7ABA800A1AE30 /* NoFetchViewController.h */,
+				3748120514C7ABA900A1AE30 /* NoFetchViewController.m */,
 				37B6FF94149207C8007CB068 /* SLFStackedViewController.h */,
 				37B6FF95149207C8007CB068 /* SLFStackedViewController.m */,
 				375694AD14ACEC4E0014BA7F /* AppBarController.h */,
@@ -1489,6 +1509,8 @@
 				37AC5FD5142C42680061414F /* StackedMenuViewController.m */,
 				28D7ACF60DDB3853001CB0EB /* LegislatorsViewController.h */,
 				28D7ACF70DDB3853001CB0EB /* LegislatorsViewController.m */,
+				37C957EB14C7B92500A30BC4 /* LegislatorsNoFetchViewController.h */,
+				37C957EC14C7B92500A30BC4 /* LegislatorsNoFetchViewController.m */,
 				37EDEAA013D3D81800F8FCA1 /* LegislatorDetailViewController.h */,
 				37EDEAA113D3D81900F8FCA1 /* LegislatorDetailViewController.m */,
 				37940218144161A600D18889 /* ContributionsDataSource.h */,
@@ -2181,6 +2203,10 @@
 				373B842614C0D25000ED7959 /* grayArrow@2x.png in Resources */,
 				373B842714C0D25000ED7959 /* whiteArrow.png in Resources */,
 				373B842814C0D25000ED7959 /* whiteArrow@2x.png in Resources */,
+				374811FD14C748F400A1AE30 /* PersonDot-Off.png in Resources */,
+				374811FE14C748F400A1AE30 /* PersonDot-Off@2x.png in Resources */,
+				374811FF14C748F400A1AE30 /* PersonDot-On.png in Resources */,
+				3748120014C748F400A1AE30 /* PersonDot-On@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2378,6 +2404,8 @@
 				378337D414AD26A10077010E /* AppendingFlowCell.m in Sources */,
 				3772624F14B507F500F8D3A6 /* AssetsViewController.m in Sources */,
 				37193F5514BCEA9E00C78262 /* MTInfoPanel.m in Sources */,
+				3748120614C7ABAA00A1AE30 /* NoFetchViewController.m in Sources */,
+				37C957ED14C7B92500A30BC4 /* LegislatorsNoFetchViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

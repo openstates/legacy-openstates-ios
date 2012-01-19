@@ -16,7 +16,7 @@
 //  your changes, bro.
 
 #import "SLFActionPathRegistry.h"
-
+#import "NSString+SLFExtensions.h"
 #import "StatesViewController.h"
 #import "StackedMenuViewController.h"
 #import "StateDetailViewController.h"
@@ -34,6 +34,7 @@
 #import "BillsWatchedViewController.h"
 #import "BillsSubjectsViewController.h"
 #import "AssetsViewController.h"
+#import "LegislatorsNoFetchViewController.h"
 
 @interface SLFTableViewController(SLFActionPath)
 + (void)registerActionPathWithPattern:(NSString *)pattern;
@@ -76,6 +77,7 @@
     else
         [self registerPattern:@"slfos://states/detail/:stateID" forClass:[StateDetailViewController class]];
     [self registerPattern:@"slfos://states" forClass:[StatesViewController class]];
+    [self registerPattern:@"slfos://findMyLegislators/:stateID" forClass:[LegislatorsNoFetchViewController class]];
     [self registerPattern:@"slfos://legislators/detail/:legID" forClass:[LegislatorDetailViewController class]];
     [self registerPattern:@"slfos://legislators/:stateID" forClass:[LegislatorsViewController class]];
     [self registerPattern:@"slfos://committees/detail/:committeeID" forClass:[CommitteeDetailViewController class]];
@@ -186,6 +188,27 @@
 }
 @end
 
+@implementation LegislatorsNoFetchViewController(SLFActionPath)
+
++ (void)registerActionPathWithPattern:(NSString *)pattern {
+    if (!pattern)
+        return;
+    [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments, BOOL skipSaving) {
+        SLFState *state = [SLFState findFirstByAttribute:@"stateID" withValue:[arguments valueForKey:@"stateID"]];
+        if (!state)
+            return nil;
+        LegislatorsNoFetchViewController *vc = [[LegislatorsNoFetchViewController alloc] initWithState:state usingGeolocation:YES];
+        if (!skipSaving) {
+            vc.onSavePersistentActionPath = ^(NSString *actionPath) {
+                SLFSaveCurrentActionPath(actionPath);
+            };
+        }
+        return vc;
+    }];
+}
+
+@end
+
 @implementation LegislatorDetailViewController(SLFActionPath)
 + (void)registerActionPathWithPattern:(NSString *)pattern {
     if (!pattern)
@@ -233,8 +256,6 @@
     Class controllerClass = [self class];
     [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments, BOOL skipSaving) {
         NSString *boundaryID = [arguments valueForKey:@"boundaryID"];
-        if (!boundaryID)
-            return nil;
         DistrictDetailViewController *vc = [[controllerClass alloc] initWithDistrictMapID:boundaryID];
         if (!skipSaving) {
             vc.onSavePersistentActionPath = ^(NSString *actionPath) {

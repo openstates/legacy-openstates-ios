@@ -10,35 +10,93 @@
 //
 //
 
-#import "LegislatorsNoFetchViewController.h"
+#import "NoFetchViewController.h"
+#import "MTInfoPanel.h"
 
-@implementation LegislatorsNoFetchViewController
+@interface NoFetchViewController()
+@property (nonatomic,readonly) RKObjectLoader *objectLoader;
+@end
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+@implementation NoFetchViewController
+@synthesize state = _state;
+@synthesize resourcePath = _resourcePath;
+@synthesize dataClass = _dataClass;
+@synthesize tableController = _tableController;
+
+- (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path dataClass:(Class)dataClass {
+    self = [super init];
     if (self) {
+        self.stackWidth = 380;
+        self.state = newState;
+        self.resourcePath = path;
+        self.dataClass = dataClass;
     }
     return self;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
+- (void)dealloc {
+    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:(id<RKRequestDelegate>)self.tableController];
+    self.tableController = nil;
+    self.state = nil;
+    self.resourcePath = nil;
+    self.dataClass = nil;
+    [super dealloc];
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
+- (NSString *)actionPath {
+    return [[self class] actionPathForObject:self.state];
 }
 
-- (void)viewDidUnload
-{
+- (void)configureTableController {
+    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    _tableController.delegate = self;
+    _tableController.objectManager = [RKObjectManager sharedManager];
+    _tableController.autoRefreshFromNetwork = YES;
+    _tableController.autoRefreshRate = 360;
+    _tableController.pullToRefreshEnabled = NO;
+        //_tableController.imageForError = [UIImage imageNamed:@"error"];
+    CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
+    MTInfoPanel *panel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeActivity title:NSLocalizedString(@"Updating", @"") subtitle:NSLocalizedString(@"Downloading new data",@"") image:nil];
+    _tableController.loadingView = panel;
+    [self resetObjectMapping];
+}
+
+- (void)viewDidUnload {
+    [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:(id<RKRequestDelegate>)self.tableController];
+    self.tableController = nil;
     [super viewDidUnload];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-	return YES;
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self configureTableController];
+    if (self.resourcePath) {
+        [_tableController loadTableWithObjectLoader:self.objectLoader];
+    }
+}
+
+- (void)setResourcePath:(NSString *)resourcePath {
+    SLFRelease(_resourcePath);
+    _resourcePath = [resourcePath copy];
+    if (self.isViewLoaded && _tableController) {
+        [_tableController setValue:[_tableController.objectManager objectLoaderWithResourcePath:resourcePath delegate:(id<RKObjectLoaderDelegate>)_tableController] forKey:@"objectLoader"];
+        [self resetObjectMapping];
+    }
+}
+
+- (void)resetObjectMapping {
+    NSParameterAssert(self.dataClass != NULL && _tableController != NULL);
+    RKObjectMapping *objectMapping = [_tableController.objectManager.mappingProvider objectMappingForClass:_dataClass];
+    [_tableController setValue:objectMapping forKeyPath:@"objectLoader.objectMapping"];
+}
+
+- (RKObjectLoader *)objectLoader {
+    return [self.tableController valueForKey:@"objectLoader"];
+}
+
+- (void)loadTableFromNetwork {
+    if (self.resourcePath && self.tableController) {
+        [_tableController loadTableWithObjectLoader:self.objectLoader];
+    }
 }
 @end

@@ -21,9 +21,7 @@
 @implementation LegislatorsViewController
 
 - (id)initWithState:(SLFState *)newState {
-    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 SUNLIGHT_APIKEY,@"apikey", newState.stateID,@"state", nil];
-    NSString *resourcePath = RKMakePathWithObject(@"/legislators?state=:state&active=true&apikey=:apikey", queryParams);
+    NSString *resourcePath = [SLFLegislator resourcePathForStateID:newState.stateID];
     self = [super initWithState:newState resourcePath:resourcePath dataClass:[SLFLegislator class]];
     return self;
 }

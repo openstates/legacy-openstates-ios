@@ -12,6 +12,7 @@
 
 #import "StateDetailViewController.h"
 #import "LegislatorsViewController.h"
+#import "LegislatorsNoFetchViewController.h"
 #import "CommitteesViewController.h"
 #import "DistrictsViewController.h"
 #import "EventsViewController.h"
@@ -27,6 +28,7 @@
 #import "TestFlight.h"
 #endif
 
+#define MenuMyRepresentatives NSLocalizedString(@"Who's My Rep?", @"")
 #define MenuLegislators NSLocalizedString(@"Legislators", @"")
 #define MenuCommittees NSLocalizedString(@"Committees", @"")
 #define MenuDistricts NSLocalizedString(@"District Maps", @"")
@@ -148,6 +150,7 @@
     RKTableViewCellMapping *momentaryMap = [self menuCellMapping];
     momentaryMap.deselectsRowOnSelection = YES;
     NSMutableArray* tableItems = [[NSMutableArray alloc] initWithCapacity:15];
+    [tableItems addObject:[self menuItemWithText:MenuMyRepresentatives imagePrefix:@"PersonDot" cellMapping:fixedMap]];
     [tableItems addObject:[self menuItemWithText:MenuLegislators imagePrefix:@"IndexCard" cellMapping:fixedMap]];
     [tableItems addObject:[self menuItemWithText:MenuCommittees imagePrefix:@"Group" cellMapping:fixedMap]];
     [tableItems addObject:[self menuItemWithText:MenuDistricts imagePrefix:@"Map" cellMapping:fixedMap]];
@@ -183,13 +186,15 @@
         controllerClass = [BillsMenuViewController class];
     else if ([menuItem isEqualToString:MenuCapitolMaps] && !IsEmpty(self.state.capitolMaps))
         controllerClass = [AssetsViewController class];
-    
+    else if ([menuItem isEqualToString:MenuMyRepresentatives])
+        controllerClass = [LegislatorsNoFetchViewController class];
     if (controllerClass) {
         NSString *path = [SLFActionPathNavigator navigationPathForController:controllerClass withResource:resource];
         if (!IsEmpty(path))
             [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:SLFIsIpad()];
         return;
     }
+    
     if ([menuItem isEqualToString:MenuNews]) {
         if (SLFIsReachableAddress(self.state.newsAddress)) {
             SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:self.state.newsAddress];

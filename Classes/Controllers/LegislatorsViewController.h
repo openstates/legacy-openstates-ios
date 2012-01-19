@@ -13,5 +13,4 @@
 #import "SLFFetchedTableViewController.h"
 
 @interface LegislatorsViewController : SLFFetchedTableViewController
-
 @end

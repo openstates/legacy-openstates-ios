@@ -17,6 +17,7 @@
 @property (nonatomic, retain) SLFState *state;
 @property (nonatomic, copy) NSString *resourcePath;
 @property (nonatomic, assign) Class dataClass;
+@property (nonatomic, assign) BOOL omitSearchBar;
 
 - (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path dataClass:(Class)dataClass;
 - (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path;

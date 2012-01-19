@@ -10,8 +10,16 @@
 //
 //
 
-#import <UIKit/UIKit.h>
+#import "SLFTableViewController.h"
 
-@interface LegislatorsNoFetchViewController : UIViewController
+@interface NoFetchViewController : SLFTableViewController
+@property (nonatomic,retain) RKTableController *tableController;
+@property (nonatomic,retain) SLFState *state;
+@property (nonatomic,copy) NSString *resourcePath;
+@property (nonatomic,assign) Class dataClass;
 
+- (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path dataClass:(Class)dataClass;
+- (void)configureTableController;
+- (void)loadTableFromNetwork;
+- (void)resetObjectMapping;
 @end

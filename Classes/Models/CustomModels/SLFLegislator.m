@@ -174,4 +174,17 @@
     return [MultiRowCalloutCell cellWithImage:self.partyObj.image title:self.title subtitle:self.fullName userData:[NSDictionary dictionaryWithObject:self.legID forKey:@"legID"]];
 }
 
++ (NSString *)resourcePathForCoordinate:(CLLocationCoordinate2D)coordinate {
+    if (!CLLocationCoordinate2DIsValid(coordinate))
+        return nil;
+    NSString *resourcePath = [NSString stringWithFormat:@"/legislators/geo/?lat=%lf&long=%lf&apikey=%@", coordinate.latitude, coordinate.longitude, SUNLIGHT_APIKEY];
+    return resourcePath;    
+}
+
++ (NSString *)resourcePathForStateID:(NSString *)stateID {
+    NSString *resourcePath = [NSString stringWithFormat:@"/legislators/?state=%@&active=true&apikey=%@", stateID, SUNLIGHT_APIKEY];
+    return resourcePath;
+}
+
+
 @end

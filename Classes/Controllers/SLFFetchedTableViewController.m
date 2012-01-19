@@ -32,6 +32,7 @@
 @synthesize tableController = _tableController;
 @synthesize resourcePath = __resourcePath;
 @synthesize dataClass = __dataClass;
+@synthesize omitSearchBar = _omitSearchBar;
 
 - (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path dataClass:(Class)dataClass {
     self = [super init];
@@ -85,7 +86,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = NSLocalizedString(@"Loading ...",@"");
-    NSAssert(self.resourcePath != NULL, @"Must set a resource path before attempting to download table data.");
     [self configureTableController];
     if (_tableController.sectionNameKeyPath) {
         
@@ -100,8 +100,9 @@
             return sectionView;
         };   
     }
-    [self.tableController loadTable];
-    if ([self hasSearchableDataClass]) {
+    if (self.resourcePath)
+        [self.tableController loadTable];
+    if ([self hasSearchableDataClass] && !self.omitSearchBar) {
         __block __typeof__(self) bself = self;
         [self configureSearchBarWithPlaceholder:NSLocalizedString(@"Filter results", @"") withConfigurationBlock:^(UISearchBar *searchBar) {
             if ([bself shouldShowChamberScopeBar]) {
@@ -129,6 +130,9 @@
     self.tableController.predicate = nil;
     SLFRelease(__resourcePath);
     __resourcePath = [resourcePath copy];
+    if (self.isViewLoaded && _tableController) {
+        _tableController.resourcePath = resourcePath;
+    }
 }
 
 - (BOOL)hasSearchableDataClass {

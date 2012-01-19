@@ -1,4 +1,5 @@
 #import "_SLFLegislator.h"
+#import <CoreLocation/CoreLocation.h>
 
 @class MultiRowCalloutCell;
 @class RKManagedObjectMapping;
@@ -28,4 +29,6 @@
 - (NSString *)districtPartyString;
 - (NSString *)title;
 + (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
++ (NSString *)resourcePathForCoordinate:(CLLocationCoordinate2D)coordinate;
++ (NSString *)resourcePathForStateID:(NSString *)stateID;
 @end

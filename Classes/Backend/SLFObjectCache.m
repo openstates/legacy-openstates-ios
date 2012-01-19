@@ -13,6 +13,7 @@
 #import "SLFObjectCache.h"
 #import "SLFDataModels.h"
 #import "NSDate+SLFDateHelper.h"
+#import "NSString+SLFExtensions.h"
 
 @interface SLFObjectCache()
 - (NSFetchRequest*)fetchRequestStatesForResourcePath:(NSString*)resourcePath;
@@ -26,7 +27,8 @@
 @implementation SLFObjectCache
 
 - (NSFetchRequest*)fetchRequestForResourcePath:(NSString*)resourcePath {
-    NSCParameterAssert(resourcePath != NULL);    
+    if (!resourcePath)
+        return nil;
     if ([resourcePath hasPrefix:@"/metadata"])
         return [self fetchRequestStatesForResourcePath:resourcePath];
     if ([resourcePath hasPrefix:@"/legislators"])
@@ -64,7 +66,6 @@
     NSDictionary *arguments = nil;
     NSFetchRequest *request = [SLFLegislator fetchRequest];
     RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
-    
     NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
     if ([pathMatcher matchesPattern:@"/legislators/:legID" tokenizeQueryStrings:YES parsedArguments:&arguments])
         predicate = [NSPredicate predicateWithFormat:@"legID LIKE[cd] %@", [arguments objectForKey:@"legID"]];
