@@ -16,4 +16,5 @@
 @property (nonatomic) BOOL isComposingMail;
 + (SLFEmailComposer *)sharedComposer;
 - (void)presentMailComposerTo:(NSString*)recipient subject:(NSString*)subject body:(NSString*)body parent:(UIViewController *)parent;
+- (void)presentAppSupportComposerFromParent:(UIViewController *)parent;
 @end

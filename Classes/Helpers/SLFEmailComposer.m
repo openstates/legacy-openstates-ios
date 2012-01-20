@@ -13,6 +13,7 @@
 #import "SLFEmailComposer.h"
 #import "SLFReachable.h"
 #import "SLFAlertView.h"
+#import "SLFAnalytics.h"
 
 @interface SLFEmailComposer()
 @property (nonatomic, retain) MFMailComposeViewController *composer;
@@ -51,6 +52,17 @@
     if (![[UIApplication sharedApplication] canOpenURL:url])
         return NO;
     return YES;
+}
+
+- (void)presentAppSupportComposerFromParent:(UIViewController *)parent {
+    NSString *appVer = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    NSMutableString *body = [NSMutableString string];
+    [body appendFormat:NSLocalizedString(@"Open States App Version: %@\n", @""), appVer];
+    [body appendFormat:NSLocalizedString(@"iOS Version: %@\n", @""), [[UIDevice currentDevice] systemVersion]];
+    [body appendFormat:NSLocalizedString(@"iOS Device: %@\n", @""), [[UIDevice currentDevice] model]];
+    [body appendString:NSLocalizedString(@"\nDescription of Problem, Concern, or Question:\n", @"")];
+    [self presentMailComposerTo:@"openstates-mobile@sunlightfoundation.com" subject:NSLocalizedString(@"Open States App Support", @"") body:body parent:parent];
+    [[SLFAnalytics sharedAnalytics] tagEvent:@"EMAILING_DEV_SUPPORT" attributes:[NSDictionary dictionaryWithObject:@"APP_DEV" forKey:@"category"]];
 }
 
 - (void)presentMailComposerTo:(NSString*)recipient subject:(NSString*)subject body:(NSString*)body parent:(UIViewController *)parent {

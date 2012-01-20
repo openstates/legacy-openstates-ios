@@ -24,9 +24,7 @@
 #import "SVWebViewController.h"
 #import "SLFReachable.h"
 #import "SLFRestKitManager.h"
-#ifdef DEBUG
-#import "TestFlight.h"
-#endif
+#import "SLFEmailComposer.h"
 
 #define MenuMyRepresentatives NSLocalizedString(@"Who's My Rep?", @"")
 #define MenuLegislators NSLocalizedString(@"Legislators", @"")
@@ -36,7 +34,14 @@
 #define MenuEvents NSLocalizedString(@"Events", @"")
 #define MenuCapitolMaps NSLocalizedString(@"Capitol Maps", @"")
 #define MenuNews NSLocalizedString(@"News", @"")
+
+#define USE_TESTFLIGHT_FEEDBACK 0 // DEBUG
+#if USE_TESTFLIGHT_FEEDBACK
+#import "TestFlight.h"
 #define MenuFeedback NSLocalizedString(@"Beta Feedback", @"")
+#else
+#define MenuFeedback NSLocalizedString(@"App Feedback", @"")
+#endif
 
 @interface StateDetailViewController()
 - (void)reconfigureForState:(SLFState *)state;
@@ -160,9 +165,7 @@
     if (!IsEmpty(self.state.capitolMaps))
         [tableItems addObject:[self menuItemWithText:MenuCapitolMaps imagePrefix:@"Bank" cellMapping:fixedMap]];
     [tableItems addObject:[self menuItemWithText:MenuNews imagePrefix:@"Paper" cellMapping:momentaryMap]];
-#ifdef DEBUG
     [tableItems addObject:[self menuItemWithText:MenuFeedback imagePrefix:@"Bug" cellMapping:momentaryMap]];
-#endif
     [_tableController loadTableItems:tableItems];
     [_tableController.tableView reloadData];
     [_tableController.tableView setNeedsDisplay];
@@ -203,11 +206,13 @@
             [webViewController release];
         }
     }
-#ifdef DEBUG
     else if ([menuItem isEqualToString:MenuFeedback]) {
+#if USE_TESTFLIGHT_FEEDBACK
         [TestFlight openFeedbackView];
-    }
+#else
+        [[SLFEmailComposer sharedComposer] presentAppSupportComposerFromParent:self];
 #endif
+    }
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
