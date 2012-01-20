@@ -66,7 +66,11 @@
 }
 
 - (void)setUpOnce {
+#ifdef DEBUG
     RKLogSetAppLoggingLevel(RKLogLevelDebug);
+#else
+    RKLogSetAppLoggingLevel(RKLogLevelWarning);
+#endif
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [self performSelectorInBackground:@selector(setUpBackgroundTasks) withObject:nil];
     [SLFAppearance setupAppearance];
