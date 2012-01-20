@@ -146,7 +146,7 @@ BOOL SLFIsReachableAddress(NSString * urlString) {
         return NO;
     NSNumber *status = [self statusForHostNamed:hostName];
     if (!status) {
-        RKLogError(@"Specific host reachability for %@ is unknown because it is not presently monitored.", hostName);
+        RKLogDebug(@"Specific host reachability for %@ is unknown because it is not presently monitored.", hostName);
         return YES;
     }
     return ([status intValue] > kSCNetworkNotReachable);

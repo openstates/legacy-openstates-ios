@@ -161,7 +161,7 @@
     
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
     RKLogCritical(@"Received memory warning!");
-    [[SLFAnalytics sharedAnalytics] tagEvent:@"Memory Warning" attributes:[NSDictionary dictionaryWithObject:@"Errors" forKey:@"category"]];
+    [[SLFAnalytics sharedAnalytics] tagEvent:@"MEMORY_WARNING" attributes:[NSDictionary dictionaryWithObject:@"APP_DEV" forKey:@"category"]];
     [[SLFAnalytics sharedAnalytics] endTracking];
     [[NSURLCache sharedURLCache] setMemoryCapacity:1024*1024]; // a more conservative value, 1MB
 }

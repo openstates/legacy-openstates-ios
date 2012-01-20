@@ -78,7 +78,7 @@
     NSString *stateName = self.state.name;
     if (!stateName)
         stateName = [self.stateID uppercaseString];
-    return [NSString stringWithFormat:@"%@ %@ %@ %@", self.state.name, chamberName, @"District", self.name];
+    return [NSString stringWithFormat:@"%@ %@ %@ %@", stateName, chamberName, @"District", self.name];
 }
 
 - (NSString *)subtitle {
