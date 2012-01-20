@@ -63,7 +63,6 @@
 		373B842714C0D25000ED7959 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 373B841F14C0D25000ED7959 /* whiteArrow.png */; };
 		373B842814C0D25000ED7959 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 373B842014C0D25000ED7959 /* whiteArrow@2x.png */; };
 		373E51501445E6C70044D478 /* DistrictSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 373E514D1445E6C70044D478 /* DistrictSearch.m */; };
-		373ECB6914888C9F000BD16D /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 373ECB6514888C9F000BD16D /* libTestFlight.a */; };
 		37442F0214342F780027F422 /* StateFlags.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 37442F0114342F780027F422 /* StateFlags.bundle */; };
 		37442F09143431940027F422 /* StackedMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37442F08143431940027F422 /* StackedMenuCell.m */; };
 		374430F014344FAC0027F422 /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = 374430CF14344FAC0027F422 /* action.png */; };
@@ -182,7 +181,6 @@
 		379BB596147409EC00DDBD3D /* BillDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F6FCFC14676214003AA80D /* BillDetailViewController.m */; };
 		37A16CF3148C0D53000A3C91 /* SLFAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A16CF2148C0D53000A3C91 /* SLFAnalytics.m */; };
 		37A16CFB148C128B000A3C91 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37A16CF9148C128B000A3C91 /* libGoogleAnalytics.a */; };
-		37A16CFF148C1C93000A3C91 /* SLFTestFlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A16CFE148C1C93000A3C91 /* SLFTestFlight.m */; };
 		37A16D02148C1FE6000A3C91 /* SLFGANTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A16D01148C1FE6000A3C91 /* SLFGANTracker.m */; };
 		37A16D08148C355B000A3C91 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 37A16D07148C355B000A3C91 /* libsqlite3.0.dylib */; };
 		37A16D16148C93BA000A3C91 /* SLFActionPathNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A16D15148C93BA000A3C91 /* SLFActionPathNavigator.m */; };
@@ -960,7 +958,6 @@
 				37E961EF13E544FB0064B1D3 /* libRestKitNetwork.a in Frameworks */,
 				37E961F013E544FD0064B1D3 /* libRestKitObjectMapping.a in Frameworks */,
 				37E961F113E544FE0064B1D3 /* libRestKitSupport.a in Frameworks */,
-				373ECB6914888C9F000BD16D /* libTestFlight.a in Frameworks */,
 				37A16CFB148C128B000A3C91 /* libGoogleAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2378,7 +2375,6 @@
 				379A44F61488167B00D47B88 /* BillsSubjectsEntry.m in Sources */,
 				371591BF148AC5BA0039ECED /* WatchedBillNotificationManager.m in Sources */,
 				37A16CF3148C0D53000A3C91 /* SLFAnalytics.m in Sources */,
-				37A16CFF148C1C93000A3C91 /* SLFTestFlight.m in Sources */,
 				37A16D02148C1FE6000A3C91 /* SLFGANTracker.m in Sources */,
 				37A16D16148C93BA000A3C91 /* SLFActionPathNavigator.m in Sources */,
 				37726AF7148D6AB3009BCE46 /* SLFActionPathRegistry.m in Sources */,
@@ -2740,7 +2736,7 @@
 					armv7,
 				);
 				BUILD_STYLE = Debug;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gregory Combs (MJMLU3U99Y)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gregory Combs (YM5M6UR479)";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2754,7 +2750,7 @@
 					Vendor/RestKit/Build,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4FBA2A05-4D25-4C07-A4F2-5EF2AE91453F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E0E8AF69-6723-4AC2-916F-CC880B61F99D";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2767,7 +2763,7 @@
 					armv7,
 				);
 				BUILD_STYLE = Release;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gregory Combs (MJMLU3U99Y)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gregory Combs (YM5M6UR479)";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2781,7 +2777,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9DCAEB38-D98A-4402-B628-E1AE362BC6A4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E0E8AF69-6723-4AC2-916F-CC880B61F99D";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
