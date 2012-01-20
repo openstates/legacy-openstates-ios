@@ -49,7 +49,7 @@
     NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys: SUNLIGHT_APIKEY, @"apikey", [NSNumber numberWithDouble:aCoordinate.longitude], @"long", [NSNumber numberWithDouble:aCoordinate.latitude], @"lat", nil];
     [client get:@"/legislators/geo" queryParams:queryParams delegate:self];
 #else
-    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys: SUNLIGHT_APIKEY, @"apikey", [NSString stringWithFormat:@"%lf,%lf", aCoordinate.latitude, aCoordinate.longitude], @"contains", @"sldu,sldl", @"sets", nil];
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys: SUNLIGHT_APIKEY, @"apikey", [NSString stringWithFormat:@"%lf,%lf", aCoordinate.latitude, aCoordinate.longitude], @"contains", @"sldu,sldl", @"sets", @"none", @"shape_type", nil];
    [client get:@"/boundary" queryParams:queryParams delegate:self];
 #endif
 }
