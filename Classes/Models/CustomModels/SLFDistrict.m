@@ -125,6 +125,13 @@
     return [[NSString stringWithFormat:@"%@-%@-%@-district-%@", boundaryCode, chamberObj.stateID, chamberName, district] lowercaseString];    
 }
 
+- (BOOL)isUpperChamber {
+    BOOL hasUpperTag = ( !IsEmpty(self.boundaryID) && [self.boundaryID hasPrefix:@"sldu"] );
+    if (hasUpperTag || [self.chamber isEqualToString:SLFChamberUpperType])
+        return YES;
+    return NO;
+}
+
 #pragma mark -
 #pragma mark Polygons
 

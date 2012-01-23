@@ -23,8 +23,6 @@
 @interface DistrictDetailViewController()
 - (void)loadMapWithID:(NSString *)objID;
 - (void)loadDataWithResourcePath:(NSString *)path;
-- (BOOL)isUpperDistrictWithID:(NSString *)objID;
-- (BOOL)isUpperDistrict:(SLFDistrict *)obj;
 - (void)setUpperOrLowerDistrict:(SLFDistrict *)districtMap;
 @property (nonatomic,retain) DistrictSearch *districtSearch;
 @end
@@ -69,7 +67,7 @@
 - (void)setUpperOrLowerDistrict:(SLFDistrict *)newObj {
     if (!newObj)
         return;
-    if ([self isUpperDistrict:newObj])
+    if (newObj.isUpperChamber)
         self.upperDistrict = newObj;
     else
         self.lowerDistrict = newObj;
@@ -157,7 +155,9 @@
     {
         SLFDistrict *district = [self districtMapForPolygon:(MKPolygon*)overlay];
         MKPolygonView *aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
-        if (district && [self isUpperDistrict:district])
+        if (!district)
+            aView.fillColor = [[UIColor grayColor] colorWithAlphaComponent:0.2];
+        else if (district.isUpperChamber)
             aView.fillColor = [[UIColor orangeColor] colorWithAlphaComponent:0.2];
         else 
             aView.fillColor = [[UIColor greenColor] colorWithAlphaComponent:0.2];
@@ -201,15 +201,4 @@
                                              }];
 }
 
-- (BOOL)isUpperDistrictWithID:(NSString *)objID {
-    if (!IsEmpty(objID) && [objID hasPrefix:@"sldu"])
-        return YES;
-    return NO;
-}
-
-- (BOOL)isUpperDistrict:(SLFDistrict *)obj {
-    if ([self isUpperDistrictWithID:obj.boundaryID] || [obj.chamberObj.type isEqualToString:SLFChamberUpperType])
-        return YES;
-    return NO;
-}
 @end
