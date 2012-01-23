@@ -19,12 +19,16 @@
 @interface LegislatorsNoFetchViewController()
 - (void)startUpdatingLocation:(id)sender;
 - (void)stopUpdatingLocation:(NSString *)reason;
+- (BOOL)isNewStateDifferentThanCurrentState;
+- (void)presentAlertForDifferentState;
 @property (nonatomic,retain) MTInfoPanel *locationActivityPanel;
+@property (nonatomic,assign) BOOL hasWarnedForDifferentStates;
 @end
 
 @implementation LegislatorsNoFetchViewController
 @synthesize locationManager = _locationManager;
 @synthesize locationActivityPanel = _locationActivityPanel;
+@synthesize hasWarnedForDifferentStates = _hasWarnedForDifferentStates;
 
 - (id)initWithState:(SLFState *)newState usingGeolocation:(BOOL)usingGeolocation {
     NSString *resourcePath = [SLFLegislator resourcePathForStateID:newState.stateID];
@@ -74,7 +78,38 @@
 }
 
 - (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
-        //    [super tableControllerDidFinishFinalLoad:tableController];
+    if ([self isNewStateDifferentThanCurrentState] && !self.hasWarnedForDifferentStates) {
+        self.hasWarnedForDifferentStates = YES;
+        [self presentAlertForDifferentState];
+    }
+    //    [super tableControllerDidFinishFinalLoad:tableController];
+}
+
+- (BOOL)isNewStateDifferentThanCurrentState {
+    if (!self.tableController)
+        return NO;
+    BOOL isNewStateDifferent = NO;
+    for (RKTableSection *section in self.tableController.sections) {
+        for (SLFLegislator *legislator in section.objects) {
+            NSString *legStateID = legislator.stateID;
+            if (IsEmpty(legStateID))
+                continue;
+            if (![legStateID isEqualToString:self.state.stateID]) {
+                isNewStateDifferent = YES;
+                break;
+            }
+        }
+    }
+    return isNewStateDifferent;
+}
+
+- (void)presentAlertForDifferentState {
+    [MTInfoPanel showPanelInView:self.view type:MTInfoPanelTypeNotice title:NSLocalizedString(@"States Differ",@"") subtitle:NSLocalizedString(@"The previously selected state differs from that of your geolocated reps.  Please keep that in mind.",@"") hideAfter:3.f];
+}
+
+- (void)setState:(SLFState *)state {
+    [super setState:state];
+    self.hasWarnedForDifferentStates = NO;
 }
 
 #pragma mark Geolocation
