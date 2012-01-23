@@ -55,14 +55,16 @@
 }
 
 - (void)presentAppSupportComposerFromParent:(UIViewController *)parent {
-    NSString *appVer = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-    NSMutableString *body = [NSMutableString string];
-    [body appendFormat:NSLocalizedString(@"Open States App Version: %@\n", @""), appVer];
+    NSMutableString *body = [[NSMutableString alloc] init];
+    NSString *appVer = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    NSString *buildVer = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    [body appendFormat:NSLocalizedString(@"Open States App Version: %@ (%@)\n", @""), appVer, buildVer];
     [body appendFormat:NSLocalizedString(@"iOS Version: %@\n", @""), [[UIDevice currentDevice] systemVersion]];
     [body appendFormat:NSLocalizedString(@"iOS Device: %@\n", @""), [[UIDevice currentDevice] model]];
     [body appendString:NSLocalizedString(@"\nDescription of Problem, Concern, or Question:\n", @"")];
     [self presentMailComposerTo:@"openstates-mobile@sunlightfoundation.com" subject:NSLocalizedString(@"Open States App Support", @"") body:body parent:parent];
     [[SLFAnalytics sharedAnalytics] tagEvent:@"EMAILING_DEV_SUPPORT" attributes:[NSDictionary dictionaryWithObject:@"APP_DEV" forKey:@"category"]];
+    [body release];
 }
 
 - (void)presentMailComposerTo:(NSString*)recipient subject:(NSString*)subject body:(NSString*)body parent:(UIViewController *)parent {
@@ -81,12 +83,13 @@
 		[parent presentModalViewController:_composer animated:YES];
 	}
 	else {
-		NSMutableString *message = [NSMutableString stringWithFormat:@"mailto:%@", recipient];
+		NSMutableString *message = [[NSMutableString alloc] initWithFormat:@"mailto:%@", recipient];
 		if (!IsEmpty(subject))
 			[message appendFormat:@"&subject=%@", subject];
 		if (!IsEmpty(body))
 			[message appendFormat:@"&body=%@", body];
 		NSURL *mailto = [NSURL URLWithString:[message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        [message release];
 		if ( ![self isNetworkAvailableForURL:mailto] ) {
 			[SLFAlertView showWithTitle:NSLocalizedString(@"Network Unavailable", @"")
 								message:NSLocalizedString(@"Cannot send an email at this time.  Please check your network settings and try again.", @"")
