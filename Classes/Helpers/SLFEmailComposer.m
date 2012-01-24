@@ -58,7 +58,7 @@
     NSMutableString *body = [[NSMutableString alloc] init];
     NSString *appVer = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     NSString *buildVer = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-    [body appendFormat:NSLocalizedString(@"Open States App Version: %@ (%@)\n", @""), appVer, buildVer];
+    [body appendFormat:NSLocalizedString(@"Open States App Version: %@ (Build %@)\n", @""), appVer, buildVer];
     [body appendFormat:NSLocalizedString(@"iOS Version: %@\n", @""), [[UIDevice currentDevice] systemVersion]];
     [body appendFormat:NSLocalizedString(@"iOS Device: %@\n", @""), [[UIDevice currentDevice] model]];
     [body appendString:NSLocalizedString(@"\nDescription of Problem, Concern, or Question:\n", @"")];
