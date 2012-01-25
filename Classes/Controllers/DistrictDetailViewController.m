@@ -158,9 +158,9 @@
         if (!district)
             aView.fillColor = [[UIColor grayColor] colorWithAlphaComponent:0.2];
         else if (district.isUpperChamber)
-            aView.fillColor = [[UIColor orangeColor] colorWithAlphaComponent:0.2];
+            aView.fillColor = [[SLFAppearance accentOrangeColor] colorWithAlphaComponent:0.2];
         else 
-            aView.fillColor = [[UIColor greenColor] colorWithAlphaComponent:0.2];
+            aView.fillColor = [[SLFAppearance accentBlueColor] colorWithAlphaComponent:0.4];
         aView.strokeColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.7];
         aView.lineWidth = 2;
         return aView;

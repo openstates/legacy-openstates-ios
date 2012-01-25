@@ -27,6 +27,7 @@
 + (UIColor *)tableSectionColor;
 + (UIColor *)accentGreenColor;
 + (UIColor *)accentBlueColor;
++ (UIColor *)accentOrangeColor;
 + (UIColor *)partyRed;
 + (UIColor *)partyBlue;
 + (UIColor *)partyGreen;
