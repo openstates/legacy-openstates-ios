@@ -96,7 +96,7 @@ static NSString* const RKManagedObjectStoreThreadDictionaryEntityCacheKey = @"RK
             [allManagedObjectModels addObject:rkCoreDataLibraryMOM];
             [rkCoreDataLibraryMOM release];
         } else {
-            RKLogWarning(@"Unable to find RestKitCoreData.momd within the RestKitResources.bundle");
+            RKLogWarning(@"Unable to find RestKitCoreData.momd within the RestKitCoreDataBundle.bundle");
         }
 
 		_managedObjectModel = [[NSManagedObjectModel modelByMergingModels:allManagedObjectModels] retain];
@@ -243,7 +243,7 @@ static NSString* const RKManagedObjectStoreThreadDictionaryEntityCacheKey = @"RK
 	NSManagedObjectContext* managedObjectContext = [[NSManagedObjectContext alloc] init];
 	[managedObjectContext setPersistentStoreCoordinator:self.persistentStoreCoordinator];
 	[managedObjectContext setUndoManager:nil];
-	[managedObjectContext setMergePolicy:NSOverwriteMergePolicy];
+	[managedObjectContext setMergePolicy:NSMergeByPropertyStoreTrumpMergePolicy];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(objectsDidChange:)

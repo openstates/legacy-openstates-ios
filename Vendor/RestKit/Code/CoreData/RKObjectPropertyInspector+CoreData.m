@@ -55,7 +55,7 @@ RK_FIX_CATEGORY_BUG(RKObjectPropertyInspector_CoreData)
     }
     
     [_cachedPropertyNamesAndTypes setObject:propertyNamesAndTypes forKey:[entity name]];
-    RKLogTrace(@"Cached property names and types for Entity '%@': %@", entity, propertyNamesAndTypes);
+    RKLogDebug(@"Cached property names and types for Entity '%@': %@", entity, propertyNamesAndTypes);
     return propertyNamesAndTypes;
 }
 

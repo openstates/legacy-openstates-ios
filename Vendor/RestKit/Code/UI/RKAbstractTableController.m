@@ -331,11 +331,7 @@ static NSString* lastUpdatedDateDictionaryKey = @"lastUpdatedDateDictionaryKey";
     RKTableViewCellMapping* cellMapping = [self.cellMappings cellMappingForObject:mappableObject];
     NSAssert(cellMapping, @"Cannot build a tableView cell for object %@: No cell mapping defined for objects of type '%@'", mappableObject, NSStringFromClass([mappableObject class]));
     
-    // Return an existing cell or initialize a new one
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    if (! cell) {
-        cell = [cellMapping mappableObjectForData:self.tableView];
-    }
+    UITableViewCell* cell = [cellMapping mappableObjectForData:self.tableView];
     NSAssert(cell, @"Cell mapping failed to dequeue or allocate a tableViewCell for object: %@", mappableObject);
     
     // Map the object state into the cell
@@ -416,6 +412,30 @@ static NSString* lastUpdatedDateDictionaryKey = @"lastUpdatedDateDictionaryKey";
     return [self.cellMappings cellMappingForObject:object];
 }
 
+- (UITableViewCell *)cellForObject:(id)object {
+    NSIndexPath *indexPath = [self indexPathForObject:object];
+    return indexPath ? [self cellForObjectAtIndexPath:indexPath] : nil;
+}
+
+// TODO: unit test...
+// TODO: This needs to be updated to take into account header & footer rows...
+- (NSIndexPath *)indexPathForObject:(id)object {
+    NSUInteger sectionIndex = 0;
+    for (RKTableSection *section in self.sections) {
+        NSUInteger rowIndex = 0;
+        for (id rowObject in section.objects) {
+            if ([rowObject isEqual:object]) {
+                return [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
+            }
+            
+            rowIndex++;
+        }
+        sectionIndex++;
+    }
+    
+    return nil;
+}
+
 #pragma mark - Header and Footer Rows
 
 - (void)addHeaderRowForItem:(RKTableItem*)tableItem {
@@ -454,23 +474,24 @@ static NSString* lastUpdatedDateDictionaryKey = @"lastUpdatedDateDictionaryKey";
     
     id object = [self objectForRowAtIndexPath:indexPath];
     
-    // TODO: Should we just use [self.tableView cellForRowAtIndexPath:cell]; ???
-    UITableViewCell* cell = [self cellForObjectAtIndexPath:indexPath];
+    // NOTE: Do NOT use cellForObjectAtIndexPath here. See https://gist.github.com/eafbb641d37bb7137759
+    UITableViewCell* cell = [theTableView cellForRowAtIndexPath:indexPath];
     RKTableViewCellMapping* cellMapping = [_cellMappings cellMappingForObject:object];
     
+    // NOTE: Handle deselection first as the onSelectCell processing may result in the tableView
+    // being reloaded and our instances invalidated
+    if (cellMapping.deselectsRowOnSelection) {
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
+    
     if (cellMapping.onSelectCell) {
-        // TODO: Logging...
         cellMapping.onSelectCell();
     }
     
     if (cellMapping.onSelectCellForObjectAtIndexPath) {
         RKLogTrace(@"%@: Invoking onSelectCellForObjectAtIndexPath block with cellMapping %@ for object %@ at indexPath = %@", self, cell, object, indexPath);
         cellMapping.onSelectCellForObjectAtIndexPath(cell, object, indexPath);
-    }
-    
-    if (cellMapping.deselectsRowOnSelection) {
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    }
+    }        
 }
 
 - (void)tableView:(UITableView *)theTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
