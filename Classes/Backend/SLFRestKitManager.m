@@ -153,9 +153,11 @@
     
     matcher = [RKPathMatcher matcherWithPattern:@"/:entity?state=:stateID&apikey=:apikey"];
 
+/*
     [queryParameters setObject:@"events" forKey:@"entity"];
     resourcePath = [matcher pathFromObject:queryParameters];
     [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)]];
+*/
     
     [queryParameters setObject:@"committees" forKey:@"entity"];
     resourcePath = [matcher pathFromObject:queryParameters];
@@ -186,7 +188,7 @@
 #pragma mark -
 #pragma mark Common Alerts
 
-+ (void) showFailureAlertWithRequest:(RKRequest *)request error:(NSError *)error {
++ (void)showFailureAlertWithRequest:(RKRequest *)request error:(NSError *)error {
     NSString *message = NSLocalizedString(@"Unknown Error",@"");
     NSString *errorText = [error localizedDescription];
     if (!IsEmpty(errorText))
