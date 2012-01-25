@@ -135,6 +135,8 @@
 #pragma mark -
 #pragma mark Polygons
 
+#define USE_BOUNDARY_SUBARRAY_HACK 1
+
 - (MKPolygon *)polygonFactory {
         // If we've already cached a polygon in memory, return it rather than recalculate it.
     if (self.districtPolygon)
@@ -144,6 +146,17 @@
         RKLogError(@"District %@ shape is empty or has no rings.", self.boundaryID);
         return nil;
     }
+    
+#if USE_BOUNDARY_SUBARRAY_HACK
+/* Legislative districts, by law and by court ruling, can't have multiple *disconnected* parts.  They must be contiguous.
+   However, the boundary service accommodates independent multipolygon shapes.  We have to dereference to get our main polygon */
+    rings = [rings objectAtIndex:0];
+    if(IsEmpty(rings)) {
+        RKLogError(@"District %@ shape is empty or has no rings.", self.boundaryID);
+        return nil;
+    }
+#endif
+    
     NSUInteger ringCount = [rings count];
     MKPolygon *tempPolygon = nil;
     NSInteger index = ringCount - 1;
