@@ -52,7 +52,7 @@ NSString * const SLFChamberLowerType = @"lower";
 }
 
 - (SLFChamber *)opposingChamber {
-    if ([self.stateID isEqualToString:@"ne"]) // unicameral
+    if (self.state.isUnicameral)
         return nil;
     if ([self isKindOfClass:[UpperChamber class]])
         return [LowerChamber lowerForState:self.state];
@@ -97,7 +97,7 @@ NSString * const SLFChamberLowerType = @"lower";
     if (!state)
         return nil;
     NSArray *chambers = state.chambers;
-    if (IsEmpty(chambers) || [chambers count] < 2)
+    if (state.isUnicameral || IsEmpty(chambers) || [chambers count] < 2)
         return nil; // No point in creating a scope bar if there's only one chamber.
     return [NSArray arrayWithObjects:NSLocalizedString(@"Both",@""), [[chambers objectAtIndex:0] shortName], [[chambers objectAtIndex:1] shortName], nil];
 }
@@ -135,8 +135,7 @@ NSString * const SLFChamberLowerType = @"lower";
 
 @implementation LowerChamber
 + (LowerChamber *)lowerForState:(SLFState *)aState {
-//  if (IsEmpty(aState.lowerChamberName))
-    if ([aState.stateID isEqualToString:@"ne"])
+    if (aState.isUnicameral)
         return nil;
     LowerChamber *chamber = [[[LowerChamber alloc] init] autorelease];
     chamber.type = SLFChamberLowerType;

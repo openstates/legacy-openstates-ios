@@ -153,6 +153,12 @@
     return chambers;
 }
 
+- (BOOL)isUnicameral {
+    if ([self.stateID isEqualToString:@"ne"] || [self.stateID isEqualToString:@"dc"])
+        return YES;
+    return NO;
+}
+
 - (NSArray *)sortedCapitolMaps {
     if (IsEmpty(self.capitolMaps))
         return nil;
