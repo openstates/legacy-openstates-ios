@@ -165,7 +165,7 @@
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     if (!IsEmpty(_legislator.votesmartID)) {
         NSString *url = [NSString stringWithFormat:@"http://votesmart.org/bio.php?can_id=%@", _legislator.votesmartID];
-        [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Vote Smart Bio", @"") subtitle:@"" url:url]];
+        [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"VoteSmart Bio", @"") subtitle:@"" url:url]];
     }
     if (!IsEmpty(_legislator.transparencyID)) {
 		__block __typeof__(self) bself = self;

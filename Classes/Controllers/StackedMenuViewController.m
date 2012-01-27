@@ -19,7 +19,7 @@
 @end
 
 const NSUInteger STACKED_MENU_INSET = 75;
-const NSUInteger STACKED_MENU_WIDTH = 200;
+const NSUInteger STACKED_MENU_WIDTH = 245;
 
 @implementation StackedMenuViewController
 

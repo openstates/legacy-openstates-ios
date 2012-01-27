@@ -48,11 +48,11 @@
 }
 
 - (NSString *)dateStartForDisplay {
-    return [self.dateStart stringWithDateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
+    return [self.dateStart stringWithLocalizationTemplate:@"MMMdhma"];
 }
 
 - (NSString *)dayForDisplay {
-    return [self.dateStart stringWithDateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+    return [self.dateStart stringWithLocalizationTemplate:@"MMMMdyyyy"];
 }
 
 - (NSString *)title {

@@ -26,12 +26,13 @@
 #pragma mark Date<->String Conversion
 + (NSString *)dateFormatString;
 + (NSString *)timeFormatString;
-+ (NSString *)timestampFormatString;
++ (NSString *)timestampFormat;
 + (NSDate *)dateFromString:(NSString *)string;
 + (NSDate *)dateFromString:(NSString *)string withFormat:(NSString *)format;
 - (NSString *)string;
-- (NSString *)stringWithFormat:(NSString *)format;
+- (NSString *)stringWithFormat:(NSString *)format localized:(BOOL)localized;
 - (NSString *)stringWithDateStyle:(NSDateFormatterStyle)dateStyle timeStyle:(NSDateFormatterStyle)timeStyle;
+- (NSString *)stringWithLocalizationTemplate:(NSString *)formatTemplate;
 
 #pragma mark - Calendar Math
 - (NSUInteger)daysAgo;

@@ -172,7 +172,7 @@
 - (void)configureAdditional {
     NSMutableArray *tableItems = [[NSMutableArray alloc] init];
     if (!IsEmpty(_event.link))
-        [tableItems addObject:[self webPageItemWithTitle:@"Link" subtitle:_event.link url:_event.link]];
+        [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Link",@"") subtitle:_event.link url:_event.link]];
     for (GenericAsset *source in _event.sources) {
         NSString *subtitle = source.name;
         if (IsEmpty(subtitle))
@@ -190,7 +190,7 @@
     __block __typeof__(self) bself = self;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
         tableItem.text = NSLocalizedString(@"iCal", @"");
-        tableItem.detailText = NSLocalizedString(@"Schedule this event in Calendar",@"");
+        tableItem.detailText = NSLocalizedString(@"Schedule in Calendar",@"");
         RKTableViewCellMapping *cellMapping = [bself eventTableCellMap];
         tableItem.cellMapping = cellMapping;
         cellMapping.selectionStyle = UITableViewCellSelectionStyleBlue;
@@ -220,7 +220,7 @@
     }
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
         tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Subscribe to all %@ events", @""), bself.event.stateObj.name];
-        tableItem.text = NSLocalizedString(@"ICS Feed", @"");
+        tableItem.text = NSLocalizedString(@"Feed", @"");
         RKTableViewCellMapping *cellMapping = [bself eventTableCellMap];
         tableItem.cellMapping = cellMapping;
         cellMapping.selectionStyle = UITableViewCellSelectionStyleBlue;

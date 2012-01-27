@@ -124,7 +124,7 @@
         NSString *subtitle = source.name;
         if (IsEmpty(subtitle))
             subtitle = source.url;
-        [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Site", @"") subtitle:subtitle url:source.url]];
+        [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Website", @"") subtitle:subtitle url:source.url]];
     }
     SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Resources", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;

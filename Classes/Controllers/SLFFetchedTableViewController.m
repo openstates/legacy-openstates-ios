@@ -85,7 +85,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = NSLocalizedString(@"Loading ...",@"");
+    self.title = NSLocalizedString(@"Loading...",@"");
     [self configureTableController];
     if (_tableController.sectionNameKeyPath) {
         

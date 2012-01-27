@@ -109,9 +109,8 @@ NSString* validSessionParameter(NSString *session);
 
 + (NSString *)pathForUpdatedSinceDaysAgo:(NSInteger)daysAgo state:(NSString *)stateID {
     NSDate *dateSince = [[NSDate date] dateByAddingDays:(-daysAgo)];
-    NSString *updatedSince = [dateSince stringWithFormat:[NSDate dateFormatString]];
-    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 updatedSince, @"updated_since", stateID, @"state", SUNLIGHT_APIKEY, @"apikey", nil];
+    NSString *updatedSince = [dateSince stringWithFormat:[NSDate dateFormatString] localized:NO];
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys: updatedSince, @"updated_since", stateID, @"state", SUNLIGHT_APIKEY, @"apikey", nil];
     return RKPathAppendQueryParams(@"/bills", queryParams);
 }
 

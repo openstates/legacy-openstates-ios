@@ -116,9 +116,9 @@ SLFPartyType partyTypeForName(NSString *newName) {
     SLFPartyType newType = SLFPartyIndependent;
     if (!IsEmpty(newName)) {
         NSString *loweredName = [newName lowercaseString];
-        if ([[DEMOCRAT_STRING lowercaseString] isEqualToString:loweredName])
+        if ([@"democrat" isEqualToString:loweredName])
             newType = SLFPartyDemocrat;
-        else if ([[REPUBLICAN_STRING lowercaseString] isEqualToString:loweredName])
+        else if ([@"republican" isEqualToString:loweredName])
             newType = SLFPartyRepublican;
     }
     return newType;

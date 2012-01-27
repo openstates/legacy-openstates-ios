@@ -318,6 +318,7 @@
 		37F6FCF514672167003AA80D /* BillsMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F6FCF414672167003AA80D /* BillsMenuViewController.m */; };
 		37F6FCF81467611F003AA80D /* BillsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F6FCF71467611F003AA80D /* BillsViewController.m */; };
 		37F6FD0A14676565003AA80D /* BillSearchParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F6FD0914676565003AA80D /* BillSearchParameters.m */; };
+		37F7C07114D34530000853D5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 37F7C06F14D34530000853D5 /* Localizable.strings */; };
 		37FA2562148029930026EFB1 /* StarButtonOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 37FA255E148029930026EFB1 /* StarButtonOff.png */; };
 		37FA2563148029930026EFB1 /* StarButtonOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37FA255F148029930026EFB1 /* StarButtonOff@2x.png */; };
 		37FA2564148029930026EFB1 /* StarButtonOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 37FA2560148029930026EFB1 /* StarButtonOn.png */; };
@@ -919,6 +920,8 @@
 		37F6FCFC14676214003AA80D /* BillDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BillDetailViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37F6FD0814676565003AA80D /* BillSearchParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BillSearchParameters.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		37F6FD0914676565003AA80D /* BillSearchParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BillSearchParameters.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		37F7C07014D34530000853D5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		37F7C07314D36193000853D5 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		37FA255E148029930026EFB1 /* StarButtonOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StarButtonOff.png; sourceTree = "<group>"; };
 		37FA255F148029930026EFB1 /* StarButtonOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "StarButtonOff@2x.png"; sourceTree = "<group>"; };
 		37FA2560148029930026EFB1 /* StarButtonOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StarButtonOn.png; sourceTree = "<group>"; };
@@ -1039,6 +1042,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				37F7C06E14D34530000853D5 /* Localization */,
 				3714804F1432D27800170716 /* Assets */,
 				37336A66142B98A000F635EB /* Interfaces */,
 				37BAC162142B97AD0021A3C6 /* SplashScreen */,
@@ -1891,6 +1895,14 @@
 			path = Backend;
 			sourceTree = "<group>";
 		};
+		37F7C06E14D34530000853D5 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				37F7C06F14D34530000853D5 /* Localizable.strings */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
 		37FA255D148029930026EFB1 /* StarButton */ = {
 			isa = PBXGroup;
 			children = (
@@ -1963,6 +1975,7 @@
 				French,
 				German,
 				en,
+				es,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -2204,6 +2217,7 @@
 				374811FE14C748F400A1AE30 /* PersonDot-Off@2x.png in Resources */,
 				374811FF14C748F400A1AE30 /* PersonDot-On.png in Resources */,
 				3748120014C748F400A1AE30 /* PersonDot-On@2x.png in Resources */,
+				37F7C07114D34530000853D5 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2452,6 +2466,15 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
+		37F7C06F14D34530000853D5 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				37F7C07014D34530000853D5 /* en */,
+				37F7C07314D36193000853D5 /* es */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -2680,6 +2703,7 @@
 			buildSettings = {
 				BUILD_STYLE = Release;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = NO;
@@ -2700,6 +2724,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenStates;
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
