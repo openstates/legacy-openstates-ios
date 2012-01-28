@@ -64,7 +64,7 @@
                 return;
             SLFState *state = object;
             SLFSaveSelectedState(state);
-            [[SLFRestKitManager sharedRestKit] preloadObjectsForState:state];
+                //[[SLFRestKitManager sharedRestKit] preloadObjectsForState:state];
             [bself pushOrSendViewControllerWithState:state];
         };
     }];

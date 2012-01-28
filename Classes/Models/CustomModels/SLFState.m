@@ -60,6 +60,10 @@
 }
 
 - (NSString *)newsAddress {
+    if ([self.stateID isEqualToString:@"dc"]) // DC doesn't have a stateline page
+        return @"http://dccouncil.washington.dc.us/news";
+    if ([self.stateID isEqualToString:@"pr"]) // Nor does Puerto Rico
+        return @"http://www.pr.gov";
     return [NSString stringWithFormat:@"http://stateline.org/live/states/%@", [self.name URLEncodedString]];
 }
 
