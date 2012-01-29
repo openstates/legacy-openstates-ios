@@ -92,6 +92,11 @@ static UIColor *strokeColor;
     [self setNeedsDisplay];
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self setNeedsDisplay];
+}
+
 - (void)drawRect:(CGRect)rect
 {
     self.borderOutlinePath = [SLFDrawing tableHeaderBorderPathWithFrame:rect];
