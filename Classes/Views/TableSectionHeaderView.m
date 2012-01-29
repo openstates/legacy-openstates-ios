@@ -32,20 +32,18 @@
         [self addSubview:__titleLabel];
         
         if (style == UITableViewStyleGrouped) {
-            self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
             self.backgroundColor = [UIColor clearColor];
             __titleLabel.shadowOffset = CGSizeMake(0, 1);
             __titleLabel.shadowColor = [[UIColor whiteColor] colorWithAlphaComponent:.7];
-            __titleLabel.backgroundColor = [UIColor clearColor];
             __titleLabel.textColor = [SLFAppearance tableSectionColor];
             __titleLabel.font = SLFFont(15);
         }
         else {
             self.backgroundColor = SLFColorWithRGB(207,208,194);
-            __titleLabel.backgroundColor = self.backgroundColor;
             __titleLabel.textColor = [UIColor whiteColor];
             __titleLabel.font = SLFFont(12);
         }
+        __titleLabel.backgroundColor = self.backgroundColor;
         [self setNeedsLayout];
     }
     return self;
@@ -68,6 +66,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.titleLabel.origin = CGPointMake(self.offset, 0);
+    [self.titleLabel sizeToFit];
 }
 
 - (void)setTitle:(NSString *)title {
