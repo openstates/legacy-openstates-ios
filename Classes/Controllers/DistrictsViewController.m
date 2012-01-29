@@ -49,7 +49,8 @@
 
 - (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
     [super tableControllerDidFinishFinalLoad:tableController];
-    self.title = [NSString stringWithFormat:@"%d Districts", self.tableController.rowCount];
+    if (!self.tableController.isEmpty)
+        self.title = [NSString stringWithFormat:@"%d Districts", self.tableController.rowCount];
 }
 
 @end

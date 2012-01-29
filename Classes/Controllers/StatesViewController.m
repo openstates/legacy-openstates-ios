@@ -87,7 +87,8 @@
 
 - (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
     [super tableControllerDidFinishFinalLoad:tableController];
-    self.title = [NSString stringWithFormat:@"%d States", self.tableController.rowCount];
+    if (!self.tableController.isEmpty)
+        self.title = [NSString stringWithFormat:@"%d States", self.tableController.rowCount];
 }
 
 - (void)loadFromNetworkIfEmpty {
