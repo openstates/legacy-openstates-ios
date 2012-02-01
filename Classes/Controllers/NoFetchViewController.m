@@ -99,4 +99,15 @@
         [_tableController loadTableWithObjectLoader:self.objectLoader];
     }
 }
+
+- (void)resizeLoadingView {
+    if (!self.tableController.loadingView)
+        return;
+    self.tableController.loadingView.width = self.tableView.width;
+}
+
+- (void)tableControllerDidStartLoad:(RKAbstractTableController *)tableController {
+    [self resizeLoadingView];
+}
+
 @end

@@ -156,6 +156,16 @@
     [self reconfigureForState:self.state];
 }
 
+- (void)resizeLoadingView {
+    if (!self.tableController.loadingView)
+        return;
+    self.tableController.loadingView.width = self.tableView.width;
+}
+
+- (void)tableControllerDidStartLoad:(RKAbstractTableController *)tableController {
+    [self resizeLoadingView];
+}
+
 - (void)tableControllerDidFinishLoad:(RKAbstractTableController *)tableController {
     // since we reload our table items, we can't use our usual finishLoading or risk an infinite loop.
     if (IsEmpty(tableController.sections))

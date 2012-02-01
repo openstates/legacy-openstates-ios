@@ -126,6 +126,16 @@
     [super dealloc];
 }
 
+- (void)resizeLoadingView {
+    if (!self.tableController.loadingView)
+        return;
+    self.tableController.loadingView.width = self.tableView.width;
+}
+
+- (void)tableControllerDidStartLoad:(RKAbstractTableController *)tableController {
+    [self resizeLoadingView];
+}
+
 - (void)setResourcePath:(NSString *)resourcePath {
     self.tableController.predicate = nil;
     SLFRelease(__resourcePath);
