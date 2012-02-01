@@ -41,7 +41,6 @@
     self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
         self.useTitleBar = SLFIsIpad();
-        self.useGearViewBackground = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(watchedBillsChanged:) name:SLFWatchedBillsDidChangeNotification object:nil];
     }
     return self;

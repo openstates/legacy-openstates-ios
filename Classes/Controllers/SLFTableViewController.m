@@ -22,7 +22,6 @@
 @synthesize useGradientBackground;
 @synthesize useTitleBar;
 @synthesize titleBarView = _titleBarView;
-@synthesize useGearViewBackground = _useGearViewBackground;
 @synthesize onSavePersistentActionPath = _onSavePersistentActionPath;
 @synthesize searchBar = _searchBar;
 
@@ -30,7 +29,6 @@
     self = [super initWithStyle:style];
     if (self) {
         self.stackWidth = 450;
-        _useGearViewBackground = (style == UITableViewStyleGrouped);
         self.useGradientBackground = YES;
         self.useTitleBar = NO;
     }
@@ -73,7 +71,6 @@
     }
     if (self.useGradientBackground) {
         GradientBackgroundView *gradient = [[GradientBackgroundView alloc] initWithFrame:self.tableView.bounds];
-        gradient.useGearView = _useGearViewBackground;
         [gradient loadLayerAndGradientColors];
         self.tableView.backgroundView = gradient;
         [gradient release];

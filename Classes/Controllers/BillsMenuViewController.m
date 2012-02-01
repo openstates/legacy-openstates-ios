@@ -39,7 +39,6 @@
 - (id)initWithState:(SLFState *)newState {
     self = [super init];
     if (self) {
-        self.useGearViewBackground = YES;
         self.title = NSLocalizedString(@"Bills", @"");
         self.useTitleBar = SLFIsIpad();
         [self reconfigureForState:newState];
