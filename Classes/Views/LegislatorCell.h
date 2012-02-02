@@ -25,6 +25,7 @@
 
 @interface LegislatorCellMapping : RKTableViewCellMapping
 @property (nonatomic,assign) BOOL roundImageCorners;
+@property (nonatomic,assign) BOOL useAlternatingRowColors;
 @end
 
 @interface FoundLegislatorCellMapping : LegislatorCellMapping

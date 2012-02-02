@@ -135,7 +135,7 @@
 
     static UIFont *font;
     if (!font)
-        font = [UIFont fontWithName:@"HelveticaNeue" size:13];
+        font = SLFPlainFont(13);
     UIColor *whiteColor = [UIColor whiteColor];
     UIColor *darkColor = [SLFAppearance cellTextColor];
     UIColor *lightColor = [SLFAppearance cellSecondaryTextColor];

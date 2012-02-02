@@ -27,7 +27,6 @@ const NSUInteger STACKED_MENU_WIDTH = 245;
     NSAssert(SLFIsIpad(), @"This class is only available for iPads (for now)");
     self = [super initWithState:newState];
     if (self) {
-        self.useGradientBackground = NO;
         self.useTitleBar = NO;
     }
     return self;

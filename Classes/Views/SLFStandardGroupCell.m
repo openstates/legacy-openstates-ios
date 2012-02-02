@@ -13,7 +13,6 @@
 #import "SLFStandardGroupCell.h"
 #import "TableCellDataObject.h"
 #import "SLFAppearance.h"
-#import "DisclosureQuartzView.h"
 
 @implementation SLFStandardGroupCell
 @synthesize cellInfo;
@@ -46,9 +45,6 @@
 		self.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
 		self.detailTextLabel.adjustsFontSizeToFitWidth = YES;
 		self.detailTextLabel.minimumFontSize = 12;
-		DisclosureQuartzView *qv = [[DisclosureQuartzView alloc] initWithFrame:CGRectMake(0.f, 0.f, 28.f, 28.f)];
-		self.accessoryView = qv;
-		[qv release];
 		self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
     }
     return self;

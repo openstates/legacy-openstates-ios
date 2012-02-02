@@ -178,8 +178,10 @@ static void addGlossPath(CGContextRef context, CGRect rect);
 + (UIBezierPath *)tableHeaderBorderPathWithFrame:(CGRect)frame {
     CGRect rect = frame;
     rect.size.height -= 26;
-    rect.size.width -= 26;
-    rect.origin.x += (CGRectGetMidX(frame) - CGRectGetMidX(rect));
+    if (SLFIsIpad()) {
+        rect.size.width -= 26;
+        rect.origin.x += (CGRectGetMidX(frame) - CGRectGetMidX(rect));
+    }
     rect = CGRectIntegral(rect);
     UIBezierPath *path = [UIBezierPath bezierPath];
     [path moveToPoint:rect.origin];

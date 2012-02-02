@@ -25,7 +25,6 @@
 static UIFont *nameFont;
 static UIFont *plainFont;
 static UIFont *titleFont;
-static UIColor *strokeColor;
 
 @implementation LegislatorDetailHeader
 @synthesize borderOutlinePath = _borderOutlinePath;
@@ -37,16 +36,17 @@ static UIColor *strokeColor;
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
-        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(28, 10, 52, 73)];
+        CGFloat offsetX = 14;
+        if (SLFIsIpad())
+            offsetX = 28;
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(offsetX, 10, 52, 73)];
         [self addSubview:_imageView];
         if (!nameFont)
             nameFont = [SLFFont(18) retain];
         if (!plainFont)
-            plainFont = [[UIFont fontWithName:@"HelveticaNeue" size:13] retain];
+            plainFont = [SLFPlainFont(13) retain];
         if (!titleFont)
             titleFont = [SLFItalicFont(13) retain];
-        if (!strokeColor)
-            strokeColor = [SLFColorWithRGB(189, 189, 176) retain];
         [self configure];
     }
     return self;
@@ -79,9 +79,9 @@ static UIColor *strokeColor;
 - (void)drawRect:(CGRect)rect
 {
     self.borderOutlinePath = [SLFDrawing tableHeaderBorderPathWithFrame:rect];
-    [[SLFAppearance cellBackgroundLightColor] setFill];
+    [[SLFAppearance tableBackgroundDarkColor] setFill];
     [_borderOutlinePath fill];
-    [strokeColor setStroke];
+    [[SLFAppearance detailHeaderSeparatorColor] setStroke];
     [_borderOutlinePath stroke];
     if (!_legislator)
         return;

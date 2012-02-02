@@ -3,9 +3,10 @@
 
 @class RKManagedObjectMapping;
 @interface SLFState : _SLFState {}
+@property (nonatomic, readonly) NSString *title;
+@property (nonatomic, readonly) NSString *subtitle;
 @property (nonatomic, readonly) NSString *stateInitial;
 @property (nonatomic, readonly) NSString *stateIDForDisplay;
-@property (nonatomic, readonly) UIImage *stateFlag;
 @property (nonatomic, readonly) NSString *newsAddress;
 @property (nonatomic, readonly) NSString *eventsFeedAddress;
 @property (nonatomic, readonly) NSArray *sessions;

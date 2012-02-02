@@ -11,11 +11,9 @@
 //
 
 #import "ContributionsViewController.h"
-#import "ContributionsDataSource.h"
 #import "TableCellDataObject.h"
 #import "SLFTheme.h"
 #import "SLFAlertView.h"
-#import "GradientBackgroundView.h"
 #import "TableSectionHeaderView.h"
 #import "GenericDetailHeader.h"
 
@@ -65,12 +63,7 @@
     nimsp.numberOfLines = 3;
     nimsp.text = NSLocalizedString(@"Data generously provided by the National Institute on Money in State Politics.", @"");
     self.tableView.tableFooterView = nimsp;
-    [nimsp release];
-    
-    GradientBackgroundView *gradient = [[GradientBackgroundView alloc] initWithFrame:self.tableView.bounds];
-    [gradient loadLayerAndGradientColors];
-    self.tableView.backgroundView = gradient;
-    [gradient release];
+    [nimsp release];    
 }
 
 - (void)updateTableHeader {
@@ -87,14 +80,17 @@
     NSString *detail = [headerData valueForKey:@"detail"];
     
     CGSize boxSize = CGSizeMake(self.tableView.width, 160);
-    GenericDetailHeader *detailBox = [[GenericDetailHeader alloc] initWithFrame:CGRectMake(0,10,boxSize.width,boxSize.height-10)];
+    CGFloat offsetY = 0;
+    if (SLFIsIpad())
+        offsetY = 10;
+    GenericDetailHeader *detailBox = [[GenericDetailHeader alloc] initWithFrame:CGRectMake(0,offsetY,boxSize.width,boxSize.height-10)];
     detailBox.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     detailBox.defaultSize = boxSize;
     detailBox.title = title;
     detailBox.subtitle = subtitle;
     detailBox.detail = detail;
     [detailBox configure];
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,detailBox.width,detailBox.height+20)];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,detailBox.width,detailBox.height+(offsetY*2))];
     headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     headerView.backgroundColor = [UIColor clearColor];
     [headerView addSubview:detailBox];
@@ -161,14 +157,14 @@
     [self stackOrPushViewController:detail];
     [detail release];
 }
-
+/*
 - (void)stackOrPushViewController:(UIViewController *)viewController {
     if (!SLFIsIpad()) {
         [self.navigationController pushViewController:viewController animated:YES];
         return;
     }
     [self.stackController pushViewController:viewController fromViewController:self animated:YES];
-}
+}*/
 
 @end
 

@@ -45,13 +45,16 @@
     return initial;
 }
 
-- (NSString *)stateIDForDisplay {
-    return [self.stateID uppercaseString];
+- (NSString *)title {
+    return self.name;
 }
 
-- (UIImage *)stateFlag {
-    NSString *iconPath = [NSString stringWithFormat:@"StateFlags.bundle/%@", self.stateID];
-    return [UIImage imageNamed:iconPath];
+- (NSString *)subtitle {
+    return [NSString stringWithFormat:@"(%@)", self.stateIDForDisplay];
+}
+
+- (NSString *)stateIDForDisplay {
+    return [self.stateID uppercaseString];
 }
 
 + (NSString *)resourcePathForStateID:(NSString *)stateID {

@@ -21,7 +21,6 @@
 static UIFont *titleFont;
 static UIFont *subtitleFont;
 static UIFont *detailFont;
-static UIColor *strokeColor;
 
 @implementation GenericDetailHeader
 @synthesize borderOutlinePath = _borderOutlinePath;
@@ -38,11 +37,9 @@ static UIColor *strokeColor;
         if (!titleFont)
             titleFont = [SLFFont(18) retain];
         if (!subtitleFont)
-            subtitleFont = [[UIFont fontWithName:@"HelveticaNeue" size:13] retain];
+            subtitleFont = [SLFPlainFont(13) retain];
         if (!detailFont)
             detailFont = [SLFItalicFont(11) retain];
-        if (!strokeColor)
-            strokeColor = [SLFColorWithRGB(189, 189, 176) retain];
         self.defaultSize = CGSizeMake(320, 100);
         [self configure];
     }
@@ -70,7 +67,9 @@ static UIColor *strokeColor;
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    CGFloat preferredWidth = 26;  // inset for header border box
+    CGFloat preferredWidth = 0;
+    if (SLFIsIpad())
+        preferredWidth = 26;  // inset for header border box
     CGFloat preferredHeight = 26; // ...
     preferredWidth += 30; // text inset from inside the box
     preferredHeight += 15;
@@ -100,13 +99,15 @@ static UIColor *strokeColor;
 - (void)drawRect:(CGRect)rect
 {
     self.borderOutlinePath = [SLFDrawing tableHeaderBorderPathWithFrame:rect];
-    [[SLFAppearance cellBackgroundLightColor] setFill];
+    [[SLFAppearance tableBackgroundDarkColor] setFill];
     [_borderOutlinePath fill];
-    [strokeColor setStroke];
+    [[SLFAppearance detailHeaderSeparatorColor] setStroke];
     [_borderOutlinePath stroke];
     UIColor *darkColor = [SLFAppearance cellTextColor];
     UIColor *lightColor = [SLFAppearance cellSecondaryTextColor];
-    CGFloat offsetX = 30 + rect.origin.x;
+    CGFloat offsetX = rect.origin.x + 14;
+    if (SLFIsIpad())
+        offsetX += 14;
     CGFloat offsetY = 10 + rect.origin.y;
     CGFloat maxWidth = _borderOutlinePath.bounds.size.width - offsetX;
 

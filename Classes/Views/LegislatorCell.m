@@ -31,6 +31,7 @@
     if (self)
     {
         self.opaque = YES;
+        self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
         CGRect tzvFrame = CGRectMake(53.f, 0, self.contentView.bounds.size.width - 53.f, self.contentView.bounds.size.height);
         _cellContentView = [[LegislatorCellView alloc] initWithFrame:CGRectInset(tzvFrame, 0, 1.0)];
         _cellContentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -110,6 +111,7 @@
 
 @implementation LegislatorCellMapping
 @synthesize roundImageCorners = _roundImageCorners;
+@synthesize useAlternatingRowColors = _useAlternatingRowColors;
 
 + (id)cellMapping {
     return [self mappingForClass:[LegislatorCell class]];
@@ -122,13 +124,17 @@
         self.rowHeight = 73; 
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         self.roundImageCorners = NO;
+        self.useAlternatingRowColors = YES;
         self.reuseIdentifier = nil; // turns off caching, sucky but we don't want to reuse facial photos
 		__block __typeof__(self) bself = self;
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             LegislatorCell *legCell = (LegislatorCell *)cell;
             if (bself.roundImageCorners && indexPath.row == 0)
                 [cell.imageView roundTopLeftCorner];
-            BOOL useDarkBG = SLFAlternateCellForIndexPath(cell, indexPath);
+            BOOL useDarkBG = NO;
+            if (bself.useAlternatingRowColors) {
+                useDarkBG = SLFAlternateCellForIndexPath(cell, indexPath);
+            }
             [legCell setUseDarkBackground:useDarkBG];
         };
     }
@@ -147,6 +153,7 @@
     self = [super init];
     if (self) {
         self.roundImageCorners = YES;
+        self.useAlternatingRowColors = NO;
     }
     return self;
 }

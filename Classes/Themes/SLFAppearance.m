@@ -26,7 +26,8 @@
 @implementation SLFAppearance
 
 #if APP_APPEARANCE_THEME == APP_OPEN_STATES_THEME
-NSString * const SLFAppearanceFontName = @"HelveticaNeue-Bold";
+NSString * const SLFAppearanceBoldFontName = @"HelveticaNeue-Bold";
+NSString * const SLFAppearancePlainFontName = @"HelveticaNeue";
 NSString * const SLFAppearanceTitleFontName = @"Museo Slab";
 NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 
@@ -34,16 +35,17 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 + (id)tarawera          {vendColor(10,63,76);}        //  vendColorHex(0x0A3F4C)  ...
 + (id)gimlet            {vendColor(166,183,101);}     //  vendColorHex(0xA6B765)  ...
 + (id)moonMist          {vendColor(227,227,215);}     //  vendColorHex(0xE3E3D7)  ...
-+ (id)whiteRock         {vendColor(240,240,226);}     //  vendColorHex(0xF0F0E2)  ...
++ (id)whiteRock         {vendColor(239,240,226);}     //  vendColorHex(0xEFF0E2)  ...
 + (id)westar            {vendColor(227,227,219);}     //  vendColorHex(0xE3E3DB)  ...
 + (id)acapulco          {vendColor(117,177,165);}     //  vendColorHex(0x75AFA5)  ...
 + (id)greenWhite        {vendColor(238,238,229);}     //  vendColorHex(0xEEEEE5)  ...
-+ (id)springWood        {vendColor(245,245,237);}     //  vendColorHex(0xF5F5ED)  ...
++ (id)springWood        {vendColor(247,248,242);}     //  vendColorHex(0xF7F8F2)  ...
 + (id)bitter            {vendColor(126,128,116);}     //  vendColorHex(0x7E8074)  ...
 + (id)zambezi           {vendColor(95,88,88);}        //  vendColorHex(0x5F5858)  ...
 + (id)bandicoot         {vendColor(116,117,107);}     //  vendColorHex(0x74756B)  ...
 + (id)kangaroo          {vendColor(197,199,190);}     //  vendColorHex(0xC5C7BE)  ...
 + (id)punch             {vendColor(213,73,39);}       //  vendColorHex(0xD54927)  ...
++ (id)mistGray          {vendColor(189,190,176);}     //  vendColorHex(0xbdbeb0)  ...
 
 + (UIColor *)partyRed {return [self crail];}
 + (UIColor *)partyBlue {return [self tarawera];}
@@ -62,6 +64,7 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 + (UIColor *)cellBackgroundLightColor {return [self springWood];}
 //+ (UIColor *)cellSelectedMarkerColor {return [self punch];}
 
++ (UIColor *)detailHeaderSeparatorColor {return [self mistGray];}
 + (UIColor *)menuBackgroundColor {return [self bitter];}
 + (UIColor *)tableSeparatorColor {return [self westar];}
 + (UIColor *)tableBackgroundDarkColor {return [self moonMist];}
@@ -106,7 +109,8 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 + (UIColor *)partyBlue {return [[self class] chambray];}
 + (UIColor *)partyGreen {return [[self class] sycamore];}
 
-NSString * const SLFAppearanceFontName = @"HelveticaNeue-Bold";
+NSString * const SLFAppearancePlainFontName = @"HelveticaNeue";
+NSString * const SLFAppearanceBoldFontName = @"HelveticaNeue-Bold";
 NSString * const SLFAppearanceTitleFontName = @"BlairMdITC TT";
 NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 
@@ -259,7 +263,11 @@ UIColor *SLFColorWithHex(char hex) {
 }
 
 UIFont *SLFFont(CGFloat size) {
-    return [UIFont fontWithName:SLFAppearanceFontName size:size];
+    return [UIFont fontWithName:SLFAppearanceBoldFontName size:size];
+}
+
+UIFont *SLFPlainFont(CGFloat size) {
+    return [UIFont fontWithName:SLFAppearancePlainFontName size:size];
 }
 
 UIFont *SLFTitleFont(CGFloat size) {
