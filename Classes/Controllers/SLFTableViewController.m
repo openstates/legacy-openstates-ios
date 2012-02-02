@@ -29,7 +29,7 @@
     self = [super initWithStyle:style];
     if (self) {
         self.stackWidth = 450;
-        self.useGradientBackground = NO;
+        self.useGradientBackground = (style == UITableViewStyleGrouped);
         self.useTitleBar = NO;
     }
     return self;
@@ -73,7 +73,7 @@
     }
     if (self.useGradientBackground) {
         GradientBackgroundView *gradient = [[GradientBackgroundView alloc] initWithFrame:self.tableView.bounds];
-        [gradient loadLayerAndGradientColors];
+        gradient.backgroundColor = [SLFAppearance tableBackgroundLightColor];
         self.tableView.backgroundView = gradient;
         [gradient release];
     }

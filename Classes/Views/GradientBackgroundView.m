@@ -26,6 +26,7 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     }
     return self;
 }
@@ -39,7 +40,6 @@
 }
 
 - (void)loadLayerAndGradientColors {
-    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     UIColor *dark = [SLFAppearance tableBackgroundDarkColor];
     UIColor *light = [SLFAppearance tableBackgroundLightColor];
     NSArray *colors = [NSArray arrayWithObjects:(id)dark.CGColor, (id)light.CGColor, nil];

@@ -117,6 +117,7 @@
 
 - (RKTableViewCellMapping *)menuCellMapping {
     StyledCellMapping *cellMap = [StyledCellMapping subtitleMapping];
+    cellMap.useAlternatingRowColors = YES;
     __block __typeof__(self) bself = self;
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
         RKTableItem* tableItem = (RKTableItem*) object;
