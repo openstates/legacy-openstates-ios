@@ -156,7 +156,7 @@
     RKTableViewCellMapping *momentaryMap = [self menuCellMapping];
     momentaryMap.deselectsRowOnSelection = YES;
     NSMutableArray* tableItems = [[NSMutableArray alloc] initWithCapacity:15];
-    [tableItems addObject:[self menuItemWithText:MenuMyRepresentatives imagePrefix:@"PersonDot" cellMapping:fixedMap]];
+    [tableItems addObject:[self menuItemWithText:MenuMyRepresentatives imagePrefix:@"Locate" cellMapping:fixedMap]];
     [tableItems addObject:[self menuItemWithText:MenuLegislators imagePrefix:@"IndexCard" cellMapping:fixedMap]];
     [tableItems addObject:[self menuItemWithText:MenuCommittees imagePrefix:@"Group" cellMapping:fixedMap]];
     [tableItems addObject:[self menuItemWithText:MenuDistricts imagePrefix:@"Map" cellMapping:fixedMap]];
@@ -166,7 +166,7 @@
     if (!IsEmpty(self.state.capitolMaps))
         [tableItems addObject:[self menuItemWithText:MenuCapitolMaps imagePrefix:@"Bank" cellMapping:fixedMap]];
     [tableItems addObject:[self menuItemWithText:MenuNews imagePrefix:@"Paper" cellMapping:momentaryMap]];
-    [tableItems addObject:[self menuItemWithText:MenuFeedback imagePrefix:@"Bug" cellMapping:momentaryMap]];
+    [tableItems addObject:[self menuItemWithText:MenuFeedback imagePrefix:@"Comment" cellMapping:momentaryMap]];
     [_tableController loadTableItems:tableItems];
     [_tableController.tableView reloadData];
     [_tableController.tableView setNeedsDisplay];
