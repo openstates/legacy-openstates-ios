@@ -94,12 +94,9 @@
     _tableController.loadingView = panel;
 
     __block __typeof__(self) bself = self;
-    RKTableViewCellMapping *objCellMap = [RKTableViewCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
-        cellMapping.cellClass = [SLFBadgeCell class];
+    StyledCellMapping *styledCellMap = [StyledCellMapping styledMappingForClass:[SLFBadgeCell class] usingBlock:^(StyledCellMapping *cellMapping){
+        cellMapping.useAlternatingRowColors = YES;
         [cellMapping mapKeyPath:@"self" toAttribute:@"subjectEntry"];
-        cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-            SLFAlternateCellForIndexPath(cell, indexPath);
-        };
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             if (!object || ![object isKindOfClass:[BillsSubjectsEntry class]])
                 return;
@@ -123,7 +120,7 @@
             [vc release];
         };
     }];
-    [_tableController mapObjectsWithClass:[BillsSubjectsEntry class] toTableCellsWithMapping:objCellMap];
+    [_tableController mapObjectsWithClass:[BillsSubjectsEntry class] toTableCellsWithMapping:styledCellMap];
 }
 
 - (void)configureStandaloneChamberScopeBar {

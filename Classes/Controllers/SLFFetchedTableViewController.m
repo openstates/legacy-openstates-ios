@@ -75,7 +75,7 @@
     _tableController.loadingView = panel;
     _tableController.predicate = nil;
     RKTableItem *emptyItem = [RKTableItem tableItemWithText:NSLocalizedString(@"No Entries Found",@"") detailText:NSLocalizedString(@"There were no entries found. You may refresh the results by dragging down on the table.",@"")];
-    emptyItem.cellMapping = [LargeStaticSubtitleCellMapping cellMapping];
+    emptyItem.cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleSubtitle alternatingColors:NO largeHeight:YES selectable:NO];
     [emptyItem.cellMapping addDefaultMappings];    
     _tableController.emptyItem = emptyItem;
     NSAssert(self.dataClass != NULL, @"Must set a data class before loading the view");

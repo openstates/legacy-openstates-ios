@@ -92,7 +92,7 @@
 #pragma mark - Table Item Creation and Mapping
 
 - (RKTableViewCellMapping *)assetCellMap {
-    SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
+    StyledCellMapping *cellMap = [StyledCellMapping subtitleMapping];
     [cellMap mapKeyPath:@"name" toAttribute:@"textLabel.text"];
     [cellMap mapKeyPath:@"fileName" toAttribute:@"detailTextLabel.text"];
     __block __typeof__(self) bself = self;

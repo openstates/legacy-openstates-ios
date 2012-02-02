@@ -28,12 +28,12 @@
     if (self)
     {
         self.clipsToBounds = YES;        
-        _flowView = [[AppendingFlowView alloc] initWithFrame:self.bounds];
+        _flowView = [[AppendingFlowView alloc] initWithFrame:CGRectInset(self.bounds, 4, 0)];
         _flowView.uniformWidth = NO;
         _flowView.preferredBoxSize = CGSizeMake(74.f, 38.f);    
         _flowView.connectorSize = CGSizeMake(7.f, 6.f); 
         _flowView.insetMargin = CGSizeMake(1.f, 7.f);
-        _flowView.backgroundColor = [UIColor clearColor];
+        _flowView.backgroundColor = [SLFAppearance cellBackgroundLightColor];
         _flowView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self.contentView addSubview:_flowView];
     }
@@ -62,6 +62,7 @@
 - (void)setUseDarkBackground:(BOOL)useDarkBackground {
     _useDarkBackground = useDarkBackground;
     self.backgroundColor = useDarkBackground ? [SLFAppearance cellBackgroundDarkColor] : [SLFAppearance cellBackgroundLightColor];
+    [self setNeedsDisplay];
 }
 
 
@@ -84,8 +85,7 @@
 		__block __typeof__(self) bself = self;
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             AppendingFlowCell *flowCell = (AppendingFlowCell *)cell;
-            BOOL useDarkBG = SLFAlternateCellForIndexPath(cell, indexPath);
-            [flowCell setUseDarkBackground:useDarkBG];
+            [flowCell setUseDarkBackground:NO];
             if (!IsEmpty(bself.stages))
                 flowCell.stages = bself.stages;
         };

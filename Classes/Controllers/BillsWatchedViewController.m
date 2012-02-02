@@ -74,7 +74,7 @@
     _tableController.canEditRows = YES;
     [_tableController mapObjectsWithClass:[SLFBill class] toTableCellsWithMapping:[self billCellMapping]];
     RKTableItem *emptyItem = [RKTableItem tableItemWithText:NSLocalizedString(@"No Watched Bills",@"") detailText:NSLocalizedString(@"There are no watched bills, yet. To add one, find a bill and click it's star button.",@"")];
-    emptyItem.cellMapping = [LargeStaticSubtitleCellMapping cellMapping];
+    emptyItem.cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleSubtitle alternatingColors:NO largeHeight:YES selectable:NO];
     [emptyItem.cellMapping addDefaultMappings];
     _tableController.emptyItem = emptyItem;
     [self configureEditingButtons];
@@ -175,7 +175,7 @@
 }
 
 - (RKTableViewCellMapping *)billCellMapping {
-    RKTableViewCellMapping *cellMap = [LargeSubtitleCellMapping cellMapping];
+    StyledCellMapping *cellMap = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleSubtitle alternatingColors:NO largeHeight:YES selectable:YES];
     [cellMap mapKeyPath:@"name" toAttribute:@"textLabel.text"];
     [cellMap mapKeyPath:@"watchSummaryForDisplay" toAttribute:@"detailTextLabel.text"];
     __block __typeof__(self) bself = self;

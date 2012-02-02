@@ -188,24 +188,24 @@
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     __block SLFBill * aBill = self.bill;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [LargeStaticSubtitleCellMapping cellMapping];
+        tableItem.cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleSubtitle alternatingColors:NO largeHeight:YES selectable:NO];
         tableItem.text = aBill.billID;
         tableItem.detailText = aBill.title;
     }]];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
+        tableItem.cellMapping = [StyledCellMapping staticSubtitleMapping];
         tableItem.text = NSLocalizedString(@"Originating Chamber", @"");
         tableItem.detailText = aBill.chamberObj.formalName;
     }]];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
+        tableItem.cellMapping = [StyledCellMapping staticSubtitleMapping];
         tableItem.text = NSLocalizedString(@"Last Updated", @"");
         tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Bill info was updated %@",@""), [aBill.dateUpdated stringForDisplayWithPrefix:YES]];
     }]];
     NSArray *sortedActions = aBill.sortedActions;
     if (!IsEmpty(sortedActions)) {
         [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-            tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
+            tableItem.cellMapping = [StyledCellMapping staticSubtitleMapping];
             tableItem.text = NSLocalizedString(@"Latest Activity",@"");
             BillAction *latest = [sortedActions objectAtIndex:0];
             tableItem.detailText = [NSString stringWithFormat:@"%@ - %@", latest.title, latest.subtitle];
@@ -283,9 +283,8 @@
 }
 
 - (RKTableViewCellMapping *)subjectCellMap {
-    RKTableViewCellMapping *cellMap = [AlternatingCellMapping cellMapping];
+    StyledCellMapping *cellMap = [StyledCellMapping cellMapping];
     [cellMap mapKeyPath:@"word" toAttribute:@"textLabel.text"];
-    cellMap.style = UITableViewCellStyleDefault;
     cellMap.reuseIdentifier = @"SUBJECT_CELL";
     __block __typeof__(self) bself = self;
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell *cell, id object, NSIndexPath *indexPath) {
@@ -302,7 +301,7 @@
 }
 
 - (RKTableViewCellMapping *)actionCellMap {
-    StaticSubtitleCellMapping *cellMap = [StaticSubtitleCellMapping cellMapping];
+    StyledCellMapping *cellMap = [StyledCellMapping staticSubtitleMapping];
     [cellMap mapKeyPath:@"title" toAttribute:@"textLabel.text"];
     [cellMap mapKeyPath:@"subtitle" toAttribute:@"detailTextLabel.text"];
     return cellMap;
@@ -325,7 +324,7 @@
 }
 
 - (RKTableViewCellMapping *)votesCellMap {
-    SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
+    StyledCellMapping *cellMap = [StyledCellMapping subtitleMapping];
     [cellMap mapKeyPath:@"title" toAttribute:@"textLabel.text"];
     [cellMap mapKeyPath:@"subtitle" toAttribute:@"detailTextLabel.text"];
     __block __typeof__(self) bself = self;

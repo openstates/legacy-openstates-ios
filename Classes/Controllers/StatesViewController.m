@@ -15,6 +15,7 @@
 #import "SLFState.h"
 #import "SLFRestKitManager.h"
 #import "OpenStatesTitleView.h"
+#import "InlineSubtitleCell.h"
 
 @interface StatesViewController()
 - (void)pushOrSendViewControllerWithState:(SLFState *)newState;
@@ -55,32 +56,26 @@
     self.tableController.sectionNameKeyPath = @"stateInitial";
     self.tableView.rowHeight = 48;
     __block __typeof__(self) bself = self;
-    SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
-        [cellMapping mapKeyPath:@"name" toAttribute:@"textLabel.text"];
-        [cellMapping mapKeyPath:@"stateIDForDisplay" toAttribute:@"detailTextLabel.text"];
-        [cellMapping mapKeyPath:@"stateFlag" toAttribute:@"imageView.image"];
-        cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
-            if (!object || ![object isKindOfClass:[SLFState class]])
-                return;
-            SLFState *state = object;
-            SLFSaveSelectedState(state);
-                //[[SLFRestKitManager sharedRestKit] preloadObjectsForState:state];
-            [bself pushOrSendViewControllerWithState:state];
-        };
-    }];
-    [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];
+    InlineSubtitleMapping *cellMapping = [InlineSubtitleMapping cellMapping];
+    cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+        if (!object || ![object isKindOfClass:[SLFState class]])
+            return;
+        SLFState *state = object;
+        SLFSaveSelectedState(state);
+            //[[SLFRestKitManager sharedRestKit] preloadObjectsForState:state];
+        [bself pushOrSendViewControllerWithState:state];
+    };
+    [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:cellMapping];
+    
     RKTableItem *tableItem = [RKTableItem tableItemWithText:NSLocalizedString(@"choose a state to get started.", @"")];
-    tableItem.cellMapping = [RKTableViewCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
+    tableItem.cellMapping = [StyledCellMapping styledMappingUsingBlock:^(StyledCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"text" toAttribute:@"textLabel.text"];
-        cellMapping.style = UITableViewCellStyleDefault;
-        cellMapping.selectionStyle = UITableViewCellSelectionStyleNone;
-        cellMapping.accessoryType = UITableViewCellAccessoryNone;
+        cellMapping.isSelectableCell = NO;
+        cellMapping.useAlternatingRowColors = YES;
         cellMapping.reuseIdentifier = @"DONT_REUSE_ME!";
-        cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-            cell.textLabel.textColor = [SLFAppearance cellSecondaryTextColor];
-            cell.textLabel.font = SLFItalicFont(14);
-            SLFAlternateCellForIndexPath(cell, indexPath);
-        };
+        cellMapping.textColor = [SLFAppearance cellSecondaryTextColor];
+        cellMapping.textFont = SLFItalicFont(14);
+        cellMapping.style = UITableViewCellStyleDefault;
     }];
     [self.tableController addHeaderRowForItem:tableItem];
 }

@@ -107,22 +107,21 @@ enum SECTIONS {
 }
 
 - (void)configureSearchInfo {
-    NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
+    NSMutableArray* tableItems  = [[NSMutableArray alloc] init];    
     __block __typeof__(self) bself = self;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
-        tableItem.cellMapping.style = UITableViewCellStyleValue1;
+        tableItem.cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleValue1 alternatingColors:NO largeHeight:NO selectable:NO];
         tableItem.text = NSLocalizedString(@"State", @"");
         tableItem.detailText = bself.state.name;
     }]];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [SubtitleCellMapping cellMapping];
-        tableItem.cellMapping.style = UITableViewCellStyleValue1;
         tableItem.text = NSLocalizedString(@"Selected Session", @"");
         if (IsEmpty(bself.selectedSession))
             bself.selectedSession = [bself.state latestSession];
         tableItem.detailText = [bself.state displayNameForSession:bself.selectedSession];
-        tableItem.cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell *cell, id obj, NSIndexPath *indexPath) {
+        StyledCellMapping *cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleValue1 alternatingColors:NO largeHeight:NO selectable:YES];
+        tableItem.cellMapping = cellMapping;
+        cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell *cell, id obj, NSIndexPath *indexPath) {
             NSArray *displayNames = bself.state.sessionDisplayNames;
             if (IsEmpty(displayNames))
                 return;

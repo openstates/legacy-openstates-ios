@@ -10,14 +10,11 @@
 //
 //
 
+#import "SLFTableViewController.h"
 #import "ContributionsDataSource.h"
-#import "GCTableViewController.h"
-#import "StackableControllerProtocol.h"
-@interface ContributionsViewController : GCTableViewController <StackableController> {
 
-}
+@interface ContributionsViewController : SLFTableViewController
 @property (nonatomic,retain) ContributionsDataSource *dataSource;
-
 - (void)setQueryEntityID:(NSString *)newObj type:(NSNumber *)newType cycle:(NSString *)newCycle;
 
 @end

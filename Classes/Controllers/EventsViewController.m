@@ -36,16 +36,16 @@
     self.tableController.showsSectionIndexTitles = NO;
     self.tableController.sectionNameKeyPath = @"dayForDisplay";
     __block __typeof__(self) bself = self;
-    SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
-        [cellMapping mapKeyPath:@"title" toAttribute:@"textLabel.text"];
-        [cellMapping mapKeyPath:@"dateStartForDisplay" toAttribute:@"detailTextLabel.text"];
-        cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
-            NSString *path = [SLFActionPathNavigator navigationPathForController:[EventDetailViewController class] withResource:object];
-            if (!IsEmpty(path))
-                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
-        };
-    }];
-    [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
+    StyledCellMapping *cellMapping = [StyledCellMapping subtitleMapping];
+    cellMapping.useAlternatingRowColors = YES;
+    [cellMapping mapKeyPath:@"title" toAttribute:@"textLabel.text"];
+    [cellMapping mapKeyPath:@"dateStartForDisplay" toAttribute:@"detailTextLabel.text"];
+    cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+        NSString *path = [SLFActionPathNavigator navigationPathForController:[EventDetailViewController class] withResource:object];
+        if (!IsEmpty(path))
+            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
+    };
+    [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:cellMapping];    
 }
 
 - (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {

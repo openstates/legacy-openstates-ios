@@ -128,37 +128,34 @@
     [_tableController addSection:headerSection];
 }
 
-- (RKTableViewCellMapping *)eventTableCellMap {
-    StaticSubtitleCellMapping *cellMapping = [StaticSubtitleCellMapping cellMapping];
+- (StyledCellMapping *)eventTableCellMapUsingSelectable:(BOOL)isSelectable {
+    StyledCellMapping *cellMapping = [StyledCellMapping cellMapping];
     cellMapping.style = UITableViewCellStyleValue2;
-    cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-        cell.detailTextLabel.textColor = [SLFAppearance cellTextColor];
-        cell.detailTextLabel.font = SLFFont(14);
-        cell.textLabel.textColor = [SLFAppearance cellSecondaryTextColor];
-        cell.textLabel.font = SLFFont(12);
-        SLFAlternateCellForIndexPath(cell, indexPath);
-        cell.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
-    };
+    cellMapping.isSelectableCell = isSelectable;
+    cellMapping.useAlternatingRowColors = NO;
+    cellMapping.detailTextColor = [SLFAppearance cellTextColor];
+    cellMapping.detailTextFont = SLFFont(14);
+    cellMapping.textColor = [SLFAppearance cellSecondaryTextColor];
+    cellMapping.textFont = SLFFont(12);
     return cellMapping;
 }
 
 - (void)configureEventInfo {
-    RKTableViewCellMapping *cellMapping = [self eventTableCellMap];
     __block __typeof__(self) bself = self;
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
-        tableItem.cellMapping = cellMapping;
+        tableItem.cellMapping = [bself eventTableCellMapUsingSelectable:NO];
         tableItem.detailText = bself.event.location;
         tableItem.text = NSLocalizedString(@"Location",@"");
     }]];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
-        tableItem.cellMapping = cellMapping;
+        tableItem.cellMapping = [bself eventTableCellMapUsingSelectable:NO];
         tableItem.detailText = bself.event.dateStartForDisplay;
         tableItem.text = NSLocalizedString(@"Starts At",@"");
     }]];
     if (_event.dateEnd) {
         [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
-            tableItem.cellMapping = cellMapping;
+            tableItem.cellMapping = [bself eventTableCellMapUsingSelectable:NO];
             tableItem.detailText = [bself.event.dateEnd stringWithDateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
             tableItem.text = NSLocalizedString(@"Ends At",@"");
         }]];
@@ -191,10 +188,8 @@
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
         tableItem.text = NSLocalizedString(@"iCal", @"");
         tableItem.detailText = NSLocalizedString(@"Schedule in Calendar",@"");
-        RKTableViewCellMapping *cellMapping = [bself eventTableCellMap];
+        StyledCellMapping *cellMapping = [bself eventTableCellMapUsingSelectable:YES];
         tableItem.cellMapping = cellMapping;
-        cellMapping.selectionStyle = UITableViewCellSelectionStyleBlue;
-        cellMapping.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cellMapping.onSelectCell = ^(void) {
             EKEvent *ekEvent = bself.event.ekEvent;
             if (!ekEvent)
@@ -207,24 +202,18 @@
             SLFEventsManager *eventManager = [SLFEventsManager sharedManager];
             tableItem.detailText = [eventManager eventCalendar].title;
             tableItem.text = NSLocalizedString(@"Calendar",@"");
-            RKTableViewCellMapping *cellMapping = [bself eventTableCellMap];
+            StyledCellMapping *cellMapping = [bself eventTableCellMapUsingSelectable:YES];
             tableItem.cellMapping = cellMapping;
-            if (!SLFIsIOS5OrGreater())
-                return;
-            cellMapping.selectionStyle = UITableViewCellSelectionStyleBlue;
-            cellMapping.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cellMapping.onSelectCell = ^(void) {
                 [eventManager presentCalendarChooserFromParent:bself];
             };
         }]];
     }
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
-        tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Subscribe to all %@ events", @""), bself.event.stateObj.name];
+        tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Subscribe to all %@ events", @""), [bself.event.stateID uppercaseString]];
         tableItem.text = NSLocalizedString(@"Feed", @"");
-        RKTableViewCellMapping *cellMapping = [bself eventTableCellMap];
+        StyledCellMapping *cellMapping = [bself eventTableCellMapUsingSelectable:YES];
         tableItem.cellMapping = cellMapping;
-        cellMapping.selectionStyle = UITableViewCellSelectionStyleBlue;
-        cellMapping.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cellMapping.onSelectCell = ^(void) {
             NSString *feedAddress = bself.event.stateObj.eventsFeedAddress;
             NSURL *subscriptionURL = [NSURL URLWithString:feedAddress];
@@ -255,7 +244,7 @@
 }
 
 - (RKTableViewCellMapping *)participantCellMap {
-    RKTableViewCellMapping *cellMapping = [self eventTableCellMap];
+    StyledCellMapping *cellMapping = [self eventTableCellMapUsingSelectable:NO];
     [cellMapping mapKeyPath:@"type" toAttribute:@"textLabel.text"];
     [cellMapping mapKeyPath:@"name" toAttribute:@"detailTextLabel.text"];
     return cellMapping;

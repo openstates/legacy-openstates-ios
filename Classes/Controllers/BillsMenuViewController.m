@@ -116,7 +116,7 @@
 }
 
 - (RKTableViewCellMapping *)menuCellMapping {
-    SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
+    StyledCellMapping *cellMap = [StyledCellMapping subtitleMapping];
     __block __typeof__(self) bself = self;
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
         RKTableItem* tableItem = (RKTableItem*) object;

@@ -96,10 +96,10 @@ enum SECTIONS {
 #pragma mark - Table Item Creation and Mapping
 
 - (void)configureVoteInfo {
-    NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
+    NSMutableArray* tableItems  = [[NSMutableArray alloc] init];    
     __block __typeof__(self) bself = self;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
+        tableItem.cellMapping = [StyledCellMapping staticSubtitleMapping];
         tableItem.text = NSLocalizedString(@"Chamber", @"");
         tableItem.detailText = bself.vote.chamberObj.formalName;
     }]];
@@ -107,7 +107,7 @@ enum SECTIONS {
         NSString *caption = [bself.vote.date stringForDisplay];
         if (!IsEmpty(bself.vote.session))
             caption = [NSString stringWithFormat:@"%@ (%@)", [bself.vote.date stringForDisplay], bself.vote.session];
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
+        tableItem.cellMapping = [StyledCellMapping staticSubtitleMapping];
         tableItem.text = NSLocalizedString(@"Date", @"");
         tableItem.detailText = caption;
     }]];
@@ -116,13 +116,13 @@ enum SECTIONS {
             NSString *caption = [bself.vote.motion capitalizedString];
             if (!IsEmpty(bself.vote.record))
                 caption = [NSString stringWithFormat:@"%@ (%@)", caption, bself.vote.record];
-            tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
+            tableItem.cellMapping = [StyledCellMapping staticSubtitleMapping];
             tableItem.text = NSLocalizedString(@"Motion", @"");
             tableItem.detailText = caption;
         }]];
     }
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [StaticSubtitleCellMapping cellMapping];
+        tableItem.cellMapping = [StyledCellMapping staticSubtitleMapping];
         tableItem.text = NSLocalizedString(@"Status", @"");
         tableItem.detailText = bself.vote.subtitle;
     }]];
@@ -162,8 +162,7 @@ enum SECTIONS {
         else if (!IsEmpty([voter otherVoteInverse]))
             imageView.image = [UIImage imageNamed:@"VotePNV"];
         [imageView release];
-        BOOL useDarkBG = SLFAlternateCellForIndexPath(cell, indexPath);
-        [(LegislatorCell *)cell setUseDarkBackground:useDarkBG];
+        [(LegislatorCell *)cell setUseDarkBackground:NO];
     };
     cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         NSString *legID = [object valueForKey:@"legID"];

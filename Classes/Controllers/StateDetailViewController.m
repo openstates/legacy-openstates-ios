@@ -138,7 +138,8 @@
 }
 
 - (RKTableViewCellMapping *)menuCellMapping {
-    SubtitleCellMapping *cellMap = [SubtitleCellMapping cellMapping];
+    StyledCellMapping *cellMap = [StyledCellMapping subtitleMapping];
+    cellMap.useAlternatingRowColors = YES;
     [cellMap mapKeyPath:@"highlightedImage" toAttribute:@"imageView.highlightedImage"];
     [cellMap addDefaultMappings];
     __block __typeof__(self) bself = self;

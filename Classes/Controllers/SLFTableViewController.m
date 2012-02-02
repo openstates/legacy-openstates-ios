@@ -29,7 +29,7 @@
     self = [super initWithStyle:style];
     if (self) {
         self.stackWidth = 450;
-        self.useGradientBackground = YES;
+        self.useGradientBackground = NO;
         self.useTitleBar = NO;
     }
     return self;
@@ -50,7 +50,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.backgroundColor = [UIColor clearColor];
+    UIColor *background = [SLFAppearance tableBackgroundLightColor];
+    self.view.backgroundColor = background;
+    self.tableView.backgroundColor = background;
     if (self.tableView.style == UITableViewStylePlain)
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     if (self.useTitleBar) {
@@ -146,21 +148,26 @@
 
 - (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url {
     NSParameterAssert(!IsEmpty(url));
+    BOOL useAlternatingRowColors = NO;
+    if (self.isViewLoaded)
+        useAlternatingRowColors =  (self.tableView.style == UITableViewStylePlain); 
     __block __typeof__(self) bself = self;
-    return [RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
-        tableItem.cellMapping = [SubtitleCellMapping cellMapping];
-        tableItem.text = itemTitle;
-        tableItem.detailText = itemSubtitle;
-        tableItem.URL = url;
-        tableItem.cellMapping.onSelectCell = ^(void) {
-            if (SLFIsReachableAddress(url)) {
-                SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:url];
-                webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-                [bself presentModalViewController:webViewController animated:YES];	
-                [webViewController release];
-            }
-        };
-    }];
+    StyledCellMapping *cellMapping = [StyledCellMapping cellMapping];
+    cellMapping.style = UITableViewCellStyleSubtitle;
+    cellMapping.useAlternatingRowColors = useAlternatingRowColors;
+    cellMapping.onSelectCell = ^(void) {
+        if (SLFIsReachableAddress(url)) {
+            SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:url];
+            webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+            [bself presentModalViewController:webViewController animated:YES];	
+            [webViewController release];
+        }
+    };
+    RKTableItem *webItem = [RKTableItem tableItemWithCellMapping:cellMapping];
+    webItem.text = itemTitle;
+    webItem.detailText = itemSubtitle;
+    webItem.URL = url;
+    return webItem;
 }
 
 #pragma mark - Search Bar Scope

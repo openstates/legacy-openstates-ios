@@ -144,7 +144,6 @@ SLF_TODO("Move this whole class to RKTableController")
         cellInfo.title = NSLocalizedString(@"Found no results for this selection.", @"");
         cell.cellInfo = cellInfo;
         [cellInfo release];
-        SLFAlternateCellForIndexPath(cell, indexPath);    
         return cell;
     }
 
@@ -159,7 +158,6 @@ SLF_TODO("Move this whole class to RKTableController")
         cell = [SLFStandardGroupCell standardCellWithIdentifier:cellIdentifier];
     }
     cell.cellInfo = cellInfo;
-    SLFAlternateCellForIndexPath(cell, indexPath);    
     [cell sizeToFit];
     [cell setNeedsDisplay];
     return cell;

@@ -12,8 +12,7 @@
 
 #import <RestKit/UI/UI.h>
 #import "SLFAppearance.h"
-#import "SubtitleCellMapping.h"
-#import "AlternatingCellMapping.h"
+#import "StyledCellMapping.h"
 #import "UIImage+OverlayColor.h"
 
 BOOL SLFAlternateCellForIndexPath(UITableViewCell *cell, NSIndexPath * indexPath); // Returns YES if resulting in dark background

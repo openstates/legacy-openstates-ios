@@ -29,16 +29,16 @@
 - (void)configureTableController {
     [super configureTableController];
     __block __typeof__(self) bself = self;
-    SubtitleCellMapping *objCellMap = [SubtitleCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
-        [cellMapping mapKeyPath:@"committeeName" toAttribute:@"textLabel.text"];
-        [cellMapping mapKeyPath:@"chamberShortName" toAttribute:@"detailTextLabel.text"];
-        cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
-            NSString *path = [SLFActionPathNavigator navigationPathForController:[CommitteeDetailViewController class] withResource:object];
-            if (!IsEmpty(path))
-                [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
-        };
-    }];
-    [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    
+    StyledCellMapping *cellMapping = [StyledCellMapping subtitleMapping];
+    cellMapping.useAlternatingRowColors = YES;
+    [cellMapping mapKeyPath:@"committeeName" toAttribute:@"textLabel.text"];
+    [cellMapping mapKeyPath:@"chamberShortName" toAttribute:@"detailTextLabel.text"];
+    cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+        NSString *path = [SLFActionPathNavigator navigationPathForController:[CommitteeDetailViewController class] withResource:object];
+        if (!IsEmpty(path))
+            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
+    };
+    [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:cellMapping];    
 }
 
 - (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
