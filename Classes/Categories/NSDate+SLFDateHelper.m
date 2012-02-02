@@ -161,6 +161,7 @@
     dateFormat = [NSDateFormatter dateFormatFromTemplate:template options:0 locale:formatter.locale];
     if (prefix)
         dateFormat = [prefix stringByAppendingString:dateFormat];
+    formatter.dateFormat = dateFormat;
     return [formatter stringFromDate:self];
 }
 
