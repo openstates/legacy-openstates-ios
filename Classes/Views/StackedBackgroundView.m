@@ -48,22 +48,20 @@
 }
 
 - (void)configure {
-    UIImage *bgImage = [UIImage imageNamed:@"Default-Portrait~ipad.png"];
+    UIImage *bgImage = [UIImage imageNamed:@"StackedBackground-Portrait"];
     _backgroundImageView = [[[UIImageView alloc] initWithImage:bgImage] retain];
-    _backgroundImageView.origin = CGPointMake(-100,-60);
     [self addSubview:_backgroundImageView];
     [self setNeedsLayout];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    NSString *imageFile = @"Default-Portrait~ipad";
+    NSString *imageFile = @"StackedBackground-Portrait";
     if (SLFIsLandscape())
-        imageFile = @"Default-Landscape~ipad";
+        imageFile = @"StackedBackground-Landscape";
     UIImage *bgImage = [UIImage imageNamed:imageFile];
     _backgroundImageView.image = bgImage;
     _backgroundImageView.size = bgImage.size;
-    _backgroundImageView.origin = CGPointMake(-100,-60);
 }
 
 @end

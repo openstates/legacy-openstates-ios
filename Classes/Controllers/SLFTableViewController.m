@@ -51,7 +51,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     UIColor *background = [SLFAppearance tableBackgroundLightColor];
-    self.view.backgroundColor = background;
     self.tableView.backgroundColor = background;
     if (self.tableView.style == UITableViewStylePlain)
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
