@@ -208,8 +208,8 @@
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     __block __typeof__(self) bself = self;
     StyledCellMapping *cellMapping = [StyledCellMapping subtitleMapping];
-    NSString *selectedSession = SLFSelectedSessionForState(bself.legislator.state);
     cellMapping.onSelectCell = ^(void) {
+        NSString *selectedSession = SLFSelectedSessionForState(bself.legislator.state);
         NSString *resourcePath = [BillSearchParameters pathForSponsor:bself.legislator.legID state:bself.legislator.stateID session:selectedSession];
         BillsViewController *vc = [[BillsViewController alloc] initWithState:bself.legislator.state resourcePath:resourcePath];
         [bself stackOrPushViewController:vc];
@@ -217,7 +217,9 @@
     };
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.text = NSLocalizedString(@"Authored/Sponsored Bills", @"");
-        tableItem.detailText = [bself.legislator.state displayNameForSession:selectedSession];
+        NSString *selectedSession = SLFSelectedSessionForState(bself.legislator.state);
+        NSString *displayName = IsEmpty(selectedSession) ? nil : [bself.legislator.state displayNameForSession:selectedSession];        
+        tableItem.detailText = IsEmpty(displayName) ? @"" : displayName;
         tableItem.cellMapping = cellMapping;
     }]];
     SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Legislation", @""));

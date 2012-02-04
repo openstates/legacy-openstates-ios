@@ -44,6 +44,7 @@
 
 - (void)dealloc
 {
+    self.legislator = nil;
     self.cellContentView = nil;    
     [super dealloc];
 }
@@ -79,7 +80,8 @@
 }
 
 - (void)setLegislator:(SLFLegislator *)value {
-    _legislator = value; // shouldn't retain, we don't need to keep it around
+    SLFRelease(_legislator);
+    _legislator = [value retain]; // shouldn't really retain, we don't need to keep it around except mapping fails.
     [self.imageView setImageWithLegislator:value];
 	[_cellContentView setLegislator:value];
 }
@@ -130,6 +132,8 @@
             LegislatorCell *legCell = (LegislatorCell *)cell;
             if (bself.roundImageCorners && indexPath.row == 0)
                 [cell.imageView roundTopLeftCorner];
+            else
+                cell.imageView.layer.mask = nil;
             BOOL useDarkBG = NO;
             if (bself.useAlternatingRowColors) {
                 useDarkBG = SLFAlternateCellForIndexPath(cell, indexPath);

@@ -14,9 +14,10 @@
 }
 
 - (SLFLegislator *)foundLegislator {
-    if (!self.legID)
-        return nil;
-    return [SLFLegislator findFirstByAttribute:@"legID" withValue:self.legID];
+    SLFLegislator *foundLegislator = nil;
+    if (self.legID)
+        foundLegislator = [SLFLegislator findFirstByAttribute:@"legID" withValue:self.legID];
+    return foundLegislator;
 }
 
 - (NSString *)type {

@@ -16,7 +16,7 @@
 @class LegislatorCellView;
 @interface LegislatorCell : UITableViewCell
 @property (nonatomic,readonly) CGSize cellSize;
-@property (nonatomic,assign) SLFLegislator *legislator;
+@property (nonatomic,retain) SLFLegislator *legislator;
 @property (nonatomic,retain) LegislatorCellView *cellContentView;
 @property (nonatomic,copy) NSString *role;
 @property (nonatomic,assign) BOOL useDarkBackground;
