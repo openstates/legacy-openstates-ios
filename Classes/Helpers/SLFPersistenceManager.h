@@ -58,7 +58,9 @@ NSString* FindOrCreateSelectedSessionForState(SLFState *state);
 
 extern NSString * const SLFWatchedBillsDidChangeNotification;
 NSDictionary* SLFWatchedBillsCatalog(void);
+BOOL SLFBillIsWatchedWithID(NSString *watchID);
 BOOL SLFBillIsWatched(SLFBill *bill);
+void SLFRemoveWatchedBillWithWatchID(NSString *watchID);
 void SLFSaveBillWatchedStatus(SLFBill *bill, BOOL isWatched);
 void SLFTouchBillWatchedStatus(SLFBill *bill);
 

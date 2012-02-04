@@ -96,6 +96,17 @@
     return [BillSearchParameters pathForBill:[parts objectAtIndex:2] state:[parts objectAtIndex:0] session:[parts objectAtIndex:1]];
 }
 
++ (NSString *)watchIDForResourcePath:(NSString *)resourcePath {
+    if (IsEmpty(resourcePath))
+        return nil;
+    RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
+    NSDictionary *args = nil;
+    if ([pathMatcher matchesPattern:@"/bills/:stateID/:session/:billID" tokenizeQueryStrings:YES parsedArguments:&args]) {
+        return RKMakePathWithObjectAddingEscapes(@":stateID||:session||:billID", args, NO);
+    }
+    return nil;
+}
+
 #pragma mark - Sorted Collections
 
 - (NSArray *)sortedActions {

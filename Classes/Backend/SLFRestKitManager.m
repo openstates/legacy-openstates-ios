@@ -189,17 +189,23 @@
 #pragma mark -
 #pragma mark Common Alerts
 
-+ (void)showFailureAlertWithRequest:(RKRequest *)request error:(NSError *)error {
-    NSString *message = NSLocalizedString(@"Unknown Error",@"");
-    NSString *errorText = [error localizedDescription];
++ (NSString *)logFailureMessageForRequest:(RKRequest *)request error:(NSError *)error {
+    NSString *message = NSLocalizedString(@"Network Data Error",@"");
+    NSString *errorText = (error) ? [error localizedDescription] : @"";
     if (!IsEmpty(errorText))
         message = [errorText stringByReplacingOccurrencesOfString:SUNLIGHT_APIKEY withString:@"<APIKEY>"];
-    [SLFAlertView showWithTitle:NSLocalizedString(@"Error",@"") message:message buttonTitle:NSLocalizedString(@"Cancel",@"")];
     RKLogError(@"RestKit Error -");
     if (request)
         RKLogError(@"    resourcePath: %@", request.resourcePath);
     RKLogError(@"    request URL: %@", request.URL);
     RKLogError(@"    error: %@", message);
+    return message;
+}
+
++ (void)showFailureAlertWithRequest:(RKRequest *)request error:(NSError *)error {
+    NSString *message = [SLFRestKitManager logFailureMessageForRequest:request error:error];
+    if (!IsEmpty(message))
+        [SLFAlertView showWithTitle:NSLocalizedString(@"Network Data Error",@"") message:message buttonTitle:NSLocalizedString(@"Cancel",@"")];
 }
 
 @end

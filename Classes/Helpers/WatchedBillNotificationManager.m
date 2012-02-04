@@ -16,6 +16,7 @@
 #import "SLFRestKitManager.h"
 #import "NSDate+SLFDateHelper.h"
 #import "BillDetailViewController.h"
+#import "SLFAlertView.h"
 
 @interface WatchedBillNotificationManager()
 @property (nonatomic,assign) NSTimer *scheduleTimer;
@@ -124,8 +125,27 @@
     }
 }
 
+- (void)pruneInvalidResultIfNessesaryWithResourcePath:(NSString *)resourcePath {
+    NSString *watchID = [SLFBill watchIDForResourcePath:resourcePath];
+    if (IsEmpty(watchID))
+        return;
+    if (!SLFBillIsWatchedWithID(watchID))
+        return;
+    NSString *watchIDForDisplay = [[watchID stringByReplacingOccurrencesOfString:@"||" withString:@" "] uppercaseString];
+    NSString *title = [NSString stringWithFormat:NSLocalizedString(@"Error for %@", @""), watchIDForDisplay];
+    NSString *message = [NSString stringWithFormat:NSLocalizedString(@"An error occurred while checking for updates to a watched bill, %@.  You may choose to ignore this error and keep the bill in your watch list for now, or you can opt to remove this bill in the event this error is not a temporary problem.", @""), watchIDForDisplay];
+    [SLFAlertView showWithTitle:title message:message cancelTitle:NSLocalizedString(@"Keep", @"") cancelBlock:nil otherTitle:NSLocalizedString(@"Delete",@"") otherBlock:^{
+        SLFRemoveWatchedBillWithWatchID(watchID);
+    }];
+}
+
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
-    [[SLFRestKitManager sharedRestKit] objectLoader:objectLoader didFailWithError:error];
+    [SLFRestKitManager logFailureMessageForRequest:objectLoader error:error];
+    [self pruneInvalidResultIfNessesaryWithResourcePath:objectLoader.resourcePath];
+}
+
+- (void)objectLoaderDidLoadUnexpectedResponse:(RKObjectLoader*)objectLoader {
+    [self pruneInvalidResultIfNessesaryWithResourcePath:objectLoader.resourcePath];
 }
 
 @end

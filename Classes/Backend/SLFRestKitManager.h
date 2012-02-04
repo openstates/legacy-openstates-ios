@@ -16,6 +16,7 @@
 @interface SLFRestKitManager : NSObject <RKObjectLoaderDelegate, RKRequestQueueDelegate>
 + (SLFRestKitManager *)sharedRestKit;
 + (void)showFailureAlertWithRequest:(RKRequest *)request error:(NSError *)error;
++ (NSString *)logFailureMessageForRequest:(RKRequest *)request error:(NSError *)error;
 - (void)loadObjectsAtResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate withTimeout:(NSTimeInterval)timeoutSeconds;
 - (void)preloadObjectsForState:(SLFState *)state;
 - (RKObjectLoader *)objectLoaderForResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate withTimeout:(NSTimeInterval)timeoutSeconds;

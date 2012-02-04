@@ -25,6 +25,7 @@ typedef enum BillType {
 @property (nonatomic,readonly) NSString *watchSummaryForDisplay;
 + (SLFBill *)billForWatchID:(NSString *)watchID;
 + (NSString *)resourcePathForWatchID:(NSString *)watchID;
++ (NSString *)watchIDForResourcePath:(NSString *)resourcePath;
 + (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
 + (NSArray *)sortDescriptors;
 @end

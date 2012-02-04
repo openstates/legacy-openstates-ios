@@ -283,11 +283,29 @@ NSDictionary* SLFWatchedBillsCatalog(void) {
     return [[NSUserDefaults standardUserDefaults] dictionaryForKey:kPersistentWatchedBillsKey];
 }
 
-BOOL SLFBillIsWatched(SLFBill *bill) {
+BOOL SLFBillIsWatchedWithID(NSString *watchID) {
     NSDictionary *watchedBills = SLFWatchedBillsCatalog();
-    if (!bill || IsEmpty(watchedBills))
+    if (IsEmpty(watchID) || IsEmpty(watchedBills))
         return NO;
-    return [[watchedBills allKeys] containsObject:bill.watchID];
+    return [[watchedBills allKeys] containsObject:watchID];
+}
+
+BOOL SLFBillIsWatched(SLFBill *bill) {
+    if (!bill)
+        return NO;
+    return SLFBillIsWatchedWithID(bill.watchID);
+}
+
+void SLFRemoveWatchedBillWithWatchID(NSString *watchID) {
+    NSDictionary *watchedBills = SLFWatchedBillsCatalog();
+    if (IsEmpty(watchID))
+        return;
+    NSMutableDictionary *watchedBillsToWrite = [NSMutableDictionary dictionaryWithDictionary:watchedBills];
+        [watchedBillsToWrite removeObjectForKey:watchID];
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+    [settings setObject:watchedBillsToWrite forKey:kPersistentWatchedBillsKey];
+    [settings synchronize];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SLFWatchedBillsDidChangeNotification object:nil];
 }
 
 void SLFSaveBillWatchedStatus(SLFBill *bill, BOOL isWatched) {
