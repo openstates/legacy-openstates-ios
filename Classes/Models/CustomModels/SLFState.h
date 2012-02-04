@@ -22,6 +22,7 @@
 + (RKManagedObjectMapping *)mapping;
 + (NSArray *)sortDescriptors;
 + (NSString *)resourcePathForStateID:(NSString *)stateID;
++ (NSString *)resourcePathForAll;
 @end
 
 @interface RKManagedObjectMapping(SLFState)

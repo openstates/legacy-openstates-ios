@@ -23,12 +23,13 @@
 @property (nonatomic, readonly) NSString *subtitle;
 @property (nonatomic, readonly) NSString *districtLongName;
 @property (nonatomic, readonly) NSString *districtShortName;
-@property (nonatomic,readonly) MultiRowCalloutCell *calloutCell;
+@property (nonatomic, readonly) NSString *normalizedPhotoURL;
+@property (nonatomic, readonly) MultiRowCalloutCell *calloutCell;
 
 + (NSArray *)sortDescriptors;
 - (NSString *)districtPartyString;
 - (NSString *)title;
 + (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
 + (NSString *)resourcePathForCoordinate:(CLLocationCoordinate2D)coordinate;
-+ (NSString *)resourcePathForStateID:(NSString *)stateID;
++ (NSString *)resourcePathForAllWithStateID:(NSString *)stateID;
 @end

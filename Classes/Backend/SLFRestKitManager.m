@@ -41,9 +41,10 @@
 - (id)init {
     self = [super init];
     if (self) {
-        RKLogConfigureByName("RestKit/Network", RKLogLevelCritical);
+        RKLogConfigureByName("RestKit/Network", RKLogLevelInfo);
         RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelWarning);
-        RKLogConfigureByName("RestKit/CoreData", RKLogLevelDebug);
+        RKLogConfigureByName("RestKit/CoreData", RKLogLevelInfo);
+        RKLogConfigureByName("RestKit/UI", RKLogLevelInfo);
 
         RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:OPENSTATES_BASE_URL];
         objectManager.requestQueue.showsNetworkActivityIndicatorWhenBusy = YES;

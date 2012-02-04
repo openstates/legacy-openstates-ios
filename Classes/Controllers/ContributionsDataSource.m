@@ -204,6 +204,7 @@ SLF_TODO("Move this whole class to RKTableController")
     NSString *state = [data valueForKeyPath:@"metadata.state"];         // TX
     NSString *partyID = [data valueForKeyPath:@"metadata.party"];       // R
     //NSString *seat = [data valueForKeyPath:@"metadata.seat"];         // state:lower
+    //NSString *photoURL = [data valueForKeyPath:@"metadata.photo_url"];
     NSMutableString *subtitle = [NSMutableString string];
     if (!IsEmpty(state)) {
         [subtitle appendFormat:@"(%@",state];

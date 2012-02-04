@@ -174,6 +174,12 @@
     return [MultiRowCalloutCell cellWithImage:self.partyObj.image title:self.title subtitle:self.fullName userData:[NSDictionary dictionaryWithObject:self.legID forKey:@"legID"]];
 }
 
+- (NSString *)normalizedPhotoURL {
+    if (!IsEmpty(self.legID))
+        return [NSString stringWithFormat:@"https://s3.amazonaws.com/assets.openstates.org/photos/small/%@.jpg", self.legID];
+    return nil;
+}
+
 + (NSString *)resourcePathForCoordinate:(CLLocationCoordinate2D)coordinate {
     if (!CLLocationCoordinate2DIsValid(coordinate))
         return nil;
@@ -181,10 +187,10 @@
     return resourcePath;    
 }
 
-+ (NSString *)resourcePathForStateID:(NSString *)stateID {
-    NSString *resourcePath = [NSString stringWithFormat:@"/legislators/?state=%@&active=true&apikey=%@", stateID, SUNLIGHT_APIKEY];
-    return resourcePath;
++ (NSString *)resourcePathForAllWithStateID:(NSString *)stateID {
+    /* download just enough attributes to populate the cell.  
+       keep last_name in addition to full_name because it's used for the section index */
+    return [NSString stringWithFormat:@"/legislators?state=%@&active=true&apikey=%@&fields=state,chamber,leg_id,title,district,party,full_name,last_name,active", stateID, SUNLIGHT_APIKEY];
 }
-
 
 @end

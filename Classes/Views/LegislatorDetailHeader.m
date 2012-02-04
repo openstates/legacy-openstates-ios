@@ -13,7 +13,7 @@
 #import "LegislatorDetailHeader.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SLFDataModels.h"
-#import "UIImageView+AFNetworking.h"
+#import "UIImageView+SLFLegislator.h"
 #import "SLFDrawingExtensions.h"
 
 @interface LegislatorDetailHeader()
@@ -127,10 +127,7 @@ static UIFont *titleFont;
     [self configure];
     if (!legislator)
         return;
-    if (legislator.photoURL)
-        [_imageView setImageWithURL:[NSURL URLWithString:legislator.photoURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
-    else
-        [self.imageView setImage:[UIImage imageNamed:@"placeholder"]];
+    [self.imageView setImageWithLegislator:legislator];
     [self setNeedsDisplay];
 }
 

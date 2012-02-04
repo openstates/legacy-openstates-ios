@@ -57,11 +57,6 @@
     return [self.stateID uppercaseString];
 }
 
-+ (NSString *)resourcePathForStateID:(NSString *)stateID {
-    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", [stateID lowercaseString], @"stateID", nil];
-    return RKMakePathWithObject(@"/metadata/:stateID?apikey=:apikey", queryParams);
-}
-
 - (NSString *)newsAddress {
     if ([self.stateID isEqualToString:@"dc"]) // DC doesn't have a stateline page
         return @"http://dccouncil.washington.dc.us/news";
@@ -172,4 +167,12 @@
     return [self.capitolMaps sortedArrayUsingDescriptors:[GenericAsset sortDescriptors]];
 }
 
++ (NSString *)resourcePathForStateID:(NSString *)stateID {
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", [stateID lowercaseString], @"stateID", nil];
+    return RKMakePathWithObject(@"/metadata/:stateID?apikey=:apikey", queryParams);
+}
+
++ (NSString *)resourcePathForAll {
+    return [NSString stringWithFormat:@"/metadata?apikey=%@&fields=name,abbreviation,upper_chamber_name,lower_chamber_name,upper_chamber_title,lower_chamber_title,feature_flags", SUNLIGHT_APIKEY];
+}
 @end

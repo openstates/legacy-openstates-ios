@@ -17,12 +17,13 @@
 #import "UIImageView+AFNetworking.h"
 #import "UIImageView+RoundedCorners.h"
 #import "SLFTheme.h"
+#import "UIImageView+SLFLegislator.h"
 
 @interface LegislatorCell()
 @end
 
 @implementation LegislatorCell
-@synthesize legislator;
+@synthesize legislator = _legislator;
 @synthesize cellContentView = _cellContentView;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -78,10 +79,8 @@
 }
 
 - (void)setLegislator:(SLFLegislator *)value {
-    if (value && value.photoURL)
-        [self.imageView setImageWithURL:[NSURL URLWithString:value.photoURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
-    else
-        [self.imageView setImage:[UIImage imageNamed:@"placeholder"]];
+    _legislator = value; // shouldn't retain, we don't need to keep it around
+    [self.imageView setImageWithLegislator:value];
 	[_cellContentView setLegislator:value];
 }
 
