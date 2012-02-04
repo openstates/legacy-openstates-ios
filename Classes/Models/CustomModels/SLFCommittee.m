@@ -65,4 +65,9 @@
     return [self.members sortedArrayUsingDescriptors:[CommitteeMember sortDescriptors]];
 }
 
++ (NSString *)resourcePathForAllWithStateID:(NSString *)stateID {
+    /* download just enough attributes to populate the cell. */
+    return [NSString stringWithFormat:@"/committees?state=%@&apikey=%@&fields=state,chamber,id,committee", stateID, SUNLIGHT_APIKEY];
+}
+
 @end

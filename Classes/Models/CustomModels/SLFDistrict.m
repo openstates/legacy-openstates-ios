@@ -29,7 +29,7 @@
 }
 
 + (NSArray*)searchableAttributes {
-    return [NSArray arrayWithObjects:@"name", @"subtitle", nil];
+    return [NSArray arrayWithObjects:@"name", @"subtitle", @"boundaryID", nil];
 }
 
 - (NSNumber *)districtNumber {

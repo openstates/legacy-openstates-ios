@@ -27,7 +27,7 @@
 @synthesize stateMenuDelegate;
 
 - (id)init {
-    self = [super initWithState:nil resourcePath:[NSString stringWithFormat:@"/metadata?apikey=%@", SUNLIGHT_APIKEY] dataClass:[SLFState class]];
+    self = [super initWithState:nil resourcePath:[SLFState resourcePathForAll] dataClass:[SLFState class]];
     if (self) {
         self.useTitleBar = NO;
     }

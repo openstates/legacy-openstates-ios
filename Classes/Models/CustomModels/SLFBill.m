@@ -156,4 +156,11 @@
     [parser release];
     return stages;
 }
+
+/* This is unnecessary, since resource paths are generated in the BillSearchParameters class. "fields" added in BillsViewController
++ (NSString *)resourcePathForAllWithStateID:(NSString *)stateID {
+    return nil;
+}
+*/
+
 @end

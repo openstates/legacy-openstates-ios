@@ -21,7 +21,7 @@
 @implementation LegislatorsViewController
 
 - (id)initWithState:(SLFState *)newState {
-    NSString *resourcePath = [SLFLegislator resourcePathForStateID:newState.stateID];
+    NSString *resourcePath = [SLFLegislator resourcePathForAllWithStateID:newState.stateID];
     self = [super initWithState:newState resourcePath:resourcePath dataClass:[SLFLegislator class]];
     return self;
 }

@@ -10,4 +10,5 @@
 - (NSArray *)sortedMembers;
 + (NSArray *)sortDescriptors;
 + (RKManagedObjectMapping *)mappingWithStateMapping:(RKManagedObjectMapping *)stateMapping;
++ (NSString *)resourcePathForAllWithStateID:(NSString *)stateID;
 @end

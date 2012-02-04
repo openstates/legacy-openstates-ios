@@ -18,6 +18,7 @@
 
 NSString* validOrEmptyParameter(NSString *parameter);
 NSString* validSessionParameter(NSString *session);
+static NSString const * kBillListMinimalFields = @"state,bill_id,title,chamber,session,updated_at,sponsors,subjects";
 
 @implementation BillSearchParameters
 
@@ -43,7 +44,8 @@ NSString* validSessionParameter(NSString *session);
 										validSessionParameter(session), @"search_window",
 										stateID, @"state",
 										SUNLIGHT_APIKEY, @"apikey", 
-                                        text, @"q", nil];
+                                        text, @"q", 
+                                        kBillListMinimalFields, @"fields", nil];
 	if (chamber && ![chamber isEqualToString:@"all"])
 		[queryParams setObject:chamber forKey:@"chamber"];
     return RKPathAppendQueryParams(@"/bills", queryParams);
@@ -64,7 +66,8 @@ NSString* validSessionParameter(NSString *session);
 										validSessionParameter(session), @"search_window",
 										stateID, @"state",
 										SUNLIGHT_APIKEY, @"apikey",
-                                        subject, @"subject", nil];
+                                        subject, @"subject", 
+                                        kBillListMinimalFields, @"fields", nil];
 	if (chamber && ![chamber isEqualToString:@"all"])
 		[queryParams setObject:chamber forKey:@"chamber"];
     return RKPathAppendQueryParams(@"/bills", queryParams);
@@ -95,7 +98,7 @@ NSString* validSessionParameter(NSString *session);
 								 validSessionParameter(session), @"search_window",
 								 SUNLIGHT_APIKEY, @"apikey",
 								 sponsorID, @"sponsor_id",
-								 @"sponsors,bill_id,title,session,state,type,update_at,subjects", @"fields", nil];
+								 kBillListMinimalFields, @"fields", nil];
 	return RKPathAppendQueryParams(@"/bills", queryParams);
 }
 
@@ -110,7 +113,10 @@ NSString* validSessionParameter(NSString *session);
 + (NSString *)pathForUpdatedSinceDaysAgo:(NSInteger)daysAgo state:(NSString *)stateID {
     NSDate *dateSince = [[NSDate date] dateByAddingDays:(-daysAgo)];
     NSString *updatedSince = [dateSince stringWithFormat:[NSDate dateFormatString] localized:NO];
-    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys: updatedSince, @"updated_since", stateID, @"state", SUNLIGHT_APIKEY, @"apikey", nil];
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys: 
+                                 updatedSince, @"updated_since", 
+                                 stateID, @"state", SUNLIGHT_APIKEY, @"apikey", 
+                                 kBillListMinimalFields, @"fields", nil];
     return RKPathAppendQueryParams(@"/bills", queryParams);
 }
 

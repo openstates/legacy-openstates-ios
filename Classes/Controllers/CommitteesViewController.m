@@ -20,8 +20,7 @@
 @implementation CommitteesViewController
 
 - (id)initWithState:(SLFState *)newState {
-    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", newState.stateID,@"state", nil];
-    NSString *resourcePath = RKMakePathWithObject(@"/committees?state=:state&apikey=:apikey", queryParams);
+    NSString *resourcePath = [SLFCommittee resourcePathForAllWithStateID:newState.stateID];
     self = [super initWithState:newState resourcePath:resourcePath dataClass:[SLFCommittee class]];
     return self;
 }

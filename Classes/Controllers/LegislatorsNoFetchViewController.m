@@ -31,7 +31,7 @@
 @synthesize hasWarnedForDifferentStates = _hasWarnedForDifferentStates;
 
 - (id)initWithState:(SLFState *)newState usingGeolocation:(BOOL)usingGeolocation {
-    NSString *resourcePath = [SLFLegislator resourcePathForStateID:newState.stateID];
+    NSString *resourcePath = [SLFLegislator resourcePathForAllWithStateID:newState.stateID];
     if (usingGeolocation)
         resourcePath = nil;
     self = [super initWithState:newState resourcePath:resourcePath dataClass:[SLFLegislator class]];
