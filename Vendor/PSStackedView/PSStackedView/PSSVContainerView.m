@@ -12,7 +12,7 @@
 
 #define kPSSVCornerRadius 6.f
 #define kPSSVShadowWidth 30.f
-#define kPSSVShadowAlpha 0.25f
+#define kPSSVShadowAlpha 0.1f
 
 @interface PSSVContainerView ()
 @property(nonatomic, assign) CGFloat originalWidth;

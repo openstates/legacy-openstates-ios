@@ -20,7 +20,7 @@
 #define kPSSVAssociatedBaseViewControllerKey @"kPSSVAssociatedBaseViewController"
 
 // reduces alpha over overlapped view controllers. 1.f would totally black-out on complete overlay
-#define kAlphaReductRatio 2.f
+#define kAlphaReductRatio 10.f
 #define EPSILON .001f // float calculations
 
 // prevents me getting crazy
@@ -377,7 +377,7 @@ enum {
 }
 
 - (CGFloat)nextFloatIndex:(CGFloat)floatIndex {
-    CGFloat nextFloat = 0.f;
+    CGFloat nextFloat = floatIndex;
     CGFloat roundedFloat = [self nearestValidFloatIndex:floatIndex];
     CGFloat viewControllerCount = [self.viewControllers count];
     for (CGFloat tester = roundedFloat + 0.5f; tester < viewControllerCount;  tester += 0.5f) {
@@ -390,7 +390,7 @@ enum {
 }
 
 - (CGFloat)prevFloatIndex:(CGFloat)floatIndex {
-    CGFloat prevFloat = 0.f;
+    CGFloat prevFloat = floatIndex;
     CGFloat roundedFloat = [self nearestValidFloatIndex:floatIndex];
     for (CGFloat tester = roundedFloat - 0.5f; tester >= 0.f;  tester -= 0.5f) {
         if ([self isValidFloatIndex:tester]) {
@@ -427,7 +427,17 @@ enum {
         CGRect currentRect = CGRectMake(leftPos, currentVC.containerView.top, currentVC.containerView.width, currentVC.containerView.height);
         [frames addObject:[NSValue valueWithCGRect:currentRect]];
     }];
-    
+        // Merge from Marcel Ball's 888a831, to fix the right/left gap snapping issue.
+    [self.viewControllers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if(idx < floatIndex && idx < [self.viewControllers count] - 1) {
+            CGRect crect = [[frames objectAtIndex:idx] CGRectValue];
+            CGRect nrect = [[frames objectAtIndex:idx + 1] CGRectValue];
+            CGFloat lpos = nrect.origin.x - crect.size.width;
+            lpos = MAX(lpos, [self currentLeftInset]);
+            CGRect newrect = CGRectMake(lpos, crect.origin.y, crect.size.width, crect.size.height);
+            [frames replaceObjectAtIndex:idx withObject:[NSValue valueWithCGRect:newrect]];
+        }
+    }];    
     return frames;
 }
 
