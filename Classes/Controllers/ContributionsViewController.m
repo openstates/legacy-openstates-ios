@@ -54,14 +54,15 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tableDataChanged:) name:kContributionsDataNotifyLoaded object:dataSource];
     
     UILabel *nimsp = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.size.width, 66)];
+    nimsp.autoresizingMask = UIViewAutoresizingNone;
     nimsp.backgroundColor = [UIColor clearColor];
-    nimsp.font = SLFFont(14);
+    nimsp.font = SLFItalicFont(14);
     nimsp.shadowColor = [UIColor colorWithWhite:1.0 alpha:0.5];
     nimsp.textAlignment = UITextAlignmentCenter;
     nimsp.textColor = [SLFAppearance cellTextColor];
     nimsp.lineBreakMode = UILineBreakModeWordWrap;
     nimsp.numberOfLines = 3;
-    nimsp.text = NSLocalizedString(@"Data generously provided by the National Institute on Money in State Politics.", @"");
+    nimsp.text = NSLocalizedString(@"Data generously provided by the \nNational Institute on Money in State Politics \nand the Center for Responsible Politics.", @"");
     self.tableView.tableFooterView = nimsp;
     [nimsp release];    
 }
