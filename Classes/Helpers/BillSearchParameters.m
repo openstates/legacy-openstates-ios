@@ -131,7 +131,7 @@ NSString* validOrEmptyParameter(NSString *parameter) {
 NSString* validSessionParameter(NSString *session) {
     if (IsEmpty(session))
         return @"session";
-    return [NSString stringWithFormat:@"session:%@", [session URLEncodedString]];
+    return [NSString stringWithFormat:@"session:%@", session];
 }
 
 
