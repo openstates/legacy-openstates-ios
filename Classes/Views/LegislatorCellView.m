@@ -130,7 +130,7 @@
     NSString *nameString = _name;
     if (IsEmpty(nameString)) {
         nameString = _genericName;
-        partyString = NSLocalizedString(@"Unknown", @"");
+        partyString = @"";
     }
 
     static UIFont *font;
