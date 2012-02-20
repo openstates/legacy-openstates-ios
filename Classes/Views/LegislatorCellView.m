@@ -169,8 +169,11 @@
     [partyString drawInRect:drawRect withFont:font];
         
     // District
+    CGFloat xoffset = drawRect.origin.x+drawRect.size.width;
     [lightColor set];
-    drawRect = [self rectOfString:_district atOrigin:CGPointMake(drawRect.origin.x+drawRect.size.width+6, 48.f) withFont:font];
+    if (!IsEmpty(partyString))
+        xoffset += 6;
+    drawRect = [self rectOfString:_district atOrigin:CGPointMake(xoffset,48) withFont:font];
     [_district drawInRect:drawRect withFont:font];
     
     // Role

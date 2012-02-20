@@ -110,7 +110,9 @@ static UIFont *titleFont;
 
     [partyColor set];
     renderedSize = [party drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:plainFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
-    CGFloat shiftX = roundf(renderedSize.width + 6);
+    CGFloat shiftX = 0;    
+    if (!IsEmpty(party))
+        shiftX += roundf(renderedSize.width + 6);
     
     [lightColor set];
     renderedSize = [district drawAtPoint:CGPointMake(offsetX+shiftX, offsetY) forWidth:maxWidth-shiftX withFont:plainFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
