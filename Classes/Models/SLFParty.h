@@ -13,9 +13,10 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
+    SLFPartyUnknown = -1,
     SLFPartyIndependent = 0,
-    SLFPartyDemocrat,
-    SLFPartyRepublican
+    SLFPartyDemocrat = 1,
+    SLFPartyRepublican = 2
 } SLFPartyType;
 
 @interface SLFParty : NSObject
@@ -41,5 +42,9 @@ typedef enum {
 
 @interface Independent : SLFParty
 + (Independent*)independent;
+@end
+
+@interface UnknownParty : SLFParty
++ (UnknownParty*)unknownParty;
 @end
 

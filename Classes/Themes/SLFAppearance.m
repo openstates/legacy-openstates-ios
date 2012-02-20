@@ -50,6 +50,7 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 + (UIColor *)partyRed {return [self crail];}
 + (UIColor *)partyBlue {return [self tarawera];}
 + (UIColor *)partyGreen {return [self gimlet];}
++ (UIColor *)partyWhite {return [self greenWhite];}
 + (UIColor *)accentGreenColor {return [self gimlet];}
 + (UIColor *)accentBlueColor {return [self acapulco];}
 + (UIColor *)accentOrangeColor {return [self punch];}

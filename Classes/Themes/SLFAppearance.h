@@ -32,6 +32,7 @@
 + (UIColor *)partyRed;
 + (UIColor *)partyBlue;
 + (UIColor *)partyGreen;
++ (UIColor *)partyWhite;
 @end
 
 BOOL SLFColorGetRGBAComponents(UIColor *color, CGFloat *red, CGFloat *green, CGFloat *blue, CGFloat *alpha);

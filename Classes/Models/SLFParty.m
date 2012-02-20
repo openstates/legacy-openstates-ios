@@ -20,6 +20,7 @@ NSString * partyNameForType(SLFPartyType newType);
 static Democrat * cachedDemocrat;
 static Republican * cachedRepublican;
 static Independent * cachedIndependent;
+static UnknownParty * cachedUnknown;
 
 @interface SLFParty()
 @end
@@ -40,7 +41,9 @@ static Independent * cachedIndependent;
         return [Democrat democrat];
     else if (aType == SLFPartyRepublican)
         return [Republican republican];
-    return [Independent independent];
+    else if (aType == SLFPartyIndependent)
+        return [Independent independent];
+    return [UnknownParty unknownParty];
 }
 
 - (void)dealloc {
@@ -112,14 +115,45 @@ static Independent * cachedIndependent;
 }
 @end
 
+#define UNKNOWN_STRING   @""
+
+@implementation UnknownParty
++ (UnknownParty *)unknownParty {
+    if (!cachedUnknown) {
+        cachedUnknown = [[UnknownParty alloc] init];
+        cachedUnknown.type = SLFPartyUnknown;
+        cachedUnknown.name = UNKNOWN_STRING;
+        cachedUnknown.color = [SLFAppearance partyWhite];
+        cachedUnknown.image = [UIImage imageNamed:@"silverstar"];
+        cachedUnknown.pinColorIndex = SLFMapPinColorGreen;
+    }
+    return cachedUnknown;
+}
+
+- (NSString *)initial {
+    return UNKNOWN_STRING;
+}
+
+- (NSString *)abbreviation {
+    return UNKNOWN_STRING;
+}
+
+- (NSString *)plural {
+    return UNKNOWN_STRING;
+}
+@end
+
+
 SLFPartyType partyTypeForName(NSString *newName) {
-    SLFPartyType newType = SLFPartyIndependent;
+    SLFPartyType newType = SLFPartyUnknown;
     if (!IsEmpty(newName)) {
         NSString *loweredName = [newName lowercaseString];
         if ([@"democrat" isEqualToString:loweredName])
             newType = SLFPartyDemocrat;
         else if ([@"republican" isEqualToString:loweredName])
             newType = SLFPartyRepublican;
+        else if ([@"independent" isEqualToString:loweredName])
+            newType = SLFPartyIndependent;
     }
     return newType;
 }
