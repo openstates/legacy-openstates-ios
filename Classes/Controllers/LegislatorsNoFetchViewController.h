@@ -12,8 +12,9 @@
 
 #import "NoFetchViewController.h"
 #import <CoreLocation/CoreLocation.h>
+#import "SVGeocoder.h"
 
-@interface LegislatorsNoFetchViewController : NoFetchViewController
+@interface LegislatorsNoFetchViewController : NoFetchViewController <SVGeocoderDelegate>
 @property (nonatomic,retain) CLLocationManager *locationManager;
 - (id)initWithState:(SLFState *)newState usingGeolocation:(BOOL)usingGeolocation;
 @end

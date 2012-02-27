@@ -15,20 +15,24 @@
 #import "SLFDataModels.h"
 #import "LegislatorCell.h"
 #import "MTInfoPanel.h"
+#import "SVPlacemark.h"
 
 @interface LegislatorsNoFetchViewController()
+- (void)loadTableWithCoordinate:(CLLocationCoordinate2D)coordinate;
 - (void)startUpdatingLocation:(id)sender;
 - (void)stopUpdatingLocation:(NSString *)reason;
 - (BOOL)isNewStateDifferentThanCurrentState;
 - (void)presentAlertForDifferentState;
 @property (nonatomic,retain) MTInfoPanel *locationActivityPanel;
 @property (nonatomic,assign) BOOL hasWarnedForDifferentStates;
+@property (nonatomic,retain) SVGeocoder *geocoder;
 @end
 
 @implementation LegislatorsNoFetchViewController
 @synthesize locationManager = _locationManager;
 @synthesize locationActivityPanel = _locationActivityPanel;
 @synthesize hasWarnedForDifferentStates = _hasWarnedForDifferentStates;
+@synthesize geocoder = _geocoder;
 
 - (id)initWithState:(SLFState *)newState usingGeolocation:(BOOL)usingGeolocation {
     NSString *resourcePath = [SLFLegislator resourcePathForAllWithStateID:newState.stateID];
@@ -53,6 +57,7 @@
     [self stopUpdatingLocation:nil];
     self.locationManager = nil;
     self.locationActivityPanel = nil;
+    self.geocoder = nil;
     [super dealloc];
 }
 
@@ -60,12 +65,15 @@
     [self stopUpdatingLocation:nil];
     self.locationManager = nil;
     self.locationActivityPanel = nil;
+    self.geocoder = nil;
     [super viewDidUnload];
 }
 
 - (void)configureTableController {
     [super configureTableController];
     self.tableController.tableView.rowHeight = 73;
+    [self configureSearchBarWithPlaceholder:NSLocalizedString(@"Search by address", @"") withConfigurationBlock:nil];
+
     __block __typeof__(self) bself = self;
     LegislatorCellMapping *objCellMap = [LegislatorCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"self" toAttribute:@"legislator"];
@@ -114,6 +122,14 @@
 
 #pragma mark Geolocation
 
+- (void)loadTableWithCoordinate:(CLLocationCoordinate2D)coordinate {
+    if (!CLLocationCoordinate2DIsValid(coordinate))
+        return;
+    NSString *resourcePath = [SLFLegislator resourcePathForCoordinate:coordinate];
+    self.resourcePath = resourcePath;
+    [self loadTableFromNetwork];
+}
+
 - (void)startUpdatingLocation:(id)sender {
     if (!self.locationManager) {
         _locationManager = [[CLLocationManager alloc] init];
@@ -156,9 +172,39 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
     [self stopUpdatingLocation:nil];
-    NSString *resourcePath = [SLFLegislator resourcePathForCoordinate:newLocation.coordinate];
-    self.resourcePath = resourcePath;
-    [self loadTableFromNetwork];
+    [self loadTableWithCoordinate:newLocation.coordinate];
+}
+
+- (void)geocodeCoordinateWithAddress:(NSString *)address {
+    self.geocoder = nil;
+    MKCoordinateRegion defaultRegion = MKCoordinateRegionMake(CLLocationCoordinate2DMake(37.250556, -96.358333), MKCoordinateSpanMake(62.20933368, 25.85818456)); // United States
+    _geocoder = [[SVGeocoder alloc] initWithAddress:address inBounds:defaultRegion];
+    [_geocoder setDelegate:self];
+    [_geocoder startAsynchronous];
+}
+
+- (void)geocoder:(SVGeocoder *)geocoder didFindPlacemark:(SVPlacemark *)placemark
+{
+    RKLogInfo(@"Geocoder found placemark: %@", placemark);
+    self.geocoder = nil;
+    [self.searchBar resignFirstResponder];
+    [self loadTableWithCoordinate:placemark.coordinate];
+}
+
+- (void)geocoder:(SVGeocoder *)geocoder didFailWithError:(NSError *)error
+{
+    RKLogError(@"SVGeocoder has failed: %@", error);
+    self.geocoder = nil;
+    if (self.isViewLoaded) {
+        NSString *reason = NSLocalizedString(@"Unable to find that address.", @"");
+        [MTInfoPanel showPanelInView:self.view type:MTInfoPanelTypeError title:NSLocalizedString(@"Geolocation Error",@"") subtitle:reason hideAfter:4.f];
+        RKLogError(@"Geolocation Error: %@", reason);
+    } 
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)aSearchBar {
+    [self geocodeCoordinateWithAddress:aSearchBar.text];
+    [super searchBarSearchButtonClicked:aSearchBar];
 }
 
 @end
