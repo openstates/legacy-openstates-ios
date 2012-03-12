@@ -62,7 +62,7 @@
     nimsp.textColor = [SLFAppearance cellTextColor];
     nimsp.lineBreakMode = UILineBreakModeWordWrap;
     nimsp.numberOfLines = 3;
-    nimsp.text = NSLocalizedString(@"Data generously provided by the \nNational Institute on Money in State Politics \nand the Center for Responsible Politics.", @"");
+    nimsp.text = NSLocalizedString(@"Data generously provided by the \nNational Institute on Money in State Politics \nand the Center for Responsive Politics.", @"");
     self.tableView.tableFooterView = nimsp;
     [nimsp release];    
 }

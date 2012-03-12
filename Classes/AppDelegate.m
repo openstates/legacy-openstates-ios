@@ -100,7 +100,7 @@
 
 - (void)setUpReachability {
     SLFReachable *reachable = [SLFReachable sharedReachable];
-    NSSet *hosts = [NSSet setWithObjects:@"openstates.org", @"assets.openstates.org", @"stateline.org", @"transparencydata.com", @"www.followthemoney.org", @"votesmart.org", nil];
+    NSSet *hosts = [NSSet setWithObjects:@"openstates.org", @"static.openstates.org", @"stateline.org", @"transparencydata.com", @"www.followthemoney.org", @"votesmart.org", nil];
     [reachable watchHostsInSet:hosts];
     __block __typeof__(self) bself = self;
     SLFRunBlockAfterDelay(^{

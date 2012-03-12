@@ -176,7 +176,7 @@
 
 - (NSString *)normalizedPhotoURL {
     if (!IsEmpty(self.legID))
-        return [NSString stringWithFormat:@"http://assets.openstates.org/photos/small/%@.jpg", self.legID];
+        return [NSString stringWithFormat:@"http://static.openstates.org/photos/small/%@.jpg", self.legID];
     return nil;
 }
 
