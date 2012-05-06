@@ -100,9 +100,11 @@ BOOL SLFIsReachableAddress(NSString * urlString) {
 - (void)beginCheckingHostReachability:(SCNetworkReachability *)hostReach {
     NSParameterAssert(hostReach);
     SCNetworkReachabilityFlags flags;
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     if ([hostReach getFlags:&flags]) // must use synchronous for initial messages only
         [self changeReachability:hostReach forFlags:flags];
     [hostReach startNotifier];
+    [pool drain];
 }
 
 - (void)notifyReachabilityChanged:(NSNotification *)notification

@@ -92,10 +92,12 @@
 }
 
 - (void)setUpBackgroundTasks {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [self setUpReachability];
     [self setUpURLCache];
     [SLFEventsManager sharedManager];
     [[SLFAnalytics sharedAnalytics] beginTracking];
+    [pool drain];
 }
 
 - (void)setUpReachability {

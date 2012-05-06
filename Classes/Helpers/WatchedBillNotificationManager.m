@@ -60,7 +60,9 @@
 }
 
 - (IBAction)checkBillsStatus:(id)sender {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [self loadWatchedBillsFromNetwork:sender];
+    [pool drain];
 }
 
 - (IBAction)loadWatchedBillsFromNetwork:(id)sender {
