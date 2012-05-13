@@ -126,7 +126,7 @@ enum {
 @property(nonatomic, assign, readonly) NSInteger lastVisibleIndex;
 
 /// array of all current view controllers, sorted
-@property(nonatomic, assign, readonly) NSArray *stackedViewControllers;
+@property(nonatomic, assign, readonly) NSArray *viewControllers;
 
 /// pangesture recognizer used
 @property(nonatomic, retain) UIPanGestureRecognizer *panRecognizer;

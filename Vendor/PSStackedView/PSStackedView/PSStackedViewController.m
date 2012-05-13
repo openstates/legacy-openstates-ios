@@ -804,6 +804,10 @@ enum {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - SVStackRootController (Public)
 
+- (NSArray *)viewControllers {
+    return self.stackedViewControllers;
+}
+
 - (NSInteger)indexOfViewController:(UIViewController *)viewController {
     __block NSUInteger index = [self.stackedViewControllers indexOfObject:viewController];
     if (index == NSNotFound) {
