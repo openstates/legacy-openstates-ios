@@ -73,7 +73,7 @@
     _tableController.tableView.rowHeight = 90;
     _tableController.canEditRows = YES;
     [_tableController mapObjectsWithClass:[SLFBill class] toTableCellsWithMapping:[self billCellMapping]];
-    RKTableItem *emptyItem = [RKTableItem tableItemWithText:NSLocalizedString(@"No Watched Bills",@"") detailText:NSLocalizedString(@"There are no watched bills, yet. To add one, find a bill and click it's star button.",@"")];
+    RKTableItem *emptyItem = [RKTableItem tableItemWithText:NSLocalizedString(@"No Watched Bills",@"") detailText:NSLocalizedString(@"There are no watched bills, yet. To add one, find a bill and click its star button.",@"")];
     emptyItem.cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleSubtitle alternatingColors:NO largeHeight:YES selectable:NO];
     [emptyItem.cellMapping addDefaultMappings];
     _tableController.emptyItem = emptyItem;
