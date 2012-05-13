@@ -28,7 +28,7 @@ typedef void(^PSSVSimpleBlock)(void);
 
 @interface PSStackedViewController() <UIGestureRecognizerDelegate> 
 @property(nonatomic, retain) UIViewController *rootViewController;
-@property(nonatomic, assign) NSMutableArray* viewControllers;
+@property(nonatomic, assign) NSMutableArray* stackedViewControllers;
 @property(nonatomic, assign) NSInteger firstVisibleIndex;
 @property(nonatomic, assign) CGFloat floatIndex;
 - (UIViewController *)overlappedViewController;
@@ -40,7 +40,7 @@ typedef void(^PSSVSimpleBlock)(void);
 @synthesize topOffset = topOffset_;
 @synthesize leftInset = leftInset_;
 @synthesize largeLeftInset = largeLeftInset_;
-@synthesize viewControllers = viewControllers_;
+@synthesize stackedViewControllers = stackedViewControllers_;
 @synthesize floatIndex = floatIndex_;
 @synthesize rootViewController = rootViewController_;
 @synthesize panRecognizer = panRecognizer_;
@@ -58,7 +58,7 @@ typedef void(^PSSVSimpleBlock)(void);
 - (id)initWithRootViewController:(UIViewController *)rootViewController; {
     if ((self = [super init])) {
         rootViewController_ = [rootViewController retain];
-        viewControllers_ = [[NSMutableArray alloc] init];
+        stackedViewControllers_ = [[NSMutableArray alloc] init];
         
         // set some reasonble defaults
         leftInset_ = 60;
@@ -97,13 +97,13 @@ typedef void(^PSSVSimpleBlock)(void);
     delegate_ = nil;
     panRecognizer_.delegate = nil;
     // remove all view controllers the hard way (w/o calling delegate)
-    while ([self.viewControllers count]) {
+    while ([self.stackedViewControllers count]) {
         [self popViewControllerAnimated:NO];
     }
     
     [panRecognizer_ release];
     [rootViewController_ release];
-    [viewControllers_ release];
+    [stackedViewControllers_ release];
     [super dealloc];
 }
 
@@ -180,7 +180,7 @@ typedef void(^PSSVSimpleBlock)(void);
 // total stack width if completely expanded
 - (NSUInteger)totalStackWidth {
     NSUInteger totalStackWidth = 0;
-    for (UIViewController *controller in self.viewControllers) {
+    for (UIViewController *controller in self.stackedViewControllers) {
         totalStackWidth += controller.containerView.width;
     }
     return totalStackWidth;
@@ -220,7 +220,7 @@ typedef void(^PSSVSimpleBlock)(void);
     NSUInteger vcIndex = [self indexOfViewController:viewController];
     UIViewController *prevVC = nil;
     if (vcIndex > 0) {
-        prevVC = [self.viewControllers objectAtIndex:vcIndex-1];
+        prevVC = [self.stackedViewControllers objectAtIndex:vcIndex-1];
     }
     
     return prevVC;
@@ -232,8 +232,8 @@ typedef void(^PSSVSimpleBlock)(void);
     
     NSUInteger vcIndex = [self indexOfViewController:viewController];
     UIViewController *nextVC = nil;
-    if (vcIndex + 1 < [self.viewControllers count]) {
-        nextVC = [self.viewControllers objectAtIndex:vcIndex+1];
+    if (vcIndex + 1 < [self.stackedViewControllers count]) {
+        nextVC = [self.stackedViewControllers objectAtIndex:vcIndex+1];
     }
     
     return nextVC;
@@ -244,7 +244,7 @@ typedef void(^PSSVSimpleBlock)(void);
 - (UIViewController *)lastVisibleViewControllerCompletelyVisible:(BOOL)completely {
     __block UIViewController *lastVisibleViewController = nil;
     
-    [self.viewControllers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [self.stackedViewControllers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         UIViewController *currentViewController = (UIViewController *)obj;
         if ([self isViewControllerVisible:currentViewController completely:completely]) {
             lastVisibleViewController = currentViewController;
@@ -257,7 +257,7 @@ typedef void(^PSSVSimpleBlock)(void);
 
 // returns true if firstVisibleIndex is the last available index.
 - (BOOL)isLastIndex {
-    BOOL isLastIndex = self.firstVisibleIndex == [self.viewControllers count] - 1;
+    BOOL isLastIndex = self.firstVisibleIndex == [self.stackedViewControllers count] - 1;
     return isLastIndex;
 }
 
@@ -284,14 +284,14 @@ enum {
             // docking to menu is only allowed if content > available size.
             isValid = contentWidth > [self screenWidth] - self.largeLeftInset;
         }else {
-            NSUInteger stackCount = [self.viewControllers count];
+            NSUInteger stackCount = [self.stackedViewControllers count];
             CGFloat intIndex, restIndex;
             restIndex = modff(floatIndex, &intIndex); // split e.g. 1.5 in 1.0 and 0.5
             isValid = stackCount > intIndex && contentWidth > ([self screenWidth] - self.leftInset);
             if (isValid && fabsf(restIndex - 0.5f) < EPSILON) {  // comparing floats -> if so, we have a .5 here
                 if (ceilf(floatIndex) < stackCount) { // at the end?
-                    CGFloat widthLeft = [[self.viewControllers objectAtIndex:floorf(floatIndex)] containerView].width;
-                    CGFloat widthRight = [[self.viewControllers objectAtIndex:ceilf(floatIndex)] containerView].width;
+                    CGFloat widthLeft = [[self.stackedViewControllers objectAtIndex:floorf(floatIndex)] containerView].width;
+                    CGFloat widthRight = [[self.stackedViewControllers objectAtIndex:ceilf(floatIndex)] containerView].width;
                     isValid = (widthLeft + widthRight) > ([self screenWidth] - self.leftInset);
                 }else {
                     isValid = NO;
@@ -347,7 +347,7 @@ enum {
         CGFloat validLowIndex = 0.f, validHighIndex = 0.f;
         
         // upper bound
-        CGFloat viewControllerCount = [self.viewControllers count];
+        CGFloat viewControllerCount = [self.stackedViewControllers count];
         for (CGFloat tester = roundedFloat + 0.5f; tester < viewControllerCount;  tester += 0.5f) {
             if ([self isValidFloatIndex:tester]) {
                 validHighIndex = tester;
@@ -379,7 +379,7 @@ enum {
 - (CGFloat)nextFloatIndex:(CGFloat)floatIndex {
     CGFloat nextFloat = floatIndex;
     CGFloat roundedFloat = [self nearestValidFloatIndex:floatIndex];
-    CGFloat viewControllerCount = [self.viewControllers count];
+    CGFloat viewControllerCount = [self.stackedViewControllers count];
     for (CGFloat tester = roundedFloat + 0.5f; tester < viewControllerCount;  tester += 0.5f) {
         if ([self isValidFloatIndex:tester]) {
             nextFloat = tester;
@@ -407,7 +407,7 @@ enum {
     
     // TODO: currently calculates *all* objects, should cache!
     CGFloat floatIndex = [self nearestValidFloatIndex:self.floatIndex];
-    [self.viewControllers enumerateObjectsWithOptions:0 usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [self.stackedViewControllers enumerateObjectsWithOptions:0 usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         UIViewController *currentVC = (UIViewController *)obj;
         CGFloat leftPos = [self currentLeftInset];
         CGRect leftRect = idx > 0 ? [[frames objectAtIndex:idx-1] CGRectValue] : CGRectZero;
@@ -428,8 +428,8 @@ enum {
         [frames addObject:[NSValue valueWithCGRect:currentRect]];
     }];
         // Merge from Marcel Ball's 888a831, to fix the right/left gap snapping issue.
-    [self.viewControllers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if(idx < floatIndex && idx < [self.viewControllers count] - 1) {
+    [self.stackedViewControllers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if(idx < floatIndex && idx < [self.stackedViewControllers count] - 1) {
             CGRect crect = [[frames objectAtIndex:idx] CGRectValue];
             CGRect nrect = [[frames objectAtIndex:idx + 1] CGRectValue];
             CGFloat lpos = nrect.origin.x - crect.size.width;
@@ -516,7 +516,7 @@ enum {
     }
     
     // hide menu, if first VC is larger than available screen space with floatIndex = 0.0
-    else if (index == 0 && [self.viewControllers count] && [[self.viewControllers objectAtIndex:0] containerView].width >= ([self screenWidth] - self.leftInset)) {
+    else if (index == 0 && [self.stackedViewControllers count] && [[self.stackedViewControllers objectAtIndex:0] containerView].width >= ([self screenWidth] - self.leftInset)) {
         self.floatIndex = 0.5f;
         [self alignStackAnimated:YES];
     }
@@ -525,7 +525,7 @@ enum {
 // iterates controllers and sets width (also, enlarges if requested width is larger than current width)
 - (void)updateViewControllerSizes {
     CGFloat maxControllerView = [self maxControllerWidth];
-    for (UIViewController *controller in self.viewControllers) {
+    for (UIViewController *controller in self.stackedViewControllers) {
         [controller.containerView limitToMaxWidth:maxControllerView];
     }
 }
@@ -545,16 +545,16 @@ enum {
 // updates view containers
 - (void)updateViewControllerMasksAndShadow {   
     // only one!
-    if ([self.viewControllers count] == 1) {
+    if ([self.stackedViewControllers count] == 1) {
         //    [[self firstViewController].containerView addMaskToCorners:UIRectCornerAllCorners];
         self.firstViewController.containerView.shadow = PSSVSideLeft | PSSVSideRight;
     }else {
         // rounded corners on first and last controller
-        [self.viewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [self.stackedViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             UIViewController *vc = (UIViewController *)obj;
             if (idx == 0) {
                 //[vc.containerView addMaskToCorners:UIRectCornerBottomLeft | UIRectCornerTopLeft];
-            }else if(idx == [self.viewControllers count]-1) {
+            }else if(idx == [self.stackedViewControllers count]-1) {
                 //        [vc.containerView addMaskToCorners:UIRectCornerBottomRight | UIRectCornerTopRight];
                 vc.containerView.shadow = PSSVSideLeft | PSSVSideRight;
             }else {
@@ -570,7 +570,7 @@ enum {
     overlappedVC.containerView.darkRatio = MIN(overlapRatio, 1.f)/kAlphaReductRatio;
     
     // reset alpha ratio everywhere else
-    for (UIViewController *vc in self.viewControllers) {
+    for (UIViewController *vc in self.stackedViewControllers) {
         if (vc != overlappedVC) {
             vc.containerView.darkRatio = 0.0f;
         }
@@ -579,7 +579,7 @@ enum {
 
 - (NSArray *)visibleViewControllersSetFullyVisible:(BOOL)fullyVisible; {
     NSMutableArray *array = [NSMutableArray array];    
-    [self.viewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [self.stackedViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([self isViewControllerVisible:obj completely:fullyVisible]) {
             [array addObject:obj];
         }
@@ -613,7 +613,7 @@ enum {
 - (UIViewController *)overlappedViewController {
     __block UIViewController *overlappedViewController = nil;
     
-    [self.viewControllers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [self.stackedViewControllers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         UIViewController *currentViewController = (UIViewController *)obj;
         UIViewController *leftViewController = [self previousViewController:currentViewController];
         
@@ -637,7 +637,7 @@ enum {
 - (void)stopStackAnimation {
     // remove all current animations
     //[self.view.layer removeAllAnimations];
-    [self.viewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [self.stackedViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         UIViewController *vc = (UIViewController *)obj;
         [vc.containerView.layer removeAllAnimations];
     }];
@@ -653,7 +653,7 @@ enum {
         // enumerate controllers from rig   ht to left
         // scroll each controller until we begin to overlap!
         __block BOOL isTopViewController = YES;
-        [self.viewControllers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [self.stackedViewControllers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             UIViewController *currentViewController = (UIViewController *)obj;
             UIViewController *leftViewController = [self previousViewController:currentViewController];
             UIViewController *rightViewController = [self nextViewController:currentViewController];        
@@ -805,11 +805,11 @@ enum {
 #pragma mark - SVStackRootController (Public)
 
 - (NSInteger)indexOfViewController:(UIViewController *)viewController {
-    __block NSUInteger index = [self.viewControllers indexOfObject:viewController];
+    __block NSUInteger index = [self.stackedViewControllers indexOfObject:viewController];
     if (index == NSNotFound) {
-        index = [self.viewControllers indexOfObject:viewController.navigationController];
+        index = [self.stackedViewControllers indexOfObject:viewController.navigationController];
         if (index == NSNotFound) {
-            [self.viewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [self.stackedViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 if ([obj isKindOfClass:[UINavigationController class]] && ((UINavigationController *)obj).topViewController == viewController) {
                     index = idx;
                     *stop = YES;
@@ -821,11 +821,11 @@ enum {
 }
 
 - (UIViewController *)topViewController {
-    return [self.viewControllers lastObject];
+    return [self.stackedViewControllers lastObject];
 }
 
 - (UIViewController *)firstViewController {
-    return [self.viewControllers count] ? [self.viewControllers objectAtIndex:0] : nil;
+    return [self.stackedViewControllers count] ? [self.stackedViewControllers objectAtIndex:0] : nil;
 }
 
 - (NSArray *)visibleViewControllers {
@@ -843,7 +843,7 @@ enum {
 - (void)pushViewController:(UIViewController *)viewController fromViewController:(UIViewController *)baseViewController animated:(BOOL)animated; {    
     // figure out where to push, and if we need to get rid of some viewControllers
     if (baseViewController) {
-        [self.viewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [self.stackedViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             UIViewController *baseVC = objc_getAssociatedObject(obj, kPSSVAssociatedBaseViewControllerKey);
             if (baseVC == baseViewController) {
                 PSSVLog(@"BaseViewController found on index: %d", idx);
@@ -860,7 +860,7 @@ enum {
         objc_setAssociatedObject(viewController, kPSSVAssociatedBaseViewControllerKey, baseViewController, OBJC_ASSOCIATION_ASSIGN); // associate weak
     }
     
-    PSSVLog(@"pushing with index %d on stack: %@ (animated: %d)", [self.viewControllers count], viewController, animated);    
+    PSSVLog(@"pushing with index %d on stack: %@ (animated: %d)", [self.stackedViewControllers count], viewController, animated);    
     viewController.view.height = [self screenHeight];
     
     // get predefined stack width; query topViewController if we have a UINavigationController
@@ -912,13 +912,13 @@ enum {
     //container.width = viewController.view.width; // sync width (after it may has changed in layoutIfNeeded)
     
     [viewController viewDidAppear:animated];
-    [viewControllers_ addObject:viewController];
+    [stackedViewControllers_ addObject:viewController];
     
     // register stack controller
     objc_setAssociatedObject(viewController, kPSSVAssociatedStackViewControllerKey, self, OBJC_ASSOCIATION_ASSIGN);
     
     [self updateViewControllerMasksAndShadow];
-    [self displayViewControllerIndexOnRightMost:[self.viewControllers count]-1 animated:animated];
+    [self displayViewControllerIndexOnRightMost:[self.stackedViewControllers count]-1 animated:animated];
     [self delegateDidInsertViewController:viewController];
 }
 
@@ -931,9 +931,9 @@ enum {
 }
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated; {
-    PSSVLog(@"popping controller: %@ (#%d total, animated:%d)", [self topViewController], [self.viewControllers count], animated);
+    PSSVLog(@"popping controller: %@ (#%d total, animated:%d)", [self topViewController], [self.stackedViewControllers count], animated);
     
-    /* MYell0w 9841f98: Fixed a crash when there is no reference left to lastController. lastController gets deallocated as soon as it gets removed from viewControllers_ and a dangling pointer gets returned.*/
+    /* MYell0w 9841f98: Fixed a crash when there is no reference left to lastController. lastController gets deallocated as soon as it gets removed from stackedViewControllers_ and a dangling pointer gets returned.*/
     UIViewController *lastController = [[[self topViewController] retain] autorelease];
     if (lastController) {        
         [self delegateWillRemoveViewController:lastController];
@@ -963,7 +963,7 @@ enum {
             finishBlock();
         }
         
-        [viewControllers_ removeLastObject];        
+        [stackedViewControllers_ removeLastObject];        
         
         // save current stack controller as an associated object.
         objc_setAssociatedObject(lastController, kPSSVAssociatedStackViewControllerKey, nil, OBJC_ASSOCIATION_ASSIGN);
@@ -978,7 +978,7 @@ enum {
 
 - (NSArray *)popToRootViewControllerAnimated:(BOOL)animated; {
     NSMutableArray *array = [NSMutableArray array];
-    while ([self.viewControllers count] > 0) {
+    while ([self.stackedViewControllers count] > 0) {
         UIViewController *vc = [self popViewControllerAnimated:animated];
         [array addObject:vc];
     }
@@ -995,8 +995,8 @@ enum {
     
     NSArray *array = nil;
     // don't remove view controller we've been called with
-    if ([self.viewControllers count] > index + 1) {
-        array = [self.viewControllers subarrayWithRange:NSMakeRange(index + 1, [self.viewControllers count] - index - 1)];
+    if ([self.stackedViewControllers count] > index + 1) {
+        array = [self.stackedViewControllers subarrayWithRange:NSMakeRange(index + 1, [self.stackedViewControllers count] - index - 1)];
     }
     
     return array;
@@ -1009,7 +1009,7 @@ enum {
     if (NSNotFound == index) {
         return nil;
     }
-    PSSVLog(@"popping to index %d, from %d", index, [self.viewControllers count]);
+    PSSVLog(@"popping to index %d, from %d", index, [self.stackedViewControllers count]);
     
     NSArray *controllersToRemove = [self viewControllersAfterViewController:viewController];
     [controllersToRemove enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -1020,7 +1020,7 @@ enum {
 }
 
 - (NSArray *)controllersForClass:(Class)theClass {
-    NSArray *controllers = [self.viewControllers filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+    NSArray *controllers = [self.stackedViewControllers filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
         return [evaluatedObject isKindOfClass:theClass] || ([evaluatedObject isKindOfClass:[UINavigationController class]] && [((UINavigationController *)evaluatedObject).topViewController isKindOfClass:theClass]);
     }]];
     return controllers;
@@ -1032,8 +1032,8 @@ enum {
     
     NSUInteger currentLeftInset = [self currentLeftInset];
     NSInteger screenSpaceLeft = [self screenWidth] - currentLeftInset;
-    while (screenSpaceLeft > 0 && lastVisibleIndex < [self.viewControllers count]) {
-        UIViewController *vc = [self.viewControllers objectAtIndex:lastVisibleIndex];
+    while (screenSpaceLeft > 0 && lastVisibleIndex < [self.stackedViewControllers count]) {
+        UIViewController *vc = [self.stackedViewControllers objectAtIndex:lastVisibleIndex];
         screenSpaceLeft -= vc.containerView.width;
         
         if (screenSpaceLeft >= 0) {
@@ -1068,7 +1068,7 @@ enum {
             PSSVLog(@"overlapping %@ with %@", NSStringFromCGRect(overlappedVC.containerView.frame), NSStringFromCGRect(rightVC.containerView.frame));
         }
         
-        UIViewController *targetVCController = [self.viewControllers objectAtIndex:targetIndex];
+        UIViewController *targetVCController = [self.stackedViewControllers objectAtIndex:targetIndex];
         CGRect targetVCFrame = [self rectForControllerAtIndex:targetIndex];
         gridOffset = targetVCController.containerView.left - targetVCFrame.origin.x;
     }
@@ -1134,7 +1134,7 @@ enum {
              CGFloat firstVCLeft = self.firstViewController.containerView.left;
              if (firstVisibleIndex == 0 && !snapBackFromLeft_ && firstVCLeft >= self.largeLeftInset) {
                  bounceAtVeryEnd = YES;
-             }else if(lastFullyVCIndex == [self.viewControllers count]-1 && lastFullyVCIndex > 0) {
+             }else if(lastFullyVCIndex == [self.stackedViewControllers count]-1 && lastFullyVCIndex > 0) {
                  bounceAtVeryEnd = YES;
              }
              
@@ -1143,7 +1143,7 @@ enum {
          
          // iterate over all view controllers and snap them to their correct positions
          __block NSArray *frames = [self rectsForControllers];
-         [self.viewControllers enumerateObjectsWithOptions:0 usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+         [self.stackedViewControllers enumerateObjectsWithOptions:0 usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
              UIViewController *currentVC = (UIViewController *)obj;
              
              CGRect currentFrame = [[frames objectAtIndex:idx] CGRectValue];
@@ -1157,7 +1157,7 @@ enum {
              }
              // snap the leftmost view controller
              else if ((snapOverOffset > 0 && idx == firstVisibleIndex) || (snapOverOffset < 0 && (idx == firstVisibleIndex+1))
-                      || [self.viewControllers count] == 1) {
+                      || [self.stackedViewControllers count] == 1) {
                  frames = [self modifiedRects:frames newLeft:currentVC.containerView.left + snapOverOffset index:idx];
              }
              
@@ -1222,13 +1222,13 @@ enum {
 }
 
 - (NSUInteger)canCollapseStack; {
-    NSUInteger steps = [self.viewControllers count] - self.firstVisibleIndex - 1;
+    NSUInteger steps = [self.stackedViewControllers count] - self.firstVisibleIndex - 1;
     
-    if (self.lastVisibleIndex == [self.viewControllers count]-1) {
+    if (self.lastVisibleIndex == [self.stackedViewControllers count]-1) {
         //PSSVLog(@"complete stack is displayed - aborting.");
         steps = 0;
-    }else if (self.firstVisibleIndex + steps > [self.viewControllers count]-1) {
-        steps = [self.viewControllers count] - self.firstVisibleIndex - 1;
+    }else if (self.firstVisibleIndex + steps > [self.stackedViewControllers count]-1) {
+        steps = [self.stackedViewControllers count] - self.firstVisibleIndex - 1;
         //PSSVLog(@"too much steps, adjusting to %d", steps);
     }
     
@@ -1258,9 +1258,9 @@ enum {
     NSUInteger steps = self.firstVisibleIndex;
     
     // sanity check
-    if (steps >= [self.viewControllers count]-1) {
+    if (steps >= [self.stackedViewControllers count]-1) {
         PSSVLog(@"Warning: firstVisibleIndex is higher than viewController count!");
-        steps = [self.viewControllers count]-1;
+        steps = [self.stackedViewControllers count]-1;
     }
     
     return steps;
@@ -1316,7 +1316,7 @@ enum {
         self.rootViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     }
     
-    for (UIViewController *controller in self.viewControllers) {
+    for (UIViewController *controller in self.stackedViewControllers) {
         // forces view loading, calls viewDidLoad via system
         UIView *controllerView = controller.view;
 #pragma unused(controllerView)
@@ -1328,7 +1328,7 @@ enum {
     [super viewWillAppear:animated];
     
     [self.rootViewController viewWillAppear:animated];
-    for (UIViewController *controller in self.viewControllers) {
+    for (UIViewController *controller in self.stackedViewControllers) {
         [controller viewWillAppear:animated];
     }
     
@@ -1342,7 +1342,7 @@ enum {
     [super viewDidAppear:animated];
     
     [self.rootViewController viewDidAppear:animated];
-    for (UIViewController *controller in self.viewControllers) {
+    for (UIViewController *controller in self.stackedViewControllers) {
         [controller viewDidAppear:animated];
     }
 }
@@ -1351,7 +1351,7 @@ enum {
     [super viewWillDisappear:animated];
     
     [self.rootViewController viewWillDisappear:animated];
-    for (UIViewController *controller in self.viewControllers) {
+    for (UIViewController *controller in self.stackedViewControllers) {
         [controller viewWillDisappear:animated];
     }
 }
@@ -1360,7 +1360,7 @@ enum {
     [super viewDidDisappear:animated];
     
     [self.rootViewController viewDidDisappear:animated];
-    for (UIViewController *controller in self.viewControllers) {
+    for (UIViewController *controller in self.stackedViewControllers) {
         [controller viewDidDisappear:animated];
     }   
 }
@@ -1371,7 +1371,7 @@ enum {
     [self.rootViewController viewDidUnload];
     self.alwaysOnTopSubview = nil;
     
-    for (UIViewController *controller in self.viewControllers) {
+    for (UIViewController *controller in self.stackedViewControllers) {
         [controller.view removeFromSuperview];
         controller.view = nil;
         [controller viewDidUnload];
@@ -1394,7 +1394,7 @@ enum {
     
     [rootViewController_ willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     
-    for (UIViewController *controller in self.viewControllers) {
+    for (UIViewController *controller in self.stackedViewControllers) {
         [controller willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     }    
 }
@@ -1408,7 +1408,7 @@ enum {
         [self updateViewControllerMasksAndShadow];
     }
         
-    for (UIViewController *controller in self.viewControllers) {
+    for (UIViewController *controller in self.stackedViewControllers) {
         [controller didRotateFromInterfaceOrientation:fromInterfaceOrientation];
     }
     
@@ -1426,7 +1426,7 @@ enum {
     }
         
     // finally relay rotation events
-    for (UIViewController *controller in self.viewControllers) {
+    for (UIViewController *controller in self.stackedViewControllers) {
         [controller willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
     }
     

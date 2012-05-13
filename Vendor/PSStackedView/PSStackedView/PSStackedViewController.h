@@ -30,7 +30,7 @@ enum {
     
     // stack state
     CGFloat floatIndex_;
-    NSMutableArray *viewControllers_;
+    NSMutableArray *stackedViewControllers_;
     
     // internal drag state handling and other messy details
     PSSVSnapOption lastDragOption_;
@@ -126,7 +126,7 @@ enum {
 @property(nonatomic, assign, readonly) NSInteger lastVisibleIndex;
 
 /// array of all current view controllers, sorted
-@property(nonatomic, assign, readonly) NSArray *viewControllers;
+@property(nonatomic, assign, readonly) NSArray *stackedViewControllers;
 
 /// pangesture recognizer used
 @property(nonatomic, retain) UIPanGestureRecognizer *panRecognizer;
