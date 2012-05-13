@@ -11,9 +11,10 @@
 //
 
 #import <RestKit/RestKit.h>
+#import <RestKit/CoreData/CoreData.h>
 
 @class SLFState;
-@interface SLFRestKitManager : NSObject <RKObjectLoaderDelegate, RKRequestQueueDelegate>
+@interface SLFRestKitManager : NSObject <RKObjectLoaderDelegate, RKRequestQueueDelegate, RKManagedObjectStoreDelegate>
 + (SLFRestKitManager *)sharedRestKit;
 + (void)showFailureAlertWithRequest:(RKRequest *)request error:(NSError *)error;
 + (NSString *)logFailureMessageForRequest:(RKRequest *)request error:(NSError *)error;

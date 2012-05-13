@@ -21,6 +21,7 @@
 
 @interface SLFRestKitManager()
 @property (nonatomic,retain) RKRequestQueue *preloadQueue;
+- (RKManagedObjectStore *)attemptLoadObjectStoreAndFlushIfNeeded;
 @end
 
 @implementation SLFRestKitManager
@@ -49,8 +50,8 @@
         RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:OPENSTATES_BASE_URL];
         objectManager.requestQueue.showsNetworkActivityIndicatorWhenBusy = YES;
         
-        RKManagedObjectStore *objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:APP_DB_NAME];
-        objectManager.objectStore = objectStore;        
+        RKManagedObjectStore *objectStore = [self attemptLoadObjectStoreAndFlushIfNeeded];        
+        objectManager.objectStore = objectStore;  
         [RKObjectManager setSharedManager:objectManager];
 
         SLFObjectCache *cache = [[SLFObjectCache alloc] init];
@@ -185,6 +186,49 @@
     [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
 }
 
+#pragma mark - RKManagedObjectStoreDelegate
+
+- (void)managedObjectStore:(RKManagedObjectStore *)objectStore didFailToCreatePersistentStoreCoordinatorWithError:(NSError *)error {
+    RKLogError(@"Failed to create the persistent store coordinator: %@", error);
+}
+
+- (void)managedObjectStore:(RKManagedObjectStore *)objectStore didFailToDeletePersistentStore:(NSString *)storePath error:(NSError *)error {
+    RKLogError(@"Failed to delete the Core Data store file: %@", error);
+}
+
+- (RKManagedObjectStore *)attemptLoadObjectStore {
+    RKManagedObjectStore *objectStore = nil;
+    @try {
+        NSManagedObjectModel *mom = [NSManagedObjectModel mergedModelFromBundles:[NSBundle allBundles]];
+        objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:APP_DB_NAME usingSeedDatabaseName:nil managedObjectModel:mom delegate:self];
+    }
+    @catch (NSException *exception) {
+        RKLogError(@"An exception ocurred while attempting to load/build the Core Data store file: %@", exception);
+    }
+    return objectStore;
+}
+
+- (RKManagedObjectStore *)attemptLoadObjectStoreAndFlushIfNeeded {
+    RKManagedObjectStore *objectStore = [self attemptLoadObjectStore];
+    if (!objectStore) {
+        RKLogWarning(@"Attempting to delete and recreate the Core Data store file.");
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+        NSString *storeFilePath = [basePath stringByAppendingPathComponent:APP_DB_NAME];
+        NSURL* storeUrl = [NSURL fileURLWithPath:storeFilePath];
+        NSError* error = nil;
+        @try {
+            if (![[NSFileManager defaultManager] removeItemAtPath:storeUrl.path error:&error]) {
+                [self managedObjectStore:objectStore didFailToDeletePersistentStore:storeFilePath error:error];
+            }
+        }
+        @catch (NSException *exception) {
+            RKLogError(@"An exception ocurred while attempting to delete the Core Data store file: %@", exception);
+        }
+        objectStore = [self attemptLoadObjectStore];
+    }
+    return objectStore;
+}
 
 #pragma mark -
 #pragma mark Common Alerts
