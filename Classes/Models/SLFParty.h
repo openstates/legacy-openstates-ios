@@ -16,7 +16,9 @@ typedef enum {
     SLFPartyUnknown = -1,
     SLFPartyIndependent = 0,
     SLFPartyDemocrat = 1,
-    SLFPartyRepublican = 2
+    SLFPartyRepublican = 2,
+    SLFPartyNewProgressive = 3,
+    SLFPartyPopularDemocratic = 4
 } SLFPartyType;
 
 @interface SLFParty : NSObject
@@ -46,5 +48,13 @@ typedef enum {
 
 @interface UnknownParty : SLFParty
 + (UnknownParty*)unknownParty;
+@end
+
+@interface NewProgressiveParty : SLFParty
++ (UnknownParty*)newprogressiveparty;
+@end
+
+@interface PopularDemocraticParty : SLFParty
++ (UnknownParty*)populardemocraticparty;
 @end
 

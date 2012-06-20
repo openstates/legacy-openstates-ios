@@ -19,6 +19,8 @@ NSString * partyNameForType(SLFPartyType newType);
 
 static Democrat * cachedDemocrat;
 static Republican * cachedRepublican;
+static NewProgressiveParty * cachedNewProgressiveParty;
+static PopularDemocraticParty * cachedPopularDemocraticParty;
 static Independent * cachedIndependent;
 static UnknownParty * cachedUnknown;
 
@@ -41,6 +43,10 @@ static UnknownParty * cachedUnknown;
         return [Democrat democrat];
     else if (aType == SLFPartyRepublican)
         return [Republican republican];
+    else if (aType == SLFPartyNewProgressive)
+        return [NewProgressiveParty newprogressiveparty];
+    else if (aType == SLFPartyPopularDemocratic)
+        return [PopularDemocraticParty populardemocraticparty];
     else if (aType == SLFPartyIndependent)
         return [Independent independent];
     return [UnknownParty unknownParty];
@@ -96,6 +102,36 @@ static UnknownParty * cachedUnknown;
         cachedRepublican.pinColorIndex = SLFMapPinColorRed;
     }
     return cachedRepublican;
+}
+@end
+#define NEWPROGRESSIVE_STRING   NSLocalizedString(@"New Progressive Party", @"")
+
+@implementation NewProgressiveParty
++ (NewProgressiveParty *)newprogressiveparty {
+    if (!cachedNewProgressiveParty) {
+        cachedNewProgressiveParty = [[NewProgressiveParty alloc] init];
+        cachedNewProgressiveParty.type = SLFPartyNewProgressive;
+        cachedNewProgressiveParty.name = NEWPROGRESSIVE_STRING;
+        cachedNewProgressiveParty.color = [SLFAppearance partyBlue];
+        cachedNewProgressiveParty.image = [UIImage imageNamed:@"bluestar"];
+        cachedNewProgressiveParty.pinColorIndex = SLFMapPinColorBlue;
+    }
+    return cachedNewProgressiveParty;
+}
+@end
+#define POPULARDEMOCRATIC_STRING   NSLocalizedString(@"Popular Democratic Party", @"")
+
+@implementation PopularDemocraticParty
++ (PopularDemocraticParty *)populardemocraticparty {
+    if (!cachedPopularDemocraticParty) {
+        cachedPopularDemocraticParty = [[PopularDemocraticParty alloc] init];
+        cachedPopularDemocraticParty.type = SLFPartyPopularDemocratic;
+        cachedPopularDemocraticParty.name = POPULARDEMOCRATIC_STRING;
+        cachedPopularDemocraticParty.color = [SLFAppearance partyRed];
+        cachedPopularDemocraticParty.image = [UIImage imageNamed:@"redstar"];
+        cachedPopularDemocraticParty.pinColorIndex = SLFMapPinColorRed;
+    }
+    return cachedPopularDemocraticParty;
 }
 @end
 
@@ -154,6 +190,10 @@ SLFPartyType partyTypeForName(NSString *newName) {
             newType = SLFPartyRepublican;
         else if ([@"independent" isEqualToString:loweredName])
             newType = SLFPartyIndependent;
+        else if ([@"partido nuevo progresista" isEqualToString:loweredName])
+            newType = SLFPartyNewProgressive;
+        else if ([@"partido popular democrático" isEqualToString:loweredName])
+            newType = SLFPartyPopularDemocratic;
     }
     return newType;
 }
