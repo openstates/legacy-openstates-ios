@@ -25,12 +25,12 @@ typedef enum {
 + (SLFParty *)partyWithName:(NSString *)aName;
 + (SLFParty *)partyWithType:(SLFPartyType)aType;
 @property (nonatomic,copy) NSString *name;
+@property (nonatomic,copy) NSString *initial;
+@property (nonatomic,copy) NSString *abbreviation;
 @property (nonatomic,assign) SLFPartyType type;
 @property (nonatomic,retain) UIImage *image;
 @property (nonatomic,assign) NSUInteger pinColorIndex;
 @property (nonatomic,retain) UIColor *color;
-@property (nonatomic,readonly) NSString *initial;
-@property (nonatomic,readonly) NSString *abbreviation;
 @property (nonatomic,readonly) NSString *plural;
 @end
 
