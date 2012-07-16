@@ -167,7 +167,7 @@
 }
 
 - (NSString *)term {
-    return [NSString stringWithFormat:@"Term: %@ Years", self.chamberObj.term];
+    return [NSString stringWithFormat:NSLocalizedString(@"Term: %@ Years",@"Term and years a legislator serves"), self.chamberObj.term];
 }
 
 - (MultiRowCalloutCell *)calloutCell {
