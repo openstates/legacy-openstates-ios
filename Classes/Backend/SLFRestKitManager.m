@@ -13,11 +13,11 @@
 #import "SLFDataModels.h"
 #import "SLFObjectCache.h"
 #import "SLFAlertView.h"
+#import "SLFGlobal.h"
 #import <RestKit/CoreData/CoreData.h>
 
 #define OPENSTATES_BASE_URL		@"http://openstates.org/api/v1"
 #define TRANSPARENCY_BASE_URL   @"http://transparencydata.com/api/1.0"
-#define BOUNDARY_BASE_URL       @"http://pentagon.sunlightlabs.net/1.0"
 
 @interface SLFRestKitManager()
 @property (nonatomic,retain) RKRequestQueue *preloadQueue;
@@ -27,7 +27,6 @@
 @implementation SLFRestKitManager
 @synthesize transClient;
 @synthesize openStatesClient;
-@synthesize boundaryClient;
 @synthesize preloadQueue = __preloadQueue;
 
 + (SLFRestKitManager *)sharedRestKit
@@ -64,7 +63,6 @@
         
         self.transClient = [RKClient clientWithBaseURL:TRANSPARENCY_BASE_URL];
         self.openStatesClient = [RKClient clientWithBaseURL:OPENSTATES_BASE_URL];
-        self.boundaryClient = [RKClient clientWithBaseURL:BOUNDARY_BASE_URL];
     }
     return self;
 }
@@ -74,8 +72,6 @@
     self.transClient = nil;
     [self.openStatesClient.requestQueue cancelAllRequests];
     self.openStatesClient = nil;
-    [self.boundaryClient.requestQueue cancelAllRequests];
-    self.boundaryClient = nil;
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
     if (__preloadQueue) {
         [__preloadQueue cancelAllRequests];
@@ -212,7 +208,7 @@
     RKManagedObjectStore *objectStore = [self attemptLoadObjectStore];
     if (!objectStore) {
         RKLogWarning(@"Attempting to delete and recreate the Core Data store file.");
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
         NSString *storeFilePath = [basePath stringByAppendingPathComponent:APP_DB_NAME];
         NSURL* storeUrl = [NSURL fileURLWithPath:storeFilePath];

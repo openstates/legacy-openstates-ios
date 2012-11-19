@@ -23,7 +23,6 @@
 - (RKObjectLoader *)objectLoaderForResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate withTimeout:(NSTimeInterval)timeoutSeconds;
 @property (nonatomic,retain) RKClient *transClient;
 @property (nonatomic,retain) RKClient *openStatesClient;
-@property (nonatomic,retain) RKClient *boundaryClient;
 @end
 
 #define SEED_DB_NAME @"SLFDataSeed.sqlite"

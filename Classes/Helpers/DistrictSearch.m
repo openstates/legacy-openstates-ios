@@ -15,6 +15,7 @@
 #import "SLFRestKitManager.h"
 #import "JSONKit.h"
 #import "SLFReachable.h"
+#import "APIKeys.h"
 
 @interface DistrictSearch()
 @property (assign) CLLocationCoordinate2D searchCoordinate;
@@ -28,30 +29,20 @@
 @synthesize onSuccessWithResults = _onSuccessWithResults;
 @synthesize onFailureWithMessageAndFailOption = _onFailureWithMessageAndFailOption;
 
-#define USE_OPENSTATES_GEOSEARCH 1  // need a more direct route to the boundary IDs than what's available in Open States right now
-
 - (void)searchForCoordinate:(CLLocationCoordinate2D)aCoordinate successBlock:(DistrictSearchSuccessWithResultsBlock)successBlock failureBlock:(DistrictSearchFailureWithMessageAndFailOptionBlock)failureBlock {
     self.onSuccessWithResults = successBlock;
     self.onFailureWithMessageAndFailOption = failureBlock;
     searchCoordinate = aCoordinate;
-#if USE_OPENSTATES_GEOSEARCH
+
     RKClient * client = [[SLFRestKitManager sharedRestKit] openStatesClient];
-#else
-    RKClient * client = [[SLFRestKitManager sharedRestKit] boundaryClient];
-#endif
     if (NO == [client isNetworkReachable]) {
         if (failureBlock)
             failureBlock(NSLocalizedString(@"Cannot geolocate legislative districts because Internet service is unavailable.", @""), DistrictSearchShowAlert);
         return;
     }
     
-#if USE_OPENSTATES_GEOSEARCH
     NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys: SUNLIGHT_APIKEY, @"apikey", [NSNumber numberWithDouble:aCoordinate.longitude], @"long", [NSNumber numberWithDouble:aCoordinate.latitude], @"lat", @"boundary_id,district,chamber,state", @"fields", nil];
     [client get:@"/legislators/geo" queryParams:queryParams delegate:self];
-#else
-    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys: SUNLIGHT_APIKEY, @"apikey", [NSString stringWithFormat:@"%lf,%lf", aCoordinate.latitude, aCoordinate.longitude], @"contains", @"sldu,sldl", @"sets", @"none", @"shape_type", nil];
-   [client get:@"/boundary" queryParams:queryParams delegate:self];
-#endif
 }
 
 + (DistrictSearch *)districtSearchForCoordinate:(CLLocationCoordinate2D)aCoordinate successBlock:(DistrictSearchSuccessWithResultsBlock)successBlock failureBlock:(DistrictSearchFailureWithMessageAndFailOptionBlock)failureBlock {
@@ -61,11 +52,7 @@
 }
 
 - (void) dealloc {
-#if USE_OPENSTATES_GEOSEARCH
     RKClient *client = [[SLFRestKitManager sharedRestKit] openStatesClient];
-#else
-    RKClient *client = [[SLFRestKitManager sharedRestKit] boundaryClient];
-#endif
     [client.requestQueue cancelRequestsWithDelegate:self];
     Block_release(_onSuccessWithResults);
     Block_release(_onFailureWithMessageAndFailOption);
@@ -125,7 +112,6 @@
 }
 
 
-#if USE_OPENSTATES_GEOSEARCH
 - (NSArray *)boundaryIDsFromSearchResults:(id)results {
     NSMutableArray *foundIDs = [NSMutableArray array];
     NSMutableArray *boundaryList = nil;
@@ -141,11 +127,5 @@
     }
     return foundIDs;
 }
-#else
-- (NSArray *)boundaryIDsFromSearchResults:(id)results {
-    NSAssert(results && [results isKindOfClass:[NSDictionary class]], @"Invalid search results, expected a dictionary, got something else");
-    return [results valueForKeyPath:@"objects.slug"];
-}
-#endif
 
 @end

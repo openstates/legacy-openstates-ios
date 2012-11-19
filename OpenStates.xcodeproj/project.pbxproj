@@ -2485,6 +2485,7 @@
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				BUILD_STYLE = Debug;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
@@ -2494,6 +2495,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_PREFIX_HEADER = Resources/InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/TestFlight\"",
@@ -2513,6 +2515,7 @@
 		1D6058950D05DD3E006BFB54 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				BUILD_STYLE = Release;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
@@ -2522,6 +2525,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_PREFIX_HEADER = Resources/InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/TestFlight\"",
@@ -2622,6 +2626,7 @@
 		373ECB5F1488747F000BD16D /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				BUILD_STYLE = Release;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
@@ -2631,6 +2636,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_PREFIX_HEADER = Resources/InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/TestFlight\"",
@@ -2703,6 +2709,7 @@
 		37A16D12148C41F0000A3C91 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				BUILD_STYLE = Release;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
@@ -2712,6 +2719,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_PREFIX_HEADER = Resources/InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/TestFlight\"",

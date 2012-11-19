@@ -89,7 +89,7 @@
     [self configureTableController];
     if (_tableController.sectionNameKeyPath) {
         
-        SLF_FIXME("RKFetchedResultsController.emptyItem breaks tableView updates when sections are involved")
+        SLF_FIXME("RKFetchedResultsController.emptyItem breaks tableView updates when sections are involved");
         _tableController.emptyItem = nil; // don't use emptyItem with sections like this ... kills FRC tableView updates
         
         UITableViewStyle style = self.tableViewStyle;
