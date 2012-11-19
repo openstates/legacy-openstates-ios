@@ -72,7 +72,7 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 + (UIColor *)tableBackgroundLightColor {return [self whiteRock];}
 
 + (void)setupAppearance {
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackOpaque;
     [[[UIApplication sharedApplication] keyWindow] setBackgroundColor:[UIColor blackColor]];
     if (![UINavigationBar respondsToSelector:@selector(appearance)]) {
         RKLogError(@"Application themes use iOS 5 methods.  This device has iOS %@.", [[UIDevice currentDevice] systemVersion]);

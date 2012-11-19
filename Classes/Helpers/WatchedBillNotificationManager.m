@@ -44,6 +44,7 @@
         _billRequestQueue.concurrentRequestsLimit = 2;
         _billRequestQueue.showsNetworkActivityIndicatorWhenBusy = NO;
         _updatedBills = [[NSMutableSet alloc] init];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
         [self performSelectorInBackground:@selector(checkBillsStatus:) withObject:self]; // check now
         self.scheduleTimer = [NSTimer scheduledTimerWithTimeInterval:SLF_HOURS_TO_SECONDS(2) target:self selector:@selector(checkBillsStatus:) userInfo:nil repeats:YES]; 
     }

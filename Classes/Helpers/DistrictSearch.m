@@ -28,7 +28,7 @@
 @synthesize onSuccessWithResults = _onSuccessWithResults;
 @synthesize onFailureWithMessageAndFailOption = _onFailureWithMessageAndFailOption;
 
-#define USE_OPENSTATES_GEOSEARCH 0  // need a more direct route to the boundary IDs than what's available in Open States right now
+#define USE_OPENSTATES_GEOSEARCH 1  // need a more direct route to the boundary IDs than what's available in Open States right now
 
 - (void)searchForCoordinate:(CLLocationCoordinate2D)aCoordinate successBlock:(DistrictSearchSuccessWithResultsBlock)successBlock failureBlock:(DistrictSearchFailureWithMessageAndFailOptionBlock)failureBlock {
     self.onSuccessWithResults = successBlock;
@@ -46,7 +46,7 @@
     }
     
 #if USE_OPENSTATES_GEOSEARCH
-    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys: SUNLIGHT_APIKEY, @"apikey", [NSNumber numberWithDouble:aCoordinate.longitude], @"long", [NSNumber numberWithDouble:aCoordinate.latitude], @"lat", nil];
+    NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys: SUNLIGHT_APIKEY, @"apikey", [NSNumber numberWithDouble:aCoordinate.longitude], @"long", [NSNumber numberWithDouble:aCoordinate.latitude], @"lat", @"boundary_id,district,chamber,state", @"fields", nil];
     [client get:@"/legislators/geo" queryParams:queryParams delegate:self];
 #else
     NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys: SUNLIGHT_APIKEY, @"apikey", [NSString stringWithFormat:@"%lf,%lf", aCoordinate.latitude, aCoordinate.longitude], @"contains", @"sldu,sldl", @"sets", @"none", @"shape_type", nil];
@@ -128,20 +128,18 @@
 #if USE_OPENSTATES_GEOSEARCH
 - (NSArray *)boundaryIDsFromSearchResults:(id)results {
     NSMutableArray *foundIDs = [NSMutableArray array];
-    NSMutableArray *memberList = nil;
+    NSMutableArray *boundaryList = nil;
     if ([results isKindOfClass:[NSMutableArray class]])
-        memberList = results;
+        boundaryList = results;
     else if ([results isKindOfClass:[NSMutableDictionary class]])
-        memberList = [NSMutableArray arrayWithObject:results];
-    for (NSMutableDictionary *member in memberList) {
-        NSString *legID = [member objectForKey:@"leg_id"];
-        if (IsEmpty(legID))
+        boundaryList = [NSMutableArray arrayWithObject:results];
+    for (NSMutableDictionary *boundary in boundaryList) {
+        NSString *boundaryID = [boundary objectForKey:@"boundary_id"];
+        if (IsEmpty(boundaryID))
             continue;
-        SLFLegislator *legislator = [SLFLegislator findFirstByAttribute:@"legID" withValue:legID];
-        if (legislator)
-            [foundIDs addObject:[legislator districtID]];
+        [foundIDs addObject:boundaryID];
     }
-    return foundIds;
+    return foundIDs;
 }
 #else
 - (NSArray *)boundaryIDsFromSearchResults:(id)results {

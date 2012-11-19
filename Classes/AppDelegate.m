@@ -26,6 +26,9 @@
 #import "SLFAlertView.h"
 #import "MTInfoPanel.h"
 #import "SLFEventsManager.h"
+#import "SLFPersistenceManager.h"
+#import "SLFActionPathNavigator.h"
+#import "SLFAnalytics.h"
 
 @interface AppDelegate()
 @property (nonatomic,retain) AppBarController *appBarController;
