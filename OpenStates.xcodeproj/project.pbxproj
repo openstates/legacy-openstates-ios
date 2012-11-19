@@ -38,6 +38,7 @@
 		3711871414463E1C00A12B8B /* 193-location-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3711871214463E1C00A12B8B /* 193-location-arrow.png */; };
 		3711871514463E1C00A12B8B /* 193-location-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3711871314463E1C00A12B8B /* 193-location-arrow@2x.png */; };
 		371591BF148AC5BA0039ECED /* WatchedBillNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 371591BE148AC5BA0039ECED /* WatchedBillNotificationManager.m */; };
+		3715F4F6165A15AA00163525 /* Icon-144.png in Resources */ = {isa = PBXBuildFile; fileRef = 3715F4F5165A15AA00163525 /* Icon-144.png */; };
 		37193F5514BCEA9E00C78262 /* MTInfoPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 37193F5214BCEA9E00C78262 /* MTInfoPanel.m */; };
 		37193F5814BCEB3400C78262 /* MTInfoPanel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 37193F5614BCEAAF00C78262 /* MTInfoPanel.bundle */; };
 		371AE697143581D500592811 /* GradientBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 371AE696143581D500592811 /* GradientBackgroundView.m */; };
@@ -500,6 +501,7 @@
 		3714804B143283A200170716 /* SLFTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFTheme.h; sourceTree = "<group>"; };
 		371591BD148AC5BA0039ECED /* WatchedBillNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WatchedBillNotificationManager.h; sourceTree = "<group>"; };
 		371591BE148AC5BA0039ECED /* WatchedBillNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchedBillNotificationManager.m; sourceTree = "<group>"; };
+		3715F4F5165A15AA00163525 /* Icon-144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-144.png"; sourceTree = "<group>"; };
 		37193F5114BCEA9E00C78262 /* MTInfoPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTInfoPanel.h; sourceTree = "<group>"; };
 		37193F5214BCEA9E00C78262 /* MTInfoPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTInfoPanel.m; sourceTree = "<group>"; };
 		37193F5614BCEAAF00C78262 /* MTInfoPanel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = MTInfoPanel.bundle; path = ../Resources/MTInfoPanel.bundle; sourceTree = "<group>"; };
@@ -1653,6 +1655,7 @@
 				37BAC14E142B97620021A3C6 /* Icon-Small.png */,
 				37BAC14F142B97620021A3C6 /* Icon.png */,
 				3748E4061459846F005D84CF /* Icon-72.png */,
+				3715F4F5165A15AA00163525 /* Icon-144.png */,
 				3748E4071459846F005D84CF /* Icon-Small@2x.png */,
 				3748E4081459846F005D84CF /* Icon-Solo.png */,
 				3748E4091459846F005D84CF /* Icon-Solo@2x.png */,
@@ -2222,6 +2225,7 @@
 				3708628D14DA672600CFC48D /* Locate-On@2x.png in Resources */,
 				3729613B14DBD30300CD336A /* StackedBackground-Landscape.png in Resources */,
 				3729613C14DBD30300CD336A /* StackedBackground-Portrait.png in Resources */,
+				3715F4F6165A15AA00163525 /* Icon-144.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
