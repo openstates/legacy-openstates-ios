@@ -67,7 +67,7 @@ static RKObjectPropertyInspector* sharedInspector = nil;
 }
 
 - (NSDictionary *)propertyNamesAndTypesForClass:(Class)theClass {
-	NSMutableDictionary* propertyNames = [_cachedPropertyNamesAndTypes objectForKey:theClass];
+	NSMutableDictionary* propertyNames = [_cachedPropertyNamesAndTypes objectForKey:NSStringFromClass(theClass)];
 	if (propertyNames) {
 		return propertyNames;
 	}
@@ -103,7 +103,7 @@ static RKObjectPropertyInspector* sharedInspector = nil;
 		currentClass = [currentClass superclass];
 	}
 	
-	[_cachedPropertyNamesAndTypes setObject:propertyNames forKey:theClass];
+	[_cachedPropertyNamesAndTypes setObject:propertyNames forKey:NSStringFromClass(theClass)];
     RKLogDebug(@"Cached property names and types for Class '%@': %@", NSStringFromClass(theClass), propertyNames);
 	return propertyNames;
 }

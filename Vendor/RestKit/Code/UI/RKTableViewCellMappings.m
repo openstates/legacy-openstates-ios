@@ -36,24 +36,24 @@
 }
 
 - (void)setCellMapping:(RKTableViewCellMapping*)cellMapping forClass:(Class)objectClass {
-    if ([_cellMappings objectForKey:objectClass]) {
+    if ([_cellMappings objectForKey:NSStringFromClass(objectClass)]) {
         @throw [NSException exceptionWithName:NSInvalidArgumentException
                                        reason:[NSString stringWithFormat:@"A tableViewCell mapping has already been registered for objects of type '%@'", NSStringFromClass(objectClass)]
                                      userInfo:nil];
     }
     
-    [_cellMappings setObject:cellMapping forKey:objectClass];
+    [_cellMappings setObject:cellMapping forKey:NSStringFromClass(objectClass)];
 }
 
 - (RKTableViewCellMapping*)cellMappingForClass:(Class)objectClass {
     // Exact match
-    RKTableViewCellMapping* cellMapping = [_cellMappings objectForKey:objectClass];
+    RKTableViewCellMapping* cellMapping = [_cellMappings objectForKey:NSStringFromClass(objectClass)];
     if (cellMapping) return cellMapping;
     
     // Subclass match
     for (Class cellClass in _cellMappings) {
         if ([objectClass isSubclassOfClass:cellClass]) {
-            return [_cellMappings objectForKey:cellClass];
+            return [_cellMappings objectForKey:NSStringFromClass(cellClass)];
         }
     }
     

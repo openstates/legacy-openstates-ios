@@ -39,12 +39,12 @@
 
 - (void)routeClass:(Class)theClass toResourcePath:(NSString*)resourcePath forMethodName:(NSString*)methodName escapeRoutedPath:(BOOL)addEscapes {
     NSString* className = NSStringFromClass(theClass);
-    if (nil == [_routes objectForKey:theClass]) {
+    if (nil == [_routes objectForKey:className]) {
         NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
-        [_routes setObject:dictionary forKey:theClass];
+        [_routes setObject:dictionary forKey:className];
     }
 
-    NSMutableDictionary* classRoutes = [_routes objectForKey:theClass];
+    NSMutableDictionary* classRoutes = [_routes objectForKey:className];
     if ([classRoutes objectForKey:methodName]) {
     [NSException raise:nil format:@"A route has already been registered for class '%@' and HTTP method '%@'", className, methodName];
     }
@@ -99,7 +99,7 @@
     // Check for exact matches
     for (Class possibleClass in _routes) {
         if ([object isMemberOfClass:possibleClass]) {
-            classRoutes = [_routes objectForKey:possibleClass];
+            classRoutes = [_routes objectForKey:NSStringFromClass(possibleClass)];
             break;
         }
     }
@@ -108,7 +108,7 @@
     if (! classRoutes) {
         for (Class possibleClass in _routes) {
             if ([object isKindOfClass:possibleClass]) {
-                classRoutes = [_routes objectForKey:possibleClass];
+                classRoutes = [_routes objectForKey:NSStringFromClass(possibleClass)];
                 break;
             }
         }

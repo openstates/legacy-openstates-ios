@@ -19,9 +19,7 @@
 				255B758F133BABCD00ED76AD /* PBXTargetDependency */,
 				255B7591133BABCD00ED76AD /* PBXTargetDependency */,
 				255B7593133BABCD00ED76AD /* PBXTargetDependency */,
-				20808E0913DE9137000A156A /* PBXTargetDependency */,
 				255B7595133BABCD00ED76AD /* PBXTargetDependency */,
-				255B7597133BABCD00ED76AD /* PBXTargetDependency */,
 				255B7599133BABCD00ED76AD /* PBXTargetDependency */,
 				259DF78A134029BB00233DF4 /* PBXTargetDependency */,
 				255B759B133BABCD00ED76AD /* PBXTargetDependency */,
@@ -417,13 +415,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		20808E0813DE9137000A156A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 20808DBC13DE8CDC000A156A;
-			remoteInfo = "RestKitJSONParser+NXJSON";
-		};
 		250BC43611F6260100F3FE5A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3F6C39B610FE738A008F47C5 /* UISpec.xcodeproj */;
@@ -458,13 +449,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2590E64E125231F600531FA8;
 			remoteInfo = "RestKitJSONParser+YAJL";
-		};
-		255B7596133BABCD00ED76AD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2590E66A1252353700531FA8;
-			remoteInfo = "RestKitJSONParser+SBJSON";
 		};
 		255B7598133BABCD00ED76AD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2467,7 +2451,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = RestKit;
 			};
 			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "RestKit" */;
@@ -2920,11 +2904,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		20808E0913DE9137000A156A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 20808DBC13DE8CDC000A156A /* RestKitJSONParserNXJSON */;
-			targetProxy = 20808E0813DE9137000A156A /* PBXContainerItemProxy */;
-		};
 		255B758F133BABCD00ED76AD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 253A07FB1255161B00976E89 /* RestKitNetwork */;
@@ -2944,11 +2923,6 @@
 			isa = PBXTargetDependency;
 			target = 2590E64E125231F600531FA8 /* RestKitJSONParserYAJL */;
 			targetProxy = 255B7594133BABCD00ED76AD /* PBXContainerItemProxy */;
-		};
-		255B7597133BABCD00ED76AD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2590E66A1252353700531FA8 /* RestKitJSONParserSBJSON */;
-			targetProxy = 255B7596133BABCD00ED76AD /* PBXContainerItemProxy */;
 		};
 		255B7599133BABCD00ED76AD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2993,10 +2967,7 @@
 			baseConfigurationReference = 258F8500141061C3007AABCD /* PortableStaticLibrary.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"ARCHS[sdk=iphoneos*]" = (
-					armv6,
-					armv7,
-				);
+				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
 				"ARCHS[sdk=macosx*]" = "$(ARCHS_STANDARD_32_64_BIT)";
 				BUILD_STYLE = Debug;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -3010,7 +2981,7 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				SYMROOT = Build;
-				VALID_ARCHS = "armv6 armv7 i386 x86_64";
+				VALID_ARCHS = "armv7s armv7 i386 x86_64";
 			};
 			name = Debug;
 		};
@@ -3019,10 +2990,7 @@
 			baseConfigurationReference = 258F8500141061C3007AABCD /* PortableStaticLibrary.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"ARCHS[sdk=iphoneos*]" = (
-					armv6,
-					armv7,
-				);
+				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
 				"ARCHS[sdk=macosx*]" = "$(ARCHS_STANDARD_32_64_BIT)";
 				BUILD_STYLE = Release;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -3035,7 +3003,7 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				SYMROOT = Build;
-				VALID_ARCHS = "armv6 armv7 i386 x86_64";
+				VALID_ARCHS = "armv7s armv7 i386 x86_64";
 			};
 			name = Release;
 		};
@@ -3130,7 +3098,7 @@
 				PUBLIC_HEADERS_FOLDER_PATH = include/RestKit/Three20;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "armv6 armv7 i386";
+				VALID_ARCHS = "armv7 i386 armv7s";
 			};
 			name = Debug;
 		};
@@ -3157,7 +3125,7 @@
 				PRODUCT_NAME = RestKitThree20;
 				PUBLIC_HEADERS_FOLDER_PATH = include/RestKit/Three20;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				VALID_ARCHS = "armv6 armv7 i386";
+				VALID_ARCHS = "armv7 i386 armv7s";
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -3167,10 +3135,7 @@
 			baseConfigurationReference = 258F8500141061C3007AABCD /* PortableStaticLibrary.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"ARCHS[sdk=iphoneos*]" = (
-					armv6,
-					armv7,
-				);
+				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
 				"ARCHS[sdk=macosx*]" = "$(ARCHS_STANDARD_32_64_BIT)";
 				BUILD_STYLE = Release;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -3183,7 +3148,7 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				SYMROOT = Build;
-				VALID_ARCHS = "armv6 armv7 i386 x86_64";
+				VALID_ARCHS = "armv7s armv7 i386 x86_64";
 			};
 			name = Distribution;
 		};
@@ -3326,7 +3291,7 @@
 				PRODUCT_NAME = RestKitThree20;
 				PUBLIC_HEADERS_FOLDER_PATH = include/RestKit/Three20;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				VALID_ARCHS = "armv6 armv7 i386";
+				VALID_ARCHS = "armv7 i386 armv7s";
 				ZERO_LINK = NO;
 			};
 			name = Distribution;
@@ -3374,7 +3339,6 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv6 armv7 i386 x86_64";
 				ZERO_LINK = NO;
 			};
 			name = Distribution;
@@ -3502,10 +3466,7 @@
 			baseConfigurationReference = 258F8500141061C3007AABCD /* PortableStaticLibrary.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"ARCHS[sdk=iphoneos*]" = (
-					armv6,
-					armv7,
-				);
+				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
 				"ARCHS[sdk=macosx*]" = "$(ARCHS_STANDARD_32_64_BIT)";
 				BUILD_STYLE = Release;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -3518,7 +3479,7 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				SYMROOT = Build;
-				VALID_ARCHS = "armv6 armv7 i386 x86_64";
+				VALID_ARCHS = "armv7s armv7 i386 x86_64";
 			};
 			name = "Ad Hoc";
 		};
@@ -3687,7 +3648,7 @@
 				PRODUCT_NAME = RestKitThree20;
 				PUBLIC_HEADERS_FOLDER_PATH = include/RestKit/Three20;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				VALID_ARCHS = "armv6 armv7 i386";
+				VALID_ARCHS = "armv7 i386 armv7s";
 				ZERO_LINK = NO;
 			};
 			name = "Ad Hoc";
@@ -3735,7 +3696,6 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv6 armv7 i386 x86_64";
 				ZERO_LINK = NO;
 			};
 			name = "Ad Hoc";
@@ -4098,7 +4058,6 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "armv6 armv7 i386 x86_64";
 			};
 			name = Debug;
 		};
@@ -4145,7 +4104,6 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv6 armv7 i386 x86_64";
 				ZERO_LINK = NO;
 			};
 			name = Release;
