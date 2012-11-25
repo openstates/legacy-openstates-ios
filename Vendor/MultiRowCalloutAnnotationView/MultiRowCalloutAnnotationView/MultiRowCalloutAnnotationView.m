@@ -149,18 +149,38 @@ CGFloat const kMultiRowCalloutCellGap = 3;
         [self setCalloutCells:[annotation calloutCells]];
 }
 
+- (void)resetCalloutCells {
+    NSMutableArray *existingCells = [[NSMutableArray alloc] initWithCapacity:[self.contentView.subviews count]];
+    for (UIView *subview in self.contentView.subviews) {
+        if ([subview isKindOfClass:[MultiRowCalloutCell class]]) {
+            [existingCells addObject:subview];
+        }
+    }
+    while ([existingCells count]) {
+        MultiRowCalloutCell *cell = [existingCells lastObject];
+        [cell removeFromSuperview];
+        [existingCells removeObject:cell];
+    }
+    [existingCells release];
+}
+
 - (void)setCalloutCells:(NSArray *)calloutCells {
     if (_calloutCells) {
         [_calloutCells release];
     }
     _calloutCells = [calloutCells retain];
+    [self resetCalloutCells];
     if (calloutCells) {
         self.contentHeight = _cellOffsetY + ([calloutCells count] * (kMultiRowCalloutCellSize.height + kMultiRowCalloutCellGap));
         for (MultiRowCalloutCell *cell in calloutCells)
             [self.contentView addSubview:cell];
         [self prepareContentFrame];
         [self copyAccessoryTappedBlockToCalloutCells];
-    } 
+    }
+    else {
+        self.contentHeight = _cellOffsetY;
+        [self prepareContentFrame];
+    }
 }
 
 #pragma mark - Block setters
@@ -285,8 +305,8 @@ CGFloat const kMultiRowCalloutCellGap = 3;
 - (void)adjustMapRegionIfNeeded {
     if (!self.mapView)
         return;
-    
-        //Longitude
+
+    //Longitude
     CGFloat xPixelShift = 0;
     if ([self relativeParentXPosition] < 38) {
         xPixelShift = 38 - [self relativeParentXPosition];

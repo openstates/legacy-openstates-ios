@@ -397,6 +397,9 @@
         }
         else
             annotationView.annotation = newAnnotation;
+        if (!self.selectedAnnotationView) {
+            self.selectedAnnotationView = annotationView;
+        }
         annotationView.parentAnnotationView = self.selectedAnnotationView;
         annotationView.mapView = mapView;
         return annotationView;
@@ -418,12 +421,12 @@
         [annotation conformsToProtocol:@protocol(MultiRowAnnotationProtocol)] )
     {
         NSObject <MultiRowAnnotationProtocol> *pinAnnotation = (NSObject <MultiRowAnnotationProtocol> *)annotation;
+        self.selectedAnnotationView = aView;
         if (!self.calloutAnnotation) {
             _calloutAnnotation = [[MultiRowAnnotation alloc] init];
             [_calloutAnnotation copyAttributesFromAnnotation:pinAnnotation];
             [mapView addAnnotation:_calloutAnnotation];
         }
-        self.selectedAnnotationView = aView;
         return;
     }
     [mapView setCenterCoordinate:annotation.coordinate animated:YES];
@@ -443,6 +446,7 @@
         [mapView removeAnnotation:_calloutAnnotation];
         self.calloutAnnotation = nil;
     }
+    self.selectedAnnotationView = nil;
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)aView calloutAccessoryControlTapped:(UIControl *)control {

@@ -72,6 +72,13 @@ CGSize const kMultiRowCalloutCellSize = {245,44};
     [super dealloc];
 }
 
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    self.title = @"";
+    self.subtitle = @"";
+    self.image = nil;
+}
+
 - (IBAction)calloutAccessoryTapped:(id)sender {
     if (self.onCalloutAccessoryTapped)
         _onCalloutAccessoryTapped(self, sender, self.userData);
