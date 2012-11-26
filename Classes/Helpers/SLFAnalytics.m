@@ -12,7 +12,7 @@
 
 #import "SLFAnalytics.h"
 
-#define USE_TESTFLIGHT 0 // DEBUG
+#define USE_TESTFLIGHT 1 // DEBUG
 #define USE_GOOGLEANALYTICS 1
 #define USE_LOCALYTICS 0
 
@@ -61,6 +61,7 @@
     self.adapters = [NSMutableSet set];
     
 #if USE_TESTFLIGHT
+    #warning TestFlight is enabled.  Turn off for AppStore and don't link against libTestFlight.a, if possible
     [self.adapters addObject:[[[SLFTestFlight alloc] init] autorelease]];
 #endif
     

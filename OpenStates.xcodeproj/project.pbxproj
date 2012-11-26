@@ -264,6 +264,8 @@
 		37C957ED14C7B92500A30BC4 /* LegislatorsNoFetchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C957EC14C7B92500A30BC4 /* LegislatorsNoFetchViewController.m */; };
 		37CFB4D2144B980F00E8120D /* NSInvocation+CWVariableArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4CF144B980F00E8120D /* NSInvocation+CWVariableArguments.m */; };
 		37CFB4D3144B980F00E8120D /* UIImageView+RoundedCorners.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4D1144B980F00E8120D /* UIImageView+RoundedCorners.m */; };
+		37D3DD8D1663D92700F25B53 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 373ECB6514888C9F000BD16D /* libTestFlight.a */; };
+		37D3DE8C1663DE0300F25B53 /* SLFTestFlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A16CFE148C1C93000A3C91 /* SLFTestFlight.m */; };
 		37D6A7031496BE34009A76E8 /* LegislatorDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6A7021496BE34009A76E8 /* LegislatorDetailHeader.m */; };
 		37D7540A146C57FD00DCD742 /* _EventParticipant.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75403146C57FD00DCD742 /* _EventParticipant.m */; };
 		37D7540B146C57FD00DCD742 /* _GenericAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75405146C57FD00DCD742 /* _GenericAsset.m */; };
@@ -972,6 +974,7 @@
 				37E961F013E544FD0064B1D3 /* libRestKitObjectMapping.a in Frameworks */,
 				37E961F113E544FE0064B1D3 /* libRestKitSupport.a in Frameworks */,
 				37A16CFB148C128B000A3C91 /* libGoogleAnalytics.a in Frameworks */,
+				37D3DD8D1663D92700F25B53 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2436,6 +2439,7 @@
 				3708625914D9C2E900CFC48D /* InlineSubtitleCell.m in Sources */,
 				3708627D14DA307D00CFC48D /* StyledCellMapping.m in Sources */,
 				377F419B14DCED3A003E211D /* UIImageView+SLFLegislator.m in Sources */,
+				37D3DE8C1663DE0300F25B53 /* SLFTestFlight.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
