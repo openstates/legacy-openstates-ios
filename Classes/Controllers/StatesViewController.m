@@ -87,14 +87,11 @@
 }
 
 - (void)loadFromNetworkIfEmpty {
-    NSInteger count = self.tableController.rowCount;
-    if (count < 30) { // Sometimes we have 1 row, so 30 is an arbitrary but reasonable sanity check.
-        @try {
-            [self.tableController loadTableFromNetwork];
-        }
-        @catch (NSException *exception) {
-            RKLogWarning(@"Exception while attempting to load list of available states from network (already in progress?) ... %@", exception);
-        }
+    @try {
+        [self.tableController loadTableFromNetwork];
+    }
+    @catch (NSException *exception) {
+        RKLogWarning(@"Exception while attempting to load list of available states from network (already in progress?) ... %@", exception);
     }
 }
 
