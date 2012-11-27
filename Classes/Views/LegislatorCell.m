@@ -19,6 +19,8 @@
 #import "SLFTheme.h"
 #import "UIImageView+SLFLegislator.h"
 
+static CGFloat LegImageWidth = 53.f;
+
 @interface LegislatorCell()
 @end
 
@@ -33,10 +35,15 @@
     {
         self.opaque = YES;
         self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
-        CGRect tzvFrame = CGRectMake(53.f, 0, self.contentView.bounds.size.width - 53.f, self.contentView.bounds.size.height);
+        CGRect tzvFrame = CGRectMake(LegImageWidth, 0, self.contentView.bounds.size.width - LegImageWidth, self.contentView.bounds.size.height);
         _cellContentView = [[LegislatorCellView alloc] initWithFrame:CGRectInset(tzvFrame, 0, 1.0)];
         _cellContentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _cellContentView.contentMode = UIViewContentModeRedraw;
+        self.imageView.width = LegImageWidth;
+        self.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        self.imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        self.imageView.clipsToBounds = YES;
+        self.imageView.backgroundColor = [UIColor whiteColor];
         [self.contentView addSubview:_cellContentView];
     }
     return self;
@@ -88,12 +95,15 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    self.imageView.width = LegImageWidth;
     [_cellContentView setNeedsDisplay];
 }
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor
 {
     [super setBackgroundColor:backgroundColor];
+    self.imageView.backgroundColor = backgroundColor;
+    [self.imageView setNeedsDisplay];
     if (_cellContentView.highlighted)
         return;
     _cellContentView.backgroundColor = backgroundColor;
