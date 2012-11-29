@@ -12,7 +12,7 @@
 
 #import "SLFAnalytics.h"
 
-#define USE_TESTFLIGHT 1 // DEBUG
+#define USE_TESTFLIGHT 0 // DEBUG
 #define USE_GOOGLEANALYTICS 1
 #define USE_LOCALYTICS 0
 
