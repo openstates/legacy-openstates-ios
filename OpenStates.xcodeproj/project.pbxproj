@@ -14,7 +14,7 @@
 		2538E8671234250100ACB5D7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2538E8661234250100ACB5D7 /* SystemConfiguration.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		28D7ACF80DDB3853001CB0EB /* LegislatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* LegislatorsViewController.m */; };
-		2F3FA8831667C6C000A63CFF /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 373ECB6514888C9F000BD16D /* libTestFlight.a */; };
+		2F3FA8841667C7F400A63CFF /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 373ECB6514888C9F000BD16D /* libTestFlight.a */; };
 		370004AF143F546600F55165 /* SCNetworkReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 37000497143F546600F55165 /* SCNetworkReachability.m */; };
 		370004B0143F546600F55165 /* SCNetworkReachabilityFlags.c in Sources */ = {isa = PBXBuildFile; fileRef = 37000498143F546600F55165 /* SCNetworkReachabilityFlags.c */; };
 		370004C3143F55C400F55165 /* SCNetworkReachabilityKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 370004A5143F546600F55165 /* SCNetworkReachabilityKitTests.m */; };
@@ -974,7 +974,7 @@
 				37E961F013E544FD0064B1D3 /* libRestKitObjectMapping.a in Frameworks */,
 				37E961F113E544FE0064B1D3 /* libRestKitSupport.a in Frameworks */,
 				37A16CFB148C128B000A3C91 /* libGoogleAnalytics.a in Frameworks */,
-				2F3FA8831667C6C000A63CFF /* libTestFlight.a in Frameworks */,
+				2F3FA8841667C7F400A63CFF /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2279,7 +2279,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n#\ngit=`sh /etc/profile; which git`\n## For the App Store, instead use: git describe –abbrev=0 –tags\nversion=`$git describe --tags --always`\ncount=`$git rev-list --all |wc -l`\necho -e \"#define GIT_VERSION $version\\n#define GIT_COMMIT_COUNT $count\" > Resources/InfoPlist.h";
+			shellScript = "#!/bin/sh\n#\ngit=`sh /etc/profile; which git`\n## For the App Store, instead use: git describe –abbrev=0 –tags\nversion=`$git describe --abbrev=0 --tags --always`\ncount=`$git rev-list --all |wc -l`\necho -e \"#define GIT_VERSION $version\\n#define GIT_COMMIT_COUNT $count\" > Resources/InfoPlist.h";
 		};
 /* End PBXShellScriptBuildPhase section */
 
