@@ -486,24 +486,22 @@
     
     else if([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString:NSLocalizedString(@"Mail Link to this Page", @"SVWebViewController")]) {
         
-        MFMailComposeViewController *emailComposer = [[MFMailComposeViewController alloc] init]; 
+        MFMailComposeViewController *emailComposer = [[MFMailComposeViewController alloc] init];
         [emailComposer setMailComposeDelegate: self]; 
         NSString *title = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
         [emailComposer setSubject:title];
         [emailComposer setMessageBody:self.webView.request.URL.absoluteString isHTML:NO];
         emailComposer.modalPresentationStyle = UIModalPresentationFormSheet;
-        UIViewController * rootVC = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-        [rootVC presentModalViewController:emailComposer animated:YES];
+        [self presentViewController:emailComposer animated:YES completion:nil];
         [emailComposer release];
     }
-    
 }
 
 #pragma mark -
 #pragma mark MFMailComposeViewControllerDelegate
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-    [controller dismissModalViewControllerAnimated:YES];
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 
