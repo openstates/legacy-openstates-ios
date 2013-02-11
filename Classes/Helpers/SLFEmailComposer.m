@@ -58,10 +58,15 @@
     NSMutableString *body = [[NSMutableString alloc] init];
     NSString *appVer = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     NSString *buildVer = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    NSString *stateId = SLFSelectedStateID();
+    [body appendString:NSLocalizedString(@"\nDescription of Problem, Concern, or Question:\n", @"")];
+    [body appendString:@"\n\n    *** VERY IMPORTANT *** Please tell us any problems you experienced, and how we can reproduce it (if possible).\n\n"];
     [body appendFormat:NSLocalizedString(@"Open States App Version: %@ (Build %@)\n", @""), appVer, buildVer];
+    if (stateId) {
+        [body appendFormat:NSLocalizedString(@"Current selected state: %@\n", @""), stateId];
+    }
     [body appendFormat:NSLocalizedString(@"iOS Version: %@\n", @""), [[UIDevice currentDevice] systemVersion]];
     [body appendFormat:NSLocalizedString(@"iOS Device: %@\n", @""), [[UIDevice currentDevice] model]];
-    [body appendString:NSLocalizedString(@"\nDescription of Problem, Concern, or Question:\n", @"")];
     [self presentMailComposerTo:@"openstates-mobile@sunlightfoundation.com" subject:NSLocalizedString(@"Open States App Support", @"") body:body parent:parent];
     [[SLFAnalytics sharedAnalytics] tagEvent:@"EMAILING_DEV_SUPPORT" attributes:[NSDictionary dictionaryWithObject:@"APP_DEV" forKey:@"category"]];
     [body release];
