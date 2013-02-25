@@ -66,7 +66,7 @@ static NSString const * kBillListMinimalFields = @"state,bill_id,title,chamber,s
 										validSessionParameter(session), @"search_window",
 										stateID, @"state",
 										SUNLIGHT_APIKEY, @"apikey",
-                                        subject, @"subject", 
+                                        subject, @"subjects", 
                                         kBillListMinimalFields, @"fields", nil];
 	if (chamber && ![chamber isEqualToString:@"all"])
 		[queryParams setObject:chamber forKey:@"chamber"];
