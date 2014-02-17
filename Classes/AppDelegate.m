@@ -33,7 +33,6 @@
 @interface AppDelegate()
 @property (nonatomic,retain) AppBarController *appBarController;
 @property (nonatomic,retain) UINavigationController *navigationController;
-@property (nonatomic,retain) WatchedBillNotificationManager *billNotifier;
 @property (nonatomic,assign) UIBackgroundTaskIdentifier backgroundTaskID;
 - (void)setUpOnce;
 - (void)setUpBackgroundTasks;
@@ -52,12 +51,10 @@
 @synthesize appBarController = _appBarController;
 @synthesize stackedViewController = _stackedViewController;
 @synthesize navigationController = _navigationController;
-@synthesize billNotifier = _billNotifier;
 @synthesize backgroundTaskID = _backgroundTaskID;
 
 - (void)dealloc {
     self.window = nil;
-    self.billNotifier = nil;
     self.navigationController = nil;
     self.appBarController = nil;
     [super dealloc];
@@ -79,7 +76,7 @@
     [SLFAppearance setupAppearance];
     [SLFRestKitManager sharedRestKit];
     [SLFPersistenceManager sharedPersistence];
-    self.billNotifier = [WatchedBillNotificationManager manager];
+    [[WatchedBillNotificationManager manager] resetStatusNotifications:nil];
     [SLFActionPathRegistry sharedRegistry];
     [self setUpViewControllers];
     
@@ -161,6 +158,7 @@
     NSString *actionPath = SLFCurrentActionPath();
     if (IsEmpty(actionPath))
         return;
+    [[WatchedBillNotificationManager manager] resetStatusNotifications:nil];
     [SLFActionPathNavigator navigateToPath:actionPath skipSaving:YES fromBase:nil popToRoot:NO];
 }
 
@@ -188,12 +186,14 @@
     NSString *path = [[url absoluteString] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     if ( NO == [path hasPrefix:@"slfos:"] )
         return NO;
+    [[WatchedBillNotificationManager manager] resetStatusNotifications:nil];
     [SLFActionPathNavigator cancelPreviousPerformRequestsWithTarget:[SLFActionPathNavigator class]];
     [SLFActionPathNavigator navigateToPath:path skipSaving:YES fromBase:nil popToRoot:NO];
     return YES;
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
+    [[WatchedBillNotificationManager manager] resetStatusNotifications:nil];
     [[SLFAnalytics sharedAnalytics] resumeTracking];
 }
 

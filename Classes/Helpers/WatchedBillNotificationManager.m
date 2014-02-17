@@ -33,7 +33,12 @@
 @synthesize scheduleTimer = _scheduleTimer;
 
 + (WatchedBillNotificationManager *)manager {
-    return [[[WatchedBillNotificationManager alloc] init] autorelease];
+    static WatchedBillNotificationManager *manager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        manager = [[WatchedBillNotificationManager alloc] init];
+    });
+    return manager;
 }
 
 - (id)init {

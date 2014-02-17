@@ -169,8 +169,8 @@ typedef void(^RKRequestDidFailLoadWithErrorBlock)(NSError *error);
  */
 @property(nonatomic, assign) id<RKRequestDelegate> delegate;
 
-@property(nonatomic, retain) RKRequestDidLoadResponseBlock onDidLoadResponse;
-@property(nonatomic, retain) RKRequestDidFailLoadWithErrorBlock onDidFailLoadWithError;
+@property(nonatomic, copy) RKRequestDidLoadResponseBlock onDidLoadResponse;
+@property(nonatomic, copy) RKRequestDidFailLoadWithErrorBlock onDidFailLoadWithError;
 
 /**
  * A Dictionary of additional HTTP Headers to send with the request

@@ -95,7 +95,7 @@ static CGFloat LegImageWidth = 53.f;
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.imageView.width = LegImageWidth;
+    self.imageView.frame = CGRectMake(0, 0, LegImageWidth, 73);
     [_cellContentView setNeedsDisplay];
 }
 

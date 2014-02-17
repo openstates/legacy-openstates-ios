@@ -14,4 +14,5 @@
 + (WatchedBillNotificationManager *)manager;
 - (NSString *)alertMessageForUpdatedBill:(SLFBill *)updatedBill;
 - (IBAction)checkBillsStatus:(id)sender;
+- (IBAction)resetStatusNotifications:(id)sender;
 @end
