@@ -104,18 +104,23 @@
 - (void)presentEventEditorForEvent:(EKEvent *)event fromParent:(UIViewController <StackableController,SLFEventsManagerDelegate> *)parent {
     if (!event)
         return;
-    self.eventEditorParent = parent;
-    EKEventEditViewController *editor = [self newEventEditorForEvent:event delegate:self];
-    editor.view.width = parent.view.width;
-    if (!SLFIsIpad()) {
-        if (!SLFIsIOS5OrGreater())
-            [parent presentModalViewController:editor animated:YES];
+    __block SLFEventsManager *bself = self;
+    [self.eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+        if (!bself || !granted)
+            return;
+        bself.eventEditorParent = parent;
+        EKEventEditViewController *editor = [bself newEventEditorForEvent:event delegate:bself];
+        editor.view.width = parent.view.width;
+        if (!SLFIsIpad()) {
+            if (!SLFIsIOS5OrGreater())
+                [parent presentModalViewController:editor animated:YES];
+            else
+                [parent presentViewController:editor animated:YES completion:nil];
+        }
         else
-            [parent presentViewController:editor animated:YES completion:nil];
-    }
-    else
-        [parent stackOrPushViewController:editor];
-    [editor release];
+            [parent stackOrPushViewController:editor];
+        [editor release];
+    }];
 }
 
 - (void)eventEditViewController:(EKEventEditViewController *)controller didCompleteWithAction:(EKEventEditViewAction)action {
