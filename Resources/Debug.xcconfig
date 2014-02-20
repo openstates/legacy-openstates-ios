@@ -1,0 +1,30 @@
+//
+//  Debug.xcconfig
+//  OpenStates
+//
+//  Created by Daniel Cloud on 2/20/14.
+//
+//
+
+#include "Shared.xcconfig"
+
+BUNDLE_DISPLAY_NAME_SUFFIX=∆
+BUNDLE_ID_SUFFIX=.dev
+
+// No optimization
+GCC_OPTIMIZATION_LEVEL = 0
+
+// Deployment postprocessing is what triggers Xcode to strip, turn it off
+DEPLOYMENT_POSTPROCESSING= NO
+
+// Dead code stripping off
+DEAD_CODE_STRIPPING= NO
+
+// Debug symbols should be on obviously
+GCC_GENERATE_DEBUGGING_SYMBOLS= YES
+
+// Turn off warnings about uninitialized autos
+// can only be done when GCC_OPTIMIZATION_LEVEL is actually optimizing
+GCC_WARN_UNINITIALIZED_AUTOS= NO
+
+GCC_PREPROCESSOR_DEFINITIONS= DEBUG=1 CONFIGURATION_$(CONFIGURATION)

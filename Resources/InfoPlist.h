@@ -1,2 +1,0 @@
-#define GIT_VERSION 1.5
-#define GIT_COMMIT_COUNT     1768

@@ -1,0 +1,11 @@
+//
+//  Release.xcconfig
+//  OpenStates
+//
+//  Created by Daniel Cloud on 2/20/14.
+//
+//
+
+#include "Shared.xcconfig"
+
+EXCLUDED_SOURCE_FILE_NAMES=*libTestFlight.a
