@@ -2514,7 +2514,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_PREFIX_HEADER = Resources/InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/TestFlight\"",
@@ -2543,7 +2543,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_PREFIX_HEADER = Resources/InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/TestFlight\"",
@@ -2614,7 +2614,7 @@
 		373ECB5E1488747F000BD16D /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUILD_STYLE = Release;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
@@ -2631,7 +2631,7 @@
 					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
 					Vendor/RestKit/Build,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
@@ -2650,7 +2650,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_PREFIX_HEADER = Resources/InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/TestFlight\"",
@@ -2693,7 +2693,7 @@
 		37A16D11148C41F0000A3C91 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUILD_STYLE = Release;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Sunlight Foundation";
 				COPY_PHASE_STRIP = NO;
@@ -2710,7 +2710,7 @@
 					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
 					Vendor/RestKit/Build,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "02F9B0DB-B897-45B8-A21D-E5C9A11F7C94";
 				SDKROOT = iphoneos;
@@ -2730,7 +2730,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_PREFIX_HEADER = Resources/InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/TestFlight\"",
@@ -2774,7 +2774,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUILD_STYLE = Debug;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -2793,7 +2793,7 @@
 					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
 					Vendor/RestKit/Build,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 			};
@@ -2802,7 +2802,7 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUILD_STYLE = Release;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -2819,7 +2819,7 @@
 					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
 					Vendor/RestKit/Build,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
