@@ -43,7 +43,13 @@
 - (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
     [super tableControllerDidFinishFinalLoad:tableController];
     if (!self.tableController.isEmpty)
-        self.title = [NSString stringWithFormat:@"%d Committees", self.tableController.rowCount];
+        self.title = [NSString stringWithFormat:@"%lu Committees", (unsigned long)self.tableController.rowCount];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.screenName = @"Committees View Screen";
 }
 
 @end

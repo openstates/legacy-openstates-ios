@@ -53,4 +53,9 @@
         self.title = [NSString stringWithFormat:@"%d Districts", self.tableController.rowCount];
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.screenName = @"Districts Screen";
+}
+
 @end

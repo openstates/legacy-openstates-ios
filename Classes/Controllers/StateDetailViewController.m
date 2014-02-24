@@ -78,8 +78,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configureTableController];
-    if (self.state)
-        self.title = self.state.name; 
+    if (self.state) {
+        self.title = self.state.name;
+    }
+    self.screenName = [NSString stringWithFormat:@"%@ State Screen", self.title];
 }
 
 - (NSString *)actionPath {

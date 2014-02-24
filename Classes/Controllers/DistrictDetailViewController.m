@@ -51,8 +51,9 @@
     [super dealloc];
 }
 
-- (void)viewDidUnload {
-    [super viewDidUnload];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.screenName = @"District Detail Screen";
 }
 
 - (void)loadMapWithID:(NSString *)objID {

@@ -79,6 +79,7 @@
     _tableController.emptyItem = emptyItem;
     [self configureEditingButtons];
     [self configureTableItems];
+    self.screenName = @"Watched Bills Screen";
 }
 
 - (NSString *)actionPath {

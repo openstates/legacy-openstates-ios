@@ -14,8 +14,9 @@
 #import "SVGeocoder.h"
 #import "StackableControllerProtocol.h"
 #import "UserPinAnnotation.h"
+#import "GAITrackedViewController.h"
 
-@interface MapViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate, UIGestureRecognizerDelegate, SVGeocoderDelegate, StackableController, UserPinAnnotationDelegate>
+@interface MapViewController : GAITrackedViewController <MKMapViewDelegate, UISearchBarDelegate, UIGestureRecognizerDelegate, SVGeocoderDelegate, StackableController, UserPinAnnotationDelegate>
 @property (nonatomic,retain) IBOutlet MKMapView *mapView;
 @property (nonatomic,retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic,retain) IBOutlet UISearchBar *searchBar;

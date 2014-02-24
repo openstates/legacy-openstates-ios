@@ -69,6 +69,11 @@
     [super viewDidUnload];
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.screenName = @"Legislators No-Fetch Screen";
+}
+
 - (void)configureTableController {
     [super configureTableController];
     self.tableController.tableView.rowHeight = 73;

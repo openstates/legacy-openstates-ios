@@ -73,6 +73,7 @@
     if (self.resourcePath) {
         [_tableController loadTableWithObjectLoader:self.objectLoader];
     }
+    self.screenName = @"No Fetch Screen";
 }
 
 - (void)setResourcePath:(NSString *)resourcePath {

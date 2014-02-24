@@ -48,4 +48,10 @@
     self.title = [NSString stringWithFormat:NSLocalizedString(@"%@ Bills",@""), self.state.stateIDForDisplay];
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.screenName = @"Bills View Screen";
+}
+
+
 @end

@@ -73,6 +73,7 @@
     _tableController.pullToRefreshEnabled = NO;
     [_tableController mapObjectsWithClass:[CommitteeRole class] toTableCellsWithMapping:[self committeeRoleCellMap]];
 	self.title = NSLocalizedString(@"Loading...", @"");
+    self.screenName = @"Legislator Detail Screen";
 }
 
 - (NSString *)actionPath {

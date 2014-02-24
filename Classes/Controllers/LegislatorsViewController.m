@@ -26,6 +26,11 @@
     return self;
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.screenName = @"Legislators Screen";
+}
+
 - (void)configureTableController {
     [super configureTableController];
     self.tableController.showsSectionIndexTitles = YES;

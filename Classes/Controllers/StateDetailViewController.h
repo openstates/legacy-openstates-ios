@@ -12,7 +12,6 @@
 
 #import "SLFTableViewController.h"
 #import "SLFState.h"
-#import "StatesViewController.h"
 
 @interface StateDetailViewController : SLFTableViewController <StateMenuSelectionDelegate, RKObjectLoaderDelegate> {
 }

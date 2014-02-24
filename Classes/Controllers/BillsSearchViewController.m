@@ -80,6 +80,7 @@ enum SECTIONS {
         }];
     }
     [self configureTableItems];
+    self.screenName = @"Bills Search Screen";
 }
 
 - (NSString *)actionPath {

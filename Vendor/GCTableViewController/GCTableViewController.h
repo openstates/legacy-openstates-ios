@@ -7,6 +7,7 @@
 //  Copyright 2010 LittleKiwi. All rights reserved.
 
 #import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
 /*** Subclass of UIViewController that mimics the UITableViewController except that the tableView is a subview 
    of self.view (as opposed to the view itself). Also allow changes in the frame of the tableView 
@@ -15,7 +16,7 @@
 
 typedef void (^GCTableViewConfigurationBlock)(UITableView* tableView, UITableViewStyle style);
 
-@interface GCTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface GCTableViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic,retain) IBOutlet UITableView *tableView;
 @property (nonatomic,assign) BOOL clearsSelectionOnViewWillAppear;

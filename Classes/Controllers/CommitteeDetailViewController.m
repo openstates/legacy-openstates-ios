@@ -63,6 +63,7 @@
     [super viewDidLoad];
     [self configureTableController];
 	self.title = NSLocalizedString(@"Loading...", @"");
+    self.screenName = @"Committee Detail Screen";
 }
 
 - (NSString *)actionPath {

@@ -88,10 +88,7 @@
     self.searchBar = [self setUpSearchBarWithFrame:searchRect];
     self.toolbar = [self setUpToolBarWithFrame:toolbarRect];
     self.mapView = [self setUpMapViewWithFrame:mapViewRect];
-}
-
-- (void)loadView {
-    [super loadView];
+    self.screenName = @"Map Screen";
 }
 
 - (void)didReceiveMemoryWarning {

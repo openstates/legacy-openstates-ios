@@ -30,6 +30,12 @@
     [super dealloc];
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.screenName = @"Events Screen";
+}
+
 - (void)configureTableController {
     [super configureTableController];
     self.tableController.autoRefreshRate = 240;

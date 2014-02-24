@@ -61,6 +61,7 @@
         self.title = [NSString stringWithFormat:@"%@ %@", self.state.name, NSLocalizedString(@"Subjects",@"")];
         [self reconfigureForState:self.state];
     }
+    self.screenName = @"Bills Search Screen";
 }
 
 - (void)reconfigureForState:(SLFState *)newState {

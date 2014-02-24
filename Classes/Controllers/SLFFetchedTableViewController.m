@@ -111,6 +111,7 @@
             }
         }];
     }
+    self.screenName = @"Fetched Table Screen";
 }
 
 - (void)viewDidUnload {

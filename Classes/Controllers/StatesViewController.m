@@ -48,6 +48,7 @@
     [super viewDidLoad];
     [self configureTableHeader];
     [self loadFromNetworkIfEmpty];
+    self.screenName = @"States Screen";
 }
 
 - (void)configureTableController {

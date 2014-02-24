@@ -83,6 +83,7 @@ enum SECTIONS {
         }];
     }
     [self configureTableItems];
+    self.screenName = @"Bill Votes Screen";
 }
 
 - (void)configureTableItems {

@@ -63,8 +63,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configureTableController];
-    if (self.state)
-        self.title = [NSString stringWithFormat:@"%@ %@", self.state.name, NSLocalizedString(@"Bills",@"")]; 
+    if (self.state) {
+        self.title = [NSString stringWithFormat:@"%@ %@", self.state.name, NSLocalizedString(@"Bills",@"")];
+    }
+    self.screenName = @"Bills Menu Screen";
 }
 
 - (void)reconfigureForState:(SLFState *)newState {

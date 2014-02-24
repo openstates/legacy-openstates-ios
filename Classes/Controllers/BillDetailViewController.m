@@ -108,6 +108,7 @@
     [_tableController mapObjectsWithClass:[GenericWord class] toTableCellsWithMapping:[self subjectCellMap]];
     [self configureActionBarForBill:self.bill];
 	self.title = NSLocalizedString(@"Loading...", @"");
+    self.screenName = @"Bill Detail Screen";
 }
 
 - (NSString *)actionPath {

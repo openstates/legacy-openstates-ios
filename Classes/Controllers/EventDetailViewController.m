@@ -79,6 +79,7 @@
     [super viewDidLoad];
     [self configureTableController];
 	self.title = NSLocalizedString(@"Loading...", @"");
+    self.screenName = @"Event Detail Screen";
 }
 
 - (void)configureTableController {
