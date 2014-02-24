@@ -50,7 +50,7 @@
 - (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
     [super tableControllerDidFinishFinalLoad:tableController];
     if (!self.tableController.isEmpty)
-        self.title = [NSString stringWithFormat:@"%d Members", self.tableController.rowCount];
+        self.title = [NSString stringWithFormat:@"%lu Members", (unsigned long)self.tableController.rowCount];
 }
 
 @end

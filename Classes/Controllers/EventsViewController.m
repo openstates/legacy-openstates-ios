@@ -57,7 +57,7 @@
 - (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
     [super tableControllerDidFinishFinalLoad:tableController];
     if (!self.tableController.isEmpty)
-        self.title = [NSString stringWithFormat:@"%d Events", self.tableController.rowCount];
+        self.title = [NSString stringWithFormat:@"%lu Events", (unsigned long)self.tableController.rowCount];
 }
 
 - (BOOL)shouldShowChamberScopeBar {

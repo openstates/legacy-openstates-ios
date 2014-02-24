@@ -149,7 +149,7 @@ SLF_TODO("Move this whole class to RKTableController")
 
     TableCellDataObject *cellInfo = [self dataObjectForIndexPath:indexPath];
     if (cellInfo == nil) {
-        RKLogError(@"Error finding table entry for section:%d row:%d", indexPath.section, indexPath.row);
+        RKLogError(@"Error finding table entry for section:%ld row:%ld", indexPath.section, (long)indexPath.row);
         return nil;
     }
     NSString *cellIdentifier = [NSString stringWithFormat:@"%@-%d", [SLFStandardGroupCell cellIdentifier], cellInfo.isClickable];
@@ -493,7 +493,7 @@ SLF_TODO("Move this whole class to RKTableController")
         [[NSNotificationCenter defaultCenter] postNotificationName:kContributionsDataNotifyLoaded object:self];
     }
     else {
-        RKLogWarning(@"Status Code is %d", [response statusCode]);
+        RKLogWarning(@"Status Code is %ld", (long)[response statusCode]);
         NSString *errorDescription = [NSString stringWithFormat:NSLocalizedString(@"An error occurred while loading results from the server: (Status Code = %d)", @""), [response statusCode]];
         NSError *error = [NSError errorWithDomain:@"Contributions Error" code:[response statusCode] userInfo:[NSDictionary dictionaryWithObject:errorDescription forKey:NSLocalizedDescriptionKey]];
         [self request:request didFailLoadWithError:error];
