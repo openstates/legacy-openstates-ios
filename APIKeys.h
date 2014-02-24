@@ -17,5 +17,6 @@
 //   Sign up for your key, and check out the multitudinous government transparency sites from Sunlight:
 //   http://services.sunlightlabs.com/
 
-extern NSString* const SUNLIGHT_APIKEY;
+FOUNDATION_EXPORT NSString* const SUNLIGHT_APIKEY;
 
+FOUNDATION_EXPORT NSString* const kGoogleAnalyticsIdRelease;

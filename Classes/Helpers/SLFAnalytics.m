@@ -13,15 +13,10 @@
 #import "SLFAnalytics.h"
 
 #define USE_TESTFLIGHT 0 // DEBUG
-#define USE_GOOGLEANALYTICS 1
 #define USE_LOCALYTICS 0
 
 #if USE_TESTFLIGHT
 #import "SLFTestFlight.h"
-#endif
-
-#if USE_GOOGLEANALYTICS
-#import "SLFGANTracker.h"
 #endif
 
 #if USE_LOCALYTICS
@@ -64,11 +59,7 @@
     #warning TestFlight is enabled.  Turn off for AppStore and don't link against libTestFlight.a, if possible
     [self.adapters addObject:[[[SLFTestFlight alloc] init] autorelease]];
 #endif
-    
-#if USE_GOOGLEANALYTICS
-    [self.adapters addObject:[[[SLFGANTracker alloc] init] autorelease]];
-#endif 
-    
+
 #if USE_LOCALYTICS
     [self.adapters addObject:[[[SLFLocalytics alloc] init] autorelease]];
 #endif

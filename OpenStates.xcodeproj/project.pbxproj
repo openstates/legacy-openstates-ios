@@ -16,6 +16,7 @@
 		28D7ACF80DDB3853001CB0EB /* LegislatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* LegislatorsViewController.m */; };
 		2F3FA8841667C7F400A63CFF /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 373ECB6514888C9F000BD16D /* libTestFlight.a */; };
 		2F3FA8A31667EFDD00A63CFF /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F3FA8A21667EFDD00A63CFF /* Icon-72@2x.png */; };
+		2FA2630918BBD96700D8041F /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA2630818BBD96700D8041F /* libGoogleAnalyticsServices.a */; };
 		370004AF143F546600F55165 /* SCNetworkReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 37000497143F546600F55165 /* SCNetworkReachability.m */; };
 		370004B0143F546600F55165 /* SCNetworkReachabilityFlags.c in Sources */ = {isa = PBXBuildFile; fileRef = 37000498143F546600F55165 /* SCNetworkReachabilityFlags.c */; };
 		370004C3143F55C400F55165 /* SCNetworkReachabilityKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 370004A5143F546600F55165 /* SCNetworkReachabilityKitTests.m */; };
@@ -188,9 +189,6 @@
 		379A44F61488167B00D47B88 /* BillsSubjectsEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 379A44F41488038400D47B88 /* BillsSubjectsEntry.m */; };
 		379BB596147409EC00DDBD3D /* BillDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F6FCFC14676214003AA80D /* BillDetailViewController.m */; };
 		37A16CF3148C0D53000A3C91 /* SLFAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A16CF2148C0D53000A3C91 /* SLFAnalytics.m */; };
-		37A16CFB148C128B000A3C91 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37A16CF9148C128B000A3C91 /* libGoogleAnalytics.a */; };
-		37A16D02148C1FE6000A3C91 /* SLFGANTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A16D01148C1FE6000A3C91 /* SLFGANTracker.m */; };
-		37A16D08148C355B000A3C91 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 37A16D07148C355B000A3C91 /* libsqlite3.0.dylib */; };
 		37A16D16148C93BA000A3C91 /* SLFActionPathNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A16D15148C93BA000A3C91 /* SLFActionPathNavigator.m */; };
 		37A3258313E49D4700138ADE /* StatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258213E49D4700138ADE /* StatesViewController.m */; };
 		37A3258F13E49F2200138ADE /* StateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A3258E13E49F2200138ADE /* StateDetailViewController.m */; };
@@ -470,6 +468,13 @@
 		28D7ACF60DDB3853001CB0EB /* LegislatorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorsViewController.h; sourceTree = "<group>"; };
 		28D7ACF70DDB3853001CB0EB /* LegislatorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorsViewController.m; sourceTree = "<group>"; };
 		2F3FA8A21667EFDD00A63CFF /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72@2x.png"; sourceTree = "<group>"; };
+		2FA2630218BBD96700D8041F /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
+		2FA2630318BBD96700D8041F /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
+		2FA2630418BBD96700D8041F /* GAIFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIFields.h; sourceTree = "<group>"; };
+		2FA2630518BBD96700D8041F /* GAILogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAILogger.h; sourceTree = "<group>"; };
+		2FA2630618BBD96700D8041F /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
+		2FA2630718BBD96700D8041F /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
+		2FA2630818BBD96700D8041F /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
 		2FEB9C6118B6AA51000A476A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		2FEB9C6218B6AA5B000A476A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		2FEB9C6318B6AA65000A476A /* Beta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Beta.xcconfig; sourceTree = "<group>"; };
@@ -744,13 +749,8 @@
 		379A44F41488038400D47B88 /* BillsSubjectsEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsSubjectsEntry.m; sourceTree = "<group>"; };
 		37A16CF1148C0D53000A3C91 /* SLFAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFAnalytics.h; sourceTree = "<group>"; };
 		37A16CF2148C0D53000A3C91 /* SLFAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFAnalytics.m; sourceTree = "<group>"; };
-		37A16CF8148C128B000A3C91 /* GANTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GANTracker.h; sourceTree = "<group>"; };
-		37A16CF9148C128B000A3C91 /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalytics.a; sourceTree = "<group>"; };
 		37A16CFD148C1C93000A3C91 /* SLFTestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFTestFlight.h; sourceTree = "<group>"; };
 		37A16CFE148C1C93000A3C91 /* SLFTestFlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFTestFlight.m; sourceTree = "<group>"; };
-		37A16D00148C1FE6000A3C91 /* SLFGANTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFGANTracker.h; sourceTree = "<group>"; };
-		37A16D01148C1FE6000A3C91 /* SLFGANTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFGANTracker.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		37A16D07148C355B000A3C91 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		37A16D14148C93B9000A3C91 /* SLFActionPathNavigator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFActionPathNavigator.h; sourceTree = "<group>"; };
 		37A16D15148C93BA000A3C91 /* SLFActionPathNavigator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFActionPathNavigator.m; sourceTree = "<group>"; };
 		37A3258113E49D4700138ADE /* StatesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = StatesViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -957,6 +957,7 @@
 				37A33E9F149D690000D821CD /* EventKit.framework in Frameworks */,
 				37A33EA0149D690000D821CD /* EventKitUI.framework in Frameworks */,
 				3711871114462D1900A12B8B /* AddressBook.framework in Frameworks */,
+				2FA2630918BBD96700D8041F /* libGoogleAnalyticsServices.a in Frameworks */,
 				37B9CC08143D0654006C56E0 /* CoreText.framework in Frameworks */,
 				3763203D142C6C5400A6185F /* MessageUI.framework in Frameworks */,
 				375DC7E614279C9300253969 /* QuartzCore.framework in Frameworks */,
@@ -970,14 +971,12 @@
 				8452D3FD128244E60069F4A9 /* MobileCoreServices.framework in Frameworks */,
 				37E95F9513E4E4990064B1D3 /* CoreLocation.framework in Frameworks */,
 				37BB3BBD143A5FCC00DCB1FB /* libz.dylib in Frameworks */,
-				37A16D08148C355B000A3C91 /* libsqlite3.0.dylib in Frameworks */,
 				375DC7E414279C6B00253969 /* libRestKitUI.a in Frameworks */,
 				37E961ED13E544F80064B1D3 /* libRestKitCoreData.a in Frameworks */,
 				37E961EE13E544F90064B1D3 /* libRestKitJSONParserJSONKit.a in Frameworks */,
 				37E961EF13E544FB0064B1D3 /* libRestKitNetwork.a in Frameworks */,
 				37E961F013E544FD0064B1D3 /* libRestKitObjectMapping.a in Frameworks */,
 				37E961F113E544FE0064B1D3 /* libRestKitSupport.a in Frameworks */,
-				37A16CFB148C128B000A3C91 /* libGoogleAnalytics.a in Frameworks */,
 				2F3FA8841667C7F400A63CFF /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1643,11 +1642,13 @@
 		37A16CF7148C128B000A3C91 /* GoogleAnalytics */ = {
 			isa = PBXGroup;
 			children = (
-				37A16D07148C355B000A3C91 /* libsqlite3.0.dylib */,
-				37A16CF8148C128B000A3C91 /* GANTracker.h */,
-				37A16CF9148C128B000A3C91 /* libGoogleAnalytics.a */,
-				37A16D00148C1FE6000A3C91 /* SLFGANTracker.h */,
-				37A16D01148C1FE6000A3C91 /* SLFGANTracker.m */,
+				2FA2630218BBD96700D8041F /* GAI.h */,
+				2FA2630318BBD96700D8041F /* GAIDictionaryBuilder.h */,
+				2FA2630418BBD96700D8041F /* GAIFields.h */,
+				2FA2630518BBD96700D8041F /* GAILogger.h */,
+				2FA2630618BBD96700D8041F /* GAITrackedViewController.h */,
+				2FA2630718BBD96700D8041F /* GAITracker.h */,
+				2FA2630818BBD96700D8041F /* libGoogleAnalyticsServices.a */,
 			);
 			name = GoogleAnalytics;
 			path = Vendor/GoogleAnalytics;
@@ -2418,7 +2419,6 @@
 				379A44F61488167B00D47B88 /* BillsSubjectsEntry.m in Sources */,
 				371591BF148AC5BA0039ECED /* WatchedBillNotificationManager.m in Sources */,
 				37A16CF3148C0D53000A3C91 /* SLFAnalytics.m in Sources */,
-				37A16D02148C1FE6000A3C91 /* SLFGANTracker.m in Sources */,
 				37A16D16148C93BA000A3C91 /* SLFActionPathNavigator.m in Sources */,
 				37726AF7148D6AB3009BCE46 /* SLFActionPathRegistry.m in Sources */,
 				37726AFA148DCCE3009BCE46 /* SLFiCloudSync.m in Sources */,
@@ -2513,11 +2513,13 @@
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2FEB9C6118B6AA51000A476A /* Debug.xcconfig */;
 			buildSettings = {
 				BUILD_STYLE = Debug;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -2526,14 +2528,15 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Vendor/TestFlight\"",
-					"\"$(SRCROOT)/Vendor/GoogleAnalytics\"",
+					"$(SRCROOT)/Vendor/TestFlight/",
+					"$(SRCROOT)/Vendor/GoogleAnalytics/",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenStates;
+				PROVISIONING_PROFILE = "519D47CB-CA42-4EA4-BCE4-50C5E8A206A2";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = SLF;
@@ -2542,12 +2545,14 @@
 		};
 		1D6058950D05DD3E006BFB54 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2FEB9C6218B6AA5B000A476A /* Release.xcconfig */;
 			buildSettings = {
 				BUILD_STYLE = Release;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_PREFIX_HEADER = "";
@@ -2555,14 +2560,15 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Vendor/TestFlight\"",
-					"\"$(SRCROOT)/Vendor/GoogleAnalytics\"",
+					"$(SRCROOT)/Vendor/TestFlight/",
+					"$(SRCROOT)/Vendor/GoogleAnalytics/",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenStates;
+				PROVISIONING_PROFILE = "A1BAA6BC-35BE-494D-A2A6-E9E766E652F0";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2650,12 +2656,14 @@
 		};
 		373ECB5F1488747F000BD16D /* AdHoc */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2FEB9C6318B6AA65000A476A /* Beta.xcconfig */;
 			buildSettings = {
 				BUILD_STYLE = Release;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_PREFIX_HEADER = "";
@@ -2663,14 +2671,15 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Vendor/TestFlight\"",
-					"\"$(SRCROOT)/Vendor/GoogleAnalytics\"",
+					"$(SRCROOT)/Vendor/TestFlight/",
+					"$(SRCROOT)/Vendor/GoogleAnalytics/",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenStates;
+				PROVISIONING_PROFILE = "519D47CB-CA42-4EA4-BCE4-50C5E8A206A2";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2700,87 +2709,6 @@
 			};
 			name = AdHoc;
 		};
-		37A16D11148C41F0000A3C91 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUILD_STYLE = Release;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Sunlight Foundation";
-				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Prefix.pch;
-				GCC_THUMB_SUPPORT = NO;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
-					Vendor/RestKit/Build,
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "02F9B0DB-B897-45B8-A21D-E5C9A11F7C94";
-				SDKROOT = iphoneos;
-			};
-			name = Distribution;
-		};
-		37A16D12148C41F0000A3C91 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUILD_STYLE = Release;
-				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Sunlight Foundation";
-				CURRENT_PROJECT_VERSION = 3;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_THUMB_SUPPORT = NO;
-				INFOPLIST_FILE = Resources/Info.plist;
-				INFOPLIST_PREFIX_HEADER = "";
-				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/Vendor/TestFlight\"",
-					"\"$(SRCROOT)/Vendor/GoogleAnalytics\"",
-				);
-				OTHER_LDFLAGS = (
-					"-all_load",
-					"-ObjC",
-				);
-				PRODUCT_NAME = OpenStates;
-				PROVISIONING_PROFILE = "02F9B0DB-B897-45B8-A21D-E5C9A11F7C94";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = SLF;
-			};
-			name = Distribution;
-		};
-		37A16D13148C41F0000A3C91 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/OpenStates.app/OpenStates";
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "UnitTests/UnitTests-Prefix.pch";
-				GCC_THUMB_SUPPORT = NO;
-				HEADER_SEARCH_PATHS = (
-					Vendor/Kiwi,
-					Vendor/RestKit/Build,
-				);
-				PRODUCT_NAME = OpenStatesSpecs;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Distribution;
-		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2FEB9C6118B6AA51000A476A /* Debug.xcconfig */;
@@ -2795,7 +2723,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				GCC_PREPROCESSOR_DEFINITIONS = "CONFIGURATION_$(CONFIGURATION)";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -2847,7 +2775,6 @@
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
 				373ECB5F1488747F000BD16D /* AdHoc */,
-				37A16D12148C41F0000A3C91 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2858,7 +2785,6 @@
 				372E57D414153D07000652B1 /* Debug */,
 				372E57D514153D07000652B1 /* Release */,
 				373ECB601488747F000BD16D /* AdHoc */,
-				37A16D13148C41F0000A3C91 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2869,7 +2795,6 @@
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
 				373ECB5E1488747F000BD16D /* AdHoc */,
-				37A16D11148C41F0000A3C91 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

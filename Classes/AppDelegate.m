@@ -30,6 +30,7 @@
 #import "SLFActionPathNavigator.h"
 #import "SLFAnalytics.h"
 
+
 @interface AppDelegate()
 @property (nonatomic,retain) AppBarController *appBarController;
 @property (nonatomic,retain) UINavigationController *navigationController;
@@ -84,7 +85,9 @@
         [MTInfoPanel showPanelInWindow:self.window type:MTInfoPanelTypeWarning title:@"Debug Features!" subtitle:@"NSZombieEnabled and/or NSAutoreleaseFreedObject debug features are turned on. Turn them off before delivery." hideAfter:5.f];
         RKLogCritical(@"**************** NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!*************");
     }
-         
+
+    [self setUpGoogleAnalytics];
+
     __block __typeof__(self) bself = self;
     SLFRunBlockAfterDelay(^{
         [bself restoreApplicationState];
@@ -108,6 +111,28 @@
     SLFRunBlockAfterDelay(^{
         [reachable.localNotification addObserver:bself selector:@selector(networkReachabilityChanged:) name:SLFReachableStatusChangedForHostKey object:nil];
     }, 1);
+}
+
+- (void)setUpGoogleAnalytics {
+    [GAI sharedInstance].trackUncaughtExceptions = YES;
+    [GAI sharedInstance].dispatchInterval = 30;
+
+    // Initialize tracker.
+    id tracker = nil;
+
+#if CONFIGURATION_Release
+    tracker = [[GAI sharedInstance] trackerWithTrackingId:kGoogleAnalyticsIdRelease];
+#endif
+
+#if CONFIGURATION_Debug
+    [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+#endif
+
+    if (tracker) {
+        NSDictionary *dict = [[GAIDictionaryBuilder createEventWithCategory:@"UX" action:@"appstart" label:nil value:nil] build];
+        [dict setValue:@"start" forKey:kGAISessionControl];
+        [tracker send:dict];
+    }
 }
 
 - (void)setUpViewControllers {

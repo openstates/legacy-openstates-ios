@@ -15,4 +15,8 @@
     #import <UIKit/UIKit.h>
     #import <CoreData/CoreData.h>
     #import "SLFGlobal.h"
+    #import <GAI.h>
+    #import <GAIDictionaryBuilder.h>
+    #import <GAIFields.h>
+
 #endif
