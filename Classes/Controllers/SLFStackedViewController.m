@@ -38,7 +38,6 @@
     self.view.autoresizesSubviews = YES;
     [super viewDidLoad];
     [self.view setNeedsLayout];
-    self.screenName = @"Stacked Screen";
 }
 
 

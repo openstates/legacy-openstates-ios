@@ -33,7 +33,7 @@
 }
 
 - (NSNumber *)districtNumber {
-    return [NSNumber numberWithInt:[self.name integerValue]];
+    return [NSNumber numberWithInteger:[self.name integerValue]];
 }
 
 - (SLFChamber *)chamberObj {
@@ -188,7 +188,7 @@
 
 - (MKPolygon *)polygonRingWithCoordinates:(NSArray *)ringCoords interiorRings:(NSArray *)interiorRings {    
     NSUInteger numberOfCoordinates = [ringCoords count];
-    RKLogDebug(@"number of coordinates: %d", numberOfCoordinates);
+    RKLogDebug(@"number of coordinates: %lu", (unsigned long)numberOfCoordinates);
     if (numberOfCoordinates == 0)
         return nil;
     CLLocationCoordinate2D *cArray = calloc(numberOfCoordinates, sizeof(CLLocationCoordinate2D));

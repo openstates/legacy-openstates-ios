@@ -109,7 +109,7 @@ const NSUInteger STACKED_NAVBAR_HEIGHT = 60;
     if (SLFIsReachableAddress(url)) {
         SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:url];
         webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-        [self presentModalViewController:webViewController animated:YES];	
+        [self presentViewController:webViewController animated:YES completion:NULL];	
         [webViewController release];
     }
 }

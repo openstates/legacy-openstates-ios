@@ -158,7 +158,7 @@
         if (SLFIsReachableAddress(url)) {
             SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:url];
             webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-            [bself presentModalViewController:webViewController animated:YES];	
+            [bself presentViewController:webViewController animated:YES completion:NULL];
             [webViewController release];
         }
     };

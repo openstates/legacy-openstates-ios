@@ -149,7 +149,7 @@ SLF_TODO("Move this whole class to RKTableController")
 
     TableCellDataObject *cellInfo = [self dataObjectForIndexPath:indexPath];
     if (cellInfo == nil) {
-        RKLogError(@"Error finding table entry for section:%ld row:%ld", indexPath.section, (long)indexPath.row);
+        RKLogError(@"Error finding table entry for section:%ld row:%ld", (long)indexPath.section, (long)indexPath.row);
         return nil;
     }
     NSString *cellIdentifier = [NSString stringWithFormat:@"%@-%d", [SLFStandardGroupCell cellIdentifier], cellInfo.isClickable];

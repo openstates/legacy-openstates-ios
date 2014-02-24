@@ -522,7 +522,7 @@
 		371AE695143581D500592811 /* GradientBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GradientBackgroundView.h; sourceTree = "<group>"; };
 		371AE696143581D500592811 /* GradientBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GradientBackgroundView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		371B5C6C143E7B2800AF317E /* SVWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVWebViewController.h; sourceTree = "<group>"; };
-		371B5C6D143E7B2800AF317E /* SVWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVWebViewController.m; sourceTree = "<group>"; };
+		371B5C6D143E7B2800AF317E /* SVWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SVWebViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		3729613914DBD30300CD336A /* StackedBackground-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "StackedBackground-Landscape.png"; sourceTree = "<group>"; };
 		3729613A14DBD30300CD336A /* StackedBackground-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "StackedBackground-Portrait.png"; sourceTree = "<group>"; };
 		372D2AF514285FDC00ADE84E /* CommitteeRole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitteeRole.h; sourceTree = "<group>"; };
@@ -621,7 +621,7 @@
 		3756944514ABD41E0014BA7F /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		3756944614ABD41E0014BA7F /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
 		375694AD14ACEC4E0014BA7F /* AppBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppBarController.h; sourceTree = "<group>"; };
-		375694AE14ACEC4E0014BA7F /* AppBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppBarController.m; sourceTree = "<group>"; };
+		375694AE14ACEC4E0014BA7F /* AppBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AppBarController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		3757CE78146A6D9900471CB7 /* _BillAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _BillAction.h; sourceTree = "<group>"; };
 		3757CE79146A6D9900471CB7 /* _BillAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _BillAction.m; sourceTree = "<group>"; };
 		3757CE7A146A6D9900471CB7 /* _BillRecordVote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _BillRecordVote.h; sourceTree = "<group>"; };
@@ -653,7 +653,7 @@
 		37632033142C5DD500A6185F /* SLFAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFAlertView.h; sourceTree = "<group>"; };
 		37632034142C5DD500A6185F /* SLFAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFAlertView.m; sourceTree = "<group>"; };
 		37632035142C5DD500A6185F /* SLFEmailComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFEmailComposer.h; sourceTree = "<group>"; };
-		37632036142C5DD500A6185F /* SLFEmailComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFEmailComposer.m; sourceTree = "<group>"; };
+		37632036142C5DD500A6185F /* SLFEmailComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFEmailComposer.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		376357E3144CCD0700122377 /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = error.png; sourceTree = "<group>"; };
 		376357E4144CCD0700122377 /* error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "error@2x.png"; sourceTree = "<group>"; };
 		376357E6144CCD0700122377 /* bluestar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bluestar.png; sourceTree = "<group>"; };
@@ -756,11 +756,11 @@
 		37A3258113E49D4700138ADE /* StatesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = StatesViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		37A3258213E49D4700138ADE /* StatesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = StatesViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37A3258D13E49F2200138ADE /* StateDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateDetailViewController.h; sourceTree = "<group>"; };
-		37A3258E13E49F2200138ADE /* StateDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StateDetailViewController.m; sourceTree = "<group>"; };
+		37A3258E13E49F2200138ADE /* StateDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = StateDetailViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37A325B013E4A55800138ADE /* CommitteesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CommitteesViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		37A325B113E4A55800138ADE /* CommitteesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteesViewController.m; sourceTree = "<group>"; };
 		37A33E9C149D669800D821CD /* SLFEventsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFEventsManager.h; sourceTree = "<group>"; };
-		37A33E9D149D669800D821CD /* SLFEventsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFEventsManager.m; sourceTree = "<group>"; };
+		37A33E9D149D669800D821CD /* SLFEventsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFEventsManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37A6450F1499B5260038C62F /* Bank-Off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bank-Off.png"; sourceTree = "<group>"; };
 		37A645101499B5260038C62F /* Bank-Off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bank-Off@2x.png"; sourceTree = "<group>"; };
 		37A645111499B5260038C62F /* Bank-On.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bank-On.png"; sourceTree = "<group>"; };

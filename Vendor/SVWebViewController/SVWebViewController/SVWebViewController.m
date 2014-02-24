@@ -473,7 +473,7 @@
 
 
 - (void)dismissController {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 #pragma mark -

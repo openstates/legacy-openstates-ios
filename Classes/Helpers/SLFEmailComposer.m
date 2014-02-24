@@ -85,7 +85,7 @@
 		[_composer setSubject:subject];
 		[_composer setToRecipients:[NSArray arrayWithObject:recipient]];
 		[_composer setMessageBody:body isHTML:NO];
-		[parent presentModalViewController:_composer animated:YES];
+		[parent presentViewController:_composer animated:YES completion:NULL];
 	}
 	else {
 		NSMutableString *message = [[NSMutableString alloc] initWithFormat:@"mailto:%@", recipient];
@@ -114,7 +114,7 @@
 							message:NSLocalizedString(@"An error prevented successful transmission of your message. Check your email and network settings or try emailing manually.", @"")
 						buttonTitle:NSLocalizedString(@"Cancel", @"")];
 	}
-	[self.composer dismissModalViewControllerAnimated:YES];
+	[self.composer dismissViewControllerAnimated:YES completion:NULL];
 	self.isComposingMail = NO;
 	self.composer = nil;
 }

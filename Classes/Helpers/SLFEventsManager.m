@@ -133,7 +133,7 @@
     }
     if (!SLFIsIpad()) {
         if (!SLFIsIOS5OrGreater())
-            [controller dismissModalViewControllerAnimated:YES];
+            [controller dismissViewControllerAnimated:YES completion:NULL];
         else
             [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
