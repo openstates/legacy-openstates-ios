@@ -32,7 +32,7 @@ BOOL IsEmpty(NSObject * thing);
 #define SLFAppBarController ((AppBarController *)[SLFAppDelegate valueForKeyPath:@"appBarController"])
 #define SLFRelease(var) if (var) [var release], var = nil
 #define SLF_HOURS_TO_SECONDS(var) (var * 60 * 60)
-#define SLFRunBlockAfterDelay(block,delay) dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*delay), dispatch_get_current_queue(), block);
+#define SLFRunBlockAfterDelay(block,delay) dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*delay), dispatch_get_main_queue(), block);
 #define SLFRunBlockInNextRunLoop(block) [[NSOperationQueue mainQueue] addOperationWithBlock: block ];
 #define SLFIsIOS5OrGreater() ( [[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0f )
 #define DO_PRAGMA(x) _Pragma (#x)
