@@ -2525,7 +2525,6 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_PREFIX_HEADER = "";
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/TestFlight/",
@@ -2536,7 +2535,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenStates;
-				PROVISIONING_PROFILE = "519D47CB-CA42-4EA4-BCE4-50C5E8A206A2";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = SLF;
@@ -2557,7 +2556,6 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_PREFIX_HEADER = "";
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/TestFlight/",
@@ -2568,7 +2566,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenStates;
-				PROVISIONING_PROFILE = "A1BAA6BC-35BE-494D-A2A6-E9E766E652F0";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2630,7 +2628,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2FEB9C6318B6AA65000A476A /* Beta.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUILD_STYLE = Release;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
@@ -2647,9 +2644,8 @@
 					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
 					Vendor/RestKit/Build,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 			};
 			name = AdHoc;
@@ -2668,7 +2664,6 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_PREFIX_HEADER = "";
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/TestFlight/",
@@ -2679,7 +2674,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenStates;
-				PROVISIONING_PROFILE = "519D47CB-CA42-4EA4-BCE4-50C5E8A206A2";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2713,7 +2708,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2FEB9C6118B6AA51000A476A /* Debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUILD_STYLE = Debug;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -2732,8 +2726,7 @@
 					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
 					Vendor/RestKit/Build,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2742,7 +2735,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2FEB9C6218B6AA5B000A476A /* Release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUILD_STYLE = Release;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -2759,9 +2751,9 @@
 					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
 					Vendor/RestKit/Build,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "DE291252-E3EA-408F-8AA4-4514600D5854";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
