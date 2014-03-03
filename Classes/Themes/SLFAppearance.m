@@ -23,6 +23,7 @@
 #define vendColor(r, g, b) static UIColor *ret; if (ret == nil) ret = [SLFColorWithRGB(r,g,b) retain]; return ret
 #define vendColorHex(v) vendColor(((v&0xFF0000)>>16),((v&0x00FF00)>>8),(v&0x0000FF))
 
+
 @implementation SLFAppearance
 
 #if APP_APPEARANCE_THEME == APP_OPEN_STATES_THEME
@@ -72,24 +73,42 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 + (UIColor *)tableBackgroundLightColor {return [self whiteRock];}
 
 + (void)setupAppearance {
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackOpaque;
-    [[[UIApplication sharedApplication] keyWindow] setBackgroundColor:[UIColor blackColor]];
+
+    UIApplication *app = [UIApplication sharedApplication];
+
+    app.statusBarStyle = UIStatusBarStyleBlackOpaque;
+    app.keyWindow.backgroundColor = [UIColor blackColor];
+
+    NSUInteger systemVersion = [[UIDevice currentDevice] systemMajorVersion];
+
     if (![UINavigationBar respondsToSelector:@selector(appearance)]) {
         RKLogError(@"Application themes use iOS 5 methods.  This device has iOS %@.", [[UIDevice currentDevice] systemVersion]);
         return;
     }
-    [[UINavigationBar appearance] setTintColor:[self bandicoot]];
-    [[UISegmentedControl appearance] setTintColor:[self bandicoot]];
-    [[UISearchBar appearance] setTintColor:[self bandicoot]];
-    [[UIToolbar appearance] setTintColor:[self acapulco]];
-    
-    UIColor *gradientTop = SLFColorWithRGBShift([self menuBackgroundColor], +20);
-    UIColor *gradientBottom = SLFColorWithRGBShift([self menuBackgroundColor], -20);
-    [[TitleBarView appearance] setGradientTopColor:gradientTop];
-    [[TitleBarView appearance] setGradientBottomColor:gradientBottom];
-    [[TitleBarView appearance] setTitleFont:SLFTitleFont(14)];
-    [[TitleBarView appearance] setTitleColor:[self navBarTextColor]];
-    [[TitleBarView appearance] setStrokeTopColor:gradientTop];
+
+    if (systemVersion >= 7) {
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+        [UIView appearance].tintColor = [self springWood];
+        [UITableView appearance].sectionIndexBackgroundColor = [UIColor clearColor];
+        [UITableView appearance].sectionIndexColor = [self cellTextColor];
+        [[UINavigationBar appearance] setBarTintColor:[self bandicoot]];
+        [[UINavigationBar appearance] setTintColor:[self springWood]];
+        [[UISearchBar appearance] setBarTintColor:[self bandicoot]];
+        [[UIToolbar appearance] setBarTintColor:[self acapulco]];
+    } else {
+        [[UINavigationBar appearance] setTintColor:[self bandicoot]];
+        [[UISegmentedControl appearance] setTintColor:[self bandicoot]];
+        [[UISearchBar appearance] setTintColor:[self bandicoot]];
+        [[UIToolbar appearance] setTintColor:[self acapulco]];
+        UIColor *gradientTop = SLFColorWithRGBShift([self menuBackgroundColor], +20);
+        UIColor *gradientBottom = SLFColorWithRGBShift([self menuBackgroundColor], -20);
+        [[TitleBarView appearance] setGradientTopColor:gradientTop];
+        [[TitleBarView appearance] setGradientBottomColor:gradientBottom];
+        [[TitleBarView appearance] setTitleFont:SLFTitleFont(14)];
+        [[TitleBarView appearance] setTitleColor:[self navBarTextColor]];
+        [[TitleBarView appearance] setStrokeTopColor:gradientTop];
+    }
+
     [[RKRefreshTriggerView appearance] setTitleFont:SLFTitleFont(13)];
     [[RKRefreshTriggerView appearance] setTitleColor:[self cellTextColor]];
     [[RKRefreshTriggerView appearance] setLastUpdatedFont:SLFFont(11)];

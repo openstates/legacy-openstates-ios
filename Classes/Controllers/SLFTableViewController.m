@@ -31,6 +31,10 @@
         self.stackWidth = 450;
         self.useGradientBackground = (style == UITableViewStyleGrouped);
         self.useTitleBar = NO;
+        if ([self respondsToSelector:@selector(extendedLayoutIncludesOpaqueBars)]) {
+            self.extendedLayoutIncludesOpaqueBars = YES;
+            self.edgesForExtendedLayout = UIRectEdgeNone;
+        }
     }
     return self;
 }

@@ -25,6 +25,11 @@
     if (self) {
         self.leftInset = STACKED_MENU_INSET;
         self.largeLeftInset = STACKED_MENU_WIDTH;
+        if ([self respondsToSelector:@selector(extendedLayoutIncludesOpaqueBars)]) {
+            self.extendedLayoutIncludesOpaqueBars = YES;
+            self.edgesForExtendedLayout = UIRectEdgeNone;
+        }
+
     }
     return self;
 }
