@@ -17,6 +17,7 @@
 		2F3FA8841667C7F400A63CFF /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 373ECB6514888C9F000BD16D /* libTestFlight.a */; };
 		2FA2630918BBD96700D8041F /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA2630818BBD96700D8041F /* libGoogleAnalyticsServices.a */; };
 		2FD00F1E18C4E5EC00A5399A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD00F1D18C4E5EC00A5399A /* Images.xcassets */; };
+		2FD00F2118C51FA500A5399A /* UIDevice+VersionCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD00F2018C51FA500A5399A /* UIDevice+VersionCheck.m */; };
 		370004AF143F546600F55165 /* SCNetworkReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 37000497143F546600F55165 /* SCNetworkReachability.m */; };
 		370004B0143F546600F55165 /* SCNetworkReachabilityFlags.c in Sources */ = {isa = PBXBuildFile; fileRef = 37000498143F546600F55165 /* SCNetworkReachabilityFlags.c */; };
 		370004C3143F55C400F55165 /* SCNetworkReachabilityKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 370004A5143F546600F55165 /* SCNetworkReachabilityKitTests.m */; };
@@ -365,6 +366,8 @@
 		2FA2630718BBD96700D8041F /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
 		2FA2630818BBD96700D8041F /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
 		2FD00F1D18C4E5EC00A5399A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = OpenStates/Images.xcassets; sourceTree = SOURCE_ROOT; };
+		2FD00F1F18C51FA500A5399A /* UIDevice+VersionCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+VersionCheck.h"; sourceTree = "<group>"; };
+		2FD00F2018C51FA500A5399A /* UIDevice+VersionCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+VersionCheck.m"; sourceTree = "<group>"; };
 		2FEB9C6118B6AA51000A476A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		2FEB9C6218B6AA5B000A476A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		2FEB9C6318B6AA65000A476A /* Beta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Beta.xcconfig; sourceTree = "<group>"; };
@@ -1374,6 +1377,8 @@
 				378A23151476438700D82721 /* SLFDrawingExtenions.m */,
 				37BAE3111479606600CD5704 /* NSString+SLFExtensions.h */,
 				37BAE3121479606600CD5704 /* NSString+SLFExtensions.m */,
+				2FD00F1F18C51FA500A5399A /* UIDevice+VersionCheck.h */,
+				2FD00F2018C51FA500A5399A /* UIDevice+VersionCheck.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1937,6 +1942,7 @@
 				3756945014ABD41E0014BA7F /* UIImageView+AFNetworking.m in Sources */,
 				375694AF14ACEC4E0014BA7F /* AppBarController.m in Sources */,
 				378337D414AD26A10077010E /* AppendingFlowCell.m in Sources */,
+				2FD00F2118C51FA500A5399A /* UIDevice+VersionCheck.m in Sources */,
 				3772624F14B507F500F8D3A6 /* AssetsViewController.m in Sources */,
 				37193F5514BCEA9E00C78262 /* MTInfoPanel.m in Sources */,
 				3748120614C7ABAA00A1AE30 /* NoFetchViewController.m in Sources */,
