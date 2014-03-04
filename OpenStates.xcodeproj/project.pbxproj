@@ -16,8 +16,8 @@
 		28D7ACF80DDB3853001CB0EB /* LegislatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* LegislatorsViewController.m */; };
 		2F3FA8841667C7F400A63CFF /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 373ECB6514888C9F000BD16D /* libTestFlight.a */; };
 		2FA2630918BBD96700D8041F /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA2630818BBD96700D8041F /* libGoogleAnalyticsServices.a */; };
-		2FD00F1E18C4E5EC00A5399A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD00F1D18C4E5EC00A5399A /* Images.xcassets */; };
 		2FD00F2118C51FA500A5399A /* UIDevice+VersionCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD00F2018C51FA500A5399A /* UIDevice+VersionCheck.m */; };
+		2FD00F2718C6843100A5399A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD00F2618C6843100A5399A /* Images.xcassets */; };
 		370004AF143F546600F55165 /* SCNetworkReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 37000497143F546600F55165 /* SCNetworkReachability.m */; };
 		370004B0143F546600F55165 /* SCNetworkReachabilityFlags.c in Sources */ = {isa = PBXBuildFile; fileRef = 37000498143F546600F55165 /* SCNetworkReachabilityFlags.c */; };
 		370004C3143F55C400F55165 /* SCNetworkReachabilityKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 370004A5143F546600F55165 /* SCNetworkReachabilityKitTests.m */; };
@@ -365,9 +365,9 @@
 		2FA2630618BBD96700D8041F /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
 		2FA2630718BBD96700D8041F /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
 		2FA2630818BBD96700D8041F /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
-		2FD00F1D18C4E5EC00A5399A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = OpenStates/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		2FD00F1F18C51FA500A5399A /* UIDevice+VersionCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+VersionCheck.h"; sourceTree = "<group>"; };
 		2FD00F2018C51FA500A5399A /* UIDevice+VersionCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+VersionCheck.m"; sourceTree = "<group>"; };
+		2FD00F2618C6843100A5399A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		2FEB9C6118B6AA51000A476A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		2FEB9C6218B6AA5B000A476A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		2FEB9C6318B6AA65000A476A /* Beta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Beta.xcconfig; sourceTree = "<group>"; };
@@ -841,7 +841,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				2FD00F1D18C4E5EC00A5399A /* Images.xcassets */,
+				2FD00F2618C6843100A5399A /* Images.xcassets */,
 				37F7C06E14D34530000853D5 /* Localization */,
 				3714804F1432D27800170716 /* Assets */,
 				37336A66142B98A000F635EB /* Interfaces */,
@@ -1739,12 +1739,12 @@
 				37F6FCF214671E34003AA80D /* 06-magnify@2x.png in Resources */,
 				37E01EFD14903D890079EBB1 /* MuseoSlab-500.otf in Resources */,
 				37E01EFF14917A890079EBB1 /* BlairMdITC TT Medium.ttf in Resources */,
-				2FD00F1E18C4E5EC00A5399A /* Images.xcassets in Resources */,
 				3756945214AC0FA20014BA7F /* SubjectCounts.json in Resources */,
 				37193F5814BCEB3400C78262 /* MTInfoPanel.bundle in Resources */,
 				373B842114C0D25000ED7959 /* blackArrow.png in Resources */,
 				373B842214C0D25000ED7959 /* blackArrow@2x.png in Resources */,
 				373B842314C0D25000ED7959 /* blueArrow.png in Resources */,
+				2FD00F2718C6843100A5399A /* Images.xcassets in Resources */,
 				373B842414C0D25000ED7959 /* blueArrow@2x.png in Resources */,
 				373B842514C0D25000ED7959 /* grayArrow.png in Resources */,
 				373B842614C0D25000ED7959 /* grayArrow@2x.png in Resources */,
