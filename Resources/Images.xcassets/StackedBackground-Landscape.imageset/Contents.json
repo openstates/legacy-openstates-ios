@@ -3,12 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "Default-Landscape~ipad.png"
+      "filename" : "StackedBackground-Landscape.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Default-Landscape@2x~ipad.png"
+      "filename" : "StackedBackground-Landscape@2x.png"
     }
   ],
   "info" : {
