@@ -85,7 +85,11 @@ const NSUInteger STACKED_NAVBAR_HEIGHT = 60;
 }
 
 - (void)configureBackgroundView {
-    CGRect viewFrame = CGRectMake(STACKED_MENU_WIDTH, 0, self.view.width - STACKED_MENU_WIDTH, self.view.height);
+    CGFloat viewTop = 0.0;
+    if ([[UIDevice currentDevice] systemMajorVersion] < 7) {
+        viewTop = -20.0f;
+    }
+    CGRect viewFrame = CGRectMake(STACKED_MENU_WIDTH, viewTop, self.view.width - STACKED_MENU_WIDTH, self.view.height);
     _backgroundView = [[StackedBackgroundView alloc] initWithFrame:viewFrame];
     [self.view insertSubview:_backgroundView atIndex:0];
 }
