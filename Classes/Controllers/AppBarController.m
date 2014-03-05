@@ -58,18 +58,23 @@ const NSUInteger STACKED_NAVBAR_HEIGHT = 60;
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.stackedViewController = nil;
+    CGFloat navBarHeight = STACKED_NAVBAR_HEIGHT;
+    if ([[UIDevice currentDevice] systemMajorVersion] >= 7) {
+        navBarHeight += 6;
+    }
+
     SLFState *foundSavedState = SLFSelectedState();
     StackedMenuViewController* stateMenuVC = [[StackedMenuViewController alloc] initWithState:foundSavedState];
     stateMenuVC.view.frame = CGRectMake(0, 0, STACKED_MENU_WIDTH, self.view.frame.size.height);
     _stackedViewController = [[SLFStackedViewController alloc] initWithRootViewController:stateMenuVC];
-    _stackedViewController.view.frame = CGRectMake(0, STACKED_NAVBAR_HEIGHT, self.view.frame.size.width, self.view.frame.size.height - STACKED_NAVBAR_HEIGHT);
+    _stackedViewController.view.frame = CGRectMake(0, navBarHeight, self.view.frame.size.width, self.view.frame.size.height - navBarHeight);
     if (SLFIsIOS5OrGreater())
         [self addChildViewController:_stackedViewController];
     [self.view addSubview:_stackedViewController.view];
     if (SLFIsIOS5OrGreater())
         [_stackedViewController didMoveToParentViewController:self];
     self.navigationBar = nil;
-    _navigationBar = [[StackedNavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, STACKED_NAVBAR_HEIGHT)];
+    _navigationBar = [[StackedNavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, navBarHeight)];
     [self.view addSubview:_navigationBar];
     [_navigationBar.mapButton addTarget:self action:@selector(changeSelectedState:) forControlEvents:UIControlEventTouchUpInside];
     [_navigationBar.appIconButton addTarget:self action:@selector(browseToAppWebSite:) forControlEvents:UIControlEventTouchUpInside];

@@ -23,7 +23,7 @@
 #define kMapButtonOffsetX (self.width - (62 + 14)) // 62 is the image width
 #define kDividerOffsetX (kMapButtonOffsetX - 20)
 #define kAccessoryIndicatorOffsetX (kDividerOffsetX - 25)
-#define kStateLabelRect CGRectMake((kAccessoryIndicatorOffsetX - 250) - 20,19,250,22)
+#define kCenterOffset (5)
 
 @interface AnimatedGradientLayer : CAGradientLayer
 @end
@@ -110,6 +110,9 @@
 - (void)createAppNameView {
     CGFloat offsetX = 16;
     CGFloat offsetY = 16;
+    if ([[UIDevice currentDevice] systemMajorVersion] >= 7) {
+        offsetY +=10;
+    }
     _iconView = [[OpenStatesIconView alloc] initWithFrame:CGRectMake(offsetX,offsetY,32,32)];
     _iconView.useDropShadow = NO;
     _iconView.useGradientOverlay = NO;
@@ -126,8 +129,12 @@
 }
 
 - (void)createMapButton {
-    UIImage *image = [UIImage imageNamed:@"MapUSA"];    
-    self.mapButton = [UIButton buttonForImage:image withFrame:CGRectMake(kMapButtonOffsetX,10,image.size.width,image.size.height) glossy:NO shadow:NO];
+    CGFloat offsetY = 10;
+    if ([[UIDevice currentDevice] systemMajorVersion] >= 7) {
+        offsetY +=10;
+    }
+    UIImage *image = [UIImage imageNamed:@"MapUSA"];
+    self.mapButton = [UIButton buttonForImage:image withFrame:CGRectMake(kMapButtonOffsetX,offsetY,image.size.width,image.size.height) glossy:NO shadow:NO];
     _mapButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     [self addSubview:_mapButton];
 }
@@ -163,21 +170,24 @@
 }
 
 - (void)createAccessoryIndicator {
-    ColoredAccessoryIndicator *indicator = [[ColoredAccessoryIndicator alloc] initWithFrame:CGRectMake(0, 0, 18, 18)];
+    CGRect viewFrame = CGRectMake(0, 0, 18, 18);
+    ColoredAccessoryIndicator *indicator = [[ColoredAccessoryIndicator alloc] initWithFrame:viewFrame];
     indicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-    indicator.center = CGPointMake(kAccessoryIndicatorOffsetX, self.center.y);
+    indicator.center = CGPointMake(kAccessoryIndicatorOffsetX, self.center.y+kCenterOffset);
     [self addSubview:indicator];
     [indicator release];
 }
 
 - (void)createStateLabel {
-    _stateLabel = [[UILabel alloc] initWithFrame:kStateLabelRect];
+    CGRect viewFrame = CGRectMake((kAccessoryIndicatorOffsetX - 250) - 20, 0, 250, 22);
+    _stateLabel = [[UILabel alloc] initWithFrame:viewFrame];
     _stateLabel.backgroundColor = [UIColor clearColor];
     _stateLabel.font = SLFTitleFont(18);
     _stateLabel.textColor = [SLFAppearance navBarTextColor];
-    _stateLabel.textAlignment = UITextAlignmentRight;
-    _stateLabel.lineBreakMode = UILineBreakModeTailTruncation;
+    _stateLabel.textAlignment = NSTextAlignmentRight;
+    _stateLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     _stateLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    _stateLabel.center = CGPointMake(_stateLabel.center.x, self.center.y+kCenterOffset);
     [self selectedStateDidChange:nil];
     [self addSubview:_stateLabel];
 }
