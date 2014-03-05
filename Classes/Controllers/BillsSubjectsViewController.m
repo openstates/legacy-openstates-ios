@@ -13,6 +13,7 @@
 #import "BillsSubjectsViewController.h"
 #import "SLFDataModels.h"
 #import "SLFTheme.h"
+#import "SLFAppearance.h"
 #import "SLFRestKitManager.h"
 #import "BillsViewController.h"
 #import "BillSearchParameters.h"
@@ -54,6 +55,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [SLFAppearance menuBackgroundColor];
     self.tableView.opaque = YES;
     [self configureStandaloneChamberScopeBar];
     [self configureTableController];
@@ -132,16 +134,23 @@
     scopeBar.selectedSegmentIndex = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
     [scopeBar addTarget:self action:@selector(chamberScopeSelectedIndexDidChange:) forControlEvents:UIControlEventValueChanged];
     scopeBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-    scopeBar.segmentedControlStyle = 7; // magic number (it's cheating)
+
+    CGFloat barInset = 0.0f;
+    if ([[UIDevice currentDevice] systemMajorVersion] < 7) {
+        scopeBar.segmentedControlStyle = 7; // magic number (it's cheating)
+    } else {
+        scopeBar.tintColor = [SLFAppearance cellSecondaryTextColor];
+        barInset += 12.0f;
+    }
     scopeBar.opaque = YES;
-    CGFloat barOriginY = self.titleBarView.opticalHeight;
+    CGFloat barOriginY = self.titleBarView.opticalHeight + barInset/2;
     CGFloat barHeight = scopeBar.height;
-    CGFloat barWidth = self.tableView.bounds.size.width;
-    scopeBar.origin = CGPointMake(0,barOriginY);
+    CGFloat barWidth = self.tableView.bounds.size.width - (2*barInset);
+    scopeBar.origin = CGPointMake(barInset,barOriginY);
     scopeBar.size = CGSizeMake(barWidth, barHeight);
     CGRect tableRect = self.tableView.frame;
     tableRect.size.height -= (scopeBar.height);
-    self.tableView.frame = CGRectOffset(tableRect, 0, scopeBar.height);
+    self.tableView.frame = CGRectOffset(tableRect, 0, scopeBar.height + barInset);
     [self.view addSubview:scopeBar];
     [scopeBar release];
 }
