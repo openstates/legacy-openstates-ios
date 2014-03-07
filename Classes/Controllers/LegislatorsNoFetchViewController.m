@@ -138,7 +138,6 @@
 - (void)startUpdatingLocation:(id)sender {
     if (!self.locationManager) {
         _locationManager = [[CLLocationManager alloc] init];
-        _locationManager.purpose = NSLocalizedString(@"This application uses your geographic location (via Location Services) to determine legislative representation for your area.", @"");
         _locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
     }
     if ([CLLocationManager locationServicesEnabled] == NO) {
