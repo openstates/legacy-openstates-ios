@@ -169,7 +169,6 @@
 		37C957ED14C7B92500A30BC4 /* LegislatorsNoFetchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C957EC14C7B92500A30BC4 /* LegislatorsNoFetchViewController.m */; };
 		37CFB4D2144B980F00E8120D /* NSInvocation+CWVariableArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4CF144B980F00E8120D /* NSInvocation+CWVariableArguments.m */; };
 		37CFB4D3144B980F00E8120D /* UIImageView+RoundedCorners.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CFB4D1144B980F00E8120D /* UIImageView+RoundedCorners.m */; };
-		37D3DE8C1663DE0300F25B53 /* SLFTestFlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A16CFE148C1C93000A3C91 /* SLFTestFlight.m */; };
 		37D6A7031496BE34009A76E8 /* LegislatorDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D6A7021496BE34009A76E8 /* LegislatorDetailHeader.m */; };
 		37D7540A146C57FD00DCD742 /* _EventParticipant.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75403146C57FD00DCD742 /* _EventParticipant.m */; };
 		37D7540B146C57FD00DCD742 /* _GenericAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D75405146C57FD00DCD742 /* _GenericAsset.m */; };
@@ -600,8 +599,6 @@
 		379A44F41488038400D47B88 /* BillsSubjectsEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BillsSubjectsEntry.m; sourceTree = "<group>"; };
 		37A16CF1148C0D53000A3C91 /* SLFAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFAnalytics.h; sourceTree = "<group>"; };
 		37A16CF2148C0D53000A3C91 /* SLFAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFAnalytics.m; sourceTree = "<group>"; };
-		37A16CFD148C1C93000A3C91 /* SLFTestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFTestFlight.h; sourceTree = "<group>"; };
-		37A16CFE148C1C93000A3C91 /* SLFTestFlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFTestFlight.m; sourceTree = "<group>"; };
 		37A16D14148C93B9000A3C91 /* SLFActionPathNavigator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFActionPathNavigator.h; sourceTree = "<group>"; };
 		37A16D15148C93BA000A3C91 /* SLFActionPathNavigator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFActionPathNavigator.m; sourceTree = "<group>"; };
 		37A3258113E49D4700138ADE /* StatesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = StatesViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1021,8 +1018,6 @@
 			children = (
 				373ECB6814888C9F000BD16D /* TestFlight.h */,
 				373ECB6514888C9F000BD16D /* libTestFlight.a */,
-				37A16CFD148C1C93000A3C91 /* SLFTestFlight.h */,
-				37A16CFE148C1C93000A3C91 /* SLFTestFlight.m */,
 			);
 			name = TestFlight;
 			path = Vendor/TestFlight;
@@ -1968,7 +1963,6 @@
 				3708625914D9C2E900CFC48D /* InlineSubtitleCell.m in Sources */,
 				3708627D14DA307D00CFC48D /* StyledCellMapping.m in Sources */,
 				377F419B14DCED3A003E211D /* UIImageView+SLFLegislator.m in Sources */,
-				37D3DE8C1663DE0300F25B53 /* SLFTestFlight.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2178,6 +2172,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "4A78866D-D274-438F-967B-5396C2887038";
 				SDKROOT = iphoneos;
 			};
 			name = AdHoc;
@@ -2265,6 +2260,7 @@
 					Vendor/RestKit/Build,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2291,7 +2287,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "DE291252-E3EA-408F-8AA4-4514600D5854";
+				PROVISIONING_PROFILE = "FAA08197-D4A9-4241-A84F-3C4BB5908A51";
 				SDKROOT = iphoneos;
 			};
 			name = Release;

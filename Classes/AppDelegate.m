@@ -12,6 +12,7 @@
 
 #import "AppDelegate.h"
 #import <Crashlytics/Crashlytics.h>
+#import "TestFlight.h"
 #import <RestKit/RestKit.h>
 #import <RestKit/CoreData/CoreData.h>
 #import "AppBarController.h"
@@ -73,6 +74,12 @@
 #else
     RKLogSetAppLoggingLevel(RKLogLevelWarning);
 #endif
+
+#if CONFIGURATION_Beta
+    #define NSLog(__FORMAT__, ...) TFLog((@"%s [Line %d] " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ## __VA_ARGS__)
+    [TestFlight takeOff:kTestFlightAppToken];
+#endif
+
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [self performSelectorInBackground:@selector(setUpBackgroundTasks) withObject:nil];
     [SLFAppearance setupAppearance];

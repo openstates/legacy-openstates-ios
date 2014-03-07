@@ -1,3 +1,113 @@
+## 3.0.0 - February 18, 2014
+
+- Remove checkpoints, feedback, and logs from production apps.
+
+## 2.2.2 - February 5, 2014
+
+- Remove `+ (void)setDeviceIdentifier:(NSString *)deviceIdentifer`, it is no longer used
+- On start up, if unsent events are found only attempt to send some of them (this is in case a device doesn't have internet for a while and unsent events build up)
+- Fix crash if you try to run `TFLog(nil)` (thanks Florian!)
+
+## 2.2.1 - January 16, 2014
+
+- Consolidate both SDK versions into one which removes all access to `ASIdentifierManager`
+
+## 2.2 - December 17, 2013
+
+- Restore In App Updates
+- Automatic identification of beta testers
+
+## 2.1.3 - November 25, 2013
+
+- Fix bug in 2.1.2-noadid which caused adid to be collected
+
+## 2.1.2 - November 19, 2013
+
+- Fix for bug that caused events to not get sent properly when using the `TFOptionSessionKeepAliveTimeout` option
+- Fix for bug that caused logs that were sent immediately after start session to sometimes not be sent to server
+
+## 2.1.1 - October 2, 2013
+
+- Create sdk version that removes all access to `ASIdentifierManager`
+- Add UIDevice's `identifierForVendor`
+
+## 2.1 - September 30, 2013
+
+- Full support for the iPhone 5s’ ARM64 processor while still supporting down to iOS 4.3
+
+## 2.0.2 - August 30, 2013
+
+- Fixed a bug where the sdk would cause an app's CPU usage to rise significantly if the device had no internet connection when the app started
+
+## 2.0.1 - August 22, 2013
+
+- Fixed rare `8badf00d` crash in TFNetworkManager that happened when the app was in the background
+
+## 2.0 - August 12, 2013
+
+Improvements
+
+- ARC
+- All public TestFlight methods may be called from any thread or dispatch_queue
+- All public TestFlight methods (except for `TFLog` and `takeOff:`) are asynchronous, so there is never a wait on them
+- TestFlight never uses more than 1 network connection at a time
+- All network traffic is grouped together, sent at once, and transferred in MessagePack. This results in using less bandwidth and less network calls.
+- All network traffic if server is not reachable
+- Size of SDK reduced by 70%
+- New In App Update UI in an alert with landscape support. Should work for all different types of apps.
+- Manual Sessions: You can manually control session start and end. See `TestFlight+ManualSessions.h` for more information
+- Combining of back to back sessions. If a session starts less than 30 seconds from the last session which ended, the previous session is continued. You may change the time limit (or turn this off) using the `TFOptionSessionKeepAliveTimeout` option key.
+- No longer automatically starts a session on `+takeOff:` in order to support new background modes that might launch an app in the background.
+- `TFOptionReportCrashes` option to not install crash handlers
+- Remove all calls to `dispatch_get_current_queue`, it is deprecated
+
+Changes
+
+- Removed all access to mac address
+- Added AdSupport.framework requirement (as a replacement for mac address to get accurate user counts)
+- Add format attribute to TFLog to show warnings for wrong format specifiers or not using a format string
+- Removed Questions
+- Removed Feedback View (along with backtrace option)
+
+Bug Fixes
+
+- Fixed addrinfo memory leak
+- Fixed possible `-[TFAirTrafficController getNumberOrNilFrom:withKey:]` crash when bad data is received.
+- CoreTelephony crash work around: this is a workaround of a iOS bug that causes deallocated instances of `CTTelephonyNetworkInfo` to receive notifications which causes crashes. Core Telephony is used to retrieve the device's mobile carrier.
+- Fix bug with crash reporting in iOS 7
+
+
+## 1.2.4 - February 19, 2013
+
+- Fixed bug that caused crash reports to sometimes not send immediately (they would be resent later)
+
+## 1.2.3 - January 8, 2013
+
+- Fixed typos in readme
+- Fixed bug where logs not sent on crash
+- Fixed bug where empty crash files were created (but not sent)
+- Cache path to TF's directory so it does not need to be regenerated every time
+- Use consts for `setOptions:`
+- Updated `setDeviceIdentifier:` comments to make them clearer
+- Remove potentially conflicting function name `UIColorFromRGB`
+- Fixed crash on bad in app update data
+
+## 1.2.2 - December 26, 2012
+
+- Fix typo in app token error message
+
+## 1.2.1 - December 26, 2012
+
+- The max number of concurrent network connections has been reduced from 4 to 2.
+
+##1.2 - November 12, 2012
+
+* Removed Team Token support. As of version 1.2 takeOff must be called with the Application Token, https://testflightapp.com/dashboard/applications/, choose your application, select SDK, get the Token for this Application.
+
+##1.2 BETA 3 - October 11, 2012
+
+* Added application token support. Application Tokens are currently optional if you do not have one you do not need one
+
 ##1.2 BETA 2 - October 9, 2012
 
 * Resolved an instance of close_file being called on a bad file descriptor
