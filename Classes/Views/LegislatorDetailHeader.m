@@ -101,26 +101,26 @@ static UIFont *titleFont;
     NSString *term = [self validString:_legislator.term];
     
     [lightColor set];
-    renderedSize = [title drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:titleFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+    renderedSize = [title drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:titleFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:NSLineBreakByTruncatingTail baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
     offsetY += roundf(2+renderedSize.height);
 
     [darkColor set];
-    renderedSize = [name drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:nameFont minFontSize:14 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+    renderedSize = [name drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:nameFont minFontSize:14 actualFontSize:&actualFontSize lineBreakMode:NSLineBreakByTruncatingTail baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
     offsetY += roundf(2+renderedSize.height);
 
     [partyColor set];
-    renderedSize = [party drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:plainFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+    renderedSize = [party drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:plainFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:NSLineBreakByTruncatingTail baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
     CGFloat shiftX = 0;    
     if (!IsEmpty(party))
         shiftX += roundf(renderedSize.width + 6);
     
     [lightColor set];
-    renderedSize = [district drawAtPoint:CGPointMake(offsetX+shiftX, offsetY) forWidth:maxWidth-shiftX withFont:plainFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+    renderedSize = [district drawAtPoint:CGPointMake(offsetX+shiftX, offsetY) forWidth:maxWidth-shiftX withFont:plainFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:NSLineBreakByTruncatingTail baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
 
     offsetY += roundf(2+renderedSize.height);
 
     [lightColor set];
-    [term drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:titleFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+    [term drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:titleFont minFontSize:11 actualFontSize:&actualFontSize lineBreakMode:NSLineBreakByTruncatingTail baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
 }
 
 - (void)setLegislator:(SLFLegislator *)legislator {

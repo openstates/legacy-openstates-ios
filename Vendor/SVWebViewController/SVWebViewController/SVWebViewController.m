@@ -167,8 +167,8 @@
         titleLabel.textColor = [SLFAppearance navBarTextColor];
         titleLabel.shadowColor = [UIColor darkGrayColor];
         titleLabel.backgroundColor = [UIColor clearColor];
-        titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
-        titleLabel.textAlignment = UITextAlignmentRight;
+        titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        titleLabel.textAlignment = NSTextAlignmentRight;
         titleLabel.shadowOffset = CGSizeMake(0, -1);
 
         [navBar addSubview:titleLabel];    

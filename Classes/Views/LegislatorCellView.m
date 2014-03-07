@@ -181,7 +181,7 @@
         [accentColor set];
         UIFont *roleFont = SLFFont(14);
         drawRect = [self rectOfString:_role atOrigin:CGPointMake(aBounds.size.width - 90.f, 9.f) withFont:roleFont];
-        [_role drawInRect:drawRect withFont:roleFont lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentRight];
+        [_role drawInRect:drawRect withFont:roleFont lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentRight];
     }
 
     CGContextRestoreGState(context);

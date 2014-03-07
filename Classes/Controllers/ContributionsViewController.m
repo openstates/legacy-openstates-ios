@@ -58,9 +58,9 @@
     nimsp.backgroundColor = [UIColor clearColor];
     nimsp.font = SLFItalicFont(14);
     nimsp.shadowColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-    nimsp.textAlignment = UITextAlignmentCenter;
+    nimsp.textAlignment = NSTextAlignmentCenter;
     nimsp.textColor = [SLFAppearance cellTextColor];
-    nimsp.lineBreakMode = UILineBreakModeWordWrap;
+    nimsp.lineBreakMode = NSLineBreakByWordWrapping;
     nimsp.numberOfLines = 3;
     nimsp.text = NSLocalizedString(@"Data generously provided by the \nNational Institute on Money in State Politics \nand the Center for Responsive Politics.", @"");
     self.tableView.tableFooterView = nimsp;

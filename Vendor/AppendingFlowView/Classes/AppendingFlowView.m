@@ -104,7 +104,7 @@ CGFloat maxHeightOfViews(NSArray *views) {
 	CGSize frameSize = preferredBoxSize;
 	
 	if (!uniformWidth || !uniformHeight) {
-		frameSize = [stage.caption sizeWithFont:font constrainedToSize:preferredBoxSize lineBreakMode:UILineBreakModeWordWrap];
+		frameSize = [stage.caption sizeWithFont:font constrainedToSize:preferredBoxSize lineBreakMode:NSLineBreakByWordWrapping];
 		
 		if (uniformHeight) {
 			frameSize.height = fmax(preferredBoxSize.height, frameSize.height);
@@ -129,8 +129,8 @@ CGFloat maxHeightOfViews(NSArray *views) {
 	aView.text = stage.caption;
 	aView.numberOfLines = 2;
 	aView.minimumFontSize = font.pointSize - 2.f;	// sensible, right?
-	aView.textAlignment = UITextAlignmentCenter;
-	aView.lineBreakMode = UILineBreakModeWordWrap;
+	aView.textAlignment = NSTextAlignmentCenter;
+	aView.lineBreakMode = NSLineBreakByWordWrapping;
 	aView.adjustsFontSizeToFitWidth = YES;
     aView.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:.8];
     aView.shadowOffset = CGSizeMake(0.f, 1.f);

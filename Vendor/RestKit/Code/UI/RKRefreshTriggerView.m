@@ -45,7 +45,7 @@
 
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        _titleLabel.textAlignment = UITextAlignmentCenter;
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.font = DEFAULT_REFRESH_TITLE_FONT;
         _titleLabel.textColor = DEFAULT_REFRESH_TITLE_COLOR;
@@ -54,7 +54,7 @@
         _lastUpdatedLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _lastUpdatedLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _lastUpdatedLabel.backgroundColor = [UIColor clearColor];
-        _lastUpdatedLabel.textAlignment = UITextAlignmentCenter;
+        _lastUpdatedLabel.textAlignment = NSTextAlignmentCenter;
         _lastUpdatedLabel.font = DEFAULT_REFRESH_UPDATED_FONT;
         _lastUpdatedLabel.textColor = DEFAULT_REFRESH_UPDATED_COLOR;
         [self addSubview:_lastUpdatedLabel];

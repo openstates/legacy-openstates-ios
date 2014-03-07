@@ -114,14 +114,14 @@ static UIFont *detailFont;
     [darkColor set];
     if (!IsEmpty(_title)) {
         CGFloat actualFontSize;
-        CGSize renderedSize = [_title drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:titleFont minFontSize:14 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+        CGSize renderedSize = [_title drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:titleFont minFontSize:14 actualFontSize:&actualFontSize lineBreakMode:NSLineBreakByTruncatingTail baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
         offsetY += roundf(5+renderedSize.height);
     }
 
     [lightColor set];
     if (!IsEmpty(_subtitle)) {
         CGFloat actualFontSize;
-        CGSize renderedSize = [_subtitle drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:subtitleFont minFontSize:10 actualFontSize:&actualFontSize lineBreakMode:UILineBreakModeTailTruncation baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+        CGSize renderedSize = [_subtitle drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:subtitleFont minFontSize:10 actualFontSize:&actualFontSize lineBreakMode:NSLineBreakByTruncatingTail baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
         offsetY += roundf(5+renderedSize.height);
     }
 

@@ -42,7 +42,7 @@
 		self.detailTextLabel.textColor = [SLFAppearance cellTextColor];
 		self.textLabel.textColor =	[SLFAppearance tableSectionColor];
 		self.textLabel.adjustsFontSizeToFitWidth =	YES;
-		self.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
+		self.detailTextLabel.lineBreakMode = NSLineBreakByTruncatingTail;
 		self.detailTextLabel.adjustsFontSizeToFitWidth = YES;
 		self.detailTextLabel.minimumFontSize = 12;
 		self.backgroundColor = [SLFAppearance cellBackgroundLightColor];

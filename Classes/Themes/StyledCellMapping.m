@@ -38,7 +38,7 @@
             cell.detailTextLabel.textColor = bself.detailTextColor;
             cell.detailTextLabel.font = bself.detailTextFont;
             if (bself.useLargeRowHeight) {
-                cell.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
+                cell.detailTextLabel.lineBreakMode = NSLineBreakByTruncatingTail;
                 cell.detailTextLabel.numberOfLines = 4;
             }
             if (bself.useAlternatingRowColors) {
