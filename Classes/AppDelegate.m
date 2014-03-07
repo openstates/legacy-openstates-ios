@@ -11,6 +11,7 @@
 //
 
 #import "AppDelegate.h"
+#import <Crashlytics/Crashlytics.h>
 #import <RestKit/RestKit.h>
 #import <RestKit/CoreData/CoreData.h>
 #import "AppBarController.h"
@@ -87,6 +88,7 @@
     }
 
     [self setUpGoogleAnalytics];
+    [Crashlytics startWithAPIKey:@"7f920088e925e57cb9f436fa327d06fefc4930dd"];
 
     __block __typeof__(self) bself = self;
     SLFRunBlockAfterDelay(^{

@@ -18,6 +18,7 @@
 		2FA2630918BBD96700D8041F /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA2630818BBD96700D8041F /* libGoogleAnalyticsServices.a */; };
 		2FD00F2118C51FA500A5399A /* UIDevice+VersionCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD00F2018C51FA500A5399A /* UIDevice+VersionCheck.m */; };
 		2FD00F2718C6843100A5399A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD00F2618C6843100A5399A /* Images.xcassets */; };
+		2FF8408418CA304700AB2295 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF8408318CA304700AB2295 /* Crashlytics.framework */; };
 		370004AF143F546600F55165 /* SCNetworkReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 37000497143F546600F55165 /* SCNetworkReachability.m */; };
 		370004B0143F546600F55165 /* SCNetworkReachabilityFlags.c in Sources */ = {isa = PBXBuildFile; fileRef = 37000498143F546600F55165 /* SCNetworkReachabilityFlags.c */; };
 		370004C3143F55C400F55165 /* SCNetworkReachabilityKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 370004A5143F546600F55165 /* SCNetworkReachabilityKitTests.m */; };
@@ -372,6 +373,7 @@
 		2FEB9C6218B6AA5B000A476A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		2FEB9C6318B6AA65000A476A /* Beta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Beta.xcconfig; sourceTree = "<group>"; };
 		2FEB9C6418B6AA90000A476A /* Shared.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
+		2FF8408318CA304700AB2295 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
 		37000496143F546600F55165 /* SCNetworkReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCNetworkReachability.h; sourceTree = "<group>"; };
 		37000497143F546600F55165 /* SCNetworkReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCNetworkReachability.m; sourceTree = "<group>"; };
@@ -758,6 +760,7 @@
 				37E961ED13E544F80064B1D3 /* libRestKitCoreData.a in Frameworks */,
 				37E961EE13E544F90064B1D3 /* libRestKitJSONParserJSONKit.a in Frameworks */,
 				37E961EF13E544FB0064B1D3 /* libRestKitNetwork.a in Frameworks */,
+				2FF8408418CA304700AB2295 /* Crashlytics.framework in Frameworks */,
 				37E961F013E544FD0064B1D3 /* libRestKitObjectMapping.a in Frameworks */,
 				37E961F113E544FE0064B1D3 /* libRestKitSupport.a in Frameworks */,
 				2F3FA8841667C7F400A63CFF /* libTestFlight.a in Frameworks */,
@@ -857,6 +860,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2FF8408318CA304700AB2295 /* Crashlytics.framework */,
 				3711871014462D1800A12B8B /* AddressBook.framework */,
 				37B9CC07143D0654006C56E0 /* CoreText.framework */,
 				372E58E314157BB0000652B1 /* MessageUI.framework */,
@@ -1563,6 +1567,7 @@
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+				2FF8408218CA300E00AB2295 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1765,6 +1770,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2FF8408218CA300E00AB2295 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Crashlytics.framework/run 7f920088e925e57cb9f436fa327d06fefc4930dd 5d7f4677ca2070e4e3eb2183324f3890caaa2641657eb6288346b7199082c0c9";
+		};
 		372E57C214153D07000652B1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2022,6 +2040,10 @@
 				BUILD_STYLE = Debug;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/dcloud/code/objc/openstates-ios",
+				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -2055,6 +2077,10 @@
 				BUILD_STYLE = Release;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/dcloud/code/objc/openstates-ios",
+				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
@@ -2165,6 +2191,10 @@
 				BUILD_STYLE = Release;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/dcloud/code/objc/openstates-ios",
+				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
