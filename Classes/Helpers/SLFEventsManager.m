@@ -112,13 +112,15 @@
         EKEventEditViewController *editor = [bself newEventEditorForEvent:event delegate:bself];
         editor.view.width = parent.view.width;
         if (!SLFIsIpad()) {
-            if (!SLFIsIOS5OrGreater())
-                [parent presentModalViewController:editor animated:YES];
-            else
+            dispatch_async(dispatch_get_main_queue(), ^{
                 [parent presentViewController:editor animated:YES completion:nil];
+            });
         }
-        else
-            [parent stackOrPushViewController:editor];
+        else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [parent stackOrPushViewController:editor];
+            });
+        }
         [editor release];
     }];
 }
