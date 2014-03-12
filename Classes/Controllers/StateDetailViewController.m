@@ -22,6 +22,7 @@
 #import "SLFTheme.h"
 #import "UIImage+OverlayColor.h"
 #import "SVWebViewController.h"
+#import "SVWebViewController+SFHackneyedWebViewController.h"
 #import "SLFReachable.h"
 #import "SLFRestKitManager.h"
 #import "SLFEmailComposer.h"
