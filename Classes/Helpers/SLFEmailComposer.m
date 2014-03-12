@@ -82,6 +82,9 @@
         self.composer = nil;
 		_composer = [[MFMailComposeViewController alloc] init];
 		_composer.mailComposeDelegate = self;
+        if ([[UIDevice currentDevice] systemMajorVersion] >= 7) {
+            _composer.view.tintColor = [SLFAppearance primaryTintColor];
+        }
 		[_composer setSubject:subject];
 		[_composer setToRecipients:[NSArray arrayWithObject:recipient]];
 		[_composer setMessageBody:body isHTML:NO];

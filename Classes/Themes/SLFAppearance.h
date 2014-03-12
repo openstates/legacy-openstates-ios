@@ -15,6 +15,8 @@
 +(void)setupAppearance;
 
 + (UIColor *)navBarTextColor;
++ (UIColor *)primaryTintColor;
++ (UIColor *)barTintColor;
 + (UIColor *)menuTextColor;
 + (UIColor *)menuBackgroundColor;
 + (UIColor *)cellBackgroundDarkColor;

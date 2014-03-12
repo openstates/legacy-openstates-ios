@@ -57,6 +57,10 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 + (UIColor *)accentOrangeColor {return [self punch];}
 
 + (UIColor *)navBarTextColor {return [self springWood];}
+
++ (UIColor *)primaryTintColor { return [self springWood];}
++ (UIColor *)barTintColor { return [self bandicoot];}
+
 + (UIColor *)menuTextColor {return [self kangaroo];}
 + (UIColor *)cellTextColor {return [self zambezi];}
 + (UIColor *)cellSecondaryTextColor {return [self bandicoot];}
@@ -88,17 +92,17 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 
     if (systemVersion >= 7) {
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-        [UIView appearance].tintColor = [self springWood];
+        [UIView appearance].tintColor = [self primaryTintColor];
         [UITableView appearance].sectionIndexBackgroundColor = [UIColor clearColor];
         [UITableView appearance].sectionIndexColor = [self cellTextColor];
-        [[UINavigationBar appearance] setBarTintColor:[self bandicoot]];
-        [[UINavigationBar appearance] setTintColor:[self springWood]];
-        [[UISearchBar appearance] setBarTintColor:[self bandicoot]];
+        [[UINavigationBar appearance] setBarTintColor:[self barTintColor]];
+        [[UINavigationBar appearance] setTintColor:[self primaryTintColor]];
+        [[UISearchBar appearance] setBarTintColor:[self barTintColor]];
         [[UIToolbar appearance] setBarTintColor:[self acapulco]];
     } else {
-        [[UINavigationBar appearance] setTintColor:[self bandicoot]];
-        [[UISegmentedControl appearance] setTintColor:[self bandicoot]];
-        [[UISearchBar appearance] setTintColor:[self bandicoot]];
+        [[UINavigationBar appearance] setTintColor:[self barTintColor]];
+        [[UISegmentedControl appearance] setTintColor:[self barTintColor]];
+        [[UISearchBar appearance] setTintColor:[self barTintColor]];
         [[UIToolbar appearance] setTintColor:[self acapulco]];
         UIColor *gradientTop = SLFColorWithRGBShift([self menuBackgroundColor], +20);
         UIColor *gradientBottom = SLFColorWithRGBShift([self menuBackgroundColor], -20);
