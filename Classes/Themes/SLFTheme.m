@@ -110,8 +110,14 @@ NSArray* SLFBarStyleButtonImageGradientsWithSizeAndBaseColorRGB(CGSize imageSize
 @implementation UIBarButtonItem (SLFTintedButtons)
 
 - (id)initWithTitle:(NSString *)title orange:(BOOL)isOrange width:(CGFloat)width target:(id)target action:(SEL)action {
-    UIButton *button = [UIButton buttonWithTitle:title orange:isOrange width:width target:target action:action];
-    return (self = [self initWithCustomView:button]);
+    if ([[UIDevice currentDevice] systemMajorVersion] < 7) {
+        UIButton *button = [UIButton buttonWithTitle:title orange:isOrange width:width target:target action:action];
+        self = [self initWithCustomView:button];
+    } else {
+        self = [self initWithTitle:title style:UIBarButtonItemStylePlain target:target action:action];
+    }
+
+    return self;
 }
 
 @end
