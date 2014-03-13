@@ -102,7 +102,7 @@
             SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:asset.url];
             webViewController.title = asset.name;
             webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-            [bself presentModalViewController:webViewController animated:YES];	
+            [bself presentViewController:webViewController animated:YES completion:nil];
             [webViewController release];
         }
     };
