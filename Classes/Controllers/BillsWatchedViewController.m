@@ -195,6 +195,7 @@
     SLFBill *bill = [object retain];
     SLFSaveBillWatchedStatus(bill, NO);
     [bill release];
+    self.title = [NSString stringWithFormat:NSLocalizedString(@"%d Watched Bills",@""), _tableController.rowCount];
 }
 
 - (void)watchedBillsChanged:(NSNotification *)notification {
