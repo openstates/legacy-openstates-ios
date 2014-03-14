@@ -13,9 +13,9 @@
 @interface TableSectionHeaderView : UIView
 @property (nonatomic,retain) IBOutlet UILabel *titleLabel;
 @property (nonatomic,assign) UITableViewStyle style;
+@property (nonatomic,copy) NSString *title;
 
 - (TableSectionHeaderView*)initWithTitle:(NSString *)title width:(CGFloat)width style:(UITableViewStyle)style;
 - (TableSectionHeaderView*)initWithFrame:(CGRect)frame style:(UITableViewStyle)style;
-- (void)setTitle:(NSString *)title;
 + (CGFloat)heightForTableViewStyle:(UITableViewStyle)style;
 @end

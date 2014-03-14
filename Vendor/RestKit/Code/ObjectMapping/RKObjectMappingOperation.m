@@ -221,7 +221,19 @@ BOOL RKObjectIsValueEqualToValue(id sourceValue, id destinationValue) {
 }
 
 - (BOOL)shouldSetValue:(id)value atKeyPath:(NSString*)keyPath {
-    id currentValue = [self.destinationObject valueForKeyPath:keyPath];
+    id currentValue = nil;
+
+    if (self.destinationObject &&
+        ![self.destinationObject isEqual:[NSNull null]])
+    {
+        @try {
+            currentValue = [self.destinationObject valueForKeyPath:keyPath];
+        }
+        @catch (NSException *exception) {
+            RKLogError(@"Encountered exception while attempting to set value (%@) for a key path (%@): %@", value, keyPath, exception);
+        }
+    }
+
     if (currentValue == [NSNull null] || [currentValue isEqual:[NSNull null]]) {
         currentValue = nil;
     }
@@ -229,14 +241,21 @@ BOOL RKObjectIsValueEqualToValue(id sourceValue, id destinationValue) {
 	if (nil == currentValue && nil == value) {
 		// Both are nil
         return NO;
-	} else if (nil == value || nil == currentValue) {
-		// One is nil and the other is not
-        return [self validateValue:value atKeyPath:keyPath];
 	}
 
-    if (! [self isValue:value equalToValue:currentValue]) {
-        // Validate value for key
-        return [self validateValue:value atKeyPath:keyPath];
+    @try {
+        if (nil == value || nil == currentValue) {
+            // One is nil and the other is not
+            return [self validateValue:value atKeyPath:keyPath];
+        }
+
+        if (! [self isValue:value equalToValue:currentValue]) {
+            // Validate value for key
+            return [self validateValue:value atKeyPath:keyPath];
+        }
+    }
+    @catch (NSException *exception) {
+        RKLogError(@"Encountered exception while attempting to validate value (%@) at key path (%@): %@", value, keyPath, exception);
     }
     return NO;
 }

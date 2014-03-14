@@ -18,8 +18,6 @@
 @end
 
 @implementation TableSectionHeaderView
-@synthesize titleLabel=__titleLabel;
-@synthesize style = _style;
 
 - (TableSectionHeaderView*)initWithFrame:(CGRect)frame style:(UITableViewStyle)style {
     self = [super initWithFrame:frame];
@@ -27,23 +25,27 @@
         self.style = style;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.autoresizesSubviews = YES;
-        __titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.offset, 0, frame.size.width-self.offset, frame.size.height)];
-        __titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        [self addSubview:__titleLabel];
-        
+        CGFloat offset = [self offsetForStyle:style];
+        CGRect labelRect = CGRectMake(offset, 0, CGRectGetWidth(frame)-offset, CGRectGetHeight(frame));
+        _titleLabel = [[UILabel alloc] initWithFrame:labelRect];
+        _titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        [self addSubview:_titleLabel];
+
+        UIColor *backgroundColor = nil;
         if (style == UITableViewStyleGrouped) {
-            self.backgroundColor = [UIColor clearColor];
-            __titleLabel.shadowOffset = CGSizeMake(0, 1);
-            __titleLabel.shadowColor = [[UIColor whiteColor] colorWithAlphaComponent:.7];
-            __titleLabel.textColor = [SLFAppearance tableSectionColor];
-            __titleLabel.font = SLFFont(15);
+            backgroundColor = [UIColor clearColor];
+            _titleLabel.shadowOffset = CGSizeMake(0, 1);
+            _titleLabel.shadowColor = [[UIColor whiteColor] colorWithAlphaComponent:.7];
+            _titleLabel.textColor = [SLFAppearance tableSectionColor];
+            _titleLabel.font = SLFFont(15);
         }
         else {
-            self.backgroundColor = SLFColorWithRGB(207,208,194);
-            __titleLabel.textColor = [UIColor whiteColor];
-            __titleLabel.font = SLFFont(12);
+            backgroundColor = SLFColorWithRGB(207,208,194);
+            _titleLabel.textColor = [UIColor whiteColor];
+            _titleLabel.font = SLFFont(12);
         }
-        __titleLabel.backgroundColor = self.backgroundColor;
+        _titleLabel.backgroundColor = backgroundColor;
+        self.backgroundColor = backgroundColor;
         [self setNeedsLayout];
     }
     return self;
@@ -60,16 +62,31 @@
 
 - (void)dealloc {
     self.titleLabel = nil;
+    self.title = nil;
     [super dealloc];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    if (!self.titleLabel) {
+        return;
+    }
     self.titleLabel.origin = CGPointMake(self.offset, 0);
     [self.titleLabel sizeToFit];
 }
 
 - (void)setTitle:(NSString *)title {
+    if (_title)
+    {
+        [_title release];
+    }
+    _title = [title copy];
+    if (!self.titleLabel ||
+        !title ||
+        ![title isKindOfClass:[NSString class]])
+    {
+        return;
+    }
     self.titleLabel.text = title;
     [self.titleLabel sizeToFit];
     [self setNeedsLayout];
@@ -81,10 +98,15 @@
     return 18.f;
 }
 
-- (CGFloat)offset {
-    if (self.style == UITableViewStyleGrouped)
+- (CGFloat)offsetForStyle:(UITableViewStyle)style
+{
+    if (style == UITableViewStyleGrouped)
         return 20.f;
     return 10.f;
+}
+
+- (CGFloat)offset {
+    return [self offsetForStyle:self.style];
 }
 
 @end
