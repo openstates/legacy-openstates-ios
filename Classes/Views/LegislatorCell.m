@@ -35,13 +35,13 @@ static CGFloat LegImageWidth = 53.f;
     {
         self.opaque = YES;
         self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
-        CGRect tzvFrame = CGRectMake(LegImageWidth, 0, self.contentView.bounds.size.width - LegImageWidth, self.contentView.bounds.size.height);
+        CGRect tzvFrame = CGRectMake(LegImageWidth, 0, CGRectGetWidth(self.contentView.bounds) - LegImageWidth, CGRectGetHeight(self.contentView.bounds));
         _cellContentView = [[LegislatorCellView alloc] initWithFrame:CGRectInset(tzvFrame, 0, 1.0)];
         _cellContentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _cellContentView.contentMode = UIViewContentModeRedraw;
         self.imageView.width = LegImageWidth;
-        self.imageView.contentMode = UIViewContentModeScaleAspectFill;
-        self.imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        self.imageView.autoresizingMask = UIViewAutoresizingNone;
         self.imageView.clipsToBounds = YES;
         self.imageView.backgroundColor = [UIColor whiteColor];
         [self.contentView addSubview:_cellContentView];
@@ -54,6 +54,15 @@ static CGFloat LegImageWidth = 53.f;
     self.legislator = nil;
     self.cellContentView = nil;    
     [super dealloc];
+}
+
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
+
+    // While this seems reasonable, the image views get out of sync or prematurely wiped out.
+    // See the NOTE further down below in the event there are legislator image problems.
+    // self.legislator = nil;
 }
 
 - (CGSize)cellSize {
@@ -136,7 +145,6 @@ static CGFloat LegImageWidth = 53.f;
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         self.roundImageCorners = NO;
         self.useAlternatingRowColors = YES;
-        self.reuseIdentifier = nil; // turns off caching, sucky but we don't want to reuse facial photos
 		__block __typeof__(self) bself = self;
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             LegislatorCell *legCell = (LegislatorCell *)cell;
@@ -157,6 +165,21 @@ static CGFloat LegImageWidth = 53.f;
 - (void)addDefaultMappings {
     [self mapKeyPath:@"self" toAttribute:@"legislator"];
 }
+
+/*
+ NOTE: If the legislator images are getting mixed up, uncomment this code.
+
+- (void)setReuseIdentifier:(NSString *)reuseIdentifier
+{
+    return;
+}
+
+- (NSString *)reuseIdentifier
+{
+    // turns off caching, sucky but we don't want to reuse facial photos
+    return nil;
+}
+*/
 
 @end
 

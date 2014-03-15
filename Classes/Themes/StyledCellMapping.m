@@ -102,10 +102,16 @@
 }
 
 + (id)staticSubtitleMapping {
-    return [self cellMappingWithStyle:UITableViewCellStyleSubtitle alternatingColors:NO largeHeight:NO selectable:NO];
+    return [self cellMappingWithStyle:[self defaultCellStyle] alternatingColors:NO largeHeight:NO selectable:NO];
 }
 
 + (id)subtitleMapping {
-    return [self cellMappingWithStyle:UITableViewCellStyleSubtitle alternatingColors:NO largeHeight:NO selectable:YES];
+    return [self cellMappingWithStyle:[self defaultCellStyle] alternatingColors:NO largeHeight:NO selectable:YES];
 }
+
++ (UITableViewCellStyle)defaultCellStyle
+{
+    return UITableViewCellStyleSubtitle;
+}
+
 @end

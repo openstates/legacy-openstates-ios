@@ -168,14 +168,32 @@ typedef void(^RKControlBlockActionBlock)(id sender);
     return copy;
 }
 
+- (id)mappableObjectForData:(UITableView*)tableView
+{
+    return [self mappableObjectForData:tableView forIndexPath:nil];
+}
 
-- (id)mappableObjectForData:(UITableView*)tableView {
+- (id)mappableObjectForData:(UITableView*)tableView forIndexPath:(NSIndexPath *)indexPath
+{
     NSAssert([tableView isKindOfClass:[UITableView class]], @"Expected to be invoked with a tableView as the data. Got %@", tableView);
     // TODO: Support for non-dequeueable cells???
     RKLogTrace(@"About to dequeue reusable cell using self.reuseIdentifier=%@", self.reuseIdentifier);
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:self.reuseIdentifier];
-    if (! cell) {
-        cell = [[[self.objectClass alloc] initWithStyle:self.style 
+    UITableViewCell* cell = nil;
+    @try {
+        if (indexPath) {
+            cell = [tableView dequeueReusableCellWithIdentifier:self.reuseIdentifier
+                                                   forIndexPath:indexPath];
+        }
+        if (!cell) {
+            cell = [tableView dequeueReusableCellWithIdentifier:self.reuseIdentifier];
+        }
+    }
+    @catch (NSException *exception) {
+        RKLogError(@"Encountered exception when dequeuing table cell, perhaps the class wasn't registered to the table view with a reuseIdentifier: %@", exception);
+    }
+
+    if (!cell) {
+        cell = [[[self.objectClass alloc] initWithStyle:self.style
                                        reuseIdentifier:self.reuseIdentifier] autorelease];
     }
     cell.accessoryType = self.accessoryType;

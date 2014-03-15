@@ -317,7 +317,7 @@
     RKTableViewCellMapping* cellMapping = [self.cellMappings cellMappingForObject:mappableObject];
     NSAssert(cellMapping, @"Cannot build a tableView cell for object %@: No cell mapping defined for objects of type '%@'", mappableObject, NSStringFromClass([mappableObject class]));
     
-    UITableViewCell* cell = [cellMapping mappableObjectForData:self.tableView];
+    UITableViewCell* cell = [cellMapping mappableObjectForData:self.tableView forIndexPath:indexPath];
     NSAssert(cell, @"Cell mapping failed to dequeue or allocate a tableViewCell for object: %@", mappableObject);
     
     // Map the object state into the cell

@@ -25,7 +25,6 @@
 	return UITableViewCellStyleValue2;
 }
 
-
 + (SLFStandardGroupCell *)standardCellWithIdentifier:(NSString *)cellIdentifier {
     UITableViewCellStyle style = [SLFStandardGroupCell cellStyle];
     SLFStandardGroupCell *cell = [[[SLFStandardGroupCell alloc] initWithStyle:style reuseIdentifier:cellIdentifier] autorelease];
@@ -33,6 +32,7 @@
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    style = [SLFStandardGroupCell cellStyle]; // in the event we're instantiated from via registration with the table view
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
 		self.selectionStyle = UITableViewCellSelectionStyleBlue;
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -44,7 +44,7 @@
 		self.textLabel.adjustsFontSizeToFitWidth =	YES;
 		self.detailTextLabel.lineBreakMode = NSLineBreakByTruncatingTail;
 		self.detailTextLabel.adjustsFontSizeToFitWidth = YES;
-		self.detailTextLabel.minimumFontSize = 12;
+		self.detailTextLabel.minimumScaleFactor = 12.f/14.f;
 		self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
     }
     return self;
@@ -70,7 +70,6 @@
 			self.accessoryView = nil;
 		}
 	}
-		
 }
 
 @end

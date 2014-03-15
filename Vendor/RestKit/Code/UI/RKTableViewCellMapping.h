@@ -52,6 +52,12 @@ typedef void(^RKTableViewCellBlock)(UITableViewCell *cell);
 }
 
 /**
+ Returns a dequeued (previously registered) table cell that can be used to apply 
+ this object mapping given a set of mappable data. For transient objects.
+ */
+- (id)mappableObjectForData:(UITableView*)tableView forIndexPath:(NSIndexPath *)indexPath;
+
+/**
  The UITableViewCell subclass that this mapping will target. This
  is an alias for the objectClass property defined on the base mapping
  provided here to make things more explicit.

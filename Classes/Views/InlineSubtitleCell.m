@@ -19,6 +19,7 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
+    style = [InlineSubtitleMapping defaultCellStyle]; // the register/dequeue class doesn't preserve our style.
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
 //      self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -78,10 +79,14 @@
 
 @implementation InlineSubtitleMapping
 
++ (UITableViewCellStyle)defaultCellStyle {
+    return UITableViewCellStyleValue2;
+}
+
 + (id)cellMapping {
     return [InlineSubtitleMapping styledMappingForClass:[InlineSubtitleCell class] usingBlock:^(StyledCellMapping *cellMapping) {
         cellMapping.useAlternatingRowColors = YES;
-        cellMapping.style = UITableViewCellStyleValue2;
+        cellMapping.style = [self defaultCellStyle];
         cellMapping.accessoryType = UITableViewCellAccessoryNone;
         cellMapping.textFont = SLFFont(18);
         cellMapping.textColor = [SLFAppearance cellTextColor];
@@ -91,5 +96,6 @@
         [cellMapping mapKeyPath:@"subtitle" toAttribute:@"subtitle"];
     }];
 }
+
 @end
 

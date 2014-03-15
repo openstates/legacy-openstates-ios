@@ -114,8 +114,9 @@ CGFloat const kTitleHeight = 30;
         [self.stateMenuDelegate stateMenuSelectionDidChangeWithState:state];
     else {
         NSString *path = [SLFActionPathNavigator navigationPathForController:[StateDetailViewController class] withResource:state];
-        if (!IsEmpty(path))
+        if (!IsEmpty(path)) {
             [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
+        }
     }
 }
 

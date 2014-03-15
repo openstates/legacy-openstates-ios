@@ -67,7 +67,6 @@
     self.enabled = [[SLFReachable sharedReachable] isNetworkReachable];
 }
 
-
 - (void)layoutSubviews
 {
     [super layoutSubviews];
@@ -149,4 +148,5 @@
     self.disabledView = nil;
     [super dealloc];
 }
+
 @end

@@ -154,10 +154,16 @@
 }
 
 - (void)configureTableItems {
+    NSString *fixedReuseId = @"fixedMenuItemCell";
     RKTableViewCellMapping *fixedMap = [self menuCellMapping];
     fixedMap.deselectsRowOnSelection = (SLFIsIpad() == NO);
+    fixedMap.reuseIdentifier = fixedReuseId;
+
+    NSString *momentaryReuseId = @"momentaryMenuItemCell";
     RKTableViewCellMapping *momentaryMap = [self menuCellMapping];
     momentaryMap.deselectsRowOnSelection = YES;
+    momentaryMap.reuseIdentifier = momentaryReuseId;
+
     NSMutableArray* tableItems = [[NSMutableArray alloc] initWithCapacity:15];
     [tableItems addObject:[self menuItemWithText:MenuMyRepresentatives imagePrefix:@"Locate" cellMapping:fixedMap]];
     [tableItems addObject:[self menuItemWithText:MenuLegislators imagePrefix:@"IndexCard" cellMapping:fixedMap]];
@@ -170,6 +176,14 @@
         [tableItems addObject:[self menuItemWithText:MenuCapitolMaps imagePrefix:@"Bank" cellMapping:fixedMap]];
     [tableItems addObject:[self menuItemWithText:MenuNews imagePrefix:@"Paper" cellMapping:momentaryMap]];
     [tableItems addObject:[self menuItemWithText:MenuFeedback imagePrefix:@"Comment" cellMapping:momentaryMap]];
+
+    @try {
+        [self.tableView registerClass:fixedMap.cellClass forCellReuseIdentifier:fixedReuseId];
+        [self.tableView registerClass:momentaryMap.cellClass forCellReuseIdentifier:momentaryReuseId];
+        self.tableController.hasRegisteredCells = YES;
+    }
+    @catch (NSException *exception) {
+    }
     [_tableController loadTableItems:tableItems];
     [_tableController.tableView reloadData];
     [_tableController.tableView setNeedsDisplay];

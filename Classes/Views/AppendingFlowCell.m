@@ -19,8 +19,6 @@
 @end
 
 @implementation AppendingFlowCell
-@synthesize flowView = _flowView;
-@synthesize useDarkBackground = _useDarkBackground;
 @synthesize stages = _stages;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -46,7 +44,22 @@
     [super dealloc];
 }
 
-- (NSArray *)stages {
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    if (!_flowView) {
+        return;
+    }
+    _flowView.frame = CGRectInset(self.bounds, 4, 0);
+}
+
+- (NSArray *)stages
+{
     return _stages;
 }
 
@@ -55,8 +68,8 @@
     _stages = [stages copy];
     if (_flowView && !IsEmpty(stages)) {
         [_flowView setStages:stages];
+        [self setNeedsLayout];
     }
-    [self setNeedsLayout];
 }
 
 - (void)setUseDarkBackground:(BOOL)useDarkBackground {
@@ -69,7 +82,6 @@
 @end
 
 @implementation AppendingFlowCellMapping
-@synthesize stages = _stages;
 
 + (id)cellMapping {
     return [self mappingForClass:[AppendingFlowCell class]];
@@ -81,13 +93,14 @@
         self.cellClass = [AppendingFlowCell class];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.rowHeight = 90; 
-        self.reuseIdentifier = nil; // turns off caching, sucky but we don't want to reuse facial photos
+        self.reuseIdentifier = nil;
 		__block __typeof__(self) bself = self;
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             AppendingFlowCell *flowCell = (AppendingFlowCell *)cell;
             [flowCell setUseDarkBackground:NO];
-            if (!IsEmpty(bself.stages))
+            if (!IsEmpty(bself.stages)) {
                 flowCell.stages = bself.stages;
+            }
         };
     }
     return self;

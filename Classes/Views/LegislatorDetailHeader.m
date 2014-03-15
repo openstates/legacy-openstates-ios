@@ -40,6 +40,7 @@ static UIFont *titleFont;
         if (SLFIsIpad())
             offsetX = 28;
         _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(offsetX, 10, 52, 73)];
+        _imageView.contentMode = UIViewContentModeScaleAspectFit;
         [self addSubview:_imageView];
         if (!nameFont)
             nameFont = [SLFFont(18) retain];
@@ -78,6 +79,8 @@ static UIFont *titleFont;
 
 - (void)drawRect:(CGRect)rect
 {
+    [super drawRect:rect];
+    
     self.borderOutlinePath = [SLFDrawing tableHeaderBorderPathWithFrame:rect];
     [[SLFAppearance tableBackgroundDarkColor] setFill];
     [_borderOutlinePath fill];
@@ -126,10 +129,10 @@ static UIFont *titleFont;
 - (void)setLegislator:(SLFLegislator *)legislator {
     SLFRelease(_legislator);
     _legislator = [legislator retain];
-    [self configure];
+    [self.imageView setImageWithLegislator:legislator];
     if (!legislator)
         return;
-    [self.imageView setImageWithLegislator:legislator];
+    [self configure];
     [self setNeedsDisplay];
 }
 

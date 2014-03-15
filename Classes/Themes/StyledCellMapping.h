@@ -26,4 +26,7 @@
 + (id)styledMappingUsingBlock:(void (^)(StyledCellMapping *cellMapping))block;
 + (id)staticSubtitleMapping;
 + (id)subtitleMapping;
+
++ (UITableViewCellStyle)defaultCellStyle;
+
 @end

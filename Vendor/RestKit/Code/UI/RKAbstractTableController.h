@@ -105,6 +105,7 @@ extern NSString* const RKTableControllerDidBecomeOffline;
 /////////////////////////////////////////////////////////////////////////
 
 @property (nonatomic, retain) RKTableViewCellMappings* cellMappings;
+@property (nonatomic, assign) BOOL hasRegisteredCells;
 
 - (void)mapObjectsWithClass:(Class)objectClass toTableCellsWithMapping:(RKTableViewCellMapping*)cellMapping;
 - (id)objectForRowAtIndexPath:(NSIndexPath *)indexPath;

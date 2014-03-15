@@ -19,7 +19,7 @@
 
 @implementation GradientBackgroundView
 
-+(Class) layerClass {
++ (Class) layerClass {
     return [CAGradientLayer class];
 }
 

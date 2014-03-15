@@ -20,8 +20,10 @@ static UIImage *placeholderImage;
 @implementation UIImageView (SLFLegislator)
 
 - (void)setImageWithLegislator:(SLFLegislator *)legislator {
-    if (!legislator)
+    if (!legislator) {
+        self.image = nil;
         return;
+    }
     NSString *photoURL = legislator.normalizedPhotoURL;
     if (!placeholderImage)
         placeholderImage = [[UIImage imageNamed:@"placeholder"] retain];

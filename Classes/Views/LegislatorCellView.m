@@ -85,7 +85,7 @@
     [self setNeedsDisplay];
 }
 
-- (void)setLegislator:(SLFLegislator *)value {    
+- (void)setLegislator:(SLFLegislator *)value {
     if (value) {
         self.title = value.title;
         self.district = value.districtShortName;
@@ -93,23 +93,32 @@
         self.name = value.fullName;
         self.role = nil;
         self.genericName = @"";
+        [self setNeedsDisplay];
     }
-    [self setNeedsDisplay];    
+    else {
+        self.title = nil;
+        self.district = nil;
+        self.party = nil;
+        self.name = nil;
+        self.role = nil;
+        self.genericName = @"";
+    }
 }
 
 - (void)setGenericName:(NSString *)genericName {
     SLFRelease(_genericName);
     if (genericName) {
         _genericName = [genericName copy];
+        [self setNeedsDisplay];
     }
-    [self setNeedsDisplay];
 }
 
 - (void)setRole:(NSString *)value {
     SLFRelease(_role);
-    if (value)
+    if (value) {
         _role = [value copy];
-    [self setNeedsDisplay];
+        [self setNeedsDisplay];
+    }
 }
 
 - (CGSize)sizeThatFits:(CGSize)size
@@ -124,6 +133,8 @@
 
 - (void)drawRect:(CGRect)dirtyRect
 {
+    [super drawRect:dirtyRect];
+    
     CGRect aBounds = [self bounds];
 
     NSString *partyString = _party.name;
@@ -133,7 +144,7 @@
         partyString = @"";
     }
 
-    static UIFont *font;
+    static UIFont *font = nil;
     if (!font)
         font = SLFPlainFont(13);
     UIColor *whiteColor = [UIColor whiteColor];
@@ -149,32 +160,40 @@
     CGContextSaveGState(context);
     CGContextTranslateCTM(context, aBounds.origin.x, aBounds.origin.y);
     
-    CGRect drawRect;
+    CGRect drawRect = CGRectZero;
 
     // Title
-    [lightColor set];
-    UIFont *titleFont = SLFItalicFont(13);
-    drawRect = [self rectOfString:_title atOrigin:CGPointMake(9,9) withFont:titleFont];
-    [_title drawInRect:drawRect withFont:SLFItalicFont(13)];
-    
+    if (!IsEmpty(_title)) {
+        [lightColor set];
+        UIFont *titleFont = SLFItalicFont(13);
+        drawRect = [self rectOfString:_title atOrigin:CGPointMake(9,9) withFont:titleFont];
+        [_title drawInRect:drawRect withFont:SLFItalicFont(13)];
+    }
+
     // Name
-    [darkColor set];
-    UIFont *nameFont = SLFFont(18);
-    drawRect = [self rectOfString:nameString atOrigin:CGPointMake(9,25) withFont:nameFont];
-    [nameString drawInRect:drawRect withFont:SLFFont(18)];
+    if (!IsEmpty(nameString)) {
+        [darkColor set];
+        UIFont *nameFont = SLFFont(18);
+        drawRect = [self rectOfString:nameString atOrigin:CGPointMake(9,25) withFont:nameFont];
+        [nameString drawInRect:drawRect withFont:SLFFont(18)];
+    }
     
     // Party
-    [partyColor set];
-    drawRect = [self rectOfString:partyString atOrigin:CGPointMake(9,48) withFont:font];
-    [partyString drawInRect:drawRect withFont:font];
-        
+    if (!IsEmpty(partyString)) {
+        [partyColor set];
+        drawRect = [self rectOfString:partyString atOrigin:CGPointMake(9,48) withFont:font];
+        [partyString drawInRect:drawRect withFont:font];
+    }
+
     // District
-    CGFloat xoffset = drawRect.origin.x+drawRect.size.width;
-    [lightColor set];
-    if (!IsEmpty(partyString))
-        xoffset += 6;
-    drawRect = [self rectOfString:_district atOrigin:CGPointMake(xoffset,48) withFont:font];
-    [_district drawInRect:drawRect withFont:font];
+    if (!IsEmpty(_district)) {
+        CGFloat xoffset = drawRect.origin.x+drawRect.size.width;
+        [lightColor set];
+        if (!IsEmpty(partyString))
+            xoffset += 6;
+        drawRect = [self rectOfString:_district atOrigin:CGPointMake(xoffset,48) withFont:font];
+        [_district drawInRect:drawRect withFont:font];
+    }
     
     // Role
     if (!IsEmpty(_role)) {
