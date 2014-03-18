@@ -41,6 +41,14 @@
     self.tableController.autoRefreshRate = 240;
     self.tableController.showsSectionIndexTitles = NO;
     self.tableController.sectionNameKeyPath = @"dayForDisplay";
+
+    // Filter to events that happen today or later
+    NSDate *today = [NSDate date];
+    NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
+    NSUInteger preservedComponents = (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit);
+    today = [calendar dateFromComponents:[calendar components:preservedComponents fromDate:today]];
+    self.tableController.predicate = [NSPredicate predicateWithFormat:@"dateStart >= %@" argumentArray:@[today]];
+
     __block __typeof__(self) bself = self;
     StyledCellMapping *cellMapping = [StyledCellMapping subtitleMapping];
     cellMapping.useAlternatingRowColors = YES;
