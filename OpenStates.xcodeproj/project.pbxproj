@@ -375,7 +375,7 @@
 		2FEB9C6218B6AA5B000A476A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		2FEB9C6318B6AA65000A476A /* Beta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Beta.xcconfig; sourceTree = "<group>"; };
 		2FEB9C6418B6AA90000A476A /* Shared.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
-		2FF8408318CA304700AB2295 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		2FF8408318CA304700AB2295 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Vendor/Crashlytics/Crashlytics.framework; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
 		37000496143F546600F55165 /* SCNetworkReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCNetworkReachability.h; sourceTree = "<group>"; };
 		37000497143F546600F55165 /* SCNetworkReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCNetworkReachability.m; sourceTree = "<group>"; };
@@ -1607,7 +1607,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastTestingUpgradeCheck = 0510;
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0510;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "OpenStates" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1782,7 +1782,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Crashlytics.framework/run 7f920088e925e57cb9f436fa327d06fefc4930dd 5d7f4677ca2070e4e3eb2183324f3890caaa2641657eb6288346b7199082c0c9";
+			shellScript = "./Vendor/Crashlytics/Crashlytics.framework/run 7f920088e925e57cb9f436fa327d06fefc4930dd 5d7f4677ca2070e4e3eb2183324f3890caaa2641657eb6288346b7199082c0c9";
 		};
 		372E57C214153D07000652B1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2043,7 +2043,7 @@
 				CURRENT_PROJECT_VERSION = 3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/dcloud/code/objc/openstates-ios",
+					"$(SRCROOT)/Vendor/Crashlytics/",
 				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
@@ -2056,6 +2056,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/TestFlight/",
 					"$(SRCROOT)/Vendor/GoogleAnalytics/",
+					"$(SRCROOT)/Vendor/Crashlytics/",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -2080,7 +2081,7 @@
 				CURRENT_PROJECT_VERSION = 3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/dcloud/code/objc/openstates-ios",
+					"$(SRCROOT)/Vendor/Crashlytics/",
 				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
@@ -2093,6 +2094,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/TestFlight/",
 					"$(SRCROOT)/Vendor/GoogleAnalytics/",
+					"$(SRCROOT)/Vendor/Crashlytics/",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -2201,7 +2203,7 @@
 				CURRENT_PROJECT_VERSION = 3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/dcloud/code/objc/openstates-ios",
+					"$(SRCROOT)/Vendor/Crashlytics/",
 				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
@@ -2214,6 +2216,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/TestFlight/",
 					"$(SRCROOT)/Vendor/GoogleAnalytics/",
+					"$(SRCROOT)/Vendor/Crashlytics/",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
