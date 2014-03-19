@@ -106,6 +106,9 @@
     [_tableController mapObjectsWithClass:[BillAction class] toTableCellsWithMapping:[self actionCellMap]];
     [_tableController mapObjectsWithClass:[BillSponsor class] toTableCellsWithMapping:[self sponsorCellMap]];
     [_tableController mapObjectsWithClass:[GenericWord class] toTableCellsWithMapping:[self subjectCellMap]];
+    RKTableViewCellMapping *flowMapping = [AppendingFlowCellMapping cellMapping];
+    [self.tableView registerClass:flowMapping.cellClass forCellReuseIdentifier:flowMapping.reuseIdentifier];
+
     [self configureActionBarForBill:self.bill];
 	self.title = NSLocalizedString(@"Loading...", @"");
     self.screenName = @"Bill Detail Screen";

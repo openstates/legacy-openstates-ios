@@ -703,10 +703,10 @@ static NSString* lastUpdatedDateDictionaryKey = @"lastUpdatedDateDictionaryKey";
 - (UITableViewCellEditingStyle)tableView:(UITableView*)theTableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (_canEditRows) {
         RKTableViewCellMapping* cellMapping = [self cellMappingForObjectAtIndexPath:indexPath];
-        UITableViewCell* cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
         if (cellMapping.editingStyleForObjectAtIndexPath) {
             RKLogTrace(@"Found a block for tableView:editingStyleForRowAtIndexPath: Executing...");
             id object = [self objectForRowAtIndexPath:indexPath];
+            UITableViewCell* cell = [theTableView cellForRowAtIndexPath:indexPath];
             return cellMapping.editingStyleForObjectAtIndexPath(cell, object, indexPath);
         }
         return UITableViewCellEditingStyleDelete;
