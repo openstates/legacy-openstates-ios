@@ -99,7 +99,9 @@
 
     NSString *localizedDone = NSLocalizedString(@"Done", @"");
     if ([[UIDevice currentDevice] systemMajorVersion] >= 7) {
-        self.doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        UIButton *dButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        dButton.titleLabel.font = SLFTitleFont(14);
+        self.doneButton = dButton;
         [self.doneButton setTitle:localizedDone forState:UIControlStateNormal];
         [self.doneButton setTitleColor:[SLFAppearance primaryTintColor] forState:UIControlStateNormal];
         [self.doneButton setTitleColor:[SLFAppearance navBarTextColor] forState:UIControlStateHighlighted];
@@ -116,7 +118,9 @@
 
     NSString *localizedEdit = NSLocalizedString(@"Edit", @"");
     if ([[UIDevice currentDevice] systemMajorVersion] >= 7) {
-        self.editButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        UIButton *eButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        eButton.titleLabel.font = SLFTitleFont(14);
+        self.editButton = eButton;
         [self.editButton setTitle:localizedEdit forState:UIControlStateNormal];
         [self.editButton setTitleColor:[SLFAppearance primaryTintColor] forState:UIControlStateNormal];
         [self.editButton setTitleColor:[SLFAppearance navBarTextColor] forState:UIControlStateHighlighted];
