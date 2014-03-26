@@ -99,6 +99,8 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
         [[UINavigationBar appearance] setTintColor:[self primaryTintColor]];
         [[UISearchBar appearance] setBarTintColor:[self barTintColor]];
         [[UIToolbar appearance] setBarTintColor:[self acapulco]];
+        [[TitleBarView appearance] setTitleFont:SLFTitleFont(14)];
+        [[TitleBarView appearance] setTitleColor:[self navBarTextColor]];
     } else {
         [[UINavigationBar appearance] setTintColor:[self barTintColor]];
         [[UISegmentedControl appearance] setTintColor:[self barTintColor]];
