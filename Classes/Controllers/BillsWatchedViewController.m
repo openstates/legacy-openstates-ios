@@ -35,8 +35,8 @@
 
 @implementation BillsWatchedViewController
 @synthesize tableController = _tableController;
-@synthesize editButton = __editButton;
-@synthesize doneButton = __doneButton;
+@synthesize editButton;
+@synthesize doneButton;
 - (id)init {
     self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
@@ -89,24 +89,46 @@
 - (void)configureEditingButtonsIphone {
     self.editButton = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit", @"") orange:NO width:45 target:self action:@selector(toggleEditing:)] autorelease];
     self.doneButton = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"") orange:YES width:45 target:self action:@selector(toggleEditing:)] autorelease];
-    [self.navigationItem setRightBarButtonItem:__editButton animated:YES];
+    [self.navigationItem setRightBarButtonItem:self.editButton animated:YES];
 }
 
 - (void)configureEditingButtonsIpad {
-    CGPoint origin = CGPointMake(self.titleBarView.size.width - 55, 15);
+    CGPoint origin = CGPointMake(self.titleBarView.size.width - 55, 18);
 
-    self.doneButton = [UIButton buttonWithTitle:NSLocalizedString(@"Done", @"") orange:YES width:45 target:self action:@selector(toggleEditing:)];
-    [__doneButton setOrigin:origin];
-    [__doneButton setTag:6616];
-    [__doneButton setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
-    [__doneButton setHidden:YES];
-    [self.titleBarView addSubview:__doneButton];
+    SEL toggleEditingSelector = @selector(toggleEditing:);
 
-    self.editButton = [UIButton buttonWithTitle:NSLocalizedString(@"Edit", @"") orange:NO width:45 target:self action:@selector(toggleEditing:)];
-    [__editButton setOrigin:origin];
-    [__editButton setTag:6617];
-    [__editButton setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
-    [self.titleBarView addSubview:__editButton];
+    NSString *localizedDone = NSLocalizedString(@"Done", @"");
+    if ([[UIDevice currentDevice] systemMajorVersion] >= 7) {
+        self.doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.doneButton setTitle:localizedDone forState:UIControlStateNormal];
+        [self.doneButton setTitleColor:[SLFAppearance primaryTintColor] forState:UIControlStateNormal];
+        [self.doneButton setTitleColor:[SLFAppearance navBarTextColor] forState:UIControlStateHighlighted];
+        [self.doneButton sizeToFit];
+        [self.doneButton addTarget:self action:toggleEditingSelector forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        self.doneButton = [UIButton buttonWithTitle:localizedDone orange:YES width:45 target:self action:toggleEditingSelector];
+    }
+    [self.doneButton setOrigin:origin];
+    [self.doneButton setTag:6616];
+    [self.doneButton setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
+    [self.doneButton setHidden:YES];
+    [self.titleBarView addSubview:self.doneButton];
+
+    NSString *localizedEdit = NSLocalizedString(@"Edit", @"");
+    if ([[UIDevice currentDevice] systemMajorVersion] >= 7) {
+        self.editButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.editButton setTitle:localizedEdit forState:UIControlStateNormal];
+        [self.editButton setTitleColor:[SLFAppearance primaryTintColor] forState:UIControlStateNormal];
+        [self.editButton setTitleColor:[SLFAppearance navBarTextColor] forState:UIControlStateHighlighted];
+        [self.editButton sizeToFit];
+        [self.editButton addTarget:self action:toggleEditingSelector forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        self.editButton = [UIButton buttonWithTitle:localizedEdit orange:NO width:45 target:self action:toggleEditingSelector];
+    }
+    [self.editButton setOrigin:origin];
+    [self.editButton setTag:6617];
+    [self.editButton setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
+    [self.titleBarView addSubview:self.editButton];
 }
 
 - (void)configureEditingButtons {
