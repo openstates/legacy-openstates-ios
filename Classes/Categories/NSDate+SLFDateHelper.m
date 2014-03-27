@@ -204,11 +204,21 @@
     return [self timestampString];
 }
 
-- (NSString *)stringWithLocalizationTemplate:(NSString *)formatTemplate {
+- (NSString *)stringWithLocalizationTemplate:(NSString *)formatTemplate timezone:(NSTimeZone *)timezone {
     NSDateFormatter *formatter = [SLFDateHelper sharedHelper].localizedFormatter;
+    if (timezone) {
+        [formatter setTimeZone:timezone];
+    } else {
+        [formatter setTimeZone:[NSTimeZone systemTimeZone]];
+    }
     NSString *format = [NSDateFormatter dateFormatFromTemplate:formatTemplate options:0 locale:formatter.locale];
     formatter.dateFormat = format;
     return [formatter stringFromDate:self];
+
+}
+
+- (NSString *)stringWithLocalizationTemplate:(NSString *)formatTemplate {
+    return [self stringWithLocalizationTemplate:formatTemplate timezone:nil];
 }
 
 - (NSString *)stringWithDateStyle:(NSDateFormatterStyle)dateStyle timeStyle:(NSDateFormatterStyle)timeStyle {

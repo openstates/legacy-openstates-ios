@@ -32,6 +32,7 @@
 - (NSString *)string;
 - (NSString *)stringWithFormat:(NSString *)format localized:(BOOL)localized;
 - (NSString *)stringWithDateStyle:(NSDateFormatterStyle)dateStyle timeStyle:(NSDateFormatterStyle)timeStyle;
+- (NSString *)stringWithLocalizationTemplate:(NSString *)formatTemplate timezone:(NSTimeZone *)timezone;
 - (NSString *)stringWithLocalizationTemplate:(NSString *)formatTemplate;
 
 #pragma mark - Calendar Math
