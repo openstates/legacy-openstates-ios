@@ -13,11 +13,12 @@
 #import "SLFTableViewController.h"
 
 @interface SLFFetchedTableViewController : SLFTableViewController
-@property (nonatomic, retain) RKFetchedResultsTableController *tableController;
-@property (nonatomic, retain) SLFState *state;
+@property (nonatomic, strong) RKFetchedResultsTableController *tableController;
+@property (nonatomic, strong) SLFState *state;
 @property (nonatomic, copy) NSString *resourcePath;
 @property (nonatomic, assign) Class dataClass;
 @property (nonatomic, assign) BOOL omitSearchBar;
+@property (nonatomic, strong) RKTableItem* defaultEmptyItem;
 
 - (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path dataClass:(Class)dataClass;
 - (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path;

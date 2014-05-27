@@ -29,18 +29,19 @@
 @implementation SLFFetchedTableViewController
 
 @synthesize state;
-@synthesize tableController = _tableController;
-@synthesize resourcePath = __resourcePath;
-@synthesize dataClass = __dataClass;
-@synthesize omitSearchBar = _omitSearchBar;
+@synthesize tableController;
+@synthesize resourcePath = _resourcePath;
+@synthesize dataClass;
+@synthesize omitSearchBar;
+@synthesize defaultEmptyItem;
 
-- (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path dataClass:(Class)dataClass {
+- (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path dataClass:(Class)class {
     self = [super init];
     if (self) {
         self.stackWidth = 380;
         self.state = newState;
         self.resourcePath = path;
-        self.dataClass = dataClass;
+        self.dataClass = class;
     }
     return self;
 }
@@ -61,41 +62,41 @@
 
 - (void)configureTableController {
     self.tableController = [RKFetchedResultsTableController tableControllerForTableViewController:(UITableViewController*)self];
-    _tableController.delegate = self;
-    _tableController.objectManager = [RKObjectManager sharedManager];
-    _tableController.resourcePath = self.resourcePath;
-    _tableController.autoRefreshFromNetwork = YES;
-    _tableController.autoRefreshRate = 360;
-    _tableController.pullToRefreshEnabled = YES;
-        //_tableController.imageForError = [UIImage imageNamed:@"error"];
+    self.tableController.delegate = self;
+    self.tableController.objectManager = [RKObjectManager sharedManager];
+    self.tableController.resourcePath = self.resourcePath;
+    self.tableController.autoRefreshFromNetwork = YES;
+    self.tableController.autoRefreshRate = 360;
+    self.tableController.pullToRefreshEnabled = YES;
+        //self.tableController.imageForError = [UIImage imageNamed:@"error"];
     CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
     MTInfoPanel *offlinePanel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeError title:NSLocalizedString(@"Offline", @"") subtitle:NSLocalizedString(@"The server is unavailable.",@"") image:nil];
-    _tableController.imageForOffline = [UIImage imageFromView:offlinePanel];    
+    self.tableController.imageForOffline = [UIImage imageFromView:offlinePanel];    
     MTInfoPanel *panel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeActivity title:NSLocalizedString(@"Updating", @"") subtitle:NSLocalizedString(@"Downloading new data",@"") image:nil];
-    _tableController.loadingView = panel;
-    _tableController.predicate = nil;
-    RKTableItem *emptyItem = [RKTableItem tableItemWithText:NSLocalizedString(@"No Entries Found",@"") detailText:NSLocalizedString(@"There were no entries found. You may refresh the results by dragging down on the table.",@"")];
-    emptyItem.cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleSubtitle alternatingColors:NO largeHeight:YES selectable:NO];
-    [emptyItem.cellMapping addDefaultMappings];    
-    _tableController.emptyItem = emptyItem;
+    self.tableController.loadingView = panel;
+    self.tableController.predicate = nil;
+    self.defaultEmptyItem = [RKTableItem tableItemWithText:NSLocalizedString(@"No Entries Found",@"") detailText:NSLocalizedString(@"There were no entries found. You may refresh the results by dragging down on the table.",@"")];
+    self.defaultEmptyItem.cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleSubtitle alternatingColors:NO largeHeight:YES selectable:NO];
+    [self.defaultEmptyItem.cellMapping addDefaultMappings];    
+    self.tableController.emptyItem = self.defaultEmptyItem;
     NSAssert(self.dataClass != NULL, @"Must set a data class before loading the view");
-    [_tableController setObjectMappingForClass:__dataClass];
-    _tableController.sortDescriptors = [self.dataClass sortDescriptors];
+    [self.tableController setObjectMappingForClass:self.dataClass];
+    self.tableController.sortDescriptors = [self.dataClass sortDescriptors];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = NSLocalizedString(@"Loading...",@"");
     [self configureTableController];
-    if (_tableController.sectionNameKeyPath) {
+    if (self.tableController.sectionNameKeyPath) {
         
         SLF_FIXME("RKFetchedResultsController.emptyItem breaks tableView updates when sections are involved");
-        _tableController.emptyItem = nil; // don't use emptyItem with sections like this ... kills FRC tableView updates
+        self.tableController.emptyItem = nil; // don't use emptyItem with sections like this ... kills FRC tableView updates
         
         UITableViewStyle style = self.tableViewStyle;
-        _tableController.heightForHeaderInSection = [TableSectionHeaderView heightForTableViewStyle:style];
+        self.tableController.heightForHeaderInSection = [TableSectionHeaderView heightForTableViewStyle:style];
         __block __typeof__(self) bself = self;
-        _tableController.onViewForHeaderInSection = ^UIView*(NSUInteger sectionIndex, NSString* sectionTitle) {
+        self.tableController.onViewForHeaderInSection = ^UIView*(NSUInteger sectionIndex, NSString* sectionTitle) {
             TableSectionHeaderView *sectionView = [[[TableSectionHeaderView alloc] initWithTitle:[sectionTitle capitalizedString] width:CGRectGetWidth(bself.tableView.bounds) style:style] autorelease];
             return sectionView;
         };   
@@ -137,12 +138,12 @@
     [self resizeLoadingView];
 }
 
-- (void)setResourcePath:(NSString *)resourcePath {
+- (void)setResourcePath:(NSString *)path {
     self.tableController.predicate = nil;
-    SLFRelease(__resourcePath);
-    __resourcePath = [resourcePath copy];
-    if (self.isViewLoaded && _tableController) {
-        _tableController.resourcePath = resourcePath;
+    SLFRelease(_resourcePath);
+    _resourcePath = [path copy];
+    if (self.isViewLoaded && self.tableController) {
+        self.tableController.resourcePath = path;
     }
 }
 
