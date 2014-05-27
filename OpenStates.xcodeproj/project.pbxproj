@@ -15,6 +15,8 @@
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		28D7ACF80DDB3853001CB0EB /* LegislatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* LegislatorsViewController.m */; };
 		2F3FA8841667C7F400A63CFF /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 373ECB6514888C9F000BD16D /* libTestFlight.a */; };
+		2F46D0091934E97C0023F3C8 /* OpenStatesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F46D0081934E97C0023F3C8 /* OpenStatesTableViewCell.m */; };
+		2F46D00C1934EF5D0023F3C8 /* libReveal.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 2F46D00A1934EEF50023F3C8 /* libReveal.dylib */; };
 		2F5FAF2218D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FAF2118D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.m */; };
 		2FA2630918BBD96700D8041F /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA2630818BBD96700D8041F /* libGoogleAnalyticsServices.a */; };
 		2FD00F2118C51FA500A5399A /* UIDevice+VersionCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD00F2018C51FA500A5399A /* UIDevice+VersionCheck.m */; };
@@ -359,6 +361,9 @@
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28D7ACF60DDB3853001CB0EB /* LegislatorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorsViewController.h; sourceTree = "<group>"; };
 		28D7ACF70DDB3853001CB0EB /* LegislatorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorsViewController.m; sourceTree = "<group>"; };
+		2F46D0071934E97C0023F3C8 /* OpenStatesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenStatesTableViewCell.h; sourceTree = "<group>"; };
+		2F46D0081934E97C0023F3C8 /* OpenStatesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenStatesTableViewCell.m; sourceTree = "<group>"; };
+		2F46D00A1934EEF50023F3C8 /* libReveal.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libReveal.dylib; path = "../../../../../Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib"; sourceTree = "<group>"; };
 		2F5FAF2018D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVWebViewController+SFHackneyedWebViewController.h"; sourceTree = "<group>"; };
 		2F5FAF2118D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SVWebViewController+SFHackneyedWebViewController.m"; sourceTree = "<group>"; };
 		2FA2630218BBD96700D8041F /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
@@ -860,6 +865,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2F46D00A1934EEF50023F3C8 /* libReveal.dylib */,
 				2FF8408318CA304700AB2295 /* Crashlytics.framework */,
 				3711871014462D1800A12B8B /* AddressBook.framework */,
 				37B9CC07143D0654006C56E0 /* CoreText.framework */,
@@ -1282,6 +1288,8 @@
 				378337D214AD26A10077010E /* AppendingFlowCell.h */,
 				378337D314AD26A10077010E /* AppendingFlowCell.m */,
 				37485D3E144BC43600D99BBD /* MapAnnotations */,
+				2F46D0071934E97C0023F3C8 /* OpenStatesTableViewCell.h */,
+				2F46D0081934E97C0023F3C8 /* OpenStatesTableViewCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1736,6 +1744,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F46D00C1934EF5D0023F3C8 /* libReveal.dylib in Resources */,
 				37336A68142B98A000F635EB /* MainWindow.xib in Resources */,
 				37336A6C142B991200F635EB /* MainWindow-iPad.xib in Resources */,
 				3711871414463E1C00A12B8B /* 193-location-arrow.png in Resources */,
@@ -1852,6 +1861,7 @@
 				372D2AFA14285FDF00ADE84E /* CommitteeMember.m in Sources */,
 				372D2B1E1428DEA400ADE84E /* BillSponsor.m in Sources */,
 				37BAC14A142B972D0021A3C6 /* main.m in Sources */,
+				2F46D0091934E97C0023F3C8 /* OpenStatesTableViewCell.m in Sources */,
 				37F25BA4142BAC0E009D8FCF /* SLFAppearance.m in Sources */,
 				37AC5FD6142C42680061414F /* StackedMenuViewController.m in Sources */,
 				37632037142C5DD500A6185F /* SLFAlertView.m in Sources */,
@@ -2057,6 +2067,7 @@
 					"$(SRCROOT)/Vendor/TestFlight/",
 					"$(SRCROOT)/Vendor/GoogleAnalytics/",
 					"$(SRCROOT)/Vendor/Crashlytics/",
+					"$(SYSTEM_APPS_DIR)/Reveal.app/Contents/SharedSupport/iOS-Libraries",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -2095,6 +2106,7 @@
 					"$(SRCROOT)/Vendor/TestFlight/",
 					"$(SRCROOT)/Vendor/GoogleAnalytics/",
 					"$(SRCROOT)/Vendor/Crashlytics/",
+					"$(SYSTEM_APPS_DIR)/Reveal.app/Contents/SharedSupport/iOS-Libraries",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -2217,6 +2229,7 @@
 					"$(SRCROOT)/Vendor/TestFlight/",
 					"$(SRCROOT)/Vendor/GoogleAnalytics/",
 					"$(SRCROOT)/Vendor/Crashlytics/",
+					"$(SYSTEM_APPS_DIR)/Reveal.app/Contents/SharedSupport/iOS-Libraries",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",

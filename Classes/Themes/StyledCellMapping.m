@@ -12,6 +12,7 @@
 
 #import "StyledCellMapping.h"
 #import "SLFTheme.h"
+#import "OpenStatesTableViewCell.h"
 
 @implementation StyledCellMapping
 @synthesize useAlternatingRowColors = _useAlternatingRowColors;
@@ -22,9 +23,17 @@
 @synthesize textFont = _textFont;
 @synthesize detailTextFont = _detailTextFont;
 
+
++ (id)cellMapping {
+    return [self mappingForClass:[OpenStatesTableViewCell class]];
+}
+
 - (id)init {
     self = [super init];
     if (self) {
+        self.cellClass = [OpenStatesTableViewCell class];
+        self.reuseIdentifier = @"OpenStatesTableViewCell";
+        self.style = UITableViewCellStyleValue2;
         self.isSelectableCell = YES;
         self.useLargeRowHeight = NO;
         self.textColor = [SLFAppearance cellTextColor];

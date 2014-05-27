@@ -143,6 +143,12 @@
 
 - (void)configureEventInfo {
     __block __typeof__(self) bself = self;
+    @try {
+        StyledCellMapping *cellMapping = [StyledCellMapping cellMapping];
+        [bself.tableView registerClass:cellMapping.cellClass forCellReuseIdentifier:cellMapping.reuseIdentifier];
+    }
+    @catch (NSException *exception) {
+    }
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
         tableItem.cellMapping = [bself eventTableCellMapUsingSelectable:NO];
