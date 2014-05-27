@@ -36,6 +36,7 @@
         NSString *path = [SLFActionPathNavigator navigationPathForController:[CommitteeDetailViewController class] withResource:object];
         if (!IsEmpty(path))
             [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
+        [bself.searchBar resignFirstResponder];
     };
     [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:cellMapping];    
 }

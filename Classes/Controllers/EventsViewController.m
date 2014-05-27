@@ -13,6 +13,8 @@
 #import "EventsViewController.h"
 #import "EventDetailViewController.h"
 #import "SLFDataModels.h"
+#import "MTInfoPanel.h"
+#import "SLFDrawingExtensions.h"
 
 @interface EventsViewController()
 @end
@@ -49,15 +51,16 @@
     today = [calendar dateFromComponents:[calendar components:preservedComponents fromDate:today]];
     self.tableController.predicate = [NSPredicate predicateWithFormat:@"dateStart >= %@" argumentArray:@[today]];
 
-    __block __typeof__(self) bself = self;
     StyledCellMapping *cellMapping = [StyledCellMapping subtitleMapping];
     cellMapping.useAlternatingRowColors = YES;
     [cellMapping mapKeyPath:@"title" toAttribute:@"textLabel.text"];
     [cellMapping mapKeyPath:@"dateStartForDisplay" toAttribute:@"detailTextLabel.text"];
+    __block __typeof__(self) bself = self;
     cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         NSString *path = [SLFActionPathNavigator navigationPathForController:[EventDetailViewController class] withResource:object];
         if (!IsEmpty(path))
             [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
+            [bself.searchBar resignFirstResponder];
     };
     [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:cellMapping];    
 }

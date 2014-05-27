@@ -122,6 +122,7 @@
     cellMap.useAlternatingRowColors = YES;
     __block __typeof__(self) bself = self;
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
+        [bself.searchBar resignFirstResponder];
         RKTableItem* tableItem = (RKTableItem*) object;
         [bself selectMenuItem:tableItem.text];
     };

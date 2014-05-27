@@ -119,6 +119,7 @@
                 NSString *chamberName = [SLFChamber chamberWithType:chamber forState:bself.state].shortName;
                 vc.title = [NSString stringWithFormat:@"%@ %@ %@ Bills", bself.state.stateIDForDisplay, chamberName, subject.name];
             }
+            [bself.searchBar resignFirstResponder];
             [bself stackOrPushViewController:vc];
             [vc release];
         };

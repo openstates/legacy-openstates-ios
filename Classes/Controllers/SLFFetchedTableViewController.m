@@ -180,6 +180,8 @@
     return [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:pred1, pred2, nil]];
 }
 
+#pragma mark - SearchBar
+
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     if (!IsEmpty(searchBar.text)) {
         NSPredicate *predicate = [self.dataClass predicateForSearchWithText:searchBar.text searchMode:RKSearchModeOr];
