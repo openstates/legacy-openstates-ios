@@ -88,7 +88,7 @@
     self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
     _tableController.delegate = self;
     _tableController.objectManager = [RKObjectManager sharedManager];
-    _tableController.pullToRefreshEnabled = YES;
+    _tableController.pullToRefreshEnabled = NO; // Don't enable this initially. Wait til the initial load has been done.
     _tableController.imageForError = [UIImage imageNamed:@"error"];
     CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
     MTInfoPanel *offlinePanel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeError title:NSLocalizedString(@"Offline", @"") subtitle:NSLocalizedString(@"The server is unavailable.",@"") image:nil];
@@ -184,6 +184,7 @@
     NSArray *sortedObjects = [section.objects sortedArrayUsingDescriptors:[BillsSubjectsEntry sortDescriptors]];
     [_tableController loadObjects:sortedObjects];
     [_tableController.tableView reloadData];
+    _tableController.pullToRefreshEnabled = YES;
 }
 
 @end
