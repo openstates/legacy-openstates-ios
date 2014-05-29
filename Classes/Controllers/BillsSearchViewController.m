@@ -16,6 +16,7 @@
 #import "BillsViewController.h"
 #import "TableSectionHeaderView.h"
 #import "ActionSheetStringPicker.h"
+#import "SLFImprovedRKTableController.h"
 
 enum SECTIONS {
     SectionSearchInfo = 1,
@@ -24,11 +25,14 @@ enum SECTIONS {
 
 
 @interface BillsSearchViewController()
-@property (nonatomic, retain) RKTableController *tableController;
+
+@property (nonatomic, strong) SLFImprovedRKTableController *tableController;
 @property (nonatomic, copy) NSString *selectedSession;
+
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
 - (void)configureTableItems;
 - (void)configureSearchInfo;
+
 @end
 
 @implementation BillsSearchViewController
@@ -61,7 +65,7 @@ enum SECTIONS {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    self.tableController = [SLFImprovedRKTableController tableControllerForTableViewController:(UITableViewController*)self];
     _tableController.delegate = self;
     _tableController.variableHeightRows = YES;
     _tableController.objectManager = [RKObjectManager sharedManager];

@@ -23,7 +23,7 @@
 @synthesize useTitleBar;
 @synthesize titleBarView = _titleBarView;
 @synthesize onSavePersistentActionPath = _onSavePersistentActionPath;
-@synthesize searchBar = _searchBar;
+@synthesize searchBar;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
@@ -178,63 +178,62 @@
 - (void)configureSearchBarWithPlaceholder:(NSString *)placeholder withConfigurationBlock:(SearchBarConfigurationBlock)block {
     CGFloat tableWidth = self.tableView.bounds.size.width;
     CGRect searchRect = CGRectMake(0, self.titleBarView.opticalHeight, tableWidth, 44);
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:searchRect];
-    searchBar.delegate = self;
-    searchBar.placeholder = placeholder;
-    searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
+    self.searchBar = [[UISearchBar alloc] initWithFrame:searchRect];
+    self.searchBar.delegate = self;
+    self.searchBar.placeholder = placeholder;
+    self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
     if (!SLFIsIOS5OrGreater())
-        searchBar.tintColor = [SLFAppearance cellSecondaryTextColor];
+        self.searchBar.tintColor = [SLFAppearance cellSecondaryTextColor];
     if (block)
-        block(searchBar);
-    [searchBar sizeToFit];
-    searchBar.width = tableWidth;
+        block(self.searchBar);
+    [self.searchBar sizeToFit];
+    self.searchBar.width = tableWidth;
     CGRect tableRect = self.tableView.frame;
     tableRect.size.height -= searchBar.height;
     self.tableView.frame = CGRectOffset(tableRect, 0, searchBar.height);
-    [self.view addSubview:searchBar];
-    self.searchBar = searchBar;
+    [self.view addSubview:self.searchBar];
     [searchBar release];
 }
 
-- (void)configureChamberScopeTitlesForSearchBar:(UISearchBar *)searchBar withState:(SLFState *)state {
-    NSParameterAssert(searchBar != NULL);
+- (void)configureChamberScopeTitlesForSearchBar:(UISearchBar *)bar withState:(SLFState *)state {
+    NSParameterAssert(bar != NULL);
     NSArray *buttonTitles = [SLFChamber chamberSearchScopeTitlesWithState:state];
     if (IsEmpty(buttonTitles))
         return;
-    searchBar.showsScopeBar = YES;
-    searchBar.scopeButtonTitles = buttonTitles;
-    searchBar.selectedScopeButtonIndex = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
+    bar.showsScopeBar = YES;
+    bar.scopeButtonTitles = buttonTitles;
+    bar.selectedScopeButtonIndex = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
 }
 
 - (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
     SLFSaveSelectedScopeIndexForKey(selectedScope, NSStringFromClass([self class]));
 }
 
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-    searchBar.showsCancelButton = YES;
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)bar {
+    bar.showsCancelButton = YES;
 }
 
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    [searchBar resignFirstResponder];
+- (void)searchBarTextDidEndEditing:(UISearchBar *)bar {
+    [bar resignFirstResponder];
 }
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [searchBar resignFirstResponder];
+- (void)searchBarSearchButtonClicked:(UISearchBar *)bar {
+    [bar resignFirstResponder];
 }
 
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    if (IsEmpty(searchBar.text)) {
-        searchBar.showsCancelButton = NO;
-        [searchBar resignFirstResponder];
+- (void)searchBar:(UISearchBar *)bar textDidChange:(NSString *)searchText {
+    if (IsEmpty(bar.text)) {
+        bar.showsCancelButton = NO;
+        [bar resignFirstResponder];
         return;
     }
-    searchBar.showsCancelButton = YES;
+    bar.showsCancelButton = YES;
 }
 
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    searchBar.text = nil;
-    searchBar.showsCancelButton = NO;
-    [searchBar resignFirstResponder];
+- (void)searchBarCancelButtonClicked:(UISearchBar *)bar {
+    bar.text = nil;
+    bar.showsCancelButton = NO;
+    [bar resignFirstResponder];
 }
 
 @end

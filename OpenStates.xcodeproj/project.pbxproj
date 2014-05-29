@@ -14,10 +14,12 @@
 		2538E8671234250100ACB5D7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2538E8661234250100ACB5D7 /* SystemConfiguration.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		28D7ACF80DDB3853001CB0EB /* LegislatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* LegislatorsViewController.m */; };
+		2F19242319378FED00E2A74E /* SLFImprovedRKFetchedResultsTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9DAC8219378A3C007EC92D /* SLFImprovedRKFetchedResultsTableController.m */; };
 		2F3FA8841667C7F400A63CFF /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 373ECB6514888C9F000BD16D /* libTestFlight.a */; };
 		2F46D0091934E97C0023F3C8 /* OpenStatesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F46D0081934E97C0023F3C8 /* OpenStatesTableViewCell.m */; };
 		2F46D00C1934EF5D0023F3C8 /* libReveal.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 2F46D00A1934EEF50023F3C8 /* libReveal.dylib */; };
 		2F5FAF2218D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FAF2118D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.m */; };
+		2F9DAC8019377E91007EC92D /* SLFImprovedRKTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9DAC7F19377E91007EC92D /* SLFImprovedRKTableController.m */; };
 		2FA2630918BBD96700D8041F /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA2630818BBD96700D8041F /* libGoogleAnalyticsServices.a */; };
 		2FD00F2118C51FA500A5399A /* UIDevice+VersionCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD00F2018C51FA500A5399A /* UIDevice+VersionCheck.m */; };
 		2FD00F2718C6843100A5399A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD00F2618C6843100A5399A /* Images.xcassets */; };
@@ -366,6 +368,10 @@
 		2F46D00A1934EEF50023F3C8 /* libReveal.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libReveal.dylib; path = "../../../../../Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib"; sourceTree = "<group>"; };
 		2F5FAF2018D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVWebViewController+SFHackneyedWebViewController.h"; sourceTree = "<group>"; };
 		2F5FAF2118D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SVWebViewController+SFHackneyedWebViewController.m"; sourceTree = "<group>"; };
+		2F9DAC7E19377E91007EC92D /* SLFImprovedRKTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFImprovedRKTableController.h; sourceTree = "<group>"; };
+		2F9DAC7F19377E91007EC92D /* SLFImprovedRKTableController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFImprovedRKTableController.m; sourceTree = "<group>"; };
+		2F9DAC8119378A3C007EC92D /* SLFImprovedRKFetchedResultsTableController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLFImprovedRKFetchedResultsTableController.h; sourceTree = "<group>"; };
+		2F9DAC8219378A3C007EC92D /* SLFImprovedRKFetchedResultsTableController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SLFImprovedRKFetchedResultsTableController.m; sourceTree = "<group>"; };
 		2FA2630218BBD96700D8041F /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
 		2FA2630318BBD96700D8041F /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
 		2FA2630418BBD96700D8041F /* GAIFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIFields.h; sourceTree = "<group>"; };
@@ -1233,6 +1239,10 @@
 				3748120514C7ABA900A1AE30 /* NoFetchViewController.m */,
 				37798CF4147E3A810098361A /* SLFFetchedTableViewController.h */,
 				37798CF5147E3A810098361A /* SLFFetchedTableViewController.m */,
+				2F9DAC8119378A3C007EC92D /* SLFImprovedRKFetchedResultsTableController.h */,
+				2F9DAC8219378A3C007EC92D /* SLFImprovedRKFetchedResultsTableController.m */,
+				2F9DAC7E19377E91007EC92D /* SLFImprovedRKTableController.h */,
+				2F9DAC7F19377E91007EC92D /* SLFImprovedRKTableController.m */,
 				37B6FF94149207C8007CB068 /* SLFStackedViewController.h */,
 				37B6FF95149207C8007CB068 /* SLFStackedViewController.m */,
 				376B88FD143186B300AA96D4 /* SLFTableViewController.h */,
@@ -1827,6 +1837,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F19242319378FED00E2A74E /* SLFImprovedRKFetchedResultsTableController.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				28D7ACF80DDB3853001CB0EB /* LegislatorsViewController.m in Sources */,
 				37EDEAA313D3D81900F8FCA1 /* LegislatorDetailViewController.m in Sources */,
@@ -1882,6 +1893,7 @@
 				370004B0143F546600F55165 /* SCNetworkReachabilityFlags.c in Sources */,
 				370004C7143F5A6700F55165 /* SLFReachable.m in Sources */,
 				3794021C144161A600D18889 /* ContributionsDataSource.m in Sources */,
+				2F9DAC8019377E91007EC92D /* SLFImprovedRKTableController.m in Sources */,
 				3794021D144161A600D18889 /* ContributionsViewController.m in Sources */,
 				3794022814418D4000D18889 /* TableCellDataObject.m in Sources */,
 				37F32829144198750059FACE /* SLFBadgeCell.m in Sources */,

@@ -19,6 +19,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "UIImageView+RoundedCorners.h"
 #import "LegislatorCell.h"
+#import "SLFImprovedRKTableController.h"
 
 enum SECTIONS {
     SectionVoteInfo = 1,
@@ -29,12 +30,15 @@ enum SECTIONS {
 };
 
 @interface BillVotesViewController()
-@property (nonatomic, retain) RKTableController *tableController;
+
+@property (nonatomic, strong) SLFImprovedRKTableController *tableController;
+
 - (RKTableViewCellMapping *)voterCellMap;
 - (NSString *)headerForSectionIndex:(NSInteger)sectionIndex;
 - (void)configureTableItems;
 - (void)configureVoteInfo;
 - (void)configureVoters;
+
 @end
 
 @implementation BillVotesViewController
@@ -63,7 +67,7 @@ enum SECTIONS {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    self.tableController = [SLFImprovedRKTableController tableControllerForTableViewController:(UITableViewController*)self];
     _tableController.delegate = self;
     _tableController.variableHeightRows = YES;
     _tableController.objectManager = [RKObjectManager sharedManager];

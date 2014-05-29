@@ -34,6 +34,7 @@
 - (void)configureTableController {
     [super configureTableController];
     self.tableController.autoRefreshRate = 36000;
+
     __block __typeof__(self) bself = self;
     StyledCellMapping *cellMapping = [StyledCellMapping subtitleMapping];
     cellMapping.useAlternatingRowColors = YES;

@@ -22,6 +22,10 @@
 #import "SLFDrawingExtensions.h"
 
 @interface BillsSubjectsViewController()
+
+@property (nonatomic, strong) UISegmentedControl *scopeBar;
+
+
 - (void)configureTableController;
 - (void)configureStandaloneChamberScopeBar;
 - (void)chamberScopeSelectedIndexDidChange:(UISegmentedControl *)scopeBar;
@@ -30,6 +34,7 @@
 @implementation BillsSubjectsViewController
 @synthesize state;
 @synthesize tableController = _tableController;
+@synthesize scopeBar;
 
 - (id)initWithState:(SLFState *)newState {
     self = [super initWithStyle:UITableViewStylePlain];
@@ -85,12 +90,15 @@
 }
 
 - (void)configureTableController {
-    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    self.tableController = [SLFImprovedRKTableController tableControllerForTableViewController:(UITableViewController*)self];
     _tableController.delegate = self;
     _tableController.objectManager = [RKObjectManager sharedManager];
     _tableController.pullToRefreshEnabled = NO; // Don't enable this initially. Wait til the initial load has been done.
     _tableController.imageForError = [UIImage imageNamed:@"error"];
+
     CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
+    CGFloat overlayTop = self.scopeBar.frame.size.height;
+    self.tableController.overlayFrame = CGRectMake(0, overlayTop, panelWidth, self.view.frame.size.height);
     MTInfoPanel *offlinePanel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeError title:NSLocalizedString(@"Offline", @"") subtitle:NSLocalizedString(@"The server is unavailable.",@"") image:nil];
     _tableController.imageForOffline = [UIImage imageFromView:offlinePanel];    
     MTInfoPanel *panel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeActivity title:NSLocalizedString(@"Updating", @"") subtitle:NSLocalizedString(@"Downloading new data",@"") image:nil];
@@ -131,35 +139,34 @@
     NSArray *buttonTitles = [SLFChamber chamberSearchScopeTitlesWithState:state];
     if (IsEmpty(buttonTitles))
         return;
-    UISegmentedControl *scopeBar = [[UISegmentedControl alloc] initWithItems:buttonTitles];
-    scopeBar.selectedSegmentIndex = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
-    [scopeBar addTarget:self action:@selector(chamberScopeSelectedIndexDidChange:) forControlEvents:UIControlEventValueChanged];
-    scopeBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
+    self.scopeBar = [[UISegmentedControl alloc] initWithItems:buttonTitles];
+    self.scopeBar.selectedSegmentIndex = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
+    [self.scopeBar addTarget:self action:@selector(chamberScopeSelectedIndexDidChange:) forControlEvents:UIControlEventValueChanged];
+    self.scopeBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
 
     CGFloat barInset = 0.0f;
     if ([[UIDevice currentDevice] systemMajorVersion] < 7) {
-        scopeBar.segmentedControlStyle = 7; // magic number (it's cheating)
+        self.scopeBar.segmentedControlStyle = 7; // magic number (it's cheating)
     } else {
-        scopeBar.tintColor = [SLFAppearance cellSecondaryTextColor];
+        self.scopeBar.tintColor = [SLFAppearance cellSecondaryTextColor];
         barInset += 12.0f;
     }
-    scopeBar.opaque = YES;
+    self.scopeBar.opaque = YES;
     CGFloat barOriginY = self.titleBarView.opticalHeight + barInset/2;
-    CGFloat barHeight = scopeBar.height;
+    CGFloat barHeight = self.scopeBar.height;
     CGFloat barWidth = self.tableView.bounds.size.width - (2*barInset);
-    scopeBar.origin = CGPointMake(barInset,barOriginY);
-    scopeBar.size = CGSizeMake(barWidth, barHeight);
+    self.scopeBar.origin = CGPointMake(barInset,barOriginY);
+    self.scopeBar.size = CGSizeMake(barWidth, barHeight);
     CGRect tableRect = self.tableView.frame;
-    tableRect.size.height -= (scopeBar.height);
-    self.tableView.frame = CGRectOffset(tableRect, 0, scopeBar.height + barInset);
-    [self.view addSubview:scopeBar];
-    [scopeBar release];
+    tableRect.size.height -= (self.scopeBar.height);
+    self.tableView.frame = CGRectOffset(tableRect, 0, self.scopeBar.height + barInset);
+    [self.view addSubview:self.scopeBar];
 }
 
-- (void)chamberScopeSelectedIndexDidChange:(UISegmentedControl *)scopeBar {
-    if (!scopeBar || ![scopeBar isKindOfClass:[UISegmentedControl class]])
+- (void)chamberScopeSelectedIndexDidChange:(UISegmentedControl *)pScopeBar {
+    if (!pScopeBar || ![pScopeBar isKindOfClass:[UISegmentedControl class]])
         return;
-    NSInteger selectedScope = scopeBar.selectedSegmentIndex;
+    NSInteger selectedScope = pScopeBar.selectedSegmentIndex;
     SLFSaveSelectedScopeIndexForKey(selectedScope, NSStringFromClass([self class]));
     [self reconfigureForState:self.state];
 }

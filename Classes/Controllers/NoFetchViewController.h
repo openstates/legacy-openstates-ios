@@ -11,9 +11,10 @@
 //
 
 #import "SLFTableViewController.h"
+#import "SLFImprovedRKTableController.h"
 
 @interface NoFetchViewController : SLFTableViewController
-@property (nonatomic,retain) RKTableController *tableController;
+@property (nonatomic,retain) SLFImprovedRKTableController *tableController;
 @property (nonatomic,retain) SLFState *state;
 @property (nonatomic,copy) NSString *resourcePath;
 @property (nonatomic,assign) Class dataClass;

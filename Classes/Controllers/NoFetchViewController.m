@@ -48,7 +48,7 @@
 }
 
 - (void)configureTableController {
-    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    self.tableController = [SLFImprovedRKTableController tableControllerForTableViewController:(UITableViewController*)self];
     _tableController.delegate = self;
     _tableController.objectManager = [RKObjectManager sharedManager];
     _tableController.autoRefreshFromNetwork = YES;

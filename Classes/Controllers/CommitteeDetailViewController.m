@@ -19,12 +19,15 @@
 #import "SVWebViewController.h"
 #import "LegislatorCell.h"
 #import "GenericDetailHeader.h"
+#import "SLFImprovedRKTableController.h"
 
 #define SectionHeaderCommitteeInfo NSLocalizedString(@"Committee Details", @"")
 #define SectionHeaderMembers NSLocalizedString(@"Members", @"")
 
 @interface CommitteeDetailViewController()
-@property (nonatomic, retain) RKTableController *tableController;
+
+@property (nonatomic, strong) SLFImprovedRKTableController *tableController;
+
 - (void)configureTableController;
 - (void)configureTableItems;
 - (void)configureResourceItems;
@@ -32,6 +35,7 @@
 - (void)configureTableHeader;
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
 - (RKTableViewCellMapping *)committeeMemberCellMap;
+
 @end
 
 @implementation CommitteeDetailViewController
@@ -85,7 +89,7 @@
 }
 
 - (void)configureTableController {
-    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    self.tableController = [SLFImprovedRKTableController tableControllerForTableViewController:(UITableViewController*)self];
     _tableController.delegate = self;
     _tableController.objectManager = [RKObjectManager sharedManager];
     _tableController.pullToRefreshEnabled = NO;

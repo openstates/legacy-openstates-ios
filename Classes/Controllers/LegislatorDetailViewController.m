@@ -25,9 +25,12 @@
 #import "ContributionsViewController.h"
 #import "LegislatorDetailHeader.h"
 #import "SLFEmailComposer.h"
+#import "SLFImprovedRKTableController.h"
 
 @interface LegislatorDetailViewController()
-@property (nonatomic, retain) RKTableController *tableController;
+
+@property (nonatomic, strong) SLFImprovedRKTableController *tableController;
+
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID;
 - (RKTableViewCellMapping *)committeeRoleCellMap;
 - (void)configureTableItems;
@@ -37,6 +40,7 @@
 - (void)configureCommitteeItems;
 - (void)configureBillItems;
 - (void)configureTableHeader;
+
 @end
 
 @implementation LegislatorDetailViewController
@@ -66,7 +70,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    self.tableController = [SLFImprovedRKTableController tableControllerForTableViewController:(UITableViewController*)self];
     _tableController.delegate = self;
     _tableController.variableHeightRows = YES;
     _tableController.objectManager = [RKObjectManager sharedManager];

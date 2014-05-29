@@ -61,7 +61,7 @@
 }
 
 - (void)configureTableController {
-    self.tableController = [RKFetchedResultsTableController tableControllerForTableViewController:(UITableViewController*)self];
+    self.tableController = [SLFImprovedRKFetchedResultsTableController tableControllerForTableViewController:(UITableViewController*)self];
     self.tableController.delegate = self;
     self.tableController.objectManager = [RKObjectManager sharedManager];
     self.tableController.resourcePath = self.resourcePath;
@@ -69,6 +69,10 @@
     self.tableController.autoRefreshRate = 360;
     self.tableController.pullToRefreshEnabled = YES;
         //self.tableController.imageForError = [UIImage imageNamed:@"error"];
+    if (!self.omitSearchBar && self.searchBar) {
+        self.tableController.overlayFrame = self.searchBar.frame;
+    }
+
     CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
     MTInfoPanel *offlinePanel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeError title:NSLocalizedString(@"Offline", @"") subtitle:NSLocalizedString(@"The server is unavailable.",@"") image:nil];
     self.tableController.imageForOffline = [UIImage imageFromView:offlinePanel];    

@@ -12,10 +12,14 @@
 
 #import "SLFTableViewController.h"
 #import "SLFState.h"
+#import "SLFImprovedRKTableController.h"
 
 @interface BillsSubjectsViewController : SLFTableViewController
-@property (nonatomic, retain) RKTableController *tableController;
-@property (nonatomic,retain) SLFState *state;
+
+@property (nonatomic, strong) SLFImprovedRKTableController *tableController;
+@property (nonatomic, strong) SLFState *state;
+
 - (id)initWithState:(SLFState *)newState;
 - (void)reconfigureForState:(SLFState *)newState;
+
 @end

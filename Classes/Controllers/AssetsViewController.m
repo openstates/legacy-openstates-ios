@@ -15,12 +15,16 @@
 #import "NSString+SLFExtensions.h"
 #import "SLFReachable.h"
 #import "SVWebViewController.h"
+#import "SLFImprovedRKTableController.h"
 
 @interface AssetsViewController()
-@property (nonatomic, retain) RKTableController *tableController;
-@property (nonatomic, retain) id assetResource;
+
+@property (nonatomic, strong) SLFImprovedRKTableController *tableController;
+@property (nonatomic, strong) id assetResource;
+
 - (RKTableViewCellMapping *)assetCellMap;
 - (void)configureTableItems;
+
 @end
 
 @implementation AssetsViewController
@@ -70,7 +74,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    self.tableController = [SLFImprovedRKTableController tableControllerForTableViewController:(UITableViewController*)self];
     _tableController.delegate = self;
     _tableController.variableHeightRows = NO;
     _tableController.objectManager = [RKObjectManager sharedManager];

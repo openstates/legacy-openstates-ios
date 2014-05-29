@@ -27,8 +27,9 @@
 #import "AppendingFlowCell.h"
 
 @interface BillDetailViewController()
-@property (nonatomic,retain) RKTableController *tableController;
-@property (nonatomic,retain) IBOutlet UIButton *watchButton; 
+
+@property (nonatomic,retain) IBOutlet UIButton *watchButton;
+
 - (id)initWithResourcePath:(NSString *)resourcePath;
 - (RKTableViewCellMapping *)actionCellMap;
 - (RKTableViewCellMapping *)sponsorCellMap;
@@ -47,6 +48,7 @@
 - (void)configureSponsors;
 - (void)configureActions;
 - (void)addTableItems:(NSMutableArray *)tableItems fromWebAssets:(NSSet *)assets withType:(NSString *)type;
+
 @end
 
 @implementation BillDetailViewController

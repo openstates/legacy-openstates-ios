@@ -11,12 +11,17 @@
 //
 
 #import "SLFTableViewController.h"
+#import "SLFImprovedRKTableController.h"
 
 @class SLFBill;
 @class SLFState;
 
 @interface BillDetailViewController : SLFTableViewController <RKObjectLoaderDelegate>
+
 @property (nonatomic, retain) SLFBill *bill;
+@property (nonatomic,retain) SLFImprovedRKTableController *tableController;
+
 - (id)initWithState:(SLFState *)aState session:(NSString *)aSession billID:(NSString *)billID;
 - (id)initWithBill:(SLFBill *)aBill;
+
 @end

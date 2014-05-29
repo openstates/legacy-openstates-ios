@@ -81,7 +81,7 @@
 }
 
 - (void)configureTableController {
-    self.tableController = [RKTableController tableControllerForTableViewController:(UITableViewController*)self];
+    self.tableController = [SLFImprovedRKTableController tableControllerForTableViewController:(UITableViewController*)self];
     self.tableController.delegate = self;
     self.tableController.objectManager = [RKObjectManager sharedManager];
     self.tableController.pullToRefreshEnabled = NO;
