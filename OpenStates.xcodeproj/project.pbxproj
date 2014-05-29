@@ -1626,6 +1626,11 @@
 			attributes = {
 				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0510;
+				TargetAttributes = {
+					1D6058900D05DD3D006BFB54 = {
+						DevelopmentTeam = 3A9R2W6JVG;
+					};
+				};
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "OpenStates" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -2062,6 +2067,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUILD_STYLE = Debug;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2101,6 +2107,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUILD_STYLE = Release;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CURRENT_PROJECT_VERSION = 3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2125,7 +2132,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenStates;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "FAA08197-D4A9-4241-A84F-3C4BB5908A51";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2187,13 +2194,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2FEB9C6318B6AA65000A476A /* Beta.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					armv6,
-					armv7,
-					armv7s,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				BUILD_STYLE = Release;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Sunlight Foundation (3A9R2W6JVG)";
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
@@ -2210,9 +2213,9 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "4A78866D-D274-438F-967B-5396C2887038";
+				PROVISIONING_PROFILE = "7EBE6766-F3B6-4468-BF44-2FF6B55CDA12";
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv6 armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = AdHoc;
 		};
@@ -2224,6 +2227,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUILD_STYLE = Release;
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CURRENT_PROJECT_VERSION = 3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2248,7 +2252,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenStates;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7EBE6766-F3B6-4468-BF44-2FF6B55CDA12";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2282,13 +2286,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2FEB9C6118B6AA51000A476A /* Debug.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					armv6,
-					armv7,
-					armv7s,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				BUILD_STYLE = Debug;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
@@ -2309,7 +2309,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv6 armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -2317,13 +2317,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2FEB9C6218B6AA5B000A476A /* Release.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					armv6,
-					armv7,
-					armv7s,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				BUILD_STYLE = Release;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Sunlight Foundation (3A9R2W6JVG)";
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
@@ -2342,7 +2338,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "FAA08197-D4A9-4241-A84F-3C4BB5908A51";
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv6 armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};
