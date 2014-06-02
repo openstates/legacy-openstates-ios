@@ -19,6 +19,7 @@
 		2F46D0091934E97C0023F3C8 /* OpenStatesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F46D0081934E97C0023F3C8 /* OpenStatesTableViewCell.m */; };
 		2F46D00C1934EF5D0023F3C8 /* libReveal.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 2F46D00A1934EEF50023F3C8 /* libReveal.dylib */; };
 		2F5FAF2218D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FAF2118D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.m */; };
+		2F9B72E0193CE78100E5FC1A /* OpenStatesBillTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B72DF193CE78100E5FC1A /* OpenStatesBillTableViewCell.m */; };
 		2F9DAC8019377E91007EC92D /* SLFImprovedRKTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9DAC7F19377E91007EC92D /* SLFImprovedRKTableController.m */; };
 		2FA2630918BBD96700D8041F /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA2630818BBD96700D8041F /* libGoogleAnalyticsServices.a */; };
 		2FD00F2118C51FA500A5399A /* UIDevice+VersionCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD00F2018C51FA500A5399A /* UIDevice+VersionCheck.m */; };
@@ -368,6 +369,8 @@
 		2F46D00A1934EEF50023F3C8 /* libReveal.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libReveal.dylib; path = "../../../../../Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib"; sourceTree = "<group>"; };
 		2F5FAF2018D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVWebViewController+SFHackneyedWebViewController.h"; sourceTree = "<group>"; };
 		2F5FAF2118D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SVWebViewController+SFHackneyedWebViewController.m"; sourceTree = "<group>"; };
+		2F9B72DE193CE78100E5FC1A /* OpenStatesBillTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenStatesBillTableViewCell.h; sourceTree = "<group>"; };
+		2F9B72DF193CE78100E5FC1A /* OpenStatesBillTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenStatesBillTableViewCell.m; sourceTree = "<group>"; };
 		2F9DAC7E19377E91007EC92D /* SLFImprovedRKTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFImprovedRKTableController.h; sourceTree = "<group>"; };
 		2F9DAC7F19377E91007EC92D /* SLFImprovedRKTableController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFImprovedRKTableController.m; sourceTree = "<group>"; };
 		2F9DAC8119378A3C007EC92D /* SLFImprovedRKFetchedResultsTableController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLFImprovedRKFetchedResultsTableController.h; sourceTree = "<group>"; };
@@ -1300,6 +1303,8 @@
 				37485D3E144BC43600D99BBD /* MapAnnotations */,
 				2F46D0071934E97C0023F3C8 /* OpenStatesTableViewCell.h */,
 				2F46D0081934E97C0023F3C8 /* OpenStatesTableViewCell.m */,
+				2F9B72DE193CE78100E5FC1A /* OpenStatesBillTableViewCell.h */,
+				2F9B72DF193CE78100E5FC1A /* OpenStatesBillTableViewCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1978,6 +1983,7 @@
 				3756942C14ABC32F0014BA7F /* SDURLCache.m in Sources */,
 				3756944714ABD41E0014BA7F /* AFHTTPClient.m in Sources */,
 				3756944814ABD41E0014BA7F /* AFHTTPRequestOperation.m in Sources */,
+				2F9B72E0193CE78100E5FC1A /* OpenStatesBillTableViewCell.m in Sources */,
 				3756944914ABD41E0014BA7F /* AFImageCache.m in Sources */,
 				3756944A14ABD41E0014BA7F /* AFImageRequestOperation.m in Sources */,
 				3756944B14ABD41E0014BA7F /* AFJSONRequestOperation.m in Sources */,

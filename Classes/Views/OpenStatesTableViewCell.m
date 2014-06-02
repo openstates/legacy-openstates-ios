@@ -12,10 +12,16 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
+    UITableViewCellStyle osCellStyle = style;
     if (style == UITableViewCellStyleDefault) {
-        style = UITableViewCellStyleValue1;
+        if (SLFIsIpad()) {
+            osCellStyle = UITableViewCellStyleValue1;
+        }
+        else {
+            osCellStyle = UITableViewCellStyleSubtitle;
+        }
     }
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    self = [super initWithStyle:osCellStyle reuseIdentifier:reuseIdentifier];
 
     return self;
 }
