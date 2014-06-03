@@ -195,7 +195,9 @@
 - (RKManagedObjectStore *)attemptLoadObjectStore {
     RKManagedObjectStore *objectStore = nil;
     @try {
-        NSManagedObjectModel *mom = [NSManagedObjectModel mergedModelFromBundles:[NSBundle allBundles]];
+        NSString *path = [[NSBundle mainBundle] pathForResource:APP_MOMD_NAME ofType:@"momd"];
+        NSURL *momURL = [NSURL fileURLWithPath:path];
+        NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:momURL];
         objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:APP_DB_NAME usingSeedDatabaseName:nil managedObjectModel:mom delegate:self];
     }
     @catch (NSException *exception) {

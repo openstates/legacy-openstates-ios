@@ -17,6 +17,7 @@
     [mapping mapKeyPath:@"created_at" toAttribute:@"dateCreated"];
     [mapping mapKeyPath:@"when" toAttribute:@"dateStart"];
     [mapping mapKeyPath:@"end" toAttribute:@"dateEnd"];
+    [mapping mapKeyPath:@"timezone" toAttribute:@"timezone"];
     [mapping mapKeyPath:@"description" toAttribute:@"eventDescription"];
     [mapping mapKeyPath:@"link" toAttribute:@"link"];
     [mapping mapKeyPath:@"status" toAttribute:@"status"];

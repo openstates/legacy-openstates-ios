@@ -27,4 +27,5 @@
 
 #define SEED_DB_NAME @"SLFDataSeed.sqlite"
 #define APP_DB_NAME @"SLFData.sqlite"
+#define APP_MOMD_NAME @"SLFData"
 

@@ -54,6 +54,7 @@
 //- (BOOL)validateDateStart:(id*)value_ error:(NSError**)error_;
 
 
+@property (nonatomic, copy) NSString *timezone;
 
 
 @property (nonatomic, retain) NSDate *dateUpdated;

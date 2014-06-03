@@ -48,6 +48,10 @@
 
 
 
+@dynamic timezone;
+
+
+
 
 
 @dynamic dateStart;

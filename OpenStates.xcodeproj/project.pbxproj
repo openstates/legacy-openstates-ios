@@ -14,6 +14,7 @@
 		2538E8671234250100ACB5D7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2538E8661234250100ACB5D7 /* SystemConfiguration.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		28D7ACF80DDB3853001CB0EB /* LegislatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* LegislatorsViewController.m */; };
+		2F0A8789193E53B900AE115A /* SLFData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2F0A8786193E53B900AE115A /* SLFData.xcdatamodeld */; };
 		2F19242319378FED00E2A74E /* SLFImprovedRKFetchedResultsTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9DAC8219378A3C007EC92D /* SLFImprovedRKFetchedResultsTableController.m */; };
 		2F3FA8841667C7F400A63CFF /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 373ECB6514888C9F000BD16D /* libTestFlight.a */; };
 		2F46D0091934E97C0023F3C8 /* OpenStatesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F46D0081934E97C0023F3C8 /* OpenStatesTableViewCell.m */; };
@@ -213,7 +214,6 @@
 		37EDEAA313D3D81900F8FCA1 /* LegislatorDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EDEAA113D3D81900F8FCA1 /* LegislatorDetailViewController.m */; };
 		37EDEAAC13D3FAF800F8FCA1 /* CommitteeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EDEAAB13D3FAF700F8FCA1 /* CommitteeDetailViewController.m */; };
 		37F25BA4142BAC0E009D8FCF /* SLFAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F25BA3142BAC0E009D8FCF /* SLFAppearance.m */; };
-		37F2990B140FCD2300B96572 /* SLFData.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 37F2990A140FCD2200B96572 /* SLFData.xcdatamodel */; };
 		37F29917140FCD5200B96572 /* SLFMappingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F29912140FCD5200B96572 /* SLFMappingsManager.m */; };
 		37F29918140FCD5200B96572 /* SLFRestKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F29914140FCD5200B96572 /* SLFRestKitManager.m */; };
 		37F2991B140FCD9000B96572 /* SLFObjectCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2991A140FCD9000B96572 /* SLFObjectCache.m */; };
@@ -364,6 +364,8 @@
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28D7ACF60DDB3853001CB0EB /* LegislatorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegislatorsViewController.h; sourceTree = "<group>"; };
 		28D7ACF70DDB3853001CB0EB /* LegislatorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegislatorsViewController.m; sourceTree = "<group>"; };
+		2F0A8787193E53B900AE115A /* SLFData 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SLFData 2.xcdatamodel"; sourceTree = "<group>"; };
+		2F0A8788193E53B900AE115A /* SLFData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SLFData.xcdatamodel; sourceTree = "<group>"; };
 		2F46D0071934E97C0023F3C8 /* OpenStatesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenStatesTableViewCell.h; sourceTree = "<group>"; };
 		2F46D0081934E97C0023F3C8 /* OpenStatesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenStatesTableViewCell.m; sourceTree = "<group>"; };
 		2F46D00A1934EEF50023F3C8 /* libReveal.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libReveal.dylib; path = "../../../../../Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib"; sourceTree = "<group>"; };
@@ -717,7 +719,6 @@
 		37EDEAAB13D3FAF700F8FCA1 /* CommitteeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CommitteeDetailViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37F25BA2142BAC0E009D8FCF /* SLFAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFAppearance.h; sourceTree = "<group>"; };
 		37F25BA3142BAC0E009D8FCF /* SLFAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFAppearance.m; sourceTree = "<group>"; };
-		37F2990A140FCD2200B96572 /* SLFData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SLFData.xcdatamodel; sourceTree = "<group>"; };
 		37F29911140FCD5200B96572 /* SLFMappingsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFMappingsManager.h; sourceTree = "<group>"; };
 		37F29912140FCD5200B96572 /* SLFMappingsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFMappingsManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37F29913140FCD5200B96572 /* SLFRestKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFRestKitManager.h; sourceTree = "<group>"; };
@@ -1553,7 +1554,7 @@
 			isa = PBXGroup;
 			children = (
 				373ECB6114887724000BD16D /* OpenStates.entitlements */,
-				37F2990A140FCD2200B96572 /* SLFData.xcdatamodel */,
+				2F0A8786193E53B900AE115A /* SLFData.xcdatamodeld */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -1871,7 +1872,6 @@
 				37D7673813E67D5200A77F89 /* _SLFLegislator.m in Sources */,
 				37D7673913E67D5200A77F89 /* _SLFState.m in Sources */,
 				37775500140F3F1200ABE16F /* DistrictsViewController.m in Sources */,
-				37F2990B140FCD2300B96572 /* SLFData.xcdatamodel in Sources */,
 				37F29917140FCD5200B96572 /* SLFMappingsManager.m in Sources */,
 				37F29918140FCD5200B96572 /* SLFRestKitManager.m in Sources */,
 				37F2991B140FCD9000B96572 /* SLFObjectCache.m in Sources */,
@@ -1955,6 +1955,7 @@
 				37BAE310147865DA00CD5704 /* BillActionParser.m in Sources */,
 				37BAE3131479606600CD5704 /* NSString+SLFExtensions.m in Sources */,
 				3771B97B147A2BE000E9CE39 /* BillVotesViewController.m in Sources */,
+				2F0A8789193E53B900AE115A /* SLFData.xcdatamodeld in Sources */,
 				3771B9A2147ABCA200E9CE39 /* BillsSearchViewController.m in Sources */,
 				37037548147AF51000B59AA2 /* SLFPersistenceManager.m in Sources */,
 				37738A10147B9616002AC526 /* AbstractActionSheetPicker.m in Sources */,
@@ -2382,6 +2383,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		2F0A8786193E53B900AE115A /* SLFData.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				2F0A8787193E53B900AE115A /* SLFData 2.xcdatamodel */,
+				2F0A8788193E53B900AE115A /* SLFData.xcdatamodel */,
+			);
+			currentVersion = 2F0A8787193E53B900AE115A /* SLFData 2.xcdatamodel */;
+			path = SLFData.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
 }
