@@ -54,7 +54,7 @@
     StyledCellMapping *cellMapping = [StyledCellMapping subtitleMapping];
     cellMapping.useAlternatingRowColors = YES;
     [cellMapping mapKeyPath:@"title" toAttribute:@"textLabel.text"];
-    [cellMapping mapKeyPath:@"dateStartForDisplay" toAttribute:@"detailTextLabel.text"];
+    [cellMapping mapKeyPath:@"timeStartForDisplay" toAttribute:@"detailTextLabel.text"];
     __block __typeof__(self) bself = self;
     cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         NSString *path = [SLFActionPathNavigator navigationPathForController:[EventDetailViewController class] withResource:object];

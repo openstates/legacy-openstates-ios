@@ -7,6 +7,7 @@
 @property (nonatomic,readonly) SLFState *state;
 @property (nonatomic,readonly) NSString *dayForDisplay;
 @property (nonatomic,readonly) NSString *dateStartForDisplay;
+@property (nonatomic,readonly) NSString *timeStartForDisplay;
 @property (nonatomic,readonly) NSTimeZone *eventTimeZone;
 @property (nonatomic,readonly) NSString *title;
 @property (nonatomic,readonly) EKEvent *ekEvent;

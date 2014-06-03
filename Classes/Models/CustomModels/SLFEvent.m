@@ -59,6 +59,10 @@
     return [self.dateStart stringWithLocalizationTemplate:@"MMMdhma z" timezone:[self eventTimeZone]];
 }
 
+- (NSString *)timeStartForDisplay {
+    return [self.dateStart stringWithLocalizationTemplate:@"hma z" timezone:[self eventTimeZone]];
+}
+
 - (NSString *)dayForDisplay {
     return [self.dateStart stringWithLocalizationTemplate:@"MMMMdyyyy"];
 }
