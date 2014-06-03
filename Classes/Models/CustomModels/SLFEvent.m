@@ -48,8 +48,15 @@
     return [NSArray arrayWithObjects:dateDesc, nameDesc, locationDesc, nil];
 }
 
+- (NSTimeZone *)eventTimeZone {
+    if (self.timezone) {
+        return [NSTimeZone timeZoneWithName:self.timezone];
+    }
+    return [NSTimeZone defaultTimeZone];
+}
+
 - (NSString *)dateStartForDisplay {
-    return [self.dateStart stringWithLocalizationTemplate:@"MMMdhma"];
+    return [self.dateStart stringWithLocalizationTemplate:@"MMMdhma z" timezone:[self eventTimeZone]];
 }
 
 - (NSString *)dayForDisplay {
