@@ -27,3 +27,14 @@
 }
 
 @end
+
+@implementation OpenStatesSubtitleTableViewCell
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier];
+
+    return self;
+}
+
+@end

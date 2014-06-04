@@ -11,3 +11,7 @@
 @interface OpenStatesTableViewCell : UITableViewCell
 
 @end
+
+@interface OpenStatesSubtitleTableViewCell : OpenStatesTableViewCell
+
+@end

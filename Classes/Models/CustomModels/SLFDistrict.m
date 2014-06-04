@@ -88,7 +88,10 @@
         chamberName = [self.chamber capitalizedString];
     NSInteger index = 0;
     for (SLFLegislator *leg in self.legislators) {
-        NSString *legName = [NSString stringWithFormat:@"%@ %@ (%@)", chamberName, leg.fullName, leg.partyObj.initial];        
+        NSMutableString *legName = [NSMutableString stringWithFormat:@"%@ - %@", chamberName, leg.fullName];
+        if (leg.partyObj && ![leg.partyObj.initial isEqualToString:@""]) {
+            [legName appendFormat:@" (%@)", leg.partyObj.initial];
+        }
         if (index > 0)
             [memberNames appendFormat:@", %@", legName];
         else

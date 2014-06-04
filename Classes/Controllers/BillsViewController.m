@@ -14,7 +14,7 @@
 #import "BillDetailViewController.h"
 #import "SLFDataModels.h"
 #import "BillSearchParameters.h"
-#import "OpenStatesBillTableViewCell.h"
+#import "OpenStatesTableViewCell.h"
 
 @interface BillsViewController()
 @end
@@ -33,8 +33,8 @@
     [super configureTableController];
     __block __typeof__(self) bself = self;
     StyledCellMapping *cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleSubtitle alternatingColors:YES largeHeight:YES selectable:YES];
-    cellMapping.cellClass = [OpenStatesBillTableViewCell class];
-    cellMapping.reuseIdentifier = @"OpenStatesBillTableViewCell";
+    cellMapping.cellClass = [OpenStatesSubtitleTableViewCell class];
+    cellMapping.reuseIdentifier = @"OpenStatesSubtitleTableViewCell";
 
     [cellMapping mapKeyPath:@"name" toAttribute:@"textLabel.text"];
     [cellMapping mapKeyPath:@"title" toAttribute:@"detailTextLabel.text"];

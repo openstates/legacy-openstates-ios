@@ -38,6 +38,8 @@
     __block __typeof__(self) bself = self;
     StyledCellMapping *cellMapping = [StyledCellMapping subtitleMapping];
     cellMapping.useAlternatingRowColors = YES;
+    cellMapping.style = UITableViewCellStyleSubtitle;
+    cellMapping.reuseIdentifier = @"VirtualDistrictTableViewCell";
     [cellMapping mapKeyPath:@"title" toAttribute:@"textLabel.text"];
     [cellMapping mapKeyPath:@"subtitle" toAttribute:@"detailTextLabel.text"];
     cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {

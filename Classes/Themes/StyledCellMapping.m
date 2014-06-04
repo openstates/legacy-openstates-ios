@@ -28,11 +28,16 @@
     return [self mappingForClass:[OpenStatesTableViewCell class]];
 }
 
++ (id)subtitleCellMapping {
+    return [self mappingForClass:[OpenStatesSubtitleTableViewCell class]];
+}
+
+
 - (id)init {
     self = [super init];
     if (self) {
         self.cellClass = [OpenStatesTableViewCell class];
-        self.reuseIdentifier = @"OpenStatesTableViewCell";
+        self.reuseIdentifier = NSStringFromClass([OpenStatesTableViewCell class]);
         self.style = UITableViewCellStyleValue2;
         self.isSelectableCell = YES;
         self.useLargeRowHeight = NO;
@@ -111,11 +116,17 @@
 }
 
 + (id)staticSubtitleMapping {
-    return [self cellMappingWithStyle:[self defaultCellStyle] alternatingColors:NO largeHeight:NO selectable:NO];
+    StyledCellMapping *cellMap = [self cellMappingWithStyle:[self defaultCellStyle] alternatingColors:NO largeHeight:NO selectable:NO];
+    cellMap.cellClass = [OpenStatesSubtitleTableViewCell class];
+    cellMap.reuseIdentifier = NSStringFromClass([OpenStatesSubtitleTableViewCell class]);
+    return cellMap;
 }
 
 + (id)subtitleMapping {
-    return [self cellMappingWithStyle:[self defaultCellStyle] alternatingColors:NO largeHeight:NO selectable:YES];
+    StyledCellMapping *cellMap = [self cellMappingWithStyle:[self defaultCellStyle] alternatingColors:NO largeHeight:NO selectable:YES];
+    cellMap.cellClass = [OpenStatesSubtitleTableViewCell class];
+    cellMap.reuseIdentifier = NSStringFromClass([OpenStatesSubtitleTableViewCell class]);
+    return cellMap;
 }
 
 + (UITableViewCellStyle)defaultCellStyle
