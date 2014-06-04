@@ -25,6 +25,7 @@
 #import "SLFDrawingExtensions.h"
 #import "SLFPersistenceManager.h"
 #import "AppendingFlowCell.h"
+#import "BillActionTableViewCell.h"
 
 @interface BillDetailViewController()
 
@@ -307,7 +308,7 @@
 }
 
 - (RKTableViewCellMapping *)actionCellMap {
-    StyledCellMapping *cellMap = [StyledCellMapping staticSubtitleMapping];
+    BillActionCellMapping *cellMap = [BillActionCellMapping cellMapping];
     [cellMap mapKeyPath:@"title" toAttribute:@"textLabel.text"];
     [cellMap mapKeyPath:@"subtitle" toAttribute:@"detailTextLabel.text"];
     return cellMap;
