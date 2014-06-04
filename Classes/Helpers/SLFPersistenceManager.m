@@ -273,7 +273,9 @@ NSString* FindOrCreateSelectedSessionForState(SLFState *state) {
     if (!state || !IsEmpty(selected))
         return selected;
     selected = state.latestSession;
-    SLFSaveSelectedSessionForState(selected, state);
+    if (!IsEmpty(selected)) {
+        SLFSaveSelectedSessionForState(selected, state);
+    }
     return selected;
 }
 
