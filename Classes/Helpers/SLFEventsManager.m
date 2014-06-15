@@ -78,7 +78,7 @@
     }
     if (!event) {
         event = [EKEvent eventWithEventStore:_eventStore];
-        event.calendar = _eventCalendar;
+        event.calendar = [self eventCalendarOrDefault];
     }
     return event;
 }
@@ -165,6 +165,13 @@
     [viewControllerToPush release];
 }
 
+- (EKCalendar *)eventCalendarOrDefault
+{
+    if (!self.eventCalendar)
+        return [self.eventStore defaultCalendarForNewEvents];
+    return self.eventCalendar;
+}
+
 - (EKCalendarChooser *)newEventCalendarChooser:(id)sender {
     if (!SLFIsIOS5OrGreater())
         return nil;
@@ -172,16 +179,25 @@
     chooser.delegate = self;
     chooser.showsDoneButton = YES;
     chooser.showsCancelButton = YES;
-    chooser.selectedCalendars = [NSSet setWithObject:_eventCalendar];
+    EKCalendar *calendar = [self eventCalendarOrDefault];
+    if (calendar)
+    {
+        chooser.selectedCalendars = [NSSet setWithObject:calendar];
+    }
     return chooser;
 }
 
 - (void)calendarChooserSelectionDidChange:(EKCalendarChooser *)calendarChooser {
-    self.eventCalendar = [calendarChooser.selectedCalendars anyObject];
+    EKCalendar *calendar = [calendarChooser.selectedCalendars anyObject];
+    if (!calendar)
+        return;
+    self.eventCalendar = calendar;
 }
 
 - (void)calendarChooserDidFinish:(EKCalendarChooser *)calendarChooser {
-    self.eventCalendar = [calendarChooser.selectedCalendars anyObject];
+    EKCalendar *calendar = [calendarChooser.selectedCalendars anyObject];
+    if (calendar)
+        self.eventCalendar = calendar;
     [self.calendarChooserParent popToThisViewController];
     self.calendarChooserParent = nil;
 }
