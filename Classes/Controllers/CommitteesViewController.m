@@ -30,7 +30,7 @@
     __block __typeof__(self) bself = self;
     StyledCellMapping *cellMapping = [StyledCellMapping subtitleMapping];
     cellMapping.useAlternatingRowColors = YES;
-    [cellMapping mapKeyPath:@"committeeName" toAttribute:@"textLabel.text"];
+    [cellMapping mapKeyPath:@"fullName" toAttribute:@"textLabel.text"];
     [cellMapping mapKeyPath:@"chamberShortName" toAttribute:@"detailTextLabel.text"];
     cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         NSString *path = [SLFActionPathNavigator navigationPathForController:[CommitteeDetailViewController class] withResource:object];

@@ -21,8 +21,9 @@
 
 + (NSArray *)sortDescriptors {
     NSSortDescriptor *nameDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"committeeName" ascending:YES];
+    NSSortDescriptor *subComDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"subcommittee" ascending:YES];
     NSSortDescriptor *chamberDesc = [NSSortDescriptor sortDescriptorWithKey:@"chamber" ascending:YES];
-    return [NSArray arrayWithObjects:nameDesc, chamberDesc, nil];
+    return @[nameDesc, subComDesc, chamberDesc];
 }
 
 #pragma mark -
@@ -46,12 +47,23 @@
 #pragma mark -
 #pragma mark Display Convenience
 
+- (NSString *)fullName {
+    NSMutableString *fName = [NSMutableString string];
+    if ([self valueForKey:@"committeeName"]) {
+        [fName appendString:[self valueForKey:@"committeeName"]];
+    }
+    if ([self valueForKey:@"subcommittee"]) {
+        [fName appendFormat:@" - %@", [self valueForKey:@"subcommittee"]];
+    }
+    return [NSString stringWithString:fName];
+}
+
 - (SLFChamber *)chamberObj {
     return [SLFChamber chamberWithType:self.chamber forState:self.state];
 }
 
 - (NSString *)chamberShortName {
-    return self.chamberObj.shortName;
+    return self.chamberObj.shortName ?: [self.chamber capitalizedString];
 }
 
 - (NSString *) initial {
