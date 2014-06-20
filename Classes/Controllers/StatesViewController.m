@@ -73,7 +73,6 @@
         [cellMapping mapKeyPath:@"text" toAttribute:@"textLabel.text"];
         cellMapping.isSelectableCell = NO;
         cellMapping.useAlternatingRowColors = YES;
-        cellMapping.reuseIdentifier = @"DONT_REUSE_ME!";
         cellMapping.textColor = [SLFAppearance cellSecondaryTextColor];
         cellMapping.textFont = SLFItalicFont(14);
         cellMapping.style = UITableViewCellStyleDefault;

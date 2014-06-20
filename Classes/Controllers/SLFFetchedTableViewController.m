@@ -17,6 +17,7 @@
 #import "MTInfoPanel.h"
 #import "SLFDrawingExtensions.h"
 #import "TableSectionHeaderView.h"
+#import "OpenStatesTableViewCell.h"
 
 @interface SLFFetchedTableViewController()
 - (NSString *)chamberFilterForScopeIndex:(NSInteger )scopeIndex;
@@ -91,6 +92,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = NSLocalizedString(@"Loading...",@"");
+    [self.tableView registerClass:[OpenStatesTableViewCell class] forCellReuseIdentifier:NSStringFromClass([OpenStatesTableViewCell class])];
+    [self.tableView registerClass:[OpenStatesSubtitleTableViewCell class] forCellReuseIdentifier:NSStringFromClass([OpenStatesSubtitleTableViewCell class])];
     [self configureTableController];
     if (self.tableController.sectionNameKeyPath) {
         

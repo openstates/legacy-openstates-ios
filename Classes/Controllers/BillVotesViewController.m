@@ -67,6 +67,7 @@ enum SECTIONS {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.tableView registerClass:[LegislatorCell class] forCellReuseIdentifier:NSStringFromClass([LegislatorCell class])];
     self.tableController = [SLFImprovedRKTableController tableControllerForTableViewController:(UITableViewController*)self];
     _tableController.delegate = self;
     _tableController.variableHeightRows = YES;
@@ -172,8 +173,9 @@ enum SECTIONS {
     cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         NSString *legID = [object valueForKey:@"legID"];
         NSString *path = [SLFActionPathNavigator navigationPathForController:[LegislatorDetailViewController class] withResourceID:legID];
-        if (!IsEmpty(path))
+        if (!IsEmpty(path)) {
             [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
+        }
     };
     return cellMapping;
 }

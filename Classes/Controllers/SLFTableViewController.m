@@ -17,6 +17,7 @@
 #import "SLFReachable.h"
 #import "SLFDataModels.h"
 #import "SLFActionPathRegistry.h"
+#import "OpenStatesTableViewCell.h"
 
 @implementation SLFTableViewController
 @synthesize useGradientBackground;
@@ -54,6 +55,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.tableView registerClass:[OpenStatesTableViewCell class] forCellReuseIdentifier:NSStringFromClass([OpenStatesTableViewCell class])];
+    [self.tableView registerClass:[OpenStatesSubtitleTableViewCell class] forCellReuseIdentifier:NSStringFromClass([OpenStatesSubtitleTableViewCell class])];
     UIColor *background = [SLFAppearance tableBackgroundLightColor];
     self.tableView.backgroundColor = background;
     if (self.tableView.style == UITableViewStylePlain)
