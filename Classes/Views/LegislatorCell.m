@@ -60,9 +60,9 @@ static CGFloat LegImageWidth = 53.f;
 {
     [super prepareForReuse];
 
-    // While this seems reasonable, the image views get out of sync or prematurely wiped out.
-    // See the NOTE further down below in the event there are legislator image problems.
-    // self.legislator = nil;
+    self.imageView.image = nil;
+    self.legislator = nil;
+    [self.cellContentView setLegislator:nil];
 }
 
 - (CGSize)cellSize {
@@ -78,7 +78,7 @@ static CGFloat LegImageWidth = 53.f;
 }
 
 - (void)setGenericName:(NSString *)genericName {
-    _cellContentView.genericName = genericName;
+    _cellContentView.genericName = [genericName capitalizedString];
 }
 
 - (NSString *)genericName {
@@ -141,17 +141,14 @@ static CGFloat LegImageWidth = 53.f;
     self = [super init];
     if (self) {
         self.cellClass = [LegislatorCell class];
-        self.rowHeight = 73; 
+        self.reuseIdentifier = NSStringFromClass([LegislatorCell class]);
+        self.rowHeight = 73;
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         self.roundImageCorners = NO;
         self.useAlternatingRowColors = YES;
 		__block __typeof__(self) bself = self;
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             LegislatorCell *legCell = (LegislatorCell *)cell;
-            if (bself.roundImageCorners && indexPath.row == 0)
-                [cell.imageView roundTopLeftCorner];
-            else
-                cell.imageView.layer.mask = nil;
             BOOL useDarkBG = NO;
             if (bself.useAlternatingRowColors) {
                 useDarkBG = SLFAlternateCellForIndexPath(cell, indexPath);
@@ -166,21 +163,6 @@ static CGFloat LegImageWidth = 53.f;
     [self mapKeyPath:@"self" toAttribute:@"legislator"];
 }
 
-/*
- NOTE: If the legislator images are getting mixed up, uncomment this code.
-
-- (void)setReuseIdentifier:(NSString *)reuseIdentifier
-{
-    return;
-}
-
-- (NSString *)reuseIdentifier
-{
-    // turns off caching, sucky but we don't want to reuse facial photos
-    return nil;
-}
-*/
-
 @end
 
 @implementation FoundLegislatorCellMapping
@@ -188,7 +170,6 @@ static CGFloat LegImageWidth = 53.f;
 - (id)init {
     self = [super init];
     if (self) {
-        self.roundImageCorners = YES;
         self.useAlternatingRowColors = NO;
     }
     return self;
