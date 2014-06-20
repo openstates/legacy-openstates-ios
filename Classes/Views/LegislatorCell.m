@@ -22,11 +22,15 @@
 static CGFloat LegImageWidth = 53.f;
 
 @interface LegislatorCell()
+
+@property (nonatomic, strong) UIImage *placeholderImage;
+
 @end
 
 @implementation LegislatorCell
 @synthesize legislator = _legislator;
 @synthesize cellContentView = _cellContentView;
+@synthesize placeholderImage;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -39,11 +43,13 @@ static CGFloat LegImageWidth = 53.f;
         _cellContentView = [[LegislatorCellView alloc] initWithFrame:CGRectInset(tzvFrame, 0, 1.0)];
         _cellContentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _cellContentView.contentMode = UIViewContentModeRedraw;
+        self.placeholderImage = [UIImage imageNamed:@"placeholder"];
         self.imageView.width = LegImageWidth;
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
         self.imageView.autoresizingMask = UIViewAutoresizingNone;
         self.imageView.clipsToBounds = YES;
         self.imageView.backgroundColor = [UIColor whiteColor];
+        self.imageView.image = self.placeholderImage;
         [self.contentView addSubview:_cellContentView];
     }
     return self;
@@ -63,6 +69,7 @@ static CGFloat LegImageWidth = 53.f;
     self.imageView.image = nil;
     self.legislator = nil;
     [self.cellContentView setLegislator:nil];
+    self.imageView.image = self.placeholderImage;
 }
 
 - (CGSize)cellSize {
