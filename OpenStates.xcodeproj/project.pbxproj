@@ -18,7 +18,6 @@
 		2F19242319378FED00E2A74E /* SLFImprovedRKFetchedResultsTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9DAC8219378A3C007EC92D /* SLFImprovedRKFetchedResultsTableController.m */; };
 		2F3FA8841667C7F400A63CFF /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 373ECB6514888C9F000BD16D /* libTestFlight.a */; };
 		2F46D0091934E97C0023F3C8 /* OpenStatesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F46D0081934E97C0023F3C8 /* OpenStatesTableViewCell.m */; };
-		2F46D00C1934EF5D0023F3C8 /* libReveal.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 2F46D00A1934EEF50023F3C8 /* libReveal.dylib */; };
 		2F5FAF2218D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FAF2118D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.m */; };
 		2F688FD0193E7B0D0099B9D4 /* BillActionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F688FCF193E7B0D0099B9D4 /* BillActionTableViewCell.m */; };
 		2F9DAC8019377E91007EC92D /* SLFImprovedRKTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9DAC7F19377E91007EC92D /* SLFImprovedRKTableController.m */; };
@@ -1765,7 +1764,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F46D00C1934EF5D0023F3C8 /* libReveal.dylib in Resources */,
 				37336A68142B98A000F635EB /* MainWindow.xib in Resources */,
 				37336A6C142B991200F635EB /* MainWindow-iPad.xib in Resources */,
 				3711871414463E1C00A12B8B /* 193-location-arrow.png in Resources */,
