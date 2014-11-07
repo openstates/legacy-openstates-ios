@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import OCDKit
 
 class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
     var objects = NSMutableArray()
+    var openCivicData: OpenCivicData?
 
 
     override func awakeFromNib() {
@@ -33,6 +35,29 @@ class MasterViewController: UITableViewController {
             let controllers = split.viewControllers
             self.detailViewController = controllers[controllers.count-1].topViewController as? DetailViewController
         }
+
+        let config = AppConfiguration()
+
+        let apiKey = config.ocdApiKey!
+
+        openCivicData = OpenCivicData(apiKey: apiKey)
+        let api = openCivicData!
+
+        api.bills().responseJSON({ (_, _, JSON, error) -> Void in
+
+            if let jsonResult = JSON as? Dictionary<String, AnyObject> {
+                let results: NSArray? = jsonResult["results"] as? NSArray
+                let meta: NSDictionary? = jsonResult["meta"] as? NSDictionary
+                let errorMessage = jsonResult["error"] as? String
+
+                if let resultsList = results {
+                    println("Found \(resultsList.count) results")
+                    self.objects.removeAllObjects()
+                    self.objects.addObjectsFromArray(resultsList)
+                    self.tableView.reloadData()
+                }
+            }
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,11 +65,11 @@ class MasterViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    func insertNewObject(sender: AnyObject) {
-        objects.insertObject(NSDate.date(), atIndex: 0)
-        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-    }
+//    func insertNewObject(sender: AnyObject) {
+//        objects.insertObject(NSDate(), atIndex: 0)
+//        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+//        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+//    }
 
     // MARK: - Segues
 
@@ -73,8 +98,10 @@ class MasterViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
 
-        let object = objects[indexPath.row] as NSDate
-        cell.textLabel?.text = object.description
+        let object = objects[indexPath.row] as NSDictionary
+        if let title = object["identifier"] as? String {
+            cell.textLabel.text = title
+        }
         return cell
     }
 
