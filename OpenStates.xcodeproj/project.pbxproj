@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2F1FE2A41A013DA10074C990 /* OCDKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1FE2A11A013D6C0074C990 /* OCDKit.framework */; };
-		2F1FE2A61A013DB40074C990 /* OCDKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2F1FE2A11A013D6C0074C990 /* OCDKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2F2238C31A0D7EBC0003298B /* OCDKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1FE2A11A013D6C0074C990 /* OCDKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2F2238C41A0D7F030003298B /* OCDKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1FE2A11A013D6C0074C990 /* OCDKit.framework */; };
 		2F66E6DF19DCA1DE00B65322 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66E6DE19DCA1DE00B65322 /* AppDelegate.swift */; };
 		2F66E6E119DCA1DE00B65322 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66E6E019DCA1DE00B65322 /* MasterViewController.swift */; };
 		2F66E6E319DCA1DE00B65322 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66E6E219DCA1DE00B65322 /* DetailViewController.swift */; };
@@ -17,6 +17,7 @@
 		2F66E6EB19DCA1DE00B65322 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F66E6E919DCA1DE00B65322 /* LaunchScreen.xib */; };
 		2F66E6F719DCA1DF00B65322 /* OpenStatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66E6F619DCA1DF00B65322 /* OpenStatesTests.swift */; };
 		2F66E75819DCACB900B65322 /* ApiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F66E75719DCACB900B65322 /* ApiKeys.plist */; };
+		2FBFAAEC1A0D350F001A44AA /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBFAAEB1A0D350F001A44AA /* Configuration.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +35,13 @@
 			remoteGlobalIDString = 2FDF131A19E71BD100F2EF04;
 			remoteInfo = OCDKitTests;
 		};
+		2F2238C51A0D80CE0003298B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2F1FE29A1A013D6C0074C990 /* OCDKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 2FDF130E19E71BD100F2EF04;
+			remoteInfo = OCDKit;
+		};
 		2F66E6F119DCA1DF00B65322 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2F66E6D119DCA1DE00B65322 /* Project object */;
@@ -44,24 +52,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		2F1FE2A51A013DA80074C990 /* CopyFiles */ = {
+		2F1FE2A51A013DA80074C990 /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2F1FE2A61A013DB40074C990 /* OCDKit.framework in CopyFiles */,
+				2F2238C31A0D7EBC0003298B /* OCDKit.framework in Copy Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2F66E75519DCA42E00B65322 /* Copy Files (1 item) */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Copy Files (1 item)";
+			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -80,6 +79,7 @@
 		2F66E6F519DCA1DF00B65322 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F66E6F619DCA1DF00B65322 /* OpenStatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenStatesTests.swift; sourceTree = "<group>"; };
 		2F66E75719DCACB900B65322 /* ApiKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ApiKeys.plist; sourceTree = "<group>"; };
+		2FBFAAEB1A0D350F001A44AA /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Configuration.swift; path = Services/Configuration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,7 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F1FE2A41A013DA10074C990 /* OCDKit.framework in Frameworks */,
+				2F2238C41A0D7F030003298B /* OCDKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,6 +173,7 @@
 				2F66E70419DCA24000B65322 /* Views */,
 				2F66E70519DCA24500B65322 /* Controllers */,
 				2F66E75919DCB48700B65322 /* Services */,
+				2FBFAAEB1A0D350F001A44AA /* Configuration.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -235,13 +236,13 @@
 			buildPhases = (
 				2F66E6D519DCA1DE00B65322 /* Sources */,
 				2F66E6D619DCA1DE00B65322 /* Frameworks */,
+				2F1FE2A51A013DA80074C990 /* Copy Frameworks */,
 				2F66E6D719DCA1DE00B65322 /* Resources */,
-				2F66E75519DCA42E00B65322 /* Copy Files (1 item) */,
-				2F1FE2A51A013DA80074C990 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2F2238C61A0D80CE0003298B /* PBXTargetDependency */,
 			);
 			name = OpenStates;
 			productName = OpenStates;
@@ -354,6 +355,7 @@
 			files = (
 				2F66E6E319DCA1DE00B65322 /* DetailViewController.swift in Sources */,
 				2F66E6E119DCA1DE00B65322 /* MasterViewController.swift in Sources */,
+				2FBFAAEC1A0D350F001A44AA /* Configuration.swift in Sources */,
 				2F66E6DF19DCA1DE00B65322 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -369,6 +371,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2F2238C61A0D80CE0003298B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OCDKit;
+			targetProxy = 2F2238C51A0D80CE0003298B /* PBXContainerItemProxy */;
+		};
 		2F66E6F219DCA1DF00B65322 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2F66E6D819DCA1DE00B65322 /* OpenStates */;
