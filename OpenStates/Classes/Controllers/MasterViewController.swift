@@ -9,12 +9,12 @@
 import UIKit
 import OCDKit
 
-class MasterViewController: UITableViewController {
+class MasterViewController: UITableViewController, StateSelectionDelegate {
 
     var detailViewController: DetailViewController? = nil
     var objects = NSMutableArray()
     var openCivicData: OpenCivicData?
-
+    @IBOutlet weak var titleViewButton:UIButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -33,28 +33,6 @@ class MasterViewController: UITableViewController {
             self.detailViewController = controllers[controllers.count-1].topViewController as? DetailViewController
         }
 
-        let config = AppConfiguration()
-
-        let apiKey = config.ocdApiKey!
-
-        openCivicData = OpenCivicData(apiKey: apiKey)
-        let api = openCivicData!
-
-        api.bills().responseJSON({ (_, _, JSON, error) -> Void in
-
-            if let jsonResult = JSON as? Dictionary<String, AnyObject> {
-                let results: NSArray? = jsonResult["results"] as? NSArray
-                let meta: NSDictionary? = jsonResult["meta"] as? NSDictionary
-                let errorMessage = jsonResult["error"] as? String
-
-                if let resultsList = results {
-                    println("Found \(resultsList.count) results")
-                    self.objects.removeAllObjects()
-                    self.objects.addObjectsFromArray(resultsList)
-                    self.tableView.reloadData()
-                }
-            }
-        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -73,6 +51,10 @@ class MasterViewController: UITableViewController {
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
+        } else if segue.identifier == "showStatesTable" {
+            if let controller = segue.destinationViewController as? StatesTableViewController {
+                controller.selectionDelegate = self
+            }
         }
     }
 
@@ -90,26 +72,54 @@ class MasterViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
 
         let object = objects[indexPath.row] as NSDictionary
-        if let title = object["identifier"] as? String {
+        if let title = object["name"] as? String {
             cell.textLabel.text = title
+        }
+        if let subtitle = object["id"] as? String {
+            cell.detailTextLabel?.text = subtitle
         }
         return cell
     }
 
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
-        return true
+        return false
     }
 
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            objects.removeObjectAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-        }
-    }
+    //MARK: - StateSelectionDelegate
 
+    func stateSelection(controller: StatesTableViewController, stateSelected: String) {
+        println("Selected \(stateSelected)")
+        controller.dismissViewControllerAnimated(true, completion: nil)
+        self.titleViewButton.setTitle(stateSelected, forState: UIControlState.Normal)
+
+        let config = AppConfiguration()
+
+        let apiKey = config.ocdApiKey!
+
+        openCivicData = OpenCivicData(apiKey: apiKey)
+        let api = openCivicData!
+
+        let jurisdiction_id = "ocd-jurisdiction/country:us/state:\(stateSelected.lowercaseString)/government"
+
+        api.organizations(["jurisdiction_id": jurisdiction_id]).responseJSON({ (request, _, JSON, error) -> Void in
+
+            if let jsonResult = JSON as? Dictionary<String, AnyObject> {
+                let results: NSArray? = jsonResult["results"] as? NSArray
+                let meta: NSDictionary? = jsonResult["meta"] as? NSDictionary
+                let errorMessage = jsonResult["error"] as? String
+
+                if let resultsList = results {
+                    println("Found \(resultsList.count) results")
+                    self.objects.removeAllObjects()
+                    self.objects.addObjectsFromArray(resultsList)
+                    self.tableView.reloadData()
+                }
+            }
+        })
+
+
+    }
 
 }
 

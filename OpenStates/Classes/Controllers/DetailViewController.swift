@@ -24,10 +24,10 @@ class DetailViewController: UIViewController {
         // Update the user interface for the detail item.
         if let detail: NSDictionary = self.detailItem {
             if let label = self.detailDescriptionLabel {
-                if let titleText = detail["title"] as? String {
+                if let titleText = detail["name"] as? String {
                     label.text = titleText
                 } else {
-                    label.text = "No title for this Bill"
+                    label.text = "No name for this organization"
                 }
             }
         }

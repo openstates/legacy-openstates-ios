@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2F2238C31A0D7EBC0003298B /* OCDKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1FE2A11A013D6C0074C990 /* OCDKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2F2238C41A0D7F030003298B /* OCDKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1FE2A11A013D6C0074C990 /* OCDKit.framework */; };
 		2F66E6DF19DCA1DE00B65322 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66E6DE19DCA1DE00B65322 /* AppDelegate.swift */; };
 		2F66E6E119DCA1DE00B65322 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66E6E019DCA1DE00B65322 /* MasterViewController.swift */; };
 		2F66E6E319DCA1DE00B65322 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66E6E219DCA1DE00B65322 /* DetailViewController.swift */; };
@@ -18,29 +16,23 @@
 		2F66E6F719DCA1DF00B65322 /* OpenStatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66E6F619DCA1DF00B65322 /* OpenStatesTests.swift */; };
 		2F66E75819DCACB900B65322 /* ApiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F66E75719DCACB900B65322 /* ApiKeys.plist */; };
 		2FBFAAEC1A0D350F001A44AA /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBFAAEB1A0D350F001A44AA /* Configuration.swift */; };
+		2FD237DA1A115CD20062EC6F /* StatesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD237D91A115CD20062EC6F /* StatesTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2F1FE2A01A013D6C0074C990 /* PBXContainerItemProxy */ = {
+		2F4FC7C81A16A67900897D38 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 2F1FE29A1A013D6C0074C990 /* OCDKit.xcodeproj */;
+			containerPortal = 2F4FC7C01A16A67900897D38 /* OCDKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 2FDF130F19E71BD100F2EF04;
 			remoteInfo = OCDKit;
 		};
-		2F1FE2A21A013D6C0074C990 /* PBXContainerItemProxy */ = {
+		2F4FC7CA1A16A67900897D38 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 2F1FE29A1A013D6C0074C990 /* OCDKit.xcodeproj */;
+			containerPortal = 2F4FC7C01A16A67900897D38 /* OCDKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 2FDF131A19E71BD100F2EF04;
 			remoteInfo = OCDKitTests;
-		};
-		2F2238C51A0D80CE0003298B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2F1FE29A1A013D6C0074C990 /* OCDKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 2FDF130E19E71BD100F2EF04;
-			remoteInfo = OCDKit;
 		};
 		2F66E6F119DCA1DF00B65322 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -58,7 +50,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2F2238C31A0D7EBC0003298B /* OCDKit.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -66,7 +57,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2F1FE29A1A013D6C0074C990 /* OCDKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OCDKit.xcodeproj; path = Vendor/OCDKit/OCDKit.xcodeproj; sourceTree = SOURCE_ROOT; };
+		2F4FC7C01A16A67900897D38 /* OCDKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OCDKit.xcodeproj; path = Vendor/OCDKit/OCDKit.xcodeproj; sourceTree = SOURCE_ROOT; };
 		2F66E6D919DCA1DE00B65322 /* OpenStates.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenStates.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F66E6DD19DCA1DE00B65322 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F66E6DE19DCA1DE00B65322 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -80,6 +71,7 @@
 		2F66E6F619DCA1DF00B65322 /* OpenStatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenStatesTests.swift; sourceTree = "<group>"; };
 		2F66E75719DCACB900B65322 /* ApiKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ApiKeys.plist; sourceTree = "<group>"; };
 		2FBFAAEB1A0D350F001A44AA /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Configuration.swift; path = Services/Configuration.swift; sourceTree = "<group>"; };
+		2FD237D91A115CD20062EC6F /* StatesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatesTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,7 +79,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F2238C41A0D7F030003298B /* OCDKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,11 +92,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2F1FE29B1A013D6C0074C990 /* Products */ = {
+		2F4FC7C11A16A67900897D38 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2F1FE2A11A013D6C0074C990 /* OCDKit.framework */,
-				2F1FE2A31A013D6C0074C990 /* OCDKitTests.xctest */,
+				2F4FC7C91A16A67900897D38 /* OCDKit.framework */,
+				2F4FC7CB1A16A67900897D38 /* OCDKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -207,6 +198,7 @@
 			children = (
 				2F66E6E019DCA1DE00B65322 /* MasterViewController.swift */,
 				2F66E6E219DCA1DE00B65322 /* DetailViewController.swift */,
+				2FD237D91A115CD20062EC6F /* StatesTableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -214,7 +206,7 @@
 		2F66E74A19DCA39700B65322 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				2F1FE29A1A013D6C0074C990 /* OCDKit.xcodeproj */,
+				2F4FC7C01A16A67900897D38 /* OCDKit.xcodeproj */,
 			);
 			name = Libraries;
 			path = OpenStates/Classes/Views;
@@ -242,7 +234,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2F2238C61A0D80CE0003298B /* PBXTargetDependency */,
 			);
 			name = OpenStates;
 			productName = OpenStates;
@@ -298,8 +289,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 2F1FE29B1A013D6C0074C990 /* Products */;
-					ProjectRef = 2F1FE29A1A013D6C0074C990 /* OCDKit.xcodeproj */;
+					ProductGroup = 2F4FC7C11A16A67900897D38 /* Products */;
+					ProjectRef = 2F4FC7C01A16A67900897D38 /* OCDKit.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -311,18 +302,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		2F1FE2A11A013D6C0074C990 /* OCDKit.framework */ = {
+		2F4FC7C91A16A67900897D38 /* OCDKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = OCDKit.framework;
-			remoteRef = 2F1FE2A01A013D6C0074C990 /* PBXContainerItemProxy */;
+			remoteRef = 2F4FC7C81A16A67900897D38 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		2F1FE2A31A013D6C0074C990 /* OCDKitTests.xctest */ = {
+		2F4FC7CB1A16A67900897D38 /* OCDKitTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = OCDKitTests.xctest;
-			remoteRef = 2F1FE2A21A013D6C0074C990 /* PBXContainerItemProxy */;
+			remoteRef = 2F4FC7CA1A16A67900897D38 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -354,6 +345,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F66E6E319DCA1DE00B65322 /* DetailViewController.swift in Sources */,
+				2FD237DA1A115CD20062EC6F /* StatesTableViewController.swift in Sources */,
 				2F66E6E119DCA1DE00B65322 /* MasterViewController.swift in Sources */,
 				2FBFAAEC1A0D350F001A44AA /* Configuration.swift in Sources */,
 				2F66E6DF19DCA1DE00B65322 /* AppDelegate.swift in Sources */,
@@ -371,11 +363,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		2F2238C61A0D80CE0003298B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = OCDKit;
-			targetProxy = 2F2238C51A0D80CE0003298B /* PBXContainerItemProxy */;
-		};
 		2F66E6F219DCA1DF00B65322 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2F66E6D819DCA1DE00B65322 /* OpenStates */;
@@ -437,7 +424,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "Open States";
@@ -475,7 +462,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "Open States";
 				SDKROOT = iphoneos;
