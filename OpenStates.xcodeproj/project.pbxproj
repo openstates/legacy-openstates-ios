@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2F66E6DF19DCA1DE00B65322 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66E6DE19DCA1DE00B65322 /* AppDelegate.swift */; };
-		2F66E6E119DCA1DE00B65322 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66E6E019DCA1DE00B65322 /* MasterViewController.swift */; };
+		2F66E6E119DCA1DE00B65322 /* SectionViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66E6E019DCA1DE00B65322 /* SectionViewControllers.swift */; };
 		2F66E6E319DCA1DE00B65322 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66E6E219DCA1DE00B65322 /* DetailViewController.swift */; };
 		2F66E6E619DCA1DE00B65322 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F66E6E419DCA1DE00B65322 /* Main.storyboard */; };
 		2F66E6E819DCA1DE00B65322 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F66E6E719DCA1DE00B65322 /* Images.xcassets */; };
@@ -17,6 +17,8 @@
 		2F66E75819DCACB900B65322 /* ApiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F66E75719DCACB900B65322 /* ApiKeys.plist */; };
 		2FBFAAEC1A0D350F001A44AA /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBFAAEB1A0D350F001A44AA /* Configuration.swift */; };
 		2FD237DA1A115CD20062EC6F /* StatesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD237D91A115CD20062EC6F /* StatesTableViewController.swift */; };
+		2FE78B801A1A835200119902 /* DataManagers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE78B7F1A1A835200119902 /* DataManagers.swift */; };
+		2FE78B811A1A8BE400119902 /* OCDKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F4FC7C91A16A67900897D38 /* OCDKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,7 +63,7 @@
 		2F66E6D919DCA1DE00B65322 /* OpenStates.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenStates.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F66E6DD19DCA1DE00B65322 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F66E6DE19DCA1DE00B65322 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		2F66E6E019DCA1DE00B65322 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
+		2F66E6E019DCA1DE00B65322 /* SectionViewControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionViewControllers.swift; sourceTree = "<group>"; };
 		2F66E6E219DCA1DE00B65322 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		2F66E6E519DCA1DE00B65322 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2F66E6E719DCA1DE00B65322 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -70,8 +72,9 @@
 		2F66E6F519DCA1DF00B65322 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F66E6F619DCA1DF00B65322 /* OpenStatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenStatesTests.swift; sourceTree = "<group>"; };
 		2F66E75719DCACB900B65322 /* ApiKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ApiKeys.plist; sourceTree = "<group>"; };
-		2FBFAAEB1A0D350F001A44AA /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Configuration.swift; path = Services/Configuration.swift; sourceTree = "<group>"; };
+		2FBFAAEB1A0D350F001A44AA /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		2FD237D91A115CD20062EC6F /* StatesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatesTableViewController.swift; sourceTree = "<group>"; };
+		2FE78B7F1A1A835200119902 /* DataManagers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManagers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FE78B811A1A8BE400119902 /* OCDKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,7 +168,6 @@
 				2F66E70419DCA24000B65322 /* Views */,
 				2F66E70519DCA24500B65322 /* Controllers */,
 				2F66E75919DCB48700B65322 /* Services */,
-				2FBFAAEB1A0D350F001A44AA /* Configuration.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -182,6 +185,7 @@
 		2F66E70219DCA22F00B65322 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				2FE78B7F1A1A835200119902 /* DataManagers.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -196,7 +200,7 @@
 		2F66E70519DCA24500B65322 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				2F66E6E019DCA1DE00B65322 /* MasterViewController.swift */,
+				2F66E6E019DCA1DE00B65322 /* SectionViewControllers.swift */,
 				2F66E6E219DCA1DE00B65322 /* DetailViewController.swift */,
 				2FD237D91A115CD20062EC6F /* StatesTableViewController.swift */,
 			);
@@ -215,6 +219,7 @@
 		2F66E75919DCB48700B65322 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				2FBFAAEB1A0D350F001A44AA /* Configuration.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -346,8 +351,9 @@
 			files = (
 				2F66E6E319DCA1DE00B65322 /* DetailViewController.swift in Sources */,
 				2FD237DA1A115CD20062EC6F /* StatesTableViewController.swift in Sources */,
-				2F66E6E119DCA1DE00B65322 /* MasterViewController.swift in Sources */,
+				2F66E6E119DCA1DE00B65322 /* SectionViewControllers.swift in Sources */,
 				2FBFAAEC1A0D350F001A44AA /* Configuration.swift in Sources */,
+				2FE78B801A1A835200119902 /* DataManagers.swift in Sources */,
 				2F66E6DF19DCA1DE00B65322 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

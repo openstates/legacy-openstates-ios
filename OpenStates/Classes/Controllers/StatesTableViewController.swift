@@ -14,7 +14,7 @@ protocol StateSelectionDelegate {
 
 class StatesTableViewController: UITableViewController {
     // TODO: Get other source of state abbreviations and put into plist or something.
-    let objects: [String] = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
+    let items: [String] = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
     var selectionDelegate: StateSelectionDelegate?
 
     override func viewDidLoad() {
@@ -38,22 +38,22 @@ class StatesTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        return self.objects.count
+        return self.items.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("StatesTableCell", forIndexPath: indexPath) as UITableViewCell
 
         // Configure the cell...
-        let item = objects[indexPath.row]
+        let item = self.items[indexPath.row]
         cell.textLabel.text = item
 
         return cell
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let selection = self.objects[indexPath.row]
-        if let delegate = selectionDelegate {
+        let selection = self.items[indexPath.row]
+        if let delegate = self.selectionDelegate {
             delegate.stateSelection(self, stateSelected: selection)
         }
     }
