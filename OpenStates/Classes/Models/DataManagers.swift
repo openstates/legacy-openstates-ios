@@ -79,6 +79,8 @@ class OpenCivicDataManager: NSObject, UITableViewDataSource {
     }
 }
 
+// MARK: -
+
 class LegislatorDataManager: OpenCivicDataManager {
     override func fetchItems(onCompletion: FetchCompletion) {
         self.api.people().responseJSON({ (request, _, JSON, error) -> Void in
@@ -98,4 +100,27 @@ class LegislatorDataManager: OpenCivicDataManager {
         })
     }
 
+}
+
+// MARK: -
+
+class BillDataManager: OpenCivicDataManager {
+    override func fetchItems(onCompletion: FetchCompletion) {
+        self.api.bills().responseJSON({ (request, _, JSON, error) -> Void in
+
+            if let jsonResult = JSON as? Dictionary<String, AnyObject> {
+                let results: NSArray? = jsonResult["results"] as? NSArray
+                let meta: NSDictionary? = jsonResult["meta"] as? NSDictionary
+                let errorMessage = jsonResult["error"] as? String
+
+                if let resultsList = results {
+                    println("Found \(resultsList.count) results")
+                    self.items.removeAllObjects()
+                    self.items.addObjectsFromArray(resultsList)
+                    onCompletion(self.items, error)
+                }
+            }
+        })
+    }
+    
 }
