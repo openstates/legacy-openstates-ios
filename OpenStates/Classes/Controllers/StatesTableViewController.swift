@@ -9,17 +9,21 @@
 import UIKit
 
 protocol StateSelectionDelegate {
-    func stateSelection(controller: StatesTableViewController, stateSelected:String)
+    func stateSelection(controller: StatesTableViewController, identifier:String)
 }
 
 class StatesTableViewController: UITableViewController {
-    // TODO: Get other source of state abbreviations and put into plist or something.
-    let items: [String] = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
+    var dataManager: StatesDataManager? {
+        didSet {
+            self.tableView.dataSource = self.dataManager
+        }
+    }
     var selectionDelegate: StateSelectionDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.clearsSelectionOnViewWillAppear = false
+        self.dataManager = StatesDataManager()
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,35 +31,18 @@ class StatesTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
-
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Potentially incomplete method implementation.
-        // Return the number of sections.
-        return 1
-    }
-
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete method implementation.
-        // Return the number of rows in the section.
-        return self.items.count
-    }
-
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("StatesTableCell", forIndexPath: indexPath) as UITableViewCell
-
-        // Configure the cell...
-        let item = self.items[indexPath.row]
-        cell.textLabel.text = item
-
-        return cell
-    }
+    // MARK: UITableViewDelegate
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let selection = self.items[indexPath.row]
-        if let delegate = self.selectionDelegate {
-            delegate.stateSelection(self, stateSelected: selection)
+        if let manager = self.dataManager {
+            let selection:NSDictionary? = manager.itemForIndexPath(indexPath)
+            if let ocdId:String = selection!["id"] as? String {
+                if let delegate = self.selectionDelegate {
+                    delegate.stateSelection(self, identifier: ocdId)
+                }
+            }
         }
     }
+
 
 }

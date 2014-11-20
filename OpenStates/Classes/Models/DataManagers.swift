@@ -11,13 +11,40 @@ import OCDKit
 
 typealias FetchCompletion = (NSArray?, NSError?) -> Void
 
-class OpenCivicDataManager: NSObject, UITableViewDataSource {
+class TableViewDataManager: NSObject, UITableViewDataSource {
+    var items: NSMutableArray = NSMutableArray()
+
+    func itemForIndexPath(indexPath: NSIndexPath) -> NSDictionary? {
+        return self.items[indexPath.row] as? NSDictionary
+    }
+
+    // MARK: UITableViewDataSource
+
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.items.count ?? 1
+    }
+
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
+        return cell
+    }
+
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        // Return false if you do not want the specified item to be editable.
+        return false
+    }
+}
+
+// MARK: -
+
+class OpenCivicDataManager: TableViewDataManager {
     private let api:OpenCivicData
-    var items: NSMutableArray
 
     override init() {
-        self.items = NSMutableArray()
-
         let config = AppConfiguration()
         let apiKey = config.ocdApiKey!
         self.api = OpenCivicData(apiKey: apiKey)
@@ -45,21 +72,9 @@ class OpenCivicDataManager: NSObject, UITableViewDataSource {
         })
     }
 
-    func itemForIndexPath(indexPath: NSIndexPath) -> NSDictionary? {
-        return self.items[indexPath.row] as? NSDictionary
-    }
+    // MARK: UITableViewDataSource
 
-    // MARK: - UITableViewDataSource
-
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.items.count ?? 1
-    }
-
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
 
         if let object = self.itemForIndexPath(indexPath) {
@@ -73,10 +88,7 @@ class OpenCivicDataManager: NSObject, UITableViewDataSource {
         return cell
     }
 
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return false
-    }
+
 }
 
 // MARK: -
@@ -123,4 +135,59 @@ class BillDataManager: OpenCivicDataManager {
         })
     }
     
+}
+
+// MARK: -
+
+class StatesDataManager: TableViewDataManager {
+    let nonStateSearch: NSPredicate = NSPredicate(format: "!(id LIKE '*state*')", argumentArray: nil)
+    let sectionTitles = ["States", "Districts & Territories"]
+
+    override init() {
+        super.init()
+        // get states items from the plist
+        let bundle = NSBundle.mainBundle()
+        if let filePath = bundle.pathForResource("States", ofType: "plist") {
+            if let states = NSMutableArray(contentsOfFile: filePath) {
+                self.items.removeAllObjects()
+                states.sortUsingDescriptors([NSSortDescriptor(key: "name", ascending: true)])
+                let nonStates = states.filteredArrayUsingPredicate(self.nonStateSearch)
+                states.removeObjectsInArray(nonStates)
+                self.items = [
+                    states,
+                    nonStates
+                ]
+            }
+        }
+    }
+
+    override func itemForIndexPath(indexPath: NSIndexPath) -> NSDictionary? {
+        return self.items[indexPath.section][indexPath.row] as? NSDictionary
+    }
+
+    // MARK: UITableViewDataSource
+
+
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return self.items.count ?? 2
+    }
+
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.items[section].count ?? 0
+    }
+
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return self.sectionTitles[section] ?? ""
+    }
+
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("StatesTableCell", forIndexPath: indexPath) as UITableViewCell
+
+        if let object = self.itemForIndexPath(indexPath) {
+            if let title = object["name"] as? String {
+                cell.textLabel.text = title
+            }
+        }
+        return cell
+    }
 }
