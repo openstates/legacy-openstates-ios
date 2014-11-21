@@ -9,7 +9,7 @@
 import UIKit
 
 protocol StateSelectionDelegate {
-    func stateSelection(controller: StatesTableViewController, identifier:String)
+    func stateSelection(controller: StatesTableViewController, division:Division)
 }
 
 class StatesTableViewController: UITableViewController {
@@ -35,10 +35,9 @@ class StatesTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if let manager = self.dataManager {
-            let selection:NSDictionary? = manager.itemForIndexPath(indexPath)
-            if let ocdId:String = selection!["id"] as? String {
+            if let selection:Division = manager.divisionForIndexPath(indexPath) {
                 if let delegate = self.selectionDelegate {
-                    delegate.stateSelection(self, identifier: ocdId)
+                    delegate.stateSelection(self, division: selection)
                 }
             }
         }

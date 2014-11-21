@@ -70,12 +70,6 @@
 	</dict>
 	<dict>
 		<key>id</key>
-		<string>ocd-division/country:us/state:gu</string>
-		<key>name</key>
-		<string>Guam</string>
-	</dict>
-	<dict>
-		<key>id</key>
 		<string>ocd-division/country:us/state:hi</string>
 		<key>name</key>
 		<string>Hawaii</string>

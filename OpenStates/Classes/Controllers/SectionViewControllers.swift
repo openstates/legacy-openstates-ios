@@ -58,10 +58,10 @@ class SectionViewController: UITableViewController, StateSelectionDelegate {
 
     //MARK: - StateSelectionDelegate
 
-    func stateSelection(controller: StatesTableViewController, identifier: String) {
-        println("Selected \(identifier)")
+    func stateSelection(controller: StatesTableViewController, division: Division) {
+        println("Selected \(division.name)")
         controller.dismissViewControllerAnimated(true, completion: nil)
-        self.titleViewButton.setTitle(identifier, forState: UIControlState.Normal)
+        self.titleViewButton.setTitle(division.name, forState: UIControlState.Normal)
     }
 
 }
@@ -72,8 +72,8 @@ class LegislatorSectionViewController: SectionViewController {
         self.dataManager = LegislatorDataManager()
     }
 
-    override func stateSelection(controller: StatesTableViewController, identifier: String) {
-        super.stateSelection(controller, identifier: identifier)
+    override func stateSelection(controller: StatesTableViewController, division: Division) {
+        super.stateSelection(controller, division: division)
         if let dataManager = self.dataManager {
             dataManager.fetchItems { (items, error) in
                 println("Fetched items")

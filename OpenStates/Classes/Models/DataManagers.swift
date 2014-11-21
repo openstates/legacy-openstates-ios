@@ -140,29 +140,24 @@ class BillDataManager: OpenCivicDataManager {
 // MARK: -
 
 class StatesDataManager: TableViewDataManager {
+    let openstates: OpenStates
     let nonStateSearch: NSPredicate = NSPredicate(format: "!(id LIKE '*state*')", argumentArray: nil)
     let sectionTitles = ["States", "Districts & Territories"]
 
     override init() {
+        self.openstates = OpenStates()
         super.init()
-        // get states items from the plist
-        let bundle = NSBundle.mainBundle()
-        if let filePath = bundle.pathForResource("States", ofType: "plist") {
-            if let states = NSMutableArray(contentsOfFile: filePath) {
-                self.items.removeAllObjects()
-                states.sortUsingDescriptors([NSSortDescriptor(key: "name", ascending: true)])
-                let nonStates = states.filteredArrayUsingPredicate(self.nonStateSearch)
-                states.removeObjectsInArray(nonStates)
-                self.items = [
-                    states,
-                    nonStates
-                ]
-            }
-        }
+        self.items.removeAllObjects()
+        let nonStates = self.openstates.divisions.nonStates()
+        let states = self.openstates.divisions.statesOnly()
+        self.items = [
+            states,
+            nonStates
+        ]
     }
 
-    override func itemForIndexPath(indexPath: NSIndexPath) -> NSDictionary? {
-        return self.items[indexPath.section][indexPath.row] as? NSDictionary
+    func divisionForIndexPath(indexPath: NSIndexPath) -> Division? {
+        return self.items[indexPath.section][indexPath.row] as? Division
     }
 
     // MARK: UITableViewDataSource
@@ -183,10 +178,8 @@ class StatesDataManager: TableViewDataManager {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("StatesTableCell", forIndexPath: indexPath) as UITableViewCell
 
-        if let object = self.itemForIndexPath(indexPath) {
-            if let title = object["name"] as? String {
-                cell.textLabel.text = title
-            }
+        if let object = self.divisionForIndexPath(indexPath) {
+            cell.textLabel.text = object.name
         }
         return cell
     }

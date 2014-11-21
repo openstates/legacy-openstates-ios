@@ -20,6 +20,7 @@
 		2FE78B801A1A835200119902 /* DataManagers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE78B7F1A1A835200119902 /* DataManagers.swift */; };
 		2FE78B811A1A8BE400119902 /* OCDKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F4FC7C91A16A67900897D38 /* OCDKit.framework */; };
 		2FF87B681A1E81560089BF8E /* States.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FF87B671A1E81560089BF8E /* States.plist */; };
+		2FF87B721A1EB6060089BF8E /* OpenStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF87B711A1EB6060089BF8E /* OpenStates.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		2FD237D91A115CD20062EC6F /* StatesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatesTableViewController.swift; sourceTree = "<group>"; };
 		2FE78B7F1A1A835200119902 /* DataManagers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManagers.swift; sourceTree = "<group>"; };
 		2FF87B671A1E81560089BF8E /* States.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = States.plist; sourceTree = "<group>"; };
+		2FF87B711A1EB6060089BF8E /* OpenStates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenStates.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				2FBFAAEB1A0D350F001A44AA /* Configuration.swift */,
+				2FF87B711A1EB6060089BF8E /* OpenStates.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -358,6 +361,7 @@
 				2F66E6E119DCA1DE00B65322 /* SectionViewControllers.swift in Sources */,
 				2FBFAAEC1A0D350F001A44AA /* Configuration.swift in Sources */,
 				2FE78B801A1A835200119902 /* DataManagers.swift in Sources */,
+				2FF87B721A1EB6060089BF8E /* OpenStates.swift in Sources */,
 				2F66E6DF19DCA1DE00B65322 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

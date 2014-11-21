@@ -49,8 +49,8 @@
                             <rect key="frame" x="180" y="6" width="240" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U27-xL-oR9">
-                                    <rect key="frame" x="97" y="2" width="46" height="30"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U27-xL-oR9">
+                                    <rect key="frame" x="102" y="2" width="37" height="30"/>
                                     <state key="normal" title="State">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
@@ -62,6 +62,10 @@
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="centerX" secondItem="U27-xL-oR9" secondAttribute="centerX" id="09w-pD-qDd"/>
+                                <constraint firstAttribute="centerY" secondItem="U27-xL-oR9" secondAttribute="centerY" id="ixX-ox-hWa"/>
+                            </constraints>
                         </view>
                     </navigationItem>
                     <connections>
