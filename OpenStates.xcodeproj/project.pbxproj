@@ -22,6 +22,7 @@
 		2F688FD0193E7B0D0099B9D4 /* BillActionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F688FCF193E7B0D0099B9D4 /* BillActionTableViewCell.m */; };
 		2F9DAC8019377E91007EC92D /* SLFImprovedRKTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9DAC7F19377E91007EC92D /* SLFImprovedRKTableController.m */; };
 		2FA2630918BBD96700D8041F /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA2630818BBD96700D8041F /* libGoogleAnalyticsServices.a */; };
+		2FCAF4A51A6EE9C4000D8F7C /* APIKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAF4A41A6EE9C4000D8F7C /* APIKeys.m */; };
 		2FD00F2118C51FA500A5399A /* UIDevice+VersionCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD00F2018C51FA500A5399A /* UIDevice+VersionCheck.m */; };
 		2FD00F2718C6843100A5399A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD00F2618C6843100A5399A /* Images.xcassets */; };
 		2FF8408418CA304700AB2295 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF8408318CA304700AB2295 /* Crashlytics.framework */; };
@@ -62,7 +63,6 @@
 		37336A6C142B991200F635EB /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37336A6B142B991200F635EB /* MainWindow-iPad.xib */; };
 		3738364814744C2400AEEC34 /* SLFSortDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3738364714744C2400AEEC34 /* SLFSortDescriptor.m */; };
 		3738364B147480CF00AEEC34 /* NSDate+SLFDateHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3738364A147480CF00AEEC34 /* NSDate+SLFDateHelper.m */; };
-		373AC88D14171F9C00720F40 /* APIKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 373AC88C14171F9C00720F40 /* APIKeys.m */; };
 		373B842114C0D25000ED7959 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 373B841914C0D25000ED7959 /* blackArrow.png */; };
 		373B842214C0D25000ED7959 /* blackArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 373B841A14C0D25000ED7959 /* blackArrow@2x.png */; };
 		373B842314C0D25000ED7959 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 373B841B14C0D25000ED7959 /* blueArrow.png */; };
@@ -383,6 +383,7 @@
 		2FA2630618BBD96700D8041F /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
 		2FA2630718BBD96700D8041F /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
 		2FA2630818BBD96700D8041F /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
+		2FCAF4A41A6EE9C4000D8F7C /* APIKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIKeys.m; sourceTree = "<group>"; };
 		2FD00F1F18C51FA500A5399A /* UIDevice+VersionCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+VersionCheck.h"; sourceTree = "<group>"; };
 		2FD00F2018C51FA500A5399A /* UIDevice+VersionCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+VersionCheck.m"; sourceTree = "<group>"; };
 		2FD00F2618C6843100A5399A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -448,7 +449,6 @@
 		37383649147480CF00AEEC34 /* NSDate+SLFDateHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+SLFDateHelper.h"; sourceTree = "<group>"; };
 		3738364A147480CF00AEEC34 /* NSDate+SLFDateHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+SLFDateHelper.m"; sourceTree = "<group>"; };
 		373AC88B14171F5200720F40 /* APIKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APIKeys.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		373AC88C14171F9C00720F40 /* APIKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APIKeys.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		373B841914C0D25000ED7959 /* blackArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blackArrow.png; sourceTree = "<group>"; };
 		373B841A14C0D25000ED7959 /* blackArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blackArrow@2x.png"; sourceTree = "<group>"; };
 		373B841B14C0D25000ED7959 /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueArrow.png; sourceTree = "<group>"; };
@@ -850,7 +850,7 @@
 				37089C6414843439002239A9 /* SLFGlobal.h */,
 				37089C6514843439002239A9 /* SLFGlobal.m */,
 				373AC88B14171F5200720F40 /* APIKeys.h */,
-				373AC88C14171F9C00720F40 /* APIKeys.m */,
+				2FCAF4A41A6EE9C4000D8F7C /* APIKeys.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -1621,7 +1621,7 @@
 			name = OpenStatesSpecs;
 			productName = UnitTests;
 			productReference = 372E57C414153D07000652B1 /* OpenStatesSpecs.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -1874,7 +1874,6 @@
 				37F29918140FCD5200B96572 /* SLFRestKitManager.m in Sources */,
 				37F2991B140FCD9000B96572 /* SLFObjectCache.m in Sources */,
 				37D953CE1412FB0F00F9C8AE /* SLFChamber.m in Sources */,
-				373AC88D14171F9C00720F40 /* APIKeys.m in Sources */,
 				375DC7E314279BE600253969 /* GCTableViewController.m in Sources */,
 				372D2AF714285FDD00ADE84E /* CommitteeRole.m in Sources */,
 				372D2AFA14285FDF00ADE84E /* CommitteeMember.m in Sources */,
@@ -1965,6 +1964,7 @@
 				3770F12B148712A500FD854B /* MultiRowCalloutAnnotationView.m in Sources */,
 				3770F12C148712A500FD854B /* MultiRowCalloutCell.m in Sources */,
 				2F688FD0193E7B0D0099B9D4 /* BillActionTableViewCell.m in Sources */,
+				2FCAF4A51A6EE9C4000D8F7C /* APIKeys.m in Sources */,
 				3770F12F148715AF00FD854B /* ColorPinAnnotationView.m in Sources */,
 				3770F13314872B8E00FD854B /* MultiRowAnnotation.m in Sources */,
 				379A44EE1487ED2700D47B88 /* BillsSubjectsViewController.m in Sources */,
