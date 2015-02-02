@@ -35,14 +35,7 @@
 #define MenuEvents NSLocalizedString(@"Events", @"")
 #define MenuCapitolMaps NSLocalizedString(@"Capitol Maps", @"")
 #define MenuNews NSLocalizedString(@"News", @"")
-
-#define USE_TESTFLIGHT_FEEDBACK 0 // DEBUG
-#if USE_TESTFLIGHT_FEEDBACK
-#import "TestFlight.h"
-#define MenuFeedback NSLocalizedString(@"Beta Feedback", @"")
-#else
-#define MenuFeedback NSLocalizedString(@"App Feedback", @"")
-#endif
+#define MenuFeedback NSLocalizedString(@"Feedback", @"")
 
 @interface StateDetailViewController()
 - (void)reconfigureForState:(SLFState *)state;
@@ -225,11 +218,7 @@
         }
     }
     else if ([menuItem isEqualToString:MenuFeedback]) {
-#if USE_TESTFLIGHT_FEEDBACK
-        [TestFlight openFeedbackView];
-#else
         [[SLFEmailComposer sharedComposer] presentAppSupportComposerFromParent:self];
-#endif
     }
 }
 

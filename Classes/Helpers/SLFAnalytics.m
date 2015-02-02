@@ -12,12 +12,7 @@
 
 #import "SLFAnalytics.h"
 
-#define USE_TESTFLIGHT 0 // DEBUG
 #define USE_LOCALYTICS 0
-
-#if USE_TESTFLIGHT
-#import "SLFTestFlight.h"
-#endif
 
 #if USE_LOCALYTICS
 #import "SLFLocalytics.h"
@@ -54,11 +49,6 @@
 
 - (void)configureAdapters {
     self.adapters = [NSMutableSet set];
-    
-#if USE_TESTFLIGHT
-    #warning TestFlight is enabled.  Turn off for AppStore and don't link against libTestFlight.a, if possible
-    [self.adapters addObject:[[[SLFTestFlight alloc] init] autorelease]];
-#endif
 
 #if USE_LOCALYTICS
     [self.adapters addObject:[[[SLFLocalytics alloc] init] autorelease]];

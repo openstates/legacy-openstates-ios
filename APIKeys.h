@@ -20,5 +20,3 @@
 FOUNDATION_EXPORT NSString *const SUNLIGHT_APIKEY;
 
 FOUNDATION_EXPORT NSString *const kGoogleAnalyticsIdRelease;
-
-FOUNDATION_EXPORT NSString *const kTestFlightAppToken;
