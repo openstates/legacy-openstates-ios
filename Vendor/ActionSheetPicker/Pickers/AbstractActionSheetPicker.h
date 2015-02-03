@@ -29,10 +29,11 @@
 
 
 @interface AbstractActionSheetPicker : NSObject
+@property (nonatomic, strong) UIToolbar* toolbar;
 @property (nonatomic, copy) NSString *title;
-@property (nonatomic, retain) UIView *pickerView;
+@property (nonatomic, strong) UIView *pickerView;
 @property (nonatomic, readonly) CGSize viewSize;
-@property (nonatomic, retain) NSMutableArray *customButtons;
+@property (nonatomic, strong) NSMutableArray *customButtons;
 @property (nonatomic, assign) BOOL hideCancel;
 @property (nonatomic, assign) CGRect presentFromRect;
 
@@ -43,7 +44,7 @@
 - (void)showActionSheetPicker;
 
     // For subclasses.  This is used to send a message to the target upon a successful selection and dismissal of the picker (i.e. not canceled).
-- (void)notifyTarget:(id)target didSucceedWithAction:(SEL)sucessAction origin:(id)origin;
+- (void)notifyTarget:(id)target didSucceedWithAction:(SEL)successAction origin:(id)origin;
 
     // For subclasses.  This is an optional message upon cancelation of the picker.
 - (void)notifyTarget:(id)target didCancelWithAction:(SEL)cancelAction origin:(id)origin;
@@ -56,5 +57,11 @@
 
     //For subclasses. This responds to a custom button being pressed.
 - (IBAction)customButtonPressed:(id)sender;
+
+    // Allow the user to specify a custom cancel button
+- (void) setCancelButton: (UIBarButtonItem *)button;
+
+    // Allow the user to specify a custom done button
+- (void) setDoneButton: (UIBarButtonItem *)button;
 
 @end

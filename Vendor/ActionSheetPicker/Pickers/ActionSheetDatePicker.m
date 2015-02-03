@@ -31,7 +31,7 @@
 
 @interface ActionSheetDatePicker()
 @property (nonatomic, assign) UIDatePickerMode datePickerMode;
-@property (nonatomic, retain) NSDate *selectedDate;
+@property (nonatomic, strong) NSDate *selectedDate;
 @end
 
 @implementation ActionSheetDatePicker
@@ -43,7 +43,7 @@
                  target:(id)target action:(SEL)action origin:(id)origin {
     ActionSheetDatePicker *picker = [[ActionSheetDatePicker alloc] initWithTitle:title datePickerMode:datePickerMode selectedDate:selectedDate target:target action:action origin:origin];
     [picker showActionSheetPicker];
-    return [picker autorelease];
+    return picker;
 }
 
 - (id)initWithTitle:(NSString *)title datePickerMode:(UIDatePickerMode)datePickerMode selectedDate:(NSDate *)selectedDate target:(id)target action:(SEL)action origin:(id)origin {
@@ -56,15 +56,17 @@
     return self;
 }
 
-- (void)dealloc {
-    self.selectedDate = nil;
-    [super dealloc];
-}
 
 - (UIView *)configuredPickerView {
     CGRect datePickerFrame = CGRectMake(0, 40, self.viewSize.width, 216);
-    UIDatePicker *datePicker = [[[UIDatePicker alloc] initWithFrame:datePickerFrame] autorelease];
+    UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:datePickerFrame];
     datePicker.datePickerMode = self.datePickerMode;
+    datePicker.maximumDate = self.maximumDate;
+    datePicker.maximumDate = self.minimumDate;
+    datePicker.calendar = self.calendar;
+    datePicker.timeZone = self.timeZone;
+    datePicker.locale = self.locale;
+
     [datePicker setDate:self.selectedDate animated:NO];
     [datePicker addTarget:self action:@selector(eventForDatePicker:) forControlEvents:UIControlEventValueChanged];
     
@@ -76,9 +78,12 @@
 
 - (void)notifyTarget:(id)target didSucceedWithAction:(SEL)action origin:(id)origin {
     if ([target respondsToSelector:action])
-        objc_msgSend(target, action, self.selectedDate, origin);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        [target performSelector:action withObject:self.selectedDate withObject:origin];
+#pragma clang diagnostic pop
     else
-        NSAssert(NO, @"Invalid target/action ( %s / %s ) combination used for ActionSheetPicker", object_getClassName(target), (char *)action);
+        NSAssert(NO, @"Invalid target/action ( %s / %s ) combination used for ActionSheetPicker", object_getClassName(target), sel_getName(action));
 }
 
 - (void)eventForDatePicker:(id)sender {

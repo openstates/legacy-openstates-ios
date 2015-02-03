@@ -94,7 +94,7 @@
         if (text) {
             
             // set up the frame for the label using our longestString length
-            NSString *keyName = [NSString stringWithFormat:@"%@_%@", [NSString stringWithString:@"longestString"], [NSNumber numberWithInt:component]]; 
+            NSString *keyName = [NSString stringWithFormat:@"%@_%@", @"longestString", [NSNumber numberWithInt:component]]; 
             NSString *longestString = [labels objectForKey:keyName];
             CGRect frame;
             frame.size = [longestString sizeWithFont:labelfont];
@@ -110,7 +110,7 @@
             BOOL addlabelView = NO;
             UILabel *label = (UILabel*)[self viewWithTag:component + 1];
             if(!label) {
-                label = [[[UILabel alloc] initWithFrame:frame] autorelease];
+                label = [[UILabel alloc] initWithFrame:frame];
                 addlabelView = YES;
             }
             
@@ -132,11 +132,27 @@
                  */     
                 if (self.showsSelectionIndicator) { 
                     // if this is the last wheel, add label as the third view from the top
-                    if (component==self.numberOfComponents-1) 
-                        [self insertSubview:label atIndex:[self.subviews count]-3];
+                    if (component==self.numberOfComponents-1)
+                        if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_6_1) {
+                            UIView * o = [[self.subviews[0] subviews] objectAtIndex:([[self.subviews[0] subviews] count] - 1) ];
+                            UIView *subview = [[o subviews] objectAtIndex:2];
+                            UIView * view = [[subview.subviews objectAtIndex:0] subviews][1];
+                            [self insertSubview:label aboveSubview:view];
+                        }
+                        else {
+                            [self insertSubview:label atIndex:[self.subviews count]-3];
+                        }
                     // otherwise add label as the 5th, 10th, 15th etc view from the top
                     else
-                        [self insertSubview:label aboveSubview:[self.subviews objectAtIndex:5*(component+1)]];
+                    {
+                        if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_6_1) {
+                            [self insertSubview:label aboveSubview:[[self.subviews[0] subviews] objectAtIndex:component]];
+                        }
+                        else {
+                            [self insertSubview:label aboveSubview:[self.subviews objectAtIndex:5*(component+1)]];
+                        }
+
+                    }
                 } else
                     // there is no selection indicator, so just add it to the top
                     [self addSubview:label];
@@ -151,10 +167,6 @@
     
 }
 
-- (void)dealloc {
-    [labels release];
-    [super dealloc];
-}
 
 
 @end
