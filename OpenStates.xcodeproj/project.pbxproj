@@ -15,6 +15,7 @@
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		28D7ACF80DDB3853001CB0EB /* LegislatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* LegislatorsViewController.m */; };
 		2F0A8789193E53B900AE115A /* SLFData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2F0A8786193E53B900AE115A /* SLFData.xcdatamodeld */; };
+		2F104EEC1A81263900B1B24C /* SLFStackedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B6FF95149207C8007CB068 /* SLFStackedViewController.m */; };
 		2F19242319378FED00E2A74E /* SLFImprovedRKFetchedResultsTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9DAC8219378A3C007EC92D /* SLFImprovedRKFetchedResultsTableController.m */; };
 		2F46D0091934E97C0023F3C8 /* OpenStatesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F46D0081934E97C0023F3C8 /* OpenStatesTableViewCell.m */; };
 		2F5FAF2218D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FAF2118D1103000617B92 /* SVWebViewController+SFHackneyedWebViewController.m */; };
@@ -24,6 +25,12 @@
 		2FCAF4A51A6EE9C4000D8F7C /* APIKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAF4A41A6EE9C4000D8F7C /* APIKeys.m */; };
 		2FD00F2118C51FA500A5399A /* UIDevice+VersionCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD00F2018C51FA500A5399A /* UIDevice+VersionCheck.m */; };
 		2FD00F2718C6843100A5399A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD00F2618C6843100A5399A /* Images.xcassets */; };
+		2FE3A85E1A803CB9003EDDF7 /* AbstractActionSheetPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE3A83E1A803CB9003EDDF7 /* AbstractActionSheetPicker.m */; };
+		2FE3A85F1A803CB9003EDDF7 /* ActionSheetCustomPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE3A8401A803CB9003EDDF7 /* ActionSheetCustomPicker.m */; };
+		2FE3A8601A803CB9003EDDF7 /* ActionSheetDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE3A8431A803CB9003EDDF7 /* ActionSheetDatePicker.m */; };
+		2FE3A8611A803CB9003EDDF7 /* ActionSheetDistancePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE3A8451A803CB9003EDDF7 /* ActionSheetDistancePicker.m */; };
+		2FE3A8621A803CB9003EDDF7 /* ActionSheetStringPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE3A8471A803CB9003EDDF7 /* ActionSheetStringPicker.m */; };
+		2FE3A8631A803CB9003EDDF7 /* DistancePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE3A8491A803CB9003EDDF7 /* DistancePickerView.m */; };
 		2FF8408418CA304700AB2295 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF8408318CA304700AB2295 /* Crashlytics.framework */; };
 		370004AF143F546600F55165 /* SCNetworkReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 37000497143F546600F55165 /* SCNetworkReachability.m */; };
 		370004B0143F546600F55165 /* SCNetworkReachabilityFlags.c in Sources */ = {isa = PBXBuildFile; fileRef = 37000498143F546600F55165 /* SCNetworkReachabilityFlags.c */; };
@@ -130,8 +137,6 @@
 		3772624F14B507F500F8D3A6 /* AssetsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3772624E14B507F500F8D3A6 /* AssetsViewController.m */; };
 		37726AF7148D6AB3009BCE46 /* SLFActionPathRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 37726AF6148D6AB3009BCE46 /* SLFActionPathRegistry.m */; };
 		37726AFA148DCCE3009BCE46 /* SLFiCloudSync.m in Sources */ = {isa = PBXBuildFile; fileRef = 37726AF9148DCCE2009BCE46 /* SLFiCloudSync.m */; };
-		37738A10147B9616002AC526 /* AbstractActionSheetPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 37738A0D147B9616002AC526 /* AbstractActionSheetPicker.m */; };
-		37738A11147B9616002AC526 /* ActionSheetStringPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 37738A0F147B9616002AC526 /* ActionSheetStringPicker.m */; };
 		37775500140F3F1200ABE16F /* DistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 377754FF140F3F1200ABE16F /* DistrictsViewController.m */; };
 		37798CF6147E3A810098361A /* SLFFetchedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37798CF5147E3A810098361A /* SLFFetchedTableViewController.m */; };
 		377C617A143000AA00EE626E /* PSStackedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 377C6170143000AA00EE626E /* PSStackedViewController.m */; };
@@ -162,7 +167,6 @@
 		37AC5FD6142C42680061414F /* StackedMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37AC5FD5142C42680061414F /* StackedMenuViewController.m */; };
 		37B43D1014448E7400A8020D /* SVGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B43D0D14448E7400A8020D /* SVGeocoder.m */; };
 		37B43D1114448E7400A8020D /* SVPlacemark.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B43D0F14448E7400A8020D /* SVPlacemark.m */; };
-		37B6FF96149207C8007CB068 /* SLFStackedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B6FF95149207C8007CB068 /* SLFStackedViewController.m */; };
 		37B9CC08143D0654006C56E0 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37B9CC07143D0654006C56E0 /* CoreText.framework */; };
 		37BAC14A142B972D0021A3C6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BAC149142B972D0021A3C6 /* main.m */; };
 		37BAE30D1478636100CD5704 /* AppendingFlowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BAE30A1478636100CD5704 /* AppendingFlowView.m */; };
@@ -386,6 +390,19 @@
 		2FD00F1F18C51FA500A5399A /* UIDevice+VersionCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+VersionCheck.h"; sourceTree = "<group>"; };
 		2FD00F2018C51FA500A5399A /* UIDevice+VersionCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+VersionCheck.m"; sourceTree = "<group>"; };
 		2FD00F2618C6843100A5399A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		2FE3A83D1A803CB9003EDDF7 /* AbstractActionSheetPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractActionSheetPicker.h; sourceTree = "<group>"; };
+		2FE3A83E1A803CB9003EDDF7 /* AbstractActionSheetPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractActionSheetPicker.m; sourceTree = "<group>"; };
+		2FE3A83F1A803CB9003EDDF7 /* ActionSheetCustomPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionSheetCustomPicker.h; sourceTree = "<group>"; };
+		2FE3A8401A803CB9003EDDF7 /* ActionSheetCustomPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionSheetCustomPicker.m; sourceTree = "<group>"; };
+		2FE3A8411A803CB9003EDDF7 /* ActionSheetCustomPickerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionSheetCustomPickerDelegate.h; sourceTree = "<group>"; };
+		2FE3A8421A803CB9003EDDF7 /* ActionSheetDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionSheetDatePicker.h; sourceTree = "<group>"; };
+		2FE3A8431A803CB9003EDDF7 /* ActionSheetDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionSheetDatePicker.m; sourceTree = "<group>"; };
+		2FE3A8441A803CB9003EDDF7 /* ActionSheetDistancePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionSheetDistancePicker.h; sourceTree = "<group>"; };
+		2FE3A8451A803CB9003EDDF7 /* ActionSheetDistancePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionSheetDistancePicker.m; sourceTree = "<group>"; };
+		2FE3A8461A803CB9003EDDF7 /* ActionSheetStringPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionSheetStringPicker.h; sourceTree = "<group>"; };
+		2FE3A8471A803CB9003EDDF7 /* ActionSheetStringPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionSheetStringPicker.m; sourceTree = "<group>"; };
+		2FE3A8481A803CB9003EDDF7 /* DistancePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistancePickerView.h; sourceTree = "<group>"; };
+		2FE3A8491A803CB9003EDDF7 /* DistancePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistancePickerView.m; sourceTree = "<group>"; };
 		2FEB9C6118B6AA51000A476A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		2FEB9C6218B6AA5B000A476A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		2FEB9C6318B6AA65000A476A /* Beta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Beta.xcconfig; sourceTree = "<group>"; };
@@ -459,8 +476,6 @@
 		373E514C1445E6C70044D478 /* DistrictSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DistrictSearch.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		373E514D1445E6C70044D478 /* DistrictSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictSearch.m; sourceTree = "<group>"; };
 		373ECB6114887724000BD16D /* OpenStates.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OpenStates.entitlements; sourceTree = "<group>"; };
-		373ECB6514888C9F000BD16D /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
-		373ECB6814888C9F000BD16D /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		37442F07143431940027F422 /* StackedMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackedMenuCell.h; sourceTree = "<group>"; };
 		37442F08143431940027F422 /* StackedMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StackedMenuCell.m; sourceTree = "<group>"; };
 		3748120414C7ABA800A1AE30 /* NoFetchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoFetchViewController.h; sourceTree = "<group>"; };
@@ -570,10 +585,6 @@
 		37726AF6148D6AB3009BCE46 /* SLFActionPathRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFActionPathRegistry.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37726AF8148DCCE2009BCE46 /* SLFiCloudSync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFiCloudSync.h; sourceTree = "<group>"; };
 		37726AF9148DCCE2009BCE46 /* SLFiCloudSync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFiCloudSync.m; sourceTree = "<group>"; };
-		37738A0C147B9616002AC526 /* AbstractActionSheetPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AbstractActionSheetPicker.h; path = Vendor/ActionSheetPicker/Pickers/AbstractActionSheetPicker.h; sourceTree = "<group>"; };
-		37738A0D147B9616002AC526 /* AbstractActionSheetPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AbstractActionSheetPicker.m; path = Vendor/ActionSheetPicker/Pickers/AbstractActionSheetPicker.m; sourceTree = "<group>"; };
-		37738A0E147B9616002AC526 /* ActionSheetStringPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActionSheetStringPicker.h; path = Vendor/ActionSheetPicker/Pickers/ActionSheetStringPicker.h; sourceTree = "<group>"; };
-		37738A0F147B9616002AC526 /* ActionSheetStringPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActionSheetStringPicker.m; path = Vendor/ActionSheetPicker/Pickers/ActionSheetStringPicker.m; sourceTree = "<group>"; };
 		377754FE140F3F1100ABE16F /* DistrictsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DistrictsViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		377754FF140F3F1200ABE16F /* DistrictsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictsViewController.m; sourceTree = "<group>"; };
 		37798CF4147E3A810098361A /* SLFFetchedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFFetchedTableViewController.h; sourceTree = "<group>"; };
@@ -895,6 +906,35 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		2FE3A8201A803CB9003EDDF7 /* ActionSheetPicker */ = {
+			isa = PBXGroup;
+			children = (
+				2FE3A83C1A803CB9003EDDF7 /* Pickers */,
+			);
+			name = ActionSheetPicker;
+			path = Vendor/ActionSheetPicker;
+			sourceTree = "<group>";
+		};
+		2FE3A83C1A803CB9003EDDF7 /* Pickers */ = {
+			isa = PBXGroup;
+			children = (
+				2FE3A83D1A803CB9003EDDF7 /* AbstractActionSheetPicker.h */,
+				2FE3A83E1A803CB9003EDDF7 /* AbstractActionSheetPicker.m */,
+				2FE3A83F1A803CB9003EDDF7 /* ActionSheetCustomPicker.h */,
+				2FE3A8401A803CB9003EDDF7 /* ActionSheetCustomPicker.m */,
+				2FE3A8411A803CB9003EDDF7 /* ActionSheetCustomPickerDelegate.h */,
+				2FE3A8421A803CB9003EDDF7 /* ActionSheetDatePicker.h */,
+				2FE3A8431A803CB9003EDDF7 /* ActionSheetDatePicker.m */,
+				2FE3A8441A803CB9003EDDF7 /* ActionSheetDistancePicker.h */,
+				2FE3A8451A803CB9003EDDF7 /* ActionSheetDistancePicker.m */,
+				2FE3A8461A803CB9003EDDF7 /* ActionSheetStringPicker.h */,
+				2FE3A8471A803CB9003EDDF7 /* ActionSheetStringPicker.m */,
+				2FE3A8481A803CB9003EDDF7 /* DistancePickerView.h */,
+				2FE3A8491A803CB9003EDDF7 /* DistancePickerView.m */,
+			);
+			path = Pickers;
+			sourceTree = "<group>";
+		};
 		3700048F143F546600F55165 /* SCNetworkReachabilityKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -924,17 +964,6 @@
 				370004A5143F546600F55165 /* SCNetworkReachabilityKitTests.m */,
 			);
 			path = SCNetworkReachabilityKitTests;
-			sourceTree = "<group>";
-		};
-		37037549147B331B00B59AA2 /* ActionSheetPicker */ = {
-			isa = PBXGroup;
-			children = (
-				37738A0C147B9616002AC526 /* AbstractActionSheetPicker.h */,
-				37738A0D147B9616002AC526 /* AbstractActionSheetPicker.m */,
-				37738A0E147B9616002AC526 /* ActionSheetStringPicker.h */,
-				37738A0F147B9616002AC526 /* ActionSheetStringPicker.m */,
-			);
-			name = ActionSheetPicker;
 			sourceTree = "<group>";
 		};
 		37147FEF1432107000170716 /* GCTableViewController */ = {
@@ -1028,16 +1057,6 @@
 			name = RKRefreshTriggerViewAssets;
 			path = Vendor/RestKit/Resources/RKRefreshTriggerViewAssets;
 			sourceTree = SOURCE_ROOT;
-		};
-		373ECB6414888C9F000BD16D /* TestFlight */ = {
-			isa = PBXGroup;
-			children = (
-				373ECB6814888C9F000BD16D /* TestFlight.h */,
-				373ECB6514888C9F000BD16D /* libTestFlight.a */,
-			);
-			name = TestFlight;
-			path = Vendor/TestFlight;
-			sourceTree = "<group>";
 		};
 		37442F1214344D230027F422 /* glyphish */ = {
 			isa = PBXGroup;
@@ -1171,12 +1190,11 @@
 		377CB425142EFD4600AFF4BC /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				2FE3A8201A803CB9003EDDF7 /* ActionSheetPicker */,
 				37193F5014BCEA9E00C78262 /* MTInfoPanel */,
 				3756942914ABC3180014BA7F /* SDURLCache */,
 				37A16CF7148C128B000A3C91 /* GoogleAnalytics */,
-				373ECB6414888C9F000BD16D /* TestFlight */,
 				3770F123148712A500FD854B /* MultiRowCalloutAnnotationView */,
-				37037549147B331B00B59AA2 /* ActionSheetPicker */,
 				37BAE3041478636100CD5704 /* AppendingFlowView */,
 				37ECC0261475AD9A0088B959 /* DDActionHeaderView */,
 				3794021E14418B1A00D18889 /* JSONKit */,
@@ -1628,7 +1646,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastTestingUpgradeCheck = 0510;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0610;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
 						DevelopmentTeam = 3A9R2W6JVG;
@@ -1844,6 +1862,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F104EEC1A81263900B1B24C /* SLFStackedViewController.m in Sources */,
+				2FE3A85E1A803CB9003EDDF7 /* AbstractActionSheetPicker.m in Sources */,
 				2F19242319378FED00E2A74E /* SLFImprovedRKFetchedResultsTableController.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				28D7ACF80DDB3853001CB0EB /* LegislatorsViewController.m in Sources */,
@@ -1864,6 +1884,7 @@
 				37D7673313E67D5200A77F89 /* _SLFBill.m in Sources */,
 				37D7673413E67D5200A77F89 /* _SLFCommittee.m in Sources */,
 				37D7673613E67D5200A77F89 /* _SLFDistrict.m in Sources */,
+				2FE3A8631A803CB9003EDDF7 /* DistancePickerView.m in Sources */,
 				37D7673713E67D5200A77F89 /* _SLFEvent.m in Sources */,
 				37D7673813E67D5200A77F89 /* _SLFLegislator.m in Sources */,
 				37D7673913E67D5200A77F89 /* _SLFState.m in Sources */,
@@ -1915,12 +1936,14 @@
 				376357F6144CCE7500122377 /* SLFParty.m in Sources */,
 				37DB6C471451AF9B007E0B53 /* TableSectionHeaderView.m in Sources */,
 				37F6FCF514672167003AA80D /* BillsMenuViewController.m in Sources */,
+				2FE3A8611A803CB9003EDDF7 /* ActionSheetDistancePicker.m in Sources */,
 				37F6FCF81467611F003AA80D /* BillsViewController.m in Sources */,
 				37F6FD0A14676565003AA80D /* BillSearchParameters.m in Sources */,
 				3757CE86146A6D9900471CB7 /* _BillAction.m in Sources */,
 				3757CE87146A6D9900471CB7 /* _BillRecordVote.m in Sources */,
 				3757CE88146A6D9900471CB7 /* _BillSponsor.m in Sources */,
 				3757CE89146A6D9900471CB7 /* _BillVoter.m in Sources */,
+				2FE3A85F1A803CB9003EDDF7 /* ActionSheetCustomPicker.m in Sources */,
 				3757CE8A146A6D9900471CB7 /* _CommitteeMember.m in Sources */,
 				3757CE8B146A6D9900471CB7 /* _CommitteeRole.m in Sources */,
 				3757CE95146A6DC900471CB7 /* BillAction.m in Sources */,
@@ -1953,8 +1976,6 @@
 				2F0A8789193E53B900AE115A /* SLFData.xcdatamodeld in Sources */,
 				3771B9A2147ABCA200E9CE39 /* BillsSearchViewController.m in Sources */,
 				37037548147AF51000B59AA2 /* SLFPersistenceManager.m in Sources */,
-				37738A10147B9616002AC526 /* AbstractActionSheetPicker.m in Sources */,
-				37738A11147B9616002AC526 /* ActionSheetStringPicker.m in Sources */,
 				37798CF6147E3A810098361A /* SLFFetchedTableViewController.m in Sources */,
 				37FA2568148043BE0026EFB1 /* BillsWatchedViewController.m in Sources */,
 				37089C6614843439002239A9 /* SLFGlobal.m in Sources */,
@@ -1966,13 +1987,13 @@
 				3770F12F148715AF00FD854B /* ColorPinAnnotationView.m in Sources */,
 				3770F13314872B8E00FD854B /* MultiRowAnnotation.m in Sources */,
 				379A44EE1487ED2700D47B88 /* BillsSubjectsViewController.m in Sources */,
+				2FE3A8621A803CB9003EDDF7 /* ActionSheetStringPicker.m in Sources */,
 				379A44F61488167B00D47B88 /* BillsSubjectsEntry.m in Sources */,
 				371591BF148AC5BA0039ECED /* WatchedBillNotificationManager.m in Sources */,
 				37A16CF3148C0D53000A3C91 /* SLFAnalytics.m in Sources */,
 				37A16D16148C93BA000A3C91 /* SLFActionPathNavigator.m in Sources */,
 				37726AF7148D6AB3009BCE46 /* SLFActionPathRegistry.m in Sources */,
 				37726AFA148DCCE3009BCE46 /* SLFiCloudSync.m in Sources */,
-				37B6FF96149207C8007CB068 /* SLFStackedViewController.m in Sources */,
 				37915377149273A500F55015 /* StackedNavigationBar.m in Sources */,
 				37D7E15414967C0900358E00 /* OpenStatesGearView.m in Sources */,
 				37D6A7031496BE34009A76E8 /* LegislatorDetailHeader.m in Sources */,
@@ -1998,6 +2019,7 @@
 				3748120614C7ABAA00A1AE30 /* NoFetchViewController.m in Sources */,
 				37C957ED14C7B92500A30BC4 /* LegislatorsNoFetchViewController.m in Sources */,
 				3708625914D9C2E900CFC48D /* InlineSubtitleCell.m in Sources */,
+				2FE3A8601A803CB9003EDDF7 /* ActionSheetDatePicker.m in Sources */,
 				3708627D14DA307D00CFC48D /* StyledCellMapping.m in Sources */,
 				377F419B14DCED3A003E211D /* UIImageView+SLFLegislator.m in Sources */,
 			);
@@ -2085,10 +2107,8 @@
 				INFOPLIST_PREPROCESS = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/Vendor/TestFlight/",
 					"$(SRCROOT)/Vendor/GoogleAnalytics/",
 					"$(SRCROOT)/Vendor/Crashlytics/",
-					"$(SYSTEM_APPS_DIR)/Reveal.app/Contents/SharedSupport/iOS-Libraries",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -2112,6 +2132,7 @@
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CURRENT_PROJECT_VERSION = 3;
+				EXCLUDED_SOURCE_FILE_NAMES = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/Crashlytics/",
@@ -2125,10 +2146,8 @@
 				INFOPLIST_PREPROCESS = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/Vendor/TestFlight/",
 					"$(SRCROOT)/Vendor/GoogleAnalytics/",
 					"$(SRCROOT)/Vendor/Crashlytics/",
-					"$(SYSTEM_APPS_DIR)/Reveal.app/Contents/SharedSupport/iOS-Libraries",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -2188,6 +2207,7 @@
 					Vendor/RestKit/Build,
 				);
 				PRODUCT_NAME = OpenStatesSpecs;
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -2214,7 +2234,7 @@
 					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
 					Vendor/RestKit/Build,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "7EBE6766-F3B6-4468-BF44-2FF6B55CDA12";
 				SDKROOT = iphoneos;
@@ -2245,10 +2265,8 @@
 				INFOPLIST_PREPROCESS = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/Vendor/TestFlight/",
 					"$(SRCROOT)/Vendor/GoogleAnalytics/",
 					"$(SRCROOT)/Vendor/Crashlytics/",
-					"$(SYSTEM_APPS_DIR)/Reveal.app/Contents/SharedSupport/iOS-Libraries",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -2280,6 +2298,7 @@
 					Vendor/RestKit/Build,
 				);
 				PRODUCT_NAME = OpenStatesSpecs;
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -2308,7 +2327,7 @@
 					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
 					Vendor/RestKit/Build,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -2338,7 +2357,7 @@
 					Vendor/MTInfoPanel/MTInfoPanel/MTInfoPanel,
 					Vendor/RestKit/Build,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "FAA08197-D4A9-4241-A84F-3C4BB5908A51";
 				SDKROOT = iphoneos;
