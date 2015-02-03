@@ -21,7 +21,6 @@
 #import "StateDetailViewController.h"
 #import "SLFRestKitManager.h"
 #import "SLFAppearance.h"
-#import "SDURLCache.h"
 #import "SLFReachable.h"
 #import "WatchedBillNotificationManager.h"
 #import "SLFAlertView.h"
@@ -44,7 +43,6 @@
 - (void)setUpViewControllersIphone;
 - (void)restoreApplicationState;
 - (void)saveApplicationState;
-- (void)setUpURLCache;
 - (void)networkReachabilityChanged:(NSNotification *)notification;
 @end
 
@@ -100,7 +98,6 @@
 - (void)setUpBackgroundTasks {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [self setUpReachability];
-    [self setUpURLCache];
     [SLFEventsManager sharedManager];
     [[SLFAnalytics sharedAnalytics] beginTracking];
     [pool drain];
@@ -171,15 +168,6 @@
     }
     [window makeKeyAndVisible];
     [stateListVC release];
-}
-
-- (void)setUpURLCache {
-    const NSUInteger memoryCacheSize = 1024*1024*4;   // 4MB mem cache
-    const NSUInteger diskCacheSize = 1024*1024*15;    // 15MB disk cache
-    NSString *cachePath = [SDURLCache defaultCachePath];
-    SDURLCache *urlCache = [[SDURLCache alloc] initWithMemoryCapacity:memoryCacheSize diskCapacity:diskCacheSize diskPath:cachePath];
-    [NSURLCache setSharedURLCache:urlCache];
-    [urlCache release];
 }
 
 - (void)restoreApplicationState {

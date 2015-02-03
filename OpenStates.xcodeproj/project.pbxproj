@@ -91,8 +91,6 @@
 		374D3A1714735F8C00DDF2EE /* StackedBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 374D3A1614735F8C00DDF2EE /* StackedBackgroundView.m */; };
 		374E6AAF14A1A58900C85231 /* GenericDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 374E6AAE14A1A58900C85231 /* GenericDetailHeader.m */; };
 		375683AE14268C830027F268 /* ObjMappingsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 375683AD14268C830027F268 /* ObjMappingsTestCase.m */; };
-		3756942C14ABC32F0014BA7F /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3756942B14ABC32F0014BA7F /* SDURLCache.m */; };
-		3756943014ABC36A0014BA7F /* SDURLCacheTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3756942F14ABC36A0014BA7F /* SDURLCacheTests.m */; };
 		3756944714ABD41E0014BA7F /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3756943214ABD41E0014BA7F /* AFHTTPClient.m */; };
 		3756944814ABD41E0014BA7F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3756943414ABD41E0014BA7F /* AFHTTPRequestOperation.m */; };
 		3756944914ABD41E0014BA7F /* AFImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3756943614ABD41E0014BA7F /* AFImageCache.m */; };
@@ -500,10 +498,6 @@
 		374E6AAD14A1A58900C85231 /* GenericDetailHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericDetailHeader.h; sourceTree = "<group>"; };
 		374E6AAE14A1A58900C85231 /* GenericDetailHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericDetailHeader.m; sourceTree = "<group>"; };
 		375683AD14268C830027F268 /* ObjMappingsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjMappingsTestCase.m; sourceTree = "<group>"; };
-		3756942A14ABC32F0014BA7F /* SDURLCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDURLCache.h; path = Vendor/SDURLCache/SDURLCache.h; sourceTree = "<group>"; };
-		3756942B14ABC32F0014BA7F /* SDURLCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDURLCache.m; path = Vendor/SDURLCache/SDURLCache.m; sourceTree = "<group>"; };
-		3756942E14ABC36A0014BA7F /* SDURLCacheTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDURLCacheTests.h; path = Vendor/SDURLCache/SDURLCacheTests.h; sourceTree = "<group>"; };
-		3756942F14ABC36A0014BA7F /* SDURLCacheTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDURLCacheTests.m; path = Vendor/SDURLCache/SDURLCacheTests.m; sourceTree = "<group>"; };
 		3756943114ABD41E0014BA7F /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		3756943214ABD41E0014BA7F /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
 		3756943314ABD41E0014BA7F /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -1092,25 +1086,6 @@
 			path = MapAnnotations;
 			sourceTree = "<group>";
 		};
-		3756942914ABC3180014BA7F /* SDURLCache */ = {
-			isa = PBXGroup;
-			children = (
-				3756942D14ABC3520014BA7F /* SDURLCacheTests */,
-				3756942A14ABC32F0014BA7F /* SDURLCache.h */,
-				3756942B14ABC32F0014BA7F /* SDURLCache.m */,
-			);
-			name = SDURLCache;
-			sourceTree = "<group>";
-		};
-		3756942D14ABC3520014BA7F /* SDURLCacheTests */ = {
-			isa = PBXGroup;
-			children = (
-				3756942E14ABC36A0014BA7F /* SDURLCacheTests.h */,
-				3756942F14ABC36A0014BA7F /* SDURLCacheTests.m */,
-			);
-			name = SDURLCacheTests;
-			sourceTree = "<group>";
-		};
 		37632032142C5DD500A6185F /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1192,7 +1167,6 @@
 			children = (
 				2FE3A8201A803CB9003EDDF7 /* ActionSheetPicker */,
 				37193F5014BCEA9E00C78262 /* MTInfoPanel */,
-				3756942914ABC3180014BA7F /* SDURLCache */,
 				37A16CF7148C128B000A3C91 /* GoogleAnalytics */,
 				3770F123148712A500FD854B /* MultiRowCalloutAnnotationView */,
 				37BAE3041478636100CD5704 /* AppendingFlowView */,
@@ -1999,7 +1973,6 @@
 				37D6A7031496BE34009A76E8 /* LegislatorDetailHeader.m in Sources */,
 				37A33E9E149D669800D821CD /* SLFEventsManager.m in Sources */,
 				374E6AAF14A1A58900C85231 /* GenericDetailHeader.m in Sources */,
-				3756942C14ABC32F0014BA7F /* SDURLCache.m in Sources */,
 				3756944714ABD41E0014BA7F /* AFHTTPClient.m in Sources */,
 				3756944814ABD41E0014BA7F /* AFHTTPRequestOperation.m in Sources */,
 				3756944914ABD41E0014BA7F /* AFImageCache.m in Sources */,
@@ -2034,7 +2007,6 @@
 				37953BDC14272D9500A0CD86 /* DataModelsTestCase.m in Sources */,
 				370004C3143F55C400F55165 /* SCNetworkReachabilityKitTests.m in Sources */,
 				37031604143FA2F300E1CF4D /* SLFReachableTests.m in Sources */,
-				3756943014ABC36A0014BA7F /* SDURLCacheTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2154,7 +2126,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenStates;
-				PROVISIONING_PROFILE = "FAA08197-D4A9-4241-A84F-3C4BB5908A51";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2273,7 +2245,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenStates;
-				PROVISIONING_PROFILE = "7EBE6766-F3B6-4468-BF44-2FF6B55CDA12";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
