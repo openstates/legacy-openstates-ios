@@ -29,7 +29,7 @@
 @end
 
 @implementation LegislatorsNoFetchViewController
-@synthesize locationManager = _locationManager;
+@synthesize locationManager;
 @synthesize locationActivityPanel = _locationActivityPanel;
 @synthesize hasWarnedForDifferentStates = _hasWarnedForDifferentStates;
 @synthesize geocoder = _geocoder;
@@ -42,7 +42,10 @@
     if (self) {
         if (usingGeolocation) {
             self.title = NSLocalizedString(@"Your Legislators", @"");
-            [self startUpdatingLocation:nil];
+            CLAuthorizationStatus authStatus = [CLLocationManager authorizationStatus];
+            if (authStatus != kCLAuthorizationStatusDenied && authStatus != kCLAuthorizationStatusRestricted) {
+                [self startUpdatingLocation:nil];
+            }
         }
     }
     return self;
@@ -138,16 +141,20 @@
 
 - (void)startUpdatingLocation:(id)sender {
     if (!self.locationManager) {
-        _locationManager = [[CLLocationManager alloc] init];
-        _locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+    }
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
+        NSLog(@"Requestion requestWhenInUseAuthorization");
+        [self.locationManager requestWhenInUseAuthorization];
     }
     if ([CLLocationManager locationServicesEnabled] == NO) {
         [MTInfoPanel showPanelInView:self.view type:MTInfoPanelTypeError title:NSLocalizedString(@"Cannot Geolocate",@"") subtitle:NSLocalizedString(@"Location Services are unavailable.  Ensure that Location Services are enabled in the iOS General Settings.",@"") hideAfter:4.f];
         return;
     }
-    _locationManager.delegate = (id<CLLocationManagerDelegate>) self;    
+   self.locationManager.delegate = (id<CLLocationManagerDelegate>) self;
     self.locationActivityPanel = [MTInfoPanel showPanelInView:self.view type:MTInfoPanelTypeActivity title:NSLocalizedString(@"Finding Location",@"") subtitle:NSLocalizedString(@"Geolocating to determine representation.",@"")];
-    [_locationManager startUpdatingLocation];
+    [self.locationManager startUpdatingLocation];
 }
 
 - (void)stopUpdatingLocation:(NSString *)reason {
@@ -157,8 +164,8 @@
     }
     if (!self.locationManager)
         return;
-    [_locationManager stopUpdatingLocation];
-    _locationManager.delegate = nil;
+    [self.locationManager stopUpdatingLocation];
+    self.locationManager.delegate = nil;
     self.locationManager = nil;
     if (reason && self.isViewLoaded) {
         [MTInfoPanel showPanelInView:self.view type:MTInfoPanelTypeError title:NSLocalizedString(@"Geolocation Error",@"") subtitle:reason hideAfter:4.f];
