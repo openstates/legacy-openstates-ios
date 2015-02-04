@@ -121,11 +121,9 @@
 
 + (NSString *)estimatedBoundaryIDForDistrict:(NSString *)district chamber:(SLFChamber *)chamberObj {
     NSParameterAssert(chamberObj != NULL);
-    NSString *chamberName = [chamberObj.shortName lowercaseString];
     NSString *boundaryCode = chamberObj.isUpperChamber ? @"sldu" : @"sldl";
-    if ([chamberName hasPrefix:@"senate"] || [chamberName hasPrefix:@"house"])
-        chamberName = [NSString stringWithFormat:@"state-%@", chamberName];
-    return [[NSString stringWithFormat:@"%@-%@-%@-district-%@", boundaryCode, chamberObj.stateID, chamberName, district] lowercaseString];    
+    NSString *estimatedId = [[NSString stringWithFormat:@"%@/%@-%@", boundaryCode, chamberObj.stateID, district] lowercaseString];
+    return estimatedId;
 }
 
 - (BOOL)isUpperChamber {

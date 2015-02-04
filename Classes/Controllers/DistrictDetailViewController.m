@@ -132,7 +132,9 @@
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
     self.onSavePersistentActionPath = nil;
-    [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
+    [SLFAlertView showWithTitle:@"Unable to load district" message:@"Sorry, we were unable to load the district map." buttonTitle:@"OK"];
+//    [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
+    NSLog(@"Error loading district: %@", error.description);
 }
 
 - (SLFDistrict *)districtMapForPolygon:(MKPolygon *)polygon {
