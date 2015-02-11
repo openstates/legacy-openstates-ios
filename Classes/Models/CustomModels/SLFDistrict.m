@@ -122,7 +122,7 @@
 + (NSString *)estimatedBoundaryIDForDistrict:(NSString *)district chamber:(SLFChamber *)chamberObj {
     NSParameterAssert(chamberObj != NULL);
     NSString *boundaryCode = chamberObj.isUpperChamber ? @"sldu" : @"sldl";
-    NSString *estimatedId = [[NSString stringWithFormat:@"%@/%@-%@", boundaryCode, chamberObj.stateID, district] lowercaseString];
+    NSString *estimatedId = [[NSString stringWithFormat:@"ocd-division/country:us/state:%@/%@:%@", chamberObj.stateID, boundaryCode, district] lowercaseString];
     return estimatedId;
 }
 
