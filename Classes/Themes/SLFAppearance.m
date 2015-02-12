@@ -92,7 +92,7 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 
     if (systemVersion >= 7) {
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-        [UIView appearance].tintColor = [self primaryTintColor];
+        [UIView appearanceWhenContainedIn:[UISegmentedControl class], nil].tintColor = [self primaryTintColor];
         [UITableView appearance].sectionIndexBackgroundColor = [UIColor clearColor];
         [UITableView appearance].sectionIndexColor = [self cellTextColor];
         [[UINavigationBar appearance] setBarTintColor:[self barTintColor]];
