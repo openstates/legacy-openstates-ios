@@ -12,17 +12,17 @@ typedef enum BillType {
 @class SLFState;
 @class SLFChamber;
 @interface SLFBill : _SLFBill {}
-@property (nonatomic,readonly) SLFState *state;
-@property (nonatomic,readonly) SLFChamber *chamberObj;
-@property (nonatomic,readonly) NSString *name;
-@property (nonatomic,readonly) NSArray *sortedActions;
-@property (nonatomic,readonly) NSArray *sortedVotes;
-@property (nonatomic,readonly) NSArray *sortedSponsors;
-@property (nonatomic,readonly) NSArray *sortedSubjects;
-@property (nonatomic,readonly) NSArray *stages;
+@property (weak, nonatomic,readonly) SLFState *state;
+@property (weak, nonatomic,readonly) SLFChamber *chamberObj;
+@property (weak, nonatomic,readonly) NSString *name;
+@property (weak, nonatomic,readonly) NSArray *sortedActions;
+@property (weak, nonatomic,readonly) NSArray *sortedVotes;
+@property (weak, nonatomic,readonly) NSArray *sortedSponsors;
+@property (weak, nonatomic,readonly) NSArray *sortedSubjects;
+@property (weak, nonatomic,readonly) NSArray *stages;
 @property (nonatomic,readonly) BillType billType;
-@property (nonatomic,readonly) NSString *watchID;
-@property (nonatomic,readonly) NSString *watchSummaryForDisplay;
+@property (weak, nonatomic,readonly) NSString *watchID;
+@property (weak, nonatomic,readonly) NSString *watchSummaryForDisplay;
 + (SLFBill *)billForWatchID:(NSString *)watchID;
 + (NSString *)resourcePathForWatchID:(NSString *)watchID;
 + (NSString *)watchIDForResourcePath:(NSString *)resourcePath;

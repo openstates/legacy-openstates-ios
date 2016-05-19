@@ -12,7 +12,7 @@
 #import "ContributionsDataSource.h"
 
 @interface ContributionsViewController : SLFTableViewController
-@property (nonatomic,retain) ContributionsDataSource *dataSource;
+@property (nonatomic,strong) ContributionsDataSource *dataSource;
 - (void)setQueryEntityID:(NSString *)newObj type:(NSNumber *)newType cycle:(NSString *)newCycle;
 
 @end

@@ -10,7 +10,7 @@
 
 #import "SLFiCloudSync.h"
 #import "SLFPersistenceManager.h"
-#import <RestKit/RestKit.h>
+#import <SLFRestKit/RestKit.h>
 
 NSString * const kSLFiCloudSyncNotification = @"SLFiCloudSyncDidUpdate";
 

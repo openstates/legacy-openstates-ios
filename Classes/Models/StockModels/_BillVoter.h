@@ -22,21 +22,21 @@
 
 
 
-@property (nonatomic, retain) BillRecordVote* noVoteInverse;
+@property (nonatomic, strong) BillRecordVote* noVoteInverse;
 
 //- (BOOL)validateNoVoteInverse:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) BillRecordVote* otherVoteInverse;
+@property (nonatomic, strong) BillRecordVote* otherVoteInverse;
 
 //- (BOOL)validateOtherVoteInverse:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) BillRecordVote* yesVoteInverse;
+@property (nonatomic, strong) BillRecordVote* yesVoteInverse;
 
 //- (BOOL)validateYesVoteInverse:(id*)value_ error:(NSError**)error_;
 

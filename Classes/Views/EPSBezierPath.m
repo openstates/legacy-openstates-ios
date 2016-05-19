@@ -20,17 +20,12 @@
 @synthesize strokeColor = _strokeColor;
 
 + (EPSBezierPath *)pathWithFillColor:(UIColor *)fill strokeColor:(UIColor *)stroke {
-    EPSBezierPath *path = [[[EPSBezierPath alloc] init] autorelease];
+    EPSBezierPath *path = [[EPSBezierPath alloc] init];
     path.fillColor = fill;
     path.strokeColor = stroke;
     return path;
 }
 
-- (void)dealloc {
-    self.fillColor = nil;
-    self.strokeColor = nil;
-    [super dealloc];
-}
 
     // EPS:"M"
 - (void)moveToPoint:(CGPoint)point {

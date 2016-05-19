@@ -9,10 +9,10 @@
 
 
 #import "NoFetchViewController.h"
-#import "MTInfoPanel.h"
+#import "SLFInfoView.h"
 
 @interface NoFetchViewController()
-@property (nonatomic,readonly) RKObjectLoader *objectLoader;
+@property (weak, nonatomic,readonly) RKObjectLoader *objectLoader;
 @end
 
 @implementation NoFetchViewController
@@ -34,11 +34,7 @@
 
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:(id<RKRequestDelegate>)self.tableController];
-    self.tableController = nil;
-    self.state = nil;
-    self.resourcePath = nil;
     self.dataClass = nil;
-    [super dealloc];
 }
 
 - (NSString *)actionPath {
@@ -54,8 +50,8 @@
     _tableController.pullToRefreshEnabled = NO;
         //_tableController.imageForError = [UIImage imageNamed:@"error"];
     CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
-    MTInfoPanel *panel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeActivity title:NSLocalizedString(@"Updating", @"") subtitle:NSLocalizedString(@"Downloading new data",@"") image:nil];
-    _tableController.loadingView = panel;
+    SLFInfoView *infoView = [SLFInfoView staticInfoViewWithFrame:CGRectMake(0,0,panelWidth,60) type:SLFInfoTypeActivity title:NSLocalizedString(@"Updating", @"") subtitle:NSLocalizedString(@"Downloading new data",@"") image:nil];
+    _tableController.loadingView = infoView;
     [self resetObjectMapping];
 }
 

@@ -18,7 +18,7 @@ typedef void (^GCTableViewConfigurationBlock)(UITableView* tableView, UITableVie
 
 @interface GCTableViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic,retain) IBOutlet UITableView *tableView;
+@property (nonatomic,strong) IBOutlet UITableView *tableView;
 @property (nonatomic,assign) BOOL clearsSelectionOnViewWillAppear;
 @property (nonatomic,assign) UITableViewStyle tableViewStyle;
 @property (nonatomic,copy) GCTableViewConfigurationBlock onConfigureTableView;

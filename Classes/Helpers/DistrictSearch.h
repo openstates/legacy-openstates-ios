@@ -9,7 +9,7 @@
 
 
 #import <MapKit/MapKit.h>
-#import <RestKit/RestKit.h>
+#import <SLFRestKit/RestKit.h>
 
 typedef enum {
     DistrictSearchFailOptionLog,
@@ -20,8 +20,7 @@ typedef enum {
 typedef void(^DistrictSearchSuccessWithResultsBlock)(NSArray *results);
 typedef void(^DistrictSearchFailureWithMessageAndFailOptionBlock)(NSString *message, DistrictSearchFailOption failOption);
 
-@interface DistrictSearch : NSObject <RKRequestDelegate> {
-}
+@interface DistrictSearch : NSObject <RKRequestDelegate>
 
 - (void)searchForCoordinate:(CLLocationCoordinate2D)coordinate
                successBlock:(DistrictSearchSuccessWithResultsBlock)successBlock

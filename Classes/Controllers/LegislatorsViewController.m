@@ -34,13 +34,24 @@
     self.tableController.showsSectionIndexTitles = YES;
     self.tableController.tableView.rowHeight = 73;
     self.tableController.sectionNameKeyPath = @"lastnameInitial";
-    __block __typeof__(self) bself = self;
+
+    __weak __typeof__(self) wSelf = self;
     LegislatorCellMapping *objCellMap = [LegislatorCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
+        if (!wSelf)
+            return;
+        __strong __typeof__(wSelf) sSelf = wSelf;
+
         [cellMapping mapKeyPath:@"self" toAttribute:@"legislator"];
+
+        __weak __typeof__(sSelf) wSelf = sSelf;
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+            if (!wSelf)
+                return;
+            __strong __typeof__(wSelf) sSelf = wSelf;
+
             NSString *path = [SLFActionPathNavigator navigationPathForController:[LegislatorDetailViewController class] withResource:object];
-            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
-            [bself.searchBar resignFirstResponder];
+            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:sSelf popToRoot:NO];
+            [sSelf.searchBar resignFirstResponder];
         };
     }];
     [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:objCellMap];    

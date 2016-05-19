@@ -21,7 +21,7 @@
 
 
 
-@property (nonatomic, retain) NSString *chamber;
+@property (nonatomic, strong) NSString *chamber;
 
 
 //- (BOOL)validateChamber:(id*)value_ error:(NSError**)error_;
@@ -29,7 +29,7 @@
 
 
 
-@property (nonatomic, retain) NSString *committeeID;
+@property (nonatomic, strong) NSString *committeeID;
 
 
 //- (BOOL)validateCommitteeID:(id*)value_ error:(NSError**)error_;
@@ -38,7 +38,7 @@
 
 
 
-@property (nonatomic, retain) SLFLegislator* legislatorInverse;
+@property (nonatomic, strong) SLFLegislator* legislatorInverse;
 
 //- (BOOL)validateLegislatorInverse:(id*)value_ error:(NSError**)error_;
 

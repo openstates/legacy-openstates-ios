@@ -49,13 +49,6 @@ enum SECTIONS {
     return self;
 }
 
-- (void)dealloc {
-    self.state = nil;
-    self.selectedSession = nil;
-    self.tableController = nil;
-    [super dealloc];
-}
-
 - (void)viewDidUnload {
     self.tableController = nil;
     [super viewDidUnload];
@@ -70,15 +63,16 @@ enum SECTIONS {
     _tableController.pullToRefreshEnabled = NO;
     CGFloat headerHeight = [TableSectionHeaderView heightForTableViewStyle:self.tableViewStyle];
     NSInteger sectionIndex;
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) bself = self;
    for (sectionIndex = SectionSearchInfo;sectionIndex < kNumSections; sectionIndex++) {
         [_tableController addSectionUsingBlock:^(RKTableSection *section) {
+            if (!bself)
+                return;
             NSString *headerTitle = [bself headerForSectionIndex:sectionIndex];
             TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:bself.tableView.width style:bself.tableViewStyle];
             section.headerTitle = headerTitle;
             section.headerHeight = headerHeight;
             section.headerView = headerView;
-            [headerView release];
         }];
     }
     [self configureTableItems];
@@ -102,8 +96,10 @@ enum SECTIONS {
     if (!self.state)
         return;
     self.title = [NSString stringWithFormat:NSLocalizedString(@"Search %@ Bills",@""), self.state.name];
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) bself = self;
     [self configureSearchBarWithPlaceholder:NSLocalizedString(@"HB 1, Budget, etc", @"") withConfigurationBlock:^(UISearchBar *searchBar) {
+        if (!bself)
+            return;
         [bself configureChamberScopeTitlesForSearchBar:searchBar withState:bself.state];
     }];
     [self configureSearchInfo];
@@ -111,7 +107,7 @@ enum SECTIONS {
 
 - (void)configureSearchInfo {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];    
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) bself = self;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleValue1 alternatingColors:NO largeHeight:NO selectable:NO];
         tableItem.text = NSLocalizedString(@"State", @"");
@@ -119,14 +115,14 @@ enum SECTIONS {
     }]];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.text = NSLocalizedString(@"Selected Session", @"");
-        if (IsEmpty(bself.selectedSession))
+        if (!SLFTypeNonEmptyStringOrNil(bself.selectedSession))
             bself.selectedSession = [bself.state latestSession];
         tableItem.detailText = [bself.state displayNameForSession:bself.selectedSession];
         StyledCellMapping *cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleValue1 alternatingColors:NO largeHeight:NO selectable:YES];
         tableItem.cellMapping = cellMapping;
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell *cell, id obj, NSIndexPath *indexPath) {
             NSArray *displayNames = bself.state.sessionDisplayNames;
-            if (IsEmpty(displayNames))
+            if (!SLFTypeNonEmptyArrayOrNil(displayNames))
                 return;
             NSString *currentDisplayName = cell.detailTextLabel.text;
             NSInteger initialSelection = [bself.state sessionIndexForDisplayName:currentDisplayName];
@@ -138,11 +134,9 @@ enum SECTIONS {
             ActionSheetStringPicker *picker = [[ActionSheetStringPicker alloc] initWithTitle:NSLocalizedString(@"Select a Session", @"") rows:displayNames initialSelection:initialSelection doneBlock:done cancelBlock:nil origin:bself.tableView];
             picker.presentFromRect = [bself.tableView rectForRowAtIndexPath:indexPath];
             [picker showActionSheetPicker];
-            [picker autorelease];
         };
     }]];
     [_tableController loadTableItems:tableItems inSection:SectionSearchInfo];
-    [tableItems release];
 }
 
 #pragma mark - Search Bar Delegate
@@ -160,7 +154,6 @@ enum SECTIONS {
     NSString *resourcePath = [BillSearchParameters pathForText:searchBar.text state:self.state.stateID session:self.selectedSession chamber:chamber];
     BillsViewController *vc = [[BillsViewController alloc] initWithState:self.state resourcePath:resourcePath];
     [self stackOrPushViewController:vc];
-    [vc release];
     [searchBar resignFirstResponder];
 }
 @end

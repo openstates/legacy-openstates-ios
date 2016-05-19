@@ -23,16 +23,21 @@
     return self;
 }
 
-- (void)configureTableController {
+- (void)configureTableController
+{
     [super configureTableController];
-    __block __typeof__(self) bself = self;
+
     StyledCellMapping *cellMapping = [StyledCellMapping subtitleMapping];
     cellMapping.useAlternatingRowColors = YES;
     [cellMapping mapKeyPath:@"fullName" toAttribute:@"textLabel.text"];
     [cellMapping mapKeyPath:@"chamberShortName" toAttribute:@"detailTextLabel.text"];
+
+    __weak __typeof__(self) bself = self;
     cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+        if (!bself)
+            return;
         NSString *path = [SLFActionPathNavigator navigationPathForController:[CommitteeDetailViewController class] withResource:object];
-        if (!IsEmpty(path))
+        if (SLFTypeNonEmptyStringOrNil(path))
             [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
         [bself.searchBar resignFirstResponder];
     };

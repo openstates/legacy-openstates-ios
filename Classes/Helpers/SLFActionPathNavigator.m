@@ -9,8 +9,9 @@
 
 
 #import "SLFActionPathNavigator.h"
-#import <RestKit/RestKit.h>
+#import <SLFRestKit/RestKit.h>
 #import "SLFActionPathRegistry.h"
+#import "AppDelegate.h"
 
 @interface SLFActionPathNavigator()
 + (void)stackOrPushViewController:(UIViewController *)viewController;
@@ -43,7 +44,6 @@
 
 - (void)dealloc {
     self.patternHandlers = nil;
-    [super dealloc];
 }
 
 + (void)registerPattern:(NSString *)pattern withArgumentHandler:(SLFActionArgumentHandlerBlock)block {
@@ -60,7 +60,7 @@
 
 + (NSString *)navigationPathForController:(Class)controller withResourceID:(NSString *)resourceID {
     NSString *path = [SLFActionPathRegistry interpolatePathForClass:controller withResourceID:resourceID];
-    if (IsEmpty(path)) {
+    if (!SLFTypeNonEmptyStringOrNil(path)) {
         RKLogError(@"Attempted to navigate to an invalid action path, controller: %@, resourceID: %@", NSStringFromClass(controller), resourceID);
         return nil;
     }
@@ -70,7 +70,7 @@
 + (NSString *)navigationPathForController:(Class)controller withResource:(id)resource {
     NSParameterAssert([controller respondsToSelector:@selector(actionPathForObject:)]);
     NSString *path = [controller performSelector:@selector(actionPathForObject:) withObject:resource];
-    if (IsEmpty(path)) {
+    if (!SLFTypeNonEmptyStringOrNil(path)) {
         RKLogError(@"Attempted to navigate to an invalid action path, controller: %@, resource: %@", NSStringFromClass(controller), resource);
         return nil;
     }
@@ -78,7 +78,7 @@
 }
 
 + (void)navigateToPath:(NSString *)actionPath skipSaving:(BOOL)skipSaving fromBase:(UIViewController *)baseController popToRoot:(BOOL)popToRoot {
-    if (IsEmpty(actionPath))
+    if (!SLFTypeNonEmptyStringOrNil(actionPath))
         return;
     @try {
         UIViewController *vc = nil;
@@ -93,7 +93,6 @@
         }
         if (vc) {
             [self stackOrPushViewController:vc fromBase:baseController popToRoot:popToRoot];
-            [vc release];
         }
     }
     @catch (NSException *exception) {
@@ -143,25 +142,18 @@
 @synthesize onViewControllerForArguments = _onViewControllerForArguments;
 
 + (SLFActionPathHandler *)handlerWithPattern:(NSString *)pattern onViewControllerForArgumentsBlock:(SLFActionArgumentHandlerBlock)block {
-    SLFActionPathHandler *handler = [[[SLFActionPathHandler alloc] init] autorelease];
+    SLFActionPathHandler *handler = [[SLFActionPathHandler alloc] init];
     handler.pattern = pattern;
     handler.onViewControllerForArguments = block;
     return handler;
 }
 
-- (void)dealloc {
-    self.onViewControllerForArguments = nil;
-    self.pattern = nil;
-    [super dealloc];
-}
-
 - (void)setOnViewControllerForArguments:(SLFActionArgumentHandlerBlock)onViewControllerForArguments {
     if (_onViewControllerForArguments) {
-        Block_release(_onViewControllerForArguments);
         _onViewControllerForArguments = nil;
+        return;
     }
-    _onViewControllerForArguments = Block_copy(onViewControllerForArguments);
+    _onViewControllerForArguments = [onViewControllerForArguments copy];
 }
+
 @end
-
-

@@ -17,9 +17,11 @@
 
 @implementation TableSectionHeaderView
 
-- (TableSectionHeaderView*)initWithFrame:(CGRect)frame style:(UITableViewStyle)style {
+- (TableSectionHeaderView*)initWithFrame:(CGRect)frame style:(UITableViewStyle)style
+{
     self = [super initWithFrame:frame];
-    if (self) {
+    if (self)
+    {
         self.style = style;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.autoresizesSubviews = YES;
@@ -37,7 +39,8 @@
             _titleLabel.textColor = [SLFAppearance tableSectionColor];
             _titleLabel.font = SLFFont(15);
         }
-        else {
+        else
+        {
             backgroundColor = SLFColorWithRGB(207,208,194);
             _titleLabel.textColor = [UIColor whiteColor];
             _titleLabel.font = SLFFont(12);
@@ -49,7 +52,8 @@
     return self;
 }
 
-- (TableSectionHeaderView*)initWithTitle:(NSString *)title width:(CGFloat)width style:(UITableViewStyle)style {
+- (TableSectionHeaderView*)initWithTitle:(NSString *)title width:(CGFloat)width style:(UITableViewStyle)style
+{
     CGFloat height = [TableSectionHeaderView heightForTableViewStyle:style];
     self = [self initWithFrame:CGRectMake(0, 0, width, height) style:style];
     if (self) {
@@ -58,39 +62,27 @@
     return self;
 }
 
-- (void)dealloc {
-    self.titleLabel = nil;
-    self.title = nil;
-    [super dealloc];
-}
-
-- (void)layoutSubviews {
+- (void)layoutSubviews
+{
     [super layoutSubviews];
-    if (!self.titleLabel) {
+    if (!self.titleLabel)
         return;
-    }
     self.titleLabel.origin = CGPointMake(self.offset, 0);
     [self.titleLabel sizeToFit];
 }
 
-- (void)setTitle:(NSString *)title {
-    if (_title)
-    {
-        [_title release];
-    }
+- (void)setTitle:(NSString *)title
+{
     _title = [title copy];
-    if (!self.titleLabel ||
-        !title ||
-        ![title isKindOfClass:[NSString class]])
-    {
+    if (!self.titleLabel || !SLFTypeStringOrNil(title))
         return;
-    }
     self.titleLabel.text = title;
     [self.titleLabel sizeToFit];
     [self setNeedsLayout];
 }
 
-+ (CGFloat)heightForTableViewStyle:(UITableViewStyle)style {
++ (CGFloat)heightForTableViewStyle:(UITableViewStyle)style
+{
     if (style == UITableViewStyleGrouped)
         return 26.f;
     return 18.f;
@@ -103,7 +95,8 @@
     return 10.f;
 }
 
-- (CGFloat)offset {
+- (CGFloat)offset
+{
     return [self offsetForStyle:self.style];
 }
 

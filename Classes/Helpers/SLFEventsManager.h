@@ -18,8 +18,8 @@
 @end
 
 @interface SLFEventsManager : NSObject <EKCalendarChooserDelegate, EKEventEditViewDelegate>
-@property (nonatomic,retain) EKEventStore *eventStore;
-@property (nonatomic,retain) EKCalendar *eventCalendar;
+@property (nonatomic,strong) EKEventStore *eventStore;
+@property (nonatomic,strong) EKCalendar *eventCalendar;
 + (id)sharedManager;
 - (EKEvent *)findOrCreateEventWithIdentifier:(NSString *)eventIdentifier;
 - (BOOL)saveEvent:(EKEvent *)event;

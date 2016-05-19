@@ -7,14 +7,15 @@
 //  This work is licensed under the BSD-3 License included with this source
 // distribution.
 
+#import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface GradientBackgroundView : UIView
 - (void)loadLayerAndGradientColors;
 - (void)loadLayerAndGradientWithColors:(NSArray *)colors;
 @end
 
-@class CAGradientLayer;
-@interface GradientInnerShadowView : UIView 
+@interface GradientInnerShadowView : UIView
 @property (nonatomic,retain) CAGradientLayer *gradient;
 @end
 

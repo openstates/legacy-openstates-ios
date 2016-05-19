@@ -26,10 +26,10 @@ typedef enum {
 @property (nonatomic,copy) NSString *initial;
 @property (nonatomic,copy) NSString *abbreviation;
 @property (nonatomic,assign) SLFPartyType type;
-@property (nonatomic,retain) UIImage *image;
+@property (nonatomic,strong) UIImage *image;
 @property (nonatomic,assign) NSUInteger pinColorIndex;
-@property (nonatomic,retain) UIColor *color;
-@property (nonatomic,readonly) NSString *plural;
+@property (nonatomic,strong) UIColor *color;
+@property (weak, nonatomic,readonly) NSString *plural;
 @end
 
 @interface Democrat : SLFParty

@@ -13,13 +13,13 @@
 #import "SLFDrawingExtensions.h"
 
 @interface AppendingFlowCell()
-@property (nonatomic,retain) AppendingFlowView *flowView;
+@property (nonatomic,strong) AppendingFlowView *flowView;
 @end
 
 @implementation AppendingFlowCell
 @synthesize stages = _stages;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     if (self)
     {
@@ -38,8 +38,6 @@
 
 - (void)dealloc {
     self.stages = nil;
-    self.flowView = nil;
-    [super dealloc];
 }
 
 - (void)prepareForReuse
@@ -61,16 +59,19 @@
     return _stages;
 }
 
-- (void)setStages:(NSArray *)stages {
+- (void)setStages:(NSArray *)stages
+{
     SLFRelease(_stages);
-    _stages = [stages copy];
-    if (_flowView && !IsEmpty(stages)) {
-        [_flowView setStages:stages];
+    _stages = [SLFTypeNonEmptyArrayOrNil(stages) copy];
+    if (_flowView && _stages)
+    {
+        [_flowView setStages:_stages];
         [self setNeedsLayout];
     }
 }
 
-- (void)setUseDarkBackground:(BOOL)useDarkBackground {
+- (void)setUseDarkBackground:(BOOL)useDarkBackground
+{
     _useDarkBackground = useDarkBackground;
     self.backgroundColor = useDarkBackground ? [SLFAppearance cellBackgroundDarkColor] : [SLFAppearance cellBackgroundLightColor];
     [self setNeedsDisplay];
@@ -81,32 +82,30 @@
 
 @implementation AppendingFlowCellMapping
 
-+ (id)cellMapping {
++ (instancetype)cellMapping
+{
     return [self mappingForClass:[AppendingFlowCell class]];
 }
 
-- (id)init {
+- (instancetype)init
+{
     self = [super init];
     if (self) {
         self.cellClass = [AppendingFlowCell class];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.rowHeight = 90; 
         self.reuseIdentifier = nil;
-		__block __typeof__(self) bself = self;
+        __weak __typeof__(self) wSelf = self;
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             AppendingFlowCell *flowCell = (AppendingFlowCell *)cell;
             [flowCell setUseDarkBackground:NO];
-            if (!IsEmpty(bself.stages)) {
-                flowCell.stages = bself.stages;
+            if (SLFTypeNonEmptyArrayOrNil(wSelf.stages)) {
+                flowCell.stages = wSelf.stages;
             }
         };
     }
     return self;
 }
 
-- (void)dealloc {
-    self.stages = nil;
-    [super dealloc];
-}
 
 @end

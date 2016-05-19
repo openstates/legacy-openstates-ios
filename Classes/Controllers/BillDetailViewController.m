@@ -16,7 +16,6 @@
 #import "BillVotesViewController.h"
 #import "SLFMappingsManager.h"
 #import "SLFRestKitManager.h"
-#import "SVWebViewController.h"
 #import "SLFReachable.h"
 #import "NSDate+SLFDateHelper.h"
 #import "LegislatorCell.h"
@@ -27,7 +26,7 @@
 
 @interface BillDetailViewController()
 
-@property (nonatomic,retain) IBOutlet UIButton *watchButton;
+@property (nonatomic,strong) IBOutlet UIButton *watchButton;
 
 - (id)initWithResourcePath:(NSString *)resourcePath;
 - (RKTableViewCellMapping *)actionCellMap;
@@ -83,10 +82,6 @@
 
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-	self.bill = nil;
-    self.tableController = nil;
-    self.watchButton = nil;
-    [super dealloc];
 }
 
 - (void)viewDidUnload {
@@ -135,10 +130,10 @@
 - (void)setState:(BOOL)isOn forWatchButton:(UIButton *)button {
     static UIImage *buttonOff;
     if (!buttonOff)
-        buttonOff = [[UIImage imageNamed:@"StarButtonOff"] retain];
+        buttonOff = [UIImage imageNamed:@"StarButtonOff"];
     static UIImage *buttonOn;
     if (!buttonOn)
-        buttonOn = [[UIImage imageNamed:@"StarButtonOn"] retain];
+        buttonOn = [UIImage imageNamed:@"StarButtonOn"];
     button.tag = isOn;
     UIImage *normal = isOn ? buttonOn : buttonOff;
     [button setImage:normal forState:UIControlStateNormal];
@@ -191,7 +186,7 @@
 
 - (void)configureBillInfoItems {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
-    __block SLFBill * aBill = self.bill;
+    __weak SLFBill * aBill = self.bill;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleSubtitle alternatingColors:NO largeHeight:YES selectable:NO];
         tableItem.text = aBill.billID;
@@ -208,23 +203,22 @@
         tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Bill info was updated %@",@""), [aBill.dateUpdated stringForDisplayWithPrefix:YES]];
     }]];
     NSArray *sortedActions = aBill.sortedActions;
-    if (!IsEmpty(sortedActions)) {
+    if (SLFTypeNonEmptyArrayOrNil(sortedActions)) {
         [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
             tableItem.cellMapping = [StyledCellMapping staticSubtitleMapping];
             tableItem.text = NSLocalizedString(@"Latest Activity",@"");
-            BillAction *latest = [sortedActions objectAtIndex:0];
+            BillAction *latest = sortedActions[0];
             tableItem.detailText = [NSString stringWithFormat:@"%@ - %@", latest.title, latest.subtitle];
         }]];
     }
     SLFAddTableControllerSectionWithTitle(self.tableController, NSLocalizedString(@"Bill Details", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [self.tableController loadTableItems:tableItems inSection:sectionIndex];
-    [tableItems release];
 }
 
 - (void)configureStages {
     NSArray *stages = _bill.stages;
-    if (IsEmpty(stages))
+    if (!SLFTypeNonEmptyArrayOrNil(stages))
         return;
     RKTableItem *stageItemCell = [RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
         AppendingFlowCellMapping *cellMap = [AppendingFlowCellMapping cellMapping];
@@ -235,12 +229,11 @@
     SLFAddTableControllerSectionWithTitle(self.tableController, NSLocalizedString(@"Legislative Status (Beta)",@""));
     NSUInteger sectionIndex = self.tableController.sectionCount-1;
     [self.tableController loadTableItems:tableItems inSection:sectionIndex];
-    [tableItems release];
 }
 
 - (void)configureSubjects {
     NSArray *tableItems = _bill.sortedSubjects;
-    if (IsEmpty(tableItems))
+    if (!SLFTypeNonEmptyArrayOrNil(tableItems))
         return;
     SLFAddTableControllerSectionWithTitle(self.tableController, NSLocalizedString(@"Subjects", @""));
     NSUInteger sectionIndex = self.tableController.sectionCount-1;
@@ -252,17 +245,16 @@
     [self addTableItems:tableItems fromWebAssets:_bill.versions withType:NSLocalizedString(@"Version",@"")];
     [self addTableItems:tableItems fromWebAssets:_bill.documents withType:NSLocalizedString(@"Document",@"")];
     [self addTableItems:tableItems fromWebAssets:_bill.sources withType:NSLocalizedString(@"Resource",@"")];
-    if (!IsEmpty(tableItems)) {
+    if (tableItems.count) {
         SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Resources", @""));
         NSUInteger sectionIndex = _tableController.sectionCount-1;
         [_tableController loadTableItems:tableItems inSection:sectionIndex];
     }
-    [tableItems release];
 }
 
 - (void)configureSponsors {
     NSArray *tableItems = _bill.sortedSponsors;
-    if (IsEmpty(tableItems))
+    if (!SLFTypeNonEmptyArrayOrNil(tableItems))
         return;
     SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Sponsors", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
@@ -271,7 +263,7 @@
 
 - (void)configureVotes {
     NSArray *tableItems = _bill.sortedVotes;
-    if (IsEmpty(tableItems))
+    if (!SLFTypeNonEmptyArrayOrNil(tableItems))
         return;
     SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Votes", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
@@ -280,7 +272,7 @@
 
 - (void)configureActions {
     NSArray *tableItems = _bill.sortedActions;
-    if (IsEmpty(tableItems))
+    if (!SLFTypeNonEmptyArrayOrNil(tableItems))
         return;
     SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Actions", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
@@ -291,7 +283,7 @@
     StyledCellMapping *cellMap = [StyledCellMapping cellMapping];
     [cellMap mapKeyPath:@"word" toAttribute:@"textLabel.text"];
     cellMap.reuseIdentifier = @"SUBJECT_CELL";
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) bself = self;
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell *cell, id object, NSIndexPath *indexPath) {
         if (!object || ![object valueForKey:@"word"])
             return;
@@ -300,7 +292,6 @@
         BillsViewController *vc = [[BillsViewController alloc] initWithState:bself.bill.stateObj resourcePath:subjectPath];
         vc.title = [NSString stringWithFormat:@"%@: %@", [bself.bill.stateID uppercaseString], word];
         [bself stackOrPushViewController:vc];
-        [vc release];
     };
     return cellMap;
 }
@@ -313,7 +304,7 @@
 }
 
 - (RKTableViewCellMapping *)sponsorCellMap {
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) bself = self;
     FoundLegislatorCellMapping *cellMap = [FoundLegislatorCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"foundLegislator" toAttribute:@"legislator"];
         [cellMapping mapKeyPath:@"type" toAttribute:@"role"];
@@ -321,7 +312,7 @@
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             NSString *legID = [object valueForKey:@"legID"];
             NSString *path = [SLFActionPathNavigator navigationPathForController:[LegislatorDetailViewController class] withResourceID:legID];
-            if (!IsEmpty(path))
+            if (SLFTypeNonEmptyStringOrNil(path))
                 [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
         };
     }];
@@ -332,25 +323,24 @@
     StyledCellMapping *cellMap = [StyledCellMapping subtitleMapping];
     [cellMap mapKeyPath:@"title" toAttribute:@"textLabel.text"];
     [cellMap mapKeyPath:@"subtitle" toAttribute:@"detailTextLabel.text"];
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) bself = self;
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
         BillRecordVote *vote = object;
         BillVotesViewController *vc = [[BillVotesViewController alloc] initWithVote:vote];
         [bself stackOrPushViewController:vc];
-        [vc release];
     };
     return cellMap;
 }
 
 - (void)addTableItems:(NSMutableArray *)tableItems fromWebAssets:(NSSet *)assets withType:(NSString *)type {
-    if (IsEmpty(assets))
+    if (!SLFTypeNonEmptySetOrNil(assets))
         return;
     NSArray *sorted = [assets sortedArrayUsingDescriptors:[GenericAsset sortDescriptors]];
     for (GenericAsset *source in sorted) {
-        if (IsEmpty(source.url))
+        if (!SLFTypeURLOrNil(source.url))
             continue;
         NSString *subtitle = source.name;
-        if (IsEmpty(subtitle))
+        if (!SLFTypeNonEmptyStringOrNil(subtitle))
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:type subtitle:subtitle url:source.url]];
     }

@@ -12,10 +12,11 @@
 #import "SLFDataModels.h"
 #import "SLFRestKitManager.h"
 #import "NSString+SLFExtensions.h"
-#import "MTInfoPanel.h"
+#import "SLFInfoView.h"
 #import "SLFDrawingExtensions.h"
 #import "TableSectionHeaderView.h"
 #import "OpenStatesTableViewCell.h"
+#import <Crashlytics/Crashlytics.h>
 
 @interface SLFFetchedTableViewController()
 - (NSString *)chamberFilterForScopeIndex:(NSInteger )scopeIndex;
@@ -73,14 +74,14 @@
     }
 
     CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
-    MTInfoPanel *offlinePanel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeError title:NSLocalizedString(@"Offline", @"") subtitle:NSLocalizedString(@"The server is unavailable.",@"") image:nil];
+    SLFInfoView *offlinePanel = [SLFInfoView staticInfoViewWithFrame:CGRectMake(0,0,panelWidth,60) type:SLFInfoTypeError title:NSLocalizedString(@"Offline", @"") subtitle:NSLocalizedString(@"The server is unavailable.",@"") image:nil];
     self.tableController.imageForOffline = [UIImage imageFromView:offlinePanel];    
-    MTInfoPanel *panel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeActivity title:NSLocalizedString(@"Updating", @"") subtitle:NSLocalizedString(@"Downloading new data",@"") image:nil];
+    SLFInfoView *panel = [SLFInfoView staticInfoViewWithFrame:CGRectMake(0,0,panelWidth,60) type:SLFInfoTypeActivity title:NSLocalizedString(@"Updating", @"") subtitle:NSLocalizedString(@"Downloading new data",@"") image:nil];
     self.tableController.loadingView = panel;
     self.tableController.predicate = nil;
     self.defaultEmptyItem = [RKTableItem tableItemWithText:NSLocalizedString(@"No Entries Found",@"") detailText:NSLocalizedString(@"There were no entries found. You may refresh the results by dragging down on the table.",@"")];
     self.defaultEmptyItem.cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleSubtitle alternatingColors:NO largeHeight:YES selectable:NO];
-    [self.defaultEmptyItem.cellMapping addDefaultMappings];    
+    [self.defaultEmptyItem.cellMapping addDefaultMappings];
     self.tableController.emptyItem = self.defaultEmptyItem;
     NSAssert(self.dataClass != NULL, @"Must set a data class before loading the view");
     [self.tableController setObjectMappingForClass:self.dataClass];
@@ -100,20 +101,20 @@
         
         UITableViewStyle style = self.tableViewStyle;
         self.tableController.heightForHeaderInSection = [TableSectionHeaderView heightForTableViewStyle:style];
-        __block __typeof__(self) bself = self;
+        __weak __typeof__(self) wSelf = self;
         self.tableController.onViewForHeaderInSection = ^UIView*(NSUInteger sectionIndex, NSString* sectionTitle) {
-            TableSectionHeaderView *sectionView = [[[TableSectionHeaderView alloc] initWithTitle:[sectionTitle capitalizedString] width:CGRectGetWidth(bself.tableView.bounds) style:style] autorelease];
+            TableSectionHeaderView *sectionView = [[TableSectionHeaderView alloc] initWithTitle:[sectionTitle capitalizedString] width:CGRectGetWidth(wSelf.tableView.bounds) style:style];
             return sectionView;
         };   
     }
     if (self.resourcePath)
         [self.tableController loadTable];
     if ([self hasSearchableDataClass] && !self.omitSearchBar) {
-        __block __typeof__(self) bself = self;
+        __weak __typeof__(self) wSelf = self;
         [self configureSearchBarWithPlaceholder:NSLocalizedString(@"Filter results", @"") withConfigurationBlock:^(UISearchBar *searchBar) {
-            if ([bself shouldShowChamberScopeBar]) {
-                [bself configureChamberScopeTitlesForSearchBar:searchBar withState:bself.state];
-                [bself performSelector:@selector(resetChamberScopeForSearchBar:) withObject:searchBar afterDelay:.3];
+            if ([wSelf shouldShowChamberScopeBar]) {
+                [wSelf configureChamberScopeTitlesForSearchBar:searchBar withState:wSelf.state];
+                [wSelf performSelector:@selector(resetChamberScopeForSearchBar:) withObject:searchBar afterDelay:.3];
             }
         }];
     }
@@ -126,11 +127,7 @@
 }
 
 - (void)dealloc {
-    self.tableController = nil;
-    self.state = nil;
-    self.resourcePath = nil;
     self.dataClass = nil;
-    [super dealloc];
 }
 
 - (void)resizeLoadingView {
@@ -188,7 +185,7 @@
 #pragma mark - SearchBar
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    if (!IsEmpty(searchBar.text)) {
+    if (SLFTypeNonEmptyStringOrNil(searchBar.text)) {
         NSPredicate *predicate = [self.dataClass predicateForSearchWithText:searchBar.text searchMode:RKSearchModeOr];
         self.tableController.predicate = [self compoundPredicate:[self defaultPredicate] withPredicate:predicate];
         if ([self shouldShowChamberScopeBar]) {
@@ -203,7 +200,7 @@
 - (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
     [super searchBar:searchBar selectedScopeButtonIndexDidChange:selectedScope];
     NSString *chamberFilter = [self chamberFilterForScopeIndex:selectedScope];
-    if (!IsEmpty(searchBar.text)) {
+    if (SLFTypeNonEmptyStringOrNil(searchBar.text)) {
         [self applyCustomFilterWithScopeIndex:selectedScope withText:searchBar.text];
         RKLogDebug(@"Built-In Predicate = %@", self.tableController.fetchRequest.predicate.predicateFormat);
         if (self.tableController.predicate)
@@ -231,9 +228,23 @@
 }
 
 - (void)applyCustomFilterWithScopeIndex:(NSInteger)scopeIndex withText:(NSString *)searchText {
+    NSDictionary *logDict = nil;
+    BOOL isShowingScope = [self shouldShowChamberScopeBar];
+    if (isShowingScope && searchText.length > 6)
+    {
+        NSString *chamberFilter = [self chamberFilterForScopeIndex:scopeIndex];
+        if (!chamberFilter)
+            chamberFilter = @"Both";
+        logDict = @{@"scopeIndex": @(scopeIndex),
+                    @"chamber": chamberFilter};
+    }
+
+    [Answers logSearchWithQuery:searchText customAttributes:logDict];
+
     NSPredicate *predicate = [self.dataClass predicateForSearchWithText:searchText searchMode:RKSearchModeOr];
     self.tableController.predicate = [self compoundPredicate:[self defaultPredicate] withPredicate:predicate];
-    if ([self shouldShowChamberScopeBar]) {
+    if (isShowingScope)
+    {
         NSString *chamberFilter = [self chamberFilterForScopeIndex:scopeIndex];
         [self filterCustomPredicateWithChamberFilter:chamberFilter];
     }
@@ -242,7 +253,7 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     [super searchBar:searchBar textDidChange:searchText];
-    if (IsEmpty(searchText)) {
+    if (!SLFTypeNonEmptyStringOrNil(searchText)) {
         [self resetToDefaultFilterPredicateWithScopeIndex:searchBar.selectedScopeButtonIndex];
         return;
     }
@@ -279,9 +290,9 @@
         replaceTerm = @"AND chamber == \"lower\"";
     else if ([oldPredicateString hasSubstring:@"AND chamber == \"upper\""])
         replaceTerm = @"AND chamber == \"upper\"";
-    if (!IsEmpty(replaceTerm))
+    if (SLFTypeNonEmptyStringOrNil(replaceTerm))
         newPredicateString = [oldPredicateString stringByReplacingOccurrencesOfString:replaceTerm withString:newChamberFilter];
-    else if (!IsEmpty(newChamberFilter))
+    else if (SLFTypeNonEmptyStringOrNil(newChamberFilter))
         newPredicateString = [oldPredicateString stringByAppendingFormat:@" %@", newChamberFilter];
     if (newPredicateString) {
         predicate = [NSPredicate predicateWithFormat:newPredicateString];

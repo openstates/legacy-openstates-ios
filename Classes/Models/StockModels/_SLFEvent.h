@@ -2,7 +2,7 @@
 // Make changes to SLFEvent.h instead.
 
 #import <CoreData/CoreData.h>
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 
 @class EventParticipant;
 @class GenericAsset;
@@ -32,7 +32,7 @@
 
 
 
-@property (nonatomic, retain) NSDate *dateCreated;
+@property (nonatomic, strong) NSDate *dateCreated;
 
 
 //- (BOOL)validateDateCreated:(id*)value_ error:(NSError**)error_;
@@ -40,7 +40,7 @@
 
 
 
-@property (nonatomic, retain) NSDate *dateEnd;
+@property (nonatomic, strong) NSDate *dateEnd;
 
 
 //- (BOOL)validateDateEnd:(id*)value_ error:(NSError**)error_;
@@ -48,7 +48,7 @@
 
 
 
-@property (nonatomic, retain) NSDate *dateStart;
+@property (nonatomic, strong) NSDate *dateStart;
 
 
 //- (BOOL)validateDateStart:(id*)value_ error:(NSError**)error_;
@@ -57,7 +57,7 @@
 @property (nonatomic, copy) NSString *timezone;
 
 
-@property (nonatomic, retain) NSDate *dateUpdated;
+@property (nonatomic, strong) NSDate *dateUpdated;
 
 
 //- (BOOL)validateDateUpdated:(id*)value_ error:(NSError**)error_;
@@ -65,7 +65,7 @@
 
 
 
-@property (nonatomic, retain) NSString *eventDescription;
+@property (nonatomic, strong) NSString *eventDescription;
 
 
 //- (BOOL)validateEventDescription:(id*)value_ error:(NSError**)error_;
@@ -73,7 +73,7 @@
 
 
 
-@property (nonatomic, retain) NSString *eventID;
+@property (nonatomic, strong) NSString *eventID;
 
 
 //- (BOOL)validateEventID:(id*)value_ error:(NSError**)error_;
@@ -81,7 +81,7 @@
 
 
 
-@property (nonatomic, retain) NSString *link;
+@property (nonatomic, strong) NSString *link;
 
 
 //- (BOOL)validateLink:(id*)value_ error:(NSError**)error_;
@@ -89,7 +89,7 @@
 
 
 
-@property (nonatomic, retain) NSString *status;
+@property (nonatomic, strong) NSString *status;
 
 
 //- (BOOL)validateStatus:(id*)value_ error:(NSError**)error_;
@@ -97,7 +97,7 @@
 
 
 
-@property (nonatomic, retain) NSString *notes;
+@property (nonatomic, strong) NSString *notes;
 
 
 //- (BOOL)validateNotes:(id*)value_ error:(NSError**)error_;
@@ -105,7 +105,7 @@
 
 
 
-@property (nonatomic, retain) NSString *ekEventIdentifier;
+@property (nonatomic, strong) NSString *ekEventIdentifier;
 
 
 //- (BOOL)validateEkEventIdentifier:(id*)value_ error:(NSError**)error_;
@@ -113,7 +113,7 @@
 
 
 
-@property (nonatomic, retain) NSString *location;
+@property (nonatomic, strong) NSString *location;
 
 
 //- (BOOL)validateLocation:(id*)value_ error:(NSError**)error_;
@@ -121,7 +121,7 @@
 
 
 
-@property (nonatomic, retain) NSString *session;
+@property (nonatomic, strong) NSString *session;
 
 
 //- (BOOL)validateSession:(id*)value_ error:(NSError**)error_;
@@ -129,7 +129,7 @@
 
 
 
-@property (nonatomic, retain) NSString *stateID;
+@property (nonatomic, strong) NSString *stateID;
 
 
 //- (BOOL)validateStateID:(id*)value_ error:(NSError**)error_;
@@ -137,7 +137,7 @@
 
 
 
-@property (nonatomic, retain) NSString *type;
+@property (nonatomic, strong) NSString *type;
 
 
 //- (BOOL)validateType:(id*)value_ error:(NSError**)error_;
@@ -146,21 +146,21 @@
 
 
 
-@property (nonatomic, retain) NSSet* participants;
+@property (nonatomic, strong) NSSet* participants;
 
 - (NSMutableSet*)participantsSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* sources;
+@property (nonatomic, strong) NSSet* sources;
 
 - (NSMutableSet*)sourcesSet;
 
 
 
 
-@property (nonatomic, retain) SLFState* stateObj;
+@property (nonatomic, strong) SLFState* stateObj;
 
 //- (BOOL)validateStateObj:(id*)value_ error:(NSError**)error_;
 

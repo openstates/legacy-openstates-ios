@@ -35,11 +35,6 @@
     return self;
 }
 
-- (void)dealloc {
-    self.tableView = nil;
-    Block_release(_onConfigureTableView);
-    [super dealloc];
-}
 
 - (void)loadView {
     [super loadView];
@@ -70,10 +65,9 @@
 
 - (void)setOnConfigureTableView:(GCTableViewConfigurationBlock)onConfigureTableView {
     if (_onConfigureTableView) {
-        Block_release(_onConfigureTableView);
         _onConfigureTableView = nil;
     }
-    _onConfigureTableView = Block_copy(onConfigureTableView);
+    _onConfigureTableView = [onConfigureTableView copy];
 }
 
 

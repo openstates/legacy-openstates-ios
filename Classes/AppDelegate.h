@@ -10,9 +10,9 @@
 @class SLFStackedViewController;
 @class AppBarController;
 @interface AppDelegate : NSObject <UIApplicationDelegate>
-@property (nonatomic,retain) IBOutlet UIWindow *window;
-@property (nonatomic,/*retain,*/ readonly) SLFStackedViewController *stackedViewController;
-@property (nonatomic,retain, readonly) AppBarController *appBarController;
-@property (nonatomic,retain, readonly) UINavigationController *navigationController;
+@property (nonatomic,strong) IBOutlet UIWindow *window;
+@property (weak, nonatomic,/*retain,*/ readonly) SLFStackedViewController *stackedViewController;
+@property (nonatomic,strong, readonly) AppBarController *appBarController;
+@property (nonatomic,strong, readonly) UINavigationController *navigationController;
 @end
 

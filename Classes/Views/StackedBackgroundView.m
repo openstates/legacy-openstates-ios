@@ -12,7 +12,7 @@
 #import "StackedMenuViewController.h"
 
 @interface StackedBackgroundView()
-@property (nonatomic,retain) IBOutlet UIImageView *backgroundImageView;
+@property (nonatomic,strong) IBOutlet UIImageView *backgroundImageView;
 - (void)configure;
 @end
 
@@ -40,14 +40,10 @@
     return self;
 }
 
-- (void)dealloc {
-    self.backgroundImageView = nil;
-    [super dealloc];
-}
 
 - (void)configure {
     UIImage *bgImage = [UIImage imageNamed:@"StackedBackground-Portrait"];
-    _backgroundImageView = [[[UIImageView alloc] initWithImage:bgImage] retain];
+    _backgroundImageView = [[UIImageView alloc] initWithImage:bgImage];
     [self addSubview:_backgroundImageView];
     [self setNeedsLayout];
 }

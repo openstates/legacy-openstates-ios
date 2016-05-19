@@ -27,7 +27,7 @@
 
 
 
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, strong) NSString *name;
 
 
 //- (BOOL)validateName:(id*)value_ error:(NSError**)error_;
@@ -35,7 +35,7 @@
 
 
 
-@property (nonatomic, retain) NSString *url;
+@property (nonatomic, strong) NSString *url;
 
 
 //- (BOOL)validateUrl:(id*)value_ error:(NSError**)error_;
@@ -44,49 +44,49 @@
 
 
 
-@property (nonatomic, retain) SLFBill* billDocumentsInverse;
+@property (nonatomic, strong) SLFBill* billDocumentsInverse;
 
 //- (BOOL)validateBillDocumentsInverse:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) SLFBill* billSourcesInverse;
+@property (nonatomic, strong) SLFBill* billSourcesInverse;
 
 //- (BOOL)validateBillSourcesInverse:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) SLFBill* billVersionsInverse;
+@property (nonatomic, strong) SLFBill* billVersionsInverse;
 
 //- (BOOL)validateBillVersionsInverse:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) SLFCommittee* committeeInverse;
+@property (nonatomic, strong) SLFCommittee* committeeInverse;
 
 //- (BOOL)validateCommitteeInverse:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) SLFEvent* eventInverse;
+@property (nonatomic, strong) SLFEvent* eventInverse;
 
 //- (BOOL)validateEventInverse:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) SLFLegislator* legislatorInverse;
+@property (nonatomic, strong) SLFLegislator* legislatorInverse;
 
 //- (BOOL)validateLegislatorInverse:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) BillRecordVote* voteInverse;
+@property (nonatomic, strong) BillRecordVote* voteInverse;
 
 //- (BOOL)validateVoteInverse:(id*)value_ error:(NSError**)error_;
 

@@ -11,11 +11,13 @@
 #import "SLFTableViewController.h"
 #import "SLFAppearance.h"
 #import "GradientBackgroundView.h"
-#import "SVWebViewController.h"
 #import "SLFReachable.h"
 #import "SLFDataModels.h"
 #import "SLFActionPathRegistry.h"
 #import "OpenStatesTableViewCell.h"
+#import "AppDelegate.h"
+
+@import SafariServices;
 
 @implementation SLFTableViewController
 @synthesize useGradientBackground;
@@ -42,7 +44,6 @@
     self.titleBarView = nil;
     self.onSavePersistentActionPath = nil;
     self.searchBar = nil;
-    [super dealloc];
 }
 
 - (void)viewDidUnload {
@@ -79,7 +80,6 @@
         GradientBackgroundView *gradient = [[GradientBackgroundView alloc] initWithFrame:self.tableView.bounds];
         gradient.backgroundColor = [SLFAppearance tableBackgroundLightColor];
         self.tableView.backgroundView = gradient;
-        [gradient release];
     }
 }
 
@@ -98,10 +98,10 @@
 
 - (void)setOnSavePersistentActionPath:(SLFPersistentActionsSaveBlock)onSavePersistentActionPath {
     if (_onSavePersistentActionPath) {
-        Block_release(_onSavePersistentActionPath);
         _onSavePersistentActionPath = nil;
+        return;
     }
-    _onSavePersistentActionPath = Block_copy(onSavePersistentActionPath);
+    _onSavePersistentActionPath = [onSavePersistentActionPath copy];
 }
 
 - (void)setTitle:(NSString *)title {
@@ -151,22 +151,41 @@
 }
 
 - (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url {
-    NSParameterAssert(!IsEmpty(url));
+    url = SLFTypeNonEmptyStringOrNil(url);
+    if (!url)
+        return nil;
+    NSURL *URL = [NSURL URLWithString:url];
+    if (!URL)
+        return nil;
+
     BOOL useAlternatingRowColors = NO;
     if (self.isViewLoaded)
         useAlternatingRowColors =  (self.tableView.style == UITableViewStylePlain); 
-    __block __typeof__(self) bself = self;
     StyledCellMapping *cellMapping = [StyledCellMapping cellMapping];
     cellMapping.style = UITableViewCellStyleSubtitle;
     cellMapping.useAlternatingRowColors = useAlternatingRowColors;
+
+    __weak __typeof__(self) wSelf = self;
     cellMapping.onSelectCell = ^(void) {
-        if (SLFIsReachableAddress(url)) {
-            SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:url];
-            webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-            [bself presentViewController:webViewController animated:YES completion:NULL];
-            [webViewController release];
+        if (!URL.scheme || ![@[@"https",@"http"] containsObject:URL.scheme])
+        {
+            return;
         }
+
+        SLFReachabilityCompletionHandler completion = ^(NSURL *url, BOOL isReachable){
+            __strong __typeof__(wSelf) sSelf = wSelf;
+
+            if (!isReachable)
+                return;
+
+            SFSafariViewController *webViewController = [[SFSafariViewController alloc] initWithURL:url entersReaderIfAvailable:NO];
+            webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+            [sSelf presentViewController:webViewController animated:YES completion:nil];
+        };
+
+        SLFIsReachableAddressAsync(URL,completion);
     };
+
     RKTableItem *webItem = [RKTableItem tableItemWithCellMapping:cellMapping];
     webItem.text = itemTitle;
     webItem.detailText = itemSubtitle;
@@ -193,13 +212,12 @@
     tableRect.size.height -= searchBar.height;
     self.tableView.frame = CGRectOffset(tableRect, 0, searchBar.height);
     [self.view addSubview:self.searchBar];
-    [searchBar release];
 }
 
 - (void)configureChamberScopeTitlesForSearchBar:(UISearchBar *)bar withState:(SLFState *)state {
     NSParameterAssert(bar != NULL);
     NSArray *buttonTitles = [SLFChamber chamberSearchScopeTitlesWithState:state];
-    if (IsEmpty(buttonTitles))
+    if (!buttonTitles)
         return;
     bar.showsScopeBar = YES;
     bar.scopeButtonTitles = buttonTitles;
@@ -223,7 +241,7 @@
 }
 
 - (void)searchBar:(UISearchBar *)bar textDidChange:(NSString *)searchText {
-    if (IsEmpty(bar.text)) {
+    if (!bar.text.length) {
         bar.showsCancelButton = NO;
         [bar resignFirstResponder];
         return;

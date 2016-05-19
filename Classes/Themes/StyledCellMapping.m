@@ -31,7 +31,8 @@
 }
 
 
-- (id)init {
+- (id)init
+{
     self = [super init];
     if (self) {
         self.cellClass = [OpenStatesTableViewCell class];
@@ -43,17 +44,21 @@
         self.detailTextColor = [SLFAppearance cellSecondaryTextColor];
         self.textFont = SLFFont(14);
         self.detailTextFont = SLFFont(12);
- 		__block __typeof__(self) bself = self;
+        __weak __typeof__(self) wSelf = self;
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-            cell.textLabel.textColor = bself.textColor;
-            cell.textLabel.font = bself.textFont;
-            cell.detailTextLabel.textColor = bself.detailTextColor;
-            cell.detailTextLabel.font = bself.detailTextFont;
-            if (bself.useLargeRowHeight) {
+            if (!wSelf)
+                return;
+            __strong __typeof__(wSelf) sSelf = wSelf;
+
+            cell.textLabel.textColor = sSelf.textColor;
+            cell.textLabel.font = sSelf.textFont;
+            cell.detailTextLabel.textColor = sSelf.detailTextColor;
+            cell.detailTextLabel.font = sSelf.detailTextFont;
+            if (sSelf.useLargeRowHeight) {
                 cell.detailTextLabel.lineBreakMode = NSLineBreakByTruncatingTail;
                 cell.detailTextLabel.numberOfLines = 4;
             }
-            if (bself.useAlternatingRowColors) {
+            if (sSelf.useAlternatingRowColors) {
                 SLFAlternateCellForIndexPath(cell, indexPath);
             }
             else {
@@ -64,13 +69,6 @@
     return self;
 }
 
-- (void)dealloc {
-    self.textColor = nil;
-    self.detailTextColor = nil;
-    self.textFont = nil;
-    self.detailTextFont = nil;
-    [super dealloc];
-}
 
 - (void)setUseLargeRowHeight:(BOOL)useLargeRowHeight {
     _useLargeRowHeight = useLargeRowHeight;

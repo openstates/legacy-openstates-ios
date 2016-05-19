@@ -14,20 +14,32 @@
 #import "SLFObjectCache.h"
 #import "SLFAlertView.h"
 #import "SLFGlobal.h"
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/RKManagedObjectStore.h>
 
-#define OPENSTATES_BASE_URL		@"http://openstates.org/api/v1"
-#define TRANSPARENCY_BASE_URL   @"http://transparencydata.com/api/1.0"
+NSString * const kAPP_DB_PREFIX = @"SLFData";
+NSString * const kAPP_DB_NAME = @"SLFData.sqlite";
+NSString * const kAPP_MOMD_NAME = @"SLFData.momd";
+NSString * const kSEED_DB_NAME = @"SLFDataSeed";
+
+NSURL * kOPENSTATES_BASE_URL;
+NSURL * kTRANSPARENCY_BASE_URL;
+
+#define OPENSTATES_BASE_URL		kOPENSTATES_BASE_URL
+#define TRANSPARENCY_BASE_URL   kTRANSPARENCY_BASE_URL
 
 @interface SLFRestKitManager()
-@property (nonatomic,retain) RKRequestQueue *preloadQueue;
+@property (nonatomic,strong) RKRequestQueue *preloadQueue;
 - (RKManagedObjectStore *)attemptLoadObjectStoreAndFlushIfNeeded;
 @end
 
 @implementation SLFRestKitManager
-@synthesize transClient;
-@synthesize openStatesClient;
-@synthesize preloadQueue = __preloadQueue;
+
++ (void)initialize
+{
+    [super initialize];
+    kOPENSTATES_BASE_URL = [NSURL URLWithString:@"http://openstates.org/api/v1"];
+    kTRANSPARENCY_BASE_URL = [NSURL URLWithString:@"http://transparencydata.com/api/1.0"];
+}
 
 + (SLFRestKitManager *)sharedRestKit
 {
@@ -46,7 +58,7 @@
         RKLogConfigureByName("RestKit/CoreData", RKLogLevelInfo);
         RKLogConfigureByName("RestKit/UI", RKLogLevelInfo);
 
-        RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:OPENSTATES_BASE_URL];
+        RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:kOPENSTATES_BASE_URL];
         objectManager.requestQueue.showsNetworkActivityIndicatorWhenBusy = YES;
         
         RKManagedObjectStore *objectStore = [self attemptLoadObjectStoreAndFlushIfNeeded];        
@@ -55,35 +67,31 @@
 
         SLFObjectCache *cache = [[SLFObjectCache alloc] init];
         objectStore.managedObjectCache = cache;
-        [cache release];
         
         SLFMappingsManager *mapper = [[SLFMappingsManager alloc] init];
         [mapper registerMappings];
-        [mapper release];        
         
-        self.transClient = [RKClient clientWithBaseURL:TRANSPARENCY_BASE_URL];
-        self.openStatesClient = [RKClient clientWithBaseURL:OPENSTATES_BASE_URL];
+        _transClient = [[RKClient alloc] initWithBaseURL:kTRANSPARENCY_BASE_URL];
+        _openStatesClient = [[RKClient alloc] initWithBaseURL:kOPENSTATES_BASE_URL];
     }
     return self;
 }
 
-- (void)dealloc {
-    [self.transClient.requestQueue cancelAllRequests];
-    self.transClient = nil;
-    [self.openStatesClient.requestQueue cancelAllRequests];
-    self.openStatesClient = nil;
+- (void)dealloc
+{
+    [_transClient.requestQueue cancelAllRequests];
+    [_openStatesClient.requestQueue cancelAllRequests];
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-    if (__preloadQueue) {
-        [__preloadQueue cancelAllRequests];
+    if (_preloadQueue) {
+        [_preloadQueue cancelAllRequests];
     }
-    self.preloadQueue = nil;
-    [super dealloc];
 }
 
 
 #pragma mark -
 
-- (Class)modelClassFromResourcePath:(NSString *)resourcePath {
+- (Class)modelClassFromResourcePath:(NSString *)resourcePath
+{
     NSAssert(resourcePath != NULL, @"Resource path must not be NULL");
     NSCharacterSet *delimiters = [NSCharacterSet characterSetWithCharactersInString:@"/?"];
     NSArray *pathComponents = [resourcePath componentsSeparatedByCharactersInSet:delimiters];
@@ -125,48 +133,62 @@
     [loader send];
 }
 
-- (void)preloadObjectsForState:(SLFState *)state {
-    if (!state)
+- (void)preloadResourcesForState:(SLFState *)state options:(SLFPreloadResourceOptions)options
+{
+    if (!state || options == SLFPreloadResourceNone)
         return;
 
-    if (__preloadQueue == NULL) {
-        __preloadQueue = [RKRequestQueue newRequestQueueWithName:@"PreLoadData"];
-        __preloadQueue.delegate = self;
-        __preloadQueue.concurrentRequestsLimit = 2;
-        __preloadQueue.showsNetworkActivityIndicatorWhenBusy = YES;
+    if (_preloadQueue == NULL)
+    {
+        _preloadQueue = [RKRequestQueue newRequestQueueWithName:@"PreLoadData"];
+        _preloadQueue.delegate = self;
+        _preloadQueue.concurrentRequestsLimit = 2;
+        _preloadQueue.showsNetworkActivityIndicatorWhenBusy = YES;
     }
 
     NSTimeInterval timeout = SLF_HOURS_TO_SECONDS(48);
     NSString *resourcePath = nil;
-    NSMutableDictionary *queryParameters = [NSMutableDictionary dictionaryWithObjectsAndKeys: SUNLIGHT_APIKEY, @"apikey", state.stateID, @"stateID", nil];
+    NSMutableDictionary *queryParameters = [@{@"apikey": SUNLIGHT_APIKEY, @"stateID": state.stateID} mutableCopy];
     RKPathMatcher *matcher = [RKPathMatcher matcherWithPattern:@"/:entity/:stateID?apikey=:apikey"];
-    
-    [queryParameters setObject:@"metadata" forKey:@"entity"];
-    resourcePath = [matcher pathFromObject:queryParameters];
-    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:timeout]];
 
-    [queryParameters setObject:@"districts" forKey:@"entity"];
-    resourcePath = [matcher pathFromObject:queryParameters];
-    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:timeout]];
-    
+    if (options & SLFPreloadResourceMetadata)
+    {
+        queryParameters[@"entity"] = @"metadata";
+        resourcePath = [matcher pathFromObject:queryParameters];
+        [_preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:timeout]];
+    }
+
+    if (options & SLFPreloadResourceBoundaries)
+    {
+        queryParameters[@"entity"] = @"districts";
+        resourcePath = [matcher pathFromObject:queryParameters];
+        [_preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:timeout]];
+    }
+
     matcher = [RKPathMatcher matcherWithPattern:@"/:entity?state=:stateID&apikey=:apikey"];
 
-/*
-    [queryParameters setObject:@"events" forKey:@"entity"];
-    resourcePath = [matcher pathFromObject:queryParameters];
-    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)]];
-*/
-    
-    [queryParameters setObject:@"committees" forKey:@"entity"];
-    resourcePath = [matcher pathFromObject:queryParameters];
-    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:timeout]];
+    if (options & SLFPreloadResourceEvents)
+    {
+        queryParameters[@"entity"] = @"events";
+        resourcePath = [matcher pathFromObject:queryParameters];
+        [_preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)]];
+    }
 
-    [queryParameters setObject:@"legislators" forKey:@"entity"];
-    resourcePath = [[matcher pathFromObject:queryParameters] stringByAppendingString:@"&active=true"];
-    [__preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:timeout]];
-    
-    [__preloadQueue start];
-    
+    if (options & SLFPreloadResourceCommittees)
+    {
+        queryParameters[@"entity"] = @"committees";
+        resourcePath = [matcher pathFromObject:queryParameters];
+        [_preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:timeout]];
+    }
+
+    if (options & SLFPreloadResourceLegislators)
+    {
+        queryParameters[@"entity"] = @"legislators";
+        resourcePath = [[matcher pathFromObject:queryParameters] stringByAppendingString:@"&active=true"];
+        [_preloadQueue addRequest:[self objectLoaderForResourcePath:resourcePath delegate:self withTimeout:timeout]];
+    }
+
+    [_preloadQueue start];
 }
 
 
@@ -195,10 +217,13 @@
 - (RKManagedObjectStore *)attemptLoadObjectStore {
     RKManagedObjectStore *objectStore = nil;
     @try {
-        NSString *path = [[NSBundle mainBundle] pathForResource:APP_MOMD_NAME ofType:@"momd"];
+        NSString *path = [[NSBundle mainBundle] pathForResource:kAPP_DB_PREFIX ofType:@"momd"];
+        //NSAssert(path != NULL, @"Unable to determine path to RestKit resource model");
         NSURL *momURL = [NSURL fileURLWithPath:path];
         NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:momURL];
-        objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:APP_DB_NAME usingSeedDatabaseName:nil managedObjectModel:mom delegate:self];
+//        objectStore = [[RKManagedObjectStore alloc] initWithStoreFilename:kAPP_DB_NAME storeType:NSSQLiteStoreType inDirectory:nil usingSeedDatabaseName:nil combinedObjectModel:mom delegate:self];
+        objectStore = [[RKManagedObjectStore alloc] initWithStoreFilename:kAPP_DB_NAME inDirectory:nil usingSeedDatabaseName:nil managedObjectModel:mom delegate:self];
+
     }
     @catch (NSException *exception) {
         RKLogError(@"An exception ocurred while attempting to load/build the Core Data store file: %@", exception);
@@ -212,7 +237,7 @@
         RKLogWarning(@"Attempting to delete and recreate the Core Data store file.");
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-        NSString *storeFilePath = [basePath stringByAppendingPathComponent:APP_DB_NAME];
+        NSString *storeFilePath = [basePath stringByAppendingPathComponent:kAPP_DB_NAME];
         NSURL* storeUrl = [NSURL fileURLWithPath:storeFilePath];
         NSError* error = nil;
         @try {
@@ -234,7 +259,7 @@
 + (NSString *)logFailureMessageForRequest:(RKRequest *)request error:(NSError *)error {
     NSString *message = NSLocalizedString(@"Network Data Error",@"");
     NSString *errorText = (error) ? [error localizedDescription] : @"";
-    if (!IsEmpty(errorText))
+    if (SLFTypeNonEmptyStringOrNil(errorText))
         message = [errorText stringByReplacingOccurrencesOfString:SUNLIGHT_APIKEY withString:@"<APIKEY>"];
     RKLogError(@"RestKit Error -");
     if (request)
@@ -246,7 +271,7 @@
 
 + (void)showFailureAlertWithRequest:(RKRequest *)request error:(NSError *)error {
     NSString *message = [SLFRestKitManager logFailureMessageForRequest:request error:error];
-    if (!IsEmpty(message))
+    if (SLFTypeNonEmptyStringOrNil(message))
         [SLFAlertView showWithTitle:NSLocalizedString(@"Network Data Error",@"") message:message buttonTitle:NSLocalizedString(@"Cancel",@"")];
 }
 

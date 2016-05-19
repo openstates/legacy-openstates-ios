@@ -1,10 +1,9 @@
 // The following is practically verbatim of RestKit's RKSpecEnvironment.
 
 #import <Foundation/Foundation.h>
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/SLFRestKit.h>
 
-NSString* SLFSpecGetBaseURL(void);
+NSURL* SLFSpecGetBaseURL(void);
 void SLFSpecStubNetworkAvailability(BOOL isNetworkAvailable);
 RKClient* SLFSpecNewClient(void);
 RKObjectManager* SLFSpecNewObjectManager(void);
@@ -15,3 +14,5 @@ void SLFSpecSpinRunLoopWithDuration(NSTimeInterval timeInterval);
 NSString* SLFSpecReadFixture(NSString* fileName);
 id SLFSpecParseFixture(NSString* fileName);
 void SLFSpecRestKitEnvironment(void);
+NSManagedObjectModel* SLFSpecGetManagedObjectModel(void);
+BOOL IsEmpty(NSObject * thing);

@@ -7,14 +7,12 @@
 //  This work is licensed under the BSD-3 License included with this source
 // distribution.
 
-SLF_TODO("Move this whole class to RKTableController")
-
 #import "ContributionsDataSource.h"
 #import "SLFTheme.h"
 #import "SLFRestKitManager.h"
-#import "JSONKit.h"
 #import "SLFStandardGroupCell.h"
 #import "SLFDataModels.h"
+#import <SLFRestKit/JSONKit.h>
 
 @interface ContributionsDataSource()
 - (void)parseJSONObject:(id)jsonDeserialized;
@@ -53,7 +51,7 @@ SLF_TODO("Move this whole class to RKTableController")
             break;
     }
     
-    if (!IsEmpty(self.queryCycle)) {
+    if (SLFTypeNonEmptyStringOrNil(self.queryCycle)) {
         NSString *year = self.queryCycle;
         if (![year isEqualToString:@"-1"])
             title = [NSString stringWithFormat:@"%@ %@", year, title];
@@ -65,12 +63,6 @@ SLF_TODO("Move this whole class to RKTableController")
 - (void)dealloc {
     RKClient *transClient = [[SLFRestKitManager sharedRestKit] transClient];
     [transClient.requestQueue cancelRequestsWithDelegate:self];
-    self.queryCycle = nil;
-    self.sectionList = nil;
-    self.queryEntityID = nil;
-    self.queryType = nil;
-    self.tableHeaderData = nil;
-    [super dealloc];
 }
 
 - (BOOL)hasSearchResults {
@@ -142,7 +134,6 @@ SLF_TODO("Move this whole class to RKTableController")
         cellInfo.subtitle = NSLocalizedString(@"Nothing",@"");
         cellInfo.title = NSLocalizedString(@"Found no results for this selection.", @"");
         cell.cellInfo = cellInfo;
-        [cellInfo release];
         return cell;
     }
 
@@ -198,27 +189,30 @@ SLF_TODO("Move this whole class to RKTableController")
     [[[SLFRestKitManager sharedRestKit] transClient] get:resourcePath queryParams:queryParams delegate:self];
 }
 
-- (NSString *)subtitleForEntity:(NSDictionary *)data {
-    NSString *type = [[data valueForKey:@"type"] capitalizedString];    // politician/organization/individual
-    NSString *state = [data valueForKeyPath:@"metadata.state"];         // TX
-    NSString *partyID = [data valueForKeyPath:@"metadata.party"];       // R
-    //NSString *seat = [data valueForKeyPath:@"metadata.seat"];         // state:lower
-    //NSString *photoURL = [data valueForKeyPath:@"metadata.photo_url"];
+- (NSString *)subtitleForEntity:(NSDictionary *)data
+{
+    data = SLFTypeDictionaryOrNil(data);
+    NSString *type = [SLFTypeNonEmptyStringOrNil([data valueForKey:@"type"]) capitalizedString];    // politician/organization/individual
+    NSString *state = SLFTypeNonEmptyStringOrNil([data valueForKeyPath:@"metadata.state"]);         // TX
+    NSString *partyID = SLFTypeNonEmptyStringOrNil([data valueForKeyPath:@"metadata.party"]);       // R
+    //NSString *seat = SLFTypeNonEmptyStringOrNil([data valueForKeyPath:@"metadata.seat"]);         // state:lower
+    //NSString *photoURL = SLFTypeNonEmptyStringOrNil([data valueForKeyPath:@"metadata.photo_url"]);
     NSMutableString *subtitle = [NSMutableString string];
-    if (!IsEmpty(state)) {
+    if (state)
+    {
         [subtitle appendFormat:@"(%@",state];
-        if (!IsEmpty(partyID))
+        if (partyID)
             [subtitle appendFormat:@"-%@", partyID];
         [subtitle appendString:@") "];
     }
-    if (!IsEmpty(type))
+    if (type)
         [subtitle appendString:type];
     return subtitle;
 }
 
 - (NSString *)bioForEntity:(NSDictionary *)data {
-    NSString *bio = [data valueForKeyPath:@"metadata.bio"];      // <p>Some bio text in html</p>
-    if (!IsEmpty(bio)) {
+    NSString *bio = SLFTypeNonEmptyStringOrNil([data valueForKeyPath:@"metadata.bio"]);      // <p>Some bio text in html</p>
+    if (bio) {
         bio = [bio stringByReplacingOccurrencesOfString:@"<p>" withString:@""];
         bio = [bio stringByReplacingOccurrencesOfString:@"</p>" withString:@"\n"];
     }
@@ -229,214 +223,220 @@ SLF_TODO("Move this whole class to RKTableController")
 
 - (void)createTableHeaderDataForEntity:(NSDictionary *)data {
     self.tableHeaderData = nil;
-    NSString *name = [[data valueForKey:@"name"] capitalizedString];
-    _tableHeaderData = [[NSDictionary alloc] initWithObjectsAndKeys:
-                       name, @"title", 
-                       [self subtitleForEntity:data], @"subtitle", 
-                       [self bioForEntity:data], @"detail", nil];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSString *name = SLFTypeStringOrNil([data valueForKey:@"name"]);
+    if (name)
+        dict[@"title"] = [name capitalizedString];
+    NSString *subtitle = SLFTypeStringOrNil([self subtitleForEntity:data]);
+    if (subtitle)
+        dict[@"subtitle"] = subtitle;
+    NSString *bio = SLFTypeStringOrNil([self bioForEntity:data]);
+    if (bio)
+        dict[@"detail"] = bio;
+    _tableHeaderData = dict;
 }
 
 - (void)parseJSONObject:(id)jsonDeserialized {
     self.tableHeaderData = nil;
     
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-    [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
-    [numberFormatter setMaximumFractionDigits:0];
-    
-    if (!self.sectionList)
-        self.sectionList = [NSMutableArray array];
-    
-    if ([self.queryType integerValue] == kContributionQueryEntitySearch) {
-        NSArray *jsonArray = jsonDeserialized;    
+    @autoreleasepool {
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+        [numberFormatter setMaximumFractionDigits:0];
         
-        // only one section right now
-        [self.sectionList removeAllObjects];
+        if (!self.sectionList)
+            self.sectionList = [NSMutableArray array];
         
-        NSMutableArray *thisSection = [[NSMutableArray alloc] init];
-        
-        for (NSDictionary *dict in jsonArray) {
-            NSString *localizedString = NSLocalizedString(@"Unknown", @"");
-            NSString *entityType = [[dict objectForKey:@"type"] capitalizedString];
-            NSNumber *action = nil;
-            if ([entityType isEqualToString:@"Politician"]) {
-                localizedString = NSLocalizedString(@"Politician", @"");
-                action = [NSNumber numberWithInteger:kContributionQueryRecipient];
-            }
-            else if ([entityType isEqualToString:@"Organization"]) {
-                localizedString = NSLocalizedString(@"Organization", @"");
-                action = [NSNumber numberWithInteger:kContributionQueryDonor];
-            }
-            else if ([entityType isEqualToString:@"Individual"]) {
-                localizedString = NSLocalizedString(@"Individual", @"");
-                action = [NSNumber numberWithInteger:kContributionQueryIndividual];
-            }
-            NSString *state = [dict valueForKey:@"state"];
-            if (!IsEmpty(state)) {
-                localizedString = [NSString stringWithFormat:@"%@ %@", state, localizedString];
-            }
+        if ([self.queryType integerValue] == kContributionQueryEntitySearch) {
+            NSArray *jsonArray = SLFTypeArrayOrNil(jsonDeserialized); // THIS MUST BE AN ARRAY, right???
             
-            TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
-            cellInfo.title = [dict valueForKey:@"name"];
-            cellInfo.subtitle = localizedString;
-            cellInfo.entryValue = [dict objectForKey:@"id"];
-            cellInfo.entryType = [self.queryType integerValue];
-            cellInfo.isClickable = YES;
-            cellInfo.action = action;
-            cellInfo.parameter = @"-1";
-            [thisSection addObject:cellInfo];
-            [cellInfo release];
-        }
-        
-        if (![jsonArray count]) {    // no search results!
-            NSString *name = [self.queryEntityID stringByReplacingOccurrencesOfString:@"+" withString:@" "];
-            TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
-            cellInfo.title = name;
-            cellInfo.subtitle = NSLocalizedString(@"Nothing for", @"");
-            cellInfo.entryValue = nil;
-            cellInfo.entryType = [self.queryType integerValue];
-            cellInfo.isClickable = NO;
-            cellInfo.action = nil;
-            cellInfo.parameter = nil;
-            [thisSection addObject:cellInfo];
-            [cellInfo release];
-        }
-        [self.sectionList addObject:thisSection];
-        [thisSection release];
-        
-    }
-    else if ([self.queryType integerValue] == kContributionQueryTop10RecipientsIndiv) {
-        NSArray *jsonArray = jsonDeserialized;    
-        
-        // only one section right now
-        [self.sectionList removeAllObjects];
-        
-        NSMutableArray *thisSection = [[NSMutableArray alloc] init];
-        
-        for (NSDictionary *dict in jsonArray) {
-            double tempDouble = [[dict objectForKey:@"amount"] doubleValue];
-            NSNumber *amount = [NSNumber numberWithDouble:tempDouble];
-            TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
-            NSString *name = [[dict objectForKey:@"recipient_name"] capitalizedString];
-            id dataID = [dict objectForKey:@"recipient_entity"];
-
-            cellInfo.title = name;
-            cellInfo.subtitle = [numberFormatter stringFromNumber:amount];
-            cellInfo.entryValue = dataID;
-            cellInfo.entryType = [self.queryType integerValue];
-            cellInfo.isClickable = YES;
-            cellInfo.parameter = self.queryCycle;
-            cellInfo.action = [NSNumber numberWithInteger:kContributionQueryRecipient];
-
-            if (!dataID || [[NSNull null] isEqual:dataID] || ![dataID isKindOfClass:[NSString class]]) {
-                RKLogError(@"ERROR - Contribution results have an empty entity ID for: %@", name);                                
-
-                NSString *nameSearch = [name stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-                cellInfo.entryValue = nameSearch;
-                cellInfo.action = [NSNumber numberWithInteger:kContributionQueryEntitySearch];
-            }
-            [thisSection addObject:cellInfo];
-            [cellInfo release];
-        }
-        
-        [self.sectionList addObject:thisSection];
-        [thisSection release];
-        
-    }
-    else if (([self.queryType integerValue] == kContributionQueryTop10Donors) ||
-        ([self.queryType integerValue] == kContributionQueryTop10Recipients)) {
-        NSArray *jsonArray = jsonDeserialized;    
-        
-        // only one section right now
-        [self.sectionList removeAllObjects];
-        
-        NSMutableArray *thisSection = [[NSMutableArray alloc] init];
-        
-        for (NSDictionary *dict in jsonArray) {
-            double tempDouble = [[dict objectForKey:@"total_amount"] doubleValue];
-            NSNumber *amount = [NSNumber numberWithDouble:tempDouble];
+            // only one section right now
+            [self.sectionList removeAllObjects];
             
-            TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
-            NSString *name = [[dict objectForKey:@"name"] capitalizedString];
+            NSMutableArray *thisSection = [[NSMutableArray alloc] init];
+            
+            for (NSDictionary *dict in jsonArray) {
+                if (!SLFTypeDictionaryOrNil(dict))
+                    continue;
 
-            id dataID = [dict objectForKey:@"id"];
-            
-            cellInfo.title = name;
-            cellInfo.subtitle = [numberFormatter stringFromNumber:amount];
-            cellInfo.entryValue = dataID;
-            cellInfo.entryType = [self.queryType integerValue];
-            cellInfo.isClickable = YES;
-            cellInfo.parameter = self.queryCycle;
-            if ([self.queryType integerValue] == kContributionQueryTop10Donors)
-                cellInfo.action = [NSNumber numberWithInteger:kContributionQueryDonor];
-            else
-                cellInfo.action = [NSNumber numberWithInteger:kContributionQueryRecipient];
-            
-            if (!dataID || [[NSNull null] isEqual:dataID] || ![dataID isKindOfClass:[NSString class]]) {
-                RKLogError(@"ERROR - Contribution results have an empty entity ID for: %@", name);
+                NSString *localizedString = NSLocalizedString(@"Unknown", @"");
+                NSString *entityType = [SLFTypeStringOrNil([dict objectForKey:@"type"]) capitalizedString];
+                NSNumber *action = nil;
+                if ([entityType isEqualToString:@"Politician"]) {
+                    localizedString = NSLocalizedString(@"Politician", @"");
+                    action = @(kContributionQueryRecipient);
+                }
+                else if ([entityType isEqualToString:@"Organization"]) {
+                    localizedString = NSLocalizedString(@"Organization", @"");
+                    action = @(kContributionQueryDonor);
+                }
+                else if ([entityType isEqualToString:@"Individual"]) {
+                    localizedString = NSLocalizedString(@"Individual", @"");
+                    action = @(kContributionQueryIndividual);
+                }
+                NSString *state = SLFTypeNonEmptyStringOrNil([dict valueForKey:@"state"]);
+                if (state) {
+                    localizedString = [NSString stringWithFormat:@"%@ %@", state, localizedString];
+                }
                 
-                NSString *nameSearch = [name stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-                cellInfo.entryValue = nameSearch;
-                cellInfo.action = [NSNumber numberWithInteger:kContributionQueryEntitySearch];
+                TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
+                cellInfo.title = [dict valueForKey:@"name"];
+                cellInfo.subtitle = localizedString;
+                cellInfo.entryValue = [dict objectForKey:@"id"];
+                cellInfo.entryType = [self.queryType integerValue];
+                cellInfo.isClickable = YES;
+                cellInfo.action = action;
+                cellInfo.parameter = @"-1";
+                [thisSection addObject:cellInfo];
             }
-            [thisSection addObject:cellInfo];
-            [cellInfo release];
+            
+            if (![jsonArray count]) {    // no search results!
+                NSString *name = [self.queryEntityID stringByReplacingOccurrencesOfString:@"+" withString:@" "];
+                TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
+                cellInfo.title = name;
+                cellInfo.subtitle = NSLocalizedString(@"Nothing for", @"");
+                cellInfo.entryValue = nil;
+                cellInfo.entryType = [self.queryType integerValue];
+                cellInfo.isClickable = NO;
+                cellInfo.action = nil;
+                cellInfo.parameter = nil;
+                [thisSection addObject:cellInfo];
+            }
+            [self.sectionList addObject:thisSection];
+            
         }
-        
-        [self.sectionList addObject:thisSection];
-        [thisSection release];
-        
-    }
-    else if ([self.queryType integerValue] == kContributionQueryRecipient ||
-             [self.queryType integerValue] == kContributionQueryDonor ||
-             [self.queryType integerValue] == kContributionQueryIndividual )
-    {
-        NSDictionary *jsonDict = jsonDeserialized;
+        else if ([self.queryType integerValue] == kContributionQueryTop10RecipientsIndiv) {
+            NSArray *jsonArray = SLFTypeArrayOrNil(jsonDeserialized); // THIS MUST BE AN ARRAY, right???
 
-        [self.sectionList removeAllObjects];
-        NSMutableArray *thisSection = nil;
-        
-        NSDictionary *totals = [jsonDict objectForKey:@"totals"];
-        NSArray *yearKeys = [totals allKeys]; 
-        yearKeys = [yearKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-        
-        [self createTableHeaderDataForEntity:jsonDict];
+            // only one section right now
+            [self.sectionList removeAllObjects];
+            
+            NSMutableArray *thisSection = [[NSMutableArray alloc] init];
+            
+            for (NSDictionary *dict in jsonArray) {
+                if (!SLFTypeDictionaryOrNil(dict))
+                    continue;
+
+                double tempDouble = [dict[@"amount"] doubleValue];
+                NSNumber *amount = @(tempDouble);
+                TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
+                NSString *name = [SLFTypeStringOrNil(dict[@"recipient_name"]) capitalizedString];
+                NSString * dataID = SLFTypeNonEmptyStringOrNil(dict[@"recipient_entity"]);
+
+                cellInfo.title = name;
+                cellInfo.subtitle = [numberFormatter stringFromNumber:amount];
+                cellInfo.entryValue = dataID;
+                cellInfo.entryType = [self.queryType integerValue];
+                cellInfo.isClickable = YES;
+                cellInfo.parameter = self.queryCycle;
+                cellInfo.action = @(kContributionQueryRecipient);
+
+                if (!dataID) {
+                    RKLogError(@"ERROR - Contribution results have an empty entity ID for: %@", name);                                
+
+                    NSString *nameSearch = [name stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+                    cellInfo.entryValue = nameSearch;
+                    cellInfo.action = @(kContributionQueryEntitySearch);
+                }
+                [thisSection addObject:cellInfo];
+            }
+            
+            [self.sectionList addObject:thisSection];
+            
+        }
+        else if (([self.queryType integerValue] == kContributionQueryTop10Donors) ||
+            ([self.queryType integerValue] == kContributionQueryTop10Recipients))
+        {
+            NSArray *jsonArray = SLFTypeArrayOrNil(jsonDeserialized); // THIS MUST BE AN ARRAY, right???
+
+            // only one section right now
+            [self.sectionList removeAllObjects];
+            
+            NSMutableArray *thisSection = [[NSMutableArray alloc] init];
+            
+            for (NSDictionary *dict in jsonArray) {
+                if (!SLFTypeDictionaryOrNil(dict))
+                    continue;
+
+                double tempDouble = [dict[@"total_amount"] doubleValue];
+                NSNumber *amount = @(tempDouble);
                 
-        thisSection = [[NSMutableArray alloc] init];
-        NSString *amountKey = ([self.queryType integerValue] == kContributionQueryRecipient) ? @"recipient_amount" : @"contributor_amount";
+                TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
+                NSString *name = [SLFTypeStringOrNil(dict[@"name"]) capitalizedString];
 
-        for (NSString *yearKey in [yearKeys reverseObjectEnumerator]) {            
-            TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
-            NSDictionary *dict = [totals objectForKey:yearKey];
-            double tempDouble = [[dict objectForKey:amountKey] doubleValue];
-            NSNumber *amount = [NSNumber numberWithDouble:tempDouble];
-            cellInfo.subtitle = yearKey;
-            cellInfo.title = [numberFormatter stringFromNumber:amount];
-            cellInfo.entryValue = [jsonDict objectForKey:@"id"];
-            cellInfo.entryType = [self.queryType integerValue];
-            cellInfo.isClickable = YES;
-            cellInfo.parameter = yearKey;
-            
-            if ([self.queryType integerValue] == kContributionQueryRecipient)
-                cellInfo.action = [NSNumber numberWithInteger:kContributionQueryTop10Donors];
-            else if ([self.queryType integerValue] == kContributionQueryIndividual)
-                cellInfo.action = [NSNumber numberWithInteger:kContributionQueryTop10RecipientsIndiv];
-            else
-                cellInfo.action = [NSNumber numberWithInteger:kContributionQueryTop10Recipients];
-            
-            if ([yearKey isEqualToString:@"-1"]) {
-                cellInfo.subtitle = NSLocalizedString(@"Total", @"");
+                id dataID = SLFTypeNonEmptyStringOrNil(dict[@"id"]);
+                
+                cellInfo.title = name;
+                cellInfo.subtitle = [numberFormatter stringFromNumber:amount];
+                cellInfo.entryValue = dataID;
+                cellInfo.entryType = [self.queryType integerValue];
+                cellInfo.isClickable = YES;
+                cellInfo.parameter = self.queryCycle;
+                if ([self.queryType integerValue] == kContributionQueryTop10Donors)
+                    cellInfo.action = @(kContributionQueryDonor);
+                else
+                    cellInfo.action = @(kContributionQueryRecipient);
+                
+                if (!dataID) {
+                    RKLogError(@"ERROR - Contribution results have an empty entity ID for: %@", name);
+                    
+                    NSString *nameSearch = [name stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+                    cellInfo.entryValue = nameSearch;
+                    cellInfo.action = @(kContributionQueryEntitySearch);
+                }
+                [thisSection addObject:cellInfo];
             }
-            [thisSection addObject:cellInfo];
-            [cellInfo release];
+            
+            [self.sectionList addObject:thisSection];
+            
+        }
+        else if ([self.queryType integerValue] == kContributionQueryRecipient ||
+                 [self.queryType integerValue] == kContributionQueryDonor ||
+                 [self.queryType integerValue] == kContributionQueryIndividual )
+        {
+            NSDictionary *jsonDict = SLFTypeDictionaryOrNil(jsonDeserialized); // THIS MUST BE A DICTIONARY, right???
+
+            [self.sectionList removeAllObjects];
+            NSMutableArray *thisSection = nil;
+            
+            NSDictionary *totals = SLFTypeDictionaryOrNil(jsonDict[@"totals"]);
+            NSArray *yearKeys = [totals allKeys]; 
+            yearKeys = [yearKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+            
+            [self createTableHeaderDataForEntity:jsonDict];
+                    
+            thisSection = [[NSMutableArray alloc] init];
+            NSString *amountKey = ([self.queryType integerValue] == kContributionQueryRecipient) ? @"recipient_amount" : @"contributor_amount";
+
+            for (NSString *yearKey in [yearKeys reverseObjectEnumerator]) {            
+                TableCellDataObject *cellInfo = [[TableCellDataObject alloc] init];
+                NSDictionary *dict = SLFTypeDictionaryOrNil(totals[yearKey]);
+                double tempDouble = [dict[amountKey] doubleValue];
+                NSNumber *amount = @(tempDouble);
+                cellInfo.subtitle = yearKey;
+                cellInfo.title = [numberFormatter stringFromNumber:amount];
+                cellInfo.entryValue = jsonDict[@"id"];
+                cellInfo.entryType = [self.queryType integerValue];
+                cellInfo.isClickable = YES;
+                cellInfo.parameter = yearKey;
+                
+                if ([self.queryType integerValue] == kContributionQueryRecipient)
+                    cellInfo.action = @(kContributionQueryTop10Donors);
+                else if ([self.queryType integerValue] == kContributionQueryIndividual)
+                    cellInfo.action = @(kContributionQueryTop10RecipientsIndiv);
+                else
+                    cellInfo.action = @(kContributionQueryTop10Recipients);
+                
+                if ([yearKey isEqualToString:@"-1"]) {
+                    cellInfo.subtitle = NSLocalizedString(@"Total", @"");
+                }
+                [thisSection addObject:cellInfo];
+            }
+            
+            [self.sectionList addObject:thisSection];
         }
         
-        [self.sectionList addObject:thisSection];
-        [thisSection release];
     }
-    
-    [numberFormatter release];
-    [pool drain];
 }
 
 
@@ -444,17 +444,18 @@ SLF_TODO("Move this whole class to RKTableController")
 #pragma mark Data Object Methods
 
 - (id) dataObjectForIndexPath:(NSIndexPath *)indexPath {
-    if (!indexPath)
+    if (!indexPath || indexPath.section >= self.sectionList.count)
         return nil;
     
     id tempEntry = nil;
-    NSArray *group = [self.sectionList objectAtIndex:indexPath.section];
+    NSArray *group = SLFTypeArrayOrNil(self.sectionList[indexPath.section]);
     if (group && [group count] > indexPath.row)
-        tempEntry = [group objectAtIndex:indexPath.row];
-        return tempEntry;
+        tempEntry = group[indexPath.row];
+    return tempEntry;
 }
 
-- (NSIndexPath *)indexPathForDataObject:(id)dataObject {
+- (NSIndexPath *)indexPathForDataObject:(id)dataObject
+{
     if (!dataObject)
         return nil;
     
@@ -485,7 +486,9 @@ SLF_TODO("Move this whole class to RKTableController")
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {  
     if ([request isGET] && [response isOK]) {  
         id jsonDeserialized = [response.body mutableObjectFromJSONDataWithParseOptions:(JKParseOptionUnicodeNewlines & JKParseOptionLooseUnicode)];
-        if (IsEmpty(jsonDeserialized))
+        if (!SLFTypeDictionaryOrNil(jsonDeserialized) && !SLFTypeArrayOrNil(jsonDeserialized))
+            return;
+        if (![jsonDeserialized count])
             return;
         
         [self parseJSONObject:jsonDeserialized];
@@ -494,10 +497,11 @@ SLF_TODO("Move this whole class to RKTableController")
     else {
         RKLogWarning(@"Status Code is %ld", (long)[response statusCode]);
         NSString *errorDescription = [NSString stringWithFormat:NSLocalizedString(@"An error occurred while loading results from the server: (Status Code = %d)", @""), [response statusCode]];
-        NSError *error = [NSError errorWithDomain:@"Contributions Error" code:[response statusCode] userInfo:[NSDictionary dictionaryWithObject:errorDescription forKey:NSLocalizedDescriptionKey]];
+        NSError *error = [NSError errorWithDomain:@"Contributions Error"
+                                             code:[response statusCode]
+                                         userInfo:@{NSLocalizedDescriptionKey:errorDescription}];
         [self request:request didFailLoadWithError:error];
     }
 }
-
 
 @end

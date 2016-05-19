@@ -1,6 +1,6 @@
 #import "GenericWord.h"
 #import "SLFSortDescriptor.h"
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 
 @implementation GenericWord
 

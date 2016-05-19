@@ -14,7 +14,7 @@
 #import "TableSectionHeaderView.h"
 
 RKTableSection* SLFAddTableControllerSectionWithTitle(RKTableController *controller, NSString *title) {
-    if (IsEmpty(title))
+    if (!SLFTypeNonEmptyStringOrNil(title))
         return nil;
     RKTableSection *section = [controller sectionWithHeaderTitle:title];
     if (!section) {
@@ -24,7 +24,6 @@ RKTableSection* SLFAddTableControllerSectionWithTitle(RKTableController *control
         section.headerHeight = [TableSectionHeaderView heightForTableViewStyle:style];
         TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:title width:300.f style:style];
         section.headerView = headerView;
-        [headerView release];
         [controller addSection:section];
     }
     return section;
@@ -50,7 +49,7 @@ UIBarButtonItem* SLFToolbarButton(UIImage *image, id target, SEL selector) {
     [button setImage:normalImage forState:UIControlStateNormal];
     [button setImage:selectedImage forState:UIControlStateHighlighted];
     [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];    
-    return [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
+    return [[UIBarButtonItem alloc] initWithCustomView:button];
 }
 
 // ex: red = 145, blue = 144, green = 130
@@ -74,7 +73,6 @@ NSArray* SLFBarStyleButtonImageGradientsWithSizeAndBaseColorRGB(CGSize imageSize
     UIImage *gradSelected = [UIImage imageFromView:view];
     
     NSArray *gradientImages = [NSArray arrayWithObjects:gradNormal, gradSelected, nil];
-    [view release];
     return gradientImages;
 }
 

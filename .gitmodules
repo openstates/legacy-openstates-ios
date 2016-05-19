@@ -1,0 +1,27 @@
+[submodule "Vendor/ActionSheetPicker"]
+	path = Vendor/ActionSheetPicker
+	url = https://github.com/grgcombs/ActionSheetPicker.git
+[submodule "Vendor/RestKit"]
+	path = Vendor/RestKit
+	url = https://github.com/grgcombs/RestKit.git
+[submodule "Vendor/AppendingFlowView"]
+	path = Vendor/AppendingFlowView
+	url = https://github.com/grgcombs/AppendingFlowView.git
+[submodule "Vendor/DDActionHeaderView"]
+	path = Vendor/DDActionHeaderView
+	url = https://github.com/grgcombs/DDActionHeaderView.git
+[submodule "Vendor/PSStackedView"]
+	path = Vendor/PSStackedView
+	url = https://github.com/grgcombs/PSStackedView.git
+[submodule "Vendor/MTInfoPanel"]
+	path = Vendor/MTInfoPanel
+	url = https://github.com/grgcombs/MTInfoPanel.git
+[submodule "Vendor/MultiRowCalloutAnnotationView"]
+	path = Vendor/MultiRowCalloutAnnotationView
+	url = https://github.com/grgcombs/MultiRowCalloutAnnotationView.git
+[submodule "Vendor/AFNetworking"]
+	path = Vendor/AFNetworking
+	url = https://github.com/grgcombs/AFNetworking.git
+[submodule "Vendor/SCNetworkReachabilityKit"]
+	path = Vendor/SCNetworkReachabilityKit
+	url = https://github.com/grgcombs/SCNetworkReachabilityKit.git

@@ -9,12 +9,12 @@
 
 
 #import "SLFEventsManager.h"
-#import "MTInfoPanel.h"
-#import <RestKit/RestKit.h>
+#import "SLFInfoView.h"
+#import <SLFRestKit/RestKit.h>
 
 @interface SLFEventsManager()
-@property (nonatomic,retain) UIViewController <StackableController,SLFEventsManagerDelegate> *eventEditorParent;
-@property (nonatomic,retain) UIViewController <StackableController,SLFEventsManagerDelegate> *calendarChooserParent;
+@property (nonatomic,strong) UIViewController <StackableController,SLFEventsManagerDelegate> *eventEditorParent;
+@property (nonatomic,strong) UIViewController <StackableController,SLFEventsManagerDelegate> *calendarChooserParent;
 - (EKEventEditViewController *)newEventEditorForEvent:(EKEvent *)event delegate:(id<EKEventEditViewDelegate>)delegate;
 - (EKCalendarChooser *)newEventCalendarChooser:(id)sender;
 @end
@@ -37,31 +37,28 @@
     self = [super init];
     if (self) {
         _eventStore = [[EKEventStore alloc] init];
-        _eventCalendar = [[_eventStore defaultCalendarForNewEvents] retain];
+        _eventCalendar = [_eventStore defaultCalendarForNewEvents];
     }
     return self;
 }
 
 - (void)dealloc {
-    self.eventStore = nil;
     self.eventCalendar = nil;
-    self.eventEditorParent = nil;
-    self.calendarChooserParent = nil;
-    [super dealloc];
 }
 
 - (void)loadEventCalendarFromPersistence {
     if (SLFIsIOS5OrGreater()) {
-        if (!IsEmpty(SLFSelectedCalendar()))
-            self.eventCalendar = [_eventStore calendarWithIdentifier:SLFSelectedCalendar()];
+        NSString *selectedCal = SLFSelectedCalendar();
+        if (selectedCal)
+            self.eventCalendar = [_eventStore calendarWithIdentifier:selectedCal];
     }
     if (!_eventCalendar)
-        _eventCalendar = [[_eventStore defaultCalendarForNewEvents] retain];
+        _eventCalendar = [_eventStore defaultCalendarForNewEvents];
 }
 
 - (void)setEventCalendar:(EKCalendar *)eventCalendar {
     SLFRelease(_eventCalendar);
-    _eventCalendar = [eventCalendar retain];
+    _eventCalendar = eventCalendar;
     if (!eventCalendar)
         return;
     SLFSaveSelectedCalendar(eventCalendar.calendarIdentifier);
@@ -71,7 +68,7 @@
 
 - (EKEvent *)findOrCreateEventWithIdentifier:(NSString *)eventIdentifier {
     EKEvent *event = nil;
-    if (!IsEmpty(eventIdentifier)) {
+    if (SLFTypeNonEmptyStringOrNil(eventIdentifier)) {
         event = [_eventStore eventWithIdentifier:eventIdentifier];
     }
     if (!event) {
@@ -102,7 +99,7 @@
 - (void)presentEventEditorForEvent:(EKEvent *)event fromParent:(UIViewController <StackableController,SLFEventsManagerDelegate> *)parent {
     if (!event)
         return;
-    __block SLFEventsManager *bself = self;
+    __weak SLFEventsManager *bself = self;
     [self.eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
         if (!bself || !granted)
             return;
@@ -119,7 +116,6 @@
                 [parent stackOrPushViewController:editor];
             });
         }
-        [editor release];
     }];
 }
 
@@ -127,7 +123,7 @@
     EKEvent *event = controller.event;
     if (action == EKEventEditViewActionSaved) {
         if (!event || NO == [self saveEvent:event])
-            [MTInfoPanel showPanelInView:self.eventEditorParent.view type:MTInfoPanelTypeError title:NSLocalizedString(@"Error Saving Event",@"") subtitle:NSLocalizedString(@"Unable to save this event to your calendar.  Please double-check your calendar settings and permissions then try again.",@"") hideAfter:3];
+            [SLFInfoView showInfoInView:self.eventEditorParent.view type:SLFInfoTypeError title:NSLocalizedString(@"Error Saving Event",@"") subtitle:NSLocalizedString(@"Unable to save this event to your calendar.  Please double-check your calendar settings and permissions then try again.",@"")  image:nil hideAfter:3];
         else if (self.eventEditorParent)
             [_eventEditorParent eventWasEdited:event];
     }
@@ -156,11 +152,9 @@
         chooser.title = NSLocalizedString(@"Select a Calendar", @"");
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:chooser];
         nav.view.width = parent.view.width;
-        [chooser release];
         viewControllerToPush = nav;
     }
     [parent stackOrPushViewController:viewControllerToPush];
-    [viewControllerToPush release];
 }
 
 - (EKCalendar *)eventCalendarOrDefault

@@ -12,8 +12,8 @@
 #import "SLFDataModels.h"
 #import "NSString+SLFExtensions.h"
 #import "SLFReachable.h"
-#import "SVWebViewController.h"
 #import "SLFImprovedRKTableController.h"
+@import SafariServices;
 
 @interface AssetsViewController()
 
@@ -58,12 +58,6 @@
     return self;
 }
 
-- (void)dealloc {
-    self.assets = nil;
-    self.tableController = nil;
-    self.assetResource = nil;
-    [super dealloc];
-}
 
 - (void)viewDidUnload {
     self.tableController = nil;
@@ -97,16 +91,27 @@
     StyledCellMapping *cellMap = [StyledCellMapping subtitleMapping];
     [cellMap mapKeyPath:@"name" toAttribute:@"textLabel.text"];
     [cellMap mapKeyPath:@"fileName" toAttribute:@"detailTextLabel.text"];
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) wSelf = self;
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+        __strong __typeof__(wSelf) sSelf = wSelf;
         GenericAsset *asset = object;
-        if (SLFIsReachableAddress(asset.url)) {
-            SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:asset.url];
+
+        NSURL *URL = [NSURL URLWithString:asset.url];
+        if (!URL.scheme || ![@[@"https",@"http"] containsObject:URL.scheme])
+            return;
+
+        __weak __typeof__(self) wSelf = sSelf;
+        SLFReachabilityCompletionHandler completion = ^(NSURL *url, BOOL isReachable){
+            if (!isReachable)
+                return;
+
+            SFSafariViewController *webViewController = [[SFSafariViewController alloc] initWithURL:url entersReaderIfAvailable:NO];
             webViewController.title = asset.name;
             webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-            [bself presentViewController:webViewController animated:YES completion:nil];
-            [webViewController release];
-        }
+            [wSelf presentViewController:webViewController animated:YES completion:nil];
+        };
+
+        SLFIsReachableAddressAsync(URL,completion);
     };
     return cellMap;
 }

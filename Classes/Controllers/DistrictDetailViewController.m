@@ -22,7 +22,7 @@
 - (void)loadMapWithID:(NSString *)objID;
 - (void)loadDataWithResourcePath:(NSString *)path;
 - (void)setUpperOrLowerDistrict:(SLFDistrict *)districtMap;
-@property (nonatomic,retain) DistrictSearch *districtSearch;
+@property (nonatomic,strong) DistrictSearch *districtSearch;
 @end
 
 @implementation DistrictDetailViewController
@@ -43,10 +43,6 @@
 
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-    self.upperDistrict = nil;
-    self.lowerDistrict = nil;
-    self.districtSearch = nil;
-    [super dealloc];
 }
 
 - (void)viewDidLoad {
@@ -55,7 +51,7 @@
 }
 
 - (void)loadMapWithID:(NSString *)objID {
-    if (IsEmpty(objID))
+    if (!SLFTypeNonEmptyStringOrNil(objID))
         return;
     SLFDistrict *district = [SLFDistrict findFirstByAttribute:@"boundaryID" withValue:objID];
     if (district)
@@ -94,10 +90,9 @@
 
 - (void)setOnSavePersistentActionPath:(SLFPersistentActionsSaveBlock)onSavePersistentActionPath {
     if (_onSavePersistentActionPath) {
-        Block_release(_onSavePersistentActionPath);
         _onSavePersistentActionPath = nil;
     }
-    _onSavePersistentActionPath = Block_copy(onSavePersistentActionPath);
+    _onSavePersistentActionPath = [onSavePersistentActionPath copy];
 }
 
 - (void)reconfigureForDistrict:(SLFDistrict *)district {
@@ -112,7 +107,7 @@
 }
 
 - (void)loadDataWithResourcePath:(NSString *)path {
-    if (IsEmpty(path))
+    if (!SLFTypeNonEmptyStringOrNil(path))
         return;    
     NSDictionary *queryParameters = [NSDictionary dictionaryWithObject:SUNLIGHT_APIKEY forKey:@"apikey"];
     NSString *pathToLoad = [path appendQueryParams:queryParameters];
@@ -139,7 +134,7 @@
     if (!polygon)
         return nil;
     NSString *boundaryID = [polygon subtitle];
-    if (IsEmpty(boundaryID)) {
+    if (!SLFTypeNonEmptyStringOrNil(boundaryID)) {
         if (self.upperDistrict && polygon.pointCount == self.upperDistrict.polygonFactory.pointCount)
             return self.upperDistrict;
         return self.lowerDistrict;
@@ -150,34 +145,38 @@
 #pragma mark -
 #pragma mark MKMapViewDelegate
 
-- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
     if ([overlay isKindOfClass:[MKPolygon class]])
     {
         SLFDistrict *district = [self districtMapForPolygon:(MKPolygon*)overlay];
-        MKPolygonView *aView = [[[MKPolygonView alloc] initWithPolygon:(MKPolygon*)overlay] autorelease];
+        MKPolygonRenderer *renderer = [[MKPolygonRenderer alloc] initWithPolygon:(MKPolygon *)overlay];
         if (!district)
-            aView.fillColor = [[UIColor grayColor] colorWithAlphaComponent:0.2];
+            renderer.fillColor = [[UIColor grayColor] colorWithAlphaComponent:0.2];
         else if (district.isUpperChamber)
-            aView.fillColor = [[SLFAppearance accentOrangeColor] colorWithAlphaComponent:0.2];
-        else 
-            aView.fillColor = [[SLFAppearance accentBlueColor] colorWithAlphaComponent:0.4];
-        aView.strokeColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.7];
-        aView.lineWidth = 2;
-        return aView;
+            renderer.fillColor = [[SLFAppearance accentOrangeColor] colorWithAlphaComponent:0.2];
+        else
+            renderer.fillColor = [[SLFAppearance accentBlueColor] colorWithAlphaComponent:0.4];
+        renderer.strokeColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.7];
+        renderer.lineWidth = 2;
+        return renderer;
     }
     return nil;
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)annotation { 
     MKAnnotationView *annotationView = [super mapView:aMapView viewForAnnotation:annotation];
-    if (annotationView && [annotationView isKindOfClass:[MultiRowCalloutAnnotationView class]]) {
+    if (annotationView
+        && [annotationView isKindOfClass:[MultiRowCalloutAnnotationView class]])
+    {
         MultiRowCalloutAnnotationView *multiView = (MultiRowCalloutAnnotationView *)annotationView;
-		__block __typeof__(self) bself = self;
+		__weak __typeof__(self) bself = self;
         multiView.onCalloutAccessoryTapped = ^(MultiRowCalloutCell *cell, UIControl *control, NSDictionary *userData) {
+            if (!bself)
+                return;
             NSString *legID = [userData valueForKey:@"legID"];
             NSString *path = [SLFActionPathNavigator navigationPathForController:[LegislatorDetailViewController class] withResourceID:legID];
-            if (!IsEmpty(path))
+            if (SLFTypeNonEmptyStringOrNil(path))
                 [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
         };
         return multiView;
@@ -186,20 +185,25 @@
 }
 
 - (void)beginBoundarySearchForCoordininate:(CLLocationCoordinate2D)coordinate {
-    __block __typeof__(self) bself = self;
-    self.districtSearch = [DistrictSearch districtSearchForCoordinate:coordinate 
-                                             successBlock:^(NSArray *results) {
-                                                 for (NSString *districtID in results)
-                                                     [bself loadMapWithID:districtID];
-                                                 bself.districtSearch = nil;
-                                             }
-                                             failureBlock:^(NSString *message, DistrictSearchFailOption failOption) {
-                                                 if (failOption == DistrictSearchFailOptionLog)
-                                                     RKLogError(@"%@", message);
-                                                 else
-                                                     [SLFAlertView showWithTitle:NSLocalizedString(@"Geolocation Error", @"") message:message buttonTitle:NSLocalizedString(@"OK", @"")];
-                                                 bself.districtSearch = nil;
-                                             }];
+    __weak __typeof__(self) bself = self;
+
+    DistrictSearchSuccessWithResultsBlock success = ^(NSArray *results) {
+        for (NSString *districtID in results)
+            [bself loadMapWithID:districtID];
+        bself.districtSearch = nil;
+    };
+
+    DistrictSearchFailureWithMessageAndFailOptionBlock failure = ^(NSString *message, DistrictSearchFailOption failOption) {
+        if (failOption == DistrictSearchFailOptionLog)
+            RKLogError(@"%@", message);
+        else
+            [SLFAlertView showWithTitle:NSLocalizedString(@"Geolocation Error", @"") message:message buttonTitle:NSLocalizedString(@"OK", @"")];
+        bself.districtSearch = nil;
+    };
+
+    self.districtSearch = [DistrictSearch districtSearchForCoordinate:coordinate
+                                             successBlock: success
+                                             failureBlock:failure];
 }
 
 @end

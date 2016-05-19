@@ -34,7 +34,6 @@
 
 - (void)dealloc {
     self.stateMenuDelegate = nil;
-    [super dealloc];
 }
 
 - (void)viewDidUnload {
@@ -54,16 +53,21 @@
     self.tableController.showsSectionIndexTitles = YES;
     self.tableController.sectionNameKeyPath = @"stateInitial";
     self.tableView.rowHeight = 48;
-    __block __typeof__(self) bself = self;
+
     InlineSubtitleMapping *cellMapping = [InlineSubtitleMapping cellMapping];
+
+    __weak __typeof__(self) wSelf = self;
     cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
-        if (!object || ![object isKindOfClass:[SLFState class]])
+        SLFState *state = SLFValueIfClass(SLFState, object);
+        if (!state)
             return;
-        SLFState *state = object;
         SLFSaveSelectedState(state);
-            //[[SLFRestKitManager sharedRestKit] preloadObjectsForState:state];
-        [bself pushOrSendViewControllerWithState:state];
+
+        [[SLFRestKitManager sharedRestKit] preloadResourcesForState:state options:SLFPreloadMinimalResources];
+
+        [wSelf pushOrSendViewControllerWithState:state];
     };
+
     [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:cellMapping];
     
     RKTableItem *tableItem = [RKTableItem tableItemWithText:NSLocalizedString(@"choose a state to get started.", @"")];
@@ -102,7 +106,6 @@ CGFloat const kTitleHeight = 30;
     OpenStatesTitleView *stretchedTitle = [[OpenStatesTitleView alloc] initWithFrame:contentRect];
     stretchedTitle.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.navigationItem.titleView = stretchedTitle;
-    [stretchedTitle release];
 }
 
 - (void)pushOrSendViewControllerWithState:(SLFState *)state {
@@ -111,7 +114,7 @@ CGFloat const kTitleHeight = 30;
         [self.stateMenuDelegate stateMenuSelectionDidChangeWithState:state];
     else {
         NSString *path = [SLFActionPathNavigator navigationPathForController:[StateDetailViewController class] withResource:state];
-        if (!IsEmpty(path)) {
+        if (SLFTypeNonEmptyStringOrNil(path)) {
             [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
         }
     }

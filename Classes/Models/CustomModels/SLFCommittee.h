@@ -4,10 +4,10 @@
 @class SLFState;
 @class SLFChamber;
 @interface SLFCommittee : _SLFCommittee {}
-@property (nonatomic,readonly) SLFState *state;
-@property (nonatomic,readonly) SLFChamber *chamberObj;
-@property (nonatomic,readonly) NSString *chamberShortName;
-@property (nonatomic,readonly) NSString *fullName;
+@property (weak, nonatomic,readonly) SLFState *state;
+@property (weak, nonatomic,readonly) SLFChamber *chamberObj;
+@property (weak, nonatomic,readonly) NSString *chamberShortName;
+@property (weak, nonatomic,readonly) NSString *fullName;
 
 - (NSArray *)sortedMembers;
 + (NSArray *)sortDescriptors;

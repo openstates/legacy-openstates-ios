@@ -33,6 +33,6 @@
 - (void)fillIfNeeded;
 - (void)strokeIfNeeded;
 - (void)fillAndStrokeIfNeeded;
-@property (nonatomic,retain) UIColor *fillColor;
-@property (nonatomic,retain) UIColor *strokeColor;
+@property (nonatomic,strong) UIColor *fillColor;
+@property (nonatomic,strong) UIColor *strokeColor;
 @end

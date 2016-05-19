@@ -1,18 +1,21 @@
 #import "SLFState.h"
 #import "SLFSortDescriptor.h"
 #import "GenericAsset.h"
-#import <RestKit/Network/NSObject+URLEncoding.h>
+#import <SLFRestKit/NSObject+URLEncoding.h>
 #import "SLFChamber.h"
 #import "SLFPersistenceManager.h"
 #import "SLFRestKitManager.h"
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/RestKit.h>
+#import <SLFRestKit/CoreData.h>
 
 @implementation RKManagedObjectMapping(SLFState)
-- (void)connectStateToKeyPath:(NSString *)keyPath withStateMapping:(RKManagedObjectMapping *)stateMapping {
+
+- (void)connectStateToKeyPath:(NSString *)keyPath withStateMapping:(RKManagedObjectMapping *)stateMapping
+{
     [self hasOne:keyPath withMapping:stateMapping];
     [self connectRelationship:keyPath withObjectForPrimaryKeyAttribute:@"stateID"];
 }
+
 @end
 
 @implementation SLFState
@@ -66,7 +69,7 @@
 }
 
 - (NSString *)eventsFeedAddress {
-    NSString *baseURL = [[[SLFRestKitManager sharedRestKit] openStatesClient] baseURL];
+    NSString *baseURL = [kOPENSTATES_BASE_URL absoluteString];
     if (!baseURL)
         baseURL = @"webcal://openstates.org/api/v1";
     else
@@ -84,11 +87,14 @@
     return NO;
 }
 
-- (NSArray *)sessions {
+- (NSArray *)sessions
+{
     NSMutableArray *sessions = [NSMutableArray array];
-    for (NSDictionary *term in self.terms) {
-        for (NSString *session in [term objectForKey:@"sessions"]) {
-            if (!IsEmpty(session))
+    for (NSDictionary *term in self.terms)
+    {
+        for (NSString *session in SLFTypeArrayOrNil(term[@"sessions"]))
+        {
+            if (SLFTypeNonEmptyStringOrNil(session))
                 [sessions addObject:session];
         }
     }
@@ -99,48 +105,57 @@
     return [self.sessions lastObject];
 }
 
-- (NSString *)displayNameForSession:(NSString *)aSession {
-    if ( [aSession length] == 0  || !self.sessionDetails )
-        return aSession;
+- (NSString *)displayNameForSession:(NSString *)aSession
+{
+    aSession = SLFTypeNonEmptyStringOrNil(aSession);
+    if (!aSession || !self.sessionDetails)
+        return nil;
     
-    NSString *value = aSession;
-    NSDictionary * sessionDetail = [self.sessionDetails objectForKey:aSession];
-    if (sessionDetail) {
-        NSString * displayName = [sessionDetail objectForKey:@"display_name"];
-        if (!IsEmpty(displayName))
-            value = displayName;
-    }
-    return value;
+    NSDictionary * sessionDetail = SLFTypeDictionaryOrNil(self.sessionDetails[aSession]);
+    if (!sessionDetail)
+        return aSession;
+
+    NSString * displayName = SLFTypeNonEmptyStringOrNil(sessionDetail[@"display_name"]);
+    if (!displayName)
+        return aSession;
+
+    return displayName;
 }
 
-- (NSDictionary *)sessionIndexesByDisplayName {
-    if (IsEmpty(self.sessions))
+- (NSDictionary *)sessionIndexesByDisplayName
+{
+    if (!self.sessions.count)
         return nil;
     NSMutableDictionary *indexesByName = [NSMutableDictionary dictionary];
-    NSInteger index = 0;
-    for (NSString *aSession in self.sessions) {
+    UInt32 index = 0;
+    for (NSString *aSession in self.sessions)
+    {
         NSString *name = [self displayNameForSession:aSession];
-        if (!IsEmpty(name))
-            [indexesByName setObject:[NSNumber numberWithInt:index] forKey:name];            
+        if (name)
+            indexesByName[name] = @(index);
         index++;
     }
     return indexesByName;
 }
 
-- (NSArray *)sessionDisplayNames {
+- (NSArray *)sessionDisplayNames
+{
     NSDictionary *sessionIndexesByName = self.sessionIndexesByDisplayName;
-    if (IsEmpty(sessionIndexesByName))
+    if (!sessionIndexesByName.count)
         return nil;
     return [sessionIndexesByName keysSortedByValueUsingSelector:@selector(compare:)];
 }
 
 
-- (NSInteger)sessionIndexForDisplayName:(NSString *)displayName {
+- (NSInteger)sessionIndexForDisplayName:(NSString *)displayName
+{
+    displayName = SLFTypeNonEmptyStringOrNil(displayName);
     NSInteger index = 0;
     NSDictionary *sessionIndexesByDisplayName = self.sessionIndexesByDisplayName;
-    if (!IsEmpty(displayName) && sessionIndexesByDisplayName) {
-        NSNumber *value = [sessionIndexesByDisplayName objectForKey:displayName];
-        if (value)
+    if (displayName)
+    {
+        NSNumber *value = sessionIndexesByDisplayName[displayName];
+        if (!SLFTypeIsNull(value))
             index = [value integerValue];
     }
     return index;
@@ -162,7 +177,7 @@
 }
 
 - (NSArray *)sortedCapitolMaps {
-    if (IsEmpty(self.capitolMaps))
+    if (!SLFTypeNonEmptySetOrNil(self.capitolMaps))
         return nil;
     return [self.capitolMaps sortedArrayUsingDescriptors:[GenericAsset sortDescriptors]];
 }

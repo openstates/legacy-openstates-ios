@@ -23,7 +23,7 @@
 
 
 
-@property (nonatomic, retain) NSString *word;
+@property (nonatomic, strong) NSString *word;
 
 
 //- (BOOL)validateWord:(id*)value_ error:(NSError**)error_;
@@ -32,28 +32,28 @@
 
 
 
-@property (nonatomic, retain) BillAction* actionInverse;
+@property (nonatomic, strong) BillAction* actionInverse;
 
 //- (BOOL)validateActionInverse:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) SLFBill* billSubjectInverse;
+@property (nonatomic, strong) SLFBill* billSubjectInverse;
 
 //- (BOOL)validateBillSubjectInverse:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) SLFBill* billTitleInverse;
+@property (nonatomic, strong) SLFBill* billTitleInverse;
 
 //- (BOOL)validateBillTitleInverse:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) SLFBill* billTypeInverse;
+@property (nonatomic, strong) SLFBill* billTypeInverse;
 
 //- (BOOL)validateBillTypeInverse:(id*)value_ error:(NSError**)error_;
 

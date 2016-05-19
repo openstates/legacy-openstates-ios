@@ -10,7 +10,6 @@
 
 #import "GradientBackgroundView.h"
 #import "SLFTheme.h"
-#import <QuartzCore/QuartzCore.h>
 
 @interface GradientBackgroundView()
 @end
@@ -29,14 +28,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [super dealloc];
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-}
-
 - (void)loadLayerAndGradientColors {
     UIColor *dark = [SLFAppearance tableBackgroundDarkColor];
     UIColor *light = [SLFAppearance tableBackgroundLightColor];
@@ -46,7 +37,7 @@
 
 - (void)loadLayerAndGradientWithColors:(NSArray *)colors {
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    if (IsEmpty(colors))
+    if (!SLFTypeNonEmptyArrayOrNil(colors))
         return;
     NSMutableArray *cgColors = [[NSMutableArray alloc] initWithCapacity:colors.count];
     [colors enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -54,7 +45,6 @@
             [cgColors addObject:(id)[obj CGColor]];
     }];
     [(CAGradientLayer *)self.layer setColors:cgColors];
-    [cgColors release];
 }
 
 @end
@@ -71,17 +61,12 @@
         CGColorRef innerColor = SLFColorWithRGBA(84,86,77,.69).CGColor;
         CGColorRef darkColor = [UIColor colorWithWhite:0.0f alpha:.75].CGColor;
         _gradient.frame = frame;
-        _gradient.colors = [NSArray arrayWithObjects:(id)darkColor, (id)innerColor, (id)innerColor, (id)darkColor, nil];
+        _gradient.colors = @[(__bridge id)darkColor, (__bridge id)innerColor, (__bridge id)innerColor, (__bridge id)darkColor];
         _gradient.startPoint = CGPointMake(.5, -0.45);
         _gradient.endPoint = CGPointMake(.5, 1.45);
         [self.layer insertSublayer:_gradient atIndex:0];
     }
     return self;
-}
-
-- (void)dealloc {
-    self.gradient = nil;
-    [super dealloc];
 }
 
 - (void)layoutSubviews {

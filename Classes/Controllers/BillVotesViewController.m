@@ -52,11 +52,6 @@ enum SECTIONS {
     return self;
 }
 
-- (void)dealloc {
-    self.vote = nil;
-    self.tableController = nil;
-    [super dealloc];
-}
 
 - (void)viewDidUnload {
     self.tableController = nil;
@@ -74,15 +69,19 @@ enum SECTIONS {
     [_tableController mapObjectsWithClass:[BillVoter class] toTableCellsWithMapping:[self voterCellMap]];
     NSInteger sectionIndex;
     CGFloat headerHeight = [TableSectionHeaderView heightForTableViewStyle:self.tableViewStyle];
-    __block __typeof__(self) bself = self;
-    for (sectionIndex = SectionVoteInfo;sectionIndex < kNumSections; sectionIndex++) {
+
+    __weak __typeof__(self) bself = self;
+    for (sectionIndex = SectionVoteInfo;sectionIndex < kNumSections; sectionIndex++)
+    {
         [_tableController addSectionUsingBlock:^(RKTableSection *section) {
+            if (!bself)
+                return;
+
             NSString *headerTitle = [bself headerForSectionIndex:sectionIndex];
             TableSectionHeaderView *headerView = [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:bself.tableView.width style:bself.tableViewStyle];
             section.headerTitle = headerTitle;
             section.headerHeight = headerHeight;
             section.headerView = headerView;
-            [headerView release];
         }];
     }
     [self configureTableItems];
@@ -101,7 +100,7 @@ enum SECTIONS {
 
 - (void)configureVoteInfo {
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];    
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) bself = self;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         tableItem.cellMapping = [StyledCellMapping staticSubtitleMapping];
         tableItem.text = NSLocalizedString(@"Chamber", @"");
@@ -109,16 +108,16 @@ enum SECTIONS {
     }]];
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
         NSString *caption = [bself.vote.date stringForDisplay];
-        if (!IsEmpty(bself.vote.session))
+        if (SLFTypeNonEmptyStringOrNil(bself.vote.session))
             caption = [NSString stringWithFormat:@"%@ (%@)", [bself.vote.date stringForDisplay], bself.vote.session];
         tableItem.cellMapping = [StyledCellMapping staticSubtitleMapping];
         tableItem.text = NSLocalizedString(@"Date", @"");
         tableItem.detailText = caption;
     }]];
-    if (!IsEmpty(bself.vote.motion)) {
+    if (SLFTypeNonEmptyStringOrNil(bself.vote.motion)) {
         [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem *tableItem) {
             NSString *caption = [bself.vote.motion capitalizedString];
-            if (!IsEmpty(bself.vote.record))
+            if (SLFTypeNonEmptyStringOrNil(bself.vote.record))
                 caption = [NSString stringWithFormat:@"%@ (%@)", caption, bself.vote.record];
             tableItem.cellMapping = [StyledCellMapping staticSubtitleMapping];
             tableItem.text = NSLocalizedString(@"Motion", @"");
@@ -131,7 +130,6 @@ enum SECTIONS {
         tableItem.detailText = bself.vote.subtitle;
     }]];
     [self.tableController loadTableItems:tableItems inSection:SectionVoteInfo];     
-    [tableItems release];
 }
 
 - (void)configureVoters {
@@ -145,10 +143,11 @@ enum SECTIONS {
     [cellMapping mapKeyPath:@"foundLegislator" toAttribute:@"legislator"];
     [cellMapping mapKeyPath:@"type" toAttribute:@"role"];
     [cellMapping mapKeyPath:@"name" toAttribute:@"genericName"];
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) wSelf = self;
+    __weak __typeof__(cellMapping) wCellMapping = cellMapping;
     cellMapping.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
-        if (cellMapping.roundImageCorners) {
-            NSInteger numRows = [bself.tableController tableView:bself.tableView numberOfRowsInSection:indexPath.section];
+        if (wCellMapping.roundImageCorners) {
+            NSInteger numRows = [wSelf.tableController tableView:wSelf.tableView numberOfRowsInSection:indexPath.section];
             if (numRows == 1)
                 [cell.imageView roundTopAndBottomLeftCorners];
             else if (indexPath.row == 0)
@@ -159,20 +158,19 @@ enum SECTIONS {
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.f, 0.f, 50.f, 50.f)];
 		cell.accessoryView = imageView;
         BillVoter *voter = object;
-        if (!IsEmpty([voter yesVoteInverse]))
+        if ([voter yesVoteInverse])
             imageView.image = [UIImage imageNamed:@"VoteYea"];
-        else if (!IsEmpty([voter noVoteInverse]))
+        else if ([voter noVoteInverse])
             imageView.image = [UIImage imageNamed:@"VoteNay"];
-        else if (!IsEmpty([voter otherVoteInverse]))
+        else if ([voter otherVoteInverse])
             imageView.image = [UIImage imageNamed:@"VotePNV"];
-        [imageView release];
         [(LegislatorCell *)cell setUseDarkBackground:NO];
     };
     cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
-        NSString *legID = [object valueForKey:@"legID"];
+        NSString *legID = SLFTypeNonEmptyStringOrNil([object valueForKey:@"legID"]);
         NSString *path = [SLFActionPathNavigator navigationPathForController:[LegislatorDetailViewController class] withResourceID:legID];
-        if (!IsEmpty(path)) {
-            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
+        if (SLFTypeNonEmptyStringOrNil(path)) {
+            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:wSelf popToRoot:NO];
         }
     };
     return cellMapping;

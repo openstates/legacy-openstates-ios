@@ -12,17 +12,17 @@
 #import "StackedNavigationBar.h"
 #import "SLFStackedViewController.h"
 #import "StackedMenuViewController.h"
-#import "SVWebViewController.h"
 #import "SLFReachable.h"
 #import "StackedBackgroundView.h"
+@import SafariServices;
 
 const NSUInteger STACKED_NAVBAR_HEIGHT = 60;
 
 @interface AppBarController()
-@property (nonatomic,retain) IBOutlet StackedNavigationBar *navigationBar;
-@property (nonatomic,retain) StatesPopoverManager *statesPopover;
-@property (nonatomic,retain) SLFStackedViewController *stackedViewController;
-@property (nonatomic,retain) StackedBackgroundView *backgroundView;
+@property (nonatomic,strong) IBOutlet StackedNavigationBar *navigationBar;
+@property (nonatomic,strong) StatesPopoverManager *statesPopover;
+@property (nonatomic,strong) SLFStackedViewController *stackedViewController;
+@property (nonatomic,strong) StackedBackgroundView *backgroundView;
 - (void)configureBackgroundView;
 @end
 
@@ -33,13 +33,6 @@ const NSUInteger STACKED_NAVBAR_HEIGHT = 60;
 @synthesize stackedViewController = _stackedViewController;
 @synthesize backgroundView = _backgroundView;
 
-- (void)dealloc {
-    self.navigationBar = nil;
-    self.statesPopover = nil;
-    self.stackedViewController = nil;
-    self.backgroundView = nil;
-    [super dealloc];
-}
 
 - (void)viewDidUnload {
     self.statesPopover = nil;
@@ -78,12 +71,11 @@ const NSUInteger STACKED_NAVBAR_HEIGHT = 60;
     [_navigationBar.appIconButton addTarget:self action:@selector(browseToAppWebSite:) forControlEvents:UIControlEventTouchUpInside];
     SLFRunBlockAfterDelay(^{
             // Give the persistent data a chance to materialize, and give time to instantiate the infrastructure.
-        if (IsEmpty(SLFSelectedStateID())) {
+        if (!SLFTypeNonEmptyStringOrNil(SLFSelectedStateID())) {
             NSString *path = [SLFActionPathNavigator navigationPathForController:[StatesViewController class] withResource:nil];
             [SLFActionPathNavigator navigateToPath:path skipSaving:YES fromBase:nil popToRoot:NO];
         }
     },.3);
-    [stateMenuVC release];
     [self configureBackgroundView];
 }
 
@@ -112,19 +104,30 @@ const NSUInteger STACKED_NAVBAR_HEIGHT = 60;
 }
 
 - (IBAction)browseToAppWebSite:(id)sender {
-    NSString *url = NSLocalizedString(@"http://openstates.org", @"App Website");
-    if (SLFIsReachableAddress(url)) {
-        SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:url];
+    NSString *urlString = NSLocalizedString(@"http://openstates.org", @"App Website");
+    NSURL *URL = [NSURL URLWithString:urlString];
+    if (!URL.scheme || ![@[@"https",@"http"] containsObject:URL.scheme])
+        return;
+
+    __weak __typeof__(self) wSelf = self;
+    SLFReachabilityCompletionHandler completion = ^(NSURL *url, BOOL isReachable){
+        if (!isReachable)
+            return;
+
+        SFSafariViewController *webViewController = [[SFSafariViewController alloc] initWithURL:url entersReaderIfAvailable:NO];
         webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-        [self presentViewController:webViewController animated:YES completion:NULL];	
-        [webViewController release];
-    }
+        [wSelf presentViewController:webViewController animated:YES completion:nil];
+    };
+
+    SLFIsReachableAddressAsync(URL,completion);
 }
 
 - (void)statePopover:(StatesPopoverManager *)statePopover didSelectState:(SLFState *)newState {
-    [_stackedViewController popToRootViewControllerAnimated:YES];
-    StackedMenuViewController *vc = (StackedMenuViewController *)(_stackedViewController.rootViewController);
-    [vc stateMenuSelectionDidChangeWithState:newState];
+    [self.stackedViewController popToRootViewControllerAnimated:YES];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        StackedMenuViewController *vc = (StackedMenuViewController *)(self.stackedViewController.rootViewController);
+        [vc stateMenuSelectionDidChangeWithState:newState];
+    });
 }
 
 - (void)statePopoverDidCancel:(StatesPopoverManager *)statePopover {

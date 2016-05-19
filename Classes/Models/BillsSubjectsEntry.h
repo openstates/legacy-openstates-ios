@@ -11,7 +11,7 @@
 @class RKObjectMapping;
 @interface BillsSubjectsEntry : NSObject
 @property (nonatomic,copy) NSString *name;
-@property (nonatomic,retain) NSNumber *billCount;
+@property (nonatomic,strong) NSNumber *billCount;
 + (RKObjectMapping *)mapping;
 + (NSArray *)sortDescriptors;
 @end

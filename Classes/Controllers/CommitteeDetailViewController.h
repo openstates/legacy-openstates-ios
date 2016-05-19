@@ -14,7 +14,7 @@
 @interface CommitteeDetailViewController : SLFTableViewController <RKObjectLoaderDelegate> {
 }
 
-@property (nonatomic,retain) SLFCommittee *committee;
+@property (nonatomic,strong) SLFCommittee *committee;
 - (id)initWithCommitteeID:(NSString *)committeeID;
 
 @end

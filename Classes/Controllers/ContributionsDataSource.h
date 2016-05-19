@@ -8,7 +8,7 @@
 // distribution.
 
 
-#import <RestKit/RestKit.h>
+#import <SLFRestKit/RestKit.h>
 
 enum ContributionQueryType {
 	kContributionQueryRecipient	= 0,
@@ -27,8 +27,8 @@ enum ContributionQueryType {
 @property (nonatomic,copy) NSString *queryCycle;
 @property (nonatomic,copy) NSString *queryEntityID;
 @property (nonatomic,copy) NSNumber * queryType;
-@property (nonatomic,retain) NSMutableArray *sectionList;
-@property (nonatomic,retain) NSDictionary *tableHeaderData;
+@property (nonatomic,strong) NSMutableArray *sectionList;
+@property (nonatomic,strong) NSDictionary *tableHeaderData;
 
 - (id)dataObjectForIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)indexPathForDataObject:(id)dataObject;

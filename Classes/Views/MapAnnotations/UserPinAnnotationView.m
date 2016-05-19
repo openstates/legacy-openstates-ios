@@ -20,7 +20,7 @@ NSString* const UserPinReuseIdentifier = @"UserPinReuse";
 @implementation UserPinAnnotationView
 
 + (UserPinAnnotationView*)pinViewWithAnnotation:(id<MKAnnotation>)annotation  {
-    return [[[UserPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:UserPinReuseIdentifier] autorelease];            
+    return [[UserPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:UserPinReuseIdentifier];            
 }
 
 - (id)initWithAnnotation:(id <MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
@@ -41,7 +41,6 @@ NSString* const UserPinReuseIdentifier = @"UserPinReuse";
             UIImage *pinImage = [SLFMapPin imageForPinColorIndex:pinColorIndex status:SLFMapPinStatusHead];
             UIImageView *pinHead = [[UIImageView alloc] initWithImage:pinImage];
             [self addSubview:pinHead];
-            [pinHead release];
         }
         else
             self.pinColor = pinColorIndex;
@@ -51,7 +50,6 @@ NSString* const UserPinReuseIdentifier = @"UserPinReuse";
         if (anImage) {
             UIImageView *iconView = [[UIImageView alloc] initWithImage:anImage];
             self.leftCalloutAccessoryView = iconView;
-            [iconView release];
         }            
     
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(annotationChanged_:) name:kUserPinAnnotationAddressChangeKey object:annotation];
@@ -61,7 +59,6 @@ NSString* const UserPinReuseIdentifier = @"UserPinReuse";
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [super dealloc];
 }
 
 - (void)annotationChanged_:(NSNotification *)notification {

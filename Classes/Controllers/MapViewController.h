@@ -9,17 +9,16 @@
 
 
 #import <MapKit/MapKit.h>
-#import "SVGeocoder.h"
 #import "StackableControllerProtocol.h"
 #import "UserPinAnnotation.h"
 #import "GAITrackedViewController.h"
 
-@interface MapViewController : GAITrackedViewController <MKMapViewDelegate, UISearchBarDelegate, UIGestureRecognizerDelegate, SVGeocoderDelegate, StackableController, UserPinAnnotationDelegate>
-@property (nonatomic,retain) IBOutlet MKMapView *mapView;
-@property (nonatomic,retain) IBOutlet UIToolbar *toolbar;
-@property (nonatomic,retain) IBOutlet UISearchBar *searchBar;
-@property (nonatomic,readonly) MKCoordinateRegion defaultRegion;
-@property (nonatomic, retain) MKAnnotationView *selectedAnnotationView;
+@interface MapViewController : GAITrackedViewController <MKMapViewDelegate, UISearchBarDelegate, UIGestureRecognizerDelegate, StackableController, UserPinAnnotationDelegate>
+@property (nonatomic,strong) IBOutlet MKMapView *mapView;
+@property (nonatomic,strong) IBOutlet UIToolbar *toolbar;
+@property (nonatomic,strong) IBOutlet UISearchBar *searchBar;
+@property (nonatomic,readonly) MKCoordinateRegion mapRegion;
+@property (nonatomic, strong) MKAnnotationView *selectedAnnotationView;
 - (IBAction)changeMapType:(id)sender;
 - (IBAction)locateUser:(id)sender;
 - (IBAction)resetMap:(id)sender;

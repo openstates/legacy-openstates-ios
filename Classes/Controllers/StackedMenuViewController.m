@@ -11,6 +11,7 @@
 #import "StackedMenuViewController.h"
 #import "StackedMenuCell.h"
 #import "GradientBackgroundView.h"
+#import "AppDelegate.h"
 
 @interface StackedMenuViewController()
 - (void)configureMenuBackground;
@@ -33,7 +34,6 @@ const NSUInteger STACKED_MENU_WIDTH = 245;
 - (void)dealloc {
     if (SLFIsIOS5OrGreater())
         [self removeFromParentViewController];
-    [super dealloc];
 }
 
 - (void)viewDidUnload {
@@ -72,7 +72,6 @@ const NSUInteger STACKED_MENU_WIDTH = 245;
     [tableBackground loadLayerAndGradientWithColors:[NSArray arrayWithObjects:topColor,stopColor,bottomColor, nil]];
     NSArray *gradientStops = [[NSArray alloc] initWithObjects:[NSNumber numberWithFloat:0.0], [NSNumber numberWithFloat:.84], [NSNumber numberWithFloat:1.0], nil];
     [(CAGradientLayer *)tableBackground.layer setLocations:gradientStops];
-    [gradientStops release];
     self.tableView.backgroundView = tableBackground;
     CGPathRef shadowPath = CGPathCreateWithRect(CGRectMake(self.tableView.width-5,0,10,self.tableView.height), NULL);
     self.tableView.layer.shadowPath = shadowPath;
@@ -80,7 +79,6 @@ const NSUInteger STACKED_MENU_WIDTH = 245;
     self.tableView.layer.shadowColor = [UIColor blackColor].CGColor;
     self.tableView.layer.shadowOpacity = .4;
     self.tableView.clipsToBounds = NO;
-    [tableBackground release];
 }
 
 @end

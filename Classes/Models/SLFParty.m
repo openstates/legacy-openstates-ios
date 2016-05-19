@@ -52,14 +52,6 @@ static UnknownParty * cachedUnknown;
     return [UnknownParty unknownParty];
 }
 
-- (void)dealloc {
-    self.abbreviation = nil;
-    self.initial = nil;
-    self.name = nil;
-    self.image = nil;
-    self.color = nil;
-    [super dealloc];
-}
 
 - (NSString *)plural {
     return [self.abbreviation stringByAppendingString:@"s"];
@@ -185,7 +177,7 @@ static UnknownParty * cachedUnknown;
 
 
 SLFPartyType partyTypeForName(NSString *newName) {
-    if (!IsEmpty(newName)) {
+    if (SLFTypeNonEmptyStringOrNil(newName)) {
         NSString *loweredName = [newName lowercaseString];
         if ([@"democrat" isEqualToString:loweredName])
             return SLFPartyDemocrat;

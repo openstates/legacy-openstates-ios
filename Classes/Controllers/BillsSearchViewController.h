@@ -8,6 +8,8 @@
 // distribution.
 
 
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "SLFTableViewController.h"
 
 @class SLFState;

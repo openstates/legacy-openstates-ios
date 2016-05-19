@@ -27,14 +27,14 @@
 @end
 
 @interface ColoredAccessoryIndicator : UIView
-@property (nonatomic,retain) UIColor *color;
+@property (nonatomic,strong) UIColor *color;
 @end
 
 @interface StackedNavigationBar()
-@property (nonatomic,retain) IBOutlet OpenStatesTitleView *titleView;
-@property (nonatomic,retain) IBOutlet OpenStatesIconView *iconView;
-@property (nonatomic,retain) AnimatedGradientLayer *gradientBar;
-@property (nonatomic,retain) IBOutlet UILabel *stateLabel;
+@property (nonatomic,strong) IBOutlet OpenStatesTitleView *titleView;
+@property (nonatomic,strong) IBOutlet OpenStatesIconView *iconView;
+@property (nonatomic,strong) AnimatedGradientLayer *gradientBar;
+@property (nonatomic,strong) IBOutlet UILabel *stateLabel;
 - (void)configure;
 - (void)createMapButton;
 - (void)createAppNameView;
@@ -76,13 +76,6 @@
 - (void)dealloc 
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    self.titleView = nil;
-    self.iconView = nil;
-    self.gradientBar = nil;
-    self.stateLabel = nil;
-    self.mapButton = nil;
-    self.appIconButton = nil;
-    [super dealloc];
 }
 
 - (void)configure {
@@ -157,14 +150,12 @@
     left.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
     left.backgroundColor = SLFColorWithRGB(87,88,82);
     [self addSubview:left];
-    [left release];
 
     dividerRect.origin.x += 1;
     UIView *right = [[UIView alloc] initWithFrame:dividerRect];
     right.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
     right.backgroundColor = SLFColorWithRGB(112,113,107);
     [self addSubview:right];
-    [right release];
 }
 
 - (void)createAccessoryIndicator {
@@ -173,7 +164,6 @@
     indicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     indicator.center = CGPointMake(kAccessoryIndicatorOffsetX, self.center.y+kCenterOffset);
     [self addSubview:indicator];
-    [indicator release];
 }
 
 - (void)createStateLabel {
@@ -233,10 +223,6 @@
     return self;
 }
 
-- (void)dealloc {
-    self.color = nil;
-    [super dealloc];
-}
 
 - (void)drawRect:(CGRect)rect {
     CGFloat x = CGRectGetMaxX(self.bounds)-3.0;

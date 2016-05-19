@@ -2,7 +2,7 @@
 // Make changes to SLFDistrict.h instead.
 
 #import <CoreData/CoreData.h>
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 
 
 @class SLFLegislator;
@@ -28,7 +28,7 @@
 
 
 
-@property (nonatomic, retain) NSString *boundaryID;
+@property (nonatomic, strong) NSString *boundaryID;
 
 
 //- (BOOL)validateBoundaryID:(id*)value_ error:(NSError**)error_;
@@ -36,7 +36,7 @@
 
 
 
-@property (nonatomic, retain) NSString *chamber;
+@property (nonatomic, strong) NSString *chamber;
 
 
 //- (BOOL)validateChamber:(id*)value_ error:(NSError**)error_;
@@ -44,7 +44,7 @@
 
 
 
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, strong) NSString *name;
 
 
 //- (BOOL)validateName:(id*)value_ error:(NSError**)error_;
@@ -52,7 +52,7 @@
 
 
 
-@property (nonatomic, retain) NSNumber *numSeats;
+@property (nonatomic, strong) NSNumber *numSeats;
 
 
 @property short numSeatsValue;
@@ -64,7 +64,7 @@
 
 
 
-@property (nonatomic, retain) NSDictionary *regionDictionary;
+@property (nonatomic, strong) NSDictionary *regionDictionary;
 
 
 //- (BOOL)validateRegionDictionary:(id*)value_ error:(NSError**)error_;
@@ -72,7 +72,7 @@
 
 
 
-@property (nonatomic, retain) NSArray *shape;
+@property (nonatomic, strong) NSArray *shape;
 
 
 //- (BOOL)validateShape:(id*)value_ error:(NSError**)error_;
@@ -80,7 +80,7 @@
 
 
 
-@property (nonatomic, retain) NSString *stateID;
+@property (nonatomic, strong) NSString *stateID;
 
 
 //- (BOOL)validateStateID:(id*)value_ error:(NSError**)error_;
@@ -89,14 +89,14 @@
 
 
 
-@property (nonatomic, retain) NSSet* legislators;
+@property (nonatomic, strong) NSSet* legislators;
 
 - (NSMutableSet*)legislatorsSet;
 
 
 
 
-@property (nonatomic, retain) SLFState* state;
+@property (nonatomic, strong) SLFState* state;
 
 //- (BOOL)validateState:(id*)value_ error:(NSError**)error_;
 

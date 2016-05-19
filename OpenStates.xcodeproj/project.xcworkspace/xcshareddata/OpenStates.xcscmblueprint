@@ -1,0 +1,114 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "B5E1788961908EBABE3AF94D0343C1DCC080325B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "37193F8A12895350C4D02D3A49CF9846B72C9F6A" : 0,
+    "62B5D185F70056F460530A372C3BC861869CA07F" : 0,
+    "EF51387A5AF28E4351AFB0302884600583A438B5" : 0,
+    "DD20A1A48C66B5213E0FEBB87A95EF51D6C6F3E8" : 0,
+    "B4BBE247D1D92687B43EB1612AD17A042181BA17" : 0,
+    "FF65A8AFC255E5913A7BCDE7153CC9C006153EAE" : 0,
+    "D78740BB5B159EA13C82AB5AF1D92A0F3C627237" : 0,
+    "FE86366953AF9E081BC7A5581F96F105D72A1D38" : 0,
+    "26DDB5077BD0A18454AD91825477031ACFD74131" : 0,
+    "B5E1788961908EBABE3AF94D0343C1DCC080325B" : 0,
+    "61E2EAE4DD8744704A2AB48F1F4950E56D86FE5D" : 0,
+    "00DEE37500E6C7998F4D113C875F3996AE26D5BE" : 0,
+    "E1D7EDCDA5D09ECF59D4D7E602013F4E01A8D9C6" : 0,
+    "5F1C4AC77FD56AB17C0FFACE62F4A0593DEB24D6" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "18BEC286-298F-42DA-8E14-59BFC32AF050",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "37193F8A12895350C4D02D3A49CF9846B72C9F6A" : "StatesLegeVendor\/PSStackedView",
+    "62B5D185F70056F460530A372C3BC861869CA07F" : "StatesLegeVendor\/MultiRowCalloutAnnotationView",
+    "EF51387A5AF28E4351AFB0302884600583A438B5" : "StatesLegeVendor\/JSONKit",
+    "DD20A1A48C66B5213E0FEBB87A95EF51D6C6F3E8" : "StatesLegeVendor\/AFNetworking",
+    "B4BBE247D1D92687B43EB1612AD17A042181BA17" : "StatesLegeVendor\/DDActionHeaderView",
+    "FF65A8AFC255E5913A7BCDE7153CC9C006153EAE" : "StatesLegeVendor\/ActionSheetPicker",
+    "D78740BB5B159EA13C82AB5AF1D92A0F3C627237" : "StatesLegeVendor\/RestKit",
+    "FE86366953AF9E081BC7A5581F96F105D72A1D38" : "StatesLegeVendor\/SVGeocoder",
+    "26DDB5077BD0A18454AD91825477031ACFD74131" : "StatesLegeVendor\/SDURLCache",
+    "B5E1788961908EBABE3AF94D0343C1DCC080325B" : "StatesLege",
+    "61E2EAE4DD8744704A2AB48F1F4950E56D86FE5D" : "StatesLegeVendor\/AppendingFlowView",
+    "00DEE37500E6C7998F4D113C875F3996AE26D5BE" : "StatesLegeVendor\/SVWebViewController",
+    "E1D7EDCDA5D09ECF59D4D7E602013F4E01A8D9C6" : "StatesLegeVendor\/MTInfoPanel",
+    "5F1C4AC77FD56AB17C0FFACE62F4A0593DEB24D6" : "StatesLegeVendor\/SCNetworkReachabilityKit"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "OpenStates",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "OpenStates.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:grgcombs\/SVWebViewController.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "00DEE37500E6C7998F4D113C875F3996AE26D5BE"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "git:\/\/github.com\/steipete\/SDURLCache.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "26DDB5077BD0A18454AD91825477031ACFD74131"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:steipete\/PSStackedView.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "37193F8A12895350C4D02D3A49CF9846B72C9F6A"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/royratcliffe\/SCNetworkReachabilityKit.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5F1C4AC77FD56AB17C0FFACE62F4A0593DEB24D6"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/grgcombs\/AppendingFlowView.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "61E2EAE4DD8744704A2AB48F1F4950E56D86FE5D"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:grgcombs\/MultiRowCalloutAnnotationView.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "62B5D185F70056F460530A372C3BC861869CA07F"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:grgcombs\/DDActionHeaderView.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B4BBE247D1D92687B43EB1612AD17A042181BA17"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:sunlightlabs\/openstates-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B5E1788961908EBABE3AF94D0343C1DCC080325B"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/RestKit\/RestKit.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D78740BB5B159EA13C82AB5AF1D92A0F3C627237"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "git:\/\/github.com\/AFNetworking\/AFNetworking.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DD20A1A48C66B5213E0FEBB87A95EF51D6C6F3E8"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:grgcombs\/MTInfoPanel.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E1D7EDCDA5D09ECF59D4D7E602013F4E01A8D9C6"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "git:\/\/github.com\/johnezang\/JSONKit.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "EF51387A5AF28E4351AFB0302884600583A438B5"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:grgcombs\/SVGeocoder.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "FE86366953AF9E081BC7A5581F96F105D72A1D38"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:grgcombs\/ActionSheetPicker.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "FF65A8AFC255E5913A7BCDE7153CC9C006153EAE"
+    }
+  ]
+}

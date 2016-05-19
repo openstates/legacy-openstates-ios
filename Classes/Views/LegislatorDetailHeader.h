@@ -10,6 +10,6 @@
 
 @class SLFLegislator;
 @interface LegislatorDetailHeader : UIView
-@property (nonatomic,retain) SLFLegislator *legislator;
+@property (nonatomic,strong) SLFLegislator *legislator;
 - (void)configure;
 @end

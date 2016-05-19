@@ -1,5 +1,5 @@
 #import "SLFDataModels.h"
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 #import "SLFSortDescriptor.h"
 #import "NSDate+SLFDateHelper.h"
 
@@ -42,11 +42,9 @@
     if (chamber)
         actorName = chamber.shortName;
     NSMutableString *words = [NSMutableString stringWithFormat:@"(%@) ", actorName];
-        //if (!IsEmpty(self.types))
-        //     [words appendString:[[[self.types anyObject] word] capitalizedString]];
-    if (!IsEmpty(self.actionID))
+    if (SLFTypeNonEmptyStringOrNil(self.actionID))
         [words appendFormat:@"- %@ ",self.actionID];
-    if (!IsEmpty(self.comment))
+    if (SLFTypeNonEmptyStringOrNil(self.comment))
         [words appendFormat:@"- %@ ",self.comment];
     return words;
 }

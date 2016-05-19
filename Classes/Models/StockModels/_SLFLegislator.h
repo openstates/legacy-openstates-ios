@@ -2,7 +2,7 @@
 // Make changes to SLFLegislator.h instead.
 
 #import <CoreData/CoreData.h>
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 
 
 @class SLFDistrict;
@@ -43,7 +43,7 @@
 
 
 
-@property (nonatomic, retain) NSNumber *active;
+@property (nonatomic, strong) NSNumber *active;
 
 
 @property BOOL activeValue;
@@ -55,7 +55,7 @@
 
 
 
-@property (nonatomic, retain) NSString *chamber;
+@property (nonatomic, strong) NSString *chamber;
 
 
 //- (BOOL)validateChamber:(id*)value_ error:(NSError**)error_;
@@ -63,7 +63,7 @@
 
 
 
-@property (nonatomic, retain) NSString *country;
+@property (nonatomic, strong) NSString *country;
 
 
 //- (BOOL)validateCountry:(id*)value_ error:(NSError**)error_;
@@ -71,7 +71,7 @@
 
 
 
-@property (nonatomic, retain) NSDate *dateCreated;
+@property (nonatomic, strong) NSDate *dateCreated;
 
 
 //- (BOOL)validateDateCreated:(id*)value_ error:(NSError**)error_;
@@ -79,7 +79,7 @@
 
 
 
-@property (nonatomic, retain) NSDate *dateUpdated;
+@property (nonatomic, strong) NSDate *dateUpdated;
 
 
 //- (BOOL)validateDateUpdated:(id*)value_ error:(NSError**)error_;
@@ -87,7 +87,7 @@
 
 
 
-@property (nonatomic, retain) NSString *district;
+@property (nonatomic, strong) NSString *district;
 
 
 //- (BOOL)validateDistrict:(id*)value_ error:(NSError**)error_;
@@ -95,7 +95,7 @@
 
 
 
-@property (nonatomic, retain) NSString *firstName;
+@property (nonatomic, strong) NSString *firstName;
 
 
 //- (BOOL)validateFirstName:(id*)value_ error:(NSError**)error_;
@@ -103,7 +103,7 @@
 
 
 
-@property (nonatomic, retain) NSString *fullName;
+@property (nonatomic, strong) NSString *fullName;
 
 
 //- (BOOL)validateFullName:(id*)value_ error:(NSError**)error_;
@@ -111,7 +111,7 @@
 
 
 
-@property (nonatomic, retain) NSString *lastName;
+@property (nonatomic, strong) NSString *lastName;
 
 
 //- (BOOL)validateLastName:(id*)value_ error:(NSError**)error_;
@@ -119,7 +119,7 @@
 
 
 
-@property (nonatomic, retain) NSString *legID;
+@property (nonatomic, strong) NSString *legID;
 
 
 //- (BOOL)validateLegID:(id*)value_ error:(NSError**)error_;
@@ -127,7 +127,7 @@
 
 
 
-@property (nonatomic, retain) NSString *url;
+@property (nonatomic, strong) NSString *url;
 
 
 //- (BOOL)validateUrl:(id*)value_ error:(NSError**)error_;
@@ -135,7 +135,7 @@
 
 
 
-@property (nonatomic, retain) NSString *email;
+@property (nonatomic, strong) NSString *email;
 
 
 //- (BOOL)validateEmail:(id*)value_ error:(NSError**)error_;
@@ -143,7 +143,7 @@
 
 
 
-@property (nonatomic, retain) NSString *level;
+@property (nonatomic, strong) NSString *level;
 
 
 //- (BOOL)validateLevel:(id*)value_ error:(NSError**)error_;
@@ -151,7 +151,7 @@
 
 
 
-@property (nonatomic, retain) NSString *middleName;
+@property (nonatomic, strong) NSString *middleName;
 
 
 //- (BOOL)validateMiddleName:(id*)value_ error:(NSError**)error_;
@@ -159,7 +159,7 @@
 
 
 
-@property (nonatomic, retain) NSString *nimspCandidateID;
+@property (nonatomic, strong) NSString *nimspCandidateID;
 
 
 //- (BOOL)validateNimspCandidateID:(id*)value_ error:(NSError**)error_;
@@ -167,7 +167,7 @@
 
 
 
-@property (nonatomic, retain) NSString *nimspID;
+@property (nonatomic, strong) NSString *nimspID;
 
 
 //- (BOOL)validateNimspID:(id*)value_ error:(NSError**)error_;
@@ -175,7 +175,7 @@
 
 
 
-@property (nonatomic, retain) NSString *party;
+@property (nonatomic, strong) NSString *party;
 
 
 //- (BOOL)validateParty:(id*)value_ error:(NSError**)error_;
@@ -183,7 +183,7 @@
 
 
 
-@property (nonatomic, retain) NSString *photoURL;
+@property (nonatomic, strong) NSString *photoURL;
 
 
 //- (BOOL)validatePhotoURL:(id*)value_ error:(NSError**)error_;
@@ -191,7 +191,7 @@
 
 
 
-@property (nonatomic, retain) NSString *stateID;
+@property (nonatomic, strong) NSString *stateID;
 
 
 //- (BOOL)validateStateID:(id*)value_ error:(NSError**)error_;
@@ -199,7 +199,7 @@
 
 
 
-@property (nonatomic, retain) NSString *suffixes;
+@property (nonatomic, strong) NSString *suffixes;
 
 
 //- (BOOL)validateSuffixes:(id*)value_ error:(NSError**)error_;
@@ -207,7 +207,7 @@
 
 
 
-@property (nonatomic, retain) NSString *transparencyID;
+@property (nonatomic, strong) NSString *transparencyID;
 
 
 //- (BOOL)validateTransparencyID:(id*)value_ error:(NSError**)error_;
@@ -215,7 +215,7 @@
 
 
 
-@property (nonatomic, retain) NSString *votesmartID;
+@property (nonatomic, strong) NSString *votesmartID;
 
 
 //- (BOOL)validateVotesmartID:(id*)value_ error:(NSError**)error_;
@@ -224,28 +224,28 @@
 
 
 
-@property (nonatomic, retain) SLFDistrict* districtMap;
+@property (nonatomic, strong) SLFDistrict* districtMap;
 
 //- (BOOL)validateDistrictMap:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) NSSet* roles;
+@property (nonatomic, strong) NSSet* roles;
 
 - (NSMutableSet*)rolesSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* sources;
+@property (nonatomic, strong) NSSet* sources;
 
 - (NSMutableSet*)sourcesSet;
 
 
 
 
-@property (nonatomic, retain) SLFState* stateObj;
+@property (nonatomic, strong) SLFState* stateObj;
 
 //- (BOOL)validateStateObj:(id*)value_ error:(NSError**)error_;
 

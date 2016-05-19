@@ -16,8 +16,8 @@
 
 @interface BillDetailViewController : SLFTableViewController <RKObjectLoaderDelegate>
 
-@property (nonatomic, retain) SLFBill *bill;
-@property (nonatomic,retain) SLFImprovedRKTableController *tableController;
+@property (nonatomic, strong) SLFBill *bill;
+@property (nonatomic,strong) SLFImprovedRKTableController *tableController;
 
 - (id)initWithState:(SLFState *)aState session:(NSString *)aSession billID:(NSString *)billID;
 - (id)initWithBill:(SLFBill *)aBill;

@@ -1,21 +1,21 @@
 #import "_SLFState.h"
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 
 @class RKManagedObjectMapping;
 @interface SLFState : _SLFState {}
-@property (nonatomic, readonly) NSString *title;
-@property (nonatomic, readonly) NSString *subtitle;
-@property (nonatomic, readonly) NSString *stateInitial;
-@property (nonatomic, readonly) NSString *stateIDForDisplay;
-@property (nonatomic, readonly) NSString *newsAddress;
-@property (nonatomic, readonly) NSString *eventsFeedAddress;
-@property (nonatomic, readonly) NSArray *sessions;
-@property (nonatomic, readonly) NSString *latestSession;
-@property (nonatomic, readonly) NSDictionary *sessionIndexesByDisplayName;
-@property (nonatomic, readonly) NSArray *sessionDisplayNames;
-@property (nonatomic, readonly) NSArray *chambers;
+@property (weak, nonatomic, readonly) NSString *title;
+@property (weak, nonatomic, readonly) NSString *subtitle;
+@property (weak, nonatomic, readonly) NSString *stateInitial;
+@property (weak, nonatomic, readonly) NSString *stateIDForDisplay;
+@property (weak, nonatomic, readonly) NSString *newsAddress;
+@property (weak, nonatomic, readonly) NSString *eventsFeedAddress;
+@property (weak, nonatomic, readonly) NSArray *sessions;
+@property (weak, nonatomic, readonly) NSString *latestSession;
+@property (weak, nonatomic, readonly) NSDictionary *sessionIndexesByDisplayName;
+@property (weak, nonatomic, readonly) NSArray *sessionDisplayNames;
+@property (weak, nonatomic, readonly) NSArray *chambers;
 @property (nonatomic, readonly) BOOL isUnicameral;
-@property (nonatomic, readonly) NSArray *sortedCapitolMaps;
+@property (weak, nonatomic, readonly) NSArray *sortedCapitolMaps;
 - (BOOL)isFeatureEnabled:(NSString *)feature;
 - (NSString *)displayNameForSession:(NSString *)aSession;
 - (NSInteger)sessionIndexForDisplayName:(NSString *)displayName;

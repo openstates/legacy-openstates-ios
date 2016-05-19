@@ -2,7 +2,7 @@
 // Make changes to SLFCommittee.h instead.
 
 #import <CoreData/CoreData.h>
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 
 @class CommitteeMember;
 @class GenericAsset;
@@ -30,7 +30,7 @@
 
 
 
-@property (nonatomic, retain) NSString *chamber;
+@property (nonatomic, strong) NSString *chamber;
 
 
 //- (BOOL)validateChamber:(id*)value_ error:(NSError**)error_;
@@ -38,7 +38,7 @@
 
 
 
-@property (nonatomic, retain) NSString *committeeID;
+@property (nonatomic, strong) NSString *committeeID;
 
 
 //- (BOOL)validateCommitteeID:(id*)value_ error:(NSError**)error_;
@@ -46,7 +46,7 @@
 
 
 
-@property (nonatomic, retain) NSString *committeeName;
+@property (nonatomic, strong) NSString *committeeName;
 
 
 //- (BOOL)validateCommitteeName:(id*)value_ error:(NSError**)error_;
@@ -54,7 +54,7 @@
 
 
 
-@property (nonatomic, retain) NSDate *dateCreated;
+@property (nonatomic, strong) NSDate *dateCreated;
 
 
 //- (BOOL)validateDateCreated:(id*)value_ error:(NSError**)error_;
@@ -62,7 +62,7 @@
 
 
 
-@property (nonatomic, retain) NSDate *dateUpdated;
+@property (nonatomic, strong) NSDate *dateUpdated;
 
 
 //- (BOOL)validateDateUpdated:(id*)value_ error:(NSError**)error_;
@@ -70,7 +70,7 @@
 
 
 
-@property (nonatomic, retain) NSString *parentID;
+@property (nonatomic, strong) NSString *parentID;
 
 
 //- (BOOL)validateParentID:(id*)value_ error:(NSError**)error_;
@@ -78,7 +78,7 @@
 
 
 
-@property (nonatomic, retain) NSString *stateID;
+@property (nonatomic, strong) NSString *stateID;
 
 
 //- (BOOL)validateStateID:(id*)value_ error:(NSError**)error_;
@@ -86,7 +86,7 @@
 
 
 
-@property (nonatomic, retain) NSString *subcommittee;
+@property (nonatomic, strong) NSString *subcommittee;
 
 
 //- (BOOL)validateSubcommittee:(id*)value_ error:(NSError**)error_;
@@ -94,7 +94,7 @@
 
 
 
-@property (nonatomic, retain) NSString *votesmartID;
+@property (nonatomic, strong) NSString *votesmartID;
 
 
 //- (BOOL)validateVotesmartID:(id*)value_ error:(NSError**)error_;
@@ -103,21 +103,21 @@
 
 
 
-@property (nonatomic, retain) NSSet* members;
+@property (nonatomic, strong) NSSet* members;
 
 - (NSMutableSet*)membersSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* sources;
+@property (nonatomic, strong) NSSet* sources;
 
 - (NSMutableSet*)sourcesSet;
 
 
 
 
-@property (nonatomic, retain) SLFState* stateObj;
+@property (nonatomic, strong) SLFState* stateObj;
 
 //- (BOOL)validateStateObj:(id*)value_ error:(NSError**)error_;
 

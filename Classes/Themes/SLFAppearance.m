@@ -9,7 +9,7 @@
 
 
 #import "SLFAppearance.h"
-#import <RestKit/RestKit.h>
+#import <SLFRestKit/RestKit.h>
 #import "TitleBarView.h"
 
 #define APP_OPEN_STATES_THEME 1
@@ -17,7 +17,7 @@
 #define APP_BLUISH_THEME 3 
 #define APP_APPEARANCE_THEME APP_OPEN_STATES_THEME
 
-#define vendColor(r, g, b) static UIColor *ret; if (ret == nil) ret = [SLFColorWithRGB(r,g,b) retain]; return ret
+#define vendColor(r, g, b) static UIColor *ret; if (ret == nil) ret = SLFColorWithRGB(r,g,b); return ret
 #define vendColorHex(v) vendColor(((v&0xFF0000)>>16),((v&0x00FF00)>>8),(v&0x0000FF))
 
 
@@ -77,7 +77,7 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 
     UIApplication *app = [UIApplication sharedApplication];
 
-    app.statusBarStyle = UIStatusBarStyleBlackOpaque;
+    app.statusBarStyle = UIStatusBarStyleDefault;
     app.keyWindow.backgroundColor = [UIColor blackColor];
 
     NSUInteger systemVersion = [[UIDevice currentDevice] systemMajorVersion];
@@ -89,7 +89,7 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 
     if (systemVersion >= 7) {
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-        [UIView appearanceWhenContainedIn:[UISegmentedControl class], nil].tintColor = [self primaryTintColor];
+        [UIView appearanceWhenContainedInInstancesOfClasses:@[[UISegmentedControl class]]].tintColor = [self primaryTintColor];
         [UITableView appearance].sectionIndexBackgroundColor = [UIColor clearColor];
         [UITableView appearance].sectionIndexColor = [self cellTextColor];
         [[UINavigationBar appearance] setBarTintColor:[self barTintColor]];
@@ -281,6 +281,7 @@ UIColor *SLFColorWithRGBA(int r, int g, int b, CGFloat a) {
 UIColor *SLFColorWithRGB(int r, int g, int b) {
     return SLFColorWithRGBA(r,g,b,1.0);
 }
+
 UIColor *SLFColorWithHex(char hex) {
     return SLFColorWithRGB(((hex&0xFF0000)>>16),((hex&0x00FF00)>>8),(hex&0x0000FF));
 }
@@ -300,3 +301,36 @@ UIFont *SLFTitleFont(CGFloat size) {
 UIFont *SLFItalicFont(CGFloat size) {
     return [UIFont fontWithName:SLFAppearanceItalicsFontName size:size];
 }
+
+UIFont *SLFFontWithDescriptorAndSize(UIFontDescriptor *descriptor, CGFloat zeroOrSize)
+{
+    if (!descriptor)
+        return nil;
+
+    CGFloat reductionOffset = 0;
+    if (zeroOrSize < 0)
+    {
+        reductionOffset = ABS(zeroOrSize);
+        zeroOrSize = 0;
+    }
+
+    UIFont *font = [UIFont fontWithDescriptor: descriptor size: zeroOrSize];
+    if (reductionOffset > 0)
+    {
+        CGFloat reducedSize = (font.pointSize - reductionOffset);
+        font = [font fontWithSize:reducedSize];
+    }
+
+    return font;
+}
+
+UIFont *SLFFontWithStyle(NSString *textStyle, UIFontDescriptorSymbolicTraits traits, CGFloat zeroOrSize)
+{
+    if (!textStyle || !textStyle.length)
+        textStyle = UIFontTextStyleBody;
+
+    UIFontDescriptor * descriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle: textStyle];
+    UIFontDescriptor *specialDescriptor = [descriptor fontDescriptorWithSymbolicTraits: traits];
+    return SLFFontWithDescriptorAndSize(specialDescriptor, zeroOrSize);
+}
+

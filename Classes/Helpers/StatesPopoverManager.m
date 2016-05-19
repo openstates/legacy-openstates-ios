@@ -12,8 +12,8 @@
 #import "StatesViewController.h"
 
 @interface StatesPopoverManager()
-@property (nonatomic,retain) UIPopoverController *popover;
-@property (nonatomic,assign) id<StatesPopoverDelegate>statePopoverDelegate;
+@property (nonatomic,strong) UIPopoverController *popover;
+@property (nonatomic,weak) id<StatesPopoverDelegate>statePopoverDelegate;
 @end
 
 @implementation StatesPopoverManager
@@ -29,10 +29,8 @@
         stateListVC.stateMenuDelegate = self;
         stateListVC.contentSizeForViewInPopover = CGSizeMake(stateListVC.stackWidth, 500.f);
         UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:stateListVC];    
-        [stateListVC release];
         _popover = [[UIPopoverController alloc] initWithContentViewController:navController];
         _popover.delegate = self;
-        [navController release];
         if ([origin isKindOfClass:[UIBarButtonItem class]])
             [_popover presentPopoverFromBarButtonItem:origin permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
         else if ([origin isKindOfClass:[UIView class]]) {
@@ -44,14 +42,13 @@
 }
 
 + (StatesPopoverManager *)showFromOrigin:(id)origin delegate:(id<StatesPopoverDelegate>)delegate {
-    return [[[StatesPopoverManager alloc] initWithOrigin:origin delegate:delegate] autorelease];
+    return [[StatesPopoverManager alloc] initWithOrigin:origin delegate:delegate];
 }
 
 
 - (void)dealloc {
     [self dismissPopover:NO];
     self.statePopoverDelegate = nil;
-    [super dealloc];
 }
 
 - (void)dismissPopover:(BOOL)animated {

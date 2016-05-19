@@ -20,7 +20,7 @@
 
 
 
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, strong) NSString *name;
 
 
 //- (BOOL)validateName:(id*)value_ error:(NSError**)error_;
@@ -28,7 +28,7 @@
 
 
 
-@property (nonatomic, retain) NSString *type;
+@property (nonatomic, strong) NSString *type;
 
 
 //- (BOOL)validateType:(id*)value_ error:(NSError**)error_;

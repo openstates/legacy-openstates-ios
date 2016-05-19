@@ -17,6 +17,12 @@
 //   Sign up for your key, and check out the multitudinous government transparency sites from Sunlight:
 //   http://services.sunlightlabs.com/
 
-FOUNDATION_EXPORT NSString *const SUNLIGHT_APIKEY;
+#import <Foundation/Foundation.h>
+
+FOUNDATION_EXPORT NSString *const PRIVATE_SUNLIGHT_APIKEY;
 
 FOUNDATION_EXPORT NSString *const kGoogleAnalyticsIdRelease;
+
+#ifndef SUNLIGHT_APIKEY
+#define SUNLIGHT_APIKEY PRIVATE_SUNLIGHT_APIKEY
+#endif

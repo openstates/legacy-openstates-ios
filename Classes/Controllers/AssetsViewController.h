@@ -11,7 +11,7 @@
 #import "SLFTableViewController.h"
 
 @interface AssetsViewController : SLFTableViewController
-@property (nonatomic,retain) NSArray *assets;
+@property (nonatomic,strong) NSArray *assets;
 - (id)initWithAssets:(NSArray *)assets;
 - (id)initWithState:(SLFState *)state;
 @end

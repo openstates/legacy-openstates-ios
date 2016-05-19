@@ -19,11 +19,10 @@
 #import "SLFDataModels.h"
 #import "SLFTheme.h"
 #import "UIImage+OverlayColor.h"
-#import "SVWebViewController.h"
-#import "SVWebViewController+SFHackneyedWebViewController.h"
 #import "SLFReachable.h"
 #import "SLFRestKitManager.h"
 #import "SLFEmailComposer.h"
+@import SafariServices;
 
 #define MenuMyRepresentatives NSLocalizedString(@"Who's My Rep?", @"")
 #define MenuLegislators NSLocalizedString(@"Legislators", @"")
@@ -57,9 +56,6 @@
 
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-    self.state = nil;
-    self.tableController = nil;
-    [super dealloc];
 }
 
 - (void)viewDidUnload {
@@ -136,10 +132,10 @@
     cellMap.useAlternatingRowColors = YES;
     [cellMap mapKeyPath:@"highlightedImage" toAttribute:@"imageView.highlightedImage"];
     [cellMap addDefaultMappings];
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) wSelf = self;
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
         RKTableItem* tableItem = (RKTableItem*) object;
-        [bself selectMenuItem:tableItem.text];
+        [wSelf selectMenuItem:tableItem.text];
     };
     return cellMap;
 }
@@ -163,7 +159,7 @@
     [tableItems addObject:[self menuItemWithText:MenuBills imagePrefix:@"Gavel" cellMapping:fixedMap]];
     if (self.state && self.state.featureFlags && [self.state.featureFlags containsObject:@"events"])
         [tableItems addObject:[self menuItemWithText:MenuEvents imagePrefix:@"Calendar" cellMapping:fixedMap]];
-    if (!IsEmpty(self.state.capitolMaps))
+    if (SLFTypeNonEmptySetOrNil(self.state.capitolMaps))
         [tableItems addObject:[self menuItemWithText:MenuCapitolMaps imagePrefix:@"Bank" cellMapping:fixedMap]];
     [tableItems addObject:[self menuItemWithText:MenuNews imagePrefix:@"Paper" cellMapping:momentaryMap]];
     [tableItems addObject:[self menuItemWithText:MenuFeedback imagePrefix:@"Comment" cellMapping:momentaryMap]];
@@ -178,7 +174,6 @@
     [_tableController loadTableItems:tableItems];
     [_tableController.tableView reloadData];
     [_tableController.tableView setNeedsDisplay];
-    [tableItems release];
 }
 
 - (void)selectMenuItem:(NSString *)menuItem {
@@ -196,24 +191,31 @@
         controllerClass = [EventsViewController class];
     else if ([menuItem isEqualToString:MenuBills])
         controllerClass = [BillsMenuViewController class];
-    else if ([menuItem isEqualToString:MenuCapitolMaps] && !IsEmpty(self.state.capitolMaps))
+    else if ([menuItem isEqualToString:MenuCapitolMaps] && SLFTypeNonEmptySetOrNil(self.state.capitolMaps))
         controllerClass = [AssetsViewController class];
     else if ([menuItem isEqualToString:MenuMyRepresentatives])
         controllerClass = [LegislatorsNoFetchViewController class];
     if (controllerClass) {
         NSString *path = [SLFActionPathNavigator navigationPathForController:controllerClass withResource:resource];
-        if (!IsEmpty(path))
+        if (SLFTypeNonEmptyStringOrNil(path))
             [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:SLFIsIpad()];
         return;
     }
     
     if ([menuItem isEqualToString:MenuNews]) {
-        if (SLFIsReachableAddress(self.state.newsAddress)) {
-            SVWebViewController *webViewController = [[SVWebViewController alloc] initWithAddress:self.state.newsAddress];
+        NSURL *URL = [NSURL URLWithString:self.state.newsAddress];
+        if (!URL.scheme || ![@[@"https",@"http"] containsObject:URL.scheme])
+            return;
+
+        SLFReachabilityCompletionHandler completion = ^(NSURL *url, BOOL isReachable){
+            if (!isReachable)
+                return;
+
+            SFSafariViewController *webViewController = [[SFSafariViewController alloc] initWithURL:url entersReaderIfAvailable:NO];
             webViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-            [self presentViewController:webViewController animated:YES completion:NULL];
-            [webViewController release];
-        }
+            [self presentViewController:webViewController animated:YES completion:nil];
+        };
+        SLFIsReachableAddressAsync(URL,completion);
     }
     else if ([menuItem isEqualToString:MenuFeedback]) {
         [[SLFEmailComposer sharedComposer] presentAppSupportComposerFromParent:self];

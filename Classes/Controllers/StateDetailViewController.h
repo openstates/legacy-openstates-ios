@@ -14,8 +14,8 @@
 @interface StateDetailViewController : SLFTableViewController <StateMenuSelectionDelegate, RKObjectLoaderDelegate> {
 }
 
-@property (nonatomic,retain) RKTableController *tableController;
-@property (nonatomic,retain) SLFState *state;
+@property (nonatomic,strong) RKTableController *tableController;
+@property (nonatomic,strong) SLFState *state;
 - (id)initWithState:(SLFState *)newState;
 - (RKTableViewCellMapping *)menuCellMapping;   // override this to customize appearance
 - (void)selectMenuItem:(NSString *)menuItem;   // override this to customize behavior

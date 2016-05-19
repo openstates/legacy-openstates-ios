@@ -20,7 +20,7 @@
 
 
 
-@property (nonatomic, retain) NSString *legID;
+@property (nonatomic, strong) NSString *legID;
 
 
 //- (BOOL)validateLegID:(id*)value_ error:(NSError**)error_;
@@ -29,7 +29,7 @@
 
 
 
-@property (nonatomic, retain) SLFCommittee* committeeInverse;
+@property (nonatomic, strong) SLFCommittee* committeeInverse;
 
 //- (BOOL)validateCommitteeInverse:(id*)value_ error:(NSError**)error_;
 

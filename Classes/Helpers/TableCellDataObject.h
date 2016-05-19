@@ -32,11 +32,11 @@ enum {
 }
 @property (nonatomic, assign) BOOL isClickable;
 @property (nonatomic, assign) NSInteger entryType;
-@property (nonatomic, retain) id entryValue;
-@property (nonatomic, retain) id action;
-@property (nonatomic, retain) id parameter;
+@property (nonatomic, strong) id entryValue;
+@property (nonatomic, strong) id action;
+@property (nonatomic, strong) id parameter;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;
-@property (nonatomic, retain) NSIndexPath *indexPath;
+@property (nonatomic, strong) NSIndexPath *indexPath;
 - (id)initWithDictionary:(NSDictionary *)aDictionary;
 @end

@@ -7,8 +7,8 @@
 //  This work is licensed under the BSD-3 License included with this source
 // distribution.
 
-
-#import <RestKit/UI/UI.h>
+#import <UIKit/UIKit.h>
+#import <SLFRestKit/UI.h>
 #import "GCTableViewController.h"
 #import "PSStackedViewDelegate.h"
 #import "StackableControllerProtocol.h"
@@ -24,8 +24,8 @@ typedef void(^SearchBarConfigurationBlock)(UISearchBar *searchBar);
 
 @property (nonatomic,assign) BOOL useGradientBackground;
 @property (nonatomic,assign) BOOL useTitleBar;
-@property (nonatomic,retain) TitleBarView *titleBarView;
-@property (nonatomic,retain) UISearchBar *searchBar;
+@property (nonatomic,strong) TitleBarView *titleBarView;
+@property (nonatomic,strong) UISearchBar *searchBar;
 
 - (RKTableItem *)webPageItemWithTitle:(NSString *)itemTitle subtitle:(NSString *)itemSubtitle url:(NSString *)url;
 - (void)configureSearchBarWithPlaceholder:(NSString *)placeholder withConfigurationBlock:(SearchBarConfigurationBlock)block;

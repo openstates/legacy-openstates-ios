@@ -9,9 +9,9 @@
 
 
 #import "AppDelegate.h"
+#import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/RestKit.h>
 #import "AppBarController.h"
 #import "SLFStackedViewController.h"
 #import "StatesViewController.h"
@@ -22,16 +22,15 @@
 #import "SLFReachable.h"
 #import "WatchedBillNotificationManager.h"
 #import "SLFAlertView.h"
-#import "MTInfoPanel.h"
+#import "SLFInfoView.h"
 #import "SLFEventsManager.h"
 #import "SLFPersistenceManager.h"
 #import "SLFActionPathNavigator.h"
 #import "SLFAnalytics.h"
 
-
 @interface AppDelegate()
-@property (nonatomic,retain) AppBarController *appBarController;
-@property (nonatomic,retain) UINavigationController *navigationController;
+@property (nonatomic,strong) AppBarController *appBarController;
+@property (nonatomic,strong) UINavigationController *navigationController;
 @property (nonatomic,assign) UIBackgroundTaskIdentifier backgroundTaskID;
 - (void)setUpOnce;
 - (void)setUpBackgroundTasks;
@@ -51,15 +50,20 @@
 @synthesize navigationController = _navigationController;
 @synthesize backgroundTaskID = _backgroundTaskID;
 
-- (void)dealloc {
-    self.window = nil;
-    self.navigationController = nil;
-    self.appBarController = nil;
-    [super dealloc];
-}
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+#ifdef DEBUG
+    [Fabric sharedSDK].debug = YES;
+#endif
+
+    [Fabric with:@[[Crashlytics class],[Answers class]]];
+    [Answers logCustomEventWithName:@"AppStart" customAttributes:nil];
+
+    [self setUpGoogleAnalytics];
+
     [self setUpOnce];
+
     return YES;
 }
 
@@ -80,34 +84,31 @@
     [self setUpViewControllers];
     
     if( getenv("NSZombieEnabled") || getenv("NSAutoreleaseFreedObjectCheckEnabled") ) {
-        [MTInfoPanel showPanelInWindow:self.window type:MTInfoPanelTypeWarning title:@"Debug Features!" subtitle:@"NSZombieEnabled and/or NSAutoreleaseFreedObject debug features are turned on. Turn them off before delivery." hideAfter:5.f];
+        [SLFInfoView showInfoInWindow:self.window type:SLFInfoTypeWarning title:@"Debug Features!" subtitle:@"NSZombieEnabled and/or NSAutoreleaseFreedObject debug features are turned on. Turn them off before delivery." hideAfter:5.f];
         RKLogCritical(@"**************** NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!*************");
     }
 
-    [self setUpGoogleAnalytics];
-    [Crashlytics startWithAPIKey:@"7f920088e925e57cb9f436fa327d06fefc4930dd"];
-
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) wSelf = self;
     SLFRunBlockAfterDelay(^{
-        [bself restoreApplicationState];
+        [wSelf restoreApplicationState];
     }, .3);
 }
 
 - (void)setUpBackgroundTasks {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [self setUpReachability];
-    [SLFEventsManager sharedManager];
-    [[SLFAnalytics sharedAnalytics] beginTracking];
-    [pool drain];
+    @autoreleasepool {
+        [self setUpReachability];
+        [SLFEventsManager sharedManager];
+        [[SLFAnalytics sharedAnalytics] beginTracking];
+    }
 }
 
 - (void)setUpReachability {
     SLFReachable *reachable = [SLFReachable sharedReachable];
     NSSet *hosts = [NSSet setWithObjects:@"openstates.org", @"static.openstates.org", @"stateline.org", @"transparencydata.com", @"www.followthemoney.org", @"votesmart.org", nil];
     [reachable watchHostsInSet:hosts];
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) wSelf = self;
     SLFRunBlockAfterDelay(^{
-        [reachable.localNotification addObserver:bself selector:@selector(networkReachabilityChanged:) name:SLFReachableStatusChangedForHostKey object:nil];
+        [reachable.localNotification addObserver:wSelf selector:@selector(networkReachabilityChanged:) name:SLFReachableStatusChangedForHostKey object:nil];
     }, 1);
 }
 
@@ -162,15 +163,13 @@
     if (foundSavedState) {
         StateDetailViewController *menu = [[StateDetailViewController alloc] initWithState:foundSavedState];
         [_navigationController pushViewController:menu animated:NO];
-        [menu release];
     }
     [window makeKeyAndVisible];
-    [stateListVC release];
 }
 
 - (void)restoreApplicationState {
     NSString *actionPath = SLFCurrentActionPath();
-    if (IsEmpty(actionPath))
+    if (!SLFTypeNonEmptyStringOrNil(actionPath))
         return;
     [[WatchedBillNotificationManager manager] resetStatusNotifications:nil];
     [SLFActionPathNavigator navigateToPath:actionPath skipSaving:YES fromBase:nil popToRoot:NO];
@@ -216,11 +215,11 @@
     [self saveApplicationState];
     
 #ifdef TEST_LOCAL_NOTIFICATIONS
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) wSelf = self;
     _backgroundTaskID = [application beginBackgroundTaskWithExpirationHandler: ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [application endBackgroundTask:bself.backgroundTaskID];
-            bself.backgroundTaskID = UIBackgroundTaskInvalid;
+            wSelf.backgroundTaskID = UIBackgroundTaskInvalid;
         });
     }];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -250,7 +249,7 @@
         return;
     [SLFAlertView showWithTitle:NSLocalizedString(@"Notification",@"") message:notification.alertBody cancelTitle:NSLocalizedString(@"Dismiss",@"") cancelBlock:nil otherTitle:notification.alertAction otherBlock:^{
         NSString *actionPath = [notification.userInfo valueForKey:@"ActionPath"];
-        if (!IsEmpty(actionPath)) {
+        if (SLFTypeNonEmptyStringOrNil(actionPath)) {
             [SLFActionPathNavigator cancelPreviousPerformRequestsWithTarget:[SLFActionPathNavigator class]];
             [SLFActionPathNavigator navigateToPath:actionPath skipSaving:YES fromBase:nil popToRoot:NO];
         }
@@ -260,7 +259,7 @@
 - (void)networkReachabilityChanged:(NSNotification *)notification {
     SLFRunBlockInNextRunLoop(^{
         if (!SLFIsReachableAddressNoAlert(@"http://openstates.org"))
-            [MTInfoPanel showPanelInWindow:self.window type:MTInfoPanelTypeError title:NSLocalizedString(@"Network Failure!",@"") subtitle:NSLocalizedString(@"This application requires Internet access to operate.",@"") hideAfter:4.f];
+            [SLFInfoView showInfoInWindow:self.window type:SLFInfoTypeError title:NSLocalizedString(@"Network Failure!",@"") subtitle:NSLocalizedString(@"This application requires Internet access to operate.",@"") hideAfter:4.f];
     });
 }
 

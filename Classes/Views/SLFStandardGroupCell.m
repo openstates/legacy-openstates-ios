@@ -25,7 +25,7 @@
 
 + (SLFStandardGroupCell *)standardCellWithIdentifier:(NSString *)cellIdentifier {
     UITableViewCellStyle style = [SLFStandardGroupCell cellStyle];
-    SLFStandardGroupCell *cell = [[[SLFStandardGroupCell alloc] initWithStyle:style reuseIdentifier:cellIdentifier] autorelease];
+    SLFStandardGroupCell *cell = [[SLFStandardGroupCell alloc] initWithStyle:style reuseIdentifier:cellIdentifier];
     return cell;
 }
 
@@ -51,15 +51,14 @@
 
 - (void)dealloc {
 	self.cellInfo = nil;
-    [super dealloc];
 }
 
 - (void)setCellInfo:(TableCellDataObject *)newCellInfo {	
 	if (cellInfo)
-		[cellInfo release], cellInfo = nil;
+		cellInfo = nil;
 	
 	if (newCellInfo) {
-		cellInfo = [newCellInfo retain];
+		cellInfo = newCellInfo;
 		self.detailTextLabel.text = cellInfo.title;
 		self.textLabel.text = cellInfo.subtitle;
 		if (!cellInfo.isClickable) {

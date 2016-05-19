@@ -1,9 +1,11 @@
 // The following is practically verbatim of RestKit's RKSpecEnvironment.
 
+#import <Foundation/Foundation.h>
 #import "SLFSpecEnvironment.h"
 #import "APIKeys.h"
-#import <RestKit/CoreData/NSManagedObject+ActiveRecord.h>
+#import <SLFRestKit/SLFRestKit.h>
 #import "SLFObjectCache.h"
+#import "SLFRestKitManager.h"
 
 BOOL IsEmpty(NSObject * thing) {
     return thing == nil
@@ -14,18 +16,17 @@ BOOL IsEmpty(NSObject * thing) {
 
 NSString* SLFSpecMIMETypeForFixture(NSString* fileName);
 
-NSString* SLFSpecGetBaseURL(void) {    
+NSURL* SLFSpecGetBaseURL(void) {
     #ifdef OPENSTATES_BASE_URL
     return OPENSTATES_BASE_URL;
     #else
-    return @"http://openstates.org/api/v1";
+    return [NSURL URLWithString:@"http://openstates.org/api/v1"];
     #endif
 }
 
 RKClient* SLFSpecNewClient(void) {    
     RKClient* client = [RKClient clientWithBaseURL:SLFSpecGetBaseURL()];
     [RKClient setSharedClient:client];    
-    [client release];
     client.requestQueue.suspended = NO;
     return client;
 }
@@ -41,10 +42,19 @@ RKObjectManager* SLFSpecNewObjectManager(void) {
     return objectManager;
 }
 
+NSManagedObjectModel* SLFSpecGetManagedObjectModel(void) {
+    NSString *path = [[NSBundle mainBundle] pathForResource:kAPP_DB_PREFIX ofType:@"momd"];
+    //NSAssert(path != NULL, @"Unable to determine path to RestKit resource model");
+    NSURL *momURL = [NSURL fileURLWithPath:path];
+    NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:momURL];
+    return mom;
+}
+
 RKManagedObjectStore* SLFSpecNewManagedObjectStore(void) {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     NSString *libraryPath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-    RKManagedObjectStore* store = [RKManagedObjectStore objectStoreWithStoreFilename:@"StatesLegeSpecs.sqlite" inDirectory:libraryPath usingSeedDatabaseName:nil managedObjectModel:nil delegate:nil];
+    NSManagedObjectModel *mom = SLFSpecGetManagedObjectModel();
+    RKManagedObjectStore* store = [[RKManagedObjectStore alloc] initWithStoreFilename:@"StatesLegeSpecs.sqlite" inDirectory:libraryPath usingSeedDatabaseName:nil managedObjectModel:mom delegate:nil];
     [store deletePersistantStore];
     RKObjectManager* objectManager = SLFSpecNewObjectManager();
     objectManager.objectStore = store;
@@ -61,7 +71,6 @@ void SLFSpecRestKitEnvironment(void) {
     NSCAssert(context, @"Failed to find a shared managed object context.");
     SLFObjectCache *cache = [[SLFObjectCache alloc] init];
     store.managedObjectCache = cache;
-    [cache release];
 }
 
 void SLFSpecClearCacheDirectory(void) {
@@ -85,7 +94,7 @@ NSString* SLFSpecReadFixture(NSString* fileName) {
     NSString* filePath = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
 	NSString* fixtureData = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
     if (fixtureData == nil && error) {
-        [NSException raise:nil format:@"Failed to read contents of fixture '%@'. Did you add it to the app bundle? Error: %@", fileName, [error localizedDescription]];
+        [NSException raise:@"Fixture Read Error" format:@"Failed to read contents of fixture '%@'. Did you add it to the app bundle? Error: %@", fileName, [error localizedDescription]];
     }
 	return fixtureData;
 }

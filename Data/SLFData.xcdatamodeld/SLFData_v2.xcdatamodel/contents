@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="v2" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15E65" minimumToolsVersion="Automatic">
+    <entity name="BillAction" representedClassName="BillAction">
+        <attribute name="action" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="actionID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="actor" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="comment" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="date" optional="YES" attributeType="Date">
+            <userInfo/>
+        </attribute>
+        <relationship name="bill" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFBill" inverseName="actions" inverseEntity="SLFBill" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="types" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GenericWord" inverseName="actionInverse" inverseEntity="GenericWord" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="BillRecordVote" representedClassName="BillRecordVote">
+        <attribute name="billChamber" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="chamber" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="date" optional="YES" attributeType="Date">
+            <userInfo/>
+        </attribute>
+        <attribute name="method" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="motion" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="noCount" optional="YES" attributeType="Integer 16" defaultValueString="0">
+            <userInfo/>
+        </attribute>
+        <attribute name="otherCount" optional="YES" attributeType="Integer 16" defaultValueString="0">
+            <userInfo/>
+        </attribute>
+        <attribute name="passed" optional="YES" attributeType="Boolean">
+            <userInfo/>
+        </attribute>
+        <attribute name="record" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="session" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="stateID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="type" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="voteID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="yesCount" optional="YES" attributeType="Integer 16" defaultValueString="0">
+            <userInfo/>
+        </attribute>
+        <relationship name="bill" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFBill" inverseName="votes" inverseEntity="SLFBill" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="noVotes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BillVoter" inverseName="noVoteInverse" inverseEntity="BillVoter" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="otherVotes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BillVoter" inverseName="otherVoteInverse" inverseEntity="BillVoter" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="sources" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GenericAsset" inverseName="voteInverse" inverseEntity="GenericAsset" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="yesVotes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BillVoter" inverseName="yesVoteInverse" inverseEntity="BillVoter" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="BillSponsor" representedClassName="BillSponsor" parentEntity="CommitteeMember">
+        <relationship name="billInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFBill" inverseName="sponsors" inverseEntity="SLFBill" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="BillVoter" representedClassName="BillVoter" parentEntity="BillSponsor">
+        <relationship name="noVoteInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="BillRecordVote" inverseName="noVotes" inverseEntity="BillRecordVote" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="otherVoteInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="BillRecordVote" inverseName="otherVotes" inverseEntity="BillRecordVote" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="yesVoteInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="BillRecordVote" inverseName="yesVotes" inverseEntity="BillRecordVote" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="CommitteeMember" representedClassName="CommitteeMember" parentEntity="GenericNamedItem">
+        <attribute name="legID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <relationship name="committeeInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFCommittee" inverseName="members" inverseEntity="SLFCommittee" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="CommitteeRole" representedClassName="CommitteeRole" parentEntity="GenericNamedItem">
+        <attribute name="chamber" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="committeeID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <relationship name="legislatorInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFLegislator" inverseName="roles" inverseEntity="SLFLegislator" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="EventParticipant" representedClassName="EventParticipant" parentEntity="GenericNamedItem">
+        <relationship name="eventInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFEvent" inverseName="participants" inverseEntity="SLFEvent" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="GenericAsset" representedClassName="GenericAsset">
+        <attribute name="name" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="url" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <relationship name="billDocumentsInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFBill" inverseName="documents" inverseEntity="SLFBill" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="billSourcesInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFBill" inverseName="sources" inverseEntity="SLFBill" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="billVersionsInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFBill" inverseName="versions" inverseEntity="SLFBill" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="committeeInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFCommittee" inverseName="sources" inverseEntity="SLFCommittee" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="eventInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFEvent" inverseName="sources" inverseEntity="SLFEvent" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="legislatorInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFLegislator" inverseName="sources" inverseEntity="SLFLegislator" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="stateInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFState" inverseName="capitolMaps" inverseEntity="SLFState" indexed="YES" syncable="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="voteInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="BillRecordVote" inverseName="sources" inverseEntity="BillRecordVote" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="GenericNamedItem" representedClassName="GenericNamedItem">
+        <attribute name="name" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="type" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <userInfo/>
+    </entity>
+    <entity name="GenericWord" representedClassName="GenericWord">
+        <attribute name="word" optional="YES" attributeType="String" indexed="YES">
+            <userInfo/>
+        </attribute>
+        <relationship name="actionInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="BillAction" inverseName="types" inverseEntity="BillAction" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="billSubjectInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFBill" inverseName="subjects" inverseEntity="SLFBill" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="billTitleInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFBill" inverseName="alternateTitles" inverseEntity="SLFBill" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="billTypeInverse" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFBill" inverseName="types" inverseEntity="SLFBill" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="RKSearchableManagedObject" representedClassName="RKSearchableManagedObject" isAbstract="YES">
+        <relationship name="searchWords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RKSearchWord" inverseName="searchableManagedObjects" inverseEntity="RKSearchWord" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="RKSearchWord" representedClassName="RKSearchWord">
+        <attribute name="word" optional="YES" attributeType="String" indexed="YES">
+            <userInfo/>
+        </attribute>
+        <relationship name="searchableManagedObjects" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RKSearchableManagedObject" inverseName="searchWords" inverseEntity="RKSearchableManagedObject" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="SLFBill" representedClassName="SLFBill" parentEntity="RKSearchableManagedObject">
+        <attribute name="billID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="chamber" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="dateCreated" optional="YES" attributeType="Date">
+            <userInfo/>
+        </attribute>
+        <attribute name="dateUpdated" optional="YES" attributeType="Date">
+            <userInfo/>
+        </attribute>
+        <attribute name="session" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="stateID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="title" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <relationship name="actions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BillAction" inverseName="bill" inverseEntity="BillAction" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="alternateTitles" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GenericWord" inverseName="billTitleInverse" inverseEntity="GenericWord" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="documents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GenericAsset" inverseName="billDocumentsInverse" inverseEntity="GenericAsset" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="sources" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GenericAsset" inverseName="billSourcesInverse" inverseEntity="GenericAsset" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="sponsors" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BillSponsor" inverseName="billInverse" inverseEntity="BillSponsor" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="stateObj" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFState" inverseName="bills" inverseEntity="SLFState" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="subjects" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GenericWord" inverseName="billSubjectInverse" inverseEntity="GenericWord" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="types" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GenericWord" inverseName="billTypeInverse" inverseEntity="GenericWord" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="versions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GenericAsset" inverseName="billVersionsInverse" inverseEntity="GenericAsset" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="votes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BillRecordVote" inverseName="bill" inverseEntity="BillRecordVote" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="SLFCommittee" representedClassName="SLFCommittee" parentEntity="RKSearchableManagedObject">
+        <attribute name="chamber" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="committeeID" attributeType="String" indexed="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="committeeName" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="dateCreated" optional="YES" attributeType="Date">
+            <userInfo/>
+        </attribute>
+        <attribute name="dateUpdated" optional="YES" attributeType="Date">
+            <userInfo/>
+        </attribute>
+        <attribute name="parentID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="stateID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="subcommittee" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="votesmartID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <relationship name="members" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CommitteeMember" inverseName="committeeInverse" inverseEntity="CommitteeMember" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="sources" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GenericAsset" inverseName="committeeInverse" inverseEntity="GenericAsset" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="stateObj" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFState" inverseName="committees" inverseEntity="SLFState" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="SLFDistrict" representedClassName="SLFDistrict" parentEntity="RKSearchableManagedObject">
+        <attribute name="boundaryID" attributeType="String" indexed="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="chamber" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="name" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="numSeats" optional="YES" attributeType="Integer 16" defaultValueString="0">
+            <userInfo/>
+        </attribute>
+        <attribute name="regionDictionary" optional="YES" attributeType="Transformable" defaultValueString="0">
+            <userInfo/>
+        </attribute>
+        <attribute name="shape" optional="YES" attributeType="Transformable">
+            <userInfo/>
+        </attribute>
+        <attribute name="stateID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <relationship name="legislators" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SLFLegislator" inverseName="districtMap" inverseEntity="SLFLegislator" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="state" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFState" inverseName="districts" inverseEntity="SLFState" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="SLFEvent" representedClassName="SLFEvent" parentEntity="RKSearchableManagedObject">
+        <attribute name="dateCreated" optional="YES" attributeType="Date">
+            <userInfo/>
+        </attribute>
+        <attribute name="dateEnd" optional="YES" attributeType="Date">
+            <userInfo/>
+        </attribute>
+        <attribute name="dateStart" optional="YES" attributeType="Date">
+            <userInfo/>
+        </attribute>
+        <attribute name="dateUpdated" optional="YES" attributeType="Date">
+            <userInfo/>
+        </attribute>
+        <attribute name="ekEventIdentifier" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="eventDescription" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="eventID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="link" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="location" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="notes" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="session" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="stateID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="status" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="timezone" optional="YES" attributeType="String" elementID="timezone">
+            <userInfo/>
+        </attribute>
+        <attribute name="type" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventParticipant" inverseName="eventInverse" inverseEntity="EventParticipant" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="sources" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GenericAsset" inverseName="eventInverse" inverseEntity="GenericAsset" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="stateObj" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFState" inverseName="events" inverseEntity="SLFState" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="SLFLegislator" representedClassName="SLFLegislator" parentEntity="RKSearchableManagedObject">
+        <attribute name="active" optional="YES" attributeType="Boolean">
+            <userInfo/>
+        </attribute>
+        <attribute name="chamber" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="country" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="dateCreated" optional="YES" attributeType="Date">
+            <userInfo/>
+        </attribute>
+        <attribute name="dateUpdated" optional="YES" attributeType="Date">
+            <userInfo/>
+        </attribute>
+        <attribute name="district" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="email" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="firstName" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="fullName" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="lastName" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="legID" attributeType="String" indexed="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="level" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="middleName" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="nimspCandidateID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="nimspID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="party" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="photoURL" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="stateID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="suffixes" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="transparencyID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="url" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <attribute name="votesmartID" optional="YES" attributeType="String">
+            <userInfo/>
+        </attribute>
+        <relationship name="districtMap" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFDistrict" inverseName="legislators" inverseEntity="SLFDistrict" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="roles" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CommitteeRole" inverseName="legislatorInverse" inverseEntity="CommitteeRole" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="sources" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GenericAsset" inverseName="legislatorInverse" inverseEntity="GenericAsset" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="stateObj" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SLFState" inverseName="legislators" inverseEntity="SLFState" indexed="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <entity name="SLFState" representedClassName="SLFState" syncable="YES">
+        <attribute name="dateUpdated" optional="YES" attributeType="Date" syncable="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="featureFlags" optional="YES" attributeType="Transformable" syncable="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="legislatureName" optional="YES" attributeType="String" syncable="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="level" optional="YES" attributeType="String" syncable="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="lowerChamberName" optional="YES" attributeType="String" syncable="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="lowerChamberTerm" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="lowerChamberTitle" optional="YES" attributeType="String" syncable="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="sessionDetails" optional="YES" attributeType="Transformable" syncable="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="stateID" attributeType="String" indexed="YES" syncable="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="terms" optional="YES" attributeType="Transformable" syncable="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="upperChamberName" optional="YES" attributeType="String" syncable="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="upperChamberTerm" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES">
+            <userInfo/>
+        </attribute>
+        <attribute name="upperChamberTitle" optional="YES" attributeType="String" syncable="YES">
+            <userInfo/>
+        </attribute>
+        <relationship name="bills" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SLFBill" inverseName="stateObj" inverseEntity="SLFBill" indexed="YES" syncable="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="capitolMaps" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GenericAsset" inverseName="stateInverse" inverseEntity="GenericAsset" indexed="YES" syncable="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="committees" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SLFCommittee" inverseName="stateObj" inverseEntity="SLFCommittee" indexed="YES" syncable="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="districts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SLFDistrict" inverseName="state" inverseEntity="SLFDistrict" indexed="YES" syncable="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SLFEvent" inverseName="stateObj" inverseEntity="SLFEvent" indexed="YES" syncable="YES">
+            <userInfo/>
+        </relationship>
+        <relationship name="legislators" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SLFLegislator" inverseName="stateObj" inverseEntity="SLFLegislator" indexed="YES" syncable="YES">
+            <userInfo/>
+        </relationship>
+        <userInfo/>
+    </entity>
+    <elements>
+        <element name="BillAction" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="RKSearchableManagedObject" positionX="160" positionY="192" width="128" height="60"/>
+        <element name="GenericNamedItem" positionX="160" positionY="192" width="128" height="75"/>
+        <element name="BillRecordVote" positionX="160" positionY="192" width="128" height="330"/>
+        <element name="BillSponsor" positionX="160" positionY="192" width="128" height="60"/>
+        <element name="SLFLegislator" positionX="180" positionY="6" width="128" height="435"/>
+        <element name="EventParticipant" positionX="160" positionY="192" width="128" height="60"/>
+        <element name="SLFBill" positionX="369" positionY="144" width="128" height="300"/>
+        <element name="GenericWord" positionX="160" positionY="192" width="128" height="120"/>
+        <element name="CommitteeMember" positionX="160" positionY="192" width="128" height="75"/>
+        <element name="CommitteeRole" positionX="160" positionY="192" width="128" height="90"/>
+        <element name="SLFEvent" positionX="547" positionY="171" width="128" height="313"/>
+        <element name="GenericAsset" positionX="160" positionY="192" width="128" height="195"/>
+        <element name="BillVoter" positionX="160" positionY="192" width="128" height="90"/>
+        <element name="SLFDistrict" positionX="565" positionY="513" width="128" height="180"/>
+        <element name="SLFState" positionX="169" positionY="453" width="128" height="345"/>
+        <element name="RKSearchWord" positionX="160" positionY="192" width="128" height="75"/>
+        <element name="SLFCommittee" positionX="16" positionY="465" width="128" height="225"/>
+    </elements>
+</model>

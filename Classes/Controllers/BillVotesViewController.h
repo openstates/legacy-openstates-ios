@@ -12,6 +12,6 @@
 
 @class BillRecordVote;
 @interface BillVotesViewController : SLFTableViewController
-@property (nonatomic,retain) BillRecordVote *vote;
+@property (nonatomic,strong) BillRecordVote *vote;
 - (id)initWithVote:(BillRecordVote *)vote;
 @end

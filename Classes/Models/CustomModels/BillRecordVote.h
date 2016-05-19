@@ -4,13 +4,13 @@
 @class SLFState;
 @class RKManagedObjectMapping;
 @interface BillRecordVote : _BillRecordVote {}
-@property (nonatomic,readonly) SLFState *state;
-@property (nonatomic,readonly) SLFChamber *chamberObj;
-@property (nonatomic,readonly) NSString *title;
-@property (nonatomic,readonly) NSString *subtitle;
-@property (nonatomic,readonly) NSArray *sortedYesVotes;
-@property (nonatomic,readonly) NSArray *sortedNoVotes;
-@property (nonatomic,readonly) NSArray *sortedOtherVotes;
+@property (weak, nonatomic,readonly) SLFState *state;
+@property (weak, nonatomic,readonly) SLFChamber *chamberObj;
+@property (weak, nonatomic,readonly) NSString *title;
+@property (weak, nonatomic,readonly) NSString *subtitle;
+@property (weak, nonatomic,readonly) NSArray *sortedYesVotes;
+@property (weak, nonatomic,readonly) NSArray *sortedNoVotes;
+@property (weak, nonatomic,readonly) NSArray *sortedOtherVotes;
 + (RKManagedObjectMapping *)mapping;
 + (NSArray *)sortDescriptors;
 @end

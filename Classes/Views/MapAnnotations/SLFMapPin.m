@@ -11,7 +11,7 @@
 
 @implementation SLFMapPin
 
-+ (NSString *)imageFileForPinColorIndex:(NSInteger)index status:(NSInteger)status {
++ (NSString *)imageFileForPinColorIndex:(SLFMapPinColor)index status:(SLFMapPinStatus)status {
     
     NSString *pinColor = nil;    
     switch (index) {
@@ -58,7 +58,7 @@
     return [NSString stringWithFormat:@"%@%@", pinStatus, pinColor];
 }
 
-+ (UIImage *)imageForPinColorIndex:(NSInteger)index status:(NSInteger)status {
++ (UIImage *)imageForPinColorIndex:(SLFMapPinColor)index status:(SLFMapPinStatus)status {
     UIImage *pinImage = nil;
     
     NSString *file = [SLFMapPin imageFileForPinColorIndex:index status:status];
@@ -68,7 +68,7 @@
     return pinImage;
 }
 
-+ (UIImage *)imageForMapAnnotation:(id <MKAnnotation>)annotation status:(NSInteger)status {
++ (UIImage *)imageForMapAnnotation:(id <MKAnnotation>)annotation status:(SLFMapPinStatus)status {
     UIImage *image = nil;
     
     NSInteger pinColor = SLFMapPinColorGreen;

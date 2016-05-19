@@ -8,22 +8,28 @@
 // distribution.
 
 #import <MapKit/MapKit.h>
-#import "SVPlacemark.h"
+#import "SLFMapPin.h"
 
-#define kUserPinAnnotationAddressChangeKey @"UserPinAnnotationAddressChangeNotification"
+NS_ASSUME_NONNULL_BEGIN
+
+FOUNDATION_EXPORT NSString * const kUserPinAnnotationAddressChangeKey;
+
 @protocol UserPinAnnotationDelegate <NSObject>
 @required
 - (void)annotationCoordinateChanged:(id)sender;
 @end
 
-@interface UserPinAnnotation : SVPlacemark <MKAnnotation> {
-}
+@interface UserPinAnnotation : MKPlacemark
 
-@property (nonatomic, assign) NSUInteger pinColorIndex;
-@property (nonatomic, copy) NSString *title;
-@property (nonatomic, copy) NSString *subtitle;
-@property (nonatomic, copy) NSString *imageName;
-@property (nonatomic, assign) id<UserPinAnnotationDelegate> delegate;
--(id)initWithSVPlacemark:(SVPlacemark*)placemark;
-- (UIImage *)image;
+@property (nonatomic, assign) SLFMapPinColor pinColorIndex;
+@property (nonatomic, copy, nullable) NSString *annotationTitle;
+@property (nonatomic, copy, nullable) NSString *annotationSubtitle;
+@property (nonatomic, copy, nullable) NSString *imageName;
+@property (nonatomic, weak, nullable) id<UserPinAnnotationDelegate> delegate;
+@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
+- (nullable UIImage *)image;
+
 @end
+
+NS_ASSUME_NONNULL_END
+

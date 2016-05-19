@@ -18,7 +18,7 @@
 
 @interface StackedMenuCell()
 - (void)reachableDidChange:(NSNotification *)notification;
-@property(nonatomic,retain) UIView *disabledView;
+@property(nonatomic,strong) UIView *disabledView;
 @end
 
 #define DEFAULT_ITEM_HEIGHT 43.f
@@ -38,7 +38,6 @@
         
         GradientInnerShadowView *selectedGradient = [[GradientInnerShadowView alloc] initWithFrame:CGRectMake(0, 0, STACKED_MENU_WIDTH, DEFAULT_ITEM_HEIGHT)];
         self.selectedBackgroundView = selectedGradient;
-        [selectedGradient release];
         
         self.backgroundColor = [SLFAppearance menuBackgroundColor];
         self.textLabel.textColor = [SLFAppearance menuTextColor];
@@ -49,12 +48,10 @@
         UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, STACKED_MENU_WIDTH, 1)];
         topLine.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.25];
         [self addSubview:topLine];
-        [topLine release];
         
         UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, DEFAULT_ITEM_HEIGHT, STACKED_MENU_WIDTH, 1)];
         bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.25];
         [self addSubview:bottomLine];
-        [bottomLine release];
                 
         [[SLFReachable sharedReachable].localNotification addObserver:self selector:@selector(reachableDidChange:) name:SLFReachableStatusChangedForHostKey object:SLFReachableAnyNetworkHost];
     }
@@ -86,11 +83,9 @@
     CGRect frm = CGRectIntegral(CGRectMake(15, (DEFAULT_ITEM_HEIGHT/2) - (imgHeight/2), imgWidth, imgHeight));
     offlineView.frame = frm;
     [newView addSubview:offlineView];        
-    [offlineView release];
     [self addSubview:newView];
     [self bringSubviewToFront:newView];
     self.disabledView = newView;
-    [newView release];
 }
 
 - (void)hideDisabledView {
@@ -143,8 +138,6 @@
 - (void)dealloc
 {
     [[SLFReachable sharedReachable].localNotification removeObserver:self];
-    self.disabledView = nil;
-    [super dealloc];
 }
 
 @end

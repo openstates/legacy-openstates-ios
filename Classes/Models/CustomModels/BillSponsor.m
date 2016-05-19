@@ -1,5 +1,5 @@
 #import "BillSponsor.h"
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 
 @implementation BillSponsor
 

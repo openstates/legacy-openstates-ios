@@ -8,7 +8,7 @@
 // distribution.
 
 
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 
 
 @interface SLFObjectCache : NSObject <RKManagedObjectCache>{

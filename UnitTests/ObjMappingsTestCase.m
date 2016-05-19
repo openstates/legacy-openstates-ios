@@ -6,15 +6,15 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
-#import <RestKit/CoreData/CoreData.h>
+#import <XCTest/XCTest.h>
+#import <SLFRestKit/SLFRestKit.h>
 
 #import "SLFSpecEnvironment.h"
 #import "SLFDataModels.h"
 #import "SLFMappingsManager.h"
 #import "SLFObjectCache.h"
 
-@interface ObjMappingsTestCase : SenTestCase
+@interface ObjMappingsTestCase : XCTestCase
 @end
 
 @implementation ObjMappingsTestCase
@@ -25,105 +25,104 @@
     SLFSpecRestKitEnvironment();
     SLFMappingsManager *mapper = [[SLFMappingsManager alloc] init];
     [mapper registerMappings];
-    [mapper release];
 }
 
 - (void)testItShouldFindAStateObjectMapping {
     RKObjectManager *manager = [RKObjectManager sharedManager];
-    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    XCTAssertNotNil(manager, @"Object manager should exist but it doesn't!");
     NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[SLFState class]];
-    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+    XCTAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
 }
 
 - (void)testItShouldFindALegislatorObjectMapping {
     RKObjectManager *manager = [RKObjectManager sharedManager];
-    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    XCTAssertNotNil(manager, @"Object manager should exist but it doesn't!");
     NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[SLFLegislator class]];
-    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+    XCTAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
 }
 
 - (void)testItShouldFindACommitteeObjectMapping {
     RKObjectManager *manager = [RKObjectManager sharedManager];
-    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    XCTAssertNotNil(manager, @"Object manager should exist but it doesn't!");
     NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[SLFCommittee class]];
-    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+    XCTAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
 }
 
 - (void)testItShouldFindABillObjectMapping {
     RKObjectManager *manager = [RKObjectManager sharedManager];
-    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    XCTAssertNotNil(manager, @"Object manager should exist but it doesn't!");
     NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[SLFBill class]];
-    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+    XCTAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
 }
 
 - (void)testItShouldFindAEventObjectMapping {
     RKObjectManager *manager = [RKObjectManager sharedManager];
-    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    XCTAssertNotNil(manager, @"Object manager should exist but it doesn't!");
     NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[SLFEvent class]];
-    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+    XCTAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
 }
 
 - (void)testItShouldFindADistrictObjectMapping {
     RKObjectManager *manager = [RKObjectManager sharedManager];
-    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    XCTAssertNotNil(manager, @"Object manager should exist but it doesn't!");
     NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[SLFDistrict class]];
-    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+    XCTAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
 }
 
 - (void)testItShouldFindABillSponsorObjectMapping {
     RKObjectManager *manager = [RKObjectManager sharedManager];
-    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    XCTAssertNotNil(manager, @"Object manager should exist but it doesn't!");
     NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[BillSponsor class]];
-    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+    XCTAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
 }
 
 - (void)testItShouldFindABillSponsorObjectMappingByKeyPath {
     RKObjectManager *manager = [RKObjectManager sharedManager];
-    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    XCTAssertNotNil(manager, @"Object manager should exist but it doesn't!");
     NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider mappingForKeyPath:@"sponsors"];
-    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+    XCTAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
 }
 
 - (void)testItShouldFindACommitteeMemberObjectMapping {
     RKObjectManager *manager = [RKObjectManager sharedManager];
-    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    XCTAssertNotNil(manager, @"Object manager should exist but it doesn't!");
     NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[CommitteeMember class]];
-    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+    XCTAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
 }
 
 - (void)testItShouldFindACommitteeMemberObjectMappingByKeyPath {
     RKObjectManager *manager = [RKObjectManager sharedManager];
-    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    XCTAssertNotNil(manager, @"Object manager should exist but it doesn't!");
     NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider mappingForKeyPath:@"members"];
-    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+    XCTAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
 }
 
 - (void)testItShouldFindACommitteeRoleObjectMapping {
     RKObjectManager *manager = [RKObjectManager sharedManager];
-    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    XCTAssertNotNil(manager, @"Object manager should exist but it doesn't!");
     NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider objectMappingForClass:[CommitteeRole class]];
-    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+    XCTAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
 }
 
 - (void)testItShouldFindACommitteeRoleObjectMappingByKeyPath {
     RKObjectManager *manager = [RKObjectManager sharedManager];
-    STAssertNotNil(manager, @"Object manager should exist but it doesn't!");
+    XCTAssertNotNil(manager, @"Object manager should exist but it doesn't!");
     NSObject <RKObjectMappingDefinition> *returnedMapping = [manager.mappingProvider mappingForKeyPath:@"roles"];
-    STAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
+    XCTAssertNotNil(returnedMapping, @"Failed to a previously created object mapping.");
 }
 
 - (void)testItShouldMapSubjectCounts {
     NSObject <RKObjectMappingDefinition> *mapping = [BillsSubjectsEntry mapping];
-    RKObjectMappingProvider* provider = [[RKObjectMappingProvider new] autorelease];
+    RKObjectMappingProvider* provider = [RKObjectMappingProvider new];
     [provider setMapping:mapping forKeyPath:@""];
     id subjectInfo = SLFSpecParseFixture(@"SubjectCounts.json");
     RKObjectMapper* mapper = [RKObjectMapper mapperWithObject:subjectInfo mappingProvider:provider];
     RKObjectMappingResult* result = [mapper performMapping];
     NSArray* subjects = [result asCollection];
-    STAssertTrue([subjects isKindOfClass:[NSArray class]], @"SubjectCounts result wasn't a collection (array)");
-    STAssertTrue([subjects count] == 45, @"SubjectCounts collection didn't have the correct number of objects");
+    XCTAssertTrue([subjects isKindOfClass:[NSArray class]], @"SubjectCounts result wasn't a collection (array)");
+    XCTAssertTrue([subjects count] == 45, @"SubjectCounts collection didn't have the correct number of objects");
     BillsSubjectsEntry* subject = [subjects objectAtIndex:0];
-    STAssertTrue([subject isKindOfClass:[BillsSubjectsEntry class]], @"First subject object didn't map to the correct class (BillsSubjects)");
+    XCTAssertTrue([subject isKindOfClass:[BillsSubjectsEntry class]], @"First subject object didn't map to the correct class (BillsSubjects)");
     __block BOOL foundEntry = NO;
     __block NSInteger foundCount = NSNotFound;
     [subjects enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -134,8 +133,8 @@
             *stop = YES;
         }
     }];
-    STAssertTrue(foundEntry, @"Didn't find 'Legislative Affairs' in SubjectCounts");
-    STAssertTrue(foundCount == 16, @"Didn't find an expected subject, or the billCount was incorrect");
+    XCTAssertTrue(foundEntry, @"Didn't find 'Legislative Affairs' in SubjectCounts");
+    XCTAssertTrue(foundCount == 16, @"Didn't find an expected subject, or the billCount was incorrect");
 }
 
 /*

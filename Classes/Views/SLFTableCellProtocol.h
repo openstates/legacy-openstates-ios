@@ -16,7 +16,7 @@
 @required
 + (UITableViewCellStyle)cellStyle;
 + (NSString*)cellIdentifier;
-@property (nonatomic,retain) TableCellDataObject *cellInfo;
+@property (nonatomic,strong) TableCellDataObject *cellInfo;
 
 @end
 

@@ -12,10 +12,10 @@
 #import "SLFImprovedRKTableController.h"
 
 @interface NoFetchViewController : SLFTableViewController
-@property (nonatomic,retain) SLFImprovedRKTableController *tableController;
-@property (nonatomic,retain) SLFState *state;
+@property (nonatomic,strong) SLFImprovedRKTableController *tableController;
+@property (nonatomic,strong) SLFState *state;
 @property (nonatomic,copy) NSString *resourcePath;
-@property (nonatomic,assign) Class dataClass;
+@property (nonatomic,weak) Class dataClass;
 
 - (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path dataClass:(Class)dataClass;
 - (void)configureTableController;

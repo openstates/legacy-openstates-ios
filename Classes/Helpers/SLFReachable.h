@@ -9,7 +9,7 @@
 
 
 #import <Foundation/Foundation.h>
-#import "SCNetworkReachabilityKit.h"
+#import <SCNetworkReachabilityKit/SCNetworkReachabilityKit.h>
 
 
 @interface SLFReachable : NSObject
@@ -22,10 +22,13 @@
 - (NSNumber *)statusForHostNamed:(NSString *)hostName;
 - (BOOL)isURLStringReachable:(NSString *)urlString;
 - (BOOL)isURLReachable:(NSURL *)url;
-@property (nonatomic,retain) NSNotificationCenter *localNotification;
+@property (nonatomic,strong) NSNotificationCenter *localNotification;
 @end
 
 extern NSString * const SLFReachableStatusChangedForHostKey;
 extern NSString * const SLFReachableAnyNetworkHost;
 BOOL SLFIsReachableAddressNoAlert(NSString *);
 BOOL SLFIsReachableAddress(NSString *);
+
+typedef void (^SLFReachabilityCompletionHandler)(NSURL *url, BOOL isReachable);
+void SLFIsReachableAddressAsync(NSURL * url, SLFReachabilityCompletionHandler completion);

@@ -38,7 +38,7 @@
 
 
 
-@property (nonatomic, retain) NSDate *dateUpdated;
+@property (nonatomic, strong) NSDate *dateUpdated;
 
 
 //- (BOOL)validateDateUpdated:(id*)value_ error:(NSError**)error_;
@@ -46,7 +46,7 @@
 
 
 
-@property (nonatomic, retain) NSArray *featureFlags;
+@property (nonatomic, strong) NSArray *featureFlags;
 
 
 //- (BOOL)validateFeatureFlags:(id*)value_ error:(NSError**)error_;
@@ -54,7 +54,7 @@
 
 
 
-@property (nonatomic, retain) NSString *legislatureName;
+@property (nonatomic, strong) NSString *legislatureName;
 
 
 //- (BOOL)validateLegislatureName:(id*)value_ error:(NSError**)error_;
@@ -62,7 +62,7 @@
 
 
 
-@property (nonatomic, retain) NSString *level;
+@property (nonatomic, strong) NSString *level;
 
 
 //- (BOOL)validateLevel:(id*)value_ error:(NSError**)error_;
@@ -70,7 +70,7 @@
 
 
 
-@property (nonatomic, retain) NSString *lowerChamberName;
+@property (nonatomic, strong) NSString *lowerChamberName;
 
 
 //- (BOOL)validateLowerChamberName:(id*)value_ error:(NSError**)error_;
@@ -78,7 +78,7 @@
 
 
 
-@property (nonatomic, retain) NSNumber *lowerChamberTerm;
+@property (nonatomic, strong) NSNumber *lowerChamberTerm;
 
 
 @property short lowerChamberTermValue;
@@ -90,7 +90,7 @@
 
 
 
-@property (nonatomic, retain) NSString *lowerChamberTitle;
+@property (nonatomic, strong) NSString *lowerChamberTitle;
 
 
 //- (BOOL)validateLowerChamberTitle:(id*)value_ error:(NSError**)error_;
@@ -98,7 +98,7 @@
 
 
 
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, strong) NSString *name;
 
 
 //- (BOOL)validateName:(id*)value_ error:(NSError**)error_;
@@ -106,7 +106,7 @@
 
 
 
-@property (nonatomic, retain) NSDictionary *sessionDetails;
+@property (nonatomic, strong) NSDictionary *sessionDetails;
 
 
 //- (BOOL)validateSessionDetails:(id*)value_ error:(NSError**)error_;
@@ -114,7 +114,7 @@
 
 
 
-@property (nonatomic, retain) NSString *stateID;
+@property (nonatomic, strong) NSString *stateID;
 
 
 //- (BOOL)validateStateID:(id*)value_ error:(NSError**)error_;
@@ -122,7 +122,7 @@
 
 
 
-@property (nonatomic, retain) NSArray *terms;
+@property (nonatomic, strong) NSArray *terms;
 
 
 //- (BOOL)validateTerms:(id*)value_ error:(NSError**)error_;
@@ -130,7 +130,7 @@
 
 
 
-@property (nonatomic, retain) NSString *upperChamberName;
+@property (nonatomic, strong) NSString *upperChamberName;
 
 
 //- (BOOL)validateUpperChamberName:(id*)value_ error:(NSError**)error_;
@@ -138,7 +138,7 @@
 
 
 
-@property (nonatomic, retain) NSNumber *upperChamberTerm;
+@property (nonatomic, strong) NSNumber *upperChamberTerm;
 
 
 @property short upperChamberTermValue;
@@ -150,7 +150,7 @@
 
 
 
-@property (nonatomic, retain) NSString *upperChamberTitle;
+@property (nonatomic, strong) NSString *upperChamberTitle;
 
 
 //- (BOOL)validateUpperChamberTitle:(id*)value_ error:(NSError**)error_;
@@ -159,42 +159,42 @@
 
 
 
-@property (nonatomic, retain) NSSet* bills;
+@property (nonatomic, strong) NSSet* bills;
 
 - (NSMutableSet*)billsSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* capitolMaps;
+@property (nonatomic, strong) NSSet* capitolMaps;
 
 - (NSMutableSet*)capitolMapsSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* committees;
+@property (nonatomic, strong) NSSet* committees;
 
 - (NSMutableSet*)committeesSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* districts;
+@property (nonatomic, strong) NSSet* districts;
 
 - (NSMutableSet*)districtsSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* events;
+@property (nonatomic, strong) NSSet* events;
 
 - (NSMutableSet*)eventsSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* legislators;
+@property (nonatomic, strong) NSSet* legislators;
 
 - (NSMutableSet*)legislatorsSet;
 

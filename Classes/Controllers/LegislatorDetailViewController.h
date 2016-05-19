@@ -13,7 +13,7 @@
 @class SLFLegislator;
 @interface LegislatorDetailViewController : SLFTableViewController <RKObjectLoaderDelegate>
 
-@property (nonatomic, retain) SLFLegislator *legislator;
+@property (nonatomic, strong) SLFLegislator *legislator;
 - (id)initWithLegislatorID:(NSString *)legislatorID;
 
 @end

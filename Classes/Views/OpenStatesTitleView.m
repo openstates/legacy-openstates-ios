@@ -83,10 +83,10 @@ const CGFloat kOpenStatesTitleViewHeight = 42.0f;
     
     static UIFont *textFont;
     if (!textFont)
-        textFont = [[UIFont fontWithName:@"BlairMdITC TT" size:39.0f] retain];
+        textFont = [UIFont fontWithName:@"BlairMdITC TT" size:39.0f];
     static UIColor *textColor;
     if (!textColor)
-        textColor = [SLFColorWithRGB(70, 70, 70) retain];
+        textColor = SLFColorWithRGB(70, 70, 70);
     [textColor set];
     CGFloat y = -4.0f;
 	CGFloat height = 60.0f;
@@ -95,19 +95,21 @@ const CGFloat kOpenStatesTitleViewHeight = 42.0f;
     
     CGRect drawRect = [self scaleRect:CGRectMake(182.0f, y, 216.0f, height) withScale:scale];
     NSString *string = @"STATES";
-    [string drawInRect:drawRect withFont:textFont];
+    NSDictionary *attributes = @{NSFontAttributeName:textFont,
+                                 NSForegroundColorAttributeName:textColor};
+    [string drawInRect:drawRect withAttributes:attributes];
     
     // OpenText
     
     drawRect = [self scaleRect:CGRectMake(1.0f, y, 166.0f, height) withScale:scale];
     string = @"OPEN";
-    [string drawInRect:drawRect withFont:textFont];
-    
+    [string drawInRect:drawRect withAttributes:attributes];
+
     // Colon
 
     static UIColor *colonColor;
     if (!colonColor)
-        colonColor = [SLFColorWithRGB(211,110,40) retain];
+        colonColor = SLFColorWithRGB(211,110,40);
 	height = 8.0f;
 	CGFloat width = height;
 	CGFloat x = 166.0f;

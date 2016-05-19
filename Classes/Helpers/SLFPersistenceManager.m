@@ -29,8 +29,8 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
 
 @interface SLFPersistenceManager()
 - (void)notifySettingsWereUpdated:(NSNotification *)notification;
-@property (nonatomic,retain) NSString *currentStateID;
-@property (nonatomic,retain) NSString *currentSession;
+@property (nonatomic,strong) NSString *currentStateID;
+@property (nonatomic,strong) NSString *currentSession;
 @end
 
 @implementation SLFPersistenceManager
@@ -57,15 +57,11 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    self.savedActionPath = nil;
-    self.currentSession = nil;
-    self.currentStateID = nil;
-    [super dealloc];
 }
 
 - (void)savePersistence {
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    if (!IsEmpty(self.savedActionPath))
+    if (SLFTypeNonEmptyStringOrNil(self.savedActionPath))
         [settings setObject:self.savedActionPath forKey:kPersistentActionPathKey];
     [settings synchronize];        
 }
@@ -84,46 +80,61 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
     [NSUserDefaults resetStandardUserDefaults];
 }
 
-- (NSDictionary *)exportSettings {
+- (NSDictionary *)exportSettings
+{
     NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-    if (!IsEmpty(SLFCurrentActionPath()))
-        [settings setObject:SLFCurrentActionPath() forKey:kPersistentActionPathKey];
-    if (!IsEmpty(SLFSelectedScopeIndexByKeyCatalog()))
-        [settings setObject:SLFSelectedScopeIndexByKeyCatalog() forKey:kPersistentScopeIndexKey];
-    if (!IsEmpty(SLFSelectedStateID()))
-        [settings setObject:SLFSelectedStateID() forKey:kPersistentSelectedStateKey];
-    if (!IsEmpty(SLFSelectedSessionsByStateID()))
-        [settings setObject:SLFSelectedSessionsByStateID() forKey:kPersistentSelectedSessionKey];
-    if (!IsEmpty(SLFWatchedBillsCatalog()))
-        [settings setObject:SLFWatchedBillsCatalog() forKey:kPersistentWatchedBillsKey];
-    if (!IsEmpty(SLFSelectedCalendar()))
-        [settings setObject:SLFSelectedCalendar() forKey:kPersistentCalendarKey];
+
+    NSString *path = SLFTypeNonEmptyStringOrNil(SLFCurrentActionPath());
+    if (path)
+        settings[kPersistentActionPathKey] = path;
+
+    NSDictionary *catalog = SLFSelectedScopeIndexByKeyCatalog();
+    if (catalog)
+        settings[kPersistentScopeIndexKey] = catalog;
+
+    NSString *stateId = SLFTypeNonEmptyStringOrNil(SLFSelectedStateID());
+    if (stateId)
+        settings[kPersistentSelectedStateKey] = stateId;
+
+    NSDictionary *sessions = SLFTypeDictionaryOrNil(SLFSelectedSessionsByStateID());
+    if (sessions.count)
+        settings[kPersistentSelectedSessionKey] = sessions;
+
+    catalog = SLFWatchedBillsCatalog();
+    if (catalog.count)
+        settings[kPersistentWatchedBillsKey] = catalog;
+
+    NSString *calendar = SLFSelectedCalendar();
+    if (calendar)
+        settings[kPersistentCalendarKey] = calendar;
+
     return settings;
 }
 
-- (void)importSettings:(NSDictionary *)settings {
-    if (IsEmpty(settings))
+- (void)importSettings:(NSDictionary *)settings
+{
+    if (!SLFTypeDictionaryOrNil(settings))
         return;
     if ([[self exportSettings] isEqualToDictionary:settings])
         return; // no changes
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *actionPath = [settings valueForKey:kPersistentActionPathKey];
-    if (!IsEmpty(actionPath))
+    if (SLFTypeNonEmptyStringOrNil(actionPath))
         [defaults setObject:actionPath forKey:kPersistentActionPathKey];
-    NSDictionary *selectedScopes = [settings valueForKey:kPersistentScopeIndexKey];
-    if (!IsEmpty(selectedScopes))
+    NSDictionary *selectedScopes = SLFTypeDictionaryOrNil([settings valueForKey:kPersistentScopeIndexKey]);
+    if (selectedScopes.count)
         [defaults setObject:selectedScopes forKey:kPersistentScopeIndexKey];
-    NSString *stateID = [settings valueForKey:kPersistentSelectedStateKey];
-    if (!IsEmpty(stateID))
+    NSString *stateID = SLFTypeNonEmptyStringOrNil([settings valueForKey:kPersistentSelectedStateKey]);
+    if (stateID)
         [defaults setObject:stateID forKey:kPersistentSelectedStateKey];
-    NSDictionary *selectedSessions = [settings valueForKey:kPersistentSelectedSessionKey];
-    if (!IsEmpty(selectedSessions))
+    NSDictionary *selectedSessions = SLFTypeDictionaryOrNil([settings valueForKey:kPersistentSelectedSessionKey]);
+    if (selectedSessions)
         [defaults setObject:selectedSessions forKey:kPersistentSelectedSessionKey];
-    NSDictionary *watchedBills = [settings valueForKey:kPersistentWatchedBillsKey];
-    if (!IsEmpty(watchedBills))
+    NSDictionary *watchedBills = SLFTypeDictionaryOrNil([settings valueForKey:kPersistentWatchedBillsKey]);
+    if (watchedBills)
         [defaults setObject:watchedBills forKey:kPersistentWatchedBillsKey];
-    NSString *calendarID = [settings valueForKey:kPersistentCalendarKey];
-    if (!IsEmpty(calendarID))
+    NSString *calendarID = SLFTypeNonEmptyStringOrNil([settings valueForKey:kPersistentCalendarKey]);
+    if (calendarID)
         [defaults setObject:calendarID forKey:kPersistentCalendarKey];
     [[SLFEventsManager sharedManager] loadEventCalendarFromPersistence];
     [self loadPersistence:nil];
@@ -149,11 +160,11 @@ NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void);
 #pragma mark - Calendar / Events
 
 NSString* SLFSelectedCalendar(void) {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:kPersistentCalendarKey];
+    return SLFTypeNonEmptyStringOrNil([[NSUserDefaults standardUserDefaults] objectForKey:kPersistentCalendarKey]);
 }
 
 void SLFSaveSelectedCalendar(NSString *calenderID) {
-    if (IsEmpty(calenderID))
+    if (!SLFTypeNonEmptyStringOrNil(calenderID))
         return;
     [[NSUserDefaults standardUserDefaults] setObject:calenderID forKey:kPersistentCalendarKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -167,7 +178,7 @@ NSString* SLFCurrentActionPath(void) {
 }
 
 void SLFSaveCurrentActionPath(NSString *path) {
-    if (IsEmpty(path))
+    if (!SLFTypeNonEmptyStringOrNil(path))
         return;
     RKLogDebug(@"---Persisting User Action: %@", path);
     [[SLFAnalytics sharedAnalytics] tagEvent:path attributes:nil];
@@ -177,14 +188,14 @@ void SLFSaveCurrentActionPath(NSString *path) {
 #pragma mark - Selected Search Bar Scope
 
 NSDictionary* SLFSelectedScopeIndexByKeyCatalog(void) {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:kPersistentScopeIndexKey];
+    return SLFTypeDictionaryOrNil([[NSUserDefaults standardUserDefaults] objectForKey:kPersistentScopeIndexKey]);
 }
 
 NSInteger SLFSelectedScopeIndexForKey(NSString *viewControllerKey) {
     NSDictionary *selectedScopeIndexByKey = SLFSelectedScopeIndexByKeyCatalog();
-    if (!viewControllerKey || IsEmpty(selectedScopeIndexByKey))
+    if (!viewControllerKey || !selectedScopeIndexByKey)
         return 0;
-    NSNumber *selectedIndex = [selectedScopeIndexByKey objectForKey:viewControllerKey];
+    NSNumber *selectedIndex = selectedScopeIndexByKey[viewControllerKey];
     if (selectedIndex)
         return [selectedIndex integerValue];
     return 0;
@@ -202,9 +213,10 @@ void SLFSaveSelectedScopeIndexForKey(NSInteger index, NSString *viewControllerKe
 #pragma mark - Selected State
 
 SLFState* SLFSelectedState(void) {
-    if (IsEmpty(SLFSelectedStateID()))
+    NSString *stateId = SLFSelectedStateID();
+    if (!stateId)
         return nil;
-    return [SLFState findFirstByAttribute:@"stateID" withValue:SLFSelectedStateID()]; 
+    return [SLFState findFirstByAttribute:@"stateID" withValue:stateId];
 }
 
 void SLFSaveSelectedState(SLFState *state) {
@@ -213,11 +225,14 @@ void SLFSaveSelectedState(SLFState *state) {
 }
 
 NSString* SLFSelectedStateID(void) {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:kPersistentSelectedStateKey];
+    return SLFTypeNonEmptyStringOrNil([[NSUserDefaults standardUserDefaults] objectForKey:kPersistentSelectedStateKey]);
 }
 
 void SLFSaveSelectedStateID(NSString *stateID) {
     NSCParameterAssert(stateID != NULL);
+    stateID = SLFTypeNonEmptyStringOrNil(stateID);
+    if (!stateID)
+        return;
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     [settings setObject:stateID forKey:kPersistentSelectedStateKey];
     [settings synchronize];
@@ -229,14 +244,14 @@ void SLFSaveSelectedStateID(NSString *stateID) {
 #pragma mark - Selected Session
 
 NSDictionary* SLFSelectedSessionsByStateID(void) {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:kPersistentSelectedSessionKey];
+    return SLFTypeDictionaryOrNil([[NSUserDefaults standardUserDefaults] objectForKey:kPersistentSelectedSessionKey]);
 }
 
 NSString* SLFSelectedSessionForState(SLFState *state) {
     NSDictionary *selectedSessionsByStateID = SLFSelectedSessionsByStateID();
-    if (!state || IsEmpty(selectedSessionsByStateID))
+    if (!state || !state.stateID || !selectedSessionsByStateID)
         return nil;
-    return [selectedSessionsByStateID objectForKey:state.stateID];
+    return SLFTypeNonEmptyStringOrNil(selectedSessionsByStateID[state.stateID]);
 }
 
 NSString* SLFSelectedSession(void) {
@@ -244,13 +259,18 @@ NSString* SLFSelectedSession(void) {
 }
 
 void SLFSaveSelectedSessionForState(NSString *session, SLFState *state) {
+    session = SLFTypeNonEmptyStringOrNil(session);
     NSCParameterAssert(state != NULL && state.stateID != NULL);
-    NSMutableDictionary *selectedSessions = [NSMutableDictionary dictionaryWithDictionary:SLFSelectedSessionsByStateID()];
+
+    NSDictionary *sessionsByState = SLFSelectedSessionsByStateID();
+    if (!sessionsByState)
+        sessionsByState = @{};
+    NSMutableDictionary *selectedSessions = [sessionsByState mutableCopy];
     NSString *oldSelectedSession = SLFSelectedSessionForState(state);
-    if (IsEmpty(session) && !IsEmpty(oldSelectedSession))
+    if (!session && oldSelectedSession)
         [selectedSessions removeObjectForKey:state.stateID];
-    else
-        [selectedSessions setObject:session forKey:state.stateID];
+    else if (session)
+        selectedSessions[state.stateID] = session;
     RKLogDebug(@"Selected Session has changed for %@: %@", state.stateID, session);
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     [settings setObject:selectedSessions forKey:kPersistentSelectedSessionKey];
@@ -268,26 +288,25 @@ void SLFSaveSelectedSession(NSString *session) {
 
 NSString* FindOrCreateSelectedSessionForState(SLFState *state) {
     NSString *selected = SLFSelectedSessionForState(state);
-    if (!state || !IsEmpty(selected))
+    if (!state || selected)
         return selected;
-    selected = state.latestSession;
-    if (!IsEmpty(selected)) {
+    selected = SLFTypeNonEmptyStringOrNil(state.latestSession);
+    if (selected)
         SLFSaveSelectedSessionForState(selected, state);
-    }
     return selected;
 }
 
 #pragma mark - Bill Watch
 
 NSDictionary* SLFWatchedBillsCatalog(void) {
-    return [[NSUserDefaults standardUserDefaults] dictionaryForKey:kPersistentWatchedBillsKey];
+    return SLFTypeDictionaryOrNil([[NSUserDefaults standardUserDefaults] dictionaryForKey:kPersistentWatchedBillsKey]);
 }
 
 BOOL SLFBillIsWatchedWithID(NSString *watchID) {
-    NSDictionary *watchedBills = SLFWatchedBillsCatalog();
-    if (IsEmpty(watchID) || IsEmpty(watchedBills))
+    if (!SLFTypeNonEmptyStringOrNil(watchID))
         return NO;
-    return [[watchedBills allKeys] containsObject:watchID];
+    NSDictionary *watchedBills = SLFWatchedBillsCatalog();
+    return (watchedBills[watchID] != NULL);
 }
 
 BOOL SLFBillIsWatched(SLFBill *bill) {
@@ -298,10 +317,10 @@ BOOL SLFBillIsWatched(SLFBill *bill) {
 
 void SLFRemoveWatchedBillWithWatchID(NSString *watchID) {
     NSDictionary *watchedBills = SLFWatchedBillsCatalog();
-    if (IsEmpty(watchID))
+    if (!SLFTypeNonEmptyStringOrNil(watchID))
         return;
     NSMutableDictionary *watchedBillsToWrite = [NSMutableDictionary dictionaryWithDictionary:watchedBills];
-        [watchedBillsToWrite removeObjectForKey:watchID];
+    [watchedBillsToWrite removeObjectForKey:watchID];
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     [settings setObject:watchedBillsToWrite forKey:kPersistentWatchedBillsKey];
     [settings synchronize];
@@ -310,13 +329,18 @@ void SLFRemoveWatchedBillWithWatchID(NSString *watchID) {
 
 void SLFSaveBillWatchedStatus(SLFBill *bill, BOOL isWatched) {
     NSDictionary *watchedBills = SLFWatchedBillsCatalog();
-    if (!bill || IsEmpty(bill.watchID))
+    if (!bill)
         return;
+    NSString *watchId = SLFTypeNonEmptyStringOrNil(bill.watchID);
+    if (!watchId)
+        return;
+
     NSMutableDictionary *watchedBillsToWrite = [NSMutableDictionary dictionaryWithDictionary:watchedBills];
-    if (isWatched)
-        [watchedBillsToWrite setObject:bill.dateUpdated forKey:bill.watchID];
+    if (isWatched && bill.dateUpdated)
+        watchedBillsToWrite[watchId] = bill.dateUpdated;
     else
-        [watchedBillsToWrite removeObjectForKey:bill.watchID];
+        [watchedBillsToWrite removeObjectForKey:watchId];
+
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     [settings setObject:watchedBillsToWrite forKey:kPersistentWatchedBillsKey];
     [settings synchronize];

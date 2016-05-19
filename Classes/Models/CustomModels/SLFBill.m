@@ -3,8 +3,8 @@
 #import "BillActionParser.h"
 #import "BillSearchParameters.h"
 #import "NSDate+SLFDateHelper.h"
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/RestKit.h>
+#import <SLFRestKit/CoreData.h>
 
 @implementation SLFBill
 
@@ -72,10 +72,10 @@
 }
 
 + (NSArray *)billComponentsForWatchID:(NSString *)watchID {
-    if (IsEmpty(watchID))
+    if (!SLFTypeNonEmptyStringOrNil(watchID))
         return nil;
     NSArray *parts = [watchID componentsSeparatedByString:@"||"];
-    if (IsEmpty(parts) || parts.count < 3)
+    if (parts.count < 3)
         return nil;
     return parts;
 }
@@ -97,7 +97,7 @@
 }
 
 + (NSString *)watchIDForResourcePath:(NSString *)resourcePath {
-    if (IsEmpty(resourcePath))
+    if (!SLFTypeNonEmptyStringOrNil(resourcePath))
         return nil;
     RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
     NSDictionary *args = nil;
@@ -110,25 +110,25 @@
 #pragma mark - Sorted Collections
 
 - (NSArray *)sortedActions {
-    if (IsEmpty(self.actions))
+    if (!SLFTypeNonEmptySetOrNil(self.actions))
         return nil;
    return [self.actions sortedArrayUsingDescriptors:[BillAction sortDescriptors]];
 }
 
 - (NSArray *)sortedVotes {
-    if (IsEmpty(self.votes))
+    if (!SLFTypeNonEmptySetOrNil(self.votes))
         return nil;
     return [self.votes sortedArrayUsingDescriptors:[BillRecordVote sortDescriptors]];
 }
 
 - (NSArray *)sortedSponsors {
-    if (IsEmpty(self.sponsors))
+    if (!SLFTypeNonEmptySetOrNil(self.sponsors))
         return nil;
     return [self.sponsors sortedArrayUsingDescriptors:[BillSponsor sortDescriptors]];
 }
 
 - (NSArray *)sortedSubjects {
-    if (IsEmpty(self.subjects))
+    if (!SLFTypeNonEmptySetOrNil(self.subjects))
         return nil;
     return [self.subjects sortedArrayUsingDescriptors:[GenericWord sortDescriptors]];
 }
@@ -137,7 +137,7 @@
 
 - (BillType)billType {
     __block BillType billType = BillTypeInvalid;
-    if (!IsEmpty(self.types)) {
+    if (SLFTypeNonEmptySetOrNil(self.types)) {
         [self.types enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
             if ([obj isKindOfClass:[GenericWord class]]) {
                 NSString *word = [[obj word] lowercaseString];
@@ -160,11 +160,10 @@
 }
 
 - (NSArray *)stages {
-    if (IsEmpty(self.actions))
+    if (!SLFTypeNonEmptySetOrNil(self.actions))
         return nil;
     BillActionParser *parser = [[BillActionParser alloc] init];
     NSArray *stages = [parser stagesForBill:self];
-    [parser release];
     return stages;
 }
 

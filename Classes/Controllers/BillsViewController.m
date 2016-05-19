@@ -19,7 +19,8 @@
 
 @implementation BillsViewController
 
-- (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path {
+- (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path
+{
     self = [super initWithState:newState resourcePath:path dataClass:[SLFBill class]];
     if (self) {
         self.useTitleBar = SLFIsIpad();
@@ -27,18 +28,23 @@
     return self;
 }
 
-- (void)configureTableController {
+- (void)configureTableController
+{
     [super configureTableController];
-    __block __typeof__(self) bself = self;
     StyledCellMapping *cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleSubtitle alternatingColors:YES largeHeight:YES selectable:YES];
     cellMapping.cellClass = [OpenStatesSubtitleTableViewCell class];
     cellMapping.reuseIdentifier = @"OpenStatesSubtitleTableViewCell";
 
     [cellMapping mapKeyPath:@"name" toAttribute:@"textLabel.text"];
     [cellMapping mapKeyPath:@"title" toAttribute:@"detailTextLabel.text"];
+
+    __weak __typeof__(self) bself = self;
     cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+        if (!bself)
+            return;
+
         NSString *path = [SLFActionPathNavigator navigationPathForController:[BillDetailViewController class] withResource:object];
-        if (!IsEmpty(path))
+        if (SLFTypeNonEmptyStringOrNil(path))
             [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
             [bself.searchBar resignFirstResponder];
     };

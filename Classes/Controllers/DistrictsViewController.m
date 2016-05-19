@@ -25,24 +25,24 @@
     return self;
 }
 
-- (void)dealloc {
-    [super dealloc];
-}
 
 - (void)configureTableController {
     [super configureTableController];
     self.tableController.autoRefreshRate = 36000;
 
-    __block __typeof__(self) bself = self;
     StyledCellMapping *cellMapping = [StyledCellMapping subtitleMapping];
     cellMapping.useAlternatingRowColors = YES;
     cellMapping.style = UITableViewCellStyleSubtitle;
     cellMapping.reuseIdentifier = @"VirtualDistrictTableViewCell";
     [cellMapping mapKeyPath:@"title" toAttribute:@"textLabel.text"];
     [cellMapping mapKeyPath:@"subtitle" toAttribute:@"detailTextLabel.text"];
+
+    __weak __typeof__(self) bself = self;
     cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+        if (!bself)
+            return;
         NSString *path = [SLFActionPathNavigator navigationPathForController:[DistrictDetailViewController class] withResource:object];
-        if (!IsEmpty(path))
+        if (SLFTypeNonEmptyStringOrNil(path))
             [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
             [bself.searchBar resignFirstResponder];
     };
@@ -52,7 +52,7 @@
 - (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
     [super tableControllerDidFinishFinalLoad:tableController];
     if (!self.tableController.isEmpty)
-        self.title = [NSString stringWithFormat:@"%d Districts", self.tableController.rowCount];
+        self.title = [NSString stringWithFormat:@"%d Districts", (int)self.tableController.rowCount];
 }
 
 - (void)viewDidLoad {

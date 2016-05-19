@@ -8,7 +8,7 @@
 // distribution.
 
 
-#import <RestKit/RestKit.h>
+#import <SLFRestKit/RestKit.h>
 #import "BillsSubjectsEntry.h"
 #import "SLFSortDescriptor.h"
 
@@ -25,11 +25,6 @@
     return mapping;
 }
 
-- (void)dealloc {
-    self.name = nil;
-    self.billCount = nil;
-    [super dealloc];
-}
 
 + (NSArray *)sortDescriptors {
     NSSortDescriptor *nameDesc = [SLFSortDescriptor stringSortDescriptorWithKey:@"name" ascending:YES];

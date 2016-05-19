@@ -7,16 +7,17 @@
 //  This work is licensed under the BSD-3 License included with this source
 // distribution.
 
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 #import "SLFTableViewController.h"
 #import "SLFState.h"
 #import "SLFImprovedRKTableController.h"
 
-@interface BillsMenuViewController : SLFTableViewController <RKObjectLoaderDelegate> {
-}
+@interface BillsMenuViewController : SLFTableViewController <RKObjectLoaderDelegate>
 
-@property (nonatomic, retain) SLFImprovedRKTableController *tableController;
-@property (nonatomic,retain) SLFState *state;
+@property (nonatomic, strong) SLFImprovedRKTableController *tableController;
+@property (nonatomic,strong) SLFState *state;
 - (id)initWithState:(SLFState *)newState;
 - (void)reconfigureForState:(SLFState *)newState;
 - (RKTableViewCellMapping *)menuCellMapping;   // override this to customize appearance

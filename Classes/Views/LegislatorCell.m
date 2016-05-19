@@ -56,8 +56,6 @@ static CGFloat LegImageWidth = 53.f;
 - (void)dealloc
 {
     self.legislator = nil;
-    self.cellContentView = nil;    
-    [super dealloc];
 }
 
 - (void)prepareForReuse
@@ -102,7 +100,7 @@ static CGFloat LegImageWidth = 53.f;
 
 - (void)setLegislator:(SLFLegislator *)value {
     SLFRelease(_legislator);
-    _legislator = [value retain]; // shouldn't really retain, we don't need to keep it around except mapping fails.
+    _legislator = value; // shouldn't really retain, we don't need to keep it around except mapping fails.
     [self.imageView setImageWithLegislator:value];
 	[_cellContentView setLegislator:value];
 }
@@ -151,11 +149,12 @@ static CGFloat LegImageWidth = 53.f;
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         self.roundImageCorners = NO;
         self.useAlternatingRowColors = YES;
-		__block __typeof__(self) bself = self;
+
+		__weak __typeof__(self) wSelf = self;
         self.onCellWillAppearForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
             LegislatorCell *legCell = (LegislatorCell *)cell;
             BOOL useDarkBG = NO;
-            if (bself.useAlternatingRowColors) {
+            if (wSelf.useAlternatingRowColors) {
                 useDarkBG = SLFAlternateCellForIndexPath(cell, indexPath);
             }
             [legCell setUseDarkBackground:useDarkBG];

@@ -11,7 +11,7 @@
 #import "StatesPopoverManager.h"
 @class SLFStackedViewController;
 @interface AppBarController : UIViewController <StatesPopoverDelegate>
-@property (nonatomic,retain,readonly) SLFStackedViewController *stackedViewController;
+@property (nonatomic,strong,readonly) SLFStackedViewController *stackedViewController;
 - (IBAction)changeSelectedState:(id)sender;
 - (IBAction)browseToAppWebSite:(id)sender;
 @end

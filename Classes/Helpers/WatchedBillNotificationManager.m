@@ -17,12 +17,12 @@
 #import "SLFAlertView.h"
 
 @interface WatchedBillNotificationManager()
-@property (nonatomic,assign) NSTimer *scheduleTimer;
-@property (nonatomic,retain) RKRequestQueue *billRequestQueue;
+@property (nonatomic,weak) NSTimer *scheduleTimer;
+@property (nonatomic,strong) RKRequestQueue *billRequestQueue;
 - (IBAction)resetStatusNotifications:(id)sender;
 - (IBAction)loadWatchedBillsFromNetwork:(id)sender;
 - (BOOL)isBillStatusUpdated:(SLFBill *)foundBill;
-@property (nonatomic,retain) NSMutableSet *updatedBills;
+@property (nonatomic,strong) NSMutableSet *updatedBills;
 @end
 
 @implementation WatchedBillNotificationManager
@@ -58,20 +58,17 @@
     [self.scheduleTimer invalidate];
     self.scheduleTimer = nil;
     [self.billRequestQueue cancelAllRequests];
-    self.billRequestQueue = nil;
-    self.updatedBills = nil;
-    [super dealloc];
 }
 
 - (IBAction)checkBillsStatus:(id)sender {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [self loadWatchedBillsFromNetwork:sender];
-    [pool drain];
+    @autoreleasepool {
+        [self loadWatchedBillsFromNetwork:sender];
+    }
 }
 
 - (IBAction)loadWatchedBillsFromNetwork:(id)sender {
     NSDictionary *watchedBills = SLFWatchedBillsCatalog();
-    if (IsEmpty(watchedBills))
+    if (!watchedBills.count)
         return;
     [self resetStatusNotifications:sender];
     SLFRestKitManager *restKit = [SLFRestKitManager sharedRestKit];
@@ -112,7 +109,6 @@
     NSString *actionPath = [BillDetailViewController actionPathForObject:updatedBill];
     notification.userInfo = [NSDictionary dictionaryWithObject:actionPath forKey:@"ActionPath"];
     [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-    [notification release];
 }
 
 - (IBAction)resetStatusNotifications:(id)sender {
@@ -133,7 +129,7 @@
 
 - (void)pruneInvalidResultIfNessesaryWithResourcePath:(NSString *)resourcePath {
     NSString *watchID = [SLFBill watchIDForResourcePath:resourcePath];
-    if (IsEmpty(watchID))
+    if (!SLFTypeNonEmptyStringOrNil(watchID))
         return;
     if (!SLFBillIsWatchedWithID(watchID))
         return;

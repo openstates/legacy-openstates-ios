@@ -11,8 +11,8 @@
 #import "SLFTheme.h"
 
 @interface InlineSubtitleCell : UITableViewCell
-@property (nonatomic,assign) NSString *title;
-@property (nonatomic,assign) NSString *subtitle;
+@property (nonatomic,weak) NSString *title;
+@property (nonatomic,weak) NSString *subtitle;
 @end
 
 @interface InlineSubtitleMapping : StyledCellMapping

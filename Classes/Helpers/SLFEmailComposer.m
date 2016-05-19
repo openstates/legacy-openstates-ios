@@ -14,7 +14,7 @@
 #import "SLFAnalytics.h"
 
 @interface SLFEmailComposer()
-@property (nonatomic, retain) MFMailComposeViewController *composer;
+@property (nonatomic, strong) MFMailComposeViewController *composer;
 @end
 
 @implementation SLFEmailComposer
@@ -39,10 +39,6 @@
     return self;
 }
 
-- (void)dealloc {
-	self.composer = nil;
-    [super dealloc];
-}
 
 - (BOOL)isNetworkAvailableForURL:(NSURL *)url {
     if (![[SLFReachable sharedReachable] isURLReachable:url])
@@ -67,7 +63,6 @@
     [body appendFormat:NSLocalizedString(@"iOS Device: %@\n", @""), [[UIDevice currentDevice] model]];
     [self presentMailComposerTo:@"openstates-mobile@sunlightfoundation.com" subject:NSLocalizedString(@"Open States App Support", @"") body:body parent:parent];
     [[SLFAnalytics sharedAnalytics] tagEvent:@"EMAILING_DEV_SUPPORT" attributes:[NSDictionary dictionaryWithObject:@"APP_DEV" forKey:@"category"]];
-    [body release];
 }
 
 - (void)presentMailComposerTo:(NSString*)recipient subject:(NSString*)subject body:(NSString*)body parent:(UIViewController *)parent {
@@ -90,12 +85,12 @@
 	}
 	else {
 		NSMutableString *message = [[NSMutableString alloc] initWithFormat:@"mailto:%@", recipient];
-		if (!IsEmpty(subject))
+		if (SLFTypeNonEmptyStringOrNil(subject))
 			[message appendFormat:@"&subject=%@", subject];
-		if (!IsEmpty(body))
+		if (SLFTypeNonEmptyStringOrNil(body))
 			[message appendFormat:@"&body=%@", body];
-		NSURL *mailto = [NSURL URLWithString:[message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-        [message release];
+        NSCharacterSet *allowedCharacters = [NSCharacterSet URLQueryAllowedCharacterSet];
+		NSURL *mailto = [NSURL URLWithString:[message stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacters]];
 		if ( ![self isNetworkAvailableForURL:mailto] ) {
 			[SLFAlertView showWithTitle:NSLocalizedString(@"Network Unavailable", @"")
 								message:NSLocalizedString(@"Cannot send an email at this time.  Please check your network settings and try again.", @"")

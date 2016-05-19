@@ -11,7 +11,7 @@
 #import "DistrictSearch.h"
 #import "SLFDataModels.h"
 #import "SLFRestKitManager.h"
-#import "JSONKit.h"
+#import <SLFRestKit/JSONKit.h>
 #import "SLFReachable.h"
 #import "APIKeys.h"
 
@@ -44,7 +44,7 @@
 }
 
 + (DistrictSearch *)districtSearchForCoordinate:(CLLocationCoordinate2D)aCoordinate successBlock:(DistrictSearchSuccessWithResultsBlock)successBlock failureBlock:(DistrictSearchFailureWithMessageAndFailOptionBlock)failureBlock {
-    DistrictSearch *op = [[[DistrictSearch alloc] init] autorelease];
+    DistrictSearch *op = [[DistrictSearch alloc] init];
     [op searchForCoordinate:aCoordinate successBlock:successBlock failureBlock:failureBlock];
     return op;
 }
@@ -52,25 +52,20 @@
 - (void) dealloc {
     RKClient *client = [[SLFRestKitManager sharedRestKit] openStatesClient];
     [client.requestQueue cancelRequestsWithDelegate:self];
-    Block_release(_onSuccessWithResults);
-    Block_release(_onFailureWithMessageAndFailOption);
-    [super dealloc];
 }
 
 - (void)setOnSuccessWithResults:(DistrictSearchSuccessWithResultsBlock)onSuccessWithResults {
     if (_onSuccessWithResults) {
-        Block_release(_onSuccessWithResults);
         _onSuccessWithResults = nil;
     }
-    _onSuccessWithResults = Block_copy(onSuccessWithResults);
+    _onSuccessWithResults = [onSuccessWithResults copy];
 }
 
 - (void)setOnFailureWithMessageAndFailOption:(DistrictSearchFailureWithMessageAndFailOptionBlock)onFailureWithMessageAndFailOption {
     if (_onFailureWithMessageAndFailOption) {
-        Block_release(_onFailureWithMessageAndFailOption);
         _onFailureWithMessageAndFailOption = nil;
     }
-    _onFailureWithMessageAndFailOption = Block_copy(onFailureWithMessageAndFailOption);
+    _onFailureWithMessageAndFailOption = [onFailureWithMessageAndFailOption copy];
 }
 
 #pragma mark -
@@ -83,7 +78,7 @@
         id results = [response.body objectFromJSONData];
         @try {
             foundIDs = [self boundaryIDsFromSearchResults:results];
-            success = !IsEmpty(foundIDs);
+            success = foundIDs.count > 0;
         }
         @catch (NSException *exception) {
             RKLogError(@"%@: %@", [exception name], [exception reason]);
@@ -118,8 +113,8 @@
     else if ([results isKindOfClass:[NSMutableDictionary class]])
         boundaryList = [NSMutableArray arrayWithObject:results];
     for (NSMutableDictionary *boundary in boundaryList) {
-        NSString *boundaryID = [boundary objectForKey:@"boundary_id"];
-        if (IsEmpty(boundaryID))
+        NSString *boundaryID = boundary[@"boundary_id"];
+        if (SLFTypeIsNull(boundaryID))
             continue;
         [foundIDs addObject:boundaryID];
     }

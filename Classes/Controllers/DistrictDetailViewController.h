@@ -8,7 +8,7 @@
 // distribution.
 
 
-#import <RestKit/RestKit.h>
+#import <SLFRestKit/RestKit.h>
 #import "MapViewController.h"
 
 @class SLFDistrict;

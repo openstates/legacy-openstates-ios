@@ -12,15 +12,14 @@
 
 @class SLFLegislator;
 @class SLFParty;
+
 @interface LegislatorCellView : UIView
-{
-}
 
 @property (nonatomic,copy) NSString *title;
 @property (nonatomic,copy) NSString *name;
-@property (nonatomic,retain) SLFParty *party;
+@property (nonatomic,strong) SLFParty *party;
 @property (nonatomic,copy) NSString *district;
-@property (nonatomic,assign) NSString *role;
+@property (nonatomic,copy) NSString *role;
 @property (nonatomic,assign) BOOL highlighted;
 @property (nonatomic,assign) BOOL useDarkBackground;
 @property (nonatomic,readonly) CGSize cellSize; 

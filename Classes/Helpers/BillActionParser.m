@@ -66,7 +66,7 @@ STAGE7:Bill becomes law / Bill does not become law
 }	
 
 - (NSMutableArray *)prepStagesForBill:(SLFBill *)bill {
-    if (!bill || IsEmpty(bill.types))
+    if (!bill || !SLFTypeNonEmptySetOrNil(bill.types))
         return nil;
     BillType billType = bill.billType;
 	SLFChamber *billChamber = bill.chamberObj;
@@ -109,7 +109,9 @@ STAGE7:Bill becomes law / Bill does not become law
     
         //STAGE1:Introduced / Read 1st in the original chamber
     if (stage.stageNumber == 1) {
-        if ([self actionTypes:types containWord:@"bill:filed"] || [self actionTypes:types containWord:@"bill:introduced"] || [self actionTypes:types containWord:@"bill:reading:1"])
+        if ([self actionTypes:types containWord:@"bill:filed"]
+            || [self actionTypes:types containWord:@"bill:introduced"]
+            || [self actionTypes:types containWord:@"bill:reading:1"])
         {
             if ([stage shouldPromoteTypeTo:FlowStageReached]) {
                 stage.stageType = FlowStageReached;
@@ -267,7 +269,7 @@ STAGE7:Bill becomes law / Bill does not become law
 }
 
 - (BOOL)actionTypes:(NSSet *)actionTypes containWord:(NSString *)searchWord {
-    if (IsEmpty(actionTypes) || IsEmpty(searchWord))
+    if (!SLFTypeNonEmptySetOrNil(actionTypes) || !SLFTypeNonEmptyStringOrNil(searchWord))
         return NO;
     __block BOOL found = NO;
     searchWord = [searchWord lowercaseString];

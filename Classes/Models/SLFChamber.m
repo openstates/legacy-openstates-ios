@@ -37,17 +37,6 @@ NSString * const SLFChamberLowerType = @"lower";
     return nil;
 }
 
-- (void)dealloc {
-    self.stateID = nil;
-    self.state = nil;
-    self.type = nil;
-    self.term = nil;
-    self.title = nil;
-    self.name = nil;
-    self.initial = nil;
-    self.titleAbbreviation = nil;
-    [super dealloc];
-}
 
 - (SLFChamber *)opposingChamber {
     if (self.state.isUnicameral)
@@ -72,7 +61,7 @@ NSString * const SLFChamberLowerType = @"lower";
 }
 
 - (NSString *)initial {
-    if (IsEmpty(initial))
+    if (!SLFTypeNonEmptyStringOrNil(initial))
         initial = [[self.name substringToIndex:1] copy];
 	return initial;
 }
@@ -95,9 +84,16 @@ NSString * const SLFChamberLowerType = @"lower";
     if (!state)
         return nil;
     NSArray *chambers = state.chambers;
-    if (state.isUnicameral || IsEmpty(chambers) || [chambers count] < 2)
+    if (state.isUnicameral || !chambers || [chambers count] < 2)
         return nil; // No point in creating a scope bar if there's only one chamber.
-    return [NSArray arrayWithObjects:NSLocalizedString(@"Both",@""), [[chambers objectAtIndex:0] shortName], [[chambers objectAtIndex:1] shortName], nil];
+
+    NSString *chamber1 = SLFTypeNonEmptyStringOrNil([chambers[0] shortName]);
+    if (!chamber1)
+        chamber1 = @"";
+    NSString *chamber2 = SLFTypeNonEmptyStringOrNil([chambers[1] shortName]);
+    if (!chamber2)
+        chamber2 = @"";
+    return @[NSLocalizedString(@"Both",@""), chamber1, chamber2];
 }
 
 - (BOOL)isUpperChamber {
@@ -108,7 +104,7 @@ NSString * const SLFChamberLowerType = @"lower";
 
 @implementation UpperChamber
 + (UpperChamber *)upperForState:(SLFState *)aState {
-    UpperChamber *chamber = [[[UpperChamber alloc] init] autorelease];
+    UpperChamber *chamber = [[UpperChamber alloc] init];
     chamber.type = SLFChamberUpperType;
     chamber.state = aState;
     chamber.stateID = aState.stateID;
@@ -135,7 +131,7 @@ NSString * const SLFChamberLowerType = @"lower";
 + (LowerChamber *)lowerForState:(SLFState *)aState {
     if (aState.isUnicameral)
         return nil;
-    LowerChamber *chamber = [[[LowerChamber alloc] init] autorelease];
+    LowerChamber *chamber = [[LowerChamber alloc] init];
     chamber.type = SLFChamberLowerType;
     chamber.state = aState;
     chamber.stateID = aState.stateID;

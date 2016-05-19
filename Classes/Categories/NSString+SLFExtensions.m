@@ -13,7 +13,7 @@
 @implementation NSString (SLFExtensions)
 
 - (BOOL)hasSubstring:(NSString *)search caseInsensitive:(BOOL)caseInsensitive {
-    if (IsEmpty(search))
+    if (!SLFTypeNonEmptyStringOrNil(search))
         return NO;
     NSString *string = self;
     if (caseInsensitive) {

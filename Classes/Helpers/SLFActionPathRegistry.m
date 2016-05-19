@@ -7,6 +7,8 @@
 //  This work is licensed under the BSD-3 License included with this source
 // distribution.
 
+#ifndef SLFActionPathRegistry_h
+#define SLFActionPathRegistry_h "SLFActionPathRegistry.h"
 
 #import "SLFActionPathRegistry.h"
 #import "NSString+SLFExtensions.h"
@@ -28,6 +30,7 @@
 #import "BillsSubjectsViewController.h"
 #import "AssetsViewController.h"
 #import "LegislatorsNoFetchViewController.h"
+#import "AppDelegate.h"
 
 @interface SLFTableViewController(SLFActionPath)
 + (void)registerActionPathWithPattern:(NSString *)pattern;
@@ -57,11 +60,6 @@
         [self registerAllControllers];
     }
     return self;
-}
-
-- (void)dealloc {
-    self.patternsForClasses = nil;
-    [super dealloc];
 }
 
 - (void)registerAllControllers {
@@ -104,15 +102,15 @@
 + (NSString *)interpolatePathForClass:(Class)controllerClass withResourceID:(NSString *)resourceID {
     NSParameterAssert(controllerClass != NULL);
     NSString *pattern = [self patternForClass:controllerClass];
-    if (IsEmpty(resourceID))
+    if (!SLFTypeNonEmptyStringOrNil(resourceID))
         return pattern;
     NSParameterAssert([pattern hasPrefix:@"slfos://"]);
     NSString *patternContents = [pattern substringFromIndex:8];
     NSArray *components = [patternContents componentsSeparatedByString:@":"];
-    if (IsEmpty(components))
+    if (!SLFTypeNonEmptyArrayOrNil(components))
         return pattern;
     // some initializers require multiple arguments, so assume they've concatenated the resource ID, i.e. @"stateID/session/billID"
-    NSString *path = [NSString stringWithFormat:@"slfos://%@%@", [components objectAtIndex:0], resourceID];
+    NSString *path = [NSString stringWithFormat:@"slfos://%@%@", components[0], resourceID];
     return path; 
 }
 @end
@@ -287,9 +285,9 @@
     Class controllerClass = [self class];
     [SLFActionPathNavigator registerPattern:pattern withArgumentHandler:^UIViewController *(NSDictionary *arguments, BOOL skipSaving) {
         SLFState *state = [SLFState findFirstByAttribute:@"stateID" withValue:[arguments valueForKey:@"stateID"]];
-        NSString *session = [arguments valueForKey:@"session"];
-        NSString *billID = [arguments valueForKey:@"billID"];
-        if (!state || IsEmpty(session) || IsEmpty(billID))
+        NSString *session = SLFTypeNonEmptyStringOrNil([arguments valueForKey:@"session"]);
+        NSString *billID = SLFTypeNonEmptyStringOrNil([arguments valueForKey:@"billID"]);
+        if (!state || !session || !billID)
             return nil;
         BillDetailViewController *vc = [[controllerClass alloc] initWithState:state session:session billID:billID];
         if (!skipSaving) {
@@ -319,3 +317,4 @@
 }
 @end
 
+#endif

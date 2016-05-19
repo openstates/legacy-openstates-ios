@@ -2,7 +2,7 @@
 // Make changes to SLFBill.h instead.
 
 #import <CoreData/CoreData.h>
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 
 @class BillAction;
 @class GenericWord;
@@ -36,7 +36,7 @@
 
 
 
-@property (nonatomic, retain) NSString *billID;
+@property (nonatomic, strong) NSString *billID;
 
 
 //- (BOOL)validateBillID:(id*)value_ error:(NSError**)error_;
@@ -44,7 +44,7 @@
 
 
 
-@property (nonatomic, retain) NSString *chamber;
+@property (nonatomic, strong) NSString *chamber;
 
 
 //- (BOOL)validateChamber:(id*)value_ error:(NSError**)error_;
@@ -52,7 +52,7 @@
 
 
 
-@property (nonatomic, retain) NSDate *dateCreated;
+@property (nonatomic, strong) NSDate *dateCreated;
 
 
 //- (BOOL)validateDateCreated:(id*)value_ error:(NSError**)error_;
@@ -60,7 +60,7 @@
 
 
 
-@property (nonatomic, retain) NSDate *dateUpdated;
+@property (nonatomic, strong) NSDate *dateUpdated;
 
 
 //- (BOOL)validateDateUpdated:(id*)value_ error:(NSError**)error_;
@@ -68,7 +68,7 @@
 
 
 
-@property (nonatomic, retain) NSString *session;
+@property (nonatomic, strong) NSString *session;
 
 
 //- (BOOL)validateSession:(id*)value_ error:(NSError**)error_;
@@ -76,7 +76,7 @@
 
 
 
-@property (nonatomic, retain) NSString *stateID;
+@property (nonatomic, strong) NSString *stateID;
 
 
 //- (BOOL)validateStateID:(id*)value_ error:(NSError**)error_;
@@ -84,7 +84,7 @@
 
 
 
-@property (nonatomic, retain) NSString *title;
+@property (nonatomic, strong) NSString *title;
 
 
 //- (BOOL)validateTitle:(id*)value_ error:(NSError**)error_;
@@ -93,70 +93,70 @@
 
 
 
-@property (nonatomic, retain) NSSet* actions;
+@property (nonatomic, strong) NSSet* actions;
 
 - (NSMutableSet*)actionsSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* alternateTitles;
+@property (nonatomic, strong) NSSet* alternateTitles;
 
 - (NSMutableSet*)alternateTitlesSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* documents;
+@property (nonatomic, strong) NSSet* documents;
 
 - (NSMutableSet*)documentsSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* sources;
+@property (nonatomic, strong) NSSet* sources;
 
 - (NSMutableSet*)sourcesSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* sponsors;
+@property (nonatomic, strong) NSSet* sponsors;
 
 - (NSMutableSet*)sponsorsSet;
 
 
 
 
-@property (nonatomic, retain) SLFState* stateObj;
+@property (nonatomic, strong) SLFState* stateObj;
 
 //- (BOOL)validateStateObj:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) NSSet* subjects;
+@property (nonatomic, strong) NSSet* subjects;
 
 - (NSMutableSet*)subjectsSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* types;
+@property (nonatomic, strong) NSSet* types;
 
 - (NSMutableSet*)typesSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* versions;
+@property (nonatomic, strong) NSSet* versions;
 
 - (NSMutableSet*)versionsSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* votes;
+@property (nonatomic, strong) NSSet* votes;
 
 - (NSMutableSet*)votesSet;
 

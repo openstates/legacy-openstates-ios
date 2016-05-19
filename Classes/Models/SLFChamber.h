@@ -15,17 +15,17 @@ extern NSString * const SLFChamberLowerType;
 
 @class SLFState;
 @interface SLFChamber : NSObject
-@property (nonatomic,retain) SLFState *state;
+@property (nonatomic,strong) SLFState *state;
 @property (nonatomic,copy) NSString *type;
 @property (nonatomic,copy) NSNumber *term;
 @property (nonatomic,copy) NSString *title;
 @property (nonatomic,copy) NSString *name;
-@property (nonatomic,readonly) NSString *formalName;
-@property (nonatomic,readonly) NSString *shortName;
+@property (weak, nonatomic,readonly) NSString *formalName;
+@property (weak, nonatomic,readonly) NSString *shortName;
 @property (nonatomic,copy) NSString *stateID;
 @property (nonatomic,copy) NSString *titleAbbreviation;
 @property (nonatomic,copy) NSString *initial;
-@property (nonatomic,readonly) SLFChamber *opposingChamber;
+@property (weak, nonatomic,readonly) SLFChamber *opposingChamber;
 @property (nonatomic,readonly) BOOL isUpperChamber;
 
 + (SLFChamber *)chamberWithType:(NSString *)aType forState:(SLFState *)aState;

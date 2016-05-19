@@ -10,6 +10,6 @@
 
 @class SLFState;
 @interface StackedNavigationBar : UIView
-@property (nonatomic,retain) UIButton *mapButton;
-@property (nonatomic,retain) UIButton *appIconButton;
+@property (nonatomic,strong) UIButton *mapButton;
+@property (nonatomic,strong) UIButton *appIconButton;
 @end

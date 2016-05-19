@@ -1,7 +1,7 @@
 #import "CommitteeMember.h"
 #import "SLFLegislator.h"
 #import "SLFSortDescriptor.h"
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 
 @implementation CommitteeMember
 

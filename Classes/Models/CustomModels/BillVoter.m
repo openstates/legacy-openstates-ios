@@ -1,5 +1,5 @@
 #import "BillVoter.h"
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 
 @implementation BillVoter
 

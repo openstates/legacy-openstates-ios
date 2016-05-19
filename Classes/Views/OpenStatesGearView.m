@@ -22,9 +22,9 @@ const CGFloat kOpenStatesGearViewHeight = 56.f;
 @interface OpenStatesGearView() {
     CGGradientRef _gradient;
 }
-@property (nonatomic,retain) EPSBezierPath *penumbraPath;
-@property (nonatomic,retain) EPSBezierPath *shinePath;
-@property (nonatomic,retain) EPSBezierPath *surfacePath;
+@property (nonatomic,strong) EPSBezierPath *penumbraPath;
+@property (nonatomic,strong) EPSBezierPath *shinePath;
+@property (nonatomic,strong) EPSBezierPath *surfacePath;
 - (void)configure;
 - (EPSBezierPath *)penumbraFactory;
 - (EPSBezierPath *)shineFactory;
@@ -57,11 +57,7 @@ const CGFloat kOpenStatesGearViewHeight = 56.f;
 }
 
 - (void)dealloc {
-    self.penumbraPath = nil;
-    self.shinePath = nil;
-    self.surfacePath = nil;
     [self destroyGradient];
-    [super dealloc];
 }
 
 - (void)configure {

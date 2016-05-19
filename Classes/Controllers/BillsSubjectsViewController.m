@@ -16,7 +16,7 @@
 #import "BillsViewController.h"
 #import "BillSearchParameters.h"
 #import "SLFBadgeCell.h"
-#import "MTInfoPanel.h"
+#import "SLFInfoView.h"
 #import "SLFDrawingExtensions.h"
 
 @interface BillsSubjectsViewController()
@@ -45,11 +45,6 @@
     return self;
 }
 
-- (void)dealloc {
-	self.state = nil;
-    self.tableController = nil;
-    [super dealloc];
-}
 
 - (void)viewDidUnload {
     self.tableController = nil;
@@ -97,12 +92,12 @@
     CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
     CGFloat overlayTop = self.scopeBar.frame.size.height;
     self.tableController.overlayFrame = CGRectMake(0, overlayTop, panelWidth, self.view.frame.size.height);
-    MTInfoPanel *offlinePanel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeError title:NSLocalizedString(@"Offline", @"") subtitle:NSLocalizedString(@"The server is unavailable.",@"") image:nil];
+    SLFInfoView *offlinePanel = [SLFInfoView staticInfoViewWithFrame:CGRectMake(0,0,panelWidth,60) type:SLFInfoTypeError title:NSLocalizedString(@"Offline", @"") subtitle:NSLocalizedString(@"The server is unavailable.",@"") image:nil];
     _tableController.imageForOffline = [UIImage imageFromView:offlinePanel];    
-    MTInfoPanel *panel = [MTInfoPanel staticPanelWithFrame:CGRectMake(0,0,panelWidth,60) type:MTInfoPanelTypeActivity title:NSLocalizedString(@"Updating", @"") subtitle:NSLocalizedString(@"Downloading new data",@"") image:nil];
+    SLFInfoView *panel = [SLFInfoView staticInfoViewWithFrame:CGRectMake(0,0,panelWidth,60) type:SLFInfoTypeActivity title:NSLocalizedString(@"Updating", @"") subtitle:NSLocalizedString(@"Downloading new data",@"") image:nil];
     _tableController.loadingView = panel;
 
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) bself = self;
     StyledCellMapping *styledCellMap = [StyledCellMapping styledMappingForClass:[SLFBadgeCell class] usingBlock:^(StyledCellMapping *cellMapping){
         cellMapping.useAlternatingRowColors = YES;
         [cellMapping mapKeyPath:@"self" toAttribute:@"subjectEntry"];
@@ -119,7 +114,7 @@
             NSString *chamber = [SLFChamber chamberTypeForSearchScopeIndex:chamberScope];
             NSString *resourcePath = [BillSearchParameters pathForSubject:subject.name chamber:chamber];
             BillsViewController *vc = [[BillsViewController alloc] initWithState:bself.state resourcePath:resourcePath];
-            if (IsEmpty(chamber))
+            if (!SLFTypeNonEmptyStringOrNil(chamber))
                 vc.title = [NSString stringWithFormat:@"%@ %@ Bills", bself.state.name, subject.name];
             else {
                 NSString *chamberName = [SLFChamber chamberWithType:chamber forState:bself.state].shortName;
@@ -127,7 +122,6 @@
             }
             [bself.searchBar resignFirstResponder];
             [bself stackOrPushViewController:vc];
-            [vc release];
         };
     }];
     [_tableController mapObjectsWithClass:[BillsSubjectsEntry class] toTableCellsWithMapping:styledCellMap];
@@ -135,7 +129,7 @@
 
 - (void)configureStandaloneChamberScopeBar {
     NSArray *buttonTitles = [SLFChamber chamberSearchScopeTitlesWithState:state];
-    if (IsEmpty(buttonTitles))
+    if (!SLFTypeNonEmptyArrayOrNil(buttonTitles))
         return;
     self.scopeBar = [[UISegmentedControl alloc] initWithItems:buttonTitles];
     self.scopeBar.selectedSegmentIndex = SLFSelectedScopeIndexForKey(NSStringFromClass([self class]));
@@ -144,7 +138,7 @@
 
     CGFloat barInset = 0.0f;
     if ([[UIDevice currentDevice] systemMajorVersion] < 7) {
-        self.scopeBar.segmentedControlStyle = 7; // magic number (it's cheating)
+//        self.scopeBar.segmentedControlStyle = 7; // magic number (it's cheating)
     } else {
         self.scopeBar.tintColor = [SLFAppearance cellSecondaryTextColor];
         barInset += 12.0f;
@@ -181,7 +175,7 @@
 
 - (void)tableControllerDidFinishLoad:(RKAbstractTableController *)tableController {
     // since we reload our table items, we can't use our usual finishLoading or risk an infinite loop.
-    if (IsEmpty(tableController.sections))
+    if (!SLFTypeNonEmptyArrayOrNil(tableController.sections))
         return;
     RKTableSection *section = [tableController sectionAtIndex:0];
     if (!section)

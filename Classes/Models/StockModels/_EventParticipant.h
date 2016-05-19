@@ -20,7 +20,7 @@
 
 
 
-@property (nonatomic, retain) SLFEvent* eventInverse;
+@property (nonatomic, strong) SLFEvent* eventInverse;
 
 //- (BOOL)validateEventInverse:(id*)value_ error:(NSError**)error_;
 

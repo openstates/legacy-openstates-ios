@@ -1,5 +1,5 @@
 #import "EventParticipant.h"
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 
 @implementation EventParticipant
 
@@ -16,7 +16,7 @@
 
 - (void)setType:(NSString *)type {
     [self willChangeValueForKey:@"type"];
-    if (!IsEmpty(type))
+    if (SLFTypeNonEmptyStringOrNil(type))
         type = [type capitalizedString];
     [self setPrimitiveType:type];
     [self didChangeValueForKey:@"type"];

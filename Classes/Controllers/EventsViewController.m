@@ -11,7 +11,6 @@
 #import "EventsViewController.h"
 #import "EventDetailViewController.h"
 #import "SLFDataModels.h"
-#import "MTInfoPanel.h"
 #import "SLFDrawingExtensions.h"
 
 @interface EventsViewController()
@@ -26,9 +25,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [super dealloc];
-}
 
 - (void)viewDidLoad
 {
@@ -45,7 +41,7 @@
     // Filter to events that happen today or later
     NSDate *today = [NSDate date];
     NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
-    NSUInteger preservedComponents = (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit);
+    NSUInteger preservedComponents = (NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay);
     today = [calendar dateFromComponents:[calendar components:preservedComponents fromDate:today]];
     self.tableController.predicate = [NSPredicate predicateWithFormat:@"dateStart >= %@" argumentArray:@[today]];
 
@@ -53,12 +49,15 @@
     cellMapping.useAlternatingRowColors = YES;
     [cellMapping mapKeyPath:@"title" toAttribute:@"textLabel.text"];
     [cellMapping mapKeyPath:@"timeStartForDisplay" toAttribute:@"detailTextLabel.text"];
-    __block __typeof__(self) bself = self;
+
+    __weak __typeof__(self) wSelf = self;
     cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
+        if (!wSelf)
+            return;
         NSString *path = [SLFActionPathNavigator navigationPathForController:[EventDetailViewController class] withResource:object];
-        if (!IsEmpty(path))
-            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
-            [bself.searchBar resignFirstResponder];
+        if (SLFTypeNonEmptyStringOrNil(path))
+            [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:wSelf popToRoot:NO];
+            [wSelf.searchBar resignFirstResponder];
     };
     [self.tableController mapObjectsWithClass:self.dataClass toTableCellsWithMapping:cellMapping];    
 }

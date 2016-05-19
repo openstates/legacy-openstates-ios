@@ -8,16 +8,16 @@
 // distribution.
 
 
-#import <RestKit/UI/UI.h>
+#import <SLFRestKit/UI.h>
 
 @interface StyledCellMapping : RKTableViewCellMapping
 @property (nonatomic,assign) BOOL useAlternatingRowColors;
 @property (nonatomic,assign) BOOL useLargeRowHeight;
 @property (nonatomic,assign) BOOL isSelectableCell;
-@property (nonatomic,retain) UIColor *textColor;
-@property (nonatomic,retain) UIColor *detailTextColor;
-@property (nonatomic,retain) UIFont *textFont;
-@property (nonatomic,retain) UIFont *detailTextFont;
+@property (nonatomic,strong) UIColor *textColor;
+@property (nonatomic,strong) UIColor *detailTextColor;
+@property (nonatomic,strong) UIFont *textFont;
+@property (nonatomic,strong) UIFont *detailTextFont;
 
 + (StyledCellMapping *)cellMappingWithStyle:(UITableViewCellStyle)style alternatingColors:(BOOL)useAlternatingRowColors largeHeight:(BOOL)useLargeRowHeight selectable:(BOOL)isSelectableCell;
 + (id)styledMappingForClass:(Class)cellClass usingBlock:(void (^)(StyledCellMapping *cellMapping))block;

@@ -11,6 +11,12 @@
 #import "SLFDataModels.h"
 #import "LegislatorCellView.h"
 #import "SLFTheme.h"
+#import <UIKit/UIKit.h>
+
+static UIFont *plainFont;
+static UIFont *nameFont;
+static UIFont *titleFont;
+static UIFont *roleFont;
 
 @implementation LegislatorCellView
 @synthesize title = _title;
@@ -25,8 +31,8 @@
 - (void)configureDefaults {
     _title = [[NSString alloc] init];
     _name = [[NSString alloc] init];
-    _party = [[Independent independent] retain];
-    _district = [[NSString alloc] init];
+    _party = [Independent independent];
+    _district = @"";
     _role = nil;
     _genericName = @"";
     self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
@@ -49,17 +55,6 @@
         [self configureDefaults];
     }
     return self;
-}
-
-- (void)dealloc
-{
-    SLFRelease(_title);
-    SLFRelease(_name);
-    SLFRelease(_party);
-    SLFRelease(_district);
-    SLFRelease(_role);
-    SLFRelease(_genericName);
-    [super dealloc];
 }
 
 - (CGSize)cellSize {
@@ -124,8 +119,10 @@
     return [self cellSize];
 }
 
-- (CGRect)rectOfString:(NSString *)string atOrigin:(CGPoint)origin withFont:(UIFont *)font {
-    CGSize textSize = [string sizeWithFont:font];
+- (CGRect)rectOfString:(NSString *)string atOrigin:(CGPoint)origin withAttributes:(NSDictionary *)attributes {
+    if (!attributes || !string || !string.length)
+        return CGRectZero;
+    CGSize textSize = [string sizeWithAttributes:attributes];
     return CGRectMake(origin.x, origin.y, textSize.width, textSize.height);
 }
 
@@ -137,7 +134,7 @@
 
     NSString *partyString = _party.name;
     NSString *nameString = _name;
-    if (IsEmpty(nameString)) {
+    if (!SLFTypeNonEmptyStringOrNil(nameString)) {
         nameString = _genericName;
         partyString = @"";
     }
@@ -149,7 +146,18 @@
     UIColor *darkColor = [SLFAppearance cellTextColor];
     UIColor *lightColor = [SLFAppearance cellSecondaryTextColor];
     UIColor *partyColor = _party.color;
-    UIColor *accentColor = [SLFAppearance accentGreenColor];    
+    UIColor *accentColor = [SLFAppearance accentGreenColor];
+    UIColor *backgroundColor = self.backgroundColor;
+
+    if (!plainFont)
+        plainFont = SLFFontWithStyle(UIFontTextStyleBody, 0, -2);
+    if (!nameFont)
+        nameFont = SLFFontWithStyle(UIFontTextStyleHeadline, UIFontDescriptorTraitBold, 0);
+    if (!titleFont)
+                    titleFont = SLFFontWithStyle(UIFontTextStyleFootnote, UIFontDescriptorTraitItalic, 0);
+    if (!roleFont)
+        roleFont = SLFFontWithStyle(UIFontTextStyleSubheadline, UIFontDescriptorTraitBold, 0);
+
     if (self.highlighted)
         darkColor = lightColor = partyColor = accentColor = whiteColor;
     
@@ -161,48 +169,76 @@
     CGRect drawRect = CGRectZero;
 
     // Title
-    if (!IsEmpty(_title)) {
-        [lightColor set];
-        UIFont *titleFont = SLFItalicFont(13);
-        drawRect = [self rectOfString:_title atOrigin:CGPointMake(9,9) withFont:titleFont];
-        [_title drawInRect:drawRect withFont:SLFItalicFont(13)];
+    if (SLFTypeNonEmptyStringOrNil(_title)) {
+        NSDictionary *attributes = @{NSFontAttributeName: titleFont,
+                                     NSForegroundColorAttributeName: lightColor,
+                                     NSBackgroundColorAttributeName: backgroundColor};
+        drawRect = [self rectOfString:_title atOrigin:CGPointMake(9,9) withAttributes:attributes];
+        [_title drawInRect:drawRect withAttributes:attributes];
     }
 
     // Name
-    if (!IsEmpty(nameString)) {
-        [darkColor set];
-        UIFont *nameFont = SLFFont(18);
-        drawRect = [self rectOfString:nameString atOrigin:CGPointMake(9,25) withFont:nameFont];
-        [nameString drawInRect:drawRect withFont:SLFFont(18)];
+    if (SLFTypeNonEmptyStringOrNil(nameString)) {
+        NSDictionary *attributes = @{NSFontAttributeName: nameFont,
+                                     NSForegroundColorAttributeName: darkColor,
+                                     NSBackgroundColorAttributeName: backgroundColor};
+        drawRect = [self rectOfString:nameString atOrigin:CGPointMake(9,25) withAttributes:attributes];
+        [nameString drawInRect:drawRect withAttributes:attributes];
     }
     
     // Party
-    if (!IsEmpty(partyString)) {
-        [partyColor set];
-        drawRect = [self rectOfString:partyString atOrigin:CGPointMake(9,48) withFont:font];
-        [partyString drawInRect:drawRect withFont:font];
+    if (SLFTypeNonEmptyStringOrNil(partyString)) {
+        NSDictionary *attributes = @{NSFontAttributeName: plainFont,
+                                     NSForegroundColorAttributeName: partyColor,
+                                     NSBackgroundColorAttributeName: backgroundColor};
+        drawRect = [self rectOfString:partyString atOrigin:CGPointMake(9,48) withAttributes:attributes];
+        [partyString drawInRect:drawRect withAttributes:attributes];
     }
 
     // District
-    if (!IsEmpty(_district)) {
+    if (SLFTypeNonEmptyStringOrNil(_district)) {
         CGFloat xoffset = drawRect.origin.x+drawRect.size.width;
-        [lightColor set];
-        if (!IsEmpty(partyString))
+        if (SLFTypeNonEmptyStringOrNil(partyString))
             xoffset += 6;
-        drawRect = [self rectOfString:_district atOrigin:CGPointMake(xoffset,48) withFont:font];
-        [_district drawInRect:drawRect withFont:font];
+        NSDictionary *attributes = @{NSFontAttributeName: plainFont,
+                                     NSForegroundColorAttributeName: lightColor,
+                                     NSBackgroundColorAttributeName: backgroundColor};
+        drawRect = [self rectOfString:_district atOrigin:CGPointMake(xoffset,48) withAttributes:attributes];
+        [_district drawInRect:drawRect withAttributes:attributes];
     }
     
     // Role
-    if (!IsEmpty(_role)) {
-        [accentColor set];
-        UIFont *roleFont = SLFFont(14);
-        drawRect = [self rectOfString:_role atOrigin:CGPointMake(aBounds.size.width - 90.f, 9.f) withFont:roleFont];
-        [_role drawInRect:drawRect withFont:roleFont lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentRight];
+    if (SLFTypeNonEmptyStringOrNil(_role)) {
+        static NSParagraphStyle *rightAlignedStyle = nil;
+        if (!rightAlignedStyle)
+        {
+            NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+            style.alignment = NSTextAlignmentRight;
+            style.lineBreakMode = NSLineBreakByTruncatingTail;
+            rightAlignedStyle = style;
+        }
+        NSDictionary *attributes = @{NSFontAttributeName: roleFont,
+                                     NSParagraphStyleAttributeName: rightAlignedStyle,
+                                     NSForegroundColorAttributeName: accentColor,
+                                     NSBackgroundColorAttributeName: backgroundColor};
+
+        drawRect = [self rectOfString:_role atOrigin:CGPointMake(aBounds.size.width - 90.f, 9.f) withAttributes:attributes];
+        [_role drawInRect:drawRect withAttributes:attributes];
     }
 
     CGContextRestoreGState(context);
     CGColorSpaceRelease(space);    
 }
+
+- (void)didUpdateFontSize:(NSNotification *)notification
+{
+    plainFont = SLFFontWithStyle(UIFontTextStyleBody, 0, -2);
+    nameFont = SLFFontWithStyle(UIFontTextStyleHeadline, UIFontDescriptorTraitBold, 0);
+    titleFont = SLFFontWithStyle(UIFontTextStyleFootnote, UIFontDescriptorTraitItalic, 0);
+    roleFont = SLFFontWithStyle(UIFontTextStyleSubheadline, UIFontDescriptorTraitBold, 0);
+
+    [self setNeedsDisplay];
+}
+
 
 @end

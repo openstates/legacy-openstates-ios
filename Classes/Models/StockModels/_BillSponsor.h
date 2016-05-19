@@ -20,7 +20,7 @@
 
 
 
-@property (nonatomic, retain) SLFBill* billInverse;
+@property (nonatomic, strong) SLFBill* billInverse;
 
 //- (BOOL)validateBillInverse:(id*)value_ error:(NSError**)error_;
 

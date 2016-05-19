@@ -25,10 +25,3 @@
 + (UIButton *)buttonForImage:(UIImage *)iconImage withFrame:(CGRect)rect glossy:(BOOL)glossy;
 @end
 
-@interface NSString (SLFDrawing)
-- (CGRect)rectWithFont:(UIFont *)font origin:(CGPoint)origin;
-- (CGRect)rectWithFont:(UIFont *)font origin:(CGPoint)origin constrainedToSize:(CGSize)constrainedSize lineBreakMode:(UILineBreakMode)lineBreakMode;
-- (CGSize)drawWithFont:(UIFont *)font origin:(CGPoint)origin;
-- (CGSize)drawWithFont:(UIFont *)font origin:(CGPoint)origin constrainedToSize:(CGSize)constrainedSize lineBreakMode:(UILineBreakMode)lineBreakMode;
-@end
-

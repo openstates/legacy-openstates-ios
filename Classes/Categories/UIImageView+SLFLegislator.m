@@ -24,7 +24,7 @@ static UIImage *placeholderImage;
     }
     NSString *photoURL = legislator.normalizedPhotoURL;
     if (!placeholderImage)
-        placeholderImage = [[UIImage imageNamed:@"placeholder"] retain];
+        placeholderImage = [UIImage imageNamed:@"placeholder"];
     if (SLFIsReachableAddressNoAlert(photoURL)) {
         [self setImageWithURL:[NSURL URLWithString:photoURL] placeholderImage:placeholderImage];
         return;

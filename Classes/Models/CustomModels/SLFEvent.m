@@ -2,8 +2,8 @@
 #import "SLFSortDescriptor.h"
 #import "NSDate+SLFDateHelper.h"
 #import "SLFEventsManager.h"
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/RestKit.h>
+#import <SLFRestKit/CoreData.h>
 #import <EventKit/EventKit.h>
 
 @implementation SLFEvent
@@ -69,7 +69,7 @@
 
 - (NSString *)title {
     NSString *title = [self.eventDescription stringByReplacingOccurrencesOfString:@"Committee Meeting\n" withString:@""];
-    if (!IsEmpty(self.status))
+    if (SLFTypeNonEmptyStringOrNil(self.status))
         title = [title stringByAppendingFormat:@" (%@)", [self.status capitalizedString]];
     return title;
 }
@@ -83,9 +83,9 @@
         event = [eventManager findOrCreateEventWithIdentifier:self.ekEventIdentifier];
         event.title = self.title;
         event.location = self.location;
-        if (!IsEmpty(self.notes))
+        if (SLFTypeNonEmptyStringOrNil(self.notes))
             event.notes = self.notes;
-        if (!IsEmpty(self.link) && [event respondsToSelector:@selector(setURL:)])
+        if (SLFTypeNonEmptyStringOrNil(self.link) && [event respondsToSelector:@selector(setURL:)])
             [event performSelector:@selector(setURL:) withObject:[NSURL URLWithString:self.link]];
         event.startDate = self.dateStart;
         if (!self.dateEnd) {

@@ -9,7 +9,7 @@
 // distribution.
 
 
-#import <RestKit/UI/UI.h>
+#import <SLFRestKit/UI.h>
 
 @interface SLFImprovedRKFetchedResultsTableController : RKFetchedResultsTableController
 

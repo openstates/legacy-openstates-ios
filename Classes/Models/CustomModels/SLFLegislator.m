@@ -1,8 +1,8 @@
 #import "SLFLegislator.h"
 #import "SLFDataModels.h"
 #import "SLFSortDescriptor.h"
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/RestKit.h>
+#import <SLFRestKit/CoreData.h>
 #import "MultiRowCalloutCell.h"
 
 @interface SLFLegislator()
@@ -71,7 +71,7 @@
 }
 
 - (NSArray *)sortedRoles {
-    if (IsEmpty(self.roles))
+    if (!SLFTypeNonEmptySetOrNil(self.roles))
         return nil;
     NSArray *sortedRoles = [self.roles sortedArrayUsingDescriptors:[CommitteeRole sortDescriptors]];
     return [self pruneJunkFromRoles:sortedRoles];
@@ -81,7 +81,7 @@
     NSMutableArray *prunedRoles = [NSMutableArray arrayWithArray:sortedRoles];
     NSMutableArray *junkRoles = [NSMutableArray array];
     for (CommitteeRole *role in sortedRoles) {
-        if (!IsEmpty(role.name))
+        if (SLFTypeNonEmptyStringOrNil(role.name))
             continue;
         [junkRoles addObject:role];
     }
@@ -170,12 +170,16 @@
     return [NSString stringWithFormat:NSLocalizedString(@"Term: %@ Years",@"Term and years a legislator serves"), self.chamberObj.term];
 }
 
-- (MultiRowCalloutCell *)calloutCell {
-    return [MultiRowCalloutCell cellWithImage:self.partyObj.image title:self.title subtitle:self.fullName userData:[NSDictionary dictionaryWithObject:self.legID forKey:@"legID"]];
+- (MultiRowCalloutCell *)calloutCell
+{
+    NSString *legId = SLFTypeStringOrNil(self.legID);
+    if (!legId)
+        legId = @"";
+    return [MultiRowCalloutCell cellWithImage:self.partyObj.image title:self.title subtitle:self.fullName userData:@{@"legID":legId}];
 }
 
 - (NSString *)normalizedPhotoURL {
-    if (!IsEmpty(self.legID))
+    if (SLFTypeNonEmptyStringOrNil(self.legID))
         return [NSString stringWithFormat:@"http://static.openstates.org/photos/small/%@.jpg", self.legID];
     return nil;
 }

@@ -21,12 +21,12 @@ const CGFloat kOpenStatesIconViewHeight = 512.f;
 @interface OpenStatesIconView() {
     CGGradientRef _gradient;
 }
-@property (nonatomic,retain) EPSBezierPath *outerPath;
-@property (nonatomic,retain) EPSBezierPath *lowerPath;
-@property (nonatomic,retain) EPSBezierPath *lowerShinePath;
-@property (nonatomic,retain) EPSBezierPath *upperShinePath;
-@property (nonatomic,retain) EPSBezierPath *upperPath;
-@property (nonatomic,retain) EPSBezierPath *chartPath;
+@property (nonatomic,strong) EPSBezierPath *outerPath;
+@property (nonatomic,strong) EPSBezierPath *lowerPath;
+@property (nonatomic,strong) EPSBezierPath *lowerShinePath;
+@property (nonatomic,strong) EPSBezierPath *upperShinePath;
+@property (nonatomic,strong) EPSBezierPath *upperPath;
+@property (nonatomic,strong) EPSBezierPath *chartPath;
 - (void)configure;
 - (EPSBezierPath *)outerFactory;
 - (EPSBezierPath *)lowerFactory;
@@ -65,14 +65,7 @@ const CGFloat kOpenStatesIconViewHeight = 512.f;
 }
 
 - (void)dealloc {
-    self.outerPath = nil;
-    self.lowerPath = nil;
-    self.lowerShinePath = nil;
-    self.upperShinePath = nil;
-    self.upperPath = nil;
-    self.chartPath = nil;
     [self destroyGradient];
-    [super dealloc];
 }
 
 - (void)configure {

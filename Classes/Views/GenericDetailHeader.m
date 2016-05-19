@@ -13,7 +13,7 @@
 #import "SLFDrawingExtensions.h"
 
 @interface GenericDetailHeader()
-@property (nonatomic,retain) UIBezierPath *borderOutlinePath;
+@property (nonatomic,strong) UIBezierPath *borderOutlinePath;
 @end
 
 static UIFont *titleFont;
@@ -33,11 +33,11 @@ static UIFont *detailFont;
     if (self) {
         self.backgroundColor = [UIColor clearColor];
         if (!titleFont)
-            titleFont = [SLFFont(18) retain];
+            titleFont = SLFFont(18);
         if (!subtitleFont)
-            subtitleFont = [SLFPlainFont(13) retain];
+            subtitleFont = SLFPlainFont(13);
         if (!detailFont)
-            detailFont = [SLFItalicFont(11) retain];
+            detailFont = SLFItalicFont(11);
         self.defaultSize = CGSizeMake(320, 100);
         [self configure];
     }
@@ -45,21 +45,18 @@ static UIFont *detailFont;
 }
 
 - (void)dealloc {
-    self.borderOutlinePath = nil;
-    self.title = nil;
     self.subtitle = nil;
     self.detail = nil;
-    [super dealloc];
 }
 
 - (CGSize)preferredSizeOfOneLineString:(NSString *)string withFont:(UIFont *)font {
-    if (IsEmpty(string))
+    if (!SLFTypeNonEmptyStringOrNil(string))
         return CGSizeZero;
     return [string sizeWithFont:font];
 }
 
 - (CGSize)preferredSizeOfDetail {
-    if (IsEmpty(_detail))
+    if (!SLFTypeNonEmptyStringOrNil(_detail))
         return CGSizeZero;
     return [_detail sizeWithFont:detailFont constrainedToSize:CGSizeMake(_defaultSize.width-40, _defaultSize.height-60)];
 }
@@ -110,20 +107,20 @@ static UIFont *detailFont;
     CGFloat maxWidth = _borderOutlinePath.bounds.size.width - offsetX;
 
     [darkColor set];
-    if (!IsEmpty(_title)) {
+    if (SLFTypeNonEmptyStringOrNil(_title)) {
         CGFloat actualFontSize;
         CGSize renderedSize = [_title drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:titleFont minFontSize:14 actualFontSize:&actualFontSize lineBreakMode:NSLineBreakByTruncatingTail baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
         offsetY += roundf(5+renderedSize.height);
     }
 
     [lightColor set];
-    if (!IsEmpty(_subtitle)) {
+    if (SLFTypeNonEmptyStringOrNil(_subtitle)) {
         CGFloat actualFontSize;
         CGSize renderedSize = [_subtitle drawAtPoint:CGPointMake(offsetX, offsetY) forWidth:maxWidth withFont:subtitleFont minFontSize:10 actualFontSize:&actualFontSize lineBreakMode:NSLineBreakByTruncatingTail baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
         offsetY += roundf(5+renderedSize.height);
     }
 
-    if (!IsEmpty(_detail)) {
+    if (SLFTypeNonEmptyStringOrNil(_detail)) {
         CGFloat maxHeight = _borderOutlinePath.bounds.size.height - offsetY - 15;
         CGSize constrainedSize = [_detail sizeWithFont:detailFont constrainedToSize:CGSizeMake(maxWidth, maxHeight)];
         CGRect detailRect = CGRectMake(offsetX, offsetY, constrainedSize.width, constrainedSize.height);

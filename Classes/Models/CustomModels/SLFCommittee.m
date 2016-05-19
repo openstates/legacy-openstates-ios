@@ -1,7 +1,7 @@
 #import "SLFDataModels.h"
 #import "SLFSortDescriptor.h"
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/RestKit.h>
+#import <SLFRestKit/CoreData.h>
 
 @implementation SLFCommittee
 

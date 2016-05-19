@@ -1,7 +1,7 @@
 #import "SLFDataModels.h"
 #import "SLFSortDescriptor.h"
-#import <RestKit/RestKit.h>
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/RestKit.h>
+#import <SLFRestKit/CoreData.h>
 
 @interface SLFDistrict()
 - (MKPolygon *)polygonRingWithCoordinates:(NSArray *)ringCoords interiorRings:(NSArray *)interiorRings;
@@ -65,10 +65,23 @@
     return MKCoordinateRegionMake(center, distanceToCenter);
 }
 
-- (NSArray *)calloutCells {
-    if (IsEmpty(self.legislators))
+- (NSArray *)calloutCells
+{
+    NSArray *legislators = SLFTypeNonEmptySetOrNil(self.legislators).allObjects;
+    if (!legislators)
         return nil;
-    return [self valueForKeyPath:@"legislators.calloutCell"];
+    NSMutableArray *callouts = [[NSMutableArray alloc] initWithCapacity:legislators.count];
+    [legislators enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        SLFLegislator *legislator = SLFValueIfClass(SLFLegislator, obj);
+        if (!legislator)
+            return;
+        MultiRowCalloutCell *cell = [legislator calloutCell];
+        if (cell)
+            [callouts addObject:cell];
+    }];
+    if (!callouts.count)
+        return nil;
+    return callouts;
 }
 
 - (NSString *)title {
@@ -127,7 +140,7 @@
 }
 
 - (BOOL)isUpperChamber {
-    BOOL hasUpperTag = ( !IsEmpty(self.boundaryID) && [self.boundaryID hasPrefix:@"sldu"] );
+    BOOL hasUpperTag = ([SLFTypeStringOrNil(self.boundaryID) hasPrefix:@"sldu"] );
     if (hasUpperTag || [self.chamber isEqualToString:SLFChamberUpperType])
         return YES;
     return NO;
@@ -142,8 +155,8 @@
         // If we've already cached a polygon in memory, return it rather than recalculate it.
     if (self.districtPolygon)
         return self.districtPolygon;
-    NSArray *rings = [self shape];
-    if(IsEmpty(rings)) {
+    NSArray *rings = SLFTypeNonEmptyArrayOrNil([self shape]);
+    if (!rings) {
         RKLogError(@"District %@ shape is empty or has no rings.", self.boundaryID);
         return nil;
     }
@@ -151,8 +164,8 @@
 #if USE_BOUNDARY_SUBARRAY_HACK
 /* Legislative districts, by law and by court ruling, can't have multiple *disconnected* parts.  They must be contiguous.
    However, the boundary service accommodates independent multipolygon shapes.  We have to dereference to get our main polygon */
-    rings = [rings objectAtIndex:0];
-    if(IsEmpty(rings)) {
+    rings = SLFTypeNonEmptyArrayOrNil(rings[0]);
+    if (!rings) {
         RKLogError(@"District %@ shape is empty or has no rings.", self.boundaryID);
         return nil;
     }
@@ -163,7 +176,7 @@
     NSInteger index = ringCount - 1;
     NSMutableArray *interiorRings = (ringCount > 1 ? [[NSMutableArray alloc] initWithCapacity:index] : nil);
     for (NSArray *ring in [rings reverseObjectEnumerator]) {
-        if (IsEmpty(ring)) {
+        if (!SLFTypeNonEmptyArrayOrNil(ring)) {
             RKLogError(@"District %@ shape has null or malformed content.", self.boundaryID);
             break;
         }
@@ -189,7 +202,6 @@
 
 - (MKPolygon *)polygonRingWithCoordinates:(NSArray *)ringCoords interiorRings:(NSArray *)interiorRings {    
     NSUInteger numberOfCoordinates = [ringCoords count];
-    RKLogDebug(@"number of coordinates: %lu", (unsigned long)numberOfCoordinates);
     if (numberOfCoordinates == 0)
         return nil;
     CLLocationCoordinate2D *cArray = calloc(numberOfCoordinates, sizeof(CLLocationCoordinate2D));

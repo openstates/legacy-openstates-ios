@@ -88,28 +88,6 @@ static void addGlossPath(CGContextRef context, CGRect rect);
 }
 @end
 
-@implementation NSString (SLFDrawing)
-- (CGRect)rectWithFont:(UIFont *)font origin:(CGPoint)origin {
-    CGSize textSize = [self sizeWithFont:font];
-    return CGRectMake(origin.x, origin.y, textSize.width, textSize.height);
-}
-
-- (CGRect)rectWithFont:(UIFont *)font origin:(CGPoint)origin constrainedToSize:(CGSize)constrainedSize lineBreakMode:(UILineBreakMode)lineBreakMode {
-    CGSize textSize = [self sizeWithFont:font constrainedToSize:constrainedSize lineBreakMode:lineBreakMode];
-    return CGRectMake(origin.x, origin.y, textSize.width, textSize.height);
-}
-
-- (CGSize)drawWithFont:(UIFont *)font origin:(CGPoint)origin {
-    CGRect drawRect = [self rectWithFont:font origin:origin];
-    return [self drawInRect:drawRect withFont:font];
-}
-
-- (CGSize)drawWithFont:(UIFont *)font origin:(CGPoint)origin constrainedToSize:(CGSize)constrainedSize lineBreakMode:(UILineBreakMode)lineBreakMode {
-    CGRect drawRect = [self rectWithFont:font origin:origin constrainedToSize:constrainedSize lineBreakMode:lineBreakMode];
-    return [self drawInRect:drawRect withFont:font lineBreakMode:lineBreakMode];
-}
-@end
-
 @implementation SLFDrawing
 
 #if !defined(DegreesToRadians)

@@ -14,7 +14,6 @@
 #import "SLFMappingsManager.h"
 #import "SLFRestKitManager.h"
 #import "SLFReachable.h"
-#import "SVWebViewController.h"
 #import "NSDate+SLFDateHelper.h"
 #import "SLFEventsManager.h"
 #import "GenericDetailHeader.h"
@@ -62,9 +61,6 @@
 
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-	self.event = nil;
-    self.tableController = nil;
-    [super dealloc];
 }
 
 - (void)viewDidUnload {
@@ -111,18 +107,17 @@
 }
 
 - (void)configureTableHeader {
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) bself = self;
     RKTableSection *headerSection = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
         GenericDetailHeader *header = [[GenericDetailHeader alloc] initWithFrame:CGRectMake(0, 0, bself.tableView.width, 100)];
         section.headerTitle = @"";
         header.title = bself.event.title;
-        if (!IsEmpty(bself.event.type))
+        if (SLFTypeNonEmptyStringOrNil(bself.event.type))
             header.subtitle = [[bself.event.type stringByReplacingOccurrencesOfString:@":" withString:@" "] capitalizedString];
         header.detail = bself.event.dateStartForDisplay;
         [header configure];
         section.headerHeight = header.height;
         section.headerView = header;
-        [header release];
     }];
     [_tableController addSection:headerSection];
 }
@@ -140,7 +135,7 @@
 }
 
 - (void)configureEventInfo {
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) bself = self;
     @try {
         StyledCellMapping *cellMapping = [StyledCellMapping cellMapping];
         [bself.tableView registerClass:cellMapping.cellClass forCellReuseIdentifier:cellMapping.reuseIdentifier];
@@ -168,59 +163,77 @@
     SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Event Details", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadTableItems:tableItems inSection:sectionIndex];
-    [tableItems release];
 }
 
 - (void)configureAdditional {
     NSMutableArray *tableItems = [[NSMutableArray alloc] init];
-    if (!IsEmpty(_event.link))
+    if (SLFTypeNonEmptyStringOrNil(_event.link))
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Link",@"") subtitle:_event.link url:_event.link]];
     for (GenericAsset *source in _event.sources) {
         NSString *subtitle = source.name;
-        if (IsEmpty(subtitle))
+        if (!SLFTypeNonEmptyStringOrNil(subtitle))
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Web Resource", @"") subtitle:subtitle url:source.url]];
     }
     SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Additional Info", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadTableItems:tableItems inSection:sectionIndex];
-    [tableItems release];
 }
 
 - (void)configureNotifications {
     NSMutableArray *tableItems = [[NSMutableArray alloc] init];
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) wSelf = self;
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
+        __strong __typeof__(wSelf) sSelf = wSelf;
+
         tableItem.text = NSLocalizedString(@"iCal", @"");
         tableItem.detailText = NSLocalizedString(@"Schedule in Calendar",@"");
-        StyledCellMapping *cellMapping = [bself eventTableCellMapUsingSelectable:YES];
+        StyledCellMapping *cellMapping = [sSelf eventTableCellMapUsingSelectable:YES];
         tableItem.cellMapping = cellMapping;
+
+        __weak __typeof__(sSelf) wSelf = sSelf;
+
         cellMapping.onSelectCell = ^(void) {
-            EKEvent *ekEvent = bself.event.ekEvent;
+            if (!wSelf)
+                return;
+            __strong __typeof__(wSelf) sSelf = wSelf;
+
+            EKEvent *ekEvent = sSelf.event.ekEvent;
             if (!ekEvent)
                 return;
-            [[SLFEventsManager sharedManager] presentEventEditorForEvent:ekEvent fromParent:bself];
+            [[SLFEventsManager sharedManager] presentEventEditorForEvent:ekEvent fromParent:sSelf];
         };
     }]];
     if (SLFIsIOS5OrGreater()) {
         [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
+            __strong __typeof__(wSelf) sSelf = wSelf;
+
             SLFEventsManager *eventManager = [SLFEventsManager sharedManager];
             tableItem.detailText = [eventManager eventCalendar].title;
             tableItem.text = NSLocalizedString(@"Calendar",@"");
-            StyledCellMapping *cellMapping = [bself eventTableCellMapUsingSelectable:YES];
+            StyledCellMapping *cellMapping = [sSelf eventTableCellMapUsingSelectable:YES];
             tableItem.cellMapping = cellMapping;
+
+            __weak __typeof__(sSelf) wSelf = sSelf;
             cellMapping.onSelectCell = ^(void) {
-                [eventManager presentCalendarChooserFromParent:bself];
+                if (!wSelf)
+                    return;
+                [eventManager presentCalendarChooserFromParent:wSelf];
             };
         }]];
     }
     [tableItems addObject:[RKTableItem tableItemUsingBlock:^(RKTableItem* tableItem) {
-        tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Subscribe to all %@ events", @""), [bself.event.stateID uppercaseString]];
+        __strong __typeof__(wSelf) sSelf = wSelf;
+
+        tableItem.detailText = [NSString stringWithFormat:NSLocalizedString(@"Subscribe to all %@ events", @""), [sSelf.event.stateID uppercaseString]];
         tableItem.text = NSLocalizedString(@"Feed", @"");
-        StyledCellMapping *cellMapping = [bself eventTableCellMapUsingSelectable:YES];
+        StyledCellMapping *cellMapping = [sSelf eventTableCellMapUsingSelectable:YES];
         tableItem.cellMapping = cellMapping;
+
+        __weak __typeof__(sSelf) wSelf = sSelf;
+
         cellMapping.onSelectCell = ^(void) {
-            NSString *feedAddress = bself.event.stateObj.eventsFeedAddress;
+            NSString *feedAddress = wSelf.event.stateObj.eventsFeedAddress;
             NSURL *subscriptionURL = [NSURL URLWithString:feedAddress];
             if ([[SLFReachable sharedReachable] isURLReachable:subscriptionURL] && ([[UIApplication sharedApplication] canOpenURL:subscriptionURL]))
                 [[UIApplication sharedApplication] openURL:subscriptionURL];
@@ -229,7 +242,6 @@
     SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Event Alerts", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadTableItems:tableItems inSection:sectionIndex];
-    [tableItems release];
 }
 
 - (void)calendarDidChange:(EKCalendar *)calendar {

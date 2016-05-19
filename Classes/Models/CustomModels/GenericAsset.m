@@ -1,6 +1,6 @@
 #import "GenericAsset.h"
 #import "SLFSortDescriptor.h"
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 
 @implementation GenericAsset
 
@@ -17,7 +17,7 @@
 }
 
 - (NSString *)fileName {
-    if (!IsEmpty(self.url)) {
+    if (SLFTypeNonEmptyStringOrNil(self.url)) {
         return [self.url lastPathComponent];
     }
     return @"";

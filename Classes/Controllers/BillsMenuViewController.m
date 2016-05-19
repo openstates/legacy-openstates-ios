@@ -7,7 +7,6 @@
 //  This work is licensed under the BSD-3 License included with this source
 // distribution.
 
-
 #import "BillsMenuViewController.h"
 #import "SLFDataModels.h"
 #import "SLFTheme.h"
@@ -47,9 +46,6 @@
 
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-    self.state = nil;
-    self.tableController = nil;
-    [super dealloc];
 }
 
 - (void)viewDidUnload {
@@ -112,13 +108,12 @@
     [cellMap mapKeyPath:@"highlightedImage" toAttribute:@"imageView.highlightedImage"];
     [cellMap addDefaultMappings];
     [_tableController loadTableItems:tableItems withMapping:cellMap];
-    [tableItems release];
 }
 
 - (RKTableViewCellMapping *)menuCellMapping {
     StyledCellMapping *cellMap = [StyledCellMapping subtitleMapping];
     cellMap.useAlternatingRowColors = YES;
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) bself = self;
     cellMap.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath* indexPath) {
         [bself.searchBar resignFirstResponder];
         RKTableItem* tableItem = (RKTableItem*) object;
@@ -136,7 +131,6 @@
         vc = [[BillsViewController alloc] initWithState:self.state resourcePath:resourcePath];
         vc.title = [NSString stringWithFormat:@"%@: %@", self.state.stateIDForDisplay, @"Recent Updates (5 days)"];
         [self stackOrPushViewController:vc];
-        [vc release];
         return;
     }
     Class controllerClass = nil;
@@ -148,7 +142,7 @@
         controllerClass = [BillsSubjectsViewController class];
     if (controllerClass) {
         NSString *path = [SLFActionPathNavigator navigationPathForController:controllerClass withResource:self.state];
-        if (!IsEmpty(path))
+        if (SLFTypeNonEmptyStringOrNil(path))
             [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:self popToRoot:NO];
     }
 }

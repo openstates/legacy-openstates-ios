@@ -9,7 +9,7 @@
 
 
 @interface TableSectionHeaderView : UIView
-@property (nonatomic,retain) IBOutlet UILabel *titleLabel;
+@property (nonatomic,strong) IBOutlet UILabel *titleLabel;
 @property (nonatomic,assign) UITableViewStyle style;
 @property (nonatomic,copy) NSString *title;
 

@@ -1,3 +1,6 @@
+#ifndef SLFDataModels_h
+#define SLFDataModels_h "SLFDataModels.h"
+
 #import "BillAction.h"
 #import "BillRecordVote.h"
 #import "BillSponsor.h"
@@ -17,3 +20,5 @@
 #import "SLFParty.h"
 #import "SLFChamber.h"
 #import "BillsSubjectsEntry.h"
+
+#endif

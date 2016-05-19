@@ -11,13 +11,13 @@
 #import "NSDate+SLFDateHelper.h"
 
 @interface SLFDateHelper : NSObject
-@property (nonatomic, retain) NSDateFormatter *standardFormatter;
-@property (nonatomic, retain) NSDateFormatter *usFormatter;
-@property (nonatomic, retain) NSDateFormatter *localizedFormatter;
-@property (nonatomic, retain) NSLocale *deviceLocale;
-@property (nonatomic, retain) NSCalendar *deviceCalendar;
-@property (nonatomic, retain) NSLocale *usLocale;
-@property (nonatomic, retain) NSCalendar *usCalendar;
+@property (nonatomic, strong) NSDateFormatter *standardFormatter;
+@property (nonatomic, strong) NSDateFormatter *usFormatter;
+@property (nonatomic, strong) NSDateFormatter *localizedFormatter;
+@property (nonatomic, strong) NSLocale *deviceLocale;
+@property (nonatomic, strong) NSCalendar *deviceCalendar;
+@property (nonatomic, strong) NSLocale *usLocale;
+@property (nonatomic, strong) NSCalendar *usCalendar;
 + (SLFDateHelper *)sharedHelper;
 @end
 
@@ -41,7 +41,7 @@
 - (id)init {
     self=[super init];
     if (self) {
-        _usCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        _usCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         _usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
         self.deviceCalendar = [NSCalendar autoupdatingCurrentCalendar];
         self.deviceLocale = [NSLocale autoupdatingCurrentLocale];
@@ -56,16 +56,6 @@
     return self;
 }
 
-- (void)dealloc {
-    self.standardFormatter = nil;
-    self.usFormatter = nil;
-    self.localizedFormatter = nil;
-    self.deviceLocale = nil;
-    self.deviceCalendar = nil;
-    self.usLocale = nil;
-    self.usCalendar = nil;
-    [super dealloc];
-}
 
 @end
 
@@ -127,7 +117,7 @@
     NSDateFormatter *formatter = [[SLFDateHelper sharedHelper] localizedFormatter];
     NSCalendar *calendar = formatter.calendar;
     NSDate *today = [NSDate date];
-    NSDateComponents *offsetComponents = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate:today];
+    NSDateComponents *offsetComponents = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:today];
     NSDate *midnight = [calendar dateFromComponents:offsetComponents];
     NSString *prefix = nil;
     NSString *template = nil;
@@ -141,11 +131,10 @@
         NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
         [componentsToSubtract setDay:-7];
         NSDate *lastweek = [calendar dateByAddingComponents:componentsToSubtract toDate:today options:0];
-        [componentsToSubtract release];
         if ([self compare:lastweek] == NSOrderedDescending)
             template = @"EEEE";  // Tuesday
         else {
-            NSDateComponents *dateComponents = [calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:self];
+            NSDateComponents *dateComponents = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self];
             NSInteger thisYear = [offsetComponents year];
             NSInteger thatYear = [dateComponents year];            
             if (thatYear == thisYear)
@@ -235,7 +224,7 @@
  */
 - (NSUInteger)daysAgo {
     NSCalendar *calendar = [SLFDateHelper sharedHelper].usCalendar;
-    NSDateComponents *components = [calendar components:(NSDayCalendarUnit) fromDate:self toDate:[NSDate date] options:0];
+    NSDateComponents *components = [calendar components:(NSCalendarUnitDay) fromDate:self toDate:[NSDate date] options:0];
     return [components day];
 }
 
@@ -248,24 +237,24 @@
 
 - (NSUInteger)weekday {
     NSCalendar *calendar = [SLFDateHelper sharedHelper].usCalendar;
-    NSDateComponents *weekdayComponents = [calendar components:(NSWeekdayCalendarUnit) fromDate:self];
+    NSDateComponents *weekdayComponents = [calendar components:(NSCalendarUnitWeekday) fromDate:self];
     return [weekdayComponents weekday];
 }
 
 - (NSUInteger)year {
     NSCalendar *calendar = [SLFDateHelper sharedHelper].usCalendar;
-    NSDateComponents *yearComponents = [calendar components:(NSYearCalendarUnit) fromDate:self];
+    NSDateComponents *yearComponents = [calendar components:(NSCalendarUnitYear) fromDate:self];
     return [yearComponents year];
 }
 
 - (NSDate *)beginningOfWeek {
     NSCalendar *calendar = [SLFDateHelper sharedHelper].usCalendar;
     NSDate *beginningOfWeek = nil;
-    BOOL isValid = [calendar rangeOfUnit:NSWeekCalendarUnit startDate:&beginningOfWeek interval:NULL forDate:self];
+    BOOL isValid = [calendar rangeOfUnit:NSCalendarUnitWeekOfMonth startDate:&beginningOfWeek interval:NULL forDate:self];
     if (isValid) {
         return beginningOfWeek;
     } 
-    NSDateComponents *weekdayComponents = [calendar components:NSWeekdayCalendarUnit fromDate:self];
+    NSDateComponents *weekdayComponents = [calendar components:NSCalendarUnitWeekday fromDate:self];
     
     /*
      Create a date components to represent the number of days to subtract from the current date.
@@ -275,26 +264,24 @@
     [componentsToSubtract setDay: 0 - ([weekdayComponents weekday] - 1)];
     beginningOfWeek = nil;
     beginningOfWeek = [calendar dateByAddingComponents:componentsToSubtract toDate:self options:0];
-    [componentsToSubtract release];
     
-    NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate:beginningOfWeek];
+    NSDateComponents *components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:beginningOfWeek];
     return [calendar dateFromComponents:components];
 }
 
 - (NSDate *)beginningOfDay {
     NSCalendar *calendar = [[SLFDateHelper sharedHelper] usCalendar];
-    NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)  fromDate:self];
+    NSDateComponents *components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay)  fromDate:self];
     return [calendar dateFromComponents:components];
 }
 
 - (NSDate *)endOfWeek {
     NSCalendar *calendar = [[SLFDateHelper sharedHelper] usCalendar];
-    NSDateComponents *weekdayComponents = [calendar components:NSWeekdayCalendarUnit fromDate:self];
+    NSDateComponents *weekdayComponents = [calendar components:NSCalendarUnitWeekday fromDate:self];
     NSDateComponents *componentsToAdd = [[NSDateComponents alloc] init];
         // to get the end of week for a particular date, add (7 - weekday) days
     [componentsToAdd setDay:(7 - [weekdayComponents weekday])];
     NSDate *endOfWeek = [calendar dateByAddingComponents:componentsToAdd toDate:self options:0];
-    [componentsToAdd release];
     
     return endOfWeek;
 }
@@ -304,7 +291,6 @@
     NSDateComponents *componentsToAdd = [[NSDateComponents alloc] init];
     [componentsToAdd setDay:days];
     NSDate *timeFrom = [calendar dateByAddingComponents:componentsToAdd toDate:self options:0];
-    [componentsToAdd release];
     return timeFrom;
 }
 
@@ -319,7 +305,7 @@
 }
 
 + (NSDate *)localDateFromUTCTimestamp:(NSString *)utcString {
-    if (IsEmpty(utcString))
+    if (!SLFTypeNonEmptyStringOrNil(utcString))
         return nil;
     NSDate *utcDate = [NSDate dateFromTimestampString:utcString];
     if (!utcDate)

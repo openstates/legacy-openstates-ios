@@ -17,7 +17,7 @@
 #endif
 
 @interface SLFAnalytics()
-@property (nonatomic,retain) NSMutableSet *adapters;
+@property (nonatomic,strong) NSMutableSet *adapters;
 - (void)configureAdapters;
 @end
 
@@ -40,10 +40,6 @@
     return self;
 }
 
-- (void)dealloc {
-    self.adapters = nil;
-    [super dealloc];
-}
 
 - (void)configureAdapters {
     self.adapters = [NSMutableSet set];
@@ -54,7 +50,7 @@
 }
 
 - (void)beginTracking {
-    if (IsEmpty(_adapters))
+    if (!_adapters.count)
         [self configureAdapters];
     
     for (id<SLFAnalyticsAdapter> adapter in _adapters)
@@ -78,22 +74,25 @@
 }
 
 - (void)tagEnvironmentVariables:(NSDictionary *)variables {
+    variables = SLFTypeDictionaryOrNil(variables);
     for (id<SLFAnalyticsAdapter> adapter in _adapters) {
-        if (![adapter isOptedIn] || IsEmpty(variables))
+        if (![adapter isOptedIn] || !variables.count)
             continue;
         [adapter tagEnvironmentVariables:variables];
     }
 }
 
 - (void)tagEvent:(NSString *)event attributes:(NSDictionary *)attributes {
+    event = SLFTypeNonEmptyStringOrNil(event);
     for (id<SLFAnalyticsAdapter> adapter in _adapters) {
-        if (![adapter isOptedIn] || IsEmpty(event))
+        if (![adapter isOptedIn] || !event)
             continue;
         [adapter tagEvent:event attributes:attributes];
     }
 }
 
 - (void)tagEvent:(NSString *)event {
+    event = SLFTypeNonEmptyStringOrNil(event);
     [self tagEvent:event attributes:nil];
 }
 

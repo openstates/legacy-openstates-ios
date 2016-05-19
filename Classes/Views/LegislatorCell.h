@@ -8,17 +8,17 @@
 // distribution.
 
 
-#import <RestKit/UI/UI.h>
+#import <SLFRestKit/UI.h>
 
 @class SLFLegislator;
 @class LegislatorCellView;
 @interface LegislatorCell : UITableViewCell
 @property (nonatomic,readonly) CGSize cellSize;
-@property (nonatomic,retain) SLFLegislator *legislator;
-@property (nonatomic,retain) LegislatorCellView *cellContentView;
+@property (nonatomic,strong) SLFLegislator *legislator;
+@property (nonatomic,strong) LegislatorCellView *cellContentView;
 @property (nonatomic,copy) NSString *role;
 @property (nonatomic,assign) BOOL useDarkBackground;
-@property (nonatomic,assign) NSString *genericName;
+@property (nonatomic,weak) NSString *genericName;
 @end
 
 @interface LegislatorCellMapping : RKTableViewCellMapping

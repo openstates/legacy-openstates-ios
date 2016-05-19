@@ -15,12 +15,12 @@
 
 @interface MiniCellBadge : UIView
 @property (nonatomic,copy) NSString *text;
-@property (nonatomic,retain) UIBezierPath *ellipse;
-@property (nonatomic,assign) SLFBadgeCell *cell;
-@property (nonatomic,retain) UIColor *badgeColor;
-@property (nonatomic,retain) UIColor *highlightColor;
+@property (nonatomic,strong) UIBezierPath *ellipse;
+@property (nonatomic,weak) SLFBadgeCell *cell;
+@property (nonatomic,strong) UIColor *badgeColor;
+@property (nonatomic,strong) UIColor *highlightColor;
 @property (nonatomic,assign) BOOL highlighted;
-@property (nonatomic,retain) UIFont *textFont;
+@property (weak, nonatomic,readonly) UIFont *textFont;
 @end
 
 @implementation MiniCellBadge
@@ -32,13 +32,14 @@
 @synthesize highlightColor = _highlightColor;
 @synthesize highlighted = _highlighted;
 
-- (id)initWithText:(NSString *)text cell:(SLFBadgeCell *)cell {
+- (id)initWithText:(NSString *)text cell:(SLFBadgeCell *)cell
+{
     self = [super initWithFrame:CGRectZero];
-    if (self) {
+    if (self)
+    {
         self.opaque = YES;
         self.text = text;
         self.cell = cell;
-        self.textFont = SLFFont(12);
         self.badgeColor = [SLFAppearance accentBlueColor];
         _highlighted = NO;
         self.highlightColor = [UIColor whiteColor];
@@ -46,53 +47,94 @@
     return self;
 }
 
-- (void)dealloc {
-    self.textFont = nil;
-    self.text = nil;
-    self.ellipse = nil;
+- (void)dealloc
+{
     self.cell = nil;
-    self.badgeColor = nil;
-    self.highlightColor = nil;
-    [super dealloc];
 }
 
-- (CGSize)sizeThatFits:(CGSize)size {
-    CGSize badgeTextSize = [self.text sizeWithFont:SLFFont(12)];
-    badgeTextSize.width += 16;
-    badgeTextSize.height += 8;
+- (UIFont *)textFont
+{
+    static UIFont *badgeFont = nil;
+    if (!badgeFont)
+        badgeFont = SLFFont(12);
+    return badgeFont;
+}
+
+- (CGSize)sizeThatFits:(CGSize)size
+{
+    NSString *text = self.text;
+    if (!text || !text.length)
+        return CGSizeZero;
+    UIFont *font = self.textFont;
+    NSDictionary *attributes = @{NSFontAttributeName:font};
+    CGRect rect = [text boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+    rect = CGRectIntegral(rect);
+    CGSize badgeTextSize = rect.size;
+    badgeTextSize.width = roundf(badgeTextSize.width) + 16;
+    badgeTextSize.height = roundf(badgeTextSize.height) + 8;
     return badgeTextSize;
 }
 
-- (void)setText:(NSString *)text {
+- (void)setText:(NSString *)text
+{
     SLFRelease(_text);
     _text = [text copy];
     [self sizeToFit];
-    if (text) {
-        self.ellipse = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:12];
+    if (!text || !text.length)
+    {
+        self.ellipse = nil;
+        return;
     }
+    CGRect bounds = CGRectIntegral(self.bounds);
+    self.ellipse = [UIBezierPath bezierPathWithRoundedRect:bounds cornerRadius:12];
 }
 
-- (void)drawRect:(CGRect)rect {
-    CGContextRef context = UIGraphicsGetCurrentContext();
+- (void)drawRect:(CGRect)rect
+{
+    [super drawRect:rect];
     UIColor *color = _badgeColor;
     if (_highlighted)
         color = _highlightColor;
+
+    CGContextRef context = UIGraphicsGetCurrentContext();
     [color set];
     [_ellipse fill];
     
     CGContextSaveGState(context);
+
     if (_highlighted)
         CGContextSetBlendMode(context, kCGBlendModeClear);
     else
         [self.backgroundColor set];
-    [_text drawInRect:CGRectInset(rect, 8, 4) withFont:_textFont];
+
     CGContextRestoreGState(context);
+
+    if (_text && _text.length)
+    {
+        static NSParagraphStyle *centeredStyle = nil;
+        if (!centeredStyle)
+        {
+            NSMutableParagraphStyle *centered = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+            centered.alignment = NSTextAlignmentCenter;
+            centeredStyle = centered;
+        }
+
+        UIColor *background = self.badgeColor;
+        if (!background)
+            background = [UIColor clearColor];
+
+        NSDictionary *attributes = @{NSFontAttributeName:self.textFont,
+                                     NSForegroundColorAttributeName: (_highlighted ? [UIColor blackColor] : [UIColor whiteColor]),
+                                     NSBackgroundColorAttributeName: color,
+                                     NSParagraphStyleAttributeName: centeredStyle};
+        [_text drawInRect:CGRectInset(rect, 8, 4) withAttributes:attributes];
+    }
 }
 
 @end
 
 @interface SLFBadgeCell()
-@property (nonatomic,retain) MiniCellBadge *miniBadge;
+@property (nonatomic,strong) MiniCellBadge *miniBadge;
 @end
 
 @implementation SLFBadgeCell
@@ -100,16 +142,22 @@
 @synthesize subjectEntry = _subjectEntry;
 @synthesize miniBadge = _miniBadge;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    
-    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
-        self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self)
+    {
         _isClickable = YES;
         self.opaque = YES;
-        self.textLabel.font = SLFFont(15);
+
+        static UIFont *labelFont = nil;
+        if (!labelFont)
+            labelFont = SLFFont(15);
+        self.textLabel.font = labelFont;
         self.textLabel.textColor = [SLFAppearance cellTextColor];
         _miniBadge = [[MiniCellBadge alloc] initWithText:nil cell:self];
         self.accessoryView = _miniBadge;
+        self.backgroundColor = [SLFAppearance cellBackgroundLightColor];
     }
     return self;
 }
@@ -117,59 +165,81 @@
 #pragma mark -
 #pragma mark init & dealloc
 
-- (void)dealloc {
+- (void)dealloc
+{
     self.subjectEntry = nil;
-    self.miniBadge = nil;
-    [super dealloc];
 }
 
-- (void)setSubjectEntry:(BillsSubjectsEntry *)subjectEntry {
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
+    self.subjectEntry = nil;
+}
+
+- (void)setSubjectEntry:(BillsSubjectsEntry *)subjectEntry
+{
     SLFRelease(_subjectEntry);
     if (!subjectEntry)
+    {
+        self.textLabel.text = nil;
+        self.miniBadge.text = nil;
+        self.isClickable = NO;
         return;
-    _subjectEntry = [subjectEntry retain];
+    }
+    _subjectEntry = subjectEntry;
     self.textLabel.text = subjectEntry.name;
     self.miniBadge.text = [NSString stringWithFormat:NSLocalizedString(@"%@ Bills", @""), subjectEntry.billCount];
     self.isClickable = [subjectEntry.billCount integerValue] > 0;
 }
 
-- (void)updateBadgeState {
-    _miniBadge.highlighted = (_isClickable && (self.isHighlighted || self.isSelected));
-    [_miniBadge setNeedsDisplay];
-}
-
-- (void)setIsClickable:(BOOL)isClickable {
-    _isClickable = isClickable;
-    if (isClickable) {
-        self.selectionStyle = UITableViewCellSelectionStyleBlue;
-        self.textLabel.textColor = [SLFAppearance cellTextColor];
-        self.miniBadge.alpha = 1;
-        _miniBadge.opaque = YES;
-        _miniBadge.badgeColor = [SLFAppearance  accentBlueColor];
-    }
-    else {
-        self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.textLabel.textColor = SLFColorWithRGBShift(self.backgroundColor, -60); // doesn't use CG blending
-        self.miniBadge.alpha = .3;
-        _miniBadge.opaque = NO;
-        _miniBadge.badgeColor = [SLFAppearance accentGreenColor];
-    }
-    [self updateBadgeState];
+- (void)updateBadgeState
+{
+    self.miniBadge.highlighted = (_isClickable && (self.isHighlighted || self.isSelected));
+    [self.miniBadge setNeedsDisplay];
+    [self.textLabel setNeedsDisplay];
     [self setNeedsDisplay];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+- (void)setIsClickable:(BOOL)isClickable
+{
+    _isClickable = isClickable;
+    if (isClickable)
+    {
+        self.selectionStyle = UITableViewCellSelectionStyleBlue;
+        self.textLabel.textColor = [SLFAppearance cellTextColor];
+        self.miniBadge.alpha = 1;
+        self.miniBadge.opaque = YES;
+        self.miniBadge.badgeColor = [SLFAppearance  accentBlueColor];
+    }
+    else
+    {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.textLabel.textColor = SLFColorWithRGBShift(self.backgroundColor, -60); // doesn't use CG blending
+        self.miniBadge.alpha = .3;
+        self.miniBadge.opaque = NO;
+        self.miniBadge.badgeColor = [SLFAppearance accentGreenColor];
+    }
+    [self updateBadgeState];
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
     [super setSelected:selected animated:animated];
     [self updateBadgeState];
 }
 
-- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
+{
     [super setHighlighted:highlighted animated:animated];
     [self updateBadgeState];
 }
 
-- (void)setBackgroundColor:(UIColor *)backgroundColor {
+- (void)setBackgroundColor:(UIColor *)backgroundColor
+{
     [super setBackgroundColor:backgroundColor];
-    _miniBadge.backgroundColor = backgroundColor;
+    self.miniBadge.backgroundColor = backgroundColor;
+    self.textLabel.backgroundColor = backgroundColor;
+    [self updateBadgeState];
 }
+
 @end

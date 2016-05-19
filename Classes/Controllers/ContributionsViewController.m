@@ -34,8 +34,6 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];    
-    self.dataSource = nil;
-    [super dealloc];
 }
 
 - (void)viewDidUnload {
@@ -62,22 +60,20 @@
     nimsp.numberOfLines = 3;
     nimsp.text = NSLocalizedString(@"Data generously provided by the \nNational Institute on Money in State Politics \nand the Center for Responsive Politics.", @"");
     self.tableView.tableFooterView = nimsp;
-    [nimsp release];
     self.screenName = @"Contributions Screen";
 }
 
 - (void)updateTableHeader {
-    NSDictionary *headerData = self.dataSource.tableHeaderData;
-    if (IsEmpty(headerData)) {
+    NSDictionary *headerData = SLFTypeDictionaryOrNil(self.dataSource.tableHeaderData);
+    if (!headerData) {
         UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,1,10)];
         headerView.backgroundColor = [UIColor clearColor];
         self.tableView.tableHeaderView = headerView;
-        [headerView release];
         return;
     }
-    NSString *title = [headerData valueForKey:@"title"];
-    NSString *subtitle = [headerData valueForKey:@"subtitle"];
-    NSString *detail = [headerData valueForKey:@"detail"];
+    NSString *title = SLFTypeNonEmptyStringOrNil(headerData[@"title"]);
+    NSString *subtitle = SLFTypeNonEmptyStringOrNil(headerData[@"subtitle"]);
+    NSString *detail = SLFTypeNonEmptyStringOrNil(headerData[@"detail"]);
     
     CGSize boxSize = CGSizeMake(self.tableView.width, 160);
     CGFloat offsetY = 0;
@@ -95,8 +91,6 @@
     headerView.backgroundColor = [UIColor clearColor];
     [headerView addSubview:detailBox];
     self.tableView.tableHeaderView = headerView;
-    [detailBox release];
-    [headerView release];
 }
 
 - (void)tableDataChanged:(NSNotification*)notification {
@@ -127,10 +121,10 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section > [tableView numberOfSections])
         return nil;
-    NSString *headerTitle = [self.dataSource tableView:tableView titleForHeaderInSection:section];
-    if (IsEmpty(headerTitle))
+    NSString *headerTitle = SLFTypeNonEmptyStringOrNil([self.dataSource tableView:tableView titleForHeaderInSection:section]);
+    if (!headerTitle)
         return nil;
-    return [[[TableSectionHeaderView alloc] initWithTitle:headerTitle width:tableView.frame.size.width style:self.tableViewStyle] autorelease];
+    return [[TableSectionHeaderView alloc] initWithTitle:headerTitle width:tableView.frame.size.width style:self.tableViewStyle];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -138,7 +132,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (!dataObject || !dataObject.isClickable)
         return;
-    if (IsEmpty(dataObject.entryValue)) {
+    if (SLFTypeIsNull(dataObject.entryValue)) {
         [SLFAlertView showWithTitle:NSLocalizedString(@"Incomplete Records", @"") 
                             message:NSLocalizedString(@"The campaign finance data provider has incomplete information for this request.  You may choose to visit followthemoney.org to perform a manual search.", @"") 
                         cancelTitle:NSLocalizedString(@"Cancel", @"") 
@@ -155,7 +149,6 @@
     ContributionsViewController *detail = [[ContributionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
     [detail setQueryEntityID:dataObject.entryValue type:dataObject.action cycle:dataObject.parameter];        
     [self stackOrPushViewController:detail];
-    [detail release];
 }
 /*
 - (void)stackOrPushViewController:(UIViewController *)viewController {

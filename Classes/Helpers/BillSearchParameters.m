@@ -10,8 +10,8 @@
 
 #import "BillSearchParameters.h"
 #import "SLFDataModels.h"
-#import <RestKit/RestKit.h>
-#import <RestKit/Network/NSObject+URLEncoding.h>
+#import <SLFRestKit/RestKit.h>
+#import <SLFRestKit/NSObject+URLEncoding.h>
 #import "NSDate+SLFDateHelper.h"
 
 NSString* validOrEmptyParameter(NSString *parameter);
@@ -102,7 +102,7 @@ static NSString const * kBillListMinimalFields = @"state,bill_id,title,chamber,s
 
 + (NSString *)pathForSponsor:(NSString *)sponsorID {
     SLFState *state = SLFSelectedState();
-	if (!state || IsEmpty(sponsorID))
+	if (!state || !SLFTypeNonEmptyStringOrNil(sponsorID))
 		return nil;
 	NSString *session = SLFSelectedSessionForState(state);
     return [[self class] pathForSponsor:sponsorID state:state.stateID session:session];
@@ -121,13 +121,13 @@ static NSString const * kBillListMinimalFields = @"state,bill_id,title,chamber,s
 @end
 
 NSString* validOrEmptyParameter(NSString *parameter) {
-    if (IsEmpty(parameter))
+    if (!SLFTypeNonEmptyStringOrNil(parameter))
 		parameter = @"";
     return parameter;
 }
 
 NSString* validSessionParameter(NSString *session) {
-    if (IsEmpty(session))
+    if (!SLFTypeNonEmptyStringOrNil(session))
         return @"session";
     return [NSString stringWithFormat:@"session:%@", session];
 }

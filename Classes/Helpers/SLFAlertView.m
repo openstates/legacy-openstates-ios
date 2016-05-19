@@ -9,6 +9,7 @@
 
 
 #import "SLFAlertView.h"
+#import <Foundation/Foundation.h>
 
 @interface SLFAlertView ()
 
@@ -16,8 +17,8 @@
 @property (nonatomic, copy) SLFAlertBlock otherBlock;
 @property (nonatomic, copy) NSString *cancelButtonTitle;
 @property (nonatomic, copy) NSString *otherButtonTitle;
-@property (nonatomic, retain) UIColor *fillColor;
-@property (nonatomic, retain) UIColor *shadowColor;
+@property (nonatomic, strong) UIColor *fillColor;
+@property (nonatomic, strong) UIColor *shadowColor;
 - (id)initWithTitle:(NSString *)title 
             message:(NSString *)message 
         cancelTitle:(NSString *)cancelTitle 
@@ -43,7 +44,7 @@
 + (void)showWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle cancelBlock:(SLFAlertBlock)cancelBlk otherTitle:(NSString *)otherTitle otherBlock:(SLFAlertBlock)otherBlk {
     SLFAlertView *alert = [[SLFAlertView alloc] initWithTitle:title message:message cancelTitle:cancelTitle cancelBlock:cancelBlk otherTitle:otherTitle otherBlock:otherBlk];
     [alert show];
-    [alert autorelease];
+    //[alert autorelease];
 }
 
 - (id)initWithTitle:(NSString *)title message:(NSString *)message cancelTitle:(NSString *)cancelTitle cancelBlock:(SLFAlertBlock)cancelBlk otherTitle:(NSString *)otherTitle otherBlock:(SLFAlertBlock)otherBlk {
@@ -74,13 +75,10 @@
 }
 
 - (void)dealloc {
-    self.fillColor = nil;
-    self.shadowColor = nil;
-    [cancelButtonTitle release], cancelButtonTitle = nil;
-    [otherButtonTitle release], otherButtonTitle = nil;
-    [cancelBlock release], cancelBlock = nil;
-    [otherBlock release], otherBlock = nil;
-    [super dealloc];
+    cancelButtonTitle = nil;
+    otherButtonTitle = nil;
+    cancelBlock = nil;
+    otherBlock = nil;
 }
 
 @end

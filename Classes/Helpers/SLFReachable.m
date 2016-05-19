@@ -9,35 +9,17 @@
 
 
 #import "SLFReachable.h"
-#import <RestKit/RestKit.h>
+#import <SLFRestKit/RestKit.h>
 #import "SLFAlertView.h"
-#import "MTInfoPanel.h"
+#import "SLFInfoView.h"
 
 NSString * const SLFReachableStatusChangedForHostKey = @"SLFReachableStatusChangedForHost";
 NSString * const SLFReachableAnyNetworkHost = @"ANY_INTERNET_HOST";
 
-BOOL SLFIsReachableAddressNoAlert(NSString * urlString) {
-    return [[SLFReachable sharedReachable] isURLStringReachable:urlString];
-}
-
-BOOL SLFIsReachableAddress(NSString * urlString) {
-    if (SLFIsReachableAddressNoAlert(urlString))
-        return YES;
-    /*[SLFAlertView showWithTitle:NSLocalizedString(@"Unreachable Host", @"")
-                        message:NSLocalizedString(@"This feature requires an Internet connection, and a connection is unavailable.  Your device may be in 'Airplane' mode or is experiencing poor network coverage.",@"")
-                    buttonTitle:NSLocalizedString(@"Cancel",@"")];*/
-    [MTInfoPanel showPanelInWindow:[UIApplication sharedApplication].keyWindow 
-                            type:MTInfoPanelTypeError 
-                           title:NSLocalizedString(@"Network Failure!",@"") 
-                        subtitle:NSLocalizedString(@"Check your internet connection and try again later.",@"") 
-                       hideAfter:2];
-    return NO;
-}
-
-
 @interface SLFReachable()
-@property (nonatomic,retain) NSMutableDictionary *networkReachByKeys;
-@property (nonatomic,retain) NSMutableDictionary *statusByHostKeys;
+@property (nonatomic,strong) NSMutableDictionary *networkReachByKeys;
+@property (nonatomic,strong) NSMutableDictionary *statusByHostKeys;
+@property (nonatomic,strong) NSMutableDictionary *observersByURL;
 - (void)beginCheckingHostReachability:(SCNetworkReachability *)hostReach;
 - (void)notifyReachabilityChanged:(NSNotification *)notification;
 - (void)changeReachability:(SCNetworkReachability *)netReach forFlags:(SCNetworkReachabilityFlags)flags;
@@ -58,6 +40,7 @@ BOOL SLFIsReachableAddress(NSString * urlString) {
 - (SLFReachable *)init {
     self = [super init];
     if (self) {
+        _observersByURL = [[NSMutableDictionary alloc] initWithCapacity:10];
         localNotification = [[NSNotificationCenter alloc] init];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyReachabilityChanged:) name:kSCNetworkReachabilityDidChangeNotification object:nil];
         self.statusByHostKeys = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithInt:kSCNetworkNotReachable] forKey:SLFReachableAnyNetworkHost];
@@ -71,11 +54,11 @@ BOOL SLFIsReachableAddress(NSString * urlString) {
 - (void)dealloc {
     for (SCNetworkReachability *reachability in self.networkReachByKeys)
         [reachability stopNotifier];
+    NSNotificationCenter *center = self.localNotification;
+    [self.observersByURL enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL * stop) {
+        [center removeObserver:obj];
+    }];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    self.networkReachByKeys = nil;
-    self.statusByHostKeys = nil;
-    self.localNotification = nil;
-    [super dealloc];
 }
 
 - (void)watchHostsInSet:(NSSet *)hosts {
@@ -98,11 +81,11 @@ BOOL SLFIsReachableAddress(NSString * urlString) {
 - (void)beginCheckingHostReachability:(SCNetworkReachability *)hostReach {
     NSParameterAssert(hostReach);
     SCNetworkReachabilityFlags flags;
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    if ([hostReach getFlags:&flags]) // must use synchronous for initial messages only
-        [self changeReachability:hostReach forFlags:flags];
-    [hostReach startNotifier];
-    [pool drain];
+    @autoreleasepool {
+        if ([hostReach getFlags:&flags]) // must use synchronous for initial messages only
+            [self changeReachability:hostReach forFlags:flags];
+        [hostReach startNotifier];
+    }
 }
 
 - (void)notifyReachabilityChanged:(NSNotification *)notification
@@ -123,8 +106,9 @@ BOOL SLFIsReachableAddress(NSString * urlString) {
         }            
     }];
     SCNetworkReachable reach = [netReach networkReachableForFlags:flags];
-    NSNumber *status = [NSNumber numberWithInt:reach];
-    if (foundKey) {
+    NSNumber *status = @(reach);
+    if (foundKey)
+    {
         [self.statusByHostKeys setObject:status forKey:foundKey];
         [self.localNotification postNotificationName:SLFReachableStatusChangedForHostKey object:foundKey];
     }
@@ -167,3 +151,61 @@ BOOL SLFIsReachableAddress(NSString * urlString) {
 }
 
 @end
+
+BOOL SLFIsReachableAddressNoAlert(NSString * urlString) {
+    return [[SLFReachable sharedReachable] isURLStringReachable:urlString];
+}
+
+BOOL SLFIsReachableAddress(NSString * urlString) {
+    if (SLFIsReachableAddressNoAlert(urlString))
+        return YES;
+    /*[SLFAlertView showWithTitle:NSLocalizedString(@"Unreachable Host", @"")
+     message:NSLocalizedString(@"This feature requires an Internet connection, and a connection is unavailable.  Your device may be in 'Airplane' mode or is experiencing poor network coverage.",@"")
+     buttonTitle:NSLocalizedString(@"Cancel",@"")];*/
+    [SLFInfoView showInfoInWindow:[UIApplication sharedApplication].keyWindow
+                              type:SLFInfoTypeError
+                             title:NSLocalizedString(@"Network Failure!",@"")
+                          subtitle:NSLocalizedString(@"Check your internet connection and try again later.",@"")
+                         hideAfter:2];
+
+    return NO;
+}
+
+void SLFIsReachableAddressAsync(NSURL * url, SLFReachabilityCompletionHandler completion) {
+    if (!url || !completion)
+        return;
+    SLFReachable *reachability = [SLFReachable sharedReachable];
+    if (![reachability isNetworkReachable])
+    {
+        completion(url,NO);
+        return;
+    }
+    NSString *host = url.host;
+    NSNumber *status = [reachability statusForHostNamed:host];
+    if (!status)
+    {
+        NSNotificationCenter *center = reachability.localNotification;
+        id observer = [center addObserverForName:SLFReachableStatusChangedForHostKey object:host queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * note) {
+            SLFReachable *reachability = [SLFReachable sharedReachable];
+            BOOL isReachable = [reachability isURLReachable:url];
+            @try {
+                NSNotificationCenter *center = reachability.localNotification;
+                id observer = reachability.observersByURL[url];
+                if (isReachable && observer)
+                {
+                    
+                    [center removeObserver:observer];
+                    [reachability.observersByURL removeObjectForKey:url];
+                }
+                completion(url,isReachable);
+            } @catch (NSException *exception) {
+            }
+        }];
+
+        reachability.observersByURL[url] = observer;
+        [reachability watchHostNamed:host];
+        return;
+    }
+    BOOL isReachable = [reachability isURLReachable:url];
+    completion(url,isReachable);
+}

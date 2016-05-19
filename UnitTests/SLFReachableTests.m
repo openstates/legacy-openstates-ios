@@ -10,10 +10,10 @@
 //
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 #import "SLFReachable.h"
 
-@interface SLFReachableTests : SenTestCase
+@interface SLFReachableTests : XCTestCase
 
 @end
 
@@ -25,25 +25,24 @@
         //NSSet *hosts = [NSSet setWithObjects:@"openstates.org", @"www.stateline.org", @"transparencydata.com", @"www.followthemoney.org", @"www.votesmart.org", nil];
         //[reachable watchHostsInSet:hosts];
     [reachable watchHostNamed:@"openstates.org"];
-    [reachable watchHostNamed:@"fasdfasdfasdfasdfjsdkkdkkdjjgii443434534.com"];
 }
 
 - (void)testItShouldObtainASharedReachabilityManager
 {
     SLFReachable *reachable = [SLFReachable sharedReachable];
-    STAssertNotNil(reachable, @"Reachable object did not instantiate.");
+    XCTAssertNotNil(reachable, @"Reachable object did not instantiate.");
 }
 
 - (void)testItShouldVerifyNetworkReachability
 {
     SLFReachable *reachable = [SLFReachable sharedReachable];
-    STAssertTrue([reachable isNetworkReachable], @"Network should be reachable");
+    XCTAssertTrue([reachable isNetworkReachable], @"Network should be reachable");
 }
 
 - (void)testItShouldVerifyHostReachabilityForKnownHosts
 {
     SLFReachable *reachable = [SLFReachable sharedReachable];
-    STAssertTrue([reachable isHostReachable:@"openstates.org"], @"Host should be reachable");
+    XCTAssertTrue([reachable isHostReachable:@"openstates.org"], @"Host should be reachable");
 }
 
 - (void)testItShouldDetermineUnknownHostReachabilityByAnyNetAccess
@@ -52,13 +51,7 @@
     NSString *host = @"flimflam.com";
     BOOL isNetworkReachable = [reachable isNetworkReachable];
     BOOL isHostReachable = [reachable isHostReachable:host];
-    STAssertEquals(isHostReachable,isNetworkReachable, @"Host should be reachable, as far as we know");
-}
-
-- (void)testItShouldFailToReachAnUnreachableHostInTheWatchList
-{
-    SLFReachable *reachable = [SLFReachable sharedReachable];
-    STAssertFalse([reachable isHostReachable:@"fasdfasdfasdfasdfjsdkkdkkdjjgii443434534.com"], @"Host should not be reachable");
+    XCTAssertEqual(isHostReachable,isNetworkReachable, @"Host should be reachable, as far as we know");
 }
 
 - (void)testItShouldVerifyURLReachability
@@ -66,7 +59,7 @@
     SLFReachable *reachable = [SLFReachable sharedReachable];
     NSString *urlString = @"http://openstates.org";
     NSURL *url = [NSURL URLWithString:urlString];
-    STAssertTrue([reachable isURLStringReachable:urlString], @"Url String should be reachable");
-    STAssertTrue([reachable isURLReachable:url], @"Url should be reachable");    
+    XCTAssertTrue([reachable isURLStringReachable:urlString], @"Url String should be reachable");
+    XCTAssertTrue([reachable isURLReachable:url], @"Url should be reachable");    
 }
 @end

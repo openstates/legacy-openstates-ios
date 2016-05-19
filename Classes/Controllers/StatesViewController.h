@@ -17,5 +17,5 @@
 @end
 
 @interface StatesViewController : SLFFetchedTableViewController
-@property (nonatomic, assign) id<StateMenuSelectionDelegate> stateMenuDelegate;
+@property (nonatomic, weak) id<StateMenuSelectionDelegate> stateMenuDelegate;
 @end

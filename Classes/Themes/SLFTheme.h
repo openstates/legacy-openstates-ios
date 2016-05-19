@@ -8,7 +8,7 @@
 // distribution.
 
 
-#import <RestKit/UI/UI.h>
+#import <SLFRestKit/UI.h>
 #import "SLFAppearance.h"
 #import "StyledCellMapping.h"
 #import "UIImage+OverlayColor.h"

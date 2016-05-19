@@ -25,7 +25,7 @@
 
 
 
-@property (nonatomic, retain) NSString *action;
+@property (nonatomic, strong) NSString *action;
 
 
 //- (BOOL)validateAction:(id*)value_ error:(NSError**)error_;
@@ -33,7 +33,7 @@
 
 
 
-@property (nonatomic, retain) NSString *actionID;
+@property (nonatomic, strong) NSString *actionID;
 
 
 //- (BOOL)validateActionID:(id*)value_ error:(NSError**)error_;
@@ -41,7 +41,7 @@
 
 
 
-@property (nonatomic, retain) NSString *actor;
+@property (nonatomic, strong) NSString *actor;
 
 
 //- (BOOL)validateActor:(id*)value_ error:(NSError**)error_;
@@ -49,7 +49,7 @@
 
 
 
-@property (nonatomic, retain) NSString *comment;
+@property (nonatomic, strong) NSString *comment;
 
 
 //- (BOOL)validateComment:(id*)value_ error:(NSError**)error_;
@@ -57,7 +57,7 @@
 
 
 
-@property (nonatomic, retain) NSDate *date;
+@property (nonatomic, strong) NSDate *date;
 
 
 //- (BOOL)validateDate:(id*)value_ error:(NSError**)error_;
@@ -66,14 +66,14 @@
 
 
 
-@property (nonatomic, retain) SLFBill* bill;
+@property (nonatomic, strong) SLFBill* bill;
 
 //- (BOOL)validateBill:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) NSSet* types;
+@property (nonatomic, strong) NSSet* types;
 
 - (NSMutableSet*)typesSet;
 

@@ -21,7 +21,6 @@
     maskLayer.path = maskPath.CGPath;
     self.clipsToBounds = YES;
     self.layer.mask = maskLayer;
-    [maskLayer release];
 }
 
 - (void)roundTopLeftCorner {

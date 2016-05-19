@@ -37,7 +37,7 @@
 
 
 
-@property (nonatomic, retain) NSString *billChamber;
+@property (nonatomic, strong) NSString *billChamber;
 
 
 //- (BOOL)validateBillChamber:(id*)value_ error:(NSError**)error_;
@@ -45,7 +45,7 @@
 
 
 
-@property (nonatomic, retain) NSString *chamber;
+@property (nonatomic, strong) NSString *chamber;
 
 
 //- (BOOL)validateChamber:(id*)value_ error:(NSError**)error_;
@@ -53,7 +53,7 @@
 
 
 
-@property (nonatomic, retain) NSDate *date;
+@property (nonatomic, strong) NSDate *date;
 
 
 //- (BOOL)validateDate:(id*)value_ error:(NSError**)error_;
@@ -61,7 +61,7 @@
 
 
 
-@property (nonatomic, retain) NSString *method;
+@property (nonatomic, strong) NSString *method;
 
 
 //- (BOOL)validateMethod:(id*)value_ error:(NSError**)error_;
@@ -69,7 +69,7 @@
 
 
 
-@property (nonatomic, retain) NSString *motion;
+@property (nonatomic, strong) NSString *motion;
 
 
 //- (BOOL)validateMotion:(id*)value_ error:(NSError**)error_;
@@ -77,7 +77,7 @@
 
 
 
-@property (nonatomic, retain) NSNumber *noCount;
+@property (nonatomic, strong) NSNumber *noCount;
 
 
 @property short noCountValue;
@@ -89,7 +89,7 @@
 
 
 
-@property (nonatomic, retain) NSNumber *otherCount;
+@property (nonatomic, strong) NSNumber *otherCount;
 
 
 @property short otherCountValue;
@@ -101,7 +101,7 @@
 
 
 
-@property (nonatomic, retain) NSNumber *passed;
+@property (nonatomic, strong) NSNumber *passed;
 
 
 @property BOOL passedValue;
@@ -113,7 +113,7 @@
 
 
 
-@property (nonatomic, retain) NSString *record;
+@property (nonatomic, strong) NSString *record;
 
 
 //- (BOOL)validateRecord:(id*)value_ error:(NSError**)error_;
@@ -121,7 +121,7 @@
 
 
 
-@property (nonatomic, retain) NSString *session;
+@property (nonatomic, strong) NSString *session;
 
 
 //- (BOOL)validateSession:(id*)value_ error:(NSError**)error_;
@@ -129,7 +129,7 @@
 
 
 
-@property (nonatomic, retain) NSString *stateID;
+@property (nonatomic, strong) NSString *stateID;
 
 
 //- (BOOL)validateStateID:(id*)value_ error:(NSError**)error_;
@@ -137,7 +137,7 @@
 
 
 
-@property (nonatomic, retain) NSString *type;
+@property (nonatomic, strong) NSString *type;
 
 
 //- (BOOL)validateType:(id*)value_ error:(NSError**)error_;
@@ -145,7 +145,7 @@
 
 
 
-@property (nonatomic, retain) NSString *voteID;
+@property (nonatomic, strong) NSString *voteID;
 
 
 //- (BOOL)validateVoteID:(id*)value_ error:(NSError**)error_;
@@ -153,7 +153,7 @@
 
 
 
-@property (nonatomic, retain) NSNumber *yesCount;
+@property (nonatomic, strong) NSNumber *yesCount;
 
 
 @property short yesCountValue;
@@ -166,35 +166,35 @@
 
 
 
-@property (nonatomic, retain) SLFBill* bill;
+@property (nonatomic, strong) SLFBill* bill;
 
 //- (BOOL)validateBill:(id*)value_ error:(NSError**)error_;
 
 
 
 
-@property (nonatomic, retain) NSSet* noVotes;
+@property (nonatomic, strong) NSSet* noVotes;
 
 - (NSMutableSet*)noVotesSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* otherVotes;
+@property (nonatomic, strong) NSSet* otherVotes;
 
 - (NSMutableSet*)otherVotesSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* sources;
+@property (nonatomic, strong) NSSet* sources;
 
 - (NSMutableSet*)sourcesSet;
 
 
 
 
-@property (nonatomic, retain) NSSet* yesVotes;
+@property (nonatomic, strong) NSSet* yesVotes;
 
 - (NSMutableSet*)yesVotesSet;
 

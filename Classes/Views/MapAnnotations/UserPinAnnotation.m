@@ -8,78 +8,108 @@
 // distribution.
 
 #import "UserPinAnnotation.h"
-#import <AddressBookUI/ABAddressFormatting.h>
 
-@interface UserPinAnnotation()
-- (void)reloadTitle;
-@end
+#if USE_POSTAL_ADDRESS_FORMAT
+@import Contacts;
+#endif
+
+NSString * const kUserPinAnnotationAddressChangeKey = @"UserPinAnnotationAddressChangeNotification";
 
 @implementation UserPinAnnotation
 
-@synthesize pinColorIndex;
-@synthesize title, subtitle, imageName, delegate;
+@synthesize pinColorIndex = _pinColorIndex;
+@synthesize imageName = _imageName;
+@synthesize delegate = _delegate;
+@synthesize coordinate = _coordinate;
 
--(id)initWithSVPlacemark:(SVPlacemark*) placemark {
-    self = [super initWithCoordinate:placemark.coordinate addressDictionary:placemark.addressDictionary];
-    if (self) {
-        pinColorIndex = MKPinAnnotationColorPurple; 
-        [self reloadTitle];
+- (instancetype)initWithPlacemark:(CLPlacemark *)placemark
+{
+    self = [super initWithPlacemark:placemark];
+    if (self)
+    {
+        _pinColorIndex = SLFMapPinColorPurple;
+        _coordinate = placemark.location.coordinate;
+
+#if USE_POSTAL_ADDRESS_FORMAT
+        [self formatPostalAddress];
+#endif
+
     }
     return self;
 }
 
-- (void)dealloc {    
-    self.imageName = nil;
+- (void)dealloc
+{
     self.delegate = nil;
-    self.title = nil;
-    self.subtitle = nil;
-    [super dealloc];
 }
 
-- (void)reloadTitle {
-    NSMutableString *formattedAddress = [[NSMutableString alloc] init];
+#if USE_POSTAL_ADDRESS_FORMAT
 
-    if (self.addressDictionary) {
-        NSString *street = [self.addressDictionary valueForKey:(NSString*)kABPersonAddressStreetKey];
-        NSString *city = [self.addressDictionary valueForKey:(NSString*)kABPersonAddressCityKey];
-        NSString *state = [self.addressDictionary valueForKey:(NSString*)kABPersonAddressStateKey];
-        
-        if (NO == IsEmpty(street)) {
-            [formattedAddress appendFormat:@"%@, ", street];
-        }
-        if (NO == IsEmpty(city) && NO == IsEmpty(state)) {
-            [formattedAddress appendFormat:@"%@, %@", city, state];
-        }        
-    }
-    if (IsEmpty(formattedAddress)) {
-        [formattedAddress appendFormat:@"%f %f", self.coordinate.latitude, self.coordinate.longitude];
-    }
-    self.title = formattedAddress;
-    [formattedAddress release];        
+- (void)formatPostalAddress
+{
+    CNMutablePostalAddress *postalAddress = [[CNMutablePostalAddress alloc] init];
+    if (self.subThoroughfare && self.thoroughfare)
+        postalAddress.street = [self.subThoroughfare stringByAppendingFormat:@" %@", self.thoroughfare];
+    else
+        postalAddress.street = self.thoroughfare;
+    postalAddress.city = self.locality;
+    postalAddress.state = self.administrativeArea;
+    postalAddress.postalCode = self.postalCode;
+    postalAddress.country = self.country;
+    postalAddress.ISOCountryCode = self.ISOcountryCode;
+
+    NSString *formattedAddress = [CNPostalAddressFormatter stringFromPostalAddress:postalAddress style:CNPostalAddressFormatterStyleMailingAddress];
+    self.annotationTitle = formattedAddress;
 }
 
-#pragma mark -
-#pragma mark MKAnnotation properties
+#endif
 
-- (UIImage *)image {
-    if (IsEmpty(self.imageName)) {
+#pragma mark - MKAnnotation properties
+
+- (UIImage *)image
+{
+    if (!SLFTypeNonEmptyStringOrNil(self.imageName))
+    {
         return [UIImage imageNamed:@"silverstar.png"];
     }
     return [UIImage imageNamed:self.imageName];
 }
 
-- (NSString *)subtitle {
-    if (IsEmpty(subtitle)) {
-        return NSLocalizedString(@"Tap & hold to move pin", @"");
+- (NSString *)title
+{
+    if (SLFTypeNonEmptyStringOrNil(_annotationTitle))
+        return _annotationTitle;
+    if ([super respondsToSelector:@selector(title)])
+    {
+        if (SLFTypeNonEmptyStringOrNil(super.title))
+            return super.title;
     }
-    return subtitle;
+        return super.title;
+    return nil;
 }
 
-- (void)setCoordinate:(CLLocationCoordinate2D)newCoordinate {
-    [super setCoordinate:newCoordinate];
-    self.title = [NSString    stringWithFormat:@"%f %f", newCoordinate.latitude, newCoordinate.longitude];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(annotationCoordinateChanged:)]) {
+- (NSString *)subtitle
+{
+    if (SLFTypeNonEmptyStringOrNil(_annotationSubtitle))
+        return _annotationSubtitle;
+    return NSLocalizedString(@"Tap & hold to move pin", @"");
+}
+
+- (CLLocationCoordinate2D)coordinate
+{
+    return _coordinate;
+}
+
+- (void)setCoordinate:(CLLocationCoordinate2D)newCoordinate
+{
+    [self willChangeValueForKey:@"coordinate"];
+    _coordinate = newCoordinate;
+    [self didChangeValueForKey:@"coordinate"];
+
+    if (self.delegate && [self.delegate respondsToSelector:@selector(annotationCoordinateChanged:)])
+    {
         [self.delegate performSelector:@selector(annotationCoordinateChanged:) withObject:self];
     }
 }
+
 @end

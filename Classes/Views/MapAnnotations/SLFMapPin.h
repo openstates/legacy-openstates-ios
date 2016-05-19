@@ -9,17 +9,15 @@
 
 #import <MapKit/MapKit.h>
 
-enum {
+typedef NS_ENUM(NSUInteger, SLFMapPinColor) {
     SLFMapPinColorRed = 0,
     SLFMapPinColorGreen,
     SLFMapPinColorPurple,
     // end compatibility with MKPinAnnotation colors
     SLFMapPinColorBlue = 99
 };
-typedef NSUInteger SLFMapPinColor;
 
-
-enum {
+typedef NS_ENUM(NSUInteger, SLFMapPinStatus) {
     SLFMapPinStatusNormal = 0,
     SLFMapPinStatusDown1,
     SLFMapPinStatusDown2,
@@ -28,14 +26,10 @@ enum {
     SLFMapPinStatusPressed,
     //
     SLFMapPinStatusHead = 99
-    
 };
-typedef NSUInteger SLFMapPinStatus;
 
-@interface SLFMapPin : NSObject {
-}
-
-+ (UIImage *)imageForMapAnnotation:(id <MKAnnotation>)annotation status:(NSInteger)status;
-+ (UIImage *)imageForPinColorIndex:(NSInteger)index status:(NSInteger)status;
-+ (NSString *)imageFileForPinColorIndex:(NSInteger)index status:(NSInteger)status;
+@interface SLFMapPin : NSObject
++ (UIImage *)imageForMapAnnotation:(id <MKAnnotation>)annotation status:(SLFMapPinStatus)status;
++ (UIImage *)imageForPinColorIndex:(SLFMapPinColor)index status:(SLFMapPinStatus)status;
++ (NSString *)imageFileForPinColorIndex:(SLFMapPinColor)index status:(SLFMapPinStatus)status;
 @end

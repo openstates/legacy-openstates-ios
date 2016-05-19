@@ -1,7 +1,7 @@
 #import "CommitteeRole.h"
 #import "SLFCommittee.h"
 #import "SLFSortDescriptor.h"
-#import <RestKit/CoreData/CoreData.h>
+#import <SLFRestKit/CoreData.h>
 
 @implementation CommitteeRole
 

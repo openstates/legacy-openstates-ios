@@ -51,7 +51,14 @@
 
     NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
     if ([pathMatcher matchesPattern:@"/metadata/:stateID" tokenizeQueryStrings:YES parsedArguments:&arguments])
-        predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", [arguments objectForKey:@"stateID"]];
+    {
+        NSString *stateID = arguments[@"stateID"];
+        if (!stateID || ![stateID isKindOfClass:[NSString class]] || ![stateID length])
+            return nil;
+        predicate = [NSPredicate predicateWithFormat:@"stateID LIKE[cd] %@", stateID];
+        if (!predicate)
+            return nil;
+    }
     [request setPredicate:predicate];
 
     // Even without a match, just do it anyway, since we know it's a state/metadata resource

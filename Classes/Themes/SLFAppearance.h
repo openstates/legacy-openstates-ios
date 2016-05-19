@@ -40,10 +40,14 @@ UIColor *SLFColorWithRGBShift(UIColor *color, int offset);
 UIColor *SLFColorWithRGBA(int r, int g, int b, CGFloat a);
 UIColor *SLFColorWithRGB(int red,  int green, int blue);
 UIColor *SLFColorWithHex(char hex);
+
+UIFont *SLFFontWithDescriptorAndSize(UIFontDescriptor *descriptor, CGFloat zeroOrSize);
+UIFont *SLFFontWithStyle(NSString *textStyle, UIFontDescriptorSymbolicTraits traits, CGFloat zeroOrSize);
 UIFont *SLFFont(CGFloat size);
 UIFont *SLFPlainFont(CGFloat size);
 UIFont *SLFTitleFont(CGFloat size);
 UIFont *SLFItalicFont(CGFloat size);
+
 extern NSString * const SLFAppearanceBoldFontName;
 extern NSString * const SLFAppearancePlainFontName;
 extern NSString * const SLFAppearanceItalicsFontName;

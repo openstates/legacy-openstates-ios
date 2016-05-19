@@ -16,7 +16,7 @@
 @property (nonatomic, strong) SLFImprovedRKFetchedResultsTableController *tableController;
 @property (nonatomic, strong) SLFState *state;
 @property (nonatomic, copy) NSString *resourcePath;
-@property (nonatomic, assign) Class dataClass;
+@property (nonatomic, weak) Class dataClass;
 @property (nonatomic, assign) BOOL omitSearchBar;
 @property (nonatomic, strong) RKTableItem* defaultEmptyItem;
 

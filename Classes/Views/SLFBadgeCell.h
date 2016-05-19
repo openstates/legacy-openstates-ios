@@ -13,5 +13,5 @@
 @class BillsSubjectsEntry;
 @interface SLFBadgeCell : UITableViewCell
 @property (nonatomic,assign) BOOL isClickable;
-@property (nonatomic,retain) BillsSubjectsEntry *subjectEntry;
+@property (nonatomic,strong) BillsSubjectsEntry *subjectEntry;
 @end

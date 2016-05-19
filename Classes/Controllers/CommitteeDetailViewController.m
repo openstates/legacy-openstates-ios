@@ -14,7 +14,6 @@
 #import "SLFMappingsManager.h"
 #import "SLFRestKitManager.h"
 #import "SLFReachable.h"
-#import "SVWebViewController.h"
 #import "LegislatorCell.h"
 #import "GenericDetailHeader.h"
 #import "SLFImprovedRKTableController.h"
@@ -50,9 +49,6 @@
 
 - (void)dealloc {
     [[RKObjectManager sharedManager].requestQueue cancelRequestsWithDelegate:self];
-	self.committee = nil;
-    self.tableController = nil;
-    [super dealloc];
 }
 
 - (void)viewDidUnload {
@@ -103,7 +99,7 @@
 }
 
 - (void)configureTableHeader {
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) bself = self;
     RKTableSection *headerSection = [RKTableSection sectionUsingBlock:^(RKTableSection *section) {
         GenericDetailHeader *header = [[GenericDetailHeader alloc] initWithFrame:CGRectMake(0, 0, bself.tableView.width, 100)];
         header.defaultSize = CGSizeMake(bself.tableView.width, 100);
@@ -114,29 +110,27 @@
         [header configure];
         section.headerHeight = header.height;
         section.headerView = header;
-        [header release];
     }];
     [_tableController addSection:headerSection];
 }
 
 - (void)configureResourceItems {
-    if (IsEmpty(_committee.sources))
+    if (!SLFTypeNonEmptySetOrNil(_committee.sources))
         return;
     NSMutableArray* tableItems  = [[NSMutableArray alloc] init];
     for (GenericAsset *source in _committee.sources) {
         NSString *subtitle = source.name;
-        if (IsEmpty(subtitle))
+        if (!SLFTypeNonEmptyStringOrNil(subtitle))
             subtitle = source.url;
         [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Website", @"") subtitle:subtitle url:source.url]];
     }
     SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Resources", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadTableItems:tableItems inSection:sectionIndex];
-    [tableItems release];
 }
 
 - (void)configureMemberItems {
-    if (IsEmpty(_committee.members))
+    if (!SLFTypeNonEmptySetOrNil(_committee.members))
         return;
     SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Members", @""));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
@@ -144,7 +138,7 @@
 }
 
 - (RKTableViewCellMapping *)committeeMemberCellMap {
-    __block __typeof__(self) bself = self;
+    __weak __typeof__(self) bself = self;
     FoundLegislatorCellMapping *cellMap = [FoundLegislatorCellMapping cellMappingUsingBlock:^(RKTableViewCellMapping* cellMapping) {
         [cellMapping mapKeyPath:@"foundLegislator" toAttribute:@"legislator"];
         [cellMapping mapKeyPath:@"type" toAttribute:@"role"];
@@ -152,7 +146,7 @@
         cellMapping.onSelectCellForObjectAtIndexPath = ^(UITableViewCell* cell, id object, NSIndexPath *indexPath) {
             NSString *legID = [object valueForKey:@"legID"];
             NSString *path = [SLFActionPathNavigator navigationPathForController:[LegislatorDetailViewController class] withResourceID:legID];
-            if (!IsEmpty(path))
+            if (SLFTypeNonEmptyStringOrNil(path))
                 [SLFActionPathNavigator navigateToPath:path skipSaving:NO fromBase:bself popToRoot:NO];
         };
     }];

@@ -6,6 +6,7 @@
 //
 //
 
+ALWAYS_SEARCH_USER_PATHS = NO
 BUILD_NUMBER=???
 #include "buildnumber.xcconfig"
 
