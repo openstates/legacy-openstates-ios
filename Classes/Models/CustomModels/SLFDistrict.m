@@ -139,8 +139,16 @@
     return estimatedId;
 }
 
-- (BOOL)isUpperChamber {
-    BOOL hasUpperTag = ([SLFTypeStringOrNil(self.boundaryID) hasPrefix:@"sldu"] );
+- (BOOL)isUpperChamber
+{
+    NSString *boundaryID = SLFTypeNonEmptyStringOrNil(self.boundaryID);
+    BOOL hasUpperTag = NO;
+    if (boundaryID)
+    {
+        NSRange subRange = [boundaryID rangeOfString:@"sldu" options:NSBackwardsSearch];
+        if (subRange.location != NSNotFound && subRange.length > 0)
+            hasUpperTag = YES;
+    }
     if (hasUpperTag || [self.chamber isEqualToString:SLFChamberUpperType])
         return YES;
     return NO;
