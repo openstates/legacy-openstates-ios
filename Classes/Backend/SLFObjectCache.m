@@ -46,7 +46,7 @@
 // FOR STATES ============================
 - (NSFetchRequest*)fetchRequestStatesForResourcePath:(NSString*)resourcePath {
     NSDictionary *arguments = nil;
-    NSFetchRequest *request = [SLFState fetchRequest];
+    NSFetchRequest *request = [SLFState arFetchRequest];
     RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
 
     NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
@@ -69,7 +69,7 @@
 // FOR LEGISLATORS ============================
 - (NSFetchRequest*)fetchRequestLegislatorsForResourcePath:(NSString*)resourcePath {
     NSDictionary *arguments = nil;
-    NSFetchRequest *request = [SLFLegislator fetchRequest];
+    NSFetchRequest *request = [SLFLegislator arFetchRequest];
     RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
     NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
     if ([pathMatcher matchesPattern:@"/legislators/:legID" tokenizeQueryStrings:YES parsedArguments:&arguments])
@@ -85,7 +85,7 @@
 // FOR COMMITTEES ============================
 - (NSFetchRequest*)fetchRequestCommitteesForResourcePath:(NSString*)resourcePath {
     NSDictionary *arguments = nil;
-    NSFetchRequest *request = [SLFCommittee fetchRequest];
+    NSFetchRequest *request = [SLFCommittee arFetchRequest];
     RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
     
     NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
@@ -101,7 +101,7 @@
 // FOR DISTRICTS ============================
 - (NSFetchRequest*)fetchRequestDistrictsForResourcePath:(NSString*)resourcePath {
     NSDictionary *args = nil;
-    NSFetchRequest *request = [SLFDistrict fetchRequest];
+    NSFetchRequest *request = [SLFDistrict arFetchRequest];
     RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
     
     NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
@@ -122,7 +122,7 @@
 // FOR EVENTS ============================
 - (NSFetchRequest*)fetchRequestEventsForResourcePath:(NSString*)resourcePath {
     NSDictionary *args = nil;
-    NSFetchRequest *request = [SLFEvent fetchRequest];
+    NSFetchRequest *request = [SLFEvent arFetchRequest];
     RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
     
     NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
@@ -141,7 +141,7 @@ SLF_TODO("Need a way to accurately search current session when search_window is 
 - (NSFetchRequest*)fetchRequestBillsForResourcePath:(NSString*)resourcePath {
 
     NSDictionary *args = nil;
-    NSFetchRequest *request = [SLFBill fetchRequest];
+    NSFetchRequest *request = [SLFBill arFetchRequest];
     
     RKPathMatcher *pathMatcher = [RKPathMatcher matcherWithPath:resourcePath];
 
