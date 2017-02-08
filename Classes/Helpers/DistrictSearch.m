@@ -14,6 +14,7 @@
 #import <SLFRestKit/JSONKit.h>
 #import "SLFReachable.h"
 #import "APIKeys.h"
+#import "SLFLog.h"
 
 @interface DistrictSearch()
 @property (assign) CLLocationCoordinate2D searchCoordinate;
@@ -81,13 +82,12 @@
             success = foundIDs.count > 0;
         }
         @catch (NSException *exception) {
-            RKLogError(@"%@: %@", [exception name], [exception reason]);
+            os_log_error([SLFLog common], "Exception in district search: %s{public}", exception.description);
         }
     }
     
     if (!success) {
-        RKLogError(@"Request = %@", request);
-        RKLogError(@"Response = %@", response);
+        os_log_error([SLFLog common], "District Search request failure -- %s{public} | response = %d", request.URL.absoluteString, response.statusCode);
         if (_onFailureWithMessageAndFailOption)
             _onFailureWithMessageAndFailOption(@"Could not find a district map with those coordinates.", DistrictSearchFailOptionLog);
         return;
@@ -98,7 +98,7 @@
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
     if (error && request) {
-        RKLogError(@"Error loading search results from %@: %@", [request description], [error localizedDescription]);
+        os_log_error([SLFLog common], "Error loading search results from %s{public}: %s{public}", request.URL.absoluteString, error.localizedDescription);
     }    
     if (_onFailureWithMessageAndFailOption)
         _onFailureWithMessageAndFailOption(@"Could not find a district map with those coordinates.", DistrictSearchFailOptionLog);

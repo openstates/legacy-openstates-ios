@@ -22,16 +22,20 @@
 #import "SLFReachable.h"
 #import "WatchedBillNotificationManager.h"
 #import "SLFAlertView.h"
-#import "SLFInfoView.h"
 #import "SLFEventsManager.h"
 #import "SLFPersistenceManager.h"
 #import "SLFActionPathNavigator.h"
 #import "SLFAnalytics.h"
+#import "SLToastManager+OpenStates.h"
+#import "SLFLog.h"
 
 @interface AppDelegate()
+@property (nonatomic,weak) SLFStackedViewController *stackedViewController;
 @property (nonatomic,strong) AppBarController *appBarController;
 @property (nonatomic,strong) UINavigationController *navigationController;
 @property (nonatomic,assign) UIBackgroundTaskIdentifier backgroundTaskID;
+@property (nonatomic,strong) SLToastManager *toastMgr;
+
 - (void)setUpOnce;
 - (void)setUpBackgroundTasks;
 - (void)setUpReachability;
@@ -44,12 +48,8 @@
 @end
 
 @implementation AppDelegate
-@synthesize window;
-@synthesize appBarController = _appBarController;
-@synthesize stackedViewController = _stackedViewController;
-@synthesize navigationController = _navigationController;
-@synthesize backgroundTaskID = _backgroundTaskID;
 
+@synthesize window = _window;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -67,13 +67,8 @@
     return YES;
 }
 
-- (void)setUpOnce {
-#ifdef DEBUG
-    RKLogSetAppLoggingLevel(RKLogLevelDebug);
-#else
-    RKLogSetAppLoggingLevel(RKLogLevelWarning);
-#endif
-
+- (void)setUpOnce
+{
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [self performSelectorInBackground:@selector(setUpBackgroundTasks) withObject:nil];
     [SLFAppearance setupAppearance];
@@ -83,15 +78,19 @@
     [SLFActionPathRegistry sharedRegistry];
     [self setUpViewControllers];
     
-    if( getenv("NSZombieEnabled") || getenv("NSAutoreleaseFreedObjectCheckEnabled") ) {
-        [SLFInfoView showInfoInWindow:self.window type:SLFInfoTypeWarning title:@"Debug Features!" subtitle:@"NSZombieEnabled and/or NSAutoreleaseFreedObject debug features are turned on. Turn them off before delivery." hideAfter:5.f];
-        RKLogCritical(@"**************** NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!*************");
-    }
-
     __weak __typeof__(self) wSelf = self;
     SLFRunBlockAfterDelay(^{
         [wSelf restoreApplicationState];
     }, .3);
+}
+
+- (void)runOnEveryAppStart:(UIApplication *)application
+{
+    SLToastManager *toastMgr = [[SLToastManager alloc] initWithManagerId:@"OpenStatesRootToast" parentView:self.window];
+    toastMgr.statusBarFrame = application.statusBarFrame;
+    _toastMgr = toastMgr;
+    [SLToastManager opstSetSharedManager:toastMgr];
+
 }
 
 - (void)setUpBackgroundTasks {
@@ -143,8 +142,8 @@
 
 - (void)setUpViewControllersIpad {
     _appBarController = [[AppBarController alloc] initWithNibName:nil bundle:nil];
-    window.rootViewController = _appBarController;
-    [window makeKeyAndVisible];
+    self.window.rootViewController = _appBarController;
+    [self.window makeKeyAndVisible];
 }
 
 - (SLFStackedViewController *)stackedViewController {
@@ -156,7 +155,7 @@
 - (void)setUpViewControllersIphone {
     StatesViewController* stateListVC = [[StatesViewController alloc] init];
     _navigationController = [[UINavigationController alloc] initWithRootViewController:stateListVC]; 
-    window.rootViewController = _navigationController;
+    self.window.rootViewController = _navigationController;
     if (!SLFIsIOS5OrGreater())
         _navigationController.navigationBar.tintColor = [SLFAppearance cellSecondaryTextColor];
     SLFState *foundSavedState = SLFSelectedState();
@@ -164,7 +163,7 @@
         StateDetailViewController *menu = [[StateDetailViewController alloc] initWithState:foundSavedState];
         [_navigationController pushViewController:menu animated:NO];
     }
-    [window makeKeyAndVisible];
+    [self.window makeKeyAndVisible];
 }
 
 - (void)restoreApplicationState {
@@ -179,8 +178,9 @@
     [[SLFPersistenceManager sharedPersistence] savePersistence];
 }
     
-- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
-    RKLogCritical(@"Received memory warning!");
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
+    os_log_error([SLFLog common], "Received low-memory warning");
     [[SLFAnalytics sharedAnalytics] tagEvent:@"MEMORY_WARNING" attributes:[NSDictionary dictionaryWithObject:@"APP_DEV" forKey:@"category"]];
     [[SLFAnalytics sharedAnalytics] endTracking];
     [[NSURLCache sharedURLCache] setMemoryCapacity:1024*1024]; // a more conservative value, 1MB
@@ -247,20 +247,29 @@
         return;
     if (!notification)
         return;
-    [SLFAlertView showWithTitle:NSLocalizedString(@"Notification",@"") message:notification.alertBody cancelTitle:NSLocalizedString(@"Dismiss",@"") cancelBlock:nil otherTitle:notification.alertAction otherBlock:^{
-        NSString *actionPath = [notification.userInfo valueForKey:@"ActionPath"];
-        if (SLFTypeNonEmptyStringOrNil(actionPath)) {
+    [SLFAlertView showWithTitle:NSLocalizedString(@"Notification", nil) message:notification.alertBody cancelTitle:NSLocalizedString(@"Dismiss", nil) cancelBlock:nil otherTitle:notification.alertAction otherBlock:^{
+        NSString *actionPath = SLTypeStringOrNil(SLTypeDictionaryOrNil(notification.userInfo)[@"ActionPath"]);
+        if (actionPath)
+        {
             [SLFActionPathNavigator cancelPreviousPerformRequestsWithTarget:[SLFActionPathNavigator class]];
             [SLFActionPathNavigator navigateToPath:actionPath skipSaving:YES fromBase:nil popToRoot:NO];
         }
     }];
 }
     
-- (void)networkReachabilityChanged:(NSNotification *)notification {
-    SLFRunBlockInNextRunLoop(^{
+- (void)networkReachabilityChanged:(NSNotification *)notification
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         if (!SLFIsReachableAddressNoAlert(@"http://openstates.org"))
-            [SLFInfoView showInfoInWindow:self.window type:SLFInfoTypeError title:NSLocalizedString(@"Network Failure!",@"") subtitle:NSLocalizedString(@"This application requires Internet access to operate.",@"") hideAfter:4.f];
-    });
+        {
+            [[SLToastManager opstSharedManager] addToastWithIdentifier:@"OpenStates-Unreachable-Host"
+                                                                  type:SLToastTypeError
+                                                                 title:NSLocalizedString(@"Network Failure!", nil)
+                                                              subtitle:NSLocalizedString(@"This application requires Internet access to operate.", nil)
+                                                                 image:nil
+                                                              duration:4];
+        }
+    }];
 }
 
 @end

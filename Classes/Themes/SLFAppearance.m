@@ -82,11 +82,6 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
 
     NSUInteger systemVersion = [[UIDevice currentDevice] systemMajorVersion];
 
-    if (![UINavigationBar respondsToSelector:@selector(appearance)]) {
-        RKLogError(@"Application themes use iOS 5 methods.  This device has iOS %@.", [[UIDevice currentDevice] systemVersion]);
-        return;
-    }
-
     if (systemVersion >= 7) {
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
         [UIView appearanceWhenContainedInInstancesOfClasses:@[[UISegmentedControl class]]].tintColor = [self primaryTintColor];
@@ -173,10 +168,6 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
     + (void)setupAppearance {
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
         [[[UIApplication sharedApplication] keyWindow] setBackgroundColor:[UIColor blackColor]];
-        if (![UINavigationBar respondsToSelector:@selector(appearance)]) {
-            RKLogError(@"Application themes use iOS 5 methods.  This device has iOS %@.", [[UIDevice currentDevice] systemVersion]);
-            return;
-        }
         [[UINavigationBar appearance] setTintColor:[[self class] graniteGreen]];
         [[UISegmentedControl appearance] setTintColor:[[self class] graniteGreen]];
         [[UISearchBar appearance] setTintColor:[[self class] graniteGreen]];
@@ -215,10 +206,6 @@ NSString * const SLFAppearanceItalicsFontName = @"Georgia-Italic";
     + (void)setupAppearance {
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
         [[[UIApplication sharedApplication] keyWindow] setBackgroundColor:[UIColor blackColor]];
-        if (![UINavigationBar respondsToSelector:@selector(appearance)]) {
-            RKLogError(@"Application themes use iOS 5 methods.  This device has iOS %@.", [[UIDevice currentDevice] systemVersion]);
-            return;
-        }
         [[UINavigationBar appearance] setTintColor:[[self class] riverBed]];
         [[UIToolbar appearance] setTintColor:[[self class] riverBed]];
         [[UISearchBar appearance] setTintColor:[[self class] celery]];

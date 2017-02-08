@@ -14,6 +14,7 @@
 #import "SLFRestKitManager.h"
 #import "OpenStatesTitleView.h"
 #import "InlineSubtitleCell.h"
+#import "SLFLog.h"
 
 @interface StatesViewController()
 - (void)pushOrSendViewControllerWithState:(SLFState *)newState;
@@ -93,7 +94,7 @@
         [self.tableController loadTableFromNetwork];
     }
     @catch (NSException *exception) {
-        RKLogWarning(@"Exception while attempting to load list of available states from network (already in progress?) ... %@", exception);
+        os_log_error([SLFLog common], "Exception while attempting to load list of available states from network (already in progress?):%{public}s", exception.description);
     }
 }
 

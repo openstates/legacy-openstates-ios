@@ -16,15 +16,13 @@
 #import "SLFActionPathRegistry.h"
 #import "OpenStatesTableViewCell.h"
 #import "AppDelegate.h"
+#import "SLFLog.h"
 
 @import SafariServices;
 
 @implementation SLFTableViewController
-@synthesize useGradientBackground;
-@synthesize useTitleBar;
-@synthesize titleBarView = _titleBarView;
+
 @synthesize onSavePersistentActionPath = _onSavePersistentActionPath;
-@synthesize searchBar;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
@@ -121,13 +119,15 @@
 - (void)tableController:(RKAbstractTableController*)tableController didFailLoadWithError:(NSError*)error {
     self.onSavePersistentActionPath = nil;
     self.title = NSLocalizedString(@"Server Error",@"");
-    RKLogError(@"Error loading table: %@", error);
+    NSString *path = nil;
     if ([tableController respondsToSelector:@selector(resourcePath)])
-        RKLogError(@"-------- from resource path: %@", [tableController performSelector:@selector(resourcePath)]);
+        path = [tableController performSelector:@selector(resourcePath)];
+    if (!path)
+        path = @"<empty>";
+    os_log_error([SLFLog common], "Error loading table (path = %s{public}): %s{public}", path, error.localizedDescription);
 }
 
 - (void)tableControllerDidFinishFinalLoad:(RKAbstractTableController*)tableController {
-    RKLogTrace(@"%@: Table controller finished loading.", NSStringFromClass([self class]));
     if (self.isViewLoaded)
         [self.tableView reloadData];
     if (self.onSavePersistentActionPath) {
@@ -209,8 +209,8 @@
     [self.searchBar sizeToFit];
     self.searchBar.width = tableWidth;
     CGRect tableRect = self.tableView.frame;
-    tableRect.size.height -= searchBar.height;
-    self.tableView.frame = CGRectOffset(tableRect, 0, searchBar.height);
+    tableRect.size.height -= self.searchBar.height;
+    self.tableView.frame = CGRectOffset(tableRect, 0, self.searchBar.height);
     [self.view addSubview:self.searchBar];
 }
 

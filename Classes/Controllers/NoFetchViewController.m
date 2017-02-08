@@ -9,7 +9,7 @@
 
 
 #import "NoFetchViewController.h"
-#import "SLFInfoView.h"
+#import "SLToastManager+OpenStates.h"
 
 @interface NoFetchViewController()
 @property (weak, nonatomic,readonly) RKObjectLoader *objectLoader;
@@ -50,8 +50,14 @@
     _tableController.pullToRefreshEnabled = NO;
         //_tableController.imageForError = [UIImage imageNamed:@"error"];
     CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
-    SLFInfoView *infoView = [SLFInfoView staticInfoViewWithFrame:CGRectMake(0,0,panelWidth,60) type:SLFInfoTypeActivity title:NSLocalizedString(@"Updating", @"") subtitle:NSLocalizedString(@"Downloading new data",@"") image:nil];
-    _tableController.loadingView = infoView;
+    NSString *toastID = [NSString stringWithFormat:@"%@-Updating", NSStringFromClass(self.class)];
+    SLToast *toast = [SLToast toastWithIdentifier:toastID
+                                             type:SLToastTypeActivity
+                                            title:NSLocalizedString(@"Updating", nil)
+                                         subtitle:NSLocalizedString(@"Downloading new data", nil)
+                                            image:nil duration:3];
+    SLToastView *toastView = [SLToastView toastViewWithFrame:CGRectMake(0,0,panelWidth,60) toast:toast];
+    _tableController.loadingView = toastView;
     [self resetObjectMapping];
 }
 

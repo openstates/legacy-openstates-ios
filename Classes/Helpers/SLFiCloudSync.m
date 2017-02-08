@@ -17,7 +17,6 @@ NSString * const kSLFiCloudSyncNotification = @"SLFiCloudSyncDidUpdate";
 @implementation SLFiCloudSync
 
 +(void)updateToiCloud:(NSNotification*) notificationObject {
-    RKLogInfo(@"Updating to iCloud");
     SLFPersistenceManager *persist = [SLFPersistenceManager sharedPersistence];
     NSDictionary *local = [persist exportSettings];
     [local enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -27,7 +26,6 @@ NSString * const kSLFiCloudSyncNotification = @"SLFiCloudSyncDidUpdate";
 }
 
 +(void)updateFromiCloud:(NSNotification*) notificationObject {
-    RKLogInfo(@"Updating from iCloud");
     NSUbiquitousKeyValueStore *iCloudStore = [NSUbiquitousKeyValueStore defaultStore];
     NSDictionary *remote = [iCloudStore dictionaryRepresentation];
     SLFPersistenceManager *persist = [SLFPersistenceManager sharedPersistence];
@@ -41,12 +39,8 @@ NSString * const kSLFiCloudSyncNotification = @"SLFiCloudSyncDidUpdate";
 }
 
 +(void)start {
-    if(NO == NSClassFromString(@"NSUbiquitousKeyValueStore")) {
-        RKLogInfo(@"Not an iOS 5 device");  
-        return;
-    }
     if(NO == [NSUbiquitousKeyValueStore defaultStore]) {
-        RKLogInfo(@"iCloud not enabled");
+        NSLog(@"iCloud not enabled");
         return;
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFromiCloud:) name:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil];

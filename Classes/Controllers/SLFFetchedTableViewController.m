@@ -12,10 +12,10 @@
 #import "SLFDataModels.h"
 #import "SLFRestKitManager.h"
 #import "NSString+SLFExtensions.h"
-#import "SLFInfoView.h"
 #import "SLFDrawingExtensions.h"
 #import "TableSectionHeaderView.h"
 #import "OpenStatesTableViewCell.h"
+#import <SLToastKit/SLToastKit.h>
 #import <Crashlytics/Crashlytics.h>
 
 @interface SLFFetchedTableViewController()
@@ -27,13 +27,6 @@
 @end
 
 @implementation SLFFetchedTableViewController
-
-@synthesize state;
-@synthesize tableController;
-@synthesize resourcePath = _resourcePath;
-@synthesize dataClass;
-@synthesize omitSearchBar;
-@synthesize defaultEmptyItem;
 
 - (id)initWithState:(SLFState *)newState resourcePath:(NSString *)path dataClass:(Class)class {
     self = [super init];
@@ -60,7 +53,8 @@
     return [[self class] actionPathForObject:self.state];
 }
 
-- (void)configureTableController {
+- (void)configureTableController
+{
     self.tableController = [SLFImprovedRKFetchedResultsTableController tableControllerForTableViewController:(UITableViewController*)self];
     self.tableController.delegate = self;
     self.tableController.objectManager = [RKObjectManager sharedManager];
@@ -74,10 +68,26 @@
     }
 
     CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
-    SLFInfoView *offlinePanel = [SLFInfoView staticInfoViewWithFrame:CGRectMake(0,0,panelWidth,60) type:SLFInfoTypeError title:NSLocalizedString(@"Offline", @"") subtitle:NSLocalizedString(@"The server is unavailable.",@"") image:nil];
-    self.tableController.imageForOffline = [UIImage imageFromView:offlinePanel];    
-    SLFInfoView *panel = [SLFInfoView staticInfoViewWithFrame:CGRectMake(0,0,panelWidth,60) type:SLFInfoTypeActivity title:NSLocalizedString(@"Updating", @"") subtitle:NSLocalizedString(@"Downloading new data",@"") image:nil];
-    self.tableController.loadingView = panel;
+    CGRect toastRect = CGRectMake(0, 0, panelWidth, 60);
+    SLToastView *toastView = nil;
+    NSString *prefixToastID = NSStringFromClass(self.class);
+    SLToast *offlineToast = [SLToast toastWithIdentifier:[prefixToastID stringByAppendingString:@"-Server-Offline"]
+                                                    type:SLToastTypeError
+                                                   title:NSLocalizedString(@"Offline", nil)
+                                                subtitle:NSLocalizedString(@"The server is unavailable.", nil)
+                                                   image:nil duration:-1];
+
+    toastView = [SLToastView toastViewWithFrame:toastRect toast:offlineToast];
+    self.tableController.imageForOffline = [UIImage imageFromView:toastView];
+
+    SLToast *updatingToast = [SLToast toastWithIdentifier:[prefixToastID stringByAppendingString:@"-Server-Updating"]
+                                                    type:SLToastTypeActivity
+                                                   title:NSLocalizedString(@"Updating", nil)
+                                                subtitle:NSLocalizedString(@"Downloading new data", nil)
+                                                    image:nil duration:3];
+    toastView = [SLToastView toastViewWithFrame:toastRect toast:updatingToast];
+    _tableController.loadingView = toastView;
+
     self.tableController.predicate = nil;
     self.defaultEmptyItem = [RKTableItem tableItemWithText:NSLocalizedString(@"No Entries Found",@"") detailText:NSLocalizedString(@"There were no entries found. You may refresh the results by dragging down on the table.",@"")];
     self.defaultEmptyItem.cellMapping = [StyledCellMapping cellMappingWithStyle:UITableViewCellStyleSubtitle alternatingColors:NO largeHeight:YES selectable:NO];
@@ -96,7 +106,6 @@
     [self configureTableController];
     if (self.tableController.sectionNameKeyPath) {
         
-        SLF_FIXME("RKFetchedResultsController.emptyItem breaks tableView updates when sections are involved");
         self.tableController.emptyItem = nil; // don't use emptyItem with sections like this ... kills FRC tableView updates
         
         UITableViewStyle style = self.tableViewStyle;
@@ -202,15 +211,9 @@
     NSString *chamberFilter = [self chamberFilterForScopeIndex:selectedScope];
     if (SLFTypeNonEmptyStringOrNil(searchBar.text)) {
         [self applyCustomFilterWithScopeIndex:selectedScope withText:searchBar.text];
-        RKLogDebug(@"Built-In Predicate = %@", self.tableController.fetchRequest.predicate.predicateFormat);
-        if (self.tableController.predicate)
-            RKLogDebug(@"Custom Predicate = %@", self.tableController.predicate.predicateFormat);
         return;
     }
     [self filterDefaultFetchRequestWithChamberFilter:chamberFilter];
-    RKLogDebug(@"Built-In Predicate = %@", self.tableController.fetchRequest.predicate.predicateFormat);
-    if (self.tableController.predicate)
-        RKLogDebug(@"Custom Predicate = %@", self.tableController.predicate.predicateFormat);
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {

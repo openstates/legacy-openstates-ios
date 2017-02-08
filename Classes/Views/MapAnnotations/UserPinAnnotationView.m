@@ -36,15 +36,25 @@ NSString* const UserPinReuseIdentifier = @"UserPinReuse";
         UserPinAnnotation *customAnnotation = (UserPinAnnotation *)annotation;
         self.canShowCallout = YES;
         
-        NSUInteger pinColorIndex = customAnnotation.pinColorIndex;
-        if (pinColorIndex >= SLFMapPinColorBlue) {
-            UIImage *pinImage = [SLFMapPin imageForPinColorIndex:pinColorIndex status:SLFMapPinStatusHead];
-            UIImageView *pinHead = [[UIImageView alloc] initWithImage:pinImage];
-            [self addSubview:pinHead];
-        }
-        else
-            self.pinColor = pinColorIndex;
+        SLFMapPinColor pinColorIndex = customAnnotation.pinColorIndex;
 
+        UIColor *tint = self.pinTintColor;
+        switch (pinColorIndex) {
+            case SLFMapPinColorRed:
+                tint = [MKPinAnnotationView redPinColor];
+                break;
+            case SLFMapPinColorBlue:
+                tint = [UIColor blueColor];
+                break;
+            case SLFMapPinColorGreen:
+                tint = [MKPinAnnotationView greenPinColor];
+                break;
+            case SLFMapPinColorPurple:
+            default:
+                tint = [MKPinAnnotationView purplePinColor];
+                break;
+        }
+        self.pinTintColor = tint;
 
         UIImage *anImage = [customAnnotation image];
         if (anImage) {

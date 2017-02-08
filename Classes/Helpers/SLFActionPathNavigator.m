@@ -12,19 +12,19 @@
 #import <SLFRestKit/RestKit.h>
 #import "SLFActionPathRegistry.h"
 #import "AppDelegate.h"
+#import "SLFLog.h"
 
 @interface SLFActionPathNavigator()
 + (void)stackOrPushViewController:(UIViewController *)viewController;
 + (void)stackOrPushViewController:(UIViewController *)viewController fromBase:(UIViewController *)baseController popToRoot:(BOOL)popToRoot;
 + (void)stackViewController:(UIViewController *)viewController fromBase:(UIViewController *)baseController popToRoot:(BOOL)popToRoot;
 + (void)pushViewController:(UIViewController *)viewController fromBase:(UIViewController *)baseController popToRoot:(BOOL)popToRoot;
-// we don't use a single NSDictionary for both of these because we need sorted keys, to force an order
-@property (nonatomic,retain) NSMutableArray *patternHandlers;
+
+@property (nonatomic,strong) NSMutableArray *patternHandlers;
 @end
 
 
 @implementation SLFActionPathNavigator
-@synthesize patternHandlers = _patternHandlers;  
 
 + (SLFActionPathNavigator *)sharedNavigator
 {
@@ -42,10 +42,6 @@
     return self;
 }
 
-- (void)dealloc {
-    self.patternHandlers = nil;
-}
-
 + (void)registerPattern:(NSString *)pattern withArgumentHandler:(SLFActionArgumentHandlerBlock)block {
     NSParameterAssert(pattern != NULL && block != NULL);
     [[SLFActionPathNavigator sharedNavigator].patternHandlers addObject:[SLFActionPathHandler handlerWithPattern:pattern onViewControllerForArgumentsBlock:block]];
@@ -61,7 +57,7 @@
 + (NSString *)navigationPathForController:(Class)controller withResourceID:(NSString *)resourceID {
     NSString *path = [SLFActionPathRegistry interpolatePathForClass:controller withResourceID:resourceID];
     if (!SLFTypeNonEmptyStringOrNil(path)) {
-        RKLogError(@"Attempted to navigate to an invalid action path, controller: %@, resourceID: %@", NSStringFromClass(controller), resourceID);
+        os_log_error([SLFLog common], "Attempted to navigate to an invalid action path, controller: %s{public}, resourceID: %s{public}", NSStringFromClass(controller), resourceID);
         return nil;
     }
     return path;
@@ -71,7 +67,7 @@
     NSParameterAssert([controller respondsToSelector:@selector(actionPathForObject:)]);
     NSString *path = [controller performSelector:@selector(actionPathForObject:) withObject:resource];
     if (!SLFTypeNonEmptyStringOrNil(path)) {
-        RKLogError(@"Attempted to navigate to an invalid action path, controller: %@, resource: %@", NSStringFromClass(controller), resource);
+        os_log_error([SLFLog common], "Attempted to navigate to an invalid action path, controller: %s{public}, resource: %s{public}", NSStringFromClass(controller), resource);
         return nil;
     }
     return path;
@@ -96,7 +92,7 @@
         }
     }
     @catch (NSException *exception) {
-        RKLogError(@"Trouble navigating to path: %@ -- Exception: %@", actionPath, exception);
+        os_log_error([SLFLog common], "Exception while navigating to path %s{public}: %s{public}", actionPath, exception.description);
     }
 }
 
@@ -126,7 +122,7 @@
             [self pushViewController:viewController fromBase:baseController popToRoot:popToRoot];
     }
     @catch (NSException *exception) {
-        RKLogError(@"Trouble pushing new view controller: %@ -- Exception: %@", viewController, exception);
+        os_log_error([SLFLog common], "Exception while pushing new view controller %s{public}: %s{public}", NSStringFromClass(viewController.class), exception.description);
     }
 }
 
@@ -138,8 +134,6 @@
 #pragma mark - Action Path Handler
 
 @implementation SLFActionPathHandler
-@synthesize pattern = _pattern;
-@synthesize onViewControllerForArguments = _onViewControllerForArguments;
 
 + (SLFActionPathHandler *)handlerWithPattern:(NSString *)pattern onViewControllerForArgumentsBlock:(SLFActionArgumentHandlerBlock)block {
     SLFActionPathHandler *handler = [[SLFActionPathHandler alloc] init];

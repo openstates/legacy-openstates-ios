@@ -78,13 +78,13 @@ void SLFSpecClearCacheDirectory(void) {
     NSString* cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     BOOL success = [[NSFileManager defaultManager] removeItemAtPath:cachePath error:&error];
     if (success) {
-        RKLogInfo(@"Cleared cache directory...");
+        NSLog(@"Cleared cache directory...");
         success = [[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:&error];
         if (!success) {
-            RKLogError(@"Failed creation of cache path '%@': %@", cachePath, [error localizedDescription]);
+            NSLog(@"Failed creation of cache path '%@': %@", cachePath, [error localizedDescription]);
         }
     } else {
-        RKLogError(@"Failed to clear cache path '%@': %@", cachePath, [error localizedDescription]);
+        NSLog(@"Failed to clear cache path '%@': %@", cachePath, [error localizedDescription]);
     }
 }
 
@@ -117,7 +117,7 @@ id SLFSpecParseFixture(NSString* fileName) {
     id<RKParser> parser = [[RKParserRegistry sharedRegistry] parserForMIMEType:MIMEType];
     id object = [parser objectFromString:data error:&error];
     if (object == nil) {
-        RKLogCritical(@"Failed to parse JSON fixture '%@'. Error: %@", fileName, [error localizedDescription]);
+        NSLog(@"Failed to parse JSON fixture '%@'. Error: %@", fileName, [error localizedDescription]);
         return nil;
     }
     

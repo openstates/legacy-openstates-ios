@@ -13,6 +13,9 @@
 #import "SLFStandardGroupCell.h"
 #import "SLFDataModels.h"
 #import <SLFRestKit/JSONKit.h>
+#import "SLFLog.h"
+
+static os_log_t contributionsLog;
 
 @interface ContributionsDataSource()
 - (void)parseJSONObject:(id)jsonDeserialized;
@@ -24,6 +27,11 @@
 @implementation ContributionsDataSource
 @synthesize sectionList, queryEntityID, queryType, queryCycle;
 @synthesize tableHeaderData = _tableHeaderData;
+
++ (void)initialize
+{
+    contributionsLog = SLFLoggerForComponent("ContributionsDataSource");
+}
 
 - (NSString *)title {
     NSString *title = nil;
@@ -139,8 +147,8 @@
 
     TableCellDataObject *cellInfo = [self dataObjectForIndexPath:indexPath];
     if (cellInfo == nil) {
-        RKLogError(@"Error finding table entry for section:%ld row:%ld", (long)indexPath.section, (long)indexPath.row);
-        return nil;
+        os_log_error(contributionsLog, "ContributionsDataSource: Error finding dataObject for section:%ld row:%ld", (long)indexPath.section, (long)indexPath.row);
+        return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     }
     NSString *cellIdentifier = [NSString stringWithFormat:@"%@-%d", [SLFStandardGroupCell cellIdentifier], cellInfo.isClickable];
     SLFStandardGroupCell *cell = (SLFStandardGroupCell *)[aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -185,7 +193,7 @@
             resourcePath = [NSString stringWithFormat:@"/entities/%@.json", aQuery];;
             break;
     }
-    RKLogDebug(@"Contributions resource path: %@", resourcePath);
+    os_log_debug(contributionsLog, "ContributionsDataSource: Contributions resource path: %s{public}", resourcePath);
     [[[SLFRestKitManager sharedRestKit] transClient] get:resourcePath queryParams:queryParams delegate:self];
 }
 
@@ -331,8 +339,9 @@
                 cellInfo.parameter = self.queryCycle;
                 cellInfo.action = @(kContributionQueryRecipient);
 
-                if (!dataID) {
-                    RKLogError(@"ERROR - Contribution results have an empty entity ID for: %@", name);                                
+                if (!dataID)
+                {
+                    os_log_error(contributionsLog, "ContributionsDataSource: Contribution results have an empty entity ID for: %s{public}", name);
 
                     NSString *nameSearch = [name stringByReplacingOccurrencesOfString:@" " withString:@"+"];
                     cellInfo.entryValue = nameSearch;
@@ -377,9 +386,10 @@
                 else
                     cellInfo.action = @(kContributionQueryRecipient);
                 
-                if (!dataID) {
-                    RKLogError(@"ERROR - Contribution results have an empty entity ID for: %@", name);
-                    
+                if (!dataID)
+                {
+                    os_log_error(contributionsLog, "ContributionsDataSource: Contribution results have an empty entity ID for: %s{public}", name);
+
                     NSString *nameSearch = [name stringByReplacingOccurrencesOfString:@" " withString:@"+"];
                     cellInfo.entryValue = nameSearch;
                     cellInfo.action = @(kContributionQueryEntitySearch);
@@ -477,7 +487,7 @@
 
 - (void)request:(RKRequest*)request didFailLoadWithError:(NSError*)error {
     if (error && request) {
-        RKLogError(@"Error loading from %@: %@", [request description], [error localizedDescription]);
+        os_log_error(contributionsLog, "ContributionsDataSource: Error loading from %s{public}: %s{public}", request.URL.absoluteString, error.localizedDescription);
         [SLFRestKitManager showFailureAlertWithRequest:request error:error];
         [[NSNotificationCenter defaultCenter] postNotificationName:kContributionsDataNotifyError object:nil];
     }
@@ -495,8 +505,9 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:kContributionsDataNotifyLoaded object:self];
     }
     else {
-        RKLogWarning(@"Status Code is %ld", (long)[response statusCode]);
-        NSString *errorDescription = [NSString stringWithFormat:NSLocalizedString(@"An error occurred while loading results from the server: (Status Code = %d)", @""), [response statusCode]];
+        os_log_error(contributionsLog, "ContributionsDataSource: Error loading results from %s{public} -- HTTP status = %d", request.URL.absoluteString, [response statusCode]);
+
+        NSString *errorDescription = [NSString stringWithFormat:NSLocalizedString(@"An error occurred while loading results from the server: (Status Code = %d)", nil), [response statusCode]];
         NSError *error = [NSError errorWithDomain:@"Contributions Error"
                                              code:[response statusCode]
                                          userInfo:@{NSLocalizedDescriptionKey:errorDescription}];

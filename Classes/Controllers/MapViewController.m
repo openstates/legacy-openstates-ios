@@ -17,6 +17,7 @@
 #import "ColorPinAnnotationView.h"
 #import "MultiRowCalloutAnnotationView.h"
 #import "MultiRowAnnotation.h"
+#import "SLFLog.h"
 
 #define LOCATE_USER_BUTTON_TAG 18887
 
@@ -309,7 +310,6 @@
 #pragma mark - Regions and Annotations
 
 - (void)beginBoundarySearchForCoordininate:(CLLocationCoordinate2D)coordinate { // override as needed
-    RKLogCritical(@"This Does Nothing!!!");
 }
 
 - (MKCoordinateRegion)mapRegion
@@ -493,7 +493,7 @@
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)aView calloutAccessoryControlTapped:(UIControl *)control
 {
-    RKLogInfo(@"Annotation accessory tapped, does nothing by default %@", control);
+    // Annotation accessory tapped, does nothing by default
 }
 
 - (void)annotationCoordinateChanged:(id)sender
@@ -528,7 +528,7 @@
             return;
         if (error || !placemarks || ![placemarks count])
         {
-            RKLogError(@"Geocoder has failed: %@", error);
+            os_log_error([SLFLog common], "Geocoder failed: %s{public}", error.localizedDescription);
             [bself showLocateUserButton];
             return;
         }
@@ -551,7 +551,7 @@
             return;
         if (error || !placemarks || ![placemarks count])
         {
-            RKLogError(@"Geocoder has failed: %@", error);
+            os_log_error([SLFLog common], "Geocoder failed: %s{public}", error.localizedDescription);
             [bself showLocateUserButton];
             return;
         }
@@ -566,7 +566,7 @@
 
     CLPlacemark *placemark = placemarks[0];
 
-    RKLogInfo(@"Geocoder found placemark: %@ (was %@)", placemark, self.searchLocation);
+    NSLog(@"Geocoder found placemark: %@ (was %@)", placemark, self.searchLocation);
 
     [self showLocateUserButton];
 

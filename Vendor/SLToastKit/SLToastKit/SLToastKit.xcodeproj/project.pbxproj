@@ -1,0 +1,451 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		37CF0B401E05D8DD00323E1C /* SLToastKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37CF0B361E05D8DD00323E1C /* SLToastKit.framework */; };
+		37CF0B451E05D8DD00323E1C /* SLToastKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CF0B441E05D8DD00323E1C /* SLToastKitTests.m */; };
+		37CF0B471E05D8DD00323E1C /* SLToastKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CF0B391E05D8DD00323E1C /* SLToastKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37CF0B601E05DC0E00323E1C /* SLToast.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CF0B521E05DC0E00323E1C /* SLToast.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37CF0B621E05DC0E00323E1C /* SLToastManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CF0B541E05DC0E00323E1C /* SLToastManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37CF0B631E05DC0E00323E1C /* SLToastManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CF0B551E05DC0E00323E1C /* SLToastManager.m */; };
+		37CF0B641E05DC0E00323E1C /* SLToastView.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CF0B561E05DC0E00323E1C /* SLToastView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37CF0B651E05DC0E00323E1C /* SLToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CF0B571E05DC0E00323E1C /* SLToastView.m */; };
+		37CF0B691E05DC0E00323E1C /* SLTypeCheck.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CF0B5B1E05DC0E00323E1C /* SLTypeCheck.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37CF0B6C1E07210200323E1C /* SLToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CF0B531E05DC0E00323E1C /* SLToast.m */; };
+		37CF0BBC1E088A1100323E1C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37CF0BBB1E088A1100323E1C /* Assets.xcassets */; };
+		37D326341E0E5D60002867B3 /* SLToastObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 37D326331E0E5D60002867B3 /* SLToastObserver.h */; settings = {ATTRIBUTES = (Private, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		37CF0B411E05D8DD00323E1C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 37CF0B2D1E05D8DD00323E1C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 37CF0B351E05D8DD00323E1C;
+			remoteInfo = SLToastKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		37CF0B361E05D8DD00323E1C /* SLToastKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SLToastKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		37CF0B391E05D8DD00323E1C /* SLToastKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLToastKit.h; sourceTree = "<group>"; };
+		37CF0B3A1E05D8DD00323E1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		37CF0B3F1E05D8DD00323E1C /* SLToastKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SLToastKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		37CF0B441E05D8DD00323E1C /* SLToastKitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SLToastKitTests.m; sourceTree = "<group>"; };
+		37CF0B461E05D8DD00323E1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		37CF0B521E05DC0E00323E1C /* SLToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLToast.h; sourceTree = "<group>"; };
+		37CF0B531E05DC0E00323E1C /* SLToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLToast.m; sourceTree = "<group>"; };
+		37CF0B541E05DC0E00323E1C /* SLToastManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLToastManager.h; sourceTree = "<group>"; };
+		37CF0B551E05DC0E00323E1C /* SLToastManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLToastManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		37CF0B561E05DC0E00323E1C /* SLToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLToastView.h; sourceTree = "<group>"; };
+		37CF0B571E05DC0E00323E1C /* SLToastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLToastView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		37CF0B5B1E05DC0E00323E1C /* SLTypeCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTypeCheck.h; sourceTree = "<group>"; };
+		37CF0BBB1E088A1100323E1C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		37D326331E0E5D60002867B3 /* SLToastObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLToastObserver.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		37CF0B321E05D8DD00323E1C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		37CF0B3C1E05D8DD00323E1C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				37CF0B401E05D8DD00323E1C /* SLToastKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		37CF0B2C1E05D8DD00323E1C = {
+			isa = PBXGroup;
+			children = (
+				37CF0B381E05D8DD00323E1C /* SLToastKit */,
+				37CF0B431E05D8DD00323E1C /* SLToastKitTests */,
+				37CF0B371E05D8DD00323E1C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		37CF0B371E05D8DD00323E1C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				37CF0B361E05D8DD00323E1C /* SLToastKit.framework */,
+				37CF0B3F1E05D8DD00323E1C /* SLToastKitTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		37CF0B381E05D8DD00323E1C /* SLToastKit */ = {
+			isa = PBXGroup;
+			children = (
+				37CF0B391E05D8DD00323E1C /* SLToastKit.h */,
+				37CF0B541E05DC0E00323E1C /* SLToastManager.h */,
+				37CF0B551E05DC0E00323E1C /* SLToastManager.m */,
+				37CF0B561E05DC0E00323E1C /* SLToastView.h */,
+				37CF0B571E05DC0E00323E1C /* SLToastView.m */,
+				37CF0B521E05DC0E00323E1C /* SLToast.h */,
+				37CF0B531E05DC0E00323E1C /* SLToast.m */,
+				37CF0B5B1E05DC0E00323E1C /* SLTypeCheck.h */,
+				37D326331E0E5D60002867B3 /* SLToastObserver.h */,
+				37CF0B3A1E05D8DD00323E1C /* Info.plist */,
+				37CF0BA81E08888900323E1C /* Assets */,
+			);
+			path = SLToastKit;
+			sourceTree = "<group>";
+		};
+		37CF0B431E05D8DD00323E1C /* SLToastKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				37CF0B441E05D8DD00323E1C /* SLToastKitTests.m */,
+				37CF0B461E05D8DD00323E1C /* Info.plist */,
+			);
+			path = SLToastKitTests;
+			sourceTree = "<group>";
+		};
+		37CF0BA81E08888900323E1C /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				37CF0BBB1E088A1100323E1C /* Assets.xcassets */,
+			);
+			path = Assets;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		37CF0B331E05D8DD00323E1C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				37CF0B691E05DC0E00323E1C /* SLTypeCheck.h in Headers */,
+				37CF0B641E05DC0E00323E1C /* SLToastView.h in Headers */,
+				37D326341E0E5D60002867B3 /* SLToastObserver.h in Headers */,
+				37CF0B601E05DC0E00323E1C /* SLToast.h in Headers */,
+				37CF0B471E05D8DD00323E1C /* SLToastKit.h in Headers */,
+				37CF0B621E05DC0E00323E1C /* SLToastManager.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		37CF0B351E05D8DD00323E1C /* SLToastKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 37CF0B4A1E05D8DD00323E1C /* Build configuration list for PBXNativeTarget "SLToastKit" */;
+			buildPhases = (
+				37CF0B311E05D8DD00323E1C /* Sources */,
+				37CF0B321E05D8DD00323E1C /* Frameworks */,
+				37CF0B331E05D8DD00323E1C /* Headers */,
+				37CF0B341E05D8DD00323E1C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SLToastKit;
+			productName = SLToastKit;
+			productReference = 37CF0B361E05D8DD00323E1C /* SLToastKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		37CF0B3E1E05D8DD00323E1C /* SLToastKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 37CF0B4D1E05D8DD00323E1C /* Build configuration list for PBXNativeTarget "SLToastKitTests" */;
+			buildPhases = (
+				37CF0B3B1E05D8DD00323E1C /* Sources */,
+				37CF0B3C1E05D8DD00323E1C /* Frameworks */,
+				37CF0B3D1E05D8DD00323E1C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				37CF0B421E05D8DD00323E1C /* PBXTargetDependency */,
+			);
+			name = SLToastKitTests;
+			productName = SLToastKitTests;
+			productReference = 37CF0B3F1E05D8DD00323E1C /* SLToastKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		37CF0B2D1E05D8DD00323E1C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = SL;
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = Sleestacks;
+				TargetAttributes = {
+					37CF0B351E05D8DD00323E1C = {
+						CreatedOnToolsVersion = 8.2;
+						ProvisioningStyle = Manual;
+					};
+					37CF0B3E1E05D8DD00323E1C = {
+						CreatedOnToolsVersion = 8.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 37CF0B301E05D8DD00323E1C /* Build configuration list for PBXProject "SLToastKit" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 37CF0B2C1E05D8DD00323E1C;
+			productRefGroup = 37CF0B371E05D8DD00323E1C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				37CF0B351E05D8DD00323E1C /* SLToastKit */,
+				37CF0B3E1E05D8DD00323E1C /* SLToastKitTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		37CF0B341E05D8DD00323E1C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				37CF0BBC1E088A1100323E1C /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		37CF0B3D1E05D8DD00323E1C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		37CF0B311E05D8DD00323E1C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				37CF0B6C1E07210200323E1C /* SLToast.m in Sources */,
+				37CF0B631E05DC0E00323E1C /* SLToastManager.m in Sources */,
+				37CF0B651E05DC0E00323E1C /* SLToastView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		37CF0B3B1E05D8DD00323E1C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				37CF0B451E05D8DD00323E1C /* SLToastKitTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		37CF0B421E05D8DD00323E1C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 37CF0B351E05D8DD00323E1C /* SLToastKit */;
+			targetProxy = 37CF0B411E05D8DD00323E1C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		37CF0B481E05D8DD00323E1C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		37CF0B491E05D8DD00323E1C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		37CF0B4B1E05D8DD00323E1C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = SLToastKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sleestacks.SLToastKit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		37CF0B4C1E05D8DD00323E1C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = SLToastKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sleestacks.SLToastKit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		37CF0B4E1E05D8DD00323E1C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = SLToastKitTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sleestacks.SLToastKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		37CF0B4F1E05D8DD00323E1C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = SLToastKitTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sleestacks.SLToastKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		37CF0B301E05D8DD00323E1C /* Build configuration list for PBXProject "SLToastKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				37CF0B481E05D8DD00323E1C /* Debug */,
+				37CF0B491E05D8DD00323E1C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		37CF0B4A1E05D8DD00323E1C /* Build configuration list for PBXNativeTarget "SLToastKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				37CF0B4B1E05D8DD00323E1C /* Debug */,
+				37CF0B4C1E05D8DD00323E1C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		37CF0B4D1E05D8DD00323E1C /* Build configuration list for PBXNativeTarget "SLToastKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				37CF0B4E1E05D8DD00323E1C /* Debug */,
+				37CF0B4F1E05D8DD00323E1C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 37CF0B2D1E05D8DD00323E1C /* Project object */;
+}

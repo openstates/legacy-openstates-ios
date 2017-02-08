@@ -17,6 +17,7 @@
 #import "NSDate+SLFDateHelper.h"
 #import "SLFEventsManager.h"
 #import "GenericDetailHeader.h"
+#import "SLFLog.h"
 
 @interface EventDetailViewController()
 - (void)reconfigureForEvent:(SLFEvent *)event;
@@ -38,7 +39,7 @@
     self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
         self.stackWidth = 500;
-        RKLogDebug(@"Loading resource path for event: %@", resourcePath);
+        os_log_debug([SLFLog common], "Loading events from: %{public}s", resourcePath);
         [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)];
     }
     return self;

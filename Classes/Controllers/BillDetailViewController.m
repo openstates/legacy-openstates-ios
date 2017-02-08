@@ -23,6 +23,7 @@
 #import "SLFPersistenceManager.h"
 #import "AppendingFlowCell.h"
 #import "BillActionTableViewCell.h"
+#import "SLFLog.h"
 
 @interface BillDetailViewController()
 
@@ -59,7 +60,7 @@
     if (self) {
         self.useTitleBar = YES;
         self.stackWidth = 500;
-        RKLogDebug(@"Loading resource path for bill: %@", resourcePath);
+        os_log_debug([SLFLog common], "Loading resource path for bill: %s{public}", resourcePath);
         [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(1)];
     }
     return self;

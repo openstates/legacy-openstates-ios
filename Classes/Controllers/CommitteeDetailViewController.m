@@ -18,9 +18,6 @@
 #import "GenericDetailHeader.h"
 #import "SLFImprovedRKTableController.h"
 
-#define SectionHeaderCommitteeInfo NSLocalizedString(@"Committee Details", @"")
-#define SectionHeaderMembers NSLocalizedString(@"Members", @"")
-
 @interface CommitteeDetailViewController()
 
 @property (nonatomic, strong) SLFImprovedRKTableController *tableController;
@@ -77,6 +74,8 @@
 }
 
 - (void)loadDataFromNetworkWithID:(NSString *)resourceID {
+    if (!resourceID)
+        return;
     NSDictionary *queryParams = [NSDictionary dictionaryWithObjectsAndKeys:SUNLIGHT_APIKEY,@"apikey", resourceID, @"committeeID", nil];
     NSString *resourcePath = RKMakePathWithObject(@"/committees/:committeeID?apikey=:apikey", queryParams);
     [[SLFRestKitManager sharedRestKit] loadObjectsAtResourcePath:resourcePath delegate:self withTimeout:SLF_HOURS_TO_SECONDS(24)];
@@ -122,9 +121,9 @@
         NSString *subtitle = source.name;
         if (!SLFTypeNonEmptyStringOrNil(subtitle))
             subtitle = source.url;
-        [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Website", @"") subtitle:subtitle url:source.url]];
+        [tableItems addObject:[self webPageItemWithTitle:NSLocalizedString(@"Website", nil) subtitle:subtitle url:source.url]];
     }
-    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Resources", @""));
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Resources", nil));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadTableItems:tableItems inSection:sectionIndex];
 }
@@ -132,7 +131,7 @@
 - (void)configureMemberItems {
     if (!SLFTypeNonEmptySetOrNil(_committee.members))
         return;
-    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Members", @""));
+    SLFAddTableControllerSectionWithTitle(_tableController, NSLocalizedString(@"Members", nil));
     NSUInteger sectionIndex = _tableController.sectionCount-1;
     [_tableController loadObjects:_committee.sortedMembers inSection:sectionIndex];
 }

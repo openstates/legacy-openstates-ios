@@ -9,7 +9,8 @@
 
 
 #import "SLFEventsManager.h"
-#import "SLFInfoView.h"
+#import "SLToastManager+OpenStates.h"
+#import "SLFLog.h"
 #import <SLFRestKit/RestKit.h>
 
 @interface SLFEventsManager()
@@ -83,7 +84,7 @@
     NSError *error = nil;
     BOOL success = [_eventStore saveEvent:event span:EKSpanThisEvent error:&error];
     if (error) {
-        RKLogError(@"Error while attempting to save a calendar event: %@ (%@)", event, [error localizedDescription]);
+        os_log_error([SLFLog common], "Error while attempting to save a calendar event: event =  %s{public}; error = %s{public}", event.description, error.localizedDescription);
     }
     return success;
 }
@@ -123,7 +124,13 @@
     EKEvent *event = controller.event;
     if (action == EKEventEditViewActionSaved) {
         if (!event || NO == [self saveEvent:event])
-            [SLFInfoView showInfoInView:self.eventEditorParent.view type:SLFInfoTypeError title:NSLocalizedString(@"Error Saving Event",@"") subtitle:NSLocalizedString(@"Unable to save this event to your calendar.  Please double-check your calendar settings and permissions then try again.",@"")  image:nil hideAfter:3];
+        {
+            [[SLToastManager opstSharedManager] addToastWithIdentifier:@"SLFEventsManager-Failed-Save"
+                                                                  type:SLToastTypeError
+                                                                 title:NSLocalizedString(@"Error Saving Event", nil)
+                                                              subtitle:NSLocalizedString(@"Unable to save this event to your calendar.  Please double-check your calendar settings and permissions then try again.", nil)
+                                                                 image:nil duration:-1];
+        }
         else if (self.eventEditorParent)
             [_eventEditorParent eventWasEdited:event];
     }

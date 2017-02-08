@@ -12,23 +12,16 @@
 #import "LegislatorDetailViewController.h"
 #import "SLFDataModels.h"
 #import "LegislatorCell.h"
-#import "SLFInfoPanelManager.h"
-
-#import "SLFInfoView.h"
+#import "SLToastManager+OpenStates.h"
+#import "SLFLog.h"
 
 @interface LegislatorsNoFetchViewController()
-@property (nonatomic,strong) SLFInfoPanelManager *infoPanelManager;
-@property (nonatomic,strong) SLFInfoView *locationActivityPanel;
 @property (nonatomic,assign) BOOL hasWarnedForDifferentStates;
 @property (nonatomic,strong) CLGeocoder *geocoder;
 @property (nonatomic,assign) BOOL didAskForLocation;
 @end
 
 @implementation LegislatorsNoFetchViewController
-@synthesize locationManager = _locationManager;
-@synthesize locationActivityPanel = _locationActivityPanel;
-@synthesize hasWarnedForDifferentStates = _hasWarnedForDifferentStates;
-@synthesize geocoder = _geocoder;
 
 - (id)initWithState:(SLFState *)newState usingGeolocation:(BOOL)usingGeolocation
 {
@@ -60,7 +53,6 @@
 
 - (void)dealloc
 {
-    self.infoPanelManager = nil;
     if (self.locationManager)
     {
         [self.locationManager stopUpdatingLocation];
@@ -73,7 +65,6 @@
 {
     [super viewDidLoad];
     self.screenName = @"Legislators No-Fetch Screen";
-    //self.infoPanelManager = [[SLFInfoPanelManager alloc] initWithManagerId:self.screenName parentView:self.view];
 }
 
 - (void)configureTableController
@@ -142,15 +133,14 @@
     if (!self.isViewLoaded)
         return;
 
-    NSString *title = NSLocalizedString(@"States Differ",@"");
-    NSString *subtitle = NSLocalizedString(@"The previously selected state differs from that of your geolocated reps.  Please keep that in mind.",@"");
-    SLFInfoItem *infoItem = [[SLFInfoItem alloc] initWithIdentifier:title type:SLFInfoTypeNotice title:title subtitle:subtitle image:nil duration:3.f];
-    [self.infoPanelManager addInfoItem:infoItem];
-
-    [SLFInfoView showInfoInView:self.view infoItem:infoItem completion:^(SLFInfoStatus status, SLFInfoItem * _Nonnull item) {
-        // do something?
-    }];
-//    [SLFInfoView showInfoInView:self.view type:SLFInfoTypeNotice title:title subtitle:subtitle image:nil hideAfter:3.f];
+    NSString *title = NSLocalizedString(@"States Differ", nil);
+    NSString *subtitle = NSLocalizedString(@"The previously selected state differs from that of your geolocated reps.  Please keep that in mind.", nil);
+    [[SLToastManager opstSharedManager] addToastWithIdentifier:@"States-Differ"
+                                                          type:SLToastTypeNotice
+                                                         title:title
+                                                      subtitle:subtitle
+                                                         image:nil
+                                                      duration:3];
 }
 
 - (void)setState:(SLFState *)state
@@ -211,19 +201,11 @@
         case kCLAuthorizationStatusRestricted:
         case kCLAuthorizationStatusDenied:
         {
-            if (self.locationActivityPanel)
-                break;
+            NSString *title = NSLocalizedString(@"Cannot Geolocate", nil);
+            NSString *subtitle = NSLocalizedString(@"Location Services are unavailable.  Ensure that Location Services are enabled in the iOS General Settings.", nil);
+            SLToast *toast = [[SLToast alloc] initWithIdentifier:title type:SLToastTypeError title:title subtitle:subtitle image:nil duration:4];
+            [[SLToastManager opstSharedManager] addToast:toast];
 
-            NSString *title = NSLocalizedString(@"Cannot Geolocate",@"");
-            NSString *subtitle = NSLocalizedString(@"Location Services are unavailable.  Ensure that Location Services are enabled in the iOS General Settings.",@"");
-
-            SLFInfoItem *infoItem = [[SLFInfoItem alloc] initWithIdentifier:title type:SLFInfoTypeError title:title subtitle:subtitle image:nil duration:4.f];
-
-            [SLFInfoView showInfoInView:self.view infoItem:infoItem completion:^(SLFInfoStatus status, SLFInfoItem * _Nonnull item) {
-                // do something?
-            }];
-
-            [self.infoPanelManager addInfoItem:infoItem];
             break;
         }
         case kCLAuthorizationStatusAuthorizedAlways:
@@ -236,23 +218,11 @@
                 [self.locationManager startUpdatingLocation];
             }
 
-            if (self.locationActivityPanel)
-                break;
+            NSString *title = NSLocalizedString(@"Finding Location", nil);
+            NSString *subtitle = NSLocalizedString(@"Geolocating to determine representation.", nil);
+            SLToast *toast = [[SLToast alloc] initWithIdentifier:title type:SLToastTypeActivity title:title subtitle:subtitle image:nil duration:0];
+            [[SLToastManager opstSharedManager] addToast:toast];
 
-            NSString *title = NSLocalizedString(@"Finding Location",@"");
-            NSString *subtitle = NSLocalizedString(@"Geolocating to determine representation.",@"");
-            SLFInfoItem *infoItem = [[SLFInfoItem alloc] initWithIdentifier:title type:SLFInfoTypeActivity title:title subtitle:subtitle image:nil duration:0];
-            [self.infoPanelManager addInfoItem:infoItem];
-
-            self.locationActivityPanel = [SLFInfoView showInfoInView:self.view infoItem:infoItem completion:^(SLFInfoStatus status, SLFInfoItem * _Nonnull item) {
-                // do something?
-            }];
-
-//            self.locationActivityPanel = [SLFInfoView showInfoInView:self.view
-//                                                                 type:SLFInfoTypeActivity
-//                                                                title:title
-//                                                             subtitle:subtitle
-//                                                            hideAfter:0];
             break;
         }
     }
@@ -261,43 +231,12 @@
 
 - (void)stopUpdatingLocation:(NSString *)reason
 {
-    SLFInfoItem *infoItem = nil;
-
     if (reason)
     {
-        NSString *title = NSLocalizedString(@"Geolocation Error",@"");
-        RKLogError(@"%@: %@", title, reason);
-        infoItem = [[SLFInfoItem alloc] initWithIdentifier:title type:SLFInfoTypeError title:title subtitle:reason image:nil duration:4];
-    }
-
-    if (!self.locationActivityPanel)
-    {
-        if (infoItem)
-        {
-            [self.infoPanelManager addInfoItem:infoItem];
-
-            SLFInfoView *infoView = [SLFInfoView showInfoInView:self.view infoItem:infoItem completion:^(SLFInfoStatus status, SLFInfoItem * _Nonnull item) {
-                // do something?
-            }];
-
-
-            //MTInfoPanel *panel = [MTInfoPanel showPanelInView:self.view type:MTInfoPanelTypeError title:NSLocalizedString(@"Geolocation Error",@"") subtitle:reason hideAfter:4.f];
-            if (infoView)
-                self.locationActivityPanel = infoView;
-        }
-    }
-    else
-    {
-        if (infoItem)
-        {
-            [self.locationActivityPanel setType:SLFInfoTypeError title:NSLocalizedString(@"Geolocation Error",@"") subtitle:reason];
-            [self.infoPanelManager addInfoItem:infoItem];
-        }
-        else
-        {
-            [self.locationActivityPanel hideInfoView];
-            self.locationActivityPanel = nil;
-        }
+        NSString *title = NSLocalizedString(@"Geolocation Error", nil);
+        os_log_error([SLFLog common], "Geolocation Error: %s{public}", reason);
+        SLToast *toast = [[SLToast alloc] initWithIdentifier:title type:SLToastTypeError title:title subtitle:reason image:nil duration:4];
+        [[SLToastManager opstSharedManager] addToast:toast];
     }
 
     if (!self.locationManager)
@@ -311,8 +250,8 @@
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
     NSString *reason = [error localizedFailureReason];
-    if (!reason) // (!reason && [error code] != kCLErrorLocationUnknown)
-        reason = NSLocalizedString(@"Unable to determine your current location.", @"");
+    if (!reason)
+        reason = NSLocalizedString(@"Unable to determine your current location.", nil);
     [self stopUpdatingLocation:reason];
 }
 
@@ -373,7 +312,7 @@
         return;
 
     CLPlacemark *placemark = placemarks[0];
-    RKLogInfo(@"Geocoder found placemark: %@", placemark);
+    NSLog(@"Geocoder found placemark: %@", placemark);
 
     [self.searchBar resignFirstResponder];
     [self loadTableWithCoordinate:placemark.location.coordinate];
@@ -381,23 +320,18 @@
 
 - (void)geocoderDidFailWithError:(NSError *)error
 {
-    RKLogError(@"Location eocoder has failed: %@", error);
+    os_log_error([SLFLog common], "Location encoder has failed: %s{public}", error.localizedDescription);
 
     if (!self.isViewLoaded)
         return;
 
-    NSString *title = NSLocalizedString(@"Geolocation Error",@"");
-    NSString *reason = NSLocalizedString(@"Unable to find that address.", @"");
+    NSString *title = NSLocalizedString(@"Geolocation Error", nil);
+    NSString *reason = NSLocalizedString(@"Unable to find that address.", nil);
+    SLToast *toast = [[SLToast alloc] initWithIdentifier:@"geocode-failure-error" type:SLToastTypeError title:title subtitle:reason image:nil duration:4.f];
+    [[SLToastManager opstSharedManager] addToast:toast];
 
-    SLFInfoItem *infoItem = [[SLFInfoItem alloc] initWithIdentifier:@"geocode-failure-error" type:SLFInfoTypeError title:title subtitle:reason image:nil duration:4.f];
-    [self.infoPanelManager addInfoItem:infoItem];
-
-    SLFInfoView *infoView = [SLFInfoView showInfoInView:self.view infoItem:infoItem completion:^(SLFInfoStatus status, SLFInfoItem * _Nonnull item) {
-        // do something?
-    }];
-    if (infoView)
-        self.locationActivityPanel = infoView;
-    RKLogError(@"%@: %@", title, reason);
+    NSString *logText = (error) ? error.localizedDescription : reason;
+    os_log_error([SLFLog common], "Geolocation Error: %s{public}", logText);
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)aSearchBar

@@ -16,7 +16,7 @@
 #import "BillsViewController.h"
 #import "BillSearchParameters.h"
 #import "SLFBadgeCell.h"
-#import "SLFInfoView.h"
+#import "SLToastManager+OpenStates.h"
 #import "SLFDrawingExtensions.h"
 
 @interface BillsSubjectsViewController()
@@ -82,7 +82,8 @@
     return [[self class] actionPathForObject:self.state];
 }
 
-- (void)configureTableController {
+- (void)configureTableController
+{
     self.tableController = [SLFImprovedRKTableController tableControllerForTableViewController:(UITableViewController*)self];
     _tableController.delegate = self;
     _tableController.objectManager = [RKObjectManager sharedManager];
@@ -90,12 +91,28 @@
     _tableController.imageForError = [UIImage imageNamed:@"error"];
 
     CGFloat panelWidth = SLFIsIpad() ? self.stackWidth : self.tableView.width;
-    CGFloat overlayTop = self.scopeBar.frame.size.height;
-    self.tableController.overlayFrame = CGRectMake(0, overlayTop, panelWidth, self.view.frame.size.height);
-    SLFInfoView *offlinePanel = [SLFInfoView staticInfoViewWithFrame:CGRectMake(0,0,panelWidth,60) type:SLFInfoTypeError title:NSLocalizedString(@"Offline", @"") subtitle:NSLocalizedString(@"The server is unavailable.",@"") image:nil];
-    _tableController.imageForOffline = [UIImage imageFromView:offlinePanel];    
-    SLFInfoView *panel = [SLFInfoView staticInfoViewWithFrame:CGRectMake(0,0,panelWidth,60) type:SLFInfoTypeActivity title:NSLocalizedString(@"Updating", @"") subtitle:NSLocalizedString(@"Downloading new data",@"") image:nil];
-    _tableController.loadingView = panel;
+    CGFloat overlayTop = CGRectGetHeight(self.scopeBar.frame);
+    self.tableController.overlayFrame = CGRectMake(0, overlayTop, panelWidth, CGRectGetHeight(self.view.frame));
+    CGRect toastRect = CGRectMake(0, 0, panelWidth, 60);
+    SLToastView *toastView = nil;
+
+    SLToast *offlineToast = [SLToast toastWithIdentifier:@"BillSubjects-Server-Offline"
+                                                    type:SLToastTypeError
+                                                   title:NSLocalizedString(@"Offline", nil)
+                                                subtitle:NSLocalizedString(@"The server is unavailable.", nil)
+                                                   image:nil duration:-1];
+
+    toastView = [SLToastView toastViewWithFrame:toastRect toast:offlineToast];
+    _tableController.imageForOffline = [UIImage imageFromView:toastView];
+
+    SLToast *updatingToast = [SLToast toastWithIdentifier:@"BillSubjects-Updating"
+                                                    type:SLToastTypeActivity
+                                                   title:NSLocalizedString(@"Updating", nil)
+                                                subtitle:NSLocalizedString(@"Downloading new data", nil)
+                                                   image:nil duration:3];
+
+    toastView = [SLToastView toastViewWithFrame:toastRect toast:updatingToast];
+    _tableController.loadingView = toastView;
 
     __weak __typeof__(self) bself = self;
     StyledCellMapping *styledCellMap = [StyledCellMapping styledMappingForClass:[SLFBadgeCell class] usingBlock:^(StyledCellMapping *cellMapping){

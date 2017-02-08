@@ -34,6 +34,10 @@
 		370004C7143F5A6700F55165 /* SLFReachable.m in Sources */ = {isa = PBXBuildFile; fileRef = 370004C6143F5A6700F55165 /* SLFReachable.m */; };
 		37031604143FA2F300E1CF4D /* SLFReachableTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37031602143FA1E400E1CF4D /* SLFReachableTests.m */; };
 		37037548147AF51000B59AA2 /* SLFPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37037547147AF51000B59AA2 /* SLFPersistenceManager.m */; };
+		37081F851E42A42D00AA8A2C /* SLToastKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37081F821E42A3CE00AA8A2C /* SLToastKit.framework */; };
+		37081F871E42A44200AA8A2C /* SLToastKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 37081F821E42A3CE00AA8A2C /* SLToastKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		37081F8C1E42A56400AA8A2C /* SLToastManager+OpenStates.m in Sources */ = {isa = PBXBuildFile; fileRef = 37081F8B1E42A56400AA8A2C /* SLToastManager+OpenStates.m */; };
+		37081F8F1E42A80A00AA8A2C /* SLFLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 37081F8E1E42A80A00AA8A2C /* SLFLog.m */; };
 		37085AF51CED007E0035BBC0 /* SLFRestKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37085AF21CED003B0035BBC0 /* SLFRestKit.framework */; };
 		37085AF71CED00E60035BBC0 /* SLFRestKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 37085AF21CED003B0035BBC0 /* SLFRestKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		37085AF81CEE49380035BBC0 /* SLFRestKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37085AF21CED003B0035BBC0 /* SLFRestKit.framework */; };
@@ -71,7 +75,6 @@
 		373E51501445E6C70044D478 /* DistrictSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 373E514D1445E6C70044D478 /* DistrictSearch.m */; };
 		37442F09143431940027F422 /* StackedMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37442F08143431940027F422 /* StackedMenuCell.m */; };
 		3748120614C7ABAA00A1AE30 /* NoFetchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3748120514C7ABA900A1AE30 /* NoFetchViewController.m */; };
-		37485D48144BC43600D99BBD /* SLFMapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D42144BC43600D99BBD /* SLFMapPin.m */; };
 		37485D49144BC43600D99BBD /* UserPinAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D44144BC43600D99BBD /* UserPinAnnotation.m */; };
 		37485D4A144BC43600D99BBD /* UserPinAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37485D46144BC43600D99BBD /* UserPinAnnotationView.m */; };
 		374A320D146F9CB500C94AF8 /* StatesPopoverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 374A320C146F9CB500C94AF8 /* StatesPopoverManager.m */; };
@@ -136,6 +139,7 @@
 		378337D414AD26A10077010E /* AppendingFlowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 378337D314AD26A10077010E /* AppendingFlowCell.m */; };
 		378466771CF106FC00C533CD /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 378466761CF106FC00C533CD /* SafariServices.framework */; };
 		378A23161476438700D82721 /* SLFDrawingExtenions.m in Sources */ = {isa = PBXBuildFile; fileRef = 378A23151476438700D82721 /* SLFDrawingExtenions.m */; };
+		378D9D491E4BAA8A001439D2 /* SLFMapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 378D9D481E4BAA8A001439D2 /* SLFMapPin.m */; };
 		37915377149273A500F55015 /* StackedNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 37915376149273A500F55015 /* StackedNavigationBar.m */; };
 		3794021C144161A600D18889 /* ContributionsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 37940219144161A600D18889 /* ContributionsDataSource.m */; };
 		3794021D144161A600D18889 /* ContributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3794021B144161A600D18889 /* ContributionsViewController.m */; };
@@ -152,11 +156,7 @@
 		37A33E9E149D669800D821CD /* SLFEventsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A33E9D149D669800D821CD /* SLFEventsManager.m */; };
 		37A33E9F149D690000D821CD /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 372E58DE14157B78000652B1 /* EventKit.framework */; };
 		37A33EA0149D690000D821CD /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 372E58DF14157B78000652B1 /* EventKitUI.framework */; };
-		37A63C991D304E0F008C015D /* SLFInfoPanelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A63C981D304E0F008C015D /* SLFInfoPanelManager.m */; };
-		37A63C9C1D3055DE008C015D /* SLFObjectQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A63C9B1D3055DE008C015D /* SLFObjectQueue.m */; };
 		37A63C9F1D308D6F008C015D /* SLFAbstractCodableObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A63C9E1D308D6F008C015D /* SLFAbstractCodableObject.m */; };
-		37A63CA21D315BFF008C015D /* SLFInfoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A63CA11D315BFF008C015D /* SLFInfoItem.m */; };
-		37A63CA61D32BDFD008C015D /* SLFInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A63CA51D32BDFD008C015D /* SLFInfoView.m */; };
 		37AC5FD6142C42680061414F /* StackedMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37AC5FD5142C42680061414F /* StackedMenuViewController.m */; };
 		37B9CC08143D0654006C56E0 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37B9CC07143D0654006C56E0 /* CoreText.framework */; };
 		37BAC14A142B972D0021A3C6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 37BAC149142B972D0021A3C6 /* main.m */; };
@@ -222,6 +222,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		37081F811E42A3CE00AA8A2C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 37081F7C1E42A3CE00AA8A2C /* SLToastKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 37CF0B361E05D8DD00323E1C;
+			remoteInfo = SLToastKit;
+		};
+		37081F831E42A3CE00AA8A2C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 37081F7C1E42A3CE00AA8A2C /* SLToastKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 37CF0B3F1E05D8DD00323E1C;
+			remoteInfo = SLToastKitTests;
+		};
+		37081F881E42A44200AA8A2C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 37081F7C1E42A3CE00AA8A2C /* SLToastKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 37CF0B351E05D8DD00323E1C;
+			remoteInfo = SLToastKit;
+		};
 		37085AF11CED003B0035BBC0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 37085AEC1CED003B0035BBC0 /* RestKit.xcodeproj */;
@@ -281,6 +302,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				37085AF71CED00E60035BBC0 /* SLFRestKit.framework in CopyFiles */,
+				37081F871E42A44200AA8A2C /* SLToastKit.framework in CopyFiles */,
 				37D3AD241D2C03B8003E21BA /* SCNetworkReachabilityKit.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,6 +367,11 @@
 		37031602143FA1E400E1CF4D /* SLFReachableTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFReachableTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37037546147AF51000B59AA2 /* SLFPersistenceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SLFPersistenceManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		37037547147AF51000B59AA2 /* SLFPersistenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFPersistenceManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		37081F7C1E42A3CE00AA8A2C /* SLToastKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SLToastKit.xcodeproj; path = Vendor/SLToastKit/SLToastKit/SLToastKit.xcodeproj; sourceTree = "<group>"; };
+		37081F8A1E42A56400AA8A2C /* SLToastManager+OpenStates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SLToastManager+OpenStates.h"; sourceTree = "<group>"; };
+		37081F8B1E42A56400AA8A2C /* SLToastManager+OpenStates.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SLToastManager+OpenStates.m"; sourceTree = "<group>"; };
+		37081F8D1E42A80A00AA8A2C /* SLFLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFLog.h; sourceTree = "<group>"; };
+		37081F8E1E42A80A00AA8A2C /* SLFLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFLog.m; sourceTree = "<group>"; };
 		37085AEC1CED003B0035BBC0 /* RestKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RestKit.xcodeproj; path = Vendor/RestKit/RestKit.xcodeproj; sourceTree = "<group>"; };
 		3708625714D9C2E900CFC48D /* InlineSubtitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InlineSubtitleCell.h; sourceTree = "<group>"; };
 		3708625814D9C2E900CFC48D /* InlineSubtitleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InlineSubtitleCell.m; sourceTree = "<group>"; };
@@ -400,7 +427,6 @@
 		3748120414C7ABA800A1AE30 /* NoFetchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoFetchViewController.h; sourceTree = "<group>"; };
 		3748120514C7ABA900A1AE30 /* NoFetchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoFetchViewController.m; sourceTree = "<group>"; };
 		37485D41144BC43600D99BBD /* SLFMapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFMapPin.h; sourceTree = "<group>"; };
-		37485D42144BC43600D99BBD /* SLFMapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFMapPin.m; sourceTree = "<group>"; };
 		37485D43144BC43600D99BBD /* UserPinAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = UserPinAnnotation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		37485D44144BC43600D99BBD /* UserPinAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = UserPinAnnotation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		37485D45144BC43600D99BBD /* UserPinAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = UserPinAnnotationView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -524,6 +550,7 @@
 		378466761CF106FC00C533CD /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		378A23141476438700D82721 /* SLFDrawingExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFDrawingExtensions.h; sourceTree = "<group>"; };
 		378A23151476438700D82721 /* SLFDrawingExtenions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFDrawingExtenions.m; sourceTree = "<group>"; };
+		378D9D481E4BAA8A001439D2 /* SLFMapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFMapPin.m; sourceTree = "<group>"; };
 		37915375149273A500F55015 /* StackedNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackedNavigationBar.h; sourceTree = "<group>"; };
 		37915376149273A500F55015 /* StackedNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StackedNavigationBar.m; sourceTree = "<group>"; };
 		37940218144161A600D18889 /* ContributionsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContributionsDataSource.h; sourceTree = "<group>"; };
@@ -550,17 +577,9 @@
 		37A325B113E4A55800138ADE /* CommitteesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitteesViewController.m; sourceTree = "<group>"; };
 		37A33E9C149D669800D821CD /* SLFEventsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFEventsManager.h; sourceTree = "<group>"; };
 		37A33E9D149D669800D821CD /* SLFEventsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SLFEventsManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		37A63C971D304E0F008C015D /* SLFInfoPanelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFInfoPanelManager.h; sourceTree = "<group>"; };
-		37A63C981D304E0F008C015D /* SLFInfoPanelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFInfoPanelManager.m; sourceTree = "<group>"; };
-		37A63C9A1D3055DE008C015D /* SLFObjectQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFObjectQueue.h; sourceTree = "<group>"; };
-		37A63C9B1D3055DE008C015D /* SLFObjectQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFObjectQueue.m; sourceTree = "<group>"; };
 		37A63C9D1D308D6F008C015D /* SLFAbstractCodableObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFAbstractCodableObject.h; sourceTree = "<group>"; };
 		37A63C9E1D308D6F008C015D /* SLFAbstractCodableObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFAbstractCodableObject.m; sourceTree = "<group>"; };
-		37A63CA01D315BFF008C015D /* SLFInfoItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFInfoItem.h; sourceTree = "<group>"; };
-		37A63CA11D315BFF008C015D /* SLFInfoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFInfoItem.m; sourceTree = "<group>"; };
 		37A63CA31D315DFA008C015D /* SLFTypeCheck.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLFTypeCheck.h; sourceTree = "<group>"; };
-		37A63CA41D32BDFD008C015D /* SLFInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFInfoView.h; sourceTree = "<group>"; };
-		37A63CA51D32BDFD008C015D /* SLFInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFInfoView.m; sourceTree = "<group>"; };
 		37AC5FD4142C42680061414F /* StackedMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackedMenuViewController.h; sourceTree = "<group>"; };
 		37AC5FD5142C42680061414F /* StackedMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StackedMenuViewController.m; sourceTree = "<group>"; };
 		37B6FF94149207C8007CB068 /* SLFStackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFStackedViewController.h; sourceTree = "<group>"; };
@@ -707,6 +726,7 @@
 				378466771CF106FC00C533CD /* SafariServices.framework in Frameworks */,
 				37D3AD231D2C03B8003E21BA /* SCNetworkReachabilityKit.framework in Frameworks */,
 				37085AF51CED007E0035BBC0 /* SLFRestKit.framework in Frameworks */,
+				37081F851E42A42D00AA8A2C /* SLToastKit.framework in Frameworks */,
 				373D59201D380EF5009A56B9 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -764,6 +784,7 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				37085AEC1CED003B0035BBC0 /* RestKit.xcodeproj */,
 				37D3AD171D2C02B9003E21BA /* SCNetworkReachabilityKit.xcodeproj */,
+				37081F7C1E42A3CE00AA8A2C /* SLToastKit.xcodeproj */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
 			name = CustomTemplate;
@@ -854,6 +875,15 @@
 				2FA60C571A816CB1007C818A /* SWActionSheet.m */,
 			);
 			path = Pickers;
+			sourceTree = "<group>";
+		};
+		37081F7D1E42A3CE00AA8A2C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				37081F821E42A3CE00AA8A2C /* SLToastKit.framework */,
+				37081F841E42A3CE00AA8A2C /* SLToastKitTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		37085AED1CED003B0035BBC0 /* Products */ = {
@@ -957,7 +987,7 @@
 			isa = PBXGroup;
 			children = (
 				37485D41144BC43600D99BBD /* SLFMapPin.h */,
-				37485D42144BC43600D99BBD /* SLFMapPin.m */,
+				378D9D481E4BAA8A001439D2 /* SLFMapPin.m */,
 				37485D43144BC43600D99BBD /* UserPinAnnotation.h */,
 				37485D44144BC43600D99BBD /* UserPinAnnotation.m */,
 				37485D45144BC43600D99BBD /* UserPinAnnotationView.h */,
@@ -1003,13 +1033,11 @@
 				37726AF6148D6AB3009BCE46 /* SLFActionPathRegistry.m */,
 				37A33E9C149D669800D821CD /* SLFEventsManager.h */,
 				37A33E9D149D669800D821CD /* SLFEventsManager.m */,
-				37A63C971D304E0F008C015D /* SLFInfoPanelManager.h */,
-				37A63C981D304E0F008C015D /* SLFInfoPanelManager.m */,
-				37A63CA01D315BFF008C015D /* SLFInfoItem.h */,
-				37A63CA11D315BFF008C015D /* SLFInfoItem.m */,
-				37A63C9A1D3055DE008C015D /* SLFObjectQueue.h */,
-				37A63C9B1D3055DE008C015D /* SLFObjectQueue.m */,
 				37A63CA31D315DFA008C015D /* SLFTypeCheck.h */,
+				37081F8A1E42A56400AA8A2C /* SLToastManager+OpenStates.h */,
+				37081F8B1E42A56400AA8A2C /* SLToastManager+OpenStates.m */,
+				37081F8D1E42A80A00AA8A2C /* SLFLog.h */,
+				37081F8E1E42A80A00AA8A2C /* SLFLog.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1146,8 +1174,6 @@
 				374E6AAE14A1A58900C85231 /* GenericDetailHeader.m */,
 				37F32824144198750059FACE /* SLFBadgeCell.h */,
 				37F32825144198750059FACE /* SLFBadgeCell.m */,
-				37A63CA41D32BDFD008C015D /* SLFInfoView.h */,
-				37A63CA51D32BDFD008C015D /* SLFInfoView.m */,
 				37F32826144198750059FACE /* SLFStandardGroupCell.h */,
 				37F32827144198750059FACE /* SLFStandardGroupCell.m */,
 				37F32828144198750059FACE /* SLFTableCellProtocol.h */,
@@ -1441,6 +1467,7 @@
 				37D3AD221D2C0371003E21BA /* PBXTargetDependency */,
 				37085AF41CED00480035BBC0 /* PBXTargetDependency */,
 				37D3AD261D2C03B9003E21BA /* PBXTargetDependency */,
+				37081F891E42A44200AA8A2C /* PBXTargetDependency */,
 			);
 			name = OpenStates;
 			productName = StatesLege;
@@ -1477,7 +1504,7 @@
 				ORGANIZATIONNAME = "Sunlight Foundation";
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = 3A9R2W6JVG;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -1505,6 +1532,10 @@
 					ProductGroup = 37D3AD181D2C02B9003E21BA /* Products */;
 					ProjectRef = 37D3AD171D2C02B9003E21BA /* SCNetworkReachabilityKit.xcodeproj */;
 				},
+				{
+					ProductGroup = 37081F7D1E42A3CE00AA8A2C /* Products */;
+					ProjectRef = 37081F7C1E42A3CE00AA8A2C /* SLToastKit.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -1515,6 +1546,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		37081F821E42A3CE00AA8A2C /* SLToastKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SLToastKit.framework;
+			remoteRef = 37081F811E42A3CE00AA8A2C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		37081F841E42A3CE00AA8A2C /* SLToastKitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = SLToastKitTests.xctest;
+			remoteRef = 37081F831E42A3CE00AA8A2C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		37085AF21CED003B0035BBC0 /* SLFRestKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -1623,7 +1668,6 @@
 				37588E2413E4B456005FB5AB /* EventsViewController.m in Sources */,
 				37588E2C13E4B5FE005FB5AB /* EventDetailViewController.m in Sources */,
 				37588E9913E4C62B005FB5AB /* DistrictDetailViewController.m in Sources */,
-				37A63C991D304E0F008C015D /* SLFInfoPanelManager.m in Sources */,
 				37D7672B13E67D5200A77F89 /* SLFBill.m in Sources */,
 				37D7672C13E67D5200A77F89 /* SLFCommittee.m in Sources */,
 				37D7672E13E67D5200A77F89 /* SLFDistrict.m in Sources */,
@@ -1648,7 +1692,6 @@
 				372D2AFA14285FDF00ADE84E /* CommitteeMember.m in Sources */,
 				372D2B1E1428DEA400ADE84E /* BillSponsor.m in Sources */,
 				37BAC14A142B972D0021A3C6 /* main.m in Sources */,
-				37A63C9C1D3055DE008C015D /* SLFObjectQueue.m in Sources */,
 				2F46D0091934E97C0023F3C8 /* OpenStatesTableViewCell.m in Sources */,
 				37F25BA4142BAC0E009D8FCF /* SLFAppearance.m in Sources */,
 				37AC5FD6142C42680061414F /* StackedMenuViewController.m in Sources */,
@@ -1665,7 +1708,7 @@
 				377E4B1714360B500063E854 /* UIImage+OverlayColor.m in Sources */,
 				37BB3B73143A12AB00DCB1FB /* LegislatorCell.m in Sources */,
 				37BB3B74143A12AB00DCB1FB /* LegislatorCellView.m in Sources */,
-				37A63CA21D315BFF008C015D /* SLFInfoItem.m in Sources */,
+				378D9D491E4BAA8A001439D2 /* SLFMapPin.m in Sources */,
 				370004C7143F5A6700F55165 /* SLFReachable.m in Sources */,
 				3794021C144161A600D18889 /* ContributionsDataSource.m in Sources */,
 				2F9DAC8019377E91007EC92D /* SLFImprovedRKTableController.m in Sources */,
@@ -1679,7 +1722,6 @@
 				3711870F144619A700A12B8B /* MapViewController.m in Sources */,
 				37CFB4D2144B980F00E8120D /* NSInvocation+CWVariableArguments.m in Sources */,
 				37CFB4D3144B980F00E8120D /* UIImageView+RoundedCorners.m in Sources */,
-				37485D48144BC43600D99BBD /* SLFMapPin.m in Sources */,
 				37485D49144BC43600D99BBD /* UserPinAnnotation.m in Sources */,
 				37485D4A144BC43600D99BBD /* UserPinAnnotationView.m in Sources */,
 				376357F6144CCE7500122377 /* SLFParty.m in Sources */,
@@ -1696,6 +1738,7 @@
 				3757CE95146A6DC900471CB7 /* BillAction.m in Sources */,
 				3757CE96146A6DC900471CB7 /* BillRecordVote.m in Sources */,
 				3757CE97146A6DC900471CB7 /* BillVoter.m in Sources */,
+				37081F8F1E42A80A00AA8A2C /* SLFLog.m in Sources */,
 				37D7540A146C57FD00DCD742 /* _EventParticipant.m in Sources */,
 				37D7540B146C57FD00DCD742 /* _GenericAsset.m in Sources */,
 				37D7540C146C57FD00DCD742 /* _GenericNamedItem.m in Sources */,
@@ -1753,10 +1796,10 @@
 				3756944A14ABD41E0014BA7F /* AFImageRequestOperation.m in Sources */,
 				3756944B14ABD41E0014BA7F /* AFJSONRequestOperation.m in Sources */,
 				37A63C9F1D308D6F008C015D /* SLFAbstractCodableObject.m in Sources */,
+				37081F8C1E42A56400AA8A2C /* SLToastManager+OpenStates.m in Sources */,
 				3756944C14ABD41E0014BA7F /* AFNetworkActivityIndicatorManager.m in Sources */,
 				3756944D14ABD41E0014BA7F /* AFPropertyListRequestOperation.m in Sources */,
 				3756944E14ABD41E0014BA7F /* AFURLConnectionOperation.m in Sources */,
-				37A63CA61D32BDFD008C015D /* SLFInfoView.m in Sources */,
 				3756944F14ABD41E0014BA7F /* AFXMLRequestOperation.m in Sources */,
 				3756945014ABD41E0014BA7F /* UIImageView+AFNetworking.m in Sources */,
 				375694AF14ACEC4E0014BA7F /* AppBarController.m in Sources */,
@@ -1786,6 +1829,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		37081F891E42A44200AA8A2C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SLToastKit;
+			targetProxy = 37081F881E42A44200AA8A2C /* PBXContainerItemProxy */;
+		};
 		37085AF41CED00480035BBC0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = SLFRestKit;
@@ -1840,6 +1888,7 @@
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/Crashlytics/",
@@ -1882,6 +1931,7 @@
 				CODE_SIGN_ENTITLEMENTS = Data/OpenStates.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = "";
 				EXCLUDED_SOURCE_FILE_NAMES = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1989,7 +2039,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv7s armv7 i386 x86_64";
 			};
 			name = Debug;
 		};
@@ -2021,7 +2070,6 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv7s armv7 i386 x86_64";
 			};
 			name = Release;
 		};

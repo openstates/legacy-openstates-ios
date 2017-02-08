@@ -5,6 +5,7 @@
 #import <SLFRestKit/RestKit.h>
 #import <SLFRestKit/CoreData.h>
 #import <EventKit/EventKit.h>
+#import "SLFLog.h"
 
 @implementation SLFEvent
 
@@ -95,7 +96,7 @@
         self.ekEventIdentifier = event.eventIdentifier; // This may or may not be the appropriate time to do this.
     }
     @catch (NSException *exception) {
-        RKLogError(@"There was an error while attempting to create an EKEvent from %@", [self description]);
+        os_log_error([SLFLog common], "There was an error while attempting to create an EKEvent from %{public}s: %{public}s", self.description, exception.description);
     }
 
     return event;

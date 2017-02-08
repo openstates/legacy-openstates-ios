@@ -180,7 +180,7 @@ NSString* SLFCurrentActionPath(void) {
 void SLFSaveCurrentActionPath(NSString *path) {
     if (!SLFTypeNonEmptyStringOrNil(path))
         return;
-    RKLogDebug(@"---Persisting User Action: %@", path);
+    NSLog(@"---Persisting User Action: %@", path);
     [[SLFAnalytics sharedAnalytics] tagEvent:path attributes:nil];
     [[SLFPersistenceManager sharedPersistence] setSavedActionPath:path];
 }
@@ -238,7 +238,7 @@ void SLFSaveSelectedStateID(NSString *stateID) {
     [settings synchronize];
     [[SLFPersistenceManager sharedPersistence] setCurrentStateID:stateID];
     [[NSNotificationCenter defaultCenter] postNotificationName:SLFSelectedStateDidChangeNotification object:stateID];
-    RKLogDebug(@"---Saving selected state ID: %@", stateID);
+    NSLog(@"---Saving selected state ID: %@", stateID);
 }
 
 #pragma mark - Selected Session
@@ -271,7 +271,7 @@ void SLFSaveSelectedSessionForState(NSString *session, SLFState *state) {
         [selectedSessions removeObjectForKey:state.stateID];
     else if (session)
         selectedSessions[state.stateID] = session;
-    RKLogDebug(@"Selected Session has changed for %@: %@", state.stateID, session);
+    NSLog(@"Selected Session has changed for %@: %@", state.stateID, session);
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     [settings setObject:selectedSessions forKey:kPersistentSelectedSessionKey];
     [settings synchronize];

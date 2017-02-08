@@ -2,6 +2,7 @@
 #import "SLFSortDescriptor.h"
 #import <SLFRestKit/RestKit.h>
 #import <SLFRestKit/CoreData.h>
+#import "SLFLog.h"
 
 @interface SLFDistrict()
 - (MKPolygon *)polygonRingWithCoordinates:(NSArray *)ringCoords interiorRings:(NSArray *)interiorRings;
@@ -61,7 +62,9 @@
     CLLocationDegrees longitude = [[self.regionDictionary objectForKey:@"center_lon"] doubleValue];
     CLLocationCoordinate2D center = CLLocationCoordinate2DMake(latitude, longitude);
     if (NO == CLLocationCoordinate2DIsValid(center))
-        RKLogDebug(@"Invalid Centroid: lat=%lf lon=%lf", latitude, longitude);
+    {
+        os_log_debug([SLFLog common], "Invalid centroid: lat=%lf lon=%lf", latitude, longitude);
+    }
     return MKCoordinateRegionMake(center, distanceToCenter);
 }
 
@@ -164,8 +167,9 @@
     if (self.districtPolygon)
         return self.districtPolygon;
     NSArray *rings = SLFTypeNonEmptyArrayOrNil([self shape]);
-    if (!rings) {
-        RKLogError(@"District %@ shape is empty or has no rings.", self.boundaryID);
+    if (!rings)
+    {
+        os_log_error([SLFLog common], "District %{public}s shape is empty or has no rings.", self.boundaryID);
         return nil;
     }
     
@@ -173,8 +177,9 @@
 /* Legislative districts, by law and by court ruling, can't have multiple *disconnected* parts.  They must be contiguous.
    However, the boundary service accommodates independent multipolygon shapes.  We have to dereference to get our main polygon */
     rings = SLFTypeNonEmptyArrayOrNil(rings[0]);
-    if (!rings) {
-        RKLogError(@"District %@ shape is empty or has no rings.", self.boundaryID);
+    if (!rings)
+    {
+        os_log_error([SLFLog common], "District %{public}s shape has no rings.", self.boundaryID);
         return nil;
     }
 #endif
@@ -184,8 +189,9 @@
     NSInteger index = ringCount - 1;
     NSMutableArray *interiorRings = (ringCount > 1 ? [[NSMutableArray alloc] initWithCapacity:index] : nil);
     for (NSArray *ring in [rings reverseObjectEnumerator]) {
-        if (!SLFTypeNonEmptyArrayOrNil(ring)) {
-            RKLogError(@"District %@ shape has null or malformed content.", self.boundaryID);
+        if (!SLFTypeNonEmptyArrayOrNil(ring))
+        {
+            os_log_error([SLFLog common], "District %{public}s has null or malformed content.", self.boundaryID);
             break;
         }
         BOOL isInnerRing = (index > 0);

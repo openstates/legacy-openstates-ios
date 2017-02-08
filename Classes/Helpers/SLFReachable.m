@@ -9,9 +9,10 @@
 
 
 #import "SLFReachable.h"
+#import "SLFLog.h"
 #import <SLFRestKit/RestKit.h>
 #import "SLFAlertView.h"
-#import "SLFInfoView.h"
+#import "SLToastManager+OpenStates.h"
 
 NSString * const SLFReachableStatusChangedForHostKey = @"SLFReachableStatusChangedForHost";
 NSString * const SLFReachableAnyNetworkHost = @"ANY_INTERNET_HOST";
@@ -130,7 +131,7 @@ NSString * const SLFReachableAnyNetworkHost = @"ANY_INTERNET_HOST";
         return NO;
     NSNumber *status = [self statusForHostNamed:hostName];
     if (!status) {
-        RKLogDebug(@"Specific host reachability for %@ is unknown because it is not presently monitored.", hostName);
+        os_log_debug([SLFLog common], "Specific host reachability for %s{public} is unknown because it is not presently monitored", hostName);
         return YES;
     }
     return ([status intValue] > kSCNetworkNotReachable);
@@ -159,15 +160,11 @@ BOOL SLFIsReachableAddressNoAlert(NSString * urlString) {
 BOOL SLFIsReachableAddress(NSString * urlString) {
     if (SLFIsReachableAddressNoAlert(urlString))
         return YES;
-    /*[SLFAlertView showWithTitle:NSLocalizedString(@"Unreachable Host", @"")
-     message:NSLocalizedString(@"This feature requires an Internet connection, and a connection is unavailable.  Your device may be in 'Airplane' mode or is experiencing poor network coverage.",@"")
-     buttonTitle:NSLocalizedString(@"Cancel",@"")];*/
-    [SLFInfoView showInfoInWindow:[UIApplication sharedApplication].keyWindow
-                              type:SLFInfoTypeError
-                             title:NSLocalizedString(@"Network Failure!",@"")
-                          subtitle:NSLocalizedString(@"Check your internet connection and try again later.",@"")
-                         hideAfter:2];
-
+    [[SLToastManager opstSharedManager] addToastWithIdentifier:@"SLFReachable-Unreachable-Host"
+                                                          type:SLToastTypeError
+                                                         title:NSLocalizedString(@"Network Failure!",nil)
+                                                      subtitle:NSLocalizedString(@"Check your internet connection and try again later.",nil)
+                                                         image:nil duration:2];
     return NO;
 }
 

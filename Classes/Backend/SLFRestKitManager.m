@@ -15,6 +15,7 @@
 #import "SLFAlertView.h"
 #import "SLFGlobal.h"
 #import <SLFRestKit/RKManagedObjectStore.h>
+#import "SLFLog.h"
 
 NSString * const kAPP_DB_PREFIX = @"SLFData";
 NSString * const kAPP_DB_NAME = @"SLFData.sqlite";
@@ -53,11 +54,6 @@ NSURL * kTRANSPARENCY_BASE_URL;
 - (id)init {
     self = [super init];
     if (self) {
-        RKLogConfigureByName("RestKit/Network", RKLogLevelInfo);
-        RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelWarning);
-        RKLogConfigureByName("RestKit/CoreData", RKLogLevelInfo);
-        RKLogConfigureByName("RestKit/UI", RKLogLevelInfo);
-
         RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:kOPENSTATES_BASE_URL];
         objectManager.requestQueue.showsNetworkActivityIndicatorWhenBusy = YES;
         
@@ -117,7 +113,7 @@ NSURL * kTRANSPARENCY_BASE_URL;
 
 - (RKObjectLoader *)objectLoaderForResourcePath:(NSString *)pathToLoad delegate:(id<RKObjectLoaderDelegate>)delegate withTimeout:(NSTimeInterval)timeoutSeconds {
     NSParameterAssert(pathToLoad != NULL);
-    RKLogDebug(@"Loading data at path: %@", pathToLoad);
+    os_log_info([SLFLog common], "Loading object data from %s{public}", pathToLoad);
     RKObjectManager* objectManager = [RKObjectManager sharedManager];
     RKObjectLoader * loader = [objectManager objectLoaderWithResourcePath:pathToLoad delegate:delegate];
     Class theClass = [self modelClassFromResourcePath:pathToLoad];
@@ -191,13 +187,11 @@ NSURL * kTRANSPARENCY_BASE_URL;
     [_preloadQueue start];
 }
 
+#pragma mark - RKObjectLoaderDelegate methods
 
-#pragma mark -
-#pragma mark RKObjectLoaderDelegate methods
-
-
-- (void)objectLoaderDidFinishLoading:(RKObjectLoader*)objectLoader {
-    RKLogDebug(@"Object Loader Finished: %@", objectLoader.resourcePath);
+- (void)objectLoaderDidFinishLoading:(RKObjectLoader*)objectLoader
+{
+    os_log_debug([SLFLog common], "Object Loader Finished: %s{public}", objectLoader.resourcePath);
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {
@@ -207,11 +201,11 @@ NSURL * kTRANSPARENCY_BASE_URL;
 #pragma mark - RKManagedObjectStoreDelegate
 
 - (void)managedObjectStore:(RKManagedObjectStore *)objectStore didFailToCreatePersistentStoreCoordinatorWithError:(NSError *)error {
-    RKLogError(@"Failed to create the persistent store coordinator: %@", error);
+    os_log_error([SLFLog common], "Failed to create the persistent store coordinator: %s{public}", error.localizedDescription);
 }
 
 - (void)managedObjectStore:(RKManagedObjectStore *)objectStore didFailToDeletePersistentStore:(NSString *)storePath error:(NSError *)error {
-    RKLogError(@"Failed to delete the Core Data store file: %@", error);
+    os_log_error([SLFLog common], "Failed to delete the Core Data store file: %s{public}", error.localizedDescription);
 }
 
 - (RKManagedObjectStore *)attemptLoadObjectStore {
@@ -226,7 +220,7 @@ NSURL * kTRANSPARENCY_BASE_URL;
 
     }
     @catch (NSException *exception) {
-        RKLogError(@"An exception ocurred while attempting to load/build the Core Data store file: %@", exception);
+        os_log_error([SLFLog common], "An exception ocurred while attempting to load/build the Core Data store file: %s{public}", exception.description);
     }
     return objectStore;
 }
@@ -234,10 +228,10 @@ NSURL * kTRANSPARENCY_BASE_URL;
 - (RKManagedObjectStore *)attemptLoadObjectStoreAndFlushIfNeeded {
     RKManagedObjectStore *objectStore = [self attemptLoadObjectStore];
     if (!objectStore) {
-        RKLogWarning(@"Attempting to delete and recreate the Core Data store file.");
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
         NSString *storeFilePath = [basePath stringByAppendingPathComponent:kAPP_DB_NAME];
+        os_log_info([SLFLog common], "Attempting to delete and recreate the Core Data store file: %s{public}", storeFilePath);
         NSURL* storeUrl = [NSURL fileURLWithPath:storeFilePath];
         NSError* error = nil;
         @try {
@@ -246,26 +240,28 @@ NSURL * kTRANSPARENCY_BASE_URL;
             }
         }
         @catch (NSException *exception) {
-            RKLogError(@"An exception ocurred while attempting to delete the Core Data store file: %@", exception);
+            os_log_error([SLFLog common], "An exception ocurred while attempting to delete the Core Data store file: %s{public}", exception.description);
         }
         objectStore = [self attemptLoadObjectStore];
     }
     return objectStore;
 }
 
-#pragma mark -
-#pragma mark Common Alerts
+#pragma mark - Common Alerts
 
-+ (NSString *)logFailureMessageForRequest:(RKRequest *)request error:(NSError *)error {
-    NSString *message = NSLocalizedString(@"Network Data Error",@"");
++ (NSString *)logFailureMessageForRequest:(RKRequest *)request error:(NSError *)error
+{
+    NSString *message = NSLocalizedString(@"Network Data Error", nil);
     NSString *errorText = (error) ? [error localizedDescription] : @"";
     if (SLFTypeNonEmptyStringOrNil(errorText))
         message = [errorText stringByReplacingOccurrencesOfString:SUNLIGHT_APIKEY withString:@"<APIKEY>"];
-    RKLogError(@"RestKit Error -");
-    if (request)
-        RKLogError(@"    resourcePath: %@", request.resourcePath);
-    RKLogError(@"    request URL: %@", request.URL);
-    RKLogError(@"    error: %@", message);
+    NSString *resourcePath = request.resourcePath;
+    if (!resourcePath)
+        resourcePath = @"<empty>";
+    NSString *url = request.URL.absoluteString;
+    if (!url)
+        url = @"<empty>";
+    os_log_error([SLFLog common], "[SLFRestKitManager] Error:\n    path: %s{public}\n    url: %s{public}\n    error: %s{public}", resourcePath, url, message);
     return message;
 }
 

@@ -17,6 +17,7 @@
 #import "DistrictSearch.h"
 #import "MultiRowCalloutAnnotationView.h"
 #import "SLFActionPathRegistry.h"
+#import "SLFLog.h"
 
 @interface DistrictDetailViewController()
 - (void)loadMapWithID:(NSString *)objID;
@@ -127,7 +128,7 @@
     self.onSavePersistentActionPath = nil;
     [SLFAlertView showWithTitle:@"Unable to load district" message:@"Sorry, we were unable to load the district map." buttonTitle:@"OK"];
 //    [SLFRestKitManager showFailureAlertWithRequest:objectLoader error:error];
-    NSLog(@"Error loading district: %@", error.description);
+    os_log_error([SLFLog common], "Error loading district details: %{public}s", error.description);
 }
 
 - (SLFDistrict *)districtMapForPolygon:(MKPolygon *)polygon {
@@ -195,7 +196,9 @@
 
     DistrictSearchFailureWithMessageAndFailOptionBlock failure = ^(NSString *message, DistrictSearchFailOption failOption) {
         if (failOption == DistrictSearchFailOptionLog)
-            RKLogError(@"%@", message);
+        {
+            os_log_error([SLFLog common], "%{public}s", message);
+        }
         else
             [SLFAlertView showWithTitle:NSLocalizedString(@"Geolocation Error", @"") message:message buttonTitle:NSLocalizedString(@"OK", @"")];
         bself.districtSearch = nil;
